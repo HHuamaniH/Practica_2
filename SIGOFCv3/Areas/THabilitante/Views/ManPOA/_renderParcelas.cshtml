@@ -1,0 +1,190 @@
+﻿@model CapaEntidad.ViewModel.VM_POA
+
+<script type="text/javascript">
+    var _frmParcela = {};
+    var cod_secuencial;
+
+    var indice;
+
+    _frmParcela.tbEliTABLA = [];
+    //iniciando la tabla parcela
+    _frmParcela.fnInitDataTable_Detail = function () {
+        var columns_label = [], columns_data = [], options = {};
+        columns_label = ["Parcela", "Área"];
+        columns_data = ["PCA", "AREA"];
+        options = {
+            page_length: 10, page_search: true, page_info: true, row_index: true, row_delete: true, row_fnDelete: "_frmParcela.fnDelete(this)",
+            row_edit: true, row_fnEdit: "_frmParcela.fnEdit(this)"
+        };
+        _frmParcela.dtParcela = utilDt.fnLoadDataTable_Detail($("#tbParcela"), columns_label, columns_data, options);
+        _frmParcela.dtParcela.rows.add(JSON.parse('@Html.Raw(Json.Encode(@Model.ListParcela))')).draw();
+    }
+    _frmParcela.fnInit = function () {
+        _frmParcela.frm.find("#hdfRegEstado").val("1");
+        _frmParcela.frm.find("#hdfCodSecuencial").val("0");
+        _frmParcela.frm.find("#frmMParcela").hide();
+
+    }
+
+    _frmParcela.fnAdd = function (obj) {
+        let parcela = _frmParcela.frm.find("#txtParcela").val();
+        let area = _frmParcela.frm.find("#txtArea").val();
+        let regEstado = _frmParcela.frm.find("#hdfRegEstado").val();
+        if (regEstado == 0) {
+            regEstado = 2;
+        }
+
+        var parcelaList = _frmParcela.fnGetList();
+        var countFilas = parcela.length;
+        var band = 0;
+        if (countFilas > 0) {
+            for (var j = 0; j < parcelaList.length; j++) {
+                if (parcela == parcelaList[j].PCA) {
+                    band = 1;
+                }
+            }
+        }
+        if (band == 0) {
+            if (parcela.trim() != "") {
+                if (area.trim() != "") {
+                    let model = {
+                        'PCA': parcela,
+                        'AREA': area,
+                        'COD_SECUENCIAL': cod_secuencial,
+                        'RegEstado': regEstado
+                    }
+                    if (indice == null) {
+                        _frmParcela.dtParcela.rows.add([model]).draw();
+                        _frmParcela.dtParcela.page('last').draw('page');
+                    }
+                    else {
+                        _frmParcela.dtParcela.row(indice).data(model).draw(false);
+                    }
+                } else {
+                    utilSigo.toastWarning("Aviso", "Ingresar área");
+                }
+            }
+            else {
+                utilSigo.toastWarning("Aviso", "Ingresar la parcela");
+            }
+        }
+        else {
+            utilSigo.toastWarning("Aviso", "La parcela ya se encuentra en la lista");
+        }
+
+        //limpiar
+        _frmParcela.frm.find("#txtParcela").val('');
+        _frmParcela.frm.find("#txtArea").val('');
+        _frmParcela.frm.find("#hdfRegEstado").val('1');
+        _frmParcela.frm.find("#hdfCodSecuencial").val('0');
+        indice = null;
+
+        _frmParcela.frm.find("#frmMParcela").hide();
+    }
+    _frmParcela.fnEdit = function (obj) {
+        var data = _frmParcela.dtParcela.row($(obj).parents('tr')).data();
+        indice = _frmParcela.dtParcela.row($(obj).parents('tr')).index();
+        _frmParcela.frm.find("#hdfRegEstado").val(data["RegEstado"]);
+        _frmParcela.frm.find("#hdfCodSecuencial").val(data["COD_SECUENCIAL"]);
+        _frmParcela.frm.find("#txtParcela").val(data["PCA"]);
+        _frmParcela.frm.find("#txtArea").val(data["AREA"]);
+        cod_secuencial = data['COD_SECUENCIAL'];
+        _frmParcela.frm.find("#frmMParcela").show();
+    }
+    _frmParcela.fnDelete = function (obj) {
+        var data = _frmParcela.dtParcela.row($(obj).parents('tr')).data();
+        if (data["RegEstado"] == "0") {
+            //let EliTabla = "";
+            _frmParcela.tbEliTABLA.push({
+                EliTABLA: "POA_PARCELA",
+                EliVALOR02: data["COD_SECUENCIAL"]
+            });
+        }
+        _frmParcela.dtParcela.row($(obj).parents('tr')).remove().draw(false);
+    }
+
+    _frmParcela.fnCancelar = function () {
+        _frmParcela.frm.find("#txtParcela").val('');
+        _frmParcela.frm.find("#txtArea").val('');
+        _frmParcela.frm.find("#hdfRegEstado").val('1');
+        _frmParcela.frm.find("#hdfCodSecuencial").val('0');
+        indice = null;
+        _frmParcela.frm.find("#frmMParcela").hide();
+    }
+
+    _frmParcela.fnAddEdit = function () {
+        _frmParcela.frm.find("#txtParcela").val('');
+        _frmParcela.frm.find("#txtArea").val('');
+        _frmParcela.frm.find("#hdfRegEstado").val('1');
+        _frmParcela.frm.find("#hdfCodSecuencial").val('0');
+        indice = null;
+        _frmParcela.frm.find("#frmMParcela").show();
+    }
+
+    _frmParcela.fnGetList = function () {
+        let list = [], rows, countFilas, data;
+        rows = _frmParcela.dtParcela.$("tr");
+        countFilas = rows.length;
+        if (countFilas > 0) {
+            $.each(rows, function (i, o) {
+                data = _frmParcela.dtParcela.row($(o)).data();
+                list.push(utilSigo.fnConvertArrayToObject(data));
+            });
+        }
+        return list;
+    }
+
+    $(document).ready(function () {
+        _frmParcela.frm = $("#frmParcela");
+        _frmParcela.fnInitDataTable_Detail();
+        _frmParcela.fnInit();
+       /* _frmParcela.fnLoadDatos();*/
+    });
+</script>
+<div id="frmParcela">
+    <div id="frmAdd">
+        <div class="card-header text-small">
+            PC
+        </div>
+        <div id="frmMParcela" class="container">
+            @Html.Hidden("hdfRegEstado")
+            @Html.Hidden("hdfCodSecuencial")
+            <div class="form-row">
+                <div class="form-group col-md-6">
+                    <label for="ddlTipoAvistEstratoId" class="text-small">Parcela</label>
+                    @Html.TextBox("txtParcela", "", new { @class = "form-control form-control-sm", @maxlength = "10" })
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group col-md-6">
+                    <label for="ddlTipoAvistEstratoId" class="text-small">Área</label>
+                    <input name="txtArea" id="txtArea" class="form-control form-control-sm"
+                           oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                           type="number"
+                           maxlength="10" />
+                </div>
+            </div>
+            <div class="form-row">
+                <button type="button" class="btn btn-primary btn-sm" onclick="_frmParcela.fnAdd()">Guardar</button>&nbsp;&nbsp;
+                <button type="button" class="btn btn-secondary btn-sm" onclick="_frmParcela.fnCancelar()">Cancelar</button>
+            </div>
+        </div>
+    </div>
+    <hr />
+    <div class="table-responsive">
+        <table id="tbParcela" style="width:100%;margin:0px !important;" class="table table-hover table-bordered">
+            <thead>
+                <tr>
+                    <th colspan="15" class="text-sm-left">
+                        <div class="form-inline">
+                            <i class="fa mx-2 fa-lg fa-file-o" style="cursor:pointer;" onclick="_frmParcela.fnAddEdit();" data-toggle="tooltip" data-placement="top" title="Nuevo"></i>
+                            <strong id="lblTitle">Listado de PC</strong>
+                        </div>
+                    </th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
+    <hr />
+</div>

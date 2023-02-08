@@ -1,0 +1,158 @@
+﻿
+@model List<CapaEntidad.DOC.Ent_INFORME_ACT_SILVICULTURAL>
+
+<style type="text/css">
+    #tbRenderActividadSilvicultural_wrapper {
+        padding: 0px;
+    }
+</style>
+
+<script type="text/javascript">
+    var _renderActividadSilvicultural = {};
+    _renderActividadSilvicultural.tbEliTABLA = [];
+
+    _renderActividadSilvicultural.fnInitDataTable_Detail = function () {
+        var columns_label = [], columns_data = [], options = {};
+
+        columns_label = ["Actividad", "Especie","Faja","Plantulas","Ubicación","Tiempo","Cumplimiento","Observación"];
+        columns_data = ["DESC_SILVICULTURALES", "DESC_ESPECIES", "FAJA", "NUM_PLANTULAS", "UBICACION", "TIEMPO", "DESC_CUMPLIMIENTO", "OBSERVACION"];
+        options = {
+            page_length: 10, row_index: true, row_edit: true, row_fnEdit: "_renderActividadSilvicultural.fnAddEdit(this)"
+            , row_delete: true, row_fnDelete: "_renderActividadSilvicultural.fnDelete(this)"
+            , button_copy: true, button_csv: true, button_excel: true, button_pdf: true, button_print: true
+            , export_title: $("#tbRenderActividadSilvicultural").find("thead tr")[0].innerText.trim()
+            , page_sort: true
+        };
+        _renderActividadSilvicultural.dtActSilvicultural = utilDt.fnLoadDataTable_Detail($("#tbRenderActividadSilvicultural"), columns_label, columns_data, options);
+    }
+
+    _renderActividadSilvicultural.fnAddEdit = function (obj) {
+        var url = urlLocalSigo + "Supervision/ManInforme/_ActividadSilvicultural";
+        var option = { url: url, type: 'POST', datos: {}, divId: "mdlManInforme_ActividadSilvicultural" };
+        utilSigo.fnOpenModal(option, function () {
+            _ActividadSilvicultural.fnSaveForm = function (data) {
+                if (data != null) {
+                    var dt = _renderActividadSilvicultural.dtActSilvicultural;
+
+                    if (obj == null || obj == "") {//Nuevo Registro
+                        dt.rows.add([data]).draw();
+                        dt.page('last').draw('page');
+                        utilSigo.toastSuccess("Exito", "Datos guardados correctamente");
+                    } else {//Modificar
+                        var row = dt.row($(obj).parents('tr')).data();
+                        row = data;
+                        dt.row($(obj).parents('tr')).data(row).draw(false);
+                        utilSigo.toastSuccess("Exito", "Datos actualizados correctamente");
+                    }
+                    $("#mdlManInforme_ActividadSilvicultural").modal('hide');
+                } else {
+                    utilSigo.toastError("Error", "No se pudieron guardar los datos");
+                }
+            }
+
+            if (obj != null && obj != "") {
+                var data = _renderActividadSilvicultural.dtActSilvicultural.row($(obj).parents('tr')).data();
+                _ActividadSilvicultural.fnInit(utilSigo.fnConvertArrayToObject(data));
+            } else { _ActividadSilvicultural.fnInit(""); }
+        });
+    }
+
+    _renderActividadSilvicultural.fnDeleteAll = function () {
+        var rows, countFilas, data;
+
+        rows = _renderActividadSilvicultural.dtActSilvicultural.$("tr");
+        countFilas = rows.length;
+        if (countFilas > 0) {
+            utilSigo.dialogConfirm("", "Está seguro de Eliminar Todos los Registros?", function (r) {
+                if (r) {
+                    $.each(rows, function (i, o) {
+                        data = _renderActividadSilvicultural.dtActSilvicultural.row($(o)).data();
+                        if (data["RegEstado"] == "0" || data["RegEstado"] == "2") {
+                            _renderActividadSilvicultural.tbEliTABLA.push({
+                                EliTABLA: "SILVICULTURAL",
+                                COD_ESPECIES: data["COD_ASILVICULTURALES"],
+                                COD_SECUENCIAL: data["COD_SECUENCIAL"]
+                            });
+                        }
+                    });
+                    _renderActividadSilvicultural.dtActSilvicultural.clear().draw();
+                }
+            });
+        } else {
+            utilSigo.toastWarning("Aviso", "No se encontraron registros a eliminar");
+        }
+    }
+
+    _renderActividadSilvicultural.fnDelete = function (obj) {
+        var data = _renderActividadSilvicultural.dtActSilvicultural.row($(obj).parents('tr')).data();
+
+        if (data["RegEstado"] == "0" || data["RegEstado"] == "2") {
+            _renderActividadSilvicultural.tbEliTABLA.push({
+                EliTABLA: "SILVICULTURAL",
+                COD_ESPECIES: data["COD_ASILVICULTURALES"],
+                COD_SECUENCIAL: data["COD_SECUENCIAL"]
+            });
+        }
+        _renderActividadSilvicultural.dtActSilvicultural.row($(obj).parents('tr')).remove().draw(false);
+    }
+
+    _renderActividadSilvicultural.fnImport = function (e, obj) {
+        var url = urlLocalSigo + "Supervision/ManInforme/ImportarDatosInformeSimple";
+        var bExiste = false;
+
+        uploadFile.fileSelectHandler(e, obj, url, { asTipo: "ACTIVIDAD_SILVICULTURAL" }, function (data) {
+            for (var i = 0; i < data.length; i++) {
+                _renderActividadSilvicultural.dtActSilvicultural.rows.add([data[i]]).draw();
+                _renderActividadSilvicultural.dtActSilvicultural.page('last').draw('page');
+            }
+        });
+    }
+
+    _renderActividadSilvicultural.fnGetList = function () {
+        var list = [], rows, countFilas, data;
+
+        rows = _renderActividadSilvicultural.dtActSilvicultural.$("tr");
+        countFilas = rows.length;
+        if (countFilas > 0) {
+            $.each(rows, function (i, o) {
+                data = _renderActividadSilvicultural.dtActSilvicultural.row($(o)).data();
+                if (data["RegEstado"] == "1" || data["RegEstado"] == "2") {
+                    list.push(utilSigo.fnConvertArrayToObject(data));
+                }
+            });
+        }
+        return list;
+    }
+
+    _renderActividadSilvicultural.fnGetListEliTABLA = function () { return _renderActividadSilvicultural.tbEliTABLA }
+
+    $(document).ready(function () {
+        _renderActividadSilvicultural.frm = $("#frmRenderActividadSilvicultural");
+
+        _renderActividadSilvicultural.fnInitDataTable_Detail();
+        _renderActividadSilvicultural.dtActSilvicultural.rows.add(JSON.parse('@Html.Raw(Json.Encode(@Model))')).draw();
+    });
+</script>
+
+<div id="frmRenderActividadSilvicultural">
+    <div class="table-responsive">
+        <table id="tbRenderActividadSilvicultural" style="width:100%;margin:0px !important;" class="table table-hover table-bordered">
+            <thead>
+                <tr>
+                    <th colspan="12" class="text-sm-left">
+                        <div class="form-inline">
+                            <i class="fa mx-2 fa-lg fa-file-o" style="cursor:pointer;" onclick="_renderActividadSilvicultural.fnAddEdit('');" data-toggle="tooltip" data-placement="top" title="Nuevo"></i>
+                            <i class="fa mx-2 fa-lg fa-window-close-o" style="cursor:pointer;" onclick="_renderActividadSilvicultural.fnDeleteAll();" data-toggle="tooltip" data-placement="top" title="Eliminar Todos"></i>
+                            <label style="cursor:pointer;" class="fa mx-2 fa-lg fa-file-excel-o" title="Importar Archivo" data-toggle="tooltip">
+                                <input type="file" id="fileselect" name="fileselect" style="display:none" size="60" onchange="_renderActividadSilvicultural.fnImport(event, this)">
+                            </label>
+                            <a href="@Url.Content("~/Archivos/Plantilla/InformeActividadSilvicultural.xlsx")"> <i class="fa mx-2 fa-lg fa-folder-open" style="cursor:pointer;" data-toggle="tooltip" data-placement="top" title="Descargar Plantilla"></i></a>
+                            <strong>Implementación de actividades silviculturales</strong>
+                        </div>
+                    </th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
+</div>

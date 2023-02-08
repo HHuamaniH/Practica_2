@@ -1,0 +1,194 @@
+﻿
+@model List<CapaEntidad.DOC.Ent_INFORME_VERTICE_AREA>
+
+<style type="text/css">
+    #tbRenderVerticeArea_wrapper {
+        padding: 0px;
+    }
+</style>
+
+<script type="text/javascript">
+    var _renderVerticeArea = {};
+    _renderVerticeArea.tbEliTABLA = [];
+
+    _renderVerticeArea.fnInitDataTable_Detail = function () {
+        var columns_label = [], columns_data = [], options = {};
+
+        columns_label = ["Vértice", "Vértice Campo", "Zona UTM", "Zona UTM Campo", "C. Este", "C. Este Campo", "C. Norte", "C. Norte Campo", "PC", "PC Campo", "Observaciones"];
+        columns_data = ["VERTICE", "VERTICE_CAMPO", "ZONA", "ZONA_CAMPO", "COORDENADA_ESTE", "COORDENADA_ESTE_CAMPO", "COORDENADA_NORTE", "COORDENADA_NORTE_CAMPO", "PCA", "PCA_CAMPO", "OBSERVACION"];
+        options = {
+            page_length: 10, row_index: true, row_edit: true, row_fnEdit: "_renderVerticeArea.fnAddEdi(this)"
+            , row_delete: true, row_fnDelete: "_renderVerticeArea.fnDelete(this)"
+            , button_copy: true, button_csv: true, button_excel: true, button_pdf: true, button_print: true
+            , export_title: $("#tbRenderVerticeArea").find("thead tr")[0].innerText.trim()
+            , page_sort: true
+        };
+        _renderVerticeArea.dtVerticeArea = utilDt.fnLoadDataTable_Detail($("#tbRenderVerticeArea"), columns_label, columns_data, options);
+    }
+
+    _renderVerticeArea.fnAddEdi = function (obj) {
+        var url = urlLocalSigo + "Supervision/ManInforme/_VerticeArea";
+        var option = { url: url, type: 'POST', datos: { asCodTHabilitante: _DatosCampo.hdfCodTHabilitante, aiNumPoa: _DatosCampo.hdfNumPoa }, divId: "mdlManInforme_VerticeArea" };
+        utilSigo.fnOpenModal(option, function () {
+            _VerticeArea.fnSaveForm = function (data) {
+
+                if (data != null) {
+
+                    var dt = _renderVerticeArea.dtVerticeArea;
+                    console.log(data);
+                    if (obj == null || obj == "") {//Nuevo Registro
+                        dt.rows.add([data]).draw();
+                        dt.page('last').draw('page');
+                        utilSigo.toastSuccess("Exito", "Datos guardados correctamente");
+                        //llanos
+                        _VerticeArea.frm.find("#ddlVerticeId").val("0000000").change();
+                        _VerticeArea.frm.find("#txtVertice").val("");
+                        _VerticeArea.frm.find("#ddlZonaId").val("0000000").change();
+                        _VerticeArea.frm.find("#txtCoordEste").val("");
+                        _VerticeArea.frm.find("#txtCoordNorte").val("");
+                        _VerticeArea.frm.find("#ddlZonaCampoId").val("0000000").change();
+                        _VerticeArea.frm.find("#txtCoordEsteCampo").val("");
+                        _VerticeArea.frm.find("#txtCoordNorteCampo").val("");
+                        _VerticeArea.frm.find("#txtObservacion").val("");
+                        _VerticeArea.frm.find("#txtParcelaVerticeArea").val("");
+                    } else {//Modificar
+                        var row = dt.row($(obj).parents('tr')).data();
+                        row = data;
+                        dt.row($(obj).parents('tr')).data(row).draw(false);
+                        utilSigo.toastSuccess("Exito", "Datos actualizados correctamente");
+                        $("#mdlManInforme_VerticeArea").modal('hide'); //lanos
+                    }
+
+                } else {
+                    utilSigo.toastError("Error", "No se pudieron guardar los datos");
+                }
+            }
+
+            if (obj != null && obj != "") {
+                var data = _renderVerticeArea.dtVerticeArea.row($(obj).parents('tr')).data();
+                _VerticeArea.fnInit(utilSigo.fnConvertArrayToObject(data));
+            } else { _VerticeArea.fnInit(""); }
+        });
+    }
+
+    _renderVerticeArea.fnDeleteAll = function () {
+        var rows, countFilas, data;
+
+        rows = _renderVerticeArea.dtVerticeArea.$("tr");
+        countFilas = rows.length;
+        if (countFilas > 0) {
+            utilSigo.dialogConfirm("", "Está seguro de Eliminar Todos los Registros?", function (r) {
+                if (r) {
+                    $.each(rows, function (i, o) {
+                        data = _renderVerticeArea.dtVerticeArea.row($(o)).data();
+                        if (data["RegEstado"] == "0" || data["RegEstado"] == "2") {
+                            _renderVerticeArea.tbEliTABLA.push({
+                                EliTABLA: "ISUPERVISION_LINDAREA_VERTICE",
+                                COD_SECUENCIAL: data["COD_SECUENCIAL"]
+                            });
+                        }
+                    });
+                    _renderVerticeArea.dtVerticeArea.clear().draw();
+                }
+            });
+        } else {
+            utilSigo.toastWarning("Aviso", "No se encontraron registros a eliminar");
+        }
+    }
+
+    _renderVerticeArea.fnDelete = function (obj) {
+        var data = _renderVerticeArea.dtVerticeArea.row($(obj).parents('tr')).data();
+
+        if (data["RegEstado"] == "0" || data["RegEstado"] == "2") {
+            _renderVerticeArea.tbEliTABLA.push({
+                EliTABLA: "ISUPERVISION_LINDAREA_VERTICE",
+                COD_SECUENCIAL: data["COD_SECUENCIAL"]
+            });
+        }
+        _renderVerticeArea.dtVerticeArea.row($(obj).parents('tr')).remove().draw(false);
+    }
+
+    _renderVerticeArea.fnGetList = function () {
+        var list = [], rows, countFilas, data;
+
+        rows = _renderVerticeArea.dtVerticeArea.$("tr");
+        countFilas = rows.length;
+        if (countFilas > 0) {
+            $.each(rows, function (i, o) {
+                data = _renderVerticeArea.dtVerticeArea.row($(o)).data();
+                if (data["RegEstado"] == "1" || data["RegEstado"] == "2") {
+                    list.push(utilSigo.fnConvertArrayToObject(data));
+                }
+            });
+        }
+        return list;
+    }
+
+    _renderVerticeArea.fnImport = function (e, obj) {
+        var url = urlLocalSigo + "Supervision/ManInforme/ImportarDatosInformeSimple";
+        uploadFile.fileSelectHandler(e, obj, url, { asTipo: "VERTICE_AREA" }, function (data) {
+
+            for (var i = 0; i < data.length; i++) {
+                let cod_secuencial = data[i]["COD_SISTEMA"].split('|')[2];
+
+
+                if (!utilDt.existValorSearch(_renderVerticeArea.dtVerticeArea, "COD_SISTEMA", data[i]["COD_SISTEMA"]) || cod_secuencial == 0) {
+                    _renderVerticeArea.dtVerticeArea.rows.add([data[i]]).draw();
+                    _renderVerticeArea.dtVerticeArea.page('last').draw('page');
+                }
+            }
+        });
+    }
+
+    _renderVerticeArea.fnGetListEliTABLA = function () { return _renderVerticeArea.tbEliTABLA }
+
+    _renderVerticeArea.fnExport = function () {
+        var url = urlLocalSigo + "Supervision/ManInforme/ExportarVerticePoa";
+        var params = {
+            asCodInforme: _POASupervisado.frm.find("#hdfCodInforme").val()
+            , aiNumPoa: _POASupervisado.frm.find("#hdfNumPoa").val()
+        };
+        var option = { url: url, datos: JSON.stringify(params), type: 'POST' };
+
+        utilSigo.fnAjax(option, function (data) {
+            if (data.success) {
+                document.location = urlLocalSigo + "Archivos/Plantilla/" + data.msj;
+            } else {
+                utilSigo.toastWarning("Aviso", "Sucedio un error, Comuníquese con el Administrador");
+                console.log(data.msj);
+            }
+        });
+    }
+
+    $(document).ready(function () {
+        _renderVerticeArea.frm = $("#frmRenderVerticeArea");
+
+        _renderVerticeArea.fnInitDataTable_Detail();
+
+        _renderVerticeArea.dtVerticeArea.rows.add(JSON.parse('@Html.Raw(Json.Encode(@Model))')).draw();
+    });
+</script>
+
+<div id="frmRenderVerticeArea">
+    <div class="table-responsive">
+        <table id="tbRenderVerticeArea" style="width:100%;margin:0px !important;" class="table table-hover table-bordered">
+            <thead>
+                <tr>
+                    <th colspan="15" class="text-sm-left">
+                        <div class="form-inline">
+                            <i class="fa mx-2 fa-lg fa-file-o" style="cursor:pointer;" onclick="_renderVerticeArea.fnAddEdi('');" data-toggle="tooltip" data-placement="top" title="Nuevo"></i>
+                            <i class="fa mx-2 fa-lg fa-window-close-o" style="cursor:pointer;" onclick="_renderVerticeArea.fnDeleteAll();" data-toggle="tooltip" data-placement="top" title="Eliminar Todos"></i>
+                            <label style="cursor:pointer;" class="fa mx-2 fa-lg fa-file-excel-o" title="Importar Archivo" data-toggle="tooltip">
+                                <input type="file" id="fileselect" name="fileselect" style="display:none" size="60" onchange="_renderVerticeArea.fnImport(event, this)">
+                            </label>
+                            @*<a href="@Url.Content("~/Archivos/Plantilla/THabilitanteVertice_v2.xlsx")"> <i class="fa mx-2 fa-lg fa-folder-open" style="cursor:pointer;" data-toggle="tooltip" data-placement="top" title="Descargar Plantilla"></i></a>*@
+                            <i class="fa mx-2 fa-lg fa-folder-open" style="cursor:pointer;" onclick="_renderVerticeArea.fnExport();" data-toggle="tooltip" data-placement="top" title="Descargar Plantilla"></i>
+                            <strong>Vértices del Área</strong>
+                        </div>
+                    </th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
+</div>

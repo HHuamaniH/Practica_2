@@ -1,0 +1,145 @@
+﻿
+@{
+    ViewBag.Title = "viewReporte6";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<link href="~/Styles/Proyectos/reporteEstadisticas.min.css" rel="stylesheet" />
+<script src="~/Scripts/chart/Chart.min.js"></script>
+<script src="~/Scripts/chart/custom.js"></script>
+
+<script>
+    $(document).ready(function () {
+        $("#btnReporte").on("click", function () {
+            if (ItemValidarFiltrosBusqueda()) {
+                $("#cnvReporteEst6").remove();
+                $("#dvChartReporteEst6").append("<canvas id='cnvReporteEst6'></canvas>");
+
+                $.ajax({
+                    url: '@Url.Action("generarReporte6", "Estadisticos")',
+                    type: 'POST',
+                    dataType: 'json',
+                    contentType: 'application/json; charset=utf-8',
+                    data: JSON.stringify({
+                        'busAnio': ObtenerListaAnio(),
+                        'busModalidad': ObtenerListaModalidad(),
+                        'busRegion': ObtenerListaRegiones()
+                    }),
+                    success: function (data) {
+                        $(".resultadoRpt6").show();
+                        var subTitulo = "Planes de manejo maderables supervisados";
+                        $("#subTituloReport6>h3").text(subTitulo);
+                        var cantColumns = 7; fila = "";
+                        var i = 0;
+                        var arrayTotal = [0, 0, 0, 0, 0, 0, 0];
+                        $("#tbReportEst6>tbody").empty();
+
+                        var dataGrafico = new Array();
+                        $(data).each(function () {
+                            fila = "<tr><td>" + (++i) + "</td><td>" + $(this)[0] + "</td>";
+                            for (var k = 0; k < cantColumns; k++) {
+                                arrayTotal[k] += $(this)[k + 1];
+                                fila += "<td>" + agregarSeparador(parseFloat($(this)[k + 1].toFixed(3)).toString(), ',') + "</td>";
+                            }
+                            fila += "</tr>";
+                            $("#tbReportEst6>tbody").append(fila);
+
+                            dataGrafico.push([$(this)[0].toString(), $(this)[1], $(this)[2], $(this)[3]]);
+                        });
+
+                        fila = "<tr><td></td><td>Total</td>";
+                        for (var k = 0; k < cantColumns; k++) {
+                            if (k<=2) {
+                                fila += "<td>" + agregarSeparador(parseFloat(arrayTotal[k].toFixed(3)).toString(), ',') + "</td>";
+                            } else {
+                                fila += "<td></td>";
+                            }
+                        }
+                        fila += "</tr>";
+                        $("#tbReportEst6>tbody").append(fila);
+
+                        customChart.LoadBarraApilada(data, 0, {
+                            colIndex: [1, 2], color: ["blue", "red"]
+                            , legend: ["Nro planes de manejo con la existencia de los árboles declarados", "Nro planes de manejo con inexistencia de árboles"]
+                        }, { type: "V", title: "", legend: true, xTitle: "Año Supervisión", yTitle: "Número de Planes de Manejo", canvas: "cnvReporteEst6", labels:true });
+                        unloader();
+                    },
+                    beforeSend: function () {
+                        loader();
+                    },
+                    error: function () {
+                        unloader();
+                    }
+                });
+            }
+        });
+    });
+</script>
+
+<div class="contenedorReporte">
+    <div class="filtroReporte">
+        <div class="toolsLista">
+            <div class="navLista">
+                <a href="@Url.Action("Index","Home")" title="Volver al Inicio"><span class="icon-arrow-back"></span><span>Volver al Inicio</span></a>
+            </div>
+            <div class="tituloLista">
+                <h2>Planes de manejo maderables supervisados</h2>
+            </div>
+        </div>
+        @Html.Partial("Controles/_MasterFiltro")
+        <div class="divbtnReporte">
+            <input id="btnReporte" type="button" value="Generar Reporte" class="btnBotonFormSIGO" />
+        </div>
+    </div>
+    <div class="informacionReporte">
+        <h3 style="margin:0px;">¿Qué contiene este reporte?</h3>
+        <ul style="padding-left:15px;margin-top:5px;margin-bottom:5px;">
+            <li><p>Muestra el número de planes de manejo para aprovechamiento forestal maderable supervisados por el OSINFOR, con existencia o inexistencia* de árboles según <strong>resultados de supervisión</strong>, así como el número de personas que habrían participado; con opción de búsqueda por año, modalidad de aprovechamiento y departamento.</p></li>
+        </ul>
+    </div>
+    <div class="resultadoReporte resultadoRpt6" style="display:none;">
+        <div id="subTituloReport6" class="subTituloReport">
+            <h3></h3>
+        </div>
+        <div class="bloqueResultado">
+            <div class="bloqueResultado2" style="margin-right:5px;">
+                <div class="GrillaDivMarco">
+                    <table id="tbReportEst6" class="Grilla GrillaReporteTotal" style="width:100%;">
+                        <thead>
+                            <tr>
+                                <th rowspan="2">N°</th>
+                                <th rowspan="2">Año Supervisión</th>
+                                <th rowspan="2">Nro planes de manejo con la existencia de los árboles declarados</th>
+                                <th rowspan="2">Nro planes de manejo con inexistencia de árboles</th>
+                                <th rowspan="2">Total de planes de manejos supervisados</th>
+                                <th colspan="2">Número de personas que habrían participado en planes de manejo con inexistencia de árboles</th>
+                                <th colspan="2">Número de persona que habrían participado en planes de manejo con existencia de árboles</th>
+                            </tr>
+                            <tr>
+                                <th>Consultores/Regentes</th>
+                                <th>Profesionales de la ARFFS</th>
+                                <th>Consultores/Regentes</th>
+                                <th>Profesionales de la ARFFS</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="bloqueResultado2" style="margin-left:5px;">
+                <div id="dvChartReporteEst6"></div>
+            </div>
+        </div>
+    </div>
+    <div class="informacionReporte resultadoRpt6" style="display:none;">
+        <ul style="padding-left:20px;margin-top:5px;margin-bottom:5px;">
+            <li>(*) Para este reporte, de manera referencial, se considera planes de manejo con inexistencia desde 20 árboles no ubicados.</li>
+            <li>(*) No se considera otros incumplimientos y/o irregularidades advertidas durante las supervisiones</li>
+            <li>El número de personas que habrían participado en la elaboración y aprobación de planes de manejo podrían repetirse entre años y entre las columnas de existencia e inexistencia.</li>
+            <li>La columna "Profesionales de la ARFFS" incluye a funcionarios que aprueban y especialistas que recomiendan la aprobación o que participaron en la inspección ocular.</li>
+            <li>En el año 2009 las supervisiones se realizaron a partir del mes de Agosto</li>
+            <li style="margin-top:10px;"><strong>Actualizado al: </strong>@ViewBag.fechaProcess</li>
+            <li><strong>Fecha y Hora de Consulta:</strong> @DateTime.Now</li>
+        </ul>
+    </div>
+</div>

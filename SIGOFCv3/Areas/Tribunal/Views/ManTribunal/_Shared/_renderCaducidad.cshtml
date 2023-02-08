@@ -1,0 +1,30 @@
+﻿@model CapaEntidad.ViewModel.VM_ResolucionTFFS
+<div id="divRDCaducidad">
+    <div class="card-header text-small">Determinación</div>
+    <div><br /></div>
+    <div class="form-row">
+        <div class="col-md-4"></div>
+        <div class="form-group col-md-6">
+            <label for="txtNumExp" class="text-small">N° Expediente asignado</label>
+            @Html.EditorFor(m => m.txtNumeroExpediente, new { htmlAttributes = new { @class = "form-control form-control-sm", placeholder = "Expediente Administrativo" } })
+        </div>
+        <div class="form-group col-md-2">
+        </div>
+    </div>
+
+    <div class="form-row">
+        <div class="form-group col-md-4">
+            <label for="chkGTF" class="text-small">Caducidad Titulo Habilitante</label>
+        </div>
+        <div class="form-group col-md-6">
+            @Html.CheckBoxFor(m => m.chkCaducidadTH, new { @class = "form-check-input", style = "width:15px;height:16px;" })
+        </div>
+        <div class="form-group col-md-2">
+        </div>
+    </div>
+
+    <!--Rectificacion-->
+    <div>
+        @Html.Partial("~/Areas/Tribunal/Views/ManTribunal/_Shared/_generic/_renderRectificacion.cshtml", Model)
+    </div>
+</div>

@@ -1,0 +1,298 @@
+﻿
+@{
+    ViewBag.Title = "viewReporte11";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<link href="~/Styles/Proyectos/reporteEstadisticas.min.css" rel="stylesheet" />
+
+<style>
+    td {
+        text-align: center !important;
+    }
+    tbody > tr:last-child > td {
+        background-color: #507cd1;
+        color: #fff;
+        font-weight: bold;
+        text-align: center;
+    }
+</style>
+
+<div class="contenedorReporte">
+    <div class="filtroReporte">
+        <div class="toolsLista">
+            <div class="navLista">
+                <a href="@Url.Action("Index","Home")" title="Volver al Inicio"><span class="icon-arrow-back"></span><span>Volver al Inicio</span></a>
+            </div>
+            <div class="tituloLista">
+                <h2>Oportunidad de envío de planes de manejo forestal por las Autoridades Regionales al OSINFOR</h2>
+            </div>
+        </div>
+        @Html.Partial("Controles/_MasterFiltro")
+    </div>
+    <div class="informacionReporte">
+        <h3 style="margin:0px;">¿Qué contiene este reporte?</h3>
+        <ul style="padding-left:15px;margin-top:5px;margin-bottom:5px;">
+            <li><p>Muestra el cumplimiento o no del plazo de remisión del plan de manejo al OSINFOR por parte de las ARFFS (GORE y ATFFS) de acuerdo a la normativa. El tiempo de entrega se mide entre la fecha de aprobación del plan y la fecha en que el OSINFOR recibe dicho documento de gestión.</p></li>
+        </ul>
+    </div>
+    <div class="resultadoReporte resultadoRpt11">
+        <div class="subTituloReport">
+            <h2>
+                N° de Planes de manejo forestal maderable remitidos al OSINFOR por la Autoridad Regional Forestal y de Fauna Silvestre.
+            </h2>
+        </div>
+        <div class="bloqueResultado">
+            <div class="bloqueResultado2" style="margin-right:5px;">
+                <div class="subTituloReport">
+                    <h3>Período: Ene-Dic 2017</h3>
+                </div>
+                <div class="GrillaDivMarco">
+                    <table id="tbReport2017" class="Grilla GrillaReporteTotal" style="width:100%;">
+                        <thead>
+                            <tr>
+                                <th rowspan="2">GORE/SERFOR-ATFFS</th>
+                                <th rowspan="2">Dentro del plazo (*)</th>
+                                <th rowspan="2">Fuera del plazo</th>
+                                <th rowspan="2">Total de planes entregados</th>
+                                <th>% Dentro del plazo</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>GORE San Martin</td>
+                                <td>5</td>
+                                <td>2</td>
+                                <td>7</td>
+                                <td>71%</td>
+                            </tr>
+                            <tr>
+                                <td>GORE Madre de Dios</td>
+                                <td>109</td>
+                                <td>50</td>
+                                <td>159</td>
+                                <td>69%</td>
+                            </tr>
+                            <tr>
+                                <td>GORE Ucayali</td>
+                                <td>7</td>
+                                <td>83</td>
+                                <td>90</td>
+                                <td>8%</td>
+                            </tr>
+                            <tr>
+                                <td>GORE Loreto</td>
+                                <td>13</td>
+                                <td>195</td>
+                                <td>208</td>
+                                <td>6%</td>
+                            </tr>
+                            <tr>
+                                <td>GORE Huánuco</td>
+                                <td>1</td>
+                                <td>25</td>
+                                <td>26</td>
+                                <td>4%</td>
+                            </tr>
+                            <tr>
+                                <td>GORE Amazonas</td>
+                                <td>0</td>
+                                <td>20</td>
+                                <td>20</td>
+                                <td>0%</td>
+                            </tr>
+                            <tr>
+                                <td>GORE Tumbes</td>
+                                <td>0</td>
+                                <td>2</td>
+                                <td>2</td>
+                                <td>0%</td>
+                            </tr>
+                            <tr>
+                                <td>ATFFS Cusco</td>
+                                <td>0</td>
+                                <td>12</td>
+                                <td>12</td>
+                                <td>0%</td>
+                            </tr>
+                            <tr>
+                                <td>ATFFS Sierra Central</td>
+                                <td>0</td>
+                                <td>5</td>
+                                <td>5</td>
+                                <td>0%</td>
+                            </tr>
+                            <tr>
+                                <td>ATFFS Piura</td>
+                                <td>0</td>
+                                <td>3</td>
+                                <td>3</td>
+                                <td>0%</td>
+                            </tr>
+                            <tr>
+                                <td>ATFFS Lambayeque</td>
+                                <td>1</td>
+                                <td>3</td>
+                                <td>4</td>
+                                <td>25%</td>
+                            </tr>
+                            <tr>
+                                <td>ATFFS Selva Central</td>
+                                <td>5</td>
+                                <td>32</td>
+                                <td>37</td>
+                                <td>14%</td>
+                            </tr>
+                            <tr>
+                                <td>ATFFS Cajamarca</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0%</td>
+                            </tr>
+                            <tr>
+                                <td>Total</td>
+                                <td>141</td>
+                                <td>432</td>
+                                <td>573</td>
+                                <td>25%</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="bloqueResultado2" style="margin-left:5px;">
+                <div class="subTituloReport">
+                    <h3>Período: Ene-Dic 2018</h3>
+                </div>
+                <div class="GrillaDivMarco">
+                    <table id="tbReport2018" class="Grilla GrillaReporteTotal">
+                        <thead>
+                            <tr>
+                                <th rowspan="2">GORE/SERFOR-ATFFS</th>
+                                <th rowspan="2">Dentro del plazo (*)</th>
+                                <th rowspan="2">Fuera del plazo</th>
+                                <th rowspan="2">Total de planes entregados</th>
+                                <th>% Dentro del plazo</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>GORE San Martin</td>
+                                <td>2</td>
+                                <td>23</td>
+                                <td>25</td>
+                                <td>8%</td>
+                            </tr>
+                            <tr>
+                                <td>GORE Madre de Dios</td>
+                                <td>17</td>
+                                <td>134</td>
+                                <td>151</td>
+                                <td>11%</td>
+                            </tr>
+                            <tr>
+                                <td>GORE Ucayali</td>
+                                <td>13</td>
+                                <td>137</td>
+                                <td>150</td>
+                                <td>9%</td>
+                            </tr>
+                            <tr>
+                                <td>GORE Loreto</td>
+                                <td>18</td>
+                                <td>203</td>
+                                <td>221</td>
+                                <td>8%</td>
+                            </tr>
+                            <tr>
+                                <td>GORE Huánuco</td>
+                                <td>9</td>
+                                <td>32</td>
+                                <td>41</td>
+                                <td>22%</td>
+                            </tr>
+                            <tr>
+                                <td>GORE Amazonas</td>
+                                <td>2</td>
+                                <td>26</td>
+                                <td>28</td>
+                                <td>7%</td>
+                            </tr>
+                            <tr>
+                                <td>GORE Tumbes</td>
+                                <td>3</td>
+                                <td>7</td>
+                                <td>10</td>
+                                <td>30%</td>
+                            </tr>
+                            <tr>
+                                <td>ATFFS Cusco</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0%</td>
+                            </tr>
+                            <tr>
+                                <td>ATFFS Sierra Central</td>
+                                <td>0</td>
+                                <td>1</td>
+                                <td>1</td>
+                                <td>0%</td>
+                            </tr>
+                            <tr>
+                                <td>ATFFS Piura</td>
+                                <td>1</td>
+                                <td>16</td>
+                                <td>17</td>
+                                <td>6%</td>
+                            </tr>
+                            <tr>
+                                <td>ATFFS Lambayeque</td>
+                                <td>2</td>
+                                <td>2</td>
+                                <td>4</td>
+                                <td>50%</td>
+                            </tr>
+                            <tr>
+                                <td>ATFFS Selva Central</td>
+                                <td>40</td>
+                                <td>15</td>
+                                <td>55</td>
+                                <td>73%</td>
+                            </tr>
+                            <tr>
+                                <td>ATFFS Cajamarca</td>
+                                <td>0</td>
+                                <td>4</td>
+                                <td>4</td>
+                                <td>0%</td>
+                            </tr>
+                            <tr>
+                                <td>Total</td>
+                                <td>107</td>
+                                <td>600</td>
+                                <td>707</td>
+                                <td>15%</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="informacionReporte resultadoRpt11">
+        <p style="margin-bottom:0px;">Nota: (*) Según la normativa vigente, las Autoridades Regionales Forestales y de Fauna Silvestre, deben remitir al OSINFOR los títulos habilitantes y planes de manejo hasta 15 días hábiles posteriores a su otorgamiento o aprobación, entre ellas:</p>
+        <ul style="padding-left:20px;margin-top:5px;margin-bottom:5px;">
+            <li>Artículo 4° del Decreto Legislativo N° 1085 (Ley de creación del OSINFOR)</li>
+            <li>La Segunda Disposición Complementaria Final del Decreto Supremo N° 024-2010-PCM (Reglamento del Decreto Legislativo N° 1085)</li>
+            <li>Artículo 54° del Decreto Supremo 018-2015-MINAGRI (Reglamento para la Gestión Forestal)</li>
+            <li>Artículo 37° del Decreto Supremo 020-2015-MINAGRI (Reglamento para la Gestión de las Plantaciones Forestales y los Sistemas Agroforestales)</li>
+            <li>Artículo 44° del Decreto Supremo 021-2015-MINAGRI (Reglamento para la Gestión Forestal y de Fauna Silvestre en Comunidades nativas y Comunidades Campesinas)</li>
+            <li>Artículo 17° del Anexo del Decreto Supremo N° 011-2016-MINAGRI (Decreto supremo que aprueba disposiciones para promover la formalización y adecuación de las actividades del sector forestal y de fauna silvestre)</li>
+            <li>Artículo 4° del Decreto Legislativo N° 1319 (Decreto Legislativo que establece medidas para promover el comercio de productos forestales y de fauna silvestre de origen legal)</li>
+        </ul>
+        <p style="margin-bottom:0px;"><strong>Actualizado al: </strong>@ViewBag.fechaProcess</p>
+        <p style="margin-top:0px;"><strong>Fecha y Hora de Consulta:</strong> @DateTime.Now</p>
+    </div>
+</div>

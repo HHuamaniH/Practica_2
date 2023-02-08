@@ -1,0 +1,157 @@
+﻿@model CapaEntidad.ViewModel.VM_ExSitu
+@{
+    ViewBag.Title = "ExSitu";
+    Layout = "~/Views/Shared/_LayoutMain.cshtml";
+}
+<div class="container-fluid">
+    <div class="card">
+        <div class="card-header text-right">
+            Plan de Manejo
+        </div>
+        <div id="divEditExSitu" class="card-body">
+            <div class="card-header text-small">
+                <a id="btnRegresarPME" style="cursor:pointer;" data-toggle="tooltip" data-placement="top" title="Regresar"><i class="fa mx-2 fa-lg fa-reply"></i></a>
+                Presentación de informes anuales
+            </div>
+            <div class="card-body">
+                <form>
+                    @Html.HiddenFor(m => m.codPm)
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label for="lblItemTHModalidad" class="text-small">Modalidad</label>
+                            @Html.EditorFor(m => m.thM, new { htmlAttributes = new { @class = "form-control form-control-sm", @disabled = "disabled" } })
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label for="lblItemTHNumero" class="text-small">Número</label>
+                            @Html.EditorFor(m => m.thN, new { htmlAttributes = new { @class = "form-control form-control-sm", @disabled = "disabled" } })
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label for="lblItemTHTitular" class="text-small">Titular</label>
+                            @Html.EditorFor(m => m.thT, new { htmlAttributes = new { @class = "form-control form-control-sm", @disabled = "disabled" } })
+                        </div>
+                    </div>
+                </form>
+                <div class="table-responsive">
+                    <table id="grvItemESituIAnual" class="table table-hover table-bordered">
+                        <thead>
+                            <tr>
+                                <th colspan="11" class="text-sm-left">
+                                    <div class="form-inline">
+                                        <i id="btnSituAnual" class="fa mx-1 fa-lg fa-file-o" style="cursor:pointer;" data-toggle="tooltip" data-placement="top" title="Nuevo"></i>
+                                        <strong id="tituloInfPlanManejo"></strong>
+                                    </div>
+                                </th>
+                            </tr>
+                            <tr>
+                                <th></th>
+                                <th></th>
+                                <th>Nº</th>
+                                <th>Año</th>
+                                <th>Fecha Emisión</th>
+                                <th>Fecha Recepción</th>
+                                <th>Profesional Nombre</th>
+                                <th>Profesional N° Registro</th>
+                                <th>Profesional N° Colegiatura</th>
+                                <th>TDR Vigente</th>
+                                <th>Observación</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                    <table id="grvItemPGeneticoFESitu" class="table table-hover table-bordered">
+                        <thead>
+                            <tr>
+                                <th colspan="8" class="text-sm-left">
+                                    <div class="form-inline">
+                                        <i id="btnSituPAgente" class="fa mx-1 fa-lg fa-file-o" style="cursor:pointer;" data-toggle="tooltip" data-placement="top" title="Nuevo"></i>
+                                        <strong>Datos del Plantel Genetico Fauna Ex Situ</strong>
+                                    </div>
+                                </th>
+                            </tr>
+                            <tr>
+                                <th></th>
+                                <th></th>
+                                <th>Nº</th>
+                                <th>N° Resolución</th>
+                                <th>Fecha</th>
+                                <th>Funcionario</th>
+                                <th>Cargo</th>
+                                <th>Observación</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="card-header text-small">
+                Datos sobre balance de individuos de fauna silvestre en el establecimiento
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table id="grvbalance_ingreso" class="table table-hover table-bordered">
+                        <thead>
+                            <tr>
+                                <th colspan="11" class="text-sm-left">
+                                    <div class="form-inline">
+                                        <i id="btnSituIngreso" class="fa mx-1 fa-lg fa-file-o" style="cursor:pointer;" data-toggle="tooltip" data-placement="top" title="Nuevo"></i>
+                                        <strong>Ingreso</strong>
+                                    </div>
+                                </th>
+                            </tr>
+                            <tr>
+                                <th></th>
+                                <th></th>
+                                <th>Nº</th>
+                                <th>Especie</th>
+                                <th>Número</th>
+                                <th>Motivo</th>
+                                <th>Documento</th>
+                                <th>N_Documento</th>
+                                <th>F_Emisión</th>
+                                <th>F_Recepción</th>
+                                <th>Observación</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                    <table id="grvbalance_egreso" class="table table-hover table-bordered">
+                        <thead>
+                            <tr>
+                                <th colspan="11" class="text-sm-left">
+                                    <div class="form-inline">
+                                        <i id="btnSituEgreso" class="fa mx-1 fa-lg fa-file-o" style="cursor:pointer;" data-toggle="tooltip" data-placement="top" title="Nuevo"></i>
+                                        <strong>Egreso</strong>
+                                    </div>
+                                </th>
+                            </tr>
+                            <tr>
+                                <th></th>
+                                <th></th>
+                                <th>Nº</th>
+                                <th>Especie</th>
+                                <th>Número</th>
+                                <th>Motivo</th>
+                                <!--<th>Documento</th>-->
+                                <th>N_Documento</th>
+                                <th>F_Emisión</th>
+                                <th>F_Recepción</th>
+                                <th>Observación</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!--Modales-->
+<div class="modal fade" id="modalItemESituIAnual" role="dialog" tabindex="-1"></div>
+<div class="modal fade" id="modalItemESituPgenetico" role="dialog" tabindex="-1"></div>
+<div class="modal fade" id="modalItemESituBalance" role="dialog" tabindex="-1"></div>
+<div class="modal fade" id="modalBuscarPersona" role="dialog" tabindex="-1"></div>
+<div class="modal fade" id="modalAddEditPersona" role="dialog" tabindex="-1"></div>
+<div class="modal fade" id="personaUbigeoModal" tabindex="-1" role="dialog"></div>
+<script src="~/Areas/THabilitante/js/ManPlanManejo/EditExSitu.js"></script>

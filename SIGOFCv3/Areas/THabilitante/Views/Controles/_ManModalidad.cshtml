@@ -1,0 +1,59 @@
+﻿@model SIGOFCv3.Areas.THabilitante.Models.ManGrillaViewModel
+
+<script type="text/javascript">  
+    $(document).ready(function () {
+        $("#chkManConsolidado").click(function () {
+            check = $(this);
+            var state = check.is(":checked");
+            if (state) {
+                check.val(true);
+            } else {
+                check.val(false);
+            }
+        });
+        $("#btnModalidadMan").click(function () {
+            var modalidadSeleccionada = $("#cboManModalidad").val();           
+            if ((modalidadSeleccionada == '-') || (modalidadSeleccionada == "") || (modalidadSeleccionada == null)) {
+                utilSigo.toastWarning("Seleccione", "Seleccione una Modalidad antes de continuar");
+                return false;
+            }          
+            var url = urlLocalSigo + "THabilitante/ManTHabilitante/Index";
+            document.location = url + "?codTH=" + "" + "&dtoMod=" + modalidadSeleccionada;
+            return true;
+        });           
+    });
+</script>
+<div class="modal-dialog" role="document">
+    <div class="modal-content">
+        <div class="modal-header" style="cursor:move;">            
+            <h5 class="modal-title">Seleccione Modalidad</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body"> 
+            <form id="frmManModalidadControles" method="post" action="@Url.Action("Index", "ManTHabilitante",new { Area="THabilitante"})">
+                @Html.HiddenFor(m=>m.hdfTipoFormulario)              
+                <div class="form-group">
+                    <select multiple id="cboManModalidad" name="cboManModalidad" class="form-control form-control-sm" style="height:400px;">
+                        @foreach (var item in Model.listMComboModalidad)
+                        {
+                            <option value="@item.CODIGO.Trim()">@item.DESCRIPCION</option>
+                        }
+                    </select>
+                </div>
+                <div class="form-group text-right" >
+                    @Html.CheckBoxFor(m=>m.chkManConsolidado, new { @class = "form-check-input", value=false} )                  
+                    <label class="form-check-label" for="chkManConsolidado" style="background-color:yellow;">¿Consolidado?</label>
+                </div>
+            </form>                             
+        </div>
+        <div class="modal-footer">
+            <button id="btnModalidadMan" class="btn-primary">Aceptar</button>
+        </div>
+
+    </div>
+</div>
+
+
+

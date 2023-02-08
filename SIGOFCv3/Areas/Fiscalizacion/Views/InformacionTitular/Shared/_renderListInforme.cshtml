@@ -1,0 +1,276 @@
+﻿@model CapaEntidad.ViewModel.VM_InformacionTitular
+
+<style type="text/css">
+    #tbRenderListInfTitular_wrapper {
+        padding: 0px;
+    }
+
+    #tbConsultaInfTitular_info {
+        color: #33b35a;
+        font-size: 12px;
+        margin-top: 12px;
+    }
+</style>
+
+
+<script type="text/javascript">
+    var _renderListExpediente = {};
+    _renderListExpediente.tbEliminaInforme = [];
+    // iniciar datos en la tabla
+    _renderListExpediente.fnInitDataTable_Detail = function () {
+        var columns_label = [], columns_data = [], options = {};
+
+        columns_label = ["Número", "Sub. Dir. Linea", "Nro_THabilitante", "Titular"];
+         columns_data = ["NUMERO", "D_LINEA", "NUM_THABILITANTE", "TITULAR"];
+        options = {
+            page_length: 10, row_index: true, row_delete: true, row_fnDelete: "_renderListExpediente.fnDelete(this)", page_sort: true
+        };
+        _renderListExpediente.dtRenderListInforme = utilDt.fnLoadDataTable_Detail(_renderListExpediente.frm.find("#tbRenderListInfTitular"), columns_label, columns_data, options);
+        _renderListExpediente.dtRenderListInforme.rows.add(JSON.parse('@Html.Raw(Json.Encode(@Model.tbInforme))')).draw();
+
+        options = {
+            page_paging: true, page_length: 10, row_index: true, row_select: true, row_fnSelect: "_renderListExpediente.fnSelect(this)"
+        };
+        utilDt.fnLoadDataTable_Detail(_renderListExpediente.frm.find("#tbConsultaExpediente"), columns_label, columns_data, options);
+        _renderListExpediente.dtConsultaInforme = _renderListExpediente.fnInitDataTablePaging(options);
+    }
+
+    _renderListExpediente.fnViewModalConsulta = function () {
+        utilSigo.modalDraggable(_renderListExpediente.frm.find("#mdlConsultaInfTitular"), '.modal-header');
+        _renderListExpediente.frm.find("#mdlConsultaInfTitular").modal({ keyboard: true, backdrop: 'static' });
+    }
+
+
+    _renderListExpediente.fnSelect = function (obj) {
+        var data = _renderListExpediente.dtConsultaInforme.row($(obj).parents('tr')).data();
+        if (!utilDt.existValorSearch(_renderListExpediente.dtRenderListInforme, "NUMERO", data["NUMERO"])) {
+            data["RegEstado"] = 1;
+            _renderListExpediente.dtRenderListInforme.rows.add([data]).draw();
+            _renderListExpediente.dtRenderListInforme.page('last').draw('page');
+
+            console.log(data["MEDIDAS_CAUTELARES"]);
+
+            if (data["MEDIDAS_CAUTELARES"] == 1) ManInfTitular_AddEdit.frm.find("#divApelarMedCaut").show();    
+            else ManInfTitular_AddEdit.frm.find("#divApelarMedCaut").hide(); 
+        } else {
+            utilSigo.toastWarning("Aviso", "El informe ya se encuentra en la lista");
+        }
+        _renderListExpediente.frm.find('#mdlConsultaInfTitular').modal('hide');
+    }
+
+    /*Listado de registros (render)*/
+    _renderListExpediente.fnDelete = function (obj) {
+        utilSigo.dialogConfirm("Confirmacion", "¿Está seguro de Eliminar el Registro Seleccionado?", function (r) {
+            if (r) {
+                var data = _renderListExpediente.dtRenderListInforme.row($(obj).parents('tr')).data();
+                if (data["RegEstado"] == "0") {
+                    //let EliTabla = "";
+                    if (data["COD_RESODIREC_INI_PAU"].trim() != "" && data["COD_RESODIREC"].trim() != "") {
+                        //console.log("aqui")
+                        _renderListExpediente.tbEliminaInforme.push({
+                            EliTABLA: "INFTIT_DET_EXP",
+                            COD_RESODIREC: data["COD_RESODIREC"],
+                            COD_RESODIREC_INI_PAU: data["COD_RESODIREC_INI_PAU"]
+
+                        });
+                    }
+                    else if (data["COD_RESODIREC"].trim() != "") {
+                        _renderListExpediente.tbEliminaInforme.push({
+                            EliTABLA: "INFTIT_VS_RD",
+                            COD_RESODIREC: data["COD_RESODIREC"]
+                        });
+                    }
+                    else if (data["COD_INFORME"].trim() != "") {
+                        _renderListExpediente.tbEliminaInforme.push({
+                            EliTABLA: "INFTIT_INFORME",
+                            COD_INFORME: data["COD_INFORME"]
+                        });
+                    }
+                    else if (data["COD_ILEGAL"].trim() != "") {
+                        _renderListExpediente.tbEliminaInforme.push({
+                            EliTABLA: "INFTIT_ILEGAL",
+                            COD_INFORME: data["COD_ILEGAL"]
+                        });
+                    }
+                    else if (data["NUM_POA"] != 0 && data["NUM_POA"] != -1 && data["COD_THABILITANTE"].trim() != "") {
+                        _renderListExpediente.tbEliminaInforme.push({
+                            EliTABLA: "INFTIT_POA",
+                            NUM_POA: data["NUM_POA"],
+                            COD_THABILITANTE: data["COD_THABILITANTE"],
+                        });
+                    }
+                    else if (data["COD_PMANEJO"].trim() != "") {
+                        _renderListExpediente.tbEliminaInforme.push({
+                            EliTABLA: "INFTIT_PLAN_MANEJO",
+                            COD_PMANEJO: data["COD_PMANEJO"]
+                        });
+                    }
+                    else if (data["COD_THABILITANTE"].trim() != "") {
+                        _renderListExpediente.tbEliminaInforme.push({
+                            EliTABLA: "INFTIT_VS_TH",
+                            COD_THABILITANTE: data["COD_THABILITANTE"]
+                        });
+                    }
+
+                }
+                _renderListExpediente.dtRenderListInforme.row($(obj).parents('tr')).remove().draw(false);
+                utilSigo.toastSuccess("Éxito", "El elemento ha sido eliminado correctamente");
+            }
+        });
+    }
+    _renderListExpediente.fnGetListEliTABLA = function () { return _renderListExpediente.tbEliminaInforme }
+
+    // para llenar el modal
+    _renderListExpediente.fnInitDataTablePaging = function (options) {
+        var optDt = {};
+        optDt.iLength = options.page_length;
+        optDt.iStart = 0;
+        optDt.bSearch = false;
+        optDt.bInfo = true;
+        optDt.bSort = true;
+        optDt.aSort = [];
+        return _renderListExpediente.frm.find("#tbConsultaExpediente").DataTable({
+            processing: true,
+            serverSide: true,
+            searching: optDt.bSearch,
+            ordering: optDt.bSort,
+            deferLoading: 0,
+            paging: true,
+            ajax: {
+                "url": urlLocalSigo + "Fiscalizacion/InformacionTitular/ConsultaModal",
+                "data": function (d) {
+                    d.customSearchEnabled = true;
+                    d.customSearchForm = "LISTAR_INFORMES_RD_EXPADM"; //ddlModalFiscalizacion
+                    d.customSearchType = _renderListExpediente.frm.find("#ddlModalFiscalizacion").val();
+                    d.customSearchValue = _renderListExpediente.frm.find("#txtConsultaInfTitular").val();
+                    for (var i = 0; i < d.order.length; i++) {
+                        d.order[i]["column_name"] = d.columns[d.order[i]["column"]]["data"];
+                    }
+                    d.columns = null;
+                },
+                "error": function (jqXHR) {
+                    utilSigo.unblockUIGeneral();
+                    utilSigo.toastError("Error", initSigo.MessageError);
+                    console.log(jqXHR.responseText);
+                }
+            },
+            columns: options.table_columns,
+            bInfo: optDt.bInfo,
+            "lengthMenu": [[10, 20, 50, 100], [10, 20, 50, 100]],
+            "bLengthChange": false,
+            "aaSorting": optDt.aSort,
+            "pageLength": optDt.iLength,
+            "displayStart": optDt.iStart,
+            "oLanguage": initSigo.oLanguage,
+            "drawCallback": initSigo.showPagination,
+        });
+    }
+
+    _renderListExpediente.fnConsulta = function () {
+        var txtConsulta = _renderListExpediente.frm.find("#txtConsultaInfTitular").val();
+        if (txtConsulta.length > 2) {
+            _renderListExpediente.dtConsultaInforme.ajax.reload();
+        } else {
+            utilSigo.toastWarning("Aviso", "Ingrese al menos 3 caracteres para proceder con la búsqueda.");
+        }
+    }
+
+    _renderListExpediente.fnInit = function () {
+        _renderListExpediente.frm.find("#btnConsultaInfTitular").click(function () {
+            _renderListExpediente.fnConsulta();
+
+        });
+        _renderListExpediente.frm.find("#txtConsultaInfTitular").keyup(function (e) {
+            if (e.keyCode == 13) {
+                _renderListExpediente.fnConsulta();
+            }
+        });
+        _renderListExpediente.frm.find("#mdlConsultaInfTitular").on('shown.bs.modal', function () {
+            _renderListExpediente.frm.find("#txtConsultaInfTitular").focus();
+        });
+    }
+
+    _renderListExpediente.fnGetList = function () {
+        let list = [], rows, countFilas, data;
+
+        rows = _renderListExpediente.dtRenderListInforme.$("tr");
+        countFilas = rows.length;
+        if (countFilas > 0) {
+            $.each(rows, function (i, o) {
+                data = _renderListExpediente.dtRenderListInforme.row($(o)).data();
+               // if (data["RegEstado"] == "1" || data["RegEstado"] == "2") {
+                list.push(utilSigo.fnConvertArrayToObject(data));
+               // }
+            });
+        }
+        return list;
+    }
+
+
+   $(document).ready(function () {
+       _renderListExpediente.frm = $("#frmRenderListInfTitular");
+       //inicializa la tabla con los campos obtenidos del model
+       _renderListExpediente.fnInitDataTable_Detail();
+       //inicializa los componentes necesarios
+       _renderListExpediente.fnInit();
+   });
+
+</script>
+<div id="frmRenderListInfTitular">
+    @Html.HiddenFor(m => m.txtTituloDocumento)
+    <div class="table-responsive">
+        <table id="tbRenderListInfTitular" style="width:100%;margin:0px !important;" class="table table-hover table-bordered">
+            <thead>
+                <tr>
+                    <th colspan="6" class="text-sm-left">
+                        <div class="form-inline">
+                            <i class="fa mx-2 fa-lg fa-file-o" style="cursor:pointer;" onclick="_renderListExpediente.fnViewModalConsulta();" data-toggle="tooltip" data-placement="top" title="Nuevo"></i>
+                            <strong>@Html.Raw(@Model.lbldocumento)</strong>
+                        </div>
+                    </th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
+
+
+    <div class="modal fade hide" id="mdlConsultaInfTitular" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header text-small" style="cursor:move;">
+                    @Model.txtTituloModal
+                    <i class="fa fa-close" style="cursor:pointer;" data-dismiss="modal" aria-label="Close"></i>
+                </div>
+                <div class="modal-body" style="padding:0px;">
+                    <div id="frmConsultaInfTitular">
+                        <div class="card-body">
+                            <div class="form-row">
+                                <div class="col-md-3 mb-3" style="margin-bottom:0px!important;">
+                                    @Html.DropDownListFor(m => m.sBusqueda, new SelectList(Model.sBusqueda, "Value", "Text", Model.sBusqueda), new { @class = "form-control form-control-sm", @id = "ddlModalFiscalizacion" })
+                                </div>
+                                <div class="col-md-9 mb-3" style="margin-bottom:0px!important;">
+                                    <div class="input-group">
+                                        <input type="text" id="txtConsultaInfTitular" class="form-control form-control-sm" maxlength="50" />
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text" id="btnConsultaInfTitular" style="cursor:pointer;color:forestgreen">
+                                                <i class="fa fa-search" data-toggle="tooltip" data-placement="top" title="Buscar"></i>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="table-responsive" style="overflow-y:hidden;">
+                            <table id="tbConsultaExpediente" style="width:100%;margin:0px !important;" class="table table-hover table-bordered">
+                                <thead></thead>
+                                <tbody></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer"></div>
+            </div>
+        </div>
+    </div>
+</div>

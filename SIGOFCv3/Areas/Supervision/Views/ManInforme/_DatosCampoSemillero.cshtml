@@ -1,0 +1,118 @@
+﻿
+@model List<CapaEntidad.DOC.Ent_INFORME_SEMILLERO>
+
+<script type="text/javascript">
+    var _DatosCampoSemillero = {};
+
+    _DatosCampoSemillero.fnInitDataTable_Detail = function () {
+        var columns_label = [], columns_data = [], options = {};
+
+        columns_label = ["POA", "Bloque", "Bloque Campo", "Faja", "Faja Campo", "Código", "Código Campo", "Especie", "Especie Campo"
+            , "Coincide con la especie", "Zona UTM", "Zona UTM Campo", "C. Este", "C. Este Campo", "C. Norte", "C. Norte Campo"
+            , "DAP (cm)", "DAP Campo (cm)", "DAP Campo 1 (cm)", "DAP Campo 2 (cm)", "Metodología medición DAP"
+            , "AC (m)", "AC Campo (m)", "Estado", "Estado Campo", "PC PMF", "PC Campo","Fenología", "C. Fuste", "F. Copa", "P. Copa"
+            ,"Estado Fitosanitario","Grado Infestación", "Cant. Sobre Estimación de los Diámetros"
+            ,"% Sobre Estimación de los Diámetros","Cant. Sub Estimación de los Diámetros","% Sub Estimación de los Diámetros","Observación"];
+        columns_data = ["POA", "BLOQUE", "BLOQUE_CAMPO", "FAJA", "FAJA_CAMPO", "CODIGO", "CODIGO_CAMPO", "DESC_ESPECIES", "DESC_ESPECIES_CAMPO"
+            , "DESC_COINCIDE_ESPECIES", "ZONA", "ZONA_CAMPO", "COORDENADA_ESTE", "COORDENADA_ESTE_CAMPO", "COORDENADA_NORTE", "COORDENADA_NORTE_CAMPO"
+            , "DAP", "DAP_CAMPO", "DAP_CAMPO1", "DAP_CAMPO2", "MMEDIR_DAP"
+            , "AC", "AC_CAMPO", "DESC_EESTADO", "DESC_EESTADO_CAMPO", "PCA_POA","PCA", "DESC_EFENOLOGICO", "DESC_CFUSTE", "DESC_FCOPA", "DESC_PCOPA"
+            , "DESC_ESANITARIO", "DESC_ILIANAS", "CANT_SOBRE_ESTIMA_DIAMETRO"
+            , "PORC_SOBRE_ESTIMA_DIAMETRO", "CANT_SUB_ESTIMA_DIAMETRO", "PORC_SUB_ESTIMA_DIAMETRO", "OBSERVACION"];
+        options = {
+            page_length: 10, row_index: true, row_edit: true, row_fnEdit: "_DatosCampoSemillero.fnAddEdit(this)"
+            , page_render: true, page_info: true, page_search: true
+        };
+        _DatosCampoSemillero.dtDatosCampoSemillero = utilDt.fnLoadDataTable_Detail($("#tbDatosCampoSemillero"), columns_label, columns_data, options);
+    }
+
+    _DatosCampoSemillero.fnAddEdit = function (obj) {
+        var url = urlLocalSigo + "Supervision/ManInforme/_EspecieSemillero";
+        var option = { url: url, type: 'POST', datos: { asCodInforme: _DatosCampoSemillero.frm.find("#hdfCodInforme").val(), aiNumPoa: _DatosCampo.hdfNumPoa}, divId: "mdlManInforme_EspecieCampo" };
+        utilSigo.fnOpenModal(option, function () {
+            _EspecieSemillero.fnSaveForm = function (data) {
+                if (data != null) {
+                    var dt = _DatosCampoSemillero.dtDatosCampoSemillero;
+                    var row = dt.row($(obj).parents('tr')).data();
+                    row = data;
+                    dt.row($(obj).parents('tr')).data(row).draw(false);
+                    utilSigo.toastSuccess("Exito", "Datos actualizados correctamente");
+
+                    $("#mdlManInforme_EspecieCampo").modal('hide');
+                } else {
+                    utilSigo.toastError("Error", "No se pudieron guardar los datos");
+                }
+            }
+
+            if (obj != null && obj != "") {
+                var data = _DatosCampoSemillero.dtDatosCampoSemillero.row($(obj).parents('tr')).data();
+                _EspecieSemillero.fnInit(utilSigo.fnConvertArrayToObject(data));
+            }
+        });
+    }
+
+    _DatosCampoSemillero.fnImport = function (e, obj) {
+        var url = urlLocalSigo + "Supervision/ManInforme/ImportarDatosCampo";
+        uploadFile.fileSelectHandler(e, obj, url, { asTipo: "SEMILLERO", asCodInforme: _DatosCampoSemillero.frm.find("#hdfCodInforme").val(), aiNumPoa: 0 }, function (data) {
+            $("#mdlManInforme_DatosCampo").modal('hide');
+        });
+    }
+
+    $(document).ready(function () {
+        _DatosCampoSemillero.frm = $("#frmDatosCampoSemillero");
+
+        _DatosCampoSemillero.fnInitDataTable_Detail();
+
+        @{
+            var serializer = new System.Web.Script.Serialization.JavaScriptSerializer();
+            serializer.MaxJsonLength = Int32.MaxValue;
+            var jsonModel = serializer.Serialize(Model);
+        }
+
+        @*_DatosCampoSemillero.dtDatosCampoSemillero.rows.add(JSON.parse('@Html.Raw(Json.Encode(@Model))')).draw();*@
+        _DatosCampoSemillero.dtDatosCampoSemillero.rows.add(@Html.Raw(jsonModel)).draw();
+    });
+</script>
+
+<style type="text/css">
+    #dvDatosCampoSemillero .dataTables_info {
+        color: #33b35a;
+        font-size: 15px;
+        margin-top: 17px;
+    }
+</style>
+
+<div class="modal-dialog modal-custom-tb" role="document" style="height:95%;">
+    <div class="modal-content" style="height:100%;">
+        <div class="modal-header text-small" style="cursor:move;">
+            Datos de Campo de la Muestra de Semillero Maderable
+            <i class="fa fa-close" style="cursor:pointer;" data-dismiss="modal" aria-label="Close"></i>
+        </div>
+        <div class="modal-body" style="padding:0px;overflow-y:auto;">
+            <div id="frmDatosCampoSemillero">
+                @Html.Hidden("hdfCodInforme", (string)ViewBag.hdfCodInforme)
+                <div id="dvDatosCampoSemillero" class="table-responsive" style="margin-top:5px;">
+                    <table id="tbDatosCampoSemillero" style="width:100%" class="table table-hover table-bordered">
+                        <thead>
+                            <tr>
+                                <th colspan="40" class="text-sm-left">
+                                    <div class="form-inline">
+                                        <label style="cursor:pointer;" class="fa mx-2 fa-lg fa-file-excel-o" title="Importar Archivo" data-toggle="tooltip">
+                                            <input type="file" id="fileselect" name="fileselect" style="display:none" size="60" onchange="_DatosCampoSemillero.fnImport(event, this)">
+                                        </label>
+                                        <a href="@Url.Content("~/Archivos/Plantilla/PoaMaderableCenso_Modificar_semillero_v2.xlsx")"> <i class="fa mx-2 fa-lg fa-folder-open" style="cursor:pointer;" data-toggle="tooltip" data-placement="top" title="Descargar Plantilla Campo"></i></a>
+                                        <strong>
+                                            Listado de Especies Seleccionadas en la Muestra
+                                        </strong>
+                                    </div>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer"></div>
+    </div>
+</div>

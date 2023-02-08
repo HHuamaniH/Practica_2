@@ -1,0 +1,165 @@
+﻿
+@model List<CapaEntidad.DOC.Ent_INFORME_HUAYRONA>
+
+<style type="text/css">
+    #tbRenderHuayrona_wrapper {
+        padding: 0px;
+    }
+</style>
+
+<script type="text/javascript">
+    var _renderHuayrona = {};
+    _renderHuayrona.tbEliTABLA = [];
+
+    _renderHuayrona.fnInitDataTable_Detail = function () {
+        var columns_label = [], columns_data = [], options = {};
+
+        columns_label = ["Número", "Zona UTM","Coordenada Este","Coordenada Norte","Volumen"];
+        columns_data = ["NUMERO", "ZONA", "COORDENADA_ESTE", "COORDENADA_NORTE", "VOLUMEN"];
+        options = {
+            page_length: 10, row_index: true, row_edit: true, row_fnEdit: "_renderHuayrona.fnAddEdit(this)"
+            , row_delete: true, row_fnDelete: "_renderHuayrona.fnDelete(this)"
+            , button_copy: true, button_csv: true, button_excel: true, button_pdf: true, button_print: true
+            , export_title: $("#tbRenderHuayrona").find("thead tr")[0].innerText.trim()
+            , page_sort: true
+        };
+        _renderHuayrona.dtHuayrona = utilDt.fnLoadDataTable_Detail($("#tbRenderHuayrona"), columns_label, columns_data, options);
+    }
+
+    _renderHuayrona.fnAddEdit = function (obj) {
+        var url = urlLocalSigo + "Supervision/ManInforme/_Huayrona";
+        var option = { url: url, type: 'POST', datos: {}, divId: "mdlManInforme_Huayrona" };
+        utilSigo.fnOpenModal(option, function () {
+            _Huayrona.fnSaveForm = function (data) {
+                if (data != null) {
+                    var dt = _renderHuayrona.dtHuayrona;
+
+                    if (obj == null || obj == "") {//Nuevo Registro
+                        if (!utilDt.existValorSearch(dt, "NUMERO", data["NUMERO"])) {
+                            dt.rows.add([data]).draw();
+                            dt.page('last').draw('page');
+                            utilSigo.toastSuccess("Exito", "Datos guardados correctamente");
+                        } else {
+                            utilSigo.toastWarning("Aviso", "El número ya se encuentra registrado");
+                        }
+                    } else {//Modificar
+                        var row = dt.row($(obj).parents('tr')).data();
+                        row = data;
+                        dt.row($(obj).parents('tr')).data(row).draw(false);
+                        utilSigo.toastSuccess("Exito", "Datos actualizados correctamente");
+                    }
+                    $("#mdlManInforme_Huayrona").modal('hide');
+                } else {
+                    utilSigo.toastError("Error", "No se pudieron guardar los datos");
+                }
+            }
+
+            if (obj != null && obj != "") {
+                var data = _renderHuayrona.dtHuayrona.row($(obj).parents('tr')).data();
+                _Huayrona.fnInit(utilSigo.fnConvertArrayToObject(data));
+            } else { _Huayrona.fnInit(""); }
+        });
+    }
+
+    _renderHuayrona.fnDeleteAll = function () {
+        var rows, countFilas, data;
+
+        rows = _renderHuayrona.dtHuayrona.$("tr");
+        countFilas = rows.length;
+        if (countFilas > 0) {
+            utilSigo.dialogConfirm("", "Está seguro de Eliminar Todos los Registros?", function (r) {
+                if (r) {
+                    $.each(rows, function (i, o) {
+                        data = _renderHuayrona.dtHuayrona.row($(o)).data();
+                        if (data["RegEstado"] == "0" || data["RegEstado"] == "2") {
+                            _renderHuayrona.tbEliTABLA.push({
+                                EliTABLA: "HUAYRONA",
+                                COD_ESPECIES: data["NUMERO"]
+                            });
+                        }
+                    });
+                    _renderHuayrona.dtHuayrona.clear().draw();
+                }
+            });
+        } else {
+            utilSigo.toastWarning("Aviso", "No se encontraron registros a eliminar");
+        }
+    }
+
+    _renderHuayrona.fnDelete = function (obj) {
+        var data = _renderHuayrona.dtHuayrona.row($(obj).parents('tr')).data();
+
+        if (data["RegEstado"] == "0" || data["RegEstado"] == "2") {
+            _renderHuayrona.tbEliTABLA.push({
+                EliTABLA: "HUAYRONA",
+                COD_ESPECIES: data["NUMERO"]
+            });
+        }
+        _renderHuayrona.dtHuayrona.row($(obj).parents('tr')).remove().draw(false);
+    }
+
+    _renderHuayrona.fnImport = function (e, obj) {
+        var url = urlLocalSigo + "Supervision/ManInforme/ImportarDatosInformeSimple";
+        var bExiste = false;
+
+        uploadFile.fileSelectHandler(e, obj, url, { asTipo: "HUAYRONA" }, function (data) {
+            for (var i = 0; i < data.length; i++) {
+                if (!utilDt.existValorSearch(_renderHuayrona.dtHuayrona, "NUMERO", data[i]["NUMERO"])) {
+                    _renderHuayrona.dtHuayrona.rows.add([data[i]]).draw();
+                    _renderHuayrona.dtHuayrona.page('last').draw('page');
+                } else { bExiste = true; }
+            }
+            if (bExiste) {
+                utilSigo.toastWarning("Aviso", "Se omitió la carga de algunas filas del Excel porque ya se encontraban registradas");
+            }
+        });
+    }
+
+    _renderHuayrona.fnGetList = function () {
+        var list = [], rows, countFilas, data;
+
+        rows = _renderHuayrona.dtHuayrona.$("tr");
+        countFilas = rows.length;
+        if (countFilas > 0) {
+            $.each(rows, function (i, o) {
+                data = _renderHuayrona.dtHuayrona.row($(o)).data();
+                if (data["RegEstado"] == "1" || data["RegEstado"] == "2") {
+                    list.push(utilSigo.fnConvertArrayToObject(data));
+                }
+            });
+        }
+        return list;
+    }
+
+    _renderHuayrona.fnGetListEliTABLA = function () { return _renderHuayrona.tbEliTABLA }
+
+    $(document).ready(function () {
+        _renderHuayrona.frm = $("#frmRenderHuayrona");
+
+        _renderHuayrona.fnInitDataTable_Detail();
+        _renderHuayrona.dtHuayrona.rows.add(JSON.parse('@Html.Raw(Json.Encode(@Model))')).draw();
+    });
+</script>
+
+<div id="frmRenderHuayrona">
+    <div class="table-responsive">
+        <table id="tbRenderHuayrona" style="width:100%;margin:0px !important;" class="table table-hover table-bordered">
+            <thead>
+                <tr>
+                    <th colspan="8" class="text-sm-left">
+                        <div class="form-inline">
+                            <i class="fa mx-2 fa-lg fa-file-o" style="cursor:pointer;" onclick="_renderHuayrona.fnAddEdit('');" data-toggle="tooltip" data-placement="top" title="Nuevo"></i>
+                            <i class="fa mx-2 fa-lg fa-window-close-o" style="cursor:pointer;" onclick="_renderHuayrona.fnDeleteAll();" data-toggle="tooltip" data-placement="top" title="Eliminar Todos"></i>
+                            <label style="cursor:pointer;" class="fa mx-2 fa-lg fa-file-excel-o" title="Importar Archivo" data-toggle="tooltip">
+                                <input type="file" id="fileselect" name="fileselect" style="display:none" size="60" onchange="_renderHuayrona.fnImport(event, this)">
+                            </label>
+                            <a href="@Url.Content("~/Archivos/Plantilla/InformeHuayrona.xlsx")"> <i class="fa mx-2 fa-lg fa-folder-open" style="cursor:pointer;" data-toggle="tooltip" data-placement="top" title="Descargar Plantilla"></i></a>
+                            <strong>Lista de Huayronas</strong>
+                        </div>
+                    </th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
+</div>

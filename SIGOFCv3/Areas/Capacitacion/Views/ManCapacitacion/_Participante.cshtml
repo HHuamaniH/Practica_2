@@ -1,0 +1,133 @@
+﻿
+<script src="~/Areas/Capacitacion/js/ManCapacitacion/_Participante.js"></script>
+
+<div class="modal-dialog" role="document">
+    <div class="modal-content">
+        <div class="modal-header text-small" style="cursor:move;">
+            <span id="lblItemPart_Titulo"></span>
+            <i class="fa fa-close" style="cursor:pointer;" data-dismiss="modal" aria-label="Close"></i>
+        </div>
+        <div class="modal-body">
+            <form id="frmItemParticipante">
+                @Html.Hidden("hdfItemPart_FechaRegistro")
+                @Html.Hidden("hdfItemPart_TipoParticipante")
+                @Html.Hidden("hdfItemPart_RegEstado")
+                <div id="dvItemPart_Institucion" class="form-group row" style="margin-bottom:0px;">
+                    <label for="lblItemPart_InstitucionId" class="col-md-4 col-form-label text-small">Procedencia/Institución</label>
+                    <div class="col-md-8">
+                        @Html.DropDownList("ddlItemPart_InstitucionId", new SelectList(ViewBag.ddlItemPart_Institucion, "Value", "Text"), new { @class = "form-control form-control-sm", @style = "width:auto;" })
+                    </div>
+                </div>
+                <div class="form-group row" style="margin-bottom:0px;">
+                    <label for="lblItemPart_Participantelbl" class="col-md-4 col-form-label text-small">Participante<i class="fa fa-cog fa-spin text-danger" id="iconPersona" style="display:none;" data-toggle="tooltip" data-placement="top" title="Seleccione el participante"></i></label>
+                    <div class="col-md-8">
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"><i class="fa fa-search-plus" style="cursor:pointer;" data-toggle="tooltip" data-placement="top" title="Seleccionar Participante" onclick="_Participante.fnBuscarPersona();"></i></span>
+                            </div>
+                            @Html.Editor("lblItemPart_Participante", new { htmlAttributes = new { @class = "form-control form-control-sm", @disabled = "disabled" } })
+                            @Html.Hidden("hdfItemPart_Participante")
+                            @Html.Hidden("hdfItemPart_Genero")
+                            @Html.Hidden("hdfItemPart_Documento")
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group row dvItemPart_DatosAsistente" style="margin-bottom:0px;">
+                    <label for="ddlItemPart_GrupoPublicoId" class="col-md-4 col-form-label text-small">Grupo Público Participante</label>
+                    <div class="col-md-8">
+                        @Html.DropDownList("ddlItemPart_GrupoPublicoId", new SelectList(ViewBag.ddlItemPart_GrupoPublico, "Value", "Text"), new { @class = "form-control form-control-sm", @style = "width:auto;" })
+                    </div>
+                </div>
+                <div class="form-group row" style="margin-bottom:0px; display:none;" id="dvItemPart_THabilitante">
+                    <label for="lblItemPart_THabilitantelbl" class="col-md-4 col-form-label text-small">Título Habilitante</label>
+                    <div class="col-md-8">
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"><i class="fa fa-search" style="cursor:pointer;" data-toggle="tooltip" data-placement="top" title="Seleccionar Título Habilitante" onclick="_Participante.fnViewModalTHabilitante();"></i></span>
+                            </div>
+                            @Html.Editor("lblItemPart_THabilitante", new { htmlAttributes = new { @class = "form-control form-control-sm", @disabled = "disabled" } })
+                            @Html.Hidden("hdfItemPart_THabilitante")
+                        </div>
+                    </div>
+                </div>
+                <div id="dvItemPart_Publico" class="form-group row" style="margin-bottom:0px;">
+                    <label for="ddlItemPart_PublicoId" class="col-md-4 col-form-label text-small">Público Participante</label>
+                    <div class="col-md-8">
+                        @Html.DropDownList("ddlItemPart_PublicoId", new SelectList(ViewBag.ddlItemPart_Publico, "Value", "Text"), new { @class = "form-control form-control-sm", @style = "width:auto;" })
+                    </div>
+                </div>
+                <div class="form-group row" style="margin-bottom:0px;">
+                    <label for="lblItemPart_Cargo" class="col-md-4 col-form-label text-small">Cargo</label>
+                    <div class="col-md-8">
+                        @Html.TextBox("txtItemPart_Cargo", "", new { @class = "form-control form-control-sm cssTxtCargo" })
+                        @Html.DropDownList("txtItemPart_Cargo00", new SelectList(ViewBag.ddlItemPart_Cargo, "Value", "Text"), new { @class = "form-control form-control-sm cssSelectCargo", @style = "width:auto ; display:none" })
+                    </div>
+                </div>
+                <div class="form-group row dvItemPart_DatosAsistente" style="margin-bottom:0px; display:none;">
+                    <label for="lblItemPart_Telefono" class="col-md-4 col-form-label text-small">Teléfono</label>
+                    <div class="col-md-8">
+                        @Html.TextBox("txtItemPart_Telefono", "", new { @class = "form-control form-control-sm" })
+                    </div>
+                </div>
+                <div class="form-group row dvItemPart_DatosAsistente" style="margin-bottom:0px; display:none;">
+                    <label for="lblItemPart_Edad" class="col-md-4 col-form-label text-small">Edad</label>
+                    <div class="col-md-4">
+                        @Html.TextBox("txtItemPart_Edad", "", new { @class = "form-control form-control-sm", type = "number" })
+                    </div>
+                </div>
+                <div class="form-group row dvItemPart_DatosAsistente" style="margin-bottom:0px; display:none;">
+                    <label for="lblItemPart_ComunidadId" class="col-md-4 col-form-label text-small">Comunidad Nativa</label>
+                    <div class="col-md-8">
+                        @Html.DropDownList("ddlItemPart_ComunidadId", new SelectList(ViewBag.ddlItemPart_Comunidad, "Value", "Text"), new { @class = "form-control form-control-sm", @style = "width:auto;" })
+                    </div>
+                </div>
+                <div class="form-group row dvItemPart_DatosAsistente" style="margin-bottom:0px; display:none;">
+                    <label for="lblItemPart_EtniaId" class="col-md-4 col-form-label text-small">Etnia</label>
+                    <div class="col-md-8">
+                        @Html.DropDownList("ddlItemPart_EtniaId", new SelectList(ViewBag.ddlItemPart_Etnia, "Value", "Text"), new { @class = "form-control form-control-sm", @style = "width:auto;" })
+                    </div>
+                </div>
+                <div class="form-group row dvItemPart_DatosAsistente" style="margin-bottom:0px; display:none;">
+                    <label for="lblItemPart_Correo" class="col-md-4 col-form-label text-small">Correo Electrónico</label>
+                    <div class="col-md-8">
+                        @Html.TextBox("txtItemPart_Correo", "", new { @class = "form-control form-control-sm" })
+                    </div>
+                </div>
+                <div class="form-group row" style="margin-bottom:0px; display:none;" id="dvItemPart_Funcion">
+                    <label for="lblItemPart_Funcion" class="col-md-4 col-form-label text-small">Funciones</label>
+                    <div class="col-md-8">
+                        @Html.TextArea("txtItemPart_Funcion", "", new { @class = "form-control form-control-sm", @rows = "3" })
+                    </div>
+                </div>
+                <div class="form-group row" style="margin-bottom:0px; display:none;" id="dvItemPart_Tema">
+                    <label for="lblItemPart_Tema" class="col-md-4 col-form-label text-small">Tema Desarrollado</label>
+                    <div class="col-md-8">
+                        @Html.TextArea("txtItemPart_Tema", "", new { @class = "form-control form-control-sm", @rows = "3" })
+                    </div>
+                </div>
+                <div class="form-group row" style="margin-bottom:0px; display:none;" id="dvItemPart_Constancia">
+                    <label for="lblItemPart_Constancia" class="col-md-4 col-form-label text-small">Código Constancia</label>
+                    <div class="col-md-8">
+                        @Html.TextBox("txtItemPart_Constancia", "", new { @class = "form-control form-control-sm" })
+                    </div>
+                </div>
+                <div class="form-group row" style="margin-bottom:0px; display:none;" id="dvItemPart_Mochila">
+                    <label for="lblItemPart_Mochila" class="col-md-4 col-form-label text-small">Recibió Mochila Forestal</label>
+                    <div class="col-md-8">
+                        @Html.DropDownList("ddlItemPart_MochilaId", new SelectList(ViewBag.ddlItemPart_Mochila, "Value", "Text"), new { @class = "form-control form-control-sm", @style = "width:auto;" })
+                    </div>
+                </div>
+                <div class="form-group row" style="margin-bottom:0px;">
+                    <label for="lblItemPart_Observacion" class="col-md-4 col-form-label text-small">Observaciones</label>
+                    <div class="col-md-8">
+                        @Html.TextArea("txtItemPart_Observacion", "", new { @class = "form-control form-control-sm", @rows = "3" })
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="modal-footer">
+            <button type="button" id="btnGuardarParticipante" class="btn btn-primary btn-sm" onclick="_Participante.fnSubmitForm()">Guardar</button>
+            <button type="button" id="btnCancelarParticipante" class="btn btn-secondary btn-sm" onclick="_Participante.fnCloseModal()">Cancelar</button>
+        </div>
+    </div>
+</div>

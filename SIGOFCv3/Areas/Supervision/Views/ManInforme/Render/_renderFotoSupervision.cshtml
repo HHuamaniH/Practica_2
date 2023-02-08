@@ -1,0 +1,114 @@
+﻿@model List<CapaEntidad.DOC.Ent_INFORME>
+
+<style type="text/css">
+    #tbRenderFotoSupervision_wrapper { padding: 0px; }
+    .foto-200 { max-height: 200px; max-width: 200px; }
+</style>
+
+<script type="text/javascript">
+    var _renderFotoSupervision = {};
+
+    _renderFotoSupervision.fnInitDataTable_Detail = function () {
+        var columns_label = [], columns_data = [], options = {}, data_extend = [];
+
+        columns_label = ["Descripción", "Fuente", "Dispositivo", "Registrado por", "Fecha Registro"];
+        columns_data = ["DESC_FOTO", "FUENTE_FOTO", "DISP_FOTO", "USUARIO_REGISTRO", "FECHA"];
+        data_extend = [
+            {
+                "data": "URL_FOTO", "title": "Foto", "orderable": false, "searchable": false, "mRender": function (data, type, row, meta) {
+                    var urlfoto = urlLocalSigo + data.replace('~/','');
+                    return '<img class="foto-200" alt="Vista previa" src="' + urlfoto + '">';
+                }
+            }
+        ];
+        options = {
+            page_length: 10, row_index: true, row_edit: true, row_delete: true, row_fnDelete: "_renderFotoSupervision.fnDelete(this)"
+            , row_download: true, row_fnDownload: "_renderFotoSupervision.fnDownload(this)"
+            , page_sort: true, data_extend: data_extend
+        };
+        _renderFotoSupervision.dtFotoSupervision = utilDt.fnLoadDataTable_Detail($("#tbRenderFotoSupervision"), columns_label, columns_data, options);
+    }
+
+    _renderFotoSupervision.fnAddEdit = function () {
+        var cod_informe = '@ViewData["cod_informe"]';
+        if ((typeof cod_informe!=='undefined') && cod_informe!="") {
+            var url = urlLocalSigo + "Supervision/ManInforme/_FotoSupervision";
+            var option = { url: url, type: 'POST', datos: { asCodInforme: cod_informe }, divId: "mdlManInforme_FotoSupervision" };
+            utilSigo.fnOpenModal(option, function () {
+                _FotoSupervision.fnSaveForm = function (data) {
+                    if (data != null) {
+                        var dt = _renderFotoSupervision.dtFotoSupervision;
+                        dt.rows.add([data]).draw();
+                        dt.page('last').draw('page');
+                        utilSigo.toastSuccess("Éxito", "La foto se registro correctamente");
+
+                        $("#mdlManInforme_FotoSupervision").modal('hide');
+                    } else {
+                        utilSigo.toastError("Error", "No se pudieron guardar los datos");
+                    }
+                }
+
+                _FotoSupervision.fnInit();
+            });
+        } else {
+            utilSigo.toastWarning("Aviso", "Primero debe registrar el informe para luego poder agregar fotos");
+        }
+    }
+
+    _renderFotoSupervision.fnDelete = function (obj) {
+        utilSigo.dialogConfirm("", "Está seguro de eliminar la foto?", function (r) {
+            if (r) {
+                var data = _renderFotoSupervision.dtFotoSupervision.row($(obj).parents('tr')).data();
+                var url = urlLocalSigo + "Supervision/ManInforme/EliminarFotoSupervision";
+                var params = {
+                    txtUrlFoto: data["URL_FOTO"],
+                    hdfCodInforme: data["COD_INFORME"],
+                    hdfCodInformeFoto: data["COD_INFORME_FOTOS"]
+                };
+                var option = { url: url, datos: JSON.stringify(params), type: 'POST' };
+
+                utilSigo.fnAjax(option, function (data) {
+                    if (data.success) {
+                        _renderFotoSupervision.dtFotoSupervision.row($(obj).parents('tr')).remove().draw(false);
+                        utilSigo.toastSuccess("Éxito", data.msj);
+                    } else {
+                        utilSigo.toastWarning("Aviso", "Sucedio un error, Comuníquese con el Administrador");
+                        console.log(data.msj);
+                    }
+                });
+            }
+        });
+    }
+
+    _renderFotoSupervision.fnDownload = function (obj) {
+        var data = _renderFotoSupervision.dtFotoSupervision.row($(obj).parents('tr')).data();
+        window.open(urlLocalSigo + (data["URL_FOTO"].replace('~/', '')), "_blank");
+    }
+
+    $(document).ready(function () {
+        _renderFotoSupervision.frm = $("#frmRenderFotoSupervision");
+
+        _renderFotoSupervision.fnInitDataTable_Detail();
+        let rows = JSON.parse('@Html.Raw(Json.Encode(@Model.Select(x=> new { COD_INFORME = x.COD_INFORME, COD_INFORME_FOTOS = x.COD_INFORME_FOTOS, URL_FOTO = x.URL_FOTO, DESC_FOTO = x.DESC_FOTO, FUENTE_FOTO = x.FUENTE_FOTO, DISP_FOTO = x.DISP_FOTO, USUARIO_REGISTRO = x.USUARIO_REGISTRO, FECHA = x.FECHA }).ToList()))');
+        //console.log(rows);
+        _renderFotoSupervision.dtFotoSupervision.rows.add(rows).draw();
+    });
+</script>
+
+<div id="frmRenderFotoSupervision">
+    <div class="table-responsive">
+        <table id="tbRenderFotoSupervision" style="width:100%;margin:0px !important;" class="table table-hover table-bordered">
+            <thead>
+                <tr>
+                    <th colspan="9" class="text-sm-left">
+                        <div class="form-inline">
+                            <i class="fa mx-2 fa-lg fa-file-o" style="cursor:pointer;" onclick="_renderFotoSupervision.fnAddEdit();" data-toggle="tooltip" data-placement="top" title="Nuevo"></i>
+                            <strong>Listado de Fotos Registradas</strong>
+                        </div>
+                    </th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
+</div>

@@ -1,0 +1,143 @@
+﻿
+<script type="text/javascript">
+    "use strict";
+    var _ActInvestigacion = {};
+    
+    _ActInvestigacion.fnSaveForm = function (data) { /*implementado desde donde se instancia*/ }
+
+    _ActInvestigacion.fnLoadDatos = function (data) {
+        if (data != null && data != "") {
+            _ActInvestigacion.frm.find("#hdfRegEstado").val(data["RegEstado"]);
+            _ActInvestigacion.frm.find("#hdfCodSecuencial").val(data["NINDICE"]);
+            _ActInvestigacion.frm.find("#txtDescripcion").val(data["VDESCRIPCION"]);
+            _ActInvestigacion.frm.find("#ddlAvance").val(data["VAVANCE"]);
+            _ActInvestigacion.frm.find("#txtCNorte").val(data["VCOORDENADANORTE"]);
+            _ActInvestigacion.frm.find("#txtCEste").val(data["VCOORDENADAESTE"]);
+            _ActInvestigacion.frm.find("#txtObservacion").val(data["VOBSERVACION"]);
+            _ActInvestigacion.frm.find("#txtObjetivo").val(data["VOBJETIVO"]);
+            _ActInvestigacion.frm.find("#ddlZonaUtm").val(data["VZONAUTM"]);
+        } else {
+            _ActInvestigacion.frm.find("#hdfRegEstado").val("1");
+            _ActInvestigacion.frm.find("#hdfCodSecuencial").val("0");
+        }
+    }
+
+    _ActInvestigacion.fnSetDatos = function () {
+        var data = [];
+        debugger
+        var regEstado = _ActInvestigacion.frm.find("#hdfRegEstado").val();
+        data["RegEstado"] = regEstado == "0" ? "2" : regEstado;
+        data["NINDICE"] = _ActInvestigacion.frm.find("#hdfCodSecuencial").val();
+        data["VDESCRIPCION"] = _ActInvestigacion.frm.find("#txtDescripcion").val();
+        data["VAVANCE"] = _ActInvestigacion.frm.find("#ddlAvance").val();
+        data["VCOORDENADANORTE"] = _ActInvestigacion.frm.find("#txtCNorte").val();
+        data["VCOORDENADAESTE"] = _ActInvestigacion.frm.find("#txtCEste").val();
+        data["VOBSERVACION"] = _ActInvestigacion.frm.find("#txtObservacion").val();
+        data["VOBJETIVO"] = _ActInvestigacion.frm.find("#txtObjetivo").val();
+        data["VZONAUTM"] = _ActInvestigacion.frm.find("#ddlZonaUtm").val();
+       
+        return data;
+    }
+
+    _ActInvestigacion.fnSubmitForm = function () {
+        _ActInvestigacion.frm.submit();
+    }
+
+    _ActInvestigacion.fnInit = function (data) {
+        _ActInvestigacion.frm = $("#frmActTuristicaImpl");
+
+        _ActInvestigacion.fnLoadDatos(data);
+
+        //=====-----Para el registro de datos del formulario-----=====
+        _ActInvestigacion.frm.validate(utilSigo.fnValidate({
+            rules: {
+                txtDescripcion: { required: true },
+                txtObjetivo: { required: true },
+                ddlAvance: { required: true },
+                ddlZonaUtm: { required: true },
+                txtCEste: { required: true },
+                txtCNorte: { required: true }
+            },
+            messages: {
+                txtDescripcion: { required: "Ingrese la Descripción" },
+                txtObjetivo: { required: "Ingrese el Objetivo" },
+                ddlAvance: { required: "Ingrese el Avance" },
+                ddlZonaUtm: { required: "Ingrese Zona UTM" },
+                txtCEste: { required: "Ingrese la Coordenada Este" },
+                txtCNorte: { required: "Ingrese la Coordenada Norte" }
+            },
+            fnSubmit: function (form) {
+                _ActInvestigacion.fnSaveForm(_ActInvestigacion.fnSetDatos());
+            }
+        }));
+        //Validación de controles que usan Select2
+        _ActInvestigacion.frm.find("select.select2-hidden-accessible").on("change", function (e) {
+            $(this).valid();
+        });
+    }
+</script>
+<div class="modal-dialog" tabindex="-1" role="document" >
+    <div class="modal-content">
+        <div class="modal-header text-small" style="cursor:move;">
+            <span>Actividad de Investigación</span>
+            <i class="fa fa-close" style="cursor:pointer;" data-dismiss="modal" aria-label="Close"></i>
+        </div>
+        <div class="modal-body">
+            <form id="frmActTuristicaImpl">
+                @Html.Hidden("hdfRegEstado")
+                @Html.Hidden("hdfCodSecuencial")
+                <div class="form-row">
+                    <div class="form-group col-md-12">
+                        <label for="txtTipoAmbiente" class="text-small">Descripción</label>
+                        @Html.TextBox("txtDescripcion", "", new { @class = "form-control form-control-sm" })
+                    </div>
+
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-12">
+                        <label for="txtTipoAmbiente" class="text-small">Objetivo</label>
+                        @Html.TextBox("txtObjetivo", "", new { @class = "form-control form-control-sm" })
+                    </div>
+
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label for="txtArea" class="text-small">Avance</label>
+                        @Html.DropDownList("ddlAvance", (new List<SelectListItem>(){new SelectListItem() { Text = "Proceso", Value = "Proceso" },
+                       new SelectListItem() { Text = "Concluido", Value = "Concluido" } }), "Seleccionar", new { @class = "form-control form-control-sm" })
+                    </div>
+
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label for="txtArea" class="text-small">Zona UTM</label>
+                        @Html.DropDownList("ddlZonaUtm", new SelectList(ViewBag.ddlZona, "Value", "Text"), new { @class = "form-control form-control-sm" })
+                    </div>
+
+                </div>
+                <div class="form-row dvDatosCons">
+                    <div class="form-group col-md-12">
+                        <label for="txtUso" class="text-small">Coordenada Este</label>
+                        @Html.TextBox("txtCEste", "", new { @class = "form-control form-control-sm", type = "number" })
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-12">
+                        <label for="txtMaterial" class="text-small">Coordenada Norte</label>
+                        @Html.TextBox("txtCNorte", "", new { @class = "form-control form-control-sm", type = "number" })
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-12">
+                        <label for="txtMaterial" class="text-small">Observaciones</label>
+                        @Html.TextArea("txtObservacion", "", new { @class = "form-control form-control-sm", rows = "4" })
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-primary btn-sm" onclick="_ActInvestigacion.fnSubmitForm()">Guardar</button>
+            <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Cancelar</button>
+        </div>
+    </div>
+</div>

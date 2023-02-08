@@ -1,0 +1,252 @@
+﻿@model CapaEntidad.ViewModel.VM_IndicadorFiltro
+
+<script src="~/Scripts/datatables/Extensions/dataTables.buttons.js"></script>
+<script src="~/Scripts/datatables/Extensions/buttons.flash.min.js"></script>
+<script src="~/Scripts/datatables/Extensions/jszip.min.js"></script>
+<script src="~/Scripts/datatables/Extensions/pdfmake.js"></script>
+<script src="~/Scripts/datatables/Extensions/vfs_fonts.js"></script>
+<script src="~/Scripts/datatables/Extensions/buttons.html5.js"></script>
+<script src="~/Scripts/datatables/Extensions/buttons.print.js"></script>
+<script src="~/Scripts/chart/Chart.min.js"></script>
+<script src="~/Areas/Supervision/js/Indicadores/customChart.js"></script>
+<script src="~/Areas/Supervision/js/Indicadores/_Shared/_renderPEI.js"></script>
+
+<link href="~/Content/datatables/buttons.dataTables.min.css" rel="stylesheet" />
+<link href="~/Areas/Capacitacion/css/ManCapacitacion/Reporte.css" rel="stylesheet" />
+<link href="~/Areas/Supervision/css/Indicadores/Reporte.css" rel="stylesheet" />
+
+<div class="container-fluid">
+    <div class="card">
+        <div class="card-body">
+            <div id="dvContenedorFiltro" class="card" style="margin-bottom:10px;">
+                <div id="dvFiltroPEI" class="card-body">
+                    <form id="frmFiltroPEI" action="@Url.Action("Reporte", "Indicadores", new { Area= "Supervision" })">
+                        <div class="form-row">
+                            <div class="form-group col-md-7">
+                                <label for="ddlIndicadorPEIId" class="text-small">Indicador</label>
+                                @Html.DropDownListFor(m => m.ddlIndicadorPEIId, new SelectList(Model.ddlIndicadorPEI, "Value", "Text"), new { @class = "form-control form-control-sm" })
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group col-md-2">
+                                <label for="ddlAnioPEIId" class="text-small">Año</label>
+                                @Html.DropDownListFor(m => m.ddlAnioPEIId, new SelectList(Model.ddlAnioPEI, "Value", "Text"), new { @class = "form-control form-control-sm" })
+                            </div>
+                        </div>
+                    </form>
+                    <button type="button" id="btnConsultarReporte" class="btn btn-primary btn-sm" onclick="_renderPEI.fnSubmitForm()">Consultar</button>
+                </div>
+                <div class="card-body" style="padding-top:0px;padding-bottom:0px;">
+                    <div class="form-row">
+                        <div id="dvHideFiltroPEI" class="form-group col-md-12" style="text-align:center; margin:0px;cursor:PEInter;" title="Ocultar Filtros">
+                            <img alt="Ocultar Filtros" src="~/Content/images/General/flecha-contraer.png" width="50" height="30" />
+                        </div>
+                        <div id="dvShowFiltroPEI" class="form-group col-md-12" style="text-align:center; margin:0px;cursor:PEInter; display:none;" title="Mostrar Filtros">
+                            <img alt="Mostrar Filtros" src="~/Content/images/General/flecha-ampliar.png" width="50" height="30" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+            @***** RF-024 PORCENTAJE DE PLANES DE MANEJO CON BUEN DESEMPEÑO *****@
+            <div class="card-body" id="dvResultadoPEI1" style="display:none;">
+                <div class="form-row">
+                    <div class="col-md-6">
+                        <div class="table-responsive">
+                            <table id="tbPEI1Semestral_Resumen" style="width:100%;" class="table table-hover table-bordered centrar_contenido">
+                                <thead>
+                                    <tr>
+                                        <th colspan="5" class="text-sm-left">
+                                            <div class="form-inline">
+                                                <strong>Resumen de Indicador</strong>
+                                            </div>
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                                <tfoot>
+                                    <tr class="custom-row-rptcapacitacion">
+                                        <th colspan="2"><span id="col1">Total</span></th>
+                                        <th><span id="col3">0</span></th>
+                                        <th><span id="col4">0</span></th>
+                                        <th><span id="col5">0</span></th>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <canvas id="cnvPEI1Semestral_Resumen"></canvas>
+                    </div>
+                </div>
+                <br />
+                <div class="form-row">
+                    <div class="table-responsive">
+                        <table id="tbPEI1Semestral_Detalle" style="width:100%" class="table table-hover table-bordered">
+                            <thead>
+                                <tr>
+                                    <th colspan="13" class="text-sm-left">
+                                        <div class="form-inline">
+                                            <strong>Listado de Planes de Manejo Registrados</strong>
+                                        </div>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            @***** Fin RF-024 *****@
+            @***** RF-025 PORCENTAJE DE PLANES DE MANEJO SUPERVISADOS *****@
+            <div class="card-body" id="dvResultadoPEI2" style="display:none;">
+                <div class="form-row">
+                    <div class="col-md-6">
+                        <div class="table-responsive">
+                            <table id="tbPEI2Semestral_Resumen" style="width:100%;" class="table table-hover table-bordered centrar_contenido">
+                                <thead>
+                                    <tr>
+                                        <th colspan="5" class="text-sm-left">
+                                            <div class="form-inline">
+                                                <strong>Resumen de Indicador</strong>
+                                            </div>
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                                <tfoot>
+                                    <tr class="custom-row-rptcapacitacion">
+                                        <th colspan="2"><span id="col1">Total</span></th>
+                                        <th><span id="col3">0</span></th>
+                                        <th><span id="col4">0</span></th>
+                                        <th><span id="col5">0</span></th>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <canvas id="cnvPEI2Semestral_Resumen"></canvas>
+                    </div>
+                </div>
+                <br />
+                <div class="form-row">
+                    <div class="table-responsive">
+                        <table id="tbPEI2Semestral_Detalle" style="width:100%" class="table table-hover table-bordered">
+                            <thead>
+                                <tr>
+                                    <th colspan="12" class="text-sm-left">
+                                        <div class="form-inline">
+                                            <strong>Listado de Planes de Manejo Registrados</strong>
+                                        </div>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            @***** Fin RF-025 *****@
+            @***** RF-027 PORCENTAJE DE AUDITORÍAS QUINQUENALES CON RESULTADOS FAVORABLES *****@
+            <div class="card-body" id="dvResultadoPEI3" style="display:none;">
+                <div class="form-row">
+                    <div class="col-md-6">
+                        <div class="table-responsive">
+                            <table id="tbPEI3Semestral_Resumen" style="width:100%;" class="table table-hover table-bordered centrar_contenido">
+                                <thead>
+                                    <tr>
+                                        <th colspan="5" class="text-sm-left">
+                                            <div class="form-inline">
+                                                <strong>Resumen de Indicador</strong>
+                                            </div>
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                                <tfoot>
+                                    <tr class="custom-row-rptcapacitacion">
+                                        <th colspan="2"><span id="col1">Total</span></th>
+                                        <th><span id="col3">0</span></th>
+                                        <th><span id="col4">0</span></th>
+                                        <th><span id="col5">0</span></th>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <canvas id="cnvPEI3Semestral_Resumen"></canvas>
+                    </div>
+                </div>
+                <br />
+                <div class="form-row">
+                    <div class="table-responsive">
+                        <table id="tbPEI3Semestral_Detalle" style="width:100%" class="table table-hover table-bordered">
+                            <thead>
+                                <tr>
+                                    <th colspan="25" class="text-sm-left">
+                                        <div class="form-inline">
+                                            <strong>Listado de Títulos Habilitantes Auditados</strong>
+                                        </div>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            @***** Fin RF-027 *****@
+            @***** RF-028 PORCENTAJE DE MEDIDAS CORRECTIVAS IMPLEMENTADAS *****@
+            <div class="card-body" id="dvResultadoPEI4" style="display:none;">
+                <div class="form-row">
+                    <div class="col-md-6">
+                        <div class="table-responsive">
+                            <table id="tbPEI4Semestral_Resumen" style="width:100%;" class="table table-hover table-bordered centrar_contenido">
+                                <thead>
+                                    <tr>
+                                        <th colspan="5" class="text-sm-left">
+                                            <div class="form-inline">
+                                                <strong>Resumen de Indicador</strong>
+                                            </div>
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                                <tfoot>
+                                    <tr class="custom-row-rptcapacitacion">
+                                        <th colspan="2"><span id="col1">Total</span></th>
+                                        <th><span id="col3">0</span></th>
+                                        <th><span id="col4">0</span></th>
+                                        <th><span id="col5">0</span></th>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <canvas id="cnvPEI4Semestral_Resumen"></canvas>
+                    </div>
+                </div>
+                <br />
+                <div class="form-row">
+                    <div class="table-responsive">
+                        <table id="tbPEI4Semestral_Detalle" style="width:100%" class="table table-hover table-bordered">
+                            <thead>
+                                <tr>
+                                    <th colspan="11" class="text-sm-left">
+                                        <div class="form-inline">
+                                            <strong>Listado de Títulos Habilitantes Auditados</strong>
+                                        </div>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            @***** Fin RF-028 *****@
+        </div>
+    </div>
+</div>

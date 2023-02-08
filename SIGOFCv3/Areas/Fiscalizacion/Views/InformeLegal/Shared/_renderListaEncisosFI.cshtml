@@ -1,0 +1,75 @@
+﻿@model  CapaEntidad.ViewModel.VM_InformeLegal
+
+<style type="text/css">
+    #tbRenderListIncisos_wrapper {
+        padding: 0px;
+    }
+
+    #tbConsultaILegal_info {
+        color: #33b35a;
+        font-size: 12px;
+        margin-top: 12px;
+    }
+</style>
+
+
+<script type="text/javascript">
+    var _rederListaIncisosFI = {};
+    // iniciar datos en la tabla
+     _rederListaIncisosFI.fnInitDataTable_Detail = function () {
+        var columns_label = [], columns_data = [], options = {};
+
+        columns_label = ["Codigo", "Articulo", "Inciso"];
+        columns_data = ["COD_ILEGAL_ENCISOS", "DESCRIPCION_ARTICULOS", "DESCRIPCION_ENCISOS"];
+        options = {
+            page_length: 10, row_index: true, row_delete: true, row_fnDelete: "_rederListaIncisosFI.fnDelete(this)", page_sort: true
+        };
+        _rederListaIncisosFI.dtRenderListInforme = utilDt.fnLoadDataTable_Detail(_rederListaIncisosFI.frm.find("#tbRenderListIncisosFI"), columns_label, columns_data, options);
+        _rederListaIncisosFI.dtRenderListInforme.rows.add(JSON.parse('@Html.Raw(Json.Encode(@Model.listaInfracciones))')).draw();
+
+        options = {
+            page_paging: true, page_length: 10, row_index: true, row_select: true, row_fnSelect: "_rederListaIncisosFI.fnSelect(this)"
+        };
+        utilDt.fnLoadDataTable_Detail(_rederListaIncisosFI.frm.find("#tbConsultaExpediente"), columns_label, columns_data, options);
+    }
+
+    /*Listado de registros (render)*/
+    _rederListaIncisosFI.fnDelete = function (obj) {
+        var data = _rederListaIncisosFI.dtRenderListInforme.row($(obj).parents('tr')).data();
+
+        if (data["RegEstado"] == "0") {
+            _rederListaIncisosFI.tbEliTABLA.push({
+                EliTABLA: "DETALLE_INFORME",
+                COD_INFORME: data["COD_ILEGAL_ENCISOS"]
+            });
+        }
+        _rederListaIncisosFI.dtRenderListInforme.row($(obj).parents('tr')).remove().draw(false);
+    }
+
+
+   $(document).ready(function () {
+       _rederListaIncisosFI.frm = $("#frmRenderListIncisos");
+       //inicializa la tabla con los campos obtenidos del model
+       _rederListaIncisosFI.fnInitDataTable_Detail();
+       //inicializa los componentes necesarios
+       //_rederListaIncisosFI.fnInit();
+
+   });
+
+</script>
+<div id="frmRenderListIncisos">
+    <div class="table-responsive">
+        <table id="tbRenderListIncisosFI" style="width:100%;margin:0px !important;" class="table table-hover table-bordered">
+            <thead>
+                <tr>
+                    <th colspan="6" class="text-sm-left">
+                        <div class="form-inline">
+                            <strong> Infracciones presuntamente incurridas</strong>
+                        </div>
+                    </th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
+</div>

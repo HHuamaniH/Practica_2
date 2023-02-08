@@ -1,0 +1,809 @@
+﻿@model CapaEntidad.ViewModel.VM_Focalizacion_PlanTrabajo
+@{
+    ViewBag.Title = "Plan";
+    Layout = "~/Views/Shared/_LayoutMain.cshtml";
+}
+<style type="text/css">
+    .table-bordered th, .table-bordered td {
+        border-color: #9aabcc;
+    }
+</style>
+@section scripts{
+    <script>
+        "use strict"; var rol = '';
+    $(document).ready(function () {
+        //Validamos el rol del usuario
+        utilSigo.ValidaRol('@ViewBag.VAliasRol', 'btnRegistrarP', '@Model.ddlItemIndicadorId');
+    });
+    </script>
+}
+<div class="container-fluid">
+    <div class="card">
+        <div class="card-header text-right">
+            Plan de trabajo N° @Model.idPlanTrajo
+        </div>
+        <div class="card-body">
+            <div class="card">
+                <div class="card-header text-small" id="divTitle">
+                    <a id="btnRegistrarP" href="javascript:void(0)" style="cursor:pointer;" data-toggle="tooltip" data-placement="top" title="Guardar" onclick="planT.fnGuardar()"><i class="fa mx-2 fa-lg fa-save"></i></a>
+                    <a id="btnRegresarP" style="cursor:pointer;" data-toggle="tooltip" data-placement="top" title="Regresar"><i class="fa mx-2 fa-lg fa-reply" onclick="planT.fnRegresar()"></i></a>
+                    Modificando Registro
+                </div>
+                <div class="card-body">
+                    <form id="frmPlanT_General">
+                        @Html.HiddenFor(x => x.idPlanTrajo)
+                        @Html.HiddenFor(m => m.ddlItemIndicadorEnable)
+                        <ul class="nav nav-tabs" id="myTab" role="tablist">
+                            <li class="nav-item" id="navEstadoTab"><a class="nav-link active" data-toggle="tab" href="#navEstado" role="tab" aria-controls="home" aria-selected="true">Estado Situacional y Datos Generales</a></li>
+                            <li class="nav-item" id="navDatosTab"><a class="nav-link" data-toggle="tab" href="#navDatos" role="tab" aria-selected="false">Planes de Manejo</a></li>
+                        </ul>
+                        <div class="tab-content" id="nav-tabContent">
+                            <div class="tab-pane fade show active" id="navEstado" role="tabpanel" aria-labelledby="nav-home-tab">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="form-row">
+                                            <div class="form-group col-md-4">
+                                                <label for="ddlItemIndicadorId" class="text-small">Indicador</label>
+                                                @if (Model.ddlItemIndicadorEnable)
+                                                {
+                                                    @Html.DropDownListFor(m => m.ddlItemIndicadorId, new SelectList(Model.ddlItemIndicador, "Value", "Text"), new { @class = "form-control form-control-sm" })
+                                                }
+                                                else
+                                                {
+                                                    @Html.DropDownListFor(m => m.ddlItemIndicadorId, new SelectList(Model.ddlItemIndicador, "Value", "Text"), new { @class = "form-control form-control-sm", disabled = "disabled" })
+                                                }
+                                            </div>
+                                            <div class="form-group col-md-4">
+                                                <label for="lblUsuarioRegistro" class="text-small">Usuario que ingresó el registro</label>
+                                                @Html.EditorFor(m => m.usuarioCreacion, new { htmlAttributes = new { @class = "form-control form-control-sm", @disabled = "disabled" } })
+                                            </div>
+                                            <div class="form-group col-md-4">
+                                                <label for="lblUsuarioControl" class="text-small">Usuario que asignó el útimo estado situacional al registro</label>
+                                                @Html.EditorFor(m => m.usuarioModificacion, new { htmlAttributes = new { @class = "form-control form-control-sm", @disabled = "disabled" } })
+                                            </div>
+                                        </div>
+                                        <div class="form-row">
+                                            <div class="form-group col-md-4">
+                                                <label for="ddlIODId" class="text-small">OD</label>
+                                                @Html.DropDownListFor(m => m.ddlIODId, new SelectList(Model.ddlIOD, "Value", "Text"), new { @class = "form-control form-control-sm", @disabled = "disabled" })
+                                            </div>
+                                            <div class="form-group col-md-4">
+                                                <label for="ddlPeriodoId" class="text-small">Periodo</label>
+                                                @Html.DropDownListFor(m => m.ddlPeriodoId, new SelectList(Model.ddlPeriodo, "Value", "Text"), new { @class = "form-control form-control-sm", @disabled = "disabled" })
+                                            </div>
+                                            <div class="form-group col-md-4">
+                                                <label for="ddlMesId" class="text-small">Mes</label>
+                                                @Html.DropDownListFor(m => m.ddlMesId, new SelectList(Model.ddlMes, "Value", "Text"), new { @class = "form-control form-control-sm", @disabled = "disabled" })
+                                            </div>
+                                        </div>
+                                        <div class="form-row">
+                                            <div class="form-group col-md-4">
+                                                <label for="funcionarioResponsable" class="text-small">Funcionario reponsable<i class="fa fa-cog fa-spin text-danger" id="iconConsultor" style="display:none;" data-toggle="tooltip" data-placement="top" title="Seleccionar"></i></label>
+                                                <div class="input-group">
+                                                    <div class="input-group-prepend">
+                                                        <span class="input-group-text"><i class="fa fa-search-plus" onclick="planT.fnBuscarPersona()" style="cursor:pointer;" data-toggle="tooltip" data-placement="top" title="Seleccionar"></i></span>
+                                                    </div>
+                                                    @Html.EditorFor(m => m.funcionarioResponsable, new { htmlAttributes = new { @class = "form-control form-control-sm", disabled = "disabled" } })
+                                                    @Html.HiddenFor(m => m.funcionarioResponsableId)
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div id="divCKEDITOR" style="display:none;"></div>
+                                        <div class="form-row" id="divObsSubsanado" style="display:none;">
+                                            <div class="col-md-6 mb-3">
+                                                <div class="form-group">
+                                                    <label for="chkItemPlanManejo" class="text-small"></label>
+                                                    <div class="form-check">
+                                                        @Html.CheckBoxFor(m => m.observacionSubsanar)
+                                                        <label class="form-check-label text-small" for="observacionSubsanar">
+                                                            Observaciones Subsanadas?
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="card">
+                                            <div class="card-header">Descargar Plan de Trabajo</div>
+                                            <div class="card-body">
+                                                <div class="row">
+                                                    <div class="col-md-6">
+                                                        <button type="button" class="btn btn-outline-info btn-sm" onclick="planT.fnProyectar()" title="Agregar Plan de Manejo Ordinario (PASPEQ)">
+                                                            Descargar  <span class="fa fa-file-word-o" aria-hidden="true"></span>
+                                                        </button>
+                                                    </div>
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="tab-pane fade" id="navDatos" role="tabpanel">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="card-header text-small" id="divTitle1">
+
+                                            <button type="button" class="btn btn-outline-info btn-sm" onclick="planT.fnAddPlanOrd(4)" title="Agregar Plan de Manejo Ordinario (PASPEQ)">
+                                                <span class="fa fa-plus" aria-hidden="true"></span>
+                                            </button>
+                                            <button type="button" class="btn btn-outline-info btn-sm" onclick="planT.fnAddPlanExtra()" title="Agregar Plan de Manejo Extra-Ordinario">
+                                                <span class="fa fa-search" aria-hidden="true"></span>
+                                            </button>
+                                            <button type="button" class="btn btn-info btn-sm" onclick="planT.fnAddPlanOrd(16)" title="Agregar Plan de Manejo Ordinario - Adicional">
+                                                <span class="fa fa-plus" aria-hidden="true"></span>
+                                            </button>
+
+                                            <button type="button" class="btn btn-outline-info btn-sm" onclick="planT.fnDownloadDet()" title="Descargar Planes de Manejo a Supervisar">
+                                                <span class="fa fa-file-excel-o" aria-hidden="true"></span>
+                                            </button>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <div class="table-responsive">
+                                                    <table id="tbPlanManejoItemsDetalle" class="table table-hover table-bordered" style="width:100%">
+                                                        <thead>
+                                                            <tr>
+                                                                <th colspan="11" style="text-align:center">
+                                                                    <h5 class="card-title">Información de títulos habilitantes y planes de manejo a supervisar</h5>
+                                                                </th>
+                                                            </tr>
+                                                            <tr>
+                                                                <th>N°</th>
+                                                                <th>Especie</th>
+                                                                <th>Titular</th>
+                                                                <th title="Nro. Título Habilitante">Título</th>
+                                                                <th>Modalidad</th>
+                                                                <th>Plan de manejo</th>
+                                                                <th>Dep/Prov/Dist</th>
+                                                                @*<th>Prov</th>
+                                                                    <th>Dist</th>*@
+                                                                <th title="Tipo de supervisión">Tipo</th>
+                                                                <th title="Criterios de focalización">Criterios</th>
+                                                                <th>Oportunidad</th>
+                                                                <th title="Eliminar">E</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody></tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
+
+
+                                    </div>
+                                </div>
+                                <div id="divGeneralEspecies" style="display:none">
+                                    <div class="card">
+                                        <div class="card-header text-small">
+                                            <strong>Calificación de Especies</strong>
+                                            <button type="button" class="btn btn-outline-info btn-sm" onclick="planT.fnDownloadCalificacion()" title="Descargar Calificación">
+                                                <span class="fa fa-file-excel-o" aria-hidden="true"></span>
+                                            </button>
+                                            @*<button type="button" class="btn btn-info btn-sm" onclick="planT.fnDownloadCalificacion()">Descargar Calificación</button>*@
+                                        </div>
+                                        <div class="card-body" id="cardMuestraCalificacion">
+                                            <input type="hidden" id="hdPlanTrabajoDetId" />
+                                            <input type="hidden" id="hdCodTH" />
+                                            <input type="hidden" id="hdNumPoa" />
+                                            <div class="form-row">
+                                                <div class="form-group col-md-3">
+                                                    <label for="detTH" class="text-small">Título Habilitante</label>
+                                                    <input type="text" id="detTH" class="form-control form-control-sm" disabled />
+                                                </div>
+                                                <div class="form-group col-md-3">
+                                                    <label for="detModalidad" class="text-small">Modalidad</label>
+                                                    <input type="text" id="detModalidad" class="form-control form-control-sm" disabled />
+                                                </div>
+                                                <div class="form-group col-md-3">
+                                                    <label for="detPM" class="text-small">Plan de Manejo</label>
+                                                    <input type="text" id="detPM" class="form-control form-control-sm" disabled />
+                                                </div>
+                                                <div class="form-group col-md-3">
+                                                    <label for="detTipoPM" class="text-small">Tipo</label>
+                                                    <input type="text" id="detTipoPM" class="form-control form-control-sm" disabled />
+                                                </div>
+                                            </div>
+                                            <br />
+                                            <ul class="nav nav-tabs" id="myTab" role="tablist">
+                                                <li class="nav-item" id="navCalificacionEspecieTab"><a class="nav-link active" data-toggle="tab" href="#navCalificacionEspecie" role="tab" aria-controls="home" aria-selected="true">Calificación de Especies</a></li>
+                                                <li class="nav-item" id="navMuestraMinimaTab"><a class="nav-link" data-toggle="tab" href="#navMuestraMinima" role="tab" aria-selected="false">Cálculo de la Muestra Mínima de Especies a Supervisar</a></li>
+                                                <li class="nav-item" id="navConsolidadoEspeciesTab"><a class="nav-link" data-toggle="tab" href="#navConsolidadoEspecies" role="tab" aria-selected="false">Consolidado de Especies a Supervisar</a></li>
+                                            </ul>
+                                            <div class="tab-content" id="nav-tabContent1">
+                                                <div class="tab-pane fade show active" id="navCalificacionEspecie" role="tabpanel" aria-labelledby="nav-home-tab">
+                                                    <div class="card">
+                                                        <div class="card-body">
+                                                            <div id="divCalEspecie">
+
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="tab-pane fade" id="navMuestraMinima" role="tabpanel" aria-labelledby="nav-home-tab">
+                                                    <div class="card">
+                                                        <div class="card-body">
+                                                            <div id="divMuestraMinima">
+
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="tab-pane fade" id="navConsolidadoEspecies" role="tabpanel" aria-labelledby="nav-home-tab">
+                                                    <div class="card">
+                                                        <div class="card-body">
+                                                            <div id="divConsolidado">
+
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    @*<div class="card">
+                                            <div class="card-header text-small">
+                                                <h5>Cálculo de la Muestra Mínima de Especies a Supervisar</h5>
+                                            </div>
+                                            <div class="card-body" id="cardMuestraCalificacion1">
+                                                <div id="divMuestraMinima1">
+
+                                                </div>
+                                            </div>
+                                        </div>*@
+                                    @*<div class="card">
+                                            <div class="card-header text-small">
+                                                <h5>Consolidado de Especies a Supervisar</h5>
+                                            </div>
+                                            <div class="card-body" id="cardMuestraCalificacion2">
+                                                <div id="divConsolidado">
+
+                                                </div>
+                                            </div>
+                                        </div>*@
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade hide" id="mdlAddPlanManejoOrd" role="dialog"></div>
+    <div class="modal fade hide" id="mdlAddPlanManejoExtra" role="dialog"></div>
+    @* Para el control genérico de personas *@
+    <div class="modal fade hide" id="mdlBuscarPersona" role="dialog"></div>
+    <div class="modal fade hide" id="modalAddEditPersona" role="dialog"></div>
+    <div class="modal fade hide" id="personaUbigeoModal" role="dialog"></div>
+    <div class="modal fade hide" id="modalCalificacionAdicional" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header text-small" style="cursor:move;padding:0.5rem;">
+                    <h5 class="modal-title">Calificación adicional</h5>
+                </div>
+                <div class="modal-body" id="divValAdicional">
+                    <input type="hidden" id="hdIdDet" />
+                    <div class="form-row">
+                        <div class="form-group col-md-12">
+                            <label>Categorización de especies amenazadas</label>
+                            <select class="form-control form-control-sm" id="cboCatAmenazada">
+                                <option value="0000008|1">No incluida</option><!--0000008-->
+                                <option value="0000007|4">Casi amenazado</option><!--0000007-->
+                                <option value="0000006|8">Vulnerable</option><!--0000006-->
+                                <option value="0000005|12">En peligro</option><!--0000005-->
+                                <option value="0000004|16">En peligro critico</option><!--0000004-->
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-12">
+                            <label>Categoria de la especie maderable</label>
+                            <select class="form-control form-control-sm" id="cboCatMaderable">
+                                <option value="0000001|1">Otras (E)</option><!--0000001-->
+                                <option value="0000002|4">Potencial (D)</option><!--0000002-->
+                                <option value="0000003|8">Intermedia (C)</option><!--0000003-->
+                                <option value="0000004|12">Valiosa (B)</option><!--0000004-->
+                                <option value="0000005|16">Altamente valiosa (A)</option><!--0000005-->
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary btn-sm" onclick="_calEspecie.fnActualizarCalificacion()">Guardar</button>
+                    <button id="btnCerrarCalificacion" class="btn btn-secondary btn-sm" data-dismiss="modal">Cancelar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade hide" id="modalEspecieAdicional" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header text-small" style="cursor:move;padding:0.5rem;">
+                    <h5 class="modal-title">Agregar Especie Adicional Al Consolidado</h5>
+                </div>
+                <div class="modal-body" id="divEspecieAdicional">
+                    <input type="hidden" id="hdIdDetAdicional" />
+                    <input type="hidden" id="hdIdDetEspecieAdicional" />
+                    <input type="hidden" id="hdTipoAdicional" />
+                    <div class="form-row">
+                        <div class="form-group col-md-12">
+                            <label>Especie</label>
+                            <input type="text" id="txtEspecieAdicional" class="form-control form-control-sm" disabled />
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-12">
+                            <label for="txtCantidadAprovAdd">Cantidad Aprovechable</label>
+                            <input type="number" id="txtCantidadAprovAdd" class="form-control form-control-sm" />
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-12">
+                            <label for="txtCantidadSemAdd">Cantidad Semillero</label>
+                            <input type="number" id="txtCantidadSemAdd" class="form-control form-control-sm" />
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-12">
+                            <label for="txtObsAdd">Observación</label>
+                            <textarea id="txtObsAdd" rows="2" class="form-control form-control-sm"></textarea>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary btn-sm" onclick="planT.fnAgregarEspecieAdicional()">Guardar</button>
+                    <button id="btnCerrarEspecieAdd" class="btn btn-secondary btn-sm" data-dismiss="modal">Cancelar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    @Html.Partial("_ModificarEspecieConsolidado")
+</div>
+<style>
+    .titular {
+        width: 15%
+    }
+
+    .criterios {
+        width: 10%
+    }
+
+    .colorSelectRow {
+        background-color: #d9ecdf;
+    }
+</style>
+<script type="text/javascript">
+    var planT = {
+        fnProyectar: () => {
+            let id = planT.frm.find("#idPlanTrajo").val().trim();
+            const url = `${urlLocalSigo}/Focalizacion/PlanTrabajo/ProyecTarPlanTrabajo?id=${id}`;
+            utilSigo.file.getBinary("demo.docx", url);
+        },
+        fnDownloadDet: () => {
+            let id = planT.frm.find("#idPlanTrajo").val().trim();
+            const url = `${urlLocalSigo}/Focalizacion/PlanTrabajo/DownloadPlanDet?codPlanId=${id}`;
+            utilSigo.file.getBinary("PMSupervisar.xlsx", url);
+        },
+        fnDownloadCalificacion: () => {
+            let frm = $("#cardMuestraCalificacion");
+            let id = frm.find("#hdPlanTrabajoDetId").val();
+            const url = `${urlLocalSigo}/Focalizacion/PlanTrabajo/DownloadCalificacionEspecie?codPlanDetId=${id}`;
+            utilSigo.file.getBinary("CalificaciónEspecies.xlsx", url);
+        },
+        fnGetMuestraPartial: (idPlanTrajoDet) => {
+            let url = urlLocalSigo + "Focalizacion/PlanTrabajo/_MuestraMinimaEspecie?codPlanDetId=" + idPlanTrajoDet;
+            let _hrGetHtml = $.ajax({
+                url: url,
+                type: 'GET',
+                data: {},
+                dataType: 'html',
+                beforeSend: utilSigo.beforeSendAjax,
+                error: utilSigo.errorAjax,
+                complete: utilSigo.completeAjax,
+                success: function (data) {
+                    if (_hrGetHtml.status != 203) {
+                        $("#divMuestraMinima").html(data);
+                    }
+
+                },
+                statusCode: {
+                    203: () => { utilSigo.unblockUIGeneral(); utilSigo.toastWarning("Aviso", "El usuario perdio la sesión. Vuelva ingresar al sistema"); }
+                }
+            });
+        },
+        fnGetCalificacionPartial: (idPlanTrajoDet, tipoPManejo) => {
+            let url = urlLocalSigo + "Focalizacion/PlanTrabajo/_CalificacionEspecie?codPlanDetId=" + idPlanTrajoDet + '&tipoPManejo=' + tipoPManejo;
+            // $("#divCalEspecie").load(url, function () { });
+            let _hrGetHtml = $.ajax({
+                url: url,
+                type: 'GET',
+                data: {},
+                dataType: 'html',
+                beforeSend: utilSigo.beforeSendAjax,
+                error: utilSigo.errorAjax,
+                complete: utilSigo.completeAjax,
+                success: function (data) {
+                    if (_hrGetHtml.status != 203) {
+                        $("#divCalEspecie").html(data);
+                        planT.fnGetMuestraPartial(idPlanTrajoDet);
+                    }
+
+                },
+                statusCode: {
+                    203: () => { utilSigo.unblockUIGeneral(); utilSigo.toastWarning("Aviso", "El usuario perdio la sesión. Vuelva ingresar al sistema"); }
+                }
+            });
+        },
+        fnGetConsolidadoPartial: (idPlanTrajoDet) => {
+            let url = urlLocalSigo + "Focalizacion/PlanTrabajo/_Consolidado?codPlanDetId=" + idPlanTrajoDet;
+            let _hrGetHtml = $.ajax({
+                url: url,
+                type: 'GET',
+                data: {},
+                dataType: 'html',
+                beforeSend: utilSigo.beforeSendAjax,
+                error: utilSigo.errorAjax,
+                complete: utilSigo.completeAjax,
+                success: function (data) {
+                    if (_hrGetHtml.status != 203) {
+                        $("#divConsolidado").html(data);
+                    }
+
+                },
+                statusCode: {
+                    203: () => { utilSigo.unblockUIGeneral(); utilSigo.toastWarning("Aviso", "El usuario perdio la sesión. Vuelva ingresar al sistema"); }
+                }
+            });
+        },
+        fnIrEspecieCal: (obj) => {
+            $("#divGeneralEspecies").show();
+            let itemData = planT.dt.row($(obj).parents('tr')).data();
+            planT.dt.rows().every(function () {
+                this.nodes().to$().removeClass('colorSelectRow');
+            })
+            $(obj).parents('tr').addClass("colorSelectRow");
+            planT.frm.find("#hdPlanTrabajoDetId").val(itemData.idPlanTrajoDet);
+            planT.frm.find("#hdCodTH").val(itemData.codTH);
+            planT.frm.find("#hdNumPoa").val(itemData.numPoa);
+            planT.frm.find("#detTH").val(itemData.numTH);
+            planT.frm.find("#detModalidad").val(itemData.modalidad);
+            planT.frm.find("#detPM").val(itemData.nombrePManejo);
+            planT.frm.find("#detTipoPM").val(itemData.tipoPManejo);
+            planT.fnGetCalificacionPartial(itemData.idPlanTrajoDet, itemData.tipoPManejo);
+            planT.fnGetConsolidadoPartial(itemData.idPlanTrajoDet);
+            $('#myTab a[href="#navCalificacionEspecie"]').tab('show');
+        },
+        fnAddPlanOrd: (tipoSupervision) => {
+            var option = {
+                url: urlLocalSigo + "Focalizacion/PlanTrabajo/_PlanManejoOrd?tipoSupervision=" + tipoSupervision,
+                divId: "mdlAddPlanManejoOrd",
+                datos: {}
+            };
+            utilSigo.fnOpenModal(option);
+        },
+        fnAddPlanExtra: () => {
+            var option = {
+                url: urlLocalSigo + "Focalizacion/PlanTrabajo/_PlanManejoExtra",
+                divId: "mdlAddPlanManejoExtra",
+                datos: {}
+            };
+            utilSigo.fnOpenModal(option);
+        },
+        fnBuildTablePlanDetalle: () => {
+            let columns = [
+                {
+                    "name": "ROW_INDE", "width": "2%", "orderable": false, "mRender": function (data, type, row, meta) {
+                        return parseInt(meta.row) + 1;
+                    }
+                },
+                {
+                    "data": "", "width": "2%", "orderable": false, "searchable": false, "mRender": function (data, type, row) {
+                        // if (row.numPoa != 0) return '<i class="fa fa-lg fa-pencil-square-o" style="color:blue;cursor:pointer;" title="Detalle de Especies" onclick="planT.fnIrEspecieCal(this)"></i>';
+                        // else return "";
+                        return '<i class="fa fa-lg fa-pencil-square-o" style="color:blue;cursor:pointer;" title="Detalle de Especies" onclick="planT.fnIrEspecieCal(this)"></i>';
+                    }
+                },
+                {
+                    "data": "", sClass: "titular", "orderable": false, "searchable": false, "mRender": function (data, type, row) {
+                        return `${row.titular}`;
+                    }
+                },
+                {
+                    "data": "", sClass: "titular", "orderable": false, "searchable": false, "mRender": function (data, type, row) {
+                        return `${row.numTH}`;
+                    }
+                },
+                { "data": "modalidad", "autoWidth": true, "orderable": false },
+                { "data": "nombrePManejo", "autoWidth": true, "orderable": false },
+                {
+                    "data": "", "width": "2%", "orderable": false, "searchable": false, "mRender": function (data, type, row) {
+                        return `${row.departamento}/${row.provincia}/${row.distrito}`;
+                    }
+                },
+                { "data": "tipoSupervision", "autoWidth": true, "orderable": false },
+                {
+                    "data": "", sClass: "criterios", "orderable": false, "searchable": false, "mRender": function (data, type, row) {
+                        return `${row.criterios}`;
+                    }
+                },
+                { "data": "oportunidadSupervision", "autoWidth": true, "orderable": false },
+                {
+                    "data": "", "width": "2%", "orderable": false, "searchable": false, "mRender": function (data, type, row) {
+                        return '<i class="fa fa-lg fa-window-close" style="color:red;cursor:pointer;" title="Eliminar Item" onclick="planT.fnDeleteItemPlanDetalle(this)"></i>';
+                    }
+                }
+            ];
+            planT.dt = $("#tbPlanManejoItemsDetalle").DataTable({
+                processing: true,
+                serverSide: false,
+                searching: false,
+                ordering: false,
+                paging: true,
+                //"bPaginate": true,
+                ajax: {
+                    "url": urlLocalSigo + "Focalizacion/PlanTrabajo/PlanTrabajoDetListar",
+                    "data": function (d) {
+                        d.codPlanTrabajo = planT.frm.find("#idPlanTrajo").val().trim();
+                    },
+                    "error": function (jqXHR) {
+                        utilSigo.unblockUIGeneral();
+                        utilSigo.toastError("Error", "Sucedio un error");
+                    },
+                    "statusCode": {
+                        203: () => { utilSigo.unblockUIGeneral(); utilSigo.toastInfo("Aviso", "El usuario perdio la sesión. Vuelva ingresar al sistema"); }
+                    }
+                },
+                columns: columns,
+                bInfo: true,
+                bLengthChange: false,
+                // "lengthMenu": [[10, 20, 50, 100], [10, 20, 50, 100]],
+                "aaSorting": [],
+                "pageLength": 15,
+                // "displayStart": optDt.iStart,
+                "oLanguage": initSigo.oLanguage,
+                "drawCallback": initSigo.showPagination
+            });
+        },
+        fnDeleteItemPlanDetalle: (obj) => {
+            let itemData = planT.dt.row($(obj).parents('tr')).data();
+            let codPlanId = planT.frm.find("#idPlanTrajo").val().trim();
+            let model = {
+                idPlanTrajoDet: itemData.idPlanTrajoDet,
+                idPlanTrajo: codPlanId
+            };
+            utilSigo.dialogConfirm("", "Está seguro de eliminar el item?", function (r) {
+                if (r) {
+                    let url = urlLocalSigo + "Focalizacion/PlanTrabajo/PlanDetEliminar";
+                    let option = { url: url, datos: JSON.stringify(model), type: 'POST' };
+                    utilSigo.fnAjax(option, function (data) {
+                        if (data.success) {
+                            utilSigo.toastSuccess("Éxito", data.msj);
+                            planT.dt.ajax.reload();
+                            if (planT.frm.find("#hdPlanTrabajoDetId").val() == itemData.idPlanTrajoDet) {
+                                planT.frm.find("#hdCodTH").val('');
+                                planT.frm.find("#hdNumPoa").val('');
+                                planT.frm.find("#detTH").val('');
+                                planT.frm.find("#detModalidad").val('');
+                                planT.frm.find("#detPM").val('');
+                                $("#divMuestraMinima").html('');
+                                $("#divCalEspecie").html('');
+                                $("#divGeneralEspecies").hide();
+                            }
+                        }
+                        else {
+                            utilSigo.toastWarning("Aviso", data.msj);
+                        }
+                    });
+                }
+            });
+        },
+        fnGuardar: () => {
+            let indicador = planT.frm.find("#ddlItemIndicadorId").select2("val");
+            let funcionarioId = planT.frm.find("#funcionarioResponsableId").val().trim();
+            let ddlIODId = planT.frm.find("#ddlIODId").select2("val");
+            let id = planT.frm.find("#idPlanTrajo").val().trim();
+            let periodo = planT.frm.find("#ddlPeriodoId").select2("val");
+            let mes = planT.frm.find("#ddlMesId").select2("val");
+            if (id == "") {
+                utilSigo.toastWarning("Aviso", "Plan trabajo incorrecto");
+                return false;
+            }
+            if (indicador == "0000000") {
+                utilSigo.toastWarning("Aviso", "Seleccione indicador");
+                return false;
+            }
+            if (ddlIODId == "0000000") {
+                utilSigo.toastWarning("Aviso", "Seleccione OD");
+                return false;
+            }
+            if (indicador == "0000002") {
+                if (funcionarioId == "") {
+                    utilSigo.toastWarning("Aviso", "Seleccione funcionario que aprobará el plan de trabajo");
+                    return false;
+                }
+            }
+            let observacionControl = "";
+            if (planT.banderaCKEDITORBD == 1)
+                observacionControl = CKEDITOR.instances["OBSERVACIONES_CONTROL"].getData();
+            let model = {
+                idPlanTrajo: id,
+                ddlIODId: ddlIODId,
+                ddlPeriodoId: periodo,
+                ddlMesId: mes,
+                ddlItemIndicadorId: indicador,
+                funcionarioResponsableId: funcionarioId,
+                observacionControl: observacionControl,
+                observacionSubsanar: planT.frm.find("#observacionSubsanar").is(":checked")
+            };
+
+            var url = urlLocalSigo + "Focalizacion/PlanTrabajo/PlanGuardarG";
+            var option = { url: url, datos: JSON.stringify(model), type: 'POST' };
+            utilSigo.fnAjax(option, function (data) {
+                if (data.success) {
+                    sessionStorage.setItem('mensajeActPlan', 'Se actualizó correctamente los datos');
+                    //utilSigo.toastSuccess("Aviso", "Se actualizó correctamente los datos");
+                    planT.fnRegresar();
+                }
+                else {
+                    utilSigo.toastWarning("Aviso", data.msj);
+                }
+            });
+
+        },
+        fnBuscarPersona: () => {
+            let url = urlLocalSigo + "General/Controles/_BuscarPersonaGeneral";
+            let option = { url: url, type: 'GET', datos: { asBusGrupo: "PERSONA", asCodPTipo: "TODOS", asTipoPersona: "TODOS" }, divId: "mdlBuscarPersona" };
+            utilSigo.fnOpenModal(option, function () {
+                _bPerGen.fnAsignarDatos = function (obj) {
+                    if (obj != null && obj != "") {
+                        let data = _bPerGen.dtBuscarPerona.row($(obj).parents('tr')).data();
+                        planT.frm.find("#funcionarioResponsable").val(data.PERSONA);
+                        planT.frm.find("#funcionarioResponsableId").val(data.COD_PERSONA);
+                        utilSigo.fnCloseModal("mdlBuscarPersona");
+                    }
+                }
+                _bPerGen.fnInit();
+            });
+        },
+        fnRegresar: () => {
+            var url = `${urlLocalSigo}/Focalizacion/PlanTrabajo/Index`;
+            window.location = url;
+        },
+        iniciarCKEDITOR: (form, codigo) => {
+            planT.banderaCKEDITORBD = 1;
+            $.ajax({
+                url: urlLocalSigo + "THabilitante/Controles/_VPCKEDITOR",
+                type: 'GET',
+                data: { formulario: form, codigo: codigo },
+                dataType: 'html',
+                success: function (data) {
+                    // utilSigo.unblockUIGeneral();
+                    utilSigo.unblockUIElement("#divCKEDITOR");
+                    planT.frm.find("#divCKEDITOR").html(data);
+                    if (planT.frm.find("#ddlItemIndicadorEnable").val() == "False") {
+                        planT.frm.find("#OBSERVACIONES_CONTROL").attr('disabled', 'disabled');
+                    }
+                },
+                beforeSend: function () {
+                    //utilSigo.blockUIGeneral();
+                    utilSigo.blockUIElement("#divCKEDITOR");
+                },
+                error: function (jqXHR, error, errorThrown) {
+                    //utilSigo.unblockUIGeneral();
+                    utilSigo.unblockUIElement("#divCKEDITOR");
+                    utilSigo.toastError("Error", "Sucedio un Error Inesperado al cargar datos de control de calidad, Comuniquese con el Administrador");
+                    initSigo.redireccionarError("Sucedio un Error Inesperado al cargar datos de control de calidad. Si sigue persistiendo el error, comuniquese con el administrador");
+                    console.log(jqXHR.responseText);
+                },
+                statusCode: {
+                    203: () => { utilSigo.unblockUIGeneral(); utilSigo.toastInfo("Aviso", "El usuario perdio la sesión. Vuelva ingresar al sistema"); }
+                }
+            });
+        },
+        fnInit: () => {
+            planT.frm = $("#frmPlanT_General");
+            planT.banderaCKEDITOR = 0;
+            planT.banderaCKEDITORBD = 0;
+            $.fn.select2.defaults.set("theme", "bootstrap4");
+            planT.frm.find("#ddlItemIndicadorId").select2();
+            planT.frm.find("#ddlIODId").select2();
+            planT.frm.find("#ddlPeriodoId").select2();
+            planT.frm.find("#ddlMesId").select2();
+            //calidad
+            planT.frm.find("#ddlItemIndicadorId").change(function () {
+                let cboVal = $(this).val();
+
+                if (cboVal == "0000007") {
+                    planT.frm.find("#divCKEDITOR").removeAttr("style");
+                    if (planT.banderaCKEDITOR == 0)
+                        planT.iniciarCKEDITOR("PASPEQ_PLAN_TRABAJO", planT.frm.find("#idPlanTrajo").val());
+                    planT.banderaCKEDITOR = 1;
+                    planT.banderaCKEDITORBD = 1;
+                }
+                else {
+                    planT.frm.find("#divCKEDITOR").attr("style", "display:none;");
+                    planT.banderaCKEDITORBD = 0;
+                }
+            });
+            if (planT.frm.find("#ddlItemIndicadorId").select2("val") == "0000007") {
+                planT.frm.find("#divCKEDITOR").removeAttr("style");
+                if (planT.frm.find("#ddlItemIndicadorEnable").val() == "False") {
+                    // planT.frm.find("#divObsSubsanado").attr("style", "display:none;");
+                    planT.frm.find("#divObsSubsanado").removeAttr("style");
+
+                } else {
+                    planT.frm.find("#divObsSubsanado").attr("style", "display:none;");
+                }
+                console.log(planT.frm.find("#ddlItemIndicadorEnable").val());
+                if (planT.banderaCKEDITOR == 0)
+                    planT.iniciarCKEDITOR("PASPEQ_PLAN_TRABAJO", planT.frm.find("#idPlanTrajo").val());
+                planT.banderaCKEDITOR = 1;
+                planT.banderaCKEDITORBD = 1;
+            }
+        },
+        fnAgregarEspecieAdicional: () => {
+            let frm = $("#divEspecieAdicional");
+            let idCabecera = frm.find("#hdIdDetAdicional").val();
+            let id = frm.find("#hdIdDetEspecieAdicional").val();
+            let muestraAprov = frm.find("#txtCantidadAprovAdd").val();
+            let muestraSem = frm.find("#txtCantidadSemAdd").val();
+            let tipo = frm.find("#hdTipoAdicional").val();
+            let obs = frm.find("#txtObsAdd").val();
+            let model = {
+                idCabecera: idCabecera,
+                id: id,
+                muestraAprov: muestraAprov,
+                muestraSem: muestraSem,
+                tipo: tipo,
+                obs: obs
+            };
+            let url = urlLocalSigo + "Focalizacion/PlanTrabajo/PlanTrabajoDetEspecieAdic";
+            let option = { url: url, datos: JSON.stringify(model), type: 'POST' };
+            utilSigo.fnAjax(option, function (data) {
+                if (data.success) {
+                    utilSigo.toastSuccess("Éxito", data.msj);
+                    $("#btnCerrarEspecieAdd").click();
+                    planT.fnGetConsolidadoPartial(idCabecera);
+                    //planT.fnGetCalificacionPartial(codPlanSupervisionDetalle);
+                    $('#myTab a[href="#navConsolidadoEspecies"]').tab('show');
+                }
+                else {
+                    utilSigo.toastWarning("Aviso", data.msj);
+                }
+            });
+        },
+        fnModificarMuestraFinal: () => {
+            let frm = $("#divEspecieModConsolidado");
+            let idCabecera = frm.find("#hdIdDetModificarCons").val();
+            let idModificarFinal = frm.find("#hdIdEspecieAdicionalMod").val();
+            let fuenteOrigen = frm.find("#hdFuenteOrigenCons").val();
+            let muestraAprovFinal = frm.find("#txtCantidadAprovFinalMod").val();
+            let muestraSemFinal = frm.find("#txtCantidadSemFinalMod").val();
+            let obsFinal = frm.find("#txtObsFinalMod").val();
+            let model = {
+                idCabecera: idCabecera,
+                idModificarFinal: idModificarFinal,
+                fuenteOrigen: fuenteOrigen,
+                muestraAprovFinal: muestraAprovFinal,
+                muestraSemFinal: muestraSemFinal,
+                obsFinal: obsFinal
+            };
+            let url = urlLocalSigo + "Focalizacion/PlanTrabajo/ModificarCantidadConsolidado";
+            let option = { url: url, datos: JSON.stringify(model), type: 'POST' };
+            utilSigo.fnAjax(option, function (data) {
+                if (data.success) {
+                    utilSigo.toastSuccess("Éxito", data.msj);
+                    $("#btnCerrarModCons").click();
+                    planT.fnGetConsolidadoPartial(idCabecera);
+                }
+                else {
+                    utilSigo.toastWarning("Aviso", data.msj);
+                }
+            });
+        }
+    }
+    $(document).ready(function () {
+        planT.fnInit();
+        planT.fnBuildTablePlanDetalle();
+    });
+</script>
+

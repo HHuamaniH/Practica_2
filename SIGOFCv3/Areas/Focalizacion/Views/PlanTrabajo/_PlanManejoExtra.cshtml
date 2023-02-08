@@ -1,0 +1,182 @@
+﻿<div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+        <div class="modal-header text-small" style="cursor:move;padding:0.5rem;">
+            <h5 id="tituloModalPM" class="modal-title">Agregar Plan de Manejo - Extra-Ordinario  OD: <strong id="strSedeExtra"></strong></h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body">
+            <form id="contenedorPMD_Extra">
+                <div class="form-row">
+                    <div class="col-md-4">
+                        <select class="form-control form-control-sm" id="cboOpcionesExtra">
+                            <option value="TH_TITULAR">Titular</option>
+                            <option value="TH_NUMERO">N° T. Habilitante</option>
+                        </select>
+                    </div>
+                    <div class="col-md-8" style="text-align:right">
+                        <div class="input-group">
+                            <input type="text" id="txtValorBuscar" class="form-control form-control-sm" placeholder="" maxlength="50" style="text-transform:uppercase;" />
+                            <div class="input-group-prepend">
+                                <span class="input-group-text" onclick="_planExtra.fnSearch()" style="cursor:pointer;color:forestgreen"><i class="fa fa-search" data-toggle="tooltip" data-placement="top" title="Buscar"></i></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <br />
+                <div class="row">
+                    <div class="table-responsive">
+                        <table id="tbPlanManejoExtra" class="table table-hover table-bordered" style="width:100%;">
+                            <thead>
+                                <tr>
+                                    <th title="Seleccionar"></th>
+                                    <th>Nro</th>
+                                    <th>Título habilitante</th>
+                                    <th>POA</th>
+                                    <th>Titular</th>
+                                    <th>Oportunidad</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="modal-footer">
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    var _planExtra = {
+        fnBuildTable: () => {
+            let columns = [
+                {
+                    "data": "", "width": "2%", "orderable": false, "searchable": false, "mRender": function (data, type, row, meta) {
+                        return '<i class="fa fa-lg fa-check" style="cursor: pointer;color:forestgreen;" title="Seleccionar" onclick="_planExtra.fnSave(this)"></i>';
+                    }
+                },
+                {
+                    "name": "ROW_INDE", "width": "2%", "orderable": false, "searchable": false, "mRender": function (data, type, row, meta) {
+                        return parseInt(meta.row) + 1 + meta.settings._iDisplayStart;
+                    }
+                },
+
+                { "data": "NUM_THABILITANTE", "autoWidth": true },
+                { "data": "NOMBRE_POA", "autoWidth": true },
+                { "data": "TITULAR", "autoWidth": true },
+                {
+                    "data": "", "width": "25%", "orderable": false, "searchable": false, "mRender": function (data, type, row) {
+                        return '<select class="csOportunidad form-control form-control-sm" ><option value="1">Antes de la extracción</option><option value="2">Durante la extracción</option><option value="3">Posterior al aprovechamiento</option></select>';
+                    }
+                }
+            ];
+            let optDt = { iLength: 10, iStart: 0, aSort: [] };
+            _planExtra.dt = $("#tbPlanManejoExtra").DataTable({
+                processing: true,
+                deferLoading: 0,
+                serverSide: true,
+                searching: false,
+                ordering: false,
+                paging: true,
+                ajax: {
+                    "url": initSigo.urlControllerGeneral + "/GetListaGeneralPaging",
+                    "data": function (d) {
+                        d.customSearchEnabled = true;
+                        d.customSearchForm = "PASPEQ_EXTRAORDINARIA_V1";
+                        d.customSearchType = _planExtra.frmPadre.find("#idPlanTrajo").val().trim();
+                        d.CustomSearchType1 = _planExtra.frm.find("#cboOpcionesExtra").val().trim();
+                        d.customSearchValue = _planExtra.frm.find("#txtValorBuscar").val().trim();
+                        
+
+                    },
+                    "error": function (jqXHR) {
+                        utilSigo.unblockUIGeneral();
+                        utilSigo.toastError("Error", initSigo.MessageError);
+                        console.log(jqXHR.responseText);
+                    },
+                    "statusCode": {
+                        203: () => { utilSigo.unblockUIGeneral(); utilSigo.toastInfo("Aviso", "El usuario perdio la sesión. Vuelva ingresar al sistema"); }
+                    }
+                },
+                columns: columns,
+                bInfo: true,
+                "lengthMenu": [[10, 20, 50, 100], [10, 20, 50, 100]],
+                "aaSorting": optDt.aSort,
+                "pageLength": optDt.iLength,
+                "displayStart": optDt.iStart,
+                "oLanguage": initSigo.oLanguage,
+                "drawCallback": initSigo.showPagination,
+            });
+        },
+        fnSearch: () => {
+            let valorBusqueda = _planExtra.frm.find("#txtValorBuscar").val().trim();
+            //if (valorBusqueda.trim() == "") {
+            //    utilSigo.toastWarning("Aviso", "Ingrese Valor a Buscar");
+            //    _planExtra.frm.find("#txtValorBuscar").focus();
+            //    return false;
+            //}
+            //else {
+            //    var cantCarateres = valorBusqueda.length;
+            //    if (cantCarateres < 4) {
+            //        utilSigo.toastWarning("Aviso", "La longitud del criterio de búsqueda debe ser mayor a tres caracteres");
+            //        _planExtra.frm.find("#txtValorBuscar").focus();
+            //        return false;
+            //    }
+            //    _planExtra.dt.ajax.reload();
+            //}
+            _planExtra.dt.ajax.reload();
+        },
+        fnSave: (obj) => {
+            utilSigo.dialogConfirm("", "Está seguro de agregar el item?", function (r) {
+                if (r) {
+                    let codPlanId = _planExtra.frmPadre.find("#idPlanTrajo").val().trim();
+                    let periodoId = _planExtra.frmPadre.find("#ddlPeriodoId").select2("val");
+                    let $tr = $(obj).closest("tr");
+                    let dataRow = _planExtra.dt.row($tr).data();
+                    let model = {
+                        codPlan: periodoId,
+                        codTH: dataRow.COD_THABILITANTE,
+                        codPManejo: dataRow.COD_PMANEJO.trim(),
+                        numPoa: dataRow.NUM_POA,
+                        idPlanTrajo: codPlanId,
+                        oportunidadSupId: parseInt($tr.find(".csOportunidad").val())
+                    };
+                   // console.log(model);
+                    let url = urlLocalSigo + "Focalizacion/PlanTrabajo/GenerarUniversoExtraOrdinario";
+                    let option = { url: url, datos: JSON.stringify(model), type: 'POST' };
+                    utilSigo.fnAjax(option, function (data) {
+                        if (data.success) {
+                            utilSigo.toastSuccess("Éxito", data.msj);
+                            planT.dt.ajax.reload();
+                            $("#mdlAddPlanManejoExtra").modal('hide');
+                            //Limpiando html calificacion de especies
+                            planT.frm.find("#hdCodTH").val('');
+                            planT.frm.find("#hdNumPoa").val('');
+                            planT.frm.find("#detTH").val('');
+                            planT.frm.find("#detModalidad").val('');
+                            planT.frm.find("#detPM").val('');
+                            $("#divMuestraMinima").html('');
+                            $("#divCalEspecie").html('');
+                            $("#divGeneralEspecies").hide();
+                        }
+                        else {
+                            utilSigo.toastWarning("Aviso", data.msj);
+                        }
+                    });
+                }
+            });
+        }
+    };
+    $(document).ready(function () {
+        _planExtra.frm = $("#contenedorPMD_Extra");
+        _planExtra.frmPadre = $("#frmPlanT_General");      
+        $("#strSedeExtra").text(_planExtra.frmPadre.find("#ddlIODId").select2("data")[0].text);
+        _planExtra.fnBuildTable();
+        _planExtra.frm.submit(function (e) {
+            e.preventDefault(e);
+            _planExtra.fnSearch();
+        });
+    });
+</script>

@@ -1,0 +1,76 @@
+﻿@model CapaEntidad.ViewModel.VM_PlanTrabajoDetalle
+<style type="text/css">     
+
+    /*.colCriterio {
+        width: 10px !important;
+    }*/
+     
+    
+</style>
+<div class="card">
+    <div class="card-header text-right">
+        OD : <strong> @ViewBag.OD_SEDE </strong>
+        Periodo : <strong> @ViewBag.periodo </strong>
+        Mes : <strong> @ViewBag.mes_focalizacion </strong>
+    </div>
+    <div class="card-body">
+        <div class="card">
+            <div class="card-header text-small" id="divTitle">
+                <a id="btnRegresarPlanTrabajo" style="cursor:pointer;" data-toggle="tooltip" data-placement="top" title="Regresar"><i class="fa mx-2 fa-lg fa-reply"></i></a>
+                <button type="button" class="btn btn-outline-info btn-sm" onclick="_PlanTrabajoDetalle.fnOpenPlan()" title="Agregar Plan de Manejo (PASPEQ)">
+                    <span class="fa fa-plus" aria-hidden="true"></span>
+                </button>
+                <button type="button" class="btn btn-outline-info btn-sm" onclick="_PlanTrabajoDetalle.fnOpenPlanExtra()" title="Buscar Plan de Manejo">
+                    <span class="fa fa-search" aria-hidden="true"></span>
+                </button>
+                <button type="button" class="btn btn-outline-info btn-sm" onclick="_PlanTrabajoDetalle.fnDownload()" title="Descargar planes de manejo">
+                    <span class="fa fa-file-excel-o" aria-hidden="true"></span>
+                </button>
+                <button type="button" class="btn btn-outline-info btn-sm" onclick="_PlanTrabajoDetalle.fnDownloadMuestra()" title="Descargar muestra">
+                    <span class="fa fa-file-excel-o" aria-hidden="true"></span>
+                </button>
+            </div>
+            <form id="frmPlanTrabajoDetalle">
+                <input type="hidden" id="cod_paspeq_plan_trabajo" value="@ViewBag.cod_paspeq_plan_trabajo" />
+                <input type="hidden" id="hdPeriodo" value="@ViewBag.periodo" />
+                <input type="hidden" id="hdSede" value="@ViewBag.OD_SEDE" />
+                <input type="hidden" id="hdMes" value="@ViewBag.mes_focalizacion" />
+            </form>
+            <div class="card-body">                 
+                <div class="row">
+                    <div class="col-md-12">
+                        
+                        <div class="table-responsive">
+                            <table id="tbListPlanTrabajo" class="table table-hover table-bordered" style="width:100%">
+                                <thead>
+                                    <tr>
+                                        <th colspan="13" style="text-align:center">                                            
+                                            <h5 class="card-title">Información de títulos habilitantes y planes de manejo a supervisar</h5>
+                                        </th>
+                                    </tr>
+                                    <tr>
+                                        <th title="Seleccionar">S</th>
+                                        <th>N°</th>
+                                        <th>Titular</th>
+                                        <th title="Nro. Título Habilitante">Título</th>
+                                        <th>Modalidad</th>
+                                        <th>Plan de manejo</th>
+                                        <th>Dpto</th>
+                                        <th>Prov</th>
+                                        <th>Dist</th>
+                                        <th title="Tipo de supervisión">Tipo</th>
+                                        <th title="Criterios de focalización">Criterios</th>
+                                        <th>Oportunidad</th>
+                                        <th title="Eliminar">E</th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="~/Areas/PlanFocalizacion/js/Focalizacion/_PlanTrabajoDetalle.js"></script>

@@ -1,0 +1,27 @@
+﻿@model CapaEntidad.ViewModel.VM_PlanTrabajo
+<div class="modal-dialog" role="document">
+    <div class="modal-content">
+        <div class="modal-header text-small" style="cursor:move;padding:0.5rem;">
+            <h5 class="modal-title">Periodo @Model.periodo</h5>
+        </div>
+        <div class="modal-body">
+            <form id="frmManPlanTrabajoEliminar" method="post">
+                <div class="form-row">
+                    <div class="form-group col-md-12">
+                        <label for="usuario" class="text-small">Se eliminará este plan de trabajo (@Model.mes), debe confirmar esta operación</label>
+                    </div>
+                </div>
+                @Html.HiddenFor(m => m.cod_paspeq_plan_trabajo)
+            </form>
+        </div>
+        <div class="modal-footer">
+            <button id="btnGuardar" class="btn btn-primary btn-sm" onclick="_manPlanTrabajoEliminar.fnSave();">Eliminar</button>
+            <button id="btnCancelar" class="btn btn-secondary btn-sm" onclick="_manPlanTrabajoEliminar.fnClose();">Cancelar</button>
+        </div>
+    </div>
+</div>
+
+<script src="~/Areas/PlanFocalizacion/js/Focalizacion/_PlanTrabajoEliminar.js"></script>
+
+
+

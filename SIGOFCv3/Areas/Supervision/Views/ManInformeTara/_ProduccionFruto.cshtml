@@ -1,0 +1,43 @@
+﻿
+<script src="~/Areas/Supervision/js/ManInformeTara/_ProduccionFruto.js"></script>
+
+<div class="modal-dialog" role="document">
+    <div class="modal-content">
+        <div class="modal-header text-small" style="cursor:move;">
+            <span>Producción Frutos</span>
+            <i class="fa fa-close" style="cursor:pointer;" data-dismiss="modal" aria-label="Close"></i>
+        </div>
+        <div class="modal-body">
+            <form id="frmItemProduccionFruto">
+                @Html.Hidden("hdfRegEstado")
+                @Html.Hidden("hdfCodSecuencial")
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label for="txtArea" class="text-small">Predio/Área</label>
+                        @Html.TextBox("txtArea", "", new { @class = "form-control form-control-sm", type = "number" })
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label for="txt1Cosecha" class="text-small">Primera Cosecha (Kg)</label>
+                        @Html.TextBox("txt1Cosecha", "", new { @class = "form-control form-control-sm", type = "number" })
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="txt2Cosecha" class="text-small">Segunda Cosecha (Kg)</label>
+                        @Html.TextBox("txt2Cosecha", "", new { @class = "form-control form-control-sm", type = "number" })
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label for="txtTotalCosecha" class="text-small">Total Producción Anual (Kg)</label>
+                        @Html.TextBox("txtTotalCosecha", "", new { @class = "form-control form-control-sm", type = "number" })
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-primary btn-sm" onclick="_ProduccionFruto.fnSubmitForm()">Guardar</button>
+            <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Cancelar</button>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,16 @@
+﻿@model CapaEntidad.ViewModel.VM_Resodirec
+    <div id="divRDCaducidad">
+        <div class="card-header text-small">Motivo de la Conservación del Acto Administrativo</div>
+        <div><br /></div>
+        <div class="form-row">
+            <div class="form-group col-md-12">
+                @Html.TextAreaFor(m => m.txtMotConservActoAdm, 4, 1, new { @class = "form-control form-control-sm" })
+            </div>
+        </div>
+
+        <!--Rectificacion-->
+        <div>
+            @Html.Partial("~/Areas/Fiscalizacion/Views/ManResolucion/_Shared/_generic/_renderRectificacion.cshtml", Model)
+        </div>
+    </div>
+

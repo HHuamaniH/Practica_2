@@ -1,0 +1,12 @@
+﻿<div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+        <div class="modal-header text-small" style="cursor:move;padding:0.5rem;">
+            <h5 class="modal-title">Control de Calidad</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>        
+        @Html.Action("_ControlCalidadAjax","Controles", new { area= "General", formulario = "PASPEQ_PLAN",codigo=ViewBag.cod_paspeq_id })
+       
+    </div>
+</div>

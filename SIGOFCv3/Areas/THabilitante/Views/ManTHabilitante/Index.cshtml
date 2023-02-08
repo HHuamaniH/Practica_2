@@ -1,0 +1,1077 @@
+﻿@model CapaEntidad.ViewModel.VM_THabilitante
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_LayoutMain.cshtml";
+    string[] tipoModRecat = { "0000001", "0000002", "0000003", "0000004", "0000023" };
+
+}
+<style type="text/css">
+    #fileselect {
+        display: none;
+    }
+
+    #fileselectMod {
+        display: none;
+    }
+
+    #tbErrorMaterial_DGeneral_wrapper {
+        padding: 0px;
+    }
+
+    #tbErrorMaterial_DAdicional_wrapper {
+        padding: 0px;
+    }
+</style>
+<script src="~/Areas/THabilitante/js/ManTHabilitante/Index.js?v=@Guid.NewGuid()"></script>
+@section scripts{
+    <script type="text/javascript">
+        ManTHabilitante.fnLoadData('@Html.Raw(Json.Encode(@Model.tbErrorMaterial_DGeneral))', "DGenereal");
+        ManTHabilitante.fnLoadData('@Html.Raw(Json.Encode(@Model.tbErrorMaterial_DAdicional))', "DAdicional");
+    </script>
+    <script>
+        "use strict";
+        $(document).ready(function () {
+            $('[data-toggle="tooltip"]').tooltip();
+            var contadorEnumTb = 1;
+            ManTHabilitante.frmTHabilitanteRegistro = $("#frmTHabilitanteRegistro");
+            ManTHabilitante.fnInit();
+            ManTHabilitante.iniciarEventosGenerales();
+            //Validamos el rol del usuario
+            utilSigo.ValidaRol('@ViewBag.VAliasRol', 'btnRegistrarTH', '@Model.vmControlCalidad.ddlIndicadorId');
+
+
+            //pintando datos de vistas parciales
+            @if(Model.cod_Modalidad== "0000002")//cuando es autorizacionde fauna silvestre Ex situ
+            {
+                <text>
+            ManTHabilitante.iniciarModalidadFauna();
+                </text>
+            }
+            else
+            {
+                <text>
+            ManTHabilitante.DGeneral.frmVertice = $("#frmVertice");
+            ManTHabilitante.DGeneral.iniciarEventos();
+            ManTHabilitante.DGeneral.tbItemVertice = ManTHabilitante.frmTHabilitanteRegistro.find("#tbItemVertice");
+            var contVertice = 1;
+            ManTHabilitante.DGeneral.dtItemVertice = ManTHabilitante.DGeneral.tbItemVertice.DataTable({
+                "bServerSide": false,
+                "ajax": {
+                    "url": "@Url.Action("GetAllVertices", "ManTHabilitante", new { Area= "THabilitante" })",
+                    "type": "GET",
+                    "datatype": "json",
+                    "beforeSend": function () {
+
+                    },
+                    "error": function (jqXHR, error, errorThrown) {
+                        utilSigo.toastError("Error", "Sucedio un Error Inesperado al cargar datos en la tabla vertice");
+                        console.log(jqXHR.responseText);
+                        // $("#tbItemVertice_processing").html("Error al cargar datos");
+                    }
+                },
+                "bAutoWidth": false,
+                "bProcessing": true,
+                "bJQueryUI": false,
+                // "bRetrieve": true,
+                "bFilter": false,
+                "aaSorting": [],
+                "bPaginate": true,
+                // "bLengthChange": false,
+                "pageLength": 25,
+                "columns": [
+                    {
+                        "autoWidth": true, "bSortable": false, "data": "VERTICE",
+                        "mRender": function (data, type, row) {
+                            var cell = '<input type="hidden" class="hdfItemCodSecuencialAdenda" value="' + row.COD_SECUENCIAL_ADENDA + '" /><input type="hidden" class="hdCodSecuencial" value="' + row.COD_SECUENCIAL + '" /><input type="hidden" class="hdEstadoItemGen" value="' + row.RegEstado + '" /><input type="hidden" class="hdDdlItemZona_UTM" value="' + row.ZONA + '" /><i class="fa mx-2 fa-lg fa-pencil-square-o" title="Editar" style="cursor:pointer;" onclick="ManTHabilitante.DGeneral.editVertice(this);"></i>';
+
+                            return cell;
+                        }
+                    },
+                    {
+                        "autoWidth": true, "bSortable": false, "data": "VERTICE",
+                        "mRender": function (data, type, row) {
+                            var cell = '<i class="fa fa-lg fa-window-close" style="color:red;cursor:pointer;" title="Eliminar" onclick="ManTHabilitante.DGeneral.eliminarVerticeTabla(this);"></i>';
+
+                            return cell;
+                        }
+                    },
+                    {
+                        "autoWidth": true, "bSortable": false, "data": "OBSERVACION",
+                        "mRender": function (data, type, row) {
+                            var cell = contVertice;
+                            contVertice++;
+                            return cell;
+                        }
+                    },
+                    { "data": "VERTICE", "autoWidth": true },
+                    { "data": "ZONA", "autoWidth": true },
+                    { "data": "COORDENADA_ESTE", "autoWidth": true },
+                    { "data": "COORDENADA_NORTE", "autoWidth": true },
+                    { "data": "OBSERVACION", "autoWidth": true }
+                ],
+                "oLanguage": initSigo.oLanguage,
+                "drawCallback": initSigo.showPagination,
+                bInfo: false,
+                bLengthChange: false
+            });
+                </text>
+            }
+            @if(Model.chkManConsolidado)
+            {
+                @:ManTHabilitante.frmTHabilitanteRegistro.find("#txtItemNumero").attr("readonly", "readonly");
+            }
+            //adendas
+            @if (!tipoModRecat.Contains(Model.hdfItemModalidadCodigo) && Model.hdfItemModalidadCodigo != "0000006")
+            {
+                <text>
+            ManTHabilitante.adend.iniciarEventos();
+            ManTHabilitante.adend.indexAdenda = 0;
+            ManTHabilitante.adend.indexAdendaArea = 0;
+                </text>
+                //cargando datos de tabla
+                if(Model.ListAdendas!=null)
+                {
+                    if(Model.ListAdendas.Count()>0)
+                    { //contadorEnumTb = 1;
+                      @:var listaVADEAREA = [];
+                        foreach(var item in Model.ListAdendas)
+                        {
+                            //evaluando si tiene vertices
+                            if(item.ListTDDVADEAREA!=null)
+                            {
+                                if(item.ListTDDVADEAREA.Count()>0)
+                                {
+                                    @:listaVADEAREA = [];
+                                    foreach (var item1 in item.ListTDDVADEAREA)
+                                    {
+                                        <text>
+                                        listaVADEAREA.push({
+                                            VERTICE: "@item1.VERTICE",
+                                            ZONA: "@item1.ZONA",
+                                            COORDENADA_ESTE: "@item1.COORDENADA_ESTE",
+                                            COORDENADA_NORTE: "@item1.COORDENADA_NORTE",
+                                            OBSERVACION: "@item1.OBSERVACION",
+                                            COD_SECUENCIAL: "@item1.COD_SECUENCIAL",
+                                            COD_SECUENCIAL_ADENDA: "@item1.COD_SECUENCIAL_ADENDA",
+                                            RegEstado: "@item1.RegEstado"
+                                        });
+                                        ManTHabilitante.adend.indexAdendaArea++;
+                                        </text>
+                                    }
+                                }
+                            }
+                            <text>
+                            ManTHabilitante.ListAdendas.push({
+                                COD_SECUENCIAL: "@item.COD_SECUENCIAL",
+                                RegEstado: "@item.RegEstado",
+                                COD_MADENDA: "@item.COD_MADENDA",
+                                COD_FUNCIONARIO_ADENDA: "@item.COD_FUNCIONARIO_ADENDA",
+                                COD_TITULAR_ADENDA: "@item.COD_TITULAR_ADENDA",
+                                ADENDA_FECHA_TERMINO: "@item.ADENDA_FECHA_TERMINO",
+                                TIPO_PERSONA: "@item.TIPO_PERSONA",
+                                N_DOCUMENTO: "@item.N_DOCUMENTO",
+                                N_RUC: "@item.N_RUC",
+                                MOTIVO: "@item.MOTIVO",
+                                ADENDA_FECHA_INICIO: "@item.ADENDA_FECHA_INICIO",
+                                TITULAR_ADENDA: "@item.TITULAR_ADENDA",
+                                NUM_THABILITANTE_ADENDA: "@item.NUM_THABILITANTE_ADENDA",
+                                NUM_RESOLUCION_ADENDA: "@item.NUM_RESOLUCION_ADENDA",
+                                FUNCIONARIO: "@item.FUNCIONARIO",
+                                CANT_VERTICES: "@item.CANT_VERTICES",
+                                AREA_OTORGADA: "@item.AREA_OTORGADA",
+                                OBSERVACION: "@item.OBSERVACION",
+                                indexAdenda: ManTHabilitante.adend.indexAdenda,
+                                ListTDDVADEAREA: listaVADEAREA
+                            });
+                            ManTHabilitante.adend.indexAdenda++;
+                            </text>
+                        }
+                        @:ManTHabilitante.adend.crearItemsTablaAdenda();//pintando la tabla
+                      }
+                }
+            }
+            //MotivoEstadoEstablecimiento
+            @if (tipoModRecat.Contains(Model.hdfItemModalidadCodigo))
+             {
+                <text>
+                ManTHabilitante.estab.iniciarEventosEstablecimiento();
+                </text>
+                //cargando datos de la tabla
+                if(Model.ListTHEstadoEsta != null)
+                {   @:contadorEnumTb = 1;
+                    foreach (var item in Model.ListTHEstadoEsta)
+                    {
+                        <text>
+                            ManTHabilitante.dtEstablecimiento.fnAddData(
+                                ['<input type="hidden" class="hdCodSecuencial" value="-1" /><input type="hidden" class="hdCodTHEvaFauna" value="' + "@item.COD_THABILITANTE_EVALUACION_FAUNA.ToString()" + '" /><input type="hidden" class="hdEstadoTbEstab" value="' + "@item.RegEstado.ToString()" + '" /><input type="hidden" class="hdddEstablecimientoTHId" value="@item.COD_MOTIVO_EV" /><i class="fa fa-lg fa-pencil-square-o" style="cursor:pointer;" onclick="ManTHabilitante.estab.cargarEditEstab(this);"></i>'
+                                    , (contadorEnumTb)
+                                    , "@item.MOTIVO.ToString()"
+                                    , "@item.NUMERO.ToString()"
+                                    , "@item.FECHA_AFFS.ToString()"
+                                    , "@item.NOMBRE_FIRMA_RES.ToString()"
+                                    , "@item.N_DOCUMENTO.ToString()"
+                                    , "@item.FECHA_DOC.ToString()"
+                                    , "@item.NOMBRE_AFFS.ToString()"
+                                    , "@item.OBSERVACION.ToString()"
+                                ]);
+                            contadorEnumTb++;
+                        </text>
+                    }
+                }
+            }
+
+            //recategorizacion
+            @if (tipoModRecat.Contains(Model.hdfItemModalidadCodigo))
+             {
+                <text>
+                ManTHabilitante.recat.iniciarEventosRecategorizacion();
+                </text>
+                //cargando datos de la tabla
+                if(Model.ListModalidadesTH!=null)
+                {   @:contadorEnumTb = 1;
+                    foreach (var item in Model.ListModalidadesTH)
+                    {
+                        <text>
+                        ManTHabilitante.dtRecategorizar.fnAddData(
+                            ['<input type="hidden" class="hdEstadoTbRecat" value="' + "@item.RegEstado.ToString()" + '" /><i class="fa fa-lg fa-pencil-square-o" style="cursor:pointer;" onclick="ManTHabilitante.recat.cargarEditRecat(this);"></i><input type="hidden" class="hdCOD_MADENDA" value="' + "@item.COD_MADENDA.Trim()" + '" /><input type="hidden" class="hdCOD_MTIPO" value="' + "@item.COD_MTIPO.Trim()" + '" /><input type="hidden" class="hdCodSecuencial" value="' + "@item.COD_SECUENCIAL.ToString()" + '" />'
+                                , (contadorEnumTb)
+                                , "@item.MOTIVO"
+                                , "@item.ADENDA_FECHA_INICIO.ToString()"
+                                , "@item.NUM_RESOLUCION_ADENDA"
+                                , "@item.MODALIDAD"
+                                , "@item.OBSERVACION.ToString()"]);
+                        contadorEnumTb++;
+                        </text>
+                    }
+                }
+                if(Model.ListTDDVVERTICE!=null)
+                {
+                    if(Model.ListTDDVVERTICE.Count>0)
+                    {
+                        <text>
+                        ManTHabilitante.ListTDDVVERTICE.push({
+                            ZONA: "@Model.ListTDDVVERTICE[0].ZONA",
+                            COORDENADA_ESTE: "@Model.ListTDDVVERTICE[0].COORDENADA_ESTE",
+                            COORDENADA_NORTE: "@Model.ListTDDVVERTICE[0].COORDENADA_NORTE",
+                            COD_SECUENCIAL: "@Model.ListTDDVVERTICE[0].COD_SECUENCIAL",
+                            COD_SECUENCIAL_ADENDA: "@Model.ListTDDVVERTICE[0].COD_SECUENCIAL_ADENDA",
+                            RegEstado: "@Model.ListTDDVVERTICE[0].RegEstado",
+                            VERTICE: "@Model.ListTDDVVERTICE[0].VERTICE"
+                        });
+                        </text>
+                    }
+                }
+            }
+
+            });
+    </script>
+
+}
+<div class="container-fluid">
+    <div class="card">
+        <div class="card-header text-right">
+            Titulo Habilitante
+        </div>
+        <div class="card-body">
+            <div class="card">
+                <div class="card-header text-small">
+                    <a id="btnRegistrarTH" href="javascript:void(0)" style="cursor:pointer;" data-toggle="tooltip" data-placement="top" title="Guardar"><i class="fa mx-2 fa-lg fa-save"></i></a>
+                    <a style="cursor:pointer;" data-toggle="tooltip" data-placement="top" title="Regresar"><i class="fa mx-2 fa-lg fa-reply" onclick="ManTHabilitante.regresar();"></i></a>
+                    @Model.ItemTitulo
+                </div>
+                <div class="card-body">
+                    <form id="frmTHabilitanteRegistro">
+                        @Html.HiddenFor(m => m.opRegresar)
+                        @Html.HiddenFor(m => m.appClient)
+                        @Html.HiddenFor(m => m.appData)
+                        @Html.HiddenFor(m => m.hdfManRegEstado)
+                        @Html.HiddenFor(m => m.hdCodigo_Thabilitante)
+                        @Html.HiddenFor(m => m.cod_Modalidad)
+                        @Html.HiddenFor(m => m.hdfItemModalidadCodigo)
+                        @Html.HiddenFor(m => m.hdfItemTipo)
+                        @Html.HiddenFor(m => m.hdfCodSecuencialAdenda)
+                        <ul class="nav nav-tabs" id="myTab" role="tablist">
+                            <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#navEstado" role="tab" aria-controls="home" aria-selected="true">Estado Situacional</a></li>
+                            <li class="nav-item"><a class="nav-link active" id="navDatosTab" data-toggle="tab" href="#navDatos" role="tab" aria-controls="home" aria-selected="true">Datos Generales</a></li>
+                            <li class="nav-item"><a class="nav-link" id="navDatosAdicTab" data-toggle="tab" href="#navDatosAdic" role="tab" aria-controls="home" aria-selected="false">Datos Adicionales</a></li>
+                        </ul>
+                        <div class="tab-content" id="nav-tabContent">
+                            <div class="tab-pane fade show" id="navEstado" role="tabpanel" aria-labelledby="nav-home-tab">
+                                @{ Html.RenderAction("_ControlCalidad", "Controles", new { area = "GENERAL", dto = Model.vmControlCalidad }); }
+                            </div>
+                            <div class="tab-pane fade show active" id="navDatos" role="tabpanel" aria-labelledby="nav-home-tab">
+                                @Html.HiddenFor(m => m.hdfItemRLegalCodigo)
+                                @Html.HiddenFor(m => m.hdtxtTitularTipo)
+                                @Html.HiddenFor(m => m.hdfItemEstUbigeoCodigo)
+                                <div class="card">
+                                    <div class="card-header text-small"></div>
+                                    <div class="card-body">
+                                        <div class="form-row">
+                                            <div class="form-group col-md-3">
+                                                <label for="ddlODRegistroId" class="text-small texto-recortado">O.D. desde donde registra la información</label>
+                                                @Html.DropDownListFor(m => m.ddlODRegistroId, new SelectList(Model.ddlODRegistro, "Value", "Text"), new { @class = "form-control form-control-sm" })
+                                            </div>
+                                            <div class="form-group col-md-3">
+                                                <label for="txtItemModalidad" class="text-small">Modalidad</label>
+                                                @Html.EditorFor(m => m.txtItemModalidad, new { htmlAttributes = new { @class = "form-control form-control-sm", @disabled = "disabled" } })
+                                            </div>
+                                            @if (Model.cod_Modalidad == "0000004")
+                                            {
+                                                <div class="form-group col-md-3">
+                                                    <label for="ddTipoId" class="text-small">Tipo</label>
+                                                    @Html.DropDownListFor(m => m.ddTipoId, new SelectList(Model.ddTipo, "Value", "Text"), new { @class = "form-control form-control-sm" })
+                                                </div>
+                                            }
+                                            @if (Model.hdfItemModalidadCodigo == "0000015")
+                                            {
+                                                <div class="form-group col-md-3">
+                                                    <label for="ddNivelAproId" class="text-small texto-recortado">Nivel de Aprovechamiento</label>
+                                                    @Html.DropDownListFor(m => m.ddNivelAproId, new SelectList(Model.ddNivelApro, "Value", "Text"), new { @class = "form-control form-control-sm" })
+                                                </div>
+                                            }
+                                            <div class="form-group col-md-3">
+                                                <label for="chkItemPlanManejo" class="text-small">Plan de Manejo</label>
+                                                <div class="form-check mt-2 pl-0">
+                                                    @Html.CheckBoxFor(m => m.chkItemPlanManejo)
+                                                    <label class="form-check-label text-small" for="chkItemPlanManejo">
+                                                        Cuenta?
+                                                    </label>
+                                                </div>
+                                            </div>
+                                            @if (Model.hdfItemModalidadCodigo == "0000001")
+                                            {
+                                                <div class="form-group col-md-2">
+                                                    <label for="ddlClaseZoologico" class="text-small">Clase</label>
+                                                    @Html.DropDownListFor(m => m.ddClaseZoologicoId, new SelectList(Model.ddClaseZoologico, "Value", "Text"), new { @class = "form-control form-control-sm" })
+
+                                                </div>
+                                            }
+                                            else
+                                            {
+                                                <div class="form-group col-md-2" hidden>
+                                                    <label for="ddlClaseZoologico" class="text-small">Clase</label>
+                                                    @Html.DropDownListFor(m => m.ddClaseZoologicoId, new SelectList(Model.ddClaseZoologico, "Value", "Text"), new { @class = "form-control form-control-sm" })
+
+                                                </div>
+                                            }
+                                            <div class="form-group col-md-2">
+                                                <label for="txtCodigoNumero" class="text-small">@Model.lblCodigoNumero</label>
+                                                @Html.EditorFor(m => m.txtCodigoNumero, new { htmlAttributes = new { @class = "form-control form-control-sm", placeholder = "Codigo N°", maxlength = "25" } })
+
+                                            </div>
+
+                                            <div class="form-group col-md-3">
+                                                <label for="ddNivelAproId" class="text-small texto-recortado">Resolución Titular</label>
+                                                @if (Model.hdCodigo_Thabilitante != "")
+                                                {
+                                                    @Html.EditorFor(m => m.txtResolucionTitular, new { htmlAttributes = new { @class = "form-control form-control-sm", @disabled = "disabled" } })
+
+                                                }
+                                                else
+                                                {
+                                                    @Html.EditorFor(m => m.txtResolucionTitular, new { htmlAttributes = new { @class = "form-control form-control-sm" } })
+
+                                                }
+                                            </div>
+                                            @if (Model.cod_Modalidad != "0000002" )
+                                            {
+                                                <div class="form-group col-md-3">
+                                                    <label for="ddNivelAproId" class="text-small texto-recortado">Estado del Título Habilitante</label>
+                                                    @Html.EditorFor(m => m.txtEstado_TH, new { htmlAttributes = new { @class = "form-control form-control-sm", @disabled = "disabled" } })
+
+                                                </div>
+                                            }
+                                        </div>
+                                        <div class="form-row">
+                                            <input type="hidden" id="hdMostrarRL" value="@Model.mostrarDivRLegal" />
+                                            <div class="form-group col-md-3">
+                                                <label for="txtTitularTipo" class="text-small">@Model.lblTitularTipoTitulo<i class="fa fa-cog fa-spin text-danger" id="iconTitularTipo" style="display:none;" data-toggle="tooltip" data-placement="top" title="Seleccione Titular"></i></label>
+                                                <div class="input-group">
+                                                    <div class="input-group-prepend">
+                                                        <span class="input-group-text"><i class="fa fa-male" style="cursor:pointer;" onclick="ManTHabilitante.fnBuscarPersona('TITULAR', 'N');" data-toggle="tooltip" data-placement="top" title="Natural"></i></span>
+                                                        <span class="input-group-text"><i class="fa fa-institution" style="cursor:pointer;" onclick="ManTHabilitante.fnBuscarPersona('TITULAR', 'J');" data-toggle="tooltip" data-placement="top" title="Jurídica"></i></span>
+                                                    </div>
+                                                    @Html.EditorFor(m => m.txtTitularTipo, new { htmlAttributes = new { @class = "form-control form-control-sm", @disabled = "disabled" } })
+                                                    <input type="hidden" id="hdtipotxtTitularTipo" />
+                                                </div>
+                                            </div>
+                                            @if (Model.mostrarDivRLegal)
+                                            {
+                                                <div class="form-group col-md-3">
+                                                    <label for="fItemRLegalCodigo" class="text-small texto-recortado">Representante Legal <i class="fa fa-cog fa-spin text-danger" id="iconRLegalCodigo" style="display:none;" data-toggle="tooltip" data-placement="top" title="Seleccione Representante legal"></i></label>
+                                                    <div class="input-group">
+                                                        <div class="input-group-prepend">
+                                                            <span class="input-group-text"><i class="fa fa-plus" style="cursor:pointer;" onclick="ManTHabilitante.fnBuscarPersona('RLEGAL', 'N');" data-toggle="tooltip" data-placement="top" title="Agregar"></i></span>
+                                                        </div>
+                                                        @Html.EditorFor(m => m.fItemRLegalCodigo, new { htmlAttributes = new { @class = "form-control form-control-sm", @disabled = "disabled" } })
+                                                    </div>
+                                                </div>
+                                            }
+                                            <div class="form-group col-md-3">
+                                                <label for="txtItemNumero" class="text-small">@Model.lblItemNumeroTitulo</label>
+                                                @Html.EditorFor(m => m.txtItemNumero, new { htmlAttributes = new { @class = "form-control form-control-sm", placeholder = "Establecimiento", maxlength = "200" } })
+                                            </div>
+                                            <div class="form-group col-md-3">
+                                                <label for="ddlDependenciaId" class="text-small texto-recortado">Dependencia donde se aprobo</label>
+                                                @Html.DropDownListFor(m => m.ddlDependenciaId, new SelectList(Model.ddlDependencia, "Value", "Text"), new { @class = "form-control form-control-sm" })
+                                            </div>
+                                        </div>
+                                        <div class="form-row">
+                                            <div class="form-group col-md-6">
+                                                <label for="txtUbigeo" class="text-small">Ubigeo Real</label>
+                                                <div class="input-group">
+                                                    @Html.EditorFor(m => m.txtUbigeo, new { htmlAttributes = new { @class = "form-control form-control-sm", @disabled = "disabled" } })
+                                                </div>
+                                            </div>
+                                            <div class="form-group col-md-6">
+                                                <label for="txtDirección" class="text-small">Dirección Real </label>
+                                                @Html.EditorFor(m => m.txtDirecion, new { htmlAttributes = new { @class = "form-control form-control-sm", @disabled = "disabled" } })
+                                            </div>
+                                        </div>
+                                        <!-- ini-->
+                                        @if (Model.hdfItemModalidadCodigo == "0000015")
+                                        {
+                                            <div class="form-row">
+
+                                                <div class="form-group col-md-2">
+                                                    <!--sss-->
+                                                    <label for="txtCodCat" class="text-small texto-recortado">COD-CAT</label>
+                                                    @Html.EditorFor(m => m.txtCodCat, new { htmlAttributes = new { @class = "form-control form-control-sm", maxlength = "10" } })
+                                                </div>
+
+                                                <div class="form-group col-md-3">
+                                                </div>
+                                                <div class="form-group col-md-3">
+                                                </div>
+                                            </div>
+                                        }
+                                        <!-- fin-->
+                                        @if (Model.chkManConsolidado)
+                                        {
+                                            Html.RenderAction("_PnlItemTitulares", "ManTHabilitante", new { Area = "THabilitante" });
+                                        }
+                                    </div>
+                                    <div class="card-header text-small">Ubicación</div>
+                                    <div class="card-body">
+                                        <div class="form-row">
+                                            <div class="form-group col-md-6">
+                                                <label for="fItemEstUbigeoCodigo" class="text-small">Ubigeo<i class="fa fa-cog fa-spin text-danger" id="iconUbigeoTH" style="display:none;" data-toggle="tooltip" data-placement="top" title="Seleccione Ubigeo"></i></label>
+                                                <div class="input-group">
+                                                    <div class="input-group-prepend">
+                                                        <span class="input-group-text"><i class="fa fa-search" style="cursor:pointer;" data-toggle="tooltip" data-placement="top" title="Ubigeo" onclick="ManTHabilitante.cargarUbigeoModal('fItemEstUbigeoCodigo');"></i></span>
+                                                    </div>
+                                                    @Html.EditorFor(m => m.fItemEstUbigeoCodigo, new { htmlAttributes = new { @class = "form-control form-control-sm", @disabled = "disabled" } })
+                                                </div>
+                                            </div>
+                                            <div class="form-group col-md-6">
+                                                <label for="txtItemEstSector" class="text-small">Sector</label>
+                                                @Html.EditorFor(m => m.txtItemEstSector, new { htmlAttributes = new { @class = "form-control form-control-sm", placeholder = "Sector", maxlength = "100" } })
+                                            </div>
+                                        </div>
+                                    </div>
+                                    @if (Model.hdfItemModalidadCodigo == "0000001" || Model.hdfItemModalidadCodigo == "0000002" || Model.hdfItemModalidadCodigo == "0000003" || Model.hdfItemModalidadCodigo == "0000004" || Model.hdfItemModalidadCodigo == "0000023")
+                                    {
+                                        List<SelectListItem> lstZoo = new List<SelectListItem> { new SelectListItem { Text = "Seleccionar", Value = "0000000" }, new SelectListItem { Text = "17S", Value = "17S" }, new SelectListItem { Text = "18S", Value = "18S" }, new SelectListItem { Text = "19S", Value = "19S" } };
+                                        <div class="card-header text-small">Vertices</div>
+                                        <div class="card-body">
+                                            <div class="form-row">
+                                                <div class="form-group col-md-2">
+                                                    <label for="ddplZonaZoo" class="text-small">Zona UTM</label>
+                                                    @Html.DropDownListFor(m => m.ddplZonaZooId, lstZoo, new { @class = "form-control form-control-sm" })
+                                                </div>
+                                                <div class="form-group col-md-2">
+                                                    <label for="txtCEsteZoo" class="text-small">Coordenada Este</label>
+                                                    @Html.EditorFor(m => m.txtCEsteZoo, new { htmlAttributes = new { @class = "form-control form-control-sm", placeholder = "Coordenada Este", maxlength = "6" } })
+                                                </div>
+                                                <div class="form-group col-md-2">
+                                                    <label for="txtCNorteZoo" class="text-small">Coordenada Norte</label>
+                                                    @Html.EditorFor(m => m.txtCNorteZoo, new { htmlAttributes = new { @class = "form-control form-control-sm", placeholder = "Coordenada Norte", maxlength = "7" } })
+                                                </div>
+                                            </div>
+                                        </div>
+                                    }
+                                    <div class="card-header text-small">Error Material</div>
+                                    <div class="card-body">
+                                        <div class="form-row">
+                                            <div class="table-responsive">
+                                                <table id="tbErrorMaterial_DGeneral" style="width:100%" class="table table-hover table-bordered">
+                                                    <thead>
+                                                        <tr>
+                                                            <th colspan="7" class="text-sm-left">
+                                                                <div class="form-inline">
+                                                                    <i class="fa mx-2 fa-lg fa-file-o" style="cursor:pointer;" onclick="ManTHabilitante.fnAddErrorMaterial('DG');" data-toggle="tooltip" data-placement="top" title="Nuevo"></i>
+                                                                    <strong>
+                                                                        Historial de Error Material
+                                                                    </strong>
+                                                                </div>
+                                                            </th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody></tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="card-header text-small">Archivos cargados en el SIADO</div>
+                                    <div class="card-body">
+                                        <div class="form-row">
+                                            @{
+                                                Html.RenderAction("_IntegracionSIADO", "Controles", new { area = "GENERAL", asCriterio = "SUBTIP_TITDOCSIGO", asSubCriterio = "0001", asValor = Model.hdCodigo_Thabilitante });
+                                            }
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!--Datos Adicionales-->
+                            <div class="tab-pane fade" id="navDatosAdic" role="tabpanel" aria-labelledby="nav-contact-tab">
+                                @Html.HiddenFor(m => m.hdfItemRAPFuncionarioCodigo)
+                                @Html.HiddenFor(m => m.hdfItemRAFFuncionarioCodigo)
+                                @Html.HiddenFor(m => m.hdfItemCamTitularCodigo)
+                                <div class="card">
+                                    <div class="card-header text-small"></div>
+                                    @if (Model.cod_Modalidad == "0000002")
+                                    {
+                                        <!--pnlItemExsitu-->
+                                        <div class="card-header text-small">
+                                            Resolución que aprueba el proyecto
+                                        </div>
+                                        <div class="card-body">
+                                            <div class="form-row">
+                                                <div class="form-group col-md-3">
+                                                    <label for="txtItemRAPNumero" class="text-small">Número</label>
+                                                    @Html.EditorFor(m => m.txtItemRAPNumero, new { htmlAttributes = new { @class = "form-control form-control-sm validarTH", maxlength = "200" } })
+                                                </div>
+                                                <div class="form-group col-md-2">
+                                                    <label for="txtItemRAPFecha" class="text-small">Fecha</label>
+                                                    @Html.EditorFor(m => m.txtItemRAPFecha, new { htmlAttributes = new { @class = "form-control form-control-sm validarTH", pattern = "[0-9]{2}/[0-9]{2}/[0-9]{4}", placeholder = "dd/mm/yyyy", title = "la fecha a ingresar debe ser en el formato dd/mm/yyyy", maxlength = "10" } })
+                                                </div>
+                                                <div class="form-group col-md-3">
+                                                    <label for="fItemRAPFuncionarioCodigo" class="text-small">Funcionario<i class="fa fa-cog fa-spin text-danger" id="iconRAPFuncionarioCodigo" style="display:none;" data-toggle="tooltip" data-placement="top" title="Seleccione Funcionario"></i></label>
+                                                    <div class="input-group">
+                                                        <div class="input-group-prepend">
+                                                            <span class="input-group-text"><i class="fa fa-search" data-toggle="tooltip" data-placement="top" title="Agregar" style="cursor:pointer;" onclick="ManTHabilitante.fnBuscarPersona('FUNC_APRUEBA_PROYECTO','N');"></i></span>
+                                                        </div>
+                                                        @Html.EditorFor(m => m.fItemRAPFuncionarioCodigo, new { htmlAttributes = new { @class = "form-control form-control-sm", disabled = "disabled" } })
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="card-header text-small">
+                                            Resolución que autoriza el funcionamiento
+                                        </div>
+                                        <div class="card-body">
+                                            <div class="form-row">
+                                                <div class="form-group col-md-3">
+                                                    <label for="txtItemRAFNumero" class="text-small">Número</label>
+                                                    @Html.EditorFor(m => m.txtItemRAFNumero, new { htmlAttributes = new { @class = "form-control form-control-sm", maxlength = "200" } })
+                                                </div>
+                                                <div class="form-group col-md-2">
+                                                    <label for="txtItemRAFFecha" class="text-small">Fecha</label>
+                                                    @Html.EditorFor(m => m.txtItemRAFFecha, new { htmlAttributes = new { @class = "form-control form-control-sm", placeholder = "dd/mm/yyyy", title = "la fecha a ingresar debe ser en el formato dd/mm/yyyy", maxlength = "10" } })
+                                                </div>
+                                                <div class="form-group col-md-3">
+                                                    <label for="fItemRAFFuncionarioCodigo" class="text-small">Funcionario<i class="fa fa-cog fa-spin text-danger" id="iconRAFFuncionarioCodigo" style="display:none;" data-toggle="tooltip" data-placement="top" title="Seleccione Funcionario"></i></label>
+                                                    <div class="input-group">
+                                                        <div class="input-group-prepend">
+                                                            <span class="input-group-text"><i class="fa fa-search" data-toggle="tooltip" data-placement="top" title="Agregar" style="cursor:pointer;" onclick="ManTHabilitante.fnBuscarPersona('FUNC_AUTORIZA_FUNCIONAMIENTO','N');"></i></span>
+                                                        </div>
+                                                        @Html.EditorFor(m => m.fItemRAFFuncionarioCodigo, new { htmlAttributes = new { @class = "form-control form-control-sm", disabled = "disabled" } })
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    }
+                                    else
+                                    {
+                                        <!--PnlItemDGeneral-->
+                                        <div class="card-body">
+                                            <div class="form-row">
+                                                <div class="form-group col-md-2">
+                                                    <label for="txtItemAOtorgada" class="text-small">Área Otorgada (ha)</label>
+                                                    @Html.EditorFor(m => m.txtItemAOtorgada, new { htmlAttributes = new { @class = "form-control form-control-sm", maxlength = "20", onkeypress = "return utilSigo.onKeyDecimal(event, this);" } })
+                                                </div>
+                                                <div class="form-group col-md-2">
+                                                    <div class="form-group">
+                                                        <label for="chkItemContCuenta" id="ltrItemEtiContratoTitulo" class="text-small texto-recortado">Contrato (Ingresar fechas consolidadas)</label>
+                                                        <div class="form-check">
+                                                            @Html.CheckBoxFor(m => m.chkItemContCuenta, new { @class = "form-check-input", value = false })
+                                                            <label class="form-check-label text-small" for="chkItemContCuenta">
+                                                                Cuenta?
+                                                            </label>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group col-md-2">
+                                                    <label for="txtItemContFInicio" class="text-small">Fecha Inicio</label>
+                                                    @Html.EditorFor(m => m.txtItemContFInicio, new { htmlAttributes = new { @class = "form-control form-control-sm", placeholder = "dd/mm/yyyy", title = "la fecha a ingresar debe ser en el formato dd/mm/yyyy", maxlength = "10" } })
+                                                </div>
+                                                <div class="form-group col-md-2">
+                                                    <label for="txtItemContFFin" class="text-small">Fecha Fin</label>
+                                                    @Html.EditorFor(m => m.txtItemContFFin, new { htmlAttributes = new { @class = "form-control form-control-sm", placeholder = "dd/mm/yyyy", title = "la fecha a ingresar debe ser en el formato dd/mm/yyyy", maxlength = "10" } })
+                                                </div>
+                                            </div>
+                                            <div class="form-row">
+                                                <div class="table-responsive">
+                                                    <table id="tbItemVertice" class="table table-hover table-bordered" width="100%">
+                                                        <thead>
+                                                            <tr>
+                                                                <th colspan="8" class="text-sm-left">
+                                                                    <div class="form-inline">
+                                                                        <i class="fa mx-2 fa-lg fa-file-o" style="cursor:pointer;" onclick="ManTHabilitante.DGeneral.mostrarModal('tbVertice');" data-toggle="tooltip" data-placement="top" title="Nuevo"></i>
+                                                                        <i class="fa mx-2 fa-lg fa-window-close-o" style="cursor:pointer;" onclick="ManTHabilitante.DGeneral.eliminarVerticeTablaAll();" data-toggle="tooltip" data-placement="top" title="Eliminar Todos"></i>
+                                                                        <div id="divArchivo"><label id="lblUpload" style="cursor:pointer;" class="fa mx-2 fa-lg fa-file-excel-o"><input type="file" id="fileselect" name="fileselect" size="60"></label></div>
+                                                                        <i class="fa mx-2 fa-lg fa-folder-open" style="cursor:pointer;" onclick="ManTHabilitante.DGeneral.descargarPlantilla();" data-toggle="tooltip" data-placement="top" title="Descargar Plantilla"></i>
+                                                                        <i class="fa mx-2 fa-lg fa-download" style="cursor:pointer;" onclick="ManTHabilitante.adend.exportarVerticeExcel();" data-toggle="tooltip" data-placement="top" title="Descargar Vertices"></i>
+                                                                        <strong>Vértices</strong>
+                                                                    </div>
+                                                                </th>
+                                                            </tr>
+                                                            <tr>
+                                                                <th></th>
+                                                                <th></th>
+                                                                <th>Nº</th>
+                                                                <th>Vértice</th>
+                                                                <th>Zona UTM</th>
+                                                                <th>Coordenada Este</th>
+                                                                <th>Coordenada Norte</th>
+                                                                <th>Observación</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody></tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    }
+                                    <!--Obligaciones Contractuales-->
+                                    @if (Model.cod_Modalidad == "0000005" || Model.cod_Modalidad == "0000009")
+                                    {
+                                        <div class="card-header text-small">
+                                            @Model.lblObligacionContTitulo
+                                        </div>
+                                        <div class="card-body">
+                                            @if (Model.hdfItemModalidadCodigo == "0000011" || Model.hdfItemModalidadCodigo == "0000012")
+                                            {
+                                                <div class="form-row">
+                                                    <div class="form-group col-md-12">
+                                                        <label for="txtcaracter_ambiental" class="text-small">Carácter Ambiental</label>
+                                                        @Html.TextAreaFor(m => m.txtcaracter_ambiental, new { @class = "form-control form-control-sm", rows = 2 })
+                                                    </div>
+                                                </div>
+                                                <div class="form-row">
+                                                    <div class="form-group col-md-12">
+                                                        <label for="txtcaracter_social" class="text-small">Carácter Social</label>
+                                                        @Html.TextAreaFor(m => m.txtcaracter_social, new { @class = "form-control form-control-sm", rows = 2 })
+                                                    </div>
+                                                </div>
+                                                <div class="form-row">
+                                                    <div class="form-group col-md-12">
+                                                        <label for="txtcaracter_eresponsable" class="text-small">Carácter Ecológicamente Responsable</label>
+                                                        @Html.TextAreaFor(m => m.txtcaracter_eresponsable, new { @class = "form-control form-control-sm", rows = 2 })
+                                                    </div>
+                                                </div>
+                                            }
+                                            else
+                                            {
+                                                <div class="form-row">
+                                                    <div class="form-group col-md-12">
+                                                        @Html.TextAreaFor(m => m.txtConcesionario, new { @class = "form-control form-control-sm", rows = 3 })
+                                                    </div>
+                                                </div>
+                                            }
+                                        </div>
+                                    }
+                                    @if (!tipoModRecat.Contains(Model.hdfItemModalidadCodigo) && Model.hdfItemModalidadCodigo != "0000006")
+                                    {
+                                        <!--div adenda-->
+                                        <div class="card-header text-small">
+                                            @Model.lblAdendaTitulo
+                                        </div>
+                                        <div class="card-body">
+                                            @Html.HiddenFor(m => m.hdfItemAdendaMod_RegEstado)
+                                            <input type="hidden" id="hdEstadoRegAden" value="1" />
+                                            <div class="form-row">
+                                                <div class="form-group col-md-2">
+                                                    <label for="txtEstadoAdenda" class="text-small">Estado del Registro</label>
+                                                    <input type="text" id="txtEstadoAdenda" class="form-control form-control-sm" value="Nueva Adenda" disabled />
+                                                </div>
+                                                <div class="form-group col-md-2">
+                                                    <label for="ddlItemAdeMotivo" class="text-small">Motivo</label>
+                                                    @Html.DropDownListFor(m => m.ddlItemAdeMotivoId, new SelectList(Model.ddlItemAdeMotivo, "Value", "Text"), new { @class = "form-control form-control-sm" })
+                                                </div>
+                                                <div class="form-group col-md-2">
+                                                    <label for="txtItemAdeFInicio" class="text-small">Fecha Inicio</label>
+                                                    @Html.EditorFor(m => m.txtItemAdeFInicio, new { htmlAttributes = new { @class = "form-control form-control-sm", placeholder = "dd/mm/yyyy", title = "la fecha a ingresar debe ser en el formato dd/mm/yyyy", maxlength = "10" } })
+                                                </div>
+                                                <div id="divadendaFecVigencia" class="form-group col-md-2" style="display:none;">
+                                                    <label for="txtItemAdeFecTer" class="text-small">Fecha Término</label>
+                                                    @Html.EditorFor(m => m.txtItemAdeFecTer, new { htmlAttributes = new { @class = "form-control form-control-sm", placeholder = "dd/mm/yyyy", title = "la fecha a ingresar debe ser en el formato dd/mm/yyyy", maxlength = "10" } })
+                                                </div>
+                                                <div id="divadendathabilitante" class="form-group col-md-3" style="display:none;">
+                                                    <label for="fItemCamTitularCodigo" id="cambio_tit" class="text-small">Cambio Titular</label>
+                                                    <div class="input-group">
+                                                        <div class="input-group-prepend">
+                                                            <span class="input-group-text"><i class="fa fa-male" onclick="ManTHabilitante.fnBuscarPersona('TITULAR_ADENDA', 'N');" data-toggle="tooltip" data-placement="top" title="Natural"></i></span>
+                                                            <span class="input-group-text"><i class="fa fa-institution" onclick="ManTHabilitante.fnBuscarPersona('TITULAR_ADENDA', 'J');" data-toggle="tooltip" data-placement="top" title="Jurídica"></i></span>
+                                                        </div>
+                                                        @Html.EditorFor(m => m.fItemCamTitularCodigo, new { htmlAttributes = new { @class = "form-control form-control-sm", disabled = "disabled" } })
+                                                    </div>
+                                                </div>
+                                                <div id="divadendaNumTH1" class="form-group col-md-3" style="display:none;">
+                                                    <label for="txtItemAdeNumTH" class="text-small">Nuevo Número de Contrato</label>
+                                                    @Html.EditorFor(m => m.txtItemAdeNumTH, new { htmlAttributes = new { @class = "form-control form-control-sm", maxlength = "150" } })
+                                                </div>
+                                                <div id="divadendaNumTH2" class="form-group col-md-3" style="display:none;">
+                                                    <label for="txtItemAdeNumResol" class="text-small">Resolución de modificación</label>
+                                                    @Html.EditorFor(m => m.txtItemAdeNumResol, new { htmlAttributes = new { @class = "form-control form-control-sm", maxlength = "150" } })
+                                                </div>
+                                                <div id="divArea" class="form-group col-md-2" style="display:none;">
+                                                    <label for="txtArea" class="text-small">Área</label>
+                                                    @Html.EditorFor(m => m.txtArea, new { htmlAttributes = new { @class = "form-control form-control-sm", maxlength = "12", onkeypress = "return utilSigo.onKeyDecimal(event, this);" } })
+                                                </div>
+                                            </div>
+                                            <div class="form-row">
+                                                <div id="divadendamodarea" class="table-responsive" style="display:none;">
+                                                    <table id="tbItemVerticeMod" class="table table-hover table-bordered" width="100%">
+                                                        <thead>
+                                                            <tr>
+                                                                <th colspan="8" class="text-sm-left">
+                                                                    <div class="form-inline">
+                                                                        <i class="fa mx-2 fa-lg fa-file-o" style="cursor:pointer;" onclick="ManTHabilitante.DGeneral.mostrarModal('tbVerticeMod');" data-toggle="tooltip" data-placement="top" title="Nuevo"></i>
+                                                                        <i class="fa mx-2 fa-lg fa-window-close-o" style="cursor:pointer;" onclick="ManTHabilitante.adend.eliminarVerticeAdenModAll();" data-toggle="tooltip" data-placement="top" title="Eliminar Todos"></i>
+                                                                        <div id="divArchivoMod"><label id="lblUploadMod" style="cursor:pointer;" class="fa mx-2 fa-lg fa-file-excel-o"><input type="file" id="fileselectMod" name="fileselectMod" size="60"></label></div>
+                                                                        <i class="fa mx-2 fa-lg fa-folder-open" style="cursor:pointer;" onclick="ManTHabilitante.DGeneral.descargarPlantilla();" data-toggle="tooltip" data-placement="top" title="Descargar Plantilla"></i>
+                                                                        <i class="fa mx-2 fa-lg fa-download" style="cursor:pointer;" onclick="" data-toggle="tooltip" data-placement="top" title="Descargar Vertices"></i>
+                                                                        <strong>Vértices de la Adenda</strong>
+                                                                    </div>
+                                                                </th>
+                                                            </tr>
+                                                            <tr>
+                                                                <th></th>
+                                                                <th></th>
+                                                                <th>Nº</th>
+                                                                <th>Vertice</th>
+                                                                <th>Zona UTM</th>
+                                                                <th>Coordenada Este</th>
+                                                                <th>Coordenada Norte</th>
+                                                                <th>Observación</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody></tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                            <div class="form-row">
+                                                <div class="form-group col-md-6">
+                                                    <label for="txtItemAdeObservacion" class="text-small">Observación</label>
+                                                    @Html.TextAreaFor(m => m.txtItemAdeObservacion, new { @class = "form-control form-control-sm", rows = 2, maxlength = "500" })
+                                                </div>
+                                            </div>
+                                            <div class="form-inline text-left">
+                                                <div class="form-group">
+                                                    <button type="button" id="btnAdendaCancelar" class="btn btn-secondary btn-sm mx-2" style="display:none;">Cancelar Edicion</button>
+                                                    <button type="button" id="btnAdendaAgregar" class="btn btn-primary btn-sm">Agregar</button>
+                                                </div>
+                                            </div>
+                                            <div style="font-size:11px;">
+                                                <p>
+                                                    <div>
+                                                        <b>Consideraciones con los siguientes motivos de adenda:</b>
+                                                    </div>
+                                                    <div style="padding-left: 15px;">
+                                                        <b>Incluir Titulares Bosques Locales:</b> Solo se deberá utilizar para la modalidad de Bosques Locales y solo se deberá usar para agregar a personas a las cuales el Comite Autónomo del Bosque Local les haya autorizado el aprovechamiento
+                                                    </div>
+                                                    <div style="padding-left:15px;">
+                                                        <b>Incluir Titulares en Sociedad:</b> Solo se deberá utilizar cuando el Título Habilitante tenga más de un titular y se deberá considerar la misma fecha inicio para todos los titulares (es diferente a una suseción o una cesión de posesión contractual)
+                                                    </div>
+                                                </p>
+                                            </div>
+                                            <div class="form-row">
+                                                <div class="table-responsive">
+                                                    <table id="tbItemAdendas" class="table table-hover table-bordered" width="100%">
+                                                        <thead>
+                                                            <tr>
+                                                                <th colspan="12" class="text-sm-left">
+                                                                    Listado de Adendas (Historial)
+                                                                </th>
+                                                            </tr>
+                                                            <tr>
+                                                                <th></th>
+                                                                <th></th>
+                                                                <th></th>
+                                                                <th>Motivo</th>
+                                                                <th>Fecha Inicio</th>
+                                                                <th>Cesión/Sucesión</th>
+                                                                <th>Cambio Num. Contrato</th>
+                                                                <th>Resolución que modifica el Num. Contrato</th>
+                                                                <th>Funcionario</th>
+                                                                <th>Ampli. / Modif. (Cant. Puntos)</th>
+                                                                <th>Área</th>
+                                                                <th>Observación</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody></tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    }
+                                    @if (Model.cod_Modalidad == "0000005" || Model.cod_Modalidad == "0000009")
+                                    {
+                                        <div id="divReformulacionCat">
+                                            @Html.Partial("~/Areas/THabilitante/Views/ManTHabilitante/_shared/_renderRecategorizarFR.cshtml", Model)
+
+                                        </div>
+                                    }
+                                    @if (tipoModRecat.Contains(Model.hdfItemModalidadCodigo))
+                                    {
+                                        <!--Recategorizacion-->
+                                        <div class="card-header text-small">
+                                            Recategorización
+                                        </div>
+                                        <div class="card-body">
+                                            <input type="hidden" id="hdfIten_RegEstadoRecat" name="hdfIten_RegEstadoRecat" value="1" />
+                                            <div class="form-row">
+                                                <div class="form-group col-md-2">
+                                                    <label for="ddComoboMotivoRec" class="text-small">Motivo</label>
+                                                    @Html.DropDownListFor(m => m.ddComoboMotivoRecId, new SelectList(Model.ddComoboMotivoRec, "Value", "Text"), new { @class = "form-control form-control-sm" })
+                                                </div>
+                                                <div class="form-group col-md-2 divCambioRect" style="display:none;">
+                                                    <label for="txtFechaRecat" class="text-small">Fecha</label>
+                                                    @Html.EditorFor(m => m.txtFechaRecat, new { htmlAttributes = new { @class = "form-control form-control-sm", placeholder = "dd/mm/yyyy", title = "la fecha a ingresar debe ser en el formato dd/mm/yyyy", maxlength = "10" } })
+                                                </div>
+                                                <div class="form-group col-md-2 divCambioRect" style="display:none;">
+                                                    <label for="ddModalidadTH" class="text-small">Nueva Modalidad</label>
+                                                    @Html.DropDownListFor(m => m.ddModalidadTHId, new SelectList(Model.ddModalidadTH, "Value", "Text"), new { @class = "form-control form-control-sm" })
+                                                </div>
+                                                <div class="form-group col-md-3 divCambioRect" style="display:none;">
+                                                    <label for="txtNumRDRect" class="text-small">Número de Resolución</label>
+                                                    @Html.EditorFor(m => m.txtNumRDRect, new { htmlAttributes = new { @class = "form-control form-control-sm", placeholder = "Número de Resolución", maxlength = "200" } })
+                                                </div>
+                                            </div>
+                                            <div class="divCambioRect" style="display:none;">
+                                                <div class="form-row">
+                                                    <div class="form-group col-md-6">
+                                                        <label for="txtObsRecat" class="text-small">Observación</label>
+                                                        @Html.TextAreaFor(m => m.txtObsRecat, new { @class = "form-control form-control-sm", rows = 2 })
+                                                    </div>
+                                                    <div class="form-group col-md-2" id="divClaseZoologico" hidden>
+                                                        <label for="ddlClaseZoologico" class="text-small">Clase</label>
+                                                        @Html.DropDownListFor(m => m.ddClaseZoologicoRECId, new SelectList(Model.ddClaseZoologico, "Value", "Text"), new { @class = "form-control form-control-sm" })
+
+                                                    </div>
+                                                </div>
+                                                <div class="form-inline text-right">
+                                                    <button type="button" id="btnCancelarRecat" class="btn btn-secondary btn-sm mx-2" style="display:none;">Cancelar Edicion</button>
+                                                    <button type="button" id="btnAgregarRecat" class="btn btn-primary btn-sm">Agregar</button>
+                                                </div>
+                                            </div>
+                                            <div class="form-row">
+                                                <div class="table-responsive">
+                                                    <table id="tbRecategorizar" class="table table-hover table-bordered" width="100%">
+                                                        <thead>
+                                                            <tr>
+                                                                <th colspan="7" class="text-sm-center">Listado de Recategorización (Historial)</th>
+                                                            </tr>
+                                                            <tr>
+                                                                <th></th>
+                                                                <th>Nº</th>
+                                                                <th>Motivo</th>
+                                                                <th>Fecha</th>
+                                                                <th>Resolución que modifica</th>
+                                                                <th>Modalidad</th>
+                                                                <th>Observación</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody></tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    }
+                                    <!-- INI Establecimiento-->
+                                    @if (Model.cod_Modalidad == "0000002")
+                                    {
+                                        <div class="card-header text-small">
+                                            Estado de Funcionamiento
+                                        </div>
+                                        <div class="card-body">
+                                            <input type="hidden" id="hdfIten_RegEstab" name="hdfIten_RegEstab" value="1" />
+                                            <div class="form-row">
+                                                <div class="form-group col-md-2">
+                                                    <label for="ddEstablecimientoTH" class="text-small">Estado</label>
+                                                    @Html.DropDownListFor(m => m.ddEstablecimientoTHId, new SelectList(Model.ddEstablecimientoTH, "Value", "Text"), new { @class = "form-control form-control-sm" })
+                                                </div>
+                                                <div class="form-group col-md-2 divCambioEstab1" style="        display: none;">
+                                                    <label for="txtNumRDEstab" class="text-small">Numero de Resolución</label>
+                                                    @Html.EditorFor(m => m.txtNumRDEstab, new { htmlAttributes = new { @class = "form-control form-control-sm", placeholder = "Numero de Resolución", maxlength = "200" } })
+                                                </div>
+                                                <div class="form-group col-md-2 divCambioEstab1" style="        display: none;">
+                                                    <label for="txtFechaRDEstab" class="text-small">Fecha</label>
+                                                    @Html.EditorFor(m => m.txtFechaRDEstab, new { htmlAttributes = new { @class = "form-control form-control-sm", placeholder = "dd/mm/yyyy", title = "la fecha a ingresar debe ser en el formato dd/mm/yyyy", maxlength = "10" } })
+                                                </div>
+                                                <div class="form-group col-md-3 divCambioEstab1" style="        display: none;">
+                                                    <label for="txtAFFSRDEstab" class="text-small">Nombre y cargo de la AFFS que firmo la resolución</label>
+                                                    @Html.EditorFor(m => m.txtAFFSRDEstab, new { htmlAttributes = new { @class = "form-control form-control-sm", placeholder = "Nombre y cargo de la AFFS que firmo la resolución", maxlength = "200" } })
+                                                </div>
+
+                                                <div class="form-group col-md-2 divCambioEstab" style="        display: none;">
+                                                    <label for="txtDocumentoEstab" class="text-small">Documento de Referencia</label>
+                                                    @Html.EditorFor(m => m.txtDocumentoEstab, new { htmlAttributes = new { @class = "form-control form-control-sm", placeholder = "Documento de Referencia", maxlength = "200" } })
+                                                </div>
+                                                <div class="form-group col-md-2 divCambioEstab" style="        display: none;">
+                                                    <label for="txtFechaEstab" class="text-small">Fecha</label>
+                                                    @Html.EditorFor(m => m.txtFechaEstab, new { htmlAttributes = new { @class = "form-control form-control-sm", placeholder = "dd/mm/yyyy", title = "la fecha a ingresar debe ser en el formato dd/mm/yyyy", maxlength = "10" } })
+                                                </div>
+                                                <div class="form-group col-md-3 divCambioEstab" style="        display: none;">
+                                                    <label for="txtAFFSEstab" class="text-small">Nombre y cargo de la AFFS</label>
+                                                    @Html.EditorFor(m => m.txtAFFSEstab, new { htmlAttributes = new { @class = "form-control form-control-sm", placeholder = "Nombre y cargo de la AFFS", maxlength = "200" } })
+                                                </div>
+
+                                            </div>
+                                            <div class="divCambioEstab" style="display:none;">
+                                                <div class="form-row">
+                                                    <div class="form-group col-md-6">
+                                                        <label for="txtObsEstab" class="text-small">Observación</label>
+                                                        @Html.TextAreaFor(m => m.txtObsEstab, new { @class = "form-control form-control-sm", rows = 2 })
+                                                    </div>
+                                                </div>
+                                                <div class="form-inline text-right">
+                                                    <button type="button" id="btnCancelarEstab" class="btn btn-secondary btn-sm mx-2" style="display:none;">Cancelar Edicion</button>
+                                                    <button type="button" id="btnAgregarEstab" class="btn btn-primary btn-sm">Agregar</button>
+                                                </div>
+                                            </div>
+                                            <div class="form-row">
+                                                <div class="table-responsive">
+                                                    <table id="tbEstablecimiento" class="table table-hover table-bordered" width="100%">
+                                                        <thead>
+                                                            <tr>
+                                                                <th colspan="11" class="text-sm-center">Listado de Establecimiento (Historial)</th>
+                                                            </tr>
+                                                            <tr>
+                                                                <th></th>
+                                                                <th>Nº</th>
+                                                                <th>Estado</th>
+                                                                <th>Numero de Resolución</th>
+                                                                <th>Fecha</th>
+                                                                <th>Nombre y cargo de la AFFS que firmo la resolución</th>
+                                                                <th>Documento de Referencia</th>
+                                                                <th>Fecha</th>
+                                                                <th>Nombre y cargo de la AFFS</th>
+                                                                <th>Observación</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody></tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    }
+
+                                    <!-- FIN Establecimiento-->
+                                    <div class="card-header text-small">Error Material</div>
+                                    <div class="card-body">
+                                        <div class="form-row">
+                                            <div class="table-responsive">
+                                                <table id="tbErrorMaterial_DAdicional" style="width:100%" class="table table-hover table-bordered">
+                                                    <thead>
+                                                        <tr>
+                                                            <th colspan="7" class="text-sm-left">
+                                                                <div class="form-inline">
+                                                                    <i class="fa mx-2 fa-lg fa-file-o" style="cursor:pointer;" onclick="ManTHabilitante.fnAddErrorMaterial('DA');" data-toggle="tooltip" data-placement="top" title="Nuevo"></i>
+                                                                    <strong>
+                                                                        Historial de Error Material
+                                                                    </strong>
+                                                                </div>
+                                                            </th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody></tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="card">
+                                        <div class="card-header text-small">
+                                            Observación
+                                        </div>
+                                        <div class="card-body">
+                                            <div class="form-row">
+                                                <div class="form-group col-md-12">
+                                                    @Html.TextAreaFor(m => m.txtItemObservacion, new { @class = "form-control form-control-sm", rows = 3 })
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    @if (Model.cod_Modalidad != "0000002" )
+                                    {
+                                        @Html.Partial("~/Areas/THabilitante/Views/ManTHabilitante/_shared/_renderTHExtincion.cshtml", Model)
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade hide" id="manTHabilitanteModalPersonaNJ" tabindex="-1" role="dialog"></div>
+    <div class="modal fade hide" id="manFuncionarioModal" tabindex="-1" role="dialog"></div>
+    <!--Modal para agregar verticas-->
+    <div class="modal fade" id="PDivItemVertice">
+        <div class="modal-dialog modal-sm" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <span id="spTituloVertive">Nuevo Registro</span>
+                    <i class="fa fa-close" style="cursor:move;" onclick="ManTHabilitante.DGeneral.closeModalVert();"></i>
+                </div>
+                <div class="modal-body">
+                    <form id="frmVertice">
+                        <input type="hidden" id="hdfItemVert_RegEstado" value="1" />
+                        <input type="hidden" id="hdOrigen" value="tbVertice" />
+                        <div class="form-row">
+                            <div class="form-group col-md-12">
+                                <label for="txtItemVert_Vertice" class="text-small">Vértice</label>
+                                <input type="text" id="txtItemVert_Vertice" name="txtItemVert_Vertice" class="form-control form-control-sm" maxlength="10" />
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group col-md-12">
+                                <label for="ddlItemZona_UTM" class="text-small">Zona UTM</label>
+                                <select id="ddlItemZona_UTM" name="ddlItemZona_UTM" class="form-control form-control-sm">
+                                    <option value="0000000">Seleccionar</option>
+                                    <option value="17S">17S</option>
+                                    <option value="18S">18S</option>
+                                    <option value="19S">19S</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group col-md-6">
+                                <label for="txtItemVert_CEste" class="text-small">Coordenada Este</label>
+                                <input type="text" id="txtItemVert_CEste" name="txtItemVert_CEste" class="form-control form-control-sm" maxlength="6" onkeypress="return utilSigo.onKeyEntero(event, this);" />
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label for="txtItemVert_CNorte" class="text-small">Coordenada Norte</label>
+                                <input type="text" id="txtItemVert_CNorte" name="txtItemVert_CNorte" class="form-control form-control-sm" maxlength="7" onkeypress="return utilSigo.onKeyEntero(event, this);" />
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group col-md-12">
+                                <label for="txtItemVert_Observacion" class="text-small">Observación</label>
+                                <textarea id="txtItemVert_Observacion" name="txtItemVert_Observacion" class="form-control form-control-sm" rows="2" maxlength="500" style="text-transform:uppercase"></textarea>
+                            </div>
+                        </div>
+                        <button type="button" id="btnRegistrarVertice" class="btn-primary">Aceptar</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @* Para el control genérico de personas *@
+    <div class="modal fade hide" id="mdlBuscarPersona" role="dialog"></div>
+    <div class="modal fade hide" id="modalAddEditPersona" role="dialog"></div>
+    <div class="modal fade hide" id="personaUbigeoModal" role="dialog"></div>
+    <div class="modal fade hide" id="modalAddErrorMaterial" role="dialog"></div>
+</div>

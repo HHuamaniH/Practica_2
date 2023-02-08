@@ -1,0 +1,56 @@
+﻿
+<script src="~/Areas/THabilitante/js/ManTHabilitante/_ErrorMaterial.js"></script>
+<script src="~/Areas/THabilitante/js/ManTHabilitante/_FormatoFecha.js"></script>
+
+<div class="modal-dialog" role="document">
+    <div class="modal-content">
+        <div class="modal-header text-small" style="cursor:move;">
+            <span>Registro</span>
+            <i class="fa fa-close" style="cursor:pointer;" data-dismiss="modal" aria-label="Close"></i>
+        </div>
+        <div class="modal-body">
+            <form id="frmAddErrorMaterial">
+                <div class="form-group row" style="margin-bottom:0px;">
+                    <label for="lblNombre" class="col-md-4 col-form-label text-small">Fecha de Resolución</label>
+                    <div class="col-md-4">
+                        @Html.TextBox("txtFechaResolucion", "", new { @class = "form-control form-control-sm", placeholder = "dd/mm/yyyy", title = "la fecha a ingresar debe ser en el formato dd/mm/yyyy", maxlength = "10" })
+                    </div>
+                </div>
+                <div class="form-group row" style="margin-bottom:0px;">
+                    <label for="lblNombre" class="col-md-4 col-form-label text-small">Resolución</label>
+                    <div class="col-md-8">
+                        @Html.TextBox("txtResolucion", "", new { @class = "form-control form-control-sm" })
+                    </div>
+                </div>
+                <div class="form-group row" style="margin-bottom:0px;">
+                    <label for="lblNombre" class="col-md-4 col-form-label text-small">Nombre de Campo</label>
+                    <div class="col-md-8">
+                        @Html.TextBox("txtNombreCampo", "", new { @class = "form-control form-control-sm" })
+                    </div>
+                </div>
+                <div class="form-group row" style="margin-bottom:0px;">
+                    <label for="lblValorAnterior" class="col-md-4 col-form-label text-small">Valor Anterior</label>
+                    <div class="col-md-8">
+                        @Html.TextBox("txtValorAnterior", "", new { @class = "form-control form-control-sm" })
+                    </div>
+                </div>
+                <div class="form-group row" style="margin-bottom:0px;">
+                    <label for="lblValorActual" class="col-md-4 col-form-label text-small">Valor Actual</label>
+                    <div class="col-md-8">
+                        @Html.TextBox("txtValorActual", "", new { @class = "form-control form-control-sm" })
+                    </div>
+                </div>
+                <div class="form-group row" style="margin-bottom:0px;">
+                    <label for="lblObservacion" class="col-md-4 col-form-label text-small">Observaciones</label>
+                    <div class="col-md-8">
+                        @Html.TextArea("txtObservacion", "", new { @class = "form-control form-control-sm", @rows = "3" })
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="modal-footer">
+            <button type="button" id="btnGuardarEM" class="btn btn-primary btn-sm" onclick="_ErrorMaterial.fnSubmitForm()">Guardar</button>
+            <button type="button" id="btnCancelarEM" class="btn btn-secondary btn-sm" onclick="_ErrorMaterial.fnCloseModal()">Cancelar</button>
+        </div>
+    </div>
+</div>

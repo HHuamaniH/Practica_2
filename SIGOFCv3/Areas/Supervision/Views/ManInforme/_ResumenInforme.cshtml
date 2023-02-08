@@ -1,0 +1,96 @@
+﻿@*@model  CapaEntidad.ViewModel.VM_InformeTecnico*@
+@{
+    Layout = null;
+}
+
+<ul class="nav nav-tabs" id="myTab" role="tablist">
+    <li class="nav-item">
+        <a class="nav-link active" data-toggle="tab" href="#tab-res-1" role="tab">Volumen analizado en la supervisión</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" data-toggle="tab" href="#tab-res-2" role="tab">Listado de especies</a>
+    </li>
+    @*<li class="nav-item">
+        <a class="nav-link" data-toggle="tab" href="#tab-res-3" role="tab">Evaluación de árboles adicionales y no autorizados</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" data-toggle="tab" href="#tab-res-4" role="tab">Porcentaje de Volumen supervisado</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" data-toggle="tab" href="#tab-res-5" role="tab">Obligaciones</a>
+    </li>*@
+</ul>
+<div class="tab-content" id="myTabContent">
+    <div class="tab-pane fade show active" id="tab-res-1" role="tabpanel">
+        <div class="table-responsive mt-3">
+            <table id="tbDatosVolumen" style="width:100%;margin:0px !important;" class="table table-hover table-bordered">
+                <thead></thead>
+                <tbody></tbody>
+            </table>
+        </div>
+    </div>
+    <div class="tab-pane fade" id="tab-res-2" role="tabpanel">
+        <div class="table-responsive mt-3">
+            <table id="tbDatosEspecies" style="width:100%;margin:0px !important;" class="table table-hover table-bordered">
+                <thead></thead>
+                <tbody></tbody>
+            </table>
+        </div>
+    </div>
+    <div class="tab-pane fade" id="tab-res-3" role="tabpanel">...</div>
+    <div class="tab-pane fade" id="tab-res-4" role="tabpanel">...</div>
+    <div class="tab-pane fade" id="tab-res-5" role="tabpanel">...</div>
+</div>
+
+<script type="text/javascript">
+    var _renderList = {};
+    //_renderList.tbEliTABLA = [];
+
+    // Volumenes
+    _renderList.fnInitDataTable_Volumenes = function (datos) {
+        let columns_label = [], columns_data = [], options = {};
+
+        columns_label = ["ESPECIE", "Volumen aprobado analizado", "Volumen movilizado analizado", "Volumen injustificado", "Volumen justificado", "Observaciones"];
+        columns_data = ["ESPECIES", "VOLUMEN_APROBADO", "VOLUMEN_MOVILIZADO", "VOLUMEN_INJUSTIFICADO", "VOLUMEN_JUSTIFICADO", "OBSERVACION"];
+        options = {
+            page_length: 10, row_index: true, page_sort: true
+        };
+        _renderList.dtRenderListInforme = utilDt.fnLoadDataTable_Detail($("#tbDatosVolumen"), columns_label, columns_data, options);
+        _renderList.dtRenderListInforme.rows.add(datos).draw();
+    }
+
+    // Especies
+    _renderList.fnInitDataTable_Especies = function (datos) {
+        let columns_label = [], columns_data = [], options = {};
+
+        columns_label = ["POA", "Bloque", "Bloque Campo", "Faja", "Faja Campo", "Código", "Código Campo", "Especie", "Especie Campo"
+            , "Coincide con la especie", "Zona UTM", "Zona UTM Campo", "C. Este", "C. Este Campo", "C. Norte", "C. Norte Campo"
+            , "DAP (cm)", "DAP Campo (cm)", "DAP Campo 1 (cm)", "DAP Campo 2 (cm)", "Metodología medición DAP"
+            , "AC (m)", "AC Campo (m)", "Estado", "Estado Campo", "Condición", "Condición Campo", "Cant. Sobre Estimación de los Diámetros"
+            , "% Sobre Estimación de los Diámetros", "Cant. Sub Estimación de los Diámetros", "% Sub Estimación de los Diámetros", "Observación"];
+        columns_data = ["POA", "BLOQUE", "BLOQUE_CAMPO", "FAJA", "FAJA_CAMPO", "CODIGO", "CODIGO_CAMPO", "DESC_ESPECIES", "DESC_ESPECIES_CAMPO"
+            , "DESC_COINCIDE_ESPECIES", "ZONA", "ZONA_CAMPO", "COORDENADA_ESTE", "COORDENADA_ESTE_CAMPO", "COORDENADA_NORTE", "COORDENADA_NORTE_CAMPO"
+            , "DAP", "DAP_CAMPO", "DAP_CAMPO1", "DAP_CAMPO2", "MMEDIR_DAP"
+            , "AC", "AC_CAMPO", "DESC_EESTADO", "DESC_EESTADO_CAMPO", "DESC_ECONDICION", "DESC_ECONDICION_CAMPO", "CANT_SOBRE_ESTIMA_DIAMETRO"
+            , "PORC_SOBRE_ESTIMA_DIAMETRO", "CANT_SUB_ESTIMA_DIAMETRO", "PORC_SUB_ESTIMA_DIAMETRO", "OBSERVACION"];
+        options = {
+            page_length: 10, row_index: true, page_render: true, page_info: true, page_search: true
+        };
+
+        _renderList.dtDatosEspecies = utilDt.fnLoadDataTable_Detail($("#tbDatosEspecies"), columns_label, columns_data, options);
+    }
+</script>
+
+<script type="text/javascript">
+    $(function () {
+        const asCodInforme = '@ViewBag.COD_INFORME';
+
+        $.getJSON(urlLocalSigo + 'Supervision/ManInforme/_DataResumenInforme', { asCodInforme: asCodInforme })
+            .done(function (res) {
+                //console.log(res);
+                _renderList.frm = $("#frmResumenInformeSupervision");
+                _renderList.fnInitDataTable_Volumenes(res.volumenes);
+                _renderList.fnInitDataTable_Especies(res.especies);
+            });
+    });
+</script>

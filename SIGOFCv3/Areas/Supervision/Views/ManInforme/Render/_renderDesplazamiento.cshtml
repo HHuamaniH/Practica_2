@@ -1,0 +1,164 @@
+﻿@model List<CapaEntidad.DOC.Ent_INFORME>
+
+<style type="text/css">
+    #tbRenderDesplazamiento_wrapper {
+        padding: 0px;
+    }
+</style>
+
+<script type="text/javascript">
+    var _renderDesplazamiento = {};
+    _renderDesplazamiento.tbEliTABLA = [];
+
+    _renderDesplazamiento.fnInitDataTable_Detail = function () {
+        var columns_label = [], columns_data = [], options = {};
+
+        columns_label = ["Zona UTM", "Coordenada Este", "Coordenada Norte", "Zona UTM", "Coordenada Este", "Coordenada Norte", "Tipo Vía", "Descripción"];
+        columns_data = ["ZONA", "COORDENADA_ESTE", "COORDENADA_NORTE", "ZONA_CAMPO", "COORDENADA_ESTE_CAMPO", "COORDENADA_NORTE_CAMPO", "TipoVia", "OBSERVACION"];
+        options = {
+            page_length: 10, row_index: true, row_edit: true, row_fnEdit: "_renderDesplazamiento.fnAddEdit(this)"
+            , row_delete: true, row_fnDelete: "_renderDesplazamiento.fnDelete(this)"
+            , button_copy: true, button_csv: true, button_excel: true, button_pdf: true, button_print: true
+            , export_title: $("#tbRenderDesplazamiento").find("thead tr")[0].innerText.trim()
+            , page_sort: true
+        };
+        _renderDesplazamiento.dtRenderDesplazamiento = utilDt.fnLoadDataTable_Detail($("#tbRenderDesplazamiento"), columns_label, columns_data, options);
+    }
+
+    _renderDesplazamiento.fnAddEdit = function (obj) {
+        var url = urlLocalSigo + "Supervision/ManInforme/_Desplazamiento";
+        var option = { url: url, type: 'POST', datos: {}, divId: "mdlManInforme_Global" };
+        utilSigo.fnOpenModal(option, function () {
+            _Desplazamiento.fnSaveForm = function (data) {
+                if (data != null) {
+                    var dt = _renderDesplazamiento.dtRenderDesplazamiento;
+
+                    if (obj == null || obj == "") {//Nuevo Registro
+                        dt.rows.add([data]).draw();
+                        dt.page('last').draw('page');
+                        utilSigo.toastSuccess("Exito", "Datos guardados correctamente");
+                    } else {//Modificar
+                        var row = dt.row($(obj).parents('tr')).data();
+                        row = data;
+                        dt.row($(obj).parents('tr')).data(row).draw(false);
+                        utilSigo.toastSuccess("Exito", "Datos actualizados correctamente");
+                    }
+                    $("#mdlManInforme_Global").modal('hide');
+                } else {
+                    utilSigo.toastError("Error", "No se pudieron guardar los datos");
+                }
+            }
+
+            if (obj != null && obj != "") {
+                var data = _renderDesplazamiento.dtRenderDesplazamiento.row($(obj).parents('tr')).data();
+                _Desplazamiento.fnInit(utilSigo.fnConvertArrayToObject(data));
+            } else { _Desplazamiento.fnInit(""); }
+        });
+    }
+
+    _renderDesplazamiento.fnDeleteAll = function () {
+        var rows, countFilas, data;
+
+        rows = _renderDesplazamiento.dtRenderDesplazamiento.$("tr");
+        countFilas = rows.length;
+        if (countFilas > 0) {
+            utilSigo.dialogConfirm("", "Está seguro de Eliminar Todos los Registros?", function (r) {
+                if (r) {
+                    $.each(rows, function (i, o) {
+                        data = _renderDesplazamiento.dtRenderDesplazamiento.row($(o)).data();
+                        if (data["RegEstado"] == "0" || data["RegEstado"] == "2") {
+                            _renderDesplazamiento.tbEliTABLA.push({
+                                EliTABLA: "INFORME_DET_DESPLAZAMIENTO",
+                                EliVALOR01: data["COD_DESPLAZAMIENTO"]
+                            });
+                        }
+                    });
+                    _renderDesplazamiento.dtRenderDesplazamiento.clear().draw();
+                }
+            });
+        } else {
+            utilSigo.toastWarning("Aviso", "No se encontraron registros a eliminar");
+        }
+    }
+
+    _renderDesplazamiento.fnDelete = function (obj) {
+        var data = _renderDesplazamiento.dtRenderDesplazamiento.row($(obj).parents('tr')).data();
+
+        if (data["RegEstado"] == "0" || data["RegEstado"] == "2") {
+            _renderDesplazamiento.tbEliTABLA.push({
+                EliTABLA: "INFORME_DET_DESPLAZAMIENTO",
+                EliVALOR01: data["COD_DESPLAZAMIENTO"]
+            });
+        }
+        _renderDesplazamiento.dtRenderDesplazamiento.row($(obj).parents('tr')).remove().draw(false);
+    }
+
+    _renderDesplazamiento.fnImport = function (e, obj) {
+        var url = urlLocalSigo + "Supervision/ManInforme/ImportarDatosInformeSimple";
+        var bExiste = false;
+
+        uploadFile.fileSelectHandler(e, obj, url, { asTipo: "DESPLAZAMIENTO_SUPERVISION" }, function (data) {
+            for (var i = 0; i < data.length; i++) {
+                _renderDesplazamiento.dtRenderDesplazamiento.rows.add([data[i]]).draw();
+                _renderDesplazamiento.dtRenderDesplazamiento.page('last').draw('page');
+            }
+        });
+    }
+
+    _renderDesplazamiento.fnGetList = function () {
+        var list = [], rows, countFilas, data;
+
+        rows = _renderDesplazamiento.dtRenderDesplazamiento.$("tr");
+        countFilas = rows.length;
+        if (countFilas > 0) {
+            $.each(rows, function (i, o) {
+                data = _renderDesplazamiento.dtRenderDesplazamiento.row($(o)).data();
+                if (data["RegEstado"] == "1" || data["RegEstado"] == "2") {
+                    list.push(utilSigo.fnConvertArrayToObject(data));
+                }
+            });
+        }
+        return list;
+    }
+
+    _renderDesplazamiento.fnGetListEliTABLA = function () { return _renderDesplazamiento.tbEliTABLA }
+
+    $(document).ready(function () {
+        _renderDesplazamiento.frm = $("#frmRenderDesplazamiento");
+
+        _renderDesplazamiento.fnInitDataTable_Detail();
+        _renderDesplazamiento.dtRenderDesplazamiento.rows.add(JSON.parse('@Html.Raw(Json.Encode(@Model))')).draw();
+    });
+</script>
+
+<div id="frmRenderDesplazamiento">
+    <div class="table-responsive">
+        <table id="tbRenderDesplazamiento" style="width:100%;margin:0px !important;" class="table table-hover table-bordered">
+            <thead>
+                <tr>
+                    <th colspan="11" class="text-sm-left">
+                        <div class="form-inline">
+                            <i class="fa mx-2 fa-lg fa-file-o" style="cursor:pointer;" onclick="_renderDesplazamiento.fnAddEdit('');" data-toggle="tooltip" data-placement="top" title="Nuevo"></i>
+                            <i class="fa mx-2 fa-lg fa-window-close-o" style="cursor:pointer;" onclick="_renderDesplazamiento.fnDeleteAll();" data-toggle="tooltip" data-placement="top" title="Eliminar Todos"></i>
+                            <label style="cursor:pointer;" class="fa mx-2 fa-lg fa-file-excel-o" title="Importar Archivo" data-toggle="tooltip">
+                                <input type="file" id="fileselect" name="fileselect" style="display:none" size="60" onchange="_renderDesplazamiento.fnImport(event, this)">
+                            </label>
+                            <a href="@Url.Content("~/Archivos/Plantilla/InformeSup/Desplazamiento_supervisor_v2.xlsx")"> <i class="fa mx-2 fa-lg fa-folder-open" style="cursor:pointer;" data-toggle="tooltip" data-placement="top" title="Descargar Plantilla"></i></a>
+                            <strong>Desplazamiento en la Supervisión</strong>
+                        </div>
+                    </th>
+                </tr>
+                <tr>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th colspan="3" style="text-align:center;">Punto Inicial</th>
+                    <th colspan="3" style="text-align:center;">Punto Final</th>
+                    <th></th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
+</div>

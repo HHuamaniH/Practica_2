@@ -1,0 +1,256 @@
+﻿@model CapaEntidad.ViewModel.VM_IndicadorFiltro
+
+<script src="~/Scripts/datatables/Extensions/dataTables.buttons.js"></script>
+<script src="~/Scripts/datatables/Extensions/buttons.flash.min.js"></script>
+<script src="~/Scripts/datatables/Extensions/jszip.min.js"></script>
+<script src="~/Scripts/datatables/Extensions/pdfmake.js"></script>
+<script src="~/Scripts/datatables/Extensions/vfs_fonts.js"></script>
+<script src="~/Scripts/datatables/Extensions/buttons.html5.js"></script>
+<script src="~/Scripts/datatables/Extensions/buttons.print.js"></script>
+<script src="~/Scripts/chart/Chart.min.js"></script>
+<script src="~/Areas/Supervision/js/Indicadores/customChart.js"></script>
+<script src="~/Areas/Supervision/js/Indicadores/_Shared/_renderPOI.js"></script>
+
+<link href="~/Content/datatables/buttons.dataTables.min.css" rel="stylesheet" />
+<link href="~/Areas/Capacitacion/css/ManCapacitacion/Reporte.css" rel="stylesheet" />
+<link href="~/Areas/Supervision/css/Indicadores/Reporte.css" rel="stylesheet" />
+
+<div class="container-fluid">
+    <div class="card">
+        <div class="card-body">
+            <div id="dvContenedorFiltro" class="card" style="margin-bottom:10px;">
+                <div id="dvFiltroPOI" class="card-body">
+                    <form id="frmFiltroPOI" action="@Url.Action("Reporte", "Indicadores", new { Area= "Supervision" })">
+                        <div class="form-row">
+                            <div class="form-group col-md-7">
+                                <label for="ddlIndicadorPOIId" class="text-small">Indicador</label>
+                                @Html.DropDownListFor(m => m.ddlIndicadorPOIId, new SelectList(Model.ddlIndicadorPOI, "Value", "Text"), new { @class = "form-control form-control-sm" })
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group col-md-2">
+                                <label for="ddlAnioPOIId" class="text-small">Año</label>
+                                @Html.DropDownListFor(m => m.ddlAnioPOIId, new SelectList(Model.ddlAnioPOI, "Value", "Text"), new { @class = "form-control form-control-sm" })
+                            </div>
+                        </div>
+                        <div class="form-row" id="dvMes" style="display:none;">
+                            <div class="form-group col-md-4">
+                                <label for="ddlMesPOIId" class="text-small">Mes</label>
+                                @Html.DropDownListFor(m => m.ddlMesPOIId, new SelectList(Model.ddlMesPOI, "Value", "Text"), new { @class = "form-control form-control-sm" })
+                            </div>
+                        </div>
+                    </form>
+                    <button type="button" id="btnConsultarReporte" class="btn btn-primary btn-sm" onclick="_renderPOI.fnSubmitForm()">Consultar</button>
+                </div>
+                <div class="card-body" style="padding-top:0px;padding-bottom:0px;">
+                    <div class="form-row">
+                        <div id="dvHideFiltroPOI" class="form-group col-md-12" style="text-align:center; margin:0px;cursor:pointer;" title="Ocultar Filtros">
+                            <img alt="Ocultar Filtros" src="~/Content/images/General/flecha-contraer.png" width="50" height="30" />
+                        </div>
+                        <div id="dvShowFiltroPOI" class="form-group col-md-12" style="text-align:center; margin:0px;cursor:pointer; display:none;" title="Mostrar Filtros">
+                            <img alt="Mostrar Filtros" src="~/Content/images/General/flecha-ampliar.png" width="50" height="30" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+            @***** RF-017 NÚMERO DE HECTÁREAS DE TH AUDITADAS *****@
+            <div class="card-body" id="dvResultadoPOI1" style="display:none;">
+                <div class="form-row">
+                    <div class="col-md-6">
+                        <div class="table-responsive">
+                            <table id="tbPOI1Mensual_Resumen" style="width:100%;" class="table table-hover table-bordered centrar_contenido">
+                                <thead>
+                                    <tr>
+                                        <th colspan="3" class="text-sm-left">
+                                            <div class="form-inline">
+                                                <strong>Resumen de Indicador</strong>
+                                            </div>
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                                <tfoot>
+                                    <tr class="custom-row-rptcapacitacion">
+                                        <th colspan="2">
+                                            <a href="javascript:void(0)" style="cursor: pointer;" title="Ver detalle" onclick="_renderPOI.fnEventTotal(0)">Total</a>
+                                        </th>
+                                        <th><span id="col3">0</span></th>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <canvas id="cnvPOI1Mensual_Resumen"></canvas>
+                    </div>
+                </div>
+                <br />
+                <div class="form-row">
+                    <div class="table-responsive">
+                        <table id="tbPOI1Mensual_Detalle" style="width:100%" class="table table-hover table-bordered">
+                            <thead>
+                                <tr>
+                                    <th colspan="9" class="text-sm-left">
+                                        <div class="form-inline">
+                                            <strong>Listado de Informes Quinquenales</strong>
+                                        </div>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            @***** Fin RF-017 *****@
+            @***** RF-018 NÚMERO DE HECTÁREAS DE TH SUPERVISADAS EN CAMPO, POR MODALIDAD *****@
+            <div class="card-body" id="dvResultadoPOI2" style="display:none;">
+                <div class="form-row">
+                    <div class="col-md-6">
+                        <div class="table-responsive">
+                            <table id="tbPOI2Mensual_Resumen" style="width:100%;" class="table table-hover table-bordered centrar_contenido">
+                                <thead>
+                                    <tr>
+                                        <th colspan="6" class="text-sm-left">
+                                            <div class="form-inline">
+                                                <strong>Resumen de Indicador</strong>
+                                            </div>
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                                <tfoot>
+                                    <tr class="custom-row-rptcapacitacion">
+                                        <th colspan="4"><span id="col1">Total</span></th>
+                                        <th><span id="col5">0</span></th>
+                                        <th><span id="col6">0</span></th>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <canvas id="cnvPOI2Mensual_Resumen"></canvas>
+                    </div>
+                </div>
+                <br />
+                <div class="form-row">
+                    <div class="table-responsive">
+                        <table id="tbPOI2Mensual_Detalle" style="width:100%" class="table table-hover table-bordered">
+                            <thead>
+                                <tr>
+                                    <th colspan="9" class="text-sm-left">
+                                        <div class="form-inline">
+                                            <strong>Listado de Informes de Supervisión</strong>
+                                        </div>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            @***** Fin RF-018 *****@
+            @***** RF-019 NÚMERO DE HECTÁREAS DE TH SUPERVISADAS EN GABINETE *****@
+            <div class="card-body" id="dvResultadoPOI3" style="display:none;">
+                <div class="form-row">
+                    <div class="col-md-6">
+                        <div class="table-responsive">
+                            <table id="tbPOI3Mensual_Resumen" style="width:100%;" class="table table-hover table-bordered centrar_contenido">
+                                <thead>
+                                    <tr>
+                                        <th colspan="6" class="text-sm-left">
+                                            <div class="form-inline">
+                                                <strong>Resumen de Indicador</strong>
+                                            </div>
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                                <tfoot>
+                                    <tr class="custom-row-rptcapacitacion">
+                                        <th colspan="4"><span id="col1">Total</span></th>
+                                        <th><span id="col5">0</span></th>
+                                        <th><span id="col6">0</span></th>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <canvas id="cnvPOI3Mensual_Resumen"></canvas>
+                    </div>
+                </div>
+                <br />
+                <div class="form-row">
+                    <div class="table-responsive">
+                        <table id="tbPOI3Mensual_Detalle" style="width:100%" class="table table-hover table-bordered">
+                            <thead>
+                                <tr>
+                                    <th colspan="9" class="text-sm-left">
+                                        <div class="form-inline">
+                                            <strong>Listado de Informes de Supervisión</strong>
+                                        </div>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            @***** Fin RF-019 *****@
+            @***** RF-021 TOTAL DE TH DE FAUNA SUPERVISADOS *****@
+            <div class="card-body" id="dvResultadoPOI4" style="display:none;">
+                <div class="form-row">
+                    <div class="col-md-6">
+                        <div class="table-responsive">
+                            <table id="tbPOI4Mensual_Resumen" style="width:100%;" class="table table-hover table-bordered centrar_contenido">
+                                <thead>
+                                    <tr>
+                                        <th colspan="3" class="text-sm-left">
+                                            <div class="form-inline">
+                                                <strong>Resumen de Indicador</strong>
+                                            </div>
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                                <tfoot>
+                                    <tr class="custom-row-rptcapacitacion">
+                                        <th colspan="2">
+                                            <a href="javascript:void(0)" style="cursor: pointer;" title="Ver detalle" onclick="_renderPOI.fnEventTotal(0)">Total</a>
+                                        </th>
+                                        <th><span id="col3">0</span></th>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <canvas id="cnvPOI4Mensual_Resumen"></canvas>
+                    </div>
+                </div>
+                <br />
+                <div class="form-row">
+                    <div class="table-responsive">
+                        <table id="tbPOI4Mensual_Detalle" style="width:100%" class="table table-hover table-bordered">
+                            <thead>
+                                <tr>
+                                    <th colspan="7" class="text-sm-left">
+                                        <div class="form-inline">
+                                            <strong>Listado de Informes de Supervisión</strong>
+                                        </div>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            @***** Fin RF-021 *****@
+        </div>
+    </div>
+</div>

@@ -1,0 +1,959 @@
+﻿@model  CapaEntidad.ViewModel.DOC.VM_FControlCalidadSupervision
+
+<style type="text/css">
+    .colN {
+        width: 20px;
+    }
+
+    .colItem {
+        width: 100px;
+    }
+
+    .colPO {
+        width: 50px;
+    }
+
+    .colObs {
+        width: 300px;
+    }
+
+    .csPO {
+        width: 1px !important;
+        text-align: center;
+        vertical-align: middle;
+    }
+
+    .paddingBtnSave {
+        padding-left: 23px !important;
+    }
+
+    .colorBtnSave {
+        background-color: #0088cc !important;
+        border-color: #0088cc !important;
+    }
+</style>
+<script type="text/javascript">
+
+    let fControlCal = {
+        getUrlParameter: (sParam) => {
+            var sPageURL = window.location.search.substring(1),
+                sURLVariables = sPageURL.split('&'),
+                sParameterName,
+                i;
+
+            for (i = 0; i < sURLVariables.length; i++) {
+                sParameterName = sURLVariables[i].split('=');
+
+                if (sParameterName[0] === sParam) {
+                    return sParameterName[1] === undefined ? true : decodeURIComponent(sParameterName[1]);
+                }
+            }
+            return false;
+        },
+        fnAddJefe: () => {
+            let especialista = fControlCal.contenedor.find("#eJefeODC").val();
+            let especialistaId = fControlCal.contenedor.find("#eJefeODCID").val();
+            if ((especialistaId == "" || especialista == "") && ($("#hdfCodGrupoUsuario").val() == '0000011' || $("#hdfCodGrupoUsuario").val() == '0000001' ))
+            {
+                let url = urlLocalSigo + "General/Controles/_BuscarPersonaGeneral";
+                let option = { url: url, type: 'GET', datos: { asBusGrupo: "SUPERVISOR_ESPECIALISTA" }, divId: "mdlBuscarPersona" };
+                utilSigo.fnOpenModal(option, function () {
+                    _bPerGen.fnAsignarDatos = function (obj) {
+                        if (obj != null && obj != "") {
+                            var data = _bPerGen.dtBuscarPerona.row($(obj).parents('tr')).data();
+                            fControlCal.contenedor.find("#eJefeODC").val(data["PERSONA"]);
+                            fControlCal.contenedor.find("#eJefeODCID").val(data["COD_PERSONA"]);
+                            utilSigo.fnCloseModal("mdlBuscarPersona");
+                        }
+                    }
+                    _bPerGen.fnInit();
+                });
+            }
+        },
+        fnGetDataTabla: () => {
+            let $rows = $('#tbFormatoCalidad > tbody > tr');
+            let model = {
+                conInforme: $("#hdfCodInforme").val(),
+                fechaRecepcionIS: fControlCal.contenedor.find("#fechaRecepcionIS").val(),
+                eJefeODCID: fControlCal.contenedor.find("#eJefeODCID").val(),
+                lstISupervision: [], lstDatosReg: []
+            };
+            let opcionA = "", opcionB = "", detAdic = "", obsAdic = "";
+            let fecha = "";
+
+            $.each($rows, (i, r) => {
+                let fila = $(r).attr("id");
+                if (typeof fila !== typeof undefined && fila !== false) {
+
+                    let id = $(r).attr("id").split('|')[0];
+                    let estado = $(r).attr("id").split('|')[1];
+                    opcionA = "";
+                    opcionB = "";
+                    fecha = "";
+                    switch (parseInt(id)) {
+                        case 84:
+                        case 85:
+                        case 86:
+                        case 87:
+                        case 135:
+                        case 136:
+                        case 150:
+                            detAdic = $(r).find("#detECC_" + id).val().trim();
+                            fecha = $(r).find("#txtfecha_" + id).val().trim();
+                            if ($(r).find('input:checkbox[name=chkECC_' + `${id}` + ']').prop('disabled')) {
+                                opcionA = "";
+                                id = 0;
+                            }
+                            else {
+                                opcionA = $(r).find('input:checkbox[name=chkECC_' + `${id}` + ']:checked').val() === undefined ? "N" : $(r).find('input:checkbox[name=chkECC_' + `${id}` + ']:checked').val();
+                            }
+                            break;
+                        default:
+                            detAdic = $(r).find("#det_" + id).val().trim();
+                            opcionA = $(r).find('input:radio[name=chkPO_' + `${id}` + ']:checked').val() === undefined ? "" : $(r).find('input:radio[name=chkPO_' + `${id}` + ']:checked').val();
+                            opcionB = $(r).find('input:radio[name=chkLO_' + `${id}` + ']:checked').val() === undefined ? "" : $(r).find('input:radio[name=chkLO_' + `${id}` + ']:checked').val();
+                    }
+                    if (parseInt(estado) == 1 || opcionA !== "" || opcionB !== "" || detAdic !== "" || fecha !== "") {
+                        if (id != 0) {
+                            model.lstISupervision.push({
+                                id: id, PRESENTA_OBS: opcionA, LEVANTO_OBS: opcionB, DETALLE: detAdic
+                                , est: estado, FECHA_VARIOS: fecha
+                            });
+                        }
+                    }
+
+                }
+            });
+            let $rows1 = $('#tbFormatoCalidad1 > tbody > tr');
+            $.each($rows1, (i, r) => {
+                let id = $(r).attr("id").split('|')[0];
+                if (parseInt(id) != 0) {
+                    let estado = $(r).attr("id").split('|')[1];
+                    opcionA = "";
+                    opcionB = "";
+                    opcionA = $(r).find('input:radio[name=chkRO_' + `${id}` + ']:checked').val() === undefined ? "" : $(r).find('input:radio[name=chkRO_' + `${id}` + ']:checked').val();
+                    opcionB = $(r).find('input:radio[name=chkLRO_' + `${id}` + ']:checked').val() === undefined ? "" : $(r).find('input:radio[name=chkLRO_' + `${id}` + ']:checked').val();
+
+                    obsAdic = $(r).find("#obsR_" + id).val().trim();
+                    fecha = "";
+                    switch (parseInt(id)) {
+                        case 143:
+                        case 144:
+                        case 145:
+                        case 146:
+                        case 147:
+                        case 148:
+                            fecha = $(r).find("#txtfecha_" + id).val().trim();
+                            detAdic = "";
+                            break;
+                        default:
+                            detAdic = $(r).find("#detR_" + id).val().trim();
+                    }
+                    if (parseInt(estado) == 1) {
+                        model.lstDatosReg.push({
+                            id: id, PRESENTA_OBS: opcionA, LEVANTO_OBS: opcionB, DETALLE: detAdic
+                            , OBS_ADICIONALES: obsAdic
+                            , est: estado, FECHA_VARIOS: fecha
+                        });
+                    }
+                    else if (opcionA !== "" || opcionB !== "" || detAdic !== "" || obsAdic !== "" || fecha !== "") {
+                        model.lstDatosReg.push({
+                            id: id, PRESENTA_OBS: opcionA, LEVANTO_OBS: opcionB, DETALLE: detAdic
+                            , OBS_ADICIONALES: obsAdic
+                            , est: estado, FECHA_VARIOS: fecha
+                        });
+                    }
+                }
+
+            });
+            return model;
+        },
+        fnSave: () => {
+            let model = fControlCal.fnGetDataTabla();
+            let option = {
+                url: urlLocalSigo + "Supervision/ManInforme/GuardarFormatoControlCalidad",
+                datos: JSON.stringify(model), type: 'POST'
+            };
+            let url;
+
+            utilSigo.dialogConfirm('', '¿Desea guardar el formato?', function (r) {
+                if (r) {
+                    utilSigo.fnAjax(option, function (data) {
+                        if (data.success) {
+                            utilSigo.toastSuccess("Aviso", data.msj);
+                            url = window.location.href;
+                            window.location.href = url + "&showEstado=S";
+                        }
+                        else {
+                            utilSigo.toastWarning("Aviso", data.msj);
+                        }
+                    });
+                }
+            });
+        },
+        fnCheck: (id) => {
+            if (id == 150) {
+                if ($('input[name="chkECC_150"]:checked').val() == "S")
+                    $("#chkECC_136").prop("checked", false);
+            }
+            if (id == 136) {
+                if ($('input[name="chkECC_136"]:checked').val() == "S")
+                    $("#chkECC_150").prop("checked", false);
+            }
+        }
+    };
+    $(document).ready(function () {
+        fControlCal.contenedor = $("#cardControlCalidad");
+        let $table = $("#tbFormatoCalidad")
+        let tbody = $table.children('tbody');
+        tbody.children('tr').remove();
+        let list =  JSON.parse('@Html.Raw(Json.Encode(@Model))');
+        let listGrupo1 = list.lstISupervision;
+        let listGrupo2 = list.lstDatosReg;
+        let padre = "";
+        let rows = "";
+        let count = 0;
+        let idEstado = "";
+        let checked = "";
+        let disableRows = "";
+
+        let enable135 = "";
+        let enable84 = "";
+        let enable85 = "";
+        let enable86 = "";
+        let enable87 = "";
+        let enable136 = "";
+        let enable150 = "";
+        let check84 = "";
+        let check85 = "";
+        let check86 = "";
+        let check87 = "";
+        let check150 = "";
+        let checkBox = "";
+
+        //est=1. cuando viene de la base de datos y 0 cuando no existe(para este caso)
+        $.each(listGrupo1, (i, r) => {
+            idEstado = r.id + "|" + r.est;
+
+            if ((r.id == 84) || (r.id == 85) || (r.id == 86) || (r.id == 87) || (r.id == 135) || (r.id == 136) || (r.id == 150)) {
+
+                if (r.id == 135) {
+                    rows += '<tr>';
+                    rows += '<td style="color: blue;font-weight: bold; text-align: center; vertical-align: middle;"></td>';
+                    rows += '<td colspan=3 style="color: blue;font-weight: bold; text-align: center; vertical-align: middle;"></td>';
+                    rows += '<td class="csPO"></td >';
+                    rows += '<td></td>';
+                    rows += '<td colspan=3 ></td>';
+                    rows += '</tr>';
+                    rows += '<tr>';
+                    rows += '<td style="text-align: center; background-color: #DAE7F5; text-transform: uppercase; vertical-align: middle;"></td>';
+                    rows += '<td colspan=3 style="text-align: center;  background-color: #DAE7F5; text-transform: uppercase; vertical-align: middle;">Control de calidad</td>';
+                    rows += '<td style="text-align: center;  background-color: #DAE7F5; text-transform: uppercase; vertical-align: middle;">Selección</td>';
+                    rows += '<td style="text-align: center; background-color: #DAE7F5; text-transform: uppercase; vertical-align: middle;">Fecha</td>';
+                    rows += '<td colspan=3 style="text-align: center; background-color: #DAE7F5; text-transform: uppercase; vertical-align: middle;">Observaciones</td>';
+                    rows += '</tr>';
+
+                }
+
+                rows += '<tr id="' + `${idEstado}` + '">';
+                if ((r.id == 85) || (r.id == 87)) {
+                    rows += '<td rowspan="' + r.cantHijos + '" style="color: blue;font-weight: bold; text-align: center; vertical-align: middle;"></td>';
+                }
+                else {
+                    rows += '<td rowspan="' + r.cantHijos + '" style="color: blue;font-weight: bold; text-align: center; vertical-align: middle;">' + `${++count}` + '</td>';
+                }
+                rows += '<td colspan=3 rowspan="' + r.cantHijos + '" style="color: blue;font-weight: bold; text-align: center; vertical-align: middle;">' + `${r.padre}` + '</td>';
+                rows += '<td class="csPO">';//inicio td
+
+                if (r.id == 135) {                    
+                    if (($("#hdfPerfil").val() != '0000058') && ($("#hdfPerfil").val() != '0000071')) {
+                    //if (($("#hdfCodGrupoUsuario").val() != '0000011') && ($("#hdfCodGrupoUsuario").val() != '0000001')) {
+                        enable135 = " disabled ";
+                    }
+                    else {
+
+                        if ($("#ddlIndicadorId").val() == '0000005' || $("#ddlIndicadorId").val() == '0000006' || $("#ddlIndicadorId").val() == '0000007') {
+                            enable135 = " disabled ";
+                        }
+                        else {
+                            enable135 = "";
+                        }
+                    }
+                } else if (r.id == 84) {
+
+                    check84 = r.PRESENTA_OBS;
+                    //if (($("#hdfCodGrupoUsuario").val() != '0000011') && ($("#hdfCodGrupoUsuario").val() != '0000001')) {
+                    if (($("#hdfPerfil").val() != '0000058') && ($("#hdfPerfil").val() != '0000071')) {
+                        enable84 = " disabled ";
+                    }
+                    else {
+
+                        if ($("#ddlIndicadorId").val() == '0000005') {
+                            enable84 = "";
+                        }
+                        else if ($("#ddlIndicadorId").val() == '0000006') {
+                            enable84 = " disabled ";
+                        }
+                        else if ($("#ddlIndicadorId").val() == '0000007') {
+                            enable84 = " disabled ";
+                        }
+                        else {
+                            enable84 = " disabled ";
+                        }
+                    }
+                } else if (r.id == 85) {
+
+                    check85 = r.PRESENTA_OBS;
+                    //if (($("#hdfCodGrupoUsuario").val() != '0000002') && ($("#hdfCodGrupoUsuario").val() != '0000001')) {
+                    if (($("#hdfPerfil").val() != '0000063') && ($("#hdfPerfil").val() != '0000071')) {
+                        enable85 = " disabled ";
+                    }
+                    else {
+
+                        if ($("#ddlIndicadorId").val() == '0000005') {
+                            enable85 = " disabled ";
+                        }
+                        else if ($("#ddlIndicadorId").val() == '0000006') {
+                            enable85 = " disabled ";
+                        }
+                        else if ($("#ddlIndicadorId").val() == '0000007') {
+                            if (check85 == "S") {
+                                enable85 = " disabled ";
+                            }
+                            else if (check84 == "S" && check85 != "S") {
+                                enable85 = "";
+                            }
+                        }
+                        else {
+                            enable85 = " disabled ";
+                        }
+                    }
+                } else if (r.id == 86) {
+
+                    check86 = r.PRESENTA_OBS;
+                    //if (($("#hdfCodGrupoUsuario").val() != '0000011') && ($("#hdfCodGrupoUsuario").val() != '0000001')) {
+                    if (($("#hdfPerfil").val() != '0000058') && ($("#hdfPerfil").val() != '0000071')) {
+                        enable86 = " disabled ";
+                    }
+                    else {
+
+                        if ($("#ddlIndicadorId").val() == '0000005') {
+                            enable86 = " disabled ";
+                        }
+                        else if ($("#ddlIndicadorId").val() == '0000006') {
+                            enable86 = " disabled ";
+                        }
+                        else if ($("#ddlIndicadorId").val() == '0000007') {
+
+                            if (check86 == "S") {
+                                enable86 = " disabled ";
+                            }
+                            else if (check85 == "S" && check86 != "S") {
+                                enable86 = "";
+                            }
+                            else if (check84 == "S" && check85 != "S") {
+                                enable86 = " disabled ";
+                            }
+                        }
+                        else {
+                            enable86 = " disabled ";
+                        }
+                    }
+                } else if (r.id == 87) {
+
+                    check87 = r.PRESENTA_OBS;
+                    //if (($("#hdfCodGrupoUsuario").val() != '0000002') && ($("#hdfCodGrupoUsuario").val() != '0000001')) {
+                    if (($("#hdfPerfil").val() != '0000063') && ($("#hdfPerfil").val() != '0000071')) {//digitador
+                        enable87 = " disabled ";
+                    }
+                    else {
+
+                        if ($("#ddlIndicadorId").val() == '0000005') {
+                            enable87 = " disabled ";
+                        }
+                        else if ($("#ddlIndicadorId").val() == '0000006') {
+                            enable87 = " disabled ";
+                        }
+                        else if ($("#ddlIndicadorId").val() == '0000007') {
+
+                            if (check87 == "S") {
+                                enable87 = " disabled ";
+                            }
+                            else if (check86 == "S" && check87 != "S") {
+                                enable87 = "";
+                            }
+                            else if (check86 != "S") {
+                                enable87 = " disabled ";
+                            }
+
+                        }
+                        else {
+                            enable87 = " disabled ";
+                        }
+                    }
+
+                }
+                else if (r.id == 150) {
+
+                    //if (($("#hdfCodGrupoUsuario").val() != '0000011') && ($("#hdfCodGrupoUsuario").val() != '0000001')) {
+                    if (($("#hdfPerfil").val() != '0000058') && ($("#hdfPerfil").val() != '0000071')) {
+                        enable150 = " disabled ";
+                    }
+                    else {
+
+                        if ($("#ddlIndicadorId").val() == '0000005') {
+                            enable150 = "";
+                        }
+                        else if ($("#ddlIndicadorId").val() == '0000006') {
+                            enable150 = " disabled ";
+                        }
+                        else if ($("#ddlIndicadorId").val() == '0000007') {
+
+                            if (check87 == "S") {
+                                enable150 = "";
+                            }
+                            else if (check86 == "S" && check87 != "S") {
+                                enable150 = " disabled ";
+                            }
+                            else if (check85 == "S" && check86 != "S") {
+                                enable150 = "";
+                            }
+                            else if (check84 == "S" && check85 != "S") {
+                                enable150 = " disabled ";
+                            }
+                        }
+                        else {
+                            enable150 = " disabled ";
+                        }
+                    }
+
+                }
+                else if (r.id == 136) {
+
+                    //if (($("#hdfCodGrupoUsuario").val() != '0000011') && ($("#hdfCodGrupoUsuario").val() != '0000001')) {
+                    if (($("#hdfPerfil").val() != '0000058') && ($("#hdfPerfil").val() != '0000071')) {
+                        enable136 = " disabled ";
+                    }
+                    else {
+
+                        if ($("#ddlIndicadorId").val() == '0000005') {
+                            enable136 = "";
+                        }
+                        else if ($("#ddlIndicadorId").val() == '0000006') {
+                            enable136 = " disabled ";
+                        }
+                        else if ($("#ddlIndicadorId").val() == '0000007') {
+
+                            if (check87 == "S") {
+                                enable136 = "";
+                            }
+                            else if (check86 == "S" && check87 != "S") {
+                                enable136 = " disabled ";
+                            }
+                            else if (check85 == "S" && check86 != "S") {
+                                enable136 = "";
+                            }
+                            else if (check84 == "S" && check85 != "S") {
+                                enable136 = " disabled ";
+                            }
+                        }
+                        else {
+                            enable136 = " disabled ";
+                        }
+                    }
+
+                }/*else if (r.id == 150) {
+                    check150 = r.PRESENTA_OBS;
+                    if (($("#hdfCodGrupoUsuario").val() != '0000011') && ($("#hdfCodGrupoUsuario").val() != '0000001')) {
+                        enable150 = " disabled ";
+                    }
+                    else {
+
+                        if ($("#ddlIndicadorId").val() == '0000005') {
+                            enable150 = "";
+                        }
+                        else if ($("#ddlIndicadorId").val() == '0000006') {
+                            enable150 = " disabled ";
+                        }
+                        else if ($("#ddlIndicadorId").val() == '0000007') {
+
+                            if (check87 == "S") {
+                                enable150 = "";
+                            }
+                            else if (check86 == "S" && check87 != "S") {
+                                enable150 = " disabled ";
+                            }
+                            else if (check85 == "S" && check86 != "S") {
+                                enable150 = "";
+                            }
+                            else if (check84 == "S" && check85 != "S") {
+                                enable150 = " disabled ";
+                            }
+                        }
+                        else {
+                            enable150 = " disabled ";
+                        }
+                    }
+
+                } else if (r.id == 136) {
+
+                    if (($("#hdfCodGrupoUsuario").val() != '0000011') && ($("#hdfCodGrupoUsuario").val() != '0000001')) {
+                        enable136 = " disabled ";
+                    }
+                    else {
+
+                        if ($("#ddlIndicadorId").val() == '0000005') {
+                            enable136 = "";
+                        }
+                        else if ($("#ddlIndicadorId").val() == '0000006') {
+                            enable136 = " disabled ";
+                        }
+                        else if ($("#ddlIndicadorId").val() == '0000007') {
+
+                            if(check150 == "S") {
+                                enable136 = "";
+                            }
+                            else if (check87 == "S" && check150 != "S") {
+                                enable136 = " disabled ";
+                            }
+                            else if (check86 == "S" && check87 != "S") {
+                                enable136 = "";
+                            }
+                            else if (check85 == "S" && check86 != "S") {
+                                enable136 = " disabled ";
+                            }
+                            else if (check84 == "S" && check85 != "S") {
+                                enable136 = " disabled ";
+                            }
+                        }
+                        else {
+                            enable136 = " disabled ";
+                        }
+                    }
+
+                }*/
+
+                checkBox = (r.PRESENTA_OBS == "S") ? " checked " : "";
+
+                rows += '<div class="custom-control custom-radio">';
+                rows += '<input type ="checkbox" value="S" class="custom-control-input" id ="chkECC_' + `${r.id}` + '" name="chkECC_' + `${r.id}` + '" ' + '" onclick="fControlCal.fnCheck(' + `${r.id}` + ')" '+`${checkBox}` + '>';
+
+                rows += ' <label class="custom-control-label" for="chkECC_' + `${r.id}` + '"></label>';
+                rows += '</div>';
+                rows += '</td >';//fin td
+                rows += '<td>Fecha: <input type="text" class="form-control form-control-sm" id="txtfecha_' + `${r.id}` + '" maxlength="10" readonly="readonly" placeholder="dd/mm/aa" value="' + r.FECHA_VARIOS + '" /></td>';
+                rows += '<td colspan=3 ><input type="text" class="form-control form-control-sm" id="detECC_' + `${r.id}` + '" maxlength="400" value="' + `${r.DETALLE}` + '" /></td>';
+                rows += '</tr>';
+
+            } else {
+
+                if (($("#hdfCodGrupoUsuario").val() !== '0000011') && ($("#hdfCodGrupoUsuario").val() !== '0000001')) {
+                    disableRows = " disabled ";
+                } else if ($("#ddlIndicadorId").val() == '0000006')
+                {
+                    disableRows = " disabled ";
+                }
+
+                if (r.padre !== padre) {
+
+                    rows += '<tr id="' + `${idEstado}` + '">';
+                    rows += '<td rowspan="' + r.cantHijos + '" style="color: blue;font-weight: bold; text-align: center; vertical-align: middle;">' + `${++count}` + '</td>';
+                    rows += '<td  rowspan="' + r.cantHijos + '" style="color: blue;font-weight: bold; text-align: center; vertical-align: middle;">' + `${r.padre}` + '</td>';
+
+                    rows += '<td class="csPO">';//inicio td
+                    checked = (r.PRESENTA_OBS == "S") ? "checked" : "";
+                    rows += '<div class="custom-control custom-radio">';
+                    rows += '<input type ="radio" value="S" class="custom-control-input" id ="chkPO1_' + `${r.id}` + '" name="chkPO_' + `${r.id}` + '" ' + `${disableRows}` + `${checked}` + '>';
+                    rows += ' <label class="custom-control-label" for="chkPO1_' + `${r.id}` + '"></label>';
+                    rows += '</div>';
+                    rows += '</td >';//fin td
+                    rows += '<td class="csPO">';//inicio td
+                    rows += '<div class="custom-control custom-radio">';
+                    checked = (r.PRESENTA_OBS == "N") ? "checked" : "";
+                    rows += '<input type ="radio" value="N" class="custom-control-input" id ="chkPO2_' + `${r.id}` + '" name="chkPO_' + `${r.id}` + '" ' + `${disableRows}` + `${checked}` + '>';
+                    rows += ' <label class="custom-control-label" for="chkPO2_' + `${r.id}` + '"></label>';
+                    rows += '</div>';
+                    rows += '</td >';//fin td
+                    rows += '<td>' + `${r.codigo}` + '</td>';
+                    rows += '<td>' + `${r.hijo}` + '</td>';
+
+                    rows += '<td><input type="text" class="form-control form-control-sm" id="det_' + `${r.id}` + '" maxlength="400" value="' + `${r.DETALLE}` + '" ' + `${disableRows}` + ' /></td>';
+                    rows += '<td class="csPO">';//inicio td
+                    rows += '<div class="custom-control custom-radio">';
+                    checked = (r.LEVANTO_OBS == "S") ? "checked" : "";
+                    rows += '<input type ="radio" value="S" class="custom-control-input" id ="chkLO1_' + `${r.id}` + '" name="chkLO_' + `${r.id}` + '" ' + `${disableRows}` + `${checked}` + '>';
+                    rows += ' <label class="custom-control-label" for="chkLO1_' + `${r.id}` + '"></label>';
+                    rows += '</div>';
+                    rows += '</td >';//fin td
+
+                    rows += '<td class="csPO">';//inicio td
+                    rows += '<div class="custom-control custom-radio">';
+                    checked = (r.LEVANTO_OBS == "N") ? "checked" : "";
+                    rows += '<input type ="radio" value="N" class="custom-control-input" id ="chkLO2_' + `${r.id}` + '" name="chkLO_' + `${r.id}` + '" ' + `${disableRows}` + `${checked}` + '>';
+                    rows += ' <label class="custom-control-label" for="chkLO2_' + `${r.id}` + '"></label>';
+                    rows += '</div>';
+                    rows += '</td >';//fin td
+
+                    rows += '</tr>';
+                    padre = r.padre;
+                }
+                else {
+                    rows += '<tr id="' + `${idEstado}` + '">';
+
+                    rows += '<td class="csPO">';//inicio td
+                    rows += '<div class="custom-control custom-radio">';
+                    checked = (r.PRESENTA_OBS == "S") ? "checked" : "";
+                    rows += '<input type ="radio" value="S" class="custom-control-input" id ="chkPO1_' + `${r.id}` + '" name="chkPO_' + `${r.id}` + '" ' + `${disableRows}` + `${checked}` + '>';
+                    rows += ' <label class="custom-control-label" for="chkPO1_' + `${r.id}` + '"></label>';
+                    rows += '</div>';
+                    rows += '</td >';//fin td
+                    rows += '<td class="csPO">';//inicio td
+                    rows += '<div class="custom-control custom-radio">';
+                    checked = (r.PRESENTA_OBS == "N") ? "checked" : "";
+                    rows += '<input type ="radio" value="N" class="custom-control-input" id ="chkPO2_' + `${r.id}` + '" name="chkPO_' + `${r.id}` + '" ' + `${disableRows}` + `${checked}` + '>';
+                    rows += ' <label class="custom-control-label" for="chkPO2_' + `${r.id}` + '"></label>';
+                    rows += '</div>';
+                    rows += '</td >';//fin td
+                    rows += '<td>' + `${r.codigo}` + '</td>';
+                    rows += '<td>' + `${r.hijo}` + '</td>';
+                    rows += '<td><input type="text" class="form-control form-control-sm" id="det_' + `${r.id}` + '" maxlength="400" value="' + `${r.DETALLE}` + '" ' + `${disableRows}` + '/></td>';
+                    rows += '<td class="csPO">';//inicio td
+                    rows += '<div class="custom-control custom-radio">';
+                    checked = (r.LEVANTO_OBS == "S") ? "checked" : "";
+                    rows += '<input type ="radio" value="S" class="custom-control-input" id ="chkLO1_' + `${r.id}` + '" name="chkLO_' + `${r.id}` + '" ' + `${disableRows}` + `${checked}` + '>';
+                    rows += ' <label class="custom-control-label" for="chkLO1_' + `${r.id}` + '"></label>';
+                    rows += '</div>';
+                    rows += '</td >';//fin td
+
+                    rows += '<td class="csPO">';//inicio td
+                    rows += '<div class="custom-control custom-radio">';
+                    checked = (r.LEVANTO_OBS == "N") ? "checked" : "";
+                    rows += '<input type ="radio" value="N" class="custom-control-input" id ="chkLO2_' + `${r.id}` + '" name="chkLO_' + `${r.id}` + '" ' + `${disableRows}` + `${checked}` + '>';
+                    rows += ' <label class="custom-control-label" for="chkLO2_' + `${r.id}` + '"></label>';
+                    rows += '</div>';
+                    rows += '</td >';//fin td
+
+                    rows += '</tr>';
+                }
+
+            }
+
+        });
+        tbody.append(rows);
+
+        if (enable135 != "") {
+            $("#chkECC_135").attr("disabled", "true");
+            $("#detECC_135").attr("disabled", "true");
+        }
+        if (enable84 != "") {
+            $("#chkECC_84").attr("disabled", "true");
+            $("#detECC_84").attr("disabled", "true");
+        }
+        if (enable85 != "") {
+            $("#chkECC_85").attr("disabled", "true");
+            $("#detECC_85").attr("disabled", "true");
+        }
+        if (enable86 != "") {
+            $("#chkECC_86").attr("disabled", "true");
+            $("#detECC_86").attr("disabled", "true");
+        }
+        if (enable87 != "") {
+            $("#chkECC_87").attr("disabled", "true");
+            $("#detECC_87").attr("disabled", "true");
+        }
+        if (enable136 != "") {
+            $("#chkECC_136").attr("disabled", "true");
+            $("#detECC_136").attr("disabled", "true");
+        }
+        if (enable150 != "") {
+            $("#chkECC_150").attr("disabled", "true");
+            $("#detECC_150").attr("disabled", "true");
+        }
+
+        $("#chkECC_84").on("click", function () {
+            if ($("#chkECC_84").is(':checked') && $("#chkECC_136").is(':checked') && !$("#chkECC_136").is(':disabled')) {
+                $("#chkECC_136").prop('checked', false);
+                $("#detECC_136").val("");
+            } else if ($("#chkECC_84").is(':checked') && $("#chkECC_150").is(':checked') && !$("#chkECC_150").is(':disabled')) {
+                $("#chkECC_150").prop('checked', false);
+                $("#detECC_150").val("");
+            }
+        });
+
+        $("#chkECC_86").on("click", function () {
+            if ($("#chkECC_86").is(':checked') && $("#chkECC_136").is(':checked') && !$("#chkECC_136").is(':disabled')) {
+                $("#chkECC_136").prop('checked', false);
+                $("#detECC_136").val("");
+            } else if ($("#chkECC_86").is(':checked') && $("#chkECC_150").is(':checked') && !$("#chkECC_150").is(':disabled')) {
+                $("#chkECC_150").prop('checked', false);
+                $("#detECC_150").val("");
+            }
+        });
+
+        $("#chkECC_150").on("click", function () {
+            if ($("#chkECC_150").is(':checked') && $("#chkECC_86").is(':checked') && !$("#chkECC_86").is(':disabled')) {
+                $("#chkECC_86").prop('checked', false);
+                $("#detECC_86").val("");
+            } else if ($("#chkECC_150").is(':checked') && $("#chkECC_84").is(':checked') && !$("#chkECC_84").is(':disabled')) {
+                $("#chkECC_84").prop('checked', false);
+                $("#detECC_84").val("");
+            }
+        });
+
+        $("#chkECC_136").on("click", function () {
+            if ($("#chkECC_136").is(':checked') && $("#chkECC_86").is(':checked') && !$("#chkECC_86").is(':disabled')) {
+                $("#chkECC_86").prop('checked', false);
+                $("#detECC_86").val("");
+            } else if ($("#chkECC_136").is(':checked') && $("#chkECC_84").is(':checked') && !$("#chkECC_84").is(':disabled')) {
+                $("#chkECC_84").prop('checked', false);
+                $("#detECC_84").val("");
+            }
+        });
+
+        /*$("#chkECC_150").on("click", function () {
+            if ($("#chkECC_150").is(':checked') && $("#chkECC_136").is(':checked') && !$("#chkECC_136").is(':disabled')) {
+                $("#chkECC_136").prop('checked', false);
+                $("#detECC_136").val("");
+            }
+            else if ($("#chkECC_150").is(':checked') && $("#chkECC_86").is(':checked') && !$("#chkECC_86").is(':disabled')) {
+                $("#chkECC_86").prop('checked', false);
+                $("#detECC_86").val("");
+            } else if ($("#chkECC_150").is(':checked') && $("#chkECC_84").is(':checked') && !$("#chkECC_84").is(':disabled')) {
+                $("#chkECC_84").prop('checked', false);
+                $("#detECC_84").val("");
+            }
+        });
+
+        $("#chkECC_136").on("click", function () {
+            if ($("#chkECC_136").is(':checked') && $("#chkECC_150").is(':checked') && !$("#chkECC_150").is(':disabled')) {
+                $("#chkECC_150").prop('checked', false);
+                $("#detECC_150").val("");
+            } else if ($("#chkECC_136").is(':checked') && $("#chkECC_86").is(':checked') && !$("#chkECC_86").is(':disabled')) {
+                $("#chkECC_86").prop('checked', false);
+                $("#detECC_86").val("");
+            } else if ($("#chkECC_136").is(':checked') && $("#chkECC_84").is(':checked') && !$("#chkECC_84").is(':disabled')) {
+                $("#chkECC_84").prop('checked', false);
+                $("#detECC_84").val("");
+            }
+        });*/
+
+        //tabla 2
+        let $table1 = $("#tbFormatoCalidad1")
+        let tbody1 = $table1.children('tbody');
+        padre = "";
+        rows = "";
+        count = 0;
+        tbody1.children('tr').remove();
+        $.each(listGrupo2, (i, r) => {
+            idEstado = r.id + "|" + r.est;
+            if (r.padre !== padre) {
+                rows += '<tr class="padre" id="0|0">';
+                rows += '<td colspan="8" style="color: blue;font-weight: bold; text-align: left;">'+`${r.padre}`+'</td>';
+                rows += '</tr>';
+                padre = r.padre;
+            }
+           // else {
+                rows += '<tr id="' + `${idEstado}` + '">';
+                rows += '<td>' + `${r.codigo}` + '</td>';
+                switch (r.id) {
+                    case 143:
+                    case 144:
+                    case 145:
+                    case 146:
+                    case 147:
+                    case 148:
+                        rows += '<td>Fecha: <input type="text" class="form-control form-control-sm" id="txtfecha_' + `${r.id}` + '" maxlength="10" placeholder="dd/mm/aa" value="' + r.FECHA_VARIOS + '" /></td>';
+                        break;
+                    default: rows += '<td>' + `${r.hijo}` + '</td>';
+                }
+               // rows += '<td>' + `${r.hijo}` + '</td>';
+                rows += '<td class="csPO">';//inicio td
+                checked = (r.PRESENTA_OBS == "S") ? "checked" : "";
+                rows += '<div class="custom-control custom-radio">';
+                rows += '<input type ="radio" value="S" class="custom-control-input" id ="chkRO1_' + `${r.id}` + '" name="chkRO_' + `${r.id}` + '" ' + checked +' >';
+                rows += ' <label class="custom-control-label" for="chkRO1_' + `${r.id}` + '"></label>';
+                rows += '</div>';
+                rows += '</td >';//fin td
+
+                rows += '<td class="csPO">';//inicio td
+                rows += '<div class="custom-control custom-radio">';
+                checked = (r.PRESENTA_OBS == "N") ? "checked" : "";
+                rows += '<input type ="radio" value="N"  class="custom-control-input" id ="chkRO2_' + `${r.id}` + '" name="chkRO_' + `${r.id}` + '" ' + checked +' >';
+                rows += ' <label class="custom-control-label" for="chkRO2_' + `${r.id}` + '"></label>';
+                rows += '</div>';
+                rows += '</td >';//fin td
+                switch (r.id) {
+                    case 143:
+                    case 144:
+                    case 145:
+                    case 146:
+                    case 147:
+                    case 148:
+                        rows += '<td></td>';
+                        break;
+                    default:
+                        rows += '<td><input type="text" class="form-control form-control-sm" id="detR_' + `${r.id}` + '" maxlength="400" value="' + r.DETALLE + '" /></td>';
+                }
+               // rows += '<td><input type="text" class="form-control form-control-sm" id="detR_' + `${r.id}` + '" maxlength="400" value="' + r.DETALLE + '" /></td>';
+                rows += '<td><input type="text" class="form-control form-control-sm" id="obsR_' + `${r.id}` + '" maxlength="400" value="' + r.OBS_ADICIONALES+'"/></td>';
+
+                switch (r.id) {
+                    case 143:
+                    case 144:
+                    case 145:
+                    case 146:
+                    case 147:
+                    case 148:
+                        rows += '<td></td>';
+                        rows += '<td></td>';
+                        break;
+                    default:
+                        rows += '<td class="csPO">';//inicio td
+                        rows += '<div class="custom-control custom-radio">';
+                        checked = (r.LEVANTO_OBS == "S") ? "checked" : "";
+                        rows += '<input type ="radio" value="S"  class="custom-control-input" id ="chkLRO1_' + `${r.id}` + '" name="chkLRO_' + `${r.id}` + '" ' + checked + ' >';
+                        rows += ' <label class="custom-control-label" for="chkLRO1_' + `${r.id}` + '"></label>';
+                        rows += '</div>';
+                        rows += '</td >';//fin td
+
+                        rows += '<td class="csPO">';//inicio td
+                        rows += '<div class="custom-control custom-radio">';
+                        checked = (r.LEVANTO_OBS == "N") ? "checked" : "";
+                        rows += '<input type ="radio" value="N"  class="custom-control-input" id ="chkLRO2_' + `${r.id}` + '" name="chkLRO_' + `${r.id}` + '" ' + checked + ' >';
+                        rows += ' <label class="custom-control-label" for="chkLRO2_' + `${r.id}` + '"></label>';
+                        rows += '</div>';
+                        rows += '</td >';//fin td
+                }
+
+                rows += '</tr>';
+            //}
+        });
+        tbody1.append(rows);
+
+        //fechas
+        tbody1.find("#txtfecha_143").datepicker(initSigo.formatDatePicker);
+        tbody1.find("#txtfecha_144").datepicker(initSigo.formatDatePicker);
+        tbody1.find("#txtfecha_145").datepicker(initSigo.formatDatePicker);
+        tbody1.find("#txtfecha_146").datepicker(initSigo.formatDatePicker);
+        tbody1.find("#txtfecha_147").datepicker(initSigo.formatDatePicker);
+        tbody1.find("#txtfecha_148").datepicker(initSigo.formatDatePicker);
+
+        let fechaRecepcion = fControlCal.contenedor.find("#fechaRecepcionIS").val();
+        if ((fechaRecepcion == "") && ($("#hdfCodGrupoUsuario").val() == '0000011' || $("#hdfCodGrupoUsuario").val() == '0000001')) {
+            fControlCal.contenedor.find("#fechaRecepcionIS").datepicker(initSigo.formatDatePicker);
+        }
+
+        if (($("#hdfCodGrupoUsuario").val() == '0000002') || (fechaRecepcion != ""))
+        {
+            $('#fechaRecepcionIS').prop('disabled', true);
+        }
+
+        var tabEstado = fControlCal.getUrlParameter("showEstado");
+        if (tabEstado == "S") {
+            $('#myTab a[href="#navEstado"]').tab('show');
+        }
+
+        if ($("#ddlIndicadorId").val() == '0000006') {
+            $('#btnGrabarControlCalidad').prop('disabled', true);
+        }
+
+
+
+    });
+</script>
+
+<div class="row">
+    <div class="col-md-12 paddingBtnSave">
+        <input type="button" class="btn btn-primary btn-sm colorBtnSave" id="btnGrabarControlCalidad" value="Registrar formato de control de calidad" onclick="fControlCal.fnSave()" />
+    </div>
+</div>
+<div class="card" id="cardControlCalidad">
+
+    <div class="card-body">
+        <div class="form-row">
+            <div class="form-group col-md-6">
+                <label for="cboCalJefeOD" class="text-small">Especialista/Jefe OD que efectúa el control de calidad </label>
+                <div class="input-group">
+                    @Html.TextBoxFor(m => m.eJefeODC, new { @class = "form-control form-control-sm", disabled = "disabled" })
+                    @Html.HiddenFor(m => m.eJefeODCID)
+                    <div class="input-group-prepend">
+                        <span class="input-group-text" style="cursor:pointer;" onclick="fControlCal.fnAddJefe()"><i class="fa fa-search-plus" data-toggle="tooltip" data-placement="top" title="Seleccione especialista/jefe OD"></i></span>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group col-md-3">
+                <label for="txtFechaRecepcionI" class="text-small">Fecha de recepción del Informe de Supervisión </label>
+
+                @Html.TextBoxFor(m => m.fechaRecepcionIS, new { @class = "form-control form-control-sm", placeholder = "dd/mm/aaaa", maxlength = "10" })
+            </div>
+            <div class="form-group col-md-3">
+                <label for="txtGuiaFormato" class="text-small">Guía del formato de control de calidad</label>
+                <a href="@Url.Content("~/Archivos/Documentos/guiaFormatoControlCalidad.pdf")" target="_blank"> <i class="fa mx-2 fa-lg fa-download" style="cursor:pointer;" data-toggle="tooltip" data-placement="top" title="Descargar Guía"></i></a>
+            </div>
+        </div>
+        <ul class="nav nav-tabs" id="tabFormato" role="tablist">
+            <li class="nav-item"><a class="nav-link active" data-toggle="tab" href="#navIS" role="tab" aria-selected="true">Informe de Supervisión</a></li>
+            <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#navDR" role="tab" aria-selected="true">Datos Registrados en el SIGO-SFC</a></li>
+        </ul>
+        <div class="tab-content">
+            <div class="tab-pane fade show active" id="navIS">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="table-responsive">
+                            <table id="tbFormatoCalidad" class="table table-hover table-bordered" style="width:100%">
+                                <thead>
+                                    <tr>
+                                        <th class="colN" rowspan="2">N°</th>
+                                        <th class="colItem" rowspan="2">Item</th>
+                                        <th class="colPO" colspan="2">¿Presenta observaciones?</th>
+                                        <th style=" width: 20px;" rowspan="2">Código</th>
+                                        <th class="colObs" rowspan="2">Alcance de las observaciones</th>
+                                        <th rowspan="2">Detalles adicionales</th>
+                                        <th colspan="2">¿Levantó las observaciones?</th>
+                                    </tr>
+                                    <tr>
+                                        <th>SI</th>
+                                        <th>NO</th>
+                                        <th style="width:2px;">SI</th>
+                                        <th style="width:2px;">NO</th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-pane fade show" id="navDR">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="table-responsive">
+                            <table id="tbFormatoCalidad1" class="table table-hover table-bordered" style="width:100%">
+                                <thead>
+                                    <tr>
+                                        <th rowspan="2">N°</th>
+                                        <th rowspan="2">Sección</th>
+                                        <th colspan="2">Conforme</th>
+                                        <th rowspan="2">Detalle</th>
+                                        <th rowspan="2">Observaciones</th>
+                                        <th colspan="2">¿Levantó las observaciones?</th>
+                                    </tr>
+                                    <tr>
+                                        <th style="width:2px;">SI</th>
+                                        <th style="width:2px;">NO</th>
+                                        <th style="width:2px;">SI</th>
+                                        <th style="width:2px;">NO</th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+

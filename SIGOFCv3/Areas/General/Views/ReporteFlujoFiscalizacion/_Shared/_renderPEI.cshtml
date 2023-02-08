@@ -1,0 +1,237 @@
+﻿<style type="text/css">
+    table {
+        width: 100%;
+        text-align: center;
+        font-size: 0.9rem;
+        border: 1px solid #495057;
+        color: #495057;
+    }
+
+    td {
+        padding-top: 8px;
+        padding-bottom: 8px;
+    }
+
+    .botonHref1 {
+        color: #495057;
+    }
+
+    .botonHref1:hover {
+        color: #007bff;
+    }
+
+    .formato2 {
+        background: #B8C5D5;
+    }
+
+    .formato3 {
+        background: #EEAD80;
+    }
+
+    .formato5 {
+        background: #F2C6A8;
+    }
+
+    .formato7 {
+        width: 50%;
+        height: 100px;
+    }
+
+    .divcantidad {
+        margin-top: 5px;
+    }
+</style>
+
+@model CapaEntidad.ViewModel.VM_FlujoFiscalizacion
+<script src="~/Areas/General/js/ReporteFlujoFiscalizacion/FormatoFecha.js"></script>
+
+<script type="text/javascript">
+    var _renderPEI = {};
+
+    _renderPEI.fnListar = function (opc, cell, fechaini, fechafin) {
+        _reporte.frm.find("#idTab").val(3);
+
+        if (opc == 1) _reporte.frm.find("#txtnomconsulta").val("Cantidad total de informes recibidos por la DFFFS");
+        else if (opc == 2) _reporte.frm.find("#txtnomconsulta").val("Cantidad de RSD de archivo y RD fin PAU");
+
+        var cad = '';
+
+        cad = 'Del ' + _renderPEI.frm.find("#" + fechaini).val() + ' ';
+        cad += 'Al ' + _renderPEI.frm.find("#" + fechafin).val();
+
+        $('#tituloTablaPEI').html('Listado de Documentos consultados "' + _reporte.frm.find("#txtnomconsulta").val() + '" ' + cad);
+        $("#frmPEI").hide();
+        $("#divlistaPEI").show();
+
+        _renderListaPEI.fnSubmitForm(opc, cell);
+    }
+
+    _renderPEI.fnValidarCampos = function (fechaini, fechafin) {
+        var valor = true;
+
+        if (_renderPEI.frm.find("#" + fechaini).val() == null ||
+            _renderPEI.frm.find("#" + fechaini).val().length == 0 ||
+            /^\s+$/.test(_renderPEI.frm.find("#" + fechaini).val())) {
+            valor = false;
+        }
+        if (_renderPEI.frm.find("#" + fechafin).val() == null ||
+            _renderPEI.frm.find("#" + fechafin).val().length == 0 ||
+            /^\s+$/.test(_renderPEI.frm.find("#" + fechafin).val())) {
+            valor = false;
+        }
+
+        return valor;
+    }
+
+    _renderPEI.fnConsultar = function (fechaini, fechafin) {
+        _reporte.frm.find("#idTab").val(3);
+        var idTab = _reporte.frm.find("#idTab").val();
+        var ddlSubdirPEIId = _renderPEI.frm.find("#ddlSubdirPEIId").val();
+        var txtfechainiPEI1 = _renderPEI.frm.find("#txtfechainiPEI1").val();
+        var txtfechafinPEI1 = _renderPEI.frm.find("#txtfechafinPEI1").val();
+        var params = {
+            idTab, ddlSubdirPEIId, txtfechainiPEI1, txtfechafinPEI1
+        };
+
+        if (_renderPEI.fnValidarCampos(fechaini, fechafin)) {
+            if (_renderPEI.frm.find("#" + fechaini).val().length == 10 && _renderPEI.frm.find("#" + fechafin).val().length == 10) {
+                if (chkEsMenor(_renderPEI.frm.find("#" + fechafin).val(), _renderPEI.frm.find("#" + fechaini).val())) {
+                    utilSigo.toastInfo("Aviso", "La fecha final no puede ser menor que la fecha inicial");
+
+                    $("#divCasosPEI").hide();
+
+                    return false;
+                }
+                else _renderPEI.fnTraerData(params);
+            }
+            else {
+                utilSigo.toastInfo("Aviso", "Formato de fechas incorrecto");
+                $("#divCasosPEI").hide();
+            }
+        } else {
+            utilSigo.toastInfo("Aviso", "Falta ingresar datos");
+            $("#divCasosPEI").hide();
+        }
+    }
+
+    _renderPEI.fnTraerData = function (params) {
+        var url = urlLocalSigo + "General/ReporteFlujoFiscalizacion/ObtenerData";
+        var option = { url: url, datos: JSON.stringify(params), type: 'POST' };
+
+        utilSigo.fnAjax(option, function (data) {
+            if (data.success) {
+                var obj = data.result;
+
+                if (obj != null) {
+                    _renderPEI.frm.find("#cantPEI1").val(obj.cantPEI1);
+                    _renderPEI.frm.find("#cantPEI2").val(obj.cantPEI2);
+                    _renderPEI.frm.find("#cantPEI3").val(obj.cantPEI3);
+                    _renderPEI.fnSetValorTabla1();
+                    _renderPEI.fnSetValorTabla2();
+                    $("#divCasosPEI").show();
+                }
+                else $("#divCasosPEI").hide();
+            }
+            else {
+                utilSigo.toastWarning("Aviso", "Sucedio un error, Comuníquese con el Administrador");
+                $("#divCasosPEI").hide();
+                console.log(data.result);
+            }
+        });
+    }
+
+    _renderPEI.fnSetValorTabla1 = function () {
+        $("#divcantPEI1").text(_renderPEI.frm.find("#cantPEI1").val());
+    }
+
+    _renderPEI.fnSetValorTabla2 = function () {
+        $("#divcantPEI2").text(_renderPEI.frm.find("#cantPEI2").val());
+        $("#divcantPEI3").text(_renderPEI.frm.find("#cantPEI3").val() + "%");
+    }
+
+    $(document).ready(function () {
+        _renderPEI.frm = $("#frmPEI");
+
+        _renderPEI.frm.find("#txtfechainiPEI1").datepicker({ format: "dd/mm/yyyy", autoclose: true, language: 'es' });
+        _renderPEI.frm.find("#txtfechainiPEI1").keyup(function () {
+            return formateafecha(this.value);
+        });
+
+        _renderPEI.frm.find("#txtfechafinPEI1").datepicker({ format: "dd/mm/yyyy", autoclose: true, language: 'es' });
+        _renderPEI.frm.find("#txtfechafinPEI1").keyup(function () {
+            return formateafecha(this.value);
+        });
+
+        _renderPEI.fnSetValorTabla1();
+        _renderPEI.fnSetValorTabla2();
+    });
+</script>
+
+<div id="frmPEI" class="text-small">
+    <div><br /><br /></div>
+    @Html.HiddenFor(m => m.cantPEI1)
+    @Html.HiddenFor(m => m.cantPEI2)
+    @Html.HiddenFor(m => m.cantPEI3)
+    <div class="form-row">
+        <div class="form-group col-md-2">
+            <label for="lblSubdirPEIId" class="text-small">Subdirección:</label>
+            @Html.DropDownListFor(m => m.ddlSubdirPEIId, new SelectList(Model.ddlSubdirPEI, "Value", "Text"), new { @class = "form-control form-control-sm" })
+        </div>
+    </div><br /><br /><br />
+    <div class="form-row">
+        <div class="form-group col-md-4">
+            <div style="display: flex; position: relative; margin-top:30px;">
+                <label class="text-small" style="margin-top:8px;font-weight:bold;">Casos resueltos</label>
+            </div>
+            <div style="display: flex; position: relative;">
+                <div>
+                    <label for="lblini" class="text-small" style="margin-top:8px;margin-right:10px;">Del: </label>
+                    <div style="width:119.02px;">
+                        @Html.EditorFor(m => m.txtfechainiPEI1, new { htmlAttributes = new { @class = "form-control form-control-sm", placeholder = "dd/mm/yyyy", title = "la fecha a ingresar debe ser en el formato dd/mm/yyyy", maxlength = "10" } })
+                    </div>
+                </div>
+                <div style="margin-left:15px;">
+                    <label for="lblfin" class="text-small" style="margin-top:8px;">Hasta: </label>
+                    <div style="width:119.02px;">
+                        @Html.EditorFor(m => m.txtfechafinPEI1, new { htmlAttributes = new { @class = "form-control form-control-sm", placeholder = "dd/mm/yyyy", title = "la fecha a ingresar debe ser en el formato dd/mm/yyyy", maxlength = "10" } })
+                    </div>
+                </div>
+                <div style="margin-left:15px;position:relative">
+                    <button type="button" class="btn btn-primary btn-sm" style="height:31px;bottom:0px;position:absolute;" onclick="_renderPEI.fnConsultar('txtfechainiPEI1','txtfechafinPEI1')">Consultar</button>
+                </div>
+            </div>
+        </div>
+        <div class="form-group col-md-1"></div>
+        <div class="form-group col-md-4" style="display:none;" id="divCasosPEI">
+            <table border="1" cellpadding="1" cellspacing="0">
+                <tr>
+                    <td colspan="2" class="formato2">Casos resueltos</td>
+                </tr>
+                <tr>
+                    <td colspan="2" style="height:100px;">
+                        <a href="javascript:void(0)" onclick="_renderPEI.fnListar(1,'4-1-1','txtfechainiPEI1','txtfechafinPEI1')" class="botonHref1" style="text-decoration:none;">
+                            Cantidad total de informes recibidos por la DFFFS
+                            <div id="divcantPEI1" class="divcantidad"></div>
+                        </a>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="height:100px;">
+                        <a href="javascript:void(0)" onclick="_renderPEI.fnListar(2,'4-2-1','txtfechainiPEI2','txtfechafinPEI2')" class="botonHref1" style="text-decoration:none;">
+                            Cantidad de RSD de archivo y RD fin PAU
+                            <div id="divcantPEI2" class="divcantidad"></div>
+                        </a>
+                    </td>
+                    <td class="formato7">
+                        <div id="divcantPEI3"></div>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+</div>
+
+<div id="divlistaPEI" style="display:none;">
+    <!--@@{ Model.valorTabla = 2;}-->
+    @Html.Partial("~/Areas/General/Views/ReporteFlujoFiscalizacion/_Shared/_renderListaPEI.cshtml", Model)
+</div>

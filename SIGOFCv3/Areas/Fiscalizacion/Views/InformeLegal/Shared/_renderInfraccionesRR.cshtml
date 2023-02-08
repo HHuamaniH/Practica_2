@@ -1,0 +1,44 @@
+﻿
+@model  CapaEntidad.ViewModel.VM_InformeLegal
+
+<style type="text/css">
+    #tbRenderListILegal_wrapper {
+        padding: 0px;
+    }
+
+    #tbConsultaILegal_info {
+        color: #33b35a;
+        font-size: 12px;
+        margin-top: 12px;
+    }
+</style>
+
+
+<script type="text/javascript">
+    var _renderInfraccionesRR = {};
+    // iniciar datos en la tabla
+    _renderInfraccionesRR.fnInitDataTable_Detail = function () {
+        var columns_label = [], columns_data = [], options = {};
+        columns_label = ["Artículo", "Incisos"];
+        columns_data = ["DESCRIPCION_ARTICULOS", "DESCRIPCION_ENCISOS"];
+        options = {
+            page_length: 10, row_index: true, row_delete: false, row_fnDelete: "_renderInfraccionesRR.fnDelete(this)", page_sort: true
+        };
+        _renderInfraccionesRR.dtRenderListInforme = utilDt.fnLoadDataTable_Detail(_renderInfraccionesRR.frm.find("#tbRenderListaInfraccionesRR"), columns_label, columns_data, options);
+        _renderInfraccionesRR.dtRenderListInforme.rows.add(JSON.parse('@Html.Raw(Json.Encode(@Model.listaInfraccionesRR))')).draw();
+    }
+
+   $(document).ready(function () {
+       _renderInfraccionesRR.frm = $("#frmRenderListaInfraccionesRR");
+       _renderInfraccionesRR.fnInitDataTable_Detail();
+   });
+</script>
+
+<div id="frmRenderListaInfraccionesRR">
+    <div class="table-responsive">
+        <table id="tbRenderListaInfraccionesRR" style="width:100%;margin:0px !important;" class="table table-hover table-bordered">
+            <thead></thead>
+            <tbody></tbody>
+        </table>
+    </div>
+</div>

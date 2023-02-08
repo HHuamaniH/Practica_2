@@ -1,0 +1,104 @@
+﻿<script type="text/javascript">
+    var IsituCarea = {};
+    IsituCarea.fnAsigna = function (obj) {
+        var tr = $(obj).closest("tr");        
+        var check = tr.find(".chkItem");
+        //verificando si existe item
+        var dataRow = IsituCarea.dt.row(tr).data();
+        var item = { COD_CAREA: dataRow.Value, DESCRIPCION: dataRow.Text, RegEstado: "1" };
+        var indexVeri = AddEditPM.fnGetRowId(AddEditPM.dtItemISituCArea, "COD_CAREA", item.COD_CAREA); 
+        if (check.is(":checked")) {
+            //adicionar
+            if (indexVeri==-1)
+                AddEditPM.dtItemISituCArea.row.add(item).draw();          
+        } else {
+            //si existe quitar
+            if (indexVeri!=-1)
+             AddEditPM.dtItemISituCArea.row(indexVeri).remove().draw(false);
+        }    
+    }    
+    IsituCarea.fnConfigTable = function () {
+        var cabecera = "<tr>";
+        var columns = ["","N°","Área"];
+        for (var i = 0; i < columns.length; i++) {
+            cabecera += "<th>" + columns[i] + "</th>";
+        }
+        cabecera += "</tr>";
+        IsituCarea.tb.find("thead").append(cabecera);
+        IsituCarea.dt = IsituCarea.tb.DataTable({
+            "bServerSide": false,
+            "bAutoWidth": false,
+            "bProcessing": true,
+            "bJQueryUI": false,
+            "bRetrieve": true,
+            "bFilter": false,
+            "aaSorting": [],
+            "bPaginate": true,
+            "bInfo": false,
+            "bLengthChange": false,
+            "pageLength": 20,
+            "pageLength": initSigo.pageLength,
+            "oLanguage": initSigo.oLanguage,
+            "drawCallback": initSigo.showPagination,
+            "columns":
+                [
+                    {
+                        "autoWidth": true, "bSortable": false, "sClass": "tdIcoconCenter", "data": "Value",
+                        "mRender": function (data, type, row) {  
+                            var cell = "";                            
+                            if (AddEditPM.fnGetRowId(AddEditPM.dtItemISituCArea, "COD_CAREA", row.Value) != -1) {
+                                cell = '<input type="checkbox" class="chkItem" onclick="IsituCarea.fnAsigna(this);" checked="checked" disabled="disabled" />';
+                            }
+                            else  cell= '<input type="checkbox" class="chkItem" onclick="IsituCarea.fnAsigna(this);" />';
+                            return cell;
+                        }
+                    },
+                    {
+                        "autoWidth": true, "bSortable": false, "sClass": "tdIcoconCenter", "name": "IND",
+                        "mRender": utilDt.countRowDT
+                    },
+                    
+                    { "data": "Text", "autoWidth": true }  
+
+                ]
+        });
+        //cargando data
+        var url = urlLocalSigo + "THabilitante/ManPlanManejo/ListMComboCArea";
+        IsituCarea.dt.ajax.url(url).load(function (data) {
+            if (data.success == false) {
+                utilSigo.toastError("Error", "Sucedio un Error al cargar datos en la tabla");
+                console.log(data.msjError);
+            }
+        });
+    }
+    IsituCarea.fnInit = function () {
+        IsituCarea.contenedor = $("#contenedorCArea");
+        IsituCarea.tb = IsituCarea.contenedor.find("#grvItemCArea");
+        IsituCarea.fnConfigTable();
+    }
+</script>
+  
+<div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content" id="contenedorCArea">
+        <div class="modal-header text-small" style="cursor:move;padding:0.5rem;">
+            <h5 class="modal-title" id="h5Titulo">Nuevo</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body">            
+            <div class="form-row">                
+                <div class="table-responsive">
+                    <table id="grvItemCArea" class="table table-hover table-bordered" style="width:100%">
+                        <thead>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">            
+        </div>
+    </div>
+</div>
+ 

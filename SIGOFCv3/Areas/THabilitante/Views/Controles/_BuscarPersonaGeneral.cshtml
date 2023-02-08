@@ -1,0 +1,204 @@
+﻿<script>
+    "use strict";
+    var vpFuncionaro = {};
+    vpFuncionaro.asignarFuncionario = function (obj) {
+        var formOrigen = vpFuncionaro.frmBuscarFuncionario.find("#fFormOrigen").val();
+        var controlOrigen = vpFuncionaro.frmBuscarFuncionario.find("#fControlOrigen").val();
+        var filaTabla = $(obj).closest('tr');
+        var codigoFuncionario = filaTabla.find(".hdCodigo").val();
+        var descripcionFuncionario = filaTabla.find(".hdDescripcion").text().trim();
+        if(formOrigen=="frmTHabilitanteRegistro")
+        {            
+            ManTHabilitante.frmTHabilitanteRegistro.find("#" + controlOrigen).val(descripcionFuncionario);
+            ManTHabilitante.frmTHabilitanteRegistro.find("#hd" + controlOrigen).val(codigoFuncionario);    
+            vpFuncionaro.closeModal('manFuncionarioModal');
+        }
+        if (formOrigen == "frmPlanManejoGeneral") {
+            ManPM.frm.find("#" + controlOrigen).val(descripcionFuncionario);
+            ManPM.frm.find("#hd" + controlOrigen).val(codigoFuncionario);
+            vpFuncionaro.closeModal('modalPersonaBuscarPM');
+        }
+    }
+    vpFuncionaro.buscarFuncionario = function () {
+        var valorBuscar = vpFuncionaro.frmBuscarFuncionario.find("#txtValor").val().trim();
+        var valBusCriterio = vpFuncionaro.frmBuscarFuncionario.find("#cboCriterio").val();
+        var formOrigen = vpFuncionaro.frmBuscarFuncionario.find("#fFormOrigen").val();
+        if (valorBuscar == "") {
+            utilSigo.toastWarning("Aviso", "Ingrese Valor a Buscar");
+            return false;
+        }
+        if (valorBuscar.length < 3) {
+            utilSigo.toastWarning("Aviso", "Ingrese mayor a dos caracteres");
+            return false;
+        }
+        switch (formOrigen)
+        {
+            case 'frmTHabilitanteRegistro': //cuando es llamado del formulario indicado                    
+                var url = urlLocalSigo + "THabilitante/Controles/buscarPersonaGeneral?busCriterio=" + valBusCriterio + "&busValor=" + valorBuscar + "&cod_pTipo=0000006";
+                    vpFuncionaro.dtFuncionario.ajax.url(url).load(function (data) {
+                        if (data.s == false) {
+                            utilSigo.toastError("Error", "Sucedio un Error al cargar registros en la tabla, Comuniquese con el Administrador");
+                            console.log(data.e);
+                        }
+                    });
+                    break;
+            case 'frmPlanManejoGeneral': //
+                var url = urlLocalSigo + "THabilitante/Controles/buscarPersonaGeneral?busCriterio=" + valBusCriterio + "&busValor=" + valorBuscar;
+                    vpFuncionaro.dtFuncionario.ajax.url(url).load(function (data) {
+                        if (data.s == false) {
+                            utilSigo.toastError("Error", "Sucedio un Error al cargar registros en la tabla, Comuniquese con el Administrador");
+                            console.log(data.e);
+                        }
+                    });
+                    break;
+        }
+        
+    }
+    vpFuncionaro.agregarFuncionario = function () {
+        $.ajax({
+            url: urlLocalSigo + "THabilitante/Controles/_Persona",
+            type: 'POST',
+            data: { tipoPersona: "", formOrigen: "frmBuscarFuncionario", controlOrigen: "", codigoPersona: "", regEstado: 1, tVentana: "", p_Tipo:"0000006" },
+            dataType: 'html',
+            success: function (data) {
+                utilSigo.unblockUIGeneral();
+                $("#funcionarioAgregarModal").html(data);
+                utilSigo.modalDraggable($("#funcionarioAgregarModal"), '.modal-header');
+                $("#funcionarioAgregarModal").modal({ keyboard: false, backdrop: 'static' });
+            },
+            beforeSend: function () {
+                utilSigo.blockUIGeneral();
+            },
+            error: function (jqXHR, error, errorThrown) {
+                utilSigo.unblockUIGeneral();
+                utilSigo.toastError("Error", "Sucedio un Error Inesperado, Comuniquese con el Administrador");
+                console.log(jqXHR.responseText);
+            }
+        });
+    }
+    vpFuncionaro.iniciarEventos=function()
+    {
+        vpFuncionaro.frmBuscarFuncionario.find("#btnFuncionarioBuscar").click(function () {
+           vpFuncionaro.buscarFuncionario();           
+        });
+        vpFuncionaro.frmBuscarFuncionario.find("#btnFuncionarioNuevo").click(function () {
+            vpFuncionaro.agregarFuncionario();
+        });
+        vpFuncionaro.frmBuscarFuncionario.find("#cboCriterio").change(function () {
+            var valSelect = $(this).val();
+            vpFuncionaro.frmBuscarFuncionario.find("#txtValor").val('');
+            switch (valSelect) {
+                case 'PERSONA': vpFuncionaro.frmBuscarFuncionario.find("#txtValor").removeAttr('onkeypress'); break;
+                case 'DNI': vpFuncionaro.frmBuscarFuncionario.find("#txtValor").attr("onkeypress", "return utilSigo.onKeyEntero(event, this);"); break;
+            }
+        });
+    }
+    vpFuncionaro.iniciarTabla = function () {       
+        vpFuncionaro.tbFuncionario =vpFuncionaro.frmBuscarFuncionario.find("#tbFuncionario");
+        vpFuncionaro.dtFuncionario = vpFuncionaro.tbFuncionario.DataTable({
+            "bServerSide": false,             
+            "bAutoWidth": false,
+            "bProcessing": true,
+            "bJQueryUI": false,
+            "bRetrieve": true,
+            "bFilter": false,
+            "aaSorting": [],
+            "bPaginate": true,
+            "bInfo": false,
+            "bLengthChange": false,          
+            "scrollY": "50vh",            
+            "scrollCollapse": true,
+            fixedHeader: true,
+            "pageLength": initSigo.pageLength,
+            "oLanguage": initSigo.oLanguage,
+            "drawCallback": initSigo.showPagination,
+            "deferLoading": 0,
+            "columns":
+                [
+                    { "data": "ind", "autoWidth": true },
+                    {
+                        "autoWidth": true, "bSortable": false, "data": "desc",
+                        "mRender": function (data, type, row) {                          
+                            var cell = '<input type="hidden" class="hdCodigo" value="' + row.cod + '" /><a class="hdDescripcion" style="cursor:pointer;color:blue;" onclick="vpFuncionaro.asignarFuncionario(this);">' + row.desc + '</a>';
+                            return cell;
+                        }
+                    },
+                    { "data": "nd", "autoWidth": true },
+                    { "data": "t", "autoWidth": true }
+                ]
+        });        
+    }
+    vpFuncionaro.closeModal = function (divModal) {       
+       
+        $("#"+divModal).modal('hide');
+        $("#" + divModal).html('');
+       $(".modal-backdrop").remove();
+        
+    }   
+    $(document).ready(function () {
+        $('[data-toggle="tooltip"]').tooltip();
+        vpFuncionaro.frmBuscarFuncionario = $("#frmBuscarFuncionario");       
+        vpFuncionaro.iniciarTabla();
+        vpFuncionaro.iniciarEventos();
+        vpFuncionaro.frmBuscarFuncionario.submit(function (e) {
+            e.preventDefault();
+            vpFuncionaro.buscarFuncionario();
+        });
+    });
+</script>
+<div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+        <div class="modal-header text-small" style="cursor:move;">
+            <h5 class="modal-title" id="hTitulo">@ViewBag.fTitulo</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar" onclick="vpFuncionaro.closeModal('manFuncionarioModal');">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body">
+            <form id="frmBuscarFuncionario" action="@Url.Action("buscarFuncionario","Controles",new { Area="THabilitante"})" method="post"> 
+                @Html.Hidden("fFormOrigen",(string)ViewBag.fFormOrigen)
+                @Html.Hidden("fControlOrigen", (string)ViewBag.fControlOrigen)               
+                <div class="form-row">
+                    <div class="col-md-4 mb-3">
+                        <select id="cboCriterio" class="form-control form-control-sm">
+                            <option value="PERSONA">Persona</option>
+                            <option value="DNI">DNI</option>
+                        </select>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <input type="text" id="txtValor" class="form-control form-control-sm" maxlength="50" />
+                    </div>
+                    <div class="col-md-2 mb-3">
+                        <a id="btnFuncionarioBuscar" style="cursor:pointer;" data-toggle="tooltip" data-placement="top" title="Buscar el registro"><span class="fa mx-2 fa-lg fa-search"></span></a>                       
+                        @if (@ViewBag.fFormOrigen != "frmPlanManejoGeneral")
+                        {
+                            <a id="btnFuncionarioNuevo" style="cursor:pointer;" data-toggle="tooltip" data-placement="top" title="Crear un nuevo registro"><span class="fa mx-2 fa-lg fa-plus"></span></a>
+                        }                        
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="col-md-12 text-center">
+                        <div class="table-responsive">
+                            <table id="tbFuncionario"   class="table table-hover table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>N°</th>
+                                        <th>Apellidos y Nombres</th>    
+                                        <th>N° Documento</th>    
+                                        <th title="N: Natural, J: Juridica">T. Persona</th>                                       
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <button type="submit" style="display:none;"></button>
+            </form>
+        </div>
+        <div class="modal-footer">
+
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="funcionarioAgregarModal"  tabindex="-1" role="dialog"></div>

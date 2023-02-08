@@ -1,0 +1,130 @@
+﻿<script>
+    $(function () {
+        $('#tbListResumenSup').DataTable();
+    })
+</script>
+<div id="divTbResumen" style="width: 100%; overflow: auto; scrollbar-base-color: none;">
+    <button class="btn btn-outline btn-info" title="Descargar Resumen" onclick="_rendReporteSup.fnExportResumen()" type="button" style="margin-right:10px"><i class="fa fa-file-excel-o"></i> </button><br /><br />
+    <table id="tbListResumenSup" class="table table-bordered table-striped-success" style="width: 100% !important; font-size:11px">
+        <thead>
+            <tr style=" text-align: center;  background-color: #dae7f5">
+                <td style="width: 2%">N°</td>
+                <td style="width: 25%">Supervisor</td>
+                <td style="width: 5%">Zoológicos</td>
+                <td style="width: 5%">Zoocriaderos</td>
+                <td style="width: 5%">Centros de rescate</td>
+                <td style="width: 5%">Centros de custodia temporal</td>
+                <td style="width: 5%">Tara</td>
+                <td style="width: 5%">Bosques secos</td>
+                <td style="width: 5%">Conseciones maderables</td>
+                <td style="width: 5%">Castaña</td>
+                <td style="width: 5%">Shiringa</td>
+                <td style="width: 5%">Forestación y reforestación</td>
+                <td style="width: 5%">Ecoturismo</td>
+                <td style="width: 5%">Conservación</td>
+                <td style="width: 5%">Fauna silvestre</td>
+                <td style="width: 5%">Predio privado</td>
+                <td style="width: 5%">Comunidad nativa</td>
+                <td style="width: 5%">Comunidad campesina</td>
+                <td style="width: 5%">Bosques locales</td>
+                <td style="width: 5%">Aguaje</td>
+                <td style="width: 5%">Agroforestales</td>
+                <td style="width: 5%">Total</td>
+            </tr>
+        </thead>
+        <tbody id="bodyTable">
+            @if (Model.listSupModResumen != null)
+            {
+                var count = 0;
+                foreach (var item in Model.listSupModResumen)
+                {
+                    <tr>
+                        <td style="width: 2%">@(++count)</td>
+                        <td style="width: 25%">'@item.SUPERVISOR'</td>
+                        <td style="width: 5%; text-align:center;">
+                            <a href="#" onclick="_rendReporteSup.fnReporteDetalle('0000001','Zoológicos','@item.SUPERVISOR', '@item.COD_SUPERVISOR')"
+                               style="cursor:pointer; font-size:14px !important;">@item.CANT_ZOOL</a>
+                        </td>
+                        <td style="width: 5%; text-align:center;">
+                            <a href="#" onclick="_rendReporteSup.fnReporteDetalle('0000002','Zoocriaderos','@item.SUPERVISOR', '@item.COD_SUPERVISOR')"
+                               style="cursor:pointer; font-size:12px !important;">@item.CANT_ZOOC</a>
+                        </td>
+                        <td style="width: 5%; text-align:center;">
+                            <a href="#" onclick="_rendReporteSup.fnReporteDetalle('0000003','Centros de Rescate','@item.SUPERVISOR', '@item.COD_SUPERVISOR')"
+                               style="cursor:pointer; font-size:12px !important;">@item.CANT_CRES</a>
+                        </td>
+                        <td style="width: 5%; text-align:center;">
+                            <a href="#" onclick="_rendReporteSup.fnReporteDetalle('0000004','Centros de Custodia Temporal','@item.SUPERVISOR', '@item.COD_SUPERVISOR')"
+                               style="cursor:pointer; font-size:12px !important;">@item.CANT_CCT</a>
+                        </td>
+                        <td style="width: 5%; text-align:center;">
+                            <a href="#" onclick="_rendReporteSup.fnReporteDetalle('0000005','Tara','@item.SUPERVISOR', '@item.COD_SUPERVISOR')"
+                               style="cursor:pointer; font-size:12px !important;">@item.CANT_TARA</a>
+                        </td>
+                        <td style="width: 5%; text-align:center;">
+                            <a href="#" onclick="_rendReporteSup.fnReporteDetalle('0000006','Bosques Secos','@item.SUPERVISOR', '@item.COD_SUPERVISOR')"
+                               style="cursor:pointer; font-size:12px !important;">@item.CANT_BS</a>
+                        </td>
+                        <td style="width: 5%; text-align:center;">
+                            <a href="#" onclick="_rendReporteSup.fnReporteDetalle('0000007','Concesiones Maderables','@item.SUPERVISOR', '@item.COD_SUPERVISOR')"
+                               style="cursor:pointer; font-size:12px !important;">@item.CANT_CMADE</a>
+                        </td>
+                        <td style="width: 5%; text-align: center;">
+                            <a href="#" onclick="_rendReporteSup.fnReporteDetalle('0000008','Castaña','@item.SUPERVISOR', '@item.COD_SUPERVISOR')"
+                               style="cursor:pointer; font-size:12px !important;">@item.CANT_NMCAST</a>
+                        </td>
+                        <td style="width: 5%; text-align: center;">
+                            <a href="#" onclick="_rendReporteSup.fnReporteDetalle('0000009','Shiringa','@item.SUPERVISOR', '@item.COD_SUPERVISOR')"
+                               style="cursor:pointer; font-size:12px !important;">@item.CANT_NMSHIR</a>
+                        </td>
+                        <td style="width: 5%; text-align:center;">
+                            <a href="#" onclick="_rendReporteSup.fnReporteDetalle('0000010','Forestación y Reforestación','@item.SUPERVISOR', '@item.COD_SUPERVISOR')"
+                               style="cursor:pointer; font-size:12px !important;">@item.CANT_FYR</a>
+                        </td>
+                        <td style="width: 5%; text-align:center;">
+                            <a href="#" onclick="_rendReporteSup.fnReporteDetalle('0000011','Ecoturismo','@item.SUPERVISOR', '@item.COD_SUPERVISOR')"
+                               style="cursor:pointer; font-size:12px !important;">@item.CANT_ECO</a>
+                        </td>
+                        <td style="width: 5%; text-align:center;">
+                            <a href="#" onclick="_rendReporteSup.fnReporteDetalle('0000012','Conservación','@item.SUPERVISOR', '@item.COD_SUPERVISOR')"
+                               style="cursor:pointer; font-size:12px !important;">@item.CANT_CONS</a>
+                        </td>
+                        <td style="width: 5%; text-align:center;">
+                            <a href="#" onclick="_rendReporteSup.fnReporteDetalle('0000013','Fauna Silvestre','@item.SUPERVISOR', '@item.COD_SUPERVISOR')"
+                               style="cursor:pointer; font-size:12px !important;">@item.CANT_CFAUNA</a>
+                        </td>
+                        <td style="width: 5%; text-align: center;">
+                            <a href="#" onclick="_rendReporteSup.fnReporteDetalle('0000014','Predio Privado','@item.SUPERVISOR', '@item.COD_SUPERVISOR')"
+                               style="cursor:pointer; font-size:12px !important;">@item.CANT_PP</a>
+                        </td>
+                        <td style="width: 5%; text-align: center;">
+                            <a href="#" onclick="_rendReporteSup.fnReporteDetalle('0000015','Comunidad Nativa','@item.SUPERVISOR', '@item.COD_SUPERVISOR')"
+                               style="cursor:pointer; font-size:12px !important;">@item.CANT_CCNN</a>
+                        </td>
+                        <td style="width: 5%; text-align: center;">
+                            <a href="#" onclick="_rendReporteSup.fnReporteDetalle('0000016','Comunidad Campesina','@item.SUPERVISOR', '@item.COD_SUPERVISOR')"
+                               style="cursor:pointer; font-size:12px !important;">@item.CANT_CCCC</a>
+                        </td>
+                        <td style="width: 5%; text-align: center;">
+                            <a href="#" onclick="_rendReporteSup.fnReporteDetalle('0000017','Bosques Locales','@item.SUPERVISOR', '@item.COD_SUPERVISOR')"
+                               style="cursor:pointer; font-size:12px !important;">@item.CANT_BL</a>
+                        </td>
+                        <td style="width: 5%; text-align: center;">
+                            <a href="#" onclick="_rendReporteSup.fnReporteDetalle('0000018','Aguaje','@item.SUPERVISOR', '@item.COD_SUPERVISOR')"
+                               style="cursor:pointer; font-size:12px !important;">@item.CANT_NMAGU</a>
+                        </td>
+                        <td style="width: 5%; text-align: center;">
+                            <a href="#" onclick="_rendReporteSup.fnReporteDetalle('0000019','Sist. Agroforestales','@item.SUPERVISOR', '@item.COD_SUPERVISOR')"
+                               style="cursor:pointer; font-size:12px !important;">@item.CANT_SISAG</a>
+                        </td>
+                        <td style="width: 5%; text-align: center;">
+                            <a href="#" onclick="_rendReporteSup.fnReporteDetalle('','TODOS','@item.SUPERVISOR', '@item.COD_SUPERVISOR')"
+                               style="cursor:pointer; font-size:12px !important;">@item.TOTALDOUBLE</a>
+                        </td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+    <br />
+</div>

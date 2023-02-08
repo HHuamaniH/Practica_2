@@ -1,0 +1,379 @@
+﻿@model  CapaEntidad.ViewModel.VM_InformeLegal
+@{
+    Layout = null;
+}
+<script type="text/javascript">
+
+    var _renderArchivo = {};
+    _renderArchivo.fnSelectRecom = function () {
+        _renderArchivo.frm.find("#divMandato").hide();
+        _renderArchivo.frm.find("#divMedidaCorrectiva").hide();
+
+        if (_renderArchivo.frm.find("#chkMandato").is(':checked')) {
+            _renderArchivo.frm.find("#divMandato").show();
+        }
+
+        if (_renderArchivo.frm.find("#chkMedidasCorrectivas").is(':checked')) {
+            _renderArchivo.frm.find("#divMedidaCorrectiva").show();
+        }
+
+    }
+    _renderArchivo.fnViewModalConsulta = function () {
+        utilSigo.modalDraggable(_renderArchivo.frm.find("#mdlEspecie"), '.modal-header');
+        _renderArchivo.frm.find("#mdlEspecie").modal({ keyboard: true, backdrop: 'static' });
+    }
+
+    _renderArchivo.fnAdd = function () {
+        var codEspecie = _renderArchivo.frm.find("#ddlEspecies").val();
+        var especie = _renderArchivo.frm.find("#ddlEspecies option:selected").text();
+        var volumen = _renderArchivo.frm.find("#txtVolumenEspecie").val();
+        var arboles = _renderArchivo.frm.find("#txtNroArboles").val();
+        var observacion = _renderArchivo.frm.find("#txtObservacionesArch").val();
+        $.ajax({
+            url: '@Url.Action("agregarEspeciesMC","InformeLegal")',
+            type: 'POST',
+            datatype: "json",
+            traditional: true,
+            data: { 'codEspecie': codEspecie, 'especie': especie, 'volumen': volumen, 'arboles': arboles, 'observaciones': observacion },
+            success: function (data) {
+             $('#divListaEspecies').html(data);
+            }
+         });
+    }
+
+    _renderArchivo.ItemExcelImportarVentana = function (e, objeto) {
+
+        var idFile = $(objeto).attr("id");
+        //var ruta = ManPOA.controller + "/ImportarDataExcel";
+        _renderArchivo.fileSelectHandler(e, idFile);
+    }
+
+    _renderArchivo.fileSelectHandler = function (e, control) {
+
+        if (e.dataTransfer != undefined &&
+            e.dataTransfer.files != undefined) {
+        }
+        var files = e.target.files || e.dataTransfer.files;
+        if (files != undefined && files.length > 0) {
+            this.uploadFileToServer(files[0]);
+        }
+    }
+
+     _renderArchivo.uploadFileToServer = function (file) {
+        var formdata = new FormData();
+        formdata.append(file.name, file);
+        $.ajax({
+            url:  '@Url.Action("ImportarEspecieMC","InformeLegal")',
+            type: 'POST',
+            data: formdata,
+            contentType: false,
+            dataType: 'json',
+            processData: false,
+            success: function (data) {
+                alert('se actualizaron los registros');
+                _renderArchivo.fnAdd();
+            },
+            error: function (jqXHR, error, errorThrown) {
+                utilSigo.unblockUIGeneral();
+                utilSigo.toastError("Error", initSigo.MessageError);
+                console.log(jqXHR.responseText);
+            }
+        });
+    }
+
+    $(document).ready(function () {
+        _renderArchivo.frm = $("#frmArchivo");
+        _renderArchivo.fnSelectRecom();
+    });
+
+    function isNumberKey(evt){
+        var charCode = (evt.which) ? evt.which : evt.keyCode
+        if (charCode > 31 && (charCode < 48 || charCode > 57))
+            return false;
+        return true;
+    }
+</script>
+<div id="frmArchivo">
+    <div class="form-row">
+        <div class="form-group col-md-4">
+            <label for="chkNuevaSupervision" class="text-small">Nueva Supervision</label>
+        </div>
+        <div class="form-group col-md-6">
+            @Html.CheckBoxFor(m => m.chkNuevaSupervision, new { @class = "form-check-input", style = "width:15px;height:16px;" })
+        </div>
+        <div class="form-group col-md-2">
+        </div>
+    </div>
+
+    <div class="form-row">
+        <div class="form-group col-md-4">
+            <label for="chkEvidencia" class="text-small">Evidencia de irregularidades cuya sanción no es competencia de OSINFOR</label>
+        </div>
+        <div class="form-group col-md-6">
+            @Html.CheckBoxFor(m => m.chkEvidencia, new { @class = "form-check-input", style = "width:15px;height:16px;" })
+        </div>
+        <div class="form-group col-md-2">
+        </div>
+    </div>
+
+    <div class="form-row">
+        <div class="form-group col-md-4">
+            <label for="chkSinIndicios" class="text-small">Sin indicios de infracción</label>
+        </div>
+        <div class="form-group col-md-6">
+            @Html.CheckBoxFor(m => m.chkSinIndicios, new { @class = "form-check-input", style = "width:15px;height:16px;" })
+        </div>
+        <div class="form-group col-md-2">
+        </div>
+    </div>
+
+    <div class="form-row">
+        <div class="form-group col-md-4">
+            <label for="chkDeficienciaNot" class="text-small">Deficiente notificación</label>
+        </div>
+        <div class="form-group col-md-6">
+            @Html.CheckBoxFor(m => m.chkDeficienciaNot, new { @class = "form-check-input", style = "width:15px;height:16px;" })
+        </div>
+        <div class="form-group col-md-2">
+        </div>
+    </div>
+
+    <div class="form-row">
+        <div class="form-group col-md-4">
+            <label for="chkDeficienciaTec" class="text-small">Deficiencia técnica</label>
+        </div>
+        <div class="form-group col-md-6">
+            @Html.CheckBoxFor(m => m.chkDeficienciaTec, new { @class = "form-check-input", style = "width:15px;height:16px;" })
+
+        </div>
+        <div class="form-group col-md-2">
+        </div>
+    </div>
+
+    <div class="form-row">
+        <div class="form-group col-md-4">
+            <label for="chkFallecimientoTitular" class="text-small">Fallecimiento Titular</label>
+        </div>
+        <div class="form-group col-md-6">
+            @Html.CheckBoxFor(m => m.chkFallecimientoTitular, new { @class = "form-check-input", style = "width:15px;height:16px;" })
+
+        </div>
+        <div class="form-group col-md-2">
+        </div>
+    </div>
+
+
+    <div class="form-row">
+        <div class="form-group col-md-4">
+            <label for="txtOtros" class="text-small">Otros</label>
+        </div>
+        <div class="form-group col-md-6">
+            @Html.TextAreaFor(m => m.txtOtros, 3, 1, new { @class = "form-control form-control-sm" })
+        </div>
+        <div class="form-group col-md-2">
+        </div>
+    </div>
+
+
+    <div class="form-row">
+        <div class="form-group col-md-4">
+            <label for="chkMedidasCorrectivas" class="text-small">
+                Medidas correctivas
+            </label>
+        </div>
+        <div class="form-group col-md-6">
+            @Html.CheckBoxFor(m => m.chkMedidasCorrectivas, new
+            {
+                @class = "form-check-input",
+                style = "width:15px;height:16px;",
+                @onchange = "_renderArchivo.fnSelectRecom()"
+            })
+
+        </div>
+        <div class="form-group col-md-2">
+        </div>
+    </div>
+
+    <div id="divMedidaCorrectiva" style="display:none;">
+        <div class="form-row">
+            <div class="form-group col-md-4">
+            </div>
+            <div class="form-group col-md-6">
+                @Html.TextAreaFor(m => m.txtDescMedidadCorrectivas, 3, 1, new { @class = "form-control form-control-sm" })
+            </div>
+            <div class="form-group col-md-2">
+            </div>
+        </div>
+
+        <div class="form-row">
+            <div class="form-group col-md-4">
+                <label class="text-small">Plazo de implementación</label>
+            </div>
+            <div class="form-group col-md-2">
+                <label for="txtImplMCDias" class="text-small">Días:</label>
+                @Html.TextBoxFor(m => m.txtImplMCDias, new { @class = "form-control form-control-sm", onkeypress = "return isNumberKey(event)" })
+            </div>
+            <div class="form-group col-md-2">
+                <label for="txtImplMCMeses" class="text-small"> Meses: </label>
+                @Html.TextBoxFor(m => m.txtImplMCMeses, new { @class = "form-control form-control-sm", onkeypress = "return isNumberKey(event)" })
+            </div>
+            <div class="form-group col-md-2">
+                <label for="txtImplMCAnio" class="text-small"> Años: </label>
+                @Html.TextBoxFor(m => m.txtImplMCAnio, new { @class = "form-control form-control-sm", onkeypress = "return isNumberKey(event)" })
+            </div>
+            <div class="form-group col-md-2">
+            </div>
+        </div>
+
+        <div class="form-row">
+            <div class="form-group col-md-4">
+                <label class="text-small"> Plazo para presentar el informe de implementación</label>
+            </div>
+            <div class="form-group col-md-2">
+                <label for="txtInfMCDia" class="text-small">Días:</label>
+                @Html.TextBoxFor(m => m.txtInfMCDia, new { @class = "form-control form-control-sm", onkeypress = "return isNumberKey(event)" })
+            </div>
+            <div class="form-group col-md-2">
+                <label for="txtInfMCMeses" class="text-small">Meses:</label>
+                @Html.TextBoxFor(m => m.txtInfMCMeses, new { @class = "form-control form-control-sm", onkeypress = "return isNumberKey(event)" })
+            </div>
+            <div class="form-group col-md-2">
+                <label for="txtInfMCAnio" class="text-small">Años:</label>
+                @Html.TextBoxFor(m => m.txtInfMCAnio, new { @class = "form-control form-control-sm", onkeypress = "return isNumberKey(event)" })
+            </div>
+            <div class="form-group col-md-2">
+            </div>
+        </div>
+
+        <div class="form-row">
+            <div class="form-group col-md-12">
+                <table style="width:100%;margin:0px !important;" class="table table-hover table-bordered">
+                    <thead>
+                        <tr>
+                            <th class="text-sm-left">
+                                <div class="form-inline">
+                                    <i class="fa mx-2 fa-lg fa-file-o" style="cursor:pointer;" onclick="_renderArchivo.fnViewModalConsulta();" data-toggle="tooltip" data-placement="top" title="Nuevo"></i>
+                                    <a href="@Url.Content("~/Archivos/Plantilla/EspeciesMedidaCorrectiva.xlsx")" type="button">
+                                        <i class="fa fa-cloud-download"></i>&nbsp;Plantilla Especies
+                                    </a>
+                                    <label style="cursor:pointer;" class="fa mx-2 fa-lg fa-file-excel-o" title="Importar Archivo" data-toggle="tooltip" title="importar especies">
+                                        <input type="file" id="fileselect" name="fileselect" style="display:none" size="60"
+                                               onchange="_renderArchivo.ItemExcelImportarVentana(event,this)">
+                                    </label>
+                                    <strong>Especies con medidas correctivas</strong>
+                                </div>
+                            </th>
+                        </tr>
+                    </thead>
+                </table>
+            </div>
+        </div>
+
+        <div class="form-group col-md-12" id="divListaEspecies">
+            @Html.Partial("~/Areas/Fiscalizacion/Views/InformeLegal/Shared/_renderListaEspecies.cshtml", Model)
+        </div>
+
+    </div>
+
+    <div class="form-row">
+        <div class="form-group col-md-4">
+            <label class="text-small">
+                Mandato
+            </label>
+        </div>
+        <div class="form-group col-md-6">
+            @Html.CheckBoxFor(m => m.chkMandato, new
+            {
+                @class = "form-check-input",
+                style = "width:15px;height:16px;",
+                @onchange = "_renderArchivo.fnSelectRecom()"
+            })
+        </div>
+        <div class="form-group col-md-2">
+        </div>
+    </div>
+
+    <div class="form-row" id="divMandato" style="display:none;">
+        <div class="form-group col-md-4">
+        </div>
+        <div class="form-group col-md-6">
+            @Html.TextAreaFor(m => m.txtDescMandato, 3, 1, new { @class = "form-control form-control-sm" })
+        </div>
+        <div class="form-group col-md-2">
+        </div>
+    </div>
+
+    <!-- modal de especies-->
+    <div class="modal fade hide" id="mdlEspecie" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header text-small" style="cursor:move;">
+                    Especie Medida Correctiva - Nuevo Registro
+                    <i class="fa fa-close" style="cursor:pointer;" data-dismiss="modal" aria-label="Close"></i>
+                </div>
+                <div class="modal-body" style="padding:0px;">
+                    <div id="frmEspecie">
+                        <div class="row">
+                            <div class="col-sm-1"></div>
+                            <div class="col-sm-10">
+                                <div class="form-row">
+                                    <div class="form-group col-md-4">
+                                        <label for="txtIdEspecie" class="text-small">Especie</label>
+                                    </div>
+                                    <div class="form-group col-md-8">
+                                        <div style="margin-top:7px;">
+                                            <div class="form-check form-check-inline">
+                                                @Html.DropDownListFor(m => m.txtIdEspecie, new SelectList(Model.listaEspeciesCombo, "Value", "Text", Model.listaEspeciesCombo),
+                                                        new { @class = "form-control form-control-sm", @id = "ddlEspecies", @onchange = "_renderRecomendaciones.fncArticulos()" })
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="form-row">
+                                    <div class="form-group col-md-4">
+                                        <label class="text-small">Volumen movilizado sin autorizacion (m3)</label>
+                                    </div>
+                                    <div class="form-group col-md-8">
+                                        <div style="margin-top:7px;">
+                                            <input type="text" class="form-control form-control-sm" id="txtVolumenEspecie">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="form-row">
+                                    <div class="form-group col-md-4">
+                                        <label class="text-small">Nro de árboles a reponer (reforestar) y/o reemplazar</label>
+                                    </div>
+                                    <div class="form-group col-md-8|">
+                                        <div style="margin-top:7px;">
+                                            <input type="text" class="form-control form-control-sm" id="txtNroArboles">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="form-row">
+                                    <div class="form-group col-md-4">
+                                        <label class="text-small">Observación</label>
+                                    </div>
+                                    <div class="form-group col-md-8">
+                                        <div style="margin-top:7px;">
+                                            <textarea class="form-control form-control-sm" aria-label="With textarea" id="txtObservacionesArch"></textarea>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-1"></div>
+
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" id="btnAddEspecies" class="btn btn-info btn-sm" onclick="_renderArchivo.fnAdd()"> Agregar Especies</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

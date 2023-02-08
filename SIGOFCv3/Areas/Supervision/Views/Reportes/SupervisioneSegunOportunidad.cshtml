@@ -1,0 +1,394 @@
+﻿@model CapaEntidad.ViewModel.VM_ReporteInformacion
+@{
+    ViewBag.Title = "SupervisioneSegunOportunidad";
+    Layout = "~/Views/Shared/_LayoutMain.cshtml";
+}
+
+<div class="container-fluid">
+    <div class="card">
+        <div class="card-header text-right">
+            <span id="lbTituloGeneral">  Reporte de Supervisiones Según Oportunidad</span>
+        </div>
+        <div class="card-body">
+            <div class="card-header text-sm-center">
+                <span id="lbSubTituloGeneral">  Opciones de busqueda</span>
+            </div>
+            <div id="dvContenedorFiltro" class="card" style="margin-bottom:10px;">
+                <div id="dvFiltro" class="card-body">
+                    <form id="frmReporteGeneral" action="@Url.Action("_SupervisioneSegunOportunidadResumen", "Reportes", new { Area= "Supervision" })">
+                        <div class="form-row">
+                            <div id="dvFiltroAnio" class="form-group col-md-1">
+                                <label for="lblChkAnioId" class="text-small">Año</label>
+                                <div id="dvChkAnioAll" class="custom-control custom-checkbox">
+                                    @Html.CheckBox("chkAnioAll", new { @class = "custom-control-input" })
+                                    <label for="chkAnioAll" class="custom-control-label">Todos</label>
+                                </div>
+                                <div style="max-height:150px;overflow:auto;">
+                                    @Html.EditorFor(m => m.lstChkAnio)
+                                    @Html.HiddenFor(m => m.lstChkAnioId)
+                                </div>
+                            </div>
+                            <div id="dvFiltroModalidad" class="form-group col-md-2">
+                                <label for="lblChkModalidadId" class="text-small">Modalidad</label>
+                                <div class="custom-control custom-checkbox">
+                                    @Html.CheckBox("chkModalidadAll", new { @class = "custom-control-input" })
+                                    <label for="chkModalidadAll" class="custom-control-label">Todos</label>
+                                </div>
+                                <div style="max-height:150px;overflow:auto;">
+                                    @Html.EditorFor(m => m.lstChkModalidad)
+                                    @Html.HiddenFor(m => m.lstChkModalidadId)
+                                </div>
+                            </div>
+                            <div id="dvFiltroRegion" class="form-group col-md-2">
+                                <label for="lblChkRegionId" class="text-small">Región</label>
+                                <div class="custom-control custom-checkbox">
+                                    @Html.CheckBox("chkRegionAll", new { @class = "custom-control-input" })
+                                    <label for="chkRegionAll" class="custom-control-label">Todos</label>
+                                </div>
+                                <div style="max-height:150px;overflow:auto;">
+                                    @Html.EditorFor(m => m.lstChkRegion)
+                                    @Html.HiddenFor(m => m.lstChkRegionId)
+                                </div>
+                            </div>
+                            <div id="dvFiltroDL" class="form-group col-md-2">
+                                <label for="lblChkSubDireccionId" class="text-small">Sub Dirección de Linea</label>
+                                <div class="custom-control custom-checkbox">
+                                    @Html.CheckBox("chkkSubDireccionAll", new { @class = "custom-control-input" })
+                                    <label for="chkkSubDireccionAll" class="custom-control-label">Todos</label>
+                                </div>
+                                <div style="max-height:150px;overflow:auto;">
+                                    @Html.EditorFor(m => m.lstChkSubDireccion)
+                                    @Html.HiddenFor(m => m.lstChkSubDireccionId)
+                                </div>
+                            </div>
+                            <div id="dvFiltroOD" class="form-group col-md-2">
+                                <label for="lblChkOdId" class="text-small">Oficina Desconcentrada</label>
+                                <div class="custom-control custom-checkbox">
+                                    @Html.CheckBox("chkOdAll", new { @class = "custom-control-input" })
+                                    <label for="chkOdAll" class="custom-control-label">Todos</label>
+                                </div>
+                                <div style="max-height:150px;overflow:auto;">
+                                    @Html.EditorFor(m => m.lstChkOd)
+                                    @Html.HiddenFor(m => m.lstChkOdId)
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                    <button type="button" id="btnConsultarReporte" class="btn btn-primary btn-sm" onclick="_reporteGeneral.fnBuscar()">Consultar</button>
+                </div>
+                <div class="card-body" style="padding-top:0px;padding-bottom:0px;">
+                    <div class="form-row">
+                        <div id="dvHideFiltro" class="form-group col-md-12" style="text-align:center; margin:0px;cursor:pointer;" title="Ocultar Filtros">
+                            <img alt="Ocultar Filtros" src="~/Content/images/General/flecha-contraer.png" width="50" height="30" />
+                        </div>
+                        <div id="dvShowFiltro" class="form-group col-md-12" style="text-align:center; margin:0px;cursor:pointer; display:none;" title="Mostrar Filtros">
+                            <img alt="Mostrar Filtros" src="~/Content/images/General/flecha-ampliar.png" width="50" height="30" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body" id="containerLoad">
+
+            </div>
+            <div class="card-body" id="containerLoadGrafico">
+                <div class="form-row">
+                    <div class="col-md-12">
+                        <canvas id="cnvPieChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="~/Scripts/chart/Chart.min.js"></script>
+@*<script src="~/Scripts/chart/custom.js"></script>*@
+@*<script src="https://cdn.jsdelivr.net/npm/chart.js@2.7.3/dist/Chart.min.js"></script>*@
+<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@0.7.0"></script>
+<script type="text/javascript">
+    
+    let _reporteGeneral = {
+
+        filterAnioClearAllCheck: () => {
+            for (var i = 1; i <= _reporteGeneral.frm.find("[id*=lstChkAnio]").length; i++) {
+                if (i % 2 == 0)
+                    _reporteGeneral.frm.find("[id*=lstChkAnio]")[i - 1].checked = false;
+            }
+        },
+        filterAnioGetAllCheck: () => {
+            let selectAnio = "";
+            for (var i = 1; i <= _reporteGeneral.frm.find("[id*=lstChkAnio]").length; i++) {
+                if (i % 2 == 0) {
+                    if (_reporteGeneral.frm.find("[id*=lstChkAnio]")[i - 1].checked) {
+                        selectAnio += selectAnio == "" ? "" : ",";
+                        selectAnio += _reporteGeneral.frm.find("[id*=lstChkAnio]")[i - 2].value;
+                    }
+                }
+            }
+            _reporteGeneral.frm.find("#lstChkAnioId").val(selectAnio);
+           
+        },
+        filterOdClearAllCheck: () => {
+            for (var i = 1; i <= _reporteGeneral.frm.find("[id*=lstChkOd]").length; i++) {
+                if (i % 2 == 0)
+                    _reporteGeneral.frm.find("[id*=lstChkOd]")[i - 1].checked = false;
+            }
+        },
+        filterOdGetAllCheck: () => {
+            let selectOd = "";
+            for (var i = 1; i <= _reporteGeneral.frm.find("[id*=lstChkOd]").length; i++) {
+                if (i % 2 == 0) {
+                    if (_reporteGeneral.frm.find("[id*=lstChkOd]")[i - 1].checked) {
+                        selectOd += selectOd == "" ? "" : ",";
+                        selectOd += _reporteGeneral.frm.find("[id*=lstChkOd]")[i - 2].value;
+                    }
+                }
+            }
+            _reporteGeneral.frm.find("#lstChkOdId").val(selectOd);
+        },
+        filterModalidadGetAllCheck: () => {
+            let selectOd = "";
+            for (var i = 1; i <= _reporteGeneral.frm.find("[id*=lstChkModalidad]").length; i++) {
+                if (i % 2 == 0) {
+                    if (_reporteGeneral.frm.find("[id*=lstChkModalidad]")[i - 1].checked) {
+                        selectOd += selectOd == "" ? "" : ",";
+                        selectOd += _reporteGeneral.frm.find("[id*=lstChkModalidad]")[i - 2].value;
+                    }
+                }
+            }
+            _reporteGeneral.frm.find("#lstChkModalidadId").val(selectOd);
+        },
+        filterRegionGetAllCheck: () => {
+            let selectOd = "";
+            for (var i = 1; i <= _reporteGeneral.frm.find("[id*=lstChkRegion]").length; i++) {
+                if (i % 2 == 0) {
+                    if (_reporteGeneral.frm.find("[id*=lstChkRegion]")[i - 1].checked) {
+                        selectOd += selectOd == "" ? "" : ",";
+                        selectOd += _reporteGeneral.frm.find("[id*=lstChkRegion]")[i - 2].value;
+                    }
+                }
+            }
+            _reporteGeneral.frm.find("#lstChkRegionId").val(selectOd);
+        },
+        filterSubDireccionGetAllCheck: () => {
+            let selectOd = "";
+            for (var i = 1; i <= _reporteGeneral.frm.find("[id*=lstChkSubDireccion]").length; i++) {
+                if (i % 2 == 0) {
+                    if (_reporteGeneral.frm.find("[id*=lstChkSubDireccion]")[i - 1].checked) {
+                        selectOd += selectOd == "" ? "" : ",";
+                        selectOd += _reporteGeneral.frm.find("[id*=lstChkSubDireccion]")[i - 2].value;
+                    }
+                }
+            }
+            _reporteGeneral.frm.find("#lstChkSubDireccionId").val(selectOd);
+        },
+        fnBuscar: () => {
+            //let anio = _reporteGeneral.frm.find("#lstChkAnioId").val();
+            //let od = _reporteGeneral.frm.find("#lstChkOdId").val();
+            //if (anio == "") {
+            //    utilSigo.toastWarning("Aviso", "Seleccione año de consulta");
+            //    return false;
+            //}
+            //if (od == "") {
+            //    utilSigo.toastWarning("Aviso", "Seleccione OD de consulta");
+            //    return false;
+            //}
+            let frm = $("#frmReporteGeneral");
+            var model = frm.serializeObject();
+            console.log(model);
+            console.log(frm.attr("action"));
+           // return false;
+            $.ajax({
+                url: frm.attr("action"),
+                type: 'POST',
+                async: false,
+                data: JSON.stringify(model),
+                contentType: 'application/json; charset=utf-8',          
+                dataType: 'html',
+                beforeSend: utilSigo.beforeSendAjax,
+                error: utilSigo.errorAjax,
+                complete: utilSigo.completeAjax,
+                success: function (data) {                  
+                    $("#containerLoad").html('');
+                    $("#containerLoad").append(data);
+                    _reporteGeneral.fnObtenerResumen();
+                },
+                statusCode: {
+                    203: () => { utilSigo.unblockUIGeneral(); utilSigo.toastInfo("Aviso", "El usuario perdio la sesión. Vuelva ingresar al sistema"); }
+                }
+            });
+        },
+        fnObtenerResumen: () => {          
+            $.ajax({
+                url: urlLocalSigo + "Supervision/Reportes/ListReporteResumenOportunidad",
+                type: 'GET',
+                data: {},
+                dataType: 'json',
+                beforeSend: utilSigo.beforeSendAjax,
+                complete: utilSigo.completeAjax,
+                error: utilSigo.errorAjax,
+                success: function (data) {                  
+                    if (data.success) {
+                        _reporteGeneral.fnGraficar(data.data);
+                    }
+                    else {
+                        utilSigo.toastWarning("Aviso", data.msj);
+                    }
+                }
+            });
+        },
+        fnGraficar: (data) => {
+            let iantes = 0, idurante = 0, idespues = 0, total = 0;
+            for (let i = 0; i < data.length; i++) {
+                iantes += parseFloat(data[i].NPLANSUPERVISADO_ANTES);
+                idurante += parseFloat(data[i].NPLANSUPERVISADO_DURANTE);
+                idespues += parseFloat(data[i].NPLANSUPERVISADO_DESPUES);
+                total += parseFloat(data[i].NPLANSUPERVISADO);
+            }
+            let ctx = document.getElementById("cnvPieChart").getContext('2d');
+            let dataGrafico = {
+                datasets: [{
+                    backgroundColor: ["#418cf0", "#fcb441", "#e0400a"],
+                    data: [parseFloat((iantes / total)*100).toFixed(2), parseFloat((idurante / total)*100).toFixed(2), parseFloat((idespues/total)*100).toFixed(2)]
+                }],
+
+                // These labels appear in the legend and in the tooltips when hovering different arcs
+                labels: [
+                    'Antes de la extracción',
+                    'Durante la extracción',
+                    'Despues del aprovechamiento'
+                ]
+            };
+            var options= {
+                title: {
+                    display: true,
+                    text: 'Oportunidad de las supervisiones realizadas en el año',
+                    position:'top'
+                },
+                plugins: {
+                    datalabels: {
+                        color: "#0e0e0e",
+                        formatter: (value) => {
+                            return value + '%';
+                        },
+                        font: {
+                            weight: 'bold',
+                            size: 16,
+                        }
+                    }
+                }
+            };
+            var myPieChart = new Chart(ctx, {
+                type: 'pie',
+                data: dataGrafico,
+                options: options
+            });
+        }
+    };
+    $(document).ready(function () {
+        //Mostrar y ocultar filtros
+        $("#dvHideFiltro").click(function () {
+            $("#dvHideFiltro").hide();
+            $("#dvShowFiltro").show();
+            $("#dvFiltro").hide();
+        });
+        $("#dvShowFiltro").click(function () {
+            $("#dvHideFiltro").show();
+            $("#dvShowFiltro").hide();
+            $("#dvFiltro").show();
+        });
+        //Filtro: Año
+        _reporteGeneral.frm = $("#frmReporteGeneral");
+        _reporteGeneral.frm.find("#chkAnioAll").change(function () {
+            for (var i = 1; i <= _reporteGeneral.frm.find("[id*=lstChkAnio]").length; i++) {
+                if (i % 2 == 0)
+                    _reporteGeneral.frm.find("[id*=lstChkAnio]")[i - 1].checked = $(this).is(":checked");
+            }
+            _reporteGeneral.filterAnioGetAllCheck();
+           // _reporteGeneral.filter_lstChkOdId_change();
+        });
+
+        _reporteGeneral.frm.find("[id*=lstChkAnio]").change(function () {
+            _reporteGeneral.filterAnioGetAllCheck();
+           // _reporteGeneral.filter_lstChkOdId_change();
+
+            if (!$(this).is(":checked")) _reporteGeneral.frm.find("#chkAnioAll").prop("checked", "");
+        });
+        //Filtro: OD
+        _reporteGeneral.frm.find("#chkOdAll").change(function () {
+            for (var i = 1; i <= _reporteGeneral.frm.find("[id*=lstChkOd]").length; i++) {
+                if (i % 2 == 0)
+                    _reporteGeneral.frm.find("[id*=lstChkOd]")[i - 1].checked = $(this).is(":checked");
+            }
+            _reporteGeneral.filterOdGetAllCheck();
+            // _reporteGeneral.filter_lstChkOdId_change();
+        });
+
+        _reporteGeneral.frm.find("[id*=lstChkOd]").change(function () {
+            //var isChecked = $(this).is(":checked");
+            //_reporteGeneral.filterOdClearAllCheck();
+
+            //if (isChecked) {
+            //    $(this).prop("checked", "checked");
+            //} else {
+            //    $(this).prop("checked", "");
+            //    _reporteGeneral.frm.find("#chkOdAll").prop("checked", "");
+            //}
+
+            _reporteGeneral.filterOdGetAllCheck();
+            if (!$(this).is(":checked")) _reporteGeneral.frm.find("#chkOdAll").prop("checked", "");
+            // _reporteGeneral.filter_lstChkOdId_change();
+
+            // if (!$(this).is(":checked")) _reporteGeneral.frm.find("#chkOdAll").prop("checked", "");
+        });
+        //Filtro: Modalidad
+        _reporteGeneral.frm.find("#chkModalidadAll").change(function () {
+            for (var i = 1; i <= _reporteGeneral.frm.find("[id*=lstChkModalidad]").length; i++) {
+                if (i % 2 == 0)
+                    _reporteGeneral.frm.find("[id*=lstChkModalidad]")[i - 1].checked = $(this).is(":checked");
+            }
+            _reporteGeneral.filterModalidadGetAllCheck();
+            
+        });
+
+        _reporteGeneral.frm.find("[id*=lstChkModalidad]").change(function () {   
+            _reporteGeneral.filterModalidadGetAllCheck();
+            if (!$(this).is(":checked")) _reporteGeneral.frm.find("#chkModalidadAll").prop("checked", "");
+          
+        });
+        //Filtro: Region
+        _reporteGeneral.frm.find("#chkRegionAll").change(function () {
+            for (var i = 1; i <= _reporteGeneral.frm.find("[id*=lstChkRegion]").length; i++) {
+                if (i % 2 == 0)
+                    _reporteGeneral.frm.find("[id*=lstChkRegion]")[i - 1].checked = $(this).is(":checked");
+            }
+            _reporteGeneral.filterRegionGetAllCheck();
+
+        });
+
+        _reporteGeneral.frm.find("[id*=lstChkRegion]").change(function () {
+            _reporteGeneral.filterRegionGetAllCheck();
+            if (!$(this).is(":checked")) _reporteGeneral.frm.find("#chkRegionAll").prop("checked", "");
+
+        });
+        //Filtro: Sub dirección
+        _reporteGeneral.frm.find("#chkkSubDireccionAll").change(function () {
+            for (var i = 1; i <= _reporteGeneral.frm.find("[id*=lstChkSubDireccion]").length; i++) {
+                if (i % 2 == 0)
+                    _reporteGeneral.frm.find("[id*=lstChkSubDireccion]")[i - 1].checked = $(this).is(":checked");
+            }
+            _reporteGeneral.filterSubDireccionGetAllCheck();
+
+        });
+
+        _reporteGeneral.frm.find("[id*=lstChkSubDireccion]").change(function () {
+            _reporteGeneral.filterSubDireccionGetAllCheck();
+            if (!$(this).is(":checked")) _reporteGeneral.frm.find("#chkkSubDireccionAll").prop("checked", "");
+
+        });
+        $("#chkAnioAll").click();
+        $("#chkModalidadAll").click();
+        $("#chkRegionAll").click();
+        $("#chkkSubDireccionAll").click();
+        $("#chkOdAll").click();
+    });
+</script>

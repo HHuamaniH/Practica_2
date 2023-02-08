@@ -1,0 +1,209 @@
+﻿
+@{
+    ViewBag.Title = "viewReporte5";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<link href="~/Styles/Proyectos/reporteEstadisticas.min.css" rel="stylesheet" />
+<script src="~/Scripts/chart/Chart.min.js"></script>
+<script src="~/Scripts/chart/custom.js"></script>
+<script src="~/Scripts/jscomunes.js"></script>
+
+<script>
+    $(document).ready(function () {
+        $("#btnReporte").on("click", function () {
+            if (ItemValidarFiltrosBusqueda()) {
+                $("#cnvReporteEst51").remove();
+                $("#dvChartReporteEst51").append("<canvas id='cnvReporteEst51'></canvas>");
+                $("#cnvReporteEst52").remove();
+                $("#dvChartReporteEst52").append("<canvas id='cnvReporteEst52'></canvas>");
+                $("#cnvReporteEst53").remove();
+                $("#dvChartReporteEst53").append("<canvas id='cnvReporteEst53'></canvas>");
+
+                $.ajax({
+                    url: '@Url.Action("generarReporte5","Estadisticos")',
+                    type: 'POST',
+                    dataType: 'json',
+                    contentType: 'application/json; charset=utf-8',
+                    data: JSON.stringify({
+                        'busRegion': ObtenerListaRegiones(),
+                        'busModalidad': ObtenerListaModalidad(),
+                        'busAnio': ObtenerListaAnio()
+                    }),
+                    success: function (data) {
+                        $(".resultadoRpt5").show();
+
+                        var j=0, cantColumns = 3; fila = "";
+                        $(data).each(function () {
+                            var i = 0;
+                            ++j;
+                            var arrayTotal = [0, 0, 0];
+                            $("#tbReportEst5" + (j) + ">tbody").empty();
+
+                            $(this).each(function () {
+                                fila = "<tr><td>" + (++i) + "</td><td>" + $(this)[0] + "</td>";
+                                for (var k = 0; k < cantColumns; k++) {
+                                    arrayTotal[k] += $(this)[k + 1];
+                                    fila += "<td>" + agregarSeparador(parseFloat($(this)[k + 1].toFixed(3)).toString(), ',') + "</td>";
+                                }
+                                fila += "</tr>";
+                                $("#tbReportEst5" + (j) + ">tbody").append(fila);
+                            });
+                            fila = "<tr><td></td><td>Total</td>";
+                            for (var k = 0; k < cantColumns; k++) {
+                                fila += "<td>" + agregarSeparador(parseFloat(arrayTotal[k].toFixed(3)).toString(), ',') + "</td>";
+                            }
+                            fila += "</tr>";
+                            $("#tbReportEst5" + (j) + ">tbody").append(fila);
+
+                            switch (j) {
+                                case 1:
+                                    customChart.LoadBarraApilada($(this), 0, {
+                                        colIndex: [1, 2], color: ["green", "red"]
+                                        , legend: ["Nro árboles maderables existentes", "Nro árboles inexistentes"]
+                                    }, { type: "V", title: "", legend: true, xTitle: "Año", yTitle: "Número de Árboles", canvas: "cnvReporteEst51", labels: true });
+                                    var indexPlugin = Chart.plugins._plugins.indexOf(Chart.plugins._plugins.find(m=>m.id == "labels"));
+                                    if (typeof indexPlugin !== 'undefined' && indexPlugin != -1) {
+                                        Chart.plugins._plugins.pop(indexPlugin);
+                                    }
+                                    break;
+                                case 2:
+                                    customChart.LoadBarraApilada($(this), 0, {
+                                        colIndex: [1, 2], color: ["green", "red"]
+                                        , legend: ["Nro árboles maderables existentes", "Nro árboles inexistentes"]
+                                    }, { type: "H", title: "", legend: true, xTitle: "Número de Árboles", yTitle: "Modalidad", canvas: "cnvReporteEst52" });
+                                    break;
+                                case 3:
+                                    var dataFormat = new Array();
+                                    var elementFormat = null;
+                                    for (var i = 0; i < $(this).length; i++) {
+                                        elementFormat = $(this)[i];
+                                        elementFormat[0] = PrimerCaracterMayuscula(elementFormat[0].toLowerCase());
+                                        dataFormat.push(elementFormat);
+                                    }
+                                    customChart.LoadBarraApilada(dataFormat, 0, {
+                                        colIndex: [1, 2], color: ["green", "red"]
+                                        , legend: ["Nro árboles maderables existentes", "Nro árboles inexistentes"]
+                                    }, { type: "H", title: "", legend: true, xTitle: "Número de Árboles", yTitle: "Departamento", canvas: "cnvReporteEst53" });
+                                    break;
+                            }
+                        });
+                        unloader();
+                    },
+                    beforeSend: function () {
+                        loader();
+                    },
+                    error: function () {
+                        unloader();
+                    }
+                });
+            }
+        });
+    });
+</script>
+
+<div class="contenedorReporte">
+    <div class="filtroReporte">
+        <div class="toolsLista">
+            <div class="navLista">
+                <a href="@Url.Action("Index","Home")" title="Volver al Inicio"><span class="icon-arrow-back"></span><span>Volver al Inicio</span></a>
+            </div>
+            <div class="tituloLista">
+                <h2>Número de árboles supervisados</h2>
+            </div>
+        </div>
+        @Html.Partial("Controles/_MasterFiltro")
+        <div class="divbtnReporte">
+            <input id="btnReporte" type="button" value="Generar Reporte" class="btnBotonFormSIGO" />
+        </div>
+    </div>
+    <div class="informacionReporte">
+        <h3 style="margin:0px;">¿Qué contiene este reporte?</h3>
+        <ul style="padding-left:15px;margin-top:5px;margin-bottom:5px;">
+            <li><p>Muestra la cantidad de árboles maderables supervisados por el OSINFOR, clasificándolos según la condición constatada en campo de existente o inexistente*, con opción de búsqueda por departamento, modalidad de aprovechamiento y año de supervisión.</p></li>
+        </ul>
+    </div>
+    <div class="resultadoReporte resultadoRpt5" style="display:none;">
+        <div id="subTituloReport51" class="subTituloReport">
+            <h3>Árboles maderables supervisados por año</h3>
+        </div>
+        <div class="bloqueResultado">
+            <div class="bloqueResultado2" style="margin-right:5px;">
+                <div class="GrillaDivMarco">
+                    <table id="tbReportEst51" class="Grilla tbReportEst5" style="width:100%;">
+                        <thead>
+                            <tr>
+                                <th>Nº</th>
+                                <th>Nº	Año Supervisión</th>
+                                <th>Nro árboles maderables existentes</th>
+                                <th>Nro árboles inexistentes</th>
+                                <th>Total de árboles maderables supervisados</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="bloqueResultado2" style="margin-left:5px;">
+                <div id="dvChartReporteEst51"></div>
+            </div>
+        </div>
+        <div id="subTituloReport52" class="subTituloReport">
+            <h3>Árboles maderables supervisados por modalidad</h3>
+        </div>
+        <div class="bloqueResultado">
+            <div class="bloqueResultado2" style="margin-right:5px;">
+                <div class="GrillaDivMarco">
+                    <table id="tbReportEst52" class="Grilla tbReportEst5" style="width:100%;">
+                        <thead>
+                            <tr>
+                                <th>Nº</th>
+                                <th>Modalidad</th>
+                                <th>Nro árboles maderables existentes</th>
+                                <th>Nro árboles inexistentes</th>
+                                <th>Total de árboles maderables supervisados</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="bloqueResultado2" style="margin-left:5px;">
+                <div id="dvChartReporteEst52"></div>
+            </div>
+        </div>
+        <div id="subTituloReport53" class="subTituloReport">
+            <h3>Árboles maderables supervisados por departamento</h3>
+        </div>
+        <div class="bloqueResultado">
+            <div class="bloqueResultado2" style="margin-right:5px;">
+                <div class="GrillaDivMarco">
+                    <table id="tbReportEst53" class="Grilla tbReportEst5" style="width:100%;">
+                        <thead>
+                            <tr>
+                                <th>Nº</th>
+                                <th>Departamento</th>
+                                <th>Nro árboles maderables existentes</th>
+                                <th>Nro árboles inexistentes</th>
+                                <th>Total de árboles maderables supervisados</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="bloqueResultado2" style="margin-left:5px;">
+                <div id="dvChartReporteEst53"></div>
+            </div>
+        </div>
+    </div>
+    <div class="informacionReporte resultadoRpt5" style="display:none;">
+        <ul style="padding-left:20px;margin-top:5px;margin-bottom:5px;">
+            <li>(*) Se considera árbol inexistente al individuo no encontrado dentro de los 50 metros de radio ni utilizando las dos opciones de búsqueda adicionales descritas en el Protocolo de Convergencia 2017 y  Directiva de supervisión de títulos habilitantes con fines maderables.</li>
+            <li>(*) El reporte solo muestra la existencia o no del recurso forestal maderable supervisado, no refleja la extracción y movilización del mismo.</li>
+            <li>(*) No se considera otros incumplimientos y/o irregularidades advertidas durante las supervisiones.</li>
+            <li style="margin-top:10px;"><strong>Actualizado al: </strong>@ViewBag.fechaProcess</li>
+            <li><strong>Fecha y Hora de Consulta:</strong> @DateTime.Now</li>
+        </ul>
+    </div>
+</div>

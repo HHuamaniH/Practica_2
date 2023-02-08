@@ -1,0 +1,13 @@
+﻿@model CapaEntidad.ViewModel.VM_ResolucionTFFS
+
+<div id="fmrRDVariacionImpCargos">
+    <!--Infracciones-->
+    <div id="divInfracciones">
+        @Html.Partial("~/Areas/Tribunal/Views/ManTribunal/_Shared/_generic/_renderInfracciones.cshtml", Model)
+    </div>
+
+    <!--Rectificacion-->
+    <div>
+        @Html.Partial("~/Areas/Tribunal/Views/ManTribunal/_Shared/_generic/_renderRectificacion.cshtml", Model)
+    </div>
+</div>

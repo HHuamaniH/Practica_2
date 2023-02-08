@@ -1,0 +1,65 @@
+﻿<div class="modal-dialog modal-lg" style="width:100%;" role="document">
+    <div class="modal-content" id="contenedorTaraInventario">
+        <div class="modal-header text-small" style="cursor:move;padding:0.5rem;">
+            <h5 class="modal-title" id="h5Titulo">Nuevo</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body">
+            <form id="frmTaraInventario">
+                <input type="hidden" id="COD_SECUENCIAL" name="COD_SECUENCIAL" value="0" />
+                <input type="hidden" id="RegEstado" name="RegEstado" value="1" />
+                <input type="hidden" id="RegEstadoClient" name="RegEstadoClient" value="1" />
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label for="N_ARBOL" class="text-small">N° Árbol</label>
+                        <input type="text" id="N_ARBOL" name="N_ARBOL" class="form-control form-control-sm" maxlength="15"/>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="CONDICION" class="text-small">Condición</label>
+                        <input type="text" id="CONDICION" name="CONDICION" class="form-control form-control-sm" maxlength="30" />
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label for="ESTADO_FITOSAN" class="text-small">Estado Fitosanitario</label>
+                        <input type="text" id="ESTADO_FITOSAN" name="ESTADO_FITOSAN" class="form-control form-control-sm" maxlength="30"/>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="ALTURA_ESTIMADO" class="text-small">Altura Estimada</label>
+                        <input type="text" id="ALTURA_ESTIMADO" name="ALTURA_ESTIMADO" class="form-control form-control-sm" maxlength="15" onkeypress="return utilSigo.onKeyDecimal(event, this);" />
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label for="PESO_VAINAS_KILOGRAMOS" class="text-small">Peso Vainas (Kilogramos)</label>
+                        <input type="text" id="PESO_VAINAS_KILOGRAMOS" name="PESO_VAINAS_KILOGRAMOS" class="form-control form-control-sm" maxlength="15" onkeypress="return utilSigo.onKeyDecimal(event, this);" />
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="COORDENADA_ESTE" class="text-small">Coordenada Este</label>
+                        <input type="text" id="COORDENADA_ESTE" name="COORDENADA_ESTE" class="form-control form-control-sm" maxlength="6" onkeypress="return utilSigo.onKeyEntero(event, this);" />
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label for="COORDENADA_NORTE" class="text-small">Coordenada Norte</label>
+                        <input type="text" id="COORDENADA_NORTE" name="COORDENADA_NORTE" class="form-control form-control-sm" maxlength="7" onkeypress="return utilSigo.onKeyEntero(event, this);" />
+                    </div>
+                    <div class="form-group col-md-6">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-12">
+                        <label for="OBSERVACION" class="text-small">Observación</label>                        
+                       <textarea id="OBSERVACION" name="OBSERVACION" class="form-control form-control-sm" rows="2"></textarea>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="modal-footer">
+            <button type="button" id="btnGuardar" class="btn btn-primary btn-sm">Agregar</button>
+        </div>
+    </div>
+</div>
+<script src="~/Areas/THabilitante/js/ManPlanManejo/_ItemTaraInventario.js"></script>

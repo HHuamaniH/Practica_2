@@ -1,0 +1,51 @@
+﻿@model CapaEntidad.ViewModel.General.VM_ValidacionFormatos
+@{
+    ViewBag.Title = "Validar Plantilla";
+    Layout = "~/Views/Shared/_LayoutMain.cshtml";
+}
+<style type="text/css">
+    .table-wrapper-scroll-y {
+        display: block;
+        max-height: 800px;
+        overflow-y: auto;
+        -ms-overflow-style: -ms-autohiding-scrollbar;
+    }
+
+    .fileselect {
+        display: none;
+    }
+
+    .divArchivo {
+        text-align: center;
+    }
+
+    .divRespuesta {
+        display: -ms-flexbox;
+        -ms-flex-wrap: wrap;
+        padding: .75rem 1rem;
+        margin-bottom: 1rem;
+        list-style: none;
+        background-color: #e9ecef;
+        border-radius: .25rem;
+        word-wrap: break-word;
+    }
+
+    .colNro {
+        width: 30px;
+    }
+</style>
+@section scripts{
+    <script>
+        "use strict"; var rol = '';
+    $(document).ready(function () {
+        //Validamos el rol del usuario
+        utilSigo.ValidaRol('@ViewBag.VAliasRol', 'btnRegistrar', 'Edit');
+    });
+    </script>
+}
+<div class="container-fluid" id="divLstVal">
+    <div class="card-body">
+        @Html.Partial("_ValidarPlantilla_")
+    </div>
+</div>
+

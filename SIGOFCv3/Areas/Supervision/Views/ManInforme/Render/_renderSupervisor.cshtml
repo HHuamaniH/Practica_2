@@ -1,0 +1,116 @@
+﻿
+@model List<CapaEntidad.DOC.Ent_GENEPERSONA>
+
+<style type="text/css">
+    #tbRenderSupervisor_wrapper {
+        padding: 0px;
+    }
+</style>
+
+<script type="text/javascript">
+    var _renderSupervisor = {};
+    _renderSupervisor.tbEliTABLA = [];
+
+    _renderSupervisor.fnBuscarPersona = function (_dom) {
+        var url = urlLocalSigo + "General/Controles/_BuscarPersonaGeneral";
+        var option = { url: url, type: 'GET', datos: { asBusGrupo: "PERSONA", asCodPTipo: "TODOS", asTipoPersona: "N" }, divId: "mdlBuscarPersona" };
+        utilSigo.fnOpenModal(option, function () {
+            _bPerGen.fnAsignarDatos = function (obj) {
+                if (obj != null && obj != "") {
+                    var data = _bPerGen.dtBuscarPerona.row($(obj).parents('tr')).data();
+                    switch (_dom) {
+                        case "SUPERVISOR":
+                            if (!utilDt.existValorSearch(_renderSupervisor.dtSupervisor, "COD_PERSONA", data["COD_PERSONA"])) {
+                                var supervisor = {
+                                    COD_PERSONA: data["COD_PERSONA"],
+                                    NOMBRES: data["PERSONA"],
+                                    RegEstado: 1,
+                                    ESTADO_FIRMA:"NO FIRMADO"
+                                };
+                                _renderSupervisor.dtSupervisor.rows.add([supervisor]).draw();
+                                _renderSupervisor.dtSupervisor.page('last').draw('page');
+                                $("#mdlControles_BuscarPersonaGeneral").modal('hide');
+                            } else {
+                                utilSigo.toastWarning("Aviso", "El supervisor ya se encuentra añadido");
+                            }
+                            break;
+                    }
+                    utilSigo.fnCloseModal("mdlBuscarPersona");
+                }
+            }
+            _bPerGen.fnInit();
+        });
+    }
+
+    _renderSupervisor.fnInitDataTable_Detail = function () {
+        var columns_label = [], columns_data = [], options = {};
+
+        columns_label = ["Apellidos y Nombres","Estado Firma"];
+        columns_data = ["NOMBRES","ESTADO_FIRMA"];
+        options = {
+            page_length: 10, row_index: true, row_delete: true, row_fnDelete: "_renderSupervisor.fnDelete(this)"
+        };
+        _renderSupervisor.dtSupervisor = utilDt.fnLoadDataTable_Detail($("#tbRenderSupervisor"), columns_label, columns_data, options);
+    }
+
+    _renderSupervisor.fnDelete = function (obj) {
+        utilSigo.dialogConfirm('', 'Desea eliminar el supervisor del informe?', function (r) {
+            if (r) {
+                var data = _renderSupervisor.dtSupervisor.row($(obj).parents('tr')).data();
+
+                if (data["RegEstado"] == "0" || data["RegEstado"] == "2") {
+                    _renderSupervisor.tbEliTABLA.push({
+                        EliTABLA: "SUPERVISOR",
+                        COD_PERSONA: data["COD_PERSONA"]
+                    });
+                }
+                _renderSupervisor.dtSupervisor.row($(obj).parents('tr')).remove().draw(false);
+                utilDt.enumColumn(_renderSupervisor.dtSupervisor);
+            }
+        });
+    }
+
+    _renderSupervisor.fnGetList = function () {
+        var list = [], rows, countFilas, data;
+
+        rows = _renderSupervisor.dtSupervisor.$("tr");
+        countFilas = rows.length;
+        if (countFilas > 0) {
+            $.each(rows, function (i, o) {
+                data = _renderSupervisor.dtSupervisor.row($(o)).data();
+                if (data["RegEstado"] == "1" || data["RegEstado"] == "2") {
+                    list.push(utilSigo.fnConvertArrayToObject(data));
+                }
+            });
+        }
+        return list;
+    }
+
+    _renderSupervisor.fnGetListEliTABLA = function () { return _renderSupervisor.tbEliTABLA }
+
+    $(document).ready(function () {
+        _renderSupervisor.frm = $("#frmRenderSupervisor");
+
+        _renderSupervisor.fnInitDataTable_Detail();
+
+        _renderSupervisor.dtSupervisor.rows.add(JSON.parse('@Html.Raw(Json.Encode(@Model))')).draw();
+    });
+</script>
+
+<div id="frmRenderSupervisor">
+    <div class="table-responsive">
+        <table id="tbRenderSupervisor" style="width:100%;margin:0px !important;" class="table table-hover table-bordered">
+            <thead>
+                <tr>
+                    <th colspan="4" class="text-sm-left">
+                        <div class="form-inline">
+                            <i class="fa mx-2 fa-lg fa-file-o" style="cursor:pointer;" onclick="_renderSupervisor.fnBuscarPersona('SUPERVISOR');" data-toggle="tooltip" data-placement="right" title="Agregar supervisor"></i>
+                            <strong>Supervisor(es)</strong>
+                        </div>
+                    </th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
+</div>

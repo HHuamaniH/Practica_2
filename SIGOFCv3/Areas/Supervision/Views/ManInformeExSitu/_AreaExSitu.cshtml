@@ -1,0 +1,103 @@
+﻿
+<script src="~/Areas/Supervision/js/ManInformeExSitu/_AreaExSitu.js"></script>
+
+<div class="modal-dialog" role="document">
+    <div class="modal-content">
+        <div class="modal-header text-small" style="cursor:move;">
+            <span id="lblAreaExSitu_Titulo">Infraestructura - Área</span>
+            <i class="fa fa-close" style="cursor:pointer;" data-dismiss="modal" aria-label="Close"></i>
+        </div>
+        <div class="modal-body">
+            <form id="frmItemAreaExSitu">
+                @Html.Hidden("hdfRegEstado")
+                @Html.Hidden("hdfCodArea")
+                @Html.Hidden("hdfCodSecuencial")
+                <div id="dvNumero" class="form-row" style="display:none;">
+                    <div class="form-group col-md-6">
+                        <label for="txtNumero" class="text-small">Número</label>
+                        @Html.TextBox("txtNumero", "", new { @class = "form-control form-control-sm" })
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-3">
+                        <label for="txtLargo" class="text-small">Largo</label>
+                        @Html.TextBox("txtLargo", "", new { @class = "form-control form-control-sm", type = "number" })
+                    </div>
+                    <div class="form-group col-md-3">
+                        <label for="txtAncho" class="text-small">Ancho</label>
+                        @Html.TextBox("txtAncho", "", new { @class = "form-control form-control-sm", type = "number" })
+                    </div>
+                    <div class="form-group col-md-3">
+                        <label for="txtAltura" class="text-small">Altura</label>
+                        @Html.TextBox("txtAltura", "", new { @class = "form-control form-control-sm", type = "number" })
+                    </div>
+                    <div class="form-group col-md-3">
+                        <label for="txtArea" class="text-small">Área</label>
+                        @Html.TextBox("txtArea", "", new { @class = "form-control form-control-sm", type = "number" })
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="table-responsive" style="overflow-x:hidden;">
+                        <table id="tbItemAreaExSitu_Material" style="width:100%" class="table table-hover table-bordered">
+                            <thead>
+                                <tr>
+                                    <th colspan="3">
+                                        <div class="form-group row" style="margin-bottom:0px;">
+                                            <label for="ddlMaterialId" class="col-md-5 col-form-label text-small" style="padding-right:0px;">Material de Construcción</label>
+                                            <div class="col-md-7" style="margin-bottom:0px;">
+                                                @Html.DropDownList("ddlMaterialId", new SelectList(ViewBag.ddlMaterial, "Value", "Text"), new { @class = "form-control form-control-sm" })
+                                            </div>
+                                        </div>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="table-responsive" style="overflow-x:hidden;">
+                        <table id="tbItemAreaExSitu_Cartel" style="width:100%" class="table table-hover table-bordered">
+                            <thead>
+                                <tr>
+                                    <th colspan="3">
+                                        <div class="form-group row" style="margin-bottom:0px;">
+                                            <label for="ddlCartelId" class="col-md-5 col-form-label text-small" style="padding-right:0px;">Tiene Cartel</label>
+                                            <div class="col-md-7" style="margin-bottom:0px;">
+                                                @Html.DropDownList("ddlCartelId", new SelectList(ViewBag.ddlCartel, "Value", "Text"), new { @class = "form-control form-control-sm" })
+                                            </div>
+                                        </div>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="table-responsive" style="overflow-x:hidden;">
+                        <table id="tbItemAreaExSitu_Equipo" style="width:100%" class="table table-hover table-bordered">
+                            <thead>
+                                <tr>
+                                    <th colspan="3">
+                                        <div class="form-group row" style="margin-bottom:0px;">
+                                            <label for="ddlEquipoId" class="col-md-5 col-form-label text-small" style="padding-right:0px;">Equipos y Accesorios</label>
+                                            <div class="col-md-7" style="margin-bottom:0px;">
+                                                @Html.DropDownList("ddlEquipoId", new SelectList(ViewBag.ddlEquipo, "Value", "Text"), new { @class = "form-control form-control-sm" })
+                                            </div>
+                                        </div>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-primary btn-sm" onclick="_AreaExSitu.fnSubmitForm()">Guardar</button>
+            <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Cancelar</button>
+        </div>
+    </div>
+</div>

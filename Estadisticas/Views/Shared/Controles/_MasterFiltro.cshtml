@@ -1,0 +1,313 @@
+﻿<link href="~/Styles/MasterFiltro.min.css" rel="stylesheet" />
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#alternar-panel-oculto').click(function (e) {
+            if ($(this).text() == "Ocultar") { $(this).text('Mostrar'); $('#panel-oculto').slideUp(); e.preventDefault(); }
+            else if ($(this).text() == "Mostrar") { $(this).text('Ocultar'); $('#panel-oculto').slideDown(); e.preventDefault(); }
+        });
+        //PaginaCargaInicial();
+        var Parametros = '@ViewBag.Parametros';
+        if (Parametros == "0|0|0|0|0|0|0|0|0|0") { $("#sliderFiltros").hide(); }
+        else {
+            var Parametros = Parametros.split("|");
+            var filtros = ["#listaAnios", "#listaModalidades", "#listaRegiones", "#listaArticulos", "#listaDLinea", "#listaProfesional", "#listaEspecie", "#listaOD"];
+            var divFiltros = ["#DivAnio", "#DivModalidad", "#DivRegion", "#DivArticulos", "#DivLinea", "#DivEspecie", "#DivRangoFecha", "#DivOD", "#DivProfesional"]
+            $.ajax({
+                url: '@Url.Action("llenarFiltros","Controles", new { Parametros=ViewBag.Parametros})',
+                type: 'POST',
+                dataType: 'json',
+                contentType: 'application/json; charset=utf-8',
+                success: function (data) {
+                    for (var i = 0; i < data.length; i++) {
+                        var ind_id = 0;
+                        $(data[i]).each(function () {
+                            var opcion = ("<li><input type='checkbox' class='DivChecks' id='" + filtros[i] + '_' + ind_id + "' value='" + this.split('|')[0] + "' /><label for='" + filtros[i] + '_' + ind_id + "'>" + this.split('|')[1] + "</label></li>")
+                            $(filtros[i]).append(opcion);
+                            ind_id++;
+                        });
+                    }
+                    for (var i = 0; i < Parametros.length; i++) {
+                        if (i == 0 || i == 1 || i == 2 || i == 3 || i == 4 || i == 5 || i == 7 || i == 8) {
+                            if ((Parametros[i] == "0")) { $(divFiltros[i]).hide(); } else {
+                                $(divFiltros[i]).show();
+                                if (Parametros[i] == "1" || Parametros[i] == "3" || Parametros[i] == "5") {
+                                    $(divFiltros[i] + " .chkAll").prop("checked", true); $(divFiltros[i] + " .DivChecks").prop("checked", true);
+                                    $(divFiltros[i] + " .listFiltro>li .DivChecks").parent('li').addClass("margenCheck");
+                                }
+                                else if (Parametros[i] == "2") { $(divFiltros[i] + " .listFiltro>li:first-child").hide(); }
+                            }
+                        }
+                        else if (i == 6) {
+                            if ((Parametros[i] == "0")) { $(divFiltros[i]).hide(); } else {
+                                $(divFiltros[i]).show();
+                            }
+                        }
+                    }
+
+                    $(".DivChecks").each(function () {
+                        $(this).on("click", function () {
+                            if (!$(this).is(":checked")) {
+                                $(this).parent('li').parent('ul').children('li:first-child').children('.chkAll').first().prop("checked", false);
+                            }
+                        });
+                    });
+
+                    $('.chkAll').on("change", function () {
+                        var check = $(this).is(":checked");
+                        $(this).parent('li').parent('ul').children("li").children(".DivChecks").each(function (i, o) {
+                            $(o).prop("checked", check);
+                        });
+                    });
+
+                    $("#listaDLinea li input.DivChecks").on("change", function () {
+                        var checkLinea = $(this);
+                        var Linea = $(this).val();
+
+                        if ($("#chkAllLinea").is(":visible") == false) {
+                            $("#listaModalidades li input.DivChecks").removeAttr("checked");
+                        }
+                        $(this).attr("checked", $(this).is(":checked"));
+                        
+                        $("#listaModalidades li input.DivChecks").each(function () {
+                            if (Linea == "0000004") {
+                                if ($(this).val() == "0000001") { $(this).attr("checked", $(checkLinea).is(":checked")); }
+                                if ($(this).val() == "0000002") { $(this).attr("checked", $(checkLinea).is(":checked")); }
+                                if ($(this).val() == "0000003") { $(this).attr("checked", $(checkLinea).is(":checked")); }
+                                if ($(this).val() == "0000004") { $(this).attr("checked", $(checkLinea).is(":checked")); }
+                                if ($(this).val() == "0000005") { $(this).attr("checked", $(checkLinea).is(":checked")); }
+                                if ($(this).val() == "0000006") { $(this).attr("checked", $(checkLinea).is(":checked")); }
+                                if ($(this).val() == "0000014") { $(this).attr("checked", $(checkLinea).is(":checked")); }
+                                if ($(this).val() == "0000015") { $(this).attr("checked", $(checkLinea).is(":checked")); }
+                                if ($(this).val() == "0000016") { $(this).attr("checked", $(checkLinea).is(":checked")); }
+                                if ($(this).val() == "0000017") { $(this).attr("checked", $(checkLinea).is(":checked")); }
+                                if ($(this).val() == "0000019") { $(this).attr("checked", $(checkLinea).is(":checked")); }
+                                if ($(this).val() == "0000020") { $(this).attr("checked", $(checkLinea).is(":checked")); }
+                                if ($(this).val() == "0000021") { $(this).attr("checked", $(checkLinea).is(":checked")); }
+                            }
+                            else if (Linea == "0000005") {
+                                if ($(this).val() == "0000007") { $(this).attr("checked", $(checkLinea).is(":checked")); }
+                                if ($(this).val() == "0000008") { $(this).attr("checked", $(checkLinea).is(":checked")); }
+                                if ($(this).val() == "0000009") { $(this).attr("checked", $(checkLinea).is(":checked")); }
+                                if ($(this).val() == "0000010") { $(this).attr("checked", $(checkLinea).is(":checked")); }
+                                if ($(this).val() == "0000011") { $(this).attr("checked", $(checkLinea).is(":checked")); }
+                                if ($(this).val() == "0000012") { $(this).attr("checked", $(checkLinea).is(":checked")); }
+                                if ($(this).val() == "0000013") { $(this).attr("checked", $(checkLinea).is(":checked")); }
+                                if ($(this).val() == "0000018") { $(this).attr("checked", $(checkLinea).is(":checked")); }
+                            }
+                        });
+
+                        if ($("#listaModalidades input[type=checkbox]:checked").length == $("#listaModalidades input[type=checkbox]").length-1) {
+                            $("#chkAllModalidad").attr("checked", true);
+                        }
+                        else if ($("#listaModalidades input[type=checkbox]:checked").length < $("#listaModalidades input[type=checkbox]").length-1) {
+                            $("#chkAllModalidad").attr("checked", false);
+                        }
+
+                    });
+                    unloader();
+                },
+                beforeSend: function () {
+                    loader();
+                },
+                error: function () {
+                    unloader();
+                }
+            });
+
+            //$(".listFiltro>li:first-child>input").each(function () {
+            //    $(this).on("click", function () {
+            //        if ($(this).is(":checked")) { $(this).parent('li').parent('ul').children('li').children('input').attr("checked", true); }
+            //        else { $(this).parent('li').parent('ul').children('li').children('input').removeAttr("checked"); }
+            //    });
+            //});
+        }
+    });
+    function ObtenerListadoCodigo(chkAll, chks)
+    {
+        var retorno = "'";
+        if (!$(chkAll).checked) {
+            for (var i = 0; i < $(chks).length; i++) { if ($(chks)[i].checked) { retorno += $(chks)[i].value + "','"; } }
+            if (retorno.length > 1) { retorno = retorno.substr(0, retorno.length - 2); }
+            else { retorno = ""; }
+        }
+        else {
+            for (var i = 0; i < $(chks).length; i++) { retorno += $(chks)[i].value + "','"; }
+            retorno = retorno.substr(0, retorno.length - 2);
+        }
+        return retorno;
+    }
+    function ObtenerListadoDescripcion(chkAll, chks)
+    {
+        var retorno = "";
+        if (!$(chkAll).checked) {
+            for (var i = 0; i < $(chks).length; i++) { if ($(chks)[i].checked) { retorno += $($(chks)[i]).next().text() + "','"; } }
+            if (retorno.length > 1) { retorno = retorno.substr(0, retorno.length - 2); }
+            else { retorno = ""; }
+        }
+        else {
+            for (var i = 0; i < $(chks).length; i++) { retorno += $($(chks)[i]).next().text() + "','"; }
+            retorno = retorno.substr(0, retorno.length - 3);
+        }
+        return retorno;
+    }
+    function ObtenerListaRegiones() { return ObtenerListadoCodigo("#chkAllRegion", "#listaRegiones .DivChecks"); }
+    function ObtenerListaRegionesDescripcion() {
+        if ($("#chkAllRegion").is(":checked")) { return "Todos los departamentos según opciones de búsqueda"; }
+        else { return ObtenerListadoDescripcion("#chkAllRegion", "#listaRegiones .DivChecks"); }
+    }
+    function ObtenerListaModalidad() { return ObtenerListadoCodigo("#chkAllModalidad", "#listaModalidades .DivChecks"); }
+    function ObtenerListaModalidadDescripcion() {
+        if ($("#chkAllModalidad").is(":checked")) { return "Todas las modalidades según opciones de búsqueda"; }
+        else { return ObtenerListadoDescripcion("#chkAllModalidad", "#listaModalidades .DivChecks"); }
+    }
+    function ObtenerListaAnio() { return ObtenerListadoCodigo("#chkAllAnio", "#listaAnios .DivChecks"); }
+    function ObtenerListaAnioDescripcion() {
+        if ($("#chkAllAnio").is(":checked")) { return "Todos los años según opciones de búsqueda"; }
+        else { return ObtenerListadoDescripcion("#chkAllAnio", "#listaAnios .DivChecks"); }
+    }
+    function ObtenerListaLinea() { return ObtenerListadoCodigo("#chkAllLinea", "#listaDLinea .DivChecks"); }
+    function ObtenerListaLineaDescripcion() {
+        if ($("#chkAllLinea").is(":checked")) { return "DSPAFFS, DSCFFS, SDSPAFFS y SDSCFFS"; }
+        else { return ObtenerListadoDescripcion("#chkAllLinea", "#listaDLinea .DivChecks"); }
+    }
+    function ObtenerListaArticulos() { return ObtenerListadoCodigo("#chkAllArticulos", "#listaArticulos .DivChecks"); }
+    function ObtenerListaEspecies() { return ObtenerListadoCodigo("#chkAllEspecie", "#listaEspecie .DivChecks"); }
+    function ObtenerListaOD() { return ObtenerListadoCodigo("#chkAllOD", "#listaOD .DivChecks"); }
+    function ObtenerListaProfesional() { return ObtenerListadoCodigo("#chkAllProfesional", "#listaDLinea .DivChecks"); }
+    function ObtenerListaProfesionalDescripcion() {
+        if ($("#chkAllProfesional").is(":checked")) { return "Todos los profesionales según opciones de búsqueda"; }
+        else { return ObtenerListadoDescripcion("#chkAllProfesional", "#listaProfesional .DivChecks"); }
+    }
+
+    function ItemValidarFiltrosBusqueda() {
+
+        var Parametros = '@ViewBag.Parametros'.split("|");
+        if (!(Parametros[0] == "0")) {
+            if (!$("#listaAnios input[type=checkbox]:checked").length > 0) {
+                ventanaMensaje("error", "Opciones de Búsqueda", "Seleccione uno o mas años a consultar", null, null);
+                return false;
+            }
+        }
+        if (!(Parametros[1] == "0")) {
+            if (!$("#listaModalidades input[type=checkbox]:checked").length > 0) {
+                ventanaMensaje("error", "Opciones de Búsqueda", "Seleccione una o más modalidades de aprovechamiento a consultar", null, null);
+                return false;
+            }       
+        }
+        if (!(Parametros[2] == "0")) {
+            if (!$("#listaRegiones input[type=checkbox]:checked").length > 0) {
+                ventanaMensaje("error", "Opciones de Búsqueda", "Seleccione una o más regiones a consultar", null, null);
+                return false;
+            } 
+        }
+        if (!(Parametros[3] == "0")) {
+            if (!$("#listaArticulos input[type=checkbox]:checked").length > 0) {
+                ventanaMensaje("error", "Opciones de Búsqueda", "Seleccione uno o más incisos de la ley forestal a consultar", null, null);
+                return false;
+            }     
+        }
+        if (!(Parametros[4] == "0")) {
+            if (!$("#listaDLinea input[type=checkbox]:checked").length > 0) {
+                ventanaMensaje("error", "Opciones de Búsqueda", "Seleccione una o más sub direcciones de linea a consultar", null, null);
+                return false;
+            }  
+        }
+        if (!(Parametros[5] == "0")) {
+            if (!$("#listaEspecie input[type=checkbox]:checked").length > 0) {
+                ventanaMensaje("error", "Opciones de Búsqueda", "Seleccione una o más especies a consultar", null, null);
+                return false;
+            }       
+        }
+        if (!(Parametros[6] == "0")) {
+            if ($("#txtItemFechaInicio").val() > $("#<% = txtItemFechaFin.ClientID %>").val()) {
+                MensajeSpam("Ingrese correctamente las fechas a consultar", 1)
+                return false;
+            }
+        }
+        if (!(Parametros[7] == "0")) {
+            if (!$("#listaOD input[type=checkbox]:checked").length > 0) {
+                ventanaMensaje("error", "Opciones de Búsqueda", "Seleccione una o más oficinas desconcentradas", null, null);
+                return false;
+            }         
+        }
+        if (!(Parametros[8] == "0")) {
+            if (!$("#listaProfesional input[type=checkbox]:checked").length > 0) {
+                ventanaMensaje("error", "Opciones de Búsqueda", "Seleccione uno o más tipos de profesional", null, null);
+                return false;
+            }           
+        }
+        return true;
+    }
+</script>
+<div id="sliderFiltros" >
+    <div id="btnFiltro" class="btnFiltro">
+        Opciones de Búsqueda
+        <a href="#" id="alternar-panel-oculto">Ocultar</a>
+    </div>
+    <div id="panel-oculto" style="display:block;">
+        <div>
+            <div class="menuFiltros" id="DivAnio" ><div class="headFiltro">Año: </div>
+                <div><div>Sel. los años</div>
+                    <ul id="listaAnios" class="listFiltro">
+                        <li><input type="checkbox" id="chkAllAnio" class="chkAll" /><label for="chkAllAnio">TODO - AÑO</label></li>                        
+                    </ul>
+                </div>
+            </div>
+            <div class="menuFiltros" id="DivModalidad"><div class="headFiltro">Modalidad: </div>
+                <div><div>Sel. las modalidades</div>
+                    <ul id="listaModalidades" class="listFiltro">
+                        <li><input type="checkbox" id="chkAllModalidad" class="chkAll" /><label for="chkAllModalidad">TODA - MODALIDAD</label></li>                         
+                    </ul>
+                </div>
+            </div>
+            <div class="menuFiltros" id="DivRegion" style="width:185px;"><div class="headFiltro">Departamento: </div>
+                <div><div>Sel. los departamentos</div>
+                    <ul id="listaRegiones" class="listFiltro">
+                        <li><input type="checkbox" id="chkAllRegion" class="chkAll" /><label for="chkAllRegion">TODO - DEPARTAMENTO</label>  </li>                               
+                    </ul>
+                </div>
+            </div>
+            <div class="menuFiltros" id="DivArticulos" ><div class="headFiltro">Articulos/Incisos: </div>
+                <div><div>Sel. los incisos</div>
+                    <ul id="listaArticulos" class="listFiltro">
+                        <li><input type="checkbox" id="chkAllArticulos" class="chkAll" /><label for="chkAllArticulos">TODO - INCISOS</label></li>                
+                    </ul>
+                </div>
+            </div>
+            <div class="menuFiltros" id="DivLinea" ><div class="headFiltro">Dirección de Linea: </div>
+                <div><div>Sel. las D. Linea</div>
+                    <ul id="listaDLinea" class="listFiltro">
+                        <li><input type="checkbox" id="chkAllLinea" class="chkAll" /><label for="chkAllLinea">TODA - SUB DIR. LINEA</label></li>                 
+                    </ul>
+                </div>
+            </div>
+            <div class="menuFiltros" id="DivProfesional" ><div class="headFiltro">Profesional: </div>
+                <div><div>Sel. tipo profesional</div>
+                    <ul id="listaProfesional" class="listFiltro">
+                        <li><input type="checkbox" id="chkAllProfesional" class="chkAll" /><label for="chkAllProfesional">TODO - PROFESIONAL</label></li>            
+                    </ul>
+                </div>
+            </div>
+            <div class="menuFiltros" id="DivEspecie" ><div class="headFiltro">Especies: </div>
+                <div><div>Sel. las especies</div>
+                    <ul id="listaEspecie" class="listFiltro">
+                        <li><input type="checkbox" id="chkAllEspecie" class="chkAll" /><label for="chkAllEspecie">TODA - ESPECIE</label></li>                 
+                    </ul>
+                </div>
+            </div>
+            <div class="menuFiltros" id="DivRangoFecha">
+                <div id="lblFecIni"  style="padding-top:2px; padding-bottom:2px;">Fecha de Inicio:</div>
+                <div id="txtFecIni"><input type="date" /></div>
+                <div id="lblFecFin"  style="padding-top:2px; padding-bottom:2px;">Fecha Fin:</div>
+                <div id="txtFecFin"><input type="date"  /></div>
+            </div>
+            <div class="menuFiltros" id="DivOD"><div  class="headFiltro">OD: </div>
+                <div><div>Sel. las OD</div>
+                    <ul id="listaOD" class="listFiltro">                 
+                        <li><input type="checkbox" id="chkAllOD" class="chkAll" /><label for="chkAllOD">TODA - OD</label></li> 
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

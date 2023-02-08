@@ -1,0 +1,73 @@
+﻿
+<script src="~/Areas/Supervision/js/ManInforme/_VerticeTHCampo.js"></script>
+
+<div class="modal-dialog" role="document">
+    <div class="modal-content">
+        <div class="modal-header text-small" style="cursor:move;">
+            <span>Vértice Título Habilitante Campo</span>
+            <i class="fa fa-close" style="cursor:pointer;" data-dismiss="modal" aria-label="Close"></i>
+        </div>
+        <div class="modal-body">
+            <form id="frmItemVerticeTHCampo">
+                <div class="form-row">
+                    <div class="form-group col-md-6"><div class="card-title">Datos Título Habilitante</div></div>
+                    <div class="form-group col-md-6"><div class="card-title">Datos Campo</div></div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label for="ddlVerticeId" class="text-small">Vértice</label>
+                        @Html.DropDownList("ddlVerticeId", new SelectList(ViewBag.ddlVetice, "Value", "Text"), new { @class = "form-control form-control-sm" })
+                        @Html.Hidden("hdfCodSistema")
+                        @Html.Hidden("hdfVertice")
+                        @Html.Hidden("hdfRegEstado")
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="txtVerticeCampo" class="text-small">Vértice</label>
+                        @Html.TextBox("txtVerticeCampo","", new { @class = "form-control form-control-sm" })
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label for="ddlZonaId" class="text-small">Zona</label>
+                        @Html.DropDownList("ddlZonaId", new SelectList(ViewBag.ddlZona, "Value", "Text"), new { @class = "form-control form-control-sm",disabled="disabled" })
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="ddlZonaCampoId" class="text-small">Zona</label>
+                        @Html.DropDownList("ddlZonaCampoId", new SelectList(ViewBag.ddlZona, "Value", "Text"), new { @class = "form-control form-control-sm" })
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label for="txtCoordEste" class="text-small">Coordenada Este</label>
+                        @Html.TextBox("txtCoordEste", "", new { @class = "form-control form-control-sm", maxlength = "6", disabled = "disabled",type="number" })
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="txtCoordEsteCampo" class="text-small">Coordenada Este</label>
+                        @Html.TextBox("txtCoordEsteCampo", "", new { @class = "form-control form-control-sm", maxlength = "6", type = "number" })
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label for="txtCoordNorte" class="text-small">Coordenada Norte</label>
+                        @Html.TextBox("txtCoordNorte", "", new { @class = "form-control form-control-sm", maxlength = "7", disabled = "disabled", type = "number" })
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="txtCoordNorteCampo" class="text-small">Coordenada Norte</label>
+                        @Html.TextBox("txtCoordNorteCampo", "", new { @class = "form-control form-control-sm", maxlength = "7", type = "number" })
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-6"></div>
+                    <div class="form-group col-md-6">
+                        <label for="txtObservacionCampo" class="text-small">Observación</label>
+                        @Html.TextArea("txtObservacionCampo", "", new { @class = "form-control form-control-sm", rows = "4" })
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-primary btn-sm" onclick="_VerticeTHCampo.fnSubmitForm()">Guardar</button>
+            <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Cancelar</button>
+        </div>
+    </div>
+</div>

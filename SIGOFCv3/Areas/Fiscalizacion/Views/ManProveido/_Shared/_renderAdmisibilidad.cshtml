@@ -1,0 +1,57 @@
+﻿
+@model CapaEntidad.ViewModel.VM_Proveido
+<script type="text/javascript">
+    var _renderAdminisibilidad = {};
+
+    _renderAdminisibilidad.fnSelectRecom = function () {
+        _renderAdminisibilidad.frm.find("#divDetalleAdmisibilidad").hide();
+        if (_renderAdminisibilidad.frm.find("#chkConceder").is(':checked')) {
+            _renderAdminisibilidad.frm.find("#divDetalleAdmisibilidad").show();
+        }
+    }
+
+    $(document).ready(function () {
+        _renderAdminisibilidad.frm = $("#divAdmisibilidad");
+        _renderAdminisibilidad.fnSelectRecom();
+    });
+</script>
+<div id="divAdmisibilidad" class="text-small">
+    <div><br /><br /></div>
+    <div class="form-row">
+        <div class="form-group col-md-4">
+            Se Resuelve
+        </div>
+        <div class="form-group col-md-6">
+            <div class="row">
+                <div class="col-sm-2">Conceder</div>
+                <div class="col-sm-2">@Html.CheckBoxFor(m => m.chkConceder, new { @class = "form-check-input", style = "width:15px;height:16px;", @onchange = "_renderAdminisibilidad.fnSelectRecom()" })</div>
+                <div class="col-sm-3">Improcedente</div>
+                <div class="col-sm-1"> @Html.CheckBoxFor(m => m.chkImprocedente, new { @class = "form-check-input", style = "width:15px;height:16px;", @onchange = "_renderAdminisibilidad.fnSelectRecom()" })</div>
+                <div class="col-sm-2">Inadmisible</div>
+                <div class="col-sm-2"> @Html.CheckBoxFor(m => m.chkInadmisible, new { @class = "form-check-input", style = "width:15px;height:16px;", @onchange = "_renderAdminisibilidad.fnSelectRecom()" })</div>
+            </div>
+
+        </div>
+        <div class="form-group col-md-2">
+        </div>
+    </div>
+
+
+    <div id="divDetalleAdmisibilidad" style="display:none;">
+        <div class="form-row">
+            <div class="form-group col-md-3">
+                <label for="chkGTF" class="text-small">TFFS</label>
+            </div>
+            <div class="form-group col-md-1">
+                @Html.CheckBoxFor(m => m.chkTFFS, new { @class = "form-check-input", style = "width:15px;height:16px;" })
+            </div>
+            <div class="form-group col-md-1">Detalle</div>
+            <div class="form-group col-md-6">
+                @Html.EditorFor(m => m.txtDesTFFS, new { htmlAttributes = new { @class = "form-control form-control-sm", maxlength = "500" } })
+            </div>
+            <div class="form-group col-md-1"></div>
+        </div>
+    </div>
+</div>
+
+

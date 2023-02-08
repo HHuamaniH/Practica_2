@@ -1,0 +1,186 @@
+﻿
+@model List<CapaEntidad.DOC.Ent_INFORME_MADERA_ASERRADA>
+
+<script type="text/javascript">
+    var _DatosMaderaAserrada = {};
+
+    _DatosMaderaAserrada.fnInitDataTable_Detail = function () {
+        var columns_label = [], columns_data = [], options = {};
+
+        columns_label = ["Código", "Especie","Nro. Piezas o Partes", "Zona UTM", "Coordenada Este", "Coordenada Norte"
+            , "Espesor (m)", "Ancho (m)", "Largo (m)", "Observación"];
+        columns_data = ["CODIGO", "ESPECIES","PIEZAS", "ZONA", "COORDENADA_ESTE", "COORDENADA_NORTE"
+            , "ESPESOR", "ANCHO", "LARGO", "OBSERVACION"];
+        options = {
+            page_length: 20, row_index: true, row_edit: true, row_fnEdit: "_DatosMaderaAserrada.fnAddEdit(this)"
+            , row_delete: true, row_fnDelete: "_DatosMaderaAserrada.fnDelete(this)", page_info: true, page_search: true
+            , page_sort: true
+        };
+        _DatosMaderaAserrada.dtDatosMaderaAserrada = utilDt.fnLoadDataTable_Detail($("#tbDatosMaderaAserrada"), columns_label, columns_data, options);
+    }
+
+    _DatosMaderaAserrada.fnAddEdit = function (obj) {
+        var url = urlLocalSigo + "Supervision/ManInforme/_EspecieMaderaAserrada";
+        var option = {
+            url: url, type: 'POST'
+            , datos: { asCodInforme: _DatosMaderaAserrada.frm.find("#hdfCodInforme").val(), aiNumPoa: _DatosMaderaAserrada.frm.find("#hdfNumPoa").val() }
+            , divId: "mdlManInforme_EspecieCampo"
+        };
+        utilSigo.fnOpenModal(option, function () {
+            _EspecieMaderaAserrada.fnSaveForm = function (data) {
+                if (data != null) {
+                    var dt = _DatosMaderaAserrada.dtDatosMaderaAserrada;
+
+                    if (obj == null || obj == "") {//Nuevo Registro
+                        dt.rows.add([data]).draw();
+                        dt.page('last').draw('page');
+                        utilSigo.toastSuccess("Exito", "Datos guardados correctamente");
+                    } else {//Modificar
+                        var row = dt.row($(obj).parents('tr')).data();
+                        row = data;
+                        dt.row($(obj).parents('tr')).data(row).draw(false);
+                        utilSigo.toastSuccess("Exito", "Datos actualizados correctamente");
+                    }
+                    $("#mdlManInforme_EspecieCampo").modal('hide');
+                } else {
+                    utilSigo.toastError("Error", "No se pudieron guardar los datos");
+                }
+            }
+
+            if (obj != null && obj != "") {
+                var data = _DatosMaderaAserrada.dtDatosMaderaAserrada.row($(obj).parents('tr')).data();
+                _EspecieMaderaAserrada.fnInit(utilSigo.fnConvertArrayToObject(data));
+            } else { _EspecieMaderaAserrada.fnInit(""); }
+        });
+    }
+
+    _DatosMaderaAserrada.fnDeleteAll = function () {
+        var rows, countFilas, data, tbEliTABLA = [];
+
+        rows = _DatosMaderaAserrada.dtDatosMaderaAserrada.$("tr");
+        countFilas = rows.length;
+        if (countFilas > 0) {
+            utilSigo.dialogConfirm("", "Está seguro de Eliminar Todos los Registros?", function (r) {
+                if (r) {
+                    $.each(rows, function (i, o) {
+                        data = _DatosMaderaAserrada.dtDatosMaderaAserrada.row($(o)).data();
+                        if (data["RegEstado"] == "0" || data["RegEstado"] == "2") {
+                            tbEliTABLA.push(
+                                utilSigo.fnConvertArrayToObject({
+                                    EliTABLA: "ISUPERVISION_DET_EASERRADA",
+                                    COD_INFORME: _DatosMaderaAserrada.frm.find("#hdfCodInforme").val(),
+                                    NUM_POA: data["NUM_POA"],
+                                    COD_SECUENCIAL: data["COD_SECUENCIAL"]
+                                })
+                            );
+                        }
+                    });
+
+                    var url = urlLocalSigo + "Supervision/ManInforme/EliminarRegistroDetalle";
+                    var option = { url: url, datos: JSON.stringify(tbEliTABLA), type: 'POST' };
+                    utilSigo.fnAjax(option, function (data) {
+                        if (data.success) {
+                            _DatosMaderaAserrada.dtDatosMaderaAserrada.clear().draw();
+                            utilSigo.toastSuccess("Éxito", "Datos de madera aserrada en campo eliminadas correctamente");
+                        }
+                        else {
+                            utilSigo.toastWarning("Aviso", data.msj);
+                        }
+                    });
+                }
+            });
+        } else {
+            utilSigo.toastWarning("Aviso", "No se encontraron registros a eliminar");
+        }
+    }
+
+    _DatosMaderaAserrada.fnDelete = function (obj) {
+        var data, tbEliTABLA = [];
+
+        data = _DatosMaderaAserrada.dtDatosMaderaAserrada.row($(obj).parents('tr')).data();
+        if (data["RegEstado"] == "0" || data["RegEstado"] == "2") {
+            tbEliTABLA.push(
+                utilSigo.fnConvertArrayToObject({
+                    EliTABLA: "ISUPERVISION_DET_EASERRADA",
+                    COD_INFORME: _DatosMaderaAserrada.frm.find("#hdfCodInforme").val(),
+                    NUM_POA: data["NUM_POA"],
+                    COD_SECUENCIAL: data["COD_SECUENCIAL"]
+                })
+            );
+        }
+
+        var url = urlLocalSigo + "Supervision/ManInforme/EliminarRegistroDetalle";
+        var option = { url: url, datos: JSON.stringify(tbEliTABLA), type: 'POST' };
+        utilSigo.fnAjax(option, function (data) {
+            if (data.success) {
+                _DatosMaderaAserrada.dtDatosMaderaAserrada.row($(obj).parents('tr')).remove().draw(false);
+                utilSigo.toastSuccess("Éxito", "Madera aserrada en campo eliminada correctamente");
+            }
+            else {
+                utilSigo.toastWarning("Aviso", data.msj);
+            }
+        });
+    }
+
+    _DatosMaderaAserrada.fnImport = function (e, obj) {
+        var url = urlLocalSigo + "Supervision/ManInforme/ImportarDatosCampo";
+        uploadFile.fileSelectHandler(e, obj, url, {
+            asTipo: "MADERA_ASERRADA", asCodInforme: _DatosMaderaAserrada.frm.find("#hdfCodInforme").val(), aiNumPoa: _DatosMaderaAserrada.frm.find("#hdfNumPoa").val()
+        }, function (data) {
+            $("#mdlManInforme_DatosCampo").modal('hide');
+        });
+    }
+
+    $(document).ready(function () {
+        _DatosMaderaAserrada.frm = $("#frmDatosMaderaAserrada");
+
+        _DatosMaderaAserrada.fnInitDataTable_Detail();
+        _DatosMaderaAserrada.dtDatosMaderaAserrada.rows.add(JSON.parse('@Html.Raw(Json.Encode(@Model))')).draw();
+    });
+</script>
+
+<style type="text/css">
+    #dvDatosMaderaAserrada .dataTables_info {
+        color: #33b35a;
+        font-size: 15px;
+        margin-top: 17px;
+    }
+</style>
+
+<div class="modal-dialog modal-custom-tb" role="document" style="height:95%;">
+    <div class="modal-content" style="height:100%;">
+        <div class="modal-header text-small" style="cursor:move;">
+            Datos de Madera Aserrada en Campo
+            <i class="fa fa-close" style="cursor:pointer;" data-dismiss="modal" aria-label="Close"></i>
+        </div>
+        <div class="modal-body" style="padding:0px;overflow-y:auto;">
+            <div id="frmDatosMaderaAserrada">
+                @Html.Hidden("hdfCodInforme", (string)ViewBag.hdfCodInforme)
+                @Html.Hidden("hdfNumPoa", (Int32)ViewBag.hdfNumPoa)
+                <div id="dvDatosMaderaAserrada" class="table-responsive" style="margin-top:5px;">
+                    <table id="tbDatosMaderaAserrada" style="width:100%" class="table table-hover table-bordered">
+                        <thead>
+                            <tr>
+                                <th colspan="13" class="text-sm-left">
+                                    <div class="form-inline">
+                                        <i class="fa mx-2 fa-lg fa-file-o" style="cursor:pointer;" onclick="_DatosMaderaAserrada.fnAddEdit('');" data-toggle="tooltip" data-placement="top" title="Nuevo"></i>
+                                        <i class="fa mx-2 fa-lg fa-window-close-o" style="cursor:pointer;" onclick="_DatosMaderaAserrada.fnDeleteAll();" data-toggle="tooltip" data-placement="top" title="Eliminar Todos"></i>
+                                        <label style="cursor:pointer;" class="fa mx-2 fa-lg fa-file-excel-o" title="Importar Archivo" data-toggle="tooltip">
+                                            <input type="file" id="fileselect" name="fileselect" style="display:none" size="60" onchange="_DatosMaderaAserrada.fnImport(event, this)">
+                                        </label>
+                                        <a href="@Url.Content("~/Archivos/Plantilla/MaderaAserradaCampo.xlsx")"> <i class="fa mx-2 fa-lg fa-folder-open" style="cursor:pointer;" data-toggle="tooltip" data-placement="top" title="Descargar Plantilla Campo"></i></a>
+                                        <strong>
+                                            Listado de Especies
+                                        </strong>
+                                    </div>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer"></div>
+    </div>
+</div>

@@ -1,0 +1,113 @@
+﻿@model CapaEntidad.ViewModel.VM_Alerta
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_LayoutMain.cshtml";
+
+}
+<script src="~/Scripts/datatables/Extensions/dataTables.buttons.js"></script>
+<script src="~/Scripts/datatables/Extensions/buttons.flash.min.js"></script>
+<script src="~/Scripts/datatables/Extensions/jszip.min.js"></script>
+
+<script src="~/Scripts/datatables/Extensions/vfs_fonts.js"></script>
+<script src="~/Scripts/datatables/Extensions/buttons.html5.js"></script>
+<script src="~/Scripts/datatables/Extensions/buttons.print.js"></script>
+
+<link href="~/Content/datatables/buttons.dataTables.min.css" rel="stylesheet" />
+<link href="~/Areas/THabilitante/css/ManPreviosAlerta/AddEdit.css" rel="stylesheet" />
+@Scripts.Render("~/bundles/MainAlerta/MainAlerta")
+
+@section scripts{
+    <script>
+        "use strict";
+        var mainAlert = new MainAlert("mainAlert");
+        $(document).ready(function () {
+            mainAlert.init();
+            var list = [];
+            var contador = 1;
+            @foreach(var item in Model.ListALERTA)
+            {
+                <text>
+                list.push({
+                    CODIGO: "@item.COD_BITACORA",
+                    COD_THABILITANTE: "@item.COD_THABILITANTE",
+                    COD_SECUENCIAL: "@item.COD_SECUENCIAL",
+                        NUMERO: contador,
+                        FECHA_SALIDA: "@item.FECHA_SALIDA",
+                        FECHA_LLEGADA: "@item.FECHA_LLEGADA",
+                        OD: "@item.OD",
+                        CARTA_NOTIFICACION: "@item.CARTA_NOTIFICACION",
+                        NUM_THABILITANTE: "@item.NUM_THABILITANTE",
+                        SUPERVISOR: "@item.SUPERVISOR",
+                        SUPERVISADO: "@item.SUPERVISADO",
+                        TIPO_INFORME: "@item.TIPO_INFORME",
+                        ENVIAR_ALERTA_TEXT: "@item.ENVIAR_ALERTA_TEXT",
+
+                            @*FECHA: "@item.FECHA",
+                            COD_BITACORA: "@item.COD_BITACORA",
+                            COD_THABILITANTE: "@item.COD_THABILITANTE",
+                            COD_SECUENCIAL: "@item.COD_SECUENCIAL",*@
+                    });
+                contador += 1;
+                </text>
+            }
+            mainAlert.dt.rows.add(list).draw();
+        });
+    </script>
+}
+
+<div class="container-fluid">
+    <div class="card">
+        @*<div class="card-header text-right">
+                <h5>Titulo</h5>
+            </div>*@
+        <div class="card-body">
+            <div class="card">
+                <div class="card-header text-small" id="divTitle">
+                    <div class="text-left"></div>
+                    <div class="text-center"><h3>ALERTAS OSINFOR</h3></div>
+                </div>
+                <div class="card-body">
+                    <form id="frmAlerta">
+                        <div class="card-body">
+                            <div class="form-row">
+                                <div class="table-responsive">
+                                    <table id="grvAlerta" class="table table-hover table-bordered" style="width:100%">
+                                        <thead>
+                                            <tr>
+                                                <th colspan="12" class="text-sm-left">
+                                                    <div class="form-inline">
+
+                                                        <label style="cursor:pointer;" class="fa mx-2 fa-lg fa-file-excel-o" title="Descargar" data-toggle="tooltip">
+
+                                                        </label>
+
+                                                    </div>
+                                                </th>
+                                            </tr>
+                                            <tr>
+                                                <th></th>
+                                                <th></th>
+                                                <th>Nº</th>
+                                                <th>Fecha Salida Oficina</th>
+                                                <th>Fecha Inicio Labores Oficina</th>
+                                                <th>Oficina Desconcentrada</th>
+                                                <th>Nro CNotificación</th>
+                                                <th>Nro THabililitante</th>
+                                                <th>Supervisor</th>
+                                                <th>Supervisado</th>
+                                                <th>Tipo de informe</th>
+                                                <th>Alerta Enviada</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody></tbody>
+                                    </table>
+
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,219 @@
+﻿@model CapaEntidad.ViewModel.VM_ResolucionTFFS
+
+<script type="text/javascript">
+    var _renderTerminoPau = {};
+    _renderTerminoPau.fncSelect = function () {
+        var idRecomendacion = _renderTerminoPau.frm.find("#ddDetermina").val();
+        _renderTerminoPau.frm.find("#divSansion").hide();
+        _renderTerminoPau.frm.find("#divArchivo").hide();
+        if (idRecomendacion == "0000001") {
+            _renderTerminoPau.frm.find("#divSansion").show();
+        }
+        if (idRecomendacion == "0000002") {
+            _renderTerminoPau.frm.find("#divArchivo").show();
+        }
+    }
+
+    _renderTerminoPau.fncSubMotivo = function () {
+        var idMotivo = _renderTerminoPau.frm.find("#ddlMotivoArch").val();
+        var descMotivo = _renderTerminoPau.frm.find("#ddlMotivoArch option:selected").text();
+        $.ajax({
+            url: '@Url.Action("subTipoArchivo","ManTribunal")',
+            type: 'GET',
+            datatype: "json",
+            traditional: true,
+            data: { 'idMotivo': idMotivo, 'descMotivo': descMotivo },
+            success: function (data) {
+                $("#divSubTipoArchivo").html(data)
+            }
+        });
+    };
+
+
+    $(document).ready(function () {
+        _renderTerminoPau.frm = $("#fmrRDTermino");
+        _renderTerminoPau.fncSelect();
+    });
+</script>
+
+<div id="fmrRDTermino">
+    <div class="card-header text-small">Medidas Cautelares <br /></div>
+    <div><br /></div>
+
+    <div class="form-row">
+        <div class="form-group col-md-4">
+            <label for="chkGTF" class="text-small">Determinación</label>
+        </div>
+        <div class="form-group col-md-6">
+            @Html.DropDownListFor(m => m.txtIdDetermina, new SelectList(Model.ListRecomendacion, "CODIGO", "DESCRIPCION"),
+                                   new
+                                        {
+                                            @class = "form-control form-control-sm",
+                                            @id = "ddDetermina",
+                                            @onchange = "_renderTerminoPau.fncSelect()"
+                                       })
+        </div>
+        <div class="form-group col-md-2">
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="form-group col-md-4">
+            <label for="chkGTF" class="text-small">Caducidad Titulo Habilitante</label>
+        </div>
+        <div class="form-group col-md-6">
+            @Html.CheckBoxFor(m => m.chkCaducidadTH, new { @class = "form-check-input", style = "width:15px;height:16px;" })
+        </div>
+        <div class="form-group col-md-2">
+        </div>
+    </div>
+
+    <div id="divSansion" style="display:none;">
+        <div class="form-row">
+            <div class="form-group col-md-4">
+                <label for="chkGTF" class="text-small">Sanción al ex-titular</label>
+            </div>
+            <div class="form-group col-md-6">
+                @Html.CheckBoxFor(m => m.chkSancionExTitular2, new { @class = "form-check-input", style = "width:15px;height:16px;" })
+            </div>
+            <div class="form-group col-md-2">
+            </div>
+        </div>
+
+        <div class="form-row">
+            <div class="form-group col-md-4">
+                <label for="chkGTF" class="text-small">Titular al que se sanciona</label>
+            </div>
+            <div class="form-group col-md-6">
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text"><i class="fa fa-plus" style="cursor:pointer;" onclick="ManRD_AddEdit.fnBuscarPersona('TITULARRDT', 'N');" data-toggle="tooltip" data-placement="top" title="Agregar"></i></span>
+                    </div>
+                    @Html.EditorFor(m => m.txtExtitular, new { htmlAttributes = new { @class = "form-control form-control-sm", @disabled = "disabled" } })
+                    <input type="hidden" id="hdfTipoPersonaExTitular" />
+                </div>
+            </div>
+            <div class="form-group col-md-2">
+            </div>
+        </div>
+
+        <div class="card-header text-small">Sanciones impuestas</div>
+
+        <div class="form-row">
+            <div class="form-group col-md-4">
+                <label for="chkGTF" class="text-small">Amonestacion</label>
+            </div>
+            <div class="form-group col-md-6">
+                @Html.CheckBoxFor(m => m.chkAmonestacion, new { @class = "form-check-input", style = "width:15px;height:16px;" })
+            </div>
+            <div class="form-group col-md-2">
+            </div>
+        </div>
+
+        <div class="form-row">
+            <div class="form-group col-md-4">
+                <label for="chkGTF" class="text-small">Multa</label>
+            </div>
+            <div class="form-group col-md-6">
+                @Html.CheckBoxFor(m => m.chkMulta, new { @class = "form-check-input", style = "width:15px;height:16px;" })
+            </div>
+            <div class="form-group col-md-2">
+            </div>
+        </div>
+
+        <div class="form-row">
+            <div class="form-group col-md-4">
+                <label for="chkGTF" class="text-small">Monto U.I.T.</label>
+            </div>
+            <div class="form-group col-md-6">
+                @Html.EditorFor(m => m.txtMonMulta, new { htmlAttributes = new { @class = "form-control form-control-sm", pattern = "[0-9]*[.,]?[0-9]+", maxlength = "20", onkeypress = "return utilSigo.onKeyDecimal(event, this);" } })
+            </div>
+            <div class="form-group col-md-2">
+            </div>
+        </div>
+
+        <div class="form-row">
+            <div class="form-group col-md-4">
+                <label for="chkGTF" class="text-small">Descuento del 30%</label>
+            </div>
+            <div class="form-group col-md-6">
+                @Html.CheckBoxFor(m => m.chkDesc30, new { @class = "form-check-input", style = "width:15px;height:16px;" })
+            </div>
+            <div class="form-group col-md-2">
+            </div>
+        </div>
+
+        <div class="card-header text-small">   Gravedad de daño</div>
+        <div> <br /></div>
+        <div class="form-row">
+            <div class="form-group col-md-4">
+                <label for="chkGTF" class="text-small">Gravedad de daño</label>
+            </div>
+            <div class="form-group col-md-4">
+                @Html.DropDownListFor(m => m.txtIdGravedad, new SelectList(Model.listComboGravedad, "CODIGO", "DESCRIPCION"),
+                                  new
+                                       {
+                                           @class = "form-control form-control-sm",
+                                           @id = "ddlGravedad"
+                                      })
+            </div>
+            <div class="form-group col-md-2">
+            </div>
+        </div>
+
+        <!--Medidas precautorias-->
+        <div>
+            @Html.Partial("~/Areas/Tribunal/Views/ManTribunal/_Shared/_generic/_renderMedPrecautoria.cshtml", Model)
+        </div>
+
+    </div>
+    <!--Archivo-->
+    <div id="divArchivo" style="display:none;">
+        <div class="form-row">
+            <div class="form-group col-md-4">
+                <label for="chkGTF" class="text-small">Motivo archivo</label>
+            </div>
+            <div class="form-group col-md-6">
+                @Html.DropDownListFor(m => m.txtIdTipoMotivoArch, new SelectList(Model.listComboTipoArchivo, "CODIGO", "DESCRIPCION"),
+                                   new
+                                        {
+                                            @class = "form-control form-control-sm",
+                                            @id = "ddlMotivoArch",
+                                            @onchange = "_renderTerminoPau.fncSubMotivo()"
+                                       })
+            </div>
+            <div class="form-group col-md-2">
+            </div>
+        </div>
+
+        <div id="divSubTipoArchivo">
+            @Html.Partial("~/Areas/Tribunal/Views/ManTribunal/_Shared/_generic/_renderMotivoArchivo.cshtml", Model)
+        </div>
+
+    </div>
+    <!--Medidas correctivas-->
+    <div>
+        @Html.Partial("~/Areas/Tribunal/Views/ManTribunal/_Shared/_generic/_renderMedCorrectiva.cshtml", Model)
+    </div>
+
+    <div class="form-row">
+        <div class="form-group col-md-4">
+            <label for="chkAprov" class="text-small">No existe aprovechamiento forestal en el Área Autorizada</label>
+        </div>
+        <div class="form-group col-md-6">
+            @Html.CheckBoxFor(m => m.chkNoev_Aprov, new { @class = "form-check-input", style = "width:15px;height:16px;" })
+        </div>
+        <div class="form-group col-md-2">
+        </div>
+    </div>
+    <!--Rectificacion-->
+    <div>
+        @Html.Partial("~/Areas/Tribunal/Views/ManTribunal/_Shared/_generic/_renderRectificacion.cshtml", Model)
+    </div>
+    <!--Infracciones-->
+    <div id="divInfracciones">
+        @Html.Partial("~/Areas/Tribunal/Views/ManTribunal/_Shared/_generic/_renderInfracciones.cshtml", Model)
+    </div>
+
+    
+</div>
+

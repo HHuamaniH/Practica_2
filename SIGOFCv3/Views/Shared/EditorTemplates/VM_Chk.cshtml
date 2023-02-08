@@ -1,0 +1,7 @@
+﻿@model CapaEntidad.ViewModel.VM_Chk
+
+<div class="custom-control custom-checkbox mr-sm-2">
+    @Html.HiddenFor(x => x.Value)
+    @Html.CheckBoxFor(x => x.Checked, new { @class = "custom-control-input" })
+    @Html.LabelFor(x => x.Checked, Model.Text, new { @class = "custom-control-label", style = "margin-top:6px; font-size:12px;" })
+</div>

@@ -1,0 +1,25 @@
+﻿
+@{
+    ViewBag.Title = ViewBag.TituloFormulario;
+    Layout = "~/Views/Shared/_LayoutMain.cshtml";
+}
+
+<script src="~/Areas/Capacitacion/js/ManCapacitacion/Index.js"></script>
+@section scripts{
+    <script>
+    "use strict";
+    var rol = '';
+    $(document).ready(function () {
+        //Validamos el rol del usuario    
+        utilSigo.ValidaRol('@ViewBag.VAliasRol', 'btnAdd');
+    });
+    </script>
+}
+
+<form id="frmManCapacitacion">
+    @Html.Hidden("tipoFormulario", (object)ViewBag.Formulario)
+    @Html.Hidden("titleMenu", (object)ViewBag.TituloFormulario)
+    @Html.Hidden("alertaFormulario", (object)ViewBag.AlertaInicial)
+
+    <div id="dvManCapacitacionContenedor" class="container-fluid"></div>
+</form>

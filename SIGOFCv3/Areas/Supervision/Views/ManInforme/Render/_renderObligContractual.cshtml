@@ -1,0 +1,331 @@
+﻿
+@model List<CapaEntidad.DOC.Ent_INFORME>
+
+<script type="text/javascript">
+    var _renderObligContractual = {};
+    _renderObligContractual.tbEliTABLA = [];
+
+    _renderObligContractual.fnInitDataTable_Detail = function () {
+        var columns_label = [], columns_data = [], options = {};
+
+        //Cargar Obligación - Actividades Ejecutadas Conservación
+        columns_label = ["Actividad", "Observación"];
+        columns_data = ["ACTIVIDAD_ACTOS", "OBSERVACION"];
+        options = {
+            page_length: 10, row_edit: true, row_fnEdit: "_renderObligContractual.fnAddEdit(this,'ACTIVIDAD_OBLIG')"
+            , row_delete: true, row_fnDelete: "_renderObligContractual.fnDelete('ACTIVIDAD_OBLIG',this)", row_index: true, page_sort: true
+        };
+        _renderObligContractual.dtActObligAmbiental = utilDt.fnLoadDataTable_Detail(_renderObligContractual.frm.find("#tbActObligAmbiental"), columns_label, columns_data, options);
+        //Cargar Obligación - Especie Aprovechado
+        columns_label = ["Especie Aprovechado"];
+        columns_data = ["ESPECIES"];
+        data_extend = [
+            {
+                "data": "ESTA_AUTORIZADO", "title": "Autorizado", "width": "5%", "orderable": false, "searchable": false, "mRender": function (data, type, row, meta) {
+                    return data == true ? "SI" : "NO";
+                }
+            },
+            {
+                "data": "OBSERVACION", "title": "Observaciones", "width": "5%", "orderable": false, "searchable": false, "mRender": function (data, type, row, meta) {
+                    return data;
+                }
+            }
+        ];
+        options = {
+            page_length: 10, row_edit: true, row_fnEdit: "_renderObligContractual.fnAddEdit(this,'ESPECIE_INTRO_OBLIG')"
+            , row_delete: true, row_fnDelete: "_renderObligContractual.fnDelete('ESPECIE_INTRO_OBLIG',this)", row_index: true, page_sort: true, data_extend: data_extend
+        };
+        _renderObligContractual.dtEspecieIntroOblig = utilDt.fnLoadDataTable_Detail(_renderObligContractual.frm.find("#tbEspecieIntroOblig"), columns_label, columns_data, options);
+        //Cargar Obligación - Actos Observados
+        columns_label = ["Acto", "Documentos Que Ponen de Conocimiento a las Autoridades"];
+        columns_data = ["ACTIVIDAD_ACTOS", "DOCUMENTOS_AFORESTAL"];
+        options = {
+            page_length: 10, row_edit: true, row_fnEdit: "_renderObligContractual.fnAddEdit(this,'ACTO_OBLIG')"
+            , row_delete: true, row_fnDelete: "_renderObligContractual.fnDelete('ACTO_OBLIG',this)", row_index: true, page_sort: true
+        };
+        _renderObligContractual.dtObligacionActo = utilDt.fnLoadDataTable_Detail(_renderObligContractual.frm.find("#tbObligacionActo"), columns_label, columns_data, options);
+        //Cargar Obligación - Especie Aprovechado
+        columns_label = ["Especie Aprovechado"];
+        columns_data = ["ESPECIES"];
+        data_extend = [
+            {
+                "data": "ESTA_AUTORIZADO", "title": "Autorizado", "width": "5%", "orderable": false, "searchable": false, "mRender": function (data, type, row, meta) {
+                    return data == true ? "SI" : "NO";
+                }
+            },
+            {
+                "data": "OBSERVACION", "title": "Observaciones", "width": "5%", "orderable": false, "searchable": false, "mRender": function (data, type, row, meta) {
+                    return data;
+                }
+            }
+        ];
+        options = {
+            page_length: 10, row_edit: true, row_fnEdit: "_renderObligContractual.fnAddEdit(this,'ESPECIE_APROV_OBLIG')"
+            , row_delete: true, row_fnDelete: "_renderObligContractual.fnDelete('ESPECIE_APROV_OBLIG',this)", row_index: true, page_sort: true, data_extend: data_extend
+        };
+        _renderObligContractual.dtEspecieAprovechaOblig = utilDt.fnLoadDataTable_Detail(_renderObligContractual.frm.find("#tbEspecieAprovechaOblig"), columns_label, columns_data, options);
+    }
+
+    _renderObligContractual.fnAddEdit = function (obj, _tipo) {
+        var url = urlLocalSigo, dt = null, _funcModal = {}, oParams = "";
+
+        switch (_tipo) {
+            case "ACTIVIDAD_OBLIG":
+                url += "Supervision/ManInformeConservacion/_ActividadObligacion";
+                dt = _renderObligContractual.dtActObligAmbiental; oParams = "01"; break;//15
+            case "ESPECIE_INTRO_OBLIG":
+                url += "Supervision/ManInformeConservacion/_AprovEspecieObligacion";
+                dt = _renderObligContractual.dtEspecieIntroOblig; oParams = "02"; break;//16
+            case "ACTO_OBLIG":
+                url += "Supervision/ManInformeFauna/_ActoObligacion";
+                dt = _renderObligContractual.dtObligacionActo; oParams = "03"; break;//17
+            case "ESPECIE_APROV_OBLIG":
+                url += "Supervision/ManInformeConservacion/_AprovEspecieObligacion";
+                dt = _renderObligContractual.dtEspecieAprovechaOblig; oParams = "04"; break;//18
+        }
+
+        var option = { url: url, type: 'POST', datos: {}, divId: "mdlManInforme_Obligacion" };
+        utilSigo.fnOpenModal(option, function () {
+            switch (_tipo) {
+                case "ACTIVIDAD_OBLIG": _funcModal = _ActividadObligacion; break;
+                case "ACTO_OBLIG": _funcModal = _ActoObligacion; break;
+                case "ESPECIE_INTRO_OBLIG":
+                case "ESPECIE_APROV_OBLIG": _funcModal = _AprovEspecieObligacion; break;
+            }
+
+            _funcModal.fnSaveForm = function (data) {
+                if (data != null) {
+                    if (obj == null || obj == "") {//Nuevo Registro
+                        dt.rows.add([data]).draw();
+                        dt.page('last').draw('page');
+                        utilSigo.toastSuccess("Exito", "Datos guardados correctamente");
+                    } else {//Modificar
+                        var row = dt.row($(obj).parents('tr')).data();
+                        row = data;
+                        dt.row($(obj).parents('tr')).data(row).draw(false);
+                        utilSigo.toastSuccess("Exito", "Datos actualizados correctamente");
+                    }
+                    $("#mdlManInforme_Obligacion").modal('hide');
+                } else {
+                    utilSigo.toastError("Error", "No se pudieron guardar los datos");
+                }
+            }
+
+            if (obj != null && obj != "") {
+                var data = dt.row($(obj).parents('tr')).data();
+                _funcModal.fnInit(utilSigo.fnConvertArrayToObject(data), oParams);
+            } else { _funcModal.fnInit("", oParams); }
+        });
+    }
+    _renderObligContractual.fnDelete = function (_tipo, obj, objData) {
+        var dt, data;
+        switch (_tipo) {
+            case "ACTIVIDAD_OBLIG": dt = _renderObligContractual.dtActObligAmbiental; break;
+            case "ACTO_OBLIG": dt = _renderObligContractual.dtObligacionActo; break;
+            case "ESPECIE_APROV_OBLIG": dt = _renderObligContractual.dtEspecieAprovechaOblig; break;
+            case "ESPECIE_INTRO_OBLIG": dt = _renderObligContractual.dtEspecieIntroOblig; break;
+        }
+
+        data = typeof objData !== 'undefined' ? objData : dt.row($(obj).parents('tr')).data();
+
+        if (data["RegEstado"] == "0" || data["RegEstado"] == "2") {
+            switch (_tipo) {
+                case "ACTIVIDAD_OBLIG":
+                case "ACTO_OBLIG":
+                case "ESPECIE_APROV_OBLIG":
+                case "ESPECIE_INTRO_OBLIG":
+                    _renderObligContractual.tbEliTABLA.push({
+                        EliTABLA: "ListISUPERVISION_OCARACTE_AMB01",
+                        EliVALOR01: data["COD_OCONTRACTUAL"],
+                        EliVALOR02: data["COD_SECUENCIAL"]
+                    });
+                    break;
+            }
+        }
+        if (typeof objData === 'undefined') {
+            dt.row($(obj).parents('tr')).remove().draw(false);
+        }
+    }
+    _renderObligContractual.fnDeleteAll = function (_tipo) {
+        var dt, data;
+        switch (_tipo) {
+            case "ACTIVIDAD_OBLIG": dt = _renderObligContractual.dtActObligAmbiental; break;
+            case "ACTO_OBLIG": dt = _renderObligContractual.dtObligacionActo; break;
+            case "ESPECIE_APROV_OBLIG": dt = _renderObligContractual.dtEspecieAprovechaOblig; break;
+            case "ESPECIE_INTRO_OBLIG": dt = _renderObligContractual.dtEspecieIntroOblig; break;
+        }
+        if (dt.$("tr").length > 0) {
+            utilSigo.dialogConfirm("", "Está seguro de Eliminar Todos los Registros?", function (r) {
+                if (r) {
+                    $.each(dt.$("tr"), function (i, o) {
+                        data = dt.row($(o)).data();
+                        _renderObligContractual.fnDelete(_tipo, "", data);
+                    });
+                    dt.clear().draw();
+                }
+            });
+        } else {
+            utilSigo.toastWarning("Aviso", "No se encontraron registros a eliminar");
+        }
+    }
+    _renderObligContractual.fnGetList = function () {
+        var dt, list = [], data;
+
+        //ACTIVIDAD_OBLIG
+        dt = _renderObligContractual.dtActObligAmbiental;
+        if (dt.$("tr").length > 0) {
+            $.each(dt.$("tr"), function (i, o) {
+                data = dt.row($(o)).data();
+                if (data["RegEstado"] == "1" || data["RegEstado"] == "2") {
+                    list.push(utilSigo.fnConvertArrayToObject(data));
+                }
+            });
+        }
+        //ACTO_OBLIG
+        dt = _renderObligContractual.dtObligacionActo;
+        if (dt.$("tr").length > 0) {
+            $.each(dt.$("tr"), function (i, o) {
+                data = dt.row($(o)).data();
+                if (data["RegEstado"] == "1" || data["RegEstado"] == "2") {
+                    list.push(utilSigo.fnConvertArrayToObject(data));
+                }
+            });
+        }
+        //ESPECIE_APROV_OBLIG
+        dt = _renderObligContractual.dtEspecieAprovechaOblig;
+        if (dt.$("tr").length > 0) {
+            $.each(dt.$("tr"), function (i, o) {
+                data = dt.row($(o)).data();
+                if (data["RegEstado"] == "1" || data["RegEstado"] == "2") {
+                    list.push(utilSigo.fnConvertArrayToObject(data));
+                }
+            });
+        }
+        //ESPECIE_INTRO_OBLIG
+        dt = _renderObligContractual.dtEspecieIntroOblig;
+        if (dt.$("tr").length > 0) {
+            $.each(dt.$("tr"), function (i, o) {
+                data = dt.row($(o)).data();
+                if (data["RegEstado"] == "1" || data["RegEstado"] == "2") {
+                    list.push(utilSigo.fnConvertArrayToObject(data));
+                }
+            });
+        }
+        return list;
+    }
+    _renderObligContractual.fnGetListEliTABLA = function () { return _renderObligContractual.tbEliTABLA }
+
+    $(document).ready(function () {
+        _renderObligContractual.frm = $("#frmRenderObligContractual");
+        _renderObligContractual.DataObligacion = JSON.parse('@Html.Raw(Json.Encode(@Model))');
+
+        _renderObligContractual.fnInitDataTable_Detail();
+
+        _renderObligContractual.dtActObligAmbiental.rows.add(_renderObligContractual.DataObligacion.filter(m=>m.COD_OCONTRACTUAL == "01")).draw();
+        _renderObligContractual.dtEspecieIntroOblig.rows.add(_renderObligContractual.DataObligacion.filter(m=>m.COD_OCONTRACTUAL == "02")).draw();
+        _renderObligContractual.dtObligacionActo.rows.add(_renderObligContractual.DataObligacion.filter(m=>m.COD_OCONTRACTUAL == "03")).draw();
+        _renderObligContractual.dtEspecieAprovechaOblig.rows.add(_renderObligContractual.DataObligacion.filter(m=>m.COD_OCONTRACTUAL == "04")).draw();
+    });
+</script>
+
+<div id="frmRenderObligContractual">
+    <div class="card-header text-small">Obligaciones Contractuales - De Carácter Ambiental</div>
+    <div class="card-body">
+        <div class="form-row">
+            <div class="col-md-6">
+                <h6 style="font-weight:normal;">¿Se ha observado la ejecución de actividades de conservación de la diversidad biológica, protección, educación y/o investigación dentro de la concesión?</h6>
+                <div class="table-responsive">
+                    <table id="tbActObligAmbiental" style="width:100%" class="table table-hover table-bordered">
+                        <thead>
+                            <tr>
+                                <th colspan="5" class="text-sm-left">
+                                    <div class="form-inline">
+                                        <i class="fa mx-2 fa-lg fa-file-o" style="cursor:pointer;" onclick="_renderObligContractual.fnAddEdit('','ACTIVIDAD_OBLIG');" data-toggle="tooltip" data-placement="top" title="Nuevo"></i>
+                                        <i class="fa mx-2 fa-lg fa-window-close-o" style="cursor:pointer;" onclick="_renderObligContractual.fnDeleteAll('ACTIVIDAD_OBLIG');" data-toggle="tooltip" data-placement="top" title="Eliminar Todos"></i>
+                                        <strong>
+                                            Actividades Ejecutadas
+                                        </strong>
+                                    </div>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <h6 style="font-weight:normal;">¿Se han observado especies exóticas de fauna o flora silvestre introducidas al interior de la concesión?</h6>
+                <div class="table-responsive">
+                    <table id="tbEspecieIntroOblig" style="width:100%" class="table table-hover table-bordered">
+                        <thead>
+                            <tr>
+                                <th colspan="6" class="text-sm-left">
+                                    <div class="form-inline">
+                                        <i class="fa mx-2 fa-lg fa-file-o" style="cursor:pointer;" onclick="_renderObligContractual.fnAddEdit('', 'ESPECIE_INTRO_OBLIG');" data-toggle="tooltip" data-placement="top" title="Nuevo"></i>
+                                        <i class="fa mx-2 fa-lg fa-window-close-o" style="cursor:pointer;" onclick="_renderObligContractual.fnDeleteAll('ESPECIE_INTRO_OBLIG');" data-toggle="tooltip" data-placement="top" title="Eliminar Todos"></i>
+                                        <strong>
+                                            Especies Introducidas a la Concesión
+                                        </strong>
+                                    </div>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="card-header text-small">Obligaciones Contractuales - De Carácter Social</div>
+    <div class="card-body">
+        <div class="form-row">
+            <div class="col-md-6">
+                <h6 style="font-weight:normal;">¿Se han observado actos de terceros que invadan, altere los límites, impida o limite los derechos sobre el área concesionada?</h6>
+                <div class="table-responsive">
+                    <table id="tbObligacionActo" style="width:100%" class="table table-hover table-bordered">
+                        <thead>
+                            <tr>
+                                <th colspan="5" class="text-sm-left">
+                                    <div class="form-inline">
+                                        <i class="fa mx-2 fa-lg fa-file-o" style="cursor:pointer;" onclick="_renderObligContractual.fnAddEdit('', 'ACTO_OBLIG');" data-toggle="tooltip" data-placement="top" title="Nuevo"></i>
+                                        <i class="fa mx-2 fa-lg fa-window-close-o" style="cursor:pointer;" onclick="_renderObligContractual.fnDeleteAll('ACTO_OBLIG');" data-toggle="tooltip" data-placement="top" title="Eliminar Todos"></i>
+                                        <strong>
+                                            Actos Observados
+                                        </strong>
+                                    </div>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="card-header text-small">Obligaciones Contractuales - De Carácter Ecológicamente Responsable</div>
+    <div class="card-body">
+        <div class="form-row">
+            <div class="col-md-6">
+                <h6 style="font-weight:normal;">¿Se ha observado aprovechamiento directo de especímenes de flora y fauna silvestre, a través de la caza, pesca y/o colección?</h6>
+                <div class="table-responsive">
+                    <table id="tbEspecieAprovechaOblig" style="width:100%" class="table table-hover table-bordered">
+                        <thead>
+                            <tr>
+                                <th colspan="6" class="text-sm-left">
+                                    <div class="form-inline">
+                                        <i class="fa mx-2 fa-lg fa-file-o" style="cursor:pointer;" onclick="_renderObligContractual.fnAddEdit('', 'ESPECIE_APROV_OBLIG');" data-toggle="tooltip" data-placement="top" title="Nuevo"></i>
+                                        <i class="fa mx-2 fa-lg fa-window-close-o" style="cursor:pointer;" onclick="_renderObligContractual.fnDeleteAll('ESPECIE_APROV_OBLIG');" data-toggle="tooltip" data-placement="top" title="Eliminar Todos"></i>
+                                        <strong>
+                                            Aprovechamiento de Especies
+                                        </strong>
+                                    </div>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

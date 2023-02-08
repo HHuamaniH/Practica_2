@@ -1,0 +1,91 @@
+﻿<script src="~/Areas/Supervision/js/ReporteVigilancia/_AddEditDetHallazgo.js"></script>
+
+<div class="modal-dialog" role="document">
+    <div class="modal-content">
+        <div class="modal-header text-small" style="cursor:move;">
+            <span>Detalle de Hallazgo</span>
+            <i class="fa fa-close" style="cursor:pointer;" data-dismiss="modal" aria-label="Close"></i>
+        </div>
+        <div class="modal-body">
+            <form id="frmDetHallazgo">
+                @Html.Hidden("hdfRegEstado")
+                <div class="form-row">
+                    <div class="form-group col-md-4">
+                        <label for="lblEstadoDtId" class="text-small">Estado Situacional</label>
+                        @Html.DropDownList("ddlEstadoDtId", new SelectList(ViewBag.ddlEstadoDt, "Value", "Text"), new { @class = "form-control form-control-sm" })
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-4">
+                        <label for="lblzonautm" class="text-small">Zona UTM</label>
+                        @Html.DropDownList("ddlZonaId", new SelectList(ViewBag.ddlZona, "Value", "Text"), new { @class = "form-control form-control-sm", disabled = true })
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-4">
+                        <label for="lblcoordeste" class="text-small">Coordenada Este</label>
+                        @Html.Editor("txtcoordenadaEste", new { htmlAttributes = new { @class = "form-control form-control-sm", disabled = true } })
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label for="lblcoordnorte" class="text-small">Coordenada Norte</label>
+                        @Html.Editor("txtcoordenadaNorte", new { htmlAttributes = new { @class = "form-control form-control-sm", disabled = true } })
+                    </div>
+                </div>
+                <div class="form-row" id="dvTipoDet" style="display:none;">
+                    <div class="form-group col-md-4">
+                        <label for="lblTipoDtId" class="text-small">Tipo</label>
+                        @Html.DropDownList("ddlTipoDtId", new SelectList(ViewBag.ddlTipoDt, "Value", "Text"), new { @class = "form-control form-control-sm", disabled = true })
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-12">
+                        <label for="lblespecie" class="text-small">Especie</label>
+                        @Html.Editor("txtespecie", new { htmlAttributes = new { @class = "form-control form-control-sm", disabled = true } })
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-12">
+                        <label for="lblEspecieId" class="text-small">Especie Validada</label>
+                        @Html.DropDownList("ddlEspecieId", new SelectList(ViewBag.lstEspecies, "Value", "Text"), new { @class = "form-control form-control-sm", @style = "width:auto;" })
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-4">
+                        <label for="lbldiamayor" class="text-small" id="lbldiamayor"></label>
+                        @Html.Editor("txtdiamayor", new { htmlAttributes = new { @class = "form-control form-control-sm", disabled = true } })
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label for="lbldiamenor" class="text-small" id="lbldiamenor"></label>
+                        @Html.Editor("txtdiamenor", new { htmlAttributes = new { @class = "form-control form-control-sm", disabled = true } })
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-4">
+                        <label for="lbllongitud" class="text-small" id="lbllongitud"></label>
+                        @Html.Editor("txtlongitud", new { htmlAttributes = new { @class = "form-control form-control-sm", disabled = true } })
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label for="lblvolumen" class="text-small" id="lblvolumen1"></label>
+                        @Html.Editor("txtvolumen", new { htmlAttributes = new { @class = "form-control form-control-sm", disabled = true } })
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-12">
+                        <label for="lblobservacion" class="text-small">Observación</label>
+                        @Html.TextArea("txtObservacion", "", new { @class = "form-control form-control-sm", rows = "3", disabled = true })
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-12">
+                        <label for="lblobservacion_validado" class="text-small">Observación Validada</label>
+                        @Html.TextArea("txtObservacion_validado", "", new { @class = "form-control form-control-sm", rows = "3" })
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Cancelar</button>
+            <button type="button" id="btnGrabar" class="btn btn-primary btn-sm" onclick="_AddEditDetHallazgo.fnSave()">Guardar</button>
+        </div>
+    </div>
+</div>

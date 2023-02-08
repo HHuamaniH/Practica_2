@@ -1,0 +1,123 @@
+﻿
+@model  CapaEntidad.ViewModel.VM_InformeLegal
+
+<script type="text/javascript">
+
+    var _renderRecomendacionAP = {};
+
+    _renderRecomendacionAP.fnSelectRecom = function () {
+        _renderRecomendacionAP.frm.find("#divEspeciesAP").hide();
+
+        if (_renderRecomendacionAP.frm.find("#chkPorEspecie").is(':checked')) {
+            _renderRecomendacionAP.frm.find("#divEspeciesAP").show();
+        }
+    }
+  
+
+    $(document).ready(function () {
+        _renderRecomendacionAP.frm = $("#frmRecomendacionesAP");
+        _renderRecomendacionAP.fnSelectRecom();
+    });
+
+</script>
+<!--Recomendaciones para el tipo Aplicacion de medidas cuatelares antes del PAU-->
+<div id="frmRecomendacionesAP">
+    <div>
+        <br />
+    </div>
+    <div class="form-row">
+        <div class="form-group col-md-4">
+            <label for="chkGTF" class="text-small">Guía transporte forestal</label>
+        </div>
+        <div class="form-group col-md-6">
+            @Html.CheckBoxFor(m => m.chkGTF, new { @class = "form-check-input", style = "width:15px;height:16px;" })
+        </div>
+        <div class="form-group col-md-2">
+        </div>
+    </div>
+
+    <div class="form-row">
+        <div class="form-group col-md-4">
+            <label for="chkLTrozas" class="text-small">Listas de trozas</label>
+        </div>
+        <div class="form-group col-md-6">
+            @Html.CheckBoxFor(m => m.chkLTrozas, new { @class = "form-check-input", style = "width:15px;height:16px;" })
+        </div>
+        <div class="form-group col-md-2">
+        </div>
+    </div>
+
+    <div class="form-row">
+        <div class="form-group col-md-4">
+            <label for="chkPlanManejo" class="text-small">Plan de Manejo</label>
+        </div>
+        <div class="form-group col-md-6">
+            @Html.CheckBoxFor(m => m.chkPlanManejo, new { @class = "form-check-input", style = "width:15px;height:16px;" })
+        </div>
+        <div class="form-group col-md-2">
+        </div>
+    </div>
+
+    <div class="form-row">
+        <div class="form-group col-md-4">
+            <label for="chkPOA" class="text-small">POA</label>
+        </div>
+        <div class="form-group col-md-6">
+            @Html.CheckBoxFor(m => m.chkPOA, new { @class = "form-check-input", style = "width:15px;height:16px;" })
+        </div>
+        <div class="form-group col-md-2">
+        </div>
+    </div>
+
+    <div class="form-row">
+        <div class="form-group col-md-4">
+            <label for="chkPorEspecie" class="text-small">Por especie</label>
+        </div>
+        <div class="form-group col-md-6">
+            @Html.CheckBoxFor(m => m.chkPorEspecie, new
+            {
+                @class = "form-check-input",
+                style = "width:15px;height:16px;",
+                @onchange = "_renderRecomendacionAP.fnSelectRecom()"
+            })
+
+        </div>
+        <div class="form-group col-md-2">
+        </div>
+    </div>
+
+    <div class="form-row" id="divEspeciesAP" style="display:none;">
+        <div class="form-group col-md-4">
+        </div>
+        <div class="form-group col-md-6">
+            <div class="row">
+                @Html.Partial("~/Areas/Fiscalizacion/Views/InformeLegal/Shared/_renderListaEspecieAP.cshtml", Model)
+            </div>
+        </div>
+        <div class="form-group col-md-2">
+        </div>
+    </div>
+
+    <div class="form-row">
+        <div class="form-group col-md-4">
+            <label for="txtDescMedidasCautelaresAP" class="text-small">Descripción de medidas cautelares</label>
+        </div>
+        <div class="form-group col-md-6">
+            @Html.TextAreaFor(m => m.txtDescMedidasCautelaresAP, 3, 1, new { @class = "form-control form-control-sm" })
+        </div>
+        <div class="form-group col-md-2">
+        </div>
+    </div>
+
+    <div class="form-row">
+        <div class="form-group col-md-4">
+            <label for="txtRecomendacionesAP" class="text-small">Recomendaciones</label>
+        </div>
+        <div class="form-group col-md-6">
+            @Html.TextAreaFor(m => m.txtRecomendacionesAP, 3, 1, new { @class = "form-control form-control-sm" })
+        </div>
+        <div class="form-group col-md-2">
+        </div>
+    </div>
+
+</div>

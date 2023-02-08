@@ -1,0 +1,117 @@
+﻿
+@model List<CapaEntidad.DOC.Ent_INFORME_BOSQUE_SECO>
+
+<script type="text/javascript">
+    var _DatosCampoBosqueSeco = {};
+
+    _DatosCampoBosqueSeco.fnInitDataTable_Detail = function () {
+        var columns_label = [], columns_data = [], options = {};
+
+        columns_label = ["Especie", "Especie Campo", "POA", "Bloque", "Bloque Campo", "Faja", "Faja Campo", "Código", "Código Campo"
+            , "DAP (cm)", "DAP Campo (cm)", "AC (m)", "AC Campo (m)", "Zona UTM", "Zona UTM Campo", "C. Este", "C. Este Campo", "C. Norte", "C. Norte Campo"
+            , "Estado", "Estado Campo", "G. Amenaza CITE", "G. Amenaza D.S.", "Alt. Total"
+            , "D1", "D2", "D3", "D4", "D5", "D6", "D7"
+            , "L1", "L2", "L3", "L4", "L5", "L6", "L7"
+            , "Observación"];
+        columns_data = ["DESC_ESPECIES", "DESC_ESPECIES_CAMPO","POA", "BLOQUE", "BLOQUE_CAMPO", "FAJA", "FAJA_CAMPO", "CODIGO", "CODIGO_CAMPO"
+            , "DAP", "DAP_CAMPO", "AC", "AC_CAMPO", "ZONA", "ZONA_CAMPO", "COORDENADA_ESTE", "COORDENADA_ESTE_CAMPO", "COORDENADA_NORTE", "COORDENADA_NORTE_CAMPO"
+            , "DESC_EESTADO", "DESC_EESTADO_CAMPO", "DESC_ACATEGORIA_CITE", "DESC_ACATEGORIA_DS", "BS_ALTURA_TOTAL"
+            , "BS_DIAMETRO_RAMA_1", "BS_DIAMETRO_RAMA_2", "BS_DIAMETRO_RAMA_3", "BS_DIAMETRO_RAMA_4", "BS_DIAMETRO_RAMA_5", "BS_DIAMETRO_RAMA_6", "BS_DIAMETRO_RAMA_7"
+            , "BS_LONGITUD_RAMA_1", "BS_LONGITUD_RAMA_2", "BS_LONGITUD_RAMA_3", "BS_LONGITUD_RAMA_4", "BS_LONGITUD_RAMA_5", "BS_LONGITUD_RAMA_6", "BS_LONGITUD_RAMA_7"
+            , "OBSERVACION"];
+        options = {
+            page_length: 10, row_index: true, row_edit: true, row_fnEdit: "_DatosCampoBosqueSeco.fnAddEdit(this)"
+            , page_render: true, page_info: true, page_search: true
+        };
+        _DatosCampoBosqueSeco.dtDatosCampoBosqueSeco = utilDt.fnLoadDataTable_Detail($("#tbDatosCampoBosqueSeco"), columns_label, columns_data, options);
+    }
+
+    _DatosCampoBosqueSeco.fnAddEdit = function (obj) {
+        var url = urlLocalSigo + "Supervision/ManInforme/_EspecieBosqueSeco";
+        var option = { url: url, type: 'POST', datos: { asCodInforme: _DatosCampoBosqueSeco.frm.find("#hdfCodInforme").val() }, divId: "mdlManInforme_EspecieCampo" };
+        utilSigo.fnOpenModal(option, function () {
+            _EspecieBosqueSeco.fnSaveForm = function (data) {
+                if (data != null) {
+                    var dt = _DatosCampoBosqueSeco.dtDatosCampoBosqueSeco;
+                    var row = dt.row($(obj).parents('tr')).data();
+                    row = data;
+                    dt.row($(obj).parents('tr')).data(row).draw(false);
+                    utilSigo.toastSuccess("Exito", "Datos actualizados correctamente");
+
+                    $("#mdlManInforme_EspecieCampo").modal('hide');
+                } else {
+                    utilSigo.toastError("Error", "No se pudieron guardar los datos");
+                }
+            }
+
+            if (obj != null && obj != "") {
+                var data = _DatosCampoBosqueSeco.dtDatosCampoBosqueSeco.row($(obj).parents('tr')).data();
+                _EspecieBosqueSeco.fnInit(utilSigo.fnConvertArrayToObject(data));
+            }
+        });
+    }
+
+    _DatosCampoBosqueSeco.fnImport = function (e, obj) {
+        var url = urlLocalSigo + "Supervision/ManInforme/ImportarDatosCampo";
+        uploadFile.fileSelectHandler(e, obj, url, { asTipo: "BOSQUE_SECO", asCodInforme: _DatosCampoBosqueSeco.frm.find("#hdfCodInforme").val(), aiNumPoa: 0 }, function (data) {
+            $("#mdlManInforme_DatosCampo").modal('hide');
+        });
+    }
+
+    $(document).ready(function () {
+        _DatosCampoBosqueSeco.frm = $("#frmDatosCampoBosqueSeco");
+
+        _DatosCampoBosqueSeco.fnInitDataTable_Detail();
+        @{
+            var serializer = new System.Web.Script.Serialization.JavaScriptSerializer();
+            serializer.MaxJsonLength = Int32.MaxValue;
+            var jsonModel = serializer.Serialize(Model);
+        }
+
+        @*_DatosCampoBosqueSeco.dtDatosCampoBosqueSeco.rows.add(JSON.parse('@Html.Raw(Json.Encode(@Model))')).draw();*@
+        _DatosCampoBosqueSeco.dtDatosCampoBosqueSeco.rows.add(@Html.Raw(jsonModel)).draw();
+    });
+</script>
+
+<style type="text/css">
+    #dvDatosCampoBosqueSeco .dataTables_info {
+        color: #33b35a;
+        font-size: 15px;
+        margin-top: 17px;
+    }
+</style>
+
+<div class="modal-dialog modal-custom-tb" role="document" style="height:95%;">
+    <div class="modal-content" style="height:100%;">
+        <div class="modal-header text-small" style="cursor:move;">
+            Datos de Campo de la Muestra de Bosque Seco
+            <i class="fa fa-close" style="cursor:pointer;" data-dismiss="modal" aria-label="Close"></i>
+        </div>
+        <div class="modal-body" style="padding:0px;overflow-y:auto;">
+            <div id="frmDatosCampoBosqueSeco">
+                @Html.Hidden("hdfCodInforme", (string)ViewBag.hdfCodInforme)
+                <div id="dvDatosCampoBosqueSeco" class="table-responsive" style="margin-top:5px;">
+                    <table id="tbDatosCampoBosqueSeco" style="width:100%" class="table table-hover table-bordered">
+                        <thead>
+                            <tr>
+                                <th colspan="41" class="text-sm-left">
+                                    <div class="form-inline">
+                                        <label style="cursor:pointer;" class="fa mx-2 fa-lg fa-file-excel-o" title="Importar Archivo" data-toggle="tooltip">
+                                            <input type="file" id="fileselect" name="fileselect" style="display:none" size="60" onchange="_DatosCampoBosqueSeco.fnImport(event, this)">
+                                        </label>
+                                        <a href="@Url.Content("~/Archivos/Plantilla/PoaBosqueSecoCenso_Modificar.xlsx")"> <i class="fa mx-2 fa-lg fa-folder-open" style="cursor:pointer;" data-toggle="tooltip" data-placement="top" title="Descargar Plantilla Campo"></i></a>
+                                        <strong>
+                                            Listado de Especies Seleccionadas en la Muestra
+                                        </strong>
+                                    </div>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer"></div>
+    </div>
+</div>

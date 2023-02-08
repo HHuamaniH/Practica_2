@@ -1,0 +1,112 @@
+﻿<script src="~/Areas/THabilitante/js/ManPreviosAlerta/_ItemCOAdministrador.js?v=2"></script>
+<style>
+    #frmItemDestinatario input[type=text] {
+        text-transform: uppercase;
+    }
+    .c-pointer{
+        cursor:pointer !important;        
+    }
+</style>
+
+<div class="modal-dialog modal-lg" role="document" id="divItemCOAdministrador">
+    <div class="modal-content">
+        <div class="modal-header text-small" style="cursor:move;padding:0.5rem;">
+            <h5 class="modal-title" id="h5Titulo">Nuevo</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body">
+            <form id="frmItemCOAdministrador">
+                <input type="hidden" id="hdCodCOAdministrador" name="hdCodCOAdministrador" value="0" />
+                <input type="hidden" id="codPersona" name="codPersona" value="" />
+                <input type="hidden" id="desPersona" name="desPersona" value="" />
+                <div class="form-row">
+                    <div class="col-md-12 mb-3">
+                        <label for="btnPersona" class="text-small">Persona<i class="fa fa-cog fa-spin text-danger" id="iconPersona" style="display:none;" data-toggle="tooltip" data-placement="top" title="Seleccione Persona"></i></label>
+                        <div class="input-group">
+                            <div class="input-group-prepend" onclick="_ItemCOAdministrador.fnBuscarPersona('FUNCIONARIO','0000006');" style="cursor:pointer;">
+                                <span class="input-group-text"><i class="fa fa-search-plus" data-toggle="tooltip" data-placement="top" title="Buscar Funcionarios"></i></span>
+                            </div>                            
+                            @Html.Editor("lbDestinatarioPersona", new { htmlAttributes = new { @class = "form-control form-control-sm", @disabled = "disabled" } })
+                            @Html.Hidden("hdDestinatarioCod_Persona")
+                        </div>                       
+
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label for="txtDestinatarioCargo" class="text-small">Cargo</label>
+                        <input type="text" id="txtDestinatarioCargo" name="txtDestinatarioCargo" class="form-control form-control-sm" required />
+                    </div>
+
+                    <div class="form-group col-md-6">
+                        <label for="txtDestinatarioCorreo" class="text-small">Correo</label>
+                        <input type="email" id="txtDestinatarioCorreo" name="txtDestinatarioCorreo" class="form-control form-control-sm" required />
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label for="txtDestinatarioDocumento" class="text-small">Documento</label>
+                        <input type="text" id="txtDestinatarioDocumento" name="txtDestinatarioDocumento" class="form-control form-control-sm" required />
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="txtDestinatarioFechaDocumento" class="text-small">Fecha Documento</label>
+                        <input type="date" id="txtDestinatarioFechaDocumento" name="txtDestinatarioFechaDocumento" class="form-control form-control-sm" required />
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label for="txtDestinatarioOficina" class="text-small">Oficina</label>
+                        <input type="text" id="txtDestinatarioOficina" name="txtDestinatarioOficina" class="form-control form-control-sm" required />
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="cbEstado" class="text-small">Estado</label>
+                        <select id="cbEstado" name="cbDestinatarioEstado" class="form-control form-control-sm">
+                            <option value="1">Activo</option>
+                            <option value="0">Desactivo</option>
+                        </select>
+
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-12">
+                        <label for="txtObservacion" class="text-small">Observacion</label>
+                        <textarea type="text" id="txtObservacion" name="txtObservacion" class="form-control form-control-sm" maxlength="8000"></textarea>
+                    </div>
+
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-12">
+                        <label for="usuario" class="text-small">Usuario</label>
+                        <input class="form-control form-control-sm text-box single-line valid" id="usuario" minlength="3" maxlength="20" name="usuario" type="text" value="" required>
+                    </div>
+                </div>
+                <div class="form-row" id="divMod" hidden>
+                    <div class="form-group col-md-12">
+                        <div class="custom-control custom-checkbox my-1 mr-sm-2">
+                            <input class="custom-control-input" data-val="true" data-val-required="El campo modPassword es obligatorio." id="modPassword" name="modPassword" type="checkbox" value="true">
+                            <label class="custom-control-label" id="lblCheckMod" style="margin-top:4px;" for="modPassword">
+                                Modificar Contraseña
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-row" id="divP1">
+                    <div class="form-group col-md-6">
+                        <label for="password" class="text-small">Contraseña</label>
+                        <input type="password" class="form-control form-control-sm valid" id="password" minlength="3" name="password" maxlength="20" placeholder="Clave" required>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="passwordR" class="text-small">Confirmar Contraseña</label>
+                        <input type="password" class="form-control form-control-sm" id="passwordR" minlength="3" name="passwordR" maxlength="20" placeholder="Repetir Clave" required>
+                    </div>
+                </div>               
+            </form>
+        </div>
+        <div class="modal-footer">
+            <button type="button" id="btnGuardar" class="btn btn-primary" onclick="">Guardar</button>
+        </div>
+    </div>
+</div>

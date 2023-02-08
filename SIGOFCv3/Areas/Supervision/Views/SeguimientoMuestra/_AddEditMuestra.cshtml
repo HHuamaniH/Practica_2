@@ -1,0 +1,452 @@
+﻿@model CapaEntidad.ViewModel.VM_SeguimientoMuestraDetalle
+@{
+    List<SelectListItem> lstUTM = new List<SelectListItem> { new SelectListItem { Text= "17S",Value= "17S" }
+                                                    ,new SelectListItem {Text="18S",Value="18S" },new SelectListItem { Text="19S",Value="19S"} };
+} 
+<style type="text/css">
+    /* table#tbListMenus thead tr th {
+        text-align: center;
+    }
+    tbCaracteristicas
+    table#tbListMenus tbody tr td[colspan="3"] {
+        font-weight: bold;
+    }*/
+    /*table#tbListMenusSeleccionados thead tr th {
+        text-align: center;
+    }
+
+    table#tbListMenusSeleccionados tbody tr td[colspan="3"] {
+        font-weight: bold;
+    }*/
+    #tbCaracteristicas tr td:first-child {
+        width: 17%;
+    }
+    .colActionFirts {
+        width: 50px;
+    }
+    .cboVarios{
+        width:50%
+    }
+    .table-wrapper-scroll-y {
+        display: block;
+        max-height: 600px;
+        overflow-y: auto;
+        -ms-overflow-style: -ms-autohiding-scrollbar;
+    }
+</style>
+<script src="~/Areas/Supervision/js/SeguimientoMuestra/_AddEditMuestra.js"></script>
+<div id="divItemMuestra" class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+        <div class="modal-header text-small" style="cursor:move;padding:0.5rem;">
+            <h5 class="modal-title">@Model.titulo</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="card-body">
+            <form id="frmMuestraDendrologica">
+                @Html.HiddenFor(m => m.codSeguimiento)
+                @Html.HiddenFor(m => m.secuencial)
+                @Html.HiddenFor(m => m.estado)
+                <input type="hidden" id="hdcodEspecie" value="@Model.codEspecie" />
+                <input type="hidden" id="hdcodCenso" value="@Model.ddlCensoId" />
+                @Html.HiddenFor(m => m.esMaderable)
+                @Html.HiddenFor(m => m.codSecuencialCenso)               
+                <input type="hidden" id="hdEspecie" value="@Model.especie" />
+                <ul class="nav nav-tabs" id="myTab" role="tablist">
+                    <li class="nav-item"><a class="nav-link active" data-toggle="tab" href="#navMuestra" role="tab" aria-controls="muestra" aria-selected="true">Muestra</a></li>
+                    <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#navCaracteristica" role="tab" aria-controls="caracteristicas" aria-selected="true">Características Adicionales</a></li>
+                    <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#navEspecie" role="tab" aria-controls="especie" aria-selected="true">Identificación de la Especie</a></li>
+                </ul>
+                <div class="tab-content">
+                    <div class="tab-pane fade show active" id="navMuestra" role="tabpanel" aria-labelledby="nav-home-tab">
+                        <div class="card-body table-wrapper-scroll-y">
+                            <div class="form-row">
+                                <div class="form-group col-md-6">
+                                    <label for="codMuestra" class="text-small">Codigo de la Muestra</label>
+                                    @Html.EditorFor(m => m.codMuestra, new { htmlAttributes = new { @class = "form-control form-control-sm", @maxlength = "50" } })
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label for="fColeccion" class="text-small">Fecha de Colección</label>
+                                    @Html.EditorFor(m => m.fColeccion, new { htmlAttributes = new { @class = "form-control form-control-sm", @maxlength = "10" } })
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="col-md-6 mb-3">
+                                    <label for="Z_UTMId" class="text-small">Zona UTM</label>
+                                    @Html.DropDownListFor(m => m.Z_UTMId, lstUTM, new { @class = "form-control form-control-sm" })
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="C_ESTE" class="text-small">Coord. Este</label>
+                                    @Html.EditorFor(m => m.C_ESTE, new { htmlAttributes = new { @class = "form-control form-control-sm", placeholder = "Coordenada Este", maxlength = "6", onkeypress = "return utilSigo.onKeyEntero(event, this);" } })
+                                </div>                                
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group col-md-6">
+                                    <label for="C_NORTE" class="text-small">Coord. Norte</label>
+                                    @Html.EditorFor(m => m.C_NORTE, new { htmlAttributes = new { @class = "form-control form-control-sm", placeholder = "Coordenada Norte", maxlength = "7", onkeypress = "return utilSigo.onKeyEntero(event, this);" } })
+
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label for="poa" class="text-small">Nro POA<i class="fa fa-cog fa-spin text-danger" id="iconPoa" style="display:none;" data-toggle="tooltip" data-placement="top" title="Seleccione POA"></i></label>
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text"><i id="btnAddPoa" class="fa fa-plus" style="cursor:pointer;" data-toggle="tooltip" data-placement="top" title="Buscar"></i></span>
+                                        </div>
+                                        @Html.EditorFor(m => m.poa, new { htmlAttributes = new { @class = "form-control form-control-sm", disabled = "disabled" } })
+                                        @Html.HiddenFor(m => m.idPoa)
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-header text-small">
+                                Datos Censo
+                            </div>
+                            <div class="card-body">
+                                <div class="form-row">
+                                    <div class="col-md-6 mb-3">
+                                        <label for="ddlCensoId" class="text-small">Código Censo</label>
+                                        <select id="ddlCensoId" name="ddlCensoId" class="form-control input-sm"></select>
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label for="txtCensoAntiguo" class="text-small">Especie Censo</label>
+                                        <input type="text" id="txtCensoAntiguo" value="@Model.especieCensoDes" class="form-control form-control-sm" disabled />
+                                    </div>
+                                </div>
+                                <div class="form-row">                                    
+                                    <div class="col-md-6 mb-3">
+                                        <label for="txtCensoEstado" class="text-small">Estado</label>
+                                        <input type="text" id="txtCensoEstado" value="@Model.estadoEspecieCenso" class="form-control form-control-sm" disabled />
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label for="txtCensoCondicion" class="text-small">Condición</label>
+                                        <input type="text" id="txtCensoCondicion" value="@Model.condicionEspecieCenso" class="form-control form-control-sm" disabled />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group col-md-6">
+                                    <label for="colectorDes" class="text-small">Colector</label>
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text"><i id="btnColector" class="fa fa-plus" style="cursor:pointer;" data-toggle="tooltip" data-placement="top" title="Agregar" onclick="_addEditMuestra.fnAddPersona(1)"></i></span>
+                                        </div>
+                                        @Html.EditorFor(m => m.colectorDes, new { htmlAttributes = new { @class = "form-control form-control-sm", disabled = "disabled" } })
+                                        @Html.HiddenFor(m => m.colectorId)
+                                    </div>
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label for="supervisoDes" class="text-small">Supervisor</label>
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text"><i id="btnSupervisor" class="fa fa-plus" style="cursor:pointer;" data-toggle="tooltip" data-placement="top" title="Agregar" onclick="_addEditMuestra.fnAddPersona(2)"></i></span>
+                                        </div>
+                                        @Html.EditorFor(m => m.supervisoDes, new { htmlAttributes = new { @class = "form-control form-control-sm", disabled = "disabled" } })
+                                        @Html.HiddenFor(m => m.supervisorId)
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group col-md-12">
+                                    <label for="obs" class="text-small">Observacion</label>
+                                    @Html.TextAreaFor(m => m.obs, new { @class = "form-control form-control-sm", @rows = "2" })
+
+                                </div>
+                            </div>
+                            <div class="card-header text-small">
+                                Imagenes Adjuntas                                                               
+                            </div>
+                            <div class="card-body">
+                                <div class="form-row">
+                                    <div class="form-group col-md-12" style="text-align:right">
+                                        <button type="button" class="btn btn-outline-info btn-sm" style="margin-top:3px;" title="Subir archivo" onclick="_addEditMuestra.fnImportFile()">Subir</button>
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group col-md-12">
+                                        <div class="custom-file" id="customFile">
+                                            <input type="file" class="custom-file-input" multiple="multiple" id="txtArchivoAdjunto" aria-describedby="fileHelp" onchange="_addEditMuestra.fnSelectFile(event, this)">
+                                            <label class="custom-file-label" for="txtArchivoAdjunto" style="color:#989797">
+                                                Seleccionar Imagen
+                                            </label>
+                                        </div>
+                                    </div>
+                                    
+                                </div>
+                                <div class="form-row" id="divFotos" style="display:none;">
+                                    <div class="form-group col-md-12">
+                                        <label id="lblFotos" for="fotos" class="text-small"></label>
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="table-responsive">
+                                        <table id="tbFotos" style="width:100%" class="table table-hover table-bordered">
+                                            <thead>
+                                                <tr>
+                                                    <th colspan="7" class="text-sm-left">
+                                                        <div class="form-inline">
+                                                            <strong>
+                                                                Imagenes
+                                                            </strong>
+                                                        </div>
+                                                    </th>
+                                                </tr>
+                                            </thead>
+                                            <tbody></tbody>
+                                        </table>
+                                    </div>
+                                    <br />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tab-pane fade show" id="navCaracteristica" role="tabpanel" aria-labelledby="nav-home-tab">
+                        <div class="card-body">
+                            <div class="form-row">
+                                <div class="table-responsive table-wrapper-scroll-y">
+                                    <table id="tbCaracteristicas" class="table table-hover table-bordered">
+                                        <thead>
+                                            <!-- <tr>
+                                    <th >
+                                        CARACTERÍSTICAS DENDROLÓGICAS
+                                    </th>
+                                </tr>-->
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td>1. De la forma del fuste</td>
+                                                <td colspan="3">
+                                                    @Html.DropDownListFor(m => m.cboFFusteId, new SelectList(Model.cboFFuste, "Value", "Text"), new { @class = "form-control form-control-sm cboVarios" })
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>2. Del tipo de ramificación</td>
+                                                <td colspan="3">
+                                                    @Html.DropDownListFor(m => m.cboTRamificacionId, new SelectList(Model.cboTRamificacion, "Value", "Text"), new { @class = "form-control form-control-sm cboVarios" })
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>3. Del tipo de raices</td>
+                                                <td colspan="3">
+                                                    @Html.DropDownListFor(m => m.cboTRaicesId, new SelectList(Model.cboTRaices, "Value", "Text"), new { @class = "form-control form-control-sm cboVarios" })
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td rowspan="4" style="vertical-align:middle">4. De la corteza externa</td>
+                                                <td>4.1. Color</td>
+                                                <td colspan="2">
+                                                    @Html.DropDownListFor(m => m.cboCEColorId, new SelectList(Model.cboCEColor, "Value", "Text"), new { @class = "form-control form-control-sm cboVarios" })
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>4.2. De las lenticelas</td>
+                                                <td colspan="2">
+                                                    @Html.DropDownListFor(m => m.cboCELenticelasId, new SelectList(Model.cboCELenticelas, "Value", "Text"), new { @class = "form-control form-control-sm cboVarios" })
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>4.3. Del ritidoma</td>
+                                                <td colspan="2">
+                                                    @Html.DropDownListFor(m => m.cboCERitidomaId, new SelectList(Model.cboCERitidoma, "Value", "Text"), new { @class = "form-control form-control-sm cboVarios" })
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>4.4. Otras estructuras</td>
+                                                <td colspan="2">
+                                                    @Html.DropDownListFor(m => m.cboCEOExtructuraId, new SelectList(Model.cboCEOExtructura, "Value", "Text"), new { @class = "form-control form-control-sm cboVarios" })
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td rowspan="9" style="vertical-align:middle">5. De la corteza interna</td>
+                                                <td>5.1. Color</td>
+                                                <td colspan="2">
+                                                    @Html.EditorFor(m => m.cortezaiColor, new { htmlAttributes = new { @class = "form-control form-control-sm", maxlength = "50" } })
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>5.2. Olor</td>
+                                                <td colspan="2">
+                                                    @Html.EditorFor(m => m.cortezaiOlor, new { htmlAttributes = new { @class = "form-control form-control-sm", maxlength = "50" } })
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td rowspan="6" style="vertical-align:middle">5.3. Del exudado</td>
+                                                <td>5.3.1. Tipo</td>
+                                                <td>
+                                                    @Html.DropDownListFor(m => m.cboCIETipoId, new SelectList(Model.cboCIETipo, "Value", "Text"), new { @class = "form-control form-control-sm cboVarios" })
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>5.3.2. Color</td>
+                                                <td>
+                                                    @Html.DropDownListFor(m => m.cboCIEColorId, new SelectList(Model.cboCIEColor, "Value", "Text"), new { @class = "form-control form-control-sm cboVarios" })
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>5.3.3. Olor</td>
+                                                <td>
+                                                    @Html.EditorFor(m => m.cortezaiExuOlor, new { htmlAttributes = new { @class = "form-control form-control-sm", maxlength = "50" } })
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>5.3.4. Sabor</td>
+                                                <td>
+                                                    @Html.DropDownListFor(m => m.cboCIESaborId, new SelectList(Model.cboCIESabor, "Value", "Text"), new { @class = "form-control form-control-sm cboVarios" })
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>5.3.5. Abundancia</td>
+                                                <td>
+                                                    @Html.DropDownListFor(m => m.cboCIEAbundanciaId, new SelectList(Model.cboCIEAbundancia, "Value", "Text"), new { @class = "form-control form-control-sm cboVarios" })
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>5.3.6. Otra caracteristica</td>
+                                                <td>
+                                                    @Html.TextAreaFor(m => m.otrasCaracteristica, new { @class = "form-control form-control-sm", @rows = "2", maxlength = "500" })
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>5.4. Tipo</td>
+                                                <td colspan="2">
+                                                    @Html.DropDownListFor(m => m.cboCITipoId, new SelectList(Model.cboCITipo, "Value", "Text"), new { @class = "form-control form-control-sm cboVarios" })
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td rowspan="3" style="vertical-align:middle">6. De las inclusiones en el fuste</td>
+                                                <td>6.1. Espinas</td>
+                                                <td colspan="2">
+                                                    @Html.DropDownListFor(m => m.cboIFEspinasId, new SelectList(Model.cboIFEspinas, "Value", "Text"), new { @class = "form-control form-control-sm cboVarios" })
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>6.2.  Aguijones</td>
+                                                <td colspan="2">
+                                                    @Html.DropDownListFor(m => m.cboIFAguijonesId, new SelectList(Model.cboIFAguijones, "Value", "Text"), new { @class = "form-control form-control-sm cboVarios" })
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>6.3.  Otras estructuras</td>
+                                                <td colspan="2">
+                                                    @Html.TextAreaFor(m => m.otrasEstructuras, new { @class = "form-control form-control-sm", @rows = "2", maxlength = "500" })
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>7. Del hábito del árbol</td>
+                                                <td colspan="3">
+                                                    @Html.EditorFor(m => m.habitoArbol, new { htmlAttributes = new { @class = "form-control form-control-sm", maxlength = "50" } })
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td rowspan="5" style="vertical-align:middle">8. De las hojas</td>
+                                                <td rowspan="2">8.1. Por la presencia de la yema axilar</td>
+                                                <td>8.1.1. Simple</td>
+                                                <td>
+                                                    @Html.CheckBoxFor(m => m.chkHSimple)
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>8.1.2. Compuesta</td>
+                                                <td>
+                                                    @Html.CheckBoxFor(m => m.chkHCompuesta)
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>8.2. Por su forma</td>
+                                                <td colspan="2">
+                                                    @Html.DropDownListFor(m => m.cboHojaFormaId, new SelectList(Model.cboHojaForma, "Value", "Text"), new { @class = "form-control form-control-sm cboVarios" })
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>8.3. Tipo de borde</td>
+                                                <td colspan="2">
+                                                    @Html.DropDownListFor(m => m.cboHojaBordeId, new SelectList(Model.cboHojaBorde, "Value", "Text"), new { @class = "form-control form-control-sm cboVarios" })
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>8.4. Disposición de la lamina</td>
+                                                <td colspan="2">
+                                                    @Html.DropDownListFor(m => m.cboHojaLaminaId, new SelectList(Model.cboHojaLamina, "Value", "Text"), new { @class = "form-control form-control-sm cboVarios" })
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td rowspan="5" style="vertical-align:middle">9. De las flores</td>
+                                                <td>9.1. Color</td>
+                                                <td colspan="2">
+                                                    @Html.DropDownListFor(m => m.cboFloresColorId, new SelectList(Model.cboFloresColor, "Value", "Text"), new { @class = "form-control form-control-sm cboVarios" })
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>9.2. Tamaño</td>
+                                                <td colspan="2">
+                                                    @Html.EditorFor(m => m.floresTamaño, new { htmlAttributes = new { @class = "form-control form-control-sm", maxlength = "50" } })
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td rowspan="2" style="vertical-align:middle">9.3. Tipo</td>
+                                                <td>9.3.1. Flor simple</td>
+                                                <td>
+                                                    @Html.CheckBoxFor(m => m.chkFSimple)
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>9.3.2. Inflorescencia</td>
+                                                <td>
+                                                    @Html.CheckBoxFor(m => m.chkFInflorescencia)
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>9.4. Otras caracteristicas</td>
+                                                <td colspan="2">
+                                                    @Html.TextAreaFor(m => m.floresOtrasCaract, new { @class = "form-control form-control-sm", @rows = "2", maxlength = "500" })
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td rowspan="4" style="vertical-align:middle">10. De los frutos</td>
+                                                <td>10.1. Tipo</td>
+                                                <td colspan="2">
+                                                    @Html.DropDownListFor(m => m.cboFrutosTipoId, new SelectList(Model.cboFrutosTipo, "Value", "Text"), new { @class = "form-control form-control-sm cboVarios" })
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>10.2. Color</td>
+                                                <td colspan="2">
+                                                    @Html.DropDownListFor(m => m.cboFrutosColorId, new SelectList(Model.cboFrutosColor, "Value", "Text"), new { @class = "form-control form-control-sm cboVarios" })
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>10.3. Tamaño</td>
+                                                <td colspan="2">
+                                                    @Html.EditorFor(m => m.frutosTamanio, new { htmlAttributes = new { @class = "form-control form-control-sm", maxlength = "50" } })
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>10.4. Otras características</td>
+                                                <td colspan="2">
+                                                    @Html.TextAreaFor(m => m.frutosOtrasCaract, new { @class = "form-control form-control-sm", @rows = "2", maxlength = "500" })
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="navEspecie" class="tab-pane fade show">
+                        <div class="card-body">
+                            <div class="form-row">
+                                <div class="form-group col-md-6">
+                                    <label for="codEspecie" class="text-small">Especie Respuesta</label>
+                                    <select id="codEspecie" name="codEspecie" class="form-control input-sm"></select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="modal-footer">
+            <button id="btnGuardar" class="btn btn-primary btn-sm">Guardar</button>
+            <button id="btnCancelar" class="btn btn-secondary btn-sm">Cancelar</button>
+        </div>
+    </div>
+</div>

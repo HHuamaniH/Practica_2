@@ -1,0 +1,704 @@
+﻿@model CapaEntidad.ViewModel.VM_Obligacion
+@{
+    ViewBag.Title = "ValidarObligacion";
+    Layout = "~/Views/Shared/_LayoutMain.cshtml";
+}
+
+<script src="~/Areas/THabilitante/js/ManObligaciones/ValidarObligacion.js"></script>
+
+<script type="text/javascript">
+    ValidarObligacion.fnLoadData('@Html.Raw(Json.Encode(@Model.listSenial))', 'DataSenial');
+    ValidarObligacion.fnLoadData('@Html.Raw(Json.Encode(@Model.listHallazgo))', 'DataHallazgo');
+    ValidarObligacion.fnLoadData('@Html.Raw(Json.Encode(@Model.listArchivoDenuncia))', 'DataArchivoDenuncia');
+    ValidarObligacion.fnLoadData('@Html.Raw(Json.Encode(@Model.listArchivoOtros))', 'DataArchivoOtros');
+    ValidarObligacion.fnLoadData('@Html.Raw(Json.Encode(@Model.listArchivo))', 'DataArchivo');
+</script>
+
+<style type="text/css">
+    fieldset.scheduler-border {
+        border: 1px groove #ddd !important;
+        padding: 0 1.4em 0.5em 1.4em !important;
+        margin: 0 0 0.5em 0 !important;
+        -webkit-box-shadow: 0px 0px 0px 0px #686867;
+        box-shadow: 0px 0px 0px 0px #686867;
+    }
+
+    legend.scheduler-border {
+        font-size: 13px !important;
+        text-align: left !important;
+        color: #686867;
+        width: auto;
+        padding: 0 10px;
+        border-bottom: none;
+    }
+</style>
+
+<div class="container-fluid">
+    <div class="card">
+        <div class="card-header text-left">
+            @Model.lblTituloCabecera
+        </div>
+        <div class="card-body">
+            <div class="card">
+                <div class="card-header text-small">
+                    <a id="btnGuardar" href="javascript:void(0)" style="cursor:pointer;" data-toggle="tooltip" data-placement="top" title="Guardar" onclick="ValidarObligacion.fnSaveForm()"><i class="fa mx-2 fa-lg fa-save"></i></a>
+                    <a style="cursor:pointer;" data-toggle="tooltip" data-placement="top" title="Regresar" onclick="ValidarObligacion.regresar()"><i class="fa mx-2 fa-lg fa-reply"></i></a>
+                    <span id="lblTitulo">@Model.lblTituloEstado</span>
+                </div>
+                <div class="card-body">
+                    <form id="frmValidarObligacion">
+                        @Html.HiddenFor(m => m.hdfCodObligacion)
+                        @Html.HiddenFor(m => m.hdfTipoObligacionId)
+                        @Html.HiddenFor(m => m.hdfCodUCuenta)
+                        @Html.HiddenFor(m => m.hdfCodUsuarioControl)
+
+                        <ul class="nav nav-tabs" id="myTab" role="tablist">
+                            <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#navEstado" role="tab" aria-controls="home" aria-selected="true">Estado Situacional</a></li>
+                            <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#navDatos" role="tab" aria-controls="home" aria-selected="true">Obligación</a></li>
+                            <li id="idNavHallazgo" class="nav-item" style="display:none;"><a class="nav-link" data-toggle="tab" href="#navHallazgo" role="tab" aria-controls="home" aria-selected="true">Hallazgo</a></li>
+                            <li id="idNavDenuncia" class="nav-item" style="display:none;"><a class="nav-link" data-toggle="tab" href="#navDenuncia" role="tab" aria-controls="home" aria-selected="true">Denuncia</a></li>
+                            <li id="idNavOtros" class="nav-item" style="display:none;"><a class="nav-link" data-toggle="tab" href="#navOtros" role="tab" aria-controls="home" aria-selected="true">Otros</a></li>
+                            <li id="idNavArchivos" class="nav-item"><a class="nav-link" data-toggle="tab" href="#navArchivos" role="tab" aria-controls="home" aria-selected="true">Archivos</a></li>
+                        </ul>
+                        <div class="tab-content">
+                            <div class="tab-pane" id="navEstado" role="tabpanel" aria-labelledby="nav-home-tab">
+                                <div class="form-row" style="margin-top:10px;">
+                                    <div class="form-group col-md-3">
+                                        <label for="lblestado" class="text-small">Indicador</label>
+                                        @Html.DropDownListFor(m => m.ddlEstadoId, new SelectList(Model.ddlEstado, "Value", "Text"), new { @class = "form-control form-control-sm" })
+                                    </div>
+                                </div>
+                                <div class="form-row" id="dvObservacion">
+                                    <div class="form-group col-md-12">
+                                        <label for="lblobservacion" class="text-small">Observación</label>
+                                        @Html.TextAreaFor(m => m.txtobservacion, 3, 1, new { @class = "form-control form-control-sm" })
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group col-md-4">
+                                        <label for="lblUsuarioRegistro" class="text-small">Usuario que ingresó el registro</label>
+                                        @Html.EditorFor(m => m.txtUsuarioRegistro, new { htmlAttributes = new { @class = "form-control form-control-sm", disabled = true } })
+                                    </div>
+                                    <div class="form-group col-md-4">
+                                        <label for="lblUsuarioControl" class="text-small">Usuario que asignó el útimo estado situacional al registro</label>
+                                        @Html.EditorFor(m => m.txtUsuarioControl, new { htmlAttributes = new { @class = "form-control form-control-sm", disabled = true } })
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="tab-pane" id="navDatos" role="tabpanel" aria-labelledby="nav-home-tab">
+                                <div class="card" style="margin-top:10px;">
+                                    <div class="card-header text-small">Datos Generales</div>
+                                    <div class="card-body">
+                                        <div class="form-row">
+                                            <div class="form-group col-md-4">
+                                                <label for="lblthabilitante" class="text-small">Título Habilitante</label>
+                                                @Html.EditorFor(m => m.txtthabilitante, new { htmlAttributes = new { @class = "form-control form-control-sm", disabled = true } })
+                                            </div>
+                                            <div class="form-group col-md-4">
+                                                <label for="lblmodalidad" class="text-small">Modalidad</label>
+                                                @Html.EditorFor(m => m.txtmodalidad, new { htmlAttributes = new { @class = "form-control form-control-sm", disabled = true } })
+                                            </div>
+                                            <div class="form-group col-md-4">
+                                                <label for="lbltitular" class="text-small">Titular Actual</label>
+                                                @Html.EditorFor(m => m.txttitular, new { htmlAttributes = new { @class = "form-control form-control-sm", disabled = true } })
+                                            </div>
+                                        </div>
+                                        <div class="form-row">
+                                            <div class="form-group col-md-2">
+                                                <label for="lblregion" class="text-small">Región</label>
+                                                @Html.EditorFor(m => m.txtregion, new { htmlAttributes = new { @class = "form-control form-control-sm", disabled = true } })
+                                            </div>
+                                            <div class="form-group col-md-4">
+                                                <label for="lblpmanejo" class="text-small">Plan de Manejo</label>
+                                                @Html.EditorFor(m => m.txtpmanejo, new { htmlAttributes = new { @class = "form-control form-control-sm", disabled = true } })
+                                            </div>
+                                            <div class="form-group col-md-4">
+                                                <label for="lbltipoobligacion" class="text-small">Tipo de Obligación</label>
+                                                @Html.EditorFor(m => m.txttipoobligacion, new { htmlAttributes = new { @class = "form-control form-control-sm", disabled = true } })
+                                            </div>
+                                            <div class="form-group col-md-2">
+                                                <label for="lblfechaenviador" class="text-small">F. Registro</label>
+                                                @Html.EditorFor(m => m.txtfechaenviado, new { htmlAttributes = new { @class = "form-control form-control-sm", placeholder = "dd/mm/yyyy", maxlength = "10", disabled = true } })
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card" style="margin-top:10px;">
+                                    <div class="card-header text-small">Datos Obligación</div>
+                                    <div class="card-body">
+                                        <!-- Informe de ejecución -->
+                                        @if (Model.hdfTipoObligacionId == "1")
+                                        {
+                                            <div class="form-row">
+                                                <div class="form-group col-md-4">
+                                                    <label for="lblnumARFFS" class="text-small">N° de registro ARFFS</label>
+                                                    @Html.EditorFor(m => m.txtnumARFFS, new { htmlAttributes = new { @class = "form-control form-control-sm", disabled = true } })
+                                                </div>
+                                                <div class="form-group col-md-2">
+                                                    <label for="lblfechaARFFS" class="text-small">Fecha de presentación</label>
+                                                    @Html.EditorFor(m => m.txtfechaARFFS, new { htmlAttributes = new { @class = "form-control form-control-sm", placeholder = "dd/mm/yyyy", maxlength = "10", disabled = true } })
+                                                </div>
+                                                <div class="form-group col-md-4">
+                                                    <label for="lblnumOSINFOR" class="text-small">N° de registro OSINFOR</label>
+                                                    @Html.EditorFor(m => m.txtnumOSINFOR, new { htmlAttributes = new { @class = "form-control form-control-sm", disabled = true } })
+                                                </div>
+                                                <div class="form-group col-md-2">
+                                                    <label for="lblfechaOSINFOR" class="text-small">Fecha de presentación</label>
+                                                    @Html.EditorFor(m => m.txtfechaOSINFOR, new { htmlAttributes = new { @class = "form-control form-control-sm", placeholder = "dd/mm/yyyy", maxlength = "10", disabled = true } })
+                                                </div>
+                                            </div>
+                                        }
+
+                                        <!-- Regente Forestal -->
+                                        @if (Model.hdfTipoObligacionId == "2")
+                                        {
+                                            <div class="form-row">
+                                                <div class="form-group col-md-4">
+                                                    <label for="lblcatregencia" class="text-small">Categoría de regencia</label>
+                                                    @Html.EditorFor(m => m.txtcatregencia, new { htmlAttributes = new { @class = "form-control form-control-sm", disabled = true } })
+                                                </div>
+                                                <div class="form-group col-md-8">
+                                                    <label for="lblnomregente" class="text-small">Nombre de regente</label>
+                                                    @Html.EditorFor(m => m.txtnomregente, new { htmlAttributes = new { @class = "form-control form-control-sm", disabled = true } })
+                                                </div>
+                                            </div>
+                                            <div class="form-row" style="margin-top:10px;">
+                                                <div class="form-group col-md-4">
+                                                    <fieldset class="scheduler-border">
+                                                        <legend class="scheduler-border">Vigencia</legend>
+                                                        <div class="form-row">
+                                                            <div class="form-group col-md-6">
+                                                                <label for="lblfechaini" class="text-small">Fecha Inicio</label>
+                                                                @Html.EditorFor(m => m.txtfechaini, new { htmlAttributes = new { @class = "form-control form-control-sm", placeholder = "dd/mm/yyyy", maxlength = "10", disabled = true } })
+                                                            </div>
+                                                            <div class="form-group col-md-6">
+                                                                <label for="lblfechafin" class="text-small">Fecha Fin</label>
+                                                                @Html.EditorFor(m => m.txtfechafin, new { htmlAttributes = new { @class = "form-control form-control-sm", placeholder = "dd/mm/yyyy", maxlength = "10", disabled = true } })
+                                                            </div>
+                                                        </div>
+                                                    </fieldset>
+                                                </div>
+                                                <div class="form-group col-md-3">
+                                                    <label for="lblcomunidad_grupo" class="text-small">@Model.lblcomunidad_grupo</label>
+                                                    @Html.EditorFor(m => m.txtcomunidad_grupo, new { htmlAttributes = new { @class = "form-control form-control-sm", disabled = true } })
+                                                </div>
+                                            </div>
+                                            <div class="form-row">
+                                                <div class="form-group col-md-12">
+                                                    <label for="lbldetallepatrullaje" class="text-small">Observación</label>
+                                                    @Html.TextAreaFor(m => m.txtobsregente, 3, 1, new { @class = "form-control form-control-sm", disabled = true })
+                                                </div>
+                                            </div>
+                                            <div class="form-row" style="margin-top:10px;">
+                                                <div class="form-group col-md-4">
+                                                    <fieldset class="scheduler-border">
+                                                        <legend class="scheduler-border">Alcance</legend>
+                                                        @foreach (var item in Model.listChkAlcance)
+                                                        {
+                                                            <div class="form-row">
+                                                                <div class="form-group col-md-12">
+                                                                    @Html.CheckBoxFor(m => item.Checked, new { @class = "form-check-input", style = "width:15px;height:16px;margin-left:0px;margin-top:0px;", disabled = true })
+                                                                    <label class="text-small" style="margin-left:25px;">@item.Text</label>
+                                                                </div>
+                                                            </div>
+                                                        }
+                                                    </fieldset>
+                                                </div>
+                                            </div>
+                                            @Html.HiddenFor(m => m.hdfCese)
+                                            <div class="form-row" id="dvCese" style="margin-top:10px;">
+                                                <div class="form-group col-md-12">
+                                                    <fieldset class="scheduler-border">
+                                                        <legend class="scheduler-border">Cese contrato</legend>
+                                                        <div class="form-row">
+                                                            <div class="form-group col-md-2">
+                                                                <label for="lblfechacese" class="text-small">Fecha de cese</label>
+                                                                @Html.EditorFor(m => m.txtfechacese, new { htmlAttributes = new { @class = "form-control form-control-sm", placeholder = "dd/mm/yyyy", maxlength = "10", disabled = true } })
+                                                            </div>
+                                                            <div class="form-group col-md-10">
+                                                                <label for="lblmotivocese" class="text-small">Motivo de cese</label>
+                                                                @Html.EditorFor(m => m.txtmotivocese, new { htmlAttributes = new { @class = "form-control form-control-sm", disabled = true } })
+                                                            </div>
+                                                        </div>
+                                                    </fieldset>
+                                                </div>
+                                            </div>
+                                        }
+
+                                        <!-- Libro de Operación -->
+                                        @if (Model.hdfTipoObligacionId == "3")
+                                        {
+                                            <div class="form-row">
+                                                <div class="form-group col-md-4">
+                                                    <label for="lblnumregLibro" class="text-small">N° de registro</label>
+                                                    @Html.EditorFor(m => m.txtnumregLibro, new { htmlAttributes = new { @class = "form-control form-control-sm", disabled = true } })
+                                                </div>
+                                                <div class="form-group col-md-4">
+                                                    <label for="lblformareg" class="text-small">Forma de registro</label>
+                                                    @Html.EditorFor(m => m.txtformareg, new { htmlAttributes = new { @class = "form-control form-control-sm", disabled = true } })
+                                                </div>
+                                                @Html.HiddenFor(m => m.ddlFormaRegistroId)
+                                                <div class="form-group col-md-4" id="dvOtroSistema">
+                                                    <label for="lblotrosistema" class="text-small">Otro sistema</label>
+                                                    @Html.EditorFor(m => m.txtotrosistema, new { htmlAttributes = new { @class = "form-control form-control-sm", disabled = true } })
+                                                </div>
+                                            </div>
+                                        }
+
+                                        <!-- Custodio Forestal -->
+                                        @if (Model.hdfTipoObligacionId == "4")
+                                        {
+                                            <div class="form-row">
+                                                <div class="form-group col-md-6">
+                                                    <fieldset class="scheduler-border">
+                                                        <legend class="scheduler-border">Motivo de Patrullaje</legend>
+                                                        <div class="form-row">
+                                                            <div class="form-group col-md-6">
+                                                                @Html.CheckBoxFor(m => m.chkactprogramada, new { @class = "form-check-input", style = "width:15px;height:16px;margin-left:0px;margin-top:0px;", disabled = true })
+                                                                <label for="lblactprogramada" class="text-small" style="margin-left:25px;">Actividad programada de patrullaje</label>
+                                                            </div>
+                                                            <div class="form-group col-md-6">
+                                                                @Html.CheckBoxFor(m => m.chkzonavulnerable, new { @class = "form-check-input", style = "width:15px;height:16px;margin-left:0px;margin-top:0px;", disabled = true })
+                                                                <label for="lblzonavulnerable" class="text-small" style="margin-left:25px;">Verificación zonas vulnerables</label>
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-row">
+                                                            <div class="form-group col-md-6">
+                                                                @Html.CheckBoxFor(m => m.chkalertatemprana, new { @class = "form-check-input", style = "width:15px;height:16px;margin-left:0px;margin-top:0px;", disabled = true })
+                                                                <label for="lblalertatemprana" class="text-small" style="margin-left:25px;">Alerta temprana</label>
+                                                            </div>
+                                                            <div class="form-group col-md-6">
+                                                                @Html.CheckBoxFor(m => m.chkalertadeforest, new { @class = "form-check-input", style = "width:15px;height:16px;margin-left:0px;margin-top:0px;", disabled = true })
+                                                                <label for="lblalertadeforest" class="text-small" style="margin-left:25px;">Alertas de deforestación</label>
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-row">
+                                                            <div class="form-group col-md-12">
+                                                                <label for="lblotromotivo" class="text-small">Otros</label>
+                                                                @Html.TextAreaFor(m => m.txtotromotivo, 3, 1, new { @class = "form-control form-control-sm", disabled = true })
+                                                            </div>
+                                                        </div>
+                                                    </fieldset>
+                                                </div>
+                                                <div class="form-group col-md-6">
+                                                    <fieldset class="scheduler-border">
+                                                        <legend class="scheduler-border">Resultado de Patrullaje</legend>
+                                                        <div class="form-row">
+                                                            <div class="form-group col-md-6">
+                                                                @Html.CheckBoxFor(m => m.chkmineriailegal, new { @class = "form-check-input", style = "width:15px;height:16px;margin-left:0px;margin-top:0px;", disabled = true })
+                                                                <label for="lblmineriailegal" class="text-small" style="margin-left:25px;">Minería Ilegal</label>
+                                                            </div>
+                                                            <div class="form-group col-md-6">
+                                                                @Html.CheckBoxFor(m => m.chkcambiouso, new { @class = "form-check-input", style = "width:15px;height:16px;margin-left:0px;margin-top:0px;", disabled = true })
+                                                                <label for="lblcambiouso" class="text-small" style="margin-left:25px;">Cambio de uso</label>
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-row">
+                                                            <div class="form-group col-md-6">
+                                                                @Html.CheckBoxFor(m => m.chktalailegal, new { @class = "form-check-input", style = "width:15px;height:16px;margin-left:0px;margin-top:0px;", disabled = true })
+                                                                <label for="lbltalailegal" class="text-small" style="margin-left:25px;">Tala Ilegal</label>
+                                                            </div>
+                                                            <div class="form-group col-md-6">
+                                                                @Html.CheckBoxFor(m => m.chkninguno, new { @class = "form-check-input", style = "width:15px;height:16px;margin-left:0px;margin-top:0px;", disabled = true })
+                                                                <label for="lblninguno" class="text-small" style="margin-left:25px;">Ninguno</label>
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-row">
+                                                            <div class="form-group col-md-12">
+                                                                <label for="lblotroresultado" class="text-small">Otros</label>
+                                                                @Html.TextAreaFor(m => m.txtotroresultado, 3, 1, new { @class = "form-control form-control-sm", disabled = true })
+                                                            </div>
+                                                        </div>
+                                                    </fieldset>
+                                                </div>
+                                            </div>
+                                            <div class="form-row">
+                                                <div class="form-group col-md-12">
+                                                    <fieldset class="scheduler-border">
+                                                        <legend class="scheduler-border">Descripción</legend>
+                                                        <div class="form-row">
+                                                            <div class="form-group col-md-2">
+                                                                <label for="lblfechapatrullaje" class="text-small">Fecha de patrullaje</label>
+                                                                @Html.EditorFor(m => m.txtfechapatrullaje, new { htmlAttributes = new { @class = "form-control form-control-sm", placeholder = "dd/mm/yyyy", maxlength = "10", disabled = true } })
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-row">
+                                                            <div class="form-group col-md-12">
+                                                                <label for="lbldetallepatrullaje" class="text-small">Detalle de patrullaje</label>
+                                                                @Html.TextAreaFor(m => m.txtdetallepatrullaje, 3, 1, new { @class = "form-control form-control-sm", disabled = true })
+                                                            </div>
+                                                        </div>
+                                                    </fieldset>
+                                                </div>
+                                            </div>
+                                        }
+
+                                        <!-- Contrato con tercero -->
+                                        @if (Model.hdfTipoObligacionId == "5")
+                                        {
+                                            <div class="form-row">
+                                                <div class="form-group col-md-4">
+                                                    <fieldset class="scheduler-border">
+                                                        <legend class="scheduler-border">Vigencia</legend>
+                                                        <div class="form-row">
+                                                            <div class="form-group col-md-6">
+                                                                <label for="lblfechaini" class="text-small">Fecha Inicio</label>
+                                                                @Html.EditorFor(m => m.txtfechaini, new { htmlAttributes = new { @class = "form-control form-control-sm", placeholder = "dd/mm/yyyy", maxlength = "10", disabled = true } })
+                                                            </div>
+                                                            <div class="form-group col-md-6">
+                                                                <label for="lblfechafin" class="text-small">Fecha Fin</label>
+                                                                @Html.EditorFor(m => m.txtfechafin, new { htmlAttributes = new { @class = "form-control form-control-sm", placeholder = "dd/mm/yyyy", maxlength = "10", disabled = true } })
+                                                            </div>
+                                                        </div>
+                                                    </fieldset>
+                                                </div>
+                                            </div>
+                                            <div class="form-row">
+                                                <div class="form-group col-md-4">
+                                                    <label for="lblruc" class="text-small">N° RUC</label>
+                                                    @Html.EditorFor(m => m.txtruc, new { htmlAttributes = new { @class = "form-control form-control-sm", disabled = true } })
+                                                </div>
+                                                <div class="form-group col-md-8">
+                                                    <label for="lblentidad" class="text-small">Nombre de la empresa o persona natural</label>
+                                                    @Html.EditorFor(m => m.txtentidad, new { htmlAttributes = new { @class = "form-control form-control-sm", disabled = true } })
+                                                </div>
+                                            </div>
+                                            @Html.HiddenFor(m => m.hdfCese)
+                                            <div class="form-row" id="dvCese" style="margin-top:10px;">
+                                                <div class="form-group col-md-12">
+                                                    <fieldset class="scheduler-border">
+                                                        <legend class="scheduler-border">Cese contrato</legend>
+                                                        <div class="form-row">
+                                                            <div class="form-group col-md-2">
+                                                                <label for="lblfechacese" class="text-small">Fecha de cese</label>
+                                                                @Html.EditorFor(m => m.txtfechacese, new { htmlAttributes = new { @class = "form-control form-control-sm", placeholder = "dd/mm/yyyy", maxlength = "10", disabled = true } })
+                                                            </div>
+                                                            <div class="form-group col-md-10">
+                                                                <label for="lblmotivocese" class="text-small">Motivo de cese</label>
+                                                                @Html.EditorFor(m => m.txtmotivocese, new { htmlAttributes = new { @class = "form-control form-control-sm", disabled = true } })
+                                                            </div>
+                                                        </div>
+                                                    </fieldset>
+                                                </div>
+                                            </div>
+                                        }
+
+                                        <!-- Linderos, hitos u Otros -->
+                                        @if (Model.hdfTipoObligacionId == "6")
+                                        {
+                                            <div class="form-row">
+                                                <div class="col-md-12">
+                                                    <div class="table-responsive">
+                                                        <table id="tbSenial" style="width:100%" class="table table-hover table-bordered">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th colspan="7" class="text-sm-left">
+                                                                        <div class="form-inline">
+                                                                            <strong>Lista de Señales</strong>
+                                                                        </div>
+                                                                    </th>
+                                                                </tr>
+                                                            </thead>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        }
+
+                                        <!-- Garantía de fiel cumplimiento -->
+                                        @if (Model.hdfTipoObligacionId == "7")
+                                        {
+                                            <div class="form-row">
+                                                <div class="form-group col-md-4">
+                                                    <fieldset class="scheduler-border">
+                                                        <legend class="scheduler-border">Vigencia</legend>
+                                                        <div class="form-row">
+                                                            <div class="form-group col-md-6">
+                                                                <label for="lblfechaini" class="text-small">Fecha Inicio</label>
+                                                                @Html.EditorFor(m => m.txtfechaini, new { htmlAttributes = new { @class = "form-control form-control-sm", placeholder = "dd/mm/yyyy", maxlength = "10", disabled = true } })
+                                                            </div>
+                                                            <div class="form-group col-md-6">
+                                                                <label for="lblfechafin" class="text-small">Fecha Fin</label>
+                                                                @Html.EditorFor(m => m.txtfechafin, new { htmlAttributes = new { @class = "form-control form-control-sm", placeholder = "dd/mm/yyyy", maxlength = "10", disabled = true } })
+                                                            </div>
+                                                        </div>
+                                                    </fieldset>
+                                                </div>
+                                            </div>
+                                        }
+
+                                        <!-- Movilización de frutos, productos y sub productos -->
+                                        @if (Model.hdfTipoObligacionId == "8")
+                                        {
+                                            <div class="form-row">
+                                                <div class="form-group col-md-12">
+                                                    <fieldset class="scheduler-border">
+                                                        <legend class="scheduler-border">Primera Serie</legend>
+                                                        <div class="form-row">
+                                                            <div class="form-group col-md-4">
+                                                                <label for="lblgtfprimera" class="text-small">N° de GTF (primera serie)</label>
+                                                                @Html.EditorFor(m => m.txtgtfprimera, new { htmlAttributes = new { @class = "form-control form-control-sm", disabled = true } })
+                                                            </div>
+                                                            <div class="form-group col-md-2">
+                                                                <label for="lblfechagtfprimera" class="text-small">Fecha de emisión de la GTF</label>
+                                                                @Html.EditorFor(m => m.txtfechagtfprimera, new { htmlAttributes = new { @class = "form-control form-control-sm", placeholder = "dd/mm/yyyy", maxlength = "10", disabled = true } })
+                                                            </div>
+                                                            <div class="form-group col-md-3">
+                                                                <label for="lblprimernumtrozas_primera" class="text-small">Primer N° de listas de trozas</label>
+                                                                @Html.EditorFor(m => m.txtprimernumtrozas_primera, new { htmlAttributes = new { @class = "form-control form-control-sm", disabled = true } })
+                                                            </div>
+                                                            <div class="form-group col-md-3">
+                                                                <label for="lblultimonumtrozas_primera" class="text-small">Último N° de listas de trozas</label>
+                                                                @Html.EditorFor(m => m.txtultimonumtrozas_primera, new { htmlAttributes = new { @class = "form-control form-control-sm", disabled = true } })
+                                                            </div>
+                                                        </div>
+                                                    </fieldset>
+                                                </div>
+                                            </div>
+                                            <div class="form-row">
+                                                <div class="form-group col-md-12">
+                                                    <fieldset class="scheduler-border">
+                                                        <legend class="scheduler-border">Última Serie</legend>
+                                                        <div class="form-row">
+                                                            <div class="form-group col-md-4">
+                                                                <label for="lblgtfprimera" class="text-small">N° de GTF (última serie)</label>
+                                                                @Html.EditorFor(m => m.txtgtfultima, new { htmlAttributes = new { @class = "form-control form-control-sm", disabled = true } })
+                                                            </div>
+                                                            <div class="form-group col-md-2">
+                                                                <label for="lblfechagtfprimera" class="text-small">Fecha de emisión de la GTF</label>
+                                                                @Html.EditorFor(m => m.txtfechagtfultima, new { htmlAttributes = new { @class = "form-control form-control-sm", placeholder = "dd/mm/yyyy", maxlength = "10", disabled = true } })
+                                                            </div>
+                                                            <div class="form-group col-md-3">
+                                                                <label for="lblprimernumtrozas_primera" class="text-small">Primer N° de listas de trozas</label>
+                                                                @Html.EditorFor(m => m.txtprimernumtrozas_ultima, new { htmlAttributes = new { @class = "form-control form-control-sm", disabled = true } })
+                                                            </div>
+                                                            <div class="form-group col-md-3">
+                                                                <label for="lblultimonumtrozas_primera" class="text-small">Último N° de listas de trozas</label>
+                                                                @Html.EditorFor(m => m.txtultimonumtrozas_ultima, new { htmlAttributes = new { @class = "form-control form-control-sm", disabled = true } })
+                                                            </div>
+                                                        </div>
+                                                    </fieldset>
+                                                </div>
+                                            </div>
+                                        }
+
+                                        <!-- Marcados de Trozas y Tocones -->
+                                        @if (Model.hdfTipoObligacionId == "9")
+                                        {
+                                            <div class="form-row">
+                                                <div class="form-group col-md-2">
+                                                    <label for="lblcodificado" class="text-small">¿Viene codificando las trozas?</label>
+                                                    @Html.EditorFor(m => m.txtcodificado, new { htmlAttributes = new { @class = "form-control form-control-sm", disabled = true } })
+                                                </div>
+                                            </div>
+                                            @Html.HiddenFor(m => m.hdfCodificacionTrozas)
+                                            <div id="dvCodificado">
+                                                @foreach (var item in Model.listChkTipoCodificado)
+                                                {
+                                                    <div class="form-row">
+                                                        <div class="form-group col-md-6">
+                                                            @Html.CheckBoxFor(m => item.Checked, new { @class = "form-check-input", style = "width:15px;height:16px;margin-left:0px;margin-top:0px;", disabled = true })
+                                                            <label class="text-small" style="margin-left:25px;">@item.Text</label>
+                                                        </div>
+                                                    </div>
+                                                }
+                                            </div>
+                                            @Html.HiddenFor(m => m.hdfOtroTipoMaterial)
+                                            <div class="form-row" id="dvOtroTipoMadera">
+                                                <div class="form-group col-md-12">
+                                                    <label for="lblotrotipomaterial" class="text-small">Otro tipo de material</label>
+                                                    @Html.EditorFor(m => m.txtotrotipomaterial, new { htmlAttributes = new { @class = "form-control form-control-sm", disabled = true } })
+                                                </div>
+                                            </div>
+                                            <div class="form-row" id="dvNoCodificado">
+                                                <div class="form-group col-md-12">
+                                                    <label for="lblmotivo_nocodificado" class="text-small">Motivo</label>
+                                                    @Html.TextAreaFor(m => m.txtmotivo_nocodificado, 3, 1, new { @class = "form-control form-control-sm", disabled = true })
+                                                </div>
+                                            </div>
+                                        }
+
+                                        <!-- Medidas Correctivas -->
+                                        @if (Model.hdfTipoObligacionId == "10")
+                                        {
+                                            <div class="form-row">
+                                                @Html.HiddenFor(m => m.hdfTipoMedida)
+                                                <div class="form-group col-md-3">
+                                                    <label for="lbltipomedida" class="text-small">Tipo de medida</label>
+                                                    @Html.EditorFor(m => m.txttipomedida, new { htmlAttributes = new { @class = "form-control form-control-sm", disabled = true } })
+                                                </div>
+                                                <div class="form-group col-md-7" id="dvNumResolucion">
+                                                    <label for="lblnumresolucion" class="text-small">N° resolución</label>
+                                                    @Html.EditorFor(m => m.txtnumresolucion, new { htmlAttributes = new { @class = "form-control form-control-sm", disabled = true } })
+                                                </div>
+                                                <div class="form-group col-md-2" id="dvFechaPlazo">
+                                                    <label for="lblfechaplazo" class="text-small">Plazo para su implementación</label>
+                                                    @Html.EditorFor(m => m.txtfechaplazo, new { htmlAttributes = new { @class = "form-control form-control-sm", placeholder = "dd/mm/yyyy", maxlength = "10", disabled = true } })
+                                                </div>
+                                                <div class="form-group col-md-9" id="dvDescripcion">
+                                                    <label for="lbldescripcion" class="text-small">Descripción</label>
+                                                    @Html.EditorFor(m => m.txtdescripcion, new { htmlAttributes = new { @class = "form-control form-control-sm", disabled = true } })
+                                                </div>
+                                            </div>
+                                        }
+
+                                        <!-- Actos Administrativos -->
+                                        @if (Model.hdfTipoObligacionId == "11")
+                                        {
+                                            <div class="form-row">
+                                                <div class="form-group col-md-6">
+                                                    <div class="form-row">
+                                                        <div class="form-group col-md-7">
+                                                            <label for="lbltiporegistro" class="text-small">Tipo de registro</label>
+                                                            @Html.EditorFor(m => m.txttiporegistro, new { htmlAttributes = new { @class = "form-control form-control-sm", disabled = true } })
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-row">
+                                                        <div class="form-group col-md-12">
+                                                            <label for="lblresaprobacion" class="text-small">Resolución de aprobación</label>
+                                                            @Html.EditorFor(m => m.txtresaprobacion, new { htmlAttributes = new { @class = "form-control form-control-sm", disabled = true } })
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group col-md-1"></div>
+                                                <div class="form-group col-md-4">
+                                                    <fieldset class="scheduler-border">
+                                                        <legend class="scheduler-border">Vigencia</legend>
+                                                        <div class="form-row">
+                                                            <div class="form-group col-md-6">
+                                                                <label for="lblfechaini" class="text-small">Fecha Inicio</label>
+                                                                @Html.EditorFor(m => m.txtfechaini, new { htmlAttributes = new { @class = "form-control form-control-sm", placeholder = "dd/mm/yyyy", maxlength = "10", disabled = true } })
+                                                            </div>
+                                                            <div class="form-group col-md-6">
+                                                                <label for="lblfechafin" class="text-small">Fecha Fin</label>
+                                                                @Html.EditorFor(m => m.txtfechafin, new { htmlAttributes = new { @class = "form-control form-control-sm", placeholder = "dd/mm/yyyy", maxlength = "10", disabled = true } })
+                                                            </div>
+                                                        </div>
+                                                    </fieldset>
+                                                </div>
+                                            </div>
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="tab-pane" id="navHallazgo" role="tabpanel" aria-labelledby="nav-home-tab">
+                                <div class="form-row" style="margin-top:10px;">
+                                    <div class="col-md-12">
+                                        <div class="table-responsive">
+                                            <table id="tbHallazgo" style="width:100%" class="table table-hover table-bordered">
+                                                <thead>
+                                                    <tr>
+                                                        <th colspan="6" class="text-sm-left">
+                                                            <div class="form-inline">
+                                                                <strong>Lista de Hallazgos</strong>
+                                                            </div>
+                                                        </th>
+                                                    </tr>
+                                                </thead>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="tab-pane" id="navDenuncia" role="tabpanel" aria-labelledby="nav-home-tab">
+                                <div class="form-row" style="margin-top:10px;">
+                                    <div class="form-group col-md-4">
+                                        <label for="lblareaafectada" class="text-small">Área afectada</label>
+                                        @Html.EditorFor(m => m.txtareaafectada, new { htmlAttributes = new { @class = "form-control form-control-sm", disabled = true } })
+                                    </div>
+                                    <div class="form-group col-md-2">
+                                        <label for="lblzona" class="text-small">Zona</label>
+                                        @Html.EditorFor(m => m.txtzona, new { htmlAttributes = new { @class = "form-control form-control-sm", disabled = true } })
+                                    </div>
+                                    <div class="form-group col-md-3">
+                                        <label for="lblcoordEste" class="text-small">Coordenada Este</label>
+                                        @Html.EditorFor(m => m.txtcoordEste, new { htmlAttributes = new { @class = "form-control form-control-sm", disabled = true } })
+                                    </div>
+                                    <div class="form-group col-md-3">
+                                        <label for="lblcoordNorte" class="text-small">Coordenada Norte</label>
+                                        @Html.EditorFor(m => m.txtcoordNorte, new { htmlAttributes = new { @class = "form-control form-control-sm", disabled = true } })
+                                    </div>
+                                </div>
+                                <div class="form-row" style="margin-top:10px;">
+                                    <div class="col-md-6">
+                                        <div class="table-responsive">
+                                            <table id="tbArchivoDenuncia" style="width:100%" class="table table-hover table-bordered">
+                                                <thead>
+                                                    <tr>
+                                                        <th colspan="4" class="text-sm-left">
+                                                            <div class="form-inline">
+                                                                <strong>Archivos Adjuntos</strong>
+                                                            </div>
+                                                        </th>
+                                                    </tr>
+                                                </thead>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="tab-pane" id="navOtros" role="tabpanel" aria-labelledby="nav-home-tab">
+                                <div class="form-row" style="margin-top:10px;">
+                                    <div class="form-group col-md-2">
+                                        <label for="lblnumdocumento" class="text-small">N° documento</label>
+                                        @Html.EditorFor(m => m.txtnumdocumento, new { htmlAttributes = new { @class = "form-control form-control-sm", disabled = true } })
+                                    </div>
+                                    <div class="form-group col-md-2">
+                                        <label for="lblnumregistro" class="text-small">N° de registro</label>
+                                        @Html.EditorFor(m => m.txtnumregistro, new { htmlAttributes = new { @class = "form-control form-control-sm", disabled = true } })
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group col-md-2">
+                                        <label for="lblfechaactadmin" class="text-small">Fecha</label>
+                                        @Html.EditorFor(m => m.txtfechaactadmin, new { htmlAttributes = new { @class = "form-control form-control-sm", placeholder = "dd/mm/yyyy", maxlength = "10", disabled = true } })
+                                    </div>
+                                    <div class="form-group col-md-10">
+                                        <label for="lbldescripcion" class="text-small">Descripción</label>
+                                        @Html.EditorFor(m => m.txtdescripcion, new { htmlAttributes = new { @class = "form-control form-control-sm", disabled = true } })
+                                    </div>
+                                </div>
+                                <div class="form-row" style="margin-top:10px;">
+                                    <div class="col-md-6">
+                                        <div class="table-responsive">
+                                            <table id="tbArchivoOtros" style="width:100%" class="table table-hover table-bordered">
+                                                <thead>
+                                                    <tr>
+                                                        <th colspan="4" class="text-sm-left">
+                                                            <div class="form-inline">
+                                                                <strong>Archivos Adjuntos</strong>
+                                                            </div>
+                                                        </th>
+                                                    </tr>
+                                                </thead>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="tab-pane" id="navArchivos" role="tabpanel" aria-labelledby="nav-home-tab">
+                                <div class="form-row" style="margin-top:10px;">
+                                    <div class="col-md-6" id="dvTbArchivo">
+                                        <div class="table-responsive">
+                                            <table id="tbArchivo" style="width:100%" class="table table-hover table-bordered">
+                                                <thead>
+                                                    <tr>
+                                                        <th colspan="6" class="text-sm-left">
+                                                            <div class="form-inline">
+                                                                <strong>Archivos Adjuntos</strong>
+                                                            </div>
+                                                        </th>
+                                                    </tr>
+                                                </thead>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

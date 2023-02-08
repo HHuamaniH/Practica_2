@@ -1,0 +1,551 @@
+﻿@model CapaEntidad.ViewModel.VM_Resodirec
+@{
+    ViewBag.Title = "Tablero Estadistico";
+    Layout = "~/Views/Shared/_LayoutMain.cshtml";
+}
+
+<script type="text/javascript">
+    var reporteTablero = {};
+
+    reporteTablero.fnConsultarR1 = function () {
+        reporteTablero.frm.find("#idTab").val(1);
+        var tipo = "RDTERMINO";
+        var anio = reporteTablero.frm.find("#ddlAnioRp1").val();
+        reporteTablero.frm.find("#divResultRpt1").hide();
+        reporteTablero.frm.find("#detalle01").hide();
+
+        
+        if (anio != "0000000") {
+            var url1 = urlLocalSigo + "General/ReporteFiscalizacion/ObtenerReporte01";
+            $.ajax({
+                url: url1,
+                type: 'POST',
+                datatype: "json",
+                traditional: true,
+                data: { 'tipo': tipo, 'anio': anio },
+                success: function (data) {
+                    reporteTablero.frm.find("#divResultRpt1").show();
+                    var obj = data.result;
+                    reporteTablero.frm.find("#rdtermino").val(obj.RESOLUCIONES);
+                    reporteTablero.frm.find("#allanamiento").val(obj.ALLANAMIENTO);
+                    reporteTablero.frm.find("#porcallanamiento").val(obj.PORC_ALLANAMIENTO);
+                    reporteTablero.frm.find("#subsanacion").val(obj.SUBSANACION);
+                    reporteTablero.frm.find("#porcSubsanacion").val(obj.PORC_SUBSANACION);
+                    reporteTablero.frm.find("#decomiso").val(obj.DECOMISO);
+                    reporteTablero.frm.find("#porcDecomiso").val(obj.PORC_DECOMISO);
+                    reporteTablero.frm.find("#plancierre").val(obj.PLAN_CIERRE);
+                    reporteTablero.frm.find("#porcplancierre").val(obj.PORC_PLAN_CIERRE);
+                    reporteTablero.frm.find("#disposicionfauna").val(obj.DISP_FAUNA);
+                    reporteTablero.frm.find("#porcdisposicionfauna").val(obj.PORC_DISP_FAUNA);
+                    reporteTablero.frm.find("#medidaCorrectiva").val(obj.MEDIDA_CORRECTIVA);
+                    reporteTablero.frm.find("#porcMedidaCorrectiva").val(obj.PORC_MEDIDA_CORRECTIVA);
+                    reporteTablero.frm.find("#archivo").val(obj.ARCHIVO);
+                    reporteTablero.frm.find("#porArchivo").val(obj.PORC_ARCHIVO);
+
+                }
+            });
+
+        } else {
+            utilSigo.toastWarning("Aviso", "Seleccione Año a consultar");
+        }
+    }
+
+    reporteTablero.fnConsultarR2 = function () {
+        var tipo = "RDINICIO";
+        var anio = reporteTablero.frm.find("#ddlAnioRp2").val();
+        reporteTablero.frm.find("#divResultRpt2").hide();
+        reporteTablero.frm.find("#detalle02").hide();
+        
+        if (anio != "0000000") {
+            var url1 = urlLocalSigo + "General/ReporteFiscalizacion/ObtenerReporte01";
+            $.ajax({
+                url: url1,
+                type: 'POST',
+                datatype: "json",
+                traditional: true,
+                data: { 'tipo': tipo, 'anio': anio },
+                success: function (data) {
+                    reporteTablero.frm.find("#divResultRpt2").show();
+                    var obj = data.result;
+                    reporteTablero.frm.find("#rdinicio").val(obj.RESOLUCIONES);
+                    reporteTablero.frm.find("#medCorrectiva").val(obj.MEDIDA_CAUT);
+                    reporteTablero.frm.find("#porcMedCorrectiva").val(obj.PORC_MEDIDA_CAUT);
+                    reporteTablero.frm.find("#guia").val(obj.MED_CAUT_GTF);
+                    reporteTablero.frm.find("#porcguia").val(obj.PORC_MED_CAUT_GTF);
+                    reporteTablero.frm.find("#troza").val(obj.LIST_TROZA);
+                    reporteTablero.frm.find("#porcTroza").val(obj.PORC_LIST_TROZA);
+                    reporteTablero.frm.find("#planpm").val(obj.PM);
+                    reporteTablero.frm.find("#prcplanpm").val(obj.PORC_PM);
+                    reporteTablero.frm.find("#poa").val(obj.POA);
+                    reporteTablero.frm.find("#porcpoa").val(obj.PORC_POA);
+                }
+            });
+
+        } else {
+            utilSigo.toastWarning("Aviso", "Seleccione Año a consultar");
+        }
+    }
+
+    reporteTablero.fnReporteDetalle01 = function (codEnSelect) {
+        var idTipo = codEnSelect;
+        var anio = reporteTablero.frm.find("#ddlAnioRp1").val();
+        $.ajax({
+            url: '@Url.Action("detalleReport01", "ReporteFiscalizacion")',
+            type: 'GET',
+            datatype: "json",
+            traditional: true,
+            data: { 'tipo': idTipo, 'anio': anio },
+            success: function (data) {
+                reporteTablero.frm.find("#detalle01").show();
+                $("#detalle01").html(data)
+            }
+        });
+
+    };
+
+    reporteTablero.fnReporteDetalle02 = function (codEnSelect) {
+        var idTipo = codEnSelect;
+        var anio = reporteTablero.frm.find("#ddlAnioRp2").val();
+        $.ajax({
+            url: '@Url.Action("detalleReport02", "ReporteFiscalizacion")',
+            type: 'GET',
+            datatype: "json",
+            traditional: true,
+            data: { 'tipo': idTipo, 'anio': anio },
+            success: function (data) {
+                reporteTablero.frm.find("#detalle02").show();
+                $("#detalle02").html(data)
+            }
+        });
+
+    };
+
+    reporteTablero.fnExport = function () {
+        var url = urlLocalSigo + "General/ReporteFiscalizacion/ExportarInfracciones";
+        let option = { url: url, datos: '', type: 'POST' };
+        utilSigo.fnAjax(option, function (data) {
+            if (data.success) {
+                document.location = urlLocalSigo + "Archivos/Plantilla/Reg_Usu/" + data.msj;
+            }
+            else {
+                utilSigo.toastWarning("Aviso", "Sucedio un error, Comuníquese con el Administrador");
+                console.log(data.msj);
+            }
+        });
+    }
+
+    reporteTablero.fnExport2 = function () {
+        var url = urlLocalSigo + "General/ReporteFiscalizacion/ExportarInfracciones2";
+        let option = { url: url, datos: '', type: 'POST' };
+        utilSigo.fnAjax(option, function (data) {
+            if (data.success) {
+                document.location = urlLocalSigo + "Archivos/Plantilla/Reg_Usu/" + data.msj;
+            }
+            else {
+                utilSigo.toastWarning("Aviso", "Sucedio un error, Comuníquese con el Administrador");
+                console.log(data.msj);
+            }
+        });
+    }
+
+    $(document).ready(function () {
+        reporteTablero.frm = $("#frmRepEstadistico");
+    });
+</script>
+
+<div class="container-fluid">
+    <div class="card">
+        <div class="card-header text-right">
+            Tablero Estadístico
+        </div>
+        <div class="card-body">
+            <div class="card">
+                <div class="card-body">
+                    <form id="frmRepEstadistico">
+
+                        <ul class="nav nav-tabs" id="myTab" role="tablist">
+                            <li class="nav-item"><a class="nav-link active" data-toggle="tab" href="#navRRDTermino" role="tab" aria-controls="home" aria-selected="true">Resoluciones Directorales</a></li>
+                            <li class="nav-item"><a class="nav-link " data-toggle="tab" href="#navRRDInicio" role="tab" aria-controls="home" aria-selected="true">Resoluciones Sub Directorales</a></li>
+                        </ul>
+
+                        <div class="tab-content">
+                            <div class="tab-pane fade show active" id="navRRDTermino" role="tabpanel" aria-labelledby="nav-home-tab">
+
+                                <div id="divConsultaR1">
+                                    <br />
+                                    <div class="form-row">
+                                        <div class="form-group col-md-4">
+                                            <label for="lblperiodo" class="text-small">Año:</label>
+                                            <div style="display: flex; position: relative;">
+                                                @Html.DropDownListFor(m => m.txtIdPOA, new SelectList(Model.sBusqueda, "Value", "Text"), new { @class = "form-control form-control-sm", @id = "ddlAnioRp1" })
+                                                <button type="button" class="btn btn-primary btn-sm" style="margin-left:15px;" onclick="reporteTablero.fnConsultarR1()">Consultar</button>
+                                            </div>
+                                        </div>
+                                    </div><br /><br /><br />
+                                    <div id="divResultRpt1" style="justify-content:center !important; display:none;">
+                                        <div class="row" style="margin: 0 auto !important; text-align:center !important;">
+                                            <div class="col-sm-12" style="text-align:center">
+                                                <table class="table table-bordered" style="width: 10% !important; align-self: center; margin: 0 auto;">
+                                                    <thead>
+                                                        <tr> <th style="background-color:red !important; color:white !important; font-weight:bold">RD Término</th> </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr>
+                                                            <td>
+                                                                <output id="rdtermino" type="text" />
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>
+                                                                <button style="font-size: 11px !important;" onclick="reporteTablero.fnReporteDetalle01('0')" type="button" class="btn btn-outline btn-link">Ver Detalle</button>
+                                                            </td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                                <br />
+                                            </div>
+                                            <div class="col-sm-6">
+                                                <table class="table table-bordered" style="width:30% !important;  margin: 0 auto;">
+                                                    <thead>
+                                                        <tr>
+                                                            <th colspan="2" style="background-color:darkgoldenrod !important; color:white !important; font-weight:bold">Allanamiento</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr>
+                                                            <td width="15%">
+                                                                <output id="allanamiento" type="text" />
+                                                            </td>
+                                                            <td width="15%">
+                                                                <output id="porcallanamiento" type="text" />
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td colspan="2">
+                                                                <button style="font-size: 11px !important;" onclick="reporteTablero.fnReporteDetalle01('1')" type="button" class="btn btn-outline btn-link">Ver Detalle</button>
+                                                            </td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                                <br />
+                                                <table class="table table-bordered" style="width:30% !important;  margin: 0 auto;">
+                                                    <thead>
+                                                        <tr>
+                                                            <th colspan="2" style="background-color:forestgreen !important; color:white !important; font-weight:bold">Subsanacion</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr>
+                                                            <td width="15%">
+                                                                <output id="subsanacion" type="text" />
+                                                            </td>
+                                                            <td width="15%">
+                                                                <output id="porcSubsanacion" type="text" />
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td colspan="2">
+                                                                <button style="font-size: 11px !important;" onclick="reporteTablero.fnReporteDetalle01('2')" type="button" class="btn btn-outline btn-link">Ver Detalle</button>
+                                                            </td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                                <br />
+                                            </div>
+                                            <div class="col-sm-6">
+                                                <table class="table table-bordered" style="width:30% !important;  margin: 0 auto;">
+                                                    <thead>
+                                                        <tr>
+                                                            <th colspan="2" style="background-color:darkorange !important; color:white !important; font-weight:bold">Decomiso</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr>
+                                                            <td width="15%">
+                                                                <output id="decomiso" type="text" />
+                                                            </td>
+                                                            <td width="15%">
+                                                                <output id="porcDecomiso" type="text" />
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td colspan="2">
+                                                                <button style="font-size: 11px !important;" onclick="reporteTablero.fnReporteDetalle01('3')" type="button" class="btn btn-outline btn-link">Ver Detalle</button>
+                                                            </td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                                <br />
+                                                <table class="table table-bordered" style="width:30% !important;  margin: 0 auto;">
+                                                    <thead>
+                                                        <tr>
+                                                            <th colspan="2" style="background-color:indianred !important; color:white !important; font-weight:bold">Caducidad - Plan de cierre</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr>
+                                                            <td width="15%">
+                                                                <output id="plancierre" type="text" />
+                                                            </td>
+                                                            <td width="15%">
+                                                                <output id="porcplancierre" type="text" />
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td colspan="2">
+                                                                <button style="font-size: 11px !important;" onclick="reporteTablero.fnReporteDetalle01('4')" type="button" class="btn btn-outline btn-link">Ver Detalle</button>
+                                                            </td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                                <br />
+                                            </div>
+                                            <div class="col-sm-6">
+                                                <table class="table table-bordered" style="width:30% !important;  margin: 0 auto;">
+                                                    <thead>
+                                                        <tr>
+                                                            <th colspan="2" style="background-color:slategrey !important; color:white !important; font-weight:bold">Disposición de fauna</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr>
+                                                            <td width="15%">
+                                                                <output id="disposicionfauna" type="text" />
+                                                            </td>
+                                                            <td width="15%">
+                                                                <output id="porcdisposicionfauna" type="text" />
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td colspan="2">
+                                                                <button style="font-size: 11px !important;" onclick="reporteTablero.fnReporteDetalle01('5')" type="button" class="btn btn-outline btn-link">Ver Detalle</button>
+                                                            </td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                                <br />
+                                                <table class="table table-bordered" style="width:30% !important;  margin: 0 auto;">
+                                                    <thead>
+                                                        <tr>
+                                                            <th colspan="2">Medida Correctiva</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr>
+                                                            <td width="15%">
+                                                                <output id="medidaCorrectiva" type="text" />
+                                                            </td>
+                                                            <td width="15%">
+                                                                <output id="porcMedidaCorrectiva" type="text" />
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td colspan="2">
+                                                                <button style="font-size: 11px !important;" onclick="reporteTablero.fnReporteDetalle01('6')" type="button" class="btn btn-outline btn-link">Ver Detalle</button>
+                                                            </td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                                <br />
+                                            </div>
+                                            <div class="col-sm-6">
+                                                <table class="table table-bordered" style="width:30% !important;  margin: 0 auto;">
+                                                    <thead>
+                                                        <tr>
+                                                            <th colspan="2" style="background-color:mediumpurple !important; color:white !important; font-weight:bold">Archivo</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr>
+                                                            <td width="15%">
+                                                                <output id="archivo" type="text" /></a>
+                                                            </td>
+                                                            <td width="15%">
+                                                                <output id="porArchivo" type="text" />
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td colspan="2">
+                                                                <button style="font-size: 11px !important;" onclick="reporteTablero.fnReporteDetalle01('7')" type="button" class="btn btn-outline btn-link">Ver Detalle</button>
+                                                            </td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                                <br />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div id="detalle01" style="justify-content:center !important; display:none;">
+
+                                </div>
+                            </div>
+                            <div class="tab-pane fade show " id="navRRDInicio" role="tabpanel" aria-labelledby="nav-home-tab">
+                                <div id="divConsultaR2">
+                                    <br />
+                                    <div class="form-row">
+                                        <div class="form-group col-md-4">
+                                            <label for="lblperiodo" class="text-small">Año:</label>
+                                            <div style="display: flex; position: relative;">
+                                                @Html.DropDownListFor(m => m.txtIdPOA, new SelectList(Model.sBusqueda, "Value", "Text"), new { @class = "form-control form-control-sm", @id = "ddlAnioRp2" })
+                                                <button type="button" class="btn btn-primary btn-sm" style="margin-left:15px;" onclick="reporteTablero.fnConsultarR2()">Consultar</button>
+                                            </div>
+                                        </div>
+                                    </div><br /><br /><br />
+                                    <div id="divResultRpt2" style="justify-content:center !important; display:none;">
+                                        <div class="row" style="margin: 0 auto !important; text-align:center !important;">
+                                            <div class="col-sm-12" style="text-align:center">
+                                                <table class="table table-bordered" style="width: 10% !important; align-self: center; margin: 0 auto;">
+                                                    <thead>
+                                                        <tr> <th style="background-color:red !important; color:white !important; font-weight:bold">RD Inicio</th> </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr>
+                                                            <td><output id="rdinicio" type="text" /></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>
+                                                                <button style="font-size: 11px !important;" onclick="reporteTablero.fnReporteDetalle02('0')" type="button" class="btn btn-outline btn-link">Ver Detalle</button>
+                                                            </td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                                <br />
+                                            </div>
+                                            <div class="col-sm-6">
+                                                <table class="table table-bordered" style="width:30% !important;  margin: 0 auto;">
+                                                    <thead>
+                                                        <tr>
+                                                            <th colspan="2" style="background-color:yellow !important; color:white !important; font-weight:bold">Medida Cautelar</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr>
+                                                            <td width="15%">
+                                                                <output id="medCorrectiva" type="text" />
+                                                            </td>
+                                                            <td width="15%">
+                                                                <output id="porcMedCorrectiva" type="text" />
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td colspan="2">
+                                                                <button style="font-size: 11px !important;" onclick="reporteTablero.fnReporteDetalle02('1')" type="button" class="btn btn-outline btn-link">Ver Detalle</button>
+                                                            </td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                                <br />
+                                                <table class="table table-bordered" style="width:30% !important;  margin: 0 auto;">
+                                                    <thead>
+                                                        <tr>
+                                                            <th colspan="2" style="background-color:darkorange !important; color:white !important; font-weight:bold">Lista de Trozas</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr>
+                                                            <td width="15%">
+                                                                <output id="troza" type="text" />
+                                                            </td>
+                                                            <td width="15%">
+                                                                <output id="porcTroza" type="text" />
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td colspan="2">
+                                                                <button style="font-size: 11px !important;" onclick="reporteTablero.fnReporteDetalle02('3')" type="button" class="btn btn-outline btn-link">Ver Detalle</button>
+                                                            </td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                                <br />
+                                            </div>
+                                            <div class="col-sm-6">
+                                                <table class="table table-bordered" style="width:30% !important;  margin: 0 auto;">
+                                                    <thead>
+                                                        <tr>
+                                                            <th colspan="2" style="background-color:forestgreen !important; color:white !important; font-weight:bold">Guía Transporte Forestal</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr>
+                                                            <td width="15%">
+                                                                <output id="guia" type="text" />
+                                                            </td>
+                                                            <td width="15%">
+                                                                <output id="porcguia" type="text" />
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td colspan="2">
+                                                                <button style="font-size: 11px !important;" onclick="reporteTablero.fnReporteDetalle02('2')" type="button" class="btn btn-outline btn-link">Ver Detalle</button>
+                                                            </td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                                <br />
+                                                <table class="table table-bordered" style="width:30% !important;  margin: 0 auto;">
+                                                    <thead>
+                                                        <tr>
+                                                            <th colspan="2" style="background-color:mediumpurple !important; color:white !important; font-weight:bold">Plan de Manejo</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr>
+                                                            <td width="15%">
+                                                                <output id="planpm" type="text" />
+                                                            </td>
+                                                            <td width="15%">
+                                                                <output id="prcplanpm" type="text" />
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td colspan="2">
+                                                                <button style="font-size: 11px !important;" onclick="reporteTablero.fnReporteDetalle02('4')" type="button" class="btn btn-outline btn-link">Ver Detalle</button>
+                                                            </td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                                <br />
+                                            </div>
+                                            <div class="col-sm-6">
+                                                <table class="table table-bordered" style="width:30% !important;  margin: 0 auto;">
+                                                    <thead>
+                                                        <tr>
+                                                            <th colspan="2" style="background-color:lightpink !important; color:white !important; font-weight:bold">POA/PO</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr>
+                                                            <td width="15%">
+                                                                <output id="poa" type="text" />
+                                                            </td>
+                                                            <td width="15%">
+                                                                <output id="porcpoa" type="text" />
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td colspan="2">
+                                                                <button style="font-size: 11px !important;" onclick="reporteTablero.fnReporteDetalle02('5')" type="button" class="btn btn-outline btn-link">Ver Detalle</button>
+                                                            </td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+
+                                                <br />
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                    <div id="detalle02" style="justify-content:center !important; display:none;">
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

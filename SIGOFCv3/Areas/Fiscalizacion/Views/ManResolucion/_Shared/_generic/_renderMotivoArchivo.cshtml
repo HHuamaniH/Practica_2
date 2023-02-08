@@ -1,0 +1,87 @@
+﻿@model CapaEntidad.ViewModel.VM_Resodirec
+
+<script type="text/javascript">
+    var _renderListaArchivoC = {};
+     _renderListaArchivoC.tbEliTABLA = [];
+
+
+    _renderListaArchivoC.fnAdd = function (obj) {
+
+        var codMotivo = _renderTerminoPau.frm.find("#ddlMotivoArch").val();
+
+        var codigoSub = _renderListaArchivoC.frm.find("#ddlSubtipoArchv").val();
+        var motivo = _renderListaArchivoC.frm.find("#txtDescTipoMotivoArch").val();
+        var detalleMotivo = _renderListaArchivoC.frm.find("#ddlSubtipoArchv option:selected").text();
+        var descmMtivo = _renderListaArchivoC.frm.find("#txtDescArchivo").val();
+        if (codMotivo != "0000000") {
+            if (codigoSub != "0000000") {
+                $.ajax({
+                    url: '@Url.Action("agregarMotivoArchivo","ManResolucion")',
+                    type: 'POST',
+                    datatype: "json",
+                    traditional: true,
+                    data: { 'codigoSub': codigoSub, 'motivo': motivo, 'detalleMotivo': detalleMotivo, 'descmMtivo': descmMtivo },
+                    success: function (data) {
+                        $('#divListaMotivoLL').html(data);
+                    }
+                });
+            }
+            else {
+                utilSigo.toastWarning("Aviso", "Seleccione tipo de archivo");
+            }
+        }
+        else {
+             utilSigo.toastWarning("Aviso", "Seleccione motivo de archivo");
+        }
+        _renderListaArchivoC.frm.find("#txtDescArchivo").val('');
+        _renderListaArchivoC.frm.find("#ddlSubtipoArchv").val('0000000');
+
+    }
+
+    $(document).ready(function () {
+       _renderListaArchivoC.frm = $("#fmrSubTipoArch");
+
+    });
+
+</script>
+
+<div id="fmrSubTipoArch">
+    @Html.HiddenFor(m => m.txtIdTipoMotivoArch)
+    @Html.HiddenFor(m => m.txtDescTipoMotivoArch)
+    <div class="form-row" id="divSubTipoArchivo">
+        <div class="form-group col-md-4">
+            <label for="chkGTF" class="text-small">Tipo motivo Archivo</label>
+        </div>
+        <div class="form-group col-md-6">
+            @Html.DropDownListFor(m => m.txtCodEspecie, new SelectList(Model.ListSubTipoArchivo, "Value", "Text"),
+                   new { @class = "form-control form-control-sm", @id = "ddlSubtipoArchv" })
+        </div>
+        <div class="form-group col-md-2">
+        </div>
+    </div>
+
+    <div class="form-row">
+        <div class="form-group col-md-4">
+            <label for="chkGTF" class="text-small">Descripción</label>
+        </div>
+        <div class="form-group col-md-6">
+            @Html.TextAreaFor(m => m.txtDescArchivo, 4, 1, new { @class = "form-control form-control-sm" })
+        </div>
+        <div class="form-group col-md-2">
+        </div>
+    </div>
+
+    <div class="form-row">
+        <div class="form-group col-md-4">
+
+        </div>
+        <div class="form-group col-md-6">
+            <button type="button" id="btnEspecies" class="btn btn-info btn-sm" onclick="_renderListaArchivoC.fnAdd()"> Agregar Motivo Archivo</button>
+        </div>
+        <div class="form-group col-md-2"></div>
+    </div>
+
+    <div id="divListaMotivoLL">
+        @Html.Partial("~/Areas/Fiscalizacion/Views/ManResolucion/_Shared/_generic/_renderListaMotiva.cshtml", Model)
+    </div>
+</div>

@@ -1,0 +1,269 @@
+﻿
+@{
+    ViewBag.Title = "AddEdit";
+    Layout = "~/Views/Shared/_LayoutMain.cshtml";
+}
+
+@model CapaEntidad.DOC.Tra_M_Tramite
+@Html.Hidden("cCodificacion", (object)ViewBag.cCodificacion)
+@Html.Hidden("iCodTramite", (object)ViewBag.iCodTramite)
+@Html.Hidden("iCodTupa", (object)ViewBag.iCodTupa)
+@Html.Hidden("iCodTupaClase", (object)ViewBag.iCodTupaClase)
+@Html.Hidden("Destino", (object)ViewBag.Destino)
+@Html.Hidden("COD_IDENUNCIA", 0)
+
+@section scripts{
+    <script>
+        "use strict"; var rol = '';
+        $(document).ready(function () {
+            //Validamos el rol del usuario
+            utilSigo.ValidaRol('@ViewBag.VAliasRol', 'btnRegistrar', 'Edit');
+        });
+
+        var tramite = JSON.parse('@Html.Raw(Json.Encode(@Model))');
+        tramiteDenuncia.tra_M_Tramite = tramite;
+    </script>
+}
+
+<div class="container-fluid">
+    <div class="card">
+        <div class="card-header text-right">
+            VistaDenuncia
+        </div>
+        <div class="card-body">
+            <div class="card">
+                <div class="card-header text-small">
+                    <a id="btnRegistrar" href="javascript:void(0)" style="cursor:pointer;" data-toggle="tooltip" data-placement="top" title="Guardar" onclick="tramiteDenuncia.guaradarEditar()"><i class="fa mx-2 fa-lg fa-save"></i></a>
+                    <a style="cursor:pointer;" data-toggle="tooltip" data-placement="top" title="Regresar" onclick="tramiteDenuncia.returnIndex()"><i class="fa mx-2 fa-lg fa-reply"></i></a>
+                    Datos de la Denuncia @ViewBag.cCodificacion
+                </div>
+                <div class="card-body">
+                    <div class="form-row">
+                        <div class="form-group col-md-6 d-none">
+                            <label for="cboAtencion" class="text-small">Atencion</label>
+                            <select class="form-control form-control-sm" id="cboAtencion" name="cboAtencion">
+                                <option value="00">--Seleccionar--</option>
+                                <option value="01">OSINFOR</option>
+                                <option value="02">OTRO</option>
+                            </select>
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label class="text-small">Estado</label>
+                            <div style="margin-top:7px;">
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" name="rbtnAtendido" id="rbtnAtendido1" value="1">
+                                    <label class="form-check-label" for="rbtnAtendido1">Atendido</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" name="rbtnAtendido" id="rbtnAtendido2" value="2">
+                                    <label class="form-check-label" for="rbtnAtendido2">En Proceso</label>
+                                </div>
+                               
+
+                            </div>
+                        </div>
+                        <div class="form-group col-md-6 cboSubEstado d-none ">
+                            <label for="cboSubEstado" class="text-small">Sub Estado</label>
+                            <select class="form-control form-control-sm" id="cboSubEstado">
+                                <option value="00">-- Seleccionar --</option>
+                                <option>Traslado (No es competencia de OSINFOR)</option>
+                                <option>Por supervisar</option>
+                                <option>Supervisado</option>
+                                <option>No precisa información para continuar el trámite.</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-6 cboTipoRequerimiento">
+                            <label for="cboTipoRequerimiento" class="text-small">Tipo Requerimiento</label>
+                            <div class="form-row">
+                                <div class="form-group col-md-6">
+                                    <select class="form-control form-control-sm" id="cboTipoRequerimiento">
+                                        <option value="00">-- Seleccionar --</option>
+                                        <option>Denuncia</option>
+                                        <option>Petición (solicitud de inspección, supervisión, etc)</option>
+                                        <option>Inspecciones físicas</option>
+                                        <option>Acompañamiento</option>
+                                        <option>Otros</option>
+                                    </select>
+                                </div>
+                                <div class="form-group col-md-6 txtOtros d-none">
+                                    <input id="txtOtros" class="form-control form-control-sm" type="text" />
+                                </div>
+                            </div>
+
+                        </div>
+                        
+
+                    </div>
+                    <div class="form-row ">
+                        <div class="form-group col-md-12">
+                            <label class="text-small">Es Titulo Habilitante:</label>
+                            <div style="margin-top:7px;">
+                                <div class="form-check form-check-inline ">
+                                    <input class="form-check-input" type="radio" name="rbtnTHabilitante" id="rbtnTHabilitanteSi" value="1">
+                                    <label class="form-check-label" for="rbtnTHabilitanteSi">Si</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" name="rbtnTHabilitante" id="rbtnTHabilitanteNo" value="2">
+                                    <label class="form-check-label" for="rbtnTHabilitanteNO">No</label>
+                                </div>
+                              
+                            </div>
+                        </div>
+                        <div class="form-group col-md-12 thabilitante d-none ">
+                            <label class="text-small" id="lblTHabilitante">T. Habilitante (0)</label>
+                            <div class="input-group ">
+                                <input type="text" id="inptTHabilitante" disabled class="form-control form-control-sm" />
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text">
+                                        <i class="fa fa-plus" style="cursor:pointer;color:forestgreen"
+                                           onclick="tramiteDenuncia.modalTitulohabilitante();">
+                                        </i>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group col-md-12 thabilitante d-none ">
+                            <div class="input-group " id="htmlTHabilitante"></div>
+                        </div>
+                    </div>
+                    <div class="card-header text-small isupervision d-none" style="margin-top:10px;">
+                        Informe de Supervisión
+                    </div>
+                    <div class="form-row isupervision d-none" style="margin-top:10px;">
+                        <div class="form-group col-md-12 dataValidacion">
+                            <label class="text-small" id="lblTramiteDenuncia">Informes de Supervisión(0)</label>
+                            <div class="input-group ">
+                                <input type="text" class="form-control form-control-sm" disabled id="inptTramiteDenuncia" />
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text" id="idAddInforme">
+                                        <i class="fa fa-plus" style="cursor:pointer;color:forestgreen"
+                                           onclick="tramiteDenuncia.modalDocInformes();">
+                                        </i>
+                                    </span>
+                                </div>
+                                <div class="input-group-prepend d-none">
+                                    <span class="input-group-text" id="idAddInforme">
+                                        <i class="fa fa-close" style="cursor:pointer;color:darkred"
+                                           onclick="tramiteDenuncia.eliminarObj();">
+                                        </i>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="input-group col-md-12" id="htmlSupervision"></div>
+
+                    </div>
+
+                    <div class="form-row d-none" style="margin-top:10px;">
+                        <div class="form-group col-md-6">
+                            <label class="text-small" id="lblEntidad">Entidad</label>
+                            <div class="input-group">
+                                <input type="text" id="inptEntidad" class="form-control form-control-sm" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-header text-small doc-sitd" style="margin-top:10px;">
+                        Documentos del SITD
+                    </div>
+                    <div class="form-row doc-sitd" style="margin-top:10px;">
+                        <div class="form-group col-md-6">
+                            <div class="form-row">
+                                <div class="form-group col-md-12">
+                                    <label class="text-small" id="lblInformesSITD">Informe / Carta / Oficios(0)</label>
+                                    <div class="input-group ">
+                                        <input type="text" id="inptInformesSITD" disabled class="form-control form-control-sm" />
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text" id="idAddCartaOficios">
+                                                <i class="fa fa-plus" style="cursor:pointer;color:forestgreen"
+                                                   onclick="tramiteDenuncia.modalInformesSITD();">
+                                                </i>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group col-md-12">
+                                    <div class="input-group" id="htmlDocSITD"></div>
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="form-group col-md-6">
+                            <div class="form-row">
+                                <div class="form-group col-md-12">
+                                    <label class="text-small" id="lblInformeTecnico">Archivos adicionales  (0)</label>
+                                    <div class="input-group ">
+                                        <input type="text" id="inptInformeTecnico" disabled class="form-control form-control-sm" />
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text" id="idAddInformeTecnico">
+                                                <i class="fa fa-plus" style="cursor:pointer;color:forestgreen"
+                                                   onclick="tramiteDenuncia.modalInformes();">
+                                                </i>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group col-md-12">
+                                    <div class="input-group" id="htmlArchivos"></div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="d-none">
+                        <div class="form-group col-md-6">
+                            <label class="text-small">Otros archivos adicionales </label>
+                            <div class="input-group input-group-sm">
+                                <div class="custom-file">
+                                    <input type="file" multiple class="custom-file-input" id="idArchivoAuditoria" accept="application/pdf, .xlsx, .xls, .csv, application/msword">
+                                    <label class="custom-file-label" for="idArchivoAuditoria" id="lblArchivoAuditoria">Sin Archivos</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-header text-small d-none" style="margin-top:10px;">
+                        Carta y Oficios
+                    </div>
+                    <div class="form-row d-none" style="margin-top:10px;">
+                        <div class="form-group col-md-6">
+                            <label class="text-small" id="lblCartaOficios">Carta y Oficios(0)</label>
+                            <div class="input-group ">
+                                <input type="text" id="inptCartaOficios" disabled class="form-control form-control-sm" />
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text" id="idAddCartaOficios">
+                                        <i class="fa fa-plus" style="cursor:pointer;color:forestgreen"
+                                           onclick="tramiteDenuncia.modalCartasOficios();">
+                                        </i>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-header text-small d-none" style="margin-top:10px;">
+                        Informe Tecnico
+                    </div>
+                    <div class="form-row d-none" style="margin-top:10px;">
+
+                    </div>
+                    <div class="form-row conclusiones-recomendaciones" style="margin-top:10px;">
+                        <div class="form-group col-md-6">
+                            <label for="txtConclusionDenuncia" class="text-small">Conclusiones</label>
+                            <textarea id="txtConclusionDenuncia" style="height:200px" class="form-control form-control-sm"></textarea>
+                        </div>
+                        <div class="form-group col-md-6 ">
+                            <label for="txtRecomendacionDenuncia" class="text-small">Recomendaciones</label>
+                            <textarea id="txtRecomendacionDenuncia" style="height:200px" class="form-control form-control-sm"></textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade hide" id="mdlManInforme_Informes" role="dialog"></div>
+<div class="modal fade hide" id="mdlManInforme_CartaOficio" role="dialog"></div>
+<div class="modal fade hide" id="mdlManInforme_DOCINFORME" role="dialog"></div>
+<div class="modal fade hide" id="mdlManInforme_DOCSITD" role="dialog"></div>
+<div class="modal fade hide" id="mdlManInforme_THabilitante" role="dialog"></div>
+<script src="~/Areas/Supervision/js/Denuncias/TramiteDenuncia.js?noCache=@Guid.NewGuid().ToString()"></script>

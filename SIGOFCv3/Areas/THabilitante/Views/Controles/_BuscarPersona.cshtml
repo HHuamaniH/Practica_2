@@ -1,0 +1,367 @@
+﻿@model SIGOFCv3.Areas.THabilitante.Models.ManGrillaViewModel
+<script>
+    "use strict";
+    var vpConsultorReg = {};
+    vpConsultorReg.agregarFuncionario = function () {
+        var hdfItemBuscar_TVentana = vpConsultorReg.frmConsultorReg.find("#hdfTipoFormulario").val();
+        var COD_PTIPO = "";
+        if (   hdfItemBuscar_TVentana == "C"
+            || hdfItemBuscar_TVentana == "AD"
+        ) //Consultor
+        {
+            COD_PTIPO = "0000003";
+        }
+        else if (hdfItemBuscar_TVentana == "TO" ||
+            hdfItemBuscar_TVentana == "TOC" ||
+            hdfItemBuscar_TVentana == "AO" ||
+            hdfItemBuscar_TVentana == "AOC") //Tecnico Ocular
+        {
+            COD_PTIPO = "0000005";
+        }
+        else if (hdfItemBuscar_TVentana == "RA" ||
+            hdfItemBuscar_TVentana == "APO")
+        {
+            COD_PTIPO = "0000004";
+        }
+        else if (hdfItemBuscar_TVentana == "FA" ||
+            hdfItemBuscar_TVentana == "FS") //Funcionario
+        {
+            COD_PTIPO = "0000006";
+        }
+
+
+        /*else if (hdfItemBuscar_TVentana == "RP" ||
+            hdfItemBuscar_TVentana == "RPO") //Reformula POA
+        {
+            COD_PTIPO = "0000006";
+        }*/
+
+
+
+
+        $.ajax({
+            url: urlLocalSigo + "THabilitante/Controles/_Persona",
+            type: 'POST',
+            data: {
+                tipoPersona: "N", formOrigen: "frmBuscarPersonaPOA", controlOrigen: "",
+                codigoPersona: "", regEstado: 1, tVentana: hdfItemBuscar_TVentana , p_Tipo: COD_PTIPO
+            },
+            dataType: 'html',
+            success: function (data) {
+                utilSigo.unblockUIGeneral();
+                $("#funcionarioAgregarModal").html(data);
+                utilSigo.modalDraggable($("#funcionarioAgregarModal"), '.modal-header');
+                $("#funcionarioAgregarModal").modal({ keyboard: false, backdrop: 'static' });
+            },
+            beforeSend: function () {
+                utilSigo.blockUIGeneral();
+            },
+            error: function (jqXHR, error, errorThrown) {
+                utilSigo.unblockUIGeneral();
+                utilSigo.toastError("Error", initSigo.MessageError);
+                console.log(jqXHR.responseText);
+            }
+        });
+    }
+
+    vpConsultorReg.buscarPersona = function () {
+        var valorBuscar = vpConsultorReg.frmConsultorReg.find("#txtValor").val().trim();
+        var opcionBusqueda = vpConsultorReg.frmConsultorReg.find("#ddlItemBuscar_Criterio").val().trim();
+
+        if (valorBuscar == "") {
+            utilSigo.toastWarning("Aviso", "Ingrese Valor a Buscar");
+            return false;
+        }
+        if (valorBuscar.length < 3) {
+            utilSigo.toastWarning("Aviso", "Ingrese mayor a dos caracteres");
+            return false;
+        }
+
+        var url = urlLocalSigo + "THabilitante/Controles/_BuscarPersona?valor=" + valorBuscar
+            + "&ddlItemBuscar_Criterio=" + opcionBusqueda;
+
+        vpConsultorReg.dtConsultorReg.ajax.url(url).load();
+
+    }
+    vpConsultorReg.iniciarEventos = function () {
+        vpConsultorReg.frmConsultorReg.find("#btnFuncionarioBuscar").click(function () {
+            vpConsultorReg.buscarPersona();
+        });
+        vpConsultorReg.frmConsultorReg.find("#txtValor").keypress(function (e) {
+            var code = e.which;
+
+            if (code == 13) {
+                vpConsultorReg.buscarPersona();
+                return false;
+            }
+        });
+
+    }
+    vpConsultorReg.closeModal = function () {
+
+        var divModal = '@Model.modalId';
+        $("#" + divModal).modal('hide');
+        $("#" + divModal).html('');
+    }
+    vpConsultorReg.ItemPDiv_BuscarNuevoMostrar = function (obj) {
+
+         var $tr = $(obj).closest('tr');
+
+        var PersonaCodigo = $tr.find(".hdCODIGO").val();
+        var PersonaNombres = $tr.find(".hdDESCRIPCION").val();
+        var PersonaDNI = $tr.find(".hdN_DOCUMENTO").val();
+        var PersonaCargo = $tr.find(".hdCARGO").val();
+        var NRConsultor = $tr.find(".hdNUM_REGISTRO_FFS").val();
+        var NRProfesional = $tr.find(".hdNUM_REGISTRO_PROFESIONAL").val();
+        var tipoFormulario = vpConsultorReg.frmConsultorReg.find("#hdfTipoFormulario").val();
+
+        switch (tipoFormulario) {
+
+            case "C":
+
+                ManPOA.frmPOARegistro.find("#hdfItemConsultorCodigo").val(PersonaCodigo);
+                ManPOA.frmPOARegistro.find("#lblItemConsultorNombre").val(PersonaNombres);
+                ManPOA.frmPOARegistro.find("#lblItemConsultorDNI").val(PersonaDNI);
+                ManPOA.frmPOARegistro.find("#txtItemNRConsultor").val(NRConsultor);
+                ManPOA.frmPOARegistro.find("#lblItemConsultorNRProfesional").val(NRProfesional);
+                utilSigo.toastSuccess("Exito", "Se selecciono correctamente");
+                break;
+            case "AO":
+            case "AOC":
+
+                if (!utilSigo.existValorSearchDataTable(ManPOA.dtItemAOcular, "N_DOCUMENTO", PersonaDNI)) {
+
+                    var $rows = ManPOA.dtItemAOcular.$("tr");
+                    var countFilas = $rows.length;
+                    var codSecC = parseInt(countFilas) + 1;
+                    var filaC = {
+                        NRO: codSecC,
+                        PERSONA: PersonaNombres,
+                        N_DOCUMENTO: PersonaDNI,
+                        CARGO: PersonaCargo,
+                        COD_PERSONA: PersonaCodigo,
+                        RegEstado:1
+                    };
+                    ManPOA.dtItemAOcular.row.add(filaC).draw();
+                    ManPOA.dtItemAOcular.page('last').draw('page');
+                    utilSigo.toastSuccess("Exito", "Se Adiciono correctamente");
+                } else {
+
+                    utilSigo.toastWarning("Error", "El Técnico para el Acta de Inspección Ocular ya Existe");
+                }
+
+                break;
+            case "TO":
+            case "TOC":
+
+                if (!utilSigo.existValorSearchDataTable(ManPOA.dtItemIOcular, "N_DOCUMENTO", PersonaDNI)) {
+
+                    var $rows = ManPOA.dtItemIOcular.$("tr");
+                    var codSecC = $rows.length + 1;
+                    var filaC = {
+                        NRO: codSecC,
+                        PERSONA: PersonaNombres,
+                        N_DOCUMENTO: PersonaDNI,
+                        CARGO: PersonaCargo,
+                        COD_PERSONA: PersonaCodigo,
+                        RegEstado: 1
+                    };
+                    ManPOA.dtItemIOcular.row.add(filaC).draw();
+                    ManPOA.dtItemIOcular.page('last').draw('page');
+                    utilSigo.toastSuccess("Exito", "Se Adiciono correctamente");
+                } else {
+
+                    utilSigo.toastWarning("Error", "El Técnico de Inspección Ocular ya Existe");
+                }
+
+                break;
+
+            case "RA":
+            case "APO":
+
+                if (!utilSigo.existValorSearchDataTable(ManPOA.dtItemTRAprobacion, "N_DOCUMENTO", PersonaDNI)) {
+
+                    var $rows = ManPOA.dtItemTRAprobacion.$("tr");
+                    var codSecC = $rows.length + 1;
+                    var filaC = {
+                        NRO: codSecC,
+                        PERSONA: PersonaNombres,
+                        N_DOCUMENTO: PersonaDNI,
+                        CARGO: PersonaCargo,
+                        COD_PERSONA: PersonaCodigo,
+                        RegEstado: 1
+                    };
+                    ManPOA.dtItemTRAprobacion.row.add(filaC).draw();
+                    ManPOA.dtItemTRAprobacion.page('last').draw('page');
+                    utilSigo.toastSuccess("Exito", "Se Adiciono correctamente");
+                } else {
+
+                    utilSigo.toastWarning("Error", "El Técnico que Recomienda la Aprobación ya Existe");
+                }
+                break;
+            case "FA":
+                ManPOA.frmPOARegistro.find("#hdfItemARFuncionarioCodigo").val(PersonaCodigo);
+                ManPOA.frmPOARegistro.find("#lblItemARFuncionario").val(PersonaNombres);
+                ManPOA.frmPOARegistro.find("#lblItemARFuncionarioODatos").val(PersonaDNI + " - " + PersonaCargo);
+                utilSigo.toastSuccess("Exito", "Se selecciono correctamente");
+                break;
+            case "AD":
+                ManPOA.frmPOARegistro.find("#hdEspAcervo").val(PersonaCodigo);
+                ManPOA.frmPOARegistro.find("#lbEspecialistaAcervo").val(PersonaNombres);  
+                utilSigo.toastSuccess("Exito", "Se selecciono correctamente");
+                break;
+
+
+            default: break;
+
+        }
+
+    }
+
+    $(document).ready(function () {
+        $('[data-toggle="tooltip"]').tooltip();
+        vpConsultorReg.frmConsultorReg = $("#frmConsultorReg");
+        vpConsultorReg.tbConsultorReg = vpConsultorReg.frmConsultorReg.find("#tbConsultorReg");
+        vpConsultorReg.dtConsultorReg = vpConsultorReg.tbConsultorReg.DataTable({
+            "bServerSide": false,
+            "bProcessing": true,
+            "bJQueryUI": false,
+            "bRetrieve": true,
+            "bFilter": false,
+            "aaSorting": [],
+            "bPaginate": true,
+            "bInfo": false,
+            "bLengthChange": false,
+            scrollY: '50vh',
+            scrollCollapse: true,
+            "pageLength": initSigo.pageLength,
+            "oLanguage": initSigo.oLanguage,
+             "columns":
+                [
+                    {
+                         title: "N°", data: "NRO", autoWidth: true
+                    },
+                     {
+                         title: "Apellidos y Nombres", data: "DESCRIPCION", autoWidth: true,
+                         mRender: function (data, type, row) {
+                             var cell =
+                                 "<a href='javascript:void(0);' onclick='vpConsultorReg.ItemPDiv_BuscarNuevoMostrar(this)' >" +
+                                row.DESCRIPCION + "</a>" +
+                                "<input type='hidden' class='hdCODIGO' value='" + row.CODIGO + "' />" +
+                                "<input type='hidden' class='hdDESCRIPCION' value='" + row.DESCRIPCION + "' />" +
+                                "<input type='hidden' class='hdN_DOCUMENTO' value='" + row.N_DOCUMENTO + "' />" +
+                                "<input type='hidden' class='hdCARGO' value='" + row.CARGO + "' />" +
+                                "<input type='hidden' class='hdNUM_REGISTRO_FFS' value='" + row.NUM_REGISTRO_FFS + "' />" +
+                                "<input type='hidden' class='hdNUM_REGISTRO_PROFESIONAL' value='" + row.NUM_REGISTRO_PROFESIONAL + "' />"
+                                ;
+
+                             return cell;
+                         }
+                     },
+                     { title: "DNI", data: "N_DOCUMENTO", autoWidth: true }
+
+                ]
+
+        });
+
+        vpConsultorReg.iniciarEventos();
+
+
+    });
+
+
+@{
+
+    var tituloModal = "";
+
+    <text>$('#cphPrincipal_ItemBNuevoCargo').hide();</text>
+    <text>$('#cphPrincipal_ItemBNuevoOtros').hide();</text>
+
+    switch (Model.hdfTipoFormulario)
+    {
+        case "C":
+            tituloModal = "Consultor / Regente";
+            <text>  $('#cphPrincipal_ItemBNuevoOtros').show();</text>
+            break;
+        case "TO":
+            tituloModal = "Técnico Ocular";
+            <text>   $('#cphPrincipal_ItemBNuevoCargo').show();</text>
+            break;
+        case "RA":
+            tituloModal = "Técnico Recomienda Aprobación";
+            <text>$('#cphPrincipal_ItemBNuevoCargo').show();</text>
+            break;
+        case "FA":
+            tituloModal = "Funcionario que Aprueba la Resolución";
+            <text>$('#cphPrincipal_ItemBNuevoCargo').show();</text>
+            break;
+        case "FS":
+            tituloModal = "Funcionario - Movilización de saldos";
+            <text>$('#cphPrincipal_ItemBNuevoCargo').show();</text>
+            break;
+        case "AO":
+            tituloModal = "Funcionario - Acta Ocular";
+            <text> $('#cphPrincipal_ItemBNuevoCargo').show()</text>
+
+            break;
+
+        default:
+            break;
+
+    }
+
+
+
+}
+</script>
+<div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+        <div class="modal-header text-small" style="cursor:move;">
+            <h5 class="modal-title">  @tituloModal </h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar" onclick="vpConsultorReg.closeModal();">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+
+
+        <div class="modal-body">
+            <form id="frmConsultorReg" action="" method="post">
+                @Html.HiddenFor(m => m.hdfTipoFormulario)
+
+                <div class="form-row">
+                    <div class="col-md-4 mb-3">
+                        <select id="ddlItemBuscar_Criterio" class="form-control form-control-sm">
+                            <option value="PERSONA">Persona</option>
+                            <option value="DNI">DNI</option>
+                        </select>
+
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <input type="text" id="txtValor" class="form-control form-control-sm" maxlength="50" />
+                    </div>
+                    <div class="col-md-2 mb-3">
+                        <div class="btn-group">
+                            <a id="btnFuncionarioBuscar" style="cursor:pointer;" data-toggle="tooltip" data-placement="top" title="Buscar el registro"><span class="fa mx-2 fa-lg fa-search"></span></a>
+                            <a id="btnFuncionarioNuevo" style="cursor:pointer;" data-toggle="tooltip" data-placement="top" title="Nuevo" onclick=" vpConsultorReg.agregarFuncionario();"><span class="fa mx-2 fa-lg fa-file-o"></span></a>
+                        </div>
+
+                    </div>
+
+                </div>
+                <div class="form-row">
+                    <div class="col-md-12 text-center">
+                        <div class="table-responsive">
+                            <table id="tbConsultorReg" style="width:100%" class="table table-hover table-bordered"></table>
+                        </div>
+                    </div>
+                </div>
+                <button type="submit" style="display:none;"></button>
+            </form>
+        </div>
+        <div class="modal-footer">
+
+        </div>
+    </div>
+</div>
+
+

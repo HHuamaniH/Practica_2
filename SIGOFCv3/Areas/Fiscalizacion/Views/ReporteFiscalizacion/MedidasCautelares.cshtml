@@ -1,0 +1,259 @@
+﻿
+@model CapaEntidad.ViewModel.VM_ReporteFiscalizacion
+
+@{
+    ViewBag.Title = "Medidas Cautelares o Provisorias";
+    Layout = "~/Views/Shared/_LayoutMain.cshtml";
+}
+@section styles
+{
+    <style type="text/css">
+        #divReporte { margin-top: 20px; }
+        .title { margin: 0 0 15px 0; clear: both; border-bottom: thin ridge #add8e6; padding: 5px 0; color: #1b4a6f; }
+        [role=button] { cursor: pointer; user-select: none; }
+        .collapsed .fa::before { content: "\f055" !important; }
+        .custom-control-label::before, .custom-control-label::after { top: 0; }
+        .box { padding: 5px; max-height: 220px; overflow: auto; font-size: 0.9em; }
+        .table thead th { text-transform: none; }
+        .table .fa, .table a, .table td { cursor: pointer; outline: none; box-shadow: none; }
+    </style>
+}
+@section scripts
+{
+    <script src="~/Areas/Fiscalizacion/js/ReporteFiscalizacion/Utils.js?v=2"></script>
+    <script type="text/javascript">
+        let baseUrl = urlLocalSigo + "Fiscalizacion/ReporteFiscalizacion/";
+        let _reporte = {};
+
+        Array.prototype.Sum = function (key) {
+            return this.map(function (a) { return a[key] }).reduce(function (a, b) { return a + b }, 0);
+        };
+
+        _reporte.fnParams = function () {
+            let modalidad = $('[name=checkModalidad]:checked').map(function () { return $(this).val() }).get();
+            let region = $('[name=checkRegion]:checked').map(function () { return $(this).val() }).get();
+
+            return {
+                MODALIDAD: modalidad.join(','),
+                REGION: region.join(','),
+            };
+        }
+
+        _reporte.fnReporte = function () {
+            if (_reporte.dtDetalle) {
+                //$('#tblDetalle').DataTable().clear().destroy();
+                //$('#tblDetalle').html('');
+                $('#box-detalle').hide();
+            }
+
+            let p = _reporte.fnParams();
+            let params = {
+                type: 'post',
+                url: baseUrl + "MedidasCautelares_Resumen",
+                datos: JSON.stringify(p)
+            };
+
+            utilSigo.fnAjax(params, function (res) {
+                res.push({
+                    DEPARTAMENTO: 'TODOS',
+                    MEDCAU_PAU: res.Sum('MEDCAU_PAU'),
+                    MEDPRECAU_PAU: res.Sum('MEDPRECAU_PAU')
+                });
+
+                let options = {
+                    id: 'tblResumen',
+                    columns: [
+                        { title: 'Departamento', render: 'DEPARTAMENTO', className: 'text-center' },
+                        { title: 'Medidas Cautelares', render: 'MEDCAU_PAU', className: 'text-center', click: _reporte.fnDetalle },
+                        { title: 'Medidas Provisorias', render: 'MEDPRECAU_PAU', className: 'text-center', click: _reporte.fnDetalle },
+                    ],
+                    data: res,
+                    ordering: false,
+                    searching: false,
+                    lengthChange: false,
+                    paging: false
+                };
+
+                let dt = fnDrawTable(options);
+            });
+        }
+
+        _reporte.fnDetalle = function (data, key, params, target) {
+            $('#tblResumen td').removeClass('bg-primary text-light');
+            $(target).addClass('bg-primary text-light');
+
+            _reporte.key = key;
+            $('#criterio').html(key === 'MEDCAU_PAU' ? 'Cautelares' : 'Provisorias');
+            $('#dpto').html(data.DEPARTAMENTO);
+            $('#box-detalle').show();
+
+            let p = _reporte.fnParams();
+            p.departamento = data.DEPARTAMENTO != 'TODOS' ? data.DEPARTAMENTO : '';
+            p.criterio = key;
+
+            let parametros = {
+                type: 'post',
+                url: baseUrl + "MedidasCautelares_Detalle",
+                datos: JSON.stringify(p)
+            };
+
+            utilSigo.fnAjax(parametros, function (res) {
+                let options = {
+                    id: 'tblDetalle',
+                    columns: [
+                        { title: 'N°', render: function (_, meta) { return meta.row + 1 }, className: 'text-center' },
+                        { title: 'Titular', render: 'TITULAR', className: 'text-center' },
+                        { title: 'Título Habilitante', render: 'THABILITANTE', className: 'text-center' },
+                        { title: 'Modalidad', render: 'MODALIDAD', className: 'text-center' },
+                        { title: 'Departamento', render: 'DEPARTAMENTO', className: 'text-center' },
+                        { title: 'Titular Sancionado', render: 'TITULAR_SANCIONADO', className: 'text-center' },
+                        { title: 'Resolución', render: 'RDMEDIDAS', className: 'text-center' },
+                        { title: 'Fecha Emisión RD', render: 'FECHA_EMISION', className: 'text-center' },
+                        { title: 'Publicado Observatorio', render: 'RDMEDIDAS_PUBLICAR', className: 'text-center' },
+                    ],
+                    data: res,
+                    //searching: false,
+                    //lengthChange: false,
+                };
+
+                if (key == 'MEDPRECAU_PAU') {
+                    options.columns = options.columns.concat([
+                        { title: 'Resolución de Reconsideración', render: 'RDRECONSIDERA', className: 'text-center' },
+                        { title: 'Publicado Observatorio', render: 'RDRECONSIDERA_PUBLICAR', className: 'text-center' },
+                        { title: 'Recurso de Apelación', render: 'REC_APELACION', className: 'text-center' },
+                        { title: 'Resolución del TFFS', render: 'RTFFS', className: 'text-center' },
+                        { title: 'Publicado Observatorio', render: 'RTFFS_PUBLICAR', className: 'text-center' },
+                    ]);
+                }
+
+                _reporte.dtDetalle = fnDrawTable(options);
+                _reporte.detalle = res;
+            });
+        }
+
+        _reporte.fnExportar = function () {
+            let data = _reporte.detalle; //.rows().data().toArray();
+
+            let params = {
+                criterio: _reporte.key,
+                detalle: data.map(function (x) {
+                    return {
+                        TITULAR: x.TITULAR,
+                        THABILITANTE: x.THABILITANTE,
+                        MODALIDAD: x.MODALIDAD,
+                        DEPARTAMENTO: x.DEPARTAMENTO,
+                        TITULAR_SANCIONADO: x.TITULAR_SANCIONADO,
+                        RDMEDIDAS: x.RDMEDIDAS,
+                        FECHA_EMISION: x.FECHA_EMISION,
+                        RDMEDIDAS_PUBLICAR: x.RDMEDIDAS_PUBLICAR,
+                        RDRECONSIDERA: x.RDRECONSIDERA,
+                        RDRECONSIDERA_PUBLICAR: x.RDRECONSIDERA_PUBLICAR,
+                        REC_APELACION: x.REC_APELACION,
+                        RTFFS: x.RTFFS,
+                        RTFFS_PUBLICAR: x.RTFFS_PUBLICAR
+                    }
+                })
+            };
+
+            $.ajax({
+                type: 'post',
+                url: baseUrl + 'MedidasCautelares_Excel',
+                data: JSON.stringify(params),
+                contentType: 'application/json',
+                dataType: 'binary',
+                xhrFields: {
+                    'responseType': 'blob'
+                },
+                beforeSend: function () { utilSigo.blockUIGeneral(); },
+                complete: function () { utilSigo.unblockUIGeneral(); }
+            }).done(function (result) {
+                utilSigo.file.downloadBlob(new Blob([result]), 'REPORTE.xlsx');
+            });
+        }
+
+        $(function () {
+            $("[type=checkbox].all, #reg_00").on("change", function () {
+                let isChecked = $(this).is(":checked");
+                $(this).closest('.box').find(".custom-control-input").prop("checked", isChecked);
+            });
+        });
+    </script>
+}
+
+<div id="divReporte">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-12">
+                <h4 class="title">Medidas Cautelares o Provisorias</h4>
+                <h5 class="collapsed" data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
+                    <i class="fa fa-minus-circle text-success"></i> Opciones de búsqueda
+                </h5>
+                <div class="collapse" id="collapseExample">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <h5>Modalidad</h5>
+                                    <div class="box">
+                                        <div class="custom-control custom-checkbox">
+                                            <input type="checkbox" class="custom-control-input all" id="chkTodoModalidad" name="chkTodoModalidad" checked>
+                                            <label class="custom-control-label" for="chkTodoModalidad">Seleccionar todo</label>
+                                        </div>
+                                        @if (Model.lstChkModalidad != null)
+                                        {
+                                            foreach (var item in Model.lstChkModalidad)
+                                            {
+                                                <div class="custom-control custom-checkbox">
+                                                    <input type="checkbox" class="custom-control-input" id="moda_@item.Value" name="checkModalidad" value="@item.Value" checked>
+                                                    <label class="custom-control-label" for="moda_@item.Value">@item.Text</label>
+                                                </div>
+                                            }
+                                        }
+                                    </div>
+                                </div>
+                                <div class="col-sm-3">
+                                    <h5>Región</h5>
+                                    <div class="box">
+                                        @if (Model.lstChkRegion != null)
+                                        {
+                                            foreach (var item in Model.lstChkRegion)
+                                            {
+                                                <div class="custom-control custom-checkbox">
+                                                    <input type="checkbox" class="custom-control-input" id="reg_@item.Value" name="checkRegion" value="@item.Value" checked>
+                                                    <label class="custom-control-label" for="reg_@item.Value">@item.Text</label>
+                                                </div>
+                                            }
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <button type="button" class="btn btn-primary" onclick="_reporte.fnReporte()">
+                        Generar reporte
+                    </button>
+                </div>
+                <div class="form-group" id="box-resumen">
+                    <div class="row justify-content-center">
+                        <div class="col-sm-6">
+                            <table id="tblResumen" class="table table-bordered"></table>
+                        </div>
+                    </div>
+                </div>
+                <div id="box-detalle" style="display: none">
+                    <h5 class="mb-4">
+                        Medidas <span id="criterio"></span> Vigentes en el Departamento [<span id="dpto"></span>]
+                        <button type="button" class="btn btn-primary btn-sm float-right" onclick="_reporte.fnExportar()">
+                            Exportar listado
+                        </button>
+                    </h5>
+                    <div class="table-responsive">
+                        <table id="tblDetalle" class="table table-bordered"></table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

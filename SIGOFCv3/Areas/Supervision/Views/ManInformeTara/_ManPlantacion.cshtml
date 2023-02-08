@@ -1,0 +1,38 @@
+﻿
+<script src="~/Areas/Supervision/js/ManInformeTara/_ManPlantacion.js"></script>
+
+<div class="modal-dialog" role="document">
+    <div class="modal-content">
+        <div class="modal-header text-small" style="cursor:move;">
+            <span>Actividad Mantenimiento</span>
+            <i class="fa fa-close" style="cursor:pointer;" data-dismiss="modal" aria-label="Close"></i>
+        </div>
+        <div class="modal-body">
+            <form id="frmItemManPlantacion">
+                @Html.Hidden("hdfRegEstado")
+                <div class="form-row">
+                    <div class="form-group col-md-12">
+                        <label for="ddlManActividadId" class="text-small">Actividad</label>
+                        @Html.DropDownList("ddlManActividadId", new SelectList(ViewBag.ddlManActividad, "Value", "Text"), new { @class = "form-control form-control-sm" })
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label for="ddlExisteId" class="text-small">Existe</label>
+                        @Html.DropDownList("ddlExisteId", new SelectList(ViewBag.ddlOpcionSiNo, "Value", "Text"), new { @class = "form-control form-control-sm" })
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-12">
+                        <label for="txtObservacion" class="text-small">Observación</label>
+                        @Html.TextArea("txtObservacion", "", new { @class = "form-control form-control-sm", rows = "3" })
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-primary btn-sm" onclick="_ManPlantacion.fnSubmitForm()">Guardar</button>
+            <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Cancelar</button>
+        </div>
+    </div>
+</div>

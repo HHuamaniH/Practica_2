@@ -1,0 +1,42 @@
+﻿<div class="modal fade hide" id="modalEspecieModConsolidado" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header text-small" style="cursor:move;padding:0.5rem;">
+                <h5 class="modal-title">Modificar Cantidades</h5>
+            </div>
+            <div class="modal-body" id="divEspecieModConsolidado">
+                <input type="hidden" id="hdIdEspecieAdicionalMod" />
+                <input type="hidden" id="hdIdDetModificarCons" />
+                <input type="hidden" id="hdFuenteOrigenCons" />
+                <div class="form-row">
+                    <div class="form-group col-md-12">
+                        <label>Especie</label>
+                        <input type="text" id="txtEspecieFinalMod" class="form-control form-control-sm" disabled />
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-12">
+                        <label for="txtCantidadAprovFinalMod">Cantidad Aprovechable</label>
+                        <input type="number" id="txtCantidadAprovFinalMod" class="form-control form-control-sm" />
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-12">
+                        <label for="txtCantidadSemFinalMod">Cantidad Semillero</label>
+                        <input type="number" id="txtCantidadSemFinalMod" class="form-control form-control-sm" />
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-12">
+                        <label for="txtObsFinalMod">Observación</label>
+                        <textarea id="txtObsFinalMod" rows="2" class="form-control form-control-sm"></textarea>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary btn-sm" onclick="planT.fnModificarMuestraFinal()">Guardar</button>
+                <button id="btnCerrarModCons" class="btn btn-secondary btn-sm" data-dismiss="modal">Cancelar</button>
+            </div>
+        </div>
+    </div>
+</div>

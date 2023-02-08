@@ -1,0 +1,201 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_LayoutMain.cshtml";
+}
+@section scripts{
+    <script>
+        "use strict"; var rol = '';
+    $(document).ready(function () {
+        //Validamos el rol del usuario
+        utilSigo.ValidaRol('@ViewBag.VAliasRol', 'btnRegistrar', 'Edit');
+    });
+    </script>
+}
+<div id="divPriorizacion" class="container-fluid">
+    <div class="card">
+        <div class="card-header text-left">
+            <h5>Priorización de PASPEQ</h5>
+        </div>
+        <div class="card-body">
+            <div class="col-12">
+                <form id="frmPriorizacion">
+                    <div class="form-row">
+                        <div class="form-group col-md-3">
+                            @Html.DropDownList("ddlOD", new SelectList(ViewBag.ddlOD, "Value", "Text"), new { @class = "form-control form-control-sm" })
+                        </div>
+                        <div class="form-group col-md-3">
+                            @Html.DropDownList("ddlPeriodo", new SelectList(ViewBag.ddlPeriodo, "Value", "Text"), new { @class = "form-control form-control-sm" })
+                        </div>
+                        <div class="form-group col-md-4">
+                            <input type="text" class="form-control form-control-sm" id="txtValorBuscar" placeholder="Ingrese Título Habilitante">
+                        </div>
+                        <div class="btn-group col-md-2" style="padding-top:5px;">
+                            <a id="btnSearch" style="cursor:pointer;" data-toggle="tooltip" data-placement="top" title="Buscar" onclick="_Priorizacion.fnGetPriorizacion()"><span class="fa mx-2 fa-lg fa-search"></span></a>
+                        </div>
+                    </div>
+                </form>
+                <div class="table-responsive-md">
+                    <div class="card-header text-small" id="divTitle">
+                        <span>
+                            <i class="fa fa-lg fa-cloud-download" style="cursor: pointer;color:dodgerblue;" title="Descargar Plantilla" onclick="_Priorizacion.fnDownloadPlantilla()"></i>
+                        </span>
+                        <span>
+                            <label style="cursor:pointer;" class="fa mx-2 fa-lg fa-cloud-upload" title="Importar Plantilla" data-toggle="tooltip">
+                                <input type="file" id="fileselect" name="fileselect" style="display:none" onchange="_Priorizacion.fnUploadCalificacion(event, this);" size="60">
+                            </label>
+                        </span>
+                    </div>
+                    <table id="tbPriorizacion" class="table table-hover table-bordered" style="width:100%;">
+                        <thead>
+                            <tr>
+                                <th colspan="4"></th>
+                                <th colspan="8" style="background-color:#a4c4e6;text-align:center">Criterios de selección ineludibles</th>
+                                <th colspan="6" style="background-color:#a4c4e6;text-align:center">Criterios de selección circunstancial</th>
+                                <th rowspan="2" style="background-color:#a4c4e6">Total</th>
+                            </tr>
+                            <tr>
+                                <th>N°</th>
+                                <th>Editar</th>
+                                <th>Título Habilitante</th>
+                                <th>POA</th>
+                                <th title="Se reporta aprovechamiento del recurso a través de documentos y registros">A.1</th>
+                                <th title="Contempla el aprovechamiento de especies CITES">A.2</th>
+                                <th title="Se encuentra sujeto a denuncia presentada">A.3</th>
+                                <th title="Se encuentra sujeto a demanda de supervisión de otras dependencias del Estado">A.4</th>
+                                <th title="Es colindante con áreas naturales protegidas y/o reservas territoriales">A.5</th>
+                                <th title="Presenta pérdida de cobertura boscosa asociada a posible cambio de uso no autorizado de la tierra">A.6</th>
+                                <th title="Actores que elaboraron, verificaron y aprobaron planes de manejo con antecedentes de información falsa">A.7</th>
+                                <th title="No ha sido supervisado">A.8</th>
+                                <th title="El plan de manejo se encuentra vigente">B.1</th>
+                                <th title="Cuenta con informe de ejecución del plan de manejo">B.2</th>
+                                <th title="Tiene disposiciones administrativas sujetas a verificación de su cumplimiento">B.3</th>
+                                <th title="La estacionalidad del aprovechamiento de productos forestales y de fauna silvestre facilitan la accesibilidad para la supervisión">B.4</th>
+                                <th title="Se emitió actos administrativos que inciden sobre el recurso o el plan de manejo">B.5</th>
+                                <th title="Se encuentra dentro de la misma ruta de acceso de otro título habilitante a supervisar">B.6</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade hide" id="modalCalificacion" role="dialog"></div>
+</div>
+<style>
+    th.dt-center, td.dt-center {
+        text-align: center;
+    }
+</style>
+<script src="~/Scripts/Sigo/utility.uploadFile.js"></script>
+<script type="text/javascript">
+    var _Priorizacion = {
+        fnEditar: (obj) => {
+            let itemData = _Priorizacion.dt.row($(obj).parents('tr')).data();
+            var option = {
+                url: urlLocalSigo + "Focalizacion/Priorizacion/_Calificación",
+                divId: "modalCalificacion",
+                datos: { codPlan: itemData.codPlan, codSecuencial: itemData.codSecuencial }
+            };
+            utilSigo.fnOpenModal(option);
+        },
+        fnBuilTable: () => {
+            const columns = [
+                {
+                    "name": "ROW_INDE", "width": "2%", "orderable": false, "searchable": false, "mRender": function (data, type, row, meta) {
+                        return parseInt(meta.row) + 1 + meta.settings._iDisplayStart;
+                    }
+                },
+                {
+                    "data": "", "className": "text-center", "width": "2%", "orderable": false, "searchable": false, "mRender": function (data, type, row) {
+                        return '<div><i class="fa fa-lg fa-pencil-square-o" style="color:blue;cursor:pointer;" title="Editar" onclick="_Priorizacion.fnEditar(this)"></i></div>';
+                    }
+                },
+                { "data": "numTH", "autoWidth": true },
+                { "data": "planManejo", "autoWidth": true },
+                { "data": "a1", "autoWidth": true, className: "dt-center" },
+                { "data": "a2", "autoWidth": true, className: "dt-center" },
+                { "data": "a3", "autoWidth": true, className: "dt-center" },
+                { "data": "a4", "autoWidth": true, className: "dt-center" },
+                { "data": "a5", "autoWidth": true, className: "dt-center" },
+                { "data": "a6", "autoWidth": true, className: "dt-center" },
+                { "data": "a7", "autoWidth": true, className: "dt-center" },
+                { "data": "a8", "autoWidth": true, className: "dt-center" },
+                { "data": "b1", "autoWidth": true, className: "dt-center" },
+                { "data": "b2", "autoWidth": true, className: "dt-center" },
+                { "data": "b3", "autoWidth": true, className: "dt-center" },
+                { "data": "b4", "autoWidth": true, className: "dt-center" },
+                { "data": "b5", "autoWidth": true, className: "dt-center" },
+                { "data": "b6", "autoWidth": true, className: "dt-center" },
+                { "data": "total", "autoWidth": true, className: "dt-center" }
+            ];
+            const optDt = { iLength: 50, iStart: 0, aSort: [] };
+            _Priorizacion.dt = $("#tbPriorizacion").DataTable({
+                "bServerSide": false,
+                "deferLoading": 0,
+                "bProcessing": true,
+                "bJQueryUI": false,
+                "bFilter": false,
+                "bInfo": false,
+                "aaSorting": [],
+                "pageLength": optDt.iLength,
+                "oLanguage": initSigo.oLanguage,
+                "drawCallback": initSigo.showPagination,
+                bLengthChange: false,
+                ordering: false,
+                columns: columns//,
+                //"lengthMenu": [[10, 20, 50, 100], [10, 20, 50,100]],
+            });
+        },
+        fnGetPriorizacion: () => {
+            let frm = $("#frmPriorizacion");
+            let od = frm.find("#ddlOD").select2("val");
+            let periodo = frm.find("#ddlPeriodo").select2("val");
+            let numTH = frm.find("#txtValorBuscar").val().trim();
+            let url = `${urlLocalSigo}/Focalizacion/Priorizacion/PaspeqPriorizacionListar?periodo=${periodo}&codOd=${od}&numTH=${numTH}`;
+            const option = { url: url, datos: {}, type: 'GET' };
+            utilSigo.fnAjax(option, function (result) {
+                if (result.success) {
+                    _Priorizacion.dt.clear().draw();
+                    _Priorizacion.dt.rows.add(result.data).draw();
+                }
+            });
+        },
+        fnDownloadPlantilla: () => {
+            let frm = $("#frmPriorizacion");
+            let od = frm.find("#ddlOD").select2("val");
+            let periodo = frm.find("#ddlPeriodo").select2("val");
+            let numTH = frm.find("#txtValorBuscar").val().trim();
+            const url = `${urlLocalSigo}/Focalizacion/Priorizacion/DownloadPaspeqPriorizacion?periodo=${periodo}&codOd=${od}&numTH=${numTH}`;
+            utilSigo.file.getBinary("PaspeqPriorizacion.xlsx", url);
+        },
+        fnUploadCalificacion: (e, objeto) => {
+            let ruta = `${urlLocalSigo}/Focalizacion/Priorizacion/UploadPaspeqPriorizacion`;
+            uploadFile.fileSelectHandler_v1(e, objeto, ruta, {}, function (data) {
+                if (data.success) {
+                    utilSigo.toastSuccess("Aviso", data.msj);
+                    _Priorizacion.fnGetPriorizacion();
+                } else {
+                    utilSigo.toastError("Error", initSigo.MessageError);
+                }
+            });
+        }
+    };
+    $(document).ready(function () {
+        $.fn.select2.defaults.set("theme", "bootstrap4");
+        $("#ddlOD").select2();
+        $("#ddlPeriodo").select2();
+        _Priorizacion.fnBuilTable();
+        $("#frmPriorizacion").submit((e) => {
+            e.preventDefault(e);
+            _Priorizacion.fnGetPriorizacion();
+        });
+        $("#ddlOD").change(function () {
+            _Priorizacion.fnGetPriorizacion();
+        });
+        $("#ddlPeriodo").change(function () {
+            _Priorizacion.fnGetPriorizacion();
+        });
+    });
+</script>

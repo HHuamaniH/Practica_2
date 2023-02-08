@@ -1,0 +1,500 @@
+﻿@model CapaEntidad.ViewModel.VM_Resodirec
+<script type="text/javascript">
+    var _renderInfraccionesRecon = {};
+    _renderInfraccionesRecon.tbEliTABLA = [];
+
+    let indice;
+    let cod_secuencial;
+    let cod_articulo;
+    let cod_inciso;
+    let cod_especie;
+    let cod_poa;
+    _renderInfraccionesRecon.iniciarEventos = function () {
+        _renderInfraccionesRecon.frm.find("#txtBExtraccionFEmision").datepicker({ format: "dd/mm/yyyy", autoclose: true, language: 'es' });
+        ///_renderInfraccionesRecon.tbEliTABLA = {};
+    };
+
+    _renderInfraccionesRecon.fncArticulos = function (codEnSelect) {
+        var idArticulo = _renderInfraccionesRecon.frm.find("#ddlArticulos").val();
+        var DescArticulo = _renderInfraccionesRecon.frm.find("#ddlArticulos option:selected").text();
+        var codEncisoSelect = codEnSelect
+        $.ajax({
+            url: '@Url.Action("inicisos","ManResolucion")',
+            type: 'GET',
+            datatype: "json",
+            traditional: true,
+            data: { 'idArticulo': idArticulo, 'descArticulo': DescArticulo, 'codEncisoSelect' : codEncisoSelect },
+            success: function (data) {
+                $("#divEncisos").html(data)
+
+            }
+        });
+        _renderInfraccionesRecon.fncBuscarPOA();
+    };
+
+    ///--------> lista
+    _renderInfraccionesRecon.fnAdd = function (obj) {
+            var idArticulo = cod_articulo;
+            var DescArticulo = _renderInfraccionesRecon.frm.find("#txtDescArticulo").val();
+            let idEnciso = cod_inciso;
+            let descEnciso = _renderInfraccionesRecon.frm.find("#txtDescInciso").val();
+            let idPoa = cod_poa;
+            let descPoa = _renderInfraccionesRecon.frm.find("#txtDesPOA").val();
+            let area = _renderInfraccionesRecon.frm.find("#txtAreaInfrac").val();
+            let descripcion = _renderInfraccionesRecon.frm.find("#txtObservaciones").val();
+            let volumen = _renderInfraccionesRecon.frm.find("#txtVolumenInf").val();
+            let codEspecie = cod_especie;
+            let especie = _renderInfraccionesRecon.frm.find("#txtDescEspecie").val();
+            let idTipo = _renderInfraccionesRecon.frm.find("#txtDescTipoA").val();
+            let numInd = _renderInfraccionesRecon.frm.find("#txtNumIndv").val();
+            let determinacion = _renderInfraccionesRecon.frm.find("#ddlDeterminacion").val();
+            let RegEstado = 1;
+
+            if (indice != null) {
+                RegEstado = 2;
+            }
+            else {
+                cod_secuencial = 0;
+            }
+            let model = {
+                'COD_ILEGAL_ARTICULOS': idArticulo,
+                'COD_ILEGAL_ENCISOS': idEnciso,
+                'DESCRIPCION_ARTICULOS': DescArticulo,
+                'DESCRIPCION_ENCISOS': descEnciso,
+                'COD_ESPECIES': codEspecie,
+                'DESCRIPCION_ESPECIE': especie,
+                'VOLUMEN': volumen == "" ? 0 : volumen,
+                'AREA': area == "" ? 0 : area,
+                'NUMERO_INDIVIDUOS': numInd == "" ? 0 : numInd,
+                'DESCRIPCION_INFRACCIONES': descripcion,
+                'COD_SECUENCIAL': cod_secuencial,
+                'NUM_POA': idPoa,
+                'POA': descPoa,
+                'TIPOMADERABLE': idTipo,
+                'RegEstado': RegEstado,
+                'DETERMINACION': determinacion
+            }
+
+           if (indice == null) {
+                _renderInfraccionesRecon.dtRenderListInforme.rows.add([model]).draw();
+                _renderInfraccionesRecon.dtRenderListInforme.page('last').draw('page');
+           }
+           else {
+                _renderInfraccionesRecon.dtRenderListInforme.row(indice).data(model).draw(false);
+            }
+            _renderInfraccionesRecon.frm.find("#txtAreaInfrac").val('');
+            _renderInfraccionesRecon.frm.find("#txtNumIndv").val('');
+            _renderInfraccionesRecon.frm.find("#txtVolumenInf").val('');
+            _renderInfraccionesRecon.frm.find("#txtDescInfrac").val('');
+            indice = null;
+            idArticulo = null;
+            _renderInfraccionesRecon.frm.find("#txtDescArticulo").val('');
+            idEnciso = null;
+            _renderInfraccionesRecon.frm.find("#txtDescInciso").val('');
+            idPoa = null;
+            _renderInfraccionesRecon.frm.find("#txtDesPOA").val('');
+            _renderInfraccionesRecon.frm.find("#txtObservaciones").val('');
+            especie = _renderInfraccionesRecon.frm.find("#txtDescEspecie").val('');
+            _renderInfraccionesRecon.frm.find("#txtDescTipoA").val('');
+            cod_especie = null;
+            _renderInfraccionesRecon.frm.find("#divEdit").hide();
+    }
+
+    _renderInfraccionesRecon.fnImport = function (obj) {
+        _renderInfraccionesRecon.dtConsultaInforme.ajax.reload();
+        utilSigo.modalDraggable(_renderInfraccionesRecon.frm.find("#mdlConsultaInfracciones"), '.modal-header');
+        _renderInfraccionesRecon.frm.find("#mdlConsultaInfracciones").modal({ keyboard: true, backdrop: 'static' });
+    }
+
+    _renderInfraccionesRecon.fnInitDataTable_Detail_Import = function (data) {
+        var columns_label = [], columns_data = [], options = {};
+        columns_label = ["Articulo", "Inciso", "Volumen (m³)", "Especie", "Área (ha)", "Num. Individuos","POA" , "Tipo de aprovechamiento" ];
+        columns_data = ["DESCRIPCION_ARTICULOS", "DESCRIPCION_ENCISOS", "VOLUMEN", "DESCRIPCION_ESPECIE", "AREA", "NUMERO_INDIVIDUOS",  "POA", "TIPOMADERABLE"];
+        options = {
+            page_paging: true, page_length: 10, row_index: true, row_select: true, row_fnSelect: "_renderInfraccionesRecon.fnSelect(this)"
+        };
+        utilDt.fnLoadDataTable_Detail(_renderInfraccionesRecon.frm.find("#tbConsultaInfraccionesRecon"), columns_label, columns_data, options);
+        _renderInfraccionesRecon.dtConsultaInforme = _renderInfraccionesRecon.fnInitDataTablePaging(options);
+    }
+
+    _renderInfraccionesRecon.fnInitDataTablePaging = function (options) {
+        var optDt = {};
+        optDt.iLength = options.page_length;
+        optDt.iStart = 0;
+        optDt.bSearch = false;
+        optDt.bInfo = true;
+        optDt.bSort = true;
+        optDt.aSort = [];
+        return _renderInfraccionesRecon.frm.find("#tbConsultaInfraccionesRecon").DataTable({
+            processing: true,
+            serverSide: true,
+            searching: optDt.bSearch,
+            ordering: optDt.bSort,
+            deferLoading: 0,
+            paging: true,
+            ajax: {
+                "url": urlLocalSigo + "Fiscalizacion/ManResolucion/importarInfraccionesRDT",
+                "data": function (d) {
+                    d.customSearchEnabled = true;
+                    for (var i = 0; i < d.order.length; i++) {
+                        d.order[i]["column_name"] = d.columns[d.order[i]["column"]]["data"];
+                    }
+                    d.columns = null;
+                },
+                "error": function (jqXHR) {
+                    utilSigo.unblockUIGeneral();
+                    utilSigo.toastError("Error", initSigo.MessageError);
+                    console.log(jqXHR.responseText);
+                }
+            },
+            columns: options.table_columns,
+            bInfo: optDt.bInfo,
+            "lengthMenu": [[10, 20, 50, 100], [10, 20, 50, 100]],
+            "bLengthChange": false,
+            "aaSorting": optDt.aSort,
+            "pageLength": optDt.iLength,
+            "displayStart": optDt.iStart,
+            "oLanguage": initSigo.oLanguage,
+            "drawCallback": initSigo.showPagination,
+        });
+    }
+
+    _renderInfraccionesRecon.fnSelect = function (obj) {
+            var modelData = _renderInfraccionesRecon.dtConsultaInforme.row($(obj).parents('tr')).data();
+            var idArticulo = modelData["COD_ILEGAL_ARTICULOS"];
+            var DescArticulo =  modelData["DESCRIPCION_ARTICULOS"];
+            let idEnciso = modelData["COD_ILEGAL_ENCISOS"];
+            let descEnciso = modelData["DESCRIPCION_ENCISOS"];
+            let idPoa = modelData["NUM_POA"];
+            let descPoa = modelData["POA"];
+            let area = modelData["AREA"];
+            let descripcion =  modelData["DESCRIPCION_INFRACCIONES"];
+            let volumen = modelData["VOLUMEN"];
+            let idEspecie =  modelData["COD_ESPECIES"];
+            let desEspecie =  modelData["DESCRIPCION_ESPECIE"];
+            let idTipo =  modelData["TIPOMADERABLE"];
+            let numInd =  modelData["NUMERO_INDIVIDUOS"];
+            let idEspecieFauna = modelData["COD_ESPECIES"];
+            let desEspecieFauna = modelData["DESCRIPCION_ESPECIE"];
+            let determinacion = modelData["DETERMINACION"];
+            let codEspecie = null;
+            let especie = '';
+            let RegEstado = 1;
+            cod_secuencial = modelData["COD_SECUENCIAL"];
+            codEspecie = idEspecie;
+
+            let model = {
+                'COD_ILEGAL_ARTICULOS': idArticulo,
+                'COD_ILEGAL_ENCISOS': idEnciso,
+                'DESCRIPCION_ARTICULOS': DescArticulo,
+                'DESCRIPCION_ENCISOS': descEnciso,
+                'COD_ESPECIES': codEspecie,
+                'DESCRIPCION_ESPECIE': desEspecie,
+                'VOLUMEN': volumen == "" ? 0 : volumen,
+                'AREA': area == "" ? 0 : area,
+                'NUMERO_INDIVIDUOS': numInd == "" ? 0 : numInd,
+                'DESCRIPCION_INFRACCIONES': descripcion,
+                'COD_SECUENCIAL': cod_secuencial,
+                'NUM_POA': idPoa,
+                'POA': descPoa,
+                'TIPOMADERABLE': idTipo,
+                'RegEstado': RegEstado,
+                'DETERMINACION': determinacion
+            }
+
+           if (indice == null) {
+                _renderInfraccionesRecon.dtRenderListInforme.rows.add([model]).draw();
+                _renderInfraccionesRecon.dtRenderListInforme.page('last').draw('page');
+           }
+           else {
+                _renderInfraccionesRecon.dtRenderListInforme.row(indice).data(model).draw(false);
+            }
+            _renderInfraccionesRecon.frm.find("#txtAreaInfrac").val('');
+            _renderInfraccionesRecon.frm.find("#txtNumIndv").val('');
+            _renderInfraccionesRecon.frm.find("#txtVolumenInf").val('');
+            _renderInfraccionesRecon.frm.find("#txtDescInfrac").val('');
+            _renderInfraccionesRecon.frm.find("#ddlEspeciesFauna").val('0002226');
+            _renderInfraccionesRecon.frm.find("#ddlEspeciesFlora").val('0002226');
+
+        indice = null;
+    }
+
+    //----> se agrega la tabla
+    _renderInfraccionesRecon.fnInitDataTable_Detail = function () {
+        var columns_label = [], columns_data = [], options = {};
+
+        columns_label = ["Articulo", "Inciso", "Volumen (m³)", "Especie", "Área (ha)", "Num. Individuos","POA" , "Tipo de aprovechamiento" , "Determinación", "Observaciones"];
+        columns_data = ["DESCRIPCION_ARTICULOS", "DESCRIPCION_ENCISOS", "VOLUMEN", "DESCRIPCION_ESPECIE", "AREA", "NUMERO_INDIVIDUOS",  "POA", "TIPOMADERABLE" , "DETERMINACION", "DESCRIPCION_INFRACCIONES"];
+       options = {
+            page_length: 10, row_index: true, row_delete: true, row_fnDelete: "_renderInfraccionesRecon.fnDelete(this)", page_sort: true, row_edit: true, row_fnEdit: "_renderInfraccionesRecon.fnEdit(this)"
+        };
+        _renderInfraccionesRecon.dtRenderListInforme = utilDt.fnLoadDataTable_Detail(_renderInfraccionesRecon.frm.find("#tbRenderIncisosRecon"), columns_label, columns_data, options);
+        _renderInfraccionesRecon.dtRenderListInforme.rows.add(JSON.parse('@Html.Raw(Json.Encode(@Model.listInfracionReconsideracion))')).draw();
+
+    }
+
+    _renderInfraccionesRecon.fnEdit = function (obj) {
+        var data = _renderInfraccionesRecon.dtRenderListInforme.row($(obj).parents('tr')).data();
+        indice = _renderInfraccionesRecon.dtRenderListInforme.row($(obj).parents('tr')).index();
+        _renderInfraccionesRecon.frm.find("#txtDescArticulo").val(data['DESCRIPCION_ARTICULOS']);
+        cod_articulo = data['COD_ILEGAL_ARTICULOS'];
+        _renderInfraccionesRecon.frm.find("#txtDescInciso").val(data['DESCRIPCION_ENCISOS']);
+        cod_inciso = data['COD_ILEGAL_ENCISOS'];
+        _renderInfraccionesRecon.frm.find("#txtDescEspecie").val(data['DESCRIPCION_ESPECIE']);
+        cod_especie = data['COD_ESPECIES'];
+        _renderInfraccionesRecon.frm.find("#txtDesPOA").val(data['POA']);
+        cod_poa = data["NUM_POA"];
+        _renderInfraccionesRecon.frm.find("#txtDescTipoA").val(data['TIPOMADERABLE']);
+        _renderInfraccionesRecon.frm.find("#txtVolumenInf").val(data['VOLUMEN']);
+        _renderInfraccionesRecon.frm.find("#txtAreaInfrac").val(data['AREA']);
+        _renderInfraccionesRecon.frm.find("#txtNumIndv").val(data['NUMERO_INDIVIDUOS']);
+        _renderInfraccionesRecon.frm.find("#ddlDeterminacion").val(data['DETERMINACION']);
+        cod_secuencial = data['COD_SECUENCIAL'];
+        _renderInfraccionesRecon.frm.find("#divEdit").show();
+    }
+
+
+    /*Listado de registros (render)*/
+    _renderInfraccionesRecon.fnDelete = function (obj) {
+        var data = _renderInfraccionesRecon.dtRenderListInforme.row($(obj).parents('tr')).data();
+        if (data["RegEstado"] == "0") {
+          _renderInfraccionesRecon.tbEliTABLA.push({
+                    EliTABLA: "RESODIREC_DET_INI_PAU",
+                    EliVALOR01: "",
+                    EliVALOR02: data["COD_SECUENCIAL"]
+           });
+        }
+        _renderInfraccionesRecon.dtRenderListInforme.row($(obj).parents('tr')).remove().draw(false);
+    }
+
+    _renderInfraccionesRecon.fnGetListEliTABLA = function () { return _renderInfraccionesRecon.tbEliTABLA }
+
+    //devuelve la lista de infracciones
+    _renderInfraccionesRecon.fnGetList = function () {
+        let list = [], rows, countFilas, data;
+        rows = _renderInfraccionesRecon.dtRenderListInforme.$("tr");
+        countFilas = rows.length;
+        if (countFilas > 0) {
+            $.each(rows, function (i, o) {
+                data = _renderInfraccionesRecon.dtRenderListInforme.row($(o)).data();
+                list.push(utilSigo.fnConvertArrayToObject(data));
+            });
+        }
+        return list;
+    }
+
+    _renderInfraccionesRecon.fnExport = function () {
+        var url = urlLocalSigo + "Fiscalizacion/ManResolucion/ExportarInfracciones";
+        let modelRD = {}
+        modelRD.ListarIniPAU = _renderInfraccionesRecon.fnGetList();
+        let option = { url: url, datos: JSON.stringify(modelRD), type: 'POST' };
+        utilSigo.fnAjax(option, function (data) {
+            if (data.success) {
+                document.location = urlLocalSigo + "Archivos/Plantilla/Reg_Usu/" + data.msj;
+            }
+            else {
+                utilSigo.toastWarning("Aviso", "Sucedio un error, Comuníquese con el Administrador");
+                console.log(data.msj);
+            }
+        });
+    }
+
+    _renderInfraccionesRecon.fncBuscarPOA = function () {
+        let id = 1;
+       $.ajax({
+            url: '@Url.Action("getListPOA","ManResolucion")',
+           type: 'GET',
+            datatype: "json",
+            traditional: true,
+            data: {'id': id},
+            success: function (data) {
+                $("#divPOA").html(data)
+                //_renderInfraccionesRecon.fncBuscarPOA();
+              }
+        });
+    };
+
+    $(document).ready(function () {
+        _renderInfraccionesRecon.frm = $("#frmInfraccionesRecons");
+        _renderInfraccionesRecon.iniciarEventos();
+        _renderInfraccionesRecon.fnInitDataTable_Detail();
+        _renderInfraccionesRecon.fnInitDataTable_Detail_Import();
+
+    });
+
+</script>
+<div id="frmInfraccionesRecons">
+    <div class="card-header text-small">Infracciones de la RD de Reconsideración</div>
+    <div><br /></div>
+    <div id="divEdit" style="display:none;">
+        <div class="form-row">
+            <div class="form-group col-md-4">
+                <label for="txtFechaBalance" class="text-small">Articulo</label>
+            </div>
+            <div class="form-group col-md-6">
+                <input type="text" class="form-control" id="txtDescArticulo" readonly="false" />
+            </div>
+            <div class="form-group col-md-2">
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group col-md-4">
+                <label for="txtFechaBalance" class="text-small">Inciso</label>
+            </div>
+            <div class="form-group col-md-6">
+                <input type="text" class="form-control" id="txtDescInciso" readonly="false" />
+            </div>
+            <div class="form-group col-md-2">
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group col-md-4">
+                <label for="txtFechaBalance" class="text-small">Especie</label>
+            </div>
+            <div class="form-group col-md-6">
+                <input type="text" class="form-control" id="txtDescEspecie" readonly="false" />
+            </div>
+            <div class="form-group col-md-2">
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group col-md-4">
+                <label for="txtFechaBalance" class="text-small">POA</label>
+            </div>
+            <div class="form-group col-md-6">
+                <input type="text" class="form-control" id="txtDesPOA" readonly="false" />
+            </div>
+            <div class="form-group col-md-2">
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group col-md-4">
+                <label for="txtFechaBalance" class="text-small">Tipo de aprovechamiento</label>
+            </div>
+            <div class="form-group col-md-6">
+                <input type="text" class="form-control" id="txtDescTipoA" readonly="false" />
+            </div>
+            <div class="form-group col-md-2">
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group col-md-4">
+                <label for="txtFechaBalance" class="text-small">Volumen</label>
+            </div>
+            <div class="form-group col-md-6">
+                <input type="text" class="form-control" id="txtVolumenInf" />
+            </div>
+            <div class="form-group col-md-2">
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group col-md-4">
+                <label for="txtFechaBalance" class="text-small">Área</label>
+            </div>
+            <div class="form-group col-md-6">
+                <input type="text" class="form-control" id="txtAreaInfrac" />
+            </div>
+            <div class="form-group col-md-2">
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group col-md-4">
+                <label for="txtFechaBalance" class="text-small">Num. Individuos</label>
+            </div>
+            <div class="form-group col-md-6">
+                <input type="text" class="form-control" id="txtNumIndv" />
+            </div>
+            <div class="form-group col-md-2">
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group col-md-4">
+                <label for="txtFechaBalance" class="text-small">Determinación</label>
+            </div>
+            <div class="form-group col-md-6">
+                <select class="form-control m-b" name="account" id="ddlDeterminacion">
+                    <option>No Evaluado</option>
+                    <option>Fundada</option>
+                    <option>Fundada en Parte</option>
+                    <option>Infundada</option>
+                    <option>Improcedente</option>
+                </select>
+            </div>
+            <div class="form-group col-md-2">
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group col-md-4">
+                <label for="txtFechaBalance" class="text-small">Observaciones</label>
+            </div>
+            <div class="form-group col-md-6">
+                <textarea id="txtObservaciones" class="form-control" placeholder="Observaciones" rows="3"></textarea>
+            </div>
+            <div class="form-group col-md-2">
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="col-sm-6">
+                <div class="form-row">
+                    <div class="form-group -col-md-12">
+                        <button type="button" id="btnAddInfracciones" class="btn btn-info btn-sm" onclick="_renderInfraccionesRecon.fnAdd()"> Agregar Infracción</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-6">
+            <div class="form-row">
+                <div class="form-group -col-md-12">
+                    <button type="button" id="btnAddInfracciones" class="btn btn-info btn-sm" onclick="_renderInfraccionesRecon.fnImport()">Importar infracciones de  RD de termino</button>
+
+                </div>
+            </div>
+        </div>
+
+        <div class="table-responsive">
+            <table id="tbRenderIncisosRecon" style="width:100%;margin:0px !important;" class="table table-hover table-bordered">
+                <thead>
+                    <tr>
+                        <th colspan="15" class="text-sm-left">
+                            <div class="row">
+                                <div class="col-md-8">
+                                    <div class="form-inline">
+                                        <strong> @Model.txtTituloInfraccion </strong>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+        <br /><br />
+
+        <!--modal-->
+        <div class="modal fade hide" id="mdlConsultaInfracciones" tabindex="-1" role="dialog">
+            <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content">
+                    <div class="modal-header text-small" style="cursor:move;">
+                        Importar infracciones de la RD de Término
+                        <i class="fa fa-close" style="cursor:pointer;" data-dismiss="modal" aria-label="Close"></i>
+                    </div>
+                    <div class="modal-body" style="padding:0px;">
+                        <div id="frmConsultaInfracciones">
+                            <div class="table-responsive" style="overflow-y:hidden;">
+                                <table id="tbConsultaInfraccionesRecon" style="width:100%;margin:0px !important;" class="table table-hover table-bordered">
+                                    <thead></thead>
+                                    <tbody></tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

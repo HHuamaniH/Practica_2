@@ -1,0 +1,102 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_LayoutMain.cshtml";
+}
+@section scripts{
+    <script>
+    "use strict";
+    var rol = '';
+    $(document).ready(function () {
+        //Validamos el rol del usuario
+        utilSigo.ValidaRol('@ViewBag.VAliasRol', 'btnAdd');
+    });
+    </script>
+}
+<form id="frmManPlan">
+    @Html.Hidden("tipoFormulario", (object)ViewBag.Formulario)
+    @Html.Hidden("titleMenu", (object)ViewBag.TituloFormulario)
+    @Html.Hidden("alertaFormulario", (object)ViewBag.AlertaInicial)
+
+    <div id="dvManPlanContenedor" class="container-fluid"></div>
+</form>
+
+<script type="text/javascript">
+    let _ManPlan = {
+        fnLoadManGrillaPaging: () => {
+            var url = initSigo.urlControllerGeneral + "_ManGrillaPaging";
+            var data = _ManPlan.frm.serializeObject();
+            var option = { url: url, datos: JSON.stringify(data), type: 'POST', dataType: 'html' };
+
+            var columns_label = [], columns_data = [], options = {}, data_extend = [];
+            columns_label = ["Fecha de registro", "Código", "Año", "Fecha corte", "Colaboradores", "Nro. Casos", "Nro. Consolidado", "Nro. Priorizado"];
+            columns_data = ["FECHA_CREACION", "COD_PLAN", "ANIO", "FECHA_CORTE", "COLABORADOR", "N_CASUISTICA", "N_CONSOLIDADO", "N_PRIORIZAR"];
+            data_extend = [
+                {
+                    "data": "ANIO", "title": "Universo", "orderable": false, "searchable": false, "mRender": function (data, type, row, meta) {
+                        return '<i class="fa fa-lg fa-database" style="cursor: pointer;color:dodgerblue;" title="Universo de títulos habilitantes y planes de manejo" onclick="_ManPlan.fnShowUniverso(this)"></i>';
+                    }
+                }
+            ];
+
+            options = {
+                page_paging: true, page_length: 20, row_index: true, row_edit: true, row_fnEdit: "_ManGrillaPaging.fnCreate(this)"
+                , data_extend: data_extend
+            };
+
+            utilSigo.fnAjax(option, function (data) {
+                _ManPlan.frm.find("#dvManPlanContenedor").html(data);
+                _ManGrillaPaging.fnInit(columns_label, columns_data, options);
+
+                _ManGrillaPaging.fnExport = function () {
+                    utilSigo.toastWarning("Aviso", "La opción no se encuentra disponible en estos momentos");
+                }
+
+                _ManGrillaPaging.fnCreate = function (obj) {
+                    var cod_plan = "";
+                    var url_crud = urlLocalSigo + "Planificacion/ManPlan/AddEdit";
+
+                    if (obj != "") { //Modificar registro
+                        var data = _ManGrillaPaging.dtManGrillaPaging.row($(obj).parents('tr')).data();
+                        cod_plan = data["COD_PLAN"];
+
+                        _ManGrillaPaging.fnReadConfigManGrillaPaging();
+
+                        window.location = url_crud + "?asCodPlan=" + cod_plan;
+                    } else { //Nuevo registro
+                        window.location = url_crud + "?asCodPlan=" + cod_plan;
+                    }
+                }
+            });
+        },
+        fnInit: () => {
+            var alertaInicial = _ManPlan.frm.find("#alertaFormulario").val();
+            if (alertaInicial != "") {
+                utilSigo.toastSuccess("Aviso", alertaInicial);
+            }
+
+            _ManPlan.fnLoadManGrillaPaging();
+        },
+        fnShowUniverso: (obj) => {
+            var cod_plan = "";
+            var url_crud = urlLocalSigo + "Planificacion/ManUniverso/AddEdit";
+
+            if (obj != "") { //Modificar registro
+                var data = _ManGrillaPaging.dtManGrillaPaging.row($(obj).parents('tr')).data();
+                cod_plan = data["COD_PLAN"];
+
+                _ManGrillaPaging.fnReadConfigManGrillaPaging();
+
+                window.location = url_crud + "?asCodPlan=" + cod_plan;
+            } else { //Nuevo registro
+                utilSigo.toastWarning("Advertencia", "Seleccione la opción del universo de un plan válido");
+            }
+        }
+    };
+
+    $(document).ready(function () {
+        _ManPlan.frm = $("#frmManPlan");
+
+        _ManPlan.fnInit();
+    });
+</script>

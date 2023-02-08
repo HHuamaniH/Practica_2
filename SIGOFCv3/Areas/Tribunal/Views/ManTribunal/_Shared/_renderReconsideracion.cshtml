@@ -1,0 +1,143 @@
+﻿@model CapaEntidad.ViewModel.VM_ResolucionTFFS
+<script type="text/javascript">
+    var _renderReconsideracion = {};
+
+    _renderReconsideracion.fncSelect = function () {
+
+    }
+
+    $(document).ready(function () {
+        _renderReconsideracion.frm = $("#divfmrReconsideracion");
+        _renderReconsideracion.fncSelect();
+    });
+</script>
+<div id="divfmrReconsideracion">
+    <div class="card-header text-small">Determinación</div>
+    <div><br /></div>
+    <div class="form-row">
+        <div class="form-group col-md-4">
+            <label for="chkGTF" class="text-small">Inadmisible</label>
+        </div>
+        <div class="form-group col-md-6">
+            @Html.CheckBoxFor(m => m.chkInadmisible, new
+            {
+               @class = "form-check-input",
+               style = "width:15px;height:16px;",
+               @onchange = "_renderReconsideracion.fncSelect()",
+               @id = "chkInadmisible",
+           })
+        </div>
+        <div class="form-group col-md-2">
+        </div>
+    </div>
+
+    <div class="form-row">
+        <div class="form-group col-md-4">
+            <label for="chkGTF" class="text-small">Improcedente</label>
+        </div>
+        <div class="form-group col-md-6">
+            @Html.CheckBoxFor(m => m.chkImprocedente, new
+            {
+                @class = "form-check-input",
+                style = "width:15px;height:16px;",
+                @onchange = "_renderReconsideracion.fncSelect()",
+                @id = "chkImprocedente",
+            })
+        </div>
+        <div class="form-group col-md-2">
+        </div>
+    </div>
+
+    <div class="form-row">
+        <div class="form-group col-md-4">
+            <label for="chkGTF" class="text-small">Fundada</label>
+        </div>
+        <div class="form-group col-md-6">
+            @Html.CheckBoxFor(m => m.chkFundada, new
+            {
+                @class = "form-check-input",
+                style = "width:15px;height:16px;",
+                @onchange = "_renderReconsideracion.fncSelect()",
+                @id = "chkFundada",
+            })
+        </div>
+        <div class="form-group col-md-2">
+        </div>
+    </div>
+
+    <div class="form-row">
+        <div class="form-group col-md-4">
+            <label for="chkGTF" class="text-small">Fundada en parte</label>
+        </div>
+        <div class="form-group col-md-6">
+            @Html.CheckBoxFor(m => m.chkFundadaParte, new
+            {
+                @class = "form-check-input",
+                style = "width:15px;height:16px;",
+                @onchange = "_renderReconsideracion.fncSelect()",
+                @id = "chkFundadaParte",
+            })
+        </div>
+        <div class="form-group col-md-2">
+        </div>
+    </div>
+
+    <div class="form-row" style="display:none;">
+        <div class="form-group col-md-4">
+            <label for="chkGTF" class="text-small"></label>
+        </div>
+        <div class="form-group col-md-6">
+            lista de literales
+        </div>
+        <div class="form-group col-md-2">
+        </div>
+    </div>
+
+    <div class="form-row">
+        <div class="form-group col-md-4">
+            <label for="chkGTF" class="text-small">Infundada</label>
+        </div>
+        <div class="form-group col-md-6">
+            @Html.CheckBoxFor(m => m.chkInFundada, new
+            {
+                @class = "form-check-input",
+                style = "width:15px;height:16px;",
+                @onchange = "_renderReconsideracion.fncSelect()",
+                @id = "chkInFundada",
+            })
+        </div>
+        <div class="form-group col-md-2">
+        </div>
+    </div>
+
+    <div class="form-row">
+        <div class="form-group col-md-4">
+            <label for="chkGTF" class="text-small">Levantar la caducidad del Título Habilitante</label>
+        </div>
+        <div class="form-group col-md-6">
+            @Html.CheckBoxFor(m => m.chkLevantarCaducidad, new { @class = "form-check-input", style = "width:15px;height:16px;" })
+        </div>
+        <div class="form-group col-md-2">
+        </div>
+    </div>
+
+    <div class="form-row">
+        <div class="form-group col-md-4">
+            <label for="chkGTF" class="text-small">Cambio de Monto de Multa</label>
+        </div>
+        <div class="form-group col-md-2">
+            @Html.CheckBoxFor(m => m.chkCambioMulta, new { @class = "form-check-input", style = "width:15px;height:16px;" })
+        </div>
+        <div class="form-group col-md-4">
+            @Html.EditorFor(m => m.txtMonMultaRecon, new { htmlAttributes = new { @class = "form-control form-control-sm", placeholder = "Ingrese el cambio de multa", onkeypress = "return utilSigo.onKeyDecimal(event, this);", maxlength = "20" } })
+        </div>
+        <div class="form-group col-md-2">
+        </div>
+    </div>
+
+    <!--Rectificacion-->
+    <div>
+        @Html.Partial("~/Areas/Tribunal/Views/ManTribunal/_Shared/_generic/_renderRectificacion.cshtml", Model)
+    </div>
+
+</div>

@@ -1,0 +1,55 @@
+﻿
+<script src="~/Areas/Capacitacion/js/ManCapacitacion/_PreguntaEncuesta.js"></script>
+
+<div class="modal-dialog" role="document">
+    <div class="modal-content">
+        <div class="modal-header text-small" style="cursor:move;">
+            <span id="lblItemPregEnc_Titulo"></span>
+            <i class="fa fa-close" style="cursor:pointer;" data-dismiss="modal" aria-label="Close"></i>
+        </div>
+        <div class="modal-body">
+            <form id="frmItemPregEnc">
+                @Html.Hidden("hdfItemPregEnc_CodPregunta")
+                <div class="form-group row" style="margin-bottom:0px;">
+                    <label for="lblItemPregEnc_Pregunta" class="col-md-4 col-form-label text-small">Pregunta</label>
+                    <div class="col-md-8">
+                        @Html.TextArea("txtItemPregEnc_Pregunta", "", new { @class = "form-control form-control-sm", @rows = "4" })
+                        @Html.Hidden("hdfItemPregEnc_Participante")
+                    </div>
+                </div>
+                <div class="form-group row" style="margin-bottom:0px;">
+                    <label for="lblItemPregEnc_NBueno" class="col-md-4 col-form-label text-small">N° de participantes que marcaron Bueno</label>
+                    <div class="col-md-4">
+                        @Html.TextBox("txtItemPregEnc_NBueno", "", new { @class = "form-control form-control-sm", type="number" })
+                        @Html.Hidden("hdfItemPregEnc__PBueno")
+                    </div>
+                </div>
+                <div class="form-group row" style="margin-bottom:0px;">
+                    <label for="lblItemPregEnc_NRegular" class="col-md-4 col-form-label text-small">N° de participantes que marcaron Regular</label>
+                    <div class="col-md-4">
+                        @Html.TextBox("txtItemPregEnc_NRegular", "", new { @class = "form-control form-control-sm", type = "number" })
+                        @Html.Hidden("hdfItemPregEnc__PRegular")
+                    </div>
+                </div>
+                <div class="form-group row" style="margin-bottom:0px;">
+                    <label for="lblItemPregEnc_NMalo" class="col-md-4 col-form-label text-small">N° de participantes que marcaron Malo</label>
+                    <div class="col-md-4">
+                        @Html.TextBox("txtItemPregEnc_NMalo", "", new { @class = "form-control form-control-sm", type = "number" })
+                        @Html.Hidden("hdfItemPregEnc__PMalo")
+                    </div>
+                </div>
+                <div class="form-group row" style="margin-bottom:0px;">
+                    <label for="lblItemPregEnc_NNo" class="col-md-4 col-form-label text-small">N° de participantes que no marcaron</label>
+                    <div class="col-md-4">
+                        @Html.TextBox("txtItemPregEnc_NNo", "", new { @class = "form-control form-control-sm", type = "number" })
+                        @Html.Hidden("hdfItemPregEnc__PNO")
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="modal-footer">
+            <button type="button" id="btnGuardarPregEnc" class="btn btn-primary btn-sm" onclick="_PreguntaEncuesta.fnSubmitForm()">Guardar</button>
+            <button type="button" id="btnCancelarPreEnc" class="btn btn-secondary btn-sm" onclick="_PreguntaEncuesta.fnCloseModal()">Cancelar</button>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,106 @@
+﻿@model CapaEntidad.ViewModel.General.VM_Menu_List
+<div id="divManPerfil" class="modal-dialog" role="document">
+    <div class="modal-content">
+        <div class="modal-header text-small" style="cursor:move;padding:0.5rem;">
+            <h5 class="modal-title">Rol</h5>
+        </div>
+        <div class="modal-body">
+            <form id="frmAddEditRolMenu" method="post">
+                @Html.HiddenFor(m => m.COD_SECUENCIAL_HIJO)
+                @Html.HiddenFor(m => m.COD_SECUENCIAL_PADRE)
+                @Html.Hidden("CodPerfil", (object)ViewBag.codPerfil)
+
+                <div class="form-row">
+                    <div class="form-group col-md-12">
+                        <label for="descr" class="text-small">Nombre del Menú</label>
+                        <div class="col-md-12 ">
+                            <input type="text" class="form-control form-control-sm" id="txtDescripcion" name="txtDescripcion" />
+
+                        </div>
+                    </div>
+                    <div class="form-group col-md-12">
+                        <label for="cboModulo" class="text-small">Acción del Rol</label>
+                        <div class="col-md-12 ">
+                            <select id="cboRol" class="form-control form-control-sm">
+                                <option value="0">- Seleccione -</option>
+                                <option value="1">Administrador - M</option>
+                                <option value="2">Control - R2</option>
+                                <option value="3">Registro - R1</option>
+                                <option value="4">Consulta - C</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+
+            </form>
+        </div>
+        <div class="modal-footer">
+            <button id="btnGuardar" class="btn btn-primary btn-sm">Registrar</button>
+            <button id="btnCancelar" class="btn btn-secondary btn-sm" onclick="_manPerfilRolMenu.fnCancelar();">Cancelar</button>
+        </div>
+    </div>
+</div>
+<script>
+    "use strict";
+    var _manPerfilRolMenu = {
+        fnGuardar: () => {
+            var url = urlLocalSigo + "Seguridad/Usuario/SaveMenuRol";
+            var model = _manPerfilRolMenu.frm.serializeObject();
+            console.log('model', model);
+            let data = {
+                COD_SECUENCIAL: (model.COD_SECUENCIAL_HIJO == 0 ? model.COD_SECUENCIAL_PADRE : model.COD_SECUENCIAL_HIJO),
+                NCODROL: $('#cboRol').val(),
+                COD_UCUENTA: _MenuUsuario.fm.find("#codUsuario").val()
+
+            };
+            var option = { url: url, datos: JSON.stringify(data), type: 'POST' };
+            utilSigo.fnAjax(option, function (data) {
+                console.log('result', data);
+                _MenuUsuario.GetListMenusUsuario({ codUsuario: _MenuUsuario.fm.find("#codUsuario").val() });
+               // _MenuPerfil.fnGetAllMenuAsignado({ codPerfil: $("#CodPerfil").val() });
+                utilSigo.toastSuccess("Aviso", "Registro Exitoso");
+                _manPerfilRolMenu.fnClose();
+            });
+        },
+        fnClose: () => {
+            utilSigo.fnCloseModal("manRolModal");
+        },
+        fnCancelar: () => {
+            _manPerfilRolMenu.fnClose();
+        },
+        fnInit: () => {
+            var menu = JSON.parse('@Html.Raw(Json.Encode(@Model))');
+            console.log('MENU', menu);
+            let desc = menu.COD_SECUENCIAL_HIJO == 0 ? menu.MENU_PADRE : menu.MENU_HIJO;
+            $('#txtDescripcion').val(desc);
+            _manPerfilRolMenu.frm = $("#frmAddEditRolMenu");
+            _manPerfilRolMenu.cont = $("#divManPerfil");
+
+            $('#cboRol').val(menu.NCODROL);
+           
+            _manPerfilRolMenu.cont.find("#btnGuardar").click(function () {
+                _manPerfilRolMenu.frm.submit();
+            });
+        }
+
+    };
+    $(function () {
+        _manPerfilRolMenu.fnInit();
+        _manPerfilRolMenu.frm.validate(utilSigo.fnValidate({
+            rules: {
+                descr: { required: true }
+            },
+            messages: {
+                descr: { required: "Ingrese descripción" }
+            },
+            fnSubmit: function (form) {
+                utilSigo.dialogConfirm('', '¿Desea continuar con el operación?', function (r) {
+                    if (r) {
+                        _manPerfilRolMenu.fnGuardar();
+                    }
+                });
+            }
+        }));
+    });
+</script>

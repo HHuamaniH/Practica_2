@@ -1,0 +1,135 @@
+﻿@model List<CapaEntidad.DOC.Ent_InfQuinquenal>
+@{
+    ViewBag.Title = "_renderRDQuinquenal";
+}
+<script type="text/javascript">
+    var _renderRDQuinquenal = {};
+    _renderRDQuinquenal.tbEliTABLA = [];
+
+    _renderRDQuinquenal.fnBuscarRDQuinquenal = function () {
+        var url = urlLocalSigo + "Supervision/ManInformeQuinquenal/_BuscarRDQuinquenal";
+        var option = { url: url, type: 'GET', datos: {}, divId: "mdlBuscarRDQuinquenal" };
+        utilSigo.fnOpenModal(option, function () {
+            _RDQuinquenal.fnAsignarDatos = function (obj) {
+                if (obj != null && obj != "") {
+                    var data = _RDQuinquenal.dtRDQuinquenal.row($(obj).parents('tr')).data();
+
+                    if (!utilDt.existValorSearch(_renderRDQuinquenal.dtRDQuinquenal, "COD_RESODIREC", data["COD_RESODIREC"])) {
+
+                        var RDQuinquenal = {
+                            COD_RESODIREC : data["COD_RESODIREC"],
+                            NUMERO_RESOLUCION : data["NUM_RESOLUCION"],
+                            TIPO_FISCALIZA : data["TIP_FISCALIZA"],
+                            TITULO_TH : data["TITULO"],
+                            RegEstado: 1
+                        };
+                        _renderRDQuinquenal.dtRDQuinquenal.rows.add([RDQuinquenal]).draw();
+                        _renderRDQuinquenal.dtRDQuinquenal.page('last').draw('page');
+                        $("#mdlBuscarRDQuinquenal").modal('hide');
+                    } else {
+                    utilSigo.toastWarning("Aviso", "La R.D. ya se encuentra en la lista");
+                     }
+
+                    utilSigo.fnCloseModal("mdlBuscarRDQuinquenal");
+                }
+            }
+            _RDQuinquenal.fnInit();
+        });
+    }
+
+
+    _renderRDQuinquenal.fnInitDataTable_Detail = function () {
+        var columns_label = [], columns_data = [], options = {};
+
+        columns_label = ["Documento de referencia", "Tipo", "Título habilitante"];
+        columns_data = ["NUMERO_RESOLUCION", "TIPO_FISCALIZA", "TITULO_TH"];
+        options = {
+            page_length: 10, row_index: true
+        };
+        _renderRDQuinquenal.dtRDQuinquenal = utilDt.fnLoadDataTable_Detail($("#tbRenderRDQuinquenal"), columns_label, columns_data, options);
+    }
+
+    _renderRDQuinquenal.fnDelete = function (obj) {
+        utilSigo.dialogConfirm('', 'Desea eliminar el Resolución?', function (r) {
+            if (r) {
+                var data = _renderRDQuinquenal.dtRDQuinquenal.row($(obj).parents('tr')).data();
+
+                if (data["RegEstado"] == "0" || data["RegEstado"] == "2") {
+                    _renderRDQuinquenal.tbEliTABLA.push({
+                        EliTABLA: "RDQUINQUENAL",
+                        COD_PERSONA: data["COD_RESODIREC"]
+                    });
+                }
+                _renderRDQuinquenal.dtRDQuinquenal.row($(obj).parents('tr')).remove().draw(false);
+                utilDt.enumColumn(_renderRDQuinquenal.dtRDQuinquenal);
+            }
+        });
+    }
+
+    _renderRDQuinquenal.fnCount = function () {
+        var list = [], rows, countFilas, data;
+
+        rows = _renderRDQuinquenal.dtRDQuinquenal.$("tr");
+        countFilas = rows.length;
+        if (countFilas > 0) {
+            $.each(rows, function (i, o) {
+                data = _renderRDQuinquenal.dtRDQuinquenal.row($(o)).data();
+                list.push(utilSigo.fnConvertArrayToObject(data));
+            });
+        }
+        return list.length;
+    }
+    _renderRDQuinquenal.fnGetList = function () {
+        var list = [], rows, countFilas, data;
+
+        rows = _renderRDQuinquenal.dtRDQuinquenal.$("tr");
+        countFilas = rows.length;
+        if (countFilas > 0) {
+            $.each(rows, function (i, o) {
+                data = _renderRDQuinquenal.dtRDQuinquenal.row($(o)).data();
+                if (data["RegEstado"] == "1" || data["RegEstado"] == "2") {
+                    list.push(utilSigo.fnConvertArrayToObject(data));
+                }
+            });
+        }
+        return list;
+    }
+
+    _renderRDQuinquenal.fnGetListEliTABLA = function () { return _renderRDQuinquenal.tbEliTABLA }
+
+    $(document).ready(function () {
+
+        _renderRDQuinquenal.frm = $("#frmRenderRDQuinquenal");
+
+        _renderRDQuinquenal.fnInitDataTable_Detail();
+        if ($("#hdfManCodTInforme").val().trim() == "") {
+            let cartaNotificacion = localStorage.getItem("localCartaNotificacion");    
+          
+            if (cartaNotificacion != null) {
+                console.log(JSON.parse(cartaNotificacion));               
+                _renderRDQuinquenal.dtRDQuinquenal.row.add(JSON.parse(cartaNotificacion)).draw();
+            }
+               
+        } else {
+            _renderRDQuinquenal.dtRDQuinquenal.rows.add(JSON.parse('@Html.Raw(Json.Encode(@Model))')).draw();
+        }
+
+    });
+</script>
+<div id="frmRenderRDQuinquenal">
+    <div class="table-responsive">
+        <table id="tbRenderRDQuinquenal" style="width:100%;margin:0px !important;" class="table table-hover table-bordered">
+            <thead>
+                <tr>
+                    <th colspan="5" class="text-sm-left">
+                        <div class="form-inline">
+                            <!--<i class="fa mx-2 fa-lg fa-file-o" style="cursor:pointer;" onclick="_renderRDQuinquenal.fnBuscarRDQuinquenal();" data-toggle="tooltip" data-placement="right" title="Agregar R.D. Quinquenal"></i>-->
+                            <strong>Carta de Notificacion</strong>
+                        </div>
+                    </th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
+</div>

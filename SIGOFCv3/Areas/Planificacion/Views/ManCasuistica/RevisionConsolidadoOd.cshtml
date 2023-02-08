@@ -1,0 +1,221 @@
+﻿
+@{
+    ViewBag.Title = "RevisionConsolidadoOd";
+    Layout = "~/Views/Shared/_LayoutMain.cshtml";
+}
+
+<style type="text/css">
+    tr.selected {
+        background-color: lightgreen;
+    }
+
+    .dataTables_info {
+        color: #33b35a;
+        font-size: 15px !important;
+        margin-top: 17px;
+    }
+
+    .dataTables_paginate {
+        margin-top: -25px;
+    }
+</style>
+@section scripts{
+    <script>
+        "use strict"; var rol = '';
+    $(document).ready(function () {
+        //Validamos el rol del usuario
+        utilSigo.ValidaRol('@ViewBag.VAliasRol', 'btnRegistrar', 'Edit');
+    });
+    </script>
+}
+<div class="container-fluid">
+    <div class="card">
+        <div class="card-header text-right">
+            Consolidado de títulos habilitantes y planes de manejo
+        </div>
+        <div class="card-body">
+            <div class="card">
+                <div class="card-header text-small">
+                    <a style="cursor:pointer;" data-toggle="tooltip" data-placement="top" title="Regresar" onclick="_RevisionConsolidadoOd.fnReturn()"><i class="fa mx-2 fa-lg fa-reply"></i></a>
+                    Revisión por OD
+                </div>
+                <div class="card-body">
+                    <form id="frmRevConsolidado">
+                        @Html.Hidden("hdfCodPlan")
+                        @Html.Hidden("hdfPlanCompleto")
+                        <div class="card">
+                            <div class="card-header text-small"></div>
+                            <div class="card-body">
+                                <div class="form-row">
+                                    <div class="form-group col-md-2">
+                                        <label for="ddlPlanAnioId" class="text-small">Año PASPEQ</label>
+                                        @Html.DropDownList("ddlPlanAnioId", new SelectList(ViewBag.ddlPlanAnio, "Value", "Text"), new { @class = "form-control form-control-sm" })
+                                    </div>
+                                    <div class="form-group col-md-2">
+                                        <label for="ddlOdId" class="text-small">Oficina desconcentrada</label>
+                                        @Html.DropDownList("ddlOdId", new SelectList(ViewBag.ddlOd, "Value", "Text"), new { @class = "form-control form-control-sm" })
+                                    </div>
+                                    <div class="form-group col-md-2">
+                                        <label for="ddlEstadoPriorizarId" class="text-small">Estado priorizar</label>
+                                        @Html.DropDownList("ddlEstadoPriorizarId", new SelectList(ViewBag.ddlEstadoPriorizar, "Value", "Text"), new { @class = "form-control form-control-sm" })
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-header text-small">Consolidado</div>
+                            <div class="card-body">
+                                <div class="form-row">
+                                    <div class="col-md-12">
+                                        <div class="table-responsive">
+                                            <table id="tbRevConsolidado" style="width:100%" class="table table-hover table-bordered">
+                                                <thead>
+                                                    <tr>
+                                                        <th colspan="100" class="text-sm-left">
+                                                            <div class="form-inline"><strong>Listado</strong></div>
+                                                        </th>
+                                                    </tr>
+                                                    <tr>
+                                                        <th colspan="31" class="text-sm-left" style="background-color:darkseagreen">
+                                                            <div class="form-inline"><strong>DATOS DEL TÍTULO HABILITANTE</strong></div>
+                                                        </th>
+                                                        <th colspan="63" class="text-sm-left" style="background-color:cornflowerblue">
+                                                            <div class="form-inline"><strong>DATOS DEL PLAN DE MANEJO</strong></div>
+                                                        </th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody></tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade hide" id="mdlPlanCasuisticaUniverso" role="dialog"></div>
+</div>
+
+<script type="text/javascript">
+    let _RevisionConsolidadoOd = {
+        fnReturn: (alertaInicial) => {
+            var url = urlLocalSigo + "Planificacion/ManPlan/Index";
+
+            if (alertaInicial == null || alertaInicial == "") {
+                window.location = url;
+            } else {
+                window.location = url + "?_alertaIncial=" + alertaInicial;
+            }
+        },
+        fnBuildTableConsolidado: () => {
+            var columns_label = [], columns_data = [], options = {};
+
+            columns_label = ["Casuística", "Observado", "Revisado", "Título habilitante", "Titular actual", "Rep. legal", "Departamento", "Provincia", "Distrito", "Sector", "Modalidad"
+                , "OD Ámbito", "Área", "Fecha inicio", "Fecha fin", "Caducidad", "Med. Cauterlar", "Med. Precautoria"
+                , "Nro. supervisiones", "Nro. superv. infracción", "% infracción", "Req. entidad", "Denuncia", "Est. establecimiento"
+                , "Última superv.", "Inactivo", "Nro. planes", "Est. calidad", "Fecha registro", "Tipo plan", "Nombre plan"
+                , "Resol. aprueba", "Fecha aprob.", "Área", "Fecha inicio", "Fecha fin", "Consultor"
+                , "Nro. censo made.", "Nro. censo no made.", "Nro. especies aprob.", "Volumen aprob.", "Nro. especies balance"
+                , "Zona UTM", "Coord. este", "Coord. norte", "Nro. superv. plan", "Acto adm. superv.", "Plan supervisado"
+                , "Superv. antes", "Superv. durante", "Superv. despúes", "Amenaza CITE", "Amenaza DS", "Amenaza"
+                , "Nro. acervo", "Programado", "Est. calidad", "Fecha registro"];
+            columns_data = ["PCASUISTICA", "OBSERVAR", "REVISAR", "NUM_THABILITANTE", "TITULAR_ACTUAL", "RLEGAL", "DEPARTAMENTO", "PROVINCIA", "DISTRITO", "SECTOR", "MODALIDAD"
+                , "OD_AMBITO", "AREA", "FECHA_INICIO", "FECHA_FIN", "CADUCIDAD", "MEDIDA_CAUTELAR", "MEDIDA_PRECAUTORIA"
+                , "N_SUPERVISION", "N_SUPERVISION_INFRAC", "PORC_INFRACCION", "REQ_ENTIDAD", "DENUNCIA", "ESTADO_ESTABLECIMIENTO"
+                , "ANIO_ULTIMA_SUPERV", "INACTIVO", "N_PMANEJO", "ESTADO_CALIDAD", "FECHA_REGISTRO", "TIPO_PMANEJO", "NOMBRE_PMANEJO"
+                , "RESOLUCION_PMANEJO", "FEC_APRUEBA_PMANEJO", "AREA_PMANEJO", "FEC_INICIO_PMANEJO", "FEC_FIN_PMANEJO", "CONSULTOR_PMANEJO"
+                , "N_CENSO_MADE_PMANEJO", "N_CENSO_NOMADE_PMANEJO", "N_ESPECIE_APROBADO_PMANEJO", "VOL_APROBADO_PMANEJO", "N_ESPECIE_BEXTRACCION_PMANEJO"
+                , "ZONA_UTM_PMANEJO", "CESTE_PMANEJO", "CNORTE_PMANEJO", "N_SUPERVISION_PMANEJO", "ACTO_SUPERVISADO_PMANEJO", "SUPERVISADO_PMANEJO"
+                , "SUPERVISADO_ANTES_PMANEJO", "SUPERVISADO_DURANTE_PMANEJO", "SUPERVISADO_DESPUES_PMANEJO", "AMENAZA_CITE_PMANEJO", "AMENAZA_DS_PMANEJO", "ESPECIE_AMENAZADA_PMANEJO"
+                , "N_ACERVODOC_PMANEJO", "PROGRAMADO", "ESTADO_CALIDAD_PMANEJO", "FECREG_PMANEJO"];
+            options = {
+                page_length: 100, row_index: true, page_info: true, page_render: false, page_search: true,
+                row_view: true, row_fnView: "_RevisionConsolidadoOd.fnObservarTableConsolidado(this)"
+            };
+
+            return utilDt.fnLoadDataTable_Detail(_RevisionConsolidadoOd.frm.find("#tbRevConsolidado"), columns_label, columns_data, options);
+        },
+        fnLoadTableConsolidado: () => {
+            var cod_plan = _RevisionConsolidadoOd.frm.find("#hdfCodPlan").val();
+            var cod_od = _RevisionConsolidadoOd.frm.find("#ddlOdId").val();
+            var cod_estado_priorizar = _RevisionConsolidadoOd.frm.find("#ddlEstadoPriorizarId").val();
+            var url = urlLocalSigo + "Planificacion/ManCasuistica/ListarConsolidadoPlanCasuisticaUniverso";
+            const option = { url: url, datos: { asCodPlan: cod_plan, asCodOd: cod_od, asCodEstadoPriorizar: cod_estado_priorizar }, type: 'GET' };
+
+            utilSigo.fnAjax(option, function (result) {
+                if (result.success) {
+                    _RevisionConsolidadoOd.dtRevConsolidado.clear().draw();
+                    _RevisionConsolidadoOd.dtRevConsolidado.rows.add(result.data).draw();
+                    _RevisionConsolidadoOd.fnSelectTableConsolidado();
+                }
+            });
+        },
+        fnSelectTableConsolidado: () => {
+            _RevisionConsolidadoOd.dtRevConsolidado.rows().iterator('row', function (context, index) {
+                if (this.row(index).data().PRIORIZAR == '1') {
+                    $(this.row(index).node()).addClass('selected');
+                } else {
+                    $(this.row(index).node()).removeClass('selected');
+                }
+            });
+        },
+        fnObservarTableConsolidado: (obj) => {
+            var url = urlLocalSigo + "Planificacion/ManCasuistica/_PlanCasuisticaUniverso";
+            let cod_pcasuistica = "";
+            let cod_plan = _RevisionConsolidadoOd.frm.find("#hdfCodPlan").val();
+            let cod_secuencial = 0;
+
+            if (obj != null && obj != "") {
+                var data = _RevisionConsolidadoOd.dtRevConsolidado.row($(obj).parents('tr')).data();
+                cod_pcasuistica = data.COD_PCASUISTICA;
+                cod_secuencial = data.COD_SECUENCIAL;
+
+                var option = {
+                    url: url, type: 'POST', datos: {
+                        asCodPCasuistica: cod_pcasuistica, asCodPlan: cod_plan, aiCodSecuencial: cod_secuencial, asTipo: "OBSERVAR"
+                    }, divId: "mdlPlanCasuisticaUniverso"
+                };
+
+                utilSigo.fnOpenModal(option, function () {
+                    _PlanCasuisticaUniverso.fnSaved = function () {
+                        data.OBSERVAR = "SI";
+                        data.REVISAR = "NO";
+                        _RevisionConsolidadoOd.dtRevConsolidado.row($(obj).parents('tr')).data(data);
+
+                        $("#mdlPlanCasuisticaUniverso").modal('hide');
+                    }
+                });
+            }
+        },
+        fnInit: () => {
+            $.fn.select2.defaults.set("theme", "bootstrap4");
+            _RevisionConsolidadoOd.frm.find("#ddlPlanAnioId").select2({ minimumResultsForSearch: -1 });
+            _RevisionConsolidadoOd.frm.find("#ddlOdId").select2({ minimumResultsForSearch: -1 });
+            _RevisionConsolidadoOd.frm.find("#ddlEstadoPriorizarId").select2({ minimumResultsForSearch: -1 });
+
+            _RevisionConsolidadoOd.frm.find("#hdfCodPlan").val("0000000");
+
+            _RevisionConsolidadoOd.dtRevConsolidado = _RevisionConsolidadoOd.fnBuildTableConsolidado();
+            _RevisionConsolidadoOd.fnLoadTableConsolidado();
+
+            _RevisionConsolidadoOd.frm.find("#ddlPlanAnioId").change(function () {
+                _RevisionConsolidadoOd.frm.find("#hdfCodPlan").val($(this).val());
+                _RevisionConsolidadoOd.fnLoadTableConsolidado();
+            });
+            _RevisionConsolidadoOd.frm.find("#ddlOdId").change(function () {
+                _RevisionConsolidadoOd.fnLoadTableConsolidado();
+            });
+            _RevisionConsolidadoOd.frm.find("#ddlEstadoPriorizarId").change(function () {
+                _RevisionConsolidadoOd.fnLoadTableConsolidado();
+            });
+        }
+    };
+
+    $(document).ready(function () {
+        _RevisionConsolidadoOd.frm = $("#frmRevConsolidado");
+
+        _RevisionConsolidadoOd.fnInit();
+    });
+</script>

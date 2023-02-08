@@ -1,0 +1,104 @@
+﻿@model CapaEntidad.ViewModel.VM_Resodirec
+<script type="text/javascript">
+    var _renderMedPrecautoria = {};
+    _renderMedPrecautoria.fnSelectRecom = function () {
+        _renderMedPrecautoria.frm.find("#divMedPrecuatoria").hide();
+        _renderMedPrecautoria.frm.find("#divEspecieMedPrecautoria").hide();
+
+
+        if (_renderMedPrecautoria.frm.find("#chkMedCautelar").is(':checked')) {
+            _renderMedPrecautoria.frm.find("#divMedPrecuatoria").show();
+        }
+
+        if (_renderMedPrecautoria.frm.find("#chkMedEspecieMP").is(':checked')) {
+            _renderMedPrecautoria.frm.find("#divEspecieMedPrecautoria").show();
+        }
+    }
+
+    $(document).ready(function () {
+        _renderMedPrecautoria.frm = $("#fmrMedPrecuatoria");
+        _renderMedPrecautoria.fnSelectRecom();
+    });
+</script>
+
+<div id="fmrMedPrecuatoria">
+    <div class="card-header text-small"> Medidas Precautorias<br /></div>
+    <div><br /></div>
+
+    <div class="form-row">
+        <div class="form-group col-md-4">
+            <label for="chkGTF" class="text-small">Con Medidas Precautorias</label>
+        </div>
+        <div class="form-group col-md-6">
+            @Html.CheckBoxFor(m => m.chkMedCautelar, new
+           {
+               @class = "form-check-input",
+               style = "width:15px;height:16px;",
+               @onchange = "_renderMedPrecautoria.fnSelectRecom()"
+           })
+        </div>
+        <div class="form-group col-md-2">
+        </div>
+    </div>
+    <div id="divMedPrecuatoria" style="display:none;">
+        <div class="form-row">
+            <div class="form-group col-md-4">
+            </div>
+            <div class="form-group col-md-4">
+                <label for="chkGTF" class="text-small">Guía Transporte Forestal</label>
+            </div>
+            <div class="form-group col-md-4">
+                @Html.CheckBoxFor(m => m.chkGTFMP, new { @class = "form-check-input", style = "width:15px;height:16px;" })
+            </div>
+        </div>
+
+        <div class="form-row">
+            <div class="form-group col-md-4">
+            </div>
+            <div class="form-group col-md-4">
+                <label for="chkGTF" class="text-small">Listas de Trozas</label>
+            </div>
+            <div class="form-group col-md-4">
+                @Html.CheckBoxFor(m => m.chkMedLisTrozasMP, new { @class = "form-check-input", style = "width:15px;height:16px;" })
+            </div>
+        </div>
+
+        <div class="form-row">
+            <div class="form-group col-md-4">
+            </div>
+            <div class="form-group col-md-4">
+                <label for="chkGTF" class="text-small">Por especie</label>
+            </div>
+            <div class="form-group col-md-4">
+                @Html.CheckBoxFor(m => m.chkMedEspecieMP, new
+                {
+                    @class = "form-check-input",
+                    style = "width:15px;height:16px;",
+                    @onchange = "_renderMedPrecautoria.fnSelectRecom()"
+                })
+            </div>
+        </div>
+
+        <div class="form-row" id="divEspecieMedPrecautoria" style="display:none;">
+            <div class="form-group col-md-4">
+            </div>
+            <div class="form-group col-md-6">
+                @Html.Partial("~/Areas/Fiscalizacion/Views/ManResolucion/_Shared/_generic/_renderListaEspeciesMP.cshtml", Model)
+            </div>
+            <div class="col-md-2"></div>
+        </div>
+    </div>
+
+    <div class="form-row">
+        <div class="form-group col-md-4">
+            <label for="chkGTF" class="text-small">Descripción de Medidas Cautelares</label>
+        </div>
+        <div class="form-group col-md-6">
+            @Html.TextAreaFor(m => m.txtDescMedidaCautelar, 4, 1, new { @class = "form-control form-control-sm" })
+        </div>
+        <div class="form-group col-md-2">
+        </div>
+    </div>
+
+</div>
+

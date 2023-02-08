@@ -1,0 +1,105 @@
+﻿<style type="text/css">
+    table#tbListMenus thead tr th {
+        text-align: center;
+    }
+
+    table#tbListMenus tbody tr td[colspan="3"] {
+        font-weight: bold;
+    }
+    /*table#tbListMenusSeleccionados thead tr th {
+        text-align: center;
+    }
+
+    table#tbListMenusSeleccionados tbody tr td[colspan="3"] {
+        font-weight: bold;
+    }*/
+    .colAction {
+        width: 30px;
+    }
+
+    .colPadre {
+        width: 150px;
+    }
+
+    .table-wrapper-scroll-y {
+        display: block;
+        max-height: 600px;
+        overflow-y: auto;
+        -ms-overflow-style: -ms-autohiding-scrollbar;
+    }
+</style>
+<div class="card">
+    <div class="card-header text-right">
+        Asignación de perfiles al usuario : <strong> @ViewBag.nUsuario</strong>
+    </div>
+    <div class="card-body">
+        <div class="card">
+            <div class="card-header text-small" id="divTitle">
+                <a id="btnRegresarusuario" style="cursor:pointer;" data-toggle="tooltip" data-placement="top" title="Regresar"><i class="fa mx-2 fa-lg fa-reply"></i></a>
+            </div>
+            <div class="card-body">
+                <form id="frmUsuarioPerfil">
+                    <input type="hidden" id="hdCodUsuario" value="@ViewBag.codUsuario" />
+                    <div class="form-row">
+                        <div class="col-md-3 mb-3">
+                            <select id="cboClasificacion" class="form-control form-control-sm">
+                                <option value="0">-Clasificación-</option>
+                            </select>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <select id="cboSubClasificacion" class="form-control form-control-sm">
+                                <option value="0">-Sub Clasificación-</option>
+                            </select>
+                        </div>
+                        <div class="form-group col-md-6">
+                            <div class="input-group">
+                                <input type="text" id="txtValor" class="form-control form-control-sm" maxlength="50" />
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text" id="btnBuscarPerfil" style="cursor:pointer;color:forestgreen"><i class="fa fa-search" data-toggle="tooltip" data-placement="top" title="Buscar"></i></span>
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="form-group col-md-6">
+
+                        </div>
+                    </div>
+                </form>
+                <div class="row">
+                    <div class="col-sm-6">
+                        <h5 class="card-title">No Asignados</h5>
+                        <div class="table-responsive table-wrapper-scroll-y">
+                            <table id="tbListPerfil" class="table table-hover table-bordered" style="width:100%">
+                                <thead>
+                                    <tr>
+                                        <th class="colAction">Nro</th>
+                                        <th class="colPadre">Perfil</th>                                      
+                                        <th class="colAction"><i class="cellCheck fa fa-lg fa-check" title="Asignar todos los menus al perfil" onclick="_UsuarioPerfil.fnAsignar(-1);"></i></th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <h5 class="card-title">Asignados</h5>
+                        <div class="table-responsive table-wrapper-scroll-y">
+                            <table id="tbListPerfilAsig" class="table table-hover table-bordered" style="width:100%">
+                                <thead>
+                                    <tr>
+                                        <th class="colAction"><i class="cellDel fa fa-lg fa-window-close" title="Quitar todos los menus del perfil" onclick="_UsuarioPerfil.fnQuitar(-1)"></i></th>
+                                        <th class="colAction">Nro</th>
+                                        <th class="colPadre">Perfil</th>                                        
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="~/Areas/Seguridad/js/Usuario/_UsuarioPerfil.js?v=@Guid.NewGuid()"></script>

@@ -1,0 +1,59 @@
+﻿
+<script src="~/Areas/Supervision/js/ManInformeFauna/_AprovSostenible.js"></script>
+
+<div class="modal-dialog" role="document">
+    <div class="modal-content">
+        <div class="modal-header text-small" style="cursor:move;">
+            <span>Aprovechamiento Sostenible</span>
+            <i class="fa fa-close" style="cursor:pointer;" data-dismiss="modal" aria-label="Close"></i>
+        </div>
+        <div class="modal-body">
+            <form id="frmItemAprovSostenible">
+                @Html.Hidden("hdfRegEstado")
+                <div class="form-row">
+                    <div class="form-group col-md-12">
+                        @Html.Partial("~/Areas/General/Views/Controles/_renderComboEspecie.cshtml")
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label for="txtPeriodo" class="text-small">Periodo</label>
+                        @Html.TextBox("txtPeriodo", "", new { @class = "form-control form-control-sm" })
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="txtCuotaSaca" class="text-small">Cuota de Saca</label>
+                        @Html.TextBox("txtCuotaSaca", "", new { @class = "form-control form-control-sm", type = "number" })
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-12">
+                        <label for="txtPersonal" class="text-small">Personal Encargado</label>
+                        @Html.TextBox("txtPersonal", "", new { @class = "form-control form-control-sm" })
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-12">
+                        <label for="txtMetodoCaza" class="text-small">Método de Caza o Captura</label>
+                        @Html.TextArea("txtMetodoCaza", "", new { @class = "form-control form-control-sm", rows = "2" })
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-12">
+                        <label for="txtSistemaMarcaje" class="text-small">Sistema de Marcaje o Identificación</label>
+                        @Html.TextArea("txtSistemaMarcaje", "", new { @class = "form-control form-control-sm", rows = "2" })
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-12">
+                        <label for="txtParteAprov" class="text-small">Partes o Derivados a Aprovechar</label>
+                        @Html.TextArea("txtParteAprov", "", new { @class = "form-control form-control-sm", rows = "2" })
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-primary btn-sm" onclick="_AprovSostenible.fnSubmitForm()">Guardar</button>
+            <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Cancelar</button>
+        </div>
+    </div>
+</div>

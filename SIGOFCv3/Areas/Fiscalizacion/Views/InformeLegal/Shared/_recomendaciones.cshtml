@@ -1,0 +1,134 @@
+﻿@model  CapaEntidad.ViewModel.VM_InformeLegal
+
+<script type="text/javascript">
+
+    var _renderRecomendaciones = {};
+    _renderRecomendaciones.fnSelectRecom = function () {
+        _renderRecomendaciones.frm.find("#dvInicioPau").hide();
+        _renderRecomendaciones.frm.find("#dvArchivo").hide();
+        _renderRecomendaciones.frm.find("#dvArchivoSup").hide();
+        _renderRecomendaciones.frm.find("#dvOtros").hide();
+
+        if (_renderRecomendaciones.frm.find("#ddlRecomendaciones").val() == "0000001") {
+            _renderRecomendaciones.frm.find("#dvInicioPau").show();
+        }
+
+        if (_renderRecomendaciones.frm.find("#ddlRecomendaciones").val() == "0000002") {
+            _renderRecomendaciones.frm.find("#dvArchivo").show();
+        }
+
+        if (_renderRecomendaciones.frm.find("#ddlRecomendaciones").val() == "0000003") {
+            _renderRecomendaciones.frm.find("#dvArchivo").show();
+        }
+
+    }
+
+    _renderRecomendaciones.fncArticulos = function () {
+        var idArticulo = _renderRecomendaciones.frm.find("#ddlArticulos").val();
+        var DescArticulo = _renderRecomendaciones.frm.find("#ddlArticulos option:selected").text();
+        $.ajax({
+                  url: '@Url.Action("_inicisos","InformeLegal")',
+                  type: 'GET',
+                  datatype: "json",
+                      traditional: true,
+                       data: {'idArticulo' :   idArticulo, 'descArticulo': DescArticulo},
+                        success: function (data) {
+                            $("#divEncisos").html(data)
+                        }
+             });
+    }
+    function init() {
+        _renderRecomendaciones.fnSelectRecom();
+    }
+
+    $(document).ready(function () {
+        _renderRecomendaciones.frm = $("#frmRecomendaciones");
+        init();
+    });
+
+
+</script>
+
+<div class="row" id="frmRecomendaciones">
+    <div class="col-sm-4">
+        <div style="margin-top:7px;">
+            <div class="form-check form-check-inline">
+                @Html.DropDownListFor(m => m.txtIdRecomendacion, new SelectList(Model.sRecomendaciones, "Value", "Text", Model.sRecomendaciones),
+                            new { @class = "form-control form-control-sm", @id = "ddlRecomendaciones", @onchange = "_renderRecomendaciones.fnSelectRecom()" })
+                <br />
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-8">
+
+    </div>
+    <div class="col-sm-12"> <hr /> <br /></div>
+    <div class="col-sm-12" id="divRecomendacion">
+        <div class="form-row" id="dvInicioPau" style="display:none;">
+            <div class="form-group col-md-12">
+                <div class="form-row">
+                    <div class="form-group col-md-4">
+                        <label for="txtInexEspecie" class="text-small">Información Falsa - Inexistencia de Especies</label>
+                        <div style="margin-top:7px;">
+                            <div class="form-check form-check-inline">
+                                @Html.CheckBoxFor(m => m.chkInexEspecie, new { @class = "form-check-input", style = "width:15px;height:16px;" })
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label for="txtDifEspecie" class="text-small">Información Falsa - Diferencia de Especies</label>
+                        <div style="margin-top:7px;">
+                            <div class="form-check form-check-inline">
+                                @Html.CheckBoxFor(m => m.chkDifEspecie, new { @class = "form-check-input", style = "width:15px;height:16px;" })
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label for="txtSobreEstimacion" class="text-small">Información Falsa - Sobreestimación de Volumen</label>
+                        <div style="margin-top:7px;">
+                            <div class="form-check form-check-inline">
+                                @Html.CheckBoxFor(m => m.chkSobreEstimacion, new { @class = "form-check-input", style = "width:15px;height:16px;" })
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group col-md-12">
+                <h4>Inicio PAU - Infracciones presuntamente incurridas</h4>
+            </div>
+            <div class="form-group col-md-12">
+                <div class="form-row">
+                    <div class="form-group col-md-2">
+                        <label for="txtIdArticulo" class="text-small">Artículo</label>
+                    </div>
+                    <div class="form-group col-md-4">
+                        @Html.DropDownListFor(m => m.txtIdArticulo, new SelectList(Model.listaArticulos, "Value", "Text", Model.listaArticulos),
+                                    new { @class = "form-control form-control-sm", @id = "ddlArticulos", @onchange = "_renderRecomendaciones.fncArticulos()" })
+                    </div>
+                    <div class="form-group col-md-6">
+                    </div>
+                </div>
+            </div>
+            <div class="form-group col-md-12" id="divEncisos">
+                <div class="form-row">
+                    <div class="form-group col-md-12">
+                        <label for="chkPrimeraVisita" class="text-small">Inciso</label>
+                    </div>
+                    <div class="form-group col-md-12">
+
+                    </div>
+
+                </div>
+            </div>
+            <div id="divInfracciones" class="form-group col-md-12">
+                @Html.Partial("~/Areas/Fiscalizacion/Views/InformeLegal/Shared/_renderListaEncisos.cshtml", Model)
+            </div>
+        </div>
+        <div id="dvArchivo" style="display:none;">
+            @Html.Partial("~/Areas/Fiscalizacion/Views/InformeLegal/Shared/_archivo.cshtml", Model)
+        </div>
+        <div id="dvArchivoSup" style="display:none;">
+         Archivo
+        </div>
+    </div>
+</div>

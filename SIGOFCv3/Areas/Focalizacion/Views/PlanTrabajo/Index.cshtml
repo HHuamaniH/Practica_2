@@ -1,0 +1,193 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_LayoutMain.cshtml";
+}
+
+<div id="divPlanTrabajo" class="container-fluid">
+    <div class="card">
+        <div class="card-header text-left">
+            <h5>Listado de Planes de Trabajo</h5>
+        </div>
+        <div class="card-body">
+            <div class="col-12">
+                <form id="frmPlanTrabajo">
+                    <div class="form-row">
+                        <div class="form-group col-md-3">
+                            @Html.DropDownList("ddlOD", new SelectList(ViewBag.ddlOD, "Value", "Text"), new { @class = "form-control form-control-sm" })
+                        </div>
+                        <div class="form-group col-md-3">
+                            @Html.DropDownList("ddlPeriodo", new SelectList(ViewBag.ddlPeriodo, "Value", "Text"), new { @class = "form-control form-control-sm" })
+                        </div>
+                        <div class="form-group col-md-3">
+                            @Html.DropDownList("ddlMes", new SelectList(ViewBag.ddlMes, "Value", "Text"), new { @class = "form-control form-control-sm" })
+                        </div>
+                        <div class="btn-group col-md-2" style="padding-top:5px;">
+                            <a id="btnSearch" style="cursor:pointer;" data-toggle="tooltip" data-placement="top" title="Buscar" onclick="_PlanT.fnSearch()"><span class="fa mx-2 fa-lg fa-search"></span></a>
+                            <a id="btnAdd" style="cursor:pointer;" data-toggle="tooltip" data-placement="top" title="Crear un nuevo registro" onclick="_PlanT.addPlanTrabajo()"><span class="fa mx-2 fa-lg fa-plus"></span></a>
+                            <a id="btnExportar" style="cursor:pointer;" data-toggle="tooltip" data-placement="top" onclick="_PlanT.fnDownload()" title="Descargar"><span class="fa mx-2 fa-lg fa-file-excel-o"></span></a>
+                        </div>
+                    </div>
+                    <div class="table-responsive-md">
+                        <table id="tbPlanTrabajo" class="table table-hover table-bordered" style="width:100%;">
+                            <thead>
+                                <tr>
+                                    <th>N°</th>
+                                    <th>Eliminar</th>
+                                    <th>Editar</th>
+                                    <th>Fecha de Registro</th>
+                                    <th>Código de Registro</th>
+                                    <th>OD</th>
+                                    <th>Periodo</th>
+                                    <th>Mes</th>
+                                    <th title="Supervisor responsable de crear el plan de trabajo">Supervisor</th>
+                                    <th title="Sub director responsable">Funcionario Aprobación</th>
+                                    <th>Estado</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </form>
+               
+            </div>
+        </div>
+    </div>
+    <div class="modal fade hide" id="modalPlanTrabajo" role="dialog"></div>
+</div>
+<script>
+    var _PlanT = {
+        addPlanTrabajo: () => {
+            var option = {
+                url: urlLocalSigo + "Focalizacion/PlanTrabajo/_AddPlan",
+                divId: "modalPlanTrabajo",
+                datos: {}
+            };
+            utilSigo.fnOpenModal(option);
+        },
+        fnEditar: (obj) => {
+            let itemData = _PlanT.dt.row($(obj).parents('tr')).data();
+            const url = `${urlLocalSigo}/Focalizacion/PlanTrabajo/Plan?id=${itemData.idPlanTrajo}`;
+            document.location = url; 
+        },
+        fnEliminar: (obj) => {
+            let itemData = _PlanT.dt.row($(obj).parents('tr')).data();
+            let model = {
+                idPlanTrajo: itemData.idPlanTrajo              
+            };            
+            utilSigo.dialogConfirm("", "Está seguro de anular el plan de trabajo?", function (r) {
+                if (r) {
+                    let url = urlLocalSigo + "Focalizacion/PlanTrabajo/PlanEliminar";
+                    let option = { url: url, datos: JSON.stringify(model), type: 'POST' };
+                    utilSigo.fnAjax(option, function (data) {
+                        if (data.success) {
+                            utilSigo.toastSuccess("Éxito", data.msj);
+                            _PlanT.dt.ajax.reload();
+                        }
+                        else {
+                            utilSigo.toastWarning("Aviso", data.msj);
+                        }
+                    });
+                }
+            });
+        },
+        fnBuilTable: () => {
+            const columns = [
+                {
+                    "name": "ROW_INDE", "width": "2%", "orderable": false, "searchable": false, "mRender": function (data, type, row, meta) {
+                        return parseInt(meta.row) + 1 + meta.settings._iDisplayStart;
+                    }
+                },
+                {
+                    "data": "", "className": "text-center","width": "2%", "orderable": false, "searchable": false, "mRender": function (data, type, row) {
+                        if (row.estado && row.estadoDoc !="Control de Calidad Conforme")
+                            return '<div><i class="fa fa-lg fa-window-close" style="color:red;cursor:pointer;" title="Eliminar Plan de trabajo" onclick="_PlanT.fnEliminar(this)"></i></div>';
+                        else return '';
+                    }
+                },
+                {
+                    "data": "", "className": "text-center", "width": "2%", "orderable": false, "searchable": false, "mRender": function (data, type, row) {
+                        if (row.estado)
+                            return '<div><i class="fa fa-lg fa-pencil-square-o" style="color:blue;cursor:pointer;" title="Editar plan de trabajo" onclick="_PlanT.fnEditar(this)"></i></div>';
+                        else return '';
+                    }
+                },
+                { "data": "fRegistroText", "autoWidth": true },
+                { "data": "idPlanTrajo", "autoWidth": true },
+                { "data": "od", "autoWidth": true },
+                { "data": "periodo", "autoWidth": true },
+                { "data": "mes", "autoWidth": true },
+                { "data": "supervisor", "autoWidth": true },
+                { "data": "funcionario", "autoWidth": true }, 
+                { "data": "estadoDoc", "autoWidth": true }   
+            ];
+            const optDt = { iLength: 20, iStart: 0, aSort: [] };
+            _PlanT.dt= _PlanT.frm.find("#tbPlanTrabajo").DataTable({
+                processing: true,
+                serverSide: true,
+                searching: false,
+                ordering: false,
+                paging: true,
+                ajax: {
+                    "url": `${urlLocalSigo}/Focalizacion/PlanTrabajo/PlanTrabajoListar`,
+                    "data": function (d) {                        
+                        d.codOd = _PlanT.frm.find("#ddlOD").select2("val");
+                        d.periodo = _PlanT.frm.find("#ddlPeriodo").select2("val");
+                        d.mes = _PlanT.frm.find("#ddlMes").select2("val");     
+                        d.id = "";
+                        for (var i = 0; i < d.order.length; i++) {
+                            d.order[i]["column_name"] = d.columns[d.order[i]["column"]]["data"];
+
+                            if (d.order[i].column_name != 0 || d.order[i].column_name != "") {
+                                d.sort = d.order[i].column_name + " " + d.order[i].dir;
+                            }
+                        }
+                        d.columns = null;
+                    },
+                    "error": function (jqXHR) {
+                        // utilSigo.unblockUIGeneral();
+                        if (jqXHR.status != 401 && jqXHR.status != 403 && jqXHR.status!=404) {                           
+                            utilSigo.toastError("Error", initSigo.MessageError);
+                        }
+                        //console.log(jqXHR);
+                    },
+                    "statusCode": {                        
+                        203: () => { utilSigo.toastInfo("Aviso", "El usuario perdio la sesión. Vuelva ingresar al sistema"); }  
+                    }
+                },
+                columns: columns,
+                bInfo: true,
+                "lengthMenu": [[10, 20, 50, 100], [10, 20, 50, 100]],
+                // "aaSorting": optDt.aSort,
+                "pageLength": optDt.iLength,
+                "displayStart": optDt.iStart,
+                "oLanguage": initSigo.oLanguage,
+                "drawCallback": initSigo.showPagination
+            });
+        },
+        fnDownload: () => {
+            let codOd = _PlanT.frm.find("#ddlOD").select2("val");
+            let periodo = _PlanT.frm.find("#ddlPeriodo").select2("val");
+            let mes = _PlanT.frm.find("#ddlMes").select2("val");
+            const url = `${urlLocalSigo}/Focalizacion/PlanTrabajo/DownloadPlanCabecera?codOd=${codOd}&periodo=${periodo}&mes=${mes}`;
+            utilSigo.file.getBinary("ListadoPT.xlsx", url);
+        },
+        fnSearch: () => {            
+            _PlanT.dt.ajax.reload();
+        }
+        
+    };
+    $(document).ready(function () {
+        if (sessionStorage.getItem('mensajeActPlan') != null) {
+            if (sessionStorage.getItem('mensajeActPlan') != "") utilSigo.toastSuccess("Aviso", sessionStorage.getItem('mensajeActPlan'));
+            sessionStorage.removeItem("mensajeActPlan");
+        }
+        $.fn.select2.defaults.set("theme", "bootstrap4");
+        _PlanT.frm = $("#frmPlanTrabajo")
+        _PlanT.frm.find("#ddlOD").select2();
+        _PlanT.frm.find("#ddlPeriodo").select2();
+        _PlanT.frm.find("#ddlMes").select2();
+        _PlanT.fnBuilTable();
+        _PlanT.fnSearch();
+    });
+</script>

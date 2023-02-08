@@ -1,0 +1,51 @@
+﻿<div class="modal-dialog" role="document">
+    <div class="modal-content" id="contenedorTaraAEAprov">
+        <div class="modal-header text-small" style="cursor:move;padding:0.5rem;">
+            <h5 class="modal-title" id="h5Titulo">Nuevo</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body">
+            <form id="frmTaraAEAprov">
+                <input type="hidden" id="COD_SECUENCIAL" name="COD_SECUENCIAL" value="0" />
+                <input type="hidden" id="RegEstado" name="RegEstado" value="1" />
+                <input type="hidden" id="RegEstadoClient" name="RegEstadoClient" value="1" />
+                <div class="form-group row">
+                    <label for="NUM_PARCELA" class="col-md-4 col-form-label text-small">Parcela</label>
+                    <div class="col-md-8">
+                        <input type="text" id="NUM_PARCELA" name="NUM_PARCELA" class="form-control form-control-sm" placeholder="Parcela" maxlength="5" />
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="NUM_ARBOLES_APROVE" class="col-md-4 col-form-label text-small">N° árboles edad aprov.</label>
+                    <div class="col-md-8">
+                        <input type="text" id="NUM_ARBOLES_APROVE" name="NUM_ARBOLES_APROVE" class="form-control form-control-sm" maxlength="7" onkeypress="return utilSigo.onKeyEntero(event, this);" />
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="NUM_ARBOLES_NO_APROVE" class="col-md-4 col-form-label text-small">N° árboles que no están en edad aprov.</label>
+                    <div class="col-md-8">
+                        <input type="text" id="NUM_ARBOLES_NO_APROVE" name="NUM_ARBOLES_NO_APROVE" class="form-control form-control-sm" maxlength="7" onkeypress="return utilSigo.onKeyEntero(event, this);" />
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="PRODUCCION_ANUAL_PROMEDIO" class="col-md-4 col-form-label text-small">Producción anual promedio por árbol</label>
+                    <div class="col-md-8">
+                        <input type="text" id="PRODUCCION_ANUAL_PROMEDIO" name="PRODUCCION_ANUAL_PROMEDIO" class="form-control form-control-sm" placeholder="Produccion anual" maxlength="7" onkeypress="return utilSigo.onKeyDecimal(event, this);" />
+                    </div>
+                </div>                
+                <div class="form-group row">
+                    <label for="PESO_ESTIMADO_VAINAS" class="col-md-4 col-form-label text-small">Peso estimado vainas</label>
+                    <div class="col-md-8">
+                        <input type="text" id="PESO_ESTIMADO_VAINAS" name="PESO_ESTIMADO_VAINAS" class="form-control form-control-sm" placeholder="Peso estimado" maxlength="7" onkeypress="return utilSigo.onKeyDecimal(event, this);" />
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="modal-footer">
+            <button type="button" id="btnGuardar" class="btn btn-primary btn-sm">Agregar</button>
+        </div>
+    </div>
+</div>
+<script src="~/Areas/THabilitante/js/ManPlanManejo/_ItemTaraAEAprov.js"></script>

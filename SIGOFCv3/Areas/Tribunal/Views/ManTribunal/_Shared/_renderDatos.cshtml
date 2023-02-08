@@ -1,0 +1,1118 @@
+﻿@model CapaEntidad.ViewModel.VM_ResolucionTFFS
+
+<script type="text/javascript">
+    var _renderDatos = {};
+    _renderDatos.fncSelect = function () {
+        var idRecomendacion = _renderDatos.frm.find("#ddlTipoResol").val();
+        //_renderDatos.frm.find("#divApelacion").hide();
+        //_renderDatos.frm.find("#divArchivo").hide();
+        if (idRecomendacion == "0000000") {
+            _renderDatos.frm.find("#divApelacion").hide();
+            _renderDatos.frm.find("#divQuejas").hide();
+            _renderDatos.frm.find("#divOtros").hide();
+        }
+        if (idRecomendacion == "0000001") {
+            _renderDatos.frm.find("#divApelacion").show();
+            _renderDatos.frm.find("#divQuejas").hide();
+            _renderDatos.frm.find("#divOtros").hide();
+        }
+        if (idRecomendacion == "0000002") {
+            _renderDatos.frm.find("#divQuejas").show();
+            _renderDatos.frm.find("#divApelacion").hide();
+            _renderDatos.frm.find("#divOtros").hide();
+        }
+        if (idRecomendacion == "0000003") {
+            _renderDatos.frm.find("#divOtros").show();
+            _renderDatos.frm.find("#divApelacion").hide();
+            _renderDatos.frm.find("#divQuejas").hide();
+        }
+    }
+
+    var _renderDetermina = {};
+    _renderDetermina.fncSelect = function () {
+        var idDetermina = _renderDetermina.frm.find("#ddlDetermina").val();
+        _renderDetermina.frm.find("#divArchivo").hide();
+        if (idDetermina == "0000000") {
+            _renderDetermina.frm.find("#divImprocedente").hide();
+            _renderDetermina.frm.find("#divTxtDetermina").hide();
+            _renderDetermina.frm.find("#divAreaDescripcion").hide();
+            _renderDetermina.frm.find("#divInadmisible").hide();
+            _renderDetermina.frm.find("#divTxtInadmisible").hide();
+            _renderDetermina.frm.find("#divAreaInadmisible").hide();
+            _renderDetermina.frm.find("#divTxtInfundado").hide();
+            _renderDetermina.frm.find("#divAreaInfundado").hide();
+            _renderDetermina.frm.find("#divChkFundado").hide();
+            _renderDetermina.frm.find("#divAreaFundado").hide();
+            _renderDetermina.frm.find("#divChkFundadoParte").hide();
+            _renderDetermina.frm.find("#divAreaFundadoParte").hide();
+            _renderDetermina.frm.find("#divNulidad").hide();
+            _renderDetermina.frm.find("#divNulidad2").hide();
+            _renderDetermina.frm.find("#divNulidad3").hide();
+            _renderDetermina.frm.find("#divAreaOtro").hide();
+        }
+        if (idDetermina == "0000053") {
+           _renderDetermina.frm.find("#divImprocedente").show();
+            _renderDetermina.frm.find("#divTxtDetermina").show();
+            _renderDetermina.frm.find("#divAreaDescripcion").show();
+            _renderDetermina.frm.find("#divInadmisible").hide();
+            _renderDetermina.frm.find("#divTxtInadmisible").hide();
+            _renderDetermina.frm.find("#divAreaInadmisible").hide();
+            _renderDetermina.frm.find("#divTxtInfundado").hide();
+            _renderDetermina.frm.find("#divAreaInfundado").hide();
+            _renderDetermina.frm.find("#divChkFundado").hide();
+            _renderDetermina.frm.find("#divAreaFundado").hide();
+            _renderDetermina.frm.find("#divChkFundadoParte").hide();
+            _renderDetermina.frm.find("#divAreaFundadoParte").hide();
+            _renderDetermina.frm.find("#divNulidad").hide();
+            _renderDetermina.frm.find("#divNulidad2").hide();
+            _renderDetermina.frm.find("#divNulidad3").hide();
+            _renderDetermina.frm.find("#divAreaOtro").hide();
+        }
+        if (idDetermina == "0000054") {
+            _renderDetermina.frm.find("#divInadmisible").show();
+            _renderDetermina.frm.find("#divTxtInadmisible").show();
+            _renderDetermina.frm.find("#divAreaInadmisible").show();
+            _renderDetermina.frm.find("#divImprocedente").hide();
+            _renderDetermina.frm.find("#divTxtDetermina").hide();
+            _renderDetermina.frm.find("#divAreaDescripcion").hide();
+            _renderDetermina.frm.find("#divTxtInfundado").hide();
+            _renderDetermina.frm.find("#divAreaInfundado").hide();
+            _renderDetermina.frm.find("#divChkFundado").hide();
+            _renderDetermina.frm.find("#divAreaFundado").hide();
+            _renderDetermina.frm.find("#divChkFundadoParte").hide();
+            _renderDetermina.frm.find("#divAreaFundadoParte").hide();
+            _renderDetermina.frm.find("#divNulidad").hide();
+            _renderDetermina.frm.find("#divNulidad2").hide();
+            _renderDetermina.frm.find("#divNulidad3").hide();
+            _renderDetermina.frm.find("#divAreaOtro").hide();
+        }
+        if (idDetermina == "0000055") {
+            _renderDetermina.frm.find("#divChkFundado").show();
+            _renderDetermina.frm.find("#divAreaFundado").show();
+            _renderDetermina.frm.find("#divTxtInfundado").hide();
+            _renderDetermina.frm.find("#divAreaInfundado").hide();
+            _renderDetermina.frm.find("#divInadmisible").hide();
+            _renderDetermina.frm.find("#divTxtInadmisible").hide();
+            _renderDetermina.frm.find("#divAreaInadmisible").hide();
+            _renderDetermina.frm.find("#divImprocedente").hide();
+            _renderDetermina.frm.find("#divTxtDetermina").hide();
+            _renderDetermina.frm.find("#divAreaDescripcion").hide();
+            _renderDetermina.frm.find("#divChkFundadoParte").hide();
+            _renderDetermina.frm.find("#divAreaFundadoParte").hide();
+            _renderDetermina.frm.find("#divNulidad").hide();
+            _renderDetermina.frm.find("#divNulidad2").hide();
+            _renderDetermina.frm.find("#divNulidad3").hide();
+            _renderDetermina.frm.find("#divAreaOtro").hide();
+        }
+        if (idDetermina == "0000056") {
+            _renderDetermina.frm.find("#divChkFundadoParte").show();
+            _renderDetermina.frm.find("#divAreaFundadoParte").show();
+            _renderDetermina.frm.find("#divImprocedente").hide();
+            _renderDetermina.frm.find("#divTxtDetermina").hide();
+            _renderDetermina.frm.find("#divAreaDescripcion").hide();
+            _renderDetermina.frm.find("#divInadmisible").hide();
+            _renderDetermina.frm.find("#divTxtInadmisible").hide();
+            _renderDetermina.frm.find("#divAreaInadmisible").hide();
+            _renderDetermina.frm.find("#divTxtInfundado").hide();
+            _renderDetermina.frm.find("#divAreaInfundado").hide();
+            _renderDetermina.frm.find("#divChkFundado").hide();
+            _renderDetermina.frm.find("#divAreaFundado").hide();
+            _renderDetermina.frm.find("#divNulidad").hide();
+            _renderDetermina.frm.find("#divNulidad2").hide();
+            _renderDetermina.frm.find("#divNulidad3").hide();
+            _renderDetermina.frm.find("#divAreaOtro").hide();
+        }
+        //------------ Infundado--------------
+        if (idDetermina == "0000057") {
+            _renderDetermina.frm.find("#divTxtInfundado").show();
+            _renderDetermina.frm.find("#divAreaInfundado").show();
+            _renderDetermina.frm.find("#divInadmisible").hide();
+            _renderDetermina.frm.find("#divTxtInadmisible").hide();
+            _renderDetermina.frm.find("#divAreaInadmisible").hide();
+            _renderDetermina.frm.find("#divImprocedente").hide();
+            _renderDetermina.frm.find("#divTxtDetermina").hide();
+            _renderDetermina.frm.find("#divAreaDescripcion").hide();
+            _renderDetermina.frm.find("#divChkFundado").hide();
+            _renderDetermina.frm.find("#divAreaFundado").hide();
+            _renderDetermina.frm.find("#divChkFundadoParte").hide();
+            _renderDetermina.frm.find("#divAreaFundadoParte").hide();
+            _renderDetermina.frm.find("#divNulidad").hide();
+            _renderDetermina.frm.find("#divNulidad2").hide();
+            _renderDetermina.frm.find("#divNulidad3").hide();
+            _renderDetermina.frm.find("#divAreaOtro").hide();
+        }
+        if (idDetermina == "0000058") {
+            _renderDetermina.frm.find("#divNulidad").show();
+            _renderDetermina.frm.find("#divNulidad2").show();
+            _renderDetermina.frm.find("#divNulidad3").show();
+            _renderDetermina.frm.find("#divImprocedente").hide();
+            _renderDetermina.frm.find("#divTxtDetermina").hide();
+            _renderDetermina.frm.find("#divAreaDescripcion").hide();
+            _renderDetermina.frm.find("#divInadmisible").hide();
+            _renderDetermina.frm.find("#divTxtInadmisible").hide();
+            _renderDetermina.frm.find("#divAreaInadmisible").hide();
+            _renderDetermina.frm.find("#divTxtInfundado").hide();
+            _renderDetermina.frm.find("#divAreaInfundado").hide();
+            _renderDetermina.frm.find("#divChkFundado").hide();
+            _renderDetermina.frm.find("#divAreaFundado").hide();
+            _renderDetermina.frm.find("#divChkFundadoParte").hide();
+            _renderDetermina.frm.find("#divAreaFundadoParte").hide();
+            _renderDetermina.frm.find("#divAreaOtro").hide();
+        }
+        if (idDetermina == "0000059") {
+            _renderDetermina.frm.find("#divNulidad").show();
+            _renderDetermina.frm.find("#divNulidad2").show();
+            _renderDetermina.frm.find("#divNulidad3").show();
+            _renderDetermina.frm.find("#divImprocedente").hide();
+            _renderDetermina.frm.find("#divTxtDetermina").hide();
+            _renderDetermina.frm.find("#divAreaDescripcion").hide();
+            _renderDetermina.frm.find("#divInadmisible").hide();
+            _renderDetermina.frm.find("#divTxtInadmisible").hide();
+            _renderDetermina.frm.find("#divAreaInadmisible").hide();
+            _renderDetermina.frm.find("#divTxtInfundado").hide();
+            _renderDetermina.frm.find("#divAreaInfundado").hide();
+            _renderDetermina.frm.find("#divChkFundado").hide();
+            _renderDetermina.frm.find("#divAreaFundado").hide();
+            _renderDetermina.frm.find("#divChkFundadoParte").hide();
+            _renderDetermina.frm.find("#divAreaFundadoParte").hide();
+            _renderDetermina.frm.find("#divAreaOtro").hide();
+        }
+        if (idDetermina == "0000060") {
+            _renderDetermina.frm.find("#divAreaOtro").show();
+            _renderDetermina.frm.find("#divImprocedente").hide();
+            _renderDetermina.frm.find("#divTxtDetermina").hide();
+            _renderDetermina.frm.find("#divAreaDescripcion").hide();
+            _renderDetermina.frm.find("#divInadmisible").hide();
+            _renderDetermina.frm.find("#divTxtInadmisible").hide();
+            _renderDetermina.frm.find("#divAreaInadmisible").hide();
+            _renderDetermina.frm.find("#divTxtInfundado").hide();
+            _renderDetermina.frm.find("#divAreaInfundado").hide();
+            _renderDetermina.frm.find("#divChkFundado").hide();
+            _renderDetermina.frm.find("#divAreaFundado").hide();
+            _renderDetermina.frm.find("#divChkFundadoParte").hide();
+            _renderDetermina.frm.find("#divAreaFundadoParte").hide();
+            _renderDetermina.frm.find("#divNulidad").hide();
+            _renderDetermina.frm.find("#divNulidad2").hide();
+            _renderDetermina.frm.find("#divNulidad3").hide();
+        }
+    }
+
+    var _renderOtros = {};
+    _renderOtros.fncSelect = function () {
+        var idOtros = _renderOtros.frm.find("#ddlOtros").val();
+        if (idOtros == "0000000") {
+            _renderOtros.frm.find("#divResRectifica").hide();
+        }
+        if (idOtros == "0000037") {
+            _renderOtros.frm.find("#divResRectifica").hide();
+        }
+        if (idOtros == "0000038") {
+            _renderOtros.frm.find("#divResRectifica").show();
+        }
+        if (idOtros == "0000039") {
+            _renderOtros.frm.find("#divResRectifica").hide();
+        }
+        if (idOtros == "0000040") {
+            _renderOtros.frm.find("#divResRectifica").hide();
+        }
+    }
+
+    @*_renderDatos.fncSubMotivo = function () {
+        var idMotivo = _renderDatos.frm.find("#ddlMotivoArch").val();
+        var descMotivo = _renderDatos.frm.find("#ddlMotivoArch option:selected").text();
+        $.ajax({
+            url: '@Url.Action("subTipoArchivo","ManResolucion")',
+            type: 'GET',
+            datatype: "json",
+            traditional: true,
+            data: { 'idMotivo': idMotivo, 'descMotivo': descMotivo },
+            success: function (data) {
+                $("#divSubTipoArchivo").html(data)
+            }
+        });
+    };*@
+
+    $(document).ready(function () {
+        _renderDatos.frm = $("#frmRDDatosResol");
+        _renderDetermina.frm = $("#frmRDDatosResol");
+        _renderOtros.frm = $("#frmRDDatosResol");
+        _renderDatos.fncSelect();
+        _renderDetermina.fncSelect();
+        _renderOtros.fncSelect();
+    });
+</script>
+
+
+@*-- LISTA DE RD APELACIÓN --*@
+<div id="frmRDDatosResol">
+
+    <div class="card-header text-small">Datos de Resolución</div>
+    <div><br /></div>
+    <div class="form-row">
+        <label for="chkGTF" class="form-group col-md-3 text-small">Tipo de Resolucion</label>
+        <div class="form-group col-md-4 text-small">
+            @Html.DropDownListFor(m => m.ddlTipoResolucion, new SelectList(Model.ListRecomendacion2, "CODIGO", "DESCRIPCION"),
+                                  new
+                                  {
+                                           @class = "form-control form-control-sm",
+                                      @id = "ddlTipoResolucion",
+                                      @onchange = "_renderDatos.fncSelect()"
+                                  })
+        </div>
+    </div>
+    <div id="divApelacion" style="display:none;">
+        <div class="form-row">
+            @*<div class="form-group col-md-4 text-small">*@
+            <label for="chkGTF" class="form-group col-md-3 text-small">Apelacion</label>
+            @*</div>*@
+            <div class="form-group col-md-4 text-small">
+                @Html.DropDownListFor(m => m.ddlResApelacion, new SelectList(Model.ListApelacion, "CODIGO", "DESCRIPCION"),
+                              new
+                              {
+                                  @class = "form-control form-control-sm",
+                                  @id = "ddlResApelacion",
+                                  @onchange = "_renderDatos.fncSelect()"
+                              })
+            </div>
+        </div>
+    </div>
+
+    <div id="divQuejas" style="display:none;">
+        <div class="form-row">
+            <label for="chkGTF" class="form-group col-md-3 text-small">Descripcion de la Queja</label>
+
+            <div class="form-group col-md-6 text-small">
+
+                @Html.TextAreaFor(m => m.txtQueja, 4, 1, new { @class = "form-control form-control-sm" })
+
+            </div>
+        </div>
+
+        @*<div id="divSubTipoArchivo">
+                @Html.Partial("~/Areas/Fiscalizacion/Views/ManResolucion/_Shared/_generic/_renderMotivoArchivo.cshtml", Model)
+            </div>*@
+    </div>
+    <div id="divOtros" style="display:none;">
+        <div class="form-row">
+            <label for="chkGTF" class="form-group col-md-3 text-small">Otros</label>
+
+            <div class="form-group col-md-4 text-small">
+                @Html.DropDownListFor(m => m.ddlResOtros, new SelectList(Model.ListOtros, "CODIGO", "DESCRIPCION"),
+                                             new
+                                             {
+                                                 @class = "form-control form-control-sm",
+                                                 @id = "ddlResOtros",
+                                                 @onchange = "_renderOtros.fncSelect()"
+                                             })
+
+            </div>
+        </div>
+
+    </div>
+    <div id="divcumplejud" style="display:none;">
+        <div class="form-row">
+            <label for="chkGTF" class="form-group col-md-3 text-small">Cumplimiento del mandato judicial</label>
+
+            <div class="form-group col-md-4 text-small">
+                @Html.TextBoxFor(m => m.txtOtrosDes, new { @class = "form-control form-control-sm", maxlength = "500" })
+
+            </div>
+        </div>
+
+    </div>
+    <div id="divnuli" style="display:none;">
+        <div class="form-row">
+            <label for="chkGTF" class="form-group col-md-3 text-small">Nulidad de Oficio</label>
+            <div class="form-group col-md-4 text-small">
+
+                @Html.DropDownListFor(m => m.ddlResTFFSDFFS, new SelectList(Model.ListRecomendacion, "CODIGO", "DESCRIPCION"),
+                    new
+                         {
+                             @class = "form-control form-control-sm",
+                             @id = "ddlResTFFSDFFS",
+                             @onchange = "_renderTerminoPAU.fncSelect()"
+                        })
+                @*@Html.EditorFor(m => m.ddlResTFFSDFFS, new { htmlAttributes = new { @class = "form-control form-control-sm", maxlength = "500" } })*@
+            </div>
+        </div>
+    </div>
+    <div id="pnlApelQueja" style="display:none;">
+        <div class="form-row">
+            <label for="divnuli" class="form-group col-md-3 text-small">Numero de Tramite</label>
+            <div class="form-group col-md-4 text-small">
+                @Html.TextBoxFor(m => m.TextBox11, new { @class = "form-control form-control-sm", maxlength = "500" })
+            </div>
+            <div class="form-check form-check-inline">
+                <ImageButton type="button" CssClass="ManHeadMenuBoton" id="ImageButton3" class="btn btn-info btn-sm" ImageUrl="~/Imagenes/BonMan/Buscar4.png" onclick="btnManGrillaBuscar2_Click">Buscar Registros</ImageButton>
+            </div>
+        </div>
+        <div class="form-row">
+            <label for="divnuli" class="form-group col-md-3 text-small">Fecha de Presentacion del Recurso de Apelacion o Queja :</label>
+            <div class="form-group col-md-4 text-small">
+                @Html.TextBoxFor(m => m.TextBox12, new { @class = "form-control form-control-sm", maxlength = "500" })
+            </div>
+        </div>
+    </div>
+
+
+    @*-- DATOS GENERALES DE LA RESOLUCIÓN DEL TFFS --*@
+    <div class="card-header text-small">Datos Generales</div>
+    <div><br /></div>
+    <div class="form-row">
+        <label for="chkGTF" class="form-group col-md-3 text-small">Número Resolucion del TFFS</label>
+        <div class="form-group col-md-4">
+            @Html.EditorFor(m => m.txtItemNumero, new { htmlAttributes = new { @class = "form-control form-control-sm", maxlength = "500" } })
+        </div>
+
+    </div>
+
+    <div class="form-row">
+        <label for="chkGTF" class="form-group col-md-3 text-small">Fecha de Emisión de la Resolución del TFFS</label>
+        <div class="form-group col-md-4">
+            @Html.TextBoxFor(m => m.txtItemfecemi, new { @class = "form-control form-control-sm", maxlength = "500" })
+        </div>
+    </div>
+
+
+
+    <div class="form-row">
+        <label for="chkGTF" class="form-group col-md-3 text-small">Ubicacion Geografica del Titulo Habilitante</label>
+        @*<div class="form-group col-md-4">Ubicacion Geografica del Titulo Habilitante</div>*@
+        <div class="form-group col-md-4">
+
+            @Html.DropDownListFor(m => m.ddlUbigeoDepartamento, new SelectList(Model.ListRecomendacion, "CODIGO", "DESCRIPCION"),
+                new
+                {
+                     @class = "form-control form-control-sm",
+                     @id = "ddlUbigeoDepartamento",
+                     @onchange = "_renderTerminoPAU.fncSelect()"
+                })
+            @*@Html.EditorFor(m => m.ddlUbigeoDepartamento, new { htmlAttributes = new { @class = "form-control form-control-sm", maxlength = "500" } })*@
+        </div>
+        <div class="form-group col-md-1"></div>
+    </div>
+
+    @*-- REGISTRO DE PERSONAS QUE FIRMAN LA RESOLUCIÓN DEL TFFS --*@
+    <div class="card-header text-small">Personas que Firman la Resolución del TFFS</div>
+    <div><br /></div>
+    <div class="form-row">
+        @*<div class="form-group col-md-4">Persona</div>*@
+        <label for="chkGTF" class="form-group col-md-3 text-small">Persona</label>
+        <div class="form-group col-md-4">
+            @Html.EditorFor(m => m.lblItemPersonaFirma, new { htmlAttributes = new { @class = "form-control form-control-sm", maxlength = "500" } })
+            @*@Html.CheckBoxFor(m => m.chkTitular, new { @class = "form-check-input", style = "width:15px;height:16px;" })*@
+        </div>
+
+    </div>
+    <div class="form-row">
+        @*<div class="form-group col-md-4">Cargo</div>*@
+        <label for="chkGTF" class="form-group col-md-3 text-small">Cargo</label>
+        <div class="form-group col-md-4">
+            @Html.EditorFor(m => m.txtItemCargoPersonaFirma, new { htmlAttributes = new { @class = "form-control form-control-sm", maxlength = "500" } })
+            @*@Html.CheckBoxFor(m => m.chkTitular, new { @class = "form-check-input", style = "width:15px;height:16px;" })*@
+        </div>
+
+    </div>
+    @*<div style="margin-top:7px;">
+            <div class="form-check form-check-inline">
+                <button type="button" id="btnAgregarPersonaFirma" class="btn btn-info btn-sm" onclick="btnAgregarPersonaFirma_Click">Agregar</button>
+            </div>
+        </div>*@
+    @*---Listado de Personas que Firman la Resolución del TFFS---*@
+    @*<div class="card-header text-small">Listado de Personas que Firman la Resolución del TFF</div>
+        <div><br /></div>
+         <div class="form-row">*@
+    @*<div class="GrillaDivMarco" style="">
+        <UpdatePanel ID="udpPersonasFirma" runat="server">
+            <ContentTemplate>
+                <GridView ID="grvPersonasFirma" runat="server" AutoGenerateColumns="False" CssClass="Grilla" ShowHeaderWhenEmpty="True" Width="98%">
+                    <Columns>
+                        <TemplateField>
+                            <ItemTemplate>
+                                <ImageButton ID="btnItemPersonaEli" runat="server" CssClass="ImagenNoBordeCursor"
+                                             CommandArgument="<%# Container.DataItemIndex %>" Height="15px" ImageUrl="~/Imagenes/BonMan/Eliminar4.png"
+                                             OnClick="btnItemPersonaEli_Click" OnClientClick="return ConfirmaDelRegistro(this, 'I');" ToolTip="Eliminar" Width="15px" />
+                            </ItemTemplate><ItemStyle HorizontalAlign="Center" VerticalAlign="Middle" Width="3%" />
+                        </TemplateField>
+                        <TemplateField HeaderText="Nº"><ItemTemplate></ItemTemplate><ItemStyle HorizontalAlign="Center" VerticalAlign="Middle" Width="3%" /></TemplateField>
+                        <BoundField DataField="APELLIDOS_NOMBRES" HeaderText="Persona firma documento" SortExpression="APELLIDOS_NOMBRES"><ItemStyle HorizontalAlign="Center" VerticalAlign="Middle" Width="30%" /></BoundField>
+                        <BoundField DataField="CARGO" HeaderText="Cargo" SortExpression="CARGO"></BoundField>
+                    </Columns>
+                </GridView>
+            </ContentTemplate>
+            <Triggers><AsyncPostBackTrigger ControlID="btnAgregarPersonaFirma" EventName="Click" /></Triggers>
+        </UpdatePanel>
+        </div>*@
+</div>
+
+
+
+@*-- DATOS DE LA DETERMIANCIÓN --*@
+<div class="card-header text-small">Determinación de la Resolución del TFFS</div>
+<div><br /></div>
+<div class="form-row">
+    @*<div class="form-group col-md-4">Sentido de Resolucion</div>*@
+    <label for="chkGTF" class="form-group col-md-3 text-small">Sentido de Resolucion</label>
+
+    <div class="form-group col-md-4">
+        @*@Html.DropDownList("ddlDeterminaResol", listado)*@
+        @Html.DropDownListFor(m => m.ddlSentidoRes, new SelectList(Model.ListCboSentidoRes, "CODIGO", "DESCRIPCION"),
+                             new
+                             {
+                                 @class = "form-control form-control-sm",
+                                 @id = "ddlSentidoRes",
+                                 @onchange = "_renderDetermina.fncSelect()"
+                             })
+    </div>
+
+</div>
+@*--------------------------  Improcedente -----------------------------------------------------*@
+<div id="divImprocedente" style="display:none;">
+    <div class="form-row">
+        @*<div class="form-group col-md-4 text-small">*@
+        <label for="chkGTF" class="form-group col-md-3 text-small">Improcedente</label>
+        @*</div>*@
+        <div class="form-group col-md-4 text-small">
+            @Html.DropDownListFor(m => m.ddlImprocedente, new SelectList(Model.ListImpro, "CODIGO", "DESCRIPCION"),
+                          new
+                          {
+                              @class = "form-control form-control-sm",
+                              @id = "ddlImprocedente",
+                              @onchange = "_renderDetermina.fncSelect()"
+                          })
+        </div>
+    </div>
+</div>
+<div id="divTxtDetermina" style="display:none;">
+    <div class="form-row">
+        <label for="chkGTF" class="form-group col-md-3 text-small">Determina</label>
+
+        <div class="form-group col-md-4 text-small">
+            @Html.TextBoxFor(m => m.txtDetermina, new { @class = "form-control form-control-sm", maxlength = "500", placeholder = "Confirmar" })
+            @Html.EditorFor(m => m.txtConfirmar, new { htmlAttributes = new { @class = "form-control form-control-sm", maxlength = "500", placeholder = "Confirmar" } })
+        </div>
+    </div>
+</div>
+<div id="divAreaDescripcion" style="display:none;">
+    <div class="form-row">
+        <label for="chkGTF" class="form-group col-md-3 text-small">Descripcion</label>
+
+        <div class="form-group col-md-4 text-small">
+            @Html.CheckBoxFor(m => m.chkDescripcion, new { @class = "form-check-input", style = "width:15px;height:16px;" })
+            @Html.TextAreaFor(m => m.txtDescripcion, 4, 1, new { @class = "form-control form-control-sm", maxlength = "500" })
+
+        </div>
+    </div>
+</div>
+@*--------------------------  Inadmisible -----------------------------------------------------*@
+
+<div id="divInadmisible" style="display:none;">
+    <div class="form-row">
+        @*<div class="form-group col-md-4 text-small">*@
+        <label for="chkGTF" class="form-group col-md-3 text-small">Inadmisible</label>
+        @*</div>*@
+        <div class="form-group col-md-4 text-small">
+            @Html.DropDownListFor(m => m.ddlInadmisible, new SelectList(Model.ListInadm, "CODIGO", "DESCRIPCION"),
+                          new
+                          {
+                              @class = "form-control form-control-sm",
+                              @id = "ddlInadmisible",
+                              @onchange = "_renderDetermina.fncSelect()"
+                          })
+        </div>
+    </div>
+</div>
+<div id="divTxtInadmisible" style="display:none;">
+    <div class="form-row">
+        <label for="chkGTF" class="form-group col-md-3 text-small">Determina</label>
+
+        <div class="form-group col-md-6 text-small">
+            @Html.TextBoxFor(m => m.txtDetermina2, new { @class = "form-control form-control-sm", maxlength = "500", placeholder = "Confirmar" })
+            @Html.EditorFor(m => m.txtConfirmar, new { htmlAttributes = new { @class = "form-control form-control-sm", placeholder = "Confirmar", maxlength = "500" } })
+        </div>
+    </div>
+</div>
+<div id="divAreaInadmisible" style="display:none;">
+    <div class="form-row">
+        <label for="chkGTF" class="form-group col-md-3 text-small">Descripcion</label>
+
+        <div class="form-group col-md-6 text-small">
+            @Html.CheckBoxFor(m => m.chkDescripcion, new { @class = "form-check-input", style = "width:15px;height:16px;" })
+            @Html.TextAreaFor(m => m.txtDescripcion, 4, 1, new { @class = "form-control form-control-sm" })
+
+        </div>
+    </div>
+</div>
+
+@*--------------------------  Infundado -----------------------------------------------------*@
+
+<div id="divTxtInfundado" style="display:none;">
+    <div class="form-row">
+        <label for="chkGTF" class="form-group col-md-3 text-small">Determina</label>
+
+        <div class="form-group col-md-6 text-small">
+            @Html.TextBoxFor(m => m.txtDetermina, new { @class = "form-control form-control-sm", maxlength = "500", placeholder = "Confirmar" })
+            @Html.EditorFor(m => m.txtConfirmar, new { htmlAttributes = new { @class = "form-control form-control-sm", placeholder = "Confirmar", maxlength = "500" } })
+        </div>
+    </div>
+</div>
+<div id="divAreaInfundado" style="display:none;">
+    <div class="form-row">
+        <label for="chkGTF" class="form-group col-md-3 text-small">Descripcion</label>
+
+        <div class="form-group col-md-6 text-small">
+            @Html.CheckBoxFor(m => m.chkDescripcion, new { @class = "form-check-input", style = "width:15px;height:16px;" })
+            @Html.TextAreaFor(m => m.txtDescripcion, 4, 1, new { @class = "form-control form-control-sm" })
+
+        </div>
+    </div>
+</div>
+@*--------------------------  Fundado -----------------------------------------------------*@
+
+<div id="divChkFundado" style="display:none;">
+    <div class="form-row">
+        <label for="chkGTF" class="form-group col-md-3 text-small">Determina</label>
+
+        <div class="form-group col-md-6 text-small">
+
+            @Html.CheckBoxFor(m => m.chkConfirmar, new { @class = "form-check-input", style = "width:15px;height:16px;" })
+
+            @Html.CheckBoxFor(m => m.chkRevocar, new { @class = "form-check-input", style = "width:15px;height:16px;" })
+
+            @Html.CheckBoxFor(m => m.chkRevocarParte, new { @class = "form-check-input", style = "width:15px;height:16px;" })
+
+            @Html.CheckBoxFor(m => m.chkRetrotraer, new { @class = "form-check-input", style = "width:15px;height:16px;" })
+
+            @Html.CheckBoxFor(m => m.chkPrescribir, new { @class = "form-check-input", style = "width:15px;height:16px;" })
+
+            @Html.CheckBoxFor(m => m.chkArchivar, new { @class = "form-check-input", style = "width:15px;height:16px;" })
+
+            @Html.CheckBoxFor(m => m.chkSuspension, new { @class = "form-check-input", style = "width:15px;height:16px;" })
+
+            @Html.CheckBoxFor(m => m.chkNulidad, new { @class = "form-check-input", style = "width:15px;height:16px;" })
+
+            @Html.CheckBoxFor(m => m.chkLevantar, new { @class = "form-check-input", style = "width:15px;height:16px;" })
+
+            @Html.CheckBoxFor(m => m.chkCarece, new { @class = "form-check-input", style = "width:15px;height:16px;" })
+
+            @Html.CheckBoxFor(m => m.chkDesestimiento, new { @class = "form-check-input", style = "width:15px;height:16px;" })
+
+            @Html.CheckBoxFor(m => m.chkOtro, new { @class = "form-check-input", style = "width:15px;height:16px;" })
+        </div>
+    </div>
+</div>
+<div id="divAreaFundado" style="display:none;">
+    <div class="form-row">
+        <label for="chkGTF" class="form-group col-md-3 text-small">Descripcion</label>
+
+        <div class="form-group col-md-6 text-small">
+            @Html.CheckBoxFor(m => m.chkDescripcion, new { @class = "form-check-input", style = "width:15px;height:16px;" })
+            @Html.TextAreaFor(m => m.txtDescripcion, 4, 1, new { @class = "form-control form-control-sm" })
+
+        </div>
+    </div>
+</div>
+
+@*--------------------------  Fundado en parte----------------------------------------------------*@
+
+<div id="divChkFundadoParte" style="display:none;">
+    <div class="form-row">
+        <label for="chkGTF" class="form-group col-md-3 text-small">Determina</label>
+
+        <div class="form-group col-md-6 text-small">
+
+            @Html.CheckBoxFor(m => m.chkConfirmar, new { @class = "form-check-input", style = "width:15px;height:16px;" })
+
+            @Html.CheckBoxFor(m => m.chkRevocar, new { @class = "form-check-input", style = "width:15px;height:16px;" })
+
+            @Html.CheckBoxFor(m => m.chkRevocarParte, new { @class = "form-check-input", style = "width:15px;height:16px;" })
+
+            @Html.CheckBoxFor(m => m.chkRetrotraer, new { @class = "form-check-input", style = "width:15px;height:16px;" })
+
+            @Html.CheckBoxFor(m => m.chkPrescribir, new { @class = "form-check-input", style = "width:15px;height:16px;" })
+
+            @Html.CheckBoxFor(m => m.chkArchivar, new { @class = "form-check-input", style = "width:15px;height:16px;" })
+
+            @Html.CheckBoxFor(m => m.chkSuspension, new { @class = "form-check-input", style = "width:15px;height:16px;" })
+
+            @Html.CheckBoxFor(m => m.chkNulidad, new { @class = "form-check-input", style = "width:15px;height:16px;" })
+
+            @Html.CheckBoxFor(m => m.chkLevantar, new { @class = "form-check-input", style = "width:15px;height:16px;" })
+
+            @Html.CheckBoxFor(m => m.chkCarece, new { @class = "form-check-input", style = "width:15px;height:16px;" })
+
+            @Html.CheckBoxFor(m => m.chkDesestimiento, new { @class = "form-check-input", style = "width:15px;height:16px;" })
+
+            @Html.CheckBoxFor(m => m.chkOtro, new { @class = "form-check-input", style = "width:15px;height:16px;" })
+        </div>
+    </div>
+</div>
+<div id="divAreaFundadoParte" style="display:none;">
+    <div class="form-row">
+        <label for="chkGTF" class="form-group col-md-3 text-small">Descripcion</label>
+
+        <div class="form-group col-md-6 text-small">
+            @Html.CheckBoxFor(m => m.chkDescripcion, new { @class = "form-check-input", style = "width:15px;height:16px;" })
+            @Html.TextAreaFor(m => m.txtDescripcion, 4, 1, new { @class = "form-control form-control-sm" })
+
+        </div>
+    </div>
+</div>
+@*--------------------------  Nulidad y Nulidad Parcial----------------------------------------------------*@
+
+<div id="divNulidad" style="display:none;">
+    <div class="form-row">
+        @*<div class="form-group col-md-4 text-small">*@
+        <label for="chkGTF" class="form-group col-md-3 text-small">Nulidad</label>
+        @*</div>*@
+        <div class="form-group col-md-4 text-small">
+            @Html.DropDownListFor(m => m.ddlNulidad, new SelectList(Model.ListNulidad, "CODIGO", "DESCRIPCION"),
+                          new
+                          {
+                              @class = "form-control form-control-sm",
+                              @id = "ddlNulidad",
+                              @onchange = "_renderDetermina.fncSelect()"
+                          })
+        </div>
+    </div>
+</div>
+<div id="divNulidad2" style="display:none;">
+    <div class="form-row">
+        @*<div class="form-group col-md-4 text-small">*@
+        <label for="chkGTF" class="form-group col-md-3 text-small">Determina</label>
+        @*</div>*@
+        <div class="form-group col-md-4 text-small">
+            @Html.DropDownListFor(m => m.txtRetrotraer, new SelectList(Model.ListNulidad2, "CODIGO", "DESCRIPCION"),
+                          new
+                          {
+                              @class = "form-control form-control-sm",
+                              @id = "txtRetroatraer",
+                              @onchange = "_renderDetermina.fncSelect()"
+                          })
+        </div>
+
+        <div class="form-group col-md-4 text-small">
+            @Html.DropDownListFor(m => m.ddlRetrotraer, new SelectList(Model.ListNulidad3, "CODIGO", "DESCRIPCION"),
+                          new
+                          {
+                              @class = "form-control form-control-sm",
+                              @id = "ddlRetrotraer",
+                              @onchange = "_renderDetermina.fncSelect()"
+                          })
+        </div>
+    </div>
+</div>
+<div id="divNulidad3" style="display:none;">
+    <div class="form-row">
+        <label for="chkGTF" class="form-group col-md-3 text-small">Descripcion</label>
+
+        <div class="form-group col-md-6 text-small">
+            @Html.CheckBoxFor(m => m.chkDescripcion, new { @class = "form-check-input", style = "width:15px;height:16px;" })
+            @Html.TextAreaFor(m => m.txtDescripcion, 4, 1, new { @class = "form-control form-control-sm" })
+
+        </div>
+    </div>
+</div>
+
+@*--------------------------  Otro ----------------------------------------------------*@
+<div id="divAreaOtro" style="display:none;">
+    <div class="form-row">
+        <label for="chkGTF" class="form-group col-md-3 text-small">Descripcion</label>
+
+        <div class="form-group col-md-6 text-small">
+            @Html.CheckBoxFor(m => m.chkDescripcion, new { @class = "form-check-input", style = "width:15px;height:16px;" })
+            @Html.TextAreaFor(m => m.txtDescripcion, 4, 1, new { @class = "form-control form-control-sm" })
+
+        </div>
+    </div>
+</div>
+
+@*---SITUACION DE INFRACCIONES---*@
+
+@*<div id="pnlDetermina_LiteralesRDTermino" runat="server" visible="true">
+        <div class="bloqueFormContent2">
+            <div class="bloqueFormContent2LeftDoble">
+                <div style="font-weight: bold;">
+                    <Label runat="server">Situación de las Infracciones</Label>
+                </div>
+                <div></div>
+            </div>
+            <div class="bloqueFormContent2Right"></div>
+        </div>
+        <Button ID="btnImportLiteralesRDTermino" runat="server" CssClass="btnBotonFormSIGO" OnClick="btnImportLiteralesRDTermino_Click">Importar Literales RD Término</Button>
+        <div class="GrillaDivMarco" style="margin-bottom: 10px;">
+            <GridView ID="grvLiteralesRDTermino" runat="server" AllowSorting="True" AutoGenerateColumns="False"
+                      CssClass="Grilla" ShowHeaderWhenEmpty="True" Width="100%">
+                <Columns>
+                    <TemplateField>
+                        <ItemTemplate>
+                            <ImageButton ID="btngrvInfracRecons_Eliminar" runat="server" CssClass="ImagenNoBordeCursor"
+                                         CommandArgument="<%# Container.DataItemIndex %>" Height="15px" ImageUrl="~/Imagenes/BonMan/Eliminar4.png"
+                                         OnClick="btngrvInfracRecons_Eliminar_Click" OnClientClick="return ConfirmaDelRegistro(this, 'I');"
+                                         ToolTip="Eliminar" Width="15px" />
+                        </ItemTemplate>
+                    </TemplateField>
+                    <TemplateField>
+                        <ItemTemplate>
+                            <asp:ImageButton ID="btnCancelar" runat="server" CssClass="ImagenNoBordeCursor" CommandArgument="<%# Container.DataItemIndex %>" Height="15px" ImageUrl="~/Imagenes/BonMan/Eliminar4.png"
+                                             OnClick="btnCancelar_Click" ToolTip="Cancelar" Width="15px"
+                                             Visible="<%#((Ent_RESODIREC)Container.DataItem).BTN_LITERALES%>" /><br /><asp:ImageButton ID="btnModificar" runat="server" CssClass="ImagenNoBordeCursor" CommandArgument="<%# Container.DataItemIndex %>" Height="15px" ImageUrl="~/Imagenes/BonMan/Modificar4.png"
+                                                                                                                                       OnClick="btnModificar_Click" ToolTip="Modificar" Width="15px" Visible="<%#((Ent_RESODIREC)Container.DataItem).BTN_LITERALES2%>" /><br /><asp:ImageButton ID="btnguardar" runat="server" CssClass="ImagenNoBordeCursor" CommandArgument="<%# Container.DataItemIndex %>" Height="15px" ImageUrl="~/Imagenes/BonMan/GrabarUno.png"
+                                                                                                                                                                                                                                                                                                OnClick="btnguardar_Click" ToolTip="Guardar" Width="15px"
+                                                                                                                                                                                                                                                                                                Visible="<%#((Ent_RESODIREC)Container.DataItem).BTN_LITERALES%>" /><br />
+                        </ItemTemplate><ItemStyle HorizontalAlign="Center" VerticalAlign="Middle" Width="10px" />
+                    </TemplateField>
+                    <TemplateField HeaderText="Nº"><ItemTemplate></ItemTemplate><ItemStyle HorizontalAlign="Center" VerticalAlign="Middle" Width="10px" /></TemplateField>
+                    <BoundField DataField="DESCRIPCION_ARTICULOS" HeaderText="Artículo"><ItemStyle HorizontalAlign="Center" VerticalAlign="Middle" Width="20%" /></BoundField>
+                    <BoundField DataField="DESCRIPCION_ENCISOS" HeaderText="Incisos"><ItemStyle HorizontalAlign="Center" VerticalAlign="Middle" Width="80px" /></BoundField>
+                    <TemplateField HeaderText="Volumen (m³)"><ItemTemplate><TextBox ID="txtItemReconsVolumen" runat="server" Width="60px" Text="<%#((Ent_RESODIREC)Container.DataItem).VOLUMEN%>" MaxLength="20" Visible="<%#((Ent_RESODIREC)Container.DataItem).BTN_LITERALES%>" /><Label runat="server" Text="<%#((Ent_RESODIREC)Container.DataItem).VOLUMEN%>" Visible="<%#((Ent_RESODIREC)Container.DataItem).BTN_LITERALES2%>"></Label></ItemTemplate></TemplateField>
+                    <BoundField DataField="DESCRIPCION_ESPECIE" HeaderText="Especies"><ItemStyle HorizontalAlign="Center" VerticalAlign="Middle" Width="80px" /></BoundField>
+                    <TemplateField HeaderText="Área (ha)"><ItemTemplate><TextBox ID="txtItemReconsArea" runat="server" Width="60px" Text="<%#((Ent_RESODIREC)Container.DataItem).AREA%>" MaxLength="20" Visible="<%#((Ent_RESODIREC)Container.DataItem).BTN_LITERALES%>" /><Label runat="server" Text="<%#((Ent_RESODIREC)Container.DataItem).AREA%>" Visible="<%#((Ent_RESODIREC)Container.DataItem).BTN_LITERALES2%>"></Label></ItemTemplate></TemplateField>
+                    <TemplateField HeaderText="Num. Individuos"><ItemTemplate><asp:TextBox ID="txtItemReconsIndiv" runat="server" Width="40px" Text="<%#((Ent_RESODIREC)Container.DataItem).NUMERO_INDIVIDUOS%>" MaxLength="20" Visible="<%#((Ent_RESODIREC)Container.DataItem).BTN_LITERALES%>" /><Label runat="server" Text="<%#((Ent_RESODIREC)Container.DataItem).NUMERO_INDIVIDUOS%>" Visible="<%#((Ent_RESODIREC)Container.DataItem).BTN_LITERALES2%>"></Label></ItemTemplate></TemplateField>
+                    <BoundField DataField="POA" HeaderText="POA"><ItemStyle HorizontalAlign="Center" VerticalAlign="Middle" Width="5%" /></BoundField>
+                    <BoundField DataField="TIPOMADERABLE" HeaderText="Tipo de aprovechamiento"><ItemStyle HorizontalAlign="Center" VerticalAlign="Middle" Width="7%" /></BoundField>
+                    <TemplateField HeaderText="Determinación"><ItemTemplate><DropDownList ID="ddlItemDeterminacion" runat="server" Width="130px" Visible="<%#((Ent_RESODIREC)Container.DataItem).BTN_LITERALES%>"><ListItem Value="No Evaluado">No Evaluado</ListItem><ListItem Value="Confirmada Total">Confirmada Total</ListItem><ListItem Value="Confirmada Parcial">Confirmada Parcial</ListItem><ListItem Value="Fundada">Fundada</ListItem></DropDownList><Label runat="server" Text="<%#((Ent_RESODIREC)Container.DataItem).DETERMINACION%>" Visible="<%#((Ent_RESODIREC)Container.DataItem).BTN_LITERALES2%>" /></ItemTemplate><ItemStyle HorizontalAlign="Center" VerticalAlign="Middle" Width="150px" /></TemplateField>
+                    <TemplateField HeaderText="Estado Determinación"><ItemTemplate><DropDownList ID="ddlItemEstDeterminaArt363i" runat="server" Width="150px" SelectedValue='<%# Eval("MAE_ESTDETERMINA_ART363I") %>' Visible="<%#((Ent_RESODIREC)Container.DataItem).BTN_LITERALES%>"><ListItem Value="0000000">No Evaluado</ListItem><ListItem Value="0000026">Agotada la vía administrativa</ListItem><ListItem Value="0000027">Agotada la vía administrativa en parte</ListItem><ListItem Value="0000028">Desvirtuada</ListItem><ListItem Value="0000029">Anulada</ListItem></DropDownList><Label runat="server" Text="<%#((Ent_RESODIREC)Container.DataItem).ESTDETERMINA_ART363I%>" Visible="<%#((Ent_RESODIREC)Container.DataItem).BTN_LITERALES2%>" /></ItemTemplate><ItemStyle HorizontalAlign="Center" VerticalAlign="Middle" Width="150" /></TemplateField>
+                    <TemplateField HeaderText="Observaciones"><ItemTemplate><TextBox ID="txtObservaciones" runat="server" Text="<%#((Ent_RESODIREC)Container.DataItem).DESCRIPCION_INFRACCIONES%>" TextMode="MultiLine" Height="50px" Width="300px" Visible="<%#((Ent_RESODIREC)Container.DataItem).BTN_LITERALES%>" /><asp:Label Height="50px" Text="<%#((Ent_RESODIREC)Container.DataItem).DESCRIPCION_INFRACCIONES%>" Width="350px" runat="server" Visible="<%#((Ent_RESODIREC)Container.DataItem).BTN_LITERALES2%>" /></ItemTemplate><ItemStyle HorizontalAlign="Center" VerticalAlign="Middle" Width="300px" /></TemplateField>
+                </Columns>
+            </GridView>
+        </div>
+    </div>*@
+
+
+
+
+@*-- CONFIRMACIÓN DE LA RESOLUCIÓN --*@
+@*<div class="card-header text-small">Confirmación de la Resolución</div>
+    <div><br /></div>
+    <div class="form-row">
+        <div class="form-group col-md-3">
+            <label for="pnlConfirmaResol" class="text-small">¿Se Confirma la Resolución?</label>
+            <div class="form-group col-md-11">
+
+                @Html.DropDownListFor(m => m.ddlConfirmaResol, new SelectList(Model.ListRecomendacion, "CODIGO", "DESCRIPCION"),
+                                new
+                                     {
+                                         @class = "form-control form-control-sm",
+                                         @id = "ddlConfirmaResol",
+                                         @onchange = "_renderTerminoPAU.fncSelect()"
+                                    })
+            </div>
+            @*MATIAS <div class="form-group col-md-4">
+                @Html.RadioButton(m => m.pnlConfirmCambioMulta, new SelectList(Model.ListRecomendacion, "CODIGO", "DESCRIPCION"),
+                     new
+                                      {
+                                          @class = "form-control form-control-sm",
+                                          @id = "ddlConfirmaResol",
+                                          @onchange = "_renderTerminoPau.fncSelect()"
+                                     })
+            </div>
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="form-group col-md-3">
+            <label for="pnlLevanta" class="text-small">Levantamiento de caducidad</label>
+            <div class="form-group col-md-1">
+                @Html.CheckBoxFor(m => m.cbl, new { @class = "form-check-input", style = "width:15px;height:16px;" })
+            </div>
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="form-group col-md-3">
+            <label for="pnlLevanta" class="text-small">Variacion de medidas correctivas</label>
+            <div class="form-group col-md-1">
+                @Html.CheckBoxFor(m => m.CheckBoxList1, new { @class = "form-check-input", style = "width:15px;height:16px;" })
+            </div>
+        </div>
+    </div>
+    @*<div class="form-row">
+        <div id="dvConfirmaResol_EstadoDetermina">
+            <div class="form-group col-md-3">
+                <label for="pnlConfirmaResol" class="text-small">Caducidad</label>
+                <div class="form-group col-md-4">
+                    @Html.DropDownListFor(m => m.ddlConfirmaResol_EstDeterminaCaducidad, new SelectList(Model.ListInadm, "CODIGO", "DESCRIPCION"),
+                        new
+                            {
+                                @class = "form-control form-control-sm",
+                                @id = "ddlConfirmaResol_EstDeterminaCaducidad",
+                                @onchange = "_renderDetermina.fncSelect()"
+                            })
+                </div>
+            </div>
+            <div class="form-group col-md-3">
+                <label for="pnlMulta" class="text-small">Multa</label>
+                <div class="form-group col-md-4">
+                    @Html.DropDownListFor(m => m.ddlConfirmaResol_EstDeterminaMulta, new SelectList(Model.ListInadm, "CODIGO", "DESCRIPCION"),
+                        new
+                            {
+                                @class = "form-control form-control-sm",
+                                @id = "ddlConfirmaResol_EstDeterminaMulta",
+                                @onchange = "_renderDetermina.fncSelect()"
+                            })
+                </div>
+            </div>
+            <div class="form-group col-md-3">
+                <label for="pnlMulta" class="text-small">Medidas Correctivas</label>
+                <div class="form-group col-md-4">
+                    @Html.DropDownListFor(m => m.ddlConfirmaResol_EstDeterminaMCorrectiva, new SelectList(Model.ListInadm, "CODIGO", "DESCRIPCION"),
+                        new
+                            {
+                                @class = "form-control form-control-sm",
+                                @id = "ddlConfirmaResol_EstDeterminaMCorrectiva",
+                                @onchange = "_renderDetermina.fncSelect()"
+                            })
+                </div>
+            </div>
+        </div>
+    </div>*@
+
+@*-- TIPO DE PROVEIDO A GENERAR --*@
+<div class="card-header text-small">Tipo de Proveido a generar</div>
+<div><br /></div>
+<div class="form-row">
+    <label for="chkGTF" class="form-group col-md-3 text-small">Proveidos a generar</label>
+    <div class="form-group col-md-6 text-small">
+        @*<input type="checkbox" class="check" value="ww">*@
+        @Html.CheckBoxFor(m => m.lstChkProveidoGenerar, new { @class = "form-check-input", style = "width:15px;height:16px;" })Proveido Firme Acto Administrativo
+    </div>
+</div>
+<div class="form-row">
+    <div class="form-group col-md-3"></div>
+    <div class="form-group col-md-6 text-small">
+        @Html.CheckBoxFor(m => m.lstChkProveidoGenerar, new { @class = "form-check-input", style = "width:15px;height:16px;" })Proveido Agotada la Via Administrativa
+    </div>
+</div>
+<div class="form-row">
+    <div class="form-group col-md-3"></div>
+    <div class="form-group col-md-6 text-small">
+        @Html.CheckBoxFor(m => m.lstChkProveidoGenerar, new { @class = "form-check-input", style = "width:15px;height:16px;" })Proveido Continuacion de PAU por Nulidad
+    </div>
+</div>
+
+
+<div class="card-header text-small">Estado del PAU</div>
+<div><br /></div>
+<div class="form-row">
+    <label for="chkGTF" class="form-group col-md-3 text-small">Estado</label>
+
+    <div class="form-group col-md-4">
+        @*MATIAS @Html.DropDownList("ddlEstadoPAU", listado)*@
+        @Html.DropDownListFor(m => m.ddlEstadoPAU, new SelectList(Model.ListRecomendacion, "CODIGO", "DESCRIPCION"),
+                        new
+                             {
+                                 @class = "form-control form-control-sm",
+                                 @id = "ddlEstadoPAU",
+                                 @onchange = "_renderTerminoPAU.fncSelect()"
+                            })
+    </div>
+
+</div>
+@*-- CAMBIAR ESTADO DE ÁRBOLES SUPERVISADOS --*@
+<div class="card-header text-small">Sobre el Informe de Supervisión</div>
+<div><br /></div>
+<div class="form-row">
+    <label for="chkGTF" class="form-group col-md-3 text-small">Se cambia el estado de los árboles supervisados</label>
+    <div class="form-group col-md-6 text-small">
+        @Html.CheckBoxFor(m => m.chkCambiaEstEspecieISuperv, new { @class = "form-check-input", style = "width:15px;height:16px;" })
+    </div>
+</div>
+@*<div id="dvEstEspecieISupervision" style="margin-top: 5px;">
+            <!--Controles ocultos para evitar error en el UpdatePanel-->
+            <div style="display: none;">
+                <Button ID="lkbMad" runat="server" OnClick="lkbMad_Click" />
+                <Button ID="lkbMadSemi" runat="server" OnClick="lkbMadSemi_Click" />
+                <Button ID="btnEstEspecieMadeGrabar" runat="server" OnClick="btnEstEspecieMadeGrabar_Click" />
+                <Button ID="btnEstEspecieMadeSemiGrabar" runat="server" OnClick="btnEstEspecieMadeSemiGrabar_Click" />
+            </div>
+            <UpdatePanel ID="udpEstEspecieISupervision" runat="server">
+                <ContentTemplate>
+                    <HiddenField ID="hdfEstEspecieISuperv_ListIndex" runat="server" />
+                    <HiddenField ID="hdfEstEspecieISuperv_CodEEstado" runat="server" />
+
+                    <div class="bloqueFormToolbar" id="DivMaderable" runat="server" style="background-color: #e4f2fc;">
+                        <div>
+                            <img alt="" title="" src="../Imagenes/BonMan/Siguiente.png" style="width: 18px; height: 18px; border: 0px" />
+                        </div>
+                        <div>
+                            <LinkButton ID="lbtnMaderable" runat="server" OnClick="lbtnMaderable_Click">Ir Datos Campo Maderable (Datos Campo: 0)</LinkButton>
+                        </div>
+                        <div></div>
+                    </div>
+                    <Panel ID="pnlCensoMaderable" runat="server" Visible="false">
+                        <div class="bloqueFormContentTituloGrilla" style="margin-top: 0px;">
+                            <div>Datos de Campo de la Muestra Maderable</div>
+                            <div>
+                                <img id="ItemCensoMaderableImportar" class="ImagenNoBordeCursor" alt="" title="" src="../Imagenes/BonMan/ExportarExcel.png"
+                                     style="width: 20px; height: 20px; border: 0px" onclick="ItemExcelImportarVentana('ItemCensoMaderableImportar', 'CMADE');" />
+                            </div>
+                            <div>
+                                <img id="lkbMadLocal" class="ImagenNoBordeCursor" alt="" title="Exportar Excel" src="../Imagenes/BonMan/CarpetaAbrir3.png"
+                                     style="width: 18px; height: 18px; border: 0px;" onclick="fnExportarMaderableCampo()" />
+                            </div>
+                            <div></div>
+                        </div>
+                        <div class="GrillaDivMarco" style="margin-bottom: 5px;">
+                            <GridView ID="grvItemISupMaderable" runat="server" AutoGenerateColumns="False" CssClass="Grilla"
+                                      Width="98%" ShowHeaderWhenEmpty="True" OnRowDataBound="grvItemISupMaderable_RowDataBound" OnSorting="grvItemISupMaderable_Sorting"
+                                      AllowPaging="True" AllowSorting="True" OnPageIndexChanging="grvItemISupMaderable_PageIndexChanging" PageSize="10">
+                                <Columns>
+                                    <TemplateField HeaderText="Nº"><ItemTemplate></ItemTemplate><ItemStyle HorizontalAlign="Center" VerticalAlign="Middle" Width="3%" /></TemplateField>
+                                    <BoundField DataField="POA" HeaderText="POA" SortExpression="POA"><ItemStyle HorizontalAlign="Left" VerticalAlign="Middle" Width="4%" /></BoundField>
+                                    <BoundField DataField="BLOQUE" HeaderText="Bloque" SortExpression="BLOQUE"><ItemStyle HorizontalAlign="Left" VerticalAlign="Middle" Width="4%" /></BoundField>
+                                    <BoundField DataField="BLOQUE_CAMPO" HeaderText="Bloque Campo" SortExpression="BLOQUE_CAMPO"><ItemStyle HorizontalAlign="Left" VerticalAlign="Middle" Width="4%" /></BoundField>
+                                    <BoundField DataField="FAJA" HeaderText="Faja" SortExpression="FAJA"><ItemStyle HorizontalAlign="Left" VerticalAlign="Middle" Width="4%" /></BoundField>
+                                    <BoundField DataField="FAJA_CAMPO" HeaderText="Faja Campo" SortExpression="FAJA_CAMPO"><ItemStyle HorizontalAlign="Left" VerticalAlign="Middle" Width="4%" /></BoundField>
+                                    <BoundField DataField="CODIGO" HeaderText="Código" SortExpression="CODIGO"><ItemStyle HorizontalAlign="Left" VerticalAlign="Middle" Width="4%" /></BoundField>
+                                    <BoundField DataField="CODIGO_CAMPO" HeaderText="Código Campo" SortExpression="CODIGO_CAMPO"><ItemStyle HorizontalAlign="Left" VerticalAlign="Middle" Width="4%" /></BoundField>
+                                    <BoundField DataField="DESC_ESPECIES" HeaderText="Especie" SortExpression="DESC_ESPECIES"><ItemStyle HorizontalAlign="Left" VerticalAlign="Middle" Width="8%" /></BoundField>
+                                    <BoundField DataField="DESC_ESPECIES_CAMPO" HeaderText="Especie Campo" SortExpression="DESC_ESPECIES_CAMPO"><ItemStyle HorizontalAlign="Left" VerticalAlign="Middle" Width="8%" /></BoundField>
+                                    <BoundField DataField="DESC_COINCIDE_ESPECIES" HeaderText="Coincide con la especie" SortExpression="DESC_COINCIDE_ESPECIES"><ItemStyle HorizontalAlign="Center" VerticalAlign="Middle" Width="4%" /></BoundField>
+                                    <BoundField DataField="ZONA" HeaderText="Zona UTM" SortExpression="ZONA"><ItemStyle HorizontalAlign="Center" VerticalAlign="Middle" Width="3%" /></BoundField>
+                                    <BoundField DataField="ZONA_CAMPO" HeaderText="Zona UTM Campo" SortExpression="ZONA_CAMPO"><ItemStyle HorizontalAlign="Center" VerticalAlign="Middle" Width="3%" /></BoundField>
+                                    <BoundField DataField="COORDENADA_ESTE" HeaderText="C. Este" SortExpression="COORDENADA_ESTE"><ItemStyle HorizontalAlign="Right" VerticalAlign="Middle" Width="4%" /></BoundField>
+                                    <BoundField DataField="COORDENADA_ESTE_CAMPO" HeaderText="C. Este Campo" SortExpression="COORDENADA_ESTE_CAMPO"><ItemStyle HorizontalAlign="Right" VerticalAlign="Middle" Width="4%" /></BoundField>
+                                    <BoundField DataField="COORDENADA_NORTE" HeaderText="C. Norte" SortExpression="COORDENADA_NORTE"><ItemStyle HorizontalAlign="Right" VerticalAlign="Middle" Width="4%" /></BoundField>
+                                    <BoundField DataField="COORDENADA_NORTE_CAMPO" HeaderText="C. Norte Campo" SortExpression="COORDENADA_NORTE_CAMPO"><ItemStyle HorizontalAlign="Right" VerticalAlign="Middle" Width="4%" /></BoundField>
+                                    <BoundField DataField="DAP" HeaderText="DAP (cm)" SortExpression="DAP"><ItemStyle HorizontalAlign="Right" VerticalAlign="Middle" Width="3%" /></BoundField>
+                                    <BoundField DataField="DAP_CAMPO" HeaderText="DAP Campo (cm)" SortExpression="DAP_CAMPO"><ItemStyle HorizontalAlign="Right" VerticalAlign="Middle" Width="3%" /></BoundField>
+                                    <BoundField DataField="DAP_CAMPO1" HeaderText="DAP Campo 1 (cm)" SortExpression="DAP_CAMPO1"><ItemStyle HorizontalAlign="Right" VerticalAlign="Middle" Width="3%" /></BoundField>
+                                    <BoundField DataField="DAP_CAMPO2" HeaderText="DAP Campo 2 (cm)" SortExpression="DAP_CAMPO2"><ItemStyle HorizontalAlign="Right" VerticalAlign="Middle" Width="3%" /></BoundField>
+                                    <BoundField DataField="MMEDIR_DAP" HeaderText="Metodología medición DAP" SortExpression="MMEDIR_DAP"><ItemStyle HorizontalAlign="Left" VerticalAlign="Middle" Width="4%" /></BoundField>
+                                    <BoundField DataField="AC" HeaderText="AC (m)"><ItemStyle HorizontalAlign="Right" VerticalAlign="Middle" Width="3%" /></BoundField>
+                                    <BoundField DataField="AC_CAMPO" HeaderText="AC Campo (m)"><ItemStyle HorizontalAlign="Right" VerticalAlign="Middle" Width="3%" /></BoundField>
+                                    <BoundField DataField="DESC_EESTADO" HeaderText="Estado" SortExpression="DESC_EESTADO"><ItemStyle HorizontalAlign="Left" VerticalAlign="Middle" Width="4%" /></BoundField>
+                                    <TemplateField HeaderText="Estado Campo"><ItemTemplate><asp:DropDownList ID="ddlEMade_EEstado" runat="server" SelectedValue='<%# Eval("COD_EESTADO") %>' data-index="<%# Container.DataItemIndex %>" onchange="fnGrabarEstEspecieMade(this)"><asp:ListItem Value="0000003">Tocón</asp:ListItem><asp:ListItem Value="0000004">En Pie</asp:ListItem><asp:ListItem Value="0000009">No existe</asp:ListItem><asp:ListItem Value="0000010">Tumbado</asp:ListItem></asp:DropDownList></ItemTemplate><ItemStyle HorizontalAlign="Center" VerticalAlign="Middle" Width="3%" /></TemplateField>
+                                    <BoundField DataField="DESC_ECONDICION" HeaderText="Condicion" SortExpression="DESC_ECONDICION"><ItemStyle HorizontalAlign="Left" VerticalAlign="Middle" Width="4%" /></BoundField>
+                                    <BoundField DataField="DESC_ECONDICION_CAMPO" HeaderText="Condición Campo" SortExpression="DESC_ECONDICION_CAMPO"><ItemStyle HorizontalAlign="Left" VerticalAlign="Middle" Width="4%" /></BoundField>
+                                    <BoundField DataField="OBSERVACION" HeaderText="Observación" SortExpression="OBSERVACION"><ItemStyle HorizontalAlign="Left" VerticalAlign="Middle" Width="4%" /></BoundField>
+                                </Columns>
+                                <PagerTemplate>
+                                    <div class="PieGrilla">
+                                        <div>
+                                            <LinkButton ID="lbtgrvFirst" runat="server" CommandArgument="First" CommandName="Page" ToolTip="Primera Página"><<</LinkButton>
+                                        </div>
+                                        <div>
+                                            <LinkButton ID="lbtgrvPrev" runat="server" CommandArgument="Prev" CommandName="Page" ToolTip="Página Anterior"><</LinkButton>
+                                        </div>
+                                        <div>
+                                            <Label ID="lblgrvPagina" runat="server" Text=" "></Label>
+                                        </div>
+                                        <div>
+                                            <LinkButton ID="lbtgrvNext" runat="server" CommandArgument="Next" CommandName="Page" ToolTip="Siguiente Página">></LinkButton>
+                                        </div>
+                                        <div>
+                                            <LinkButton ID="lbtgrvLast" runat="server" CommandArgument="Last" CommandName="Page" ToolTip="Última Página">>></LinkButton>
+                                        </div>
+                                        <div>
+                                            <Label ID="lblgrvRegistroNum" runat="server" Text=""></Label>
+                                        </div>
+                                    </div>
+                                </PagerTemplate>
+                                <PagerStyle CssClass="GrillaPagerstyle" />
+                            </GridView>
+                        </div>
+                    </Panel>
+                    <div class="bloqueFormToolbar" id="DivSemiMaderable" runat="server" style="background-color: #e4f2fc;">
+                        <div>
+                            <img alt="" title="" src="../Imagenes/BonMan/Siguiente.png" style="width: 18px; height: 18px; border: 0px" />
+                        </div>
+                        <div>
+                            <LinkButton ID="lbtnSemilleroMaderable" runat="server" OnClick="lbtnSemilleroMaderable_Click">Ir Datos Semillero Maderable (Datos Campo: 0)</LinkButton>
+                        </div>
+                        <div></div>
+                    </div>
+                    <Panel ID="pnlCensoMAderableSemillero" runat="server" Visible="false">
+                        <div class="bloqueFormContentTituloGrilla" style="margin-top: 0px;">
+                            <div>Datos de Campo de la Muestra de Semillero Maderable</div>
+                            <div>
+                                <img id="ItemCensoMadSemilleroImportar" class="ImagenNoBordeCursor" alt="" title="" src="../Imagenes/BonMan/ExportarExcel.png"
+                                     style="width: 20px; height: 20px; border: 0px" onclick="ItemExcelImportarVentana('ItemCensoMadSemilleroImportar', 'CMADESEM');" />
+                            </div>
+                            <div>
+                                <img id="lkbMadSemiLocal" class="ImagenNoBordeCursor" alt="" title="Exportar Excel" src="../Imagenes/BonMan/CarpetaAbrir3.png"
+                                     style="width: 18px; height: 18px; border: 0px;" onclick="fnExportarMadeSemilleroCampo()" />
+                            </div>
+                            <div></div>
+                        </div>
+                        <div class="GrillaDivMarco">
+                            <GridView ID="grvSemillero" runat="server" AutoGenerateColumns="False" CssClass="Grilla"
+                                      Width="98%" ShowHeaderWhenEmpty="True" AllowPaging="True" OnSorting="grvSemillero_Sorting"
+                                      OnPageIndexChanging="grvSemillero_PageIndexChanging" OnRowDataBound="grvSemillero_RowDataBound" AllowSorting="True">
+                                <Columns>
+                                    <TemplateField HeaderText="Nº"><ItemTemplate></ItemTemplate><ItemStyle HorizontalAlign="Center" VerticalAlign="Middle" Width="3%" /></TemplateField>
+                                    <BoundField DataField="POA" HeaderText="POA" SortExpression="POA"><ItemStyle HorizontalAlign="Left" VerticalAlign="Middle" Width="3%" /></BoundField>
+                                    <BoundField DataField="BLOQUE" HeaderText="Bloque" SortExpression="BLOQUE"><ItemStyle HorizontalAlign="Left" VerticalAlign="Middle" Width="3%" /></BoundField>
+                                    <BoundField DataField="BLOQUE_CAMPO" HeaderText="Bloque Campo" SortExpression="BLOQUE_CAMPO"><ItemStyle HorizontalAlign="Left" VerticalAlign="Middle" Width="3%" /></BoundField>
+                                    <BoundField DataField="FAJA" HeaderText="Faja" SortExpression="FAJA"><ItemStyle HorizontalAlign="Left" VerticalAlign="Middle" Width="3%" /></BoundField>
+                                    <BoundField DataField="FAJA_CAMPO" HeaderText="Faja Campo" SortExpression="FAJA_CAMPO"><ItemStyle HorizontalAlign="Left" VerticalAlign="Middle" Width="3%" /></BoundField>
+                                    <BoundField DataField="CODIGO" HeaderText="Código" SortExpression="CODIGO"><ItemStyle HorizontalAlign="Left" VerticalAlign="Middle" Width="3%" /></BoundField>
+                                    <BoundField DataField="CODIGO_CAMPO" HeaderText="Código Campo" SortExpression="CODIGO_CAMPO"><ItemStyle HorizontalAlign="Left" VerticalAlign="Middle" Width="3%" /></BoundField>
+                                    <BoundField DataField="DESC_ESPECIES" HeaderText="Especie" SortExpression="DESC_ESPECIES"><ItemStyle HorizontalAlign="Left" VerticalAlign="Middle" Width="8%" /></BoundField>
+                                    <BoundField DataField="DESC_ESPECIES_CAMPO" HeaderText="Especie Campo" SortExpression="DESC_ESPECIES_CAMPO"><ItemStyle HorizontalAlign="Left" VerticalAlign="Middle" Width="8%" /></BoundField>
+                                    <BoundField DataField="DESC_COINCIDE_ESPECIES" HeaderText="Coincide con la especie" SortExpression="DESC_COINCIDE_ESPECIES"><ItemStyle HorizontalAlign="Center" VerticalAlign="Middle" Width="4%" /></BoundField>
+                                    <BoundField DataField="ZONA" HeaderText="Zona UTM" SortExpression="ZONA"><ItemStyle HorizontalAlign="Center" VerticalAlign="Middle" Width="11%" /></BoundField>
+                                    <BoundField DataField="ZONA_CAMPO" HeaderText="Zona UTM Campo" SortExpression="ZONA_CAMPO"><ItemStyle HorizontalAlign="Center" VerticalAlign="Middle" Width="11%" /></BoundField>
+                                    <BoundField DataField="COORDENADA_ESTE" HeaderText="C. Este"><ItemStyle HorizontalAlign="Right" VerticalAlign="Middle" Width="3%" /></BoundField>
+                                    <BoundField DataField="COORDENADA_ESTE_CAMPO" HeaderText="C. Este Campo"><ItemStyle HorizontalAlign="Right" VerticalAlign="Middle" Width="3%" /></BoundField>
+                                    <BoundField DataField="COORDENADA_NORTE" HeaderText="C. Norte"><ItemStyle HorizontalAlign="Right" VerticalAlign="Middle" Width="3%" /></BoundField>
+                                    <BoundField DataField="COORDENADA_NORTE_CAMPO" HeaderText="C. Norte Campo"><ItemStyle HorizontalAlign="Right" VerticalAlign="Middle" Width="3%" /></BoundField>
+                                    <BoundField DataField="DAP" HeaderText="DAP (cm)" SortExpression="DAP"><ItemStyle HorizontalAlign="Right" VerticalAlign="Middle" Width="3%" /></BoundField>
+                                    <BoundField DataField="DAP_CAMPO" HeaderText="DAP Campo (cm)" SortExpression="DAP_CAMPO"><ItemStyle HorizontalAlign="Right" VerticalAlign="Middle" Width="3%" /></BoundField>
+                                    <BoundField DataField="DAP_CAMPO1" HeaderText="DAP Campo 1 (cm)" SortExpression="DAP_CAMPO1"><ItemStyle HorizontalAlign="Right" VerticalAlign="Middle" Width="3%" /></BoundField>
+                                    <BoundField DataField="DAP_CAMPO2" HeaderText="DAP Campo 2 (cm)" SortExpression="DAP_CAMPO2"><ItemStyle HorizontalAlign="Right" VerticalAlign="Middle" Width="3%" /></BoundField>
+                                    <BoundField DataField="MMEDIR_DAP" HeaderText="Metodología medición DAP" SortExpression="MMEDIR_DAP"><ItemStyle HorizontalAlign="Left" VerticalAlign="Middle" Width="4%" /></BoundField>
+                                    <BoundField DataField="AC" HeaderText="AC (m)"><ItemStyle HorizontalAlign="Right" VerticalAlign="Middle" Width="3%" /></BoundField>
+                                    <BoundField DataField="AC_CAMPO" HeaderText="AC Campo (m)"><ItemStyle HorizontalAlign="Right" VerticalAlign="Middle" Width="3%" /></BoundField>
+                                    <BoundField DataField="DESC_EESTADO" HeaderText="Estado"><ItemStyle HorizontalAlign="Left" VerticalAlign="Middle" Width="3%" /></BoundField>
+                                    <TemplateField HeaderText="Estado Campo"><ItemTemplate><asp:DropDownList ID="ddlEMadeSemi_EEstado" runat="server" SelectedValue='<%# Eval("COD_EESTADO") %>' data-index="<%# Container.DataItemIndex %>" onchange="fnGrabarEstEspecieMadeSemi(this)"><asp:ListItem Value="0000003">Tocón</asp:ListItem><asp:ListItem Value="0000004">En Pie</asp:ListItem><asp:ListItem Value="0000009">No existe</asp:ListItem><asp:ListItem Value="0000010">Tumbado</asp:ListItem></asp:DropDownList></ItemTemplate><ItemStyle HorizontalAlign="Center" VerticalAlign="Middle" Width="3%" /></TemplateField>
+                                    <BoundField DataField="DESC_EFENOLOGICO" HeaderText="Fenología" SortExpression="DESC_EFENOLOGICO"><ItemStyle HorizontalAlign="Left" VerticalAlign="Middle" Width="3%" /></BoundField>
+                                    <BoundField DataField="DESC_CFUSTE" HeaderText="C. Fuste" SortExpression="DESC_CFUSTE"><ItemStyle HorizontalAlign="Left" VerticalAlign="Middle" Width="3%" /></BoundField>
+                                    <BoundField DataField="DESC_FCOPA" HeaderText="F. Copa" SortExpression="DESC_FCOPA"><ItemStyle HorizontalAlign="Left" VerticalAlign="Middle" Width="3%" /></BoundField>
+                                    <BoundField DataField="DESC_PCOPA" HeaderText="P. Copa" SortExpression="DESC_PCOPA"><ItemStyle HorizontalAlign="Left" VerticalAlign="Middle" Width="3%" /></BoundField>
+                                    <BoundField DataField="DESC_ESANITARIO" HeaderText="Estado Fitosanitario" SortExpression="DESC_ESANITARIO"><ItemStyle HorizontalAlign="Left" VerticalAlign="Middle" Width="3%" /></BoundField>
+                                    <BoundField DataField="DESC_ILIANAS" HeaderText="Grado Infestación" SortExpression="DESC_ILIANAS"><ItemStyle HorizontalAlign="Left" VerticalAlign="Middle" Width="3%" /></BoundField>
+                                    <BoundField DataField="OBSERVACION" HeaderText="Observación" SortExpression="OBSERVACION"><ItemStyle HorizontalAlign="Left" VerticalAlign="Middle" Width="3%" /></BoundField>
+                                </Columns>
+                                <PagerTemplate>
+                                    <div class="PieGrilla">
+                                        <div>
+                                            <LinkButton ID="lbtgrvFirst" runat="server" CommandArgument="First" CommandName="Page" ToolTip="Primera Página"><<</LinkButton>
+                                        </div>
+                                        <div>
+                                            <LinkButton ID="lbtgrvPrev" runat="server" CommandArgument="Prev" CommandName="Page" ToolTip="Página Anterior"><</LinkButton>
+                                        </div>
+                                        <div>
+                                            <Label ID="lblgrvPagina" runat="server" Text=" "></Label>
+                                        </div>
+                                        <div>
+                                            <LinkButton ID="lbtgrvNext" runat="server" CommandArgument="Next" CommandName="Page" ToolTip="Siguiente Página">></LinkButton>
+                                        </div>
+                                        <div>
+                                            <LinkButton ID="lbtgrvLast" runat="server" CommandArgument="Last" CommandName="Page" ToolTip="Última Página">>></LinkButton>
+                                        </div>
+                                        <div>
+                                            <Label ID="lblgrvRegistroNum" runat="server" Text=""></Label>
+                                        </div>
+                                    </div>
+                                </PagerTemplate>
+                                <PagerStyle CssClass="GrillaPagerstyle" />
+                            </GridView>
+                        </div>
+                    </Panel>
+                </ContentTemplate>
+                <Triggers><AsyncPostBackTrigger ControlID="btnEstEspecieMadeGrabar" EventName="Click" /><AsyncPostBackTrigger ControlID="btnEstEspecieMadeSemiGrabar" EventName="Click" /></Triggers>
+            </UpdatePanel>
+        </div>
+    </div>*@
+@*-- OTRO DATOS GENERALES --*@
+@*<div class="form-row">
+        <div class="form-group col-md-3">
+            <label for="pnlObservaciones" class="text-small">Observación</label>
+        </div>
+        <div class="form-group col-md-11">
+            @Html.TextBoxFor(m => m.txtItemObservacion, new { @class = "form-control form-control-sm", maxlength = "500" })
+        </div>
+    </div>*@
+
+
+

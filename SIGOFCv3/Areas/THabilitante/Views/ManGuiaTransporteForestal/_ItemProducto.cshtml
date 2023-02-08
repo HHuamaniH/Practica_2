@@ -1,0 +1,65 @@
+﻿@model CapaEntidad.ViewModel.VM_GuiaTransporte_Producto
+
+<script src="~/Areas/THabilitante/js/ManGuiaTransporteForestal/_ItemProducto.js"></script>
+
+<div class="modal-dialog modal-lg" role="document" id="divItemProducto">
+    <div class="modal-content">
+        <div class="modal-header text-small" style="cursor:move;padding:0.5rem;">
+            <h5 class="modal-title" id="h5Titulo">Nuevo</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body">
+            <form id="frmItemProducto">
+                <input type="hidden" id="hdCodidoProducto" name="hdCodidoProducto" value="0" />
+
+                <div class="form-row">
+                    @*<div class="form-group col-md-6">
+            <label for="txtCodProdProducto" class="text-small">Código</label>
+            <input type="text" id="txtCodProdProducto" name="txtCodProdProducto" class="form-control form-control-sm" required maxlength="200"  />
+        </div>*@
+                    <div class="form-group col-md-6">
+                        <label for="ddlEspeciesProducto" class="text-small">Nombre Científico</label>
+                        @Html.DropDownList("ddlEspeciesProducto", new SelectList(Model.ddlEspecies, "Value", "Text"), new { @class = "form-control-sm", @style = "width:auto;" })
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="txtTipoProducto" class="text-small">Tipo de Producto</label>
+                        <input type="text" id="txtTipoProducto" name="txtTipoProducto" class="form-control form-control-sm" required maxlength="100" />
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label for="txtDescripcionProducto" class="text-small">Descripción</label>
+                        <input type="text" id="txtDescripcionProducto" name="txtDescripcionProducto" class="form-control form-control-sm" required maxlength="200" />
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="txtCantidadProducto" class="text-small">Cantidad</label>
+                        <input type="text" id="txtCantidadProducto" name="txtCantidadProducto" class="form-control form-control-sm" required maxlength="20" onkeypress="return utilSigo.onKeyDecimal(event, this);" />
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label for="ddlUnidadMedidaProducto" class="text-small">Unidad de Medida</label>
+                        @Html.DropDownList("ddlUnidadMedidaProducto", new SelectList(Model.ddlUnidadMedida, "Value", "Text"), new { @class = "form-control form-control-sm w-100" })
+
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="txtTotalProducto" class="text-small">Total</label>
+                        <input type="text" id="txtTotalProducto" name="txtTotalProducto" class="form-control form-control-sm" required maxlength="20" onkeypress="return utilSigo.onKeyDecimal(event, this);" />
+                    </div>
+                </div>
+               <div class="form-row">
+
+                    <div class="form-group col-md-12">
+                        <label for="txtObservacionProducto" class="text-small">Observaciones</label>
+                        <textarea id="txtObservacionProducto" name="txtObservacionProducto" class="form-control form-control-sm" ></textarea>
+                    </div>
+                </div> 
+            </form>
+        </div>
+        <div class="modal-footer">
+            <button type="button" id="btnGuardarProducto" class="btn btn-primary" onclick="">Guardar</button>
+        </div>
+    </div>
+</div>

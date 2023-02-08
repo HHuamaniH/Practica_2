@@ -1,0 +1,105 @@
+﻿
+@model  CapaEntidad.ViewModel.VM_ResolucionTFFS
+
+<style type="text/css">
+    #tbRenderListILegal_wrapper {
+        padding: 0px;
+    }
+
+    #tbConsultaILegal_info {
+        color: #33b35a;
+        font-size: 12px;
+        margin-top: 12px;
+    }
+</style>
+
+
+<script type="text/javascript">
+    var _renderListaEspecies = {};
+     _renderListaEspecies.tbEliTABLA = [];
+
+    // iniciar datos en la tabla
+    _renderListaEspecies.fnInitDataTable_Detail = function () {
+        var columns_label = [], columns_data = [], options = {};
+
+        columns_label = ["Especie", "Volumen movilizado sin autorización (m3)", "N° árboles a reponer (reforestar) y/o reemplazar", "Observaciones"];
+        columns_data = ["ESPECIES", "VOLUMEN_MOVILIZADO", "NUMERO_INDIVIDUOS", "OBSERVACION"];
+        options = {
+            page_length: 10, row_index: true, row_delete: true, row_fnDelete: "_renderListaEspecies.fnDelete(this)", page_sort: true
+        };
+        _renderListaEspecies.dtRenderListInforme = utilDt.fnLoadDataTable_Detail(_renderListaEspecies.frm.find("#tbRenderListEspecies"), columns_label, columns_data, options);
+        _renderListaEspecies.dtRenderListInforme.rows.add(JSON.parse('@Html.Raw(Json.Encode(@Model.ListEspecieMedCorrectiva))')).draw();
+    }
+
+    /*Listado de registros (render)*/
+    _renderListaEspecies.fnDelete = function (obj) {
+        var data = _renderListaEspecies.dtRenderListInforme.row($(obj).parents('tr')).data();
+
+        if (data["RegEstado"] == "0") {
+            _renderListaEspecies.tbEliTABLA.push({
+                EliTABLA: "RESODIREC_MEDIDA_ESPECIES",
+                EliVALOR02: data["COD_MEDIDA"],
+                COD_SECUENCIAL: data["COD_SECUENCIAL"]
+
+            });
+        }
+        _renderListaEspecies.dtRenderListInforme.row($(obj).parents('tr')).remove().draw(false);
+    }
+
+    //devuelve la lista de especies
+    _renderListaEspecies.fnGetList = function () {
+        let list = [], rows, countFilas, data;
+        rows = _renderListaEspecies.dtRenderListInforme.$("tr");
+        countFilas = rows.length;
+        if (countFilas > 0) {
+            $.each(rows, function (i, o) {
+                data = _renderListaEspecies.dtRenderListInforme.row($(o)).data();
+                list.push(utilSigo.fnConvertArrayToObject(data));
+            });
+        }
+        return list;
+    }
+
+    _renderListaEspecies.fnGetListEliTABLA = function () { return _renderListaEspecies.tbEliTABLA }
+
+   $(document).ready(function () {
+       _renderListaEspecies.frm = $("#frmRenderListaEspecies");
+       _renderListaEspecies.fnInitDataTable_Detail();
+   });
+</script>
+
+<div id="frmRenderListaEspecies">
+    <div class="form-row">
+        <div class="form-group col-md-12">
+            <table style="width:100%;margin:0px !important;" class="table table-hover table-bordered">
+                <thead>
+                    <tr>
+                        <th class="text-sm-left">
+                            <div class="form-inline">
+                                <i class="fa mx-2 fa-lg fa-file-o" style="cursor:pointer;" onclick="_renderMedCorrect.fnViewModalConsulta();" data-toggle="tooltip"
+                                   data-placement="top" title="Nuevo"></i> &nbsp; Nuevo &nbsp;
+                                <a href="@Url.Content("~/Archivos/Plantilla/EspeciesMedidaCorrectiva.xlsx")" type="button">
+                                    <i class="fa fa-cloud-download"></i>&nbsp; Descargar Plantilla Especies
+                                </a> &nbsp;
+                                <label style="cursor:pointer;" class="fa mx-2 fa-lg fa-file-excel-o" title="Importar Archivo" data-toggle="tooltip" title="importar especies">
+                                    <input type="file" id="fileselect" name="fileselect" style="display:none" size="60"
+                                           onchange="_renderMedCorrect.ItemExcelImportarVentana(event,this)"> &nbsp;Importar Especies
+                                </label>
+                            </div>
+                        </th>
+                    </tr>
+                </thead>
+            </table>
+        </div>
+    </div>
+    <div class="table-responsive">
+        <table id="tbRenderListEspecies" style="width:100%;margin:0px !important;" class="table table-hover table-bordered">
+            <thead></thead>
+            <tbody></tbody>
+        </table>
+    </div>
+    <div>
+        <br />
+    </div>
+
+</div>

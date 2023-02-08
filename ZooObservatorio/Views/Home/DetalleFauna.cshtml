@@ -1,0 +1,295 @@
+﻿@using ZooObservatorio;
+@model dynamic
+
+@{
+    ViewBag.Title = "DetalleFauna";
+}
+<style>
+    body {
+        background-image: linear-gradient(#d5f0c5, #18a94c);
+        background-attachment: fixed;
+    }
+
+    #form {
+        width: 250px;
+        margin: 0 auto;
+        height: 50px;
+    }
+
+        #form p {
+            text-align: center;
+        }
+
+        #form label {
+            font-size: 20px;
+        }
+
+    input[type="radio"] {
+        display: none;
+    }
+
+    label {
+        color: grey;
+    }
+
+    .clasificacion {
+        direction: rtl;
+        unicode-bidi: bidi-override;
+    }
+
+  /*  label:hover,
+    label:hover ~ label {
+        color: orange;
+    }
+  */
+
+    input[type="radio"]:checked ~ label {
+        color: orange;
+    }
+</style>
+<script type="text/javascript">
+    $(document).ready(function () {
+        var ranking = document.getElementById("hfRanking").value;
+        if (ranking == 5) {
+            $('#radio1').attr('checked', true);
+        }
+        if (ranking == 4) {
+            $('#radio2').attr('checked', true);
+        }
+        if (ranking == 3) {
+            $('#radio3').attr('checked', true);
+        }
+        if (ranking == 2) {
+            $('#radio4').attr('checked', true);
+        }
+        if (ranking == 1) {
+            $('#radio5').attr('checked', true);
+        }
+    });
+</script>
+<link rel="stylesheet" href="~/Styles/css/slider.css">
+<div class="row">
+    <div class="col-sm-1">
+        <br />
+    </div>
+    <div class="col-sm-10">
+        <div class="box box-success" style="background-color: white">
+            <div class="row">
+                <div class="col-sm-3"></div>
+                <div class="col-sm-6">
+                    <img id="profile-img" class="img-responsive pad" src="~/Images/General/top_logos.png" />
+                </div>
+                <div class="col-sm-3"></div>
+            </div>
+            <div class="row">
+                <div class="col-sm-1"></div>
+                <div class="col-sm-10">
+                    <div class="form-horizontal">
+                        <div style="text-align: center">
+                            <h4><strong>ZoOBSERVATORIO OSINFOR</strong></h4>
+                        </div>
+                        <div style="text-align:center">
+                            @if (Model.ranking != null)
+                            {
+                                var rank = Model.ranking;
+                                <input type="hidden" id="hfRanking" name="htfRanking" value="@rank" />
+                                if (rank > 0)
+                                {
+                                    <p>Calificación</p>
+                                    <form style="font-size:36px">
+                                        <p class="clasificacion">
+                                            <input id="radio1" type="radio" name="estrellas" value="5" disabled="disabled">
+                                            <label for="radio1">★</label>
+                                            <input id="radio2" type="radio" name="estrellas" value="4" disabled="disabled">
+                                            <label for="radio2">★</label>
+                                            <input id="radio3" type="radio" name="estrellas" value="3" disabled="disabled">
+                                            <label for="radio3">★</label>
+                                            <input id="radio4" type="radio" name="estrellas" value="2" disabled="disabled">
+                                            <label for="radio4">★</label>
+                                            <input id="radio5" type="radio" name="estrellas" value="1" disabled="disabled">
+                                            <label for="radio5">★</label>
+                                        </p>
+                                    </form>
+                                }
+                            }
+                        </div>
+                        <div style="text-align: left">
+                            <h5><strong>DATOS GENERALES</strong></h5>
+                        </div>
+                        <div class="box-body">
+                            @if (Model.oCEntidad != null)
+                            {
+                                var item = Model.oCEntidad;
+                                <div class="form-group  has-success" style="text-align:left !important">
+                                    <label class="col-sm-2 control-label">Nombre del establecimiento</label>
+                                    <div class="col-sm-10">
+                                        <input class="form-control" readonly="readonly" value="@item.TITULO" />
+                                    </div>
+                                </div>
+                                <div class="form-group  has-success">
+                                    <label class="col-sm-2 control-label text-left">Modalidad</label>
+                                    <div class="col-sm-10">
+                                        <input class="form-control" readonly="readonly" value="@item.MODALIDAD" />
+                                    </div>
+                                </div>
+                                <div class="form-group  has-success">
+                                    <label class="col-sm-2 control-label">Titular</label>
+                                    <div class="col-sm-10">
+                                        <input class="form-control" readonly="readonly" value="@item.TITULAR" />
+                                    </div>
+                                </div>
+                                <div class="form-group  has-success">
+                                    <label class="col-sm-2 control-label">Representante Legal</label>
+                                    <div class="col-sm-10">
+                                        <input class="form-control" readonly="readonly" value="@item.REPRESENTANTE_LEG" />
+                                    </div>
+                                </div>
+                                <div class="form-group  has-success">
+                                    <label class="col-sm-2 control-label">Ubicación</label>
+                                    <div class="col-sm-10">
+                                        <input class="form-control" readonly="readonly" value="@item.UBICACION" />
+                                    </div>
+                                </div>
+
+                                <div class="form-group  has-success">
+                                    <label class="col-sm-2 control-label">Dirección</label>
+                                    <div class="col-sm-10">
+                                        <input class="form-control" readonly="readonly" value="@item.DIRECCION_TH" />
+                                    </div>
+                                </div>
+                                <div class="form-group  has-success">
+                                    <label class="col-sm-2 control-label">Objetivos Actuales</label>
+                                    <div class="col-sm-10">
+                                        <input class="form-control" readonly="readonly" value="@item.OBJ_ACTUAL" />
+                                    </div>
+                                </div>
+                                <div class="form-group  has-success">
+                                    <label class="col-sm-2 control-label">Objetivos Principales</label>
+                                    <div class="col-sm-10">
+                                        <input class="form-control" readonly="readonly" value="@item.OBJ_PRINCIP" />
+                                    </div>
+                                </div>
+                                <div class="form-group  has-success">
+                                    <label class="col-sm-2 control-label">Estado del Establecimiento</label>
+                                    <div class="col-sm-10">
+                                        <input class="form-control" readonly="readonly" value="@item.ESTADO_ESTABLECIMIENTO" />
+                                    </div>
+                                </div>
+                                <div style="text-align: left">
+                                    <h5><strong>SUPERVISIÓN OSINFOR</strong></h5>
+                                </div>
+                                <div class="form-group has-success">
+                                    <label class="col-sm-2 control-label">Fecha supervisión</label>
+                                    <div class="col-sm-10">
+                                        <input class="form-control" readonly="readonly" id="txtfechaSup" value="@item.FECHA_FIN" />
+                                    </div>
+                                </div>
+
+                                <div class="form-group has-success">
+                                    <label class="col-sm-2 control-label">Recibe visitantes</label>
+                                    <div class="col-sm-10">
+                                        <input class="form-control" readonly="readonly" id="txtfechaSup" value="@item.VISITA" />
+                                    </div>
+                                </div>
+                                <div class="form-group has-success">
+                                    <label class="col-sm-2 control-label">Reproduce especies en cautiverio</label>
+                                    <div class="col-sm-10">
+                                        <input class="form-control" readonly="readonly" id="txtfechaSup" value="@item.REPRODUCE" />
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                        <script>
+                            $(function () {
+                                $('#tbEspecies').DataTable()
+
+                            })
+                        </script>
+                        <div class="box-body">
+                            <div class="box box-success">
+                                <br />
+                                <table id="tbEspecies" class="table table-bordered table-striped-success" style="width: 100% !important; font-size: 12px;">
+                                    <thead>
+                                        <tr style="text-align: center; background-color: #D2E9C3">
+                                            <td style="width: 5%">N°</td>
+                                            <td style="width: 95%">
+                                                @if (Model.oCEntidad != null)
+                                                {
+                                                    var item = Model.oCEntidad;
+                                                    <h5><i><strong>@item.DESCRIPCION</strong></i></h5>
+                                                }
+                                            </td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @if (Model.ListEspecies != null)
+                                        {
+                                            var count = 0;
+                                            foreach (var item in Model.ListEspecies)
+                                            {
+                                                <tr>
+                                                    <td>@(++count)</td>
+                                                    <td><i><strong>@item.Nombre_Cienti</strong></i> | @item.NOMBRE_COMUN</td>
+                                                </tr>
+                                            }
+                                        }
+                                    </tbody>
+                                </table>
+                                <br />
+                                <br />
+                            </div>
+                            <div class="w3-content w3-display-container">
+
+                                @if (Model.ListEspeciesFotos != null)
+                                {
+                                    foreach (var item in Model.ListEspeciesFotos)
+                                    {
+                                        <div class="w3-display-container mySlides" style="text-align:center;">
+                                            <img src="../@item.URL_FOTO.Replace("~", "")" style="width: 75%; height: 75%">
+                                            <div class="w3-display-bottomright w3-large w3-container w3-padding-16 w3-green" style="text-align:justify; font-size:12px !important; ">
+                                                @item.DESC_ESPECIES
+                                            </div>
+                                        </div>
+                                    }
+                                }
+
+                                <button class="w3-button w3-display-left w3-green" onclick="plusDivs(-1)">&#10094;</button>
+                                <button class="w3-button w3-display-right w3-green" onclick="plusDivs(1)">&#10095;</button>
+
+                            </div>
+                            <script>
+                                var slideIndex = 1;
+                                showDivs(slideIndex);
+
+                                function plusDivs(n) {
+                                    showDivs(slideIndex += n);
+                                }
+
+                                function showDivs(n) {
+                                    var i;
+                                    var x = document.getElementsByClassName("mySlides");
+                                    if (n > x.length) { slideIndex = 1 }
+                                    if (n < 1) { slideIndex = x.length }
+                                    for (i = 0; i < x.length; i++) {
+                                        x[i].style.display = "none";
+                                    }
+                                    x[slideIndex - 1].style.display = "block";
+                                }
+                            </script>
+                        </div>
+                    </div>
+                    <h5 class="text-center"><i><strong>"Usemos responsablemente nuestros bosques"</strong></i></h5>
+                    @if (Model.fecha_observ != null)
+                    {
+                        var fecha = Model.fecha_observ;
+                        <h6 class="text-center"><i>Fecha de ingreso al ZoObservatorio:</i> @fecha</h6>
+                    }
+                </div>
+                <div class="col-sm-1"></div>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-1">
+        <br />
+    </div>
+</div>

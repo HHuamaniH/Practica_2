@@ -1,0 +1,78 @@
+﻿
+<script src="~/Areas/Supervision/js/ManInforme/_EspecieCarrizoCampo.js"></script>
+
+<div class="modal-dialog" role="document">
+    <div class="modal-content">
+        <div class="modal-header text-small" style="cursor:move;">
+            <span>Individuo No Maderable</span>
+            <i class="fa fa-close" style="cursor:pointer;" data-dismiss="modal" aria-label="Close"></i>
+        </div>
+        <div class="modal-body">
+            <form id="frmItemCarrizoCampo">
+                @Html.Hidden("hdfCodInforme", (string)ViewBag.hdfCodInforme)
+                @Html.Hidden("hdfNumPoa", (Int32)ViewBag.hdfNumPoa)
+                @Html.Hidden("hdfCodMTipo", (string)ViewBag.hdfCodMTipo)
+                @Html.Hidden("hdfRegEstado")
+                @Html.Hidden("hdfCodMuestra")
+                @Html.Hidden("hdfCodTHabilitante")
+                <div class="form-row">
+                    <div class="form-group col-md-12">
+                        @Html.Partial("~/Areas/General/Views/Controles/_renderComboEspecie.cshtml")
+                    </div>
+                </div>
+                <div class="form-row dvDatosCarrizo">
+                    <div class="form-group col-md-6">
+                        <label for="txtTotalMuestra" class="text-small">Total de individuos por m2 o mata</label>
+                        @Html.TextBox("txtTotalMuestra", "", new { @class = "form-control form-control-sm", type = "number" })
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="txtTotalMuestraAprov" class="text-small">Individuos aprovechables o comerciales por m2 o mata</label>
+                        @Html.TextBox("txtTotalMuestraAprov", "", new { @class = "form-control form-control-sm", type = "number" })
+                    </div>
+                </div>
+                @*<div class="form-row dvDatosPlantaMedicinal">
+                    <div class="form-group col-md-6">
+                        <label for="txtUnidadMedida" class="text-small">Unidad de Medida</label>
+                        @Html.TextBox("txtUnidadMedida", "", new { @class = "form-control form-control-sm" })
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="txtNumIndividuo" class="text-small">Nro. de Individuos</label>
+                        @Html.TextBox("txtNumIndividuo", "", new { @class = "form-control form-control-sm", type = "number" })
+                    </div>
+                </div>*@
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label for="ddlZonaId" class="text-small">Zona UTM</label>
+                        @Html.DropDownList("ddlZonaId", new SelectList(ViewBag.ddlZona, "Value", "Text"), new { @class = "form-control form-control-sm" })
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label for="txtCEste" class="text-small">Coordenada Este Campo</label>
+                        @Html.TextBox("txtCEste", "", new { @class = "form-control form-control-sm", type = "number", maxlength = "6" })
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="txtCNorte" class="text-small">Coordenada Norte Campo</label>
+                        @Html.TextBox("txtCNorte", "", new { @class = "form-control form-control-sm", type = "number", maxlength = "7" })
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label for="ddlProductoId" class="text-small">Producto a extraer</label>
+                        @Html.DropDownList("ddlProductoId", new SelectList(ViewBag.ddlProducto, "Value", "Text"), new { @class = "form-control form-control-sm" })
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-12">
+                        <label for="txtObservacion" class="text-small">Observaciones</label>
+                        @Html.TextArea("txtObservacion", "", new { @class = "form-control form-control-sm", rows = "3" })
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-primary btn-sm" onclick="_EspecieCarrizoCampo.fnSubmitForm()">Guardar</button>
+            <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Cancelar</button>
+        </div>
+    </div>
+</div>

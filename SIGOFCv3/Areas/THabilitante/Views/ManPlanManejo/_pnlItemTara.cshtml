@@ -1,0 +1,176 @@
+﻿<div id="pnlItemTara">
+    <div class="table-responsive">
+        <table id="grvItemTaraCUTM" class="table table-hover table-bordered">
+            <thead>
+                <tr>
+                    <th colspan="8" class="text-sm-left">
+                        <div class="form-inline">
+                            <i class="fa mx-1 fa-lg fa-file-o" style="cursor:pointer;" data-toggle="tooltip" data-placement="top" title="Nuevo"></i>
+                            <i class="fa mx-2 fa-lg fa-trash-o" style="cursor:pointer;font-size:18px;" data-toggle="tooltip" data-placement="top" title="Eliminar Todos"></i>
+                            <div id="divArchivo" title="Importar Excel"><label id="lblUpload" style="cursor:pointer;" class="fa mx-2 fa-lg fa-file-excel-o"><input type="file" class="fileselect" id="fileTaraCUTM" name="fileTaraCUTM" size="60"></label></div>
+                            <i class="fa mx-2 fa-lg fa-folder-open" style="cursor:pointer;" data-toggle="tooltip" data-placement="top" title="Descargar Plantilla"></i>
+
+                            <strong>Coordenades UTM del área de manejo</strong>
+                        </div>
+                    </th>
+                </tr>
+                <tr>
+                    <th></th>
+                    <th></th>
+                    <th>Nº</th>
+                    <th>Parcelas</th>
+                    <th>Puntos</th>
+                    <th>Este</th>
+                    <th>Norte</th>
+                    <th>Referencia</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+        <table id="grvItemTaraAEAprov" class="table table-hover table-bordered">
+            <thead>
+                <tr>
+                    <th colspan="8" class="text-sm-left">
+                        <div class="form-inline">
+                            <i class="fa mx-1 fa-lg fa-file-o" style="cursor:pointer;" data-toggle="tooltip" data-placement="top" title="Nuevo"></i>
+                            <strong>Árboles en Edad Aprovechamiento</strong>
+                        </div>
+                    </th>
+                </tr>
+                <tr>
+                    <th></th>
+                    <th></th>
+                    <th>Nº</th>
+                    <th>Parcela</th>
+                    <th>N° Arboles</th>
+                    <th>N° árboles que no están en edad aprovechamiento</th>
+                    <th>Producción anual promedio por árbol</th>
+                    <th>Peso estimado vainas</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+        <table id="grvItemTaraPApro" class="table table-hover table-bordered">
+            <thead>
+                <tr>
+                    <th colspan="9" class="text-sm-left">
+                        <div class="form-inline">
+                            <i class="fa mx-1 fa-lg fa-file-o" style="cursor:pointer;" data-toggle="tooltip" data-placement="top" title="Nuevo"></i>
+                            <strong>Proyección de aprovechamiento</strong>
+                        </div>
+                    </th>
+                </tr>
+                <tr>
+                    <th></th>
+                    <th></th>
+                    <th>Nº</th>
+                    <th>Año</th>
+                    <th>N° Arboles</th>
+                    <th>Peso Vainas</th>
+                    <th>N° Cosechas</th>
+                    <th>N° Quintales</th>
+                    <th>Observación</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+        <table id="grvItemTaraESistemaA" class="table table-hover table-bordered">
+            <thead>
+                <tr>
+                    <th colspan="5" class="text-sm-left">
+                        <div class="form-inline">
+                            <i class="fa mx-1 fa-lg fa-file-o" style="cursor:pointer;" data-toggle="tooltip" data-placement="top" title="Nuevo"></i>
+                            <strong>Especificaciones del Sistema de Aprovechamiento</strong>
+                        </div>
+                    </th>
+                </tr>
+                <tr>
+                    <th></th>
+                    <th></th>
+                    <th>Nº</th>
+                    <th>Descripción</th>
+                    <th>Observación</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+        <table id="grvItemTaraPSilvicultural" class="table table-hover table-bordered">
+            <thead>
+                <tr>
+                    <th colspan="5" class="text-sm-left">
+                        <div class="form-inline">
+                            <i class="fa mx-1 fa-lg fa-file-o" style="cursor:pointer;" data-toggle="tooltip" data-placement="top" title="Nuevo"></i>
+                            <strong>Practicas Silviculturales</strong>
+                        </div>
+                    </th>
+                </tr>
+                <tr>
+                    <th></th>
+                    <th></th>
+                    <th>Nº</th>
+                    <th>Descripción</th>
+                    <th>Observación</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
+    <div class="form-row">
+        <div class="form-group col-md-12">
+            <label for="txtItemTara_ACapacitacion" class="text-small">Actividades de capacitación</label>
+            @Html.TextAreaFor(m => m.txtItemTara_ACapacitacion, new { @class = "form-control form-control-sm", rows = 2 })
+
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="form-group col-md-12">
+            <label for="txtItemTara_MComercializacion" class="text-small">Modalidad de comercialización</label>
+            @Html.TextAreaFor(m => m.txtItemTara_MComercializacion, new { @class = "form-control form-control-sm", rows = 2 })
+
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="form-group col-md-6">
+            <label for="txtItemTara_AnoEPlantacion" class="text-small">Año de establecimiento de la plantación</label>
+            @Html.EditorFor(m => m.txtItemTara_AnoEPlantacion, new { htmlAttributes = new { @class = "form-control form-control-sm", MaxLength = "4" } })
+        </div>
+    </div>
+    <div class="table-responsive">
+        <table id="grvItemTaraAutoExtraer" class="table table-hover table-bordered">
+            <thead>
+                <tr>
+                    <th colspan="13" class="text-sm-left">
+                        <div class="form-inline">
+                            <i class="fa mx-1 fa-lg fa-file-o" style="cursor:pointer;" data-toggle="tooltip" data-placement="top" title="Nuevo"></i>
+                            <strong>Cantidad Autorizada a extraer</strong>
+                        </div>
+                    </th>
+                </tr>
+                <tr>
+                    <th></th>
+                    <th></th>
+                    <th>Nº</th>
+                    <th>Nombre Cientifico</th>
+                    <th>Superficie HA</th>
+                    <th>Total PGMF</th>
+                    <th>1 año</th>
+                    <th>2 año</th>
+                    <th>3 año</th>
+                    <th>4 año</th>
+                    <th>5 año</th>
+                    <th>Der. Aprov. / quintal/Unitario</th>
+                    <th>Der. Aprov. / quintal/Total</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
+    <div class="form-row">
+        <div class="form-group col-md-6">
+            <a href="#" onclick="" style="cursor:pointer">
+                <i class="fa fa-search-plus" style="cursor:pointer"></i>
+                @Html.Label("lbtItemTaraInventarioSelec", string.IsNullOrEmpty(Model.lbtItemTaraInventarioSelec) ? "Ir Censo (0)" : Model.lbtItemTaraInventarioSelec, new { style = "cursor:pointer" })
+            </a>
+        </div>
+    </div>
+</div>

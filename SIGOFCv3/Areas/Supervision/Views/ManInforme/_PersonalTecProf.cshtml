@@ -1,0 +1,39 @@
+﻿
+<script src="~/Areas/Supervision/js/ManInforme/_PersonalTecProf.js"></script>
+
+<div class="modal-dialog" role="document">
+    <div class="modal-content">
+        <div class="modal-header text-small" style="cursor:move;">
+            <span>Persona Técnico Profesional</span>
+            <i class="fa fa-close" style="cursor:pointer;" data-dismiss="modal" aria-label="Close"></i>
+        </div>
+        <div class="modal-body">
+            <form id="frmItemPersonalTecProf">
+                @Html.Hidden("hdfRegEstado")
+                @Html.Hidden("hdfCodPersonalTECPROF")
+                <div class="form-row">
+                    <div class="form-group col-md-12">
+                        <label for="txtNombres" class="text-small">Nombre</label>
+                        @Html.TextBox("txtNombres", "", new { @class = "form-control form-control-sm", maxlength = "180", type = "text" })
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label for="ddlTipoPersonalTECPROFId" class="text-small">Tipo</label>
+                        @Html.DropDownList("ddlTipoPersonalTECPROFId", new SelectList(ViewBag.ddlTipoPersonalTECPROF, "Value", "Text"), new { @class = "form-control form-control-sm" })
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-12">
+                        <label for="txtOtro" class="text-small">Otro</label>
+                        @Html.TextBox("txtOtro", "", new { @class = "form-control form-control-sm", maxlength = "200", type = "text" })
+                    </div>
+                </div> 
+            </form>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-primary btn-sm" onclick="_PersonalTecProf.fnSubmitForm()">Guardar</button>
+            <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Cancelar</button>
+        </div>
+    </div>
+</div>

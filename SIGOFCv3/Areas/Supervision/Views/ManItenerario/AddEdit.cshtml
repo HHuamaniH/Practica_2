@@ -1,0 +1,229 @@
+﻿@model CapaEntidad.ViewModel.Documento.VM_Itenerario
+@{
+    ViewBag.Title = "AddEdit";
+    Layout = "~/Views/Shared/_LayoutMain.cshtml";
+
+}
+@section scripts{
+    <script>
+        "use strict"; var rol = '';
+    $(document).ready(function () {
+        //Validamos el rol del usuario
+        utilSigo.ValidaRol('@ViewBag.VAliasRol', 'btnRegistrarP','Edit');
+    });
+    </script>
+}
+<div class="container-fluid">
+    <div class="card">
+        <div class="card-header text-right">
+            Itinerario de Supervisión
+        </div>
+        <div class="card-body">
+            <div class="card">
+                <div class="card-header text-small" id="divTitle">
+                    <a id="btnRegistrarP" href="javascript:void(0)" style="cursor:pointer;" data-toggle="tooltip" data-placement="top" title="Guardar" onclick="_IteEdit.fnGuardar()"><i class="fa mx-2 fa-lg fa-save"></i></a>
+                    <a id="btnRegresarP" style="cursor:pointer;" data-toggle="tooltip" data-placement="top" title="Regresar"><i class="fa mx-2 fa-lg fa-reply" onclick="_IteEdit.fnRegresar()"></i></a>
+                    @if (Model.id == "0")
+                    {
+                        <span>Nuevo Registro</span>
+                    }
+                    else
+                    {
+                        <span>Modificando Registro</span>
+                    }
+                </div>
+                <div class="card-body">
+                    <form id="frmItenerarioAddEdit">
+                        @Html.HiddenFor(x => x.id)
+                        <ul class="nav nav-tabs" id="myTab" role="tablist">
+                            <li class="nav-item" id="navEstadoTab"><a class="nav-link active" data-toggle="tab" href="#navEstado" role="tab" aria-controls="home" aria-selected="true">Información de Salida a la Supervisión</a></li>
+
+                        </ul>
+                        <div class="tab-content" id="nav-tabContent">
+                            <div class="tab-pane fade show active" id="navEstado" role="tabpanel" aria-labelledby="nav-home-tab">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="form-row">
+                                            <div class="form-group col-md-3">
+                                                <label for="odId" class="text-small">Oficina desconcentrada</label>
+                                                @Html.DropDownListFor(m => m.odId, new SelectList(Model.od, "Value", "Text"), new { @class = "form-control form-control-sm" })
+                                            </div>
+                                            <div class="form-group col-md-3">
+                                                <label for="fechaSalida" class="text-small texto-recortado">Fecha de salida a campo</label>
+                                                @Html.EditorFor(m => m.fechaSalida, new { htmlAttributes = new { @class = "form-control form-control-sm", placeholder = "dd/mm/yyyy" } })
+                                            </div>
+                                            <div class="form-group col-md-3">
+                                                <label for="fechaRecepcionCheque" class="text-small texto-recortado">Fecha de recepción del Cheque</label>
+                                                @Html.EditorFor(m => m.fechaRecepcionCheque, new { htmlAttributes = new { @class = "form-control form-control-sm", placeholder = "dd/mm/yyyy" } })
+                                            </div>
+                                            <div class="form-group col-md-3">
+                                                <label for="fechaCobroCheque" class="text-small texto-recortado">Fecha de cobro del cheque</label>
+                                                @Html.EditorFor(m => m.fechaCobroCheque, new { htmlAttributes = new { @class = "form-control form-control-sm", placeholder = "dd/mm/yyyy" } })
+                                            </div>
+
+                                        </div>
+                                        <div class="form-row">
+                                            <div class="col-md-12">
+                                                @Html.Partial("~/Areas/Supervision/Views/ManItenerario/_renderSupervisor.cshtml", Model.tbSupervisor)
+                                            </div>
+                                        </div>
+                                        <br />
+                                        <div id="divSupervisionesAdd">
+                                            <div class="card-header text-small">
+                                                <strong>  Información de Retorno de la Supervisión</strong>
+                                            </div>
+                                            <br />
+                                            <div class="form-row">
+                                                <div class="form-group col-md-3">
+                                                    <label for="fechaRetornoCampo" class="text-small texto-recortado">Fecha de Regreso de campo</label>
+                                                    @Html.EditorFor(m => m.fechaRetornoCampo, new { htmlAttributes = new { @class = "form-control form-control-sm", placeholder = "dd/mm/yyyy" } })
+                                                </div>
+                                                <div class="form-group col-md-3">
+                                                    <label for="fechaInicioLabores" class="text-small texto-recortado">Fecha de Inicio de labores en la oficina</label>
+                                                    @Html.EditorFor(m => m.fechaInicioLabores, new { htmlAttributes = new { @class = "form-control form-control-sm", placeholder = "dd/mm/yyyy" } })
+                                                </div>
+                                            </div>
+                                            <div class="form-row">
+                                                <div class="col-md-12">
+                                                    <div id="divRenderSupervisiones">
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <br />
+                                        </div>
+                                        <br />
+                                        <div class="form-row">
+                                            <div class="form-group col-md-12">
+                                                <label for="ddPAuxiliosId" class="text-small">Se capacitó al personal que conforma la brigada sobre primeros auxilios</label>
+                                                @Html.DropDownListFor(m => m.ddPAuxiliosId, new SelectList(Model.ddPAuxilios, "Value", "Text"), new { @class = "form-control form-control-sm" })
+                                            </div>
+                                        </div>
+                                        <div class="form-row">
+                                            <div class="form-group col-md-12">
+                                                <label for="ddIncidentesId" class="text-small texto-recortado">Se capacitó al personal que conforma la brigada sobre el protocolo de respuesta frente a incidentes y accidentes durante el trabajo de campo</label>
+                                                @Html.DropDownListFor(m => m.ddIncidentesId, new SelectList(Model.ddIncidentes, "Value", "Text"), new { @class = "form-control form-control-sm" })
+                                            </div>
+                                        </div>
+                                        <div class="form-row">
+                                            <div class="form-group col-md-12">
+                                                <label for="ddPAuxiliosId" class="text-small">Observaciones generales</label>
+                                                @Html.TextAreaFor(x => x.observacion, new { @class = "form-control form-control-sm", rows = 2 })
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade hide" id="mdlControles_BuscarPersonaGeneral" tabindex="-1" role="dialog"></div>
+<div class="modal fade hide" id="mdlBuscarPersona" role="dialog"></div>
+<div class="modal fade" id="modalAddEditPersona" tabindex="-1" role="dialog"></div>
+<div class="modal fade hide" id="mdlBuscarCarta" role="dialog"></div>
+<div class="modal fade hide" id="mdlCartaModificar" role="dialog"></div>
+<script type="text/javascript">
+    var _IteEdit = {
+        fnGuardar: () => {
+            let frm = $("#frmItenerarioAddEdit");
+            let id = frm.find("#id").val().trim();
+            let odId = frm.find("#odId").val();
+            let fechaSalida = frm.find("#fechaSalida").val();
+            let fechaRecepcionCheque = frm.find("#fechaRecepcionCheque").val();
+            let fechaCobroCheque = frm.find("#fechaCobroCheque").val();
+            let fechaRetornoCampo = frm.find("#fechaRetornoCampo").val();
+            let fechaInicioLabores = frm.find("#fechaInicioLabores").val();
+            let ddPAuxiliosId = frm.find("#ddPAuxiliosId").val();
+            let ddIncidentesId = frm.find("#ddIncidentesId").val();
+            let observacion = frm.find("#observacion").val().trim();
+            if (odId == "0000000") {
+                utilSigo.toastWarning("Validación", "Seleccione oficina desconcentrada");
+                return false;
+            }
+            if (fechaSalida == "") {
+                utilSigo.toastWarning("Validación", "Ingrese la fecha de salida de la oficina");
+                frm.find("#fechaSalida").focus();
+                return false;
+            }
+            let model = {
+                id, odId, fechaSalida, fechaRecepcionCheque, fechaCobroCheque, fechaRetornoCampo, fechaInicioLabores, ddPAuxiliosId, ddIncidentesId, observacion
+            };
+            model.tbSupervisor = _renderSupervisor.fnGetList();
+            if (_renderSupervisor.fnCountSupervisor() <= 0) {
+                utilSigo.toastWarning("Validación", "Se debe seleccionar como mínimo un Supervisor");
+                return false;
+            }
+            model.ListEliTABLA = _renderSupervisor.tbEliTABLA;
+
+            utilSigo.dialogConfirm("", "Está seguro registrar los datos?", function (r) {
+                if (r) {
+                    let url = urlLocalSigo + "Supervision/ManItenerario/Guardar";
+                    let option = { url: url, datos: JSON.stringify(model), type: 'POST' };
+                    utilSigo.fnAjax(option, function (data) {
+                        if (data.success) {
+                            if (id == "0") {
+                                window.location = `${urlLocalSigo}/Supervision/ManItenerario/AddEdit?id=${data.id}`;
+                                sessionStorage.setItem('mensajeActIte', 'Datos registrados correctamente');
+                            }
+                            else {
+                                utilSigo.toastSuccess("Éxito", "Datos actualizados correctamente");
+                            }
+                        }
+                        else {
+                            utilSigo.toastWarning("Aviso", data.msj);
+                        }
+                    });
+                }
+            });
+        },
+        fnGetSupervisiones: () => {
+            let codBitacora = _IteEdit.frm.find("#id").val();
+            $.ajax({
+                url: urlLocalSigo + "Supervision/ManItenerario/_renserSupervisiones",
+                type: 'GET',
+                data: { codBitacora },
+                contentType: 'application/json; charset=utf-8',
+                dataType: 'html',
+                beforeSend: function () { $("#divRenderSupervisiones").html(''); },
+                error: function (jqXHR, error, errorThrown) { },
+                complete: function () { },
+                success: function (data) {
+                    $("#divRenderSupervisiones").html(data);
+                }
+            });
+        },
+        fnRegresar: () => {
+            let url = `${urlLocalSigo}/Supervision/ManItenerario/Index`;
+            window.location = url;
+        },
+        fnInit: () => {
+            $.fn.select2.defaults.set("theme", "bootstrap4");
+            _IteEdit.frm = $("#frmItenerarioAddEdit");
+            if (_IteEdit.frm.find("#id").val() == "0") {
+                $("#divSupervisionesAdd").hide();
+            } else {
+                $("#divSupervisionesAdd").show();
+            }
+            _IteEdit.frm.find("#odId").select2();
+            _IteEdit.frm.find("#ddPAuxiliosId").select2();
+            _IteEdit.frm.find("#ddIncidentesId").select2();
+            _IteEdit.frm.find("#fechaSalida").datepicker(initSigo.formatDatePicker);
+            _IteEdit.frm.find("#fechaRecepcionCheque").datepicker(initSigo.formatDatePicker);
+            _IteEdit.frm.find("#fechaCobroCheque").datepicker(initSigo.formatDatePicker);
+            _IteEdit.frm.find("#fechaRetornoCampo").datepicker(initSigo.formatDatePicker);
+            _IteEdit.frm.find("#fechaInicioLabores").datepicker(initSigo.formatDatePicker);
+            _IteEdit.fnGetSupervisiones();
+        }
+    };
+    $(document).ready(function () {
+        _IteEdit.fnInit();
+        if (sessionStorage.getItem('mensajeActIte') != null) {
+            if (sessionStorage.getItem('mensajeActIte') != "") utilSigo.toastSuccess("Éxito", "Datos registrados correctamente");
+            sessionStorage.removeItem("mensajeActIte");
+        }
+    });
+</script>

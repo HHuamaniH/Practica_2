@@ -1,0 +1,48 @@
+﻿<script>
+    $(function () {
+        $('#tbListDetalle').DataTable();
+    })
+</script>
+
+<div id="divTbResumen" style="width: 100%; overflow: auto; scrollbar-base-color: none;">
+    <button class="btn btn-outline btn-info" title="Descargar Resumen" onclick="_rendReporteSup.fnExportDetalle()"
+            type="button" style="margin-right:10px"><i class="fa fa-file-excel-o"></i> </button><br /><br />
+
+    <div style="text-align:center; color:cadetblue">
+        <h3>@Model.tituloReporteDetalle</h3>
+    </div>
+    <table id="tbListDetalle" class="table table-bordered table-striped-success" style="width: 100% !important; font-size:12px">
+        <thead>
+            <tr style=" text-align: center;  background-color: #dae7f5">
+                <td style="width: 2%">N°</td>
+
+                <td style="width: 15%">Título Habilitante</td>
+                <td style="width: 10%">Titular</td>
+                <td style="width: 10%">Modalidad</td>
+                <td style="width: 10%">Departamento</td>
+                <td style="width: 10%">Supervisor(es)</td>
+                <td style="width: 10%">Fecha Inicio Supervisión</td>
+                <td style="width: 10%">Fecha Término Supervisión</td>
+            </tr>
+        </thead>
+        <tbody id="bodyTable">
+            @if (Model.listSupModDetalle != null)
+            {
+                var count = 0;
+                foreach (var item in Model.listSupModDetalle)
+                {
+                    <tr>
+                        <td style="width: 2%">@(++count)</td>
+                        <td style="width: 15%">@item.NUM_THABILITANTE</td>
+                        <td style="width: 10%">@item.TITULAR</td>
+                        <td style="width: 10%">@item.MODALIDAD</td>
+                        <td style="width: 10%">@item.DEPARTAMENTO</td>
+                        <td style="width: 10%">@item.SUPERVISOR</td>
+                        <td style="width: 10%">@item.FECHA_INICIO</td>
+                        <td style="width: 10%">@item.FECHA_FIN</td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+</div>

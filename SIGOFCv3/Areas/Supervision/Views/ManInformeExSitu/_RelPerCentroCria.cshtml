@@ -1,0 +1,34 @@
+﻿<script src="~/Areas/Supervision/js/ManInformeExSitu/_RelPerCentroCria.js"></script>
+
+<div class="modal-dialog" role="document">
+    <div class="modal-content">
+        <div class="modal-header text-small" style="cursor:move;">
+            <span>Personal del Centro de Cría</span>
+            <i class="fa fa-close" style="cursor:pointer;" data-dismiss="modal" aria-label="Close"></i>
+        </div>
+        <div class="modal-body">
+            <form id="frmItemRelPerCentroCria">
+                @Html.Hidden("hdfRegEstado")
+                @Html.Hidden("hdfCodSecuencial")
+                <div class="form-row">
+                    <div class="form-group col-md-12">
+                        <label for="txtNombre" class="text-small">Nombre</label>
+                        @Html.TextBox("txtNombre", "", new { @class = "form-control form-control-sm" })
+                    </div>
+                    
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-12">
+                        <label for="txtCargo" class="text-small">Cargo</label>
+                        @Html.TextBox("txtCargo", "", new { @class = "form-control form-control-sm" })
+                    </div>
+                </div>               
+            </form>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-primary btn-sm" onclick="_RelPerCentroCria.fnSubmitForm()">Guardar</button>
+            <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Cancelar</button>
+        </div>
+    </div>
+</div>
+

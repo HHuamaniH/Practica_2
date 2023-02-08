@@ -1,0 +1,434 @@
+﻿@model CapaEntidad.ViewModel.VM_InformacionTitular
+@{
+    ViewBag.Title = "AddEdit";
+    Layout = "~/Views/Shared/_LayoutMain.cshtml";
+}
+
+<script src="~/Areas/Fiscalizacion/js/InformacionTitular/AddEdit.js"></script>
+@section scripts{
+    <script>
+        "use strict"; var rol = '';
+    $(document).ready(function () {
+        //Validamos el rol del usuario
+        utilSigo.ValidaRol('@ViewBag.VAliasRol', 'btnRegistrar', '@Model.vmControlCalidad.ddlIndicadorId');
+    });
+    </script>
+}
+<script type="text/javascript">
+    ManInfTitular_AddEdit.fnLoadData('@Html.Raw(Json.Encode(@Model.tbPersonaFirma))', "DataPersona");
+</script>
+
+<style type="text/css">
+    .tab-pane:not(.active) {
+        display: none;
+    }
+</style>
+
+<div class="container-fluid">
+    <div class="card">
+        <div class="card-header text-right">
+            @Model.lblTituloCabecera
+        </div>
+        <div class="card-body">
+            <div class="card">
+                <div class="card-header text-small">
+                    <a id="btnRegistrar" href="javascript:void(0)" style="cursor:pointer;" data-toggle="tooltip" data-placement="top" title="Guardar" onclick="ManInfTitular_AddEdit.fnSaveForm()"><i class="fa mx-2 fa-lg fa-save"></i></a>
+                    <a style="cursor:pointer;" data-toggle="tooltip" data-placement="top" title="Regresar" onclick="ManInfTitular_AddEdit.regresar()"><i class="fa mx-2 fa-lg fa-reply"></i></a>
+                    @Model.lblTituloEstado
+                </div>
+                <div class="card-body">
+                    <form id="frmInfTitularRegistro">
+                        <!-- form-->
+                        @Html.HiddenFor(m => m.hdfCodInfTitular)
+                        @Html.HiddenFor(m => m.hdfCodTipoInfTitular)
+                        @Html.HiddenFor(m => m.RegEstado)
+
+                        <!--para el tipo antes del PAU-->
+                        @Html.HiddenFor(m => m.hdfCodigoInfTitularAlerta)
+
+                        <ul class="nav nav-tabs" id="myTab" role="tablist">
+                            <li class="nav-item"><a class="nav-link active" data-toggle="tab" href="#navEstado" role="tab" aria-controls="home" aria-selected="true">Estado Situacional</a></li>
+                            <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#navDatos" role="tab" aria-controls="home" aria-selected="true">Datos Generales</a></li>
+                            <!--<li class="nav-item"><a class="nav-link" data-toggle="tab" href="#navAdicionales" role="tab" aria-controls="home" aria-selected="true">Datos Adicionales</a></li>-->
+                        </ul>
+                        <div class="tab-content">
+                            <div class="tab-pane fade show active" id="navEstado" role="tabpanel" aria-labelledby="nav-home-tab">
+                                @{ Html.RenderAction("_ControlCalidad", "Controles", new { area = "GENERAL", dto = Model.vmControlCalidad }); }
+                            </div>
+                            <div class="tab-pane" id="navDatos" role="tabpanel" aria-labelledby="nav-home-tab">
+                                <br />
+                                <div class="form-row">
+                                    <div class="form-group col-md-3">
+                                        <label for="lblOdId" class="text-small">O.D. desde donde registra la información</label>
+                                        @Html.DropDownListFor(m => m.ddlOdId, new SelectList(Model.ddlOd, "Value", "Text"), new { @class = "form-control form-control-sm" })
+                                    </div>
+                                    <div class="form-group col-md-10">
+                                        <label for="lblTipoNotificacion" class="text-small">Tipo de documento</label>
+                                        @Html.TextBoxFor(m => m.txtTipoInfTitular, new { @class = "form-control form-control-sm", disabled = "disabled" })
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label for="txtItemTprofesional" class="text-small texto-recortado">Persona que presenta el documento<i class="fa fa-cog fa-spin text-danger" id="iconRNotificacionCodigo" style="display:none;" data-toggle="tooltip" data-placement="top" title="Nuevo"></i></label>
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text"><i class="fa fa-plus" style="cursor:pointer;" onclick="ManInfTitular_AddEdit.fnBuscarPersona('TI', 'N');" data-toggle="tooltip" data-placement="top" title="Agregar"></i></span>
+                                            </div>
+                                            @Html.EditorFor(m => m.txtItemTprofesional, new { htmlAttributes = new { @class = "form-control form-control-sm", @disabled = "disabled" } })
+                                            @Html.HiddenFor(m => m.hdfItemTprofesionalCodigo)
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-md-3">
+                                        <label for="lblTitularId" class="text-small">Relación con el titular</label>
+                                        @Html.DropDownListFor(m => m.ddlTitularId, new SelectList(Model.ddlTitular, "Value", "Text"), new { @class = "form-control form-control-sm" })
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div id="dvFechaEmision" class="form-group col-md-2">
+                                        <label for="txtFechaEmision" class="text-small">Fecha de Emisión</label>
+                                        @Html.EditorFor(m => m.txtFechaEmision, new { htmlAttributes = new { @class = "form-control form-control-sm", placeholder = "dd/mm/yyyy", title = "la fecha a ingresar debe ser en el formato dd/mm/yyyy", maxlength = "10" } })
+                                    </div>
+                                    <div class="form-group col-md-2">
+                                        <label for="txtFechaPresentacion" class="text-small">Fecha de presentación</label>
+                                        @Html.EditorFor(m => m.txtFechaPresentacion, new { htmlAttributes = new { @class = "form-control form-control-sm", placeholder = "dd/mm/yyyy", title = "la fecha a ingresar debe ser en el formato dd/mm/yyyy", maxlength = "10" } })
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="col-md-6 mb-3">
+                                        <label for="lblUbigeoText" class="text-small">Lugar presentación<i class="fa fa-cog fa-spin text-danger" id="iconUbigeo" style="display:none;" data-toggle="tooltip" data-placement="top" title="Seleccione Ubigeo"></i></label>
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text"><i class="fa fa-search" style="cursor:pointer;" data-toggle="tooltip" data-placement="top" title="Seleccionar Ubigeo" onclick="ManInfTitular_AddEdit.fnBuscarUbigeo('EUbigeoTit');"></i></span>
+                                            </div>
+                                            @Html.EditorFor(m => m.txtItemEstUbigeoLugarpresentacion, new { htmlAttributes = new { @class = "form-control form-control-sm", @disabled = "disabled" } })
+                                            @Html.HiddenFor(m => m.hdfItemEstUbigeoLugarpresentacion)
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-md-4">
+                                        <label for="txtItemEtiNContrato" class="text-small">Número de documento presentado por el titular</label>
+                                        @Html.EditorFor(m => m.txtItemEtiNContrato, new { htmlAttributes = new { @class = "form-control form-control-sm" } })
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group col-md-6">
+                                        <label for="lblDomicilioProcesal" class="text-small">Domicilio procesal</label>
+                                        @Html.TextBoxFor(m => m.txtDomicilioProcesal, new { @class = "form-control form-control-sm" })
+                                    </div>
+                                </div><br />
+                                <div id="dvRenderListInforme" class="form-row" style="margin-bottom:10px;">
+                                    <div class="col-md-12">
+                                        @Html.Partial("~/Areas/Fiscalizacion/Views/InformacionTitular/Shared/_renderListInforme.cshtml", Model)
+                                    </div>
+                                </div><br />
+                                <div id="divApelarMedCaut" class="form-row">
+                                    <div class="form-group col-md-6">
+                                        <div>
+                                            <label for="lblApelarMedCaut" class="text-small" style="margin-top:6px;">Apelar medidas cuatelares:</label>
+                                            @Html.CheckBoxFor(m => m.chkApelarMedCaut, new { @class = "form-check-input", style = "width:15px;height:16px;margin-left:10px;" })
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="col-md-6 mb-3">
+                                        <label for="txtItemTprofesional" class="text-small texto-recortado">Otra persona que firma el documento<i class="fa fa-cog fa-spin text-danger" id="iconRNotificacionCodigo" style="display:none;" data-toggle="tooltip" data-placement="top" title="Nuevo"></i></label>
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text"><i class="fa fa-plus" style="cursor:pointer;" onclick="ManInfTitular_AddEdit.fnBuscarPersona('OT', 'N');" data-toggle="tooltip" data-placement="top" title="Agregar"></i></span>
+                                            </div>
+                                            @Html.EditorFor(m => m.txtItemOtraPersonafirma, new { htmlAttributes = new { @class = "form-control form-control-sm", @disabled = "disabled" } })
+                                            @Html.HiddenFor(m => m.hdfItemOtraPersonafirma)
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-md-3">
+                                        <label for="lblOdId" class="text-small">Tipo de Profesional</label>
+                                        @Html.DropDownListFor(m => m.ddlTipoProfesionalId, new SelectList(Model.ddlTipoProfesional, "Value", "Text"), new { @class = "form-control form-control-sm" })
+                                    </div>
+                                    <div class="form-group col-md-3">
+                                        <label class="text-small">&ensp;</label><br />
+                                        <button type="button" id="btnAddPersonas" class="btn btn-info btn-sm">Agregar</button>
+                                    </div>
+                                </div><br />
+                                <div class="form-row">
+                                    <div class="table-responsive">
+                                        <table id="tbPersonaFirma" style="width:100%;margin:0px !important;" class="table table-hover table-bordered">
+                                            <thead>
+                                                <tr>
+                                                    <th colspan="4" class="text-sm-left">
+                                                        <strong>Listado de personas que firmaron el documento</strong>
+                                                    </th>
+                                                </tr>
+                                            </thead>
+                                        </table>
+                                    </div>
+                                </div><br /><br />
+                                <div id="pnlblVista1" class="form-row">
+                                    <label for="lblAmpDescargo" class="text-medium" style="font-weight:bold;margin-left:5px;">Descargos</label>
+                                </div>
+                                <div id="pnVista1" class="form-row">
+                                    <div class="col-md-6 mb-3">
+                                        <label for="lblEstUbigeo" class="text-small">Domicilio procesal señalado<i class="fa fa-cog fa-spin text-danger" id="iconUbigeo" style="display:none;" data-toggle="tooltip" data-placement="top" title="Seleccione Ubigeo"></i></label>
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text"><i class="fa fa-search" style="cursor:pointer;" data-toggle="tooltip" data-placement="top" title="Seleccionar Ubigeo" onclick="ManInfTitular_AddEdit.fnBuscarUbigeo('EUbigeo');"></i></span>
+                                            </div>
+                                            @Html.EditorFor(m => m.txtItemEstUbigeo, new { htmlAttributes = new { @class = "form-control form-control-sm", @disabled = "disabled" } })
+                                            @Html.HiddenFor(m => m.hdfItemEstUbigeoCodigo)
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-md-6">
+                                        <label for="lblDireccion" class="text-small">Dirección</label>
+                                        @Html.TextBoxFor(m => m.txtDireccion, new { @class = "form-control form-control-sm" })
+                                    </div>
+                                    <div class="form-group col-md-2">
+                                        <label for="lbltelefono" class="text-small">Teléfono consignado</label>
+                                        @Html.TextBoxFor(m => m.txttelefono, new { @class = "form-control form-control-sm" })
+                                    </div>
+                                    <div class="form-group col-md-6">
+                                        <label for="lblcorreo" class="text-small">Correo electrónico consignado</label>
+                                        @Html.TextBoxFor(m => m.txtcorreo, new { @class = "form-control form-control-sm" })
+                                    </div>
+                                    <div class="form-group col-md-3">
+                                        <label for="lblDescargoTipoId" class="text-small">Tipo de descargo</label>
+                                        @Html.DropDownListFor(m => m.ddlDescargoTipoId, new SelectList(Model.ddlDescargoTipo, "Value", "Text"), new { @class = "form-control form-control-sm" })
+                                    </div>
+                                    <div id="panelFirmaLegalizada" class="form-group col-md-2">
+                                        <div>
+                                            <label for="lblfirmaLegalizada" class="text-small" style="margin-top:6px;">Firma legalizada:</label>
+                                            @Html.CheckBoxFor(m => m.chkfirmaLegalizada, new { @class = "form-check-input", style = "width:15px;height:16px;margin-left:10px;" })
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-md-2">
+                                        <div>
+                                            <label for="lblAudienciaOral" class="text-small" style="margin-top:6px;">Solicita audiencia oral:</label>
+                                            @Html.CheckBoxFor(m => m.chkAudienciaOral, new { @class = "form-check-input", style = "width:15px;height:16px;margin-left:10px;" })
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-md-12">
+                                        <label for="txtdescripciondescargo" class="text-small">Descripción</label>
+                                        @Html.TextAreaFor(m => m.txtdescripciondescargo, 3, 1, new { @class = "form-control form-control-sm" })
+                                    </div>
+                                </div>
+                                <div id="pnlblVista2" class="form-row">
+                                    <label for="lblRecursosReconsideracion" class="text-medium" style="font-weight:bold;margin-left:5px;">Recurso de reconsideración</label>
+                                </div>
+                                <div id="pnVista2" class="form-row">
+                                    <div class="form-group col-md-12">
+                                        <label for="txtrecursorecon" class="text-small">Medios probatorios presentados</label>
+                                        @Html.TextAreaFor(m => m.txtrecursorecon, 3, 1, new { @class = "form-control form-control-sm" })
+                                    </div>
+                                </div>
+                                <div id="pnlblVista3" class="form-row">
+                                    <label for="lblRecursosApelacion" class="text-medium" style="font-weight:bold;margin-left:5px;">Recurso de Apelación</label>
+                                </div>
+                                <div id="pnVista3" class="form-row">
+                                    <div class="form-group col-md-12">
+                                        <label for="txtrecursoapelacion" class="text-small">Medios probatorios presentados</label>
+                                        @Html.TextAreaFor(m => m.txtrecursoapelacion, 3, 1, new { @class = "form-control form-control-sm" })
+                                    </div>
+                                    <div class="form-group col-md-6">
+                                        <div>
+                                            <label for="lblNulidad_RecApe" class="text-small" style="margin-top:6px;">Nulidad:</label>
+                                            @Html.CheckBoxFor(m => m.chkNulidad_RecApe, new { @class = "form-check-input", style = "width:15px;height:16px;margin-left:10px;" })
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-md-12">
+                                        <label for="txtObservNul_RecApe" class="text-small">Observación nulidad</label>
+                                        @Html.TextAreaFor(m => m.txtObservNul_RecApe, 3, 1, new { @class = "form-control form-control-sm" })
+                                    </div>
+                                </div>
+                                <div id="pnlblVista4" class="form-row">
+                                    <label for="lblSolicVariacion" class="text-medium" style="font-weight:bold;margin-left:5px;">Solicitud de Variación de Medida Cautelar</label>
+                                </div>
+                                <div id="pnVista4" class="form-row">
+                                    <div class="form-group col-md-12">
+                                        <label for="txtfunpresentadoscautelar" class="text-small">Documentos presentados</label>
+                                        @Html.TextAreaFor(m => m.txtfunpresentadoscautelar, 3, 1, new { @class = "form-control form-control-sm" })
+                                    </div>
+                                </div>
+                                <div id="pnlblVista5" class="form-row">
+                                    <label for="lblPropuestaPago" class="text-medium" style="font-weight:bold;margin-left:5px;">Propuesta de pago</label>
+                                </div>
+                                <div id="pnVista5" class="form-row">
+                                    <div class="form-group col-md-2">
+                                        <label for="lblnumcuotas" class="text-small">Número de cuotas</label>
+                                        @Html.TextBoxFor(m => m.txtnumcuotas, new { @class = "form-control form-control-sm" })
+                                    </div>
+                                    <div class="form-group col-md-2">
+                                        <label for="lblnumcuotas" class="text-small">Monto de cada cuota</label>
+                                        @Html.TextBoxFor(m => m.txtmontocuota, new { @class = "form-control form-control-sm" })
+                                    </div>
+                                    <div class="form-group col-md-2">
+                                        <label for="txtfecinipago" class="text-small">Fecha de Inicio de Pago</label>
+                                        @Html.EditorFor(m => m.txtfecinipago, new { htmlAttributes = new { @class = "form-control form-control-sm", placeholder = "dd/mm/yyyy", title = "la fecha a ingresar debe ser en el formato dd/mm/yyyy", maxlength = "10" } })
+                                    </div>
+                                    <div class="form-group col-md-2">
+                                        <label for="txtfecfinpago" class="text-small">Fecha de Fin de Pago</label>
+                                        @Html.EditorFor(m => m.txtfecfinpago, new { htmlAttributes = new { @class = "form-control form-control-sm", placeholder = "dd/mm/yyyy", title = "la fecha a ingresar debe ser en el formato dd/mm/yyyy", maxlength = "10" } })
+                                    </div>
+                                </div>
+                                <div id="pnlblVista6" class="form-row">
+                                    <label for="lblAudienciaOral" class="text-medium" style="font-weight:bold;margin-left:5px;">Audiencia Oral</label>
+                                </div>
+                                <div id="pnVista6" class="form-row">
+                                    <div class="form-group col-md-12">
+                                        <label for="txtfundamentosaudiencia" class="text-small">Fundamentos presentados</label>
+                                        @Html.TextAreaFor(m => m.txtfundamentosaudiencia, 3, 1, new { @class = "form-control form-control-sm" })
+                                    </div>
+                                </div>
+                                <div id="pnlblVista7" class="form-row">
+                                    <label for="lblInspOcular" class="text-medium" style="font-weight:bold;margin-left:5px;">Inspección Ocular</label>
+                                </div>
+                                <div id="pnVista7" class="form-row">
+                                    <div class="form-group col-md-12">
+                                        <label for="txtfundamentosaudiencia" class="text-small">Fundamentos presentados</label>
+                                        @Html.TextAreaFor(m => m.txtinspeccionoc, 3, 1, new { @class = "form-control form-control-sm" })
+                                    </div>
+                                </div>
+                                <div id="pnlblVista8" class="form-row">
+                                    <label for="lblAmpDescargo" class="text-medium" style="font-weight:bold;margin-left:5px;">Ampliación de Descargo</label>
+                                </div>
+                                <div id="pnVista8" class="card">
+                                    <div class="form-row">
+                                        <div class="form-group col-md-12">
+                                            <label for="txtampliaciondescargo" class="text-small">Documentos Presentados</label>
+                                            @Html.TextAreaFor(m => m.txtampliaciondescargo, 3, 1, new { @class = "form-control form-control-sm" })
+                                        </div>
+                                    </div>
+                                </div>
+                                <div id="pnlblVista9" class="form-row">
+                                    <label for="lblSolicInformacion" class="text-medium" style="font-weight:bold;margin-left:5px;">Solicitud de Información</label>
+                                </div>
+                                <div id="pnVista9" class="card">
+                                    <div class="form-row">
+                                        <div class="form-group col-md-12">
+                                            <label for="txtsolicitudfInfo" class="text-small">Información solicitada</label>
+                                            @Html.TextAreaFor(m => m.txtsolicitudfInfo, 3, 1, new { @class = "form-control form-control-sm" })
+                                        </div>
+                                    </div>
+                                </div>
+                                <div id="pnlblVista10" class="form-row">
+                                    <label for="lblOtros" class="text-medium" style="font-weight:bold;margin-left:5px;">Otros</label>
+                                </div>
+                                <div id="pnVista10" class="card">
+                                    <div class="form-row">
+                                        <div class="form-group col-md-12">
+                                            <label for="txtotros" class="text-small">Motivo</label>
+                                            @Html.TextAreaFor(m => m.txtotros, 3, 1, new { @class = "form-control form-control-sm" })
+                                        </div>
+                                    </div>
+                                </div>
+                                <div id="pnlblVista11" class="form-row">
+                                    <label for="lblQueja" class="text-medium" style="font-weight:bold;margin-left:5px;">Queja</label>
+                                </div>
+                                <div id="pnVista11" class="card">
+                                    <div class="form-row">
+                                        <div class="form-group col-md-12">
+                                            <label for="txtotros" class="text-small">Fundamento de la queja</label>
+                                            @Html.TextAreaFor(m => m.txtFundQueja_Queja, 3, 1, new { @class = "form-control form-control-sm" })
+                                        </div>
+                                    </div>
+                                </div>
+                                <div id="pnlblVista12" class="form-row">
+                                    <label for="lblMedidasCorrectivas" class="text-medium" style="font-weight:bold;margin-left:5px;">Medidas correctivas implementadas</label>
+                                </div>
+                                <div id="pnVista12" class="card">
+                                    <div class="form-row">
+                                        <div class="form-group col-md-12">
+                                            @Html.TextAreaFor(m => m.txtObservMedidaCorrect, 3, 1, new { @class = "form-control form-control-sm" })
+                                        </div>
+                                    </div>
+                                </div>
+                                <div id="pnlblVista13" class="form-row">
+                                    <label for="lblResumenActividad" class="text-medium" style="font-weight:bold;margin-left:5px;">Resumen de actividades</label>
+                                </div>
+                                <div id="pnVista13" class="card">
+                                    <div class="form-row">
+                                        <div class="form-group col-md-12">
+                                            @Html.TextAreaFor(m => m.txtObservActividad, 3, 1, new { @class = "form-control form-control-sm" })
+                                        </div>
+                                    </div>
+                                </div>
+                                <div id="pnlblVista14" class="form-row">
+                                    <label for="lblMotivoDesistimiento" class="text-medium" style="font-weight:bold;margin-left:5px;">Motivo del desistimiento</label>
+                                </div>
+                                <div id="pnVista14" class="card">
+                                    <div class="form-row">
+                                        <div class="form-group col-md-12">
+                                            @Html.TextAreaFor(m => m.txtMotivoDesistimiento, 3, 1, new { @class = "form-control form-control-sm" })
+                                        </div>
+                                    </div>
+                                </div>
+                                <div id="pnlblVista15" class="form-row">
+                                    <label for="lblNewUbigeoTH" class="text-medium" style="font-weight:bold;margin-left:5px;">Nuevo Domicilio Procesal</label>
+                                </div>
+                                <div id="pnVista15" class="form-row">
+                                    <div class="col-md-6 mb-3">
+                                        <label for="lblUbigeoText" class="text-small">Lugar presentación<i class="fa fa-cog fa-spin text-danger" id="iconUbigeo" style="display:none;" data-toggle="tooltip" data-placement="top" title="Seleccione Ubigeo"></i></label>
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text"><i class="fa fa-search" style="cursor:pointer;" data-toggle="tooltip" data-placement="top" title="Seleccionar Ubigeo" onclick="ManInfTitular_AddEdit.fnBuscarUbigeo('EUbigeoNew');"></i></span>
+                                            </div>
+                                            @Html.EditorFor(m => m.txtItemNewUbigeoTH, new { htmlAttributes = new { @class = "form-control form-control-sm", @disabled = "disabled" } })
+                                            @Html.HiddenFor(m => m.hdfItemNewUbigeoTHCodigo)
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-md-6">
+                                        <label for="lblDireccion" class="text-small">Dirección</label>
+                                        @Html.TextBoxFor(m => m.txtNewDireccionTH, new { @class = "form-control form-control-sm" })
+                                    </div>
+                                    <div class="form-group col-md-12">
+                                        <label for="txtampliaciondescargo" class="text-small">Información de Referencia</label>
+                                        @Html.TextAreaFor(m => m.txtNewReferenciaTH, 3, 1, new { @class = "form-control form-control-sm" })
+                                    </div>
+                                </div>
+                                <div id="pnlblVista16" class="form-row">
+                                    <label for="lblDescSubsanacion" class="text-medium" style="font-weight:bold;margin-left:5px;">Descripción de la Subsanación</label>
+                                </div>
+                                <div id="pnVista16" class="form-row">
+                                    <div class="form-group col-md-12">
+                                        @Html.TextAreaFor(m => m.txtObservSubsanacion, 3, 1, new { @class = "form-control form-control-sm" })
+                                    </div>
+                                </div>
+                                <div id="pnlblVista17" class="form-row">
+                                    <label for="lblImprocedenciaRecurso" class="text-medium" style="font-weight:bold;margin-left:5px;">Improcedencia del Recurso presentado</label>
+                                </div>
+                                <div id="pnVista17" class="form-row">
+                                    <div class="form-group col-md-6">
+                                        <div>
+                                            <label for="lblEmitioCarta" class="text-small" style="margin-top:6px;">¿Se emitio carta informando de la improcedencia del recurso?</label>
+                                            @Html.CheckBoxFor(m => m.chkEmitioCarta, new { @class = "form-check-input", style = "width:15px;height:16px;margin-left:10px;" })
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-md-2">
+                                        <label for="lblNroCarta" class="text-small">Nro de carta emitida</label>
+                                        @Html.TextBoxFor(m => m.txtNroCarta, new { @class = "form-control form-control-sm" })
+                                    </div>
+                                    <div class="form-group col-md-2">
+                                        <label for="txtFechaCarta" class="text-small">Fecha de emisión de la carta</label>
+                                        @Html.EditorFor(m => m.txtFechaCarta, new { htmlAttributes = new { @class = "form-control form-control-sm", placeholder = "dd/mm/yyyy", title = "la fecha a ingresar debe ser en el formato dd/mm/yyyy", maxlength = "10" } })
+                                    </div>
+                                </div><br />
+                                <div class="form-row">
+                                    <label for="lblNewUbigeoTH" class="text-medium" style="font-weight:bold;margin-left:5px;">Observaciones</label>
+                                </div>
+                                <div class="card">
+                                    <div class="form-row">
+                                        <div class="form-group col-md-12">
+                                            @Html.TextAreaFor(m => m.txtObservaciones, 3, 1, new { @class = "form-control form-control-sm" })
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="tab-pane" id="navAdicionales" role="tabpanel" aria-labelledby="nav-home-tab">
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@* Para el control genérico de personas *@
+<div class="modal fade hide" id="mdlBuscarPersona" role="dialog"></div>
+<div class="modal fade" id="modalAddEditPersona" tabindex="-1" role="dialog"></div>
+<div class="modal fade hide" id="mdlBuscarUbigeo" role="dialog"></div>
+<div id="divIframe"></div>

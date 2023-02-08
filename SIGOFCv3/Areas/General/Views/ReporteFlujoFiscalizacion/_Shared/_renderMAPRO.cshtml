@@ -1,0 +1,928 @@
+﻿<style type="text/css">
+    table {
+        width: 100%;
+        text-align: center;
+        font-size: 0.9rem;
+        border: 1px solid #495057;
+        color: #495057;
+    }
+
+    td {
+        padding-top: 8px;
+        padding-bottom: 8px;
+    }
+
+    .botonHref1 {
+        color: #495057;
+    }
+
+    .botonHref1:hover {
+        color: #007bff;
+    }
+
+    .formato2 {
+        background: #B8C5D5;
+    }
+
+    .formato3 {
+        background: #EEAD80;
+    }
+
+    .formato5 {
+        background: #F2C6A8;
+    }
+
+    .formato7 {
+        width:50%;
+        height:100px;
+    }
+
+    .divcantidad {
+        margin-top: 5px;
+    }
+</style>
+
+@model CapaEntidad.ViewModel.VM_FlujoFiscalizacion
+<script src="~/Areas/General/js/ReporteFlujoFiscalizacion/FormatoFecha.js"></script>
+
+<script type="text/javascript">
+    var _renderMAPRO = {};
+
+    _renderMAPRO._fnListar = function (opc, cell, consulta, fechaini, fechafin) {
+        _reporte.frm.find("#idTab").val(2);
+
+        if (opc == 1) _reporte.frm.find("#txtnomconsulta").val("Cantidad total de informes recibidos por la DFFFS (No incluye devueltos)");
+        else if (opc == 2) _reporte.frm.find("#txtnomconsulta").val("Cantidad de informes evaluados (No incluye devueltos)");
+        else if (opc == 4) _reporte.frm.find("#txtnomconsulta").val("Cantidad de PAU iniciados - notificados");
+        else if (opc == 5) _reporte.frm.find("#txtnomconsulta").val("Cantidad de IFI emitidos");
+
+        var cad = 'Del ' + _renderMAPRO.frm.find("#" + fechaini).val() + ' Al ' + _renderMAPRO.frm.find("#" + fechafin).val();
+
+        $('#tituloTablaMAPRO').html('Listado de Documentos consultados "' + _reporte.frm.find("#txtnomconsulta").val() + '" ' + cad);
+        $("#frmMAPRO").hide();
+        $("#divlistaMAPRO").show();
+
+        _renderListaMAPRO.fnSubmitForm(opc, cell, consulta);
+    }
+
+    _renderMAPRO.fnListar = function (opc, cell, consulta, fechaini, fechafin, chkFechaini) {
+        _reporte.frm.find("#idTab").val(2);
+
+        if (opc == 1) _reporte.frm.find("#txtnomconsulta").val("Cantidad total de informes recibidos por la DFFFS (No incluye devueltos)");
+        else if (opc == 2) _reporte.frm.find("#txtnomconsulta").val("Cantidad de informes evaluados (No incluye devueltos)");
+        else if (opc == 4) _reporte.frm.find("#txtnomconsulta").val("Cantidad de PAU iniciados - notificados");
+        else if (opc == 5) _reporte.frm.find("#txtnomconsulta").val("Cantidad de IFI emitidos");
+        else if (opc == 7) _reporte.frm.find("#txtnomconsulta").val("Cantidad de RD apeladas - resueltas");
+        else if (opc == 8) _reporte.frm.find("#txtnomconsulta").val("Cantidad de RD confirmadas");
+        else if (opc == 10) _reporte.frm.find("#txtnomconsulta").val("Cantidad de RD reconsideradas - resueltas");
+        else if (opc == 11) _reporte.frm.find("#txtnomconsulta").val("Cantidad de RD emitidos en el plazo");
+
+        var cad='';
+
+        if (_renderMAPRO.frm.find("#" + chkFechaini).prop('checked')) cad = 'Del ' + _renderMAPRO.frm.find("#" + fechaini).val() + ' ';
+        cad += 'Al ' + _renderMAPRO.frm.find("#" + fechafin).val();
+
+        $('#tituloTablaMAPRO').html('Listado de Documentos consultados "' + _reporte.frm.find("#txtnomconsulta").val() + '" ' + cad);
+        $("#frmMAPRO").hide();
+        $("#divlistaMAPRO").show();
+
+        _renderListaMAPRO.fnSubmitForm(opc, cell, consulta);
+    }
+
+    _renderMAPRO._fnValidarCampos = function (fechaini, fechafin) {
+        var valor = true;
+
+        if (_renderMAPRO.frm.find("#" + fechaini).val() == null ||
+            _renderMAPRO.frm.find("#" + fechaini).val().length == 0 ||
+            /^\s+$/.test(_renderMAPRO.frm.find("#" + fechaini).val())) {
+            valor = false;
+        }
+        if (_renderMAPRO.frm.find("#" + fechafin).val() == null ||
+            _renderMAPRO.frm.find("#" + fechafin).val().length == 0 ||
+            /^\s+$/.test(_renderMAPRO.frm.find("#" + fechafin).val())) {
+            valor = false;
+        }
+
+        return valor;
+    }
+
+    _renderMAPRO.fnValidarCampos = function (fechaini, fechafin, chkFechaini) {
+        var valor = true;
+
+        if (_renderMAPRO.frm.find("#" + chkFechaini).prop('checked')) {
+            if (_renderMAPRO.frm.find("#" + fechaini).val() == null ||
+                _renderMAPRO.frm.find("#" + fechaini).val().length == 0 ||
+                /^\s+$/.test(_renderMAPRO.frm.find("#" + fechaini).val())) {
+                valor = false;
+            }
+        }
+        if (_renderMAPRO.frm.find("#" + fechafin).val() == null ||
+            _renderMAPRO.frm.find("#" + fechafin).val().length == 0 ||
+            /^\s+$/.test(_renderMAPRO.frm.find("#" + fechafin).val())) {
+            valor = false;
+        }
+
+        return valor;
+    }
+
+    _renderMAPRO._fnConsultar = function (fechaini, fechafin, opc) {
+        _reporte.frm.find("#idTab").val(2);
+        var idTab = _reporte.frm.find("#idTab").val();
+        var ddlSubdirMAPROId = _renderMAPRO.frm.find("#ddlSubdirMAPROId").val();
+        var txtfechainiMAPRO1 = _renderMAPRO.frm.find("#txtfechainiMAPRO1").val();
+        var txtfechafinMAPRO1 = _renderMAPRO.frm.find("#txtfechafinMAPRO1").val();
+        var cantMAPRO1 = _renderMAPRO.frm.find("#cantMAPRO1").val();
+        var txtfechainiMAPRO2 = _renderMAPRO.frm.find("#txtfechainiMAPRO2").val();
+        var txtfechafinMAPRO2 = _renderMAPRO.frm.find("#txtfechafinMAPRO2").val();
+        var txtfechainiMAPRO3 = _renderMAPRO.frm.find("#txtfechainiMAPRO3").val();
+        var txtfechafinMAPRO3 = _renderMAPRO.frm.find("#txtfechafinMAPRO3").val();
+        var cantMAPRO4 = _renderMAPRO.frm.find("#cantMAPRO4").val();
+        var txtfechainiMAPRO4 = _renderMAPRO.frm.find("#txtfechainiMAPRO4").val();
+        var txtfechafinMAPRO4 = _renderMAPRO.frm.find("#txtfechafinMAPRO4").val();
+        var opcConsulta = opc;
+        var params = {
+            idTab, ddlSubdirMAPROId, txtfechainiMAPRO1, txtfechafinMAPRO1, cantMAPRO1, txtfechainiMAPRO2, txtfechafinMAPRO2,
+            txtfechainiMAPRO3, txtfechafinMAPRO3, cantMAPRO4, txtfechainiMAPRO4, txtfechafinMAPRO4, opcConsulta
+        };
+
+        if (_renderMAPRO._fnValidarCampos(fechaini, fechafin)) {
+            if (_renderMAPRO.frm.find("#" + fechaini).val().length == 10 && _renderMAPRO.frm.find("#" + fechafin).val().length == 10) {
+                if (chkEsMenor(_renderMAPRO.frm.find("#" + fechafin).val(), _renderMAPRO.frm.find("#" + fechaini).val())) {
+                    utilSigo.toastInfo("Aviso", "La fecha final no puede ser menor que la fecha inicial");
+
+                    _renderMAPRO.fnOcultarCampos(opc);
+
+                    return false;
+                }
+                else _renderMAPRO.fnValidarConsulta(opc, params);
+            }
+            else {
+                utilSigo.toastInfo("Aviso", "Formato de fechas incorrecto");
+                _renderMAPRO.fnOcultarCampos(opc);
+            }
+        } else {
+            utilSigo.toastInfo("Aviso", "Falta ingresar datos");
+            _renderMAPRO.fnOcultarCampos(opc);
+        }
+    }
+
+    _renderMAPRO.fnConsultar = function (fechaini, fechafin, chkFechaini, opc) {
+        _reporte.frm.find("#idTab").val(2);
+        var idTab = _reporte.frm.find("#idTab").val();
+        var ddlSubdirMAPROId = _renderMAPRO.frm.find("#ddlSubdirMAPROId").val();
+        var chkFechaini1 = _renderMAPRO.frm.find("#chkFechaini1").prop('checked');
+        var txtfechainiMAPRO1 = _renderMAPRO.frm.find("#txtfechainiMAPRO1").val();
+        var txtfechafinMAPRO1 = _renderMAPRO.frm.find("#txtfechafinMAPRO1").val();
+        var cantMAPRO1 = _renderMAPRO.frm.find("#cantMAPRO1").val();
+        var chkFechaini2 = _renderMAPRO.frm.find("#chkFechaini2").prop('checked');
+        var txtfechainiMAPRO2 = _renderMAPRO.frm.find("#txtfechainiMAPRO2").val();
+        var txtfechafinMAPRO2 = _renderMAPRO.frm.find("#txtfechafinMAPRO2").val();
+        var chkFechaini3 = _renderMAPRO.frm.find("#chkFechaini3").prop('checked');
+        var txtfechainiMAPRO3 = _renderMAPRO.frm.find("#txtfechainiMAPRO3").val();
+        var txtfechafinMAPRO3 = _renderMAPRO.frm.find("#txtfechafinMAPRO3").val();
+        var cantMAPRO4 = _renderMAPRO.frm.find("#cantMAPRO4").val();
+        var chkFechaini4 = _renderMAPRO.frm.find("#chkFechaini4").prop('checked');
+        var txtfechainiMAPRO4 = _renderMAPRO.frm.find("#txtfechainiMAPRO4").val();
+        var txtfechafinMAPRO4 = _renderMAPRO.frm.find("#txtfechafinMAPRO4").val();
+        var chkFechaini5 = _renderMAPRO.frm.find("#chkFechaini5").prop('checked');
+        var txtfechainiMAPRO5 = _renderMAPRO.frm.find("#txtfechainiMAPRO5").val();
+        var txtfechafinMAPRO5 = _renderMAPRO.frm.find("#txtfechafinMAPRO5").val();
+        var cantMAPRO7 = _renderMAPRO.frm.find("#cantMAPRO7").val();
+        var chkFechaini6 = _renderMAPRO.frm.find("#chkFechaini6").prop('checked');
+        var txtfechainiMAPRO6 = _renderMAPRO.frm.find("#txtfechainiMAPRO6").val();
+        var txtfechafinMAPRO6 = _renderMAPRO.frm.find("#txtfechafinMAPRO6").val();
+        var chkFechaini7 = _renderMAPRO.frm.find("#chkFechaini7").prop('checked');
+        var txtfechainiMAPRO7 = _renderMAPRO.frm.find("#txtfechainiMAPRO7").val();
+        var txtfechafinMAPRO7 = _renderMAPRO.frm.find("#txtfechafinMAPRO7").val();
+        var cantMAPRO10 = _renderMAPRO.frm.find("#cantMAPRO10").val();
+        var chkFechaini8 = _renderMAPRO.frm.find("#chkFechaini8").prop('checked');
+        var txtfechainiMAPRO8 = _renderMAPRO.frm.find("#txtfechainiMAPRO8").val();
+        var txtfechafinMAPRO8 = _renderMAPRO.frm.find("#txtfechafinMAPRO8").val();
+        var opcConsulta = opc;
+        var params = {
+            idTab, ddlSubdirMAPROId, chkFechaini1, txtfechainiMAPRO1, txtfechafinMAPRO1, cantMAPRO1, chkFechaini2, txtfechainiMAPRO2, txtfechafinMAPRO2, chkFechaini3,
+            txtfechainiMAPRO3, txtfechafinMAPRO3, cantMAPRO4, chkFechaini4, txtfechainiMAPRO4, txtfechafinMAPRO4, chkFechaini5, txtfechainiMAPRO5, txtfechafinMAPRO5,
+            cantMAPRO7, chkFechaini6, txtfechainiMAPRO6, txtfechafinMAPRO6, chkFechaini7, txtfechainiMAPRO7, txtfechafinMAPRO7, cantMAPRO10, chkFechaini8,
+            txtfechainiMAPRO8, txtfechafinMAPRO8, opcConsulta
+        };
+
+        if (_renderMAPRO.fnValidarCampos(fechaini, fechafin, chkFechaini)) {
+            if (_renderMAPRO.frm.find("#" + chkFechaini).prop('checked')) {
+                if (_renderMAPRO.frm.find("#" + fechaini).val().length == 10 && _renderMAPRO.frm.find("#" + fechafin).val().length == 10) {
+                    if (chkEsMenor(_renderMAPRO.frm.find("#" + fechafin).val(), _renderMAPRO.frm.find("#" + fechaini).val())) {
+                        utilSigo.toastInfo("Aviso", "La fecha final no puede ser menor que la fecha inicial");
+
+                        _renderMAPRO.fnOcultarCampos(opc);
+
+                        return false;
+                    }
+                    else _renderMAPRO.fnValidarConsulta(opc, params);
+                }
+                else {
+                    utilSigo.toastInfo("Aviso", "Formato de fechas incorrecto");
+                    _renderMAPRO.fnOcultarCampos(opc);
+                }
+            }
+            else {
+                if (_renderMAPRO.frm.find("#" + fechafin).val().length == 10) _renderMAPRO.fnValidarConsulta(opc, params);
+                else {
+                    utilSigo.toastInfo("Aviso", "Formato de fechas incorrecto");
+                    _renderMAPRO.fnOcultarCampos(opc);
+                }
+            }
+        } else {
+            utilSigo.toastInfo("Aviso", "Falta ingresar datos");
+            _renderMAPRO.fnOcultarCampos(opc);
+        } 
+    }
+
+    _renderMAPRO.fnValidarConsulta = function (opc, params) {
+        if (opc == 2 || opc == 4 || opc == 6 || opc == 8) {
+            var cantidad;
+            var cadena;
+
+            switch (opc) {
+                case 2:
+                    cantidad = _renderMAPRO.frm.find("#cantMAPRO1").val();
+                    cadena = "Cantidad total de informes derivados a la DFFFS y pendientes de evaluar";
+                    break;
+
+                case 4:
+                    cantidad = _renderMAPRO.frm.find("#cantMAPRO4").val();
+                    cadena = "Cantidad de PAU iniciados y notificados, pendientes de IFI";
+                    break;
+
+                case 6:
+                    cantidad = _renderMAPRO.frm.find("#cantMAPRO7").val();
+                    cadena = "Cantidad de RD apeladas y resueltas";
+                    break;
+
+                case 8:
+                    cantidad = _renderMAPRO.frm.find("#cantMAPRO10").val();
+                    cadena = "Cantidad de RD reconsideradas y resueltas";
+                    break;
+            }
+
+            if (cantidad == 0) {
+                utilSigo.toastInfo('Aviso', 'No es posible efectuar la operación cuando el valor de "' + cadena +
+                    '" es igual a "0"');
+            }
+            else _renderMAPRO.fnTraerData(opc, params);
+        }
+        else _renderMAPRO.fnTraerData(opc, params);
+    }
+
+    _renderMAPRO.fnTraerData = function (opc, params) {
+        var url = urlLocalSigo + "General/ReporteFlujoFiscalizacion/ObtenerData";
+        var option = { url: url, datos: JSON.stringify(params), type: 'POST' };
+
+        utilSigo.fnAjax(option, function (data) {
+            if (data.success) {
+                var obj = data.result;
+
+                if (obj != null) {
+                    switch (opc) {
+                        case 1:
+                            _renderMAPRO.frm.find("#cantMAPRO1").val(obj.cantMAPRO1);
+                            _renderMAPRO.fnSetValorTabla1();
+                            $("#divEvalMAPRO").show();
+                            break;
+
+                        case 2:
+                            _renderMAPRO.frm.find("#cantMAPRO2").val(obj.cantMAPRO2);
+                            _renderMAPRO.frm.find("#cantMAPRO3").val(obj.cantMAPRO3);
+                            _renderMAPRO.fnSetValorTabla2();
+                            $("#trEvalMAPRO").show();
+                            break;
+
+                        case 3:
+                            _renderMAPRO.frm.find("#cantMAPRO4").val(obj.cantMAPRO4);
+                            _renderMAPRO.fnSetValorTabla3();
+                            $("#divPAUInstMAPRO").show();
+                            break;
+
+                        case 4:
+                            _renderMAPRO.frm.find("#cantMAPRO5").val(obj.cantMAPRO5);
+                            _renderMAPRO.frm.find("#cantMAPRO6").val(obj.cantMAPRO6);
+                            _renderMAPRO.fnSetValorTabla4();
+                            $("#trPAUInstMAPRO").show();
+                            break;
+
+                        case 5:
+                            _renderMAPRO.frm.find("#cantMAPRO7").val(obj.cantMAPRO7);
+                            _renderMAPRO.frm.find("#cantMAPRO8").val(obj.cantMAPRO8);
+                            _renderMAPRO.frm.find("#cantMAPRO9").val(obj.cantMAPRO9);
+                            _renderMAPRO.fnSetValorTabla5();
+                            _renderMAPRO.fnSetValorTabla6();
+                            $("#divPAUDecisor").show();
+                            break;
+
+                        /*case 6:
+                            _renderMAPRO.frm.find("#cantMAPRO8").val(obj.cantMAPRO8);
+                            _renderMAPRO.frm.find("#cantMAPRO9").val(obj.cantMAPRO9);
+                            _renderMAPRO.fnSetValorTabla6();
+                            $("#trPAUDecisor").show();
+                            break;*/
+
+                        case 7:
+                            _renderMAPRO.frm.find("#cantMAPRO10").val(obj.cantMAPRO10);
+                            _renderMAPRO.frm.find("#cantMAPRO11").val(obj.cantMAPRO11);
+                            _renderMAPRO.frm.find("#cantMAPRO12").val(obj.cantMAPRO12);
+                            _renderMAPRO.fnSetValorTabla7();
+                            _renderMAPRO.fnSetValorTabla8();
+                            $("#divReconsideracion").show();
+                            break;
+
+                        /*case 8:
+                            _renderMAPRO.frm.find("#cantMAPRO11").val(obj.cantMAPRO11);
+                            _renderMAPRO.frm.find("#cantMAPRO12").val(obj.cantMAPRO12);
+                            _renderMAPRO.fnSetValorTabla8();
+                            $("#trReconsideracion").show();
+                            break;*/
+                    }
+                }
+                else _renderMAPRO.fnOcultarCampos(opc);
+            }
+            else {
+                utilSigo.toastWarning("Aviso", "Sucedio un error, Comuníquese con el Administrador");
+                _renderMAPRO.fnOcultarCampos(opc);
+                console.log(data.result);
+            }
+        });
+    }
+
+    _renderMAPRO.fnOcultarCampos = function (opc) {
+        switch (opc) {
+            case 1:
+                $("#divEvalMAPRO").hide();
+                $("#trEvalMAPRO").hide();
+                break;
+
+            case 2:
+                $("#trEvalMAPRO").hide();
+                break;
+
+            case 3:
+                $("#divPAUInstMAPRO").hide();
+                $("#trPAUInstMAPRO").hide();
+                break;
+
+            case 4:
+                $("#trPAUInstMAPRO").hide();
+                break;
+
+            case 5:
+                $("#divPAUDecisor").hide();
+                //$("#trPAUDecisor").hide();
+                break;
+
+            /*case 6:
+                $("#trPAUDecisor").hide();
+                break;*/
+
+            case 7:
+                $("#divReconsideracion").hide();
+                //$("#trReconsideracion").hide();
+                break;
+
+            /*case 8:
+                $("#trReconsideracion").hide();
+                break;*/
+        }
+    }
+
+    _renderMAPRO.fnSetValorTabla1 = function () {
+        $("#divcantMAPRO1").text(_renderMAPRO.frm.find("#cantMAPRO1").val());
+    }
+
+    _renderMAPRO.fnSetValorTabla2 = function () {
+        $("#divcantMAPRO2").text(_renderMAPRO.frm.find("#cantMAPRO2").val());
+        $("#divcantMAPRO3").text(_renderMAPRO.frm.find("#cantMAPRO3").val() + "%");
+    }
+
+    _renderMAPRO.fnSetValorTabla3 = function () {
+        $("#divcantMAPRO4").text(_renderMAPRO.frm.find("#cantMAPRO4").val());
+    }
+
+    _renderMAPRO.fnSetValorTabla4 = function () {
+        $("#divcantMAPRO5").text(_renderMAPRO.frm.find("#cantMAPRO5").val());
+        $("#divcantMAPRO6").text(_renderMAPRO.frm.find("#cantMAPRO6").val() + "%");
+    }
+
+    _renderMAPRO.fnSetValorTabla5 = function () {
+        $("#divcantMAPRO7").text(_renderMAPRO.frm.find("#cantMAPRO7").val());
+    }
+
+    _renderMAPRO.fnSetValorTabla6 = function () {
+        $("#divcantMAPRO8").text(_renderMAPRO.frm.find("#cantMAPRO8").val());
+        $("#divcantMAPRO9").text(_renderMAPRO.frm.find("#cantMAPRO9").val() + "%");
+    }
+
+    _renderMAPRO.fnSetValorTabla7 = function () {
+        $("#divcantMAPRO10").text(_renderMAPRO.frm.find("#cantMAPRO10").val());
+    }
+
+    _renderMAPRO.fnSetValorTabla8 = function () {
+        $("#divcantMAPRO11").text(_renderMAPRO.frm.find("#cantMAPRO11").val());
+        $("#divcantMAPRO12").text(_renderMAPRO.frm.find("#cantMAPRO12").val() + "%");
+    }
+
+    $(document).ready(function () {
+        _renderMAPRO.frm = $("#frmMAPRO");
+
+        _renderMAPRO.frm.find("#txtfechainiMAPRO1").datepicker({ format: "dd/mm/yyyy", autoclose: true, language: 'es' });
+        //_renderMAPRO.frm.find("#txtfechainiMAPRO1").prop("disabled", true);
+        _renderMAPRO.frm.find("#txtfechainiMAPRO1").keyup(function () {
+            return formateafecha(this.value);
+        });
+
+        _renderMAPRO.frm.find("#txtfechafinMAPRO1").datepicker({ format: "dd/mm/yyyy", autoclose: true, language: 'es' });
+        _renderMAPRO.frm.find("#txtfechafinMAPRO1").keyup(function () {
+            return formateafecha(this.value);
+        });
+
+        _renderMAPRO.frm.find("#txtfechainiMAPRO2").datepicker({ format: "dd/mm/yyyy", autoclose: true, language: 'es' });
+        //_renderMAPRO.frm.find("#txtfechainiMAPRO2").prop("disabled", true);
+        _renderMAPRO.frm.find("#txtfechainiMAPRO2").keyup(function () {
+            return formateafecha(this.value);
+        });
+
+        _renderMAPRO.frm.find("#txtfechafinMAPRO2").datepicker({ format: "dd/mm/yyyy", autoclose: true, language: 'es' });
+        _renderMAPRO.frm.find("#txtfechafinMAPRO2").keyup(function () {
+            return formateafecha(this.value);
+        });
+
+        _renderMAPRO.frm.find("#txtfechainiMAPRO3").datepicker({ format: "dd/mm/yyyy", autoclose: true, language: 'es' });
+        //_renderMAPRO.frm.find("#txtfechainiMAPRO3").prop("disabled", true);
+        _renderMAPRO.frm.find("#txtfechainiMAPRO3").keyup(function () {
+            return formateafecha(this.value);
+        });
+
+        _renderMAPRO.frm.find("#txtfechafinMAPRO3").datepicker({ format: "dd/mm/yyyy", autoclose: true, language: 'es' });
+        _renderMAPRO.frm.find("#txtfechafinMAPRO3").keyup(function () {
+            return formateafecha(this.value);
+        });
+
+        _renderMAPRO.frm.find("#txtfechainiMAPRO4").datepicker({ format: "dd/mm/yyyy", autoclose: true, language: 'es' });
+        //_renderMAPRO.frm.find("#txtfechainiMAPRO4").prop("disabled", true);
+        _renderMAPRO.frm.find("#txtfechainiMAPRO4").keyup(function () {
+            return formateafecha(this.value);
+        });
+
+        _renderMAPRO.frm.find("#txtfechafinMAPRO4").datepicker({ format: "dd/mm/yyyy", autoclose: true, language: 'es' });
+        _renderMAPRO.frm.find("#txtfechafinMAPRO4").keyup(function () {
+            return formateafecha(this.value);
+        });
+
+        _renderMAPRO.frm.find("#txtfechainiMAPRO5").datepicker({ format: "dd/mm/yyyy", autoclose: true, language: 'es' });
+        _renderMAPRO.frm.find("#txtfechainiMAPRO5").prop("disabled", true);
+        _renderMAPRO.frm.find("#txtfechainiMAPRO5").keyup(function () {
+            return formateafecha(this.value);
+        });
+
+        _renderMAPRO.frm.find("#txtfechafinMAPRO5").datepicker({ format: "dd/mm/yyyy", autoclose: true, language: 'es' });
+        _renderMAPRO.frm.find("#txtfechafinMAPRO5").keyup(function () {
+            return formateafecha(this.value);
+        });
+
+        /*_renderMAPRO.frm.find("#txtfechainiMAPRO6").datepicker({ format: "dd/mm/yyyy", autoclose: true, language: 'es' });
+        _renderMAPRO.frm.find("#txtfechainiMAPRO6").prop("disabled", true);
+        _renderMAPRO.frm.find("#txtfechainiMAPRO6").keyup(function () {
+            return formateafecha(this.value);
+        });
+
+        _renderMAPRO.frm.find("#txtfechafinMAPRO6").datepicker({ format: "dd/mm/yyyy", autoclose: true, language: 'es' });
+        _renderMAPRO.frm.find("#txtfechafinMAPRO6").keyup(function () {
+            return formateafecha(this.value);
+        });*/
+
+        _renderMAPRO.frm.find("#txtfechainiMAPRO7").datepicker({ format: "dd/mm/yyyy", autoclose: true, language: 'es' });
+        _renderMAPRO.frm.find("#txtfechainiMAPRO7").prop("disabled", true);
+        _renderMAPRO.frm.find("#txtfechainiMAPRO7").keyup(function () {
+            return formateafecha(this.value);
+        });
+
+        _renderMAPRO.frm.find("#txtfechafinMAPRO7").datepicker({ format: "dd/mm/yyyy", autoclose: true, language: 'es' });
+        _renderMAPRO.frm.find("#txtfechafinMAPRO7").keyup(function () {
+            return formateafecha(this.value);
+        });
+
+        /*_renderMAPRO.frm.find("#txtfechainiMAPRO8").datepicker({ format: "dd/mm/yyyy", autoclose: true, language: 'es' });
+        _renderMAPRO.frm.find("#txtfechainiMAPRO8").prop("disabled", true);
+        _renderMAPRO.frm.find("#txtfechainiMAPRO8").keyup(function () {
+            return formateafecha(this.value);
+        });
+
+        _renderMAPRO.frm.find("#txtfechafinMAPRO8").datepicker({ format: "dd/mm/yyyy", autoclose: true, language: 'es' });
+        _renderMAPRO.frm.find("#txtfechafinMAPRO8").keyup(function () {
+            return formateafecha(this.value);
+        });*/
+
+        _renderMAPRO.fnSetValorTabla1();
+        _renderMAPRO.fnSetValorTabla2();
+        _renderMAPRO.fnSetValorTabla3();
+        _renderMAPRO.fnSetValorTabla4();
+        _renderMAPRO.fnSetValorTabla5();
+        _renderMAPRO.fnSetValorTabla6();
+        _renderMAPRO.fnSetValorTabla7();
+        _renderMAPRO.fnSetValorTabla8();
+
+        _renderMAPRO.frm.find("#chkFechaini1").change(function () { 
+            if ($(this).is(':checked')) _renderMAPRO.frm.find("#txtfechainiMAPRO1").prop("disabled", false);
+            else {
+                _renderMAPRO.frm.find("#txtfechainiMAPRO1").val(null);
+                _renderMAPRO.frm.find("#txtfechainiMAPRO1").prop("disabled", true);
+            }
+        });
+
+        _renderMAPRO.frm.find("#chkFechaini2").change(function () {
+            if ($(this).is(':checked')) _renderMAPRO.frm.find("#txtfechainiMAPRO2").prop("disabled", false);
+            else {
+                _renderMAPRO.frm.find("#txtfechainiMAPRO2").val(null);
+                _renderMAPRO.frm.find("#txtfechainiMAPRO2").prop("disabled", true);
+            }
+        });
+
+        _renderMAPRO.frm.find("#chkFechaini3").change(function () {
+            if ($(this).is(':checked')) _renderMAPRO.frm.find("#txtfechainiMAPRO3").prop("disabled", false);
+            else {
+                _renderMAPRO.frm.find("#txtfechainiMAPRO3").val(null);
+                _renderMAPRO.frm.find("#txtfechainiMAPRO3").prop("disabled", true);
+            }
+        });
+
+        _renderMAPRO.frm.find("#chkFechaini4").change(function () {
+            if ($(this).is(':checked')) _renderMAPRO.frm.find("#txtfechainiMAPRO4").prop("disabled", false);
+            else {
+                _renderMAPRO.frm.find("#txtfechainiMAPRO4").val(null);
+                _renderMAPRO.frm.find("#txtfechainiMAPRO4").prop("disabled", true);
+            }
+        });
+
+        _renderMAPRO.frm.find("#chkFechaini5").change(function () {
+            if ($(this).is(':checked')) _renderMAPRO.frm.find("#txtfechainiMAPRO5").prop("disabled", false);
+            else {
+                _renderMAPRO.frm.find("#txtfechainiMAPRO5").val(null);
+                _renderMAPRO.frm.find("#txtfechainiMAPRO5").prop("disabled", true);
+            }
+        });
+
+        /*_renderMAPRO.frm.find("#chkFechaini6").change(function () {
+            if ($(this).is(':checked')) _renderMAPRO.frm.find("#txtfechainiMAPRO6").prop("disabled", false);
+            else {
+                _renderMAPRO.frm.find("#txtfechainiMAPRO6").val(null);
+                _renderMAPRO.frm.find("#txtfechainiMAPRO6").prop("disabled", true);
+            }
+        });*/
+
+        _renderMAPRO.frm.find("#chkFechaini7").change(function () {
+            if ($(this).is(':checked')) _renderMAPRO.frm.find("#txtfechainiMAPRO7").prop("disabled", false);
+            else {
+                _renderMAPRO.frm.find("#txtfechainiMAPRO7").val(null);
+                _renderMAPRO.frm.find("#txtfechainiMAPRO7").prop("disabled", true);
+            }
+        });
+
+        /*_renderMAPRO.frm.find("#chkFechaini8").change(function () {
+            if ($(this).is(':checked')) _renderMAPRO.frm.find("#txtfechainiMAPRO8").prop("disabled", false);
+            else {
+                _renderMAPRO.frm.find("#txtfechainiMAPRO8").val(null);
+                _renderMAPRO.frm.find("#txtfechainiMAPRO8").prop("disabled", true);
+            }
+        });*/
+    });
+</script>
+
+<div id="frmMAPRO" class="text-small">
+    <div><br /><br /></div>
+    @Html.HiddenFor(m => m.cantMAPRO1)
+    @Html.HiddenFor(m => m.cantMAPRO2)
+    @Html.HiddenFor(m => m.cantMAPRO3)
+    @Html.HiddenFor(m => m.cantMAPRO4)
+    @Html.HiddenFor(m => m.cantMAPRO5)
+    @Html.HiddenFor(m => m.cantMAPRO6)
+    @Html.HiddenFor(m => m.cantMAPRO7)
+    @Html.HiddenFor(m => m.cantMAPRO8)
+    @Html.HiddenFor(m => m.cantMAPRO9)
+    @Html.HiddenFor(m => m.cantMAPRO10)
+    @Html.HiddenFor(m => m.cantMAPRO11)
+    @Html.HiddenFor(m => m.cantMAPRO12)
+    <div class="form-row">
+        <div class="form-group col-md-2">
+            <label for="lblSubdirMAPROId" class="text-small">Subdirección:</label>
+            @Html.DropDownListFor(m => m.ddlSubdirMAPROId, new SelectList(Model.ddlSubdirMAPRO, "Value", "Text"), new { @class = "form-control form-control-sm" })
+        </div>
+    </div><br /><br /><br />
+    <div class="form-row">
+        <!--<div class="form-group col-md-4">
+            <div style="display: flex; position: relative; margin-top:55px;">
+                <label for="lblini" class="text-small" style="margin-top:8px;margin-right:10px;">Del: </label><br />
+                @@Html.EditorFor(m => m.txtfechainiMAPRO1, new { htmlAttributes = new { @@class = "form-control form-control-sm", placeholder = "dd/mm/yyyy", title = "la fecha a ingresar debe ser en el formato dd/mm/yyyy", maxlength = "10" } })
+                <label for="lblfin" class="text-small" style="margin-top:8px;margin-right:10px;margin-left:10px;">Hasta: </label><br />
+                @@Html.EditorFor(m => m.txtfechafinMAPRO1, new { htmlAttributes = new { @@class = "form-control form-control-sm", placeholder = "dd/mm/yyyy", title = "la fecha a ingresar debe ser en el formato dd/mm/yyyy", maxlength = "10" } })
+                <button type="button" class="btn btn-primary btn-sm" style="margin-left:15px;" onclick="_renderMAPRO.fnConsultar('txtfechainiMAPRO1','txtfechafinMAPRO1',1)">Consultar</button>
+            </div>
+            <div style="display: flex; position: relative; margin-top:70px;">
+                <label for="lblini" class="text-small" style="margin-top:8px;margin-right:10px;">Del: </label>
+                @@Html.EditorFor(m => m.txtfechainiMAPRO2, new { htmlAttributes = new { @@class = "form-control form-control-sm", placeholder = "dd/mm/yyyy", title = "la fecha a ingresar debe ser en el formato dd/mm/yyyy", maxlength = "10" } })
+                <label for="lblfin" class="text-small" style="margin-top:8px;margin-right:10px;margin-left:10px;">Hasta: </label>
+                @@Html.EditorFor(m => m.txtfechafinMAPRO2, new { htmlAttributes = new { @@class = "form-control form-control-sm", placeholder = "dd/mm/yyyy", title = "la fecha a ingresar debe ser en el formato dd/mm/yyyy", maxlength = "10" } })
+                <button type="button" class="btn btn-primary btn-sm" style="margin-left:15px;" onclick="_renderMAPRO.fnConsultar('txtfechainiMAPRO2','txtfechafinMAPRO2',2)">Consultar</button>
+            </div>
+        </div>-->
+        <div class="form-group col-md-4">
+            <div style="display: flex; position: relative; margin-top:30px;">
+                <label class="text-small" style="margin-top:8px;font-weight:bold;">Evaluación de Informe de supervisión</label>
+            </div>
+            <div style="display: flex; position: relative;">
+                <div>
+                    <!--@@Html.CheckBoxFor(m => m.chkFechaini1, new { @@class = "form-check-input", style = "width:15px;height:16px;margin-left:0px;" })-->
+                    <label for="lblini" class="text-small" style="margin-top:8px;margin-right:10px;">Del: </label>
+                    <div style="width:119.02px;">
+                        @Html.EditorFor(m => m.txtfechainiMAPRO1, new { htmlAttributes = new { @class = "form-control form-control-sm", placeholder = "dd/mm/yyyy", title = "la fecha a ingresar debe ser en el formato dd/mm/yyyy", maxlength = "10" } })
+                    </div>
+                </div>
+                <div style="margin-left:15px;">
+                    <label for="lblfin" class="text-small" style="margin-top:8px;">Hasta: </label>
+                    <div style="width:119.02px;">
+                        @Html.EditorFor(m => m.txtfechafinMAPRO1, new { htmlAttributes = new { @class = "form-control form-control-sm", placeholder = "dd/mm/yyyy", title = "la fecha a ingresar debe ser en el formato dd/mm/yyyy", maxlength = "10" } })
+                    </div>
+                </div>
+                <div style="margin-left:15px;position:relative">
+                    <button type="button" class="btn btn-primary btn-sm" style="height:31px;bottom:0px;position:absolute;" onclick="_renderMAPRO._fnConsultar('txtfechainiMAPRO1','txtfechafinMAPRO1',1)">Consultar</button>
+                </div>
+            </div>
+            <div style="display: flex; position: relative; margin-top:20px;">
+                <label class="text-small" style="margin-top:8px;font-weight:bold;">Evaluación de Informe de supervisión</label>
+            </div>
+            <div style="display: flex; position: relative;">
+                <div>
+                    <!--@@Html.CheckBoxFor(m => m.chkFechaini2, new { @@class = "form-check-input", style = "width:15px;height:16px;margin-left:0px;" })-->
+                    <label for="lblini" class="text-small" style="margin-top:8px;margin-right:10px;">Del: </label>
+                    <div style="width:119.02px;">
+                        @Html.EditorFor(m => m.txtfechainiMAPRO2, new { htmlAttributes = new { @class = "form-control form-control-sm", placeholder = "dd/mm/yyyy", title = "la fecha a ingresar debe ser en el formato dd/mm/yyyy", maxlength = "10" } })
+                    </div>
+                </div>
+                <div style="margin-left:15px;">
+                    <label for="lblfin" class="text-small" style="margin-top:8px;">Hasta: </label>
+                    <div style="width:119.02px;">
+                        @Html.EditorFor(m => m.txtfechafinMAPRO2, new { htmlAttributes = new { @class = "form-control form-control-sm", placeholder = "dd/mm/yyyy", title = "la fecha a ingresar debe ser en el formato dd/mm/yyyy", maxlength = "10" } })
+                    </div>
+                </div>
+                <div style="margin-left:15px;position:relative">
+                    <button type="button" class="btn btn-primary btn-sm" style="height:31px;bottom:0px;position:absolute;" onclick="_renderMAPRO._fnConsultar('txtfechainiMAPRO2','txtfechafinMAPRO2',2)">Consultar</button>
+                </div>
+            </div>
+        </div>
+        <div class="form-group col-md-1"></div>
+        <div class="form-group col-md-4" style="display:none;" id="divEvalMAPRO">
+            <table border="1" cellpadding="1" cellspacing="0">
+                <tr>
+                    <td colspan="2" class="formato2">Evaluación de Informe de supervisión </td>
+                </tr>
+                <tr>
+                    <td colspan="2" style="height:100px;">
+                        <a href="javascript:void(0)" onclick="_renderMAPRO._fnListar(1,'3-1-1',1,'txtfechainiMAPRO1','txtfechafinMAPRO1')" class="botonHref1" style="text-decoration:none;">
+                            Cantidad total de informes recibidos por la DFFFS (No incluye devueltos)
+                            <div id="divcantMAPRO1" class="divcantidad"></div>
+                        </a>
+                    </td>
+                </tr>
+                <tr style="display:none;" id="trEvalMAPRO">
+                    <td style="height:100px;">
+                        <a href="javascript:void(0)" onclick="_renderMAPRO._fnListar(2,'3-2-1',2,'txtfechainiMAPRO2','txtfechafinMAPRO2')" class="botonHref1" style="text-decoration:none;">
+                            Cantidad de informes evaluados (No incluye devueltos)
+                            <div id="divcantMAPRO2" class="divcantidad"></div>
+                        </a>
+                    </td>
+                    <td class="formato7">
+                        <div id="divcantMAPRO3"></div>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="form-group col-md-4">
+            <div style="display: flex; position: relative; margin-top:30px;">
+                <label class="text-small" style="margin-top:8px;font-weight:bold;">PAU - Instrucción</label>
+            </div>
+            <div style="display: flex; position: relative;">
+                <div>
+                    <!--@@Html.CheckBoxFor(m => m.chkFechaini3, new { @@class = "form-check-input", style = "width:15px;height:16px;margin-left:0px;" })-->
+                    <label for="lblini" class="text-small" style="margin-top:8px;margin-right:10px;">Del: </label>
+                    <div style="width:119.02px;">
+                        @Html.EditorFor(m => m.txtfechainiMAPRO3, new { htmlAttributes = new { @class = "form-control form-control-sm", placeholder = "dd/mm/yyyy", title = "la fecha a ingresar debe ser en el formato dd/mm/yyyy", maxlength = "10" } })
+                    </div>
+                </div>
+                <div style="margin-left:15px;">
+                    <label for="lblfin" class="text-small" style="margin-top:8px;">Hasta: </label>
+                    <div style="width:119.02px;">
+                        @Html.EditorFor(m => m.txtfechafinMAPRO3, new { htmlAttributes = new { @class = "form-control form-control-sm", placeholder = "dd/mm/yyyy", title = "la fecha a ingresar debe ser en el formato dd/mm/yyyy", maxlength = "10" } })
+                    </div>
+                </div>
+                <div style="margin-left:15px;position:relative">
+                    <button type="button" class="btn btn-primary btn-sm" style="height:31px;bottom:0px;position:absolute;" onclick="_renderMAPRO._fnConsultar('txtfechainiMAPRO3','txtfechafinMAPRO3',3)">Consultar</button>
+                </div>
+            </div>
+            <div style="display: flex; position: relative; margin-top:20px;">
+                <label class="text-small" style="margin-top:8px;font-weight:bold;">PAU - Instrucción</label>
+            </div>
+            <div style="display: flex; position: relative;">
+                <div>
+                    <!--@@Html.CheckBoxFor(m => m.chkFechaini4, new { @@class = "form-check-input", style = "width:15px;height:16px;margin-left:0px;" })-->
+                    <label for="lblini" class="text-small" style="margin-top:8px;margin-right:10px;">Del: </label>
+                    <div style="width:119.02px;">
+                        @Html.EditorFor(m => m.txtfechainiMAPRO4, new { htmlAttributes = new { @class = "form-control form-control-sm", placeholder = "dd/mm/yyyy", title = "la fecha a ingresar debe ser en el formato dd/mm/yyyy", maxlength = "10" } })
+                    </div>
+                </div>
+                <div style="margin-left:15px;">
+                    <label for="lblfin" class="text-small" style="margin-top:8px;">Hasta: </label>
+                    <div style="width:119.02px;">
+                        @Html.EditorFor(m => m.txtfechafinMAPRO4, new { htmlAttributes = new { @class = "form-control form-control-sm", placeholder = "dd/mm/yyyy", title = "la fecha a ingresar debe ser en el formato dd/mm/yyyy", maxlength = "10" } })
+                    </div>
+                </div>
+                <div style="margin-left:15px;position:relative">
+                    <button type="button" class="btn btn-primary btn-sm" style="height:31px;bottom:0px;position:absolute;" onclick="_renderMAPRO._fnConsultar('txtfechainiMAPRO4','txtfechafinMAPRO4',4)">Consultar</button>
+                </div>
+            </div>
+        </div>
+        <div class="form-group col-md-1"></div>
+        <div class="form-group col-md-4" style="display:none;" id="divPAUInstMAPRO">
+            <table border="1" cellpadding="1" cellspacing="0">
+                <tr>
+                    <td colspan="2" class="formato5">PAU - Instrucción</td>
+                </tr>
+                <tr>
+                    <td colspan="2" style="height:100px;">
+                        <a href="javascript:void(0)" onclick="_renderMAPRO._fnListar(4,'3-3-1',3,'txtfechainiMAPRO3','txtfechafinMAPRO3')" class="botonHref1" style="text-decoration:none;">
+                            Cantidad de PAU iniciados - notificados
+                            <div id="divcantMAPRO4" class="divcantidad"></div>
+                        </a>
+                    </td>
+                </tr>
+                <tr style="display:none;" id="trPAUInstMAPRO">
+                    <td style="height:100px;">
+                        <a href="javascript:void(0)" onclick="_renderMAPRO._fnListar(5,'3-4-1',4,'txtfechainiMAPRO4','txtfechafinMAPRO4')" class="botonHref1" style="text-decoration:none;">
+                            Cantidad de IFI emitidos
+                            <div id="divcantMAPRO5" class="divcantidad"></div>
+                        </a>
+                    </td>
+                    <td class="formato7">
+                        <div id="divcantMAPRO6"></div>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="form-group col-md-4">
+            <div style="display: flex; position: relative; margin-top:30px;">
+                <label class="text-small" style="margin-top:8px;font-weight:bold;">PAU - Decisor</label>
+            </div>
+            <div style="display: flex; position: relative;">
+                <div>
+                    @Html.CheckBoxFor(m => m.chkFechaini5, new { @class = "form-check-input", style = "width:15px;height:16px;margin-left:0px;" })
+                    <label for="lblini" class="text-small" style="margin-top:8px;margin-left:20px;margin-right:10px;">Del: </label>
+                    <div style="width:119.02px;">
+                        @Html.EditorFor(m => m.txtfechainiMAPRO5, new { htmlAttributes = new { @class = "form-control form-control-sm", placeholder = "dd/mm/yyyy", title = "la fecha a ingresar debe ser en el formato dd/mm/yyyy", maxlength = "10" } })
+                    </div>
+                </div>
+                <div style="margin-left:15px;">
+                    <label for="lblfin" class="text-small" style="margin-top:8px;">Hasta: </label>
+                    <div style="width:119.02px;">
+                        @Html.EditorFor(m => m.txtfechafinMAPRO5, new { htmlAttributes = new { @class = "form-control form-control-sm", placeholder = "dd/mm/yyyy", title = "la fecha a ingresar debe ser en el formato dd/mm/yyyy", maxlength = "10" } })
+                    </div>
+                </div>
+                <div style="margin-left:15px;position:relative">
+                    <button type="button" class="btn btn-primary btn-sm" style="height:31px;bottom:0px;position:absolute;" onclick="_renderMAPRO.fnConsultar('txtfechainiMAPRO5','txtfechafinMAPRO5','chkFechaini5',5)">Consultar</button>
+                </div>
+            </div>
+            <!--<div style="display: flex; position: relative; margin-top:20px;">
+                <label class="text-small" style="margin-top:8px;font-weight:bold;">PAU - Decisor</label>
+            </div>
+            <div style="display: flex; position: relative;">
+                <div>
+                    @@Html.CheckBoxFor(m => m.chkFechaini6, new { @@class = "form-check-input", style = "width:15px;height:16px;margin-left:0px;" })
+                    <label for="lblini" class="text-small" style="margin-top:8px;margin-left:20px;margin-right:10px;">Del: </label>
+                    <div style="width:119.02px;">
+                        @@Html.EditorFor(m => m.txtfechainiMAPRO6, new { htmlAttributes = new { @@class = "form-control form-control-sm", placeholder = "dd/mm/yyyy", title = "la fecha a ingresar debe ser en el formato dd/mm/yyyy", maxlength = "10" } })
+                    </div>
+                </div>
+                <div style="margin-left:15px;">
+                    <label for="lblfin" class="text-small" style="margin-top:8px;">Hasta: </label>
+                    <div style="width:119.02px;">
+                        @@Html.EditorFor(m => m.txtfechafinMAPRO6, new { htmlAttributes = new { @@class = "form-control form-control-sm", placeholder = "dd/mm/yyyy", title = "la fecha a ingresar debe ser en el formato dd/mm/yyyy", maxlength = "10" } })
+                    </div>
+                </div>
+                <div style="margin-left:15px;position:relative">
+                    <button type="button" class="btn btn-primary btn-sm" style="height:31px;bottom:0px;position:absolute;" onclick="_renderMAPRO.fnConsultar('txtfechainiMAPRO6','txtfechafinMAPRO6','chkFechaini6',6)">Consultar</button>
+                </div>
+            </div>-->
+                </div>
+        <div class="form-group col-md-1"></div>
+        <div class="form-group col-md-4" style="display:none;" id="divPAUDecisor">
+            <table border="1" cellpadding="1" cellspacing="0">
+                <tr>
+                    <td colspan="2" class="formato2">PAU - Decisor</td>
+                </tr>
+                <tr>
+                    <td colspan="2" style="height:100px;">
+                        <a href="javascript:void(0)" onclick="_renderMAPRO.fnListar(7,'3-5-1',5,'txtfechainiMAPRO5','txtfechafinMAPRO5','chkFechaini5')" class="botonHref1" style="text-decoration:none;">
+                            Cantidad de RD apeladas - resueltas
+                            <div id="divcantMAPRO7" class="divcantidad"></div>
+                        </a>
+                    </td>
+                </tr>
+                <tr id="trPAUDecisor">
+                    <td style="height:100px;">
+                        <a href="javascript:void(0)" onclick="_renderMAPRO.fnListar(8,'3-6-1',6,'txtfechainiMAPRO6','txtfechafinMAPRO6','chkFechaini6')" class="botonHref1" style="text-decoration:none;">
+                            Cantidad de RD confirmadas
+                            <div id="divcantMAPRO8" class="divcantidad"></div>
+                        </a>
+                    </td>
+                    <td class="formato7">
+                        <div id="divcantMAPRO9"></div>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="form-group col-md-4">
+            <div style="display: flex; position: relative; margin-top:30px;">
+                <label class="text-small" style="margin-top:8px;font-weight:bold;">Reconsideración</label>
+            </div>
+            <div style="display: flex; position: relative;">
+                <div>
+                    @Html.CheckBoxFor(m => m.chkFechaini7, new { @class = "form-check-input", style = "width:15px;height:16px;margin-left:0px;" })
+                    <label for="lblini" class="text-small" style="margin-top:8px;margin-left:20px;margin-right:10px;">Del: </label>
+                    <div style="width:119.02px;">
+                        @Html.EditorFor(m => m.txtfechainiMAPRO7, new { htmlAttributes = new { @class = "form-control form-control-sm", placeholder = "dd/mm/yyyy", title = "la fecha a ingresar debe ser en el formato dd/mm/yyyy", maxlength = "10" } })
+                    </div>
+                </div>
+                <div style="margin-left:15px;">
+                    <label for="lblfin" class="text-small" style="margin-top:8px;">Hasta: </label>
+                    <div style="width:119.02px;">
+                        @Html.EditorFor(m => m.txtfechafinMAPRO7, new { htmlAttributes = new { @class = "form-control form-control-sm", placeholder = "dd/mm/yyyy", title = "la fecha a ingresar debe ser en el formato dd/mm/yyyy", maxlength = "10" } })
+                    </div>
+                </div>
+                <div style="margin-left:15px;position:relative">
+                    <button type="button" class="btn btn-primary btn-sm" style="height:31px;bottom:0px;position:absolute;" onclick="_renderMAPRO.fnConsultar('txtfechainiMAPRO7','txtfechafinMAPRO7','chkFechaini7',7)">Consultar</button>
+                </div>
+            </div>
+            <!--<div style="display: flex; position: relative; margin-top:20px;">
+                <label class="text-small" style="margin-top:8px;font-weight:bold;">Reconsideración</label>
+            </div>
+            <div style="display: flex; position: relative;">
+                <div>
+                    @@Html.CheckBoxFor(m => m.chkFechaini8, new { @@class = "form-check-input", style = "width:15px;height:16px;margin-left:0px;" })
+                    <label for="lblini" class="text-small" style="margin-top:8px;margin-left:20px;margin-right:10px;">Del: </label>
+                    <div style="width:119.02px;">
+                        @@Html.EditorFor(m => m.txtfechainiMAPRO8, new { htmlAttributes = new { @@class = "form-control form-control-sm", placeholder = "dd/mm/yyyy", title = "la fecha a ingresar debe ser en el formato dd/mm/yyyy", maxlength = "10" } })
+                    </div>
+                </div>
+                <div style="margin-left:15px;">
+                    <label for="lblfin" class="text-small" style="margin-top:8px;">Hasta: </label>
+                    <div style="width:119.02px;">
+                        @@Html.EditorFor(m => m.txtfechafinMAPRO8, new { htmlAttributes = new { @@class = "form-control form-control-sm", placeholder = "dd/mm/yyyy", title = "la fecha a ingresar debe ser en el formato dd/mm/yyyy", maxlength = "10" } })
+                    </div>
+                </div>
+                <div style="margin-left:15px;position:relative">
+                    <button type="button" class="btn btn-primary btn-sm" style="height:31px;bottom:0px;position:absolute;" onclick="_renderMAPRO.fnConsultar('txtfechainiMAPRO8','txtfechafinMAPRO8','chkFechaini8',8)">Consultar</button>
+                </div>
+            </div>-->
+        </div>
+        <div class="form-group col-md-1"></div>
+        <div class="form-group col-md-4" style="display:none;" id="divReconsideracion">
+            <table border="1" cellpadding="1" cellspacing="0">
+                <tr>
+                    <td colspan="2" class="formato5">Reconsideración</td>
+                </tr>
+                <tr>
+                    <td colspan="2" style="height:100px;">
+                        <a href="javascript:void(0)" onclick="_renderMAPRO.fnListar(10,'3-7-1',7,'txtfechainiMAPRO7','txtfechafinMAPRO7','chkFechaini7')" class="botonHref1" style="text-decoration:none;">
+                            Cantidad de RD reconsideradas - resueltas
+                            <div id="divcantMAPRO10" class="divcantidad"></div>
+                        </a>
+                    </td>
+                </tr>
+                <tr id="trReconsideracion">
+                    <td style="height:100px;">
+                        <a href="javascript:void(0)" onclick="_renderMAPRO.fnListar(11,'3-8-1',8,'txtfechainiMAPRO8','txtfechafinMAPRO8','chkFechaini8')" class="botonHref1" style="text-decoration:none;">
+                            Cantidad de RD emitidos en el plazo
+                            <div id="divcantMAPRO11" class="divcantidad"></div>
+                        </a>
+                    </td>
+                    <td class="formato7">
+                        <div id="divcantMAPRO12"></div>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+</div>
+
+<div id="divlistaMAPRO" style="display:none;">
+    @Html.Partial("~/Areas/General/Views/ReporteFlujoFiscalizacion/_Shared/_renderListaMAPRO.cshtml", Model)
+</div>

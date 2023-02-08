@@ -1,0 +1,39 @@
+﻿@{
+    ViewBag.Title = ViewBag.TituloFormulario;
+    Layout = "~/Views/Shared/_LayoutMain.cshtml";
+}
+
+<script src="~/Areas/Supervision/js/AdmEquipo/Index.js"></script>
+
+<div class="container-fluid">
+    <div class="card">
+        <div class="card-header text-left">
+            <h5>@ViewBag.TituloFormulario</h5>
+        </div>
+        <div class="card-body">
+            <form id="frmBuscarEquipo" method="get">
+                <div class="form-row">
+                    <div class="form-group col-md-3">
+                        <label for="ddlVeeduriaId" class="text-small">Buscar por</label>
+                        @Html.DropDownList("ddlOpcionId", new SelectList(ViewBag.ddlOpcion, "Value", "Text"), new { @class = "form-control form-control-sm" })
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label for="lblValor" class="text-small">Ingrese dato a buscar</label>
+                        <input type="text" class="form-control form-control-sm" id="txtValor" disabled="disabled">
+                    </div>
+                    <div class="btn-group col-md-2" style="padding-top:30px;">
+                        <a id="btnSearch" style="cursor:pointer;" data-toggle="tooltip" data-placement="top" title="Buscar el registro" onclick="AdmEquipo.fnSearch()"><span class="fa mx-2 fa-lg fa-search"></span></a>
+                        <a id="btnRefresh" style="cursor:pointer;" data-toggle="tooltip" data-placement="top" title="Actualizar el listado" onclick="AdmEquipo.fnRefresh()"><span class="fa mx-2 fa-lg fa-refresh"></span></a>
+                    </div>
+                </div>
+            </form>
+            <div class="table-responsive">
+                <table id="tbListEquipo" class="table table-hover table-bordered" style="width:100%;">
+                    <thead></thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+<!--<div class="modal fade hide" id="addEditModal" tabindex="-1" role="dialog"></div>-->

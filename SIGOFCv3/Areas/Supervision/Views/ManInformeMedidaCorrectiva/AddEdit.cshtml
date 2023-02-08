@@ -1,0 +1,198 @@
+﻿@model CapaEntidad.ViewModel.VM_InformeMedidaCorrectiva
+@{
+    ViewBag.Title = "AddEdit";
+    Layout = "~/Views/Shared/_LayoutMain.cshtml";
+}
+
+<script src="~/Areas/Supervision/js/ManInformeMedidaCorrectiva/AddEdit.js"></script>
+
+<style type="text/css">
+    .tab-pane:not(.active) {
+        display: none;
+    }
+</style>
+@section scripts{
+    <script>
+        "use strict"; var rol = '';
+    $(document).ready(function () {
+        //Validamos el rol del usuario
+        utilSigo.ValidaRol('@ViewBag.VAliasRol', 'btnRegistrar', '@Model.vmControlCalidad.ddlIndicadorId');
+    });
+    </script>
+}
+<div class="container-fluid">
+    <div class="card">
+        <div class="card-header text-right">
+            @Model.lblTituloCabecera
+        </div>
+        <div class="card-body">
+            <div class="card">
+                <div class="card-header text-small">
+                    <a id="btnRegistrar"    href="javascript:void(0)" style="cursor:pointer;" data-toggle="tooltip" data-placement="top" title="Guardar" onclick="ManInfMedidaCorrectiva_AddEdit.fnSubmitForm()"><i class="fa mx-2 fa-lg fa-save"></i></a>
+                    <a style="cursor:pointer;" data-toggle="tooltip" data-placement="top" title="Regresar" onclick="ManInfMedidaCorrectiva_AddEdit.regresar()"><i class="fa mx-2 fa-lg fa-reply"></i></a>
+                    @Model.lblTituloEstado
+                </div>
+                <div class="card-body">
+                    <form id="frmInfMedidaCorrectivaRegistro">
+                        <!-- form-->
+                        @Html.HiddenFor(m => m.hdfCodInfMedidaCorrectiva)
+                        @Html.HiddenFor(m => m.hdfItemTInformeCodigo)
+                        @Html.HiddenFor(m => m.RegEstado)
+
+                        <!--para el tipo antes del PAU-->
+                        @Html.HiddenFor(m => m.hdfCodigoInfMedidaCorrectivaAlerta)
+
+                        <ul class="nav nav-tabs" id="myTab" role="tablist">
+                            <li class="nav-item"><a class="nav-link active" data-toggle="tab" href="#navEstado" role="tab" aria-controls="home" aria-selected="true">Estado Situacional</a></li>
+                            <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#navDatos" role="tab" aria-controls="home" aria-selected="true">Datos Generales</a></li>
+                            <li id="liEvaluacion" class="nav-item"><a class="nav-link" data-toggle="tab" href="#navEvaluacion" role="tab" aria-controls="home" aria-selected="true">Datos de Evaluación</a></li>
+                            <li id="liVerificacion" class="nav-item"><a class="nav-link" data-toggle="tab" href="#navVerificacion" role="tab" aria-controls="home" aria-selected="true">Datos de Verificación</a></li>
+                            <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#navConclusion" role="tab" aria-controls="home" aria-selected="true">Conclusiones y/o Recomendaciones</a></li>
+                        </ul>
+                        <div class="tab-content">
+                            <div class="tab-pane fade show active" id="navEstado" role="tabpanel" aria-labelledby="nav-home-tab">
+                                @{ Html.RenderAction("_ControlCalidad", "Controles", new { area = "GENERAL", dto = Model.vmControlCalidad }); }
+                            </div>
+                            <div class="tab-pane" id="navDatos" role="tabpanel" aria-labelledby="nav-home-tab">
+                                <br />
+                                <div class="form-row">
+                                    <div class="form-group col-md-10">
+                                        <label for="lblTipoInfMedidaCorrectiva" class="text-small">Tipo informe</label>
+                                        @Html.TextBoxFor(m => m.txtItemTInforme, new { @class = "form-control form-control-sm", disabled = "disabled" })
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group col-md-5">
+                                        <label for="lblItemEtiNContrato" class="text-small">Número de informe técnico</label>
+                                        @Html.EditorFor(m => m.txtItemNumero, new { htmlAttributes = new { @class = "form-control form-control-sm" } })
+                                    </div>
+                                </div>
+                                <div class="form-row" style="margin-bottom:10px;">
+                                    <div class="col-md-12">
+                                        @Html.Partial("~/Areas/Supervision/Views/ManInformeMedidaCorrectiva/Shared/_renderListResponsable.cshtml", Model)
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group col-md-12">
+                                        <label for="lblItemMotivo" class="text-small">Motivo de la verificación</label>
+                                        @Html.TextAreaFor(m => m.txtItemMotivo, 3, 1, new { @class = "form-control form-control-sm" })
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="col-md-6 mb-3">
+                                        <label for="lblItemDirector" class="text-small texto-recortado">Director de línea<i class="fa fa-cog fa-spin text-danger" style="display:none;" data-toggle="tooltip" data-placement="top" title="Nuevo"></i></label>
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text"><i class="fa fa-plus" style="cursor:pointer;" onclick="ManInfMedidaCorrectiva_AddEdit.fnBuscarPersona('DIR', 'N');" data-toggle="tooltip" data-placement="top" title="Agregar"></i></span>
+                                            </div>
+                                            @Html.EditorFor(m => m.txtItemDirector, new { htmlAttributes = new { @class = "form-control form-control-sm", @disabled = "disabled" } })
+                                            @Html.HiddenFor(m => m.hdfItemDirectorCodigo)
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-row" style="margin-bottom:10px;">
+                                    <div class="col-md-12">
+                                        @Html.Partial("~/Areas/Supervision/Views/ManInformeMedidaCorrectiva/Shared/_renderListExpediente.cshtml", Model)
+                                    </div>
+                                </div>
+                                <div id="pnlItemFechaVerificacion" class="form-row">
+                                    <div class="form-group col-md-2">
+                                        <label for="lblItemFechaIni" class="text-small">Fecha de inicio de verificación</label>
+                                        @Html.EditorFor(m => m.txtItemFechaIni, new { htmlAttributes = new { @class = "form-control form-control-sm", placeholder = "dd/mm/yyyy", title = "la fecha a ingresar debe ser en el formato dd/mm/yyyy", maxlength = "10" } })
+                                    </div>
+                                    <div class="form-group col-md-2">
+                                        <label for="lblItemFechaFin" class="text-small">Fecha de término de verificación</label>
+                                        @Html.EditorFor(m => m.txtItemFechaFin, new { htmlAttributes = new { @class = "form-control form-control-sm", placeholder = "dd/mm/yyyy", title = "la fecha a ingresar debe ser en el formato dd/mm/yyyy", maxlength = "10" } })
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="tab-pane" id="navEvaluacion" role="tabpanel" aria-labelledby="nav-home-tab">
+                                <br />
+                                <div class="form-row">
+                                    <div class="form-group col-md-2">
+                                        <label for="lblItemPresentaFechaPlazoId" class="text-small">Presentó informe de implementación dentro del plazo</label>
+                                        @Html.DropDownListFor(m => m.ddlItemPresentaFechaPlazoId, new SelectList(Model.ddlItemPresentaFechaPlazo, "Value", "Text"), new { @class = "form-control form-control-sm" })
+                                    </div>
+                                    <div class="form-group col-md-2">
+                                        <label for="lblItemFechaPresentaTitular" class="text-small">Fecha de presentación por parte del titular</label>
+                                        @Html.EditorFor(m => m.txtItemFechaPresentaTitular, new { htmlAttributes = new { @class = "form-control form-control-sm", placeholder = "dd/mm/yyyy", title = "la fecha a ingresar debe ser en el formato dd/mm/yyyy", maxlength = "10" } })
+                                    </div>
+                                    <div class="form-group col-md-2">
+                                        <label for="lblItemInformeCompletoId" class="text-small">El informe contiene información completa y verificable</label>
+                                        @Html.DropDownListFor(m => m.ddlItemInformeCompletoId, new SelectList(Model.ddlItemInformeCompleto, "Value", "Text"), new { @class = "form-control form-control-sm" })
+                                    </div>
+                                    <div class="form-group col-md-2">
+                                        <label for="lblItemCuentaFirmaRegenteId" class="text-small">Tiene firma del regente</label>
+                                        @Html.DropDownListFor(m => m.ddlItemCuentaFirmaRegenteId, new SelectList(Model.ddlItemCuentaFirmaRegente, "Value", "Text"), new { @class = "form-control form-control-sm" })
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="tab-pane" id="navVerificacion" role="tabpanel" aria-labelledby="nav-home-tab">
+                                <br />
+                                <div class="form-row">
+                                    <div class="form-group col-md-2">
+                                        <label for="lblItemFechaInstalacion" class="text-small">Fecha de instalación de plantación según informe</label>
+                                        @Html.EditorFor(m => m.txtItemFechaInstalacion, new { htmlAttributes = new { @class = "form-control form-control-sm", placeholder = "dd/mm/yyyy", title = "la fecha a ingresar debe ser en el formato dd/mm/yyyy", maxlength = "10" } })
+                                    </div>
+                                    <div class="form-group col-md-2">
+                                        <label for="lblItemRemitirDFFFSId" class="text-small">Reposición dentro del PO</label>
+                                        @Html.DropDownListFor(m => m.ddlItemReponeDentroId, new SelectList(Model.ddlItemReponeDentro, "Value", "Text"), new { @class = "form-control form-control-sm" })
+                                    </div>
+                                    <div class="form-group col-md-2">
+                                        <label for="lblItemRemitirDFFFSId" class="text-small">Reposición fuera del PO dentro del título habilitante</label>
+                                        @Html.DropDownListFor(m => m.ddlItemReponeFueraId, new SelectList(Model.ddlItemReponeFuera, "Value", "Text"), new { @class = "form-control form-control-sm" })
+                                    </div>
+                                    <div class="form-group col-md-2">
+                                        <label for="lblItemRemitirDFFFSId" class="text-small">Cumplió con reponer la cantidad mínima solicitada de árbolese</label>
+                                        @Html.DropDownListFor(m => m.ddlItemCumpleCantidadReponeId, new SelectList(Model.ddlItemCumpleCantidadRepone, "Value", "Text"), new { @class = "form-control form-control-sm" })
+                                    </div>
+                                </div>
+                                <div class="form-row" style="margin-bottom:10px;">
+                                    <div class="col-md-12">
+                                        @Html.Partial("~/Areas/Supervision/Views/ManInformeMedidaCorrectiva/Shared/_renderListEspecie.cshtml", Model)
+                                    </div>
+                                </div>
+                                <div class="form-row" style="margin-bottom:10px;">
+                                    <div class="col-md-12">
+                                        @Html.Partial("~/Areas/Supervision/Views/ManInformeMedidaCorrectiva/Shared/_renderListVertice.cshtml", Model)
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="tab-pane" id="navConclusion" role="tabpanel" aria-labelledby="nav-home-tab">
+                                <br />
+                                <div id="pnlItemConclusion" class="form-row">
+                                    <div class="form-group col-md-12">
+                                        <label for="lblItemConclusion" class="text-small">Conclusiones</label>
+                                        @Html.TextAreaFor(m => m.txtItemConclusion, 3, 1, new { @class = "form-control form-control-sm" })
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div id="pnlItemCumpleMCorrectiva" class="form-group col-md-2">
+                                        <label for="lblItemRemitirDFFFSId" class="text-small">El titular cumplió con la medida correctiva</label>
+                                        @Html.DropDownListFor(m => m.ddlItemCumpleMCorrectivaId, new SelectList(Model.ddlItemCumpleMCorrectiva, "Value", "Text"), new { @class = "form-control form-control-sm" })
+                                    </div>
+                                    <div class="form-group col-md-2">
+                                        <label for="lblItemRemitirDFFFSId" class="text-small">Remitir a la dirección de fiscalización</label>
+                                        @Html.DropDownListFor(m => m.ddlItemRemitirDFFFSId, new SelectList(Model.ddlItemRemitirDFFFS, "Value", "Text"), new { @class = "form-control form-control-sm" })
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group col-md-12">
+                                        <label for="lblItemRecomendacion" class="text-small">Recomendaciones</label>
+                                        @Html.TextAreaFor(m => m.txtItemRecomendacion, 3, 1, new { @class = "form-control form-control-sm" })
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@* Para el control genérico de personas *@
+<div class="modal fade hide" id="mdlBuscarPersona" role="dialog"></div>
+<div class="modal fade" id="modalAddEditPersona" tabindex="-1" role="dialog"></div>
+<div class="modal fade hide" id="mdlBuscarUbigeo" role="dialog"></div>
+<div id="divIframe"></div>

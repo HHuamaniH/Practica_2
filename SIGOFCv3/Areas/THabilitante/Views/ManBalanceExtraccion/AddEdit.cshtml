@@ -1,0 +1,1270 @@
+﻿@model CapaEntidad.ViewModel.VM_BalanceExtraccion
+
+@{
+    ViewBag.Title = "AddEdit";
+    Layout = "~/Views/Shared/_LayoutMain.cshtml";
+}
+
+<style type="text/css">
+    tr.selected {
+        background-color: lightgreen;
+    }
+
+    .dataTables_info {
+        color: #33b35a;
+        font-size: 15px;
+        margin-top: 17px;
+    }
+
+    .dataTables_paginate {
+        margin-top: -25px;
+    }
+
+    .custom-row-footer {
+        background-color: lightblue;
+    }
+</style>
+@section scripts{
+    <script>
+    "use strict";
+    var rol = '';
+    $(document).ready(function () {
+        //Validamos el rol del usuario
+        utilSigo.ValidaRol('@ViewBag.VAliasRol', 'btnRegistrar');
+    });
+    </script>
+}
+<div class="container-fluid">
+    <div class="card">
+        <div class="card-header text-right">
+            @Model.lblTituloCabecera
+        </div>
+        <div class="card-body">
+            <div class="card">
+                <div class="card-header text-small">
+                    <a style="cursor:pointer;" data-toggle="tooltip" data-placement="top" title="Regresar" onclick="_EditBExtraccion.fnReturn()"><i class="fa mx-2 fa-lg fa-reply"></i></a>
+                    @Model.lblTituloEstado
+                </div>
+                <div class="card-body">
+                    <form id="frmEditBExtraccion" action="@Url.Action("AddEdit", "ManBalanceExtraccion", new { Area= "THabilitante" })">
+                        @Html.HiddenFor(m => m.hdfCodTHabilitante)
+                        @Html.HiddenFor(m => m.hdfNumPoa)
+                        @Html.HiddenFor(m => m.hdfCodMTipo)
+                        @Html.HiddenFor(m => m.hdfEstadoOrigen)
+                        @Html.HiddenFor(m => m.hdfIndicador)
+                        <div class="card">
+                            <div class="card-header text-small"><span id="lblTituloGeneral"></span></div>
+                            <div class="card-body">
+                                <div class="form-row">
+                                    <div class="form-group col-md-3">
+                                        <label class="text-small">Descripción plan</label>
+                                        @Html.TextBoxFor(m => m.txtNombrePoa, new { @class = "form-control form-control-sm", disabled = "disabled" })
+                                    </div>
+                                    <div class="form-group col-md-3">
+                                        <label class="text-small">Res. de aprobación</label>
+                                        @Html.TextBoxFor(m => m.txtResolucionPoa, new { @class = "form-control form-control-sm", disabled = "disabled" })
+                                    </div>
+                                    <div class="form-group col-md-3">
+                                        <label class="text-small">Título habilitante</label>
+                                        @Html.TextBoxFor(m => m.txtTHabilitante, new { @class = "form-control form-control-sm", disabled = "disabled" })
+                                    </div>
+                                    <div class="form-group col-md-3">
+                                        <label class="text-small">Titular actual</label>
+                                        @Html.TextBoxFor(m => m.txtTitular, new { @class = "form-control form-control-sm", disabled = "disabled" })
+                                    </div>
+                                    <div class="form-group col-md-3">
+                                        <label class="text-small">Modalidad</label>
+                                        @Html.TextBoxFor(m => m.txtModalidad, new { @class = "form-control form-control-sm", disabled = "disabled" })
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-header text-small">Sobre los balances de extracción</div>
+                            <div class="card-body">
+                                <div class="form-row">
+                                    <div class="col-xl-3 col-lg-4 col-md-6 col-sm-8">
+                                        <div class="table-responsive">
+                                            <table id="tbBExtFecha" style="width:100%" class="table table-hover table-bordered">
+                                                <thead>
+                                                    <tr>
+                                                        <th colspan="4" class="text-sm-left">
+                                                            <div class="form-inline">
+                                                                <i class="fa mx-2 fa-lg fa-file-o" style="cursor:pointer;" onclick="_EditBExtraccion.fnAddEditBExtFecha('');" data-toggle="tooltip" data-placement="top" title="Nuevo"></i>
+                                                                <strong>
+                                                                    Fechas de emisión de los balances de extracción
+                                                                </strong>
+                                                            </div>
+                                                        </th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody></tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div id="dvBExtMade_NoMade" class="card-body" style="display:none;">
+                                <div class="form-row">
+                                    <div class="col-md-12">
+                                        <div class="table-responsive">
+                                            <table id="tbBExtMade_NoMade" style="width:100%" class="table table-hover table-bordered">
+                                                <thead>
+                                                    <tr>
+                                                        <th colspan="24" class="text-sm-left">
+                                                            <div class="form-inline">
+                                                                <i class="fa mx-2 fa-lg fa-file-o" style="cursor:pointer;" onclick="_EditBExtraccion.fnAddEditBExtMade_NoMade('');" data-toggle="tooltip" data-placement="top" title="Nuevo"></i>
+                                                                <i class="fa mx-2 fa-lg fa-window-close-o" style="cursor:pointer;" onclick="_EditBExtraccion.fnDeleteBExt(null, 'BEXTRACCION_MADE_ALL');" data-toggle="tooltip" data-placement="top" title="Eliminar Todos"></i>
+                                                                <label style="cursor:pointer;" class="fa mx-2 fa-lg fa-file-excel-o" title="Importar Archivo" data-toggle="tooltip">
+                                                                    <input type="file" style="display:none" size="60" onchange="_EditBExtraccion.fnImportBExt(event, this, 'BEXTRACCION_MADE')">
+                                                                </label>
+                                                                @*Maderable*@
+                                                                <div id="hplMaderableItemBExtDownload" style="display:none">
+                                                                    <a href="@Url.Content("~/Archivos/Plantilla/PoaMaderableBExtraccion_v3.xlsx")"> <i class="fa mx-2 fa-lg fa-folder-open" style="cursor:pointer;" data-toggle="tooltip" data-placement="top" title="Descargar Plantilla"></i></a>
+                                                                </div>
+                                                                @*No Maderable*@
+                                                                <div id="btnExcelBExtNormal" style="display:none">
+                                                                    <a href="@Url.Content("~/Archivos/Plantilla/PoaNoMaderableBExtraccion_v3.xlsx")"> <i class="fa mx-2 fa-lg fa-folder-open" style="cursor:pointer;" data-toggle="tooltip" data-placement="top" title="Descargar Plantilla"></i></a>
+                                                                </div>
+                                                                @*No Maderable*@
+                                                                <div id="btnExcelBExtPMed" style="display:none">
+                                                                    <a href="@Url.Content("~/Archivos/Plantilla/PoaNoMaderablePMedBExtraccion_v3.xlsx")"> <i class="fa mx-2 fa-lg fa-folder-open" style="cursor:pointer;" data-toggle="tooltip" data-placement="top" title="Descargar Plantilla"></i></a>
+                                                                </div>
+                                                                @*No Maderable*@
+                                                                <div id="btnExcelBExtCarr" style="display:none">
+                                                                    <a href="@Url.Content("~/Archivos/Plantilla/PoaNoMaderableCarrBExtraccion_v3.xlsx")"> <i class="fa mx-2 fa-lg fa-folder-open" style="cursor:pointer;" data-toggle="tooltip" data-placement="top" title="Descargar Plantilla"></i></a>
+                                                                </div>
+                                                                @*Maderable - No Maderable*@
+                                                                <div id="btnExcelPMedBExtMadNoMad" style="display:none">
+                                                                    <a href="@Url.Content("~/Archivos/Plantilla/PoaMadNoMadPMedBExtraccion_v3.xlsx")"> <i class="fa mx-2 fa-lg fa-folder-open" style="cursor:pointer;" data-toggle="tooltip" data-placement="top" title="Descargar Plantilla"></i></a>
+                                                                </div>
+                                                                @*Maderable - No Maderable*@
+                                                                <div id="btnExcelCarrBExtMadNoMad" style="display:none">
+                                                                    <a href="@Url.Content("~/Archivos/Plantilla/PoaMadNoMadCarrBExtraccion_v3.xlsx")"> <i class="fa mx-2 fa-lg fa-folder-open" style="cursor:pointer;" data-toggle="tooltip" data-placement="top" title="Descargar Plantilla"></i></a>
+                                                                </div>
+                                                                @*Maderable - No Maderable*@
+                                                                <div id="btnExcelBExtMadNoMad" style="display:none">
+                                                                    <a href="@Url.Content("~/Archivos/Plantilla/PoaMadNoMadBExtraccion_v3.xlsx")"> <i class="fa mx-2 fa-lg fa-folder-open" style="cursor:pointer;" data-toggle="tooltip" data-placement="top" title="Descargar Plantilla"></i></a>
+                                                                </div>
+                                                                <i class="fa mx-2 fa-lg fa-download" style="cursor:pointer;" onclick="_EditBExtraccion.fnExportBExt('BEXTRACCION_MADE');" data-toggle="tooltip" data-placement="top" title="Descargar balance de extracción"></i>
+                                                                <strong id="txttbBExtMade_NoMade"></strong>
+                                                            </div>
+                                                        </th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody></tbody>
+                                                <tfoot></tfoot>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!--<div id="dvBExtMaderable" class="card-body" style="display:none;">
+                                <div class="form-row">
+                                    <div class="col-md-12">
+                                        <div class="table-responsive">
+                                            <table id="tbBExtMade" style="width:100%" class="table table-hover table-bordered">
+                                                <thead>
+                                                    <tr>
+                                                        <th colspan="12" class="text-sm-left">
+                                                            <div class="form-inline">
+                                                                <i class="fa mx-2 fa-lg fa-file-o" style="cursor:pointer;" onclick="_EditBExtraccion.fnAddEditBExtMade('');" data-toggle="tooltip" data-placement="top" title="Nuevo"></i>
+                                                                <i class="fa mx-2 fa-lg fa-window-close-o" style="cursor:pointer;" onclick="_EditBExtraccion.fnDeleteBExt(null, 'BEXTRACCION_MADE_ALL');" data-toggle="tooltip" data-placement="top" title="Eliminar Todos"></i>
+                                                                <label style="cursor:pointer;" class="fa mx-2 fa-lg fa-file-excel-o" title="Importar Archivo" data-toggle="tooltip">
+                                                                    <input type="file" style="display:none" size="60" onchange="_EditBExtraccion.fnImportBExt(event, this, 'BEXTRACCION_MADE')">
+                                                                </label>
+                                                                <div>
+                                                                    <a href="@@Url.Content("~/Archivos/Plantilla/PoaMaderableBExtraccion_v2.xlsx")"> <i class="fa mx-2 fa-lg fa-folder-open" style="cursor:pointer;" data-toggle="tooltip" data-placement="top" title="Descargar plantilla"></i></a>
+                                                                </div>
+                                                                <i class="fa mx-2 fa-lg fa-download" style="cursor:pointer;" onclick="_EditBExtraccion.fnExportBExt('BEXTRACCION_MADE');" data-toggle="tooltip" data-placement="top" title="Descargar balance de extracción"></i>
+                                                                <strong>
+                                                                    BALANCE DE EXTRACCIÓN O KARDEX (Maderable)
+                                                                </strong>
+                                                            </div>
+                                                        </th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody></tbody>
+                                                <tfoot>
+                                                    <tr class="custom-row-footer">
+                                                        <th></th>
+                                                        <th></th>
+                                                        <th></th>
+                                                        <th colspan="2"><span>Total</span></th>
+                                                        <th><span id="colDmc">0</span></th>
+                                                        <th><span id="colTotArb">0</span></th>
+                                                        <th><span id="colVolAut">0</span></th>
+                                                        <th><span id="colVolMov">0</span></th>
+                                                        <th></th>
+                                                        <th></th>
+                                                        <th></th>
+                                                    </tr>
+                                                </tfoot>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div id="dvBExtNoMaderable" class="card-body" style="display:none;">
+                                <div class="form-row">
+                                    <div class="col-md-12">
+                                        <div class="table-responsive">
+                                            <table id="tbBExtNoMade" style="width:100%" class="table table-hover table-bordered">
+                                                <thead>
+                                                    <tr>
+                                                        <th colspan="12" class="text-sm-left">
+                                                            <div class="form-inline">
+                                                                <i class="fa mx-2 fa-lg fa-file-o" style="cursor:pointer;" onclick="_EditBExtraccion.fnAddEditBExtNoMade('');" data-toggle="tooltip" data-placement="top" title="Nuevo"></i>
+                                                                <i class="fa mx-2 fa-lg fa-window-close-o" style="cursor:pointer;" onclick="_EditBExtraccion.fnDeleteBExt(null, 'BEXTRACCION_NOMADE_ALL');" data-toggle="tooltip" data-placement="top" title="Eliminar Todos"></i>
+                                                                <label style="cursor:pointer;" class="fa mx-2 fa-lg fa-file-excel-o" title="Importar Archivo" data-toggle="tooltip">
+                                                                    <input type="file" style="display:none" size="60" onchange="_EditBExtraccion.fnImportBExt(event, this, 'BEXTRACCION_NOMADE')">
+                                                                </label>
+                                                                <div>
+                                                                    <a href="#" onclick="_EditBExtraccion.fnDownloadTemplateBExtNoMade()"><i class="fa mx-2 fa-lg fa-folder-open" style="cursor:pointer;" data-toggle="tooltip" data-placement="top" title="Descargar plantilla"></i></a>
+                                                                </div>
+                                                                <i class="fa mx-2 fa-lg fa-download" style="cursor:pointer;" onclick="_EditBExtraccion.fnExportBExt('BEXTRACCION_NOMADE');" data-toggle="tooltip" data-placement="top" title="Descargar balance de extracción"></i>
+                                                                <strong>
+                                                                    BALANCE DE EXTRACCIÓN O KARDEX (No Maderable)
+                                                                </strong>
+                                                            </div>
+                                                        </th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody></tbody>
+                                                <tfoot>
+                                                    <tr class="custom-row-footer">
+                                                        <th></th>
+                                                        <th></th>
+                                                        <th></th>
+                                                        <th colspan="2"><span>Total</span></th>
+                                                        <th><span id="NMadCol6"></span></th>
+                                                        <th><span id="NMadCol7"></span></th>
+                                                        <th><span id="NMadCol8"></span></th>
+                                                        <th><span id="NMadCol9"></span></th>
+                                                        @@if (Model.hdfCodMTipo == "0000020" || Model.hdfCodMTipo == "0000021")
+                                                        {
+                                                            <th><span id="NMadCol10"></span></th>
+                                                            if (Model.hdfCodMTipo == "0000020")
+                                                            {
+                                                                <th><span id="NMadCol11"></span></th>
+                                                                <th><span id="NMadCol12"></span></th>
+                                                            }
+                                                        }
+                                                    </tr>
+                                                </tfoot>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>-->
+                            <div id="dvBExtKardexTitle" class="card-header text-small" style="display:none;">Sobre el kardex</div>
+                            <div id="dvBExtKardex" class="card-body" style="display:none;">
+                                <div class="form-row">
+                                    <div class="col-md-12">
+                                        <div class="table-responsive">
+                                            <table id="tbBExtKardex" style="width:100%" class="table table-hover table-bordered">
+                                                <thead>
+                                                    <tr>
+                                                        <th colspan="14" class="text-sm-left">
+                                                            <div class="form-inline">
+                                                                <i class="fa mx-2 fa-lg fa-file-o" style="cursor:pointer;" onclick="_EditBExtraccion.fnAddEditBExtKardex('');" data-toggle="tooltip" data-placement="top" title="Nuevo"></i>
+                                                                <i class="fa mx-2 fa-lg fa-window-close-o" style="cursor:pointer;" onclick="_EditBExtraccion.fnDeleteBExt(null, 'BEXTRACCION_KARDEX_ALL');" data-toggle="tooltip" data-placement="top" title="Eliminar Todos"></i>
+                                                                <strong>
+                                                                    KARDEX DEL POA
+                                                                </strong>
+                                                            </div>
+                                                        </th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody></tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade hide" id="mdlBExtGeneral" role="dialog"></div>
+</div>
+
+<script src="~/Scripts/sigo/utility.uploadFile.js"></script>
+
+<script type="text/javascript">
+    let _EditBExtraccion = {
+        codSecuencialBExtSelect: 0,
+        fnReturn: (alertaInicial) => {
+            var url = urlLocalSigo + "THabilitante/ManBalanceExtraccion/Index";
+
+            if (alertaInicial == null || alertaInicial == "") {
+                window.location = url;
+            } else {
+                window.location = url + "?_alertaIncial=" + alertaInicial;
+            }
+        },
+        fnBuildTableBExtFecha: () => {
+            var columns_label = [], columns_data = [], options = {};
+
+            columns_label = ["Fecha de Emisión"];
+            columns_data = ["BEXTRACCION_FEMISION"];
+            options = {
+                page_length: 10, row_edit: true, row_fnEdit: "_EditBExtraccion.fnAddEditBExtFecha(this)"
+                , row_delete: true, row_fnDelete: "_EditBExtraccion.fnDeleteBExt(this,'BEXTRACCION_FECEMI')"
+                , row_index: true
+            };
+
+            return utilDt.fnLoadDataTable_Detail(_EditBExtraccion.frm.find("#tbBExtFecha"), columns_label, columns_data, options);
+        },
+        fnLoadTableBExtFecha: () => {
+            let cod_thabilitante = _EditBExtraccion.frm.find("#hdfCodTHabilitante").val();
+            let num_poa = _EditBExtraccion.frm.find("#hdfNumPoa").val();
+            var url = urlLocalSigo + "THabilitante/ManBalanceExtraccion/ListarBExtraccionPorPlan";
+            const option = { url: url, datos: { asCodTHabilitante: cod_thabilitante, aiNumPoa: num_poa }, type: 'GET' };
+
+            utilSigo.fnAjax(option, function (result) {
+                if (result.success) {
+                    _EditBExtraccion.dtBExtFecha.clear().draw();
+                    _EditBExtraccion.dtBExtFecha.rows.add(result.data).draw();
+                    _EditBExtraccion.codSecuencialBExtSelect = 0;
+                    _EditBExtraccion.fnShowBExt();
+
+                    //Seleccionar la fecha de emisión por defecto
+                    $.each(_EditBExtraccion.dtBExtFecha.$("tr"), function (i, o) {
+                        let data = _EditBExtraccion.dtBExtFecha.row($(o)).data();
+                        if (data.SELECTED == 1) {
+                            $(o).addClass('selected');
+                            _EditBExtraccion.codSecuencialBExtSelect = data.COD_SECUENCIAL;
+                            _EditBExtraccion.fnShowBExt();
+                            _EditBExtraccion.fnLoadTableBExtMade_NoMade(data.COD_SECUENCIAL);
+                            //_EditBExtraccion.fnLoadTableBExtMade(data.COD_SECUENCIAL);
+                            //_EditBExtraccion.fnLoadTableBExtNoMade(data.COD_SECUENCIAL);
+                        }
+                    });
+                }
+            });
+        },
+        fnAddEditBExtFecha: (obj) => {
+            let cod_thabilitante = _EditBExtraccion.frm.find("#hdfCodTHabilitante").val();
+            let num_poa = _EditBExtraccion.frm.find("#hdfNumPoa").val();
+            var url = urlLocalSigo + "THabilitante/ManBalanceExtraccion/_BExtraccionFecEmi";
+            var option = { url: url, type: 'POST', datos: { asCodTHabilitante: cod_thabilitante, aiNumPoa: num_poa }, divId: "mdlBExtGeneral" };
+
+            utilSigo.fnOpenModal(option, function () {
+                _BExtraccionFecEmi.fnSaved = function () {
+                    _EditBExtraccion.fnLoadTableBExtFecha();
+                    $("#mdlBExtGeneral").modal('hide');
+                }
+
+                if (obj != null && obj != "") {
+                    var data = _EditBExtraccion.dtBExtFecha.row($(obj).parents('tr')).data();
+                    _BExtraccionFecEmi.fnInit(utilSigo.fnConvertArrayToObject(data));
+                } else { _BExtraccionFecEmi.fnInit(""); }
+            });
+        },
+        fnBuildTableBExtMade_NoMade: () => {
+            const estado_origen = _EditBExtraccion.frm.find("#hdfEstadoOrigen").val();
+            const indicador = _EditBExtraccion.frm.find("#hdfIndicador").val();
+            //const lst_estado_origen_1 = ["ADECU", "REFOR", "REAJU", "PMFI", "PN", "DEMA"];
+            const lst_estado_origen_2 = ["R", "MS", "PC"];
+            var columns_label = [], columns_data = [], options = {};
+            var cod_mtipo = _EditBExtraccion.frm.find("#hdfCodMTipo").val();
+
+            /*if ((estado_origen == "PN" && indicador == "M")
+                || lst_estado_origen_2.includes(estado_origen)) {
+                _EditBExtraccion.frm.find("#txttbBExtMade_NoMade").html("BALANCE DE EXTRACCIÓN O KARDEX (Maderable)");
+                _EditBExtraccion.frm.find("#hplMaderableItemBExtDownload").show();
+
+                columns_label = ["Especie", "Especie SERFOR", "DMC", "Total Árboles", "Cantidad Autorizada", "Cantidad Movilizada"
+                    , "Saldo", "Unidad de medida", "Tipo de aprovechamiento", "Observación"];
+                columns_data = ["ESPECIES", "ESPECIES_SERFOR", "DMC", "TOTAL_ARBOLES", "VOLUMEN_AUTORIZADO", "VOLUMEN_MOVILIZADO"
+                    , "SALDO", "UNIDAD_MEDIDA", "TIPOMADERABLE", "OBSERVACION"];
+            }
+            else if ((estado_origen == "PN" && indicador == "NM")
+                || estado_origen == "PCN"
+                || (estado_origen == "DEMA" && indicador != "M")) {
+                _EditBExtraccion.frm.find("#txttbBExtMade_NoMade").html("BALANCE DE EXTRACCIÓN O KARDEX (No Maderable)");
+
+                if (cod_mtipo == "0000021") { //Planta medicinal
+                    _EditBExtraccion.frm.find("#btnExcelBExtPMed").show();
+
+                    //Unidad de Medida inicialmente hacía referencia a un campo de texto
+                    columns_label = ["Especie", "Especie SERFOR", "Autorizado", "Extraído", "Saldo", "Unidad de medida", "Observación"];
+                    columns_data = ["ESPECIES", "ESPECIES_SERFOR", "AUTORIZADO", "EXTRAIDO", "SALDO", "UNIDAD_MEDIDA", "OBSERVACION"];
+                } else if (cod_mtipo == "0000020") { //Carrizo
+                    _EditBExtraccion.frm.find("#btnExcelBExtCarr").show();
+
+                    //Se agregó Unidad de Medidad por solicitud de requerimiento
+                    columns_label = ["Especie", "Especie SERFOR", "Fecha (expedición para forma 20)", "Guía de Transporte Forestal"
+                        , "Fecha", "Recibo", "Saldo", "Cantidad", "Unidad de medida", "Observación"];
+                    columns_data = ["ESPECIES", "ESPECIES_SERFOR", "FECHA1", "GUIA_TRANSPORTE", "FECHA2", "RECIBO", "SALDO", "CANTIDAD"
+                        , "UNIDAD_MEDIDA", "OBSERVACION"];
+                } else { //Normal
+                    _EditBExtraccion.frm.find("#btnExcelBExtNormal").show();
+
+                    //Se agregó Unidad de Medida al existir Cantidad Autorizada y Valorizada, ya que inicialmente no contaba con esta propiedad
+                    columns_label = ["Especie", "Especie SERFOR", "Total Árboles", "Cantidad Autorizada", "Cantidad Movilizada", "Saldo", "Unidad de medida", "Observación"];
+                    columns_data = ["ESPECIES", "ESPECIES_SERFOR", "TOTAL_ARBOLES", "VOLUMEN_AUTORIZADO", "VOLUMEN_MOVILIZADO", "SALDO", "UNIDAD_MEDIDA", "OBSERVACION"];
+                }
+            }
+            else {*/
+                _EditBExtraccion.frm.find("#txttbBExtMade_NoMade").html("BALANCE DE EXTRACCIÓN O KARDEX (Maderable y No Maderable)");
+
+                if (cod_mtipo == "0000021") {
+                    _EditBExtraccion.frm.find("#btnExcelPMedBExtMadNoMad").show();
+
+                    columns_label = ["Especie", "Especie SERFOR", "DMC", "Total Árboles", "Cantidad Autorizada", "Cantidad Movilizada"
+                        , "Autorizado", "Extraído", "Saldo", "Unidad de medida", "Tipo de aprovechamiento", "Observación"];
+                    columns_data = ["ESPECIES", "ESPECIES_SERFOR", "DMC", "TOTAL_ARBOLES", "VOLUMEN_AUTORIZADO", "VOLUMEN_MOVILIZADO"
+                        , "AUTORIZADO", "EXTRAIDO", "SALDO", "UNIDAD_MEDIDA", "TIPOMADERABLE", "OBSERVACION"];
+                } else if (cod_mtipo == "0000020") {
+                    _EditBExtraccion.frm.find("#btnExcelCarrBExtMadNoMad").show();
+
+                    columns_label = ["Especie", "Especie SERFOR", "DMC", "Total Árboles", "Cantidad Autorizada", "Cantidad Movilizada"
+                        , "Fecha (expedición para forma 20)", "Guía de Transporte Forestal", "Fecha", "Recibo", "Saldo", "Cantidad"
+                        , "Unidad de medida", "Tipo de aprovechamiento", "Observación"];
+                    columns_data = ["ESPECIES", "ESPECIES_SERFOR", "DMC", "TOTAL_ARBOLES", "VOLUMEN_AUTORIZADO", "VOLUMEN_MOVILIZADO"
+                        , "FECHA1", "GUIA_TRANSPORTE", "FECHA2", "RECIBO", "SALDO", "CANTIDAD", "UNIDAD_MEDIDA", "TIPOMADERABLE", "OBSERVACION"];
+                } else {
+                    _EditBExtraccion.frm.find("#btnExcelBExtMadNoMad").show();
+
+                    //Se agregó Total Árboles por solicitud de requerimiento
+                    columns_label = ["Especie", "Especie SERFOR", "DMC", "Total Árboles", "Cantidad Autorizada", "Cantidad Movilizada"
+                        , "Saldo", "Unidad de medida", "Tipo de aprovechamiento", "Parcela de Corta", "Observación"];
+                    columns_data = ["ESPECIES", "ESPECIES_SERFOR", "DMC", "TOTAL_ARBOLES", "VOLUMEN_AUTORIZADO", "VOLUMEN_MOVILIZADO"
+                        , "SALDO", "UNIDAD_MEDIDA", "TIPOMADERABLE", "PC", "OBSERVACION"];
+                }
+            //}
+
+            options = {
+                page_length: 10, row_edit: true, row_fnEdit: "_EditBExtraccion.fnAddEditBExtMade_NoMade(this)"
+                , row_delete: true, row_fnDelete: "_EditBExtraccion.fnDeleteBExt(this,'BEXTRACCION_MADE')"
+                , row_index: true, page_autowidth: false, page_info: true
+            };
+
+            return utilDt.fnLoadDataTable_Detail(_EditBExtraccion.frm.find("#tbBExtMade_NoMade"), columns_label, columns_data, options);
+        },
+        fnLoadTableBExtMade_NoMade: (cod_secuencial) => {
+            const estado_origen = _EditBExtraccion.frm.find("#hdfEstadoOrigen").val();
+            const indicador = _EditBExtraccion.frm.find("#hdfIndicador").val();
+            //const lst_estado_origen_1 = ["ADECU", "REFOR", "REAJU", "PMFI", "PN", "DEMA"];
+            const lst_estado_origen_2 = ["R", "MS", "PC"];
+            var cod_mtipo = _EditBExtraccion.frm.find("#hdfCodMTipo").val();
+            let cod_thabilitante = _EditBExtraccion.frm.find("#hdfCodTHabilitante").val();
+            let num_poa = _EditBExtraccion.frm.find("#hdfNumPoa").val();
+            var url = urlLocalSigo + "THabilitante/ManBalanceExtraccion/ListarBExtraccionMaderable";
+            const option = { url: url, datos: { asCodTHabilitante: cod_thabilitante, aiNumPoa: num_poa, aiCodSecuencialBExt: cod_secuencial }, type: 'GET' };
+
+            _EditBExtraccion.frm.find("#tbBExtMade_NoMade").find("tfoot tr").remove();
+            var tfootTable = "";
+            var cMdmc = 0, cMarboles = 0, cMvautorizado = 0, cMvmovilizado = 0, cMautorizado = 0, cMextraido = 0, cMsaldo = 0, cMcantidad = 0;
+            var cCdmc = 0, cCarboles = 0, cCvautorizado = 0, cCvmovilizado = 0, cCautorizado = 0, cCextraido = 0, cCsaldo = 0, cCcantidad = 0;
+            var cNoMdmc = 0, cNoMarboles = 0, cNoMvautorizado = 0, cNoMvmovilizado = 0, cNoMautorizado = 0, cNoMextraido = 0, cNoMsaldo = 0, cNoMcantidad = 0;
+            var contM = 0, contC = 0, contNoM = 0;
+
+            utilSigo.fnAjax(option, function (result) {
+                if (result.success) {
+                    _EditBExtraccion.dtBExtMade_NoMade.clear().draw();
+                    /*for (var i = 0; i < result.data.length; i++) {
+                        if (result.data[i].UNIDAD_MEDIDA.Trim == "" || result.data[i].UNIDAD_MEDIDA == "-") {
+                            
+                            if (result.data[i].TIPOMADERABLE == "NO MADERABLES") {
+                                if (cod_mtipo != "0000020") result.data[i].UNIDAD_MEDIDA = "KG";
+                            }
+                        }
+                    }*/
+                    _EditBExtraccion.dtBExtMade_NoMade.rows.add(result.data).draw();
+                    
+                    if (result.data.length > 0) {
+                        for (var i = 0; i < result.data.length; i++) {
+                            switch (result.data[i].TIPOMADERABLE) {
+                                case "MADERABLES":
+                                    cMdmc += parseInt(result.data[i].DMC); cMarboles += parseInt(result.data[i].TOTAL_ARBOLES);
+                                    cMvautorizado += parseFloat(result.data[i].VOLUMEN_AUTORIZADO); cMvmovilizado += parseFloat(result.data[i].VOLUMEN_MOVILIZADO);
+                                    cMautorizado += parseFloat((result.data[i].AUTORIZADO == "") ? 0 : result.data[i].AUTORIZADO);
+                                    cMextraido += parseFloat((result.data[i].EXTRAIDO == "") ? 0 : result.data[i].EXTRAIDO);
+                                    cMsaldo += parseFloat(result.data[i].SALDO);
+                                    cMcantidad += parseInt((result.data[i].CANTIDAD == "") ? 0 : result.data[i].CANTIDAD);
+                                    contM++;
+                                    break;
+
+                                case "CARBON":
+                                    cCdmc += parseInt(result.data[i].DMC); cCarboles += parseInt(result.data[i].TOTAL_ARBOLES);
+                                    cCvautorizado += parseFloat(result.data[i].VOLUMEN_AUTORIZADO); cCvmovilizado += parseFloat(result.data[i].VOLUMEN_MOVILIZADO);
+                                    cCautorizado += parseFloat((result.data[i].AUTORIZADO == "") ? 0 : result.data[i].AUTORIZADO);
+                                    cCextraido += parseFloat((result.data[i].EXTRAIDO == "") ? 0 : result.data[i].EXTRAIDO);
+                                    cCsaldo += parseFloat(result.data[i].SALDO);
+                                    cCcantidad += parseInt((result.data[i].CANTIDAD == "") ? 0 : result.data[i].CANTIDAD);
+                                    contC++;
+                                    break;
+
+                                case "NO MADERABLES":
+                                    cNoMdmc += parseInt((result.data[i].DMC == "") ? 0 : result.data[i].DMC);
+                                    cNoMarboles += parseInt((result.data[i].TOTAL_ARBOLES == "") ? 0 : result.data[i].TOTAL_ARBOLES);
+                                    cNoMvautorizado += parseFloat((result.data[i].VOLUMEN_AUTORIZADO == "") ? 0 : result.data[i].VOLUMEN_AUTORIZADO);
+                                    cNoMvmovilizado += parseFloat((result.data[i].VOLUMEN_MOVILIZADO == "") ? 0 : result.data[i].VOLUMEN_MOVILIZADO);
+                                    cNoMautorizado += parseFloat((result.data[i].AUTORIZADO == "") ? 0 : result.data[i].AUTORIZADO);
+                                    cNoMextraido += parseFloat((result.data[i].EXTRAIDO == "") ? 0 : result.data[i].EXTRAIDO);
+                                    cNoMsaldo += parseFloat(result.data[i].SALDO);
+                                    cNoMcantidad += parseInt((result.data[i].CANTIDAD == "") ? 0 : result.data[i].CANTIDAD);
+                                    contNoM++;
+                                    break;
+                            }
+                        }
+
+                        /*if ((estado_origen == "PN" && indicador == "M")
+                            || lst_estado_origen_2.includes(estado_origen)) {
+                            if (contM > 0) {
+                                tfootTable += "<tr><th></th>" +
+                                    "<th></th>" +
+                                    "<th></th>" +
+                                    "<th></th>" +
+                                    "<th>Total (MADERABLES)</th>" +
+                                    "<th>" + cMdmc + "</th>"+
+                                    "<th>" + cMarboles + "</th>" +
+                                    "<th>" + _EditBExtraccion.fnIntlRound(cMvautorizado, 3) + "</th>" +
+                                    "<th>" + _EditBExtraccion.fnIntlRound(cMvmovilizado, 3) + "</th>" +
+                                    "<th>" + _EditBExtraccion.fnIntlRound(cMsaldo, 3) + "</th>" +
+                                    "<th></th>" +
+                                    "<th></th>" +
+                                    "<th></th></tr>";
+                            }
+                            if (contC > 0) {
+                                tfootTable += "<tr><th></th>" +
+                                    "<th></th>" +
+                                    "<th></th>" +
+                                    "<th></th>" +
+                                    "<th>Total (CARBON)</th>" +
+                                    "<th>" + cCdmc + "</th>"+
+                                    "<th>" + cCarboles + "</th>" +
+                                    "<th>" + _EditBExtraccion.fnIntlRound(cCvautorizado, 3) + "</th>" +
+                                    "<th>" + _EditBExtraccion.fnIntlRound(cCvmovilizado, 3) + "</th>" +
+                                    "<th>" + _EditBExtraccion.fnIntlRound(cCsaldo, 3) + "</th>" +
+                                    "<th></th>" +
+                                    "<th></th>" +
+                                    "<th></th></tr>";
+                            }
+                        }
+                        else if ((estado_origen == "PN" && indicador == "NM")
+                            || estado_origen == "PCN"
+                            || (estado_origen == "DEMA" && indicador != "M")) {
+                            if (cod_mtipo == "0000021") {
+                                if (contNoM > 0) {
+                                    tfootTable += "<tr><th></th>" +
+                                        "<th></th>" +
+                                        "<th></th>" +
+                                        "<th></th>" +
+                                        "<th>Total (NO MADERABLES)</th>" +
+                                        "<th>" + _EditBExtraccion.fnIntlRound(cNoMautorizado, 3) + "</th>"+
+                                        "<th>" + _EditBExtraccion.fnIntlRound(cNoMextraido, 3) + "</th>" +
+                                        "<th>" + _EditBExtraccion.fnIntlRound(cNoMsaldo, 3) + "</th>" +
+                                        "<th></th>" +
+                                        "<th></th></tr>";
+                                }
+                                
+                            } else if (cod_mtipo == "0000020") {
+                                if (contNoM > 0) {
+                                    tfootTable += "<tr><th></th>" +
+                                        "<th></th>" +
+                                        "<th></th>" +
+                                        "<th></th>" +
+                                        "<th>Total (NO MADERABLES)</th>" +
+                                        "<th></th>" +
+                                        "<th></th>" +
+                                        "<th></th>" +
+                                        "<th></th>" +
+                                        "<th>" + _EditBExtraccion.fnIntlRound(cNoMsaldo, 3) + "</th>" +
+                                        "<th>" + cNoMcantidad + "</th>" +
+                                        "<th></th>" +
+                                        "<th></th></tr>";
+                                }
+                                
+                            } else {
+                                if (contNoM > 0) {
+                                    tfootTable += "<tr><th></th>" +
+                                        "<th></th>" +
+                                        "<th></th>" +
+                                        "<th></th>" +
+                                        "<th>Total (NO MADERABLES)</th>" +
+                                        "<th>" + cNoMarboles + "</th>" +
+                                        "<th>" + _EditBExtraccion.fnIntlRound(cNoMvautorizado, 3) + "</th>" +
+                                        "<th>" + _EditBExtraccion.fnIntlRound(cNoMvmovilizado, 3) + "</th>" +
+                                        "<th>" + _EditBExtraccion.fnIntlRound(cNoMsaldo, 3) + "</th>" +
+                                        "<th></th>" +
+                                        "<th></th></tr>";
+                                }
+                            }
+                        }
+                        else {*/
+                        if (cod_mtipo == "0000021") {
+                                if (contM > 0) {
+                                    tfootTable += "<tr><th></th>" +
+                                        "<th></th>" +
+                                        "<th></th>" +
+                                        "<th></th>" +
+                                        "<th>Total (MADERABLES)</th>" +
+                                        "<th>" + cMdmc + "</th>"+
+                                        "<th>" + cMarboles + "</th>" +
+                                        "<th>" + _EditBExtraccion.fnIntlRound(cMvautorizado, 3) + "</th>" +
+                                        "<th>" + _EditBExtraccion.fnIntlRound(cMvmovilizado, 3) + "</th>" +
+                                        "<th>" + _EditBExtraccion.fnIntlRound(cMautorizado, 3) + "</th>" +
+                                        "<th>" + _EditBExtraccion.fnIntlRound(cMextraido, 3) + "</th>" +
+                                        "<th>" + _EditBExtraccion.fnIntlRound(cMsaldo, 3) + "</th>" +
+                                        "<th></th>" +
+                                        "<th></th>" +
+                                        "<th></th></tr>";
+                                }
+                                if (contC > 0) {
+                                    tfootTable += "<tr><th></th>" +
+                                        "<th></th>" +
+                                        "<th></th>" +
+                                        "<th></th>" +
+                                        "<th>Total (CARBON)</th>" +
+                                        "<th>" + cCdmc + "</th>"+
+                                        "<th>" + cCarboles + "</th>" +
+                                        "<th>" + _EditBExtraccion.fnIntlRound(cCvautorizado, 3) + "</th>" +
+                                        "<th>" + _EditBExtraccion.fnIntlRound(cCvmovilizado, 3) + "</th>" +
+                                        "<th>" + _EditBExtraccion.fnIntlRound(cCautorizado, 3) + "</th>" +
+                                        "<th>" + _EditBExtraccion.fnIntlRound(cCextraido, 3) + "</th>" +
+                                        "<th>" + _EditBExtraccion.fnIntlRound(cCsaldo, 3) + "</th>" +
+                                        "<th></th>" +
+                                        "<th></th>" +
+                                        "<th></th></tr>";
+                                }
+                                if (contNoM > 0) {
+                                    tfootTable += "<tr><th></th>" +
+                                        "<th></th>" +
+                                        "<th></th>" +
+                                        "<th></th>" +
+                                        "<th>Total (NO MADERABLES)</th>" +
+                                        "<th>" + cNoMdmc + "</th>"+
+                                        "<th>" + cNoMarboles + "</th>" +
+                                        "<th>" + _EditBExtraccion.fnIntlRound(cNoMvautorizado, 3) + "</th>" +
+                                        "<th>" + _EditBExtraccion.fnIntlRound(cNoMvmovilizado, 3) + "</th>" +
+                                        "<th>" + _EditBExtraccion.fnIntlRound(cNoMautorizado, 3) + "</th>" +
+                                        "<th>" + _EditBExtraccion.fnIntlRound(cNoMextraido, 3) + "</th>" +
+                                        "<th>" + _EditBExtraccion.fnIntlRound(cNoMsaldo, 3) + "</th>" +
+                                        "<th></th>" +
+                                        "<th></th>" +
+                                        "<th></th></tr>";
+                                }
+                            } else if (cod_mtipo == "0000020") {
+                                if (contM > 0) {
+                                    tfootTable += "<tr><th></th>" +
+                                        "<th></th>" +
+                                        "<th></th>" +
+                                        "<th></th>" +
+                                        "<th>Total (MADERABLES)</th>" +
+                                        "<th>" + cMdmc + "</th>"+
+                                        "<th>" + cMarboles + "</th>" +
+                                        "<th>" + _EditBExtraccion.fnIntlRound(cMvautorizado, 3) + "</th>" +
+                                        "<th>" + _EditBExtraccion.fnIntlRound(cMvmovilizado, 3) + "</th>" +
+                                        "<th></th>" +
+                                        "<th></th>" +
+                                        "<th></th>" +
+                                        "<th></th>" +
+                                        "<th>" + _EditBExtraccion.fnIntlRound(cMsaldo, 3) + "</th>" +
+                                        "<th>" + cMcantidad + "</th>" +
+                                        "<th></th>" +
+                                        "<th></th>" +
+                                        "<th></th></tr>";
+                                }
+                                if (contC > 0) {
+                                    tfootTable += "<tr><th></th>" +
+                                        "<th></th>" +
+                                        "<th></th>" +
+                                        "<th></th>" +
+                                        "<th>Total (CARBON)</th>" +
+                                        "<th>" + cCdmc + "</th>"+
+                                        "<th>" + cCarboles + "</th>" +
+                                        "<th>" + _EditBExtraccion.fnIntlRound(cCvautorizado, 3) + "</th>" +
+                                        "<th>" + _EditBExtraccion.fnIntlRound(cCvmovilizado, 3) + "</th>" +
+                                        "<th></th>" +
+                                        "<th></th>" +
+                                        "<th></th>" +
+                                        "<th></th>" +
+                                        "<th>" + _EditBExtraccion.fnIntlRound(cCsaldo, 3) + "</th>" +
+                                        "<th>" + cCcantidad + "</th>" +
+                                        "<th></th>" +
+                                        "<th></th>" +
+                                        "<th></th></tr>";
+                                }
+                                if (contNoM > 0) {
+                                    tfootTable += "<tr><th></th>" +
+                                        "<th></th>" +
+                                        "<th></th>" +
+                                        "<th></th>" +
+                                        "<th>Total (NO MADERABLES)</th>" +
+                                        "<th>" + cNoMdmc + "</th>"+
+                                        "<th>" + cNoMarboles + "</th>" +
+                                        "<th>" + _EditBExtraccion.fnIntlRound(cNoMvautorizado, 3) + "</th>" +
+                                        "<th>" + _EditBExtraccion.fnIntlRound(cNoMvmovilizado, 3) + "</th>" +
+                                        "<th></th>" +
+                                        "<th></th>" +
+                                        "<th></th>" +
+                                        "<th></th>" +
+                                        "<th>" + _EditBExtraccion.fnIntlRound(cNoMsaldo, 3) + "</th>" +
+                                        "<th>" + cNoMcantidad + "</th>" +
+                                        "<th></th>" +
+                                        "<th></th>" +
+                                        "<th></th></tr>";
+                                }
+                            } else {
+                                if (contM > 0) {
+                                    tfootTable += "<tr><th></th>" +
+                                        "<th></th>" +
+                                        "<th></th>" +
+                                        "<th></th>" +
+                                        "<th>Total (MADERABLES)</th>" +
+                                        "<th>" + cMdmc + "</th>"+
+                                        "<th>" + cMarboles + "</th>" +
+                                        "<th>" + _EditBExtraccion.fnIntlRound(cMvautorizado, 3) + "</th>" +
+                                        "<th>" + _EditBExtraccion.fnIntlRound(cMvmovilizado, 3) + "</th>" +
+                                        "<th>" + _EditBExtraccion.fnIntlRound(cMsaldo, 3) + "</th>" +
+                                        "<th></th>" +
+                                        "<th></th>" +
+                                        "<th></th>" +
+                                        "<th></th></tr>";
+                                }
+                                if (contC > 0) {
+                                    tfootTable += "<tr><th></th>" +
+                                        "<th></th>" +
+                                        "<th></th>" +
+                                        "<th></th>" +
+                                        "<th>Total (CARBON)</th>" +
+                                        "<th>" + cCdmc + "</th>"+
+                                        "<th>" + cCarboles + "</th>" +
+                                        "<th>" + _EditBExtraccion.fnIntlRound(cCvautorizado, 3) + "</th>" +
+                                        "<th>" + _EditBExtraccion.fnIntlRound(cCvmovilizado, 3) + "</th>" +
+                                        "<th>" + _EditBExtraccion.fnIntlRound(cCsaldo, 3) + "</th>" +
+                                        "<th></th>" +
+                                        "<th></th>" +
+                                        "<th></th>" +
+                                        "<th></th></tr>";
+                                }
+                                if (contNoM > 0) {
+                                    tfootTable += "<tr><th></th>" +
+                                        "<th></th>" +
+                                        "<th></th>" +
+                                        "<th></th>" +
+                                        "<th>Total (NO MADERABLES)</th>" +
+                                        "<th>" + cNoMdmc + "</th>"+
+                                        "<th>" + cNoMarboles + "</th>" +
+                                        "<th>" + _EditBExtraccion.fnIntlRound(cNoMvautorizado, 3) + "</th>" +
+                                        "<th>" + _EditBExtraccion.fnIntlRound(cNoMvmovilizado, 3) + "</th>" +
+                                        "<th>" + _EditBExtraccion.fnIntlRound(cNoMsaldo, 3) + "</th>" +
+                                        "<th></th>" +
+                                        "<th></th>" +
+                                        "<th></th>" +
+                                        "<th></th></tr>";
+                                }
+                            }
+                        //}
+
+                        _EditBExtraccion.frm.find("#tbBExtMade_NoMade").find("tfoot").append(tfootTable);
+                    }
+                }
+            });
+        },
+        fnIntlRound: (numero, decimales, usarComa = false) => {
+            var opciones = {
+                maximumFractionDigits: decimales,
+                useGrouping: false
+            };
+            usarComa = usarComa ? "es" : "en";
+            return new Intl.NumberFormat(usarComa, opciones).format(numero);
+        },
+        fnAddEditBExtMade_NoMade: (obj) => {
+            if (_EditBExtraccion.codSecuencialBExtSelect == 0) {
+                utilSigo.toastWarning("Aviso", "Es necesario ingresar o seleccionar la fecha de emisión del balance de extracción");
+                return false;
+            }
+
+            var cod_mtipo = _EditBExtraccion.frm.find("#hdfCodMTipo").val();
+            let cod_thabilitante = _EditBExtraccion.frm.find("#hdfCodTHabilitante").val();
+            let num_poa = _EditBExtraccion.frm.find("#hdfNumPoa").val();
+            let cod_secuencial_bext = _EditBExtraccion.codSecuencialBExtSelect;
+            var url = urlLocalSigo + "THabilitante/ManBalanceExtraccion/_BExtraccionMaderable";
+            var option = { url: url, type: 'POST', datos: { asCodTHabilitante: cod_thabilitante, aiNumPoa: num_poa, aiCodSecuencialBExt: cod_secuencial_bext }, divId: "mdlBExtGeneral" };
+
+            utilSigo.fnOpenModal(option, function () {
+                _BExtraccionMaderable.fnSaved = function () {
+                    _EditBExtraccion.fnLoadTableBExtMade_NoMade(cod_secuencial_bext);
+                    $("#mdlBExtGeneral").modal('hide');
+                }
+
+                if (obj != null && obj != "") {
+                    var data = _EditBExtraccion.dtBExtMade_NoMade.row($(obj).parents('tr')).data();
+                    _BExtraccionMaderable.fnInit(utilSigo.fnConvertArrayToObject(data), cod_mtipo);
+                } else { _BExtraccionMaderable.fnInit("", cod_mtipo); }
+            });
+        },
+        fnBuildTableBExtMade: () => {
+            var columns_label = [], columns_data = [], options = {};
+
+            columns_label = ["Especie", "Especie SERFOR", "DMC", "Total árboles", "Volumen autorizado (m³)", "Volumen movilizado (m³)"
+                , "Saldo", "Tipo de aprovechamiento", "Observación"];
+            columns_data = ["ESPECIES", "ESPECIES_SERFOR", "DMC", "TOTAL_ARBOLES", "VOLUMEN_AUTORIZADO", "VOLUMEN_MOVILIZADO"
+                , "SALDO", "TIPOMADERABLE", "OBSERVACION"];
+            options = {
+                page_length: 10, row_edit: true, row_fnEdit: "_EditBExtraccion.fnAddEditBExtMade(this)"
+                , row_delete: true, row_fnDelete: "_EditBExtraccion.fnDeleteBExt(this,'BEXTRACCION_MADE')"
+                , row_index: true, page_autowidth: false, page_info: true
+            };
+
+            return utilDt.fnLoadDataTable_Detail(_EditBExtraccion.frm.find("#tbBExtMade"), columns_label, columns_data, options);
+        },
+        fnLoadTableBExtMade: (cod_secuencial) => {
+            let cod_thabilitante = _EditBExtraccion.frm.find("#hdfCodTHabilitante").val();
+            let num_poa = _EditBExtraccion.frm.find("#hdfNumPoa").val();
+            var url = urlLocalSigo + "THabilitante/ManBalanceExtraccion/ListarBExtraccionMaderable";
+            const option = { url: url, datos: { asCodTHabilitante: cod_thabilitante, aiNumPoa: num_poa, aiCodSecuencialBExt: cod_secuencial }, type: 'GET' };
+
+            utilSigo.fnAjax(option, function (result) {
+                if (result.success) {
+                    _EditBExtraccion.dtBExtMade.clear().draw();
+                    _EditBExtraccion.dtBExtMade.rows.add(result.data).draw();
+
+                    let dmc = 0, totArb = 0, volAut = 0, volMov = 0;
+                    for (var i = 0; i < result.data.length; i++) {
+                        dmc += result.data[i].DMC;
+                        totArb += result.data[i].TOTAL_ARBOLES;
+                        volAut += result.data[i].VOLUMEN_AUTORIZADO;
+                        volMov += result.data[i].VOLUMEN_MOVILIZADO;
+                    }
+                    _EditBExtraccion.frm.find("#colDmc").text(dmc.toFixed(3));
+                    _EditBExtraccion.frm.find("#colTotArb").text(totArb.toFixed(3));
+                    _EditBExtraccion.frm.find("#colVolAut").text(volAut.toFixed(3));
+                    _EditBExtraccion.frm.find("#colVolMov").text(volMov.toFixed(3));
+                }
+            });
+        },
+        fnAddEditBExtMade: (obj) => {
+            if (_EditBExtraccion.codSecuencialBExtSelect == 0) {
+                utilSigo.toastWarning("Aviso", "Es necesario ingresar o seleccionar la fecha de emisión del balance de extracción");
+                return false;
+            }
+
+            let cod_thabilitante = _EditBExtraccion.frm.find("#hdfCodTHabilitante").val();
+            let num_poa = _EditBExtraccion.frm.find("#hdfNumPoa").val();
+            let cod_secuencial_bext = _EditBExtraccion.codSecuencialBExtSelect;
+            var url = urlLocalSigo + "THabilitante/ManBalanceExtraccion/_BExtraccionMaderable";
+            var option = { url: url, type: 'POST', datos: { asCodTHabilitante: cod_thabilitante, aiNumPoa: num_poa, aiCodSecuencialBExt: cod_secuencial_bext }, divId: "mdlBExtGeneral" };
+
+            utilSigo.fnOpenModal(option, function () {
+                _BExtraccionMaderable.fnSaved = function () {
+                    _EditBExtraccion.fnLoadTableBExtMade(cod_secuencial_bext);
+                    $("#mdlBExtGeneral").modal('hide');
+                }
+
+                if (obj != null && obj != "") {
+                    var data = _EditBExtraccion.dtBExtMade.row($(obj).parents('tr')).data();
+                    _BExtraccionMaderable.fnInit(utilSigo.fnConvertArrayToObject(data));
+                } else { _BExtraccionMaderable.fnInit(""); }
+            });
+        },
+        fnBuildTableBExtNoMade: () => {
+            var columns_label = [], columns_data = [], options = {};
+            var cod_mtipo = _EditBExtraccion.frm.find("#hdfCodMTipo").val();
+
+            if (cod_mtipo == "0000021") { //Planta medicinal
+                columns_label = ["Especie", "Especie SERFOR", "Autorizado", "Extraído", "Saldo", "Unidad de medida", "Observación"];
+                columns_data = ["ESPECIES", "ESPECIES_SERFOR", "AUTORIZADO", "EXTRAIDO", "SALDO", "UNIDAD_MEDIDA", "OBSERVACION"];
+            } else if (cod_mtipo == "0000020") { //Carrizo
+                columns_label = ["Especie", "Especie SERFOR", "Fecha (expedición para forma 20)", "Guía de transporte forestal", "Fecha", "Recibo", "Saldo", "Cantidad", "Observación"];
+                columns_data = ["ESPECIES", "ESPECIES_SERFOR", "FECHA1", "GUIA_TRANSPORTE", "FECHA2", "RECIBO", "SALDO", "CANTIDAD", "OBSERVACION"];
+            } else { //Normal
+                columns_label = ["Especie", "Especie SERFOR", "Kilogramo autorizado (kg)", "Kilogramo movilizado (kg)", "Saldo", "Observación"];
+                columns_data = ["ESPECIES", "ESPECIES_SERFOR", "KILOGRAMO_AUTORIZADO", "KILOGRAMO_MOVILIZADO", "SALDO", "OBSERVACION"];
+            }
+
+            options = {
+                page_length: 10, row_edit: true, row_fnEdit: "_EditBExtraccion.fnAddEditBExtNoMade(this)"
+                , row_delete: true, row_fnDelete: "_EditBExtraccion.fnDeleteBExt(this,'BEXTRACCION_NOMADE')"
+                , row_index: true, page_autowidth: false, page_info: true
+            };
+
+            return utilDt.fnLoadDataTable_Detail(_EditBExtraccion.frm.find("#tbBExtNoMade"), columns_label, columns_data, options);
+        },
+        fnLoadTableBExtNoMade: (cod_secuencial) => {
+            var cod_mtipo = _EditBExtraccion.frm.find("#hdfCodMTipo").val();
+            let cod_thabilitante = _EditBExtraccion.frm.find("#hdfCodTHabilitante").val();
+            let num_poa = _EditBExtraccion.frm.find("#hdfNumPoa").val();
+            var url = urlLocalSigo + "THabilitante/ManBalanceExtraccion/ListarBExtraccionNoMaderable";
+            const option = { url: url, datos: { asCodTHabilitante: cod_thabilitante, aiNumPoa: num_poa, aiCodSecuencialBExt: cod_secuencial }, type: 'GET' };
+
+            utilSigo.fnAjax(option, function (result) {
+                if (result.success) {
+                    _EditBExtraccion.dtBExtNoMade.clear().draw();
+                    _EditBExtraccion.dtBExtNoMade.rows.add(result.data).draw();
+
+                    let saldo = 0, cantidad = 0, kgAut = 0, kgMov = 0, autorizado = 0, extraido = 0;
+
+                    for (var i = 0; i < result.data.length; i++) {
+                        saldo += result.data[i].SALDO;
+                        cantidad += result.data[i].CANTIDAD;
+                        kgAut += result.data[i].KILOGRAMO_AUTORIZADO;
+                        kgMov += result.data[i].KILOGRAMO_MOVILIZADO;
+                        autorizado += result.data[i].AUTORIZADO;
+                        extraido += result.data[i].EXTRAIDO;
+                    }
+
+                    if (cod_mtipo == "0000021") {
+                        _EditBExtraccion.frm.find("#NMadCol6").text(autorizado.toFixed(3));
+                        _EditBExtraccion.frm.find("#NMadCol7").text(extraido.toFixed(3));
+                        _EditBExtraccion.frm.find("#NMadCol8").text(saldo.toFixed(3));
+                    } else if (cod_mtipo == "0000020") {
+                        _EditBExtraccion.frm.find("#NMadCol10").text(saldo.toFixed(3));
+                        _EditBExtraccion.frm.find("#NMadCol11").text(cantidad.toFixed(3));
+                    } else {
+                        _EditBExtraccion.frm.find("#NMadCol6").text(kgAut.toFixed(3));
+                        _EditBExtraccion.frm.find("#NMadCol7").text(kgMov.toFixed(3));
+                        _EditBExtraccion.frm.find("#NMadCol8").text(saldo.toFixed(3));
+                    }
+                }
+            });
+        },
+        fnAddEditBExtNoMade: (obj) => {
+            if (_EditBExtraccion.codSecuencialBExtSelect == 0) {
+                utilSigo.toastWarning("Aviso", "Es necesario ingresar o seleccionar la fecha de emisión del balance de extracción");
+                return false;
+            }
+
+            var cod_mtipo = _EditBExtraccion.frm.find("#hdfCodMTipo").val();
+            let cod_thabilitante = _EditBExtraccion.frm.find("#hdfCodTHabilitante").val();
+            let num_poa = _EditBExtraccion.frm.find("#hdfNumPoa").val();
+            let cod_secuencial_bext = _EditBExtraccion.codSecuencialBExtSelect;
+            var url = urlLocalSigo + "THabilitante/ManBalanceExtraccion/_BExtraccionNoMaderable";
+            var option = { url: url, type: 'POST', datos: { asCodTHabilitante: cod_thabilitante, aiNumPoa: num_poa, aiCodSecuencialBExt: cod_secuencial_bext }, divId: "mdlBExtGeneral" };
+
+            utilSigo.fnOpenModal(option, function () {
+                _BExtraccionNoMaderable.fnSaved = function () {
+                    _EditBExtraccion.fnLoadTableBExtNoMade(cod_secuencial_bext);
+                    $("#mdlBExtGeneral").modal('hide');
+                }
+
+                if (obj != null && obj != "") {
+                    var data = _EditBExtraccion.dtBExtNoMade.row($(obj).parents('tr')).data();
+                    _BExtraccionNoMaderable.fnInit(utilSigo.fnConvertArrayToObject(data), cod_mtipo);
+                } else { _BExtraccionNoMaderable.fnInit("", cod_mtipo); }
+            });
+        },
+        fnDownloadTemplateBExtNoMade: () => {
+            var cod_mtipo = _EditBExtraccion.frm.find("#hdfCodMTipo").val();
+            var url = "#";
+
+            if (cod_mtipo == "0000021") { //Planta medicinal
+                url = '@Url.Content("~/Archivos/Plantilla/PoaNoMaderablePMedBExtraccion_v2.xlsx")';
+            } else if (cod_mtipo == "0000020") { //Carrizo
+                url = '@Url.Content("~/Archivos/Plantilla/PoaNoMaderableCarrBExtraccion_v2.xlsx")';
+            } else { //Normal
+                url = '@Url.Content("~/Archivos/Plantilla/PoaNoMaderableBExtraccion_v2.xlsx")';
+            }
+
+            document.location = url;
+        },
+        fnBuildTableBExtKardex: () => {
+            var columns_label = [], columns_data = [], options = {};
+
+            columns_label = ["Especie", "Fecha de emisión", "Guia de transporte", "Producto", "Descripción", "Cantidad"
+                , "Kilogramos(kg)", "m³", "Acumulado", "Saldo", "Observación"];
+            columns_data = ["ESPECIES", "FECHA_EMISIONKARDEX", "GUIA_TRANSPORTE", "KARDEX_PRODUCTO", "KARDEX_DESCRIPCION", "CANTIDAD"
+                , "KILOGRAMOS_KARDEX", "M3", "ACUMULADO", "SALDO_KARDEX", "OBSERVACION_KARDEX"];
+
+            options = {
+                page_length: 10, row_edit: true, row_fnEdit: "_EditBExtraccion.fnAddEditBExtKardex(this)"
+                , row_delete: true, row_fnDelete: "_EditBExtraccion.fnDeleteBExt(this,'BEXTRACCION_KARDEX')"
+                , row_index: true, page_autowidth: false, page_info: true
+            };
+
+            return utilDt.fnLoadDataTable_Detail(_EditBExtraccion.frm.find("#tbBExtKardex"), columns_label, columns_data, options);
+        },
+        fnLoadTableBExtKardex: () => {
+            let cod_thabilitante = _EditBExtraccion.frm.find("#hdfCodTHabilitante").val();
+            let num_poa = _EditBExtraccion.frm.find("#hdfNumPoa").val();
+            var url = urlLocalSigo + "THabilitante/ManBalanceExtraccion/ListarBExtraccionKardex";
+            const option = { url: url, datos: { asCodTHabilitante: cod_thabilitante, aiNumPoa: num_poa }, type: 'GET' };
+
+            utilSigo.fnAjax(option, function (result) {
+                if (result.success) {
+                    _EditBExtraccion.dtBExtKardex.clear().draw();
+                    _EditBExtraccion.dtBExtKardex.rows.add(result.data).draw();
+                }
+            });
+        },
+        fnAddEditBExtKardex: (obj) => {
+            let cod_thabilitante = _EditBExtraccion.frm.find("#hdfCodTHabilitante").val();
+            let num_poa = _EditBExtraccion.frm.find("#hdfNumPoa").val();
+            var url = urlLocalSigo + "THabilitante/ManBalanceExtraccion/_BExtraccionKardex";
+            var option = { url: url, type: 'POST', datos: { asCodTHabilitante: cod_thabilitante, aiNumPoa: num_poa }, divId: "mdlBExtGeneral" };
+
+            utilSigo.fnOpenModal(option, function () {
+                _BExtraccionKardex.fnSaved = function () {
+                    _EditBExtraccion.fnLoadTableBExtKardex();
+                    $("#mdlBExtGeneral").modal('hide');
+                }
+
+                if (obj != null && obj != "") {
+                    var data = _EditBExtraccion.dtBExtKardex.row($(obj).parents('tr')).data();
+                    _BExtraccionKardex.fnInit(utilSigo.fnConvertArrayToObject(data));
+                } else { _BExtraccionKardex.fnInit(""); }
+            });
+        },
+        fnDeleteBExt: (obj, tabla) => {
+            var url = urlLocalSigo + "THabilitante/ManBalanceExtraccion/EliminarBExtraccion";
+            var data, msj = "¿Desea eliminar el registro?";
+
+            var params = {
+                EliTABLA: tabla,
+                COD_THABILITANTE: _EditBExtraccion.frm.find("#hdfCodTHabilitante").val(),
+                NUM_POA: _EditBExtraccion.frm.find("#hdfNumPoa").val()
+            };
+
+            switch (tabla) {
+                case "BEXTRACCION_FECEMI":
+                    msj += " Se eliminara también el detalle asociado al registro.";
+                    data = _EditBExtraccion.dtBExtFecha.row($(obj).parents('tr')).data();
+                    params.COD_SECUENCIAL = data.COD_SECUENCIAL;
+                    break;
+                case "BEXTRACCION_MADE":
+                    //data = _EditBExtraccion.dtBExtMade.row($(obj).parents('tr')).data();
+                    data = _EditBExtraccion.dtBExtMade_NoMade.row($(obj).parents('tr')).data();
+                    params.COD_SECUENCIAL = _EditBExtraccion.codSecuencialBExtSelect;
+                    params.COD_ESPECIES_BEXT = data.COD_ESPECIES;
+                    params.COD_SECUENCIAL_BEXT = data.COD_SECUENCIAL;
+                    break;
+                /*case "BEXTRACCION_NOMADE":
+                    data = _EditBExtraccion.dtBExtNoMade.row($(obj).parents('tr')).data();
+                    params.COD_SECUENCIAL = _EditBExtraccion.codSecuencialBExtSelect;
+                    params.COD_ESPECIES_BEXT = data.COD_ESPECIES;
+                    params.COD_SECUENCIAL_BEXT = data.COD_SECUENCIAL;
+                    break;*/
+                case "BEXTRACCION_MADE_ALL":
+                //case "BEXTRACCION_NOMADE_ALL":
+                    msj = "¿Desea eliminar todos los registros?";
+                    params.COD_SECUENCIAL = _EditBExtraccion.codSecuencialBExtSelect;
+                    break;
+                case "BEXTRACCION_KARDEX":
+                    data = _EditBExtraccion.dtBExtKardex.row($(obj).parents('tr')).data();
+                    params.COD_SECUENCIAL = data.COD_SECUENCIAL;
+                    break;
+                case "BEXTRACCION_KARDEX_ALL":
+                    msj = "¿Desea eliminar todos los registros?";
+                    break;
+            }
+
+            var option = { url: url, datos: JSON.stringify(params), type: 'POST' };
+
+            utilSigo.dialogConfirm('', msj, function (r) {
+                if (r) {
+                    utilSigo.fnAjax(option, function (data) {
+                        if (data.success) {
+                            switch (tabla) {
+                                case "BEXTRACCION_FECEMI": _EditBExtraccion.fnLoadTableBExtFecha(); break;
+                                case "BEXTRACCION_MADE":
+                                case "BEXTRACCION_MADE_ALL":
+                                    //_EditBExtraccion.fnLoadTableBExtMade(_EditBExtraccion.codSecuencialBExtSelect);
+                                    _EditBExtraccion.fnLoadTableBExtMade_NoMade(_EditBExtraccion.codSecuencialBExtSelect);
+                                    break;
+                                /*case "BEXTRACCION_NOMADE":
+                                case "BEXTRACCION_NOMADE_ALL": _EditBExtraccion.fnLoadTableBExtNoMade(_EditBExtraccion.codSecuencialBExtSelect); break;*/
+                                case "BEXTRACCION_KARDEX":
+                                case "BEXTRACCION_KARDEX_ALL": _EditBExtraccion.fnLoadTableBExtKardex(); break;
+                            }
+
+                            utilSigo.toastSuccess("Éxito", data.msj);
+                        }
+                        else {
+                            utilSigo.toastWarning("Aviso", data.msj);
+                        }
+                    });
+                }
+            });
+        },
+        fnImportBExt: (e, obj, tipo) => {
+            var url = urlLocalSigo + "THabilitante/ManBalanceExtraccion/ImportarBExtraccion";
+            let cod_thabilitante = _EditBExtraccion.frm.find("#hdfCodTHabilitante").val();
+            let num_poa = _EditBExtraccion.frm.find("#hdfNumPoa").val();
+            let cod_secuencial_bext = _EditBExtraccion.codSecuencialBExtSelect;
+            var cod_mtipo = _EditBExtraccion.frm.find("#hdfCodMTipo").val();
+
+            switch (tipo) {
+                case "BEXTRACCION_MADE":
+                //case "BEXTRACCION_NOMADE":
+                    if (cod_secuencial_bext == null) {
+                        utilSigo.toastError("Error", "Ingrese o seleccione la fecha de emisión del balance de extracción"); return false;
+                    }
+                    break;
+            }
+
+            uploadFile.fileSelectHandler(e, obj, url,
+                {
+                    asTipo: tipo,
+                    asCodTHabilitante: cod_thabilitante,
+                    aiNumPoa: num_poa,
+                    aiCodSecuencialBExt: cod_secuencial_bext,
+                    asCodMTipo: cod_mtipo,
+                    asEstadoOrigen: _EditBExtraccion.frm.find("#hdfEstadoOrigen").val(),
+                    asIndicador: _EditBExtraccion.frm.find("#hdfIndicador").val()
+                },
+                function (data) {
+                utilSigo.dialogConfirm('', 'Desea registrar los datos del archivo importado?', function (r) {
+                    if (r) {
+                        var url2 = "";
+
+                        switch (tipo) {
+                            case "BEXTRACCION_MADE": url2 = urlLocalSigo + "THabilitante/ManBalanceExtraccion/GrabarBExtraccionMaderableLista"; break;
+                            case "BEXTRACCION_NOMADE": url2 = urlLocalSigo + "THabilitante/ManBalanceExtraccion/GrabarBExtraccionNoMaderableLista"; break;
+                        }
+
+                        var option2 = { url: url2, datos: JSON.stringify(data), type: 'POST' };
+
+                        utilSigo.fnAjax(option2, function (data2) {
+                            if (data2.success) {
+                                utilSigo.toastSuccess("Éxito", data2.msj);
+
+                                switch (tipo) {
+                                    case "BEXTRACCION_MADE":
+                                        //_EditBExtraccion.fnLoadTableBExtMade(cod_secuencial_bext); 
+                                        _EditBExtraccion.fnLoadTableBExtMade_NoMade(cod_secuencial_bext);
+                                        break;
+                                    case "BEXTRACCION_NOMADE": _EditBExtraccion.fnLoadTableBExtNoMade(cod_secuencial_bext); break;
+                                }
+                            }
+                            else {
+                                utilSigo.toastWarning("Aviso", data2.msj);
+                            }
+                        });
+                    }
+                });
+            });
+        },
+        fnExportBExt: (tipo) => {
+            var cod_mtipo = _EditBExtraccion.frm.find("#hdfCodMTipo").val();
+            let cod_thabilitante = _EditBExtraccion.frm.find("#hdfCodTHabilitante").val();
+            let num_poa = _EditBExtraccion.frm.find("#hdfNumPoa").val();
+            let cod_secuencial_bext = _EditBExtraccion.codSecuencialBExtSelect;
+
+            switch (tipo) {
+                case "BEXTRACCION_MADE":
+                case "BEXTRACCION_NOMADE":
+                    if (cod_secuencial_bext == null) {
+                        utilSigo.toastError("Error", "Seleccione la fecha de emisión del balance de extracción a eliminar"); return false;
+                    }
+                    break;
+            }
+
+            var data = {
+                asTipo: tipo,
+                asCodTHabilitante: cod_thabilitante,
+                aiNumPoa: num_poa,
+                aiCodSecuencialBExt: cod_secuencial_bext,
+                asCodMTipo: cod_mtipo,
+                asEstadoOrigen: _EditBExtraccion.frm.find("#hdfEstadoOrigen").val(),
+                asIndicador: _EditBExtraccion.frm.find("#hdfIndicador").val()
+            };
+
+            var url = urlLocalSigo + "THabilitante/ManBalanceExtraccion/DescargarBExtraccion";
+            var option = { url: url, datos: JSON.stringify(data), type: 'POST' };
+
+            utilSigo.fnAjax(option, function (data) {
+                if (data.success) {
+                    window.location.href = urlLocalSigo + "THabilitante/ManBalanceExtraccion/Download?file=" + data.msj;
+                }
+                else {
+                    utilSigo.toastWarning("Aviso", data.msj);
+                }
+            });
+        },
+        fnShowBExt: () => {
+            const estado_origen = _EditBExtraccion.frm.find("#hdfEstadoOrigen").val();
+            const indicador = _EditBExtraccion.frm.find("#hdfIndicador").val();
+            //const lst_estado_origen_1 = ["ADECU", "REFOR", "REAJU", "PMFI", "PN", "DEMA"];
+            const lst_estado_origen_1 = ["ADECU", "REFOR", "REAJU", "PMFI"];
+            const lst_estado_origen_2 = ["R", "MS", "PC"];
+            var cod_mtipo = _EditBExtraccion.frm.find("#hdfCodMTipo").val();
+
+            _EditBExtraccion.frm.find("#dvBExtMade_NoMade").hide();
+            //_EditBExtraccion.frm.find("#dvBExtMaderable").hide();
+            //_EditBExtraccion.frm.find("#dvBExtNoMaderable").hide();
+
+            if (_EditBExtraccion.codSecuencialBExtSelect != 0) {
+                /*if ((lst_estado_origen_1.includes(estado_origen) && indicador == "M")
+                    || lst_estado_origen_2.includes(estado_origen)) {
+                    _EditBExtraccion.frm.find("#dvBExtMaderable").show();
+                }
+                if ((lst_estado_origen_1.includes(estado_origen) && indicador == "NM")
+                    || estado_origen=="PCN") {
+                    _EditBExtraccion.frm.find("#dvBExtNoMaderable").show();
+                }*/
+
+                /*if ((lst_estado_origen_1.includes(estado_origen) && indicador == "M")
+                    || (lst_estado_origen_1.includes(estado_origen) && indicador == "NM")
+                    || lst_estado_origen_2.includes(estado_origen)
+                    || estado_origen == "PCN") {
+                    _EditBExtraccion.frm.find("#dvBExtMade_NoMade").show();
+                }*/
+
+                /*if ((estado_origen == "PN" && indicador == "M")//Maderable
+                    || (estado_origen == "PN" && indicador == "NM")//No Maderable
+                    || (lst_estado_origen_1.includes(estado_origen) && indicador == "M")
+                    || (lst_estado_origen_1.includes(estado_origen) && indicador == "NM")
+                    || lst_estado_origen_2.includes(estado_origen)//Maderable
+                    || (estado_origen == "DEMA" && indicador == "M")//Maderable
+                    || estado_origen == "PCN"//No Maderable
+                    || (estado_origen == "DEMA" /*&& indicador == "NM"*///)//No Maderable
+                /*) {*/
+                    _EditBExtraccion.frm.find("#dvBExtMade_NoMade").show();
+                //}
+            }
+
+            if (cod_mtipo == "0000006") {
+                _EditBExtraccion.frm.find("#dvBExtKardex").show();
+                _EditBExtraccion.frm.find("#dvBExtKardexTitle").show();
+            }
+        },
+        fnInit: () => {
+            const estado_origen = _EditBExtraccion.frm.find("#hdfEstadoOrigen").val();
+            let titulo_general = "";
+
+            switch (estado_origen) {
+                case 'PMFI': titulo_general = "Datos del PMFI"; break;
+                case 'DEMA': titulo_general = "Datos de la DEMA"; break;
+                default: titulo_general = "Datos del POA/PO";
+            }
+
+            _EditBExtraccion.frm.find("#lblTituloGeneral").text(titulo_general);
+            _EditBExtraccion.fnShowBExt();
+
+            _EditBExtraccion.dtBExtFecha = _EditBExtraccion.fnBuildTableBExtFecha();
+            _EditBExtraccion.dtBExtMade_NoMade = _EditBExtraccion.fnBuildTableBExtMade_NoMade();
+            //_EditBExtraccion.dtBExtMade = _EditBExtraccion.fnBuildTableBExtMade();
+            //_EditBExtraccion.dtBExtNoMade = _EditBExtraccion.fnBuildTableBExtNoMade();
+            _EditBExtraccion.fnLoadTableBExtFecha();
+            _EditBExtraccion.dtBExtKardex = _EditBExtraccion.fnBuildTableBExtKardex();
+            _EditBExtraccion.fnLoadTableBExtKardex();
+
+            $('[data-toggle="tooltip"]').tooltip();
+
+            _EditBExtraccion.frm.find('#tbBExtFecha tbody').on('click', 'tr', function () {
+                if (!$(this).hasClass('selected')) {
+                    let data = _EditBExtraccion.dtBExtFecha.row($(this)).data();
+
+                    _EditBExtraccion.dtBExtFecha.$('tr.selected').removeClass('selected');
+                    $(this).addClass('selected');
+
+                    _EditBExtraccion.codSecuencialBExtSelect = data.COD_SECUENCIAL;
+                    _EditBExtraccion.fnLoadTableBExtMade_NoMade(data.COD_SECUENCIAL);
+                    //_EditBExtraccion.fnLoadTableBExtMade(data.COD_SECUENCIAL);
+                    //_EditBExtraccion.fnLoadTableBExtNoMade(data.COD_SECUENCIAL);
+                }
+            });
+        }
+    };
+
+    $(document).ready(function () {
+        _EditBExtraccion.frm = $("#frmEditBExtraccion");
+
+        _EditBExtraccion.fnInit();
+    });
+</script>

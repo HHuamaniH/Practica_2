@@ -1,0 +1,48 @@
+﻿
+<script src="~/Areas/Supervision/js/ManInformeConservacion/_ActividadCapacitacion.js"></script>
+
+<div class="modal-dialog" role="document">
+    <div class="modal-content">
+        <div class="modal-header text-small" style="cursor:move;">
+            <span>Actividad Realizada</span>
+            <i class="fa fa-close" style="cursor:pointer;" data-dismiss="modal" aria-label="Close"></i>
+        </div>
+        <div class="modal-body">
+            <form id="frmItemActividadCapacitacion">
+                @Html.Hidden("hdfRegEstado")
+                @Html.Hidden("hdfCodPrograma")
+                @Html.Hidden("hdfCodSecuencial")
+                <div class="form-row">
+                    <div class="form-group col-md-12">
+                        <label for="txtActividad" class="text-small">Actividad</label>
+                        @Html.TextBox("txtActividad", "", new { @class = "form-control form-control-sm" })
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label for="txtFechaRealiza" class="text-small">Fecha de Realización</label>
+                        @Html.TextBox("txtFechaRealiza", "", new { @class = "form-control form-control-sm" })
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="txtNumParticipante" class="text-small">Nro. de Participantes</label>
+                        @Html.TextBox("txtNumParticipante", "", new { @class = "form-control form-control-sm", type = "number"})
+                    </div>
+                </div>
+                <div id="dvDatosCapacitacion" class="form-row" style="display:none;">
+                    <div class="form-group col-md-6">
+                        <label for="ddlEstadoDocumentoId" class="text-small">Se Encuentra Documentada</label>
+                        @Html.DropDownList("ddlEstadoDocumentoId", new SelectList(ViewBag.ddlOpcionSiNo, "Value", "Text"), new { @class = "form-control form-control-sm" })
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="txtTipoRegistro" class="text-small">Tipo de Registro</label>
+                        @Html.TextBox("txtTipoRegistro", "", new { @class = "form-control form-control-sm" })
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-primary btn-sm" onclick="_ActividadCapacitacion.fnSubmitForm()">Guardar</button>
+            <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Cancelar</button>
+        </div>
+    </div>
+</div>

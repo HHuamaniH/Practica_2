@@ -1,0 +1,370 @@
+﻿@model IEnumerable<CapaEntidad.DOC.Ent_INFORME_CONSOLIDADO>
+
+<style type="text/css">
+    #tbConsolidadoNN_wrapper {
+        padding: 0px;
+    }
+
+    table .custom-row-foot th {
+        text-align: center;
+        background-color: lightblue;
+    }
+</style>
+
+<script type="text/javascript">
+    var _ReporteConsolidadoNN = {};
+
+    _ReporteConsolidadoNN.fnInitDataTable_Detail = function () {
+        var columns_label = [], columns_data = [], options = {};
+
+        columns_label = ["Nombre cientifico", "N° Árb.", "Vol. (m3)", "N° Árb.", "Vol. (m3)", "N° Árb.", "N° Árb.", "N° Árb.", "Vol. (m3)", "N° Árb.", "Vol. (m3)", "N° Árb.", "Vol. (m3)", "N° Árb.", "Vol. (m3)", "N° Árb.", "Vol. (m3)", "N° Árb.", "Vol. (m3)", "N° Árb.", "N° Árb.", "Vol. (m3)", "N° Árb.", "Vol. (m3)", "N° Árb.", "Vol. (m3)", "N° Árb.", "N° Árb.", "Vol. (m3)", "N° Árb.", "Vol. (m3)", "N° Árb.", "N° Árb.", "N° Árb.", "N° Árb. ", "N° Árb."];
+        columns_data = ["NOMBRE_CIENTIFICO", "NUM_PIEZAS", "VOLUMEN_AUTORIZADO", "NUM_ARBOLES", "VOLUMEN_CENSO", "NUM_ARB_SEM", "NUM_ARB_TOT", "NUM_ARB_AEP", "VOLUMEN_AEP", "NUM_ARB_ATU", "VOLUMEN_ATU", "NUM_ARB_ATF", "VOLUMEN_ATF", "NUM_ARB_AMO", "VOLUMEN_AMO", "NUM_ARB_AMF", "VOLUMEN_AMF","NUM_ARB_ACN", "VOLUMEN_ACN", "NUM_ARB_ANE", "NUM_ARB_NEP", "VOLUMEN_NEP", "NUM_ARB_NTU", "VOLUMEN_NTU", "NUM_ARB_NCN", "VOLUMEN_NCN", "NUM_ARB_SEP", "NUM_ARB_STU", "VOLUMEN_STU", "NUM_ARB_SMO", "VOLUMEN_SMO", "NUM_ARB_SCN", "NUM_ARB_SNE", "NUM_ARB_NEA", "NUM_ARB_NES", "TOTAL_SUP"];
+        options = {
+            page_length: 15, row_index: true//, button_excel: true 
+            , export_title: "Consolidado"
+        };
+        _ReporteConsolidadoNN.dtConsolidado = utilDt.fnLoadDataTable_Detail($("#tbConsolidadoNN"), columns_label, columns_data, options);
+    }
+
+    _ReporteConsolidadoNN.fnSetTotal = function () {
+        var rows, data, piezas = 0, volumenApro = 0, arboles = 0, volumen = 0, Sem = 0, Total = 0, ArbolesAEP = 0, VolumenAEP = 0, ArbolesATU = 0,
+            VolumenATU = 0, ArbolesATF = 0, VolumenATF = 0, ArbolesAMO = 0, VolumenAMO = 0, ArbolesAMF = 0, VolumenAMF = 0, ArbolesACN = 0,
+            VolumenACN = 0, ArbolesANE = 0, ArbolesNEP = 0, VolumenNEP = 0, ArbolesNTU = 0, VolumenNTU = 0, ArbolesNMO = 0, VolumenNMO = 0,
+            ArbolesNCN = 0, VolumenNCN = 0, ArbolesSEP = 0, ArbolesSTU = 0, VolumenSTU = 0, ArbolesSMO = 0, VolumenSMO = 0, ArbolesSCN = 0,
+            ArbolesSNE = 0, ArbolesNEA = 0, ArbolesNES = 0, totalSUP = 0;
+        rows = _ReporteConsolidadoNN.dtConsolidado.$("tr");
+        if (rows.length > 0) {
+            $.each(rows, function (i, o) {
+                data = _ReporteConsolidadoNN.dtConsolidado.row($(o)).data();
+                piezas += parseFloat(data["NUM_PIEZAS"]);
+                volumenApro += parseFloat(data["VOLUMEN_AUTORIZADO"]);
+                arboles += parseFloat(data["NUM_ARBOLES"]);
+                volumen += parseFloat(data["VOLUMEN_CENSO"]);
+                Sem += parseFloat(data["NUM_ARB_SEM"]);
+                Total += parseFloat(data["NUM_ARB_TOT"]);
+                ArbolesAEP += parseFloat(data["NUM_ARB_AEP"]);
+                VolumenAEP += parseFloat(data["VOLUMEN_AEP"]);
+                ArbolesATU += parseFloat(data["NUM_ARB_ATU"]);
+                VolumenATU += parseFloat(data["VOLUMEN_ATU"]);
+                ArbolesATF += parseFloat(data["NUM_ARB_ATF"]);
+                VolumenATF += parseFloat(data["VOLUMEN_ATF"]);
+                ArbolesAMO += parseFloat(data["NUM_ARB_AMO"]);
+                VolumenAMO += parseFloat(data["VOLUMEN_AMO"]);
+                ArbolesAMF += parseFloat(data["NUM_ARB_AMF"]);
+                VolumenAMF += parseFloat(data["VOLUMEN_AMF"]);
+                ArbolesACN += parseFloat(data["NUM_ARB_ACN"]);
+                VolumenACN += parseFloat(data["VOLUMEN_ACN"]);
+                ArbolesANE += parseFloat(data["NUM_ARB_ANE"]);
+                ArbolesNEP += parseFloat(data["NUM_ARB_NEP"]);
+                VolumenNEP += parseFloat(data["VOLUMEN_NEP"]);
+                ArbolesNTU += parseFloat(data["NUM_ARB_NTU"]);
+                VolumenNTU += parseFloat(data["VOLUMEN_NTU"]);
+                //ArbolesNMO += parseFloat(data["NUM_ARB_NMO"]);
+                //VolumenNMO += parseFloat(data["VOLUMEN_NMO"]);
+                ArbolesNCN += parseFloat(data["NUM_ARB_NCN"]);
+                VolumenNCN += parseFloat(data["VOLUMEN_NCN"]);
+                ArbolesSEP += parseFloat(data["NUM_ARB_SEP"]);
+                ArbolesSTU += parseFloat(data["NUM_ARB_STU"]);
+                VolumenSTU += parseFloat(data["VOLUMEN_STU"]);
+                ArbolesSMO += parseFloat(data["NUM_ARB_SMO"]);
+                VolumenSMO += parseFloat(data["VOLUMEN_SMO"]);
+                ArbolesSCN += parseFloat(data["NUM_ARB_SCN"]);
+                ArbolesSNE += parseFloat(data["NUM_ARB_SNE"]);
+                ArbolesNEA += parseFloat(data["NUM_ARB_NEA"]);
+                ArbolesNES += parseFloat(data["NUM_ARB_NES"]);
+                totalSUP += parseFloat(data["TOTAL_SUP"]);
+            });
+        }
+        _ReporteConsolidadoNN.frm.find("#totalPiezas").text(Math.round(piezas * 1000) / 1000);
+        _ReporteConsolidadoNN.frm.find("#totalVolumenApro").text(Math.round(volumenApro * 1000) / 1000);
+        _ReporteConsolidadoNN.frm.find("#totalArboles").text(Math.round(arboles * 1000) / 1000);
+        _ReporteConsolidadoNN.frm.find("#totalVolumen").text(Math.round(volumen * 1000) / 1000);
+        _ReporteConsolidadoNN.frm.find("#totalSem").text(Math.round(Sem * 1000) / 1000);
+        _ReporteConsolidadoNN.frm.find("#totalTotal").text(Math.round(Total * 1000) / 1000);
+        _ReporteConsolidadoNN.frm.find("#totalArbolesAEP").text(Math.round(ArbolesAEP * 1000) / 1000);
+        _ReporteConsolidadoNN.frm.find("#totalVolumenAEP").text(Math.round(VolumenAEP * 1000) / 1000);
+        _ReporteConsolidadoNN.frm.find("#totalArbolesATU").text(Math.round(ArbolesATU * 1000) / 1000);
+        _ReporteConsolidadoNN.frm.find("#totalVolumenATU").text(Math.round(VolumenATU * 1000) / 1000);
+        _ReporteConsolidadoNN.frm.find("#totalArbolesATF").text(Math.round(ArbolesATU * 1000) / 1000);
+        _ReporteConsolidadoNN.frm.find("#totalVolumenATF").text(Math.round(VolumenATU * 1000) / 1000);
+        _ReporteConsolidadoNN.frm.find("#totalArbolesAMO").text(Math.round(ArbolesAMO * 1000) / 1000);
+        _ReporteConsolidadoNN.frm.find("#totalVolumenAMO").text(Math.round(VolumenAMO * 1000) / 1000);
+        _ReporteConsolidadoNN.frm.find("#totalArbolesAMF").text(Math.round(ArbolesAMF * 1000) / 1000);
+        _ReporteConsolidadoNN.frm.find("#totalVolumenAMF").text(Math.round(VolumenAMF * 1000) / 1000);
+        _ReporteConsolidadoNN.frm.find("#totalArbolesACN").text(Math.round(ArbolesACN * 1000) / 1000);
+        _ReporteConsolidadoNN.frm.find("#totalVolumenACN").text(Math.round(VolumenACN * 1000) / 1000);
+        _ReporteConsolidadoNN.frm.find("#totalArbolesANE").text(Math.round(ArbolesANE * 1000) / 1000);
+        _ReporteConsolidadoNN.frm.find("#totalArbolesNEP").text(Math.round(ArbolesNEP * 1000) / 1000);
+        _ReporteConsolidadoNN.frm.find("#totalVolumenNEP").text(Math.round(VolumenNEP * 1000) / 1000);
+        _ReporteConsolidadoNN.frm.find("#totalArbolesNTU").text(Math.round(ArbolesNTU * 1000) / 1000);
+        _ReporteConsolidadoNN.frm.find("#totalVolumenNTU").text(Math.round(VolumenNTU * 1000) / 1000);
+        //_ReporteConsolidadoNN.frm.find("#totalArbolesNMO").text(Math.round(ArbolesNMO * 1000) / 1000);
+        //_ReporteConsolidadoNN.frm.find("#totalVolumenNMO").text(Math.round(VolumenNMO * 1000) / 1000);
+        _ReporteConsolidadoNN.frm.find("#totalArbolesNCN").text(Math.round(ArbolesNCN * 1000) / 1000);
+        _ReporteConsolidadoNN.frm.find("#totalVolumenNCN").text(Math.round(VolumenNCN * 1000) / 1000);
+        _ReporteConsolidadoNN.frm.find("#totalArbolesSEP").text(Math.round(ArbolesSEP * 1000) / 1000);
+        _ReporteConsolidadoNN.frm.find("#totalArbolesSTU").text(Math.round(ArbolesSTU * 1000) / 1000);
+        _ReporteConsolidadoNN.frm.find("#totalVolumenSTU").text(Math.round(VolumenSTU * 1000) / 1000);
+        _ReporteConsolidadoNN.frm.find("#totalArbolesSMO").text(Math.round(ArbolesSMO * 1000) / 1000);
+        _ReporteConsolidadoNN.frm.find("#totalVolumenSMO").text(Math.round(VolumenSMO * 1000) / 1000);
+        _ReporteConsolidadoNN.frm.find("#totalArbolesSCN").text(Math.round(ArbolesSCN * 1000) / 1000);
+        _ReporteConsolidadoNN.frm.find("#totalArbolesSNE").text(Math.round(ArbolesSNE * 1000) / 1000);
+        _ReporteConsolidadoNN.frm.find("#totalArbolesNEA").text(Math.round(ArbolesNEA * 1000) / 1000);
+        _ReporteConsolidadoNN.frm.find("#totalArbolesNES").text(Math.round(ArbolesNES * 1000) / 1000);
+        _ReporteConsolidadoNN.frm.find("#totalSUP").text(Math.round(totalSUP * 1000) / 1000);
+    }
+
+    _ReporteConsolidadoNN.fnExportConsolidado = function () {
+        var url = urlLocalSigo + "Supervision/ManInforme/ExportarConsolidado?asCodInf=" + _ReporteConsolidadoNN.frm.find("#hdfCodInforme").val() + "&iNUmPoa=" + _ReporteConsolidadoNN.frm.find("#hdfNumPoa").val();
+            window.location = url;        
+    };
+
+    $(document).ready(function () {
+        _ReporteConsolidadoNN.frm = $("#frmConsolidadoNN");
+        _ReporteConsolidadoNN.fnInitDataTable_Detail();
+        //_ReporteConsolidadoNN.dtConsolidado.rows.add(JSON.parse('@Html.Raw(Json.Encode(@Model))')).draw();
+        _ReporteConsolidadoNN.fnSetTotal();
+    });
+</script>
+
+<div id="frmConsolidadoNN">
+    <div class="form-group col-md-6" style="margin-top:23px;">
+        @Html.Hidden("hdfCodInforme", (string)ViewBag.hdfCodInforme)
+        @Html.Hidden("hdfNumPoa", (int)ViewBag.hdfNumPoa)
+        @*<div class="dt-buttons"><button class="dt-button buttons-excel buttons-html5" tabindex="0" onclick="_ReporteConsolidadoNN.fnExportConsolidado()"><span>Excel</span></button> </div>*@        
+    </div>
+    <div class="table-responsive">
+        <table id="tbConsolidadoNN" style="width:100%;margin:0px !important;" class="table table-hover table-bordered">
+            <thead>
+                <tr>
+                    <th colspan="37" class="text-sm-center">
+                        <div class="form-inline" style="display: flex; justify-content: center; align-items: center;"><strong>Mal Identificado</strong></div>
+                    </th>
+                </tr>
+                
+                <tr>
+                    <th colspan="2" rowspan="2" class="text-sm-center align-middle">
+                        <div class="form-inline" style="display: flex; justify-content: center; align-items: center;"><strong>Especies Forestales</strong></div>
+                    </th>
+                    <th colspan="2" rowspan="2" class="text-sm-center align-middle">
+                        <div class="form-inline" style="display: flex; justify-content: center; align-items: center;"><strong>Aprovechables  Autorizados</strong></div>
+                    </th>
+                    <th colspan="2" rowspan="2" class="text-sm-center align-middle">
+                        <div class="form-inline" style="display: flex; justify-content: center; align-items: center;"><strong>Aprovechables</strong></div>
+                    </th>
+                    <th rowspan="2" class="text-sm-center align-middle">
+                        <div class="form-inline" style="display: flex; justify-content: center; align-items: center;"><strong>Semilleros</strong></div>
+                    </th>
+                    <th rowspan="2" class="text-sm-center align-middle">
+                        <div class="form-inline" style="display: flex; justify-content: center; align-items: center;"><strong>Total</strong></div>
+                    </th>
+                    <th colspan="13" class="text-sm-center align-middle">
+                        <div class="form-inline" style="display: flex; justify-content: center; align-items: center;"><strong>Aprovechables (A)</strong></div>
+                    </th>
+                    <th colspan="6" class="text-sm-center align-middle">
+                        <div class="form-inline" style="display: flex; justify-content: center; align-items: center;"><strong>Arboles No Aprovechables</strong></div>
+                    </th>
+                    <th colspan="7" class="text-sm-center align-middle">
+                        <div class="form-inline" style="display: flex; justify-content: center; align-items: center;"><strong>Semilleros (S)</strong></div>
+                    </th>
+                    <th colspan="2" class="text-sm-center align-middle">
+                        <div class="form-inline" style="display: flex; justify-content: center; align-items: center;"><strong>No Evaluados</strong></div>
+                    </th>
+                    <th rowspan="2" class="text-sm-center align-middle">
+                        <div class="form-inline" style="display: flex; justify-content: center; align-items: center;"><strong>Total Supervisado</strong></div>
+                    </th>
+                </tr>
+                <tr>
+                    <th colspan="2" class="text-sm-center align-middle">
+                        <div class="form-inline" style="display: flex; justify-content: center; align-items: center;"><strong>En Pie (P)</strong></div>
+                    </th>
+                    <th colspan="2" class="text-sm-center align-middle">
+                        <div class="form-inline" style="display: flex; justify-content: center; align-items: center;"><strong>Tumbado (T)</strong></div>
+                    </th>
+                    <th colspan="2" class="text-sm-center align-middle">
+                        <div class="form-inline" style="display: flex; justify-content: center; align-items: center;"><strong>Tumbado (T) Fuera de Vigencia</strong></div>
+                    </th>
+                    <th colspan="2" class="text-sm-center align-middle">
+                        <div class="form-inline" style="display: flex; justify-content: center; align-items: center;"><strong>Movilizado (M)</strong></div>
+                    </th>
+                    <th colspan="2" class="text-sm-center align-middle">
+                        <div class="form-inline" style="display: flex; justify-content: center; align-items: center;"><strong>Movilizado (M) Fuera de Vigencia</strong></div>
+                    </th>
+                    <th colspan="2" class="text-sm-center align-middle">
+                        <div class="form-inline" style="display: flex; justify-content: center; align-items: center;"><strong>Caido Natural (CN)</strong></div>
+                    </th>
+                    <th class="text-sm-center align-middle">
+                        <div class="form-inline" style="display: flex; justify-content: center; align-items: center;"><strong>No Existe</strong></div>
+                    </th>
+                    <th colspan="2" class="text-sm-center align-middle">
+                        <div class="form-inline" style="display: flex; justify-content: center; align-items: center;"><strong>En Pie (P)</strong></div>
+                    </th>
+                    <th colspan="2" class="text-sm-center align-middle">
+                        <div class="form-inline" style="display: flex; justify-content: center; align-items: center;"><strong>Tumbado (T)</strong></div>
+                    </th>
+                    <th colspan="2" class="text-sm-center align-middle">
+                        <div class="form-inline" style="display: flex; justify-content: center; align-items: center;"><strong>Caido Natural (CN)</strong></div>
+                    </th>
+                    <th class="text-sm-center align-middle">
+                        <div class="form-inline" style="display: flex; justify-content: center; align-items: center;"><strong>En Pie (P)</strong></div>
+                    </th>
+                    <th colspan="2" class="text-sm-center align-middle">
+                        <div class="form-inline" style="display: flex; justify-content: center; align-items: center;"><strong>Tumbado (T)</strong></div>
+                    </th>
+                    <th colspan="2" class="text-sm-center align-middle">
+                        <div class="form-inline" style="display: flex; justify-content: center; align-items: center;"><strong>Movilizado (M)</strong></div>
+                    </th>
+                    <th class="text-sm-center align-middle">
+                        <div class="form-inline" style="display: flex; justify-content: center; align-items: center;"><strong>Caido Natural (CN)</strong></div>
+                    </th>
+                    <th class="text-sm-center align-middle">
+                        <div class="form-inline" style="display: flex; justify-content: center; align-items: center;"><strong>No Existe</strong></div>
+                    </th>
+                    <th class="text-sm-center align-middle">
+                        <div class="form-inline" style="display: flex; justify-content: center; align-items: center;"><strong>Aprovechables</strong></div>
+                    </th>
+                    <th class="text-sm-center align-middle">
+                        <div class="form-inline" style="display: flex; justify-content: center; align-items: center;"><strong>Semilleros</strong></div>
+                    </th>
+                </tr>
+
+                @*<tr>
+            <th colspan="2" rowspan="3" class="text-sm-center align-middle">
+                <div class="form-inline" style="display: flex; justify-content: center; align-items: center;"><strong>Especies Forestales</strong></div>
+            </th>
+            <th colspan="2" rowspan="3" class="text-sm-center align-middle">
+                <div class="form-inline" style="display: flex; justify-content: center; align-items: center;"><strong>Aprovechables  Autorizados</strong></div>
+            </th>
+            <th colspan="4" class="text-sm-center align-middle">
+                <div class="form-inline" style="display: flex; justify-content: center; align-items: center;"><strong>Árboles Programados a Supervisar del PMF</strong></div>
+            </th>
+            <th colspan="26" class="text-sm-cente align-middler">
+                <div class="form-inline" style="display: flex; justify-content: center; align-items: center;"><strong>Árboles  Supervisados  en  Campo</strong></div>
+            </th>
+            <th colspan="2" rowspan="2" class="text-sm-center align-middle">
+                <div class="form-inline" style="display: flex; justify-content: center; align-items: center;"><strong>No Evaluados</strong></div>
+            </th>
+            <th rowspan="3" class="text-sm-center align-middle">
+                <div class="form-inline" style="display: flex; justify-content: center; align-items: center;"><strong>Total Supervisado</strong></div>
+            </th>
+        </tr>
+        <tr>
+            <th colspan="2" rowspan="2" class="text-sm-center align-middle">
+                <div class="form-inline" style="display: flex; justify-content: center; align-items: center;"><strong>Aprovechables</strong></div>
+            </th>
+            <th rowspan="2" class="text-sm-center align-middle">
+                <div class="form-inline" style="display: flex; justify-content: center; align-items: center;"><strong>Semilleros</strong></div>
+            </th>
+            <th rowspan="2" class="text-sm-center align-middle">
+                <div class="form-inline" style="display: flex; justify-content: center; align-items: center;"><strong>Total</strong></div>
+            </th>
+            <th colspan="13" class="text-sm-center align-middle">
+                <div class="form-inline" style="display: flex; justify-content: center; align-items: center;"><strong>Aprovechables (A)</strong></div>
+            </th>
+            <th colspan="6" class="text-sm-center align-middle">
+                <div class="form-inline" style="display: flex; justify-content: center; align-items: center;"><strong>Arboles No Aprovechables</strong></div>
+            </th>
+            <th colspan="7" class="text-sm-center align-middle">
+                <div class="form-inline" style="display: flex; justify-content: center; align-items: center;"><strong>Semilleros (S)</strong></div>
+            </th>
+        </tr>
+        <tr>
+            <th colspan="2" class="text-sm-center align-middle">
+                <div class="form-inline" style="display: flex; justify-content: center; align-items: center;"><strong>En Pie (P)</strong></div>
+            </th>
+            <th colspan="2" class="text-sm-center align-middle">
+                <div class="form-inline" style="display: flex; justify-content: center; align-items: center;"><strong>Tumbado (T)</strong></div>
+            </th>
+            <th colspan="2" class="text-sm-center align-middle">
+                <div class="form-inline" style="display: flex; justify-content: center; align-items: center;"><strong>Tumbado (T) Fuera de Vigencia</strong></div>
+            </th>
+            <th colspan="2" class="text-sm-center align-middle">
+                <div class="form-inline" style="display: flex; justify-content: center; align-items: center;"><strong>Movilizado (M)</strong></div>
+            </th>
+            <th colspan="2" class="text-sm-center align-middle">
+                <div class="form-inline" style="display: flex; justify-content: center; align-items: center;"><strong>Movilizado (M) Fuera de Vigencia</strong></div>
+            </th>
+            <th colspan="2" class="text-sm-center align-middle">
+                <div class="form-inline" style="display: flex; justify-content: center; align-items: center;"><strong>Caido Natural (CN)</strong></div>
+            </th>
+            <th class="text-sm-center align-middle">
+                <div class="form-inline" style="display: flex; justify-content: center; align-items: center;"><strong>No Existe</strong></div>
+            </th>
+            <th colspan="2" class="text-sm-center align-middle">
+                <div class="form-inline" style="display: flex; justify-content: center; align-items: center;"><strong>En Pie (P)</strong></div>
+            </th>
+            <th colspan="2" class="text-sm-center align-middle">
+                <div class="form-inline" style="display: flex; justify-content: center; align-items: center;"><strong>Tumbado (T)</strong></div>
+            </th>
+            <th colspan="2" class="text-sm-center align-middle">
+                <div class="form-inline" style="display: flex; justify-content: center; align-items: center;"><strong>Caido Natural (CN)</strong></div>
+            </th>
+            <th class="text-sm-center align-middle">
+                <div class="form-inline" style="display: flex; justify-content: center; align-items: center;"><strong>En Pie (P)</strong></div>
+            </th>
+            <th colspan="2" class="text-sm-center align-middle">
+                <div class="form-inline" style="display: flex; justify-content: center; align-items: center;"><strong>Tumbado (T)</strong></div>
+            </th>
+            <th colspan="2" class="text-sm-center align-middle">
+                <div class="form-inline" style="display: flex; justify-content: center; align-items: center;"><strong>Movilizado (M)</strong></div>
+            </th>
+            <th class="text-sm-center align-middle">
+                <div class="form-inline" style="display: flex; justify-content: center; align-items: center;"><strong>Caido Natural (CN)</strong></div>
+            </th>
+            <th class="text-sm-center align-middle">
+                <div class="form-inline" style="display: flex; justify-content: center; align-items: center;"><strong>No Existe</strong></div>
+            </th>
+            <th class="text-sm-center align-middle">
+                <div class="form-inline" style="display: flex; justify-content: center; align-items: center;"><strong>Aprovechables</strong></div>
+            </th>
+            <th class="text-sm-center align-middle">
+                <div class="form-inline" style="display: flex; justify-content: center; align-items: center;"><strong>Semilleros</strong></div>
+            </th>
+        </tr>*@
+            </thead>
+            <tbody></tbody>
+            <tfoot>
+                <tr class="custom-row-foot">
+                    <th colspan="2">Total</th>
+                    <th style="text-align:left;"><span id="totalPiezas">0</span></th>
+                    <th style="text-align:left;"><span id="totalVolumenApro">0</span></th>
+                    <th style="text-align:left;"><span id="totalArboles">0</span></th>
+                    <th style="text-align:left;"><span id="totalVolumen">0</span></th>
+                    <th style="text-align:left;"><span id="totalSem">0</span></th>
+                    <th style="text-align:left;"><span id="totalTotal">0</span></th>
+                    <th style="text-align:left;"><span id="totalArbolesAEP">0</span></th>
+                    <th style="text-align:left;"><span id="totalVolumenAEP">0</span></th>
+                    <th style="text-align:left;"><span id="totalArbolesATU">0</span></th>
+                    <th style="text-align:left;"><span id="totalVolumenATU">0</span></th>
+                    <th style="text-align:left;"><span id="totalArbolesATF">0</span></th>
+                    <th style="text-align:left;"><span id="totalVolumenATF">0</span></th>
+                    <th style="text-align:left;"><span id="totalArbolesAMO">0</span></th>
+                    <th style="text-align:left;"><span id="totalVolumenAMO">0</span></th>
+                    <th style="text-align:left;"><span id="totalArbolesAMF">0</span></th>
+                    <th style="text-align:left;"><span id="totalVolumenAMF">0</span></th>
+                    <th style="text-align:left;"><span id="totalArbolesACN">0</span></th>
+                    <th style="text-align:left;"><span id="totalVolumenACN">0</span></th>
+                    <th style="text-align:left;"><span id="totalArbolesANE">0</span></th>
+                    <th style="text-align:left;"><span id="totalArbolesNEP">0</span></th>
+                    <th style="text-align:left;"><span id="totalVolumenNEP">0</span></th>
+                    <th style="text-align:left;"><span id="totalArbolesNTU">0</span></th>
+                    <th style="text-align:left;"><span id="totalVolumenNTU">0</span></th>
+                    @*<th style="text-align:left;"><span id="totalArbolesNMO">0</span></th>
+        <th style="text-align:left;"><span id="totalVolumenNMO">0</span></th>*@
+                    <th style="text-align:left;"><span id="totalArbolesNCN">0</span></th>
+                    <th style="text-align:left;"><span id="totalVolumenNCN">0</span></th>
+                    <th style="text-align:left;"><span id="totalArbolesSEP">0</span></th>
+                    <th style="text-align:left;"><span id="totalArbolesSTU">0</span></th>
+                    <th style="text-align:left;"><span id="totalVolumenSTU">0</span></th>
+                    <th style="text-align:left;"><span id="totalArbolesSMO">0</span></th>
+                    <th style="text-align:left;"><span id="totalVolumenSMO">0</span></th>
+                    <th style="text-align:left;"><span id="totalArbolesSCN">0</span></th>
+                    <th style="text-align:left;"><span id="totalArbolesSNE">0</span></th>
+                    <th style="text-align:left;"><span id="totalArbolesNEA">0</span></th>
+                    <th style="text-align:left;"><span id="totalArbolesNES">0</span></th>
+                    <th style="text-align:left;"><span id="totalSUP">0</span></th>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+</div>

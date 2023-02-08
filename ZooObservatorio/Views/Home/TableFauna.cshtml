@@ -1,0 +1,192 @@
+﻿@using ZooObservatorio;
+@model dynamic
+@{
+    Layout = null;
+}
+<link rel="stylesheet" href="~/Styles/css/estrellas.css" />
+<div class="alert alert-success alert-dismissible" style="background-color: #D2E9C3 !important">
+    <div style="text-align: justify; font-size: 12px; color: black" id="divDescripcion">
+        @if (Model != null)
+        {
+            var itemZoo = Model.descZoologico;
+            var itemZooc = Model.descZoocriadero;
+            <p>@itemZoo</p>
+            <p>@itemZooc</p>
+        }
+        *** La busqueda se puede realizar por: nombre del titular, del establecimiento, científico o común de las especies
+    </div>
+</div>
+<div>
+    @if (Model != null)
+    {
+        var urlGeneral = Model.urlGeneral;
+        <a href="@urlGeneral" target="_blank">
+            <img id="btnMapGeneral" src="~/Images/Iconos/map_sisfor.png" title="ver Mapa" runat="server" style="margin-right: 15px; float: right" />
+        </a>
+    }
+    <a href="@Url.Action("dowloanEcxel","Home")" target="_blank">
+        <img id="imgBtnDowloadExcel" src="~/Images/Iconos/ExportarExcel.png" title="Descargar Excel" style="margin-right: 10px; float: right" />
+    </a>
+
+
+</div>
+<br />
+<br />
+<script>
+    $(function () {
+        $('#tbListFauna').DataTable()
+    })
+</script>
+
+<div style="width: 100%; overflow: auto; scrollbar-base-color: none;">
+    <table id="tbListFauna" class="table table-bordered table-striped-success" style="width: 100% !important">
+        <thead>
+            <tr style="text-align: center; background-color: #D2E9C3">
+                <td style="width: 2%">N°</td>
+                <td style="width: 20%">Titular</td>
+                <td style="width: 8%">DNI/RUC</td>
+                <td style="width: 20%">Nombre Establecimiento</td>
+                <td style="width: 10%">Modalidad</td>
+                <td style="width: 10%">Departamento</td>
+                <td style="width: 10%">Sector</td>
+                <td style="width: 10%">Calificación</td>
+                <td style="width: 5%">Mapa</td>
+                <td style="width: 5%">Detalle</td>
+                <td style="display:none">Especie</td>
+            </tr>
+        </thead>
+        <tbody id="bodyTable">
+            @if (Model.ListReporteFauna != null)
+            {
+                var count = 0;
+                foreach (var item in Model.ListReporteFauna)
+                {
+                    <tr>
+                        <td style="width: 2%">@(++count)</td>
+                        <td style="width: 20%">@item.TITULAR</td>
+                        <td style="width: 8%">@item.NUMERO</td>
+                        <td style="width: 20%">@item.TITULO</td>
+                        <td style="width: 10%">@item.MODALIDAD</td>
+                        <td style="width: 10%">@item.DEPARTAMENTO</td>
+                        <td style="width: 10%">@item.DIRECCION</td>
+                        <td style="width: 10%; text-align:center">
+                            @if (item.NO_EVALUADO > 0)
+                            {
+                                var @rank = item.NO_EVALUADO;
+                                <input type="hidden" id="hfRanking" name="htfRanking" value="@rank" />
+
+                                if (@rank == 5)
+                                {
+                                    <form>
+                                        <p class="clasificacion">
+                                            <input id="radio1" type="radio" name="radio1" value="5" disabled="disabled" checked="checked">
+                                            <label for="radio1">★</label>
+                                            <input id="radio2" type="radio" name="radio2" value="4" disabled="disabled">
+                                            <label for="radio2">★</label>
+                                            <input id="radio3" type="radio" name="radio3" value="3" disabled="disabled">
+                                            <label for="radio3">★</label>
+                                            <input id="radio4" type="radio" name="radio4" value="2" disabled="disabled">
+                                            <label for="radio4">★</label>
+                                            <input id="radio5" type="radio" name="radio5" value="1" disabled="disabled">
+                                            <label for="radio5">★</label>
+                                        </p>
+                                    </form>
+                                }
+                                if (@rank == 4)
+                                {
+                                    <form>
+                                        <p class="clasificacion">
+                                            <input id="radio1" type="radio" name="radio1" value="5" disabled="disabled">
+                                            <label for="radio1">★</label>
+                                            <input id="radio2" type="radio" name="radio2" value="4" disabled="disabled" checked="checked">
+                                            <label for="radio2">★</label>
+                                            <input id="radio3" type="radio" name="radio3" value="3" disabled="disabled">
+                                            <label for="radio3">★</label>
+                                            <input id="radio4" type="radio" name="radio4" value="2" disabled="disabled">
+                                            <label for="radio4">★</label>
+                                            <input id="radio5" type="radio" name="radio5" value="1" disabled="disabled">
+                                            <label for="radio5">★</label>
+                                        </p>
+                                    </form>
+                                }
+                                if (@rank == 3)
+                                {
+                                    <form>
+                                        <p class="clasificacion">
+                                            <input id="radio1" type="radio" name="radio1" value="5" disabled="disabled">
+                                            <label for="radio1">★</label>
+                                            <input id="radio2" type="radio" name="radio2" value="4" disabled="disabled">
+                                            <label for="radio2">★</label>
+                                            <input id="radio3" type="radio" name="radio3" value="3" disabled="disabled" checked="checked">
+                                            <label for="radio3">★</label>
+                                            <input id="radio4" type="radio" name="radio4" value="2" disabled="disabled">
+                                            <label for="radio4">★</label>
+                                            <input id="radio5" type="radio" name="radio5" value="1" disabled="disabled">
+                                            <label for="radio5">★</label>
+                                        </p>
+                                    </form>
+                                }
+                                if (@rank == 2)
+                                {
+                                    <form>
+                                        <p class="clasificacion">
+                                            <input id="radio1" type="radio" name="radio1" value="5" disabled="disabled">
+                                            <label for="radio1">★</label>
+                                            <input id="radio2" type="radio" name="radio2" value="4" disabled="disabled">
+                                            <label for="radio2">★</label>
+                                            <input id="radio3" type="radio" name="radio3" value="3" disabled="disabled">
+                                            <label for="radio3">★</label>
+                                            <input id="radio4" type="radio" name="radio4" value="2" disabled="disabled" checked="checked">
+                                            <label for="radio4">★</label>
+                                            <input id="radio5" type="radio" name="radio5" value="1" disabled="disabled">
+                                            <label for="radio5">★</label>
+                                        </p>
+                                    </form>
+                                }
+                                if (@rank == 1)
+                                {
+                                    <form>
+                                        <p class="clasificacion">
+                                            <input id="radio1" type="radio" name="radio1" value="5" disabled="disabled">
+                                            <label for="radio1">★</label>
+                                            <input id="radio2" type="radio" name="radio2" value="4" disabled="disabled">
+                                            <label for="radio2">★</label>
+                                            <input id="radio3" type="radio" name="radio3" value="3" disabled="disabled">
+                                            <label for="radio3">★</label>
+                                            <input id="radio4" type="radio" name="radio4" value="2" disabled="disabled">
+                                            <label for="radio4">★</label>
+                                            <input id="radio5" type="radio" name="radio5" value="1" disabled="disabled" checked="checked">
+                                            <label for="radio5">★</label>
+                                        </p>
+                                    </form>
+                                }
+                            }
+                            <div style="display:none">
+                                @item.NO_EVALUADO
+                            </div>
+                        </td>
+                        <td style="width: 5%; text-align: center">
+                            <a href="https://sisfor.osinfor.gob.pe/visor/sisforv4/geoTHFauna/@item.COD_THABILITANTE" target="_blank">
+                                <img border="0" src="~/Images/Iconos/map_sisfor.png" />
+                            </a>
+                        </td>
+                        <td style="width: 5%; text-align: center">
+                            @using (@Html.BeginForm("detalle", "Home", FormMethod.Post))
+                            {
+                                <button id="btnBuscar" type="submit" class="btn btn-app" formtarget="_blank" title="Ver Historial"
+                                        style="min-width:50px; height:52px; background-color:#3c8dbc; color:white; padding: 10px 5px;">
+                                    <i class="fa fa-search-plus"></i> Ver
+                                </button>
+                                <input type="hidden" id="hfTHabilitanteCod" name="hfTHabilitanteCod" value="@item.COD_THABILITANTE" visible="false" />
+                                <input type="hidden" id="hfCodInforme" name="hfCodInforme" value="@item.COD_INFORME" visible="false"/>
+                                <input type="hidden" id="hfAnioSup" name="hfAnioSup" value="@item.ANIO_SUP" visible="false" />
+
+                            }
+                        </td>
+                        <td style="display: none ">@item.COD_ESPECIES</td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+</div>

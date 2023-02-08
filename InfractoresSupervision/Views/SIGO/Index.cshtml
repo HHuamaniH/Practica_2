@@ -1,0 +1,264 @@
+﻿@using InfractoresSupervision;
+@model dynamic
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<script type="text/javascript">
+
+    $(function () {
+        $("[id*=chkTodoReg]").on("change", function () {
+            if ($(this).is(":checked")) {
+                $("[id*=chkRegiones] input").prop("checked", true);
+            } else {
+                $("[id*=chkRegiones] input").prop('checked', false);
+            }
+        });
+    });
+
+    $(function () {
+        $("[id*=chkRegiones]").on("change", function () {
+            if ((!$(this).is(":checked")) && ($("[id*=chkTodoReg]").is(":checked") == true)) {
+                $("[id*=chkTodoReg]").prop('checked', false);
+            }
+
+        });
+    });
+
+    $(function () {
+        $("[id*=chkTodoMod]").on("change", function () {
+            if ($(this).is(":checked")) {
+                $("[id*=chkModalidad] input").prop("checked", true);
+            } else {
+                $("[id*=chkModalidad] input").prop('checked', false);
+            }
+        });
+    });
+    $(function () {
+        $("[id*=chkModalidad]").on("change", function () {
+            if ((!$(this).is(":checked")) && ($("[id*=chkTodoMod]").is(":checked") == true)) {
+                $("[id*=chkTodoMod]").prop('checked', false);
+            }
+
+            if ($(this).is(":checked") == true) {
+                alert("click check")
+            }
+
+        });
+    });
+    function verDetalleFauna(COD_THABILITANTE, COD_INFORME, ANIO_SUP) {
+        $.ajax({
+            url: '@Url.Action("detalleFauna1","Home")',
+            type: 'POST',
+            datatype: "json",
+            traditional: true,
+            data: { 'COD_THABILITANTE': COD_THABILITANTE, 'COD_INFORME': COD_INFORME, 'ANIO_SUP': ANIO_SUP },
+            /* success: function (result) {
+                var w = window.open();
+                $(w.document.body).html(result);
+                // window.open('/Home/detalleFauna1', '_blank')
+             }*/
+        });
+    }
+
+    $(document).ready(function () {
+        $("[id*=btnBuscarInformes]").click(function () {
+            var modalidades = [];
+            var departamentos = [];
+            $("[id*=chkModalidad] input:checked").each(function () {
+                modalidades.push($(this).attr('value'));
+            });
+            $("[id*=chkRegiones] input:checked").each(function () {
+                departamentos.push($(this).attr('value'));
+            });
+            if (modalidades.length > 0 && departamentos.length > 0) {
+                $.ajax({
+                    url: '@Url.Action("ListInformes", "SIGO")',
+                    type: 'POST',
+                    datatype: "json",
+                    traditional: true,
+                    data: { 'modalidades': modalidades, 'departamentos': departamentos },
+                    success: function (data) {
+                        $('div#divTbReporteFauna').html(data);
+                    }
+                });
+            }
+            else {
+                if (modalidades.length == 0 && departamentos.length == 0) {
+                    alert("Seleccione una o mas opciondes de busqueda");
+                }
+                if (modalidades.length == 0 && departamentos.length > 0) {
+                    alert("Seleccione una o mas modalidades para realizar la busqueda...");
+                }
+                if (modalidades.length > 0 && departamentos.length == 0) {
+                    alert("Seleccione uno o mas departamentos para realizar la busqueda...");
+                }
+            }
+
+        });
+
+    });
+</script>
+<div class="modal fade" id="modal-default">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title">Default Modal</h4>
+            </div>
+            <div class="modal-body">
+                <p><img src="~/Images/General/cargando.gif" /></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary">Save changes</button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+
+<div class="row">
+    <div class="col-sm-6">
+        <div class="col-sm-12">
+            <br />
+            <img id="Img1" class="img-responsive pad" src="~/Images/Fondos/infractores.png" />
+            <br />
+        </div>
+    </div>
+    <div class="col-sm-6">
+        <div class="col-sm-12" style="text-align:center">
+            <h4><span style="color:#00a65a">Informes de supervisión de procesos concluidos </span></h4>
+        </div>
+        <div class="col-sm-12">
+
+        </div>
+        <div class="col-sm-12">
+            <div class="box collapsed-box box-primary" style="background-color:lightblue">
+                <div class="box-header with-border">
+                    <h5>Opciones de busqueda</h5>
+                    <div class="box-tools pull-right">
+                        <button type="button" class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip" title="Collapse">
+                            <i class="fa fa-plus"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="box-body">
+                    <div class="col-sm-12" style="font-size: 12px">
+                        <div class="col-sm-6">
+                            <div class="menuFiltros" id="divRegion">
+                                <div>
+                                    <div class="listFiltro">
+                                        <h6 class="text-center">Sel. Regiones</h6>
+                                        <div class="box" style="max-height: 200px; overflow: auto; border: none; background-color:lightblue !important">
+                                            <ul class="list-group">
+                                                <li style="border:1px; background-color:lightblue !important">
+                                                    <div class="checkbox">
+                                                        <label>
+                                                            <input type="checkbox" class="check" value="00" id="chkTodoReg">
+                                                            Todas las Regiones
+                                                        </label>
+                                                    </div>
+                                                </li>
+                                                <div id="chkRegiones">
+                                                    @if (Model.ListRegion != null)
+                                                    {
+                                                        foreach (var item in Model.ListRegion)
+                                                        {
+                                                            <li style="background-color:lightblue !important">
+                                                                <div class="checkbox">
+                                                                    <label>
+                                                                        <input type="checkbox" class="check" value="@item.CODIGO">
+                                                                        @item.DESCRIPCION
+                                                                    </label>
+                                                                </div>
+                                                            </li>
+                                                        }
+                                                    }
+                                                </div>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="menuFiltros" id="DivProfesional">
+                                <div>
+                                    <div class="listFiltro">
+                                        <h6 class="text-center">Sel. Modalidades</h6>
+                                        <div class="box" style="max-height: 200px; overflow: auto; border: none; background-color:lightblue !important">
+                                            <ul class="list-group">
+                                                <li style="background-color:lightblue !important">
+                                                    <div class="checkbox">
+                                                        <label>
+                                                            <input type="checkbox" class="check" value="0000000" id="chkTodoMod">
+                                                            Todas las Modalidades
+                                                        </label>
+                                                    </div>
+                                                </li>
+                                                <div id="chkModalidad">
+                                                    @if (Model.ListModalidad != null)
+                                                    {
+                                                        foreach (var item in Model.ListModalidad)
+                                                        {
+                                                            <li style="background-color:lightblue !important">
+                                                                <div class="checkbox">
+                                                                    <label>
+                                                                        <input type="checkbox" class="check" value="@item.CODIGO" id="@item.CODIGO">
+                                                                        @item.DESCRIPCION
+                                                                    </label>
+                                                                </div>
+                                                            </li>
+                                                        }
+                                                    }
+                                                </div>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- /.box-body -->
+                <div class="box-footer">
+                    <button id="btnBuscarInformes" class="btn btn-primary" style="float: right">
+                        <i class="fa fa-search"></i>&nbsp;&nbsp;Buscar
+                    </button>
+
+                </div>
+                <!-- /.box-footer-->
+            </div>
+
+        </div>
+
+    </div>
+</div>
+
+<div id="divListReporte" class="form-group" style="margin-left: 5px; margin-right: 5px; font-size: 12px">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="box box-primary">
+                <!-- /.box-header -->
+                <div class="box-body" id="divTbReporteFauna">
+
+                </div>
+                <!-- /.box-body -->
+            </div>
+        </div>
+
+    </div>
+
+    <div id="divMensajeNoMatch">
+        <label text="" id="lblMensaje" font-size="12px" />
+    </div>
+    <div id="divMensajeNota">
+        <label id="lblNotaMsje" font-size="12px" />
+    </div>
+
+</div>

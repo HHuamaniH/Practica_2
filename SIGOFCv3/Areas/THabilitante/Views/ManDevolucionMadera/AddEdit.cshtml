@@ -1,0 +1,1304 @@
+﻿@model CapaEntidad.ViewModel.VM_DevolucionMadera
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_LayoutMain.cshtml";
+
+
+
+}
+
+<script src="~/Scripts/ckeditor/ckeditor.js"></script>
+
+@Scripts.Render("~/bundles/ManDevolucionMadera/AddEdit")
+@section scripts{
+    <script>
+        "use strict";
+        $(document).ready(function () {
+            $('[data-toggle="tooltip"]').tooltip();
+            ManDM.init();
+            ItemPoa.init();
+            ItemEspDev.init();
+            ItemEspHalladas.init();
+            ItemBExtMaderable.init();
+            ItemVertice.init();
+            ItemTRAprobacion.init();
+            utilSigo.blockUIGeneral();
+            //Poas
+            var list = [];
+            @foreach(var item in Model.ListNUM_POA)
+            {
+                <text>
+
+            list.push({
+                NUM_POA: @item.NUM_POA,
+                ESTADO_ORIGEN: "@item.ESTADO_ORIGEN",
+                RegEstado: RegEstadoSigo.INITIAL
+            });
+                </text>
+            }
+            ItemPoa.dt.rows.add(list).draw();
+
+
+            //Especies Devueltas
+            list = [];
+            @foreach(var item in Model.ListESPDEVUELTAS)
+            {
+                <text>
+                list.push({
+                    ESPECIES: "@item.ESPECIES",
+                    NUM_TROZAS: "@item.NUM_TROZAS",
+                    VOLUMEN: "@item.VOLUMEN",
+                    COORDENADA_ESTE: "@item.COORDENADA_ESTE",
+                    COORDENADA_NORTE: "@item.COORDENADA_NORTE",
+                    OBSERVACION: "@item.OBSERVACION",
+                    COD_SECUENCIAL: "@item.COD_SECUENCIAL",
+                    COD_ESPECIES: "@item.COD_ESPECIES",
+                    RegEstado: RegEstadoSigo.INITIAL
+                });
+            </text>
+            }
+            ItemEspDev.dt.rows.add(list).draw();
+            //Especies Halladas
+            list = [];
+
+            @foreach(var item in Model.ListESPHALLADAS)
+            {
+                <text>
+                list.push({
+                    ESPECIES: "@item.ESPECIES",
+                    NUM_TROZAS: "@item.NUM_TROZAS",
+                    VOLUMEN: "@item.VOLUMEN",
+                    COORDENADA_ESTE: "@item.COORDENADA_ESTE",
+                    COORDENADA_NORTE: "@item.COORDENADA_NORTE",
+                    OBSERVACION: "@item.OBSERVACION",
+                    COD_SECUENCIAL: "@item.COD_SECUENCIAL",
+                    COD_ESPECIES: "@item.COD_ESPECIES",
+                    RegEstado: RegEstadoSigo.INITIAL
+                });
+                </text>
+            }
+            ItemEspHalladas.dt.rows.add(list).draw();
+          //Maderable
+            list = [];
+            @foreach(var item in Model.ListBEXTRACCION)
+            {
+                <text>
+                list.push({
+                    ESPECIES: "@item.ESPECIES",
+                    VOLUMEN_AUTORIZADO: "@item.VOLUMEN_AUTORIZADO",
+                    VOLUMEN_MOVILIZADO: "@item.VOLUMEN_MOVILIZADO",
+                    SALDO: "@item.SALDO",
+                    OBSERVACION: "@item.OBSERVACION",
+                    COD_SECUENCIAL: "@item.COD_SECUENCIAL",
+                    COD_ESPECIES: "@item.COD_ESPECIES",
+                    RegEstado: RegEstadoSigo.INITIAL
+                });
+                </text>
+            }
+            ItemBExtMaderable.dt.rows.add(list).draw();
+            //Vertice
+            list = [];
+            @foreach(var item in Model.ListVERTICE)
+            {
+                <text>
+                list.push({
+                    VERTICE: "@item.VERTICE",
+                    COORDENADA_ESTE: "@item.COORDENADA_ESTE",
+                    COORDENADA_NORTE: "@item.COORDENADA_NORTE",
+                    OBSERVACION: "@item.OBSERVACION",
+                    COD_SECUENCIAL: "@item.COD_SECUENCIAL",
+                    RegEstado: RegEstadoSigo.INITIAL
+                });
+                </text>
+            }
+            ItemVertice.dt.rows.add(list).draw();
+            //Persona
+            list = [];
+            @foreach(var item in Model.ListPINFTEC)
+            {
+                <text>
+                list.push({
+                    @*NUM_INFORME: "@item.NUM_INFORME",
+                    FECHA_INFORME: "@item.FECHA_INFORME",*@
+                    PERSONA: "@item.PERSONA",
+                    N_DOCUMENTO: "@item.N_DOCUMENTO",
+                    CARGO: "@item.CARGO",
+                    COD_PERSONA: "@item.COD_PERSONA",
+                    COD_SECUENCIAL:"@item.COD_SECUENCIAL",
+                    RegEstado: RegEstadoSigo.INITIAL
+                });
+                </text>
+            }
+            ItemTRAprobacion.dt.rows.add(list).draw();
+
+
+
+            utilSigo.ValidaRol('@ViewBag.VAliasRol', 'btnSaveDevMadera', '@Model.ddlItemIndicadorId');
+
+            utilSigo.unblockUIGeneral();
+
+            ItemCTroza.init();
+            ItemCTocon.init();
+            ItemCArbol.init();
+        });
+
+
+
+    </script>
+}
+<div class="container-fluid">
+    <div class="card">
+        <div class="card-header text-right">
+            <h5>Devolucion de Madera</h5>  
+        </div>
+
+        <div class="card-body">
+            <div class="card">
+                <div class="card-header text-small" id="divTitle">
+                    <div class="text-left">
+                        <a id="btnSaveDevMadera" href="javascript:void(0)" style="cursor:pointer;" data-toggle="tooltip" data-placement="top" title="Guardar"><i class="fa mx-2 fa-lg fa-save"></i></a>
+                        <a style="cursor:pointer;" data-toggle="tooltip" data-placement="top" title="Regresar" href="@Url.Content("~/THabilitante/ManDevolucionMadera/Index"  )"><i class="fa mx-2 fa-lg fa-reply"></i></a>
+
+                    </div>
+                    <div class="text-center"><h3>@Model.ItemTitulo</h3></div>
+
+                </div>
+                <div class="card-body">
+                    <form id="frmDMaderaRegistro">
+                        @Html.HiddenFor(m => m.TipoFormulario)
+                        @Html.HiddenFor(m => m.hdfManRegEstado)
+
+                   
+
+
+                        <ul class="nav nav-tabs" id="myTab" role="tablist">
+                            <li class="nav-item" id="navDatosTab"><a class="nav-link active" data-toggle="tab" href="#navDatos" role="tab" aria-controls="home" aria-selected="true"><strong>Estado Situacional / Datos Generales</strong></a></li>
+                            <li class="nav-item" id="navDevolCensoTrozaTab" style="display:none"><a class="nav-link" data-toggle="tab" href="#navDevolCensoTroza" role="tab" aria-controls="censo1" aria-selected="false"><strong>Censo Troza</strong></a></li>
+                            <li class="nav-item" id="navDevolCensoToconTab" style="display:none"><a class="nav-link" data-toggle="tab" href="#navDevolCensoTocon" role="tab" aria-controls="censo2" aria-selected="false"><strong>Censo Tocones</strong></a></li>
+                            <li class="nav-item" id="navDevolCensoArbolesTab" style="display:none"><a class="nav-link" data-toggle="tab" href="#navDevolCensoArboles" role="tab" aria-controls="censo3" aria-selected="false"><strong>Censo Arboles</strong></a></li>
+
+                        </ul>
+                        <div class="tab-content" id="nav-tabContent">
+
+                            <!--Estado Situacional Datos Generales-->
+                            <div class="tab-pane fade show active" id="navDatos" role="tabpanel" aria-labelledby="nav-home-tab">
+
+                                <div class="card-body">
+                                    <div class="form-row align-items-end">
+                                        <div class="form-group col-md-4">
+                                            <label for="ddlItemIndicadorId" class="text-small">Indicador</label>
+
+                                            @Html.DropDownListFor(m => m.ddlItemIndicadorId, new SelectList(Model.ddlItemIndicador, "Value", "Text"), new { @class = "form-control form-control-sm", onChange = "ManDM.Seleccionar(this);" })
+
+
+
+                                        </div>
+
+
+                                        <div class="form-group col-md-4">
+                                            <label for="txtUsuarioRegistro" class="text-small">Usuario que ingresó el registro</label>
+                                            @Html.EditorFor(m => m.txtUsuarioRegistro, new { htmlAttributes = new { @class = "form-control form-control-sm", @disabled = "disabled" } })
+
+                                        </div>
+                                        <div class="form-group col-md-4">
+                                            <label for="txtUsuarioControl" class="text-small">Usuario que asignó el útimo estado situacional al registro</label>
+                                            @Html.EditorFor(m => m.txtUsuarioControl, new { htmlAttributes = new { @class = "form-control form-control-sm", @disabled = "disabled" } })
+                                        </div>
+                                    </div>
+                                    <div style="display:none;" id="divCalidad" class="form-row">
+                                        <div class="form-group col-md-12">
+                                            @Html.TextAreaFor(m => m.txtControlCalidadObservaciones, new { @class = "form-control form-control-sm" })
+                                        </div>
+                                    </div>
+                                    @if (!string.IsNullOrEmpty(Model.txtControlCalidadObservaciones))
+                                    {
+                                        <div id="divObsSubsanada">
+                                            @Html.CheckBoxFor(m => m.chkItemObsSubsanada)
+                                            <label class="form-check-label text-small" for="chkItemObsSubsanada">
+                                                Observaciones Subsanadas?
+                                            </label>
+                                        </div>
+                                    }
+                                </div>
+                                <div class="card-header text-small">
+                                    Datos Titulo Habilitante
+                                </div>
+                                <div class="card-body">
+                                    <div class="form-row">
+                                        <div class="form-group col-md-4">
+                                            <label class="text-small">Modalidad</label>
+                                            @Html.EditorFor(m => m.lblItemTHModalidad, new { htmlAttributes = new { @class = "form-control form-control-sm", @disabled = "disabled" } })
+
+                                            @Html.HiddenFor(m => m.hdfItemCod_THabilitante)
+                                            @Html.HiddenFor(m => m.hdfItemCod_Devolucion)
+                                        </div>
+                                        <div class="form-group col-md-4">
+                                            <label class="text-small">Numero:</label>
+                                            @Html.EditorFor(m => m.lblItemTHNumero, new { htmlAttributes = new { @class = "form-control form-control-sm", @disabled = "disabled" } })
+
+                                        </div>
+                                        <div class="form-group col-md-4">
+                                            <label class="text-small">Titular</label>
+                                            @Html.EditorFor(m => m.lblItemTHTitular, new { htmlAttributes = new { @class = "form-control form-control-sm", @disabled = "disabled" } })
+
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="card-header text-small">
+                                    Datos Generales
+                                </div>
+                                <div class="card-body">
+                                    <div class="form-row">
+                                        <div class="form-group col-md-4 mb-3">
+                                            <label for="ddlODRegistroId" class="text-small">O.D. desde donde registra la información</label>
+                                            @Html.DropDownListFor(m => m.ddlODRegistroId, new SelectList(Model.ddlODRegistro, "Value", "Text"), new { @class = "form-control form-control-sm" })
+                                        </div>
+
+
+                                    </div>
+                                    <div class="form-row">
+                                        <div class="form-group col-md-12 mb-3">
+                                            <label class="text-small">Seleccionar POA</label>
+                                            <div class="table-responsive">
+                                                <table id="grvLista_Poa" style="width:100%" class="table table-hover table-bordered">
+                                                    <thead>
+                                                        <tr>
+                                                            <th colspan="4" class="text-sm-left">
+                                                                <div class="form-inline">
+                                                                    <i class="fa mx-2 fa-lg fa-file-o" style="cursor:pointer;" onclick="ItemPoa.showModal(1, 0)" data-toggle="tooltip" data-placement="top" title="Nuevo"></i>
+
+                                                                </div>
+                                                            </th>
+                                                        </tr>
+                                                        <tr>
+                                                            <th></th>
+                                                            <th>Nº</th>
+                                                            <th>Poa</th>
+                                                            <th>Origen</th>
+
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody></tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-row">
+                                        <div class="form-group col-md-8 mb-3">
+                                            <label for="txtItemNumResolucion" id="ltrItemEtiNDevol" class="text-small">Número Resolución</label>
+                                            @Html.EditorFor(m => m.txtItemNumResolucion, new { htmlAttributes = new { @class = "form-control form-control-sm" } })
+
+                                        </div>
+                                        <div class="form-group col-md-4 mb-3">
+                                            <label for="txtItemFechaResol" class="text-small">Fecha</label>
+                                            @Html.EditorFor(m => m.txtItemFechaResol, new { htmlAttributes = new { @class = "form-control form-control-sm" } })
+
+                                        </div>
+                                    </div>
+                                    <div class="form-row">
+                                        
+                                    </div>
+
+                                    <div class="form-row">
+                                        <div class="col-md-8 mb-3">
+                                            <label class="text-small">  Funcionario que firma la Resolución </label>
+                                            <div class="input-group">
+                                                <div class="input-group-prepend" onclick="ManDM.fnBuscarPersona('FRESOLUCION_FIRMA', '0000006');"  style="cursor:pointer;">
+                                                    <span class="input-group-text"><i class="fa fa-search-plus" data-toggle="tooltip" data-placement="top" title="Seleccionar funcionario"></i></span>
+                                                </div>
+                                                @Html.HiddenFor(m => m.hdfItemFunFirmaCodigo)
+                                                @Html.EditorFor(m => m.lblItemFunFirma, new { htmlAttributes = new { @class = "form-control form-control-sm", @disabled = "disabled" } })
+
+                                            </div>
+                                        </div>
+                                        <div class="form-group col-md-4 mb-3">
+                                            <label for="txtItemZafra_Ejec" class="text-small">Zafra a ejecutar</label>
+                                            @Html.EditorFor(m => m.txtItemZafra_Ejec, new { htmlAttributes = new { @class = "form-control form-control-sm", maxlength = 15 } })
+
+                                        </div>
+                                    </div>
+
+
+                                </div>
+                                <div class="card-header text-small">
+                                    Periodo de Ejecucion
+                                </div>
+                                <div class="card-body">
+                                    <div class="form-row">
+                                        <div class="form-group col-md-4 mb-3">
+                                            <label for="txtItemEjecucionInicio" class="text-small">Fecha Inicio</label>
+                                            @Html.EditorFor(m => m.txtItemEjecucionInicio, new { htmlAttributes = new { @class = "form-control form-control-sm", Maxlength = 10, Pattern = "[0-9]{2}/[0-9]{2}/[0-9]{4}", Placeholder = "dd/mm/aaaa", Title = "la fecha a ingresar debe ser en el formato dd/mm/aaaa" } })
+
+                                        </div>
+                                        <div class="form-group col-md-4 mb-3">
+                                            <label for="txtItemEjecucionFin" class="text-small">Fecha Fin</label>
+                                            @Html.EditorFor(m => m.txtItemEjecucionFin, new { htmlAttributes = new { @class = "form-control form-control-sm", Maxlength = 10, Pattern = "[0-9]{2}/[0-9]{2}/[0-9]{4}", Placeholder = "dd/mm/aaaa", Title = "la fecha a ingresar debe ser en el formato dd/mm/aaaa" } })
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card-header text-small">
+                                    Informe Técnico que Recomienda la devolución de la Madera
+                                </div>
+                                <div class="card-body">
+                                    <div class="form-row">
+                                        <div class="form-group col-md-8 mb-3">
+                                            <label for="txtItemItecnico_Raprobacion_Num" class="text-small">Número</label>
+                                            @Html.EditorFor(m => m.txtItemItecnico_Raprobacion_Num, new { htmlAttributes = new { @class = "form-control form-control-sm", Maxlength = 100 } })
+
+                                        </div>
+                                        <div class="form-group col-md-4 mb-3">
+                                            <label for="txtItemItecnico_Raprobacion_Fecha" class="text-small">Fecha</label>
+                                            @Html.EditorFor(m => m.txtItemItecnico_Raprobacion_Fecha, new { htmlAttributes = new { @class = "form-control form-control-sm", Maxlength = 10, Pattern = "[0-9]{2}/[0-9]{2}/[0-9]{4}", Placeholder = "dd/mm/aaaa", Title = "la fecha a ingresar debe ser en el formato dd/mm/aaaa" } })
+
+                                        </div>
+                                    </div>
+                                    <div class="form-row">
+                                   
+                                            <table id="grvItemTRAprobacion" style="width:100%" class="table table-hover table-bordered">
+                                                <thead>
+                                                    <tr>
+                                                        <th colspan="5" class="text-sm-left">
+                                                            <i class="fa mx-2 fa-lg fa-file-o" style="cursor:pointer;" onclick="ManDM.fnBuscarPersona('ITRAPROBACION', '0000006');" data-toggle="tooltip" data-placement="top" title="Nuevo"></i>
+                                                        </th>
+                                                    </tr>
+                                                    <tr>
+                                                        <th></th>
+                                                        <th>Nº</th>
+                                                        @*<th>"N° Informe</th>
+                                                        <th>Fecha</th>*@
+                                                        <th>Apellidos y Nombres</th>
+                                                        <th>N° Documento</th>
+                                                        <th>Cargo</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody></tbody>
+                                            </table>
+                                      
+                                    </div>
+                                    <div class="form-row">
+                                        
+                                            <table id="grvItemEspDev" style="width:100%" class="table table-hover table-bordered">
+                                                <thead>
+                                                    <tr>
+                                                        <th colspan="9" class="text-sm-left">
+                                                            <div class="form-inline">
+                                                                <i class="fa mx-2 fa-lg fa-file-o" style="cursor:pointer;" onclick="ItemEspDev.showModal(1, this);" data-toggle="tooltip" data-placement="top" title="Nuevo"></i>
+                                                                <i class="fa mx-2 fa-lg fa-window-close-o" style="cursor:pointer;" onclick="ItemEspDev.deleteAll();" data-toggle="tooltip" data-placement="top" title="Eliminar Todos"></i>
+                                                                <label style="cursor:pointer;" class="fa mx-2 fa-lg fa-file-excel-o" title="Importar Archivo" data-toggle="tooltip">
+                                                                    <input type="file" id="fileItemEspDev" name="fileItemEspDev" style="display:none" size="60" onchange="ItemEspDev.importarExcel(event, this)" onclick="    return ItemEspDev.validaImportarExcel(event,this)">
+                                                                </label>
+                                                                <a href="@Url.Content("~/Archivos/Plantilla/EspeciesDevueltas.xlsx")"> <i class="fa mx-2 fa-lg fa-folder-open" style="cursor:pointer;" data-toggle="tooltip" data-placement="top" title="Descargar Plantilla"></i></a>
+                                                                <strong>
+                                                                    Especies Devueltas Según Resolución
+                                                                </strong>
+                                                            </div>
+                                                        </th>
+                                                    </tr>
+                                                    <tr>
+                                                        <th></th>
+                                                        <th></th>
+                                                        <th>Nº</th>
+                                                        <th>Especie</th>
+                                                        <th>N° Trozas</th>
+                                                        <th>Volumen</th>
+                                                        <th>Coordenada Este</th>
+                                                        <th>Coordenada Norte</th>
+                                                        <th>Observación</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody></tbody>
+                                            </table>
+                                       
+                                    </div>
+                                    <div class="form-row">
+                                        <table id="grvItemVertice" style="width:100%" class="table table-hover table-bordered">
+                                            <thead>
+                                                <tr>
+                                                    <th colspan="8" class="text-sm-left">
+                                                        <div class="form-inline">
+                                                            <i class="fa mx-2 fa-lg fa-file-o" style="cursor:pointer;" onclick="ItemVertice.showModal(1, this);" data-toggle="tooltip" data-placement="top" title="Nuevo"></i>
+                                                            <i class="fa mx-2 fa-lg fa-window-close-o" style="cursor:pointer;" onclick="ItemVertice.deleteAll();" data-toggle="tooltip" data-placement="top" title="Eliminar Todos"></i>
+                                                            <label style="cursor:pointer;" class="fa mx-2 fa-lg fa-file-excel-o" title="Importar Archivo" data-toggle="tooltip">
+                                                                <input type="file" id="fileItemVertice" name="fileItemVertice" style="display:none" size="60" onchange="ItemVertice.importarExcel(event,this)" onclick="return ItemVertice.validaImportarExcel(event,this)">
+                                                            </label>
+                                                            <a href="@Url.Content("~/Archivos/Plantilla/DevolucionVertice.xlsx")"> <i class="fa mx-2 fa-lg fa-folder-open" style="cursor:pointer;" data-toggle="tooltip" data-placement="top" title="Descargar Plantilla"></i></a>
+                                                            <strong>Coordenadas del lugar de hallazgo</strong>
+                                                        </div>
+                                                    </th>
+                                                </tr>
+                                                <tr>
+                                                    <th></th>
+                                                    <th></th>
+                                                    <th>Nº</th>
+                                                    <th>Vertice</th>                                                
+                                                    <th>Coordenada Este</th>
+                                                    <th>Coordenada Norte</th>
+                                                    <th>Observación</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody></tbody>
+                                        </table>
+
+                                    </div>
+
+                                    <div class="form-row">
+                                   
+                                            <table id="grvItemEspHalladas" style="width:100%" class="table table-hover table-bordered">
+                                                <thead>
+                                                    <tr>
+                                                        <th colspan="9" class="text-sm-left">
+                                                            <div class="form-inline">
+                                                                <i class="fa mx-2 fa-lg fa-file-o" style="cursor:pointer;" onclick="ItemEspHalladas.showModal(1, this);" data-toggle="tooltip" data-placement="top" title="Nuevo"></i>
+                                                                <i class="fa mx-2 fa-lg fa-window-close-o" style="cursor:pointer;" onclick="ItemEspHalladas.deleteAll();" data-toggle="tooltip" data-placement="top" title="Eliminar Todos"></i>
+                                                                <label style="cursor:pointer;" class="fa mx-2 fa-lg fa-file-excel-o" title="Importar Archivo" data-toggle="tooltip">
+                                                                    <input type="file" id="fileItemEspHalladas" name="fileItemEspHalladas" style="display:none" size="60" onchange="ItemEspHalladas.importarExcel(event, this)" onclick="return ItemEspHalladas.validaImportarExcel(event,this)">
+                                                                </label>
+                                                                <a href="@Url.Content("~/Archivos/Plantilla/EspeciesHalladas.xlsx")"> <i class="fa mx-2 fa-lg fa-folder-open" style="cursor:pointer;" data-toggle="tooltip" data-placement="top" title="Descargar Plantilla"></i></a>
+                                                                <strong>
+                                                                    Especies Halladas (de acuerdo a resumen de Informe Técnico)
+                                                                </strong>
+                                                            </div>
+                                                        </th>
+                                                    </tr>
+                                                    <tr>
+                                                        <th></th>
+                                                        <th></th>
+                                                        <th>Nº</th>
+                                                        <th>Especie</th>
+                                                        <th>N° Trozas</th>
+                                                        <th>Volumen</th>
+                                                        <th>Coordenada Este</th>
+                                                        <th>Coordenada Norte</th>
+                                                        <th>Observación</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody></tbody>
+                                            </table>
+                                        
+                                    </div>
+                                    <div class="form-row">
+
+                                        <div class="form-group col-md-4 mb-3">
+                                            <label for="txtItemFEmisionBExtracion" class="text-small">Fecha Emisión B. Extracción</label>
+                                            @Html.EditorFor(m => m.txtItemFEmisionBExtracion, new { htmlAttributes = new { @class = "form-control form-control-sm", Maxlength = 10, Pattern = "[0-9]{2}/[0-9]{2}/[0-9]{4}", Placeholder = "dd/mm/aaaa", Title = "la fecha a ingresar debe ser en el formato dd/mm/aaaa" } })
+
+                                        </div>
+                                    </div>
+                                    <div class="form-row">
+                                     
+                                            <table id="grvItemBExtMaderable" style="width:100%" class="table table-hover table-bordered">
+                                                <thead>
+                                                    <tr>
+                                                        <th colspan="8" class="text-sm-left">
+                                                            <div class="form-inline">
+                                                                <i class="fa mx-2 fa-lg fa-file-o" style="cursor:pointer;" onclick="ItemBExtMaderable.showModal(1, this);" data-toggle="tooltip" data-placement="top" title="Nuevo"></i>
+                                                                <i class="fa mx-2 fa-lg fa-window-close-o" style="cursor:pointer;" onclick="ItemBExtMaderable.deleteAll();" data-toggle="tooltip" data-placement="top" title="Eliminar Todos"></i>
+                                                                <label style="cursor:pointer;" class="fa mx-2 fa-lg fa-file-excel-o" title="Importar Archivo" data-toggle="tooltip">
+                                                                    <input type="file" id="fileItemBExtMaderable" name="fileItemBExtMaderable" style="display:none" size="60" onchange="ItemBExtMaderable.importarExcel(event, this)" onclick="return ItemBExtMaderable.validaImportarExcel(event,this)">
+                                                                </label>
+                                                                <a href="@Url.Content("~/Archivos/Plantilla/DevolucionMaderableBExtraccion.xlsx")"> <i class="fa mx-2 fa-lg fa-folder-open" style="cursor:pointer;" data-toggle="tooltip" data-placement="top" title="Descargar Plantilla"></i></a>
+                                                                <strong>
+                                                                    Balance de Extracción
+                                                                </strong>
+                                                            </div>
+                                                        </th>
+                                                    </tr>
+                                                    <tr>
+                                                        <th></th>
+                                                        <th></th>
+                                                        <th>Nº</th>
+                                                        <th>Especie</th>
+                                                        <th>Volumen Autorizado</th>
+                                                        <th>Volumen Movilizado</th>
+                                                        <th>Saldo</th>
+                                                        <th>Observación</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody></tbody>
+                                            </table>
+                                        
+                                    </div>
+
+                                    <div class="form-row m-3">
+                                        <a href="#" onclick="ItemCTroza.tabsActive()" style="cursor:pointer">
+                                            <i class="fa fa-search-plus" style="cursor:pointer"></i>
+                                            @Html.LabelFor(m => m.lbtMaderableItemCensoTrozaSelec, string.IsNullOrEmpty(Model.lbtMaderableItemCensoTrozaSelec) ? "Ingresar Listado de Trozas (0)" : Model.lbtMaderableItemCensoTrozaSelec, new { style = "cursor:pointer", id = "lbtMaderableItemCensoTrozaSelec" })
+                                        </a>
+                                    </div>
+                                    <div class="form-row m-3">
+                                        <a href="#" onclick="ItemCTocon.tabsActive()" style="cursor:pointer">
+                                            <i class="fa fa-search-plus" style="cursor:pointer"></i>
+                                            @Html.LabelFor(m => m.lbtMaderableItemCensoToconSelec, string.IsNullOrEmpty(Model.lbtMaderableItemCensoToconSelec) ? "Ingresar Listado de Tocones (0)" : Model.lbtMaderableItemCensoToconSelec, new { style = "cursor:pointer", id = "lbtMaderableItemCensoToconSelec" })
+                                        </a>
+                                    </div>
+                                    <div class="form-row m-3">
+                                        <a href="#" onclick="ItemCArbol.tabsActive()" style="cursor:pointer">
+                                            <i class="fa fa-search-plus" style="cursor:pointer"></i>
+                                            @Html.LabelFor(m => m.lbtMaderableItemCensoArbolSelec, string.IsNullOrEmpty(Model.lbtMaderableItemCensoArbolSelec) ? "Ingresar Listado de Arboles (0)" : Model.lbtMaderableItemCensoArbolSelec, new { style = "cursor:pointer", id = "lbtMaderableItemCensoArbolSelec" })
+                                        </a>
+                                    </div>
+                                    <div class="form-row"> @{ string codEnv = Model.hdfItemCod_THabilitante + "|" + Model.hdfItemCod_Devolucion;}
+                                      @{                                           
+                                          Html.RenderAction("_IntegracionSIADO", "Controles", new { area = "GENERAL", asCriterio = "SUBTIP_TITDOCSIGO", asSubCriterio = "0018", asValor = codEnv });
+                                      }
+                                  </div>
+                                </div>                                  
+                            </div>
+
+                            <!--Censo Troza-->
+
+                            <div id="navDevolCensoTroza" class="tab-pane fade">
+                                <div class="card-body">
+                                    <div class="form-row">
+                                        <div class="text-left">
+                                            <a style="cursor:pointer;" onclick="ItemCTroza.tabsInactive()" data-toggle="tooltip" data-placement="top" title="Regresar"><i class="fa mx-2 fa-lg fa-reply"></i></a>
+                                        </div>
+                                        <div class="text-center"><h4>Listado de Trozas</h4></div>
+                                    </div>
+                                    <div class="form-row">
+                                        <div class="form-group col-md-6">
+                                            <label for="lblItemDevolTrozaTHModalidad" class="text-small">Modalidad</label>
+                                            <input id="lblItemDevolTrozaTHModalidad" class="form-control form-control-sm" value="@Model.lblItemTHModalidad" disabled />
+
+                                        </div>
+                                        <div class="form-group col-md-6">
+                                            <label for="lblItemDevolTrozaTHNumero" class="text-small">Número</label>
+                                            <input id="lblItemDevolTrozaTHNumero" class="form-control form-control-sm" value="@Model.lblItemTHNumero" disabled />
+                                        </div>
+                                    </div>
+                                    <div class="form-row">
+                                        <div class="form-group col-md-6">
+                                            <label for="lblItemDevolTrozaTHTitular" class="text-small">Titular</label>
+                                            <input id="lblItemDevolTrozaTHTitular" class="form-control form-control-sm" value="@Model.lblItemTHTitular" disabled />
+                                        </div>
+
+                                    </div>
+                                    <div class="form-row align-items-end">
+                                        <div class="btn-group col-md-2">
+
+                                            <i class="fa mx-2 fa-lg fa-file-o" style="cursor:pointer;" onclick="ItemCTroza.showModal(1, this);" data-toggle="tooltip" data-placement="top" title="Nuevo"></i>
+                                            <i class="fa mx-2 fa-lg fa-window-close-o" style="cursor:pointer;" onclick="ItemCTroza.deleteAll();" data-toggle="tooltip" data-placement="top" title="Eliminar Todos"></i>
+                                            <label style="cursor:pointer;" class="fa mx-2 fa-lg fa-file-excel-o" title="Importar Archivo" data-toggle="tooltip">
+                                                <input type="file" id="fileItemCTroza" name="fileItemCTroza" style="display:none" size="60" onchange="ItemCTroza.importarExcel(event,this )" onclick="return ItemCTroza.validaImportarExcel(event,this )">
+                                            </label>
+                                            <a href="@Url.Content("~/Archivos/Plantilla/DevolTrozaCenso.xlsx")"> <i class="fa mx-2 fa-lg fa-folder-open" style="cursor:pointer;" data-toggle="tooltip" data-placement="top" title="Descargar Plantilla"></i></a>
+                                        </div>
+
+                                    </div>
+                                    <div class="form-row">
+                                        <div class="table-responsive">
+                                            <table id="grvItemCTroza" style="width:100%" class="table table-hover table-bordered">
+                                                <thead>
+                                                    <tr>
+                                                        <th></th>
+                                                        <th></th>
+                                                        <th>Nº</th>
+                                                        <th>Especie</th>
+                                                        <th>Código</th>
+                                                        <th>DAP</th>
+                                                        <th>Altura</th>
+                                                        <th>VOLUMEN</th>
+                                                        <th>Coord. Este</th>
+                                                        <th>Coord. Norte</th>
+                                                        <th>Nº Trozas</th>
+                                                        <th>Descripción</th>
+                                                        <th>Observación</th>
+                                                    </tr>
+
+                                                </thead>
+                                                <tbody></tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+
+                            <!--Censo Tocones-->
+
+                            <div id="navDevolCensoTocon" class="tab-pane fade">
+                                <div class="card-body">
+                                    <div class="form-row">
+                                        <div class="text-left">
+                                            <a style="cursor:pointer;" onclick="ItemCTocon.tabsInactive()" data-toggle="tooltip" data-placement="top" title="Regresar"><i class="fa mx-2 fa-lg fa-reply"></i></a>
+                                        </div>
+                                        <div class="text-center"><h4>Listado de Tocones</h4></div>
+                                    </div>
+                                    <div class="form-row">
+                                        <div class="form-group col-md-6">
+                                            <label for="lblItemDevolToconTHModalidad" class="text-small">Modalidad</label>
+                                            <input id="lblItemDevolToconTHModalidad" class="form-control form-control-sm" value="@Model.lblItemTHModalidad" disabled />
+
+                                        </div>
+                                        <div class="form-group col-md-6">
+                                            <label for="lblItemDevolToconTHNumero" class="text-small">Número</label>
+                                            <input id="lblItemDevolToconTHNumero" class="form-control form-control-sm" value="@Model.lblItemTHNumero" disabled />
+                                        </div>
+                                    </div>
+                                    <div class="form-row">
+                                        <div class="form-group col-md-6">
+                                            <label for="lblItemDevolToconTHTitular" class="text-small">Titular</label>
+                                            <input id="lblItemDevolToconTHTitular" class="form-control form-control-sm" value="@Model.lblItemTHTitular" disabled />
+                                        </div>
+
+                                    </div>
+                                    <div class="form-row align-items-end">
+                                        <div class="btn-group col-md-2">
+
+                                            <i class="fa mx-2 fa-lg fa-file-o" style="cursor:pointer;" onclick="ItemCTocon.showModal(1, this);" data-toggle="tooltip" data-placement="top" title="Nuevo"></i>
+                                            <i class="fa mx-2 fa-lg fa-window-close-o" style="cursor:pointer;" onclick="ItemCTocon.deleteAll();" data-toggle="tooltip" data-placement="top" title="Eliminar Todos"></i>
+                                            <label style="cursor:pointer;" class="fa mx-2 fa-lg fa-file-excel-o" title="Importar Archivo" data-toggle="tooltip">
+                                                <input type="file" id="fileItemCTocon" name="fileItemCTocon" style="display:none" size="60" onchange="ItemCTocon.importarExcel(event,this )" onclick="return ItemCTocon.validaImportarExcel(event,this)">
+                                            </label>
+                                            <a href="@Url.Content("~/Archivos/Plantilla/DevolToconCenso.xlsx")"> <i class="fa mx-2 fa-lg fa-folder-open" style="cursor:pointer;" data-toggle="tooltip" data-placement="top" title="Descargar Plantilla"></i></a>
+                                        </div>
+
+                                    </div>
+                                    <div class="form-row">
+                                        <div class="table-responsive">
+                                            <table id="grvItemCTocon" style="width:100%" class="table table-hover table-bordered">
+                                                <thead>
+                                                    <tr>
+                                                        <th></th>
+                                                        <th></th>
+                                                        <th>Nº</th>
+                                                        <th>Especie</th>
+                                                        <th>Código</th>
+                                                        <th>Diametro</th>
+                                                        <th>Largo</th>
+                                                        <th>Volumen</th>
+                                                        <th>Coord. Este</th>
+                                                        <th>Coord. Norte</th>
+                                                        <th>Cantidad</th>
+                                                        <th>Descripción</th>
+                                                        <th>Observación</th>
+
+                                                    </tr>
+                                                </thead>
+                                                <tbody></tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!--Listado Arboles-->
+
+                            <div id="navDevolCensoArboles" class="tab-pane fade">
+                                <div class="card-body">
+                                    <div class="form-row">
+                                        <div class="text-left">
+                                            <a style="cursor:pointer;" onclick="ItemCArbol.tabsInactive()" data-toggle="tooltip" data-placement="top" title="Regresar"><i class="fa mx-2 fa-lg fa-reply"></i></a>
+                                        </div>
+                                        <div class="text-center"><h4>Listado de Árboles</h4></div>
+                                    </div>
+                                    <div class="form-row">
+                                        <div class="form-group col-md-6">
+                                            <label for="lblItemDevolArbolTHModalidad" class="text-small">Modalidad</label>
+                                            <input id="lblItemDevolArbolTHModalidad" class="form-control form-control-sm" value="@Model.lblItemTHModalidad" disabled />
+
+                                        </div>
+                                        <div class="form-group col-md-6">
+                                            <label for="lblItemDevolArbolTHNumero" class="text-small">Número</label>
+                                            <input id="lblItemDevolArbolTHNumero" class="form-control form-control-sm" value="@Model.lblItemTHNumero" disabled />
+                                        </div>
+                                    </div>
+                                    <div class="form-row">
+                                        <div class="form-group col-md-6">
+                                            <label for="lblItemDevolArbolTHTitular" class="text-small">Titular</label>
+                                            <input id="lblItemDevolArbolTHTitular" class="form-control form-control-sm" value="@Model.lblItemTHTitular" disabled />
+                                        </div>
+
+                                    </div>
+                                    <div class="form-row align-items-end">
+                                        <div class="btn-group col-md-2">
+
+                                            <i class="fa mx-2 fa-lg fa-file-o" style="cursor:pointer;" onclick="ItemCArbol.showModal(1, this);" data-toggle="tooltip" data-placement="top" title="Nuevo"></i>
+                                            <i class="fa mx-2 fa-lg fa-window-close-o" style="cursor:pointer;" onclick="ItemCArbol.deleteAll();" data-toggle="tooltip" data-placement="top" title="Eliminar Todos"></i>
+                                            <label style="cursor:pointer;" class="fa mx-2 fa-lg fa-file-excel-o" title="Importar Archivo" data-toggle="tooltip">
+                                                <input type="file" id="fileItemCArbol" name="fileItemCArbol" style="display:none" size="60" onchange="ItemCArbol.importarExcel(event,this)" onclick="return ItemCArbol.validaImportarExcel(event,this)">
+                                            </label>
+                                            <a href="@Url.Content("~/Archivos/Plantilla/DevolArbolCenso.xlsx")"> <i class="fa mx-2 fa-lg fa-folder-open" style="cursor:pointer;" data-toggle="tooltip" data-placement="top" title="Descargar Plantilla"></i></a>
+                                        </div>
+
+                                    </div>
+                                    <div class="form-row">
+                                        <div class="table-responsive">
+                                            <table id="grvItemCArbol" style="width:100%" class="table table-hover table-bordered">
+                                                <thead>
+                                                    <tr>
+                                                        <th></th>
+                                                        <th></th>
+                                                        <th>Nº</th>
+                                                        <th>Especie</th>
+                                                        <th>N° PCA</th>
+                                                        <th>Código</th>
+                                                        <th>DAP</th>
+                                                        <th>Altura</th>
+                                                        <th>Volumen</th>
+                                                        <th>Coord. Este</th>
+                                                        <th>Coord. Norte</th>
+                                                        <th>Condición</th>
+                                                        <th>Estado</th>
+                                                        <th>Observación</th>
+                                                    </tr>
+
+                                                </thead>
+                                                <tbody></tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    @* Para el control genérico de personas *@
+    <div class="modal fade hide" id="mdlBuscarPersona" role="dialog"></div>
+    <div class="modal fade hide" id="modalAddEditPersona" role="dialog"></div>
+    <div class="modal fade hide" id="personaUbigeoModal" role="dialog"></div>
+</div>
+
+<div class="modal fade" id="PDivItemCTroza" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header p-2"  style="cursor:move;">
+                <span class="spTitulo">Nuevo</span>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar" onclick="ItemCTroza.closeModal();">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="frmCTroza">
+                    <div class="form-row">
+                        <div class="form-group col-md-12">
+                            <label for="ddlItemCTrozaEspecies" class="text-small">Especie</label>
+                            @Html.DropDownList("ddlItemCTrozaEspecies", new SelectList(Model.ListMComboEspecies, "Value", "Text"), new { @class = "form-control-sm", @style = "width:auto;" })
+
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label for="txtItemCTrozaCodigo" class="text-small">Codigo</label>
+
+                            <input type="text" id="txtItemCTrozaCodigo" name="txtItemCTrozaCodigo" class="form-control form-control-sm" maxlength="15" required onkeypress="return utilSigo.onKeyEntero(event, this);">
+
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label for="txtItemCTrozaDAP" class="text-small">DAP</label>
+
+                            <input type="text" id="txtItemCTrozaDAP" name="txtItemCTrozaDAP" class="form-control form-control-sm" maxlength="10" required onkeypress="return utilSigo.onKeyDecimal(event, this);">
+
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label for="txtItemCTrozaAltura" class="text-small">Altura</label>
+
+                            <input type="text" id="txtItemCTrozaAltura" name="txtItemCTrozaAltura" class="form-control form-control-sm" maxlength="10" required onkeypress="return utilSigo.onKeyDecimal(event, this);">
+
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label for="txtItemCTrozaVolumen" class="text-small">Volumen</label>
+
+                            <input type="text" id="txtItemCTrozaVolumen" name="txtItemCTrozaVolumen" class="form-control form-control-sm" maxlength="10" required onkeypress="return utilSigo.onKeyDecimal(event, this);">
+
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label for="txtItemCTrozaCoordenada_Este" class="text-small">Coordenada Este</label>
+
+                            <input type="text" id="txtItemCTrozaCoordenada_Este"  name="txtItemCTrozaCoordenada_Este" class="form-control form-control-sm" maxlength="6" required onkeypress="return utilSigo.onKeyEntero(event, this);">
+
+
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label for="txtItemCTrozaCoordenada_Norte" class="text-small">Coordenada Norte</label>
+
+                            <input type="text" id="txtItemCTrozaCoordenada_Norte" name="txtItemCTrozaCoordenada_Norte" class="form-control form-control-sm" maxlength="7" required onkeypress="return utilSigo.onKeyEntero(event, this);">
+
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label for="txtItemCTrozaNum_Trozas" class="text-small">Numero de Trozas</label>
+
+                            <input type="text" id="txtItemCTrozaNum_Trozas" name="txtItemCTrozaNum_Trozas" class="form-control form-control-sm" maxlength="6" required onkeypress="return utilSigo.onKeyEntero(event, this);">
+
+                        </div>
+
+                    </div>
+                    <div class="form-row">
+
+                        <div class="form-group col-md-12">
+                            <label for="txtItemCTrozaDescripcion" class="text-small">Descripción:</label>
+
+                            <textarea id="txtItemCTrozaDescripcion" name="txtItemCTrozaDescripcion" class="form-control form-control-sm"></textarea>
+
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-12">
+                            <label for="txtItemCTrozaObservacion" class="text-small">Observación:</label>
+
+                            <textarea id="txtItemCTrozaObservacion" name="txtItemCTrozaObservacion" class="form-control form-control-sm"></textarea>
+
+                        </div>
+                    </div>
+                    <hr />
+
+                    <button type="button" class="btn-primary" onclick="ItemCTroza.saveModal()">Aceptar</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+</div>
+<div class="modal fade" id="PDivItemCTocon" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header p-2"  style="cursor:move;">
+                <span class="spTitulo">Nuevo</span>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar" onclick="ItemCTocon.closeModal();">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="frmCTocon">
+
+                    <div class="form-row">
+                        <div class="form-group col-md-12">
+                            <label for="ddlItemCToconEspecies" class="text-small">Especie</label>
+
+                            @Html.DropDownList("ddlItemCToconEspecies", new SelectList(Model.ListMComboEspecies, "Value", "Text"), new { @class = "form-control-sm", @style = "width:auto;" })
+
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label for="txtItemCToconCodigo" class="text-small">Codigo</label>
+                            <input type="text" id="txtItemCToconCodigo" name="txtItemCToconCodigo" class="form-control form-control-sm" maxlength="15" required onkeypress="return utilSigo.onKeyEntero(event, this);">
+
+
+                        </div>
+                        <div class="form-group  col-md-6">
+                            <label for="txtItemCToconDiametro" class="text-small">Diámetro</label>
+
+                            <input type="text" id="txtItemCToconDiametro" name="txtItemCToconDiametro" class="form-control form-control-sm" maxlength="10" required onkeypress="return utilSigo.onKeyDecimal(event, this);">
+
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label for="txtItemCToconLargo" class="text-small">Largo</label>
+
+                            <input type="text" id="txtItemCToconLargo" name="txtItemCToconLargo" class="form-control form-control-sm" maxlength="10" required onkeypress="return utilSigo.onKeyDecimal(event, this);">
+
+
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label for="txtItemCToconVolumen" class="text-small">Volumen</label>
+
+                            <input type="text" id="txtItemCToconVolumen" name="txtItemCToconVolumen" class="form-control form-control-sm" maxlength="10" required onkeypress="return utilSigo.onKeyDecimal(event, this);">
+
+
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label for="txtItemCToconCoordenada_Este" class="text-small">Coordenada Este</label>
+
+                            <input type="text" id="txtItemCToconCoordenada_Este" name="txtItemCToconCoordenada_Este" class="form-control form-control-sm" maxlength="6" required onkeypress="return utilSigo.onKeyEntero(event, this);">
+
+
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label for="txtItemCToconCoordenada_Norte" class="text-small">Coordenada Norte</label>
+
+                            <input type="text" id="txtItemCToconCoordenada_Norte" name="txtItemCToconCoordenada_Norte" class="form-control form-control-sm" maxlength="7" required onkeypress="return utilSigo.onKeyEntero(event, this);">
+
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label for="txtItemCToconCantidad" class="text-small">Cantidad</label>
+
+                            <input type="text" id="txtItemCToconCantidad"  name="txtItemCToconCantidad" class="form-control form-control-sm" maxlength="6" required  onkeypress="return utilSigo.onKeyEntero(event, this);">
+
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group  col-md-12">
+                            <label for="txtItemCToconDescripcion" class="text-small">Descripción:</label>
+                            <textarea id="txtItemCToconDescripcion" class="form-control form-control-sm"></textarea>
+
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group  col-md-12">
+                            <label for="txtItemCToconObservacion" class="text-small">Observación:</label>
+
+                            <textarea id="txtItemCToconObservacion" class="form-control form-control-sm"></textarea>
+
+                        </div>
+                    </div>
+                    <hr />
+
+                    <button type="button" class="btn-primary" onclick="ItemCTocon.saveModal()">Aceptar</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<div class="modal fade" id="PDivItemCArbol" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header p-2"  style="cursor:move;">
+                <span class="spTitulo">Nuevo</span>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar" onclick="ItemCArbol.closeModal();">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="frmCArbol">
+
+                    <div class="form-row">
+                        <div class="form-group col-md-12">
+                            <label for="ddlItemCArbolEspecies" class="text-small">Especie</label>
+                            @Html.DropDownList("ddlItemCArbolEspecies", new SelectList(Model.ListMComboEspecies, "Value", "Text"), new { @class = "form-control form-control-sm", @style = "width:auto;" })
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label for="txtItemCArbolNum_PCA" class="text-small">N° PCA</label>
+                            <input type="text" id="txtItemCArbolNum_PCA" name="txtItemCArbolNum_PCA" class="form-control form-control-sm" maxlength="10" required  onkeypress="return utilSigo.onKeyEntero(event, this);">
+
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label for="txtItemCArbolCodigo" class="text-small">Codigo</label>
+                            <input type="text" id="txtItemCArbolCodigo" name="txtItemCArbolCodigo"  class="form-control form-control-sm" maxlength="15" required  onkeypress="return utilSigo.onKeyEntero(event, this);">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label for="txtItemCArbolDAP" class="text-small">DAP</label>
+
+                            <input type="text" id="txtItemCArbolDAP" name="txtItemCArbolDAP" class="form-control form-control-sm" maxlength="10" required  onkeypress="return utilSigo.onKeyDecimal(event, this);">
+
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label for="txtItemCArbolAltura" class="text-small">Altura</label>
+
+                            <input type="text" id="txtItemCArbolAltura" name="txtItemCArbolAltura" class="form-control form-control-sm" maxlength="10" required  onkeypress="return utilSigo.onKeyDecimal(event, this);">
+
+
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label for="txtItemCArbolVolumen" class="text-small">Volumen</label>
+
+                            <input type="text" id="txtItemCArbolVolumen" name="txtItemCArbolVolumen" class="form-control form-control-sm" maxlength="10" required  onkeypress="return utilSigo.onKeyDecimal(event, this);">
+
+                        </div>
+                       
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label for="txtItemCArbolCoordenada_Este" class="text-small">Coordenada Este</label>
+
+                            <input type="text" id="txtItemCArbolCoordenada_Este" name="txtItemCArbolCoordenada_Este" class="form-control form-control-sm" maxlength="6" required onkeypress="return utilSigo.onKeyEntero(event, this);">
+
+
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label for="txtItemCArbolCoordenada_Norte" class="text-small">Coordenada Norte</label>
+
+                            <input type="text" id="txtItemCArbolCoordenada_Norte" name="txtItemCArbolCoordenada_Norte" class="form-control form-control-sm" maxlength="7" required onkeypress="return utilSigo.onKeyEntero(event, this);">
+
+                        </div>
+
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label for="ddlItemCArbolCod_Econdicion" class="text-small">Condicion</label>
+
+                            @Html.DropDownList("ddlItemCArbolCod_Econdicion", new SelectList(Model.ddlItemCArbolCod_Econdicion, "Value", "Text"), new { @class = "form-control form-control-sm w-100" })
+
+                        </div>
+
+                        <div class="form-group col-md-6">
+                            <label for="ddlItemCArbolCod_Eestado" class="text-small">Estado</label>
+
+                            @Html.DropDownList("ddlItemCArbolCod_Eestado", new SelectList(Model.ddlItemCArbolCod_Eestado, "Value", "Text"), new { @class = "form-control form-control-sm w-100" })
+
+
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-12">
+                            <label for="txtItemCArbolObservacion" class="text-small">Observación:</label>
+
+                            <textarea id="txtItemCArbolObservacion" class="form-control form-control-sm"></textarea>
+
+                        </div>
+                    </div>
+                    <hr />
+
+                    <button type="button" class="btn-primary" onclick="ItemCArbol.saveModal()">Aceptar</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
+<div class="modal fade" id="PDivItemBExtMaderable" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header p-2"  style="cursor:move;">
+                <span class="spTitulo">Nuevo Registro</span>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar" onclick="ItemBExtMaderable.closeModal();">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="frmBExtMaderable">
+                    <input type="hidden" id="hdfItemBExtMaderable_RegEstado" />
+
+                    <div class="form-group row">
+                        <label for="ddlItemBExtMaderableEspecies" class="text-small col-md-3">Especie</label>
+                        <div class="col-md-9">
+                            @Html.DropDownList("ddlItemBExtMaderableEspecies", new SelectList(Model.ListMComboEspecies, "Value", "Text"), new { @class = "form-control-sm", @style = "width:auto;" })
+
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="txtItemBExtMaderableVolumen_Autorizado" class="text-small col-md-3">Volumen Autorizado</label>
+                        <div class="col-md-9">
+                            <input type="text" id="txtItemBExtMaderableVolumen_Autorizado" name="txtItemBExtMaderableVolumen_Autorizado" class="form-control form-control-sm" maxlength="10" required>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="txtItemBExtMaderableVolumen_Movilizado" class="text-small col-md-3">Volumen Movilizado</label>
+                        <div class="col-md-9">
+                            <input type="text" id="txtItemBExtMaderableVolumen_Movilizado" name="txtItemBExtMaderableVolumen_Movilizado" class="form-control form-control-sm" maxlength="10" required>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="txtItemBExtMaderableSaldo" class="text-small col-md-3">Saldo</label>
+                        <div class="col-md-9">
+                            <input type="text" id="txtItemBExtMaderableSaldo" name="txtItemBExtMaderableSaldo" class="form-control form-control-sm" maxlength="10" required>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="txtItemBExtMaderableObservacion" class="text-small col-md-3">Observación</label>
+                        <div class="col-md-9">
+                            <textarea type="text" id="txtItemBExtMaderableObservacion" name="txtItemBExtMaderableObservacion" class="form-control form-control-sm">
+</textarea>
+
+                        </div>
+                    </div>
+                    <hr />
+
+                    <button type="button" class="btn-primary" onclick="ItemBExtMaderable.saveModal()">Aceptar</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<div class="modal fade" id="PDivItemVertice" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">            
+            <div class="modal-header p-2" style="cursor:move;">
+                <span class="spTitulo">Nuevo Registro</span>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar" onclick="ItemVertice.closeModal();">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="frmVertice">
+
+                    <div class="form-group row">
+                        <label for="txtItemVert_Vertice" class="text-small col-md-3">Vertice</label>
+                        <div class="col-md-9">
+                            <input type="text" id="txtItemVert_Vertice" name="txtItemVert_Vertice" class="form-control form-control-sm" maxlength="10" required>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="txtItemVert_CEste" class="text-small col-md-3">Coordenada Este</label>
+                        <div class="col-md-9">
+                            <input type="text" id="txtItemVert_CEste" name="txtItemVert_CEste" class="form-control form-control-sm" maxlength="6" onkeypress="return utilSigo.onKeyEntero(event, this);" required>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="txtItemVert_CNorte" class="text-small col-md-3">Coordenada Norte</label>
+                        <div class="col-md-9">
+                            <input type="text" id="txtItemVert_CNorte"  name="txtItemVert_CNorte" class="form-control form-control-sm" maxlength="7" onkeypress="return utilSigo.onKeyEntero(event, this);" required>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="txtItemVert_Observacion" class="text-small col-md-3">Observación</label>
+                        <div class="col-md-9">
+                            <textarea type="text" id="txtItemVert_Observacion" name="txtItemVert_Observacion" class="form-control form-control-sm"></textarea>
+
+                        </div>
+                    </div>
+                    <hr />
+
+                    <button type="button" class="btn-primary" onclick="ItemVertice.saveModal()">Aceptar</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
+
+<div class="modal fade" id="PDivItemEspHalladas" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header p-2"  style="cursor:move;">
+                <span class="spTitulo">Nuevo Registro</span>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar" onclick="ItemEspHalladas.closeModal();">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="frmEspHalladas">
+                    <div class="form-group row">
+                        <label for="ddlItemEspHalladasEspecies" class="text-small col-md-3">Especie</label>
+                        <div class="col-md-9">
+                            @Html.DropDownList("ddlItemEspHalladasEspecies", new SelectList(Model.ListMComboEspecies, "Value", "Text"), new { @class = "form-control-sm", @style = "width:auto;" })
+
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="txtItemEspHalladasNumTrozas" class="text-small col-md-3">N° Trozas</label>
+                        <div class="col-md-9">
+                            <input type="text" id="txtItemEspHalladasNumTrozas" name="txtItemEspHalladasNumTrozas" class="form-control form-control-sm" maxlength="6" required onkeypress="return utilSigo.onKeyEntero(event, this);">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="txtItemEspHalladasVolumen" class="text-small col-md-3">Volumen</label>
+                        <div class="col-md-9">
+                            <input type="text" id="txtItemEspHalladasVolumen" name="txtItemEspHalladasVolumen" class="form-control form-control-sm" maxlength="10" required onkeypress="return utilSigo.onKeyDecimal(event, this);">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="txtItemEspHalladasCoordenada_Este" class="text-small col-md-3">Coordenada Este</label>
+                        <div class="col-md-9">
+                            <input type="text" id="txtItemEspHalladasCoordenada_Este" name="txtItemEspHalladasCoordenada_Este" class="form-control form-control-sm" maxlength="6"  onkeypress="return utilSigo.onKeyEntero(event, this);" required>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="txtItemEspHalladasCoordenada_Norte" class="text-small col-md-3">Coordenada Norte</label>
+                        <div class="col-md-9">
+                            <input type="text" id="txtItemEspHalladasCoordenada_Norte" name="txtItemEspHalladasCoordenada_Norte" class="form-control form-control-sm" maxlength="7"  onkeypress="return utilSigo.onKeyEntero(event, this);" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label for="txtItemEspHalladasObservacion" class="text-small col-md-3">Observación</label>
+                        <div class="col-md-9">
+                            <textarea type="text" id="txtItemEspHalladasObservacion" class="form-control form-control-sm">
+</textarea>
+
+                        </div>
+                    </div>
+                    <hr />
+
+                    <button type="button" class="btn-primary" onclick="ItemEspHalladas.saveModal()">Aceptar</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
+<div class="modal fade" id="PDivItemEspDevContenedor" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header text-small p-2"  style="cursor:move;">
+                <h5 class="modal-title">
+                    <span class="spTitulo">Nuevo Registro</span>
+                    </h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar" onclick="ItemEspDev.closeModal();">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+            </div>
+            <div class="modal-body">
+                <form id="frmEspDev">
+                    <input type="hidden" id="hdfItemEspDev_RegEstado" />
+                    <div class="form-group row">
+                        <label for="ddlItemEspDevEspecies" class="text-small col-md-3">Especie</label>
+                        <div class="col-md-9">
+                            @Html.DropDownList("ddlItemEspDevEspecies", new SelectList(Model.ListMComboEspecies, "Value", "Text"), new { @class = "form-control-sm", @style = "width:auto;" })
+                            <label id="lblItemEspDevEspecies"></label>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="txtItemEspDevNumTrozas" class="text-small col-md-3">N° Trozas</label>
+                        <div class="col-md-9">
+                            <input type="text" id="txtItemEspDevNumTrozas" name="txtItemEspDevNumTrozas" class="form-control form-control-sm" maxlength="6" required>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="txtItemEspDevVolumen" class="text-small col-md-3">Volumen</label>
+                        <div class="col-md-9">
+                            <input type="text" id="txtItemEspDevVolumen" name="txtItemEspDevVolumen" class="form-control form-control-sm" maxlength="10" required>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="txtItemEspDevCoordenada_Este" class="text-small col-md-3">Coordenada Este</label>
+                        <div class="col-md-9">
+                            <input type="text" id="txtItemEspDevCoordenada_Este" name="txtItemEspDevCoordenada_Este" class="form-control form-control-sm" maxlength="6"  onkeypress="return utilSigo.onKeyEntero(event, this);" required>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="txtItemEspDevCoordenada_Norte" class="text-small col-md-3">Coordenada Norte</label>
+                        <div class="col-md-9">
+                            <input type="text" id="txtItemEspDevCoordenada_Norte" name="txtItemEspDevCoordenada_Norte" class="form-control form-control-sm" maxlength="7"  onkeypress="return utilSigo.onKeyEntero(event, this);" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label for="txtItemEspDevObservacion" class="text-small col-md-3">Observación</label>
+                        <div class="col-md-9">
+                            <textarea type="text" id="txtItemEspDevObservacion" name="txtItemEspDevObservacion" class="form-control form-control-sm"></textarea>
+
+                        </div>
+                    </div>
+                    <hr />
+
+                    <button type="button" class="btn-primary" onclick="ItemEspDev.saveModal()">Aceptar</button>
+                </form>
+
+
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
+
+<div class="modal fade" id="modalBuscarPOA" tabindex="-1" role="dialog"></div>
+<div class="modal fade" id="modalBuscarPersona" tabindex="-1" role="dialog"></div>
+<div class="modal fade" id="modalAddEditPersona" tabindex="-1" role="dialog"></div>
+<div class="modal fade" id="personaUbigeoModal" tabindex="-1" role="dialog"></div>

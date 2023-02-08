@@ -1,0 +1,803 @@
+﻿@model CapaEntidad.ViewModel.VM_Capacitacion
+@{
+    ViewBag.Title = "AddEdit";
+    Layout = "~/Views/Shared/_LayoutMain.cshtml";
+}
+
+<script src="~/Scripts/datatables/Extensions/dataTables.buttons.js"></script>
+<script src="~/Scripts/datatables/Extensions/buttons.flash.min.js"></script>
+<script src="~/Scripts/datatables/Extensions/jszip.min.js"></script>
+<script src="~/Scripts/datatables/Extensions/pdfmake.js"></script>
+<script src="~/Scripts/datatables/Extensions/vfs_fonts.js"></script>
+<script src="~/Scripts/datatables/Extensions/buttons.html5.js"></script>
+<script src="~/Scripts/datatables/Extensions/buttons.print.js"></script>
+<script src="~/Scripts/ckeditor/ckeditor.js"></script>
+<script src="~/Scripts/sigo/utility.uploadFile.js"></script>
+<script src="~/Areas/Capacitacion/js/ManCapacitacion/AddEdit.js"></script>
+<script type="text/javascript">
+    ManCapacitacion_AddEdit.fnLoadData('@Html.Raw(Json.Encode(@Model.tbParticipante_Asistentes))', "DataAsistente");
+    ManCapacitacion_AddEdit.fnLoadData('@Html.Raw(Json.Encode(@Model.tbParticipante_EquipoApoyo))', "DataEquipoApoyo");
+    ManCapacitacion_AddEdit.fnLoadData('@Html.Raw(Json.Encode(@Model.tbParticipante_Ponentes))', "DataPonentes");
+    ManCapacitacion_AddEdit.fnLoadData('@Html.Raw(Json.Encode(@Model.tbEvaluacion_Aportes))', "DataAportes");
+    ManCapacitacion_AddEdit.fnLoadData('@Html.Raw(Json.Encode(@Model.tbEvaluacion_Encuestas))', "DataEncuestas");
+    ManCapacitacion_AddEdit.fnLoadData('@Html.Raw(Json.Encode(@Model.tbEvaluacion_Examenes))', "DataExamenes");
+    ManCapacitacion_AddEdit.fnLoadData('@Html.Raw(Json.Encode(@Model.tbEvaluacion_EvalInicial))', "DataEvalInicial");
+    ManCapacitacion_AddEdit.fnLoadData('@Html.Raw(Json.Encode(@Model.tbEvaluacion_EvalFinal))', "DataEvalFinal");
+    ManCapacitacion_AddEdit.fnLoadData('@Html.Raw(Json.Encode(@Model.tbDocumentoAdjunto))', "DataDocumentoAdjunto");
+    ManCapacitacion_AddEdit.fnLoadData('@Html.Raw(Json.Encode(@Model.tbProgramacion))', "DataProgramacion");
+    ManCapacitacion_AddEdit.fnLoadData('@Html.Raw(Json.Encode(@Model.tbCronograma))', "DataCronograma");
+</script>
+@*<script>
+        function soloLetras(e) {
+            var key = e.keyCode || e.which,
+                tecla = String.fromCharCode(key).toLowerCase(),
+                letras = " áéíóúabcdefghijklmnñopqrstuvwxyz1234567890",
+                especiales = [8, 37, 39, 46],
+                tecla_especial = false;
+
+            for (var i in especiales) {
+                if (key == especiales[i]) {
+                    tecla_especial = true;
+                    break;
+                }
+            }
+
+            if (letras.indexOf(tecla) == -1 && !tecla_especial) {
+                return false;
+            }
+        }
+    </script>*@
+<link href="~/Content/datatables/buttons.dataTables.min.css" rel="stylesheet" />
+<link href="~/Areas/Capacitacion/css/ManCapacitacion/AddEdit.css" rel="stylesheet" />
+@section scripts{
+    <script>
+        "use strict"; var rol = '';
+    $(document).ready(function () {
+        //Validamos el rol del usuario
+        utilSigo.ValidaRol('@ViewBag.VAliasRol', 'btnRegistrarCapacitacion', '@Model.vmControlCalidad.ddlIndicadorId');
+    });
+    </script>
+}
+
+<div class="container-fluid">
+    <div class="card">
+        <div class="card-header text-right">
+            @Model.lblTituloCabecera
+        </div>
+        <div class="card-body">
+            <div class="card">
+                <div class="card-header text-small">
+                    <a id="btnRegistrarCapacitacion" href="javascript:void(0)" style="cursor:pointer;" data-toggle="tooltip" data-placement="top" title="Guardar" onclick="ManCapacitacion_AddEdit.fnSubmitForm()"><i class="fa mx-2 fa-lg fa-save"></i></a>
+                    <a id="btnRegresarCapacitacion" style="cursor:pointer;" data-toggle="tooltip" data-placement="top" title="Regresar" onclick="ManCapacitacion_AddEdit.fnReturnIndex()"><i class="fa mx-2 fa-lg fa-reply"></i></a>
+                    @Model.lblTituloEstado
+                </div>
+                <div class="card-body">
+                    @* <form id="frmCapacitacion" onkeypress="return soloLetras(event)" action="@Url.Action("AddEdit", "ManCapacitacion", new { Area= "Capacitacion" })" data-request_url="@Url.Action("Index", "ManCapacitacion", new { Area= "Capacitacion" })">*@
+                    <form id="frmCapacitacion" action="@Url.Action("AddEdit", "ManCapacitacion", new { Area= "Capacitacion" })" data-request_url="@Url.Action("Index", "ManCapacitacion", new { Area= "Capacitacion" })">
+                        @Html.HiddenFor(m => m.hdfCodCapacitacion)
+                        @Html.HiddenFor(m => m.hdfRegEstado)
+                        @Html.HiddenFor(m => m.hdfDLinea)
+                        @Html.Hidden("hdfFormulario", (object)ViewBag.Formulario)
+                        <ul class="nav nav-tabs" id="myTab" role="tablist">
+                            <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#navEstado" role="tab" aria-controls="home" aria-selected="true">Estado Situacional</a></li>
+                            <li class="nav-item"><a class="nav-link active" data-toggle="tab" href="#navDatos" role="tab" aria-controls="home" aria-selected="true">Datos Generales</a></li>
+                            <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#navTemas" role="tab" aria-controls="home" aria-selected="true">Temas</a></li>
+                            <li class="nav-item" id="tabConvenios" style="display:none;"><a class="nav-link" data-toggle="tab" href="#navConvenios" role="tab" aria-controls="home" aria-selected="false">Convenios</a></li>
+                            <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#navParticipantes" role="tab" aria-controls="home" aria-selected="true">Participantes</a></li>
+                            <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#navEvaluacion" role="tab" aria-controls="home" aria-selected="true">Evaluación</a></li>
+                            <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#navConclusiones" role="tab" aria-controls="home" aria-selected="false">Conclusiones y Recomendaciones</a></li>
+                            <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#navNotaConceptual" role="tab" aria-controls="home" aria-selected="false">Nota Conceptual</a></li>
+                            <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#navMemoriaTaller" role="tab" aria-controls="home" aria-selected="false">Memoria taller</a></li>
+                            <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#navDocumentos" role="tab" aria-controls="home" aria-selected="false">Documentos</a></li>
+                        </ul>
+                        <div class="tab-content">
+                            <div class="tab-pane fade show" id="navEstado" role="tabpanel" aria-labelledby="nav-home-tab">
+                                @{ Html.RenderAction("_ControlCalidad", "Controles", new { area = "GENERAL", dto = Model.vmControlCalidad }); }
+                            </div>
+                            <div class="tab-pane fade show active" id="navDatos" role="tabpanel" aria-labelledby="nav-home-tab">
+                                <div class="card">
+                                    <div class="card-header text-small"></div>
+                                    <div class="card-body">
+                                        <div class="form-row">
+                                            <div class="form-group col-md-3">
+                                                <label for="lblOdId" class="text-small">O.D. desde donde registra la información</label>
+                                                @Html.DropDownListFor(m => m.ddlOdId, new SelectList(Model.ddlOd, "Value", "Text"), new { @class = "form-control form-control-sm" })
+                                            </div>
+                                            <div class="form-group col-md-9">
+                                                <label for="lblOdId" class="text-small">Capacitación Ejecutada</label>
+                                                @Html.DropDownListFor(m => m.ddlCapacitacionEjecutarId, new SelectList(Model.ddlCapacitacionEjecutar, "Value", "Text"), new { @class = "form-control form-control-sm" })
+                                            </div>
+                                        </div>
+                                        <div class="form-row">
+                                            <div class="form-group col-md-12">
+                                                <label for="lblNomCapacitacion" class="text-small">Nombre del Taller</label>
+                                                @Html.TextAreaFor(m => m.txtNomCapacitacion, new { @class = "form-control form-control-sm", @rows = "2", disabled = "disabled" })
+                                            </div>
+                                        </div>
+                                        <div class="form-row">
+                                            <div class="form-group col-md-4">
+                                                <label for="lblTipCapacitacion" class="text-small">Tipo</label>
+                                                @Html.DropDownListFor(m => m.ddlTipCapacitacionId, new SelectList(Model.ddlTipCapacitacion, "Value", "Text"), new { @class = "form-control form-control-sm", disabled = "disabled" })
+                                            </div>
+                                            <div class="form-group col-md-2">
+                                                <label for="lblSumMetPoi" class="text-small">Suma la Meta POI</label>
+                                                @Html.DropDownListFor(m => m.ddlSumMetPoiId, new SelectList(Model.ddlSumMetPoi, "Value", "Text"), new { @class = "form-control form-control-sm", disabled = "disabled" })
+                                            </div>
+                                            <div class="form-group col-md-2">
+                                                <label for="lblFecInicio" class="text-small">Fecha de Inicio</label>
+                                                @Html.TextBoxFor(m => m.txtFecInicio, new { @class = "form-control form-control-sm", placeholder = "dd/mm/aaaa", maxlength = "10" })
+                                            </div>
+                                            <div class="form-group col-md-2">
+                                                <label for="lblFecTermino" class="text-small">Fecha de Término</label>
+                                                @Html.TextBoxFor(m => m.txtFecTermino, new { @class = "form-control form-control-sm", placeholder = "dd/mm/aaaa", maxlength = "10" })
+                                            </div>
+                                            <div class="form-group col-md-2">
+                                                <label for="lblDuracion" class="text-small">Duración (horas)</label>
+                                                @Html.TextBoxFor(m => m.txtDuracion, new { @class = "form-control form-control-sm", type = "number" })
+                                            </div>
+                                        </div>
+                                        <div class="form-row">
+                                            <div class="form-group col-md-2">
+                                                <label for="lblMetodologiaId" class="text-small">Metodología</label>
+                                                @Html.DropDownListFor(m => m.ddlMetodologiaId, new SelectList(Model.ddlMetodologia, "Value", "Text"), new { @class = "form-control form-control-sm" })
+                                            </div>
+                                            <div class="form-group col-md-2">
+                                                <label for="lblDetOrganizador" class="text-small">Total de Participantes</label>
+                                                @Html.TextBoxFor(m => m.txtTotalParticipante, new { @class = "form-control form-control-sm", type = "number" })
+                                            </div>
+                                            <div class="form-group col-md-2">
+                                                <label for="lblOrganizadorId" class="text-small">Organizador</label>
+                                                @Html.DropDownListFor(m => m.ddlOrganizadorId, new SelectList(Model.ddlOrganizador, "Value", "Text"), new { @class = "form-control form-control-sm" })
+                                            </div>
+                                            <div class="form-group col-md-6" id="dvDetOrganizador" style="display:none;">
+                                                <label for="lblDetOrganizador" class="text-small">Descripción Organizador</label>
+                                                @Html.TextBoxFor(m => m.txtDetOrganizador, new { @class = "form-control form-control-sm" })
+                                            </div>
+                                        </div>
+                                        @*<div class="form-row">
+                                                <div class="form-group col-md-12">
+                                                    <label for="lblObsMetodologia" class="text-small">Observación Metodología</label>
+                                                    @Html.TextAreaFor(m => m.txtObsMetodologia, new { @class = "form-control form-control-sm", @rows = "5" })
+                                                </div>
+                                            </div>*@
+                                        <div class="form-row">
+                                            <div class="form-group col-md-12">
+                                                <label for="lblMetodologiaId" class="text-small">Apoyo del Coorganizador</label>
+                                                @Html.DropDownListFor(m => m.ddlApoyoCoorganizadorId, new SelectList(Model.ddlApoyoCoorganizador, "Value", "Text"), new { @class = "form-control form-control-sm", multiple = "multiple" })
+                                                @Html.Hidden("hdfApoyoCoorganizadorId", Model.ddlApoyoCoorganizadorId)
+                                            </div>
+                                        </div>
+                                        <div class="form-row">
+                                            <div class="form-group col-md-4">
+                                                <div class="custom-control custom-checkbox my-1 mr-sm-2">
+                                                    @Html.CheckBoxFor(m => m.chkMarConvenio, new { @class = "custom-control-input" })
+                                                    <label for="chkMarConvenio" class="custom-control-label" style="margin-top:6px;">Evento realizado en marco de un convenio</label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="card-header text-small">
+                                        Ubicación donde se llevará a cabo
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="form-row">
+                                            <div class="col-md-6 mb-3">
+                                                <label for="lblUbigeoText" class="text-small">Ubigeo<i class="fa fa-cog fa-spin text-danger" id="iconUbigeo" style="display:none;" data-toggle="tooltip" data-placement="top" title="Seleccione Ubigeo"></i></label>
+                                                <div class="input-group">
+                                                    <div class="input-group-prepend">
+                                                        <span class="input-group-text"><i class="fa fa-search" style="cursor:pointer;" data-toggle="tooltip" data-placement="top" title="Seleccionar Ubigeo" onclick="ManCapacitacion_AddEdit.fnViewModalUbigeo();"></i></span>
+                                                    </div>
+                                                    @Html.EditorFor(m => m.lblUbigeo, new { htmlAttributes = new { @class = "form-control form-control-sm", @disabled = "disabled" } })
+                                                    @Html.HiddenFor(m => m.hdfUbigeo)
+                                                </div>
+                                            </div>
+                                            <div class="form-group col-md-6">
+                                                <label for="lblLugar" class="text-small">Lugar</label>
+                                                @Html.TextBoxFor(m => m.txtLugar, new { @class = "form-control form-control-sm" })
+                                            </div>
+                                        </div>
+                                        <div class="form-row">
+                                            <div class="form-group col-md-6">
+                                                <label for="lblSector" class="text-small">Sector</label>
+                                                @Html.TextBoxFor(m => m.txtSector, new { @class = "form-control form-control-sm" })
+                                            </div>
+                                        </div>
+                                        <div class="form-row">
+                                            <div class="form-group col-md-2">
+                                                <label for="lblZonaUtmId" class="text-small">Zona UTM</label>
+                                                @Html.DropDownListFor(m => m.ddlZonaUtmId, new SelectList(Model.ddlZonaUtm, "Value", "Text"), new { @class = "form-control form-control-sm" })
+                                            </div>
+                                            <div class="form-group col-md-2">
+                                                <label for="lblCEste" class="text-small">Coordenada Este</label>
+                                                @Html.TextBoxFor(m => m.txtCEste, new { @class = "form-control form-control-sm", type = "number", maxlength = "6" })
+                                            </div>
+                                            <div class="form-group col-md-2">
+                                                <label for="lblCNorte" class="text-small">Coordenada Norte</label>
+                                                @Html.TextBoxFor(m => m.txtCNorte, new { @class = "form-control form-control-sm", type = "number", maxlength = "7" })
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="card-header text-small">Archivos Cargados en el SIADO</div>
+                                    <div class="card-body">
+                                        <div class="form-row">
+                                            @{
+                                                Html.RenderAction("_IntegracionSIADO", "Controles", new { area = "GENERAL", asCriterio = "SUBTIP_TITDOCSIGO", asSubCriterio = "3201", asValor = Model.hdfCodCapacitacion });
+                                            }
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="tab-pane fade show" id="navTemas" role="tabpanel" aria-labelledby="nav-home-tab">
+                                <div class="card">
+                                    <div class="card-header text-small"></div>
+                                    <div class="card-body">
+                                        <div class="form-row">
+                                            <div class="col-md-4">
+                                                <div class="card-header text-small">Temas Tratados en la Capacitación</div>
+                                                <div class="form-row">
+                                                    <div class="form-group col-md-12">
+                                                        @Html.EditorFor(m => m.lstChkTema)
+                                                        @Html.HiddenFor(m => m.lstChkTemaId)
+                                                    </div>
+                                                </div>
+                                                <div class="form-row">
+                                                    <div class="form-group col-md-12" id="dvDescTema" style="display:none;">
+                                                        <label for="lblDescTema" class="text-small">Descripción Otros Temas</label>
+                                                        @Html.TextAreaFor(m => m.txtDescTema, new { @class = "form-control form-control-sm", @rows = "7" })
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-8" style="display:none;">
+                                                <div class="card-header text-small">Público Objetivo</div>
+                                                <div class="form-row">
+                                                    <div class="form-group col-md-6">
+                                                        <label for="lblConvenio" class="text-small">Listado de Público Objetivo</label>
+                                                        @Html.DropDownList("ddlPObjetivoOsinforId", new SelectList(Model.ddlPublicoObjetivo, "Value", "Text", "Group", null, null), new { @class = "form-control form-control-sm", multiple = "multiple", style = "height:500px; overflow:auto;" })
+                                                    </div>
+                                                    <div class="form-group col-md-6">
+                                                        <label for="lblConvenio" class="text-small">Público a Quién se Dirigió el Evento</label>
+                                                        @Html.DropDownList("ddlPObjetivoCapacitacionId", new SelectList(Model.ddlPublicoObjetivo, "Value", "Text", "Group", null, null), new { @class = "form-control form-control-sm", multiple = "multiple", style = "height:287px; overflow:auto;" })
+                                                        @Html.HiddenFor(m => m.ddlPublicoObjetivoId)
+
+                                                        <div class="form-group col-md-12" id="dvDescPObjRepresentante" style="padding:0px;margin-top:10px;display:none;">
+                                                            <label for="lblDescPObjRepresentante" class="text-small">Descripción Otros Representantes</label>
+                                                            @Html.TextAreaFor(m => m.txtDescPObjRepresentante, new { @class = "form-control form-control-sm", @rows = "3" })
+                                                        </div>
+                                                        <div class="form-group col-md-12" id="dvDescPObjOtroActor" style="padding:0px;margin-top:10px;display:none;">
+                                                            <label for="lblDescPObjOtroActor" class="text-small">Descripción Otros Actores</label>
+                                                            @Html.TextAreaFor(m => m.txtDescPObjOtroActor, new { @class = "form-control form-control-sm", @rows = "3" })
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="tab-pane fade show" id="navConvenios" role="tabpanel" aria-labelledby="nav-home-tab">
+                                <div class="card">
+                                    <div class="card-header text-small"></div>
+                                    <div class="card-body">
+                                        <div class="form-row">
+                                            <div class="form-group col-md-6">
+                                                <label for="lblConvenio" class="text-small">Listado de Convenios OSINFOR</label>
+                                                @Html.DropDownList("ddlConvenioOsinforId", new SelectList(Model.ddlConvenio, "Value", "Text", "Group", null, null), new { @class = "form-control form-control-sm", multiple = "multiple", style = "height:500px; overflow:auto;" })
+                                            </div>
+                                            <div class="form-group col-md-6">
+                                                <label for="lblConvenio" class="text-small">Evento Realizado en Marco de los Convenios</label>
+                                                @Html.DropDownList("ddlConvenioCapacitacionId", new SelectList(Model.ddlConvenio, "Value", "Text", "Group", null, null), new { @class = "form-control form-control-sm", multiple = "multiple", style = "height:500px; overflow:auto;" })
+                                                @Html.HiddenFor(m => m.ddlConvenioId)
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="tab-pane fade show" id="navParticipantes" role="tabpanel" aria-labelledby="nav-home-tab">
+                                <div class="card">
+                                    <div class="card-header text-small"></div>
+                                    <div class="card-body">
+                                        <div class="form-row">
+                                            <div class="table-responsive">
+                                                <table id="tbParticipante_Asistentes" style="width:100%" class="table table-hover table-bordered">
+                                                    <thead>
+                                                        <tr>
+                                                            <th colspan="19" class="text-sm-left">
+                                                                <div class="form-inline">
+                                                                    <i class="fa mx-2 fa-lg fa-file-o" style="cursor:pointer;" onclick="ManCapacitacion_AddEdit.fnAddEditParticipante('','ASISTENTE');" data-toggle="tooltip" data-placement="top" title="Nuevo"></i>
+                                                                    <i class="fa mx-2 fa-lg fa-window-close-o" style="cursor:pointer;" onclick="ManCapacitacion_AddEdit.fnDeleteParticipanteAll('ASISTENTE');" data-toggle="tooltip" data-placement="top" title="Eliminar Todos"></i>
+                                                                    <label style="cursor:pointer;" class="fa mx-2 fa-lg fa-file-excel-o" title="Importar Archivo" data-toggle="tooltip">
+                                                                        <input type="file" id="fileselect" name="fileselect" style="display:none" size="60" onchange="ManCapacitacion_AddEdit.fnImportarDatosCapacitacion('PARTICIPANTE_ASISTENTE', event, this)">
+                                                                    </label>
+                                                                    <a href="@Url.Content("~/Archivos/Plantilla/CapacitacionParticipantes_v3.xlsx")"> <i class="fa mx-2 fa-lg fa-folder-open" style="cursor:pointer;" data-toggle="tooltip" data-placement="top" title="Descargar Plantilla"></i></a>
+                                                                    @*<i class="fa mx-2 fa-lg fa-download" style="cursor:pointer;" onclick="ManCapacitacion_AddEdit.fnExportDatosCapacitacion('PARTICIPANTE_ASISTENTE');" data-toggle="tooltip" data-placement="top" title="Descargar el Listado de Asistentes"></i>*@
+                                                                    <a href="@Url.Content("~/Areas/Capacitacion/Reporte/ReporteCapacitacion.aspx?reporte=1")"> <i class="fa mx-2 fa-lg fa-file-o" style="cursor:pointer;" data-toggle="tooltip" data-placement="top" title="Reporte"></i></a>
+                                                                    <strong>
+                                                                        Registro De Asistentes
+                                                                    </strong>
+                                                                </div>
+                                                            </th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody></tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                        <br />
+                                        <div class="form-row">
+                                            <div class="table-responsive">
+                                                <table id="tbParticipante_EquipoApoyo" style="width:100%" class="table table-hover table-bordered">
+                                                    <thead>
+                                                        <tr>
+                                                            <th colspan="10" class="text-sm-left">
+                                                                <div class="form-inline">
+                                                                    <i class="fa mx-2 fa-lg fa-file-o" style="cursor:pointer;" onclick="ManCapacitacion_AddEdit.fnAddEditParticipante('','EQUIPO');" data-toggle="tooltip" data-placement="top" title="Nuevo"></i>
+                                                                    <i class="fa mx-2 fa-lg fa-window-close-o" style="cursor:pointer;" onclick="ManCapacitacion_AddEdit.fnDeleteParticipanteAll('EQUIPO');" data-toggle="tooltip" data-placement="top" title="Eliminar Todos"></i>
+                                                                    <label style="cursor:pointer;" class="fa mx-2 fa-lg fa-file-excel-o" title="Importar Archivo" data-toggle="tooltip">
+                                                                        <input type="file" id="fileselect" name="fileselect" style="display:none" size="60" onchange="ManCapacitacion_AddEdit.fnImportarDatosCapacitacion('PARTICIPANTE_EQUIPO', event, this)">
+                                                                    </label>
+                                                                    <a href="@Url.Content("~/Archivos/Plantilla/CapacitacionParticipantesOSINFOR.xlsx")"> <i class="fa mx-2 fa-lg fa-folder-open" style="cursor:pointer;" data-toggle="tooltip" data-placement="top" title="Descargar Plantilla"></i></a>
+                                                                    @*<i class="fa mx-2 fa-lg fa-download" style="cursor:pointer;" onclick="ManCapacitacion_AddEdit.fnExportDatosCapacitacion('PARTICIPANTE_EQUIPO');" data-toggle="tooltip" data-placement="top" title="Descargar el Listado del Equipo de Apoyo"></i>*@
+                                                                    <strong>
+                                                                        Registro del Equipo de Apoyo
+                                                                    </strong>
+                                                                </div>
+                                                            </th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody></tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                        <br />
+                                        <div class="form-row">
+                                            <div class="table-responsive">
+                                                <table id="tbParticipante_Ponentes" style="width:100%" class="table table-hover table-bordered">
+                                                    <thead>
+                                                        <tr>
+                                                            <th colspan="11" class="text-sm-left">
+                                                                <div class="form-inline">
+                                                                    <i class="fa mx-2 fa-lg fa-file-o" style="cursor:pointer;" onclick="ManCapacitacion_AddEdit.fnAddEditParticipante('','PONENTE');" data-toggle="tooltip" data-placement="top" title="Nuevo"></i>
+                                                                    <i class="fa mx-2 fa-lg fa-window-close-o" style="cursor:pointer;" onclick="ManCapacitacion_AddEdit.fnDeleteParticipanteAll('PONENTE');" data-toggle="tooltip" data-placement="top" title="Eliminar Todos"></i>
+                                                                    <label style="cursor:pointer;" class="fa mx-2 fa-lg fa-file-excel-o" title="Importar Archivo" data-toggle="tooltip">
+                                                                        <input type="file" id="fileselect" name="fileselect" style="display:none" size="60" onchange="ManCapacitacion_AddEdit.fnImportarDatosCapacitacion('PARTICIPANTE_PONENTE', event, this)">
+                                                                    </label>
+                                                                    <a href="@Url.Content("~/Archivos/Plantilla/CapacitacionParticipantesPonente.xlsx")"> <i class="fa mx-2 fa-lg fa-folder-open" style="cursor:pointer;" data-toggle="tooltip" data-placement="top" title="Descargar Plantilla"></i></a>
+                                                                    @*<i class="fa mx-2 fa-lg fa-download" style="cursor:pointer;" onclick="ManCapacitacion_AddEdit.fnExportDatosCapacitacion('PARTICIPANTE_PONENTE');" data-toggle="tooltip" data-placement="top" title="Descargar el Listado des los Ponentes"></i>*@
+                                                                    <strong>
+                                                                        Registro De Ponentes
+                                                                    </strong>
+                                                                </div>
+                                                            </th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody></tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="tab-pane fade show" id="navEvaluacion" role="tabpanel" aria-labelledby="nav-home-tab">
+                                <div class="card">
+                                    <div class="card-header text-small"></div>
+                                    <div class="card-body">
+                                        <div class="form-row" id="dvEvaluacion_Aportes" style="display:none;">
+                                            <div class="table-responsive">
+                                                <table id="tbEvaluacion_Aportes" style="width:100%" class="table table-hover table-bordered">
+                                                    <thead>
+                                                        <tr>
+                                                            <th colspan="5" class="text-sm-left">
+                                                                <div class="form-inline">
+                                                                    <strong>
+                                                                        Registro de Aportes (Histórico)
+                                                                    </strong>
+                                                                </div>
+                                                            </th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody></tbody>
+                                                </table>
+                                            </div>
+                                            <br />
+                                        </div>
+                                        <div class="form-row" id="dvEvaluacion_Encuestas" style="display:none;">
+                                            <div class="table-responsive">
+                                                <table id="tbEvaluacion_Encuestas" style="width:100%" class="table table-hover table-bordered">
+                                                    <thead>
+                                                        <tr>
+                                                            <th colspan="14" class="text-sm-left">
+                                                                <div class="form-inline">
+                                                                    <i class="fa mx-2 fa-lg fa-file-o" style="cursor:pointer;" onclick="ManCapacitacion_AddEdit.fnAddEditPreguntaEncuesta('', 'ENCUESTA');" data-toggle="tooltip" data-placement="top" title="Nueva Pregunta"></i>
+                                                                    <i class="fa mx-2 fa-lg fa-window-close-o" style="cursor:pointer;" onclick="ManCapacitacion_AddEdit.fnDeleteEvaluacionAll('ENCUESTA');" data-toggle="tooltip" data-placement="top" title="Eliminar Todas las Preguntas"></i>
+                                                                    <label style="cursor:pointer;" class="fa mx-2 fa-lg fa-file-excel-o" title="Importar Archivo" data-toggle="tooltip">
+                                                                        <input type="file" id="fileselect" name="fileselect" style="display:none" size="60" onchange="ManCapacitacion_AddEdit.fnImportarDatosCapacitacion('EVALUACION_ENCUESTA', event, this)">
+                                                                    </label>
+                                                                    <a href="@Url.Content("~/Archivos/Plantilla/CapacitacionResumenEncuesta.xlsx")"> <i class="fa mx-2 fa-lg fa-folder-open" style="cursor:pointer;" data-toggle="tooltip" data-placement="top" title="Descargar Plantilla"></i></a>
+                                                                    @*<i class="fa mx-2 fa-lg fa-download" style="cursor:pointer;" onclick="ManCapacitacion_AddEdit.fnExportDatosCapacitacion('EVALUACION_ENCUESTA');" data-toggle="tooltip" data-placement="top" title="Descargar Encuesta"></i>*@
+                                                                    <a href="@Url.Content("~/Areas/Capacitacion/Reporte/ReporteCapacitacion.aspx?reporte=3")"> <i class="fa mx-2 fa-lg fa-file-o" style="cursor:pointer;" data-toggle="tooltip" data-placement="top" title="Reporte"></i></a>
+                                                                    <strong>
+                                                                        Registro de Encuesta
+                                                                    </strong>
+                                                                </div>
+                                                            </th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody></tbody>
+                                                </table>
+                                            </div>
+                                            <br />
+                                        </div>
+                                        <div class="form-row" id="dvEvaluacion_Examenes" style="display:none;">
+                                            <div class="table-responsive">
+                                                <table id="tbEvaluacion_Examenes" style="width:100%" class="table table-hover table-bordered">
+                                                    <thead>
+                                                        <tr>
+                                                            <th colspan="9" class="text-sm-left">
+                                                                <div class="form-inline">
+                                                                    <i class="fa mx-2 fa-lg fa-file-o" style="cursor:pointer;" onclick="ManCapacitacion_AddEdit.fnAddEditNotaExamen('');" data-toggle="tooltip" data-placement="top" title="Nuevo Resultado"></i>
+                                                                    <i class="fa mx-2 fa-lg fa-window-close-o" style="cursor:pointer;" onclick="ManCapacitacion_AddEdit.fnDeleteEvaluacionAll('EXAMEN');" data-toggle="tooltip" data-placement="top" title="Eliminar Todos los Resultados"></i>
+                                                                    <label style="cursor:pointer;" class="fa mx-2 fa-lg fa-file-excel-o" title="Importar Archivo" data-toggle="tooltip">
+                                                                        <input type="file" id="fileselect" name="fileselect" style="display:none" size="60" onchange="ManCapacitacion_AddEdit.fnImportarDatosCapacitacion('EVALUACION_EXAMEN', event, this)">
+                                                                    </label>
+                                                                    <a href="@Url.Content("~/Archivos/Plantilla/CapacitacionEvaluacionParticipantes.xlsx")"> <i class="fa mx-2 fa-lg fa-folder-open" style="cursor:pointer;" data-toggle="tooltip" data-placement="top" title="Descargar Plantilla"></i></a>
+                                                                    @*<i class="fa mx-2 fa-lg fa-download" style="cursor:pointer;" onclick="ManCapacitacion_AddEdit.fnExportDatosCapacitacion('EVALUACION_EXAMEN');" data-toggle="tooltip" data-placement="top" title="Descargar Resultado Examen"></i>*@
+                                                                    <a href="@Url.Content("~/Areas/Capacitacion/Reporte/ReporteCapacitacion.aspx?reporte=2")"> <i class="fa mx-2 fa-lg fa-file-o" style="cursor:pointer;" data-toggle="tooltip" data-placement="top" title="Reporte"></i></a>
+                                                                    <strong>
+                                                                        Registro Notas - Examen Inicial y Final
+                                                                    </strong>
+                                                                </div>
+                                                            </th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody></tbody>
+                                                </table>
+                                            </div>
+                                            <br />
+                                        </div>
+                                        <div class="form-row" id="dvEvaluacion_EvalInicial" style="display:none;">
+                                            <div class="table-responsive">
+                                                <table id="tbEvaluacion_EvalInicial" style="width:100%" class="table table-hover table-bordered">
+                                                    <thead>
+                                                        <tr>
+                                                            <th colspan="14" class="text-sm-left">
+                                                                <div class="form-inline">
+                                                                    <i class="fa mx-2 fa-lg fa-file-o" style="cursor:pointer;" onclick="ManCapacitacion_AddEdit.fnAddEditPreguntaEncuesta('', 'EVALINICIAL');" data-toggle="tooltip" data-placement="top" title="Nueva Pregunta"></i>
+                                                                    <i class="fa mx-2 fa-lg fa-window-close-o" style="cursor:pointer;" onclick="ManCapacitacion_AddEdit.fnDeleteEvaluacionAll('EVALINICIAL');" data-toggle="tooltip" data-placement="top" title="Eliminar Todas las Preguntas"></i>
+                                                                    <label style="cursor:pointer;" class="fa mx-2 fa-lg fa-file-excel-o" title="Importar Archivo" data-toggle="tooltip">
+                                                                        <input type="file" id="fileselect" name="fileselect" style="display:none" size="60" onchange="ManCapacitacion_AddEdit.fnImportarDatosCapacitacion('EVALUACION_EVALINICIAL', event, this)">
+                                                                    </label>
+                                                                    <a href="@Url.Content("~/Archivos/Plantilla/CapacitacionResumenEncuesta.xlsx")"> <i class="fa mx-2 fa-lg fa-folder-open" style="cursor:pointer;" data-toggle="tooltip" data-placement="top" title="Descargar Plantilla"></i></a>
+                                                                    @*<i class="fa mx-2 fa-lg fa-download" style="cursor:pointer;" onclick="ManCapacitacion_AddEdit.fnExportDatosCapacitacion('EVALUACION_EVALINICIAL');" data-toggle="tooltip" data-placement="top" title="Descargar Evaluación Inicial"></i>*@
+                                                                    <strong>
+                                                                        Registro de la Evaluación Inicial
+                                                                    </strong>
+                                                                </div>
+                                                            </th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody></tbody>
+                                                </table>
+                                            </div>
+                                            <br />
+                                        </div>
+                                        <div class="form-row" id="dvEvaluacion_EvalFinal" style="display:none;">
+                                            <div class="table-responsive">
+                                                <table id="tbEvaluacion_EvalFinal" style="width:100%" class="table table-hover table-bordered">
+                                                    <thead>
+                                                        <tr>
+                                                            <th colspan="14" class="text-sm-left">
+                                                                <div class="form-inline">
+                                                                    <i class="fa mx-2 fa-lg fa-file-o" style="cursor:pointer;" onclick="ManCapacitacion_AddEdit.fnAddEditPreguntaEncuesta('', 'EVALFINAL');" data-toggle="tooltip" data-placement="top" title="Nueva Pregunta"></i>
+                                                                    <i class="fa mx-2 fa-lg fa-window-close-o" style="cursor:pointer;" onclick="ManCapacitacion_AddEdit.fnDeleteEvaluacionAll('EVALFINAL');" data-toggle="tooltip" data-placement="top" title="Eliminar Todas las Preguntas"></i>
+                                                                    <label style="cursor:pointer;" class="fa mx-2 fa-lg fa-file-excel-o" title="Importar Archivo" data-toggle="tooltip">
+                                                                        <input type="file" id="fileselect" name="fileselect" style="display:none" size="60" onchange="ManCapacitacion_AddEdit.fnImportarDatosCapacitacion('EVALUACION_EVALFINAL', event, this)">
+                                                                    </label>
+                                                                    <a href="@Url.Content("~/Archivos/Plantilla/CapacitacionResumenEncuesta.xlsx")"> <i class="fa mx-2 fa-lg fa-folder-open" style="cursor:pointer;" data-toggle="tooltip" data-placement="top" title="Descargar Plantilla"></i></a>
+                                                                    @*<i class="fa mx-2 fa-lg fa-download" style="cursor:pointer;" onclick="ManCapacitacion_AddEdit.fnExportDatosCapacitacion('EVALUACION_EVALFINAL');" data-toggle="tooltip" data-placement="top" title="Descargar Evaluación Final"></i>*@
+                                                                    <strong>
+                                                                        Registro de la Evaluación Final
+                                                                    </strong>
+                                                                </div>
+                                                            </th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody></tbody>
+                                                </table>
+                                            </div>
+                                            <br />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="tab-pane fade show" id="navConclusiones" role="tabpanel" aria-labelledby="nav-home-tab">
+                                <div class="card">
+                                    <div class="card-header text-small"></div>
+                                    <div class="card-body">
+                                        <div class="form-row">
+                                            <div class="form-group col-md-12">
+                                                <label for="lblObsMetodologia" class="text-small">Conclusiones</label>
+                                                @Html.TextAreaFor(m => m.txtConclusion, new { @class = "form-control form-control-sm", @rows = "5" })
+                                            </div>
+                                        </div>
+                                        <div class="form-row">
+                                            <div class="form-group col-md-12">
+                                                <label for="lblRecomendaciones" class="text-small">Recomendaciones</label>
+                                                @Html.TextAreaFor(m => m.txtRecomendaciones, new { @class = "form-control form-control-sm", @rows = "5" })
+                                            </div>
+                                        </div>
+                                        <div class="form-row">
+                                            <div class="form-group col-md-12">
+                                                <label for="lblObsMetodologia" class="text-small">Observaciones</label>
+                                                @Html.TextAreaFor(m => m.txtObservacion, new { @class = "form-control form-control-sm", @rows = "5" })
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                            <div class="tab-pane fade show" id="navNotaConceptual" role="tabpanel" aria-labelledby="nav-home-tab">
+                                <div class="card">
+                                    <div class="card-header text-small"></div>
+                                    <div class="card-body">
+                                        <div class="form-row">
+                                            <div class="form-group col-md-12">
+                                                <label for="lblAntecendentes" class="text-small">Antecedentes</label>
+                                                @Html.TextAreaFor(m => m.txtAntecedentes, new { @class = "form-control form-control-sm", @rows = "5" })
+                                            </div>
+                                        </div>
+                                        <div class="form-row">
+                                            <div class="form-group col-md-12">
+                                                <label for="lblJustificacion" class="text-small">Justificacion</label>
+                                                @Html.TextAreaFor(m => m.txtJustificacion, new { @class = "form-control form-control-sm", @rows = "5" })
+                                            </div>
+                                        </div>
+                                        <div class="form-row">
+                                            <div class="form-group col-md-12">
+                                                <label for="lblObjetivo" class="text-small">Objetivo del Taller</label>
+                                                @Html.TextAreaFor(m => m.txtObjetivo, new { @class = "form-control form-control-sm", @rows = "5" })
+                                            </div>
+                                        </div>
+                                        <div class="form-row">
+                                            <div class="form-group col-md-12">
+                                                <label for="lblResultados" class="text-small">Resultados Esperados</label>
+                                                @Html.TextAreaFor(m => m.txtResultadosEsperados, new { @class = "form-control form-control-sm", @rows = "5" })
+                                            </div>
+                                        </div>
+                                        <div class="form-row">
+                                            <div class="form-group col-md-3">
+                                                <label for="lblModalidad" class="text-small">Modalidad</label>
+                                                @Html.DropDownListFor(m => m.ddlModalidadId, new SelectList(Model.ddlModalidad, "Value", "Text"), new { @class = "form-control form-control-sm" })
+                                            </div>
+                                        </div>
+                                        <div class="form-row">
+                                            <div class="form-group col-md-12">
+                                                <label for="lblMaterialesMetodos" class="text-small">Materiales y Metodos</label>
+                                                @Html.TextAreaFor(m => m.txtMaterialesEquipo, new { @class = "form-control form-control-sm", @rows = "5" })
+                                            </div>
+                                        </div>
+                                        <div class="form-row">
+                                            <div class="form-group col-md-12">
+                                                <label for="lblPublicoObjetivo" class="text-small">Publico Objetivo</label>
+                                                @Html.TextAreaFor(m => m.txtPublicoObjetivo, new { @class = "form-control form-control-sm", @rows = "5" })
+                                                <script>
+                                                    CKEDITOR.replace('txtPublicoObjetivo', { toolbar: initSigo.configuracionCKEDITOR });
+                                                </script>
+                                            </div>
+                                        </div>
+                                        <div class="card-body">
+                                            <div class="form-row">
+                                                <div class="table-responsive">
+                                                    <table id="tbProgramacion" style="width:100%" class="table table-hover table-bordered">
+                                                        <thead>
+                                                            <tr>
+                                                                <th colspan="17" class="text-sm-left">
+                                                                    <div class="form-inline">
+                                                                        <label style="cursor:pointer;" class="fa mx-2 fa-lg fa-file-excel-o" title="Importar Archivo" data-toggle="tooltip">
+                                                                            <input type="file" id="fileselect" name="fileselect" style="display:none" size="60" onchange="ManCapacitacion_AddEdit.fnImportarDatosCapacitacion('PROGRAMACION', event, this)">
+                                                                        </label>
+                                                                        <a href="@Url.Content("~/Archivos/Plantilla/CapacitacionPrograma.xlsx")"> <i class="fa mx-2 fa-lg fa-folder-open" style="cursor:pointer;" data-toggle="tooltip" data-placement="top" title="Descargar Plantilla"></i></a>
+                                                                        @*<i class="fa mx-2 fa-lg fa-download" style="cursor:pointer;" onclick="ManCapacitacion_AddEdit.fnExportDatosCapacitacion('PARTICIPANTE_ASISTENTE');" data-toggle="tooltip" data-placement="top" title="Descargar el Listado de Asistentes"></i>*@
+
+                                                                        <strong>
+                                                                            Registro De Programacion
+                                                                        </strong>
+                                                                    </div>
+                                                                </th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody></tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                            <br />
+                                        </div>
+                                        <div class="card-body">
+                                            <div class="form-row">
+                                                <div class="table-responsive">
+                                                    <table id="tbCronograma" style="width:100%" class="table table-hover table-bordered">
+                                                        <thead>
+                                                            <tr>
+                                                                <th colspan="17" class="text-sm-left">
+                                                                    <div class="form-inline">
+                                                                        <label style="cursor:pointer;" class="fa mx-2 fa-lg fa-file-excel-o" title="Importar Archivo" data-toggle="tooltip">
+                                                                            <input type="file" id="fileselect" name="fileselect" style="display:none" size="60" onchange="ManCapacitacion_AddEdit.fnImportarDatosCapacitacion('CRONOGRAMA', event, this)">
+                                                                        </label>
+                                                                        <a href="@Url.Content("~/Archivos/Plantilla/CapacitacionCronograma.xlsx")"> <i class="fa mx-2 fa-lg fa-folder-open" style="cursor:pointer;" data-toggle="tooltip" data-placement="top" title="Descargar Plantilla"></i></a>
+                                                                        @*<i class="fa mx-2 fa-lg fa-download" style="cursor:pointer;" onclick="ManCapacitacion_AddEdit.fnExportDatosCapacitacion('PARTICIPANTE_ASISTENTE');" data-toggle="tooltip" data-placement="top" title="Descargar el Listado de Asistentes"></i>*@
+
+                                                                        <strong>
+                                                                            Registro Del Cronograma
+                                                                        </strong>
+                                                                    </div>
+                                                                </th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody></tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                            <br />
+                                        </div>
+                                        @*<div class="form-row">
+                                                <div class="form-group col-md-12">
+                                                    <label for="lblPrograma" class="text-small">Programa</label>
+                                                    @Html.TextAreaFor(m => m.txtPrograma, new { htmlAttributes = new { @class = "form-control" } })
+                                                    <script>
+                                                        CKEDITOR.replace('txtPrograma', { toolbar: initSigo.configuracionCKEDITOR });
+                                                    </script>
+                                                </div>
+                                            </div>*@
+                                        @*<div class="form-row">
+                                                <div class="form-group col-md-12">
+                                                    <label for="lblCronograma" class="text-small">Cronograma</label>
+                                                    @Html.TextAreaFor(m => m.txtCronograma, new { htmlAttributes = new { @class = "form-control" } })
+
+                                                    <script>
+                                                     CKEDITOR.replace('txtCronograma', {toolbar: initSigo.configuracionCKEDITOR});
+                                                    </script>
+                                                </div>
+                                            </div>*@
+                                    </div>
+                                </div>
+                                <a href="@Url.Action("ReporteNC",new {id= "Word",asCodCapacitacion=ViewBag.codCapacitacionreporte})"> Exportacion Nota Conceptual</a>
+                            </div>
+                            <div class="tab-pane fade show" id="navMemoriaTaller" role="tabpanel" aria-labelledby="nav-home-tab">
+                                <div class="card">
+                                    <div class="card-header text-small"></div>
+                                    <div class="card-body">
+                                        <div class="form-row">
+                                            <div class="form-group col-md-12">
+                                                <label for="lblPresentacion" class="text-small">Presentacion</label>
+                                                @Html.TextAreaFor(m => m.txtPresentacion, new { @class = "form-control form-control-sm", @rows = "5" })
+                                            </div>
+                                        </div>
+                                        <div class="form-row">
+                                            <div class="form-group col-md-12">
+                                                <label for="lblDescripcionEjecutiva" class="text-small">Descripcion Ejecutiva</label>
+                                                @Html.TextAreaFor(m => m.txtDescripcionEjecutiva, new { @class = "form-control form-control-sm", @rows = "5" })
+                                            </div>
+                                        </div>
+                                        <div class="form-row">
+                                            <div class="form-group col-md-12">
+                                                <label for="lblResumenIntervenciones" class="text-small">Resumen de las intervenciones de los participantes</label>
+                                                @Html.TextAreaFor(m => m.txtResumenIntervenciones, new { @class = "form-control form-control-sm", @rows = "5" })
+                                            </div>
+                                        </div>
+                                        <div class="form-row">
+                                            <div class="form-group col-md-12">
+                                                <label for="lblDescripcionTrabajos" class="text-small">Descripcion de los trabajos en grupo</label>
+                                                @Html.TextAreaFor(m => m.txtDescripcionTrabajos, new { @class = "form-control form-control-sm", @rows = "5" })
+                                            </div>
+                                        </div>
+                                        <div class="form-row">
+                                            <div class="form-group col-md-12">
+                                                <label for="lblObsMetodologia" class="text-small">Metodología</label>
+                                                @Html.TextAreaFor(m => m.txtObsMetodologia, new { @class = "form-control form-control-sm", @rows = "5" })
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <a href="@Url.Content("~/Areas/Capacitacion/Reporte/ReporteCapacitacion.aspx?reporte=4")">Exportacion Memoria</a>
+                                </div>
+                            </div>
+                            <div class="tab-pane fade show" id="navDocumentos" role="tabpanel" aria-labelledby="nav-home-tab">
+                                <div class="card">
+                                    <div class="card-header text-small"></div>
+                                    <div class="card-body">
+                                        <div class="card-header text-small">
+                                            Documentos Adjuntos
+                                        </div>
+                                        <div class="card-body">
+                                            <div class="form-row">
+                                                <div class="form-group col-md-2">
+                                                    <label for="ddlTipoAdjuntoId" class="text-small">Tipo</label>
+                                                    @Html.DropDownListFor(m => m.ddlTipoAdjuntoId, new SelectList(Model.ddlTipoAdjunto, "Value", "Text"), new { @class = "form-control form-control-sm" })
+                                                </div>
+                                                <div class="form-group col-md-5">
+                                                    <label for="txtObservacionTAdjunto" class="text-small">Observación</label>
+                                                    @Html.TextBox("txtObservacionTAdjunto", "", new { @class = "form-control form-control-sm" })
+                                                </div>
+                                            </div>
+                                            <div class="form-row">
+                                                <div class="form-group col-md-7">
+                                                    <div class="custom-file" id="customFile">
+                                                        <input type="file" class="custom-file-input" multiple="multiple" id="txtArchivoAdjunto" aria-describedby="fileHelp" onchange="ManCapacitacion_AddEdit.fnSelectDocAdjunto(event, this)">
+                                                        <label class="custom-file-label" for="txtArchivoAdjunto" style="color:#989797">
+                                                            Seleccionar Archivo
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group col-md-1">
+                                                    <button type="button" class="btn btn-outline-info btn-sm" style="margin-top:3px;" onclick="ManCapacitacion_AddEdit.fnSaveDocumentoAdjunto()">Subir</button>
+                                                </div>
+                                            </div>
+                                            <div class="form-row">
+                                                <div class="table-responsive">
+                                                    <table id="tbDocumentoAdjunto" style="width:100%" class="table table-hover table-bordered">
+                                                        <thead>
+                                                            <tr>
+                                                                <th colspan="7" class="text-sm-left">
+                                                                    <div class="form-inline">
+                                                                        <strong>
+                                                                            Documentos
+                                                                        </strong>
+                                                                    </div>
+                                                                </th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody></tbody>
+                                                    </table>
+                                                </div>
+                                                <br />
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @* MODAL's *@
+    <div class="modal fade hide" id="mdlManCapacitacion_AddEdit_Ubigeo" role="dialog"></div>
+    <div class="modal fade hide" id="mdlManCapacitacion_AddEdit_Participante" role="dialog"></div>
+    <div class="modal fade hide" id="mdlManCapacitacion_Evaluacion_Encuesta" role="dialog"></div>
+    <div class="modal fade hide" id="mdlManCapacitacion_Evaluacion_Examen" role="dialog"></div>
+    <div class="modal fade hide" id="mdlManCapacitacion_Participante_THabilitante" tabindex="-1" role="dialog"></div>
+    <div class="modal fade hide" id="mdlManCapacitacion_Participante_Persona" tabindex="-1" role="dialog"></div>
+
+    @* Para el control genérico de personas *@
+    <div class="modal fade hide" id="mdlBuscarPersona" role="dialog"></div>
+    <div class="modal fade hide" id="modalAddEditPersona" role="dialog"></div>
+    <div class="modal fade hide" id="personaUbigeoModal" role="dialog"></div>
+</div>
+@*@Scripts.Render("~/jQuery")
+    @Scripts.Render("~/jQueryValidate")
+    @Scripts.Render("~/Unobtrusive")*@
+@*<script>
+        $(document).ready(function () {
+            $("#btnRegistrarCapacitacion").click(function () {
+                CKEDITOR.instances["txtPrograma"].updateElement();
+                $("#txtPrograma").show();
+            });
+        });
+    </script>*@
+@*<script>
+        $(document).ready(function () {
+            $("#btnRegistrarCapacitacion").click(function () {
+                CKEDITOR.instances["txtCronograma"].updateElement();
+                $("#txtCronograma").show();
+            });
+        });
+    </script>*@
+<script>
+    $(document).ready(function () {
+        $("#btnRegistrarCapacitacion").click(function () {
+            CKEDITOR.instances["txtPublicoObjetivo"].updateElement();
+            $("#txtPublicoObjetivo").show();
+        });
+    });
+</script>

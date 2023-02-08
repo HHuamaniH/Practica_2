@@ -1,0 +1,89 @@
+﻿@model CapaEntidad.ViewModel.VM_Veeduria
+@{
+    ViewBag.Title = "DetalleEquipo";
+    Layout = "~/Views/Shared/_LayoutMain.cshtml";
+}
+
+<script src="~/Areas/Supervision/js/AdmEquipo/DetalleEquipo.js"></script>
+
+<script type="text/javascript">
+    DetalleEquipo.fnLoadData('@Html.Raw(Json.Encode(@Model.listIntengrante))');
+</script>
+
+<div class="container-fluid">
+    <div class="card">
+        <div class="card-header text-left">
+            @Model.lblTituloCabecera
+        </div>
+        <div class="card-body">
+            <div class="card">
+                <div class="card-header text-small">
+                    <a style="cursor:pointer;" data-toggle="tooltip" data-placement="top" title="Regresar" onclick="DetalleEquipo.regresar()"><i class="fa mx-2 fa-lg fa-reply"></i></a>
+                    @Model.lblTituloEstado
+                </div>
+                <div class="card-body">
+                    <form id="frmDetalleEquipo">
+                        @Html.HiddenFor(m => m.hdfCodDetalle)
+                        <div class="form-row">
+                            <div class="form-group col-md-5">
+                                <label for="lblcomunidad" class="text-small">Comunidad</label>
+                                @Html.EditorFor(m => m.txtcomunidad, new { htmlAttributes = new { @class = "form-control form-control-sm", disabled = true } })
+                            </div>
+                            <div class="form-group col-md-5">
+                                <label for="lblubigeo" class="text-small">Ubigeo</label>
+                                @Html.EditorFor(m => m.txtubigeo, new { htmlAttributes = new { @class = "form-control form-control-sm", disabled = true } })
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group col-md-5">
+                                <label for="lbltipo" class="text-small">Tipo de Organización</label>
+                                @Html.EditorFor(m => m.txttipo, new { htmlAttributes = new { @class = "form-control form-control-sm", disabled = true } })
+                            </div>
+                            <div class="form-group col-md-5">
+                                <label for="lblorginterna" class="text-small">Nombre de la Organización Interna</label>
+                                @Html.EditorFor(m => m.txtorginterna, new { htmlAttributes = new { @class = "form-control form-control-sm", disabled = true } })
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group col-md-5">
+                                <label for="lblsector" class="text-small">Sector</label>
+                                @Html.EditorFor(m => m.txtlugar, new { htmlAttributes = new { @class = "form-control form-control-sm", disabled = true } })
+                            </div>
+                            <div class="form-group col-md-5">
+                                <label for="lblorgregional" class="text-small">Organización Regional</label>
+                                @Html.EditorFor(m => m.txtorgregional, new { htmlAttributes = new { @class = "form-control form-control-sm", disabled = true } })
+                            </div>
+                        </div>
+                        <div class="card" style="margin-top:20px;">
+                            <div class="card-header text-small">Integrante</div>
+                            <div class="card-body">
+                                <div class="form-row">
+                                    <div class="form-group col-md-2">
+                                        <label for="lbltipodoc" class="text-small">Tipo de Documento</label>
+                                        @Html.EditorFor(m => m.txttipodoc, new { htmlAttributes = new { @class = "form-control form-control-sm", disabled = true } })
+                                    </div>
+                                    <div class="form-group col-md-2">
+                                        <label for="lblnumero" class="text-small">Número</label>
+                                        @Html.EditorFor(m => m.txtnumero, new { htmlAttributes = new { @class = "form-control form-control-sm", disabled = true } })
+                                    </div>
+                                    <div class="form-group col-md-4">
+                                        <label for="lblintegrante" class="text-small">Apellidos y Nombres</label>
+                                        @Html.EditorFor(m => m.txtintegrante, new { htmlAttributes = new { @class = "form-control form-control-sm", disabled = true } })
+                                    </div>
+                                    <div class="form-group col-md-2">
+                                        <label for="lblnumero" class="text-small">Fecha de Inicio</label>
+                                        @Html.EditorFor(m => m.txtfechaini, new { htmlAttributes = new { @class = "form-control form-control-sm", disabled = true } })
+                                    </div>
+                                    <div class="form-group col-md-2">
+                                        <label for="lblnumero" class="text-small">Fecha de Término</label>
+                                        @Html.EditorFor(m => m.txtfechafin, new { htmlAttributes = new { @class = "form-control form-control-sm", disabled = true } })
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

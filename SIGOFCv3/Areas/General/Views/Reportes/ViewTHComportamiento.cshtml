@@ -1,0 +1,390 @@
+﻿@model CapaEntidad.ViewModel.VM_THComportamiento
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_LayoutMain.cshtml";
+}
+<script src="~/Scripts/datatables/Extensions/dataTables.buttons.js"></script>
+<script src="~/Scripts/datatables/Extensions/buttons.flash.min.js"></script>
+<script src="~/Scripts/datatables/Extensions/jszip.min.js"></script>
+
+<script src="~/Scripts/datatables/Extensions/vfs_fonts.js"></script>
+<script src="~/Scripts/datatables/Extensions/buttons.html5.js"></script>
+<script src="~/Scripts/datatables/Extensions/buttons.print.js"></script>
+
+<script src="~/Scripts/apexcharts/apexcharts.js"></script>
+
+<link href="~/Content/datatables/buttons.dataTables.min.css" rel="stylesheet" />
+<input type="hidden" id="hddAnio" name="hddAnio" value="@ViewBag.txtAnio" />
+<input type="hidden" id="hddPuntaje" name="hddPuntaje" value="@ViewBag.txtPuntaje" />
+<div id="divVENMaderable" class="container-fluid">
+    <div class="card">
+        <div class="card-header text-left">
+            <h5>Comportamiento Título Habilitante</h5>
+        </div>
+        <div class="card-body">
+            <div class="card">
+                <div class="card-header text-small">
+                    <a style="cursor:pointer;" data-toggle="tooltip" data-placement="top" title="Regresar" onclick="_viewTHComportamiento.fnReturnIndex()"><i class="fa mx-2 fa-lg fa-reply"></i></a>
+                </div>
+            </div>
+            <div class="col-md-6">
+
+            </div>
+            <div class="col-md-6">
+
+            </div>
+
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="col-md-6">
+            <div class="form-row">
+                <div class="form-group col-md-10">
+                    <label for="txtTHabilitante" class="text-small">Título Habilitante</label>
+                    @Html.TextBoxFor(m => m.THComportamiento.NV_TITULO_HABILITANTE, new { @class = "form-control form-control-sm", @readonly = "readonly", @style = "text-align:right" })
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group col-md-10">
+                    <label for="txtUbigeo" class="text-small">Ubigeo</label>
+                    @Html.TextBoxFor(m => m.THComportamiento.NV_REGION, new { @class = "form-control form-control-sm", @readonly = "readonly", @style = "text-align:right" })
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group col-md-10">
+                    <label for="txtArea" class="text-small">Fecha última Supervision - Concluido</label>
+                    @Html.TextBoxFor(m => m.THComportamiento.DA_FECHA_REGISTRO, new { @class = "form-control form-control-sm", @readonly = "readonly", @style = "text-align:right" })
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group col-md-10">
+                    <label for="txtArea" class="text-small">Area</label>
+                    @Html.TextBoxFor(m => m.THComportamiento.NV_AREA, new { @class = "form-control form-control-sm", @readonly = "readonly", @style = "text-align:right" })
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group col-md-10">
+                    <label for="txtArea" class="text-small">Calificación</label>
+                    @Html.TextBoxFor(m => m.THComportamiento.NU_CALIFICACION, new { @class = "form-control form-control-sm", @readonly = "readonly", @style = "text-align:right" })
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group col-md-10">
+                    <label for="txtArea" class="text-small">Modalidad</label>
+                    @Html.TextBoxFor(m => m.THComportamiento.NV_MODALIDAD_TIPO, new { @class = "form-control form-control-sm", @readonly = "readonly", @style = "text-align:right" })
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group col-md-10">
+                    <label>Historial de Titulares</label>
+                    <div class="table-responsive-md">
+                        <table id="tbTitulares" class="table table-hover table-bordered" style="width:100%;">
+                            <thead>
+                                <tr>
+                                    <th>Titular</th>
+                                    <th>DNI/RUC</th>
+                                    <th>Periodo</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model.ListTHabilitante)
+                                {
+                                    <tr>
+                                        <td>@item.NV_ENTIDAD</td>
+                                        <td>@item.NV_NUMERO</td>
+                                        <td>@item.ADENDA_FECHA_INICIO - @item.ADENDA_FECHA_TERMINO</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div id="chart">
+
+            </div>
+        </div>
+    </div>
+    @if(Model.THComportamiento.NU_CADUCO == "1")
+    {
+        <div class="form-row">
+            <div class="form-group col-md-10">
+                <label style="color:red">Estado TH CADUCADO</label>
+            </div>
+        </div>
+    }
+
+    <div class="form-row">
+        <div class="form-group col-md-10">
+            <label>Indicadores</label>
+            <div class="table-responsive-md">
+                <table id="tbIndicadores" class="table table-hover table-bordered" style="width:100%;">
+                    <thead>
+                        <tr>
+                            <th>N°</th>
+                            <th>Indicador</th>
+                            @{
+                                var listCalificacion = Model.ListTHCalificacionAnual.OrderBy(y => y.NV_ANIO).Select(x => x.NV_ANIO);
+                                foreach (var item in listCalificacion)
+                                {
+                                    <th>@item</th>
+                                }
+                            }
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>1</td>
+                            <td>Para las supervisiones que cuentan con archivo preliminar por buen manejo o cuando el PAU culminó en archivo (no se acreditado la infracción o se ha subsanado la infracción)</td>
+                            @{
+                                var listCriterio1 = Model.ListTHCalificacionAnual.OrderBy(y => y.NV_ANIO).Select(x => x.NCRITERIO1);
+                                foreach (var item in listCriterio1)
+                                {
+                                    <th>@item</th>
+                                }
+                            }
+                        </tr>
+                        <tr>
+                            <td>2</td>
+                            <td>Para las supervisiones cuyo PAU culminó en sanción Leve</td>
+                            @{
+                                var listCriterio2 = Model.ListTHCalificacionAnual.OrderBy(y => y.NV_ANIO).Select(x => x.NCRITERIO2);
+                                foreach (var item in listCriterio2)
+                                {
+                                    <th>@item</th>
+                                }
+                            }
+                        </tr>
+                        <tr>
+                            <td>3</td>
+                            <td>Para las supervisiones cuyo PAU culminó en sanción Grave</td>
+                            @{
+                                var listCriterio3 = Model.ListTHCalificacionAnual.OrderBy(y => y.NV_ANIO).Select(x => x.NCRITERIO3);
+                                foreach (var item in listCriterio3)
+                                {
+                                    <th>@item</th>
+                                }
+                            }
+                        </tr>
+                        <tr>
+                            <td>4</td>
+                            <td>Para las supervisiones cuyo PAU culminó en sanción Muy Grave</td>
+                            @{
+                                var listCriterio4 = Model.ListTHCalificacionAnual.OrderBy(y => y.NV_ANIO).Select(x => x.NCRITERIO4);
+                                foreach (var item in listCriterio4)
+                                {
+                                    <th>@item</th>
+                                }
+                            }
+                        </tr>
+                        <tr>
+                            <td>5</td>
+                            <td>Para las supervisiones que cuentan con archivo preliminar (Evidencia de irregularidades cuya sanción no es competencia del OSINFOR)</td>
+                            @{
+                                var listCriterio5 = Model.ListTHCalificacionAnual.OrderBy(y => y.NV_ANIO).Select(x => x.NCRITERIO5);
+                                foreach (var item in listCriterio5)
+                                {
+                                    <th>@item</th>
+                                }
+                            }
+                        </tr>
+                        <tr>
+                            <td>6</td>
+                            <td>Para los planes de manejo forestal en la Lista verde o los Informes de fauna de 3 a 5 estrellas*</td>
+                            @{
+                                var listCriterio6 = Model.ListTHCalificacionAnual.OrderBy(y => y.NV_ANIO).Select(x => x.NCRITERIO6);
+                                foreach (var item in listCriterio6)
+                                {
+                                    <th>@item</th>
+                                }
+                            }
+                        </tr>
+                        <tr>
+                            <td>7</td>
+                            <td>Para los planes de manejo forestal en la Lista roja o los Informes de fauna de 0 a 2 estrellas*</td>
+                            @{
+                                var listCriterio7 = Model.ListTHCalificacionAnual.OrderBy(y => y.NV_ANIO).Select(x => x.NCRITERIO7);
+                                foreach (var item in listCriterio7)
+                                {
+                                    <th>@item</th>
+                                }
+                            }
+                        </tr>
+                        <tr>
+                            <td>8</td>
+                            <td>Para los Planes de manejo que cuenten con Alertas</td>
+                            @{
+                                var listCriterio8 = Model.ListTHCalificacionAnual.OrderBy(y => y.NV_ANIO).Select(x => x.NCRITERIO8);
+                                foreach (var item in listCriterio8)
+                                {
+                                    <th>@item</th>
+                                }
+                            }
+                        </tr>
+                        <tr>
+                            <td>9</td>
+                            <td>Para las supervisiones de manejo con reincidencia (se considera un periodo de: 5 años) en la sanción de alguna infracción</td>
+                            @{
+                                var listCriterio9 = Model.ListTHCalificacionAnual.OrderBy(y => y.NV_ANIO).Select(x => x.NCRITERIO9);
+                                foreach (var item in listCriterio9)
+                                {
+                                    <th>@item</th>
+                                }
+                            }
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td style="text-align:right">Sub Total</td>
+                            @{
+                                int sumCriterioT = 0;
+                                int stAnterior = 0;
+                                //var listTHCAL = Model.ListTHCalificacionAnual.OrderBy(y => y.NV_ANIO);
+                                for (int i = 0; i < Model.ListTHCalificacionAnual.Count(); i++)
+                                {
+                                    var item = Model.ListTHCalificacionAnual[i];
+                                    int sumCriterioST = int.Parse(@item.NCRITERIO1) + int.Parse(@item.NCRITERIO2) + int.Parse(@item.NCRITERIO3) + int.Parse(@item.NCRITERIO4) + int.Parse(@item.NCRITERIO5) + int.Parse(@item.NCRITERIO6) + int.Parse(@item.NCRITERIO7) + int.Parse(@item.NCRITERIO8) + int.Parse(@item.NCRITERIO9);
+                                    sumCriterioT += sumCriterioST;
+                                    if (Model.ListTHCalificacionAnual.Count() > 1)
+                                    {
+                                        if (i == Model.ListTHCalificacionAnual.Count() - 1)
+                                        {
+                                            var itemP = Model.ListTHCalificacionAnual[i - 1];
+                                            int sumCriterioSTPre = int.Parse(@itemP.NCRITERIO1) + int.Parse(@itemP.NCRITERIO2) + int.Parse(@itemP.NCRITERIO3) + int.Parse(@itemP.NCRITERIO4) + int.Parse(@itemP.NCRITERIO5) + int.Parse(@itemP.NCRITERIO6) + int.Parse(@itemP.NCRITERIO7) + int.Parse(@itemP.NCRITERIO8) + int.Parse(@itemP.NCRITERIO9);
+                                            if (sumCriterioSTPre <= sumCriterioT)
+                                            {
+                                                <th>@sumCriterioST.ToString()+2</th>
+                                                sumCriterioT += 2;
+                                            }
+                                            else
+                                            {
+                                                <th>@sumCriterioST.ToString()</th>
+                                            }
+                                        }
+                                        else
+                                        {
+                                            <th>@sumCriterioST.ToString()</th>
+                                        }
+                                    }
+                                    else
+                                    {
+                                        <th>@sumCriterioST.ToString()</th>
+                                    }
+                                }
+                            }
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td style="text-align:right">TOTAL</td>
+                            @{
+                                double total = Math.Round((float)sumCriterioT / Model.ListTHCalificacionAnual.Count(),2);
+                            }
+                            <th>@total.ToString()</th>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    var _viewTHComportamiento = {
+
+        fnReturnIndex: () => {
+            var url = urlLocalSigo + "General/Reportes/Rpt_TH_Comportamiento";
+            window.location = url;
+        },
+
+        fnCrearResumen: () => {
+
+            var anio = $('#hddAnio').val().split('|');
+            var puntaje = $('#hddPuntaje').val().split('|');
+
+
+            var options = {
+                series: [
+                    {
+                        name: "Puntaje",
+                        data: puntaje
+                    }
+                    //,
+                    //{
+                    //    name: "Low - 2013",
+                    //    data: [12, 11, 14, 18, 17, 13, 13]
+                    //}
+                ],
+                chart: {
+                    height: 320,
+                    type: 'line',
+                    dropShadow: {
+                        enabled: true,
+                        color: '#000',
+                        top: 18,
+                        left: 7,
+                        blur: 10,
+                        opacity: 0.2
+                    },
+                    toolbar: {
+                        show: false
+                    }
+                },
+                colors: ['#77B6EA', '#545454'],
+                dataLabels: {
+                    enabled: true,
+                },
+                stroke: {
+                    curve: 'smooth'
+                },
+                title: {
+                    text: 'RESUMEN ANUAL',
+                    align: 'left'
+                },
+                grid: {
+                    borderColor: '#e7e7e7',
+                    row: {
+                        colors: ['#f3f3f3', 'transparent'], // takes an array which will be repeated on columns
+                        opacity: 0.5
+                    },
+                },
+                markers: {
+                    size: 1
+                },
+                xaxis: {
+                    categories: anio,//['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul'],
+                    title: {
+                        text: 'Años'
+                    }
+                },
+                yaxis: {
+                    title: {
+                        text: 'Calififación'
+                    },
+                    min: -5,
+                    max: 15
+                },
+                legend: {
+                    position: 'top',
+                    horizontalAlign: 'right',
+                    floating: true,
+                    offsetY: -25,
+                    offsetX: -5
+                }
+            };
+
+            var chart = new ApexCharts(document.querySelector("#chart"), options);
+            chart.render();
+        }
+
+    };
+    $(document).ready(function () {
+
+        _viewTHComportamiento.fnCrearResumen();
+
+    });
+</script>
+
+
+
+
+

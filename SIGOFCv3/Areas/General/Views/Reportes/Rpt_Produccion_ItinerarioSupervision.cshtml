@@ -1,0 +1,322 @@
+﻿@model CapaEntidad.ViewModel.VM_ReporteGeneral
+@{
+    ViewBag.Title = "Reporte Itinerario de supervisión";
+    Layout = "~/Views/Shared/_LayoutMain.cshtml";
+}
+@section styles
+{
+    <style type="text/css">
+        #divReporte { margin-top: 20px; }
+        .title { margin: 0 0 15px 0; clear: both; border-bottom: thin ridge #add8e6; padding: 5px 0; color: #1b4a6f; }
+        [role=button] { cursor: pointer; user-select: none; }
+        .collapsed .fa::before { content: "\f055" !important; }
+        .custom-control-label::before, .custom-control-label::after { top: 0; }
+        .box { padding: 5px; max-height: 220px; overflow: auto; font-size: 0.9em; }
+        .table thead th { text-transform: none; }
+        .table .fa, .table a { cursor: pointer; outline: none; box-shadow: none; }
+        #content-graph { width: 60%; display: inline-block; }
+    </style>
+}
+@section scripts
+{
+    <script src="~/Scripts/chart/chart.js"></script>
+    <script type="text/javascript">
+        var _rendReporteUs = {};
+        var myChart = null;
+        var parameters = {};
+
+        _rendReporteUs.fnReporte = function () {
+            parameters.ANIO = _rendReporteUs.frm.find('[name=radioAnio]:checked').val();
+            parameters.MES = _rendReporteUs.frm.find('#sel_month').val();
+
+            let direcciones = _rendReporteUs.frm.find('[name*=check]:checked').map(function () { return $(this).val() }).get();
+            parameters.COD_DLINEA = direcciones.join(',');
+            _rendReporteUs.fnResumen();
+        }
+
+        _rendReporteUs.fnResumen = function () {
+            let params = {
+                COD_TIPO: 'RESUMEN',
+                COD_DLINEA: parameters.COD_DLINEA,
+                ANIO: parameters.ANIO,
+                MES: parameters.MES
+            };
+
+            let container_resumen = _rendReporteUs.frm.find('#rptResumen');
+            container_resumen.html('Cargando...');
+
+            $.ajax({
+                type: 'POST',
+                url: urlLocalSigo + "General/Reportes/Rpt_Produccion_ItinerarioSupervision_Resumen",
+                data: params,
+            }).done(function (result) {
+                container_resumen.html(result);
+                _rendReporteUs.frm.find('#rptDetalle').html('');
+                _rendReporteUs.fnGraficar();
+            }).fail(function () {
+                container_resumen.html('Ha ocurrido un error al cargar los datos');
+            });
+        };
+
+        _rendReporteUs.fnDetalle = function (COD_OD, OD) {
+            //console.log(COD_OD, OD);
+            let INFO_GEO = _rendReporteUs.frm.find('#chkInfoGEO').is(":checked") * 1;
+
+            let container_detalle = _rendReporteUs.frm.find('#rptDetalle');
+            container_detalle.html('<h5>Buscando información de ' + OD + '...</h5>');
+
+            let params = {
+                COD_TIPO: 'DETALLE',
+                COD_DLINEA: parameters.COD_DLINEA,
+                ANIO: parameters.ANIO,
+                MES: parameters.MES,
+                COD_OD: COD_OD,
+                OD: OD,
+                INFO_GEO: INFO_GEO
+            };
+
+            $.post(urlLocalSigo + "General/Reportes/Rpt_Produccion_ItinerarioSupervision_Detalle", params)
+                .done(function (result) {
+                    container_detalle.html(result);
+                }).fail(function () {
+                    container_detalle.html("Hubo un error al cargar los datos");
+                });
+        };
+
+        _rendReporteUs.fnGraficar = function () {
+            let ctx = document.getElementById('myChart');
+
+            if (myChart != null) {
+                myChart.destroy();
+            }
+
+            let dataList = _rendReporteUs.dataGraph;
+            if (!dataList.length) return;
+
+            let labelChart = [],
+                dataChart = [];
+
+            for (let i = 0; i < dataList.length; i++) {
+                labelChart.push(dataList[i]["OD"]);
+                dataChart.push(dataList[i]["TOTAL"]);
+            }
+
+            var color = Chart.helpers.color;
+
+            let options = {
+                type: 'bar',
+                data: {
+                    labels: labelChart,
+                    datasets: [{
+                        label: 'Total',
+                        data: dataChart,
+                        backgroundColor: color('green').alpha(0.5).rgbString(),
+                        borderColor: 'green',
+                        borderWidth: 1,
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    legend: null,
+                    title: {
+                        display: true,
+                        text: 'Itinerario de Supervisión'
+                    },
+                    hover: {
+                        animationDuration: 0
+                    },
+                    animation: {
+                        duration: 0,
+                        onComplete: function () {
+                            var chartInstance = this.chart,
+                                ctx = chartInstance.ctx;
+                            ctx.font = Chart.helpers.fontString(Chart.defaults.global.defaultFontSize, Chart.defaults.global.defaultFontStyle, Chart.defaults.global.defaultFontFamily);
+                            ctx.textAlign = 'center';
+                            ctx.textBaseline = 'bottom';
+
+                            this.data.datasets.forEach(function (dataset, i) {
+                                var meta = chartInstance.controller.getDatasetMeta(i);
+                                meta.data.forEach(function (bar, index) {
+                                    var data = dataset.data[index];
+                                    ctx.fillText(data, bar._model.x, bar._model.y - 5);
+                                });
+                            });
+                        }
+                    }
+                }
+            };
+
+            myChart = new Chart(ctx, options);
+        }
+
+        _rendReporteUs.fnDescargarArchivo = function (path, name) {
+            console.log(path, name);
+            let params = { path: path, name: name };
+            let url = urlLocalSigo + 'General/Reportes/Rpt_Produccion_ItinerarioSupervision_Descargar?' + $.param(params);
+            window.open(url);
+        }
+
+        _rendReporteUs.fnExportar = function () {
+            let data = _rendReporteUs.dt.rows().data();
+            //console.log(data);
+
+            let lista = [];
+            for (var i = 0; i < data.length; i++) {
+                let item = data[i];
+
+                lista.push({
+                    OD: item[1],
+                    NUM_CNOTIFICACION: item[2],
+                    SUPERVISOR: item[3],
+                    TITULAR: item[4],
+                    NUM_THABILITANTE: item[5],
+                    MODALIDAD: item[6],
+                    POAS: item[7],
+                    DEPARTAMENTO: item[8],
+                    FECHA_SALIDA: item[9],
+                    FECHA_LLEGADA: item[10],
+                    SUPERVISADO_TEXT: item[11],
+                    TIPO_INFORME: item[12],
+                    ALERTA: item[13],
+                    NUM_INFORME: item[14],
+                    ABREVIADO_SUBPER: item[15],
+                    OBSERVACION: item[16] && $(item[16]).attr('data-content') || ''
+                });
+            }
+
+            let params = {
+                cabecera: {
+                    Periodo: parameters.ANIO,
+                    Mes: parameters.MES
+                },
+                detalle: lista
+            };
+
+            $.ajax({
+                type: 'post',
+                url: urlLocalSigo + 'General/Reportes/Rpt_Produccion_ItinerarioSupervision_Excel',
+                data: JSON.stringify(params),
+                contentType: 'application/json',
+                dataType: 'binary',
+                xhrFields: {
+                    'responseType': 'blob'
+                },
+            }).done(function (result) {
+                var a = $("<a style='display: none;'/>");
+                var url = window.URL.createObjectURL(new Blob([result]));
+                a.attr("href", url);
+                a.attr("download", 'REPORTE_ITINERARIO_SUPERVISION.xlsx');
+                $("body").append(a);
+                a[0].click();
+                window.URL.revokeObjectURL(url);
+                a.remove();
+            });
+        }
+
+        $(document).ready(function () {
+            _rendReporteUs.frm = $("#divReporte");
+
+            $('.custom-radio:first-child input').prop("checked", true);
+
+            _rendReporteUs.frm.find("#chkTodoR").on("change", function () {
+                let isChecked = $(this).is(":checked");
+                $(this).closest('.box').find(".custom-control-input").prop("checked", isChecked);
+            });
+
+            var popOverSettings = {
+                trigger: 'focus',
+                container: 'body',
+                html: true,
+                selector: '[data-toggle="popover"]'
+            }
+
+            $('body').popover(popOverSettings);
+        });
+    </script>
+}
+
+<div id="divReporte">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-12">
+                <h4 class="title">Reporte Itinerario de supervisión</h4>
+                <h5 class="collapsed" data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
+                    <i class="fa fa-minus-circle text-success"></i> Opciones de búsqueda
+                </h5>
+                <div class="collapse" id="collapseExample">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <h5>Año de consulta</h5>
+                                    <div class="box">
+                                        @for (int anio = DateTime.Now.Year; anio >= 2004; anio--)
+                                        {
+                                            <div class="custom-control custom-radio">
+                                                <input id="@anio" type="radio" class="custom-control-input" name="radioAnio" value="@anio">
+                                                <label class="custom-control-label" for="@anio">@anio</label>
+                                            </div>
+                                        }
+                                    </div>
+                                </div>
+                                <div class="col-sm-4">
+                                    <h5>Sub Dirección de Linea</h5>
+                                    <div class="box">
+                                        <div class="custom-control custom-checkbox">
+                                            <input type="checkbox" class="custom-control-input" id="chkTodoR" name="chkTodoR" checked>
+                                            <label class="custom-control-label" for="chkTodoR">Todas las DL</label>
+                                        </div>
+                                        @if (Model.listDireccionLinea != null)
+                                        {
+                                            foreach (var item in Model.listDireccionLinea)
+                                            {
+                                                <div class="custom-control custom-checkbox">
+                                                    <input type="checkbox" class="custom-control-input" id="check_@item.CODIGO" name="check_@item.CODIGO" value="@item.CODIGO" checked>
+                                                    <label class="custom-control-label" for="check_@item.CODIGO">@item.DESCRIPCION</label>
+                                                </div>
+                                            }
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <div class="form-inline">
+                        <div class="form-group">
+                            <label class="mr-2">Mes:</label>
+                            <select id="sel_month" class="form-control">
+                                <option value="0">Todos</option>
+                                <option value="1">Enero</option>
+                                <option value="2">Febrero</option>
+                                <option value="3">Marzo</option>
+                                <option value="4">Abril</option>
+                                <option value="5">Mayo</option>
+                                <option value="6">Junio</option>
+                                <option value="7">Julio</option>
+                                <option value="8">Agosto</option>
+                                <option value="9">Septiembre</option>
+                                <option value="10">Octubre</option>
+                                <option value="11">Noviembre</option>
+                                <option value="12">Diciembre</option>
+                            </select>
+                        </div>
+                        <div class="form-group ml-2">
+                            <button type="button" id="btnGraficar" class="btn btn-primary" onclick="_rendReporteUs.fnReporte()">
+                                Graficar
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div id="rptResumen"></div>
+                <div id="rptDetalle"></div>
+                <div class="text-center">
+                    <div id="content-graph">
+                        <canvas id="myChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

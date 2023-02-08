@@ -1,0 +1,391 @@
+﻿@model CapaEntidad.ViewModel.VM_FiscalizaNotificacion
+@{
+    ViewBag.Title = "AddEdit";
+    Layout = "~/Views/Shared/_LayoutMain.cshtml";
+}
+
+<script src="~/Areas/Fiscalizacion/js/FiscalizacionNotificacion/AddEdit.js?v=@Guid.NewGuid()"></script>
+@section scripts{
+    <script>
+        "use strict"; var rol = '';
+    $(document).ready(function () {
+        //Validamos el rol del usuario
+        utilSigo.ValidaRol('@ViewBag.VAliasRol', 'btnRegistrar', '@Model.vmControlCalidad.ddlIndicadorId');
+    });
+    </script>
+}
+
+
+<style type="text/css">
+    .tab-pane:not(.active) {
+        display: none;
+    }
+</style>
+
+<div class="container-fluid">
+    <div class="card">
+        <div class="card-header text-right">
+            @Model.lblTituloCabecera
+        </div>
+        <div class="card-body">
+            <div class="card">
+                <div class="card-header text-small">
+                    <a id="btnRegistrar" href="javascript:void(0)" style="cursor:pointer;" data-toggle="tooltip" data-placement="top" title="Guardar" onclick="ManNotificacion_AddEdit.fnSaveForm()"><i class="fa mx-2 fa-lg fa-save"></i></a>
+                    <a style="cursor:pointer;" data-toggle="tooltip" data-placement="top" title="Regresar" onclick="ManNotificacion_AddEdit.regresar()"><i class="fa mx-2 fa-lg fa-reply"></i></a>
+                    @Model.lblTituloEstado
+                </div>
+                <div class="card-body">
+                    <form id="frmNotificacionRegistro">
+                        <!-- form-->
+                        @Html.HiddenFor(m => m.hdfCodNotificacion)
+                        @Html.HiddenFor(m => m.hdfCodTipoNotificacion)
+                        @Html.HiddenFor(m => m.hdfCodNotificador)
+                        @Html.HiddenFor(m => m.hdfCodNotificado)
+                        @Html.HiddenFor(m => m.hdfIdOrigenRegistro)
+                        @Html.HiddenFor(m => m.RegEstado)
+                        @Html.HiddenFor(m => m.chknotifTitular)
+                        @Html.HiddenFor(m => m.idTramiteSITD)
+                        @Html.HiddenFor(m => m.chkactadispensa)
+                        @Html.HiddenFor(m => m.chkdjcambiodomicilio)
+
+                        <!--para el tipo antes del PAU-->
+                        @Html.HiddenFor(m => m.hdfCodigoNotificacionAlerta)
+
+                        <!--Datos del archivo adjuntado-->
+                        @Html.HiddenFor(m => m.txtnomArchOriginal)
+                        @Html.HiddenFor(m => m.txtnomArchTemporal)
+                        @Html.HiddenFor(m => m.txtextArch)
+                        @Html.HiddenFor(m => m.txtestadoArch)
+                        @Html.HiddenFor(m => m.txtcCodificacionSiTD)
+                        @Html.HiddenFor(m => m.Ent_Notificado.codigoPersona)
+
+
+                        <ul class="nav nav-tabs" id="myTab" role="tablist">
+                            <li class="nav-item"><a class="nav-link active" data-toggle="tab" href="#navEstado" role="tab" aria-controls="home" aria-selected="true">Estado Situacional</a></li>
+                            <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#navDatos" role="tab" aria-controls="home" aria-selected="true">Datos Generales</a></li>
+                            <li id="liCaracteristicas" class="nav-item"><a class="nav-link" data-toggle="tab" href="#navCaracteristicas" role="tab" aria-controls="home" aria-selected="true">Características del lugar</a></li>
+                            <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#navAdicionales" role="tab" aria-controls="home" aria-selected="true">Datos Adicionales</a></li>
+                        </ul>
+                        <div class="tab-content">
+                            <div class="tab-pane fade show active" id="navEstado" role="tabpanel" aria-labelledby="nav-home-tab">
+                                @{ Html.RenderAction("_ControlCalidad", "Controles", new { area = "GENERAL", dto = Model.vmControlCalidad }); }
+                            </div>
+                            <div class="tab-pane" id="navDatos" role="tabpanel" aria-labelledby="nav-home-tab">
+                                <br />
+                                <div class="form-row">
+                                    <label for="lbltitulo" class="text-medium" style="font-weight:bold;margin-left:5px;">@Model.lblTituloDatosG</label>
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group col-md-3">
+                                        <label for="lblOdId" class="text-small">O.D. desde donde registra la información</label>
+                                        @Html.DropDownListFor(m => m.ddlOdId, new SelectList(Model.ddlOd, "Value", "Text"), new { @class = "form-control form-control-sm" })
+                                    </div>
+                                    <div class="form-group col-md-10">
+                                        <label for="lblTipoNotificacion" class="text-small">Tipo</label>
+                                        @Html.TextBoxFor(m => m.txtTipoNotificacion, new { @class = "form-control form-control-sm", disabled = "disabled" })
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label for="txtNotificador" class="text-small texto-recortado">Notificador<i class="fa fa-cog fa-spin text-danger" id="iconRNotificacionCodigo" style="display:none;" data-toggle="tooltip" data-placement="top" title="Nuevo"></i></label>
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text"><i class="fa fa-plus" style="cursor:pointer;" onclick="ManNotificacion_AddEdit.fnBuscarPersona('NOTIFICADOR', 'N');" data-toggle="tooltip" data-placement="top" title="Agregar"></i></span>
+                                            </div>
+                                            @Html.EditorFor(m => m.txtNotificador, new { htmlAttributes = new { @class = "form-control form-control-sm", @disabled = "disabled" } })
+                                            <input type="hidden" id="hdTipoNotificador" />
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-md-4">
+                                        <label for="txtNumCarta" class="text-small">@Model.lblTituloItemDoc</label>
+                                        @Html.EditorFor(m => m.txtNumCarta, new { htmlAttributes = new { @class = "form-control form-control-sm" } })
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group col-md-2">
+                                        <label for="txtFechaEmision" class="text-small">Fecha de emisión</label>
+                                        @Html.EditorFor(m => m.txtFechaEmision, new { htmlAttributes = new { @class = "form-control form-control-sm", placeholder = "dd/mm/yyyy", title = "la fecha a ingresar debe ser en el formato dd/mm/yyyy", maxlength = "10" } })
+                                    </div>
+                                    <div class="form-group col-md-2">
+                                        <label for="txtFechaRecepcion" class="text-small">Fecha de recepción por la OD</label>
+                                        @Html.EditorFor(m => m.txtFechaRecepcion, new { htmlAttributes = new { @class = "form-control form-control-sm", placeholder = "dd/mm/yyyy", title = "la fecha a ingresar debe ser en el formato dd/mm/yyyy", maxlength = "10" } })
+                                    </div>
+                                    <div class="form-group col-md-2">
+                                        <label for="txtFechaEntrega" class="text-small">Fecha Entrega a Notificador</label>
+                                        @Html.EditorFor(m => m.txtFechaEntrega, new { htmlAttributes = new { @class = "form-control form-control-sm", placeholder = "dd/mm/yyyy", title = "la fecha a ingresar debe ser en el formato dd/mm/yyyy", maxlength = "10" } })
+                                    </div>
+                                    <div class="form-group col-md-2">
+                                        <label for="txtFechaNotificacion" class="text-small">@Model.lblTituloItemFechaNotif</label>
+                                        @Html.EditorFor(m => m.txtFechaNotificacion, new { htmlAttributes = new { @class = "form-control form-control-sm", placeholder = "dd/mm/yyyy", title = "la fecha a ingresar debe ser en el formato dd/mm/yyyy", maxlength = "10" } })
+                                    </div>
+                                    <div class="form-group col-md-2">
+                                        <label for="txtFechaDevolucion" class="text-small">Fecha de devolución a la secretaria OD</label>
+                                        @Html.EditorFor(m => m.txtFechaDevolucion, new { htmlAttributes = new { @class = "form-control form-control-sm", placeholder = "dd/mm/yyyy", title = "la fecha a ingresar debe ser en el formato dd/mm/yyyy", maxlength = "10" } })
+                                    </div>
+                                </div>
+                                <div id="dvRenderListInforme" class="form-row" style="margin-bottom:10px;">
+                                    <div class="col-md-12">
+                                        @Html.Partial("~/Areas/Fiscalizacion/Views/FiscalizacionNotificacion/Shared/_renderListInforme.cshtml", Model)
+                                    </div>
+                                </div>
+                                <div id="divDatosRecepcion">
+                                    <div class="form-row">
+                                        <div class="form-group col-md-3">
+                                            <label for="lblEstadoCargoId" class="text-small">Estado del cargo</label>
+                                            @Html.DropDownListFor(m => m.ddlEstadoCargoId, new SelectList(Model.ddlEstadoCargo, "Value", "Text"), new { @class = "form-control form-control-sm" })
+                                        </div>
+                                    </div>
+                                    <div class="form-row">
+                                        <div class="form-group col-md-2">
+                                            <div class="custom-control custom-checkbox my-1 mr-sm-2">
+                                                @Html.CheckBoxFor(m => m.chkPrimeraVisita, new { @class = "form-check-input", style = "width:15px;height:16px;" })
+                                                <label for="lblPrimeraVisita" class="text-small" style="margin-top:6px;">Primera Visita</label>
+                                            </div>
+                                            <div style="margin-top:7px;">
+                                                @Html.EditorFor(m => m.txtFechaPVisita, new { htmlAttributes = new { @class = "form-control form-control-sm", placeholder = "dd/mm/yyyy", title = "la fecha a ingresar debe ser en el formato dd/mm/yyyy", maxlength = "10" } })
+                                            </div>
+                                        </div>
+                                        <div class="form-group col-md-2">
+                                            <div class="custom-control custom-checkbox my-1 mr-sm-2">
+                                                @Html.CheckBoxFor(m => m.chkSegundaVisita, new { @class = "form-check-input", style = "width:15px;height:16px;" })
+                                                <label for="lblSegundaVisita" class="text-small" style="margin-top:6px;">Segunda Visita</label>
+                                            </div>
+                                            <div style="margin-top:7px;">
+                                                @Html.EditorFor(m => m.txtFechaSVisita, new { htmlAttributes = new { @class = "form-control form-control-sm", placeholder = "dd/mm/yyyy", title = "la fecha a ingresar debe ser en el formato dd/mm/yyyy", maxlength = "10" } })
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-row">
+                                        <div class="form-group col-md-3">
+                                            <div class="custom-control custom-checkbox my-1 mr-sm-2">
+                                                @Html.RadioButtonFor(m => m.radSituacion, "1", new { @class = "form-check-input", style = "width:15px;height:16px;" })
+                                                <label for="lblConforme" class="text-small" style="margin-top:6px;">Conforme recepción y firma</label>
+                                            </div>
+                                        </div>
+                                        <div class="form-group col-md-3">
+                                            <div class="custom-control custom-checkbox my-1 mr-sm-2">
+                                                @Html.RadioButtonFor(m => m.radSituacion, "2", new { @class = "form-check-input", style = "width:15px;height:16px;" })
+                                                <label for="lblSeNegoRecibir" class="text-small" style="margin-top:6px;">Se nego a recibir la notificación</label>
+                                            </div>
+                                        </div>
+                                        <div class="form-group col-md-3">
+                                            <div class="custom-control custom-checkbox my-1 mr-sm-2">
+                                                @Html.RadioButtonFor(m => m.radSituacion, "3", new { @class = "form-check-input", style = "width:15px;height:16px;" })
+                                                <label for="lblSeNegoCargo" class="text-small" style="margin-top:6px;">Se nego a firmar el cargo notificación</label>
+                                            </div>
+                                        </div>
+                                        <div class="form-group col-md-3">
+                                            <div class="custom-control custom-checkbox my-1 mr-sm-2">
+                                                @Html.RadioButtonFor(m => m.radSituacion, "4", new { @class = "form-check-input", style = "width:15px;height:16px;" })
+                                                <label for="lblBajoPuerta" class="text-small" style="margin-top:6px;">Bajo puerta</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div id="divNotificaEntidad" class="form-group col-md-3">
+                                        <label for="lblEntidadId" class="text-small">Entidad</label>
+                                        @Html.DropDownListFor(m => m.ddlEntidadId, new SelectList(Model.ddlEntidad, "Value", "Text"), new { @class = "form-control form-control-sm" })
+                                    </div>
+                                    <div id="divNotificaTitular" class="form-group col-md-3">
+                                        <label for="lblTitularId" class="text-small">Relación con el titular</label>
+                                        @Html.DropDownListFor(m => m.ddlTitularId, new SelectList(Model.ddlTitular, "Value", "Text"), new { @class = "form-control form-control-sm" })
+                                    </div>
+                                    <div id="divParentesco" class="col-md-6 mb-3">
+                                        <label for="txtParentesco" class="text-small">Parentesco</label>
+                                        @Html.EditorFor(m => m.txtParentesco, new { htmlAttributes = new { @class = "form-control form-control-sm" } })
+                                    </div>
+                                    <div id="divNotificado" class="col-md-6 mb-3">
+                                        <label for="txtNotificado" class="text-small texto-recortado">@Model.lblTituloItemRecibeNotif<i class="fa fa-cog fa-spin text-danger" id="iconRNotificacionCodigo" style="display:none;" data-toggle="tooltip" data-placement="top" title="Nuevo"></i></label>
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text"><i class="fa fa-plus" style="cursor:pointer;" onclick="ManNotificacion_AddEdit.fnBuscarPersona('NOTIFICADO', 'N');" data-toggle="tooltip" data-placement="top" title="Agregar"></i></span>
+                                            </div>
+                                            @Html.EditorFor(m => m.txtNotificado, new { htmlAttributes = new { @class = "form-control form-control-sm", @disabled = "disabled" } })
+                                            <input type="hidden" id="hdTipoNotificado" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="tab-pane" id="navCaracteristicas" role="tabpanel" aria-labelledby="nav-home-tab">
+                                <div class="form-row">
+                                    <div class="col-md-6 mb-3">
+                                        <label for="lblUbigeoText" class="text-small">Ubigeo Real<i class="fa fa-cog fa-spin text-danger" id="iconUbigeo" style="display:none;" data-toggle="tooltip" data-placement="top" title="Seleccione Ubigeo"></i></label>
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                        <span class="input-group-text"><i class="fa fa-refresh" style="cursor:pointer;" data-toggle="tooltip" data-placement="top" title="Trae datos actuales correspondientes al Ubigeo y Dirección Real" onclick="ManNotificacion_AddEdit.fnActualiza()"></i></span>
+                    </div>
+                                            @Html.EditorFor(m => m.txtUbigeo, new { htmlAttributes = new { @class = "form-control form-control-sm", @disabled = "disabled" } })
+                                            @Html.HiddenFor(m => m.hdfUbigeo)
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-md-6">
+                                        <label for="lblDireccion" class="text-small">Dirección Real</label>
+                                        @Html.TextBoxFor(m => m.txtDireccion, new { @class = "form-control form-control-sm", @disabled = "disabled" })
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group col-md-4">
+                                        <div class="custom-control custom-checkbox my-1 mr-sm-2">
+                                            @Html.CheckBoxFor(m => m.chkActa, new { @class = "form-check-input", style = "width:15px;height:16px;" })
+                                            <label for="lblActa" class="text-small" style="margin-top:6px;">¿Acta de notificación administrativa?</label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group col-md-2">
+                                        <label for="txtFechaEmision" class="text-small">Medidor de</label>
+                                        <div class="custom-control custom-checkbox my-1 mr-sm-2">
+                                            @Html.RadioButtonFor(m => m.radMedidor, "a", new { @class = "form-check-input", style = "width:15px;height:16px;" })
+                                            <label for="lblAgua" class="text-small" style="margin-top:6px;margin-right:30px;">Agua</label>
+                                            @Html.RadioButtonFor(m => m.radMedidor, "l", new { @class = "form-check-input", style = "width:15px;height:16px;" })
+                                            <label for="lblLuz" class="text-small" style="margin-top:6px;">Luz</label>
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-md-4">
+                                        <label for="txtNumMedidor" class="text-small">Nro. de medidor</label>
+                                        @Html.EditorFor(m => m.txtNumMedidor, new { htmlAttributes = new { @class = "form-control form-control-sm" } })
+                                    </div>
+
+                                </div>
+                                <div class="form-row">
+                                    <div class="col-md-6 mb-3">
+                                        <label for="txtMatFachada" class="text-small">Material y color de fachada</label>
+                                        @Html.EditorFor(m => m.txtMatFachada, new { htmlAttributes = new { @class = "form-control form-control-sm" } })
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label for="txtMatPuerta" class="text-small">Material y color de puerta</label>
+                                        @Html.EditorFor(m => m.txtMatPuerta, new { htmlAttributes = new { @class = "form-control form-control-sm" } })
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group col-md-3">
+                                        <label for="txtNumPisos" class="text-small">Nro de pisos</label>
+                                        @Html.EditorFor(m => m.txtNumPisos, new { htmlAttributes = new { @class = "form-control form-control-sm" } })
+                                    </div>
+                                    <div class="form-group col-md-3">
+                                        <label for="lblZonaUtmId" class="text-small">Zona UTM</label>
+                                        @Html.DropDownListFor(m => m.ddlZonaUtmId, new SelectList(Model.ddlZonaUtm, "Value", "Text"), new { @class = "form-control form-control-sm" })
+                                    </div>
+                                    <div class="form-group col-md-3">
+                                        <label for="txtCoordEste" class="text-small">Coordenada Este</label>
+                                        @Html.EditorFor(m => m.txtCoordEste, new { htmlAttributes = new { @class = "form-control form-control-sm" } })
+                                    </div>
+                                    <div class="form-group col-md-3">
+                                        <label for="txtCoordNorte" class="text-small">Coordenada Norte</label>
+                                        @Html.EditorFor(m => m.txtCoordNorte, new { htmlAttributes = new { @class = "form-control form-control-sm" } })
+                                    </div>
+                                </div>
+                                <div id="DivTelefCorreo">
+                                    <div class="form-row" style="margin-bottom:10px;">
+                                        <div class="col-md-12">
+                                            @Html.Partial("~/Areas/General/Views/ManPersonas/Shared/_renderListTelefono.cshtml", Model.Ent_Notificado)
+                                        </div>
+                                    </div>
+
+                                    <div class="form-row" style="margin-bottom:10px;">
+                                        <div class="col-md-12">
+                                            @Html.Partial("~/Areas/General/Views/ManPersonas/Shared/_renderListCorreo.cshtml", Model.Ent_Notificado)
+                                        </div>
+                                    </div>
+                                </div>                                
+                                <div class="form-row">
+                                    <div class="form-group col-md-4">
+                                        <label for="lblItemConexionInter" class="text-small">Conexión a internet</label>
+                                        @*<div class="control-label">
+            <label id="inter" class="text-success"> <i class='fa fa-fw @(Model.Ent_Notificado.rb_internet==1?"fa-check-circle-o":"fa-circle-o")'></i>
+                                                    <span>@(Model.Ent_Notificado.rb_internet == 1 ? "Si" : "No")</span>
+            </label>
+        </div>*@
+                                        <div class="control-label">
+                                            @Html.RadioButtonFor(m => m.Ent_Notificado.rb_internet, "1", new { htmlAttributes = new { @class = "form-check-input" } }) Si
+                                            @Html.RadioButtonFor(m => m.Ent_Notificado.rb_internet, "0", new { htmlAttributes = new { @class = "form-check-input" } }) No
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="form-row">
+                                    <div class="form-group col-md-6">
+                                        <div class="custom-control custom-checkbox my-1 mr-sm-2">
+                                            @Html.CheckBoxFor(m => m.chkDeclaracionJurada, new { @class = "form-check-input", style = "width:15px;height:16px;" })
+                                            <label for="lblDeclaracionJurada" class="text-small" style="margin-top:6px;">¿Declaración jurada de variación de domicilio?</label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div id="divUbigeoDJ" class="form-row">
+                                    <div class="col-md-6 mb-3">
+                                        <label for="lblUbigeoDJText" class="text-small">Ubigeo Real<i class="fa fa-cog fa-spin text-danger" id="iconUbigeo" style="display:none;" data-toggle="tooltip" data-placement="top" title="Seleccione Ubigeo"></i></label>
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text"><i class="fa fa-search" style="cursor:pointer;" data-toggle="tooltip" data-placement="top" title="Seleccionar Ubigeo" onclick="ManNotificacion_AddEdit.fnBuscarUbigeo('UBIGEO_DJ');"></i></span>
+                                            </div>
+                                            @Html.EditorFor(m => m.txtUbigeoDJ, new { htmlAttributes = new { @class = "form-control form-control-sm", @disabled = "disabled" } })
+                                            @Html.HiddenFor(m => m.hdfUbigeoDJ)
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label for="txtLugarDJ" class="text-small">Nueva Dirección Real</label>
+                                        @Html.EditorFor(m => m.txtCalleDJ, new { htmlAttributes = new { @class = "form-control form-control-sm" } })
+                                    </div>
+                                </div>
+                                <div id="divLugarDJ" class="form-row ">
+                                    <div class="col-md-6 mb-3 d-none">
+                                        <label for="txtCalleDJ" class="text-small">Calle</label>
+                                        @Html.EditorFor(m => m.txtLugarDJ, new { htmlAttributes = new { @class = "form-control form-control-sm" } })
+                                    </div>
+                                    
+                                    <div class="form-group col-md-12">
+                                        <label for="lblReferenciaDJ" class="text-small">Referencia</label>
+                                        @Html.TextBoxFor(m => m.txtReferenciaDJ, new { @class = "form-control form-control-sm" })
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div class="tab-pane" id="navAdicionales" role="tabpanel" aria-labelledby="nav-home-tab">
+                                <div class="card">
+                                    <div class="form-row">
+                                        <div class="form-group col-md-12">
+                                            <label for="txtObservaciones" class="text-small">Observaciones</label>
+                                            @Html.TextAreaFor(m => m.txtObservaciones, 3, 1, new { @class = "form-control form-control-sm" })
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card">
+                                    <div class="form-row">
+                                        <div class="form-group col-md-12">
+                                            <label for="txtDocAdjuntos" class="text-small">Documentos adjuntos</label>
+                                            @Html.TextAreaFor(m => m.txtDocAdjuntos, 3, 1, new { @class = "form-control form-control-sm" })
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card">
+                                    <div class="form-row">
+                                        <div class="form-group col-md-7">
+                                            <label for="txtSubirCargo" class="text-small">Subir cargo</label>
+                                            <div>
+                                                <div class="custom-file" id="customFile">
+                                                    <input type="file" class="custom-file-input" multiple="multiple" id="txtArchivoAdjunto" aria-describedby="fileHelp" onchange="ManNotificacion_AddEdit.fnSelectDocAdjunto(event, this)">
+                                                    <label class="custom-file-label" for="txtArchivoAdjunto" style="color:#989797">
+                                                        Seleccionar Archivo
+                                                    </label>
+                                                </div>
+                                                <div>
+                                                    <button id="iconDownload" type="button" class="btn btn-outline-info btn-sm" style="margin-top:3px;" onclick="ManNotificacion_AddEdit.fnDownloadDocumentoAdjunto()">Descargar</button>
+                                                    <label for="lblnomArchOriginal" class="text-small" style="color:red;"></label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@* Para el control genérico de personas *@
+<div class="modal fade hide" id="mdlBuscarPersona" role="dialog"></div>
+<div class="modal fade" id="modalAddEditPersona" tabindex="-1" role="dialog"></div>
+<div class="modal fade hide" id="mdlBuscarUbigeo" role="dialog"></div>
+<div id="divIframe"></div>

@@ -1,0 +1,246 @@
+﻿@model CapaEntidad.ViewModel.VM_Libro_Operaciones_THabilitante
+@{
+    ViewBag.Title = "LibroOperaciones";
+    Layout = "~/Views/Shared/_LayoutMain.cshtml";
+}
+ 
+<script>
+    var libroOP_Det = libroOP_Det || {
+        regresar: () => {
+            window.location = urlLocalSigo + "THabilitante/LibroOperaciones";
+        },  
+        searchTH: () => {
+            let url = urlLocalSigo + "General/Controles/_THabilitante";
+            let option = { url: url, type: 'GET', datos: { hdfFormulario: "TITULO_HABILITANTE" }, divId: "modalSearchTH" };
+            utilSigo.fnOpenModal(option, function () {
+                vpTHabilitante.fnAsignarDatos = function (obj) {
+                    if (obj != null && obj != "") {
+                        var data = vpTHabilitante.dtTituloHabilitante.row($(obj).parents('tr')).data();
+                        libroOP_Det.frm.find("#txtModalidad").val(data["PARAMETRO01"]);
+                        libroOP_Det.frm.find("#txtTitular").val(data["PARAMETRO02"]);
+                        libroOP_Det.frm.find("#txtBuscarTH").val(data["NUMERO"]); 
+                        libroOP_Det.frm.find("#hdCodTH").val(data["CODIGO"]); 
+                        libroOP_Det.limpiarDatosPoa();
+                        $("#modalSearchTH").modal('hide');
+                    }
+                }
+                vpTHabilitante.fnInit_v2();
+            });
+        },
+        addPoa: () => {
+            let url = "", sFormulario = "TITULO_HABILITANTE", sCriterio = "CN_DEV_POA_PMANEJO", sValor = libroOP_Det.frm.find("#hdCodTH").val();
+            url = urlLocalSigo + "General/Controles/_POA";
+            var option = { url: url, type: 'POST', datos: { asFormulario: sFormulario, asCriterio: sCriterio, asValor: sValor }, divId: "modalSearchPOA" };
+            utilSigo.fnOpenModal(option, function () {
+                _POA.fnAsignarDatos = function (obj) {
+                    if (obj != null && obj != "") {
+                        //delete data censo                         
+                        var data = _POA.dtPOA.row($(obj).parents('tr')).data();
+                        libroOP_Det.frm.find("#txtBuscarPOA").val(data["NOMBRE_POA"]); 
+                        libroOP_Det.frm.find("#txtNumPoa").val(data["NUM_POA"]);  
+                        libroOP_Det.frm.find("#txtZafra").val(data["ZAFRA"]);
+                        libroOP_Det.frm.find("#txtResolucion").val(data["NUM_RESOLUCION"]);
+                        libroOP_Det.frm.find("#hdNumPoa").val(data["NUM_POA"]); 
+                        utilSigo.fnCloseModal("modalSearchPOA");
+                    }
+                }
+                _POA.fnInit();
+            });
+        },
+        limpiarDatosPoa: () => {
+            libroOP_Det.frm.find("#txtBuscarPOA").val("");
+            libroOP_Det.frm.find("#txtNumPoa").val("");
+            libroOP_Det.frm.find("#txtZafra").val("");            
+            libroOP_Det.frm.find("#txtResolucion").val("");
+            libroOP_Det.frm.find("#hdNumPoa").val(""); 
+        },
+        mostrarCargarExcel: () => {
+           // $("#btnGuardarCabecera").remove();
+            $("#contenedorItems").show();
+        },
+        addCabecera: () => {
+            let codTH = libroOP_Det.frm.find("#hdCodTH").val();
+            let numPoa = libroOP_Det.frm.find("#hdNumPoa").val();  
+            let id = libroOP_Det.frm.find("#id_Libro_Operaciones_TH").val(); 
+            if (codTH.trim() === "") {
+                utilSigo.toastWarning("Aviso", "Seleccione un Título Habilitante para continuar con la operación ");
+                return false;
+            }
+            if (numPoa === "" || numPoa=="0") {
+                utilSigo.toastWarning("Aviso", "Seleccione POA Maderable para continuar con la operación ");
+                return false;
+            }                      
+            let model = { id_Libro_Operaciones_TH:id,cod_Thabilitante: codTH, num_poa: numPoa };
+            var url = urlLocalSigo + "THabilitante/LibroOperaciones/createLibroOperacioneTH";
+            var option = { url: url, datos: JSON.stringify(model), type:"POST"};
+            utilSigo.fnAjax(option, function (data) {
+                if (data.success) {
+                    libroOP_Det.mostrarCargarExcel();
+                    console.log(data.values[0]);
+                    console.log(data.values);
+                    libroOP_Det.frm.find("#id_Libro_Operaciones_TH").val(data.values[0]);                     
+                    utilSigo.toastSuccess("Aviso", data.msj);                    
+                }
+                else {
+                    utilSigo.toastWarning("Aviso", data.msj);                     
+                }
+            });
+        },
+        fnSelectFile: (e, obj) => {
+            let file = e.target.files || e.dataTransfer.files;
+            var idFile = $(obj).attr("id");
+            $("#" + idFile).next().text(file[0].name);             
+        },
+        fnImportFile: () => {
+            let input = document.getElementById('txtArchivoAdjunto'); 
+            if (input.files[0]) {
+                let file = input.files[0];
+                var url = urlLocalSigo + "THabilitante/LibroOperaciones/ImportarItemsExcel";
+                var fileData = new FormData();
+                fileData.append(file.name, file);
+                fileData.append("LIBRO_OPERACIONES_TH_ID", libroOP_Det.frm.find("#id_Libro_Operaciones_TH").val());
+                $.ajax({
+                    url: url,
+                    type: "POST",
+                    contentType: false, // Not to set any content header  
+                    processData: false, // Not to process data  
+                    data: fileData,
+                    success: function (result) {
+                        utilSigo.unblockUIGeneral();
+                        if (result.success) {                            
+                            //_addEditMuestra.frm.find("#txtArchivoAdjunto").next().text("Seleccionar Archivo");
+                            utilSigo.toastSuccess("Aviso", result.msj);
+                        }
+                        else {
+                            utilSigo.toastWarning("Aviso", result.msj);
+                        }
+                    },
+                    beforeSend: function () {
+                        utilSigo.blockUIGeneral();
+                    },
+                    error: function (err) {
+                        utilSigo.unblockUIGeneral();
+                        utilSigo.toastWarning("Aviso", "Sucedio un error, Comuníquese con el Administrador");
+                        console.log(err.statusText);
+                    }
+                });
+            }
+        }
+    };
+    $(document).ready(function () {
+        libroOP_Det.frm = $("#frmLibOperacionesTH");
+        if (parseInt(libroOP_Det.frm.find("#id_Libro_Operaciones_TH").val())>0) {
+            libroOP_Det.mostrarCargarExcel();
+        }
+    });
+</script>
+<div class="container-fluid">
+    <div class="card">
+        <div class="card-header text-right">
+            Registro de Libro de operaciones de Título Habilitante
+        </div>
+        <div class="card-body">
+            <div class="card">
+                <div class="card-header text-small">
+                    <a href="javascript:void(0)" id="btnGuardarCabecera" style="cursor:pointer;" data-toggle="tooltip" data-placement="top" title="Guardar" onclick="libroOP_Det.addCabecera()"><i class="fa mx-2 fa-lg fa-save"></i></a>
+                     
+                    <a style="cursor:pointer" title="Regresar" onclick="libroOP_Det.regresar()"><i class="fa mx-2 fa-lg fa-reply"></i></a>
+                </div>
+                <div class="card-body">
+                    <form id="frmLibOperacionesTH">
+                        @Html.HiddenFor(m => m.id_Libro_Operaciones_TH)
+                        <input type="hidden" id="hdCodTH" value="@Model.cod_Thabilitante" />
+                        <input type="hidden" id="hdNumPoa" value="@Model.num_poa" />
+                        <div class="form-row">
+                            <div class="form-group col-md-4">
+                                <label class="text-small">Título habilitante</label>
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text" onclick="libroOP_Det.searchTH()" style="cursor:pointer;color:forestgreen"><i class="fa fa-search" data-toggle="tooltip" data-placement="top" title="Buscar"></i></span>
+                                    </div>
+                                    <input type="text" id="txtBuscarTH" value="@Model.numTHabilitante" class="form-control form-control-sm" maxlength="150" disabled style="text-transform:uppercase;" />
+
+                                </div>
+                            </div>
+                            <div class="form-group col-md-4">
+                                <label class="text-small">Modalidad</label>
+                                <input type="text" id="txtModalidad" class="form-control form-control-sm" disabled value="@Model.modalidad" />
+
+                            </div>
+                            <div class="form-group col-md-4">
+                                <label class="text-small">Titular</label>
+                                <input type="text" id="txtTitular" class="form-control form-control-sm" disabled value="@Model.titular" />
+
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group col-md-4">
+                                <label class="text-small">POA</label>
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text" onclick="libroOP_Det.addPoa()" style="cursor:pointer;color:forestgreen"><i class="fa fa-search" data-toggle="tooltip" data-placement="top" title="Buscar"></i></span>
+                                    </div>
+                                    <input type="text" id="txtBuscarPOA" value="@Model.poa" class="form-control form-control-sm" maxlength="150" disabled style="text-transform:uppercase;" />
+                                </div>
+                            </div>
+                            <div class="form-group col-md-4">
+                                <label class="text-small">Num POA</label>
+                                <input type="text" id="txtNumPoa" class="form-control form-control-sm" disabled value="@Model.num_poa" />
+                            </div>
+                            <div class="form-group col-md-4">
+                                <label class="text-small">Resolución</label>
+                                <input type="text" id="txtResolucion" class="form-control form-control-sm" disabled value="@Model.resolucion" />
+                            </div>
+                        </div>
+                        <div class="form-row">                             
+                            <div class="form-group col-md-4">
+                                <label class="text-small">Num Zafra</label>
+                                <input type="text" id="txtZafra" class="form-control form-control-sm" disabled value="@Model.ZAFRA_PCA" />
+                            </div>                            
+                        </div>
+                    </form>
+                    <div id="contenedorItems" style="display:none">
+                        <ul class="nav nav-tabs" id="myTab" role="tablist">
+                            <li class="nav-item">
+                                <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">Carga Masiva de Archivo</a>
+                            </li>
+
+                        </ul>
+                        <div class="tab-content" id="myTabContent">
+                            <br />
+                            <div class="form-row">
+                                <div class="form-group col-md-6">
+                                    <div class="custom-file" id="customFile">
+                                        <input type="file" class="custom-file-input" id="txtArchivoAdjunto" aria-describedby="fileHelp" onchange="libroOP_Det.fnSelectFile(event, this)" >
+                                        <label class="custom-file-label" for="txtArchivoAdjunto" style="color:#989797">
+                                            Seleccionar Imagen
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="form-group col-md-6" style="text-align:left">
+                                    <button type="button" class="btn btn-outline-info btn-sm" style="margin-top:3px;" title="Subir archivo" onclick="libroOP_Det.fnImportFile()">Subir</button>
+                                </div>
+                            </div>
+                            <div class="table-responsive">
+                                <table id="tbManGrillaPaging" class="table table-hover table-bordered" style="width:70%;">
+                                    <thead>
+                                        <tr>
+                                            <th><strong>Fecha Registro</strong></th>
+                                            <th><strong>Archivo Base</strong></th>                                             
+                                            <th><strong>Archivo Sistema</strong></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody></tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>                    
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="modalSearchTH" role="dialog" tabindex="-1"></div>
+<div class="modal fade" id="modalSearchPOA" role="dialog" tabindex="-1"></div>
+

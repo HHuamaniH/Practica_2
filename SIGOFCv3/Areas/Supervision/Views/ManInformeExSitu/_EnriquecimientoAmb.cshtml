@@ -1,0 +1,42 @@
+﻿
+<script src="~/Areas/Supervision/js/ManInformeExSitu/_EnriquecimientoAmb.js"></script>
+
+<div class="modal-dialog" role="document">
+    <div class="modal-content">
+        <div class="modal-header text-small" style="cursor:move;">
+            <span>Grupo Taxonómico</span>
+            <i class="fa fa-close" style="cursor:pointer;" data-dismiss="modal" aria-label="Close"></i>
+        </div>
+        <div class="modal-body">
+            <form id="frmItemEnriquecimientoAmb">
+                @Html.Hidden("hdfRegEstado")
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label for="ddlTipoTaxonomicoId" class="text-small">Tipo Taxonómico</label>
+                        @Html.DropDownList("ddlTipoTaxonomicoId", new SelectList(ViewBag.ddlTipoTaxonomico, "Value", "Text"), new { @class = "form-control form-control-sm" })
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label for="txtActImplemeta" class="text-small">Actividades implementadas</label>
+                        @Html.TextBox("txtActImplemeta", "", new { @class = "form-control form-control-sm" })
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="txtMaterialUsa" class="text-small">Materiales Usados</label>
+                        @Html.TextBox("txtMaterialUsa", "", new { @class = "form-control form-control-sm" })
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-12">
+                        <label for="txtObservacion" class="text-small">Observación</label>
+                        @Html.TextArea("txtObservacion", "", new { @class = "form-control form-control-sm", rows = "3" })
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-primary btn-sm" onclick="_EnriquecimientoAmb.fnSubmitForm()">Guardar</button>
+            <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Cancelar</button>
+        </div>
+    </div>
+</div>

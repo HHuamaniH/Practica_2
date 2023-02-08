@@ -1,0 +1,19 @@
+﻿@model CapaEntidad.ViewModel.VM_ControlCalidad
+<script type="text/javascript">
+    $(document).ready(function () {       
+        if (CKEDITOR.instances['OBSERVACIONES_CONTROL']) {
+           // CKEDITOR.instances['OBSERVACIONES_CONTROL'].destroy();
+            CKEDITOR.remove(CKEDITOR.instances["OBSERVACIONES_CONTROL"]);
+        }
+        CKEDITOR.replace('OBSERVACIONES_CONTROL', {
+            toolbar: initSigo.configuracionCKEDITOR
+        });
+    });
+</script>
+<div class="form-row">
+    <div class="col-md-12 mb-3">
+        @Html.TextAreaFor(m => m.OBSERVACIONES_CONTROL, new { rows = 10 })
+    </div>
+</div>
+<script src="~/Scripts/ckeditor/ckeditor.js"></script>
+

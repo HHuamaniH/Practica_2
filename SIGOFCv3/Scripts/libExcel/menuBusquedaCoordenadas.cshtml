@@ -1,0 +1,557 @@
+﻿
+<style type="text/css">
+    .opcImage:hover {
+        cursor: pointer;
+    }
+
+    .opcImage > img {
+        width: 40px;
+        height: 40px;
+    }
+</style>
+
+@* LEER XLSX *@
+<script type="text/javascript" src="~/js/js-xlsx/jszip.js"></script>
+<script type="text/javascript" src="~/js/js-xlsx/xlsx.js"></script>
+<script type="text/javascript" src="~/js/js-xlsx/custom.js"></script>
+
+<!-- Modal -->
+<div class="modal fade modal-scrolling" id="divBusquedaCoordenadas" role="dialog" data-backdrop="false" style="z-index:97;">
+    <div class="modal-dialog modal-query">
+        @*Modal content*@
+        <div class="modal-content cform">
+            <div class="modal-header cform">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4>Búsqueda por Coordenadas</h4>
+            </div>
+            <div class="modal-body cform">
+                @using (Html.BeginForm("", "Home", FormMethod.Post, new { @class = "form-horizontal" }))
+                {
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                @Html.Label("lbltipocoord", "Proyección coordenadas:", new { @class = "col-md-4 control-label" })
+                                <div class="col-md-8">
+                                    <select name="cbotipocoord" id="cbotipocoord" class="form-control input-sm"></select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                @Html.Label("lbltipocoord", "Tipo de geometría:", new { @class = "col-md-4 control-label" })
+                                <div class="col-md-8">
+                                    <select name="cbotipogeo" id="cbotipogeo" class="form-control input-sm">
+                                        <option value="1">Punto</option>
+                                        <option value="2">Linea</option>
+                                        <option value="3">Poligono</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6"></div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <div class="col-md-4"></div>
+                                <div class="col-md-2">
+                                    <a id="btnimagen">
+                                        <img id="imgImagen" src="~/images/tools/BlackPin1LargeB.png" style="width:40px; height:40px; border:dotted;" />
+                                        <input id="hdfImage" type="hidden" value="BlackPin1LargeB.png" />
+                                        <input id="hdfColor" type="hidden" value="Black" />
+                                    </a>
+                                </div>
+                                <div class="col-md-6">
+                                    <div style="margin-top:15px;">
+                                        <div id="slider-opacityImg" style="width:100%;"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+                <div class="modal-footer cform" style="padding:5px; text-align:left;">
+                    <a id="btnaddcoordenada" title="Añadir nueva coordenada">
+                        <i class="icon icon-document" aria-hidden="true" style="font-size:18px;font-weight:bold;"></i>
+                    </a>
+                    <a id="btndelallcoordenada" title="Eliminar todas las coordenadas">
+                        <i class="icon icon-trashcan2" aria-hidden="true" style="font-size:18px;"></i>
+                    </a>
+                    <a id="btndownplantilla" title="Descargar plantilla de coordenadas">
+                        <i class="icon icon-download6" aria-hidden="true" style="font-size:18px;font-weight:bold;"></i>
+                    </a>
+                    <a id="btnupplantilla" title="Importar coordenadas">
+                        <i class="icon icon-upload5" aria-hidden="true" style="font-size:18px;font-weight:bold;"></i>
+                    </a>
+                    Coordenadas de Búsqueda
+                </div>
+                <div class="table-responsive" style="margin-bottom:10px;">
+                    <table class="table-condensed" id="tbcoordenadasEN">
+                        <thead>
+                            <tr role="row">
+                                <th style="text-align:left">Punto</th>
+                                <th style="text-align:left">Zona</th>
+                                <th style="text-align:left">Este</th>
+                                <th style="text-align:left">Norte</th>
+                                <th>&nbsp;</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+                <div class="modal-footer cform" style="padding:5px;">
+                    <button type="button" class="btn btn-success btn-default pull-right" onclick="fnBuscarCoordenadas()"><span class="icon icon-search2"></span> Generar Búsqueda</button>
+                    <button type="button" class="btn btn-danger btn-default pull-right" data-dismiss="modal"><span class="icon icon-cancel5"></span> Cerrar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    //Se muestra la ventana para búsqueda por coordenadas
+    $('#mnuBusquedaCoordenadas').on("click", function () {
+        dtablaCoord.fnClearTable();
+        llenarSelectCoordenadas("#cbotipocoord", 0);
+
+        $("#divBusquedaCoordenadas").modal();
+        // Jquery draggable
+        $('#divBusquedaCoordenadas .modal-dialog').draggable({
+            handle: ".modal-header",
+            containment: "#mapDiv"
+        });
+    });
+
+    function fnBuscarCoordenadas() {
+        //Limpiar para visor
+        //map.graphics.clear();
+
+        require([
+                "esri/map",
+                "esri/geometry/Polygon",
+                "esri/geometry/Point",
+                "esri/graphic",
+                "esri/geometry/Polyline",
+                "esri/symbols/TextSymbol",
+                "dojo/_base/array",
+                "dojo/dom-style",
+                "dojo/domReady!"
+        ], function (
+                Map, Polygon, Point, Graphic, Polyline, TextSymbol,
+                arrayUtils, domStyle
+                ) {
+            var symbol = generaPines('Blue', 24, 24, 0, 0, 0);
+            //var MiniSymbol = generaPines('Black', 16, 16, 0, 0, 0);
+            var MiniSymbol = generaPinesCustom($("#hdfImage").val(), 16, 16, 0, 0, 0);
+
+            var opacity = 1 - ($("#slider-opacityImg").slider("value") / 10);
+            var colorSymbol = generaColorSymbol($("#hdfColor").val(), opacity);
+
+            //var filasCoord = $("#divBusquedaCoordenadas #tbcoordenadasEN>tbody tr");
+            var point;
+            var points = new Array();
+            var puntos = new Array();
+            var marcas = new Array();
+            //filasCoord.each(function () {
+            //    var zona;
+
+            //    if ($(this).find('td:eq(1)>input').val() == '') {
+            //        point = [$(this).find('td:eq(2)>input').val(), $(this).find('td:eq(3)>input').val()];
+            //    }
+            //    else {
+            //        var punto = cmdUTM2Lat_click($(this).find('td:eq(2)>input').val(), $(this).find('td:eq(3)>input').val(), $(this).find('td:eq(1)>input').val());
+            //        point = [$(punto).attr('LONG'), $(punto).attr('LAT')];
+            //    }
+            //    marcas = [$(this).find('td:eq(0)>input').val(), point];
+
+            //    puntos.push(point);
+            //    points.push(marcas);
+            //});
+
+            var objFilasCood = dtablaCoord.fnGetData();
+            if (objFilasCood.length>0) {
+                for (var i = 0; i < objFilasCood.length; i++) {
+                    drZona = $($(dtablaCoord.fnGetNodes()[i]).find("td")[1]).find("input").val();
+                    drCEste = $($(dtablaCoord.fnGetNodes()[i]).find("td")[2]).find("input").val();
+                    drCNorte = $($(dtablaCoord.fnGetNodes()[i]).find("td")[3]).find("input").val();
+                    drLabel = $($(dtablaCoord.fnGetNodes()[i]).find("td")[0]).find("input").val();
+
+                    if (drZona == '') {
+                        point = [drCEste, drCNorte];
+                    } else {
+                        var punto = cmdUTM2Lat_click(drCEste, drCNorte, drZona);
+                        point = [$(punto).attr('LONG'), $(punto).attr('LAT')];
+                    }
+                    marcas = [drLabel, point];
+
+                    puntos.push(point);
+                    points.push(marcas);
+                }
+                //map.graphics.clear();
+
+                var initColor = "#ce641d";
+                if ($('#cbotipogeo').val() == 1) {//punto
+                    arrayUtils.forEach(points, function (point) {
+                        if (point[0] == '') {
+                            var graphic = new Graphic(new Point(point[1]), symbol);
+                            map.graphics.add(graphic);
+                        }
+                        else {
+                            var graphic = new Graphic(new Point(point[1]), MiniSymbol);
+                            map.graphics.add(graphic);
+                            var textSym = new esri.symbol.TextSymbol(point[0]).setColor(
+                        new esri.Color([128, 0, 0])).setOffset(0, 20).setAlign(esri.symbol.Font.ALIGN_START).setFont(
+                        new esri.symbol.Font("20pt").setWeight(esri.symbol.Font.WEIGHT_BOLD));
+                            graphic = new Graphic(new Point(point[1]), textSym);
+                            map.graphics.add(graphic);
+                        }
+
+                    });
+                    var graphic = new Graphic(new Polyline(puntos), new esri.symbol.SimpleLineSymbol());
+                    map.setExtent(graphic.geometry.getExtent().expand(3));
+                }//punto
+                else if ($('#cbotipogeo').val() == 2) {//linea
+                    var graphic = new Graphic(new Polyline(puntos), new esri.symbol.SimpleLineSymbol().setColor(colorSymbol));
+                    map.graphics.add(graphic);
+                    map.setExtent(graphic.geometry.getExtent().expand(3));
+
+                    arrayUtils.forEach(points, function (point) {
+                        if (point[0] == '') {
+                            var graphic = new Graphic(new Point(point[1]), symbol);
+                        }
+                        else {
+                            var textSym = new esri.symbol.TextSymbol(point[0]).setColor(
+                        new esri.Color([128, 0, 0])).setAlign(esri.symbol.Font.ALIGN_START).setFont(
+                        new esri.symbol.Font("20pt").setWeight(esri.symbol.Font.WEIGHT_BOLD));
+                            var graphic = new Graphic(new Point(point[1]), textSym);
+                        }
+                        map.graphics.add(graphic);
+                    });
+                }//linea
+                else if ($('#cbotipogeo').val() == 3) {//poligono
+                    var graphic = new Graphic(new Polygon(puntos), new esri.symbol.SimpleFillSymbol().setColor(colorSymbol));
+                    map.graphics.add(graphic);
+                    map.setExtent(graphic.geometry.getExtent().expand(3));
+
+                    arrayUtils.forEach(points, function (point) {
+                        if (point[0] == '') {
+                            var graphic = new Graphic(new Point(point[1]), symbol);
+                        }
+                        else {
+                            var textSym = new esri.symbol.TextSymbol(point[0]).setColor(
+                                new esri.Color([128, 0, 0])).setAlign(esri.symbol.Font.ALIGN_START).setFont(
+                                    new esri.symbol.Font("20pt").setWeight(esri.symbol.Font.WEIGHT_BOLD));
+                            var graphic = new Graphic(new Point(point[1]), textSym);
+                        }
+                        map.graphics.add(graphic);
+                    });
+                }//poligono
+            }
+        });
+    }
+
+    function llenarSelectCoordenadas(controlCombo, val_tipo) {
+        var array_params = {
+            'TIPO_LISTA': val_tipo
+        };
+        $.ajax({
+            url: '@Url.Action("llenarSelectCoordenadas", "Coordenada")',
+            type: 'POST',
+            data: JSON.stringify(array_params),
+            dataType: 'json',
+            contentType: 'application/json; charset=utf-8',
+            success: function (data) {
+                $(controlCombo).empty();
+                $(controlCombo).append(data.toString());
+                unloader();
+            },
+            beforeSend: function () {
+                loader();
+            },
+            error: function () {
+                //console.log(status + ':' + error + '<br>' + request);
+                unloader();
+            }
+        });
+    }
+
+    $('#btnaddcoordenada').on("click", function () {
+        var zona = '';
+        if ($('#cbotipocoord').val() == 32717) { zona = '17'; }
+        if ($('#cbotipocoord').val() == 32718) { zona = '18'; }
+        if ($('#cbotipocoord').val() == 32719) { zona = '19'; }
+        if ($('#cbotipocoord').val() == 4326) { zona = ''; }
+
+        var index = dtablaCoord.fnGetData().length;
+
+        val1 = '<input type="text" maxlength="20" class="form-control input-sm" style="padding:0px;height:20px" value="" />';
+        val2 = '<input type="text" maxlength="3" value="' + zona + '" readonly class="form-control input-sm" style="padding:0px;height:20px" />';
+        val3 = '<input type="text" maxlength="11" class="form-control input-sm" style="padding:0px;height:20px" value="" />';
+        val4 = '<input type="text" maxlength="11" class="form-control input-sm" style="padding:0px;height:20px" value=""/>';
+        val5 = '<span class="icon-trashcan" onclick="fnDeleteRowCoordenada(' + index + ')"></span>';
+        dtablaCoord.fnAddData([val1, val2, val3, val4, val5]);
+
+        $("#tbcoordenadasEN tbody tr td").css({ padding: "0px" });
+    });
+
+    $('#cbotipogeo').on("change", function () {
+        opcImage = $(this).val();
+
+        if (opcImage == 1) {
+            $("#imgImagen").prop("src", "images/tools/BlackPin1LargeB.png");
+            $("#hdfImage").val("BlackPin1LargeB.png");
+            $("#tbOpcImagen_Poligono").hide(); $("#tbOpcImagen_Linea").hide(); $("#tbOpcImagen_Punto").show();
+        } else if (opcImage == 2) {
+            $("#imgImagen").prop("src", "images/tools/esriCartographyMarker_74.png");
+            $("#hdfImage").val("esriCartographyMarker_74.png");
+            $("#tbOpcImagen_Poligono").hide(); $("#tbOpcImagen_Linea").show(); $("#tbOpcImagen_Punto").hide();
+        } else if (opcImage == 3) {
+            $("#imgImagen").prop("src", "images/tools/BlackDiamondLargeB.png");
+            $("#hdfImage").val("BlackDiamondLargeB.png");
+            $("#tbOpcImagen_Poligono").show(); $("#tbOpcImagen_Linea").hide(); $("#tbOpcImagen_Punto").hide();
+        }
+
+        $("#hdfColor").val("Black");
+    });
+
+    $('#btndelallcoordenada').on("click", function () {
+        dtablaCoord.fnClearTable();
+    });
+
+    $('#btndownplantilla').on("click", function () {
+        document.location = "/visor/Archivos/Plantillas/CoordenadasBusqueda.xlsx";
+    });
+
+    $('#btnupplantilla').on("click", function () {
+        fnPreparaVentanaAlerta();
+        $("#divUpPlantilla").modal();
+    });
+
+    $('#btnimagen').on("click", function () {
+        fnPreparaVentanaAlerta();
+        $("#divOpcImage").modal();
+    });
+
+    function handleFileSelect(evt) {
+        var files = evt.target.files;
+
+        for (var i = 0, f; f = files[i]; i++) {
+            // Only process xls.
+            if (!f.type.match('officedocument.spreadsheetml.*')) {
+                $("#fileUpPlantilla").val("");
+                $("#divUpPlantilla").modal("hide");
+                alert("Archivo inválido");
+                continue;
+            }
+
+            var reader = new FileReader();
+
+            // Closure to capture the file information.
+            reader.onload = (function (theFile) {
+                return function (e) {
+                    var data = e.target.result;
+                    //var wb = XLSX.read(data, {type: 'binary'});
+                    var arr = String.fromCharCode.apply(null, new Uint8Array(data));
+                    var wb = XLSX.read(btoa(arr), { type: 'base64' });
+
+                    var datXlsx = eval('(' + process_wb(wb, "json") + ')');
+
+                    if (datXlsx.Datos != undefined) {
+                        //Insertar coordenadas del archivo en la tabla
+                        var zona = '';
+                        if ($('#cbotipocoord').val() == 32717) { zona = '17'; }
+                        else if ($('#cbotipocoord').val() == 32718) { zona = '18'; }
+                        else if ($('#cbotipocoord').val() == 32719) { zona = '19'; }
+                        else if ($('#cbotipocoord').val() == 4326) { zona = ''; }
+
+                        for (var i = 0; i < datXlsx.Datos.length; i++) {
+                            punto = "";
+                            if (datXlsx.Datos[i].PUNTO != null) {
+                                punto = datXlsx.Datos[i].PUNTO;
+                            }
+                            if (datXlsx.Datos[i].ZONA_UTM!=null && datXlsx.Datos[i].ZONA_UTM != "") {
+                                zona = datXlsx.Datos[i].ZONA_UTM;
+                            }
+
+                            ceste = datXlsx.Datos[i].COORDENADA_ESTE;
+                            cnorte = datXlsx.Datos[i].COORDENADAS_NORTE;
+
+                            var index = dtablaCoord.fnGetData().length;
+
+                            if (ceste != "" && cnorte != "") {
+                                val1 = '<input type="text" maxlength="20" class="form-control input-sm" style="padding:0px;height:20px" value="'+punto+'" />';
+                                val2 = '<input type="text" maxlength="3" value="' + zona + '" readonly class="form-control input-sm" style="padding:0px;height:20px" />';
+                                val3 = '<input type="text" maxlength="11" class="form-control input-sm" style="padding:0px;height:20px" value="'+ceste+'" />';
+                                val4 = '<input type="text" maxlength="11" class="form-control input-sm" style="padding:0px;height:20px" value="'+cnorte+'" />';
+                                val5 = '<span class="icon-trashcan" onclick="fnDeleteRowCoordenada('+index+')"></span>';
+
+
+                                dtablaCoord.fnAddData([val1, val2, val3, val4, val5]);
+                                //$('#divBusquedaCoordenadas #tbcoordenadasEN>tbody').append('<tr><td><input type="text" maxlength="20" style="width:90%" value="' + punto + '" /></td><td><input type="text" maxlength="3" style="width:90%" value="' + zona + '" readonly /></td><td><input type="text" maxlength="11" style="width:90%" value="' + ceste + '" /></td><td><input type="text" maxlength="11" style="width:90%" value="' + cnorte + '" /></td><td><span class="icon-trashcan"></span></td></tr>');
+                            }
+                        }
+
+                        //$('#divBusquedaCoordenadas #tbcoordenadasEN .icon-trashcan').click(function () {
+                        //    $(this).parent('td').parent('tr').remove();
+                        //});
+                        $("#tbcoordenadasEN tbody tr td").css({ padding: "0px" });
+
+                        $("#fileUpPlantilla").val("");
+                        //$("#divUpPlantilla").dialog("close");
+                        $("#divUpPlantilla").modal("hide");
+                    } else { alert("No se encontraron coordenadas en la plantilla"); }
+                };
+            })(f);
+
+            // Read in the image file as a data URL.
+            reader.readAsArrayBuffer(f);
+        }
+    }
+
+    function fnSetOpcImage(opcImage, opcColor) {
+        $("#imgImagen").prop("src", "images/tools/" + opcImage);
+        $("#hdfImage").val(opcImage);
+        $("#hdfColor").val(opcColor);
+
+        $("#divOpcImage").modal("hide");
+    }
+
+    function fnDeleteRowCoordenada(index) {
+        //tr = $(obj.parentNode.parentNode).closest("tr");
+        //index = dtablaCoord.fnGetData().find("tr").index(tr);
+        dtablaCoord.fnDeleteRow(index);
+    }
+
+    var dtablaCoord;
+    $(document).ready(function () {
+        $("#fileUpPlantilla").on('change', handleFileSelect);
+
+        $("#slider-opacityImg").slider({
+            range: "min",
+            min: 0,
+            max: 8,
+            value: 0,
+            slide: function (event, ui) {
+                $("#imgImagen").css({ opacity: (1 - (ui.value / 10)) });
+            }
+        });
+
+        dtablaCoord = $('#tbcoordenadasEN').dataTable({
+            "bRetrieve": true,
+            "bDestroy": true,
+            "bAutoWidth": false
+        });
+    });
+</script>
+
+<!-- Modal -->
+<div class="modal fade" id="divUpPlantilla" role="dialog" data-backdrop="true">
+    <div class="modal-dialog">
+        @*Modal content*@
+        <div class="modal-content cform">
+            <div class="modal-header cform">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4>Importar Coordenadas</h4>
+            </div>
+            <div class="modal-body cform">
+                @using (Html.BeginForm("", "Home", FormMethod.Post, new { @class = "form-horizontal" }))
+                {
+                    <div class="row">
+                        <div class="form-group">
+                            @Html.Label("lbltipocoord", "Seleccione el archivo:", new { @class = "col-md-3 control-label" })
+                            <div class="col-md-8">
+                                @Html.TextBox("fileUpPlantilla", "", new { @class = "", type = "file" })
+                            </div>
+                        </div>
+                    </div>
+                }
+                <div class="modal-footer cform" style="padding:5px;">
+                    <button type="button" class="btn btn-danger btn-default pull-right" data-dismiss="modal"><span class="icon icon-cancel5"></span> Cerrar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="divOpcImage" role="dialog" data-backdrop="true">
+    <div class="modal-dialog">
+        @*Modal content*@
+        <div class="modal-content cform">
+            <div class="modal-header cform">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4>Imagen Señalización</h4>
+            </div>
+            <div class="modal-body cform">
+                @using (Html.BeginForm("", "Home", FormMethod.Post, new { @class = "form-horizontal" }))
+                {
+                    <table id="tbOpcImagen_Punto" cellpadding="2" cellspacing="2" style="width: 100%;">
+                        <tr>
+                            <th style="text-align:left">
+                                <a id="btnOpcImage_11" class="opcImage" onclick="fnSetOpcImage('BlackPin1LargeB.png','Black')"><img src="~/images/tools/BlackPin1LargeB.png" /></a>
+                                <a id="btnOpcImage_12" class="opcImage" onclick="fnSetOpcImage('BluePin1LargeB.png','Blue')"><img src="~/images/tools/BluePin1LargeB.png" /></a>
+                                <a id="btnOpcImage_13" class="opcImage" onclick="fnSetOpcImage('GreenPin1LargeB.png','Green')"><img src="~/images/tools/GreenPin1LargeB.png" /></a>
+                                <a id="btnOpcImage_14" class="opcImage" onclick="fnSetOpcImage('OrangePin1LargeB.png','Orange')"><img src="~/images/tools/OrangePin1LargeB.png" /></a>
+                                <a id="btnOpcImage_15" class="opcImage" onclick="fnSetOpcImage('PurplePin1LargeB.png','Purple')"><img src="~/images/tools/PurplePin1LargeB.png" /></a>
+                                <a id="btnOpcImage_16" class="opcImage" onclick="fnSetOpcImage('RedPin1LargeB.png','Red')"><img src="~/images/tools/RedPin1LargeB.png" /></a>
+                                <a id="btnOpcImage_17" class="opcImage" onclick="fnSetOpcImage('YellowPin1LargeB.png','Yellow')"><img src="~/images/tools/YellowPin1LargeB.png" /></a>
+
+                                <a id="btnOpcImage_21" class="opcImage" onclick="fnSetOpcImage('BlackStickpin.png','Black')"><img src="~/images/tools/BlackStickpin.png" /></a>
+                                <a id="btnOpcImage_22" class="opcImage" onclick="fnSetOpcImage('BlueStickpin.png', 'Blue')"><img src="~/images/tools/BlueStickpin.png" /></a>
+                                <a id="btnOpcImage_23" class="opcImage" onclick="fnSetOpcImage('SpringGreenStickpin.png', 'Green')"><img src="~/images/tools/SpringGreenStickpin.png" /></a>
+                                <a id="btnOpcImage_24" class="opcImage" onclick="fnSetOpcImage('OrangeStickpin.png', 'Orange')"><img src="~/images/tools/OrangeStickpin.png" /></a>
+                                <a id="btnOpcImage_25" class="opcImage" onclick="fnSetOpcImage('PurpleStickpin.png', 'Purple')"><img src="~/images/tools/PurpleStickpin.png" /></a>
+                                <a id="btnOpcImage_26" class="opcImage" onclick="fnSetOpcImage('RedStickpin.png', 'Red')"><img src="~/images/tools/RedStickpin.png" /></a>
+                                <a id="btnOpcImage_27" class="opcImage" onclick="fnSetOpcImage('YellowStickpin.png', 'Yellow')"><img src="~/images/tools/YellowStickpin.png" /></a>
+
+                                <a id="btnOpcImage_31" class="opcImage" onclick="fnSetOpcImage('esriCartographyMarker_70.png', 'Black')"><img src="~/images/tools/esriCartographyMarker_70.png" /></a>
+                                <a id="btnOpcImage_32" class="opcImage" onclick="fnSetOpcImage('esriCartographyMarker_70_Blue.png', 'Blue')"><img src="~/images/tools/esriCartographyMarker_70_Blue.png" /></a>
+                                <a id="btnOpcImage_33" class="opcImage" onclick="fnSetOpcImage('esriCartographyMarker_70_Green.png', 'Green')"><img src="~/images/tools/esriCartographyMarker_70_Green.png" /></a>
+                                <a id="btnOpcImage_34" class="opcImage" onclick="fnSetOpcImage('esriCartographyMarker_70_Red.png', 'Red')"><img src="~/images/tools/esriCartographyMarker_70_Red.png" /></a>
+                                <a id="btnOpcImage_35" class="opcImage" onclick="fnSetOpcImage('esriCartographyMarker_70_Yellow.png', 'Yellow')"><img src="~/images/tools/esriCartographyMarker_70_Yellow.png" /></a>
+
+                                <a id="btnOpcImage_41" class="opcImage" onclick="fnSetOpcImage('esriCartographyMarker_98.png', 'Black')"><img src="~/images/tools/esriCartographyMarker_98.png" /></a>
+                                <a id="btnOpcImage_42" class="opcImage" onclick="fnSetOpcImage('esriCartographyMarker_98_Blue.png', 'Blue')"><img src="~/images/tools/esriCartographyMarker_98_Blue.png" /></a>
+                                <a id="btnOpcImage_43" class="opcImage" onclick="fnSetOpcImage('esriCartographyMarker_98_Green.png', 'Green')"><img src="~/images/tools/esriCartographyMarker_98_Green.png" /></a>
+                                <a id="btnOpcImage_44" class="opcImage" onclick="fnSetOpcImage('esriCartographyMarker_98_Red.png', 'Red')"><img src="~/images/tools/esriCartographyMarker_98_Red.png" /></a>
+                                <a id="btnOpcImage_45" class="opcImage" onclick="fnSetOpcImage('esriCartographyMarker_98_Yellow.png', 'Yellow')"><img src="~/images/tools/esriCartographyMarker_98_Yellow.png" /></a>
+
+                                <a id="btnOpcImage_51" class="opcImage" onclick="fnSetOpcImage('esriBusinessMarker_53.png', 'Black')"><img src="~/images/tools/esriBusinessMarker_53.png" /></a>
+                                <a id="btnOpcImage_52" class="opcImage" onclick="fnSetOpcImage('esriBusinessMarker_53_Blue.png', 'Blue')"><img src="~/images/tools/esriBusinessMarker_53_Blue.png" /></a>
+                                <a id="btnOpcImage_53" class="opcImage" onclick="fnSetOpcImage('esriBusinessMarker_53_Green.png', 'Green')"><img src="~/images/tools/esriBusinessMarker_53_Green.png" /></a>
+                                <a id="btnOpcImage_54" class="opcImage" onclick="fnSetOpcImage('esriBusinessMarker_53_Red.png', 'Red')"><img src="~/images/tools/esriBusinessMarker_53_Red.png" /></a>
+                            </th>
+                        </tr>
+                    </table>
+                    <table id="tbOpcImagen_Linea" cellpadding="2" cellspacing="2" style="width: 100%; display:none;">
+                        <tr>
+                            <th style="text-align:left">
+                                <a id="btnOpcImage_11" class="opcImage" onclick="fnSetOpcImage('esriCartographyMarker_74.png', 'Black')"><img src="~/images/tools/esriCartographyMarker_74.png" /></a>
+                                <a id="btnOpcImage_12" class="opcImage" onclick="fnSetOpcImage('esriCartographyMarker_74_Blue.png', 'Blue')"><img src="~/images/tools/esriCartographyMarker_74_Blue.png" /></a>
+                                <a id="btnOpcImage_13" class="opcImage" onclick="fnSetOpcImage('esriCartographyMarker_74_Green.png', 'Green')"><img src="~/images/tools/esriCartographyMarker_74_Green.png" /></a>
+                                <a id="btnOpcImage_14" class="opcImage" onclick="fnSetOpcImage('esriCartographyMarker_74_Red.png', 'Red')"><img src="~/images/tools/esriCartographyMarker_74_Red.png" /></a>
+                                <a id="btnOpcImage_15" class="opcImage" onclick="fnSetOpcImage('esriCartographyMarker_74_Yellow.png', 'Yellow')"><img src="~/images/tools/esriCartographyMarker_74_Yellow.png" /></a>
+                            </th>
+                        </tr>
+                    </table>
+                    <table id="tbOpcImagen_Poligono" cellpadding="2" cellspacing="2" style="width: 100%; display:none;">
+                        <tr>
+                            <th style="text-align:left">
+                                <a id="btnOpcImage_11" class="opcImage" onclick="fnSetOpcImage('BlackDiamondLargeB.png', 'Black')"><img src="~/images/tools/BlackDiamondLargeB.png" /></a>
+                                <a id="btnOpcImage_12" class="opcImage" onclick="fnSetOpcImage('BlueDiamondLargeB.png', 'Blue')"><img src="~/images/tools/BlueDiamondLargeB.png" /></a>
+                                <a id="btnOpcImage_13" class="opcImage" onclick="fnSetOpcImage('GreenDiamondLargeB.png', 'Green')"><img src="~/images/tools/GreenDiamondLargeB.png" /></a>
+                                <a id="btnOpcImage_14" class="opcImage" onclick="fnSetOpcImage('OrangeDiamondLargeB.png', 'Orange')"><img src="~/images/tools/OrangeDiamondLargeB.png" /></a>
+                                <a id="btnOpcImage_15" class="opcImage" onclick="fnSetOpcImage('PurpleDiamondLargeB.png', 'Purple')"><img src="~/images/tools/PurpleDiamondLargeB.png" /></a>
+                                <a id="btnOpcImage_16" class="opcImage" onclick="fnSetOpcImage('RedDiamondLargeB.png', 'Red')"><img src="~/images/tools/RedDiamondLargeB.png" /></a>
+                                <a id="btnOpcImage_17" class="opcImage" onclick="fnSetOpcImage('YellowDiamondLargeB.png', 'Yellow')"><img src="~/images/tools/YellowDiamondLargeB.png" /></a>
+                            </th>
+                        </tr>
+                    </table>
+                }
+                <div class="modal-footer cform" style="padding:5px; margin-top:10px;">
+                    <button type="button" class="btn btn-danger btn-default pull-right" data-dismiss="modal"><span class="icon icon-cancel5"></span> Cerrar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

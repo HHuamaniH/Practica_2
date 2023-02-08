@@ -1,0 +1,197 @@
+﻿@model CapaEntidad.ViewModel.VM_Proveido
+<script type="text/javascript">
+    var _renderCumplimiento = {};
+    _renderCumplimiento.tbEliTABLA = [];
+    _renderCumplimiento.fnSelectRecom = function () {
+        _renderCumplimiento.frm.find("#divMandato").hide();
+        _renderCumplimiento.frm.find("#divDetalleCumplimiento").hide();
+
+
+        if (_renderCumplimiento.frm.find("#chkMandato").is(':checked')) {
+            _renderCumplimiento.frm.find("#divMandato").show();
+        }
+
+        if (_renderCumplimiento.frm.find("#chkCumpleMCorrectiva").is(':checked')) {
+            _renderCumplimiento.frm.find("#divDetalleCumplimiento").show();
+        }
+    }
+
+    _renderCumplimiento.fnInitDataTable_Detail = function () {
+        var columns_label = [], columns_data = [], options = {};
+        columns_label = ["Mandato", "Días", "Meses"];
+        columns_data = ["MANDATO", "CANTDIAS", "CANTMESES"];
+        options = {
+            page_length: 10, row_index: true, row_delete: true, row_fnDelete: "_renderCumplimiento.fnDelete(this)", page_sort: true
+        };
+        _renderCumplimiento.dtRenderListInforme = utilDt.fnLoadDataTable_Detail(_renderCumplimiento.frm.find("#tbRenderMandato"), columns_label, columns_data, options);
+        _renderCumplimiento.dtRenderListInforme.rows.add(JSON.parse('@Html.Raw(Json.Encode(@Model.ListMandatos))')).draw();
+    }
+
+    _renderCumplimiento.fnDelete = function (obj) {
+        var data = _renderCumplimiento.dtRenderListInforme.row($(obj).parents('tr')).data();
+          if (data["COD_MEICODMANDATODIDA"] > 0) {
+            _renderCumplimiento.tbEliTABLA.push({
+                EliTABLA: "PROVEIDOARCH_MANDATO",
+                EliVALOR02: data["ICODMANDATO"]
+            });
+        }
+        _renderCumplimiento.dtRenderListInforme.row($(obj).parents('tr')).remove().draw(false);
+    }
+
+    _renderCumplimiento.fnAdd = function (obj) {
+        let mandato = _renderCumplimiento.frm.find("#txtDescripcionMandato").val();
+        let diasImp = _renderCumplimiento.frm.find("#txtDiasImpl").val();
+        let mesImpl = _renderCumplimiento.frm.find("#txtMesesImpl").val();
+        if (mandato != "" && diasImp != "" && mesImpl != "" ) {
+            var data = {
+                "ESMANDATO": 1,
+                "MANDATO": mandato,
+                "CANTMESES": mesImpl,
+                "CANTDIAS": diasImp,
+                "ITIPO": 1,
+                'RegEstado' : 1
+            };
+            _renderCumplimiento.dtRenderListInforme.rows.add([data]).draw();
+        }
+        else {
+              utilSigo.toastWarning("Aviso", "debe ingresar valores para agregar mandatos");
+        }
+        _renderCumplimiento.frm.find("#txtDescripcionMandato").val("");
+        _renderCumplimiento.frm.find("#txtDiasImpl").val("");
+        _renderCumplimiento.frm.find("#txtMesesImpl").val("");
+    }
+
+    _renderCumplimiento.fnGetList = function () {
+        let list = [], rows, countFilas, data;
+        rows = _renderCumplimiento.dtRenderListInforme.$("tr");
+        countFilas = rows.length;
+        if (countFilas > 0) {
+            $.each(rows, function (i, o) {
+                data = _renderCumplimiento.dtRenderListInforme.row($(o)).data();
+                list.push(utilSigo.fnConvertArrayToObject(data));
+            });
+        }
+        return list;
+    }
+
+    $(document).ready(function () {
+        _renderCumplimiento.frm = $("#provCumplimiento");
+        _renderCumplimiento.fnSelectRecom();
+        _renderCumplimiento.fnInitDataTable_Detail();
+    });
+
+    function isNumberKey(evt) {
+        var charCode = (evt.which) ? evt.which : evt.keyCode
+        if (charCode > 31 && (charCode < 48 || charCode > 57))
+            return false;
+        return true;
+    }
+</script>
+
+<div id="provCumplimiento">
+    <div><br /></div>
+    <div class="form-row">
+        <div class="form-group col-md-4">
+            Fecha en que Adquiere la Firmeza
+        </div>
+        <div class="form-group col-md-6">
+            @Html.EditorFor(m => m.txtFechaCumpleMCorrectiva, new { htmlAttributes = new { @class = "form-control form-control-sm", placeholder = "dd/mm/yyyy", title = "la fecha a ingresar debe ser en el formato dd/mm/yyyy", maxlength = "10" } })
+        </div>
+        <div class="form-group col-md-2">
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="form-group col-md-4">
+            <label for="chkMandatos" class="text-small">Declarar cumplida las medidas correctivas</label>
+        </div>
+        <div class="form-group col-md-6">
+            @Html.CheckBoxFor(m => m.chkCumpleMCorrectiva, new
+            {
+                @class = "form-check-input",
+                style = "width:15px;height:16px;",
+                @onchange = "_renderCumplimiento.fnSelectRecom()"
+            })
+        </div>
+        <div class="form-group col-md-2">
+        </div>
+    </div>
+    <div class="form-row" id="divDetalleCumplimiento" style="display:none;">
+        <div class="form-group col-md-12">
+            <label for="lblTipoILegal" class="text-small">Se dispone</label>
+            @Html.TextAreaFor(m => m.CumpleMCorrectivaDetalle, 4, 1, new { @class = "form-control form-control-sm" })
+        </div>
+    </div>
+    <div class="card-header text-small">Mandatos</div>
+    <div><br /></div>
+    <div class="form-row">
+        <div class="form-group col-md-4">
+            <label for="chkMandatos" class="text-small">¿Se disponen mandatos?</label>
+        </div>
+        <div class="form-group col-md-6">
+            @Html.CheckBoxFor(m => m.chkMandato, new
+            {
+                @class = "form-check-input",
+                style = "width:15px;height:16px;",
+                @onchange = "_renderCumplimiento.fnSelectRecom()"
+            })
+        </div>
+        <div class="form-group col-md-2">
+        </div>
+    </div>
+    <div id="divMandato" style="display:none;">
+        <div class="form-row">
+            <div class="form-group col-md-4">
+            </div>
+            <div class="form-group col-md-6">
+                @Html.TextAreaFor(m => m.txtDescripcionMandato, 3, 1, new { @class = "form-control form-control-sm" })
+            </div>
+            <div class="form-group col-md-2">
+            </div>
+        </div>
+
+        <div class="form-row">
+            <div class="form-group col-md-4">
+                <label class="text-small">Plazo de implementación</label>
+            </div>
+            <div class="form-group col-md-2">
+                <label for="txtImplMCDias" class="text-small">Días:</label>
+                @Html.TextBoxFor(m => m.txtDiasImpl, new { @class = "form-control form-control-sm", onkeypress = "return isNumberKey(event)", maxlength = "3" })
+            </div>
+            <div class="form-group col-md-2">
+                <label for="txtImplMCMeses" class="text-small"> Meses: </label>
+                @Html.TextBoxFor(m => m.txtMesesImpl, new { @class = "form-control form-control-sm", onkeypress = "return isNumberKey(event)", maxlength = "3" })
+            </div>
+            <div class="form-group col-md-2">
+            </div>
+            <div class="form-group col-md-2">
+            </div>
+        </div>
+
+        <div class="form-row">
+            <div class="form-group col-md-4"></div>
+            <div class="form-group col-md-6">
+                <button type="button" id="btnAddInfracciones" class="btn btn-info btn-sm" onclick="_renderCumplimiento.fnAdd()"> Agregar Mandato</button>
+            </div>
+            <div class="form-group col-md-2"></div>
+        </div>
+
+        <div class="form-group col-md-12" id="divListaMandato">
+            <div class="table-responsive">
+                <table id="tbRenderMandato" style="width:100%;margin:0px !important;" class="table table-hover table-bordered">
+                    <thead>
+                        <tr>
+                            <th colspan="7" class="text-sm-left">
+                                <div class="form-inline">
+                                    <strong>Listado de mandatos</strong>
+                                </div>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
+
+    </div>
+</div>
+

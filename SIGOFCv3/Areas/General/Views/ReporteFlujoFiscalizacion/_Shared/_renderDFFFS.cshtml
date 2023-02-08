@@ -1,0 +1,564 @@
+﻿<style type="text/css">
+    table {
+        width: 100%;
+        text-align: center;
+        font-size: 0.9rem;
+        border: 1px solid #495057;
+        color: #495057;
+    }
+
+    td {
+        padding-top: 8px;
+        padding-bottom: 8px;
+    }
+
+    .botonHref1 {
+        color: #495057;
+    }
+
+    .botonHref1:hover {
+        color: #007bff;
+    }
+
+    .botonHref2 {
+        color: red;
+    }
+
+    .botonHref2:hover {
+        color: #007bff;
+    }
+
+    .formato1 {
+        border-top: hidden;
+        border-left: hidden;
+    }
+
+    .formato2 {
+        background: #B8C5D5;
+    }
+
+    .formato3 {
+        background: #EEAD80;
+    }
+
+    .formato4 {
+        background: #FDD860;
+    }
+
+    .formato5 {
+        background: #F2C6A8;
+    }
+
+    .formato6 {
+        background: #FADCC8;
+    }
+
+    .formato8 {
+        border-bottom: hidden;
+        border-right: hidden;
+    }
+
+    .divcantidad{
+        margin-top:5px;
+    }
+</style>
+
+@model CapaEntidad.ViewModel.VM_FlujoFiscalizacion
+<script src="~/Areas/General/js/ReporteFlujoFiscalizacion/FormatoFecha.js"></script>
+
+<script type="text/javascript">
+    var _renderDFFFS = {};
+
+    _renderDFFFS.fnListar = function (opc,cell,opLista) {
+        _reporte.frm.find("#idTab").val(0);
+
+        if (opc == 1) _reporte.frm.find("#txtnomconsulta").val("Cantidad total de informes recibidos por la DFFFS");
+        else if (opc == 2) _reporte.frm.find("#txtnomconsulta").val("Cantidad de PAU iniciados - notificados");
+        else if (opc == 3) _reporte.frm.find("#txtnomconsulta").val("Cantidad de IFI emitidos");
+        else if (opc == 4) _reporte.frm.find("#txtnomconsulta").val("Cantidad de RD emitidos");
+        else if (opc == 5) _reporte.frm.find("#txtnomconsulta").val("Cantidad de informes evaluados");
+        else if (opc == 6) _reporte.frm.find("#txtnomconsulta").val("Cantidad de informes pendientes de evaluar");
+        else if (opc == 7) _reporte.frm.find("#txtnomconsulta").val("Cantidad de IFI emitidos");
+        else if (opc == 8) _reporte.frm.find("#txtnomconsulta").val("Cantidad de IFI pendientes");
+        else if (opc == 9) _reporte.frm.find("#txtnomconsulta").val("Cantidad de RD emitidos - notificados");
+        else if (opc == 10) _reporte.frm.find("#txtnomconsulta").val("Cantidad de RD pendientes");
+        else if (opc == 11) _reporte.frm.find("#txtnomconsulta").val("Cantidad de RD con firmeza");
+        else if (opc == 12) _reporte.frm.find("#txtnomconsulta").val("Cantidad de RD pendiente de firmeza");
+        else if (opc == 13) _reporte.frm.find("#txtnomconsulta").val("Promedio de días hábiles utilizados para el envío de los informes a la DFFFS");
+        else if (opc == 14) _reporte.frm.find("#txtnomconsulta").val("Promedio de días hábiles utilizados para la evaluación del informe");
+        else if (opc == 15) _reporte.frm.find("#txtnomconsulta").val("Promedio de días hábiles utilizados en la fase de instrucción");
+        else if (opc == 16) _reporte.frm.find("#txtnomconsulta").val("Promedio de días hábiles utilizados en la fase decisora");
+        else if (opc == 17) _reporte.frm.find("#txtnomconsulta").val("Promedio de meses utilizados en el PAU");
+        else if (opc == 18) _reporte.frm.find("#txtnomconsulta").val("Promedio de meses utilizados desde la emisión del informe hasta la finalización del PAU");
+        else if (opc == 19) _reporte.frm.find("#txtnomconsulta").val("Cantidad de IFI pendientes");
+        else if (opc == 20) _reporte.frm.find("#txtnomconsulta").val("Cantidad de RD pendientes");
+        else if (opc == 21) _reporte.frm.find("#txtnomconsulta").val("Cantidad de RD pendiente de firmeza");
+        else if (opc == 22) _reporte.frm.find("#txtnomconsulta").val("Cantidad total de informe de supervisión");
+        else if (opc == 23) _reporte.frm.find("#txtnomconsulta").val("Cantidad de casos aptos para emitir IFI");
+        else if (opc == 24) _reporte.frm.find("#txtnomconsulta").val("Cantidad de casos en plazo para descargos");
+        else if (opc == 25) _reporte.frm.find("#txtnomconsulta").val("Cantidad de casos aptos para emitir RD");
+        else if (opc == 26) _reporte.frm.find("#txtnomconsulta").val("Cantidad de casos en plazo para la firmeza");
+        else if (opc == 27) _reporte.frm.find("#txtnomconsulta").val("Cantidad de casos aptos para emitir Firmeza");
+        else if (opc == 28) _reporte.frm.find("#txtnomconsulta").val("Archivados");
+        else if (opc == 29) _reporte.frm.find("#txtnomconsulta").val("Devueltos");
+        else if (opc == 30) _reporte.frm.find("#txtnomconsulta").val("Inicio PAU");
+
+        if (opLista == 1) {
+            $('#tituloTablaDFFFS').html('Listado de Documentos consultados "' + _reporte.frm.find("#txtnomconsulta").val() +
+                '" Del ' + _reporte.frm.find("#txtfechainiDFFFS").val() + ' Al ' + _reporte.frm.find("#txtfechafinDFFFS").val());
+            $("#frmDFFFS").hide();
+            $("#divlistaDFFFS").show();
+
+            _renderListaDFFFS.fnSubmitForm(opc, cell);
+        }
+        else {
+            $('#tituloTablaDFFFSDias').html('Listado de Documentos consultados "' + _reporte.frm.find("#txtnomconsulta").val() +
+                '" Del ' + _reporte.frm.find("#txtfechainiDFFFS").val() + ' Al ' + _reporte.frm.find("#txtfechafinDFFFS").val());
+            $("#frmDFFFS").hide();
+            $("#divlistaDFFFSDias").show();
+
+            _renderListaDFFFSDias.fnSubmitForm(opc, cell);
+        }   
+    }
+
+    _renderDFFFS.fnValidarCampos = function () {
+        var valor = true;
+
+        if (_renderDFFFS.frm.find("#txtfechainiDFFFS").val() == null ||
+            _renderDFFFS.frm.find("#txtfechainiDFFFS").val().length == 0 ||
+            /^\s+$/.test(_renderDFFFS.frm.find("#txtfechainiDFFFS").val())) {
+            valor = false;
+        }
+        if (_renderDFFFS.frm.find("#txtfechafinDFFFS").val() == null ||
+            _renderDFFFS.frm.find("#txtfechafinDFFFS").val().length == 0 ||
+            /^\s+$/.test(_renderDFFFS.frm.find("#txtfechafinDFFFS").val())) {
+            valor = false;
+        }
+
+        return valor;
+    }
+
+    _renderDFFFS.fnConsultar = function () {
+        _reporte.frm.find("#idTab").val(0);
+        var idTab = _reporte.frm.find("#idTab").val();
+        var txtfechainiDFFFS = _renderDFFFS.frm.find("#txtfechainiDFFFS").val();
+        var txtfechafinDFFFS = _renderDFFFS.frm.find("#txtfechafinDFFFS").val();
+        var params = { idTab, txtfechainiDFFFS, txtfechafinDFFFS };
+
+        if (_renderDFFFS.fnValidarCampos()) {
+            if (txtfechainiDFFFS.length == 10 && txtfechafinDFFFS.length == 10) {
+                if (chkEsMenor(txtfechafinDFFFS, txtfechainiDFFFS)) {
+                    utilSigo.toastInfo("Aviso", "La fecha final no puede ser menor que la fecha inicial");
+                    $("#divDataDFFFS").hide();
+                    $("#divPendienteDFFFS").hide();
+                    return false;
+                }
+                else {
+                    var url = urlLocalSigo + "General/ReporteFlujoFiscalizacion/ObtenerData";
+                    var option = { url: url, datos: JSON.stringify(params), type: 'POST' };
+
+                    utilSigo.fnAjax(option, function (data) {
+                        if (data.success) {
+                            var obj = data.result;
+
+                            if (obj != null) {
+                                /*if (obj.cantDFFFS1 == 0 && obj.cantDFFFS2 == 0 && obj.cantDFFFS3 == 0 && obj.cantDFFFS4 == 0 &&
+                                    obj.cantDFFFS5 == 0 && obj.cantDFFFS6 == 0 && obj.cantDFFFS7 == 0 && obj.cantDFFFS8 == 0 &&
+                                    obj.cantDFFFS9 == 0 && obj.cantDFFFS10 == 0 && obj.cantDFFFS11 == 0 && obj.cantDFFFS12 == 0 &&
+                                    obj.cantDFFFS13 == 0 && obj.cantDFFFS14 == 0 && obj.cantDFFFS15 == 0 && obj.cantDFFFS16 == 0 &&
+                                    obj.cantDFFFS17 == 0 && obj.cantDFFFS18 == 0) {
+                                    $("#divDataDFFFS").hide();
+                                }
+                                else {*/
+                                    _renderDFFFS.frm.find("#cantDFFFS1").val(obj.cantDFFFS1);
+                                    _renderDFFFS.frm.find("#cantDFFFS2").val(obj.cantDFFFS2);
+                                    _renderDFFFS.frm.find("#cantDFFFS3").val(obj.cantDFFFS3);
+                                    _renderDFFFS.frm.find("#cantDFFFS4").val(obj.cantDFFFS4);
+                                    _renderDFFFS.frm.find("#cantDFFFS5").val(obj.cantDFFFS5);
+                                    _renderDFFFS.frm.find("#cantDFFFS5_1").val(obj.cantDFFFS5_1);
+                                    _renderDFFFS.frm.find("#cantDFFFS5_2").val(obj.cantDFFFS5_2);
+                                    _renderDFFFS.frm.find("#cantDFFFS5_3").val(obj.cantDFFFS5_3);
+                                    _renderDFFFS.frm.find("#cantDFFFS6").val(obj.cantDFFFS6);
+                                    _renderDFFFS.frm.find("#cantDFFFS7").val(obj.cantDFFFS7);
+                                    _renderDFFFS.frm.find("#cantDFFFS8").val(obj.cantDFFFS8);
+                                    _renderDFFFS.frm.find("#cantDFFFS9").val(obj.cantDFFFS9);
+                                    _renderDFFFS.frm.find("#cantDFFFS10").val(obj.cantDFFFS10);
+                                    _renderDFFFS.frm.find("#cantDFFFS11").val(obj.cantDFFFS11);
+                                    _renderDFFFS.frm.find("#cantDFFFS12").val(obj.cantDFFFS12);
+                                    _renderDFFFS.frm.find("#cantDFFFS13").val(obj.cantDFFFS13);
+                                    _renderDFFFS.frm.find("#cantDFFFS14").val(obj.cantDFFFS14);
+                                    _renderDFFFS.frm.find("#cantDFFFS15").val(obj.cantDFFFS15);
+                                    _renderDFFFS.frm.find("#cantDFFFS16").val(obj.cantDFFFS16);
+                                    _renderDFFFS.frm.find("#cantDFFFS17").val(obj.cantDFFFS17);
+                                    _renderDFFFS.frm.find("#cantDFFFS18").val(obj.cantDFFFS18);
+                                    _renderDFFFS.fnSetValorTabla1();
+                                    $("#divDataDFFFS").show();
+                                /*} 
+
+                                if (obj.cantDFFFS19 == 0 && obj.cantDFFFS20 == 0 && obj.cantDFFFS21 == 0 && obj.cantDFFFS22 == 0 &&
+                                    obj.cantDFFFS23 == 0 && obj.cantDFFFS24 == 0 && obj.cantDFFFS25 == 0 && obj.cantDFFFS26 == 0 &&
+                                    obj.cantDFFFS27 == 0) {
+                                    $("#divPendienteDFFFS").hide();
+                                }
+                                else {*/
+                                    _renderDFFFS.frm.find("#cantDFFFS19").val(obj.cantDFFFS19);
+                                    _renderDFFFS.frm.find("#cantDFFFS20").val(obj.cantDFFFS20);
+                                    _renderDFFFS.frm.find("#cantDFFFS21").val(obj.cantDFFFS21);
+                                    _renderDFFFS.frm.find("#cantDFFFS22").val(obj.cantDFFFS22);
+                                    _renderDFFFS.frm.find("#cantDFFFS23").val(obj.cantDFFFS23);
+                                    _renderDFFFS.frm.find("#cantDFFFS24").val(obj.cantDFFFS24);
+                                    _renderDFFFS.frm.find("#cantDFFFS25").val(obj.cantDFFFS25);
+                                    _renderDFFFS.frm.find("#cantDFFFS26").val(obj.cantDFFFS26);
+                                    _renderDFFFS.frm.find("#cantDFFFS27").val(obj.cantDFFFS27);
+                                    _renderDFFFS.fnSetValorTabla2();
+                                    $("#divPendienteDFFFS").show();
+                                //} 
+                            }
+                            else {
+                                $("#divDataDFFFS").hide();
+                                $("#divPendienteDFFFS").hide();
+                            }
+                        }
+                        else {
+                            utilSigo.toastWarning("Aviso", "Sucedio un error, Comuníquese con el Administrador");
+                            $("#divDataDFFFS").hide();
+                            $("#divPendienteDFFFS").hide();
+                            console.log(data.result);
+                        }
+                    });
+                }
+            }
+            else {
+                utilSigo.toastInfo("Aviso", "Formato de fechas incorrecto");
+                $("#divDataDFFFS").hide();
+                $("#divPendienteDFFFS").hide();
+            }
+        } else {
+            utilSigo.toastInfo("Aviso", "Falta ingresar datos");
+            $("#divDataDFFFS").hide();
+            $("#divPendienteDFFFS").hide();
+        }
+    }
+
+    _renderDFFFS.fnSetValorTabla1 = function () {
+        $("#divcantDFFFS1").text(_renderDFFFS.frm.find("#cantDFFFS1").val());
+        $("#divcantDFFFS2").text(_renderDFFFS.frm.find("#cantDFFFS2").val());
+        $("#divcantDFFFS3").text(_renderDFFFS.frm.find("#cantDFFFS3").val());
+        $("#divcantDFFFS4").text(_renderDFFFS.frm.find("#cantDFFFS4").val());
+        $("#divcantDFFFS5").text(_renderDFFFS.frm.find("#cantDFFFS5").val());
+        $("#divcantDFFFS5_1").text(_renderDFFFS.frm.find("#cantDFFFS5_1").val());
+        $("#divcantDFFFS5_2").text(_renderDFFFS.frm.find("#cantDFFFS5_2").val());
+        $("#divcantDFFFS5_3").text(_renderDFFFS.frm.find("#cantDFFFS5_3").val());
+        $("#divcantDFFFS6").text(_renderDFFFS.frm.find("#cantDFFFS6").val());
+        $("#divcantDFFFS7").text(_renderDFFFS.frm.find("#cantDFFFS7").val());
+        $("#divcantDFFFS8").text(_renderDFFFS.frm.find("#cantDFFFS8").val());
+        $("#divcantDFFFS9").text(_renderDFFFS.frm.find("#cantDFFFS9").val());
+        $("#divcantDFFFS10").text(_renderDFFFS.frm.find("#cantDFFFS10").val());
+        $("#divcantDFFFS11").text(_renderDFFFS.frm.find("#cantDFFFS11").val());
+        $("#divcantDFFFS12").text(_renderDFFFS.frm.find("#cantDFFFS12").val());
+        $("#divcantDFFFS13").text(_renderDFFFS.frm.find("#cantDFFFS13").val());
+        $("#divcantDFFFS14").text(_renderDFFFS.frm.find("#cantDFFFS14").val());
+        $("#divcantDFFFS15").text(_renderDFFFS.frm.find("#cantDFFFS15").val());
+        $("#divcantDFFFS16").text(_renderDFFFS.frm.find("#cantDFFFS16").val());
+        $("#divcantDFFFS17").text(_renderDFFFS.frm.find("#cantDFFFS17").val());
+        $("#divcantDFFFS18").text(_renderDFFFS.frm.find("#cantDFFFS18").val());
+    }
+
+    _renderDFFFS.fnSetValorTabla2 = function () {
+        $("#divcantDFFFS19").text(_renderDFFFS.frm.find("#cantDFFFS19").val());
+        $("#divcantDFFFS20").text(_renderDFFFS.frm.find("#cantDFFFS20").val());
+        $("#divcantDFFFS21").text(_renderDFFFS.frm.find("#cantDFFFS21").val());
+        $("#divcantDFFFS22").text(_renderDFFFS.frm.find("#cantDFFFS22").val());
+        $("#divcantDFFFS23").text(_renderDFFFS.frm.find("#cantDFFFS23").val());
+        $("#divcantDFFFS24").text(_renderDFFFS.frm.find("#cantDFFFS24").val());
+        $("#divcantDFFFS25").text(_renderDFFFS.frm.find("#cantDFFFS25").val());
+        $("#divcantDFFFS26").text(_renderDFFFS.frm.find("#cantDFFFS26").val());
+        $("#divcantDFFFS27").text(_renderDFFFS.frm.find("#cantDFFFS27").val());
+    }
+
+    $(document).ready(function () {
+        _renderDFFFS.frm = $("#frmDFFFS"); 
+        
+        _renderDFFFS.frm.find("#txtfechainiDFFFS").datepicker({ format: "dd/mm/yyyy", autoclose: true, language: 'es' });
+        _renderDFFFS.frm.find("#txtfechainiDFFFS").keyup(function () {
+            return formateafecha(this.value); 
+        });
+
+        _renderDFFFS.frm.find("#txtfechafinDFFFS").datepicker({ format: "dd/mm/yyyy", autoclose: true, language: 'es' });
+        _renderDFFFS.frm.find("#txtfechafinDFFFS").keyup(function () {
+            return formateafecha(this.value);
+        });
+
+        _renderDFFFS.fnSetValorTabla1();    
+        _renderDFFFS.fnSetValorTabla2();
+    });
+</script>
+
+<div id="frmDFFFS" class="text-small">
+    <div><br /><br /></div>
+    @Html.HiddenFor(m => m.cantDFFFS1)
+    @Html.HiddenFor(m => m.cantDFFFS2)
+    @Html.HiddenFor(m => m.cantDFFFS3)
+    @Html.HiddenFor(m => m.cantDFFFS4)
+    @Html.HiddenFor(m => m.cantDFFFS5)
+    @Html.HiddenFor(m => m.cantDFFFS5_1)
+    @Html.HiddenFor(m => m.cantDFFFS5_2)
+    @Html.HiddenFor(m => m.cantDFFFS5_3)
+    @Html.HiddenFor(m => m.cantDFFFS6)
+    @Html.HiddenFor(m => m.cantDFFFS7)
+    @Html.HiddenFor(m => m.cantDFFFS8)
+    @Html.HiddenFor(m => m.cantDFFFS9)
+    @Html.HiddenFor(m => m.cantDFFFS10)
+    @Html.HiddenFor(m => m.cantDFFFS11)
+    @Html.HiddenFor(m => m.cantDFFFS12)
+    @Html.HiddenFor(m => m.cantDFFFS13)
+    @Html.HiddenFor(m => m.cantDFFFS14)
+    @Html.HiddenFor(m => m.cantDFFFS15)
+    @Html.HiddenFor(m => m.cantDFFFS16)
+    @Html.HiddenFor(m => m.cantDFFFS17)
+    @Html.HiddenFor(m => m.cantDFFFS18)
+    @Html.HiddenFor(m => m.cantDFFFS19)
+    @Html.HiddenFor(m => m.cantDFFFS20)
+    @Html.HiddenFor(m => m.cantDFFFS21)
+    @Html.HiddenFor(m => m.cantDFFFS22)
+    @Html.HiddenFor(m => m.cantDFFFS23)
+    @Html.HiddenFor(m => m.cantDFFFS24)
+    @Html.HiddenFor(m => m.cantDFFFS25)
+    @Html.HiddenFor(m => m.cantDFFFS26)
+    @Html.HiddenFor(m => m.cantDFFFS27)
+    <div class="form-row">
+        <div class="form-group col-md-4">
+            <label for="lblperiodo" class="text-small">Periodo de consulta:</label>
+            <div style="display: flex; position: relative;">
+                <label for="lblini" class="text-small" style="margin-top:8px;margin-right:10px;">Del: </label>
+                @Html.EditorFor(m => m.txtfechainiDFFFS, new { htmlAttributes = new { @class = "form-control form-control-sm", placeholder = "dd/mm/yyyy", title = "la fecha a ingresar debe ser en el formato dd/mm/yyyy", maxlength = "10" } })
+                <label for="lblfin" class="text-small" style="margin-top:8px;margin-right:10px;margin-left:10px;">Al: </label>
+                @Html.EditorFor(m => m.txtfechafinDFFFS, new { htmlAttributes = new { @class = "form-control form-control-sm", placeholder = "dd/mm/yyyy", title = "la fecha a ingresar debe ser en el formato dd/mm/yyyy", maxlength = "10" } })
+                <button type="button" class="btn btn-primary btn-sm" style="margin-left:15px;" onclick="_renderDFFFS.fnConsultar()">Consultar</button>
+            </div>
+        </div>
+    </div><br /><br /><br />
+    <div class="form-row" style="display:none;" id="divDataDFFFS">
+        <div class="form-group col-md-12">
+            <div class="table-responsive">
+                <table border="1" cellpadding="1" cellspacing="0">
+                    <tr>
+                        <td rowspan="5" class="formato1"></td>
+                        <td rowspan="2" colspan="4" class="formato2">Evaluación de Informe de supervisión</td>
+                        <td colspan="4" class="formato3">PAU</td>
+                        <td rowspan="2" colspan="2" class="formato4">Firmeza</td>
+                    </tr>
+                    <tr>
+                        <td colspan="2" class="formato5">Instrucción</td>
+                        <td colspan="2" class="formato6">Decisión</td>
+                    </tr>
+                    <tr>
+                        <td colspan="4" style="font-weight:bold">
+                            <a href="javascript:void(0)" onclick="_renderDFFFS.fnListar(1,'1-1-1',1)" class="botonHref1" style="text-decoration:none;">
+                                Cantidad total de informes recibidos por la DFFFS
+                                <div id="divcantDFFFS1" class="divcantidad"></div>
+                            </a>
+                        </td>
+                        <td colspan="2" style="font-weight:bold">
+                            <a href="javascript:void(0)" onclick="_renderDFFFS.fnListar(2,'1-1-2',1)" class="botonHref1" style="text-decoration:none;">
+                                Cantidad de PAU iniciados - notificados
+                                <div id="divcantDFFFS2" class="divcantidad"></div>
+                            </a>
+                        </td>
+                        <td colspan="2" style="font-weight:bold">
+                            <a href="javascript:void(0)" onclick="_renderDFFFS.fnListar(3,'1-1-3',1)" class="botonHref1" style="text-decoration:none;">
+                                Cantidad de IFI emitidos
+                                <div id="divcantDFFFS3" class="divcantidad"></div>
+                            </a>
+                        </td>
+                        <td colspan="2" style="font-weight:bold">
+                            <a href="javascript:void(0)" onclick="_renderDFFFS.fnListar(4,'1-1-4',1)" class="botonHref1" style="text-decoration:none;">
+                                Cantidad de RD emitidos - notificados
+                                <div id="divcantDFFFS4" class="divcantidad"></div>
+                            </a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="3">
+                            <a href="javascript:void(0)" onclick="_renderDFFFS.fnListar(5,'1-2-1',1)" class="botonHref1" style="text-decoration:none;">
+                                Cantidad de informes evaluados
+                                <div id="divcantDFFFS5" class="divcantidad"></div>
+                            </a>
+                        </td>
+                        <td rowspan="2">
+                            <a href="javascript:void(0)" onclick="_renderDFFFS.fnListar(6,'1-2-2',2)" class="botonHref2" style="text-decoration:none;">
+                                Cantidad de informes pendientes de evaluar
+                                <div id="divcantDFFFS6" class="divcantidad"></div>
+                            </a>
+                        </td>
+                        <td rowspan="2">
+                            <a href="javascript:void(0)" onclick="_renderDFFFS.fnListar(7,'1-2-3',1)" class="botonHref1" style="text-decoration:none;">
+                                Cantidad de IFI emitidos
+                                <div id="divcantDFFFS7" class="divcantidad"></div>
+                            </a>
+                        </td>
+                        <td rowspan="2">
+                            <a href="javascript:void(0)" onclick="_renderDFFFS.fnListar(8,'1-2-4',1)" class="botonHref1" style="text-decoration:none;">
+                                Cantidad de IFI pendientes
+                                <div id="divcantDFFFS8" class="divcantidad"></div>
+                            </a>
+                        </td>
+                        <td rowspan="2">
+                            <a href="javascript:void(0)" onclick="_renderDFFFS.fnListar(9,'1-2-5',1)" class="botonHref1" style="text-decoration:none;">
+                                Cantidad de RD emitidos
+                                <div id="divcantDFFFS9" class="divcantidad"></div>
+                            </a>
+                        </td>
+                        <td rowspan="2">
+                            <a href="javascript:void(0)" onclick="_renderDFFFS.fnListar(10,'1-2-6',1)" class="botonHref1" style="text-decoration:none;">
+                                Cantidad de RD pendientes
+                                <div id="divcantDFFFS10" class="divcantidad"></div>
+                            </a>
+                        </td>
+                        <td rowspan="2">
+                            <a href="javascript:void(0)" onclick="_renderDFFFS.fnListar(11,'1-2-7',1)" class="botonHref1" style="text-decoration:none;">
+                                Cantidad de RD con firmeza
+                                <div id="divcantDFFFS11" class="divcantidad"></div>
+                            </a>
+                        </td>
+                        <td rowspan="2">
+                            <a href="javascript:void(0)" onclick="_renderDFFFS.fnListar(12,'1-2-8',1)" class="botonHref1" style="text-decoration:none;">
+                                Cantidad de RD pendiente de firmeza
+                                <div id="divcantDFFFS12" class="divcantidad"></div>
+                            </a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <a href="javascript:void(0)" onclick="_renderDFFFS.fnListar(28,'1-2-1-1',1)" class="botonHref1" style="text-decoration:none;">
+                                Archivados
+                                <div id="divcantDFFFS5_1" class="divcantidad"></div>
+                            </a>
+                        </td>
+                        <td>
+                            <a href="javascript:void(0)" onclick="_renderDFFFS.fnListar(29,'1-2-1-2',1)" class="botonHref1" style="text-decoration:none;">
+                                Devueltos
+                                <div id="divcantDFFFS5_2" class="divcantidad"></div>
+                            </a>
+                        </td>
+                        <td>
+                            <a href="javascript:void(0)" onclick="_renderDFFFS.fnListar(30,'1-2-1-3',1)" class="botonHref1" style="text-decoration:none;">
+                                Inicio PAU
+                                <div id="divcantDFFFS5_3" class="divcantidad"></div>
+                            </a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td rowspan="2">
+                            Promedios de días hábiles utilizados para el envío de los informes a la DFFFS
+                            <div id="divcantDFFFS13" class="divcantidad"></div>
+                        </td>
+                        <td colspan="4" rowspan="2">
+                            Promedio de días hábiles utilizados para la evaluación del informe
+                            <div id="divcantDFFFS14" class="divcantidad"></div>
+                        </td>
+                        <td colspan="2">
+                            Promedio de días hábiles utilizados en la fase de instrucción
+                            <div id="divcantDFFFS15" class="divcantidad"></div>
+                        </td>
+                        <td colspan="2">
+                            Promedio de días hábiles utilizados en la fase decisora
+                            <div id="divcantDFFFS16" class="divcantidad"></div>
+                        </td>
+                        <td colspan="2" rowspan="3" class="formato8"></td>
+                    </tr>
+                    <tr>
+                        <td colspan="4">
+                            Promedio de meses utilizados en el PAU
+                            <div id="divcantDFFFS17" class="divcantidad"></div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="9">
+                            Promedio de meses utilizados desde la emisión del informe hasta la finalización del PAU
+                            <div id="divcantDFFFS18" class="divcantidad"></div>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div><br />
+    <div class="form-row" style="display:none;" id="divPendienteDFFFS">
+        <div class="form-group col-md-4"></div>
+        <div class="form-group col-md-8">
+            <table border="1" cellpadding="1" cellspacing="0">
+                <tr>
+                    <td colspan="2" class="formato5">IFI Pendientes</td>
+                    <td colspan="2" class="formato6">RD Pendientes</td>
+                    <td colspan="2" class="formato4">Firmeza pendiente</td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        <a href="javascript:void(0)" onclick="_renderDFFFS.fnListar(19,'1-6-1',1)" class="botonHref1" style="text-decoration:none;">
+                            Cantidad de IFI pendientes
+                            <div id="divcantDFFFS19" class="divcantidad"></div>
+                        </a>
+                    </td>
+                    <td colspan="2">
+                        <a href="javascript:void(0)" onclick="_renderDFFFS.fnListar(20,'1-6-2',1)" class="botonHref1" style="text-decoration:none;">
+                            Cantidad de RD pendientes
+                            <div id="divcantDFFFS20" class="divcantidad"></div>
+                        </a>
+                    </td>
+                    <td colspan="2">
+                        <a href="javascript:void(0)" onclick="_renderDFFFS.fnListar(21,'1-6-3',1)" class="botonHref1" style="text-decoration:none;">
+                            Cantidad de RD pendiente de firmeza
+                            <div id="divcantDFFFS21" class="divcantidad"></div>
+                        </a>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <a href="javascript:void(0)" onclick="_renderDFFFS.fnListar(22,'1-7-1',1)" class="botonHref1" style="text-decoration:none;">
+                            Cantidad de casos en plazo para descargo
+                            <div id="divcantDFFFS22" class="divcantidad"></div>
+                        </a>
+                    </td>
+                    <td>
+                        <a href="javascript:void(0)" onclick="_renderDFFFS.fnListar(23,'1-7-2',2)" class="botonHref2" style="text-decoration:none;">
+                            Cantidad de casos aptos para emitir IFI
+                            <div id="divcantDFFFS23" class="divcantidad"></div>
+                        </a>
+                    </td>
+                    <td>
+                        <a href="javascript:void(0)" onclick="_renderDFFFS.fnListar(24,'1-7-3',1)" class="botonHref1" style="text-decoration:none;">
+                            Cantidad de casos en plazo para descargos
+                            <div id="divcantDFFFS24" class="divcantidad"></div>
+                        </a>
+                    </td>
+                    <td>
+                        <a href="javascript:void(0)" onclick="_renderDFFFS.fnListar(25,'1-7-4',2)" class="botonHref2" style="text-decoration:none;">
+                            Cantidad de casos aptos para emitir RD
+                            <div id="divcantDFFFS25" class="divcantidad"></div>
+                        </a>
+                    </td>
+                    <td>
+                        <a href="javascript:void(0)" onclick="_renderDFFFS.fnListar(26,'1-7-5',1)" class="botonHref1" style="text-decoration:none;">
+                            Cantidad de casos en plazo para la firmeza
+                            <div id="divcantDFFFS26" class="divcantidad"></div>
+                        </a>
+                    </td>
+                    <td>
+                        <a href="javascript:void(0)" onclick="_renderDFFFS.fnListar(27,'1-7-6',2)" class="botonHref2" style="text-decoration:none;">
+                            Cantidad de casos aptos para emitir Firmeza
+                            <div id="divcantDFFFS27" class="divcantidad"></div>
+                        </a>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+</div>
+
+<div id="divlistaDFFFS" style="display:none;">
+    @Html.Partial("~/Areas/General/Views/ReporteFlujoFiscalizacion/_Shared/_renderListaDFFFS.cshtml", Model)
+</div>
+<div id="divlistaDFFFSDias" style="display:none;">
+    @Html.Partial("~/Areas/General/Views/ReporteFlujoFiscalizacion/_Shared/_renderListaDFFFSDias.cshtml", Model)
+</div>
+

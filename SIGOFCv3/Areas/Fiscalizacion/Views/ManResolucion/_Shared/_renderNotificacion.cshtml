@@ -1,0 +1,160 @@
+﻿@model CapaEntidad.ViewModel.VM_Resodirec
+
+<div id="frmRDNotificacion">
+    <div class="card-header text-small">Instituciones que se pone de conocimiento</div>
+    <div><br /></div>
+    <div class="form-row">
+        <div class="form-group col-md-3">
+            <label for="chkGTF" class="text-small">DGFFS</label>
+        </div>
+        <div class="form-group col-md-1">
+            @Html.CheckBoxFor(m => m.chkDGFFS, new { @class = "form-check-input", style = "width:15px;height:16px;" })
+        </div>
+        <div class="form-group col-md-1">Detalle</div>
+        <div class="form-group col-md-6">
+            @Html.EditorFor(m => m.txtDescDGFFS, new { htmlAttributes = new { @class = "form-control form-control-sm", maxlength = "500" } })
+        </div>
+        <div class="form-group col-md-1"></div>
+    </div>
+
+    <div class="form-row">
+        <div class="form-group col-md-3">
+            <label for="chkGTF" class="text-small">Programas Regionales</label>
+        </div>
+        <div class="form-group col-md-1">
+            @Html.CheckBoxFor(m => m.chkProgramaRegional, new { @class = "form-check-input", style = "width:15px;height:16px;" })
+        </div>
+        <div class="form-group col-md-1">Detalle</div>
+        <div class="form-group col-md-6">
+            @Html.EditorFor(m => m.txtDescProgramaRegional, new { htmlAttributes = new { @class = "form-control form-control-sm", maxlength = "500" } })
+        </div>
+        <div class="form-group col-md-1"></div>
+    </div>
+
+    <div class="form-row">
+        <div class="form-group col-md-3">
+            <label for="chkGTF" class="text-small">Ministerio Público</label>
+        </div>
+        <div class="form-group col-md-1">
+            @Html.CheckBoxFor(m => m.chkMinPublico, new { @class = "form-check-input", style = "width:15px;height:16px;" })
+        </div>
+        <div class="form-group col-md-1">Detalle</div>
+        <div class="form-group col-md-6">
+            @Html.EditorFor(m => m.txtDescMinPublico, new { htmlAttributes = new { @class = "form-control form-control-sm", maxlength = "500" } })
+        </div>
+        <div class="form-group col-md-1"></div>
+    </div>
+
+    <div class="form-row">
+        <div class="form-group col-md-3">
+            <label for="chkGTF" class="text-small">Ministerio de Energia y Minas</label>
+        </div>
+        <div class="form-group col-md-1">
+            @Html.CheckBoxFor(m => m.chkMINEMMIN, new { @class = "form-check-input", style = "width:15px;height:16px;" })
+        </div>
+        <div class="form-group col-md-1">Detalle</div>
+        <div class="form-group col-md-6">
+            @Html.EditorFor(m => m.txtDescMINEMMIN, new { htmlAttributes = new { @class = "form-control form-control-sm", maxlength = "500" } })
+        </div>
+        <div class="form-group col-md-1"></div>
+    </div>
+
+    <div class="form-row">
+        <div class="form-group col-md-3">
+            <label for="chkGTF" class="text-small">Colegio de Ingenieros</label>
+        </div>
+        <div class="form-group col-md-1">
+            @Html.CheckBoxFor(m => m.chkColegioIng, new { @class = "form-check-input", style = "width:15px;height:16px;" })
+        </div>
+        <div class="form-group col-md-1">Detalle</div>
+        <div class="form-group col-md-6">
+            @Html.EditorFor(m => m.txtDescColegioIng, new { htmlAttributes = new { @class = "form-control form-control-sm", maxlength = "500" } })
+        </div>
+        <div class="form-group col-md-1"></div>
+    </div>
+
+    <div class="form-row">
+        <div class="form-group col-md-3">
+            <label for="chkGTF" class="text-small">ATFFS</label>
+        </div>
+        <div class="form-group col-md-1">
+            @Html.CheckBoxFor(m => m.chkATFFS, new { @class = "form-check-input", style = "width:15px;height:16px;" })
+        </div>
+        <div class="form-group col-md-1">Detalle</div>
+        <div class="form-group col-md-6">
+            @Html.EditorFor(m => m.txtDescATFFS, new { htmlAttributes = new { @class = "form-control form-control-sm", maxlength = "500" } })
+        </div>
+        <div class="form-group col-md-1"></div>
+    </div>
+
+    <div class="form-row">
+        <div class="form-group col-md-3">
+            <label for="chkGTF" class="text-small">OCI</label>
+        </div>
+        <div class="form-group col-md-1">
+            @Html.CheckBoxFor(m => m.chkOCI, new { @class = "form-check-input", style = "width:15px;height:16px;" })
+        </div>
+        <div class="form-group col-md-1">Detalle</div>
+        <div class="form-group col-md-6">
+            @Html.EditorFor(m => m.txtDescOCI, new { htmlAttributes = new { @class = "form-control form-control-sm", maxlength = "500" } })
+        </div>
+        <div class="form-group col-md-1"></div>
+    </div>
+
+    <div class="form-row">
+        <div class="form-group col-md-3">
+            <label for="chkGTF" class="text-small">OEFA</label>
+        </div>
+        <div class="form-group col-md-1">
+            @Html.CheckBoxFor(m => m.chkOEFA, new { @class = "form-check-input", style = "width:15px;height:16px;" })
+        </div>
+        <div class="form-group col-md-1">Detalle</div>
+        <div class="form-group col-md-6">
+            @Html.EditorFor(m => m.txtDescOEFA, new { htmlAttributes = new { @class = "form-control form-control-sm", maxlength = "500" } })
+        </div>
+        <div class="form-group col-md-1"></div>
+    </div>
+
+    <div class="form-row">
+        <div class="form-group col-md-3">
+            <label for="chkGTF" class="text-small">SUNAT</label>
+        </div>
+        <div class="form-group col-md-1">
+            @Html.CheckBoxFor(m => m.chkSUNAT, new { @class = "form-check-input", style = "width:15px;height:16px;" })
+        </div>
+        <div class="form-group col-md-1">Detalle</div>
+        <div class="form-group col-md-6">
+            @Html.EditorFor(m => m.txtDescSUNAT, new { htmlAttributes = new { @class = "form-control form-control-sm", maxlength = "500" } })
+        </div>
+        <div class="form-group col-md-1"></div>
+    </div>
+
+    <div class="form-row">
+        <div class="form-group col-md-3">
+            <label for="chkGTF" class="text-small">SERFOR</label>
+        </div>
+        <div class="form-group col-md-1">
+            @Html.CheckBoxFor(m => m.chkSERFOR, new { @class = "form-check-input", style = "width:15px;height:16px;" })
+        </div>
+        <div class="form-group col-md-1">Detalle</div>
+        <div class="form-group col-md-6">
+            @Html.EditorFor(m => m.txtDescSERFOR, new { htmlAttributes = new { @class = "form-control form-control-sm", maxlength = "500" } })
+        </div>
+        <div class="form-group col-md-1"></div>
+    </div>
+
+    <div class="form-row">
+        <div class="form-group col-md-3">
+            <label for="chkGTF" class="text-small">Otros</label>
+        </div>
+        <div class="form-group col-md-1">
+            @Html.CheckBoxFor(m => m.chkOTROS1, new { @class = "form-check-input", style = "width:15px;height:16px;" })
+        </div>
+        <div class="form-group col-md-1">Detalle</div>
+        <div class="form-group col-md-6">
+            @Html.EditorFor(m => m.txtDescOTROS1, new { htmlAttributes = new { @class = "form-control form-control-sm", maxlength = "500" } })
+        </div>
+        <div class="form-group col-md-1"></div>
+    </div>
+
+</div>

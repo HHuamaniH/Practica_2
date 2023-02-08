@@ -1,0 +1,210 @@
+﻿@model CapaEntidad.ViewModel.VM_Resodirec
+
+<script type="text/javascript">
+    var _renderIncisos = {};
+
+
+    _renderIncisos.fncSelectEnciso = function () {
+        var idEnciso = _renderIncisos.frm.find("#ddlEnciso").val();
+        _renderInfracciones.frm.find("#divInfArea").hide();
+        _renderInfracciones.frm.find("#divInfEspecie").hide();
+        _renderInfracciones.frm.find("#divInfVolumen").hide();
+        _renderInfracciones.frm.find("#divInfEspecieFauna").hide();
+        _renderInfracciones.frm.find("#divInfNumIndv").hide();
+        _renderInfracciones.frm.find("#divInfEspecieFlora").hide();
+        _renderInfracciones.frm.find("#divInfTipoAprov").hide();
+        switch (idEnciso) {
+            case "0000001":
+            case "0000002":
+            case "0000027":
+            case "0000004":
+            case "0000008":
+            case "0000009":
+            case "0000011":
+            case "0000012":
+            case "0000031":
+            case "0000034":
+            case "0000048":
+            case "0000015":
+            case "0000018":
+            case "0000020":
+            case "0000036":
+            case "0000021":
+            case "0000030":
+            case "0000024":
+            case "0000028":
+            case "0000032":
+            case "0000033":
+            case "0000035":
+            case "0000039":
+            case "0000040":
+            case "0000042":
+            case "0000043":
+            case "0000044":
+            case "0000045":
+            case "0000046":
+            case "0000047":
+            case "0000049":
+            case "0000050":
+            case "0000051":
+            case "0000052":
+            case "0000053":
+            case "0000054":
+            case "0000055":
+            case "0000056":
+            case "0000062":
+            case "0000063":
+            case "0000066":
+            case "0000067":
+            case "0000069":
+            case "0000070":
+            case "0000071":
+            case "0000072":
+            case "0000073":
+            case "0000075":
+            case "0000076":
+            case "0000077":
+            case "0000078":
+            case "0000080":
+            case "0000098":
+            case "0000087":
+            case "0000086":
+            case "0000090":
+            case "0000091":
+            case "0000099":
+            case "0000102":
+            case "0000103":
+            case "0000104":
+            case "0000105":
+            case "0000121":
+                _renderInfracciones.frm.find("#divInfArea").hide();
+                _renderInfracciones.frm.find("#divInfEspecie").hide();
+                _renderInfracciones.frm.find("#divInfVolumen").hide();
+                _renderInfracciones.frm.find("#divInfEspecieFauna").hide();
+                _renderInfracciones.frm.find("#divInfNumIndv").hide();
+                _renderInfracciones.frm.find("#divInfEspecieFlora").hide();
+                _renderInfracciones.frm.find("#divInfTipoAprov").hide();
+                break;
+            case "0000022":
+            case "0000023":
+            case "0000006":
+            case "0000010":
+            case "0000013":
+            case "0000025":
+            case "0000026":
+            case "0000085":
+            case "0000088":
+            case "0000089":            
+                _renderInfracciones.frm.find("#divInfEspecieFlora").show();
+                _renderInfracciones.frm.find("#divInfVolumen").show();
+                _renderInfracciones.frm.find("#divInfTipoAprov").show();
+                break;
+            case "0000014":
+            case "0000016":
+            case "0000017":
+            case "0000019":
+            case "0000037":
+            case "0000079":
+            case "0000093":
+            case "0000094":
+            case "0000095":
+            case "0000096":
+            case "0000097":
+            case "0000187":
+            case "0000191":
+            case "0000192":
+            case "0000193":
+            case "0000195":
+            case "0000196":
+            case "0000197":
+            case "0000198":
+            case "0000200":
+            case "0000202":
+            case "0000204":
+            case "0000205":
+                _renderInfracciones.frm.find("#divInfEspecieFauna").show();
+                _renderInfracciones.frm.find("#divInfNumIndv").show();
+                _renderInfracciones.frm.find("#divInfTipoAprov").hide();
+                break;
+            case "0000003":
+            case "0000005":
+            case "0000029":
+            case "0000038":
+            case "0000041":
+            case "0000057":
+            case "0000058":
+            case "0000059":
+            case "0000060":
+            case "0000068":
+            case "0000081":
+            case "0000082":
+            case "0000083":
+            case "0000084":
+            case "0000092":
+            case "0000101":
+            case "0000158":
+            case "0000159":
+            case "0000226":
+            case "0000227":
+                _renderInfracciones.frm.find("#divInfArea").show();
+                _renderInfracciones.frm.find("#divInfTipoAprov").hide();
+                break;
+            case "0000007":
+            case "0000061":
+            case "0000064":
+            case "0000065":
+            case "0000150":         
+            case "0000161":
+            case "0000166":
+            case "0000228":
+            case "0000301":
+                _renderInfracciones.frm.find("#divInfEspecieFlora").show();
+                _renderInfracciones.frm.find("#divInfVolumen").show();
+                _renderInfracciones.frm.find("#divInfNumIndv").show();
+                _renderInfracciones.frm.find("#divInfTipoAprov").show();
+                break;
+            case "0000074":
+                _renderInfracciones.frm.find("#divInfEspecieFlora").show();
+                _renderInfracciones.frm.find("#divInfTipoAprov").show();
+                break;
+        }
+    };
+    function isNumberKey(evt) {
+        var charCode = (evt.which) ? evt.which : evt.keyCode
+        if (charCode > 31 && (charCode < 48 || charCode > 57))
+            return false;
+        return true;
+    };
+
+    $(document).ready(function () {
+        _renderIncisos.frm = $("#fmrEncisos");
+        var cod = _renderInfracciones.frm.find("#hdfCodEnciso").val();
+        if (cod != '') {
+            _renderInfracciones.frm.find("#ddlEnciso").val(cod);
+            _renderIncisos.fncSelectEnciso();
+        }
+    });
+</script>
+<div id="fmrEncisos">
+    <div class="form-row">
+        <div class="form-group col-md-4">
+            <label for="lblArticulos" class="text-small">Inciso</label>
+        </div>
+        @Html.HiddenFor(m => m.hdfCodEnciso)
+        <div class="form-group col-md-6">
+            @Html.DropDownListFor(m => m.txtIdEnciso, new SelectList(Model.ListIncisos, "Value", "Text", Model.ListArticulo),
+                                   new
+                                        {
+                                           @class = "form-control form-control-sm",
+                                           @id = "ddlEnciso",
+                                           @onchange = "_renderIncisos.fncSelectEnciso()"
+                                        })
+
+        </div>
+        <div class="form-group col-md-2">
+        </div>
+    </div>
+    
+
+
+</div>

@@ -1,0 +1,33 @@
+﻿@model CapaEntidad.ViewModel.VM_ResolucionTFFS
+
+<div id="fmrRDAplicMedCorrectiva">
+
+    <!--Medidas Cautelares-->
+    <div id="divMedCaut">
+        @Html.Partial("~/Areas/Tribunal/Views/ManTribunal/_Shared/_generic/_renderMedCaut.cshtml", Model)
+    </div>
+
+    <div style="display:none;">
+        <div class="card-header text-small">Especies del Balance de Extracción Reportadas en la Alerta<br /></div>
+        <div><br /></div>
+
+        <div class="form-row">
+            <div class="form-group col-md-12">
+                boton importar balance del informe de supervision
+            </div>
+        </div>
+
+        <div class="form-row">
+            <div class="form-group col-md-12">
+                lista de balance del informe de supervision
+            </div>
+        </div>
+    </div>
+
+    <!--Rectificacion-->
+    <div>
+        @Html.Partial("~/Areas/Tribunal/Views/ManTribunal/_Shared/_generic/_renderRectificacion.cshtml", Model)
+    </div>
+
+</div>
+

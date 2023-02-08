@@ -1,0 +1,188 @@
+﻿@model CapaEntidad.DOC.Tra_M_Tramite
+@{
+    ViewBag.Title = "AddEdit";
+    Layout = "~/Views/Shared/_LayoutMain.cshtml";
+}
+@Html.Hidden("cCodificacion", (object)ViewBag.cCodificacion)
+@Html.Hidden("iCodTramite", (object)ViewBag.iCodTramite)
+@Html.Hidden("iCodTupa", (object)ViewBag.iCodTupa)
+@Html.Hidden("iCodTupaClase", (object)ViewBag.iCodTupaClase)
+@section scripts{
+    <script>
+        var tramite = JSON.parse('@Html.Raw(Json.Encode(@Model))');
+    </script>
+}
+<script src="~/Areas/Supervision/js/Denuncias/VistaDenuncia.js?noCache=@Guid.NewGuid().ToString()"></script>
+
+<div class="container-fluid">
+    <div class="card">
+        <div class="card-header text-right">
+            VistaDenuncia
+        </div>
+        <div class="card-body">
+            <div class="card">
+                <div class="card-header text-small">
+                    @*<a href="javascript:void(0)" style="cursor:pointer;" data-toggle="tooltip" data-placement="top" title="Guardar" onclick="ManInforme_AddEdit.fnSubmitForm()"><i class="fa mx-2 fa-lg fa-save"></i></a>*@
+                    <a style="cursor:pointer;" data-toggle="tooltip" data-placement="top" title="Regresar" onclick="returnIndex()"><i class="fa mx-2 fa-lg fa-reply"></i></a>
+                </div>
+                <div class="card-body">
+                    <ul class="nav nav-tabs" id="TabsDenuncia" role="tablist">
+                        <li class="nav-item"><a class="nav-link active show" data-toggle="tab" href="#navEstado" role="tab" aria-controls="home" aria-selected="true">Informe</a></li>
+                        <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#navDatos" role="tab" aria-controls="home" aria-selected="false">Denuncia/Peticiones</a></li>
+                    </ul>
+                    <div class="tab-content">
+                        <div class="tab-pane fade show active" id="navEstado" role="tabpanel" aria-labelledby="nav-home-tab">
+                            <div class="card-header text-small ">
+                                Datos del Informe de Supervision
+                            </div>
+                            <div id="htmlInformeSupervision">
+
+                            </div>
+
+                        </div>
+
+                        <div class="tab-pane fade show" id="navDatos" role="tabpanel" aria-labelledby="nav-home-tab">
+                            <div class="card-header text-small">
+                                Datos de la Denuncia
+                            </div>
+                            <div class="card">
+                                <div class="card-body">
+                                    <div class="form-row" disabled>
+                                        <div class="form-group col-md-6 d-none">
+                                            <label for="cboAtencion" class="text-small">Atencion</label>
+                                            <select class="form-control form-control-sm" id="cboAtencion" name="cboAtencion">
+                                                <option value="00">--Seleccionar--</option>
+                                                <option value="01">OSINFOR</option>
+                                                <option value="02">OTRO</option>
+                                            </select>
+                                        </div>
+                                        <div class="form-group col-md-6">
+                                            <label class="text-small">Estado</label>
+                                            <div style="margin-top:7px;">
+                                                <div class="custom-control custom-radio custom-control-inline">
+                                                    <input type="radio" class="custom-control-input" id="rbtnAtendido1" name="rbtnAtendido" value="1" disabled>
+                                                    <label class="custom-control-label" for="rbtnAtendido1">Atendido</label>
+                                                </div>
+                                                <div class="custom-control custom-radio custom-control-inline">
+                                                    <input type="radio" class="custom-control-input" id="rbtnAtendido2" name="rbtnAtendido" value="2" disabled>
+                                                    <label class="custom-control-label" for="rbtnAtendido2">En Proceso</label>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                        <div class="form-group col-md-6 cboTipoTraslado ">
+                                            <label for="cboTipoTraslado" class="text-small">Sub estado</label>
+                                            <select class="form-control form-control-sm" id="cboTipoTraslado" disabled>
+                                                <option value="00">-- Seleccionar --</option>
+                                                <option>Traslado (No es competencia de OSINFOR)</option>
+                                                <option>Por supervisar</option>
+                                                <option>Supervisado</option>
+                                                <option>No precisa información para continuar el trámite.</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="form-row">
+                                        <div class="form-group col-md-6 cboTipoRequerimiento">
+                                            <label for="cboTipoRequerimiento" class="text-small">Tipo Requerimiento</label>
+                                            <div class="form-row">
+                                                <div class="form-group col-md-6">
+                                                    <select class="form-control form-control-sm" id="cboTipoRequerimiento" disabled>
+                                                        <option value="00">-- Seleccionar --</option>
+                                                        <option>Denuncia</option>
+                                                        <option>Petición (solicitud de inspección, supervisión, etc)</option>
+                                                        <option>Inspecciones físicas</option>
+                                                        <option>Acompañamiento</option>
+                                                        <option>Otros</option>
+                                                    </select>
+                                                </div>
+                                                <div class="form-group col-md-6 txtOtros d-none">
+                                                    <input id="txtOtros" class="form-control form-control-sm" type="text" />
+                                                </div>
+                                            </div>
+                                        </div>
+
+
+                                    </div>
+                                    <div class="form-row">
+                                        <div class="form-group col-md-12">
+                                            <label class="text-small">Es Titulo Habilitante:</label>
+                                            <div style="margin-top:7px;">
+                                                <div class="form-check form-check-inline ">
+                                                    <input class="form-check-input" type="radio" name="rbtnTHabilitante" id="rbtnTHabilitanteSi" value="1" disabled>
+                                                    <label class="form-check-label" for="rbtnTHabilitanteSi">Si</label>
+                                                </div>
+                                                <div class="form-check form-check-inline">
+                                                    <input class="form-check-input" type="radio" name="rbtnTHabilitante" id="rbtnTHabilitanteNo" value="2" disabled>
+                                                    <label class="form-check-label" for="rbtnTHabilitanteNO">No</label>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="card-header text-small oosDenun" style="margin-top:10px;">
+                                        Título Habilitante
+                                    </div>
+                                    <div class="form-row">
+                                        <div class="input-group " id="htmlTHabilitante"></div>
+                                    </div>
+                                    <div class="card-header text-small oosDenun" style="margin-top:10px;">
+                                        Expediente Informe de Supervisión
+                                    </div>
+                                    <div class="form-row ValidateHidden" style="margin-top:10px;">
+                                        <div class="input-group  dataValidacion" id="htmlExpedientes"></div>
+                                        <div class="input-group col-md-12 d-none" id="htmlAuditoria"></div>
+                                    </div>
+                                    <div class="form-row d-none" style="margin-top:10px;">
+                                        <div class="form-group col-md-6">
+                                            <label class="text-small" id="lblEntidad">Entidad</label>
+                                            <div class="input-group">
+                                                <input type="text" id="inptEntidad" disabled class="form-control form-control-sm" />
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="card-header text-small osinforDenun" style="margin-top:10px;">
+                                        Documentos del SITD
+                                    </div>
+                                    <div class="form-row " style="margin-top:10px;">
+                                        <div class="form-group col-md-12">
+                                            <label class="text-small" id="lblInformesSITD">Informe / Carta / Oficios(0)</label>
+                                        </div>
+                                        <div class="input-group col-md-12" id="htmlDocSITD"></div>
+                                    </div>
+                                    <div class="form-row " style="margin-top:10px;">
+
+                                        <div class="form-group col-md-12">
+                                            <label class="text-small" id="lblInformesSITD">Documentos adicionales</label>
+                                        </div>
+                                        <div class="input-group col-md-12" id="htmlInformes"></div>
+                                    </div>
+                                    <div class="card-header text-small d-none" style="margin-top:10px;">
+                                        Carta y Oficios
+                                    </div>
+                                    <div class="form-row d-none " style="margin-top:10px;">
+                                        <div class="input-group col-md-12" id="htmlCartasOficios"></div>
+                                    </div>
+                                    <div class="form-row osinforDenun" style="margin-top:10px;">
+                                        <div class="form-group col-md-6">
+                                            <label for="txtConclusionDenuncia" class="text-small">Conclusiones</label>
+                                            <textarea id="txtConclusionDenuncia" disabled="disabled" style="height:200px" class="form-control form-control-sm"></textarea>
+                                        </div>
+                                        <div class="form-group col-md-6 ">
+                                            <label for="txtRecomendacionDenuncia" class="text-small">Recomendaciones</label>
+                                            <textarea id="txtRecomendacionDenuncia" disabled="disabled" style="height:200px" class="form-control form-control-sm"></textarea>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@* Para el modal _POASupervisado usado en el control _renderCNotificacion *@
+<div class="modal fade hide" id="mdlManInforme_POASupervisado" tabindex="-1" role="dialog"></div>
+@* Para el modal _DatosCampoMaderable,_DatosCampoBosqueSeco usado en el control _POASupervisado *@
+<div class="modal fade hide" id="mdlManInforme_DatosCampo" tabindex="-1" role="dialog"></div>

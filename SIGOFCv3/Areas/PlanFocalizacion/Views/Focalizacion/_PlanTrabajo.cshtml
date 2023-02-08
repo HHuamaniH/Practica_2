@@ -1,0 +1,32 @@
+﻿@model CapaEntidad.ViewModel.VM_PlanTrabajo
+<div class="modal-dialog" role="document">
+    <div class="modal-content">
+        <div class="modal-header text-small" style="cursor:move;padding:0.5rem;">
+            <h5 class="modal-title">Nuevo plan de trabajo - PASPEQ @ViewBag.periodo</h5>
+        </div>
+        <div class="modal-body">
+            <form id="frmManPlanTrabajo" method="post">
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label for="cboMesFocalizacion" class="text-small">Mes de focalización</label>
+                        @Html.DropDownList("mes_focalizacion", (IEnumerable<SelectListItem>)ViewBag.mes_focalizacion, new { @class = "form-control form-control-sm" })
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group col-md-12">
+                        <label for="usuario" class="text-small">Se creará un nuevo plan de trabajo para el mes seleccionado</label>
+                    </div>
+                </div>
+                @Html.HiddenFor(m => m.periodo)
+                @Html.HiddenFor(m => m.cod_od)
+            </form>
+        </div>
+        <div class="modal-footer">
+            <button id="btnGuardar" class="btn btn-primary btn-sm" onclick="_manPlanTrabajo.fnSave();">Generar</button>
+            <button id="btnCancelar" class="btn btn-secondary btn-sm" onclick="_manPlanTrabajo.fnClose();">Cancelar</button>
+        </div>
+    </div>
+</div>
+
+<script src="~/Areas/PlanFocalizacion/js/Focalizacion/_PlanTrabajo.js"></script>

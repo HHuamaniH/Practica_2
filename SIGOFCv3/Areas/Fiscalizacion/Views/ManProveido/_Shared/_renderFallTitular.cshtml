@@ -1,0 +1,23 @@
+﻿@model CapaEntidad.ViewModel.VM_Proveido
+
+<div id="divFallTitular" class="text-small">
+    <div><br /><br /></div>
+
+    <div class="form-row">
+        <div class="form-group col-md-4">
+            Se Resuelve
+        </div>
+        <div class="form-group col-md-6">
+            @Html.TextAreaFor(m => m.txtResuelve, 8, 1, new { @class = "form-control form-control-sm" })
+        </div>
+        <div class="form-group col-md-2">
+        </div>
+    </div>
+
+    <div class="form-row">
+        <div class="form-group col-md-12">
+            @Html.Partial("~/Areas/Fiscalizacion/Views/ManProveido/_Shared/_renderNotificacion.cshtml", Model)
+        </div>
+    </div>
+</div>
+

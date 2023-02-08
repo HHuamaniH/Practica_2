@@ -1,0 +1,553 @@
+﻿
+@model CapaEntidad.ViewModel.VM_ReporteTitularResumen
+@{
+    ViewBag.Title = "ReporteTitularResumen";
+    Layout = "~/Views/Shared/_LayoutMain.cshtml";
+}
+
+<link href="~/Content/datatables/buttons.dataTables.min.css" rel="stylesheet" />
+
+<style type="text/css">
+    #dvHideFiltro:hover, #dvShowFiltro:hover {
+        color: #fff;
+        background-color: lightblue;
+        border-color: lightblue;
+        box-shadow: 0 0 0 0.2rem rgba(23, 162, 184, 0.5);
+    }
+
+    button.dt-button {
+        font-weight: 400;
+        border: 1px solid transparent;
+        padding: 0.25rem 0.5rem;
+        font-size: 0.875rem;
+        line-height: 1.5;
+        border-radius: 0;
+        color: #17a2b8;
+        background-color: transparent;
+        background-image: none;
+        border-color: #17a2b8;
+    }
+
+    button.dt-button:hover:not(.disabled) {
+        text-decoration: none;
+        color: #fff;
+        background-color: #17a2b8;
+        border-color: #17a2b8;
+        background-image: none;
+    }
+
+    button.dt-button:active:not(.disabled), button.dt-button:hover:not(.disabled):active:not(.disabled) {
+        color: #fff;
+        background-color: #17a2b8;
+        border-color: #17a2b8;
+        box-shadow: 0 0 0 0.2rem rgba(23, 162, 184, 0.5);
+        background-image: none;
+    }
+
+    .text-small {
+        margin-bottom: 5px;
+        font-size: 14px;
+    }
+
+    .custom-checkbox {
+        font-size: 13px;
+    }
+
+    .custom-control-label {
+        margin-top: 6px;
+    }
+
+    #dvReporteTitular .dataTables_info {
+        color: #33b35a;
+        font-size: 15px;
+        margin-top: 17px;
+    }
+
+    #dvReporteTitular .dataTables_paginate {
+        margin-top: -25px;
+    }
+</style>
+
+<div class="container-fluid">
+    <div class="card">
+        <div class="card-header text-right">Reporte Titular Sancionado Resumen</div>
+        <div class="card-body">
+            <div class="card-header text-sm-left">Filtros de búsqueda</div>
+            <div class="card" style="margin-bottom:10px;">
+                <div id="dvFiltro" class="card-body">
+                    <form id="frmFiltro" action="@Url.Action("Reporte", "ReporteTitularResumen", new { Area= "Supervision" })">
+                        <div class="form-row">
+                            <div class="form-group col-md-1">
+                                <label class="text-small">Departamento</label>
+                                <div class="custom-control custom-checkbox">
+                                    @Html.CheckBox("chkDepartamentoAll", new { @class = "custom-control-input" })
+                                    <label for="chkDepartamentoAll" class="custom-control-label">Todos</label>
+                                </div>
+                                <div style="max-height:150px;overflow:auto;">
+                                    @Html.EditorFor(m => m.lstChkDepartamento)
+                                    @Html.HiddenFor(m => m.lstChkDepartamentoId)
+                                </div>
+                            </div>
+                            <div class="form-group col-md-1">
+                                <label class="text-small">Ubicación</label>
+                                <div class="custom-control custom-checkbox">
+                                    @Html.CheckBox("chkUbicacionAll", new { @class = "custom-control-input" })
+                                    <label for="chkUbicacionAll" class="custom-control-label">Todos</label>
+                                </div>
+                                <div style="max-height:150px;overflow:auto;">
+                                    @Html.EditorFor(m => m.lstChkUbicacion)
+                                    @Html.HiddenFor(m => m.lstChkUbicacionId)
+                                </div>
+                            </div>
+                            <div class="form-group col-md-1">
+                                <label class="text-small">Dirección de Línea</label>
+                                <div class="custom-control custom-checkbox">
+                                    @Html.CheckBox("chkDLineaAll", new { @class = "custom-control-input" })
+                                    <label for="chkDLineaAll" class="custom-control-label">Todos</label>
+                                </div>
+                                <div style="max-height:150px;overflow:auto;">
+                                    @Html.EditorFor(m => m.lstChkDLinea)
+                                    @Html.HiddenFor(m => m.lstChkDLineaId)
+                                </div>
+                            </div>
+                            <div class="form-group col-md-2">
+                                <label class="text-small">Modalidad de Aprovechamiento</label>
+                                <div class="custom-control custom-checkbox">
+                                    @Html.CheckBox("chkModalidadAll", new { @class = "custom-control-input" })
+                                    <label for="chkModalidadAll" class="custom-control-label">Todos</label>
+                                </div>
+                                <div style="max-height:150px;overflow:auto;">
+                                    @Html.EditorFor(m => m.lstChkModalidad)
+                                    @Html.HiddenFor(m => m.lstChkModalidadId)
+                                </div>
+                            </div>
+                            <div class="form-group col-md-1">
+                                <label class="text-small">Año de Supervisión</label>
+                                <div class="custom-control custom-checkbox">
+                                    @Html.CheckBox("chkAnioSupervAll", new { @class = "custom-control-input" })
+                                    <label for="chkAnioSupervAll" class="custom-control-label">Todos</label>
+                                </div>
+                                <div style="max-height:150px;overflow:auto;">
+                                    @Html.EditorFor(m => m.lstChkAnioSuperv)
+                                    @Html.HiddenFor(m => m.lstChkAnioSupervId)
+                                </div>
+                            </div>
+                            <div class="form-group col-md-1">
+                                <label class="text-small">Año RD de Término</label>
+                                <div class="custom-control custom-checkbox">
+                                    @Html.CheckBox("chkAnioRDTerminoAll", new { @class = "custom-control-input" })
+                                    <label for="chkAnioRDTerminoAll" class="custom-control-label">Todos</label>
+                                </div>
+                                <div style="max-height:150px;overflow:auto;">
+                                    @Html.EditorFor(m => m.lstChkAnioRDTermino)
+                                    @Html.HiddenFor(m => m.lstChkAnioRDTerminoId)
+                                </div>
+                            </div>
+                            <div class="form-group col-md-1">
+                                <label class="text-small">Mes RD de Término</label>
+                                <div class="custom-control custom-checkbox">
+                                    @Html.CheckBox("chkMesRDTerminoAll", new { @class = "custom-control-input" })
+                                    <label for="chkMesRDTerminoAll" class="custom-control-label">Todos</label>
+                                </div>
+                                <div style="max-height:150px;overflow:auto;">
+                                    @Html.EditorFor(m => m.lstChkMesRDTermino)
+                                    @Html.HiddenFor(m => m.lstChkMesRDTerminoId)
+                                </div>
+                            </div>
+                            <div class="form-group col-md-1">
+                                <label class="text-small">Año Firmeza</label>
+                                <div class="custom-control custom-checkbox">
+                                    @Html.CheckBox("chkAnioFirmezaAll", new { @class = "custom-control-input" })
+                                    <label for="chkAnioFirmezaAll" class="custom-control-label">Todos</label>
+                                </div>
+                                <div style="max-height:150px;overflow:auto;">
+                                    @Html.EditorFor(m => m.lstChkAnioFirmeza)
+                                    @Html.HiddenFor(m => m.lstChkAnioFirmezaId)
+                                </div>
+                            </div>
+                            <div class="form-group col-md-1">
+                                <label class="text-small">Año Proveído</label>
+                                <div class="custom-control custom-checkbox">
+                                    @Html.CheckBox("chkAnioProveidoAll", new { @class = "custom-control-input" })
+                                    <label for="chkAnioProveidoAll" class="custom-control-label">Todos</label>
+                                </div>
+                                <div style="max-height:150px;overflow:auto;">
+                                    @Html.EditorFor(m => m.lstChkAnioProveido)
+                                    @Html.HiddenFor(m => m.lstChkAnioProveidoId)
+                                </div>
+                            </div>
+                            <div class="form-group col-md-2">
+                                <label class="text-small">Adicionales</label>
+                                <div class="form-group" style="margin-top:4px;">
+                                    <label for="ddlFiltroAdiconalId" style="font-size:13px;">Buscar por:</label>
+                                    @Html.DropDownListFor(m => m.ddlFiltroAdiconalId, new SelectList(Model.ddlFiltroAdicional, "Value", "Text"), new { @class = "form-control form-control-sm" })
+                                </div>
+                                <div class="form-group" id="dvValorFiltro" style="display:none;">
+                                    @Html.TextBoxFor(m => m.txtValorFiltro, new { @class = "form-control form-control-sm", @placeholder = "Valor a buscar" })
+                                </div>
+                                <div class="form-group">
+                                    <div class="custom-control custom-checkbox my-1 mr-sm-2">
+                                        @Html.CheckBoxFor(m => m.chkMulta, new { @class = "custom-control-input" })
+                                        <label for="chkMulta" class="custom-control-label" style="margin-top:6px;">¿Imposisición de multa?</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                    <button type="button" class="btn btn-primary btn-sm" onclick="rpteTitularResumen.fnSubmitForm()">Consultar</button>
+                </div>
+                <div class="card-body" style="padding-top:0px;padding-bottom:0px;">
+                    <div class="form-row">
+                        <div id="dvHideFiltro" class="form-group col-md-12" style="text-align:center; margin:0px;cursor:pointer;" title="Ocultar Filtros">
+                            <img alt="Ocultar Filtros" src="~/Content/images/General/flecha-contraer.png" width="50" height="30" />
+                        </div>
+                        <div id="dvShowFiltro" class="form-group col-md-12" style="text-align:center; margin:0px;cursor:pointer; display:none;" title="Mostrar Filtros">
+                            <img alt="Mostrar Filtros" src="~/Content/images/General/flecha-ampliar.png" width="50" height="30" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-body" id="dvReporteTitular">
+                    <div class="form-row">
+                        <div class="table-responsive">
+                            <table id="tbReporteTitular" style="width:100%" class="table table-hover table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th colspan="132" class="text-sm-left">
+                                            <div class="form-inline">
+                                                <strong>Titulares Sancionados Resumen</strong>
+                                            </div>
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="~/Scripts/datatables/Extensions/dataTables.buttons.js"></script>
+<script src="~/Scripts/datatables/Extensions/buttons.flash.min.js"></script>
+<script src="~/Scripts/datatables/Extensions/jszip.min.js"></script>
+<script src="~/Scripts/datatables/Extensions/pdfmake.js"></script>
+<script src="~/Scripts/datatables/Extensions/vfs_fonts.js"></script>
+<script src="~/Scripts/datatables/Extensions/buttons.html5.js"></script>
+<script src="~/Scripts/datatables/Extensions/buttons.print.js"></script>
+
+<script type="text/javascript">
+    var rpteTitularResumen = {};
+
+    rpteTitularResumen.fnFilterGetAllOptions = function (lstChk) {
+        var options = "";
+        for (var i = 1; i <= rpteTitularResumen.frm.find("[id*=" + lstChk + "]").length; i++) {
+            if (i % 2 == 0) {
+                options += options == "" ? "" : ",";
+                options += "'" + rpteTitularResumen.frm.find("[id*=" + lstChk + "]")[i - 2].value + "'";
+            }
+        }
+        return options;
+    };
+
+    rpteTitularResumen.fnFilterGetAllCheck = function (lstChk, lstChkId) {
+        var select = "";
+        for (var i = 1; i <= rpteTitularResumen.frm.find("[id*=" + lstChk + "]").length; i++) {
+            if (i % 2 == 0) {
+                if (rpteTitularResumen.frm.find("[id*=" + lstChk + "]")[i - 1].checked) {
+                    select += select == "" ? "" : ",";
+                    select += "'" + rpteTitularResumen.frm.find("[id*=" + lstChk + "]")[i - 2].value + "'";
+                }
+            }
+        }
+
+        if (rpteTitularResumen.fnFilterGetAllOptions(lstChk) == select) {
+            rpteTitularResumen.frm.find("#" + lstChkId).val("All");
+        } else {
+            rpteTitularResumen.frm.find("#" + lstChkId).val(select);
+        }
+    };
+
+    rpteTitularResumen.fnShowValorFiltro = function () {
+        var opcionId = rpteTitularResumen.frm.find("#ddlFiltroAdiconalId").val();
+        if (opcionId == "TH_1_Todo") {
+            rpteTitularResumen.frm.find("#txtValorFiltro").val("");
+            rpteTitularResumen.frm.find("#dvValorFiltro").hide();
+        } else {
+            setTimeout(function () {
+                $('.select2-container-active').removeClass('select2-container-active');
+                rpteTitularResumen.frm.find("#dvValorFiltro").show();
+                rpteTitularResumen.frm.find("#txtValorFiltro").focus();
+            }, 1);
+        }
+    }
+
+    rpteTitularResumen.fnInitDataTable = function () {
+        var columns_label = [], columns_data = [], options = {};
+
+        columns_label = ["N° Informe", "Fecha Informe", "Titular", "N° Documento", "N° RUC", "Tipo Persona"
+            , "Dirección", "Ubigeo", "Departamento", "Provincia", "Distrito", "R. Legal", "Doc. R. Legal"
+            , "Título Habilitante", "Modalidad", "Sector", "Ubicación", "N° POA", "Archivo Preliminar"
+            , "Res. Inicio PAU", "Res. Término PAU", "Fecha Emisión", "Determinación", "¿Es una amonestación?"
+            , "Monto Multa (UIT)", "Infracciones", "Notificación", "Recurso Reconsideración", "Res. Reconsideración"
+            , "Fecha Emisión", "Determinación", "¿Modifica la multa?", "Monto Multa (UIT)", "Notificación"
+            , "Res. Rectificación", "Fecha Emisión", "¿Modifica la multa?", "Monto Multa (UIT)", "Notificación"
+            , "Recurso Apelación", "Res. TFFS", "Fecha Emisión", "Recurso", "Determina", "Motivo"
+            , "¿Modifica la multa?", "Monto Multa (UIT)", "Confirma Resolución", "Res. Término PAU 2", "Fecha Emisión"
+            , "Determinación", "¿Es una amonestación?", "Monto Multa (UIT)", "Infracciones", "Notificación"
+            , "Recurso Reconsideración", "Res. Reconsideración 2", "Fecha Emisión", "Determinación", "¿Modifica la multa?"
+            , "Monto Multa (UIT)", "Notificación", "Res. Rectificación", "Fecha Emisión", "¿Modifica la multa?"
+            , "Monto Multa (UIT)", "Notificación", "Recurso Apelación", "Res. TFFS 2", "Fecha Emisión", "Recurso"
+            , "Determina", "Motivo", "¿Modifica la multa?", "Monto Multa (UIT)", "Confirma Resolución", "Proveído", "Fecha Proveído", "Fecha Firmeza"];
+        columns_data = ["NUM_INFORME", "FECHA_INFORME", "TITULAR", "DOCUMENTO_TITULAR", "RUC_TITULAR", "TIPO_PERSONA_TITULAR"
+            , "DIRECCION_TITULAR", "UBIGEO_TITULAR", "DEPARTAMENTO_TITULAR", "PROVINCIA_TITULAR", "DISTRITO_TITULAR", "RLEGAL", "DNI_RLEGAL"
+            , "NUM_THABILITANTE", "MODALIDAD", "SECTOR", "UBIGEO", "N_POA", "ARCHIVO_IL"
+            , "NUM_RDINI", "NUM_RDTER", "FECEMI_RDTER", "DETER_RDTER", "AMONESTA_RDTER"
+            , "MULTA_RDTER", "INFRACC_RDTER", "NOTIFICACION_RDTER", "RECURSO_RDREC", "NUM_RDREC"
+            , "FECEMI_RDREC", "DETER_RDREC", "CAMBIO_MULTA_RDREC", "MULTA_RDREC", "NOTIFICACION_RDREC"
+            , "NUM_RDRECTIF", "FECEMI_RDRECTIF", "CAMBIO_MULTA_RDRECTIF", "MULTA_RDRECTIF", "NOTIFICACION_RDRECTIF"
+            , "RECURSO_RTFFS", "NUM_RTFFS", "FECEMI_RTFFS", "RECAPE_RTFFS", "DETERM_RTFFS", "MOTIVO_RTFFS"
+            , "CAMBIO_MULTA_RTFFS", "MULTA_RTFFS", "CONFIRM_RTFFS", "NUM_RDTER_2", "FECEMI_RDTER_2"
+            , "DETER_RDTER_2", "AMONESTA_RDTER_2", "MULTA_RDTER_2", "INFRAC_RDTER_2", "NOTIFICACION_RDTER_2"
+            , "RECURSO_RDREC_2", "NUM_RDREC_2", "FECEMI_RDREC_2", "DETER_RDREC_2", "CAMBIO_MULTA_RDREC_2"
+            , "MULTA_RDREC_2", "NOTIFICACION_RDREC_2", "NUM_RDRECTIF_2", "FECEMI_RDRECTIF_2"
+            , "CAMBIO_MULTA_RDRECTIF_2", "MULTA_RDRECTIF_2", "NOTIFICACION_RDRECTIF_2", "RECURSO_RTFFS_2"
+            , "NUM_RTFFS_2", "FECEMI_RTFFS_2", "RECAPE_RTFFS_2", "DETER_RTFFS_2", "MOTIVO_RTFFS_2", "CAMBIO_MULTA_RTFFS_2"
+            , "MULTA_RTFFS_2", "CONFIRM_RTFFS_2", "PROVEIDO", "FECHA_PROVEIDO", "FECHA_FIRMEZA"];
+        options = {
+            page_length: 50, button_excel: true, export_title: $("#tbReporteTitular").find("thead tr")[0].innerText.trim()
+            , page_info: true, row_index: true
+        };
+        rpteTitularResumen.dtReporteTitular = utilDt.fnLoadDataTable_Detail($("#tbReporteTitular"), columns_label, columns_data, options);
+    };
+
+    rpteTitularResumen.fnInit = function () {
+        //Ocultar o mostrar filtros
+        $("#dvHideFiltro").click(function () {
+            $("#dvHideFiltro").hide();
+            $("#dvShowFiltro").show();
+            $("#dvFiltro").hide();
+        });
+        $("#dvShowFiltro").click(function () {
+            $("#dvHideFiltro").show();
+            $("#dvShowFiltro").hide();
+            $("#dvFiltro").show();
+        });
+
+        //Filtro: Ubicación
+        rpteTitularResumen.frm.find("#chkUbicacionAll").change(function () {
+            for (var i = 1; i <= rpteTitularResumen.frm.find("[id*=lstChkUbicacion]").length; i++) {
+                if (i % 2 == 0)
+                    rpteTitularResumen.frm.find("[id*=lstChkUbicacion]")[i - 1].checked = $(this).is(":checked");
+            }
+            rpteTitularResumen.fnFilterGetAllCheck("lstChkUbicacion", "lstChkUbicacionId");
+        });
+        rpteTitularResumen.frm.find("[id*=lstChkUbicacion]").change(function () {
+            rpteTitularResumen.fnFilterGetAllCheck("lstChkUbicacion", "lstChkUbicacionId");
+
+            if (!$(this).is(":checked")) rpteTitularResumen.frm.find("#chkUbicacionAll").prop("checked", "");
+        });
+
+        //Filtro: Departamento
+        rpteTitularResumen.frm.find("#chkDepartamentoAll").change(function () {
+            for (var i = 1; i <= rpteTitularResumen.frm.find("[id*=lstChkDepartamento]").length; i++) {
+                if (i % 2 == 0)
+                    rpteTitularResumen.frm.find("[id*=lstChkDepartamento]")[i - 1].checked = $(this).is(":checked");
+            }
+            rpteTitularResumen.fnFilterGetAllCheck("lstChkDepartamento", "lstChkDepartamentoId");
+        });
+        rpteTitularResumen.frm.find("[id*=lstChkDepartamento]").change(function () {
+            rpteTitularResumen.fnFilterGetAllCheck("lstChkDepartamento", "lstChkDepartamentoId");
+
+            if (!$(this).is(":checked")) rpteTitularResumen.frm.find("#chkDepartamentoAll").prop("checked", "");
+        });
+
+        //Filtro: Dirección de Línea
+        rpteTitularResumen.frm.find("#chkDLineaAll").change(function () {
+            for (var i = 1; i <= rpteTitularResumen.frm.find("[id*=lstChkDLinea]").length; i++) {
+                if (i % 2 == 0)
+                    rpteTitularResumen.frm.find("[id*=lstChkDLinea]")[i - 1].checked = $(this).is(":checked");
+            }
+            rpteTitularResumen.fnFilterGetAllCheck("lstChkDLinea", "lstChkDLineaId");
+        });
+        rpteTitularResumen.frm.find("[id*=lstChkDLinea]").change(function () {
+            rpteTitularResumen.fnFilterGetAllCheck("lstChkDLinea", "lstChkDLineaId");
+
+            if (!$(this).is(":checked")) rpteTitularResumen.frm.find("#chkDLineaAll").prop("checked", "");
+        });
+
+        //Filtro: Modalidad
+        rpteTitularResumen.frm.find("#chkModalidadAll").change(function () {
+            for (var i = 1; i <= rpteTitularResumen.frm.find("[id*=lstChkModalidad]").length; i++) {
+                if (i % 2 == 0)
+                    rpteTitularResumen.frm.find("[id*=lstChkModalidad]")[i - 1].checked = $(this).is(":checked");
+            }
+            rpteTitularResumen.fnFilterGetAllCheck("lstChkModalidad", "lstChkModalidadId");
+        });
+        rpteTitularResumen.frm.find("[id*=lstChkModalidad]").change(function () {
+            rpteTitularResumen.fnFilterGetAllCheck("lstChkModalidad", "lstChkModalidadId");
+
+            if (!$(this).is(":checked")) rpteTitularResumen.frm.find("#chkModalidadAll").prop("checked", "");
+        });
+
+        //Filtro: Año de supervisión
+        rpteTitularResumen.frm.find("#chkAnioSupervAll").change(function () {
+            for (var i = 1; i <= rpteTitularResumen.frm.find("[id*=lstChkAnioSuperv]").length; i++) {
+                if (i % 2 == 0)
+                    rpteTitularResumen.frm.find("[id*=lstChkAnioSuperv]")[i - 1].checked = $(this).is(":checked");
+            }
+            rpteTitularResumen.fnFilterGetAllCheck("lstChkAnioSuperv", "lstChkAnioSupervId");
+        });
+        rpteTitularResumen.frm.find("[id*=lstChkAnioSuperv]").change(function () {
+            rpteTitularResumen.fnFilterGetAllCheck("lstChkAnioSuperv", "lstChkAnioSupervId");
+
+            if (!$(this).is(":checked")) rpteTitularResumen.frm.find("#chkAnioSupervAll").prop("checked", "");
+        });
+
+        //Filtro: Año RD de Término
+        rpteTitularResumen.frm.find("#chkAnioRDTerminoAll").change(function () {
+            for (var i = 1; i <= rpteTitularResumen.frm.find("[id*=lstChkAnioRDTermino]").length; i++) {
+                if (i % 2 == 0)
+                    rpteTitularResumen.frm.find("[id*=lstChkAnioRDTermino]")[i - 1].checked = $(this).is(":checked");
+            }
+            rpteTitularResumen.fnFilterGetAllCheck("lstChkAnioRDTermino", "lstChkAnioRDTerminoId");
+        });
+        rpteTitularResumen.frm.find("[id*=lstChkAnioRDTermino]").change(function () {
+            rpteTitularResumen.fnFilterGetAllCheck("lstChkAnioRDTermino", "lstChkAnioRDTerminoId");
+
+            if (!$(this).is(":checked")) rpteTitularResumen.frm.find("#chkAnioRDTerminoAll").prop("checked", "");
+        });
+
+        //Filtro: Mes RD de Término
+        rpteTitularResumen.frm.find("#chkMesRDTerminoAll").change(function () {
+            for (var i = 1; i <= rpteTitularResumen.frm.find("[id*=lstChkMesRDTermino]").length; i++) {
+                if (i % 2 == 0)
+                    rpteTitularResumen.frm.find("[id*=lstChkMesRDTermino]")[i - 1].checked = $(this).is(":checked");
+            }
+            rpteTitularResumen.fnFilterGetAllCheck("lstChkMesRDTermino", "lstChkMesRDTerminoId");
+        });
+        rpteTitularResumen.frm.find("[id*=lstChkMesRDTermino]").change(function () {
+            rpteTitularResumen.fnFilterGetAllCheck("lstChkMesRDTermino", "lstChkMesRDTerminoId");
+
+            if (!$(this).is(":checked")) rpteTitularResumen.frm.find("#chkMesRDTerminoAll").prop("checked", "");
+        });
+
+        //Filtro: Año Proveído
+        rpteTitularResumen.frm.find("#chkAnioProveidoAll").change(function () {
+            for (var i = 1; i <= rpteTitularResumen.frm.find("[id*=lstChkAnioProveido]").length; i++) {
+                if (i % 2 == 0)
+                    rpteTitularResumen.frm.find("[id*=lstChkAnioProveido]")[i - 1].checked = $(this).is(":checked");
+            }
+            rpteTitularResumen.fnFilterGetAllCheck("lstChkAnioProveido", "lstChkAnioProveidoId");
+        });
+        rpteTitularResumen.frm.find("[id*=lstChkAnioProveido]").change(function () {
+            rpteTitularResumen.fnFilterGetAllCheck("lstChkAnioProveido", "lstChkAnioProveidoId");
+
+            if (!$(this).is(":checked")) rpteTitularResumen.frm.find("#chkAnioProveidoAll").prop("checked", "");
+        });
+
+        //Filtro: Año Firmeza
+        rpteTitularResumen.frm.find("#chkAnioFirmezaAll").change(function () {
+            for (var i = 1; i <= rpteTitularResumen.frm.find("[id*=lstChkAnioFirmeza]").length; i++) {
+                if (i % 2 == 0)
+                    rpteTitularResumen.frm.find("[id*=lstChkAnioFirmeza]")[i - 1].checked = $(this).is(":checked");
+            }
+            rpteTitularResumen.fnFilterGetAllCheck("lstChkAnioFirmeza", "lstChkAnioFirmezaId");
+        });
+        rpteTitularResumen.frm.find("[id*=lstChkAnioFirmeza]").change(function () {
+            rpteTitularResumen.fnFilterGetAllCheck("lstChkAnioFirmeza", "lstChkAnioFirmezaId");
+
+            if (!$(this).is(":checked")) rpteTitularResumen.frm.find("#chkAnioFirmezaAll").prop("checked", "");
+        });
+
+        $.fn.select2.defaults.set("theme", "bootstrap4");
+        rpteTitularResumen.frm.find("#ddlFiltroAdiconalId").select2({ minimumResultsForSearch: -1 });
+
+        rpteTitularResumen.fnShowValorFiltro();
+        rpteTitularResumen.frm.find("#ddlFiltroAdiconalId").change(function () {
+            rpteTitularResumen.fnShowValorFiltro();
+        });
+
+        rpteTitularResumen.fnInitDataTable();
+    };
+
+    rpteTitularResumen.fnValidate = function () {
+        if (rpteTitularResumen.frm.find("#lstChkUbicacionId").val() == "") {
+            utilSigo.toastWarning("Aviso", "Seleccione las ubicaciones a consultar"); return false;
+        }
+        if (rpteTitularResumen.frm.find("#lstChkDepartamentoId").val() == "") {
+            utilSigo.toastWarning("Aviso", "Seleccione los departamentos a consultar"); return false;
+        }
+        if (rpteTitularResumen.frm.find("#lstChkDLineaId").val() == "") {
+            utilSigo.toastWarning("Aviso", "Seleccione las direcciones de línea a consultar"); return false;
+        }
+        if (rpteTitularResumen.frm.find("#lstChkModalidadId").val() == "") {
+            utilSigo.toastWarning("Aviso", "Seleccione las modalidades a consultar"); return false;
+        }
+        if (rpteTitularResumen.frm.find("#lstChkAnioSupervId").val() == "") {
+            utilSigo.toastWarning("Aviso", "Seleccione los años de supervisión a consultar"); return false;
+        }
+        if (rpteTitularResumen.frm.find("#lstChkAnioRDTerminoId").val() == "") {
+            utilSigo.toastWarning("Aviso", "Seleccione los años de emisión de las RD de término a consultar"); return false;
+        }
+        if (rpteTitularResumen.frm.find("#lstChkMesRDTerminoId").val() == "") {
+            utilSigo.toastWarning("Aviso", "Seleccione los meses de emisión de las RD de término a consultar"); return false;
+        }
+        if (rpteTitularResumen.frm.find("#lstChkAnioProveidoId").val() == "") {
+            utilSigo.toastWarning("Aviso", "Seleccione los años de emisión de los proveídos (firmeza o agotada la vía administrativa) a consultar"); return false;
+        }
+        if (rpteTitularResumen.frm.find("#lstChkAnioFirmezaId").val() == "") {
+            utilSigo.toastWarning("Aviso", "Seleccione los años de firmeza o agotada la vía administrativa a consultar"); return false;
+        }
+
+        var opcionId = rpteTitularResumen.frm.find("#ddlFiltroAdiconalId").val();
+        if (opcionId != "TH_1_Todo") {
+            var valorBusqueda = rpteTitularResumen.frm.find("#txtValorFiltro").val();
+
+            if (valorBusqueda.trim() == "") {
+                utilSigo.toastWarning("Aviso", "Ingrese el valor a buscar");
+                rpteTitularResumen.frm.find("#txtValorFiltro").focus();
+                return false;
+            }
+            else {
+                var cantCarateres = valorBusqueda.length;
+                if (cantCarateres < 3) {
+                    utilSigo.toastWarning("Aviso", "La longitud del valor a buscar debe ser mayor a dos caracteres");
+                    rpteTitularResumen.frm.find("#txtValorFiltro").focus();
+                    return false;
+                }
+            };
+        }
+
+        return true;
+    };
+
+    rpteTitularResumen.fnSubmitForm = function () {
+        rpteTitularResumen.dtReporteTitular.clear().draw();
+        if (rpteTitularResumen.fnValidate()) {
+            var datosReporte = rpteTitularResumen.frm.serializeObject();
+            datosReporte.chkMulta = rpteTitularResumen.frm.find("#chkMulta").is(":checked");
+            var option = { url: rpteTitularResumen.frm.action, datos: JSON.stringify(datosReporte), type: 'POST' };
+
+            utilSigo.fnAjax(option, function (data) {
+                if (data.success) {
+                    rpteTitularResumen.dtReporteTitular.rows.add(data.data).draw();
+                }
+                else {
+                    utilSigo.toastWarning("Aviso", "Ocurrió un error al procesar la consulta.");
+                }
+            });
+        }
+
+        return false;
+    };
+
+    $(document).ready(function () {
+        rpteTitularResumen.frm = $("#frmFiltro");
+
+        rpteTitularResumen.fnInit();
+    });
+</script>

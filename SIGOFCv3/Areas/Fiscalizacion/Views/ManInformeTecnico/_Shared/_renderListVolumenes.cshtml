@@ -1,0 +1,75 @@
+﻿
+@model  CapaEntidad.ViewModel.VM_InformeTecnico
+
+<style type="text/css">
+    #tbRenderListILegal_wrapper {
+        padding: 0px;
+    }
+
+    #tbConsultaILegal_info {
+        color: #33b35a;
+        font-size: 12px;
+        margin-top: 12px;
+    }
+</style>
+
+
+<script type="text/javascript">
+    var _renderListVolumen = {};
+     _renderListVolumen.tbEliTABLA = [];
+
+    // iniciar datos en la tabla
+    _renderListVolumen.fnInitDataTable_Detail = function () {
+        var columns_label = [], columns_data = [], options = {};
+
+        columns_label = ["ESPECIES", "Volumen aprobado analizado", "Volumen movilizado analizado", "Volumen movilizado que no justifica su extracción", "Volumen movilizado que justifica su extracción", "Observaciones"];
+        columns_data = ["ESPECIES", "VOLUMEN_APROBADO", "VOLUMEN_MOVILIZADO", "VOLUMEN_INJUSTIFICADO", "VOLUMEN_JUSTIFICADO", "OBSERVACION"];
+        options = {
+            page_length: 10, row_index: true, row_delete: true, row_fnDelete: "_renderListVolumen.fnDelete(this)", page_sort: true
+        };
+        _renderListVolumen.dtRenderListInforme = utilDt.fnLoadDataTable_Detail(_renderListVolumen.frm.find("#tbRenderListVolumen"), columns_label, columns_data, options);
+        _renderListVolumen.dtRenderListInforme.rows.add(JSON.parse('@Html.Raw(Json.Encode(@Model.ListVolumen))')).draw();
+    }
+
+    /*Listado de registros (render)*/
+    _renderListVolumen.fnDelete = function (obj) {
+        var data = _renderListVolumen.dtRenderListInforme.row($(obj).parents('tr')).data();
+
+        if (data["RegEstado"] == "0") {
+            _renderListVolumen.tbEliTABLA.push({
+                EliTABLA: "INFTEC_DET_VOLUMEN",
+                EliVALOR02: data["COD_SECUENCIAL"]
+            });
+        }
+        _renderListVolumen.dtRenderListInforme.row($(obj).parents('tr')).remove().draw(false);
+    }
+    //devuelve la lista de especies
+    _renderListVolumen.fnGetList = function () {
+        let list = [], rows, countFilas, data;
+        rows = _renderListVolumen.dtRenderListInforme.$("tr");
+        countFilas = rows.length;
+        if (countFilas > 0) {
+            $.each(rows, function (i, o) {
+                data = _renderListVolumen.dtRenderListInforme.row($(o)).data();
+                list.push(utilSigo.fnConvertArrayToObject(data));
+            });
+        }
+        return list;
+    }
+
+    _renderListVolumen.fnGetListEliTABLA = function () { return _renderListVolumen.tbEliTABLA }
+
+   $(document).ready(function () {
+       _renderListVolumen.frm = $("#frmRenderListaVolumen");
+       _renderListVolumen.fnInitDataTable_Detail();
+   });
+</script>
+
+<div id="frmRenderListaVolumen">
+    <div class="table-responsive">
+        <table id="tbRenderListVolumen" style="width:100%;margin:0px !important;" class="table table-hover table-bordered">
+            <thead></thead>
+            <tbody></tbody>
+        </table>
+    </div>
+</div>

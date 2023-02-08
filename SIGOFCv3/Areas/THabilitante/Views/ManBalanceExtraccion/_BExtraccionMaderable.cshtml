@@ -1,0 +1,466 @@
+﻿<div class="modal-dialog" role="document">
+    <div class="modal-content">
+        <div class="modal-header text-small" style="cursor:move;">
+            <span>Balance de Extracción Maderable</span>
+            <i class="fa fa-close" style="cursor:pointer;" data-dismiss="modal" aria-label="Close"></i>
+        </div>
+        <div class="modal-body">
+            <form id="frmBExtMaderable">
+                @Html.Hidden("hdfCodTHabilitante", (object)ViewBag.hdfCodTHabilitante)
+                @Html.Hidden("hdfNumPoa", (object)ViewBag.hdfNumPoa)
+                @Html.Hidden("hdfCodSecuencialBExt", (object)ViewBag.hdfCodSecuencialBExt)
+                @Html.Hidden("hdfCodSecuencial")
+                @Html.Hidden("hdfRegEstado")
+                @Html.Hidden("hdfCodMTipo")
+                <div class="form-row">
+                    <div class="form-group col-md-12">
+                        <!--Html.Partial("~/Areas/General/Views/Controles/_renderComboEspecie.cshtml")-->
+                        <label for="ddlRenderComboEspecieId" class="text-small">Especie</label>
+                        @Html.DropDownList("ddlRenderComboEspecieId", new SelectList(ViewBag.lstEspecies, "Value", "Text"), new { @class = "form-control form-control-sm" })
+                    </div>
+                </div>
+                <div class="form-row trEspecieSERFOR">
+                    <div class="form-group col-md-12">
+                        <label for="ddlEspecieSerforId" class="text-small">Especie SERFOR</label>
+                        @Html.DropDownList("ddlEspecieSerforId", new SelectList(ViewBag.lstEspeciesSerfor, "Value", "Text"), new { @class = "form-control form-control-sm" })
+                    </div>
+                </div>
+                <div class="form-row trGrupoDMCArbol" style="display:none;">
+                    @*Maderable*@
+                    <div class="form-group col-md-6 trDMC" style="display:none;">
+                        <label for="txtDMC" class="text-small">DMC (cm)</label>
+                        @Html.TextBox("txtDMC", "", new { @class = "form-control form-control-sm", maxlength = "10", @onkeypress = "return utilSigo.onKeyEntero(event, this);" })
+                    </div>
+                    @*Maderable*@
+                    <div class="form-group col-md-6 trArbol" style="display:none;">
+                        <label for="txtTotalArbol" class="text-small">Total árboles</label>
+                        @Html.TextBox("txtTotalArbol", "", new { @class = "form-control form-control-sm", maxlength = "6", @onkeypress = "return utilSigo.onKeyEntero(event, this);" })
+                    </div>
+                </div>
+                <div class="form-row trVolumen" style="display:none;">
+                    <div class="form-group col-md-6">
+                        <label for="txtVolAutorizado" class="text-small">Cantidad autorizada</label>
+                        @Html.TextBox("txtVolAutorizado", "", new { @class = "form-control form-control-sm", maxlength = "10", @onkeypress = "return utilSigo.onKeyDecimal(event, this);" })
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="txtVolMovilizado" class="text-small">Cantidad movilizada</label>
+                        @Html.TextBox("txtVolMovilizado", "", new { @class = "form-control form-control-sm", maxlength = "10", @onkeypress = "return utilSigo.onKeyDecimal(event, this);" })
+                    </div>
+                </div>
+                <div class="form-row trMedicinal" style="display:none;">
+                    @*No Maderable*@
+                    <div class="form-group col-md-6">
+                        <label for="txtAutorizado" class="text-small" title="Coincide con el peso seco de la resolución">Autorizado</label>
+                        @Html.TextBox("txtAutorizado", "", new { @class = "form-control form-control-sm", maxlength = "10", @onkeypress = "return utilSigo.onKeyDecimal(event, this);" })
+                    </div>
+                    @*No Maderable*@
+                    <div class="form-group col-md-6">
+                        <label for="txtExtraido" class="text-small">Extraído</label>
+                        @Html.TextBox("txtExtraido", "", new { @class = "form-control form-control-sm", maxlength = "10", @onkeypress = "return utilSigo.onKeyDecimal(event, this);" })
+                    </div>
+                </div>
+                <div class="form-row trCarrizo" style="display:none;">
+                    @*No Maderable*@
+                    <div class="form-group col-md-6">
+                        <label for="txtFecha1" class="text-small">Fecha</label>
+                        @Html.TextBox("txtFecha1", "", new { @class = "form-control form-control-sm", placeholder = "dd/mm/aaaa", maxlength = "10" })
+                    </div>
+                </div>
+                <div class="form-row trCarrizo" style="display:none;">
+                    @*No Maderable*@
+                    <div class="form-group col-md-12">
+                        <label for="txtGtf" class="text-small">Guía de transporte forestal</label>
+                        @Html.TextBox("txtGtf", "", new { @class = "form-control form-control-sm" })
+                    </div>
+                </div>
+                <div class="form-row trCarrizo" style="display:none;">
+                    @*No Maderable*@
+                    <div class="form-group col-md-6">
+                        <label for="txtFecha2" class="text-small">Fecha</label>
+                        @Html.TextBox("txtFecha2", "", new { @class = "form-control form-control-sm", placeholder = "dd/mm/aaaa", maxlength = "10" })
+                    </div>
+                </div>
+                <div class="form-row trCarrizo" style="display:none;">
+                    @*No Maderable*@
+                    <div class="form-group col-md-12">
+                        <label for="txtRecibo" class="text-small">Recibo</label>
+                        @Html.TextBox("txtRecibo", "", new { @class = "form-control form-control-sm" })
+                    </div>
+                </div>
+                <div class="form-row trGrupoCS" style="display:none;">
+                    @*No Maderable*@
+                    <div class="form-group col-md-6 trCarrizo" style="display:none;">
+                        <label for="txtCantidad" class="text-small">Cantidad</label>
+                        @Html.TextBox("txtCantidad", "", new { @class = "form-control form-control-sm", maxlength = "10", @onkeypress = "return utilSigo.onKeyEntero(event, this);" })
+                    </div>
+                    <div class="form-group col-md-6 trSaldo" style="display:none;">
+                        <label for="txtSaldo" class="text-small">Saldo</label>
+                        @Html.TextBox("txtSaldo", "", new { @class = "form-control form-control-sm", maxlength = "10", @onkeypress = "return utilSigo.onKeyDecimal(event, this);" })
+                    </div>
+                    <div class="form-group col-md-6 trParcela" style="display:none;">
+                        <label for="txtParcela" class="text-small">PC</label>
+                        @Html.DropDownList("ddlParcelaId", new SelectList(ViewBag.lstParcelas, "Value", "Text"), new { @class = "form-control form-control-sm" })                     
+                    </div>
+                </div>
+                <div class="form-row trTipoAprov" style="display:none;">
+                    @*Maderable*@
+                    <div class="form-group col-md-6">
+                        <label for="ddlTipoId" class="text-small">Tipo</label>
+                        <select id="ddlTipoId" class="form-control form-control-sm">
+                            <option value="-">Seleccionar</option>
+                            <option value="CARBON">CARBÓN</option>
+                            <option value="MADERABLES">MADERABLES</option>
+                            <option value="NO MADERABLES">NO MADERABLES</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-row trUM" style="display:none;">
+                    <div class="form-group col-md-6">
+                        <label for="ddlUniMedidaId" class="text-small">Unidad de medida</label>
+                        <select id="ddlUniMedidaId" class="form-control form-control-sm">
+                            <option value="-">Seleccionar</option>
+                            <option value="M3">M3</option>
+                            <option value="KG">KG</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-row trObservacion" style="display:none;">
+                    <div class="form-group col-md-12">
+                        <label for="txtObservacion" class="text-small">Observacion</label>
+                        @Html.TextArea("txtObservacion", "", new { @class = "form-control form-control-sm", rows = "3" })
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Cancelar</button>
+            <button type="button" class="btn btn-primary btn-sm" onclick="_BExtraccionMaderable.fnSave()">Guardar</button>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    var estado_origen = _EditBExtraccion.frm.find("#hdfEstadoOrigen").val();
+    var indicador = _EditBExtraccion.frm.find("#hdfIndicador").val();
+    //var lst_estado_origen_1 = ["ADECU", "REFOR", "REAJU", "PMFI", "PN", "DEMA"];
+    var lst_estado_origen_2 = ["R", "MS", "PC"];
+    var band;
+
+    var _BExtraccionMaderable = {  
+        fnSave: () => {
+            var cod_mtipo = _BExtraccionMaderable.frm.find("#hdfCodMTipo").val();
+            /*
+            if (_renderComboEspecie.fnGetCodEspecie() == null) {
+                utilSigo.toastError("Error", "Seleccione la especie"); return false;
+            }
+            */
+            if (utilSigo.ValidaCombo("ddlRenderComboEspecieId", "Seleccione la especie") == false) return false;
+
+            /*if ((estado_origen == "PN" && indicador == "M")
+                || lst_estado_origen_2.includes(estado_origen)) {
+                if (utilSigo.ValidaTexto("txtDMC", "Ingrese el DMC") == false) return false;
+                if (utilSigo.ValidaTexto("txtTotalArbol", "Ingrese el Total de árboles") == false) return false;
+                if (utilSigo.ValidaTexto("txtVolAutorizado", "Ingrese la Cantidad autorizada") == false) return false;
+                if (utilSigo.ValidaTexto("txtVolMovilizado", "Ingrese la Cantidad movilizada") == false) return false;
+                if (utilSigo.ValidaTexto("txtSaldo", "Ingrese el saldo") == false) return false;
+                if (utilSigo.ValidaCombo("ddlTipoId", "Seleccione el tipo de aprovechamiento") == false) return false;
+            }
+            else if ((estado_origen == "PN" && indicador == "NM")
+                || estado_origen == "PCN"
+                || (estado_origen == "DEMA" && indicador != "M")) {
+                if (cod_mtipo == "0000021") { //Planta medicinal
+                    if (utilSigo.ValidaTexto("txtAutorizado", "Ingrese el valor autorizado") == false) return false;
+                    if (utilSigo.ValidaTexto("txtExtraido", "Ingrese el valor extraído") == false) return false;                    
+                } else if (cod_mtipo == "0000020") { //Carrizo
+                    if (utilSigo.ValidaTexto("txtCantidad", "Ingrese la cantidad") == false) return false;
+                } else { //Normal
+                    if (utilSigo.ValidaTexto("txtVolAutorizado", "Ingrese la Cantidad autorizada") == false) return false;
+                    if (utilSigo.ValidaTexto("txtVolMovilizado", "Ingrese la Cantidad movilizada") == false) return false;
+                }
+                if (utilSigo.ValidaTexto("txtSaldo", "Ingrese el saldo") == false) return false;
+            }
+            else {*/
+                if (utilSigo.ValidaCombo("ddlTipoId", "Seleccione el tipo de aprovechamiento") == false) return false;
+                else {
+                    var codTipoAprov = _BExtraccionMaderable.frm.find("#ddlTipoId").val();
+                    if (codTipoAprov == "MADERABLES" || codTipoAprov == "CARBON") {
+                        if (utilSigo.ValidaTexto("txtDMC", "Ingrese el DMC") == false) return false;
+                        if (utilSigo.ValidaTexto("txtTotalArbol", "Ingrese el Total de árboles") == false) return false;
+                        if (utilSigo.ValidaTexto("txtVolAutorizado", "Ingrese la Cantidad autorizada") == false) return false;
+                        if (utilSigo.ValidaTexto("txtVolMovilizado", "Ingrese la Cantidad movilizada") == false) return false;
+                    }
+                    else {
+                        if (cod_mtipo == "0000021") {
+                            if (utilSigo.ValidaTexto("txtAutorizado", "Ingrese el valor autorizado") == false) return false;
+                            if (utilSigo.ValidaTexto("txtExtraido", "Ingrese el valor extraído") == false) return false;
+                        } else if (cod_mtipo == "0000020") {
+                            if (utilSigo.ValidaTexto("txtCantidad", "Ingrese la cantidad") == false) return false;
+                        } else {
+                            if (utilSigo.ValidaTexto("txtVolAutorizado", "Ingrese la Cantidad autorizada") == false) return false;
+                            if (utilSigo.ValidaTexto("txtVolMovilizado", "Ingrese la Cantidad movilizada") == false) return false;
+                        }
+                    }
+                    if (utilSigo.ValidaTexto("txtSaldo", "Ingrese el saldo") == false) return false;
+                }
+            //}
+
+            var data = {
+                COD_THABILITANTE: _BExtraccionMaderable.frm.find("#hdfCodTHabilitante").val(),
+                NUM_POA: _BExtraccionMaderable.frm.find("#hdfNumPoa").val(),
+                COD_SECUENCIAL_BEXT: _BExtraccionMaderable.frm.find("#hdfCodSecuencialBExt").val(),
+                COD_SECUENCIAL: _BExtraccionMaderable.frm.find("#hdfCodSecuencial").val(),
+                //COD_ESPECIES: _renderComboEspecie.fnGetCodEspecie(),
+                COD_ESPECIES: _BExtraccionMaderable.frm.find("#ddlRenderComboEspecieId").val(),
+                ESPECIES: "",
+                COD_ESPECIES_SERFOR: _BExtraccionMaderable.frm.find("#ddlEspecieSerforId").val(),
+                ESPECIES_SERFOR: "",
+                DMC: _BExtraccionMaderable.frm.find("#txtDMC").val(),
+                TOTAL_ARBOLES: _BExtraccionMaderable.frm.find("#txtTotalArbol").val(),
+                VOLUMEN_AUTORIZADO: _BExtraccionMaderable.frm.find("#txtVolAutorizado").val(),
+                VOLUMEN_MOVILIZADO: _BExtraccionMaderable.frm.find("#txtVolMovilizado").val(),
+                SALDO: _BExtraccionMaderable.frm.find("#txtSaldo").val(),
+                FECHA1: _BExtraccionMaderable.frm.find("#txtFecha1").val(),
+                FECHA2: _BExtraccionMaderable.frm.find("#txtFecha2").val(),
+                CANTIDAD: _BExtraccionMaderable.frm.find("#txtCantidad").val(),
+                GUIA_TRANSPORTE: _BExtraccionMaderable.frm.find("#txtGtf").val(),
+                RECIBO: _BExtraccionMaderable.frm.find("#txtRecibo").val(),
+                UNIDAD_MEDIDA: _BExtraccionMaderable.frm.find("#ddlUniMedidaId").val(),
+                AUTORIZADO: _BExtraccionMaderable.frm.find("#txtAutorizado").val(),
+                EXTRAIDO: _BExtraccionMaderable.frm.find("#txtExtraido").val(),
+                TIPOMADERABLE: _BExtraccionMaderable.frm.find("#ddlTipoId").val(),
+                COD_PARCELA: _BExtraccionMaderable.frm.find("#ddlParcelaId").val(),
+                PC: "",
+                OBSERVACION: _BExtraccionMaderable.frm.find("#txtObservacion").val(),
+                RegEstado: _BExtraccionMaderable.frm.find("#hdfRegEstado").val()
+            };
+
+            var url = urlLocalSigo + "THabilitante/ManBalanceExtraccion/GrabarBExtraccionMaderable";
+            var option = { url: url, datos: JSON.stringify(data), type: 'POST' };
+
+            utilSigo.dialogConfirm('', 'Desea continuar con el registro?', function (r) {
+                if (r) {
+                    utilSigo.fnAjax(option, function (data) {
+                        if (data.success) {
+                            utilSigo.toastSuccess("Éxito", data.msj);
+                            _BExtraccionMaderable.fnSaved();
+                        }
+                        else {
+                            utilSigo.toastWarning("Aviso", data.msj);
+                        }
+                    });
+                }
+            });
+        },
+        fnFiltrarTipoAprov: (value) => {
+            if (this.band == 1) {
+                var cod_mtipo = _BExtraccionMaderable.frm.find("#hdfCodMTipo").val();
+
+                if (value == "MADERABLES" || value == "CARBON") {
+                    _BExtraccionMaderable.frm.find(".trGrupoDMCArbol").show();
+                    _BExtraccionMaderable.frm.find(".trDMC").show();
+                    _BExtraccionMaderable.frm.find(".trArbol").show();
+                    _BExtraccionMaderable.frm.find(".trVolumen").show();
+                    _BExtraccionMaderable.frm.find(".trMedicinal").hide();
+                    _BExtraccionMaderable.frm.find(".trCarrizo").hide();
+                    _BExtraccionMaderable.frm.find(".trGrupoCS").show();
+                    _BExtraccionMaderable.frm.find(".trSaldo").show();
+                    _BExtraccionMaderable.frm.find(".trParcela").show();
+                    _BExtraccionMaderable.frm.find(".trUM").show();
+                    _BExtraccionMaderable.frm.find(".trObservacion").show();
+
+                    if (value == "MADERABLES") _BExtraccionMaderable.frm.find("#ddlUniMedidaId").val("M3").select2();
+                    else _BExtraccionMaderable.frm.find("#ddlUniMedidaId").val("KG").select2();
+
+                    _BExtraccionMaderable.frm.find("#ddlUniMedidaId").attr("disabled", true);
+                }
+                else if (value == "NO MADERABLES") {
+                    _BExtraccionMaderable.frm.find(".trGrupoDMCArbol").hide();
+                    _BExtraccionMaderable.frm.find(".trDMC").hide();
+                    _BExtraccionMaderable.frm.find(".trArbol").hide();
+                    _BExtraccionMaderable.frm.find(".trGrupoCS").show();
+                    _BExtraccionMaderable.frm.find(".trSaldo").show();
+                    _BExtraccionMaderable.frm.find(".trObservacion").show();
+
+                    if (cod_mtipo == "0000021") {
+                        _BExtraccionMaderable.frm.find(".trVolumen").hide();
+                        _BExtraccionMaderable.frm.find(".trMedicinal").show();
+                        _BExtraccionMaderable.frm.find(".trCarrizo").hide();
+                        _BExtraccionMaderable.frm.find(".trUM").show();
+
+                        _BExtraccionMaderable.frm.find("#ddlUniMedidaId").val("KG").select2();
+                        _BExtraccionMaderable.frm.find("#ddlUniMedidaId").attr("disabled", true);
+                    }
+                    else if (cod_mtipo == "0000020") {
+                        _BExtraccionMaderable.frm.find(".trVolumen").hide();
+                        _BExtraccionMaderable.frm.find(".trMedicinal").hide();
+                        _BExtraccionMaderable.frm.find(".trCarrizo").show();
+                        //_BExtraccionMaderable.frm.find(".trUM").hide();
+                        _BExtraccionMaderable.frm.find(".trUM").show();
+
+                        //_BExtraccionMaderable.frm.find("#ddlUniMedidaId").val("-").select2();
+                        _BExtraccionMaderable.frm.find("#ddlUniMedidaId").val("KG").select2();
+                        _BExtraccionMaderable.frm.find("#ddlUniMedidaId").attr("disabled", true);
+                    }
+                    else {
+                        _BExtraccionMaderable.frm.find(".trGrupoDMCArbol").show();
+                        _BExtraccionMaderable.frm.find(".trArbol").show();
+                        _BExtraccionMaderable.frm.find(".trVolumen").show();
+                        _BExtraccionMaderable.frm.find(".trMedicinal").hide();
+                        _BExtraccionMaderable.frm.find(".trCarrizo").hide();
+                        _BExtraccionMaderable.frm.find(".trUM").show();
+
+                        _BExtraccionMaderable.frm.find("#ddlUniMedidaId").val("KG").select2();
+                        _BExtraccionMaderable.frm.find("#ddlUniMedidaId").attr("disabled", true);
+                    }
+                }
+                else {
+                    _BExtraccionMaderable.frm.find(".trGrupoDMCArbol").hide();
+                    _BExtraccionMaderable.frm.find(".trDMC").hide();
+                    _BExtraccionMaderable.frm.find(".trArbol").hide();
+                    _BExtraccionMaderable.frm.find(".trVolumen").hide();
+                    _BExtraccionMaderable.frm.find(".trMedicinal").hide();
+                    _BExtraccionMaderable.frm.find(".trCarrizo").hide();
+                    _BExtraccionMaderable.frm.find(".trGrupoCS").hide();
+                    _BExtraccionMaderable.frm.find(".trSaldo").hide();
+                    _BExtraccionMaderable.frm.find(".trUM").hide();
+                    _BExtraccionMaderable.frm.find(".trObservacion").hide();
+
+                    _BExtraccionMaderable.frm.find("#ddlUniMedidaId").val("-").select2();
+                }
+
+                _BExtraccionMaderable.frm.find("#txtDMC").val('');
+                _BExtraccionMaderable.frm.find("#txtTotalArbol").val('');
+                _BExtraccionMaderable.frm.find("#txtVolAutorizado").val('');
+                _BExtraccionMaderable.frm.find("#txtVolMovilizado").val('');
+                _BExtraccionMaderable.frm.find("#txtAutorizado").val('');
+                _BExtraccionMaderable.frm.find("#txtExtraido").val('');
+                _BExtraccionMaderable.frm.find("#txtFecha1").val('');
+                _BExtraccionMaderable.frm.find("#txtGtf").val('');
+                _BExtraccionMaderable.frm.find("#txtFecha2").val('');
+                _BExtraccionMaderable.frm.find("#txtRecibo").val('');
+                _BExtraccionMaderable.frm.find("#txtCantidad").val('');
+                _BExtraccionMaderable.frm.find("#txtSaldo").val('');
+                _BExtraccionMaderable.frm.find("#txtObservacion").val('');
+            }
+            else {
+                if ((estado_origen == "PN" && indicador == "M")
+                    || lst_estado_origen_2.includes(estado_origen)) {
+                    if (value == "MADERABLES") {
+                        _BExtraccionMaderable.frm.find("#ddlUniMedidaId").val("M3").select2();
+                        _BExtraccionMaderable.frm.find("#ddlUniMedidaId").attr("disabled", true);
+                    }
+                    else if (value == "CARBON") {
+                        _BExtraccionMaderable.frm.find("#ddlUniMedidaId").val("KG").select2();
+                        _BExtraccionMaderable.frm.find("#ddlUniMedidaId").attr("disabled", true);
+                    }
+                    else {
+                        _BExtraccionMaderable.frm.find("#ddlUniMedidaId").val("-").select2();
+                        _BExtraccionMaderable.frm.find("#ddlUniMedidaId").attr("disabled", false);
+                    }
+                }
+            }
+        },
+        fnInit: (data, cod_mtipo) => {
+            _BExtraccionMaderable.frm = $("#frmBExtMaderable");
+
+            $.fn.select2.defaults.set("theme", "bootstrap4");
+
+            _BExtraccionMaderable.frm.find("#ddlRenderComboEspecieId").select2();
+            _BExtraccionMaderable.frm.find("#ddlEspecieSerforId").select2();
+            _BExtraccionMaderable.frm.find("#ddlTipoId").select2({ minimumResultsForSearch: -1 });
+            _BExtraccionMaderable.frm.find("#ddlUniMedidaId").select2({ minimumResultsForSearch: -1 });
+            utilSigo.fnFormatDate(_BExtraccionMaderable.frm.find("#txtFecha1"));
+            utilSigo.fnFormatDate(_BExtraccionMaderable.frm.find("#txtFecha2"));
+            _BExtraccionMaderable.frm.find("#hdfCodMTipo").val(cod_mtipo);
+            band = 0;
+
+            _BExtraccionMaderable.frm.find("#ddlTipoId").change(function () {
+                _BExtraccionMaderable.fnFiltrarTipoAprov(this.value);
+            });
+
+            /*if ((estado_origen == "PN" && indicador == "M")
+                || lst_estado_origen_2.includes(estado_origen)) {
+                _BExtraccionMaderable.frm.find(".trGrupoDMCArbol").show();
+                _BExtraccionMaderable.frm.find(".trDMC").show();
+                _BExtraccionMaderable.frm.find(".trArbol").show();
+                _BExtraccionMaderable.frm.find(".trVolumen").show();
+                _BExtraccionMaderable.frm.find(".trGrupoCS").show();
+                _BExtraccionMaderable.frm.find(".trSaldo").show();
+                _BExtraccionMaderable.frm.find(".trTipoAprov").show();
+                _BExtraccionMaderable.frm.find("#ddlTipoId option[value='NO MADERABLES']").remove();
+                _BExtraccionMaderable.frm.find(".trUM").show();
+                _BExtraccionMaderable.frm.find(".trObservacion").show();
+            }
+            else if ((estado_origen == "PN" && indicador == "NM")
+                || estado_origen == "PCN"
+                || (estado_origen == "DEMA" && indicador != "M")) {
+                if (cod_mtipo == "0000021") { //Planta medicinal
+                    _BExtraccionMaderable.frm.find(".trMedicinal").show();
+                    _BExtraccionMaderable.frm.find(".trGrupoCS").show();
+                    _BExtraccionMaderable.frm.find(".trSaldo").show();
+                    _BExtraccionMaderable.frm.find(".trUM").show();
+                    if (data == "") _BExtraccionMaderable.frm.find("#ddlUniMedidaId").val("KG").select2();
+                    _BExtraccionMaderable.frm.find("#ddlUniMedidaId").attr("disabled", true);
+                } else if (cod_mtipo == "0000020") { //Carrizo
+                    _BExtraccionMaderable.frm.find(".trCarrizo").show();
+                    _BExtraccionMaderable.frm.find(".trGrupoCS").show();
+                    _BExtraccionMaderable.frm.find(".trSaldo").show();
+                    //
+                    _BExtraccionMaderable.frm.find(".trUM").show();
+                    if (data == "") _BExtraccionMaderable.frm.find("#ddlUniMedidaId").val("KG").select2();
+                    _BExtraccionMaderable.frm.find("#ddlUniMedidaId").attr("disabled", true);
+                } else { //Normal
+                    _BExtraccionMaderable.frm.find(".trGrupoDMCArbol").show();
+                    _BExtraccionMaderable.frm.find(".trArbol").show();
+                    _BExtraccionMaderable.frm.find(".trVolumen").show();
+                    _BExtraccionMaderable.frm.find(".trGrupoCS").show();
+                    _BExtraccionMaderable.frm.find(".trSaldo").show();
+                    _BExtraccionMaderable.frm.find(".trUM").show();
+                    if (data == "") _BExtraccionMaderable.frm.find("#ddlUniMedidaId").val("KG").select2();
+                    _BExtraccionMaderable.frm.find("#ddlUniMedidaId").attr("disabled", true);
+                }
+                _BExtraccionMaderable.frm.find("#ddlTipoId").val("NO MADERABLES").select2();
+                _BExtraccionMaderable.frm.find(".trObservacion").show();
+            }
+            else {*/
+                _BExtraccionMaderable.frm.find(".trTipoAprov").show();
+                _BExtraccionMaderable.frm.find(".trEspecieSERFOR").after(_BExtraccionMaderable.frm.find(".trTipoAprov"));
+                if (data != "") _BExtraccionMaderable.frm.find("#ddlTipoId").attr("disabled", true);
+                band = 1;
+            //}
+
+            if (data == "") { //Nuevo registro
+                _BExtraccionMaderable.frm.find("#hdfCodSecuencial").val(0);
+                _BExtraccionMaderable.frm.find("#hdfRegEstado").val(1);
+               // _renderComboEspecie.fnInit("FORESTAL", "", "");
+            } else { //Modificar registro
+                _BExtraccionMaderable.frm.find("#hdfCodSecuencial").val(data.COD_SECUENCIAL);
+                _BExtraccionMaderable.frm.find("#hdfRegEstado").val(data.RegEstado);
+               // _renderComboEspecie.fnInit("FORESTAL", data.COD_ESPECIES, data.ESPECIES);
+                _BExtraccionMaderable.frm.find("#ddlRenderComboEspecieId").val(data.COD_ESPECIES).trigger("change");
+                //_BExtraccionMaderable.frm.find("#ddlRenderComboEspecieId").attr("disabled",true);
+                _BExtraccionMaderable.frm.find("#ddlEspecieSerforId").val(data.COD_ESPECIES_SERFOR).trigger("change");
+                _BExtraccionMaderable.frm.find("#ddlTipoId").val(data.TIPOMADERABLE).trigger("change");
+
+                _BExtraccionMaderable.frm.find("#txtDMC").val(data.DMC);
+                _BExtraccionMaderable.frm.find("#txtTotalArbol").val(data.TOTAL_ARBOLES);
+                _BExtraccionMaderable.frm.find("#txtVolAutorizado").val(data.VOLUMEN_AUTORIZADO);
+                _BExtraccionMaderable.frm.find("#txtVolMovilizado").val(data.VOLUMEN_MOVILIZADO);
+                _BExtraccionMaderable.frm.find("#txtAutorizado").val(data.AUTORIZADO);
+                _BExtraccionMaderable.frm.find("#txtExtraido").val(data.EXTRAIDO);
+                _BExtraccionMaderable.frm.find("#txtFecha1").val(data.FECHA1);
+                _BExtraccionMaderable.frm.find("#txtGtf").val(data.GUIA_TRANSPORTE);
+                _BExtraccionMaderable.frm.find("#txtFecha2").val(data.FECHA2);
+                _BExtraccionMaderable.frm.find("#txtRecibo").val(data.RECIBO);
+                _BExtraccionMaderable.frm.find("#txtCantidad").val(data.CANTIDAD);
+                _BExtraccionMaderable.frm.find("#txtSaldo").val(data.SALDO);
+                _BExtraccionMaderable.frm.find("#ddlParcelaId").val(data.COD_PARCELA).trigger("change");
+                _BExtraccionMaderable.frm.find("#ddlUniMedidaId").val(data.UNIDAD_MEDIDA).trigger("change");
+                _BExtraccionMaderable.frm.find("#txtObservacion").val(data.OBSERVACION);
+            }
+        },
+        fnSaved: () => {
+            /*Implementar en donde se instancia*/
+        }
+    };
+</script>

@@ -1,0 +1,34 @@
+﻿
+<script src="~/Areas/Supervision/js/ManInformeFauna/_ActoObligacion.js"></script>
+
+<div class="modal-dialog" role="document">
+    <div class="modal-content">
+        <div class="modal-header text-small" style="cursor:move;">
+            <span>Acto Observado</span>
+            <i class="fa fa-close" style="cursor:pointer;" data-dismiss="modal" aria-label="Close"></i>
+        </div>
+        <div class="modal-body">
+            <form id="frmItemActoObligacion">
+                @Html.Hidden("hdfRegEstado")
+                @Html.Hidden("hdfCodObligacion")
+                @Html.Hidden("hdfCodSecuencial")
+                <div class="form-row">
+                    <div class="form-group col-md-12">
+                        <label for="txtActo" class="text-small">Acto</label>
+                        @Html.TextBox("txtActo", "", new { @class = "form-control form-control-sm" })
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-12">
+                        <label for="txtDocumento" class="text-small">Documento que pone de conocimiento a las autoridades</label>
+                        @Html.TextArea("txtDocumento", "", new { @class = "form-control form-control-sm", rows = "3" })
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-primary btn-sm" onclick="_ActoObligacion.fnSubmitForm()">Guardar</button>
+            <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Cancelar</button>
+        </div>
+    </div>
+</div>

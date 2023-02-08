@@ -1,0 +1,210 @@
+﻿<div class="modal-dialog" role="document">
+    <div class="modal-content">
+        <div class="modal-header text-small" style="cursor:move;">
+            <span>Balance de Extracción No Maderable</span>
+            <i class="fa fa-close" style="cursor:pointer;" data-dismiss="modal" aria-label="Close"></i>
+        </div>
+        <div class="modal-body">
+            <form id="frmBExtNoMaderable">
+                @Html.Hidden("hdfCodTHabilitante", (object)ViewBag.hdfCodTHabilitante)
+                @Html.Hidden("hdfNumPoa", (object)ViewBag.hdfNumPoa)
+                @Html.Hidden("hdfCodSecuencialBExt", (object)ViewBag.hdfCodSecuencialBExt)
+                @Html.Hidden("hdfCodSecuencial")
+                @Html.Hidden("hdfRegEstado")
+                @Html.Hidden("hdfCodMTipo")
+                <div class="form-row">
+                    <div class="form-group col-md-12">
+                        <!-- Html.Partial("~/Areas/General/Views/Controles/_renderComboEspecie.cshtml")-->
+                        <label for="ddlRenderComboEspecieId" class="text-small">Especie</label>
+                        @Html.DropDownList("ddlRenderComboEspecieId", new SelectList(ViewBag.lstEspecies, "Value", "Text"), new { @class = "form-control form-control-sm" })
+
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-12">
+                        <label for="ddlEspecieSerforId" class="text-small">Especie SERFOR</label>
+                        @Html.DropDownList("ddlEspecieSerforId", new SelectList(ViewBag.lstEspeciesSerfor, "Value", "Text"), new { @class = "form-control form-control-sm" })
+                    </div>
+                </div>
+                <div class="form-row dvNMadNormal" style="display:none;">
+                    <div class="form-group col-md-6">
+                        <label for="txtKgAutorizado" class="text-small">Kilogramo autorizado</label>
+                        @Html.TextBox("txtKgAutorizado", "", new { @class = "form-control form-control-sm", maxlength = "10", @onkeypress = "return utilSigo.onKeyDecimal(event, this);" })
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="txtKgMovilizado" class="text-small">Kilogramo movilizado</label>
+                        @Html.TextBox("txtKgMovilizado", "", new { @class = "form-control form-control-sm", maxlength = "10", @onkeypress = "return utilSigo.onKeyDecimal(event, this);" })
+                    </div>
+                </div>
+                <div class="form-row dvNMadMedicinal" style="display:none;">
+                    <div class="form-group col-md-6">
+                        <label for="txtAutorizado" class="text-small" title="Coincide con el peso seco de la resolución">Autorizado</label>
+                        @Html.TextBox("txtAutorizado", "", new { @class = "form-control form-control-sm", maxlength = "10", @onkeypress = "return utilSigo.onKeyDecimal(event, this);" })
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="txtExtraido" class="text-small">Extraído</label>
+                        @Html.TextBox("txtExtraido", "", new { @class = "form-control form-control-sm", maxlength = "10", @onkeypress = "return utilSigo.onKeyDecimal(event, this);" })
+                    </div>
+                </div>
+                <div class="form-row dvNMadCarrizo" style="display:none;">
+                    <div class="form-group col-md-6">
+                        <label for="txtFecha1" class="text-small">Fecha</label>
+                        @Html.TextBox("txtFecha1", "", new { @class = "form-control form-control-sm", placeholder = "dd/mm/aaaa", maxlength = "10" })
+                    </div>
+                </div>
+                <div class="form-row dvNMadCarrizo" style="display:none;">
+                    <div class="form-group col-md-12">
+                        <label for="txtGtf" class="text-small">Guía de transporte forestal</label>
+                        @Html.TextBox("txtGtf", "", new { @class = "form-control form-control-sm" })
+                    </div>
+                </div>
+                <div class="form-row dvNMadCarrizo" style="display:none;">
+                    <div class="form-group col-md-6">
+                        <label for="txtFecha2" class="text-small">Fecha</label>
+                        @Html.TextBox("txtFecha2", "", new { @class = "form-control form-control-sm", placeholder = "dd/mm/aaaa", maxlength = "10" })
+                    </div>
+                </div>
+                <div class="form-row dvNMadCarrizo" style="display:none;">
+                    <div class="form-group col-md-12">
+                        <label for="txtRecibo" class="text-small">Recibo</label>
+                        @Html.TextBox("txtRecibo", "", new { @class = "form-control form-control-sm" })
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-6 dvNMadCarrizo" style="display:none;">
+                        <label for="txtCantidad" class="text-small">Cantidad</label>
+                        @Html.TextBox("txtCantidad", "", new { @class = "form-control form-control-sm", maxlength = "10", @onkeypress = "return utilSigo.onKeyEntero(event, this);" })
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="txtSaldo" class="text-small">Saldo</label>
+                        @Html.TextBox("txtSaldo", "", new { @class = "form-control form-control-sm", maxlength = "10", @onkeypress = "return utilSigo.onKeyDecimal(event, this);" })
+                    </div>
+                    <div class="form-group col-md-6 dvNMadMedicinal" style="display:none;">
+                        <label for="txtUniMedida" class="text-small">Unidad de medida</label>
+                        @Html.TextBox("txtUniMedida", "", new { @class = "form-control form-control-sm" })
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-12">
+                        <label for="txtObservacion" class="text-small">Observacion</label>
+                        @Html.TextArea("txtObservacion", "", new { @class = "form-control form-control-sm", rows = "3" })
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-primary btn-sm" onclick="_BExtraccionNoMaderable.fnSave()">Guardar</button>
+            <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Cancelar</button>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    var _BExtraccionNoMaderable = {
+        fnSave: () => {
+            var cod_mtipo = _BExtraccionNoMaderable.frm.find("#hdfCodMTipo").val();
+            /*
+            if (_renderComboEspecie.fnGetCodEspecie() == null) {
+                utilSigo.toastError("Error", "Seleccione la especie"); return false;
+            }*/
+            if (utilSigo.ValidaCombo("ddlRenderComboEspecieId", "Seleccione la especie") == false) return false;
+
+            if (cod_mtipo == "0000021") { //Planta medicinal
+                if (utilSigo.ValidaTexto("txtAutorizado", "Ingrese el valor autorizado") == false) return false;
+                if (utilSigo.ValidaTexto("txtExtraido", "Ingrese el valor extraído") == false) return false;
+            } else if (cod_mtipo == "0000020") { //Carrizo
+                if (utilSigo.ValidaTexto("txtCantidad", "Ingrese la cantidad") == false) return false;
+            } else { //Normal
+                if (utilSigo.ValidaTexto("txtKgAutorizado", "Ingrese el kilogramo autorizado") == false) return false;
+                if (utilSigo.ValidaTexto("txtKgMovilizado", "Ingrese el kilogramo movilizado") == false) return false;
+            }
+
+            if (utilSigo.ValidaTexto("txtSaldo", "Ingrese el saldo") == false) return false;
+
+            var data = {
+                COD_THABILITANTE: _BExtraccionNoMaderable.frm.find("#hdfCodTHabilitante").val(),
+                NUM_POA: _BExtraccionNoMaderable.frm.find("#hdfNumPoa").val(),
+                COD_SECUENCIAL_BEXT: _BExtraccionNoMaderable.frm.find("#hdfCodSecuencialBExt").val(),
+                COD_SECUENCIAL: _BExtraccionNoMaderable.frm.find("#hdfCodSecuencial").val(),
+                //COD_ESPECIES: _renderComboEspecie.fnGetCodEspecie(),
+                COD_ESPECIES: _BExtraccionNoMaderable.frm.find("#ddlRenderComboEspecieId").val(),
+                ESPECIES: "",
+                COD_ESPECIES_SERFOR: _BExtraccionNoMaderable.frm.find("#ddlEspecieSerforId").val(),
+                ESPECIES_SERFOR: "",
+                KILOGRAMO_AUTORIZADO: _BExtraccionNoMaderable.frm.find("#txtKgAutorizado").val(),
+                KILOGRAMO_MOVILIZADO: _BExtraccionNoMaderable.frm.find("#txtKgMovilizado").val(),
+                SALDO: _BExtraccionNoMaderable.frm.find("#txtSaldo").val(),
+                FECHA1: _BExtraccionNoMaderable.frm.find("#txtFecha1").val(),
+                FECHA2: _BExtraccionNoMaderable.frm.find("#txtFecha2").val(),
+                CANTIDAD: _BExtraccionNoMaderable.frm.find("#txtCantidad").val(),
+                GUIA_TRANSPORTE: _BExtraccionNoMaderable.frm.find("#txtGtf").val(),
+                RECIBO: _BExtraccionNoMaderable.frm.find("#txtRecibo").val(),
+                UNIDAD_MEDIDA: _BExtraccionNoMaderable.frm.find("#txtUniMedida").val(),
+                AUTORIZADO: _BExtraccionNoMaderable.frm.find("#txtAutorizado").val(),
+                EXTRAIDO: _BExtraccionNoMaderable.frm.find("#txtExtraido").val(),
+                OBSERVACION: _BExtraccionNoMaderable.frm.find("#txtObservacion").val(),
+                RegEstado: _BExtraccionNoMaderable.frm.find("#hdfRegEstado").val()
+            };
+            var url = urlLocalSigo + "THabilitante/ManBalanceExtraccion/GrabarBExtraccionNoMaderable";
+            var option = { url: url, datos: JSON.stringify(data), type: 'POST' };
+
+            utilSigo.dialogConfirm('', 'Desea continuar con el registro?', function (r) {
+                if (r) {
+                    utilSigo.fnAjax(option, function (data) {
+                        if (data.success) {
+                            utilSigo.toastSuccess("Éxito", data.msj);
+                            _BExtraccionNoMaderable.fnSaved();
+                        }
+                        else {
+                            utilSigo.toastWarning("Aviso", data.msj);
+                        }
+                    });
+                }
+            });
+        },
+        fnInit: (data, cod_mtipo) => {
+            _BExtraccionNoMaderable.frm = $("#frmBExtNoMaderable");
+
+            $.fn.select2.defaults.set("theme", "bootstrap4");
+            _BExtraccionNoMaderable.frm.find("#ddlEspecieSerforId").select2();
+            utilSigo.fnFormatDate(_BExtraccionNoMaderable.frm.find("#txtFecha1"));
+            utilSigo.fnFormatDate(_BExtraccionNoMaderable.frm.find("#txtFecha2"));
+            _BExtraccionNoMaderable.frm.find("#hdfCodMTipo").val(cod_mtipo);
+
+            if (cod_mtipo == "0000021") { //Planta medicinal
+                _BExtraccionNoMaderable.frm.find(".dvNMadMedicinal").show();
+            } else if (cod_mtipo == "0000020") { //Carrizo
+                _BExtraccionNoMaderable.frm.find(".dvNMadCarrizo").show();
+            } else { //Normal
+                _BExtraccionNoMaderable.frm.find(".dvNMadNormal").show();
+            }
+
+            if (data == "") { //Nuevo registro
+                _BExtraccionNoMaderable.frm.find("#hdfCodSecuencial").val(0);
+                _BExtraccionNoMaderable.frm.find("#hdfRegEstado").val(1);
+               // _renderComboEspecie.fnInit("FORESTAL", "", "");
+            } else { //Modificar registro
+                _BExtraccionNoMaderable.frm.find("#hdfCodSecuencial").val(data.COD_SECUENCIAL);
+                _BExtraccionNoMaderable.frm.find("#hdfRegEstado").val(data.RegEstado);
+                //_renderComboEspecie.fnInit("FORESTAL", data.COD_ESPECIES, data.ESPECIES);
+                _BExtraccionNoMaderable.frm.find("#ddlRenderComboEspecieId").val(data.COD_ESPECIES).trigger("change");
+                _BExtraccionNoMaderable.frm.find("#ddlEspecieSerforId").val(data.COD_ESPECIES_SERFOR).trigger("change");
+                _BExtraccionNoMaderable.frm.find("#txtKgAutorizado").val(data.KILOGRAMO_AUTORIZADO);
+                _BExtraccionNoMaderable.frm.find("#txtKgMovilizado").val(data.KILOGRAMO_MOVILIZADO);
+                _BExtraccionNoMaderable.frm.find("#txtAutorizado").val(data.AUTORIZADO);
+                _BExtraccionNoMaderable.frm.find("#txtExtraido").val(data.EXTRAIDO);
+                _BExtraccionNoMaderable.frm.find("#txtFecha1").val(data.FECHA1);
+                _BExtraccionNoMaderable.frm.find("#txtGtf").val(data.GUIA_TRANSPORTE);
+                _BExtraccionNoMaderable.frm.find("#txtFecha2").val(data.FECHA2);
+                _BExtraccionNoMaderable.frm.find("#txtRecibo").val(data.RECIBO);
+                _BExtraccionNoMaderable.frm.find("#txtCantidad").val(data.CANTIDAD);
+                _BExtraccionNoMaderable.frm.find("#txtSaldo").val(data.SALDO);
+                _BExtraccionNoMaderable.frm.find("#txtUniMedida").val(data.UNIDAD_MEDIDA);
+                _BExtraccionNoMaderable.frm.find("#txtObservacion").val(data.OBSERVACION);
+            }
+        },
+        fnSaved: () => {
+            /*Implementar en donde se instancia*/
+        }
+    };
+</script>

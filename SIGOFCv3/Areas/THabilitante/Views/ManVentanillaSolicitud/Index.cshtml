@@ -1,0 +1,93 @@
+﻿
+@{
+    ViewBag.Title = "Gestión de Solicitudes de Información";
+    Layout = "~/Views/Shared/_LayoutMain.cshtml";
+}
+<div class="container-fluid">
+    <div class="card">
+        <div class="card-header text-left">
+            <h5>Gestión de Solicitudes de Información de Títulos Habilitantes</h5>
+        </div>
+        <div class="card-body">
+            <form id="frmManGrillaPaging">
+                @Html.Hidden("tipoFormulario", "SOLINF_THABILITANTE_SITD")
+                <div class="form-row">
+                    <div class="form-group col-md-3">
+                        @Html.DropDownList("ddlOpcionBuscarId", (IEnumerable<SelectListItem>)ViewBag.vbOpciones, new { @class = "form-control form-control-sm" })
+                    </div>
+                    <div class="form-group col-md-3">
+                        @Html.DropDownList("ddlOpcionBuscarId1", (IEnumerable<SelectListItem>)ViewBag.vbOpciones1, new { @class = "form-control form-control-sm" })
+                    </div>
+                    <div class="form-group col-md-4">
+                        <input type="text" class="form-control form-control-sm" id="txtValorBuscar" disabled="disabled" placeholder="Ingrese Valor a Buscar">
+                    </div>
+                    <div class="btn-group col-md-2" style="padding-top:5px;">
+                        <a id="btnSearch" style="cursor:pointer;" data-toggle="tooltip" data-placement="top" title="Buscar el registro" onclick="ventanillaSol.fnSearch()"><span class="fa mx-2 fa-lg fa-search"></span></a>
+                        <a id="btnRefresh" style="cursor:pointer;" data-toggle="tooltip" data-placement="top" title="Actualizar el listado" onclick="ventanillaSol.fnRefresh()"><span class="fa mx-2 fa-lg fa-refresh"></span></a>
+                    </div>
+                </div>
+
+            </form>
+            <div id="dvManGrillaPaging" class="table-responsive">
+                <table id="tbManGrillaPaging" class="table table-hover table-bordered" style="width:100%;">
+                    <thead>
+                        <tr>
+                            <th colspan="6"><strong>Solicitudes de Información de Títulos Habilitantes que se registran desde el SITD</strong></th>
+                            <th colspan="2"><strong>Acción</strong></th>
+                            <th colspan="2"><strong>Opciones Transferidos</strong></th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="~/Areas/THabilitante/js/ManVentanillaSolicitud/Index.js"></script>
+
+<!--Modal para anular-->
+<div class="modal fade" id="modalAnular" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header text-small" style="cursor:move;padding:0.5rem;">
+                <h5 class="modal-title" id="h5Titulo">Anular Solicitud de Información</h5>
+            </div>
+            <div class="modal-body">
+                <form id="frmAnular" method="post">
+                    <input type="hidden" id="tramiteId" />
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label class="text-small">Código Trámite SITD</label>
+                            <input type="text" class="form-control form-control-sm" disabled id="cod_Tramite_Id" />
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label class="text-small">Nro. Documento de Referencia</label>
+                            <input type="text" class="form-control form-control-sm" disabled id="nro_Referencia" />
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label class="text-small">Entidad Remitente</label>
+                            <input type="text" class="form-control form-control-sm" disabled id="entidad" />
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label class="text-small">Asunto</label>
+                            <input type="text" class="form-control form-control-sm" disabled id="asunto" />
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-12">
+                            <label class="text-small">Observaciones Transferencia</label>
+                            <textarea id="txtObsTransferencia" class="form-control form-control-sm" rows="2"></textarea>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button id="btnGuardar" class="btn btn-primary btn-sm" onclick="ventanillaSol.fnAnular()">Aceptar</button>
+                <button id="btnCancelar" class="btn btn-secondary btn-sm" onclick="ventanillaSol.fnCancelar()">Cancelar</button>
+            </div>
+        </div>
+    </div>
+</div>
+

@@ -1,0 +1,472 @@
+﻿
+@model CapaEntidad.ViewModel.VM_Informe_CNotificacion
+
+<style type="text/css">
+    #tbRenderListPoa_wrapper{
+        padding:0px;
+    }
+</style>
+
+<script type="text/javascript">
+    _renderCNotificacion = {};
+    _renderCNotificacion.tbEliTABLA = [];
+
+    _renderCNotificacion.fnViewModalTHabilitante = function () {
+        var url = urlLocalSigo + "Supervision/ManInforme/_THabilitanteGeneral";
+        var option = { url: url, type: 'POST', datos: { asCodCNotificacion: _renderCNotificacion.frm.find("#hdfCodCNotificacion").val() }, divId: "mdlManInforme_THabilitanteGeneral" };
+        utilSigo.fnOpenModal(option, function () {});
+    }
+    _renderCNotificacion.fnViewModalCNotificacion = function () {
+        var url = "", sFormulario = "MODAL_CNOTIFICACION", sCriterio = "CN_NUMCN_ENLACE", sValor = _renderCNotificacion.frm.find("#hdfCodCNotificacion").val();
+        url = initSigo.urlControllerGeneral + "_CNotificacion";
+        var option = { url: url, type: 'POST', datos: { asFormulario: sFormulario, asCriterio: sCriterio, asValor: sValor }, divId: "mdlControles_CNotificacion" };
+        utilSigo.fnOpenModal(option, function () {
+            _CNotificacion.fnAsignarDatos = function (obj) {
+                if (obj != null && obj != "") {
+                    var data = _CNotificacion.dtCNotificacion.row($(obj).parents('tr')).data();
+
+                    if (!utilDt.existValorSearch(_renderCNotificacion.dtListCNotificacion, "COD_CNOTIFICACION", data["COD_CNOTIFICACION"])) {
+                        data["RegEstado"] = 1;
+                        _renderCNotificacion.dtListCNotificacion.rows.add([data]).draw();
+                        _renderCNotificacion.dtListCNotificacion.page('last').draw('page');
+                        _renderCNotificacion.frm.find("#txtCNotificacion").val(_renderCNotificacion.fnGetCadenaCNotificacion());
+                        //Añadir los POA's asociados a la carta en caso no existan
+                        _renderCNotificacion.fnAddPoa(data["COD_CNOTIFICACION"]);
+                        $("#mdlControles_CNotificacion").modal('hide');
+                    } else {
+                        utilSigo.toastWarning("Aviso", "La Carta de Notificación ya se encuentra añadida");
+                    }
+                }
+            }
+
+            _CNotificacion.fnInit();
+        });
+    }
+    /*
+    _renderCNotificacion.fnViewModalCNotificacion = function () {
+        var url = "", sFormulario = "MODAL_NOTIFICACION", sCriterio = "FN_NUM_ENLACE", sValor = _renderCNotificacion.frm.find("#hdfCodCNotificacion").val();
+        url = initSigo.urlControllerGeneral + "_CNotificacion";
+        var option = { url: url, type: 'POST', datos: { asFormulario: sFormulario, asCriterio: sCriterio, asValor: sValor,asTipo:"" }, divId: "mdlControles_CNotificacion" };
+        utilSigo.fnOpenModal(option, function () {
+            _CNotificacion.fnAsignarDatos = function (obj) {
+                if (obj != null && obj != "") {
+                    var data = _CNotificacion.dtCNotificacion.row($(obj).parents('tr')).data();
+
+                    if (!utilDt.existValorSearch(_renderCNotificacion.dtListCNotificacion, "COD_FISNOTI", data["COD_FISNOTI"])) {
+                        data["RegEstado"] = 1;
+                        _renderCNotificacion.dtListCNotificacion.rows.add([data]).draw();
+                        _renderCNotificacion.dtListCNotificacion.page('last').draw('page');
+                        _renderCNotificacion.frm.find("#txtCNotificacion").val(_renderCNotificacion.fnGetCadenaCNotificacion());
+                        //Añadir los POA's asociados a la carta en caso no existan
+                        _renderCNotificacion.fnAddPoa(data["COD_FISNOTI"]);
+                        $("#mdlControles_CNotificacion").modal('hide');
+                    } else {
+                        utilSigo.toastWarning("Aviso", "La Carta de Notificación ya se encuentra añadida");
+                    }
+                }
+            }
+
+            _CNotificacion.fnInit();
+        });
+    }
+    */
+    _renderCNotificacion.fnViewModalCNotifEliminar = function () {
+        utilSigo.modalDraggable($("#mdlRenderListCNotificacion"), '.modal-header');
+        $("#mdlRenderListCNotificacion").modal({ keyboard: true, backdrop: 'static' });
+    }
+    _renderCNotificacion.fnViewModalPOASupervisado = function (obj, bool) {
+        
+        var codInforme = '@ViewData["cod_informe"]';
+        var _origen = '@ViewData["ORIGEN"]';
+        debugger
+        if ((typeof codInforme!=='undefined' && codInforme!="")) {
+            var data = _renderCNotificacion.dtListPoa.row($(obj).parents('tr')).data();
+            var url = urlLocalSigo;
+
+            if (data["RegEstado"] != "1") {
+                let datos = {};
+                if (bool) {
+                    if (_origen !== 'undefined' && _origen == 'FAUNA') {
+                        url += "Supervision/ManInformeFauna/_POAFaunaSupervisado";
+                    } else {
+                        url += "Supervision/ManInforme/_POASupervisado";
+                    }
+                    datos = {
+                        asCodInforme: codInforme,
+                        aiNumPoa: data["NUM_POA"],
+                        B_POA: data.B_POA
+                    }
+                } else {
+                    url += "Supervision/ManInforme/_ArbolesSinPoa";
+                    datos = {
+                        asCodInforme: codInforme,
+                        B_POA: data.B_POA,
+                        CODIGO_SEC_NOPOA : data.CODIGO_SEC_NOPOA,
+                        hdfCodMTipo : $('#hdfCodMTipo').val()
+                    }
+                }
+                var option = {
+                    url: url, type: 'POST', datos: datos, divId: "mdlManInforme_POASupervisado"
+                };
+                utilSigo.fnOpenModal(option, function () { });
+            } else {
+                utilSigo.toastWarning("Aviso", "Por favor guarde los cambios realizados para luego poder registrar los datos del plan de manejo seleccionado");
+            }
+        } else {
+            utilSigo.toastWarning("Aviso", "Primero debe guardar el informe para luego poder registrar los datos del plan de manejo");
+        }
+    }
+
+    _renderCNotificacion.fnInitDataTable_Detail = function () {
+        var columns_label = [], columns_data = [], options = {}, data_extend = [];
+
+        columns_label = ["Tipo Carta", "Carta de Notificación", "Título Habilitante", "Modalidad", "Origen"];
+        columns_data = ["MAE_CNTIPO", "NUMERO", "NUM_THABILITANTE", "MTIPO", "ESTADO_ORIGEN_TEXT"];
+        /*columns_label = ["Tipo Carta", "Carta de Notificación", "Título Habilitante", "Modalidad", "Plan de Manejo"];
+        columns_data = ["FCTIPO", "NUM_NOTIFICACION", "NUM_THABILITANTE", "MTIPO", "NOMBRE_POA"];*/
+        options = {
+            page_length: 10, row_index: true, row_delete: true, row_fnDelete: "_renderCNotificacion.fnRemoveCNotificacion(this)"
+        };
+        _renderCNotificacion.dtListCNotificacion = utilDt.fnLoadDataTable_Detail($("#tbRenderListCNotificacion"), columns_label, columns_data, options);
+
+        columns_label = ["Plan de Manejo"];
+        columns_data = ["POA"];
+        data_extend = [
+                {
+                    "data": "SUPERVISADO", "title": "Supervisado", "width":"10%", "orderable": false, "searchable": false, "mRender": function (data, type, row, meta) {
+                        if (!data) {
+                            return '<i class="fa fa-square-o" style="cursor:pointer; font-size:16px;" onclick="_renderCNotificacion.fnSetPoaSupervisado(this,true)"></i>';
+                        } else {
+                            return '<i class="fa fa-check-square-o" style="cursor:pointer; font-size:16px;" onclick="_renderCNotificacion.fnSetPoaSupervisado(this,false)"></i>';
+                        }
+                    }
+                },
+                {
+                    "data": "SUPERVISADO", "title": "Datos", "width":"10%", "orderable": false, "searchable": false, "mRender": function (data, type, row, meta) {
+                        if (!data) {
+                            return '';
+                        } else {
+                            let str;
+                            if (row.B_POA) {
+                                str = '<i class="fa fa-edit" style="cursor:pointer; font-size:16px;" title="Ingresar datos de la supervisión" onclick="_renderCNotificacion.fnViewModalPOASupervisado(this,true);"></i>';
+                            } else {
+                                str = '<i class="fa fa-edit" style="cursor:pointer; font-size:16px;" title="Ingresar datos de la supervisión" onclick="_renderCNotificacion.fnViewModalPOASupervisado(this,false);"></i>';
+                            }
+                            return str;
+                        }
+                    }
+                },
+                {
+                    "data": "SUPERVISADO", "title": "Simular", "width": "10%", "orderable": false, "searchable": false, "mRender": function (data, type, row, meta) {
+                        if (!data) {
+                            return '';
+                        } else {
+                            let str;
+                            if (row.B_POA) {
+                                str = '<i class="fa fa-cogs" style="cursor:pointer; font-size:16px;" title="Simular datos en el Observatorio" onclick="_renderCNotificacion.fnSimularObservatorio(this);"></i>';
+                            } else {
+                                str = '';
+                            }
+                            return str;
+                        }
+                    }
+                },
+                {
+                    "data": "PUBLICAR", "title": "Publicar", "width": "10%", "orderable": false, "searchable": false, "mRender": function (data, type, row, meta) {
+                        if (!row["SUPERVISADO"]) {
+                            return '';
+                        } else {
+                            if ('@ViewData["cod_grupo_usuario"]' != "0000011" && '@ViewData["cod_grupo_usuario"]' != "0000001") {
+                                if (!data) {
+                                    return '<i class="fa fa-square-o" style="cursor:pointer; font-size:16px;"></i>';
+                                } else {
+                                    return '<i class="fa fa-check-square-o" style="cursor:pointer; font-size:16px;"></i>';
+                                }
+                            } else {
+                                if (!data) {
+                                    return '<i class="fa fa-square-o" style="cursor:pointer; font-size:16px;" onclick="_renderCNotificacion.fnSetPoaPublicar(this,true)"></i>';
+                                } else {
+                                    return '<i class="fa fa-check-square-o" style="cursor:pointer; font-size:16px;" onclick="_renderCNotificacion.fnSetPoaPublicar(this,false);"></i>';
+                                }
+                            }
+                        }
+                    }
+                }
+        ];
+        options = {
+            page_length: 10, row_index: true, data_extend: data_extend
+        };
+        _renderCNotificacion.dtListPoa = utilDt.fnLoadDataTable_Detail($("#tbRenderListPoa"), columns_label, columns_data, options);
+    }
+
+    _renderCNotificacion.fnRemoveCNotificacion = function (obj) {
+        //Carta de Notificación a Quitar
+        var dt = _renderCNotificacion.dtListCNotificacion;
+        var data = dt.row($(obj).parents('tr')).data();
+
+        utilSigo.dialogConfirm("", "Está seguro de quitar la Carta de Notificación "+data["NUMERO"]+"? Recuerde que los datos registrados en los POA's asociados a esta carta se perderán", function (r) {
+        //utilSigo.dialogConfirm("", "Está seguro de quitar la Carta de Notificación "+data["NUM_NOTIFICACION"]+"? Recuerde que los datos registrados en los POA's asociados a esta carta se perderán", function (r) {
+            if (r) {
+                //Obtener los códigos de todas las Cartas de Notificación excepto la que se va a quitar
+                var rows = _renderCNotificacion.dtListCNotificacion.$("tr");
+                var cadCodCNot = "'" + _renderCNotificacion.frm.find("#hdfCodCNotificacion").val() + "'";
+
+                if (rows.length > 0) {
+                    $.each(rows, function (i, o) {
+                        var row = _renderCNotificacion.dtListCNotificacion.row($(o)).data();
+                        if (row != data) {
+                            cadCodCNot += ",'" + row["COD_CNOTIFICACION"] + "'";
+                            //cadCodCNot += ",'" + row["COD_FISNOTI"] + "'";
+                        }
+                    });
+                    //Quitar Carta de Notificación
+                    dt.row($(obj).parents('tr')).remove().draw();
+                    utilDt.enumColumn(dt);
+                    _renderCNotificacion.frm.find("#txtCNotificacion").val(_renderCNotificacion.fnGetCadenaCNotificacion());
+
+                    if (data["RegEstado"] == "0" || data["RegEstado"] == "2") {
+                        _renderCNotificacion.tbEliTABLA.push({
+                            EliTABLA: "LISTADO_CNOTIF",
+                            COD_CNOTIFICACION: data["COD_CNOTIFICACION"]
+                            /*EliTABLA: "LISTADO_NOTIF_v3",
+                            COD_FISNOTI: data["COD_FISNOTI"]*/
+                        });
+                    }
+
+                    //Quitar POA's asociados a la carta de notificación a quitar en caso estos no se encuentren asociados a otras cartas
+                    var url = urlLocalSigo + "SUPERVISION/ManInforme/GetListPoaCNotificacion";
+                    var option = { url: url, datos: JSON.stringify({ asCodCNotificacion: cadCodCNot }), type: 'POST' };
+                    utilSigo.fnAjax(option, function (data2) {
+                        if (data2.success) {
+                            var rows2 = _renderCNotificacion.dtListPoa.$("tr");
+                            if (rows2.length > 0) {
+                                $.each(rows2, function (i2, o2) {
+                                    var bExiste = false;
+                                    var row2 = _renderCNotificacion.dtListPoa.row($(o2)).data();
+                                    for (var j = 0; j < data2.data.length; j++) {
+                                        if (row2["NUM_POA"] == data2.data[j]["NUM_POA"]) {
+                                            bExiste = true;
+                                        }
+                                    }
+                                    if (!bExiste) {
+                                        //Quitar POA's
+                                        _renderCNotificacion.dtListPoa.row($(o2)).remove().draw();
+                                        utilDt.enumColumn(_renderCNotificacion.dtListPoa);
+
+                                        if (row2["RegEstado"] == "0" || row2["RegEstado"] == "2") {
+                                            _renderCNotificacion.tbEliTABLA.push({
+                                                EliTABLA: "ISUPERVISION_INFO_DOCUMENT_v3",
+                                                NUM_POA: row2["NUM_POA"]
+                                            });
+                                        }
+                                    }
+                                });
+                            }
+                        }
+                        else {
+                            utilSigo.toastWarning("Aviso", "Sucedio un error, Comuníquese con el Administrador");
+                            console.log(data2.msj);
+                        }
+                    });
+                }
+            }
+        });
+    }
+
+    _renderCNotificacion.fnGetCadenaCNotificacion = function () {
+        var rows = _renderCNotificacion.dtListCNotificacion.$("tr");
+        var cadena = _renderCNotificacion.frm.find("#hdfCNotificacion").val();
+
+        if (rows.length > 0) {
+            $.each(rows, function (i, o) {
+                var data = _renderCNotificacion.dtListCNotificacion.row($(o)).data();
+                cadena += "; " + data["NUMERO"];
+                //cadena += "; " + data["NUM_NOTIFICACION"];
+            });
+        }
+        return cadena;
+    }
+
+    _renderCNotificacion.fnAddPoa = function (codCNotificacion) {
+        var url = urlLocalSigo + "SUPERVISION/ManInforme/GetListPoaCNotificacion";
+        var option = { url: url, datos: JSON.stringify({ asCodCNotificacion: "'"+codCNotificacion+"'" }), type: 'POST' };
+        utilSigo.fnAjax(option, function (data) {
+            if (data.success) {
+                for (var i = 0; i < data.data.length; i++) {
+                    if (!utilDt.existValorSearch(_renderCNotificacion.dtListPoa, "NUM_POA", data.data[i]["NUM_POA"])) {
+                        var dataPoa = {
+                            COD_THABILITANTE: data.data[i]["COD_THABILITANTE"], NUM_POA: data.data[i]["NUM_POA"]
+                            , POA: data.data[i]["POA"], SUPERVISADO: false, PUBLICAR: false, RegEstado: 1
+                        };
+                        _renderCNotificacion.dtListPoa.rows.add([dataPoa]).draw();
+                        _renderCNotificacion.dtListPoa.page('last').draw('page');
+                    }
+                }
+            }
+            else {
+                utilSigo.toastWarning("Aviso", "Sucedio un error, Comuníquese con el Administrador");
+                console.log(data.msj);
+            }
+        });
+    }
+    _renderCNotificacion.fnSetPoaSupervisado = function (obj, bSupervisado) {
+        var data = _renderCNotificacion.dtListPoa.row($(obj).parents('tr')).data();
+        data["SUPERVISADO"] = bSupervisado;
+        data["RegEstado"] = data["RegEstado"] == 1 ? 1 : 2;
+
+        _renderCNotificacion.dtListPoa.row($(obj).parents('tr')).data(data).draw(false);
+    }
+    _renderCNotificacion.fnSetPoaPublicar = function (obj, bPublicar) {
+        var data = _renderCNotificacion.dtListPoa.row($(obj).parents('tr')).data();
+        data["PUBLICAR"] = bPublicar;
+        data["RegEstado"] = data["RegEstado"] == 1 ? 1 : 2;
+
+        _renderCNotificacion.dtListPoa.row($(obj).parents('tr')).data(data).draw(false);
+    }
+
+    _renderCNotificacion.fnSimularObservatorio = function (obj) {
+        var data = _renderCNotificacion.dtListPoa.row($(obj).parents('tr')).data();
+        var url = "@Url.Action("SimularObservatorio", "ManInforme",new { Area="Supervision"  })" + "?asCodInforme=" + '@ViewData["cod_informe"]' + "&aiNumPoa=" + data["NUM_POA"];
+        window.open(url, "_blank");
+    }
+
+    //Obtener las cartas de notificación adicionales asociadas al informe de supervisión
+    _renderCNotificacion.fnGetListCNotificacion = function () {
+        var list = [], rows, countFilas, data;
+
+        rows = _renderCNotificacion.dtListCNotificacion.$("tr");
+        countFilas = rows.length;
+        if (countFilas > 0) {
+            $.each(rows, function (i, o) {
+                data = _renderCNotificacion.dtListCNotificacion.row($(o)).data();
+                if (data["RegEstado"] == "1" || data["RegEstado"] == "2") {
+                    list.push(utilSigo.fnConvertArrayToObject(data));
+                }
+            });
+        }
+        return list;
+    }
+    _renderCNotificacion.fnGetListPoa = function () {
+        var list = [], rows, countFilas, data;
+
+        rows = _renderCNotificacion.dtListPoa.$("tr");
+        countFilas = rows.length;
+        if (countFilas > 0) {
+            $.each(rows, function (i, o) {
+                data = _renderCNotificacion.dtListPoa.row($(o)).data();
+                if (data["RegEstado"] == "1" || data["RegEstado"] == "2") {
+                    list.push(utilSigo.fnConvertArrayToObject(data));
+                }
+            });
+        }
+        return list;
+    }
+
+    _renderCNotificacion.fnGetDatosCNotificacion = function () {
+        var datosCNot = {};
+        datosCNot.hdfCodCNotificacion = _renderCNotificacion.frm.find("#hdfCodCNotificacion").val();
+
+        if ('@ViewData["TIPO"]' == "DETALLE") {
+            datosCNot.tbCNotificacion = _renderCNotificacion.fnGetListCNotificacion();
+            datosCNot.tbPoa = _renderCNotificacion.fnGetListPoa();
+        }
+        return datosCNot;
+    }
+    _renderCNotificacion.fnGetListEliTABLA = function () { return _renderCNotificacion.tbEliTABLA }
+
+    $(document).ready(function () {
+        _renderCNotificacion.frm = $("#frmRenderCNotificacion");
+
+        _renderCNotificacion.frm.find("#dvOptionCNotificacion").hide();
+        _renderCNotificacion.frm.find("#dvListPoaCNotificacion").hide();
+        if ('@ViewData["TIPO"]' == "DETALLE") {
+            _renderCNotificacion.frm.find("#dvOptionCNotificacion").show();
+            _renderCNotificacion.frm.find("#dvListPoaCNotificacion").show();
+
+            _renderCNotificacion.fnInitDataTable_Detail();
+
+            _renderCNotificacion.dtListCNotificacion.rows.add(JSON.parse('@Html.Raw(Json.Encode(@Model.tbCNotificacion))')).draw();
+            _renderCNotificacion.dtListPoa.rows.add(JSON.parse('@Html.Raw(Json.Encode(@Model.tbPoa))')).draw();
+            console.log(JSON.parse('@Html.Raw(Json.Encode(@Model.tbPoa))'));
+            //_renderCNotificacion.frm.find("#txtCNotificacion").val(_renderCNotificacion.fnGetCadenaCNotificacion());
+        }
+        else if ('@ViewData["TIPO"]' == "SIMPLE") {
+             
+        }
+    });
+</script>
+
+<div id="frmRenderCNotificacion">
+    <div class="form-row">
+        @Html.HiddenFor(m => m.hdfCodCNotificacion)
+        @Html.Hidden("hdfCNotificacion",(object)Model.txtCNotificacion)
+        <div class="form-group col-md-4" style="margin-bottom:0px;">
+            <label for="txtTHabilitante" class="text-small">Título Habilitante</label>
+            <div class="input-group">
+                @Html.TextBoxFor(m => m.txtTHabilitante, new { @class = "form-control form-control-sm", disabled = "disabled" })
+                <div class="input-group-prepend">
+                    <span class="input-group-text" style="cursor:pointer;color:forestgreen" onclick="_renderCNotificacion.fnViewModalTHabilitante()"><i class="fa fa-eye" data-toggle="tooltip" data-placement="top" title="Ver datos generales del Título Habilitante"></i></span>
+                </div>
+            </div>
+        </div>
+        <div class="form-group col-md-8" style="margin-bottom:0px;">
+            <label for="txtCNotificacion" class="text-small">Carta de Notificación</label>
+            <div class="input-group">
+                @Html.TextBoxFor(m => m.txtCNotificacion, new { @class = "form-control form-control-sm", disabled = "disabled" })
+                <div id="dvOptionCNotificacion" class="input-group-prepend" style="display:none;">
+                    <span class="input-group-text" style="cursor:pointer;color:forestgreen" onclick="_renderCNotificacion.fnViewModalCNotificacion()"><i class="fa fa-plus" data-toggle="tooltip" data-placement="top" title="Añadir Carta de Notificación"></i></span>
+                    <span class="input-group-text" style="cursor:pointer;color:red;" onclick="_renderCNotificacion.fnViewModalCNotifEliminar()"><i class="fa fa-close" data-toggle="tooltip" data-placement="top" title="Quitar Carta de Notificación"></i></span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="dvListPoaCNotificacion" class="form-row" style="display:none;">
+        <div class="form-group col-md-4" style="margin-bottom:0px;"></div>
+        <div class="form-group col-md-8" style="margin-bottom:0px;">
+            <div class="table-responsive">
+                <table id="tbRenderListPoa" style="width:100%;margin:0px !important;" class="table table-hover table-bordered">
+                    <thead>
+                        <tr>
+                            <th colspan="20" class="text-sm-left">
+                                <div class="form-inline">
+                                    Planes de Manejo Asociados a la Carta de Notificación
+                                </div>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade hide" id="mdlRenderListCNotificacion" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header text-small" style="cursor:move;">
+                    Quitar Carta de Notificación
+                    <i class="fa fa-close" style="cursor:pointer;" data-dismiss="modal" aria-label="Close"></i>
+                </div>
+                <div class="modal-body" style="padding:5px;">
+                    <div class="table-responsive">
+                        <table id="tbRenderListCNotificacion" style="width:100%" class="table table-hover table-bordered">
+                            <thead>
+                                <tr>
+                                    <th colspan="20" class="text-sm-left">
+                                        <div class="form-inline">
+                                            <strong>
+                                                Listado de Cartas de Notificación Añadidas
+                                            </strong>
+                                        </div>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="modal-footer"></div>
+            </div>
+        </div>
+    </div>
+</div>

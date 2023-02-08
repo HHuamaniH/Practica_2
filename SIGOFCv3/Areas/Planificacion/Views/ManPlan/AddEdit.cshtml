@@ -1,0 +1,714 @@
+﻿@model CapaEntidad.ViewModel.VM_Plan
+
+@{
+    ViewBag.Title = "AddEdit";
+    Layout = "~/Views/Shared/_LayoutMain.cshtml";
+}
+
+<style type="text/css">
+    tr.selected {
+        background-color: lightgreen;
+    }
+
+    .dataTables_info {
+        color: #33b35a;
+        font-size: 15px !important;
+        margin-top: 17px;
+    }
+
+    .dataTables_paginate {
+        margin-top: -25px;
+    }
+</style>
+@section scripts{
+    <script>
+        "use strict"; var rol = '';
+    $(document).ready(function () {
+        //Validamos el rol del usuario
+        utilSigo.ValidaRol('@ViewBag.VAliasRol', 'btnRegistrarCapacitacion', '@Model.vmControlCalidad.ddlIndicadorId');
+    });
+    </script>
+}
+<div class="container-fluid">
+    <div class="card">
+        <div class="card-header text-right">
+            @Model.lblTituloCabecera
+        </div>
+        <div class="card-body">
+            <div class="card">
+                <div class="card-header text-small">
+                    <a id="btnRegistrarCapacitacion" href="javascript:void(0)" style="cursor:pointer;" data-toggle="tooltip" data-placement="top" title="Guardar" onclick="_EditPlan.fnSubmitForm()"><i class="fa mx-2 fa-lg fa-save"></i></a>
+                    <a id="btnRegresarCapacitacion" style="cursor:pointer;" data-toggle="tooltip" data-placement="top" title="Regresar" onclick="_EditPlan.fnReturn()"><i class="fa mx-2 fa-lg fa-reply"></i></a>
+                    @Model.lblTituloEstado
+                </div>
+                <div class="card-body">
+                    <form id="frmPlan" action="@Url.Action("AddEdit", "ManPlan", new { Area= "Planificacion" })" data-request_url="@Url.Action("Index", "ManPlan", new { Area= "Planificacion" })">
+                        @Html.HiddenFor(m => m.hdfCodPlan)
+                        <ul class="nav nav-tabs" id="myTab" role="tablist">
+                            <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#navEstado" role="tab" aria-controls="home" aria-selected="true">Estado Situacional</a></li>
+                            <li class="nav-item"><a class="nav-link active" data-toggle="tab" href="#navDatos" role="tab" aria-controls="home" aria-selected="true">Datos Generales</a></li>
+                            <li class="nav-item dvDatModificar"><a class="nav-link" data-toggle="tab" href="#navCriterio" role="tab" aria-controls="home" aria-selected="true">Criterios</a></li>
+                            <li class="nav-item dvDatModificar"><a class="nav-link" data-toggle="tab" href="#navCasuistica" role="tab" aria-controls="home" aria-selected="true">Casuísticas</a></li>
+                            <li class="nav-item dvDatModificar"><a class="nav-link" data-toggle="tab" href="#navConsolidado" role="tab" aria-controls="home" aria-selected="true">Consolidado</a></li>
+                        </ul>
+                        <div class="tab-content">
+                            <div class="tab-pane fade show" id="navEstado" role="tabpanel" aria-labelledby="nav-home-tab">
+                                @{ Html.RenderAction("_ControlCalidad", "Controles", new { area = "GENERAL", dto = Model.vmControlCalidad }); }
+                            </div>
+                            <div class="tab-pane fade show active" id="navDatos" role="tabpanel" aria-labelledby="nav-home-tab">
+                                <div class="card">
+                                    <div class="card-header text-small"></div>
+                                    <div class="card-body">
+                                        <div class="form-row">
+                                            <div class="form-group col-md-2">
+                                                <label for="txtAnioPlan" class="text-small">Año</label>
+                                                @Html.TextBoxFor(m => m.txtAnioPlan, new { @class = "form-control form-control-sm", disabled = "disabled" })
+                                            </div>
+                                            <div class="form-group col-md-2">
+                                                <label for="txtFechaCorte" class="text-small">Fecha de corte</label>
+                                                @Html.TextBoxFor(m => m.txtFechaCorte, new { @class = "form-control form-control-sm", disabled = "disabled" })
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="dvDatModificar" style="display:none;">
+                                        <div class="card-header text-small">Sobre el equipo de trabajo</div>
+                                        <div class="card-body">
+                                            <div class="form-row">
+                                                <div class="col-md-6">
+                                                    <div class="table-responsive">
+                                                        <table id="tbColaborador" style="width:100%" class="table table-hover table-bordered">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th colspan="4" class="text-sm-left">
+                                                                        <div class="form-inline">
+                                                                            <i class="fa mx-2 fa-lg fa-file-o" style="cursor:pointer;" onclick="_EditPlan.fnSearchPersona('COLABORADOR');" data-toggle="tooltip" data-placement="top" title="Nuevo"></i>
+                                                                            <strong>
+                                                                                Colaboradores
+                                                                            </strong>
+                                                                        </div>
+                                                                    </th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody></tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="card-header text-small">Sobre la aprobación</div>
+                                        <div class="card-body">
+                                            <div class="form-row">
+                                                <div class="form-group col-md-2">
+                                                    <label for="txtNumResolucion" class="text-small">Número de resolución</label>
+                                                    @Html.TextBoxFor(m => m.txtNumResolucion, new { @class = "form-control form-control-sm" })
+                                                </div>
+                                                <div class="form-group col-md-2">
+                                                    <label for="txtFechaEmision" class="text-small">Fecha de emisión</label>
+                                                    @Html.TextBoxFor(m => m.txtFechaEmision, new { @class = "form-control form-control-sm", placeholder = "dd/mm/aaaa", maxlength = "10" })
+                                                </div>
+                                                <div class="form-group col-md-3">
+                                                    <label for="txtDirector" class="text-small">Funcionario</label>
+                                                    <div class="input-group">
+                                                        @Html.TextBoxFor(m => m.txtFuncionario, new { @class = "form-control form-control-sm", disabled = "disabled" })
+                                                        @Html.HiddenFor(m => m.hdfCodFuncionario)
+                                                        <div class="input-group-prepend">
+                                                            <span class="input-group-text" style="cursor:pointer;" onclick="_EditPlan.fnSearchPersona('FUNCIONARIO')"><i class="fa fa-search-plus" data-toggle="tooltip" data-placement="top" title="Seleccione el funcionario"></i></span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="card-header text-small">Observaciones</div>
+                                    <div class="card-body">
+                                        <div class="form-row">
+                                            <div class="form-group col-md-12">
+                                                @Html.TextAreaFor(m => m.txtObservacion, new { @class = "form-control form-control-sm", @rows = "4" })
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="tab-pane fade show" id="navCriterio" role="tabpanel" aria-labelledby="nav-home-tab">
+                                <div class="card">
+                                    <div class="card-header text-small"></div>
+                                    <div class="card-body">
+                                        <div class="form-row">
+                                            <div class="col-md-12">
+                                                <div class="table-responsive">
+                                                    <table id="tbCriterio" style="width:100%" class="table table-hover table-bordered">
+                                                        <thead>
+                                                            <tr>
+                                                                <th colspan="8" class="text-sm-left">
+                                                                    <div class="form-inline">
+                                                                        <i class="fa mx-2 fa-lg fa-file-o" style="cursor:pointer;" onclick="_EditPlan.fnAddEditCriterio('');" data-toggle="tooltip" data-placement="top" title="Nuevo"></i>
+                                                                        <i class="fa mx-2 fa-lg fa-magic" style="cursor:pointer;" onclick="_EditPlan.fnReplicarCriterio();" data-toggle="tooltip" data-placement="top" title="Replicar criterios"></i>
+                                                                        <strong>
+                                                                            Listado de criterios de priorización
+                                                                        </strong>
+                                                                    </div>
+                                                                </th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody></tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="tab-pane fade show" id="navCasuistica" role="tabpanel" aria-labelledby="nav-home-tab">
+                                <div class="card">
+                                    <div class="card-header text-small"></div>
+                                    <div class="card-body">
+                                        <div class="form-row">
+                                            <div class="col-md-12">
+                                                <div class="table-responsive">
+                                                    <table id="tbCasuistica" style="width:100%" class="table table-hover table-bordered">
+                                                        <thead>
+                                                            <tr>
+                                                                <th colspan="8" class="text-sm-left">
+                                                                    <div class="form-inline">
+                                                                        <i class="fa mx-2 fa-lg fa-file-o" style="cursor:pointer;" onclick="_EditPlan.fnAddEditCasuistica('');" data-toggle="tooltip" data-placement="top" title="Nuevo"></i>
+                                                                        <strong>
+                                                                            Listado de casuísticas de priorización
+                                                                        </strong>
+                                                                    </div>
+                                                                </th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody></tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="tab-pane fade show" id="navConsolidado" role="tabpanel" aria-labelledby="nav-home-tab">
+                                <div class="card">
+                                    <div class="card-header text-small"></div>
+                                    <div class="card-body">
+                                        <div class="form-row">
+                                            <div class="col-md-12">
+                                                <div class="table-responsive">
+                                                    <table id="tbConsolidado" style="width:100%" class="table table-hover table-bordered">
+                                                        <thead>
+                                                            <tr>
+                                                                <th colspan="100" class="text-sm-left">
+                                                                    <div class="form-inline">
+                                                                        <label style="cursor:pointer;" class="fa mx-2 fa-lg fa-upload" title="Importar priorización" data-toggle="tooltip">
+                                                                            <input type="file" id="fileselect" name="fileselect" style="display:none" size="60" onchange="_EditPlan.fnImportTableConsolidado(event, this)">
+                                                                        </label>
+                                                                        <label style="cursor:pointer;" class="fa mx-2 fa-lg fa-download" title="Descargar consolidado" data-toggle="tooltip" onclick="_EditPlan.fnExportTableConsolidado()"></label>
+                                                                        <strong>Listado</strong>
+                                                                    </div>
+                                                                </th>
+                                                            </tr>
+                                                            <tr>
+                                                                <th colspan="32" class="text-sm-left" style="background-color:darkseagreen">
+                                                                    <div class="form-inline"><strong>DATOS DEL TÍTULO HABILITANTE</strong></div>
+                                                                </th>
+                                                                <th colspan="63" class="text-sm-left" style="background-color:cornflowerblue">
+                                                                    <div class="form-inline"><strong>DATOS DEL PLAN DE MANEJO</strong></div>
+                                                                </th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody></tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    @* Para el control genérico de personas *@
+    <div class="modal fade hide" id="mdlBuscarPersona" role="dialog"></div>
+    <div class="modal fade hide" id="modalAddEditPersona" role="dialog"></div>
+    <div class="modal fade hide" id="personaUbigeoModal" role="dialog"></div>
+
+    <div class="modal fade hide" id="mdlPlanCriterio" role="dialog"></div>
+    <div class="modal fade hide" id="mdlPlanCriterioValor" role="dialog"></div>
+    <div class="modal fade hide" id="mdlPlanCasuistica" role="dialog"></div>
+    <div class="modal fade hide" id="mdlPlanCasuisticaUniverso" role="dialog"></div>
+</div>
+
+<script src="~/Scripts/sigo/utility.uploadFile.js"></script>
+
+<script type="text/javascript">
+    let _EditPlan = {
+        fnReturn: (alertaInicial) => {
+            if (alertaInicial == null || alertaInicial == "") {
+                window.location = _EditPlan.frm.data("request_url");
+            } else {
+                window.location = _EditPlan.frm.data("request_url") + "?_alertaIncial=" + alertaInicial;
+            }
+        },
+        fnShow: () => {
+            const cod_plan = _EditPlan.frm.find("#hdfCodPlan").val();
+
+            _EditPlan.frm.find(".dvDatModificar").hide();
+
+            if (cod_plan != "") {
+                _EditPlan.frm.find(".dvDatModificar").show();
+            }
+        },
+        fnBuildTableColaborador: () => {
+            var columns_label = [], columns_data = [], options = {};
+
+            columns_label = ["Apellidos y nombres"];
+            columns_data = ["COLABORADOR"];
+            options = {
+                page_length: 10, row_edit: false, row_delete: true, row_fnDelete: "_EditPlan.fnDeleteColaborador(this)"
+                , row_index: true, page_autowidth: false
+            };
+
+            return utilDt.fnLoadDataTable_Detail(_EditPlan.frm.find("#tbColaborador"), columns_label, columns_data, options);
+        },
+        fnLoadTableColaborador: () => {
+            let cod_plan = _EditPlan.frm.find("#hdfCodPlan").val();
+            var url = urlLocalSigo + "Planificacion/ManPlan/ListarPlanColaborador";
+            const option = { url: url, datos: { asCodPlan: cod_plan }, type: 'GET' };
+
+            utilSigo.fnAjax(option, function (result) {
+                if (result.success) {
+                    _EditPlan.dtColaborador.clear().draw();
+                    _EditPlan.dtColaborador.rows.add(result.data).draw();
+                } else {
+                    utilSigo.toastError("Error", "Ocurrió un problema al cargar los colaboradores");
+                }
+            });
+        },
+        fnBuildTableCriterio: () => {
+            var columns_label = [], columns_data = [], options = {};
+
+            columns_label = ["Código", "Criterio", "Tipo criterio", "Tipo aplicación", "Columna"];
+            columns_data = ["CODIGO", "PCRITERIO", "TCRITERIO", "TAPLICACION", "PCOLUMNA"];
+            options = {
+                page_length: 10, row_edit: true, row_fnEdit: "_EditPlan.fnAddEditCriterio(this)"
+                , row_delete: true, row_fnDelete: "_EditPlan.fnDeleteCriterio(this)"
+                , row_index: true, page_autowidth: false
+            };
+
+            return utilDt.fnLoadDataTable_Detail(_EditPlan.frm.find("#tbCriterio"), columns_label, columns_data, options);
+        },
+        fnLoadTableCriterio: () => {
+            let cod_plan = _EditPlan.frm.find("#hdfCodPlan").val();
+            var url = urlLocalSigo + "Planificacion/ManCriterio/ListarPlanCriterio";
+            const option = { url: url, datos: { asCodPlan: cod_plan }, type: 'GET' };
+
+            utilSigo.fnAjax(option, function (result) {
+                if (result.success) {
+                    _EditPlan.dtCriterio.clear().draw();
+                    _EditPlan.dtCriterio.rows.add(result.data).draw();
+                } else {
+                    utilSigo.toastError("Error", "Ocurrió un problema al listar los criterios");
+                }
+            });
+        },
+        fnBuildTableCasuistica: () => {
+            var columns_label = [], columns_data = [], options = {};
+
+            columns_label = ["Casuística", "Tipo criterio", "Criterios", "Registros", "Descripción"];
+            columns_data = ["PCASUISTICA", "TCRITERIO", "N_CRITERIO", "N_REGISTRO", "DESCRIPCION"];
+            options = {
+                page_length: 10, row_edit: true, row_fnEdit: "_EditPlan.fnAddEditCasuistica(this)"
+                , row_delete: true, row_fnDelete: "_EditPlan.fnDeleteCasuistica(this)"
+                , row_index: true, page_autowidth: false
+            };
+
+            return utilDt.fnLoadDataTable_Detail(_EditPlan.frm.find("#tbCasuistica"), columns_label, columns_data, options);
+        },
+        fnLoadTableCasuistica: () => {
+            let cod_plan = _EditPlan.frm.find("#hdfCodPlan").val();
+            var url = urlLocalSigo + "Planificacion/ManCasuistica/ListarPlanCasuistica";
+            const option = { url: url, datos: { asCodPlan: cod_plan }, type: 'GET' };
+
+            utilSigo.fnAjax(option, function (result) {
+                if (result.success) {
+                    _EditPlan.dtCasuistica.clear().draw();
+                    _EditPlan.dtCasuistica.rows.add(result.data).draw();
+                } else {
+                    utilSigo.toastError("Error", "Ocurrió un problema al listar las casuísticas");
+                }
+            });
+        },
+        fnBuildTableConsolidado: () => {
+            var columns_label = [], columns_data = [], options = {};
+
+            columns_label = ["Casuística", "Observado", "Revisado", "Título habilitante", "Titular actual", "Rep. legal", "Departamento", "Provincia", "Distrito", "Sector", "Modalidad"
+                , "OD Ámbito", "Área", "Fecha inicio", "Fecha fin", "Caducidad", "Med. Cauterlar", "Med. Precautoria"
+                , "Nro. supervisiones", "Nro. superv. infracción", "% infracción", "Req. entidad", "Denuncia", "Est. establecimiento"
+                , "Última superv.", "Inactivo", "Nro. planes", "Est. calidad", "Fecha registro", "Tipo plan", "Nombre plan"
+                , "Resol. aprueba", "Fecha aprob.", "Área", "Fecha inicio", "Fecha fin", "Consultor"
+                , "Nro. censo made.", "Nro. censo no made.", "Nro. especies aprob.", "Volumen aprob."
+                , "Nro. especies balance"
+                , "Zona UTM", "Coord. este", "Coord. norte", "Nro. superv. plan", "Acto adm. superv.", "Plan supervisado"
+                , "Superv. antes", "Superv. durante", "Superv. despúes", "Amenaza CITE", "Amenaza DS", "Amenaza"
+                , "Nro. acervo", "Programado", "Est. calidad", "Fecha registro"];
+            columns_data = ["PCASUISTICA", "OBSERVAR", "REVISAR", "NUM_THABILITANTE", "TITULAR_ACTUAL", "RLEGAL", "DEPARTAMENTO", "PROVINCIA", "DISTRITO", "SECTOR", "MODALIDAD"
+                , "OD_AMBITO", "AREA", "FECHA_INICIO", "FECHA_FIN", "CADUCIDAD", "MEDIDA_CAUTELAR", "MEDIDA_PRECAUTORIA"
+                , "N_SUPERVISION", "N_SUPERVISION_INFRAC", "PORC_INFRACCION", "REQ_ENTIDAD", "DENUNCIA", "ESTADO_ESTABLECIMIENTO"
+                , "ANIO_ULTIMA_SUPERV", "INACTIVO", "N_PMANEJO", "ESTADO_CALIDAD", "FECHA_REGISTRO", "TIPO_PMANEJO", "NOMBRE_PMANEJO"
+                , "RESOLUCION_PMANEJO", "FEC_APRUEBA_PMANEJO", "AREA_PMANEJO", "FEC_INICIO_PMANEJO", "FEC_FIN_PMANEJO", "CONSULTOR_PMANEJO"
+                , "N_CENSO_MADE_PMANEJO", "N_CENSO_NOMADE_PMANEJO", "N_ESPECIE_APROBADO_PMANEJO", "VOL_APROBADO_PMANEJO"
+                , "N_ESPECIE_BEXTRACCION_PMANEJO"
+                , "ZONA_UTM_PMANEJO", "CESTE_PMANEJO", "CNORTE_PMANEJO", "N_SUPERVISION_PMANEJO", "ACTO_SUPERVISADO_PMANEJO", "SUPERVISADO_PMANEJO"
+                , "SUPERVISADO_ANTES_PMANEJO", "SUPERVISADO_DURANTE_PMANEJO", "SUPERVISADO_DESPUES_PMANEJO", "AMENAZA_CITE_PMANEJO", "AMENAZA_DS_PMANEJO", "ESPECIE_AMENAZADA_PMANEJO"
+                , "N_ACERVODOC_PMANEJO", "PROGRAMADO", "ESTADO_CALIDAD_PMANEJO", "FECREG_PMANEJO"];
+            options = {
+                page_length: 50, row_index: true, page_info: true, page_render: false, page_search: true,
+                row_view: true, row_fnView: "_EditPlan.fnRevisarTableConsolidado(this)",
+                row_change: true, row_fnChange: "_EditPlan.fnPriorizarTableConsolidado(this)"
+            };
+
+            return utilDt.fnLoadDataTable_Detail(_EditPlan.frm.find("#tbConsolidado"), columns_label, columns_data, options);
+        },
+        fnLoadTableConsolidado: () => {
+            var cod_plan = _EditPlan.frm.find("#hdfCodPlan").val();
+            var url = urlLocalSigo + "Planificacion/ManCasuistica/ListarConsolidadoPlanCasuisticaUniverso";
+            const option = { url: url, datos: { asCodPlan: cod_plan }, type: 'GET' };
+
+            utilSigo.fnAjax(option, function (result) {
+                if (result.success) {
+                    _EditPlan.dtConsolidado.clear().draw();
+                    _EditPlan.dtConsolidado.rows.add(result.data).draw();
+                    _EditPlan.fnSelectTableConsolidado();
+                }
+            });
+        },
+        fnSelectTableConsolidado: () => {
+            _EditPlan.dtConsolidado.rows().iterator('row', function (context, index) {
+                if (this.row(index).data().PRIORIZAR == 1) {
+                    $(this.row(index).node()).addClass('selected');
+                } else {
+                    $(this.row(index).node()).removeClass('selected');
+                }
+            });
+        },
+        fnRevisarTableConsolidado: (obj) => {
+            var url = urlLocalSigo + "Planificacion/ManCasuistica/_PlanCasuisticaUniverso";
+            let cod_pcasuistica = "";
+            let cod_plan = _EditPlan.frm.find("#hdfCodPlan").val();
+            let cod_secuencial = 0;
+
+            if (obj != null && obj != "") {
+                var data = _EditPlan.dtConsolidado.row($(obj).parents('tr')).data();
+                cod_pcasuistica = data.COD_PCASUISTICA;
+                cod_secuencial = data.COD_SECUENCIAL;
+
+                if (data.OBSERVAR == 'SI') {
+                    var option = {
+                        url: url, type: 'POST', datos: {
+                            asCodPCasuistica: cod_pcasuistica, asCodPlan: cod_plan, aiCodSecuencial: cod_secuencial, asTipo: "REVISAR"
+                        }, divId: "mdlPlanCasuisticaUniverso"
+                    };
+
+                    utilSigo.fnOpenModal(option, function () {
+                        _PlanCasuisticaUniverso.fnSaved = function (revisar) {
+                            data.REVISAR = revisar == true ? "SI" : "NO";
+                            _EditPlan.dtConsolidado.row($(obj).parents('tr')).data(data);
+
+                            $("#mdlPlanCasuisticaUniverso").modal('hide');
+                        }
+                    });
+                }
+            }
+        },
+        fnPriorizarTableConsolidado: (obj) => {
+            var url = urlLocalSigo + "Planificacion/ManCasuistica/PriorizarConsolidadoPlanCasuisticaUniverso";
+            var obj = $(obj).parents('tr');
+            let data = _EditPlan.dtConsolidado.row(obj).data();
+
+            var params = {
+                asCodPlan: _EditPlan.frm.find("#hdfCodPlan").val(),
+                aiCodSecuencial: data.COD_SECUENCIAL,
+                asCodPCasuistica: data.COD_PCASUISTICA,
+                abPriorizar: data.PRIORIZAR == 1 ? 0 : 1
+            };
+            var option = { url: url, datos: JSON.stringify(params), type: 'POST' };
+
+            utilSigo.fnAjax(option, function (result) {
+                if (result.success) {
+                    data.PRIORIZAR = data.PRIORIZAR == 1 ? 0 : 1;
+                    _EditPlan.dtConsolidado.row(obj).data(data);
+
+                    _EditPlan.fnSelectTableConsolidado();
+                } else {
+                    utilSigo.toastWarning("Aviso", result.msj);
+                }
+            });
+        },
+        fnInit: () => {
+            $.fn.select2.defaults.set("theme", "bootstrap4");
+            $('[data-toggle="tooltip"]').tooltip();
+
+            utilSigo.fnFormatDate(_EditPlan.frm.find("#txtFechaEmision"));
+
+            _EditPlan.dtColaborador = _EditPlan.fnBuildTableColaborador();
+            _EditPlan.fnLoadTableColaborador();
+            _EditPlan.dtCriterio = _EditPlan.fnBuildTableCriterio();
+            _EditPlan.fnLoadTableCriterio();
+            _EditPlan.dtCasuistica = _EditPlan.fnBuildTableCasuistica();
+            _EditPlan.fnLoadTableCasuistica();
+            _EditPlan.dtConsolidado = _EditPlan.fnBuildTableConsolidado();
+            _EditPlan.fnLoadTableConsolidado();
+
+            _EditPlan.fnShow();
+        },
+        fnSearchPersona: (tipo) => {
+            var url = urlLocalSigo + "General/Controles/_BuscarPersonaGeneral";
+            var option = { url: url, type: 'GET', datos: { asBusGrupo: "PERSONA", asCodPTipo: "TODOS", asTipoPersona: "N" }, divId: "mdlBuscarPersona" };
+            utilSigo.fnOpenModal(option, function () {
+                _bPerGen.fnAsignarDatos = function (obj) {
+                    if (obj != null && obj != "") {
+                        var data = _bPerGen.dtBuscarPerona.row($(obj).parents('tr')).data();
+
+                        if (tipo == "FUNCIONARIO") {
+                            _EditPlan.frm.find("#hdfCodFuncionario").val(data["COD_PERSONA"]);
+                            _EditPlan.frm.find("#txtFuncionario").val(data["PERSONA"]);
+                            utilSigo.fnCloseModal("mdlBuscarPersona");
+                        } else if (tipo == "COLABORADOR") {
+                            let colaborador = {
+                                COD_PLAN: _EditPlan.frm.find("#hdfCodPlan").val(),
+                                COD_COLABORADOR: data["COD_PERSONA"]
+                            };
+
+                            _EditPlan.fnSaveColaborador(colaborador);
+                        }
+                    }
+                }
+                _bPerGen.fnInit();
+            });
+        },
+        fnSaveColaborador: (colaborador) => {
+            var url = urlLocalSigo + "Planificacion/ManPlan/GrabarPlanColaborador";
+            var option = { url: url, datos: JSON.stringify(colaborador), type: 'POST' };
+
+            utilSigo.fnAjax(option, function (data) {
+                if (data.success) {
+                    utilSigo.toastSuccess("Éxito", data.msj);
+                    _EditPlan.fnLoadTableColaborador();
+                    utilSigo.fnCloseModal("mdlBuscarPersona");
+                }
+                else {
+                    utilSigo.toastWarning("Aviso", data.msj);
+                }
+            });
+        },
+        fnDeleteColaborador: (obj) => {
+            var url = urlLocalSigo + "Planificacion/ManPlan/EliminarPlanColaborador";
+            var data = _EditPlan.dtColaborador.row($(obj).parents('tr')).data();
+            var params = {
+                asCodPlan: _EditPlan.frm.find("#hdfCodPlan").val(),
+                asCodColaborador: data.COD_COLABORADOR
+            };
+            var option = { url: url, datos: JSON.stringify(params), type: 'POST' };
+
+            utilSigo.dialogConfirm('', "¿Desea eliminar el registro?", function (r) {
+                if (r) {
+                    utilSigo.fnAjax(option, function (data) {
+                        if (data.success) {
+                            utilSigo.toastSuccess("Éxito", data.msj);
+                            _EditPlan.fnLoadTableColaborador();
+                        }
+                        else {
+                            utilSigo.toastWarning("Aviso", data.msj);
+                        }
+                    });
+                }
+            });
+        },
+        fnAddEditCriterio: (obj) => {
+            var url = urlLocalSigo + "Planificacion/ManCriterio/_PlanCriterio";
+            let cod_plan = _EditPlan.frm.find("#hdfCodPlan").val();
+            let cod_pcriterio = "";
+
+            if (obj != null && obj != "") {
+                var data = _EditPlan.dtCriterio.row($(obj).parents('tr')).data();
+                cod_pcriterio = data.COD_PCRITERIO;
+            }
+
+            var option = { url: url, type: 'POST', datos: { asCodPCriterio: cod_pcriterio, asCodPlan: cod_plan }, divId: "mdlPlanCriterio" };
+
+            utilSigo.fnOpenModal(option, function () {
+                _PlanCriterio.fnSaved = function () {
+                    _EditPlan.fnLoadTableCriterio();
+                }
+            });
+        },
+        fnDeleteCriterio: (obj) => {
+            var url = urlLocalSigo + "Planificacion/ManCriterio/EliminarPlanCriterio";
+            var data = _EditPlan.dtCriterio.row($(obj).parents('tr')).data();
+            var params = {
+                asCodPCriterio: data.COD_PCRITERIO,
+                asCodPlan: _EditPlan.frm.find("#hdfCodPlan").val()
+            };
+            var option = { url: url, datos: JSON.stringify(params), type: 'POST' };
+
+            utilSigo.dialogConfirm('', "¿Desea eliminar el registro?", function (r) {
+                if (r) {
+                    utilSigo.fnAjax(option, function (data) {
+                        if (data.success) {
+                            utilSigo.toastSuccess("Éxito", data.msj);
+                            _EditPlan.fnLoadTableCriterio();
+                        }
+                        else {
+                            utilSigo.toastWarning("Aviso", data.msj);
+                        }
+                    });
+                }
+            });
+        },
+        fnReplicarCriterio: () => {
+            var url = urlLocalSigo + "Planificacion/ManCriterio/_ReplicarPlanCriterio";
+            let cod_plan = _EditPlan.frm.find("#hdfCodPlan").val();
+
+            var option = { url: url, type: 'POST', datos: { asCodPlan: cod_plan }, divId: "mdlPlanCriterio" };
+
+            utilSigo.fnOpenModal(option, function () {
+                _ReplicarPlanCriterio.fnSaved = function () {
+                    _EditPlan.fnLoadTableCriterio();
+                    $("#mdlPlanCriterio").modal('hide');
+                }
+            });
+        },
+        fnAddEditCasuistica: (obj) => {
+            var url = urlLocalSigo + "Planificacion/ManCasuistica/_PlanCasuistica";
+            let cod_plan = _EditPlan.frm.find("#hdfCodPlan").val();
+            let cod_pcasuistica = "";
+
+            if (obj != null && obj != "") {
+                var data = _EditPlan.dtCasuistica.row($(obj).parents('tr')).data();
+                cod_pcasuistica = data.COD_PCASUISTICA;
+            }
+
+            var option = { url: url, type: 'POST', datos: { asCodPCasuistica: cod_pcasuistica, asCodPlan: cod_plan }, divId: "mdlPlanCasuistica" };
+
+            utilSigo.fnOpenModal(option, function () {
+                _PlanCasuistica.fnSaved = function () {
+                    _EditPlan.fnLoadTableCasuistica();
+                    _EditPlan.fnLoadTableConsolidado();
+                    $("#mdlPlanCasuistica").modal('hide');
+                }
+            });
+        },
+        fnDeleteCasuistica: (obj) => {
+            var url = urlLocalSigo + "Planificacion/ManCasuistica/EliminarPlanCasuistica";
+            var data = _EditPlan.dtCasuistica.row($(obj).parents('tr')).data();
+            var params = {
+                asCodPlan: _EditPlan.frm.find("#hdfCodPlan").val(),
+                asCodPCasuistica: data.COD_PCASUISTICA
+            };
+            var option = { url: url, datos: JSON.stringify(params), type: 'POST' };
+
+            utilSigo.dialogConfirm('', "¿Desea eliminar el registro?", function (r) {
+                if (r) {
+                    utilSigo.fnAjax(option, function (data) {
+                        if (data.success) {
+                            utilSigo.toastSuccess("Éxito", data.msj);
+                            _EditPlan.fnLoadTableCasuistica();
+                            _EditPlan.fnLoadTableConsolidado();
+                        }
+                        else {
+                            utilSigo.toastWarning("Aviso", data.msj);
+                        }
+                    });
+                }
+            });
+        },
+        fnImportTableConsolidado: (e, obj) => {
+            var url = urlLocalSigo + "Planificacion/ManCasuistica/ImportarPriorizarConsolidadoPlanCasuisticaUniverso";
+            var cod_plan = _EditPlan.frm.find("#hdfCodPlan").val();
+
+            uploadFile.fileSelectHandler(e, obj, url, { asCodPlan: cod_plan }, function (data) {
+                _EditPlan.fnLoadTableConsolidado();
+            });
+        },
+        fnExportTableConsolidado: () => {
+            var cod_plan = _EditPlan.frm.find("#hdfCodPlan").val();
+            var url = urlLocalSigo + "Planificacion/ManCasuistica/ExportarConsolidadoPlanCasuisticaUniverso?asCodPlan=" + cod_plan;
+            window.location = url;
+        },
+        fnSubmitForm: () => {
+            var controls = ["ddlIndicadorId", "txtAnioPlan"];
+
+            if (!utilSigo.fnValidateForm(_EditPlan.frm, controls)) {
+                return _EditPlan.frm.valid();
+            }
+
+            _EditPlan.frm.submit();
+        },
+        fnSaveForm: () => {
+            var datosPlan = _EditPlan.frm.serializeObject();
+
+            datosPlan.txtAnioPlan = _EditPlan.frm.find("#txtAnioPlan").val();
+            datosPlan.vmControlCalidad = _ControlCalidad.fnGetDatosControlCalidad();
+
+            $.ajax({
+                url: _EditPlan.frm.action,
+                type: 'POST',
+                data: JSON.stringify(datosPlan),
+                contentType: 'application/json; charset=utf-8',
+                dataType: 'json',
+                success: function (data) {
+                    utilSigo.unblockUIGeneral();
+                    if (data.success) {
+                        _EditPlan.fnReturn(data.msj);
+                    }
+                    else utilSigo.toastWarning("Aviso", data.msj);
+                },
+                beforeSend: function () {
+                    utilSigo.blockUIGeneral();
+                },
+                error: function (jqXHR, error, errorThrown) {
+                    utilSigo.unblockUIGeneral();
+                    utilSigo.toastError("Error", "Ocurrió un error, comuníquese con el administrador");
+                }
+            });
+        }
+    }
+
+    $(document).ready(function () {
+        _EditPlan.frm = $("#frmPlan");
+
+        _EditPlan.fnInit();
+
+        //=====-----Para el registro de datos del formulario-----=====
+        //Validación personalizada
+        jQuery.validator.addMethod("invalidFrmPlan", function (value, element) {
+            switch ($(element).attr('id')) {
+                case 'ddlIndicadorId': return value == '0000000' ? false : true;
+            }
+        });
+
+        _EditPlan.frm.validate(utilSigo.fnValidate({
+            rules: {
+                ddlIndicadorId: { invalidFrmPlan: true },
+                txtAnioPlan: { required: true }
+            },
+            messages: {
+                ddlIndicadorId: { invalidFrmPlan: "Seleccione el estado actual del registro" },
+                txtAnioPlan: { required: "Ingrese el año del plan" }
+            },
+            fnSubmit: function (form) {
+                utilSigo.dialogConfirm('', 'Desea continuar con el registro?', function (r) {
+                    if (r) {
+                        _EditPlan.fnSaveForm();
+                    }
+                });
+            }
+        }));
+        //Validación de controles que usan Select2
+        _EditPlan.frm.find("select.select2-hidden-accessible").on("change", function (e) {
+            $(this).valid();
+        });
+    });
+</script>

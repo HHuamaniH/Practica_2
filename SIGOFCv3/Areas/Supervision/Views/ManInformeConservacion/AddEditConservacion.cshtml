@@ -1,0 +1,1030 @@
+﻿@model CapaEntidad.ViewModel.VM_Informe_Conservacion
+@{
+    ViewBag.Title = "AddEditConservacion";
+    Layout = "~/Views/Shared/_LayoutMain.cshtml";
+}
+
+<script src="~/Scripts/ckeditor5/ckeditor.js"></script>
+<script src="~/Scripts/sigo/utility.uploadFile.js"></script>
+<script src="~/Areas/Supervision/js/ManInformeConservacion/AddEditConservacion.js?V=@Guid.NewGuid().ToString()"></script>
+@section scripts{
+    <script>
+        "use strict"; var rol = '';
+    $(document).ready(function () {
+        //Validamos el rol del usuario
+        utilSigo.ValidaRol('@ViewBag.VAliasRol', 'btnRegistrar', '@Model.vmControlCalidad.ddlIndicadorId');
+    });
+    </script>
+}
+<script type="text/javascript">
+    ManInforme_AddEditConservacion.fnLoadData('@Html.Raw(Json.Encode(@Model.tbCoordenadaUTM))', "DataCoordenadaUTM");
+    ManInforme_AddEditConservacion.fnLoadData('@Html.Raw(Json.Encode(@Model.tbPrograma))', "DataPrograma");
+    ManInforme_AddEditConservacion.fnLoadData('@Html.Raw(Json.Encode(@Model.tbInfraestructura))', "DataInfraestructura");
+    ManInforme_AddEditConservacion.fnLoadData('@Html.Raw(Json.Encode(@Model.tbActividadPrograma))', "DataActividadPrograma");
+    ManInforme_AddEditConservacion.fnLoadData('@Html.Raw(Json.Encode(@Model.tbManejoImpacto))', "DataManejoImpacto");
+    ManInforme_AddEditConservacion.fnLoadData('@Html.Raw(Json.Encode(@Model.tbRegFlora))', "DataRegFlora");
+    ManInforme_AddEditConservacion.fnLoadData('@Html.Raw(Json.Encode(@Model.tbRegPaisaje))', "DataRegPaisaje");
+    ManInforme_AddEditConservacion.fnLoadData('@Html.Raw(Json.Encode(@Model.tbZonificacion))', "DataZonificacion");
+    ManInforme_AddEditConservacion.fnLoadData('@Html.Raw(Json.Encode(@Model.tbEquipamiento))', "DataEquipamiento");
+    ManInforme_AddEditConservacion.fnLoadData('@Html.Raw(Json.Encode(@Model.tbActTuristica))', "DataActTuristica");
+    ManInforme_AddEditConservacion.fnLoadData('@Html.Raw(Json.Encode(@Model.tbActIntAmbiental))', "DataIntAmbiental");
+    ManInforme_AddEditConservacion.fnLoadData('@Html.Raw(Json.Encode(@Model.tbActInvestigacion))', "DataActInvestigacion");
+    ManInforme_AddEditConservacion.fnLoadData('@Html.Raw(Json.Encode(@Model.tbActVisitas))', "DataActVisitas");
+    ManInforme_AddEditConservacion.fnLoadData('@Html.Raw(Json.Encode(@Model.tbActOtroPrograma))', "DataActOtroPrograma");
+
+
+
+
+</script>
+<style type="text/css">
+    #tbActObligAmbiental_wrapper, #tbObligacionActo_wrapper, #tbEspecieAprovechaOblig_wrapper {
+        padding: 0px;
+    }
+</style>
+
+<div class="container-fluid">
+    <div class="card">
+        <div class="card-header text-right">
+            @Model.lblTituloCabecera
+        </div>
+        <div class="card-body">
+            <div class="card">
+                <div class="card-header text-small">
+                    <a id="btnRegistrar" href="javascript:void(0)" style="cursor:pointer;" data-toggle="tooltip" data-placement="top" title="Guardar" onclick="ManInforme_AddEditConservacion.fnSubmitForm()"><i class="fa mx-2 fa-lg fa-save"></i></a>
+                    <a style="cursor:pointer;" data-toggle="tooltip" data-placement="top" title="Regresar" onclick="ManInforme_AddEditConservacion.fnReturnIndex()"><i class="fa mx-2 fa-lg fa-reply"></i></a>
+                    @Model.lblTituloEstado
+                </div>
+                <div class="card-body">
+                    <form id="frmManInforme_AddEditConservacion" action="@Url.Action("AddEditConservacion", "ManInformeConservacion", new { Area= "Supervision" })">
+                        @Html.HiddenFor(m => m.hdfCodInforme)
+                        @Html.HiddenFor(m => m.hdfRegEstado)
+                        @Html.HiddenFor(m => m.hdfCodMTipo)
+                        @Html.HiddenFor(m => m.hdfPerfil)
+                        <ul class="nav nav-tabs" id="myTab" role="tablist">
+                            <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#navEstado" role="tab" aria-controls="home" aria-selected="true">Estado Situacional</a></li>
+                            <li class="nav-item"><a class="nav-link active" data-toggle="tab" href="#navDatos" role="tab" aria-controls="home" aria-selected="true">Datos Generales</a></li>
+                            <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#navProgramas" role="tab" aria-controls="home" aria-selected="true">Programas</a></li>
+                            <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#navRegistros" role="tab" aria-controls="home" aria-selected="true">Registros</a></li>
+                            <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#navObligaciones" role="tab" aria-controls="home" aria-selected="true">Obligaciones</a></li>
+                            <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#navConclusion" role="tab" aria-controls="home" aria-selected="true">Conclusiones</a></li>
+                            <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#navIncidencias" role="tab" aria-controls="home" aria-selected="true">Incidencias</a></li>
+                            <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#navImpacto" role="tab" aria-controls="home" aria-selected="true">Impactos</a></li>
+                            <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#navInformeDigital" role="tab" aria-controls="home" aria-selected="true">Informe digital</a></li>
+                        </ul>
+                        <div class="tab-content">
+                            <div class="tab-pane fade show" id="navEstado" role="tabpanel" aria-labelledby="nav-home-tab">
+                                @{ Html.RenderAction("_ControlCalidad", "Controles", new { area = "GENERAL", dto = Model.vmControlCalidad, disableControl = true }); }
+                                @Html.Action("_FormatoControlCalidad", "ManInforme", new { COD_INFORME = Model.hdfCodInforme })
+                            </div>
+                            <div class="tab-pane fade show active" id="navDatos" role="tabpanel" aria-labelledby="nav-home-tab">
+                                <div class="card">
+                                    <div class="card-header text-small"></div><br />
+                                    <div class="card-header text-small">Datos Título Habilitante/Carta de Notificación</div>
+                                    <div class="card-body">
+                                        @Html.Partial("~/Areas/Supervision/Views/ManInforme/Render/_renderCNotificacion.cshtml", Model.vmInfCNotificacion
+                                        , new ViewDataDictionary { { "TIPO", "SIMPLE" } })
+                                    </div>
+                                    <div class="card-header text-small">Datos del Informe</div>
+                                    <div class="card-body">
+                                        <div class="form-row">
+                                            <div class="form-group col-md-3">
+                                                <label for="ddlOdId" class="text-small">O.D. desde donde registra la información</label>
+                                                @Html.DropDownListFor(m => m.ddlOdId, new SelectList(Model.ddlOd, "Value", "Text"), new { @class = "form-control form-control-sm" })
+                                            </div>
+                                            <div class="form-group col-md-3">
+                                                <label for="txtNumInforme" class="text-small">N° de Informe de Supervisión</label>
+                                                @Html.TextBoxFor(m => m.txtNumInforme, new { @class = "form-control form-control-sm" })
+                                            </div>
+                                            <div class="form-group col-md-2">
+                                                <label for="txtFechaEntrega" class="text-small">Fecha Entrega del Informe</label>
+                                                @Html.TextBoxFor(m => m.txtFechaEntrega, new { @class = "form-control form-control-sm", placeholder = "dd/mm/aaaa", maxlength = "10" })
+                                            </div>
+                                        </div>
+
+                                        <div class="form-row">
+                                            <div class="form-group col-md-5">
+                                                <div class="card">
+                                                    <div class="card-header">
+                                                        Denuncia
+                                                    </div>
+                                                    <div class="card-body">
+                                                        <div class="form-row ">
+                                                            <div class="form-group col-md-7">
+                                                                <label class="text-small" id="lblExpediente">Tramite STID</label>
+                                                                <div class="input-group">
+                                                                    <input type="text" id="inptExpediente" class="form-control form-control-sm" />
+                                                                    <div class="input-group-prepend">
+                                                                        <span class="input-group-text" id="idAddInforme">
+                                                                            <i class="fa fa-search" style="cursor:pointer;color:forestgreen"
+                                                                               onclick="ManInforme_AddEditConservacion.Denuncia.buscarTramite();">
+                                                                            </i>
+                                                                        </span>
+                                                                    </div>
+                                                                    <div class="input-group-prepend">
+                                                                        <span class="input-group-text" id="idAddInforme">
+                                                                            <i class="fa fa-close" style="cursor:pointer;color:darkred"
+                                                                               onclick="ManInforme_AddEditConservacion.Denuncia.eliminarTramite();">
+                                                                            </i>
+                                                                        </span>
+                                                                    </div>
+                                                                    <div class="input-group-prepend responseOk" style="display:none">
+                                                                        <span class="input-group-text">
+                                                                            <i class="fa fa-check-circle" data-toggle="tooltip" data-placement="top" title="N° Tramite OK" style="color:forestgreen">
+                                                                            </i>
+                                                                        </span>
+                                                                    </div>
+                                                                    <div class="input-group-prepend responseError" style="display:none">
+                                                                        <span class="input-group-text">
+                                                                            <i class="fa fa-times-circle" data-toggle="tooltip" data-placement="top" title="No existe N° de Tramite" style="color:darkred">
+                                                                            </i>
+                                                                        </span>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="form-group col-md-5">
+                                                                <label class="text-small">Atendido</label>
+                                                                <div style="margin-top:7px;">
+                                                                    <div class="custom-control custom-radio custom-control-inline">
+                                                                        <input type="radio" class="custom-control-input" id="rbtnAtendido1" name="rbtnAtendido" value="1">
+                                                                        <label class="custom-control-label" for="rbtnAtendido1">Atendido</label>
+                                                                    </div>
+                                                                    <div class="custom-control custom-radio custom-control-inline">
+                                                                        <input type="radio" class="custom-control-input" id="rbtnAtendido2" name="rbtnAtendido" value="2">
+                                                                        <label class="custom-control-label" for="rbtnAtendido2">En Proceso</label>
+                                                                    </div>
+                                                                    <div class="custom-control custom-radio custom-control-inline">
+                                                                        <input type="radio" class="custom-control-input" id="rbtnAtendido3" name="rbtnAtendido" value="3">
+                                                                        <label class="custom-control-label" for="rbtnAtendido3">Trasladado</label>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-row">
+                                            <div class="col-md-12">
+                                                @Html.Partial("~/Areas/Supervision/Views/ManInforme/Render/_renderSupervisorCalidad.cshtml", new CapaEntidad.ViewModel.VM_SupervisorCalidad() { hdSupervisor_Calidad = Model.hdSupervisor_Calidad, Nombre_Supervisor_Calidad = Model.Nombre_Supervisor_Calidad })
+                                            </div>
+                                        </div>
+                                        <div class="form-row">
+                                            <div class="col-md-12">
+                                                @Html.Partial("~/Areas/Supervision/Views/ManInforme/Render/_renderSupervisor.cshtml", Model.tbSupervisor)
+                                            </div>
+                                        </div>
+                                        <div class="form-row" style="margin-top:10px;">
+                                            <div class="form-group col-md-6">
+                                                <label for="txtAsunto" class="text-small">Asunto</label>
+                                                @Html.TextAreaFor(m => m.txtAsunto, new { @class = "form-control form-control-sm", @rows = "14" })
+                                            </div>
+                                            <div class="form-group col-md-6">
+                                                <label for="txtContenido" class="text-small">Contenido</label>
+                                                <div id="txtContenido" class="ckeditor-inf">
+                                                    <div class="toolbar-container"></div>
+                                                    <div class="editor-container">
+                                                        <div class="editor">
+                                                            @Html.Raw(Model.txtContenido)
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                @Html.HiddenFor(m => m.txtContenido)
+                                                @*<label for="txtContenido" class="text-small">Contenido</label>
+                                @Html.TextAreaFor(m => m.txtContenido, new { @class = "form-control form-control-sm", @rows = "5" })*@
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="card-header text-small">Datos de la Supervisión</div>
+                                    <div class="card-body">
+                                        @Html.Partial("~/Areas/Supervision/Views/ManInforme/Render/_renderDatosSupervision.cshtml", Model.vmDatoSupervision)
+                                    </div>
+                                    <div class="card-header text-small">Ubicación del Título Habilitante</div>
+                                    <div class="card-body">
+                                        <div class="form-row">
+                                            <div class="col-md-6 mb-3">
+                                                <label for="txtUbigeo" class="text-small">Ubigeo<i class="fa fa-cog fa-spin text-danger" id="iconUbigeo" style="display:none;" data-toggle="tooltip" data-placement="top" title="Seleccione Ubigeo"></i></label>
+                                                <div class="input-group">
+                                                    <div class="input-group-prepend">
+                                                        <span class="input-group-text"><i class="fa fa-search" style="cursor:pointer;" data-toggle="tooltip" data-placement="top" title="Seleccionar Ubigeo" onclick="ManInforme_AddEditConservacion.fnViewModalUbigeo();"></i></span>
+                                                    </div>
+                                                    @Html.EditorFor(m => m.txtUbigeo, new { htmlAttributes = new { @class = "form-control form-control-sm", @disabled = "disabled" } })
+                                                    @Html.HiddenFor(m => m.hdfCodUbigeo)
+                                                </div>
+                                            </div>
+                                            <div class="form-group col-md-6">
+                                                <label for="txtSector" class="text-small">Sector</label>
+                                                @Html.TextBoxFor(m => m.txtSector, new { @class = "form-control form-control-sm" })
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="card-header text-small">Sobre el PGMF</div>
+                                    <div class="card-body">
+                                        <div class="form-row">
+                                            <div class="col-md-6 mb-3">
+                                                <label for="txtTitularEjecutaPgmf" class="text-small">Titular que Ejecutó el PGMF</label>
+                                                <div class="input-group">
+                                                    <div class="input-group-prepend">
+                                                        <span class="input-group-text"><i class="fa fa-search-plus" style="cursor:pointer;" data-toggle="tooltip" data-placement="top" title="Seleccionar titular" onclick="ManInforme_AddEditConservacion.fnBuscarPersona('TITULAR_EJECUTA','0000001');"></i></span>
+                                                    </div>
+                                                    @Html.EditorFor(m => m.txtTitularEjecutaPgmf, new { htmlAttributes = new { @class = "form-control form-control-sm", @disabled = "disabled" } })
+                                                    @Html.HiddenFor(m => m.hdfCodTitularEjecutaPgmf)
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6 mb-3">
+                                                <label for="txtRegenteImplPgmf" class="text-small">Regente Encargado de la Implementación</label>
+                                                <div class="input-group">
+                                                    <div class="input-group-prepend">
+                                                        <span class="input-group-text"><i class="fa fa-search-plus" style="cursor:pointer;" data-toggle="tooltip" data-placement="top" title="Seleccionar regente" onclick="ManInforme_AddEditConservacion.fnBuscarPersona('REGENTE_IMPLEMENTA', '0000020,0000003');"></i></span>
+                                                    </div>
+                                                    @Html.EditorFor(m => m.txtRegenteImplPgmf, new { htmlAttributes = new { @class = "form-control form-control-sm", @disabled = "disabled" } })
+                                                    @Html.HiddenFor(m => m.hdfCodRegenteImplPgmf)
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="card-header text-small">Delimitación de la Concesión</div>
+                                    <div class="card-body">
+                                        <div class="form-row">
+                                            <div class="table-responsive">
+                                                <table id="tbDelimitacion" style="width:100%" class="table table-hover table-bordered">
+                                                    <thead></thead>
+                                                    <tbody></tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                        <div class="form-row">
+                                            <div class="table-responsive">
+                                                <table id="tbCoordenadaUTM" style="width:100%" class="table table-hover table-bordered">
+                                                    <thead>
+                                                        <tr>
+                                                            <th colspan="10" class="text-sm-left">
+                                                                <div class="form-inline">
+                                                                    <i class="fa mx-2 fa-lg fa-file-o" style="cursor:pointer;" onclick="ManInforme_AddEditConservacion.fnAddEditConservacion('', 'COORDENADA_UTM');" data-toggle="tooltip" data-placement="top" title="Nuevo"></i>
+                                                                    <i class="fa mx-2 fa-lg fa-window-close-o" style="cursor:pointer;" onclick="ManInforme_AddEditConservacion.fnDeleteAllConservacion('COORDENADA_UTM');" data-toggle="tooltip" data-placement="top" title="Eliminar Todos"></i>
+                                                                    <strong>
+                                                                        Coordenadas UTM
+                                                                    </strong>
+                                                                </div>
+                                                            </th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody></tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="card-header text-small">Desplazamiento</div>
+                                    <div class="card-body">
+                                        <div class="form-row">
+                                            <div class="col-md-12">
+                                                @Html.Partial("~/Areas/Supervision/Views/ManInforme/Render/_renderDesplazamiento.cshtml", Model.tbDesplazamiento)
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="card-header text-small">Archivos Cargados en el SIADO</div>
+                                    <div class="card-body">
+                                        <div class="form-row">
+                                            @{
+                                                Html.RenderAction("_IntegracionSIADO", "Controles", new { area = "GENERAL", asCriterio = "SUBTIP_TITDOCSIGO", asSubCriterio = "0006", asValor = Model.hdfCodInforme });
+                                            }
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="tab-pane fade show" id="navProgramas" role="tabpanel" aria-labelledby="nav-home-tab">
+                                <div class="card">
+                                    <div class="card-header text-small"></div><br />
+                                    <div class="card-header text-small">Programa de Desarrollo Ecoturístico</div>
+                                    <div class="card-body">
+                                        <div class="form-row">
+                                            <div class="form-group col-md-3">
+                                                <label for="ddlCuentaCroquisId" class="text-small">Cuenta con croquis de ubicación</label>
+                                                @Html.DropDownListFor(m => m.ddlCuentaCroquisId, new SelectList(Model.ddlOpcionSiNo, "Value", "Text"), new { @class = "form-control form-control-sm" })
+                                            </div>
+                                            <div class="form-group col-md-3">
+                                                <label for="ddlCuentaSenderoId" class="text-small">Cuenta con senderos y rutas</label>
+                                                @Html.DropDownListFor(m => m.ddlCuentaSenderoId, new SelectList(Model.ddlOpcionSiNo, "Value", "Text"), new { @class = "form-control form-control-sm" })
+                                            </div>
+                                            <div class="form-group col-md-3">
+                                                <label for="ddlSenalizacionSenderoId" class="text-small">Los senderos se encuentran señalizados</label>
+                                                @Html.DropDownListFor(m => m.ddlSenalizacionSenderoId, new SelectList(Model.ddlOpcionSiNo, "Value", "Text"), new { @class = "form-control form-control-sm" })
+                                            </div>
+                                        </div>
+                                        <div class="form-row">
+                                            <div class="col-md-12">
+                                                <div class="table-responsive">
+                                                    <table id="tbActTuristica" style="width:100%" class="table table-hover table-bordered">
+                                                        <thead>
+                                                            <tr>
+                                                                <th colspan="10" class="text-sm-left">
+                                                                    <div class="form-inline">
+                                                                        <i class="fa mx-2 fa-lg fa-file-o" style="cursor:pointer;" onclick="ManInforme_AddEditConservacion.fnAddEditConservacion('', 'ACT_TURISTICA');" data-toggle="tooltip" data-placement="top" title="Nuevo"></i>
+                                                                        <i class="fa mx-2 fa-lg fa-window-close-o" style="cursor:pointer;" onclick="ManInforme_AddEditConservacion.fnDeleteAllConservacion('ACT_TURISTICA');" data-toggle="tooltip" data-placement="top" title="Eliminar Todos"></i>
+                                                                        <strong>
+                                                                            Actividad turística
+                                                                        </strong>
+                                                                    </div>
+                                                                </th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody></tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-row">
+                                            <div class="col-md-6 dvDatosEcot">
+                                                <div class="table-responsive">
+                                                    <table id="tbInfraestructura" style="width:100%" class="table table-hover table-bordered">
+                                                        <thead>
+                                                            <tr>
+                                                                <th colspan="8" class="text-sm-left">
+                                                                    <div class="form-inline">
+                                                                        <i class="fa mx-2 fa-lg fa-file-o" style="cursor:pointer;" onclick="ManInforme_AddEditConservacion.fnAddEditConservacion('', 'INFRAESTRUCTURA_ECOT');" data-toggle="tooltip" data-placement="top" title="Nuevo"></i>
+                                                                        <i class="fa mx-2 fa-lg fa-window-close-o" style="cursor:pointer;" onclick="ManInforme_AddEditConservacion.fnDeleteAllConservacion('INFRAESTRUCTURA_ECOT');" data-toggle="tooltip" data-placement="top" title="Eliminar Todos"></i>
+                                                                        <strong>
+                                                                            Infraestructura Implementada
+                                                                        </strong>
+                                                                    </div>
+                                                                </th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody></tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-md-12 dvDatosCons">
+                                                <div class="table-responsive">
+                                                    <table id="tbInfraestructuraCons" style="width:100%" class="table table-hover table-bordered">
+                                                        <thead>
+                                                            <tr>
+                                                                <th colspan="10" class="text-sm-left">
+                                                                    <div class="form-inline">
+                                                                        <i class="fa mx-2 fa-lg fa-file-o" style="cursor:pointer;" onclick="ManInforme_AddEditConservacion.fnAddEditConservacion('', 'INFRAESTRUCTURA_CONS');" data-toggle="tooltip" data-placement="top" title="Nuevo"></i>
+                                                                        <i class="fa mx-2 fa-lg fa-window-close-o" style="cursor:pointer;" onclick="ManInforme_AddEditConservacion.fnDeleteAllConservacion('INFRAESTRUCTURA_CONS');" data-toggle="tooltip" data-placement="top" title="Eliminar Todos"></i>
+                                                                        <strong>
+                                                                            Infraestructura Implementada
+                                                                        </strong>
+                                                                    </div>
+                                                                </th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody></tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-row dvDatosCons">
+                                            <div class="col-md-12">
+                                                <div class="table-responsive">
+                                                    <table id="tbZonificacionCons" style="width:100%" class="table table-hover table-bordered">
+                                                        <thead>
+                                                            <tr>
+                                                                <th colspan="10" class="text-sm-left">
+                                                                    <div class="form-inline">
+                                                                        <i class="fa mx-2 fa-lg fa-file-o" style="cursor:pointer;" onclick="ManInforme_AddEditConservacion.fnAddEditConservacion('', 'ZONIFICACION_CONS');" data-toggle="tooltip" data-placement="top" title="Nuevo"></i>
+                                                                        <i class="fa mx-2 fa-lg fa-window-close-o" style="cursor:pointer;" onclick="ManInforme_AddEditConservacion.fnDeleteAllConservacion('ZONIFICACION_CONS');" data-toggle="tooltip" data-placement="top" title="Eliminar Todos"></i>
+                                                                        <strong>
+                                                                            Zonificación de la Concesión
+                                                                        </strong>
+                                                                    </div>
+                                                                </th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody></tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-row dvDatosCons">
+                                            <div class="col-md-12">
+                                                <div class="table-responsive">
+                                                    <table id="tbEquipamientoCons" style="width:100%" class="table table-hover table-bordered">
+                                                        <thead>
+                                                            <tr>
+                                                                <th colspan="9" class="text-sm-left">
+                                                                    <div class="form-inline">
+                                                                        <i class="fa mx-2 fa-lg fa-file-o" style="cursor:pointer;" onclick="ManInforme_AddEditConservacion.fnAddEditConservacion('', 'EQUIPAMIENTO_CONS');" data-toggle="tooltip" data-placement="top" title="Nuevo"></i>
+                                                                        <i class="fa mx-2 fa-lg fa-window-close-o" style="cursor:pointer;" onclick="ManInforme_AddEditConservacion.fnDeleteAllConservacion('EQUIPAMIENTO_CONS');" data-toggle="tooltip" data-placement="top" title="Eliminar Todos"></i>
+                                                                        <strong>
+                                                                            Equipamiento de la Concesión
+                                                                        </strong>
+                                                                    </div>
+                                                                </th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody></tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-row dvDatosCons">
+                                            <div class="col-md-12">
+                                                <div class="table-responsive">
+                                                    <table id="tbCapacitacionCons" style="width:100%" class="table table-hover table-bordered">
+                                                        <thead>
+                                                            <tr>
+                                                                <th colspan="8" class="text-sm-left">
+                                                                    <div class="form-inline">
+                                                                        <i class="fa mx-2 fa-lg fa-file-o" style="cursor:pointer;" onclick="ManInforme_AddEditConservacion.fnAddEditConservacion('', 'CAPACITACION_CONS');" data-toggle="tooltip" data-placement="top" title="Nuevo"></i>
+                                                                        <i class="fa mx-2 fa-lg fa-window-close-o" style="cursor:pointer;" onclick="ManInforme_AddEditConservacion.fnDeleteAllConservacion('CAPACITACION_CONS');" data-toggle="tooltip" data-placement="top" title="Eliminar Todos"></i>
+                                                                        <strong>
+                                                                            Programa de Capacitación o Educación
+                                                                        </strong>
+                                                                    </div>
+                                                                </th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody></tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-row dvDatosCons">
+                                            <div class="col-md-12">
+                                                <div class="table-responsive">
+                                                    <table id="tbActividadCons" style="width:100%" class="table table-hover table-bordered">
+                                                        <thead>
+                                                            <tr>
+                                                                <th colspan="8" class="text-sm-left">
+                                                                    <div class="form-inline">
+                                                                        <i class="fa mx-2 fa-lg fa-file-o" style="cursor:pointer;" onclick="ManInforme_AddEditConservacion.fnAddEditConservacion('', 'ACTIVIDAD_CONS');" data-toggle="tooltip" data-placement="top" title="Nuevo"></i>
+                                                                        <i class="fa mx-2 fa-lg fa-window-close-o" style="cursor:pointer;" onclick="ManInforme_AddEditConservacion.fnDeleteAllConservacion('ACTIVIDAD_CONS');" data-toggle="tooltip" data-placement="top" title="Eliminar Todos"></i>
+                                                                        <strong>
+                                                                            Programa de relaciones comunitarias y participación local
+                                                                        </strong>
+                                                                    </div>
+                                                                </th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody></tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-row dvDatosCons">
+                                            <div class="col-md-12">
+                                                <div class="table-responsive">
+                                                    <table id="tbDocGestionCons" style="width:100%" class="table table-hover table-bordered">
+                                                        <thead>
+                                                            <tr>
+                                                                <th colspan="7" class="text-sm-left">
+                                                                    <div class="form-inline">
+                                                                        <i class="fa mx-2 fa-lg fa-file-o" style="cursor:pointer;" onclick="ManInforme_AddEditConservacion.fnAddEditConservacion('', 'DOSGESTION_CONS');" data-toggle="tooltip" data-placement="top" title="Nuevo"></i>
+                                                                        <i class="fa mx-2 fa-lg fa-window-close-o" style="cursor:pointer;" onclick="ManInforme_AddEditConservacion.fnDeleteAllConservacion('DOSGESTION_CONS');" data-toggle="tooltip" data-placement="top" title="Eliminar Todos"></i>
+                                                                        <strong>
+                                                                            Otros Documentos de Gestión de la Concesión
+                                                                        </strong>
+                                                                    </div>
+                                                                </th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody></tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="card-header text-small dvDatosEcot"> Programa de relaciones comunitarias y participación local</div>
+                                    <div class="card-body dvDatosEcot">
+                                        <div class="form-row">
+                                            <div class="col-md-6" style="padding:0px;">
+                                                <div class="table-responsive">
+                                                    <table id="tbProgParticipacion" style="width:100%" class="table table-hover table-bordered">
+                                                        <thead>
+                                                            <tr>
+                                                                <th colspan="6" class="text-sm-left">
+                                                                    <div class="form-inline">
+                                                                        <i class="fa mx-2 fa-lg fa-file-o" style="cursor:pointer;" onclick="ManInforme_AddEditConservacion.fnAddEditConservacion('', 'PROGRAMA_PARTICIPACION');" data-toggle="tooltip" data-placement="top" title="Nuevo"></i>
+                                                                        <i class="fa mx-2 fa-lg fa-window-close-o" style="cursor:pointer;" onclick="ManInforme_AddEditConservacion.fnDeleteAllConservacion('PROGRAMA_PARTICIPACION');" data-toggle="tooltip" data-placement="top" title="Eliminar Todos"></i>
+                                                                        <strong>
+                                                                            Actividades Realizadas
+                                                                        </strong>
+                                                                    </div>
+                                                                </th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody></tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-row">
+                                            <div class="form-group col-md-3">
+                                                <label for="ddlProgParticipacionDocId" class="text-small">Los actividades se encuentran documentadas</label>
+                                                @Html.DropDownList("ddlProgParticipacionDocId", new SelectList(Model.ddlOpcionSiNo, "Value", "Text"), new { @class = "form-control form-control-sm" })
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="card-header text-small dvDatosEcot">Programa de Capacitación o Educación</div>
+                                    <div class="card-body dvDatosEcot">
+                                        <div class="form-row">
+                                            <div class="col-md-6" style="padding:0px;">
+                                                <div class="table-responsive">
+                                                    <table id="tbProgCapacitacion" style="width:100%" class="table table-hover table-bordered">
+                                                        <thead>
+                                                            <tr>
+                                                                <th colspan="8" class="text-sm-left">
+                                                                    <div class="form-inline">
+                                                                        <i class="fa mx-2 fa-lg fa-file-o" style="cursor:pointer;" onclick="ManInforme_AddEditConservacion.fnAddEditConservacion('', 'PROGRAMA_CAPACITACION');" data-toggle="tooltip" data-placement="top" title="Nuevo"></i>
+                                                                        <i class="fa mx-2 fa-lg fa-window-close-o" style="cursor:pointer;" onclick="ManInforme_AddEditConservacion.fnDeleteAllConservacion('PROGRAMA_CAPACITACION');" data-toggle="tooltip" data-placement="top" title="Eliminar Todos"></i>
+                                                                        <strong>
+                                                                            Actividades Realizadas
+                                                                        </strong>
+                                                                    </div>
+                                                                </th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody></tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="card-header text-small dvDatosEcot">Programa de Protección del Área y Seguridad del Visitante</div>
+                                    <div class="card-body dvDatosEcot">
+                                        <div class="form-row">
+                                            <div class="table-responsive">
+                                                <table id="tbProgramaProteccion" style="width:100%" class="table table-hover table-bordered">
+                                                    <thead></thead>
+                                                    <tbody></tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="card-header text-small ">Programa de Investigación</div>
+                                    <div class="card-body ">
+                                        <div class="form-row dvDatosEcot_ d-none">
+                                            <div class="col-md-6" style="padding:0px;">
+                                                <div class="table-responsive">
+                                                    <table id="tbProgInvestigacion" style="width:100%" class="table table-hover table-bordered">
+                                                        <thead>
+                                                            <tr>
+                                                                <th colspan="6" class="text-sm-left">
+                                                                    <div class="form-inline">
+                                                                        <i class="fa mx-2 fa-lg fa-file-o" style="cursor:pointer;" onclick="ManInforme_AddEditConservacion.fnAddEditConservacion('', 'PROGRAMA_INVESTIGACION');" data-toggle="tooltip" data-placement="top" title="Nuevo"></i>
+                                                                        <i class="fa mx-2 fa-lg fa-window-close-o" style="cursor:pointer;" onclick="ManInforme_AddEditConservacion.fnDeleteAllConservacion('PROGRAMA_INVESTIGACION');" data-toggle="tooltip" data-placement="top" title="Eliminar Todos"></i>
+                                                                        <strong>
+                                                                            Actividades de Investigación
+                                                                        </strong>
+                                                                    </div>
+                                                                </th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody></tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-row">
+                                            <div class="col-md-12" style="padding:0px;">
+                                                <div class="table-responsive">
+                                                    <table id="tbActInvestigacion" style="width:100%" class="table table-hover table-bordered">
+                                                        <thead>
+                                                            <tr>
+                                                                <th colspan="6" class="text-sm-left">
+                                                                    <div class="form-inline">
+                                                                        <i class="fa mx-2 fa-lg fa-file-o" style="cursor:pointer;" onclick="ManInforme_AddEditConservacion.fnAddEditConservacion('', 'ACT_INVESTIGACION');" data-toggle="tooltip" data-placement="top" title="Nuevo"></i>
+                                                                        <i class="fa mx-2 fa-lg fa-window-close-o" style="cursor:pointer;" onclick="ManInforme_AddEditConservacion.fnDeleteAllConservacion('ACT_INVESTIGACION');" data-toggle="tooltip" data-placement="top" title="Eliminar Todos"></i>
+                                                                        <strong>
+                                                                            Información de la Actividad de investigación
+                                                                        </strong>
+                                                                    </div>
+                                                                </th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody></tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="card-header text-small   ">Programa de Interpretación Ambiental</div>
+                                    <div class="card-body ">
+                                        <div class="form-row dvDatosEcot_ d-none">
+                                            <div class="col-md-6" style="padding:0px;">
+                                                <div class="table-responsive">
+                                                    <table id="tbProgInterpretacion" style="width:100%" class="table table-hover table-bordered">
+                                                        <thead>
+                                                            <tr>
+                                                                <th colspan="5" class="text-sm-left">
+                                                                    <div class="form-inline">
+                                                                        <i class="fa mx-2 fa-lg fa-file-o" style="cursor:pointer;" onclick="ManInforme_AddEditConservacion.fnAddEditConservacion('', 'PROGRAMA_INTERPRETACION');" data-toggle="tooltip" data-placement="top" title="Nuevo"></i>
+                                                                        <i class="fa mx-2 fa-lg fa-window-close-o" style="cursor:pointer;" onclick="ManInforme_AddEditConservacion.fnDeleteAllConservacion('PROGRAMA_INTERPRETACION');" data-toggle="tooltip" data-placement="top" title="Eliminar Todos"></i>
+                                                                        <strong>
+                                                                            Actividades Realizadas
+                                                                        </strong>
+                                                                    </div>
+                                                                </th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody></tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-row">
+                                            <div class="table-responsive">
+                                                <table id="tbIntAmbiental" style="width:100%" class="table table-hover table-bordered">
+                                                    <thead>
+                                                        <tr>
+                                                            <th colspan="10" class="text-sm-left">
+                                                                <div class="form-inline">
+                                                                    <i class="fa mx-2 fa-lg fa-file-o" style="cursor:pointer;" onclick="ManInforme_AddEditConservacion.fnAddEditConservacion('', 'INTERP_AMBIENTAL');" data-toggle="tooltip" data-placement="top" title="Nuevo"></i>
+                                                                    <i class="fa mx-2 fa-lg fa-window-close-o" style="cursor:pointer;" onclick="ManInforme_AddEditConservacion.fnDeleteAllConservacion('INTERP_AMBIENTAL');" data-toggle="tooltip" data-placement="top" title="Eliminar Todos"></i>
+                                                                    <strong>
+                                                                        Actividad de interpretación Ambiental
+                                                                    </strong>
+                                                                </div>
+                                                            </th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody></tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="card-header text-small dvDatosEcot">Programa de Promoción y Marketing</div>
+                                    <div class="card-body dvDatosEcot">
+                                        <div class="form-row">
+                                            <div class="col-md-6" style="padding:0px;">
+                                                <div class="table-responsive">
+                                                    <table id="tbProgPromocion" style="width:100%" class="table table-hover table-bordered">
+                                                        <thead>
+                                                            <tr>
+                                                                <th colspan="5" class="text-sm-left">
+                                                                    <div class="form-inline">
+                                                                        <i class="fa mx-2 fa-lg fa-file-o" style="cursor:pointer;" onclick="ManInforme_AddEditConservacion.fnAddEditConservacion('', 'PROGRAMA_PROMOCION');" data-toggle="tooltip" data-placement="top" title="Nuevo"></i>
+                                                                        <i class="fa mx-2 fa-lg fa-window-close-o" style="cursor:pointer;" onclick="ManInforme_AddEditConservacion.fnDeleteAllConservacion('PROGRAMA_PROMOCION');" data-toggle="tooltip" data-placement="top" title="Eliminar Todos"></i>
+                                                                        <strong>
+                                                                            Actividades Realizadas
+                                                                        </strong>
+                                                                    </div>
+                                                                </th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody></tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="card-header text-small dvDatosEcot">Programa de Monitoreo y Evaluación</div>
+                                    <div class="card-body dvDatosEcot">
+                                        <div class="form-row">
+                                            <div class="col-md-6" style="padding:0px;">
+                                                <div class="table-responsive">
+                                                    <table id="tbProgMonitoreo" style="width:100%" class="table table-hover table-bordered">
+                                                        <thead>
+                                                            <tr>
+                                                                <th colspan="5" class="text-sm-left">
+                                                                    <div class="form-inline">
+                                                                        <i class="fa mx-2 fa-lg fa-file-o" style="cursor:pointer;" onclick="ManInforme_AddEditConservacion.fnAddEditConservacion('', 'PROGRAMA_MONITOREO');" data-toggle="tooltip" data-placement="top" title="Nuevo"></i>
+                                                                        <i class="fa mx-2 fa-lg fa-window-close-o" style="cursor:pointer;" onclick="ManInforme_AddEditConservacion.fnDeleteAllConservacion('PROGRAMA_MONITOREO');" data-toggle="tooltip" data-placement="top" title="Eliminar Todos"></i>
+                                                                        <strong>
+                                                                            Actividades Realizadas
+                                                                        </strong>
+                                                                    </div>
+                                                                </th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody></tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-row">
+                                            <div class="table-responsive">
+                                                <table id="tbEvaluacionActividad" style="width:100%" class="table table-hover table-bordered">
+                                                    <thead></thead>
+                                                    <tbody></tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="card-header text-small dvDatosEcot">Programa de Identificación y Manejo de Impactos</div>
+                                    <div class="card-body dvDatosEcot">
+                                        <div class="form-row">
+                                            <div class="table-responsive">
+                                                <table id="tbProgIdentificacion" style="width:100%" class="table table-hover table-bordered">
+                                                    <thead>
+                                                        <tr>
+                                                            <th colspan="7" class="text-sm-left">
+                                                                <div class="form-inline">
+                                                                    <i class="fa mx-2 fa-lg fa-file-o" style="cursor:pointer;" onclick="ManInforme_AddEditConservacion.fnAddEditConservacion('', 'PROGRAMA_IDENTIFICACION');" data-toggle="tooltip" data-placement="top" title="Nuevo"></i>
+                                                                    <i class="fa mx-2 fa-lg fa-window-close-o" style="cursor:pointer;" onclick="ManInforme_AddEditConservacion.fnDeleteAllConservacion('PROGRAMA_IDENTIFICACION');" data-toggle="tooltip" data-placement="top" title="Eliminar Todos"></i>
+                                                                    <strong>
+                                                                        Impactos
+                                                                    </strong>
+                                                                </div>
+                                                            </th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody></tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="card-header text-small">Programa de Seguridad del Turista e Investigador</div>
+                                    <div class="card-body ">
+                                        <div class="form-row">
+                                            <div class="table-responsive">
+                                                <table id="tbProgramaSegTurista" style="width:100%" class="table table-hover table-bordered">
+                                                    <thead></thead>
+                                                    <tbody></tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="card-header text-small">Programa de Visitas</div>
+                                    <div class="card-body ">
+                                        <div class="form-row">
+                                            <div class="table-responsive">
+                                                <table id="tbActVisitas" style="width:100%" class="table table-hover table-bordered">
+                                                    <thead>
+                                                        <tr>
+                                                            <th colspan="10" class="text-sm-left">
+                                                                <div class="form-inline">
+                                                                    <i class="fa mx-2 fa-lg fa-file-o" style="cursor:pointer;" onclick="ManInforme_AddEditConservacion.fnAddEditConservacion('', 'ACT_VISITAS');" data-toggle="tooltip" data-placement="top" title="Nuevo"></i>
+                                                                    <i class="fa mx-2 fa-lg fa-window-close-o" style="cursor:pointer;" onclick="ManInforme_AddEditConservacion.fnDeleteAllConservacion('ACT_VISITAS');" data-toggle="tooltip" data-placement="top" title="Eliminar Todos"></i>
+                                                                    <strong>
+                                                                        Actividad de Visitas
+                                                                    </strong>
+                                                                </div>
+                                                            </th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody></tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="card-header text-small">Otros Programas</div>
+                                    <div class="card-body ">
+                                        <div class="form-row">
+                                            <div class="table-responsive">
+                                                <table id="tbActOtroPrograma" style="width:100%" class="table table-hover table-bordered">
+                                                    <thead>
+                                                        <tr>
+                                                            <th colspan="10" class="text-sm-left">
+                                                                <div class="form-inline">
+                                                                    <i class="fa mx-2 fa-lg fa-file-o" style="cursor:pointer;" onclick="ManInforme_AddEditConservacion.fnAddEditConservacion('', 'ACT_OTROS_PROGRAMAS');" data-toggle="tooltip" data-placement="top" title="Nuevo"></i>
+                                                                    <i class="fa mx-2 fa-lg fa-window-close-o" style="cursor:pointer;" onclick="ManInforme_AddEditConservacion.fnDeleteAllConservacion('ACT_OTROS_PROGRAMAS');" data-toggle="tooltip" data-placement="top" title="Eliminar Todos"></i>
+                                                                    <strong>
+                                                                        Actividad Otro Programa
+                                                                    </strong>
+                                                                </div>
+                                                            </th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody></tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="card-header text-small">Información Adicional</div>
+                                    <div class="card-body ">
+                                        <div class="form-row">
+                                            <div class="table-responsive">
+                                                <table id="tbInfoAdicional" style="width:100%" class="table table-hover table-bordered">
+                                                    <thead></thead>
+                                                    <tbody></tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="tab-pane fade show" id="navRegistros" role="tabpanel" aria-labelledby="nav-home-tab">
+                                <div class="card">
+                                    <div class="card-header text-small"></div>
+                                    <div class="card-body">
+                                        <div class="form-row">
+                                            <div class="col-md-12">
+                                                @Html.Partial("~/Areas/Supervision/Views/ManInforme/Render/_renderAvistamientoFauna.cshtml", Model.tbRegFauna
+                                                    , new ViewDataDictionary { { "TITULO", "Registro de Fauna Silvestre" } })
+                                            </div>
+                                        </div>
+                                        <br />
+                                        <div class="form-row">
+                                            <div class="table-responsive">
+                                                <table id="tbRegFlora" style="width:100%" class="table table-hover table-bordered">
+                                                    <thead>
+                                                        <tr>
+                                                            <th colspan="11" class="text-sm-left">
+                                                                <div class="form-inline">
+                                                                    <i class="fa mx-2 fa-lg fa-file-o" style="cursor:pointer;" onclick="ManInforme_AddEditConservacion.fnAddEditConservacion('', 'REGISTRO_FLORA');" data-toggle="tooltip" data-placement="top" title="Nuevo"></i>
+                                                                    <i class="fa mx-2 fa-lg fa-window-close-o" style="cursor:pointer;" onclick="ManInforme_AddEditConservacion.fnDeleteAllConservacion('REGISTRO_FLORA');" data-toggle="tooltip" data-placement="top" title="Eliminar Todos"></i>
+                                                                    <strong>
+                                                                        Registro de Flora Silvestre
+                                                                    </strong>
+                                                                </div>
+                                                            </th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody></tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                        <br />
+                                        <div class="form-row">
+                                            <div class="table-responsive">
+                                                <table id="tbRegPaisaje" style="width:100%" class="table table-hover table-bordered">
+                                                    <thead>
+                                                        <tr>
+                                                            <th colspan="10" class="text-sm-left">
+                                                                <div class="form-inline">
+                                                                    <i class="fa mx-2 fa-lg fa-file-o" style="cursor:pointer;" onclick="ManInforme_AddEditConservacion.fnAddEditConservacion('', 'REGISTRO_PAISAJE');" data-toggle="tooltip" data-placement="top" title="Nuevo"></i>
+                                                                    <i class="fa mx-2 fa-lg fa-window-close-o" style="cursor:pointer;" onclick="ManInforme_AddEditConservacion.fnDeleteAllConservacion('REGISTRO_PAISAJE');" data-toggle="tooltip" data-placement="top" title="Eliminar Todos"></i>
+                                                                    <strong>
+                                                                        Registro de Recursos Paisajísticos y/o Culturales
+                                                                    </strong>
+                                                                </div>
+                                                            </th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody></tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="tab-pane fade show" id="navObligaciones" role="tabpanel" aria-labelledby="nav-home-tab">
+                                <div class="card">
+                                    <div class="card-header text-small"></div><br />
+                                    @Html.Partial("~/Areas/Supervision/Views/ManInforme/Render/_renderObligContractual.cshtml", Model.tbObligacion)
+                                    @Html.Partial("~/Areas/Supervision/Views/ManInforme/Render/_renderObligacionTitular.cshtml", Model.tbObligTitular)
+                                </div>
+                            </div>
+                            <div class="tab-pane fade show" id="navConclusion" role="tabpanel" aria-labelledby="nav-home-tab">
+                                <div class="card">
+                                    <div class="card-header text-small"></div>
+                                    <div class="card-body">
+                                        <div class="form-row">
+                                            <div class="form-group col-md-12">
+                                                <label for="txtObservacion" class="text-small">Observaciones</label>
+                                                @Html.TextAreaFor(m => m.txtObservacion, new { @class = "form-control form-control-sm", @rows = "7" })
+                                            </div>
+                                        </div>
+                                        <div class="form-row">
+                                            <div class="form-group col-md-12">
+                                                <label for="txtConclusion" class="text-small">Conclusiones del Informe de Supervisión</label>
+                                                <div id="txtConclusion" class="ckeditor-inf">
+                                                    <div class="toolbar-container"></div>
+                                                    <div class="editor-container">
+                                                        <div class="editor">
+                                                            @Html.Raw(Model.txtConclusion)
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                @Html.HiddenFor(m => m.txtConclusion)
+                                                @*<label for="txtConclusion" class="text-small">Conclusiones del Informe de Supervisión</label>
+                                @Html.TextAreaFor(m => m.txtConclusion, new { @class = "form-control form-control-sm" })*@
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="tab-pane fade show" id="navIncidencias" role="tabpanel" aria-labelledby="nav-home-tab">
+                                <div class="card-header text-small">
+                                    Incidencias
+                                </div>
+                                <div class="card-body">
+                                    <input type="hidden" id="h1" value="" />
+                                    <input type="hidden" id="h2" value="" />
+                                    <div class="form-row">
+                                        <input type="hidden" id="COD_IINCIDENCIA" value="0">
+                                        <div class="form-group col-md-4">
+                                            <label for="txt_FECHA_SUCESO" class="text-small">FECHA SUCESO:</label>
+                                            <input type="date" id="txt_FECHA_SUCESO" name="txt_FECHA_SUCESO" class="form-control form-control-sm valid">
+                                        </div>
+                                        <div class="form-group col-md-4">
+                                            <label for="txt_HORA_SUCESO" class="text-small">
+                                                HORA SUCESO:
+                                            </label>
+                                            <input class="form-control form-control-sm" type="time" id="txt_HORA_SUCESO" />
+                                        </div>
+                                    </div>
+                                    <div class="form-row">
+                                        <div class="form-group col-md-4">
+                                            <label for="cboRIESGO" class="text-small">RIESGO</label>
+                                            <select class="form-control form-control-sm" id="cboRIESGO" name="cboRIESGO">
+                                                <option value="00">--Seleccionar--</option>
+                                            </select><div id="tooltip_containerRIESGO"></div>
+                                        </div>
+                                        <div class="form-group col-md-4">
+                                            <label for="cboPROCESO" class="text-small">PROCESO</label>
+                                            <select class="form-control form-control-sm" id="cboPROCESO" name="cboPROCESO">
+                                                <option value="00">--Seleccionar--</option>
+                                            </select><div id="tooltip_containerPROCESO"></div>
+                                        </div>
+                                        <div class="form-group col-md-4">
+                                            <label for="cboCIRCUNSTANCIA" class="text-small">CIRCUNSTANCIA</label>
+                                            <select class="form-control form-control-sm" id="cboCIRCUNSTANCIA" name="cboCIRCUNSTANCIA">
+                                                <option value="00">--Seleccionar--</option>
+                                            </select><div id="tooltip_containerCIRCUNSTANCIA"></div>
+                                        </div>
+                                        <div class="form-group col-md-4">
+                                            <label for="txt_UBICACION" class="text-small">
+                                                UBICACION:
+                                            </label>
+                                            <input class="form-control form-control-sm" type="text" id="txt_UBICACION" />
+                                        </div>
+                                        <div class="form-group col-md-4">
+                                            <label for="cboEFECTO" class="text-small">EFECTO</label>
+                                            <select class="form-control form-control-sm" id="cboEFECTO" name="cboEFECTO">
+                                                <option value="00">--Seleccionar--</option>
+                                            </select><div id="tooltip_containerEFECTO"></div>
+                                        </div>
+                                    </div>
+                                    <div class="form-row">
+                                        <div class="form-group col-md-4">
+                                            <label for="NIVEL_1" class="text-small">NIVEL 1</label>
+                                            <select class="form-control form-control-sm" id="NIVEL_1" name="NIVEL_1">
+                                                <option selected="selected" value="00">--Seleccionar--</option>
+                                            </select><div id="tooltip_containerNIVEL_1"></div>
+                                        </div>
+                                        <div class="form-group col-md-4">
+                                            <label for="NIVEL_2" class="text-small">NIVEL 2</label>
+                                            <select class="form-control form-control-sm" id="NIVEL_2" name="NIVEL_2">
+                                                <option selected="selected" value="00">--Seleccionar--</option>
+                                            </select><div id="tooltip_containerNIVEL_2"></div>
+                                        </div>
+                                        <div class="form-group col-md-4">
+                                            <label for="txt_DSCRP_INCIDENCIA" class="text-small">
+                                                INCIDENCIA:
+                                            </label>
+                                            <input class="form-control form-control-sm" type="text" id="txt_DSCRP_INCIDENCIA" />
+                                        </div>
+                                    </div>
+                                    <div class="form-row ValidateHidden" style="margin-top:10px;">
+                                        <div class="form-group col-md-8">
+                                            <label for="txt_OBSERVACIONES" class="text-small">
+                                                OBSERVACIONES:
+                                            </label>
+                                            <textarea id="txt_OBSERVACIONES" style="height:200px" class="form-control form-control-sm"></textarea>
+                                        </div>
+                                        <div class="form-group col-md-4">
+                                            <div class="btn-group derecha">
+                                                <button id="BtnLimpiar" type="button" class="btn btn-small btn-info tip" title="" data-original-title="Limpiar">LIMPIAR</button>
+                                                <button id="BtnGuardar" type="button" class="btn btn-small btn-info tip" title="" data-original-title="Nuevo">GUARDAR</button>
+                                                <button id="BtnExportar" type="button" class="btn btn-small btn-info tip" title="" data-original-title="Exportar">EXPORTAR</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-row">
+                                        <div class="col-md-12">
+                                            <table id="GridIINCIDENCIA" class="table table-hover table-bordered" width="100%" cellspacing="0"></table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="tab-pane fade show" id="navImpacto" role="tabpanel" aria-labelledby="nav-home-tab">
+                                <div class="card">
+                                    <div class="card-header text-small"></div><br />
+                                    @Html.Partial("~/Areas/Supervision/Views/ManInformeConservacion/_Impacto.cshtml", Model)
+                                </div>
+                            </div>
+                            <div class="tab-pane fade" id="navInformeDigital" role="tabpanel" aria-labelledby="nav-home-tab">
+                                @Html.Partial("~/Areas/Supervision/Views/ManInforme/_InformeDigital.cshtml")
+                            </div>
+
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script type="text/javascript">
+        setTimeout(function () {
+            $("#ddlIndicadorId").val("0000001");
+            $("#ddlIndicadorId").prop("disabled", "disabled");
+        }, 2000);
+    </script>
+
+    @* Para el modal _THabilitanteGeneral usado en el control _renderCNotificacion *@
+    <div class="modal fade hide" id="mdlManInforme_THabilitanteGeneral" tabindex="-1" role="dialog"></div>
+    @* Para el modal _BuscarPersonaGeneral usado en este control y _renderSupervisor *@
+    <div class="modal fade hide" id="mdlControles_BuscarPersonaGeneral" tabindex="-1" role="dialog"></div>
+    @* Para el modal _DenunciaSITD usado en este control *@
+    <div class="modal fade hide" id="mdlControles_DenunciaSITD" tabindex="-1" role="dialog"></div>
+    @* Para el modal _Ubigeo usado en este control *@
+    <div class="modal fade hide" id="mdlControles_Ubigeo" role="dialog"></div>
+    @* Para el modal _CoordenadaUTM y otros usado en este control *@
+    <div class="modal fade hide" id="mdlManInformeConservacion" role="dialog"></div>
+    @* Para el modal _AvistamientoFauna usado en el control _renderAvistamientoFauna *@
+    <div class="modal fade hide" id="mdlManInforme_AvistamientoFauna" role="dialog"></div>
+    @* Para los modals relacionados a las Obligaciones Contractuales usado en este control *@
+    <div class="modal fade hide" id="mdlManInforme_Obligacion" role="dialog"></div>
+    @* Para los modals relacionados este control Global*@
+    <div class="modal fade hide" id="mdlManInforme_Global" role="dialog"></div>
+
+    @* Para el control genérico de personas *@
+    <div class="modal fade hide" id="mdlBuscarPersona" role="dialog"></div>
+    <div class="modal fade" id="modalAddEditPersona" tabindex="-1" role="dialog"></div>
+    <div class="modal fade hide" id="personaUbigeoModal" role="dialog"></div>
+</div>

@@ -1,0 +1,115 @@
+﻿@model IEnumerable<CapaEntidad.DOC.Ent_REPORTE_FISCALIZACION>
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<link href="~/Styles/Proyectos/medidas.min.css" rel="stylesheet" />
+ 
+<script>
+        function downloadDocSiado(obj) {       
+        var $tr = $(obj).parents('tr');
+        if ($tr.find(".csDoc").val() == "") {
+            alert("No existe el archivo");
+            return false;
+        }
+        var urlLocal = window.location.protocol + "//" + window.location.host + '@Url.Content("~")';
+        var url = urlLocal+ "Home/DescargarIntegracionSIADO?fileName="+ $tr.find(".csDoc").val();
+        var xhr = new XMLHttpRequest();
+        xhr.onload = function () {
+            if (xhr.readyState == 4 && xhr.status == 200) {
+                window.location.href = url;
+            }
+            else if (xhr.status == 404) {
+                alert("Sucedio un error, No existe la direccion de descarga");
+            }
+            else if (xhr.status == 0) {
+                alert("No existe el archivo");
+            }
+            else {
+                alert("Sucedio un error al descargar el archivo, Comuníquese con el Administrador");
+            }
+        }
+        xhr.open('head', url);
+        xhr.send(null);
+    }
+    function verDetalle(depart, tipo) {
+        var array_params = {
+            'depart': depart,
+            'tipoMedida': tipo
+        };
+        $.ajax({
+            url: '@Url.Action("listaMedidas", "Home")',
+            type: 'POST',
+            data: JSON.stringify(array_params),
+            dataType: 'json',
+            contentType: 'application/json; charset=utf-8',
+            success: function (data) {
+                $("#seccionDetalle").css("display","block");
+                if(tipo=="MEDCAU_PAU"){$("#tituloDetalle>h2").text('Medidas Cautelares en el departamento de '+depart);}
+                else if (tipo="MEDPRECAU_PAU"){$("#tituloDetalle>h2").text('Medidas Provisorias en el departamento de '+depart);}
+
+                $("#tbDetalleMedidas>tbody").empty();
+                for(var i=0; i <data.length; i++){
+                    $("#tbDetalleMedidas>tbody").append(
+                        '<tr><td><input type="hidden" class="csDoc" value="' + data[i][6] + '"/>' + (i + 1).toString() + '</td><td>' + data[i][0] + '</td><td>' + data[i][1] + '</td><td>' + data[i][2] +
+                        '</td><td style="color:blue"><a onclick="downloadDocSiado(this)"  style="cursor:pointer" title="Descargar">' + data[i][3] +
+                        '</a></td><td>'+data[i][4]+'</td><td>'+data[i][5]+'</td></tr>');
+                }
+                unloader();
+            },
+            beforeSend: function () {
+                loader();
+            },
+            error: function () {
+                //console.log(status + ':' + error + '<br>' + request);
+                unloader();
+            }
+        });
+    }
+</script>
+<h2>Medidas Cautelares o Provisorias</h2>
+<div class="GrillaDivMarco">
+    <table id="tbGralMedidas" class="Grilla">
+        <thead>
+            <tr>
+                <th>Departamento en el que se aplicaron las Medidas</th>
+                <th>Medidas Cautelares</th>
+                <th>Medidas Provisorias</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.DEPARTAMENTO</td>
+                    <td><span onclick="verDetalle('@item.DEPARTAMENTO','MEDCAU_PAU')">@item.MEDCAU_PAU.ToString()</span></td>
+                    <td><span onclick="verDetalle('@item.DEPARTAMENTO','MEDPRECAU_PAU')">@item.MEDPRECAU_PAU.ToString()</span></td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+<div id="seccionDetalle" style="display:none;">
+    <div id="tituloDetalle">
+        <h2></h2>
+    </div>
+    <div class="GrillaDivMarco">
+        <table id="tbDetalleMedidas" class="Grilla">
+            <thead>
+                <tr>
+                    <th>Nº</th>
+                    <th>Titular</th>
+                    <th>Título Habilitante</th>
+                    <th>Modalidad</th>
+                    <th>Resolución Directoral</th>
+                    <th>Fecha Emisión RD</th>
+                    <th>Observación</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
+</div>
+<div id="fechaHora">
+    <div><strong>* Actualizado al: </strong>@ViewBag.fechaProcess</div><div><strong>Fecha y Hora de Consulta:</strong> @DateTime.Now</div>
+</div>

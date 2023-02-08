@@ -1,0 +1,124 @@
+﻿
+@model List<CapaEntidad.DOC.Ent_INFORME_NO_MADERABLE>
+
+<script type="text/javascript">
+    var _DatosCampoNoMaderable = {};
+
+    _DatosCampoNoMaderable.fnInitDataTable_Detail = function () {
+        var columns_label = [], columns_data = [], options = {};
+
+        //columns_label = ["Especie", "Especie Campo", "POA", "Estrada", "Estrada Campo", "Código", "Código Campo"
+        //    , "Diámetro (cm)", "Diámetro Campo (cm)", "Altura (m)", "Altura Campo (m)", "P. LATAS", "P. LATAS Campo"
+        //    , "Zona UTM", "Zona UTM Campo", "C. Este", "C. Este Campo", "C. Norte", "C. Norte Campo", "Estado Campo"
+        //    , "C. Abierto Campo", "C. Cerrado Campo", "C. Fuste", "P. Copa", "F. Copa", "Fenología", "Sanitario", "I. Lianas"
+        //    , "Observación"];
+        columns_label = ["Especie", "Especie Campo", "POA", "Estrada", "Estrada Campo", "Código", "Código Campo"
+            , "Zona UTM", "Zona UTM Campo", "C. Este", "C. Este Campo", "C. Norte", "C. Norte Campo", "Estado Campo"
+            , "Sanitario", "I. Lianas", "Condición Campo"
+            , "Observación"];
+        //columns_data = ["DESC_ESPECIES", "DESC_ESPECIES_CAMPO","POA", "NUM_ESTRADA", "NUM_ESTRADA_CAMPO", "CODIGO", "CODIGO_CAMPO"
+        //    , "DIAMETRO", "DIAMETRO_CAMPO", "ALTURA", "ALTURA_CAMPO", "PRODUCCION_LATAS", "PRODUCCION_LATAS_CAMPO"
+        //    , "ZONA", "ZONA_CAMPO", "COORDENADA_ESTE", "COORDENADA_ESTE_CAMPO", "COORDENADA_NORTE", "COORDENADA_NORTE_CAMPO", "DESC_EESTADO_CAMPO"
+        //    , "NUM_COCOS_ABIERTOS", "NUM_COCOS_CERRADOS", "DESC_CFUSTE", "DESC_PCOPA", "DESC_FCOPA", "DESC_EFENOLOGICO", "DESC_ESANITARIO", "DESC_ILIANAS"
+        //    , "OBSERVACION"];
+        columns_data = ["DESC_ESPECIES", "DESC_ESPECIES_CAMPO", "POA", "NUM_ESTRADA", "NUM_ESTRADA_CAMPO", "CODIGO", "CODIGO_CAMPO"
+            , "ZONA", "ZONA_CAMPO", "COORDENADA_ESTE", "COORDENADA_ESTE_CAMPO", "COORDENADA_NORTE", "COORDENADA_NORTE_CAMPO", "DESC_EESTADO_CAMPO"
+            , "DESC_ESANITARIO", "DESC_ILIANAS", "DESC_ECONDICION_CAMPO"
+            , "OBSERVACION"];
+        options = {
+            page_length: 10, row_index: true, row_edit: true, row_fnEdit: "_DatosCampoNoMaderable.fnAddEdit(this)"
+            , page_render: true, page_info: true, page_search: true
+        };
+        _DatosCampoNoMaderable.dtDatosCampoNoMaderable = utilDt.fnLoadDataTable_Detail($("#tbDatosCampoNoMaderable"), columns_label, columns_data, options);
+    }
+
+    _DatosCampoNoMaderable.fnAddEdit = function (obj) {
+        var url = urlLocalSigo + "Supervision/ManInforme/_EspecieNoMaderable";
+        var option = { url: url, type: 'POST', datos: { asCodInforme: _DatosCampoNoMaderable.frm.find("#hdfCodInforme").val() }, divId: "mdlManInforme_EspecieCampo" };
+        utilSigo.fnOpenModal(option, function () {
+            _EspecieNoMaderable.fnSaveForm = function (data) {
+                if (data != null) {
+                    var dt = _DatosCampoNoMaderable.dtDatosCampoNoMaderable;
+                    var row = dt.row($(obj).parents('tr')).data();
+                    row = data;
+                    dt.row($(obj).parents('tr')).data(row).draw(false);
+                    utilSigo.toastSuccess("Exito", "Datos actualizados correctamente");
+
+                    $("#mdlManInforme_EspecieCampo").modal('hide');
+                } else {
+                    utilSigo.toastError("Error", "No se pudieron guardar los datos");
+                }
+            }
+
+            if (obj != null && obj != "") {
+                var data = _DatosCampoNoMaderable.dtDatosCampoNoMaderable.row($(obj).parents('tr')).data();
+                _EspecieNoMaderable.fnInit(utilSigo.fnConvertArrayToObject(data));
+            }
+        });
+    }
+
+    _DatosCampoNoMaderable.fnImport = function (e, obj) {
+        var url = urlLocalSigo + "Supervision/ManInforme/ImportarDatosCampo";
+        uploadFile.fileSelectHandler(e, obj, url, { asTipo: "NO_MADERABLE", asCodInforme: _DatosCampoNoMaderable.frm.find("#hdfCodInforme").val(), aiNumPoa: 0 }, function (data) {
+            $("#mdlManInforme_DatosCampo").modal('hide');
+        });
+    }
+
+    $(document).ready(function () {
+        _DatosCampoNoMaderable.frm = $("#frmDatosCampoNoMaderable");
+
+        _DatosCampoNoMaderable.fnInitDataTable_Detail();
+
+        @{
+            var serializer = new System.Web.Script.Serialization.JavaScriptSerializer();
+            serializer.MaxJsonLength = Int32.MaxValue;
+            var jsonModel = serializer.Serialize(Model);
+        }
+
+        @*_DatosCampoNoMaderable.dtDatosCampoNoMaderable.rows.add(JSON.parse('@Html.Raw(Json.Encode(@Model))')).draw();*@
+        _DatosCampoNoMaderable.dtDatosCampoNoMaderable.rows.add(@Html.Raw(jsonModel)).draw();
+    });
+</script>
+
+<style type="text/css">
+    #dvDatosCampoNoMaderable .dataTables_info {
+        color: #33b35a;
+        font-size: 15px;
+        margin-top: 17px;
+    }
+</style>
+
+<div class="modal-dialog modal-custom-tb" role="document" style="height:95%;">
+    <div class="modal-content" style="height:100%;">
+        <div class="modal-header text-small" style="cursor:move;">
+            Datos de Campo de la Muestra No Maderable
+            <i class="fa fa-close" style="cursor:pointer;" data-dismiss="modal" aria-label="Close"></i>
+        </div>
+        <div class="modal-body" style="padding:0px;overflow-y:auto;">
+            <div id="frmDatosCampoNoMaderable">
+                @Html.Hidden("hdfCodInforme", (string)ViewBag.hdfCodInforme)
+                <div id="dvDatosCampoNoMaderable" class="table-responsive" style="margin-top:5px;">
+                    <table id="tbDatosCampoNoMaderable" style="width:100%" class="table table-hover table-bordered">
+                        <thead>
+                            <tr>
+                                <th colspan="38" class="text-sm-left">
+                                    <div class="form-inline">
+                                        <label style="cursor:pointer;" class="fa mx-2 fa-lg fa-file-excel-o" title="Importar Archivo" data-toggle="tooltip">
+                                            <input type="file" id="fileselect" name="fileselect" style="display:none" size="60" onchange="_DatosCampoNoMaderable.fnImport(event, this)">
+                                        </label>
+                                        <a href="@Url.Content("~/Archivos/Plantilla/DatosCampoNoMaderable.xlsx")"> <i class="fa mx-2 fa-lg fa-folder-open" style="cursor:pointer;" data-toggle="tooltip" data-placement="top" title="Descargar Plantilla Campo"></i></a>
+                                        <strong>
+                                            Listado de Especies Seleccionadas en la Muestra
+                                        </strong>
+                                    </div>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer"></div>
+    </div>
+</div>

@@ -1,0 +1,69 @@
+﻿@model CapaEntidad.ViewModel.VM_PlanManejoEspecies
+<style type="text/css">
+    table#tbListPlanTrabajoEspecies thead tr th {
+        text-align: center;
+    }
+
+    table#tbListPlanTrabajoEspecies tbody tr td {
+        font-weight: bold;
+    }
+
+    .col1 {
+        width: 30px;
+    }
+
+    .col2 {
+        width: 150px;
+    }
+
+    .table-wrapper-scroll-y {
+        display: block;
+        max-height: 600px;
+        overflow-y: auto;
+        -ms-overflow-style: -ms-autohiding-scrollbar;
+    }
+</style>
+<div class="card">
+    <div class="card-header text-right">
+        Nro. de título habilitante : <strong> @ViewBag.num_thabilitante </strong>
+        Plan de manejo : <strong> @ViewBag.nombre_poa </strong>
+    </div>
+    <div class="card-body">
+        <div class="card">
+            <div class="card-header text-small" id="divTitle">
+                <a id="btnRegresarPlanManejo" style="cursor:pointer;" data-toggle="tooltip" data-placement="top" title="Regresar"><i class="fa mx-2 fa-lg fa-reply"></i></a>
+            </div>
+            <form id="frmPlanTrabajoEspecies">
+                <input type="hidden" id="cod_paspeq_detalle_mensual" value="@ViewBag.cod_paspeq_detalle_mensual" />
+            </form>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <h5 class="card-title">Lista de especies a supervisar por plan de manejo</h5>
+                        <div class="table-responsive table-wrapper-scroll-y">
+                            <table id="tbListPlanTrabajoEspecies" class="table table-hover table-bordered" style="width:100%">
+                                <thead>
+                                    <tr>
+                                        <th class="col1">Nro.</th>
+                                        <th class="col2">Especie</th>
+                                        <th class="col2">Cantidad de especies aprobadas</th>
+                                        <th class="col2">Volumen aprobado</th>
+                                        <th class="col2">Nro. de aprovechables mínimo</th>
+                                        <th class="col2">Nro. de semilleros mínimo</th>
+                                        <th class="col2">Nro. de aprovechables a supervisar</th>
+                                        <th class="col2">Nro. de semilleros a supervisar</th>
+                                        <th class="col2">Total</th>
+                                        <th class="col2"></th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="~/Areas/PlanFocalizacion/js/Focalizacion/_PlanTrabajoEspecies.js"></script>
+

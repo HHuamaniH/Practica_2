@@ -1,0 +1,50 @@
+﻿
+@{
+    ViewBag.Title = @ViewBag.thTitleMenu;
+    Layout = "~/Views/Shared/_LayoutMain.cshtml";
+}
+@section scripts{
+    <script>
+    "use strict";
+    var rol = '';
+    $(document).ready(function () {
+        var url = "@Url.Action("_ManGrilla", "Controles", new { Area= "THabilitante" })";
+        //debugger
+        var datos = {
+            tipoFrmulario: "@ViewBag.thTipoFrmulario",
+            busFormulario: "@ViewBag.thBusFormulario",
+            busCriterio: "@ViewBag.thBusCriterio",
+            titleMenu: $("#hdTituloForm").val(),
+            hdfTipoFormulario: "@ViewBag.hdfTipoFormulario"
+        };
+        $.ajax({
+            url: url,
+            type: 'POST',
+            data: datos,
+            dataType: 'html',
+            success: function (vista) {
+                utilSigo.unblockUIGeneral();
+                $("#contenedorManGrilla").html(vista);
+                //Validamos el rol del usuario
+                utilSigo.ValidaRol('@ViewBag.VAliasRol', 'btnManGrillaNuevo');
+            },
+            beforeSend: function () {
+                utilSigo.blockUIGeneral();
+
+            },
+            error: function (jqXHR, error, errorThrown) {
+                utilSigo.unblockUIGeneral();
+                utilSigo.toastError("Error", "Sucedio un Error Inesperado, Comuniquese con el Administrador");
+                console.log(jqXHR.responseText);
+            }
+        });
+
+    });
+    </script>
+}
+<div class="container-fluid" id="contenedorManGrilla">
+    <input type="hidden" id="hdTituloForm" value="@ViewBag.thTitleMenu" />
+</div>
+<form style="display:none;" id="frmEditTH" method="post" action="@Url.Action("Index","ManTHabilitante",new { Area="THabilitante"})">
+    <input type="hidden" id="codigoThabilitante" name="codigoThabilitante" />
+</form>

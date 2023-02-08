@@ -1,0 +1,62 @@
+﻿
+<script src="~/Areas/Supervision/js/ManInformeConservacion/_RegistroFlora.js"></script>
+
+<div class="modal-dialog" role="document">
+    <div class="modal-content">
+        <div class="modal-header text-small" style="cursor:move;">
+            <span>Flora Silvestre</span>
+            <i class="fa fa-close" style="cursor:pointer;" data-dismiss="modal" aria-label="Close"></i>
+        </div>
+        <div class="modal-body">
+            <form id="frmItemRegFlora">
+                @Html.Hidden("hdfRegEstado")
+                @Html.Hidden("hdfCodSecuencial")
+                <div class="form-row">
+                    <div class="form-group col-md-12">
+                        @Html.Partial("~/Areas/General/Views/Controles/_renderComboEspecie.cshtml")
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label for="txtDap" class="text-small">DAP</label>
+                        @Html.TextBox("txtDap", "", new { @class = "form-control form-control-sm", type = "number" })
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="txtAltura" class="text-small">Altura Total</label>
+                        @Html.TextBox("txtAltura", "", new { @class = "form-control form-control-sm", type = "number" })
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label for="txtEstado" class="text-small">Estado</label>
+                        @Html.TextBox("txtEstado", "", new { @class = "form-control form-control-sm" })
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="ddlZonaId" class="text-small">Zona UTM</label>
+                        @Html.DropDownList("ddlZonaId", new SelectList(ViewBag.ddlZona, "Value", "Text"), new { @class = "form-control form-control-sm" })
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label for="txtCoordEste" class="text-small">Coordenada Este</label>
+                        @Html.TextBox("txtCoordEste", "", new { @class = "form-control form-control-sm", maxlength = "6", type = "number" })
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="txtCoordNorte" class="text-small">Coordenada Norte</label>
+                        @Html.TextBox("txtCoordNorte", "", new { @class = "form-control form-control-sm", maxlength = "7", type = "number" })
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-12">
+                        <label for="txtObservacion" class="text-small">Observación</label>
+                        @Html.TextArea("txtObservacion", "", new { @class = "form-control form-control-sm", rows = "3" })
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-primary btn-sm" onclick="_RegistroFlora.fnSubmitForm()">Guardar</button>
+            <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Cancelar</button>
+        </div>
+    </div>
+</div>

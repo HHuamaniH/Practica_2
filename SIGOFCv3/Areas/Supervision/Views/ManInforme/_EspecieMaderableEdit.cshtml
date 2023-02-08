@@ -1,0 +1,302 @@
+﻿
+<script src="~/Areas/Supervision/js/ManInforme/_EspecieMaderableEdit.js?v3.5"></script>
+
+<style>
+    .select-css {
+        width: 100%;
+        display: block;
+        font-size: 16px;
+        font-family: "Roboto", sans-serif;
+        font-weight: 300;
+        font-size: 1rem;
+        color: #444;
+        line-height: 1.5;
+        padding: 0.31rem 0.75rem;
+        border: 1px solid #ced4da;
+        border-radius: 0.25rem;
+        background-color: #fff;
+        background-repeat: no-repeat, repeat;
+        background-position: right .7em top 50%, 0 0;
+        background-size: .65em auto, 100%;
+    }
+
+        .select-css::-ms-expand {
+            display: none;
+        }
+
+        .select-css:hover {
+            border-color: #888;
+        }
+
+        .select-css:focus {
+            border-color: #aaa;
+            box-shadow: 0 0 1px 3px rgba(59, 153, 252, .7);
+            box-shadow: 0 0 0 3px -moz-mac-focusring;
+            color: #222;
+            outline: none;
+        }
+
+        .select-css option {
+            font-weight: normal;
+        }
+</style>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+
+        $("#txtCodigoB").keypress(function (e) {
+
+            tecla = (document.all) ? e.keyCode : e.which;
+            tecla = String.fromCharCode(tecla)
+            return /^[0-9a-zA-Z\-]+$/.test(tecla);
+
+            if (e.which != 8 && e.which != 0 && (e.which < 48 || e.which > 57)) {
+
+                return false;
+            }
+        })
+
+    });
+</script>
+
+<div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+        <div class="modal-header text-small" style="cursor:move;">
+            <span>Individuo Maderable</span>
+            <i class="fa fa-close" style="cursor:pointer;" data-dismiss="modal" aria-label="Close"></i>
+        </div>
+        <div class="modal-body">
+            <form id="frmItemEspecieMaderableEdit">
+                @Html.Hidden("hdfCodInforme", (string)ViewBag.hdfCodInforme)
+                @Html.Hidden("hdfRegEstado")
+                @Html.Hidden("hdfCodSecuencial")
+                @Html.Hidden("hdfCodTHabilitante", (string)ViewBag.hdfCodTHabilitante)
+                @Html.Hidden("hdfNumPoa", (int)ViewBag.hdfNumPoa)
+                @Html.Hidden("hdfNombrePoa")
+                @Html.Hidden("hdfCodEspecie")
+
+
+                <div class="form-row card-header text-small">
+                    <div class="form-group col-md-2">
+                        <label for="txtBloque" class="text-small">Parcela de Corta</label>
+                        @Html.DropDownList("txtPCEM", new SelectList(ViewBag.ddParcelas, "Value", "Text"), new { @class = "form-control form-control-sm" })
+                    </div>
+                    <div class="form-group col-md-2">
+                        <label for="txtBloque" class="text-small">Bloque</label>
+                        @Html.TextBox("txtBloqueB", "", new { @class = "form-control form-control-sm" })
+                    </div>
+                    <div class="form-group col-md-2">
+                        <label for="txtFaja" class="text-small">Faja</label>
+                        @Html.TextBox("txtFajaB", "", new { @class = "form-control form-control-sm" })
+                    </div>
+                    <div class="form-group col-md-2">
+                        <label for="txtCodigo" class="text-small">Código</label>
+                        @Html.TextBox("txtCodigoB", "", new { @class = "form-control form-control-sm" })
+                    </div>
+                    <div class="form-group col-md-2">
+
+                    </div>
+
+                    <div class="btn-group col-md-1" style="padding-top:20px;">
+                        <a id="btnSearch" style="cursor:pointer;" data-toggle="tooltip" data-placement="top" title="" onclick="_EspecieMaderableEdit.fnSearch()" data-original-title="Buscar el registro"><span class="fa mx-2 fa-lg fa-search"></span></a>
+                    </div>
+                </div>
+
+
+                <div class="form-row">
+                    <div class="form-group col-md-4">
+                        <label for="txtEspecie" class="text-small">Especie</label>
+                        @Html.TextBox("txtEspecie", "", new { @class = "form-control form-control-sm", disabled = "disabled" })
+                    </div>
+                    <div class="form-group col-md-5">
+                        @Html.Partial("~/Areas/General/Views/Controles/_renderComboEspecie.cshtml")
+                    </div>
+                    <div class="form-group col-md-3">
+                        <label for="ddlCoincideEspecieId" class="text-small">Coincide con la especie</label>
+                        @Html.DropDownList("ddlCoincideEspecieId", new SelectList(ViewBag.ddlCoincideEspecie, "Value", "Text"), new { @class = "select-css" })
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-4">
+
+                    </div>
+
+                    <div class="form-group col-md-4">
+                        <label for="txtBloqueCampo" class="text-small">Bloque Campo</label>
+                        @Html.TextBox("txtBloqueCampo", "", new { @class = "form-control form-control-sm" })
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label for="txtFajaCampo" class="text-small">Faja Campo</label>
+                        @Html.TextBox("txtFajaCampo", "", new { @class = "form-control form-control-sm" })
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-2">
+                        <label for="txtBloque" class="text-small">Bloque</label>
+                        @Html.TextBox("txtBloque", "", new { @class = "form-control form-control-sm", disabled = "disabled" })
+                    </div>
+                    <div class="form-group col-md-2">
+                        <label for="txtFaja" class="text-small">Faja</label>
+                        @Html.TextBox("txtFaja", "", new { @class = "form-control form-control-sm", disabled = "disabled" })
+                    </div>
+
+                    <div class="form-group col-md-4">
+                        <label for="txtCodigoCampo" class="text-small">Código Campo</label>
+                        @Html.TextBox("txtCodigoCampo", "", new { @class = "form-control form-control-sm" })
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label for="ddlEstadoCampoId" class="text-small">Estado Campo</label>
+                        @Html.DropDownList("ddlEstadoCampoId", new SelectList(ViewBag.ddlEstado, "Value", "Text"), new { @class = "select-css" })
+                    </div>
+
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-2">
+                        <label for="txtCodigo" class="text-small">Código</label>
+                        @Html.TextBox("txtCodigo", "", new { @class = "form-control form-control-sm", disabled = "disabled" })
+                    </div>
+                    <div class="form-group col-md-2">
+                        <label for="txtDap" class="text-small">DAP (cm)</label>
+                        @Html.TextBox("txtDap", "", new { @class = "form-control form-control-sm", disabled = "disabled" })
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label for="txtDapCampo" class="text-small">DAP Campo (cm)</label>
+                        @Html.TextBox("txtDapCampo", "", new { @class = "form-control form-control-sm", type = "number" })
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label for="ddlCondicionEspCampoId" class="text-small">Condición Campo</label>
+                        @Html.DropDownList("ddlCondicionEspCampoId", new SelectList(ViewBag.ddlCondicionEsp, "Value", "Text"), new { @class = "select-css" })
+                    </div>
+
+
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-4">
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label for="txtDapCampo1" class="text-small">Diametro Campo 1 (cm)</label>
+                        @Html.TextBox("txtDapCampo1", "", new { @class = "form-control form-control-sm", type = "number" })
+                    </div>
+
+                    <div class="form-group col-md-4">
+                        <label for="txtDapCampo2" class="text-small">Diametro Campo 2 (cm)</label>
+                        @Html.TextBox("txtDapCampo2", "", new { @class = "form-control form-control-sm", type = "number" })
+                    </div>
+
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-2">
+                        <label for="txtAc" class="text-small">AC (m)</label>
+                        @Html.TextBox("txtAc", "", new { @class = "form-control form-control-sm", disabled = "disabled" })
+                    </div>
+                    <div class="form-group col-md-2">
+                        <label for="txtZona" class="text-small">Zona UTM</label>
+                        @Html.TextBox("txtZona", "", new { @class = "form-control form-control-sm", disabled = "disabled" })
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label for="ddlMetodoMedirDapId" class="text-small">Metodología medición DAP</label>
+                        @Html.DropDownList("ddlMetodoMedirDapId", new SelectList(ViewBag.ddlMetodoMedirDap, "Value", "Text"), new { @class = "select-css" })
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label for="ddlVigencia" class="text-small">¿Esta en periodo de vigencia?</label>
+                        @Html.DropDownList("ddlVigencia", new SelectList(ViewBag.ddlVigencia, "Value", "Text"), new { @class = "form-control form-control-sm", disabled = "disabled" })
+                    </div>
+
+
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-2">
+                        <label for="txtCEste" class="text-small">Coordenada Este</label>
+                        @Html.TextBox("txtCEste", "", new { @class = "form-control form-control-sm", disabled = "disabled" })
+                    </div>
+                    <div class="form-group col-md-2">
+                        <label for="txtCNorte" class="text-small">Coordenada Norte</label>
+                        @Html.TextBox("txtCNorte", "", new { @class = "form-control form-control-sm", disabled = "disabled" })
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label for="txtAcCampo" class="text-small">AC/LC Campo (m)</label>
+                        @Html.TextBox("txtAcCampo", "", new { @class = "form-control form-control-sm", type = "number" })
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label for="ddlZonaCampoId" class="text-small">Zona UTM Campo</label>
+                        @Html.DropDownList("ddlZonaCampoId", new SelectList(ViewBag.ddlZona, "Value", "Text"), new { @class = "form-control form-control-sm" })
+                    </div>
+
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-2">
+                        <label for="txtEstado" class="text-small">Estado</label>
+                        @Html.TextBox("txtEstado", "", new { @class = "form-control form-control-sm", disabled = "disabled" })
+                    </div>
+                    <div class="form-group col-md-2">
+                        <label for="txtCondicion" class="text-small">Condición</label>
+                        @Html.TextBox("txtCondicion", "", new { @class = "form-control form-control-sm", disabled = "disabled" })
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label for="txtCEsteCampo" class="text-small">Coordenada Este Campo</label>
+                        @Html.TextBox("txtCEsteCampo", "", new { @class = "form-control form-control-sm", type = "number", maxlength = "6" })
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label for="txtCNorteCampo" class="text-small">Coordenada Norte Campo</label>
+                        @Html.TextBox("txtCNorteCampo", "", new { @class = "form-control form-control-sm", type = "number", maxlength = "7" })
+                    </div>
+
+                </div>
+                <div class="form-row">
+
+                    <div class="form-group col-md-4"></div>
+                    <div class="form-group col-md-4">
+                        <label for="txtCantSobreEst" class="text-small">Cant. Sobre Estimación de los Diámetros</label>
+                        @Html.TextBox("txtCantSobreEst", "", new { @class = "form-control form-control-sm", type = "number" })
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label for="txtPorcSobreEst" class="text-small">% Sobre Estimación de los Diámetros</label>
+                        @Html.TextBox("txtPorcSobreEst", "", new { @class = "form-control form-control-sm", type = "number" })
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-4"></div>
+                    <div class="form-group col-md-4">
+                        <label for="txtCantSubEst" class="text-small">Cant. Sub Estimación de los Diámetros</label>
+                        @Html.TextBox("txtCantSubEst", "", new { @class = "form-control form-control-sm", type = "number" })
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label for="txtPorcSubEst" class="text-small">% Sub Estimación de los Diámetros</label>
+                        @Html.TextBox("txtPorcSubEst", "", new { @class = "form-control form-control-sm", type = "number" })
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-4"></div>
+                    <div class="form-group col-md-4">
+                        <label for="txtObservacion" class="text-small">Volumen</label>
+                        @Html.TextBox("txtVolumen", "", new { @class = "form-control form-control-sm", type = "number" })
+                    </div>
+                    <div class="form-group col-md-4"></div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-4">
+                        <label for="txtEspecie" class="text-small">Parcela de Corta PMF</label>
+                        @Html.TextBox("txtPC", "", new { @class = "form-control form-control-sm", disabled = "disabled" })
+                    </div>
+                    <div class="form-group col-md-8">
+
+                        <label for="txtParcelaBalance" class="text-small">PC Campo</label>
+                        @Html.DropDownList("txtParcelaCampo", new SelectList(ViewBag.ddParcelas, "Value", "Text"), new { @class = "form-control form-control-sm" })
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-4"></div>
+                    <div class="form-group col-md-8">
+                        <label for="txtObservacion" class="text-small">Observación</label>
+                        @Html.TextArea("txtObservacion", "", new { @class = "form-control form-control-sm", rows = "2" })
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-primary btn-sm" onclick="_EspecieMaderableEdit.fnSubmitForm()">Guardar</button>
+            <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Cancelar</button>
+        </div>
+    </div>
+</div>
+

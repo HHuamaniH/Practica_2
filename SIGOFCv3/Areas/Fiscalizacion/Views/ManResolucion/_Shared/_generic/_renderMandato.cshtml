@@ -1,0 +1,187 @@
+﻿@model CapaEntidad.ViewModel.VM_Resodirec
+
+<script type="text/javascript">
+    var _renderMandato = {};
+    _renderMandato.tbEliTABLA = [];
+    _renderMandato.fnSelectRecom = function () {
+        _renderMandato.frm.find("#divMandato").hide();
+
+
+        if (_renderMandato.frm.find("#chkMandatos").is(':checked')) {
+            _renderMandato.frm.find("#divMandato").show();
+        }
+
+
+    }
+
+    _renderMandato.fnInitDataTable_Detail = function () {
+        var columns_label = [], columns_data = [], options = {};
+        columns_label = ["Mandato", "Plazo Implementación Días", "Plazo Implementación Meses", "Plazo Informe Días", "Plazo Informe Meses"];
+        columns_data = ["MEDIDA", "PLAZO_IMPL_DIA", "PLAZO_IMPL_MES", "PLAZO_INF_DIA", "PLAZO_INF_MES"];
+        options = {
+            page_length: 10, row_index: true, row_delete: true, row_fnDelete: "_renderMandato.fnDelete(this)", page_sort: true
+        };
+        _renderMandato.dtRenderListInforme = utilDt.fnLoadDataTable_Detail(_renderMandato.frm.find("#tbRenderMandato"), columns_label, columns_data, options);
+        _renderMandato.dtRenderListInforme.rows.add(JSON.parse('@Html.Raw(Json.Encode(@Model.ListMandato))')).draw();
+    }
+
+    _renderMandato.fnDelete = function (obj) {
+        var data = _renderMandato.dtRenderListInforme.row($(obj).parents('tr')).data();
+          if (data["COD_MEDIDA"] > 0) {
+            _renderMandato.tbEliTABLA.push({
+                EliTABLA: "RESODIREC_DET_MEDIDA",
+                EliVALOR02: data["COD_MEDIDA"]
+            });
+        }
+        _renderMandato.dtRenderListInforme.row($(obj).parents('tr')).remove().draw(false);
+    }
+
+    _renderMandato.fnAdd = function (obj) {
+        let mandato = _renderMandato.frm.find("#txtDescripcionMandato").val();
+        let diasImp = _renderMandato.frm.find("#txtDiasImpl").val();
+        let mesImpl = _renderMandato.frm.find("#txtMesesImpl").val();
+        let diaInf = _renderMandato.frm.find("#txtDiasInf").val();
+        let mesInf = _renderMandato.frm.find("#txtMeseInf").val();
+        if (mandato != "") { //&& diasImp != "" && mesImpl != "" && diaInf != "" && mesInf != "") {
+            var data = {
+                "COD_MEDIDA": 0,
+                "MEDIDA": mandato,
+                "MAE_TIP_MEDIDA": "0000009",
+                "PLAZO_IMPL_DIA": diasImp == "" ? 0 : diasImp,
+                "PLAZO_IMPL_MES": mesImpl == "" ? 0 : mesImpl,
+                "PLAZO_INF_DIA": diaInf == "" ? 0 : diaInf,
+                "PLAZO_INF_MES": mesInf == "" ? 0 : mesInf,
+                'RegEstado' : '1'
+            };
+            _renderMandato.dtRenderListInforme.rows.add([data]).draw();
+        }
+        else {
+              utilSigo.toastWarning("Aviso", "debe ingresar valores para agregar mandatos");
+        }
+        _renderMandato.frm.find("#txtDescripcionMandato").val("");
+        _renderMandato.frm.find("#txtDiasImpl").val("");
+        _renderMandato.frm.find("#txtMesesImpl").val("");
+        _renderMandato.frm.find("#txtDiasInf").val("");
+        _renderMandato.frm.find("#txtMeseInf").val("");
+
+    }
+
+    _renderMandato.fnGetList = function () {
+        let list = [], rows, countFilas, data;
+        rows = _renderMandato.dtRenderListInforme.$("tr");
+        countFilas = rows.length;
+        if (countFilas > 0) {
+            $.each(rows, function (i, o) {
+                data = _renderMandato.dtRenderListInforme.row($(o)).data();
+                list.push(utilSigo.fnConvertArrayToObject(data));
+            });
+        }
+        return list;
+    }
+
+    $(document).ready(function () {
+        _renderMandato.frm = $("#frmMandato");
+        _renderMandato.fnSelectRecom();
+        _renderMandato.fnInitDataTable_Detail();
+    });
+
+    function isNumberKey(evt) {
+        var charCode = (evt.which) ? evt.which : evt.keyCode
+        if (charCode > 31 && (charCode < 48 || charCode > 57))
+            return false;
+        return true;
+    }
+</script>
+
+<div id="frmMandato">
+    <div class="card-header text-small">Mandatos</div>
+    <div><br /></div>
+    <div class="form-row">
+        <div class="form-group col-md-4">
+            <label for="chkMandatos" class="text-small">¿Se disponen mandatos?</label>
+        </div>
+        <div class="form-group col-md-6">
+            @Html.CheckBoxFor(m => m.chkMandatos, new
+            {
+                @class = "form-check-input",
+                style = "width:15px;height:16px;",
+                @onchange = "_renderMandato.fnSelectRecom()"
+            })
+        </div>
+        <div class="form-group col-md-2">
+        </div>
+    </div>
+    <div id="divMandato" style="display:none;">
+        <div class="form-row">
+            <div class="form-group col-md-4">
+            </div>
+            <div class="form-group col-md-6">
+                @Html.TextAreaFor(m => m.txtDescripcionMandato, 3, 1, new { @class = "form-control form-control-sm" })
+            </div>
+            <div class="form-group col-md-2">
+            </div>
+        </div>
+
+        <div class="form-row">
+            <div class="form-group col-md-4">
+                <label class="text-small">Plazo de implementación</label>
+            </div>
+            <div class="form-group col-md-2">
+                <label for="txtImplMCDias" class="text-small">Días:</label>
+                @Html.TextBoxFor(m => m.txtDiasImpl, new { @class = "form-control form-control-sm", onkeypress = "return isNumberKey(event)", maxlength = "3" })
+            </div>
+            <div class="form-group col-md-2">
+                <label for="txtImplMCMeses" class="text-small"> Meses: </label>
+                @Html.TextBoxFor(m => m.txtMesesImpl, new { @class = "form-control form-control-sm", onkeypress = "return isNumberKey(event)", maxlength = "3" })
+            </div>
+            <div class="form-group col-md-2">
+            </div>
+            <div class="form-group col-md-2">
+            </div>
+        </div>
+
+        <div class="form-row">
+            <div class="form-group col-md-4">
+                <label class="text-small"> Plazo para presentar el informe de implementación</label>
+            </div>
+            <div class="form-group col-md-2">
+                <label for="txtInfMCDia" class="text-small">Días:</label>
+                @Html.TextBoxFor(m => m.txtDiasInf, new { @class = "form-control form-control-sm", onkeypress = "return isNumberKey(event)", maxlength = "3" })
+            </div>
+            <div class="form-group col-md-2">
+                <label for="txtInfMCMeses" class="text-small">Meses:</label>
+                @Html.TextBoxFor(m => m.txtMeseInf, new { @class = "form-control form-control-sm", onkeypress = "return isNumberKey(event)", maxlength = "3" })
+            </div>
+            <div class="form-group col-md-2">
+            </div>
+            <div class="form-group col-md-2">
+            </div>
+        </div>
+
+        <div class="form-row">
+            <div class="form-group col-md-4"></div>
+            <div class="form-group col-md-6">
+                <button type="button" id="btnAddInfracciones" class="btn btn-info btn-sm" onclick="_renderMandato.fnAdd()"> Agregar Mandato</button>
+            </div>
+            <div class="form-group col-md-2"></div>
+        </div>
+
+        <div class="form-group col-md-12" id="divListaMandato">
+            <div class="table-responsive">
+                <table id="tbRenderMandato" style="width:100%;margin:0px !important;" class="table table-hover table-bordered">
+                    <thead>
+                        <tr>
+                            <th colspan="7" class="text-sm-left">
+                                <div class="form-inline">
+                                    <strong>Listado de mandatos</strong>
+                                </div>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
+
+    </div>
+</div>

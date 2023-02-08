@@ -1,0 +1,210 @@
+﻿
+@model List<CapaEntidad.DOC.Ent_Reporte_ProduccionXDigitadores>
+<style>
+    .fa-lg { font-size: 1.8em; }
+</style>
+<div class="table-responsive-md">
+    <table id="tbReporteGeneral" class="table table-hover table-bordered" style="width:100%;">
+        <thead>
+            <tr>
+                <th colspan="15" style="text-align:left">
+                    <a style="cursor:pointer;" data-toggle="tooltip" data-placement="top" onclick="_noti.exportar()" title="Descargar"><span class="fa mx-2 fa-lg fa-file-excel-o"></span></a>
+                </th>
+            </tr>
+            <tr>
+                <th>N°</th>
+                <th>Modalidad</th>
+                <th>Enero</th>
+                <th>Febrero</th>
+                <th>Marzo</th>
+                <th>Abril</th>
+                <th>Mayo</th>
+                <th>Junio</th>
+                <th>Julio</th>
+                <th>Agosto</th>
+                <th>Septiembre</th>
+                <th>Octubre</th>
+                <th>Noviembre</th>
+                <th>Diciembre</th>
+                <th style="background-color: #89c4e6;">Total</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model.Count > 0)
+            {
+                // var listGroup = Model.GroupBy(x => x.DESCRIPCION).ToList();
+                int contador = 1;
+                foreach (var item in Model)
+                {
+                    if (item.NOM_OD == "01")
+                    {
+                        <tr style="background-color: LightGreen;">
+                            <td>@contador</td>
+                            <td>@item.MODALIDAD</td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                    }
+                    else
+                    {
+                        <tr>
+                            <td>@contador</td>
+                            <td>@item.MODALIDAD</td>
+                            <td>@item.enero</td>
+                            <td>@item.febrero</td>
+                            <td>@item.marzo</td>
+                            <td>@item.abril</td>
+                            <td>@item.mayo</td>
+                            <td>@item.junio</td>
+                            <td>@item.julio</td>
+                            <td>@item.agosto</td>
+                            <td>@item.septiembre</td>
+                            <td>@item.octubre</td>
+                            <td>@item.noviembre</td>
+                            <td>@item.diciembre</td>
+                            <td style="background-color: #89c4e6;">@item.TOTAL</td>
+                        </tr>
+                    }
+
+                    contador = contador + 1;
+                }
+            }
+            else
+            {
+                <tr><td colspan="15" style="text-align:center">No existe registros</td></tr>
+            }
+        </tbody>
+        <tfoot>
+            <tr style="background-color: #89c4e6;">
+                <td colspan="2">Total:</td>
+                
+                <td>@Model.Sum(x=>x.enero)</td>
+                <td>@Model.Sum(x => x.febrero)</td>
+                <td>@Model.Sum(x => x.marzo)</td>
+                <td>@Model.Sum(x => x.abril)</td>
+                <td>@Model.Sum(x => x.mayo)</td>
+                <td>@Model.Sum(x => x.junio)</td>
+                <td>@Model.Sum(x => x.julio)</td>
+                <td>@Model.Sum(x => x.agosto)</td>
+                <td>@Model.Sum(x => x.septiembre)</td>
+                <td>@Model.Sum(x => x.octubre)</td>
+                <td>@Model.Sum(x => x.noviembre)</td>
+                <td>@Model.Sum(x => x.diciembre)</td>
+                <td>@Model.Sum(x=>x.TOTAL)</td>
+            </tr>
+        </tfoot>
+    </table>
+</div>
+<br />
+<div class="table-responsive-md">
+    <table id="tbDocumentacion" class="table table-hover table-bordered" style="width:100%;">
+        <thead>
+            <tr>
+                <th colspan="7" style="text-align:left">
+                    <a style="cursor:pointer;" data-toggle="tooltip" data-placement="top" onclick="_noti.exportar_1()" title="Descargar"><span class="fa mx-2 fa-lg fa-file-excel-o"></span></a>
+                </th>
+            </tr>
+            <tr>
+                <th>N°</th>
+                <th>Fecha de registro</th>
+                <th>Modalidad</th>
+                <th>N° de título habilitante</th>
+                <th>Tipo de documento compilado</th>
+                <th>Departamento</th>
+                <th>Provincia</th>
+            </tr>
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
+</div>
+<script type="text/javascript">
+    var _noti = {
+        exportar: () => {
+            let anio = _reporteGeneral.frm.find("#lstChkAnioId").val();
+            let od = _reporteGeneral.frm.find("#lstChkOdId").val();
+            if (anio == "") {
+                utilSigo.toastWarning("Aviso", "Seleccione año de consulta");
+                return false;
+            }
+            if (od == "") {
+                utilSigo.toastWarning("Aviso", "Seleccione OD de consulta");
+                return false;
+            }
+            const url = `${urlLocalSigo}General/Reportes/RptRegistroExpediente`;
+            utilSigo.file.getBinary("ReporteExpediente.xlsx", url);
+        },
+        exportar_1: () => {
+            let anio = _reporteGeneral.frm.find("#lstChkAnioId").val();
+            let od = _reporteGeneral.frm.find("#lstChkOdId").val();
+            if (anio == "") {
+                utilSigo.toastWarning("Aviso", "Seleccione año de consulta");
+                return false;
+            }
+            if (od == "") {
+                utilSigo.toastWarning("Aviso", "Seleccione OD de consulta");
+                return false;
+            }
+            const url = `${urlLocalSigo}General/Reportes/RptRegistroExpedienteDetalle`;
+            utilSigo.file.getBinary("ReporteExpedienteDetalle.xlsx", url);
+        },
+        fnBuildTable: () => {
+            const columns = [
+                {
+                    "name": "ROW_INDE", "width": "2%", "orderable": false, "searchable": false, "mRender": function (data, type, row, meta) {
+                        return parseInt(meta.row) + 1 + meta.settings._iDisplayStart;
+                    }
+                },
+                { "data": "FECHA", "autoWidth": true },
+                { "data": "MODALIDAD", "autoWidth": true },
+                { "data": "TITULO", "autoWidth": true },
+                { "data": "TIPO", "autoWidth": true },
+                { "data": "DEPARTAMENTO", "autoWidth": true },
+                { "data": "PROVINCIA", "autoWidth": true }                
+            ];
+            const optDt = { iLength: 10, iStart: 0, aSort: [] };
+            _noti.dt = $("#tbDocumentacion").DataTable({
+                "bServerSide": false,
+                "deferLoading": 0,
+                "bProcessing": true,
+                "bJQueryUI": false,
+                "bFilter": false,
+                 bInfo: true,
+                "aaSorting": [],
+                "lengthMenu": [[10, 20, 50, 100], [10, 20, 50, 100]],
+                "pageLength": optDt.iLength,
+                "oLanguage": initSigo.oLanguage,
+                "drawCallback": initSigo.showPagination,
+                bLengthChange: false,
+                ordering: false,
+                columns: columns
+            });
+        }
+    };
+    $(document).ready(function () {
+        _noti.fnBuildTable();
+        var option = {
+            url: urlLocalSigo + "General/Reportes/DocumentacionFList", datos: {}, type: 'GET' };
+
+        utilSigo.fnAjax(option, function (data) {
+            if (data.success) {
+                _noti.dt.rows.add(data.data).draw();
+            }
+            else {
+                utilSigo.toastWarning("Aviso", "Sucedio un error al cargar datos, Comuníquese con el Administrador");
+                console.log(data.msj);
+            }
+        });
+    });
+</script>

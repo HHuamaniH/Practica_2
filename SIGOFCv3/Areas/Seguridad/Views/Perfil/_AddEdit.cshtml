@@ -1,0 +1,157 @@
+﻿@model CapaEntidad.ViewModel.General.VM_Perfil
+<div id="divManPerfil" class="modal-dialog" role="document">
+    <div class="modal-content">
+        <div class="modal-header text-small" style="cursor:move;padding:0.5rem;">
+            <h5 class="modal-title">@Model.lblTitulo</h5>
+        </div>
+        <div class="modal-body">
+            <form id="frmAddEditPerfil" method="post">
+                @Html.HiddenFor(m => m.id)
+                @Html.HiddenFor(m => m.estado)
+               
+                
+                <div class="form-row">
+                    <div class="form-group col-md-12">
+                        <label for="descr" class="text-small">Clasificación</label>
+                        <select id="cboEClasificacion" name="idClasificacion" class="form-control form-control-sm">
+                            <option value="0">-Clasificación-</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-12">
+                        <label for="descr" class="text-small">Sub Clasificación</label>
+                       
+                        <select id="cboESubClasificacion" name="idSubClasificacion" class="form-control form-control-sm">
+                            <option value="0">-Sub Clasificación-</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-12">
+                        <label for="descr" class="text-small">Descripcion</label>
+                        @Html.EditorFor(m => m.descr, new { htmlAttributes = new { @class = "form-control form-control-sm", @minlength = "4", @maxlength = "50" } })
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-12">
+                        <div class="custom-control custom-checkbox my-1 mr-sm-2">
+                            @Html.CheckBoxFor(m => m.act, new { @class = "custom-control-input" })
+                            <label class="custom-control-label" id="lblCheck" style="margin-top:4px;" for="act">
+                                Activo
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+            </form>
+        </div>
+        <div class="modal-footer">
+            <button id="btnGuardar" class="btn btn-primary btn-sm" >Registrar</button>
+            <button id="btnCancelar" class="btn btn-secondary btn-sm" onclick="_manPerfil.fnCancelar();">Cancelar</button>
+        </div>
+    </div>
+</div> 
+<script>
+    "use strict";
+    var _manPerfil = {
+        fnGuardar: () => {
+            var url = urlLocalSigo + "Seguridad/Perfil/_AddEdit";
+            var model = _manPerfil.frm.serializeObject();
+            model.act = utilSigo.fnGetValChk(_manPerfil.frm.find("#act"));
+            
+            var option = { url: url, datos:JSON.stringify(model), type: 'POST'};
+            utilSigo.fnAjax(option, function (data) {
+                if (data.success) {
+                    utilSigo.toastSuccess("Aviso", data.msj);
+                    _manPerfil.fnClose();
+                    ManPerfil.fnBuscarPerfil();
+                }
+                else {
+                    utilSigo.toastWarning("Aviso", data.msj);
+                }
+            });
+        },
+        fnClose: () => {
+            utilSigo.fnCloseModal("manPerfilModal");
+        },
+        fnCancelar: () => {
+            _manPerfil.fnClose();
+        },
+        fnInit: () => {
+            let perfil = JSON.parse('@Html.Raw(Json.Encode(@Model))');
+            console.log('perfil', perfil);
+           
+            _manPerfil.frm = $("#frmAddEditPerfil");
+            _manPerfil.cont = $("#divManPerfil");
+            _manPerfil.resultSelect('cboEClasificacion', null, perfil.idClasificacion);
+            _manPerfil.resultSelect('cboESubClasificacion', perfil.idClasificacion, perfil.idSubClasificacion);
+          
+            if (!utilSigo.fnGetValChk(_manPerfil.frm.find("#act"))) _manPerfil.frm.find("#lblCheck").text("Inactivo");
+            _manPerfil.frm.find("#act").click(function () {
+                if ($(this).is(":checked")) {
+                    _manPerfil.frm.find("#lblCheck").text("Activo");
+                }
+                else {
+                    _manPerfil.frm.find("#lblCheck").text("Inactivo");
+                }
+            });
+            _manPerfil.cont.find("#btnGuardar").click(function () {
+                _manPerfil.frm.submit();
+            });
+            _manPerfil.frm.find("#cboEClasificacion").on('change', function () {
+
+                if ($(this).val() != 0)
+                    ManPerfil.resultSelect('cboESubClasificacion', $(this).val());
+                else
+                    $('#cboESubClasificacion').children('option:not(:first)').remove();
+
+            });
+        },
+        resultSelect :(e, o, v)=> {
+            $.ajax({
+                method: "GET",
+                url: urlLocalSigo + "Seguridad/Perfil/GetListClasificacionPerfil?id=" + o || null,
+                dataType: "json",
+                success: function (d) {
+                    console.log('result', d)
+                    //debugger
+                    $('#' + e).children('option:not(:first)').remove();
+                    let s = document.getElementById(e);
+
+                    let r = d.data;
+                    for (var i = 0; i < r.length; i++) {
+                        var option = document.createElement("option");
+                        option.text = r[i].VDESCRIPCION;
+                        option.value = r[i].PK_PERFILESMAECLASIFICACION;
+                        s.add(option);
+                    }
+                    if (v) $('#' + e).val(v);
+                    //$("#cboClasificacion").select2({
+                    //    data: data
+                    //})
+                }
+            });
+        }
+
+    };
+    $(function () {
+        _manPerfil.fnInit();
+        _manPerfil.frm.validate(utilSigo.fnValidate({
+            rules: {
+                descr: { required: true }
+            },
+            messages: {
+                descr: { required: "Ingrese descripción" }
+            },
+            fnSubmit: function (form) {
+                utilSigo.dialogConfirm('', 'Desea continuar con el operacion?', function (r) {
+                    if (r) {
+                       _manPerfil.fnGuardar();
+                    }
+                });
+            }
+        }));
+    });
+</script>
+ 

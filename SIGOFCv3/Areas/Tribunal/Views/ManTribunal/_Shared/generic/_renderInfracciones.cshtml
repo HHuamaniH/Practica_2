@@ -1,0 +1,457 @@
+﻿@model CapaEntidad.ViewModel.VM_ResolucionTFFS
+<script type="text/javascript">
+    var _renderInfracciones = {};
+    _renderInfracciones.tbEliTABLA = [];
+
+    let indice;
+
+    _renderInfracciones.iniciarEventos = function () {
+        _renderInfracciones.frm.find("#txtFEmisionBExtraccion").datepicker({ format: "dd/mm/yyyy", autoclose: true, language: 'es' });
+        ///_renderInfracciones.tbEliTABLA = {};
+    };
+
+    _renderInfracciones.fncArticulos = function (codEnSelect) {
+        var idArticulo = _renderInfracciones.frm.find("#ddlArticulosId").val();
+        var DescArticulo = _renderInfracciones.frm.find("#ddlArticulosId option:selected").text();
+        var codEncisoSelect = codEnSelect
+        $.ajax({
+            url: '@Url.Action("inicisos","ManTribunal")',
+            type: 'GET',
+            datatype: "json",
+            traditional: true,
+            data: { 'idArticulo': idArticulo, 'descArticulo': DescArticulo, 'codEncisoSelect': codEncisoSelect},
+            success: function (data) {
+                $("#divEncisos").html(data)
+            }
+        });
+    };
+    ///--------> lista
+    _renderInfracciones.fnAdd = function (obj) {
+        // alert(indice);
+
+        var idArticulo = _renderInfracciones.frm.find("#ddlArticulosId").val();
+        var DescArticulo = _renderInfracciones.frm.find("#ddlArticulosId option:selected").text();
+        let idEnciso = _renderIncisos.frm.find("#ddlEnciso").val();
+        let descEnciso = _renderIncisos.frm.find("#ddlEnciso option:selected").text();
+        let idPoa = _renderInfracciones.frm.find("#ddlPOAId").val();
+        let descPoa = _renderInfracciones.frm.find("#ddlPOAId option:selected").text();
+        let area = _renderInfracciones.frm.find("#txtAreaInfrac").val();
+        let descripcion = _renderInfracciones.frm.find("#txtDescInfrac").val();
+        let volumen = _renderInfracciones.frm.find("#txtVolumenInf").val();
+        let idEspecie = _renderInfracciones.frm.find("#ddlEspeciesFlora").val();
+        let desEspecie = _renderInfracciones.frm.find("#ddlEspeciesFlora option:selected").text();
+        let idTipo = _renderInfracciones.frm.find("#ddlTipoAprovechamientoId option:selected").text();
+        let numInd = _renderInfracciones.frm.find("#txtNumeroIndividuos").val();
+        let idEspecieFauna = _renderInfracciones.frm.find("#ddlEspeciesFauna").val();
+        let desEspecieFauna = _renderInfracciones.frm.find("#ddlEspeciesFauna option:selected").text();
+        let codEspecie = null;
+        let especie = '';
+        console.log("desEspecieFauna" + desEspecieFauna);
+        console.log("desEspecie" + desEspecie);
+        console.log("idEspecie" + idEspecie);
+        console.log("idEspecieFauna" + idEspecieFauna);
+        if (desEspecieFauna.length > desEspecie.length) {
+            especie = desEspecieFauna;
+        }
+        else {
+            especie = desEspecie;
+        }
+        if (indice != null) {
+            RegEstado = 2;
+        }
+        else {
+            cod_secuencial = 0;
+        }
+        let model = {
+            'COD_ILEGAL_ARTICULOS': idArticulo,
+            'COD_ILEGAL_ENCISOS': idEnciso,
+            'DESCRIPCION_ARTICULOS': DescArticulo,
+            'DESCRIPCION_ENCISOS': descEnciso,
+            'COD_ESPECIES': codEspecie,
+            'DESCRIPCION_ESPECIE': especie,
+            'VOLUMEN': volumen == "" ? 0 : volumen,
+            'AREA': area == "" ? 0 : area,
+            'NUMERO_INDIVIDUOS': numInd == "" ? 0 : numInd,
+            'DESCRIPCION_INFRACCIONES': descripcion,
+            'COD_SECUENCIAL': cod_secuencial,
+            'NUM_POA': idPoa,
+            'POA': descPoa,
+            'TIPOMADERABLE': idTipo,
+            'RegEstado': 1
+        }
+        if (indice == null) {
+            _renderInfracciones.dtRenderListInforme.page('last').draw('page');
+        }
+        else {
+            _renderInfracciones.dtRenderListInforme.row(indice).data(model).draw(false);
+        }
+
+        _renderInfracciones.frm.find("#txtAreaInfrac").val('');
+        _renderInfracciones.frm.find("#txtNumIndv").val('');
+        _renderInfracciones.frm.find("#txtVolumenInf").val('');
+        _renderInfracciones.frm.find("#txtDescInfrac").val('');
+        _renderInfracciones.frm.find("#ddlEspeciesFauna").val('0002226');
+        _renderInfracciones.frm.find("#ddlEspeciesFlora").val('0002226');
+
+        indice = null;
+        _renderInfracciones.frm.find("#divArticulo").hide();
+    }
+    _renderInfracciones.fnImport = function () {        
+
+        var listInfracciones = [];
+        let url = urlLocalSigo + "Tribunal/ManTribunal/importarInfracciones";
+        listInformes = _renderListRS.fnGetList();
+
+
+        var pcod_resodirec = listInformes[0].COD_RESODIREC;
+        var pcod_resodirec_ini_pau = listInformes[0].COD_RESODIREC_INI_PAU;
+        $.ajax({
+            url: url,
+            type: 'POST',
+            datatype: "json",
+            traditional: true,
+            data: { 'pcod_resodirec': pcod_resodirec, 'pcod_resodirec_ini_pau': pcod_resodirec_ini_pau },
+            success: function (data) {
+                data = data.data;
+                console.log("import registro");
+                console.log(data);
+
+                for (var i = 0; i < data.length; i++) {
+                    var DescArticulo = data[i].DESCRIPCION_ARTICULOS;
+                    var cod_secuencial = data[i].COD_SECUENCIAL;
+                    var idArticulo = data[i].COD_ILEGAL_ARTICULOS;
+                    var idEnciso = data[i].COD_ILEGAL_ENCISOS;
+                    var idPoa = data[i].NUM_POA;
+                    var area = data[i].AREA;
+                    var descEnciso = data[i].DESCRIPCION_ENCISOS;
+                    var descripcion = data[i].DESCRIPCION_INFRACCIONES;
+                    var volumen = data[i].VOLUMEN;
+                    var codEspecie = data[i].COD_ESPECIES;
+                    var desEspecie = data[i].DESCRIPCION_ESPECIE;
+                    var idTipo = data[i].TIPOMADERABLE;
+                    var numInd = data[i].NUMERO_INDIVIDUOS;
+                    var especie = data[i].DESCRIPCION_ESPECIE;
+                    var descPOA = data[i].POA;
+
+                    let model = {
+                        'COD_ILEGAL_ARTICULOS': idArticulo,
+                        'COD_ILEGAL_ENCISOS': idEnciso,//
+                        'DESCRIPCION_ARTICULOS': DescArticulo,//
+                        'DESCRIPCION_ENCISOS': descEnciso,//
+                        'COD_ESPECIES': codEspecie,//
+                        'DESCRIPCION_ESPECIE': especie,//
+                        'VOLUMEN': volumen == "" ? 0 : volumen,//
+                        'AREA': area == "" ? 0 : area,//
+                        'NUMERO_INDIVIDUOS': numInd == "" ? 0 : numInd,//
+                        'DESCRIPCION_INFRACCIONES': descripcion,//
+                        'COD_SECUENCIAL': cod_secuencial,
+                        'NUM_POA': idPoa,//
+                        'POA': descPOA,
+                        'TIPOMADERABLE': idTipo,
+                        'RegEstado': 1
+                    }
+
+                    _renderInfracciones.dtRenderListInforme.rows.add([model]).draw();
+                }
+            }
+
+        });
+
+    }
+
+    //----> se agrega la tabla
+    _renderInfracciones.fnInitDataTable_Detail = function () {
+        var columns_label = [], columns_data = [], options = {};
+
+        columns_label = ["Articulo", "Inciso", "Volumen (m3)", "Especie", "Area (ha)", "Num. Indiv", "Desc. Infraccion", "Numero POA", "Tipo Aprovechamiento","COD_SECUENCIAL"];
+        columns_data = ["DESCRIPCION_ARTICULOS", "DESCRIPCION_ENCISOS", "VOLUMEN","DESCRIPCION_ESPECIE" , "AREA", "NUMERO_INDIVIDUOS", "DESCRIPCION_INFRACCIONES", "POA", "TIPOMADERABLE","COD_SECUENCIAL"];
+        options = {
+            page_length: 10, row_index: true, row_delete: true, row_fnDelete: "_renderInfracciones.fnDelete(this)", page_sort: true, row_edit: true, row_fnEdit: "_renderInfracciones.fnEdit(this)"
+        };
+        _renderInfracciones.dtRenderListInforme = utilDt.fnLoadDataTable_Detail(_renderInfracciones.frm.find("#tbRenderIncisos"), columns_label, columns_data, options);
+        _renderInfracciones.dtRenderListInforme.rows.add(JSON.parse('@Html.Raw(Json.Encode(@Model.tbInfracciones))')).draw();
+
+    }
+
+    _renderInfracciones.fnEdit = function (obj) {
+        _renderInfracciones.frm.find("#divArticulo").show();
+        var data = _renderInfracciones.dtRenderListInforme.row($(obj).parents('tr')).data();
+        console.log($(obj).parents('tr').data());
+
+        indice = _renderInfracciones.dtRenderListInforme.row($(obj).parents('tr')).index();
+
+
+        _renderInfracciones.frm.find("#ddlArticulosId").val(data['COD_ILEGAL_ARTICULOS']);
+        $("#ddlArticulosId").val(data['COD_ILEGAL_ARTICULOS']);
+        $("#ddlEnciso").val(data['COD_ILEGAL_ENCISOS']);
+        $("#txtDescInfrac").val(data['DESCRIPCION_ARTICULOS']);
+        $("#txtVolumenInf").val(data['VOLUMEN']);
+        $("#txtAreaInfrac").val(data['AREA']);
+        console.log((data['COD_ILEGAL_ENCISOS']));
+        console.log((data['COD_ILEGAL_ARTICULOS']));
+        console.log((data['COD_ESPECIES']));
+
+        var CODIGO_TIPOMADERABLE;
+        if (data['TIPOMADERABLE'] = "MADERABLES") {
+            CODIGO_TIPOMADERABLE = "00000121";
+        }
+        if (data['TIPOMADERABLE'] = "NO MADERABLES") {
+            CODIGO_TIPOMADERABLE = "00000122";
+        }
+        if (data['TIPOMADERABLE'] = "CARBON") {
+            CODIGO_TIPOMADERABLE = "00000123";
+        }
+        $("#ddlTipoAprovechamientoId").val(CODIGO_TIPOMADERABLE);
+        var CODIGO_PLANMANEJO;
+        if (data['POA'] = "PO 1") {
+            CODIGO_PLANMANEJO = "00000146";
+        }
+        if (data['POA'] = "PMFI") {
+            CODIGO_PLANMANEJO = "00000147";
+        }
+        if (data['POA'] = "DEMA") {
+            CODIGO_PLANMANEJO = "00000148";
+        }
+        if (data['POA'] = "PGMF") {
+            CODIGO_PLANMANEJO = "00000149";
+        }
+        if (data['POA'] = "POA") {
+            CODIGO_PLANMANEJO = "00000150";
+        }
+        $("#ddlPOAId").val(CODIGO_PLANMANEJO);
+        $("#txtNumeroIndividuos").val(data['NUMERO_INDIVIDUOS']);
+
+
+        _renderInfracciones.fncArticulos(data['COD_ILEGAL_ENCISOS']);
+        var data = _renderInfracciones.dtRenderListInforme.row($(obj).parents('tr')).data();
+        if (data["RegEstado"] == "0") {
+            _renderInfracciones.tbEliTABLA.push({
+                EliTABLA: "RESODIREC_DET_INI_PAU",
+                EliVALOR01: "COD_RESODIREC",
+                EliVALOR02: data["COD_SECUENCIAL"]
+            });
+        }
+
+        cod_secuencial = data['COD_SECUENCIAL'];
+
+    }
+
+
+    /*Listado de registros (render)*/
+    _renderInfracciones.fnDelete = function (obj) {
+        var data = _renderInfracciones.dtRenderListInforme.row($(obj).parents('tr')).data();
+        if (data["RegEstado"] == "0") {
+            _renderInfracciones.tbEliTABLA.push({
+                EliTABLA: "RESOLUCION_TFFS_INFRACCION",
+                COD_RESODIREC: data["COD_RESODIREC"],
+                EliVALOR01: data["COD_SECUENCIAL"]
+            });
+        }
+        _renderInfracciones.dtRenderListInforme.row($(obj).parents('tr')).remove().draw(false);
+    }
+
+    _renderInfracciones.fnGetListEliTABLA = function () { return _renderInfracciones.tbEliTABLA }
+
+    //devuelve la lista de infracciones
+    _renderInfracciones.fnGetList = function () {
+        let list = [], rows, countFilas, data;
+        rows = _renderInfracciones.dtRenderListInforme.$("tr");
+        countFilas = rows.length;
+        if (countFilas > 0) {
+            $.each(rows, function (i, o) {
+                data = _renderInfracciones.dtRenderListInforme.row($(o)).data();
+                list.push(utilSigo.fnConvertArrayToObject(data));
+            });
+        }
+        return list;
+    }
+    $(document).ready(function () {
+        _renderInfracciones.frm = $("#frmInfracciones");
+        _renderInfracciones.iniciarEventos();
+        _renderInfracciones.fnInitDataTable_Detail();
+    });
+
+</script>
+<div id="frmInfracciones">
+    <div id="divArticulo" style="display:none;">
+
+        <div class="form-row">
+            <div class="form-group col-md-3">
+                <label for="lblArticulos" class="text-small">Articulo</label>
+            </div>
+            <div class="form-group col-md-3">
+                @Html.DropDownListFor(m => m.ddlArticulosId, new SelectList(Model.ListArticulo, "CODIGO", "DESCRIPCION"),
+                                       new
+                                       {
+                                           @class = "form-control form-control-sm",
+                                           @id = "ddlArticulosId",
+                                           @onchange = "_renderInfracciones.fncArticulos('')"
+                                       })
+
+            </div>
+            <div class="form-group col-md-2">
+                @*<input id="id_indice_tabla"/>*@
+            </div>
+        </div>
+
+        <div id="divEncisos">
+
+        </div>
+        <!-- se mueven campos complementarios-->
+        <div class="form-row" id="divInfArea" style="display:none;">
+            <div class="form-group col-md-3">
+                <label for="lblArticulos" class="text-small">Área</label>
+            </div>
+            <div class="form-group col-md-3">
+                @Html.TextBoxFor(m => m.txtAreaInfrac, new { @class = "form-control form-control-sm", pattern = "[0-9]*[.,]?[0-9]+", onkeypress = "return utilSigo.onKeyDecimal(event, this);", maxlength = "10" })
+            </div>
+            <div class="form-group col-md-2">
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group col-md-3">
+                <label for="lblArticulos" class="text-small">Descripción</label>
+            </div>
+            <div class="form-group col-md-6">
+                @Html.TextAreaFor(m => m.txtDescInfrac, 4, 1, new { @class = "form-control form-control-sm" })
+            </div>
+            <div class="form-group col-md-2">
+
+            </div>
+        </div>
+
+        <div class="form-row" id="divInfEspecieFlora" style="display:none;">
+            <div class="form-group col-md-3">
+                <label for="lblArticulos" class="text-small">Especie Forestal</label>
+            </div>
+            <div class="form-group col-md-3">
+                @Html.DropDownListFor(m => m.ddlEspeciesFloraId, new SelectList(Model.listaEspeciesFloraCombo, "CODIGO", "DESCRIPCION"),
+                       new { @class = "form-control form-control-sm", @id = "ddlEspeciesFlora" })
+            </div>
+            <div class="form-group col-md-2">
+
+            </div>
+        </div>
+
+        <div class="form-row" id="divInfEspecieFauna" style="display:none;">
+            <div class="form-group col-md-3">
+                <label for="lblArticulos" class="text-small">Especie Fauna</label>
+            </div>
+            <div class="form-group col-md-3">
+                @Html.DropDownListFor(m => m.ddlEspeciesFaunaId, new SelectList(Model.listaEspeciesFaunaCombo, "CODIGO", "DESCRIPCION"),
+                       new { @class = "form-control form-control-sm", @id = "ddlEspeciesFauna" })
+            </div>
+            <div class="form-group col-md-2">
+
+            </div>
+        </div>
+
+        <div class="form-row" id="divInfVolumen" style="display:none;">
+            <div class="form-group col-md-3">
+                <label for="lblArticulos" class="text-small">Volumen</label>
+            </div>
+            <div class="form-group col-md-3">
+                @Html.TextBoxFor(m => m.txtVolumenInf, new { @class = "form-control form-control-sm", pattern = "[0-9]*[.,]?[0-9]+", maxlength = "10", onkeypress = "return utilSigo.onKeyDecimal(event, this);" })
+            </div>
+            <div class="form-group col-md-2">
+
+            </div>
+        </div>
+
+        <div class="form-row" id="divInfNumIndv" style="display:none;">
+            <div class="form-group col-md-3">
+                <label for="lblArticulos" class="text-small">Número de individuos</label>
+            </div>
+            <div class="form-group col-md-3">
+                @Html.TextBoxFor(m => m.txtNumeroIndividuos, new { @class = "form-control form-control-sm", pattern = "[0-9]*[.,]?[0-9]+", maxlength = "10", onkeypress = "return utilSigo.onKeyDecimal(event, this);" })
+            </div>
+            <div class="form-group col-md-2">
+
+            </div>
+        </div>
+
+
+
+        <div class="form-row" id="divInfPOA">
+            <div class="form-group col-md-3">
+                <label for="lblArticulos" class="text-small">Plan de Manejo</label>
+            </div>
+            <div class="form-group col-md-3">
+                @*@if (Model.ListPOA.Count > 0)
+                    {*@
+                @Html.DropDownListFor(m => m.ddlPOA, new SelectList(Model.ListPOA, "CODIGO", "DESCRIPCION"),
+                                 new
+                                      {
+                                         @class = "form-control form-control-sm",
+                                         @id = "ddlPOAId"
+                                      })
+                @*}
+                    else
+                    {
+                        <h1>Seleccionar expediente o informe que contenga POA</h1>
+                    }*@
+
+            </div>
+            <div class="form-group col-md-2">
+            </div>
+        </div>
+
+        <div class="form-row" id="divInfTipoAprov">
+            <div class="form-group col-md-3">
+                <label for="lblArticulos" class="text-small">Tipo de aprovechamiento</label>
+            </div>
+            <div class="form-group col-md-3">
+                @Html.DropDownListFor(m => m.ddlTipoAprovechamiento, new SelectList(Model.ListTipoAprovechamiento, "Value", "Text"),  //Model.ListTipoAprovechamiento, "CODIGO", "DESCRIPCION", Model.ListTipoAprovechamiento
+                        new
+                        {
+                            @class = "form-control form-control-sm",
+                            @id = "ddlTipoAprovechamientoId"
+                        })
+            </div>
+            <div class="form-group col-md-2">
+
+            </div>
+        </div>
+    </div>
+    <!--fin-->
+    <div class="form-row">
+        <div class="form-group -col-md-2">
+            <button type="button" id="btnAddInfracciones" class="btn btn-info btn-sm" onclick="_renderInfracciones.fnAdd()"> Modificar Infracción</button>
+        </div>
+        <div class="form-group col-md-2">
+
+            <div class="form-check form-check-inline">
+                <button type="button" id="btnImportLiteralesRDTermino" class="btn btn-info btn-sm" onclick="_renderInfracciones.fnImport()">Importar Literales RD Término</button>
+            </div>
+
+        </div>
+    </div>
+
+    <div class="table-responsive">
+        <table id="tbRenderIncisos" style="width:100%;margin:0px !important;" class="table table-hover table-bordered">
+            <thead>
+                <tr>
+                    <th colspan="13" class="text-sm-left">
+                        <label for="lbldocument" class="form-group col-md-12 text-small">Listado de Infracciones Confirmadas Según Ley</label>
+                        <div class="row">
+                            <div class="col-md-8">
+                                <div class="form-inline">
+                                    <strong> @Html.Raw(@Model.lbldocumento) </strong>
+                                </div>
+                            </div>
+                        </div>
+                    </th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
+
+
+
+
+    <br /><br />
+</div>
+
+
+

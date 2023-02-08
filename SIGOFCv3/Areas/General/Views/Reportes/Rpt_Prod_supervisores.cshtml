@@ -1,0 +1,356 @@
+﻿
+
+@model CapaEntidad.ViewModel.VM_ReporteGeneral
+@{
+    ViewBag.Title = "Reporte";
+    Layout = "~/Views/Shared/_LayoutMain.cshtml";
+}
+
+<script src="~/Scripts/chart/chart.js"></script>
+<script type="text/javascript">
+    var _rendReporteSup = {};
+    $(function () {
+        $("[id*=chkTodoR]").on("change", function () {
+            if ($(this).is(":checked")) {
+                $("[id*=chkDireccion] input").prop("checked", true);
+            } else {
+                $("[id*=chkDireccion] input").prop('checked', false);
+            }
+        });
+        $("[id*=chkTodoDep]").on("change", function () {
+            if ($(this).is(":checked")) {
+                $("[id*=chkDepartamento] input").prop("checked", true);
+            } else {
+                $("[id*=chkDepartamento] input").prop('checked', false);
+            }
+        });
+    });
+
+
+    _rendReporteSup.fnReporte = function () {
+        let anio = $("[id*=chkAnio] input:checked").val(); //_rendReporteSup.frm.find("#chkAnio").val();
+        let direccion = [];
+        $("[id*=chkDireccion] input:checked").each(function () {
+            direccion.push($(this).attr('value'));
+        });
+        let departamento = [];
+        $("[id*=chkDepartamento] input:checked").each(function () {
+            departamento.push($(this).attr('value'));
+        });
+        let url = urlLocalSigo + "General/Reportes/ReporteResumenSupervision";
+        if (anio != null) {
+            if (direccion.length > 0) {
+                if (departamento.length > 0) {
+                    $.ajax({
+                        url: url,
+                        type: 'POST',
+                        datatype: "json",
+                        traditional: true,
+                        data: { 'direccion': direccion, 'anio': anio, 'departamento': departamento },
+                        success: function (data) {
+                            $('div#divReporte').html(data);
+                            _rendReporteSup.frm.find("#divReporteDetalle").hide();
+                        }
+                    });
+                } else {
+                    utilSigo.toastWarning("Aviso", 'Seleccione un departamento');
+                }
+
+            } else {
+                utilSigo.toastWarning("Aviso", 'Seleccione una dirección de linea');
+            }
+        } else {
+            utilSigo.toastWarning("Aviso", 'Seleccione año de busqueda');
+        }
+
+    }
+    _rendReporteSup.fnReporteDetalle = function (TCodModalidad, TModalidad, TSupervisor, TCodSupervisor) {
+        //alert('ingreso al detalle');
+
+        let codModalidad = TCodModalidad;
+        let modalidad = TModalidad;
+        let codSupervisor = TCodSupervisor;
+        let supervisor = TSupervisor;
+        let anio = $("[id*=chkAnio] input:checked").val();
+        let direccion = [];
+        $("[id*=chkDireccion] input:checked").each(function () {
+            direccion.push($(this).attr('value'));
+        });
+        let departamento = [];
+        $("[id*=chkDepartamento] input:checked").each(function () {
+            departamento.push($(this).attr('value'));
+        });
+
+        let url = urlLocalSigo + "General/Reportes/ReporteDetalleSupervision";
+        if (anio != null) {
+            if (direccion.length > 0) {
+                if (departamento.length > 0) {
+                    $.ajax({
+                        url: url,
+                        type: 'POST',
+                        datatype: "json",
+                        traditional: true,
+                        data: { 'direccion': direccion, 'anio': anio, 'departamento': departamento, 'codModalidad': codModalidad, 'modalidad': modalidad, 'codSupervisor': codSupervisor, 'Supervisor': supervisor },
+                        success: function (data) {
+                            _rendReporteSup.frm.find("#divReporteDetalle").show();
+                            $('div#divReporteDetalle').html(data);
+                        }
+                    });
+                } else {
+                    utilSigo.toastWarning("Aviso", 'Seleccione un departamento para la consulta');
+                }
+            } else {
+                utilSigo.toastWarning("Aviso", 'Seleccione una dirección de linea');
+            }
+        } else {
+            utilSigo.toastWarning("Aviso", 'Seleccione año de busqueda');
+        }
+
+    }
+    _rendReporteSup.fnExportResumen = function () {
+        var url = urlLocalSigo + "General/Reportes/DescargarResumenSupervision";
+        var option = { url: url, datos: JSON.stringify({}), type: 'POST' };
+
+        utilSigo.fnAjax(option, function (data) {
+            if (data.success) {
+                document.location = urlLocalSigo + "Archivos/Plantilla/" + data.msj;
+            }
+            else {
+                utilSigo.toastWarning("Aviso", "Sucedio un error, Comuníquese con el Administrador");
+                console.log(data.msj);
+            }
+        });
+    }
+
+    _rendReporteSup.fnExportDetalle = function () {
+        var url = urlLocalSigo + "General/Reportes/DescargarDetalleSupervision";
+        var option = { url: url, datos: JSON.stringify({}), type: 'POST' };
+
+        utilSigo.fnAjax(option, function (data) {
+            if (data.success) {
+                document.location = urlLocalSigo + "Archivos/Plantilla/" + data.msj;
+            }
+            else {
+                utilSigo.toastWarning("Aviso", "Sucedio un error, Comuníquese con el Administrador");
+                console.log(data.msj);
+            }
+        });
+    }
+    _rendReporteSup.fnGraficar = function () {
+        let url = urlLocalSigo + "General/Reportes/graficarResultado";
+        let labelChart = [];
+        let dataChart = [];
+        let dataList = [];
+        $.ajax({
+            url: url,
+            type: 'POST',
+            datatype: "json",
+            traditional: true,
+            data: {},
+            success: function (data) {
+                dataList = data.data;
+                if (dataList.length > 0) {
+                    for (let i = 0; i < dataList.length; i++) {
+                        labelChart.push(dataList[i]["FECHA"]);
+                        dataChart.push(dataList[i]["TOTAL"]);
+                    }
+                    var ctx = document.getElementById('myChart');
+                    var myChart = new Chart(ctx, {
+                        type: 'bar',
+                        data: {
+                            labels: labelChart,
+                            datasets: [{
+                                label: 'N° de registros en el SIGO',
+                                data: dataChart,
+                                backgroundColor: [
+                                    'rgba(255, 99, 132, 0.2)',
+                                    'rgba(54, 162, 235, 0.2)',
+                                    'rgba(255, 206, 86, 0.2)',
+                                    'rgba(75, 192, 192, 0.2)',
+                                    'rgba(153, 102, 255, 0.2)',
+                                    'rgba(255, 159, 64, 0.2)',
+                                    'rgba(255, 101, 132, 0.2)',
+                                    'rgba(54, 182, 235, 0.2)',
+                                    'rgba(255, 256, 86, 0.2)',
+                                    'rgba(75, 142, 192, 0.2)',
+                                    'rgba(153, 142, 255, 0.2)',
+                                    'rgba(255, 169, 64, 0.2)'
+                                ],
+                                borderColor: [
+                                    'rgba(255, 99, 132, 1)',
+                                    'rgba(54, 162, 235, 1)',
+                                    'rgba(255, 206, 86, 1)',
+                                    'rgba(75, 192, 192, 1)',
+                                    'rgba(153, 102, 255, 1)',
+                                    'rgba(255, 159, 64, 1)',
+                                    'rgba(255, 101, 132, 0.2)',
+                                    'rgba(54, 182, 235, 0.2)',
+                                    'rgba(255, 256, 86, 0.2)',
+                                    'rgba(75, 142, 192, 0.2)',
+                                    'rgba(153, 142, 255, 0.2)',
+                                    'rgba(255, 169, 64, 0.2)'
+                                ],
+                                borderWidth: 1
+                            }]
+                        },
+                        options: {
+                            scales: {
+                                yAxes: [{
+                                    ticks: {
+                                        beginAtZero: true
+                                    }
+                                }]
+                            }
+                        }
+                    });
+                }
+                else {
+                    alert('na cho');
+                }
+            }
+        });
+
+
+    }
+    $(document).ready(function () {
+        _rendReporteSup.frm = $("#divReporteSupervisores");
+    });
+
+
+</script>
+
+<div id="divReporteSupervisores" class="container-fluid" style="font-size:12px !important;">
+    <div class="card">
+        <div class="card-header text-left">
+            <h5>Supervisiones Realizadas Por Supervisor</h5>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-sm-12">
+                    <a class="btn btn-outline-success" data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
+                        Opciones de busqueda
+                    </a>
+                    <div class="collapse" id="collapseExample">
+                        <div class="card card-body">
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <h6>Sel. Año de consulta</h6>
+                                    <ul class="list-group">
+                                        <div id="chkAnio" style="height:150px; overflow-y: scroll;">
+                                            @if (Model.lstChkAnio != null)
+                                            {
+                                                foreach (var item in Model.lstChkAnio)
+                                                {
+                                                    <li>
+                                                        <div class="checkbox">
+                                                            <label>
+                                                                <input type="radio" name="radioAnio" class="check" value="@item.Value">
+                                                                @item.Text
+                                                            </label>
+                                                        </div>
+                                                    </li>
+
+                                                }
+                                            }
+                                        </div>
+                                    </ul>
+                                </div>
+                                <div class="col-sm-3">
+                                    <div class="listFiltro">
+                                        <h6 class="text-center">Sel. Sub Dirección de Linea</h6>
+                                        <div class="box" style="height:150px; overflow-y: scroll;">
+                                            <ul class="list-group">
+                                                <li>
+                                                    <div class="checkbox">
+                                                        <label>
+                                                            <input type="checkbox" class="check" value="00" id="chkTodoR">
+                                                            Todas las DL
+                                                        </label>
+                                                    </div>
+                                                </li>
+                                                <div id="chkDireccion">
+                                                    @if (Model.listDireccionLinea != null)
+                                                    {
+                                                        foreach (var item in Model.listDireccionLinea)
+                                                        {
+                                                            <li>
+                                                                <div class="checkbox">
+                                                                    <label>
+                                                                        <input type="checkbox" class="check" value="@item.CODIGO">
+                                                                        @item.DESCRIPCION
+                                                                    </label>
+                                                                </div>
+                                                            </li>
+                                                        }
+                                                    }
+                                                </div>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-3">
+                                    <div class="listFiltro">
+                                        <h6 class="text-center">Sel. Departamento</h6>
+                                        <div class="box" style="height:150px; overflow-y: scroll;">
+                                            <ul class="list-group">
+                                                <li>
+                                                    <div class="checkbox">
+                                                        <label>
+                                                            <input type="checkbox" class="check" value="00" id="chkTodoDep">
+                                                            Todas los departamentos
+                                                        </label>
+                                                    </div>
+                                                </li>
+                                                <div id="chkDepartamento">
+                                                    @if (Model.listDepartamento != null)
+                                                    {
+                                                        foreach (var item in Model.listDepartamento)
+                                                        {
+                                                            <li>
+                                                                <div class="checkbox">
+                                                                    <label>
+                                                                        <input type="checkbox" class="check" value="@item.CODIGO">
+                                                                        @item.DESCRIPCION
+                                                                    </label>
+                                                                </div>
+                                                            </li>
+                                                        }
+                                                    }
+                                                </div>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-3">
+                                    <button id="btnBuscarFauna" class="btn btn-info" style="float: right" onclick="_rendReporteSup.fnReporte()">
+                                        <i class="fa fa-search"></i>&nbsp;&nbsp;Generar reporte
+                                    </button>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                    <br />
+                </div>
+                <div class="col-sm-12">
+                    <br />
+                </div>
+            </div>
+
+            <div><hr /></div>
+            <div id="divReporte">
+
+            </div>
+            <div><br /></div>
+            <div id="divReporteDetalle">
+
+            </div>
+            <div><br /></div>
+            <div style="text-align:center !important;">
+                <canvas id="myChart" style="width:30% !important; height:30% !important;"></canvas>
+            </div>
+        </div>
+    </div>
+
+</div>

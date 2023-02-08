@@ -1,0 +1,704 @@
+﻿@model  CapaEntidad.ViewModel.VM_InformeLegal
+
+<script type="text/javascript">
+
+    var _renderFinalInstruccion = {};
+    _renderFinalInstruccion.tbEliTABLA = [];
+    _renderFinalInstruccion.tbEliTABLAInfraccionSubsanada = [];
+
+    _renderFinalInstruccion.fnSelectRecom = function () {
+        _renderFinalInstruccion.frm.find("#divEmitirRDFinal").hide();
+        _renderFinalInstruccion.frm.find("#divMedidaProvisoria").hide();
+
+        if (_renderFinalInstruccion.frm.find("#chkEmitirRDFI").is(':checked')) {
+            _renderFinalInstruccion.frm.find("#divEmitirRDFinal").show();
+        }
+        if (_renderFinalInstruccion.frm.find("#chkMedidasProvisoriasFI").is(':checked')) {
+            _renderFinalInstruccion.frm.find("#divMedidaProvisoria").show();
+        }
+
+
+    }
+    _renderFinalInstruccion.fncArticulos = function () {
+        var idArticulo = _renderFinalInstruccion.frm.find("#ddlArticuloFIs").val();
+        var DescArticulo = _renderFinalInstruccion.frm.find("#ddlArticuloFIs option:selected").text();
+        $.ajax({
+              url: '@Url.Action("_inicisos","InformeLegal")',
+              type: 'GET',
+                 datatype: "json",
+                 traditional: true,
+                 data: {'idArticulo' :   idArticulo, 'descArticulo': DescArticulo},
+                 success: function (data) {
+                        $("#divEncisosFI").html(data);
+                  //_renderFinalInstruccion.fnInitDataTable_Detail.html(data)
+                 }
+        });
+    }
+
+    _renderFinalInstruccion.fncArticulosSubsanables = function () {
+        var idArticulo = _renderFinalInstruccion.frm.find("#ddlArticuloSubsanableId").val();
+        var DescArticulo = _renderFinalInstruccion.frm.find("#ddlArticuloSubsanableId option:selected").text();
+        $.ajax({
+              url: '@Url.Action("_inicisosSubsanables", "InformeLegal")',
+              type: 'GET',
+                 datatype: "json",
+                 traditional: true,
+                 data: {'idArticulo' :   idArticulo, 'descArticulo': DescArticulo},
+                 success: function (data) {
+                     $("#divIncisosSubsanados").html(data);
+                 }
+        });
+    }
+
+    _renderFinalInstruccion.fnInitDataTable_Detail = function (data) {
+        var columns_label = [], columns_data = [], options = {};
+        columns_label = ["Articulo", "Inciso"];
+        columns_data = ["DESCRIPCION_ARTICULOS", "DESCRIPCION_ENCISOS"];
+        options = {
+            page_paging: true, page_length: 10, row_index: true, row_select: true, row_fnSelect: "_renderFinalInstruccion.fnSelect(this)"
+        };
+        utilDt.fnLoadDataTable_Detail(_renderFinalInstruccion.frm.find("#tbConsultaInfracciones"), columns_label, columns_data, options);
+        _renderFinalInstruccion.dtConsultaInforme = _renderFinalInstruccion.fnInitDataTablePaging(options);
+    }
+
+    _renderFinalInstruccion.fnInitDataTablePaging = function (options) {
+        var optDt = {};
+        optDt.iLength = options.page_length;
+        optDt.iStart = 0;
+        optDt.bSearch = false;
+        optDt.bInfo = true;
+        optDt.bSort = true;
+        optDt.aSort = [];
+        return _renderFinalInstruccion.frm.find("#tbConsultaInfracciones").DataTable({
+            processing: true,
+            serverSide: true,
+            searching: optDt.bSearch,
+            ordering: optDt.bSort,
+            deferLoading: 0,
+            paging: true,
+            ajax: {
+                "url": urlLocalSigo + "Fiscalizacion/InformeLegal/busInfraccionesRDInicio",
+                "data": function (d) {
+                    d.customSearchEnabled = true;
+                    for (var i = 0; i < d.order.length; i++) {
+                        d.order[i]["column_name"] = d.columns[d.order[i]["column"]]["data"];
+                    }
+                    d.columns = null;
+                },
+                "error": function (jqXHR) {
+                    utilSigo.unblockUIGeneral();
+                    utilSigo.toastError("Error", initSigo.MessageError);
+                    console.log(jqXHR.responseText);
+                }
+            },
+            columns: options.table_columns,
+            bInfo: optDt.bInfo,
+            "lengthMenu": [[10, 20, 50, 100], [10, 20, 50, 100]],
+            "bLengthChange": false,
+            "aaSorting": optDt.aSort,
+            "pageLength": optDt.iLength,
+            "displayStart": optDt.iStart,
+            "oLanguage": initSigo.oLanguage,
+            "drawCallback": initSigo.showPagination,
+        });
+    }
+
+   _renderFinalInstruccion.fnImportarInfracciones = function () {
+        _renderFinalInstruccion.dtConsultaInforme.ajax.reload();
+        utilSigo.modalDraggable(_renderFinalInstruccion.frm.find("#mdlConsultaInfracciones"), '.modal-header');
+        _renderFinalInstruccion.frm.find("#mdlConsultaInfracciones").modal({ keyboard: true, backdrop: 'static' });
+    }
+
+    _renderFinalInstruccion.fnSelect = function (obj) {
+        var data = _renderFinalInstruccion.dtConsultaInforme.row($(obj).parents('tr')).data();
+        var codArticulo = data["COD_ILEGAL_ARTICULOS"];
+        var codInciso = data["COD_ILEGAL_ENCISOS"];
+        var txtArticulo = data["DESCRIPCION_ARTICULOS"];
+        var txtInciso = data["DESCRIPCION_ENCISOS"];
+           $.ajax({
+                    url: '@Url.Action("agregarInfraccion","InformeLegal")',
+                    type: 'POST',
+                    datatype: "json",
+               traditional: true,
+               data: { 'codIlegalInciso': codInciso, 'txtArticulo': txtArticulo, 'txtInciso': txtInciso, 'codIlegalArticulo': codArticulo },
+                    success: function (data) {
+                        $('div#divInfracciones').html(data);
+                    }
+                });
+    }
+
+     _renderFinalInstruccion.fncbuscaExpAllanamiento = function () {
+        var url = urlLocalSigo + "General/Controles/_ConsultaSITD";
+         var option = { url: url, datos: { op: "DOC_ENTRADA" }, type: 'GET', divId: 'modalBuscarFinalInstruccion' };
+        utilSigo.fnOpenModal(option, function () {
+            _cSITD.fnAsignarDatos = function (obj) {
+                if (obj != null && obj != "") {
+                    var data = _cSITD.dt.row($(obj).parents('tr')).data();
+                    _renderFinalInstruccion.fnAsignarSTID(data, "DOC_ENTRADA");
+                }
+            }
+            _cSITD.fnInit();
+        });
+    };
+
+    _renderFinalInstruccion.fnAsignarSTID = function (data, op) {
+        if (op == "DOC_ENTRADA") {
+            var model = {
+
+                'CODIGO': data.cCodificacion,
+                'NUMERO': data.cNroDocumento,
+                'TIPO_DOCUMENTO': data.cDescTipoDoc,
+                'PDF_DOCUMENTO': data.PDF_TRAMITE_SITD,
+                'RegEstado': 1
+            };
+            console.log(model);
+            _renderFinalInstruccion.dtAllanamientoFinalInstruccion.rows.add([model]).draw();
+            _renderFinalInstruccion.dtAllanamientoFinalInstruccion.page('last').draw('page');
+        }
+        utilSigo.toastSuccess("", "Se selecciono correctamente el documento");
+        utilSigo.fnCloseModal("modalBuscarFinalInstruccion");
+    }
+
+    _renderFinalInstruccion.fncbuscaExpSubsanacion = function () {
+        var url = urlLocalSigo + "General/Controles/_ConsultaSITD";
+        var option = { url: url, datos: { op: "DOC_ENTRADA" }, type: 'GET', divId: 'modalBuscarFinalInstruccion' };
+        utilSigo.fnOpenModal(option, function () {
+            _cSITD.fnAsignarDatos = function (obj) {
+                if (obj != null && obj != "") {
+                    var data = _cSITD.dt.row($(obj).parents('tr')).data();
+                    _renderFinalInstruccion.fnAsignarSTID02(data, "DOC_ENTRADA");
+                }
+            }
+            _cSITD.fnInit();
+        });
+    };
+
+    _renderFinalInstruccion.fnAsignarSTID02 = function (data, op) {
+        if (op == "DOC_ENTRADA") {
+            var model = {
+
+                'CODIGO': data.cCodificacion,
+                'NUMERO': data.cNroDocumento,
+                'TIPO_DOCUMENTO': data.cDescTipoDoc,
+                'PDF_DOCUMENTO': data.PDF_TRAMITE_SITD,
+                'RegEstado': 1
+            };
+            console.log(model);
+            _renderFinalInstruccion.dtSubsanacionFinalInstruccion.rows.add([model]).draw();
+            _renderFinalInstruccion.dtSubsanacionFinalInstruccion.page('last').draw('page');
+        }
+        utilSigo.toastSuccess("", "Se selecciono correctamente el documento");
+        utilSigo.fnCloseModal("modalBuscarFinalInstruccion");
+    }
+
+    _renderFinalInstruccion.fnGetListAllanamiento = function () {
+        let list = [], rows, countFilas, data;
+        rows = _renderFinalInstruccion.dtAllanamientoFinalInstruccion.$("tr");
+        countFilas = rows.length;
+        if (countFilas > 0) {
+            $.each(rows, function (i, o) {
+                data = _renderFinalInstruccion.dtAllanamientoFinalInstruccion.row($(o)).data();
+                list.push(utilSigo.fnConvertArrayToObject(data));
+            });
+        }
+        return list;
+        console.log(list.length);
+    }
+
+    _renderFinalInstruccion.fnGetListSubsanacion = function () {
+        let list = [], rows, countFilas, data;
+        rows = _renderFinalInstruccion.dtSubsanacionFinalInstruccion.$("tr");
+        countFilas = rows.length;
+        if (countFilas > 0) {
+            $.each(rows, function (i, o) {
+                data = _renderFinalInstruccion.dtSubsanacionFinalInstruccion.row($(o)).data();
+                list.push(utilSigo.fnConvertArrayToObject(data));
+            });
+        }
+        return list;
+    }
+
+    _renderFinalInstruccion.fnGetListInfraccionSubsanada = function () {
+        let list = [], rows, countFilas, data;
+        rows = _renderFinalInstruccion.dtRenderListInformeSubsanado.$("tr");
+        countFilas = rows.length;
+        if (countFilas > 0) {
+            $.each(rows, function (i, o) {
+                data = _renderFinalInstruccion.dtRenderListInformeSubsanado.row($(o)).data();
+                list.push(utilSigo.fnConvertArrayToObject(data));
+            });
+        }
+        return list;
+    }
+
+    var descargarTramite = function (row) {
+        var urlSITD = 'https://sitd.osinfor.gob.pe:8443/std/cInterfaseUsuario_SITD/download.php?direccion=sitd-almacen&file=' + row.PDF_DOCUMENTO;
+        window.open(urlSITD, "_blank");
+    };
+
+    _renderFinalInstruccion.fnDeleteAllanamiento = function (obj) {
+        var data = _renderFinalInstruccion.dtAllanamientoFinalInstruccion.row($(obj).parents('tr')).data();
+        if (data["RegEstado"] == "0") {
+            _renderFinalInstruccion.tbEliTABLA.push({
+                EliTABLA: "ILEGAL_DET_ACCION",
+                EliVALOR01: data["COD_ILACCION"]
+            });
+        }
+        _renderFinalInstruccion.dtAllanamientoFinalInstruccion.row($(obj).parents('tr')).remove().draw(false);
+    }
+
+    _renderFinalInstruccion.fnDeleteSubsanacion = function (obj) {
+        var data = _renderFinalInstruccion.dtSubsanacionFinalInstruccion.row($(obj).parents('tr')).data();
+        if (data["RegEstado"] == "0") {
+            _renderFinalInstruccion.tbEliTABLA.push({
+                EliTABLA: "ILEGAL_DET_ACCION",
+                EliVALOR01: data["COD_ILACCION"]
+            });
+        }
+        _renderFinalInstruccion.dtSubsanacionFinalInstruccion.row($(obj).parents('tr')).remove().draw(false);
+    }
+
+    _renderFinalInstruccion.fnDeleteInfraccionSubsanada = function (obj) {
+        var data = _renderFinalInstruccion.dtRenderListInformeSubsanado.row($(obj).parents('tr')).data();
+        if (data["RegEstado"] == "0") {
+            data["ESTADO"] = 0;
+            _renderFinalInstruccion.tbEliTABLAInfraccionSubsanada.push(data);
+        }
+        _renderFinalInstruccion.dtRenderListInformeSubsanado.row($(obj).parents('tr')).remove().draw(false);
+    }
+
+    _renderFinalInstruccion.fnInitDataTableAllanamiento = function () {
+        var columns_label = [], columns_data = [], options = {}, data_extend = [];;
+
+        columns_label = ["Codigo", "Num. Documento", "Tipo Documento"];
+        columns_data = ["CODIGO", "NUMERO", "TIPO_DOCUMENTO"];
+        data_extend = [
+            {
+                render: function (data, type, row) {
+                    return "<a href='#' data-toggle='tooltip' data-placement='top'  onClick='descargarTramite(" + JSON.stringify(row) + ")' > Descargar</a>";
+                }, title: "Descargar"
+            }
+        ]
+        options = {
+            page_length: 10, row_index: true, row_delete: true, row_fnDelete: "_renderFinalInstruccion.fnDeleteAllanamiento(this)", page_sort: true,
+            data_extend: data_extend
+        };
+
+        _renderFinalInstruccion.dtAllanamientoFinalInstruccion = utilDt.fnLoadDataTable_Detail(_renderFinalInstruccion.frm.find("#tbAllanamientoFinalInstruccion"), columns_label, columns_data, options);
+        _renderFinalInstruccion.dtAllanamientoFinalInstruccion.rows.add(JSON.parse('@Html.Raw(Json.Encode(@Model.ListSTD01))')).draw();
+    }
+
+    _renderFinalInstruccion.fnInitDataTableSubsanacion = function () {
+        var columns_label = [], columns_data = [], options = {}, data_extend = [];;
+
+        columns_label = ["Codigo", "Num. Documento", "Tipo Documento"];
+        columns_data = ["CODIGO", "NUMERO", "TIPO_DOCUMENTO"];
+        data_extend = [
+            {
+                render: function (data, type, row) {
+                    return "<a href='#' data-toggle='tooltip' data-placement='top'  onClick='descargarTramite(" + JSON.stringify(row) + ")' > Descargar</a>";
+                }, title: "Descargar"
+            }
+        ]
+        options = {
+            page_length: 10, row_index: true, row_delete: true, row_fnDelete: "_renderFinalInstruccion.fnDeleteSubsanacion(this)", page_sort: true,
+            data_extend: data_extend
+        };
+
+        _renderFinalInstruccion.dtSubsanacionFinalInstruccion = utilDt.fnLoadDataTable_Detail(_renderFinalInstruccion.frm.find("#tbSubsanacionFinalInstruccion"), columns_label, columns_data, options);
+        _renderFinalInstruccion.dtSubsanacionFinalInstruccion.rows.add(JSON.parse('@Html.Raw(Json.Encode(@Model.ListSTD02))')).draw();
+    }
+
+    _renderFinalInstruccion.fnInitDataTable_ListIncisosSubsanados = function () {
+        var columns_label = [], columns_data = [], options = {};
+
+        columns_label = ["Codigo", "Articulo", "Inciso"];
+        columns_data = ["COD_ENCISOS", "ARTICULO", "INCISO"];
+        options = {
+            page_length: 10, row_index: true, row_delete: true, row_fnDelete: "_renderFinalInstruccion.fnDeleteInfraccionSubsanada(this)", page_sort: true
+        };
+        _renderFinalInstruccion.dtRenderListInformeSubsanado = utilDt.fnLoadDataTable_Detail(_renderFinalInstruccion.frm.find("#tbRenderListIncisosSubsanados"), columns_label, columns_data, options);
+        _renderFinalInstruccion.dtRenderListInformeSubsanado.rows.add(JSON.parse('@Html.Raw(Json.Encode(@Model.listaInfraccionesSubsanadas))')).draw();
+    }
+
+    _renderFinalInstruccion.fnShowTerceroSolidario = function () {
+        if (_renderFinalInstruccion.frm.find("#chkTerceroSolidario").is(':checked')) {
+            _renderFinalInstruccion.frm.find("#divTerceroSolidario").show();
+        }
+        else {
+            _renderFinalInstruccion.frm.find("#divTerceroSolidario").hide();
+            _renderFinalInstruccion.frm.find("#hdfCodTerceroSolidario").val(null);
+            _renderFinalInstruccion.frm.find("#txtTerceroSolidario").val(null);
+        }
+    }
+
+    $(document).ready(function () {
+        _renderFinalInstruccion.frm = $("#frmFinalInstruccion");
+        _renderFinalInstruccion.fnSelectRecom();
+        _renderFinalInstruccion.fnInitDataTable_Detail();
+        _renderFinalInstruccion.fnInitDataTableAllanamiento();
+        _renderFinalInstruccion.fnInitDataTableSubsanacion();
+        _renderFinalInstruccion.fnShowTerceroSolidario();
+        _renderFinalInstruccion.fnInitDataTable_ListIncisosSubsanados();
+    });
+
+</script>
+<!-- para tipo de evaluacion recurso de reconsideracion-->
+<div id="frmFinalInstruccion">
+    <div>
+        <br />
+    </div>
+    <div class="form-row" style="background-color:#dae7f5">
+        <div class="form-group col-md-12">
+            <label for="lblInfraccionesAcreditadas" class="text-small">Infracciones acreditadas</label>
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="form-group col-md-12">
+            <br />
+        </div>
+        <div class="form-group col-md-2">
+            <label for="txtIdArticulo" class="text-small">Artículo</label>
+        </div>
+        <div class="form-group col-md-4">
+            @Html.DropDownListFor(m => m.txtIdArticulo, new SelectList(Model.listaArticulos, "Value", "Text", Model.listaArticulos),
+                        new { @class = "form-control form-control-sm", @id = "ddlArticuloFIs", @onchange = "_renderFinalInstruccion.fncArticulos()" })
+        </div>
+        <div class="form-group col-md-6">
+            <button type="button" id="btnAddInfracciones" class="btn btn-info btn-sm" onclick="_renderFinalInstruccion.fnImportarInfracciones()">Importar Infracciónes RD Inicio</button>
+        </div>
+    </div>
+
+    <div class="form-row" id="divEncisosFI">
+        <div class="form-group col-md-12">
+            <label for="lblInciso" class="text-small">Inciso</label>
+        </div>
+    </div>
+
+    <div class="form-row">
+        <div id="divInfracciones" class="form-group col-md-12">
+            @Html.Partial("~/Areas/Fiscalizacion/Views/InformeLegal/Shared/_renderListaEncisos.cshtml", Model)
+        </div>
+    </div>
+
+    <div class="form-row" style="background-color:#dae7f5">
+        <div class="form-group col-md-12">
+            <label for="lblRecomendaciones" class="text-small">Recomendaciones</label>
+        </div>
+    </div>
+
+    <div class="form-row">
+        <div class="form-group col-md-12">
+            <br />
+        </div>
+        <div class="form-group col-md-4">
+            <label for="chkInspeccionOcularFI" class="text-small">Inspección Ocular</label>
+        </div>
+        <div class="form-group col-md-6">
+            @Html.CheckBoxFor(m => m.chkInspeccionOcularFI, new { @class = "form-check-input", style = "width:15px;height:16px;" })
+        </div>
+        <div class="form-group col-md-2">
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="form-group col-md-4">
+            <label for="chkEmitirRDFI" class="text-small">Emitir RD final</label>
+        </div>
+        <div class="form-group col-md-6">
+            @Html.CheckBoxFor(m => m.chkEmitirRDFI, new
+            {
+                @class = "form-check-input",
+                style = "width:15px;height:16px;",
+                @onchange = "_renderFinalInstruccion.fnSelectRecom()"
+
+             })
+        </div>
+        <div class="form-group col-md-2">
+        </div>
+    </div>
+    <div id="divEmitirRDFinal" style="display:none;">
+        <div class="form-row">
+            <div class="form-group col-md-4">
+            </div>
+            <div class="form-group col-md-4">
+                <label for="chkSancionFI" class="text-small">Sanción</label>
+            </div>
+            <div class="form-group col-md-4">
+                @Html.CheckBoxFor(m => m.chkSancionFI, new { @class = "form-check-input", style = "width:15px;height:16px;" })
+            </div>
+        </div>
+
+        <div class="form-row">
+            <div class="form-group col-md-4">
+            </div>
+            <div class="form-group col-md-4">
+                <label for="chkAmonestacionesFI" class="text-small">Amonestaciones</label>
+            </div>
+            <div class="form-group col-md-4">
+                @Html.CheckBoxFor(m => m.chkAmonestacionesFI, new { @class = "form-check-input", style = "width:15px;height:16px;" })
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group col-md-4">
+            </div>
+            <div class="form-group col-md-4">
+                <label for="chkArchivoFI" class="text-small">Archivo</label>
+            </div>
+            <div class="form-group col-md-4">
+                @Html.CheckBoxFor(m => m.chkArchivoFI, new { @class = "form-check-input", style = "width:15px;height:16px;" })
+            </div>
+        </div>
+
+        <div class="form-row">
+            <div class="form-group col-md-4">
+            </div>
+            <div class="form-group col-md-4">
+                <label for="chkMedidasProvisoriasFI" class="text-small">Medidas Provisorias</label>
+            </div>
+            <div class="form-group col-md-4">
+                @Html.CheckBoxFor(m => m.chkMedidasProvisoriasFI, new
+                {
+                    @class = "form-check-input",
+                    style = "width:15px;height:16px;",
+                    @onchange = "_renderFinalInstruccion.fnSelectRecom()"
+                })
+            </div>
+        </div>
+        <div id="divMedidaProvisoria" style="display:none;">
+            <div class="form-row">
+                <div class="form-group col-md-4">
+                </div>
+                <div class="form-group col-md-6">
+                    @Html.TextAreaFor(m => m.txtMedidasProvisoriasFI, 3, 1, new { @class = "form-control form-control-sm" })
+                </div>
+                <div class="form-group col-md-2">
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <div class="form-row">
+        <div class="form-group col-md-4">
+            <label for="lblTerceroSolidario" class="text-small">Tercero solidario</label>
+        </div>
+        <div class="form-group col-md-6">
+            @Html.CheckBoxFor(m => m.chkTerceroSolidario, new { @class = "form-check-input", style = "width:15px;height:16px;", @onchange = "_renderFinalInstruccion.fnShowTerceroSolidario()" })
+        </div>
+    </div>
+    <div class="form-row" id="divTerceroSolidario" style="display:none;">
+        <div class="form-group col-md-6">
+            <div class="input-group">
+                <div class="input-group-prepend">
+                    <span class="input-group-text"><i class="fa fa-plus" style="cursor:pointer;" onclick="ManInfLegal_AddEdit.fnBuscarPersona('TERCERO', 'N');" data-toggle="tooltip" data-placement="top" title="Agregar"></i></span>
+                </div>
+                @Html.EditorFor(m => m.txtTerceroSolidario, new { htmlAttributes = new { @class = "form-control form-control-sm", @disabled = "disabled" } })
+                @Html.HiddenFor(m => m.hdfCodTerceroSolidario)
+            </div>
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="form-group col-md-4">
+            <label for="chkCaducidadRDFI" class="text-small">Caducidad</label>
+        </div>
+        <div class="form-group col-md-6">
+            @Html.CheckBoxFor(m => m.chkCaducidadRDFI, new { @class = "form-check-input", style = "width:15px;height:16px;" })
+        </div>
+        <div class="form-group col-md-2">
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="form-group col-md-4">
+            <label for="chkAmpliacionFI" class="text-small">Ampliación PAU</label>
+        </div>
+        <div class="form-group col-md-6">
+            @Html.CheckBoxFor(m => m.chkAmpliacionFI, new { @class = "form-check-input", style = "width:15px;height:16px;" })
+        </div>
+        <div class="form-group col-md-2">
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="form-group col-md-4">
+            <label for="chkAcumulacionFI" class="text-small">Acumulación PAU</label>
+        </div>
+        <div class="form-group col-md-6">
+            @Html.CheckBoxFor(m => m.chkAcumulacionFI, new { @class = "form-check-input", style = "width:15px;height:16px;" })
+        </div>
+        <div class="form-group col-md-2">
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="form-group col-md-4">
+            <label for="chkMedidaCorrectivaRDFI" class="text-small">Medidas correctivas</label>
+        </div>
+        <div class="form-group col-md-6">
+            @Html.CheckBoxFor(m => m.chkMedidaCorrectivaRDFI, new { @class = "form-check-input", style = "width:15px;height:16px;" })
+        </div>
+        <div class="form-group col-md-2">
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="form-group col-md-4">
+            <label for="chkNuevaSupervisionFI" class="text-small">Nueva Supervisión</label>
+        </div>
+        <div class="form-group col-md-6">
+            @Html.CheckBoxFor(m => m.chkNuevaSupervisionFI, new { @class = "form-check-input", style = "width:15px;height:16px;" })
+        </div>
+        <div class="form-group col-md-2">
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="form-group col-md-4">
+            <label for="chkNuevaNotificacionFI" class="text-small">Nueva Notificación</label>
+        </div>
+        <div class="form-group col-md-6">
+            @Html.CheckBoxFor(m => m.chkNuevaNotificacionFI, new { @class = "form-check-input", style = "width:15px;height:16px;" })
+        </div>
+        <div class="form-group col-md-2">
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="form-group col-md-4">
+            <label for="chkRectificacionFI" class="text-small">Rectificación de error material</label>
+        </div>
+        <div class="form-group col-md-6">
+            @Html.CheckBoxFor(m => m.chkRectificacionFI, new { @class = "form-check-input", style = "width:15px;height:16px;" })
+        </div>
+        <div class="form-group col-md-2">
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="form-group col-md-4">
+            <label for="txtVariarMedCaut" class="text-small">Variar Medidas Cautelares</label>
+        </div>
+        <div class="form-group col-md-6">
+            @Html.TextAreaFor(m => m.txtVariarMedCaut, 3, 1, new { @class = "form-control form-control-sm" })
+        </div>
+        <div class="form-group col-md-2">
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="form-group col-md-4">
+            <label for="txtOtrosFI" class="text-small">Otros</label>
+        </div>
+        <div class="form-group col-md-6">
+            @Html.TextAreaFor(m => m.txtOtrosFI, 3, 1, new { @class = "form-control form-control-sm" })
+        </div>
+        <div class="form-group col-md-2">
+        </div>
+    </div>
+
+    <!--Acciones-->
+    <div class="form-row">
+        <div class="form-group col-md-12">
+            <div class="card-header text-small">Acciones</div>
+            <br />
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="form-group col-md-4">
+            <label for="lblAllanamiento" class="text-small">Allanamiento de responsabilidad</label>
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="form-group col-md-12">
+            <button style="font-size:11px !important;" onclick="_renderFinalInstruccion.fncbuscaExpAllanamiento()" class="btn btn-primary " type="button"><i class="fa fa-search"></i>&nbsp;Buscar Expdiente en SITD</button>
+            <br />
+            <table id="tbAllanamientoFinalInstruccion" style="width:100%;margin:0px !important;" class="table table-hover table-bordered">
+                <thead>
+                    <tr>
+                        <th colspan="6" class="text-sm-left">
+                            <div class="form-inline">
+                                <strong>Lista de expedientes de SITD</strong>
+                            </div>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="form-group col-md-4">
+            <label for="lblSubsanacion" class="text-small">Subsanación voluntaria</label>
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="form-group col-md-12">
+            <button style="font-size:11px !important;" onclick="_renderFinalInstruccion.fncbuscaExpSubsanacion()" class="btn btn-primary " type="button"><i class="fa fa-search"></i>&nbsp;Buscar Expdiente en SITD</button>
+            <br />
+            <table id="tbSubsanacionFinalInstruccion" style="width:100%;margin:0px !important;" class="table table-hover table-bordered">
+                <thead>
+                    <tr>
+                        <th colspan="6" class="text-sm-left">
+                            <div class="form-inline">
+                                <strong>Lista de expedientes de SITD</strong>
+                            </div>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="form-group col-md-12">
+            <div class="card-header text-small">Infracciones subsanadas</div>
+            <br />
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="form-group col-md-2">
+            <label for="lblArticulo" class="text-small">Artículo</label>
+        </div>
+        <div class="form-group col-md-4">
+            @Html.DropDownListFor(m => m.ddlArticuloSubsanableId, new SelectList(Model.listaArticulosSubsanables, "Value", "Text"), new { @class = "form-control form-control-sm", @onchange = "_renderFinalInstruccion.fncArticulosSubsanables()" })
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="form-group col-md-12" id="divIncisosSubsanados">
+            <label for="lblIncisoSubsanado" class="text-small">Inciso</label>
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="form-group col-md-12">
+            <div class="table-responsive">
+                <table id="tbRenderListIncisosSubsanados" style="width:100%;margin:0px !important;" class="table table-hover table-bordered">
+                    <thead>
+                        <tr>
+                            <th colspan="6" class="text-sm-left">
+                                <div class="form-inline">
+                                    <strong> Infracciones subsanadas</strong>
+                                </div>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!--modal-->
+    <div class="modal fade hide" id="mdlConsultaInfracciones" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header text-small" style="cursor:move;">
+                    Lista de Infracciones
+                    <i class="fa fa-close" style="cursor:pointer;" data-dismiss="modal" aria-label="Close"></i>
+                </div>
+                <div class="modal-body" style="padding:0px;">
+                    <div id="frmConsultaInfracciones">
+                        <div class="table-responsive" style="overflow-y:hidden;">
+                            <table id="tbConsultaInfracciones" style="width:100%;margin:0px !important;" class="table table-hover table-bordered">
+                                <thead></thead>
+                                <tbody></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer"></div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade hide" id="modalBuscarFinalInstruccion" tabindex="-1" role="dialog"></div>

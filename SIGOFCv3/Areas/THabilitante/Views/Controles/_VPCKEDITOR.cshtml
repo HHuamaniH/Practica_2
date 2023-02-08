@@ -1,0 +1,16 @@
+﻿@model CapaEntidad.ViewModel.VM_ControlCalidad
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#OBSERVACIONES_CONTROL").removeAttr("name");
+        CKEDITOR.replace('OBSERVACIONES_CONTROL', {
+            toolbar: initSigo.configuracionCKEDITOR
+        });        
+    });
+</script>
+<div class="form-row">
+    <div class="col-md-12 mb-3">
+        @Html.TextAreaFor(m => m.OBSERVACIONES_CONTROL, new { rows = 10 })
+    </div> 
+</div>
+<script src="~/Scripts/ckeditor/ckeditor.js"></script>
+ 

@@ -1,0 +1,353 @@
+﻿@model CapaEntidad.ViewModel.General.VM_ValidacionFormatos
+<input type="hidden" id="hdTipoVal" value="@ViewBag.vbOrigen" />
+<ul class="nav nav-tabs" id="myTab" role="tablist">
+    <li class="nav-item">
+        <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">Validación</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false">Listas válidas SIGOsfc para las plantillas</a>
+    </li>
+</ul>
+<div class="tab-content" id="myTabContent">
+    <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+        <div id="divListaOpcion" style="margin-top:10px;">
+            <div class="table-responsive table-wrapper-scroll-y">
+                <table id="tbListVal" class="table table-hover table-bordered" style="width:100%">
+                    <thead>
+                        <tr>
+                            <th colspan="2">Validación de Plantillas</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tbItemVal">
+                        <tr>
+                            <td class="colItem"> <div class="divArchivo"><label style="cursor:pointer;" class="fa fa-lg fa-file-excel-o"><input type="file" id="LISTAPASPEQ" class="fileselect" onchange="_ValP.fnValidar(event, this,'LISTAPASPEQ');" size="60"></label></div></td>
+                            <td>Validar Paspeq</td>
+                        </tr>
+                        <tr>
+                            <td class="colItem"> <div class="divArchivo"><label style="cursor:pointer;" class="fa fa-lg fa-file-excel-o"><input type="file" id="PRIORIZACION" class="fileselect" onchange="_ValP.fnValidar(event, this,'PRIORIZACION');" size="60"></label></div></td>
+                            <td>Validar formato de priorización</td>
+                        </tr>
+                        <tr>
+                            <td class="colItem"> <div class="divArchivo"><label style="cursor:pointer;" class="fa fa-lg fa-file-excel-o"><input type="file" id="POAMADE" class="fileselect" onchange="_ValP.fnValidar(event, this,'POAMADE');" size="60"></label></div></td>
+                            <td>Validar CENSO del POA Maderable</td>
+                        </tr>
+                        <tr>
+                            <td class="colItem"> <div class="divArchivo"><label style="cursor:pointer;" class="fa fa-lg fa-file-excel-o"><input type="file" id="POARAM" class="fileselect" onchange="_ValP.fnValidar(event, this,'POARAM');" size="60"></label></div></td>
+                            <td>Validar Resolución de Aprobación o Resolución de Reformulación del POA Maderable</td>
+                        </tr>
+                        <tr>
+                            <td class="colItem"> <div class="divArchivo"><label style="cursor:pointer;" class="fa fa-lg fa-file-excel-o"><input type="file" id="POARAMPMED" class="fileselect" onchange="_ValP.fnValidar(event, this,'POARAMPMED');" size="60"></label></div></td>
+                            <td>Validar Resolución de Aprobación o Resolución de Reformulación del POA de la Modalidad Plantas Medicinales</td>
+                        </tr>
+                        <tr>
+                            <td class="colItem"> <div class="divArchivo"><label style="cursor:pointer;" class="fa fa-lg fa-file-excel-o"><input type="file" id="POABEXTM" class="fileselect" onchange="_ValP.fnValidar(event, this,'POABEXTM');" size="60"></label></div></td>
+                            <td>Validar Balance de Extracción del POA Maderable</td>
+                        </tr>
+                        <tr>
+                            <td class="colItem"> <div class="divArchivo"><label style="cursor:pointer;" class="fa fa-lg fa-file-excel-o"><input type="file" id="POABEXTNMPMED" class="fileselect" onchange="_ValP.fnValidar(event, this,'POABEXTNMPMED');" size="60"></label></div></td>
+                            <td>Validar Balance de Extracción del POA No Maderable de la Modalidad Plantas Medicinales</td>
+                        </tr>
+                        <tr>
+                            <td class="colItem"> <div class="divArchivo"><label style="cursor:pointer;" class="fa fa-lg fa-file-excel-o"><input type="file" id="POANOMADEC" class="fileselect" onchange="_ValP.fnValidar(event, this,'POANOMADEC');" size="60"></label></div></td>
+                            <td>Validar CENSO del POA No Maderable (Castaña)</td>
+                        </tr>
+                        <tr>
+                            <td class="colItem"> <div class="divArchivo"><label style="cursor:pointer;" class="fa fa-lg fa-file-excel-o"><input type="file" id="ISUMADE" class="fileselect" onchange="_ValP.fnValidar(event, this,'ISUMADE');" size="60"></label></div></td>
+                            <td>Validar Datos de Campo del Informe de Supervisión Maderable</td>
+                        </tr>
+                        <tr>
+                            <td class="colItem"> <div class="divArchivo"><label style="cursor:pointer;" class="fa fa-lg fa-file-excel-o"><input type="file" id="ISUMADESEM" class="fileselect" onchange="_ValP.fnValidar(event, this,'ISUMADESEM');" size="60"></label></div></td>
+                            <td>Validar Datos de Campo del Informe de Supervisión Semillero Maderable</td>
+                        </tr>
+                        <tr>
+                            <td class="colItem"> <div class="divArchivo"><label style="cursor:pointer;" class="fa fa-lg fa-file-excel-o"><input type="file" id="ISUBOSE" class="fileselect" onchange="_ValP.fnValidar(event, this,'ISUBOSE');" size="60"></label></div></td>
+                            <td>Validar Datos de Campo del Informe de Supervisión de Bosques Secos</td>
+                        </tr>
+                        <tr>
+                            <td class="colItem"> <div class="divArchivo"><label style="cursor:pointer;" class="fa fa-lg fa-file-excel-o"><input type="file" id="ISUCASTANA" class="fileselect" onchange="_ValP.fnValidar(event, this,'ISUCASTANA');" size="60"></label></div></td>
+                            <td>Validar Datos de Campo del Informe de Supervisión No Maderable Castaña</td>
+                        </tr>
+                        <tr>
+                            <td class="colItem"> <div class="divArchivo"><label style="cursor:pointer;" class="fa fa-lg fa-file-excel-o"><input type="file" id="ISUCVOLINJUS" class="fileselect" onchange="_ValP.fnValidar(event, this,'ISUCVOLINJUS');" size="60"></label></div></td>
+                            <td>Validar Datos de Volumen Injustificado y Justificado del Informe</td>
+                        </tr>
+                        <tr>
+                            <td class="colItem"> <div class="divArchivo"><label style="cursor:pointer;" class="fa fa-lg fa-file-excel-o"><input type="file" id="ISUINDADIC" class="fileselect" onchange="_ValP.fnValidar(event, this,'ISUINDADIC');" size="60"></label></div></td>
+                            <td>Validar Datos de Campo de Individuos Adicionales e Individuos no autorizados</td>
+                        </tr>
+                        <tr>
+                            <td class="colItem"> <div class="divArchivo"><label style="cursor:pointer;" class="fa fa-lg fa-file-excel-o"><input type="file" id="CAPPARTICIPANTES" class="fileselect" onchange="_ValP.fnValidar(event, this,'CAPPARTICIPANTES');" size="60"></label></div></td>
+                            <td>Validar Datos de Participantes de Capacitación</td>
+                        </tr>
+                        <tr>
+                            <td class="colItem"> <div class="divArchivo"><label style="cursor:pointer;" class="fa fa-lg fa-file-excel-o"><input type="file" id="VALGTF" class="fileselect" onchange="_ValP.fnValidar(event, this,'VALGTF');" size="60"></label></div></td>
+                            <td>Validar Carga Masiva Guia de Transporte Forestal</td>
+                        </tr>
+                        <tr>
+                            <td class="colItem"> <div class="divArchivo"><label style="cursor:pointer;" class="fa fa-lg fa-file-excel-o"><input type="file" id="VALTROZACAMPO" class="fileselect" onchange="_ValP.fnValidar(event, this,'VALTROZACAMPO');" size="60"></label></div></td>
+                            <td>Validar Datos Trozas en Campo</td>
+                        </tr>
+                        <tr>
+                            <td class="colItem"> <div class="divArchivo"><label style="cursor:pointer;" class="fa fa-lg fa-file-excel-o"><input type="file" id="VALMADEASERRADA" class="fileselect" onchange="_ValP.fnValidar(event, this,'VALMADEASERRADA');" size="60"></label></div></td>
+                            <td>Validar Datos Madera Aserrada en Campo</td>
+                        </tr>
+                        <tr>
+                            <td class="colItem"> <div class="divArchivo"><label style="cursor:pointer;" class="fa fa-lg fa-file-excel-o"><input type="file" id="ISUCVERTMAY" class="fileselect" onchange="_ValP.fnValidar(event, this,'ISUCVERTMAY');" size="60"></label></div></td>
+                            <td>Validar Datos de Censo de Vertebrados - Fauna  Silvestre - Cautiverio</td>
+                        </tr>
+                        <tr>
+                            <td class="colItem"> <div class="divArchivo"><label style="cursor:pointer;" class="fa fa-lg fa-file-excel-o"><input type="file" id="ISUCVERTMEN" class="fileselect" onchange="_ValP.fnValidar(event, this,'ISUCVERTMEN');" size="60"></label></div></td>
+                            <td>Validar Datos de Censo de Invertebrados - Fauna  Silvestre - Cautiverio</td>
+                        </tr>
+                        <tr>
+                            <td class="colItem"> <div class="divArchivo"><label style="cursor:pointer;" class="fa fa-lg fa-file-excel-o"><input type="file" id="BALANCE_ING_EGR" class="fileselect" onchange="_ValP.fnValidar(event, this,'BALANCE_ING_EGR');" size="60"></label></div></td>
+                            <td>Validar Balance de Ingreso y Egreso de Especímenes - Fauna Silvestre - Cautiverio</td>
+                        </tr>
+                        <tr>
+                            <td class="colItem"> <div class="divArchivo"><label style="cursor:pointer;" class="fa fa-lg fa-file-excel-o"><input type="file" id="ISUNACIMIENTO" class="fileselect" onchange="_ValP.fnValidar(event, this,'ISUNACIMIENTO');" size="60"></label></div></td>
+                            <td>Validar Datos de Nacimientos - Fauna Silvestre - Cautiverio</td>
+                        </tr>
+                        <tr>
+                            <td class="colItem"> <div class="divArchivo"><label style="cursor:pointer;" class="fa fa-lg fa-file-excel-o"><input type="file" id="ISUEGRESO" class="fileselect" onchange="_ValP.fnValidar(event, this,'ISUEGRESO');" size="60"></label></div></td>
+                            <td>Validar Datos de Egresos - Fauna Silvestre - Cautiverio</td>
+                        </tr>
+                        <tr>
+                            <td class="colItem"> <div class="divArchivo"><label style="cursor:pointer;" class="fa fa-lg fa-file-excel-o"><input type="file" id="ISUINFRAESTRUCTURA" class="fileselect" onchange="_ValP.fnValidar(event, this,'ISUINFRAESTRUCTURA');" size="60"></label></div></td>
+                            <td>Validar Datos - Fauna Silvestre - Infraestructura</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <br />
+            <div id="navResultdoExcel"></div>
+        </div>
+
+        <div id="divListadoError" style="display:none;">
+            <div class="divRespuesta" style="background-color:#dae7f5 !important;">
+                <a style="cursor:pointer;color:blue;" title="Regresar"><i class="fa mx-2 fa-lg fa-arrow-left" onclick="_ValP.fnMostrarError(1);"></i></a>
+                <strong>Lista de Errores</strong>
+            </div>
+            <div id="resultdoExcelError"></div>
+            <div id="divError" class="table-responsive table-wrapper-scroll-y" style="margin-top:10px;">
+                <table id="tbError" class="table table-hover table-bordered" style="width:100%">
+                    <thead>
+                        <tr>
+                            <th class="colNro">FILA_EXCEL</th>
+                            <th>OBSERVACIONES</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+        <div style="margin-top:10px;">
+            <div class="form-group row">
+                <label for="cboEspecieCC" class="col-md-5 col-form-label text-small">Especies SIGOsfc (N. Científico | N. Comun)</label>
+                <div class="col-md-7">
+                    <select id="cboEspecieCC" class="form-control input-sm"></select>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="cboEspecieCientifico" class="col-md-5 col-form-label text-small">Especies SIGOsfc (N. Científico)</label>
+                <div class="col-md-7">
+                    <select id="cboEspecieCientifico" class="form-control input-sm"></select>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="cboMaderable" class="col-md-5 col-form-label text-small">Condición Censo Maderable</label>
+                <div class="col-md-7">
+                    @Html.DropDownList("cboMaderable", new SelectList(Model.ListCondicionMad, "Value", "Text"), new { @class = "form-control form-control-sm" })
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="cboNoMaderable" class="col-md-5 col-form-label text-small">Condición Censo No Maderable</label>
+                <div class="col-md-7">
+                    @Html.DropDownList("cboNoMaderable", new SelectList(Model.ListCondicionNoMad, "Value", "Text"), new { @class = "form-control form-control-sm" })
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="cboEstadoM" class="col-md-5 col-form-label text-small">Estado Campo Maderable</label>
+                <div class="col-md-7">
+                    @Html.DropDownList("cboEstadoM", new SelectList(Model.ListEstadoMad, "Value", "Text"), new { @class = "form-control form-control-sm" })
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="cboEstadoNoM" class="col-md-5 col-form-label text-small">Estado Campo No Maderable</label>
+                <div class="col-md-7">
+                    @Html.DropDownList("cboEstadoNoM", new SelectList(Model.ListEstadoNoMad, "Value", "Text"), new { @class = "form-control form-control-sm" })
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="cboEstadoNoM" class="col-md-5 col-form-label text-small">Zonas UTM</label>
+                <div class="col-md-7">
+                    <select id="cboUTM" class="form-control form-control-sm">
+                        <option value="17S">17S</option>
+                        <option value="18S">18S</option>
+                        <option value="19S">19S</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="cboInstitu" class="col-md-5 col-form-label text-small">Instituciones de participantes de Capacitaciones</label>
+                <div class="col-md-7">
+                    @Html.DropDownList("cboInstitu", new SelectList(Model.ListInstitucionesCapac, "Value", "Text"), new { @class = "form-control form-control-sm" })
+                </div>
+            </div>
+            <nav>
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item active" id="navResultdo" aria-current="page"></li>
+                </ol>
+            </nav>
+        </div>
+    </div>
+</div>
+<script>
+    var _ValP = {
+        fnBuilTable: (data, tbName) => {
+            var table = $('#' + tbName);
+            var tabla = table.children('tbody');
+            tabla.children('tr').remove();
+            var rows = '';
+            $.each(data, (i, r) => {
+                rows += '<tr>';
+                rows += '<td>' + `${r.Orden_Categoria}` + '</td>';
+                rows += '<td>' + `${r.OBSERVACION}` + '</td>';
+                rows += '</tr>';
+            });
+            tabla.append(rows);
+        },
+        fnMostrarError: (flag) => {
+            _ValP.content.find("#navResultdoExcel").hide();
+            if (flag == 0) {
+                _ValP.content.find("#divListadoError").show();
+                _ValP.content.find("#divListaOpcion").hide();
+            } else {
+                _ValP.content.find("#divListadoError").hide();
+                _ValP.content.find("#divListaOpcion").show();
+            }
+        },
+        fnValidar: (e, objeto, opcion) => {
+            var url = urlLocalSigo + "General/Controles/ValidarFormatoExcel";
+            var file = e.target.files || e.dataTransfer.files;
+            if (file != undefined && file.length > 0) {
+                var formdata = new FormData();
+                formdata.append(file.name, file[0]);
+                //Agregamos los parametros opcionales
+                formdata.append("tipo", opcion);
+                $.ajax({
+                    url: url,
+                    type: "POST",
+                    contentType: false,
+                    processData: false,
+                    data: formdata,
+                    success: function (result) {
+                        utilSigo.unblockUIGeneral();
+                        if (result.success) {
+                            if (result.data.length > 0) {
+                                _ValP.fnMostrarError(0);
+                                _ValP.fnBuilTable(result.data, "tbError");
+                                var seleccion = '<div class="divRespuesta"  style="color:red;font-size:14px;" ><strong>' + result.msj1 + '</strong></div>';
+                                _ValP.content.find("#resultdoExcelError").html(seleccion);
+                            }
+                            else {
+                                _ValP.content.find("#navResultdoExcel").show();
+                                var seleccion = '<div class="divRespuesta"  style="color:blue;font-size:14px;" ><strong>' + result.msj1 + '</strong><i class="fa fa-lg fa-check-circle" style="color:green;padding-left:0.8em;" aria-hidden="true" title="Formato correcto"></i></div>';
+                                _ValP.content.find("#navResultdoExcel").html(seleccion);
+                            }
+                        }
+                        else {
+                            _ValP.content.find("#navResultdoExcel").show();
+                            var seleccion = '<div class="divRespuesta" style="color:red;font-size:14px;" ><strong>' + result.msj + '</strong></div>';
+                            _ValP.content.find("#navResultdoExcel").html(seleccion);
+                        }
+                    },
+                    beforeSend: function () {
+                        utilSigo.blockUIGeneral();
+                    },
+                    error: function (err) {
+                        utilSigo.unblockUIGeneral();
+                        utilSigo.toastWarning("Aviso", "Sucedio un error, Comuníquese con el Administrador");
+                        console.log(err.statusText);
+                    }
+                });
+            }
+            _ValP.resetFileSelect(objeto);
+        },
+        resetFileSelect: (objeto) => {
+            var tr = $(objeto).closest("tr");
+            tr.find(".fileselect").replaceWith(objeto.outerHTML);
+        },
+        fnInitEspecie: (control, tipoEspecie, minBusqueda, pageSize) => {
+            _ValP.content.find("#" + control).select2({
+                placeholder: "Seleccione Especie",
+                minimumInputLength: minBusqueda,
+                allowClear: true,
+                ajax: {
+                    url: initSigo.urlControllerGeneral + "GetComboEspeciePaging",
+                    dataType: 'json',
+                    delay: 250,
+                    data: function (params) {
+                        var term = params.term;
+                        return {
+                            pageSize: pageSize,
+                            pageNum: params.page || 1,
+                            searchTerm: term,
+                            tipoEspecie: tipoEspecie
+                        };
+                    },
+                    processResults: function (data, params) {
+                        params.page = params.page || 1;
+                        return {
+                            results: data.Results,
+                            pagination: {
+                                more: (params.page * pageSize) < data.Total
+                            }
+                        };
+                    },
+                    transport: function (params, success, failure) {
+                        var $request = $.ajax(params);
+                        $request.then(success);
+                        $request.fail(failure);
+                        return $request;
+                    },
+                    statusCode: {
+                        203: () => { utilSigo.unblockUIGeneral(); utilSigo.toastWarning("Aviso", "El usuario perdio la sesión. Vuelva ingresar al sistema"); }
+                    }
+                }
+            });
+        }
+    }
+    $(function () {
+        $.fn.select2.defaults.set("theme", "bootstrap4");
+        _ValP.content = $("#divLstVal");
+        _ValP.content.find("#cboMaderable").select2();
+        _ValP.content.find("#cboNoMaderable").select2();
+        _ValP.content.find("#cboEstadoM").select2();
+        _ValP.content.find("#cboEstadoNoM").select2();
+        _ValP.content.find("#cboUTM").select2();
+        _ValP.content.find("#cboInstitu").select2();
+        _ValP.fnInitEspecie("cboEspecieCC", "MCIEN_COMUN", 0, 100);
+        _ValP.fnInitEspecie("cboEspecieCientifico", "MCIENTIFICO", 0, 100);
+        _ValP.content.find('select').on('select2:select', function (e) {
+            var data = e.params.data;
+            var seleccion = '<strong>' + data.text + '</strong>';
+            _ValP.content.find("#navResultdo").html(seleccion);
+        });
+        //mostrando opciones segun formulario
+        var valOpcion = _ValP.content.find("#hdTipoVal").val();
+        var splitOpion = valOpcion.split("|");
+        if (valOpcion != "") {           
+            var trsVal = $("#tbItemVal > tr");
+            $.each(trsVal, (i, o) => {
+                var idOpcion = $(o).find(".fileselect").attr("id");
+                if (splitOpion.indexOf(idOpcion) == -1) {
+                    $(o).attr('style', 'display:none');
+                }
+            });
+        }
+
+
+    });
+</script>

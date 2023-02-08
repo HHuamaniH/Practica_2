@@ -1,0 +1,121 @@
+﻿@model CapaEntidad.ViewModel.VM_InformeMedidaCorrectiva
+
+<style type="text/css">
+    #tbRenderListResponsable_wrapper {
+        padding: 0px;
+    }
+</style>
+
+
+<script type="text/javascript">
+    var _renderListResponsable = {};
+    _renderListResponsable.tbElimResponsable = [];
+    // iniciar datos en la tabla
+    _renderListResponsable.fnInitDataTable_Detail = function () {
+        var columns_label = [], columns_data = [], options = {};
+
+        columns_label = ["Apellido / Nombre"];
+        columns_data = ["RESPONSABLE"];
+        options = {
+            page_length: 10, row_index: true, row_delete: true, row_fnDelete: "_renderListResponsable.fnDelete(this)", page_sort: true
+        };
+        _renderListResponsable.dtRenderListResponsable = utilDt.fnLoadDataTable_Detail(_renderListResponsable.frm.find("#tbRenderListResponsable"), columns_label, columns_data, options);
+        _renderListResponsable.dtRenderListResponsable.rows.add(JSON.parse('@Html.Raw(Json.Encode(@Model.tbResponsable))')).draw();
+    }
+
+    _renderListResponsable.fnBuscarPersona = function (_dom, _tipoPersona) {
+        var url = urlLocalSigo + "General/Controles/_BuscarPersonaGeneral";
+        var option = { url: url, type: 'GET', datos: { asBusGrupo: "PERSONA", asCodPTipo: "TODOS", asTipoPersona: _tipoPersona }, divId: "mdlBuscarPersona" };
+        utilSigo.fnOpenModal(option, function () {
+            _bPerGen.fnAsignarDatos = function (obj) {
+                if (obj != null && obj != "") {
+                    var data = _bPerGen.dtBuscarPerona.row($(obj).parents('tr')).data();
+                    switch (_dom) {
+                        case "RESPON":
+                            if (!utilDt.existValorSearch(_renderListResponsable.dtRenderListResponsable, "COD_PERSONA", data["COD_PERSONA"])) {
+                                var obj = {};
+                                obj.COD_RESPONSABLE = data["COD_PERSONA"];
+                                obj.RESPONSABLE = data["PERSONA"];
+                                obj.RegEstado = 1;
+
+                                _renderListResponsable.dtRenderListResponsable.rows.add([obj]).draw();
+                                _renderListResponsable.dtRenderListResponsable.page('last').draw('page');
+                            }
+                            else {
+                                utilSigo.toastWarning("Aviso", "El Profesional ya existe");
+                            }
+
+                            break;
+                    }
+                    utilSigo.fnCloseModal("mdlBuscarPersona");
+                }
+            };
+            _bPerGen.fnInit();
+        });
+    };
+
+    /*Listado de registros (render)*/
+    _renderListResponsable.fnDelete = function (obj) {
+        utilSigo.dialogConfirm("Confirmacion", "¿Está seguro de Eliminar el Registro Seleccionado?", function (r) {
+            if (r) {
+                var data = _renderListResponsable.dtRenderListResponsable.row($(obj).parents('tr')).data();
+                if (data["RegEstado"] != "1") {
+                    _renderListResponsable.tbElimResponsable.push({
+                        EliTABLA: "INFORME_DET_SUPERVISOR",
+                        COD_PERSONA: data["COD_RESPONSABLE"] //COD_PERSONA: data["COD_PERSONA"]                        
+                    })
+                }
+                _renderListResponsable.dtRenderListResponsable.row($(obj).parents('tr')).remove().draw(false);
+                utilSigo.toastSuccess("Éxito", "El elemento ha sido eliminado correctamente");
+            }
+        });
+    }
+    _renderListResponsable.fnGetListElimResponsable = function () { return _renderListResponsable.tbElimResponsable }
+
+    _renderListResponsable.fnGetListResponsable = function () {
+        let list = [], rows, countFilas, data;
+
+        rows = _renderListResponsable.dtRenderListResponsable.$("tr");
+        countFilas = rows.length;
+        if (countFilas > 0) {
+            $.each(rows, function (i, o) {
+                data = _renderListResponsable.dtRenderListResponsable.row($(o)).data();
+               // if (data["RegEstado"] == "1" || data["RegEstado"] == "2") {
+                list.push(utilSigo.fnConvertArrayToObject(data));
+               // }
+            });
+        }
+        return list;
+    }
+
+
+   $(document).ready(function () {
+       _renderListResponsable.frm = $("#frmRenderListResponsable");
+       //inicializa la tabla con los campos obtenidos del model
+       _renderListResponsable.fnInitDataTable_Detail();
+   });
+
+</script>
+<div id="frmRenderListResponsable">
+    <label for="lblResponsable" class="text-medium" style="font-weight:bold">Profesional Responsable</label>
+    <div class="table-responsive">
+        <table id="tbRenderListResponsable" style="width:100%;margin:0px !important;" class="table table-hover table-bordered">
+            <thead>
+                <tr>
+                    <th colspan="6" class="text-sm-left">
+                        <div class="form-inline">
+                            <i class="fa mx-2 fa-lg fa-file-o" style="cursor:pointer;" onclick="_renderListResponsable.fnBuscarPersona('RESPON','N');" data-toggle="tooltip" data-placement="top" title="Nuevo"></i>
+                            <strong>Agregar Responsable</strong>
+                        </div>
+                    </th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
+</div>
+
+@* Para el control genérico de personas *@
+<div class="modal fade hide" id="mdlBuscarPersona" role="dialog"></div>
+<div class="modal fade" id="modalAddEditPersona" tabindex="-1" role="dialog"></div>
+

@@ -1,0 +1,434 @@
+﻿@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_LayoutMain.cshtml";
+}
+<script src="~/Scripts/datatables/Extensions/dataTables.buttons.js"></script>
+<script src="~/Scripts/datatables/Extensions/buttons.flash.min.js"></script>
+<script src="~/Scripts/datatables/Extensions/jszip.min.js"></script>
+
+<script src="~/Scripts/datatables/Extensions/vfs_fonts.js"></script>
+<script src="~/Scripts/datatables/Extensions/buttons.html5.js"></script>
+<script src="~/Scripts/datatables/Extensions/buttons.print.js"></script>
+
+
+<link href="~/Content/datatables/buttons.dataTables.min.css" rel="stylesheet" />
+<link href="~/Areas/General/css/ManCalculoMulta/ManCalculoMulta.css" rel="stylesheet" />
+<div id="divIndPreCon" class="container-fluid">
+    <div class="card">
+        <div class="card-header text-left">
+            <h5>Índice de Precios al Consumidor</h5>
+        </div>
+        <div class="card-body">
+            <div class="col-12">
+                <form id="frmManIndPreCon">
+                    <div class="form-row">
+                        <div class="form-group col-md-3">
+                            <select class="form-control form-control-sm" id="cboDescripcion">
+                                <option value="0">Todos</option>
+                                <option value="2022">2022</option>
+                                <option value="2021">2021</option>
+                                <option value="2020">2020</option>
+                                <option value="2019">2019</option>
+                                <option value="2018">2018</option>
+                                <option value="2017">2017</option>
+                                <option value="2016">2016</option>
+                                <option value="2015">2015</option>
+                                <option value="2014">2014</option>
+                                <option value="2013">2013</option>
+                                <option value="2012">2012</option>
+                                <option value="2011">2011</option>
+                                <option value="2010">2010</option>
+                                <option value="2009">2009</option>
+                                <option value="2008">2008</option>
+                                <option value="2007">2007</option>
+                                <option value="2006">2006</option>
+                                <option value="2005">2005</option>
+                                <option value="2004">2004</option>
+                                <option value="2003">2003</option>
+                                <option value="2002">2002</option>
+                                <option value="2001">2001</option>
+                                <option value="2000">2000</option>
+                                <option value="1999">1999</option>
+                                <option value="1998">1998</option>
+                                <option value="1997">1997</option>
+                                <option value="1996">1996</option>
+                                <option value="1995">1995</option>
+                            </select>
+                        </div>
+                        <div class="btn-group col-md-2" style="padding-top:5px;">
+                            <a id="btnSearch" style="cursor:pointer;" data-toggle="tooltip" data-placement="top" title="Buscar" onclick="_manIndPreCon.fnSearch()"><span class="fa mx-2 fa-lg fa-search"></span></a>
+                            <a id="btnRefresh" style="cursor:pointer;" data-toggle="tooltip" data-placement="top" title="Buscar" onclick="_manIndPreCon.fnRefresh()"><span class="fa mx-2 fa-lg fa-refresh"></span></a>
+                            <a id="btnAdd" style="cursor:pointer;" data-toggle="tooltip" data-placement="top" title="" onclick="_manIndPreCon.fnCrear()" data-original-title="Crear un nuevo registro"><span class="fa mx-2 fa-lg fa-plus"></span></a>
+
+                        </div>
+                    </div>
+                    <div class="table-responsive-md">
+                        <table id="tbIndPreCon" class="table table-hover table-bordered" style="width:100%;">
+                            <thead>
+                                <tr>
+                                    <th></th>
+                                    <th></th>
+                                    <th>Código</th>
+                                    <th>N°</th>
+                                    <th>Año</th>
+                                    <th>Mes</th>
+                                    <th>IPC</th>                                    
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </form>
+
+            </div>
+        </div>
+    </div>
+    <div class="modal fade hide" id="modalIndPreCon" role="dialog">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header text-small" style="cursor:move;padding:0.5rem;">
+                    <h5 class="modal-title" id="h5TituloIndPreCon">Modificar</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body" id="divModIndPreCon">
+                    <input type="hidden" id="hdRegEstado" value="1" />
+                    <input type="hidden" id="hdNCodIndPreCon" value="0" />
+                    <input type="hidden" id="hdEstado" value="1" />
+                    <div class="form-row">
+                        <div class="form-group col-md-4">
+                            <label for="cboTipo">Año</label>
+                            <select class="form-control form-control-sm" id="cboAnio">
+                                <option value="2022">2022</option>
+                                <option value="2021">2021</option>
+                                <option value="2020">2020</option>
+                                <option value="2019">2019</option>
+                                <option value="2018">2018</option>
+                                <option value="2017">2017</option>
+                                <option value="2016">2016</option>
+                                <option value="2015">2015</option>
+                                <option value="2014">2014</option>
+                                <option value="2013">2013</option>
+                                <option value="2012">2012</option>
+                                <option value="2011">2011</option>
+                                <option value="2010">2010</option>
+                                <option value="2009">2009</option>
+                                <option value="2008">2008</option>
+                                <option value="2007">2007</option>
+                                <option value="2006">2006</option>
+                                <option value="2005">2005</option>
+                                <option value="2004">2004</option>
+                                <option value="2003">2003</option>
+                                <option value="2002">2002</option>
+                                <option value="2001">2001</option>
+                                <option value="2000">2000</option>
+                                <option value="1999">1999</option>
+                                <option value="1998">1998</option>
+                                <option value="1997">1997</option>
+                                <option value="1996">1996</option>
+                                <option value="1995">1995</option>
+                            </select>
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label for="cboTipo">Mes</label>
+                            <select class="form-control form-control-sm" id="cboMes">
+                                <option value="1">ENERO</option>
+                                <option value="2">FEBREO</option>
+                                <option value="3">MARZO</option>
+                                <option value="4">ABRIL</option>
+                                <option value="5">MAYO</option>
+                                <option value="6">JUNIO</option>
+                                <option value="7">JULIO</option>
+                                <option value="8">AGOSTO</option>
+                                <option value="9">SEPTIEMBRE</option>
+                                <option value="10">OCTUBRE</option>
+                                <option value="11">NOVIEMBRE</option>
+                                <option value="12">DICIEMBRE</option>                                
+                            </select>
+                        </div>                       
+                        <div class="form-group col-md-4">
+                            <label for="txtIPC">IPC</label>
+                            <input class="form-control form-control-sm" id="txtIPC" type="number">
+                        </div>
+                    </div>
+                    @*<div class="form-row" >
+                        <div class="form-group col-md-6">
+                            <label for="txtIPC">IPC</label>
+                            <input class="form-control form-control-sm" id="txtIPC" type="number">
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label for="txtValor">Estado</label>
+                            <select class="form-control form-control-sm" id="cboEstado">
+                                <option value="0">Inactivo</option>
+                                <option value="1">Activo</option>
+                            </select>
+                        </div>
+                    </div>*@
+                    <div class="form-row" id="">
+
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary btn-sm" onclick="_manIndPreCon.fnIndPreConUpdate()">Guardar</button>
+                    <button id="btnCerrarModal" class="btn btn-secondary btn-sm" data-dismiss="modal">Cancelar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    var _manIndPreCon = {
+        fnRefresh: () => {
+            $("#cboDescripcion").val('0');;
+            _manIndPreCon.fnSearch();
+        },
+        fnCrear: () => {
+            _manIndPreCon.fnLimpiar();
+            $("#h5TituloIndPreCon").text("Nuevo");
+            $("#hdRegEstado").val("1");
+            $("#modalIndPreCon").modal({ keyboard: true, backdrop: 'static' });
+
+        },
+        fnLimpiar: () => {
+            let frm = $("#divModIndPreCon");
+            frm.find("#hdNCodIndPreCon").val('0');
+            frm.find("#cboAnio").val('2021');
+            frm.find("#cboMes").val('1');
+            frm.find("#txtIPC").val('');           
+        },
+        fnDelete: (obj) => {    
+
+            let frm = $("#divModIndPreCon");
+            let $tr = $(obj).closest("tr");
+            let dataRow = _manIndPreCon.dt.row($tr).data();
+
+            let model = {
+                NCODIndPreCon: dataRow.NCODINDPRECON,
+                VANIO: dataRow.VANIO,
+                VMES: dataRow.VMES,
+                NIPC: dataRow.NIPC,
+                NESTADO: 0,                
+                RegEstado: 3
+            };
+            debugger;
+
+            let url = urlLocalSigo + "General/ManCalculoMulta/GuardarIndPreCon";
+            let option = { url: url, datos: JSON.stringify(model), type: 'POST' };
+            utilSigo.fnAjax(option, function (data) {
+                if (data.success) {
+                    utilSigo.toastSuccess("Éxito", data.msj);
+                    _manIndPreCon.fnSearch();
+                }
+                else {
+                    utilSigo.toastWarning("Aviso", data.msj);
+                }
+            });
+
+        },
+        fnEdit: (obj) => {
+            
+            $("#h5TituloIndPreCon").text("Modificar");
+            _manIndPreCon.fnLimpiar();
+            $("#hdRegEstado").val("2");
+            let frm = $("#divModIndPreCon");
+            let $tr = $(obj).closest("tr");
+            let dataRow = _manIndPreCon.dt.row($tr).data();
+            
+            switch (dataRow.VMES) {
+                case 'ENERO':
+                    frm.find("#cboMes").val('1');
+                    break;
+                case 'FEBRERO':
+                    frm.find("#cboMes").val('2');
+                    break;
+                case 'MARZO':
+                    frm.find("#cboMes").val('3');
+                    break;
+                case 'ABRIL':
+                    frm.find("#cboMes").val('4');
+                    break;
+                case 'MAYO':
+                    frm.find("#cboMes").val('5');
+                    break;
+                case 'JUNIO':
+                    frm.find("#cboMes").val('6');
+                    break;
+                case 'JULIO':
+                    frm.find("#cboMes").val('7');
+                    break;
+                case 'AGOSTO':
+                    frm.find("#cboMes").val('8');
+                    break;
+                case 'SEPTIEMBRE':
+                    frm.find("#cboMes").val('9');
+                    break;
+                case 'OCTUBRE':
+                    frm.find("#cboMes").val('10');
+                    break;
+                case 'NOVIEMBRE':
+                    frm.find("#cboMes").val('11');
+                    break;
+                case 'DICIEMBRE':
+                    frm.find("#cboMes").val('12');
+                    break;
+                
+            }
+
+           //    debugger;
+
+            frm.find("#hdNCodIndPreCon").val(dataRow.NCODINDPRECON);
+            frm.find("#cboAnio").val(dataRow.VANIO);
+
+
+
+            frm.find("#txtIPC").val(dataRow.NIPC);
+            frm.find("#cboEstado").val(1);
+
+            $("#modalIndPreCon").modal({ keyboard: true, backdrop: 'static' });
+        },
+        fnIndPreConUpdate: () => {
+            let frm = $("#divModIndPreCon");
+            let model = {
+                NCODINDPRECON: frm.find("#hdNCodIndPreCon").val(),
+                VANIO: frm.find("#cboAnio").val(),
+                VMES: frm.find("#cboMes").val(),
+                NIPC: frm.find("#txtIPC").val(),
+                RegEstado: 1
+            };
+
+            model.RegEstado = model.NCODINDPRECON == "0" ? 1 : 2;
+            model.NESTADO = $("#cboEstado").val() == "0" ? 0 : 1;
+           
+            if (model.VANIO == "" || model.VANIO == null) {
+                utilSigo.toastWarning("Warning", "Ingresar Año");
+                return false;
+            } else if (model.VMES == "" || model.VMES == null) {
+                utilSigo.toastWarning("Warning", "Ingresar Mes");
+                return false;
+            } else if (model.NIPC == "") {
+                utilSigo.toastWarning("Warning", "Ingresar IPC");
+                return false;
+            } 
+
+            
+            let url = urlLocalSigo + "General/ManCalculoMulta/GuardarIndPreCon";
+            let option = { url: url, datos: JSON.stringify(model), type: 'POST' };
+            utilSigo.fnAjax(option, function (data) {
+                if (data.success) {
+                    utilSigo.toastSuccess("Éxito", data.msj);
+                    $("#btnCerrarModal").click();
+                    _manIndPreCon.fnSearch();
+                }
+                else {
+                    utilSigo.toastWarning("Aviso", data.msj);
+                }
+            });
+        },
+        fnBuilTable: () => {
+            const columns = [                
+                {
+                    "data": "", "className": "text-center", "width": "2%", "orderable": false, "searchable": false, "mRender": function (data, type, row) {
+                        return '<div><i class="fa fa-lg fa-pencil-square-o" style="color:blue;cursor:pointer;" title="Editar plan de trabajo" onclick="_manIndPreCon.fnEdit(this)"></i></div>';
+                    }
+                },
+                {
+                    "data": "", "className": "text-center", "width": "2%", "orderable": false, "searchable": false, "mRender": function (data, type, row) {
+                        return '<div><i class="cellDel fa fa-lg fa-window-close" style="color:red;cursor:pointer;" title="Editar plan de trabajo" onclick="_manIndPreCon.fnDelete(this)"></i></div>';
+                    }
+                },
+                {
+                    "name": "ROW_INDE", "width": "2%", "orderable": false, "searchable": false, "mRender": function (data, type, row, meta) {
+                        return parseInt(meta.row) + 1 + meta.settings._iDisplayStart;
+                    }
+                },
+                { "data": "NCODINDPRECON", visible: false },
+                { "data": "VANIO", "autoWidth": true },
+                { "data": "VMES", "autoWidth": true },
+                { "data": "NIPC", "autoWidth": true },                
+           //     { "data": "NESTADO", "autoWidth": true }
+
+            ];
+            const optDt = { iLength: 20, iStart: 0, aSort: [] };
+            _manIndPreCon.dt = _manIndPreCon.frm.find("#tbIndPreCon").DataTable({
+                processing: true,
+                serverSide: true,
+                searching: false,
+                ordering: false,
+                paging: true,
+                dom: 'Bfrtip',
+                buttons: [{
+                    extend: 'excelHtml5',
+                    messageTop: 'Indice Precio Consumidor',
+                    exportOptions: {
+                        // columns: [1, ':visible'],
+                        //  columns: [2, ':visible'],
+                        //   columns: [3, ':visible'],
+                        // columns: [8, ':visible'],
+                        //columns: [4, ':visible'],
+                    }
+                }],
+                ajax: {
+                    "url": `${urlLocalSigo}/General/Controles/GetIndPreCon`,
+                    "data": function (d) {
+                        d.CustomSearchForm = "CALCULOMULTA";
+                        d.CustomSearchType = "INDPRECON";
+                        d.CustomSearchValue = $("#cboDescripcion").val();
+                        d.customSearchEnabled = true;
+                        //d.id = "";
+                        //for (var i = 0; i < d.order.length; i++) {
+                        //    d.order[i]["column_name"] = d.columns[d.order[i]["column"]]["data"];
+
+                        //    if (d.order[i].column_name != 0 || d.order[i].column_name != "") {
+                        //        d.sort = d.order[i].column_name + " " + d.order[i].dir;
+                        //    }
+                        //}
+                        d.columns = null;
+                    },
+                    "error": function (jqXHR) {
+                        // utilSigo.unblockUIGeneral();
+                        if (jqXHR.status != 401 && jqXHR.status != 403 && jqXHR.status != 404) {
+                            utilSigo.toastError("Error", initSigo.MessageError);
+                        }
+                        //console.log(jqXHR);
+                    },
+                    "statusCode": {
+                        203: () => { utilSigo.toastInfo("Aviso", "El usuario perdio la sesión. Vuelva ingresar al sistema"); }
+                    }
+                },
+                columns: columns,
+                bInfo: true,
+                "lengthMenu": [[10, 20, 50, 100], [10, 20, 50, 100]],
+                // "aaSorting": optDt.aSort,
+                "pageLength": optDt.iLength,
+                "displayStart": optDt.iStart,
+                "oLanguage": initSigo.oLanguage,
+                "drawCallback": initSigo.showPagination
+            });
+        },
+        fnSearch: () => {
+            _manIndPreCon.dt.ajax.reload();
+        }
+    };
+    $(document).ready(function () {
+
+        _manIndPreCon.frm = $("#frmManIndPreCon");
+        _manIndPreCon.fnBuilTable();
+        _manIndPreCon.frm.submit(function (e) {
+            e.preventDefault();
+            _manIndPreCon.fnSearch();
+        });
+
+
+        //_renderComboEspecie.fnInit("FAUNA", "", "");
+
+        $('#lblRenderComboEspecieId').removeAttr('Class');
+        $('#lblRenderComboEspecieId').html('Especie Sinónimo');
+
+    });
+</script>
+
+
+
+
+

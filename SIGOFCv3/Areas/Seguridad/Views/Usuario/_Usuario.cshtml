@@ -1,0 +1,126 @@
+﻿
+@model CapaEntidad.ViewModel.DOC.VM_Usuario
+
+<script src="~/Areas/Seguridad/js/Usuario/_Usuario.js?v=@Guid.NewGuid()"></script>
+
+<div class="modal-dialog" role="document">
+    <div class="modal-content">
+        <div class="modal-header text-small" style="cursor:move;padding:0.5rem;">
+            <h5 class="modal-title">@Model.titulo</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body">
+            <form id="frmManUsuario_AddEdit" method="post">
+                @Html.HiddenFor(m => m.id)
+                @Html.HiddenFor(m => m.estado)
+                <div class="form-row">
+                    <div class="form-group col-md-12">
+                        <label for="btnPersona" class="text-small">Persona<i class="fa fa-cog fa-spin text-danger" id="iconPersona" style="display:none;" data-toggle="tooltip" data-placement="top" title="Seleccione Persona"></i></label>
+                        <div class="input-group">
+                            @Html.EditorFor(m => m.desPersona, new { htmlAttributes = new { @class = "form-control form-control-sm", disabled = "disabled" } })
+                            @Html.HiddenFor(m => m.codPersona)
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"><i id="btnPersona" onclick="ManUsuario_AddEdit.fnBuscarPersona();" class="fa fa-search-plus" style="cursor:pointer;" data-toggle="tooltip" data-placement="top" title="Buscar"></i></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-12">
+                        <label for="usuario" class="text-small">Usuario</label>
+                        @Html.EditorFor(m => m.usuario, new { htmlAttributes = new { @class = "form-control form-control-sm", @maxlength = "20" } })
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-12">
+                        <label for="usuario" class="text-small">Tipo de Persona</label>
+                        @Html.DropDownListFor(m => m.ddlTipoPersonalId, new SelectList(Model.ddlTipoPersonal, "Value", "Text"), new { @class = "form-control form-control-sm" })
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-12">
+                        <label for="usuario" class="text-small">Cargo/Funcion</label>
+                        @Html.EditorFor(m => m.cargo, new { htmlAttributes = new { @class = "form-control form-control-sm", oninput = "this.value = this.value.replace(/[^áéíóúa-zÁÉÍÓÚA-Z 0-9]/,'')", @maxlength = "90" } })
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-12">
+                        <label for="usuario" class="text-small">Lugar de Trabajo</label>
+                        @Html.DropDownListFor(m => m.ddlLugarTrabajoId, new SelectList(Model.ddlLugarTrabajo, "Value", "Text"), new { @class = "form-control form-control-sm" })
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-12">
+                        <label for="usuario" class="text-small">Oficina/Unidad/Area del Trabajo</label>
+                        @Html.EditorFor(m => m.oficina, new { htmlAttributes = new { @class = "form-control form-control-sm", oninput = "this.value = this.value.replace(/[^áéíóúa-zÁÉÍÓÚA-Z 0-9]/,'')", @maxlength = "150" } })
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-12">
+                        <label for="usuario" class="text-small">Institución</label>
+                        @Html.EditorFor(m => m.institucion, new { htmlAttributes = new { @class = "form-control form-control-sm", oninput = "this.value = this.value.replace(/[^áéíóúa-zÁÉÍÓÚA-Z 0-9]/,'')", @maxlength = "150" } })
+                    </div>
+                </div>
+                <div class="form-row" id="divMod" style="display:none;">
+                    <div class="form-group col-md-12">
+                        <div class="custom-control custom-checkbox my-1 mr-sm-2">
+                            @Html.CheckBoxFor(m => m.modPassword, new { @class = "custom-control-input" })
+                            <label class="custom-control-label" id="lblCheckMod" style="margin-top:4px;" for="modPassword">
+                                Modificar Contraseña
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-row" id="divP1">
+                    <div class="form-group col-md-12">
+                        <label for="password" class="text-small">Contraseña</label>
+                        <input type="password" class="form-control form-control-sm" id="password" name="password" maxlength="20" placeholder="Clave">
+                    </div>
+                </div>
+                <div class="form-row" id="divP2">
+                    <div class="form-group col-md-12">
+                        <label for="passwordR" class="text-small">Confirmar Contraseña</label>
+                        <input type="password" class="form-control form-control-sm" id="passwordR" name="passwordR" maxlength="20" placeholder="Repetir Clave">
+                    </div>
+                </div>
+                <div class="form-row" id="divRem">
+                    <div class="form-group col-md-12">
+                        <div class="custom-control custom-checkbox my-1 mr-sm-2">
+                            @Html.CheckBoxFor(m => m.remPassword, new { @class = "custom-control-input" })
+                            <label class="custom-control-label" id="lblCheckRem" style="margin-top:4px;" for="remPassword">
+                                Remitir Contraseña
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-12">
+                        <div class="custom-control custom-checkbox my-1 mr-sm-2">
+                            @Html.CheckBoxFor(m => m.esPublico, new { @class = "custom-control-input" })
+                            <label class="custom-control-label" id="lblCheckPublico" style="margin-top:4px;" for="esPublico">
+                                Es Usuario Público
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-12">
+                        <div class="custom-control custom-checkbox my-1 mr-sm-2">
+                            @Html.CheckBoxFor(m => m.activo, new { @class = "custom-control-input" })
+                            <label class="custom-control-label" id="lblCheckActivo" style="margin-top:4px;" for="activo">
+                                Activo
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+            </form>
+        </div>
+        <div class="modal-footer">
+            <button id="btnGuardar" class="btn btn-primary btn-sm" onclick="ManUsuario_AddEdit.fnSubmit();">Registrar</button>
+            <button id="btnCancelar" class="btn btn-secondary btn-sm" onclick="ManUsuario_AddEdit.fnClose();">Cancelar</button>
+        </div>
+    </div>
+</div>

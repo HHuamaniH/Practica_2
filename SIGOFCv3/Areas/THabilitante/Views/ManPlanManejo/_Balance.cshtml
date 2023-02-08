@@ -1,0 +1,75 @@
+﻿@model CapaEntidad.ViewModel.VM_BalanceItem
+
+<div id="divItemESituBalance" class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+        <div class="modal-header text-small" style="cursor:move;">
+            <h5 class="modal-title">@Model.lblTitulo</h5>
+        </div>
+        <div class="modal-body">
+            <form id="frmItemESituBalance">
+                @Html.HiddenFor(m => m.COD_PMANEJO)
+                @Html.HiddenFor(m => m.COD_SECUENCIAL)
+                @Html.HiddenFor(m => m.hdEstado)
+                @Html.HiddenFor(m => m.hdTipo)                
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label for="ddlbfs_especieId" class="text-small">Especie</label>
+                        @Html.DropDownListFor(m => m.ddlbfs_especieId, new SelectList(Model.ddlbfs_especie, "Value", "Text"), new { @class = "form-control form-control-sm", @style = "width:auto;" })
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="txtbfs_numero" class="text-small">Número</label>
+                        @Html.EditorFor(m => m.txtbfs_numero, new { htmlAttributes = new { @class = "form-control form-control-sm", @maxlength = "100" } })
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label for="ddlbfs_motivo_Id" class="text-small">Motivo</label>
+                        @Html.DropDownListFor(m => m.ddlbfs_motivo_Id, new SelectList(Model.ddlbfs_motivo, "Value", "Text"), new { @class = "form-control form-control-sm" })
+                    </div>
+                    <div class="form-group col-md-6">
+                        @if(Model.hdTipo.Equals("I")){
+
+                            <label for="ddlbfs_documento" class="text-small">Documento</label>
+                            @Html.DropDownListFor(m => m.ddlbfs_documentoId, new SelectList(Model.ddlbfs_documento, "Value", "Text"), new { @class = "form-control form-control-sm" })
+
+                        }
+                    </div>
+                </div>                
+                
+                    <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label for="txtbfs_num_documento" class="text-small">N° Documento</label>
+                        @Html.EditorFor(m => m.txtbfs_num_documento, new { htmlAttributes = new { @class = "form-control form-control-sm", @maxlength = "100" } })
+                    </div>
+                    <div class="form-group col-md-6">
+                    </div>
+                    </div>
+                
+                
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label for="txtbfs_femision" class="text-small">Fecha de emisión de documento</label>
+                        @Html.EditorFor(m => m.txtbfs_femision, new { htmlAttributes = new { @class = "form-control form-control-sm", @maxlength = "10" } })
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="txtbfs_frecepcion" class="text-small">Fecha de recepción</label>
+                        @Html.EditorFor(m => m.txtbfs_frecepcion, new { htmlAttributes = new { @class = "form-control form-control-sm", @maxlength = "10" } })
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-12">
+                        <label for="txtItemESituIAnual_Observacion" class="text-small">Observación</label>
+                        @Html.TextAreaFor(m => m.txtbfs_observacion, new { @class = "form-control form-control-sm", rows = 2 })
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="modal-footer">
+            <button id="btnGuardar" class="btn btn-primary btn-sm">Agregar</button>
+            <button id="btnCancelar" class="btn btn-secondary btn-sm">Cancelar</button>
+        </div>
+    </div>
+</div>
+ 
+
+<script src="~/Areas/THabilitante/js/ManPlanManejo/_Balance.js"></script>

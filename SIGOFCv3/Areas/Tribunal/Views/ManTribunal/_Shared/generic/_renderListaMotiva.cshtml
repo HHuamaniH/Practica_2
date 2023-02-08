@@ -1,0 +1,76 @@
+﻿@model CapaEntidad.ViewModel.VM_ResolucionTFFS
+
+<script type="text/javascript">
+    var _renderListaArchivoDetalle = {};
+     _renderListaArchivoDetalle.tbEliTABLA = [];
+
+    // iniciar datos en la tabla
+    _renderListaArchivoDetalle.fnInitDataTable_Detail = function () {
+        var columns_label = [], columns_data = [], options = {};
+
+        columns_label = ["Motivo", "Detalle", "Descripción"];
+        columns_data = ["MOTIVO", 'DETALLE_MOTIVO','DESCRIPCIONMOTIVO'];
+        options = {
+            page_length: 10, row_index: true, row_delete: true, row_fnDelete: "_renderListaArchivoDetalle.fnDelete(this)", page_sort: true
+        };
+        _renderListaArchivoDetalle.dtRenderListInforme = utilDt.fnLoadDataTable_Detail(_renderListaArchivoDetalle.frm.find("#tbRenderListArchivo"), columns_label, columns_data, options);
+        _renderListaArchivoDetalle.dtRenderListInforme.rows.add(JSON.parse('@Html.Raw(Json.Encode(@Model.ListMotivoArchivo))')).draw();
+
+    }
+
+    /*Listado de registros (render)*/
+    _renderListaArchivoDetalle.fnDelete = function (obj) {
+        var data = _renderListaArchivoDetalle.dtRenderListInforme.row($(obj).parents('tr')).data();
+
+        if (data["RegEstado"] == "0") {
+            _renderListaArchivoDetalle.tbEliTABLA.push({
+                EliTABLA: "RESODIREC_DET_ARCHIVO_PAU",
+                EliVALOR01: data["CODIGO"]
+
+            });
+        }
+        _renderListaArchivoDetalle.dtRenderListInforme.row($(obj).parents('tr')).remove().draw(false);
+    }
+
+    _renderListaArchivoDetalle.fnGetListEliTABLA = function () { return _renderListaArchivoDetalle.tbEliTABLA }
+
+    //devuelve la lista
+    _renderListaArchivoDetalle.fnGetList = function () {
+        let list = [], rows, countFilas, data;
+        rows = _renderListaArchivoDetalle.dtRenderListInforme.$("tr");
+        countFilas = rows.length;
+        if (countFilas > 0) {
+            $.each(rows, function (i, o) {
+                data = _renderListaArchivoDetalle.dtRenderListInforme.row($(o)).data();
+                list.push(utilSigo.fnConvertArrayToObject(data));
+            });
+        }
+        return list;
+    }
+
+    
+
+    $(document).ready(function () {
+       _renderListaArchivoDetalle.frm = $("#fmrSubTipoArch");
+       _renderListaArchivoDetalle.fnInitDataTable_Detail();
+    });
+
+</script>
+
+<div id="fmrListaTipoArch">
+   
+    <div class="form-row">
+        <div class="form-group col-md-4">
+        </div>
+        <div class="form-group col-md-6">
+            <div class="table-responsive">
+                <table id="tbRenderListArchivo" style="width:100%;margin:0px !important;" class="table table-hover table-bordered">
+                    <thead></thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
+        <div class="form-group col-md-2">
+        </div>
+    </div>
+</div>

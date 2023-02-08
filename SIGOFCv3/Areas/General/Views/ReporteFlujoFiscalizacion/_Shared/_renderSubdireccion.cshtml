@@ -1,0 +1,380 @@
+﻿<style type="text/css">
+    table {
+        width: 100%;
+        text-align: center;
+        font-size: 0.9rem;
+        border: 1px solid #495057;
+        color: #495057;
+    }
+
+    td {
+        padding-top: 8px;
+        padding-bottom: 8px;
+    }
+
+    .botonHref1 {
+        color: #495057;
+    }
+
+    .botonHref1:hover {
+        color: #007bff;
+    }
+
+    .formato1 {
+        border-top: hidden;
+        border-left: hidden;
+    }
+
+    .formato2 {
+        background: #B8C5D5;
+    }
+
+    .formato3 {
+        background: #EEAD80;
+    }
+
+    .formato5 {
+        background: #F2C6A8;
+    }
+
+    .divcantidad {
+        margin-top: 5px;
+    }
+</style>
+
+@model CapaEntidad.ViewModel.VM_FlujoFiscalizacion
+<script src="~/Areas/General/js/ReporteFlujoFiscalizacion/FormatoFecha.js"></script>
+
+<script type="text/javascript">
+    var _renderSubdireccion = {};
+
+    _renderSubdireccion.fnListar = function (opc, cell) {
+        _reporte.frm.find("#idTab").val(1);
+
+        if (opc == 1) _reporte.frm.find("#txtnomconsulta").val("Cantidad total de informes recibidos por la DFFFS");
+        else if (opc == 2) _reporte.frm.find("#txtnomconsulta").val("Cantidad de PAU iniciados - notificados");
+        else if (opc == 3) _reporte.frm.find("#txtnomconsulta").val("Cantidad de informes evaluados");
+        else if (opc == 4) _reporte.frm.find("#txtnomconsulta").val("Cantidad de informes pendientes de evaluar");
+        else if (opc == 5) _reporte.frm.find("#txtnomconsulta").val("Cantidad de IFI emitidos");
+        else if (opc == 6) _reporte.frm.find("#txtnomconsulta").val("Cantidad de IFI pendientes");
+        else if (opc == 7) _reporte.frm.find("#txtnomconsulta").val("Promedio de días hábiles utilizados para el envío de los informes a la DFFFS");
+        else if (opc == 8) _reporte.frm.find("#txtnomconsulta").val("Promedio de días hábiles utilizados para la evaluación de informe");
+        else if (opc == 9) _reporte.frm.find("#txtnomconsulta").val("Promedio de días hábiles utilizados en la fase de instrucción");
+        else if (opc == 10) _reporte.frm.find("#txtnomconsulta").val("Cantidad de IFI pendientes");
+        else if (opc == 11) _reporte.frm.find("#txtnomconsulta").val("Cantidad de casos en plazo para descargos");
+        else if (opc == 12) _reporte.frm.find("#txtnomconsulta").val("Cantidad de casos aptos para emitir IFI");
+        else if (opc == 13) _reporte.frm.find("#txtnomconsulta").val("Archivados");
+        else if (opc == 14) _reporte.frm.find("#txtnomconsulta").val("Devueltos");
+        else if (opc == 15) _reporte.frm.find("#txtnomconsulta").val("Inicio PAU");
+
+
+        $('#tituloTablaSubdireccion').html('Listado de Documentos consultados "' + _reporte.frm.find("#txtnomconsulta").val() +
+            '" Del ' + _reporte.frm.find("#txtfechainiSubdireccion").val() + ' Al ' + _reporte.frm.find("#txtfechafinSubdireccion").val());
+        $("#frmSubdireccion").hide();
+        $("#divlistaSubdireccion").show();
+
+        _renderListaSubdireccion.fnSubmitForm(opc, cell);
+    }
+
+    _renderSubdireccion.fnValidarCampos = function () {
+        var valor = true;
+
+        if (_renderSubdireccion.frm.find("#txtfechainiSubdireccion").val() == null ||
+            _renderSubdireccion.frm.find("#txtfechainiSubdireccion").val().length == 0 ||
+            /^\s+$/.test(_renderSubdireccion.frm.find("#txtfechainiSubdireccion").val())) {
+            valor = false;
+        }
+        if (_renderSubdireccion.frm.find("#txtfechafinSubdireccion").val() == null ||
+            _renderSubdireccion.frm.find("#txtfechafinSubdireccion").val().length == 0 ||
+            /^\s+$/.test(_renderSubdireccion.frm.find("#txtfechafinSubdireccion").val())) {
+            valor = false;
+        }
+
+        return valor;
+    }
+
+    _renderSubdireccion.fnConsultar = function () {
+        _reporte.frm.find("#idTab").val(1);
+        var idTab = _reporte.frm.find("#idTab").val();
+        var ddlSubdireccionId = _renderSubdireccion.frm.find("#ddlSubdireccionId").val();
+        var txtfechainiSubdireccion = _renderSubdireccion.frm.find("#txtfechainiSubdireccion").val();
+        var txtfechafinSubdireccion = _renderSubdireccion.frm.find("#txtfechafinSubdireccion").val();
+        var params = { idTab, ddlSubdireccionId, txtfechainiSubdireccion, txtfechafinSubdireccion };
+
+        if (_renderSubdireccion.fnValidarCampos()) {
+            if (txtfechainiSubdireccion.length == 10 && txtfechafinSubdireccion.length == 10) {
+                if (chkEsMenor(txtfechafinSubdireccion, txtfechainiSubdireccion)) {
+                    utilSigo.toastInfo("Aviso", "La fecha final no puede ser menor que la fecha inicial");
+                    $("#divDataSubdireccion").hide();
+                    $("#divPendienteSubdireccion").hide();
+                    return false;
+                }
+                else {
+                    var url = urlLocalSigo + "General/ReporteFlujoFiscalizacion/ObtenerData";
+                    var option = { url: url, datos: JSON.stringify(params), type: 'POST' };
+
+                    utilSigo.fnAjax(option, function (data) {
+                        if (data.success) {
+                            var obj = data.result;
+
+                            if (obj != null) {
+                                /*if (obj.cantSubdireccion1 == 0 && obj.cantSubdireccion2 == 0 && obj.cantSubdireccion3 == 0 && obj.cantSubdireccion4 == 0 &&
+                                    obj.cantSubdireccion5 == 0 && obj.cantSubdireccion6 == 0 && obj.cantSubdireccion7 == 0 && obj.cantSubdireccion8 == 0 &&
+                                    obj.cantSubdireccion9 == 0) {
+                                    $("#divDataSubdireccion").hide();
+                                }
+                                else {*/
+                                    _renderSubdireccion.frm.find("#cantSubdireccion1").val(obj.cantSubdireccion1);
+                                    _renderSubdireccion.frm.find("#cantSubdireccion2").val(obj.cantSubdireccion2);
+                                    _renderSubdireccion.frm.find("#cantSubdireccion3").val(obj.cantSubdireccion3);
+                                    _renderSubdireccion.frm.find("#cantSubdireccion3_1").val(obj.cantSubdireccion3_1);
+                                    _renderSubdireccion.frm.find("#cantSubdireccion3_2").val(obj.cantSubdireccion3_2);
+                                    _renderSubdireccion.frm.find("#cantSubdireccion3_3").val(obj.cantSubdireccion3_3);
+                                    _renderSubdireccion.frm.find("#cantSubdireccion4").val(obj.cantSubdireccion4);
+                                    _renderSubdireccion.frm.find("#cantSubdireccion5").val(obj.cantSubdireccion5);
+                                    _renderSubdireccion.frm.find("#cantSubdireccion6").val(obj.cantSubdireccion6);
+                                    _renderSubdireccion.frm.find("#cantSubdireccion7").val(obj.cantSubdireccion7);
+                                    _renderSubdireccion.frm.find("#cantSubdireccion8").val(obj.cantSubdireccion8);
+                                    _renderSubdireccion.frm.find("#cantSubdireccion9").val(obj.cantSubdireccion9);
+                                    _renderSubdireccion.fnSetValorTabla1();
+                                    $("#divDataSubdireccion").show();
+                                /*}
+
+                                if (obj.cantSubdireccion10 == 0 && obj.cantSubdireccion11 == 0 && obj.cantSubdireccion12 == 0) {
+                                    $("#divPendienteSubdireccion").hide();
+                                }
+                                else {*/
+                                    _renderSubdireccion.frm.find("#cantSubdireccion10").val(obj.cantSubdireccion10);
+                                    _renderSubdireccion.frm.find("#cantSubdireccion11").val(obj.cantSubdireccion11);
+                                    _renderSubdireccion.frm.find("#cantSubdireccion12").val(obj.cantSubdireccion12);
+                                    _renderSubdireccion.fnSetValorTabla2();
+                                    $("#divPendienteSubdireccion").show();
+                                //}
+                            }
+                            else {
+                                $("#divDataSubdireccion").hide();
+                                $("#divPendienteSubdireccion").hide();
+                            }
+                        }
+                        else {
+                            utilSigo.toastWarning("Aviso", "Sucedio un error, Comuníquese con el Administrador");
+                            $("#divDataSubdireccion").hide();
+                            $("#divPendienteSubdireccion").hide();
+                            console.log(data.result);
+                        }
+                    });
+                }
+            }
+            else {
+                utilSigo.toastInfo("Aviso", "Formato de fechas incorrecto");
+                $("#divDataSubdireccion").hide();
+                $("#divPendienteSubdireccion").hide();
+            }
+        } else {
+            utilSigo.toastInfo("Aviso", "Falta ingresar datos");
+            $("#divDataSubdireccion").hide();
+            $("#divPendienteSubdireccion").hide();
+        }
+    }
+
+    _renderSubdireccion.fnSetValorTabla1 = function () {
+        $("#divcantSubdireccion1").text(_renderSubdireccion.frm.find("#cantSubdireccion1").val());
+        $("#divcantSubdireccion2").text(_renderSubdireccion.frm.find("#cantSubdireccion2").val());
+        $("#divcantSubdireccion3").text(_renderSubdireccion.frm.find("#cantSubdireccion3").val());
+        $("#divcantSubdireccion3_1").text(_renderSubdireccion.frm.find("#cantSubdireccion3_1").val());
+        $("#divcantSubdireccion3_2").text(_renderSubdireccion.frm.find("#cantSubdireccion3_2").val());
+        $("#divcantSubdireccion3_3").text(_renderSubdireccion.frm.find("#cantSubdireccion3_3").val());
+        $("#divcantSubdireccion4").text(_renderSubdireccion.frm.find("#cantSubdireccion4").val());
+        $("#divcantSubdireccion5").text(_renderSubdireccion.frm.find("#cantSubdireccion5").val());
+        $("#divcantSubdireccion6").text(_renderSubdireccion.frm.find("#cantSubdireccion6").val());
+        $("#divcantSubdireccion7").text(_renderSubdireccion.frm.find("#cantSubdireccion7").val());
+        $("#divcantSubdireccion8").text(_renderSubdireccion.frm.find("#cantSubdireccion8").val());
+        $("#divcantSubdireccion9").text(_renderSubdireccion.frm.find("#cantSubdireccion9").val());
+    }
+
+    _renderSubdireccion.fnSetValorTabla2 = function () {
+        $("#divcantSubdireccion10").text(_renderSubdireccion.frm.find("#cantSubdireccion10").val());
+        $("#divcantSubdireccion11").text(_renderSubdireccion.frm.find("#cantSubdireccion11").val());
+        $("#divcantSubdireccion12").text(_renderSubdireccion.frm.find("#cantSubdireccion12").val());
+    }
+
+    $(document).ready(function () {
+        _renderSubdireccion.frm = $("#frmSubdireccion");
+
+        _renderSubdireccion.frm.find("#txtfechainiSubdireccion").datepicker({ format: "dd/mm/yyyy", autoclose: true, language: 'es' });
+        _renderSubdireccion.frm.find("#txtfechainiSubdireccion").keyup(function () {
+            return formateafecha(this.value);
+        });
+
+        _renderSubdireccion.frm.find("#txtfechafinSubdireccion").datepicker({ format: "dd/mm/yyyy", autoclose: true, language: 'es' });
+        _renderSubdireccion.frm.find("#txtfechafinSubdireccion").keyup(function () {
+            return formateafecha(this.value);
+        });
+
+        _renderSubdireccion.fnSetValorTabla1();
+        _renderSubdireccion.fnSetValorTabla2();
+    });
+</script>
+
+<div id="frmSubdireccion" class="text-small">
+    <div><br /><br /></div>
+    @Html.HiddenFor(m => m.cantSubdireccion1)
+    @Html.HiddenFor(m => m.cantSubdireccion2)
+    @Html.HiddenFor(m => m.cantSubdireccion3)
+    @Html.HiddenFor(m => m.cantSubdireccion3_1)
+    @Html.HiddenFor(m => m.cantSubdireccion3_2)
+    @Html.HiddenFor(m => m.cantSubdireccion3_3)
+    @Html.HiddenFor(m => m.cantSubdireccion4)
+    @Html.HiddenFor(m => m.cantSubdireccion5)
+    @Html.HiddenFor(m => m.cantSubdireccion6)
+    @Html.HiddenFor(m => m.cantSubdireccion7)
+    @Html.HiddenFor(m => m.cantSubdireccion8)
+    @Html.HiddenFor(m => m.cantSubdireccion9)
+    @Html.HiddenFor(m => m.cantSubdireccion10)
+    @Html.HiddenFor(m => m.cantSubdireccion11)
+    @Html.HiddenFor(m => m.cantSubdireccion12)
+    <div class="form-row">
+        <div class="form-group col-md-2">
+            <label for="lblSubdireccionId" class="text-small">Subdirección:</label>
+            @Html.DropDownListFor(m => m.ddlSubdireccionId, new SelectList(Model.ddlSubdireccion, "Value", "Text"), new { @class = "form-control form-control-sm" })
+        </div>
+    </div><br />
+    <div class="form-row">
+        <div class="form-group col-md-4">
+            <label for="lblperiodo" class="text-small">Periodo de consulta:</label>
+            <div style="display: flex; position: relative;">
+                <label for="lblini" class="text-small" style="margin-top:8px;margin-right:10px;">Del: </label>
+                @Html.EditorFor(m => m.txtfechainiSubdireccion, new { htmlAttributes = new { @class = "form-control form-control-sm", placeholder = "dd/mm/yyyy", title = "la fecha a ingresar debe ser en el formato dd/mm/yyyy", maxlength = "10" } })
+                <label for="lblfin" class="text-small" style="margin-top:8px;margin-right:10px;margin-left:10px;">Al: </label>
+                @Html.EditorFor(m => m.txtfechafinSubdireccion, new { htmlAttributes = new { @class = "form-control form-control-sm", placeholder = "dd/mm/yyyy", title = "la fecha a ingresar debe ser en el formato dd/mm/yyyy", maxlength = "10" } })
+                <button type="button" class="btn btn-primary btn-sm" style="margin-left:15px;" onclick="_renderSubdireccion.fnConsultar()">Consultar</button>
+            </div>
+        </div>
+    </div><br /><br /><br />
+    <div class="form-row" style="display:none;" id="divDataSubdireccion">
+        <div class="form-group col-md-12">
+            <div class="table-responsive">
+                <table border="1" cellpadding="1" cellspacing="0">
+                    <tr>
+                        <td rowspan="5" class="formato1"></td>
+                        <td rowspan="2" colspan="4" class="formato2">Evaluación de Informe de supervisión</td>
+                        <td colspan="2" class="formato3">PAU</td>
+                    </tr>
+                    <tr>
+                        <td colspan="2" class="formato5">Instrucción</td>
+                    </tr>
+                    <tr>
+                        <td colspan="4">
+                            <a href="javascript:void(0)" onclick="_renderSubdireccion.fnListar(1,'2-1-1')" class="botonHref1" style="text-decoration:none;">
+                                Cantidad total de informes recibidos por la DFFFS
+                                <div id="divcantSubdireccion1" class="divcantidad"></div>
+                            </a>
+                        </td>
+                        <td colspan="2">
+                            <a href="javascript:void(0)" onclick="_renderSubdireccion.fnListar(2,'2-1-2')" class="botonHref1" style="text-decoration:none;">
+                                Cantidad de PAU iniciados - notificados
+                                <div id="divcantSubdireccion2" class="divcantidad"></div>
+                            </a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="3">
+                            <a href="javascript:void(0)" onclick="_renderSubdireccion.fnListar(3,'2-2-1')" class="botonHref1" style="text-decoration:none;">
+                                Cantidad de informes evaluados
+                                <div id="divcantSubdireccion3" class="divcantidad"></div>
+                            </a>
+                        </td>
+                        <td rowspan="2">
+                            <a href="javascript:void(0)" onclick="_renderSubdireccion.fnListar(4,'2-2-2')" class="botonHref1" style="text-decoration:none;">
+                                Cantidad de informes pendientes de evaluar
+                                <div id="divcantSubdireccion4" class="divcantidad"></div>
+                            </a>
+                        </td>
+                        <td rowspan="2">
+                            <a href="javascript:void(0)" onclick="_renderSubdireccion.fnListar(5,'2-2-3')" class="botonHref1" style="text-decoration:none;">
+                                Cantidad de IFI emitidos
+                                <div id="divcantSubdireccion5" class="divcantidad"></div>
+                            </a>
+                        </td>
+                        <td rowspan="2">
+                            <a href="javascript:void(0)" onclick="_renderSubdireccion.fnListar(6,'2-2-4')" class="botonHref1" style="text-decoration:none;">
+                                Cantidad de IFI pendientes
+                                <div id="divcantSubdireccion6" class="divcantidad"></div>
+                            </a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <a href="javascript:void(0)" onclick="_renderSubdireccion.fnListar(13,'2-2-1-1')" class="botonHref1" style="text-decoration:none;">
+                                Archivados
+                                <div id="divcantSubdireccion3_1" class="divcantidad"></div>
+                            </a>
+                        </td>
+                        <td>
+                            <a href="javascript:void(0)" onclick="_renderSubdireccion.fnListar(14,'2-2-1-2')" class="botonHref1" style="text-decoration:none;">
+                                Devueltos
+                                <div id="divcantSubdireccion3_2" class="divcantidad"></div>
+                            </a>
+                        </td>
+                        <td>
+                            <a href="javascript:void(0)" onclick="_renderSubdireccion.fnListar(15,'2-2-1-3')" class="botonHref1" style="text-decoration:none;">
+                                Inicio PAU
+                                <div id="divcantSubdireccion3_3" class="divcantidad"></div>
+                            </a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            Promedio de días hábiles utilizados para el envío de los informes a la DFFFS
+                            <div id="divcantSubdireccion7" class="divcantidad"></div>
+                        </td>
+                        <td colspan="4">
+                            Promedio de días hábiles utilizados para la evaluación del informe
+                            <div id="divcantSubdireccion8" class="divcantidad"></div>
+                        </td>
+                        <td colspan="2">
+                            Promedio de días hábiles utilizados en la fase de instrucción
+                            <div id="divcantSubdireccion9" class="divcantidad"></div>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div><br />
+    <div class="form-row" style="display:none;" id="divPendienteSubdireccion">
+        <div class="form-group col-md-8"></div>
+        <div class="form-group col-md-4">
+            <table border="1" cellpadding="1" cellspacing="0">
+                <tr>
+                    <td colspan="2" class="formato5">IFI Pendientes</td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        <a href="javascript:void(0)" onclick="_renderSubdireccion.fnListar(10,'2-4-1')" class="botonHref1" style="text-decoration:none;">
+                            Cantidad de IFI pendientes
+                            <div id="divcantSubdireccion10" class="divcantidad"></div>
+                        </a>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <a href="javascript:void(0)" onclick="_renderSubdireccion.fnListar(11,'2-5-1')" class="botonHref1" style="text-decoration:none;">
+                            Cantidad de casos en plazo para descargos
+                            <div id="divcantSubdireccion11" class="divcantidad"></div>
+                        </a>
+                    </td>
+                    <td>
+                        <a href="javascript:void(0)" onclick="_renderSubdireccion.fnListar(12,'2-5-2')" class="botonHref1" style="text-decoration:none;">
+                            Cantidad de casos aptos para emitir IFI
+                            <div id="divcantSubdireccion12" class="divcantidad"></div>
+                        </a>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+</div>
+
+<div id="divlistaSubdireccion" style="display:none;">
+    @Html.Partial("~/Areas/General/Views/ReporteFlujoFiscalizacion/_Shared/_renderListaSubdireccion.cshtml", Model)
+</div>

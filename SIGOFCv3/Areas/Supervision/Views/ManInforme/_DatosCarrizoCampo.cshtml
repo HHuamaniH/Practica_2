@@ -1,0 +1,186 @@
+﻿
+@model List<CapaEntidad.DOC.Ent_INFORME_CARRIZO_CAMPO>
+
+<script type="text/javascript">
+    var _DatosCarrizoCampo = {};
+
+    _DatosCarrizoCampo.fnInitDataTable_Detail = function () {
+        var columns_label = [], columns_data = [], options = {};
+
+        columns_label = ["Especie", "Total de individuos por m2 o mata","Individuos aprovechables o comerciales por m2 o mata", "Zona UTM", "Coordenada Este Campo", "Coordenada Norte Campo"
+            , "Producto a extraer", "Observación"];
+        columns_data = ["ESPECIES", "TOTAL_UNIDAD_MUEST", "TOTAL_UNIDADES_APROV", "ZONA", "COORDENADA_ESTE", "COORDENADA_NORTE"
+            , "PRODUCTO_EXTRAER", "OBSERVACION"];
+        options = {
+            page_length: 15, row_index: true, row_edit: true, row_fnEdit: "_DatosCarrizoCampo.fnAddEdit(this)"
+            , row_delete: true, row_fnDelete: "_DatosCarrizoCampo.fnDelete(this)", page_info: true, page_search: true
+            , page_sort: true
+        };
+        _DatosCarrizoCampo.dtDatosCarrizoCampo = utilDt.fnLoadDataTable_Detail($("#tbDatosCarrizoCampo"), columns_label, columns_data, options);
+    }
+
+    _DatosCarrizoCampo.fnAddEdit = function (obj) {
+        var url = urlLocalSigo + "Supervision/ManInforme/_EspecieCarrizoCampo";
+        var option = {
+            url: url, type: 'POST'
+            , datos: { asCodInforme: _DatosCarrizoCampo.frm.find("#hdfCodInforme").val(), aiNumPoa: _DatosCarrizoCampo.frm.find("#hdfNumPoa").val(),asCodMTipo:"0000020" }
+            , divId: "mdlManInforme_EspecieCampo"
+        };
+        utilSigo.fnOpenModal(option, function () {
+            _EspecieCarrizoCampo.fnSaveForm = function (data) {
+                if (data != null) {
+                    var dt = _DatosCarrizoCampo.dtDatosCarrizoCampo;
+
+                    if (obj == null || obj == "") {//Nuevo Registro
+                        dt.rows.add([data]).draw();
+                        dt.page('last').draw('page');
+                        utilSigo.toastSuccess("Exito", "Datos guardados correctamente");
+                    } else {//Modificar
+                        var row = dt.row($(obj).parents('tr')).data();
+                        row = data;
+                        dt.row($(obj).parents('tr')).data(row).draw(false);
+                        utilSigo.toastSuccess("Exito", "Datos actualizados correctamente");
+                    }
+                    $("#mdlManInforme_EspecieCampo").modal('hide');
+                } else {
+                    utilSigo.toastError("Error", "No se pudieron guardar los datos");
+                }
+            }
+
+            if (obj != null && obj != "") {
+                var data = _DatosCarrizoCampo.dtDatosCarrizoCampo.row($(obj).parents('tr')).data();
+                _EspecieCarrizoCampo.fnInit(utilSigo.fnConvertArrayToObject(data));
+            } else { _EspecieCarrizoCampo.fnInit(""); }
+        });
+    }
+
+    _DatosCarrizoCampo.fnDeleteAll = function () {
+        var rows, countFilas, data, tbEliTABLA = [];
+
+        rows = _DatosCarrizoCampo.dtDatosCarrizoCampo.$("tr");
+        countFilas = rows.length;
+        if (countFilas > 0) {
+            utilSigo.dialogConfirm("", "Está seguro de Eliminar Todos los Registros?", function (r) {
+                if (r) {
+                    $.each(rows, function (i, o) {
+                        data = _DatosCarrizoCampo.dtDatosCarrizoCampo.row($(o)).data();
+                        if (data["RegEstado"] == "0" || data["RegEstado"] == "2") {
+                            tbEliTABLA.push(
+                                utilSigo.fnConvertArrayToObject({
+                                    EliTABLA: "CARRIZO_CAMPO",
+                                    COD_INFORME: _DatosCarrizoCampo.frm.find("#hdfCodInforme").val(),
+                                    NUM_POA: data["NUM_POA"],
+                                    COD_MUESTRA_SUPERVISION: data["COD_MUESTRA_SUPERVISION"]
+                                })
+                            );
+                        }
+                    });
+
+                    var url = urlLocalSigo + "Supervision/ManInforme/EliminarRegistroDetalle";
+                    var option = { url: url, datos: JSON.stringify(tbEliTABLA), type: 'POST' };
+                    utilSigo.fnAjax(option, function (data) {
+                        if (data.success) {
+                            _DatosCarrizoCampo.dtDatosCarrizoCampo.clear().draw();
+                            utilSigo.toastSuccess("Éxito", "Individuos no maderables (carrizos) eliminados correctamente");
+                        }
+                        else {
+                            utilSigo.toastWarning("Aviso", data.msj);
+                        }
+                    });
+                }
+            });
+        } else {
+            utilSigo.toastWarning("Aviso", "No se encontraron registros a eliminar");
+        }
+    }
+
+    _DatosCarrizoCampo.fnDelete = function (obj) {
+        var data, tbEliTABLA = [];
+
+        data = _DatosCarrizoCampo.dtDatosCarrizoCampo.row($(obj).parents('tr')).data();
+        if (data["RegEstado"] == "0" || data["RegEstado"] == "2") {
+            tbEliTABLA.push(
+                utilSigo.fnConvertArrayToObject({
+                    EliTABLA: "CARRIZO_CAMPO",
+                    COD_INFORME: _DatosCarrizoCampo.frm.find("#hdfCodInforme").val(),
+                    NUM_POA: data["NUM_POA"],
+                    COD_MUESTRA_SUPERVISION: data["COD_MUESTRA_SUPERVISION"]
+                })
+            );
+        }
+
+        var url = urlLocalSigo + "Supervision/ManInforme/EliminarRegistroDetalle";
+        var option = { url: url, datos: JSON.stringify(tbEliTABLA), type: 'POST' };
+        utilSigo.fnAjax(option, function (data) {
+            if (data.success) {
+                _DatosCarrizoCampo.dtDatosCarrizoCampo.row($(obj).parents('tr')).remove().draw(false);
+                utilSigo.toastSuccess("Éxito", "Individuo no maderable (carrizo) eliminado correctamente");
+            }
+            else {
+                utilSigo.toastWarning("Aviso", data.msj);
+            }
+        });
+    }
+
+    _DatosCarrizoCampo.fnImport = function (e, obj) {
+        var url = urlLocalSigo + "Supervision/ManInforme/ImportarDatosCampo";
+        uploadFile.fileSelectHandler(e, obj, url, {
+            asTipo: "CARRIZO_CAMPO", asCodInforme: _DatosCarrizoCampo.frm.find("#hdfCodInforme").val(), aiNumPoa: _DatosCarrizoCampo.frm.find("#hdfNumPoa").val()
+        }, function (data) {
+            $("#mdlManInforme_DatosCampo").modal('hide');
+        });
+    }
+
+    $(document).ready(function () {
+        _DatosCarrizoCampo.frm = $("#frmDatosCarrizoCampo");
+
+        _DatosCarrizoCampo.fnInitDataTable_Detail();
+        _DatosCarrizoCampo.dtDatosCarrizoCampo.rows.add(JSON.parse('@Html.Raw(Json.Encode(@Model))')).draw();
+    });
+</script>
+
+<style type="text/css">
+    #dvDatosCarrizoCampo .dataTables_info {
+        color: #33b35a;
+        font-size: 15px;
+        margin-top: 17px;
+    }
+</style>
+
+<div class="modal-dialog modal-custom-tb" role="document" style="height:95%;">
+    <div class="modal-content" style="height:100%;">
+        <div class="modal-header text-small" style="cursor:move;">
+            Relación de Muestras Supervisadas
+            <i class="fa fa-close" style="cursor:pointer;" data-dismiss="modal" aria-label="Close"></i>
+        </div>
+        <div class="modal-body" style="padding:0px;overflow-y:auto;">
+            <div id="frmDatosCarrizoCampo">
+                @Html.Hidden("hdfCodInforme", (string)ViewBag.hdfCodInforme)
+                @Html.Hidden("hdfNumPoa", (Int32)ViewBag.hdfNumPoa)
+                <div id="dvDatosCarrizoCampo" class="table-responsive" style="margin-top:5px;">
+                    <table id="tbDatosCarrizoCampo" style="width:100%" class="table table-hover table-bordered">
+                        <thead>
+                            <tr>
+                                <th colspan="11" class="text-sm-left">
+                                    <div class="form-inline">
+                                        <i class="fa mx-2 fa-lg fa-file-o" style="cursor:pointer;" onclick="_DatosCarrizoCampo.fnAddEdit('');" data-toggle="tooltip" data-placement="top" title="Nuevo"></i>
+                                        <i class="fa mx-2 fa-lg fa-window-close-o" style="cursor:pointer;" onclick="_DatosCarrizoCampo.fnDeleteAll();" data-toggle="tooltip" data-placement="top" title="Eliminar Todos"></i>
+                                        <label style="cursor:pointer;" class="fa mx-2 fa-lg fa-file-excel-o" title="Importar Archivo" data-toggle="tooltip">
+                                            <input type="file" id="fileselect" name="fileselect" style="display:none" size="60" onchange="_DatosCarrizoCampo.fnImport(event, this)">
+                                        </label>
+                                        <a href="@Url.Content("~/Archivos/Plantilla/DatosCampoNoMaderableCarrizo.xlsx")"> <i class="fa mx-2 fa-lg fa-folder-open" style="cursor:pointer;" data-toggle="tooltip" data-placement="top" title="Descargar Plantilla Campo"></i></a>
+                                        <strong>
+                                            Listado de Especies
+                                        </strong>
+                                    </div>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer"></div>
+    </div>
+</div>

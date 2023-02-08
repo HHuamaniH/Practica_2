@@ -1,0 +1,380 @@
+﻿@model CapaEntidad.ViewModel.VM_InformeTecnico
+<script type="text/javascript">
+
+    var _renderEvaluacion = {};
+    _renderEvaluacion.tbEliTABLA = [];
+    let indice;
+    let cod_secuencial;
+
+    _renderEvaluacion.fnSelectRecom = function () {
+        let idInfraccion = _renderEvaluacion.frm.find("#ddlInfraccionesED").val();
+        //alert(idInfraccion);
+        switch (idInfraccion) {
+            case "-":
+            case "0000001": case "0000002": case "0000027": case "0000004": case "0000008": case "0000009": case "0000011": case "0000012": case "0000031": case "0000034": case "0000048": case "0000015": case "0000018": case "0000020":
+            case "0000036": case "0000021": case "0000030": case "0000024": case "0000028": case "0000032": case "0000033": case "0000035": case "0000039": case "0000040": case "0000042": case "0000043": case "0000044": case "0000045":
+            case "0000046": case "0000047": case "0000049": case "0000050": case "0000051": case "0000052": case "0000053": case "0000054": case "0000055": case "0000056": case "0000062": case "0000063": case "0000066": case "0000067":
+            case "0000069": case "0000070": case "0000071": case "0000072": case "0000073": case "0000075": case "0000076": case "0000077": case "0000078": case "0000080": case "0000098": case "0000087": case "0000086": case "0000090":
+            case "0000091": case "0000099": case "0000102": case "0000103": case "0000104": case "0000105": case "0000121":
+                _renderEvaluacion.frm.find("#pnespecie").hide();
+                _renderEvaluacion.frm.find("#pnvol").hide();
+                _renderEvaluacion.frm.find("#pnarea").hide();
+                _renderEvaluacion.frm.find("#pnind").hide();
+                break;
+            case "0000022": case "0000023": case "0000006": case "0000010": case "0000013": case "0000025": case "0000026": case "0000085": case "0000088": case "0000089":
+                _renderEvaluacion.frm.find("#pnespecie").show();
+                _renderEvaluacion.frm.find("#pnvol").show();
+                _renderEvaluacion.frm.find("#pnarea").hide();
+                _renderEvaluacion.frm.find("#pnind").show();
+                break;
+            case "0000014": case "0000016": case "0000017": case "0000019": case "0000037": case "0000079": case "0000093": case "0000094": case "0000095": case "0000096": case "0000097":
+                _renderEvaluacion.frm.find("#pnespecie").show();
+                _renderEvaluacion.frm.find("#pnvol").hide();
+                _renderEvaluacion.frm.find("#pnarea").hide();
+                _renderEvaluacion.frm.find("#pnind").show();
+                break;
+            case "0000003": case "0000005": case "0000029": case "0000038": case "0000041": case "0000057": case "0000058": case "0000059": case "0000060": case "0000068": case "0000081": case "0000082": case "0000083":
+            case "0000084": case "0000092": case "0000101":
+                _renderEvaluacion.frm.find("#pnespecie").hide();
+                _renderEvaluacion.frm.find("#pnvol").hide();
+                _renderEvaluacion.frm.find("#pnarea").show();
+                _renderEvaluacion.frm.find("#pnind").hide();
+                break;
+            case "0000007": case "0000061": case "0000064": case "0000065":
+                _renderEvaluacion.frm.find("#pnespecie").show();
+                _renderEvaluacion.frm.find("#pnvol").show();
+                _renderEvaluacion.frm.find("#pnarea").hide();
+                _renderEvaluacion.frm.find("#pnind").show();
+                break;
+            case "0000074":
+                _renderEvaluacion.frm.find("#pnespecie").show();
+                _renderEvaluacion.frm.find("#pnvol").show();
+                _renderEvaluacion.frm.find("#pnarea").hide();
+                _renderEvaluacion.frm.find("#pnind").hide();
+                break;
+        }
+    }
+
+    _renderEvaluacion.fnInitDataTable_Detail = function () {
+        var columns_label = [], columns_data = [], options = {};
+        columns_label = ["Artículo", "Incisos", "Volumen", "Descrip. Especie","Área","Num. Individuos", "Descripción Descargo"];
+        columns_data = ["DESCRIPCION_ARTICULOS", "DESCRIPCION_ENCISOS", "VOLUMEN", "DESCRIPCION_ESPECIE", "AREA", "NUMERO_INDIVIDUOS", "DESCRIPCION_DET_DESCARGO"];
+        options = {
+            page_length: 10, row_index: true, row_delete: true, row_fnDelete: "_renderEvaluacion.fnDelete(this)", row_select: false, page_sort: true, row_edit: true,  row_fnEdit: "_renderEvaluacion.fnInitEdit(this)"
+        };
+        _renderEvaluacion.dtRenderListInforme = utilDt.fnLoadDataTable_Detail(_renderEvaluacion.frm.find("#tbRenderInfracciones"), columns_label, columns_data, options);
+        _renderEvaluacion.dtRenderListInforme.rows.add(JSON.parse('@Html.Raw(Json.Encode(@Model.Listardetdescargo))')).draw();
+    }
+
+    _renderEvaluacion.fnDelete = function (obj) {
+        var data = _renderEvaluacion.dtRenderListInforme.row($(obj).parents('tr')).data();
+          if (data["RegEstado"] == 0) {
+            _renderEvaluacion.tbEliTABLA.push({
+                EliTABLA: "INFTEC_DET_DESCARGO",
+                EliVALOR02: data["COD_SECUENCIAL"]
+            });
+        }
+        _renderEvaluacion.dtRenderListInforme.row($(obj).parents('tr')).remove().draw(false);
+    }
+    _renderEvaluacion.fnAdd = function (obj) {
+        let ensisos = _renderEvaluacion.frm.find("#ddlInfraccionesED option:selected").text();
+        var infreacciones = ensisos.split('|');
+        let COD_ILEGAL_ENCISOS = _renderEvaluacion.frm.find("#ddlInfraccionesED").val();
+        let DESCRIPCION_ARTICULOS = infreacciones[0];
+        let DESCRIPCION_ENCISOS = infreacciones[1];
+        let COD_ESPECIES = _renderEvaluacion.frm.find("#ddlEspecies1").val();
+        let DESCRIPCION_ESPECIE = _renderEvaluacion.frm.find("#ddlEspecies1 option:selected").text();
+        let VOLUMEN = _renderEvaluacion.frm.find("#txtVolumen").val();
+        let AREA = _renderEvaluacion.frm.find("#txtArea").val();
+        let NUMERO_INDIVIDUOS = _renderEvaluacion.frm.find("#txtNroIndividuos").val();
+        let DESCRIPCION_DET_DESCARGO = _renderEvaluacion.frm.find("#txtDescripcion").val();
+        let RegEstado = 1;
+        if (indice != null) {
+           RegEstado = 2;
+        }
+        else {
+          cod_secuencial = 0;
+        }
+
+        var model = {
+            "COD_ILEGAL_ENCISOS": COD_ILEGAL_ENCISOS,
+            "DESCRIPCION_ARTICULOS": DESCRIPCION_ARTICULOS,
+            "DESCRIPCION_ENCISOS": DESCRIPCION_ENCISOS,
+            "COD_ESPECIES": COD_ESPECIES,
+            "DESCRIPCION_ESPECIE": DESCRIPCION_ESPECIE,
+            "VOLUMEN": VOLUMEN == "" ? 0 : VOLUMEN,
+            "AREA": AREA == "" ? 0 :AREA,
+            "NUMERO_INDIVIDUOS": NUMERO_INDIVIDUOS == "" ? 0 : NUMERO_INDIVIDUOS,
+            "DESCRIPCION_DET_DESCARGO": DESCRIPCION_DET_DESCARGO,
+            "COD_SECUENCIAL": cod_secuencial,
+            "RegEstado": RegEstado
+        }
+        if (indice == null) {
+           _renderEvaluacion.dtRenderListInforme.rows.add([model]).draw();
+           _renderEvaluacion.dtRenderListInforme.page('last').draw('page');
+        }
+        else {
+           _renderEvaluacion.dtRenderListInforme.row(indice).data(model).draw(false);
+        }
+
+       _renderEvaluacion.frm.find("#ddlInfraccionesED").val('0000002');
+       _renderEvaluacion.frm.find("#ddlEspecies1").val('0004563');
+       _renderEvaluacion.frm.find("#txtVolumen").val('0');
+       _renderEvaluacion.frm.find("#txtArea").val('0');
+       _renderEvaluacion.frm.find("#txtNroIndividuos").val('0');
+       _renderEvaluacion.frm.find("#txtDescripcion").val('');
+        _renderEvaluacion.fnSelectRecom();
+        indice = null;
+        cod_secuencial = 0;
+    }
+    _renderEvaluacion.fnInitEdit = function (obj) {
+        var data = _renderEvaluacion.dtRenderListInforme.row($(obj).parents('tr')).data();
+        indice = _renderEvaluacion.dtRenderListInforme.row($(obj).parents('tr')).index();
+        _renderEvaluacion.frm.find("#ddlInfraccionesED").val(data['COD_ILEGAL_ENCISOS']);
+        _renderEvaluacion.frm.find("#ddlEspecies1").val(data['COD_ESPECIES']);
+        _renderEvaluacion.frm.find("#txtVolumen").val(data['VOLUMEN']);
+        _renderEvaluacion.frm.find("#txtArea").val(data['AREA']);
+        _renderEvaluacion.frm.find("#txtNroIndividuos").val(data['NUMERO_INDIVIDUOS']);
+        _renderEvaluacion.frm.find("#txtDescripcion").val(data['DESCRIPCION_DET_DESCARGO']);
+        cod_secuencial = data['COD_SECUENCIAL'];
+        _renderEvaluacion.fnSelectRecom();
+    }
+    _renderEvaluacion.fnInitDataTable_Detail2 = function () {
+        var columns_label = [], columns_data = [], options = {};
+        columns_label = ["Resolución", "Artículo", "Incisos", "Sanción"];
+        columns_data = ["RESOLUCION", "DESCRIPCION_ARTICULOSLFFS", "DESCRIPCION_ENCISOSLFFS", "SANCION"];
+        options = {
+            page_length: 10, row_index: true, row_delete: true, row_fnDelete: "_renderEvaluacion.fnDelete2(this)", row_select: false, page_sort: true
+        };
+        _renderEvaluacion.dtRenderListInforme2 = utilDt.fnLoadDataTable_Detail(_renderEvaluacion.frm.find("#tbRenderlFFS"), columns_label, columns_data, options);
+        _renderEvaluacion.dtRenderListInforme2.rows.add(JSON.parse('@Html.Raw(Json.Encode(@Model.Listarlffs))')).draw();
+    }
+
+    _renderEvaluacion.fnDelete2 = function (obj) {
+        var data = _renderEvaluacion.dtRenderListInforme2.row($(obj).parents('tr')).data();
+          if (data["RegEstado"] == 0) {
+            _renderEvaluacion.tbEliTABLA.push({
+                EliTABLA: "INFTEC_INFRACCION_LFFS",
+                EliVALOR02: data["COD_SECUENCIAL"]
+            });
+        }
+        _renderEvaluacion.dtRenderListInforme2.row($(obj).parents('tr')).remove().draw(false);
+    }
+    _renderEvaluacion.fnAdd2 = function (obj) {
+
+        let ensisos = _renderEvaluacion.frm.find("#ddlInfraccionesED3 option:selected").text();
+        var infreacciones = ensisos.split('|');
+        let COD_ILEGAL_ENCISOS = _renderEvaluacion.frm.find("#ddlInfraccionesED3").val();
+        let DESCRIPCION_ARTICULOSLFFS = infreacciones[0];
+        let DESCRIPCION_ENCISOSLFFS = infreacciones[1];
+        let RESOLUCION = _renderEvaluacion.frm.find("#txtResolucion").val();
+        let SANCION = _renderEvaluacion.frm.find("#txtSancion").val();
+
+        var data = {
+            "COD_ILEGAL_ENCISOSLFFS": COD_ILEGAL_ENCISOS,
+            "DESCRIPCION_ARTICULOSLFFS": DESCRIPCION_ARTICULOSLFFS,
+            "DESCRIPCION_ENCISOSLFFS": DESCRIPCION_ENCISOSLFFS,
+            "RESOLUCION": RESOLUCION,
+            "SANCION": SANCION,
+            "COD_SECUENCIAL": 0,
+            "RegEstado": 1
+        }
+        _renderEvaluacion.dtRenderListInforme2.rows.add([data]).draw();
+
+       _renderEvaluacion.frm.find("#ddlInfraccionesED3").val('0000002');
+       _renderEvaluacion.frm.find("#txtResolucion").val('');
+       _renderEvaluacion.frm.find("#txtSancion").val('');
+    }
+
+    _renderEvaluacion.fnGetList = function () {
+        let list = [], rows, countFilas, data;
+
+        rows = _renderEvaluacion.dtRenderListInforme.$("tr");
+        countFilas = rows.length;
+        if (countFilas > 0) {
+            $.each(rows, function (i, o) {
+                data = _renderEvaluacion.dtRenderListInforme.row($(o)).data();
+                // if (data["RegEstado"] == "1" || data["RegEstado"] == "2") {
+                list.push(utilSigo.fnConvertArrayToObject(data));
+                // }
+            });
+        }
+        return list;
+    };
+
+    _renderEvaluacion.fnGetList2 = function () {
+        let list = [], rows, countFilas, data;
+
+        rows = _renderEvaluacion.dtRenderListInforme2.$("tr");
+        countFilas = rows.length;
+        if (countFilas > 0) {
+            $.each(rows, function (i, o) {
+                data = _renderEvaluacion.dtRenderListInforme2.row($(o)).data();
+                // if (data["RegEstado"] == "1" || data["RegEstado"] == "2") {
+                list.push(utilSigo.fnConvertArrayToObject(data));
+                // }
+            });
+        }
+        return list;
+    };
+
+    $(document).ready(function () {
+        _renderEvaluacion.frm = $("#divEvaDescargo");
+        _renderEvaluacion.fnSelectRecom();
+        _renderEvaluacion.fnInitDataTable_Detail();
+        _renderEvaluacion.fnInitDataTable_Detail2();
+
+    });
+</script>
+<div id="divEvaDescargo">
+    <div class="card-header text-small">Infracciones acreditadas</div>
+    <div><br /></div>
+    <div class="form-row">
+        <div class="form-group col-md-4">
+            <label for="chkGTF" class="text-small">Artículo / Incisos</label>
+        </div>
+        <div class="form-group col-md-6">
+            @Html.DropDownListFor(m => m.txtIdInfraccion, new SelectList(Model.ListComboInciso, "CODIGO", "DESCRIPCION"),
+                                                    new
+                                                         {
+                                                            @class = "form-control form-control-sm",
+                                                            @id = "ddlInfraccionesED",
+                                                            @onchange = "_renderEvaluacion.fnSelectRecom()"
+                                                         })
+        </div>
+        <div class="form-group col-md-2">
+        </div>
+    </div>
+    <!---->
+    <div class="form-row" id="pnarea" style="display:none;">
+        <div class="form-group col-md-4">
+            <label for="chkGTF" class="text-small">Área</label>
+        </div>
+        <div class="form-group col-md-6">
+            <input type="text" class="form-control form-control-sm" id="txtArea">
+        </div>
+        <div class="form-group col-md-2">
+        </div>
+    </div>
+    <div class="form-row" id="pnespecie" style="display:none;">
+        <div class="form-group col-md-4">
+            <label for="chkGTF" class="text-small">Especie</label>
+        </div>
+        <div class="form-group col-md-6">
+            @Html.DropDownListFor(m => m.txtIdEspecie, new SelectList(Model.ListComboEspecies, "CODIGO", "DESCRIPCION"),
+                                                 new { @class = "form-control form-control-sm", @id = "ddlEspecies1" })
+        </div>
+        <div class="form-group col-md-2">
+        </div>
+    </div>
+    <div class="form-row" id="pnvol" style="display:none;">
+        <div class="form-group col-md-4">
+            <label for="chkGTF" class="text-small">Volumen</label>
+        </div>
+        <div class="form-group col-md-6">
+            <input type="text" class="form-control form-control-sm" id="txtVolumen">
+        </div>
+        <div class="form-group col-md-2">
+        </div>
+    </div>
+    <div class="form-row" id="pnind" style="display:none;">
+        <div class="form-group col-md-4">
+            <label for="chkGTF" class="text-small">Nro. Individuos</label>
+        </div>
+        <div class="form-group col-md-6">
+            <input type="text" class="form-control form-control-sm" id="txtNroIndividuos">
+        </div>
+        <div class="form-group col-md-2">
+        </div>
+    </div>
+
+    <!---->
+    <div class="form-row">
+        <div class="form-group col-md-4">
+            <label for="chkGTF" class="text-small">Contenido</label>
+        </div>
+        <div class="form-group col-md-6">
+            <input type="text" class="form-control form-control-sm" id="txtDescripcion">
+        </div>
+        <div class="form-group col-md-2">
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="form-group col-md-12">
+            <button type="button" class="btn btn-info btn-sm" onclick="_renderEvaluacion.fnAdd()"> Agregar</button>
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="form-group col-md-12">
+            <div class="table-responsive">
+                <table id="tbRenderInfracciones" style="width:100%;margin:0px !important;" class="table table-hover table-bordered">
+                    <thead></thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div class="card-header text-small">Titular sancionado anteriormente por infracción a la LFFS</div>
+    <div><br /></div>
+    <div class="form-row">
+        <div class="form-group col-md-4">
+            <label for="chkGTF" class="text-small">Resolución</label>
+        </div>
+        <div class="form-group col-md-6">
+            <input type="text" class="form-control form-control-sm" id="txtResolucion">
+        </div>
+        <div class="form-group col-md-2">
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="form-group col-md-4">
+            <label for="chkGTF" class="text-small">Artículo / Incisos</label>
+        </div>
+        <div class="form-group col-md-6">
+            @Html.DropDownListFor(m => m.txtIdInfraccion, new SelectList(Model.ListComboInciso, "CODIGO", "DESCRIPCION"),
+                                                    new
+                                                         {
+                                                            @class = "form-control form-control-sm",
+                                                            @id = "ddlInfraccionesED3",
+                                                            @onchange = "_renderEvaluacion.fnSelectRecom()"
+                                                         })
+        </div>
+        <div class="form-group col-md-2">
+        </div>
+    </div>
+    <!---->
+    <div class="form-row">
+        <div class="form-group col-md-4">
+            <label for="chkGTF" class="text-small">Sanción</label>
+        </div>
+        <div class="form-group col-md-6">
+            <input type="text" class="form-control form-control-sm" id="txtSancion">
+        </div>
+        <div class="form-group col-md-2">
+        </div>
+    </div>
+
+    <div class="form-row">
+        <div class="form-group col-md-12">
+            <button type="button" class="btn btn-info btn-sm" onclick="_renderEvaluacion.fnAdd2()"> Agregar</button>
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="form-group col-md-12">
+            <div class="table-responsive">
+                <table id="tbRenderlFFS" style="width:100%;margin:0px !important;" class="table table-hover table-bordered">
+                    <thead></thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div>
+        @Html.Partial("~/Areas/Fiscalizacion/Views/ManInformeTecnico/_Shared/_renderSSupervision.cshtml", Model)
+    </div>
+</div>
+
+
+

@@ -1,0 +1,134 @@
+﻿@model CapaEntidad.ViewModel.VM_ResolucionTFFS
+
+<div id="fmrRDInicio">
+    <div><br /></div>
+
+    <div class="form-row">
+        <div class="col-md-12"><br /><br /></div>
+        <div class="form-group col-md-8">
+            <label for="txtNumExp" class="text-small">N° Expediente asignado</label>
+            @Html.EditorFor(m => m.txtNumeroExpediente, new { htmlAttributes = new { @class = "form-control form-control-sm", placeholder = "Expediente Administrativo" } })
+        </div>
+
+        <div class="form-group col-md-4">
+            <label for="lblSolAntecedente" class="text-small">Solicitud de Antecedentes del titular</label>
+            <div style="margin-top:7px;">
+                <div class="form-check form-check-inline">
+                    @Html.CheckBoxFor(m => m.chkSolAntecedente, new { @class = "form-check-input", style = "width:15px;height:16px;" })
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="form-row">
+        <div class="form-group col-md-6">
+            <label for="lblExtitular" class="text-small">Iniciar PAU al ex-titular</label>
+            <div style="margin-top:7px;">
+                <div class="form-check form-check-inline">
+                    @Html.CheckBoxFor(m => m.chkSancionExTitular, new { @class = "form-check-input", style = "width:15px;height:16px;" })
+                </div>
+            </div>
+        </div>
+        <div class="form-group col-md-6">
+            <label for="lblTitularSancion" class="text-small texto-recortado">Titular al que se inicia PAU<i class="fa fa-cog fa-spin text-danger" id="iconRLegalCodigo" style="display:none;" data-toggle="tooltip" data-placement="top" title="Seleccione titular"></i></label>
+            <div class="input-group">
+                <div class="input-group-prepend">
+                    <span class="input-group-text"><i class="fa fa-plus" style="cursor:pointer;" onclick="ManRD_AddEdit.fnBuscarPersona('TITULAR', 'N');" data-toggle="tooltip" data-placement="top" title="Agregar"></i></span>
+                </div>
+                @Html.EditorFor(m => m.txtTitular, new { htmlAttributes = new { @class = "form-control form-control-sm", @disabled = "disabled" } })
+                <input type="hidden" id="hdTipoTitular" />
+
+            </div>
+        </div>
+    </div>
+    <!--Medidas Cautelares-->
+    <div id="divMedCaut">
+        @Html.Partial("~/Areas/Tribunal/Views/ManTribunal/_Shared/_generic/_renderMedCaut.cshtml", Model)
+    </div>
+  
+
+    <div class="form-row">
+        <div class="form-group col-md-4">
+            <label for="chkBalance" class="text-small">Solicitud de Balance de extracción para medidas cautelares</label>
+        </div>
+        <div class="form-group col-md-6">
+            @Html.CheckBoxFor(m => m.chkSolBalance, new { @class = "form-check-input", style = "width:15px;height:16px;" })
+        </div>
+        <div class="form-group col-md-2">
+        </div>
+    </div>
+
+    <div class="form-row">
+        <div class="form-group col-md-4">
+            <label for="chkCausales" class="text-small">Con causales de caducidad</label>
+        </div>
+        <div class="form-group col-md-6">
+            @Html.CheckBoxFor(m => m.chkCausalesCaducidad, new { @class = "form-check-input", style = "width:15px;height:16px;" })
+        </div>
+        <div class="form-group col-md-2">
+        </div>
+    </div>
+
+    <div class="form-row">
+        <div class="form-group col-md-4">
+            <label for="chkInfFalsaInex" class="text-small">Información Falsa - Inexistencia de Especies</label>
+        </div>
+        <div class="form-group col-md-6">
+            @Html.CheckBoxFor(m => m.chkInfFalsaInex, new { @class = "form-check-input", style = "width:15px;height:16px;" })
+        </div>
+        <div class="form-group col-md-2">
+        </div>
+    </div>
+
+    <div class="form-row">
+        <div class="form-group col-md-4">
+            <label for="chkInfFalsaEsp" class="text-small">Información Falsa - Diferencia de Especies</label>
+        </div>
+        <div class="form-group col-md-6">
+            @Html.CheckBoxFor(m => m.chkInfFalsaDif, new { @class = "form-check-input", style = "width:15px;height:16px;" })
+        </div>
+        <div class="form-group col-md-2">
+        </div>
+    </div>
+
+    <div class="form-row">
+        <div class="form-group col-md-4">
+            <label for="chkInfFalsaDas" class="text-small">Información Falsa - Sobreestimacióin de Medidas Dasométricas</label>
+        </div>
+        <div class="form-group col-md-6">
+            @Html.CheckBoxFor(m => m.chkInfFalsaDas, new { @class = "form-check-input", style = "width:15px;height:16px;" })
+        </div>
+        <div class="form-group col-md-2">
+        </div>
+    </div>
+
+    <div class="form-row">
+        <div class="form-group col-md-4">
+            <label for="txtDescFalsa" class="text-small">Descripción Información falsa</label>
+        </div>
+        <div class="form-group col-md-6">
+            @Html.TextAreaFor(m => m.txtDescInfFalsa, 4, 1, new { @class = "form-control form-control-sm" })
+        </div>
+        <div class="form-group col-md-2">
+        </div>
+    </div>
+
+    <div id="divInfracciones">
+        @Html.Partial("~/Areas/Tribunal/Views/ManTribunal/_Shared/_generic/_renderInfracciones.cshtml", Model)
+    </div>
+
+    <div class="form-row">
+        <div class="form-group col-md-4">
+            <label for="chkNoExisteAprovechamiento" class="text-small">No existe aprovechamiento forestal en el Área Autorizada</label>
+        </div>
+        <div class="form-group col-md-6">
+            @Html.CheckBoxFor(m => m.chkNoExisteAprovechamiento, new { @class = "form-check-input", style = "width:15px;height:16px;" })
+        </div>
+        <div class="form-group col-md-2">
+        </div>
+    </div>
+    <div id="divMandatos">
+        @Html.Partial("~/Areas/Tribunal/Views/ManTribunal/_Shared/_generic/_renderMandato.cshtml", Model)
+    </div>
+    
+</div>

@@ -1,0 +1,141 @@
+﻿@using HistorialTH;
+
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<script type="text/javascript">
+        $(document).ready(function () {
+            // DOM ready
+            SearchText();
+           // validar();
+
+        });
+
+        function a_onClick()
+        {
+            validar();
+        }
+        function validar() {
+            //metodo para validar el click del botton
+            var opcion = "";
+           //var capchaResp = grecaptcha.getResponse();
+            if (document.getElementById("rbTitular").checked == true) {
+                opcion = document.getElementById("rbTitular").value;
+            }
+            else if (document.getElementById("rbTitulo").checked == true) {
+                opcion = document.getElementById("rbTitulo").value;
+            }
+            if (opcion != "") {
+                if (document.getElementById("hfTHabilitanteCod").value && document.getElementById("txtNumContrato").value != "") {
+                    grecaptcha.execute();
+                }
+                else {
+                    alert("Ingrese y/o seleccione los campos para realizar la búsqueda correctamente");
+                    return false;
+                }
+            }
+            else {
+                alert("Seleccione una opción de búsqueda");
+                return false;
+            }
+        }
+        function SearchText() {
+            $("#txtNumContrato").autocomplete({
+                source: function (request, response) {
+                    var opcion = "";
+                    if (document.getElementById("rbTitular").checked == true) {
+                        opcion = document.getElementById("rbTitular").value;
+                    }
+                    else if (document.getElementById("rbTitulo").checked == true) {
+                        opcion = document.getElementById("rbTitulo").value;
+                    }
+
+                    $.ajax({
+                        type: "POST",
+
+                        url: '@Url.Action("GetTHName", "Home")',
+                        data: { 'name': document.getElementById('txtNumContrato').value, 'opcion': opcion },
+                        dataType: "json",
+                        traditional: true,
+                        success: function (data) {
+                            // response(data.d);
+                            response($.map(data, function (item) {
+                                return {
+                                    label: item.split('|')[1],
+                                    val: item.split('|')[0]
+                                }
+                            }))
+                        },
+                        error: function (result) {
+                            alert("No Match" + result);
+                        }
+                    });
+
+                },
+                select: function (e, i) {
+                    // $("[id$=hfTHabilitanteCod]").val(i.item.val);
+                    $('#hfTHabilitanteCod').val(i.item.val);
+                },
+            });
+        }
+        function ModifyPlaceHolder(element) {
+            var data = {
+                rbTitular: 'Ingrese nombre del Titular o Rep. Legal',
+                rbTitulo: 'Número de título habilitante'
+            };
+            var input = document.getElementById("txtNumContrato");
+            input.placeholder = data[element.id];
+
+        }
+</script>
+
+
+<div class="container" id="divContainer">
+    <div class="col-xs-1 col-sm-1 col-md-2 col-lg-3"></div>
+    <div class="col-xs-10 col-sm-10 col-md-8 col-lg-6 card card-container">
+        <img id="profile-img" class="profile-img-card" src="~/Images/Logo-sigo-2.png" style="height: 150px; width: 250px" />
+        <br />
+        @using (@Html.BeginForm("detalle", "Home", FormMethod.Post, (new { onsubmit = "return validar();" })))
+        {
+            <!--form  id="form1" class="form-signin"-->
+            <div class="form-signin">
+                <asp:HiddenField ID="hdfParamInicial" />
+                <fieldset class="fsStyle">
+                    <legend>
+                        <label ID="lbltitle" style="font-size:Small; font-style:italic; font-weight:bold">Seleccione opción:</label>
+                    </legend>
+                    <label class="radio-inline">
+                        <input id="rbTitular" type="radio" name="optradio" style="float:right" value="titular" onclick="ModifyPlaceHolder(this)">Titular o Rep. Legal
+                    </label>
+                    <label class="radio-inline">
+                        <input id="rbTitulo" type="radio" name="optradio" style="float:right" value="titulo" onclick="ModifyPlaceHolder(this)">Número Título Habilitante
+                    </label>
+                </fieldset>
+                <br />
+                <input id="txtNumContrato" name="txtNumContrato" type="text" class="form-control" placeholder="Seleccione una alternativa" /><br />
+                <input type="hidden" id="hfTHabilitanteCod" name="hfTHabilitanteCod" />
+                <div style="align-items:center; justify-content: center;  display: -webkit-box;  display: -ms-flexbox;  display: flex;">
+
+                    <div id='recaptcha' class="g-recaptcha"
+                         data-sitekey="6Lfugy0UAAAAANdsGWum0FtV7Wtg22AeW3sierzP"
+                         data-callback="onSubmit"
+                         data-size="invisible"></div>
+                </div><br />
+                <div>
+                    <button id="btnBuscar" onclick="a_onClick()" type="submit" class="btn btn-primary">Buscar</button>
+                </div>
+                <div style="width: 100%; text-align: left;">
+                    <asp:Label ID="DivMensaje" Text=""></asp:Label>
+                </div>
+            </div>
+
+            <!-- /form -->
+        }
+        <h5 class="text-center"><i><strong>"Usemos responsablemente nuestros bosques"</strong></i></h5>
+    </div>
+    <!-- /card-container -->
+    <div class="col-xs-1 col-sm-1 col-md-2 col-lg-3"></div>
+</div>
+<!-- /container -->

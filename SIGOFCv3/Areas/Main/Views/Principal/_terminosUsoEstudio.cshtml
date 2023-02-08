@@ -1,0 +1,43 @@
+﻿<script src="~/Areas/General/js/Controles/_terminosUso.js"></script>
+<script>
+    $(document).ready(function () {
+        @*$(".aceptoTerminos").click(function () {
+            window.top.location = '@Url.Action("index", "principal")';
+        });*@
+    });
+</script>
+<div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+        <div class="modal-header text-small" style="cursor:move;padding:0.5rem;">
+            <h5 class="modal-title">Términos de Uso del Registro de Guias de Transporte Forestal</h5>
+            @*<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>*@
+        </div>
+        <div class="modal-body">
+            <form id="frmterminosUso" method="post">
+                <div class="form-row" id="divP1">
+                    <h3>Términos y condiciones de uso de los sistemas de información del OSINFOR</h3>
+                    <div style="text-align: left;">
+                        El acceso a los sistemas de información del Organismo de Supervisión de los Recursos Forestales y de Fauna Silvestre (OSINFOR) implica sin reservas, la aceptación de las presentes condiciones generales de uso, las cuales EL/LA USUARIO/A afirma comprender, y se detallan a continuación:<br /><br />
+                        <ol>
+                            <li>Mantener y guardar estricta reserva y absoluta confidencialidad respecto a la información del OSINFOR contenida en los sistemas de información y no utilizarla para beneficio propio o de terceros, reconociendo que toda información administrada es de propiedad exclusiva del OSINFOR.</li>
+                            <li>EL/LA USUARIO/A es completamente responsable de todas las actividades realizadas con su cuenta de acceso. Por lo tanto, debe custodiar la contraseña de acceso, asumiendo cualquier daño y perjuicio que pudiera derivarse de su uso indebido, cesión, revelación o extravío de la misma. En caso de no recordar la contraseña o considerar que su cuenta de acceso ha sido vulnerada o representa un riesgo de acceso y/o utilización por parte de terceros no autorizados, EL/LA USUARIO/A deberá comunicarlo inmediatamente al OSINFOR, a través de la Oficina de Tecnología de la Información, a fin de que ésta proceda inmediatamente al bloqueo y sustitución de la misma.</li>
+                            <li>EL/LA USUARIO/A no debe subir archivos que contengan material protegido por leyes de propiedad intelectual a menos que controle los derechos respectivos, o haya recibido el consentimiento expreso.</li>
+                            <li>Una vez que cese la relación laboral o contractual de EL/LA USUARIO/A con el OSINFOR y/o ENTIDAD autorizada por el OSINFOR, la cuenta de acceso será suspendida, en concordancia con el procedimiento de altas y bajas de la Oficina de Tecnología de la Información. Además, EL/LA USUARIO/A debe abstenerse de cualquier acceso a los sistemas de información y servicios tecnológicos del OSINFOR, una vez culminado el plazo autorizado.</li>
+                            <li>La violación de la seguridad a nuestros sistemas de información y servicios tecnológicos pueden incurrir en responsabilidades civiles y penales, según la legislación vigente.</li>
+                        </ol>
+                    </div>
+                </div>
+
+            </form>
+        </div>
+        <div class="modal-footer">
+            <button id="btnGuardar" class="btn btn-primary btn-sm" onclick="ManterminosUso.fnSubmit();">Acepto los términos de uso del Registro de GTF</button>
+            @*<button id="btnGuardar" class="btn btn-primary btn-sm aceptoTerminos" ">Acepto los terminos de uso del SIGOsfc</button>*@
+        </div>
+    </div>
+</div>
+
+
+

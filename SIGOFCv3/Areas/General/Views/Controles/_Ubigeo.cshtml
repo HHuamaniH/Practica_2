@@ -1,0 +1,41 @@
+﻿
+@{
+    IEnumerable<SelectListItem> iniSelect = new List<SelectListItem> { new SelectListItem { Value = "-", Text = "Seleccionar" }, new SelectListItem { Value = "0000", Text = "MULTI-PROVINCIA" } };
+    IEnumerable<SelectListItem> iniSelectDistri = new List<SelectListItem> { new SelectListItem { Value = "-", Text = "Seleccionar" }, new SelectListItem { Value = "000000", Text = "MULTI-DISTRITO" } };
+}
+
+<script src="~/Areas/General/js/Controles/_Ubigeo.js"></script>
+
+<div class="modal-dialog" role="document">
+    <div class="modal-content">
+        <div class="modal-header text-small" style="cursor:move;">
+            Seleccione el Ubigeo
+            <i class="fa fa-close" style="cursor:pointer;" data-dismiss="modal" aria-label="Close"></i>
+        </div>
+        <div class="modal-body">
+            <form id="frmUbigeo">
+                <div class="form-group row">
+                    <label for="lblDepartamento" class="col-md-3 col-form-label text-small">Departamento</label>
+                    <div class="col-md-9">
+                        @Html.DropDownList("cboDepartamento", iniSelect, new { @class = "form-control form-control-sm", @style = "width:auto;" })
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="lblProvincia" class="col-md-3 col-form-label text-small">Provincia</label>
+                    <div class="col-md-9">
+                        @Html.DropDownList("cboProvincia", iniSelect, new { @class = "form-control form-control-sm", @style = "width:auto;" })
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="lblDistrito" class="col-md-3 col-form-label text-small">Distrito</label>
+                    <div class="col-md-9">
+                        @Html.DropDownList("cboDistrito", iniSelectDistri, new { @class = "form-control form-control-sm", @style = "width:auto;" })
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="modal-footer">
+
+        </div>
+    </div>
+</div>

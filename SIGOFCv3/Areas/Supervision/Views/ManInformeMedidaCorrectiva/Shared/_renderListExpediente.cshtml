@@ -1,0 +1,441 @@
+﻿@model CapaEntidad.ViewModel.VM_InformeMedidaCorrectiva
+
+<style type="text/css">
+    #tbRenderListExpediente_wrapper {
+        padding: 0px;
+    }
+    #tbRenderListExpedienteMandato_wrapper {
+        padding: 0px;
+    }
+    #tbRenderListExpedienteMCorrectiva_wrapper {
+        padding: 0px;
+    }
+
+    #tbConsultaExpediente_info {
+        color: #33b35a;
+        font-size: 12px;
+        margin-top: 12px;
+    }
+</style>
+
+
+<script type="text/javascript">
+    var _renderListExpediente = {};
+
+    _renderListExpediente.tbMedidaAsociada = [];
+    _renderListExpediente.tbElimExpediente = [];
+
+    //para iniciar los eventos
+    _renderListExpediente.iniciarEventos = function () {
+        if (ManInfMedidaCorrectiva_AddEdit.frm.find("#hdfItemTInformeCodigo").val() == "0000011" ||
+            ManInfMedidaCorrectiva_AddEdit.frm.find("#hdfItemTInformeCodigo").val() == "0000012") {
+            $("#grvItemExpedienteMandato").hide();
+            $("#grvItemExpedienteMCorrectiva").show();
+        }
+        else if (ManInfMedidaCorrectiva_AddEdit.frm.find("#hdfItemTInformeCodigo").val() == "0000016" ||
+            ManInfMedidaCorrectiva_AddEdit.frm.find("#hdfItemTInformeCodigo").val() == "0000017") {
+            $("#grvItemExpedienteMandato").show();
+            $("#grvItemExpedienteMCorrectiva").hide();
+        } 
+    }
+
+    // iniciar datos en la tabla
+    _renderListExpediente.fnInitDataTable_Detail = function () {
+        var columns_label = [], columns_data = [], options = {};
+
+        //tabla Expediente
+        columns_label = ["N° Expediente", "Título Habilitante", "Titular", "Modalidad"];
+        columns_data = ["NUM_EXPEDIENTE", "NUM_THABILITANTE", "TITULAR", "MODALIDAD"];
+        options = {
+            page_length: 10, row_index: true, row_delete: true, row_fnDelete: "_renderListExpediente.fnDelete(this)", page_sort: true
+        };
+        _renderListExpediente.dtRenderListExpediente = utilDt.fnLoadDataTable_Detail(_renderListExpediente.frm.find("#tbRenderListExpediente"), columns_label, columns_data, options);
+        _renderListExpediente.dtRenderListExpediente.rows.add(JSON.parse('@Html.Raw(Json.Encode(@Model.tbExpediente))')).draw();
+
+        //tabla ExpedienteMandato
+        columns_label = ["Resolución", "Mandato", "Impl. Días", "Impl. Meses", "Inf. Días", "Inf. Meses"];
+        columns_data = ["NUM_RESOLUCION_MEDIDA", "MEDIDA", "PLAZO_IMPL_DIA", "PLAZO_IMPL_MES", "PLAZO_INF_DIA", "PLAZO_INF_MES"];
+
+        options = {
+            page_length: 10, row_check: true, row_fnCheck: "_renderListExpediente.fnChecked('ExpedienteMandato',this)", row_nocheck: true, row_fnNoCheck: "_renderListExpediente.fnNoChecked('ExpedienteMandato',this)", page_sort: true
+        };
+        _renderListExpediente.dtRenderListExpedienteMandato = utilDt.fnLoadDataTable_Detail(_renderListExpediente.frm.find("#tbRenderListExpedienteMandato"), columns_label, columns_data, options);
+        _renderListExpediente.dtRenderListExpedienteMandato.rows.add(JSON.parse('@Html.Raw(Json.Encode(@Model.tbMedida))')).draw();
+
+        //tabla ExpedienteMCorrectiva
+        columns_label = ["Asociado", "Resolución", "Medida Correctiva", "Impl. Días", "Impl. Meses", "Impl. Años", "Post Impl. Días", "Post Impl. Meses", "Post Impl. Años", "Inf. Días", "Inf. Meses", "Inf. Años"];
+        columns_data = ["TXT_ASOCIADO", "NUM_RESOLUCION_MEDIDA", "MEDIDA", "PLAZO_IMPL_DIA", "PLAZO_IMPL_MES", "PLAZO_IMPL_ANIO", "PLAZO_POST_DIA", "PLAZO_POST_MES", "PLAZO_POST_ANIO", "PLAZO_INF_DIA", "PLAZO_INF_MES", "PLAZO_INF_ANIO"];
+
+        options = {
+            page_length: 10, row_check: true, row_fnCheck: "_renderListExpediente.fnChecked('ExpedienteMCorrectiva',this)", row_nocheck: true, row_fnNoCheck: "_renderListExpediente.fnNoChecked('ExpedienteMCorrectiva',this)", page_sort: true
+        };
+        _renderListExpediente.dtRenderListExpedienteMCorrectiva = utilDt.fnLoadDataTable_Detail(_renderListExpediente.frm.find("#tbRenderListExpedienteMCorrectiva"), columns_label, columns_data, options);
+        _renderListExpediente.dtRenderListExpedienteMCorrectiva.rows.add(JSON.parse('@Html.Raw(Json.Encode(@Model.tbMedida))')).draw();
+
+        //tabla modal
+        columns_label = ["N° Expediente", "N° Resolución", "Tipo Resolución", "Título Habilitante", "Titular", "Modalidad"];
+        columns_data = ["NUM_EXPEDIENTE", "NUM_RESOLUCION", "TIPO_RESOLUCION", "NUM_THABILITANTE", "TITULAR", "MODALIDAD"];
+        options = {
+            page_paging: true, page_length: 10, row_index: true, row_select: true, row_fnSelect: "_renderListExpediente.fnSelect(this)"
+        };
+        utilDt.fnLoadDataTable_Detail(_renderListExpediente.frm.find("#tbConsultaExpediente"), columns_label, columns_data, options);
+        _renderListExpediente.dtConsultaInforme = _renderListExpediente.fnInitDataTablePaging(options);
+    }
+
+    _renderListExpediente.fnViewModalConsulta = function () {
+        utilSigo.modalDraggable(_renderListExpediente.frm.find("#mdlConsultaExpediente"), '.modal-header');
+        _renderListExpediente.frm.find("#mdlConsultaExpediente").modal({ keyboard: true, backdrop: 'static' });
+    }
+
+    _renderListExpediente.fnSelect = function (obj) {
+        var data = _renderListExpediente.dtConsultaInforme.row($(obj).parents('tr')).data();
+        if (!utilDt.existValorSearch(_renderListExpediente.dtRenderListExpediente, "NUM_EXPEDIENTE", data["NUM_EXPEDIENTE"])) {
+            data["RegEstado"] = 1;
+            _renderListExpediente.dtRenderListExpediente.rows.add([data]).draw();
+            _renderListExpediente.dtRenderListExpediente.page('last').draw('page');
+
+            _renderListExpediente.fnCargarMedidas();  
+        } else {
+            utilSigo.toastWarning("Aviso", "El expediente ya se encuentra en la lista");
+        }
+        _renderListExpediente.frm.find('#mdlConsultaExpediente').modal('hide');
+    }
+
+    _renderListExpediente.fnChecked = function (opc, obj) {
+
+        var dt, data;
+        //_renderListExpediente.dtRenderListExpedienteMCorrectiva.
+        switch (opc) {
+            case "ExpedienteMandato":
+                dt = _renderListExpediente.dtRenderListExpedienteMandato;
+                data = dt.row($(obj).parents('tr')).data();
+                break;
+
+            case "ExpedienteMCorrectiva":
+                dt = _renderListExpediente.dtRenderListExpedienteMCorrectiva;
+                data = dt.row($(obj).parents('tr')).data();
+                break;
+        }
+        console.log(data["COD_MEDIDA"]);
+
+        if (data["TXT_ASOCIADO"] == 'NO') {
+            _renderListExpediente.tbMedidaAsociada.push({
+                COD_RESODIREC: data["COD_RESODIREC"],
+                COD_RESODIREC_MEDIDA: data["COD_RESODIREC_MEDIDA"],
+                COD_MEDIDA: data["COD_MEDIDA"],
+            });
+
+            data["TXT_ASOCIADO"] = "SI";
+
+            switch (opc) {
+                case "ExpedienteMandato":
+                    _renderListExpediente.dtRenderListExpedienteMandato.row($(obj).parents('tr')).data(data).draw(false);
+                    break;
+
+                case "ExpedienteMCorrectiva":
+                    _renderListExpediente.dtRenderListExpedienteMCorrectiva.row($(obj).parents('tr')).data(data).draw(false);
+                    break;
+            }
+        }
+        else {
+            utilSigo.toastWarning("Aviso", "La resolución está asociada");
+        }
+    }
+
+    _renderListExpediente.fnNoChecked = function (opc, obj) {
+
+        var dt, data;
+
+        switch (opc) {
+            case "ExpedienteMandato":
+                dt = _renderListExpediente.dtRenderListExpedienteMandato;
+                data = dt.row($(obj).parents('tr')).data();
+                break;
+
+            case "ExpedienteMCorrectiva":
+                dt = _renderListExpediente.dtRenderListExpedienteMCorrectiva;
+                data = dt.row($(obj).parents('tr')).data();
+                break;
+        }
+
+        if (data["TXT_ASOCIADO"] == 'SI') {
+            const index = _renderListExpediente.tbMedidaAsociada.findIndex((item) => item.COD_RESODIREC === data["COD_RESODIREC"]);
+            if (index > -1) {
+                _renderListExpediente.tbMedidaAsociada.splice(index, 1);
+            }
+
+            data["TXT_ASOCIADO"] = "NO";
+
+            switch (opc) {
+                case "ExpedienteMandato":
+                    _renderListExpediente.dtRenderListExpedienteMandato.row($(obj).parents('tr')).data(data).draw(false);
+                    break;
+
+                case "ExpedienteMCorrectiva":
+                    _renderListExpediente.dtRenderListExpedienteMCorrectiva.row($(obj).parents('tr')).data(data).draw(false);
+                    break;
+            }
+        }
+        else {
+            utilSigo.toastWarning("Aviso", "La resolución no está asociado");
+        }
+    }
+
+    _renderListExpediente.fnDelete = function (obj) {
+        utilSigo.dialogConfirm("Confirmacion", "¿Está seguro de Eliminar el Registro Seleccionado?", function (r) {
+            if (r) {
+                var data = _renderListExpediente.dtRenderListExpediente.row($(obj).parents('tr')).data();
+                if (data["RegEstado"] != "1") {
+                    _renderListExpediente.tbElimExpediente.push({
+                        EliTABLA: "IMEDIDA_VS_EXP",
+                        COD_RESODIREC: data["COD_RESODIREC"]
+                    });
+                }
+                _renderListExpediente.dtRenderListExpediente.row($(obj).parents('tr')).remove().draw(false);
+
+                _renderListExpediente.fnCargarMedidas();
+                
+                utilSigo.toastSuccess("Éxito", "El elemento ha sido eliminado correctamente");
+            }
+        });
+    }
+
+    _renderListExpediente.fnCargarMedidas = function () {
+        var codTipoIMC = ManInfMedidaCorrectiva_AddEdit.frm.find("#hdfItemTInformeCodigo").val();
+        var CodInforme = ManInfMedidaCorrectiva_AddEdit.frm.find("#hdfCodInfMedidaCorrectiva").val();
+        var url = urlLocalSigo + "Supervision/ManInformeMedidaCorrectiva/CargarMedidas";
+        var params = {};
+        params.COD_INFORME = CodInforme;        
+        params.COD_RESODIREC = "";
+
+        if (codTipoIMC == "0000011" || codTipoIMC == "0000012") //InfTec Medidas Correctivas
+        {
+            params.MAE_TIP_MEDIDA = "0000008";
+        }
+        else if (codTipoIMC == "0000016" || codTipoIMC == "0000017") //InfTec Mandatos
+        {
+            params.MAE_TIP_MEDIDA = "0000009";
+        }
+
+        _renderListExpediente.dtRenderListExpediente.rows().every(function (rowIdx, tableLoop, rowLoop) {
+            var data = this.data();
+            
+            params.COD_RESODIREC = (params.COD_RESODIREC == "") ? data["COD_RESODIREC"] : params.COD_RESODIREC + "," + data["COD_RESODIREC"];            
+        });
+        
+        var option = { url: url, datos: JSON.stringify(params), type: 'POST' };
+
+        utilSigo.fnAjax(option, function (_dto) {
+            if (_dto.success) {
+                if (_dto.result.length > 0) {
+                    _renderListExpediente.tbMedidaAsociada = [];
+            
+                    if (codTipoIMC == "0000011" || codTipoIMC == "0000012") //InfTec Medidas Correctivas
+                    {
+                        _renderListExpediente.dtRenderListExpedienteMCorrectiva.clear().draw();
+                        _renderListExpediente.dtRenderListExpedienteMCorrectiva.rows.add(_dto.result).draw();
+                        _renderListExpediente.dtRenderListExpedienteMCorrectiva.page('last').draw('page');
+                    }
+                    else if (codTipoIMC == "0000016" || codTipoIMC == "0000017") //InfTec Mandatos
+                    {
+                        _renderListExpediente.dtRenderListExpedienteMandato.clear().draw();
+                        _renderListExpediente.dtRenderListExpedienteMandato.rows.add(_dto.result).draw();
+                        _renderListExpediente.dtRenderListExpedienteMandato.page('last').draw('page');
+                    }
+
+                    for (let ob of _dto.result) {
+                        if (ob.ASOCIADO == true) {
+                            _renderListExpediente.tbMedidaAsociada.push({
+                                COD_RESODIREC: ob.COD_RESODIREC,
+                                COD_RESODIREC_MEDIDA: ob.COD_RESODIREC_MEDIDA,
+                                COD_MEDIDA: ob.COD_MEDIDA,
+                            });
+                        } 
+                    }
+                }
+            }
+            else {
+                utilSigo.toastWarning("Aviso", "Sucedio un error, Comuníquese con el Administrador");
+            }
+        });
+    }
+
+    _renderListExpediente.fnGetListMedidaAsociada = function () { return _renderListExpediente.tbMedidaAsociada }
+
+    _renderListExpediente.fnGetListElimExpediente = function () { return _renderListExpediente.tbElimExpediente }
+
+    // para llenar el modal
+    _renderListExpediente.fnInitDataTablePaging = function (options) {
+        var optDt = {};
+        optDt.iLength = options.page_length;
+        optDt.iStart = 0;
+        optDt.bSearch = false;
+        optDt.bInfo = true;
+        optDt.bSort = true;
+        optDt.aSort = [];
+        return _renderListExpediente.frm.find("#tbConsultaExpediente").DataTable({
+            processing: true,
+            serverSide: true,
+            searching: optDt.bSearch,
+            ordering: optDt.bSort,
+            deferLoading: 0,
+            paging: true,
+            ajax: {
+                "url": urlLocalSigo + "Supervision/ManInformeMedidaCorrectiva/ConsultaModal",
+                "data": function (d) {
+                    d.customSearchEnabled = true;
+                    d.customSearchForm = "IMEDIDA";//"LISTAR_INFORMES_RD_EXPADM"; //ddlModalSupervision
+                    d.customSearchType = _renderListExpediente.frm.find("#ddlModalSupervision").val();
+                    d.customSearchValue = _renderListExpediente.frm.find("#txtConsultaExpediente").val();
+                    for (var i = 0; i < d.order.length; i++) {
+                        d.order[i]["column_name"] = d.columns[d.order[i]["column"]]["data"];
+                    }
+                    d.columns = null;
+                },
+                "error": function (jqXHR) {
+                    utilSigo.unblockUIGeneral();
+                    utilSigo.toastError("Error", initSigo.MessageError);
+                    console.log(jqXHR.responseText);
+                }
+            },
+            columns: options.table_columns,
+            bInfo: optDt.bInfo,
+            "lengthMenu": [[10, 20, 50, 100], [10, 20, 50, 100]],
+            "bLengthChange": false,
+            "aaSorting": optDt.aSort,
+            "pageLength": optDt.iLength,
+            "displayStart": optDt.iStart,
+            "oLanguage": initSigo.oLanguage,
+            "drawCallback": initSigo.showPagination,
+        });
+    }
+
+    _renderListExpediente.fnConsulta = function () {
+        var txtConsulta = _renderListExpediente.frm.find("#txtConsultaExpediente").val();
+        if (txtConsulta.length > 2) {
+            _renderListExpediente.dtConsultaInforme.ajax.reload();
+        } else {
+            utilSigo.toastWarning("Aviso", "Ingrese al menos 3 caracteres para proceder con la búsqueda.");
+        }
+    }
+
+    _renderListExpediente.fnInit = function () {
+        _renderListExpediente.frm.find("#btnConsultaExpediente").click(function () {
+            _renderListExpediente.fnConsulta();
+
+        });
+        _renderListExpediente.frm.find("#txtConsultaExpediente").keyup(function (e) {
+            if (e.keyCode == 13) {
+                _renderListExpediente.fnConsulta();
+            }
+        });
+        _renderListExpediente.frm.find("#mdlConsultaExpediente").on('shown.bs.modal', function () {
+            _renderListExpediente.frm.find("#txtConsultaExpediente").focus();
+        });
+    }
+
+    _renderListExpediente.fnGetListExpediente = function () {
+        let list = [], rows, countFilas, data;
+
+        rows = _renderListExpediente.dtRenderListExpediente.$("tr");
+        countFilas = rows.length;
+        if (countFilas > 0) {
+            $.each(rows, function (i, o) {
+                data = _renderListExpediente.dtRenderListExpediente.row($(o)).data();
+               // if (data["RegEstado"] == "1" || data["RegEstado"] == "2") {
+                list.push(utilSigo.fnConvertArrayToObject(data));
+               // }
+            });
+        }
+        return list;
+    }
+
+    _renderListExpediente.fnIniciaCargarMedidas = function () {
+        let rows, countFilas;
+
+        rows = _renderListExpediente.dtRenderListExpediente.$("tr");
+        countFilas = rows.length;
+        if (countFilas > 0) {
+            _renderListExpediente.fnCargarMedidas();
+        }
+    }
+
+   $(document).ready(function () {
+       _renderListExpediente.frm = $("#frmRenderListExpediente");
+       _renderListExpediente.iniciarEventos();
+       //inicializa la tabla con los campos obtenidos del model
+       _renderListExpediente.fnInitDataTable_Detail();
+       //inicializa los componentes necesarios
+       _renderListExpediente.fnInit();
+       _renderListExpediente.fnIniciaCargarMedidas();
+   });
+
+</script>
+<div id="frmRenderListExpediente">
+    <label for="lblReferencia" class="text-medium" style="font-weight:bold;">Documentos de referencia</label>
+    <div class="table-responsive">
+        <table id="tbRenderListExpediente" style="width:100%;margin:0px !important;" class="table table-hover table-bordered">
+            <thead>
+                <tr>
+                    <th colspan="6" class="text-sm-left">
+                        <div class="form-inline">
+                            <i class="fa mx-2 fa-lg fa-file-o" style="cursor:pointer;" onclick="_renderListExpediente.fnViewModalConsulta();" data-toggle="tooltip" data-placement="top" title="Nuevo"></i>
+                            <strong>Agregar Expediente</strong>
+                        </div>
+                    </th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
+    <div id="grvItemExpedienteMandato" class="table-responsive">
+        <table id="tbRenderListExpedienteMandato" style="width:100%;margin:0px !important;" class="table table-hover table-bordered">
+            <thead></thead>
+            <tbody></tbody>
+        </table>
+    </div>
+    <div id="grvItemExpedienteMCorrectiva" class="table-responsive">
+        <table id="tbRenderListExpedienteMCorrectiva" style="width:100%;margin:0px !important;" class="table table-hover table-bordered">
+            <thead></thead>
+            <tbody></tbody>
+        </table>
+    </div>
+    <div class="modal fade hide" id="mdlConsultaExpediente" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header text-small" style="cursor:move;">
+                    @Model.txtTituloModal
+                    <i class="fa fa-close" style="cursor:pointer;" data-dismiss="modal" aria-label="Close"></i>
+                </div>
+                <div class="modal-body" style="padding:0px;">
+                    <div id="frmConsultaExpediente">
+                        <div class="card-body">
+                            <div class="form-row">
+                                <div class="col-md-3 mb-3" style="margin-bottom:0px!important;">
+                                    @Html.DropDownListFor(m => m.sBusqueda, new SelectList(Model.sBusqueda, "Value", "Text", Model.sBusqueda), new { @class = "form-control form-control-sm", @id = "ddlModalSupervision" })
+                                </div>
+                                <div class="col-md-9 mb-3" style="margin-bottom:0px!important;">
+                                    <div class="input-group">
+                                        <input type="text" id="txtConsultaExpediente" class="form-control form-control-sm" maxlength="50" />
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text" id="btnConsultaExpediente" style="cursor:pointer;color:forestgreen">
+                                                <i class="fa fa-search" data-toggle="tooltip" data-placement="top" title="Buscar"></i>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="table-responsive" style="overflow-y:hidden;">
+                            <table id="tbConsultaExpediente" style="width:100%;margin:0px !important;" class="table table-hover table-bordered">
+                                <thead></thead>
+                                <tbody></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer"></div>
+            </div>
+        </div>
+    </div>
+</div>

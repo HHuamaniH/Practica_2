@@ -1,0 +1,42 @@
+﻿
+<script src="~/Areas/Supervision/js/ManInformeExSitu/_EspecieCapturada.js"></script>
+
+<div class="modal-dialog" role="document">
+    <div class="modal-content">
+        <div class="modal-header text-small" style="cursor:move;">
+            <span>Especie Capturada</span>
+            <i class="fa fa-close" style="cursor:pointer;" data-dismiss="modal" aria-label="Close"></i>
+        </div>
+        <div class="modal-body">
+            <form id="frmItemEspecieCapturada">
+                @Html.Hidden("hdfRegEstado")
+                @Html.Hidden("hdfCodSecuencial")
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        @Html.Partial("~/Areas/General/Views/Controles/_renderComboEspecie.cshtml")
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="txtIndivCapturado" class="text-small">N° Individuos Capturados</label>
+                        @Html.TextBox("txtIndivCapturado", "", new { @class = "form-control form-control-sm", type = "number" })
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-12">
+                        <label for="txtZonaCaptura" class="text-small">Zona de Captura</label>
+                        @Html.TextBox("txtZonaCaptura", "", new { @class = "form-control form-control-sm" })
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-12">
+                        <label for="txtObservacion" class="text-small">Observación</label>
+                        @Html.TextArea("txtObservacion", "", new { @class = "form-control form-control-sm", rows = "3" })
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-primary btn-sm" onclick="_EspecieCapturada.fnSubmitForm()">Guardar</button>
+            <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Cancelar</button>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,76 @@
+﻿@model CapaEntidad.ViewModel.VM_PreviosAlerta
+
+<script src="~/Areas/THabilitante/js/ManPreviosAlerta/_ItemSupuesto.js?v=1"></script>
+<style>
+    #frmItemSupuesto input[type=text] {
+        text-transform: uppercase;
+    }
+</style>
+
+<div class="modal-dialog modal-lg" role="document" id="divItemSupuesto">
+    <div class="modal-content">
+        <div class="modal-header text-small" style="cursor:move;padding:0.5rem;">
+            <h5 class="modal-title" id="h5Titulo">Nuevo</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body">
+            <form id="frmItemSupuesto">
+                <input type="hidden" id="hdCodSupuesto" name="hdCodSupuesto" value="0" />
+                <!--Datos del archivo adjuntado-->
+                <input type="hidden" id="txtnomArchOriginal" name="txtnomArchOriginal" />
+                <input type="hidden" id="txtnomArchTemporal" name="txtnomArchTemporal" />
+                <input type="hidden" id="txtextArch" name="txtextArch" />
+                <input type="hidden" id="txtestadoArch" name="txtestadoArch" />
+
+                <div class="form-row">
+                    <div class="form-group col-md-12">
+                        <label for="txtAbrev_Supuesto" class="text-small">Abreviación Supuesto</label>
+                        <input type="text" id="txtAbrev_Supuesto" name="txtAbrev_Supuesto" class="form-control form-control-sm" required placeholder="Ingrese abreviación" maxlength="25"/>
+
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-12">
+                        <label for="txtSupuesto" class="text-small">Supuesto</label>
+                        <textarea type="text" id="txtSupuesto" name="txtSupuesto" class="form-control form-control-sm" maxlength="500" required></textarea>
+                    </div>
+                </div>                
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label for="cbSupuestoEstado" class="text-small">Estado</label>
+                        <select id="cbSupuestoEstado" name="cbSupuestoEstado" class="form-control form-control-sm">
+                            <option value="1">Activo</option>
+                            <option value="0">Inactivo</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-row" id="cambioArchivo" hidden>
+                    <div class="form-group col-md-12">
+                        <div class="custom-control custom-checkbox my-1 mr-sm-2">
+                            <input type="checkbox" class="custom-control-input" id="chkcambioArchivo" name="">
+                            <label for="chkcambioArchivo" class="custom-control-label" style="margin-top:6px;">Cambiar plantilla</label>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="form-row">                    
+                    <div class="custom-file" id="customFile">
+                        @*<input type="file" class="custom-file-input" multiple="multiple" id="txtArchivoAdjunto" aria-describedby="fileHelp" onchange="vpItemSupuesto.fnSelectDocAdjunto(event, this)">*@
+                        <input type="file" id="file-input" class="custom-file-input" accept=".doc,.docx,.xml,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document" required/>
+                        <label class="custom-file-label" for="txtArchivoAdjunto" style="color:#989797">
+                            Seleccionar Archivo
+                        </label>
+                    </div>
+                </div>  
+                <br />
+            </form>
+        </div>
+        <div class="modal-footer">
+            <button type="button" id="btnGuardar" class="btn btn-primary" onclick="">Guardar</button>
+        </div>
+    </div>
+</div>
+<div id="divIframe"></div>
+

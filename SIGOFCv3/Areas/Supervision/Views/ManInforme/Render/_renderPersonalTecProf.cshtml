@@ -1,0 +1,116 @@
+﻿
+@model List<CapaEntidad.DOC.Ent_GENEPERSONA>
+
+<style type="text/css">
+    #tbRenderPersonalTecProf_wrapper {
+        padding: 0px;
+    }
+</style>
+
+<script type="text/javascript">
+    var _renderPersonalTecProf = {};
+    _renderPersonalTecProf.tbEliTABLA = [];
+
+    _renderPersonalTecProf.fnAddEdit = function (obj) {
+        var url = urlLocalSigo + "Supervision/ManInforme/_PersonalTecProf";
+        var option = { url: url, type: 'POST', datos: {}, divId: "mdlManInforme_Global" };
+        utilSigo.fnOpenModal(option, function () {
+            _PersonalTecProf.fnSaveForm = function (data) {
+                if (data != null) {
+                    var dt = _renderPersonalTecProf.dtPersonalTecProf;
+                    
+                    if (obj == null || obj == "") {//Nuevo Registro
+                        dt.rows.add([data]).draw();
+                        dt.page('last').draw('page');
+                        utilSigo.toastSuccess("Exito", "Datos guardados correctamente");
+                    } else {//Modificar
+                        var row = dt.row($(obj).parents('tr')).data();
+                        row = data;
+                        dt.row($(obj).parents('tr')).data(row).draw(false);
+                        utilSigo.toastSuccess("Exito", "Datos actualizados correctamente");
+                    }
+                    $("#mdlManInforme_Global").modal('hide');
+                } else {
+                    utilSigo.toastError("Error", "No se pudieron guardar los datos");
+                }
+            }
+
+            if (obj != null && obj != "") {
+                var data = _renderPersonalTecProf.dtPersonalTecProf.row($(obj).parents('tr')).data();
+                _PersonalTecProf.fnInit(utilSigo.fnConvertArrayToObject(data));
+            } else { _PersonalTecProf.fnInit(""); }
+        });
+    }
+
+    _renderPersonalTecProf.fnInitDataTable_Detail = function () {
+        var columns_label = [], columns_data = [], options = {};
+
+        columns_label = ["Apellidos y Nombres", "Tipo", "Otro"];
+        columns_data = ["NOMBRES", "TIPO", "OTRO"];
+        options = {
+            page_length: 10, row_index: true, row_delete: true, row_fnDelete: "_renderPersonalTecProf.fnDelete(this)"
+        };
+        _renderPersonalTecProf.dtPersonalTecProf = utilDt.fnLoadDataTable_Detail($("#tbRenderPersonalTecProf"), columns_label, columns_data, options);
+    }
+
+    _renderPersonalTecProf.fnDelete = function (obj) {
+        utilSigo.dialogConfirm('', 'Desea eliminar el personal técnico profesional?', function (r) {
+            if (r) {
+                var data = _renderPersonalTecProf.dtPersonalTecProf.row($(obj).parents('tr')).data();
+
+                if (data["RegEstado"] == "0" || data["RegEstado"] == "2") {
+                    _renderPersonalTecProf.tbEliTABLA.push({
+                        EliTABLA: "INFORME_DET_PERSONALTECPROF",
+                        EliVALOR01: data["COD_PERSONALTECPROF"]
+                    });
+                }
+                _renderPersonalTecProf.dtPersonalTecProf.row($(obj).parents('tr')).remove().draw(false);
+                utilDt.enumColumn(_renderPersonalTecProf.dtPersonalTecProf);
+            }
+        });
+    }
+
+    _renderPersonalTecProf.fnGetList = function () {
+        var list = [], rows, countFilas, data;
+
+        rows = _renderPersonalTecProf.dtPersonalTecProf.$("tr");
+        countFilas = rows.length;
+        if (countFilas > 0) {
+            $.each(rows, function (i, o) {
+                data = _renderPersonalTecProf.dtPersonalTecProf.row($(o)).data();
+                if (data["RegEstado"] == "1" || data["RegEstado"] == "2") {
+                    list.push(utilSigo.fnConvertArrayToObject(data));
+                }
+            });
+        }
+        return list;
+    }
+
+    _renderPersonalTecProf.fnGetListEliTABLA = function () { return _renderPersonalTecProf.tbEliTABLA }
+
+    $(document).ready(function () {
+        _renderPersonalTecProf.frm = $("#frmRenderPersonalTecProf");
+
+        _renderPersonalTecProf.fnInitDataTable_Detail();
+
+        _renderPersonalTecProf.dtPersonalTecProf.rows.add(JSON.parse('@Html.Raw(Json.Encode(@Model))')).draw();
+    });
+</script>
+
+<div id="frmRenderPersonalTecProf">
+    <div class="table-responsive">
+        <table id="tbRenderPersonalTecProf" style="width:100%;margin:0px !important;" class="table table-hover table-bordered">
+            <thead>
+                <tr>
+                    <th colspan="5" class="text-sm-left">
+                        <div class="form-inline">
+                            <i class="fa mx-2 fa-lg fa-file-o" style="cursor:pointer;" onclick="_renderPersonalTecProf.fnAddEdit('');" data-toggle="tooltip" data-placement="top" title="Nuevo"></i>                            
+                            <strong>Personal Técnico o Profesional</strong>
+                        </div>
+                    </th>                     
+                </tr>                
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
+</div>

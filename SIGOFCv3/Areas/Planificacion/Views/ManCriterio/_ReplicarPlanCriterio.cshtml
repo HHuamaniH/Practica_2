@@ -1,0 +1,72 @@
+﻿
+<div class="modal-dialog modal-sm" role="document">
+    <div class="modal-content">
+        <div class="modal-header text-small" style="cursor:move;">
+            <span>Replicar Criterios</span>
+            <i class="fa fa-close" style="cursor:pointer;" data-dismiss="modal" aria-label="Close"></i>
+        </div>
+        <div class="modal-body">
+            <form id="frmReplicarPlanCriterio">
+                @Html.Hidden("hdfCodPlan",(object)ViewBag.hdfCodPlan)
+                <div class="form-row">
+                    <div class="form-group col-md-12">
+                        <label for="ddlPlanAnioId" class="text-small">Seleccione plan base</label>
+                        @Html.DropDownList("ddlPlanAnioId", new SelectList(ViewBag.ddlPlanAnio, "Value", "Text"), new { @class = "form-control form-control-sm" })
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-primary btn-sm" onclick="_ReplicarPlanCriterio.fnSave()">Replicar</button>
+            <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Cancelar</button>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    var _ReplicarPlanCriterio = {
+        fnInit: () => {
+            _ReplicarPlanCriterio.frm.find("#ddlPlanAnioId").select2({ minimumResultsForSearch: -1 });
+        },
+        fnSave: () => {
+            let cod_plan_base = _ReplicarPlanCriterio.frm.find("#ddlPlanAnioId").val();
+            let cod_plan = _ReplicarPlanCriterio.frm.find("#hdfCodPlan").val();
+
+            if (cod_plan_base == "0000000") {
+                utilSigo.toastWarning("Aviso", "Seleccione el plan");
+                _ReplicarPlanCriterio.frm.find("#ddlPlanAnioId").focus();
+                return false;
+            }
+
+            var data = {
+                asCodPlan: cod_plan,
+                asCodPlanBase: cod_plan_base
+            };
+            var url = urlLocalSigo + "Planificacion/ManCriterio/ReplicarPlanCriterio";
+            var option = { url: url, datos: JSON.stringify(data), type: 'POST' };
+
+            utilSigo.dialogConfirm('', 'Desea continuar con el registro?', function (r) {
+                if (r) {
+                    utilSigo.fnAjax(option, function (data) {
+                        if (data.success) {
+                            utilSigo.toastSuccess("Éxito", data.msj);
+                            _ReplicarPlanCriterio.fnSaved();
+                        }
+                        else {
+                            utilSigo.toastWarning("Aviso", data.msj);
+                        }
+                    });
+                }
+            });
+        },
+        fnSaved: () => {
+            /*Implementar en donde se instancia*/
+        }
+    };
+
+    $(document).ready(function () {
+        _ReplicarPlanCriterio.frm = $("#frmReplicarPlanCriterio");
+
+        _ReplicarPlanCriterio.fnInit();
+    });
+</script>

@@ -1,0 +1,266 @@
+﻿@model CapaEntidad.ViewModel.VM_Resodirec
+
+<style type="text/css">
+    #tbRenderListIncisos_wrapper {
+        padding: 0px;
+    }
+</style>
+
+<script type="text/javascript">
+    var _renderArchivoInfSup = {};
+    _renderArchivoInfSup.tbEliTABLA = [];
+
+    _renderArchivoInfSup.fnShowSubsVoluntaria = function () {
+        if (_renderArchivoInfSup.frm.find("#chkSubsVoluntaria").is(':checked')) {
+            _renderArchivoInfSup.frm.find("#divSubsVoluntaria").show();
+        }
+        else {
+            if (_renderArchivoInfSup.dtRenderListInforme.$("tr").length > 0) {
+                utilSigo.dialogConfirm("", "Existen datos en la lista de infracciones, al confirmar esta acción la información será borrada. ¿Desea continuar?",
+                    function (r) {
+                        if (r) {
+                            _renderArchivoInfSup.frm.find("#divSubsVoluntaria").hide();
+                            _renderArchivoInfSup.frm.find("#ddlArticuloId").val("0000000").trigger("change");
+                            _renderArchivoInfSup.fnDeleteAll();
+                        }
+                    },
+                    function (c) {
+                        if (c) {
+                            console.log("1");
+                            _renderArchivoInfSup.frm.find("#chkSubsVoluntaria").prop('checked', true);
+                        }
+                    }
+                );
+            }
+            else {
+                _renderArchivoInfSup.frm.find("#divSubsVoluntaria").hide();
+                _renderArchivoInfSup.frm.find("#ddlArticuloId").val("0000000").trigger("change");
+            }  
+        }
+    }
+
+    _renderArchivoInfSup.fncArticulos = function () {
+        var idArticulo = _renderArchivoInfSup.frm.find("#ddlArticuloId").val();
+        var DescArticulo = _renderArchivoInfSup.frm.find("#ddlArticuloId option:selected").text();
+        $.ajax({
+              url: '@Url.Action("_inicisos","ManResolucion")',
+              type: 'GET',
+                 datatype: "json",
+                 traditional: true,
+                 data: {'idArticulo' :   idArticulo, 'descArticulo': DescArticulo},
+                 success: function (data) {
+                        $("#divEncisosFI").html(data);
+                 }
+        });
+    }
+
+    _renderArchivoInfSup.fnDeleteAll = function () {
+        let rows, countFilas, data;
+        rows = _renderArchivoInfSup.dtRenderListInforme.$("tr");
+        countFilas = rows.length;
+        if (countFilas > 0) {
+            $.each(rows, function (i, o) {
+                data = _renderArchivoInfSup.dtRenderListInforme.row($(o)).data();
+                if (data["RegEstado"] == "0") {
+                    data["ESTADO"] = 0;
+                    _renderArchivoInfSup.tbEliTABLA.push(data);
+                }
+                _renderArchivoInfSup.dtRenderListInforme.row($(o)).remove().draw(false);
+            });
+        }
+    }
+
+    _renderArchivoInfSup.fnDelete = function (obj) {
+        var data = _renderArchivoInfSup.dtRenderListInforme.row($(obj).parents('tr')).data();
+        if (data["RegEstado"] == "0") {
+            data["ESTADO"] = 0;
+            _renderArchivoInfSup.tbEliTABLA.push(data);
+        }
+        _renderArchivoInfSup.dtRenderListInforme.row($(obj).parents('tr')).remove().draw(false);
+    }
+
+    _renderArchivoInfSup.fnGetListEliTABLA = function () { return _renderArchivoInfSup.tbEliTABLA }
+
+    _renderArchivoInfSup.fnGetList = function () {
+        let list = [], rows, countFilas, data;
+        rows = _renderArchivoInfSup.dtRenderListInforme.$("tr");
+        countFilas = rows.length;
+        if (countFilas > 0) {
+            $.each(rows, function (i, o) {
+                data = _renderArchivoInfSup.dtRenderListInforme.row($(o)).data();
+                list.push(utilSigo.fnConvertArrayToObject(data));
+            });
+        }
+        return list;
+    }
+
+    _renderArchivoInfSup.fnInitDataTable_ListIncisos = function () {
+        var columns_label = [], columns_data = [], options = {};
+
+        columns_label = ["Codigo", "Articulo", "Inciso"];
+        columns_data = ["COD_ENCISOS", "ARTICULO", "INCISO"];
+        options = {
+            page_length: 10, row_index: true, row_delete: true, row_fnDelete: "_renderArchivoInfSup.fnDelete(this)", page_sort: true
+        };
+        _renderArchivoInfSup.dtRenderListInforme = utilDt.fnLoadDataTable_Detail(_renderArchivoInfSup.frm.find("#tbRenderListIncisos"), columns_label, columns_data, options);
+        _renderArchivoInfSup.dtRenderListInforme.rows.add(JSON.parse('@Html.Raw(Json.Encode(@Model.listaInfracciones))')).draw();
+        
+    }
+
+    $(document).ready(function () {
+        _renderArchivoInfSup.frm = $("#divRDArchivo");
+        _renderArchivoInfSup.fnInitDataTable_ListIncisos();
+        _renderArchivoInfSup.fnShowSubsVoluntaria();
+    });
+</script>
+
+<div id="divRDArchivo">
+    <div><br /></div>
+    <div class="form-row">
+        <div class="form-group col-md-4">
+            <label for="chkGTF" class="text-small">N° Expediente asignado</label>
+        </div>
+        <div class="form-group col-md-6">
+            @Html.EditorFor(m => m.txtNumExpeAsignado, new { htmlAttributes = new { @class = "form-control form-control-sm", placeholder = "Expediente Administrativo" } })
+        </div>
+        <div class="form-group col-md-2">
+            <button type="button" id="btnExpediente" class="btn btn-info btn-sm" onclick="ManRD_AddEdit.fnGenerarNumeracionArchivo()">Generar</button>
+        </div>
+    </div>
+
+    <div class="card-header text-small">Motivo del archivo</div>
+    <div><br /></div>
+
+
+    <div class="form-row">
+        <div class="form-group col-md-4">
+            <label for="chkGTF" class="text-small">Evidencia de irregularidades cuya sanción no es competencia de OSINFOR</label>
+        </div>
+        <div class="form-group col-md-6">
+            @Html.CheckBoxFor(m => m.chkeviirre, new { @class = "form-check-input", style = "width:15px;height:16px;" })
+        </div>
+        <div class="form-group col-md-2">
+        </div>
+    </div>
+
+    <div class="form-row">
+        <div class="form-group col-md-4">
+            <label for="chkGTF" class="text-small">Sin indicios de infracción</label>
+        </div>
+        <div class="form-group col-md-6">
+            @Html.CheckBoxFor(m => m.chksininf, new { @class = "form-check-input", style = "width:15px;height:16px;" })
+        </div>
+        <div class="form-group col-md-2">
+        </div>
+    </div>
+
+    <div class="form-row">
+        <div class="form-group col-md-4">
+            <label for="chkGTF" class="text-small">Buen manejo</label>
+        </div>
+        <div class="form-group col-md-6">
+            @Html.CheckBoxFor(m => m.chkbueman, new { @class = "form-check-input", style = "width:15px;height:16px;" })
+        </div>
+        <div class="form-group col-md-2">
+        </div>
+    </div>
+
+    <div class="form-row">
+        <div class="form-group col-md-4">
+            <label for="chkGTF" class="text-small">Deficiente notificación</label>
+        </div>
+        <div class="form-group col-md-6">
+            @Html.CheckBoxFor(m => m.chkdefnot, new { @class = "form-check-input", style = "width:15px;height:16px;" })
+        </div>
+        <div class="form-group col-md-2">
+        </div>
+    </div>
+
+    <div class="form-row">
+        <div class="form-group col-md-4">
+            <label for="chkGTF" class="text-small">Deficiencia técnica</label>
+        </div>
+        <div class="form-group col-md-6">
+            @Html.CheckBoxFor(m => m.chkdeftec, new { @class = "form-check-input", style = "width:15px;height:16px;" })
+        </div>
+        <div class="form-group col-md-2">
+        </div>
+    </div>
+
+    <div class="form-row">
+        <div class="form-group col-md-4">
+            <label for="chkGTF" class="text-small">Subsanación voluntaria</label>
+        </div>
+        <div class="form-group col-md-6">
+            @Html.CheckBoxFor(m => m.chkSubsVoluntaria, new { @class = "form-check-input", style = "width:15px;height:16px;", @onchange = "_renderArchivoInfSup.fnShowSubsVoluntaria()" })
+        </div>
+        <div class="form-group col-md-2">
+        </div>
+    </div>
+    <div id="divSubsVoluntaria" style="display:none;">
+        <div class="form-row">
+            <div class="form-group col-md-1">
+            </div>
+            <div class="form-group col-md-11"  style="background-color:#dae7f5">
+                <label for="lblInfraccionesSubsanadas" class="text-small">Infracciones subsanadas</label>
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group col-md-12">
+                <br />
+            </div>
+            <div class="form-group col-md-1">
+            </div>
+            <div class="form-group col-md-2">
+                <label for="lblArticulo" class="text-small">Artículo</label>
+            </div>
+            <div class="form-group col-md-4">
+                @Html.DropDownListFor(m => m.ddlArticuloId, new SelectList(Model.listaArticulos, "Value", "Text"), new { @class = "form-control form-control-sm", @onchange = "_renderArchivoInfSup.fncArticulos()" })
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group col-md-1">
+            </div>
+            <div class="form-group col-md-11" id="divEncisosFI">
+                <label for="lblInciso" class="text-small">Inciso</label>
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group col-md-1">
+            </div>
+            <div class="form-group col-md-11">
+                <div class="table-responsive">
+                    <table id="tbRenderListIncisos" style="width:100%;margin:0px !important;" class="table table-hover table-bordered">
+                        <thead>
+                            <tr>
+                                <th colspan="6" class="text-sm-left">
+                                    <div class="form-inline">
+                                        <strong> Infracciones subsanadas</strong>
+                                    </div>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="form-row" id="divRectificacion">
+        <div class="form-group col-md-4">
+            <label for="chkGTF" class="text-small">Otros</label>
+        </div>
+        <div class="form-group col-md-6">
+            @Html.TextAreaFor(m => m.txtOtrosArchivo, 4, 1, new { @class = "form-control form-control-sm" })
+        </div>
+        <div class="form-group col-md-2">
+        </div>
+    </div>
+
+    <!--Rectificacion-->
+    <div>
+        @Html.Partial("~/Areas/Fiscalizacion/Views/ManResolucion/_Shared/_generic/_renderRectificacion.cshtml", Model)
+    </div>
+</div>
+

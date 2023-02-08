@@ -1,0 +1,151 @@
+﻿@model CapaEntidad.ViewModel.DOC.VM_DENUNCIA_SITD
+@{
+    ViewBag.Title = "RevisarDenuncia";
+    Layout = "~/Views/Shared/_LayoutMain.cshtml";
+}
+
+<div class="container-fluid">
+    <div class="card">
+        <div class="card-header text-right">
+            Gestión de Denuncias
+        </div>
+        <div class="card-body">
+            <div class="card">
+                <div class="card-header text-small">
+                    <a id="btnRegistrarT" href="javascript:void(0)" style="cursor:pointer;" data-toggle="tooltip" data-placement="top" title="Guardar" onclick="transferirS.fnSaveCabecera()"><i class="fa mx-2 fa-lg fa-save"></i></a>
+                    <a style="cursor:pointer" title="Regresar" onclick="RDenuncias.regresar()"><i class="fa mx-2 fa-lg fa-reply"></i></a>
+                    Revisar Denuncia
+                </div>
+                <div class="card-body">
+                    <form id="frmRevisarDenuncia" method="post">
+                        <input type="hidden" id="cod_Tramite_Id" value="@Model.cod_Tramite_Id" />
+                        <div class="form-row">
+                            <div class="form-group col-md-6">
+                                <label class="text-small">Código Trámite SITD</label>
+                                <input type="text" class="form-control form-control-sm" disabled value="@Model.cod_Tramite_Id" />
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label class="text-small">Nro. Documento de Referencia</label>
+                                <input type="text" class="form-control form-control-sm" disabled value="@Model.nro_Referencia" />
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group col-md-6">
+                                <label class="text-small">Asunto</label>
+                                <input type="text" class="form-control form-control-sm" disabled value="@Model.asunto" />
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group col-md-6">
+                                <label class="text-small">Denuncia del Sector Forestal</label>
+                                <select class="form-control form-control-sm" id="cboSectorF">
+                                    <option value="000000" selected>Seleccionar</option>
+                                    <option value="SI">SI</option>
+                                    <option value="NO">NO</option>
+                                </select>
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label class="text-small">Es Competencia del OSINFOR</label>
+                                <select class="form-control form-control-sm" id="cboCompetencia">
+                                    <option value="000000" selected>Seleccionar</option>
+                                    <option value="SI">SI</option>
+                                    <option value="NO">NO</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group col-md-6">
+                                <div class="custom-control custom-checkbox my-1 mr-sm-2">
+                                    @Html.CheckBoxFor(m => m.chkDisponeET, new { @class = "custom-control-input" })
+                                    <label class="custom-control-label" style="margin-top:4px;" for="chkDisponeET">
+                                        Se Dispone Elaboración de Informe Técnico
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label for="prof_Tecnico" class="text-small">Responsable de Elaboración de Informe Técnico</label>
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text"><i id="btnFuncionarioFirma" class="fa fa-plus" style="cursor:pointer;" data-toggle="tooltip" data-placement="top" title="Agregar"></i></span>
+                                    </div>
+                                    @Html.EditorFor(m => m.prof_Tecnico, new { htmlAttributes = new { @class = "form-control form-control-sm", disabled = "disabled" } })
+                                    @Html.HiddenFor(m => m.cod_Prof_Tecnico)
+                                </div>
+                            </div>
+                        </div>                         
+                        <div class="form-row">
+                            <div class="form-group col-md-6">
+                                <div class="custom-control custom-checkbox my-1 mr-sm-2">
+                                    @Html.CheckBoxFor(m => m.chkDisponeER, new { @class = "custom-control-input" })
+                                    <label class="custom-control-label" style="margin-top:4px;" for="chkDisponeER">
+                                        Se Dispone la Emisión de Respuesta Mediante Carta
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="form-group col-md-6">
+                                <div class="custom-control custom-checkbox my-1 mr-sm-2">
+                                    @Html.CheckBoxFor(m => m.chkDisponeSI, new { @class = "custom-control-input" })
+                                    <label class="custom-control-label" style="margin-top:4px;" for="chkDisponeSI">
+                                        Se Dispone Solicitar Información a la AFFS
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group col-md-6">
+                                <div class="custom-control custom-checkbox my-1 mr-sm-2">
+                                    @Html.CheckBoxFor(m => m.chkOtros, new { @class = "custom-control-input" })
+                                    <label class="custom-control-label" style="margin-top:4px;" for="chkOtros">
+                                        Otros
+                                    </label>
+                                </div>
+                            </div>
+                            
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group col-md-12">
+                                <label class="text-small">Descripción Otros</label>
+                                <textarea id="descOtros" class="form-control form-control-sm" rows="2">@Model.descOtros</textarea>
+
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group col-md-12">
+                                <label class="text-small">Observaciones Revisado</label>
+                                <textarea id="txtObsTransferencia" class="form-control form-control-sm" rows="2">@Model.obs</textarea>
+                            </div>
+                        </div>
+                    </form>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div> 
+<script type="text/javascript">
+    var RDenuncias = {
+        regresar: () => {
+            window.location = urlLocalSigo + "THabilitante/ManVentanillaDenuncia/Index";
+        },
+        clearAll: () => {
+            RDenuncias.frm.find("#cboCompetencia").val('000000');
+            RDenuncias.frm.find("#descOtros").val('');
+            document.getElementById("chkDisponeET").checked = false;
+            document.getElementById("chkDisponeER").checked = false;
+            document.getElementById("chkDisponeSI").checked = false;
+            document.getElementById("chkOtros").checked = false;
+        }
+    };
+    window.onload = function () {
+        RDenuncias.frm = $("#frmRevisarDenuncia");
+        RDenuncias.frm.find("#cboSectorF").change(function () {            
+            if ($(this).val() == "000000") {
+                RDenuncias.clearAll();
+            }
+        });
+        RDenuncias.frm.find("#chkDisponeET").change(function () {
+             
+        });
+    };
+
+</script>

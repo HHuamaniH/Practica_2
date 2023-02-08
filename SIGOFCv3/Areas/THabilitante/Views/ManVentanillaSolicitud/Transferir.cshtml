@@ -1,0 +1,77 @@
+﻿@model CapaEntidad.ViewModel.DOC.VM_SOLINF_THABILITANTE
+@{
+    ViewBag.Title = "Transferir";
+    Layout = "~/Views/Shared/_LayoutMain.cshtml";
+}
+
+<div class="container-fluid">
+    <div class="card">
+        <div class="card-header text-right">            
+            Gestión de Solicitudes de Información de Títulos Habilitantes
+        </div>
+        <div class="card-body">
+            <div class="card">
+                <div class="card-header text-small">
+                    <a id="btnRegistrarT" href="javascript:void(0)" style="cursor:pointer;" data-toggle="tooltip" data-placement="top" title="Guardar" onclick="transferirS.fnSaveCabecera()"><i class="fa mx-2 fa-lg fa-save"></i></a>
+                    <a style="cursor:pointer" title="Regresar" onclick="transferirS.regresar()"><i class="fa mx-2 fa-lg fa-reply"></i></a>
+                    Transferir Solicitud de Información
+                </div>
+                <div class="card-body">
+                    <form id="frmTransferirInformacion" method="post">
+                        <input type="hidden" id="tramiteId" value="@Model.cod_Tramite_Id" />
+                       @Html.HiddenFor(m=>m.nFlgTransferencia)
+                        <div class="form-row">
+                            <div class="form-group col-md-6">
+                                <label class="text-small">Código Trámite SITD</label>
+                                <input type="text" class="form-control form-control-sm" disabled value="@Model.cod_Tramite_Id" />
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label class="text-small">Nro. Documento de Referencia</label>
+                                <input type="text" class="form-control form-control-sm" disabled value="@Model.nro_Referencia" />
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group col-md-6">
+                                <label class="text-small">Entidad Remitente</label>
+                                <input type="text" class="form-control form-control-sm" disabled value="@Model.entidad" />
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label class="text-small">Asunto</label>
+                                <input type="text" class="form-control form-control-sm" disabled value="@Model.asunto" />
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group col-md-12">
+                                <label class="text-small">Observaciones Transferencia</label>
+                                <textarea id="txtObsTransferencia" class="form-control form-control-sm" rows="2">@Model.obs</textarea>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div id="divTabla" class="table-responsive" style="display:none">
+                                <table id="tbTHSolicitados" class="table table-hover table-bordered" style="width:100%;">
+                                    <thead>
+                                        <tr>
+                                            <th colspan="10" class="text-sm-left">
+                                                <div class="form-inline">
+                                                    <i id="btnAdd" class="fa mx-1 fa-lg fa-file-o" style="cursor:pointer;" data-toggle="tooltip" data-placement="top" title="Nuevo" onclick="transferirS.AddEdit('')"></i>
+                                                    <i id="btnDeleteAll" class="fa mx-2 fa-lg fa-window-close-o" style="cursor:pointer;font-size:18px;" data-toggle="tooltip" data-placement="top" title="Eliminar Todos" onclick="transferirS.Delete('',2)"></i>
+                                                    Títulos Habilitantes Solicitados
+                                                </div>
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody></tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </form>
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="modalTransferir" role="dialog"></div>
+<div class="modal fade" id="modalAddTH" role="dialog"></div>
+<div class="modal fade" id="modalAddPlan" role="dialog"></div>
+<script src="~/Areas/THabilitante/js/ManVentanillaSolicitud/Transferir.js"></script>

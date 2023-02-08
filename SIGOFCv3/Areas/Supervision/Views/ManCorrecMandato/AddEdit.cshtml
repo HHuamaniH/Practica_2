@@ -1,0 +1,188 @@
+﻿@model CapaEntidad.ViewModel.VM_SeguimientoMedida
+@{
+    ViewBag.Title = "AddEdit";
+    Layout = "~/Views/Shared/_LayoutMain.cshtml";
+        
+}
+
+<script src="~/Areas/Supervision/js/ManCorrecMandato/AddEdit.js"></script>
+
+<script type="text/javascript">
+    ManCorrecMandato_AddEdit.fnLoadData('@Html.Raw(Json.Encode(@Model.tbMedidaCorrectiva))', "DataMedidaCorrectiva");
+    ManCorrecMandato_AddEdit.fnLoadData('@Html.Raw(Json.Encode(@Model.tbMandato))', "DataMandato");
+</script>
+
+<div class="container-fluid">
+    <div class="card">
+        <div class="card-header text-right">
+            @Model.lblTituloCabecera
+        </div>
+        <div class="card-body">
+            <div class="card">
+                <div class="card-header text-small">
+                    <a style="cursor:pointer;" data-toggle="tooltip" data-placement="top" title="Regresar" onclick="ManCorrecMandato_AddEdit.fnReturnIndex()"><i class="fa mx-2 fa-lg fa-reply"></i></a>
+                    @Model.lblTituloEstado
+                </div>
+                <div class="card-body">
+                    <form id="frmManCorrecMandato_AddEdit">
+                        @Html.HiddenFor(m => m.hdfCodResodirec)
+                        <div class="card-header text-small"></div>
+                        <div class="card-body">
+                            <div class="form-row">
+                                <div class="form-group col-md-3">
+                                    <label for="txtTitular" class="text-small">Titular</label>
+                                    @Html.TextBoxFor(m => m.txtTitular, new { @class = "form-control form-control-sm", disabled = "disabled" })
+                                </div>
+                                <div class="form-group col-md-3">
+                                    <label for="txtNumTHabilitante" class="text-small">Título Habilitante</label>
+                                    @Html.TextBoxFor(m => m.txtNumTHabilitante, new { @class = "form-control form-control-sm", disabled = "disabled" })
+                                </div>
+                                <div class="form-group col-md-3">
+                                    <label for="txtModalidad" class="text-small">Modalidad</label>
+                                    @Html.TextBoxFor(m => m.txtModalidad, new { @class = "form-control form-control-sm", disabled = "disabled" })
+                                </div>
+                                <div class="form-group col-md-3">
+                                    <label for="txtNumExpediente" class="text-small">Nro. Expediente</label>
+                                    @Html.TextBoxFor(m => m.txtNumExpediente, new { @class = "form-control form-control-sm", disabled = "disabled" })
+                                </div>
+                            </div>
+                        </div>
+                        <ul class="nav nav-tabs" id="myTab" role="tablist">
+                            <li class="nav-item"><a class="nav-link active" data-toggle="tab" href="#navCorrectivos" role="tab" aria-controls="home" aria-selected="true">Medidas Correctivas</a></li>
+                            <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#navMandatos" role="tab" aria-controls="home" aria-selected="true">Mandatos</a></li>
+                        </ul>
+                        <div class="tab-content">
+                            <div class="tab-pane fade show active" id="navCorrectivos" role="tabpanel" aria-labelledby="nav-home-tab">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="form-row">
+                                            <div class="form-group col-md-12">
+                                                <div class="table-responsive">
+                                                    <table id="grvMedidaCorrectivaDet" style="width:100%" class="table table-hover table-bordered">
+                                                        <thead></thead>
+                                                        <tbody></tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="dvRegModificar card-body">
+                                        <div class="form-row">
+                                            <div class="form-group col-md-12">
+                                                <div class="input-group">
+                                                    <input type="text" id="inptExpediente" disabled class="form-control form-control-sm" />
+                                                    <div class="input-group-prepend">
+                                                        <span class="input-group-text">
+                                                            <i class="fa fa-plus" style="cursor:pointer;" data-toggle="tooltip" data-placement="top"
+                                                               title="Buscar Expedientes" onclick="fnViewModalExpedientes();">
+                                                            </i>
+                                                        </span>
+                                                    </div>
+                                                    <table id="grvExpedientesDet" class="table responsive table-hover table-bordered" style="width:100%"></table>
+                                                </div>
+                                            </div>
+                                            @*<div class="form-group col-md-12">
+                                                <div class="card-header text-small">
+                                                    Documentos para la Evaluación de la Medida Correctiva
+                                                </div>
+                                                <div class="input-group">
+                                                    <input type="text" id="inptExpediente" disabled class="form-control form-control-sm" />
+                                                    <div class="input-group-prepend">
+                                                        <span class="input-group-text">
+                                                            <i class="fa fa-plus" style="cursor:pointer;" data-toggle="tooltip" data-placement="top"
+                                                               title="Buscar Informes" onclick="fnViewModalInformes();">
+                                                            </i>
+                                                        </span>
+                                                    </div>
+                                                    <table id="grvEvaluacionDet" class="table responsive table-hover table-bordered" style="width:100%"></table>
+                                                </div>
+                                            </div>*@
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-md-6">
+                                        <div class="dvRegModificar card-body">
+                                            <div class="form-row">
+                                                <div class="form-group col-md-12">
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    @********@
+                                    <div class="form-group col-md-6">
+                                    </div>
+
+                                </div>
+                            </div>
+                            <div class="tab-pane fade show" id="navMandatos" role="tabpanel" aria-labelledby="nav-home-tab">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="form-row">
+                                            <div class="form-group col-md-12">
+                                                <div class="table-responsive">
+                                                    <table id="grvMandatosDet" style="width:100%" class="table table-hover table-bordered">
+                                                        <thead></thead>
+                                                        <tbody></tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group col-md-12">
+                                        <div class="card-header text-small">
+                                            Expedientes
+                                        </div>
+                                        <div class="input-group">
+                                            <input type="text" id="inptExpediente" disabled class="form-control form-control-sm" />
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text">
+                                                    <i class="fa fa-plus" style="cursor:pointer;" data-toggle="tooltip" data-placement="top"
+                                                       title="Buscar Expedientes" onclick="fnViewModalMandatos();">
+                                                    </i>
+                                                </span>
+                                            </div>
+                                            <table id="grvExpedientesMandato" class="table responsive table-hover table-bordered" style="width:100%"></table>
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-md-12">
+                                        <div id="panel" class="hl" style="padding-top:20px">
+                                            <div class="card-header text-small">
+                                                Informes para Evaluación
+                                            </div>
+                                            <div class="input-group">
+                                                <input type="text" id="inptExpediente" disabled class="form-control form-control-sm" />
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text">
+                                                        <i class="fa fa-plus" style="cursor:pointer;" data-toggle="tooltip" data-placement="top"
+                                                           title="Buscar Expedientes" onclick="fnViewModalInformesMandato();">
+                                                        </i>
+                                                    </span>
+                                                </div>
+                                                <table id="grvInformesMandato" class="table responsive table-hover table-bordered" style="width:100%"></table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade hide" id="mdlManCNot_AddEdit_THabilitante" tabindex="-1" role="dialog"></div>
+    <div class="modal fade hide" id="mdlManCNot_AddEdit_Persona" tabindex="-1" role="dialog"></div>
+    <div class="modal fade hide" id="mdlManCNot_AddEdit_Ubigeo" tabindex="-1" role="dialog"></div>
+    <div class="modal fade hide" id="mdlManCNot_AddEdit_Referencia" tabindex="-1" role="dialog"></div>
+    <div class="modal fade hide" id="mdlManCNot_AddEdit_POA" tabindex="-1" role="dialog"></div>
+    <div class="modal fade hide" id="mdlManCNot_AddEdit_DevolMadera" tabindex="-1" role="dialog"></div>
+    @* Para el modal _Expediente usado en este control *@
+    <div class="modal fade hide" id="mdlManInforme_Expedientes" role="dialog" data-keyboard="false" data-backdrop="static"></div>
+    @* Para el control genérico de personas *@
+    <div class="modal fade hide" id="mdlBuscarPersona" role="dialog"></div>
+    <div class="modal fade" id="modalAddEditPersona" tabindex="-1" role="dialog"></div>
+    <div class="modal fade hide" id="personaUbigeoModal" role="dialog"></div>
+    <div class="modal fade" id="modalAddArchivo" tabindex="-1" role="dialog"></div>
+</div>
+

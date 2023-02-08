@@ -1,0 +1,159 @@
+﻿
+@model List<CapaEntidad.DOC.Ent_INFORME_EVAL_ARBOL>
+
+<style type="text/css">
+    #tbRenderArbolAdicional_wrapper {
+        padding: 0px;
+    }
+</style>
+
+<script type="text/javascript">
+    var _renderEvalArbolAdicional = {};
+    _renderEvalArbolAdicional.tbEliTABLA = [];
+
+    _renderEvalArbolAdicional.fnInitDataTable_Detail = function () {
+        var columns_label = [], columns_data = [], options = {};
+
+        columns_label = ["Especie", "Bloque", "Faja", "Código", "DAP (cm)", "DAP 1 (cm)", "DAP 2 (cm)", "Metodología Medir DAP", "AC (m)"
+            , "Zona UTM","C.Este","C.Norte","E.Especie","G.Amenaza CITES","G.Amenaza D.S.","Observación"];
+        columns_data = ["DESC_ESPECIES", "BLOQUE", "FAJA", "CODIGO", "DAP", "DAP1", "DAP2","MMEDIR_DAP", "AC", "ZONA"
+            , "COORDENADA_ESTE", "COORDENADA_NORTE", "DESC_EESTADO", "DESC_ACATEGORIA_CITE", "DESC_ACATEGORIA_DS", "OBSERVACION"];
+        options = {
+            page_length: 10, row_index: true, row_edit: true, row_fnEdit: "_renderEvalArbolAdicional.fnAddEdit(this)"
+            , row_delete: true, row_fnDelete: "_renderEvalArbolAdicional.fnDelete(this)"
+            , button_copy: true, button_csv: true, button_excel: true, button_pdf: true, button_print: true
+            , export_title: $("#tbRenderArbolAdicional").find("thead tr")[0].innerText.trim()
+            , page_sort: true
+        };
+        _renderEvalArbolAdicional.dtArbolAdicional = utilDt.fnLoadDataTable_Detail($("#tbRenderArbolAdicional"), columns_label, columns_data, options);
+    }
+
+    _renderEvalArbolAdicional.fnAddEdit = function (obj) {
+        var url = urlLocalSigo + "Supervision/ManInforme/_EvaluacionArbol";
+        var option = { url: url, type: 'POST', datos: {}, divId: "mdlManInforme_EvaluacionArbol" };
+        utilSigo.fnOpenModal(option, function () {
+            _EvaluacionArbol.fnSaveForm = function (data) {
+                if (data != null) {
+                    var dt = _renderEvalArbolAdicional.dtArbolAdicional;
+
+                    if (obj == null || obj == "") {//Nuevo Registro
+                        dt.rows.add([data]).draw();
+                        dt.page('last').draw('page');
+                        utilSigo.toastSuccess("Exito", "Datos guardados correctamente");
+                    } else {//Modificar
+                        var row = dt.row($(obj).parents('tr')).data();
+                        row = data;
+                        dt.row($(obj).parents('tr')).data(row).draw(false);
+                        utilSigo.toastSuccess("Exito", "Datos actualizados correctamente");
+                    }
+                    $("#mdlManInforme_EvaluacionArbol").modal('hide');
+                } else {
+                    utilSigo.toastError("Error", "No se pudieron guardar los datos");
+                }
+            }
+
+            if (obj != null && obj != "") {
+                var data = _renderEvalArbolAdicional.dtArbolAdicional.row($(obj).parents('tr')).data();
+                _EvaluacionArbol.fnInit(utilSigo.fnConvertArrayToObject(data));
+            } else { _EvaluacionArbol.fnInit(""); }
+        });
+    }
+
+    _renderEvalArbolAdicional.fnDeleteAll = function () {
+        var rows, countFilas, data;
+
+        rows = _renderEvalArbolAdicional.dtArbolAdicional.$("tr");
+        countFilas = rows.length;
+        if (countFilas > 0) {
+            utilSigo.dialogConfirm("", "Está seguro de Eliminar Todos los Registros?", function (r) {
+                if (r) {
+                    $.each(rows, function (i, o) {
+                        data = _renderEvalArbolAdicional.dtArbolAdicional.row($(o)).data();
+                        if (data["RegEstado"] == "0" || data["RegEstado"] == "2") {
+                            _renderEvalArbolAdicional.tbEliTABLA.push({
+                                EliTABLA: "ADICIONALES",
+                                COD_ESPECIES: data["COD_ESPECIES"],
+                                COD_SECUENCIAL: data["COD_SECUENCIAL"]
+                            });
+                        }
+                    });
+                    _renderEvalArbolAdicional.dtArbolAdicional.clear().draw();
+                }
+            });
+        } else {
+            utilSigo.toastWarning("Aviso", "No se encontraron registros a eliminar");
+        }
+    }
+
+    _renderEvalArbolAdicional.fnDelete = function (obj) {
+        var data = _renderEvalArbolAdicional.dtArbolAdicional.row($(obj).parents('tr')).data();
+
+        if (data["RegEstado"] == "0" || data["RegEstado"] == "2") {
+            _renderEvalArbolAdicional.tbEliTABLA.push({
+                EliTABLA: "ADICIONALES",
+                COD_ESPECIES: data["COD_ESPECIES"],
+                COD_SECUENCIAL: data["COD_SECUENCIAL"]
+            });
+        }
+        _renderEvalArbolAdicional.dtArbolAdicional.row($(obj).parents('tr')).remove().draw(false);
+    }
+
+    _renderEvalArbolAdicional.fnImport = function (e, obj) {
+        var url = urlLocalSigo + "Supervision/ManInforme/ImportarDatosInformeSimple";
+        uploadFile.fileSelectHandler(e, obj, url, { asTipo: "EVALUACION_ARBOL" }, function (data) {
+            for (var i = 0; i < data.length; i++) {
+                _renderEvalArbolAdicional.dtArbolAdicional.rows.add([data[i]]).draw();
+                _renderEvalArbolAdicional.dtArbolAdicional.page('last').draw('page');
+            }
+        });
+    }
+
+    _renderEvalArbolAdicional.fnGetList = function () {
+        var list = [], rows, countFilas, data;
+
+        rows = _renderEvalArbolAdicional.dtArbolAdicional.$("tr");
+        countFilas = rows.length;
+        if (countFilas > 0) {
+            $.each(rows, function (i, o) {
+                data = _renderEvalArbolAdicional.dtArbolAdicional.row($(o)).data();
+                if (data["RegEstado"] == "1" || data["RegEstado"] == "2") {
+                    list.push(utilSigo.fnConvertArrayToObject(data));
+                }
+            });
+        }
+        return list;
+    }
+
+    _renderEvalArbolAdicional.fnGetListEliTABLA = function () { return _renderEvalArbolAdicional.tbEliTABLA }
+
+    $(document).ready(function () {
+        _renderEvalArbolAdicional.frm = $("#frmRenderArbolAdicional");
+
+        _renderEvalArbolAdicional.fnInitDataTable_Detail();
+        _renderEvalArbolAdicional.dtArbolAdicional.rows.add(JSON.parse('@Html.Raw(Json.Encode(@Model))')).draw();
+    });
+</script>
+
+<div id="frmRenderArbolAdicional">
+    <div class="table-responsive">
+        <table id="tbRenderArbolAdicional" style="width:100%;margin:0px !important;" class="table table-hover table-bordered">
+            <thead>
+                <tr>
+                    <th colspan="19" class="text-sm-left">
+                        <div class="form-inline">
+                            <i class="fa mx-2 fa-lg fa-file-o" style="cursor:pointer;" onclick="_renderEvalArbolAdicional.fnAddEdit('');" data-toggle="tooltip" data-placement="top" title="Nuevo"></i>
+                            <i class="fa mx-2 fa-lg fa-window-close-o" style="cursor:pointer;" onclick="_renderEvalArbolAdicional.fnDeleteAll();" data-toggle="tooltip" data-placement="top" title="Eliminar Todos"></i>
+                            <label style="cursor:pointer;" class="fa mx-2 fa-lg fa-file-excel-o" title="Importar Archivo" data-toggle="tooltip">
+                                <input type="file" id="fileselect" name="fileselect" style="display:none" size="60" onchange="_renderEvalArbolAdicional.fnImport(event, this)">
+                            </label>
+                            <a href="@Url.Content("~/Archivos/Plantilla/IndAdicNoAut_Mad_v2.xlsx")"> <i class="fa mx-2 fa-lg fa-folder-open" style="cursor:pointer;" data-toggle="tooltip" data-placement="top" title="Descargar Plantilla"></i></a>
+                            <strong>Evaluación de árboles adicionales</strong>
+                        </div>
+                    </th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
+</div>
+

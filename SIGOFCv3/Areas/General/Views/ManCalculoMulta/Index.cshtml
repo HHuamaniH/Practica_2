@@ -1,0 +1,267 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_LayoutMain.cshtml";
+}
+
+<script src="~/Scripts/datatables/Extensions/dataTables.buttons.js"></script>
+<script src="~/Scripts/datatables/Extensions/buttons.flash.min.js"></script>
+<script src="~/Scripts/datatables/Extensions/jszip.min.js"></script>
+
+<script src="~/Scripts/datatables/Extensions/vfs_fonts.js"></script>
+<script src="~/Scripts/datatables/Extensions/buttons.html5.js"></script>
+<script src="~/Scripts/datatables/Extensions/buttons.print.js"></script>
+
+
+<link href="~/Content/datatables/buttons.dataTables.min.css" rel="stylesheet" />
+<link href="~/Areas/General/css/ManCalculoMulta/ManCalculoMulta.css" rel="stylesheet" />
+
+<div id="divFactoresAA" class="container-fluid">
+    <div class="card">
+        <div class="card-header text-left">
+            <h5>Factores Atenuantes y Agravantes</h5>
+        </div>
+        <div class="card-body">
+            <div class="col-12">
+                <form id="frmManEspecies">
+                    <div class="table-responsive-md">
+                        <table id="tbFactorAA" class="table table-hover table-bordered" style="width:100%;">
+                            <thead>
+                                <tr>
+                                    <th>Editar</th>
+                                    <th>N°</th>
+                                    <th>Código</th>
+                                    <th>Variable</th>
+                                    <th>Descripción</th>
+                                    <th>Calificación</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </form>
+
+            </div>
+        </div>
+    </div>
+    <div class="modal fade hide" id="modalModFactorAA" role="dialog">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header text-small" style="cursor:move;padding:0.5rem;">
+                    <h5 class="modal-title" id="h5TituloFactorAA">Modificar Factor Atenuante y Agravante</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body" id="divModFactorAA">
+                    <input type="hidden" id="hdRegEstado" value="1" />
+                    <input type="hidden" id="hdNCodFactorAA" />
+                    <input type="hidden" id="hdEstado" />
+                    <input type="hidden" id="hdNCodFactorAADep" />
+                    <div class="form-row" id="divVariable">
+                        <div class="form-group col-md-4">
+                            <label for="txtVariable">Variable</label>
+                            <input class="form-control form-control-sm" id="txtVariable" type="text" maxlength="2">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-12">
+                            <label for="txtDescripcion">Descripción</label>
+                            <input class="form-control form-control-sm" id="txtDescripcion" type="text">
+                        </div>
+                    </div>
+                    <div class="form-row" id="divCalificacion">
+                        <div class="form-group col-md-4">
+                            <label for="txtCalificacion">Calificación</label>
+                            <input class="form-control form-control-sm" id="txtCalificacion" type="number" maxlength="3">
+                        </div>
+                    </div>
+
+
+
+
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary btn-sm" onclick="_manFactorAA.fnFactorAAUpdate()">Guardar</button>
+                    <button id="btnCerrarModFactorAA" class="btn btn-secondary btn-sm" data-dismiss="modal">Cancelar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    var _manFactorAA = {
+        fnCrear: () => {
+
+        },
+        fnLimpiar: () => {
+            let frm = $("#divModFactorAA");
+            frm.find("#hdNCodFactorAA").val('');
+            frm.find("#txtVariable").val('');
+            frm.find("#txtDescripcion").val('');
+            frm.find("#txtCalificacion").val('');
+            frm.find("#hdEstado").val('');
+            frm.find("#hdNCodFactorAADep").val('');
+
+
+        },
+        fnEdit: (obj) => {
+
+            $("#h5TituloFactorAA").text("Modificar Factor Atenuante y Agravante");
+            _manFactorAA.fnLimpiar();
+            $("#hdRegEstado").val("0");
+            let frm = $("#divModFactorAA");
+            let $tr = $(obj).closest("tr");
+            let dataRow = _manFactorAA.dt.row($tr).data();
+            let variable = dataRow.VVARIABLE;
+
+            frm.find("#hdNCodFactorAA").val(dataRow.NCODFACTORAA);
+            frm.find("#txtVariable").val(dataRow.VVARIABLE);
+            frm.find("#txtDescripcion").val(dataRow.VDESCRIPCION);
+            //frm.find("#txtCalificacion").val(dataRow.NCALIFICACION);
+            frm.find("#txtCalificacion").val(dataRow.NCALIFICACION.substring(0, dataRow.NCALIFICACION.length - 1));
+            frm.find("#hdEstado").val(dataRow.NESTADO);
+            frm.find("#hdNCodFactorAADep").val(dataRow.NCODFACTORAADEP);
+
+            if (variable == '') {
+                $("#divVariable").attr('hidden', 'hidden');
+                $("#divCalificacion").removeAttr('hidden');
+            } else {
+                $("#divCalificacion").attr('hidden', 'hidden');
+                $("#divVariable").removeAttr('hidden');
+            }
+
+            $("#modalModFactorAA").modal({ keyboard: true, backdrop: 'static' });
+        },
+        fnFactorAAUpdate: () => {
+            let frm = $("#divModFactorAA");
+            let model = {
+                NCODFACTORAA: frm.find("#hdNCodFactorAA").val(),
+                VVARIABLE: frm.find("#txtVariable").val(),
+                VDESCRIPCION: frm.find("#txtDescripcion").val(),
+                NCALIFICACION: frm.find("#txtCalificacion").val(),
+                NESTADO: frm.find("#hdEstado").val(),
+                NCODFACTORAADEP: frm.find("#hdNCodFactorAADep").val(),
+                RegEstado: 2
+            };
+
+            if (model.NCODFACTORAADEP == "") {
+                if (model.VVARIABLE == "" || model.VDESCRIPCION == "") {
+                    utilSigo.toastWarning("Éxito", "Los campos de nombre no deben ser vacios");
+                    return false;
+                }
+            } else {
+                if (model.VDESCRIPCION == "") {
+                    utilSigo.toastWarning("Éxito", "Los campos de nombre no deben ser vacios");
+                    return false;
+                }
+            }
+
+            let url = urlLocalSigo + "General/ManCalculoMulta/GuardarFactorAA";
+            let option = { url: url, datos: JSON.stringify(model), type: 'POST' };
+            utilSigo.fnAjax(option, function (data) {
+                if (data.success) {
+                    utilSigo.toastSuccess("Éxito", data.msj);
+                    $("#btnCerrarModFactorAA").click();
+                    _manFactorAA.fnSearch();
+                }
+                else {
+                    utilSigo.toastWarning("Aviso", data.msj);
+                }
+            });
+        },
+        fnBuilTable: () => {
+            const columns = [                
+                {
+                    "data": "", "className": "text-center", "width": "2%", "orderable": false, "searchable": false, "mRender": function (data, type, row) {
+                        return '<div><i class="fa fa-lg fa-pencil-square-o" style="color:blue;cursor:pointer;" title="Editar plan de trabajo" onclick="_manFactorAA.fnEdit(this)"></i></div>';
+                    }
+                },
+                {
+                    "name": "ROW_INDE", "width": "2%", "orderable": false, "searchable": false, "mRender": function (data, type, row, meta) {
+                        return parseInt(meta.row) + 1 + meta.settings._iDisplayStart;
+                    }
+                },
+                { "data": "NCODFACTORAA", visible: false },
+                { "data": "VVARIABLE", "autoWidth": true },
+                { "data": "VDESCRIPCION", "autoWidth": true },
+                { "data": "NCALIFICACION", "autoWidth": true },
+                { "data": "NESTADO", visible: false },
+                { "data": "NCODFACTORAADEP", visible: false }
+
+            ];
+            const optDt = { iLength: 20, iStart: 0, aSort: [] };
+            _manFactorAA.dt = _manFactorAA.frm.find("#tbFactorAA").DataTable({
+                processing: true,
+                serverSide: true,
+                searching: false,
+                ordering: false,
+                paging: true,
+                dom: 'Bfrtip',
+                buttons: [{
+                    extend: 'excelHtml5',
+                    messageTop: 'Factores Atenuantes y Agravantes'
+                }],
+                ajax: {
+                    "url": `${urlLocalSigo}/General/Controles/GetFactorAA`,
+                    "data": function (d) {
+                        d.CustomSearchForm = "CALCULOMULTA";
+                        d.CustomSearchType = "FACTORAA";
+                        d.CustomSearchValue = " ";
+                        d.customSearchEnabled = true;
+                        //d.id = "";
+                        //for (var i = 0; i < d.order.length; i++) {
+                        //    d.order[i]["column_name"] = d.columns[d.order[i]["column"]]["data"];
+
+                        //    if (d.order[i].column_name != 0 || d.order[i].column_name != "") {
+                        //        d.sort = d.order[i].column_name + " " + d.order[i].dir;
+                        //    }
+                        //}
+                        d.columns = null;
+                    },
+                    "error": function (jqXHR) {
+                        // utilSigo.unblockUIGeneral();
+                        if (jqXHR.status != 401 && jqXHR.status != 403 && jqXHR.status != 404) {
+                            utilSigo.toastError("Error", initSigo.MessageError);
+                        }
+                        //console.log(jqXHR);
+                    },
+                    "statusCode": {
+                        203: () => { utilSigo.toastInfo("Aviso", "El usuario perdio la sesión. Vuelva ingresar al sistema"); }
+                    }
+                },
+                columns: columns,
+                bInfo: true,
+                "lengthMenu": [[10, 20, 50, 100], [10, 20, 50, 100]],
+                // "aaSorting": optDt.aSort,
+                "pageLength": optDt.iLength,
+                "displayStart": optDt.iStart,
+                "oLanguage": initSigo.oLanguage,
+                "drawCallback": initSigo.showPagination
+            });
+        },
+        fnSearch: () => {
+            _manFactorAA.dt.ajax.reload();
+        }
+    };
+    $(document).ready(function () {
+
+        _manFactorAA.frm = $("#frmManEspecies");
+        _manFactorAA.fnBuilTable();
+        _manFactorAA.frm.submit(function (e) {
+            e.preventDefault();
+            _manFactorAA.fnSearch();
+        });
+
+
+        //_renderComboEspecie.fnInit("FAUNA", "", "");
+
+        $('#lblRenderComboEspecieId').removeAttr('Class');
+        $('#lblRenderComboEspecieId').html('Especie Sinónimo');
+
+    });
+</script>
+
+
+

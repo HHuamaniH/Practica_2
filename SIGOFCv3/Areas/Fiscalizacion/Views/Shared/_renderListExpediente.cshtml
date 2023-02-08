@@ -1,0 +1,211 @@
+﻿
+@model List<CapaEntidad.DOC.Ent_RESODIREC_CONSULTA>
+<style type="text/css">
+    #tbRenderListExpediente_wrapper {
+        padding: 0px;
+    }
+
+    #tbConsultaExpediente_info {
+        color: #33b35a;
+        font-size: 12px;
+        margin-top: 12px;
+    }
+</style>
+<script type="text/javascript">
+    var _renderListExpediente = {};
+    _renderListExpediente.tbEliTABLA = [];
+
+    /*Consulta de registros (modal)*/
+    _renderListExpediente.fnInitDataTablePaging = function (options) {
+        var optDt = {};
+        optDt.iLength = options.page_length;
+        optDt.iStart = 0;
+        optDt.bSearch = false;
+        optDt.bInfo = true;
+        optDt.bSort = true;
+        optDt.aSort = [];
+        return _renderListExpediente.frm.find("#tbConsultaExpediente").DataTable({
+            processing: true,
+            serverSide: true,
+            searching: optDt.bSearch,
+            ordering: optDt.bSort,
+            deferLoading: 0,
+            paging: true,
+            ajax: {
+                "url": urlLocalSigo + "Fiscalizacion/ManResolucion/ConsultaResolucionPaging",
+                "data": function (d) {
+                    d.customSearchEnabled = true;
+                    d.customSearchForm = "EXPEDIENTE_CONSULTA";
+                    d.customSearchType = "NUM_EXPEDIENTE";
+                    d.customSearchValue = _renderListExpediente.frm.find("#txtConsultaExpediente").val().trim();
+                    for (var i = 0; i < d.order.length; i++) {
+                        d.order[i]["column_name"] = d.columns[d.order[i]["column"]]["data"];
+                    }
+                    d.columns = null;
+                },
+                "error": function (jqXHR) {
+                    utilSigo.unblockUIGeneral();
+                    utilSigo.toastError("Error", initSigo.MessageError);
+                    console.log(jqXHR.responseText);
+                }
+            },
+            columns: options.table_columns,
+            bInfo: optDt.bInfo,
+            "lengthMenu": [[10, 20, 50, 100], [10, 20, 50, 100]],
+            "bLengthChange" : false,
+            "aaSorting": optDt.aSort,
+            "pageLength": optDt.iLength,
+            "displayStart": optDt.iStart,
+            "oLanguage": initSigo.oLanguage,
+            "drawCallback": initSigo.showPagination,
+        });
+    }
+    _renderListExpediente.fnConsulta = function () {
+        var txtConsulta = _renderListExpediente.frm.find("#txtConsultaExpediente").val();
+        if (txtConsulta.length > 2) {
+            _renderListExpediente.dtConsultaExpediente.ajax.reload();
+        } else {
+            utilSigo.toastWarning("Aviso", "Ingrese al menos 3 caracteres para proceder con la búsqueda.");
+        }
+    }
+    _renderListExpediente.fnInit = function () {
+        _renderListExpediente.frm.find("#btnConsultaExpediente").click(function () {
+            _renderListExpediente.fnConsulta();
+
+        });
+        _renderListExpediente.frm.find("#txtConsultaExpediente").keyup(function (e) {
+            if (e.keyCode == 13) {
+                _renderListExpediente.fnConsulta();
+            }
+        });
+        _renderListExpediente.frm.find("#mdlConsultaExpediente").on('shown.bs.modal', function () {
+            _renderListExpediente.frm.find("#txtConsultaExpediente").focus();
+        });
+    }
+    _renderListExpediente.fnViewModalConsulta = function () {
+        utilSigo.modalDraggable(_renderListExpediente.frm.find("#mdlConsultaExpediente"), '.modal-header');
+        _renderListExpediente.frm.find("#mdlConsultaExpediente").modal({ keyboard: true, backdrop: 'static' });
+    }
+    _renderListExpediente.fnSelect = function (obj) {
+        var data = _renderListExpediente.dtConsultaExpediente.row($(obj).parents('tr')).data();
+        if (utilDt.existValorSearch(_renderListExpediente.dtRenderListExpediente, "COD_RESODIREC", data["COD_RESODIREC"])
+                && utilDt.existValorSearch(_renderListExpediente.dtRenderListExpediente, "COD_RESODIREC_INI_PAU", data["COD_RESODIREC_INI_PAU"])
+                && utilDt.existValorSearch(_renderListExpediente.dtRenderListExpediente, "COD_RPSECUENCIAL", data["COD_RPSECUENCIAL"])) {
+            utilSigo.toastWarning("Aviso", "El Expediente ya se encuentra en la lista");
+        } else {
+            data["RegEstado"] = 1;
+            _renderListExpediente.dtRenderListExpediente.rows.add([data]).draw();
+            _renderListExpediente.dtRenderListExpediente.page('last').draw('page');
+        }
+    }
+
+    /*Listado de registros (render)*/
+    _renderListExpediente.fnDelete = function (obj) {
+        var data = _renderListExpediente.dtRenderListExpediente.row($(obj).parents('tr')).data();
+
+        if (data["RegEstado"] == "0") {
+            _renderListExpediente.tbEliTABLA.push({
+                EliTABLA: "DETALLE_EXPEDIENTE",
+                COD_RESODIREC: data["COD_RESODIREC"],
+                COD_RESODIREC_INI_PAU: data["COD_RESODIREC_INI_PAU"],
+                COD_RPSECUENCIAL: data["COD_RPSECUENCIAL"]
+            });
+        }
+        _renderListExpediente.dtRenderListExpediente.row($(obj).parents('tr')).remove().draw(false);
+    }
+    _renderListExpediente.fnGetList = function () {
+        var list = [], rows, countFilas, data;
+
+        rows = _renderListExpediente.dtRenderListExpediente.$("tr");
+        if (rows.length > 0) {
+            $.each(rows, function (i, o) {
+                data = _renderListExpediente.dtRenderListExpediente.row($(o)).data();
+                if (data["RegEstado"] == "1") {
+                    list.push(utilSigo.fnConvertArrayToObject(data));
+                }
+            });
+        }
+        return list;
+    }
+    _renderListExpediente.fnGetListEliTABLA = function () { return _renderListExpediente.tbEliTABLA }
+    _renderListExpediente.fnGetCount = function () { return _renderListExpediente.dtRenderListExpediente.$("tr").length }
+
+    /*General*/
+    _renderListExpediente.fnInitDataTable_Detail = function () {
+        var columns_label = [], columns_data = [], options = {};
+
+        columns_label = ["Expediente Administrativo", "Sub. Dir. Línea", "Título Habilitante", "Titular"];
+        columns_data = ["NUM_EXPEDIENTE", "DLINEA", "NUM_THABILITANTE", "TITULAR"];
+        options = {
+            page_length: 10, row_index: true, row_delete: true, row_fnDelete: "_renderListExpediente.fnDelete(this)", page_sort: true
+        };
+        _renderListExpediente.dtRenderListExpediente = utilDt.fnLoadDataTable_Detail(_renderListExpediente.frm.find("#tbRenderListExpediente"), columns_label, columns_data, options);
+        _renderListExpediente.dtRenderListExpediente.rows.add(JSON.parse('@Html.Raw(Json.Encode(@Model))')).draw();
+
+        options = {
+            page_paging: true, page_length: 10, row_index: true, row_select: true, row_fnSelect: "_renderListExpediente.fnSelect(this)"
+        };
+        utilDt.fnLoadDataTable_Detail(_renderListExpediente.frm.find("#tbConsultaExpediente"), columns_label, columns_data, options);
+        _renderListExpediente.dtConsultaExpediente = _renderListExpediente.fnInitDataTablePaging(options);
+    }
+
+    $(document).ready(function () {
+        _renderListExpediente.frm = $("#frmRenderListExpediente");
+        _renderListExpediente.fnInitDataTable_Detail();
+        _renderListExpediente.fnInit();
+    });
+</script>
+
+<div id="frmRenderListExpediente">
+    <div class="table-responsive">
+        <table id="tbRenderListExpediente" style="width:100%;margin:0px !important;" class="table table-hover table-bordered">
+            <thead>
+                <tr>
+                    <th colspan="6" class="text-sm-left">
+                        <div class="form-inline">
+                            <i class="fa mx-2 fa-lg fa-file-o" style="cursor:pointer;" onclick="_renderListExpediente.fnViewModalConsulta();" data-toggle="tooltip" data-placement="top" title="Nuevo"></i>
+                            <strong>Lista de Expedientes Administrativos</strong>
+                        </div>
+                    </th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
+    <div class="modal fade hide" id="mdlConsultaExpediente" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header text-small" style="cursor:move;">
+                    Consulta de Expedientes Administrativos
+                    <i class="fa fa-close" style="cursor:pointer;" data-dismiss="modal" aria-label="Close"></i>
+                </div>
+                <div class="modal-body" style="padding:0px;">
+                    <div id="frmConsultaExpediente">
+                        <div class="card-body">
+                            <div class="form-row">
+                                <div class="col-md-3 mb-3" style="margin-bottom:0px!important;">
+                                    <label class="text-small form-control-sm">Expediente Administrativo</label>
+                                </div>
+                                <div class="col-md-9 mb-3" style="margin-bottom:0px!important;">
+                                    <div class="input-group">
+                                        <input type="text" id="txtConsultaExpediente" class="form-control form-control-sm" maxlength="50" />
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text" id="btnConsultaExpediente" style="cursor:pointer;color:forestgreen"><i class="fa fa-search" data-toggle="tooltip" data-placement="top" title="Buscar"></i></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="table-responsive" style="overflow-y:hidden;">
+                            <table id="tbConsultaExpediente" style="width:100%;margin:0px !important;" class="table table-hover table-bordered">
+                                <thead></thead>
+                                <tbody></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer"></div>
+            </div>
+        </div>
+    </div>
+</div>

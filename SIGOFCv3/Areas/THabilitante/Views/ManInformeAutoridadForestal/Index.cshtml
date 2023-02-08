@@ -1,0 +1,26 @@
+﻿@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_LayoutMain.cshtml";
+}
+
+@Scripts.Render("~/bundles/_Mangrilla")
+@Scripts.Render("~/bundles/ManInformeAutoridadForestal/Index")
+@section scripts{
+    <script>
+    "use strict";
+    var rol = '';
+    $(document).ready(function () {
+        //Validamos el rol del usuario
+        utilSigo.ValidaRol('@ViewBag.VAliasRol', 'btnManGrillaNuevo');
+    });
+    </script>
+}
+<div class="container-fluid" id="contenedorManInfAutForestal"
+     data-request_url="@Url.Action("_ManGrilla", "Controles", new { Area= "General" })"
+     data-request_formulario="@ViewBag.Formulario" data-request_titulo="@ViewBag.TituloFormulario">
+</div>
+
+<form style="display:none;" id="frmAddEditManIAF" method="post" action="">
+    <input type="hidden" id="hdFormulario" name="hdFormulario" value="@ViewBag.Formulario" />
+
+</form>

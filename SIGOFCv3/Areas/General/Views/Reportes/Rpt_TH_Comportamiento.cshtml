@@ -1,0 +1,347 @@
+﻿@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_LayoutMain.cshtml";
+}
+<script src="~/Scripts/datatables/Extensions/dataTables.buttons.js"></script>
+<script src="~/Scripts/datatables/Extensions/buttons.flash.min.js"></script>
+<script src="~/Scripts/datatables/Extensions/jszip.min.js"></script>
+
+<script src="~/Scripts/datatables/Extensions/vfs_fonts.js"></script>
+<script src="~/Scripts/datatables/Extensions/buttons.html5.js"></script>
+<script src="~/Scripts/datatables/Extensions/buttons.print.js"></script>
+
+
+<link href="~/Content/datatables/buttons.dataTables.min.css" rel="stylesheet" />
+<link href="~/Areas/General/css/ManCalculoMulta/ManCalculoMulta.css" rel="stylesheet" />
+<div id="divVENMaderable" class="container-fluid">
+    <div class="card">
+        <div class="card-header text-left">
+            <h5>Título Habilitante Supervisado con Buen Comportamiento</h5>
+        </div>
+        <div class="card-body">
+            <div class="col-12">
+                <form id="frmManVENMaderable">
+                    <div class="form-row">
+                        <div class="form-group col-md-3">
+                            <select class="form-control form-control-sm" id="cboTipo">
+                                <option value="1">Código del TH</option>
+                                <option value="2">Titular</option>
+                                <option value="3">Representante Legal</option>
+                            </select>
+                        </div>
+                        <div class="form-group col-md-3">
+                            <input class="form-control form-control-sm" id="txtBuscar" type="text" max="100" />
+                        </div>
+                        <div class="btn-group col-md-2" style="padding-top:5px;">
+                            <a id="btnSearch" style="cursor:pointer;" data-toggle="tooltip" data-placement="top" title="Buscar" onclick="_listTHComportamiento.fnSearch()"><span class="fa mx-2 fa-lg fa-search"></span></a>
+                            <a id="btnExport" style="cursor:pointer;" data-toggle="tooltip" data-placement="top" title="Buscar" onclick="_listTHComportamiento.fnExportExcel()"><span class="fa mx-2 fa-lg fa-file-excel-o"></span></a>
+                            @*<a id="btnAdd" style="cursor:pointer;" data-toggle="tooltip" data-placement="top" title="" onclick="_listTHComportamiento.fnCrear()" data-original-title="Crear un nuevo registro"><span class="fa mx-2 fa-lg fa-plus"></span></a>*@
+                        </div>
+                    </div>
+                    <div class="table-responsive-md">
+                        <table id="tbVENMaderable" class="table table-hover table-bordered" style="width:100%;">
+                            <thead>
+                                <tr>
+                                    <th></th>
+                                    <th>N°</th>
+                                    <th>Entidad</th>
+                                    <th>Modalidad</th>
+                                    <th>Código TH</th>
+                                    <th>Región</th>
+                                    <th>Provincia</th>
+                                    <th>Distrito</th>
+                                    <th>Titular</th>
+                                    <th>Documento</th>
+                                    <th>Fecha Registro</th>
+                                    <th>Area</th>
+                                    <th>Calificación</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </form>
+
+            </div>
+        </div>
+    </div>
+    <div class="modal fade hide" id="modalVENMaderable" role="dialog">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header text-small" style="cursor:move;padding:0.5rem;">
+                    <h5 class="modal-title" id="h5TituloVENMaderable">Modificar</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body" id="divModVENMaderable">
+                    <input type="hidden" id="hdRegEstado" value="1" />
+                    <input type="hidden" id="hdNCodVENMaderable" value="0" />
+                    <input type="hidden" id="hdEstado" value="1" />
+                    <div class="form-row">
+                        <div class="form-group col-md-4">
+                            <label for="txtInfraccion">Categoría</label>
+                            <input class="form-control form-control-sm" id="txtCategoria" type="text" maxlength="2">
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label for="txtInfraccion"> Denominación</label>
+                            <input class="form-control form-control-sm" id="txtDenominacion" type="text" maxlength="200">
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label for="txtInfraccion">VEN</label>
+                            <input class="form-control form-control-sm" id="txtVEN" type="number" min="0.00" max="9999.99">
+                        </div>
+                    </div>
+                    <div class="form-row" id="">
+
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary btn-sm" onclick="_listTHComportamiento.fnVENMaderableUpdate()">Guardar</button>
+                    <button id="btnCerrarModal" class="btn btn-secondary btn-sm" data-dismiss="modal">Cancelar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    var _listTHComportamiento = {
+        fnRefresh: () => {
+            $("#cboInfraccion").val('0');
+            $("#txtBuscar").val('');
+            _listTHComportamiento.fnSearch();
+        },
+        fnCrear: () => {
+            _listTHComportamiento.fnLimpiar();
+            $("#h5TituloVENMaderable").text("Nuevo");
+            $("#hdRegEstado").val("1");
+            $("#modalVENMaderable").modal({ keyboard: true, backdrop: 'static' });
+
+        },
+        fnLimpiar: () => {
+            let frm = $("#divModVENMaderable");
+            frm.find("#hdNCodVENMaderable").val('0');
+            frm.find("#txtCategoria").val('');
+            frm.find("#txtDenominacion").val('');
+            frm.find("#txtVEN").val('');
+        },
+        fnDelete: (obj) => {
+
+            let frm = $("#divModVENMaderable");
+            let $tr = $(obj).closest("tr");
+            let dataRow = _listTHComportamiento.dt.row($tr).data();
+
+            let model = {
+                NCODVENMADERA: dataRow.NCODVENMADERA,
+                VCATEGORIA: dataRow.VCATEGORIA,
+                VDENOMINACION: dataRow.VDENOMINACION,
+                NVEN: dataRow.NVEN,
+                NESTADO: 0,
+                RegEstado: 3
+            };
+
+            let url = urlLocalSigo + "General/ManCalculoMulta/GuardarVENMaderable";
+            let option = { url: url, datos: JSON.stringify(model), type: 'POST' };
+            utilSigo.fnAjax(option, function (data) {
+                if (data.success) {
+                    utilSigo.toastSuccess("Éxito", data.msj);
+                    _listTHComportamiento.fnSearch();
+                }
+                else {
+                    utilSigo.toastWarning("Aviso", data.msj);
+                }
+            });
+
+        },
+
+        //_ManGrillaPaging.fnCreate = function (obj, codCNotificacion, codMTipo) {
+        //    codCNotificacion = (typeof codCNotificacion === 'undefined') ? '' : codCNotificacion;
+
+        //    if (obj != "" || codCNotificacion != "") {
+        //        var cod_informe = "";
+        //        var url_crud = urlLocalSigo + "Supervision/ManInforme/AddEdit";
+
+        //        if (obj != "") {
+        //            var data = _ManGrillaPaging.dtManGrillaPaging.row($(obj).parents('tr')).data();
+        //            cod_informe = data["COD_INFORME"];
+        //            codMTipo = data["COD_MTIPO"];
+        //        }
+
+        //        _ManGrillaPaging.fnReadConfigManGrillaPaging();
+
+        //        window.location = url_crud + "?asCodMTipo=" + codMTipo + "&asCodInforme=" + cod_informe + "&asCodNotificacion=" + codCNotificacion;
+        //    } else {//Nuevo registro
+        //        ManInforme.fnViewModalCNotificacion();
+        //    }
+        //},
+
+        fnExportExcel: () => {
+            
+            var cboTipo = $("#cboTipo").val() + "|" + $("#txtBuscar").val();
+            var url = urlLocalSigo + "General/Reportes/ExportTHComportamiento";
+            var oParams = { cboTipo: cboTipo};
+            var option = { url: url, datos: JSON.stringify(oParams), type: 'POST' };
+
+            utilSigo.fnAjax(option, function (data) {
+                if (data.success) {
+                    document.location = urlLocalSigo + "Archivos/Plantilla/ReporteComportamiento/" + data.msj;
+                }
+                else {
+                    utilSigo.toastWarning("Aviso", data.msj);
+                }
+            });
+        },
+    
+
+        fnEdit: (obj) => {
+
+            var url_crud = urlLocalSigo + "General/Reportes/ViewTHComportamiento";
+
+            let frm = $("#divModVENMaderable");
+            let $tr = $(obj).closest("tr");
+            let dataRow = _listTHComportamiento.dt.row($tr).data();
+
+            console.log(dataRow);
+
+            window.location = url_crud + "?asNU_Entidad=" + dataRow.NU_ENTIDAD;
+
+        },
+        fnVENMaderableUpdate: () => {
+            let frm = $("#divModVENMaderable");
+            let model = {
+                NCODVENMADERA: frm.find("#hdNCodVENMaderable").val(),
+                VCATEGORIA: frm.find("#txtCategoria").val(),
+                VDENOMINACION: frm.find("#txtDenominacion").val(),
+                NVEN: frm.find("#txtVEN").val(),
+                RegEstado: 1
+            };
+        
+
+            model.RegEstado = model.NCODVENMADERA == "0" ? 1 : 2;
+            model.NESTADO = $("#cboEstado").val() == "0" ? 0 : 1;
+
+            if (model.VCATEGORIA == "") {
+                utilSigo.toastWarning("Warning", "Ingresar Categoría");
+                return false;
+            } else if (model.VDENOMINACION == "" || model.VDENOMINACION == null) {
+                utilSigo.toastWarning("Warning", "Ingresar Denominación.");
+                return false;
+            } else if (model.NVEN == "" || model.NVEN == null) {
+                utilSigo.toastWarning("Warning", "Ingresar Valor Estado Natural.");
+                return false;
+            } else if (parseFloat(model.NVEN) <= 0 || parseFloat(model.NVEN) >= 9999.99) {
+                utilSigo.toastWarning("Warning", "El Valor Estado Natural debe ser mayor que 0 y menor que 9999.99.");
+                return false;
+            }
+
+            let url = urlLocalSigo + "General/ManCalculoMulta/GuardarVENMaderable";
+            let option = { url: url, datos: JSON.stringify(model), type: 'POST' };
+            utilSigo.fnAjax(option, function (data) {               
+                if (data.success) {
+                    utilSigo.toastSuccess("Éxito", data.msj);
+                    $("#btnCerrarModal").click();
+                    _listTHComportamiento.fnSearch();
+                }
+                else {
+                    utilSigo.toastWarning("Aviso", data.msj);
+                }
+            });
+        },
+        fnBuilTable: () => {
+            const columns = [
+                {
+                    "data": "", "className": "text-center", "width": "2%", "orderable": false, "searchable": false, "mRender": function (data, type, row) {
+                        return '<div><i class="fa fa-lg fa-eye" style="color:blue;cursor:pointer;" title="Ver detalle" onclick="_listTHComportamiento.fnEdit(this)"></i></div>';
+                    }
+                },
+                //{
+                //    "data": "", "className": "text-center", "width": "2%", "orderable": false, "searchable": false, "mRender": function (data, type, row) {
+                //        return '<div><i class="cellDel fa fa-lg fa-window-close" style="color:red;cursor:pointer;" title="Editar plan de trabajo" onclick="_listTHComportamiento.fnDelete(this)"></i></div>';
+                //    }
+                //},
+                {
+                    "name": "ROW_INDE", "width": "2%", "orderable": false, "searchable": false, "mRender": function (data, type, row, meta) {
+                        return parseInt(meta.row) + 1 + meta.settings._iDisplayStart;
+                    }
+                },
+                { "data": "NU_ENTIDAD", visible: false },
+                { "data": "NV_MODALIDAD_TIPO", "autoWidth": true },
+                { "data": "NV_TITULO_HABILITANTE", "autoWidth": true },
+                { "data": "NV_REGION", "autoWidth": true },
+                { "data": "NV_PROVINCIA", visible: false},
+                { "data": "NV_DISTRITO", visible: false },
+                { "data": "NV_TITULAR", "autoWidth": true },                
+                { "data": "NV_DOCUMENTO", visible: false },                
+                { "data": "DA_FECHA_REGISTRO", visible: false },                
+                { "data": "NV_AREA", visible: false },                
+                { "data": "NU_CALIFICACION", "autoWidth": true },                
+            ];
+            const optDt = { iLength: 20, iStart: 0, aSort: [] };
+            _listTHComportamiento.dt = _listTHComportamiento.frm.find("#tbVENMaderable").DataTable({
+                processing: true,
+                serverSide: true,
+                searching: false,
+                ordering: false,
+                paging: true,
+                //dom: 'Bfrtip',
+                //buttons: [{
+                //    extend: 'excelHtml5',
+                //    exportOptions: { orthogonal: 'export' },
+                //    messageTop: 'TITULOS HABILITANTES SUPERVISADOS CON BUEN COMPORTAMIENTO',
+                //    exportOptions: {
+                //        columns: [0, ':visible']
+                //    }
+                //}],
+
+                ajax: {
+                    "url": `${urlLocalSigo}/General/Controles/GetTHComportamiento`,
+                    "data": function (d) {
+                       // d.CustomSearchForm = "THCALIFICACION";
+                        d.CustomSearchType = $("#cboTipo").val();
+                        d.CustomSearchValue = $("#txtBuscar").val();
+                        d.CustomSearchType1 = '0';
+                        d.customSearchEnabled = true;
+                        d.columns = null;
+                    },
+                    "error": function (jqXHR) {
+                        // utilSigo.unblockUIGeneral();
+                        if (jqXHR.status != 401 && jqXHR.status != 403 && jqXHR.status != 404) {
+                            utilSigo.toastError("Error", initSigo.MessageError);
+                        }
+                        //console.log(jqXHR);
+                    },
+                    "statusCode": {
+                        203: () => { utilSigo.toastInfo("Aviso", "El usuario perdio la sesión. Vuelva ingresar al sistema"); }
+                    }
+                },
+                columns: columns,
+                bInfo: true,
+                "lengthMenu": [[10, 20, 50, 100], [10, 20, 50, 100]],
+                // "aaSorting": optDt.aSort,
+                "pageLength": optDt.iLength,
+                "displayStart": optDt.iStart,
+                "oLanguage": initSigo.oLanguage,
+                "drawCallback": initSigo.showPagination
+            });
+        },
+        fnSearch: () => {
+            _listTHComportamiento.dt.ajax.reload();
+        }
+    };
+    $(document).ready(function () {
+
+        _listTHComportamiento.frm = $("#frmManVENMaderable");
+        _listTHComportamiento.fnBuilTable();
+        _listTHComportamiento.frm.submit(function (e) {
+            e.preventDefault();
+            _listTHComportamiento.fnSearch();
+        });
+
+
+    });
+</script>
+
+
+
+
+

@@ -1,0 +1,64 @@
+﻿<div class="modal-dialog" role="document">
+    <div class="modal-content">
+        <div class="modal-header text-small" style="cursor:move;padding:0.5rem;">
+            <h5 class="modal-title">Nuevo plan de trabajo - PASPEQ @ViewBag.periodo</h5>
+        </div>
+        <div class="modal-body">
+            <form id="frmNewPlanTrabajo" method="post">
+                <div class="form-group col-md-12">
+                    <label for="cboOD" class="text-small">OD</label>
+                    @Html.DropDownList("ddlOD_Add", new SelectList(ViewBag.ddlOD_Add, "Value", "Text"), new { @class = "form-control form-control-sm" })
+                </div>               
+                <div class="form-group col-md-12">
+                    <label for="cboOD" class="text-small">Periodo</label>
+                    @Html.DropDownList("ddlPeriodo_Add", new SelectList(ViewBag.ddlPeriodo_Add, "Value", "Text"), new { @class = "form-control form-control-sm" })
+                </div>
+                <div class="form-group col-md-12">
+                    <label for="cboOD" class="text-small">Mes</label>
+                    @Html.DropDownList("ddlMes_Add", new SelectList(ViewBag.ddlMes_Add, "Value", "Text"), new { @class = "form-control form-control-sm" })
+                </div>
+            </form>
+
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-primary btn-sm" onclick="_addPlan.generar()">Generar</button>
+            <button class="btn btn-secondary btn-sm" data-dismiss="modal">Cancelar</button>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    var _addPlan = {
+        generar: () => {
+            let od = _addPlan.frm.find("#ddlOD_Add").select2("val")
+            if (od == "0000000") {
+                utilSigo.toastWarning("Aviso", "Seleccione OD");
+                return false;
+            }
+            let periodo = _addPlan.frm.find("#ddlPeriodo_Add").select2("val")
+            let mes = _addPlan.frm.find("#ddlMes_Add").select2("val")
+            let model = {
+                od: od,
+                periodo: periodo,
+                mes:mes
+            };
+            var url = urlLocalSigo + "Focalizacion/PlanTrabajo/PlanGuardar";
+            var option = { url: url, datos:JSON.stringify(model), type: 'POST' };
+            utilSigo.fnAjax(option, function (data) {
+                if (data.success) {
+                    const url = `${urlLocalSigo}/Focalizacion/PlanTrabajo/Plan?id=${data.id}`;
+                    document.location = url;                              
+                }
+                else {
+                    utilSigo.toastWarning("Aviso", data.msj);
+                }
+            });
+        }
+    };
+    $(document).ready(function () {
+        $.fn.select2.defaults.set("theme", "bootstrap4");
+        _addPlan.frm = $("#frmNewPlanTrabajo");
+        _addPlan.frm.find("#ddlOD_Add").select2();
+        _addPlan.frm.find("#ddlPeriodo_Add").select2();
+        _addPlan.frm.find("#ddlMes_Add").select2();
+    });
+</script>

@@ -1,0 +1,145 @@
+﻿<script>
+      
+    var _planAddDet = _planAddDet ||  {
+        fnBuildTable: () => {
+            let columns = [
+                {
+                    "data": "", "width": "2%", "orderable": false, "searchable": false, "mRender": function (data, type, row, meta) {
+                        return '<div class="custom-control custom-checkbox"><input type="checkbox" class="chkSelect custom-control-input" id="chkAdd_' + meta.row + '"><label class="custom-control-label" for="chkAdd_' + meta.row + '"></label></div>';
+                    }
+                },
+                {
+                    "name": "ROW_INDE", "width": "2%", "orderable": false, "searchable": false, "mRender": function (data, type, row, meta) {
+                        return parseInt(meta.row) + 1 + meta.settings._iDisplayStart;
+                    }
+                },
+                
+                { "data": "NUM_THABILITANTE", "autoWidth": true },
+                { "data": "NOMBRE_POA", "autoWidth": true },
+                {
+                    "data": "", "width": "25%", "orderable": false, "searchable": false, "mRender": function (data, type, row) {
+                        return '<select class="csOportunidad form-control form-control-sm" ><option value="1">Antes de la extracción</option><option value="2">Durante la extracción</option><option value="3">Posterior al aprovechamiento</option></select>';
+                    }
+                },
+                { "data": "PUNTAJE", "autoWidth": true }                 
+            ];
+            _planAddDet.dt=$("#tbPlanManejoSelect").DataTable({
+                processing: true,
+                serverSide: false,
+                searching: true,
+                ordering: false,
+                //paging: true,
+                //"bPaginate": true,
+                ajax: {
+                    "url": urlLocalSigo + "PlanFocalizacion/Focalizacion/planManejoListar",
+                    "data": function (d) {                                            
+                        d.COD_PASPEQ_PLAN_TRABAJO = _planAddDet.frmPadre.find("#cod_paspeq_plan_trabajo").val().trim();
+                    },
+                    "error": function (jqXHR) {
+                        utilSigo.unblockUIGeneral();
+                        utilSigo.toastError("Error", "Sucedio un error");                      
+                    },
+                    "statusCode": {
+                        203: () => { utilSigo.unblockUIGeneral(); utilSigo.toastInfo("Aviso", "El usuario perdio la sesión. Vuelva ingresar al sistema"); }
+                    }
+                },
+                columns: columns,
+                bInfo: true,
+                "lengthMenu": [[10, 20, 50, 100], [10, 20, 50, 100]],
+                "aaSorting": [],
+                "pageLength":10,
+               // "displayStart": optDt.iStart,
+                "oLanguage": initSigo.oLanguage,
+                "drawCallback": initSigo.showPagination
+            });
+        },
+        fnGetData: () => {
+            let model = [];
+            let cod_paspeq_plan_t = _planAddDet.frmPadre.find("#cod_paspeq_plan_trabajo").val().trim();
+            $.each(_planAddDet.dt.$("tr"), function (i, o) {
+                if ($(o).find(".chkSelect").is(":checked")) {
+                    let data = _planAddDet.dt.row($(o)).data();
+                    model.push(
+                        {
+                            cod_paspeq_plan_t: cod_paspeq_plan_t,
+                            cod_paspeq_detalle: data.COD_PASPEQ_DETALLE,
+                            tipo_supervision: 4,//4 - Ordinaria
+                            oportunidad_supervision: parseInt($(o).find(".csOportunidad").val())
+                        }
+                    );
+                }               
+            });  
+            return model;
+        },
+        fnSave: () => {
+            let model = _planAddDet.fnGetData();            
+            if (model.length <= 0) {
+                utilSigo.toastWarning("Aviso", "No existe Items seleccionado");
+                return false;
+            }
+            utilSigo.dialogConfirm("", "Está seguro de continuar con la operación?", function (r) {
+                if (r) {
+                    let url = urlLocalSigo + "PlanFocalizacion/Focalizacion/CreatePlanTrabajoItems";
+                    let option = { url: url, datos: JSON.stringify(model), type: 'POST' };
+                    utilSigo.fnAjax(option, function (data) {
+                        if (data.success) {
+                            utilSigo.toastSuccess("Éxito", data.msj);
+                            _PlanTrabajoDetalle.fnRefresh();
+                            $("#manAddPlanManejoModal").modal('hide');
+                        }
+                        else {
+                            utilSigo.toastWarning("Aviso", data.msj);
+                        }
+                    });
+                }
+            });            
+        }
+    };
+    $(document).ready(function () {
+        _planAddDet.frm = $("#contenedorPMD");
+        _planAddDet.frmPadre = $("#frmPlanTrabajoDetalle");
+        _planAddDet.frm.find("#strPeriodo").text(_planAddDet.frmPadre.find("#hdPeriodo").val());
+        _planAddDet.frm.find("#strSede").text(_planAddDet.frmPadre.find("#hdSede").val());         
+        _planAddDet.fnBuildTable(); 
+    });
+</script>
+
+<div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content" id="contenedorPMD">
+        <div class="modal-header text-small" style="cursor:move;padding:0.5rem;">
+            <h5 id="tituloModalPM" class="modal-title">Agregar Plan de Manejo - PASPEQ  <strong id="strPeriodo"></strong>  OD: <strong id="strSede"></strong></h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body">
+            
+            <div class="row">
+                <div class="table-responsive">
+                    <table id="tbPlanManejoSelect" class="table table-hover table-bordered" style="width:100%;">
+                        <thead>
+                            <tr>
+                                <th title="Seleccionar"></th>
+                                <th>Nro</th>
+                                <th>Título habilitante</th>
+                                <th>POA</th>
+                                <th>Oportunidad</th>
+                                <th>Puntaje</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-outline-info btn-sm" onclick="_planAddDet.fnSave()" title="Agregar Items Seleccionados">
+                Agregar
+            </button>
+            <button type="button" class="btn btn-outline-info btn-sm" data-dismiss="modal" title="Cancelar">
+                Cancelar
+            </button>
+             
+        </div>
+    </div>
+</div>

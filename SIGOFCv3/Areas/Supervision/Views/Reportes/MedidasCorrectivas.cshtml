@@ -1,0 +1,13 @@
+﻿
+@{
+    ViewBag.Title = "MedidasCorrectivas";
+    Layout = "~/Views/Shared/_LayoutMain.cshtml";
+}
+<form id="frmManCNotificacion">
+    @Html.Hidden("tipoFormulario", (object)ViewBag.Formulario)
+    @Html.Hidden("titleMenu", (object)ViewBag.TituloFormulario)
+    <div id="dvManContenedor"></div>
+</form>
+
+
+<script src="~/Areas/Supervision/js/Reportes/ReporteMCorrectiva.js"></script>

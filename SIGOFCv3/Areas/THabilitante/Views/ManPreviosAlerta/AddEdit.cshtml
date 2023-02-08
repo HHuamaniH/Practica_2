@@ -1,0 +1,410 @@
+﻿@model CapaEntidad.ViewModel.VM_PreviosAlerta
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_LayoutMain.cshtml";
+
+}
+<script src="~/Scripts/datatables/Extensions/dataTables.buttons.js"></script>
+<script src="~/Scripts/datatables/Extensions/buttons.flash.min.js"></script>
+<script src="~/Scripts/datatables/Extensions/jszip.min.js"></script>
+
+<script src="~/Scripts/datatables/Extensions/vfs_fonts.js"></script>
+<script src="~/Scripts/datatables/Extensions/buttons.html5.js"></script>
+<script src="~/Scripts/datatables/Extensions/buttons.print.js"></script>
+
+
+<link href="~/Content/datatables/buttons.dataTables.min.css" rel="stylesheet" />
+<link href="~/Areas/THabilitante/css/ManPreviosAlerta/AddEdit.css" rel="stylesheet" />
+@Scripts.Render("~/bundles/ManPreviosAlerta/AddEdit")
+
+
+@section scripts{
+    <script>
+        "use strict";
+
+        var ManPreviosAlerta = new PreviosAlerta();
+        var ItemDestinatarios = new Destinatarios("ItemDestinatarios", "Destinarios");
+        var ItemRutas = new Ruta("ItemRutas", "Rutas");
+        var ItemDestinatarioRuta = new DestinatarioRuta("ItemDestinatarioRuta", "DestinatarioRuta");
+        var ItemSupuestos = new Supuestos("ItemSupuestos", "Supuestos");
+        var ItemDestinatariosCC = new DestinatariosCC("ItemDestinatariosCC", "DestinariosCC");
+        var ItemCOAdministrador = new COAdministrador("ItemCOAdministrador", "COAdministrador");
+
+        $(document).ready(function () {
+
+            if ($('#perfil').val() == 1) {
+                $('.noCoAdmin').attr('hidden', 'hidden');
+                $('#navDestinatarios').addClass('active');
+            }
+
+            $('[data-toggle="tooltip"]').tooltip();
+            ManPreviosAlerta.init();
+            ItemDestinatarios.init();
+            ItemRutas.init();
+            ItemDestinatarioRuta.init();
+            ItemSupuestos.init();
+             ItemDestinatariosCC.init();
+             ItemCOAdministrador.init();
+            var list = [];
+
+            @foreach(var item in Model.ListDESTINATARIO )
+            {
+                <text>
+
+                list.push({
+                    COD_DESTINATARIO: @item.COD_DESTINATARIO,
+                    COD_PERSONA: "@Html.Raw(item.COD_PERSONA)",
+                    DESCRIPCION: "@Html.Raw(item.DESCRIPCION)" ,
+                    CORREO: "@Html.Raw(item.CORREO)" ,
+                    OFICINA: "@Html.Raw(item.OFICINA)" ,
+                    DOCUMENTO: "@Html.Raw(item.DOCUMENTO)" ,
+                    FECHA_DOCUMENTO: "@item.FECHA_DOCUMENTO" ,
+                    CARGO: "@Html.Raw(item.CARGO)" ,
+                    ACTIVO: @item.ACTIVO,
+                    OBSERVACION: '@Html.Raw(item.OBSERVACION)',
+                    TIPO_FUNCIONARIO: '@item.TIPO_FUNCIONARIO',
+                    SUPUESTOS_DESTINATARIO: '@Html.Raw(item.SUPUESTOS_DESTINATARIO)',
+                    COD_ENTIDAD: '@Html.Raw(item.COD_ENTIDAD)'
+                });
+             </text>
+            }
+             ItemDestinatarios.dt.rows.add(list).draw();
+             list = [];
+             @foreach(var item in Model.ListRUTA )
+             {
+                 <text>
+
+                 list.push({
+                     COD_RUTA: @item.COD_RUTA,
+                     DEPARTAMENTO: "@Html.Raw(item.DEPARTAMENTO)" ,
+                     ACTIVO: @item.ACTIVO ,
+                     TRAMO: "@Html.Raw(item.TRAMO)",
+                     ORIGEN_DESTINO: "@Html.Raw(item.ORIGEN_DESTINO)",
+                     COD_UBIDEPARTAMENTO: "@Html.Raw(item.COD_UBIDEPARTAMENTO)"
+                 });
+                 </text>
+             }
+             ItemRutas.dt.rows.add(list).draw();
+             list = [];
+             @foreach (var item in Model.ListDESTINATARIO_RUTA)
+             {
+                 <text>
+
+                 list.push({
+                    COD_RUTA: @item.COD_RUTA ,
+                    DEPARTAMENTO: "@Html.Raw(item.DEPARTAMENTO)" ,
+                    ORIGEN_DESTINO: "@Html.Raw(item.ORIGEN_DESTINO)",
+                    TRAMO: "@Html.Raw(item.TRAMO)",
+                    DESCRIPCION: "@Html.Raw(item.DESCRIPCION)"
+
+                 });
+                 </text>
+             }
+             ItemDestinatarioRuta.dt.rows.add(list).draw();
+             list = [];
+             @foreach(var item in Model.ListSUPUESTO )
+             {
+                <text>
+
+                list.push({
+                    COD_SUPUESTO: @item.COD_SUPUESTO ,
+                    ABREV_SUPUESTO: "@Html.Raw(item.ABREV_SUPUESTO)" ,
+                    DES_SUPUESTO: "@Html.Raw(item.DES_SUPUESTO)",
+                    ACTIVO: "@item.ACTIVO",
+                    ACTIVO_DESC: "@Html.Raw(item.ACTIVO_DESC)",
+                    NOMBRE_ARCHIVO: "@Html.Raw(item.NOMBRE_ARCHIVO)",
+                    NOMBRE_ARCHIVO_REAL: "@Html.Raw(item.NOMBRE_ARCHIVO_REAL)"
+                });
+                </text>
+             }
+             ItemSupuestos.dt.rows.add(list).draw();
+             list = [];
+             @foreach(var item in Model.ListDESTINATARIOCC )
+             {
+                <text>
+             list.push({
+                    COD_DESTINATARIO: @item.COD_DESTINATARIO,
+                    COD_PERSONA: "@Html.Raw(item.COD_PERSONA)",
+                    DESCRIPCION: "@Html.Raw(item.DESCRIPCION)" ,
+                    CORREO: "@Html.Raw(item.CORREO)" ,
+                    OFICINA: "@Html.Raw(item.OFICINA)" ,
+                    DOCUMENTO: "@Html.Raw(item.DOCUMENTO)" ,
+                    FECHA_DOCUMENTO: "@item.FECHA_DOCUMENTO" ,
+                    CARGO: "@Html.Raw(item.CARGO)" ,
+                    ACTIVO: @item.ACTIVO,
+                    OBSERVACION:'@Html.Raw(item.OBSERVACION)'
+                });
+                </text>
+             }
+             ItemDestinatariosCC.dt.rows.add(list).draw();
+
+             list = [];
+             @foreach(var item in Model.ListCOADMINISTRADOR )
+             {
+                <text>
+             list.push({
+                 COD_PERSONA: "@Html.Raw(item.COD_PERSONA)",
+                 COD_UCUENTA: "@Html.Raw(item.COD_UCUENTA)",
+                 FECHA_REGISTRO: "@item.FECHA_REGISTRO",
+                 DESCRIPCION: "@Html.Raw(item.DESCRIPCION)",
+                 USUARIO: "@Html.Raw(item.USUARIO)" ,
+                 ACTIVO_DESC: "@Html.Raw(item.ACTIVO_DESC)" ,
+                 CARGO: "@Html.Raw(item.CARGO)" ,
+                 CORREO: "@Html.Raw(item.CORREO)" ,
+                 ACTIVO: "@item.ACTIVO" ,
+                 DOCUMENTO: "@Html.Raw(item.DOCUMENTO)" ,
+                 FECHA_DOCUMENTO: "@item.FECHA_DOCUMENTO",
+                 OFICINA: "@Html.Raw(item.OFICINA)",
+                 OBSERVACION:"@Html.Raw(item.OBSERVACION)"
+                });
+                </text>
+             }
+            ItemCOAdministrador.dt.rows.add(list).draw();
+            //Validamos el rol del usuario
+        utilSigo.ValidaRol('@ViewBag.VAliasRol', 'btnAdd','Edit');
+        });
+
+
+    </script>
+}
+<div class="container-fluid">
+    <div class="card">
+        <div class="card-header text-right">
+            Mantenimiento Previos Alertas OSINFOR
+        </div>
+        <input type="hidden" id="perfil" name="perfil" value="@ViewBag.Perfil" />
+        <div class="card-body">
+            <form id="frmPreviosAlerta">
+                @Html.HiddenFor(m => m.TipoFormulario)
+                <ul class="nav nav-tabs" id="myTab" role="tablist">
+                    <li class="nav-item noCoAdmin" id="navDestinatariosCCTab">
+                        <a class="nav-link active" data-toggle="tab" href="#navCOAdministrador" role="tab" aria-controls="home" aria-selected="true"><strong>CO-Administradores</strong></a>
+                    </li>
+                    <li class="nav-item noCoAdmin" id="navSupuestosTab">
+                        <a class="nav-link" data-toggle="tab" href="#navSupuestos" role="tab" aria-controls="home" aria-selected="true"><strong>Supuestos</strong></a>
+                    </li>
+                    <li class="nav-item noCoAdmin" id="navRutasTab">
+                        <a class="nav-link" data-toggle="tab" href="#navRutas" role="tab" aria-controls="home" aria-selected="false"><strong>Rutas</strong></a>
+                    </li>
+                    <li class="nav-item" id="navDestinatariosTab">
+                        <a class="nav-link" data-toggle="tab" href="#navDestinatarios" role="tab" aria-controls="home" aria-selected="false"><strong>Destinatarios</strong></a>
+                    </li>
+                    <li class="nav-item" id="navAsociacionTab">
+                        <a class="nav-link" data-toggle="tab" href="#navAsociacion" role="tab" aria-controls="home" aria-selected="false"><strong>Asociacion Rutas con Destinatarios</strong></a>
+                    </li>
+                    <li class="nav-item noCoAdmin" id="navDestinatariosCCTab">
+                        <a class="nav-link" data-toggle="tab" href="#navDestinatariosCC" role="tab" aria-controls="home" aria-selected="false"><strong>Destinatarios con Copia</strong></a>
+                    </li>
+                </ul>
+                <div class="tab-content" id="nav-tabContent">
+                    <div class="tab-pane fade show noCoAdmin" id="navSupuestos" role="tabpanel" aria-labelledby="nav-home-tab">
+                        <div class="card-body">
+                            <div class="form-row">
+                                <table id="grvSupuestos" class="table table-hover table-bordered" style="width:100%">
+                                    <thead>
+                                        <tr>
+                                            <th colspan="11" class="text-sm-left">
+                                                <div class="form-inline">
+                                                    <i class="fa mx-2 fa-lg fa-file-o" style="cursor:pointer;" onclick="ItemSupuestos.showModal(1, this);" data-toggle="tooltip" data-placement="top" title="Nuevo"></i>
+                                                    <strong>Supuestos</strong>
+                                                </div>
+                                            </th>
+                                        </tr>
+                                        <tr>
+                                            <th></th>
+                                            <th></th>
+                                            <th>Codigo</th>
+                                            <th>Abreviación</th>
+                                            <th>Supuesto</th>
+                                            <th>Estado</th>
+                                            <th>Archivo</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody></tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tab-pane fade show" id="navDestinatarios" role="tabpanel" aria-labelledby="nav-home-tab">
+                        <div class="card-body">
+                            <div class="form-row">
+
+                                <table id="grvDestinatarios" class="table table-hover table-bordered" style="width:100%">
+                                    <thead>
+                                        <tr>
+                                            <th colspan="11" class="text-sm-left">
+                                                <div class="form-inline">
+                                                    <i class="fa mx-2 fa-lg fa-file-o" style="cursor:pointer;" onclick="ItemDestinatarios.showModal(1, this);" data-toggle="tooltip" data-placement="top" title="Nuevo"></i>
+                                                    <i class="fa mx-2 fa-lg fa-window-close-o" style="cursor:pointer;" onclick="ItemDestinatarios.deleteAll();" data-toggle="tooltip" data-placement="top" title="Eliminar Todos"></i>
+                                                    <strong>Destinatarios</strong>
+                                                </div>
+                                            </th>
+                                        </tr>
+                                        <tr>
+                                            <th></th>
+                                            <th></th>
+                                            <!--<th>Codigo</th>-->
+                                            <th>Destinatario</th>
+                                            <th>Correo</th>
+                                            <th>Oficina</th>
+                                            <th>Documento</th>
+                                            <th>Fecha Documento</th>
+                                            <th>Cargo</th>
+                                            <th>Observacion</th>
+                                            <!--<th>Activo</th>-->
+                                            <th>Tipo Funcionario</th>
+                                            <!--<th>Supuestos</th>-->
+                                            <th>Entidad</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody></tbody>
+                                </table>
+
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tab-pane fade show noCoAdmin" id="navRutas" role="tabpanel" aria-labelledby="nav-home-tab">
+                        <div class="card-body">
+                            <div class="form-row">
+                                <table id="grvRutas" class="table table-hover table-bordered" style="width:100%">
+                                    <thead>
+                                        <tr>
+                                            <th colspan="6" class="text-sm-left">
+                                                <div class="form-inline">
+                                                    <i class="fa mx-2 fa-lg fa-file-o" style="cursor:pointer;" onclick="ItemRutas.showModal(1, this);" data-toggle="tooltip" data-placement="top" title="Nuevo"></i>
+                                                    <i class="fa mx-2 fa-lg fa-window-close-o" style="cursor:pointer;" onclick="ItemRutas.deleteAll();" data-toggle="tooltip" data-placement="top" title="Eliminar Todos"></i>
+                                                    <i class="fa mx-2 fa-lg fa-download" style="cursor:pointer;" onclick="ItemRutas.exportarExcel();" data-toggle="tooltip" data-placement="top" title="Descargar Rutas"></i>
+                                                    <strong>Rutas</strong>
+                                                </div>
+                                            </th>
+                                        </tr>
+                                        <tr>
+                                            <th></th>
+                                            <th>Ruta</th>
+                                            <th>Departamento</th>
+                                            <th>Tramo</th>
+                                            <th>Origen-Destino</th>
+                                            <th>Activo</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody></tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tab-pane fade show" id="navAsociacion" role="tabpanel" aria-labelledby="nav-home-tab">
+                        <div class="card-body">
+                            <div class="form-row">
+                                <table id="grvDestinatarioRuta" class="table table-hover table-bordered" style="width:100%">
+                                    <thead>
+                                        <tr>
+                                            <th colspan="7" class="text-sm-left">
+                                                <div class="form-inline">
+                                                    <i class="fa mx-2 fa-lg fa-file-o" style="cursor:pointer;" onclick="ItemDestinatarioRuta.showModal(1, this);" data-toggle="tooltip" data-placement="top" title="Nuevo"></i>
+                                                    <i class="fa mx-2 fa-lg fa-window-close-o" style="cursor:pointer;" onclick="ItemDestinatarioRuta.deleteAll();" data-toggle="tooltip" data-placement="top" title="Eliminar Todos"></i>
+
+                                                    <strong>Destinatario Ruta</strong>
+                                                </div>
+                                            </th>
+                                        </tr>
+                                        <tr>
+                                            <th></th>
+                                            <th></th>
+                                            <th>Ruta</th>
+                                            <th>Departamento</th>
+                                            <th>Origen-Destino</th>
+                                            <th>Tramo</th>
+                                            <th>Destinatarios</th>
+
+                                        </tr>
+                                    </thead>
+                                    <tbody></tbody>
+                                </table>
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tab-pane fade show noCoAdmin" id="navDestinatariosCC" role="tabpanel" aria-labelledby="nav-home-tab">
+                        <div class="card-body">
+                            <div class="form-row">
+                                <table id="grvDestinatariosCC" class="table table-hover table-bordered" style="width:100%">
+                                    <thead>
+                                        <tr>
+                                            <th colspan="10" class="text-sm-left">
+                                                <div class="form-inline">
+                                                    <i class="fa mx-2 fa-lg fa-file-o" style="cursor:pointer;" onclick="ItemDestinatariosCC.showModal();" data-toggle="tooltip" data-placement="top" title="Nuevo"></i>
+                                                    <i class="fa mx-2 fa-lg fa-window-close-o" style="cursor:pointer;" onclick="ItemDestinatariosCC.deleteAll();" data-toggle="tooltip" data-placement="top" title="Eliminar Todos"></i>
+                                                    <strong>Destinatarios con Copia</strong>
+                                                </div>
+                                            </th>
+                                        </tr>
+                                        <tr>
+                                            <th></th>
+                                            <th>Codigo</th>
+                                            <th>Destinatario</th>
+                                            <th>Correo</th>
+                                            <th>Oficina</th>
+                                            <th>Documento</th>
+                                            <th>Fecha Documento</th>
+                                            <th>Cargo</th>
+                                            <th>Observacion</th>
+                                            <th>Activo</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody></tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tab-pane active show noCoAdmin" id="navCOAdministrador" role="tabpanel" aria-labelledby="nav-home-tab">
+                        <div class="card-body">
+                            <div class="form-row">
+                                <table id="grvCOAdministrador" class="table table-hover table-bordered" style="width:100%">
+                                    <thead>
+                                        <tr>
+                                            <th colspan="10" class="text-sm-left">
+                                                <div class="form-inline">
+                                                    <i class="fa mx-2 fa-lg fa-file-o" style="cursor:pointer;" onclick="ItemCOAdministrador.showModal(1, this);" data-toggle="tooltip" data-placement="top" title="Nuevo"></i>
+                                                    <i class="fa mx-2 fa-lg fa-window-close-o" style="cursor:pointer;" onclick="ItemCOAdministrador.deleteAll();" data-toggle="tooltip" data-placement="top" title="Eliminar Todos"></i>
+                                                    <strong>CO-Administradores</strong>
+                                                </div>
+                                            </th>
+                                        </tr>
+                                        <tr>
+                                            <th></th>
+                                            @*<th></th>*@
+                                            <th>FECHA REGISTRO</th>
+                                            <th>USUARIO</th>
+                                            <th>NOMBRES</th>
+                                            <th>ESTADO</th>
+                                            <th>COD_PERSONA</th>
+                                            <th>COD_UCUENTA</th>
+                                            <th>CARGO</th>
+                                            <th>CORREO</th>
+                                            <th>ACTIVO</th>
+                                            <th>DOCUMENTO</th>
+                                            <th>FECHA_DOCUMENTO</th>
+                                            <th>OFICINA</th>
+                                            <th>OBSERVACION</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody></tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="modal fade" id="modalAddEditDestinatario" tabindex="-1" role="dialog"></div>
+    <div class="modal fade" id="modalAddEditSupuesto" tabindex="-1" role="dialog"></div>
+    <div class="modal fade" id="modalAddEditDestinatarioCC" tabindex="-1" role="dialog"></div>
+    <div class="modal fade" id="modalAddEditCOAdministrador" tabindex="-1" role="dialog"></div>
+    @* Para el control genérico de personas *@
+    <div class="modal fade hide" id="mdlBuscarPersona" role="dialog"></div>
+    <div class="modal fade hide" id="modalAddEditPersona" role="dialog"></div>
+    <div class="modal fade hide" id="personaUbigeoModal" role="dialog"></div>
+</div>

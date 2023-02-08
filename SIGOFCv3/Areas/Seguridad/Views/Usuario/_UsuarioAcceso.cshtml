@@ -1,0 +1,72 @@
+﻿<style type="text/css">
+    table#tbListMenus thead tr th {
+        text-align: center;
+    }
+
+    table#tbListMenus tbody tr td[colspan="3"] {
+        font-weight: bold;
+    }
+    /*table#tbListMenusSeleccionados thead tr th {
+        text-align: center;
+    }
+
+    table#tbListMenusSeleccionados tbody tr td[colspan="3"] {
+        font-weight: bold;
+    }*/
+    .colAction {
+        width: 30px;
+    }
+
+    .colPadre {
+        width: 150px;
+    }
+
+    .table-wrapper-scroll-y {
+        display: block;
+        max-height: 600px;
+        overflow-y: auto;
+        -ms-overflow-style: -ms-autohiding-scrollbar;
+    }
+</style>
+<div class="card">
+    <div class="card-header text-right">
+        Control de Accesos al usuario : <strong> @ViewBag.nUsuario</strong>
+    </div>
+    <div class="card-body">
+        <div class="card">
+            <div class="card-header text-small" id="divTitle">
+                <a id="btnRegresarusuario" style="cursor:pointer;" data-toggle="tooltip" data-placement="top" title="Regresar"><i class="fa mx-2 fa-lg fa-reply"></i></a>
+            </div>
+            <div class="card-body">
+                <form id="frmUsuarioAcceso">
+                    <input type="hidden" id="hdCodUsuario" value="@ViewBag.codUsuario" />                    
+                </form>
+                <div class="row">                    
+                    <div class="col-sm-12">
+                        <h5 class="card-title">Control de Accesos</h5>
+                        <div class="table-responsive table-wrapper-scroll-y">
+                            <table id="tbListAccesoAsig" class="table table-hover table-bordered" style="width:100%">
+                                <thead>
+                                    <tr>
+                                        <th class="colAction"><i class="cellDel fa fa-lg fa-window-close" title="Quitar la autorización al usario" onclick="_UsuarioAcceso.fnQuitar(-1)"></i></th>
+                                        <th class="colAction"><i class="cellEdit fa fa-lg fa-plus" title="Añadir autorización al usario" onclick="_UsuarioAcceso.fnEditar(-1)"></i></th>
+                                        <th class="colAction">Nro</th>
+                                        <th class="colPadre">Acceso no caduca (Indeterminado)</th>
+                                        <th class="colPadre">Fecha de Solicitud</th>
+                                        <th class="colPadre">Fecha de Registro</th>
+                                        <th class="colPadre">Desde</th>
+                                        <th class="colPadre">Hasta</th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal dialog" id="manAccesoModal" tabindex="-1" role="document"></div>
+<script src="~/Areas/Seguridad/js/Usuario/_UsuarioAcceso.js"></script>

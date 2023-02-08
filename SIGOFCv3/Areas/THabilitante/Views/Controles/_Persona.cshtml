@@ -1,0 +1,153 @@
+﻿@model CapaEntidad.ViewModel.VM_Persona
+<style>
+    /*.modal-header { height: 20px !important; overflow-y: auto; }*/
+    /*.bootbox-dialog .modal-body { max-height: 420px; overflow-y: auto; }*/
+</style>
+<script src="~/Areas/THabilitante/js/Controles/Persona.js"></script>
+
+@{
+    var tituloModal = Model.tipo.Equals("N") == true ? "Nuevo Registro - Persona Natural" : "Nuevo Registro - Persona Juridica";
+}
+<div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+        <div class="modal-header text-small" style="cursor:move;">
+            @tituloModal             
+            @*<i class="fa fa-close" style="cursor:pointer;" id="btnClosePersona"></i>*@ 
+            <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar" id="btnClosePersona">
+                <span aria-hidden="true">&times;</span>
+            </button>            
+        </div>
+        <div class="modal-body">
+            @using (Html.BeginForm("registrarPersona", "Controles", new { Area = "THabilitante" }, FormMethod.Post, new { id = "frmPersonaControles" }))
+            {   @Html.HiddenFor(m => m.tipo)
+                @Html.HiddenFor(m => m.regEstado)
+                @Html.HiddenFor(m => m.tVentana)
+                @Html.HiddenFor(m => m.codigoPersona)
+                @Html.HiddenFor(m => m.formOrigen)
+                @Html.HiddenFor(m => m.controlOrigen)
+                @Html.HiddenFor(m => m.COD_PTIPO)
+                if (Model.tipo.Equals("N") || Model.COD_PTIPO.Equals("0000006"))
+                {
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label for="txtItemPN_APaterno" class="text-small">Apellido Paterno</label>
+                            @Html.EditorFor(m => m.txtItemPN_APaterno, new { htmlAttributes = new { @class = "form-control form-control-sm", placeholder = "Apellido Paterno", style = "text-transform:uppercase" } })
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label for="txtItemPN_AMaterno" class="text-small">Apellido Materno</label>
+                            @Html.EditorFor(m => m.txtItemPN_AMaterno, new { htmlAttributes = new { @class = "form-control form-control-sm", placeholder = "Apellido Materno", style = "text-transform:uppercase" } })
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label for="txtItemPN_Nombres" class="text-small">Nombres</label>
+                            @Html.EditorFor(m => m.txtItemPN_Nombres, new { htmlAttributes = new { @class = "form-control form-control-sm", placeholder = "Nombres", style = "text-transform:uppercase" } })
+                        </div>
+                        <div class="form-group col-md-6">
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-header text-small">
+                            Documento Identidad
+                        </div>
+                        <div class="card-body">
+                            <div class="form-row">
+                                <div class="form-group col-md-6">
+                                    <label for="ddlItemPN_DITipoId" class="text-small">Tipo</label>
+                                    @Html.DropDownListFor(m => m.ddlItemPN_DITipoId, new SelectList(Model.ddlItemPN_DITipo, "Value", "Text"), new { @class = "form-control form-control-sm" })
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label for="txtItemPN_DINumero" class="text-small">Numero</label>
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text"><i class="fa fa-search" id="btnBuscarPersonaNatural" data-toggle="tooltip" data-placement="top" title="Buscar Persona"></i></span>
+                                        </div>
+                                        @Html.EditorFor(m => m.txtItemPN_DINumero, new { htmlAttributes = new { @class = "form-control form-control-sm", @onkeypress = "return controles_Persona.IsNumber(event);", placeholder = "Numero", maxlength = "8" } })
+                                    </div>
+                                </div>
+                            </div>
+                            @if (Model.formOrigen == "frmBuscarPersonaPOA")
+    {<div class="form-row">
+    <div class="form-group col-md-6">
+        <label for="ddlItemPN_DITipoId" class="text-small">Cargo</label>
+        @Html.EditorFor(m => m.txtItemBNuevo_Cargo, new { htmlAttributes = new { @class = "form-control form-control-sm", placeholder = "Cargo" } })
+    </div>
+</div>
+                            }
+
+
+
+
+                            @if (Model.tipo.Equals("N") && Model.formOrigen != "frmBuscarPersonaPOA")
+    {
+                        <div class="form-row">
+                            <div class="form-group col-md-6">
+                                <label for="txtItemPN_DIRUC" class="text-small">RUC</label>
+                                @Html.EditorFor(m => m.txtItemPN_DIRUC, new { htmlAttributes = new { @class = "form-control form-control-sm", placeholder = "Ruc", maxlength = "11" } })
+                            </div>
+                            <div class="form-group col-md-6">
+                            </div>
+                        </div>
+}
+                        </div>
+                        </div>
+                }
+                else if (Model.tipo.Equals("J"))
+                {
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label for="txtItemPJ_RSocial" class="text-small">Razón social</label>
+                            @Html.EditorFor(m => m.txtItemPJ_RSocial, new { htmlAttributes = new { @class = "form-control form-control-sm", placeholder = "Razon social", style = "text-transform:uppercase" } })
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label for="txtItemPJ_RUC" class="text-small">RUC</label>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"><i class="fa fa-search" id="btnBuscarPersonaJuridica"  data-toggle="tooltip" data-placement="top" title="Buscar Persona"></i></span>
+                                </div>
+                                @Html.EditorFor(m => m.txtItemPJ_RUC, new { htmlAttributes = new { @class = "form-control form-control-sm", placeholder = "Ruc", maxlength = "11" } })
+                            </div>
+                        </div>
+                    </div>
+                }
+                if ((Model.tipo.Equals("N") || Model.tipo.Equals("J") ) && Model.formOrigen != "frmBuscarPersonaPOA")
+                {
+                    <div class="card">
+                        <div class="card-header text-small">
+                            Dirección Legal
+                        </div>
+                        <div class="card-body">
+                            <div class="form-row">
+                                <div class="form-group col-md-6">
+                                    <label for="COD_UBIGEO" id="lblCOD_UBIGEO" class="text-small">Ubigeo <i class="fa fa-cog fa-spin text-danger" id="iconUbigeo" style="display:none;" data-toggle="tooltip" data-placement="top" title="Seleccione ubigeo"></i></label>
+                                   
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text"><i class="fa fa-search" data-toggle="tooltip" data-placement="top" title="Ubigeo" id="btnUbigeoPersona"></i></span>
+                                        </div>
+                                        @Html.EditorFor(m => m.COD_UBIGEO, new { htmlAttributes = new { @class = "form-control form-control-sm", @disabled = "disabled", id= "COD_UBIGEO" } })
+                                        @Html.HiddenFor(m => m.hdCOD_UBIGEO)
+                                        @Html.HiddenFor(m => m.hdfUbigeo)
+                                    </div>
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label for="txtItemPN_DLDireccion" class="text-small">Dirección</label>
+                                    @Html.EditorFor(m => m.txtItemPN_DLDireccion, new { htmlAttributes = new { @class = "form-control form-control-sm", placeholder = "Dirección" } })
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <button type="button" id="btnRegistrarPersona" class="btn btn-primary">Aceptar</button>
+                }
+                else
+                {
+
+                    <button type="button" id="btnRegistrarPersona" class="btn btn-primary">Registrar</button>
+                }
+
+            }
+        </div>
+        <div class="modal-footer">
+        </div>
+    </div>
+</div>

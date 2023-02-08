@@ -1,0 +1,41 @@
+﻿@model CapaEntidad.ViewModel.VM_ControlCalidad_2
+
+@*<script src="~/Scripts/ckeditor/ckeditor.js"></script>*@
+<script src="~/Areas/General/js/Controles/_ControlCalidad.js"></script>
+
+<div class="card" id="frmControlCalidad">
+    @Html.Hidden("hdfCodGrupoUsuario", (object)ViewBag.hdfCodGrupoUsuario)
+    <div class="card-header text-small"></div>
+    <div class="card-body">
+        <div class="form-row">
+            <div class="form-group col-md-4">
+                <label for="ddlIndicadorId" class="text-small">Indicador</label>
+                @Html.DropDownListFor(m => m.ddlIndicadorId, new SelectList(Model.ddlIndicador, "Value", "Text"), new { @class = "form-control form-control-sm" })
+                @Html.HiddenFor(m => m.ddlIndicadorEnable)
+                @Html.HiddenFor(m => m.hdnDisableControl)
+            </div>
+            <div class="form-group col-md-4">
+                <label for="txtUsuarioControl" class="text-small">Responsable del registro en Control de Calidad</label>
+                @Html.TextBoxFor(m => m.txtUsuarioControl, new { @class = "form-control form-control-sm", disabled = "disabled" })
+            </div>
+            <div class="form-group col-md-4">
+                <label for="txtUsuarioRegistro" class="text-small">Responsable del Registro Concluido </label>
+                @Html.TextBoxFor(m => m.txtUsuarioRegistro, new { @class = "form-control form-control-sm", disabled = "disabled" })
+            </div>
+
+        </div>
+        <div class="form-row" id="dvObservacionCalidad" style="display:none;">
+            <div class="form-group col-md-12">
+                @Html.TextAreaFor(m => m.txtControlCalidadObservaciones, new { @class = "form-control form-control-sm" })
+            </div>
+        </div>
+        <div class="form-row" id="dvObservacionSubsanar" style="display:none;">
+            <div class="form-group col-md-4">
+                <div class="custom-control custom-checkbox my-1 mr-sm-2">
+                    @Html.CheckBoxFor(m => m.chkObsSubsanada, new { @class = "custom-control-input" })
+                    <label for="chkObsSubsanada" class="custom-control-label" style="margin-top:4px;">Observaciones Subsanadas?</label>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,103 @@
+﻿@model  CapaEntidad.ViewModel.VM_InformeLegal
+
+<style type="text/css">
+    #tbRenderListIncisos_wrapper {
+        padding: 0px;
+    }
+
+    #tbConsultaILegal_info {
+        color: #33b35a;
+        font-size: 12px;
+        margin-top: 12px;
+    }
+</style>
+
+
+<script type="text/javascript">
+    var _rederListaIncisos = {};
+     _rederListaIncisos.tbEliTABLA = [];
+
+    // iniciar datos en la tabla
+     _rederListaIncisos.fnInitDataTable_Detail = function () {
+        var columns_label = [], columns_data = [], options = {};
+
+        columns_label = ["Codigo", "Articulo", "Inciso"];
+        columns_data = ["COD_ILEGAL_ENCISOS", "DESCRIPCION_ARTICULOS", "DESCRIPCION_ENCISOS"];
+        options = {
+            page_length: 10, row_index: true, row_delete: true, row_fnDelete: "_rederListaIncisos.fnDelete(this)", page_sort: true
+        };
+        _rederListaIncisos.dtRenderListInforme = utilDt.fnLoadDataTable_Detail(_rederListaIncisos.frm.find("#tbRenderListIncisos"), columns_label, columns_data, options);
+        _rederListaIncisos.dtRenderListInforme.rows.add(JSON.parse('@Html.Raw(Json.Encode(@Model.listaInfracciones))')).draw();
+
+        options = {
+            page_paging: true, page_length: 10, row_index: true, row_select: true, row_fnSelect: "_rederListaIncisos.fnSelect(this)"
+        };
+        utilDt.fnLoadDataTable_Detail(_rederListaIncisos.frm.find("#tbConsultaExpediente"), columns_label, columns_data, options);
+    }
+
+    /*Listado de registros (render)*/
+    _rederListaIncisos.fnDelete = function (obj) {
+        var data = _rederListaIncisos.dtRenderListInforme.row($(obj).parents('tr')).data();
+        var tipoInformeLegal = ManInfLegal_AddEdit.frm.find("#hdfCodTipoIlegal").val();
+        if (data["RegEstado"] == "0") {
+            if (tipoInformeLegal == "0000001") {
+                _rederListaIncisos.tbEliTABLA.push({
+                    EliTABLA: "DET_INF_SUP_ENCISOS",
+                    COD_INFORME: data["COD_ILEGAL_ENCISOS"],
+                     COD_SECUENCIAL: data["COD_SECUENCIAL"]
+
+                });
+            }
+            else if (tipoInformeLegal == "0000002"||tipoInformeLegal == "0000107"||tipoInformeLegal == "0000108") {
+                 _rederListaIncisos.tbEliTABLA.push({
+                    EliTABLA: "ILEGAL_DET_EVA_INSTRUCTIVA",
+                     COD_ILEGAL_ENCISOS: data["COD_ILEGAL_ENCISOS"]
+                });
+            }
+
+        }
+        _rederListaIncisos.dtRenderListInforme.row($(obj).parents('tr')).remove().draw(false);
+    }
+
+    _rederListaIncisos.fnGetListEliTABLA = function () { return _rederListaIncisos.tbEliTABLA }
+
+    //devuelve la lista de infracciones
+    _rederListaIncisos.fnGetList = function () {
+        let list = [], rows, countFilas, data;
+        rows = _rederListaIncisos.dtRenderListInforme.$("tr");
+        countFilas = rows.length;
+        if (countFilas > 0) {
+            $.each(rows, function (i, o) {
+                data = _rederListaIncisos.dtRenderListInforme.row($(o)).data();
+                list.push(utilSigo.fnConvertArrayToObject(data));
+            });
+        }
+        return list;
+    }
+
+   $(document).ready(function () {
+       _rederListaIncisos.frm = $("#frmRenderListIncisos");
+       //inicializa la tabla con los campos obtenidos del model
+       _rederListaIncisos.fnInitDataTable_Detail();
+       //inicializa los componentes necesarios
+       //_rederListaIncisos.fnInit();
+
+   });
+
+</script>
+<div id="frmRenderListIncisos">
+    <div class="table-responsive">
+        <table id="tbRenderListIncisos" style="width:100%;margin:0px !important;" class="table table-hover table-bordered">
+            <thead>
+                <tr>
+                    <th colspan="6" class="text-sm-left">
+                        <div class="form-inline">
+                            <strong> Infracciones presuntamente incurridas</strong>
+                        </div>
+                    </th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
+</div>

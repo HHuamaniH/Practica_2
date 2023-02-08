@@ -1,0 +1,569 @@
+﻿@model CapaEntidad.ViewModel.VM_InformeTecnico
+<script type="text/javascript">
+    var _renderFormatoMulta = {};
+    _renderFormatoMulta.tbEliTABLA = [];
+    _renderFormatoMulta.tbEliTABLA2 = [];
+
+   _renderFormatoMulta.fnInitDataTable_Detail2 = function () {
+        var columns_label = [], columns_data = [], options = {};
+        columns_label = ["Articulo / Inciso","ARTICULO/INCISO", "Especie", "VOLUMEN","BENEFICIO", "PE","K","α", "R","Fórmula", "F", "Multa Sub Tot S/.", "Multa Sub Tot UIT", "Multa Tot S/."];
+        columns_data = ["DESCRIPCION_INCISOSMULTA", "DESCRIPCION_INCISOSMULTA2", "DESCRIPCION_ESPECIEMULTA", "VOLUMENMULTA","BENEFICIOILICITO","PE","K", "ALFA", "R", "VSUBFORMULA", "F", "MULTASUBTOTALSOL", "MULTASUBTOTALUIT", "MULTATOTALUIT"];
+        options = {
+            page_length: 10, row_index: true, row_delete: true, row_fnDelete: "_renderFormatoMulta.fnDelete2(this)", row_select: false, page_sort: true
+        };
+        _renderFormatoMulta.dtRenderListInforme2 = utilDt.fnLoadDataTable_Detail(_renderFormatoMulta.frm.find("#tbRenderMulta"), columns_label, columns_data, options);
+        _renderFormatoMulta.dtRenderListInforme2.rows.add(JSON.parse('@Html.Raw(Json.Encode(@Model.Listarmulta))')).draw();
+    }
+
+    _renderFormatoMulta.fnDelete2 = function (obj) {
+        var data = _renderFormatoMulta.dtRenderListInforme2.row($(obj).parents('tr')).data();
+          if (data["RegEstado"] == 0) {
+            _renderFormatoMulta.tbEliTABLA.push({
+                EliTABLA: "INFTEC_DET_FORMATO_MULTA",
+                EliVALOR02: data["COD_SECUENCIAL"]
+            });
+        }
+        _renderFormatoMulta.dtRenderListInforme2.row($(obj).parents('tr')).remove().draw(false);
+    }
+
+    _renderFormatoMulta.fnAdd2 = function (obj) {
+        let COD_ILEGAL_ENCISOS = _renderFormatoMulta.frm.find("#ddlInfracciones1").val();
+        let DESCRIPCION_INCISOSMULTA = _renderFormatoMulta.frm.find("#ddlInfracciones1 option:selected").text();
+        let COD_INCISO_OPCIONAL = _renderFormatoMulta.frm.find("#ddlInfracciones2").val();
+        let DESCRIPCION_INCISOSMULTA2 = _renderFormatoMulta.frm.find("#ddlInfracciones2 option:selected").text();
+        let COD_ESPECIES = _renderFormatoMulta.frm.find("#ddlEspecies1").val();
+        let DESCRIPCION_ESPECIEMULTA = _renderFormatoMulta.frm.find("#ddlEspecies1 option:selected").text();
+        let VOLUMENMULTA = _renderFormatoMulta.frm.find("#txtVolumen2").val();
+        let BENEFICIOILICITO = _renderFormatoMulta.frm.find("#txtBeneficio2").val();
+        let PE = _renderFormatoMulta.frm.find("#txtPe2").val();
+        let K = _renderFormatoMulta.frm.find("#txtk2").val();
+        let ALFA = _renderFormatoMulta.frm.find("#txta2").val();
+        let VSUBFORMULA = _renderFormatoMulta.frm.find("#txtFormulaR").val();
+        let MULTASUBTOTALSOL = _renderFormatoMulta.frm.find("#txtMultaSub4").val();
+        let MULTASUBTOTALUIT = _renderFormatoMulta.frm.find("#txtMultaSub5").val();
+        let MULTATOTALUIT = _renderFormatoMulta.frm.find("#txtTotalMulta2").val();
+        let R = _renderFormatoMulta.frm.find("#txtR2").val();
+        let F = _renderFormatoMulta.frm.find("#txt1f2").val();
+
+        var data = {
+            "COD_ILEGAL_ENCISOS": COD_ILEGAL_ENCISOS,
+            "DESCRIPCION_INCISOSMULTA": DESCRIPCION_INCISOSMULTA,
+            "DESCRIPCION_INCISOSMULTA2": DESCRIPCION_INCISOSMULTA2,
+            "COD_INCISO_OPCIONAL": COD_INCISO_OPCIONAL,
+            "COD_ESPECIES": COD_ESPECIES,
+            "DESCRIPCION_ESPECIEMULTA": DESCRIPCION_ESPECIEMULTA,
+            "VOLUMENMULTA": VOLUMENMULTA == "" ? 0 : VOLUMENMULTA,
+            "BENEFICIOILICITO": BENEFICIOILICITO == "" ? 0 : BENEFICIOILICITO,
+            "PE": PE == "" ? 0 : PE,
+            "K": K == "" ? 0 : K,
+            "ALFA": ALFA == "" ? 0 : ALFA,
+            "R": R == "" ? 0 : R,
+            "VSUBFORMULA": VSUBFORMULA == "" ? 0 : VSUBFORMULA,
+            "F": F == "" ? 0 : F,
+            "MULTASUBTOTALSOL": MULTASUBTOTALSOL == "" ? 0 : MULTASUBTOTALSOL,
+            "MULTASUBTOTALUIT": MULTASUBTOTALUIT == "" ? 0 : MULTASUBTOTALUIT,
+            "MULTATOTALUIT": MULTATOTALUIT == "" ? 0 : MULTATOTALUIT,
+            "RegEstado": 1,
+            "COD_SECUENCIAL": 0
+        }
+
+        _renderFormatoMulta.dtRenderListInforme2.rows.add([data]).draw();
+        _renderFormatoMulta.frm.find("#ddlInfracciones1").val('0000002');
+        _renderFormatoMulta.frm.find("#ddlInfracciones2").val('0000002');
+        _renderFormatoMulta.frm.find("#ddlEspecies1").val('0004563');
+        _renderFormatoMulta.frm.find("#txtVolumen2").val('0');
+        _renderFormatoMulta.frm.find("#txtBeneficio2").val('0');
+        _renderFormatoMulta.frm.find("#txtPe2").val('0');
+        _renderFormatoMulta.frm.find("#txtk2").val('0');
+        _renderFormatoMulta.frm.find("#txta2").val('0');
+        _renderFormatoMulta.frm.find("#txtFormulaR").val('0');
+        _renderFormatoMulta.frm.find("#txtMultaSub4").val('0');
+        _renderFormatoMulta.frm.find("#txtMultaSub5").val('0');
+        _renderFormatoMulta.frm.find("#txtTotalMulta2").val('0');
+        _renderFormatoMulta.frm.find("#txtR2").val('0');
+        _renderFormatoMulta.frm.find("#txt1f2").val('0');
+
+    }
+    _renderFormatoMulta.fnInitDataTable_Detail = function () {
+        var columns_label = [], columns_data = [], options = {};
+        columns_label = ["Articulo / Inciso", "Especie", "Hasta 100 HAS (UIT)","De 101 a 500 HAS (UIT)", "> 500 HAS (UIT)","Multa Sub Total (1)","(UIT)", "Multa Sub Total (2)", "Volumen (m3)","Volumen PT", "VCF (S/.)", "DMC", "Multa CITE/C (%VCF)", "Multa Sub Total (3) (S/.)", "Multa Sub Total (S/.)", "Multa Total (UIT)"];
+        columns_data = ["DESCRIPCION_INCISOSMULTA", "DESCRIPCION_ESPECIEMULTA", "UIT_100", "UIT_500","UIT_501","MULTA_SUBTOT1","UIT", "MULTA_SUBTOT2", "VOLUMEN_M3", "VOLUMEN_PT", "VCF", "DMC", "MULTA_CITE", "MULTA_SUBTOTAL3", "MULTA_SUBTOTAL", "MULTA_TOTAL_UIT"];
+        options = {
+            page_length: 10, row_index: true, row_delete: true, row_fnDelete: "_renderFormatoMulta.fnDelete(this)", row_select: false, page_sort: true
+        };
+        _renderFormatoMulta.dtRenderListInforme = utilDt.fnLoadDataTable_Detail(_renderFormatoMulta.frm.find("#tbRenderFormatoAntiguo"), columns_label, columns_data, options);
+        _renderFormatoMulta.dtRenderListInforme.rows.add(JSON.parse('@Html.Raw(Json.Encode(@Model.Listarmultaantiguo))')).draw();
+    }
+
+    _renderFormatoMulta.fnDelete = function (obj) {
+        var data = _renderFormatoMulta.dtRenderListInforme.row($(obj).parents('tr')).data();
+          if (data["RegEstado"] == 0) {
+            _renderFormatoMulta.tbEliTABLA.push({
+                EliTABLA: "INFTEC_DET_FORMATO_MULTAAntigua",
+                EliVALOR02: data["COD_SECUENCIAL"]
+            });
+        }
+        _renderFormatoMulta.dtRenderListInforme.row($(obj).parents('tr')).remove().draw(false);
+    }
+
+    _renderFormatoMulta.fnAdd = function (obj) {
+        let COD_ILEGAL_ENCISOS = _renderFormatoMulta.frm.find("#ddlInfracciones").val();
+        let DESCRIPCION_INCISOSMULTA = _renderFormatoMulta.frm.find("#ddlInfracciones option:selected").text();
+        let COD_ESPECIES = _renderFormatoMulta.frm.find("#ddlEspecies").val();
+        let DESCRIPCION_ESPECIEMULTA = _renderFormatoMulta.frm.find("#ddlEspecies  option:selected").text();
+        //let COD_SECUENCIAL = 0;
+        let UIT = _renderFormatoMulta.frm.find("#txtUIT").val();
+        let UIT_100 = _renderFormatoMulta.frm.find("#txthasta100").val();
+        let UIT_500 = _renderFormatoMulta.frm.find("#txt101a500").val();
+        let UIT_501 = _renderFormatoMulta.frm.find("#txtMas500").val();
+        let MULTA_SUBTOT1 = _renderFormatoMulta.frm.find("#txtMultaSub1").val();
+        let MULTA_SUBTOT2 = _renderFormatoMulta.frm.find("#txtMultaSub2").val();
+        let VOLUMEN_M3 = _renderFormatoMulta.frm.find("#txtVolumen").val();
+        let VOLUMEN_PT = _renderFormatoMulta.frm.find("#txtVolPt").val();
+        let VCF = _renderFormatoMulta.frm.find("#txtVCF").val();
+        let DMC = _renderFormatoMulta.frm.find("#txtDMC").val();
+        let MULTA_CITE = _renderFormatoMulta.frm.find("#txtCITE").val();
+        let MULTA_SUBTOTAL3 = _renderFormatoMulta.frm.find("#txtMultaSub3").val();
+        let MULTA_SUBTOTAL = _renderFormatoMulta.frm.find("#txtMultaSub").val();
+        let MULTA_TOTAL_UIT = _renderFormatoMulta.frm.find("#txtMultaUIT").val();
+       if (DESCRIPCION_ESPECIEMULTA != "||" ) {
+            var data = {
+                "COD_INCISOMULTA": COD_ILEGAL_ENCISOS,
+                "DESCRIPCION_INCISOSMULTA": DESCRIPCION_INCISOSMULTA,
+                "COD_ESPECIESMULTA": COD_ESPECIES,
+                "DESCRIPCION_ESPECIEMULTA": DESCRIPCION_ESPECIEMULTA,
+                "COD_SECUENCIAL" : 0,
+                "UIT": UIT == "" ? 0 : UIT,
+                "UIT_100": UIT_100 == "" ? 0 : UIT_100,
+                "UIT_500": UIT_500 == "" ? 0 : UIT_500,
+                "UIT_501": UIT_501 == "" ? 0 : UIT_501,
+                "MULTA_SUBTOT1": MULTA_SUBTOT1 == "" ? 0 : MULTA_SUBTOT1,
+                "MULTA_SUBTOT2": MULTA_SUBTOT2 == "" ? 0 : MULTA_SUBTOT2,
+                "VOLUMEN_M3": VOLUMEN_M3 == "" ? 0 : VOLUMEN_M3,
+                "VOLUMEN_PT": VOLUMEN_PT == "" ? 0 : VOLUMEN_PT,
+                "VCF": VCF == "" ? 0 : VCF,
+                "DMC": DMC == "" ?0 : DMC,
+                "MULTA_CITE": MULTA_CITE == "" ? 0 : MULTA_CITE,
+                "MULTA_SUBTOTAL3": MULTA_SUBTOTAL3 == "" ? 0 : MULTA_SUBTOTAL3,
+                "MULTA_SUBTOTAL": MULTA_SUBTOTAL == "" ? 0 : MULTA_SUBTOTAL,
+                "MULTA_TOTAL_UIT": MULTA_TOTAL_UIT == "" ? 0 : MULTA_TOTAL_UIT,
+                "RegEstado": 1
+            };
+            _renderFormatoMulta.dtRenderListInforme.rows.add([data]).draw();
+        }
+        else {
+              utilSigo.toastWarning("Aviso", "debe ingresar valores");
+        }
+        _renderFormatoMulta.frm.find("#ddlInfracciones").val('0000002');
+        _renderFormatoMulta.frm.find("#ddlEspecies").val('0004563');
+        _renderFormatoMulta.frm.find("#txtUIT").val('0');
+        _renderFormatoMulta.frm.find("#txthasta100").val('0');
+        _renderFormatoMulta.frm.find("#txt101a500").val('0');
+        _renderFormatoMulta.frm.find("#txtMas500").val('0');
+        _renderFormatoMulta.frm.find("#txtMultaSub1").val('0');
+        _renderFormatoMulta.frm.find("#txtMultaSub2").val('0');
+        _renderFormatoMulta.frm.find("#txtVolumen").val('0');
+        _renderFormatoMulta.frm.find("#txtVolPt").val('0');
+        _renderFormatoMulta.frm.find("#txtVCF").val('0');
+        _renderFormatoMulta.frm.find("#txtDMC").val('0');
+        _renderFormatoMulta.frm.find("#txtCITE").val('0');
+        _renderFormatoMulta.frm.find("#txtMultaSub3").val('0');
+        _renderFormatoMulta.frm.find("#txtMultaSub").val('0');
+        _renderFormatoMulta.frm.find("#txtMultaUIT").val('0');
+
+    }
+
+    _renderFormatoMulta.fnGetList = function () {
+        let list = [], rows, countFilas, data;
+        rows = _renderFormatoMulta.dtRenderListInforme.$("tr");
+        countFilas = rows.length;
+        if (countFilas > 0) {
+            $.each(rows, function (i, o) {
+                data = _renderFormatoMulta.dtRenderListInforme.row($(o)).data();
+                list.push(utilSigo.fnConvertArrayToObject(data));
+            });
+        }
+        return list;
+    }
+     _renderFormatoMulta.fnGetList2 = function () {
+        let list = [], rows, countFilas, data;
+        rows = _renderFormatoMulta.dtRenderListInforme2.$("tr");
+        countFilas = rows.length;
+        if (countFilas > 0) {
+            $.each(rows, function (i, o) {
+                data = _renderFormatoMulta.dtRenderListInforme2.row($(o)).data();
+                list.push(utilSigo.fnConvertArrayToObject(data));
+            });
+        }
+        return list;
+    }
+    $(document).ready(function () {
+        _renderFormatoMulta.frm = $("#divFormatoMulta");
+        _renderFormatoMulta.fnInitDataTable_Detail();
+        _renderFormatoMulta.fnInitDataTable_Detail2();
+    });
+
+</script>
+<div id="divFormatoMulta">
+    <div class="card-header text-small">Formato de Antiguo</div>
+    <div><br /></div>
+    <div class="form-row">
+        <div class="form-group col-md-4">
+            <label for="chkGTF" class="text-small">Artículo / Inciso</label>
+        </div>
+        <div class="form-group col-md-6">
+            @Html.DropDownListFor(m => m.txtIdInfraccion, new SelectList(Model.ListComboInciso, "CODIGO", "DESCRIPCION"),
+                                                    new { @class = "form-control form-control-sm", @id = "ddlInfracciones" })
+        </div>
+        <div class="form-group col-md-2">
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="form-group col-md-4">
+            <label for="chkGTF" class="text-small">Especie</label>
+        </div>
+        <div class="form-group col-md-6">
+            @Html.DropDownListFor(m => m.txtIdEspecie, new SelectList(Model.ListComboEspecies, "CODIGO", "DESCRIPCION"),
+                                                   new { @class = "form-control form-control-sm", @id = "ddlEspecies" })
+        </div>
+        <div class="form-group col-md-2">
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="form-group col-md-4">
+            <label for="chkGTF" class="text-small">Hasta 100 HAS (UIT)</label>
+        </div>
+        <div class="form-group col-md-6">
+            <input type="text" class="form-control form-control-sm" id="txthasta100">
+        </div>
+        <div class="form-group col-md-2">
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="form-group col-md-4">
+            <label for="chkGTF" class="text-small">De 101 a 500 HAS (UIT)</label>
+        </div>
+        <div class="form-group col-md-6">
+            <input type="text" class="form-control form-control-sm" id="txt101a500">
+        </div>
+        <div class="form-group col-md-2">
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="form-group col-md-4">
+            <label for="chkGTF" class="text-small">> 500 HAS (UIT)</label>
+        </div>
+        <div class="form-group col-md-6">
+            <input type="text" class="form-control form-control-sm" id="txtMas500">
+        </div>
+        <div class="form-group col-md-2">
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="form-group col-md-4">
+            <label for="chkGTF" class="text-small">Multa Sub Total (1)</label>
+        </div>
+        <div class="form-group col-md-6">
+            <input type="text" class="form-control form-control-sm" id="txtMultaSub1">
+        </div>
+        <div class="form-group col-md-2">
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="form-group col-md-4">
+            <label for="chkGTF" class="text-small">(UIT)</label>
+        </div>
+        <div class="form-group col-md-6">
+            <input type="text" class="form-control form-control-sm" id="txtUIT">
+        </div>
+        <div class="form-group col-md-2">
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="form-group col-md-4">
+            <label for="chkGTF" class="text-small">Multa Sub Total (2)</label>
+        </div>
+        <div class="form-group col-md-6">
+            <input type="text" class="form-control form-control-sm" id="txtMultaSub2">
+        </div>
+        <div class="form-group col-md-2">
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="form-group col-md-4">
+            <label for="chkGTF" class="text-small">Volumen (m3)</label>
+        </div>
+        <div class="form-group col-md-6">
+            <input type="text" class="form-control form-control-sm" id="txtVolumen">
+        </div>
+        <div class="form-group col-md-2">
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="form-group col-md-4">
+            <label for="chkGTF" class="text-small">Volumen PT</label>
+        </div>
+        <div class="form-group col-md-6">
+            <input type="text" class="form-control form-control-sm" id="txtVolPt">
+        </div>
+        <div class="form-group col-md-2">
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="form-group col-md-4">
+            <label for="chkGTF" class="text-small">VCF (S/.)</label>
+        </div>
+        <div class="form-group col-md-6">
+            <input type="text" class="form-control form-control-sm" id="txtVCF">
+        </div>
+        <div class="form-group col-md-2">
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="form-group col-md-4">
+            <label for="chkGTF" class="text-small">DMC</label>
+        </div>
+        <div class="form-group col-md-6">
+            <input type="text" class="form-control form-control-sm" id="txtDMC">
+        </div>
+        <div class="form-group col-md-2">
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="form-group col-md-4">
+            <label for="chkGTF" class="text-small">Multa CITE/C (%VCF)</label>
+        </div>
+        <div class="form-group col-md-6">
+            <input type="text" class="form-control form-control-sm" id="txtCITE">
+        </div>
+        <div class="form-group col-md-2">
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="form-group col-md-4">
+            <label for="chkGTF" class="text-small">Multa Sub Total (3) (S/.)</label>
+        </div>
+        <div class="form-group col-md-6">
+            <input type="text" class="form-control form-control-sm" id="txtMultaSub3">
+        </div>
+        <div class="form-group col-md-2">
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="form-group col-md-4">
+            <label for="chkGTF" class="text-small">Multa Sub Total (S/.)</label>
+        </div>
+        <div class="form-group col-md-6">
+            <input type="text" class="form-control form-control-sm" id="txtMultaSub">
+        </div>
+        <div class="form-group col-md-2">
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="form-group col-md-4">
+            <label for="chkGTF" class="text-small">Multa Total (UIT)</label>
+        </div>
+        <div class="form-group col-md-6">
+            <input type="text" class="form-control form-control-sm" id="txtMultaUIT">
+        </div>
+        <div class="form-group col-md-2">
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="form-group col-md-12">
+            <button type="button" class="btn btn-info btn-sm" onclick="_renderFormatoMulta.fnAdd()"> Agregar</button>
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="form-group col-md-12">
+            <div class="table-responsive">
+                <table id="tbRenderFormatoAntiguo" style="width:100%;margin:0px !important;" class="table table-hover table-bordered">
+                    <thead></thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div class="form-row">
+        <div class="form-group col-md-4">
+            <label class="text-small">Descripción</label>
+        </div>
+        <div class="form-group col-md-6">
+            @Html.TextAreaFor(m => m.txtDescripMultaAnt, 4, 1, new { @class = "form-control form-control-sm" })
+        </div>
+        <div class="form-group col-md-2">
+        </div>
+    </div>
+    <!---->
+    <div class="card-header text-small">Formato de Multa</div>
+    <div><br /></div>
+    <div class="form-row">
+        <div class="form-group col-md-4">
+            <label for="chkGTF" class="text-small">Artículo / Inciso</label>
+        </div>
+        <div class="form-group col-md-6">
+            @Html.DropDownListFor(m => m.txtIdInfraccion, new SelectList(Model.ListComboInciso, "CODIGO", "DESCRIPCION"),
+                                                    new { @class = "form-control form-control-sm", @id = "ddlInfracciones1" })
+        </div>
+        <div class="form-group col-md-2">
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="form-group col-md-4">
+            <label for="chkGTF" class="text-small">Artículo / Inciso</label>
+        </div>
+        <div class="form-group col-md-6">
+            @Html.DropDownListFor(m => m.txtIdInfraccion, new SelectList(Model.ListComboInciso, "CODIGO", "DESCRIPCION"),
+                                                    new { @class = "form-control form-control-sm", @id = "ddlInfracciones2" })
+        </div>
+        <div class="form-group col-md-2">
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="form-group col-md-4">
+            <label for="chkGTF" class="text-small">Especie</label>
+        </div>
+        <div class="form-group col-md-6">
+            @Html.DropDownListFor(m => m.txtIdEspecie, new SelectList(Model.ListComboEspecies, "CODIGO", "DESCRIPCION"),
+                                                    new { @class = "form-control form-control-sm", @id = "ddlEspecies1" })
+        </div>
+        <div class="form-group col-md-2">
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="form-group col-md-4">
+            <label for="chkGTF" class="text-small">Volumen</label>
+        </div>
+        <div class="form-group col-md-6">
+            <input type="text" class="form-control form-control-sm" id="txtVolumen2">
+        </div>
+        <div class="form-group col-md-2">
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="form-group col-md-4">
+            <label for="chkGTF" class="text-small">Beneficio Ilicito unitario</label>
+        </div>
+        <div class="form-group col-md-6">
+            <input type="text" class="form-control form-control-sm" id="txtBeneficio2">
+        </div>
+        <div class="form-group col-md-2">
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="form-group col-md-4">
+            <label for="chkGTF" class="text-small">P(e)</label>
+        </div>
+        <div class="form-group col-md-6">
+            <input type="text" class="form-control form-control-sm" id="txtPe2">
+        </div>
+        <div class="form-group col-md-2">
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="form-group col-md-4">
+            <label for="chkGTF" class="text-small">k</label>
+        </div>
+        <div class="form-group col-md-6">
+            <input type="text" class="form-control form-control-sm" id="txtk2">
+        </div>
+        <div class="form-group col-md-2">
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="form-group col-md-4">
+            <label for="chkGTF" class="text-small">α</label>
+        </div>
+        <div class="form-group col-md-6">
+            <input type="text" class="form-control form-control-sm" id="txta2">
+        </div>
+        <div class="form-group col-md-2">
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="form-group col-md-4">
+            <label for="chkGTF" class="text-small">R</label>
+        </div>
+        <div class="form-group col-md-6">
+            <input type="text" class="form-control form-control-sm" id="txtR2">
+        </div>
+        <div class="form-group col-md-2">
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="form-group col-md-4">
+            <label for="chkGTF" class="text-small">Total Formula</label>
+        </div>
+        <div class="form-group col-md-6">
+            <input type="text" class="form-control form-control-sm" id="txtFormulaR">
+        </div>
+        <div class="form-group col-md-2">
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="form-group col-md-4">
+            <label for="chkGTF" class="text-small">(1+F)</label>
+        </div>
+        <div class="form-group col-md-6">
+            <input type="text" class="form-control form-control-sm" id="txt1f2">
+        </div>
+        <div class="form-group col-md-2">
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="form-group col-md-4">
+            <label for="chkGTF" class="text-small"> Multa Sub total (S/.)</label>
+        </div>
+        <div class="form-group col-md-6">
+            <input type="text" class="form-control form-control-sm" id="txtMultaSub4">
+        </div>
+        <div class="form-group col-md-2">
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="form-group col-md-4">
+            <label for="chkGTF" class="text-small">  Multa Sub Total (UIT)</label>
+        </div>
+        <div class="form-group col-md-6">
+            <input type="text" class="form-control form-control-sm" id="txtMultaSub5">
+        </div>
+        <div class="form-group col-md-2">
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="form-group col-md-4">
+            <label for="chkGTF" class="text-small"> Total Multa (UIT)</label>
+        </div>
+        <div class="form-group col-md-6">
+            <input type="text" class="form-control form-control-sm" id="txtTotalMulta2">
+        </div>
+        <div class="form-group col-md-2">
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="form-group col-md-12">
+            <button type="button" class="btn btn-info btn-sm" onclick="_renderFormatoMulta.fnAdd2()"> Agregar</button>
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="form-group col-md-12">
+            <div class="table-responsive">
+                <table id="tbRenderMulta" style="width:100%;margin:0px !important;" class="table table-hover table-bordered">
+                    <thead></thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="form-group col-md-4">
+            <label class="text-small">Descripción</label>
+        </div>
+        <div class="form-group col-md-6">
+            @Html.TextAreaFor(m => m.txtDescripMulta, 4, 1, new { @class = "form-control form-control-sm" })
+        </div>
+        <div class="form-group col-md-2">
+        </div>
+    </div>
+</div>

@@ -1,0 +1,556 @@
+﻿@model CapaEntidad.ViewModel.VM_IndicadorFiltro
+
+<script src="~/Scripts/datatables/Extensions/dataTables.buttons.js"></script>
+<script src="~/Scripts/datatables/Extensions/buttons.flash.min.js"></script>
+<script src="~/Scripts/datatables/Extensions/jszip.min.js"></script>
+<script src="~/Scripts/datatables/Extensions/pdfmake.js"></script>
+<script src="~/Scripts/datatables/Extensions/vfs_fonts.js"></script>
+<script src="~/Scripts/datatables/Extensions/buttons.html5.js"></script>
+<script src="~/Scripts/datatables/Extensions/buttons.print.js"></script>
+<script src="~/Scripts/chart/Chart.min.js"></script>
+<script src="~/Areas/Supervision/js/Indicadores/customChart.js"></script>
+<script src="~/Areas/Supervision/js/Indicadores/_Shared/_renderMAPRO.js"></script>
+
+<link href="~/Content/datatables/buttons.dataTables.min.css" rel="stylesheet" />
+<link href="~/Areas/Capacitacion/css/ManCapacitacion/Reporte.css" rel="stylesheet" />
+<link href="~/Areas/Supervision/css/Indicadores/Reporte.css" rel="stylesheet" />
+
+<script type="text/javascript">
+    _renderMAPRO.fnLoadIndicador('@Html.Raw(Json.Encode(@Model.ddlIndicadorMAPRO))');
+</script>
+
+<div class="container-fluid">
+    <div class="card">
+        <div class="card-body">
+            <div id="dvContenedorFiltro" class="card" style="margin-bottom:10px;">
+                <div id="dvFiltro" class="card-body">
+                    <form id="frmFiltroMAPRO" action="@Url.Action("Reporte", "Indicadores", new { Area= "Supervision" })">
+                        <div class="form-row">
+                            <div class="form-group col-md-7">
+                                <label for="ddlIndicadorMAPROId" class="text-small">Indicador</label>
+                                @Html.DropDownListFor(m => m.ddlIndicadorMAPROId, new SelectList(Model.ddlIndicadorMAPRO, "Value", "Text"), new { @class = "form-control form-control-sm" })
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group col-md-2">
+                                <label for="ddlAnioMAPROId" class="text-small">Año</label>
+                                @Html.DropDownListFor(m => m.ddlAnioMAPROId, new SelectList(Model.ddlAnioMAPRO, "Value", "Text"), new { @class = "form-control form-control-sm" })
+                            </div>
+                        </div>
+                    </form>
+                    <button type="button" id="btnConsultarReporte" class="btn btn-primary btn-sm" onclick="_renderMAPRO.fnSubmitForm()">Consultar</button>
+                </div>
+                <div class="card-body" style="padding-top:0px;padding-bottom:0px;">
+                    <div class="form-row">
+                        <div id="dvHideFiltro" class="form-group col-md-12" style="text-align:center; margin:0px;cursor:pointer;" title="Ocultar Filtros">
+                            <img alt="Ocultar Filtros" src="~/Content/images/General/flecha-contraer.png" width="50" height="30" />
+                        </div>
+                        <div id="dvShowFiltro" class="form-group col-md-12" style="text-align:center; margin:0px;cursor:pointer; display:none;" title="Mostrar Filtros">
+                            <img alt="Mostrar Filtros" src="~/Content/images/General/flecha-ampliar.png" width="50" height="30" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+            @***** M1.1 PORCENTAJE DE PLANES DE MANEJO CON CONTROL DE CALIDAD CONFORME *****@
+            <div class="card-body" id="dvResultadoMAPRO1" style="display:none;">
+                <div class="form-row">
+                    <div class="col-md-6">
+                        <div class="table-responsive">
+                            <table id="tbMAPRO1Trimestral_Resumen" style="width:100%;" class="table table-hover table-bordered centrar_contenido">
+                                <thead>
+                                    <tr>
+                                        <th colspan="5" class="text-sm-left">
+                                            <div class="form-inline">
+                                                <strong>Resumen de Planes de Manejo con Control de Calidad Conforme</strong>
+                                            </div>
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                                <tfoot>
+                                    <tr class="custom-row-rptcapacitacion">
+                                        <th colspan="2"><span id="col1">Total</span></th>
+                                        <th><span id="col3">0</span></th>
+                                        <th><span id="col4">0</span></th>
+                                        <th><span id="col5">0</span></th>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <canvas id="cnvMAPRO1Trimestral_Resumen"></canvas>
+                    </div>
+                </div>
+                <br />
+                <div class="form-row">
+                    <div class="table-responsive">
+                        <table id="tbMAPRO1Trimestral_Detalle" style="width:100%" class="table table-hover table-bordered">
+                            <thead>
+                                <tr>
+                                    <th colspan="11" class="text-sm-left">
+                                        <div class="form-inline">
+                                            <strong>Listado de Planes de Manejo registrados en el SIGO – SFC</strong>
+                                        </div>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            @***** Fin M1.1 *****@
+            @***** M1.2-2 PORCENTAJE DE TÍTULOS HABILITANTES SUPERVISADOS SEGÚN PASPEQ *****@
+            <div class="card-body" id="dvResultadoMAPRO2" style="display:none;">
+                <div class="form-row">
+                    <div class="col-md-6">
+                        <div class="table-responsive">
+                            <table id="tbMAPRO2Trimestral_Resumen" style="width:100%;" class="table table-hover table-bordered centrar_contenido">
+                                <thead>
+                                    <tr>
+                                        <th colspan="5" class="text-sm-left">
+                                            <div class="form-inline">
+                                                <strong>Resumen de Títulos Habilitantes supervisados según PASPEQ</strong>
+                                            </div>
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                                <tfoot>
+                                    <tr class="custom-row-rptcapacitacion">
+                                        <th colspan="2"><span id="col1">Total</span></th>
+                                        <th><span id="col3">0</span></th>
+                                        <th><span id="col4">0</span></th>
+                                        <th><span id="col5">0</span></th>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <canvas id="cnvMAPRO2Trimestral_Resumen"></canvas>
+                    </div>
+                </div>
+                <br />
+                <div class="form-row">
+                    <div class="table-responsive">
+                        <table id="tbMAPRO2Trimestral_Detalle" style="width:100%" class="table table-hover table-bordered">
+                            <thead>
+                                <tr>
+                                    <th colspan="12" class="text-sm-left">
+                                        <div class="form-inline">
+                                            <strong>Listado de Informes de Supervisión</strong>
+                                        </div>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            @***** Fin M1.2-2 *****@
+            @***** M1.2-4 PORCENTAJE DE TÍTULOS HABILITANTES AUDITADOS SEGÚN POI *****@
+            <div class="card-body" id="dvResultadoMAPRO3" style="display:none;">
+                <div class="form-row">
+                    <div class="col-md-6">
+                        <div class="table-responsive">
+                            <table id="tbMAPRO3Trimestral_Resumen" style="width:100%;" class="table table-hover table-bordered centrar_contenido">
+                                <thead>
+                                    <tr>
+                                        <th colspan="5" class="text-sm-left">
+                                            <div class="form-inline">
+                                                <strong>Resumen de Títulos Habilitantes auditados según POI</strong>
+                                            </div>
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                                <tfoot>
+                                    <tr class="custom-row-rptcapacitacion">
+                                        <th colspan="2"><span id="col1">Total</span></th>
+                                        <th><span id="col3">0</span></th>
+                                        <th><span id="col4">0</span></th>
+                                        <th><span id="col5">0</span></th>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <canvas id="cnvMAPRO3Trimestral_Resumen"></canvas>
+                    </div>
+                </div>
+                <br />
+                <div class="form-row">
+                    <div class="table-responsive">
+                        <table id="tbMAPRO3Trimestral_Detalle" style="width:100%" class="table table-hover table-bordered">
+                            <thead>
+                                <tr>
+                                    <th colspan="17" class="text-sm-left">
+                                        <div class="form-inline">
+                                            <strong>Listado de Informes Auditados</strong>
+                                        </div>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            @***** Fin M1.2-4 *****@
+            @***** M.1.2 PORCENTAJE DE TÍTULOS HABILITANTES SUPERVISADOS SEGÚN POI *****@
+            <div class="card-body" id="dvResultadoMAPRO4" style="display:none;">
+                <div class="form-row">
+                    <div class="col-md-6">
+                        <div class="table-responsive">
+                            <table id="tbMAPRO4Trimestral_Resumen" style="width:100%;" class="table table-hover table-bordered centrar_contenido">
+                                <thead>
+                                    <tr>
+                                        <th colspan="5" class="text-sm-left">
+                                            <div class="form-inline">
+                                                <strong>Resumen de Títulos Habilitantes supervisados según POI</strong>
+                                            </div>
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                                <tfoot>
+                                    <tr class="custom-row-rptcapacitacion">
+                                        <th colspan="2"><span id="col1">Total</span></th>
+                                        <th><span id="col3">0</span></th>
+                                        <th><span id="col4">0</span></th>
+                                        <th><span id="col5">0</span></th>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <canvas id="cnvMAPRO4Trimestral_Resumen"></canvas>
+                    </div>
+                </div>
+                <br />
+                <div class="form-row">
+                    <div class="table-responsive">
+                        <table id="tbMAPRO4Trimestral_Detalle" style="width:100%" class="table table-hover table-bordered">
+                            <thead>
+                                <tr>
+                                    <th colspan="23" class="text-sm-left">
+                                        <div class="form-inline">
+                                            <strong>Listado de Planes de Manejo Supervisados</strong>
+                                        </div>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            @***** Fin M.1.2 *****@
+            @***** M1.4-2 PORCENTAJE DE NOTIFICACIONES CORRECTAMENTE DILIGENCIADAS *****@
+            <div class="card-body" id="dvResultadoMAPRO5" style="display:none;">
+                <div class="form-row">
+                    <div class="col-md-6">
+                        <div class="table-responsive">
+                            <table id="tbMAPRO5Trimestral_Resumen" style="width:100%;" class="table table-hover table-bordered centrar_contenido">
+                                <thead>
+                                    <tr>
+                                        <th colspan="5" class="text-sm-left">
+                                            <div class="form-inline">
+                                                <strong>Resumen de Notificaciones Correctamente Diligenciadas</strong>
+                                            </div>
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                                <tfoot>
+                                    <tr class="custom-row-rptcapacitacion">
+                                        <th colspan="2"><span id="col1">Total</span></th>
+                                        <th><span id="col3">0</span></th>
+                                        <th><span id="col4">0</span></th>
+                                        <th><span id="col5">0</span></th>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <canvas id="cnvMAPRO5Trimestral_Resumen"></canvas>
+                    </div>
+                </div>
+                <br />
+                <div class="form-row">
+                    <div class="table-responsive">
+                        <table id="tbMAPRO5Trimestral_Detalle" style="width:100%" class="table table-hover table-bordered">
+                            <thead>
+                                <tr>
+                                    <th colspan="17" class="text-sm-left">
+                                        <div class="form-inline">
+                                            <strong>Listado de Cartas de Notificación</strong>
+                                        </div>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            @***** Fin M1.4-2 *****@
+            @***** M1.4 PORCENTAJE DE ATENCIÓN DE FONDOS POR ENCARGO EN EL PLAZO ESTABLECIDO *****@
+            <div class="card-body" id="dvResultadoMAPRO6" style="display:none;">
+                <div class="form-row">
+                    <div class="col-md-6">
+                        <div class="table-responsive">
+                            <table id="tbMAPRO6Trimestral_Resumen" style="width:100%;" class="table table-hover table-bordered centrar_contenido">
+                                <thead>
+                                    <tr>
+                                        <th colspan="5" class="text-sm-left">
+                                            <div class="form-inline">
+                                                <strong>Resumen de Atenciones de Fondos por encargo en el plazo establecido</strong>
+                                            </div>
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                                <tfoot>
+                                    <tr class="custom-row-rptcapacitacion">
+                                        <th colspan="2"><span id="col1">Total</span></th>
+                                        <th><span id="col3">0</span></th>
+                                        <th><span id="col4">0</span></th>
+                                        <th><span id="col5">0</span></th>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <canvas id="cnvMAPRO6Trimestral_Resumen"></canvas>
+                    </div>
+                </div>
+                <br />
+                <div class="form-row">
+                    <div class="table-responsive">
+                        <table id="tbMAPRO6Trimestral_Detalle" style="width:100%" class="table table-hover table-bordered">
+                            <thead>
+                                <tr>
+                                    <th colspan="14" class="text-sm-left">
+                                        <div class="form-inline">
+                                            <strong>Listado de Cartas de Notificación de Supervisiones realizadas</strong>
+                                        </div>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            @***** Fin M1.4 *****@
+            @***** M1.5.1-3 PROMEDIO DE SUPERVISIONES QUE CUMPLEN CON LA NORMATIVA *****@
+            <div class="card-body" id="dvResultadoMAPRO7" style="display:none;">
+                <div class="form-row">
+                    <div class="col-md-6">
+                        <div class="table-responsive">
+                            <table id="tbMAPRO7Trimestral_Resumen" style="width:100%;" class="table table-hover table-bordered centrar_contenido">
+                                <thead>
+                                    <tr>
+                                        <th colspan="5" class="text-sm-left">
+                                            <div class="form-inline">
+                                                <strong>Resumen de Promedio de Supervisiones que cumplen con la normativa</strong>
+                                            </div>
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                                <tfoot>
+                                    <tr class="custom-row-rptcapacitacion">
+                                        <th colspan="2"><span id="col1">Total</span></th>
+                                        <th><span id="col3">0</span></th>
+                                        <th><span id="col4">0</span></th>
+                                        <th><span id="col5">0</span></th>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <canvas id="cnvMAPRO7Trimestral_Resumen"></canvas>
+                    </div>
+                </div>
+                <br />
+                <div class="form-row">
+                    <div class="table-responsive">
+                        <table id="tbMAPRO7Trimestral_Detalle" style="width:100%" class="table table-hover table-bordered">
+                            <thead>
+                                <tr>
+                                    <th colspan="16" class="text-sm-left">
+                                        <div class="form-inline">
+                                            <strong>Listado de Supervisiones Ejecutadas</strong>
+                                        </div>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            @***** Fin M1.5.1-3 *****@
+            @***** M1.5.1 PROMEDIO DE DÍAS PARA LA EJECUCIÓN DE LA SUPERVISIÓN *****@
+            <div class="card-body" id="dvResultadoMAPRO8" style="display:none;">
+                <div class="form-row">
+                    <div class="col-md-6">
+                        <div class="table-responsive">
+                            <table id="tbMAPRO8Trimestral_Resumen" style="width:100%;" class="table table-hover table-bordered centrar_contenido">
+                                <thead>
+                                    <tr>
+                                        <th colspan="5" class="text-sm-left">
+                                            <div class="form-inline">
+                                                <strong>Resumen de Promedio de días para la ejecución de la Supervisión</strong>
+                                            </div>
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                                <tfoot>
+                                    <tr class="custom-row-rptcapacitacion">
+                                        <th colspan="2"><span id="col1">Total</span></th>
+                                        <th><span id="col3">0</span></th>
+                                        <th><span id="col4">0</span></th>
+                                        <th><span id="col5">0</span></th>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <canvas id="cnvMAPRO8Trimestral_Resumen"></canvas>
+                    </div>
+                </div>
+                <br />
+                <div class="form-row">
+                    <div class="table-responsive">
+                        <table id="tbMAPRO8Trimestral_Detalle" style="width:100%" class="table table-hover table-bordered">
+                            <thead>
+                                <tr>
+                                    <th colspan="17" class="text-sm-left">
+                                        <div class="form-inline">
+                                            <strong>Listado de Supervisiones realizadas</strong>
+                                        </div>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            @***** Fin M1.5.1 *****@
+            @***** M1.5.2-3 PORCENTAJE DE AUDITORÍAS QUE CUMPLEN CON LA NORMATIVA *****@
+            <div class="card-body" id="dvResultadoMAPRO9" style="display:none;">
+                <div class="form-row">
+                    <div class="col-md-6">
+                        <div class="table-responsive">
+                            <table id="tbMAPRO9Trimestral_Resumen" style="width:100%;" class="table table-hover table-bordered centrar_contenido">
+                                <thead>
+                                    <tr>
+                                        <th colspan="5" class="text-sm-left">
+                                            <div class="form-inline">
+                                                <strong>Resumen de Auditorías que cumplen con la normativa</strong>
+                                            </div>
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                                <tfoot>
+                                    <tr class="custom-row-rptcapacitacion">
+                                        <th colspan="2"><span id="col1">Total</span></th>
+                                        <th><span id="col3">0</span></th>
+                                        <th><span id="col4">0</span></th>
+                                        <th><span id="col5">0</span></th>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <canvas id="cnvMAPRO9Trimestral_Resumen"></canvas>
+                    </div>
+                </div>
+                <br />
+                <div class="form-row">
+                    <div class="table-responsive">
+                        <table id="tbMAPRO9Trimestral_Detalle" style="width:100%" class="table table-hover table-bordered">
+                            <thead>
+                                <tr>
+                                    <th colspan="33" class="text-sm-left">
+                                        <div class="form-inline">
+                                            <strong>Listado de Informes de Auditoría</strong>
+                                        </div>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            @***** Fin M1.5.2-3 *****@
+            @***** M1.5.2 PROMEDIO DE DÍAS DEL PROCESO DE AUDITORÍA *****@
+            <div class="card-body" id="dvResultadoMAPRO10" style="display:none;">
+                <div class="form-row">
+                    <div class="col-md-6">
+                        <div class="table-responsive">
+                            <table id="tbMAPRO10Trimestral_Resumen" style="width:100%;" class="table table-hover table-bordered centrar_contenido">
+                                <thead>
+                                    <tr>
+                                        <th colspan="5" class="text-sm-left">
+                                            <div class="form-inline">
+                                                <strong>Resumen de Promedio de días del Proceso de Auditoría</strong>
+                                            </div>
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                                <tfoot>
+                                    <tr class="custom-row-rptcapacitacion">
+                                        <th colspan="2"><span id="col1">Total</span></th>
+                                        <th><span id="col3">0</span></th>
+                                        <th><span id="col4">0</span></th>
+                                        <th><span id="col5">0</span></th>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <canvas id="cnvMAPRO10Trimestral_Resumen"></canvas>
+                    </div>
+                </div>
+                <br />
+                <div class="form-row">
+                    <div class="table-responsive">
+                        <table id="tbMAPRO10Trimestral_Detalle" style="width:100%" class="table table-hover table-bordered">
+                            <thead>
+                                <tr>
+                                    <th colspan="12" class="text-sm-left">
+                                        <div class="form-inline">
+                                            <strong>Listado de Informes de Auditoría</strong>
+                                        </div>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            @***** Fin M1.5.2 *****@
+        </div>
+    </div>
+</div>

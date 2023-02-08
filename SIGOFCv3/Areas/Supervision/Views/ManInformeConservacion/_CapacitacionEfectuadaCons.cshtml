@@ -1,0 +1,52 @@
+﻿
+<script src="~/Areas/Supervision/js/ManInformeConservacion/_CapacitacionEfectuadaCons.js"></script>
+
+<div class="modal-dialog" role="document">
+    <div class="modal-content">
+        <div class="modal-header text-small" style="cursor:move;">
+            <span>Capacitación Efectuada</span>
+            <i class="fa fa-close" style="cursor:pointer;" data-dismiss="modal" aria-label="Close"></i>
+        </div>
+        <div class="modal-body">
+            <form id="frmItemCapacitacionCons">
+                @Html.Hidden("hdfRegEstado")
+                @Html.Hidden("hdfCodPrograma")
+                @Html.Hidden("hdfCodSecuencial")
+                <div class="form-row">
+                    <div class="form-group col-md-12">
+                        <label for="txtCapacitacion" class="text-small">Capacitación</label>
+                        @Html.TextBox("txtCapacitacion", "", new { @class = "form-control form-control-sm" })
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label for="txtNumParticipante" class="text-small">Nro. de Participantes</label>
+                        @Html.TextBox("txtNumParticipante", "", new { @class = "form-control form-control-sm", type = "number" })
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-12">
+                        <label for="txtLugar" class="text-small">Lugar de Capacitación</label>
+                        @Html.TextBox("txtLugar", "", new { @class = "form-control form-control-sm" })
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-12">
+                        <label for="txtObjetivo" class="text-small">Objetivo</label>
+                        @Html.TextBox("txtObjetivo", "", new { @class = "form-control form-control-sm" })
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-12">
+                        <label for="txtObservacion" class="text-small">Observación</label>
+                        @Html.TextArea("txtObservacion", "", new { @class = "form-control form-control-sm", rows = "3" })
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-primary btn-sm" onclick="_CapacitacionEfectuadaCons.fnSubmitForm()">Guardar</button>
+            <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Cancelar</button>
+        </div>
+    </div>
+</div>

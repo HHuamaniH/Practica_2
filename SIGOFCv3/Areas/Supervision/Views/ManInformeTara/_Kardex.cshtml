@@ -1,0 +1,69 @@
+﻿
+<script src="~/Areas/Supervision/js/ManInformeTara/_Kardex.js"></script>
+
+<div class="modal-dialog" role="document">
+    <div class="modal-content">
+        <div class="modal-header text-small" style="cursor:move;">
+            <span>Kardex</span>
+            <i class="fa fa-close" style="cursor:pointer;" data-dismiss="modal" aria-label="Close"></i>
+        </div>
+        <div class="modal-body">
+            <form id="frmItemKardex">
+                @Html.Hidden("hdfRegEstado")
+                @Html.Hidden("hdfCodSecuencial")
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label for="txtGuia" class="text-small">Guía de Transporte</label>
+                        @Html.TextBox("txtGuia", "", new { @class = "form-control form-control-sm" })
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="txtFechaEmision" class="text-small">Fecha Emisión</label>
+                        @Html.TextBox("txtFechaEmision","", new { @class = "form-control form-control-sm", placeholder = "dd/mm/aaaa", maxlength = "10" })
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label for="txtZafra" class="text-small">Zafra</label>
+                        @Html.TextBox("txtZafra", "", new { @class = "form-control form-control-sm" })
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label for="txtCantAutoriza" class="text-small">Cantidad Autorizada (Qq)</label>
+                        @Html.TextBox("txtCantAutoriza", "", new { @class = "form-control form-control-sm", type = "number" })
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="txtTotalSacado" class="text-small">Total Sacado (Qq)</label>
+                        @Html.TextBox("txtTotalSacado", "", new { @class = "form-control form-control-sm", type = "number" })
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label for="txtSaldoQuint" class="text-small">Saldo (Qq)</label>
+                        @Html.TextBox("txtSaldoQuint", "", new { @class = "form-control form-control-sm" })
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="txtSaldoCubic" class="text-small">Saldo (m3)</label>
+                        @Html.TextBox("txtSaldoCubic", "", new { @class = "form-control form-control-sm" })
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="col-md-12 mb-3">
+                        <label for="txtUbigeo" class="text-small">Ubigeo de Destino</label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"><i class="fa fa-search" style="cursor:pointer;" data-toggle="tooltip" data-placement="top" title="Seleccionar Ubigeo" onclick="_Kardex.fnViewModalUbigeo();"></i></span>
+                            </div>
+                            @Html.Editor("txtUbigeoDestino", new { htmlAttributes = new { @class = "form-control form-control-sm", @disabled = "disabled" } })
+                            @Html.Hidden("hdfCodUbigeoDestino")
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-primary btn-sm" onclick="_Kardex.fnSubmitForm()">Guardar</button>
+            <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Cancelar</button>
+        </div>
+    </div>
+</div>

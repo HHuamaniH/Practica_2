@@ -1,0 +1,130 @@
+﻿@model CapaEntidad.ViewModel.VM_CNotificacionMuestra
+@{
+    ViewBag.Title = "Muestra";
+    Layout = "~/Views/Shared/_LayoutMain.cshtml";
+}
+
+<script src="~/Scripts/sigo/utility.uploadFile.js"></script>
+<script src="~/Areas/Supervision/js/ManCNotificacion/Muestra.js?v=2"></script>
+
+<style type="text/css">
+    #dvManCNot_Muestra_NoMuestra .dataTables_info {
+        color:#33b35a;
+        font-size:15px;
+        margin-top:17px;
+    }
+    #dvManCNot_Muestra_Muestra .dataTables_info {
+        color:#33b35a;
+        font-size:15px;
+        margin-top:17px;
+    }
+</style>
+
+<div class="container-fluid">
+    <div class="card" style="margin-bottom:10px;">
+        <div class="card-header text-right">
+            Carta de Notificación
+        </div>
+        <div class="card-body">
+            <div class="card" style="margin-bottom:0px;">
+                <div class="card-header text-small">
+                    <a href="javascript:void(0)" style="cursor:pointer;" data-toggle="tooltip" data-placement="top" title="Actualizar listado" onclick="ManCNotificacion_Muestra.fnRefreshEspecieCenso()"><span class="fa mx-2 fa-lg fa-refresh"></span></a>
+                    <a href="javascript:void(0)" style="cursor:pointer;" data-toggle="tooltip" data-placement="top" title="Guardar muestra" onclick="ManCNotificacion_Muestra.fnSubmitForm()"><i class="fa mx-2 fa-lg fa-save"></i></a>
+                    <a href="javascript:void(0)" style="cursor:pointer;" data-toggle="tooltip" data-placement="top" title="Retornar" onclick="ManCNotificacion_Muestra.fnReturnIndex()"><i class="fa mx-2 fa-lg fa-reply"></i></a>
+                    <a href="javascript:void(0)" style="cursor:pointer;" data-toggle="tooltip" data-placement="top" title="Seleccionar todo el censo como muestra" onclick="ManCNotificacion_Muestra.fnSaveCensoAsMuestra()"><span class="fa mx-2 fa-lg fa-magic"></span></a>
+                    <label id="dvManCNot_Muestra_Import" style="cursor:pointer; color:#007bff;" class="fa mx-2 fa-lg fa-cloud-upload" data-toggle="tooltip" data-placement="top" title="Cargar muestra">
+                        <input type="file" id="fileselect" name="fileselect" style="display:none" size="60" onchange="ManCNotificacion_Muestra.fnImportMuestra(event, this)">
+                    </label>
+                    <a id="dvManCNot_Muestra_Export" href="javascript:void(0)" style="cursor:pointer;" data-toggle="tooltip" data-placement="top" title="Descargar muestra" onclick="ManCNotificacion_Muestra.fnExportMuestra()"><span class="fa mx-2 fa-lg fa-cloud-download"></span></a>
+                    <a href="javascript:void(0)" style="cursor:pointer;" data-toggle="tooltip" data-placement="top" title="Visualizar muestra en el SISFOR" onclick="ManCNotificacion_Muestra.fnGoToSISFOR()"><span class="fa mx-2 fa-lg fa-globe"></span></a>
+                    <a href="javascript:void(0)" style="cursor:pointer;" data-toggle="tooltip" data-placement="top" title="Descargar datos generales" onclick="ManCNotificacion_Muestra.fnExportDatosGenerales()"><span class="fa mx-2 fa-lg fa-book"></span></a>
+                    @Model.lblTituloEstado
+                </div>
+                <div class="card-body">
+                    <form id="frmManCNotificacion_Muestra" action="@Url.Action("Muestra", "ManCNotificacion", new { Area = "Supervision" })">
+                        @Html.HiddenFor(m=>m.hdfCodCNotificacion)
+                        @Html.HiddenFor(m => m.hdfCodTHabilitante)
+                        @Html.HiddenFor(m=>m.hdfTipoMuestra)
+                        @Html.HiddenFor(m=>m.hdfRemoveAllMuestraSelect)
+                        <div class="form-row">
+                            <div class="form-group col-md-3">
+                                <label for="ddlFiltroBusquedaId" class="text-small">Especies del CENSO</label>
+                                @Html.DropDownListFor(m => m.ddlFiltroBusquedaId, new SelectList(Model.ddlFiltroBusqueda, "Value", "Text"), new { @class = "form-control form-control-sm" })
+                            </div>
+                            <div class="form-group col-md-3">
+                                <label for="ddlCriterioBusquedaId" class="text-small">Buscar por</label>
+                                @Html.DropDownListFor(m => m.ddlCriterioBusquedaId, new SelectList(Model.ddlCriterioBusqueda, "Value", "Text"), new { @class = "form-control form-control-sm" })
+                            </div>
+                            <div class="form-group col-md-3">
+                                <label for="txtValorBusqueda" class="text-small">Valor</label>
+                                @Html.TextBoxFor(m => m.txtValorBusqueda, new { @class = "form-control form-control-sm", autocomplete="off" })
+                            </div>
+                            <div class="col-md-3">
+                                <button type="button" class="btn btn-sm btn-primary" style="margin-top:23px;" onclick="ManCNotificacion_Muestra.fnSearchEspecieCenso()">BUSCAR</button>
+                            </div>
+                        </div>
+                        <br />
+                        <div class="form-row">
+                            <div class="col-md-12" style="text-align:center;">
+                                <a href="javascript:void(0)" style="cursor:pointer;text-decoration:none;" onclick="ManCNotificacion_Muestra.fnViewModalMuestra()">Listado de Especies Seleccionadas en la Muestra (@Html.Label("lblNumEspecieSelect", " ",new { id= "lblNumEspecieSelect" }))</a>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="card">
+        <div id="dvManCNot_Muestra_NoMuestra" class="table-responsive">
+            <table id="tbManCNot_Muestra_NoMuestra" style="width:100%" class="table table-hover table-bordered">
+                <thead>
+                    <tr>
+                        <th colspan="20" class="text-sm-left">
+                            <div class="form-inline">
+                                <i class="fa mx-2 fa-lg fa-check" style="cursor:pointer;color:limegreen;font-size:24px;" onclick="ManCNotificacion_Muestra.fnSelectAllListaEspecieMuestra()" data-toggle="tooltip" data-placement="top" title="Seleccionar todas las especies a la muestra"></i>
+                                <i class="fa mx-2 fa-lg fa-ban" style="cursor:pointer;color:red;font-size:24px;" onclick="ManCNotificacion_Muestra.fnRemoveAllListaEspecieMuestra()" data-toggle="tooltip" data-placement="top" title="Quitar todas las especies de la muestra"></i>
+                                <strong>
+                                    Listado de Especies del CENSO
+                                </strong>
+                            </div>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade hide" id="mdlManCNot_Muestra_Muestra" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-custom-tb" role="document">
+        <div class="modal-content">
+            <div class="modal-header text-small" style="cursor:move;">
+                Muestra
+                <i class="fa fa-close" style="cursor:pointer;" data-dismiss="modal" aria-label="Close"></i>
+            </div>
+            <div class="modal-body" style="padding:0px;">
+                <div id="dvManCNot_Muestra_Muestra" class="table-responsive" style="margin-top:5px;">
+                    <table id="tbManCNot_Muestra_Muestra" style="width:100%" class="table table-hover table-bordered">
+                        <thead>
+                            <tr>
+                                <th colspan="20" class="text-sm-left">
+                                    <div class="form-inline">
+                                        <div id="dvManCNot_Muestra_Remove">
+                                            <i class="fa mx-2 fa-lg fa-window-close-o" style="cursor:pointer;" onclick="ManCNotificacion_Muestra.fnRemoveMuestra()" data-toggle="tooltip" data-placement="top" title="Quitar todas las especies de la muestra"></i>
+                                        </div>
+                                        <strong>
+                                            Listado de Especies Seleccionadas en la Muestra
+                                        </strong>
+                                    </div>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="modal-footer"></div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,159 @@
+﻿
+@{
+    ViewBag.Title = "viewReporte3";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<link href="~/Styles/Proyectos/reporteEstadisticas.min.css" rel="stylesheet" />
+<script src="~/Scripts/chart/Chart.min.js"></script>
+<script src="~/Scripts/chart/custom.js"></script>
+
+<script>
+    $(document).ready(function () {
+        $("#cnvReporteEst3").remove();
+        $("#dvChartReporteEst3").append("<canvas id='cnvReporteEst3'></canvas>");
+        $("#cnvReporteEst4").remove();
+        $("#dvChartReporteEst4").append("<canvas id='cnvReporteEst4'></canvas>");
+
+        $.ajax({
+            url: '@Url.Action("generarReporte3","Estadisticos")',
+            type: 'POST',
+            dataType: 'json',
+            contentType: 'application/json; charset=utf-8',
+            success: function (data) {                
+                var j = 0; cantColumns = 0; fila = ""; anio = 2012;
+                $(data).each(function () {
+                    var i = 0;
+                    ++j;
+                    var arrayTotal = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+                    $("#tbReportEst3" + (j) + ">tbody").empty();
+                    if (j == 1) { cantColumns = 13; } else if (j == 2) { cantColumns = 4; }
+
+                    var dataGrafico = new Array();
+                    $(this).each(function () {
+                        fila = "<tr><td>" + (++i) + "</td><td>" + $(this)[0] + "</td>";
+                        for (var k = 0; k < cantColumns; k++) {
+                            arrayTotal[k] += $(this)[k + 1];
+                            fila += "<td>" + agregarSeparador(parseFloat($(this)[k + 1].toFixed(3)).toString(), ',') + "</td>";
+                        }
+                        fila += "</tr>";
+                        $("#tbReportEst3" + (j) + ">tbody").append(fila);
+
+                    });
+
+                    fila = "<tr><td></td><td>Total</td>";
+                    for (var k = 0; k < cantColumns; k++) {
+                        fila += "<td>" + agregarSeparador(parseFloat(arrayTotal[k].toFixed(3)).toString(), ',') + "</td>";
+                        if (k + 1 != cantColumns) {
+                            dataGrafico.push([anio.toString(), arrayTotal[k]]);
+                            anio++;
+                        }
+                    }
+                    fila += "</tr>";
+                    $("#tbReportEst3" + (j) + ">tbody").append(fila);
+
+                    if (j == 1) {
+                        customChart.LoadBarraSimple(dataGrafico, 0, { colIndex: [1], color: ["blue"], legend: ["Número de Capacitaciones"] }, { type: "V", title: "Capacitaciones por Año", legend: false, xTitle: "Años", yTitle: "Número de Capacitaciones", canvas: "cnvReporteEst3" });
+
+                        customChart.LoadBarraSimple($(this), 0, { colIndex: [12], color: ["blue"], legend: ["Número de Capacitaciones"] }, { type: "H", title: "Capacitaciones por Departamento", legend: false, xTitle: "Número de Capacitaciones", yTitle: "Departamento", canvas: "cnvReporteEst4" });
+                    }
+                });
+                unloader();
+            },
+            beforeSend: function () {
+                loader();
+            },
+            error: function () {
+                unloader();
+            }
+        });
+    });
+</script>
+
+<div class="contenedorReporte">
+    <div class="filtroReporte">
+        <div class="toolsLista">
+            <div class="navLista">
+                <a href="@Url.Action("Index","Home")" title="Volver al Inicio"><span class="icon-arrow-back"></span><span>Volver al Inicio</span></a>
+            </div>
+            <div class="tituloLista">
+                <h2>Capacitaciones por departamento</h2>
+            </div>
+        </div>
+        @Html.Partial("Controles/_MasterFiltro")
+    </div>
+    <div class="informacionReporte">
+        <h3 style="margin:0px;">¿Qué contiene este reporte?</h3>
+        <ul style="padding-left:15px;margin-top:5px;margin-bottom:5px;">
+            <li><p>Muestra el número de capacitaciones efectuadas por el OSINFOR a partir del año 2012, por departamento y año.</p></li>
+        </ul>
+    </div>
+    <div class="resultadoReporte">
+        <div id="subTituloReport3" class="subTituloReport">
+            <h3>Capacitaciones efectuadas a los actores forestales y de fauna silvestre</h3>
+        </div>
+        <div class="bloqueResultado">
+            <div class="bloqueResultado4"></div>
+            <div class="bloqueResultado2">
+                <div class="GrillaDivMarco">
+                    <table id="tbReportEst31" class="Grilla GrillaReporteTotal" style="width:100%;">
+                        <thead>
+                            <tr>
+                                <th>Nº</th>
+                                <th>Departamento</th>
+                                <th>2012</th>
+                                <th>2013</th>
+                                <th>2014</th>
+                                <th>2015</th>
+                                <th>2016</th>
+                                <th>2017</th>
+                                <th>2018</th>
+                                <th>2019</th>
+                                <th>2020</th>
+                                <th>2021</th>
+                                <th>2022</th>
+                                <th>2023</th>
+                                <th>Total</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="bloqueResultado4"></div>
+        </div>
+        <br />
+        <div class="bloqueResultado">
+            <div class="bloqueResultado2" style="margin-right:5px;">
+                <div id="dvChartReporteEst4"></div>
+            </div>
+            <div class="bloqueResultado2" style="margin-left:5px;">
+                <div id="dvChartReporteEst3"></div>
+            </div>
+        </div>
+    </div>
+    <div class="informacionReporte">
+        <ul style="padding-left:20px;margin-top:5px;margin-bottom:5px;">
+            <li style="margin-top:10px;"><strong>Actualizado al: </strong>@ViewBag.fechaProcess</li>
+            <li><strong>Fecha y Hora de Consulta:</strong> @DateTime.Now</li>
+        </ul>
+    </div>
+</div>
+
+@*
+<div class="GrillaDivMarco">
+    <table id="tbReportEst32" class="Grilla GrillaReporteTotal">
+        <thead>
+            <tr>
+                <th>Nº</th>
+                <th>Año</th>
+                <th>Num. Capacitaciones</th>
+                <th>Num. Personas Capacitadas</th>
+                <th>Num. Hombres</th>
+                <th>Num. Mujeres</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+</div>
+*@

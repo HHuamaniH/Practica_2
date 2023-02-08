@@ -1,0 +1,79 @@
+﻿@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<script type="text/javascript">
+    function btnAvisoAceptaTerm() {
+        $("#chkVentanaRecom").prop("checked", true);
+        $("#divAvisoCheck").fadeOut("slow");
+    }
+    function retornaResultado() {
+        if ($("#chkVentanaRecom").is(":checked")) {
+            return true;
+        }
+        else {
+            $("#divAvisoCheck").fadeIn("slow");
+            return false;
+        }
+    }   
+        
+
+</script>
+@using (@Html.BeginForm("Menu", "Home", FormMethod.Post,(new { onsubmit="return retornaResultado();" })))
+{
+<div id="divVentanaRecom" class="boxMensajeBloqueo">
+    <div>
+        <div><div>Recomendaciones para el uso del OBSERVATORIO OSINFOR</div></div>
+        <div><img src="~/Imagenes/Fondos/mensaje_observatorio.png" /></div>
+    </div>
+    <div>
+        <div>
+            <p>Califica a los planes de manejo de los títulos habilitantes en base a los resultados de la supervisión en campo y/o fiscalización del OSINFOR, con la finalidad de coadyuvar al comercio legal de la madera.</p>
+            <h3>¿Qué información muestra?</h3>
+            <p>Planes de manejo forestal de los títulos habilitantes supervisados por el OSINFOR de las siguientes modalidades:</p>
+            <ul style="list-style-type:disc; padding-left:20px;">
+                <li>Concesiones forestales maderables.</li>
+                <li>Concesiones forestales no maderables con planes complementarios maderables.</li>
+                <li>Concesiones de forestación y/o reforestación.</li>
+                <li>Permisos forestales en comunidades nativas y campesinas.</li>
+                <li>Permisos forestales en predios privados.</li>
+                <li>Contratos de administración en bosques locales.</li>
+            </ul>
+        </div>
+        <div>
+            <h2>Tener en cuenta</h2>
+            <ul style="list-style-type:disc; padding-left:20px;">
+                <li>La asignación de color se realiza sobre cada plan de manejo forestal supervisado por el OSINFOR, por lo que puede existir un mismo titular en ambas listas con plan de manejo forestal distinto.</li>
+                <li style="padding-top:6px;">Los resultados de la supervisión son mostrados en el observatorio desde la emisión del informe de supervisión, el mismo que es actualizado conforme se vaya generando la documentación correspondiente del proceso de fiscalización.</li>
+                <li style="padding-top:6px;">Las actualizaciones son diarias y a partir de los documentos generados en 2016, en cada reporte se muestra la fecha de ingreso en el Observatorio OSINFOR.</li>
+                <li style="padding-top:6px;">Todos los reportes muestran la fecha y hora de consulta.</li>
+            </ul>
+        </div>
+        <div>
+            <h3>¿Cómo se califican los planes de manejo forestal?</h3>
+            <h1>Lista Roja</h1>
+            <p>Representa un riesgo inaceptable, importante o moderado para el comercio legal por haberse evidenciado aprovechamiento no autorizado de los recursos forestales maderables.</p>
+            <h1>Lista Verde</h1>
+            <p>No representa ninguno de los riesgos de la lista roja para el comercio legal.</p>
+        </div>
+        <div>
+            <p>Se deja expresa constancia que el OSINFOR no asume responsabilidad alguna por el uso o decisión final que adopte el usuario dentro de la información aqui presentada.</p>
+            <p>La información proporcionada a través de las consultas en línea del SIGO, no tiene validez para ningún trámite administrativo, judicial y otros.</p>
+        </div>
+    </div>
+    <div>
+        <div>Acepto haber leido las recomendaciones para el uso del OBSERVATORIO OSINFOR</div>
+        <div><input type="checkbox" id="chkVentanaRecom" value="valor" /></div>
+        <div>         
+            <input id="btnIngresaObs" type="submit" value="Aceptar" />
+        </div>
+
+    </div>
+    <div><div>- Usar de preferencia Google Chrome y Firefox</div></div>
+    <div id="divAvisoCheck" class="divAvisoCheck">
+        <div onclick="btnAvisoAceptaTerm()">* Para continuar es obligatorio marcar el check donde acepta haber leido las condiciones</div>
+    </div>
+</div>
+        }
+
+

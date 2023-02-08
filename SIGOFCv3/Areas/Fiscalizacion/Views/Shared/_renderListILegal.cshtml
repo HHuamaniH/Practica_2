@@ -1,0 +1,207 @@
+﻿
+@model List<CapaEntidad.DOC.Ent_ILEGAL_CONSULTA>
+<style type="text/css">
+    #tbRenderListILegal_wrapper {
+        padding: 0px;
+    }
+
+    #tbConsultaILegal_info {
+        color: #33b35a;
+        font-size: 12px;
+        margin-top: 12px;
+    }
+</style>
+<script type="text/javascript">
+    var _renderListILegal = {};
+    _renderListILegal.tbEliTABLA = [];
+
+    /*Consulta de registros (modal)*/
+    _renderListILegal.fnInitDataTablePaging = function (options) {
+        var optDt = {};
+        optDt.iLength = options.page_length;
+        optDt.iStart = 0;
+        optDt.bSearch = false;
+        optDt.bInfo = true;
+        optDt.bSort = true;
+        optDt.aSort = [];
+        return _renderListILegal.frm.find("#tbConsultaILegal").DataTable({
+            processing: true,
+            serverSide: true,
+            searching: optDt.bSearch,
+            ordering: optDt.bSort,
+            deferLoading: 0,
+            paging: true,
+            ajax: {
+                "url": urlLocalSigo + "Fiscalizacion/ManILegal/ConsultaILegalPaging",
+                "data": function (d) {
+                    d.customSearchEnabled = true;
+                    d.customSearchForm = "ILEGAL_CONSULTA";
+                    d.customSearchType = "NUM_ILEGAL";
+                    d.customSearchValue = _renderListILegal.frm.find("#txtConsultaILegal").val().trim();
+                    for (var i = 0; i < d.order.length; i++) {
+                        d.order[i]["column_name"] = d.columns[d.order[i]["column"]]["data"];
+                    }
+                    d.columns = null;
+                },
+                "error": function (jqXHR) {
+                    utilSigo.unblockUIGeneral();
+                    utilSigo.toastError("Error", initSigo.MessageError);
+                    console.log(jqXHR.responseText);
+                }
+            },
+            columns: options.table_columns,
+            bInfo: optDt.bInfo,
+            "lengthMenu": [[10, 20, 50, 100], [10, 20, 50, 100]],
+            "bLengthChange" : false,
+            "aaSorting": optDt.aSort,
+            "pageLength": optDt.iLength,
+            "displayStart": optDt.iStart,
+            "oLanguage": initSigo.oLanguage,
+            "drawCallback": initSigo.showPagination,
+        });
+    }
+    _renderListILegal.fnConsulta = function () {
+        var txtConsulta = _renderListILegal.frm.find("#txtConsultaILegal").val();
+        if (txtConsulta.length > 2) {
+            _renderListILegal.dtConsultaILegal.ajax.reload();
+        } else {
+            utilSigo.toastWarning("Aviso", "Ingrese al menos 3 caracteres para proceder con la búsqueda.");
+        }
+    }
+    _renderListILegal.fnInit = function () {
+        _renderListILegal.frm.find("#btnConsultaILegal").click(function () {
+            _renderListILegal.fnConsulta();
+
+        });
+        _renderListILegal.frm.find("#txtConsultaILegal").keyup(function (e) {
+            if (e.keyCode == 13) {
+                _renderListILegal.fnConsulta();
+            }
+        });
+        _renderListILegal.frm.find("#mdlConsultaILegal").on('shown.bs.modal', function () {
+            _renderListILegal.frm.find("#txtConsultaILegal").focus();
+        });
+    }
+    _renderListILegal.fnViewModalConsulta = function () {
+        utilSigo.modalDraggable(_renderListILegal.frm.find("#mdlConsultaILegal"), '.modal-header');
+        _renderListILegal.frm.find("#mdlConsultaILegal").modal({ keyboard: true, backdrop: 'static' });
+    }
+    _renderListILegal.fnSelect = function (obj) {
+        var data = _renderListILegal.dtConsultaILegal.row($(obj).parents('tr')).data();
+        if (!utilDt.existValorSearch(_renderListILegal.dtRenderListILegal, "COD_ILEGAL", data["COD_ILEGAL"])) {
+            data["RegEstado"] = 1;
+            _renderListILegal.dtRenderListILegal.rows.add([data]).draw();
+            _renderListILegal.dtRenderListILegal.page('last').draw('page');
+        } else {
+            utilSigo.toastWarning("Aviso", "El informe legal ya se encuentra en la lista");
+        }
+    }
+
+    /*Listado de registros (render)*/
+    _renderListILegal.fnDelete = function (obj) {
+        var data = _renderListILegal.dtRenderListILegal.row($(obj).parents('tr')).data();
+
+        if (data["RegEstado"] == "0") {
+            _renderListILegal.tbEliTABLA.push({
+                EliTABLA: "DETALLE_ILEGAL",
+                COD_ILEGAL: data["COD_ILEGAL"]
+            });
+        }
+        _renderListILegal.dtRenderListILegal.row($(obj).parents('tr')).remove().draw(false);
+    }
+    _renderListILegal.fnGetList = function () {
+        var list = [], rows, countFilas, data;
+
+        rows = _renderListILegal.dtRenderListILegal.$("tr");
+        if (rows.length > 0) {
+            $.each(rows, function (i, o) {
+                data = _renderListILegal.dtRenderListILegal.row($(o)).data();
+                if (data["RegEstado"] == "1") {
+                    list.push(utilSigo.fnConvertArrayToObject(data));
+                }
+            });
+        }
+        return list;
+    }
+    _renderListILegal.fnGetListEliTABLA = function () { return _renderListILegal.tbEliTABLA }
+    _renderListILegal.fnGetCount = function () { return _renderListILegal.dtRenderListILegal.$("tr").length }
+
+    /*General*/
+    _renderListILegal.fnInitDataTable_Detail = function () {
+        var columns_label = [], columns_data = [], options = {};
+
+        columns_label = ["Informe Legal", "Sub. Dir. Línea", "Título Habilitante", "Titular"];
+        columns_data = ["NUM_ILEGAL", "DLINEA", "NUM_THABILITANTE", "TITULAR"];
+        options = {
+            page_length: 10, row_index: true, row_delete: true, row_fnDelete: "_renderListILegal.fnDelete(this)", page_sort: true
+        };
+        _renderListILegal.dtRenderListILegal = utilDt.fnLoadDataTable_Detail(_renderListILegal.frm.find("#tbRenderListILegal"), columns_label, columns_data, options);
+        _renderListILegal.dtRenderListILegal.rows.add(JSON.parse('@Html.Raw(Json.Encode(@Model))')).draw();
+
+        options = {
+            page_paging: true, page_length: 10, row_index: true, row_select: true, row_fnSelect: "_renderListILegal.fnSelect(this)"
+        };
+        utilDt.fnLoadDataTable_Detail(_renderListILegal.frm.find("#tbConsultaILegal"), columns_label, columns_data, options);
+        _renderListILegal.dtConsultaILegal = _renderListILegal.fnInitDataTablePaging(options);
+    }
+
+    $(document).ready(function () {
+        _renderListILegal.frm = $("#frmRenderListILegal");
+        _renderListILegal.fnInitDataTable_Detail();
+        _renderListILegal.fnInit();
+    });
+</script>
+
+<div id="frmRenderListILegal">
+    <div class="table-responsive">
+        <table id="tbRenderListILegal" style="width:100%;margin:0px !important;" class="table table-hover table-bordered">
+            <thead>
+                <tr>
+                    <th colspan="6" class="text-sm-left">
+                        <div class="form-inline">
+                            <i class="fa mx-2 fa-lg fa-file-o" style="cursor:pointer;" onclick="_renderListILegal.fnViewModalConsulta();" data-toggle="tooltip" data-placement="top" title="Nuevo"></i>
+                            <strong>Lista de Informes Legales</strong>
+                        </div>
+                    </th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
+    <div class="modal fade hide" id="mdlConsultaILegal" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header text-small" style="cursor:move;">
+                    Consulta de Informes Legales
+                    <i class="fa fa-close" style="cursor:pointer;" data-dismiss="modal" aria-label="Close"></i>
+                </div>
+                <div class="modal-body" style="padding:0px;">
+                    <div id="frmConsultaILegal">
+                        <div class="card-body">
+                            <div class="form-row">
+                                <div class="col-md-3 mb-3" style="margin-bottom:0px!important;">
+                                    <label class="text-small form-control-sm">Nro. de Informe Legal</label>
+                                </div>
+                                <div class="col-md-9 mb-3" style="margin-bottom:0px!important;">
+                                    <div class="input-group">
+                                        <input type="text" id="txtConsultaILegal" class="form-control form-control-sm" maxlength="50" />
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text" id="btnConsultaILegal" style="cursor:pointer;color:forestgreen"><i class="fa fa-search" data-toggle="tooltip" data-placement="top" title="Buscar"></i></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="table-responsive" style="overflow-y:hidden;">
+                            <table id="tbConsultaILegal" style="width:100%;margin:0px !important;" class="table table-hover table-bordered">
+                                <thead></thead>
+                                <tbody></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer"></div>
+            </div>
+        </div>
+    </div>
+</div>

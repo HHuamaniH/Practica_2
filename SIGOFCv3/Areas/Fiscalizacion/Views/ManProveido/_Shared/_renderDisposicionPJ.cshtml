@@ -1,0 +1,229 @@
+﻿@model CapaEntidad.ViewModel.VM_Proveido
+<script type="text/javascript">
+    var _renderPJ = {};
+    _renderPJ.tbEliTABLA = [];
+    _renderPJ.fnSelectRecom = function () {
+        _renderPJ.frm.find("#detalleDispPJ").hide();
+
+        if (_renderPJ.frm.find("#chkMedCaut").is(':checked')) {
+            _renderPJ.frm.find("#detalleDispPJ").show();
+        }
+    }
+
+    $(document).ready(function () {
+        _renderPJ.frm = $("#provDisposicionPJ");
+        _renderPJ.fnSelectRecom();
+    });
+
+    function isNumberKey(evt) {
+        var charCode = (evt.which) ? evt.which : evt.keyCode
+        if (charCode > 31 && (charCode < 48 || charCode > 57))
+            return false;
+        return true;
+    }
+</script>
+
+<div id="provDisposicionPJ">
+    <div><br /></div>
+    <div class="form-row">
+        <div class="form-group col-md-4">
+            <label for="chkMandatos" class="text-small">P.J. Dispone Con medidas Cautelares?</label>
+        </div>
+        <div class="form-group col-md-6">
+            @Html.CheckBoxFor(m => m.chkMedCaut, new
+            {
+                @class = "form-check-input",
+                style = "width:15px;height:16px;",
+                @onchange = "_renderPJ.fnSelectRecom()"
+            })
+        </div>
+        <div class="form-group col-md-2">
+        </div>
+    </div>
+    <div id="detalleDispPJ" style="display:none;">
+        <div class="form-row">
+            <div class="form-group col-md-4">
+            </div>
+            <div class="form-group col-md-4">
+                <label for="chkMandatos" class="text-small">Caducidad</label>
+            </div>
+            <div class="form-group col-md-4">
+                @Html.CheckBoxFor(m => m.chckCaducidad, new
+                {
+                    @class = "form-check-input",
+                    style = "width:15px;height:16px;"
+                })
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group col-md-4">
+            </div>
+            <div class="form-group col-md-4">
+                <label for="chkMandatos" class="text-small">Infracciones</label>
+            </div>
+            <div class="form-group col-md-4">
+                @Html.CheckBoxFor(m => m.chkInfraccion, new
+                {
+                    @class = "form-check-input",
+                    style = "width:15px;height:16px;"
+                })
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group col-md-4">
+            </div>
+            <div class="form-group col-md-4">
+                <label for="chkMandatos" class="text-small">Planes de Manejo</label>
+            </div>
+            <div class="form-group col-md-4">
+                @Html.CheckBoxFor(m => m.chkPM, new
+                {
+                    @class = "form-check-input",
+                    style = "width:15px;height:16px;"
+                })
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group col-md-4">
+            </div>
+            <div class="form-group col-md-4">
+                <label for="chkMandatos" class="text-small">Guías de Transporte Forestal</label>
+            </div>
+            <div class="form-group col-md-4">
+                @Html.CheckBoxFor(m => m.chkGTF, new
+                {
+                    @class = "form-check-input",
+                    style = "width:15px;height:16px;"
+                })
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group col-md-4">
+            </div>
+            <div class="form-group col-md-4">
+                <label for="chkMandatos" class="text-small">Lista de Trozas</label>
+            </div>
+            <div class="form-group col-md-4">
+                @Html.CheckBoxFor(m => m.chkTrozas, new
+                {
+                    @class = "form-check-input",
+                    style = "width:15px;height:16px;"
+                })
+            </div>
+        </div>
+
+    </div>
+
+    <div class="form-row">
+        <div class="form-group col-md-4">
+            <label for="chkMandatos" class="text-small">N° Expediente</label>
+        </div>
+        <div class="form-group col-md-6">
+            @Html.EditorFor(m => m.txtExpedientePJ, new { htmlAttributes = new { @class = "form-control form-control-sm", placeholder = "Expediente Administrativo" } })
+        </div>
+        <div class="form-group col-md-2">
+        </div>
+    </div>
+
+    <div class="form-row">
+        <div class="form-group col-md-4">
+            <label for="chkMandatos" class="text-small">Juzgado</label>
+        </div>
+        <div class="form-group col-md-6">
+            @Html.EditorFor(m => m.txtJuzagdo, new { htmlAttributes = new { @class = "form-control form-control-sm" } })
+        </div>
+        <div class="form-group col-md-2">
+        </div>
+    </div>
+
+    <div class="form-row">
+        <div class="form-group col-md-4">
+            <label for="chkMandatos" class="text-small">Fecha Notificación</label>
+        </div>
+        <div class="form-group col-md-6">
+            @Html.EditorFor(m => m.txtFechaJud, new { htmlAttributes = new { @class = "form-control form-control-sm", placeholder = "dd/mm/yyyy", title = "la fecha a ingresar debe ser en el formato dd/mm/yyyy", maxlength = "10" } })
+        </div>
+        <div class="form-group col-md-2">
+        </div>
+    </div>
+
+    <div class="form-row">
+        <div class="form-group col-md-4">
+            <label for="chkMandatos" class="text-small">Quien Notifica</label>
+        </div>
+        <div class="form-group col-md-6">
+            @Html.DropDownListFor(m => m.txtIdNotPJ, new SelectList(Model.ListComboNotPJ, "Value", "Text"),
+                                  new { @class = "form-control form-control-sm", @id = "ddlCaducidadF" })
+        </div>
+        <div class="form-group col-md-2">
+        </div>
+    </div>
+
+    <div class="form-row">
+        <div class="form-group col-md-4">
+            <label for="chkMandatos" class="text-small">Plazo cumplimiento dictado</label>
+        </div>
+        <div class="form-group col-md-6">
+            @Html.EditorFor(m => m.txtPlazoJud, new { htmlAttributes = new { @class = "form-control form-control-sm" } })
+        </div>
+        <div class="form-group col-md-2">
+        </div>
+    </div>
+
+    <div class="form-row">
+        <div class="form-group col-md-4">
+            <label for="chkMandatos" class="text-small">Resumen del Mandato Judicial</label>
+        </div>
+        <div class="form-group col-md-6">
+            @Html.TextAreaFor(m => m.txtMandatoJudicial, 4, 1, new { @class = "form-control form-control-sm" })
+        </div>
+        <div class="form-group col-md-2">
+        </div>
+    </div>
+
+    <div class="form-row">
+        <div class="form-group col-md-4">
+            <label for="chkMandatos" class="text-small">Observaciones para el Registro de Sancionados y/o Caducados</label>
+        </div>
+        <div class="form-group col-md-6">
+            @Html.TextAreaFor(m => m.txtObservacionesTSC, 4, 1, new { @class = "form-control form-control-sm" })
+
+        </div>
+        <div class="form-group col-md-2">
+        </div>
+    </div>
+
+    <div class="form-row">
+        <div class="form-group col-md-4">
+            <label for="chkMandatos" class="text-small">P.J. Dispone</label>
+        </div>
+        <div class="form-group col-md-6">
+            <div class="row text-small">
+                <div class="col-md-4">Caducidad en Parte</div>
+                <div class="col-md-4">
+                    @Html.CheckBoxFor(m => m.chkCaducidadParte, new { @class = "form-check-input", style = "width:15px;height:16px;" })
+                </div>
+                <div class="col-md-4"></div>
+            </div>
+
+        </div>
+        <div class="form-group col-md-2">
+        </div>
+    </div>
+
+
+    <div class="form-row">
+        <div class="form-group col-md-12">
+            <label for="lblTipoILegal" class="text-small">Se Resuelve</label>
+            @Html.TextAreaFor(m => m.txtResuelve, 4, 1, new { @class = "form-control form-control-sm" })
+        </div>
+    </div>
+
+
+    <div class="form-row">
+        <div class="form-group col-md-12">
+            @Html.Partial("~/Areas/Fiscalizacion/Views/ManProveido/_Shared/_renderNotificacion.cshtml", Model)
+        </div>
+    </div>
+</div>
+

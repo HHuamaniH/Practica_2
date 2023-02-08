@@ -1,0 +1,103 @@
+﻿@{
+    ViewBag.Title = "Index0";
+}
+<script type="text/javascript">
+    function btnAvisoAceptaTerm() {
+        $("#chkVentanaRecom").prop("checked", true);
+        $("#divAvisoCheck").fadeOut("slow");
+    }
+    function retornaResultado() {
+        if ($("#chkVentanaRecom").is(":checked")) {
+            return true;
+        }
+        else {
+            $("#divAvisoCheck").fadeIn("slow");
+            return false;
+        }
+    }
+
+
+</script>
+<style>
+    body {
+        background-color: #666;
+    }
+</style>
+@using (@Html.BeginForm("Home", "Home", FormMethod.Post, (new { onsubmit = "return retornaResultado();" })))
+{
+    <div class="row">
+        <div class="col-sm-2">
+            <br />
+        </div>
+        <div class="col-sm-8" style="background-color: white; font-size: 12px; text-align: justify">
+            <div id="divVentanaRecom" class="box box-success">
+                <div class="row" style="margin-left: 2%; margin-right: 2%;">
+                    <div id="header" class="col-sm-12">
+                        <div>
+                            <img class="img-responsive pad" src="~/Images/Fondos/fondo_1.png" style="width:100%" />
+
+                        </div>
+                    </div>
+                    <div class="col-sm-12">
+                        <div style="color: #8CC63F; text-align:center">
+                            <h4><strong>Recomendaciones para el uso del reporte Supervisiones antes de la extracción</strong></h4>
+                        </div>
+                        <br />
+                    </div>
+                    <div class="col-sm-6">
+                        <br />
+                        <p> Las supervisiones antes de la extracción, se realizan previa a la corta del árbol, luego de aprobado el plan de manejo; para ello, se debe contar con la información documentaria proporcionada por la autoridad competente o por el titular del título habilitante.</p>
+                        <p> Numeral 11.1 del artículo 11° del Reglamento N° 003-2017-OSINFOR,<i>“Reglamento para la supervisión de los recursos forestales y de fauna silvestre”</i>.</p>
+                        <img class="img-responsive" src="~/Images/Fondos/arbol.png" style="float:right" />
+                    </div>
+                    <div class="col-sm-6">
+                        <h5 style="color: #fe9728">Tener en cuenta</h5>
+                        <ul style="list-style-type: disc; padding-left: 20px;">
+                            <li>Estas supervisiones tienen como propósito verificar la existencia del recurso forestal maderable aprobado; no hace referencia a las acciones de aprovechamiento ejecutadas por el titular posteriormente.</li>
+                            <li style="padding-top:6px;">Un plan de manejo supervisado antes de la extracción, puede ser objeto de una nueva supervisión durante o después del aprovechamiento; los resultados se mostrarán en el Observatorio OSINFOR.</li>
+                        </ul>
+                        <p style="font-style: oblique">
+                            Se deja expresa constancia que el OSINFOR no asume responsabilidad alguna por el uso
+                            o decisión final que adopte el usuario dentro de la información aqui presentada.
+                        </p>
+                        <p style="font-style: oblique">
+                            La información proporcionada a través de las consultas en línea del SIGO(SFC),
+                            no tiene validez para ningún trámite administrativo, judicial y otros.
+                        </p>
+                    </div>
+                </div>
+                <div class="box-footer" style="background-color: #8CC63F">
+                    <div class="row">
+                        <div class="col-sm-9" style="color: green; font: bold 90%;">
+                            Acepto haber leído las recomendaciones para el uso de la información de los resultados de las supervisiones realizadas por el OSINFOR antes de la extracción
+                            <div style="display: inline-block">
+                                <input type="checkbox" id="chkVentanaRecom" value="valor" />
+                            </div>
+                        </div>
+                        <div class="col-sm-3">
+                            <button id="btnIngresaObs" class="btn btn-warning" type="submit">
+                                <i class="fa fa-check"></i>&nbsp;&nbsp;Aceptar
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div id="divAvisoCheck" class="divAvisoCheck">
+                    <div onclick="btnAvisoAceptaTerm()">* Para continuar es obligatorio marcar el check donde acepta haber leido las condiciones</div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-2">
+            <br />
+        </div>
+        <div class="col-sm-12">
+            <div style="font-style: oblique; font-size: 12px; float: right; margin-right: 25%; color: white">
+                <strong>** Usar de preferencia Google Chrome y Firefox</strong>
+            </div>
+        </div>
+        <div class="col-sm-12" style="height: 200%">
+            <br />
+        </div>
+    </div>
+
+}
+

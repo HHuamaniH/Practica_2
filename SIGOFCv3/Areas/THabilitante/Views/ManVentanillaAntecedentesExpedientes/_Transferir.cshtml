@@ -1,0 +1,254 @@
+﻿@model CapaEntidad.ViewModel.DOC.VM_Transferir
+
+<script src="~/Areas/THabilitante/js/ManVentanillaAntecedentesExpedientes/_Transferir.js?v3.39"></script>
+<script>
+
+
+</script>
+<div id="divItemESituAnual" class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+        <div class="modal-header text-small" style="cursor:move;padding:0.5rem;">
+            <h5 class="modal-title" id="h5Titulo">@Model.tipo</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body">
+            <form id="frmTransferir">
+                @Html.HiddenFor(m => m.ItemCodTHabilitante)
+                @Html.HiddenFor(m => m.EXISTE_PGMF)
+                @Html.HiddenFor(m => m.EXISTE_PM)
+                @Html.HiddenFor(m => m.COD_PGMF)
+                @Html.HiddenFor(m => m.COD_PMANEJO)
+                @Html.HiddenFor(m => m.COD_DREFERENCIA)
+                @Html.HiddenFor(m => m.ItemNumPoa)
+                @Html.HiddenFor(m => m.COD_TRAMITE_SITD)
+                @Html.HiddenFor(m => m.COD_AEXPEDIENTE_SITD)
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label for="ItemCodAnteExpSitd" class="text-small">Ant. Expediente SITD</label>
+                        @Html.EditorFor(m => m.ItemCodAnteExpSitd, new { htmlAttributes = new { @class = "form-control form-control-sm", @disabled = "disabled" } })
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="ItemDocReferencia" class="text-small">Documento Referencia</label>
+                        @Html.EditorFor(m => m.ItemDocReferencia, new { htmlAttributes = new { @class = "form-control form-control-sm", @disabled = "disabled" } })
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label for="ItemCodTHabilitante" class="text-small">(*) Cod. THabilitante</label>
+                        @Html.EditorFor(m => m.ItemCodTHabilitante, new { htmlAttributes = new { @class = "form-control form-control-sm", @disabled = "disabled" } })
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="ItemNumTHabilitante" class="text-small">Nro. THabilitante</label>
+                        @Html.EditorFor(m => m.ItemNumTHabilitante, new { htmlAttributes = new { @class = "form-control form-control-sm", @disabled = "disabled" } })
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label for="cboModalidadTransId" class="text-small">(*) Modalidad</label>
+                        @if (Model.pnlItemTHabilitanteTransferir)
+                        {
+                            @Html.DropDownListFor(m => m.cboModalidadTransId, new SelectList(Model.cboModalidadTrans, "Value", "Text"), new { @class = "form-control form-control-sm" })
+                        }
+                        else
+                        {
+                            @Html.DropDownListFor(m => m.cboModalidadTransId, new SelectList(Model.cboModalidadTrans, "Value", "Text"), new { @class = "form-control form-control-sm", @disabled = "disabled" })
+                        }
+                    </div>
+                </div>
+                @if (Model.pnlItemMsjTHTransferir)
+                {
+                    <div id="pnlItemMsjTHTransferir" class="alert alert-danger" role="alert">
+                        El título habilitante se encuentra registrado en el SIGOsfc
+                        <!--<br />
+                        @@if (Model.EXISTE_TH)
+                        {
+                            <div style="color:red"><i class="fa fa-cog fa-spin fa-fw"></i>Nota: El sistema SITD y SIGOsfc no estan sincronizados. Para sincronizar dar clik en: </div>
+                            <button type="button" id="btnSincronizarTH" onclick="_transf.TH_Sincronizar_()" class="btn btn-primary btn-sm">Sincronizar</button>
+                        }-->
+                    </div>
+                }
+                <br />
+                @if (Model.pnlItemTHabilitanteTransferir)
+                {
+                    <div id="pnlItemTHabilitanteTransferir" style="text-align:right">
+                        <button type="button" id="btnTransferirTH" class="btn btn-primary btn-sm" onclick="_transf.TH_EXISTE()">Transferir Título Habilitante</button>
+                    </div>
+                }
+
+                @if (Model.pnlItemPlanManejo)
+                {
+                    <div id="pnlItemPlanManejo">
+                        <div class="card-header text-small">
+                        </div>
+                        <br />
+                        @if (Model.pnlItemPlanManejoDetalle)
+                        {
+                            <div id="pnlItemPlanManejoDetalle">
+                                <div class="form-row">
+                                    <div class="form-group col-md-6">
+                                        <label for="ItemNumPoa" class="text-small">(*) Nro. Plan Manejo</label>
+                                        @Html.EditorFor(m => m.ItemNumPoa, new { htmlAttributes = new { @class = "form-control form-control-sm", @disabled = "disabled" } })
+                                    </div>
+                                    <div class="form-group col-md-6">
+                                        <label for="ItemNombrePoa" class="text-small">(*) Nombre Plan Manejo</label>
+                                        @Html.EditorFor(m => m.ItemNombrePoa, new { htmlAttributes = new { @class = "form-control form-control-sm", @disabled = "disabled" } })
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group col-md-6">
+                                        <label for="ItemResolucionPoa" class="text-small">Res. Aprobación Plan Manejo</label>
+                                        @Html.EditorFor(m => m.ItemResolucionPoa, new { htmlAttributes = new { @class = "form-control form-control-sm", @disabled = "disabled" } })
+                                    </div>
+                                    <div class="form-group col-md-6">
+
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                        @if (Model.pnlItemPlanManejoPadre)
+                        {
+                            <div id="pnlItemPlanManejoPadre">
+                                <div class="form-row">
+                                    <div class="form-group col-md-6">
+                                        <label for="ddlItemPoaPadreId" class="text-small">(*) Plan Manejo Padre</label>
+                                        @if (Model.pnlItemPlanManejoPadreEnabled)
+                                        {
+                                            @Html.DropDownListFor(m => m.ddlItemPoaPadreId, new SelectList(Model.ddlItemPoaPadre, "Value", "Text"), new { @class = "form-control form-control-sm" })
+                                        }
+                                        else
+                                        {
+                                            @Html.DropDownListFor(m => m.ddlItemPoaPadreId, new SelectList(Model.ddlItemPoaPadre, "Value", "Text"), new { @class = "form-control form-control-sm", @disabled = "disabled" })
+                                        }
+                                    </div>
+                                    <div class="form-group col-md-6">
+
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                        @if (Model.pnlItemMsjPoaTransferir)
+                        {
+                            <div id="pnlItemMsjPoaTransferir" class="alert alert-danger" role="alert">
+                                El plan de manejo se encuentra registrado en el SIGOsfc.<br />
+                                <!--@@if (Model.EXISTE_PGMF || Model.EXISTE_PM || Model.EXISTE_POA)
+            {
+                <div style="color:red"><i class="fa fa-cog fa-spin fa-fw"></i>Nota: El sistema SITD y SIGOsfc no estan sincronizados. Para sincronizar dar clik en: </div>
+                <button type="button" id="btnSincronizarP" onclick="_transf.PM_Sincronizar()" class="btn btn-primary btn-sm">Sincronizar</button>
+            }-->
+
+                            </div>
+                        }
+                        @if (Model.subtipo == "2")
+                        {
+                            <div style="text-align:right">
+                                <button type="button" id="btnAsociarPOA" onclick="_transf.PMAsociar()" class="btn btn-primary btn-sm">Asociar Plan de Manejo</button>
+                            </div>
+                        }
+                        @if (Model.pnlItemPlanManejoTransferir && Model.subtipo == "1")
+                        {
+                            <div id="pnlItemPlanManejoTransferir" style="text-align:right">
+                                <button type="button" id="btnTransferirPOA" onclick="_transf.TPM()" class="btn btn-primary btn-sm">Transferir Plan de Manejo</button>
+                            </div>
+                        }
+                        @if (ViewBag.Obs == "CENSO")
+                        {
+                            <br />
+                            <div style="text-align:right">
+                                <button type="button" id="btnTransferirCenso" onclick="_transf.VERPOA()" class="btn btn-primary btn-sm">
+                                    Transferir CENSO
+                                </button>
+                            </div>
+                            <br />
+                            <div style="text-align:right">
+                                <button type="button" id="btnTransferirCenso" onclick="anteExpedientes.fnDownloadDocCenso(this)" class="btn btn-primary btn-sm">
+                                    Descarga CENSO Pre-procesado <i class="fa fa-lg fa-download" title="Descargar Documento" ></i>
+                                </button>
+                            </div>
+                        }
+                        <br />
+                    </div>
+                }
+                @if (Model.pnlItemActoAdministrativo)
+                {
+                    <div id="pnlItemActoAdministrativo">
+                        <div class="card-header text-small">
+
+                        </div>
+                        <br />
+                        <div class="form-row">
+                            <div class="form-group col-md-6">
+                                <label for="ItemActoAdmin" class="text-small">(*) Acto administrativo</label>
+                                @Html.EditorFor(m => m.ItemActoAdmin, new { htmlAttributes = new { @class = "form-control form-control-sm", @disabled = "disabled" } })
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label for="ItemResolActoAdmin" class="text-small">Res. Aprobación Acto</label>
+                                @Html.EditorFor(m => m.ItemResolActoAdmin, new { htmlAttributes = new { @class = "form-control form-control-sm", @disabled = "disabled" } })
+                            </div>
+                        </div>
+                        @if (Model.pnlItemMsjActoAdminTransferir)
+                        {
+                            <div id="pnlItemMsjActoAdminTransferir" class="alert alert-danger" role="alert">
+                                El acto administrativo se encuentra registrado en el SIGOsfc
+                            </div>
+                        }
+                        @if (Model.pnlItemActoAdminTransferir)
+                        {
+                            <div id="pnlItemActoAdminTransferir" style="text-align:right">
+                                <button type="button" id="btnTransferirAAD" onclick="_transf.TPMACTO();" class="btn btn-primary btn-sm">Transferir Acto Administrativo</button>
+                            </div>
+                        }
+
+                    </div>
+                }
+                @if (Model.pnlItemBExtraccion)
+                {
+                    <div id="pnlItemBExtraccion">
+                        <br />
+                        <div class="card-header text-small">
+
+                        </div>
+                        <br />
+                        <div class="form-row">
+                            <div class="form-group col-md-6">
+                                <label for="txtItemFecEmiBExtraccion" class="text-small">Fecha Emisión Balance Extracción</label>
+                                @Html.EditorFor(m => m.txtItemFecEmiBExtraccion, new { htmlAttributes = new { @class = "form-control form-control-sm", @placeholder = "dd/mm/aaaa", pattern = "[0-9]{2}/[0-9]{2}/[0-9]{4}" } })
+                            </div>
+                            <div class="form-group col-md-6">
+
+                            </div>
+                        </div>
+                        @if (Model.pnlItemBExtraccionTransferir)
+                        {
+                            <div id="pnlItemBExtraccionTransferir" style="text-align:right">
+                                <button type="button" id="btnTransferirBExtraccion" onclick="_transf.TBEXTRA()" class="btn btn-primary btn-sm">Transferir Balance de Extracción</button>
+                            </div>
+                        }
+                    </div>
+                }
+                @if (Model.pnlItemAdendaTransferir)
+                {
+                    <div id="pnlItemAdendaTransferir" style="text-align:right">
+                        <button type="button" id="btnTransferirAdenda" onclick="_transf.TTH('ADENDA')" class="btn btn-primary btn-sm">Transferir Adenda TH</button>
+                    </div>
+                }
+                <br />
+                <div class="form-row">
+                    <div class="form-group col-md-12">
+                        <label for="txtItemObservacionTransferir" class="text-small">Observaciones</label>
+                        <textarea id="txtItemObservacionTransferir" name="txtItemObservacionTransferir" class="form-control form-control-sm" rows="2" maxlength="500" style="text-transform:uppercase"></textarea>
+                    </div>
+                </div>
+                <div class="alert alert-danger" role="alert">(*) Datos del SIGOsfc</div>
+            </form>
+        </div>
+        <div class="modal-footer">
+            @if (Model.tipo == "ANULAR")
+            {
+                <button type="button" id="btnGuardar" onclick="_transf.Anular()" class="btn btn-primary btn-sm">Anular</button>
+            }
+            <button type="button" id="btnCancelar" onclick="_transf.fnCloseModal();" class="btn btn-secondary btn-sm">@((Model.tipo == "ANULAR") ? "Cancelar":"Aceptar")</button>
+        </div>
+    </div>
+</div>

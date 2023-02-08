@@ -1,0 +1,91 @@
+﻿
+@model dynamic
+@{
+    Layout = null;
+}
+<script type="text/javascript">
+    var _renderIncisosSubsanables ={}
+    $(document).ready(function () {
+        $("[id*=btnAddInfraccionesSubsanadas]").click(function () {
+            var value = [];
+            $("[id*=chkIncisosSubsanables] input:checked").each(function () {
+                value.push($(this).attr('value'));
+            });
+
+            if (value.length > 0) {
+                for (let item of value) {
+                    var band = 0;
+                    var listaInforme, data;
+
+                    let model = {
+                        COD_ENCISOS: item,
+                        INCISO: _renderIncisosSubsanables.buscaEnciso(item),
+                        ARTICULO: '@Model.txtArticuloSubsanable',
+                        RegEstado: 1 //nuevo registro
+                    }
+
+                    listaInforme = _renderFinalInstruccion.dtRenderListInformeSubsanado.$("tr");
+                    for (let elem of listaInforme) {
+                        data = _renderFinalInstruccion.dtRenderListInformeSubsanado.row($(elem)).data();
+                        if (data.COD_ENCISOS == model.COD_ENCISOS) {
+                            //existe
+                            band = 1;
+                        }
+                    }
+
+                    if (band == 0) {
+                        _renderFinalInstruccion.dtRenderListInformeSubsanado.rows.add([model]).draw();
+                        _renderFinalInstruccion.dtRenderListInformeSubsanado.page('last').draw('page');
+                    }
+                }
+            }
+            else {
+                if (value.length == 0) {
+                    alert("Seleccion una infracción");
+                }
+            }
+        });
+    });
+
+    _renderIncisosSubsanables.buscaEnciso = function (codEnciso) {
+        var descEnciso = "";
+        var listaIncisos = JSON.parse('@Html.Raw(Json.Encode(@Model.listaIncisosSubsanados))');
+
+        for (var item of listaIncisos)
+        {
+            if (item.Value == codEnciso) {
+                descEnciso = item.Text;
+            }
+        }
+        return descEnciso;
+    }
+</script>
+<div style="width: 100%;">
+    <div class="form-row">
+        <div class="form-group col-md-12">
+            <label class="text-small">Inciso</label>
+        </div>
+        <div class="form-group col-md-12">
+            <div id="chkIncisosSubsanables" class="container">
+                @if (Model.listaIncisosSubsanados != null)
+                {
+                    <ul class="list-group list-group-horizontal">
+                        @foreach (var item in Model.listaIncisosSubsanados)
+                        {
+                            <li class="list-group-item">
+                                <div class="checkbox">
+                                    <label>
+                                        <input type="checkbox" class="check" value="@item.Value">
+                                        @item.Text
+                                    </label>
+                                </div>
+                            </li>
+                        }
+                    </ul>
+                }
+            </div>
+            <br>
+            <button type="button" id="btnAddInfraccionesSubsanadas" class="btn btn-info btn-sm"> Agregar Infracción</button>
+        </div>
+    </div>
+</div>

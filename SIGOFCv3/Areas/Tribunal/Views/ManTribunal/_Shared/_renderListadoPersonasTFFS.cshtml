@@ -1,0 +1,127 @@
+﻿@model CapaEntidad.ViewModel.VM_ResolucionTFFS
+
+<script type="text/javascript">
+    var _renderListProf = {};
+     _renderListProf.tbEliTABLA = [];
+
+    // iniciar datos en la tabla
+    _renderListProf.fnInitDataTable_Detail = function () {
+        var columns_label = [], columns_data = [], options = {};
+
+        columns_label = ["FUNCIONARIO", "CARGO"];
+        columns_data = ["APELLIDOS_NOMBRES", 'CARGO'];
+        options = {
+            page_length: 10, row_index: true, row_delete: true, row_fnDelete: "_renderListProf.fnDelete(this)", page_sort: true
+        };
+        _renderListProf.dtRenderListInforme = utilDt.fnLoadDataTable_Detail(_renderListProf.frm.find("#tbRenderListProfesionales"), columns_label, columns_data, options);
+        _renderListProf.dtRenderListInforme.rows.add(JSON.parse('@Html.Raw(Json.Encode(@Model.tbPersonas))')).draw();
+    }
+
+    /*Listado de registros (render)*/
+    _renderListProf.fnDelete = function (obj) {
+        var data = _renderListProf.dtRenderListInforme.row($(obj).parents('tr')).data();
+
+        if (data["RegEstado"] == "0") {
+            _renderListProf.tbEliTABLA.push({
+                EliTABLA: "RESOLUCION_TFFS_FIRMA",
+                EliVALOR01: data["COD_PERSONA"]
+            });
+        }
+        _renderListProf.dtRenderListInforme.row($(obj).parents('tr')).remove().draw(false);
+    }
+
+    _renderListProf.fnGetListEliTABLA = function () { return _renderListProf.tbEliTABLA }
+
+    _renderListProf.fnGetList = function () {
+        let list = [], rows, countFilas, data;
+        rows = _renderListProf.dtRenderListInforme.$("tr");
+        countFilas = rows.length;
+        if (countFilas > 0) {
+            $.each(rows, function (i, o) {
+                data = _renderListProf.dtRenderListInforme.row($(o)).data();
+                list.push(utilSigo.fnConvertArrayToObject(data));
+            });
+        }
+        return list;
+    }
+
+    _renderListProf.fnAdd = function (obj) {
+        var CodProfesional = _renderListProf.frm.find("#hdfCodProfesional").val();
+        var Profesional = _renderListProf.frm.find("#txtProfesional").val();
+        var Cargo = _renderListProf.frm.find("#txtCargo").val();
+        if (CodProfesional != "") {
+                var data = {
+                    "COD_PERSONA": CodProfesional,
+                    "APELLIDOS_NOMBRES": Profesional,
+                    "CARGO" : Cargo,
+                    "RegEstado": 1
+                }
+                _renderListProf.dtRenderListInforme.rows.add([data]).draw();
+                _renderListProf.dtRenderListInforme.page('last').draw('page');
+            _renderListProf.frm.find("#hdfCodProfesional").val('');
+            _renderListProf.frm.find("#txtProfesional").val('');
+            _renderListProf.frm.find("#txtCargo").val('');
+        }
+        else {
+             utilSigo.toastWarning("Aviso", "Seleccione un profesional");
+        }
+    }
+
+    $(document).ready(function () {
+       _renderListProf.frm = $("#divProfesionales");
+       _renderListProf.fnInitDataTable_Detail();
+   });
+</script>
+
+<div id="divProfesionales">
+    <div class="form-row">
+        <div class="form-group col-md-3">
+            <label for="txtNumLegal" class="text-small">Persona que Firma</label>
+        </div>
+        <div class="form-group col-md-6">
+            <div class="input-group">
+                <div class="input-group-prepend">
+                    <span class="input-group-text"><i class="fa fa-plus" style="cursor:pointer;" onclick="ManRD_AddEdit.fnBuscarPersona('PROFESIONAL', 'N');" data-toggle="tooltip" data-placement="top" title="Agregar"></i></span>
+                </div>
+                @Html.EditorFor(m => m.txtProfesional, new { htmlAttributes = new { @class = "form-control form-control-sm", @disabled = "disabled" } })
+                <input type="hidden" id="hdfCodProfesional" />
+            </div>
+        </div>
+        <div class="form-group col-md-2">
+        </div>
+    </div>
+
+    <div class="form-row">
+        <div class="form-group col-md-3">
+            <label for="txtNumLegal" class="text-small">Cargo</label>
+        </div>
+
+        <div class="form-group col-md-6">
+            @Html.EditorFor(m => m.txtCargo, new { htmlAttributes = new { @class = "form-control form-control-sm", } })
+        </div>
+        <div class="form-group col-md-2">
+        </div>
+    </div>
+
+    <div class="form-row">
+        <div class="form-group col-md-4">
+        </div>
+
+        <div class="form-group col-md-6">
+            <button type="button" id="btnEspecies" class="btn btn-info btn-sm" onclick="_renderListProf.fnAdd()"> Agregar</button>
+        </div>
+        <div class="form-group col-md-2">
+        </div>
+    </div>
+
+    <div class="form-row">
+        <div class="col-md-12">
+            <div class="table-responsive">
+                <table id="tbRenderListProfesionales" style="width:100%;margin:0px !important;" class="table table-hover table-bordered">
+                    <thead></thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,223 @@
+﻿@model CapaEntidad.ViewModel.VM_SeguimientoMuestra
+@{
+    ViewBag.Title = "Mantenimiento Seguimiento Muestra";
+    Layout = "~/Views/Shared/_LayoutMain.cshtml";
+}
+@section scripts{
+    <script>
+        "use strict"; var rol = '';
+    $(document).ready(function () {
+        //Validamos el rol del usuario
+        utilSigo.ValidaRol('@ViewBag.VAliasRol', 'btnRegistrar', '@Model.ddlItemIndicadorId');
+    });
+    </script>
+}
+<div class="container-fluid">
+    <div class="card">
+        <div class="card-header text-right">
+            Seguimiento Muestra Dendrológica
+        </div>
+        <div class="card-body">
+            <div class="card">
+                <div class="card-header text-small">
+                    <a id="btnRegistrar" style="cursor:pointer;" data-toggle="tooltip" data-placement="top" title="Regresar" onclick="addEditSD.fnRegresar();"><i class="fa mx-2 fa-lg fa-reply"></i></a>
+                    @Model.lblTituloEstado
+                </div>
+                <div class="card-body">
+                    <form id="frmSeguimientoMuestraAddEdit" method="post">
+                        <input type="hidden" id="hdMsj" value="@Model.msjR" />
+                        @Html.HiddenFor(m => m.id)
+                        @Html.HiddenFor(m => m.hdEstado)
+                        <ul class="nav nav-tabs" id="myTab" role="tablist">
+                            <li class="nav-item"><a class="nav-link active" data-toggle="tab" href="#navEstado" role="tab" aria-controls="home" aria-selected="true">Estado Situacional / Datos de Informe</a></li>
+                            <li class="nav-item" style="display:none;" id="tabMuestras"><a class="nav-link" data-toggle="tab" href="#navDatos" role="tab" aria-controls="home" aria-selected="true">Muestras Dendrológicas</a></li>
+
+                        </ul>
+                        <div class="tab-content">
+                            <div class="tab-pane fade show active" id="navEstado" role="tabpanel" aria-labelledby="nav-home-tab">
+                                <div class="card-header text-small">
+                                    <a id="btnRegistrarMuestraD" href="javascript:void(0)" style="cursor:pointer;" data-toggle="tooltip" data-placement="top" title="Guardar"><i class="fa mx-2 fa-lg fa-save"></i></a>
+                                </div>
+                                <div class="card-body">
+                                    <div class="form-row">
+                                        <div class="form-group col-md-6">
+                                            <label for="ddlItemIndicadorId" class="text-small">Indicador</label>
+                                            @Html.DropDownListFor(m => m.ddlItemIndicadorId, new SelectList(Model.ddlItemIndicador, "Value", "Text"), new { @class = "form-control form-control-sm" })
+                                        </div>
+                                        <div class="form-group col-md-6">
+                                            <label for="lblUsuarioRegistro" class="text-small">Usuario que ingresó el registro</label>
+                                            @Html.EditorFor(m => m.lblUsuarioRegistro, new { htmlAttributes = new { @class = "form-control form-control-sm", @disabled = "disabled" } })
+                                        </div>
+                                    </div>
+                                    <div class="form-row">
+                                        <div class="form-group col-md-6">
+                                            <label for="lblUsuarioControl" class="text-small">Usuario que asignó el útimo estado situacional al registro</label>
+                                            @Html.EditorFor(m => m.lblUsuarioControl, new { htmlAttributes = new { @class = "form-control form-control-sm", @disabled = "disabled" } })
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card">
+                                    <div class="card-header text-small">
+                                        Datos de Informe
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="form-row">
+                                            <div class="form-group col-md-6">
+                                                <label for="desSupervision" class="text-small">Nro Informe<i class="fa fa-cog fa-spin text-danger" id="iconInforme" style="display:none;" data-toggle="tooltip" data-placement="top" title="Seleccione Informe Supervisión"></i></label>
+                                                <div class="input-group">
+                                                    <div class="input-group-prepend">
+                                                        <span class="input-group-text"><i id="btnBusInformeSup" class="fa fa-plus" style="cursor:pointer;" data-toggle="tooltip" data-placement="top" title="Buscar"></i></span>
+                                                    </div>
+                                                    @Html.EditorFor(m => m.desSupervision, new { htmlAttributes = new { @class = "form-control form-control-sm", disabled = "disabled" } })
+                                                    @Html.HiddenFor(m => m.codSupervision)
+                                                </div>
+                                            </div>
+                                            <div class="form-group col-md-6">
+                                                <label for="desNotificacion" class="text-small">N° C. Notificación</label>
+                                                @Html.EditorFor(m => m.desNotificacion, new { htmlAttributes = new { @class = "form-control form-control-sm", disabled = "disabled" } })
+                                            </div>
+                                        </div>
+                                        <div class="form-row">
+                                            <div class="form-group col-md-6">
+                                                <label for="desTHabilitante" class="text-small">N° Habilitante</label>
+                                                @Html.EditorFor(m => m.desTHabilitante, new { htmlAttributes = new { @class = "form-control form-control-sm", disabled = "disabled" } })
+                                                @Html.HiddenFor(m => m.codTH)
+                                            </div>
+                                            <div class="form-group col-md-6">
+                                                <label for="ddlODRegistroId" class="text-small">O.D. desde donde registra la información</label>
+                                                @Html.DropDownListFor(m => m.ddlODRegistroId, new SelectList(Model.ddlODRegistro, "Value", "Text"), new { @class = "form-control form-control-sm" })
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card">
+                                    <div class="card-header text-small">
+                                        Datos Sistema de Tramite documentario - Envio
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="form-row">
+                                            <div class="form-group col-md-4">
+                                                <label for="desTramEnvio" class="text-small">Nro Oficio Envio<i class="fa fa-cog fa-spin text-danger" id="iconOficioEnv" style="display:none;" data-toggle="tooltip" data-placement="top" title="Seleccione Nro Oficio de Envio"></i></label>
+                                                <div class="input-group">
+                                                    <div class="input-group-prepend">
+                                                        <span class="input-group-text"><i id="btnBusDocEnv" class="fa fa-plus" style="cursor:pointer;" data-toggle="tooltip" data-placement="top" title="Buscar"></i></span>
+                                                    </div>
+                                                    @Html.EditorFor(m => m.desTramEnvio, new { htmlAttributes = new { @class = "form-control form-control-sm", disabled = "disabled" } })
+                                                    @Html.HiddenFor(m => m.codTramiteEnvio)
+                                                </div>
+                                            </div>
+                                            <div class="form-group col-md-4">
+                                                <label for="nroSITDEnvio" class="text-small">Nro Documento</label>
+                                                <input type="text" id="nroSITDEnvio" value="@Model.cNroDocumentoE" class="form-control form-control-sm" disabled="disabled" />
+                                            </div>
+                                            <div class="form-group col-md-4">
+                                                <label for="fechaSITDEnvio" class="text-small">Fecha Documento</label>
+                                                <input type="text" id="fechaSITDEnvio" value="@Model.fFecDocumentoE" class="form-control form-control-sm" disabled="disabled" />
+                                            </div>
+                                        </div>
+                                        <div class="form-row">
+                                            <div class="form-group col-md-8">
+                                                <label for="asuntoSITDEnvio" class="text-small">Asunto</label>
+                                                <textarea id="asuntoSITDEnvio" class="form-control form-control-sm" rows="2" disabled="disabled">@Model.cAsuntoE</textarea>
+                                            </div>
+                                            <div class="form-group col-md-4">
+                                                <label for="descargarEnvio" class="text-small">Descargar documento</label>
+                                                <div style="margin-top:0.6em;margin-left:2em;">
+                                                    <i class="fa fa-lg fa-download" id="descargarEnvio" style="cursor:pointer;color:dodgerblue;" title="Descargar Documento Trámite SITD" onclick="addEditSD.fnDownloadDocSITD('pdf_id_tram_envio')"></i>
+                                                    <input type="hidden" id="pdf_id_tram_envio" value="@Model.pdf_id_tram_envio" />
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card">
+                                    <div class="card-header text-small">
+                                        Datos Sistema de Tramite documentario - Respuesta
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="form-row">
+                                            <div class="form-group col-md-4">
+                                                <label for="desTramRespuesta" class="text-small">Nro Oficio Respuesta<i class="fa fa-cog fa-spin text-danger" id="iconOficioRes" style="display:none;" data-toggle="tooltip" data-placement="top" title="Seleccione Nro Oficio de Respuesta"></i></label>
+                                                <div class="input-group">
+                                                    <div class="input-group-prepend">
+                                                        <span class="input-group-text"><i id="btnBusDocRes" class="fa fa-plus" style="cursor:pointer;" data-toggle="tooltip" data-placement="top" title="Buscar"></i></span>
+                                                    </div>
+                                                    @Html.EditorFor(m => m.desTramRespuesta, new { htmlAttributes = new { @class = "form-control form-control-sm", disabled = "disabled" } })
+                                                    @Html.HiddenFor(m => m.codTramiteRespuesta)
+                                                </div>
+                                            </div>
+                                            <div class="form-group col-md-4">
+                                                <label for="nroSITDRes" class="text-small">Nro Documento</label>
+                                                <input type="text" id="nroSITDRes" value="@Model.cNroDocumentoR" class="form-control form-control-sm" disabled="disabled" />
+                                            </div>
+                                            <div class="form-group col-md-4">
+                                                <label for="fechaSITDERes" class="text-small">Fecha Documento</label>
+                                                <input type="text" id="fechaSITDERes" value="@Model.fFecDocumentoR" class="form-control form-control-sm" disabled="disabled" />
+                                            </div>
+                                        </div>
+                                        <div class="form-row">
+                                            <div class="form-group col-md-8">
+                                                <label for="asuntoSITDRes" class="text-small">Asunto</label>
+                                                <textarea id="asuntoSITDRes" class="form-control form-control-sm" rows="2" disabled="disabled">@Model.cAsuntoR</textarea>
+                                            </div>
+                                            <div class="form-group col-md-4">
+                                                <label for="descargarEnvio" class="text-small">Descargar documento</label>
+                                                <div style="margin-top:0.6em;margin-left:2em;">
+                                                    <i class="fa fa-lg fa-download" id="descargarEnvio" style="cursor:pointer;color:dodgerblue;" title="Descargar Documento Trámite SITD" onclick="addEditSD.fnDownloadDocSITD('pdf_id_tram_respuesta')"></i>
+                                                    <input type="hidden" id="pdf_id_tram_respuesta" value="@Model.pdf_id_tram_respuesta" />
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card-header text-small">
+                                    Observación
+                                </div>
+                                <div class="card-body">
+                                    <div class="form-row">
+                                        <div class="form-group col-md-12">
+                                            @Html.TextAreaFor(m => m.observacion, new { @class = "form-control form-control-sm", @rows = "2" })
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="tab-pane fade show" id="navDatos" role="tabpanel" aria-labelledby="nav-home-tab">
+                                <div class="card-header text-small">
+                                    <label></label>
+                                </div>
+                                <div class="card-body">
+                                    <div class="table-responsive">
+                                        <table id="tbItemMuestra" class="table table-hover table-bordered" style="width:100%;">
+                                            <thead>
+                                                <tr>
+                                                    <th colspan="10" class="text-sm-left">
+                                                        <div class="form-inline">
+                                                            <i id="btnAddMuestra" class="fa mx-1 fa-lg fa-file-o" style="cursor:pointer;" data-toggle="tooltip" data-placement="top" title="Nuevo"></i>
+                                                            <i id="btnDeleteAll" class="fa mx-2 fa-lg fa-window-close-o" style="cursor:pointer;font-size:18px;" data-toggle="tooltip" data-placement="top" title="Eliminar Todos"></i>
+                                                        </div>
+                                                    </th>
+                                                </tr>
+                                            </thead>
+                                            <tbody></tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade hide" id="modalBuscarInformSupervision" tabindex="-1" role="dialog"></div>
+    <div class="modal fade hide" id="modalBuscarDocSITD" tabindex="-1" role="dialog"></div>
+    <div class="modal fade hide" id="modalAddMuestraDen" role="dialog"></div>
+    <div class="modal fade hide" id="modalBuscarPOA" tabindex="-1" role="dialog"></div>
+    <div class="modal fade" id="modalBuscarPersona" role="dialog" tabindex="-1"></div>
+
+    @* Para el control genérico de personas *@
+    <div class="modal fade hide" id="mdlBuscarPersona" role="dialog"></div>
+    <div class="modal fade" id="modalAddEditPersona" tabindex="-1" role="dialog"></div>
+    <div class="modal fade hide" id="personaUbigeoModal" role="dialog"></div>
+</div>
+@Scripts.Render("~/bundles/SeguimientoMuestra/AddEdit")

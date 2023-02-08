@@ -1,0 +1,704 @@
+﻿@model CapaEntidad.ViewModel.VM_ReporteSeguimientoRegistro
+@{
+    //ViewBag.Title = "Reporte";
+    ViewBag.Title = Model.lblTituloCabecera;
+    Layout = "~/Views/Shared/_LayoutMain.cshtml";
+}
+
+<script src="~/Scripts/datatables/Extensions/dataTables.buttons.js"></script>
+<script src="~/Scripts/datatables/Extensions/buttons.flash.min.js"></script>
+<script src="~/Scripts/datatables/Extensions/jszip.min.js"></script>
+<script src="~/Scripts/datatables/Extensions/pdfmake.js"></script>
+<script src="~/Scripts/datatables/Extensions/vfs_fonts.js"></script>
+<script src="~/Scripts/datatables/Extensions/buttons.html5.js"></script>
+<script src="~/Scripts/datatables/Extensions/buttons.print.js"></script>
+<script src="~/Scripts/chart/Chart.min.js"></script>
+<script src="~/Scripts/chart/custom.js"></script>
+<script src="~/Areas/General/js/ReporteSeguimientoRegistro/Index.js"></script>
+
+<link href="~/Content/datatables/buttons.dataTables.min.css" rel="stylesheet" />
+<link href="~/Areas/General/css/ReporteSeguimientoRegistro/Index.css" rel="stylesheet" />
+
+<script type="text/javascript">
+    _reporte.fnLoadTituloCabecera('@Model.lblTituloCabecera');
+</script>
+
+<div class="container-fluid">
+    <div class="card">
+        <div class="card-header text-right">
+            Reporte Seguimiento de Registros
+        </div>
+        <div class="card-body">
+            <div class="card-header text-sm-center">
+                @Model.lblTituloCabecera
+            </div>
+            <div id="dvContenedorFiltro" class="card" style="margin-bottom:10px;">
+                <div id="dvFiltro" class="card-body">
+                    <form id="frmReporteSeguimientoRegistro" action="@Url.Action("Reporte","ReporteSeguimientoRegistro", new {Area="General"})">
+                        @Html.HiddenFor(m => m.hdfTipoReporte)
+                        <div class="form-row">
+                            <div id="dvFiltroAnio" class="form-group col-md-1" style="display:none;">
+                                <label for="lblChkAnioId" class="text-small">Año</label>
+                                <div id="dvChkAnioAll" class="custom-control custom-checkbox" style="display:none;">
+                                    @Html.CheckBox("chkAnioAll", new { @class = "custom-control-input" })
+                                    <label for="chkAnioAll" class="custom-control-label">Todos</label>
+                                </div>
+                                <div style="max-height:150px;overflow:auto;">
+                                    @Html.EditorFor(m => m.lstChkAnio)
+                                    @Html.HiddenFor(m => m.lstChkAnioId)
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                    <button type="button" id="btnConsultarReporte" class="btn btn-primary btn-sm" onclick="_reporte.fnSubmitForm()">Consultar</button>
+                </div>
+                <div class="card-body" style="padding-top:0px;padding-bottom:0px;">
+                    <div class="form-row">
+                        <div id="dvHideFiltro" class="form-group col-md-12" style="text-align:center; margin:0px;cursor:pointer;" title="Ocultar Filtros">
+                            <img alt="Ocultar Filtros" src="~/Content/images/General/flecha-contraer.png" width="50" height="30" />
+                        </div>
+                        <div id="dvShowFiltro" class="form-group col-md-12" style="text-align:center; margin:0px;cursor:pointer; display:none;" title="Mostrar Filtros">
+                            <img alt="Mostrar Filtros" src="~/Content/images/General/flecha-ampliar.png" width="50" height="30" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body" id="dvInfSupervisionMensual" style="display:none;">
+                <div class="form-row">
+                    <div class="col-md-7">
+                        <div class="table-responsive">
+                            <table id="tbInfSupervisionMensual_Resumen" style="width:100%;" class="table table-hover table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th colspan="7" class="text-sm-left">
+                                            <div class="form-inline">
+                                                <strong>Resumen Mensual de Informes de Supervisión</strong>
+                                            </div>
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                                <tfoot>
+                                    <tr class="custom-row-rpt">
+                                        <th colspan="2"><span id="col1">Total</span></th>
+                                        <th><span id="col3">0</span></th>
+                                        <th><span id="col4">0</span></th>
+                                        <th><span id="col5">0</span></th>
+                                        <th><span id="col6">0</span></th>
+                                        <th><span id="col7">0</span></th>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="col-md-5">
+                        <canvas id="cnvInfSuspervisionMensual_Resumen"></canvas>
+                    </div>
+                </div>
+                <br />
+                <div class="form-row">
+                    <div class="table-responsive">
+                        <table id="tbInfSupervisionMensual_Detalle" style="width:100%" class="table table-hover table-bordered">
+                            <thead>
+                                <tr>
+                                    <th colspan="16" class="text-sm-left">
+                                        <div class="form-inline">
+                                            <strong>Listado de Informes de Supervisión</strong>
+                                        </div>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body" id="dvInfSuspensionMensual" style="display:none;">
+                <div class="form-row">
+                    <div class="col-md-7">
+                        <div class="table-responsive">
+                            <table id="tbInfSuspensionMensual_Resumen" style="width:100%;" class="table table-hover table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th colspan="7" class="text-sm-left">
+                                            <div class="form-inline">
+                                                <strong>Resumen Mensual de Informes de Suspensión</strong>
+                                            </div>
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                                <tfoot>
+                                    <tr class="custom-row-rpt">
+                                        <th colspan="2"><span id="col1">Total</span></th>
+                                        <th><span id="col3">0</span></th>
+                                        <th><span id="col4">0</span></th>
+                                        <th><span id="col5">0</span></th>
+                                        <th><span id="col6">0</span></th>
+                                        <th><span id="col7">0</span></th>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="col-md-5">
+                        <canvas id="cnvInfSuspensionMensual_Resumen"></canvas>
+                    </div>
+                </div>
+                <br />
+                <div class="form-row">
+                    <div class="table-responsive">
+                        <table id="tbInfSuspensionMensual_Detalle" style="width:100%" class="table table-hover table-bordered">
+                            <thead>
+                                <tr>
+                                    <th colspan="15" class="text-sm-left">
+                                        <div class="form-inline">
+                                            <strong>Listado de Informes de Suspensión</strong>
+                                        </div>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body" id="dvInfQuinquenalMensual" style="display:none;">
+                <div class="form-row">
+                    <div class="col-md-7">
+                        <div class="table-responsive">
+                            <table id="tbInfQuinquenalMensual_Resumen" style="width:100%;" class="table table-hover table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th colspan="7" class="text-sm-left">
+                                            <div class="form-inline">
+                                                <strong>Resumen Mensual de Informes Quinquenales</strong>
+                                            </div>
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                                <tfoot>
+                                    <tr class="custom-row-rpt">
+                                        <th colspan="2"><span id="col1">Total</span></th>
+                                        <th><span id="col3">0</span></th>
+                                        <th><span id="col4">0</span></th>
+                                        <th><span id="col5">0</span></th>
+                                        <th><span id="col6">0</span></th>
+                                        <th><span id="col7">0</span></th>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="col-md-5">
+                        <canvas id="cnvInfQuinquenalMensual_Resumen"></canvas>
+                    </div>
+                </div>
+                <br />
+                <div class="form-row">
+                    <div class="table-responsive">
+                        <table id="tbInfQuinquenalMensual_Detalle" style="width:100%" class="table table-hover table-bordered">
+                            <thead>
+                                <tr>
+                                    <th colspan="14" class="text-sm-left">
+                                        <div class="form-inline">
+                                            <strong>Listado de Informes Quinquenales</strong>
+                                        </div>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body" id="dvInfVMCMensual" style="display:none;">
+                <div class="form-row">
+                    <div class="col-md-6">
+                        <div class="table-responsive">
+                            <table id="tbInfVMCMensual_Resumen" style="width:100%;" class="table table-hover table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th colspan="6" class="text-sm-left">
+                                            <div class="form-inline">
+                                                <strong>Resumen Mensual de Informes de Verificación de Medidas Correctivas</strong>
+                                            </div>
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                                <tfoot>
+                                    <tr class="custom-row-rpt">
+                                        <th colspan="2"><span id="col1">Total</span></th>
+                                        <th><span id="col3">0</span></th>
+                                        <th><span id="col4">0</span></th>
+                                        <th><span id="col5">0</span></th>
+                                        <th><span id="col6">0</span></th>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <canvas id="cnvInfVMCMensual_Resumen"></canvas>
+                    </div>
+                </div>
+                <br />
+                <div class="form-row">
+                    <div class="table-responsive">
+                        <table id="tbInfVMCMensual_Detalle" style="width:100%" class="table table-hover table-bordered">
+                            <thead>
+                                <tr>
+                                    <th colspan="14" class="text-sm-left">
+                                        <div class="form-inline">
+                                            <strong>Listado de Informes de Verificación de Medidas Correctivas</strong>
+                                        </div>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body" id="dvTituloHabilitanteMensual" style="display:none;">
+                <div class="form-row">
+                    <div class="col-md-5">
+                        <div class="table-responsive">
+                            <table id="tbTituloHabilitanteMensual_Resumen" style="width:100%;" class="table table-hover table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th colspan="5" class="text-sm-left">
+                                            <div class="form-inline">
+                                                <strong>Resumen Mensual de Títulos Habilitantes</strong>
+                                            </div>
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                                <tfoot>
+                                    <tr class="custom-row-rpt">
+                                        <th colspan="2"><span id="col1">Total</span></th>
+                                        <th><span id="col3">0</span></th>
+                                        <th><span id="col4">0</span></th>
+                                        <th><span id="col5">0</span></th>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="col-md-5">
+                        <canvas id="cnvTituloHabilitanteMensual_Resumen"></canvas>
+                    </div>
+                </div>
+                <br />
+                <div class="form-row">
+                    <div class="table-responsive">
+                        <table id="tbTituloHabilitanteMensual_Detalle" style="width:100%" class="table table-hover table-bordered">
+                            <thead>
+                                <tr>
+                                    <th colspan="11" class="text-sm-left">
+                                        <div class="form-inline">
+                                            <strong>Listado de Títulos Habilitantes</strong>
+                                        </div>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body" id="dvPOAMensual" style="display:none;">
+                <div class="form-row">
+                    <div class="col-md-5">
+                        <div class="table-responsive">
+                            <table id="tbPOAMensual_Resumen" style="width:100%;" class="table table-hover table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th colspan="5" class="text-sm-left">
+                                            <div class="form-inline">
+                                                <strong>Resumen Mensual de Planes de Manejo</strong>
+                                            </div>
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                                <tfoot>
+                                    <tr class="custom-row-rpt">
+                                        <th colspan="2"><span id="col1">Total</span></th>
+                                        <th><span id="col3">0</span></th>
+                                        <th><span id="col4">0</span></th>
+                                        <th><span id="col5">0</span></th>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="col-md-5">
+                        <canvas id="cnvPOAMensual_Resumen"></canvas>
+                    </div>
+                </div>
+                <br />
+                <div class="form-row">
+                    <div class="table-responsive">
+                        <table id="tbPOAMensual_Detalle" style="width:100%" class="table table-hover table-bordered">
+                            <thead>
+                                <tr>
+                                    <th colspan="14" class="text-sm-left">
+                                        <div class="form-inline">
+                                            <strong>Listado de Planes de Manejo</strong>
+                                        </div>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body" id="dvResolucionDirectoralMensual" style="display:none;">
+                <div class="form-row">
+                    <div class="col-md-5">
+                        <div class="table-responsive">
+                            <table id="tbResolucionDirectoralMensual_Resumen" style="width:100%;" class="table table-hover table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th colspan="5" class="text-sm-left">
+                                            <div class="form-inline">
+                                                <strong>Resumen Mensual de Resoluciones Directorales</strong>
+                                            </div>
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                                <tfoot>
+                                    <tr class="custom-row-rpt">
+                                        <th colspan="2"><span id="col1">Total</span></th>
+                                        <th><span id="col3">0</span></th>
+                                        <th><span id="col4">0</span></th>
+                                        <th><span id="col5">0</span></th>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="col-md-5">
+                        <canvas id="cnvResolucionDirectoralMensual_Resumen"></canvas>
+                    </div>
+                </div>
+                <br />
+                <div class="form-row">
+                    <div class="table-responsive">
+                        <table id="tbResolucionDirectoralMensual_Detalle" style="width:100%" class="table table-hover table-bordered">
+                            <thead>
+                                <tr>
+                                    <th colspan="13" class="text-sm-left">
+                                        <div class="form-inline">
+                                            <strong>Listado de Resoluciones Directorales</strong>
+                                        </div>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body" id="dvInfLegalMensual" style="display:none;">
+                <div class="form-row">
+                    <div class="col-md-5">
+                        <div class="table-responsive">
+                            <table id="tbInfLegalMensual_Resumen" style="width:100%;" class="table table-hover table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th colspan="5" class="text-sm-left">
+                                            <div class="form-inline">
+                                                <strong>Resumen Mensual de Informes Legales</strong>
+                                            </div>
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                                <tfoot>
+                                    <tr class="custom-row-rpt">
+                                        <th colspan="2"><span id="col1">Total</span></th>
+                                        <th><span id="col3">0</span></th>
+                                        <th><span id="col4">0</span></th>
+                                        <th><span id="col5">0</span></th>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="col-md-5">
+                        <canvas id="cnvInfLegalMensual_Resumen"></canvas>
+                    </div>
+                </div>
+                <br />
+                <div class="form-row">
+                    <div class="table-responsive">
+                        <table id="tbInfLegalMensual_Detalle" style="width:100%" class="table table-hover table-bordered">
+                            <thead>
+                                <tr>
+                                    <th colspan="13" class="text-sm-left">
+                                        <div class="form-inline">
+                                            <strong>Listado de Informes Legales</strong>
+                                        </div>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body" id="dvInfInstruccionFinalMensual" style="display:none;">
+                <div class="form-row">
+                    <div class="col-md-5">
+                        <div class="table-responsive">
+                            <table id="tbInfInstruccionFinalMensual_Resumen" style="width:100%;" class="table table-hover table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th colspan="5" class="text-sm-left">
+                                            <div class="form-inline">
+                                                <strong>Resumen Mensual de Informes de Instrucción Final</strong>
+                                            </div>
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                                <tfoot>
+                                    <tr class="custom-row-rpt">
+                                        <th colspan="2"><span id="col1">Total</span></th>
+                                        <th><span id="col3">0</span></th>
+                                        <th><span id="col4">0</span></th>
+                                        <th><span id="col5">0</span></th>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="col-md-5">
+                        <canvas id="cnvInfInstruccionFinalMensual_Resumen"></canvas>
+                    </div>
+                </div>
+                <br />
+                <div class="form-row">
+                    <div class="table-responsive">
+                        <table id="tbInfInstruccionFinalMensual_Detalle" style="width:100%" class="table table-hover table-bordered">
+                            <thead>
+                                <tr>
+                                    <th colspan="13" class="text-sm-left">
+                                        <div class="form-inline">
+                                            <strong>Listado de Informes de Instrucción Final</strong>
+                                        </div>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body" id="dvInfTecnicoMensual" style="display:none;">
+                <div class="form-row">
+                    <div class="col-md-5">
+                        <div class="table-responsive">
+                            <table id="tbInfTecnicoMensual_Resumen" style="width:100%;" class="table table-hover table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th colspan="5" class="text-sm-left">
+                                            <div class="form-inline">
+                                                <strong>Resumen Mensual de Informes Técnicos</strong>
+                                            </div>
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                                <tfoot>
+                                    <tr class="custom-row-rpt">
+                                        <th colspan="2"><span id="col1">Total</span></th>
+                                        <th><span id="col3">0</span></th>
+                                        <th><span id="col4">0</span></th>
+                                        <th><span id="col5">0</span></th>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="col-md-5">
+                        <canvas id="cnvInfTecnicoMensual_Resumen"></canvas>
+                    </div>
+                </div>
+                <br />
+                <div class="form-row">
+                    <div class="table-responsive">
+                        <table id="tbInfTecnicoMensual_Detalle" style="width:100%" class="table table-hover table-bordered">
+                            <thead>
+                                <tr>
+                                    <th colspan="13" class="text-sm-left">
+                                        <div class="form-inline">
+                                            <strong>Listado de Informes Técnicos</strong>
+                                        </div>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body" id="dvNotificacionesMensual" style="display:none;">
+                <div class="form-row">
+                    <div class="col-md-5">
+                        <div class="table-responsive">
+                            <table id="tbNotificacionesMensual_Resumen" style="width:100%;" class="table table-hover table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th colspan="5" class="text-sm-left">
+                                            <div class="form-inline">
+                                                <strong>Resumen Mensual de Notificaciones</strong>
+                                            </div>
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                                <tfoot>
+                                    <tr class="custom-row-rpt">
+                                        <th colspan="2"><span id="col1">Total</span></th>
+                                        <th><span id="col3">0</span></th>
+                                        <th><span id="col4">0</span></th>
+                                        <th><span id="col5">0</span></th>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="col-md-5">
+                        <canvas id="cnvNotificacionesMensual_Resumen"></canvas>
+                    </div>
+                </div>
+                <br />
+                <div class="form-row">
+                    <div class="table-responsive">
+                        <table id="tbNotificacionesMensual_Detalle" style="width:100%" class="table table-hover table-bordered">
+                            <thead>
+                                <tr>
+                                    <th colspan="13" class="text-sm-left">
+                                        <div class="form-inline">
+                                            <strong>Listado de Notificaciones</strong>
+                                        </div>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body" id="dvInfTitularMensual" style="display:none;">
+                <div class="form-row">
+                    <div class="col-md-5">
+                        <div class="table-responsive">
+                            <table id="tbInfTitularMensual_Resumen" style="width:100%;" class="table table-hover table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th colspan="5" class="text-sm-left">
+                                            <div class="form-inline">
+                                                <strong>Resumen Mensual de Documentos presentados por el Titular</strong>
+                                            </div>
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                                <tfoot>
+                                    <tr class="custom-row-rpt">
+                                        <th colspan="2"><span id="col1">Total</span></th>
+                                        <th><span id="col3">0</span></th>
+                                        <th><span id="col4">0</span></th>
+                                        <th><span id="col5">0</span></th>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="col-md-5">
+                        <canvas id="cnvInfTitularMensual_Resumen"></canvas>
+                    </div>
+                </div>
+                <br />
+                <div class="form-row">
+                    <div class="table-responsive">
+                        <table id="tbInfTitularMensual_Detalle" style="width:100%" class="table table-hover table-bordered">
+                            <thead>
+                                <tr>
+                                    <th colspan="13" class="text-sm-left">
+                                        <div class="form-inline">
+                                            <strong>Listado de Documentos presentados por el Titular</strong>
+                                        </div>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body" id="dvCapacitacionesMensual" style="display:none;">
+                <div class="form-row">
+                    <div class="col-md-6">
+                        <div class="table-responsive">
+                            <table id="tbCapacitacionesMensual_Resumen" style="width:100%;" class="table table-hover table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th colspan="6" class="text-sm-left">
+                                            <div class="form-inline">
+                                                <strong>Resumen Mensual de Registros de Capacitaciones</strong>
+                                            </div>
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                                <tfoot>
+                                    <tr class="custom-row-rpt">
+                                        <th colspan="2"><span id="col1">Total</span></th>
+                                        <th><span id="col3">0</span></th>
+                                        <th><span id="col4">0</span></th>
+                                        <th><span id="col5">0</span></th>
+                                        <th><span id="col6">0</span></th>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <canvas id="cnvCapacitacionesMensual_Resumen"></canvas>
+                    </div>
+                </div>
+                <br />
+                <div class="form-row">
+                    <div class="table-responsive">
+                        <table id="tbCapacitacionesMensual_Detalle" style="width:100%" class="table table-hover table-bordered">
+                            <thead>
+                                <tr>
+                                    <th colspan="13" class="text-sm-left">
+                                        <div class="form-inline">
+                                            <strong>Listado de Registros de Capacitaciones</strong>
+                                        </div>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @* Para la descarga de documentos *@
+    <div id="divIframe"></div>
+</div>
+

@@ -1,0 +1,317 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_LayoutMain.cshtml";
+}
+
+<script src="~/Scripts/datatables/Extensions/dataTables.buttons.js"></script>
+<script src="~/Scripts/datatables/Extensions/buttons.flash.min.js"></script>
+<script src="~/Scripts/datatables/Extensions/jszip.min.js"></script>
+
+<script src="~/Scripts/datatables/Extensions/vfs_fonts.js"></script>
+<script src="~/Scripts/datatables/Extensions/buttons.html5.js"></script>
+<script src="~/Scripts/datatables/Extensions/buttons.print.js"></script>
+
+
+<link href="~/Content/datatables/buttons.dataTables.min.css" rel="stylesheet" />
+<link href="~/Areas/General/css/ManCalculoMulta/ManCalculoMulta.css" rel="stylesheet" />
+
+<div id="divRegenEsp" class="container-fluid">
+    <div class="card">
+        <div class="card-header text-left">
+            <h5>Regeneración de Especies</h5>
+        </div>
+        <div class="card-body">
+            <div class="col-12">
+                <form id="frmManRegenEsp">
+                    <div class="form-row">
+                        <div class="form-group col-md-3">
+                            <select class="form-control form-control-sm" id="cboDescripcion">
+                                <option value="DESCRIPCION">Descripción</option>
+                            </select>
+                        </div>
+                        <div class="form-group col-md-3">
+                            <input type="text" id="txtValorBuscar" class="form-control form-control-sm" placeholder="" maxlength="100" style="text-transform:uppercase;" />
+                        </div>
+                        <div class="btn-group col-md-2" style="padding-top:5px;">
+                            <a id="btnSearch" style="cursor:pointer;" data-toggle="tooltip" data-placement="top" title="Buscar" onclick="_manRegenEsp.fnSearch()"><span class="fa mx-2 fa-lg fa-search"></span></a>
+                            <a id="btnRefresh" style="cursor:pointer;" data-toggle="tooltip" data-placement="top" title="Buscar" onclick="_manRegenEsp.fnRefresh()"><span class="fa mx-2 fa-lg fa-refresh"></span></a>
+                            <a id="btnAdd" style="cursor:pointer;" data-toggle="tooltip" data-placement="top" title="" onclick="_manRegenEsp.fnCrear()" data-original-title="Crear un nuevo registro"><span class="fa mx-2 fa-lg fa-plus"></span></a>
+
+                        </div>
+                    </div>
+                    <div class="table-responsive-md">
+                        <table id="tbRegenEsp" class="table table-hover table-bordered" style="width:100%;">
+                            <thead>
+                                <tr>
+                                    <th></th>
+                                    <th></th>
+                                    <th>N°</th>
+                                    <th>Código</th>
+                                    <th>Variable</th>
+                                    <th>Descripción</th>
+                                    <th>Calificación</th>
+                                    <th>Estado</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </form>
+
+            </div>
+        </div>
+    </div>
+    <div class="modal fade hide" id="modalRegenEsp" role="dialog">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header text-small" style="cursor:move;padding:0.5rem;">
+                    <h5 class="modal-title" id="h5TituloRegenEsp">Modificar Regeneración de Especie</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body" id="divModRegenEsp">
+                    <input type="hidden" id="hdRegEstado" value="1" />
+                    <input type="hidden" id="hdNCodRegenEsp" value="0" />
+                    <input type="hidden" id="hdEstado" value="1" />
+                    <div class="form-row" id="divVariable">
+                        <div class="form-group col-md-4">
+                            <label for="txtVariable">Variable</label>
+                            <input class="form-control form-control-sm" id="txtVariable" type="text" maxlength="2">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-12">
+                            <label for="txtDescripcion">Descripción</label>
+                            <input class="form-control form-control-sm" id="txtDescripcion" type="text">
+                        </div>
+                    </div>
+                    <div class="form-row" id="divCalificacion">
+                        <div class="form-group col-md-4">
+                            <label for="txtCalificacion">Calificación</label>
+                            <input class="form-control form-control-sm" id="txtCalificacion" type="number" maxlength="3">
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary btn-sm" onclick="_manRegenEsp.fnRegenEspUpdate()">Guardar</button>
+                    <button id="btnCerrarModFactorAA" class="btn btn-secondary btn-sm" data-dismiss="modal">Cancelar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    var _manRegenEsp = {
+        fnRefresh: () => {
+            $("#txtValorBuscar").val('');
+            _manRegenEsp.fnSearch();
+        },
+        fnCrear: () => {
+            _manRegenEsp.fnLimpiar();
+            $("#h5TituloRegenEsp").text("Crear Regeneración de Especie");
+            $("#hdRegEstado").val("1");
+            $("#modalRegenEsp").modal({ keyboard: true, backdrop: 'static' });
+            //_renderComboEspecie.fnInit("FAUNA", "", "");
+            //$('#ddlRenderComboEspecieId').val("").trigger("change");
+        },
+        fnLimpiar: () => {
+            let frm = $("#divModRegenEsp");
+            frm.find("#hdNCodRegenEsp").val('0');
+            frm.find("#txtVariable").val('');
+            frm.find("#txtDescripcion").val('');
+            frm.find("#txtCalificacion").val('');
+            frm.find("#hdEstado").val('1');
+        },
+        fnDelete: (obj) => {
+
+            let frm = $("#divModRegenEsp");
+            let $tr = $(obj).closest("tr");
+            let dataRow = _manRegenEsp.dt.row($tr).data();
+
+            let model = {
+                NCODREGENESP: dataRow.NCODREGENESP,
+                VVARIABLE: frm.find("#txtVariable").val(),
+                VDESCRIPCION: frm.find("#txtDescripcion").val(),
+                NCALIFICACION: frm.find("#txtCalificacion").val(),
+                NESTADO: 0,
+                //  NCODFACTORAADEP: frm.find("#hdNCodRegenEspDep").val(),
+                RegEstado: 3
+            };
+
+            let url = urlLocalSigo + "General/ManCalculoMulta/GuardarRegenEsp";
+            let option = { url: url, datos: JSON.stringify(model), type: 'POST' };
+            utilSigo.fnAjax(option, function (data) {
+                if (data.success) {
+                    utilSigo.toastSuccess("Éxito", data.msj);
+                    _manRegenEsp.fnSearch();
+                }
+                else {
+                    utilSigo.toastWarning("Aviso", data.msj);
+                }
+            });
+
+        },
+        fnEdit: (obj) => {
+
+            $("#h5TituloRegenEsp").text("Modificar Regeneración de Agente");
+            _manRegenEsp.fnLimpiar();
+            $("#hdRegEstado").val("2");
+            let frm = $("#divModRegenEsp");
+            let $tr = $(obj).closest("tr");
+            let dataRow = _manRegenEsp.dt.row($tr).data();
+            let variable = dataRow.VVARIABLE;
+
+            frm.find("#hdNCodRegenEsp").val(dataRow.NCODREGENESP);
+            frm.find("#txtVariable").val(dataRow.VVARIABLE);
+            frm.find("#txtDescripcion").val(dataRow.VDESCRIPCION);
+
+            frm.find("#txtCalificacion").val(dataRow.NCALIFICACION.substring(0, dataRow.NCALIFICACION.length - 1));
+            frm.find("#hdEstado").val(dataRow.NESTADO);
+
+            $("#modalRegenEsp").modal({ keyboard: true, backdrop: 'static' });
+        },
+        fnRegenEspUpdate: () => {
+            let frm = $("#divModRegenEsp");
+            let model = {
+                NCODREGENESP: frm.find("#hdNCodRegenEsp").val(),
+                VVARIABLE: frm.find("#txtVariable").val(),
+                VDESCRIPCION: frm.find("#txtDescripcion").val(),
+                NCALIFICACION: frm.find("#txtCalificacion").val(),
+                NESTADO: frm.find("#hdEstado").val(),
+                //  NCODFACTORAADEP: frm.find("#hdNCodRegenEspDep").val(),
+                RegEstado: 1
+            };
+
+            model.RegEstado = model.NCODREGENESP == "0" ? 1 : 2;
+            if (model.VVARIABLE == "") {
+                utilSigo.toastWarning("Warning", "Ingresar la variable");
+                return false;
+            } else if (model.VDESCRIPCION == "") {
+                utilSigo.toastWarning("Warning", "Ingresar la descripción");
+                return false;
+            } else if (model.NCALIFICACION == "") {
+                utilSigo.toastWarning("Warning", "Ingresar Calificación");
+                return false;
+            }
+
+
+            let url = urlLocalSigo + "General/ManCalculoMulta/GuardarRegenEsp";
+            let option = { url: url, datos: JSON.stringify(model), type: 'POST' };
+            utilSigo.fnAjax(option, function (data) {
+                if (data.success) {
+                    utilSigo.toastSuccess("Éxito", data.msj);
+                    $("#btnCerrarModFactorAA").click();
+                    _manRegenEsp.fnSearch();
+                }
+                else {
+                    utilSigo.toastWarning("Aviso", data.msj);
+                }
+            });
+        },
+        fnBuilTable: () => {
+            const columns = [
+                {
+                    "data": "", "className": "text-center", "width": "2%", "orderable": false, "searchable": false, "mRender": function (data, type, row) {
+                        return '<div><i class="fa fa-lg fa-pencil-square-o" style="color:blue;cursor:pointer;" title="Editar plan de trabajo" onclick="_manRegenEsp.fnEdit(this)"></i></div>';
+                    }
+                },
+                {
+                    "data": "", "className": "text-center", "width": "2%", "orderable": false, "searchable": false, "mRender": function (data, type, row) {
+                        return '<div><i class="cellDel fa fa-lg fa-window-close" style="color:red;cursor:pointer;" title="Editar plan de trabajo" onclick="_manRegenEsp.fnDelete(this)"></i></div>';
+                    }
+                },
+                {
+                    "name": "ROW_INDE", "width": "2%", "orderable": false, "searchable": false, "mRender": function (data, type, row, meta) {
+                        return parseInt(meta.row) + 1 + meta.settings._iDisplayStart;
+                    }
+                },                
+                { "data": "NCODREGENESP", visible: false },
+                { "data": "VVARIABLE", "autoWidth": true },
+                { "data": "VDESCRIPCION", "autoWidth": true },
+                { "data": "NCALIFICACION", "autoWidth": true },
+                { "data": "NESTADO", visible: false }
+
+            ];
+            const optDt = { iLength: 20, iStart: 0, aSort: [] };
+            _manRegenEsp.dt = _manRegenEsp.frm.find("#tbRegenEsp").DataTable({
+                processing: true,
+                serverSide: true,
+                searching: false,
+                ordering: false,
+                paging: true,
+                dom: 'Bfrtip',
+                buttons: [{
+                    extend: 'excelHtml5',
+                    messageTop: 'Regeneración de Especies',
+                    exportOptions: {
+                        // columns: [1, ':visible'],
+                        //  columns: [2, ':visible'],
+                        //   columns: [3, ':visible'],
+                        // columns: [8, ':visible'],
+                        //columns: [4, ':visible'],
+                    }
+                }],
+                ajax: {
+                    "url": `${urlLocalSigo}/General/Controles/GetRegenEsp`,
+                    "data": function (d) {
+                        d.CustomSearchForm = "CALCULOMULTA";
+                        d.CustomSearchType = "REGENESP";
+                        d.CustomSearchValue = $("#txtValorBuscar").val();
+                        d.customSearchEnabled = true;
+                        //d.id = "";
+                        //for (var i = 0; i < d.order.length; i++) {
+                        //    d.order[i]["column_name"] = d.columns[d.order[i]["column"]]["data"];
+
+                        //    if (d.order[i].column_name != 0 || d.order[i].column_name != "") {
+                        //        d.sort = d.order[i].column_name + " " + d.order[i].dir;
+                        //    }
+                        //}
+                        d.columns = null;
+                    },
+                    "error": function (jqXHR) {
+                        // utilSigo.unblockUIGeneral();
+                        if (jqXHR.status != 401 && jqXHR.status != 403 && jqXHR.status != 404) {
+                            utilSigo.toastError("Error", initSigo.MessageError);
+                        }
+                        //console.log(jqXHR);
+                    },
+                    "statusCode": {
+                        203: () => { utilSigo.toastInfo("Aviso", "El usuario perdio la sesión. Vuelva ingresar al sistema"); }
+                    }
+                },
+                columns: columns,
+                bInfo: true,
+                "lengthMenu": [[10, 20, 50, 100], [10, 20, 50, 100]],
+                // "aaSorting": optDt.aSort,
+                "pageLength": optDt.iLength,
+                "displayStart": optDt.iStart,
+                "oLanguage": initSigo.oLanguage,
+                "drawCallback": initSigo.showPagination
+            });
+        },
+        fnSearch: () => {
+            _manRegenEsp.dt.ajax.reload();
+        }
+    };
+    $(document).ready(function () {
+
+        _manRegenEsp.frm = $("#frmManRegenEsp");
+        _manRegenEsp.fnBuilTable();
+        _manRegenEsp.frm.submit(function (e) {
+            e.preventDefault();
+            _manRegenEsp.fnSearch();
+        });
+
+
+        //_renderComboEspecie.fnInit("FAUNA", "", "");
+
+        $('#lblRenderComboEspecieId').removeAttr('Class');
+        $('#lblRenderComboEspecieId').html('Especie Sinónimo');
+
+    });
+</script>
+
+
+

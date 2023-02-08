@@ -1,0 +1,130 @@
+﻿@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<script type="text/javascript">
+    function btnAvisoAceptaTerm() {
+        $("#chkVentanaRecom").prop("checked", true);
+        $("#divAvisoCheck").fadeOut("slow");
+    }
+    function retornaResultado() {
+        if ($("#chkVentanaRecom").is(":checked")) {
+            return true;
+        }
+        else {
+            $("#divAvisoCheck").fadeIn("slow");
+            return false;
+        }
+    }
+
+
+</script>
+<style>
+    body {
+        background-color: #666;
+    }
+</style>
+@using (@Html.BeginForm("ListFauna", "Home", FormMethod.Post, (new { onsubmit = "return retornaResultado();" })))
+{
+    <div class="row">
+        <div class="col-sm-2">
+            <br />
+        </div>
+        <div class="col-sm-8" style="background-color: white; font-size: 11px; text-align: justify">
+            <div id="divVentanaRecom" class="box box-success">
+                <div class="row" style="margin-left: 2%; margin-right: 2%;">
+                    <div id="header" class="col-sm-12">
+                        <div>
+                            <img class="img-responsive pad" src="~/Images/Fondos/mensaje_fauna.jpg" />
+                            <div style="color: green; position: absolute; left: 5%; top: 60%;">
+                                <strong>Recomendaciones para el uso del ZoOBSERVATORIO OSINFOR</strong>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <p>
+                            El ZoObservatorio OSINFOR califica la calidad de los establecimientos de fauna silvestre que supervisamos asignándoles de 0 (muy malo) a 5 (excelente) estrellas.
+                            Las apreciaciones están basadas en los indicadores de evaluación y medios de verificación establecidos en la Directiva de Supervisión de títulos habilitantes para 
+                            el manejo de fauna silvestre. El objetivo es dar a conocer el nivel de cumplimiento del plan de manejo y de las obligaciones de los titulares de los centros de cría
+                            autorizados a nivel nacional, de acuerdo a la normativa vigente.
+                        </p>
+                        <h5 style="color: #3990ca;">¿Qué información muestra?</h5>
+                        <p>
+                            El ZoObservatorio OSINFOR recoge el trabajo de supervisión de las autorizaciones para el manejo de fauna silvestre en las siguientes modalidades:
+                        </p>
+                        <div class="box-body">
+                            <ul style="list-style-type: disc; padding-left: 20px;">
+                                <li>Zoológicos.</li>
+                                <li>Zoocriaderos.</li>
+                                <li>Centros de Rescate.</li>
+                                <li>Centros de Custodia Temporal.</li>
+                                <li>Centros de Conservación</li>
+                            </ul>
+                        </div>
+                        <p>
+                            Para esto se incluye la siguiente información: nombre del titular, nombre del establecimiento, localización geográfica de los centros de cría incluyendo un mapa,
+                            la relación de especies albergadas el día de la supervisión, además de algunos registros fotográficos.
+                        </p>
+                    </div>
+                    <div class="col-sm-6">
+                        <h5 style="color: #fe9728">Tener en cuenta</h5>
+                        <ul style="list-style-type: disc; padding-left: 20px;">
+                            <li>
+                               	Los resultados de la supervisión son mostrados en el ZoObservatorio OSINFOR desde la generación del informe de supervisión y corresponden a la evaluación
+                                realizada hasta la emisión de ese informe.
+                            </li>
+                            <li style="padding-top: 6px;">
+                                Para los casos de centros de cría que hayan sido supervisados en más de una ocasión, se tomará en cuenta los resultados de la última supervisión.
+                            </li>
+                            <li style="padding-top: 6px;">
+                                Se ofrecen opciones de búsqueda por el nombre del establecimiento, región y especies supervisadas.
+                            </li>
+                            <li style="padding-top: 6px;">
+                                Las actualizaciones son diarias y en cada reporte se muestra la fecha de ingreso en el ZoObservatorio OSINFOR.
+                            </li>
+                        </ul>
+                        <p style="font-style: oblique">
+                            Importante: “Los centros de cría en cautividad de fauna silvestre, son instalaciones de propiedad pública o privada que se destinan para la zoocría de especímenes 
+                            fuera de su ambiente natural, en un medio controlado y en condiciones adecuadas para el bienestar animal, con fines científicos, de difusión cultural, de educación, 
+                            de conservación, de rescate, de rehabilitación o comerciales” (Artículo 92 de la Ley Forestal y de Fauna Silvestre – Ley N° 29763).
+                        </p>
+                        <p style="font-style: oblique">
+                            Se deja expresa constancia de que el OSINFOR no asume responsabilidad alguna por el uso o decisión final que adopte el usuario dentro de la información aquí presentada.<br />
+                            La información proporcionada a través de las consultas en línea del SIGOSFC, no tiene validez para ningún trámite administrativo, judicial y otros.
+                        </p>
+                    </div>
+                </div>
+                <div class="box-footer" style="background-color: #e5fac2">
+                    <div class="row">
+                        <div class="col-sm-9" style="color: green; font: bold 90%;">
+                            Acepto haber leido las recomendaciones para el uso del OBSERVATORIO OSINFOR
+                            <div style="display: inline-block">
+                                <input type="checkbox" id="chkVentanaRecom" value="valor" />
+                            </div>
+                        </div>
+                        <div class="col-sm-3">
+                            <button id="btnIngresaObs" class="btn btn-warning" type="submit">
+                                <i class="fa fa-check"></i>&nbsp;&nbsp;Aceptar
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div id="divAvisoCheck" class="divAvisoCheck">
+                    <div onclick="btnAvisoAceptaTerm()">* Para continuar es obligatorio marcar el check donde acepta haber leido las condiciones</div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-2">
+            <br />
+        </div>
+        <div class="col-sm-12">
+            <div style="font-style: oblique; font-size: 12px; float: right; margin-right: 25%; color: white">
+                <strong>** Usar de preferencia Google Chrome y Firefox</strong>
+            </div>
+        </div>
+        <div class="col-sm-12" style="height: 200%">
+            <br />
+        </div>
+    </div>
+
+}

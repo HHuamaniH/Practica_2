@@ -1,0 +1,37 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_LayoutMain.cshtml";
+}
+
+<script src="~/Areas/Fiscalizacion/js/ManProveido/IndexFisca.js"></script>
+
+<form id="frmManProveido">
+    @Html.Hidden("tipoFormulario", (object)ViewBag.Formulario)
+    @Html.Hidden("titleMenu", (object)ViewBag.TituloFormulario)
+    @Html.Hidden("alertaFormulario", (object)ViewBag.AlertaInicial)
+
+    <div id="dvManProvedioContenedor" class="container-fluid"></div>
+</form>
+
+<div class="modal fade hide" id="mdProveidos" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header text-small" style="cursor:move;">
+                Tipo de Proveido
+                <i class="fa fa-close" style="cursor:pointer;" data-dismiss="modal" aria-label="Close"></i>
+            </div>
+            <div class="modal-body">
+                <div class="form-row">
+                    <div class="form-group col-md-12">
+                        @Html.DropDownList("ddlManProveidoOpcionesId", new SelectList(ViewBag.ddlListOpciones, "Value", "Text"), new { @class = "form-control form-control-sm" })
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary btn-sm" onclick="ManProveido.fnNuevaCN()">Aceptar</button>
+            </div>
+        </div>
+    </div>
+</div>
+

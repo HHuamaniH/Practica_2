@@ -1,0 +1,156 @@
+﻿<script>
+    $(function () {
+        $('.tbListResumenSup').DataTable();
+        let ob = { anio: '', supervision: 0, archivo_pre: '' };
+        var lstModel = [];
+        _rendReporteSup.lista=@Html.Raw(Json.Encode(Model));
+
+    })
+</script>
+<style>
+    .table-footer tr {
+        background-color: aliceblue;
+    }
+
+        .table-footer tr > td {
+            font-weight: 600;
+        }
+
+        #bodyTable tr > td,
+        .table-footer tr > td {
+            text-align: center;
+        }
+</style>
+@{ var count = 0;}
+@foreach (var vm in Model)
+{
+    count++;
+
+    <div id="divTbResumen" style="width: 100%; overflow: auto; scrollbar-base-color: none;">
+        <br />
+        <div class="form-group">
+            <nav class="navbar navbar-light bg-light justify-content-between">
+                <span class="navbar-brand">@count. @vm.tituloReporte </span>
+                <button class="btn btn-sm btn-outline-primary my-2 my-sm-0 rpt_@count" type="button" onclick="_rendReporteSup.fnExportResumen(@count)">Descargar<i class="fa fa-file-excel-o fa-fw"></i></button>
+            </nav>
+        </div>
+
+        <table id="tbListResumenSup" class="table table-bordered table-striped-success tbListResumenSup table-hover" style="width: 100% !important; font-size:11px">
+            <thead>
+                <tr style=" text-align: center;  background-color: #dae7f5">
+                    <td>Año</td>
+                    <td>N° Informes </td>
+                    <td>N° Archivos Preliminares </td>
+                    <td>N°Archivos - sin indicios de infracción </td>
+                    <td>N° PAU Iniciados</td>
+                    <td>N° Informes con Inicio PAU </td>
+                    <td>N° Informes concluidos en 1ra Etapa</td>
+                    <td>% Procesos concluidos primera etapa </td>
+                    <td>Número PAU con medidas cautelares</td>
+                    <td>N° PAU Terminados</td>
+                    <td>N° PAU con sanción y/o caducidad</td>
+                    <td>N° PAU con Medidas Correctivas</td>
+                    <td>N° PAU con Amonestación</td>
+                    <td>N° PAU que dictó caducidad</td>
+                    <td>N° THs Caducados</td>
+                    <td>N° THs Caducados Firmes o Agotada la vía Adm.</td>
+                    <td>N° PAU archivados</td>
+                    <td>% PAU terminados</td>
+                    <td>N° casos concluidos (Nro archivo preliminar + Nro informes cuyo PAU ha concluido)</td>
+                    <td>% casos concluidos (Nro de Casos / total de informes)</td>
+                    <td>N° PAU sancionados (1ra Instancia)</td>
+                    <td>N° PAU sancionados (2da Instancia)</td>
+                    <td>Multa impuesta</td>
+                    <td>Multa final impuesta</td>
+                    <td>Multa final firme</td>
+                </tr>
+            </thead>
+            @if (vm.listPauConcluido != null)
+            {
+                var SUPERVISION = 0; var ARCHIVO_PRELIMINAR = 0; var INI_PAU = 0; var CANTIDAD = 0; var TERMINO_PAU = 0; var CASOS = 0;
+                var ARCHIVO_PRELIMINAR_SIN = 0; var SUPER_TERMINADO_PAU = 0; var MEDCAU_PAU = 0; var SANCIONADO_PAU = 0; var MED_CORREC_PAU = 0.0; var AMONEST_PAU = 0.0;
+                var CADUCADO_PAU = 0; var CADUCADO_PAU_TH = 0; var CADUCADO_PAU_TH_PRV = 0; var ARCHIVO_PAU = 0; var SANCIONADO_PAU_1RA = 0; var SANCIONADO_PAU_2DA = 0;
+                decimal MONTO_MULTA = 0; decimal MONTO_MULTA_FINAL = 0; decimal MONTO_MULTA_FIRME = 0;
+                <tbody id="bodyTable">
+
+
+                    @foreach (var item in vm.listPauConcluido)
+                    {
+                        SUPERVISION = item.SUPERVISION + SUPERVISION; ARCHIVO_PRELIMINAR = item.ARCHIVO_PRELIMINAR + ARCHIVO_PRELIMINAR; INI_PAU = item.INI_PAU + INI_PAU; CANTIDAD = item.CANTIDAD + CANTIDAD;
+                        TERMINO_PAU = item.TERMINO_PAU + TERMINO_PAU; CASOS = item.CASOS + CASOS;
+
+                        ARCHIVO_PRELIMINAR_SIN = item.ARCHIVO_PRELIMINAR_SIN + ARCHIVO_PRELIMINAR_SIN; SUPER_TERMINADO_PAU = item.SUPER_TERMINADO_PAU + SUPER_TERMINADO_PAU; MEDCAU_PAU = item.MEDCAU_PAU + MEDCAU_PAU;
+                        SANCIONADO_PAU = item.SANCIONADO_PAU + SANCIONADO_PAU; MED_CORREC_PAU = item.MED_CORREC_PAU + MED_CORREC_PAU; AMONEST_PAU = item.AMONEST_PAU + AMONEST_PAU; CADUCADO_PAU = item.CADUCADO_PAU + CADUCADO_PAU;
+                        CADUCADO_PAU_TH = item.CADUCADO_PAU_TH + CADUCADO_PAU_TH; CADUCADO_PAU_TH_PRV = item.CADUCADO_PAU_TH_PRV + CADUCADO_PAU_TH_PRV; ARCHIVO_PAU = item.ARCHIVO_PAU + ARCHIVO_PAU; SANCIONADO_PAU_1RA = item.SANCIONADO_PAU_1RA + SANCIONADO_PAU_1RA;
+                        SANCIONADO_PAU_2DA = item.SANCIONADO_PAU_2DA + SANCIONADO_PAU_2DA; MONTO_MULTA = item.MONTO_MULTA + MONTO_MULTA; MONTO_MULTA_FINAL = item.MONTO_MULTA_FINAL + MONTO_MULTA_FINAL; MONTO_MULTA_FIRME = item.MONTO_MULTA_FIRME + MONTO_MULTA_FIRME;
+                    <tr>
+
+                        <td>@item.ANIO</td>
+                        <td>@item.SUPERVISION</td>
+                        <td>@item.ARCHIVO_PRELIMINAR</td>
+                        <td>@item.ARCHIVO_PRELIMINAR_SIN</td>
+                        <td>@item.INI_PAU</td>
+                        <td>@item.SUPER_TERMINADO_PAU</td>
+                        <td>@item.CANTIDAD</td>
+                        <td>@Math.Round((item.AVANCE * 100), 2) %</td>
+                        <td>@item.MEDCAU_PAU</td>
+                        <td>@item.TERMINO_PAU</td>
+                        <td>@item.SANCIONADO_PAU</td>
+                        <td>@item.MED_CORREC_PAU</td>
+                        <td>@item.AMONEST_PAU</td>
+                        <td>@item.CADUCADO_PAU</td>
+                        <td>@item.CADUCADO_PAU_TH</td>
+                        <td>@item.CADUCADO_PAU_TH_PRV</td>
+                        <td>@item.ARCHIVO_PAU</td>
+                        <td>@Math.Round((item.AVANCE1 * 100), 2) %</td>
+                        <td>@item.CASOS</td>
+                        <td>@Math.Round((item.AVANCE_CASOS * 100), 2) %</td>
+                        <td>@item.SANCIONADO_PAU_1RA</td>
+                        <td>@item.SANCIONADO_PAU_2DA</td>
+                        <td>@item.MONTO_MULTA</td>
+                        <td>@item.MONTO_MULTA_FINAL</td>
+                        <td>@item.MONTO_MULTA_FIRME</td>
+                    </tr>
+
+
+
+                    }
+                </tbody>
+                <tfoot class="table-footer">
+
+                    <tr>
+                        <td>Total</td>
+                        <td>@SUPERVISION</td>
+                        <td>@ARCHIVO_PRELIMINAR</td>
+                        <td>@ARCHIVO_PRELIMINAR_SIN</td>
+                        <td>@INI_PAU</td>
+                        <td>@SUPER_TERMINADO_PAU</td>
+                        <td>@CANTIDAD</td>
+                        <td>@Math.Round((double)CANTIDAD / SUPERVISION * 100, 2) %</td>
+                        <td>@MEDCAU_PAU</td>
+                        <td>@TERMINO_PAU</td>
+                        <td>@SANCIONADO_PAU</td>
+                        <td>@MED_CORREC_PAU</td>
+                        <td>@AMONEST_PAU</td>
+                        <td>@CADUCADO_PAU</td>
+                        <td>@CADUCADO_PAU_TH</td>
+                        <td>@CADUCADO_PAU_TH_PRV</td>
+                        <td>@ARCHIVO_PAU</td>
+                        <td>@Math.Round((double)TERMINO_PAU / INI_PAU * 100, 2) %</td>
+                        <td>@CASOS</td>
+                        <td>@Math.Round((double)CASOS / SUPERVISION * 100, 2) %</td>
+                        <td>@SANCIONADO_PAU_1RA</td>
+                        <td>@SANCIONADO_PAU_2DA</td>
+                        <td>@MONTO_MULTA</td>
+                        <td>@MONTO_MULTA_FINAL</td>
+                        <td>@MONTO_MULTA_FIRME</td>
+                    </tr>
+                </tfoot>
+
+            }
+
+        </table>
+        <br />
+    </div>
+}
+

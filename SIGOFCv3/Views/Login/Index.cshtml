@@ -1,0 +1,127 @@
+﻿
+@model CapaEntidad.GENE.Ent_USUARIO_CUENTA
+@{
+    ViewBag.Title = "INICIAR SESSION";
+    Layout = "~/Views/Shared/_LayoutLogin.cshtml";
+}
+
+<style type="text/css">
+    #DivMensaje {
+        margin-left: 0 !important;
+    }
+</style>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $frmIngreso = $(".frmLoginSigo");
+        $frmIngreso.validate({
+            focusInvalid: true,
+            //ignore: '', hiden predeterminado
+            rules: {
+                USUARIO_LOGIN: {
+                    required: true
+                },
+                USUARIO_CONTRASENA: {
+                    required: true
+                }
+            },
+            messages: {
+                USUARIO_LOGIN: {
+                    required: "Debe ingresar usuario"
+                },
+                USUARIO_CONTRASENA: {
+                    required: "Ingresar la contraseña"
+                }
+            },
+            invalidHandler: function (event, validator) {//display error alert on form submit
+
+            },
+            errorPlacement: function (error, element) {// render error placement for each input type
+                var loginElement = $(element);
+                loginElement.addClass('border-danger');
+                loginElement.attr('data-toggle', 'tooltip');
+                loginElement.attr('data-placement', 'top');
+                loginElement.attr('data-original-title', error.text());
+                $('[data-toggle="tooltip"]').tooltip();
+
+            },
+
+            highlight: function (element) {
+
+            },
+            unhighlight: function (element) { // revert the change done by hightlight
+
+            },
+            success: function (label, element) {
+                var loginElement = $(element);
+                loginElement.removeClass('border-danger');
+                loginElement.removeAttr('data-toggle', 'tooltip');
+                loginElement.removeAttr('data-placement', 'top');
+            },
+            submitHandler: function (form) {
+                if (grecaptcha.getResponse() != '') {
+                    form.submit();
+                }
+                else {
+                    alert("Error captcha");
+                    return false;
+                }
+            }
+        });
+
+        //Validar el ingreso de solo letras, números y .
+        $("#USUARIO_LOGIN").keypress(function (e) {
+            tecla = (document.all) ? e.keyCode : e.which;
+            tecla = String.fromCharCode(tecla)
+            return /^[0-9A-Za-z\-\.]+$/.test(tecla);
+
+            if (e.which != 8 && e.which != 0 && (e.which < 48 || e.which > 57)) {
+                return false;
+            }
+        });
+    });
+</script>
+
+@using (Html.BeginForm("Login", "Login", FormMethod.Post, new { id = "frmLoginSigo", @class = "frmLoginSigo" }))
+{
+    <div class="login-box">
+
+        <div class="login-box-body">
+            <h6 class="text-center">
+                <strong>
+                    BIENVENIDOS AL SISTEMA DE INFORMACIÓN GERENCIAL DEL OSINFOR
+                </strong>
+            </h6><br />
+            <div class="col-xs-12" style="text-align:center">
+                <img id="profile-img" class="img-fluid" style="height:30%; width:80%" src="~/Content/images/logo/Logo-sigo-2.png" />
+            </div>
+            <br />
+            <div class="col-xs-12" style="text-align:center">
+                <h5 class="text-center"><i><strong>"Usemos responsablemente nuestros bosques"</strong></i></h5>
+            </div>
+            <div class="col-xs-12">
+                <div class="form-signin">
+                    @Html.EditorFor(u => u.USUARIO_LOGIN, new { htmlAttributes = new { @class = "form-control", placeholder = "Usuario" } })
+                    @Html.EditorFor(u => u.USUARIO_CONTRASENA, new { htmlAttributes = new { @class = "form-control", placeholder = "Password" } })
+                    @Html.Hidden("returnUrl", HttpContext.Current.Request.QueryString["returnUrl"])
+                    <input type="submit" class="btn btn-lg btn-primary btn-block btn-signin" value="Iniciar Sesión" id="idSubmit" /><br />
+                    <div style="align-items:center; justify-content: center;  display: -webkit-box;  display: -ms-flexbox;  display: flex;">
+                        <div class="g-recaptcha" data-sitekey="6Lfugy0UAAAAANdsGWum0FtV7Wtg22AeW3sierzP"></div>
+                    </div>
+                    <br />
+                    @if (ViewBag.errorLogin != null)
+                    {
+                        <div class="text-danger text-bold text-sm-center">
+                            @ViewBag.errorLogin
+                        </div>
+                    }
+                    <div style="text-align:right; font-size:11px">
+                        <b>version</b> 3.0.18<br />
+                    </div>
+                    <div style="text-align:center; font-size:11px">
+                        <strong><a href="https://www.osinfor.gob.pe/" target="_blank">OSINFOR</a> &copy; 2018 </strong>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}

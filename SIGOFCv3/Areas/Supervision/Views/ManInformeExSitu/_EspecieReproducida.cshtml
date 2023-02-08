@@ -1,0 +1,61 @@
+﻿
+<script src="~/Areas/Supervision/js/ManInformeExSitu/_EspecieReproducida.js"></script>
+
+<div class="modal-dialog" role="document">
+    <div class="modal-content">
+        <div class="modal-header text-small" style="cursor:move;">
+            <span>Especie Reproducida</span>
+            <i class="fa fa-close" style="cursor:pointer;" data-dismiss="modal" aria-label="Close"></i>
+        </div>
+        <div class="modal-body">
+            <form id="frmItemEspecieReproducida">
+                @Html.Hidden("hdfRegEstado")
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label for="ddlEspecieOrigenId" class="text-small">Origen</label>
+                        @Html.DropDownList("ddlEspecieOrigenId", new SelectList(ViewBag.ddlEspecieOrigen, "Value", "Text"), new { @class = "form-control form-control-sm" })
+                    </div>
+                    <div class="form-group col-md-6">
+                        @Html.Partial("~/Areas/General/Views/Controles/_renderComboEspecie.cshtml")
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label for="txtNumCriaAnio" class="text-small">N° Crías por Año</label>
+                        @Html.TextBox("txtNumCriaAnio", "", new { @class = "form-control form-control-sm", type = "number" })
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="txtCriaNumViable" class="text-small">N° Crías Viables</label>
+                        @Html.TextBox("txtCriaNumViable", "", new { @class = "form-control form-control-sm", type = "number" })
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label for="txtNumCriaMuerta" class="text-small">N° Crías Muertas</label>
+                        @Html.TextBox("txtNumCriaMuerta", "", new { @class = "form-control form-control-sm", type = "number" })
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="ddlFrecReproduccionId" class="text-small">Frecuencia de Reproducción</label>
+                        @Html.DropDownList("ddlFrecReproduccionId", new SelectList(ViewBag.ddlFrecReproduccion, "Value", "Text"), new { @class = "form-control form-control-sm" })
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-12">
+                        <label for="txtEpocaReprod" class="text-small">Época de Reproducción</label>
+                        @Html.TextBox("txtEpocaReprod", "", new { @class = "form-control form-control-sm" })
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-12">
+                        <label for="txtObservacion" class="text-small">Observación</label>
+                        @Html.TextArea("txtObservacion", "", new { @class = "form-control form-control-sm", rows = "3" })
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-primary btn-sm" onclick="_EspecieReproducida.fnSubmitForm()">Guardar</button>
+            <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Cancelar</button>
+        </div>
+    </div>
+</div>

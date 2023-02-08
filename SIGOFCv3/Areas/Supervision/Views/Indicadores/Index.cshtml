@@ -1,0 +1,39 @@
+﻿@model CapaEntidad.ViewModel.VM_IndicadorFiltro
+@{
+    ViewBag.Title = ViewBag.TituloFormulario;
+    Layout = "~/Views/Shared/_LayoutMain.cshtml";
+}
+
+<script src="~/Areas/Supervision/js/Indicadores/Index.js"></script>
+
+<div class="container-fluid" id="frmIndicador">
+    @Html.HiddenFor(m => m.idTab)
+    <div class="card">
+        <div class="card-header text-left">
+            <h5>@ViewBag.Title</h5>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-sm-12">
+                    <ul class="nav nav-tabs" id="myTab" role="tablist">
+                        <li class="nav-item"><a class="nav-link" id="hrefnavMAPRO" data-toggle="tab" href="#navMAPRO" role="tab" aria-controls="home" aria-selected="true">MAPRO</a></li>
+                        <li class="nav-item"><a class="nav-link" id="hrefnavPOI" data-toggle="tab" href="#navPOI" role="tab" aria-controls="home" aria-selected="true">POI</a></li>
+                        <li class="nav-item"><a class="nav-link" id="hrefnavPEI" data-toggle="tab" href="#navPEI" role="tab" aria-controls="home" aria-selected="true">PEI</a></li>
+                    </ul>
+                    <div class="tab-content">
+                        <div class="tab-pane" id="navMAPRO" role="tabpanel" aria-labelledby="nav-home-tab">
+                            @Html.Partial("~/Areas/Supervision/Views/Indicadores/_Shared/_renderMAPRO.cshtml", Model)
+                        </div>
+                        <div class="tab-pane" id="navPOI" role="tabpanel" aria-labelledby="nav-home-tab">
+                            @Html.Partial("~/Areas/Supervision/Views/Indicadores/_Shared/_renderPOI.cshtml", Model)
+                        </div>
+                        <div class="tab-pane" id="navPEI" role="tabpanel" aria-labelledby="nav-home-tab">
+                            @Html.Partial("~/Areas/Supervision/Views/Indicadores/_Shared/_renderPEI.cshtml", Model)
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

@@ -1,0 +1,294 @@
+﻿@model CapaEntidad.ViewModel.VM_Veeduria
+@{
+    ViewBag.Title = "ValidarHallazgo";
+    Layout = "~/Views/Shared/_LayoutMain.cshtml";
+}
+
+<script src="~/Areas/Supervision/js/ReporteVigilancia/ValidarHallazgo.js"></script>
+
+<script type="text/javascript">
+    ValidarHallazgo.fnLoadData('@Html.Raw(Json.Encode(@Model.listDetHallazgo))', 'DataDetHallazgo');
+    ValidarHallazgo.fnLoadData('@Html.Raw(Json.Encode(@Model.listTHabilitanteVinculado))', 'DataTHabilitanteVinculado');
+    ValidarHallazgo.fnLoadData('@Html.Raw(Json.Encode(@Model.listArchivo))', 'DataArchivo');
+</script>
+
+<div class="container-fluid">
+    <div class="card">
+        <div class="card-header text-left">
+            @Model.lblTituloCabecera
+        </div>
+        <div class="card-body">
+            <div class="card">
+                <div class="card-header text-small">
+                    <a id="btnGuardar" href="javascript:void(0)" style="cursor:pointer;" data-toggle="tooltip" data-placement="top" title="Guardar" onclick="ValidarHallazgo.fnSaveForm()"><i class="fa mx-2 fa-lg fa-save"></i></a>
+                    <a style="cursor:pointer;" data-toggle="tooltip" data-placement="top" title="Regresar" onclick="ValidarHallazgo.regresar()"><i class="fa mx-2 fa-lg fa-reply"></i></a>
+                    <span id="lblTitulo">@Model.lblTituloEstado</span>
+                </div>
+                <div class="card-body">
+                    <form id="frmValidarHallazgo">
+                        @Html.HiddenFor(m => m.hdfCodHallazgo)
+                        @Html.HiddenFor(m => m.hdfCodUCuenta)
+                        @Html.HiddenFor(m => m.hdfCodUsuarioControl)
+                        @Html.HiddenFor(m => m.hdfCodEquipo)
+                        @Html.HiddenFor(m => m.hdfCodIntegrante)
+                        @Html.HiddenFor(m => m.hdfCodOrganizacion)
+                        @Html.HiddenFor(m => m.hdfRegEstado)
+
+                        <ul class="nav nav-tabs" id="myTab" role="tablist">
+                            <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#navEstado" role="tab" aria-controls="home" aria-selected="true">Estado Situacional</a></li>
+                            <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#navDatos" role="tab" aria-controls="home" aria-selected="true">Datos Generales</a></li>
+                            <!--<li class="nav-item"><a class="nav-link active" data-toggle="tab" href="#navDatos" role="tab" aria-controls="home" aria-selected="true">Datos Generales</a></li>-->
+                            <li id="idNavDetalles" class="nav-item"><a class="nav-link" data-toggle="tab" href="#navDetalles" role="tab" aria-controls="home" aria-selected="true">Detalles</a></li>
+                            <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#navTHabilitantes" role="tab" aria-controls="home" aria-selected="true">Títulos Habilitantes vinculados</a></li>
+                            <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#navFotos" role="tab" aria-controls="home" aria-selected="true">Fotos</a></li>
+                        </ul>
+                        <div class="tab-content">
+                            <div class="tab-pane" id="navEstado" role="tabpanel" aria-labelledby="nav-home-tab">
+                                <div class="form-row" style="margin-top:10px;">
+                                    <div class="form-group col-md-3">
+                                        <label for="lblestado" class="text-small">Indicador</label>
+                                        @Html.DropDownListFor(m => m.ddlEstadoId, new SelectList(Model.ddlEstado, "Value", "Text"), new { @class = "form-control form-control-sm" })
+                                        <input type="hidden" id="idEstado" />
+                                    </div>
+                                    <div class="col-md-3" style="margin-top:22px;">
+                                        <button type="button" id="btnProcesar" class="btn btn-primary btn-sm" style="margin-left:6px;" onclick="ValidarHallazgo.fnIniProceso()">Procesar</button>
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group col-md-4">
+                                        <label for="txtUsuarioRegistro" class="text-small">Usuario que ingresó el registro</label>
+                                        @Html.EditorFor(m => m.txtUsuarioRegistro, new { htmlAttributes = new { @class = "form-control form-control-sm", disabled = true } })
+                                    </div>
+                                    <div class="form-group col-md-4">
+                                        <label for="txtUsuarioControl" class="text-small">Usuario que asignó el útimo estado situacional al registro</label>
+                                        @Html.EditorFor(m => m.txtUsuarioControl, new { htmlAttributes = new { @class = "form-control form-control-sm", disabled = true } })
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="tab-pane" id="navDatos" role="tabpanel" aria-labelledby="nav-home-tab">
+                                <!--<div class="tab-pane fade show active" id="navDatos" role="tabpanel" aria-labelledby="nav-home-tab">-->
+                                <div class="form-row" style="margin-top:10px;">
+                                    <div class="form-group col-md-4">
+                                        <label for="lblcomunidad" class="text-small">Comunidad</label>
+                                        @Html.EditorFor(m => m.txtcomunidad, new { htmlAttributes = new { @class = "form-control form-control-sm", disabled = true } })
+                                    </div>
+                                    <div class="form-group col-md-4">
+                                        <label for="lblorgregional" class="text-small">Organización Regional</label>
+                                        @Html.EditorFor(m => m.txtorgregional, new { htmlAttributes = new { @class = "form-control form-control-sm", disabled = true } })
+                                    </div>
+                                    <div class="form-group col-md-4">
+                                        <label for="lblorginterna" class="text-small">Organización Interna</label>
+                                        @Html.EditorFor(m => m.txtorginterna, new { htmlAttributes = new { @class = "form-control form-control-sm", disabled = true } })
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group col-md-3">
+                                        <label for="lbltipohallazgo" class="text-small">Tipo Hallazgo</label>
+                                        @Html.DropDownListFor(m => m.ddlTipoHallazgoId, new SelectList(Model.ddlTipoHallazgo, "Value", "Text"), new { @class = "form-control form-control-sm", disabled = true })
+                                    </div>
+                                    <div class="form-group col-md-2">
+                                        <label for="lblfecha" class="text-small">Fecha</label>
+                                        @Html.EditorFor(m => m.txtfecha, new { htmlAttributes = new { @class = "form-control form-control-sm", placeholder = "dd/mm/yyyy", maxlength = "10", disabled = true } })
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group col-md-4">
+                                        <label for="lblsector" class="text-small">Sector</label>
+                                        @Html.EditorFor(m => m.txtsector, new { htmlAttributes = new { @class = "form-control form-control-sm", disabled = true } })
+                                    </div>
+                                    @if (Model.ddlTipoHallazgoId == "0000003"
+                                        || Model.ddlTipoHallazgoId == "0000004"
+                                        || Model.ddlTipoHallazgoId == "0000005")
+                                    {
+                                        <div class="form-group col-md-2">
+                                            <label for="lblzonautm" class="text-small">Zona UTM</label>
+                                            @Html.DropDownListFor(m => m.ddlZonaId, new SelectList(Model.ddlZona, "Value", "Text"), new { @class = "form-control form-control-sm", disabled = true })
+                                        </div>
+                                        <div class="form-group col-md-2">
+                                            <label for="lblcoordeste" class="text-small">Coordenada Este</label>
+                                            @Html.EditorFor(m => m.txtcoordenadaEste, new { htmlAttributes = new { @class = "form-control form-control-sm", disabled = true } })
+                                        </div>
+                                        <div class="form-group col-md-2">
+                                            <label for="lblcoordnorte" class="text-small">Coordenada Norte</label>
+                                            @Html.EditorFor(m => m.txtcoordenadaNorte, new { htmlAttributes = new { @class = "form-control form-control-sm", disabled = true } })
+                                        </div>
+                                    }
+                                </div>
+                                @if (Model.ddlTipoHallazgoId == "0000003")
+                                {
+                                    <div class="form-row">
+                                        <div class="form-group col-md-3">
+                                            <label for="lbltipoactividad" class="text-small">Tipo de Actividad</label>
+                                            @Html.DropDownListFor(m => m.ddlTipoActividadId, new SelectList(Model.ddlTipoActividad, "Value", "Text"), new { @class = "form-control form-control-sm", disabled = true })
+                                        </div>
+                                        <div class="form-group col-md-2">
+                                            <label for="lblsuperficie" class="text-small">Superficie estimada (Ha)</label>
+                                            @Html.EditorFor(m => m.txtsuperficie, new { htmlAttributes = new { @class = "form-control form-control-sm", disabled = true } })
+                                        </div>
+                                    </div>
+                                    <div class="form-row">
+                                        <div class="form-group col-md-3">
+                                            <label for="lbltiporesponsable" class="text-small">Responsable</label>
+                                            @Html.DropDownListFor(m => m.ddlTipoResponsableId, new SelectList(Model.ddlTipoResponsable, "Value", "Text"), new { @class = "form-control form-control-sm", disabled = true })
+                                        </div>
+                                        <div class="form-group col-md-4" id="dvNombre">
+                                            <label for="lblnomempresa" class="text-small">Nombre</label>
+                                            @Html.EditorFor(m => m.txtnomempresa, new { htmlAttributes = new { @class = "form-control form-control-sm", disabled = true } })
+                                        </div>
+                                        <div class="form-group col-md-4" id="dvNombreValidado">
+                                            <label for="lblnomempresa_validado" class="text-small">Nombre Validado</label>
+                                            @Html.EditorFor(m => m.txtnomempresa_validado, new { htmlAttributes = new { @class = "form-control form-control-sm" } })
+                                        </div>
+                                    </div>
+                                }
+
+                                @if (Model.ddlTipoHallazgoId == "0000004")
+                                {
+                                    <div class="form-row">
+                                        <div class="form-group col-md-3">
+                                            <label for="lblTipoVia" class="text-small">Vía</label>
+                                            @Html.DropDownListFor(m => m.ddlTipoViaId, new SelectList(Model.ddlTipoVia, "Value", "Text"), new { @class = "form-control form-control-sm", disabled = true })
+                                        </div>
+                                        <div class="form-group col-md-3">
+                                            <label for="lblTipoVehiculo" class="text-small">Tipo de Vehículo</label>
+                                            @Html.DropDownListFor(m => m.ddlTipoVehiculoId, new SelectList(Model.ddlTipoVehiculo, "Value", "Text"), new { @class = "form-control form-control-sm", disabled = true })
+                                        </div>
+                                        <div class="form-group col-md-3">
+                                            <label for="lblTipoFrecuencia" class="text-small">Frecuencia</label>
+                                            @Html.DropDownListFor(m => m.ddlTipoFrecuenciaId, new SelectList(Model.ddlTipoFrecuencia, "Value", "Text"), new { @class = "form-control form-control-sm", disabled = true })
+                                        </div>
+                                        <div class="form-group col-md-3">
+                                            <label for="lblsuperficie" class="text-small">Volúmen estimado (m3)</label>
+                                            @Html.EditorFor(m => m.txtsuperficie, new { htmlAttributes = new { @class = "form-control form-control-sm", disabled = true } })
+                                        </div>
+                                    </div>
+                                    <div class="form-row">
+                                        <div class="form-group col-md-3">
+                                            <label for="lbltiporesponsable" class="text-small">Responsable</label>
+                                            @Html.DropDownListFor(m => m.ddlTipoResponsableId, new SelectList(Model.ddlTipoResponsable, "Value", "Text"), new { @class = "form-control form-control-sm", disabled = true })
+                                        </div>
+                                        <div class="form-group col-md-4" id="dvTHabilitante" style="display:none;">
+                                            <label for="lblTHabilitante" class="text-small">Número del Título Habilitante</label>
+                                            @Html.EditorFor(m => m.txtTHabilitante, new { htmlAttributes = new { @class = "form-control form-control-sm", disabled = true } })
+                                        </div>
+                                        <div class="form-group col-md-4" id="dvTHabilitante_validado" style="display:none;">
+                                            <label for="lblTHabilitante_validado" class="text-small">Número del Título Habilitante Validado</label>
+                                            <div class="input-group">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text"><i id="btnTHabilitante" class="fa fa-search-plus" style="cursor:pointer;" data-toggle="tooltip" data-placement="top" title="Seleccionar Título Habilitante"></i></span>
+                                                </div>
+                                                @Html.EditorFor(m => m.txtTHabilitante_validado, new { htmlAttributes = new { @class = "form-control form-control-sm", disabled = true } })
+                                                @Html.HiddenFor(m => m.hdfCodTHabilitante)
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-row" id="dvTitular" style="display:none;">
+                                        <div class="form-group col-md-4">
+                                            <label for="lblTitular" class="text-small">Nombre del Titular del TH</label>
+                                            @Html.EditorFor(m => m.txtTitular, new { htmlAttributes = new { @class = "form-control form-control-sm", disabled = true } })
+                                        </div>
+                                        <div class="form-group col-md-4">
+                                            <label for="lblTitular_validado" class="text-small">Nombre del Titular del TH Validado</label>
+                                            @Html.EditorFor(m => m.txtTitular_validado, new { htmlAttributes = new { @class = "form-control form-control-sm", disabled = true } })
+                                            @Html.HiddenFor(m => m.hdfCodTitular)
+                                        </div>
+                                    </div>
+                                }
+
+                                @if (Model.ddlTipoHallazgoId == "0000005")
+                                {
+                                    <div class="form-row">
+                                        <div class="form-group col-md-3">
+                                            <label for="lblTipoHecho" class="text-small">Hecho</label>
+                                            @Html.DropDownListFor(m => m.ddlTipoHechoId, new SelectList(Model.ddlTipoHecho, "Value", "Text"), new { @class = "form-control form-control-sm", disabled = true })
+                                        </div>
+                                        <div class="form-group col-md-3">
+                                            <label for="lbltiporesponsable" class="text-small">Responsable de la afectación</label>
+                                            @Html.DropDownListFor(m => m.ddlTipoResponsableId, new SelectList(Model.ddlTipoResponsable, "Value", "Text"), new { @class = "form-control form-control-sm", disabled = true })
+                                        </div>
+                                    </div>
+                                }
+                                <div class="form-row">
+                                    <div class="form-group col-md-12">
+                                        <label for="lblobservacion" class="text-small">Observación</label>
+                                        @Html.TextAreaFor(m => m.txtobservacion, 3, 1, new { @class = "form-control form-control-sm", disabled = true })
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group col-md-12">
+                                        <label for="lblobservacion_validado" class="text-small">Observación Validada</label>
+                                        @Html.TextAreaFor(m => m.txtobservacion_validado, 3, 1, new { @class = "form-control form-control-sm" })
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="tab-pane" id="navDetalles" role="tabpanel" aria-labelledby="nav-home-tab">
+                                <div class="form-row" style="margin-top:10px;">
+                                    <div class="col-md-12">
+                                        <div class="table-responsive">
+                                            <table id="tbDetHallazgo" style="width:100%" class="table table-hover table-bordered">
+                                                <thead>
+                                                    <tr>
+                                                        <th colspan="8" class="text-sm-left">
+                                                            <div class="form-inline">
+                                                                <strong>Especies</strong>
+                                                            </div>
+                                                        </th>
+                                                    </tr>
+                                                </thead>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="tab-pane" id="navTHabilitantes" role="tabpanel" aria-labelledby="nav-home-tab">
+                                <div class="form-row" style="margin-top:20px;" id="divVincularTH">
+                                    <div class="col-md-12">
+                                        <button type="button" class="btn btn-primary btn-sm" style="margin-left:6px;" onclick="ValidarHallazgo.fnVincularTH('THVinculado')">Vincular</button>
+                                    </div>
+                                </div>
+                                <div class="form-row" style="margin-top:10px;">
+                                    <div class="col-md-12">
+                                        <div class="table-responsive">
+                                            <table id="tbTHabilitanteVinculado" style="width:100%" class="table table-hover table-bordered">
+                                                <thead>
+                                                    <tr>
+                                                        <th colspan="8" class="text-sm-left">
+                                                            <div class="form-inline">
+                                                                <strong>Títulos Habilitantes</strong>
+                                                            </div>
+                                                        </th>
+                                                    </tr>
+                                                </thead>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="tab-pane" id="navFotos" role="tabpanel" aria-labelledby="nav-home-tab">
+                                <div class="form-row" style="margin-top:10px;">
+                                    <div class="col-md-6">
+                                        <div class="table-responsive">
+                                            <table id="tbArchivo" style="width:100%" class="table table-hover table-bordered">
+                                                <thead>
+                                                    <tr>
+                                                        <th colspan="3" class="text-sm-left">
+                                                            <div class="form-inline">
+                                                                <strong>Archivos Adjuntos</strong>
+                                                            </div>
+                                                        </th>
+                                                    </tr>
+                                                </thead>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade hide" id="mdlAddEdit" role="dialog"></div>
+    <div class="modal fade hide" id="mdlVincularTH" role="dialog"></div>
+</div>

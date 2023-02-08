@@ -1,0 +1,875 @@
+﻿
+@model CapaEntidad.DOC.Ent_BITACORA_SUPER
+
+<div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+        <div class="modal-header text-small" style="cursor:move;padding:0.5rem;">
+            <h5 class="modal-title">Modificar</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body">
+            <form id="frmModificarCartaBitacora">
+                <input type="hidden" id="hdCodBitacora" value="@Model.COD_BITACORA" />
+                <input type="hidden" id="hdCodNotificacion" value="@Model.COD_CNOTIFICACION" />
+                <input type="hidden" id="hdCodTH" value="@Model.COD_THABILITANTE" />
+                <input type="hidden" id="hdNumTH" value="@Model.NUM_THABILITANTE" />
+                <input type="hidden" id="hdCodSecuencial" value="@Model.COD_SECUENCIAL" />
+                <input type="hidden" id="hdCodReque" value="@Model.COD_REQUE" />
+                <div class="form-row">
+                    <div class="form-group col-md-4">
+                        <label for="lblRetornoNumCnotificacion" class="text-small">Carta de Notificación</label>
+                        <input type="text" id="lblRetornoNumCnotificacion" disabled class="form-control form-control-sm" value="@Model.NUM_CNOTIFICACION" />
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label for="txtFInitSupervision" class="text-small">Fecha Inicio Supervisión</label>
+                        <input type="text" id="txtFInitSupervision" class="form-control form-control-sm" value="@Model.FECHA_INICIO_SUPERVISION" />
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label for="txtFTerminoSupervision" class="text-small">Fecha de Término Supervisión</label>
+                        <input type="text" id="txtFTerminoSupervision" class="form-control form-control-sm" value="@Model.FECHA_FIN_SUPERVISION" />
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-4">
+                        <label for="SUPERVISADO_TEXT" class="text-small">Supervisado</label>
+                        @Html.DropDownListFor(m => m.SUPERVISADO_TEXT, new SelectList(ViewBag.vmddlSupervisado, "Value", "Text"), new { @class = "form-control form-control-sm" })
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label for="COD_ITIPO" class="text-small">Tipo de informe a generar</label>
+                        @Html.DropDownListFor(m => m.COD_ITIPO, new SelectList(ViewBag.vmddTipoInforme, "Value", "Text"), new { @class = "form-control form-control-sm" })
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-12">
+                        <label for="txtObservaciones" class="text-small">Observaciones correspondiente a la supervisión</label>
+                        <textarea id="txtObservaciones" class="form-control form-control-sm" rows="2">@Model.OBSERVACIONES</textarea>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-4">
+                        <label for="ALERTA_ILEGAL_TEXT" class="text-small">Alerta sobre hechos ilegales</label>
+                        @Html.DropDownListFor(m => m.ALERTA_ILEGAL_TEXT, new SelectList(ViewBag.vmddlAlertaIlegal, "Value", "Text"), new { @class = "form-control form-control-sm" })
+                    </div>
+                </div>
+                <div id="divIlegal">
+                    <div class="form-row">
+                        <div class="form-group col-md-4">
+                            <label for="txtVolInjustAlerta" class="text-small">Volumen Injustificado</label>
+                            <input type="text" id="txtVolInjustAlerta" class="form-control form-control-sm" value="@Model.VOLUMEN_INJUSTIFICADO" />
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-12">
+                            <label for="txtDesAlerta" class="text-small">Descripción de la Alerta sobre hechos ilegales</label>
+                            <textarea id="txtDesAlerta" class="form-control form-control-sm" rows="2">@Model.DES_ALERTA_ILEGAL</textarea>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-12">
+                            <label for="txtOtrosHechos" class="text-small">Otros hechos relevantes</label>
+                            <textarea id="txtOtrosHechos" class="form-control form-control-sm" rows="2">@Model.OTROS_HECHO</textarea>
+                        </div>
+                    </div>
+                </div>
+                <br />
+                <div class="card-header text-small">
+                    Listado de archivos - Alerta OSINFOR
+                </div>
+                <div class="card-body">
+                    <div class="form-row">
+                        <div class="form-group col-md-12" style="text-align:right">
+                            <button type="button" class="btn btn-outline-info btn-sm" style="margin-top:3px;" onclick="_cartaMod.fnImportFile()" title="Subir archivo">Subir</button>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-12">
+                            <div class="custom-file" id="customFile">
+                                <input type="file" class="custom-file-input" multiple="multiple" id="txtArchivoAdjuntoAlerta" onchange="_cartaMod.fnSelectFile(event, this)" aria-describedby="fileHelp">
+                                <label class="custom-file-label" for="txtArchivoAdjuntoAlerta" style="color:#989797">
+                                    Seleccionar Archivo
+                                </label>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="form-row" id="divFileActa" style="display:none;">
+                        <div class="form-group col-md-12">
+                            <label id="lblFileActa" for="fotos" class="text-small"></label>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="table-responsive">
+                            <table id="tbArchivoAlerta" style="width:100%" class="table table-hover table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th colspan="7" class="text-sm-left">
+                                            <div class="form-inline">
+                                                <strong>
+                                                    Archivos
+                                                </strong>
+                                            </div>
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+                        </div>
+                        <br />
+                    </div>
+                </div>
+                @**************************************************INICIO*********************************************************
+        ////////////////////////////////////////////////////////////////////////////////////////////////////////////*@
+                <div class="card-header text-small">
+                    Listado de archivos - Encriptado
+                </div>
+                <div class="card-body">
+                    <div class="form-row">
+                        <div class="form-group col-md-12" style="text-align:right">
+                            <button type="button" class="btn btn-outline-info btn-sm" style="margin-top:3px;" onclick="_cartaMod.fnImportFileEncryp()" title="Subir archivo">Subir</button>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-12">
+                            <div class="custom-file" id="customFile">
+                                <input type="file" class="custom-file-input" multiple="multiple" id="txtArchivoAdjuntoEncryp" onchange="_cartaMod.fnSelectFileEncryp(event, this)" aria-describedby="fileHelp">
+                                <label class="custom-file-label" for="txtArchivoAdjuntoEncryp" style="color:#989797">
+                                    Seleccionar Archivo
+                                </label>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="form-row" id="divFileEncryp" style="display:none;">
+                        <div class="form-group col-md-12">
+                            <label id="lblFileEncryp" for="fotos" class="text-small"></label>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="table-responsive">
+                            <table id="tbArchivoEncryp" style="width:100%" class="table table-hover table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th colspan="7" class="text-sm-left">
+                                            <div class="form-inline">
+                                                <strong>
+                                                    Archivos
+                                                </strong>
+                                            </div>
+                                            
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+                        </div>
+                        <br />
+                    </div>
+                </div>
+
+                @***************************************************FIN******************************************
+        ////////////////////////////////////////////////////////////////////////////////////////////*@
+                <div class="card-header text-small">
+                    Listado de archivos - Información geográfica
+                </div>
+                <div class="card-body">
+                    <div class="form-row">
+                        <div class="form-group col-md-12" style="text-align:right">
+                            <button type="button" class="btn btn-outline-info btn-sm" style="margin-top:3px;" onclick="_cartaMod.fnImportFileInfoGeo()" title="Subir archivo">Subir</button>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-12">
+                            <div class="custom-file" id="customFile">
+                                <input type="file" class="custom-file-input" multiple="multiple" id="txtArchivoAdjuntoInfoGeo" onchange="_cartaMod.fnSelectFileInfoGeo(event, this)" aria-describedby="fileHelp">
+                                <label class="custom-file-label" for="txtArchivoAdjuntoInfoGeo" style="color:#989797">
+                                    Seleccionar Archivo
+                                </label>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="form-row" id="divFileInfoGeo" style="display:none;">
+                        <div class="form-group col-md-12">
+                            <label id="lblFileInfoGeo" for="fotos" class="text-small"></label>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="table-responsive">
+                            <table id="tbArchivoInfoGeo" style="width:100%" class="table table-hover table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th colspan="7" class="text-sm-left">
+                                            <div class="form-inline">
+                                                <strong>
+                                                    Archivos
+                                                </strong>
+                                            </div>
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+                        </div>
+                        <br />
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="modal-footer">
+            <button id="btnGuardar" class="btn btn-primary btn-sm" onclick="_cartaMod.fnGuardar();">Registrar</button>
+            <button id="btnCancelar" class="btn btn-secondary btn-sm" onclick="_cartaMod.fnClose();">Cancelar</button>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    var _cartaMod = {
+        selectFile: [],
+        selectFileInfoGeo: [],
+        selectFileEncrip:[],
+        lstdelete: [],
+        fnGetDataTableActa: () => {
+            var list = [];
+            _cartaMod.dtFileActa.rows().every(function (rowIdx, tableLoop, rowLoop) {
+                var row = this.data();
+                if (parseInt(row.COD_SECUENCIAL_ACTA) == 0) {
+                    list.push(row);
+                }
+            });
+            return list;
+        },
+        fnGetDataTableInfoGeo: () => {
+            var list = [];
+            _cartaMod.dtFileInfoGeo.rows().every(function (rowIdx, tableLoop, rowLoop) {
+                var row = this.data();
+                if (parseInt(row.RegEstado) == 1) {
+                    list.push(row);
+                }
+            });
+            return list;
+        },
+        fnGetDataTableEncryp: () => {
+            var list = [];
+            _cartaMod.dtFileEncryp.rows().every(function (rowIdx, tableLoop, rowLoop) {
+                var row = this.data();
+                if (parseInt(row.RegEstado) == 1) {
+                    list.push(row);
+                }
+            });
+            return list;
+        },
+
+        // **************************Encriptado*****************************************
+        fnImportFileEncryp: () => {
+            if (_cartaMod.selectFileEncrip != null) {
+                // Checking whether FormData is available in browser  
+                if (window.FormData !== undefined) {
+                    var url = urlLocalSigo + "Supervision/ManItenerario/UploadFilesEncryp";
+                    var fileData = new FormData();
+                    for (var i = 0; i < _cartaMod.selectFileEncrip.length; i++) {
+                        fileData.append(_cartaMod.selectFileEncrip[i].name, _cartaMod.selectFileEncrip[i]);
+                    }
+                    $.ajax({
+                        url: url,
+                        type: "POST",
+                        contentType: false, // Not to set any content header  
+                        processData: false, // Not to process data  
+                        data: fileData,
+                        success: function (result) {
+                            utilSigo.unblockUIGeneral();
+                            if (result.success) {
+                                _cartaMod.dtFileEncryp.rows.add(result.data).draw();
+                                _cartaMod.dtFileEncryp.page('last').draw('page');
+                                _cartaMod.selectFileEncrip = null;
+                                let frm = $("#frmModificarCartaBitacora");
+                                frm.find("#txtArchivoAdjuntoEncryp").next().text("Seleccionar Archivo");
+                                utilSigo.toastSuccess("Aviso", result.msj);
+                            }
+                            else {
+                                utilSigo.toastWarning("Aviso", result.msj);
+                            }
+                        },
+                        beforeSend: function () {
+                            utilSigo.blockUIGeneral();
+                        },
+                        error: function (err) {
+                            utilSigo.unblockUIGeneral();
+                            utilSigo.toastWarning("Aviso", "Sucedio un error, Comuníquese con el Administrador");
+                            console.log(err.statusText);
+                        }
+                    });
+                } else {
+                    utilSigo.toastWarning("Aviso", "Sucedio un error, Comuníquese con el Administrador");
+                    console.log("FormData is not available in your browser");
+                }
+            } else {
+                utilSigo.toastWarning("Aviso", "Seleccione un archivo a subir");
+            }
+        },
+
+        fnInitDataTableArchivoEncryp: () => {
+            let frm = $("#frmModificarCartaBitacora");
+            var url = urlLocalSigo + "Supervision/ManItenerario/GetAllDetaEncryp";
+            var columns_label = ["Nombre Archivo", "Extensión Archivo"];
+            var columns_data = ["NOMBRE_ARCH", "EXTENSION_ARCH"]
+            data_extend = [
+                {
+                    "data": "","title": "", "width": "2%", "orderable": false, "searchable": false, "mRender": function (data, type, row) {
+
+                        if (row.NOMBRE_ARCH != null) {
+                            return '<div><i class="fa fa-cloud-download" style="color:black;cursor:pointer;" title="Descargar archivo desenciptado" onclick="_cartaMod.fnDownloadFileDesencryp(this)"></i>';
+                        }
+                        else {
+                            return '<div><i class="fa fa-cloud-download" style="color:black;cursor:pointer;" title="Descargar archivo desenciptado" onclick=""></i>';
+                        }
+                    }
+                }
+            ];
+            var options = {
+                page_length: 6, row_delete: false, row_fnDelete: "_cartaMod.fnDeleteFileEncryp(this)"
+                , row_download: true, row_fnDownload: "_cartaMod.fnDownloadFileEncryp(this)"
+                , row_index: true, data_extend: data_extend
+            };
+            _cartaMod.dtFileEncryp = utilDt.fnLoadDataTable_Detail(frm.find("#tbArchivoEncryp"), columns_label, columns_data, options);
+
+            _cartaMod.dtFileEncryp.ajax.url(url).load(function (data) {
+                if (data.success == false) {
+                    utilSigo.toastError("Error", "Sucedio un Error Inesperado al Mostrar los archivos de alertas, Comuníquese con el Administrador");
+                    console.log(data.msjError);
+                }
+            });
+        },
+
+        fnSelectFileEncryp: (e, obj) => {
+            _cartaMod.selectFileEncrip = [];
+            var idFile = $(obj).attr("id");
+            var files = e.target.files || e.dataTransfer.files;
+            if (files != undefined && files.length > 0) {
+                if (files.length > 10) {
+                    utilSigo.toastWarning("Error", "Seleccione 10 archivos como maximo");
+                    return false;
+                }
+                var obj = new Object();
+                obj.success = true;
+                var fileSize = 0;
+                var fileNames = [];
+                for (var i = 0; i < files.length; i++) {
+                    //validando extension
+                    if (_cartaMod.fnValidaExtensionTXT(files[i].name) == false) {
+
+                        obj.nombre = files[i].name;
+                        obj.success = false;
+                        obj.msj = "La extension del archivo  : " + obj.nombre + " no es permitido";
+                        break;
+                    }
+                    //validando tamaño
+                    fileSize = parseFloat(files[i].size);
+                    if ((fileSize / 1048576) > 12) //7168
+                    {
+                        obj.nombre = files[i].name;
+                        obj.success = false;
+                        obj.msj = "El tamaño del archivo : " + obj.nombre + " no debe exceder 12MB";
+                        break;
+                    }
+                    //formData.append(files[i].name, files[i]);
+                    // $("#" + idFile).next().text(files[i].name);
+                    _cartaMod.selectFileEncrip.push(files[i]);
+                    fileNames.push(files[i].name);
+
+                }
+                if (!obj.success) {
+                    utilSigo.toastWarning("Error", obj.msj);
+                    return false;
+                }
+                //if (fileNames.length >= 3) {
+                //    _addEditMuestra.frm.find("#lblFotos").text(fileNames.join(","));
+                //}
+                // else {
+                $("#" + idFile).next().text(fileNames.join(","));
+
+
+                // }
+
+            }
+        },
+        fnValidaExtensionTXT: (filename) => {
+            var extension = filename.substr((filename.lastIndexOf('.') + 1));
+            var extensiones_permitidas = "txt";
+            var permitido = false;
+            if (extensiones_permitidas == extension) {
+                permitido = true;
+            }
+            return permitido;
+        },
+
+        fnDownloadFileEncryp: (obj) => {
+            var dt = _cartaMod.dtFileEncryp;
+            var data = dt.row($(obj).parents('tr')).data();
+            if (parseInt(data["RegEstado"]) == 0 && data["NOM_ARCH_TEMP"] == null) {
+                window.open(urlLocalSigo + "Archivos/Modulo/Supervision/Itinerario/Encriptado/" + data["COD_BITACORA"] + "-" + data["NOMBRE_ARCH"] + "." + data["EXTENSION_ARCH"], '_blank');
+            } else if (parseInt(data["RegEstado"]) != 0 && data["NOM_ARCH_TEMP"] != null) {
+                window.open(urlLocalSigo + "Archivos/Modulo/Supervision/Itinerario/Temp/" + data["NOM_ARCH_TEMP"], "_blank");
+            } 
+                
+            
+        },
+        fnDownloadFileDesencryp: (obj) => {
+            var dt = _cartaMod.dtFileEncryp;
+            var data = dt.row($(obj).parents('tr')).data();
+            if (parseInt(data["RegEstado"]) == 0) {
+                window.open(urlLocalSigo + "Archivos/Modulo/Supervision/Itinerario/Encriptado/Desencriptado/" + data["NOMBRE_ARCH"] + ".csv", '_blank');
+            } 
+        },
+
+        fnDeleteFileEncryp: (obj) => {
+            utilSigo.dialogConfirm("Confirmacion", "¿Está seguro de Eliminar el Registro Seleccionado?",
+                function (r) {
+                    if (r) {
+                        var $tr = $(obj).closest('tr');
+                        var row = _cartaMod.dtFileEncryp.row($tr).data();
+                        if (parseInt(row.COD_SECUENCIAL_ENCRYP) == 0) { //si es un archivo temporal, secuencial es 0
+                            var url = urlLocalSigo + "Supervision/ManItenerario/EliminarArchivoEncryp";
+                            var option = { url: url, datos: { name: row.NOM_ARCH_TEMP } };
+                            utilSigo.fnAjax(option, function (data) {
+                                if (data.success) {
+                                    utilSigo.toastSuccess("", "Se elimino correctamente el archivo");
+                                    _cartaMod.dtFileEncryp.row($tr).remove().draw(false);
+                                }
+                                else {
+                                    utilSigo.toastWarning("Aviso", "Sucedio un error al eliminar, Comuníquese con el Administrador");
+                                    console.log(data.msj);
+                                }
+                            });
+                        } else {
+                            row.EliTABLA = "BITACORA_SUPERVISIONES_DET_ENCRYP";
+                            _cartaMod.lstdelete.push(row);
+                            _cartaMod.dtFileEncryp.row($tr).remove().draw(false);
+                        }
+                    }
+                });
+        },
+
+        // *************************Fin Encryptado**************************************
+
+        fnDeleteFileActa: (obj) => {
+            utilSigo.dialogConfirm("Confirmacion", "¿Está seguro de Eliminar el Registro Seleccionado?",
+                function (r) {
+                    if (r) {
+                        var $tr = $(obj).closest('tr');
+                        var row = _cartaMod.dtFileActa.row($tr).data();
+                        if (parseInt(row.COD_SECUENCIAL_ACTA) == 0) { //si es un archivo temporal, secuencial es 0
+                            var url = urlLocalSigo + "Supervision/ManItenerario/EliminarArchivoActa";
+                            var option = { url: url, datos: { name: row.NOM_ARCH_TEMP } };
+                            utilSigo.fnAjax(option, function (data) {
+                                if (data.success) {
+                                    utilSigo.toastSuccess("", "Se elimino correctamente el archivo");
+                                    _cartaMod.dtFileActa.row($tr).remove().draw(false);
+                                }
+                                else {
+                                    utilSigo.toastWarning("Aviso", "Sucedio un error al eliminar, Comuníquese con el Administrador");
+                                    console.log(data.msj);
+                                }
+                            });
+                        } else {
+                            row.EliTABLA = "BITACORA_SUPERVISIONES_DET_ACTA";
+                            _cartaMod.lstdelete.push(row);
+                            _cartaMod.dtFileActa.row($tr).remove().draw(false);
+                        }
+                    }
+                });
+        },
+        fnDownloadFileActa: (obj) => {
+            var dt = _cartaMod.dtFileActa;
+            var data = dt.row($(obj).parents('tr')).data();
+            if (parseInt(data["COD_SECUENCIAL_ACTA"]) != 0) {
+                window.open(urlLocalSigo + "Archivos/Modulo/Supervision/Itinerario/" + data["COD_BITACORA"] + data["COD_SECUENCIAL_ACTA"] +"." + data["EXTENSION_ARCH"] , '_blank');
+            } else {
+                window.open(urlLocalSigo + "Archivos/Modulo/Supervision/Itinerario/Temp/" + data["NOM_ARCH_TEMP"], "_blank");
+            }
+        },
+        fnInitDataTableArchivoActa: () => {
+            let frm = $("#frmModificarCartaBitacora");
+            var url = urlLocalSigo + "Supervision/ManItenerario/GetAllDetaActa";
+            var columns_label = ["Nombre Archivo", "Extensión Archivo"];
+            var columns_data = ["NOMBRE_ARCH", "EXTENSION_ARCH"];
+            var options = {
+                page_length: 5, row_delete: true, row_fnDelete: "_cartaMod.fnDeleteFileActa(this)"
+                , row_download: true, row_fnDownload: "_cartaMod.fnDownloadFileActa(this)"
+                , row_index: true
+            };
+            _cartaMod.dtFileActa = utilDt.fnLoadDataTable_Detail(frm.find("#tbArchivoAlerta"), columns_label, columns_data, options);
+
+            _cartaMod.dtFileActa.ajax.url(url).load(function (data) {
+                if (data.success == false) {
+                    utilSigo.toastError("Error", "Sucedio un Error Inesperado al Mostrar los archivos de alertas, Comuníquese con el Administrador");
+                    console.log(data.msjError);
+                }
+            });
+        },
+        fnDeleteFileInfoGeo: (obj) => {
+            utilSigo.dialogConfirm("Confirmacion", "¿Está seguro de Eliminar el Registro Seleccionado?",
+                function (r) {
+                    if (r) {
+                        var $tr = $(obj).closest('tr');
+                        var row = _cartaMod.dtFileInfoGeo.row($tr).data();
+                        if (parseInt(row.RegEstado) != 0) { //si es un archivo temporal, secuencial es 0
+                            var url = urlLocalSigo + "Supervision/ManItenerario/EliminarArchivoInfoGeo";
+                            var option = { url: url, datos: { name: row.NOM_ARCH_TEMP } };
+                            utilSigo.fnAjax(option, function (data) {
+                                if (data.success) {
+                                    utilSigo.toastSuccess("", "Se elimino correctamente el archivo");
+                                    _cartaMod.dtFileInfoGeo.row($tr).remove().draw(false);
+                                }
+                                else {
+                                    utilSigo.toastWarning("Aviso", "Sucedio un error al eliminar, Comuníquese con el Administrador");
+                                    console.log(data.msj);
+                                }
+                            });
+                        } else {
+                            row.EliTABLA = "BITACORA_SUPERVISIONES_DET_INFOGEO";
+                            _cartaMod.lstdelete.push(row);
+                            _cartaMod.dtFileInfoGeo.row($tr).remove().draw(false);
+                        }
+                    }
+                });
+        },
+        fnDownloadFileInfoGeo: (obj) => {
+            var dt = _cartaMod.dtFileInfoGeo;
+            var data = dt.row($(obj).parents('tr')).data();
+            if (parseInt(data["RegEstado"]) != 0) {
+                window.open(urlLocalSigo + "Archivos/Modulo/Supervision/Itinerario/" + data["NOM_ARCH_TEMP"], '_blank');
+            } else {
+                let url = urlLocalSigo + "Supervision/ManItenerario/DownloadFileInfoGeo?ruta=" + data["RUTA_ARCH"] + "&nombre=" + data["NOMBRE_ARCH"];                
+                window.open(url, "_blank");
+            }
+        },
+        fnInitDataTableArchivoInfoGeo: () => {
+            let frm = $("#frmModificarCartaBitacora");
+            var url = urlLocalSigo + "Supervision/ManItenerario/GetAllDetaInfoGeo";
+            var columns_label = ["Nombre Archivo", "Extensión Archivo"];
+            var columns_data = ["NOMBRE_ARCH", "EXTENSION_ARCH"];
+            var options = {
+                page_length: 5, row_delete: true, row_fnDelete: "_cartaMod.fnDeleteFileInfoGeo(this)"
+                , row_download: true, row_fnDownload: "_cartaMod.fnDownloadFileInfoGeo(this)"
+                , row_index: true
+            };
+            _cartaMod.dtFileInfoGeo = utilDt.fnLoadDataTable_Detail(frm.find("#tbArchivoInfoGeo"), columns_label, columns_data, options);
+
+            _cartaMod.dtFileInfoGeo.ajax.url(url).load(function (data) {
+                if (data.success == false) {
+                    utilSigo.toastError("Error", "Sucedio un Error Inesperado al Mostrar los archivos de información geográfica, Comuníquese con el Administrador");
+                    console.log(data.msjError);
+                }
+            });
+        },
+        fnValidaExtension: (filename) => {
+            var extension = filename.substr((filename.lastIndexOf('.') + 1));
+            var extensiones_permitidas = ["exe", "bin", "bat", "run"];
+            var permitido = true;
+            for (var i = 0; i < extensiones_permitidas.length; i++) {
+                if (extensiones_permitidas[i] == extension) {
+                    permitido = false;
+                    break;
+                }
+            }
+            return permitido;
+        },
+        fnImportFile: () => {
+            if (_cartaMod.selectFile != null) {
+                // Checking whether FormData is available in browser  
+                if (window.FormData !== undefined) {
+                    var url = urlLocalSigo + "Supervision/ManItenerario/UploadFilesAlerta";
+                    var fileData = new FormData();
+                    for (var i = 0; i < _cartaMod.selectFile.length; i++) {
+                        fileData.append(_cartaMod.selectFile[i].name, _cartaMod.selectFile[i]);
+                    }
+                    $.ajax({
+                        url: url,
+                        type: "POST",
+                        contentType: false, // Not to set any content header  
+                        processData: false, // Not to process data  
+                        data: fileData,
+                        success: function (result) {
+                            utilSigo.unblockUIGeneral();
+                            if (result.success) {
+                                _cartaMod.dtFileActa.rows.add(result.data).draw();
+                                _cartaMod.dtFileActa.page('last').draw('page');
+                                _cartaMod.selectFile = null;
+                                let frm = $("#frmModificarCartaBitacora");
+                                frm.find("#txtArchivoAdjuntoAlerta").next().text("Seleccionar Archivo");
+                                utilSigo.toastSuccess("Aviso", result.msj);
+                            }
+                            else {
+                                utilSigo.toastWarning("Aviso", result.msj);
+                            }
+                        },
+                        beforeSend: function () {
+                            utilSigo.blockUIGeneral();
+                        },
+                        error: function (err) {
+                            utilSigo.unblockUIGeneral();
+                            utilSigo.toastWarning("Aviso", "Sucedio un error, Comuníquese con el Administrador");
+                            console.log(err.statusText);
+                        }
+                    });
+                } else {
+                    utilSigo.toastWarning("Aviso", "Sucedio un error, Comuníquese con el Administrador");
+                    console.log("FormData is not available in your browser");
+                }
+            } else {
+                utilSigo.toastWarning("Aviso", "Seleccione un archivo a subir");
+            }
+        },
+        fnImportFileInfoGeo: () => {
+            if (_cartaMod.selectFileInfoGeo != null) {
+                // Checking whether FormData is available in browser  
+                if (window.FormData !== undefined) {
+                    var url = urlLocalSigo + "Supervision/ManItenerario/UploadFilesInfoGeo";
+                    var fileData = new FormData();
+                    for (var i = 0; i < _cartaMod.selectFileInfoGeo.length; i++) {
+                        fileData.append(_cartaMod.selectFileInfoGeo[i].name, _cartaMod.selectFileInfoGeo[i]);
+                    }
+                    $.ajax({
+                        url: url,
+                        type: "POST",
+                        contentType: false, // Not to set any content header  
+                        processData: false, // Not to process data  
+                        data: fileData,
+                        success: function (result) {
+                            utilSigo.unblockUIGeneral();
+                            if (result.success) {
+                                _cartaMod.dtFileInfoGeo.rows.add(result.data).draw();
+                                _cartaMod.dtFileInfoGeo.page('last').draw('page');
+                                _cartaMod.selectFileInfoGeo = null;
+                                let frm = $("#frmModificarCartaBitacora");
+                                frm.find("#txtArchivoAdjuntoAlerta").next().text("Seleccionar Archivo");
+                                utilSigo.toastSuccess("Aviso", result.msj);
+                            }
+                            else {
+                                utilSigo.toastWarning("Aviso", result.msj);
+                            }
+                        },
+                        beforeSend: function () {
+                            utilSigo.blockUIGeneral();
+                        },
+                        error: function (err) {
+                            utilSigo.unblockUIGeneral();
+                            utilSigo.toastWarning("Aviso", "Sucedio un error, Comuníquese con el Administrador");
+                            console.log(err.statusText);
+                        }
+                    });
+                } else {
+                    utilSigo.toastWarning("Aviso", "Sucedio un error, Comuníquese con el Administrador");
+                    console.log("FormData is not available in your browser");
+                }
+            } else {
+                utilSigo.toastWarning("Aviso", "Seleccione un archivo a subir");
+            }
+        },
+        fnSelectFile: (e, obj) => {
+            _cartaMod.selectFile = [];
+            var idFile = $(obj).attr("id");
+            var files = e.target.files || e.dataTransfer.files;
+            if (files != undefined && files.length > 0) {
+                if (files.length > 8) {
+                    utilSigo.toastWarning("Error", "Seleccione 8 archivos como maximo");
+                    return false;
+                }
+                var obj = new Object();
+                obj.success = true;
+                var fileSize = 0;
+                var fileNames = [];
+                for (var i = 0; i < files.length; i++) {
+                    //validando extension
+                    if (_cartaMod.fnValidaExtension(files[i].name) == false) {
+
+                        obj.nombre = files[i].name;
+                        obj.success = false;
+                        obj.msj = "La extension del archivo  : " + obj.nombre + " no es permitido";
+                        break;
+                    }
+                    //validando tamaño
+                    fileSize = parseFloat(files[i].size);
+                    if ((fileSize / 1048576) > 12) //7168
+                    {
+                        obj.nombre = files[i].name;
+                        obj.success = false;
+                        obj.msj = "El tamaño del archivo : " + obj.nombre + " no debe exceder 12MB";
+                        break;
+                    }
+                    //formData.append(files[i].name, files[i]);
+                    // $("#" + idFile).next().text(files[i].name);
+                    _cartaMod.selectFile.push(files[i]);
+                    fileNames.push(files[i].name);
+
+                }
+                if (!obj.success) {
+                    utilSigo.toastWarning("Error", obj.msj);
+                    return false;
+                }
+                //if (fileNames.length >= 3) {
+                //    _addEditMuestra.frm.find("#lblFotos").text(fileNames.join(","));
+                //}
+                // else {
+                $("#" + idFile).next().text(fileNames.join(","));
+
+                
+                // }
+
+            }
+        },
+        fnSelectFileInfoGeo: (e, obj) => {
+            _cartaMod.selectFileInfoGeo = [];
+            var idFile = $(obj).attr("id");
+            var files = e.target.files || e.dataTransfer.files;
+            if (files != undefined && files.length > 0) {
+                if (files.length > 8) {
+                    utilSigo.toastWarning("Error", "Seleccione 8 archivos como maximo");
+                    return false;
+                }
+                var obj = new Object();
+                obj.success = true;
+                var fileSize = 0;
+                var fileNames = [];
+                for (var i = 0; i < files.length; i++) {
+                    //validando extension
+                    if (_cartaMod.fnValidaExtension(files[i].name) == false) {
+
+                        obj.nombre = files[i].name;
+                        obj.success = false;
+                        obj.msj = "La extension del archivo  : " + obj.nombre + " no es permitido";
+                        break;
+                    }
+                    //validando tamaño
+                    fileSize = parseFloat(files[i].size);
+                    if ((fileSize / 1048576) > 12) //7168
+                    {
+                        obj.nombre = files[i].name;
+                        obj.success = false;
+                        obj.msj = "El tamaño del archivo : " + obj.nombre + " no debe exceder 12MB";
+                        break;
+                    }
+                    //formData.append(files[i].name, files[i]);
+                    // $("#" + idFile).next().text(files[i].name);
+                    _cartaMod.selectFileInfoGeo.push(files[i]);
+                    fileNames.push(files[i].name);
+
+                }
+                if (!obj.success) {
+                    utilSigo.toastWarning("Error", obj.msj);
+                    return false;
+                }
+                //if (fileNames.length >= 3) {
+                //    _addEditMuestra.frm.find("#lblFotos").text(fileNames.join(","));
+                //}
+                // else {
+                $("#" + idFile).next().text(fileNames.join(","));
+
+
+                // }
+
+            }
+        },
+        fnClose: () => {
+            utilSigo.fnCloseModal("mdlCartaModificar");
+        },
+        fnGuardar: () => {          
+            let frm = $("#frmModificarCartaBitacora");
+            let txtFInitSupervision = frm.find("#txtFInitSupervision").val();
+            if (txtFInitSupervision.trim() == "") {
+                utilSigo.toastWarning("Validación", "Ingrese la fecha de inicio de la supervisión");
+                frm.find("#txtFInitSupervision").focus();
+                return false;
+            }
+            let txtFTerminoSupervision = frm.find("#txtFTerminoSupervision").val();
+            if (txtFTerminoSupervision.trim() == "") {
+                utilSigo.toastWarning("Validación", "Ingrese la fecha de término de la supervisión");
+                frm.find("#txtFTerminoSupervision").focus();
+                return false;
+            }
+            let hdCodBitacora = frm.find("#hdCodBitacora").val();
+            let hdCodNotificacion = frm.find("#hdCodNotificacion").val();
+            let hdCodTH = frm.find("#hdCodTH").val();
+            let hdNumTH = frm.find("#hdNumTH").val();
+            let hdCodSecuencial = frm.find("#hdCodSecuencial").val();
+            let SUPERVISADO_TEXT = frm.find("#SUPERVISADO_TEXT").val();
+            let COD_ITIPO = frm.find("#COD_ITIPO").val();
+            let txtObservaciones = frm.find("#txtObservaciones").val().trim();
+            let ALERTA_ILEGAL_TEXT = frm.find("#ALERTA_ILEGAL_TEXT").val();
+            let txtDesAlerta = frm.find("#txtDesAlerta").val().trim();
+            let txtOtrosHechos = frm.find("#txtOtrosHechos").val().trim();
+            let hdCodReque = frm.find("#hdCodReque").val();
+            let txtVolInjustAlerta = frm.find("#txtVolInjustAlerta").val();
+            if (parseFloat(txtVolInjustAlerta) < 0) txtVolInjustAlerta = 0;
+          
+            let model = {
+                FECHA_SALIDA: _IteEdit.frm.find("#fechaSalida").val(),
+                COD_BITACORA: hdCodBitacora,
+                COD_CNOTIFICACION: hdCodNotificacion,
+                COD_THABILITANTE: hdCodTH,
+                NUM_THABILITANTE: hdNumTH,
+                COD_SECUENCIAL: hdCodSecuencial,
+                SUPERVISADO: SUPERVISADO_TEXT == "SN" ? null : (SUPERVISADO_TEXT=="SI"?1:0),
+                COD_ITIPO: COD_ITIPO == "0000000" ? null : COD_ITIPO,
+                OBSERVACIONES: txtObservaciones,
+                ALERTA_ILEGAL: ALERTA_ILEGAL_TEXT == "SN" ? null : (ALERTA_ILEGAL_TEXT=="SI"?1:0),
+                DES_ALERTA_ILEGAL: ALERTA_ILEGAL_TEXT == "SI" ? txtDesAlerta : "",
+                OTROS_HECHO: ALERTA_ILEGAL_TEXT == "SI" ? txtOtrosHechos : "",
+                COD_REQUE: hdCodReque,
+                ACTA_ARCHIVO: "",
+                ACTA_ARCHIVO_TEXT: "",
+                NOTIFICAR_ARCHIVO: 0,
+                ARCHIVOS_NTF: "",
+                VOLUMEN_INJUSTIFICADO: ALERTA_ILEGAL_TEXT == "SI"?txtVolInjustAlerta:0,
+                FECHA_INICIO_SUPERVISION: txtFInitSupervision,
+                FECHA_FIN_SUPERVISION: txtFTerminoSupervision,
+                RegEstado: 2
+            };
+            model.ListEliTABLA = _cartaMod.lstdelete;
+            model.ListDetActa = _cartaMod.fnGetDataTableActa();
+            model.ListInfoGeo = _cartaMod.fnGetDataTableInfoGeo();
+            model.ListEncryp = _cartaMod.fnGetDataTableEncryp();
+            model.ListInformeDetSupervisor = _renderSupervisor.fnGetListAll();              
+            utilSigo.dialogConfirm("", "Está seguro registrar los datos?", function (r) {
+                if (r) {
+                    let url = urlLocalSigo + "Supervision/ManItenerario/GuardarCartaBitacora";
+                    let option = { url: url, datos: JSON.stringify(model), type: 'POST' };
+                    utilSigo.fnAjax(option, function (data) {
+                        if (data.success) {
+                            _IteEdit.fnGetSupervisiones();
+                            utilSigo.toastSuccess("Éxito", "Datos actualizados correctamente");
+                            utilSigo.fnCloseModal("mdlCartaModificar");
+                        }
+                        else {
+                            utilSigo.toastWarning("Aviso", data.msj);
+                        }
+                    });
+                   
+                }
+            });
+        }
+    };
+    $(document).ready(function () {
+        let frm = $("#frmModificarCartaBitacora");
+        _cartaMod.fnInitDataTableArchivoActa();
+        _cartaMod.fnInitDataTableArchivoInfoGeo();
+        _cartaMod.fnInitDataTableArchivoEncryp();
+        frm.find("#txtFInitSupervision").datepicker(initSigo.formatDatePicker);
+        frm.find("#txtFTerminoSupervision").datepicker(initSigo.formatDatePicker);
+        let valAlertaItegal = $("#ALERTA_ILEGAL_TEXT").val();
+        if (valAlertaItegal == "SN" || valAlertaItegal=="NO") {
+            $("#divIlegal").hide();
+        }
+        else if (valAlertaItegal == "SI") {
+            $("#divIlegal").show();
+        }
+        $("#ALERTA_ILEGAL_TEXT").change(function () {
+            if ($(this).val() == "SI") {
+                $("#divIlegal").show();
+            } else {
+                $("#divIlegal").hide();
+            }
+        });
+    });
+</script>

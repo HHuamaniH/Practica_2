@@ -1,0 +1,1604 @@
+﻿@model CapaEntidad.DOC.Ent_InfQuinquenal_QUINQUENIO
+<style>
+    .modal-body { height: 80vh; overflow-y: auto; }
+    .modal-dialog-full-width { width: 100% !important; height: 100% !important; margin: 0 !important; padding: 0 !important; max-width: none !important; }
+
+    .modal-content-full-width { height: auto !important; min-height: 100% !important; border-radius: 0 !important; background-color: #ececec !important }
+
+    .modal-header-full-width { border-bottom: 1px solid #9ea2a2 !important; }
+
+    .modal-footer-full-width { border-top: 1px solid #9ea2a2 !important; }
+</style>
+<div class="modal-dialog-full-width modal-dialog" role="document">
+    <div class="modal-content-full-width modal-content">
+        <div class="modal-header-full-width modal-header text-small" style="cursor:move;padding:0.5rem;">
+            <h5 class="modal-title">Verificadores</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body">     
+            <input type="hidden" id="hdCodInformeQuinquenio" value="@Model.COD_INFORME" />
+            <div class="form-row text-small">
+                <div class="col-md-12">
+                    <div style="color:forestgreen">
+                        Indicador: Los Planes de Manejo presentan información confiable para la planificación estratégica y operativa del aprovechamiento de la UMF
+                    </div>
+                </div>
+            </div>
+            <br />
+            <div class="form-group row">
+                <label for="ddlVerificadorv11" class="col-sm-4 col-form-label col-form-label-sm">Verificador 1.1: Los objetivos declarados en los planes operativos son claramente presentados:</label>
+                <div class="col-sm-8">
+                    <select id="ddlVerificadorv11" class="form-control form-control-sm" style="width:200px">
+                        <option value="0">Seleccionar</option>
+                        <option value="1">SI</option>
+                        <option value="2">NO</option>
+                        <option value="3">No Aplica</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="txtObserv11" class="col-sm-4 col-form-label col-form-label-sm">Observaciones V 1.1:</label>
+                <div class="col-sm-8">
+                    <textarea id="txtObserv11" rows="2" class="form-control form-control-sm"></textarea>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="ddlVerificadorv12" class="col-sm-4 col-form-label col-form-label-sm">Verificador 1.2: El mapa de la división administrativa presenta información adecuada y de calidad:</label>
+                <div class="col-sm-8">
+                    <select id="ddlVerificadorv12" class="form-control form-control-sm" style="width:200px">
+                        <option value="0">Seleccionar</option>
+                        <option value="1">SI</option>
+                        <option value="2">NO</option>
+                        <option value="3">No Aplica</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="txtObserv12" class="col-sm-4 col-form-label col-form-label-sm">Observaciones V 1.2:</label>
+                <div class="col-sm-8">
+                    <textarea id="txtObserv12" rows="2" class="form-control form-control-sm"></textarea>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="ddlVerificadorv13" class="col-sm-4 col-form-label col-form-label-sm">Verificador 1.3: El mapa de ordenamiento de la UMF presenta información adecuada y de calidad:</label>
+                <div class="col-sm-8">
+                    <select id="ddlVerificadorv13" class="form-control form-control-sm" style="width:200px">
+                        <option value="0">Seleccionar</option>
+                        <option value="1">SI</option>
+                        <option value="2">NO</option>
+                        <option value="3">No Aplica</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="txtObserv13" class="col-sm-4 col-form-label col-form-label-sm">Observaciones V 1.3</label>
+                <div class="col-sm-8">
+                    <textarea id="txtObserv13" rows="2" class="form-control form-control-sm"></textarea>
+                </div>
+            </div>
+
+            <br />
+            <div class="form-row text-small">
+                <div class="col-md-12">
+                    <div style="color:forestgreen">
+                        Indicador: El censo comercial ofrece información confiable para la planificación del aprovechamiento forestal
+                    </div>
+                </div>
+            </div>
+            <br />
+            <div class="form-group row">
+                <label for="ddlVerificadorv21" class="col-sm-4 col-form-label col-form-label-sm">Verificador 2.1: Los árboles semilleros y aprovechables han sido identificados correctamente a nivel de especie:</label>
+                <div class="col-sm-8">
+                    <select id="ddlVerificadorv21" class="form-control form-control-sm" style="width:200px">
+                        <option value="0">Seleccionar</option>
+                        <option value="1">Menos del 75%</option>
+                        <option value="2">Al 75%</option>
+                        <option value="3">Más del 75%</option>
+                        <option value="4">No Aplica</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="txtObserv21" class="col-sm-4 col-form-label col-form-label-sm">Observaciones V 2.1</label>
+                <div class="col-sm-8">
+                    <textarea id="txtObserv21" rows="2" class="form-control form-control-sm"></textarea>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="ddlVerificadorv22" class="col-sm-4 col-form-label col-form-label-sm">Verificador 2.2: El DAP y la altura comercial de los árboles aprovechables han sido determinados correctamente:</label>
+                <div class="col-sm-8">
+                    <select id="ddlVerificadorv22" class="form-control form-control-sm" style="width:200px">
+                        <option value="0">Seleccionar</option>
+                        <option value="1">Menos del 75%</option>
+                        <option value="2">Al 75%</option>
+                        <option value="3">Más del 75%</option>
+                        <option value="4">No Aplica</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="txtObserv22" class="col-sm-4 col-form-label col-form-label-sm">Observaciones V 2.2</label>
+                <div class="col-sm-8">
+                    <textarea id="txtObserv22" rows="2" class="form-control form-control-sm"></textarea>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="ddlVerificadorv23" class="col-sm-4 col-form-label col-form-label-sm">Verificador 2.3: La calidad del fuste de los árboles aprovechables ha sido determinada correctamente:</label>
+                <div class="col-sm-8">
+                    <select id="ddlVerificadorv23" class="form-control form-control-sm" style="width:200px">
+                        <option value="0">Seleccionar</option>
+                        <option value="1">Menos del 75%</option>
+                        <option value="2">Al 75%</option>
+                        <option value="3">Más del 75%</option>
+                        <option value="4">No Aplica</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="txtObserv23" class="col-sm-4 col-form-label col-form-label-sm">Observaciones V 2.3</label>
+                <div class="col-sm-8">
+                    <textarea id="txtObserv23" rows="2" class="form-control form-control-sm"></textarea>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="ddlVerificadorv24" class="col-sm-4 col-form-label col-form-label-sm">Verificador 2.4: Los árboles semilleros presentan las características fenotípicas correspondientes:</label>
+                <div class="col-sm-8">
+                    <select id="ddlVerificadorv24" class="form-control form-control-sm" style="width:200px">
+                        <option value="0">Seleccionar</option>
+                        <option value="1">Menos del 75%</option>
+                        <option value="2">Al 75%</option>
+                        <option value="3">Más del 75%</option>
+                        <option value="4">No Aplica</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="txtObserv24" class="col-sm-4 col-form-label col-form-label-sm">Observaciones V 2.4</label>
+                <div class="col-sm-8">
+                    <textarea id="txtObserv24" rows="2" class="form-control form-control-sm"></textarea>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="ddlVerificadorv25" class="col-sm-4 col-form-label col-form-label-sm">Verificador 2.5: Los árboles aprovechables y semilleros presentan una codificación apropiada para el control de la madera en la UMF:</label>
+                <div class="col-sm-8">
+                    <select id="ddlVerificadorv25" class="form-control form-control-sm" style="width:200px">
+                        <option value="0">Seleccionar</option>
+                        <option value="1">Menos del 75%</option>
+                        <option value="2">Al 75%</option>
+                        <option value="3">Más del 75%</option>
+                        <option value="4">No Aplica</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="txtObserv25" class="col-sm-4 col-form-label col-form-label-sm">Observaciones V 2.5</label>
+                <div class="col-sm-8">
+                    <textarea id="txtObserv25" rows="2" class="form-control form-control-sm"></textarea>
+                </div>
+            </div>
+            <br />
+            <div class="form-row text-small">
+                <div class="col-md-12">
+                    <div style="color:forestgreen">
+                        Indicador: Las actividades de manejo forestal permiten alcanzar los objetivos de los planes de manejo
+                    </div>
+                </div>
+            </div>
+            <br />
+            <div class="form-group row">
+                <label for="ddlVerificadorv311" class="col-sm-4 col-form-label col-form-label-sm">Verificador 3.1.1: El volumen movilizado de las Parcelas de Corta del quinquenio en evaluación concuerda con el Volumen de Corta Anual Permisible (VCAP) de la UMF:</label>
+                <div class="col-sm-8">
+                    <select id="ddlVerificadorv311" class="form-control form-control-sm" style="width:200px">
+                        <option value="0">Seleccionar</option>
+                        <option value="1">En menos del 80% de las PC</option>
+                        <option value="2">80% de parcelas de las PC</option>
+                        <option value="3">En más del 80% de las PC</option>
+                        <option value="4">No Aplica</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="txtObserv311" class="col-sm-4 col-form-label col-form-label-sm">Observaciones V 3.1.1</label>
+                <div class="col-sm-8">
+                    <textarea id="txtObserv311" rows="2" class="form-control form-control-sm"></textarea>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="ddlVerificador312" class="col-sm-4 col-form-label col-form-label-sm">Verificador 3.1.2: Los árboles semilleros son protegidos en las operaciones de aprovechamiento forestal:</label>
+                <div class="col-sm-8">
+                    <select id="ddlVerificador312" class="form-control form-control-sm" style="width:200px">
+                        <option value="0">Seleccionar</option>
+                        <option value="1">Menos del 75%</option>
+                        <option value="2">Al 75%</option>
+                        <option value="3">Más del 75%</option>
+                        <option value="4">No Aplica</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="txtObserv312" class="col-sm-4 col-form-label col-form-label-sm">Observaciones V 3.1.2</label>
+                <div class="col-sm-8">
+                    <textarea id="txtObserv312" rows="2" class="form-control form-control-sm"></textarea>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="ddlVerificadorv313" class="col-sm-4 col-form-label col-form-label-sm">Verificador 3.1.3: Las trozas son codificadas en el marco de un sistema de codificación para el control del movimiento de la madera en la UMF:</label>
+                <div class="col-sm-8">
+                    <select id="ddlVerificadorv313" class="form-control form-control-sm" style="width:200px">
+                        <option value="0">Seleccionar</option>
+                        <option value="1">Menos del 75%</option>
+                        <option value="2">Al 75%</option>
+                        <option value="3">Más del 75%</option>
+                        <option value="4">No Aplica</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="txtObserv313" class="col-sm-4 col-form-label col-form-label-sm">Describir Sistema V 3.1.3</label>
+                <div class="col-sm-8">
+                    <textarea id="txtObserv313" rows="2" class="form-control form-control-sm"></textarea>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="ddlVerificador314" class="col-sm-4 col-form-label col-form-label-sm">Verificador 3.1.4: Se aplican los tratamientos silviculturales prescritos en los planes de manejo:</label>
+                <div class="col-sm-8">
+                    <select id="ddlVerificador314" class="form-control form-control-sm" style="width:200px">
+                        <option value="0">Seleccionar</option>
+                        <option value="1">Menos del 80% de los tratamientos</option>
+                        <option value="2">80% de los tratamientos</option>
+                        <option value="3">Más del 80% de los tratamientos</option>
+                        <option value="4">No Aplica</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="txtObserv314" class="col-sm-4 col-form-label col-form-label-sm">Observaciones V 3.1.4</label>
+                <div class="col-sm-8">
+                    <textarea id="txtObserv314" rows="2" class="form-control form-control-sm"></textarea>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="ddlverificador315C" class="col-sm-4 col-form-label col-form-label-sm">Verificador 3.1.5.: Se realizan actividades para recuperar los caminos forestales y patios en Planes Operativos ejecutados:</label>
+                <!-- <div>Verificador 3.1.5. Caminos</div>-->
+                <div class="col-sm-8">
+                    <select id="ddlverificador315C" class="form-control form-control-sm" style="width:200px">
+                        <option value="0">Seleccionar</option>
+                        <option value="1">Menos del 80% de puntos evaluados</option>
+                        <option value="2">80% de puntos evaluados</option>
+                        <option value="3">Más del 80% de puntos evaluados</option>
+                        <option value="4">No Aplica</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="txtObserv315C" class="col-sm-4 col-form-label col-form-label-sm">Describir actividades V 3.1.5 Caminos</label>
+                <div class="col-sm-8">
+                    <textarea id="txtObserv315C" rows="2" class="form-control form-control-sm"></textarea>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="ddlverificador315P" class="col-sm-4 col-form-label col-form-label-sm">Verificador 3.1.5. Patios:</label>
+
+                <div class="col-sm-8">
+                    <select id="ddlverificador315P" class="form-control form-control-sm" style="width:200px">
+                        <option value="0">Seleccionar</option>
+                        <option value="1">Menos del 80% de puntos evaluados</option>
+                        <option value="2">80% de puntos evaluados</option>
+                        <option value="3">Más del 80% de puntos evaluados</option>
+                        <option value="4">No Aplica</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="txtObserv315P" class="col-sm-4 col-form-label col-form-label-sm">Describir actividades V 3.1.5 Patios:</label>
+                <div class="col-sm-8">
+                    <textarea id="txtObserv315P" rows="2" class="form-control form-control-sm"></textarea>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="ddlverificadorv316" class="col-sm-4 col-form-label col-form-label-sm">Verificador 3.1.6.:El área de la UMF se protege en puntos críticos contra actos que afecten los derechos del titular:</label>
+
+                <div class="col-sm-8">
+                    <select id="ddlverificadorv316" class="form-control form-control-sm" style="width:200px">
+                        <option value="0">Seleccionar</option>
+                        <option value="1">Menos del 80% de los casos</option>
+                        <option value="2">80% de los casos</option>
+                        <option value="3">Más del 80% de los casos</option>
+                        <option value="4">No Aplica</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="txtObserv316" class="col-sm-4 col-form-label col-form-label-sm">Observaciones V 3.1.6:</label>
+                <div class="col-sm-8">
+                    <textarea id="txtObserv316" rows="2" class="form-control form-control-sm"></textarea>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="ddlverificadorv317" class="col-sm-4 col-form-label col-form-label-sm">Verificador 3.1.7: Se registran formalmente las operaciones de aprovechamiento:</label>
+
+                <div class="col-sm-8">
+                    <select id="ddlverificadorv317" class="form-control form-control-sm" style="width:200px">
+                        <option value="0">Seleccionar</option>
+                        <option value="1">Menos del 80% de operaciones</option>
+                        <option value="2">80% de operaciones</option>
+                        <option value="3">Más del 80% de operaciones</option>
+                        <option value="4">No Aplica</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="txtObserv317" class="col-sm-4 col-form-label col-form-label-sm">Describir protocolo: V 3.1.7:</label>
+                <div class="col-sm-8">
+                    <textarea id="txtObserv317" rows="2" class="form-control form-control-sm"></textarea>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="ddlverificador318" class="col-sm-4 col-form-label col-form-label-sm">Verificador 3.1.8.: Los trabajadores de la UMF conocen sus funciones:</label>
+
+                <div class="col-sm-8">
+                    <select id="ddlverificador318" class="form-control form-control-sm" style="width:200px">
+                        <option value="0">Seleccionar</option>
+                        <option value="1">Menos del 80% de los casos</option>
+                        <option value="2">80% de los casos</option>
+                        <option value="3">Más del 80% de los casos</option>
+                        <option value="4">No Aplica</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="txtObserv318" class="col-sm-4 col-form-label col-form-label-sm">Observaciones V 3.1.8:</label>
+                <div class="col-sm-8">
+                    <textarea id="txtObserv318" rows="2" class="form-control form-control-sm"></textarea>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="ddlverificadorv319" class="col-sm-4 col-form-label col-form-label-sm">Verificador 3.1.9.: El titular presenta oportunamente sus requerimientos derivados de la ejecución de su título habilitante:</label>
+
+                <div class="col-sm-8">
+                    <select id="ddlverificadorv319" class="form-control form-control-sm" style="width:200px">
+                        <option value="0">Seleccionar</option>
+                        <option value="1">Menos del 80% de los casos</option>
+                        <option value="2">80% de los casos</option>
+                        <option value="3">Más del 80% de los casos</option>
+                        <option value="4">No Aplica</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="txtObserv319" class="col-sm-4 col-form-label col-form-label-sm">Observaciones V 3.1.9:</label>
+                <div class="col-sm-8">
+                    <textarea id="txtObserv319" rows="2" class="form-control form-control-sm"></textarea>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="ddlverificador3110" class="col-sm-4 col-form-label col-form-label-sm">Verificador 3.1.10: El titular ha formalizado su relación con terceros y el regente mediante contratos legales que garanticen la responsabilidad solidaria:</label>
+
+                <div class="col-sm-8">
+                    <select id="ddlverificador3110" class="form-control form-control-sm" style="width:200px">
+                        <option value="0">Seleccionar</option>
+                        <option value="1">SI</option>
+                        <option value="2">NO</option>
+                        <option value="3">No Aplica</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="txtObserv3110" class="col-sm-4 col-form-label col-form-label-sm">Observar si las obligaciones y beneficios de las partes son claras: V 3.1.10:</label>
+                <div class="col-sm-8">
+                    <textarea id="txtObserv3110" rows="2" class="form-control form-control-sm"></textarea>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="ddlverificadorv3111" class="col-sm-4 col-form-label col-form-label-sm">Verificador 3.1.11: El titular cumple oportunamente con el pago del derecho de aprovechamiento:</label>
+
+                <div class="col-sm-8">
+                    <select id="ddlverificadorv3111" class="form-control form-control-sm" style="width:200px">
+                        <option value="0">Seleccionar</option>
+                        <option value="1">Menos del 80% del quinquenio</option>
+                        <option value="2">80%  del quinquenio</option>
+                        <option value="3">En más del 80% del quinquenio</option>
+                        <option value="4">No Aplica</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="txtObserv3111" class="col-sm-4 col-form-label col-form-label-sm">Observaciones V 3.1.11:</label>
+                <div class="col-sm-8">
+                    <textarea id="txtObserv3111" rows="2" class="form-control form-control-sm"></textarea>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="ddlverificadorv3112" class="col-sm-4 col-form-label col-form-label-sm">Verificador 3.1.12.:El titular implementa las medidas correctivas dictadas por las autoridades competentes en los plazos correspondientes:</label>
+
+                <div class="col-sm-8">
+                    <select id="ddlverificadorv3112" class="form-control form-control-sm" style="width:200px">
+                        <option value="0">Seleccionar</option>
+                        <option value="1">SI</option>
+                        <option value="2">NO</option>
+                        <option value="3">No Aplica</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="txtObserv3112" class="col-sm-4 col-form-label col-form-label-sm">Observaciones: V 3.1.12:</label>
+                <div class="col-sm-8">
+                    <textarea id="txtObserv3112" rows="2" class="form-control form-control-sm"></textarea>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="ddlverificador3113" class="col-sm-4 col-form-label col-form-label-sm">Verificador 3.1.13.: El titular actualizada anualmente la garantía de fiel cumplimiento (no plica en comunidades nativas):</label>
+
+                <div class="col-sm-8">
+                    <select id="ddlverificador3113" class="form-control form-control-sm" style="width:200px">
+                        <option value="0">Seleccionar</option>
+                        <option value="1">Menos del 80% del quinquenio</option>
+                        <option value="2">80%  del quinquenio</option>
+                        <option value="3">En más del 80% del quinquenio</option>
+                        <option value="4">No Aplica</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="txtObsev3113" class="col-sm-4 col-form-label col-form-label-sm">Observaciones: V 3.1.13:</label>
+                <div class="col-sm-8">
+                    <textarea id="txtObsev3113" rows="2" class="form-control form-control-sm"></textarea>
+                </div>
+            </div>
+            <br />
+            <div class="form-row text-small">
+                <div class="col-md-12">
+                    <div style="color:forestgreen">
+                        Indicador: Las operaciones de aprovechamiento se realizan de acuerdo a las prescripciones del Plan de Manejo
+                    </div>
+                </div>
+            </div>
+            <br />
+            <div class="form-group row">
+                <label for="ddlverificador321" class="col-sm-4 col-form-label col-form-label-sm">Verificador 3.2.1.: La infraestructura principal para el aprovechamiento y transporte forestal ha sido implementada de acuerdo a las especificaciones señaladas en los lineamientos correspondientes:</label>
+
+                <div class="col-sm-8">
+                    <select id="ddlverificador321" class="form-control form-control-sm" style="width:200px">
+                        <option value="0">Seleccionar</option>
+                        <option value="1">En menos del 80% de puntos de evaluación</option>
+                        <option value="2">80%  de puntos de evaluación</option>
+                        <option value="3">En más del 80% puntos de evaluación</option>
+                        <option value="4">No Aplica</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="txtObserv321" class="col-sm-4 col-form-label col-form-label-sm">Observaciones: V 3.2.1:</label>
+                <div class="col-sm-8">
+                    <textarea id="txtObserv321" rows="2" class="form-control form-control-sm"></textarea>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="ddlverificador322" class="col-sm-4 col-form-label col-form-label-sm">Verificador 3.2.2: Las viales de arrastre se construyen de acuerdo a especificaciones técnicas:</label>
+
+                <div class="col-sm-8">
+                    <select id="ddlverificador322" class="form-control form-control-sm" style="width:200px">
+                        <option value="0">Seleccionar</option>
+                        <option value="1">En menos del 80% de puntos de evaluación</option>
+                        <option value="2">En 80%  de puntos de evaluación</option>
+                        <option value="3">En más del 80% puntos de evaluación</option>
+                        <option value="4">No Aplica</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="txtObser322" class="col-sm-4 col-form-label col-form-label-sm">Observaciones: V 3.2.2:</label>
+                <div class="col-sm-8">
+                    <textarea id="txtObser322" rows="2" class="form-control form-control-sm"></textarea>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="ddlverificador323" class="col-sm-4 col-form-label col-form-label-sm">Verificador 3.2.3.: En el tumbado de árboles se aplica la tala dirigida:</label>
+
+                <div class="col-sm-8">
+                    <select id="ddlverificador323" class="form-control form-control-sm" style="width:200px">
+                        <option value="0">Seleccionar</option>
+                        <option value="1">Menos del 80% de puntos de evaluación</option>
+                        <option value="2">80%  de puntos de evaluación</option>
+                        <option value="3">En más del 80% puntos de evaluación</option>
+                        <option value="4">No Aplica</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="txtObserv323" class="col-sm-4 col-form-label col-form-label-sm">Describa acciones de esta operación: V 3.2.3:</label>
+                <div class="col-sm-8">
+                    <textarea id="txtObserv323" rows="2" class="form-control form-control-sm"></textarea>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="ddlverificador324" class="col-sm-4 col-form-label col-form-label-sm">Verificador 3.2.4.: En la UMF se evitan las  obstrucciones a cursos naturales de agua:</label>
+
+                <div class="col-sm-8">
+                    <select id="ddlverificador324" class="form-control form-control-sm" style="width:200px">
+                        <option value="0">Seleccionar</option>
+                        <option value="1">Menos del 80% de puntos de evaluación</option>
+                        <option value="2">80%  de puntos de evaluación</option>
+                        <option value="3">En más del 80% puntos de evaluación</option>
+                        <option value="4">No Aplica</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="txtObserv324" class="col-sm-4 col-form-label col-form-label-sm">Describa acciones de esta operación: V 3.2.4:</label>
+                <div class="col-sm-8">
+                    <textarea id="txtObserv324" rows="2" class="form-control form-control-sm"></textarea>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="ddlverificadorv325" class="col-sm-4 col-form-label col-form-label-sm">Verificador 3.2.5.: Las áreas de protección de acuerdo al ordenamiento no son afectadas por las operaciones de aprovechamiento forestal:</label>
+
+                <div class="col-sm-8">
+                    <select id="ddlverificadorv325" class="form-control form-control-sm" style="width:200px">
+                        <option value="0">Seleccionar</option>
+                        <option value="1">En menos del 80% de puntos no hay afectación</option>
+                        <option value="2">En 80%  de puntos no hay afectación</option>
+                        <option value="3">En más del 80% de puntos no hay afectación</option>
+                        <option value="4">No Aplica</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="txtObserv325" class="col-sm-4 col-form-label col-form-label-sm">Describa acciones de esta operación: V 3.2.5:</label>
+                <div class="col-sm-8">
+                    <textarea id="txtObserv325" rows="2" class="form-control form-control-sm"></textarea>
+                </div>
+            </div>
+            <br />
+            <div class="form-row text-small">
+                <div class="col-md-12">
+                    <div style="color:forestgreen">
+                        Indicador: El monitoreo de actividades contribuye a la gestión de la UMF
+                    </div>
+                </div>
+            </div>
+            <br />
+            <div class="form-group row">
+                <label for="ddlverificador41" class="col-sm-4 col-form-label col-form-label-sm">Verificador 4.1.: El titular presenta rentabilidad en la ejecución de los Planes Operativos:</label>
+
+                <div class="col-sm-8">
+                    <select id="ddlverificador41" class="form-control form-control-sm" style="width:200px">
+                        <option value="0">Seleccionar</option>
+                        <option value="1">Menos del 80% de los casos</option>
+                        <option value="2">80% de los casos</option>
+                        <option value="3">En más del 80% de los casos</option>
+                        <option value="4">No Aplica</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="txtObserv41" class="col-sm-4 col-form-label col-form-label-sm">Describa acciones de esta operación: V 4.1:</label>
+                <div class="col-sm-8">
+                    <textarea id="txtObserv41" rows="2" class="form-control form-control-sm"></textarea>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="ddlverificador42" class="col-sm-4 col-form-label col-form-label-sm">Verificador 4.2.: El titular aplica un documento de gestión de la información procedente del aprovechamiento forestal y de otros efectos del título habilitante:</label>
+
+                <div class="col-sm-8">
+                    <select id="ddlverificador42" class="form-control form-control-sm" style="width:200px">
+                        <option value="0">Seleccionar</option>
+                        <option value="1">SI</option>
+                        <option value="2">NO</option>
+                        <option value="3">No Aplica</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="txtObserv42" class="col-sm-4 col-form-label col-form-label-sm">Comentarios: V 4.2:</label>
+                <div class="col-sm-8">
+                    <textarea id="txtObserv42" rows="2" class="form-control form-control-sm"></textarea>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="ddlverificador43" class="col-sm-4 col-form-label col-form-label-sm">Verificador 4.3.: El titular actualiza periódicamente el Plan de Manejo:</label>
+
+                <div class="col-sm-8">
+                    <select id="ddlverificador43" class="form-control form-control-sm" style="width:200px">
+                        <option value="0">Seleccionar</option>
+                        <option value="1">SI</option>
+                        <option value="2">NO</option>
+                        <option value="3">No Aplica</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="txtObserv43" class="col-sm-4 col-form-label col-form-label-sm">Comentarios: V 4.3:</label>
+                <div class="col-sm-8">
+                    <textarea id="txtObserv43" rows="2" class="form-control form-control-sm"></textarea>
+                </div>
+            </div>
+            <br />
+            <div class="form-row text-small">
+                <div class="col-md-12">
+                    <div style="color:forestgreen">
+                        Indicador: El manejo ambiental contribuye a la sostenibilidad del recurso forestal
+                    </div>
+                </div>
+            </div>
+            <br />
+            <div class="form-group row">
+                <label for="ddlverificador511" class="col-sm-4 col-form-label col-form-label-sm">Verificador 5.1.1: El titular ejecuta las actividades del Plan de Gestión Ambiental o similar:</label>
+
+                <div class="col-sm-8">
+                    <select id="ddlverificador511" class="form-control form-control-sm" style="width:200px">
+                        <option value="0">Seleccionar</option>
+                        <option value="1">Menos del 80% de los casos</option>
+                        <option value="2">80%  de los casos</option>
+                        <option value="3">Más del 80% de los casos</option>
+                        <option value="4">No Aplica</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="txtObserv511" class="col-sm-4 col-form-label col-form-label-sm">Observaciones: V 5.1.1:</label>
+                <div class="col-sm-8">
+                    <textarea id="txtObserv511" rows="2" class="form-control form-control-sm"></textarea>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="ddlverificador512" class="col-sm-4 col-form-label col-form-label-sm">Verificador 5.1.2: Se disponen adecuadamente los residuos sólidos y líquidos generados en el aprovechamiento forestal:</label>
+
+                <div class="col-sm-8">
+                    <select id="ddlverificador512" class="form-control form-control-sm" style="width:200px">
+                        <option value="0">Seleccionar</option>
+                        <option value="1">SI</option>
+                        <option value="2">NO</option>
+                        <option value="3">No Aplica</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="txtObserv512" class="col-sm-4 col-form-label col-form-label-sm">Describir: V 5.1.2:</label>
+                <div class="col-sm-8">
+                    <textarea id="txtObserv512" rows="2" class="form-control form-control-sm"></textarea>
+                </div>
+            </div>
+            <br />
+            <div class="form-row text-small">
+                <div class="col-md-12">
+                    <div style="color:forestgreen">
+                        Indicador: El titular mantiene una adecuada relación con las comunidades locales
+                    </div>
+                </div>
+            </div>
+            <br />
+            <div class="form-group row">
+                <label for="ddlverificador521" class="col-sm-4 col-form-label col-form-label-sm">Verificador 5.2.1: Los pobladores no tienen conflictos y tienen buenas relaciones con el titular de la UMF:</label>
+
+                <div class="col-sm-8">
+                    <select id="ddlverificador521" class="form-control form-control-sm" style="width:200px">
+                        <option value="0">Seleccionar</option>
+                        <option value="1">Menos del 80% de los casos</option>
+                        <option value="2">80%  de los casos</option>
+                        <option value="3">En más del 80% de los casos</option>
+                        <option value="4">No Aplica</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="txtObserv521" class="col-sm-4 col-form-label col-form-label-sm">Describir: V 5.2.1:</label>
+                <div class="col-sm-8">
+                    <textarea id="txtObserv521" rows="2" class="form-control form-control-sm"></textarea>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="ddlverificador522" class="col-sm-4 col-form-label col-form-label-sm">Verificador 5.2.2: El titular respeta las servidumbre de paso al interior del área del título habilitante UMF:</label>
+
+                <div class="col-sm-8">
+                    <select id="ddlverificador522" class="form-control form-control-sm" style="width:200px">
+                        <option value="0">Seleccionar</option>
+                        <option value="1">SI</option>
+                        <option value="2">NO</option>
+                        <option value="3">No Aplica</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="txtObserv522" class="col-sm-4 col-form-label col-form-label-sm">observaciones: V 5.2.2:</label>
+                <div class="col-sm-8">
+                    <textarea id="txtObserv522" rows="2" class="form-control form-control-sm"></textarea>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="ddlverificador523" class="col-sm-4 col-form-label col-form-label-sm">Verificador 5.2.3: El titular ocupa mano de obra de las comunidades locales vinculadas a la concesión:</label>
+
+                <div class="col-sm-8">
+                    <select id="ddlverificador523" class="form-control form-control-sm" style="width:200px">
+                        <option value="0">Seleccionar</option>
+                        <option value="1">Menos del 20% de los trabajadores</option>
+                        <option value="2">20%  de los trabajadores</option>
+                        <option value="3">En más del 20% de los trabajadores</option>
+                        <option value="4">No Aplica</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="txtObserv523" class="col-sm-4 col-form-label col-form-label-sm">observaciones: V 5.2.3:</label>
+                <div class="col-sm-8">
+                    <textarea id="txtObserv523" rows="2" class="form-control form-control-sm"></textarea>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="ddlverificador524" class="col-sm-4 col-form-label col-form-label-sm">Verificador 5.2.4.: Los trabajadores conocen de las acciones a realizarse frente a poblaciones indígenas en aislamiento o en situación de contacto inicial:</label>
+
+                <div class="col-sm-8">
+                    <select id="ddlverificador524" class="form-control form-control-sm" style="width:200px">
+                        <option value="0">Seleccionar</option>
+                        <option value="1">Menos del 80% de los casos</option>
+                        <option value="2">80%  de los casos</option>
+                        <option value="3">En más del 80% de los casos</option>
+                        <option value="4">No Aplica</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="txtObserv524" class="col-sm-4 col-form-label col-form-label-sm">observaciones: V 5.2.4:</label>
+                <div class="col-sm-8">
+                    <textarea id="txtObserv524" rows="2" class="form-control form-control-sm"></textarea>
+                </div>
+            </div>
+            <br />
+            <div class="form-row text-small">
+                <div class="col-md-12">
+                    <div style="color:forestgreen">
+                        Indicador: El titular garantiza las condiciones básicas para el trabajo
+                    </div>
+                </div>
+            </div>
+            <br />
+            <div class="form-group row">
+                <label for="ddlverificador531" class="col-sm-4 col-form-label col-form-label-sm">Verificador 5.3.1.: Los trabajadores usan indumentaria y accesorios adecuados de protección y seguridad personal:</label>
+
+                <div class="col-sm-8">
+                    <select id="ddlverificador531" class="form-control form-control-sm" style="width:200px">
+                        <option value="0">Seleccionar</option>
+                        <option value="1">SI</option>
+                        <option value="2">NO</option>
+                        <option value="3">No Aplica</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="txtObserv531" class="col-sm-4 col-form-label col-form-label-sm">observaciones: V 5.3.1:</label>
+                <div class="col-sm-8">
+                    <textarea id="txtObserv531" rows="2" class="form-control form-control-sm"></textarea>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="ddlverificador532" class="col-sm-4 col-form-label col-form-label-sm">Verificador 5.3.2.: El titular atiende oportunamente el compromiso de pago a los trabajadores de la UMF:</label>
+
+                <div class="col-sm-8">
+                    <select id="ddlverificador532" class="form-control form-control-sm" style="width:200px">
+                        <option value="0">Seleccionar</option>
+                        <option value="1">SI</option>
+                        <option value="2">NO</option>
+                        <option value="3">No Aplica</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="txtObserv532" class="col-sm-4 col-form-label col-form-label-sm">Observaciones: V 5.3.2:</label>
+                <div class="col-sm-8">
+                    <textarea id="txtObserv532" rows="2" class="form-control form-control-sm"></textarea>
+                </div>
+            </div>
+            <br />
+            <div class="form-row text-small">
+                <div class="col-md-12">
+                    <div style="color:forestgreen">
+                        Indicador: La capacitación permite mayor eficiencia de los trabajadores en el desarrollo de sus funciones
+                    </div>
+                </div>
+            </div>
+            <br />
+            <div class="form-group row">
+                <label for="ddlverificador61" class="col-sm-4 col-form-label col-form-label-sm">Verificador 6.1.: El titular capacita sobre las actividades de aprovechamiento forestal y otros:</label>
+
+                <div class="col-sm-8">
+                    <select id="ddlverificador61" class="form-control form-control-sm" style="width:200px">
+                        <option value="0">Seleccionar</option>
+                        <option value="1">SI</option>
+                        <option value="2">NO</option>
+                        <option value="3">No Aplica</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="txtObserv61" class="col-sm-4 col-form-label col-form-label-sm">Temas: V 6.1:</label>
+                <div class="col-sm-8">
+                    <textarea id="txtObserv61" rows="2" class="form-control form-control-sm"></textarea>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="ddlverificador62" class="col-sm-4 col-form-label col-form-label-sm">Verificador 6.2.: El personal correspondiente ha recibido capacitación en el manejo de mapas y de instrumentos:</label>
+
+                <div class="col-sm-8">
+                    <select id="ddlverificador62" class="form-control form-control-sm" style="width:200px">
+                        <option value="0">Seleccionar</option>
+                        <option value="1">Menos del 80% de los casos</option>
+                        <option value="2">80%  de los casos</option>
+                        <option value="3">En más del 80% de los casos</option>
+                        <option value="4">No Aplica</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="txtObserv62" class="col-sm-4 col-form-label col-form-label-sm">Observaciones: V 6.2:</label>
+                <div class="col-sm-8">
+                    <textarea id="txtObserv62" rows="2" class="form-control form-control-sm"></textarea>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="ddlverificador63" class="col-sm-4 col-form-label col-form-label-sm">Verificador 6.3.: El personal correspondiente ha recibido capacitación en tala dirigida:</label>
+
+                <div class="col-sm-8">
+                    <select id="ddlverificador63" class="form-control form-control-sm" style="width:200px">
+                        <option value="0">Seleccionar</option>
+                        <option value="1">SI</option>
+                        <option value="2">NO</option>
+                        <option value="3">No Aplica</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="txtObserv63" class="col-sm-4 col-form-label col-form-label-sm">Comente sobre la capacidad de los entrevistados para realizar dicha labor: V 6.3:</label>
+                <div class="col-sm-8">
+                    <textarea id="txtObserv63" rows="2" class="form-control form-control-sm"></textarea>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="ddlverificador64" class="col-sm-4 col-form-label col-form-label-sm">Verificador 6.4.: El personal correspondiente ha recibido capacitación en el manejo de un sistema de codificación de árboles:</label>
+
+                <div class="col-sm-8">
+                    <select id="ddlverificador64" class="form-control form-control-sm" style="width:200px">
+                        <option value="0">Seleccionar</option>
+                        <option value="1">SI</option>
+                        <option value="2">NO</option>
+                        <option value="3">No Aplica</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="txtObserv64" class="col-sm-4 col-form-label col-form-label-sm">Observaciones: V 6.4:</label>
+                <div class="col-sm-8">
+                    <textarea id="txtObserv64" rows="2" class="form-control form-control-sm"></textarea>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="ddlverificador65" class="col-sm-4 col-form-label col-form-label-sm">Verificador 6.5.: El personal ha recibido capacitación sobre la disposición de residuos sólidos y líquidos generados en el aprovechamiento forestal:</label>
+
+                <div class="col-sm-8">
+                    <select id="ddlverificador65" class="form-control form-control-sm" style="width:200px">
+                        <option value="0">Seleccionar</option>
+                        <option value="1">Menos del 80% de los casos</option>
+                        <option value="2">80%  de los casos</option>
+                        <option value="3">En más del 80% de los casos</option>
+                        <option value="4">No Aplica</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="txtObserv65" class="col-sm-4 col-form-label col-form-label-sm">Observaciones: V 6.5:</label>
+                <div class="col-sm-8">
+                    <textarea id="txtObserv65" rows="2" class="form-control form-control-sm"></textarea>
+                </div>
+            </div>
+            <br />
+
+            <div class="card-header text-small">Conclusiones</div>
+            <br />
+            <div class="form-row">
+                <div class="form-group col-md-12">
+                    <label for="txtConclCriterioEval" class="text-small">10.1.	De los criterios de evaluación</label>
+                    <textarea id="txtConclCriterioEval" rows="3" class="form-control form-control-sm">@Model.entConclusion.CRITERIO_EVALUACION</textarea>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group col-md-12">
+                    <label for="txtConclAclaracionTit" class="text-small">10.2.	De las aclaraciones del titular</label>
+                    <textarea id="txtConclAclaracionTit" rows="3" class="form-control form-control-sm">@Model.entConclusion.ACLARACION_TITULAR</textarea>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group col-md-12">
+                    <label for="txtConclImplPManejo" class="text-small">10.3.	De la implementación del Plan de Manejo</label>
+                    <textarea id="txtConclImplPManejo" rows="3" class="form-control form-control-sm">@Model.entConclusion.IMPL_PMANEJO</textarea>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group col-md-12">
+                    <label for="txtConclCumplObligacion" class="text-small">10.4.	Del cumplimiento de las obligaciones del título habilitante</label>
+                    <textarea id="txtConclCumplObligacion" rows="3" class="form-control form-control-sm">@Model.entConclusion.CUMPL_OBLIGACION</textarea>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group col-md-12">
+                    <label for="txtConclCalidadImpl" class="text-small">10.5.	De la calidad de la implementación del Plan de Manejo y de las obligaciones evaluadas del título habilitante</label>
+                    <textarea id="txtConclCalidadImpl" rows="3" class="form-control form-control-sm">@Model.entConclusion.CALIDAD_IMPL</textarea>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group col-md-12">
+                    <label for="txtConclOpinionFavo" class="text-small">10.6.	De la opinión favorable para la renovación del título habilitante</label>
+                    <textarea id="txtConclOpinionFavo" rows="3" class="form-control form-control-sm">@Model.entConclusion.OPINION_FAVORABLE</textarea>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group col-md-12">
+                    <label for="txtConclDemora" class="text-small">10.7.	De las demoras o negligencias por parte de la autoridad concedente</label>
+                    <textarea id="txtConclDemora" rows="3" class="form-control form-control-sm">@Model.entConclusion.DEMORA_NEGLIGENCIA</textarea>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group col-md-12">
+                    <label for="txtConclAdvCausal" class="text-small">10.8.	De la advertencia de causales de resolución de contrato </label>
+                    <textarea id="txtConclAdvCausal" rows="3" class="form-control form-control-sm">@Model.entConclusion.ADVERTENCIA_CAUSAL</textarea>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="ddlAuditoriaOk" class="col-sm-4 col-form-label col-form-label-sm">Pasó auditoría:</label>
+                <div class="col-sm-8">
+                    <select id="ddlAuditoriaOk" class="form-control form-control-sm" style="width:200px">
+                        <option value="0">Seleccionar</option>
+                        <option value="1">SI</option>
+                        <option value="2">NO</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="ddlAmpliarContrato" class="col-sm-4 col-form-label col-form-label-sm">Se recomienda ampliar la vigencia del contrato:</label>
+                <div class="col-sm-8">
+                    <select id="ddlAmpliarContrato" class="form-control form-control-sm" style="width:200px">
+                        <option value="0">Seleccionar</option>
+                        <option value="1">SI</option>
+                        <option value="2">NO</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer-full-width modal-footer">
+            <button id="btnGuardarQuinquenio" class="btn btn-primary btn-sm" onclick="_renderQuin.fnGuardar()">Registrar</button>
+            <button id="btnCancelarQuinquenio" class="btn btn-secondary btn-sm" onclick="_renderQuin.fnClose()">Cancelar</button>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    var _renderQuin = {
+        fnSetVal: (item) => {
+            for (let i = 0; i < item.length;i++)
+            {
+                if (item[i].CODIGO == "0000001") {
+                    $("#ddlVerificadorv11").val(item[i].VALUE_VERIFICADOR);
+                    $("#txtObserv11").val(item[i].OBSERVACION);
+                }
+                if (item[i].CODIGO == "0000002") {
+                    $("#ddlVerificadorv12").val(item[i].VALUE_VERIFICADOR);                  
+                    $("#txtObserv12").val(item[i].OBSERVACION);
+                }
+                if (item[i].CODIGO == "0000003") {
+                    $("#ddlVerificadorv13").val(item[i].VALUE_VERIFICADOR);                   
+                    $("#txtObserv13").val(item[i].OBSERVACION);                   
+                }
+                if (item[i].CODIGO == "0000005") {
+                    $("#ddlVerificadorv21").val(item[i].VALUE_VERIFICADOR);
+                    $("#txtObserv21").val(item[i].OBSERVACION);    
+
+                     
+                }
+                if (item[i].CODIGO == "0000006") {
+                    $("#ddlVerificadorv22").val(item[i].VALUE_VERIFICADOR);
+                    $("#txtObserv22").val(item[i].OBSERVACION);    
+
+                }
+                if (item[i].CODIGO == "0000007") {
+                    $("#ddlVerificadorv23").val(item[i].VALUE_VERIFICADOR);
+                    $("#txtObserv23").val(item[i].OBSERVACION);  
+
+                }
+                if (item[i].CODIGO == "0000008") {
+                    $("#ddlVerificadorv24").val(item[i].VALUE_VERIFICADOR);
+                    $("#txtObserv24").val(item[i].OBSERVACION);  
+
+                }
+                if (item[i].CODIGO == "0000009") {
+                    $("#ddlVerificadorv25").val(item[i].VALUE_VERIFICADOR);
+                    $("#txtObserv25").val(item[i].OBSERVACION);  
+
+                }
+                if (item[i].CODIGO == "0000010") {
+                    $("#ddlVerificadorv311").val(item[i].VALUE_VERIFICADOR);
+                    $("#txtObserv311").val(item[i].OBSERVACION);  
+
+                }
+                if (item[i].CODIGO == "0000012") {
+                    $("#ddlVerificador312").val(item[i].VALUE_VERIFICADOR);
+                    $("#txtObserv312").val(item[i].OBSERVACION);  
+
+                }
+                if (item[i].CODIGO == "0000013") {
+                    $("#ddlVerificadorv313").val(item[i].VALUE_VERIFICADOR);
+                    $("#txtObserv313").val(item[i].OBSERVACION);  
+
+                }
+                if (item[i].CODIGO == "0000014") {
+                    $("#ddlVerificador314").val(item[i].VALUE_VERIFICADOR);
+                    $("#txtObserv314").val(item[i].OBSERVACION);  
+ 
+                }
+                if (item[i].CODIGO == "0000015") {
+                    $("#ddlverificador315C").val(item[i].VALUE_VERIFICADOR);
+                    $("#txtObserv315C").val(item[i].OBSERVACION);  
+
+                }
+                if (item[i].CODIGO == "0000016") {
+                    $("#ddlverificador315P").val(item[i].VALUE_VERIFICADOR);
+                    $("#txtObserv315P").val(item[i].OBSERVACION);  
+
+                }
+                if (item[i].CODIGO == "0000017") {
+                    $("#ddlverificadorv316").val(item[i].VALUE_VERIFICADOR);
+                    $("#txtObserv316").val(item[i].OBSERVACION);  
+
+                }
+                if (item[i].CODIGO == "0000018") {
+                    $("#ddlverificadorv317").val(item[i].VALUE_VERIFICADOR);
+                    $("#txtObserv317").val(item[i].OBSERVACION);  
+                }
+                if (item[i].CODIGO == "0000019") {
+                    $("#ddlverificador318").val(item[i].VALUE_VERIFICADOR);
+                    $("#txtObserv318").val(item[i].OBSERVACION);  
+
+                }
+                if (item[i].CODIGO == "0000020") {
+                    $("#ddlverificadorv319").val(item[i].VALUE_VERIFICADOR);
+                    $("#txtObserv319").val(item[i].OBSERVACION);  
+
+                }
+                if (item[i].CODIGO == "0000021") {
+                    $("#ddlverificador3110").val(item[i].VALUE_VERIFICADOR);
+                    $("#txtObserv3110").val(item[i].OBSERVACION); 
+ 
+                }
+                if (item[i].CODIGO == "0000022") {
+                    $("#ddlverificadorv3111").val(item[i].VALUE_VERIFICADOR);
+                    $("#txtObserv3111").val(item[i].OBSERVACION); 
+ 
+                }
+                if (item[i].CODIGO == "0000023") {
+                    $("#ddlverificadorv3112").val(item[i].VALUE_VERIFICADOR);
+                    $("#txtObserv3112").val(item[i].OBSERVACION); 
+ 
+                }
+                if (item[i].CODIGO == "0000025") {
+                    $("#ddlverificador3113").val(item[i].VALUE_VERIFICADOR);
+                    $("#txtObsev3113").val(item[i].OBSERVACION); 
+ 
+                }
+                if (item[i].CODIGO == "0000026") {
+                    $("#ddlverificador321").val(item[i].VALUE_VERIFICADOR);
+                    $("#txtObserv321").val(item[i].OBSERVACION); 
+ 
+                }
+                if (item[i].CODIGO == "0000027") {
+                    $("#ddlverificador322").val(item[i].VALUE_VERIFICADOR);
+                    $("#txtObser322").val(item[i].OBSERVACION); 
+ 
+                }
+                if (item[i].CODIGO == "0000029") {
+                    $("#ddlverificador323").val(item[i].VALUE_VERIFICADOR);
+                    $("#txtObserv323").val(item[i].OBSERVACION); 
+ 
+                   
+                }
+                if (item[i].CODIGO == "0000030") {
+                    $("#ddlverificador324").val(item[i].VALUE_VERIFICADOR);
+                    $("#txtObserv324").val(item[i].OBSERVACION); 
+ 
+                }
+                if (item[i].CODIGO == "0000031") {
+                    $("#ddlverificadorv325").val(item[i].VALUE_VERIFICADOR);
+                    $("#txtObserv325").val(item[i].OBSERVACION); 
+
+                    
+                }
+                if (item[i].CODIGO == "0000032") {
+                    $("#ddlverificador41").val(item[i].VALUE_VERIFICADOR);
+                    $("#txtObserv41").val(item[i].OBSERVACION); 
+                    
+                }
+                if (item[i].CODIGO == "0000033") {
+                    $("#ddlverificador42").val(item[i].VALUE_VERIFICADOR);
+                    $("#txtObserv42").val(item[i].OBSERVACION); 
+                   
+                }
+                if (item[i].CODIGO == "0000034") {
+                    $("#ddlverificador43").val(item[i].VALUE_VERIFICADOR);
+                    $("#txtObserv43").val(item[i].OBSERVACION);  
+                }
+                if (item[i].CODIGO == "0000035") {
+                    $("#ddlverificador511").val(item[i].VALUE_VERIFICADOR);
+                    $("#txtObserv511").val(item[i].OBSERVACION); 
+
+                }
+                if (item[i].CODIGO == "0000036") {
+                    $("#ddlverificador512").val(item[i].VALUE_VERIFICADOR);
+                    $("#txtObserv512").val(item[i].OBSERVACION); 
+
+                }
+                if (item[i].CODIGO == "0000037") {
+                    $("#ddlverificador521").val(item[i].VALUE_VERIFICADOR);
+                    $("#txtObserv521").val(item[i].OBSERVACION); 
+                   
+                }
+                if (item[i].CODIGO == "0000038") {
+                    $("#ddlverificador522").val(item[i].VALUE_VERIFICADOR);
+                    $("#txtObserv522").val(item[i].OBSERVACION); 
+
+                }
+                if (item[i].CODIGO == "0000039") {
+                    $("#ddlverificador523").val(item[i].VALUE_VERIFICADOR);
+                    $("#txtObserv523").val(item[i].OBSERVACION); 
+
+                }
+                if (item[i].CODIGO == "0000040") {
+                    $("#ddlverificador524").val(item[i].VALUE_VERIFICADOR);
+                    $("#txtObserv524").val(item[i].OBSERVACION); 
+                 
+                }
+                if (item[i].CODIGO == "0000041") {
+                   // $("#ddlverificadorv325").val(item[i].VALUE_VERIFICADOR);
+                    $("#txtObserv531").val(item[i].OBSERVACION); 
+ 
+                }
+                if (item[i].CODIGO == "0000042") {
+                    $("#txtObserv531").val(item[i].OBSERVACION); 
+                    
+                 }
+                if (item[i].CODIGO == "0000043") {
+                    $("#ddlverificador532").val(item[i].VALUE_VERIFICADOR);
+                    $("#txtObserv532").val(item[i].OBSERVACION);  
+                }
+                if (item[i].CODIGO == "0000044") {
+                    $("#ddlverificador61").val(item[i].VALUE_VERIFICADOR);
+                    $("#txtObserv61").val(item[i].OBSERVACION); 
+ 
+                }
+                if (item[i].CODIGO == "0000045") {
+                    $("#ddlverificador62").val(item[i].VALUE_VERIFICADOR);
+                    $("#txtObserv62").val(item[i].OBSERVACION); 
+ 
+                }
+                if (item[i].CODIGO == "0000046") {
+                    $("#ddlverificador63").val(item[i].VALUE_VERIFICADOR);
+                    $("#txtObserv63").val(item[i].OBSERVACION); 
+                     
+                }
+                if (item[i].CODIGO == "0000047") {
+                    $("#ddlverificador64").val(item[i].VALUE_VERIFICADOR);
+                    $("#txtObserv64").val(item[i].OBSERVACION); 
+ 
+                }
+                if (item[i].CODIGO == "0000048") {
+                    $("#ddlverificador65").val(item[i].VALUE_VERIFICADOR);
+                    $("#txtObserv65").val(item[i].OBSERVACION);
+
+                }
+            };
+        },
+        fnInit: () => {
+            $("#ddlAuditoriaOk").val("@Model.entConclusion.AUDITORIA_OK");
+            $("#ddlAmpliarContrato").val("@Model.entConclusion.AMPLIAR_CONTRATO");
+            var option = {
+                url: urlLocalSigo + "Supervision/ManInformeQuinquenal/GetQuinquenio", datos: { asCodInforme: $("#hdfManCodTInforme").val(), quinquenio: "@ViewBag.hdvQuinquenio"}, type: 'GET' };
+            utilSigo.fnAjax(option, function (data) {
+                if (data.success) {      
+                    if (data.data.verificadores.length>0)
+                      _renderQuin.fnSetVal(data.data.verificadores);
+                }
+                else {
+                    utilSigo.toastWarning("Aviso","Sucedio un error");
+                }
+            });
+
+        },
+        fnClose: () => {
+            utilSigo.fnCloseModal("mdlQuinquenio");
+        },
+        fnGuardar: () => {
+            let verificadores = [];
+            let verificador = {};
+            let quinquenio = "@ViewBag.hdvQuinquenio";
+
+            verificador.CODIGO = "0000001";
+            verificador.VERIFICADOR = "Verificador 1.1: Los objetivos declarados en los planes operativos son claramente presentados";
+            verificador.VALUE_VERIFICADOR = $("#ddlVerificadorv11").val();
+            verificador.OBSERVACION = $("#txtObserv11").val();
+            verificador.QUINQUENIO = quinquenio;
+            verificadores.push(verificador);
+
+            verificador = {};
+            verificador.CODIGO = "0000002";
+            verificador.VERIFICADOR = "Verificador 1.2: El mapa de la división administrativa presenta información adecuada y de calidad";
+            verificador.VALUE_VERIFICADOR = $("#ddlVerificadorv12").val();
+            verificador.OBSERVACION = $("#txtObserv12").val();
+            verificador.QUINQUENIO = quinquenio;
+            verificadores.push(verificador);
+
+            verificador = {};
+            verificador.CODIGO = "0000003";
+            verificador.VERIFICADOR = "Verificador 1.3: El mapa de ordenamiento de la UMF presenta información adecuada y de calidad";
+            verificador.VALUE_VERIFICADOR = $("#ddlVerificadorv13").val();
+            verificador.OBSERVACION = $("#txtObserv13").val();
+            verificador.QUINQUENIO = quinquenio;
+            verificadores.push(verificador);
+
+            verificador = {};
+            verificador.CODIGO = "0000005";
+            verificador.VERIFICADOR = "Verificador 2.1: Los árboles semilleros y aprovechables han sido identificados correctamente a nivel de especie";
+            verificador.VALUE_VERIFICADOR = $("#ddlVerificadorv21").val();
+            verificador.OBSERVACION = $("#txtObserv21").val();
+            verificador.QUINQUENIO = quinquenio;
+            verificadores.push(verificador);
+
+            verificador = {};
+            verificador.CODIGO = "0000006";
+            verificador.VERIFICADOR = "Verificador 2.2: El DAP y la altura comercial de los árboles aprovechables han sido determinados correctamente";
+            verificador.VALUE_VERIFICADOR = $("#ddlVerificadorv22").val();
+            verificador.OBSERVACION = $("#txtObserv22").val();
+            verificador.QUINQUENIO = quinquenio;
+            verificadores.push(verificador);
+
+            verificador = {};
+            verificador.CODIGO = "0000007";
+            verificador.VERIFICADOR = "Verificador 2.3: La calidad del fuste de los árboles aprovechables ha sido determinada correctamente";
+            verificador.VALUE_VERIFICADOR = $("#ddlVerificadorv23").val();
+            verificador.OBSERVACION = $("#txtObserv23").val();
+            verificador.QUINQUENIO = quinquenio;
+            verificadores.push(verificador);
+
+            verificador = {};
+            verificador.CODIGO = "0000008";
+            verificador.VERIFICADOR = "Verificador 2.4: Los árboles semilleros presentan las características fenotípicas correspondientes";
+            verificador.VALUE_VERIFICADOR = $("#ddlVerificadorv24").val();
+            verificador.OBSERVACION = $("#txtObserv24").val();
+            verificador.QUINQUENIO = quinquenio;
+            verificadores.push(verificador);
+
+            verificador = {};
+            verificador.CODIGO = "0000009";
+            verificador.VERIFICADOR = "Verificador 2.5: Los árboles aprovechables y semilleros presentan una codificación apropiada para el control de la madera en la UMF";
+            verificador.VALUE_VERIFICADOR = $("#ddlVerificadorv25").val();
+            verificador.OBSERVACION = $("#txtObserv25").val();
+            verificador.QUINQUENIO = quinquenio;
+            verificadores.push(verificador);
+
+            verificador = {};
+            verificador.CODIGO = "0000010";
+            verificador.VERIFICADOR = "Verificador 3.1.1: El volumen movilizado de las Parcelas de Corta del quinquenio en evaluación concuerda con el Volumen de Corta Anual Permisible (VCAP) de la UMF";
+            verificador.VALUE_VERIFICADOR = $("#ddlVerificadorv311").val();
+            verificador.OBSERVACION = $("#txtObserv311").val();
+            verificador.QUINQUENIO = quinquenio;
+            verificadores.push(verificador);
+
+            verificador = {};
+            verificador.CODIGO = "0000012";
+            verificador.VERIFICADOR = "Verificador 3.1.2: Los árboles semilleros son protegidos en las operaciones de aprovechamiento forestal";
+            verificador.VALUE_VERIFICADOR = $("#ddlVerificador312").val();
+            verificador.OBSERVACION = $("#txtObserv312").val();
+            verificador.QUINQUENIO = quinquenio;
+            verificadores.push(verificador);
+
+            verificador = {};
+            verificador.CODIGO = "0000013";
+            verificador.VERIFICADOR = "Verificador 3.1.3: Las trozas son codificadas en el marco de un sistema de codificación para el control del movimiento de la madera en la UMF";
+            verificador.VALUE_VERIFICADOR = $("#ddlVerificadorv313").val();
+            verificador.OBSERVACION = $("#txtObserv313").val();
+            verificador.QUINQUENIO = quinquenio;
+            verificadores.push(verificador);
+
+            verificador = {};
+            verificador.CODIGO = "0000014";
+            verificador.VERIFICADOR = "Verificador 3.1.4: Se aplican los tratamientos silviculturales prescritos en los planes de manejo";
+            verificador.VALUE_VERIFICADOR = $("#ddlVerificador314").val();
+            verificador.OBSERVACION = $("#txtObserv314").val();
+            verificador.QUINQUENIO = quinquenio;
+            verificadores.push(verificador);
+
+            verificador = {};
+            verificador.CODIGO = "0000015";
+            verificador.VERIFICADOR = "Verificador 3.1.5.Caminos";
+            verificador.VALUE_VERIFICADOR = $("#ddlverificador315C").val();
+            verificador.OBSERVACION = $("#txtObserv315C").val();
+            verificador.QUINQUENIO = quinquenio;
+            verificadores.push(verificador);
+
+            verificador = {};
+            verificador.CODIGO = "0000016";
+            verificador.VERIFICADOR = "Verificador 3.1.5. Patios";
+            verificador.VALUE_VERIFICADOR = $("#ddlverificador315P").val();
+            verificador.OBSERVACION = $("#txtObserv315P").val();
+            verificador.QUINQUENIO = quinquenio;
+            verificadores.push(verificador);
+
+            verificador = {};
+            verificador.CODIGO = "0000017";
+            verificador.VERIFICADOR = "Verificador 3.1.6.:El área de la UMF se protege en puntos críticos contra actos que afecten los derechos del titular";
+            verificador.VALUE_VERIFICADOR = $("#ddlverificadorv316").val();
+            verificador.OBSERVACION = $("#txtObserv316").val();
+            verificador.QUINQUENIO = quinquenio;
+            verificadores.push(verificador);
+
+            verificador = {};
+            verificador.CODIGO = "0000018";
+            verificador.VERIFICADOR = "Verificador 3.1.7: Se registran formalmente las operaciones de aprovechamiento";
+            verificador.VALUE_VERIFICADOR = $("#ddlverificadorv317").val();
+            verificador.OBSERVACION = $("#txtObserv317").val();
+            verificador.QUINQUENIO = quinquenio;
+            verificadores.push(verificador);
+
+            verificador = {};
+            verificador.CODIGO = "0000019";
+            verificador.VERIFICADOR = "Verificador 3.1.8.: Los trabajadores de la UMF conocen sus funciones";
+            verificador.VALUE_VERIFICADOR = $("#ddlverificador318").val();
+            verificador.OBSERVACION = $("#txtObserv318").val();
+            verificador.QUINQUENIO = quinquenio;
+            verificadores.push(verificador);
+
+            verificador = {};
+            verificador.CODIGO = "0000020";
+            verificador.VERIFICADOR = "Verificador 3.1.9.: El titular presenta oportunamente sus requerimientos derivados de la ejecución de su título habilitante";
+            verificador.VALUE_VERIFICADOR = $("#ddlverificadorv319").val();
+            verificador.OBSERVACION = $("#txtObserv319").val();
+            verificador.QUINQUENIO = quinquenio;
+            verificadores.push(verificador);
+
+            verificador = {};
+            verificador.CODIGO = "0000021";
+            verificador.VERIFICADOR = "Verificador 3.1.10: El titular ha formalizado su relación con terceros y el regente mediante contratos legales que garanticen la responsabilidad solidaria";
+            verificador.VALUE_VERIFICADOR = $("#ddlverificador3110").val();
+            verificador.OBSERVACION = $("#txtObserv3110").val();
+            verificador.QUINQUENIO = quinquenio;
+            verificadores.push(verificador);
+
+            verificador = {};
+            verificador.CODIGO = "0000022";
+            verificador.VERIFICADOR = "Verificador 3.1.11: El titular cumple oportunamente con el pago del derecho de aprovechamiento";
+            verificador.VALUE_VERIFICADOR = $("#ddlverificadorv3111").val();
+            verificador.OBSERVACION = $("#txtObserv3111").val();
+            verificador.QUINQUENIO = quinquenio;
+            verificadores.push(verificador);
+
+            verificador = {};
+            verificador.CODIGO = "0000023";
+            verificador.VERIFICADOR = "Verificador 3.1.12.:El titular implementa las medidas correctivas dictadas por las autoridades competentes en los plazos correspondientes";
+            verificador.VALUE_VERIFICADOR = $("#ddlverificadorv3112").val();
+            verificador.OBSERVACION = $("#txtObserv3112").val();
+            verificador.QUINQUENIO = quinquenio;
+            verificadores.push(verificador);
+
+            verificador = {};
+            verificador.CODIGO = "0000025";
+            verificador.VERIFICADOR = "Verificador 3.1.13: El titular actualizada anualmente la garantía de fiel cumplimiento (no plica en comunidades nativas)";
+            verificador.VALUE_VERIFICADOR = $("#ddlverificador3113").val();
+            verificador.OBSERVACION = $("#txtObsev3113").val();
+            verificador.QUINQUENIO = quinquenio;
+            verificadores.push(verificador);
+
+            verificador = {};
+            verificador.CODIGO = "0000026";
+            verificador.VERIFICADOR = "Verificador 3.2.1: La infraestructura principal para el aprovechamiento y transporte forestal ha sido implementada de acuerdo a las especificaciones señaladas en los lineamientos correspondientes";
+            verificador.VALUE_VERIFICADOR = $("#ddlverificador321").val();
+            verificador.OBSERVACION = $("#txtObserv321").val();
+            verificador.QUINQUENIO = quinquenio;
+            verificadores.push(verificador);
+
+            verificador = {};
+            verificador.CODIGO = "0000027";
+            verificador.VERIFICADOR = "Verificador 3.2.2: Las viales de arrastre se construyen de acuerdo a especificaciones técnicas";
+            verificador.VALUE_VERIFICADOR = $("#ddlverificador322").val();
+            verificador.OBSERVACION = $("#txtObser322").val();
+            verificador.QUINQUENIO = quinquenio;
+            verificadores.push(verificador);
+
+            verificador = {};
+            verificador.CODIGO = "0000029";
+            verificador.VERIFICADOR = "Verificador 3.2.3: En el tumbado de árboles se aplica la tala dirigida";
+            verificador.VALUE_VERIFICADOR = $("#ddlverificador323").val();
+            verificador.OBSERVACION = $("#txtObserv323").val();
+            verificador.QUINQUENIO = quinquenio;
+            verificadores.push(verificador);
+
+            verificador = {};
+            verificador.CODIGO = "0000030";
+            verificador.VERIFICADOR = "Verificador 3.2.4: En la UMF se evitan las  obstrucciones a cursos naturales de agua";
+            verificador.VALUE_VERIFICADOR = $("#ddlverificador324").val();
+            verificador.OBSERVACION = $("#txtObserv324").val();
+            verificador.QUINQUENIO = quinquenio;
+            verificadores.push(verificador);
+
+            verificador = {};
+            verificador.CODIGO = "0000031";
+            verificador.VERIFICADOR = "Verificador 3.2.5: Las áreas de protección de acuerdo al ordenamiento no son afectadas por las operaciones de aprovechamiento forestal";
+            verificador.VALUE_VERIFICADOR = $("#ddlverificadorv325").val();
+            verificador.OBSERVACION = $("#txtObserv325").val();
+            verificador.QUINQUENIO = quinquenio;
+            verificadores.push(verificador);
+
+            verificador = {};
+            verificador.CODIGO = "0000032";
+            verificador.VERIFICADOR = "Verificador 4.1: El titular presenta rentabilidad en la ejecución de los Planes Operativos";
+            verificador.VALUE_VERIFICADOR = $("#ddlverificador41").val();
+            verificador.OBSERVACION = $("#txtObserv41").val();
+            verificador.QUINQUENIO = quinquenio;
+            verificadores.push(verificador);
+
+            verificador = {};
+            verificador.CODIGO = "0000033";
+            verificador.VERIFICADOR = "Verificador 4.2: El titular aplica un documento de gestión de la información procedente del aprovechamiento forestal y de otros efectos del título habilitante";
+            verificador.VALUE_VERIFICADOR = $("#ddlverificador42").val();
+            verificador.OBSERVACION = $("#txtObserv42").val();
+            verificador.QUINQUENIO = quinquenio;
+            verificadores.push(verificador);
+
+            verificador = {};
+            verificador.CODIGO = "0000034";
+            verificador.VERIFICADOR = "Verificador 4.3.: El titular actualiza periódicamente el Plan de Manejo";
+            verificador.VALUE_VERIFICADOR = $("#ddlverificador43").val();
+            verificador.OBSERVACION = $("#txtObserv43").val();
+            verificador.QUINQUENIO = quinquenio;
+            verificadores.push(verificador);
+
+            verificador = {};
+            verificador.CODIGO = "0000035";
+            verificador.VERIFICADOR = "Verificador 5.1.1: El titular ejecuta las actividades del Plan de Gestión Ambiental o similar";
+            verificador.VALUE_VERIFICADOR = $("#ddlverificador511").val();
+            verificador.OBSERVACION = $("#txtObserv511").val();
+            verificador.QUINQUENIO = quinquenio;
+            verificadores.push(verificador);
+
+            verificador = {};
+            verificador.CODIGO = "0000036";
+            verificador.VERIFICADOR = "Verificador 5.1.2: Se disponen adecuadamente los residuos sólidos y líquidos generados en el aprovechamiento forestal";
+            verificador.VALUE_VERIFICADOR = $("#ddlverificador512").val();
+            verificador.OBSERVACION = $("#txtObserv512").val();
+            verificador.QUINQUENIO = quinquenio;
+            verificadores.push(verificador);
+
+            verificador = {};
+            verificador.CODIGO = "0000037";
+            verificador.VERIFICADOR = "Verificador 5.2.1: Los pobladores no tienen conflictos y tienen buenas relaciones con el titular de la UMF";
+            verificador.VALUE_VERIFICADOR = $("#ddlverificador521").val();
+            verificador.OBSERVACION = $("#txtObserv521").val();
+            verificador.QUINQUENIO = quinquenio;
+            verificadores.push(verificador);
+
+            verificador = {};
+            verificador.CODIGO = "0000038";
+            verificador.VERIFICADOR = "Verificador 5.2.2: El titular respeta las servidumbre de paso al interior del área del título habilitante UMF";
+            verificador.VALUE_VERIFICADOR = $("#ddlverificador522").val();
+            verificador.OBSERVACION = $("#txtObserv522").val();
+            verificador.QUINQUENIO = quinquenio;
+            verificadores.push(verificador);
+
+            verificador = {};
+            verificador.CODIGO = "0000039";
+            verificador.VERIFICADOR = "Verificador 5.2.3: El titular ocupa mano de obra de las comunidades locales vinculadas a la concesión";
+            verificador.VALUE_VERIFICADOR = $("#ddlverificador523").val();
+            verificador.OBSERVACION = $("#txtObserv523").val();
+            verificador.QUINQUENIO = quinquenio;
+            verificadores.push(verificador);
+
+            verificador = {};
+            verificador.CODIGO = "0000040";
+            verificador.VERIFICADOR = "Verificador 5.2.3: El titular ocupa mano de obra de las comunidades locales vinculadas a la concesión";
+            verificador.VALUE_VERIFICADOR = $("#ddlverificador524").val();
+            verificador.OBSERVACION = $("#txtObserv524").val();
+            verificador.QUINQUENIO = quinquenio;
+            verificadores.push(verificador);
+
+            verificador = {};
+            verificador.CODIGO = "0000041";
+            verificador.VERIFICADOR = "Verificador 5.3.1.: Los trabajadores usan indumentaria y accesorios adecuados de protección y seguridad personal";
+            verificador.VALUE_VERIFICADOR = $("#ddlverificador531").val(); 
+            verificador.OBSERVACION = $("#txtObserv531").val();
+            verificador.QUINQUENIO = quinquenio;
+            verificadores.push(verificador);
+
+            verificador = {};
+            verificador.CODIGO = "0000042";
+            verificador.VERIFICADOR = "Verificador 5.3.1.: Los trabajadores usan indumentaria y accesorios adecuados de protección y seguridad personal";
+            verificador.VALUE_VERIFICADOR = $("#ddlverificador531").val(); 
+            verificador.OBSERVACION = $("#txtObserv531").val();
+            verificador.QUINQUENIO = quinquenio;
+            verificadores.push(verificador);
+
+            verificador = {};
+            verificador.CODIGO = "0000043";
+            verificador.VERIFICADOR = "Verificador 5.3.2.: El titular atiende oportunamente el compromiso de pago a los trabajadores de la UMF";
+            verificador.VALUE_VERIFICADOR = $("#ddlverificador532").val();
+            verificador.OBSERVACION = $("#txtObserv532").val();
+            verificador.QUINQUENIO = quinquenio;
+            verificadores.push(verificador);
+
+            verificador = {};
+            verificador.CODIGO = "0000044";
+            verificador.VERIFICADOR = "Verificador 6.1.: El titular capacita sobre las actividades de aprovechamiento forestal y otros";
+            verificador.VALUE_VERIFICADOR = $("#ddlverificador61").val();
+            verificador.OBSERVACION = $("#txtObserv61").val();
+            verificador.QUINQUENIO = quinquenio;
+            verificadores.push(verificador);
+
+            verificador = {};
+            verificador.CODIGO = "0000045";
+            verificador.VERIFICADOR = "Verificador 6.2.: El personal correspondiente ha recibido capacitación en el manejo de mapas y de instrumentos";
+            verificador.VALUE_VERIFICADOR = $("#ddlverificador62").val();
+            verificador.OBSERVACION = $("#txtObserv62").val();
+            verificador.QUINQUENIO = quinquenio;
+            verificadores.push(verificador);
+
+            verificador = {};
+            verificador.CODIGO = "0000046";
+            verificador.VERIFICADOR = "Verificador 6.3.: El personal correspondiente ha recibido capacitación en tala dirigida";
+            verificador.VALUE_VERIFICADOR = $("#ddlverificador63").val();
+            verificador.OBSERVACION = $("#txtObserv63").val();
+            verificador.QUINQUENIO = quinquenio;
+            verificadores.push(verificador);
+
+            verificador = {};
+            verificador.CODIGO = "0000047";
+            verificador.VERIFICADOR = "Verificador 6.4.: El personal correspondiente ha recibido capacitación en el manejo de un sistema de codificación de árboles";
+            verificador.VALUE_VERIFICADOR = $("#ddlverificador64").val();
+            verificador.OBSERVACION = $("#txtObserv64").val();
+            verificador.QUINQUENIO = quinquenio;
+            verificadores.push(verificador);
+
+            verificador = {};
+            verificador.CODIGO = "0000048";
+            verificador.VERIFICADOR = "Verificador 6.5.: El personal ha recibido capacitación sobre la disposición de residuos sólidos y líquidos generados en el aprovechamiento forestal";
+            verificador.VALUE_VERIFICADOR = $("#ddlverificador65").val();
+            verificador.OBSERVACION = $("#txtObserv65").val();
+            verificador.QUINQUENIO = quinquenio;
+            verificadores.push(verificador);
+
+            let ListConclusiones = {};
+            ListConclusiones.QUINQUENIO = quinquenio;
+            ListConclusiones.CRITERIO_EVALUACION = $("#txtConclCriterioEval").val();
+            ListConclusiones.ACLARACION_TITULAR = $("#txtConclAclaracionTit").val();
+            ListConclusiones.IMPL_PMANEJO = $("#txtConclImplPManejo").val();
+            ListConclusiones.CUMPL_OBLIGACION = $("#txtConclCumplObligacion").val();
+            ListConclusiones.CALIDAD_IMPL = $("#txtConclCalidadImpl").val();
+            ListConclusiones.OPINION_FAVORABLE = $("#txtConclOpinionFavo").val();
+            ListConclusiones.DEMORA_NEGLIGENCIA = $("#txtConclDemora").val();
+            ListConclusiones.ADVERTENCIA_CAUSAL = $("#txtConclAdvCausal").val();
+            ListConclusiones.AUDITORIA_OK = $("#ddlAuditoriaOk").val();
+            ListConclusiones.AMPLIAR_CONTRATO =$("#ddlAmpliarContrato").val();
+
+            let model = {};
+            model.COD_INFORME = $("#hdCodInformeQuinquenio").val();
+            model.ListVerificadores = verificadores;
+            model.ListConclusiones = [ListConclusiones];
+            var option = { url: urlLocalSigo + "Supervision/ManInformeQuinquenal/AddEditQuinquenio", datos: JSON.stringify(model), type: 'POST' };
+            utilSigo.fnAjax(option, function (data) {
+                if (data.success) {
+                    utilSigo.toastSuccess("Aviso", data.msj);
+                    $("#mdlQuinquenio").modal('hide');
+                }
+                else {
+                    utilSigo.toastWarning("Aviso", data.msj);
+                }
+            });
+        }
+    }
+    $(document).ready(function () {
+
+        _renderQuin.fnInit();
+    });
+</script>

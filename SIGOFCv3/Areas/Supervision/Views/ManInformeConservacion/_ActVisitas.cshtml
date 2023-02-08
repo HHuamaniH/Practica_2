@@ -1,0 +1,97 @@
+﻿
+<script type="text/javascript">
+    "use strict";
+    var _ActVisitas = {};
+    
+    _ActVisitas.fnSaveForm = function (data) { /*implementado desde donde se instancia*/ }
+
+    _ActVisitas.fnLoadDatos = function (data) {
+        if (data != null && data != "") {
+            _ActVisitas.frm.find("#hdfRegEstado").val(data["RegEstado"]);
+            _ActVisitas.frm.find("#hdfCodSecuencial").val(data["NINDICE"]);
+            _ActVisitas.frm.find("#txtDescripcion").val(data["VDESCRIPCION"]);
+            _ActVisitas.frm.find("#ddlPerfil").val(data["VPERFIL"]);
+          
+        } else {
+            _ActVisitas.frm.find("#hdfRegEstado").val("1");
+            _ActVisitas.frm.find("#hdfCodSecuencial").val("0");
+        }
+    }
+
+    _ActVisitas.fnSetDatos = function () {
+        var data = [];
+        debugger
+        var regEstado = _ActVisitas.frm.find("#hdfRegEstado").val();
+        data["RegEstado"] = regEstado == "0" ? "2" : regEstado;
+        data["NINDICE"] = _ActVisitas.frm.find("#hdfCodSecuencial").val();
+        data["VDESCRIPCION"] = _ActVisitas.frm.find("#txtDescripcion").val();
+        data["VPERFIL"] = _ActVisitas.frm.find("#ddlPerfil").val();
+       
+        return data;
+    }
+
+    _ActVisitas.fnSubmitForm = function () {
+        _ActVisitas.frm.submit();
+    }
+
+    _ActVisitas.fnInit = function (data) {
+        _ActVisitas.frm = $("#frmActTuristicaImpl");
+
+        _ActVisitas.fnLoadDatos(data);
+
+        //=====-----Para el registro de datos del formulario-----=====
+        _ActVisitas.frm.validate(utilSigo.fnValidate({
+            rules: {
+                txtDescripcion: { required: true },
+                ddlPerfil: { required: true }
+               
+            },
+            messages: {
+                txtDescripcion: { required: "Ingrese la descripción" },
+                ddlPerfil: { required: "Seleccione el Perfil" }
+              
+            },
+            fnSubmit: function (form) {
+                _ActVisitas.fnSaveForm(_ActVisitas.fnSetDatos());
+            }
+        }));
+        //Validación de controles que usan Select2
+        _ActVisitas.frm.find("select.select2-hidden-accessible").on("change", function (e) {
+            $(this).valid();
+        });
+    }
+</script>
+<div class="modal-dialog" tabindex="-1" role="document" >
+    <div class="modal-content">
+        <div class="modal-header text-small" style="cursor:move;">
+            <span>Actividad de Visitas</span>
+            <i class="fa fa-close" style="cursor:pointer;" data-dismiss="modal" aria-label="Close"></i>
+        </div>
+        <div class="modal-body">
+            <form id="frmActTuristicaImpl">
+                @Html.Hidden("hdfRegEstado")
+                @Html.Hidden("hdfCodSecuencial")
+                <div class="form-row">
+                    <div class="form-group col-md-12">
+                        <label for="txtTipoAmbiente" class="text-small">Descripción</label>
+                        @Html.TextBox("txtDescripcion", "", new { @class = "form-control form-control-sm" })
+                    </div>
+
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label for="txtArea" class="text-small">Perfil</label>
+                        @Html.DropDownList("ddlPerfil", (new List<SelectListItem>(){new SelectListItem() { Text = "Investigador", Value = "Investigador" },
+                       new SelectListItem() { Text = "Voluntario", Value = "Voluntario" },new SelectListItem() { Text = "Practicante", Value = "Practicante" } }),"Seleccionar", new { @class = "form-control form-control-sm" })
+                    </div>
+
+                </div>
+                
+            </form>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-primary btn-sm" onclick="_ActVisitas.fnSubmitForm()">Guardar</button>
+            <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Cancelar</button>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,121 @@
+﻿
+@model CapaEntidad.ViewModel.VM_Informe_POAFaunaSupervisado
+
+<script src="~/Areas/Supervision/js/ManInformeFauna/_POAFaunaSupervisado.js"></script>
+<script type="text/javascript">
+    _POAFaunaSupervisado.fnLoadData('@Html.Raw(Json.Encode(@Model.tbCoordenadaUTM))', "DataCoordenada");
+    _POAFaunaSupervisado.fnLoadData('@Html.Raw(Json.Encode(@Model.tbInfraestructuraImpl))', "DataInfraesImpl");
+    _POAFaunaSupervisado.fnLoadData('@Html.Raw(Json.Encode(@Model.tbZonificacion))', "DataZonificacion");
+    _POAFaunaSupervisado.fnLoadData('@Html.Raw(Json.Encode(@Model.tbAprovSostenible))', "DataAprovSostenible");
+</script>
+
+<div class="modal-dialog modal-custom-tb" role="document" style="height:95%;">
+    <div class="modal-content" style="height:100%;">
+        <div class="modal-header text-small" style="cursor:move;">
+            <strong>@Model.lblTituloEstado</strong>
+            <i class="fa fa-close" style="cursor:pointer;" data-dismiss="modal" aria-label="Close"></i>
+        </div>
+        <div class="card" style="margin-bottom:0px;">
+            <div class="card-header text-small" style="padding-top:3px;padding-bottom:4.5px;">
+                <a href="javascript:void(0)" style="cursor:pointer;" data-toggle="tooltip" data-placement="top" title="Guardar datos" onclick="_POAFaunaSupervisado.fnSubmitForm()"><i class="fa mx-2 fa-lg fa-save"></i></a>
+                <a href="javascript:void(0)" style="cursor:pointer;" data-toggle="tooltip" data-placement="top" title="Cancelar" data-dismiss="modal"><i class="fa mx-2 fa-lg fa-reply"></i></a>
+            </div>
+            <div id="dvManInfFauna_POASupervisado" class="card-body" style="overflow-y:auto;">
+                <form id="frmManInfFauna_POASupervisado" action="@Url.Action("GrabarPOAFaunaSupervisado", "ManInformeFauna", new { Area = "Supervision" })">
+                    <div class="card">
+                        @Html.HiddenFor(m => m.hdfCodInforme)
+                        @Html.HiddenFor(m => m.hdfNumPoa)
+                        <div class="card-body">
+                            <div class="form-row">
+                                <div class="col-md-12">
+                                    @Html.Partial("~/Areas/Supervision/Views/ManInforme/Render/_renderAvistamientoFauna.cshtml", Model.tbAvistamientoFauna
+                                        ,new ViewDataDictionary { { "TITULO", "Especies de Fauna Silvestre a Manejar" } })
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="table-responsive">
+                                    <table id="tbCoordenadaUtm" style="width:100%" class="table table-hover table-bordered">
+                                        <thead>
+                                            <tr>
+                                                <th colspan="10" class="text-sm-left">
+                                                    <div class="form-inline">
+                                                        <i class="fa mx-2 fa-lg fa-file-o" style="cursor:pointer;" onclick="_POAFaunaSupervisado.fnAddEditFauna('','COORDENADA_UTM');" data-toggle="tooltip" data-placement="top" title="Nuevo"></i>
+                                                        <i class="fa mx-2 fa-lg fa-window-close-o" style="cursor:pointer;" onclick="_POAFaunaSupervisado.fnDeleteAllFauna('COORDENADA_UTM');" data-toggle="tooltip" data-placement="top" title="Eliminar Todos"></i>
+                                                        <strong>
+                                                            Coordenadas UTM
+                                                        </strong>
+                                                    </div>
+                                                </th>
+                                            </tr>
+                                        </thead>
+                                        <tbody></tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="table-responsive">
+                                    <table id="tbInfraestructuraImp" style="width:100%" class="table table-hover table-bordered">
+                                        <thead>
+                                            <tr>
+                                                <th colspan="8" class="text-sm-left">
+                                                    <div class="form-inline">
+                                                        <i class="fa mx-2 fa-lg fa-file-o" style="cursor:pointer;" onclick="_POAFaunaSupervisado.fnAddEditFauna('', 'INFRAESTRUCTURA');" data-toggle="tooltip" data-placement="top" title="Nuevo"></i>
+                                                        <i class="fa mx-2 fa-lg fa-window-close-o" style="cursor:pointer;" onclick="_POAFaunaSupervisado.fnDeleteAllFauna('INFRAESTRUCTURA');" data-toggle="tooltip" data-placement="top" title="Eliminar Todos"></i>
+                                                        <strong>
+                                                            Infraestructura Implementada
+                                                        </strong>
+                                                    </div>
+                                                </th>
+                                            </tr>
+                                        </thead>
+                                        <tbody></tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="table-responsive">
+                                    <table id="tbZonificacion" style="width:100%" class="table table-hover table-bordered">
+                                        <thead>
+                                            <tr>
+                                                <th colspan="10" class="text-sm-left">
+                                                    <div class="form-inline">
+                                                        <i class="fa mx-2 fa-lg fa-file-o" style="cursor:pointer;" onclick="_POAFaunaSupervisado.fnAddEditFauna('', 'ZONIFICACION');" data-toggle="tooltip" data-placement="top" title="Nuevo"></i>
+                                                        <i class="fa mx-2 fa-lg fa-window-close-o" style="cursor:pointer;" onclick="_POAFaunaSupervisado.fnDeleteAllFauna('ZONIFICACION');" data-toggle="tooltip" data-placement="top" title="Eliminar Todos"></i>
+                                                        <strong>
+                                                            Zonificación de las Especies a Manejar
+                                                        </strong>
+                                                    </div>
+                                                </th>
+                                            </tr>
+                                        </thead>
+                                        <tbody></tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="table-responsive">
+                                    <table id="tbAprovSostenible" style="width:100%" class="table table-hover table-bordered">
+                                        <thead>
+                                            <tr>
+                                                <th colspan="10" class="text-sm-left">
+                                                    <div class="form-inline">
+                                                        <i class="fa mx-2 fa-lg fa-file-o" style="cursor:pointer;" onclick="_POAFaunaSupervisado.fnAddEditFauna('', 'APROVECHAMIENTO');" data-toggle="tooltip" data-placement="top" title="Nuevo"></i>
+                                                        <i class="fa mx-2 fa-lg fa-window-close-o" style="cursor:pointer;" onclick="_POAFaunaSupervisado.fnDeleteAllFauna('APROVECHAMIENTO');" data-toggle="tooltip" data-placement="top" title="Eliminar Todos"></i>
+                                                        <strong>
+                                                            Aprovechamiento Sostenible
+                                                        </strong>
+                                                    </div>
+                                                </th>
+                                            </tr>
+                                        </thead>
+                                        <tbody></tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

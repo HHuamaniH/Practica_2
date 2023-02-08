@@ -1,0 +1,531 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:tm="http://microsoft.com/wsdl/mime/textMatching/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:tns="http://microsoft.com/webservices/" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:s="http://www.w3.org/2001/XMLSchema" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" targetNamespace="http://microsoft.com/webservices/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:types>
+    <s:schema elementFormDefault="qualified" targetNamespace="http://microsoft.com/webservices/">
+      <s:element name="listaCNotificaciones">
+        <s:complexType />
+      </s:element>
+      <s:element name="listaCNotificacionesResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="listaCNotificacionesResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="autenticaUser" type="tns:autenticaUser" />
+      <s:complexType name="autenticaUser">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="userName" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="password" type="s:string" />
+        </s:sequence>
+        <s:anyAttribute />
+      </s:complexType>
+      <s:element name="listaInformes">
+        <s:complexType />
+      </s:element>
+      <s:element name="listaInformesResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="listaInformesResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="listaMuestra">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="codCN" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="tipo" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="listaMuestraResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="listaMuestraResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="cargaDatosCampoMaderable">
+        <s:complexType />
+      </s:element>
+      <s:element name="cargaDatosCampoMaderableResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="cargaDatosCampoMaderableResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="objMaderable" type="tns:objMaderable" />
+      <s:complexType name="objMaderable">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="COD_INFORME" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="COD_SISTEMA" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="COD_ESPECIES_CAMPO" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="ESPECIES_NCIENTIFICO" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="ESPECIES_NCOMUN" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="BLOQUE_CAMPO" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="FAJA_CAMPO" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="CODIGO_CAMPO" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="DAP_CAMPO" type="s:decimal" />
+          <s:element minOccurs="1" maxOccurs="1" name="AC_CAMPO" type="s:decimal" />
+          <s:element minOccurs="0" maxOccurs="1" name="ZONA_CAMPO" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="COORDENADA_ESTE_CAMPO" type="s:int" />
+          <s:element minOccurs="1" maxOccurs="1" name="COORDENADA_NORTE_CAMPO" type="s:int" />
+          <s:element minOccurs="0" maxOccurs="1" name="COD_EESTADO" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="ESTADO_CAMPO" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="OBSERVACION_CAMPO" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="COD_CFUSTE" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="COD_FCOPA" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="COD_PCOPA" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="COD_EFENOLOGICO" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="COD_ESANITARIO" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="COD_ILIANAS" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="DESC_CFUSTE" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="DESC_PCOPA" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="DESC_FCOPA" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="DESC_EFENOLOGICO" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="DESC_ESANITARIO" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="DESC_ILIANAS" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="BS_ALTURA_TOTAL" type="s:decimal" />
+          <s:element minOccurs="1" maxOccurs="1" name="BS_DIAMETRO_RAMA_1" type="s:decimal" />
+          <s:element minOccurs="1" maxOccurs="1" name="BS_DIAMETRO_RAMA_2" type="s:decimal" />
+          <s:element minOccurs="1" maxOccurs="1" name="BS_DIAMETRO_RAMA_3" type="s:decimal" />
+          <s:element minOccurs="1" maxOccurs="1" name="BS_DIAMETRO_RAMA_4" type="s:decimal" />
+          <s:element minOccurs="1" maxOccurs="1" name="BS_DIAMETRO_RAMA_5" type="s:decimal" />
+          <s:element minOccurs="1" maxOccurs="1" name="BS_DIAMETRO_RAMA_6" type="s:decimal" />
+          <s:element minOccurs="1" maxOccurs="1" name="BS_DIAMETRO_RAMA_7" type="s:decimal" />
+          <s:element minOccurs="1" maxOccurs="1" name="BS_LONGITUD_RAMA_1" type="s:decimal" />
+          <s:element minOccurs="1" maxOccurs="1" name="BS_LONGITUD_RAMA_2" type="s:decimal" />
+          <s:element minOccurs="1" maxOccurs="1" name="BS_LONGITUD_RAMA_3" type="s:decimal" />
+          <s:element minOccurs="1" maxOccurs="1" name="BS_LONGITUD_RAMA_4" type="s:decimal" />
+          <s:element minOccurs="1" maxOccurs="1" name="BS_LONGITUD_RAMA_5" type="s:decimal" />
+          <s:element minOccurs="1" maxOccurs="1" name="BS_LONGITUD_RAMA_6" type="s:decimal" />
+          <s:element minOccurs="1" maxOccurs="1" name="BS_LONGITUD_RAMA_7" type="s:decimal" />
+        </s:sequence>
+        <s:anyAttribute />
+      </s:complexType>
+      <s:element name="cargaDatosCampoNoMaderable">
+        <s:complexType />
+      </s:element>
+      <s:element name="cargaDatosCampoNoMaderableResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="cargaDatosCampoNoMaderableResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="objNoMaderable" type="tns:objNoMaderable" />
+      <s:complexType name="objNoMaderable">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="COD_INFORME" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="COD_SISTEMA" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="COD_ESPECIES_CAMPO" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="ESPECIES_NCIENTIFICO" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="ESPECIES_NCOMUN" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="COD_SECUENCIAL" type="s:int" />
+          <s:element minOccurs="0" maxOccurs="1" name="NUM_ESTRADA" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="CODIGO" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="DIAMETRO" type="s:decimal" />
+          <s:element minOccurs="1" maxOccurs="1" name="ALTURA" type="s:decimal" />
+          <s:element minOccurs="1" maxOccurs="1" name="PRODUCCION_LATAS" type="s:decimal" />
+          <s:element minOccurs="0" maxOccurs="1" name="ZONA" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="COORDENADA_ESTE" type="s:int" />
+          <s:element minOccurs="1" maxOccurs="1" name="COORDENADA_NORTE" type="s:int" />
+          <s:element minOccurs="0" maxOccurs="1" name="COD_EESTADO" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="CONDICION_CAMPO" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="ESTADO_CAMPO" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="NUM_COCOS_ABIERTOS" type="s:int" />
+          <s:element minOccurs="1" maxOccurs="1" name="NUM_COCOS_CERRADOS" type="s:int" />
+          <s:element minOccurs="0" maxOccurs="1" name="OBSERVACION_CAMPO" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="COD_EFITOSANITARIO" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="COD_CFUSTE" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="COD_FCOPA" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="COD_PCOPA" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="COD_EFENOLOGICO" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="COD_ESANITARIO" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="COD_ILIANAS" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="DESC_CFUSTE" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="DESC_PCOPA" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="DESC_FCOPA" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="DESC_EFENOLOGICO" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="DESC_ESANITARIO" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="DESC_ILIANAS" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="ESTADO_SUPERVISION" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="RegEstado" type="s:int" />
+        </s:sequence>
+        <s:anyAttribute />
+      </s:complexType>
+      <s:element name="listaEspNCientifico">
+        <s:complexType />
+      </s:element>
+      <s:element name="listaEspNCientificoResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="listaEspNCientificoResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="listaEspNComun">
+        <s:complexType />
+      </s:element>
+      <s:element name="listaEspNComunResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="listaEspNComunResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="listaDatosPOAs">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="codCN" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="listaDatosPOAsResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="listaDatosPOAsResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="listaDatosPOAs_v3">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="codFN" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="listaDatosPOAs_v3Response">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="listaDatosPOAs_v3Result" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+    </s:schema>
+  </wsdl:types>
+  <wsdl:message name="listaCNotificacionesSoapIn">
+    <wsdl:part name="parameters" element="tns:listaCNotificaciones" />
+  </wsdl:message>
+  <wsdl:message name="listaCNotificacionesSoapOut">
+    <wsdl:part name="parameters" element="tns:listaCNotificacionesResponse" />
+  </wsdl:message>
+  <wsdl:message name="listaCNotificacionesautenticaUser">
+    <wsdl:part name="autenticaUser" element="tns:autenticaUser" />
+  </wsdl:message>
+  <wsdl:message name="listaInformesSoapIn">
+    <wsdl:part name="parameters" element="tns:listaInformes" />
+  </wsdl:message>
+  <wsdl:message name="listaInformesSoapOut">
+    <wsdl:part name="parameters" element="tns:listaInformesResponse" />
+  </wsdl:message>
+  <wsdl:message name="listaInformesautenticaUser">
+    <wsdl:part name="autenticaUser" element="tns:autenticaUser" />
+  </wsdl:message>
+  <wsdl:message name="listaMuestraSoapIn">
+    <wsdl:part name="parameters" element="tns:listaMuestra" />
+  </wsdl:message>
+  <wsdl:message name="listaMuestraSoapOut">
+    <wsdl:part name="parameters" element="tns:listaMuestraResponse" />
+  </wsdl:message>
+  <wsdl:message name="listaMuestraautenticaUser">
+    <wsdl:part name="autenticaUser" element="tns:autenticaUser" />
+  </wsdl:message>
+  <wsdl:message name="cargaDatosCampoMaderableSoapIn">
+    <wsdl:part name="parameters" element="tns:cargaDatosCampoMaderable" />
+  </wsdl:message>
+  <wsdl:message name="cargaDatosCampoMaderableSoapOut">
+    <wsdl:part name="parameters" element="tns:cargaDatosCampoMaderableResponse" />
+  </wsdl:message>
+  <wsdl:message name="cargaDatosCampoMaderableobjMaderable">
+    <wsdl:part name="objMaderable" element="tns:objMaderable" />
+  </wsdl:message>
+  <wsdl:message name="cargaDatosCampoMaderableautenticaUser">
+    <wsdl:part name="autenticaUser" element="tns:autenticaUser" />
+  </wsdl:message>
+  <wsdl:message name="cargaDatosCampoNoMaderableSoapIn">
+    <wsdl:part name="parameters" element="tns:cargaDatosCampoNoMaderable" />
+  </wsdl:message>
+  <wsdl:message name="cargaDatosCampoNoMaderableSoapOut">
+    <wsdl:part name="parameters" element="tns:cargaDatosCampoNoMaderableResponse" />
+  </wsdl:message>
+  <wsdl:message name="cargaDatosCampoNoMaderableobjNoMaderable">
+    <wsdl:part name="objNoMaderable" element="tns:objNoMaderable" />
+  </wsdl:message>
+  <wsdl:message name="cargaDatosCampoNoMaderableautenticaUser">
+    <wsdl:part name="autenticaUser" element="tns:autenticaUser" />
+  </wsdl:message>
+  <wsdl:message name="listaEspNCientificoSoapIn">
+    <wsdl:part name="parameters" element="tns:listaEspNCientifico" />
+  </wsdl:message>
+  <wsdl:message name="listaEspNCientificoSoapOut">
+    <wsdl:part name="parameters" element="tns:listaEspNCientificoResponse" />
+  </wsdl:message>
+  <wsdl:message name="listaEspNCientificoautenticaUser">
+    <wsdl:part name="autenticaUser" element="tns:autenticaUser" />
+  </wsdl:message>
+  <wsdl:message name="listaEspNComunSoapIn">
+    <wsdl:part name="parameters" element="tns:listaEspNComun" />
+  </wsdl:message>
+  <wsdl:message name="listaEspNComunSoapOut">
+    <wsdl:part name="parameters" element="tns:listaEspNComunResponse" />
+  </wsdl:message>
+  <wsdl:message name="listaEspNComunautenticaUser">
+    <wsdl:part name="autenticaUser" element="tns:autenticaUser" />
+  </wsdl:message>
+  <wsdl:message name="listaDatosPOAsSoapIn">
+    <wsdl:part name="parameters" element="tns:listaDatosPOAs" />
+  </wsdl:message>
+  <wsdl:message name="listaDatosPOAsSoapOut">
+    <wsdl:part name="parameters" element="tns:listaDatosPOAsResponse" />
+  </wsdl:message>
+  <wsdl:message name="listaDatosPOAsautenticaUser">
+    <wsdl:part name="autenticaUser" element="tns:autenticaUser" />
+  </wsdl:message>
+  <wsdl:message name="listaDatosPOAs_v3SoapIn">
+    <wsdl:part name="parameters" element="tns:listaDatosPOAs_v3" />
+  </wsdl:message>
+  <wsdl:message name="listaDatosPOAs_v3SoapOut">
+    <wsdl:part name="parameters" element="tns:listaDatosPOAs_v3Response" />
+  </wsdl:message>
+  <wsdl:message name="listaDatosPOAs_v3autenticaUser">
+    <wsdl:part name="autenticaUser" element="tns:autenticaUser" />
+  </wsdl:message>
+  <wsdl:portType name="WSSupervisionSoap">
+    <wsdl:operation name="listaCNotificaciones">
+      <wsdl:input message="tns:listaCNotificacionesSoapIn" />
+      <wsdl:output message="tns:listaCNotificacionesSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="listaInformes">
+      <wsdl:input message="tns:listaInformesSoapIn" />
+      <wsdl:output message="tns:listaInformesSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="listaMuestra">
+      <wsdl:input message="tns:listaMuestraSoapIn" />
+      <wsdl:output message="tns:listaMuestraSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="cargaDatosCampoMaderable">
+      <wsdl:input message="tns:cargaDatosCampoMaderableSoapIn" />
+      <wsdl:output message="tns:cargaDatosCampoMaderableSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="cargaDatosCampoNoMaderable">
+      <wsdl:input message="tns:cargaDatosCampoNoMaderableSoapIn" />
+      <wsdl:output message="tns:cargaDatosCampoNoMaderableSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="listaEspNCientifico">
+      <wsdl:input message="tns:listaEspNCientificoSoapIn" />
+      <wsdl:output message="tns:listaEspNCientificoSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="listaEspNComun">
+      <wsdl:input message="tns:listaEspNComunSoapIn" />
+      <wsdl:output message="tns:listaEspNComunSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="listaDatosPOAs">
+      <wsdl:input message="tns:listaDatosPOAsSoapIn" />
+      <wsdl:output message="tns:listaDatosPOAsSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="listaDatosPOAs_v3">
+      <wsdl:input message="tns:listaDatosPOAs_v3SoapIn" />
+      <wsdl:output message="tns:listaDatosPOAs_v3SoapOut" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="WSSupervisionSoap" type="tns:WSSupervisionSoap">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="listaCNotificaciones">
+      <soap:operation soapAction="http://microsoft.com/webservices/listaCNotificaciones" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+        <soap:header message="tns:listaCNotificacionesautenticaUser" part="autenticaUser" use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="listaInformes">
+      <soap:operation soapAction="http://microsoft.com/webservices/listaInformes" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+        <soap:header message="tns:listaInformesautenticaUser" part="autenticaUser" use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="listaMuestra">
+      <soap:operation soapAction="http://microsoft.com/webservices/listaMuestra" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+        <soap:header message="tns:listaMuestraautenticaUser" part="autenticaUser" use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="cargaDatosCampoMaderable">
+      <soap:operation soapAction="http://microsoft.com/webservices/cargaDatosCampoMaderable" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+        <soap:header message="tns:cargaDatosCampoMaderableobjMaderable" part="objMaderable" use="literal" />
+        <soap:header message="tns:cargaDatosCampoMaderableautenticaUser" part="autenticaUser" use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="cargaDatosCampoNoMaderable">
+      <soap:operation soapAction="http://microsoft.com/webservices/cargaDatosCampoNoMaderable" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+        <soap:header message="tns:cargaDatosCampoNoMaderableobjNoMaderable" part="objNoMaderable" use="literal" />
+        <soap:header message="tns:cargaDatosCampoNoMaderableautenticaUser" part="autenticaUser" use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="listaEspNCientifico">
+      <soap:operation soapAction="http://microsoft.com/webservices/listaEspNCientifico" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+        <soap:header message="tns:listaEspNCientificoautenticaUser" part="autenticaUser" use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="listaEspNComun">
+      <soap:operation soapAction="http://microsoft.com/webservices/listaEspNComun" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+        <soap:header message="tns:listaEspNComunautenticaUser" part="autenticaUser" use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="listaDatosPOAs">
+      <soap:operation soapAction="http://microsoft.com/webservices/listaDatosPOAs" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+        <soap:header message="tns:listaDatosPOAsautenticaUser" part="autenticaUser" use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="listaDatosPOAs_v3">
+      <soap:operation soapAction="http://microsoft.com/webservices/listaDatosPOAs_v3" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+        <soap:header message="tns:listaDatosPOAs_v3autenticaUser" part="autenticaUser" use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="WSSupervisionSoap12" type="tns:WSSupervisionSoap">
+    <soap12:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="listaCNotificaciones">
+      <soap12:operation soapAction="http://microsoft.com/webservices/listaCNotificaciones" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+        <soap12:header message="tns:listaCNotificacionesautenticaUser" part="autenticaUser" use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="listaInformes">
+      <soap12:operation soapAction="http://microsoft.com/webservices/listaInformes" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+        <soap12:header message="tns:listaInformesautenticaUser" part="autenticaUser" use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="listaMuestra">
+      <soap12:operation soapAction="http://microsoft.com/webservices/listaMuestra" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+        <soap12:header message="tns:listaMuestraautenticaUser" part="autenticaUser" use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="cargaDatosCampoMaderable">
+      <soap12:operation soapAction="http://microsoft.com/webservices/cargaDatosCampoMaderable" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+        <soap12:header message="tns:cargaDatosCampoMaderableobjMaderable" part="objMaderable" use="literal" />
+        <soap12:header message="tns:cargaDatosCampoMaderableautenticaUser" part="autenticaUser" use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="cargaDatosCampoNoMaderable">
+      <soap12:operation soapAction="http://microsoft.com/webservices/cargaDatosCampoNoMaderable" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+        <soap12:header message="tns:cargaDatosCampoNoMaderableobjNoMaderable" part="objNoMaderable" use="literal" />
+        <soap12:header message="tns:cargaDatosCampoNoMaderableautenticaUser" part="autenticaUser" use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="listaEspNCientifico">
+      <soap12:operation soapAction="http://microsoft.com/webservices/listaEspNCientifico" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+        <soap12:header message="tns:listaEspNCientificoautenticaUser" part="autenticaUser" use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="listaEspNComun">
+      <soap12:operation soapAction="http://microsoft.com/webservices/listaEspNComun" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+        <soap12:header message="tns:listaEspNComunautenticaUser" part="autenticaUser" use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="listaDatosPOAs">
+      <soap12:operation soapAction="http://microsoft.com/webservices/listaDatosPOAs" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+        <soap12:header message="tns:listaDatosPOAsautenticaUser" part="autenticaUser" use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="listaDatosPOAs_v3">
+      <soap12:operation soapAction="http://microsoft.com/webservices/listaDatosPOAs_v3" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+        <soap12:header message="tns:listaDatosPOAs_v3autenticaUser" part="autenticaUser" use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="WSSupervision">
+    <wsdl:port name="WSSupervisionSoap" binding="tns:WSSupervisionSoap">
+      <soap:address location="http://10.10.11.17:8099/wssupervision.asmx" />
+    </wsdl:port>
+    <wsdl:port name="WSSupervisionSoap12" binding="tns:WSSupervisionSoap12">
+      <soap12:address location="http://10.10.11.17:8099/wssupervision.asmx" />
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

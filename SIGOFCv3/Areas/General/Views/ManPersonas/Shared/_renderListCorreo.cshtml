@@ -1,0 +1,230 @@
+﻿@model CapaEntidad.ViewModel.VM_Persona
+
+<style type="text/css">
+    #tbRenderListCorreo_wrapper {
+        padding: 0px;
+    }
+</style>
+
+<script type="text/javascript">
+    var _renderListCorreo = {};
+    _renderListCorreo.tbElimCorreo = [];
+    _renderListCorreo.opc;
+    _renderListCorreo.estado;
+    _renderListCorreo.codsecuencial;
+    _renderListCorreo.dataCorreo;
+    // iniciar datos en la tabla
+    _renderListCorreo.fnInitDataTable_Detail = function () {
+        var columns_label = [], columns_data = [], options = {};
+
+        columns_label = ["Tipo", "Correo", "Notificar"];
+        columns_data = ["TIPO_CORREO", "CORREO", "TXT_NOTIFICAR"];
+        options = {
+            page_length: 10, row_index: true, row_edit: true, row_fnEdit: "_renderListCorreo.fnEdit(this,'MOD')", row_delete: true, row_fnDelete: "_renderListCorreo.fnDelete(this)", page_sort: true
+        };
+        _renderListCorreo.dtRenderListCorreo = utilDt.fnLoadDataTable_Detail(_renderListCorreo.frm.find("#tbRenderListCorreo"), columns_label, columns_data, options);
+        _renderListCorreo.dtRenderListCorreo.rows.add(JSON.parse('@Html.Raw(Json.Encode(@Model.tbCorreo))')).draw();
+    }
+
+    _renderListCorreo.fnAddEditCorreo = function (opc) {
+        _renderListCorreo.fnLimpiarCampos();
+
+        if (opc == 'NUE') _renderListCorreo.frm.find("label[for='lblTituloRegistro']").text("Correo Electrónico - Nuevo Registro");
+        else _renderListCorreo.frm.find("label[for='lblTituloRegistro']").text("Correo Electrónico - Modificando Registro");
+
+        utilSigo.modalDraggable(_renderListCorreo.frm.find("#mdlRegistraCorreo"), '.modal-header');
+        _renderListCorreo.frm.find("#mdlRegistraCorreo").modal({ keyboard: true, backdrop: 'static' });
+
+        _renderListCorreo.opc = opc;
+    }
+
+    _renderListCorreo.fnCloseModal = function () {
+        _renderListCorreo.frm.find('#mdlRegistraCorreo').modal('hide');
+        _renderListCorreo.fnLimpiarCampos();
+    }
+
+    _renderListCorreo.fnLimpiarCampos = function () {
+        _renderListCorreo.frm.find("#txtMItemCorreo_Correo").val("");
+        _renderListCorreo.frm.find("#chkMItemCorreo_Notificar").prop("checked", false);
+        _renderListCorreo.frm.find("#txtMItemCorreo_Notificar").val("NO");
+        _renderListCorreo.frm.find("#lblError").text("");
+    }
+
+    _renderListCorreo.fnEdit = function (obj, opc) {
+        _renderListCorreo.fnAddEditCorreo(opc);
+
+        _renderListCorreo.dataCorreo = _renderListCorreo.dtRenderListCorreo.row($(obj).parents('tr'));
+
+        var data = _renderListCorreo.dtRenderListCorreo.row($(obj).parents('tr')).data();
+
+        _renderListCorreo.frm.find("#ddlMItemCorreo_TCorreoId").val(data["COD_TCORREO"]);
+        _renderListCorreo.frm.find("#txtMItemCorreo_Correo").val(data["CORREO"]);
+        _renderListCorreo.frm.find("#chkMItemCorreo_Notificar").prop("checked", data["NOTIFICAR"]);
+        _renderListCorreo.fnSetNotificar(_renderListCorreo.frm.find("#chkMItemCorreo_Notificar").prop("checked"));
+        _renderListCorreo.estado = data["RegEstado"];
+        _renderListCorreo.codsecuencial = data["COD_SECUENCIAL"];
+    }
+
+    _renderListCorreo.fnDelete = function (obj) {
+        utilSigo.dialogConfirm("Confirmacion", "¿Está seguro de Eliminar el Registro Seleccionado?", function (r) {
+            if (r) {
+                var data = _renderListCorreo.dtRenderListCorreo.row($(obj).parents('tr')).data();
+                if (data["RegEstado"] != "1") {
+                    _renderListCorreo.tbElimCorreo.push({
+                        EliTABLA: "PERSONA_DET_CORREO",
+                        COD_SECUENCIAL: data["COD_SECUENCIAL"]
+                    });
+                }
+                _renderListCorreo.dtRenderListCorreo.row($(obj).parents('tr')).remove().draw(false);
+                utilSigo.toastSuccess("Éxito", "El elemento ha sido eliminado correctamente");
+            }
+        });
+    }
+
+    _renderListCorreo.fnGetListElimCorreo = function () { return _renderListCorreo.tbElimCorreo }
+
+    _renderListCorreo.fnSubmitForm = function () {
+        if (_renderListCorreo.frm.find("#txtMItemCorreo_Correo").val().trim() == '') {
+            utilSigo.toastWarning("Aviso", "Ingrese el correo electrónico"); return false;
+        }
+
+        _renderListCorreo.fnSaveCorreo();
+    }
+
+    _renderListCorreo.fnSaveCorreo = function () {
+        var emailReg = /^([\w-\.]+)@@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([\w-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$/;
+        _renderListCorreo.frm.find("#lblError").text("");
+        if (!emailReg.test(_renderListCorreo.frm.find("#txtMItemCorreo_Correo").val().trim())) {
+            _renderListCorreo.frm.find("#lblError").text("Correo electrónico inválido");
+            return false;
+        }
+
+        var data = {};
+        data.COD_TCORREO = _renderListCorreo.frm.find("#ddlMItemCorreo_TCorreoId").val();
+        data.TIPO_CORREO = _renderListCorreo.frm.find("#ddlMItemCorreo_TCorreoId option:selected").text(),
+        data.CORREO = _renderListCorreo.frm.find("#txtMItemCorreo_Correo").val();
+        data.NOTIFICAR = _renderListCorreo.frm.find("#chkMItemCorreo_Notificar").prop("checked");
+        data.TXT_NOTIFICAR = _renderListCorreo.frm.find("#txtMItemCorreo_Notificar").val();;
+
+        if (ManPersonas_AddEdit.frm.find("#RegEstado").val() == 1) data.RegEstado = 1;
+        else data.RegEstado = (_renderListCorreo.estado == 0) ? 2 : _renderListCorreo.estado;
+
+        if (_renderListCorreo.opc == 'NUE') {
+            data.RegEstado = 1;
+            data.COD_SECUENCIAL = 0; 
+            _renderListCorreo.dtRenderListCorreo.rows.add([data]).draw();
+            _renderListCorreo.dtRenderListCorreo.page('last').draw('page');
+        }
+        else {
+            data.COD_SECUENCIAL = _renderListCorreo.codsecuencial; 
+            _renderListCorreo.dataCorreo.data(data).draw(false);
+        }
+
+        _renderListCorreo.fnCloseModal();
+    }
+
+    _renderListCorreo.fnSetNotificar = function (dto) {
+        if (dto == true) _renderListCorreo.frm.find("#txtMItemCorreo_Notificar").val("SI");
+        else _renderListCorreo.frm.find("#txtMItemCorreo_Notificar").val("NO");
+    }
+
+    _renderListCorreo.fnGetListCorreo = function () {
+        let list = [], rows, countFilas, data;
+
+        rows = _renderListCorreo.dtRenderListCorreo.$("tr");
+        countFilas = rows.length;
+        if (countFilas > 0) {
+            $.each(rows, function (i, o) {
+                data = _renderListCorreo.dtRenderListCorreo.row($(o)).data();
+               // if (data["RegEstado"] == "1" || data["RegEstado"] == "2") {
+                list.push(utilSigo.fnConvertArrayToObject(data));
+               // }
+            });
+        }
+        return list;
+    }
+
+   $(document).ready(function () {
+       _renderListCorreo.frm = $("#frmRenderListCorreo");
+       //inicializa la tabla con los campos obtenidos del model
+       _renderListCorreo.fnInitDataTable_Detail();
+
+       _renderListCorreo.frm.find("#chkMItemCorreo_Notificar").change(function () {
+           _renderListCorreo.fnSetNotificar(_renderListCorreo.frm.find(this).prop("checked"));
+       });
+
+       _renderListCorreo.frm.find("#txtMItemCorreo_Correo").keyup(function () {
+           if (_renderListCorreo.frm.find("#lblError").text() != "") {
+               if (_renderListCorreo.frm.find(this).val().trim() == "")
+                   _renderListCorreo.frm.find("#lblError").text("");
+               else {
+                   var emailReg = /^([\w-\.]+)@@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([\w-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$/;
+                   if (emailReg.test(_renderListCorreo.frm.find(this).val().trim())) {
+                       _renderListCorreo.frm.find("#lblError").text("");
+                   }
+               }
+           }
+       });
+   });
+
+</script>
+<div id="frmRenderListCorreo">
+    <div class="table-responsive">
+        <table id="tbRenderListCorreo" style="width:100%;margin:0px !important;" class="table table-hover table-bordered">
+            <thead>
+                <tr>
+                    <th colspan="8" class="text-sm-left">
+                        <div class="form-inline">
+                            <i class="fa mx-2 fa-lg fa-file-o" style="cursor:pointer;" onclick="_renderListCorreo.fnAddEditCorreo('NUE');" data-toggle="tooltip" data-placement="top" title="Nuevo"></i>
+                            <strong>Correo Electrónico</strong>
+                        </div>
+                    </th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
+
+    <div class="modal fade hide" id="mdlRegistraCorreo" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header text-small" style="cursor:move;">
+                    <label for="lblTituloRegistro"></label>
+                    <i class="fa fa-close" style="cursor:pointer;" data-dismiss="modal" aria-label="Close"></i>
+                </div>
+                <div class="modal-body">
+                    <div id="frmRegistrarCorreo">
+                        <div class="form-group row" style="margin-bottom:0px;">
+                            <label for="lblMItemTelefono_TTelefonoId" class="col-md-3 col-form-label text-small">Tipo:</label>
+                            <div class="col-md-9">
+                                @Html.DropDownList("ddlMItemCorreo_TCorreoId", new SelectList(ViewBag.ddlMItemCorreo_TCorreo, "Value", "Text"), new { @class = "form-control form-control-sm", @style = "width:auto;" })
+                            </div>
+                        </div>
+                        <div class="form-group row" style="margin-bottom:0px;">
+                            <label for="lblMItemCorreo_Correo" class="col-md-3 col-form-label text-small">Correo:</label>
+                            <div class="col-md-9">
+                                @Html.TextBox("txtMItemCorreo_Correo", "", new { @class = "form-control form-control-sm", @type = "email" })
+                                <span id="lblError" style="color:red"></span>
+                            </div>
+                        </div>
+                        <div class="form-group row" style="margin-bottom:0px;">
+                            <label for="lblMItemCorreo_Notificar" class="col-md-3 col-form-label text-small">Recibir notificaciones:</label>
+                            <div class="col-md-9">
+                                @Html.CheckBox("chkMItemCorreo_Notificar", new { @class = "form-check-input", style = "width:15px;height:16px;margin-left:0px;" })
+                                @Html.Hidden("txtMItemCorreo_Notificar")
+                            </div>  
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" id="btnGuardarCorreo" class="btn btn-primary btn-sm" onclick="_renderListCorreo.fnSubmitForm()">Guardar</button>
+                    <button type="button" id="btnCancelarCorreo" class="btn btn-secondary btn-sm" onclick="_renderListCorreo.fnCloseModal()">Cancelar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+

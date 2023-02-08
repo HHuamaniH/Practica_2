@@ -1,0 +1,179 @@
+﻿@model CapaEntidad.ViewModel.VM_ReporteFiscalizacion
+@{
+    ViewBag.Title = Model.lblTituloCabecera;
+    Layout = "~/Views/Shared/_LayoutMain.cshtml";
+}
+
+<script src="~/Scripts/datatables/Extensions/dataTables.buttons.js"></script>
+<script src="~/Scripts/datatables/Extensions/buttons.flash.min.js"></script>
+<script src="~/Scripts/datatables/Extensions/jszip.min.js"></script>
+<script src="~/Scripts/datatables/Extensions/pdfmake.js"></script>
+<script src="~/Scripts/datatables/Extensions/vfs_fonts.js"></script>
+<script src="~/Scripts/datatables/Extensions/buttons.html5.js"></script>
+<script src="~/Scripts/datatables/Extensions/buttons.print.js"></script>
+<script src="~/Scripts/chart/Chart.min.js"></script>
+<script src="~/Scripts/chart/custom.js"></script>
+<script src="~/Areas/Fiscalizacion/js/ReporteFiscalizacion/Index.js"></script>
+
+<link href="~/Content/datatables/buttons.dataTables.min.css" rel="stylesheet" />
+<link href="~/Areas/Fiscalizacion/css/ReporteFiscalizacion/Index.css" rel="stylesheet" />
+
+<script type="text/javascript">
+        _reporte.fnLoadTituloCabecera('@Model.lblTituloCabecera');
+</script>
+
+<div class="container-fluid">
+    <div class="card">
+        <div class="card-header text-right">
+            Reporte Fiscalización
+        </div>
+        <div class="card-body">
+            <div class="card-header text-sm-center">
+                @Model.lblTituloCabecera
+            </div>
+            <div id="dvContenedorFiltro" class="card" style="margin-bottom:10px;">
+                <div id="dvFiltro" class="card-body">
+                    <form id="frmReporteFiscalizacion" action="@Url.Action("Reporte","ReporteFiscalizacion", new {Area = "Fiscalizacion"})">
+                        @Html.HiddenFor(m => m.hdfTipoReporte)
+                        <div class="form-row">
+                            <div id="dvFiltroModalidad" class="form-group col-md-2" style="display:none;">
+                                <label for="lblChkModalidadId" class="text-small">Modalidad</label>
+                                <div class="custom-control custom-checkbox">
+                                    @Html.CheckBox("chkModalidadAll", new { @class = "custom-control-input" })
+                                    <label for="chkModalidadAll" class="custom-control-label">Todos</label>
+                                </div>
+                                <div style="max-height:150px;overflow:auto;">
+                                    @Html.EditorFor(m => m.lstChkModalidad)
+                                    @Html.HiddenFor(m => m.lstChkModalidadId)
+                                </div>
+                            </div>
+                            <div id="dvFiltroRegion" class="form-group col-md-2" style="display:none;">
+                                <label for="lblChkRegionId" class="text-small">Región</label>
+                                <div class="custom-control custom-checkbox">
+                                    @Html.CheckBox("chkRegionAll", new { @class = "custom-control-input" })
+                                    <label for="chkRegionAll" class="custom-control-label">Todos</label>
+                                </div>
+                                <div style="max-height:150px;overflow:auto;">
+                                    @Html.EditorFor(m => m.lstChkRegion)
+                                    @Html.HiddenFor(m => m.lstChkRegionId)
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                    <button type="button" id="btnConsultarReporte" class="btn btn-primary btn-sm" onclick="_reporte.fnSubmitForm()">Consultar</button>
+                </div>
+                <div class="card-body" style="padding-top:0px;padding-bottom:0px;">
+                    <div class="form-row">
+                        <div id="dvHideFiltro" class="form-group col-md-12" style="text-align:center; margin:0px;cursor:pointer;" title="Ocultar Filtros">
+                            <img alt="Ocultar Filtros" src="~/Content/images/General/flecha-contraer.png" width="50" height="30" />
+                        </div>
+                        <div id="dvShowFiltro" class="form-group col-md-12" style="text-align:center; margin:0px;cursor:pointer; display:none;" title="Mostrar Filtros">
+                            <img alt="Mostrar Filtros" src="~/Content/images/General/flecha-ampliar.png" width="50" height="30" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body" id="dvArchivadosAnual" style="display:none;">
+                <div class="form-row">
+                    <div class="col-md-6">
+                        <div class="table-responsive">
+                            <table id="tbArchivadosAnual_Resumen" style="width:100%;" class="table table-hover table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th colspan="6" class="text-sm-left">
+                                            <div class="form-inline">
+                                                <strong>Resumen Anual de Casos Archivados</strong>
+                                            </div>
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                                <tfoot>
+                                    <tr class="custom-row-rpt">
+                                        <th colspan="2"><span id="col1">Total</span></th>
+                                        <th><span id="col3">0</span></th>
+                                        <th><span id="col4">0</span></th>
+                                        <th><span id="col5">0</span></th>
+                                        <th><span id="col6">0</span></th>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="col-md-5">
+                        <canvas id="cnvArchivadosAnual_Resumen"></canvas>
+                    </div>
+                </div>
+                <br />
+                @Html.HiddenFor(m => m.hdfTipoArchivados)
+                @Html.HiddenFor(m => m.txtanio)
+                <div class="form-row" id="dvArchivadosAnual_Detalle1" style="display:none;">
+                    <div class="table-responsive">
+                        <table id="tbArchivadosAnual_Detalle1" style="width:100%" class="table table-hover table-bordered">
+                            <thead>
+                                <tr>
+                                    <th colspan="10" class="text-sm-left">
+                                        <div class="form-inline">
+                                            <strong><label for="lblSubTituloArchivados1"></label></strong>
+                                        </div>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="form-row" id="dvArchivadosAnual_Detalle2" style="display:none;">
+                    <div class="table-responsive">
+                        <table id="tbArchivadosAnual_Detalle2" style="width:100%" class="table table-hover table-bordered">
+                            <thead>
+                                <tr>
+                                    <th colspan="10" class="text-sm-left">
+                                        <div class="form-inline">
+                                            <strong><label for="lblSubTituloArchivados2"></label></strong>
+                                        </div>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="form-row" id="dvArchivadosAnual_Detalle3" style="display:none;">
+                    <div class="table-responsive">
+                        <table id="tbArchivadosAnual_Detalle3" style="width:100%" class="table table-hover table-bordered">
+                            <thead>
+                                <tr>
+                                    <th colspan="11" class="text-sm-left">
+                                        <div class="form-inline">
+                                            <strong><label for="lblSubTituloArchivados3"></label></strong>
+                                        </div>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="form-row" id="dvArchivadosAnual_Detalle4" style="display:none;">
+                    <div class="table-responsive">
+                        <table id="tbArchivadosAnual_Detalle4" style="width:100%" class="table table-hover table-bordered">
+                            <thead>
+                                <tr>
+                                    <th colspan="9" class="text-sm-left">
+                                        <div class="form-inline">
+                                            <strong><label for="lblSubTituloArchivados4"></label></strong>
+                                        </div>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+

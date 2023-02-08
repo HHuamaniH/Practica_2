@@ -1,0 +1,72 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_LayoutMain.cshtml";
+}
+
+    <form id="frmManBExtraccion">
+        @Html.Hidden("tipoFormulario", (object)ViewBag.Formulario)
+        @Html.Hidden("titleMenu", (object)ViewBag.TituloFormulario)
+        @Html.Hidden("alertaFormulario", (object)ViewBag.AlertaInicial)
+        
+        <div id="dvManBExtraccionContenedor" class="container-fluid"></div>
+    </form>
+
+    <script type="text/javascript">
+    let _ManBExtraccion = {
+        fnLoadManGrillaPaging: () => {
+            var url = initSigo.urlControllerGeneral + "_ManGrillaPaging";
+            //alert(url);
+            var data = _ManBExtraccion.frm.serializeObject();
+            var option = { url: url, datos: JSON.stringify(data), type: 'POST', dataType: 'html' };
+
+            var columns_label = [], columns_data = [], options = {};
+            columns_label = ["Descripción plan", "Res. de aprobación", "Título habilitante", "Titular actual", "Modalidad", "Último Balance"];
+            columns_data = ["NOMBRE_POA", "ARESOLUCION_NUM", "NUM_THABILITANTE", "TITULAR", "MODALIDAD", "ULTIMA_FECEMI"];
+            options = {
+                page_paging: true, page_length: 20, row_index: true, row_edit: true, row_fnEdit: "_ManGrillaPaging.fnCreate(this)"
+            };
+
+            utilSigo.fnAjax(option, function (data) {
+                _ManBExtraccion.frm.find("#dvManBExtraccionContenedor").html(data);
+                _ManGrillaPaging.fnInit(columns_label, columns_data, options);
+
+                _ManGrillaPaging.fnExport = function () {
+                    utilSigo.toastWarning("Aviso", "La opción no se encuentra disponible en estos momentos");
+                }
+
+                _ManGrillaPaging.fnCreate = function (obj) {
+                    var cod_thabilitante = "", num_poa = 0;
+                    var url_crud = urlLocalSigo + "THabilitante/ManBalanceExtraccion/AddEdit";
+
+                    if (obj != "") {//Modificar registro
+                        var data = _ManGrillaPaging.dtManGrillaPaging.row($(obj).parents('tr')).data();
+                        cod_thabilitante = data["COD_THABILITANTE"];
+                        num_poa = data["NUM_POA"];
+
+                        _ManGrillaPaging.fnReadConfigManGrillaPaging();
+
+                        window.location = url_crud + "?asCodTHabilitante=" + cod_thabilitante + "&aiNumPoa=" + num_poa;
+                    } else {
+                        utilSigo.toastWarning("Aviso", "La opción no se encuentra disponible en este formulario");
+                    }
+                }
+                utilSigo.ValidaRol('@ViewBag.VAliasRol', 'btnManGrillaNuevo');
+            });
+        },
+        fnInit: () => {
+            var alertaInicial = _ManBExtraccion.frm.find("#alertaFormulario").val();
+            if (alertaInicial != "") {
+                utilSigo.toastSuccess("Aviso", alertaInicial);
+            }
+
+            _ManBExtraccion.fnLoadManGrillaPaging();
+        }
+    };
+
+    $(document).ready(function () {
+        _ManBExtraccion.frm = $("#frmManBExtraccion");
+
+        _ManBExtraccion.fnInit();
+    });
+    </script>

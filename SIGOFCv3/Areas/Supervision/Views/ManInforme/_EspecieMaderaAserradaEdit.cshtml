@@ -1,0 +1,161 @@
+﻿
+<script src="~/Areas/Supervision/js/ManInforme/_EspecieMaderaAserradaEdit.js"></script>
+
+<style>
+    .select-css {
+        width: 100%;
+        display: block;
+        font-size: 16px;
+        font-family: "Roboto", sans-serif;
+        font-weight: 300;
+        font-size: 1rem;
+        color: #444;
+        line-height: 1.5;
+        padding: 0.31rem 0.75rem;
+        border: 1px solid #ced4da;
+        border-radius: 0.25rem;
+        background-color: #fff;
+        background-repeat: no-repeat, repeat;
+        background-position: right .7em top 50%, 0 0;
+        background-size: .65em auto, 100%;
+    }
+
+        .select-css::-ms-expand {
+            display: none;
+        }
+
+        .select-css:hover {
+            border-color: #888;
+        }
+
+        .select-css:focus {
+            border-color: #aaa;
+            box-shadow: 0 0 1px 3px rgba(59, 153, 252, .7);
+            box-shadow: 0 0 0 3px -moz-mac-focusring;
+            color: #222;
+            outline: none;
+        }
+
+        .select-css option {
+            font-weight: normal;
+        }
+</style>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+
+        $("#txtCodigoB").keypress(function (e) {
+
+            tecla = (document.all) ? e.keyCode : e.which;
+            tecla = String.fromCharCode(tecla)
+            return /^[0-9a-z\-]+$/.test(tecla);
+
+            if (e.which != 8 && e.which != 0 && (e.which < 48 || e.which > 57)) {
+
+                return false;
+            }
+        });
+
+        $("#txtPieza").keypress(function (e) {
+
+            tecla = (document.all) ? e.keyCode : e.which;
+            tecla = String.fromCharCode(tecla)
+            return /^[0-9\-]+$/.test(tecla);
+
+            if (e.which != 8 && e.which != 0 && (e.which < 48 || e.which > 57)) {
+
+                return false;
+            }
+        });
+
+    });      
+</script>
+
+<div class="modal-dialog" role="document">
+    <div class="modal-content">
+        <div class="modal-header text-small" style="cursor:move;">
+            <span>Madera Aserrada en Campo</span>
+            <i class="fa fa-close" style="cursor:pointer;" data-dismiss="modal" aria-label="Close"></i>
+        </div>
+        <div class="modal-body">
+            <form id="frmItemMaderaAserradaEdit">
+                @Html.Hidden("hdfCodInforme", (string)ViewBag.hdfCodInforme)
+                @Html.Hidden("hdfNumPoa", (Int32)ViewBag.hdfNumPoa)
+                @Html.Hidden("hdfRegEstado")
+                @Html.Hidden("hdfCodSecuencial")
+                @Html.Hidden("hdfCodTHabilitante", (string)ViewBag.hdfCodTHabilitante)
+
+                <div class="form-row card-header text-small">
+                    <div class="form-group col-md-6">
+                        <label for="txtCodigo" class="text-small">Código</label>
+                        @Html.TextBox("txtCodigoB", "", new { @class = "form-control form-control-sm" })
+                    </div>
+                    <div class="form-group col-md-5">
+                    </div>
+                    <div class="btn-group col-md-1" style="padding-top:20px;">
+                        <a id="btnSearch" style="cursor:pointer;" data-toggle="tooltip" data-placement="top" title="" onclick="_EspecieMaderaAserradaEdit.fnSearch()" data-original-title="Buscar el registro"><span class="fa mx-2 fa-lg fa-search"></span></a>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group col-md-12">
+                        @Html.Partial("~/Areas/General/Views/Controles/_renderComboEspecie.cshtml")
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label for="txtCodigo" class="text-small">Código</label>
+                        @Html.TextBox("txtCodigo", "", new { @class = "form-control form-control-sm" })
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="txtPieza" class="text-small">Nro. de Piezas o Partes</label>                        
+                        @Html.TextBox("txtPieza", "", new { @class = "form-control form-control-sm", type = "number" })
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label for="ddlZonaId" class="text-small">Zona UTM</label>
+                        @Html.DropDownList("ddlZonaId", new SelectList(ViewBag.ddlZona, "Value", "Text"), new { @class = "select-css" })
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label for="txtCEste" class="text-small">Coordenada Este</label>
+                        @Html.TextBox("txtCEste", "", new { @class = "form-control form-control-sm", type = "number", maxlength = "6" })
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="txtCNorte" class="text-small">Coordenada Norte</label>
+                        @Html.TextBox("txtCNorte", "", new { @class = "form-control form-control-sm", type = "number", maxlength = "7" })
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label for="txtEspesor" class="text-small">Espesor (m)</label>
+                        @Html.TextBox("txtEspesor", "", new { @class = "form-control form-control-sm", type = "number" })
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="txtAncho" class="text-small">Ancho (m)</label>
+                        @Html.TextBox("txtAncho", "", new { @class = "form-control form-control-sm", type = "number" })
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label for="txtLargo" class="text-small">Largo (m)</label>
+                        @Html.TextBox("txtLargo", "", new { @class = "form-control form-control-sm", type = "number" })
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-12">
+                        <label for="txtObservacion" class="text-small">Observaciones</label>
+                        @Html.TextArea("txtObservacion", "", new { @class = "form-control form-control-sm", rows = "3" })
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-primary btn-sm" onclick="_EspecieMaderaAserradaEdit.fnSubmitForm()">Guardar</button>
+            <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Cancelar</button>
+        </div>
+    </div>
+</div>
+

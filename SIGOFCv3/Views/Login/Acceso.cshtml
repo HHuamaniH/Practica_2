@@ -1,0 +1,135 @@
+﻿@model CapaEntidad.GENE.Ent_USUARIO_CUENTA
+@{
+    ViewBag.Title = "Acceso";
+    Layout = "~/Views/Shared/_LayoutLogin.cshtml";
+}
+<script type="text/javascript">
+     var urlLocalSigo = window.location.protocol + "//" + window.location.host + '@Url.Content("~")';
+    
+    var _UsuarioPerfil = {
+
+        GetListUsuarioPerfil: (d) => {
+            var url = urlLocalSigo + "Seguridad/Usuario/GetUsuarioPerfil";
+
+            var option = { url: url, datos: JSON.stringify(d), type: 'POST' };
+            $.ajax(
+                {
+                    url: url,
+                    type: 'POST',
+                    data: d,
+                    success: function (r) {
+                        console.log('perfiles', r);
+                        //asignados
+                        let t = r.data.listPerfilAsig;
+                        // $('#' + e).children('option:not(:first)').remove();
+                        let s = document.getElementById('cmboPerfil');
+
+                        for (var i = 0; i < t.length; i++) {
+                            var option = document.createElement("option");
+                            option.text = t[i].descr;
+                            option.value = t[i].id;
+                            s.add(option);
+                        }
+                    }
+
+                });
+            //utilSigo.fnAjax(option, function (data) {
+            //    console.log('perfiles', data);
+            //    if (data.success) {
+
+                   
+
+
+            //    }
+            //    else {
+            //        utilSigo.toastWarning("Aviso", data.msj);
+            //        console.log(data.msjError);
+            //    }
+            //});
+        },
+        fnEvent: () => {
+            $("#btnRegresarusuario").click(function () {
+                ManUsuario.fnShowHide(0);
+            });
+
+            $("#cboClasificacion").on('change', function () {
+                //console.log($(this).val());
+                if ($(this).val() != 0)
+                    _UsuarioPerfil.resultSelect('cboSubClasificacion', $(this).val());
+                else
+                    $('#cboSubClasificacion').children('option:not(:first)').remove();
+            });
+        },
+        fnInit: () => {
+            var ent = JSON.parse('@Html.Raw(Json.Encode(@Model))');
+            _UsuarioPerfil.fm = $("#frmUsuario");
+            $('#user').val(ent.USUARIO_LOGIN);
+            _UsuarioPerfil.fnEvent();
+            _UsuarioPerfil.GetListUsuarioPerfil({ codUsuario: ent.COD_UCUENTA });
+        },
+        ingresar: () => {
+            var url = urlLocalSigo + "login/Perfil";
+            
+        }
+    }
+    $(document).ready(function () {
+        
+        _UsuarioPerfil.fnInit();
+
+        
+
+    });
+</script>
+<style>
+    .box {
+        height: 500px;
+        
+    }
+
+       
+        .box .selected {
+            align-self: center;
+        }
+    #frmUsuario {
+        padding: 40px 20px;
+        background-color: white;
+        color: forestgreen;
+        border-radius: 10px;
+    }
+</style>
+<div class="box d-flex justify-content-center ">
+    <div class="d-flex align-items-center col-md-6 col-xs-8">
+        @using (Html.BeginForm("Perfil", "Login", FormMethod.Post, new { id = "frmUsuario", @class = "col-xl-12 border" }))
+        {
+            <h2 class="text-center">Acceso</h2>
+            <div class="col-md-12">
+                <div class="form-group">
+                    <label for="exampleFormControlInput1">Bienvenido</label>
+                    <input type="text" class="form-control" name="USUARIO_LOGIN" id="user" readonly>
+                    @Html.HiddenFor(m => m.COD_UCUENTA)
+
+                  
+                </div>
+            </div>
+            <div class="col-md-12">
+                <div class="form-group">
+                    <label for="exampleFormControlSelect1">Por favor selecciona tu Perfil</label>
+                    <select class="form-control text-uppercase" name="COD_SPERFIL" id="cmboPerfil">
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-group text-center">
+                <div class="col-md-12">
+                    <button type="submit" class="form-control btn btn-success">Ingresar</button>
+                </div>
+
+            </div>
+        }
+    </div>
+    
+    
+
+</div>
+
+

@@ -1,0 +1,74 @@
+﻿@model List<CapaEntidad.DOC.Ent_Reporte_ProduccionItinerarioSupervision>
+
+@{
+    var data_grafica = Model.Where(x => x.COD_OD != " ").Select(x => new { OD = x.OD, TOTAL = x.TOTAL }).ToList();
+}
+
+<script type="text/javascript">
+    _rendReporteUs.dataGraph = JSON.parse('@Html.Raw(Json.Encode(data_grafica))');
+</script>
+
+@if (Model != null && Model.Count > 0)
+{
+    <div class="custom-control custom-checkbox">
+        <input type="checkbox" class="custom-control-input" id="chkInfoGEO" name="chkInfoGEO">
+        <label class="custom-control-label" for="chkInfoGEO">Incluir la información geográfica (archivos gbd) en el detalle</label>
+    </div>
+    <table class="table table-bordered table-hover table-striped mt-2">
+        <thead>
+            <tr>
+                <th>N°</th>
+                <th>Oficina Desconcentrada</th>
+                <th class="text-center">Fauna Silvestre</th>
+                <th class="text-center">Tara</th>
+                <th class="text-center">Bosques Secos</th>
+                <th class="text-center">Predio Privado</th>
+                <th class="text-center">CCNN y CCNN</th>
+                <th class="text-center">Bosques Locales</th>
+                <th class="text-center">No Maderables</th>
+                <th class="text-center">Concesiones Maderables</th>
+                <th class="text-center">Concesiones No Maderables</th>
+                <th class="text-center">Forestación y Reforestación</th>
+                <th class="text-center">Ecoturismo</th>
+                <th class="text-center">Conservación</th>
+                <th class="text-center">Fauna Silvestre</th>
+                <th class="text-center">TOTAL</th>
+            </tr>
+        </thead>
+        <tbody>
+            @for (int i = 0; i < Model.Count; i++)
+            {
+                var item = Model[i];
+
+                <tr>
+                    <td>@(i + 1)</td>
+                    <td>
+                        <a class="btn btn-link btn-sm p-0" tabindex="-1" onclick="_rendReporteUs.fnDetalle('@item.COD_OD', '@item.OD')">@item.OD</a>
+                    </td>
+                    <!--Permisos-->
+                    <td class="text-center">@item.PFAUNA.ToString("#,0")</td>
+                    <td class="text-center">@item.M0000005.ToString("#,0")</td>
+                    <td class="text-center">@item.M0000006.ToString("#,0")</td>
+                    <td class="text-center">@item.M0000014.ToString("#,0")</td>
+                    <td class="text-center">@item.CC_CC_NN.ToString("#,0")</td>
+                    <td class="text-center">@item.M0000017.ToString("#,0")</td>
+                    <td class="text-center">@item.PNM.ToString("#,0")</td>
+                    <!--Concesiones-->
+                    <td class="text-center">@item.M0000007.ToString("#,0")</td>
+                    <td class="text-center">@item.NM.ToString("#,0")</td>
+                    <td class="text-center">@item.M0000010.ToString("#,0")</td>
+                    <td class="text-center">@item.M0000011.ToString("#,0")</td>
+                    <td class="text-center">@item.M0000012.ToString("#,0")</td>
+                    <td class="text-center">@item.CFAUNA.ToString("#,0")</td>
+                    <td class="text-center">@item.TOTAL.ToString("#,0")</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <div class="alert alert-warning">
+        <i class="fa fa-warning"></i> No hay datos para mostrar
+    </div>
+}

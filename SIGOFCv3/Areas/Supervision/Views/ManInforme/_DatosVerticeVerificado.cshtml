@@ -1,0 +1,186 @@
+﻿
+@model List<CapaEntidad.DOC.Ent_INFORME_VERTICE_VERIFICADO>
+
+<script type="text/javascript">
+    var _DatosVerticeVerificado = {};
+
+    _DatosVerticeVerificado.fnInitDataTable_Detail = function () {
+        var columns_label = [], columns_data = [], options = {};
+
+        columns_label = ["Vértice", "Vértice Campo", "Zona UTM", "Zona UTM Campo", "Coordenada Este", "Coordenada Este Campo"
+            , "Coordenada Norte","Coordenada Norte Campo", "Observación"];
+        columns_data = ["VERTICE", "VERTICE_CAMPO", "ZONA", "ZONA_CAMPO", "COORDENADA_ESTE", "COORDENADA_ESTE_CAMPO"
+            , "COORDENADA_NORTE","COORDENADA_NORTE_CAMPO", "OBSERVACION"];
+        options = {
+            page_length: 15, row_index: true, row_edit: true, row_fnEdit: "_DatosVerticeVerificado.fnAddEdit(this)"
+            , row_delete: true, row_fnDelete: "_DatosVerticeVerificado.fnDelete(this)", page_info: true, page_search: true
+            , page_sort: true
+        };
+        _DatosVerticeVerificado.dtDatosVerticeVerificado = utilDt.fnLoadDataTable_Detail($("#tbDatosVerticeVerificado"), columns_label, columns_data, options);
+    }
+
+    _DatosVerticeVerificado.fnAddEdit = function (obj) {
+        var url = urlLocalSigo + "Supervision/ManInforme/_VerticeVerificado";
+        var option = {
+            url: url, type: 'POST'
+            , datos: { asCodInforme: _DatosVerticeVerificado.frm.find("#hdfCodInforme").val(), aiNumPoa: _DatosVerticeVerificado.frm.find("#hdfNumPoa").val() }
+            , divId: "mdlManInforme_EspecieCampo"
+        };
+        utilSigo.fnOpenModal(option, function () {
+            _VerticeVerificado.fnSaveForm = function (data) {
+                if (data != null) {
+                    var dt = _DatosVerticeVerificado.dtDatosVerticeVerificado;
+
+                    if (obj == null || obj == "") {//Nuevo Registro
+                        dt.rows.add([data]).draw();
+                        dt.page('last').draw('page');
+                        utilSigo.toastSuccess("Exito", "Datos guardados correctamente");
+                    } else {//Modificar
+                        var row = dt.row($(obj).parents('tr')).data();
+                        row = data;
+                        dt.row($(obj).parents('tr')).data(row).draw(false);
+                        utilSigo.toastSuccess("Exito", "Datos actualizados correctamente");
+                    }
+                    $("#mdlManInforme_EspecieCampo").modal('hide');
+                } else {
+                    utilSigo.toastError("Error", "No se pudieron guardar los datos");
+                }
+            }
+
+            if (obj != null && obj != "") {
+                var data = _DatosVerticeVerificado.dtDatosVerticeVerificado.row($(obj).parents('tr')).data();
+                _VerticeVerificado.fnInit(utilSigo.fnConvertArrayToObject(data));
+            } else { _VerticeVerificado.fnInit(""); }
+        });
+    }
+
+    _DatosVerticeVerificado.fnDeleteAll = function () {
+        var rows, countFilas, data, tbEliTABLA = [];
+
+        rows = _DatosVerticeVerificado.dtDatosVerticeVerificado.$("tr");
+        countFilas = rows.length;
+        if (countFilas > 0) {
+            utilSigo.dialogConfirm("", "Está seguro de Eliminar Todos los Registros?", function (r) {
+                if (r) {
+                    $.each(rows, function (i, o) {
+                        data = _DatosVerticeVerificado.dtDatosVerticeVerificado.row($(o)).data();
+                        if (data["RegEstado"] == "0" || data["RegEstado"] == "2") {
+                            tbEliTABLA.push(
+                                utilSigo.fnConvertArrayToObject({
+                                    EliTABLA: "VERTICE_VERIFICADO",
+                                    COD_INFORME: _DatosVerticeVerificado.frm.find("#hdfCodInforme").val(),
+                                    NUM_POA: data["NUM_POA"],
+                                    COD_MUESTRA_SUPERVISION: data["COD_INFORME_VERTICE"]
+                                })
+                            );
+                        }
+                    });
+
+                    var url = urlLocalSigo + "Supervision/ManInforme/EliminarRegistroDetalle";
+                    var option = { url: url, datos: JSON.stringify(tbEliTABLA), type: 'POST' };
+                    utilSigo.fnAjax(option, function (data) {
+                        if (data.success) {
+                            _DatosVerticeVerificado.dtDatosVerticeVerificado.clear().draw();
+                            utilSigo.toastSuccess("Éxito", "Vértices verificados eliminados correctamente");
+                        }
+                        else {
+                            utilSigo.toastWarning("Aviso", data.msj);
+                        }
+                    });
+                }
+            });
+        } else {
+            utilSigo.toastWarning("Aviso", "No se encontraron registros a eliminar");
+        }
+    }
+
+    _DatosVerticeVerificado.fnDelete = function (obj) {
+        var data, tbEliTABLA = [];
+
+        data = _DatosVerticeVerificado.dtDatosVerticeVerificado.row($(obj).parents('tr')).data();
+        if (data["RegEstado"] == "0" || data["RegEstado"] == "2") {
+            tbEliTABLA.push(
+                utilSigo.fnConvertArrayToObject({
+                    EliTABLA: "VERTICE_VERIFICADO",
+                    COD_INFORME: _DatosVerticeVerificado.frm.find("#hdfCodInforme").val(),
+                    NUM_POA: data["NUM_POA"],
+                    COD_MUESTRA_SUPERVISION: data["COD_INFORME_VERTICE"]
+                })
+            );
+        }
+
+        var url = urlLocalSigo + "Supervision/ManInforme/EliminarRegistroDetalle";
+        var option = { url: url, datos: JSON.stringify(tbEliTABLA), type: 'POST' };
+        utilSigo.fnAjax(option, function (data) {
+            if (data.success) {
+                _DatosVerticeVerificado.dtDatosVerticeVerificado.row($(obj).parents('tr')).remove().draw(false);
+                utilSigo.toastSuccess("Éxito", "Vértice verificado eliminado correctamente");
+            }
+            else {
+                utilSigo.toastWarning("Aviso", data.msj);
+            }
+        });
+    }
+
+    _DatosVerticeVerificado.fnImport = function (e, obj) {
+        var url = urlLocalSigo + "Supervision/ManInforme/ImportarDatosCampo";
+        uploadFile.fileSelectHandler(e, obj, url, {
+            asTipo: "VERTICE_VERIFICADO", asCodInforme: _DatosVerticeVerificado.frm.find("#hdfCodInforme").val(), aiNumPoa: _DatosVerticeVerificado.frm.find("#hdfNumPoa").val()
+        }, function (data) {
+            $("#mdlManInforme_DatosCampo").modal('hide');
+        });
+    }
+
+    $(document).ready(function () {
+        _DatosVerticeVerificado.frm = $("#frmDatosVerticeVerificado");
+
+        _DatosVerticeVerificado.fnInitDataTable_Detail();
+        _DatosVerticeVerificado.dtDatosVerticeVerificado.rows.add(JSON.parse('@Html.Raw(Json.Encode(@Model))')).draw();
+    });
+</script>
+
+<style type="text/css">
+    #dvDatosVerticeVerificado .dataTables_info {
+        color: #33b35a;
+        font-size: 15px;
+        margin-top: 17px;
+    }
+</style>
+
+<div class="modal-dialog modal-custom-tb" role="document" style="height:95%;">
+    <div class="modal-content" style="height:100%;">
+        <div class="modal-header text-small" style="cursor:move;">
+            Vértice Verificados
+            <i class="fa fa-close" style="cursor:pointer;" data-dismiss="modal" aria-label="Close"></i>
+        </div>
+        <div class="modal-body" style="padding:0px;overflow-y:auto;">
+            <div id="frmDatosVerticeVerificado">
+                @Html.Hidden("hdfCodInforme", (string)ViewBag.hdfCodInforme)
+                @Html.Hidden("hdfNumPoa", (Int32)ViewBag.hdfNumPoa)
+                <div id="dvDatosVerticeVerificado" class="table-responsive" style="margin-top:5px;">
+                    <table id="tbDatosVerticeVerificado" style="width:100%" class="table table-hover table-bordered">
+                        <thead>
+                            <tr>
+                                <th colspan="12" class="text-sm-left">
+                                    <div class="form-inline">
+                                        <i class="fa mx-2 fa-lg fa-file-o" style="cursor:pointer;" onclick="_DatosVerticeVerificado.fnAddEdit('');" data-toggle="tooltip" data-placement="top" title="Nuevo"></i>
+                                        <i class="fa mx-2 fa-lg fa-window-close-o" style="cursor:pointer;" onclick="_DatosVerticeVerificado.fnDeleteAll();" data-toggle="tooltip" data-placement="top" title="Eliminar Todos"></i>
+                                        <label style="cursor:pointer;" class="fa mx-2 fa-lg fa-file-excel-o" title="Importar Archivo" data-toggle="tooltip">
+                                            <input type="file" id="fileselect" name="fileselect" style="display:none" size="60" onchange="_DatosVerticeVerificado.fnImport(event, this)">
+                                        </label>
+                                        <a href="@Url.Content("~/Archivos/Plantilla/PoaCensoNoMaderableVertices.xlsx")"> <i class="fa mx-2 fa-lg fa-folder-open" style="cursor:pointer;" data-toggle="tooltip" data-placement="top" title="Descargar Plantilla Campo"></i></a>
+                                        <strong>
+                                            Listado de Vértices
+                                        </strong>
+                                    </div>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer"></div>
+    </div>
+</div>

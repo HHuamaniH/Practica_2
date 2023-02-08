@@ -1,0 +1,58 @@
+﻿<script src="~/Areas/General/js/Controles/_BuscarPersonaGeneral.js?v=@Guid.NewGuid()"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        if ($("#hdfBusGrupo").val() == 'SUPERVISOR_ESPECIALISTA') {
+            $('#btnNuevaPersona').toggle(false);
+        }
+    });
+</script>
+<div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+        <div class="modal-header text-small" style="cursor:move;padding:0.5rem;">
+            <h5 id="lblTituloBuscarPersona" class="modal-title">Buscar Persona (natural o jurídica)</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body">
+            <form id="frmBuscarPersona" method="get">
+                @Html.Hidden("hdfBusGrupo", (string)ViewBag.hdfBusGrupo)
+                @Html.Hidden("hdfCodPTipo", (string)ViewBag.hdfCodPTipo)
+                @Html.Hidden("hdfTipoPersona", (string)ViewBag.hdfTipoPersona)
+                @Html.Hidden("hdfFormulario", (string)ViewBag.hdfFormulario)
+                @Html.Hidden("hdfCodMod", (string)ViewBag.hdfCodMod)
+                @Html.Hidden("hdfTipoCargo", (string)ViewBag.hdfTipoCargo)
+                <div class="form-row">
+                    <div class="col-md-4 mb-3">
+                        <select id="cboCriterio" class="form-control form-control-sm">
+                            <option value="NOMBRES">Persona</option>
+                            <option value="DOCUMENTO">Documento</option>
+                        </select>
+                    </div>
+
+                    <div class="col-md-8 mb-3">
+                        <div class="input-group">
+                            <input type="text" id="txtValor" class="form-control form-control-sm" maxlength="50" style="text-transform:uppercase;" />
+                            <div class="input-group-prepend">
+                                <span class="input-group-text" id="btnBuscarPersona" style="cursor:pointer;color:forestgreen"><i class="fa fa-search" data-toggle="tooltip" data-placement="top" title="Buscar"></i></span>
+                                <span class="input-group-text" id="btnNuevaPersona" style="cursor:pointer;color:cadetblue;"><i class="fa fa-plus" data-toggle="tooltip" data-placement="top" title="Adicionar"></i></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="table-responsive">
+                    <table id="tbBuscarPerona" class="table table-hover table-bordered" width="100%">
+                        <thead>
+
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+                <button type="submit" style="display:none;"></button>
+            </form>
+        </div>
+        <div class="modal-footer">
+
+        </div>
+    </div>
+</div>

@@ -1,0 +1,633 @@
+﻿@model CapaEntidad.ViewModel.VM_Resodirec
+
+<script type="text/javascript">
+    var _renderTerminoPau = {};
+    _renderTerminoPau.tbEliTABLA = [];
+    _renderTerminoPau.tbEliTABLAInfraccion = [];
+
+    _renderTerminoPau.fncSelect = function () {
+        var idRecomendacion = _renderTerminoPau.frm.find("#ddDetermina").val();
+        _renderTerminoPau.frm.find("#divSansion").hide();
+        _renderTerminoPau.frm.find("#divArchivo").hide();
+        if (idRecomendacion == "0000001") {
+            _renderTerminoPau.frm.find("#divSansion").show();
+        }
+        if (idRecomendacion == "0000002") {
+            _renderTerminoPau.frm.find("#divArchivo").show();
+        }
+    }
+
+    _renderTerminoPau.fncSelectAM = function () {
+        //_renderTerminoPau.frm.find("#divAcciones").hide();
+        _renderTerminoPau.frm.find("#divMedComplementaria").hide();
+        /*_renderTerminoPau.frm.find("#divSITD2").hide();
+        _renderTerminoPau.frm.find("#divSITD1").hide();*/
+
+        /*if (_renderTerminoPau.frm.find("#chkAccion").is(':checked')) {
+            _renderTerminoPau.frm.find("#divAcciones").show();
+        }*/
+        if (_renderTerminoPau.frm.find("#chkMedidaCompl").is(':checked')) {
+            _renderTerminoPau.frm.find("#divMedComplementaria").show();
+        }
+
+        /*if (_renderTerminoPau.frm.find("#chkAllanamiento").is(':checked')) {
+            _renderTerminoPau.frm.find("#divSITD1").show();
+        }
+        if (_renderTerminoPau.frm.find("#chkSubsanacion").is(':checked')) {
+            _renderTerminoPau.frm.find("#divSITD2").show();
+        }*/
+    }
+    _renderTerminoPau.fncSubMotivo = function () {
+        var idMotivo = _renderTerminoPau.frm.find("#ddlMotivoArch").val();
+        var descMotivo = _renderTerminoPau.frm.find("#ddlMotivoArch option:selected").text();
+        $.ajax({
+            url: '@Url.Action("subTipoArchivo","ManResolucion")',
+            type: 'GET',
+            datatype: "json",
+            traditional: true,
+            data: { 'idMotivo': idMotivo, 'descMotivo': descMotivo },
+            success: function (data) {
+                $("#divSubTipoArchivo").html(data)
+            }
+        });
+    };
+
+
+    _renderTerminoPau.fncbuscaSITD = function () {
+        var url = urlLocalSigo + "General/Controles/_ConsultaSITD";
+        var option = { url: url, datos: { op: "DOC_ENTRADA" }, type: 'GET', divId: 'modalBuscarDocSITD' };
+        utilSigo.fnOpenModal(option, function () {
+            _cSITD.fnAsignarDatos = function (obj) {
+                if (obj != null && obj != "") {
+                    var data = _cSITD.dt.row($(obj).parents('tr')).data();
+                    _renderTerminoPau.fnAsignarSTID(data, "DOC_ENTRADA");
+                }
+            }
+            _cSITD.fnInit();
+        });
+    };
+
+    _renderTerminoPau.fnAsignarSTID = function (data, op) {
+        if (op == "DOC_ENTRADA") {
+            var model = {
+
+                'CODIGO': data.cCodificacion,
+                'NUMERO': data.cNroDocumento,
+                'TIPO_DOCUMENTO': data.cDescTipoDoc,
+                'PDF_DOCUMENTO': data.PDF_TRAMITE_SITD,
+                'RegEstado': 1
+            };
+            console.log(model);
+            _renderTerminoPau.dtRenderListSTD1.rows.add([model]).draw();
+            _renderTerminoPau.dtRenderListSTD1.page('last').draw('page');
+        }
+        utilSigo.toastSuccess("", "Se selecciono correctamente el documento");
+        utilSigo.fnCloseModal("modalBuscarDocSITD");
+    }
+
+
+    _renderTerminoPau.fnInitDataTable01 = function () {
+
+        var columns_label = [], columns_data = [], options = {}, data_extend = [];;
+
+        columns_label = ["Codigo", "Num. Documento", "Tipo Documento"];
+        columns_data = ["CODIGO", "NUMERO", "TIPO_DOCUMENTO"];
+        data_extend = [
+            {
+                render: function (data, type, row) {
+                    return "<a href='#' data-toggle='tooltip' data-placement='top'  onClick='descargarTramite(" + JSON.stringify(row) + ")' > Descargar</a>";
+                }, title: "Descargar"
+            }
+        ]
+        options = {
+            page_length: 10, row_index: true, row_delete: true, row_fnDelete: "_renderTerminoPau.fnDelete01(this)", page_sort: true,
+            data_extend: data_extend
+        };
+        _renderTerminoPau.dtRenderListSTD1 = utilDt.fnLoadDataTable_Detail(_renderTerminoPau.frm.find("#tbrenderSITD01"), columns_label, columns_data, options);
+        _renderTerminoPau.dtRenderListSTD1.rows.add(JSON.parse('@Html.Raw(Json.Encode(@Model.ListSTD01))')).draw();
+
+    }
+
+    _renderTerminoPau.fncbuscaSITD02 = function () {
+        var url = urlLocalSigo + "General/Controles/_ConsultaSITD";
+        var option = { url: url, datos: { op: "DOC_ENTRADA" }, type: 'GET', divId: 'modalBuscarDocSITD' };
+        utilSigo.fnOpenModal(option, function () {
+            _cSITD.fnAsignarDatos = function (obj) {
+                if (obj != null && obj != "") {
+                    var data = _cSITD.dt.row($(obj).parents('tr')).data();
+                    _renderTerminoPau.fnAsignarSTID02(data, "DOC_ENTRADA");
+                }
+            }
+            _cSITD.fnInit();
+        });
+    };
+
+    _renderTerminoPau.fncArticulos = function () {
+        var idArticulo = _renderTerminoPau.frm.find("#ddlArticuloId").val();
+        var DescArticulo = _renderTerminoPau.frm.find("#ddlArticuloId option:selected").text();
+        $.ajax({
+              url: '@Url.Action("_inicisos","ManResolucion")',
+              type: 'GET',
+                 datatype: "json",
+                 traditional: true,
+                 data: {'idArticulo' :   idArticulo, 'descArticulo': DescArticulo},
+                 success: function (data) {
+                        $("#divEncisosFI").html(data);
+                 }
+        });
+    }
+
+    _renderTerminoPau.fnDelete01 = function (obj) {
+        var data = _renderTerminoPau.dtRenderListSTD1.row($(obj).parents('tr')).data();
+        if (data["RegEstado"] == "0") {
+            _renderTerminoPau.tbEliTABLA.push({
+                EliTABLA: "RESODIREC_DET_ACCION",
+                EliVALOR01: data["COD_RDACCION"]
+            });
+        }
+        _renderTerminoPau.dtRenderListSTD1.row($(obj).parents('tr')).remove().draw(false);
+    }
+
+    _renderTerminoPau.fnDelete02 = function (obj) {
+        var data = _renderTerminoPau.dtRenderListSTD02.row($(obj).parents('tr')).data();
+        if (data["RegEstado"] == "0") {
+            _renderTerminoPau.tbEliTABLA.push({
+                EliTABLA: "RESODIREC_DET_ACCION",
+                EliVALOR01: data["COD_RDACCION"]
+            });
+        }
+        _renderTerminoPau.dtRenderListSTD02.row($(obj).parents('tr')).remove().draw(false);
+    }
+
+    _renderTerminoPau.fnDeleteInfraccion = function (obj) {
+        var data = _renderTerminoPau.dtRenderListInforme.row($(obj).parents('tr')).data();
+        if (data["RegEstado"] == "0") {
+            data["ESTADO"] = 0;
+            _renderTerminoPau.tbEliTABLAInfraccion.push(data);
+        }
+        _renderTerminoPau.dtRenderListInforme.row($(obj).parents('tr')).remove().draw(false);
+    }
+
+    _renderTerminoPau.fnGetList01 = function () {
+        let list = [], rows, countFilas, data;
+        rows = _renderTerminoPau.dtRenderListSTD1.$("tr");
+        countFilas = rows.length;
+        if (countFilas > 0) {
+            $.each(rows, function (i, o) {
+                data = _renderTerminoPau.dtRenderListSTD1.row($(o)).data();
+                list.push(utilSigo.fnConvertArrayToObject(data));
+            });
+        }
+        return list;
+        console.log(list.length);
+    }
+
+    _renderTerminoPau.fnGetList02 = function () {
+        let list = [], rows, countFilas, data;
+        rows = _renderTerminoPau.dtRenderListSTD02.$("tr");
+        countFilas = rows.length;
+        if (countFilas > 0) {
+            $.each(rows, function (i, o) {
+                data = _renderTerminoPau.dtRenderListSTD02.row($(o)).data();
+                list.push(utilSigo.fnConvertArrayToObject(data));
+            });
+        }
+        return list;
+    }
+
+    _renderTerminoPau.fnGetListInfraccion = function () {
+        let list = [], rows, countFilas, data;
+        rows = _renderTerminoPau.dtRenderListInforme.$("tr");
+        countFilas = rows.length;
+        if (countFilas > 0) {
+            $.each(rows, function (i, o) {
+                data = _renderTerminoPau.dtRenderListInforme.row($(o)).data();
+                list.push(utilSigo.fnConvertArrayToObject(data));
+            });
+        }
+        return list;
+    }
+
+    _renderTerminoPau.fnAsignarSTID02 = function (data, op) {
+        if (op == "DOC_ENTRADA") {
+            var model = {
+
+                'CODIGO': data.cCodificacion,
+                'NUMERO': data.cNroDocumento,
+                'TIPO_DOCUMENTO': data.cDescTipoDoc,
+                'PDF_DOCUMENTO': data.PDF_TRAMITE_SITD,
+                'RegEstado': 1
+            };
+            console.log(model);
+            _renderTerminoPau.dtRenderListSTD02.rows.add([model]).draw();
+            _renderTerminoPau.dtRenderListSTD02.page('last').draw('page');
+        }
+        utilSigo.toastSuccess("", "Se selecciono correctamente el documento");
+        utilSigo.fnCloseModal("modalBuscarDocSITD");
+    }
+    _renderTerminoPau.fnInitDataTable02 = function () {
+
+        var columns_label = [], columns_data = [], options = {}, data_extend = [];;
+
+        columns_label = ["Codigo", "Num. Documento", "Tipo Documento"];
+        columns_data = ["CODIGO", "NUMERO", "TIPO_DOCUMENTO"];
+        data_extend = [
+            {
+                render: function (data, type, row) {
+                    return "<a href='#' data-toggle='tooltip' data-placement='top'  onClick='descargarTramite(" + JSON.stringify(row) + ")' > Descargar</a>";
+                }, title: "Descargar"
+            }
+        ]
+        options = {
+            page_length: 10, row_index: true, row_delete: true, row_fnDelete: "_renderTerminoPau.fnDelete02(this)", page_sort: true,
+            data_extend: data_extend
+        };
+        _renderTerminoPau.dtRenderListSTD02 = utilDt.fnLoadDataTable_Detail(_renderTerminoPau.frm.find("#tbrenderSITD02"), columns_label, columns_data, options);
+        _renderTerminoPau.dtRenderListSTD02.rows.add(JSON.parse('@Html.Raw(Json.Encode(@Model.ListSTD02))')).draw();
+
+    }
+
+    _renderTerminoPau.fnInitDataTable_ListIncisos = function () {
+        var columns_label = [], columns_data = [], options = {};
+
+        columns_label = ["Codigo", "Articulo", "Inciso"];
+        columns_data = ["COD_ENCISOS", "ARTICULO", "INCISO"];
+        options = {
+            page_length: 10, row_index: true, row_delete: true, row_fnDelete: "_renderTerminoPau.fnDeleteInfraccion(this)", page_sort: true
+        };
+        _renderTerminoPau.dtRenderListInforme = utilDt.fnLoadDataTable_Detail(_renderTerminoPau.frm.find("#tbRenderListIncisos"), columns_label, columns_data, options);
+        _renderTerminoPau.dtRenderListInforme.rows.add(JSON.parse('@Html.Raw(Json.Encode(@Model.listaInfracciones))')).draw();
+    }
+
+    var descargarTramite = function (row) {
+        var urlSITD = 'https://sitd.osinfor.gob.pe:8443/std/cInterfaseUsuario_SITD/download.php?direccion=sitd-almacen&file=' + row.PDF_DOCUMENTO;
+        window.open(urlSITD, "_blank");
+    };
+
+    $(document).ready(function () {
+        _renderTerminoPau.frm = $("#fmrRDTermino");
+        _renderTerminoPau.fncSelect();
+        _renderTerminoPau.fncSelectAM();
+        _renderTerminoPau.fnInitDataTable01();
+        _renderTerminoPau.fnInitDataTable02();
+        _renderTerminoPau.fnInitDataTable_ListIncisos();
+    });
+</script>
+
+<div id="fmrRDTermino">
+    <div class="card-header text-small">Medidas Cautelares <br /></div>
+    <div><br /></div>
+
+    <div class="form-row">
+        <div class="form-group col-md-4">
+            <label for="chkGTF" class="text-small">Determinación</label>
+        </div>
+        <div class="form-group col-md-6">
+            @Html.DropDownListFor(m => m.txtIdDetermina, new SelectList(Model.ListRecomendacion, "CODIGO", "DESCRIPCION"),
+                                   new
+                                        {
+                                            @class = "form-control form-control-sm",
+                                            @id = "ddDetermina",
+                                            @onchange = "_renderTerminoPau.fncSelect()"
+                                       })
+        </div>
+        <div class="form-group col-md-2">
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="form-group col-md-4">
+            <label for="chkGTF" class="text-small">Caducidad Titulo Habilitante</label>
+        </div>
+        <div class="form-group col-md-6">
+            @Html.CheckBoxFor(m => m.chkCaducidadTH, new { @class = "form-check-input", style = "width:15px;height:16px;" })
+        </div>
+        <div class="form-group col-md-2">
+        </div>
+    </div>
+
+    <div id="divSansion" style="display:none;">
+        <div class="form-row">
+            <div class="form-group col-md-4">
+                <label for="chkGTF" class="text-small">Sanción al ex-titular</label>
+            </div>
+            <div class="form-group col-md-6">
+                @Html.CheckBoxFor(m => m.chkSancionExTitular2, new { @class = "form-check-input", style = "width:15px;height:16px;" })
+            </div>
+            <div class="form-group col-md-2">
+            </div>
+        </div>
+
+        <div class="form-row">
+            <div class="form-group col-md-4">
+                <label for="chkGTF" class="text-small">Titular al que se sanciona</label>
+            </div>
+            <div class="form-group col-md-6">
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text"><i class="fa fa-plus" style="cursor:pointer;" onclick="ManRD_AddEdit.fnBuscarPersona('TITULARRDT', 'N');" data-toggle="tooltip" data-placement="top" title="Agregar"></i></span>
+                    </div>
+                    @Html.EditorFor(m => m.txtExtitular, new { htmlAttributes = new { @class = "form-control form-control-sm", @disabled = "disabled" } })
+                    <input type="hidden" id="hdfTipoPersonaExTitular" />
+                </div>
+            </div>
+            <div class="form-group col-md-2">
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group col-md-4">
+                <label for="lblTerceroSolidario" class="text-small">Tercero solidario</label>
+            </div>
+            <div class="form-group col-md-6">
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text"><i class="fa fa-plus" style="cursor:pointer;" onclick="ManRD_AddEdit.fnBuscarPersona('TERCERO', 'N');" data-toggle="tooltip" data-placement="top" title="Agregar"></i></span>
+                    </div>
+                    @Html.EditorFor(m => m.txtTerceroSolidario, new { htmlAttributes = new { @class = "form-control form-control-sm", @disabled = "disabled" } })
+                    <input type="hidden" id="hdTipoTercero" />
+                </div>
+            </div>
+        </div>
+
+        <div class="card-header text-small">Sanciones impuestas</div>
+
+        <div class="form-row">
+            <div class="form-group col-md-4">
+                <label for="chkGTF" class="text-small">Amonestacion</label>
+            </div>
+            <div class="form-group col-md-6">
+                @Html.CheckBoxFor(m => m.chkAmonestacion, new { @class = "form-check-input", style = "width:15px;height:16px;" })
+            </div>
+            <div class="form-group col-md-2">
+            </div>
+        </div>
+
+        <div class="form-row">
+            <div class="form-group col-md-4">
+                <label for="chkGTF" class="text-small">Multa</label>
+            </div>
+            <div class="form-group col-md-6">
+                @Html.CheckBoxFor(m => m.chkMulta, new { @class = "form-check-input", style = "width:15px;height:16px;" })
+            </div>
+            <div class="form-group col-md-2">
+            </div>
+        </div>
+
+        <div class="form-row">
+            <div class="form-group col-md-4">
+                <label for="chkGTF" class="text-small">Monto U.I.T.</label>
+            </div>
+            <div class="form-group col-md-6">
+                @Html.EditorFor(m => m.txtMonMulta, new { htmlAttributes = new { @class = "form-control form-control-sm", pattern = "[0-9]*[.,]?[0-9]+", maxlength = "20", onkeypress = "return utilSigo.onKeyDecimal(event, this);" } })
+            </div>
+            <div class="form-group col-md-2">
+            </div>
+        </div>
+
+        <div class="form-row">
+            <div class="form-group col-md-4">
+                <label for="chkGTF" class="text-small">Descuento del 30%</label>
+            </div>
+            <div class="form-group col-md-6">
+                @Html.CheckBoxFor(m => m.chkDesc30, new { @class = "form-check-input", style = "width:15px;height:16px;" })
+            </div>
+            <div class="form-group col-md-2">
+            </div>
+        </div>
+
+        <div class="card-header text-small">   Gravedad de daño</div>
+        <div> <br /></div>
+        <div class="form-row">
+            <div class="form-group col-md-4">
+                <label for="chkGTF" class="text-small">Gravedad de daño</label>
+            </div>
+            <div class="form-group col-md-4">
+                @Html.DropDownListFor(m => m.txtIdGravedad, new SelectList(Model.listComboGravedad, "CODIGO", "DESCRIPCION"),
+                                  new
+                                       {
+                                           @class = "form-control form-control-sm",
+                                           @id = "ddlGravedad"
+                                      })
+            </div>
+            <div class="form-group col-md-2">
+            </div>
+        </div>
+
+        <!--Medidas precautorias-->
+        <div>
+            @Html.Partial("~/Areas/Fiscalizacion/Views/ManResolucion/_Shared/_generic/_renderMedPrecautoria.cshtml", Model)
+        </div>
+
+    </div>
+    <!--Archivo-->
+    <div id="divArchivo" style="display:none;">
+        <div class="form-row">
+            <div class="form-group col-md-4">
+                <label for="chkGTF" class="text-small">Motivo archivo</label>
+            </div>
+            <div class="form-group col-md-6">
+                @Html.DropDownListFor(m => m.txtIdTipoMotivoArch, new SelectList(Model.listComboTipoArchivo, "CODIGO", "DESCRIPCION"),
+                                   new
+                                        {
+                                            @class = "form-control form-control-sm",
+                                            @id = "ddlMotivoArch",
+                                            @onchange = "_renderTerminoPau.fncSubMotivo()"
+                                       })
+            </div>
+            <div class="form-group col-md-2">
+            </div>
+        </div>
+
+        <div id="divSubTipoArchivo">
+            @Html.Partial("~/Areas/Fiscalizacion/Views/ManResolucion/_Shared/_generic/_renderMotivoArchivo.cshtml", Model)
+        </div>
+
+    </div>
+    <!--Medidas correctivas-->
+    <div>
+        @Html.Partial("~/Areas/Fiscalizacion/Views/ManResolucion/_Shared/_generic/_renderMedCorrectiva.cshtml", Model)
+    </div>
+
+    <div class="form-row">
+        <div class="form-group col-md-4">
+            <label for="chkAprov" class="text-small">No existe aprovechamiento forestal en el Área Autorizada</label>
+        </div>
+        <div class="form-group col-md-6">
+            @Html.CheckBoxFor(m => m.chkNoev_Aprov, new { @class = "form-check-input", style = "width:15px;height:16px;" })
+        </div>
+        <div class="form-group col-md-2">
+        </div>
+    </div>
+    <!--Rectificacion-->
+    <div>
+        @Html.Partial("~/Areas/Fiscalizacion/Views/ManResolucion/_Shared/_generic/_renderRectificacion.cshtml", Model)
+    </div>
+    <!--19.08.2021 acciones y medidas complementarias -->
+    <div class="form-row">
+        <div class="form-group col-md-12">
+            <div class="card-header text-small">Acciones</div>
+            <br />
+        </div>
+    </div>
+    @*<div class="form-row">
+        <div class="form-group col-md-4">
+            <label for="chkAprov" class="text-small">¿Se requiere acción?</label>
+        </div>
+        <div class="form-group col-md-6">
+            @Html.CheckBoxFor(m => m.chkAccion, new { @class = "form-check-input", style = "width:15px;height:16px;", @onchange = "_renderTerminoPau.fncSelectAM()" })
+        </div>
+        <div class="form-group col-md-2">
+        </div>
+    </div>*@
+    <div id="divAcciones">
+        <div class="form-row">
+            <div class="form-group col-md-4">
+                <label for="chkAllanamiento" class="text-small">Allanamiento de responsabilidad</label>
+            </div>
+            @*<div class="form-group col-md-6">
+                @Html.CheckBoxFor(m => m.chkAllanamiento, new { @class = "form-check-input", style = "width:15px;height:16px;", @onchange = "_renderTerminoPau.fncSelectAM()" })
+            </div>*@
+            <div class="form-group col-md-2">
+            </div>
+        </div>
+        <div id="divSITD1" class="form-row">
+            <div class="form-group col-md-12">
+                <button style="font-size:11px !important;" onclick="_renderTerminoPau.fncbuscaSITD()" id="btnBuscarSITD" class="btn btn-primary " type="button"><i class="fa fa-search"></i>&nbsp;Buscar Expdiente en SITD</button>
+                <br />
+                <table id="tbrenderSITD01" style="width:100%;margin:0px !important;" class="table table-hover table-bordered">
+                    <thead>
+                        <tr>
+                            <th colspan="6" class="text-sm-left">
+                                <div class="form-inline">
+                                    <strong>Lista de expedientes de SITD</strong>
+                                </div>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+
+        </div>
+        <div class="form-row">
+            <div class="form-group col-md-4">
+                <label for="chkSubsanacion" class="text-small">Subsanación voluntaria</label>
+            </div>
+            @*<div class="form-group col-md-6">
+                @Html.CheckBoxFor(m => m.chkSubsanacion, new { @class = "form-check-input", style = "width:15px;height:16px;", @onchange = "_renderTerminoPau.fncSelectAM()" })
+            </div>*@
+            <div class="form-group col-md-2">
+            </div>
+        </div>
+        <div id="divSITD2" class="form-row">
+            <div class="form-group col-md-12">
+                <button style="font-size:11px !important;" onclick="_renderTerminoPau.fncbuscaSITD02()" id="btnBuscarSITD" class="btn btn-primary " type="button"><i class="fa fa-search"></i>&nbsp;Buscar Expdiente en SITD</button>
+                <br />
+                <table id="tbrenderSITD02" style="width:100%;margin:0px !important;" class="table table-hover table-bordered">
+                    <thead>
+                        <tr>
+                            <th colspan="6" class="text-sm-left">
+                                <div class="form-inline">
+                                    <strong>Lista de expedientes de SITD</strong>
+                                </div>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group col-md-12">
+                <div class="card-header text-small">Infracciones subsanadas</div>
+                <br />
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group col-md-2">
+                <label for="lblArticulo" class="text-small">Artículo</label>
+            </div>
+            <div class="form-group col-md-4">
+                @Html.DropDownListFor(m => m.ddlArticuloId, new SelectList(Model.listaArticulos, "Value", "Text"), new { @class = "form-control form-control-sm", @onchange = "_renderTerminoPau.fncArticulos()" })
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group col-md-12" id="divEncisosFI">
+                <label for="lblInciso" class="text-small">Inciso</label>
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group col-md-12">
+                <div class="table-responsive">
+                    <table id="tbRenderListIncisos" style="width:100%;margin:0px !important;" class="table table-hover table-bordered">
+                        <thead>
+                            <tr>
+                                <th colspan="6" class="text-sm-left">
+                                    <div class="form-inline">
+                                        <strong> Infracciones subsanadas</strong>
+                                    </div>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+        </div><br />
+    </div>
+    <div class="form-row">
+        <div class="form-group col-md-12">
+            <div class="card-header text-small">Medidas Complementarias y Seguimiento</div>
+            <br />
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="form-group col-md-4">
+            <label for="chkAprov" class="text-small">¿Requiere implementar medidas?</label>
+        </div>
+        <div class="form-group col-md-6">
+            @Html.CheckBoxFor(m => m.chkMedidaCompl, new { @class = "form-check-input", style = "width:15px;height:16px;", @onchange = "_renderTerminoPau.fncSelectAM()" })
+        </div>
+        <div class="form-group col-md-2">
+        </div>
+    </div>
+    <div id="divMedComplementaria">
+        <div class="form-row">
+            <div class="form-group col-md-4">
+                <label for="chkAprov" class="text-small">Decomiso</label>
+            </div>
+            <div class="form-group col-md-6">
+                @Html.CheckBoxFor(m => m.chkDecomiso, new { @class = "form-check-input", style = "width:15px;height:16px;" })
+            </div>
+            <div class="form-group col-md-2">
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group col-md-4">
+                <label for="chkAprov" class="text-small">Caducidad - Plan de cierre</label>
+            </div>
+            <div class="form-group col-md-6">
+                @Html.CheckBoxFor(m => m.chkPlanCierre, new { @class = "form-check-input", style = "width:15px;height:16px;" })
+            </div>
+            <div class="form-group col-md-2">
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group col-md-4">
+                <label for="chkAprov" class="text-small">Disposición Fauna</label>
+            </div>
+            <div class="form-group col-md-6">
+                @Html.CheckBoxFor(m => m.chkDisposicionFauna, new { @class = "form-check-input", style = "width:15px;height:16px;" })
+            </div>
+            <div class="form-group col-md-2">
+            </div>
+        </div>
+
+    </div>
+    <!--Infracciones-->
+    <div id="divInfracciones">
+        @Html.Partial("~/Areas/Fiscalizacion/Views/ManResolucion/_Shared/_generic/_renderInfracciones.cshtml", Model)
+    </div>
+
+
+</div>
+<div class="modal fade hide" id="modalBuscarDocSITD" tabindex="-1" role="dialog"></div>

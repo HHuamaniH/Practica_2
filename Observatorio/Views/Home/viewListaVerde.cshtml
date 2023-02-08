@@ -1,0 +1,101 @@
+﻿@model PagedList.IPagedList<CapaEntidad.DOC.Ent_Reporte_OBSERVATORIO>
+@using PagedList.Mvc;
+@{
+    ViewBag.Title = "viewListaVerde";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<link href="~/Styles/Proyectos/listaObservatorio.min.css" rel="stylesheet" />
+<script>
+    function ubicarVerde(P1,P2) {
+        if($(P1).Lenght==12){P1="000"+P1;}
+        window.open('https://sisfor.osinfor.gob.pe/visor/sisforv4/geoObsVERDE/'+P1+'|'+P2);
+    }
+</script>
+<div class="tituloLista">
+    <h2>OBSERVATORIO OSINFOR: Lista Verde</h2>
+</div>
+<div class="toolsLista">
+    <div class="navLista">
+        <a href="@Url.Action("Menu","Home")" title="Volver al Inicio"><span class="icon-arrow-back"></span><span>Volver al Inicio</span></a>
+    </div>
+    <div class="toolBusqueda">
+        @using (Html.BeginForm("listaVerde", "Home", FormMethod.Get))
+        {
+            <span>Ingrese título habilitante o titular:</span> @Html.TextBox("SearchString", ViewBag.CurrentFilter as string, new { Title = "Ingrese el Título Habilitante, titular, modalidad de aprovechamiento o el departamento" })
+            <input type="submit" value="Buscar" />
+        }
+    </div>
+</div>
+<div class="opcionLista">
+    <div class="opcionDescargaV">
+        <span>Descargar relación de titulares</span><a href="@Url.Action("descargaResumenPDF","Home",new { Color="VERDE" })" title="Descargar relación de titulares"><span class="icon-download5"></span></a>
+</div>
+    <div class="opcionImagenV">
+        <span>Descargar relación de especies</span>&nbsp;<a href="@Url.Action("dowloadEcxel","Home",new { Color="VERDE" })" title="Descargar relación de especies"><span class="icon-download2"></span></a>
+    </div>
+</div>
+    <div class="GrillaDivMarco">
+        <table id="tbListaVerde" class="GrillaVerde">
+            <thead>
+                <tr>
+                    <th>N°</th>
+                    <th>@Html.ActionLink("Titular", "listaVerde", new { sortOrder = ViewBag.TitularSort, currentFilter = ViewBag.CurrentFilter })</th>
+                    <th>@Html.ActionLink("Título Habilitante", "listaVerde", new { sortOrder = ViewBag.THabilitanteSort, currentFilter = ViewBag.CurrentFilter })</th>
+                    <th>@Html.ActionLink("Modalidad", "listaVerde", new { sortOrder = ViewBag.ModalidadSort, currentFilter = ViewBag.CurrentFilter })</th>
+                    <th>@Html.ActionLink("Departamento", "listaVerde", new { sortOrder = ViewBag.DepartamentoSort, currentFilter = ViewBag.CurrentFilter })</th>
+                    <th>@Html.ActionLink("N° POA", "listaVerde", new { sortOrder = ViewBag.NumPOASort, currentFilter = ViewBag.CurrentFilter })</th>
+                    <th>@Html.ActionLink("Inicio de Vigencia del POA", "listaVerde", new { sortOrder = ViewBag.VigenciaSort, currentFilter = ViewBag.CurrentFilter })</th>
+                    <th>@Html.ActionLink("Zafra o Periodo", "listaVerde", new { sortOrder = ViewBag.ZafraSort, currentFilter = ViewBag.CurrentFilter })</th>
+                    <th>Ver detalle</th>
+                    <th>Ver Ubicación en el SISFOR</th>
+                </tr>
+            </thead>
+            <tbody>
+                @{
+                    var counter = 0;
+                }
+
+                @if (Model != null)
+                {
+                    foreach (var item in Model)
+                    {
+                    <tr>
+                        <td>@(((Model.PageNumber - 1) * 20) + (++counter))</td>
+                        <td>@item.TITULAR</td>
+                        <td>@item.NUM_THABILITANTE</td>
+                        <td>@item.MODALIDAD</td>
+                        <td>@item.REGION</td>
+                        <td>@item.NUM_POA</td>
+                        <td>@item.VIGENCIA</td>
+                        <td>@item.ZAFRA</td>
+                        <td><a href='@Url.Action("descargaPDFverde", "Home", new { idRegistro = item.ID_REGISTRO })' target='_blank'><img src="~/Imagenes/iconos/Buscar4.png" /></a></td>
+                        <td><img src="~/Imagenes/iconos/map_sisfor.png" style="cursor:pointer;" onclick="ubicarVerde(@item.COD_THABILITANTE,@item.NUM_POA_INT.ToString())" /></td>
+                    </tr>
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
+    <div class="divPaginacionVerde">
+        Página @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) de @Model.PageCount
+
+        @Html.PagedListPager(Model, page => Url.Action("listaVerde",
+    new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter }))
+    </div>
+    <div class="pieLista">
+        <div>
+            <p>* Incluye:</p>
+        </div>
+        <ul>
+            <li>Títulos habilitantes que están en el marco de un Procedimiento Administrativo Único (PAU), cuya resolución final podría variar su condición actual.</li>
+            <li>Concesiones Forestales Maderables.</li>
+            <li>Concesiones Forestales No Maderables con Planes Complementarios.</li>
+            <li>Concesiones de Forestación y/o Reforestación.</li>
+            <li>Permisos Forestales en Comunidades Nativas.</li>
+            <li>Permisos Forestales en Predios Privados.</li>
+            <li>Contratos de Administración de Bosques Locales supervisados por el OSINFOR.</li>
+        </ul>
+    </div>
+<div id="fechaHora">
+    <div><strong>* Actualizado al: </strong>@ViewBag.fechaProcess</div><div><strong>Fecha y Hora de Consulta:</strong> @DateTime.Now</div>
+</div>

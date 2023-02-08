@@ -1,0 +1,106 @@
+﻿@model CapaEntidad.ViewModel.VM_InformeTecnico
+<script type="text/javascript">
+    var _renderSup = {};
+    _renderSup.fnSelectRecom = function () {
+        _renderSup.frm.find("#divModVol").hide();
+        _renderSup.frm.find("#divModEstado").hide();
+
+        _renderSup.frm.find("#divMaderable").hide();
+        _renderSup.frm.find("#divSemillero").hide();
+
+
+        if (_renderSup.frm.find("#chkCambiaVol").is(':checked')) {
+            _renderSup.frm.find("#divModVol").show();
+        }
+        if (_renderSup.frm.find("#chkCambiaEstado").is(':checked')) {
+            _renderSup.frm.find("#divModEstado").show();
+        }
+        if (_renderSup.frm.find("#chkMaderable").is(':checked')) {
+            _renderSup.frm.find("#divMaderable").show();
+        }
+        if (_renderSup.frm.find("#chkSemillero").is(':checked')) {
+            _renderSup.frm.find("#divSemillero").show();
+        }
+    }
+    $(document).ready(function () {
+        _renderSup.frm = $("#divSobreSup");
+        _renderSup.fnSelectRecom();
+    });
+</script>
+<div id="divSobreSup">
+    <div class="card-header text-small">Sobre el Informe de Supervisión</div>
+    <div><br /></div>
+    <div class="form-row">
+        <div class="form-group col-md-4">
+            <label for="chkGTF" class="text-small">Se modifica el volumen injustificado detectado en la supervisión</label>
+        </div>
+        <div class="form-group col-md-6">
+            @Html.CheckBoxFor(m => m.chkCambiaVol, new
+          {
+              @class = "form-check-input",
+              style = "width:15px;height:16px;",
+              @onchange = "_renderSup.fnSelectRecom()"
+          })
+        </div>
+        <div class="form-group col-md-2">
+        </div>
+    </div>
+    <div id="divModVol" style="display:none;">
+        @Html.Partial("~/Areas/Fiscalizacion/Views/ManInformeTecnico/_Shared/_renderVolumen.cshtml", Model)
+    </div>
+    <div class="form-row">
+        <div class="form-group col-md-4">
+            <label for="chkGTF" class="text-small">Se cambia el estado de los árboles supervisados</label>
+        </div>
+        <div class="form-group col-md-6">
+            @Html.CheckBoxFor(m => m.chkCambiaEstado, new
+           {
+               @class = "form-check-input",
+               style = "width:15px;height:16px;",
+               @onchange = "_renderSup.fnSelectRecom()"
+           })
+        </div>
+        <div class="form-group col-md-2">
+        </div>
+    </div>
+    <div id="divModEstado" style="display:none;">
+        <div class="form-row">
+            <div class="form-group col-md-4">
+                <label for="chkGTF" class="text-small">Ir Datos Campo Maderable</label>
+            </div>
+            <div class="form-group col-md-6">
+                @Html.CheckBoxFor(m => m.chkMaderable, new
+               {
+                   @class = "form-check-input",
+                   style = "width:15px;height:16px;",
+                   @onchange = "_renderSup.fnSelectRecom()"
+               })
+            </div>
+            <div class="form-group col-md-2">
+            </div>
+        </div>
+        <div id="divMaderable" style="display:none;">
+            Maderable
+        </div>
+        <div class="form-row">
+            <div class="form-group col-md-4">
+                <label for="chkGTF" class="text-small">Ir Datos Semillero Maderable</label>
+            </div>
+            <div class="form-group col-md-6">
+                @Html.CheckBoxFor(m => m.chkSemillero, new
+               {
+                   @class = "form-check-input",
+                   style = "width:15px;height:16px;",
+                   @onchange = "_renderSup.fnSelectRecom()"
+               })
+            </div>
+            <div class="form-group col-md-2">
+            </div>
+        </div>
+        <div id="divSemillero" style="display:none;">
+            Semilleros
+        </div>
+    </div>
+</div>
+
+

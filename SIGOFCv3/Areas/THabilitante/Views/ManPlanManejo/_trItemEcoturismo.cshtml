@@ -1,0 +1,91 @@
+﻿<div id="trItemEcoturismo">
+    <div class="table-responsive">
+        <table id="grvItemEcotPImplementar" class="table table-hover table-bordered">
+            <thead>
+                <tr>
+                    <th colspan="5" class="text-sm-left">
+                        <div class="form-inline">
+                            <i class="fa mx-1 fa-lg fa-file-o" style="cursor:pointer;" data-toggle="tooltip" data-placement="top" title="Nuevo"></i>
+                            <strong>Programas a implementar</strong>
+                        </div>
+                    </th>
+                </tr>
+                <tr>
+                    <th></th>
+                    <th></th>
+                    <th>Nº</th>
+                    <th>Descripción</th>
+                    <th>Observación</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
+    <div class="form-row">
+        <div class="form-group col-md-12">
+            <div class="form-check">
+                @Html.CheckBoxFor(m => m.chkItemActividadPrioritaria)
+                <label class="form-check-label text-small" for="chkItemActividadPrioritaria">
+                    Cuenta con Aprobación de Actividades Prioritarias?
+                </label>
+            </div>
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="form-group col-md-6">
+            <label for="txtAPROB_ACTIVIDAD_FECHA" class="text-small">Fecha de Presentación</label>
+            @Html.EditorFor(m => m.txtAPROB_ACTIVIDAD_FECHA, new { htmlAttributes = new { @class = "form-control form-control-sm", MaxLength = "10" } })
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="form-group col-md-12">
+            <label for="txtAPROB_ACTIVIDAD_AUTORIZACION" class="text-small">Actividades prioritarias autorizadas</label>
+            @Html.TextAreaFor(m => m.txtAPROB_ACTIVIDAD_AUTORIZACION, new { @class = "form-control form-control-sm", rows = 2 })
+
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="form-group col-md-6">
+            <label for="txtAPROB_ACTIVIDAD_RESOLUCION" class="text-small">N° Resolución de Aprobación de Actividades Prioritarias</label>
+            @Html.EditorFor(m => m.txtAPROB_ACTIVIDAD_RESOLUCION, new { htmlAttributes = new { @class = "form-control form-control-sm", MaxLength = "150" } })
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="form-group col-md-6">
+            <label for="lblAPROB_ACTIVIDAD_DATOS" class="text-small">Datos del Funcionario que firma la Resolución de Aprobación</label>
+            <div class="input-group">
+                <div class="input-group-prepend">
+                    <span class="input-group-text"><i id="btnConsultor" class="fa fa-plus" style="cursor:pointer;" data-toggle="tooltip" data-placement="top" title="Nuevo"></i></span>
+                </div>
+                @Html.EditorFor(m => m.lblAPROB_ACTIVIDAD_DATOS, new { htmlAttributes = new { @class = "form-control form-control-sm", disabled = "disabled" } })
+                @Html.HiddenFor(m => m.hdlblAPROB_ACTIVIDAD_DATOS)
+            </div>
+        </div>
+        <div class="form-group col-md-6"></div>
+    </div>
+    <div class="table-responsive">
+        <table id="grvItemEcotInformeAnual" class="table table-hover table-bordered">
+            <thead>
+                <tr>
+                    <th colspan="8" class="text-sm-left">
+                        <div class="form-inline">
+                            <i class="fa mx-1 fa-lg fa-file-o" style="cursor:pointer;" data-toggle="tooltip" data-placement="top" title="Nuevo"></i>
+                            <strong>Informes Anuales de Ejecución Plan de Manejo</strong>
+                        </div>
+                    </th>
+                </tr>
+                <tr>
+                    <th></th>
+                    <th></th>
+                    <th>Nº</th>
+                    <th>Fecha Presentación</th>
+                    <th>Periodo Informado</th>
+                    <th>Persona que Firma</th>
+                    <th>Principales acciones a desarrollar</th>
+                    <th>Observación</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
+</div>

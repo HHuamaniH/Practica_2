@@ -1,0 +1,46 @@
+﻿@model CapaEntidad.ViewModel.VM_InformeTecnico
+<div id="divInsOcular">
+    <div class="card-header text-small">Determinación Multa</div>
+    <div><br /></div>
+    <div class="form-row" id="divRectificacion">
+        <div class="form-group col-md-4">
+            <label for="chkGTF" class="text-small">Fecha de Inicio de inspección</label>
+        </div>
+        <div class="form-group col-md-6">
+            @Html.EditorFor(m => m.txtFechaInicio, new { htmlAttributes = new { @class = "form-control form-control-sm", pattern = "[0-9]*[.,]?[0-9]+", maxlength = "10", onkeypress = "return utilSigo.onKeyDecimal(event, this);" } })
+
+        </div>
+        <div class="form-group col-md-2">
+        </div>
+    </div>
+    <div class="form-row" id="divRectificacion">
+        <div class="form-group col-md-4">
+            <label for="chkGTF" class="text-small">fecha de término de inspección</label>
+        </div>
+        <div class="form-group col-md-6">
+            @Html.EditorFor(m => m.txtFechaFin, new { htmlAttributes = new { @class = "form-control form-control-sm", pattern = "[0-9]*[.,]?[0-9]+", maxlength = "10", onkeypress = "return utilSigo.onKeyDecimal(event, this);" } })
+
+        </div>
+        <div class="form-group col-md-2">
+        </div>
+    </div>
+    <div class="form-row" id="divRectificacion">
+        <div class="form-group col-md-4">
+            <label for="chkGTF" class="text-small">Principales resultados</label>
+        </div>
+        <div class="form-group col-md-6">
+            @Html.TextAreaFor(m => m.txtPrincipalesResultados, 4, 1, new { @class = "form-control form-control-sm" })
+        </div>
+        <div class="form-group col-md-2">
+        </div>
+    </div>
+    <div>
+        @Html.Partial("~/Areas/Fiscalizacion/Views/ManInformeTecnico/_Shared/_renderSSupervision.cshtml", Model)
+    </div>
+</div>
+
+
+
+
+
+

@@ -1,0 +1,69 @@
+﻿<script src="~/Scripts/ckeditor/ckeditor.js"></script>
+<script src="~/Areas/Supervision/js/ReporteVigilancia/_EnviarCorreo.js"></script>
+
+<div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+        <div class="modal-header text-small" style="cursor:move;">
+            <span>Enviar Reporte de Hallazgo</span>
+            <i class="fa fa-close" style="cursor:pointer;" data-dismiss="modal" aria-label="Close"></i>
+        </div>
+        <div class="modal-body">
+            <form id="frmEnviarRptHallazgo">
+                <div class="form-row" style="margin-top:8px;">
+                    <div class="col-md-1"></div>
+                    <div class="col-md-11" id="dvDestino" style="display:none;">
+                        @Html.DropDownList("ddlDestinoId", new SelectList(ViewBag.lstDestino, "Value", "Text"), new { @class = "form-control form-control-sm", @style = "width:auto;" })
+                    </div>
+                    <div class="col-md-11" id="dvAddDestino">
+                        <i class="fa fa-lg fas fa-plus" style="cursor:pointer;" title="Añadir Correo" onclick="_EnviarCorreo.MostrarCorreo(1)"></i>
+                    </div>
+                </div>
+                <div class="form-row" style="margin-top:8px;">
+                    <div class="col-md-1">
+                        <label for="lbldestino" class="text-small">Para:</label>
+                    </div>
+                    <div class="col-md-11">
+                        @Html.TextArea("txtdestino", "", new { @class = "form-control form-control-sm", rows = "3" })
+                    </div>
+                </div>
+                <div class="form-row" style="margin-top:30px;">
+                    <div class="col-md-1"></div>
+                    <div class="col-md-11" id="dvDestinoCC" style="display:none;">
+                        @Html.DropDownList("ddlDestinoCCId", new SelectList(ViewBag.lstDestinoCC, "Value", "Text"), new { @class = "form-control form-control-sm", @style = "width:auto;" })
+                    </div>
+                    <div class="col-md-11" id="dvAddDestinoCC">
+                        <i class="fa fa-lg fas fa-plus" style="cursor:pointer;" title="Añadir Correo" onclick="_EnviarCorreo.MostrarCorreo(2)"></i>
+                    </div>
+                </div>
+                <div class="form-row" style="margin-top:8px;margin-bottom:20px;">
+                    <div class="col-md-1">
+                        <label for="lbldestinoCC" class="text-small">CC:</label>
+                    </div>
+                    <div class="col-md-11">
+                        @Html.TextArea("txtdestinoCC", "", new { @class = "form-control form-control-sm", rows = "3" })
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-12">
+                        <label for="lblasunto" class="text-small">Asunto del correo electrónico</label>
+                        @Html.Editor("txtasunto", new { htmlAttributes = new { @class = "form-control form-control-sm", disabled = true } })
+                    </div>
+                </div>
+                <div class="card" style="margin-top:8px;">
+                    <div class="card-header text-small">
+
+                    </div>
+                    <div class="card-body">
+                        <div class="col-md-12">
+                            @Html.TextArea("txtmensaje_envio", new { @class = "form-control form-control-sm", @rows = "10", @disabled = false })
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Cancelar</button>
+            <button type="button" class="btn btn-primary btn-sm" onclick="_EnviarCorreo.ValidarCampos()">Enviar</button>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,237 @@
+﻿
+@{
+    ViewBag.Title = "viewReporte2";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<link href="~/Styles/Proyectos/reporteEstadisticas.min.css" rel="stylesheet" />
+<script src="~/Scripts/chart/Chart.min.js"></script>
+<script src="~/Scripts/chart/custom.js"></script>
+<script src="~/Scripts/jscomunes.js"></script>
+
+<script>
+    $(document).ready(function () {
+        $("#btnReporte").on("click", function () {
+            if (ItemValidarFiltrosBusqueda()) {
+                $("#cnvReporteEst2").remove();
+                $("#dvChartReporteEst2").append("<canvas id='cnvReporteEst2'></canvas>");
+                $("#cnvReporteEst3").remove();
+                $("#dvChartReporteEst3").append("<canvas id='cnvReporteEst3'></canvas>");
+
+                $.ajax({
+                    url: '@Url.Action("generarReporte2","Estadisticos")',
+                    type: 'POST',
+                    dataType: 'json',
+                    contentType: 'application/json; charset=utf-8',
+                    data: JSON.stringify({
+                        'busAnio': ObtenerListaAnio(),
+                        'busModalidad': ObtenerListaModalidad(),
+                        'busRegion': ObtenerListaRegiones(),
+                        'busLinea': ObtenerListaLinea()
+                    }),
+                    success: function (data) {                       
+                        $(".resultadoRpt2").show();
+                        var subTitulo21 = 'Supervisiones por Departamento y Modalidad';
+                        var subTitulo22 = 'Supervisiones por Modalidad y Año';
+                        var subTitulo23 = 'Supervisiones por Departamento y Año';
+                        $("#subTituloReport21>h3").text(subTitulo21);
+                        $("#subTituloReport22>h3").text(subTitulo22);
+                        $("#subTituloReport23>h3").text(subTitulo23);
+                        var j = 0; cantColumns = 0; fila = "";
+                        $(data).each(function () {
+                            var i = 0;
+                            ++j;
+                            var arrayTotal = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+                            $("#tbReportEst2" + (j) + ">tbody").empty();
+                            if (j == 1) { cantColumns = 14; } else if (j == 2 || j == 3) { cantColumns = 16; }
+
+                            $(this).each(function () {
+                                fila = "<tr><td>" + (++i) + "</td><td>" + $(this)[0] + "</td>";
+                                for (var k = 0; k < cantColumns; k++) {
+                                    arrayTotal[k] += $(this)[k + 1];
+                                    fila += "<td>" + agregarSeparador(parseFloat($(this)[k + 1].toFixed(3)).toString(), ',') + "</td>";
+                                }
+                                fila += "</tr>";
+                                $("#tbReportEst2" + (j) + ">tbody").append(fila);
+                            });
+
+                            fila = "<tr><td></td><td>Total</td>";
+                            for (var k = 0; k < cantColumns; k++) {
+                                fila += "<td>" + agregarSeparador(parseFloat(arrayTotal[k].toFixed(3)).toString(), ',') + "</td>";
+
+                            }
+                            fila += "</tr>";
+                            $("#tbReportEst2" + (j) + ">tbody").append(fila);
+
+                            var dvHeight = $("#tbReportEst2" + (j)).parent().height();
+                            var dataSort = $(this).sort(function (a, b) { return b[16] - a[16] });
+
+                            if (j == 2) {
+                                customChart.LoadBarraSimple(dataSort, 0, { colIndex: [16], color: ["blue"], legend: ["Número de Supervisiones"] }, { type: "H", title: "", legend: false, xTitle: "Número de Supervisiones", yTitle: "Modalidad de Aprovechamiento", canvas: "cnvReporteEst2" });
+                                if (dvHeight>372) {
+                                    $("#cnvReporteEst2").css("height", dvHeight);
+                                }
+                            }
+                            if (j == 3) {
+                                for (var i = 0; i < dataSort.length; i++) {
+                                    dataSort[i][0] = PrimerCaracterMayuscula(dataSort[i][0].toLowerCase());
+                                }
+                                customChart.LoadBarraSimple(dataSort, 0, { colIndex: [16], color: ["blue"], legend: ["Número de Supervisiones"] }, { type: "H", title: "", legend: false, xTitle: "Número de Supervisiones", yTitle: "Departamento", canvas: "cnvReporteEst3" });
+                                if (dvHeight > 372) {
+                                    $("#cnvReporteEst3").css("height", dvHeight);
+                                }
+                            }
+
+                        });
+                        unloader();
+                    },
+                    beforeSend: function () {
+                        loader();
+                    },
+                    error: function () {
+                        unloader();
+                    }
+                });
+            }
+        });
+    });
+</script>
+
+<div class="contenedorReporte">
+    <div class="filtroReporte">
+        <div class="toolsLista">
+            <div class="navLista">
+                <a href="@Url.Action("Index","Home")" title="Volver al Inicio"><span class="icon-arrow-back"></span><span>Volver al Inicio</span></a>
+            </div>
+            <div class="tituloLista">
+                <h2>Supervisiones efectuadas: departamento y modalidad</h2>
+            </div>
+        </div>
+        @Html.Partial("Controles/_MasterFiltro")
+        <div class="divbtnReporte">
+            <input id="btnReporte" type="button" value="Generar Reporte" class="btnBotonFormSIGO" />
+        </div>
+    </div>
+    <div class="informacionReporte">
+        <h3 style="margin:0px;">¿Qué contiene este reporte?</h3>
+        <ul style="padding-left:15px;margin-top:5px;margin-bottom:5px;">
+            <li><p>Muestra el número de supervisiones efectuadas por el OSINFOR desde el año 2009.</p></li>
+            <li><p>Incluye opciones de búsqueda por año de supervisión, modalidad de aprovechamiento y departamento.</p></li>
+        </ul>
+    </div>
+    <div class="resultadoReporte resultadoRpt2" style="display:none;">
+        <div id="subTituloReport21" class="subTituloReport">
+            <h3></h3>
+        </div>
+        <div class="bloqueResultado">
+            <div class="bloqueResultado1">
+                <div class="GrillaDivMarco">
+                    <table id="tbReportEst21" class="Grilla" style="width:100%;">
+                        <thead>
+                            <tr>
+                                <th>Nº</th>
+                                <th>Departamento</th>
+                                <th>Permisos y Autorizaciones Fauna Silvestre</th>
+                                <th>Tara</th>
+                                <th>Bosques Secos</th>
+                                <th>Concesiones Maderables</th>
+                                <th>Concesiones No Maderables</th>
+                                <th>Forestación y Reforestación</th>
+                                <th>Concesiones Ecoturismo</th>
+                                <th>Concesiones Conservación</th>
+                                <th>Concesiones Fauna Silvestre</th>
+                                <th>Predio Privado</th>
+                                <th>Comunidad Nativa y Campesina</th>
+                                <th>Bosques Locales</th>
+                                <th>Permisos y Autorizaciones Productos Forestales No Maderables</th>
+                                <th>Total</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div id="subTituloReport22" class="subTituloReport">
+            <h3></h3>
+        </div>
+        <div class="bloqueResultado">
+            <div class="bloqueResultado2" style="margin-right:5px;">
+                <div class="GrillaDivMarco">
+                    <table id="tbReportEst22" class="Grilla" style="width:100%;">
+                        <thead>
+                            <tr>
+                                <th>Nº</th>
+                                <th>Modalidad de Aprovechamiento</th>
+                                <th>2009</th>
+                                <th>2010</th>
+                                <th>2011</th>
+                                <th>2012</th>
+                                <th>2013</th>
+                                <th>2014</th>
+                                <th>2015</th>
+                                <th>2016</th>
+                                <th>2017</th>
+                                <th>2018</th>
+                                <th>2019</th>
+                                <th>2020</th>
+                                <th>2021</th>
+                                <th>2022</th>
+                                <th>2023</th>
+                                <th>Total</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="bloqueResultado2" style="margin-left:5px;">
+                <div id="dvChartReporteEst2"></div>
+            </div>
+        </div>
+        <div id="subTituloReport23" class="subTituloReport">
+            <h3></h3>
+        </div>
+        <div class="bloqueResultado">
+            <div class="bloqueResultado2" style="margin-right:5px;">
+                <div class="GrillaDivMarco">
+                    <table id="tbReportEst23" class="Grilla" style="width:100%;">
+                        <thead>
+                            <tr>
+                                <th>Nº</th>
+                                <th>Departamento</th>
+                                <th>2009</th>
+                                <th>2010</th>
+                                <th>2011</th>
+                                <th>2012</th>
+                                <th>2013</th>
+                                <th>2014</th>
+                                <th>2015</th>
+                                <th>2016</th>
+                                <th>2017</th>
+                                <th>2018</th>
+                                <th>2019</th>
+                                <th>2020</th>
+                                <th>2021</th>
+                                <th>2022</th>
+                                <th>2023</th>
+                                <th>Total</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="bloqueResultado2" style="margin-left:5px;">
+                <div id="dvChartReporteEst3"></div>
+            </div>
+        </div>
+    </div>
+    <div class="informacionReporte resultadoRpt2" style="display:none;">
+        <ul style="padding-left:20px;margin-top:5px;margin-bottom:5px;">
+            <li>En el año 2009 las supervisiones se realizaron a partir del mes de Agosto</li>
+            <li style="margin-top:10px;"><strong>Actualizado al: </strong>@ViewBag.fechaProcess</li>
+            <li><strong>Fecha y Hora de Consulta:</strong> @DateTime.Now</li>
+        </ul>
+    </div>
+</div>

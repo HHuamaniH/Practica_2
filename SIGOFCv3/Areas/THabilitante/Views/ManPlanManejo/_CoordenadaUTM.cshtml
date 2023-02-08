@@ -1,0 +1,51 @@
+﻿<div class="modal-dialog" role="document">
+    <div class="modal-content" id="contenedorCoordenadaUTM">
+        <div class="modal-header text-small" style="cursor:move;padding:0.5rem;">
+            <h5 class="modal-title" id="h5Titulo">Nuevo</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body">
+            <form id="frmCoordenadaUTM">
+                <input type="hidden" id="COD_SECUENCIAL" name="COD_SECUENCIAL" value="0" />
+                <input type="hidden" id="RegEstado" name="RegEstado" value="1" />
+                <input type="hidden" id="RegEstadoClient" name="RegEstadoClient" value="1" />     
+                <div class="form-group row">
+                    <label for="NUM_PARCELA" class="col-md-4 col-form-label text-small">Parcela</label>
+                    <div class="col-md-8">
+                        <input type="text" id="NUM_PARCELA" name="NUM_PARCELA" class="form-control form-control-sm" placeholder="Parcela" maxlength="2" />
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="NUM_PUNTOS" class="col-md-4 col-form-label text-small">Puntos / Vértices</label>
+                    <div class="col-md-8">
+                        <input type="text" id="NUM_PUNTOS" name="NUM_PUNTOS" class="form-control form-control-sm" maxlength="7" />
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="COORDENADA_ESTE" class="col-md-4 col-form-label text-small">Coord. Este</label>
+                    <div class="col-md-8">
+                        <input type="text" id="COORDENADA_ESTE" name="COORDENADA_ESTE" class="form-control form-control-sm" placeholder="Coord. Este" maxlength="6" onkeypress="return utilSigo.onKeyEntero(event, this);" />
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="COORDENADA_NORTE" class="col-md-4 col-form-label text-small">Coord. Norte</label>
+                    <div class="col-md-8">
+                        <input type="text" id="COORDENADA_NORTE" name="COORDENADA_NORTE" class="form-control form-control-sm" placeholder="Coord. Norte" maxlength="7" onkeypress="return utilSigo.onKeyEntero(event, this);" />
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="OBSERVACION" class="col-md-4 col-form-label text-small">Observacíon</label>
+                    <div class="col-md-8">
+                        <textarea id="OBSERVACION" name="OBSERVACION" class="form-control form-control-sm" rows="2" maxlength="300" />
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="modal-footer">
+            <button type="button" id="btnGuardarCoordenada" class="btn btn-primary btn-sm">Agregar</button>            
+        </div>
+    </div>
+</div>
+<script src="~/Areas/THabilitante/js/ManPlanManejo/_CoordenadaUTM.js"></script>

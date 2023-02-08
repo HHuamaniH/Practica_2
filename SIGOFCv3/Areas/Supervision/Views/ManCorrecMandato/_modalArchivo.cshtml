@@ -1,0 +1,90 @@
+﻿<style>
+    #frmItemDestinatario input[type=text] {
+        text-transform: uppercase;
+    }
+</style>
+
+<div class="modal-dialog modal-lg" role="document" id="divItemDestinatario">
+    <div class="modal-content">
+        <div class="modal-header text-small" style="cursor:move;padding:0.5rem;">
+            <h5 class="modal-title" id="h5Titulo">Archivo</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body">
+            <form id="frmItemExpediente">
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label class="text-small">Archivo</label>
+                        <div class="input-group">
+                            <div class="custom-file">
+                                <input type="file" class="custom-file-input" id="idArchivo" accept="application/pdf, .xlsx, .xls, .csv, application/msword">
+                                <label class="custom-file-label" for="idArchivo" id="lblArchivo">Sin Archivos</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="modal-footer">
+            <button type="button" id="guardarArchivo" data-dismiss="modal" aria-label="Close" class="btn btn-primary">Aceptar</button>
+            <button type="button" data-dismiss="modal" aria-label="Close" class="btn btn-danger">Cerrar</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(function () {
+        $('#guardarArchivo').click(function () {
+            let fileData = new FormData();
+            let archivoAuditoria = $("#idArchivo").get(0);
+            $.each(archivoAuditoria.files, function (index, value) {
+                fileData.append(value.name, value);
+            });
+            let infoArchivo = [];
+            $.ajax({
+                url: urlLocalSigo + "Supervision/ManCorrecMandato/SubirArchivoData",
+                data: fileData,
+                dataType: "json",
+                type: "POST",
+                contentType: false,
+                processData: false,
+                success: function (data) {
+                    infoArchivo = data;
+                },
+                complete: function () {
+                     var option = {
+                        url: urlLocalSigo + "Supervision/ManCorrecMandato/guardarTramite",
+                        datos: JSON.stringify({
+                            COD_RESODIREC: $('#hiddentramite').val(),
+                            ADJMANDATO: {
+                                URLNOMBRE: infoArchivo[0].path,
+                                ARCHIVO_EXTENSION: infoArchivo[0].mineType,
+                                URLDIGITAL: infoArchivo[0].mensaje
+                            },
+                            iTipo: 5
+                        }),
+                        type: 'POST'
+                    };
+                    utilSigo.fnAjax(option, function (data) {
+                            $('#hiddentramite').val('');
+                            $("#modalAddArchivo .close").click();
+                    });
+                }
+            });
+        });
+
+         $("#idArchivo").change(function () {
+            $('#lblArchivo').html(utilSigo.recortarTextos(setNombre(this.files), 40));
+         });
+
+        var setNombre = function (archivos) {
+            let concatNombres = '';
+            for (let i = 0; i < archivos.length; i++) {
+                concatNombres += archivos[i].name + ', ';
+            }
+            return concatNombres.substring(0, concatNombres.length - 2);
+        };
+    });
+</script>

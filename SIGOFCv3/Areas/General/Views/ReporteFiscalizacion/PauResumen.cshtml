@@ -1,0 +1,313 @@
+﻿@model CapaEntidad.ViewModel.VM_ReporteGeneral
+@{
+    ViewBag.Title = "PAU Resumen";
+    Layout = "~/Views/Shared/_LayoutMain.cshtml";
+}
+
+<script src="~/Scripts/chart/chart.js"></script>
+
+<script type="text/javascript">
+    var _rendReporteSup = {};
+    $(function () {
+       
+        $('#Fecha').datepicker({ format: "dd/mm/yyyy", autoclose: true, language: 'es' }).datepicker("setDate", new Date());
+        $("[id*=chk] input").prop("checked", true);
+        $("[id*=chk] ").prop("checked", true);
+        $(".check-all").on("change", function () {
+            console.log('clic');
+            let isChecked = $(this).is(":checked");
+            $(this).closest('.box').find(".custom-control-input").prop("checked", isChecked);
+        });
+
+       
+    });
+
+
+    _rendReporteSup.fnReporte = function () {
+        let anio = $('#Fecha').val(); //_rendReporteSup.frm.find("#chkAnio").val();
+        let modalidad = [];
+        $("[id*=chkModalidad] input:checked").each(function () {
+            modalidad.push($(this).attr('value'));
+        });
+        let direccion = [];
+        $("[id*=chkDireccionSup] input:checked").each(function () {
+            direccion.push($(this).attr('value'));
+        });
+        let direccionFisc = [];
+        $("[id*=chkDireccionFisc] input:checked").each(function () {
+            direccionFisc.push($(this).attr('value'));
+        });
+        let departamento = [];
+        $("[id*=chkDepartamento] input:checked").each(function () {
+            departamento.push($(this).attr('value'));
+        });
+        let url = urlLocalSigo + "General/ReporteFiscalizacion/ReporteResumenFiscalizacionPau";
+        if (modalidad.length > 0) {
+            if (direccion.length > 0) {
+                if (departamento.length > 0) {
+                    $.ajax({
+                        url: url,
+                        type: 'POST',
+                        datatype: "json",
+                        traditional: true,
+                        beforeSend: function () { utilSigo.beforeSendAjax(); },
+                        data: { 'modalidad': modalidad, 'direccion': direccion, 'direccionFisc': direccionFisc, 'anio': anio, 'departamento': departamento, instancia: 'DFFFS'},
+                        success: function (data) {
+                            $('div#divReporte').html(data);
+                        },
+                        complete: function () { utilSigo.unblockUIGeneral(); }
+                    });
+                } else {
+                    utilSigo.toastWarning("Aviso", 'Seleccione un departamento');
+                }
+
+            } else {
+                utilSigo.toastWarning("Aviso", 'Seleccione una dirección de linea');
+            }
+        } else {
+            utilSigo.toastWarning("Aviso", 'Seleccione una modalidad');
+        }
+
+    }
+    _rendReporteSup.fnExportResumen = function (index) {
+        var url = urlLocalSigo + "General/ReporteFiscalizacion/Rpt_Fiscalizacion_Resumen";
+        let params = {
+            cabecera: {
+                Titulo: "NPAU_RESUMEN_1ERA_INSTANCIA"
+              
+            },
+            resumen: _rendReporteSup.lista[index - 1]
+        };
+
+        $.ajax({
+            type: 'post',
+            url: url,
+            data: JSON.stringify(params),
+            contentType: 'application/json',
+            beforeSend: function () { utilSigo.beforeSendAjax(); },
+            dataType: 'binary',
+            xhrFields: {
+                'responseType': 'blob'
+            },
+        }).done(function (result) {
+            var a = $("<a style='display: none;'/>");
+            var url = window.URL.createObjectURL(new Blob([result]));
+            a.attr("href", url);
+            a.attr("download", _rendReporteSup.lista[index - 1].tituloReporte + '.xlsx');
+            $("body").append(a);
+            a[0].click();
+            window.URL.revokeObjectURL(url);
+            a.remove();
+            utilSigo.unblockUIGeneral();
+        });
+    }
+
+    $(document).ready(function () {
+        _rendReporteSup.frm = $("#divReporteFiscalizacionPAU");
+    });
+
+
+</script>
+<style>
+    #divReporteFiscalizacionPAU {
+        padding-top: 20px;
+    }
+    #collapseExample {
+        font-size: 0.8em;
+    }
+    .screen {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        background-color: black;
+        opacity: 0.3;
+        z-index: 1000;
+    }
+    .logo-wait {
+        position: fixed;
+        left: 50%;
+        top: 40%;
+        color: #dae7f5;
+        text-align: center
+    }
+    .custom-control-label::before, .custom-control-label::after {
+        top: 0;
+    }
+
+    .box {
+        padding: 5px;
+        max-height: 220px;
+        overflow: auto;
+        font-size: 0.9em;
+    }
+</style>
+<div class="screen d-none ">
+    <div class="logo-wait">
+        <p>Cargando...</p>
+        <span><i class="fa fa-spinner fa-4x fa-pulse"></i> </span>
+    </div>
+
+</div>
+<div id="divReporteFiscalizacionPAU" class="container-fluid" >
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="card">
+                <div class="card-header text-left">
+
+                    <h5 class="card-title">Número de PAU concluídos (Resumen 1ra Instancia)</h5>
+                </div>
+                <div class="card-body">
+                    <a class="btn btn-outline-success btn-sm" data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
+                        Opciones de busqueda <i class="fa fa-filter fa-fw"></i>
+                    </a>
+                    <div class="card card-body">
+                        <div class="collapse" id="collapseExample">
+                            <div class="row">
+                                <div class="col-sm-4 ">
+                                    <div class="card-body">
+                                        <h6 class="card-title">Modalidad</h6>
+                                        <p class="card-text">
+                                            <div id="chkModalidad" class="box">
+                                                <div class="custom-control custom-checkbox">
+                                                    <input type="checkbox" class="custom-control-input check-all" id="chkTodoMod" value="00" name="chkTodoMod" checked>
+                                                    <label class="custom-control-label" for="chkTodoMod">Todos</label>
+                                                </div>
+                                                @if (Model.listModalidadPAU != null)
+                                                {
+                                                    foreach (var item in Model.listModalidadPAU)
+                                                    {
+                                                        <div class="custom-control custom-checkbox">
+                                                            <input type="checkbox" class="custom-control-input" id="mcheck_@item.CODIGO" name="mcheck_@item.CODIGO" value="@item.CODIGO" checked>
+                                                            <label class="custom-control-label" for="mcheck_@item.CODIGO">@item.DESCRIPCION</label>
+                                                        </div>
+                                                    }
+                                                }
+                                            </div>
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class="col-sm-2">
+                                    <div class="listFiltro card-body">
+                                        <h6 class="card-title">Departamento</h6>
+                                        <p class="card-text">
+                                            <div id="chkDepartamento" class="box">
+                                                <div class="custom-control custom-checkbox">
+                                                    <input type="checkbox" class="custom-control-input check-all" id="chkTodoDep" value="00" name="chkTodoDep" checked>
+                                                    <label class="custom-control-label" for="chkTodoDep">Todos</label>
+                                                </div>
+                                                @if (Model.listDepartamentoPAU != null)
+                                                {
+                                                    foreach (var item in Model.listDepartamentoPAU)
+                                                    {
+                                                        <div class="custom-control custom-checkbox">
+                                                            <input type="checkbox" class="custom-control-input" id="dcheck_@item.CODIGO" name="dcheck_@item.CODIGO" value="@item.CODIGO" checked>
+                                                            <label class="custom-control-label" for="dcheck_@item.CODIGO">@item.DESCRIPCION</label>
+                                                        </div>
+                                                    }
+                                                }
+                                            </div>
+
+                                        </p>
+
+                                    </div>
+                                </div>
+                                <div class="col-sm-3">
+                                    <div class="listFiltro card-body">
+                                        <h6 class="card-title">Supervisión: SD Línea</h6>
+                                        <p class="card-text">
+                                            <div id="chkDireccionSup" class="box">
+                                                <div class="custom-control custom-checkbox">
+                                                    <input type="checkbox" class="custom-control-input check-all" id="chkTodoSup" value="00" name="chkTodoSup" checked>
+                                                    <label class="custom-control-label" for="chkTodoSup">Todas las DL</label>
+                                                </div>
+                                                @if (Model.listDireccionLineaSupervision != null)
+                                                {
+                                                    foreach (var item in Model.listDireccionLineaSupervision)
+                                                    {
+                                                        <div class="custom-control custom-checkbox">
+                                                            <input type="checkbox" class="custom-control-input" id="scheck_@item.CODIGO" name="scheck_@item.CODIGO" value="@item.CODIGO" checked>
+                                                            <label class="custom-control-label" for="scheck_@item.CODIGO">@item.DESCRIPCION</label>
+                                                        </div>
+                                                    }
+                                                }
+                                            </div>
+
+                                        </p>
+
+                                    </div>
+                                </div>
+                                <div class="col-sm-3">
+                                    <div class="listFiltro card-body">
+                                        <h6 class="card-title">Fiscalización: SD Línea</h6>
+                                        <p class="card-text">
+                                            <div id="chkDireccionFisc" class="box ">
+                                                <div class="custom-control custom-checkbox">
+                                                    <input type="checkbox" class="custom-control-input check-all" id="chkTodoFisc" value="00" name="chkTodoFisc" checked>
+                                                    <label class="custom-control-label" for="chkTodoFisc">Todas las DL</label>
+                                                </div>
+                                                @if (Model.listDireccionLineaFiscalizacion != null)
+                                                {
+                                                    foreach (var item in Model.listDireccionLineaFiscalizacion)
+                                                    {
+                                                        <div class="custom-control custom-checkbox">
+                                                            <input type="checkbox" class="custom-control-input" id="fcheck_@item.CODIGO" name="fcheck_@item.CODIGO" value="@item.CODIGO" checked>
+                                                            <label class="custom-control-label" for="fcheck_@item.CODIGO">@item.DESCRIPCION</label>
+                                                        </div>
+                                                    }
+                                                }
+                                            </div>
+
+                                        </p>
+
+                                    </div>
+                                </div>
+                                <div class="col-sm-4">
+                                    <div class="form-group card-body">
+                                        <h6 class="card-title">Fecha Fin</h6>
+                                        <div class="input-group input-group-sm">
+
+                                            <input type="text" name="name" value="" id="Fecha" class="form-control" />
+                                            <div class="input-group-append">
+                                                <span class="input-group-text"><i class="fa fa-calendar"></i></span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+
+
+
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <div class="form-group">
+
+                                        <button id="btnBuscarFauna" class="btn btn-info" style="float: right" onclick="_rendReporteSup.fnReporte()">
+                                            <i class="fa fa-search fa-fw"></i>Generar reporte
+                                        </button>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                </div>
+                <div class="card-body">
+                    <div id="divReporte">
+
+                    </div>
+                </div>
+
+
+            </div>
+        </div>
+    </div>
+    
+    
+   
+
+</div>
+
+

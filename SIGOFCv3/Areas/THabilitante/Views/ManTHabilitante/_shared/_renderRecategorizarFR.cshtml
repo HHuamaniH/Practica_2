@@ -1,0 +1,200 @@
+﻿@model CapaEntidad.ViewModel.VM_THabilitante
+
+@{
+    ViewBag.Title = "_renderRecategorizarFR";
+}
+<script>
+    var Recategorizar = {};
+    var cod_secuencial;
+    var indice;
+    Recategorizar.iniciarEventos = function () {
+        Recategorizar.frm.find("#txtFechaRecat").datepicker({ format: "dd/mm/yyyy", autoclose: true, language: 'es' });
+        ///Recategorizar.tbEliTABLA = {};
+    };
+    Recategorizar.fncSelect = function () {
+        var idRecomendacion = Recategorizar.frm.find("#ddComoboMotivoRecId").val();
+        Recategorizar.frm.find("#divRecatFecha").hide();
+        Recategorizar.frm.find("#divRecatModalidad").hide();
+        Recategorizar.frm.find("#divRectContrato").hide();
+        Recategorizar.frm.find("#divRecatReolucion").hide();
+        Recategorizar.frm.find("#divRecatObservaciones").hide();
+
+        if (idRecomendacion != "0000000") {
+            Recategorizar.frm.find("#divRecatFecha").show();
+            Recategorizar.frm.find("#divRecatModalidad").show();
+            Recategorizar.frm.find("#divRectContrato").show();
+            Recategorizar.frm.find("#divRecatReolucion").show();
+            Recategorizar.frm.find("#divRecatObservaciones").show();
+
+        }
+
+    }
+    Recategorizar.fnInitDataTable_Detail = function () {
+        var columns_label = [], columns_data = [], options = {};
+
+        columns_label = ["Motivo", "Fecha", "Resolucion", "Modalidad", "Nueva Modalidad", "Contrato", "Observación"];
+        columns_data = ["MOTIVO", "ADENDA_FECHA_INICIO", "RES_TITULAR", "MTIPO_ANTERIOR", "MODALIDAD", "NUMERO", "OBSERVACION"];
+        options = {
+            page_length: 10, row_index: true,  page_sort: true, row_edit: true, row_fnEdit: "Recategorizar.fnEdit(this)"
+        };
+        Recategorizar.dtRenderListInforme = utilDt.fnLoadDataTable_Detail(Recategorizar.frm.find("#tbRecategorizarRF"), columns_label, columns_data, options);
+        Recategorizar.dtRenderListInforme.rows.add(JSON.parse('@Html.Raw(Json.Encode(@Model.ListModalidadesTH))')).draw();
+
+    }
+
+    Recategorizar.fnGetList = function () {
+        let list = [], rows, countFilas, data;
+        rows = Recategorizar.dtRenderListInforme.$("tr");
+        countFilas = rows.length;
+        if (countFilas > 0) {
+            $.each(rows, function (i, o) {
+                data = Recategorizar.dtRenderListInforme.row($(o)).data();
+                list.push(utilSigo.fnConvertArrayToObject(data));
+            });
+        }
+        return list;
+    }
+
+    Recategorizar.fnEdit = function (obj) {
+        var data = Recategorizar.dtRenderListInforme.row($(obj).parents('tr')).data();
+        indice = Recategorizar.dtRenderListInforme.row($(obj).parents('tr')).index();
+        Recategorizar.frm.find("#ddComoboMotivoRecId").val(data['COD_MADENDA']);
+        Recategorizar.frm.find("#txtFechaRecat").val(data['ADENDA_FECHA_INICIO']);
+        Recategorizar.frm.find("#ddModalidadFRTHId").val(data['COD_MTIPO']);
+        Recategorizar.frm.find("#txtNuevaResTitular").val(data['RES_TITULAR']);
+        Recategorizar.frm.find("#txtNuevoContrato").val(data['NUMERO']);
+        Recategorizar.frm.find("#txtObsRecat").val(data['OBSERVACION']);
+        Recategorizar.frm.find("#hdfIten_RegEstadoRecat").val(data['RegEstado']);
+
+        cod_secuencial = data['COD_SECUENCIAL'];
+        Recategorizar.fncSelect();
+    }
+    Recategorizar.fnAdd = function (obj) {
+        var idTipoRecategoriza = Recategorizar.frm.find("#ddComoboMotivoRecId").val();
+        var TipoRecategoriza = Recategorizar.frm.find("#ddComoboMotivoRecId option:selected").text();
+        let idModalidad = Recategorizar.frm.find("#ddModalidadFRTHId").val();
+        let modalidad = Recategorizar.frm.find("#ddModalidadFRTHId option:selected").text();
+        let fecha = Recategorizar.frm.find("#txtFechaRecat").val();
+        let resolucion = Recategorizar.frm.find("#txtNuevaResTitular").val();
+        let numero = Recategorizar.frm.find("#txtNuevoContrato").val();
+        let observacion = Recategorizar.frm.find("#txtObsRecat").val();
+        let regEstado = Recategorizar.frm.find("#hdfIten_RegEstadoRecat").val();
+        let modalidadanterior = Recategorizar.frm.find("#txtItemModalidad").val();
+        let codmodalidadanterior = Recategorizar.frm.find("#hdfItemModalidadCodigo").val();
+        if (indice != null) {
+            RegEstado = 2;
+        }
+        let model = {
+            'COD_MADENDA': idTipoRecategoriza,
+            'MOTIVO': TipoRecategoriza,
+            'COD_SECUENCIAL': cod_secuencial,
+            'ADENDA_FECHA_INICIO': fecha,
+            'OBSERVACION': observacion ,
+            'COD_MTIPO': idModalidad,
+            'MODALIDAD': modalidad,
+            'RES_TITULAR': resolucion,
+            'NUMERO': numero,
+            'RegEstado': regEstado,
+            'MTIPO_ANTERIOR': modalidadanterior,
+            'CODMTIPO_ANTERIOR': codmodalidadanterior
+
+        }
+        if (idTipoRecategoriza != "0000000" && idModalidad != "0000000" && numero != "" && resolucion != "" && fecha != "") {
+            if (indice == null) {
+                Recategorizar.dtRenderListInforme.rows.add([model]).draw();
+                Recategorizar.dtRenderListInforme.page('last').draw('page');
+            }
+            else {
+                Recategorizar.dtRenderListInforme.row(indice).data(model).draw(false);
+            }
+            Recategorizar.frm.find("#txtObsRecat").val('');
+            Recategorizar.frm.find("#txtNuevoContrato").val('');
+            Recategorizar.frm.find("#txtNuevaResTitular").val('');
+            Recategorizar.frm.find("#txtFechaRecat").val('');
+            Recategorizar.frm.find("#ddComoboMotivoRecId").val('0000000');
+            Recategorizar.frm.find("#ddModalidadTHId").val('0000000');
+
+            indice = null;
+            Recategorizar.fncSelect();
+            //
+            // table.row(i).data(tempRow);
+        }
+        else {
+            alert("Ingresar los valores necesarios");
+        }
+    }
+
+    $(document).ready(function () {
+        Recategorizar.frm = $("#fmrReforestacionCat");
+        Recategorizar.fncSelect();
+        Recategorizar.iniciarEventos();
+        Recategorizar.fnInitDataTable_Detail();
+    });
+</script>
+<div id="fmrReforestacionCat">
+    <div class="card-header text-small">
+        Cambio de modalidad
+    </div>
+
+    <div class="card-body">
+        <input type="hidden" id="hdfIten_RegEstadoRecat" name="hdfIten_RegEstadoRecat" value="1" />
+        @Html.HiddenFor(m => m.hdfItemModalidadCodigo)
+        @Html.HiddenFor(m => m.txtItemModalidad)
+        @if (Model.hdfItemModalidadCodigo == "0000010")
+        {
+            <div class="form-row">
+                <div class="form-group col-md-2">
+                    <label for="ddComoboMotivoRec" class="text-small">Motivo</label>
+                    @Html.DropDownListFor(m => m.ddComoboMotivoRecId, new SelectList(Model.ddComoboMotivoRec, "Value", "Text"), new { @class = "form-control form-control-sm", @onchange = "Recategorizar.fncSelect()" })
+                </div>
+                <div class="form-group col-md-2 divCambioRect" style="display:none;" id="divRecatFecha">
+                    <label for="txtFechaRecat" class="text-small">Fecha</label>
+                    @Html.EditorFor(m => m.txtFechaRecat, new { htmlAttributes = new { @class = "form-control form-control-sm", placeholder = "dd/mm/yyyy", title = "la fecha a ingresar debe ser en el formato dd/mm/yyyy", maxlength = "10" } })
+                </div>
+                <div class="form-group col-md-2 divCambioRect" id="divRecatModalidad" style="display:none;">
+                    <label for="ddModalidadTH" class="text-small">Nueva Modalidad</label>
+                    @Html.DropDownListFor(m => m.ddModalidadFRTHId, new SelectList(Model.ddModalidadFRTH, "Value", "Text"), new { @class = "form-control form-control-sm" })
+                </div>
+
+            </div>
+
+            <div class="form-row">
+                <div class="form-group col-md-2 divCambioRect" id="divRectContrato" style="display:none">
+                    <label for="txtNuevoContrato" class="text-small">Nuevo Nro Contrato</label>
+                    @Html.EditorFor(m => m.txtNuevoContrato, new { htmlAttributes = new { @class = "form-control form-control-sm", placeholder = "Número de Contrato", maxlength = "200" } })
+                </div>
+                <div class="form-group col-md-3 divCambioRect" id="divRecatReolucion" style="display:none;">
+                    <label for="txtNuevaResTitular" class="text-small">Numero de Resolución</label>
+                    @Html.EditorFor(m => m.txtNuevaResTitular, new { htmlAttributes = new { @class = "form-control form-control-sm", placeholder = "Número de Resolución del Titular", maxlength = "200" } })
+                </div>
+            </div>
+
+            <div class="divCambioRect" id="divRecatObservaciones" style="display:none;">
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label for="txtObsRecat" class="text-small">Observación</label>
+                        @Html.TextAreaFor(m => m.txtObsRecat, new { @class = "form-control form-control-sm", rows = 2 })
+                    </div>
+                </div>
+                <div class="form-inline text-right">
+                    <button type="button" id="btnCancelarRecat" class="btn btn-secondary btn-sm mx-2" style="display:none;">Cancelar Edicion</button>
+                    <button type="button" id="btnAgregarRecat" class="btn btn-primary btn-sm" onclick="Recategorizar.fnAdd()">Agregar</button>
+                </div>
+            </div>
+            <br />
+        }
+        <div class="form-row">
+            <div class="table-responsive">
+                <table id="tbRecategorizarRF" class="table table-hover table-bordered" width="100%">
+                    <thead>
+                        <tr>
+                            <th colspan="9" class="text-sm-center">Listado de Cambios (Historial)</th>
+                        </tr>
+
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,48 @@
+﻿
+<script src="~/Areas/Supervision/js/ManInformeExSitu/_ActividadInvestigacion.js"></script>
+
+<div class="modal-dialog" role="document">
+    <div class="modal-content">
+        <div class="modal-header text-small" style="cursor:move;">
+            <span>Investigación Realizada</span>
+            <i class="fa fa-close" style="cursor:pointer;" data-dismiss="modal" aria-label="Close"></i>
+        </div>
+        <div class="modal-body">
+            <form id="frmItemActInvestigacion">
+                @Html.Hidden("hdfRegEstado")
+                @Html.Hidden("hdfCodSecuencial")
+                <div class="form-row">
+                    <div class="form-group col-md-12">
+                        <label for="txtInvestigacion" class="text-small">Investigación</label>
+                        @Html.TextArea("txtInvestigacion", "", new { @class = "form-control form-control-sm", rows = "3" })
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-12">
+                        <label for="txtObjetivo" class="text-small">Objetivo</label>
+                        @Html.TextArea("txtObjetivo", "", new { @class = "form-control form-control-sm", rows = "3" })
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-3">
+                        <label for="chkPublicar" class="text-small">Publicado</label>
+                        <div style="margin-top:7px;">
+                            <div class="form-check form-check-inline">
+                                @Html.CheckBox("chkPublicar", false, new { @class = "form-check-input", style = "width:15px;height:16px;" })
+                                <label class="form-check-label" for="chkPublicar"></label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group col-md-3">
+                        <label for="txtFechaPublicacion" class="text-small">Fecha Publicación</label>
+                        @Html.TextBox("txtFechaPublicacion", "", new { @class = "form-control form-control-sm" })
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-primary btn-sm" onclick="_ActividadInvestigacion.fnSubmitForm()">Guardar</button>
+            <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Cancelar</button>
+        </div>
+    </div>
+</div>

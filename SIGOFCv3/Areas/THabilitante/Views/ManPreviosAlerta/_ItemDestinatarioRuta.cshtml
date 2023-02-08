@@ -1,0 +1,119 @@
+﻿@model CapaEntidad.ViewModel.VM_PreviosAlerta
+<script src="~/Areas/THabilitante/js/ManPreviosAlerta/_ItemDestinatarioRuta.js"></script>
+<style>
+
+    #modalAddEditDestinatario > .modal-lg {
+        max-width: 80% !important;
+    }
+</style>
+<script>
+    $(document).ready(function () {
+
+        var list = [];
+            @foreach(var item in Model.ListDESTINATARIO )
+            {
+                <text>
+
+                list.push({
+                    COD_DESTINATARIO: @item.COD_DESTINATARIO,
+                    DESCRIPCION: "@item.DESCRIPCION" ,
+                    CORREO: "@item.CORREO",
+                    OFICINA: "@item.OFICINA",
+                    RegEstado:RegEstadoSigo.INITIAL
+                });
+             </text>
+            }
+        _ItemDestinatarioRuta.dtDestinatario.rows.add(list).draw();
+        list=[];
+
+         @foreach(var item in Model.ListDESTINATARIO_RUTA )
+        {
+            <text>
+  
+            list.push({
+                COD_DESTINATARIO: @item.COD_DESTINATARIO,
+                DESCRIPCION: "@item.DESCRIPCION" ,
+                COD_RUTA: @item.COD_RUTA,
+                COD_DESTINATARIO_RUTA: @item.COD_DESTINATARIO_RUTA,
+                CORREO: "@item.CORREO",
+                OFICINA: "@item.OFICINA",
+                RegEstado:RegEstadoSigo.INITIAL
+            });
+        </text>
+        }
+        if(list.count>0)
+            _ItemDestinatarioRuta.frm.find("#ddlDestinatarioRutaRutaId").val(list[0].COD_RUTA);
+        console.log(list);
+
+        _ItemDestinatarioRuta.dtDestinatarioRuta.rows.add(list).draw();
+
+
+
+    });
+
+</script>
+<div class="modal-dialog modal-lg" role="document" id="divItemDestinatarioRuta">
+    <div class="modal-content">
+        <div class="modal-header text-small" style="cursor:move;padding:0.5rem;">
+            <h5 class="modal-title" id="h5Titulo">Nuevo</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body">
+            <form id="frmItemDestinatarioRuta">
+                <div class="form-row">
+                    <div class="form-group col-md-12">
+                        <label for="ddlDestinatarioRutaRutaId" class="text-small">Ruta</label>
+                        @*@Html.DropDownList("ddlDestinatarioRutaRutaId", new SelectList(Model.ddlDestinatarioRutaRuta, "Value", "Text"), new { @class = "form-control form-control-sm" })*@
+                        @Html.DropDownListFor(m=>m.ddlDestinatarioRutaRutaId, new SelectList(Model.ddlDestinatarioRutaRuta, "Value", "Text"), new { @class = "form-control form-control-sm" })
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <table id="grvDestinatarioRutaDestinatario" class="table table-hover table-bordered" style="width:100%">
+                            <thead>
+                                <tr>
+                                    <th colspan="5" class="text-sm-left font-weight-bold">
+                                        Seleccionar Destinatarios
+                                    </th>
+                                </tr>
+                                <tr>
+                                    <th></th>
+                                    <th>Codigo</th>
+                                    <th>Destinatario</th>
+                                    <th>Correo</th>
+                                    <th>Oficina</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <table id="grvDestinatarioRutaDestinatarioSeleccion" class="table table-hover table-bordered" style="width:100%">
+                            <thead>
+                                <tr>
+                                    <th colspan="5" class="text-sm-left font-weight-bold">
+                                        Destinatarios Seleccionados
+                                    </th>
+                                </tr>
+                                <tr>
+                                    <th></th>
+                                    <th>Codigo</th>
+                                    <th>Destinatario</th>
+                                    <th>Correo</th>
+                                    <th>Oficina</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </div>
+
+            </form>
+        </div>
+        <div class="modal-footer">
+            <button type="button" id="btnGuardar" class="btn btn-primary" >Guardar</button>
+        </div>
+    </div>
+</div>

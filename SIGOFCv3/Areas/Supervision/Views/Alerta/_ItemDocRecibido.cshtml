@@ -1,0 +1,68 @@
+﻿@model CapaEntidad.ViewModel.VM_PreviosAlerta
+
+<script src="~/Areas/Supervision/js/Alerta/ItemDocRecibido.js"></script>
+<style>
+    #frm_ItemDocRecibido input[type=text] {
+        text-transform: uppercase;
+    }
+</style>
+
+<div class="modal-dialog modal-lg" role="document" id="divItemDocRecibido">
+    <div class="modal-content">
+        <div class="modal-header text-small" style="cursor:move;padding:0.5rem;">
+            <h5 class="modal-title" id="h5Titulo">Nuevo</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body">
+            <form id="frmItemDocRecibido">
+                <input type="hidden" id="hdCodDocRecibido" name="hdCodDocRecibido" value="0" />
+                <!--Datos del archivo adjuntado-->
+                <input type="hidden" id="txtnomArchOriginal" name="txtnomArchOriginal" />
+                <input type="hidden" id="txtnomArchTemporal" name="txtnomArchTemporal" />
+                <input type="hidden" id="txtextArch" name="txtextArch" />
+                <input type="hidden" id="txtestadoArch" name="txtestadoArch" />
+
+                <div class="form-row">
+                    <div class="form-group col-md-12">
+                        <label for="txtOficina" class="text-small">Entidad/Oficina</label>
+                        <input type="text" id="txtOficina" name="txtOficina" class="form-control form-control-sm" required placeholder="Ingrese oficina" />
+
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-12">
+                        <label for="txtDocumento" class="text-small">Documento</label>
+                        <input type="text" id="txtDocumento" name="txtDocumento" class="form-control form-control-sm" required placeholder="Ingrese Documento" />
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label for="txtfechaexpediente" class="text-small">Fecha</label>
+                        <input type="date" id="txtfechaexpediente" name="txtfechaexpediente" class="form-control form-control-sm" required />
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="txtExpediente" class="text-small">Nro Expediente de Trámite</label>
+                        <input type="text" id="txtExpediente" name="txtExpediente" class="form-control form-control-sm" required placeholder="Ingrese Expediente" />
+
+                    </div>
+                </div>  
+  
+                <div class="form-row">
+                    <div class="form-group col-md-12">
+                        <label for="txtObservaciones" class="text-small">OBSERVACIONES</label>
+                        <textarea id="txtObservaciones" name="txtObservaciones" class="form-control form-control-sm" required placeholder="Ingrese Observaciones" ></textarea>                        
+
+                    </div>
+                </div>
+                <br />
+            </form>
+        </div>
+        <div class="modal-footer">
+            <button type="button" id="btnGuardar" class="btn btn-primary" onclick="">Guardar</button>
+        </div>
+    </div>
+</div>
+<div id="divIframe"></div>
+

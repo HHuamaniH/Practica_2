@@ -1,0 +1,440 @@
+﻿@model CapaEntidad.ViewModel.VM_Alerta
+@{
+    ViewBag.Title = "AddEdit";
+    Layout = "~/Views/Shared/_LayoutMain.cshtml";
+}
+
+<script src="~/Scripts/datatables/Extensions/dataTables.buttons.js"></script>
+<script src="~/Scripts/datatables/Extensions/buttons.flash.min.js"></script>
+<script src="~/Scripts/datatables/Extensions/jszip.min.js"></script>
+<script src="~/Scripts/datatables/Extensions/pdfmake.js"></script>
+<script src="~/Scripts/datatables/Extensions/vfs_fonts.js"></script>
+<script src="~/Scripts/datatables/Extensions/buttons.html5.js"></script>
+<script src="~/Scripts/datatables/Extensions/buttons.print.js"></script>
+<script src="~/Scripts/sigo/utility.uploadFile.js"></script>
+<script src="~/Scripts/ckeditor/ckeditor.js"></script>
+
+<link href="~/Content/datatables/buttons.dataTables.min.css" rel="stylesheet" />
+<link href="~/Areas/Capacitacion/css/ManCapacitacion/AddEdit.css" rel="stylesheet" />
+@Scripts.Render("~/bundles/MainAlerta/MainAlerta")
+
+@section scripts{
+    <script>
+        "use strict";
+        var addEdit = new AddEdit();
+        var tablaVertice = new TablaVertice();
+
+        $(document).ready(function () {
+            addEdit.init();
+            tablaVertice.init();
+
+            _BalExtra.fnBuildTable();
+            var list = [];
+            var contador = 1;
+            $("#frmAddEdit").find("#ENVIAR_ALERTA").prop('disabled', false);
+            $("#frmAddEdit").find("#chkItemListDepa").prop('disabled', false);
+            @if ((Boolean)Model.entidad.ENVIAR_ALERTA){
+                <text>
+                addEdit.envioAlerta = 1;
+                $("#frmAddEdit").find("#divSeleccioneF").hide();
+                $("#frmAddEdit").find("#imgOficio").show();
+                $("#frmAddEdit").find("#FileOficio").hide();
+                $("#frmAddEdit").find("#pn_envio").show();
+                $("#frmAddEdit").find("#ENVIAR_ALERTA").prop('disabled', true);
+                $("#frmAddEdit").find("#chkItemListDepa").prop('disabled', true);
+                </text>
+            }
+            else
+            {
+                <text>
+                 $("#lblOficio").text('');
+                </text>
+            }
+
+            @foreach(var item in Model.entidad.ListVertices)
+            {
+                <text>
+                    list.push({
+                        NUMERO: contador,
+                        VERTICE: "@item.VERTICE",
+                        ZONA: "@item.ZONA",
+                        COORDENADA_ESTE: "@item.COORDENADA_ESTE",
+                        COORDENADA_NORTE: "@item.COORDENADA_NORTE",
+                        OBSERVACIONES: "@item.OBSERVACIONES",
+                    });
+                    contador += 1;
+                </text>
+            }
+            tablaVertice.dt.rows.add(list).draw();
+
+            //quitar check
+            $("#frmAddEdit").find("#chkItemListDepa").prop('checked', false);
+            addEdit.cargarDatosActa(1);
+            //iniciamos el CKEDITOR
+            //$("#MENSAJE_ENVIO_ALERTA").removeAttr("name");
+            CKEDITOR.replace('MENSAJE_ENVIO_ALERTA', {
+                toolbar: initSigo.configuracionCKEDITOR,
+                height :891
+            });
+            //Validamos el rol del usuario
+            utilSigo.ValidaRol('@ViewBag.VAliasRol', 'btnRegistrarCapacitacion','Edit');
+        });
+    </script>
+}
+<div class="container-fluid">
+    <div class="card">
+        <div class="card-header text-right">
+            Alerta Osinfor
+        </div>
+        <div class="card-body">
+            <div class="card">
+                <div class="card-header text-small">
+                    <a id="btnRegistrarCapacitacion" href="javascript:void(0)" style="cursor:pointer;" data-toggle="tooltip" data-placement="top" title="Guardar" onclick="addEdit.confirmarRegistro()"><i class="fa mx-2 fa-lg fa-save"></i></a>
+                    <a id="btnRegresarCapacitacion" style="cursor:pointer;" data-toggle="tooltip" data-placement="top" title="Regresar" onclick="addEdit.fnReturnIndex()"><i class="fa mx-2 fa-lg fa-reply"></i></a>
+                    Modificando Registro
+                </div>
+                <div class="card-body">
+                    <form id="frmAddEdit">
+                        @Html.HiddenFor(m => m.codigoDato, new { Name = "codigoDato", id = "codigoDato" })
+                        @Html.HiddenFor(m => m.codigoComplementario, new { Name = "codigoComplementario", id = "codigoComplementario" })
+
+                        <div class="card">
+                            <div class="card-header text-small">Datos de la Supervisión</div>
+                            <div class="card-body">
+                                <div class="form-row">
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label for="cartaNotificacion" class="text-small"><strong>Carta de Notificación:</strong></label>
+                                            <div class="">
+                                                <label class="text-small col-form-label">@Model.entidad.NUM_CNOTIFICACION</label>
+                                                @Html.HiddenFor(m => m.entidad.NUM_CNOTIFICACION, new { Name = "NUM_CNOTIFICACION", id = "NUM_CNOTIFICACION" })
+                                                @Html.HiddenFor(m => m.entidad.COD_CNOTIFICACION, new { Name = "COD_CNOTIFICACION", id = "COD_CNOTIFICACION" })
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label for="" class="text-small"><strong>Título Habilitante:</strong></label>
+                                            <div class="">
+                                                <label class="text-small col-form-label">@Model.entidad.NUM_THABILITANTE</label>
+                                                @Html.HiddenFor(m => m.entidad.NUM_THABILITANTE, new { Name = "NUM_THABILITANTE", id = "NUM_THABILITANTE" })
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label for="" class="text-small"><strong>Modalidad de Aprovechamiento:</strong></label>
+                                            <div class="">
+                                                <label class="text-small col-form-label">@Model.entidad.MODALIDAD</label>
+                                                @Html.HiddenFor(m => m.entidad.MODALIDAD, new { Name = "MODALIDAD", id = "MODALIDAD" })
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label for="" class="text-small"><strong>Titular:</strong></label>
+                                            <div class="">
+                                                <label class="text-small col-form-label">@Model.entidad.TITULAR</label>
+                                                @Html.HiddenFor(m => m.entidad.TITULAR, new { Name = "TITULAR", id = "TITULAR" })
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="form-row">
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label for="" class="text-small"><strong>PO Supervisado:</strong></label>
+                                            <div class="">
+                                                <label class="text-small col-form-label">@Model.entidad.POA</label>
+                                                @Html.HiddenFor(m => m.entidad.POA, new { Name = "POA", id = "POA" })
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label for="" class="text-small"><strong>Ubicación:</strong></label>
+                                            <div class="">
+                                                <label class="text-small col-form-label">@Model.entidad.UBICACION</label>
+                                                @Html.HiddenFor(m => m.entidad.UBICACION, new { Name = "UBICACION", id = "UBICACION" })
+                                                <img src="@Url.Content("~/Imagenes/iconos/map_sisfor.png")" width="18" height="18" onclick="_BalExtra.gotoSISFORTH();" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label for="" class="text-small"><strong>Supervisor(es):</strong></label>
+                                            <div class="">
+                                                <label class="text-small col-form-label">@Model.entidad.SUPERVISOR</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label for="" class="text-small"><strong>Fecha de Salida de la Oficina:</strong></label>
+                                            <div class="">
+                                                <label class="text-small col-form-label">@Model.entidad.FECHA_SALIDA</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="form-row">
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label for="" class="text-small"><strong>Fecha de Inicio de Labores en la Oficina:</strong></label>
+                                            <div class="">
+                                                <label class="text-small col-form-label">@Model.entidad.FECHA_LLEGADA</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3" style="display:none;">
+                                        <div class="form-group">
+                                            <label for="" class="text-small"><strong>Acta de Supervisión:</strong></label>
+                                            <div class="">
+                                                <label class="text-small col-form-label">@Model.entidad.ACTA_ARCHIVO_TEXT</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-3">
+                                        <div class="form-row">
+                                            <div class="col-10">
+                                                <div class="form-group">
+                                                    <label for="ddlItemSupuesto" class="text-small"><strong>Supuestos</strong></label>
+                                                    <select class="form-control form-control-sm" id="ddlItemSupuesto" name="ddlItemSupuesto" onchange="addEdit.seleccionarSupuesto(this);">                                                        
+                                                        @foreach (var item in Model.ListSupuestos)
+                                                        {
+                                                            <option value="@item.CODIGO">@item.DESCRIPCION</option>
+                                                        }
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="col-2 mt-4">
+                                                <span class="fa mx-2 fa-2x fa-download" style="cursor:pointer;" onclick="addEdit.descargarPlantillaTipo();"></span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <div class="form-row">
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <label for="" class="text-small"><strong>Subir Archivo Oficio:</strong></label>
+                                            <div class="">
+                                                <input type="file" onchange="addEdit.fnImportarExcel(event,this);" id="FileOficio">
+                                                <img id="imgOficio" src="@Url.Content("~/Imagenes/BonMan/download.png")" alt="Descargar" title="Descargar" style="cursor:pointer;display:none" width="15px" height="15px" onclick="addEdit.fnDownloadOficio();" />
+                                                <input type="hidden" id="hdOficioName" value="@Model.entidad.ARCHIVO_OFICIO" />
+                                                <input type="hidden" id="hdOficioEstado" value="0" />
+                                                <label class="imgOficioLBL" id="lblOficio" style="color:red">@Model.entidad.ARCHIVO_OFICIO_TEXT</label>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="card">
+                            <div class="card-header text-small">Listado de archivos - Acta de Supervisión</div>
+                            <div class="card-body">
+                                <div class="form-row">
+                                    <div class="table-responsive">
+                                        <div id="divArchivosActaMostrar">
+                                            <table id="" style="width:100%;" class="table table-hover table-bordered">
+                                                <thead>
+                                                    <tr>
+                                                        <th></th>
+                                                        <th>Nº</th>
+                                                        <th>Nombre Archivo</th>
+                                                        <th>Extensión Archivo</th>
+                                                        <th></th>
+                                                    </tr>
+                                                </thead>
+                                            </table>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="card">
+                            <div class="card-header text-small">Listado de Especies del Balance</div>
+                            <div class="">
+                                <button type="button" class="btn btn-outline-info btn-sm" onclick="addEdit.GetEspecieBExt()">Importar Especies Balance Extracción</button>
+                            </div>
+
+                            <div class="card-body">
+                                <div class="form-row">
+                                    <div class="table-responsive">
+                                        <table id="grvEspeciesSD" style="width:100%" class="table table-hover table-bordered">
+                                            <thead>
+                                                <tr>
+                                                    <th>Nº</th>
+                                                    <th>Especie</th>
+                                                    <th>Total Arboles</th>
+                                                    <th>Volumen Autorizado (m³)</th>
+                                                    <th>Volumen Movilizado (m³)</th>
+                                                    <th>Saldo</th>
+                                                    <th>N° POA</th>
+                                                    <th></th>
+                                                </tr>
+                                            </thead>
+                                            <tbody></tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div class="">
+                            <div class="">
+                                <div class="form-group row">
+                                    <label for="ENVIAR_ALERTA" class="text-small col-sm-2 col-form-label">Enviar Alerta:</label>
+                                    <div class="">
+                                        @Html.CheckBox("ENVIAR_ALERTA", (Boolean)Model.entidad.ENVIAR_ALERTA, new { @class = "form-check-input" })
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="card">
+                            <div class="card-header text-small">Vertices del Título Habilitante</div>
+                            <div class="card-body">
+                                <div class="form-row">
+                                    <div class="table-responsive">
+                                        <table id="grvItemVertice" style="width:100%" class="table table-hover table-bordered">
+                                            <thead>
+                                                <tr>
+                                                    <th>Nº</th>
+                                                    <th>Vertice</th>
+                                                    <th>Zona UTM</th>
+                                                    <th>Coordenada Este</th>
+                                                    <th>Coordenada Norte</th>
+                                                    <th>Observaciones</th>
+                                                </tr>
+                                            </thead>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div id="divSeleccioneF" class="card">
+                            <div class="card-header text-small">Seleccione Funcionarios a los que se remitira la alerta</div>
+                            <div class="card-body">
+                                <div class="form-row">
+                                    <div class="col-sm-3">
+                                        <div class="card">
+                                            <div class="card-header text-small">Departamentos</div>
+                                            <div class="card-body">
+
+                                                @foreach (var item in Model.ListDepartamentos)
+                                                {
+
+                                                    <div class="form-group col-md-12">
+                                                        <div class="custom-control custom-checkbox my-1 mr-sm-2">
+                                                            <input type="checkbox" onchange="addEdit.chkDepartamento(this,'@item.CODIGO')" class="custom-control-input" id="customCheck@(item.CODIGO)" name="">
+                                                            <label for="customCheck@(item.CODIGO)" class="custom-control-label" style="margin-top:6px;">@item.DESCRIPCION</label>
+                                                        </div>
+                                                    </div>
+                                                }
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-9">
+                                        <div class="card">
+                                            <div class="card-body">
+                                                <div class="table-responsive">
+                                                    <table id="tbTramo" class="table table-hover table-bordered">
+                                                        <thead>
+                                                            <tr>
+                                                                <th></th>
+                                                                <th>Nº</th>
+                                                                <th>Departamento</th>
+                                                                <th>Tramo</th>
+                                                                <th>Origen-Destino</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="card">
+                            <div class="card-header text-small">Funcionarios Seleccionados</div>
+                            <div class="card-body" id="divTramoSelecionado">
+
+                            </div>
+
+                            <div class="card-body">
+                                <div class="form-row">
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <label for="" class="text-small">Asunto del correo electrónico</label>
+                                            @Html.TextBoxFor(m => m.entidad.ASUNTO_ENVIO_ALERTA, new { Name = "ASUNTO_ENVIO_ALERTA", id = "ASUNTO_ENVIO_ALERTA", @class = "form-control form-control-sm" })
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <label for="" class="text-small">Destinatarios del Mensaje de Alerta</label>
+                                            @Html.TextAreaFor(m => m.entidad.DESTINO_ENVIO_ALERTA, new { Name = "DESTINO_ENVIO_ALERTA", id = "DESTINO_ENVIO_ALERTA", @class = "form-control form-control-sm", @rows = "10", @disabled = false })
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <label for="" class="text-small">Destinatarios Con Copia del Mensaje de Alerta</label>
+                                            @Html.TextAreaFor(m => m.entidad.CONCOPIA_ENVIO_ALERTA, new { Name = "CONCOPIA_ENVIO_ALERTA", id = "CONCOPIA_ENVIO_ALERTA", @class = "form-control form-control-sm", @rows = "7", @disabled = false })
+                                        </div>
+                                    </div>
+                                </div>
+                                <div id="pn_envio" class="form-row">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="" class="text-small">Fecha y hora de envio de la alerta</label>
+                                            <label class="text-small col-form-label">@Model.entidad.FECHA_ENVIO_ALERTA</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="" class="text-small">Usuario que envia la alerta</label>
+                                            <label class="text-small col-form-label">@Model.entidad.USUARIO_ENVIA</label>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+
+                        <div class="card">
+                            <div class="card-header text-small">Mensaje del correo electrónico</div>
+                            <div class="card-body">
+                                <div class="col-md-12">
+                                    @Html.TextAreaFor(m => m.entidad.MENSAJE_ENVIO_ALERTA, new { Name = "MENSAJE_ENVIO_ALERTA", id = "MENSAJE_ENVIO_ALERTA", @class = "form-control form-control-sm", @rows = "10", @disabled = false })
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            @Html.HiddenFor(m => m.entidad.DESTINO_ENVIO_TEXT, new { Name = "DESTINO_ENVIO_TEXT", id = "DESTINO_ENVIO_TEXT" })
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="divIframe"></div>
+<div class="modal fade hide" id="mdlAddBalanceExtra" role="dialog"></div>

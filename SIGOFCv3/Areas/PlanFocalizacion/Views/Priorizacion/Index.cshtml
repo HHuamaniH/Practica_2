@@ -1,0 +1,79 @@
+﻿@{
+    ViewBag.Title = "Priorización de planes de manejo";
+    Layout = "~/Views/Shared/_LayoutMain.cshtml";
+}
+
+<div id="divPriorizacion" class="container-fluid">
+    <div class="card">
+        <div class="card-header text-left">
+            <h5>Priorización de planes de manejo</h5>
+        </div>
+        <div class="card-body">
+            <form id="frmManGrillaPaging">
+                @Html.Hidden("tipoFormulario", (string)ViewBag.Formulario)
+                <div class="form-row">
+                    <div class="form-group col-md-3">
+                        @Html.DropDownList("ddlOpcionBuscarOD", (IEnumerable<SelectListItem>)ViewBag.vbOD, new { @class = "form-control form-control-sm" })
+                    </div>
+                    <div class="form-group col-md-3">
+                        @Html.DropDownList("ddlOpcionBuscarPeriodo", (IEnumerable<SelectListItem>)ViewBag.vbPeriodo, new { @class = "form-control form-control-sm" })
+                    </div>
+                    <div class="form-group col-md-4">
+                        <input type="text" class="form-control form-control-sm" id="txtValorBuscar" placeholder="Ingrese Valor a Buscar">
+                    </div>
+                    <div class="btn-group col-md-2" style="padding-top:5px;">
+                        <a id="btnSearch" style="cursor:pointer;" data-toggle="tooltip" data-placement="top" title="Buscar" onclick="ManPriorizacion.fnSearch()"><span class="fa mx-2 fa-lg fa-search"></span></a>
+                        <a id="btnRefresh" style="cursor:pointer;" data-toggle="tooltip" data-placement="top" title="Actualizar" onclick="ManPriorizacion.fnRefresh()"><span class="fa mx-2 fa-lg fa-refresh"></span></a>
+                    </div>
+                </div>
+
+            </form>
+            <div id="dvManGrillaPaging" class="table-responsive">
+                <div class="card-header text-small" id="divTitle">
+                    <span>
+                        <i class="fa fa-lg fa-file-excel-o" style="cursor: pointer;color:dodgerblue;" title="Descargar excel" onclick="ManPriorizacion.fnExport(this);"></i>
+                    </span>
+                    <span>
+                        <i class="fa mx-2 fa-lg fa-check-circle" style="cursor:pointer;color:#007bff;" onclick="utilSigo.validarFormato('PRIORIZACION');" data-toggle="tooltip" data-placement="top" title="Validar Información"></i>
+                    </span>
+                    <span>
+                        <label style="cursor:pointer;" class="fa mx-2 fa-lg fa-file-excel-o" title="Importar Archivo" data-toggle="tooltip">
+                            <input type="file" id="fileselect" name="fileselect" style="display:none" size="60" onchange="Priorizacion.ItemExcelImportarVentana(event,this,'PRIORIZACION')" onclick="return true">
+                        </label>
+                    </span>
+                </div>
+
+                <table id="tbManGrillaPaging" class="table table-hover table-bordered" style="width:100%;">
+                    <thead>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+
+                <table id="tbManGrillaLeyenda" class="table table-hover table-bordered" style="width:100%;">
+                    <thead>
+                        <tr>
+                            <th class="col1">Código</th>
+                            <th class="col2">Descripción</th>
+                            <th class="col2">Puntaje</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+
+                <table id="tbManGrillaSupervisados" class="table table-hover table-bordered" style="width:100%;">
+                    <thead>
+                        <tr>
+                            <th class="col1">Título Habilitante Supervisado</th>
+                            <th class="col2">Plan de manejo</th>
+                            <th class="col2">Modalidad</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade hide" id="manPriorizacionModal" role="dialog"></div>
+<script src="~/Areas/PlanFocalizacion/js/Priorizacion/Index.js"></script>

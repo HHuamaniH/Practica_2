@@ -1,0 +1,118 @@
+﻿@model CapaEntidad.ViewModel.VM_PreviosAlerta
+<script src="~/Areas/THabilitante/js/ManPreviosAlerta/_ItemDestinatarioCC.js"></script>
+<style>
+
+    #modalAddEditDestinatarioCC > .modal-lg {
+        max-width: 80% !important;
+    }
+</style>
+<script>
+    $(document).ready(function () {
+
+        var list = [];
+            @foreach(var item in Model.ListDESTINATARIO)
+            {
+                <text>
+
+                list.push({
+                    COD_DESTINATARIO: @item.COD_DESTINATARIO,
+                    COD_PERSONA: "@item.COD_PERSONA",
+                    DESCRIPCION: "@item.DESCRIPCION" ,
+                    CORREO: "@item.CORREO" ,
+                    OFICINA: "@item.OFICINA" ,
+                    DOCUMENTO: "@item.DOCUMENTO" ,
+                    FECHA_DOCUMENTO: "@item.FECHA_DOCUMENTO" ,
+                    CARGO: "@item.CARGO" ,
+                    ACTIVO: @item.ACTIVO,
+                    OBSERVACION: '@item.OBSERVACION',
+                    TIPO_FUNCIONARIO: '@item.TIPO_FUNCIONARIO',
+                    RegEstado:RegEstadoSigo.INITIAL
+                });
+             </text>
+            }
+        _ItemDestinatarioCC.dtDestinatario.rows.add(list).draw();
+        list=[];
+
+         @foreach(var item in Model.ListDESTINATARIOCC)
+         {
+            <text>
+
+                list.push({
+                    COD_DESTINATARIO: @item.COD_DESTINATARIO,
+                    COD_PERSONA: "@item.COD_PERSONA",
+                    DESCRIPCION: "@item.DESCRIPCION" ,
+                    CORREO: "@item.CORREO" ,
+                    OFICINA: "@item.OFICINA" ,
+                    DOCUMENTO: "@item.DOCUMENTO" ,
+                    FECHA_DOCUMENTO: "@item.FECHA_DOCUMENTO" ,
+                    CARGO: "@item.CARGO" ,
+                    ACTIVO: @item.ACTIVO,
+                    OBSERVACION: '@item.OBSERVACION',
+                    TIPO_FUNCIONARIO: '@item.TIPO_FUNCIONARIO',
+                    TIPO_CC: "@item.TIPO_CC",
+                    RegEstado: RegEstadoSigo.INITIAL
+                });
+            </text>
+        }
+        _ItemDestinatarioCC.dtDestinatarioCC.rows.add(list).draw();
+    });
+
+</script>
+<div class="modal-dialog modal-lg" role="document" id="divItemDestinatarioCC">
+    <div class="modal-content">
+        <div class="modal-header text-small" style="cursor:move;padding:0.5rem;">
+            <h5 class="modal-title" id="h5Titulo">Nuevo</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body">
+            <form id="frmItemDestinatarioCC">
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <table id="grvDestinatario" class="table table-hover table-bordered" style="width:100%">
+                            <thead>
+                                <tr>
+                                    <th colspan="5" class="text-sm-left font-weight-bold">
+                                        Seleccionar Destinatarios
+                                    </th>
+                                </tr>
+                                <tr>
+                                    <th></th>
+                                    <th>Codigo</th>
+                                    <th>Destinatario</th>
+                                    <th>Correo</th>
+                                    <th>Oficina</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <table id="grvDestinatarioCC" class="table table-hover table-bordered" style="width:100%">
+                            <thead>
+                                <tr>
+                                    <th colspan="5" class="text-sm-left font-weight-bold">
+                                        Destinatarios Seleccionados
+                                    </th>
+                                </tr>
+                                <tr>
+                                    <th></th>
+                                    <th>Codigo</th>
+                                    <th>Destinatario</th>
+                                    <th>Correo</th>
+                                    <th>Oficina</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </div>
+
+            </form>
+        </div>
+        <div class="modal-footer">
+            <button type="button" id="btnGuardar" class="btn btn-primary">Guardar</button>
+        </div>
+    </div>
+</div>

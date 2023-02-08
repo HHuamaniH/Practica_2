@@ -1,0 +1,188 @@
+﻿@model List<CapaEntidad.ViewModel.VM_PlanTrabajoDetalleEspecie>
+<br />
+<br />
+<div class="form-row">
+    <div class="form-group">
+        @if (Model.Count > 0)
+        {
+            <button type="button" class="btn btn-info btn-sm" onclick="_mMinima.fnEliminarMuestra()">Eliminar Muestra Mínima</button>
+            @*<button type="button" class="btn btn-secondary">Descargar Muestra Mínima</button>*@            
+        }
+        else
+        {
+            <button type="button" class="btn btn-info btn-sm" onclick="_mMinima.fnGenerar()">Generar Muestra Mínima</button>
+        }
+    </div>
+</div>
+<div class="form-row">
+    <div class="form-group col-md-4">
+        <label for="" class="text-small">Tamaño mínimo de la muestra</label>
+        @if (Model.Count > 0)
+        {
+            <input type="text" class="form-control form-control-sm" value="@Model.First().muestraMinima" disabled />
+        }
+        else
+        {
+            <input type="text" class="form-control form-control-sm" value="0" disabled />
+        }
+
+    </div>
+    <div class="form-group col-md-4">
+        <label for="" class="text-small">Cantidad de especies Cites</label>
+        <input type="text" class="form-control form-control-sm" value="@ViewBag.cantEspeciesCites" disabled />
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-12">
+        <div class="table-responsive">
+            <table id="tbMuestraMinimaEspecie" class="table table-hover table-bordered" style="width:100%">
+                <thead>
+                    <tr>
+                        <th colspan="10" style="text-align:center">
+                            <h5 class="card-title">Muestra mínima de especies a supervisar</h5>
+                        </th>
+                    </tr>
+                    <tr>
+                        <th>N°</th>
+                        <th title="Seleccionar para adicionar cantidades al consolidado de especies a supervisar">S</th>
+                        <th>Especie</th>
+                        <th>Total individuos</th>
+                        <th>N° de Aprov.</th>
+                        <th>N° de Sem.</th>
+                        <th>Factor aprovechable</th>
+                        <th>Factor semillero</th>
+                        <th>Muestra aprovechable</th>
+                        <th>Muestra semillero</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @{
+                        var cont = 1;
+                        Int32 totalIndividuos = 0, numApro = 0, numSem = 0, totalMAprov = 0, totalMSem = 0;
+                        decimal totalFAprov = 0, totalFSem=0;
+                    }
+                    @if (Model.Count > 0)
+                    {
+
+                        foreach (var i in Model)
+                        {
+
+                            <tr>
+                                <td>@cont</td>
+                                <td><i class="fa fa-lg fa-paper-plane" style="color:blue;cursor:pointer;" title="Agregar especie adicional al consolidado" onclick="_mMinima.fnModalAdicionarAlConsolidado(@i.idCabecera,@i.id,2,this)"></i></td>
+                                <td>@i.descripcionEspecie</td>
+                                <td>@i.totalIndividuos</td>
+                                <td>@i.numAprov</td>
+                                <td>@i.numSemilleros</td>
+                                <td>@string.Format("{0:#,0.00}", i.factorAprov)</td>
+                                <td>@string.Format("{0:#,0.00}", i.factorSem)</td>
+                                <td>@i.muestraAprov</td>
+                                <td>@i.muestraSem</td>
+                            </tr>
+                            cont = cont + 1;
+                            totalIndividuos = totalIndividuos + i.totalIndividuos;
+                            numApro = numApro + i.numAprov;
+                            numSem = numSem + i.numSemilleros;
+                            totalFAprov = totalFAprov + i.factorAprov.Value;
+                            totalFSem = totalFSem + i.factorSem.Value;
+                            totalMAprov = totalMAprov + i.muestraAprov;
+                            totalMSem = totalMSem + i.muestraSem;
+                        }
+                    }
+                    else
+                    {
+                        <tr><td colspan="10" style="text-align:center">No existe registros</td></tr>
+                    }
+                </tbody>
+                <tfoot>
+                    <tr style="background-color:#cbddf1">
+                        <td></td>
+                        <td></td>
+                        <td style="font-weight:bold">Total</td>
+                        <td style="font-weight:bold">@totalIndividuos</td>
+                        <td style="font-weight:bold">@numApro</td>
+                        <td style="font-weight:bold">@numSem</td>
+                        <td style="font-weight:bold">@totalFAprov</td>
+                        <td style="font-weight:bold">@totalFSem</td>
+                        <td style="font-weight:bold">@totalMAprov</td>
+                        <td style="font-weight:bold">@totalMSem</td>
+                    </tr>
+                    <tr>
+                        <td colspan="10" style="color:red;text-align:left">Nota: Las muestras aprovechables y semilleros se redondean al inmediato superior</td>
+                    </tr>
+                    <tr>
+                        <td colspan="10" style="color:red;text-align:left">Nota: En el caso de semilleros, por lo menos se debe evaluar 3 individuos por cada especie </td>
+                    </tr>
+                    <tr>
+                        <td colspan="10" style="color:red;text-align:left">Nota: Las especies CITES y las declaraciones de manejo (DEMA), no forman parte del cálculo de la muestra mínima. Pasan al 100% al consolidado de especies  </td>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    var _mMinima = {
+        fnGenerar: () => {
+            let frm = $("#cardMuestraCalificacion");            
+            let codPlanSupervisionDetalle = frm.find("#hdPlanTrabajoDetId").val();
+            let model = {                
+                codPlanSupervisionDetalle: codPlanSupervisionDetalle
+            };
+            utilSigo.dialogConfirm("", "Está seguro de generar la muestra mínima?", function (r) {
+                if (r) {
+                    let url = urlLocalSigo + "Focalizacion/PlanTrabajo/GenerarMuestraMinima";
+                    let option = { url: url, datos: JSON.stringify(model), type: 'POST' };
+                    utilSigo.fnAjax(option, function (data) {
+                        if (data.success) {
+                            utilSigo.toastSuccess("Éxito", data.msj);
+                            planT.fnGetCalificacionPartial(codPlanSupervisionDetalle);
+                            planT.fnGetMuestraPartial(codPlanSupervisionDetalle);
+                            planT.fnGetConsolidadoPartial(codPlanSupervisionDetalle);
+                        }
+                        else {
+                            utilSigo.toastWarning("Aviso", data.msj);
+                        }
+                    });
+                }
+            });
+        },
+        fnModalAdicionarAlConsolidado: (idPlanDetalle, idPlanDetalleEspecie, tipo, obj) => {
+            let trSelect = $(obj).closest('tr');
+            let frm = $("#divEspecieAdicional");
+            frm.find("#hdIdDetAdicional").val(idPlanDetalle);
+            frm.find("#hdIdDetEspecieAdicional").val(idPlanDetalleEspecie);
+            frm.find("#hdTipoAdicional").val(tipo);
+            frm.find("#txtEspecieAdicional").val(trSelect.find("td:eq(2)").text());
+            frm.find("#txtCantidadAprovAdd").val(parseInt(trSelect.find("td:eq(4)").text()));
+            frm.find("#txtCantidadSemAdd").val(parseInt(trSelect.find("td:eq(5)").text()));
+            frm.find("#txtObsAdd").val('');
+            $("#modalEspecieAdicional").modal();
+        },
+        fnEliminarMuestra: () => {
+            let frm = $("#cardMuestraCalificacion");
+            let codPlanSupervisionDetalle = frm.find("#hdPlanTrabajoDetId").val();
+            let model = { codPlanSupervisionDetalle: codPlanSupervisionDetalle };
+            utilSigo.dialogConfirm("", "Está seguro de eliminar la muestra?", function (r) {
+                if (r) {
+                    let url = urlLocalSigo + "Focalizacion/PlanTrabajo/PlanTrabajoDetMuestraDelete";
+                    let option = { url: url, datos: JSON.stringify(model), type: 'POST' };
+                    utilSigo.fnAjax(option, function (data) {
+                        if (data.success) {
+                            utilSigo.toastSuccess("Éxito", data.msj);
+                            planT.fnGetCalificacionPartial(codPlanSupervisionDetalle);
+                            planT.fnGetMuestraPartial(codPlanSupervisionDetalle);
+                            planT.fnGetConsolidadoPartial(codPlanSupervisionDetalle);
+                        }
+                        else {
+                            utilSigo.toastWarning("Aviso", data.msj);
+                        }
+                    });
+                }
+            });
+        }
+    }
+    $(document).ready(function () {
+
+    });
+</script>

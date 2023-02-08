@@ -1,0 +1,133 @@
+﻿@model dynamic
+
+@{
+    ViewBag.Title = "Index";
+}
+<div class="modal fade" id="modal-default">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title">Default Modal</h4>
+            </div>
+            <div class="modal-body">
+                <p><img src="~/Images/General/cargando.gif" /></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary">Save changes</button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+
+<div class="row">
+    <div class="col-sm-6">
+    </div>
+    <div class="col-sm-6">
+        <div class="col-sm-12" style="text-align:center">
+            <h4><span style="color:#00a65a">Supervisiones realizadas por el OSINFOR antes de la extracción</span></h4>
+        </div>
+        <div class="col-sm-12">
+
+        </div>
+        <div class="col-sm-12">
+        </div>
+    </div>
+</div>
+
+<div id="divListReporte" class="form-group" style="margin-left: 5px; margin-right: 5px; font-size: 12px">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="box box-primary">
+                <!-- /.box-header -->
+                <div class="box-body" id="divTbReporteFauna">
+                    <div>
+                        <a href="@Url.Action("dowloanEcxel","Home")" target="_blank">
+                            <img id="imgBtnDowloadExcel" src="~/Images/Iconos/ExportarExcel.png" title="Descargar Excel" style="margin-right: 10px; float: right" />
+                        </a>
+
+                    </div>
+                    <br />
+                    <br />
+                    <script>
+                        $(function () {
+                            $('#tbListFauna').DataTable()
+                        })
+                    </script>
+                    <table id="tbListFauna" class="table table-bordered table-striped-info" style="width: 100% !important">
+                        <thead>
+                            <tr style="text-align: center !important; background-color: lightblue; font-size:13px">
+                                <td style="width: 2%"><strong>N°</strong></td>
+                                <td style="width: 20%"><strong>Titular</strong></td>
+                                <td style="width: 20%"><strong>Título Habilitante</strong></td>
+                                <td style="width: 20%"><strong>Modalidad de Aprovechamiento</strong></td>
+                                <td style="width: 10%"><strong>Departamento</strong></td>
+                                <td style="width: 10%"><strong>N° POA</strong></td>
+                                <td style="width: 25%"><strong>Resol. de Aprob. del Plan de Manejo Supervisado</strong></td>
+                                <td style="width: 5%"><strong>Ver Detalle</strong></td>
+                                <td style="width: 5%"><strong>Ver Ubicación</strong></td>
+
+                            </tr>
+                        </thead>
+                        <tbody id="bodyTable">
+                            @if (Model.ListInformSup != null)
+                            {
+                                var count = 0;
+                                foreach (var item in Model.ListInformSup)
+                                {
+                                    <tr style="height:5px !important">
+                                        <td style="width: 2%; text-align:center">@(++count)</td>
+                                        <td style="width: 20%">@item.TITULAR</td>
+                                        <td style="width: 20%">@item.TITULO</td>
+                                        <td style="width: 20%">@item.MODALIDAD</td>
+                                        <td style="width: 10%; text-align:center">@item.DEPARTAMENTO</td>
+                                        <td style="width: 10%; text-align:center">@item.NUM_POA_STRING</td>
+                                        <td style="width: 25%; text-align:center">@item.NUMERO_RESOLUCION</td>
+                                        <td style="width: 5%; text-align: center">
+                                            @using (@Html.BeginForm("detalle", "Home", FormMethod.Post))
+                                            {
+                                                <button id="btnBuscar" type="submit" class="btn btn-app" formtarget="_blank" title="Ver Historial"
+                                                        style="min-width:50px; height:30px; padding: 10px; background:none; border:none">
+                                                    <img border="0" src="~/Images/Iconos/Buscar4.png" />
+                                                </button>
+                                                <input type="hidden" id="hfTHabilitanteCod" name="hfTHabilitanteCod" value="@item.COD_THABILITANTE" />
+                                                <input type="hidden" id="hfCodInforme" name="hfCodInforme" value="@item.COD_INFORME" />
+                                            }
+                                        </td>
+                                        <td style="width: 5%; text-align: center">
+                                            <a href="https://sisfor.osinfor.gob.pe/visor/sisforv4/geoPOA/@item.COD_THABILITANTE|@item.NUM_POA" target="_blank">
+                                                <img style="min-width:40px; height:42px; padding: 10px;" border="0" src="~/Images/Iconos/map_sisfor.png" />
+                                            </a>
+                                        </td>
+                                    </tr>
+                                }
+                            }
+                        </tbody>
+                    </table>
+                    <br />
+                    <strong>*** Actualizado al:</strong>
+                    @if (Model != null)
+                    {
+                        var item = Model;
+                        <a style="color:red">@item.fecha</a>
+                    }
+                </div>
+                <!-- /.box-body -->
+            </div>
+        </div>
+
+    </div>
+
+    <div id="divMensajeNoMatch">
+        <label text="" id="lblMensaje" font-size="12px" />
+    </div>
+    <div id="divMensajeNota">
+        <label id="lblNotaMsje" font-size="12px" />
+    </div>
+
+</div>

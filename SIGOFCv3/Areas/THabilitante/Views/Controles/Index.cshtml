@@ -1,0 +1,402 @@
+﻿@model SIGOFCv3.Areas.THabilitante.Models.ManGrillaViewModel
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_LayoutMain.cshtml";
+}
+<script src="~/Areas/THabilitante/js/Controles/Index.js?noCache=@Guid.NewGuid().ToString()"></script>
+<link href="~/Areas/THabilitante/css/controles.css" rel="stylesheet" />
+<div class="container-fluid">
+    <div class="card">
+        <div class="card-header text-left">
+            <h5>@ViewBag.Titulo</h5>
+        </div>
+        <div class="card-body">
+            <form id="frmManGrilla" method="post" action="@Url.Action("listarBusqueda","Controles",new { Area="THabilitante"})">
+                @Html.HiddenFor(m => m.tipoFrmulario)
+                @Html.HiddenFor(m => m.busFormulario)
+                @Html.HiddenFor(m => m.busCriterio)
+                @Html.HiddenFor(m => m.busModuloConsulta)
+                @Html.HiddenFor(m => m.hdfTipoFormulario)
+                @Html.Hidden("hdfFormulario", (string)ViewBag.hdfFormulario)
+                <button type="submit" style="display:none;"></button>
+                <div class="form-row">
+                    <div class="form-group col-md-4">
+                        @Html.DropDownList("cboOpciones", (IEnumerable<SelectListItem>)Model.cboOpciones, new { @class = "form-control form-control-sm" })
+                    </div>
+                    <div class="form-group col-md-6">
+                        <input type="text" class="form-control form-control-sm" id="txtValor" placeholder="Ingrese Valor a Buscar">
+                    </div>
+                    <div class="form-group col-md-2">
+                        <a id="btnManGrillaBuscar" style="cursor:pointer;" data-toggle="tooltip" data-placement="top" title="Buscar el registro"><span class="fa mx-2 fa-lg fa-search"></span></a>
+                        <a id="btnManGrillaReload" style="cursor:pointer;" data-toggle="tooltip" data-placement="top" title="Actualizar el listado"><span class="fa mx-2 fa-lg fa-refresh"></span></a>
+                        <a id="btnManGrillaNuevo" style="cursor:pointer;" data-toggle="tooltip" data-placement="top" title="Crear un nuevo registro"><span class="fa mx-2 fa-lg fa-plus"></span></a>
+                        <a id="btnManGrillaExportar" style="cursor:pointer;" data-toggle="tooltip" data-placement="top" title="Descargar"><span class="fa mx-2 fa-lg fa-file-excel-o"></span></a>
+                    </div>
+                </div>
+            </form>
+            <div class="table-responsive" id="divTablaGeneral">
+                <table id="tbGrillaGeneral" class="table table-hover table-bordered">
+                    <thead>
+                        <tr>
+                            @if (Model.tipoFrmulario == "TITULO_HABILITANTE")
+                            {
+                                <th></th>
+                                <th>N°</th>
+                                <th>Fecha de registro</th>
+                                <th>Modalidad</th>
+                                <th>Nro THabililitante</th>
+                                <th>Titular</th>
+                                <th>R. Legal</th>
+                                <th>Región</th>
+                            }
+                            else if (Model.tipoFrmulario == "POA")
+                            {
+                                <th></th>
+                                <th></th>
+                                <th>N°</th>
+                                <th>Fecha de registro</th>
+                                <th>POA/PO</th>
+                                <th>Res. de Aprobación</th>
+                                <th>POA/PO Padre</th>
+                                <th>Modalidad</th>
+                                <th>Titular Actual</th>
+                                <th>Título Habilitante</th>
+                            }
+                            else if (Model.tipoFrmulario == "PLAN_MANEJO")
+                            {
+                                <th></th>
+                                <th></th>
+                                <th>N°</th>
+                                <th>Fecha de registro</th>
+                                <th>Modalidad</th>
+                                <th>Título Habilitante</th>
+                                <th>Titular</th>
+                                <th>Nro Resolución</th>
+                            }
+                            else if (Model.tipoFrmulario == "BITACORA_SUPER")
+                            {
+                                <th></th>
+                                <th>N°</th>
+                                <th>Fecha de registro</th>
+                                <th>Oficina Desconcentrada</th>
+                                <th>Nro CNotificación</th>
+                                <th>Nro THabililitante</th>
+                                <th>Supervisor</th>
+                                <th>Supervisado</th>
+                                <th>Tipo de informe</th>
+                            }
+                            else if (Model.tipoFrmulario == "ALERTA_OSINFOR")
+                            {
+                                <th></th>
+                                <th>N°</th>
+                                <th>Fecha de registro</th>
+                                <th>Oficina Desconcentrada</th>
+                                <th>Nro CNotificación</th>
+                                <th>Nro THabililitante</th>
+                                <th>Supervisor</th>
+                                <th>Supervisado</th>
+                                <th>Tipo de informe</th>
+                                <th>Alerta Enviada</th>
+                            }
+                            else if (Model.tipoFrmulario == "CARTA_NOTIFICACION")
+                            {
+                                <th></th>
+                                <th>N°</th>
+                                <th>Fecha de registro</th>
+                                <th>Nro CNotificacion</th>
+                                <th>Nro THabilitante</th>
+                                <th>Titular</th>
+                                <th>Notificador</th>
+                                <th>Tipo</th>
+                                <th>M</th>
+                                <th>NM</th>
+                                <th>DTr</th>
+                                <th>DToc</th>
+                                <th>DAr</th>
+                            }
+                            else if (Model.tipoFrmulario == "INFORME_SUPERVISION")
+                            {
+                                <th></th>
+                                <th>N°</th>
+                                <th>Fecha de registro</th>
+                                <th>Nro Informe</th>
+                                <th>Nro CNotificación</th>
+                                <th>Modalidad</th>
+                                <th>Nro THabililitante</th>
+                                <th>Titular</th>
+                                <th>Supervisor</th>
+                                <th>POA Supervisado</th>
+                                <th>Doc</th>
+                            }
+                            else if (Model.tipoFrmulario == "INFORME_AUT_FORESTAL")
+                            {
+                                <th></th>
+                                <th>N°</th>
+                                <th>Fecha de registro</th>
+                                <th>Nro Informe</th>
+                                <th>Entidad</th>
+                                <th>Nro THabilitante</th>
+                                <th>Modalidad</th>
+                                <th>Titular</th>
+                                <th>POA</th>
+                            }
+                            else if (Model.tipoFrmulario == "RENUNCIA_CONCESION")
+                            {
+                                <th></th>
+                                <th>N°</th>
+                                <th>Fecha de registro</th>
+                                <th>Nro de documento de renuncia</th>
+                                <th>N° de documento de la Autoridad</th>
+                                <th>Nro THabilitante</th>
+                                <th>Modalidad</th>
+                                <th>Titular</th>
+                            }
+                            else if (Model.tipoFrmulario == "OTROS_INFORMES")
+                            {
+                                <th></th>
+                                <th>N°</th>
+                                <th>Fecha de registro</th>
+                                <th>Nro Informe</th>
+                                <th>Tipo Informe</th>
+                                <th>Nro THabilitante</th>
+                                <th>Modalidad</th>
+                                <th>Titular</th>
+                                <th>POA</th>
+                            }
+                            else if (Model.tipoFrmulario == "DEVOLUCION_MADERA")
+                            {
+                                <th></th>
+                                <th>N°</th>
+                                <th>Fecha de registro</th>
+                                <th>Nro Resolución</th>
+                                <th>Titular</th>
+                                <th>Nro THabilitante</th>
+                            }
+                            else if (Model.tipoFrmulario == "INFORME_SUSPENSION")
+                            {
+                                <th></th>
+                                <th>N°</th>
+                                <th>Fecha de registro</th>
+                                <th>Nro Informe</th>
+                                <th>Nro C. Notificación</th>
+                                <th>Modalidad</th>
+                                <th>Nro THabilitante</th>
+                                <th>Supervisión posterior</th>
+                            }
+                            else if (Model.tipoFrmulario == "INFORME_CANCELACION")
+                            {
+                                <th></th>
+                                <th>N°</th>
+                                <th>Fecha de registro</th>
+                                <th>Nro Informe</th>
+                                <th>Nro C. Notificación</th>
+                                <th>Modalidad</th>
+                                <th>Nro THabilitante</th>
+                            }
+                            else if (Model.tipoFrmulario == "INFORMACION_TITULAR")
+                            {
+                                <th></th>
+                                <th>N°</th>
+                                <th>Fecha de registro</th>
+                                <th>Nro Documento</th>
+                                <th>Tipo Documento</th>
+                                <th>Nro Resolución Directoral</th>
+                                <th>Nro Expediente</th>
+                                <th>Nro Informe</th>
+                                <th>Remitente</th>
+                                <th>Titular</th>
+                            }
+                            else if (Model.tipoFrmulario == "DOC_REM_OTRA_INST")
+                            {
+                                <th></th>
+                                <th>N°</th>
+                                <th>Fecha de registro</th>
+                                <th>Nro Documento</th>
+                                <th>Tipo Documento</th>
+                                <th>Nro THabilitante</th>
+                            }
+                            else if (Model.tipoFrmulario == "SOL_INTERNA")
+                            {
+                                <th></th>
+                                <th>N°</th>
+                                <th>Fecha de registro</th>
+                                <th>Número</th>
+                                <th>Tipo Documento</th>
+                                <th>Nro Informe</th>
+                                <th>Nro THabilitante</th>
+                            }
+                            else if (Model.tipoFrmulario == "INFORME_LEGAL")
+                            {
+                                <th></th>
+                                <th>N°</th>
+                                <th>Fecha de registro</th>
+                                <th>Nro. Inf. Legal</th>
+                                <th>Tipo Inf. Legal</th>
+                                <th>Nro. Informe</th>
+                                <th>Nro. Resolución Directoral</th>
+                                <th>Nro. Expediente Administrativo</th>
+                            }
+                            else if (Model.tipoFrmulario == "RESOLUCION_DIRECTORAL")
+                            {
+                                <th></th>
+                                <th>N°</th>
+                                <th>Fecha de registro</th>
+                                <th>Nro. Resolución</th>
+                                <th>Tipo Resolución</th>
+                                <th>Nro. Expediente Administrativo</th>
+                                <th>Nro. Informe</th>
+                            }
+                            else if (Model.tipoFrmulario == "INFORME_TECNICO")
+                            {
+                                <th></th>
+                                <th>N°</th>
+                                <th>Fecha de registro</th>
+                                <th>Nro. Inf. Técnico</th>
+                                <th>Tipo Inf. Técnico</th>
+                                <th>Nro Expediente Administrativo</th>
+                                <th>Nro Informe</th>
+                            }
+                            else if (Model.tipoFrmulario == "INFORME_FUNDAMENTADO")
+                            {
+                                <th></th>
+                                <th>N°</th>
+                                <th>Fecha de registro</th>
+                                <th>Número</th>
+                                <th>Tipo Documento</th>
+                                <th>Nro Expediente</th>
+                                <th>Nro Informe</th>
+                            }
+                            else if (Model.tipoFrmulario == "FIS_NOTIFICACION")
+                            {
+                                <th></th>
+                                <th>N°</th>
+                                <th>Fecha de registro</th>
+                                <th>Número</th>
+                                <th>Tipo Notificación</th>
+                                <th>Nro Expediente</th>
+                                <th>Resolución</th>
+                                <th>Nro Informe</th>
+                                <th>Destino Notif.</th>
+                                <th>Fecha Notificación</th>
+                            }
+                            else if (Model.tipoFrmulario == "SOL_EXTERNA")
+                            {
+                                <th></th>
+                                <th>N°</th>
+                                <th>Fecha de registro</th>
+                                <th>Número</th>
+                                <th>Tipo Documento</th>
+                                <th>Nro Informe</th>
+                                <th>Nro THabilitante</th>
+                                <th>Nro Expediente</th>
+                            }
+                            else if (Model.tipoFrmulario == "PROVEIDO")
+                            {
+                                <th></th>
+                                <th>N°</th>
+                                <th>Fecha de registro</th>
+                                <th>Fecha Derivación</th>
+                                <th>D. Linea</th>
+                                <th>Funcionario</th>
+                                <th>Profesional</th>
+                                <th>Documento derivado</th>
+                                <th>Informe de Referencia</th>
+                                <th>Derivado para</th>
+                            }
+                            else if (Model.tipoFrmulario == "PROVEIDO_ARCHIVO")
+                            {
+                                <th></th>
+                                <th>N°</th>
+                                <th>Fecha de registro</th>
+                                <th>Nro Informe</th>
+                                <th>Nro Expediente</th>
+                                <th>Nro Informe Legal</th>
+                                <th>Tipo Documento</th>
+                            }
+                            else if (Model.tipoFrmulario == "CAPACITACION")
+                            {
+                                <th></th>
+                                <th>N°</th>
+                                <th>Fecha de registro</th>
+                                <th>Nombre</th>
+                                <th>OD</th>
+                                <th>Tipo Taller</th>
+                                <th>Fecha Inicio</th>
+                                <th>Nro Particip.</th>
+                                <th>Particip. Registrados</th>
+                            }
+                            else if (Model.tipoFrmulario == "GUIA_TRANSPORTE")
+                            {
+                                <th></th>
+                                <th>N°</th>
+                                <th>Fecha de registro</th>
+                                <th>Número Guía</th>
+                                <th>Nombre Guía</th>
+                                <th>Nro T. Habilitante</th>
+                                <th>Titular</th>
+                                <th>Fecha Expedición</th>
+                                <th>POA</th>
+                                <th>Zafra</th>
+                                <th>Destinatario</th>
+                            }
+                            else if (Model.tipoFrmulario == "ACTIVIDAD")
+                            {
+                                <th></th>
+                                <th>N°</th>
+                                <th>Nombre</th>
+                                <th>Entregables</th>
+                                <th>Prioridad</th>
+                                <th>Fecha Inicio</th>
+                                <th>Fecha Fin</th>
+                                <th>Tiempo Restante</th>
+                                <th>Tiempo Caducado</th>
+                                <th>Estado</th>
+                                <th>Avance</th>
+                                <th>Oficina</th>
+                            }
+                            else if (Model.tipoFrmulario == "ACTIVIDADOCI")
+                            {
+                                <th></th>
+                                <th>N°</th>
+                                <th>Nombre</th>
+                                <th>Descripción</th>
+                                <th>Entregables</th>
+                                <th>Prioridad</th>
+                                <th>Fecha Inicio</th>
+                                <th>Fecha Fin</th>
+                                <th>Tiempo Vencimiento</th>
+                                <th>Tiempo Caducado</th>
+                                <th>Estado</th>
+                                <th>Avance</th>
+                                <th>Oficina</th>
+                            }
+                            else if (Model.tipoFrmulario == "PRECIO_ESPECIES")
+                            {
+                                <th></th>
+                                <th>N°</th>
+                            }
+                            else if (Model.tipoFrmulario == "TFFS")
+                            {
+                                <th></th>
+                                <th>N°</th>
+                                <th>Fecha de registro</th>
+                                <th>Nro. Resolución Tribunal</th>
+                                <th>Tipo Referencia</th>
+                                <th>Nro. Resolución Directoral</th>
+                                <th>Nro. Expediente Adminsitrativo</th>
+                            }
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
+        <div class="card-footer"></div>
+    </div>
+    <div class="modal fade" id="manModalidadModal" tabindex="-1" role="dialog"></div>
+</div>
+<form style="display:none;" id="frmEditTH" method="post" action="@Url.Action("Index","ManTHabilitante",new { Area="THabilitante"})">
+    <input type="hidden" id="codigoThabilitante" name="codigoThabilitante" />
+</form>
+

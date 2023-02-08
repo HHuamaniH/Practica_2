@@ -1,0 +1,179 @@
+﻿@model CapaEntidad.ViewModel.VM_InformeQuinquenal
+@{
+    ViewBag.Title = "_renderResultadoQuinquenal";
+}
+<br /><br />
+<div class="form-row text-small">
+    <div class="col-md-12">
+        <div>
+            Conclusiones de la evaluación documentaria
+        </div>
+    </div>
+</div><br /><br />
+<div class="form-row text-small">
+    <div class="col-md-4">
+        <div>
+            Derecho de aprovechamiento(DA) y garantías
+        </div>
+    </div>
+    <div class="col-md-8">
+        @Html.TextArea("txtDA", @Model.txtDerechoAprovechamiento, new { @class = "form-control form-control-sm text-small" })
+    </div>
+</div><br />
+<div class="form-row text-small">
+    <div class="col-md-4">
+        <div>
+            Disposición de derechos y obligaciones de la concesión
+        </div>
+    </div>
+    <div class="col-md-8">
+        @Html.TextArea("txtDDO", @Model.txtDisposicionDO, new { @class = "form-control form-control-sm" })
+    </div>
+</div><br />
+<div class="form-row text-small">
+    <div class="col-md-4">
+        <div>
+            Ordenamiento del manejo forestal
+        </div>
+    </div>
+    <div class="col-md-8">
+        @Html.TextArea("txtOrdenamientoForestal", @Model.txtOrdenamientoForestal, new { @class = "form-control form-control-sm" })
+    </div>
+</div><br />
+<div class="form-row text-small">
+    <div class="col-md-4">
+        <div>
+            Sistema de marcado
+        </div>
+    </div>
+    <div class="col-md-8">
+        @Html.TextArea("txtSistemaMarcado", @Model.txtSistemaMarcado, new { @class = "form-control form-control-sm" })
+    </div>
+</div><br />
+<div class="form-row text-small">
+    <div class="col-md-4">
+        <div>
+            Árboles y volúmenes extraídos
+        </div>
+    </div>
+    <div class="col-md-8">
+        @Html.TextArea("txtarbolesyvolumenes", @Model.txtArbolesVolumenes, new { @class = "form-control form-control-sm" })
+    </div>
+</div><br />
+<div class="form-row text-small">
+    <div class="col-md-4">
+        <div>
+            Protección de la concesión forestal
+        </div>
+    </div>
+    <div class="col-md-8">
+        @Html.TextArea("txtproteccionconcesion", @Model.txtProteccionConcesion, new { @class = "form-control form-control-sm" })
+    </div>
+</div><br />
+<div class="form-row text-small">
+    <div class="col-md-4">
+        <div>
+            Relación con pueblos indígenas, comunidades nativas y otras poblaciones locales
+        </div>
+    </div>
+    <div class="col-md-8">
+        @Html.TextArea("txtComunidadNativa", @Model.txtRelacionPueblos, new { @class = "form-control form-control-sm" })
+    </div>
+</div><br />
+<div class="form-row text-small">
+    <div class="col-md-4">
+        <div>
+            Otras disposiciones admininistrativas
+        </div>
+    </div>
+    <div class="col-md-8">
+        @Html.TextArea("txtOtrasDispocisiones", @Model.txtOtrasDispocisiones, new { @class = "form-control form-control-sm" })
+    </div>
+</div><br />
+<div class="form-row text-small">
+    <div class="col-md-4">
+        <div>
+            Requerimientos del concesionarío
+        </div>
+    </div>
+    <div class="col-md-8">
+        @Html.TextArea("txtReqCons", @Model.txtRequerimientoConsecionario, new { @class = "form-control form-control-sm" })
+    </div>
+</div><br />
+<div class="form-row text-small">
+    <div class="col-md-12">
+        <div>
+            Conclusiones de la evaluación campo
+        </div>
+    </div>
+</div><br /><br />
+<div class="form-row text-small">
+    <div class="col-md-4">
+        <div>
+            Categoría de ordenamiento del manejo forestal
+        </div>
+    </div>
+    <div class="col-md-8">
+        @Html.TextArea("txtCatOrdenamiento", @Model.txtCategoriaOrdenamiento, new { @class = "form-control form-control-sm" })
+    </div>
+</div><br />
+<div class="form-row text-small">
+    <div class="col-md-4">
+        <div>
+            Protección de la concesión forestal
+        </div>
+    </div>
+    <div class="col-md-8">
+        @Html.TextArea("txtproteccion2", @Model.txtProteccionConcesion2, new { @class = "form-control form-control-sm" })
+    </div>
+</div><br />
+<div class="form-row text-small">
+    <div class="col-md-4">
+        <div>
+            De la planificación del aprovechamiento
+        </div>
+    </div>
+    <div class="col-md-8">
+        @Html.TextArea("txtPlanificacionAprovechamiento", @Model.txtPlanificacionAprovechamiento, new { @class = "form-control form-control-sm" })
+    </div>
+</div><br />
+<div class="form-row text-small">
+    <div class="col-md-4">
+        <div>
+            Del aprovechamiento forestal
+        </div>
+    </div>
+    <div class="col-md-8">
+        @Html.TextArea("txtAprovechamientoForestal", @Model.txtAprovechamientoForestal, new { @class = "form-control form-control-sm" })
+    </div>
+</div><br />
+<div class="form-row text-small">
+    <div class="col-md-4">
+        <div>
+            Aplicacion silvicultutal
+        </div>
+    </div>
+    <div class="col-md-8">
+        @Html.TextArea("txtAplicacionSilvi", @Model.txtAplicacionSilvi, new { @class = "form-control form-control-sm" })
+    </div>
+</div><br />
+<div class="form-row text-small">
+    <div class="col-md-4">
+        <div>
+            Pasó auditoría
+        </div>
+    </div>
+    <div class="col-md-8">
+        @Html.DropDownListFor(m => m.ddlAuditoriaOkId, new SelectList(@Model.ddlAuditoriaOk, "Value", "Text"), new { @class = "form-control form-control-sm" })
+    </div>
+</div><br />
+<div class="form-row text-small">
+    <div class="col-md-4">
+        <div>
+            Se recomienda ampliar la vigencia del contrato
+        </div>
+    </div>
+    <div class="col-md-8">
+        @Html.DropDownListFor(m => m.ddlAmpliarContratoId, new SelectList(@Model.ddlAmpliarContrato, "Value", "Text"), new { @class = "form-control form-control-sm" })
+    </div>
+</div><br />

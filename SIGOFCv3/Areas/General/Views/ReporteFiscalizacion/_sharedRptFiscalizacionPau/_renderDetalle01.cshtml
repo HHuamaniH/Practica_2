@@ -1,0 +1,86 @@
+﻿@model CapaEntidad.ViewModel.VM_TableroEstadistico
+
+<script src="~/Scripts/datatables/Extensions/dataTables.buttons.js"></script>
+<script src="~/Scripts/datatables/Extensions/buttons.flash.min.js"></script>
+<script src="~/Scripts/datatables/Extensions/jszip.min.js"></script>
+<script src="~/Scripts/datatables/Extensions/pdfmake.js"></script>
+<script src="~/Scripts/datatables/Extensions/vfs_fonts.js"></script>
+<script src="~/Scripts/datatables/Extensions/buttons.html5.js"></script>
+<script src="~/Scripts/datatables/Extensions/buttons.print.js"></script>
+<script src="~/Scripts/chart/Chart.min.js"></script>
+<script src="~/Scripts/chart/custom.js"></script>
+
+<link href="~/Content/datatables/buttons.dataTables.min.css" rel="stylesheet" />
+<link href="~/Areas/Capacitacion/css/ManCapacitacion/Reporte.css" rel="stylesheet" />
+
+<script>
+  var _renderReport01 = {};
+
+    _renderReport01.fnInitDataTable_Detail = function () {
+        var columns_label = [], columns_data = [], options = {};
+
+        columns_label = ["Fecha Emisión", "Titular", "Título Habilitante", "Resolución Directoral", "Expediente Administrativo", "Num. Informe", "Sanción", "Amonestar", "Archivo", "Allanamiento de responsabilidad", "Subsanación voluntaria", "Requiere implementar medidas", "Decomiso", "Caducidad - Plan de cierre", "Disposición de fauna", "Medida Correctiva", "Observaciones"];
+        columns_data = ["FECHA_EMSION", "TITULAR", "TITULO", "RESOLUCION", "NUMERO_EXPEDIENTE", "NUM_INFORME", "SANCION", "AMONESTACION", "ARCHIVO", "ALLANAMIENTO", "SUBSANACION", "IMPL_MEDIDAS", "DECOMISO", "PLAN_CIERRE", "DISP_FAUNA", "MED_CORRECTIVA", "OBSERVACIONES"];
+        options = {
+            page_length: 10, button_copy: true, button_csv: true, button_excel: true, button_pdf: true, button_print: true
+            , export_title: $("#tbDetalle01").find("thead tr")[0].innerText.trim(), row_index: true, page_sort: true, page_info: true
+
+        };
+
+        _renderReport01.dtReporte2 = utilDt.fnLoadDataTable_Detail(_renderReport01.frm.find("#tbDetalle01"), columns_label, columns_data, options);
+        _renderReport01.dtReporte2.rows.add(JSON.parse('@Html.Raw(Json.Encode(@Model.detalle01))')).draw();
+
+    }
+
+    $(document).ready(function () {
+        _renderReport01.frm = $("#frmReporteDetalle01");
+        _renderReport01.fnInitDataTable_Detail();
+    });
+</script>
+
+<div class="container" id="frmReporteDetalle01">
+    <br /><br />
+    <hr />
+    <div class="row">
+        <div class="col-sm-12">
+            @if (Model.detalle01.Count > 0)
+            {
+                var count = 0;
+
+                <div class="table-responsive">
+                    <table id="tbDetalle01" class="table table-striped table-bordered table-hover dataTables-example">
+                        <thead style="text-align: center !important;">
+                            <tr>
+                                <th colspan="18" class="text-sm-left">
+                                    <div class="row">
+                                        <div class="col-md-8">
+                                            <div class="form-inline">
+                                                <strong> Detalle de las Resoluciones Directorales </strong>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </th>
+                            </tr>
+                            <tr>
+                                <th colspan="10">RD Término</th>
+                                <th colspan="2">Acciones</th>
+                                <th colspan="4">Medidas Complementarias</th>
+                                <th colspan="2"> </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+
+
+                        </tbody>
+                    </table>
+                </div>
+            }
+            else
+            {
+                <h2>No se encontraron registros</h2>
+            }
+        </div>
+
+    </div>
+</div>

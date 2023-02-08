@@ -1,0 +1,59 @@
+﻿<div class="modal-dialog" role="document">
+    <div class="modal-content" id="contenedorTransferir">
+        <div class="modal-header text-small" style="cursor:move;padding:0.5rem;">
+            <h5 class="modal-title" id="h5Titulo">Nuevo</h5>            
+        </div>
+        <div class="modal-body">
+            <form id="frmAddTHS">
+                <input type="hidden" id="COD_SECUENCIAL" />
+                <div class="form-row">
+                    <div class="form-group col-md-12">
+                        <label for="NUM_THABILITANTE" class="text-small">Título Habilitante</label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"><i id="btnTH" class="fa fa-plus" style="cursor:pointer;" data-toggle="tooltip" data-placement="top" title="Seleccionar" onclick="_transferirM.fnShowModalTH()"></i></span>
+                            </div>
+                            <input type="text" id="NUM_THABILITANTE" class="form-control form-control-sm" disabled />                            
+                            <input type="hidden" id="COD_THABILITANTE" />
+                        </div>
+
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-12">
+                        <label for="NOMBRE_POA" class="text-small">Plan de Manejo</label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"><i id="btnPoa" class="fa fa-plus" style="cursor:pointer;" data-toggle="tooltip" data-placement="top" title="Seleccionar" onclick="_transferirM.fnShowModalPoa()"></i></span>
+                            </div>
+                            <input type="text" id="NOMBRE_POA" class="form-control form-control-sm" disabled />
+                            <input type="hidden" id="NUM_POA" />
+                            <input type="hidden" id="res_poa" />
+                        </div>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-12">
+                        <label for="cboSupervision" class="text-small">Supervisión OSINFOR</label>
+                        <select id="cboSupervision" class="form-control form-control-sm">
+                            <option value="SI">SI</option>
+                            <option value="NO">NO</option>
+                            <option value="No supervisable">No supervisable</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-12">
+                        <label for="OBSERVACION" class="text-small">Observaciones</label>
+                        <textarea id="OBSERVACION" class="form-control form-control-sm" rows="2" maxlength="300" />
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="modal-footer">
+            <button id="btnGuardar" class="btn btn-primary btn-sm" onclick="_transferirM.fnSave()">Registrar</button>
+            <button id="btnCancelar" class="btn btn-secondary btn-sm" onclick="_transferirM.close()">Cancelar</button>
+        </div>
+    </div>
+</div>
+<script src="~/Areas/THabilitante/js/ManVentanillaSolicitud/_Transferir.js"></script>

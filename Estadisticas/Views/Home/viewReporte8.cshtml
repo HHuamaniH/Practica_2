@@ -1,0 +1,108 @@
+﻿
+@{
+    ViewBag.Title = "viewReporte8";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<link href="~/Styles/Proyectos/reporteEstadisticas.min.css" rel="stylesheet" />
+<script src="~/Scripts/chart/Chart.min.js"></script>
+<script src="~/Scripts/chart/custom.js"></script>
+
+<script>
+    $(document).ready(function () {
+        $("#btnReporte").on("click", function () {
+            if (ItemValidarFiltrosBusqueda()) {
+                $("#cnvReporteEst8").remove();
+                $("#dvChartReporteEst8").append("<canvas id='cnvReporteEst8'></canvas>");
+
+                $.ajax({
+                    url: '@Url.Action("generarReporte8", "Estadisticos")',
+                    type: 'POST',
+                    dataType: 'json',
+                    contentType: 'application/json; charset=utf-8',
+                    data: JSON.stringify({
+                        'busAnio': ObtenerListaAnio(),
+                        'busRegion': ObtenerListaRegiones()
+                    }),
+                    success: function (data) {                        
+                        $(".resultadoRpt8").show();
+                        var subTitulo = "Principales especies forestales extraídas provenientes de árboles no autorizados";
+                        $("#subTituloReport8>h3").text(subTitulo);
+                        var i = 0;
+                        $("#tbReportEst8>tbody").empty();
+                        $(data).each(function () {
+                            $("#tbReportEst8>tbody").append("<tr><td>" + (++i) + "</td><td>" + $(this)[0] + "</td><td>" + agregarSeparador($(this)[1], ',') + "</td></tr>");
+                        });
+
+                        customChart.LoadBarraSimple(data, 0, { colIndex: [1], color: ["blue"], legend: ["Volumen No Autorizado (m³)"] }, { type: "H", title: "", legend: false, xTitle: "Volumen No Autorizado (m³)", yTitle: "Nombre Científico", canvas: "cnvReporteEst8" });
+                        unloader();
+                    },
+                    beforeSend: function () {
+                        loader();
+                    },
+                    error: function () {
+                        unloader();
+                    }
+                });
+            }
+        });
+    });
+</script>
+
+<div class="contenedorReporte">
+    <div class="filtroReporte">
+        <div class="toolsLista">
+            <div class="navLista">
+                <a href="@Url.Action("Index","Home")" title="Volver al Inicio"><span class="icon-arrow-back"></span><span>Volver al Inicio</span></a>
+            </div>
+            <div class="tituloLista">
+                <h2>Principales especies forestales extraídas provenientes de árboles no autorizados</h2>
+            </div>
+        </div>
+        @Html.Partial("Controles/_MasterFiltro")
+        <div class="divbtnReporte">
+            <input id="btnReporte" type="button" value="Generar Reporte" class="btnBotonFormSIGO" />
+        </div>
+    </div>
+    <div class="informacionReporte">
+        <h3 style="margin:0px;">¿Qué contiene este reporte?</h3>
+        <ul style="padding-left:15px;margin-top:5px;margin-bottom:5px;">
+            <li><p>Muestra las diez (10) especies forestales maderables con mayor volumen extraído inmerso en sanción a titulares de títulos habilitantes, por la comisión de infracciones*, determinadas a partir de las resoluciones de término de PAU que no necesariamente han quedado firmes o agotada la vía administrativa. Con opciones de búsqueda por año de supervisión y por departamento.</p></li>
+        </ul>
+    </div>
+    <div class="resultadoReporte resultadoRpt8" style="display:none;">
+        <div id="subTituloReport8" class="subTituloReport">
+            <h3></h3>
+        </div>
+        <div class="bloqueResultado">
+            <div class="bloqueResultado2" style="margin-right:5px;">
+                <div class="GrillaDivMarco">
+                    <table id="tbReportEst8" class="Grilla" style="width:100%;">
+                        <thead>
+                            <tr>
+                                <th>Nº</th>
+                                <th>Nombre Científico</th>
+                                <th>Volumen No Autorizado (m³)</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="bloqueResultado2" style="margin-left:5px;">
+                <div id="dvChartReporteEst8"></div>
+            </div>
+        </div>
+    </div>
+    <div class="informacionReporte resultadoRpt8" style="display:none;">
+        <ul style="padding-left:20px;margin-top:5px;margin-bottom:5px;">
+            <li>(*) Literal i) del artículo 363° del Reglamento de la Ley Forestal y de Fauna Silvestre, Ley N° 27308,</li>
+            <li>(*) Literal k) del artículo 363° del Reglamento de la Ley Forestal y de Fauna Silvestre, Ley N° 27308,</li>
+            <li>(*) Literal n) del artículo 363° del Reglamento de la Ley Forestal y de Fauna Silvestre, Ley N° 27308,</li>
+            <li>(*) Literal e) del artículo 137.3 del Reglamento para la Gestión Forestal y de Fauna Silvestre en Comunidades Nativas y Comunidades Campesinas aprobado mediante Decreto Supremo N° 021-2015-MINAGRI.</li>
+            <li>(*) Literal e) del artículo 207.3 del Reglamento para la Gestión Forestal aprobado mediante Decreto Supremo N° 018-2015-MINAGRI.</li>
+            <li style="margin-top:10px;"><strong>Actualizado al: </strong>@ViewBag.fechaProcess</li>
+            <li><strong>Fecha y Hora de Consulta:</strong> @DateTime.Now</li>
+        </ul>
+    </div>
+</div>

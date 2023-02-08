@@ -1,0 +1,64 @@
+﻿body {
+}
+
+.custom-file-input ~ .custom-file-label::after {
+    content: "Elegir";
+}
+
+button.dt-button {
+    font-weight: 400;
+    border: 1px solid transparent;
+    padding: 0.25rem 0.5rem;
+    font-size: 0.875rem;
+    line-height: 1.5;
+    border-radius: 0;
+    color: #17a2b8;
+    background-color: transparent;
+    background-image: none;
+    border-color: #17a2b8;
+}
+
+    button.dt-button:hover:not(.disabled) {
+        text-decoration: none;
+        color: #fff;
+        background-color: #17a2b8;
+        border-color: #17a2b8;
+        background-image: none;
+    }
+
+        button.dt-button:active:not(.disabled), button.dt-button:hover:not(.disabled):active:not(.disabled) {
+            color: #fff;
+            background-color: #17a2b8;
+            border-color: #17a2b8;
+            box-shadow: 0 0 0 0.2rem rgba(23, 162, 184, 0.5);
+            background-image: none;
+        }
+
+.text-small {
+    margin-bottom: 5px;
+    font-size: 14px;
+}
+
+.custom-checkbox {
+    font-size: 13px;
+}
+
+.custom-control-label {
+    margin-top: 6px;
+}
+
+#navParticipantes .dataTables_info {
+    color: #33b35a;
+    font-size: 15px;
+    margin-top: 17px;
+}
+
+#navParticipantes .dataTables_paginate {
+    margin-top: -25px;
+}
+
+@media (min-width: 576px) {
+    #modalCalMul .modal-dialog {
+        max-width: 90%;
+    }
+}

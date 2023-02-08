@@ -1,0 +1,127 @@
+﻿@model CapaEntidad.ViewModel.VM_ResolucionTFFS
+<script type="text/javascript">
+    var _renderMedCautelar = {};
+    _renderMedCautelar.fnSelectRecom = function () {
+        _renderMedCautelar.frm.find("#divMedidaCorrectiva").hide();
+        _renderMedCautelar.frm.find("#divEspecieIniPAU").hide();
+
+
+        if (_renderMedCautelar.frm.find("#chkMedCautelar").is(':checked')) {
+            _renderMedCautelar.frm.find("#divMedidaCorrectiva").show();
+        }
+        if (_renderMedCautelar.frm.find("#chkMedEspecie").is(':checked')) {
+            _renderMedCautelar.frm.find("#divEspecieIniPAU").show();
+        }
+
+    }
+
+    $(document).ready(function () {
+        _renderMedCautelar.frm = $("#frmMedCaut");
+        _renderMedCautelar.fnSelectRecom();
+    });
+
+</script>
+<div id="frmMedCaut">
+    <div class="card-header text-small">Medidas Cautelares <br /></div>
+    <div><br /></div>
+
+    <div class="form-row">
+        <div class="form-group col-md-4">
+            <label for="chkGTF" class="text-small">Con Medidas Cautelares</label>
+        </div>
+        <div class="form-group col-md-6">
+            @Html.CheckBoxFor(m => m.chkMedCautelar, new
+            {
+                @class = "form-check-input",
+                style = "width:15px;height:16px;",
+                @onchange = "_renderMedCautelar.fnSelectRecom()"
+            })
+        </div>
+        <div class="form-group col-md-2">
+        </div>
+    </div>
+
+    <!--div de medidas cautelares-->
+    <div id="divMedidaCorrectiva" style="display:none;">
+
+        <div class="form-row">
+            <div class="form-group col-md-4">
+            </div>
+            <div class="form-group col-md-4">
+                <label for="chkGTF" class="text-small">Guía Transporte Forestal</label>
+            </div>
+            <div class="form-group col-md-4">
+                @Html.CheckBoxFor(m => m.chkMedGTF, new { @class = "form-check-input", style = "width:15px;height:16px;" })
+            </div>
+        </div>
+
+        <div class="form-row">
+            <div class="form-group col-md-4">
+            </div>
+            <div class="form-group col-md-4">
+                <label for="chkLT" class="text-small">Listas de Trozas</label>
+            </div>
+            <div class="form-group col-md-4">
+                @Html.CheckBoxFor(m => m.chkMedLisTrozas, new { @class = "form-check-input", style = "width:15px;height:16px;" })
+            </div>
+        </div>
+
+        <div class="form-row">
+            <div class="form-group col-md-4">
+            </div>
+            <div class="form-group col-md-4">
+                <label for="chkPM" class="text-small">Plan de Manejo</label>
+            </div>
+            <div class="form-group col-md-4">
+                @Html.CheckBoxFor(m => m.chkMedPM, new { @class = "form-check-input", style = "width:15px;height:16px;" })
+            </div>
+        </div>
+
+        <div class="form-row">
+            <div class="form-group col-md-4">
+            </div>
+            <div class="form-group col-md-4">
+                <label for="chkPOA" class="text-small">POA</label>
+            </div>
+            <div class="form-group col-md-4">
+                @Html.CheckBoxFor(m => m.chkMedPOA, new { @class = "form-check-input", style = "width:15px;height:16px;" })
+            </div>
+        </div>
+
+        <div class="form-row">
+            <div class="form-group col-md-4">
+            </div>
+            <div class="form-group col-md-4">
+                <label for="chkEspecie" class="text-small">Por especie</label>
+            </div>
+            <div class="form-group col-md-4">
+                @Html.CheckBoxFor(m => m.chkMedEspecie, new
+                {
+                    @class = "form-check-input",
+                    style = "width:15px;height:16px;",
+                    @onchange = "_renderMedCautelar.fnSelectRecom()"
+                })
+            </div>
+        </div>
+
+        <div class="form-row" id="divEspecieIniPAU" style="display:none;">
+            <div class="form-group col-md-4">
+            </div>
+            <div class="form-group col-md-6">
+                @Html.Partial("~/Areas/Tribunal/Views/ManTribunal/_Shared/_generic/_renderListaEspeciesMC.cshtml", Model)
+            </div>
+            <div class="col-md-2"></div>
+        </div>
+    </div>
+
+    <div class="form-row">
+        <div class="form-group col-md-4">
+            <label for="txtSDescMEdCaut" class="text-small">Descripción de Medidas Cautelares</label>
+        </div>
+        <div class="form-group col-md-6">
+            @Html.TextAreaFor(m => m.txtDescMedidaCautelar, 4, 1, new { @class = "form-control form-control-sm" })
+        </div>
+        <div class="form-group col-md-2">
+        </div>
+    </div>
+</div>

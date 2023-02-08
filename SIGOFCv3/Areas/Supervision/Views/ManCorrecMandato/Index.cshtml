@@ -1,0 +1,15 @@
+﻿
+@{
+    ViewBag.Title = ViewBag.TituloFormulario;
+    Layout = "~/Views/Shared/_LayoutMain.cshtml";
+}
+
+<script src="~/Areas/Supervision/js/ManCorrecMandato/Index.js"></script>
+
+<form id="frmManCorrecMandato">
+    @Html.Hidden("tipoFormulario", (object)ViewBag.Formulario)
+    @Html.Hidden("titleMenu", (object)ViewBag.TituloFormulario)
+    @Html.Hidden("alertaFormulario", (object)ViewBag.AlertaInicial)
+
+    <div id="dvManCorrecMandatoContenedor" class="container-fluid"></div>
+</form>

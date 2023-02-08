@@ -1,0 +1,71 @@
+﻿
+<script src="~/Areas/Supervision/js/ManInformeTara/_AprovechaForestal.js"></script>
+
+<div class="modal-dialog" role="document">
+    <div class="modal-content">
+        <div class="modal-header text-small" style="cursor:move;">
+            <span>Aprovechamiento Forestal</span>
+            <i class="fa fa-close" style="cursor:pointer;" data-dismiss="modal" aria-label="Close"></i>
+        </div>
+        <div class="modal-body">
+            <form id="frmItemAprovechaForestal">
+                @Html.Hidden("hdfRegEstado")
+                @Html.Hidden("hdfCodSecuencial")
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label for="txtArea" class="text-small">Predio/Área</label>
+                        @Html.TextBox("txtArea", "", new { @class = "form-control form-control-sm", type = "number" })
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="txtZafra" class="text-small">Zafra</label>
+                        @Html.TextBox("txtZafra", "", new { @class = "form-control form-control-sm" })
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label for="txtProdArb" class="text-small">Producción árboles productivos (Qq)</label>
+                        @Html.TextBox("txtProdArb", "", new { @class = "form-control form-control-sm", type = "number" })
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="txtProdArbNoProd" class="text-small">Producción árboles no productivos (Qq)</label>
+                        @Html.TextBox("txtProdArbNoProd", "", new { @class = "form-control form-control-sm", type = "number" })
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label for="txtProdArbPlantado" class="text-small">Producción árboles plantados (Qq)</label>
+                        @Html.TextBox("txtProdArbPlantado", "", new { @class = "form-control form-control-sm", type = "number" })
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="txtCantAutorizada" class="text-small">Cantidad autorizada a extraer (Qq)</label>
+                        @Html.TextBox("txtCantAutorizada", "", new { @class = "form-control form-control-sm", type = "number" })
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label for="txtCantExtraida" class="text-small">Cantidad extrída (Qq)</label>
+                        @Html.TextBox("txtCantExtraida", "", new { @class = "form-control form-control-sm", type = "number" })
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="txtArbSupervisado" class="text-small">Árboles Supervisados</label>
+                        @Html.TextBox("txtArbSupervisado", "", new { @class = "form-control form-control-sm", type = "number" })
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label for="txtCantSupervisada" class="text-small">Cantidad Supervisada (Kg)</label>
+                        @Html.TextBox("txtCantSupervisada", "", new { @class = "form-control form-control-sm", type = "number" })
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="txtCantInjustificada" class="text-small">Cantidad Injustificada (Kg)</label>
+                        @Html.TextBox("txtCantInjustificada", "", new { @class = "form-control form-control-sm", type = "number" })
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-primary btn-sm" onclick="_AprovechaForestal.fnSubmitForm()">Guardar</button>
+            <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Cancelar</button>
+        </div>
+    </div>
+</div>

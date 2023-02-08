@@ -1,0 +1,299 @@
+﻿@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_LayoutMain.cshtml";
+}
+<script src="~/Scripts/datatables/Extensions/dataTables.buttons.js"></script>
+<script src="~/Scripts/datatables/Extensions/buttons.flash.min.js"></script>
+<script src="~/Scripts/datatables/Extensions/jszip.min.js"></script>
+
+<script src="~/Scripts/datatables/Extensions/vfs_fonts.js"></script>
+<script src="~/Scripts/datatables/Extensions/buttons.html5.js"></script>
+<script src="~/Scripts/datatables/Extensions/buttons.print.js"></script>
+
+
+<link href="~/Content/datatables/buttons.dataTables.min.css" rel="stylesheet" />
+<link href="~/Areas/General/css/ManCalculoMulta/ManCalculoMulta.css" rel="stylesheet" />
+<div id="divVENMaderable" class="container-fluid">
+    <div class="card">
+        <div class="card-header text-left">
+            <h5>Valores al Estado Natural de la Madera</h5>
+        </div>
+        <div class="card-body">
+            <div class="col-12">
+                <form id="frmManVENMaderable">
+                    <div class="form-row">
+                        <div class="form-group col-md-3">
+                            <select class="form-control form-control-sm" id="cboInfraccion">
+                                <option value="0">Denominación</option>
+                            </select>
+                        </div>
+                        <div class="form-group col-md-3">
+                            <input class="form-control form-control-sm" id="txtBuscar" type="text" max="100" />
+                        </div>
+                        <div class="btn-group col-md-2" style="padding-top:5px;">
+                            <a id="btnSearch" style="cursor:pointer;" data-toggle="tooltip" data-placement="top" title="Buscar" onclick="_manVENMaderable.fnSearch()"><span class="fa mx-2 fa-lg fa-search"></span></a>
+                            <a id="btnRefresh" style="cursor:pointer;" data-toggle="tooltip" data-placement="top" title="Buscar" onclick="_manVENMaderable.fnRefresh()"><span class="fa mx-2 fa-lg fa-refresh"></span></a>
+                            <a id="btnAdd" style="cursor:pointer;" data-toggle="tooltip" data-placement="top" title="" onclick="_manVENMaderable.fnCrear()" data-original-title="Crear un nuevo registro"><span class="fa mx-2 fa-lg fa-plus"></span></a>
+                        </div>
+                    </div>
+                    <div class="table-responsive-md">
+                        <table id="tbVENMaderable" class="table table-hover table-bordered" style="width:100%;">
+                            <thead>
+                                <tr>
+                                    <th></th>
+                                    <th></th>
+                                    <th></th>
+                                    <th>Código</th>
+                                    <th>Categoría</th>
+                                    <th>Denominación</th>
+                                    <th>VEN</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </form>
+
+            </div>
+        </div>
+    </div>
+    <div class="modal fade hide" id="modalVENMaderable" role="dialog">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header text-small" style="cursor:move;padding:0.5rem;">
+                    <h5 class="modal-title" id="h5TituloVENMaderable">Modificar</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body" id="divModVENMaderable">
+                    <input type="hidden" id="hdRegEstado" value="1" />
+                    <input type="hidden" id="hdNCodVENMaderable" value="0" />
+                    <input type="hidden" id="hdEstado" value="1" />
+                    <div class="form-row">
+                        <div class="form-group col-md-4">
+                            <label for="txtInfraccion">Categoría</label>
+                            <input class="form-control form-control-sm" id="txtCategoria" type="text" maxlength="2">
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label for="txtInfraccion"> Denominación</label>
+                            <input class="form-control form-control-sm" id="txtDenominacion" type="text" maxlength="200">
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label for="txtInfraccion">VEN</label>
+                            <input class="form-control form-control-sm" id="txtVEN" type="number" min="0.00" max="9999.99">
+                        </div>
+                    </div>
+                    <div class="form-row" id="">
+
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary btn-sm" onclick="_manVENMaderable.fnVENMaderableUpdate()">Guardar</button>
+                    <button id="btnCerrarModal" class="btn btn-secondary btn-sm" data-dismiss="modal">Cancelar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    var _manVENMaderable = {
+        fnRefresh: () => {
+            $("#cboInfraccion").val('0');
+            $("#txtBuscar").val('');
+            _manVENMaderable.fnSearch();
+        },
+        fnCrear: () => {
+            _manVENMaderable.fnLimpiar();
+            $("#h5TituloVENMaderable").text("Nuevo");
+            $("#hdRegEstado").val("1");
+            $("#modalVENMaderable").modal({ keyboard: true, backdrop: 'static' });
+
+        },
+        fnLimpiar: () => {
+            let frm = $("#divModVENMaderable");
+            frm.find("#hdNCodVENMaderable").val('0');
+            frm.find("#txtCategoria").val('');
+            frm.find("#txtDenominacion").val('');
+            frm.find("#txtVEN").val('');
+        },
+        fnDelete: (obj) => {
+
+            let frm = $("#divModVENMaderable");
+            let $tr = $(obj).closest("tr");
+            let dataRow = _manVENMaderable.dt.row($tr).data();
+
+            let model = {
+                NCODVENMADERA: dataRow.NCODVENMADERA,
+                VCATEGORIA: dataRow.VCATEGORIA,
+                VDENOMINACION: dataRow.VDENOMINACION,
+                NVEN: dataRow.NVEN,
+                NESTADO: 0,
+                RegEstado: 3
+            };
+
+            let url = urlLocalSigo + "General/ManCalculoMulta/GuardarVENMaderable";
+            let option = { url: url, datos: JSON.stringify(model), type: 'POST' };
+            utilSigo.fnAjax(option, function (data) {
+                if (data.success) {
+                    utilSigo.toastSuccess("Éxito", data.msj);
+                    _manVENMaderable.fnSearch();
+                }
+                else {
+                    utilSigo.toastWarning("Aviso", data.msj);
+                }
+            });
+
+        },
+        fnEdit: (obj) => {
+
+            $("#h5TituloVENMaderable").text("Modificar");
+            _manVENMaderable.fnLimpiar();
+            $("#hdRegEstado").val("2");
+            let frm = $("#divModVENMaderable");
+            let $tr = $(obj).closest("tr");
+            let dataRow = _manVENMaderable.dt.row($tr).data();
+
+            frm.find("#hdNCodVENMaderable").val(dataRow.NCODVENMADERA);
+            frm.find("#txtCategoria").val(dataRow.VCATEGORIA);
+            frm.find("#txtDenominacion").val(dataRow.VDENOMINACION);
+            frm.find("#txtVEN").val(dataRow.NVEN);            
+
+            $("#modalVENMaderable").modal({ keyboard: true, backdrop: 'static' });
+        },
+        fnVENMaderableUpdate: () => {
+            let frm = $("#divModVENMaderable");
+            let model = {
+                NCODVENMADERA: frm.find("#hdNCodVENMaderable").val(),
+                VCATEGORIA: frm.find("#txtCategoria").val(),
+                VDENOMINACION: frm.find("#txtDenominacion").val(),
+                NVEN: frm.find("#txtVEN").val(),
+                RegEstado: 1
+            };
+        
+
+            model.RegEstado = model.NCODVENMADERA == "0" ? 1 : 2;
+            model.NESTADO = $("#cboEstado").val() == "0" ? 0 : 1;
+
+            if (model.VCATEGORIA == "") {
+                utilSigo.toastWarning("Warning", "Ingresar Categoría");
+                return false;
+            } else if (model.VDENOMINACION == "" || model.VDENOMINACION == null) {
+                utilSigo.toastWarning("Warning", "Ingresar Denominación.");
+                return false;
+            } else if (model.NVEN == "" || model.NVEN == null) {
+                utilSigo.toastWarning("Warning", "Ingresar Valor Estado Natural.");
+                return false;
+            } else if (parseFloat(model.NVEN) <= 0 || parseFloat(model.NVEN) >= 9999.99) {
+                utilSigo.toastWarning("Warning", "El Valor Estado Natural debe ser mayor que 0 y menor que 9999.99.");
+                return false;
+            }
+
+            let url = urlLocalSigo + "General/ManCalculoMulta/GuardarVENMaderable";
+            let option = { url: url, datos: JSON.stringify(model), type: 'POST' };
+            utilSigo.fnAjax(option, function (data) {               
+                if (data.success) {
+                    utilSigo.toastSuccess("Éxito", data.msj);
+                    $("#btnCerrarModal").click();
+                    _manVENMaderable.fnSearch();
+                }
+                else {
+                    utilSigo.toastWarning("Aviso", data.msj);
+                }
+            });
+        },
+        fnBuilTable: () => {
+            const columns = [
+                {
+                    "data": "", "className": "text-center", "width": "2%", "orderable": false, "searchable": false, "mRender": function (data, type, row) {
+                        return '<div><i class="fa fa-lg fa-pencil-square-o" style="color:blue;cursor:pointer;" title="Editar plan de trabajo" onclick="_manVENMaderable.fnEdit(this)"></i></div>';
+                    }
+                },
+                {
+                    "data": "", "className": "text-center", "width": "2%", "orderable": false, "searchable": false, "mRender": function (data, type, row) {
+                        return '<div><i class="cellDel fa fa-lg fa-window-close" style="color:red;cursor:pointer;" title="Editar plan de trabajo" onclick="_manVENMaderable.fnDelete(this)"></i></div>';
+                    }
+                },
+                {
+                    "name": "ROW_INDE", "width": "2%", "orderable": false, "searchable": false, "mRender": function (data, type, row, meta) {
+                        return parseInt(meta.row) + 1 + meta.settings._iDisplayStart;
+                    }
+                },
+                { "data": "NCODVENMADERA", visible: false },
+                { "data": "VCATEGORIA", "autoWidth": true },
+                { "data": "VDENOMINACION", "autoWidth": true },
+                { "data": "NVEN", "autoWidth": true },                
+              //  { "data": "NESTADO", "autoWidth": true }
+
+            ];
+            const optDt = { iLength: 20, iStart: 0, aSort: [] };
+            _manVENMaderable.dt = _manVENMaderable.frm.find("#tbVENMaderable").DataTable({
+                processing: true,
+                serverSide: true,
+                searching: false,
+                ordering: false,
+                paging: true,
+                dom: 'Bfrtip',
+                buttons: [{
+                    extend: 'excelHtml5',
+                    messageTop: 'Indice Precio Consumidor',
+                    exportOptions: {
+                        // columns: [1, ':visible'],
+                        //  columns: [2, ':visible'],
+                        //   columns: [3, ':visible'],
+                        // columns: [8, ':visible'],
+                        //columns: [4, ':visible'],
+                    }
+                }],
+                ajax: {
+                    "url": `${urlLocalSigo}/General/Controles/GetVENMaderable`,
+                    "data": function (d) {
+                        d.CustomSearchForm = "CALCULOMULTA";
+                        d.CustomSearchType = "VENMADERA";
+                        d.CustomSearchValue = $("#txtBuscar").val();
+                        d.customSearchEnabled = true;
+
+                        d.columns = null;
+                    },
+                    "error": function (jqXHR) {
+                        // utilSigo.unblockUIGeneral();
+                        if (jqXHR.status != 401 && jqXHR.status != 403 && jqXHR.status != 404) {
+                            utilSigo.toastError("Error", initSigo.MessageError);
+                        }
+                        //console.log(jqXHR);
+                    },
+                    "statusCode": {
+                        203: () => { utilSigo.toastInfo("Aviso", "El usuario perdio la sesión. Vuelva ingresar al sistema"); }
+                    }
+                },
+                columns: columns,
+                bInfo: true,
+                "lengthMenu": [[10, 20, 50, 100], [10, 20, 50, 100]],
+                // "aaSorting": optDt.aSort,
+                "pageLength": optDt.iLength,
+                "displayStart": optDt.iStart,
+                "oLanguage": initSigo.oLanguage,
+                "drawCallback": initSigo.showPagination
+            });
+        },
+        fnSearch: () => {
+            _manVENMaderable.dt.ajax.reload();
+        }
+    };
+    $(document).ready(function () {
+
+        _manVENMaderable.frm = $("#frmManVENMaderable");
+        _manVENMaderable.fnBuilTable();
+        _manVENMaderable.frm.submit(function (e) {
+            e.preventDefault();
+            _manVENMaderable.fnSearch();
+        });
+
+
+    });
+</script>
+
+
+
+
+

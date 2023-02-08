@@ -1,0 +1,56 @@
+﻿
+<script src="~/Areas/Supervision/js/ManInformeExSitu/_ActividadEducacion.js"></script>
+
+<div class="modal-dialog" role="document">
+    <div class="modal-content">
+        <div class="modal-header text-small" style="cursor:move;">
+            <span>Actividad Realizada</span>
+            <i class="fa fa-close" style="cursor:pointer;" data-dismiss="modal" aria-label="Close"></i>
+        </div>
+        <div class="modal-body">
+            <form id="frmItemActEducacion">
+                @Html.Hidden("hdfRegEstado")
+                @Html.Hidden("hdfCodSecuencial")
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label for="ddlActividadId" class="text-small">Tema</label>
+                        @Html.DropDownList("ddlActividadId", new SelectList(ViewBag.ddlActividad, "Value", "Text"), new { @class = "form-control form-control-sm" })
+                    </div>
+                    <div class="form-group col-md-3">
+                        <label for="txtFechaEvento" class="text-small">Fecha del Evento</label>
+                        @Html.TextBox("txtFechaEvento", "", new { @class = "form-control form-control-sm" })
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="table-responsive" style="overflow-x:hidden;">
+                        <table id="tbItemActEducacion_PObjetivo" style="width:100%" class="table table-hover table-bordered">
+                            <thead>
+                                <tr>
+                                    <th colspan="3">
+                                        <div class="form-group row" style="margin-bottom:0px;">
+                                            <label for="ddlPublicoObjetivoId" class="col-md-5 col-form-label text-small" style="padding-right:0px;">Público Objetivo</label>
+                                            <div class="col-md-7" style="margin-bottom:0px;">
+                                                @Html.DropDownList("ddlPublicoObjetivoId", new SelectList(ViewBag.ddlPublicoObjetivo, "Value", "Text"), new { @class = "form-control form-control-sm" })
+                                            </div>
+                                        </div>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-12">
+                        <label for="txtObservacion" class="text-small">Observación</label>
+                        @Html.TextArea("txtObservacion", "", new { @class = "form-control form-control-sm", rows = "3" })
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-primary btn-sm" onclick="_ActividadEducacion.fnSubmitForm()">Guardar</button>
+            <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Cancelar</button>
+        </div>
+    </div>
+</div>

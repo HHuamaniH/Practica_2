@@ -1,0 +1,19 @@
+﻿@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_LayoutMain.cshtml";
+}
+
+<script src="~/Areas/THabilitante/js/ManObligacion/_ManGrilla.js"></script>
+<script src="~/Areas/THabilitante/js/ManObligacion/Index.js"></script>
+@*<div class="container-fluid" id="contenedorPlanManejo"
+     data-request_url="@Url.Action("_ManGrilla", "Controles", new { Area= "General" })"
+     data-request_formulario="@ViewBag.Formulario" data-request_titulo="@ViewBag.TituloFormulario">
+</div>*@
+<div class="container-fluid" id="contenedorPlanManejo"
+     data-request_url="@Url.Action("_ManGrilla", "ManObligacion", new { Area= "THabilitante" })"
+     data-request_formulario="@ViewBag.Formulario" data-request_titulo="@ViewBag.TituloFormulario">
+</div>
+
+
+<input type="hidden" id="hdMsj" value="@ViewBag.AlertaInicial" />
+<!--Modales-->

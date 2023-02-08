@@ -1,0 +1,73 @@
+﻿@using InfractoresSupervision;
+@model dynamic
+@{
+    Layout = null;
+}
+
+<div>
+    <a href="@Url.Action("dowloanEcxel","SIGO")" target="_blank">
+        <img id="imgBtnDowloadExcel" src="~/Images/Iconos/ExportarExcel.png" title="Descargar Excel" style="margin-right: 10px; float: right" />
+    </a>
+
+</div>
+<br />
+<br />
+<script>
+    $(function () {
+        $('#tbListFauna').DataTable()
+    })
+</script>
+<table id="tbListFauna" class="table table-bordered table-striped-warning" style="width: 100% !important">
+    <thead>
+        <tr style="text-align: center !important; background-color: #F7D6B4">
+            <td style="width: 2%">N°</td>
+            <td style="width: 20%">Titular</td>
+            <td style="width: 8%">DNI/RUC</td>
+            <td style="width: 25%">N° de Título</td>
+            <td style="width: 10%">Modalidad</td>
+            <td style="width: 10%">Departamento</td>
+            <td style="width: 15%">N° Resolución Directoral</td>
+            <td style="width: 5%">Se Dispuso Caducidad</td>
+            <td style="width: 5%">Historial Título Habilitante</td>
+        </tr>
+    </thead>
+    <tbody id="bodyTable">
+        @if (Model.ListInfractores != null)
+        {
+            var count = 0;
+            foreach (var item in Model.ListInfractores)
+            {
+                <tr>
+                    <td style="width: 2%">@(++count)</td>
+                    <td style="width: 20%">@item.TITULAR</td>
+                    <td style="width: 8%">@item.consultor</td>
+                    <td style="width: 25%">@item.TITULO</td>
+                    <td style="width: 10%">@item.MODALIDAD</td>
+                    <td style="width: 10%">@item.DEPARTAMENTO</td>
+                    <td style="width: 15%">
+                        <a data-COD_DOC="@item.DOC_SIADO" href="@Url.Action("dowloandPDF","SIGO", new {COD_DOC=item.DOC_SIADO})" target="_blank">
+                            @item.RD_termino
+                        </a> <br />
+                        <a data-COD_DOC="@item.DOC_SIADO_RECONSIDERACION" href="@Url.Action("dowloandPDF","SIGO", new {COD_DOC=item.DOC_SIADO_RECONSIDERACION})" target="_blank">
+                            @item.NUM_RESODIREC_RECONSIDERACION
+                        </a>
+                    </td>
+                    <td style="width: 5%; text-align: center">@item.CADUCIDAD_RDTERMINO</td>
+                    <td style="width: 5%; text-align: center">
+                        <a href="/SIGO/detalleInfractores?CODIGO=@item.COD_THABILITANTE" target="_blank" class="btn btn-app"
+                           title="Ver historial Título Habilitante" style="min-width:50px; height:52px; background-color:#3c8dbc; color:white; padding: 10px 5px;">
+                            <i class="fa fa-search-plus"></i> Ver
+                        </a>
+                    </td>
+                </tr>
+            }
+        }
+    </tbody>
+</table>
+<br />
+<strong>*** Actualizado al:</strong>
+@if (Model != null)
+{
+    var item = Model;
+    <a style="color:red">@item.fecha</a>
+}

@@ -1,0 +1,91 @@
+﻿@model CapaEntidad.ViewModel.VM_PaspeqDetalle
+<style type="text/css">
+    table#tbListPaspeq thead tr th {
+        text-align: center;
+    }
+
+    table#tbListPaspeq tbody tr td {
+        font-weight: bold;
+    }
+    .col1 {
+        width: 30px;
+    }
+
+    .col2 {
+        width: 150px;
+    }
+
+    .table-wrapper-scroll-y {
+        display: block;
+        max-height: 600px;
+        overflow-y: auto;
+        -ms-overflow-style: -ms-autohiding-scrollbar;
+    }
+</style>
+<div class="card">
+    <div class="card-header text-right">
+        Paspeq seleccionado : <strong> @ViewBag.periodo </strong>
+    </div>
+    <div class="card-body">
+        <div class="card">
+            <div class="card-header text-small" id="divTitle">
+                <div id="btnImportacionExcelPaspeq">
+                    <label style="cursor:pointer;" class="fa mx-2 fa-lg fa-file-excel-o" title="Importar Archivo" data-toggle="tooltip">
+                        <input type="file" id="fileselect" name="fileselect" style="display:none" size="60" onchange="PaspeqEdit.ItemExcelImportarVentana(event,this,'LISTAPASPEQ')" onclick="return true">
+                    </label>
+                    <i class="fa mx-2 fa-lg fa-check-circle" style="cursor:pointer;color:#007bff;" onclick="utilSigo.validarFormato('LISTAPASPEQ');" data-toggle="tooltip" data-placement="top" title="Validar Información"></i>
+                    <a id="btnRegresarPaspeq" style="cursor:pointer;" data-toggle="tooltip" data-placement="top" title="Regresar"><i class="fa mx-2 fa-lg fa-reply"></i></a>
+                </div>
+            </div>
+            <form id="frmPaspeqDetalle">
+                <input type="hidden" id="num_paspeq" value="@ViewBag.num_paspeq" />
+                <input type="hidden" id="periodo" value="@ViewBag.periodo" />
+            </form>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <h5 class="card-title">Planes de manejo</h5>
+                        <div class="table-responsive table-wrapper-scroll-y">
+                            <table id="tbListPaspeq" class="table table-hover table-bordered" style="width:100%">
+                                <thead>
+                                    <tr>
+                                        <th class="col1">Nro.</th>
+                                        <th class="col2">Título habilitante</th>
+                                        <th class="col2">Ubicación</th>
+                                        <th class="col2">Oficina</th>
+                                        <th class="col2">Plan de Manejo</th>
+                                        <th class="col2">Res. de aprobación</th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="divErroresImportacion" class="card-body" style="display:none;">
+                <div class="row">
+                    <div class="col-md-12">
+                        <h5 class="card-title">Lista de filas no procesadas en la importación</h5>
+                        <div class="table-responsive table-wrapper-scroll-y">
+                            <table id="tbListErroresImportacion" class="table table-hover table-bordered" style="width:100%">
+                                <thead>
+                                    <tr>
+                                        <th class="col1">Nro.</th>
+                                        <th class="col2">Título Habilitante</th>
+                                        <th class="col2">Ubicación</th>
+                                        <th class="col2">Oficina</th>
+                                        <th class="col2">Plan de manejo</th>
+                                        <th class="col2">Res. de aprobación</th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="~/Areas/PlanFocalizacion/js/Paspeq/_PaspeqDetalle.js"></script>

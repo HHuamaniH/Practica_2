@@ -1,0 +1,192 @@
+﻿
+@{
+    ViewBag.Title = "ReporteTHModPorDpto";
+    Layout = "~/Views/Shared/_LayoutMain.cshtml";
+}
+
+<link href="~/Content/datatables/buttons.dataTables.min.css" rel="stylesheet" />
+
+<style type="text/css">
+    table .custom-row-reporte th {
+        text-align: center;
+        background-color: lightblue;
+    }
+
+    button.dt-button{
+        font-weight: 400;
+        border: 1px solid transparent;
+
+        padding: 0.25rem 0.5rem;
+        font-size: 0.875rem;
+        line-height: 1.5;
+        border-radius: 0;
+
+        color: #17a2b8;
+        background-color: transparent;
+        background-image: none;
+        border-color: #17a2b8;
+    }
+
+    button.dt-button:hover:not(.disabled){
+        text-decoration: none;
+        color: #fff;
+        background-color: #17a2b8;
+        border-color: #17a2b8;
+        background-image:none;
+    }
+
+    button.dt-button:active:not(.disabled), button.dt-button:hover:not(.disabled):active:not(.disabled){
+        color: #fff;
+        background-color: #17a2b8;
+        border-color: #17a2b8;
+        box-shadow: 0 0 0 0.2rem rgba(23, 162, 184, 0.5);
+        background-image:none;
+    }
+</style>
+
+<div class="container-fluid">
+    <div class="card">
+        <div class="card-header text-right">
+            Reporte de Títulos Habilitantes por Modalidad y Departamento
+        </div>
+        <div class="card-body">
+            <div class="form-row">
+                <div class="form-group col-md-2">
+                    <label for="ddlPlanAnioId" class="text-small">Año PASPEQ</label>
+                    @Html.DropDownList("ddlPlanAnioId", new SelectList(ViewBag.ddlPlanAnio, "Value", "Text"), new { @class = "form-control form-control-sm" })
+                </div>
+            </div>
+            <br />
+            <div class="form-row">
+                <div class="col-md-12">
+                    <div class="table-responsive">
+                        <table id="tbTHModDpto" style="width: 100%" class="table table-hover table-bordered">
+                            <thead>
+                                <tr>
+                                    <th colspan="25" class="text-sm-left">
+                                        <div class="form-inline">
+                                            <strong>
+                                                Reporte de Títulos Habilitantes por Modalidad y Departamento
+                                            </strong>
+                                        </div>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                            <tfoot>
+                                <tr class="custom-row-reporte">
+                                    <th><span id="col1">Total</span></th>
+                                    <th><span id="col2">0</span></th>
+                                    <th><span id="col3">0</span></th>
+                                    <th><span id="col4">0</span></th>
+                                    <th><span id="col5">0</span></th>
+                                    <th><span id="col6">0</span></th>
+                                    <th><span id="col7">0</span></th>
+                                    <th><span id="col8">0</span></th>
+                                    <th><span id="col9">0</span></th>
+                                    <th><span id="col10">0</span></th>
+                                    <th><span id="col11">0</span></th>
+                                    <th><span id="col12">0</span></th>
+                                    <th><span id="col13">0</span></th>
+                                    <th><span id="col14">0</span></th>
+                                    <th><span id="col15">0</span></th>
+                                    <th><span id="col16">0</span></th>
+                                    <th><span id="col17">0</span></th>
+                                    <th><span id="col18">0</span></th>
+                                    <th><span id="col19">0</span></th>
+                                    <th><span id="col20">0</span></th>
+                                    <th><span id="col21">0</span></th>
+                                    <th><span id="col22">0</span></th>
+                                    <th><span id="col23">0</span></th>
+                                    <th><span id="col24">0</span></th>
+                                    <th><span id="col25">0</span></th>
+                                </tr>
+                            </tfoot>
+                        </table>
+                        <p class="text-small" style="padding-left:6px;">(*) Obtenido del universo de títulos habilitantes y planes de manejo correspondientes al PASPEQ seleccionado.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="~/Scripts/datatables/Extensions/dataTables.buttons.js"></script>
+<script src="~/Scripts/datatables/Extensions/buttons.flash.min.js"></script>
+<script src="~/Scripts/datatables/Extensions/jszip.min.js"></script>
+<script src="~/Scripts/datatables/Extensions/pdfmake.js"></script>
+<script src="~/Scripts/datatables/Extensions/vfs_fonts.js"></script>
+<script src="~/Scripts/datatables/Extensions/buttons.html5.js"></script>
+<script src="~/Scripts/datatables/Extensions/buttons.print.js"></script>
+
+<script type="text/javascript">
+    let _THModPorDpto = {
+        fnBuildTable: () => {
+            var columns_label = [], columns_data = [], options = {};
+
+            columns_label = ["Modalidad", "Amazonas", "Ancash", "Apurimac", "Arequipa", "Ayacucho", "Cajamarca", "Callao"
+                , "Cusco", "Huanuco", "Ica", "Junin", "La Libertad", "Lambayeque", "Lima", "Loreto", "Madre de Dios", "Pasco"
+                , "Piura", "Puno", "San Martin", "Tacna", "Tumbes", "Ucayali", "Total"];
+            columns_data = ["MODALIDAD", "'AMAZONAS'", "'ANCASH'", "'APURIMAC'", "'AREQUIPA'", "'AYACUCHO'", "'CAJAMARCA'", "'CALLAO'"
+                , "'CUSCO'", "'HUANUCO'", "'ICA'", "'JUNIN'", "'LA LIBERTAD'", "'LAMBAYEQUE'", "'LIMA'", "'LORETO'", "'MADRE DE DIOS'", "'PASCO'"
+                , "'PIURA'", "'PUNO'", "'SAN MARTIN'", "'TACNA'", "'TUMBES'", "'UCAYALI'", "TOTAL"];
+            options = {
+                page_length: 100, row_edit: false, row_delete: false, row_index: false, page_autowidth: false, page_sort: true
+                , button_excel: true, button_pdf: true, button_print: true, export_title: $("#tbTHModDpto").find("thead tr")[0].innerText.trim()
+            };
+
+            return utilDt.fnLoadDataTable_Detail($("#tbTHModDpto"), columns_label, columns_data, options);
+        },
+        fnLoadTable: () => {
+            let cod_plan = $("#ddlPlanAnioId").val();
+            var url = urlLocalSigo + "Planificacion/ManReporte/ListarTHModPorDpto";
+            const option = { url: url, datos: { asCodPlan: cod_plan }, type: 'GET' };
+
+            utilSigo.fnAjax(option, function (result) {
+                if (result.success) {
+                    _THModPorDpto.dtTHModDpto.clear().draw();
+                    _THModPorDpto.dtTHModDpto.rows.add(result.data).draw();
+
+                    var c2 = 0, c3 = 0, c4 = 0, c5 = 0, c6 = 0, c7 = 0, c8 = 0, c9 = 0, c10 = 0, c11 = 0
+                        , c12 = 0, c13 = 0, c14 = 0, c15 = 0, c16 = 0, c17 = 0, c18 = 0, c19 = 0, c20 = 0
+                        , c21 = 0, c22 = 0, c23 = 0, c24 = 0, c25 = 0;
+                    for (var i = 0; i < result.data.length; i++) {
+                        c2 += parseInt(result.data[i]["'AMAZONAS'"]); c3 += parseInt(result.data[i]["'ANCASH'"]); c4 += parseInt(result.data[i]["'APURIMAC'"]);
+                        c5 += parseInt(result.data[i]["'AREQUIPA'"]); c6 += parseInt(result.data[i]["'AYACUCHO'"]); c7 += parseInt(result.data[i]["'CAJAMARCA'"]);
+                        c8 += parseInt(result.data[i]["'CALLAO'"]); c9 += parseInt(result.data[i]["'CUSCO'"]); c10 += parseInt(result.data[i]["'HUANUCO'"]);
+                        c11 += parseInt(result.data[i]["'ICA'"]); c12 += parseInt(result.data[i]["'JUNIN'"]); c13 += parseInt(result.data[i]["'LA LIBERTAD'"]);
+                        c14 += parseInt(result.data[i]["'LAMBAYEQUE'"]); c15 += parseInt(result.data[i]["'LIMA'"]); c16 += parseInt(result.data[i]["'LORETO'"]);
+                        c17 += parseInt(result.data[i]["'MADRE DE DIOS'"]); c18 += parseInt(result.data[i]["'PASCO'"]); c19 += parseInt(result.data[i]["'PIURA'"]);
+                        c20 += parseInt(result.data[i]["'PUNO'"]); c21 += parseInt(result.data[i]["'SAN MARTIN'"]); c22 += parseInt(result.data[i]["'TACNA'"]);
+                        c23 += parseInt(result.data[i]["'TUMBES'"]); c24 += parseInt(result.data[i]["'UCAYALI'"]); c25 += parseInt(result.data[i]["TOTAL"]);
+                    }
+
+                    var tb = $("#tbTHModDpto");
+                    tb.find("#col2").text(c2); tb.find("#col3").text(c3); tb.find("#col4").text(c4); tb.find("#col5").text(c5); tb.find("#col6").text(c6);
+                    tb.find("#col7").text(c7); tb.find("#col8").text(c8); tb.find("#col9").text(c9); tb.find("#col10").text(c10); tb.find("#col11").text(c11);
+                    tb.find("#col12").text(c12); tb.find("#col13").text(c13); tb.find("#col14").text(c14); tb.find("#col15").text(c15); tb.find("#col16").text(c16);
+                    tb.find("#col17").text(c17); tb.find("#col18").text(c18); tb.find("#col19").text(c19); tb.find("#col20").text(c20); tb.find("#col21").text(c21);
+                    tb.find("#col22").text(c22); tb.find("#col23").text(c23); tb.find("#col24").text(c24); tb.find("#col25").text(c25);
+                } else {
+                    utilSigo.toastError("Error", "Ocurrió un problema al listar los criterios");
+                }
+            });
+        },
+        fnInit: () => {
+            $.fn.select2.defaults.set("theme", "bootstrap4");
+            $('[data-toggle="tooltip"]').tooltip();
+
+            $("#ddlPlanAnioId").select2({ minimumResultsForSearch: -1 });
+
+            _THModPorDpto.dtTHModDpto = _THModPorDpto.fnBuildTable();
+
+            $("#ddlPlanAnioId").change(function () {
+                _THModPorDpto.fnLoadTable();
+            });
+        }
+    }
+
+    $(document).ready(function () {
+        _THModPorDpto.fnInit();
+    });
+</script>

@@ -1,0 +1,137 @@
+﻿<link href="~/Styles/Custom.css" rel="stylesheet" />
+@model dynamic
+<div class="row">
+    <div class="col-sm-6">
+    </div>
+    <div class="col-sm-6">
+        <div class="col-sm-12" style="text-align:center">
+            <h4 style="text-align:right"><span style="color:#00a65a">ALERTAS OSINFOR</span></h4>
+        </div>
+        <div class="col-sm-12">
+
+        </div>
+        <div class="col-sm-12">
+
+        </div>
+    </div>
+</div>
+<div id="divListReporte" class="form-group" style="margin-left: 5px; margin-right: 5px; font-size: 12px">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="box box-primary">
+                <!-- /.box-header -->
+                <div class="box-body" id="divTbReporteFauna">
+                    <div>
+                        <a href="@Url.Action("DownloadAlerta","Home")" target="_blank">
+                            <img id="imgBtnDowloadExcel" src="~/Images/Iconos/ExportarExcel.png" title="Descargar Alertas" style="margin-right: 10px; float: right" />
+                        </a>
+
+                    </div>
+                    <br />
+                    <br />
+                    <div class="table-responsive">
+                        <table id="tbListAlerta" class="table table-bordered table-striped-info GrillaRojo" style="width: 100% !important">
+                            <thead>
+                                <tr style="text-align: center !important; background-color: lightblue; font-size:13px">
+                                    <td style="width: 2%"><strong>N°</strong></td>
+                                    <td style="width: 10%"><strong>Titular</strong></td>
+                                    <td style="width: 10%"><strong>Título Habilitante</strong></td>
+                                    <td style="width: 10%"><strong>Modalidad de Aprovechamiento</strong></td>
+                                    <td style="width: 10%"><strong>Departamento</strong></td>
+                                    <td style="width: 10%"><strong>Provincia</strong></td>
+                                    <td style="width: 10%"><strong>Distrito</strong></td>
+                                    <!--<td style="width: 10%"><strong>N° POA</strong></td>-->
+                                    <td style="width: 30%"><strong>Resol. de Aprob. del Plan de Manejo Supervisado</strong></td>
+                                    <td style="width: 10%" title="Fecha de Emisión de la Alerta"><strong>Fecha de Emisión de la Alerta</strong></td>
+                                    <td style="width: 5%"><strong>Volumen Injustificado (m³)</strong></td>
+                                    <td style="width: 5%"><strong>N° Resolución de Medida Cautelar</strong></td>
+                                    <td style="width: 5%"><strong>Ver Ubicación</strong></td>
+                                </tr>
+                            </thead>
+                            <tbody id="bodyTable">
+                                @if (Model != null)
+                                {
+                                    var count = 0;
+                                    foreach (var item in Model)
+                                    {
+                                        <tr style="height:5px !important">
+                                            <td style="width: 2%; text-align:center">@(++count)</td>
+                                            <td style="width: 10%">@item.TITULAR</td>
+                                            <td style="width: 10%">@item.TITULO</td>
+                                            <td style="width: 00%">@item.MODALIDAD</td>
+                                            <td style="width: 10%; text-align:center">@item.DEPARTAMENTO</td>
+                                            <td style="width: 10%; text-align:center">@item.PROVINCIA</td>
+                                            <td style="width: 10%; text-align:center">@item.DISTRITO</td>
+                                            <!--<td style="width: 10%; text-align:center">@item.NUM_POA </td>-->
+                                            <td style="width: 30%; text-align:center">@item.POA_RESOLUCION </td>
+                                            <td style="width: 10%; text-align:center">@item.FECHA_ENVIO_ALERTA </td>
+                                            <td style="width: 15%; text-align:center">@item.VOLINJUS </td>
+                                            <td style="width: 15%; text-align:center">
+                                                <input type="hidden" class="csDoc" value="@item.COD_DOC_SIADO" />
+                                                <input type="hidden" class="csOrg" value="@item.ORIGEN_SIADO" />
+                                                <a onclick="downloadDocSiado(this)" style="cursor:pointer">@item.RES_MC_ANT_PAU</a>
+                                            </td>
+                                            <td style="width: 5%; text-align: center">
+                                                <a href="https://sisfor.osinfor.gob.pe/visor/sisforv4/geoPOA/@item.COD_TH|@item.NUM_POA" target="_blank">
+                                                    <img style="min-width:40px; height:42px; padding: 10px;" border="0" src="~/Images/Iconos/map_sisfor.png" />
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    }
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <br />
+                    <strong>*** Actualizado al:</strong>
+                    @if (Model != null)
+                    {
+                        <a style="color:red">@ViewBag.fecha</a>
+                    }
+                </div>
+                <!-- /.box-body -->
+            </div>
+        </div>
+
+    </div>
+
+    <div id="divMensajeNoMatch">
+        <label text="" id="lblMensaje" font-size="12px" />
+    </div>
+    <div id="divMensajeNota">
+        <label id="lblNotaMsje" font-size="12px" />
+    </div>
+</div>
+<script>
+    function downloadDocSiado(obj) {
+
+        var $tr = $(obj).parents('tr');
+        if ($tr.find(".csDoc").val() == "") {
+            alert("No existe el archivo");
+            return false;
+        }
+        var urlLocal = window.location.protocol + "//" + window.location.host + '@Url.Content("~")';
+        var url = urlLocal + "Home/DescargarIntegracionSIADO?fileName=" + $tr.find(".csDoc").val() + "&origen=" + $tr.find(".csOrg").val();
+        var xhr = new XMLHttpRequest();
+        xhr.onload = function () {
+            if (xhr.readyState == 4 && xhr.status == 200) {
+                window.location.href = url;
+            }
+            else if (xhr.status == 404) {
+                alert("Sucedio un error, No existe la direccion de descarga");
+            }
+            else if (xhr.status == 0) {
+                alert("No existe el archivo");
+            }
+            else {
+                alert("Sucedio un error al descargar el archivo, Comuníquese con el Administrador");
+            }
+        }
+        xhr.open('head', url);
+        xhr.send(null);
+    }
+    $(function () {
+        $('#tbListAlerta').DataTable()
+    })
+</script>

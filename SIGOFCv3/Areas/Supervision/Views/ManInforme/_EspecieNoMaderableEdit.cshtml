@@ -1,0 +1,443 @@
+﻿<script src="~/Areas/Supervision/js/ManInforme/_EspecieNoMaderableEdit.js"></script>
+
+@*<script type="text/javascript">
+
+    _EspecieNoMaderableEdit.fnInit = function (data) {
+
+        _renderComboEspecie.fnInit("FORESTAL", '', '');
+        
+
+        $.fn.select2.defaults.set("theme", "bootstrap4");
+        _EspecieNoMaderableEdit.frm.find("#ddlZonaCampoId").select2({ minimumResultsForSearch: -1 });
+        _EspecieNoMaderableEdit.frm.find("#ddlEstadoCampoId").select2();
+        _EspecieNoMaderableEdit.frm.find("#ddlFenologiaId").select2({ minimumResultsForSearch: -1 });
+        _EspecieNoMaderableEdit.frm.find("#ddlCFusteId").select2({ minimumResultsForSearch: -1 });
+        _EspecieNoMaderableEdit.frm.find("#ddlFCopaId").select2({ minimumResultsForSearch: -1 });
+        _EspecieNoMaderableEdit.frm.find("#ddlPCopaId").select2({ minimumResultsForSearch: -1 });
+        _EspecieNoMaderableEdit.frm.find("#ddlEstadoFitoId").select2({ minimumResultsForSearch: -1 });
+        _EspecieNoMaderableEdit.frm.find("#ddlGradoInfestId").select2({ minimumResultsForSearch: -1 });
+
+        _EspecieNoMaderableEdit.fnLoadDatos(data);
+
+        //=====-----Para el registro de datos del formulario-----=====
+        //Validación personalizada
+        jQuery.validator.addMethod("invalidFrmEspecie", function (value, element) {
+            switch ($(element).attr('id')) {
+                case 'ddlZonaCampoId':
+                case 'ddlEstadoCampoId':
+                    return (value == '0000000') ? false : true;
+                    break
+            }
+        });
+        _EspecieNoMaderableEdit.frm.validate(utilSigo.fnValidate({
+            rules: {
+                txtDiametroCampo: { required: true },
+                txtAlturaCampo: { required: true },
+                txtProdLataCampo: { required: true },
+                ddlZonaCampoId: { invalidFrmEspecie: true },
+                txtCEsteCampo: { required: true },
+                txtCNorteCampo: { required: true },
+                ddlEstadoCampoId: { invalidFrmEspecie: true },
+                txtCocoAbierto: { required: true },
+                txtCocoCerrado: { required: true }
+            },
+            messages: {
+                txtDiametroCampo: { required: "Ingrese el diámetro campo (cm)" },
+                txtAlturaCampo: { required: "Ingrese la altura campo (m)" },
+                txtProdLataCampo: { required: "Ingrese la producción latas campo 2 (cm)" },
+                ddlZonaCampoId: { invalidFrmEspecie: "Seleccione la zona UTM campo" },
+                txtCEsteCampo: { required: "Ingrese la coordenada este campo" },
+                txtCNorteCampo: { required: "Ingrese la coordenada norte campo" },
+                ddlEstadoCampoId: { invalidFrmEspecie: "Seleccione el estado de la especie en campo" },
+                txtCocoAbierto: { required: "Ingrese los cocos abiertos" },
+                txtCocoCerrado: { required: "Ingrese los cocos cerrados" }
+            },
+            fnSubmit: function (form) {
+                if (_EspecieNoMaderableEdit.fnCustomValidateForm()) {
+                    var oEspecie = utilSigo.fnConvertArrayToObject(_EspecieNoMaderableEdit.fnSetDatos());
+                    var url = urlLocalSigo + "Supervision/ManInforme/GrabarEspecieNoMaderable";
+                    var option = { url: url, datos: JSON.stringify(oEspecie), type: 'POST' };
+                    utilSigo.fnAjax(option, function (data) {
+                        if (data.success) {
+                            _EspecieNoMaderableEdit.fnSaveForm(oEspecie);
+                        }
+                        else {
+                            utilSigo.toastWarning("Aviso", data.msj);
+                        }
+                    });
+                }
+            }
+        }));
+        //Validación de controles que usan Select2
+        _EspecieNoMaderableEdit.frm.find("select.select2-hidden-accessible").on("change", function (e) {
+            $(this).valid();
+        });
+    }
+
+    _EspecieNoMaderableEdit.fnSubmitForm = function () {
+
+        if (_EspecieNoMaderableEdit.fnCustomValidateForm()) {
+            var oEspecie = utilSigo.fnConvertArrayToObject(_EspecieNoMaderableEdit.fnSetDatos());
+            var url = urlLocalSigo + "Supervision/ManInforme/GrabarEspecieNoMaderable";
+            var option = { url: url, datos: JSON.stringify(oEspecie), type: 'POST' };
+            utilSigo.fnAjax(option, function (data) {
+                if (data.success) {
+                    _EspecieNoMaderableEdit.fnSaveForm(oEspecie);
+                    utilSigo.toastSuccess("Aviso", "Datos guardados correctamente");
+                }
+                else {
+                    utilSigo.toastWarning("Aviso", data.msj);
+                }
+            });
+        }
+    };
+
+    $(document).ready(function () {
+        _EspecieNoMaderableEdit.frm = $("#frmItemEspecieNoMaderableEdit");
+
+        _EspecieNoMaderableEdit.fnInit();
+              
+
+        _EspecieNoMaderableEdit.frm.find("#ddlRenderComboEspecieId").on("change", function (e) {
+
+            Coincidencia();
+        });
+
+    });
+
+
+    utilSigo.dialogConfirma = function (_title, _msg, fnOk, fnCancel) {
+        //var ventana_alto = $(window).height();
+        var altNavegador = $(window).height();
+        bootbox.dialog({
+            title: "",
+            message: _title + "<br/>" + "<br/>" + _msg,
+            buttons: {
+                //Ok: {
+                //    label: 'Aceptar',
+                //    className: 'btn-sm  btn-primary',
+                //    iconFa: 'fa-check',
+                //    callback: fnOk
+                //},
+                Cancel: {
+                    label: 'Cancelar',
+                    className: "btn-sm",
+                    iconFa: 'fa-times',
+                    callback: fnCancel
+                }
+            }
+        }).css({ top: altNavegador / 5 });
+
+        //Poner el enfoque en el modal que se encuentra abierto (problema con el scroll)
+        $(document).unbind("bootbox.modal").on('hidden.bs.modal', function () {
+            if ($('.modal:visible').length) { // check whether parent modal is opend after child modal close
+                $('body').addClass('modal-open'); // if open mean length is 1 then add a bootstrap css class to body of the page
+            }
+        });
+    };
+
+    function AbrirOpciones(valores) {
+        var separador = "#",
+            arreglo = valores.split(separador);
+        var a = arreglo[0];
+        var b = arreglo[1];
+
+        $("#txtBloqueB").val(a);
+        $("#txtFajaB").val(b);
+
+        Limpiar();
+
+        _EspecieNoMaderableEdit.fnSearch();
+
+    }
+
+    function Limpiar() {
+        var sel = document.getElementById("ddlRenderComboEspecieId");
+        sel.remove(sel.selectedIndex);
+
+        _EspecieNoMaderableEdit.frm = $("#frmItemEspecieNoMaderableEdit");
+        var regEstado = "1"; // Nuevo
+
+        _EspecieNoMaderableEdit.frm.find("#hdfRegEstado").val(regEstado);
+        _EspecieNoMaderableEdit.frm.find("#hdfCodSecuencial").val("");
+        _EspecieNoMaderableEdit.frm.find("#hdfCodEspecie").val("");
+        _EspecieNoMaderableEdit.frm.find("#txtEspecie").val("");
+        _EspecieNoMaderableEdit.frm.find("#ddlCoincideEspecieId").val("-");
+        _EspecieNoMaderableEdit.frm.find("#txtBloque").val("");
+        _EspecieNoMaderableEdit.frm.find("#txtBloqueCampo").val("");
+        _EspecieNoMaderableEdit.frm.find("#txtFaja").val("");
+        _EspecieNoMaderableEdit.frm.find("#txtFajaCampo").val("");
+        _EspecieNoMaderableEdit.frm.find("#txtCodigo").val("");
+        _EspecieNoMaderableEdit.frm.find("#txtCodigoCampo").val("");
+        _EspecieNoMaderableEdit.frm.find("#txtDap").val("");
+        _EspecieNoMaderableEdit.frm.find("#txtDapCampo").val("");
+        _EspecieNoMaderableEdit.frm.find("#txtDapCampo1").val("");
+        _EspecieNoMaderableEdit.frm.find("#txtDapCampo2").val("");
+        _EspecieNoMaderableEdit.frm.find("#ddlMetodoMedirDapId").val("0000000");
+        _EspecieNoMaderableEdit.frm.find("#txtAc").val("");
+        _EspecieNoMaderableEdit.frm.find("#txtAcCampo").val("");
+        _EspecieNoMaderableEdit.frm.find("#txtZona").val("");
+        _EspecieNoMaderableEdit.frm.find("#ddlZonaCampoId").val("0000000");
+        _EspecieNoMaderableEdit.frm.find("#txtCEste").val("");
+        _EspecieNoMaderableEdit.frm.find("#txtCEsteCampo").val("");
+        _EspecieNoMaderableEdit.frm.find("#txtCNorte").val("");
+        _EspecieNoMaderableEdit.frm.find("#txtCNorteCampo").val("");
+        _EspecieNoMaderableEdit.frm.find("#txtEstado").val("");
+        _EspecieNoMaderableEdit.frm.find("#ddlEstadoCampoId").val("0000000");
+        _EspecieNoMaderableEdit.frm.find("#txtCondicion").val("");
+        _EspecieNoMaderableEdit.frm.find("#ddlCondicionEspCampoId").val("0000000");
+        _EspecieNoMaderableEdit.frm.find("#ddlFenologiaId").val("0000001");
+        _EspecieNoMaderableEdit.frm.find("#ddlCFusteId").val("0000000");
+        _EspecieNoMaderableEdit.frm.find("#ddlFCopaId").val("0000000");
+        _EspecieNoMaderableEdit.frm.find("#ddlPCopaId").val("0000000");
+        _EspecieNoMaderableEdit.frm.find("#ddlEstadoFitoId").val("0000000");
+        _EspecieNoMaderableEdit.frm.find("#ddlGradoInfestId").val("0000000");
+        _EspecieNoMaderableEdit.frm.find("#txtCantSobreEst").val("");
+        _EspecieNoMaderableEdit.frm.find("#txtPorcSobreEst").val("");
+        _EspecieNoMaderableEdit.frm.find("#txtCantSubEst").val("");
+        _EspecieNoMaderableEdit.frm.find("#txtPorcSubEst").val("");
+        _EspecieNoMaderableEdit.frm.find("#txtObservacion").val("");
+        _renderComboEspecie.fnInit("FORESTAL", '', '');
+
+    }
+
+    function Coincidencia() {
+        var a = _renderComboEspecie.fnGetEspecie();
+        var b = _EspecieNoMaderableEdit.frm.find("#txtEspecie").val();
+        if (a == b) {
+            _EspecieNoMaderableEdit.frm.find("#ddlCoincideEspecieId").val("SI");
+        }
+        else {
+            _EspecieNoMaderableEdit.frm.find("#ddlCoincideEspecieId").val("NO");
+        }
+    }
+
+</script>*@
+
+<style>
+    input:required {
+        border-color: #c00000;        
+    }
+
+        input:required:invalid {
+            border-color: #800000;
+        }
+
+    .select-css {
+        width: 100%;
+        display: block;
+        font-size: 16px;
+        font-family: "Roboto", sans-serif;
+        font-weight: 300;
+        font-size: 1rem;
+        color: #444;
+        line-height: 1.5;
+        padding: 0.31rem 0.75rem;
+        border: 1px solid #ced4da;
+        border-radius: 0.25rem;
+        background-color: #fff;
+        background-repeat: no-repeat, repeat;
+        background-position: right .7em top 50%, 0 0;
+        background-size: .65em auto, 100%;
+    }
+
+        .select-css::-ms-expand {
+            display: none;
+        }
+
+        .select-css:hover {
+            border-color: #888;
+        }
+
+        .select-css:focus {
+            border-color: #aaa;
+            box-shadow: 0 0 1px 3px rgba(59, 153, 252, .7);
+            box-shadow: 0 0 0 3px -moz-mac-focusring;
+            color: #222;
+            outline: none;
+        }
+
+        .select-css option {
+            font-weight: normal;
+        }
+</style>
+
+<div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+        <div class="modal-header text-small" style="cursor:move;">
+            <span>Individuo No Maderable</span>
+            <i class="fa fa-close" style="cursor:pointer;" data-dismiss="modal" aria-label="Close"></i>
+        </div>
+        <div class="modal-body">
+            <form id="frmItemEspecieNoMaderableEdit" action="" method="post">
+                @Html.Hidden("hdfCodInforme", (string)ViewBag.hdfCodInforme)
+                @Html.Hidden("hdfRegEstado")
+                @Html.Hidden("hdfCodSecuencial")
+                @Html.Hidden("hdfCodSecuencialB", -1)
+                @Html.Hidden("hdfCodTHabilitante")
+                @Html.Hidden("hdfNumPoa")
+                @Html.Hidden("hdfNombrePoa")
+                @Html.Hidden("hdfCodEspecie")
+
+                <div class="form-row card-header text-small">
+                    <div class="form-group col-md-5">
+                        <label for="txtCodigoB" class="text-small">Código</label>
+                        @Html.TextBox("txtCodigoB", "", new { @class = "form-control form-control-sm" })
+                    </div>
+                    <div class="form-group col-md-6">
+
+                    </div>
+
+                    <div class="btn-group col-md-1" style="padding-top:20px;">
+                        <a id="btnSearch" style="cursor:pointer;" data-toggle="tooltip" data-placement="top" title="" onclick="_EspecieNoMaderableEdit.fnSearch()" data-original-title="Buscar el registro"><span class="fa mx-2 fa-lg fa-search"></span></a>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group col-md-4">
+                        <label for="txtEspecie" class="text-small">Especie</label>
+                        @Html.TextBox("txtEspecie", "", new { @class = "form-control form-control-sm", disabled = "disabled" })
+                    </div>
+                    <div class="form-group col-md-8">
+                        @Html.Partial("~/Areas/General/Views/Controles/_renderComboEspecie.cshtml")
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-2">
+                        <label for="txtEstrada" class="text-small">Estrada</label>
+                        @Html.TextBox("txtEstrada", "", new { @class = "form-control form-control-sm", disabled = "disabled" })
+                    </div>
+                    <div class="form-group col-md-2">
+                        <label for="txtCodigo" class="text-small">Código</label>
+                        @Html.TextBox("txtCodigo", "", new { @class = "form-control form-control-sm", disabled = "disabled" })
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label for="txtEstradaCampo" class="text-small">Estrada Campo</label>
+                        @Html.TextBox("txtEstradaCampo", "", new { @class = "form-control form-control-sm" })
+                    </div>
+                    <div class="form-group col-md-4" data-tip="Ingrese el número de individuos">
+                        <label for="txtCodigoCampo" class="text-small">Código Campo</label>
+                        @Html.TextBox("txtCodigoCampo", "", new { @class = "form-control form-control-sm" })
+                    </div>
+                </div>
+                @*<div class="form-row">
+            <div class="form-group col-md-2">
+                <label for="txtDiametro" class="text-small">Diámetro (cm)</label>
+                @Html.TextBox("txtDiametro", "", new { @class = "form-control form-control-sm", disabled = "disabled" })
+            </div>
+            <div class="form-group col-md-2">
+                <label for="txtAltura" class="text-small">Altura (m)</label>
+                @Html.TextBox("txtAltura", "", new { @class = "form-control form-control-sm", disabled = "disabled" })
+            </div>
+            <div class="form-group col-md-4">
+                <label for="txtDiametroCampo" class="text-small">Diámetro Campo (cm)</label>
+                @Html.TextBox("txtDiametroCampo", "", new { @class = "form-control form-control-sm", type = "number" })
+            </div>
+            <div class="form-group col-md-4">
+                <label for="txtAlturaCampo" class="text-small">Altura Campo (cm)</label>
+                @Html.TextBox("txtAlturaCampo", "", new { @class = "form-control form-control-sm", type = "number" })
+            </div>
+        </div>*@
+                <div class="form-row">
+                    <div class="form-group col-md-2">
+                        <label for="txtZona" class="text-small">Zona UTM</label>
+                        @Html.TextBox("txtZona", "", new { @class = "form-control form-control-sm", disabled = "disabled" })
+                    </div>
+                    <div class="form-group col-md-2">
+                        @*<label for="txtProdLata" class="text-small">Producción de Latas</label>
+                @Html.TextBox("txtProdLata", "", new { @class = "form-control form-control-sm", disabled = "disabled" })*@
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label for="ddlZonaCampoId" class="text-small">Zona UTM Campo</label>
+                        @Html.DropDownList("ddlZonaCampoId", new SelectList(ViewBag.ddlZona, "Value", "Text"), new { @class = "select-css" })
+                    </div>
+                    <div class="form-group col-md-4">
+                        @*<label for="txtProdLataCampo" class="text-small">Producción de Latas Campo</label>
+                @Html.TextBox("txtProdLataCampo", "", new { @class = "form-control form-control-sm", type = "number" })*@
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-2">
+                        <label for="txtCEste" class="text-small">Coordenada Este</label>
+                        @Html.TextBox("txtCEste", "", new { @class = "form-control form-control-sm", disabled = "disabled" })
+                    </div>
+                    <div class="form-group col-md-2">
+                        <label for="txtCNorte" class="text-small">Coordenada Norte</label>
+                        @Html.TextBox("txtCNorte", "", new { @class = "form-control form-control-sm", disabled = "disabled" })
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label for="txtCEsteCampo" class="text-small">Coordenada Este Campo</label>
+                        @Html.TextBox("txtCEsteCampo", "", new { @class = "form-control form-control-sm", type = "number", maxlength = "6" })
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label for="txtCNorteCampo" class="text-small">Coordenada Norte Campo</label>
+                        @Html.TextBox("txtCNorteCampo", "", new { @class = "form-control form-control-sm", type = "number", maxlength = "7" })
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-4"></div>
+                    <div class="form-group col-md-4">
+                        <label for="ddlEstadoCampoId" class="text-small">Estado</label>
+                        @Html.DropDownList("ddlEstadoCampoId", new SelectList(ViewBag.ddlEstado, "Value", "Text"), new { @class = "select-css" })
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label for="ddlEstadoFitoId" class="text-small">Estado Fitosanitario</label>
+                        @Html.DropDownList("ddlEstadoFitoId", new SelectList(ViewBag.ddlEstadoFito, "Value", "Text"), new { @class = "form-control form-control-sm" })
+                    </div>
+                    @*<div class="form-group col-md-2">
+                <label for="txtCocoAbierto" class="text-small">Cocos Abiertos</label>
+                @Html.TextBox("txtCocoAbierto", "", new { @class = "form-control form-control-sm", type = "number" })
+            </div>
+            <div class="form-group col-md-2">
+                <label for="txtCocoCerrado" class="text-small">Cocos Cerrados</label>
+                @Html.TextBox("txtCocoCerrado", "", new { @class = "form-control form-control-sm", type = "number" })
+            </div>*@
+                </div>
+                @*<div class="form-row">
+            <div class="form-group col-md-4"></div>
+            <div class="form-group col-md-4">
+                <label for="ddlCFusteId" class="text-small">C. Fuste</label>
+                @Html.DropDownList("ddlCFusteId", new SelectList(ViewBag.ddlCFuste, "Value", "Text"), new { @class = "select-css" })
+            </div>
+            <div class="form-group col-md-4">
+                <label for="ddlPCopaId" class="text-small">P. Copa</label>
+                @Html.DropDownList("ddlPCopaId", new SelectList(ViewBag.ddlPCopa, "Value", "Text"), new { @class = "select-css" })
+            </div>
+        </div>*@
+                @*<div class="form-row">
+            <div class="form-group col-md-4"></div>
+            <div class="form-group col-md-4">
+                <label for="ddlFCopaId" class="text-small">F. Copa</label>
+                @Html.DropDownList("ddlFCopaId", new SelectList(ViewBag.ddlFCopa, "Value", "Text"), new { @class = "form-control form-control-sm" })
+            </div>
+            <div class="form-group col-md-4">
+                <label for="ddlFenologiaId" class="text-small">Fenología</label>
+                @Html.DropDownList("ddlFenologiaId", new SelectList(ViewBag.ddlFenologia, "Value", "Text"), new { @class = "form-control form-control-sm" })
+            </div>
+        </div>*@
+                <div class="form-row">
+                    <div class="form-group col-md-4"></div>
+                    <div class="form-group col-md-4">
+                        <label for="ddlGradoInfestId" class="text-small">Grado de infestación de Lianas</label>
+                        @Html.DropDownList("ddlGradoInfestId", new SelectList(ViewBag.ddlGradoInfest, "Value", "Text"), new { @class = "form-control form-control-sm" })
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label for="ddlCondicionId" class="text-small">Condición</label>
+                        @Html.DropDownList("ddlCondicionId", new SelectList(ViewBag.ddlCondicion, "Value", "Text"), new { @class = "form-control form-control-sm" })
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-4"></div>
+                    <div class="form-group col-md-8">
+                        <label for="txtObservacion" class="text-small">Observación</label>
+                        @Html.TextArea("txtObservacion", "", new { @class = "form-control form-control-sm", rows = "2" })
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-primary btn-sm" onclick="_EspecieNoMaderableEdit.fnSubmitForm()">Guardar</button>
+            <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Cancelar</button>
+        </div>
+    </div>
+</div>

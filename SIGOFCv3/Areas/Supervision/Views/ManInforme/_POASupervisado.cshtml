@@ -1,0 +1,456 @@
+﻿
+@model CapaEntidad.ViewModel.VM_Informe_POASupervisado
+
+
+<script src="~/Areas/Supervision/js/ManInforme/_POASupervisado.js?v=@Guid.NewGuid()"></script>
+
+<script type="text/javascript">
+    _POASupervisado.fnLoadDataCondicionArea('@Html.Raw(Json.Encode(@Model.tbCondicionArea))');
+    
+        _POASupervisado.ReporteAnalisis = function (obj) {
+
+            var url = urlLocalSigo + "Supervision/ManInforme/_ReporteAnalisis";
+            var option = { url: url, type: 'POST', datos: { asCodInforme: _DatosCampo.hdfCodInforme }, divId: "mdlManInforme_EspecieCampo" };
+            utilSigo.fnOpenModal(option, function () {
+                _POASupervisado.fnInit("");
+            });
+        }     
+</script>
+
+<div class="modal-dialog modal-custom-tb" role="document" style="height:95%;">
+    <div class="modal-content" style="height:100%;">
+        <div class="modal-header text-small" style="cursor:move;">
+            <strong>@Model.lblTituloEstado</strong>
+            <i class="fa fa-close" style="cursor:pointer;" data-dismiss="modal" aria-label="Close"></i>
+        </div>
+        <div class="card" style="margin-bottom:0px;">
+            <div class="card-header text-small" style="padding-top:3px;padding-bottom:4.5px;">
+                <a href="javascript:void(0)" style="cursor:pointer;" data-toggle="tooltip" data-placement="top" title="Guardar datos" onclick="_POASupervisado.fnSubmitForm()"><i class="fa mx-2 fa-lg fa-save"></i></a>
+                <a href="javascript:void(0)" style="cursor:pointer;" data-toggle="tooltip" data-placement="top" title="Cancelar" data-dismiss="modal"><i class="fa mx-2 fa-lg fa-reply"></i></a>
+                <div class="btn-group btn-group-toggle" data-toggle="buttons">
+                    <label class="btn btn-outline-info btn-sm active" onchange="_POASupervisado.fnShowOpcionPoa()">
+                        <input type="radio" name="mnuOpcionPoa" id="mnuOpcionPoaResultado" autocomplete="off" checked value="RESULTADO"> RESULTADOS
+                    </label>
+                    <label class="btn btn-outline-info btn-sm" onchange="_POASupervisado.fnShowOpcionPoa()">
+                        <input type="radio" name="mnuOpcionPoa" id="mnuOpcionPoaAnalisis" autocomplete="off" value="ANALISIS"> ANÁLISIS
+                    </label>
+                    <label class="btn btn-outline-info btn-sm" onchange="_POASupervisado.fnShowOpcionPoa()">
+                        <input type="radio" name="mnuOpcionPoa" id="mnuOpcionPoaResultado" autocomplete="off" value="DATOS"> DATOS PROCESADOS
+                    </label>
+                </div>
+            </div>
+            <div id="dvManInf_POASupervisado" class="card-body" style="overflow-y:auto;">
+                <form id="frmManInf_POASupervisado" action="@Url.Action("GrabarPOASupervisado", "ManInforme", new { Area = "Supervision" })">
+                    <div class="card">
+                        @Html.HiddenFor(m => m.hdfCodInforme)
+                        @Html.HiddenFor(m => m.hdfNumPoa)
+                        @Html.HiddenFor(m => m.hdfCodMTipo)
+                        <div id="dvOpcionPoaResultado" style="display:none;">
+                            <div id="dvDelimitacionArea" style="display:none;">
+                                <div class="card-header text-small">Delimitación del área</div>
+                                <div class="card-body">
+                                    <div class="form-row">
+                                        <div class="form-group col-md-3">
+                                            <label for="ddlOdId" class="text-small">Linderamiento del Área</label><br />
+                                            <div class="custom-control custom-radio custom-control-inline">
+                                                @Html.RadioButton("hdfLinderamientoArea", "S", (Model.hdfLinderamientoArea == "S" ? true : false), new { @class = "custom-control-input", id = "rdbLinderAreaSi" })
+                                                @Html.Label("rdbLinderAreaSi", "SI", new { @class = "custom-control-label", style = "margin-top:5px;font-size:14px;" })
+                                            </div>
+                                            <div class="custom-control custom-radio custom-control-inline">
+                                                @Html.RadioButton("hdfLinderamientoArea", "N", (Model.hdfLinderamientoArea == "N" ? true : false), new { @class = "custom-control-input", id = "rdbLinderAreaNo" })
+                                                @Html.Label("rdbLinderAreaNo", "NO", new { @class = "custom-control-label", style = "margin-top:5px;font-size:14px;" })
+                                            </div>
+                                            <div class="custom-control custom-radio custom-control-inline">
+                                                @Html.RadioButton("hdfLinderamientoArea", "NA", (Model.hdfLinderamientoArea == "NA" ? true : false), new { @class = "custom-control-input", id = "rdbLinderAreaNA" })
+                                                @Html.Label("rdbLinderAreaNA", "NO APLICA", new { @class = "custom-control-label", style = "margin-top:5px;font-size:14px;" })
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div id="dvVerticeArea" class="form-row" style="display:none;">
+                                        <div class="col-md-12">
+                                            @Html.Partial("~/Areas/Supervision/Views/ManInforme/Render/_renderVerticeArea.cshtml", Model.tbVerticeArea)
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-header text-small">Ordenamiento del área</div>
+                            <div class="card-body">
+                                <div class="form-row">
+                                    <div class="form-group col-md-3">
+                                        <label for="ddlOdId" class="text-small">Demarcación del Área</label><br />
+                                        <div class="custom-control custom-radio custom-control-inline">
+                                            @Html.RadioButton("hdfAreaDemarcacion", "S", (Model.hdfAreaDemarcacion == "S" ? true : false), new { @class = "custom-control-input", id = "rdbAreaDemarcSi" })
+                                            @Html.Label("rdbAreaDemarcSi", "SI", new { @class = "custom-control-label", style = "margin-top:5px;font-size:14px;" })
+                                        </div>
+                                        <div class="custom-control custom-radio custom-control-inline">
+                                            @Html.RadioButton("hdfAreaDemarcacion", "N", (Model.hdfAreaDemarcacion == "N" ? true : false), new { @class = "custom-control-input", id = "rdbAreaDemarcNo" })
+                                            @Html.Label("rdbAreaDemarcNo", "NO", new { @class = "custom-control-label", style = "margin-top:5px;font-size:14px;" })
+                                        </div>
+                                        <div class="custom-control custom-radio custom-control-inline">
+                                            @Html.RadioButton("hdfAreaDemarcacion", "NA", (Model.hdfAreaDemarcacion == "NA" ? true : false), new { @class = "custom-control-input", id = "rdbAreaDemarcNA" })
+                                            @Html.Label("rdbAreaDemarcNA", "NO APLICA", new { @class = "custom-control-label", style = "margin-top:5px;font-size:14px;" })
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-md-3">
+                                        <label for="ddlOdId" class="text-small">Señalización de vértices del POA</label><br />
+                                        <div class="custom-control custom-radio custom-control-inline">
+                                            @Html.RadioButton("hdfAreaLinderamiento", "S", (Model.hdfAreaLinderamiento == "S" ? true : false), new { @class = "custom-control-input", id = "rdbAreaLinderSi" })
+                                            @Html.Label("rdbAreaLinderSi", "SI", new { @class = "custom-control-label", style = "margin-top:5px;font-size:14px;" })
+                                        </div>
+                                        <div class="custom-control custom-radio custom-control-inline">
+                                            @Html.RadioButton("hdfAreaLinderamiento", "N", (Model.hdfAreaLinderamiento == "N" ? true : false), new { @class = "custom-control-input", id = "rdbAreaLinderNo" })
+                                            @Html.Label("rdbAreaLinderNo", "NO", new { @class = "custom-control-label", style = "margin-top:5px;font-size:14px;" })
+                                        </div>
+                                        <div class="custom-control custom-radio custom-control-inline">
+                                            @Html.RadioButton("hdfAreaLinderamiento", "NA", (Model.hdfAreaLinderamiento == "NA" ? true : false), new { @class = "custom-control-input", id = "rdbAreaLinderNA" })
+                                            @Html.Label("rdbAreaLinderNA", "NO APLICA", new { @class = "custom-control-label", style = "margin-top:5px;font-size:14px;" })
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="table-responsive">
+                                        <table id="tbCondicionArea" style="width:100%" class="table table-hover table-bordered">
+                                            <thead>
+                                                <tr>
+                                                    <th colspan="6" class="text-sm-left">
+                                                        <div class="form-inline"><strong>Condiciones del Área</strong></div>
+                                                    </th>
+                                                </tr>
+                                            </thead>
+                                            <tbody></tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-header text-small">Censo Comercial</div>
+                            <div class="card-body col-md-12">
+                                @{ Html.RenderAction("_DatosCampo", "ManInforme", new { area = "Supervision", asCodInforme = Model.hdfCodInforme, aiNumPoa = Model.hdfNumPoa, abMaderable = Model.hdfMaderable, abNoMaderable = Model.hdfNoMaderable }); }
+                            </div>
+                            <div class="card-header text-small">Evaluación de árboles</div>
+                            <div class="card-body">
+                                <div class="form-row">
+                                    <div class="col-md-12">
+                                        @Html.Partial("~/Areas/Supervision/Views/ManInforme/Render/_renderEvalArbolAdicional.cshtml", Model.tbEvalArbolAdicional)
+                                    </div>
+                                </div>
+                                <br />
+                                <div class="form-row">
+                                    <div class="col-md-12">
+                                        @Html.Partial("~/Areas/Supervision/Views/ManInforme/Render/_renderEvalArbolNoAutorizado.cshtml", Model.tbEvalArbolNoAutorizado)
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-header text-small">Aprovechamiento</div>
+                            <div class="card-body">
+                                <div class="form-row">
+                                    <div class="form-group col-md-2">
+                                        <label for="ddlIndicioAprovechaId" class="text-small">Con Indicios de Aprovechamiento</label>
+                                        @Html.DropDownListFor(m => m.ddlIndicioAprovechaId, new SelectList(Model.ddlIndicioAprovecha, "Value", "Text"), new { @class = "form-control form-control-sm" })
+                                    </div>
+                                    <div class="form-group col-md-4">
+                                        <label for="ddlOdId" class="text-small">Tipo de Sistema de Aprovechamiento</label><br />
+                                        <div class="custom-control custom-radio custom-control-inline">
+                                            @Html.RadioButton("hdfTipoSisAprovecha", "MA", (Model.hdfTipoSisAprovecha == "MA" ? true : false), new { @class = "custom-control-input", id = "rdbTipoSisAprovMA" })
+                                            @Html.Label("rdbTipoSisAprovMA", "Manual", new { @class = "custom-control-label", style = "margin-top:5px;font-size:14px;" })
+                                        </div>
+                                        <div class="custom-control custom-radio custom-control-inline">
+                                            @Html.RadioButton("hdfTipoSisAprovecha", "ME", (Model.hdfTipoSisAprovecha == "ME" ? true : false), new { @class = "custom-control-input", id = "rdbTipoSisAprovME" })
+                                            @Html.Label("rdbTipoSisAprovME", "Mecánico", new { @class = "custom-control-label", style = "margin-top:5px;font-size:14px;" })
+                                        </div>
+                                        <div class="custom-control custom-radio custom-control-inline">
+                                            @Html.RadioButton("hdfTipoSisAprovecha", "MI", (Model.hdfTipoSisAprovecha == "MI" ? true : false), new { @class = "custom-control-input", id = "rdbTipoSisAprovMI" })
+                                            @Html.Label("rdbTipoSisAprovMI", "Mixto", new { @class = "custom-control-label", style = "margin-top:5px;font-size:14px;" })
+                                        </div>
+                                        <div class="custom-control custom-radio custom-control-inline">
+                                            @Html.RadioButton("hdfTipoSisAprovecha", "NI", (Model.hdfTipoSisAprovecha == "NI" ? true : false), new { @class = "custom-control-input", id = "rdbTipoSisAprovNI" })
+                                            @Html.Label("rdbTipoSisAprovNI", "Ninguno", new { @class = "custom-control-label", style = "margin-top:5px;font-size:14px;" })
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-md-3 dvHuayrona" style="display:none;">
+                                        <label for="ddlOdId" class="text-small">Presencia de Huayronas</label><br />
+                                        <div class="custom-control custom-radio custom-control-inline">
+                                            @Html.RadioButton("hdfPresenciaHuayrona", "S", (Model.hdfPresenciaHuayrona == "S" ? true : false), new { @class = "custom-control-input", id = "rdbPresenciaHuayronaSi" })
+                                            @Html.Label("rdbPresenciaHuayronaSi", "SI", new { @class = "custom-control-label", style = "margin-top:5px;font-size:14px;" })
+                                        </div>
+                                        <div class="custom-control custom-radio custom-control-inline">
+                                            @Html.RadioButton("hdfPresenciaHuayrona", "N", (Model.hdfPresenciaHuayrona == "N" ? true : false), new { @class = "custom-control-input", id = "rdbPresenciaHuayronaNo" })
+                                            @Html.Label("rdbPresenciaHuayronaNo", "NO", new { @class = "custom-control-label", style = "margin-top:5px;font-size:14px;" })
+                                        </div>
+                                        <div class="custom-control custom-radio custom-control-inline">
+                                            @Html.RadioButton("hdfPresenciaHuayrona", "NA", (Model.hdfPresenciaHuayrona == "NA" ? true : false), new { @class = "custom-control-input", id = "rdbPresenciaHuayronaNA" })
+                                            @Html.Label("rdbPresenciaHuayronaNA", "NO APLICA", new { @class = "custom-control-label", style = "margin-top:5px;font-size:14px;" })
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group col-md-12">
+                                        <label for="txtObsAprovecha" class="text-small">Observaciones del Aprovechamiento</label>
+                                        @Html.TextAreaFor(m => m.txtObsAprovecha, new { @class = "form-control form-control-sm", @rows = "2" })
+                                    </div>
+                                </div>
+                                <div id="dvListHuayrona" class="form-row dvHuayrona" style="display:none;">
+                                    <div class="col-md-12">
+                                        @Html.Partial("~/Areas/Supervision/Views/ManInforme/Render/_renderHuayrona.cshtml", Model.tbHuayrona)
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-header text-small">Infraestructura Vial</div>
+                            <div class="card-body">
+                                <div class="form-row">
+                                    <div class="form-group col-md-2">
+                                        <label for="ddlCumpleVialId" class="text-small">Cumple Viales del Plan Manejo</label>
+                                        @Html.DropDownListFor(m => m.ddlCumpleVialId, new SelectList(Model.ddlCumpleVial, "Value", "Text"), new { @class = "form-control form-control-sm" })
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-header text-small">Actividades Silviculturales</div>
+                            <div class="card-body">
+                                <div class="form-row">
+                                    <div class="form-group col-md-3">
+                                        <label for="ddlOdId" class="text-small">Cuenta con Área de Reposición</label><br />
+                                        <div class="custom-control custom-radio custom-control-inline">
+                                            @Html.RadioButton("hdfAreaReposicion", "S", (Model.hdfAreaReposicion == "S" ? true : false), new { @class = "custom-control-input", id = "rdbAreaReposicionSi" })
+                                            @Html.Label("rdbAreaReposicionSi", "SI", new { @class = "custom-control-label", style = "margin-top:5px;font-size:14px;" })
+                                        </div>
+                                        <div class="custom-control custom-radio custom-control-inline">
+                                            @Html.RadioButton("hdfAreaReposicion", "N", (Model.hdfAreaReposicion == "N" ? true : false), new { @class = "custom-control-input", id = "rdbAreaReposicionNo" })
+                                            @Html.Label("rdbAreaReposicionNo", "NO", new { @class = "custom-control-label", style = "margin-top:5px;font-size:14px;" })
+                                        </div>
+                                        <div class="custom-control custom-radio custom-control-inline">
+                                            @Html.RadioButton("hdfAreaReposicion", "NA", (Model.hdfAreaReposicion == "NA" ? true : false), new { @class = "custom-control-input", id = "rdbAreaReposicionNA" })
+                                            @Html.Label("rdbAreaReposicionNA", "NO APLICA", new { @class = "custom-control-label", style = "margin-top:5px;font-size:14px;" })
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="col-md-12">
+                                        @Html.Partial("~/Areas/Supervision/Views/ManInforme/Render/_renderActividadSilvicultural.cshtml", Model.tbActividadSilvicultural)
+                                    </div>
+                                </div>
+                                <br />
+                            </div>
+                            <div class="card-header text-small">Impactos</div>
+                            <div class="card-body">
+                                <div class="form-row">
+                                    <div class="col-md-12">
+                                        @Html.Partial("~/Areas/Supervision/Views/ManInforme/Render/_renderCambioUso.cshtml", Model.tbCambioUso)
+                                    </div>
+                                </div>
+                                <br />
+                                <div class="form-row">
+                                    <div class="col-md-12">
+                                        @Html.Partial("~/Areas/Supervision/Views/ManInforme/Render/_renderEvalOtro.cshtml", Model.tbEvalOtro)
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="dvOpcionPoaAnalisis" style="display:none;">
+                            <div class="card-header text-small">Sobre la Aprobación del Plan Manejo</div>
+                            <div class="card-body">
+                                <div class="form-row">
+                                    <div class="form-group col-md-2">
+                                        <label for="txtFecPresentaPlan" class="text-small">Fecha de presentación del Plan Manejo</label>
+                                        @Html.TextBoxFor(m => m.txtFecPresentaPlan, new { @class = "form-control form-control-sm", placeholder = "dd/mm/aaaa", maxlength = "10" })
+                                    </div>
+                                    <div class="form-group col-md-2">
+                                        <label for="txtFecApruebaPlan" class="text-small">Fecha de aprobación del Plan Manejo</label>
+                                        @Html.TextBoxFor(m => m.txtFecApruebaPlan, new { @class = "form-control form-control-sm", placeholder = "dd/mm/aaaa", maxlength = "10" })
+                                    </div>
+                                    <div class="form-group col-md-2">
+                                        <label for="txtFecEntregaAcervo" class="text-small">Fecha de entrega del acervo documentario a la OD</label>
+                                        @Html.TextBoxFor(m => m.txtFecEntregaAcervo, new { @class = "form-control form-control-sm", placeholder = "dd/mm/aaaa", maxlength = "10" })
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group col-md-6">
+                                        <label for="ddlPlanConcuerdaPgmfId" class="text-small">El Plan Manejo es concordante con el PGMF</label>
+                                        @Html.DropDownListFor(m => m.ddlPlanConcuerdaPgmfId, new SelectList(Model.ddlPlanConcuerdaPgmf, "Value", "Text"), new { @class = "form-control form-control-sm" })
+                                    </div>
+                                    <div class="form-group col-md-6">
+                                        <label for="ddlPlanApruebaNormaId" class="text-small">La aprobación del Título Habilitante y el Plan Manejo se realizó de acuerdo a las normas vigentes</label>
+                                        @Html.DropDownListFor(m => m.ddlPlanApruebaNormaId, new SelectList(Model.ddlPlanApruebaNorma, "Value", "Text"), new { @class = "form-control form-control-sm" })
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group col-md-6">
+                                        <label for="txtObsPlanConcuerdaPgmf" class="text-small">Observaciones de la concordancia del Plan Manejo y el PGMF</label>
+                                        @Html.TextAreaFor(m => m.txtObsPlanConcuerdaPgmf, new { @class = "form-control form-control-sm", @rows = "2" })
+                                    </div>
+                                    <div class="form-group col-md-6">
+                                        <label for="txtObsPlanApruebaNorma" class="text-small">Observaciones de la aprobación del Título Habilitante y el Plan Manejo</label>
+                                        @Html.TextAreaFor(m => m.txtObsPlanApruebaNorma, new { @class = "form-control form-control-sm", @rows = "2" })
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-header text-small">Informe de Ejecución Forestal</div>
+                            <div class="card-body">
+                                <div class="form-row">
+                                    <div class="form-group col-md-3">
+                                        <label for="ddlInformeEjecutaPlanId" class="text-small">Cuenta con informe de ejecución del Plan Operativo</label>
+                                        @Html.DropDownListFor(m => m.ddlInformeEjecutaPlanId, new SelectList(Model.ddlInformeEjecutaPlan, "Value", "Text"), new { @class = "form-control form-control-sm" })
+                                    </div>
+                                    <div class="form-group col-md-3 dvInformeEjecucionForestal">
+                                        <label for="ddlTipoInformeEjecutaId" class="text-small">Tipo de informe de ejecución</label>
+                                        @Html.DropDownListFor(m => m.ddlTipoInformeEjecutaId, new SelectList(Model.ddlTipoInformeEjecuta, "Value", "Text"), new { @class = "form-control form-control-sm" })
+                                    </div>
+                                    <div class="form-group col-md-3 dvInformeEjecucionForestal">
+                                        <label for="txtFecPresentaAutoridad" class="text-small">Fecha de presentación a la autoridad</label>
+                                        @Html.TextBoxFor(m => m.txtFecPresentaAutoridad, new { @class = "form-control form-control-sm", placeholder = "dd/mm/aaaa", maxlength = "10" })
+                                    </div>
+                                    <div class="form-group col-md-3 dvInformeEjecucionForestal">
+                                        <label for="txtFecComunicaOsinfor" class="text-small">Fecha de comunicación al OSINFOR</label>
+                                        @Html.TextBoxFor(m => m.txtFecComunicaOsinfor, new { @class = "form-control form-control-sm", placeholder = "dd/mm/aaaa", maxlength = "10" })
+                                    </div>
+                                </div>
+                                <div class="form-row dvInformeEjecucionForestal">
+                                    <div class="form-group col-md-3">
+                                        <label for="ddlCumpleLineamientoId" class="text-small">Formulado de acuerdo a los lineamientos</label>
+                                        @Html.DropDownListFor(m => m.ddlCumpleLineamientoId, new SelectList(Model.ddlCumpleLineamiento, "Value", "Text"), new { @class = "form-control form-control-sm" })
+                                    </div>
+                                    <div class="form-group col-md-3">
+                                        <label for="txtObsCumpleLineamiento" class="text-small">Observaciones de la formulación</label>
+                                        @Html.TextAreaFor(m => m.txtObsCumpleLineamiento, new { @class = "form-control form-control-sm", @rows = "2" })
+                                    </div>
+                                </div>
+                            </div>
+                            <div id="dvPagoAprovechamiento" style="display:none;">
+                                <div class="card-header text-small">Pago por Derecho de Aprovechamiento</div>
+                                <div class="card-body">
+                                    <div class="form-row">
+                                        <div class="form-group col-md-6">
+                                            <label for="ddlCumplePagoAprovId" class="text-small">Cumplimiento del Pago por Derecho de Aprovechamiento</label>
+                                            @Html.DropDownListFor(m => m.ddlCumplePagoAprovId, new SelectList(Model.ddlCumplePagoAprov, "Value", "Text"), new { @class = "form-control form-control-sm" })
+                                        </div>
+                                        <div class="form-group col-md-6">
+                                            <label for="txtObsCumplePagoAprov" class="text-small">Observaciones del Pago por Derecho de Aprovechamiento</label>
+                                            @Html.TextAreaFor(m => m.txtObsCumplePagoAprov, new { @class = "form-control form-control-sm", @rows = "2" })
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-header text-small">Aprovechamiento</div>
+                            <div class="card-body">
+                                <div class="form-row">
+                                    <div class="col-md-12">
+                                        @Html.Partial("~/Areas/Supervision/Views/ManInforme/Render/_renderVolumenAnalizado.cshtml", Model.tbVolumenAnalizado)
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-header text-small">Impacto de Actividades No Autorizadas</div>
+                            <div class="card-body">
+                                <div class="form-row">
+                                    <div class="form-group col-md-2">
+                                        <label for="ddlImpactoDanioId" class="text-small">Impacto del Daño</label>
+                                        @Html.DropDownListFor(m => m.ddlImpactoDanioId, new SelectList(Model.ddlImpactoDanio, "Value", "Text"), new { @class = "form-control form-control-sm" })
+                                    </div>
+                                    <div class="form-group col-md-2">
+                                        <label for="ddlOportunidadAprovId" class="text-small">Supervisión realizada</label>
+                                        @Html.DropDownListFor(m => m.ddlOportunidadAprovId, new SelectList(Model.ddlOportunidadAprov, "Value", "Text"), new { @class = "form-control form-control-sm" })
+                                    </div>
+                                    <div class="form-group col-md-2 dvAntesAprovRecomienda">
+                                        <label for="chkRecReformulaPlan" class="text-small">Se recomendó la reformulación del plan de manejo</label>
+                                        <div style="margin-top:7px;">
+                                            <div class="form-check form-check-inline">
+                                                @Html.CheckBoxFor(m => m.chkRecReformulaPlan, new { @class = "form-check-input" })
+                                                <label class="form-check-label" for="chkRecReformulaPlan"></label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-md-6 dvAntesAprovRecomienda">
+                                        <label for="txtDescOtraRec" class="text-small">Otras recomendaciones</label>
+                                        @Html.TextAreaFor(m => m.txtDescOtraRec, new { @class = "form-control form-control-sm", @rows = "2" })
+                                    </div>
+                                </div>
+                            </div>
+                            <div id="dvSobrePlan" style="display:none;">
+                                <div class="card-header text-small">Sobre el Plan Operativo</div>
+                                <div class="card-body">
+                                    <div class="form-row">
+                                        <div id="dvTitularEjecuta" class="form-group col-md-4" style="display:none;">
+                                            <label for="txtTitularEjecuta" class="text-small">Titular que Ejecutó el Plan Operativo</label>
+                                            <div class="input-group">
+                                                @Html.TextBoxFor(m => m.txtTitularEjecuta, new { @class = "form-control form-control-sm", disabled = "disabled" })
+                                                @Html.HiddenFor(m => m.hdfCodTitularEjecuta)
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text" style="cursor:pointer;" onclick="_POASupervisado.fnBuscarPersona('TITULAR','0000001')"><i class="fa fa-search-plus" data-toggle="tooltip" data-placement="top" title="Seleccionar titular"></i></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group col-md-4">
+                                            <label for="txtRegenteImplementa" class="text-small">Regente Encargado de la Implementación</label>
+                                            <div class="input-group">
+                                                @Html.TextBoxFor(m => m.txtRegenteImplementa, new { @class = "form-control form-control-sm", disabled = "disabled" })
+                                                @Html.HiddenFor(m => m.hdfCodRegenteImplementa)
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text" style="cursor:pointer;" onclick="_POASupervisado.fnBuscarPersona('REGENTE', '0000020')"><i class="fa fa-search-plus" data-toggle="tooltip" data-placement="top" title="Seleccionar regente"></i></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group col-md-4">
+                                            <label for="txtTerceroSolidario" class="text-small">Tercero solidario</label>
+                                            <div class="input-group">
+                                                @Html.TextBoxFor(m => m.txtTerceroSolidario, new { @class = "form-control form-control-sm", disabled = "disabled" })
+                                                @Html.HiddenFor(m => m.hdfCodTerceroSolidario)
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text" style="cursor:pointer;" onclick="_POASupervisado.fnBuscarPersona('TERCERO', 'TODOS')"><i class="fa fa-search-plus" data-toggle="tooltip" data-placement="top" title="Seleccionar tercero"></i></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        @*//*@
+                        <div id="dvOpcionPoaDatosProcesados" style="display:none;">
+                            <div  style="margin-top:15px;margin-bottom:20px;text-align:center;">
+                                <div class="btn-group btn-group-toggle" data-toggle="buttons">
+                                    @foreach (var item in Model.lstChkParcelaCorta)
+                                    {
+                                        <label class="btn btn-outline-info btn-sm  @(item.Checked?"active":"")" onchange="_POASupervisado.fnListarParcelaCorta()">
+                                            <input type="radio" name="mnuOpcionPC" @(item.Checked ? "checked" : "") value="@item.Value">@item.Text
+                                        </label>
+                                    }
+                                </div>
+                            </div> 
+                            <div id="dvAnalsisVolumen">
+                                <div class="card-header text-small">Analisis Maderable</div>
+                                <div class="card-body">
+                                    <div id="dvVerticeArea" class="form-row">
+                                        <div class="col-md-12">
+                                            @Html.Partial("~/Areas/Supervision/Views/ManInforme/_ReporteAnalisisMaderable.cshtml", Model.tbAnalisis)
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div id="dvConsolidado">
+                                <div class="card-header text-small">Consolidado</div>
+                                <div class="card-body">
+                                    <div id="dvRepConsolidado" class="form-row">
+                                        <div class="col-md-12">
+                                            @Html.Partial("~/Areas/Supervision/Views/ManInforme/_ReporteConsolidado.cshtml", Model.tbConsolidado)
+                                        </div>
+                                    </div>
+                                    <div class="form-row">
+                                        <div class="col-md-12">
+                                            @Html.Partial("~/Areas/Supervision/Views/ManInforme/_ReporteConsolidadoNN.cshtml", Model.tbConsolidadoNN)
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div id="dvMaderable">
+                                <div class="card-header text-small">Datos Maderable</div>
+                                <div class="card-body">
+                                    <div id="dvAprovechable" class="form-row">
+                                        <div class="col-md-12">
+                                            @Html.Partial("~/Areas/Supervision/Views/ManInforme/_ReporteMaderable.cshtml", Model.tbMaderable)
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

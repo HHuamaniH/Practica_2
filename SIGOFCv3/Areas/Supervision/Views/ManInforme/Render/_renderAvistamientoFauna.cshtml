@@ -1,0 +1,166 @@
+﻿
+@model List<CapaEntidad.DOC.Ent_INFORME>
+
+<style type="text/css">
+    #tbRenderAvistamientoFauna_wrapper {
+        padding: 0px;
+    }
+</style>
+
+<script type="text/javascript">
+    var _renderAvistamientoFauna = {};
+    _renderAvistamientoFauna.tbEliTABLA = [];
+
+    _renderAvistamientoFauna.fnInitDataTable_Detail = function () {
+        var columns_label = [], columns_data = [], options = {};
+
+        columns_label = ["Especie", "Nombre Común", "N° Individuos", "Tipo de Registro", "Estrato", "Fecha", "Hora"
+            , "Zona UTM", "Coord. Este", "Coord. Norte", "Altitud", "Descripción"];
+        columns_data = ["DESC_ESPECIES", "NOMBRE_COMUN", "NUM_INDIVIDUOS", "DESC_TIPO_REGISTRO", "DESC_ESTRATO"
+            , "FECHA_AVISTAMIENTO", "HORA_AVISTAMIENTO", "ZONA", "COORDENADA_ESTE", "COORDENADA_NORTE", "ALTITUD", "DESCRIPCION"];
+        options = {
+            page_length: 10, row_index: true, row_edit: true, row_fnEdit: "_renderAvistamientoFauna.fnAddEdit(this)"
+            , row_delete: true, row_fnDelete: "_renderAvistamientoFauna.fnDelete(this)"
+            , button_copy: true, button_csv: true, button_excel: true, button_pdf: true, button_print: true
+            , export_title: $("#tbRenderAvistamientoFauna").find("thead tr")[0].innerText.trim()
+            , page_sort: true
+        };
+        _renderAvistamientoFauna.dtAvistamientoFauna = utilDt.fnLoadDataTable_Detail($("#tbRenderAvistamientoFauna"), columns_label, columns_data, options);
+    }
+
+    _renderAvistamientoFauna.fnAddEdit = function (obj) {
+        var url = urlLocalSigo + "Supervision/ManInforme/_AvistamientoFauna";
+        var option = { url: url, type: 'POST', datos: {}, divId: "mdlManInforme_AvistamientoFauna" };
+        utilSigo.fnOpenModal(option, function () {
+            _AvistamientoFauna.fnSaveForm = function (data) {
+                if (data != null) {
+                    var dt = _renderAvistamientoFauna.dtAvistamientoFauna;
+
+                    if (obj == null || obj == "") {//Nuevo Registro
+                        dt.rows.add([data]).draw();
+                        dt.page('last').draw('page');
+                        utilSigo.toastSuccess("Exito", "Datos guardados correctamente");
+                    } else {//Modificar
+                        var row = dt.row($(obj).parents('tr')).data();
+                        row = data;
+                        dt.row($(obj).parents('tr')).data(row).draw(false);
+                        utilSigo.toastSuccess("Exito", "Datos actualizados correctamente");
+                    }
+                    $("#mdlManInforme_AvistamientoFauna").modal('hide');
+                } else {
+                    utilSigo.toastError("Error", "No se pudieron guardar los datos");
+                }
+            }
+
+            if (obj != null && obj != "") {
+                var data = _renderAvistamientoFauna.dtAvistamientoFauna.row($(obj).parents('tr')).data();
+                _AvistamientoFauna.fnInit(utilSigo.fnConvertArrayToObject(data));
+            } else { _AvistamientoFauna.fnInit(""); }
+        });
+    }
+
+    _renderAvistamientoFauna.fnDeleteAll = function () {
+        var rows, countFilas, data;
+
+        rows = _renderAvistamientoFauna.dtAvistamientoFauna.$("tr");
+        countFilas = rows.length;
+        if (countFilas > 0) {
+            utilSigo.dialogConfirm("", "Está seguro de Eliminar Todos los Registros?", function (r) {
+                if (r) {
+                    $.each(rows, function (i, o) {
+                        data = _renderAvistamientoFauna.dtAvistamientoFauna.row($(o)).data();
+                        if (data["RegEstado"] == "0" || data["RegEstado"] == "2") {
+                            _renderAvistamientoFauna.tbEliTABLA.push({
+                                EliTABLA: "AVISTAMIENTO",
+                                COD_ESPECIES: data["COD_ESPECIES"],
+                                COD_SECUENCIAL: data["COD_SECUENCIAL"]
+                            });
+                        }
+                    });
+                    _renderAvistamientoFauna.dtAvistamientoFauna.clear().draw();
+                }
+            });
+        } else {
+            utilSigo.toastWarning("Aviso", "No se encontraron registros a eliminar");
+        }
+    }
+
+    _renderAvistamientoFauna.fnDelete = function (obj) {
+        var data;
+
+        data = _renderAvistamientoFauna.dtAvistamientoFauna.row($(obj).parents('tr')).data();
+        if (data["RegEstado"] == "0" || data["RegEstado"] == "2") {
+            _renderAvistamientoFauna.tbEliTABLA.push({
+                EliTABLA: "AVISTAMIENTO",
+                COD_ESPECIES: data["COD_ESPECIES"],
+                COD_SECUENCIAL: data["COD_SECUENCIAL"]
+            });
+        }
+        _renderAvistamientoFauna.dtAvistamientoFauna.row($(obj).parents('tr')).remove().draw(false);
+    }
+
+    _renderAvistamientoFauna.fnImport = function (e, obj) {
+        var url = urlLocalSigo + "Supervision/ManInforme/ImportarDatosInformeSimple";
+        uploadFile.fileSelectHandler(e, obj, url, { asTipo: "AVISTAMIENTO_FAUNA" }, function (data) {
+            for (var i = 0; i < data.length; i++) {
+                _renderAvistamientoFauna.dtAvistamientoFauna.rows.add([data[i]]).draw();
+                _renderAvistamientoFauna.dtAvistamientoFauna.page('last').draw('page');
+            }
+        });
+    }
+
+    _renderAvistamientoFauna.fnGetList = function () {
+        var list = [], rows, countFilas, data;
+
+        rows = _renderAvistamientoFauna.dtAvistamientoFauna.$("tr");
+        countFilas = rows.length;
+        if (countFilas > 0) {
+            $.each(rows, function (i, o) {
+                data = _renderAvistamientoFauna.dtAvistamientoFauna.row($(o)).data();
+                if (data["RegEstado"] == "1" || data["RegEstado"] == "2") {
+                    list.push(utilSigo.fnConvertArrayToObject(data));
+                }
+            });
+        }
+        return list;
+    }
+
+    _renderAvistamientoFauna.fnGetListEliTABLA = function () { return _renderAvistamientoFauna.tbEliTABLA }
+
+    $(document).ready(function () {
+        _renderAvistamientoFauna.frm = $("#frmRenderAvistamientoFauna");
+
+        _renderAvistamientoFauna.fnInitDataTable_Detail();
+
+        _renderAvistamientoFauna.dtAvistamientoFauna.rows.add(JSON.parse('@Html.Raw(Json.Encode(@Model))')).draw();
+
+        var title = '@ViewData["TITULO"]';
+        if (typeof title==='undefined' || title=="") {
+            title = "Formato de Avistamiento de Fauna Silvestre";
+        }
+        _renderAvistamientoFauna.frm.find("#lblTitle").text(title);
+    });
+</script>
+
+<div id="frmRenderAvistamientoFauna">
+    <div class="table-responsive">
+        <table id="tbRenderAvistamientoFauna" style="width:100%;margin:0px !important;" class="table table-hover table-bordered">
+            <thead>
+                <tr>
+                    <th colspan="15" class="text-sm-left">
+                        <div class="form-inline">
+                            <i class="fa mx-2 fa-lg fa-file-o" style="cursor:pointer;" onclick="_renderAvistamientoFauna.fnAddEdit('');" data-toggle="tooltip" data-placement="top" title="Nuevo"></i>
+                            <i class="fa mx-2 fa-lg fa-window-close-o" style="cursor:pointer;" onclick="_renderAvistamientoFauna.fnDeleteAll();" data-toggle="tooltip" data-placement="top" title="Eliminar Todos"></i>
+                            <label style="cursor:pointer;" class="fa mx-2 fa-lg fa-file-excel-o" title="Importar Archivo" data-toggle="tooltip">
+                                <input type="file" id="fileselect" name="fileselect" style="display:none" size="60" onchange="_renderAvistamientoFauna.fnImport(event, this)">
+                            </label>
+                            <a href="@Url.Content("~/Archivos/Plantilla/InformeAvistamientoFauna.xlsx")"> <i class="fa mx-2 fa-lg fa-folder-open" style="cursor:pointer;" data-toggle="tooltip" data-placement="top" title="Descargar Plantilla"></i></a>
+                            <strong id="lblTitle">Formato de Avistamiento de Fauna Silvestre</strong>
+                        </div>
+                    </th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
+</div>

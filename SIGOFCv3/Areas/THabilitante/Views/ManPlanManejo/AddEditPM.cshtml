@@ -1,0 +1,640 @@
+﻿@model CapaEntidad.ViewModel.VM_PlanManejo
+@{
+    ViewBag.Title = "AddEditPM";
+    Layout = "~/Views/Shared/_LayoutMain.cshtml";
+}
+<style type="text/css">
+    .fileselect {
+        display: none;
+    }
+
+    .fileselectMod {
+        display: none;
+    }
+
+    .modal-full {
+        min-width: 100%;
+        margin: 0;
+    }
+
+    #tbErrorMaterial_DGeneral_wrapper {
+        padding: 0px;
+    }
+
+    #tbErrorMaterial_DAdicional_wrapper {
+        padding: 0px;
+    }
+</style>
+@section scripts{
+    <script>
+        "use strict"; var rol = '';
+    $(document).ready(function () {
+        //Validamos el rol del usuario
+        utilSigo.ValidaRol('@ViewBag.VAliasRol', 'btnRegistrarPM', '@Model.ddlItemIndicadorId');
+    });
+    </script>
+}
+<div class="container-fluid">
+    <div class="card">
+        <div class="card-header text-right">
+            Plan de Manejo
+        </div>
+        <div class="card-body">
+            <div class="card">
+                <div class="card-header text-small" id="divTitle">
+                    <a id="btnRegistrarPM" href="javascript:void(0)" style="cursor:pointer;" data-toggle="tooltip" data-placement="top" title="Guardar"><i class="fa mx-2 fa-lg fa-save"></i></a>
+                    <a id="btnRegresarPM" style="cursor:pointer;" data-toggle="tooltip" data-placement="top" title="Regresar"><i class="fa mx-2 fa-lg fa-reply"></i></a>
+                    @Model.lblTituloEstado
+                </div>
+                <div class="card-header text-small" id="divTInventario" style="display:none;">
+                    <a id="btnRInventario" style="cursor:pointer;" data-toggle="tooltip" data-placement="top" title="Regresar"><i class="fa mx-2 fa-lg fa-reply"></i></a>
+                </div>
+                <div class="card-body">
+                    <form id="frmPlanManejo">
+                        @Html.HiddenFor(m => m.hdfManRegEstado)
+                        @Html.HiddenFor(m => m.hdfItemCod_THabilitante)
+                        @Html.HiddenFor(m => m.hdfItemIndicador)
+                        @Html.HiddenFor(m => m.hdfItemCod_MTipo)
+                        @Html.HiddenFor(m => m.hdfItemCOD_PMANEJO)
+                        @Html.HiddenFor(m => m.ddlItemIndicadorEnable)
+                        @Html.HiddenFor(m => m.appClient)
+                        @Html.HiddenFor(m => m.appData)
+                        @Html.HiddenFor(m => m.opRegresar)
+                        <ul class="nav nav-tabs" id="myTab" role="tablist">
+                            <li class="nav-item" id="navEstadoTab"><a class="nav-link" data-toggle="tab" href="#navEstado" role="tab" aria-controls="home" aria-selected="true">Estado Situacional</a></li>
+                            <li class="nav-item" id="navDatosTab"><a class="nav-link active" data-toggle="tab" href="#navDatos" role="tab" aria-selected="false">Datos Generales</a></li>
+                            <li class="nav-item" id="navDatosAdicTab"><a class="nav-link" data-toggle="tab" href="#navDatosAdic" role="tab" aria-selected="false">Datos Adicionales</a></li>
+                            <li class="nav-item" id="navDatosInventarioTab" style="display:none;"><a class="nav-link" data-toggle="tab" href="#navDatosInventario" role="tab" aria-selected="false">Datos del Inventario</a></li>
+                        </ul>
+                        <div class="tab-content" id="nav-tabContent">
+                            <div class="tab-pane fade" id="navEstado" role="tabpanel" aria-labelledby="nav-home-tab">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="form-row">
+                                            <div class="form-group col-md-4">
+                                                <label for="ddlItemIndicadorId" class="text-small">Indicador</label>
+                                                @if (Model.ddlItemIndicadorEnable)
+                                                {
+                                                    @Html.DropDownListFor(m => m.ddlItemIndicadorId, new SelectList(Model.ddlItemIndicador, "Value", "Text"), new { @class = "form-control form-control-sm" })
+                                                }
+                                                else
+                                                {
+                                                    @Html.DropDownListFor(m => m.ddlItemIndicadorId, new SelectList(Model.ddlItemIndicador, "Value", "Text"), new { @class = "form-control form-control-sm", disabled = "disabled" })
+                                                }
+                                            </div>
+                                            <div class="form-group col-md-4">
+                                                <label for="lblUsuarioRegistro" class="text-small">Usuario que ingresó el registro</label>
+                                                @Html.EditorFor(m => m.lblUsuarioRegistro, new { htmlAttributes = new { @class = "form-control form-control-sm", @disabled = "disabled" } })
+                                            </div>
+                                            <div class="form-group col-md-4">
+                                                <label for="lblUsuarioControl" class="text-small">Usuario que asignó el útimo estado situacional al registro</label>
+                                                @Html.EditorFor(m => m.lblUsuarioControl, new { htmlAttributes = new { @class = "form-control form-control-sm", @disabled = "disabled" } })
+                                            </div>
+                                        </div>
+                                        <div id="divCKEDITOR" style="display:none;"></div>
+                                        <div class="form-row" id="divObsSubsanado" style="display:none;">
+                                            <div class="col-md-6 mb-3">
+                                                <div class="form-group">
+                                                    <label for="chkItemPlanManejo" class="text-small"></label>
+                                                    <div class="form-check">
+                                                        @Html.CheckBoxFor(m => m.OBSERV_SUBSANAR)
+                                                        <label class="form-check-label text-small" for="OBSERV_SUBSANAR">
+                                                            Observaciones Subsanadas?
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="tab-pane fade show active" id="navDatos" role="tabpanel">
+                                <div class="card">
+                                    <div class="card-header text-small">Datos del título habilitante</div>
+                                    <div class="card-body">
+                                        <div class="form-row">
+                                            <div class="form-group col-md-4">
+                                                <label for="lblItemTHNumero" class="text-small">Número</label>
+                                                @Html.EditorFor(m => m.lblItemTHNumero, new { htmlAttributes = new { @class = "form-control form-control-sm", @disabled = "disabled" } })
+                                            </div>
+                                            <div class="form-group col-md-4">
+                                                <label for="lblItemTHTitular" class="text-small">Titular</label>
+                                                @Html.EditorFor(m => m.lblItemTHTitular, new { htmlAttributes = new { @class = "form-control form-control-sm", @disabled = "disabled" } })
+                                            </div>
+                                            <div class="form-group col-md-4">
+                                                <label for="lblItemTHModalidad" class="text-small">Modalidad</label>
+                                                @Html.EditorFor(m => m.lblItemTHModalidad, new { htmlAttributes = new { @class = "form-control form-control-sm", @disabled = "disabled" } })
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="card-header text-small">Sobre el plan</div>
+                                    <div class="card-body">
+                                        <div class="form-row">
+                                            <div class="form-group col-md-2">
+                                                <label for="ddlODRegistroId" class="text-small texto-recortado">O.D. desde donde registra la información</label>
+                                                @Html.DropDownListFor(m => m.ddlODRegistroId, new SelectList(Model.ddlODRegistro, "Value", "Text"), new { @class = "form-control form-control-sm" })
+                                            </div>
+                                            <div class="form-group col-md-2">
+                                                <label for="txtItemFechaPresentacion" class="text-small texto-recortado">Fecha de presentación</label>
+                                                @Html.EditorFor(m => m.txtItemFechaPresentacion, new { htmlAttributes = new { @class = "form-control form-control-sm", placeholder = "dd/mm/yyyy" } })
+                                            </div>
+                                            @if (Model.visiblePlanComplementario)
+                                            {
+                                                <div class="form-group col-md-3">
+                                                    <label for="txtItemNumPlanComplementario" class="text-small texto-recortado">N° Plan Complementario (*)</label>
+                                                    @Html.EditorFor(m => m.txtItemNumPlanComplementario, new { htmlAttributes = new { @class = "form-control form-control-sm", MaxLength = "15" } })
+                                                </div>
+                                            }
+                                        </div>
+                                    </div>
+                                    @if (Model.hdfItemIndicador == "IS" || Model.hdfItemIndicador == "TR")
+                                    {
+                                        <div class="card-header text-small">Duración del PMFS</div>
+                                        <div class="card-body">
+                                            <div class="form-row">
+                                                <div class="form-group col-md-2">
+                                                    <label for="txtItemISDuracionFInicio" class="text-small">Fecha Inicio</label>
+                                                    @Html.EditorFor(m => m.txtItemISDuracionFInicio, new { htmlAttributes = new { @class = "form-control form-control-sm", MaxLength = "10", placeholder = "dd/mm/yyyy" } })
+                                                </div>
+                                                <div class="form-group col-md-2">
+                                                    <label for="txtItemISDuracionFFin" class="text-small">Fecha Finalización</label>
+                                                    @Html.EditorFor(m => m.txtItemISDuracionFFin, new { htmlAttributes = new { @class = "form-control form-control-sm", MaxLength = "10", placeholder = "dd/mm/yyyy" } })
+                                                </div>
+                                                @if (Model.hdfItemIndicador == "TR")
+                                                {
+                                                    <div class="form-group col-md-2">
+                                                        <label for="txtItemTaraAPredio" class="text-small">Área del Predio</label>
+                                                        @Html.EditorFor(m => m.txtItemTaraAPredio, new { htmlAttributes = new { @class = "form-control form-control-sm", MaxLength = "13", onkeypress = "return utilSigo.onKeyDecimal(event, this);" } })
+                                                    </div>
+                                                    <div class="form-group col-md-2">
+                                                        <label for="txtItemTaraAManejo" class="text-small">Área de Manejo</label>
+                                                        @Html.EditorFor(m => m.txtItemTaraAManejo, new { htmlAttributes = new { @class = "form-control form-control-sm", MaxLength = "15", onkeypress = "return utilSigo.onKeyDecimal(event, this);" } })
+                                                    </div>
+                                                }
+                                            </div>
+                                        </div>
+                                    }
+                                    <div class="card-header text-small">Regente</div>
+                                    <div class="card-body">
+                                        <div class="form-row">
+                                            <div class="form-group col-md-4">
+                                                <label for="lblItemConsultorNombre" class="text-small">Nombres<i class="fa fa-cog fa-spin text-danger" id="iconConsultor" style="display:none;" data-toggle="tooltip" data-placement="top" title="Seleccione Consultor"></i></label>
+                                                <div class="input-group">
+                                                    <div class="input-group-prepend">
+                                                        <span class="input-group-text"><i id="btnConsultor" class="fa fa-search-plus" style="cursor:pointer;" data-toggle="tooltip" data-placement="top" title="Seleccionar"></i></span>
+                                                    </div>
+                                                    @Html.EditorFor(m => m.lblItemConsultorNombre, new { htmlAttributes = new { @class = "form-control form-control-sm", disabled = "disabled" } })
+                                                    @Html.HiddenFor(m => m.hdlblItemConsultorNombre)
+                                                </div>
+                                            </div>
+                                            <div class="form-group col-md-2">
+                                                <label for="lblItemConsultorDNI" class="text-small">DNI</label>
+                                                @Html.EditorFor(m => m.lblItemConsultorDNI, new { htmlAttributes = new { @class = "form-control form-control-sm", @disabled = "disabled" } })
+                                            </div>
+                                            <div class="form-group col-md-2">
+                                                <label for="txtItemConsultorNRConsultor" class="text-small">N° Registro Consultor</label>
+                                                @Html.EditorFor(m => m.txtItemConsultorNRConsultor, new { htmlAttributes = new { @class = "form-control form-control-sm", MaxLength = "4" } })
+                                            </div>
+                                            <div class="form-group col-md-2">
+                                                <label for="lblItemConsultorNRProfesional" class="text-small">N° Registro Profesional</label>
+                                                @Html.EditorFor(m => m.lblItemConsultorNRProfesional, new { htmlAttributes = new { @class = "form-control form-control-sm", MaxLength = "15" } })
+                                            </div>
+                                            <div class="form-group col-md-2">
+                                                <label for="txtItemConsultorNRRegente" class="text-small">N° Registro Regente</label>
+                                                @Html.EditorFor(m => m.txtItemConsultorNRRegente, new { htmlAttributes = new { @class = "form-control form-control-sm", MaxLength = "16" } })
+                                            </div>
+                                        </div>
+                                        <div class="form-row">
+                                            <div class="form-group col-md-6">
+                                                <label for="txtUbigeo_" class="text-small">Ubigeo Real</label>
+                                                @Html.EditorFor(m => m.txtUbigeo, new { htmlAttributes = new { @class = "form-control form-control-sm", @disabled = "disabled" } })
+                                                @Html.HiddenFor(m => m.txtCodUbigeo)
+                                                
+                                            </div>
+                                            <div class="form-group col-md-6">
+                                                <label for="txtDirecion" class="text-small">Dirección Real</label>
+                                                @Html.EditorFor(m => m.txtDirecion, new { htmlAttributes = new { @class = "form-control form-control-sm", @disabled = "disabled" } })
+                                               
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="card-header text-small">Informe Técnico de Inspección Ocular</div>
+                                    <div class="card-body">
+                                        <div class="form-row">
+                                            <div class="form-group col-md-4">
+                                                <label for="txtItemItecnico_Iocular_Num" class="text-small">Número</label>
+                                                @Html.EditorFor(m => m.txtItemItecnico_Iocular_Num, new { htmlAttributes = new { @class = "form-control form-control-sm", MaxLength = "200" } })
+                                            </div>
+                                            <div class="form-group col-md-2">
+                                                <label for="txtItemItecnico_Iocular_Fecha" class="text-small">Fecha</label>
+                                                @Html.EditorFor(m => m.txtItemItecnico_Iocular_Fecha, new { htmlAttributes = new { @class = "form-control form-control-sm", MaxLength = "10", placeholder = "dd/mm/yyyy" } })
+                                            </div>
+                                        </div>
+                                        <div class="form-row">
+                                            <div class="table-responsive">
+                                                <table id="grvItemIOcular" class="table table-hover table-bordered" style="width:100%">
+                                                    <thead>
+                                                        <tr>
+                                                            <th colspan="6" class="text-sm-left">
+                                                                <div class="form-inline">
+                                                                    <i id="btnAddItemIOcular" class="fa mx-1 fa-lg fa-file-o" style="cursor:pointer;" data-toggle="tooltip" data-placement="top" title="Nuevo"></i>
+                                                                </div>
+                                                            </th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody></tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="card-header text-small">Informe Técnico que Recomienda la Aprobación</div>
+                                    <div class="card-body">
+                                        <div class="form-row">
+                                            <div class="form-group col-md-4">
+                                                <label for="txtItemItecnico_Raprobacion_Num" class="text-small">Número</label>
+                                                @Html.EditorFor(m => m.txtItemItecnico_Raprobacion_Num, new { htmlAttributes = new { @class = "form-control form-control-sm", MaxLength = "200" } })
+                                            </div>
+                                            <div class="form-group col-md-2">
+                                                <label for="txtItemItecnico_Raprobacion_Fecha" class="text-small">Fecha</label>
+                                                @Html.EditorFor(m => m.txtItemItecnico_Raprobacion_Fecha, new { htmlAttributes = new { @class = "form-control form-control-sm", MaxLength = "10", placeholder = "dd/mm/yyyy" } })
+                                            </div>
+                                        </div>
+                                        <div class="table-responsive">
+                                            <table id="grvItemTRAprobacion" class="table table-hover table-bordered" style="width:100%;">
+                                                <thead>
+                                                    <tr>
+                                                        <th colspan="6" class="text-sm-left">
+                                                            <div class="form-inline">
+                                                                <i id="btnAddItemTRAprobacion" class="fa mx-1 fa-lg fa-file-o" style="cursor:pointer;" data-toggle="tooltip" data-placement="top" title="Nuevo"></i>
+                                                            </div>
+                                                        </th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody></tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                    <div class="card-header text-small">Resolución de Aprobación</div>
+                                    <div class="card-body">
+                                        <div class="form-row">
+                                            <div class="form-group col-md-4">
+                                                <label for="txtItemAresolucion_Num" class="text-small">Número</label>
+                                                @Html.EditorFor(m => m.txtItemAresolucion_Num, new { htmlAttributes = new { @class = "form-control form-control-sm", MaxLength = "200" } })
+                                            </div>
+                                            <div class="form-group col-md-2">
+                                                <label for="txtItemAresolucion_Fecha" class="text-small">Fecha</label>
+                                                @Html.EditorFor(m => m.txtItemAresolucion_Fecha, new { htmlAttributes = new { @class = "form-control form-control-sm", MaxLength = "10", placeholder = "dd/mm/yyyy" } })
+                                            </div>
+                                            <div class="form-group col-md-3">
+                                                <label for="lblItemARFuncionario" class="text-small">Funcionario</label>
+                                                <div class="input-group">
+                                                    <div class="input-group-prepend">
+                                                        <span class="input-group-text"><i id="btnFuncionario" class="fa fa-search-plus" style="cursor:pointer;" data-toggle="tooltip" data-placement="top" title="Nuevo"></i></span>
+                                                    </div>
+                                                    @Html.EditorFor(m => m.lblItemARFuncionario, new { htmlAttributes = new { @class = "form-control form-control-sm", disabled = "disabled" } })
+                                                    @Html.HiddenFor(m => m.hdlblItemARFuncionario)
+                                                </div>
+                                            </div>
+                                            <div class="form-group col-md-3">
+                                                <label for="ddlDependenciaId" class="text-small">Dependencia donde se aprobo</label>
+                                                @Html.DropDownListFor(m => m.ddlDependenciaId, new SelectList(Model.ddlDependencia, "Value", "Text"), new { @class = "form-control form-control-sm" })
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="card-header text-small">Error Material</div>
+                                    <div class="card-body">
+                                        <div class="form-row">
+                                            <div class="table-responsive">
+                                                <table id="tbErrorMaterial_DGeneral" style="width:100%" class="table table-hover table-bordered">
+                                                    <thead>
+                                                        <tr>
+                                                            <th colspan="7" class="text-sm-left">
+                                                                <div class="form-inline">
+                                                                    <i id="btnAddItemErrorMaterialG" class="fa mx-1 fa-lg fa-file-o" style="cursor:pointer;" data-toggle="tooltip" data-placement="top" title="Nuevo"></i>
+                                                                    <strong>
+                                                                        Historial de Error Material
+                                                                    </strong>
+                                                                </div>
+                                                            </th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody></tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="card-header text-small">Archivos cargados en el SIADO</div>
+                                    <div class="card-body">
+                                        <div class="form-row">
+                                            @{
+                                                Html.RenderAction("_IntegracionSIADO", "Controles", new { area = "GENERAL", asCriterio = "SUBTIP_TITDOCSIGO", asSubCriterio = "0004", asValor = Model.hdfItemCOD_PMANEJO });
+                                            }
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="tab-pane fade" id="navDatosAdic" role="tabpanel" aria-labelledby="nav-home-tab">
+                                <div class="card">
+                                    <div class="card-header text-small"></div>
+                                    <div class="card-body">
+                                        <!--pnlItemInSitu-->
+                                        @if (Model.hdfItemIndicador == "IS")
+                                        {
+                                            <div class="form-row">
+                                                @Html.Partial("_pnlItemInSitu")
+                                            </div>
+                                        }
+                                        <!--pnlItemTara-->
+                                        @if (Model.hdfItemIndicador == "TR")
+                                        {
+                                            <div class="form-row">
+                                                <div class="table-responsive">
+                                                    <table id="grvItemTaraCUTM" class="table table-hover table-bordered" style="width:100%;">
+                                                        <thead>
+                                                            <tr>
+                                                                <th colspan="8" class="text-sm-left">
+                                                                    <div class="form-inline">
+                                                                        <i id="btnAddItemTaraCUTM" class="fa mx-1 fa-lg fa-file-o" style="cursor:pointer;" data-toggle="tooltip" data-placement="top" title="Nuevo"></i>
+                                                                        <i id="btnDeleteAllCUTM" class="fa mx-2 fa-lg fa-window-close-o" style="cursor:pointer;font-size:18px;" data-toggle="tooltip" data-placement="top" title="Eliminar Todos"></i>
+                                                                        <label id="lblUpload" title="Importar Excel" style="cursor:pointer;" class="fa mx-2 fa-lg fa-file-excel-o">
+                                                                            <input type="file" class="fileselect" id="fileTaraCUTM" name="fileTaraCUTM" onchange="AddEditPM.fnImportarExcel(event, this,'TaraCUTM');" size="60">
+                                                                        </label>
+                                                                        <i id="btnDownloadCUTM" class="fa mx-2 fa-lg fa-folder-open" style="cursor:pointer;color:blue;" data-toggle="tooltip" data-placement="top" title="Descargar Plantilla"></i>
+                                                                        <strong>Coordenadas UTM del área de manejo</strong>
+                                                                    </div>
+                                                                </th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody></tbody>
+                                                    </table>
+                                                    <table id="grvItemTaraAEAprov" class="table table-hover table-bordered" style="width:100%;">
+                                                        <thead>
+                                                            <tr>
+                                                                <th colspan="8" class="text-sm-left">
+                                                                    <div class="form-inline">
+                                                                        <i id="btnAddTaraAEAprov" class="fa mx-1 fa-lg fa-file-o" style="cursor:pointer;" data-toggle="tooltip" data-placement="top" title="Nuevo"></i>
+                                                                        <strong>Árboles en Edad Aprovechamiento</strong>
+                                                                    </div>
+                                                                </th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody></tbody>
+                                                    </table>
+                                                    <table id="grvItemTaraPApro" class="table table-hover table-bordered" style="width:100%;">
+                                                        <thead>
+                                                            <tr>
+                                                                <th colspan="9" class="text-sm-left">
+                                                                    <div class="form-inline">
+                                                                        <i id="btnAddTaraPApro" class="fa mx-1 fa-lg fa-file-o" style="cursor:pointer;" data-toggle="tooltip" data-placement="top" title="Nuevo"></i>
+                                                                        <strong>Proyección de aprovechamiento</strong>
+                                                                    </div>
+                                                                </th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody></tbody>
+                                                    </table>
+                                                    <table id="grvItemTaraESistemaA" class="table table-hover table-bordered" style="width:100%;">
+                                                        <thead>
+                                                            <tr>
+                                                                <th colspan="5" class="text-sm-left">
+                                                                    <div class="form-inline">
+                                                                        <i id="btnAddTaraESistemaA" class="fa mx-1 fa-lg fa-file-o" style="cursor:pointer;" data-toggle="tooltip" data-placement="top" title="Nuevo"></i>
+                                                                        <strong>Especificaciones del Sistema de Aprovechamiento</strong>
+                                                                    </div>
+                                                                </th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody></tbody>
+                                                    </table>
+                                                    <table id="grvItemTaraPSilvicultural" class="table table-hover table-bordered" style="width:100%;">
+                                                        <thead>
+                                                            <tr>
+                                                                <th colspan="5" class="text-sm-left">
+                                                                    <div class="form-inline">
+                                                                        <i id="btnAddTaraPSilvicultural" class="fa mx-1 fa-lg fa-file-o" style="cursor:pointer;" data-toggle="tooltip" data-placement="top" title="Nuevo"></i>
+                                                                        <strong>Practicas Silviculturales</strong>
+                                                                    </div>
+                                                                </th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody></tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                            <div class="form-row">
+                                                <div class="form-group col-md-12">
+                                                    <label for="txtItemTara_ACapacitacion" class="text-small">Actividades de capacitación</label>
+                                                    @Html.TextAreaFor(m => m.txtItemTara_ACapacitacion, new { @class = "form-control form-control-sm", rows = 2 })
+                                                </div>
+                                            </div>
+                                            <div class="form-row">
+                                                <div class="form-group col-md-12">
+                                                    <label for="txtItemTara_MComercializacion" class="text-small">Modalidad de comercialización</label>
+                                                    @Html.TextAreaFor(m => m.txtItemTara_MComercializacion, new { @class = "form-control form-control-sm", rows = 2 })
+                                                </div>
+                                            </div>
+                                            <div class="form-row">
+                                                <div class="form-group col-md-2">
+                                                    <label for="txtItemTara_AnoEPlantacion" class="text-small">Año de establecimiento de la plantación</label>
+                                                    @Html.EditorFor(m => m.txtItemTara_AnoEPlantacion, new { htmlAttributes = new { @class = "form-control form-control-sm", MaxLength = "4", onkeypress = "return utilSigo.onKeyEntero(event, this);" } })
+                                                </div>
+                                            </div>
+                                            <div class="form-row">
+                                                <div class="table-responsive">
+                                                    <table id="grvItemTaraAutoExtraer" class="table table-hover table-bordered" style="width:100%;">
+                                                        <thead>
+                                                            <tr>
+                                                                <th colspan="13" class="text-sm-left">
+                                                                    <div class="form-inline">
+                                                                        <i id="btnAddItemTaraAutoExtraer" class="fa mx-1 fa-lg fa-file-o" style="cursor:pointer;" data-toggle="tooltip" data-placement="top" title="Nuevo"></i>
+                                                                        <strong>Cantidad Autorizada a extraer</strong>
+                                                                    </div>
+                                                                </th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody></tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                            <div class="form-row">
+                                                <div class="form-group col-md-6">
+                                                    <a href="#" id="btnInventario" style="cursor:pointer">
+                                                        <i class="fa fa-search-plus" style="cursor:pointer"></i>
+                                                        <label id="lbtItemTaraInventarioSelec" style="cursor:pointer;"></label>
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        }
+                                        <div class="form-row" id="trItemTdrVigente">
+                                            <div class="form-group col-md-12">
+                                                <div class="custom-control custom-checkbox my-1 mr-sm-2">
+                                                    @Html.CheckBoxFor(m => m.chkItemAcorde_Tdr_Vigente, new { @class = "custom-control-input" })
+                                                    <label class="custom-control-label text-small" style="margin-top:4px;" for="chkItemAcorde_Tdr_Vigente">
+                                                        Elaborado Acorde TDR Vigente?
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!--trItemEcoturismo-->
+                                        @if (Model.hdfItemIndicador == "EC" || Model.hdfItemIndicador == "CS")
+                                        {
+                                            <div class="form-row">
+                                                <div class="table-responsive">
+                                                    <table id="grvItemEcotPImplementar" class="table table-hover table-bordered" style="width:100%;">
+                                                        <thead>
+                                                            <tr>
+                                                                <th colspan="5" class="text-sm-left">
+                                                                    <div class="form-inline">
+                                                                        <i id="btnAddEcotPImplementar" class="fa mx-1 fa-lg fa-file-o" style="cursor:pointer;" data-toggle="tooltip" data-placement="top" title="Nuevo"></i>
+                                                                        <strong>Programas a implementar</strong>
+                                                                    </div>
+                                                                </th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody></tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                            <div class="form-row">
+                                                <div class="form-group col-md-2">
+                                                    <div class="custom-control custom-checkbox my-1 mr-sm-2">
+                                                        @Html.CheckBoxFor(m => m.chkItemActividadPrioritaria, new { @class = "custom-control-input" })
+                                                        <label class="custom-control-label text-small" style="margin-top:4px;" for="chkItemActividadPrioritaria">
+                                                            Cuenta con Aprobación de Actividades Prioritarias?
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group col-md-2">
+                                                    <label for="txtAPROB_ACTIVIDAD_FECHA" class="text-small">Fecha de Presentación</label>
+                                                    @Html.EditorFor(m => m.txtAPROB_ACTIVIDAD_FECHA, new { htmlAttributes = new { @class = "form-control form-control-sm", MaxLength = "10" } })
+                                                </div>
+                                            </div>
+                                            <div class="form-row">
+                                                <div class="form-group col-md-12">
+                                                    <label for="txtAPROB_ACTIVIDAD_AUTORIZACION" class="text-small">Actividades prioritarias autorizadas</label>
+                                                    @Html.TextAreaFor(m => m.txtAPROB_ACTIVIDAD_AUTORIZACION, new { @class = "form-control form-control-sm", rows = 3 })
+                                                </div>
+                                            </div>
+                                            <div class="form-row">
+                                                <div class="form-group col-md-4">
+                                                    <label for="txtAPROB_ACTIVIDAD_RESOLUCION" class="text-small">N° Resolución de Aprobación de Actividades Prioritarias</label>
+                                                    @Html.EditorFor(m => m.txtAPROB_ACTIVIDAD_RESOLUCION, new { htmlAttributes = new { @class = "form-control form-control-sm", MaxLength = "150" } })
+                                                </div>
+                                                <div class="form-group col-md-4">
+                                                    <label for="lblAPROB_ACTIVIDAD_DATOS" class="text-small">Datos del Funcionario que firma la Resolución de Aprobación</label>
+                                                    <div class="input-group">
+                                                        <div class="input-group-prepend">
+                                                            <span class="input-group-text"><i id="btnFuncionarioFR" class="fa fa-search-plus" style="cursor:pointer;" data-toggle="tooltip" data-placement="top" title="Nuevo"></i></span>
+                                                        </div>
+                                                        @Html.EditorFor(m => m.lblAPROB_ACTIVIDAD_NOM_FUNCIONARIO, new { htmlAttributes = new { @class = "form-control form-control-sm", disabled = "disabled" } })
+                                                        @Html.HiddenFor(m => m.hdlblAPROB_ACTIVIDAD_NOM_FUNCIONARIO)
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-row">
+                                                <div class="table-responsive">
+                                                    <table id="grvItemEcotInformeAnual" class="table table-hover table-bordered" style="width:100%;">
+                                                        <thead>
+                                                            <tr>
+                                                                <th colspan="8" class="text-sm-left">
+                                                                    <div class="form-inline">
+                                                                        <i id="btnAddEcotInformeAnual" class="fa mx-1 fa-lg fa-file-o" style="cursor:pointer;" data-toggle="tooltip" data-placement="top" title="Nuevo"></i>
+                                                                        <strong>Informes Anuales de Ejecución Plan de Manejo</strong>
+                                                                    </div>
+                                                                </th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody></tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        }
+                                        <div class="card-header text-small">Error Material</div>
+                                        <div class="card-body">
+                                            <div class="form-row">
+                                                <div class="table-responsive">
+                                                    <table id="tbErrorMaterial_DAdicional" style="width:100%" class="table table-hover table-bordered">
+                                                        <thead>
+                                                            <tr>
+                                                                <th colspan="5" class="text-sm-left">
+                                                                    <div class="form-inline">
+                                                                        <i id="btnAddItemErrorMaterialA" class="fa mx-1 fa-lg fa-file-o" style="cursor:pointer;" data-toggle="tooltip" data-placement="top" title="Nuevo"></i>
+                                                                        <strong>
+                                                                            Historial de Error Material
+                                                                        </strong>
+                                                                    </div>
+                                                                </th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody></tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-row">
+                                            <div class="form-group col-md-12">
+                                                <label for="txtItemObservacion" class="text-small">Observación</label>
+                                                @Html.TextAreaFor(m => m.txtItemObservacion, new { @class = "form-control form-control-sm", rows = 3 })
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="tab-pane fade" id="navDatosInventario" role="tabpanel">
+                                <div class="card-header text-small"></div>
+                                <div class="card-body">
+                                    <div class="form-row">
+                                        <div class="form-group col-md-4">
+                                            <label for="lblItemDevolTrozaTHNumero" class="text-small">Número</label>
+                                            <input id="lblItemDevolTrozaTHNumero" class="form-control form-control-sm" value="@Model.lblItemTHNumero" disabled />
+                                        </div>
+                                        <div class="form-group col-md-4">
+                                            <label for="lblItemDevolTrozaTHTitular" class="text-small">Titular</label>
+                                            <input id="lblItemDevolTrozaTHTitular" class="form-control form-control-sm" value="@Model.lblItemTHTitular" disabled />
+                                        </div>
+                                        <div class="form-group col-md-4">
+                                            <label for="lblItemDevolTrozaTHModalidad" class="text-small">Modalidad</label>
+                                            <input id="lblItemDevolTrozaTHModalidad" class="form-control form-control-sm" value="@Model.lblItemTHModalidad" disabled />
+                                        </div>
+                                    </div>
+                                    <div class="form-row">
+                                        <div class="table-responsive">
+                                            <table id="grvItemTaraInventario" style="width:100%" class="table table-hover table-bordered">
+                                                <thead>
+                                                    <tr>
+                                                        <th colspan="11" class="text-sm-left">
+                                                            <div class="form-inline">
+                                                                <i id="btnAddInventario" class="fa mx-2 fa-lg fa-file-o" style="cursor:pointer;" data-toggle="tooltip" data-placement="top" title="Nuevo"></i>
+                                                                <i id="btnDeleteAllInventario" class="fa mx-2 fa-lg fa-window-close-o" style="cursor:pointer;" data-toggle="tooltip" data-placement="top" title="Eliminar Todos"></i>
+                                                                <label style="cursor:pointer;" class="fa mx-2 fa-lg fa-file-excel-o" title="Importar Archivo" data-toggle="tooltip">
+                                                                    <input type="file" id="fileTaraInv" name="fileTaraInv" onchange="AddEditPM.fnImportarExcel(event, this,'TaraInventario');" style="display:none" size="60">
+                                                                </label>
+                                                                <a href="#" id="btnDownloadInv"> <i class="fa mx-2 fa-lg fa-folder-open" style="cursor:pointer;" data-toggle="tooltip" data-placement="top" title="Descargar Plantilla"></i></a>
+                                                            </div>
+                                                        </th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody></tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="modalAddEdit" role="dialog" tabindex="-1"></div>
+    <div class="modal fade" id="modalAddEditSelect2" role="dialog"></div>
+    <div class="modal fade" id="modalBuscarPersona" role="dialog" tabindex="-1"></div>
+    @* Para el control genérico de personas *@
+    <div class="modal fade hide" id="mdlBuscarPersona" role="dialog"></div>
+    <div class="modal fade hide" id="modalAddEditPersona" role="dialog"></div>
+    <div class="modal fade hide" id="personaUbigeoModal" role="dialog"></div>
+    <div class="modal fade hide" id="modalAddErrorMaterial" role="dialog"></div>
+</div>
+
+<script src="~/Scripts/Sigo/utility.uploadFile.js"></script>
+<script src="~/Areas/THabilitante/js/ManPlanManejo/AddEditPM.js?v=@Guid.NewGuid()"></script>

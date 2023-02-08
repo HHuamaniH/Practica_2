@@ -1,0 +1,27 @@
+﻿ @Scripts.Render("~/bundles/General/Controles/_POA")
+
+<div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+        <div class="modal-header text-small" style="cursor:move;padding:0.5rem;">
+            <h5 class="modal-title">Seleccionar el Plan de Manejo</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body">
+            <form id="frmPOA">
+                @Html.Hidden("hdfFormulario", (object)ViewBag.hdfFormulario)
+                @Html.Hidden("hdfCriterio", (object)ViewBag.hdfCriterio)
+                @Html.Hidden("hdfValor", (object)ViewBag.hdfValor)
+                <div class="table-responsive">
+                    <table id="tbPOA" class="table table-hover table-bordered" style="width:100%">
+                        <thead></thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </form>
+        </div>
+        <div class="modal-footer"></div>
+    </div>
+</div>
+

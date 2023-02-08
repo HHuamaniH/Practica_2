@@ -1,0 +1,207 @@
+﻿
+@model List<CapaEntidad.DOC.Ent_RESODIREC_CONSULTA>
+<style type="text/css">
+    #tbRenderListResolucion_wrapper {
+        padding: 0px;
+    }
+
+    #tbConsultaResolucion_info {
+        color: #33b35a;
+        font-size: 12px;
+        margin-top: 12px;
+    }
+</style>
+<script type="text/javascript">
+    var _renderListResolucion = {};
+    _renderListResolucion.tbEliTABLA = [];
+
+    /*Consulta de registros (modal)*/
+    _renderListResolucion.fnInitDataTablePaging = function (options) {
+        var optDt = {};
+        optDt.iLength = options.page_length;
+        optDt.iStart = 0;
+        optDt.bSearch = false;
+        optDt.bInfo = true;
+        optDt.bSort = true;
+        optDt.aSort = [];
+        return _renderListResolucion.frm.find("#tbConsultaResolucion").DataTable({
+            processing: true,
+            serverSide: true,
+            searching: optDt.bSearch,
+            ordering: optDt.bSort,
+            deferLoading: 0,
+            paging: true,
+            ajax: {
+                "url": urlLocalSigo + "Fiscalizacion/ManResolucion/ConsultaResolucionPaging",
+                "data": function (d) {
+                    d.customSearchEnabled = true;
+                    d.customSearchForm = "RESOLUCION_CONSULTA";
+                    d.customSearchType = "NUM_RESOLUCION";
+                    d.customSearchValue = _renderListResolucion.frm.find("#txtConsultaResolucion").val().trim();
+                    for (var i = 0; i < d.order.length; i++) {
+                        d.order[i]["column_name"] = d.columns[d.order[i]["column"]]["data"];
+                    }
+                    d.columns = null;
+                },
+                "error": function (jqXHR) {
+                    utilSigo.unblockUIGeneral();
+                    utilSigo.toastError("Error", initSigo.MessageError);
+                    console.log(jqXHR.responseText);
+                }
+            },
+            columns: options.table_columns,
+            bInfo: optDt.bInfo,
+            "lengthMenu": [[10, 20, 50, 100], [10, 20, 50, 100]],
+            "bLengthChange" : false,
+            "aaSorting": optDt.aSort,
+            "pageLength": optDt.iLength,
+            "displayStart": optDt.iStart,
+            "oLanguage": initSigo.oLanguage,
+            "drawCallback": initSigo.showPagination,
+        });
+    }
+    _renderListResolucion.fnConsulta = function () {
+        var txtConsulta = _renderListResolucion.frm.find("#txtConsultaResolucion").val();
+        if (txtConsulta.length > 2) {
+            _renderListResolucion.dtConsultaResolucion.ajax.reload();
+        } else {
+            utilSigo.toastWarning("Aviso", "Ingrese al menos 3 caracteres para proceder con la búsqueda.");
+        }
+    }
+    _renderListResolucion.fnInit = function () {
+        _renderListResolucion.frm.find("#btnConsultaResolucion").click(function () {
+            _renderListResolucion.fnConsulta();
+
+        });
+        _renderListResolucion.frm.find("#txtConsultaResolucion").keyup(function (e) {
+            if (e.keyCode == 13) {
+                _renderListResolucion.fnConsulta();
+            }
+        });
+        _renderListResolucion.frm.find("#mdlConsultaResolucion").on('shown.bs.modal', function () {
+            _renderListResolucion.frm.find("#txtConsultaResolucion").focus();
+        });
+    }
+    _renderListResolucion.fnViewModalConsulta = function () {
+        utilSigo.modalDraggable(_renderListResolucion.frm.find("#mdlConsultaResolucion"), '.modal-header');
+        _renderListResolucion.frm.find("#mdlConsultaResolucion").modal({ keyboard: true, backdrop: 'static' });
+    }
+    _renderListResolucion.fnSelect = function (obj) {
+        var data = _renderListResolucion.dtConsultaResolucion.row($(obj).parents('tr')).data();
+        if (!utilDt.existValorSearch(_renderListResolucion.dtRenderListResolucion, "COD_RESODIREC", data["COD_RESODIREC"])) {
+            data["RegEstado"] = 1;
+            _renderListResolucion.dtRenderListResolucion.rows.add([data]).draw();
+            _renderListResolucion.dtRenderListResolucion.page('last').draw('page');
+        } else {
+            utilSigo.toastWarning("Aviso", "La resolución ya se encuentra en la lista");
+        }
+    }
+
+    /*Listado de registros (render)*/
+    _renderListResolucion.fnDelete = function (obj) {
+        var data = _renderListResolucion.dtRenderListResolucion.row($(obj).parents('tr')).data();
+
+        if (data["RegEstado"] == "0") {
+            _renderListResolucion.tbEliTABLA.push({
+                EliTABLA: "DETALLE_RESOLUCION",
+                COD_RESODIREC: data["COD_RESODIREC"]
+            });
+        }
+        _renderListResolucion.dtRenderListResolucion.row($(obj).parents('tr')).remove().draw(false);
+    }
+    _renderListResolucion.fnGetList = function () {
+        var list = [], rows, countFilas, data;
+
+        rows = _renderListResolucion.dtRenderListResolucion.$("tr");
+        if (rows.length > 0) {
+            $.each(rows, function (i, o) {
+                data = _renderListResolucion.dtRenderListResolucion.row($(o)).data();
+                if (data["RegEstado"] == "1") {
+                    list.push(utilSigo.fnConvertArrayToObject(data));
+                }
+            });
+        }
+        return list;
+    }
+    _renderListResolucion.fnGetListEliTABLA = function () { return _renderListResolucion.tbEliTABLA }
+    _renderListResolucion.fnGetCount = function () { return _renderListResolucion.dtRenderListResolucion.$("tr").length }
+
+    /*General*/
+    _renderListResolucion.fnInitDataTable_Detail = function () {
+        var columns_label = [], columns_data = [], options = {};
+
+        columns_label = ["Resolución", "Sub. Dir. Línea", "Título Habilitante", "Titular"];
+        columns_data = ["NUM_RESOLUCION", "DLINEA", "NUM_THABILITANTE", "TITULAR"];
+        options = {
+            page_length: 10, row_index: true, row_delete: true, row_fnDelete: "_renderListResolucion.fnDelete(this)", page_sort: true
+        };
+        _renderListResolucion.dtRenderListResolucion = utilDt.fnLoadDataTable_Detail(_renderListResolucion.frm.find("#tbRenderListResolucion"), columns_label, columns_data, options);
+        _renderListResolucion.dtRenderListResolucion.rows.add(JSON.parse('@Html.Raw(Json.Encode(@Model))')).draw();
+
+        options = {
+            page_paging: true, page_length: 10, row_index: true, row_select: true, row_fnSelect: "_renderListResolucion.fnSelect(this)"
+        };
+        utilDt.fnLoadDataTable_Detail(_renderListResolucion.frm.find("#tbConsultaResolucion"), columns_label, columns_data, options);
+        _renderListResolucion.dtConsultaResolucion = _renderListResolucion.fnInitDataTablePaging(options);
+    }
+
+    $(document).ready(function () {
+        _renderListResolucion.frm = $("#frmRenderListResolucion");
+        _renderListResolucion.fnInitDataTable_Detail();
+        _renderListResolucion.fnInit();
+    });
+</script>
+
+<div id="frmRenderListResolucion">
+    <div class="table-responsive">
+        <table id="tbRenderListResolucion" style="width:100%;margin:0px !important;" class="table table-hover table-bordered">
+            <thead>
+                <tr>
+                    <th colspan="6" class="text-sm-left">
+                        <div class="form-inline">
+                            <i class="fa mx-2 fa-lg fa-file-o" style="cursor:pointer;" onclick="_renderListResolucion.fnViewModalConsulta();" data-toggle="tooltip" data-placement="top" title="Nuevo"></i>
+                            <strong>Lista de Resoluciones</strong>
+                        </div>
+                    </th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
+    <div class="modal fade hide" id="mdlConsultaResolucion" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header text-small" style="cursor:move;">
+                    Consulta de Resoluciones
+                    <i class="fa fa-close" style="cursor:pointer;" data-dismiss="modal" aria-label="Close"></i>
+                </div>
+                <div class="modal-body" style="padding:0px;">
+                    <div id="frmConsultaResolucion">
+                        <div class="card-body">
+                            <div class="form-row">
+                                <div class="col-md-3 mb-3" style="margin-bottom:0px!important;">
+                                    <label class="text-small form-control-sm">Nro. de Resolución</label>
+                                </div>
+                                <div class="col-md-9 mb-3" style="margin-bottom:0px!important;">
+                                    <div class="input-group">
+                                        <input type="text" id="txtConsultaResolucion" class="form-control form-control-sm" maxlength="50" />
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text" id="btnConsultaResolucion" style="cursor:pointer;color:forestgreen"><i class="fa fa-search" data-toggle="tooltip" data-placement="top" title="Buscar"></i></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="table-responsive" style="overflow-y:hidden;">
+                            <table id="tbConsultaResolucion" style="width:100%;margin:0px !important;" class="table table-hover table-bordered">
+                                <thead></thead>
+                                <tbody></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer"></div>
+            </div>
+        </div>
+    </div>
+</div>

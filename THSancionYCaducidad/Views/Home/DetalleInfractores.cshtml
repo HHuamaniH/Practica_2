@@ -1,0 +1,212 @@
+﻿@using THSAncionYCaducidad;
+@model dynamic
+
+@{
+    ViewBag.Title = "DetalleInfractores";
+}
+<style>
+    body {
+        background-image: linear-gradient(#d5f0c5, #18a94c);
+        background-attachment: fixed;
+    }
+</style>
+<script>
+    $(document).ready(function () { });
+    function a_onClick(POA, Codigo) {
+        $.ajax({
+            url: '@Url.Action("verEspecies", "Home")',
+            type: 'POST',
+            datatype: "json",
+            traditional: true,
+            data: { 'NUM_POA': POA, 'COD_THABILITANTE': Codigo },
+            success: function (data) {
+                $('div#divTableEspecies').html(data);
+            }
+        });
+       // alert('El codigo es: ' + POA + ' - ' + Codigo);
+
+    }
+</script>
+<link rel="stylesheet" href="~/Styles/css/slider.css">
+<div class="row">
+    <div class="col-sm-1">
+        <br />
+    </div>
+    <div class="col-sm-10">
+        <div class="box box-success" style="background-color: white">
+            <div class="row">
+                <div class="col-sm-3"></div>
+                <div class="col-sm-6">
+                    <img id="profile-img" class="img-responsive pad" src="~/Images/General/top_logos.png" />
+                </div>
+                <div class="col-sm-3"></div>
+            </div>
+            <div class="row">
+                <div class="col-sm-1"></div>
+                <div class="col-sm-10">
+                    <div class="form-horizontal">
+                        <div style="text-align: center">
+                            <h4><strong>INFORMACIÓN BÁSICA DEL TÍTULO HABILITANTE</strong></h4>
+                        </div>
+                        <div class="box-body">
+                            @if (Model.oCEntidad != null)
+                            {
+                                var item = Model.oCEntidad;
+                                <div class="form-group  has-success">
+                                    <label class="col-sm-2 control-label">Número</label>
+                                    <div class="col-sm-10">
+                                        <input class="form-control" readonly="readonly" value="@item.TITULO" />
+                                    </div>
+                                </div>
+                                <div class="form-group  has-success">
+                                    <label class="col-sm-2 control-label">Modalidad</label>
+                                    <div class="col-sm-10">
+                                        <input class="form-control" readonly="readonly" value="@item.MODALIDAD" />
+                                    </div>
+                                </div>
+                                <div class="form-group  has-success">
+                                    <label class="col-sm-2 control-label">Ubicación</label>
+                                    <div class="col-sm-10">
+                                        <input class="form-control" readonly="readonly" value="@item.UBICACION" />
+                                    </div>
+                                </div>
+                                <div class="form-group  has-success">
+                                    <label class="col-sm-2 control-label">Titular</label>
+                                    <div class="col-sm-10">
+                                        <input class="form-control" readonly="readonly" value="@item.TITULAR" />
+                                    </div>
+                                </div>
+                                <div class="form-group  has-success">
+                                    <label class="col-sm-2 control-label">Dirección</label>
+                                    <div class="col-sm-10">
+                                        <input class="form-control" readonly="readonly" value="@item.DIRECCION_TH" />
+                                    </div>
+                                </div>
+                                <div class="form-group  has-success">
+                                    <label class="col-sm-2 control-label">Representante Legal</label>
+                                    <div class="col-sm-10">
+                                        <input class="form-control" readonly="readonly" value="@item.REPRESENTANTE_LEG" />
+                                    </div>
+                                </div>
+                                if (item.CADUCIDAD_RDTERMINO != "No")
+                                {
+                                    <div class="form-group has-success">
+                                        <label class="col-sm-2 control-label">Estado actual del Título Habilitante</label>
+                                        <div class="col-sm-10">
+                                            <input class="form-control" readonly="readonly" id="txtfechaSup" value="@item.CADUCIDAD_RDTERMINO" style="color:red" />
+                                        </div>
+                                    </div>
+
+                                }
+                            }
+                        </div>
+                        <script>
+                            $(function () {
+                                $('#dtDetalleInfractores').DataTable({
+                                    'paging': true,
+                                    'lengthChange': false,
+                                    'searching': false,
+                                    'ordering': true,
+                                    'info': true,
+                                    'autoWidth': false
+                                })
+                            })
+                        </script>
+                        <div class="box-body">
+                            <div class="box box-success">
+                                <br />
+                                @if (Model != null)
+                                {
+                                    var item = Model;
+                                    <table id="dtDetalleInfractores" class="table table-bordered table-striped" style="width: 100% !important; font-size: 12px;">
+                                        <thead>
+                                            <tr>
+                                                <td colspan="10" style='text-align: center; background: #13BB6D; color: #484F4C; border-color: #00733e'>
+                                                    <strong>
+                                                        @item.Descripcion
+                                                    </strong>
+                                                </td>
+                                            </tr>
+                                            @if (item.tipo == "MADERABLE")
+                                            {
+                                                <tr style="text-align: center; font-size:smaller; background: #dddddd">
+                                                    <td style="width: 8%">Documento</td>
+                                                    <td style="width: 15%">Resolución aprobación del POA</td>
+                                                    <td style="width: 8%">N° Especies Aprobadas</td>
+                                                    <td style="width: 8%">Volumen Aprobado (m³)</td>
+                                                    <td style="width: 13%">Consultor que Elaboro el POA</td>
+                                                    <td style="width: 8%">Supervisión</td>
+                                                    <td style="width: 8%">Año de Supervisión</td>
+                                                    <td style="width: 15%">Resoluciones</td>
+                                                    <td style="width: 12%">Estado del Proceso</td>
+                                                    <td style="width: 8%">Observatorio</td>
+                                                </tr>
+                                            }
+                                            @if (item.tipo == "NOMADERABLE")
+                                            {
+                                                <tr style="text-align: center; font-size:small; background: #dddddd">
+                                                    <td style="width: 5%">N°</td>
+                                                    <td style="width: 25%">Año de Supervisión</td>
+                                                    <td style="width: 70%">Estado del proceso administrativo</td>
+                                                </tr>
+                                            }
+                                        </thead>
+                                        <tbody>
+                                            @if (item.ListPOA != null)
+                                            {
+                                                var count = 0;
+                                                foreach (var itemPOA in Model.ListPOA)
+                                                {
+                                                    if (item.tipo == "MADERABLE")
+                                                    {
+                                                        <tr style="font-size:smaller">
+                                                            <td style="width: 8%; text-align:center">@itemPOA.NUM_POA_STRING</td>
+                                                            <td style="width: 15%; text-align:justify">@itemPOA.ARESOLUCION_NUM</td>
+                                                            <td style="width: 8%; text-align:center">
+                                                                <a id="btnArbolesDetalle" onclick="a_onClick('@itemPOA.NUM_POA', '@itemPOA.COD_THABILITANTE')" style="color:blue" title="Detalle de especies">@itemPOA.Arboles_aprob</a>
+                                                            </td>
+                                                            <td style="width: 8%; text-align:center">@itemPOA.VOLUMEN_AUTORIZADO</td>
+                                                            <td style="width: 13%; text-align:justify">@itemPOA.consultor</td>
+                                                            <td style="width: 8%; text-align:center">@itemPOA.Supervisor</td>
+                                                            <td style="width: 8%; text-align:center">@itemPOA.ANIO_SUP</td>
+                                                            <td style="width: 15%; text-align:justify">@itemPOA.NUM_RESODIREC_RECONSIDERACION</td>
+                                                            <td style="width: 12%; text-align:justify">@itemPOA.ESTADO_ORIGEN</td>
+                                                            <td style="width: 8%; text-align:center">
+                                                                @if (itemPOA.ID_REGISTRO != 0)
+                                                                {
+                                                                    <a href="~/Home/verPDF?CODIGO=@itemPOA.ID_REGISTRO" target="_blank">
+                                                                        <input type="button" class="@itemPOA.BTN_STYLE_CLASS" style="visibility: @itemPOA.BTN_VISIBLE" value="@itemPOA.BTN_NAME" />
+                                                                    </a>
+                                                                }
+                                                            </td>
+                                                        </tr>
+                                                    }
+                                                    if (item.tipo == "NOMADERABLE")
+                                                    {
+                                                        <tr style="font-size:small; text-align:center">
+                                                            <td style="width: 5%">@(++count)</td>
+                                                            <td style="width: 25%">@itemPOA.ANIO_SUPERV</td>
+                                                            <td style="width: 70%">@itemPOA.ESTADO_ORIGEN</td>
+                                                        </tr>
+                                                    }
+                                                }
+                                            }
+                                        </tbody>
+                                    </table>
+                                }
+                                <div id="divTableEspecies" style="text-align:center; width:100%">
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <h5 class="text-center"><i><strong>"Usemos responsablemente nuestros bosques"</strong></i></h5>
+                </div>
+                <div class="col-sm-1"></div>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-1">
+        <br />
+    </div>
+</div>

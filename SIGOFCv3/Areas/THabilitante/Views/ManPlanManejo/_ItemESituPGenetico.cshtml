@@ -1,0 +1,67 @@
+﻿
+@model CapaEntidad.ViewModel.VM_PGeneticoItem
+    <div id="divItemESituPGenetico" class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header text-small" style="cursor:move;">
+                <h5 class="modal-title">@Model.lblTitulo</h5>
+            </div>
+            <div class="modal-body">
+                <form id="frmItemESituPGenetico">
+                    @Html.HiddenFor(m => m.COD_PMANEJO)
+                    @Html.HiddenFor(m => m.COD_SECUENCIAL)
+                    @Html.HiddenFor(m => m.hdEstado)
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label for="txtItemESituIAnual_Ano" class="text-small">N° Resolución de Autorización</label>
+                            @Html.EditorFor(m => m.txtnum_resolucion, new { htmlAttributes = new { @class = "form-control form-control-sm", @maxlength = "200" } })
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label for="txtItemESituIAnual_FEmision" class="text-small">Fecha de emisión</label>
+                            @Html.EditorFor(m => m.txtfecha_emision_resolucion, new { htmlAttributes = new { @class = "form-control form-control-sm", @maxlength = "10" } })
+                        </div>
+                    </div>
+                    <div class="card-header text-small">
+                        Datos del funcionario que autorizo plantel genético
+                    </div>
+                    <div class="card-body" style="border:1.5px;">
+                        <div class="form-row">
+                            <div class="form-group col-md-6">
+                                <label for="lblProfesional" class="text-small">Nombres<i class="fa fa-cog fa-spin text-danger" id="iconProfesional" style="display:none;" data-toggle="tooltip" data-placement="top" title="Seleccione Profesional"></i></label>
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text"><i id="btnAddProfesional" class="fa fa-plus" style="cursor:pointer;" data-toggle="tooltip" data-placement="top" title="Agregar"></i></span>
+                                    </div>
+                                    @Html.EditorFor(m => m.lblItemPGenetico_PNombre, new { htmlAttributes = new { @class = "form-control form-control-sm", disabled = "disabled" } })
+                                    @Html.HiddenFor(m => m.hdfItemPGenetico_PCodigo)
+                                </div>
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label for="txtDni" class="text-small">DNI</label>
+                                @Html.EditorFor(m => m.lblItemPGenetico_PDNI, new { htmlAttributes = new { @class = "form-control form-control-sm", disabled = "disabled" } })
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group col-md-6">
+                                <label for="txtItemESituIAnual_PNR" class="text-small">Cargo</label>
+                                @Html.EditorFor(m => m.lblItemPGenetico_PCargo, new { htmlAttributes = new { @class = "form-control form-control-sm", disabled = "disabled" } })
+                            </div>
+                            <div class="form-group col-md-6">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group col-md-12">
+                            <label for="txtItemESituIAnual_Observacion" class="text-small">Observación</label>
+                            @Html.TextAreaFor(m => m.lblItemPGenetico_Observacion, new { @class = "form-control form-control-sm", rows = 2 })
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button id="btnGuardar" class="btn btn-primary btn-sm">Agregar</button>
+                <button id="btnCancelar" class="btn btn-secondary btn-sm">Cancelar</button>
+            </div>
+        </div>
+    </div>
+    <script src="~/Areas/THabilitante/js/ManPlanManejo/_ItemESituPGenetico.js"></script>

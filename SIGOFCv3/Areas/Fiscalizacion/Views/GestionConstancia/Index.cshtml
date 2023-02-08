@@ -1,0 +1,52 @@
+﻿
+@{
+    ViewBag.Title = ViewBag.TituloFormulario;
+    Layout = "~/Views/Shared/_LayoutMain.cshtml";
+}
+
+<script src="~/Areas/Fiscalizacion/js/GestionConstancia/Index.js"></script>
+
+<style type="text/css">
+    #dvListaConstancia .dataTables_info {
+        color: #33b35a;
+        font-size: 15px;
+        margin-top: 10px;
+    }
+
+    #dvListaConstancia .dataTables_length > label {
+        margin: 0px;
+        font-size: 12px;
+    }
+</style>
+
+<div class="container-fluid">
+    <div class="card">
+        <div class="card-header text-left">
+            <h5>@ViewBag.TituloFormulario</h5>
+        </div>
+        <div class="card-body">
+            <form id="frmBuscarConstancia" method="get">
+                <div class="form-row">
+                    <div class="form-group col-md-4">
+                        @Html.DropDownList("ddlOpcionId", new SelectList(ViewBag.ddlOpcion, "Value", "Text"), new { @class = "form-control form-control-sm" })
+                    </div>
+                    <div class="form-group col-md-6">
+                        <input type="text" class="form-control form-control-sm" id="txtValor" placeholder="Ingrese Valor a Buscar">
+                    </div>
+                    <div class="btn-group col-md-2" style="padding-top:5px;">
+                        <a id="btnSearch" style="cursor:pointer;" data-toggle="tooltip" data-placement="top" title="Buscar el registro" onclick="GestConstancia.fnSearch()"><span class="fa mx-2 fa-lg fa-search"></span></a>
+                        <a id="btnRefresh" style="cursor:pointer;" data-toggle="tooltip" data-placement="top" title="Actualizar el listado" onclick="GestConstancia.fnRefresh()"><span class="fa mx-2 fa-lg fa-refresh"></span></a>
+                        <a id="btnDownload" style="cursor:pointer;" data-toggle="tooltip" data-placement="top" title="Descargar" onclick="GestConstancia.fnExport()"><span class="fa mx-2 fa-lg fa-file-excel-o"></span></a>
+                    </div>
+                </div>
+            </form>
+            <div id="dvListaConstancia" class="table-responsive">
+                <table id="tbConstancia" class="table table-hover table-bordered" style="width:100%;">
+                    <thead></thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+@Html.Partial("~/Areas/General/Views/FirmaDigital/_FirmaModal.cshtml")

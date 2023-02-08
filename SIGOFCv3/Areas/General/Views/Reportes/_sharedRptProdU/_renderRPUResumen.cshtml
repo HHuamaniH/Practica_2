@@ -1,0 +1,89 @@
+﻿
+<div id="divTbResumen" style="width: 100%; overflow: auto; scrollbar-base-color: none;">
+    <table id="tbListResumen" class="table table-bordered table-striped-success" style="width: 100% !important; font-size:12px">
+        <thead>
+            <tr style=" text-align: center;  background-color: #dae7f5">
+                <td style="width: 2%">N°</td>
+                <td style="width: 15%">Fecha</td>
+                <td style="width: 5%">Título Habilitante</td>
+                <td style="width: 5%">POA/DEMA</td>
+                <td style="width: 5%">Plan de Manejo</td>
+                <td style="width: 5%">Capacitación</td>
+                <td style="width: 5%">Carta Notificación Supervisión</td>
+                <td style="width: 5%">Carta Notificación Supervisión Notificado</td>
+                <td style="width: 5%">Carta Notificación Fiscalización</td>
+                <td style="width: 5%">Carta Notificación Fiscalización Notificado</td>
+                <td style="width: 5%">Informe Supervisión</td>
+                <td style="width: 5%">Guía Transporte</td>
+                <td style="width: 5%">Informe Legal</td>
+                <td style="width: 5%">Resolución Directoral</td>
+                <td style="width: 5%">Informe Fundamentado</td>
+                <td style="width: 5%">Informe Títular</td>
+                <td style="width: 5%">Total</td>
+            </tr>
+        </thead>
+        <tbody id="bodyTable">
+            @if (Model.listProduccionU != null)
+            {
+                var count = 0;
+                foreach (var item in Model.listProduccionU)
+                {
+                    <tr>
+                        <td style="width: 2%">@(++count)</td>
+                        <td style="width: 5%">@item.FECHA</td>
+                        <td style="width: 5%; text-align:center;">
+                            <a href="#" onclick="_rendReporteUs.fnReporteDetalle('TITULO_HABILITANTE', @item.MesNum, '@item.MesNombre')" style="cursor:pointer; font-size:14px !important;">@item.TH</a>
+                        </td>
+                        <td style="width: 5%; text-align:center;">
+                            <a href="#" onclick="_rendReporteUs.fnReporteDetalle('POA', @item.MesNum, '@item.MesNombre')" style="cursor:pointer; font-size:12px !important;">@item.POA</a>
+                        </td>
+                        <td style="width: 5%; text-align:center;">
+                            <a href="#" onclick="_rendReporteUs.fnReporteDetalle('PLAN_MANEJO', @item.MesNum, '@item.MesNombre')" style="cursor:pointer; font-size:12px !important;">@item.PM</a>
+                        </td>
+                        <td style="width: 5%; text-align:center;">
+                            <a href="#" onclick="_rendReporteUs.fnReporteDetalle('CAPACITACION', @item.MesNum, '@item.MesNombre')" style="cursor:pointer; font-size:12px !important;">@item.CAP</a>
+                        </td>
+                        <td style="width: 5%; text-align:center;">
+                            <a href="#" onclick="_rendReporteUs.fnReporteDetalle('CARTA_NOTIFICACION', @item.MesNum, '@item.MesNombre')" style="cursor:pointer; font-size:12px !important;">@item.CN</a>
+                        </td>
+                        <td style="width: 5%; text-align:center;">
+                            <a href="#" onclick="_rendReporteUs.fnReporteDetalle('CARTA_NOTIFICACION_NTF', @item.MesNum, '@item.MesNombre')" style="cursor:pointer; font-size:12px !important;">@item.CN_NTF</a>
+                        </td>
+                        <td style="width: 5%; text-align:center;">
+                            <a href="#" onclick="_rendReporteUs.fnReporteDetalle('NOTIFICACION_FISCALIZACION', @item.MesNum, '@item.MesNombre')" style="cursor:pointer; font-size:12px !important;">@item.NOT_FISC</a>
+                        </td>
+                        <td style="width: 5%; text-align: center;">
+                            <a href="#" onclick="_rendReporteUs.fnReporteDetalle('NOTIFICACION_FISCALIZACION_NTF', @item.MesNum, '@item.MesNombre')" style="cursor:pointer; font-size:12px !important;">@item.NOT_FISC_NTF</a>
+                        </td>
+                        <td style="width: 5%; text-align: center;">
+                            <a href="#" onclick="_rendReporteUs.fnReporteDetalle('INFORME_SUPERVISION', @item.MesNum, '@item.MesNombre')" style="cursor:pointer; font-size:12px !important;">@item.ISUP</a>
+                        </td>
+                        <td style="width: 5%; text-align:center;">
+                            <a href="#" onclick="_rendReporteUs.fnReporteDetalle('GUIA_TRANSPORTE', @item.MesNum, '@item.MesNombre')" style="cursor:pointer; font-size:12px !important;">@item.GTF</a>
+                        </td>
+                        <td style="width: 5%; text-align:center;">
+                            <a href="#" onclick="_rendReporteUs.fnReporteDetalle('INFORME_LEGAL', @item.MesNum, '@item.MesNombre')" style="cursor:pointer; font-size:12px !important;">@item.ILEG</a>
+                        </td>
+                        <td style="width: 5%; text-align:center;">
+                            <a href="#" onclick="_rendReporteUs.fnReporteDetalle('RESOLUCION_DIRECTORAL', @item.MesNum, '@item.MesNombre')" style="cursor:pointer; font-size:12px !important;">@item.RD</a>
+                        </td>
+                        <td style="width: 5%; text-align:center;">
+                            <a href="#" onclick="_rendReporteUs.fnReporteDetalle('INFORME_FUNDAMENTADO', @item.MesNum, '@item.MesNombre')" style="cursor:pointer; font-size:12px !important;">@item.IFUN</a>
+                        </td>
+                        <td style="width: 5%; text-align: center;">
+                            <a href="#" onclick="_rendReporteUs.fnReporteDetalle('INFORMACION_TITULAR', @item.MesNum, '@item.MesNombre')" style="cursor:pointer; font-size:12px !important;">@item.INTIT</a>
+                        </td>
+                        <td style="width: 5%; text-align:center;">@item.TOTAL</td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+
+    <br />
+    <ol>
+        <li>Para las notificaciones de supervisión según el actual ROF, son emitidas por la DSFFS</li>
+        <li>Para las notificaciones de fiscalización según el actual ROF, son emitidas por la DFFFS o las subdirecciones (SDFPAFFS o SDFCFFS)</li>
+    </ol>
+    <br/>
+</div>

@@ -1,0 +1,392 @@
+﻿
+<script type="text/javascript">
+    _DatosCampo = {};
+    _DatosCampo.hdfCodInforme = '@ViewBag.hdfCodInforme';
+    _DatosCampo.hdfCodTHabilitante = '@ViewBag.hdfCodTHabilitante'; //llanos
+    _DatosCampo.hdfNumPoa = '@ViewBag.hdfNumPoa';
+    _DatosCampo.hdfCodMTipo = '@ViewBag.hdfCodMTipo';
+    _DatosCampo.hdfEstadoOrigen = '@ViewBag.hdfEstadoOrigen';
+    _DatosCampo.hdfMaderable = '@ViewBag.hdfMaderable';
+    _DatosCampo.hdfNoMaderable = '@ViewBag.hdfNoMaderable';
+
+    var cod_mtipo_nomade = "0000008,0000009,0000018";
+    var cod_mtipo_made = "0000007,0000010,0000014,0000015,0000016,0000017";
+
+    _DatosCampo.fnViewModalDatosCampo = function (asTipo) {
+        var url = "";
+
+        switch (asTipo) {
+            case "MADERABLE":
+                if (_DatosCampo.hdfCodMTipo == "0000006") {
+                    url = urlLocalSigo + "Supervision/ManInforme/_DatosCampoBosqueSeco";
+                } else {
+                    url = urlLocalSigo + "Supervision/ManInforme/_DatosCampoMaderable";
+                }
+                break;
+            case "SEMILLERO": url = urlLocalSigo + "Supervision/ManInforme/_DatosCampoSemillero"; break;
+            case "NO_MADERABLE": url = urlLocalSigo + "Supervision/ManInforme/_DatosCampoNoMaderable"; break;
+            case "TROZA_CAMPO": url = urlLocalSigo + "Supervision/ManInforme/_DatosTrozaCampo"; break;
+            case "MADERA_ASERRADA": url = urlLocalSigo + "Supervision/ManInforme/_DatosMaderaAserrada"; break;
+            case "CARRIZO_CAMPO": url = urlLocalSigo + "Supervision/ManInforme/_DatosCarrizoCampo"; break;
+            case "VERTICE_VERIFICADO": url = urlLocalSigo + "Supervision/ManInforme/_DatosVerticeVerificado"; break;
+        }
+
+        var option = { url: url, type: 'POST', datos: { asCodInforme: _DatosCampo.hdfCodInforme, aiNumPoa: _DatosCampo.hdfNumPoa }, divId: "mdlManInforme_DatosCampo" };
+        utilSigo.fnOpenModal(option, function () { }, function () {
+            var url = urlLocalSigo + "Supervision/ManInforme/GetCantidadMuestraDatosCampo";
+            var oParams = { asTipo: asTipo, asCodInforme: _DatosCampo.hdfCodInforme, aiNumPoa: _DatosCampo.hdfNumPoa };
+            var option = { url: url, datos: JSON.stringify(oParams), type: 'POST' };
+            utilSigo.fnAjax(option, function (data) {
+                if (data.success) {
+                    switch (asTipo) {
+                        case "MADERABLE":
+                            if (cod_mtipo_made.includes(_DatosCampo.hdfCodMTipo)) {
+                                _DatosCampo.frm.find("#lblDatosCampoMaderable").text("Ir Datos de Campo Maderable (Muestra: " + data.CANTIDAD + ", Datos Campo: " + data.CANTIDAD_CAMPO + ")");
+                            } else if (cod_mtipo_nomade.includes(_DatosCampo.hdfCodMTipo)) {
+                                _DatosCampo.frm.find("#lblDatosCampoMaderable").text("Ir Datos de Campo Aprovechable Maderable (Muestra: " + data.CANTIDAD + ", Datos Campo: " + data.CANTIDAD_CAMPO + ")");
+                            } else if (_DatosCampo.hdfCodMTipo == "0000006") {
+                                _DatosCampo.frm.find("#lblDatosCampoMaderable").text("Ir Datos de Campo Bosque Secos (Muestra: " + data.CANTIDAD + ", Datos Campo: " + data.CANTIDAD_CAMPO + ")");
+                            }
+                            break;
+                        case "SEMILLERO":
+                            _DatosCampo.frm.find("#lblDatosCampoSemillero").text("Ir Datos de Campo Semillero Maderable (Muestra: " + data.CANTIDAD + ", Datos Campo: " + data.CANTIDAD_CAMPO + ")");
+                            break;
+                        case "NO_MADERABLE":
+                            if (_DatosCampo.hdfCodMTipo == "0000008") {
+                                _DatosCampo.frm.find("#lblDatosCampoNoMaderable").text("Ir Datos de Campo Castaña No Maderable (Muestra Aprov.: " + data.CANTIDAD + ", Muestra Semi.:" + data.CANTIDAD_2 + ", Datos Campo Aprov.: " + data.CANTIDAD_CAMPO + ", Datos Campo Semi. " + data.CANTIDAD_CAMPO_2 + ")");
+                            } else if (_DatosCampo.hdfCodMTipo == "0000009") {
+                                _DatosCampo.frm.find("#lblDatosCampoNoMaderable").text("Ir Datos de Campo Shiringa No Maderable (Muestra Aprov.: " + data.CANTIDAD + ", Muestra Semi.:" + data.CANTIDAD_2 + ", Datos Campo Aprov.: " + data.CANTIDAD_CAMPO + ", Datos Campo Semi. " + data.CANTIDAD_CAMPO_2 + ")");
+                            } else if (_DatosCampo.hdfCodMTipo == '0000018') {
+                                _DatosCampo.frm.find("#lblDatosCampoNoMaderable").text("Ir Datos de Campo Aguaje No Maderable (Muestra Aprov.: " + data.CANTIDAD + ", Muestra Semi.:" + data.CANTIDAD_2 + ", Datos Campo Aprov.: " + data.CANTIDAD_CAMPO + ", Datos Campo Semi. " + data.CANTIDAD_CAMPO_2 + ")");
+                            }
+                            break;
+                        case "TROZA_CAMPO":
+                            _DatosCampo.frm.find("#lblDatosTrozaCampo").text("Ir Datos de Trozas en Campo (" + data.CANTIDAD_CAMPO + ")");
+                            break;
+                        case "MADERA_ASERRADA":
+                            _DatosCampo.frm.find("#lblDatosMaderaAserradaCampo").text("Ir Datos de Madera Aserrada en Campo (" + data.CANTIDAD_CAMPO + ")");
+                            break;
+                        case "CARRIZO_CAMPO":
+                            if (_DatosCampo.hdfCodMTipo == "0000020") {
+                                _DatosCampo.frm.find("#lblDatosCarrizoCampo").text("Ir Relación de Muestras Supervisadas (" + data.CANTIDAD_CAMPO + ")");
+                            }
+                            else if (_DatosCampo.hdfCodMTipo == "0000021") {
+                                _DatosCampo.frm.find("#lblDatosCarrizoCampo").text("Ir Relación de Individuos Supervisados (" + data.CANTIDAD_CAMPO + ")");
+                            }
+                            break;
+                        case "VERTICE_VERIFICADO":
+                            _DatosCampo.frm.find("#lblDatosVerticeVerifCampo").text("Ir Relación de Vértices Verificados (" + data.CANTIDAD_CAMPO + ")");
+                            break;
+                    }
+                }
+            });
+        });
+    }
+
+    _DatosCampo.fnAddEditMaderable = function (obj) {
+
+        var url = urlLocalSigo + "Supervision/ManInforme/_EspecieMaderableEdit";
+        //var option = { url: url, type: 'POST', datos: { asCodInforme: _DatosCampo.frm.find("#hdfCodInforme").val() }, divId: "mdlManInforme_EspecieCampo" };
+        var option = { url: url, type: 'POST', datos: { asCodInforme: _DatosCampo.hdfCodInforme }, divId: "mdlManInforme_EspecieCampo" };
+        utilSigo.fnOpenModal(option, function () {
+            _EspecieMaderableEdit.fnInit("");
+        });
+    }
+
+    _DatosCampo.fnAddEditSemillero = function (obj) {
+
+        var url = urlLocalSigo + "Supervision/ManInforme/_EspecieSemilleroEdit";
+        var option = { url: url, type: 'POST', datos: { asCodInforme: _DatosCampo.hdfCodInforme }, divId: "mdlManInforme_EspecieCampo" };
+        utilSigo.fnOpenModal(option, function () {
+            _EspecieSemilleroEdit.fnInit("");
+        });
+    }
+
+    _DatosCampo.fnAddEditNoMaderable = function (obj) {
+        var url = urlLocalSigo + "Supervision/ManInforme/_EspecieNoMaderableEdit";
+        var option = { url: url, type: 'POST', datos: { asCodInforme: _DatosCampo.hdfCodInforme }, divId: "mdlManInforme_EspecieCampo" };
+        utilSigo.fnOpenModal(option, function () {
+            _EspecieNoMaderableEdit.fnInit("");
+        });
+    }
+
+    _DatosCampo.fnAddEditTrozaCampo = function (obj) {
+
+        var url = urlLocalSigo + "Supervision/ManInforme/_EspecieTrozaCampoEdit";
+        var option = { url: url, type: 'POST', datos: { asCodInforme: _DatosCampo.hdfCodInforme, asCodTHabilitante: _DatosCampo.hdfCodTHabilitante, aiNumPoa: _DatosCampo.hdfNumPoa }, divId: "mdlManInforme_EspecieCampo" };
+        utilSigo.fnOpenModal(option, function () {
+            _EspecieTrozaCampoEdit.fnInit("");
+        });
+    }
+
+    _DatosCampo.fnAddEditMaderaAserrada = function (obj) {
+
+        var url = urlLocalSigo + "Supervision/ManInforme/_EspecieMaderaAserradaEdit";
+        var option = { url: url, type: 'POST', datos: { asCodInforme: _DatosCampo.hdfCodInforme, asCodTHabilitante: _DatosCampo.hdfCodTHabilitante, aiNumPoa: _DatosCampo.hdfNumPoa }, divId: "mdlManInforme_EspecieCampo" };
+        utilSigo.fnOpenModal(option, function () {
+            _EspecieMaderaAserradaEdit.fnInit("");
+        });
+    }
+
+    _DatosCampo.fnAddEditCarrizoCampo = function (obj) {
+
+        var url = urlLocalSigo + "Supervision/ManInforme/_EspecieCarrizoCampoEdit";
+        var option = { url: url, type: 'POST', datos: { asCodInforme: _DatosCampo.hdfCodInforme, aiNumPoa: _DatosCampo.hdfNumPoa, asCodMTipo: _DatosCampo.hdfCodMTipo }, divId: "mdlManInforme_EspecieCampo" };
+        utilSigo.fnOpenModal(option, function () {
+            _EspecieCarrizoCampoEdit.fnInit("");
+        });
+    }
+
+
+    _DatosCampo.fnExportDatosCampo = function (asTipo) {
+        //Set tipo exportar
+        if (asTipo == "MADERABLE") {
+            if (_DatosCampo.hdfCodMTipo == "0000006") { asTipo = "BOSQUE_SECO"; }
+        } else if (asTipo=="CARRIZO_CAMPO") {
+            if (_DatosCampo.hdfCodMTipo == "0000021") { asTipo = "PLANTA_MEDICINAL"; }
+        }
+
+        var url = urlLocalSigo + "Supervision/ManInforme/ExportarDatosCampo";
+        var oParams = { asTipo: asTipo, asCodInforme: _DatosCampo.hdfCodInforme, aiNumPoa: _DatosCampo.hdfNumPoa };
+        var option = { url: url, datos: JSON.stringify(oParams), type: 'POST' };
+        utilSigo.fnAjax(option, function (data) {
+            if (data.success) {
+                document.location = urlLocalSigo + "Archivos/Plantilla/" + data.msj;
+            }
+            else {
+                utilSigo.toastWarning("Aviso", data.msj);
+            }
+        });
+    }
+
+    _DatosCampo.fnAjustarDatosCampo = function (asTipo) {
+        //Set tipo ajuste
+        if (asTipo == "MADERABLE") {
+            if (_DatosCampo.hdfCodMTipo == "0000006") { asTipo = "BOSQUE_SECO"; }
+        }
+
+        var url = urlLocalSigo + "Supervision/ManInforme/AjustarDatosCampo";
+        var oParams = { asTipo: asTipo, asCodInforme: _DatosCampo.hdfCodInforme, aiNumPoa: _DatosCampo.hdfNumPoa };
+        var option = { url: url, datos: JSON.stringify(oParams), type: 'POST' };
+        utilSigo.fnAjax(option, function (data) {
+            if (data.success) {
+                switch (asTipo) {
+                    case "MADERABLE":
+                    case "BOSQUE_SECO":
+                        if (cod_mtipo_made.includes(_DatosCampo.hdfCodMTipo)) {
+                            _DatosCampo.frm.find("#lblDatosCampoMaderable").text("Ir Datos de Campo Maderable (Muestra: " + data.CANTIDAD + ", Datos Campo: " + data.CANTIDAD_CAMPO + ")");
+                        } else if (cod_mtipo_nomade.includes(_DatosCampo.hdfCodMTipo)) {
+                            _DatosCampo.frm.find("#lblDatosCampoMaderable").text("Ir Datos de Campo Aprovechable Maderable (Muestra: " + data.CANTIDAD + ", Datos Campo: " + data.CANTIDAD_CAMPO + ")");
+                        } else if (_DatosCampo.hdfCodMTipo == "0000006") {
+                            _DatosCampo.frm.find("#lblDatosCampoMaderable").text("Ir Datos de Campo Bosque Secos (Muestra: " + data.CANTIDAD + ", Datos Campo: " + data.CANTIDAD_CAMPO + ")");
+                        }
+                        break;
+                    case "SEMILLERO":
+                        _DatosCampo.frm.find("#lblDatosCampoSemillero").text("Ir Datos de Campo Semillero Maderable (Muestra: " + data.CANTIDAD + ", Datos Campo: " + data.CANTIDAD_CAMPO + ")");
+                        break;
+                    case "NO_MADERABLE":
+                        if (_DatosCampo.hdfCodMTipo == "0000008") {
+                            _DatosCampo.frm.find("#lblDatosCampoNoMaderable").text("Ir Datos de Campo Castaña No Maderable (Muestra Aprov.: " + data.CANTIDAD + ", Muestra Semi.:" + data.CANTIDAD_2 + ", Datos Campo Aprov.: " + data.CANTIDAD_CAMPO + ", Datos Campo Semi. " + data.CANTIDAD_CAMPO_2 + ")");
+                        } else if (_DatosCampo.hdfCodMTipo == "0000009") {
+                            _DatosCampo.frm.find("#lblDatosCampoNoMaderable").text("Ir Datos de Campo Shiringa No Maderable (Muestra Aprov.: " + data.CANTIDAD + ", Muestra Semi.:" + data.CANTIDAD_2 + ", Datos Campo Aprov.: " + data.CANTIDAD_CAMPO + ", Datos Campo Semi. " + data.CANTIDAD_CAMPO_2 + ")");
+                        } else if (_DatosCampo.hdfCodMTipo == '0000018') {
+                            _DatosCampo.frm.find("#lblDatosCampoNoMaderable").text("Ir Datos de Campo Aguaje No Maderable (Muestra Aprov.: " + data.CANTIDAD + ", Muestra Semi.:" + data.CANTIDAD_2 + ", Datos Campo Aprov.: " + data.CANTIDAD_CAMPO + ", Datos Campo Semi. " + data.CANTIDAD_CAMPO_2 + ")");
+                        }
+                        break;
+                }
+                utilSigo.toastSuccess("Éxito", data.msj);
+            }
+            else {
+                utilSigo.toastWarning("Aviso", data.msj);
+            }
+        });
+    }
+
+    _DatosCampo.fnInit = function () {
+        //Mostrar las opciones de datos de campo de devolución troza, tocón y árbol
+        _DatosCampo.frm.find("#dvDatosCampoDevolTroza").hide();
+        _DatosCampo.frm.find("#dvDatosCampoDevolTocon").hide();
+        _DatosCampo.frm.find("#dvDatosCampoDevolArbol").hide();
+        if (_DatosCampo.hdfEstadoOrigen == 'DM') {
+            _DatosCampo.frm.find("#lblDatosCampoDevolTroza").text("Ir Datos de Campo Devolución Troza (" + '@ViewBag.hdfDatosDevolTroza' + ")");
+            _DatosCampo.frm.find("#dvDatosCampoDevolTroza").show();
+            _DatosCampo.frm.find("#lblDatosCampoDevolTocon").text("Ir Datos de Campo Devolución Tocón (" + '@ViewBag.hdfDatosDevolTocon' + ")");
+            _DatosCampo.frm.find("#dvDatosCampoDevolTocon").show();
+            _DatosCampo.frm.find("#lblDatosCampoDevolArbol").text("Ir Datos de Campo Devolución Árbol (" + '@ViewBag.hdfDatosDevolArbol' + ")");
+            _DatosCampo.frm.find("#dvDatosCampoDevolArbol").show();
+        } else {
+            //Mostrar opción datos de campo maderable, semillero, no maderable
+            _DatosCampo.frm.find("#dvDatosCampoMaderable").hide();
+            _DatosCampo.frm.find("#dvDatosCampoSemillero").hide();
+            _DatosCampo.frm.find("#dvDatosCampoNoMaderable").hide();
+            if (cod_mtipo_made.includes(_DatosCampo.hdfCodMTipo)) {
+                _DatosCampo.frm.find("#lblDatosCampoMaderable").text("Ir Datos de Campo Maderable (Muestra: " + '@ViewBag.hdfMuestraMade' + ", Datos Campo: " + '@ViewBag.hdfDatosCampoMade' + ")");
+                _DatosCampo.frm.find("#dvDatosCampoMaderable").show();
+                _DatosCampo.frm.find("#lblDatosCampoSemillero").text("Ir Datos de Campo Semillero Maderable (Muestra: " + '@ViewBag.hdfMuestraSemi' + ", Datos Campo: " + '@ViewBag.hdfDatosCampoSemi' + ")");
+                _DatosCampo.frm.find("#dvDatosCampoSemillero").show();
+
+                if (_DatosCampo.hdfNoMaderable == 'True') {
+                    _DatosCampo.frm.find("#lblDatosCampoNoMaderable").text("Ir Datos de Campo No Maderable (Muestra Aprov.: " + '@ViewBag.hdfMuestraNoMade' + ", Muestra Semi.:" + '@ViewBag.hdfMuestraSemiNoMade' + ", Datos Campo Aprov.: " + '@ViewBag.hdfDatosNoMade' + ", Datos Campo Semi. " + '@ViewBag.hdfDatosSemiNoMade' + ")");
+                    _DatosCampo.frm.find("#dvDatosCampoNoMaderable").show();
+                }
+            } else if (cod_mtipo_nomade.includes(_DatosCampo.hdfCodMTipo)) {
+                _DatosCampo.frm.find("#lblDatosCampoMaderable").text("Ir Datos de Campo Aprovechable Maderable (Muestra: " + '@ViewBag.hdfMuestraMade' + ", Datos Campo: " + '@ViewBag.hdfDatosCampoMade' + ")");
+                _DatosCampo.frm.find("#dvDatosCampoMaderable").show();
+                _DatosCampo.frm.find("#lblDatosCampoSemillero").text("Ir Datos de Campo Semillero Maderable (Muestra: " + '@ViewBag.hdfMuestraSemi' + ", Datos Campo: " + '@ViewBag.hdfDatosCampoSemi' + ")");
+                _DatosCampo.frm.find("#dvDatosCampoSemillero").show();
+
+                if (_DatosCampo.hdfCodMTipo == "0000008") {
+                    _DatosCampo.frm.find("#lblDatosCampoNoMaderable").text("Ir Datos de Campo Castaña No Maderable (Muestra Aprov.: " + '@ViewBag.hdfMuestraNoMade' + ", Muestra Semi.:" + '@ViewBag.hdfMuestraSemiNoMade' + ", Datos Campo Aprov.: " + '@ViewBag.hdfDatosNoMade' + ", Datos Campo Semi. " + '@ViewBag.hdfDatosSemiNoMade' + ")");
+                } else if (_DatosCampo.hdfCodMTipo == "0000009") {
+                    _DatosCampo.frm.find("#lblDatosCampoNoMaderable").text("Ir Datos de Campo Shiringa No Maderable (Muestra Aprov.: " + '@ViewBag.hdfMuestraNoMade' + ", Muestra Semi.:" + '@ViewBag.hdfMuestraSemiNoMade' + ", Datos Campo Aprov.: " + '@ViewBag.hdfDatosNoMade' + ", Datos Campo Semi. " + '@ViewBag.hdfDatosSemiNoMade' + ")");
+                } else if (_DatosCampo.hdfCodMTipo == '0000018') {
+                    _DatosCampo.frm.find("#lblDatosCampoNoMaderable").text("Ir Datos de Campo Aguaje No Maderable (Muestra Aprov.: " + '@ViewBag.hdfMuestraNoMade' + ", Muestra Semi.:" + '@ViewBag.hdfMuestraSemiNoMade' + ", Datos Campo Aprov.: " + '@ViewBag.hdfDatosNoMade' + ", Datos Campo Semi. " + '@ViewBag.hdfDatosSemiNoMade' + ")");
+                }
+                _DatosCampo.frm.find("#dvDatosCampoNoMaderable").show();
+            } else if (_DatosCampo.hdfCodMTipo == "0000006") {
+                _DatosCampo.frm.find("#lblDatosCampoMaderable").text("Ir Datos de Campo Bosque Secos (Muestra: " + '@ViewBag.hdfMuestraMade' + ", Datos Campo: " + '@ViewBag.hdfDatosCampoMade' + ")");
+                _DatosCampo.frm.find("#dvDatosCampoMaderable").show();
+                _DatosCampo.frm.find("#lblDatosCampoSemillero").text("Ir Datos de Campo Semillero Maderable (Muestra: " + '@ViewBag.hdfMuestraSemi' + ", Datos Campo: " + '@ViewBag.hdfDatosCampoSemi' + ")");
+                _DatosCampo.frm.find("#dvDatosCampoSemillero").show();
+            }
+            //Mostrar opción datos carrizo, planta medicinal y vértices verificados
+            _DatosCampo.frm.find("#dvDatosCarrizoCampo").hide();
+            _DatosCampo.frm.find("#dvDatosVerticeVerifCampo").hide();
+            if (_DatosCampo.hdfCodMTipo == "0000020" || _DatosCampo.hdfCodMTipo == "0000021") {
+                if (_DatosCampo.hdfCodMTipo == "0000020") {
+                    _DatosCampo.frm.find("#lblDatosCarrizoCampo").text("Ir Relación de Muestras Supervisadas (" + '@ViewBag.hdfDatosCarrizoCampo' + ")");
+                }
+                else if (_DatosCampo.hdfCodMTipo == "0000021") {
+                    _DatosCampo.frm.find("#lblDatosCarrizoCampo").text("Ir Relación de Individuos Supervisados (" + '@ViewBag.hdfDatosCarrizoCampo' + ")");
+                }
+                _DatosCampo.frm.find("#dvDatosCarrizoCampo").show();
+                _DatosCampo.frm.find("#lblDatosVerticeVerifCampo").text("Ir Relación de Vértices Verificados (" + '@ViewBag.hdfDatosVerticeVerifCampo' + ")");
+                _DatosCampo.frm.find("#dvDatosVerticeVerifCampo").show();
+            }
+
+            _DatosCampo.frm.find("#lblDatosTrozaCampo").text("Ir Datos de Trozas en Campo (" + '@ViewBag.hdfDatosTrozaCampo' + ")");
+            _DatosCampo.frm.find("#lblDatosMaderaAserradaCampo").text("Ir Datos de Madera Aserrada en Campo (" + '@ViewBag.hdfDatosMaderaAserradaCampo' + ")");
+        }
+    }
+
+    $(document).ready(function () {
+        _DatosCampo.frm = $("#frmItemDatosCampo");
+
+        _DatosCampo.fnInit();
+    });
+</script>
+
+<div id="frmItemDatosCampo">
+    <div id="dvDatosCampoMaderable" class="form-row" style="display:none;">
+        <div class="form-group col-md-12" style="margin-bottom:5px;">
+            <div class="alert alert-info" role="alert" style="width:100%;padding:4px;margin-bottom:0px;">
+                <a href="javascript:void(0)" onclick="_DatosCampo.fnViewModalDatosCampo('MADERABLE')" style="text-decoration:none;"><i class="fa mx-2 fa-lg fa-search-plus"></i><span id="lblDatosCampoMaderable">Ir Datos Campo Maderable</span></a>
+                <a href="javascript:void(0)" onclick="_DatosCampo.fnAjustarDatosCampo('MADERABLE')" style="text-decoration:none;" data-toggle="tooltip" data-placement="top" title="Ajustar las muestras seleccionadas a los datos de campo"><i class="fa mx-2 fa-lg fa-gears"></i></a>
+                <i class="fa mx-2 fa-lg fa-exclamation-triangle" data-toggle="tooltip" data-placement="top" title="Contiene los datos de campo de todos los planes de manejo supervisados"></i>
+
+                @*llanos*@
+                @*Llama a modal de registro*@
+                @*<a href="javascript:void(0)" onclick="_DatosCampo.fnAddEditMaderable('this')" style="text-decoration:none;" title="Registro de Datos"><i class="fa mx-2 fa-lg fa-plus-square-o"></i><span id="lblDatosCampoMaderable">Registro de Datos</span></a>*@
+                <a href="javascript:void(0)" onclick="_DatosCampo.fnAddEditMaderable('this')" style="text-decoration:none;" data-toggle="tooltip" data-placement="top"><i class="fa mx-2 fa-lg fa-plus-square-o" data-toggle="tooltip" data-placement="top" title="Registro de Datos"></i></a>
+
+
+                <a href="javascript:void(0)" onclick="_DatosCampo.fnExportDatosCampo('MADERABLE')" style="text-decoration:none; float:right;" data-toggle="tooltip" data-placement="top" title="Descargar datos de campo finalizados"><i class="fa mx-2 fa-lg fa-download"></i></a>
+            </div>
+        </div>
+    </div>
+    <div id="dvDatosCampoSemillero" class="form-row" style="display:none;">
+        <div class="form-group col-md-12" style="margin-bottom:5px;">
+            <div class="alert alert-info" role="alert" style="width:100%;padding:4px;margin-bottom:0px;">
+                <a href="javascript:void(0)" onclick="_DatosCampo.fnViewModalDatosCampo('SEMILLERO')" style="text-decoration:none;"><i class="fa mx-2 fa-lg fa-search-plus"></i><span id="lblDatosCampoSemillero">Ir Datos Campo Semillero</span></a>
+                <a href="javascript:void(0)" onclick="_DatosCampo.fnAjustarDatosCampo('SEMILLERO')" style="text-decoration:none;" data-toggle="tooltip" data-placement="top" title="Ajustar las muestras seleccionadas de semilleros a los datos de campo"><i class="fa mx-2 fa-lg fa-gears"></i></a>
+                <i class="fa mx-2 fa-lg fa-exclamation-triangle" data-toggle="tooltip" data-placement="top" title="Contiene los datos de campo de todos los planes de manejo supervisados"></i>
+
+                @*llanos*@
+                <a href="javascript:void(0)" onclick="_DatosCampo.fnAddEditSemillero('this')" style="text-decoration:none;" data-toggle="tooltip" data-placement="top"><i class="fa mx-2 fa-lg fa-plus-square-o" data-toggle="tooltip" data-placement="top" title="Registro de Datos"></i></a>
+
+                <a href="javascript:void(0)" onclick="_DatosCampo.fnExportDatosCampo('SEMILLERO')" style="text-decoration:none; float:right;" data-toggle="tooltip" data-placement="top" title="Descargar datos de campo finalizados de Semillero Maderable"><i class="fa mx-2 fa-lg fa-download"></i></a>
+            </div>
+        </div>
+    </div>
+    <div id="dvDatosCampoNoMaderable" class="form-row" style="display:none;">
+        <div class="form-group col-md-12" style="margin-bottom:5px;">
+            <div class="alert alert-info" role="alert" style="width:100%;padding:4px;margin-bottom:0px;">
+                <a href="javascript:void(0)" onclick="_DatosCampo.fnViewModalDatosCampo('NO_MADERABLE')" style="text-decoration:none;"><i class="fa mx-2 fa-lg fa-search-plus"></i><span id="lblDatosCampoNoMaderable">Ir Datos Campo No Maderable</span></a>
+                <a href="javascript:void(0)" onclick="_DatosCampo.fnAjustarDatosCampo('NO_MADERABLE')" style="text-decoration:none;" data-toggle="tooltip" data-placement="top" title="Ajustar las muestras seleccionadas a los datos de campo No Maderables"><i class="fa mx-2 fa-lg fa-gears"></i></a>
+                <i class="fa mx-2 fa-lg fa-exclamation-triangle" data-toggle="tooltip" data-placement="top" title="Contiene los datos de campo de todos los planes de manejo supervisados"></i>
+
+                <a href="javascript:void(0)" onclick="_DatosCampo.fnAddEditNoMaderable('this')" style="text-decoration:none;" data-toggle="tooltip" data-placement="top"><i class="fa mx-2 fa-lg fa-plus-square-o" data-toggle="tooltip" data-placement="top" title="Registro de Datos"></i></a>
+
+                <a href="javascript:void(0)" onclick="_DatosCampo.fnExportDatosCampo('NO_MADERABLE')" style="text-decoration:none; float:right;" data-toggle="tooltip" data-placement="top" title="Descargar datos de campo finalizados de No Maderable"><i class="fa mx-2 fa-lg fa-download"></i></a>
+            </div>
+        </div>
+    </div>
+    <div id="dvDatosCampoDevolTroza" class="form-row" style="display:none;">
+        <div class="form-group col-md-12" style="margin-bottom:5px;">
+            <div class="alert alert-info" role="alert" style="width:100%;padding:4px;margin-bottom:0px;">
+                <a href="javascript:void(0)" style="text-decoration:none;"><i class="fa mx-2 fa-lg fa-search-plus"></i><span id="lblDatosCampoDevolTroza">Ir Datos de Campo Devolución Troza</span></a>                
+                <a href="javascript:void(0)" style="text-decoration:none; float:right;" data-toggle="tooltip" data-placement="top" title="Descargar datos de campo finalizados de Devolución Troza"><i class="fa mx-2 fa-lg fa-download"></i></a>
+            </div>
+        </div>
+    </div>
+    <div id="dvDatosCampoDevolTocon" class="form-row" style="display:none;">
+        <div class="form-group col-md-12" style="margin-bottom:5px;">
+            <div class="alert alert-info" role="alert" style="width:100%;padding:4px;margin-bottom:0px;">
+                <a href="javascript:void(0)" style="text-decoration:none;"><i class="fa mx-2 fa-lg fa-search-plus"></i><span id="lblDatosCampoDevolTocon">Ir Datos de Campo Devolución Tocón</span></a>
+                <a href="javascript:void(0)" style="text-decoration:none; float:right;" data-toggle="tooltip" data-placement="top" title="Descargar datos de campo finalizados de Devolución Tocón"><i class="fa mx-2 fa-lg fa-download"></i></a>
+            </div>
+        </div>
+    </div>
+    <div id="dvDatosCampoDevolArbol" class="form-row" style="display:none;">
+        <div class="form-group col-md-12" style="margin-bottom:5px;">
+            <div class="alert alert-info" role="alert" style="width:100%;padding:4px;margin-bottom:0px;">
+                <a href="javascript:void(0)" style="text-decoration:none;"><i class="fa mx-2 fa-lg fa-search-plus"></i><span id="lblDatosCampoDevolArbol">Ir Datos de Campo Devolución Árbol</span></a>
+                <a href="javascript:void(0)" style="text-decoration:none; float:right;" data-toggle="tooltip" data-placement="top" title="Descargar datos de campo finalizados de Devolución Árbol"><i class="fa mx-2 fa-lg fa-download"></i></a>
+            </div>
+        </div>
+    </div>
+    <div id="dvDatosCarrizoCampo" class="form-row" style="display:none;">
+        <div class="form-group col-md-12" style="margin-bottom:5px;">
+            <div class="alert alert-info" role="alert" style="width:100%;padding:4px;margin-bottom:0px;">
+                <a href="javascript:void(0)" onclick="_DatosCampo.fnViewModalDatosCampo('CARRIZO_CAMPO')" style="text-decoration:none;"><i class="fa mx-2 fa-lg fa-search-plus"></i><span id="lblDatosCarrizoCampo">Ir Relación de Muestras Supervisadas</span></a>
+
+                @*llanos*@
+                <a href="javascript:void(0)" onclick="_DatosCampo.fnAddEditCarrizoCampo('this')" style="text-decoration:none;" data-toggle="tooltip" data-placement="top"><i class="fa mx-2 fa-lg fa-plus-square-o" data-toggle="tooltip" data-placement="top" title="Registro de Datos"></i></a>
+
+                <a href="javascript:void(0)" onclick="_DatosCampo.fnExportDatosCampo('CARRIZO_CAMPO')" style="text-decoration:none; float:right;" data-toggle="tooltip" data-placement="top" title="Descargar datos de muestras supervisadas"><i class="fa mx-2 fa-lg fa-download"></i></a>
+            </div>
+        </div>
+    </div>
+    <div id="dvDatosVerticeVerifCampo" class="form-row" style="display:none;">
+        <div class="form-group col-md-12" style="margin-bottom:5px;">
+            <div class="alert alert-info" role="alert" style="width:100%;padding:4px;margin-bottom:0px;">
+                <a href="javascript:void(0)" onclick="_DatosCampo.fnViewModalDatosCampo('VERTICE_VERIFICADO')" style="text-decoration:none;"><i class="fa mx-2 fa-lg fa-search-plus"></i><span id="lblDatosVerticeVerifCampo">Ir Relación de Vértices Verificados</span></a>
+                <a href="javascript:void(0)" onclick="_DatosCampo.fnExportDatosCampo('VERTICE_VERIFICADO')" style="text-decoration:none; float:right;" data-toggle="tooltip" data-placement="top" title="Descargar datos de vértices verificados"><i class="fa mx-2 fa-lg fa-download"></i></a>
+            </div>
+        </div>
+    </div>
+    <div id="dvDatosTrozaCampo" class="form-row">
+        <div class="form-group col-md-12" style="margin-bottom:5px;">
+            <div class="alert alert-info" role="alert" style="width:100%;padding:4px;margin-bottom:0px;">
+                <a href="javascript:void(0)" onclick="_DatosCampo.fnViewModalDatosCampo('TROZA_CAMPO')" style="text-decoration:none;"><i class="fa mx-2 fa-lg fa-search-plus"></i><span id="lblDatosTrozaCampo">Ir Datos de Trozas en Campo</span></a>
+
+                @*llanos*@
+                <a href="javascript:void(0)" onclick="_DatosCampo.fnAddEditTrozaCampo('this')" style="text-decoration:none;" data-toggle="tooltip" data-placement="top"><i class="fa mx-2 fa-lg fa-plus-square-o" data-toggle="tooltip" data-placement="top" title="Registro de Datos"></i></a>
+
+                <a href="javascript:void(0)" onclick="_DatosCampo.fnExportDatosCampo('TROZA_CAMPO')" style="text-decoration:none; float:right;" data-toggle="tooltip" data-placement="top" title="Descargar datos de Trozas en campo"><i class="fa mx-2 fa-lg fa-download"></i></a>
+            </div>
+        </div>
+    </div>
+    <div id="dvDatosMaderaAserradaCampo" class="form-row">
+        <div class="form-group col-md-12" style="margin-bottom:5px;">
+            <div class="alert alert-info" role="alert" style="width:100%;padding:4px;margin-bottom:0px;">
+                <a href="javascript:void(0)" onclick="_DatosCampo.fnViewModalDatosCampo('MADERA_ASERRADA')" style="text-decoration:none;"><i class="fa mx-2 fa-lg fa-search-plus"></i><span id="lblDatosMaderaAserradaCampo">Ir Datos de Madera Aserrada en Campo</span></a>
+
+                @*llanos*@
+                <a href="javascript:void(0)" onclick="_DatosCampo.fnAddEditMaderaAserrada('this')" style="text-decoration:none;" data-toggle="tooltip" data-placement="top"><i class="fa mx-2 fa-lg fa-plus-square-o" data-toggle="tooltip" data-placement="top" title="Registro de Datos"></i></a>                
+
+                <a href="javascript:void(0)" onclick="_DatosCampo.fnExportDatosCampo('MADERA_ASERRADA')" style="text-decoration:none; float:right;" data-toggle="tooltip" data-placement="top" title="Descargar datos de Madera Aserrada en campo"><i class="fa mx-2 fa-lg fa-download"></i></a>
+            </div>
+        </div>
+    </div>
+</div>

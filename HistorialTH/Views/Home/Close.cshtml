@@ -1,0 +1,9 @@
+﻿@using HistorialTH;
+@Model dynamic
+<body>
+   @if (Model != null)
+   {
+       var item = Model;
+       <div>@item.mensajeError</div>
+   }
+</body>

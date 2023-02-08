@@ -1,0 +1,228 @@
+﻿@model CapaEntidad.ViewModel.VM_InformeLegal
+@{
+    ViewBag.Title = "AddEdit";
+    Layout = "~/Views/Shared/_LayoutMain.cshtml";
+}
+<script src="~/Areas/Fiscalizacion/js/InformeLegal/AddEdit.js"></script>
+@section scripts{
+    <script>
+        "use strict"; var rol = '';
+    $(document).ready(function () {
+        //Validamos el rol del usuario
+        utilSigo.ValidaRol('@ViewBag.VAliasRol', 'btnRegistrar', '@Model.vmControlCalidad.ddlIndicadorId');
+    });
+    </script>
+}
+<div class="container-fluid">
+    <div class="card">
+        <div class="card-header text-right">
+            Informe Legal
+        </div>
+        <div class="card-body">
+            <div class="card">
+                <div class="card-header text-small">
+                    <a id="btnRegistrar" href="javascript:void(0)" style="cursor:pointer;" data-toggle="tooltip" data-placement="top" title="Guardar" onclick="ManInfLegal_AddEdit.fnSaveForm()"><i class="fa mx-2 fa-lg fa-save"></i></a>
+                    <a style="cursor:pointer;" data-toggle="tooltip" data-placement="top" title="Regresar" onclick="ManInfLegal_AddEdit.regresar()"><i class="fa mx-2 fa-lg fa-reply"></i></a>
+                    @Model.lblTituloEstado
+                </div>
+                <div class="card-body">
+                    <form id="frmInfLegalRegistro">
+                        <!-- form-->
+                        @Html.HiddenFor(m => m.hdfCodInfLegal)
+                        @Html.HiddenFor(m => m.hdfCodTipoIlegal)
+                        @Html.HiddenFor(m => m.hdfCodProfesional)
+                        @Html.HiddenFor(m => m.RegEstado)
+
+                        <!--para el tipo antes del PAU-->
+                        @Html.HiddenFor(m => m.hdfCodigoIlegalAlerta)
+
+
+                        <ul class="nav nav-tabs" id="myTab" role="tablist">
+                            <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#navEstado" role="tab" aria-controls="home" aria-selected="true">Estado Situacional</a></li>
+                            <li class="nav-item"><a class="nav-link active" data-toggle="tab" href="#navDatos" role="tab" aria-controls="home" aria-selected="true">Datos Generales</a></li>
+                            @if (Model.hdfCodTipoIlegal == "0000001")
+                            {
+                                <li id="idNavRecomendaciones" class="nav-item"><a class="nav-link" data-toggle="tab" href="#navRecomendacion" role="tab" aria-controls="home" aria-selected="true">Recomendaciones</a></li>
+                            }
+                            @if (Model.hdfCodTipoIlegal == "0000129")
+                            {
+                                <!--recomendaciones antes del PAU-->
+                                <li id="idNavRecomendacionesAP" class="nav-item"><a class="nav-link" data-toggle="tab" href="#navRecomendacionAP" role="tab" aria-controls="home" aria-selected="true">Recomendaciones</a></li>
+                            }
+                            @if (Model.hdfCodTipoIlegal == "0000004")
+                            {
+                                <!--Evaluacion de recurso de reconsideracion-->
+                                <li id="idNavMotivo" class="nav-item"><a class="nav-link" data-toggle="tab" href="#navMotivo" role="tab" aria-controls="home" aria-selected="true">Motivo</a></li>
+                            }
+                            @if (Model.hdfCodTipoIlegal == "0000002" || Model.hdfCodTipoIlegal == "0000107" || Model.hdfCodTipoIlegal == "0000108")
+                            {
+                                <!--final de instrccion -->
+                                <li id="idNavFinalInst" class="nav-item"><a class="nav-link" data-toggle="tab" href="#navFinalInst" role="tab" aria-controls="home" aria-selected="true">Infracciones acreditadas</a></li>
+                            }
+                            @if (Model.hdfCodTipoIlegal == "0000005")
+                            {
+                                <!--otros-->
+                                <li id="idNavOtros" class="nav-item"><a class="nav-link" data-toggle="tab" href="#navOtros" role="tab" aria-controls="home" aria-selected="true">Otros</a></li>
+                            }
+                            <li id="idNavObservaciones" class="nav-item"><a class="nav-link" data-toggle="tab" href="#navObservacion" role="tab" aria-controls="home" aria-selected="true">Observaciones</a></li>
+                        </ul>
+                        <div class="tab-content">
+                            <div class="tab-pane fade show" id="navEstado" role="tabpanel" aria-labelledby="nav-home-tab">
+                                @{ Html.RenderAction("_ControlCalidad", "Controles", new { area = "GENERAL", dto = Model.vmControlCalidad }); }
+                            </div>
+                            <div class="tab-pane fade show active" id="navDatos" role="tabpanel" aria-labelledby="nav-home-tab">
+                                <div class="card">
+                                    <div class="form-row">
+                                        <div class="form-group col-md-12">
+                                            <label for="lblTipoILegal" class="text-small">Tipo de Informe Legal</label>
+                                            @Html.TextBoxFor(m => m.txtTipoInfLegal, new { @class = "form-control form-control-sm", disabled = "disabled" })
+                                        </div>
+
+                                    </div>
+                                    <!---->
+                                    <div class="form-row">
+                                        <div class="form-group col-md-4">
+                                            <label for="txtProfesional" class="text-small texto-recortado">Profesional responsable de la evaluación legal<i class="fa fa-cog fa-spin text-danger" id="iconRLegalCodigo" style="display:none;" data-toggle="tooltip" data-placement="top" title="Seleccione Representante legal"></i></label>
+                                            <div class="input-group">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text"><i class="fa fa-plus" style="cursor:pointer;" onclick="ManInfLegal_AddEdit.fnBuscarPersona('PROFESIONAL', 'N');" data-toggle="tooltip" data-placement="top" title="Agregar"></i></span>
+                                                </div>
+                                                @Html.EditorFor(m => m.txtProfesional, new { htmlAttributes = new { @class = "form-control form-control-sm", @disabled = "disabled" } })
+                                                <input type="hidden" id="hdTipoProfesional" />
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group col-md-4">
+                                            <label for="txtNumLegal" class="text-small">N° de Informe Legal</label>
+                                            @Html.EditorFor(m => m.txtNumIlegal, new { htmlAttributes = new { @class = "form-control form-control-sm" } })
+                                        </div>
+
+                                        <div class="form-group col-md-4">
+                                            <label for="txtFechaLegal" class="text-small">Fecha de informe legal</label>
+                                            @Html.EditorFor(m => m.txtFechaLegal, new { htmlAttributes = new { @class = "form-control form-control-sm", placeholder = "dd/mm/yyyy", title = "la fecha a ingresar debe ser en el formato dd/mm/yyyy", maxlength = "10" } })
+                                        </div>
+                                    </div>
+
+                                    <div class="form-row">
+                                        <div class="form-group col-md-4">
+                                            <label for="chkPublicar" class="text-small">Publicar en el observatorio</label>
+                                            <div style="margin-top:7px;">
+                                                <div class="form-check form-check-inline">
+                                                    @Html.CheckBoxFor(m => m.chkPublicar, new { @class = "form-check-input", style = "width:15px;height:16px;" })
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group col-md-4">
+                                        </div>
+                                        <div class="form-group col-md-4">
+                                        </div>
+                                    </div>
+
+                                    <div class="form-row">
+                                        <div class="form-group col-md-4">
+                                            <label for="txtPresentoProyecto" class="text-small">Presento proyecto RD</label>
+                                            <div style="margin-top:7px;">
+                                                <div class="form-check form-check-inline">
+                                                    @Html.CheckBoxFor(m => m.txtPresentoProyecto, new { @class = "form-check-input", style = "width:15px;height:16px;" })
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group col-md-4">
+                                            <label for="txtInfDirectoral" class="text-small">Informe Directoral</label>
+                                            <div style="margin-top:7px;">
+                                                <div class="form-check form-check-inline">
+                                                    @Html.CheckBoxFor(m => m.txtInfDirectoral, new { @class = "form-check-input", style = "width:15px;height:16px;" })
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group col-md-4">
+                                            <label for="txtInfSubDirectoral" class="text-small">Informe Sub Directoral</label>
+                                            <div style="margin-top:7px;">
+                                                <div class="form-check form-check-inline">
+                                                    @Html.CheckBoxFor(m => m.txtInfSubDirectoral, new { @class = "form-check-input", style = "width:15px;height:16px;" })
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div id="dvRenderListInforme" class="form-row" style="margin-bottom:10px;">
+                                        <div class="col-md-12">
+                                            @Html.Partial("~/Areas/Fiscalizacion/Views/InformeLegal/Shared/_renderListInforme.cshtml", Model)
+                                        </div>
+                                    </div>
+
+                                    <div class="card-header text-small">Archivos Cargados en el SIADO</div>
+                                    <div class="card-body">
+                                        <div class="form-row">
+                                            @{Html.RenderAction("_IntegracionSIADO", "Controles", new { area = "GENERAL", asCriterio = "SUBTIP_TITDOCSIGO", asSubCriterio = "0009", asValor = Model.hdfCodInfLegal });}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            @if (Model.hdfCodTipoIlegal == "0000001")
+                            {
+                                <!--Evaluación del Informe de Supervisión/Suspensión 0000001-->
+                                <div class="tab-pane fade show" id="navRecomendacion" role="tabpanel" aria-labelledby="nav-home-tab">
+                                    <div class="card">
+                                        @Html.Partial("~/Areas/Fiscalizacion/Views/InformeLegal/Shared/_recomendaciones.cshtml", Model)
+                                    </div>
+                                </div>
+                            }
+                            @if (Model.hdfCodTipoIlegal == "0000129")
+                            {
+                                <!--Aplicación de Medidas Cautelares (Antes del PAU) 0000129-->
+                                <div class="tab-pane fade show" id="navRecomendacionAP" role="tabpanel" aria-labelledby="nav-home-tab">
+                                    <div class="card">
+                                        @Html.Partial("~/Areas/Fiscalizacion/Views/InformeLegal/Shared/_recomendacionesAP.cshtml", Model)
+                                    </div>
+                                </div>
+                            }
+                            @if (Model.hdfCodTipoIlegal == "0000004")
+                            {
+                                <!--Recurso de reconsideracion -->
+                                <div class="tab-pane fade show" id="navMotivo" role="tabpanel" aria-labelledby="nav-home-tab">
+                                    <div class="card">
+                                        @Html.Partial("~/Areas/Fiscalizacion/Views/InformeLegal/Shared/_motivoRR.cshtml", Model)
+                                    </div>
+                                </div>
+                            }
+                            @if (Model.hdfCodTipoIlegal == "0000002" || Model.hdfCodTipoIlegal == "0000107" || Model.hdfCodTipoIlegal == "0000108")
+                            {<!--final de instruccion -->
+                                <div class="tab-pane fade show" id="navFinalInst" role="tabpanel" aria-labelledby="nav-home-tab">
+                                    <div class="card">
+                                        @Html.Partial("~/Areas/Fiscalizacion/Views/InformeLegal/Shared/_finalInstruccion.cshtml", Model)
+                                    </div>
+                                </div>
+                            }
+                            @if (Model.hdfCodTipoIlegal == "0000005")
+                            {<!--Otros-->
+                                <div class="tab-pane fade show" id="navOtros" role="tabpanel" aria-labelledby="nav-home-tab">
+                                    <div class="card">
+                                        @Html.Partial("~/Areas/Fiscalizacion/Views/InformeLegal/Shared/_otros.cshtml", Model)
+                                    </div>
+                                </div>
+                            }
+
+                            <div class="tab-pane fade show" id="navObservacion" role="tabpanel" aria-labelledby="nav-home-tab">
+                                <div class="card">
+                                    <div class="form-row">
+                                        <div class="form-group col-md-12">
+                                            <label for="txtObservaciones" class="text-small">Observaciones</label>
+                                            @Html.TextAreaFor(m => m.txtObservaciones, 3, 1, new { @class = "form-control form-control-sm" })
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@* Para el control genérico de personas *@
+<div class="modal fade hide" id="mdlBuscarPersona" role="dialog"></div>
+<div class="modal fade" id="modalAddEditPersona" tabindex="-1" role="dialog"></div>
+<div class="modal fade hide" id="personaUbigeoModal" role="dialog"></

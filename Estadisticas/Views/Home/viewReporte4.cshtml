@@ -1,0 +1,126 @@
+﻿
+@{
+    ViewBag.Title = "viewReporte4";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<link href="~/Styles/Proyectos/reporteEstadisticas.min.css" rel="stylesheet" />
+
+<script>
+    $(document).ready(function () {
+        $("#btnReporte").on("click", function () {
+            if (ItemValidarFiltrosBusqueda()) {
+                $.ajax({
+                    url: '@Url.Action("generarReporte4", "Estadisticos")',
+                    type: 'POST',
+                    dataType: 'json',
+                    contentType: 'application/json; charset=utf-8',
+                    data: JSON.stringify({
+                        'busModalidad': ObtenerListaModalidad(),
+                        'busRegion': ObtenerListaRegiones(),
+                        'busLinea': ObtenerListaLinea(),
+                    }),
+                    success: function (data) {
+                        $(".resultadoRpt4").show();
+                        var j = 0; cantColumns = 0; fila = "";
+                        var i = 0;
+                        ++j;
+                        var arrayTotal = [0, 0, 0, 0, 0, 0, 0, 0, 0];
+                        $("#tbReportEst4>tbody").empty();
+                        cantColumns = 9; 
+                        $(data).each(function () {
+                            fila = "<tr><td>" + $(this)[0] + "</td>";
+                            for (var k = 0; k < cantColumns; k++) {
+                                arrayTotal[k] += $(this)[k + 1];
+                                if (k == 4 || k == 6 || k == 8) { fila += "<td>" + agregarSeparador(parseFloat(($(this)[k + 1]*100).toFixed(1)).toString(), ',')+"%" + "</td>"; }
+                                else { fila += "<td>" + agregarSeparador(parseFloat($(this)[k + 1].toFixed(3)).toString(), ',') + "</td>"; }
+                                
+                            }
+                            fila += "</tr>";
+                            $("#tbReportEst4>tbody").append(fila);
+                        });
+
+                        fila = "<tr><td>Total</td>";
+                        for (var k = 0; k < cantColumns; k++) {
+                            if (k == 4) { fila += "<td>" + agregarSeparador(parseFloat(((arrayTotal[3] / arrayTotal[0])*100).toFixed(1)).toString(), ',')+"%" + "</td>"; }
+                            else if (k == 6) { fila += "<td>" + agregarSeparador(parseFloat(((arrayTotal[5] / arrayTotal[2])*100).toFixed(1)).toString(), ',') + "%" + "</td>"; }
+                            else if (k == 8) { fila += "<td>" + agregarSeparador(parseFloat(((arrayTotal[7] / arrayTotal[0])*100).toFixed(1)).toString(), ',') + "%" + "</td>"; }
+                            else { fila += "<td>" + agregarSeparador(parseFloat(arrayTotal[k].toFixed(3)).toString(), ',') + "</td>"; }
+                            
+                        }
+                        fila += "</tr>";
+                        $("#tbReportEst4>tbody").append(fila);
+                        unloader();
+                    },
+                    beforeSend: function () {
+                        loader();
+                    },
+                    error: function () {
+                        unloader();
+                    }
+                });
+            }
+        });
+    });
+</script>
+
+<div class="contenedorReporte">
+    <div class="filtroReporte">
+        <div class="toolsLista">
+            <div class="navLista">
+                <a href="@Url.Action("Index","Home")" title="Volver al Inicio"><span class="icon-arrow-back"></span><span>Volver al Inicio</span></a>
+            </div>
+            <div class="tituloLista">
+                <h2>Procesos de fiscalización - Primera instancia</h2>
+            </div>
+        </div>
+        @Html.Partial("Controles/_MasterFiltro")
+        <div class="divbtnReporte">
+            <input id="btnReporte" type="button" value="Generar Reporte" class="btnBotonFormSIGO" />
+        </div>
+    </div>
+    <div class="informacionReporte">
+        <h3 style="margin:0px;">¿Qué contiene este reporte?</h3>
+        <ul style="padding-left:15px;margin-top:5px;margin-bottom:5px;">
+            <li><p>Muestra el reporte estadístico del proceso de fiscalización del OSINFOR, considerando como inicio el año de supervisión; incluye opciones de búsqueda por modalidad de aprovechamiento y departamento.</p></li>
+            <li><p>Se consideran aquellos casos concluidos en primera instancia.</p></li>
+        </ul>
+    </div>
+    <div class="resultadoReporte resultadoRpt4" style="display:none;">
+        <div id="subTituloReport4" class="subTituloReport">
+            <h3>Procesos de fiscalización - Primera instancia</h3>
+        </div>
+        <div class="bloqueResultado">
+            <div class="bloqueResultado1">
+                <div class="GrillaDivMarco">
+                    <table id="tbReportEst4" class="Grilla" style="width:100%;">
+                        <thead>
+                            <tr>
+                                <th>Año Supervisión</th>
+                                <th>N° Supervisiones</th>
+                                <th>N° Informes Supervisión Archivados</th>
+                                <th>N° PAU Iniciados</th>
+                                <th>N° Informes Supervisión Evaluados en 1ra Etapa</th>
+                                <th>% Procesos Evaluados en Primera Etapa</th>
+                                <th>N° PAU Concluidos</th>
+                                <th>% PAU Concluidos</th>
+                                <th>N° casos concluidos (Nro archivo preliminar + Nro informes cuyo PAU ha concluido)</th>
+                                <th>% casos Concluidos (Nro de Casos / total de informes)</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="informacionReporte resultadoRpt4" style="display:none;">
+        <ul style="padding-left:20px;margin-top:5px;margin-bottom:5px;">
+            <li>Se consideran informes de supervisión o PAU que han sido acumulados en un solo procedimiento.</li>
+            <li>Se consideran informes de supervisión que han generado más de 01 PAU</li>
+            <li><strong>PAU,</strong> Procedimiento Administrativo Único</li>
+            <li style="margin-top:10px;"><strong>Actualizado al: </strong>@ViewBag.fechaProcess</li>
+            <li><strong>Fecha y Hora de Consulta:</strong> @DateTime.Now</li>
+        </ul>
+    </div>
+</div>

@@ -1,0 +1,133 @@
+﻿
+<script>
+    var AddCoordPM = {};
+    AddCoordPM.estado;
+    AddCoordPM.codSecuencial;
+
+    AddCoordPM.closeModal = function () {
+        $('#modalCoordenadaPM').modal('hide');
+        $('#modalCoordenadaPM').html('');
+    }
+    AddCoordPM.limpiarForm = function () {
+        AddCoordPM.frm.find("#txtCoordVertice").val('');
+        AddCoordPM.frm.find("#txtCoordEste").val('');
+        AddCoordPM.frm.find("#txtCoordNorte").val('');
+        AddCoordPM.frm.find("#txtObservCoord").val('');
+        AddCoordPM.frm.find("#txtCoordVertice").focus();
+    }
+    AddCoordPM.addCoordenada = function () {
+        var valV = AddCoordPM.frm.find("#txtCoordVertice").val().trim();
+        var valCE = AddCoordPM.frm.find("#txtCoordEste").val().trim();
+        var valCN = AddCoordPM.frm.find("#txtCoordNorte").val().trim();
+        var valOBS = AddCoordPM.frm.find("#txtObservCoord").val().trim();
+        ManPM.agregarCoordenadas(valV, valCE, valCN, valOBS, AddCoordPM.codSecuencial, AddCoordPM.estado);
+        AddCoordPM.limpiarForm();
+    }
+    $(document).ready(function () {
+        AddCoordPM.frm = $("#frmCoordenadasModal");
+
+        if (ManPM.opcRegItem == 'NUE') {
+            $('#tituloRegistro').html('Nuevo Registro');
+            $('#btnGuardarCoordenadas').html('Agregar');
+        }
+        else {
+            $('#tituloRegistro').html('Modificando Registro');
+            $('#btnGuardarCoordenadas').html('Guardar');
+
+            AddCoordPM.frm.find("#txtCoordVertice").val(ManPM.dataEditar.find(".hdNombreVertice").val());
+            AddCoordPM.frm.find("#txtCoordVertice").attr("disabled", true);
+            AddCoordPM.frm.find("#txtCoordEste").val(ManPM.dataEditar.find(".hdCoordenadaEste").val());
+            AddCoordPM.frm.find("#txtCoordNorte").val(ManPM.dataEditar.find(".hdCoordenadaNorte").val());
+            AddCoordPM.frm.find("#txtObservCoord").val(ManPM.dataEditar.find(".hdObservacion").val());
+            AddCoordPM.codSecuencial = ManPM.dataEditar.find(".hdCodSecuencial").val();
+            AddCoordPM.estado = ManPM.dataEditar.find(".hdEstadoItem").val()
+        }
+
+        $("#btnGuardarCoordenadas").click(function () {
+            AddCoordPM.frm.submit();
+        });
+        $("#btnCancelarCoordenadas").click(function () {
+            AddCoordPM.closeModal();
+        });
+        AddCoordPM.frm.validate({
+            focusInvalid: true,
+            //ignore: '', hiden predeterminado
+            rules: {
+                txtCoordVertice: { required: true },
+                txtCoordEste: { required: true },
+                txtCoordNorte: { required: true }
+            },
+            messages: {
+                txtCoordVertice: { required: "Ingrese vertice" },
+                txtCoordEste: { required: "Ingrese coord. este" },
+                txtCoordNorte: { required: "Ingrese coord. norte" }
+            },
+            invalidHandler: function (event, validator) {
+            },
+            errorPlacement: function (error, element) {
+                var cooElement = $(element);
+                cooElement.addClass('border-danger');
+                cooElement.attr('data-toggle', 'tooltip');
+                cooElement.attr('data-placement', 'top');
+                cooElement.attr('data-original-title', error.text());
+                $('[data-toggle="tooltip"]').tooltip();
+            },
+            highlight: function (element) {
+            },
+            unhighlight: function (element) {
+            },
+            success: function (label, element) {
+                var cooElement = $(element);
+                cooElement.removeClass('border-danger');
+                cooElement.removeAttr('data-toggle', 'tooltip');
+                cooElement.removeAttr('data-placement', 'top');
+            },
+            submitHandler: function (form) {
+                AddCoordPM.addCoordenada();
+                if (ManPM.opcRegItem == 'NUE') utilSigo.toastSuccess("Aviso", "Se agregó el registro");
+                else utilSigo.toastSuccess("Aviso", "Se actualizó el registro");
+                AddCoordPM.closeModal();
+            }
+        });
+    });
+</script>
+<div class="modal-dialog" role="document">
+    <div class="modal-content">
+        <div class="modal-header text-small" style="cursor:move;">
+            <span id="tituloRegistro"></span>
+        </div>
+        <div class="modal-body">
+            <form id="frmCoordenadasModal">
+                <div class="form-group row">
+                    <label for="txtCoordVertice" class="col-md-4 col-form-label text-small">Vertice</label>
+                    <div class="col-md-8">
+                        <input type="text" id="txtCoordVertice" name="txtCoordVertice" class="form-control form-control-sm" placeholder="Vertice" maxlength="20" />
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="txtCoordEste" class="col-md-4 col-form-label text-small">Coordenada este</label>
+                    <div class="col-md-8">
+                        <input type="text" id="txtCoordEste" name="txtCoordEste" class="form-control form-control-sm" placeholder="Coord. Este" maxlength="6" onkeypress="return utilSigo.onKeyEntero(event, this);" />
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="txtCoordNorte" class="col-md-4 col-form-label text-small">Coordenada norte</label>
+                    <div class="col-md-8">
+                        <input type="text" id="txtCoordNorte" name="txtCoordNorte" class="form-control form-control-sm" placeholder="Coord. Norte" maxlength="7" onkeypress="return utilSigo.onKeyEntero(event, this);" />
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="txtObservCoord" class="col-md-4 col-form-label text-small">Observacíon</label>
+                    <div class="col-md-8">
+                        <textarea id="txtObservCoord" class="form-control form-control-sm" rows="2" maxlength="300" />
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="modal-footer">
+            <button type="button" id="btnGuardarCoordenadas" class="btn btn-primary btn-sm">Agregar</button>
+            <button type="button" id="btnCancelarCoordenadas" class="btn btn-secondary btn-sm">Cancelar</button>
+        </div>
+    </div>
+</div>
+

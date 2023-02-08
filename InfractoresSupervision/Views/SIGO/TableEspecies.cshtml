@@ -1,0 +1,45 @@
+﻿@using InfractoresSupervision;
+@model dynamic
+@{
+    Layout = null;
+}
+
+<br />
+<br />
+<script>
+    $(function () {
+        $('#tbEspecies').DataTable({
+            'paging': true,
+            'lengthChange': false,
+            'searching': false,
+            'ordering': true,
+            'info': true,
+            'autoWidth': false
+        })
+    })
+</script>
+<table id="tbEspecies" class="table table-bordered table-striped" style="width: 100% !important">
+    <thead>
+        <tr style="text-align: center !important; background-color: #dddddd; font-size:smaller">
+            <td style="width: 2%">N°</td>
+            <td style="width: 60%">Especies</td>
+            <td style="width: 18%">N° de arboles</td>
+            <td style="width: 20%">Volumen aprobado (m³)</td>
+        </tr>
+    </thead>
+    <tbody id="bodyTable">
+        @if (Model.ListEspecie != null)
+        {
+            var count = 0;
+            foreach (var item in Model.ListEspecie)
+            {
+                <tr style="font-size:smaller">
+                    <td style="width: 2%; text-align:center">@(++count)</td>
+                    <td style="width: 60%; text-align:justify"><i><strong>@item.Nombre_Cienti</strong></i> | @item.Nombre_Comun</td>
+                    <td style="width: 18%; text-align:center">@item.NUMERO_ARBOLES</td>
+                    <td style="width: 20%; text-align:center">@item.VOLUMEN_AUTORIZADO</td>
+                </tr>
+            }
+        }
+    </tbody>
+</table>

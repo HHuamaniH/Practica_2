@@ -1,0 +1,15 @@
+﻿@{
+    ViewBag.Title = ViewBag.TituloFormulario;
+    Layout = "~/Views/Shared/_LayoutMain.cshtml";
+}
+
+<script src="~/Areas/Fiscalizacion/js/Notificacion/Index.js"></script>
+
+<form id="frmManNotificacion">
+    @Html.Hidden("tipoFormulario", (object)ViewBag.Formulario)
+    @Html.Hidden("titleMenu", (object)ViewBag.TituloFormulario)
+    @Html.Hidden("alertaFormulario", (object)ViewBag.AlertaInicial)
+
+    <div id="dvManNotificacionContenedor" class="container-fluid"></div>
+</form>
+

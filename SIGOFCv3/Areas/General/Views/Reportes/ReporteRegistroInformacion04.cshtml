@@ -1,0 +1,250 @@
+﻿@model CapaEntidad.ViewModel.VM_ReporteInformacion
+@{
+    ViewBag.Title = "ReporteRegistroInformacion01";
+    Layout = "~/Views/Shared/_LayoutMain.cshtml";
+}
+<style>
+    .fa-lg { font-size: 1.8em; }
+</style>
+<div class="container-fluid">
+    <div class="card">
+        <div class="card-header text-right">
+            <span id="lbTituloGeneral">Apoyo en la ejecución del Plan Anual de Capacitación</span>
+        </div>
+        <div class="card-body">
+            <div class="card-header text-sm-center">
+                <span id="lbSubTituloGeneral">  Opciones de busqueda</span>
+            </div>
+            <div id="dvContenedorFiltro" class="card" style="margin-bottom:10px;">
+                <div id="dvFiltro" class="card-body">
+                    <form id="frmReporteGeneral">
+                        <div class="form-row">
+                            <div id="dvFiltroAnio" class="form-group col-md-1">
+                                <label for="lblChkAnioId" class="text-small">Año</label>
+                                <div id="dvChkAnioAll" class="custom-control custom-checkbox" style="display:none;">
+                                    @Html.CheckBox("chkAnioAll", new { @class = "custom-control-input" })
+                                    <label for="chkAnioAll" class="custom-control-label">Todos</label>
+                                </div>
+                                <div style="max-height:150px;overflow:auto;">
+                                    @Html.EditorFor(m => m.lstChkAnio)
+                                    @Html.HiddenFor(m => m.lstChkAnioId)
+                                </div>
+                            </div>
+                            <div id="dvFiltroOD" class="form-group col-md-2">
+                                <label for="lblChkMesId" class="text-small">Oficina Desconcentrada</label>
+                                <div class="custom-control custom-checkbox" style="display:none;">
+                                    @Html.CheckBox("chkOdAll", new { @class = "custom-control-input" })
+                                    <label for="chkOdAll" class="custom-control-label">Todos</label>
+                                </div>
+                                <div style="max-height:150px;overflow:auto;">
+                                    @Html.EditorFor(m => m.lstChkOd)
+                                    @Html.HiddenFor(m => m.lstChkOdId)
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                    <button type="button" id="btnConsultarReporte" class="btn btn-primary btn-sm" onclick="_reporteGeneral.fnBuscar()">Consultar</button>
+                </div>
+                <div class="card-body" style="padding-top:0px;padding-bottom:0px;">
+                    <div class="form-row">
+                        <div id="dvHideFiltro" class="form-group col-md-12" style="text-align:center; margin:0px;cursor:pointer;" title="Ocultar Filtros">
+                            <img alt="Ocultar Filtros" src="~/Content/images/General/flecha-contraer.png" width="50" height="30" />
+                        </div>
+                        <div id="dvShowFiltro" class="form-group col-md-12" style="text-align:center; margin:0px;cursor:pointer; display:none;" title="Mostrar Filtros">
+                            <img alt="Mostrar Filtros" src="~/Content/images/General/flecha-ampliar.png" width="50" height="30" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body" id="dvRegistroInformacione">
+                <div class="form-row">
+                    <div class="col-md-12" id="containerLoad">
+                        <div class="table-responsive-md">
+                            <table id="tbEjecucion" class="table table-hover table-bordered" style="width:100%;">
+                                <thead>
+                                    <tr>
+                                        <th colspan="9" style="text-align:left">
+                                            <a id="btnExportar" style="cursor:pointer;" data-toggle="tooltip" data-placement="top" onclick="_reporteGeneral.exportar()" title="Descargar"><span class="fa mx-2 fa-lg fa-file-excel-o"></span></a>
+                                        </th>
+                                    </tr>
+                                    <tr>
+                                        <th>N°</th>
+                                        <th>Tipo de taller</th>
+                                        <th>Nombre del evento</th>
+                                        <th>Departamento</th>
+                                        <th>Fecha</th>
+                                        <th>Organizado por</th>
+                                        <th>Público objetivo</th>
+                                        <th>N° de asistentes</th>
+                                        <th>Marco de ejecución de convenio con</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    let _reporteGeneral = {
+        exportar: () => {
+            let anio = _reporteGeneral.frm.find("#lstChkAnioId").val();
+            let od = _reporteGeneral.frm.find("#lstChkOdId").val();
+            if (anio == "") {
+                utilSigo.toastWarning("Aviso", "Seleccione año de consulta");
+                return false;
+            }
+            if (od == "") {
+                utilSigo.toastWarning("Aviso", "Seleccione OD de consulta");
+                return false;
+            }                 
+            const url = `${urlLocalSigo}General/Reportes/ReporteTalleres?anio=${anio}&od=${od}`;
+            utilSigo.file.getBinary("ReporteRegTaller.xlsx", url);
+        },
+        filterAnioClearAllCheck: () => {
+            for (var i = 1; i <= _reporteGeneral.frm.find("[id*=lstChkAnio]").length; i++) {
+                if (i % 2 == 0)
+                    _reporteGeneral.frm.find("[id*=lstChkAnio]")[i - 1].checked = false;
+            }
+        },
+        filterAnioGetAllCheck: () => {
+            let selectAnio = "";
+            for (var i = 1; i <= _reporteGeneral.frm.find("[id*=lstChkAnio]").length; i++) {
+                if (i % 2 == 0) {
+                    if (_reporteGeneral.frm.find("[id*=lstChkAnio]")[i - 1].checked) {
+                        selectAnio += selectAnio == "" ? "" : ",";
+                        selectAnio += _reporteGeneral.frm.find("[id*=lstChkAnio]")[i - 2].value;
+                    }
+                }
+            }
+            _reporteGeneral.frm.find("#lstChkAnioId").val(selectAnio);
+        },
+        filterOdClearAllCheck: () => {
+            for (var i = 1; i <= _reporteGeneral.frm.find("[id*=lstChkOd]").length; i++) {
+                if (i % 2 == 0)
+                    _reporteGeneral.frm.find("[id*=lstChkOd]")[i - 1].checked = false;
+            }
+        },
+        filterOdGetAllCheck: () => {
+            let selectOd = "";
+            for (var i = 1; i <= _reporteGeneral.frm.find("[id*=lstChkOd]").length; i++) {
+                if (i % 2 == 0) {
+                    if (_reporteGeneral.frm.find("[id*=lstChkOd]")[i - 1].checked) {
+                        selectOd += selectOd == "" ? "" : ",";
+                        selectOd += _reporteGeneral.frm.find("[id*=lstChkOd]")[i - 2].value;
+                    }
+                }
+            }
+            _reporteGeneral.frm.find("#lstChkOdId").val(selectOd);
+        },
+        fnBuildTable: () => {
+            const columns = [
+                {
+                    "name": "ROW_INDE", "width": "2%", "orderable": false, "searchable": false, "mRender": function (data, type, row, meta) {
+                        return parseInt(meta.row) + 1 + meta.settings._iDisplayStart;
+                    }
+                },
+                { "data": "TIPO", "autoWidth": true },
+                { "data": "NOMBRES", "autoWidth": true },
+                { "data": "DEPARTAMENTO", "autoWidth": true },
+                { "data": "FECHA", "autoWidth": true },
+                { "data": "ORGANIZADOR", "autoWidth": true },
+                { "data": "PUBLICO_OBJECTIVO", "autoWidth": true },
+                { "data": "N_PARTICIPANTES", "autoWidth": true },
+                { "data": "MARCO_CONVENIO", "autoWidth": true }               
+            ];
+            const optDt = { iLength: 10, iStart: 0, aSort: [] };
+            _reporteGeneral.dt = $("#tbEjecucion").DataTable({
+                "bServerSide": false,
+                "deferLoading": 0,
+                "bProcessing": true,
+                "bJQueryUI": false,
+                "bFilter": false,
+                bInfo: true,
+                "aaSorting": [],
+                "lengthMenu": [[10, 20, 50, 100], [10, 20, 50, 100]],
+                "pageLength": optDt.iLength,
+                "oLanguage": initSigo.oLanguage,
+                "drawCallback": initSigo.showPagination,
+                bLengthChange: false,
+                ordering: false,
+                columns: columns
+            });
+        },
+        fnBuscar: () => {
+            let anio = _reporteGeneral.frm.find("#lstChkAnioId").val();
+            let od = _reporteGeneral.frm.find("#lstChkOdId").val();
+            if (anio == "") {
+                utilSigo.toastWarning("Aviso", "Seleccione año de consulta"); 
+                return false;
+            }
+            if (od == "") {
+                utilSigo.toastWarning("Aviso", "Seleccione OD de consulta");
+                return false;
+            }
+            var option = {
+                url: urlLocalSigo + "General/Reportes/EjecucionPAList", datos: { anio:anio,od:od}, type: 'GET'
+            };
+            _reporteGeneral.dt.clear().draw();
+            utilSigo.fnAjax(option, function (data) {
+                if (data.success) {
+                    _reporteGeneral.dt.rows.add(data.data).draw();
+                }
+                else {
+                    utilSigo.toastWarning("Aviso", "Sucedio un error al cargar datos, Comuníquese con el Administrador");
+                    console.log(data.msj);
+                }
+            });
+        }
+    };
+    $(document).ready(function () {
+        //Mostrar y ocultar filtros
+        $("#dvHideFiltro").click(function () {
+            $("#dvHideFiltro").hide();
+            $("#dvShowFiltro").show();
+            $("#dvFiltro").hide();
+        });
+        $("#dvShowFiltro").click(function () {
+            $("#dvHideFiltro").show();
+            $("#dvShowFiltro").hide();
+            $("#dvFiltro").show();
+        });
+        //Filtro: Año
+        _reporteGeneral.frm = $("#frmReporteGeneral");
+        _reporteGeneral.frm.find("[id*=lstChkAnio]").change(function () {
+            var isChecked = $(this).is(":checked");
+            _reporteGeneral.filterAnioClearAllCheck();
+            if (isChecked) {
+                $(this).prop("checked", "checked");
+            } else {
+                $(this).prop("checked", "");
+                _reporteGeneral.frm.find("#chkAnioAll").prop("checked", "");
+            }
+
+            _reporteGeneral.filterAnioGetAllCheck();
+           // _reporteGeneral.filter_lstChkAnioId_change();
+        });
+        _reporteGeneral.frm.find("[id*=lstChkOd]").change(function () {
+            var isChecked = $(this).is(":checked");
+            _reporteGeneral.filterOdClearAllCheck();
+
+            if (isChecked) {
+                $(this).prop("checked", "checked");
+            } else {
+                $(this).prop("checked", "");
+                _reporteGeneral.frm.find("#chkOdAll").prop("checked", "");
+            }
+
+            _reporteGeneral.filterOdGetAllCheck();
+           // _reporteGeneral.filter_lstChkOdId_change();
+
+           // if (!$(this).is(":checked")) _reporteGeneral.frm.find("#chkOdAll").prop("checked", "");
+        });
+        _reporteGeneral.fnBuildTable();
+    });
+</script>

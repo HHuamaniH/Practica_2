@@ -1,0 +1,31 @@
+﻿@model SIGOFCv3.Areas.THabilitante.Models.Obligacion
+
+<link href="~/Areas/General/css/Controles/_ManGrilla.css" rel="stylesheet" />
+<div class="card">
+    <div class="card-header text-left">
+        <h5>@Model.titleMenu</h5>
+    </div>
+    <div class="card-body">    
+        <div class="col-6">
+            <div class="row">
+                <div class="form-group col-md-3">
+                    <p>Estado</p>
+                    @Html.DropDownList("cboOpciones", (IEnumerable<SelectListItem>)Model.cboOpciones, new { @class = "form-control form-control-sm" })
+                </div>
+
+                <div class="btn-group col-md-2 mt-4" style="padding-top:5px;">
+                    <a href="#" class="btn btn-success mr-2" id="btnAplicar" style="border-radius: 0.25rem; cursor: pointer;" data-toggle="tooltip" data-placement="top" title="Aplicar cambios" onclick="_manGrilla.fnSearchDataTable()">APLICAR</a>
+                    <a href="#" class="btn btn-success  mr-2" id="btnRegresar" style="border-radius: 0.25rem; cursor: pointer;" data-toggle="tooltip" data-placement="top" title="Regresar al listado" onclick="Regresar()">REGRESAR</a>
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group col-md-3">
+                    <p>Observaciones</p>
+                    <textarea id="observaciones" > </textarea>
+                </div>
+            </div>
+        </div>
+        @Html.HiddenFor(m => m.tipoFormulario)
+       
+    </div>
+</div>

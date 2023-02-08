@@ -1,0 +1,246 @@
+﻿@model CapaEntidad.ViewModel.VM_ReporteFiscalizacion
+
+@{
+    ViewBag.Title = "Documentos Presentados por el Titular";
+    Layout = "~/Views/Shared/_LayoutMain.cshtml";
+}
+@section styles
+{
+    <style type="text/css">
+        #divReporte { margin-top: 20px; }
+        .title { margin: 0 0 15px 0; clear: both; border-bottom: thin ridge #add8e6; padding: 5px 0; color: #1b4a6f; }
+        [role=button] { cursor: pointer; user-select: none; }
+        .collapsed .fa::before { content: "\f055" !important; }
+        .custom-control-label::before, .custom-control-label::after { top: 0; }
+        .box { padding: 5px; max-height: 220px; overflow: auto; font-size: 0.9em; }
+        .table thead th { text-transform: none; }
+        .table .fa, .table a, .table td { cursor: pointer; outline: none; box-shadow: none; }
+    </style>
+}
+@section scripts
+{
+    <script src="~/Areas/Fiscalizacion/js/ReporteFiscalizacion/Utils.js?v=2"></script>
+    <script type="text/javascript">
+        let baseUrl = urlLocalSigo + "Fiscalizacion/ReporteFiscalizacion/";
+        let _reporte = {};
+
+        _reporte.fnParams = function () {
+            let anios = $('[name=checkAnio]:checked').map(function () { return $(this).val() }).get();
+            let modalidad = $('[name=checkModalidad]:checked').map(function () { return $(this).val() }).get();
+            let region = $('[name=checkRegion]:checked').map(function () { return $(this).val() }).get();
+            let OD = $('[name=checkOD]:checked').map(function () { return $(this).val() }).get();
+
+            return {
+                ANIOS: anios.join(','),
+                MODALIDAD: modalidad.join(','),
+                REGION: region.join(','),
+                OD: OD.join(',')
+            };
+        }
+
+        Array.prototype.Sum = function (key) {
+            return this.map(function (a) { return a[key] }).reduce(function (a, b) { return a + b }, 0);
+        };
+
+        _reporte.fnReporte = function () {
+            if (_reporte.dtDetalle) {
+                $('#tblDetalle').DataTable().clear().destroy();
+                $('#tblDetalle').html('');
+            }
+
+            let p = _reporte.fnParams();
+            let params = {
+                type: 'post',
+                url: baseUrl + "DocumentosTitular_Resumen",
+                datos: JSON.stringify(p)
+            };
+
+            utilSigo.fnAjax(params, function (res) {
+                res.push({
+                    ANIO: 'TOTAL',
+                    DESC_RD_INI: res.Sum('DESC_RD_INI'),
+                    ALLANAMIENTO: res.Sum('ALLANAMIENTO'),
+                    DESC_INF_FINAL: res.Sum('DESC_INF_FINAL'),
+                    RECONSIDERACION: res.Sum('RECONSIDERACION'),
+                    APELACIONES: res.Sum('APELACIONES'),
+                    IMPLEMENTACIONES: res.Sum('IMPLEMENTACIONES'),
+                    OTROS: res.Sum('OTROS'),
+                    TOTAL: res.Sum('TOTAL'),
+                });
+
+                let options = {
+                    id: 'tblResumen',
+                    columns: [
+                        { title: 'N°', render: function (data, meta) { return data.ANIO !== 'TOTAL' ? meta.row + 1 : '' }, className: 'text-center' },
+                        { title: 'Año de presentación', render: 'ANIO', className: 'text-center' },
+                        { title: 'N° descargos RD inicio', render: 'DESC_RD_INI', className: 'text-center', click: _reporte.fnDetalle, params: '0000019' },
+                        { title: 'N° Allanamientos', render: 'ALLANAMIENTO', className: 'text-center', click: _reporte.fnDetalle, params: '0000019' },
+                        { title: 'N° Descargos Informe final de instrucción', render: 'DESC_INF_FINAL', className: 'text-center', click: _reporte.fnDetalle, params: '0000112' },
+                        { title: 'N° Reconsideraciones', render: 'RECONSIDERACION', className: 'text-center', click: _reporte.fnDetalle, params: '0000025' },
+                        { title: 'N° Apelaciones', render: 'APELACIONES', className: 'text-center', click: _reporte.fnDetalle, params: '0000026' },
+                        { title: 'N° informes de implementación medidas correctivas', render: 'IMPLEMENTACIONES', className: 'text-center', click: _reporte.fnDetalle, params: '0000082' },
+                        { title: 'N° otros documentos presentados', render: 'OTROS', className: 'text-center', click: _reporte.fnDetalle, params: '0000050' },
+                        { title: 'Total de documentos presentados', render: 'TOTAL', className: 'text-center' },
+                    ],
+                    data: res,
+                    ordering: false,
+                    searching: false,
+                    lengthChange: false,
+                    paging: false
+                };
+
+                let dt = fnDrawTable(options);
+            });
+        }
+
+        _reporte.fnDetalle = function (data, key, params, target) {
+            if (data.ANIO == 'TOTAL') return;
+            
+            $('#tblResumen td').removeClass('bg-primary text-light');
+            $(target).addClass('bg-primary text-light');
+
+            let p = _reporte.fnParams();
+            p.tipo = params;
+            p.anios = data.ANIO;
+
+            let parametros = {
+                type: 'post',
+                url: baseUrl + "DocumentosTitular_Detalle",
+                datos: JSON.stringify(p)
+            };
+
+            utilSigo.fnAjax(parametros, function (res) {
+                let options = {
+                    id: 'tblDetalle',
+                    columns: [
+                        { title: 'N°', render: function (_, meta) { return meta.row + 1 }, className: 'text-center' },
+                        { title: 'N° de documento', render: 'NUMERO_INFTIT', className: 'text-center' },
+                        { title: 'Tipo', render: 'TIPO_DOCUMENTO', className: 'text-center' },
+                        { title: 'Fecha presentación', render: 'FECHA_PRESENTACION', className: 'text-center' },
+                        { title: 'Año presentación', render: 'ANIO', className: 'text-center' },
+                        { title: 'N° Titulo Habilitante', render: 'TITULO', className: 'text-center' },
+                        { title: 'Modalidad', render: 'MODALIDAD', className: 'text-center' },
+                        { title: 'Titular', render: 'TITULAR', className: 'text-center' },
+                        { title: 'Departamento', render: 'DEPARTAMENTO', className: 'text-center' },
+                        { title: 'Oficina Desconcentradas', render: 'OD', className: 'text-center' },
+                        { title: 'N° R.D.', render: 'N_DOCUMENTO', className: 'text-center' },
+                        { title: 'N° Expediente administrativo', render: 'EXPED_ADMN', className: 'text-center' },
+                    ],
+                    data: res,
+                    //searching: false,
+                    //lengthChange: false,
+                };
+
+                _reporte.dtDetalle = fnDrawTable(options);
+            });
+        }
+
+        $(function () {
+            $("[type=checkbox].all, #reg_00").on("change", function () {
+                let isChecked = $(this).is(":checked");
+                $(this).closest('.box').find(".custom-control-input").prop("checked", isChecked);
+            });
+        });
+    </script>
+}
+
+<div id="divReporte">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-12">
+                <h4 class="title">Documentos Presentados por el Titular</h4>
+                <h5 class="collapsed" data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
+                    <i class="fa fa-minus-circle text-success"></i> Opciones de búsqueda
+                </h5>
+                <div class="collapse" id="collapseExample">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-sm-auto">
+                                    <h5>Año de consulta</h5>
+                                    <div class="box">
+                                        <div class="custom-control custom-checkbox">
+                                            <input type="checkbox" class="custom-control-input all" id="chkTodoAnios" name="chkTodoAnios" checked>
+                                            <label class="custom-control-label" for="chkTodoAnios">Seleccionar todo</label>
+                                        </div>
+                                        @for (int anio = DateTime.Now.Year - 1; anio >= 2004; anio--)
+                                        {
+                                            <div class="custom-control custom-checkbox">
+                                                <input id="@anio" type="checkbox" class="custom-control-input" name="checkAnio" value="@anio" checked>
+                                                <label class="custom-control-label" for="@anio">@anio</label>
+                                            </div>
+                                        }
+                                    </div>
+                                </div>
+                                <div class="col-sm-3">
+                                    <h5>Modalidad</h5>
+                                    <div class="box">
+                                        <div class="custom-control custom-checkbox">
+                                            <input type="checkbox" class="custom-control-input all" id="chkTodoModalidad" name="chkTodoModalidad" checked>
+                                            <label class="custom-control-label" for="chkTodoModalidad">Seleccionar todo</label>
+                                        </div>
+                                        @if (Model.lstChkModalidad != null)
+                                        {
+                                            foreach (var item in Model.lstChkModalidad)
+                                            {
+                                                <div class="custom-control custom-checkbox">
+                                                    <input type="checkbox" class="custom-control-input" id="moda_@item.Value" name="checkModalidad" value="@item.Value" checked>
+                                                    <label class="custom-control-label" for="moda_@item.Value">@item.Text</label>
+                                                </div>
+                                            }
+                                        }
+                                    </div>
+                                </div>
+                                <div class="col-sm-3">
+                                    <h5>Región</h5>
+                                    <div class="box">
+                                        @if (Model.lstChkRegion != null)
+                                        {
+                                            foreach (var item in Model.lstChkRegion)
+                                            {
+                                                <div class="custom-control custom-checkbox">
+                                                    <input type="checkbox" class="custom-control-input" id="reg_@item.Value" name="checkRegion" value="@item.Value" checked>
+                                                    <label class="custom-control-label" for="reg_@item.Value">@item.Text</label>
+                                                </div>
+                                            }
+                                        }
+                                    </div>
+                                </div>
+                                <div class="col-sm-3">
+                                    <h5>OD</h5>
+                                    <div class="box">
+                                        <div class="custom-control custom-checkbox">
+                                            <input type="checkbox" class="custom-control-input all" id="chkTodoOD" name="chkTodoOD" checked>
+                                            <label class="custom-control-label" for="chkTodoOD">Todas las OD</label>
+                                        </div>
+                                        @if (ViewBag.lstChkOd != null)
+                                        {
+                                            foreach (var item in ViewBag.lstChkOd)
+                                            {
+                                                <div class="custom-control custom-checkbox">
+                                                    <input type="checkbox" class="custom-control-input" id="check_@item.Value" name="checkOD" value="@item.Value" checked>
+                                                    <label class="custom-control-label" for="check_@item.Value">@item.Text</label>
+                                                </div>
+                                            }
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <button type="button" class="btn btn-primary" onclick="_reporte.fnReporte()">
+                        Generar reporte
+                    </button>
+                </div>
+                <div class="form-group" id="box-resumen">
+                    <table id="tblResumen" class="table table-bordered"></table>
+                </div>
+                <div id="box-detalle">
+                    <table id="tblDetalle" class="table table-bordered"></table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

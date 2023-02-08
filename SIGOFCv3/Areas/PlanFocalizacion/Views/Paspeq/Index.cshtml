@@ -1,0 +1,19 @@
+﻿
+@{
+    ViewBag.Title = "Listado preliminar de PASPEQ";
+    Layout = "~/Views/Shared/_LayoutMain.cshtml";
+}
+
+<div id="divPaspeq">
+    <form id="frmListPaspeq">
+        @Html.Hidden("tipoFormulario", (string)ViewBag.Formulario)
+        @Html.Hidden("titleMenu", (string)ViewBag.TituloFormulario)
+        <div id="dvListPaspeq" class="container-fluid"></div>
+    </form>
+</div>
+<div id="divPaspeqDetalle" class="container-fluid">
+
+</div>
+
+<div class="modal fade hide" id="manPaspeqModal" role="dialog"></div>
+<script src="~/Areas/PlanFocalizacion/js/Index.js"></script>

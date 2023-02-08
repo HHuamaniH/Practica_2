@@ -1,0 +1,96 @@
+﻿@model CapaEntidad.ViewModel.VM_Proveido
+<script type="text/javascript">
+    var _renderAgotadaVA = {};
+
+    _renderAgotadaVA.fnSelectRecom = function () {
+        _renderAgotadaVA.frm.find("#divDetalleAgotadaVA").hide();
+
+        if (_renderAgotadaVA.frm.find("#ddlTipoAgotada").val() == '0000004') {
+            _renderAgotadaVA.frm.find("#divDetalleAgotadaVA").show();
+        }
+
+    }
+
+    $(document).ready(function () {
+        _renderAgotadaVA.frm = $("#divAgotadaAdmin");
+        _renderAgotadaVA.fnSelectRecom();
+    });
+</script>
+<div id="divAgotadaAdmin" class="text-small">
+    <div><br /><br /></div>
+    <div class="form-row">
+        <div class="form-group col-md-4 bt-3">
+            Se Resuelve
+            <div class="form-row mt-3">
+                <div class="form-group col-md-5">
+                    <label for="chkGTF" class="text-small mt-1">Fundado</label>
+                </div>
+                <div class="form-group col-md-1">
+                    @Html.CheckBoxFor(m => m.chkResFundado, new { @class = "form-check-input", style = "width:15px;height:16px;" })
+                </div>
+                <div class="form-group col-md-6"></div>
+            </div>
+            <div class="form-row">
+                <div class="form-group col-md-5">
+                    <label for="chkGTF" class="text-small mt-1">Infundado</label>
+                </div>
+                <div class="form-group col-md-1">
+                    @Html.CheckBoxFor(m => m.chkResInfundado, new { @class = "form-check-input", style = "width:15px;height:16px;" })
+                </div>
+                <div class="form-group col-md-6"></div>
+            </div>
+            <div class="form-row">
+                <div class="form-group col-md-5">
+                    <label for="chkGTF" class="text-small mt-1">Improcedente</label>
+                </div>
+                <div class="form-group col-md-1">
+                    @Html.CheckBoxFor(m => m.chkResImprocedente, new { @class = "form-check-input", style = "width:15px;height:16px;" })
+                </div>
+                <div class="form-group col-md-6"></div>
+            </div>
+        </div>
+        <div class="form-group col-md-6">
+            @Html.TextAreaFor(m => m.txtResuelve, 8, 1, new { @class = "form-control form-control-sm" })
+        </div>
+        <div class="form-group col-md-2">
+        </div>
+    </div>
+
+    <div class="form-row">
+        <div class="form-group col-md-4">
+            Se Agota la Vía Administrativa Por
+        </div>
+        <div class="form-group col-md-6">
+            @Html.DropDownListFor(m => m.txtIdTipoAgotada, new SelectList(Model.ListMComboTipoAgotadaVia, "CODIGO", "DESCRIPCION"),
+                                                                   new
+                                                                        {
+                                                                            @class = "form-control form-control-sm",
+                                                                            @id = "ddlTipoAgotada",
+                                                                            @onchange = "_renderAgotadaVA.fnSelectRecom()"
+                                                                       })
+        </div>
+        <div class="form-group col-md-2">
+        </div>
+    </div>
+    <div id="divDetalleAgotadaVA" style="display:none;">
+        <div class="form-row">
+            <div class="form-group col-md-4">
+                ¿Se confirma la resolución?
+            </div>
+            <div class="form-group col-md-6">
+                @Html.DropDownListFor(m => m.txtIdConfirRD, new SelectList(Model.ListComboSubAgotada, "Value", "Text"),
+                                        new { @class = "form-control form-control-sm", @id = "ddlConfirmRDAV" })
+            </div>
+            <div class="form-group col-md-2">
+            </div>
+        </div>
+
+    </div>
+
+    <div class="form-row">
+        <div class="form-group col-md-12">
+            @Html.Partial("~/Areas/Fiscalizacion/Views/ManProveido/_Shared/_renderNotificacion.cshtml", Model)
+        </div>
+    </div>
+</div>
+

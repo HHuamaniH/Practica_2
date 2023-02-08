@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xs:schema xmlns:ser="http://schemas.microsoft.com/2003/10/Serialization/" xmlns:tns="http://schemas.datacontract.org/2004/07/Osinfor.Pide.Request" elementFormDefault="qualified" targetNamespace="http://schemas.datacontract.org/2004/07/Osinfor.Pide.Request" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:import schemaLocation="http://srvdev04:8080/ReniecService.svc?xsd=xsd1" namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
+  <xs:complexType name="PersonaRequest">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="ApeMaterno" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="ApePaterno" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Documento" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Nombre01" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Nombre02" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Nombre03" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="RazonSocial" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Ruc" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="TipoPersona" type="ser:char" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="PersonaRequest" nillable="true" type="tns:PersonaRequest" />
+  <xs:complexType name="ConsultaInfoRequest">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="App" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="IPTerminal" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="UserName" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ConsultaInfoRequest" nillable="true" type="tns:ConsultaInfoRequest" />
+</xs:schema>

@@ -1,0 +1,83 @@
+﻿
+<script type="text/javascript">
+    "use strict";
+    var _ActOtrosProgramas = {};
+    
+    _ActOtrosProgramas.fnSaveForm = function (data) { /*implementado desde donde se instancia*/ }
+
+    _ActOtrosProgramas.fnLoadDatos = function (data) {
+        if (data != null && data != "") {
+            _ActOtrosProgramas.frm.find("#hdfRegEstado").val(data["RegEstado"]);
+            _ActOtrosProgramas.frm.find("#hdfCodSecuencial").val(data["NINDICE"]);
+            _ActOtrosProgramas.frm.find("#txtDescripcion").val(data["VDESCRIPCION"]);
+          
+        } else {
+            _ActOtrosProgramas.frm.find("#hdfRegEstado").val("1");
+            _ActOtrosProgramas.frm.find("#hdfCodSecuencial").val("0");
+        }
+    }
+
+    _ActOtrosProgramas.fnSetDatos = function () {
+        var data = [];
+        debugger
+        var regEstado = _ActOtrosProgramas.frm.find("#hdfRegEstado").val();
+        data["RegEstado"] = regEstado == "0" ? "2" : regEstado;
+        data["NINDICE"] = _ActOtrosProgramas.frm.find("#hdfCodSecuencial").val();
+        data["VDESCRIPCION"] = _ActOtrosProgramas.frm.find("#txtDescripcion").val();
+       
+        return data;
+    }
+
+    _ActOtrosProgramas.fnSubmitForm = function () {
+        _ActOtrosProgramas.frm.submit();
+    }
+
+    _ActOtrosProgramas.fnInit = function (data) {
+        _ActOtrosProgramas.frm = $("#frmActTuristicaImpl");
+
+        _ActOtrosProgramas.fnLoadDatos(data);
+
+        //=====-----Para el registro de datos del formulario-----=====
+        _ActOtrosProgramas.frm.validate(utilSigo.fnValidate({
+            rules: {
+                txtDescripcion: { required: true }
+               
+            },
+            messages: {
+                txtDescripcion: { required: "Ingrese la descripción" }
+              
+            },
+            fnSubmit: function (form) {
+                _ActOtrosProgramas.fnSaveForm(_ActOtrosProgramas.fnSetDatos());
+            }
+        }));
+        //Validación de controles que usan Select2
+        _ActOtrosProgramas.frm.find("select.select2-hidden-accessible").on("change", function (e) {
+            $(this).valid();
+        });
+    }
+</script>
+<div class="modal-dialog" tabindex="-1" role="document" >
+    <div class="modal-content">
+        <div class="modal-header text-small" style="cursor:move;">
+            <span>Actividad de Otros Programas</span>
+            <i class="fa fa-close" style="cursor:pointer;" data-dismiss="modal" aria-label="Close"></i>
+        </div>
+        <div class="modal-body">
+            <form id="frmActTuristicaImpl">
+                @Html.Hidden("hdfRegEstado")
+                @Html.Hidden("hdfCodSecuencial")
+                <div class="form-row">
+                    <div class="form-group col-md-12">
+                        <label for="txtTipoAmbiente" class="text-small">Descripción</label>
+                        @Html.TextBox("txtDescripcion", "", new { @class = "form-control form-control-sm" })
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-primary btn-sm" onclick="_ActOtrosProgramas.fnSubmitForm()">Guardar</button>
+            <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Cancelar</button>
+        </div>
+    </div>
+</div>

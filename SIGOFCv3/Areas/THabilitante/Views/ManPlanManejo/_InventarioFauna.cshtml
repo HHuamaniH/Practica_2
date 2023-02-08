@@ -1,0 +1,30 @@
+﻿<div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content" id="contenedorIfauna">
+        <div class="modal-header text-small" style="cursor:move;padding:0.5rem;">
+            <h5 class="modal-title" id="h5Titulo">Nuevo</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body">
+            <div class="form-row">
+                <div class="table-responsive">
+                    <table id="grvItemIFauna" class="table table-hover table-bordered" style="width:100%">
+                        <thead>
+                            <tr>
+                                <th colspan="3" class="text-sm-right">                                   
+                                   <i id="btnReload" class="fa mx-2 fa-lg fa-refresh" style="cursor:pointer;" data-toggle="tooltip" data-placement="top" title="Actualizar el listado"></i>                              
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button id="btnGuardar" class="btn btn-primary btn-sm">Agregar</button>
+        </div>
+    </div>
+</div>
+<script src="~/Areas/THabilitante/js/ManPlanManejo/_InventarioFauna.js"></script>

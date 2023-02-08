@@ -1,0 +1,438 @@
+﻿@model CapaEntidad.ViewModel.VM_InformeAutoridadForestal
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_LayoutMain.cshtml";
+
+}
+
+
+<script src="~/Scripts/ckeditor/ckeditor.js"></script>
+
+
+@Scripts.Render("~/bundles/ManInformeAutoridadForestal/AddEdit")
+@section scripts{
+    <script>
+        "use strict";
+
+        var ManInfAutForestal = new InfAutForestal();
+        var ItemProfesional = new Profesional();
+        var ItemTHabilitante = new THabilitante();
+        var ItemVolInjustificado = new VolInjustificado("ItemVolInjustificado", "VOLINJUS");
+
+        $(document).ready(function () {
+            $('[data-toggle="tooltip"]').tooltip();
+            ManInfAutForestal.init();
+            ItemProfesional.init();
+            ItemVolInjustificado.init();
+            var list = [];
+
+            @foreach(var item in Model.ListProfesionales)
+            {
+                <text>
+
+            list.push({
+                PERSONA: "@item.PERSONA",
+                COD_PERSONA: "@item.COD_PERSONA",
+                DESCRIPCION: "@item.DESCRIPCION",
+                N_DOCUMENTO: "@item.N_DOCUMENTO",
+                COD_DIDENTIDAD: "@item.COD_DIDENTIDAD",
+                CARGO: "@item.CARGO",
+                COLEGIATURA_NUM: "@item.COLEGIATURA_NUM",
+                COD_DPESPECIALIDAD: "@item.COD_DPESPECIALIDAD",
+                COD_NACADEMICO: "@item.COD_NACADEMICO",
+                APE_PATERNO: "@item.APE_PATERNO",
+                APE_MATERNO: "@item.APE_MATERNO",
+                NOMBRES: "@item.NOMBRES",
+                RegEstado: RegEstadoSigo.INITIAL
+            });
+            </text>
+            }
+            ItemProfesional.dt.rows.add(list).draw();
+            list = [];
+
+            @foreach(var item in Model.ListVolInjustificado)
+            {
+                <text>
+
+            list.push({
+                ESPECIES: "@item.ESPECIES",
+                VOLUMEN_APROBADO: "@item.VOLUMEN_APROBADO",
+                VOLUMEN_MOVILIZADO: "@item.VOLUMEN_MOVILIZADO",
+                VOLUMEN_INJUSTIFICADO: "@item.VOLUMEN_INJUSTIFICADO",
+                VOLUMEN_JUSTIFICADO: "@item.VOLUMEN_JUSTIFICADO",
+                OBSERVACION: "@item.OBSERVACION",
+                COD_ESPECIES: "@item.COD_ESPECIES",
+                COD_SECUENCIAL: "@item.COD_SECUENCIAL",
+                RegEstado: RegEstadoSigo.INITIAL
+            });
+                </text>
+            }
+            ItemVolInjustificado.dt.rows.add(list).draw();
+            utilSigo.ValidaRol('@ViewBag.VAliasRol', 'btnRegistrar', '@Model.ddlItemIndicadorId');
+        });
+
+
+
+
+    </script>
+}
+<div class="container-fluid">
+    <div class="card">
+        <div class="card-header text-right">
+            <h5>   @Model.Titulo</h5>
+        </div>
+        <div class="card-body">
+            <div class="card">
+                <div class="card-header text-small" id="divTitle">
+                    <div class="text-left">
+                        <a id="btnRegistrar" href="javascript:void(0)" style="cursor:pointer;" data-toggle="tooltip" data-placement="top" title="Guardar" onclick="ManInfAutForestal.save()"><i class="fa mx-2 fa-lg fa-save"></i></a>
+                        <a style="cursor:pointer;" data-toggle="tooltip" data-placement="top" title="Regresar" href="@Url.Content("~/THabilitante/ManInformeAutoridadForestal/Index?lstManMenu="+(Model.TipoFormularioId)  )"><i class="fa mx-2 fa-lg fa-reply"></i></a>
+
+                    </div>
+                    <div class="text-center"><h3>@Model.SubTitulo</h3></div>
+
+                </div>
+                <div class="card-body">
+                    <form id="frmInfAutForestal">
+                        @Html.HiddenFor(m => m.TipoFormulario)
+                        @Html.HiddenFor(m => m.TipoFormularioId)
+                        @Html.HiddenFor(m => m.hdfManRegEstado)
+                        @Html.HiddenFor(m => m.hdfcod_informe)
+
+                        <ul class="nav nav-tabs" id="myTab" role="tablist">
+                            <li class="nav-item" id="navDatosTab"><a class="nav-link active" data-toggle="tab" href="#navDatos" role="tab" aria-controls="home" aria-selected="true"><strong>Estado Situacional / Datos Generales</strong></a></li>
+
+                        </ul>
+                        <div class="tab-content" id="nav-tabContent">
+                            <!--Estado Situacional Datos Generales-->
+                            <div class="tab-pane fade show active" id="navDatos" role="tabpanel" aria-labelledby="nav-home-tab">
+
+                                <div class="card-body">
+                                    <div class="form-row align-items-end">
+                                        <div class="form-group col-md-4">
+                                            <label for="ddlItemIndicadorId" class="text-small">Indicador</label>
+
+                                            @Html.DropDownListFor(m => m.ddlItemIndicadorId, new SelectList(Model.ddlItemIndicador.VM_Cbo, "Value", "Text"), new
+                                       {
+                                           @class = "form-control form-control-sm",
+                                           onChange = "ManInfAutForestal.seleccionar();"
+                                       })
+                                        </div>
+                                        <div style="display:none">
+                                            @Html.CheckBoxFor(m => m.chkItemObsSubsanada)
+                                            <label class="form-check-label text-small" for="chkItemObsSubsanada">
+                                                Observaciones Subsanadas?
+                                            </label>
+                                        </div>
+                                        <div class="form-group col-md-4">
+                                            <label for="txtUsuarioRegistro" class="text-small">Usuario que ingresó el registro</label>
+                                            @Html.EditorFor(m => m.txtUsuarioRegistro, new { htmlAttributes = new { @class = "form-control form-control-sm", @disabled = "disabled" } })
+
+                                        </div>
+                                        <div class="form-group col-md-4">
+                                            <label for="txtUsuarioControl" class="text-small">Usuario que asignó el útimo estado situacional al registro</label>
+                                            @Html.EditorFor(m => m.txtUsuarioControl, new { htmlAttributes = new { @class = "form-control form-control-sm", @disabled = "disabled" } })
+                                        </div>
+                                        <div class="form-group col-md-4">
+                                            <label class="form-check-label text-small" for="chkPublicar">
+                                                Publicar en el Observatorio
+                                            </label>
+                                            @Html.CheckBoxFor(m => m.chkPublicar)
+                                        </div>
+                                    </div>
+                                    <div style="display:none;" id="divCalidad" class="form-row">
+                                        <div class="form-group col-md-12">
+                                            @Html.TextAreaFor(m => m.txtControlCalidadObservaciones, new { @class = "form-control form-control-sm" })
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card-header text-small">
+                                    Datos del Informe
+                                </div>
+                                <div class="card-body">
+                                    <div class="form-row">
+                                        <div class="form-group col-md-4 mb-3">
+                                            <label for="ddlODRegistroId" class="text-small">O.D. desde donde registra la información</label>
+                                            @Html.DropDownListFor(m => m.ddlODRegistroId, new SelectList(Model.ddlODRegistro, "Value", "Text"), new { @class = "form-control form-control-sm" })
+                                        </div>
+                                    </div>
+                                    @if (Model.TipoFormulario == "INFORME_AUT_FORESTAL")
+                                    {
+                                        <div class="form-row" id="pnInstitucion">
+                                            <div class="form-group col-md-4 mb-3">
+                                                <label for="ddlEntidadId" class="text-small">Institución que remite</label>
+                                                @Html.DropDownListFor(m => m.ddlEntidadId, new SelectList(Model.ddlEntidad, "Value", "Text"), new { @class = "form-control form-control-sm" })
+                                            </div>
+                                        </div>
+                                    }
+                                    <div class="form-row">
+                                        <div class="form-group col-md-12 mb-3">
+                                            <label for="txtnum_informe" class="text-small">@Model.lblcampo_numero</label>
+                                            @Html.EditorFor(m => m.txtnum_informe, new { htmlAttributes = new { @class = "form-control form-control-sm" } })
+
+                                        </div>
+                                    </div>
+                                    @if (Model.TipoFormulario == "INFORME_AUT_FORESTAL" || Model.TipoFormulario == "OTROS_INFORMES")
+                                    {
+                                        <div id="pndatos_InfAutOtros">
+                                            <div class="form-row">
+                                                <div class="form-group col-md-3 mb-3">
+                                                    <label for="ddlTipoInforme" class="text-small">Tipo de Informe</label>
+                                                    @Html.DropDownListFor(m => m.ddlTipoInformeId, new SelectList(Model.ddlTipoInforme, "Value", "Text"), new { @class = "form-control form-control-sm" })
+
+                                                </div>
+                                            </div>
+
+                                            <div class="form-row">
+                                                <div class="form-group col-md-4 mb-3">
+                                                    <label for="txtfecha_emision" class="text-small">Fecha Emision</label>
+                                                    @Html.EditorFor(m => m.txtfecha_emision, new { htmlAttributes = new { @class = "form-control form-control-sm", Maxlength = 10, Pattern = "[0-9]{2}/[0-9]{2}/[0-9]{4}", Placeholder = "dd/mm/aaaa", Title = "la fecha a ingresar debe ser en el formato dd/mm/aaaa" } })
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                    }
+                                    else
+                                    {
+                                        @Html.HiddenFor(m => m.ddlTipoInformeId)
+
+                                    }<div class="form-row">
+                                        <div class="form-group col-md-4 mb-3">
+                                            <label for="txtfecha_recepcion" class="text-small">@Model.lblfecha_recepcion</label>
+                                            @Html.EditorFor(m => m.txtfecha_recepcion, new { htmlAttributes = new { @class = "form-control form-control-sm", Maxlength = 10, Pattern = "[0-9]{2}/[0-9]{2}/[0-9]{4}", Placeholder = "dd/mm/aaaa", Title = "la fecha a ingresar debe ser en el formato dd/mm/aaaa" } })
+                                        </div>
+                                    </div>
+                                    <div class="form-row">
+                                        <div class="col-md-4 mb-3">
+
+                                            <label for="lblnum_Thabilitante" class="text-small">
+                                                Título Habilitante
+                                                <i class="fa fa-cog fa-spin text-danger" id="lblnum_Thabilitante_error" style="display:none;" data-toggle="tooltip" data-placement="top" title="Seleccione Titulo Habilitante"></i>
+                                            </label>
+                                            <div class="input-group">
+                                                <div class="input-group-prepend" onclick="ItemTHabilitante.showModal();" style="cursor:pointer;">
+                                                    <span class="input-group-text"><i class="fa fa-search" data-toggle="tooltip" data-placement="top" title="Buscar Titulo Habilitante"></i></span>
+                                                </div>
+                                                @Html.EditorFor(m => m.lblnum_Thabilitante, new { htmlAttributes = new { @class = "form-control form-control-sm", @disabled = "disabled" } })
+
+                                                @Html.HiddenFor(m => m.hdfItemCod_THabilitante)
+                                            </div>
+
+                                        </div>
+                                        <div class="form-group col-md-8">
+                                            <label for="lblnom_Titular" class="text-small">Titular</label>
+                                            @Html.EditorFor(m => m.lblnom_Titular, new { htmlAttributes = new { @class = "form-control form-control-sm", @disabled = "disabled" } })
+                                        </div>
+                                    </div>
+                                    @if (Model.TipoFormulario == "RENUNCIA_CONCESION")
+                                    {
+                                        <div id="pnRenuncia_Concesion">
+                                            <div class="form-row">
+                                                <div class="form-group col-md-12 mb-3">
+                                                    <label for="txtMotivo_Renuncia" class="text-small">Motivo de la renuncia</label>
+                                                    @Html.TextAreaFor(m => m.txtMotivo_Renuncia, new { @class = "form-control form-control-sm", Maxlength = 5000 })
+                                                </div>
+                                            </div>
+                                            <div class="form-row">
+                                                <div class="form-group col-md-12 mb-3">
+                                                    <label for="txtNumDocumento_AutSolRenuncia" class="text-small">N° de documento de la Autoridad con el que se remitió la solicitud de renuncia al OSINFOR</label>
+                                                    @Html.EditorFor(m => m.txtNumDocumento_AutSolRenuncia, new { htmlAttributes = new { @class = "form-control form-control-sm", Maxlength = 5000 } })
+                                                </div>
+                                            </div>
+                                            <div class="form-row">
+                                                <div class="form-group col-md-4 mb-3">
+                                                    <label for="txtFecha_DocAutRenuncia" class="text-small">Fecha del documento de la Autoridad</label>
+                                                    @Html.EditorFor(m => m.txtFecha_DocAutRenuncia, new { htmlAttributes = new { @class = "form-control form-control-sm", Maxlength = 10, Pattern = "[0-9]{2}/[0-9]{2}/[0-9]{4}", Placeholder = "dd/mm/aaaa", Title = "la fecha a ingresar debe ser en el formato dd/mm/aaaa" } })
+                                                </div>
+                                            </div>
+                                        </div>
+                                    }
+                                    @if (Model.TipoFormulario == "INFORME_AUT_FORESTAL" || Model.TipoFormulario == "OTROS_INFORMES")
+                                    {
+                                        <div id="pnInf_AutOtros">
+                                            <div class="form-row">
+                                                <div class="form-group col-md-12 mb-3">
+                                                    <label for="txtnum_poa" class="text-small">POA</label>
+                                                    @Html.EditorFor(m => m.txtnum_poa, new { htmlAttributes = new { @class = "form-control form-control-sm", Maxlength = 5, Pattern = "[0-9]{1,5}", Title = "Solo debe ingresar números enteros" } })
+                                                </div>
+                                            </div>
+                                            <div class="form-row">
+                                                <table id="grvItemProfesional" class="table table-hover table-bordered">
+                                                    <thead>
+                                                        <tr>
+                                                            <th colspan="4" class="text-sm-left">
+                                                                <div class="form-inline">
+                                                                    <i class="fa mx-2 fa-lg fa-file-o" style="cursor:pointer;" onclick="ItemProfesional.fnBuscarPersona('PROF_SUSC_INF', 'TODOS');" data-toggle="tooltip" data-placement="top" title="Nuevo"></i>
+                                                                    <strong>  Profesional que suscribe el Informe</strong>
+                                                                </div>
+                                                            </th>
+                                                        </tr>
+                                                        <tr>
+
+                                                            <th></th>
+                                                            <th>Nº</th>
+                                                            <th>Apellido / Nombre</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody></tbody>
+                                                </table>
+                                            </div>
+                                            <div class="form-row">
+                                                <table id="grvVolInjustificado" class="table table-hover table-bordered">
+                                                    <thead>
+                                                        <tr>
+                                                            <th colspan="9" class="text-sm-left">
+
+                                                                <div class="form-inline">
+                                                                    <i class="fa mx-2 fa-lg fa-file-o" style="cursor:pointer;" onclick="ItemVolInjustificado.showModal(1, this);" data-toggle="tooltip" data-placement="top" title="Nuevo"></i>
+                                                                    <i class="fa mx-2 fa-lg fa-window-close-o" style="cursor:pointer;" onclick="ItemVolInjustificado.deleteAll();" data-toggle="tooltip" data-placement="top" title="Eliminar Todos"></i>
+                                                                    <label style="cursor:pointer;" class="fa mx-2 fa-lg fa-file-excel-o" title="Importar Archivo" data-toggle="tooltip">
+                                                                        <input type="file" id="fileItemVolInjustificado" name="fileItemVolInjustificado" style="display:none" size="60" onchange="ItemVolInjustificado.importarExcel(event, this)">
+                                                                    </label>
+                                                                    <a href="@Url.Content("~/Archivos/Plantilla/VolInjus_v2.xlsx")"> <i class="fa mx-2 fa-lg fa-folder-open" style="cursor:pointer;" data-toggle="tooltip" data-placement="top" title="Descargar Plantilla"></i></a>
+                                                                    <i class="fa mx-2 fa-lg fa-download" style="cursor:pointer;" onclick="ItemVolInjustificado.exportarExcel('VOLINJUS');" data-toggle="tooltip" data-placement="top" title="Descargar el Volumen analizado en la supervisión registrado"></i>
+                                                                    <strong>Volumen analizado en la supervisión</strong>
+                                                                </div>
+                                                            </th>
+                                                        </tr>
+                                                        <tr>
+                                                            <th></th>
+                                                            <th></th>
+                                                            <th>Nº</th>
+                                                            <th>Especie</th>
+                                                            <th>Volumen aprobado analizado</th>
+                                                            <th>Volumen movilizado analizado</th>
+                                                            <th>Volumen injustificado</th>
+                                                            <th>Volumen justificado</th>
+                                                            <th>Observaciones</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody></tbody>
+                                                    <tfoot>
+                                                        <tr>
+
+                                                            <th></th>
+                                                            <th></th>
+                                                            <th></th>
+                                                            <th></th>
+                                                            <th></th>
+                                                            <th></th>
+                                                            <th></th>
+                                                            <th></th>
+                                                            <th></th>
+
+
+                                                        </tr>
+
+                                                    </tfoot>
+                                                </table>
+                                            </div>
+                                            <br />
+                                            <div class="form-row">
+                                                <div class="form-group col-md-12 mb-3">
+                                                    <label for="txtconclusiones" class="text-small">Conclusiones</label>
+                                                    @Html.TextAreaFor(m => m.txtconclusiones, new { @class = "form-control form-control-sm" })
+                                                </div>
+                                            </div>
+                                            <div class="form-row">
+                                                <div class="form-group col-md-12 mb-3">
+                                                    <label for="txtdocAdjuntos" class="text-small">Documentos Adjuntos</label>
+                                                    @Html.TextAreaFor(m => m.txtdocAdjuntos, new { @class = "form-control form-control-sm" })
+                                                </div>
+                                            </div>
+                                        </div>
+                                    }
+                                    <div class="form-row">
+                                        <div class="form-group col-md-12 mb-3">
+                                            <label for="txtObservacion" class="text-small">@Model.lblTituloObs</label>
+                                            @Html.TextAreaFor(m => m.txtObservacion, new { @class = "form-control form-control-sm" })
+                                        </div>
+                                    </div>
+                                      <div class="form-row"> 
+                                      @{                                           
+                                          Html.RenderAction("_IntegracionSIADO", "Controles", new { area = "GENERAL", asCriterio = "SUBTIP_TITDOCSIGO", asSubCriterio = "0006", asValor = Model.hdfcod_informe });
+                                      }
+                                    </div>
+                                </div>
+                            </div>
+
+
+
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    @* Para el control genérico de personas *@
+    <div class="modal fade hide" id="mdlBuscarPersona" role="dialog"></div>
+    <div class="modal fade hide" id="modalAddEditPersona" role="dialog"></div>
+    <div class="modal fade hide" id="personaUbigeoModal" role="dialog"></div>
+</div>
+
+<div class="modal fade" id="PDivItemVolInjustificado" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header p-2" style="cursor:move;">
+                <strong><span class="spTitulo">Nuevo Registro</span></strong>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar" onclick="ItemVolInjustificado.closeModal();">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="frmVolInjustificado">
+
+                    <div class="form-group row">
+                        <label for="ddlInjustEspecies" class="text-small col-md-3">Especie</label>
+                        <div class="col-md-9">
+                            @Html.DropDownList("ddlInjustEspecies", new SelectList(Model.ddlInjustEspecies, "Value", "Text"), new { @class = "form-control-sm", @style = "width:auto;" })
+
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="txtInjustVolAprobado" class="text-small col-md-3">Volumen aprobado</label>
+                        <div class="col-md-9">
+                            <input type="text" id="txtInjustVolAprobado" name="txtInjustVolAprobado" class="form-control form-control-sm" maxlength="10" onkeypress="return utilSigo.onKeyDecimal(event, this);">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="txtInjustVolMovilizado" class="text-small col-md-3">Volumen Movilizado</label>
+                        <div class="col-md-9">
+                            <input type="text" id="txtInjustVolMovilizado" name="txtInjustVolMovilizado" class="form-control form-control-sm" maxlength="10" onkeypress="return utilSigo.onKeyDecimal(event, this);">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="txtInjustVolInjustificado" class="text-small col-md-3">Volumen injustificado</label>
+                        <div class="col-md-9">
+                            <input type="text" id="txtInjustVolInjustificado" name="txtInjustVolInjustificado" class="form-control form-control-sm" maxlength="10" onkeypress="return utilSigo.onKeyDecimal(event, this);">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="txtInjustVolJustificado" class="text-small col-md-3">Volumen justificado</label>
+                        <div class="col-md-9">
+                            <input type="text" id="txtInjustVolJustificado" name="txtInjustVolJustificado" class="form-control form-control-sm" maxlength="10" onkeypress="return utilSigo.onKeyDecimal(event, this);">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="txtInjustObservacion" class="text-small col-md-3">Observación</label>
+                        <div class="col-md-9">
+                            <textarea type="text" id="txtInjustObservacion" name="txtInjustObservacion" class="form-control form-control-sm"></textarea>
+
+                        </div>
+                    </div>
+                    <hr />
+
+                    <button type="button" class="btn-primary" onclick="ItemVolInjustificado.saveModal()">Aceptar</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<div class="modal fade" id="modalBuscarTitular" tabindex="-1" role="dialog"></div>
+<div class="modal fade" id="modalBuscarPersona" tabindex="-1" role="dialog"></div>
+<div class="modal fade" id="modalAddEditPersona" tabindex="-1" role="dialog"></div>
+<div class="modal fade" id="personaUbigeoModal" tabindex="-1" role="dialog"></div>

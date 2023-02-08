@@ -1,0 +1,171 @@
+﻿
+@model CapaEntidad.ViewModel.VM_Informe_DatoSuperv
+
+<script type="text/javascript">
+    var _renderDatosSupervision = {};
+
+    _renderDatosSupervision.fnViewModalDenunciaSITD = function () {
+        var url = initSigo.urlControllerGeneral + "_DenunciaSITD";
+        var option = { url: url, type: 'POST', datos: {}, divId: "mdlControles_DenunciaSITD" };
+        utilSigo.fnOpenModal(option, function () {
+            _DenunciaSITD.fnAsignarDatos = function (obj) {
+                if (obj != null && obj != "") {
+                    var data = _DenunciaSITD.dtDenunciaSITD.row($(obj).parents('tr')).data();
+                    _renderDatosSupervision.frm.find("#hdfCodDocDenunciaSITD").val(data["COD_TRAMITE_SITD"]);
+                    _renderDatosSupervision.frm.find("#txtDocDenunciaSITD").val(data["NUM_DREFERENCIA"]);
+                    $("#mdlControles_DenunciaSITD").modal('hide');
+                }
+            }
+            _DenunciaSITD.fnInit();
+        });
+    }
+
+    _renderDatosSupervision.fnShowDatosPeticionMotivada = function () {
+        _renderDatosSupervision.frm.find("#dvTipPeticionMotivada").hide();
+        _renderDatosSupervision.frm.find("#dvDocReferenciaSITD").hide();
+        if (_renderDatosSupervision.frm.find("#ddlMotivoSupervisionId").val() == "0000011") {
+            _renderDatosSupervision.frm.find("#dvTipPeticionMotivada").show();
+            //_renderDatosSupervision.frm.find("#dvDocReferenciaSITD").show();
+        }
+    }
+    _renderDatosSupervision.fnShowDescGeoTecOtro = function () {
+        _renderDatosSupervision.frm.find("#dvDescOtraGeoTec").hide();
+        if (_renderDatosSupervision.frm.find("#chkGeoTecOtro").is(":checked")) {
+            _renderDatosSupervision.frm.find("#dvDescOtraGeoTec").show();
+        }
+    }
+
+    _renderDatosSupervision.fnInit = function () {
+        $.fn.select2.defaults.set("theme", "bootstrap4");
+        _renderDatosSupervision.frm.find("#ddlMotivoSupervisionId").select2({ minimumResultsForSearch: -1 });
+        _renderDatosSupervision.frm.find("#ddlTipoPeticionMotivadaId").select2({ minimumResultsForSearch: -1 });
+        _renderDatosSupervision.frm.find("#ddlTipoSupervisionId").select2({ minimumResultsForSearch: -1 });
+        _renderDatosSupervision.frm.find("#ddlTipoInformeId").select2({ minimumResultsForSearch: -1 });
+
+        utilSigo.fnFormatDate(_renderDatosSupervision.frm.find("#txtFechaInicio"));
+        utilSigo.fnFormatDate(_renderDatosSupervision.frm.find("#txtFechaFin"));
+    }
+
+    _renderDatosSupervision.fnGetDatosSupervision = function () {
+        var datosInforme = {};
+        datosInforme.txtFechaInicio = _renderDatosSupervision.frm.find("#txtFechaInicio").val();
+        datosInforme.txtFechaFin = _renderDatosSupervision.frm.find("#txtFechaFin").val();
+        datosInforme.ddlMotivoSupervisionId = _renderDatosSupervision.frm.find("#hdfCodMotivoSupervision").val();
+        datosInforme.ddlTipoPeticionMotivadaId = _renderDatosSupervision.frm.find("#ddlTipoPeticionMotivadaId").val();
+        datosInforme.ddlTipoSupervisionId = _renderDatosSupervision.frm.find("#ddlTipoSupervisionId").val();
+        datosInforme.ddlTipoInformeId = _renderDatosSupervision.frm.find("#ddlTipoInformeId").val();
+        datosInforme.ddlTipoInformeId = (datosInforme.ddlTipoInformeId == "0000000") ? "CAMPO" : datosInforme.ddlTipoInformeId;
+        datosInforme.hdfCodDocDenunciaSITD = _renderDatosSupervision.frm.find("#hdfCodDocDenunciaSITD").val();
+        datosInforme.chkGeoTecDron = utilSigo.fnGetValChk(_renderDatosSupervision.frm.find("#chkGeoTecDron"));
+        datosInforme.chkGeoTecGeoSupervisor = utilSigo.fnGetValChk(_renderDatosSupervision.frm.find("#chkGeoTecGeoSupervisor"));
+        datosInforme.chkGeoTecOtro = utilSigo.fnGetValChk(_renderDatosSupervision.frm.find("#chkGeoTecOtro"));
+        datosInforme.chkGeoTecNinguno = utilSigo.fnGetValChk(_renderDatosSupervision.frm.find("#chkGeoTecNinguno"));
+        datosInforme.txtGeoTecOtro = _renderDatosSupervision.frm.find("#txtGeoTecOtro").val();
+        return datosInforme;
+    }
+
+    $(document).ready(function () {
+        _renderDatosSupervision.frm = $("#frmRenderDatosSupervision");
+
+        _renderDatosSupervision.fnInit();
+
+        $('[data-toggle="tooltip"]').tooltip();
+
+        //Casos anteriores, solo se muestra como texto
+        if (_renderDatosSupervision.frm.find("#hdfCodMotivoSupervision").val() == "0000010" || _renderDatosSupervision.frm.find("#hdfCodMotivoSupervision").val() == "0000014") {
+            _renderDatosSupervision.frm.find("#dvComboMotSupervision").hide();
+            _renderDatosSupervision.frm.find("#dvTextMotSupervision").show();
+        } else {
+            _renderDatosSupervision.frm.find("#dvComboMotSupervision").show();
+            _renderDatosSupervision.frm.find("#dvTextMotSupervision").hide();
+        }
+
+        _renderDatosSupervision.fnShowDatosPeticionMotivada();
+        _renderDatosSupervision.frm.find("#ddlMotivoSupervisionId").change(function () {
+            _renderDatosSupervision.fnShowDatosPeticionMotivada();
+            _renderDatosSupervision.frm.find("#hdfCodMotivoSupervision").val($(this).val());
+        });
+        _renderDatosSupervision.fnShowDescGeoTecOtro();
+        _renderDatosSupervision.frm.find("#chkGeoTecOtro").click(function () {
+            _renderDatosSupervision.fnShowDescGeoTecOtro();
+        });
+    });
+</script>
+
+<div id="frmRenderDatosSupervision">
+    <div class="form-row">
+        <div class="form-group col-md-2">
+            <label for="txtFechaInicio" class="text-small">Fecha Inicio Supervisión</label>
+            @Html.TextBoxFor(m => m.txtFechaInicio, new { @class = "form-control form-control-sm", placeholder = "dd/mm/aaaa", maxlength = "10" })
+        </div>
+        <div class="form-group col-md-2">
+            <label for="txtFechaFin" class="text-small">Fecha Fin Supervisión</label>
+            @Html.TextBoxFor(m => m.txtFechaFin, new { @class = "form-control form-control-sm", placeholder = "dd/mm/aaaa", maxlength = "10" })
+        </div>
+        <div id="dvComboMotSupervision" class="form-group col-md-2" style="display:none;">
+            <label for="ddlMotivoSupervisionId" class="text-small">Motivo de la Supervisión</label>
+            @Html.DropDownListFor(m => m.ddlMotivoSupervisionId, new SelectList(Model.ddlMotivoSupervision, "Value", "Text"), new { @class = "form-control form-control-sm" })
+        </div>
+        <div id="dvTextMotSupervision" class="form-group col-md-2" style="display:none;">
+            <label for="txtMotivoSupervision" class="text-small">Motivo de la Supervisión</label>
+            @Html.TextBoxFor(m => m.txtMotivoSupervision, new { @class = "form-control form-control-sm", disabled = "disabled" })
+            @Html.Hidden("hdfCodMotivoSupervision", (string)Model.ddlMotivoSupervisionId)
+        </div>
+
+        <div id="dvComboTipSupervision" class="form-group col-md-2">
+            <label for="ddlTipoSupervisionId" class="text-small">Tipo de Supervisión</label>
+            @Html.DropDownListFor(m => m.ddlTipoSupervisionId, new SelectList(Model.ddlTipoSupervision, "Value", "Text"), new { @class = "form-control form-control-sm" })
+        </div>
+        <div id="dvComboTipSupervision" class="form-group col-md-2">
+            <label for="ddlTipoSupervisionId" class="text-small">Tipo de Informe</label>
+            @Html.DropDownListFor(m => m.ddlTipoInformeId, new SelectList(Model.ddlTipoInforme, "Value", "Text"), new { @class = "form-control form-control-sm" })
+        </div>
+        @*<div id="dvTextTipSupervision" class="form-group col-md-2" style="display:none;">
+            <label for="txtTipoSupervision" class="text-small">Tipo de Supervisión</label>
+            @Html.TextBoxFor(m => m.txtTipoSupervision, new { @class = "form-control form-control-sm", disabled = "disabled" })
+            @Html.Hidden("hdfCodTipoSupervision", (string)Model.ddlTipoSupervisionId)
+        </div>*@
+
+        <div id="dvTipPeticionMotivada" class="form-group col-md-3" style="display:none;">
+            <label for="ddlTipoPeticionMotivadaId" class="text-small">Tipo Petición Motivada</label>
+            @Html.DropDownListFor(m => m.ddlTipoPeticionMotivadaId, new SelectList(Model.ddlTipoPeticionMotivada, "Value", "Text"), new { @class = "form-control form-control-sm" })
+        </div>
+        <div id="dvDocReferenciaSITD" class="form-group col-md-3" style="display:none;">
+            <label for="txtDocReferenciaSITD" class="text-small">Documento Denuncia (SITD)</label>
+            <div class="input-group">
+                @Html.TextBoxFor(m => m.txtDocDenunciaSITD, new { @class = "form-control form-control-sm", disabled = "disabled" })
+                @Html.HiddenFor(m => m.hdfCodDocDenunciaSITD)
+                <div class="input-group-prepend">
+                    <span class="input-group-text" style="cursor:pointer;" onclick="_renderDatosSupervision.fnViewModalDenunciaSITD()"><i class="fa fa-search" data-toggle="tooltip" data-placement="top" title="Seleccionar el documento de denuncia del SITD"></i></span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="form-group col-md-4">
+            <label for="chkGeoTec" class="text-small">¿Qué geotecnología se ha utilizado en la supervisión?</label>
+            <div style="margin-top:7px;">
+                <div class="form-check form-check-inline">
+                    @Html.CheckBoxFor(m => m.chkGeoTecDron, new { @class = "form-check-input", style = "width:15px;height:16px;" })
+                    <label class="form-check-label" for="chkGeoTecDron">Dron</label>
+                </div>
+                <div class="form-check form-check-inline">
+                    @Html.CheckBoxFor(m => m.chkGeoTecGeoSupervisor, new { @class = "form-check-input", style = "width:15px;height:16px;" })
+                    <label class="form-check-label" for="chkGeoTecGeoSupervisor">Geosupervisor</label>
+                </div>
+                <div class="form-check form-check-inline">
+                    @Html.CheckBoxFor(m => m.chkGeoTecOtro, new { @class = "form-check-input", style = "width:15px;height:16px;" })
+                    <label class="form-check-label" for="chkGeoTecOtro">Otros</label>
+                </div>
+                <div class="form-check form-check-inline">
+                    @Html.CheckBoxFor(m => m.chkGeoTecNinguno, new { @class = "form-check-input", style = "width:15px;height:16px;" })
+                    <label class="form-check-label" for="chkGeoTecNinguno">Ninguno</label>
+                </div>
+            </div>
+        </div>
+        <div id="dvDescOtraGeoTec" class="form-group col-md-2" style="display:none;">
+            <label for="txtGeoTecOtro" class="text-small">Otra Geotecnología</label>
+            @Html.TextBoxFor(m => m.txtGeoTecOtro, new { @class = "form-control form-control-sm" })
+        </div>
+    </div>
+</div>

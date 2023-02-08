@@ -1,0 +1,22 @@
+﻿
+@{
+    ViewBag.Title = "ErrorC";
+    Layout = "~/Views/Shared/_LayoutMain.cshtml";
+}
+@section scripts{
+<script>
+    $(document).ready(function () {
+
+    });
+</script>
+}
+<div class="alert alert-danger" role="alert">
+    @if (ViewBag.mensajeError == "")
+    {
+        <h2 style="text-align:center">Sucedio un error, Comuníquese con el Administrador</h2>
+    }
+    else
+    {
+        <h2 style="text-align:center">@ViewBag.mensajeError</h2>
+    }
+</div>

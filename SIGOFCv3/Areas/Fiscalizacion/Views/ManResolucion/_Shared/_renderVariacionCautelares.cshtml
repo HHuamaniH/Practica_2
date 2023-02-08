@@ -1,0 +1,79 @@
+﻿@model CapaEntidad.ViewModel.VM_Resodirec
+<div id="divRDArchivo">
+    <div class="card-header text-small">Medida Cautelar Resolución Directoral de Inicio PAU</div>
+    <div><br /></div>
+
+
+    <div class="form-row">
+        <div class="form-group col-md-12">
+            @Html.TextAreaFor(m => m.txtMedidaCaut, 4, 1, new { @class = "form-control form-control-sm" })
+        </div>
+    </div>
+    <div class="card-header text-small">Acción</div>
+    <div><br /></div>
+
+
+    <div class="form-row">
+        <div class="form-group col-md-4">
+            <label for="chkGTF" class="text-small">Levantamiento de Medidas Cautelares</label>
+        </div>
+        <div class="form-group col-md-6">
+            @Html.CheckBoxFor(m => m.chklevmed, new { @class = "form-check-input", style = "width:15px;height:16px;" })
+        </div>
+        <div class="form-group col-md-2">
+        </div>
+    </div>
+
+    <div class="form-row">
+        <div class="form-group col-md-4">
+            <label for="chkGTF" class="text-small">Levantar en Parte Medidas Cautelares</label>
+        </div>
+        <div class="form-group col-md-6">
+            @Html.CheckBoxFor(m => m.chklevParmed, new { @class = "form-check-input", style = "width:15px;height:16px;" })
+        </div>
+        <div class="form-group col-md-2">
+        </div>
+    </div>
+
+    <div class="form-row">
+        <div class="form-group col-md-4">
+            <label for="chkGTF" class="text-small">No Levantar Medidas Cautelares</label>
+        </div>
+        <div class="form-group col-md-6">
+            @Html.CheckBoxFor(m => m.chkNoLevmed, new { @class = "form-check-input", style = "width:15px;height:16px;" })
+        </div>
+        <div class="form-group col-md-2">
+        </div>
+    </div>
+
+    <div class="form-row">
+        <div class="form-group col-md-4">
+            <label for="chkGTF" class="text-small">Modificación de Medidas Cautelares</label>
+        </div>
+        <div class="form-group col-md-6">
+            @Html.CheckBoxFor(m => m.chkmodmed, new { @class = "form-check-input", style = "width:15px;height:16px;" })
+        </div>
+        <div class="form-group col-md-2">
+        </div>
+    </div>
+
+    <div class="form-row" id="divRectificacion">
+        <div class="form-group col-md-4">
+            <label for="chkGTF" class="text-small">Descripción de medidas cautelares modificadas</label>
+        </div>
+        <div class="form-group col-md-6">
+            @Html.TextAreaFor(m => m.txtdesmed, 4, 1, new { @class = "form-control form-control-sm" })
+        </div>
+        <div class="form-group col-md-2">
+        </div>
+    </div>
+
+    <!--Rectificacion-->
+    <div>
+        @Html.Partial("~/Areas/Fiscalizacion/Views/ManResolucion/_Shared/_generic/_renderRectificacion.cshtml", Model)
+    </div>
+
+</div>
+
+
+

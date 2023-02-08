@@ -1,0 +1,106 @@
+﻿
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#tbListResumen').DataTable({
+            "searching": false,
+            scrollY: "500px",
+            scrollX: true,
+            scrollCollapse: true,
+            paging: false,
+       
+        });
+    });
+
+</script>
+<style>
+    th, td {
+        white-space: nowrap;
+    }
+
+</style>
+<div id="divTbResumen" style="width: 100%;">
+    <table id="tbListResumen" class="table table-bordered" style="width: 100% !important;  border-collapse: collapse;" >
+        <thead>
+            <tr  style="background-color: #dae7f5">
+                <td>N°</td>
+                <td>Especialista Legal</td>
+                <td>Meta/Mes</td>
+                <td>Enero</td>
+                <td>% Avance Enero</td>
+                <td>Febrero</td>
+                <td>% Avance Febrero</td>
+                <td>Marzo</td>
+                <td>% Avance Marzo</td>
+                <td>Abril</td>
+                <td>% Avance Abril</td>
+                <td>Mayo</td>
+                <td>% Avance Mayo</td>
+                <td>Junio</td>
+                <td>% Avance Junio</td>
+                <td>Julio</td>
+                <td>% Avance Julio</td>
+                <td>Agosto</td>
+                <td>% Avance Agosto</td>
+                <td>Septiembre</td>
+                <td>% Avance Septiembre</td>
+                <td>Octubre</td>
+                <td>% Avance Octubre</td>
+                <td>Noviembre</td>
+                <td>% Avance Noviembre</td>
+                <td>Diciembre</td>
+                <td>% Avance Diciembre</td>
+                <td>Total</td>
+            </tr>
+        </thead>
+        <tbody id="bodyTable">
+            @if (Model.listProduccionEL != null)
+            {
+                var count = 0;
+                foreach (var item in Model.listProduccionEL)
+                {
+                    <tr>
+                        <td style="background-color: #dae7f5;">@(++count)</td>
+                        <td style="background-color: #dae7f5;">@item.NOMBRES </td>
+                        <td style="background-color: #dae7f5;">@item.META </td>
+                        <td>@item.enero </td>
+                        <td>@item.eneroAV %</td>
+                        <td>@item.febrero </td>
+                        <td>@item.febreroAV %</td>
+                        <td>@item.marzo </td>
+                        <td>@item.marzoAV %</td>
+                        <td>@item.abril </td>
+                        <td>@item.abrilAV %</td>
+                        <td>@item.mayo </td>
+                        <td>@item.mayoAV %</td>
+                        <td>@item.junio </td>
+                        <td>@item.junioAV %</td>
+                        <td>@item.julio </td>
+                        <td>@item.julioAV %</td>
+                        <td>@item.agosto </td>
+                        <td>@item.agostoAV %</td>
+                        <td>@item.septiembre</td>
+                        <td>@item.septiembreAV %</td>
+                        <td>@item.octubre </td>
+                        <td>@item.octubreAV %</td>
+                        <td>@item.noviembre </td>
+                        <td>@item.noviembreAV %</td>
+                        <td>@item.diciembre </td>
+                        <td>@item.diciembreAV %</td>
+                        <td>@item.TOTAL </td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+    <br />
+    <div id="divMensajeNota" runat="server">
+        *NOTA:<br />
+        <ol type="a">
+            <li>
+                Meta/Mes = 12 (especialistas de las Sub direcciones), contabiliza: informes legales de evaluación del informe de supervisión (incluye informe de la autoridad,
+                auditoría, suspensión, etc.), informe final de instrucción y Resolución de Variación de imputaciones.
+            </li>
+            <li>Meta/Mes = 11 (especialistas de la Dirección), contabiliza: Resoluciones Directorales de término de PAU.</li>
+        </ol>
+    </div>
+</div>

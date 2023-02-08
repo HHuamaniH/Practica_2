@@ -1,0 +1,85 @@
+﻿@model CapaEntidad.ViewModel.VM_ExSituItem
+<div id="divItemESituAnual" class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+        <div class="modal-header text-small" style="cursor:move;">            
+            <h5 class="modal-title">@Model.lblTitulo</h5>             
+        </div>
+        <div class="modal-body">
+            <form id="frmItemESituAnual">
+                @Html.HiddenFor(m => m.COD_PMANEJO)
+                @Html.HiddenFor(m => m.COD_SECUENCIAL)
+                @Html.HiddenFor(m => m.hdEstado)                 
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label for="txtItemESituIAnual_Ano" class="text-small">Año</label>                         
+                        @Html.EditorFor(m => m.txtItemESituIAnual_Ano, new { htmlAttributes = new { @class = "form-control form-control-sm", @onkeypress = "return utilSigo.onKeyEntero(event, this);", @maxlength = "4" } })
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="txtItemESituIAnual_FEmision" class="text-small">Fecha de emisión</label>                        
+                        @Html.EditorFor(m => m.txtItemESituIAnual_FEmision, new { htmlAttributes = new { @class = "form-control form-control-sm", @maxlength = "10" } })
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label for="txtItemESituIAnual_FRecepcion" class="text-small">Fecha de recepción de la Autoridad Competente</label>                        
+                        @Html.EditorFor(m => m.txtItemESituIAnual_FRecepcion, new { htmlAttributes = new { @class = "form-control form-control-sm", @maxlength = "10" } })
+                    </div>
+                    <div class="form-group col-md-6">
+                    </div>
+                </div>
+                <div class="card-header text-small">
+                    Profesional que elaboró el Informe Anual
+                </div>
+                <div class="card-body" style="border:1.5px;">
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label for="lblProfesional" class="text-small">Nombres<i class="fa fa-cog fa-spin text-danger" id="iconProfesional" style="display:none;" data-toggle="tooltip" data-placement="top" title="Seleccione Profesional"></i></label>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"><i id="btnAddProfesional" class="fa fa-plus" style="cursor:pointer;" data-toggle="tooltip" data-placement="top" title="Agregar"></i></span>
+                                </div>                                
+                                @Html.EditorFor(m => m.txtProfesional, new { htmlAttributes = new { @class = "form-control form-control-sm", disabled = "disabled" } })
+                                @Html.HiddenFor(m => m.hdtxtProfesional)
+                            </div>
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label for="txtDni" class="text-small">DNI</label>                             
+                            @Html.EditorFor(m => m.txtDni, new { htmlAttributes = new { @class = "form-control form-control-sm", disabled = "disabled" } })
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label for="txtItemESituIAnual_PNR" class="text-small">N° Registro</label>                             
+                            @Html.EditorFor(m => m.txtItemESituIAnual_PNR, new { htmlAttributes = new { @class = "form-control form-control-sm", @maxlength = "4" } })
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label for="txtDni" class="text-small">N° Colegio Profesional</label>                             
+                            @Html.EditorFor(m => m.lblItemESituIAnual_PNC, new { htmlAttributes = new { @class = "form-control form-control-sm", disabled = "disabled" } })
+                        </div>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-12">
+                        <div class="custom-control custom-checkbox my-1 mr-sm-2">
+                            @Html.CheckBoxFor(m => m.chkItemAcorde_Tdr_Vigente, new { @class = "custom-control-input" })
+                            <label class="custom-control-label" style="margin-top:4px;" for="chkItemAcorde_Tdr_Vigente">
+                                Se encuentra redactado de acuerdo a los TdR vigentes
+                            </label>
+                        </div>
+                    </div>                    
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-12">
+                        <label for="txtItemESituIAnual_Observacion" class="text-small">Observación</label>                        
+                        @Html.TextAreaFor(m => m.txtItemESituIAnual_Observacion, new { @class = "form-control form-control-sm", rows = 2 })
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="modal-footer">
+            <button id="btnGuardar" class="btn btn-primary btn-sm">Agregar</button>
+            <button id="btnCancelar" class="btn btn-secondary btn-sm">Cancelar</button>
+        </div>
+    </div>
+</div>
+<script src="~/Areas/THabilitante/js/ManPlanManejo/_ItemESituIAnual.js"></script>

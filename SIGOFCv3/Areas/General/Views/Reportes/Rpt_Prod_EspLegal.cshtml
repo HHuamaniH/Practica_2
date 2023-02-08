@@ -1,0 +1,313 @@
+﻿
+@model CapaEntidad.ViewModel.VM_ReporteGeneral
+@{
+    ViewBag.Title = "Reporte";
+    Layout = "~/Views/Shared/_LayoutMain.cshtml";
+}
+
+<script src="~/Scripts/chart/chart.js"></script>
+<script type="text/javascript">
+    var _rendReporteEL = {};
+    $(function () {
+        $("[id*=chkTodoR]").on("change", function () {
+            if ($(this).is(":checked")) {
+                $("[id*=chkDireccion] input").prop("checked", true);
+            } else {
+                $("[id*=chkDireccion] input").prop('checked', false);
+            }
+        });
+        $("[id*=chkTodoAnio]").on("change", function () {
+            if ($(this).is(":checked")) {
+                $("[id*=chkAnio] input").prop("checked", true);
+            } else {
+                $("[id*=chkAnio] input").prop('checked', false);
+            }
+        });
+    });
+
+    _rendReporteEL.fnBuscarPersona = function (_dom, _tipoPersona) {
+        var url = urlLocalSigo + "General/Controles/_BuscarPersonaGeneral";
+        var option = { url: url, type: 'GET', datos: { asBusGrupo: "PERSONA", asCodPTipo: "TODOS", asTipoPersona: _tipoPersona }, divId: "mdlBuscarPersona" };
+        utilSigo.fnOpenModal(option, function () {
+            _bPerGen.fnAsignarDatos = function (obj) {
+                if (obj != null && obj != "") {
+                    var data = _bPerGen.dtBuscarPerona.row($(obj).parents('tr')).data();
+                    switch (_dom) {
+                        case "PROFESIONAL":
+                            _rendReporteEL.frm.find("#hdCodProfesional").val(data["COD_PERSONA"]);
+                            _rendReporteEL.frm.find("#txtPersona").val(data["PERSONA"]);
+                            break;
+                    }
+                    utilSigo.fnCloseModal("mdlBuscarPersona");
+                }
+            };
+            _bPerGen.fnInit();
+        });
+    };
+
+    _rendReporteEL.fnViewModalUbigeo = function () {
+        var url = initSigo.urlControllerGeneral + "_Ubigeo";
+        var option = { url: url, type: 'POST', datos: {}, divId: "mdlControles_Ubigeo" };
+        utilSigo.fnOpenModal(option, function () {
+            _Ubigeo.fnSelectUbigeo = function (_ubigeoText, _ubigeoId) {
+                _rendReporteEL.frm.find("#hdfCodUbigeo").val(_ubigeoId);
+                _rendReporteEL.frm.find("#txtUbigeo").val(_ubigeoText);
+                $("#mdlControles_Ubigeo").modal('hide');
+            }
+            _Ubigeo.fnLoadModalView(_rendReporteEL.frm.find("#hdfCodUbigeo").val());
+        }, function () {
+            if (!utilSigo.fnValidateForm_HideControl(_rendReporteEL.frm, _rendReporteEL.frm.find("#hdfCodUbigeo"), _rendReporteEL.frm.find("#iconUbigeo"), false)) return false;
+            return true;
+        }
+        );
+    }
+    _rendReporteEL.fnReporte = function () {
+        let codUsuario = _rendReporteEL.frm.find("#hdCodProfesional").val();
+        let anio = [];
+        $("[id*=chkAnio] input:checked").each(function () {
+            anio.push($(this).attr('value'));
+        });
+        let direccion = [];
+        $("[id*=chkDireccion] input:checked").each(function () {
+            direccion.push($(this).attr('value'));
+        });
+        let chkProfesional = _rendReporteEL.frm.find("#chkProfesional").is(':checked');
+        let url = urlLocalSigo + "General/Reportes/ReporteProdEL";
+        if (chkProfesional == true && codUsuario == "") {
+            utilSigo.toastWarning("Aviso", 'Seleccione un usuario para la consulta');
+        } else {
+            if (anio != null) {
+                if (direccion.length > 0) {
+
+                    $.ajax({
+                        url: url,
+                        type: 'POST',
+                        datatype: "json",
+                        traditional: true,
+                        data: { 'direccion': direccion, 'anio': anio, 'codUsuario': codUsuario, 'chkProfesional': chkProfesional },
+                        success: function (data) {
+                            $('div#divReporteEL').html(data);
+                            _rendReporteEL.frm.find("#divReporteDetalleEL").hide();
+                            //_rendReporteEL.fnGraficar();
+                        }
+                    });
+                } else {
+                    utilSigo.toastWarning("Aviso", 'Seleccione una dirección de linea');
+                }
+            } else {
+                utilSigo.toastWarning("Aviso", 'Seleccione año de busqueda');
+            }
+        }
+    }
+    _rendReporteEL.fnReporteDetalle = function (TCodtipo, TCodigo) {
+        let codFCTipo = TCodtipo;
+        let codigo = TCodigo;
+        let anio = [];
+        $("[id*=chkAnio] input:checked").each(function () {
+            anio.push($(this).attr('value'));
+        });
+        let direccion = [];
+        $("[id*=chkDireccion] input:checked").each(function () {
+            direccion.push($(this).attr('value'));
+        });
+
+        let url = urlLocalSigo + "General/Reportes/ReporteProdELDetalle";
+        // alert(direccion)
+        if (anio != null) {
+            if (direccion.length > 0) {
+                $.ajax({
+                    url: url,
+                    type: 'POST',
+                    datatype: "json",
+                    traditional: true,
+                    data: { 'direccion': direccion, 'anio': anio, 'codFCTipo': codFCTipo, 'codigo': codigo },
+                    success: function (data) {
+                        _rendReporteEL.frm.find("#divReporteDetalleEL").show();
+                        $('div#divReporteDetalleEL').html(data);
+                    }
+                });
+
+            } else {
+                utilSigo.toastWarning("Aviso", 'Seleccione una dirección de linea');
+            }
+        } else {
+            utilSigo.toastWarning("Aviso", 'Seleccione año de busqueda');
+        }
+    }
+
+    _rendReporteEL.fnReporteDetalle2 = function (TCodtipo) {
+        let codFCTipo = TCodtipo;
+        let anio = [];
+        $("[id*=chkAnio] input:checked").each(function () {
+            anio.push($(this).attr('value'));
+        });
+        let direccion = [];
+        $("[id*=chkDireccion] input:checked").each(function () {
+            direccion.push($(this).attr('value'));
+        });
+        let chkProfesional = _rendReporteEL.frm.find("#chkProfesional").is(':checked');
+        let codUsuario = _rendReporteEL.frm.find("#hdCodProfesional").val();
+
+        let url = urlLocalSigo + "General/Reportes/ReporteProdELDetalle2";
+        if (chkProfesional == true && codUsuario == "") {
+            utilSigo.toastWarning("Aviso", 'Seleccione un usuario para la consulta');
+        }
+        else {
+            if (anio != null) {
+                if (direccion.length > 0) {
+                    $.ajax({
+                        url: url,
+                        type: 'POST',
+                        datatype: "json",
+                        traditional: true,
+                        data: { 'direccion': direccion, 'anio': anio, 'codFCTipo': codFCTipo, 'codUsuario': codUsuario, 'chkProfesional': chkProfesional },
+                        success: function (data) {
+                            _rendReporteEL.frm.find("#divReporteDetalleEL").show();
+                            $('div#divReporteDetalleEL').html(data);
+                        }
+                    });
+
+                } else {
+                    utilSigo.toastWarning("Aviso", 'Seleccione una dirección de linea');
+                }
+            } else {
+                utilSigo.toastWarning("Aviso", 'Seleccione año de busqueda');
+            }
+        }
+    }
+    $(document).ready(function () {
+        _rendReporteEL.frm = $("#divReporteProduccionEL");
+    });
+
+
+</script>
+
+<div id="divReporteProduccionEL" class="container-fluid" style="font-size:12px !important;">
+    <div class="card">
+        <div class="card-header text-left">
+            <h5>Informes Legales por Especialista</h5>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-sm-12">
+                    <a class="btn btn-outline-success" data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
+                        Opciones de busqueda
+                    </a>
+                    <div class="collapse" id="collapseExample">
+                        <div class="card card-body">
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <h6>Sel. Año de consulta</h6>
+                                    <ul class="list-group">
+                                        <li>
+                                            <div class="checkbox">
+                                                <label>
+                                                    <input type="checkbox" class="check" value="00" id="chkTodoAnio">
+                                                    Todos los años
+                                                </label>
+                                            </div>
+                                        </li>
+                                        <div id="chkAnio" style="height:150px; overflow-y: scroll;">
+                                            @if (Model.lstChkAnio != null)
+                                            {
+                                                foreach (var item in Model.lstChkAnio)
+                                                {
+                                                    <li>
+                                                        <div class="checkbox">
+                                                            <label>
+                                                                <input type="checkbox" name="radioAnio" class="check" value="@item.Value">
+                                                                @item.Text
+                                                            </label>
+                                                        </div>
+                                                    </li>
+
+                                                }
+                                            }
+                                        </div>
+                                    </ul>
+                                </div>
+                                <div class="col-sm-3">
+                                    <div class="listFiltro">
+                                        <h6 class="text-center">Sel. Sub Dirección de Linea</h6>
+                                        <div class="box" style="height:150px; overflow-y: scroll;">
+                                            <ul class="list-group">
+                                                <li>
+                                                    <div class="checkbox">
+                                                        <label>
+                                                            <input type="checkbox" class="check" value="00" id="chkTodoR">
+                                                            Todas las DL
+                                                        </label>
+                                                    </div>
+                                                </li>
+                                                <div id="chkDireccion">
+                                                    @if (Model.listDireccionLinea != null)
+                                                    {
+                                                        foreach (var item in Model.listDireccionLinea)
+                                                        {
+                                                            <li>
+                                                                <div class="checkbox">
+                                                                    <label>
+                                                                        <input type="checkbox" class="check" value="@item.CODIGO">
+                                                                        @item.DESCRIPCION
+                                                                    </label>
+                                                                </div>
+                                                            </li>
+                                                        }
+                                                    }
+                                                </div>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-3">
+                                    <div class="checkbox">
+                                        <label>
+                                            <input type="checkbox" class="check" value="00" id="chkProfesional">
+                                            Profesional
+                                        </label>
+                                    </div><br />
+                                    <label for="txtProfesional" class="text-small texto-recortado">Nombre del funcionario<i class="fa fa-cog fa-spin text-danger" id="iconRLegalCodigo" style="display:none;" data-toggle="tooltip" data-placement="top" title="Seleccione funcionario"></i></label>
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text"><i class="fa fa-plus" style="cursor:pointer;" onclick="_rendReporteEL.fnBuscarPersona('PROFESIONAL', 'N');" data-toggle="tooltip" data-placement="top" title="Agregar"></i></span>
+                                        </div>
+                                        @Html.EditorFor(m => m.txtPersona, new { htmlAttributes = new { @class = "form-control form-control-sm", @disabled = "disabled" } })
+                                        <input type="hidden" id="hdCodProfesional" />
+                                    </div>
+                                </div>
+                                <div class="col-sm-3">
+                                    <button id="btnBuscarFauna" class="btn btn-info" style="float: right" onclick="_rendReporteEL.fnReporte()">
+                                        <i class="fa fa-search"></i>&nbsp;&nbsp;Generar reporte
+                                    </button>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                    <br />
+                </div>
+                <div class="col-sm-12">
+                    <br />
+                </div>
+            </div>
+
+            <div><hr /></div>
+            <div id="divReporteEL">
+
+            </div>
+            <div><br /></div>
+            <div id="divReporteDetalleEL">
+
+            </div>
+            <div><br /></div>
+            <div style="text-align:center !important;">
+                <canvas id="myChart" style="width:30% !important; height:30% !important;"></canvas>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<div class="modal fade hide" id="mdlBuscarPersona" role="dialog"></div>
+<div class="modal fade" id="modalAddEditPersona" tabindex="-1" role="dialog"></div>
+<div class="modal fade hide" id="personaUbigeoModal" role="dialog"></div>

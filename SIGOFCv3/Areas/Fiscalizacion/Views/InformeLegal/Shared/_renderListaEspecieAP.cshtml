@@ -1,0 +1,101 @@
+﻿
+@model  CapaEntidad.ViewModel.VM_InformeLegal
+
+<style type="text/css">
+    #tbRenderListILegal_wrapper {
+        padding: 0px;
+    }
+
+    #tbConsultaILegal_info {
+        color: #33b35a;
+        font-size: 12px;
+        margin-top: 12px;
+    }
+</style>
+
+
+<script type="text/javascript">
+    var _renderListaEspeciesA = {};
+     _renderListaEspeciesA.tbEliTABLA = [];
+
+    // iniciar datos en la tabla
+    _renderListaEspeciesA.fnInitDataTable_Detail = function () {
+        var columns_label = [], columns_data = [], options = {};
+
+        columns_label = ["Especie"];
+        columns_data = ["DESCRIPCION_ESPECIE"];
+        options = {
+            page_length: 10, row_index: true, row_delete: true, row_fnDelete: "_renderListaEspeciesA.fnDelete(this)", page_sort: true
+        };
+        _renderListaEspeciesA.dtRenderListInforme = utilDt.fnLoadDataTable_Detail(_renderListaEspeciesA.frm.find("#tbRenderListEspeciesAP"), columns_label, columns_data, options);
+        _renderListaEspeciesA.dtRenderListInforme.rows.add(JSON.parse('@Html.Raw(Json.Encode(@Model.listaEspeciesAP))')).draw();
+    }
+
+    /*Listado de registros (render)*/
+    _renderListaEspeciesA.fnDelete = function (obj) {
+        var data = _renderListaEspeciesA.dtRenderListInforme.row($(obj).parents('tr')).data();
+
+        if (data["RegEstado"] == "0") {
+            _renderListaEspeciesA.tbEliTABLA.push({
+                EliTABLA: "ILEGAL_IALERTA_ESPECIES",
+                COD_ESPECIES: data["COD_ESPECIES"],
+                COD_SECUENCIAL: data["COD_SECUENCIAL"]
+
+            });
+        }
+        _renderListaEspeciesA.dtRenderListInforme.row($(obj).parents('tr')).remove().draw(false);
+    }
+
+    _renderListaEspeciesA.fnGetListEliTABLA = function () { return _renderListaEspeciesA.tbEliTABLA }
+
+       //devuelve la lista de especies
+    _renderListaEspeciesA.fnGetList = function () {
+        let list = [], rows, countFilas, data;
+        rows = _renderListaEspeciesA.dtRenderListInforme.$("tr");
+        countFilas = rows.length;
+        if (countFilas > 0) {
+            $.each(rows, function (i, o) {
+                data = _renderListaEspeciesA.dtRenderListInforme.row($(o)).data();
+                list.push(utilSigo.fnConvertArrayToObject(data));
+            });
+        }
+        return list;
+    }
+
+    _renderListaEspeciesA.fnAdd = function (obj) {
+
+        var codEspecie = _renderListaEspeciesA.frm.find("#ddlEspeciesAP").val();
+        var especie = _renderListaEspeciesA.frm.find("#ddlEspeciesAP option:selected").text();
+        var data = {
+            "COD_ESPECIES" : codEspecie,
+            "DESCRIPCION_ESPECIE": especie,
+            "COD_SECUENCIAL": 0,
+            "RegEstado": 1
+        }
+        _renderListaEspeciesA.dtRenderListInforme.rows.add([data]).draw();
+        _renderListaEspeciesA.dtRenderListInforme.page('last').draw('page');
+    }
+
+    $(document).ready(function () {
+       _renderListaEspeciesA.frm = $("#frmRenderListaEspeciesAP");
+       _renderListaEspeciesA.fnInitDataTable_Detail();
+   });
+</script>
+<div id="frmRenderListaEspeciesAP">
+    <div class="col-md-12">
+        @Html.DropDownListFor(m => m.txtIdEspecie, new SelectList(Model.listaEspeciesCombo, "Value", "Text", Model.listaEspeciesCombo),
+                  new { @class = "form-control form-control-sm", @id = "ddlEspeciesAP" })
+    </div>
+    <div class="col-md-12">
+        <button type="button" id="btnEspecies" class="btn btn-info btn-sm" onclick="_renderListaEspeciesA.fnAdd()"> Agregar Especie</button>
+    </div>
+    <div class="col-md-12">
+        <div class="table-responsive">
+            <table id="tbRenderListEspeciesAP" style="width:100%;margin:0px !important;" class="table table-hover table-bordered">
+                <thead></thead>
+                <tbody></tbody>
+            </table>
+        </div>
+    </div>
+</div>
+

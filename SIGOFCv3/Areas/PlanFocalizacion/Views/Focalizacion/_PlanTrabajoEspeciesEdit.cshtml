@@ -1,0 +1,32 @@
+﻿@model CapaEntidad.ViewModel.VM_PlanManejoEspecies
+<div class="modal-dialog" role="document">
+    <div class="modal-content">
+        <div class="modal-header text-small" style="cursor:move;padding:0.5rem;">
+            <h5 class="modal-title">Especie @Model.especie</h5>
+        </div>
+        <div class="modal-body">
+            <form id="frmManPlanTrabajoEspecie" method="post">
+                @Html.HiddenFor(m => m.cod_paspeq_plan_trabajo_especies)
+                @Html.HiddenFor(m => m.cod_paspeq_detalle_mensual)
+                @Html.HiddenFor(m => m.cod_especies)
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label for="txtAprovechables" class="text-small">Aprovechables a supervisar</label>
+                        @Html.TextBoxFor(m => m.aprovechables_supervisar, new { @class = "form-control form-control-sm", maxlength = "4" })
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="txtSemilleros" class="text-small">Semilleros a supervisar</label>
+                        @Html.TextBoxFor(m => m.semilleros_supervisar, new { @class = "form-control form-control-sm", maxlength = "4" })
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="modal-footer">
+            <button id="btnGuardar" class="btn btn-primary btn-sm" onclick="_PlanTrabajoEspeciesEdit.fnSave();">Guardar</button>
+            <button id="btnCancelar" class="btn btn-secondary btn-sm" onclick="_PlanTrabajoEspeciesEdit.fnClose();">Cancelar</button>
+        </div>
+    </div>
+</div>
+
+<script src="~/Areas/PlanFocalizacion/js/Focalizacion/_PlanTrabajoEspeciesEdit.js"></script>
+

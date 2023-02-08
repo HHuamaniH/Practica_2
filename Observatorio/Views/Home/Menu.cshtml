@@ -1,0 +1,32 @@
+﻿<link href="~/Styles/Proyectos/menuObservatorio.min.css" rel="stylesheet" />
+@{ 
+    ViewBag.Title = "Menu";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="mainBotonera">
+    <div class="msjMenu">
+        <div>
+            <div> 
+            </div>            
+            <div><h1>Observatorio OSINFOR</h1></div>
+        </div>
+        <div class="submsjMenu"><p>Califica a los planes de manejo de los títulos habilitantes en base a los resultados de la supervisión en campo y/o fiscalización del OSINFOR, con la finalidad de coadyuvar al comercio legal de la madera.</p></div>
+    </div>
+    
+    <div class="subBotoneraR">
+        <a href=@Url.Action("listaRoja","Home")>
+            <div>
+                <h1>Lista Roja</h1>  
+            </div>  
+                    
+        </a>
+    </div>
+    <div class="subBotoneraV">
+        <a href=@Url.Action("listaVerde","Home")>
+            <div>
+                <h1>Lista Verde</h1> 
+            </div> 
+                                 
+        </a>
+    </div>
+</div>

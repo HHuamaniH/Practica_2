@@ -1,0 +1,89 @@
+﻿@model List<CapaEntidad.DOC.Ent_Reporte_ProduccionItinerarioSupervision>
+
+<script type="text/javascript">    
+    $(function () {
+        _rendReporteUs.dt = $('#tblDetalle').DataTable({ ordering: false, searching: true, lengthChange: true });
+    });
+</script>
+
+<h4 class="mb-4">
+    Reporte detallado de la OD: @ViewBag.Titulo
+    <button type="button" class="btn btn-primary btn-sm float-right" onclick="_rendReporteUs.fnExportar()">Exportar Resultado</button>
+</h4>
+<div class="table-responsive">
+    <table id="tblDetalle" class="table table-bordered table-hover table-striped mt-3">
+        <thead>
+            <tr>
+                <th>N°</th>
+                <th>Lugar de Salida</th>
+                <th class="text-center">Carta de Notificación</th>
+                <th class="text-center">Supervisor</th>
+                <th class="text-center">Titular a Supervisar</th>
+                <th class="text-center">Título Habitante</th>
+                <th class="text-center">Modalidad</th>
+                <th class="text-center">N° de POA</th>
+                <th class="text-center">Departamento</th>
+                <th class="text-center">Fecha de Salidad a Campo</th>
+                <th class="text-center">Fecha de Inicio de las Labores en la Oficina</th>
+                <th class="text-center">Supervisado</th>
+                <th class="text-center">Informe a Generar</th>
+                <th class="text-center">Con Alerta</th>
+                <th class="text-center">N° de Informe</th>
+                <th class="text-center">D. Línea</th>
+                <th class="text-center">Obs.</th>
+                @if ((ViewBag.INFO_GEO ?? 0) != 0)
+                {
+                    <th class="text-center">Archivo</th>
+                    <th class="text-center">Extensión</th>
+                    <th class="text-center">Ruta</th>
+                }
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model != null)
+            {
+                for (int i = 0; i < Model.Count; i++)
+                {
+                    var item = Model[i];
+
+                    <tr>
+                        <td>@(i + 1)</td>
+                        <td>@item.OD</td>
+                        <td class="text-center">@item.NUM_CNOTIFICACION</td>
+                        <td class="text-center">@item.SUPERVISOR</td>
+                        <td class="text-center">@item.TITULAR</td>
+                        <td class="text-center">@item.NUM_THABILITANTE</td>
+                        <td class="text-center">@item.MODALIDAD</td>
+                        <td class="text-center">@item.POAS</td>
+                        <td class="text-center">@item.DEPARTAMENTO</td>
+                        <td class="text-center">@item.FECHA_SALIDA</td>
+                        <td class="text-center">@item.FECHA_LLEGADA</td>
+                        <td class="text-center">@item.SUPERVISADO_TEXT</td>
+                        <td class="text-center">@item.TIPO_INFORME</td>
+                        <td class="text-center">@item.ALERTA</td>
+                        <td class="text-center">@item.NUM_INFORME</td>
+                        <td class="text-center">@item.ABREVIADO_SUBPER</td>
+                        <td class="text-center">
+                            @if (!string.IsNullOrEmpty(item.OBSERVACION.Trim()))
+                            {
+                                <i class="fa fa-2x fa-comment-o" tabindex="0" data-trigger="focus" data-toggle="popover" title="Observaciones" data-content="@item.OBSERVACION"></i>
+                            }
+                        </td>
+                        @if ((ViewBag.INFO_GEO ?? 0) != 0)
+                        {
+                            <td>@item.NOMBRE_ARCH</td>
+                            <td>@item.EXTENSION_ARCH</td>
+                            <td>
+                                <a onclick="_rendReporteUs.fnDescargarArchivo('@item.RUTA_ARCH', '@string.Format("{0}.{1}", item.NOMBRE_ARCH, item.EXTENSION_ARCH)')">
+                                    <i class="fa fa-cloud-download fa-2x text-success"></i>
+                                </a>
+                            </td>
+                        }
+                    </tr>
+                }
+
+            }
+
+        </tbody>
+    </table>
+</div>

@@ -1,0 +1,90 @@
+﻿    <div id="divTbResumen" style="width: 100%; overflow: auto; scrollbar-base-color: none;">
+        <div style="text-align:center; color:cadetblue">
+            <h3>@Model.tituloReporte</h3>
+        </div>
+        <table id="tbListDetalle" class="table table-bordered table-striped-success" style="width: 100% !important; font-size:12px">
+            <thead>
+                <tr style=" text-align: center;  background-color: #dae7f5">
+                    <td style="width: 2%">N°</td>
+                    <td style="width: 20%">Especialista</td>
+                    <td style="width: 15%">Informe Técnico de Descargo</td>
+                    <td style="width: 15%">Informe de Aclaración</td>
+                    <td style="width: 15%">Informe Complementario</td>
+                    <td style="width: 15%">Informe de Multa</td>
+                    <td style="width: 15%">Otros</td>
+                    <td style="width: 15%">Total</td>
+                </tr>
+            </thead>
+            <tbody id="bodyTable">
+                @if (Model.listResumenEL != null)
+                {
+                    var count = 0;
+                    foreach (var item in Model.listResumenEL)
+                    {
+                        <tr style=" text-align: center; ">
+                            <td style="width: 2%">@(++count)</td>
+                            <td style="width: 20%; text-align:left !important;">@item.APELLIDOS_NOMBRES</td>
+                            <td style="width: 15%">
+                                <a href="#" onclick="_rendReporteIT.fnReporteDetalle('0000038', '@item.CODIGO')" style="cursor:pointer; font-size:14px !important;">
+                                    @item.IL_EVA_INF_SUP
+                                </a>
+                            </td>
+                            <td style="width: 15%">
+                                <a href="#" onclick="_rendReporteIT.fnReporteDetalle('0000042', '@item.CODIGO')" style="cursor:pointer; font-size:14px !important;">
+                                    @item.IL_ETAPA_INSTRU
+                                </a>
+                            </td>
+                            <td style="width: 15%">
+                                <a href="#" onclick="_rendReporteIT.fnReporteDetalle('0000041', '@item.CODIGO')" style="cursor:pointer; font-size:14px !important;">
+                                    @item.IL_CONFORMIDAD
+                                </a>
+                            </td>
+                            <td style="width: 15%">
+                                <a href="#" onclick="_rendReporteIT.fnReporteDetalle('0000040', '@item.CODIGO')" style="cursor:pointer; font-size:14px !important;">
+                                    @item.TOTAL_PRIMERO
+                                </a>
+                            </td>
+                            <td style="width: 15%">
+                                <a href="#" onclick="_rendReporteIT.fnReporteDetalle('0000044', '@item.CODIGO')" style="cursor:pointer; font-size:14px !important;">
+                                    @item.OTROS
+                                </a>
+                            </td>
+                            <td style="width: 15%">@item.TOTAL</td>
+                        </tr>
+                    }
+                }
+            </tbody>
+            <tfoot>
+                <tr style=" text-align: center;  background-color: #dae7f5">
+                    <td style="width: 2%"></td>
+                    <td style="width: 20%">Total</td>
+                    <td style="width: 15%">
+                        <a href="#" onclick="_rendReporteIT.fnReporteDetalle2('0000038')" style="cursor:pointer; font-size:14px !important;">
+                            @Model.subTEvaluacion
+                        </a>
+                    </td>
+                    <td style="width: 15%">
+                        <a href="#" onclick="_rendReporteIT.fnReporteDetalle2('0000042')" style="cursor:pointer; font-size:14px !important;">
+                            @Model.subTInstructiva
+                        </a>
+                    </td>
+                    <td style="width: 15%">
+                        <a href="#" onclick="_rendReporteIT.fnReporteDetalle2('0000041')" style="cursor:pointer; font-size:14px !important;">
+                            @Model.subTReconsideracion
+                        </a>
+                    </td>
+                    <td style="width: 15%">
+                        <a href="#" onclick="_rendReporteIT.fnReporteDetalle2('0000040')" style="cursor:pointer; font-size:14px !important;">
+                            @Model.subTFinal
+                        </a>
+                    </td>
+                    <td style="width: 15%">
+                        <a href="#" onclick="_rendReporteIT.fnReporteDetalle2('0000044')" style="cursor:pointer; font-size:14px !important;">
+                            @Model.subTOtros
+                        </a>
+                    </td>
+                    <td style="width: 15%"></td>
+                </tr>
+            </tfoot>
+        </table>
+    </div>

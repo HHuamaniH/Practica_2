@@ -1,0 +1,97 @@
+﻿
+@model  CapaEntidad.ViewModel.VM_ResolucionTFFS
+
+<style type="text/css">
+    #tbRenderListIncisos_wrapper {
+        padding: 0px;
+    }
+
+    #tbConsultaILegal_info {
+        color: #33b35a;
+        font-size: 12px;
+        margin-top: 12px;
+    }
+</style>
+
+
+<script type="text/javascript">
+    var _rederListaIncisos = {};
+     _rederListaIncisos.tbEliTABLA = [];
+
+    // iniciar datos en la tabla
+     _rederListaIncisos.fnInitDataTable_Detail = function () {
+        var columns_label = [], columns_data = [], options = {};
+
+        columns_label = ["Articulo", "Inciso", "Volumen (m3)", "Especie", "Area (ha)", "Num. Indiv", "Desc. Infraccion", "Numero POA", "Tipo Aprovechamiento"];
+        columns_data = ["DESCRIPCION_ARTICULOS", "DESCRIPCION_ENCISOS", "VOLUMEN","DESCRIPCION_ESPECIE" , "AREA", "NUMERO_INDIVIDUOS", "DESCRIPCION_INFRACCIONES", "POA", "TIPOMADERABLE"];
+        options = {
+            page_length: 10, row_index: true, row_delete: true, row_fnDelete: "_rederListaIncisos.fnDelete(this)", page_sort: true, row_edit :true, row_fnEdit:"_rederListaIncisos.fnEdit(this)"
+        };
+        _rederListaIncisos.dtRenderListInforme = utilDt.fnLoadDataTable_Detail(_rederListaIncisos.frm.find("#tbRenderListIncisos"), columns_label, columns_data, options);
+        _rederListaIncisos.dtRenderListInforme.rows.add(JSON.parse('@Html.Raw(Json.Encode(@Model.ListarIniPAU))')).draw();
+
+
+    }
+
+    _rederListaIncisos.fnEdit = function (obj) {
+        var data = _rederListaIncisos.dtRenderListInforme.row($(obj).parents('tr')).data();
+        alert('Editando');
+  
+    }
+
+
+    /*Listado de registros (render)*/
+    _rederListaIncisos.fnDelete = function (obj) {
+        var data = _rederListaIncisos.dtRenderListInforme.row($(obj).parents('tr')).data();
+        if (data["RegEstado"] == "0") {
+          _rederListaIncisos.tbEliTABLA.push({
+                    EliTABLA: "RESODIREC_DET_INI_PAU",
+                    EliVALOR01: "",
+                    EliVALOR02: data["COD_SECUENCIAL"]
+           });
+        }
+        _rederListaIncisos.dtRenderListInforme.row($(obj).parents('tr')).remove().draw(false);
+    }
+
+    _rederListaIncisos.fnGetListEliTABLA = function () { return _rederListaIncisos.tbEliTABLA }
+
+    //devuelve la lista de infracciones
+    _rederListaIncisos.fnGetList = function () {
+        let list = [], rows, countFilas, data;
+        rows = _rederListaIncisos.dtRenderListInforme.$("tr");
+        countFilas = rows.length;
+        if (countFilas > 0) {
+            $.each(rows, function (i, o) {
+                data = _rederListaIncisos.dtRenderListInforme.row($(o)).data();
+                list.push(utilSigo.fnConvertArrayToObject(data));
+            });
+        }
+        return list;
+    }
+
+   $(document).ready(function () {
+       _rederListaIncisos.frm = $("#frmRenderListIncisos");
+       //inicializa la tabla con los campos obtenidos del model
+       _rederListaIncisos.fnInitDataTable_Detail();
+       //inicializa los componentes necesarios
+       //_rederListaIncisos.fnInit();
+
+   });
+
+</script>
+<div id="frmRenderListIncisos">
+    <div class="table-responsive">
+        <table id="tbRenderListIncisos" style="width:100%;margin:0px !important;" class="table table-hover table-bordered">
+            <thead>
+                <tr>
+                    <th colspan="11" class="text-sm-left">
+                        <div class="form-inline">
+                            <strong> Infracciones presuntamente incurridas</strong>
+                        </div>
+                    </th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
+</div>

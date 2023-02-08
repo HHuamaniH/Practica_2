@@ -1,0 +1,113 @@
+﻿@model IEnumerable<CapaEntidad.DOC.Ent_INFORME_ANALISIS>
+
+    <style type="text/css">
+        #tbAnalisis_wrapper {
+            padding: 0px;
+        }
+
+        table .custom-row-foot th {
+            text-align: center;
+            background-color: lightblue;
+        }
+    </style>
+
+    <script type="text/javascript">
+    var _ReporteAnalisisMaderable = {};
+    //_ReporteAnalisisMaderable.tbEliTABLA = [];
+
+    _ReporteAnalisisMaderable.fnInitDataTable_Detail = function () {
+        var columns_label = [], columns_data = [], options = {};
+
+        columns_label = ["Nombre Científico", "N° de Arboles", "Volumen (m3)", "Volumen (m3)", "%","Saldo","N° de Arboles", "Volumen (m3)", "Volumen (m3)"];
+        columns_data = ["NOMBRE_CIENTIFICO", "NUM_PIEZAS", "VOLUMEN_AUTORIZADO", "VOLUMEN_MOVILIZADO", "PORC", "SALDO", "NUM_ARBOLES", "VOLUMEN", "DIFERENCIA"];
+        options = {
+            page_length: 15, row_index: true, button_excel: true
+            , export_title: "Analisis de Volumen"//$("#tbAnalisis").find("thead tr")[0].innerText.trim()
+        };
+        _ReporteAnalisisMaderable.dtAnalisis = utilDt.fnLoadDataTable_Detail($("#tbAnalisis"), columns_label, columns_data, options);
+    }
+
+    _ReporteAnalisisMaderable.fnSetTotal = function () {
+        var rows, data, piezas = 0, volumenApro = 0, volumen = 0, porc = 0, saldo = 0, arboles = 0, volumenMovi = 0, diferencia = 0;
+
+        rows = _ReporteAnalisisMaderable.dtAnalisis.$("tr");
+        if (rows.length > 0) {
+            $.each(rows, function (i, o) {
+                data = _ReporteAnalisisMaderable.dtAnalisis.row($(o)).data();
+                piezas += parseFloat(data["NUM_PIEZAS"]);
+                volumenApro += parseFloat(data["VOLUMEN_AUTORIZADO"]);
+                volumen += parseFloat(data["VOLUMEN_MOVILIZADO"]);
+                saldo += parseFloat(data["SALDO"]);
+                arboles += parseFloat(data["NUM_ARBOLES"]);
+                volumenMovi += parseFloat(data["VOLUMEN"]);
+                diferencia += parseFloat(data["DIFERENCIA"]);
+               // _ReporteAnalisisMaderable.frm.find("#fechaEmision").text(data["BEXTRACCION_FEMISION"]);
+            });
+            porc = volumen / volumenApro;
+            _ReporteAnalisisMaderable.frm.find("#fechaEmision").text(data["BEXTRACCION_FEMISION"]);
+        }
+    
+        _ReporteAnalisisMaderable.frm.find("#totalPiezas").text(Math.round(piezas * 1000) / 1000);
+        _ReporteAnalisisMaderable.frm.find("#totalVolumenApro").text(Math.round(volumenApro * 1000) / 1000);
+        _ReporteAnalisisMaderable.frm.find("#totalVolumen").text(Math.round(volumen * 1000) / 1000);
+        _ReporteAnalisisMaderable.frm.find("#totalPorc").text(Math.round(porc * 1000) / 1000);
+        _ReporteAnalisisMaderable.frm.find("#totalSaldo").text(Math.round(saldo * 1000) / 1000);
+        _ReporteAnalisisMaderable.frm.find("#totalArboles").text(Math.round(arboles * 1000) / 1000);
+        _ReporteAnalisisMaderable.frm.find("#totalVolumenMovi").text(Math.round(volumenMovi * 1000) / 1000);
+        _ReporteAnalisisMaderable.frm.find("#totalDiferencia").text(Math.round(diferencia * 1000) / 1000);
+    }
+
+    $(document).ready(function () {
+        _ReporteAnalisisMaderable.frm = $("#frmAnalisis");
+
+        _ReporteAnalisisMaderable.fnInitDataTable_Detail();
+        //_ReporteAnalisisMaderable.dtAnalisis.rows.add(JSON.parse('@Html.Raw(Json.Encode(@Model))')).draw();
+        //_ReporteAnalisisMaderable.fnSetTotal();
+    });
+    </script>
+
+<div id="frmAnalisis">
+    <div class="table-responsive">
+        <table id="tbAnalisis" style="width:100%;margin:0px !important;" class="table table-hover table-bordered">
+            <thead>
+                <tr>
+                    <th colspan="11" class="text-sm-center">
+                        <div class="form-inline" style="display: flex; justify-content: center; align-items: center;"><strong>Analisis</strong></div>
+                    </th>
+                </tr>
+                <tr>
+                    <th colspan="3" class="text-sm-left">
+                        <div class="form-inline" style="display: flex; justify-content: center; align-items: center;"><strong>Especies</strong></div>
+                    </th>
+                    <th colspan="2" class="text-sm-left">
+                        <div class="form-inline" style="display: flex; justify-content: center; align-items: center;"><strong>Aprovechables  Autorizados</strong></div>
+                    </th>
+                    <th colspan="3" class="text-sm-left">
+                        <div class="form-inline" style="display: flex; justify-content: center; align-items: center;"><strong>Total Movilizado <span id="fechaEmision">0</span></strong></div>
+                    </th>
+                    <th colspan="2" class="text-sm-left">
+                        <div class="form-inline" style="display: flex; justify-content: center; align-items: center;"><strong>Movilizado Campo</strong></div>
+                    </th>
+                    <th colspan="1" class="text-sm-left">
+                        <div class="form-inline" style="display: flex; justify-content: center; align-items: center;"><strong>Diferencia Volumen</strong></div>
+                    </th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+            <tfoot>
+                <tr class="custom-row-foot">
+                    <th></th><th></th>
+                    <th>Total</th>
+                    <th style="text-align:left;"><span id="totalPiezas">0</span></th>
+                    <th style="text-align:left;"><span id="totalVolumenApro">0</span></th>
+                    <th style="text-align:left;"><span id="totalVolumen">0</span></th>
+                    <th style="text-align:left;"><span id="totalPorc">0</span></th>
+                    <th style="text-align:left;"><span id="totalSaldo">0</span></th>
+                    <th style="text-align:left;"><span id="totalArboles">0</span></th>
+                    <th style="text-align:left;"><span id="totalVolumenMovi">0</span></th>
+                    <th style="text-align:left;"><span id="totalDiferencia">0</span></th>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+</div>

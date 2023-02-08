@@ -1,0 +1,26 @@
+﻿@model CapaEntidad.ViewModel.VM_Paspeq
+<div class="modal-dialog" role="document">
+    <div class="modal-content">
+        <div class="modal-header text-small" style="cursor:move;padding:0.5rem;">
+            <h5 class="modal-title">Paspeq @Model.periodo</h5>
+        </div>
+        <div class="modal-body">
+            <form id="frmManPaspeqSeleccion" method="post">
+                <div class="form-row">
+                    <div class="form-group col-md-12">
+                        <label for="usuario" class="text-small">Se seleccionará este Paspeq (N° @Model.num_paspeq) como el definitivo para el presente periodo</label>
+                    </div>
+                </div>
+                @Html.HiddenFor(m => m.num_paspeq)
+                @Html.HiddenFor(m => m.periodo)
+            </form>
+        </div>
+        <div class="modal-footer">
+            <button id="btnGuardar" class="btn btn-primary btn-sm" onclick="_manPaspeqSeleccion.fnSave();">Seleccionar</button>
+            <button id="btnCancelar" class="btn btn-secondary btn-sm" onclick="_manPaspeqSeleccion.fnClose();">Cancelar</button>
+        </div>
+    </div>
+</div>
+
+<script src="~/Areas/PlanFocalizacion/js/Paspeq/_PaspeqSeleccion.js"></script>
+

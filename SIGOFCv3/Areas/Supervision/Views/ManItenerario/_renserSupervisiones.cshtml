@@ -1,0 +1,142 @@
+﻿@model List<CapaEntidad.DOC.Ent_BITACORA_SUPER>
+
+<style type="text/css">
+    #tbRenderSupervisiones_wrapper {
+        padding: 0px;
+    }
+</style>
+<div id="frmRenderSupervisiones">
+    <div class="table-responsive">
+        <table id="tbRenderSupervisiones" style="width:100%;margin:0px !important;" class="table table-hover table-bordered">
+            <thead>
+                <tr>
+                    <th colspan="15" class="text-sm-left">
+                        <div class="form-inline">
+                            <i class="fa mx-2 fa-lg fa-file-o" style="cursor:pointer;" onclick="_renderSupervisiones.fnBuscarCarta();" data-toggle="tooltip" data-placement="right" title="Agregar supervisor"></i>
+                            <strong>Supervisiones a realizar</strong>
+                        </div>
+                    </th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
+</div>
+<script type="text/javascript">
+    var _renderSupervisiones = {};
+    _renderSupervisiones.tbEliTABLA = [];
+    _renderSupervisiones.fnBuscarCarta = function (_dom) {
+        let url = urlLocalSigo + "Supervision/ManItenerario/_BuscarCartaNotificacion";
+        let option = { url: url, type: 'GET', datos: {}, divId: "mdlBuscarCarta" };
+        utilSigo.fnOpenModal(option, function () {
+            _BuscarCN.fnAsignarDatos = function (obj) {
+                if (obj != null && obj != "") {
+                    let data = _BuscarCN.dtBuscarCarta.row($(obj).parents('tr')).data();
+                    data.RegEstado = 1;
+                    data.COD_BITACORA = $("#frmItenerarioAddEdit").find("#id").val().trim();
+                    data.VOLUMEN_INJUSTIFICADO = 0;
+                    console.log(data);
+                   // utilSigo.fnCloseModal("mdlBuscarCarta");
+                   // _IteEdit.fnGetSupervisiones();
+                    if (!utilDt.existValorSearch(_renderSupervisiones.dtSupervisiones, "COD_CNOTIFICACION", data["COD_CNOTIFICACION"])) {
+                        //var supervisor = {
+                        //    COD_PERSONA: data["COD_PERSONA"],
+                        //    NOMBRES: data["PERSONA"],
+                        //    RegEstado: 1
+                        //};
+                        //_renderSupervisiones.dtSupervisor.rows.add([supervisor]).draw();
+                        //_renderSupervisiones.dtSupervisor.page('last').draw('page');
+                        //$("#mdlControles_BuscarPersonaGeneral").modal('hide');
+                        let url = urlLocalSigo + "Supervision/ManItenerario/GuardarCartaBitacora";
+                        let option = { url: url, datos: JSON.stringify(data), type: 'POST' };
+                        utilSigo.fnAjax(option, function (data) {
+                            if (data.success) {
+                                _IteEdit.fnGetSupervisiones();
+                                utilSigo.toastSuccess("Éxito", "Datos agregados correctamente");
+                            }
+                            else {
+                                utilSigo.toastWarning("Aviso", data.msj);
+                            }
+                        });
+                        utilSigo.fnCloseModal("mdlBuscarCarta");
+                    } else {
+                        utilSigo.toastWarning("Aviso", "LA CARTA DE NOTIFICACIÓN YA EXISTE");
+                    }
+                   
+                }
+            }
+            _BuscarCN.fnInit();
+        });
+    }
+
+    _renderSupervisiones.fnInitDataTable_Detail = function () {
+        let columns_label = [], columns_data = [], options = {};
+
+        columns_label = ["Título Habilitante", "Titular", "POA", "Modalidad", "Carta de Notificación", "Supervisado",
+            "Tipo de informe a generar", "Alerta", "Descripción de la Alerta", "Acta", "Observaciones","Información Geográfica"];
+        columns_data = ["NUM_THABILITANTE", "TITULAR", "POA", "MODALIDAD", "NUM_CNOTIFICACION", "SUPERVISADO_TEXT", "TIPO_INFORME"
+            , "ALERTA_ILEGAL_TEXT", "DES_ALERTA_ILEGAL", "ACTA_ARCHIVO_TEXT", "OBSERVACIONES","ARCHIVOS"];
+        options = {
+            page_length: 5, row_index: true, row_delete: true, row_fnDelete: "_renderSupervisiones.fnDelete(this)", row_edit:true, row_fnEdit: "_renderSupervisiones.fnEdit(this)"
+        };
+        _renderSupervisiones.dtSupervisiones = utilDt.fnLoadDataTable_Detail($("#tbRenderSupervisiones"), columns_label, columns_data, options);
+    }
+    _renderSupervisiones.fnEdit = function (obj) {
+        var data = _renderSupervisiones.dtSupervisiones.row($(obj).parents('tr')).data();
+        let url = urlLocalSigo + "Supervision/ManItenerario/_CartaBitacora";
+        let model = {
+            codBitacora: data.COD_BITACORA,
+            codNotificacion: data.COD_CNOTIFICACION,
+            codTH: data.COD_THABILITANTE,
+            codSecuencial: data.COD_SECUENCIAL
+        };
+        let option = { url: url, type: 'GET', datos: model, divId: "mdlCartaModificar" };
+        utilSigo.fnOpenModal(option, function () { });
+         
+    }
+    _renderSupervisiones.fnDelete = function (obj) {
+        utilSigo.dialogConfirm('', 'Desea eliminar?', function (r) {
+            if (r) {
+                var data = _renderSupervisiones.dtSupervisiones.row($(obj).parents('tr')).data();
+                data.EliTABLA = "BITACORA_SUPERVISIONES_DETALLE";
+                let url = urlLocalSigo + "Supervision/ManItenerario/EliminarBitacoraDetalle";
+                let option = { url: url, datos: JSON.stringify(data), type: 'POST' };
+                utilSigo.fnAjax(option, function (data) {
+                    if (data.success) {
+                        _IteEdit.fnGetSupervisiones();
+                        utilSigo.toastSuccess("Éxito", "Datos eliminados correctamente");
+                    }
+                    else {
+                        utilSigo.toastWarning("Aviso", data.msj);
+                    }
+                });
+            }
+        });
+    }
+
+    _renderSupervisiones.fnGetList = function () {
+        let list = [], rows, countFilas, data;
+
+        rows = _renderSupervisiones.dtSupervisiones.$("tr");
+        countFilas = rows.length;
+        if (countFilas > 0) {
+            $.each(rows, function (i, o) {
+                data = _renderSupervisiones.dtSupervisiones.row($(o)).data();
+                if (data["RegEstado"] == "1" || data["RegEstado"] == "2") {
+                    list.push(utilSigo.fnConvertArrayToObject(data));
+                }
+            });
+        }
+        return list;
+    }
+
+    _renderSupervisiones.fnGetListEliTABLA = function () { return _renderSupervisiones.tbEliTABLA }
+
+    $(document).ready(function () {
+        _renderSupervisiones.frm = $("#frmRenderSupervisiones");
+
+        _renderSupervisiones.fnInitDataTable_Detail();
+        
+        _renderSupervisiones.dtSupervisiones.rows.add(JSON.parse('@Html.Raw(Json.Encode(@Model))')).draw();
+    });
+</script>

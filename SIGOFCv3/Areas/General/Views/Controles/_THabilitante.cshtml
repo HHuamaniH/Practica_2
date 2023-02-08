@@ -1,0 +1,42 @@
+﻿<script src="~/Areas/General/js/Controles/_THabilitante.js"></script>
+
+<div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+        <div class="modal-header text-small" style="cursor:move;padding:0.5rem;">             
+            <h5 class="modal-title">Buscar Título Habilitante</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body">
+            <form id="frmThBusqueda" method="get">
+                @Html.Hidden("hdfTipoFormulario", (string)ViewBag.tipFormulario)
+                <div class="form-row">
+                    <div class="col-md-4 mb-3" id="divCriterio">
+                        @Html.DropDownList("cboCriterio", (IEnumerable<SelectListItem>)ViewBag.cboOpciones, new { @class = "form-control form-control-sm" })
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <input type="text" id="txtValor" class="form-control form-control-sm" maxlength="50" />
+                    </div>
+                    <div class="col-md-2 mb-3">
+                        <a id="btnTHBuscar" style="cursor:pointer;" data-toggle="tooltip" data-placement="top" title="Buscar el registro"><span class="fa mx-2 fa-lg fa-search"></span></a>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="col-md-12 text-center">
+                        <div class="table-responsive">
+                            <table id="tbHabilitanteBusqueda" class="table table-hover table-bordered" style="width:100%;">
+                                <thead></thead>
+                                <tbody></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <button type="submit" style="display:none;"></button>
+            </form>
+        </div>
+        <div class="modal-footer">
+        </div>
+    </div>
+</div>
+

@@ -1,0 +1,230 @@
+﻿@model CapaEntidad.ViewModel.VM_Focalizacion_Priorizacion
+<div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+        <div class="modal-header text-small" style="cursor:move;padding:0.5rem;">
+            <h5 class="modal-title">Calificar</h5>
+        </div>
+        <div id="divCalificacion" class="modal-body">
+            <form id="frmCalificacion">
+                <input type="hidden" id="hd_codPlan" value="@Model.codPlan" />
+                <input type="hidden" id="hd_codSecuencial" value="@Model.codSecuencial" />
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label>Título Habilitante</label>
+                        <input type="text" class="form-control form-control-sm" disabled value="@Model.numTH" />
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label>Plan de manejo</label>
+                        <input type="text" class="form-control form-control-sm" disabled value="@Model.planManejo" />
+                    </div>
+                </div>
+            </form>            
+            <div class="table-responsive-md">
+                <table id="tbCIneludibles" class="table table-hover table-bordered" style="width:100%;">
+                    <thead>
+                        <tr>
+                            <th colspan="9">Criterios de selección ineludibles</th>
+                        </tr>
+                        <tr>
+                            <th title="Se reporta aprovechamiento del recurso a través de documentos y registros">A.1</th>
+                            <th title="Contempla el aprovechamiento de especies CITES">A.2</th>
+                            <th title="Se encuentra sujeto a denuncia presentada">A.3</th>
+                            <th title="Se encuentra sujeto a demanda de supervisión de otras dependencias del Estado">A.4</th>
+                            <th title="Es colindante con áreas naturales protegidas y/o reservas territoriales">A.5</th>
+                            <th title="Presenta pérdida de cobertura boscosa asociada a posible cambio de uso no autorizado de la tierra">A.6</th>
+                            <th title="Actores que elaboraron, verificaron y aprobaron planes de manejo con antecedentes de información falsa">A.7</th>
+                            <th title="No ha sido supervisado">A.8</th>
+                            <th>Total</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @{
+                            var a1_ = Model.a1 > 0 ? "1" : "";
+                            var a2_ = Model.a2 > 0 ? "1" : "";
+                            var a3_ = Model.a3 > 0 ? "1" : "";
+                            var a4_ = Model.a4 > 0 ? "1" : "";
+                            var a5_ = Model.a5 > 0 ? "1" : "";
+                            var a6_ = Model.a6 > 0 ? "1" : "";
+                            var a7_ = Model.a7 > 0 ? "1" : "";
+                            var a8_ = Model.a8 > 0 ? "1" : "";
+                            var b1_ = Model.b1 > 0 ? "1" : "";
+                            var b2_ = Model.b2 > 0 ? "1" : "";
+                            var b3_ = Model.b3 > 0 ? "1" : "";
+                            var b4_ = Model.b4 > 0 ? "1" : "";
+                            var b5_ = Model.b5 > 0 ? "1" : "";
+                            var b6_ = Model.b6 > 0 ? "1" : "";
+                        }
+                        <tr>
+                            <td><input type="number" class="form-control form-control-sm cssValCal" id="txta1" value="@a1_" /></td>
+                            <td><input type="number" class="form-control form-control-sm" id="txta2" value="@a2_" /></td>
+                            <td><input type="number" class="form-control form-control-sm" id="txta3" value="@a3_" /></td>
+                            <td><input type="number" class="form-control form-control-sm" id="txta4" value="@a4_" /></td>
+                            <td><input type="number" class="form-control form-control-sm" id="txta5" value="@a5_" /></td>
+                            <td><input type="number" class="form-control form-control-sm" id="txta6" value="@a6_" /></td>
+                            <td><input type="number" class="form-control form-control-sm" id="txta7" value="@a7_" /></td>
+                            <td><input type="number" class="form-control form-control-sm" id="txta8" value="@a8_" /></td>
+                            <td style="text-align:center"><label id="lblIne">@Model.subTotalIneludible</label> </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <table id="tbCCircunstancial" class="table table-hover table-bordered" style="width:100%;">
+                    <thead>
+                        <tr>
+                            <th colspan="7">Criterios de selección circunstancial</th>
+                        </tr>
+                        <tr>
+                            <th title="El plan de manejo se encuentra vigente">B.1</th>
+                            <th title="Cuenta con informe de ejecución del plan de manejo">B.2</th>
+                            <th title="Tiene disposiciones administrativas sujetas a verificación de su cumplimiento">B.3</th>
+                            <th title="La estacionalidad del aprovechamiento de productos forestales y de fauna silvestre facilitan la accesibilidad para la supervisión">B.4</th>
+                            <th title="Se emitió actos administrativos que inciden sobre el recurso o el plan de manejo">B.5</th>
+                            <th title="Se encuentra dentro de la misma ruta de acceso de otro título habilitante a supervisar">B.6</th>
+                            <th>Total</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><input type="number" class="form-control form-control-sm" id="txtb1" value="@b1_" /></td>
+                            <td><input type="number" class="form-control form-control-sm" id="txtb2" value="@b2_" /></td>
+                            <td><input type="number" class="form-control form-control-sm" id="txtb3" value="@b3_" /></td>
+                            <td><input type="number" class="form-control form-control-sm" id="txtb4" value="@b4_" /></td>
+                            <td><input type="number" class="form-control form-control-sm" id="txtb5" value="@b5_" /></td>
+                            <td><input type="number" class="form-control form-control-sm" id="txtb6" value="@b6_" /></td>
+                            <td style="text-align:center"><label id="lblCir">@Model.subTotalCircunstancial</label> </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-primary btn-sm" onclick="_calificacion.fnGuardar()">Guardar</button>
+            <button id="btnCancelar" class="btn btn-secondary btn-sm" data-dismiss="modal">Cancelar</button>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    var _calificacion = {
+        fnGetValIneludible: () => {
+            let frm = $("#divCalificacion");
+            return  {
+                a1 : parseInt(frm.find("#txta1").val() == "" ? 0 : frm.find("#txta1").val()),
+                a2 : parseInt(frm.find("#txta2").val() == "" ? 0 : frm.find("#txta2").val()),
+                a3 : parseInt(frm.find("#txta3").val() == "" ? 0 : frm.find("#txta3").val()),
+                a4 : parseInt(frm.find("#txta4").val() == "" ? 0 : frm.find("#txta4").val()),
+                a5 : parseInt(frm.find("#txta5").val() == "" ? 0 : frm.find("#txta5").val()),
+                a6 : parseInt(frm.find("#txta6").val() == "" ? 0 : frm.find("#txta6").val()),
+                a7 : parseInt(frm.find("#txta7").val() == "" ? 0 : frm.find("#txta7").val()),
+                a8 : parseInt(frm.find("#txta8").val() == "" ? 0 : frm.find("#txta8").val())
+            };
+        },
+        fnGetValCircunstancial: () => {
+            let frm = $("#divCalificacion");
+            return {
+                b1 : parseInt(frm.find("#txtb1").val() == "" ? 0 : frm.find("#txtb1").val()),
+                b2 : parseInt(frm.find("#txtb2").val() == "" ? 0 : frm.find("#txtb2").val()),
+                b3 : parseInt(frm.find("#txtb3").val() == "" ? 0 : frm.find("#txtb3").val()),
+                b4 : parseInt(frm.find("#txtb4").val() == "" ? 0 : frm.find("#txtb4").val()),
+                b5 : parseInt(frm.find("#txtb5").val() == "" ? 0 : frm.find("#txtb5").val()),
+                b6 : parseInt(frm.find("#txtb6").val() == "" ? 0 : frm.find("#txtb6").val())   
+            };
+        },
+        fnGuardar: () => {
+            let frm = $("#divCalificacion");
+            let objI = _calificacion.fnGetValIneludible();
+            let objC = _calificacion.fnGetValCircunstancial();    
+            let model = [{
+                codPlan: frm.find("#hd_codPlan").val(),
+                codSecuencial: frm.find("#hd_codSecuencial").val(),
+                a1: objI.a1, a2: objI.a2, a3: objI.a3, a4: objI.a4, a5: objI.a5, a6: objI.a6, a7: objI.a7, a8: objI.a8,
+                b1: objC.b1, b2: objC.b2, b3: objC.b3, b4: objC.b4, b5: objC.b5, b6: objC.b6,
+                total: 0, subTotalIneludible: 0, subTotalCircunstancial:0
+            }];
+            var url = urlLocalSigo + "Focalizacion/Priorizacion/GuardarCalificacion";           
+            var option = { url: url, datos: JSON.stringify(model), type: 'POST' };
+            utilSigo.fnAjax(option, function (data) {
+                if (data.success) {
+                    utilSigo.toastSuccess("Aviso", data.msj);
+                    $("#btnCancelar").click();
+                    _Priorizacion.fnGetPriorizacion();
+                }
+                else {
+                    utilSigo.toastWarning("Aviso", data.msj);
+                }
+            });
+        },
+        fnCalSubtotalIneludible: () => {
+            let frm = $("#divCalificacion");             
+            let obj = _calificacion.fnGetValIneludible();
+            let subTotal = obj.a1 * 0.15 + obj.a2 * 0.2 + obj.a3 * 0.25 + obj.a4 * 0.2 + obj.a5 * 0.05 + obj.a6 * 0.05 + obj.a7 * 0.05 + obj.a8 * 0.05;            
+            frm.find("#lblIne").text(parseFloat(subTotal).toFixed(2));
+        },
+        fnCalSubtotalCircunstancial: () => {
+            let frm = $("#divCalificacion");
+            let obj = _calificacion.fnGetValCircunstancial();       
+            let subTotal = obj.b1 * 0.3 + obj.b2 * 0.07 + obj.b3 * 0.2 + obj.b4 * 0.25 + obj.b5 * 0.15 + obj.b6 * 0.03;
+            frm.find("#lblCir").text(parseFloat(subTotal).toFixed(2));
+        },
+        fnInit: () => {
+            let frm = $("#divCalificacion");
+            frm.find("#txta1").change(function () {
+                if ($(this).val() != "1") $(this).val("");
+                _calificacion.fnCalSubtotalIneludible();
+            });
+            frm.find("#txta2").change(function () {
+                if ($(this).val() != "1") $(this).val("");
+                _calificacion.fnCalSubtotalIneludible();
+            });
+            frm.find("#txta3").change(function () {
+                if ($(this).val() != "1") $(this).val("");
+                _calificacion.fnCalSubtotalIneludible();
+            });
+            frm.find("#txta4").change(function () {
+                if ($(this).val() != "1") $(this).val("");
+                _calificacion.fnCalSubtotalIneludible();
+            });
+            frm.find("#txta5").change(function () {
+                if ($(this).val() != "1") $(this).val("");
+                _calificacion.fnCalSubtotalIneludible();
+            });
+            frm.find("#txta6").change(function () {
+                if ($(this).val() != "1") $(this).val("");
+                _calificacion.fnCalSubtotalIneludible();
+            });
+            frm.find("#txta7").change(function () {
+                if ($(this).val() != "1") $(this).val("");
+                _calificacion.fnCalSubtotalIneludible();
+            });
+            frm.find("#txta8").change(function () {
+                if ($(this).val() != "1") $(this).val("");
+                _calificacion.fnCalSubtotalIneludible();
+            });
+            frm.find("#txtb1").change(function () {
+                if ($(this).val() != "1") $(this).val("");
+                _calificacion.fnCalSubtotalCircunstancial();
+            });
+            frm.find("#txtb2").change(function () {
+                if ($(this).val() != "1") $(this).val("");
+                _calificacion.fnCalSubtotalCircunstancial();
+            });
+            frm.find("#txtb3").change(function () {
+                if ($(this).val() != "1") $(this).val("");
+                _calificacion.fnCalSubtotalCircunstancial();
+            });
+            frm.find("#txtb4").change(function () {
+                if ($(this).val() != "1") $(this).val("");
+                _calificacion.fnCalSubtotalCircunstancial();
+            });
+            frm.find("#txtb5").change(function () {
+                if ($(this).val() != "1") $(this).val("");
+                _calificacion.fnCalSubtotalCircunstancial();
+            });
+            frm.find("#txtb6").change(function () {
+                if ($(this).val() != "1") $(this).val("");
+                _calificacion.fnCalSubtotalCircunstancial();
+            });
+        }
+    }
+    $(document).ready(function () {
+        _calificacion.fnInit();
+    });
+</script>

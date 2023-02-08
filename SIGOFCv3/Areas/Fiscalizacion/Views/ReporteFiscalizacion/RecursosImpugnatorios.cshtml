@@ -1,0 +1,285 @@
+﻿@{
+    ViewBag.Title = "Recursos Impugnatorios";
+    Layout = "~/Views/Shared/_LayoutMain.cshtml";
+}
+@section styles
+{
+    <style type="text/css">
+        #app { padding: 0 25px; }
+        .table tr td, .table thead tr th { cursor: pointer; }
+        .table tr td.selected { background: #DAE7F5; }
+        .table thead tr th.order { position: relative; padding-right: 20px; }
+        .table thead tr th.order:before { position: absolute; right: 5px; top: 50%; transform: translateY(-50%); font-family: "FontAwesome"; content: "\f0dc"; }
+        .title { margin: 0 0 15px 0; clear: both; border-bottom: thin ridge #add8e6; padding: 5px 0; color: #1b4a6f; }        
+    </style>
+}
+@section scripts{
+    <script src="~/Scripts/vue.min.js"></script>
+    <script>
+        const baseUrl = urlLocalSigo + "Fiscalizacion/ReporteFiscalizacion/";
+
+        Array.prototype.Sum = function (key) {
+            return this.map(function (a) { return a[key] }).reduce(function (a, b) { return a + b }, 0);
+        };
+
+        // VueJS filters
+        Vue.filter("formatNumber", function (x) {
+            if (!x || isNaN(x) || typeof x === 'undefined') {
+                x = 0;
+            }
+            x = x.toString().split('.');
+            var pattern = /(-?\d+)(\d{3})/;
+            while (pattern.test(x[0]))
+                x[0] = x[0].replace(pattern, "$1,$2");
+            return x.join('.');
+        });
+
+        var app = new Vue({
+            el: '#app',
+            data: {                
+                resumen: [],
+                totales: {},
+                detalle: [],
+                selected: null,
+                pagination: {
+                    pageSize: 10,
+                    currentPage: 1,
+                    total: 0
+                },
+                order: {
+                    type: null,
+                    key: null
+                }
+            },
+            methods: {
+                fnResumen: function () {                    
+                    $.ajax({
+                        type: 'GET',
+                        url: baseUrl + "RecursosImpugnatorios_Resumen",
+                        //data: params,
+                        dataType: 'json',
+                        contentType: 'application/json',
+                        beforeSend: function () { utilSigo.blockUIGeneral(); },
+                        complete: function () { utilSigo.unblockUIGeneral(); }
+                    }).done(function (result) {
+                        //console.log(result);
+                        let totales = {
+                            ANIO: 'Total',
+                            Impugnatorios: result.Sum('Impugnatorios'),
+                            Resueltos: result.Sum('Resueltos'),
+                            Pendientes: result.Sum('Pendientes')
+                        };
+
+                        app.totales = totales;
+                        //result.push(totales);
+
+                        app.resumen = result;
+                    });
+                },
+                fnDetalle: function (sCriterio, item) {                   
+                    item = item || {};
+
+                    this.detalle = [];
+                    this.pagination.currentPage = 1;                   
+
+                    let params = {
+                        BusCriterio: sCriterio,
+                        BusValor: item.ANIO
+                    };
+
+                    this.selected = sCriterio + (item.ANIO || '');
+
+
+                    $.ajax({
+                        type: 'POST',
+                        url: baseUrl + "RecursosImpugnatorios_Detalle",
+                        data: JSON.stringify(params),
+                        dataType: 'json',
+                        contentType: 'application/json',
+                        beforeSend: function () { utilSigo.blockUIGeneral(); },
+                        complete: function () { utilSigo.unblockUIGeneral(); }
+                    }).done(function (res) {
+                        if (res.msj) {
+                            toastr.error(res.msj);
+                            return;
+                        }
+
+                        app.detalle = res;
+                        app.pagination.total = Math.ceil(res.length / app.pagination.pageSize);
+                    });
+                },
+                fnExportar: function () {                    
+                    let params = {
+                        detalle: this.detalle.map(function (x) {
+                            return {
+                                NUMERO_INFTIT: x.NUMERO_INFTIT,
+                                TIPO_DOCUMENTO: x.TIPO_DOCUMENTO,
+                                FECHA: x.FECHA,
+                                ANIO: x.ANIO,
+                                TITULAR: x.TITULAR,
+                                TITULO: x.TITULO,
+                                MODALIDAD: x.MODALIDAD,
+                                NUMERO_EXPEDIENTE: x.NUMERO_EXPEDIENTE,
+                                NUMERO_RD: x.NUMERO_RD,
+                                DIAS_TRANSC: x.DIAS_TRANSC
+                            }
+                        })
+                    };
+
+                    $.ajax({
+                        type: 'post',
+                        url: baseUrl + 'RecursosImpugnatorios_Excel',
+                        data: JSON.stringify(params),
+                        contentType: 'application/json',
+                        dataType: 'binary',
+                        xhrFields: {
+                            'responseType': 'blob'
+                        },
+                        beforeSend: function () { utilSigo.blockUIGeneral(); },
+                        complete: function () { utilSigo.unblockUIGeneral(); }
+                    }).done(function (result) {                        
+                        utilSigo.file.downloadBlob(new Blob([result]), 'RECURSOS_IMPUGNATORIOS.xlsx');
+                    });
+                },
+                nextPage: function () {
+                    if ((this.pagination.currentPage * this.pagination.pageSize) < this.detalle.length) this.pagination.currentPage++;
+                },
+                prevPage: function () {
+                    if (this.pagination.currentPage > 1) this.pagination.currentPage--;
+                },
+                fnOrder: function (key) {
+                    this.order.type = this.order.type == 'asc' ? 'desc' : 'asc';
+                    this.order.key = key;
+                    let direction = this.order.type == 'asc' ? 1 : -1;
+                    this.detalle.sort(function (a, b) { return (a[key] > b[key] ? 1 : -1) * direction });
+                }
+            },
+            created: function () {
+                this.fnResumen();
+            },
+            computed: {
+                filtered: function () {
+                    let start = (this.pagination.currentPage - 1) * this.pagination.pageSize;
+                    let end = this.pagination.currentPage * this.pagination.pageSize;
+                    let result = this.detalle.slice(start, end);
+                    return result;
+                }
+            },
+        });
+    </script>
+}
+
+<div id="app">
+    <div class="container-fluid mt-3">
+        <div class="row">
+            <div class="col-12">
+                <h4 class="title">Recursos Impugnatorios</h4>
+                <my-checkbox :title="'Hola'"></my-checkbox>
+                <div class="row">
+                    <div class="col-sm-6 m-auto">
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th class="text-center">N°</th>
+                                    <th class="text-center">Año de presentación</th>
+                                    <th class="text-center">Recursos Impugnatorios</th>
+                                    <th class="text-center">Casos Resueltos</th>
+                                    <th class="text-center">Casos Pendientes</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr v-for="(item, index) in resumen">
+                                    <td class="text-center">{{ index + 1 }}</td>
+                                    <td class="text-center">{{item.ANIO}}</td>
+                                    <td class="text-center" v-on:click="fnDetalle('I', item)" v-bind:class="{selected: selected && (selected == 'I' + item.ANIO)}">
+                                        <a>{{item.Impugnatorios | formatNumber}}</a>
+                                    </td>
+                                    <td class="text-center" v-on:click="fnDetalle('IR', item)" v-bind:class="{selected: selected && (selected == 'IR' + item.ANIO)}">
+                                        <a>{{item.Resueltos | formatNumber}}</a>
+                                    </td>
+                                    <td class="text-center" v-on:click="fnDetalle('IP', item)" v-bind:class="{selected: selected && (selected == 'IP' + item.ANIO)}">
+                                        <a>{{item.Pendientes | formatNumber}}</a>
+                                    </td>
+                                </tr>
+                            </tbody>
+                            <tfoot>
+                                <tr>
+                                    <td></td>
+                                    <td class="text-center">TOTAL</td>
+                                    <td class="text-center" v-on:click="fnDetalle('TI')" v-bind:class="{selected: selected && (selected == 'TI')}">
+                                        <a>{{totales.Impugnatorios | formatNumber}}</a>
+                                    </td>
+                                    <td class="text-center" v-on:click="fnDetalle('IRT')" v-bind:class="{selected: selected && (selected == 'IRT')}">
+                                        <a>{{totales.Resueltos | formatNumber}}</a>
+                                    </td>
+                                    <td class="text-center" v-on:click="fnDetalle('IPT')" v-bind:class="{selected: selected && (selected == 'IPT')}">
+                                        <a>{{totales.Pendientes | formatNumber}}</a>
+                                    </td>
+                                </tr>
+                            </tfoot>
+                        </table>
+
+                    </div>
+                </div>
+                <template v-if="detalle.length">
+                    <h4>
+                        Listado de Recursos Impugnatorios
+                        <a class="float-right text-primary" title="Descargar" v-on:click="fnExportar">
+                            <i class="fa fa-cloud-download fa-lg"></i>
+                        </a>
+                    </h4>
+                    <div class="table-responsive">
+                        <table id="tblDetalle" class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th class="text-center">N°</th>
+                                    <th class="text-center" v-on:click="fnOrder('NUMERO_INFTIT')" v-bind:class="{order: order.key == 'NUMERO_INFTIT'}">N° Documento Presentado</th>
+                                    <th class="text-center" v-on:click="fnOrder('TIPO_DOCUMENTO')" v-bind:class="{order: order.key == 'TIPO_DOCUMENTO'}">Tipo</th>
+                                    <th class="text-center" v-on:click="fnOrder('FECHA')" v-bind:class="{order: order.key == 'FECHA'}">Fecha de presentación del Recurso Impugnatorio</th>
+                                    <th class="text-center" v-on:click="fnOrder('ANIO')" v-bind:class="{order: order.key == 'ANIO'}">Año presentacion</th>
+                                    <th class="text-center" v-on:click="fnOrder('TITULAR')" v-bind:class="{order: order.key == 'TITULAR'}">Titular</th>
+                                    <th class="text-center" v-on:click="fnOrder('TITULO')" v-bind:class="{order: order.key == 'TITULO'}">N° Titulo Habilitante</th>
+                                    <th class="text-center" v-on:click="fnOrder('MODALIDAD')" v-bind:class="{order: order.key == 'MODALIDAD'}">Modalidad</th>
+                                    <th class="text-center" v-on:click="fnOrder('NUMERO_EXPEDIENTE')" v-bind:class="{order: order.key == 'NUMERO_EXPEDIENTE'}">N° Expediente administrativo</th>
+                                    <th class="text-center" v-on:click="fnOrder('NUMERO_RD')" v-bind:class="{order: order.key == 'NUMERO_RD'}">RD término PAU</th>
+                                    <th class="text-center" v-on:click="fnOrder('DIAS_TRANSC')" v-bind:class="{order: order.key == 'DIAS_TRANSC'}">N° Días transcurridos desde la presentación</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr v-for="(item, index) in filtered">
+                                    <td class="text-center">
+                                        {{ pagination.pageSize * (pagination.currentPage - 1) + index + 1 }}
+                                    </td>
+                                    <td>{{item.NUMERO_INFTIT}}</td>
+                                    <td class="text-center">{{item.TIPO_DOCUMENTO}}</td>
+                                    <td class="text-center">{{item.FECHA}}</td>
+                                    <td class="text-center">{{item.ANIO}}</td>
+                                    <td>{{item.TITULAR}}</td>
+                                    <td class="text-center">{{item.TITULO}}</td>
+                                    <td class="text-center">{{item.MODALIDAD}}</td>
+                                    <td class="text-center">{{item.NUMERO_EXPEDIENTE}}</td>
+                                    <td class="text-center">{{item.NUMERO_RD}}</td>
+                                    <td class="text-center">{{item.DIAS_TRANSC | formatNumber}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="d-flex flex-sm-row align-items-center justify-content-between mb-3">
+                        <div class="mb-3 mb-sm-0 small">Se encontró {{detalle.length | formatNumber}} registros</div>
+                        <div>
+                            <span class="mr-2 small">Página {{pagination.currentPage}} / {{pagination.total}}</span>
+                            <div class="btn-group btn-group-sm">
+                                <button type="button" class="btn btn-light border-secondary" v-on:click="prevPage()" v-bind:disabled="pagination.currentPage == 1">
+                                    <i class="fa fa-angle-left"></i>
+                                </button>
+                                <button type="button" class="btn btn-light border-secondary" v-on:click="nextPage()" v-bind:disabled="pagination.currentPage == pagination.total">
+                                    <i class="fa fa-angle-right"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </template>
+            </div>
+        </div>
+    </div>    
+</div>

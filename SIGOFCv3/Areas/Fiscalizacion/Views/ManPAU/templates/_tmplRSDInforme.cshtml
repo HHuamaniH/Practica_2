@@ -1,0 +1,282 @@
+﻿<script id="tmpl-exportar" type="text/x-jquery-tmpl">
+    <div style="font-family: Arial; font-size: 10pt; line-height: 150%;">
+        <div>
+            <table width="100%" cellpadding="4" style="border: 0; text-align: justify; font-family: Arial; font-size: 10pt; border-collapse: collapse; line-height: 150%;">
+                <tbody>
+                    <tr>
+                        <td style="vertical-align: top;"><strong>EXPEDIENTE N°</strong></td>
+                        <td style="width: 30px; vertical-align: top;">:</td>
+                        <td style="vertical-align: top;">${EXPEDIENTE_ADM}</td>
+                    </tr>
+                    <tr>
+                        <td style="vertical-align: top;"><strong>PROCEDENCIA</strong></td>
+                        <td style="width: 30px; vertical-align: top;">:</td>
+                        <td style="vertical-align: top;">${PROCEDENCIA}</td>
+                    </tr>
+                    <tr>
+                        <td style="vertical-align: top;"><strong>MATERIA</strong></td>
+                        <td style="width: 30px; vertical-align: top;">:</td>
+                        <td style="vertical-align: top;">${MATERIA}</td>
+                    </tr>
+                    <tr>
+                        <td style="vertical-align: top;"><strong>ADMINISTRADO</strong></td>
+                        <td style="width: 30px; vertical-align: top;">:</td>
+                        <td style="vertical-align: top;">${TITULAR_SUPERVISADO}</td>
+                    </tr>
+                    <tr>
+                        <td style="vertical-align: top;"><strong>TÍTULO HABILITANTE</strong></td>
+                        <td style="width: 30px; vertical-align: top;">:</td>
+                        <td style="vertical-align: top;">${REPRESENTANTE_LEGAL}</td>
+                    </tr>
+                    <tr>
+                        <td style="vertical-align: top;"><strong>REFERENCIA</strong></td>
+                        <td style="width: 30px; vertical-align: top;">:</td>
+                        <td style="vertical-align: top;">Informe de Supervisión N° ${NRO_REFERENCIA}</td>
+                    </tr>
+                </tbody>
+            </table>
+            <div style="font-weight: bold; text-align: center; font-size: 11pt; margin: 15pt 0;">
+                RESOLUCIÓN SUB DIRECTORAL N° ${NUM_INFORME_SITD}
+            </div>
+            <div style="text-align: right; margin-bottom: 15pt;">
+                Lima, ${FECHA}
+            </div>
+        </div>
+        <div style="text-align: justify;">
+            <strong>VISTOS:</strong>
+            <div style="text-indent: 50px;">{{html VISTOS}}</div>
+            <div><strong>CONSIDERANDO:</strong></div>
+            <ul style="list-style-type: upper-roman;">
+                <li>
+                    <p><strong>ANTECEDENTES</strong></p>
+                    <div>{{html ANTECEDENTES}}</div>
+                </li>
+                <li>
+                    <p><strong>COMPETENCIA</strong></p>
+                    <div>{{html COMPETENCIA}}</div>
+                </li>
+                <li>
+                    <p><strong>ANÁLISIS DE LOS RESULTADOS DEL INFORME DE SUPERVISIÓN</strong></p>
+                    <!--(aquí se puede poner la opción de exportar las especies, volumen; teniendo en cuenta que debe mantenerse una hoja en blanco; toda vez, que aquí se realiza el análisis de los resultados de la diligencia de supervisión).-->
+                    <div>{{html ANALISIS}}</div>
+                </li>
+                <li>
+                    <p><strong>IMPUTACION DE CARGOS</strong></p>
+                    <div>{{html IMPUTACION}}</div>
+                </li>
+                <li>
+                    <p><strong>SOBRE LA COMUNICACIÓN DE LOS ACTUADOS A OTRAS ENTIDADES</strong></p>
+                    <div>{{html COMUNICACION_EXTERNA}}</div>
+                    <div>{{html PARRAFOS_CLICHE}}</div>
+                </li>
+            </ul>
+            <p style="text-align: justify;">
+                En virtud de lo establecido en el numeral 3 de los artículos 254 y 255 del TUO de la Ley del Procedimiento Administrativo General - Ley N° 27444, aprobado por Decreto Supremo 
+                N° 004-2019-JUS, la autoridad instructora es la que formula la calificación de las infracciones que tales hechos pueden constituir y la expresión de las sanciones que, en su caso, se le pudiera imponer.
+            </p>
+            <p style="text-align: justify;">
+                Bajo ese razonamiento, de acuerdo con el artículo 16  del Reglamento del PAU, corresponde a la autoridad instructora determinar la existencia o inexistencia de indicios de la 
+                comisión de infracción (es) a la legislación forestal y de fauna silvestre y, si además éstas constituyen causal de caducidad del título habilitante otorgado, debiendo disponer 
+                el inicio del PAU o el archivo del Informe de supervisión en caso de no existir mérito para el inicio.
+            </p>
+            <p style="text-align: justify;">
+                En uso de las atribuciones conferidas por la Ley que crea el Organismo de Supervisión de los Recursos Forestales y de Fauna Silvestre, Decreto Legislativo N° 1085, 
+                modificado por los Decretos Legislativos N° 1319 y N° 1451; la Ley Forestal y de Fauna Silvestre, Ley N° 29763; el Reglamento para la Gestión Forestal y de Fauna Silvestre 
+                en Comunidades Nativas y Comunidades Campesinas, aprobado mediante Decreto Supremo N° 021-2015-MINAGRI, Decreto Supremo N° 007-2021-MIDAGRI, que aprueba el Reglamento de 
+                Infracciones y Sanciones en Materia Forestal y de Fauna Silvestre; el TUO de la Ley del Procedimiento Administrativo General - Ley N° 27444, aprobado por Decreto Supremo 
+                N° 004-2019-JUS; el Reglamento de Organización y Funciones del OSINFOR, aprobado por Decreto Supremo N° 029-2017-PCM; la Resolución Directoral N° 001-2017-OSINFOR-DFFFS; 
+                y, el Reglamento del Procedimiento Administrativo Único del OSINFOR, aprobado mediante Resolución Presidencial N° 020-2017-OSINFOR.
+            </p>
+            <p><strong>SE RESUELVE:</strong></p>
+            {{html RESOLUCION}}
+        </div>
+        <p style="text-align: center;">
+            Regístrese y comuníquese,
+        </p>
+        <p style="text-align: center;">
+            Firmado digitalmente por
+        </p>
+        <p><br /><br /><br /></p>
+        <p style="text-align: center;">
+            Sub Director<br />
+            {{html PROCEDENCIA_FOOTER}}<br />
+            OSINFOR
+        </p>
+    </div>
+    <table border="0" cellspacing="0" cellpadding="0" style="margin: 0in 0in 0in 900in; width: 1px; height: 1px; overflow: hidden;">
+        <tr>
+            <td>
+                <!--Footer Primera página => id = ff1 -->
+                <div style="mso-element: footer; text-align: justify; font-size: 9pt;" id="googoose-footer">
+                    <p class="MsoFooter">
+                        {{html PIE_PAGINA}}
+                        <table style="width: 100%;"><tr><td style="text-align: right;">#CURRENTPAGE#</td></tr></table>
+                    </p>
+                </div>                
+            </td>
+        </tr>
+    </table>
+</script>
+
+<script id="tmpl-vistos" type="text/x-jquery-tmpl">
+    <p style="text-align: justify;">
+        El informe de Supervisión N° ${NRO_REFERENCIA} de fecha ${INF_FECHA}, con el tipo de supervisión
+        (ORDINARIA/ EXTRAORDINARIA/ INOPINADA / GABINETE*) y el plan de manejo supervisado
+        (PO / DEMA / PMFI/ CUMPLIMIENTO DE OBLIGACIONES / MEDIDAS CORRECTIVAS),
+        ${TITULAR_SUPERVISADO} con {{if RUC_TITULAR}}RUC ${RUC_TITULAR}{{else DOCUMENTO_RLEGAL}}DNI ${DOCUMENTO_RLEGAL}{{/if}}, en relación al
+        título habilitante Nº ${NUM_THABILITANTE}.
+    </p>
+</script>
+
+<script id="tmpl-antecedentes" type="text/x-jquery-tmpl">
+    <strong>Nota:</strong> Los documentos asociados no generaron contenido en ésta sección.
+</script>
+
+<script id="tmpl-competencia" type="text/x-jquery-tmpl">
+    <p style="text-align: justify;">
+        Mediante Decreto Legislativo N° 1085, modificado por los Decretos
+        Legislativos N° 1319 y N° 1451 (en adelante, Decreto Legislativo N°
+        1085), se crea el Organismo de Supervisión de los Recursos Forestales
+        y de Fauna Silvestre - OSINFOR, como un organismo público ejecutor,
+        con personería jurídica de derecho público interno, el cual de acuerdo
+        al artículo 18 de la Ley N° 29763, Ley Forestal y de Fauna Silvestre, se
+        encarga de supervisar y fiscalizar el aprovechamiento sostenible y la
+        conservación.
+    </p>
+</script>
+
+<script id="tmpl-analisis" type="text/x-jquery-tmpl">
+    <p style="text-align: justify;">
+        Ahora bien, en virtud de lo establecido en el literal b) del artículo 12 del Reglamento del Procedimiento Administrativo Único (PAU) del Organismo de Supervisión de los Recursos Forestales y de Fauna Silvestre – OSINFOR,
+        aprobado por Resolución de Jefatura N° 00043-2021-OSINFOR/01.1, publicado en el Diario Oficial El Peruano, el 24 de agosto de 2021, es pertinente señalar que, si bien se estableció que corresponde mantener la tipificación
+        y sanción prevista en el XX, vigente al momento de cometerse la conducta constitutiva de infracción, en tanto la consecuencia jurídica prevista para dicha infracción es la misma que la prevista para el tipo infractor
+        regulada por el RISMFFS, es de advertir también que, de acuerdo a lo indicado en esta norma, la conducta materia de imputación se encuentra dentro de aquellas que pueden ser materia de subsanación, en concordancia con lo
+        establecido en el numeral 6.4 del artículo 6 del Decreto Legislativo N° 1319, el mismo que estableció que, por vía reglamentaria, se determinan las medidas necesarias para la implementación de la figura de la subsanación voluntaria y las infracciones subsanables.
+    </p>
+    <p style="text-align: justify;">
+        En tal sentido, teniendo en consideración que las condiciones y forma en cómo se procederá a realizar la subsanación voluntaria ya se encuentra establecida en el RISMFFS, resulta pertinente aplicar los criterios señalados en dicho Reglamento, en concordancia con lo señalado en el Decreto Legislativo N° 1319.
+    </p>
+    <p style="text-align: justify;">
+        Para el caso en concreto, la forma de subsanar la conducta constitutiva de presunta infracción se encuentra establecida en el Numeral XX del Anexo XX del RISMFFS, donde XXXXX
+    </p>
+    <p style="text-align: justify;">
+        Cabe indicar que el artículo 6 del RISMFFS, establece que iniciado el procedimiento administrativo sancionador, la subsanación voluntaria se efectúa dentro del plazo previsto para la presentación de los descargos en la fase instructora, añadiendo que la subsanación voluntaria no resulta aplicable al sujeto infractor reincidente.
+    </p>
+</script>
+
+<script id="tmpl-imputacion" type="text/x-jquery-tmpl">
+    <p>Se deberá señalar el Decreto Supremo N° 007-2021-MIDAGRI, Ley N° 29763, Ley Forestal y de Fauna Silvestre y sus Reglamentos, el Texto Único Ordenado de la Ley N° 27444, Ley del Procedimiento Administrativo General, aprobado por Decreto Supremo N° 004-2019-JUS.</p>
+    <p>Aquí se determina si hay infracciones y se inicia el PAU o de lo contrario se archiva el informe de supervisión.</p>
+    <p>En los casos de inicio de PAU se deberá poner un cuadro donde se detalle lo siguiente lo cual debe ser llenado por el especialista legal.</p>
+    <table cellpadding="7" cellspacing="0" border="0" style="width: 15cm; font-family: Arial; font-size: 10pt; border: 1px solid #ccc; border-collapse: collapse;">
+        <tbody>
+            <tr>
+                <td style="background-color: #f0f0f0; text-align: center; border: 1px solid #ccc; width: 20px;">N°</td>
+                <td style="background-color: #f0f0f0; text-align: center; border: 1px solid #ccc;">Conducta imputada</td>
+                <td style="background-color: #f0f0f0; text-align: center; border: 1px solid #ccc;">Tipo infractor</td>
+                <td style="background-color: #f0f0f0; text-align: center; border: 1px solid #ccc;">Sanción aplicable</td>
+            </tr>
+            <tr>
+                <td style="border: 1px solid #ccc;"></td>
+                <td style="border: 1px solid #ccc;"></td>
+                <td style="border: 1px solid #ccc;"></td>
+                <td style="border: 1px solid #ccc;"></td>
+            </tr>
+        </tbody>
+    </table>
+</script>
+
+<script id="tmpl-comunicacion-externa" type="text/x-jquery-tmpl">
+    <p>En virtud de lo antes mencionado, se determina que resulta necesario poner en conocimiento de la presente resolución a diversas autoridades, a fin que implementen acciones en el marco de su competencia, conforme se detalla a continuación:</p>
+    <table cellpadding="7" cellspacing="0" border="0" style="width: 15cm; font-family: Arial; font-size: 10pt; border: 1px solid #ccc; border-collapse: collapse;">
+        <tbody>
+            <tr>
+                <td style="background-color: #f0f0f0; text-align: center; border: 1px solid #ccc; width: 20px;">N°</td>
+                <td style="background-color: #f0f0f0; text-align: center; border: 1px solid #ccc;">Entidad</td>
+                <td style="background-color: #f0f0f0; text-align: center; border: 1px solid #ccc;">Motivo</td>
+            </tr>
+            <tr>
+                <td style="border: 1px solid #ccc;">1</td>
+                <td style="border: 1px solid #ccc;"></td>
+                <td style="border: 1px solid #ccc; width: 50%;">
+                    Tomar conocimiento de los hechos expuestos y adopte las medidas que estime pertinente. Asimismo, solicitarle información que pueda ser trascendente y/o los antecedentes de infracción a la legislación forestal y de fauna silvestre de la administrada, de ser el caso.
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</script>
+
+<script id="tmpl-cliche" type="text/x-jquery-tmpl">
+    <p style="text-align: justify;">
+        En virtud de lo establecido en el numeral 3 de los artículos 254 y 255 del TUO de la Ley del Procedimiento Administrativo General - Ley N° 27444, aprobado por Decreto Supremo N° 004-2019-JUS, la autoridad 
+        instructora es la que formula la calificación de las infracciones que tales hechos pueden constituir y la expresión de las sanciones que, en su caso, se le pudiera imponer.
+    </p>
+    <p style="text-align: justify;">
+        Bajo ese razonamiento, de acuerdo con el artículo 8[1] del Reglamento del Procedimiento Administrativo Único (PAU) del Organismo de Supervisión de los Recursos Forestales y de Fauna Silvestre – OSINFOR,
+        aprobado por Resolución de Jefatura N° 00043-2021-OSINFOR/01.1, publicado en el Diario Oficial El Peruano, el 24 de agosto de 2021, corresponde a la autoridad instructora evaluar y determinar el inicio del PAU, llevando a cabo la fase instructora, siendo competente para realizar las actuaciones de investigación para recabar indicios sobre la presunta comisión de infracciones y causales de caducidad contempladas en la normativa forestal y de fauna silvestre, imputar cargos, entre otros.
+    </p>
+    <p style="text-align: justify;">
+        Reglamento del Procedimiento Administrativo Único del OSINFOR aprobado por Resolución de Jefatura N° 00043-2021-OSINFOR/01.1
+    </p>
+    <p style="text-align: justify;">
+        <strong>Artículo 8.- Autoridad Instructora</strong>
+    </p>
+    <p style="text-align: justify;">
+        Es la autoridad que evalúa y determina el inicio del PAU, llevando a cabo la fase instructora, y es competente para realizar las actuaciones de investigación para recabar indicios sobre la presunta comisión de infracciones y causales de caducidad contempladas en la normativa forestal y de fauna silvestre, imputar cargos, dictar medidas cautelares, recomendar medidas correctivas y complementarias, desarrollar actuaciones probatorias, y, formular el informe final de instrucción.
+    </p>
+    <p style="text-align: justify;">
+        La Autoridad Instructora recae en la Sub Dirección de Fiscalización de Concesiones Forestales y de Fauna Silvestre y la Sub Dirección de Fiscalización de Permisos y Autorizaciones Forestales y de Fauna Silvestre, o quienes hagan sus veces, según corresponda.
+    </p>
+    <p style="text-align: justify;">
+        En uso de las atribuciones conferidas por la Ley que crea el Organismo de Supervisión de los Recursos Forestales y de Fauna Silvestre, Decreto Legislativo N° 1085, modificado por los Decretos Legislativos N° 1319 y N° 1451; la Ley Forestal y de Fauna Silvestre,
+        Ley N° 29763; el Reglamento XXX (completar por el especialista), aprobado mediante Decreto Supremo N° 021-2015-MINAGRI, Decreto Supremo N° 007-2021-MINAGRI, que aprueba el Reglamento de Infracciones y Sanciones en Materia Forestal y de Fauna Silvestre;
+        el TUO de la Ley del Procedimiento Administrativo General - Ley N° 27444, aprobado por Decreto Supremo N° 004-2019-JUS; el Reglamento de Organización y Funciones del OSINFOR, aprobado por Decreto Supremo N° 029-2017-PCM; la Resolución Directoral N° 001-2017-OSINFOR-DFFFS;
+        y, el Reglamento del Procedimiento Administrativo Único del OSINFOR, aprobado mediante Resolución de Jefatura Nº 00043-2021-OSINFOR/01.1
+    </p>
+</script>
+
+<script id="tmpl-resolucion" type="text/x-jquery-tmpl">
+    <div style="text-align: justify;">
+        <p>
+            <strong>Artículo.</strong> Iniciar Procedimiento Administrativo Único a ${Inf_Supervision?.TITULAR_SUPERVISADO} titular del contrato o permiso ${Inf_Supervision.NUM_THABILITANTE}, por la presunta comisión de las
+            infracciones contempladas en los numerales ${TIPO_INFRACTORES}, según lo señalado en los considerandos de la presente resolución sub directoral.
+        </p>
+        {{if COMPANIES}}
+        @*{{each(i, item) COMPANIES}}
+        <p>
+            <strong>Artículo.</strong> Notificar la presente Resolución Sub Directoral, adjuntando copia del Informe de Supervisión Nº ${NRO_REFERENCIA}, a la <strong>{{html item[1]}}</strong> otorgándole un plazo de
+            quince (15) días hábiles contados a partir del día siguiente de su fecha de notificación, más el término de la distancia, para que presenten ante la mesa de partes del OSINFOR de la Sede Central – Lima o
+            de manera virtual  al correo electrónico de Mesa de Partes del OSINFOR: mesa.partes@osinfor.gob.pe, u otro medio electrónico que se habilite para tal finalidad, los descargos que consideren pertinentes a su
+            derecho de defensa, debiendo consignar el domicilio donde desean ser notificados en el curso del procedimiento.
+            (tener en cuenta que se puede notificar a otras autoridades tales como ministerio público o las Oficina de Control Institucional de los GORE)
+        </p>
+        {{/each}}*@
+
+        {{each(i, item) COMPANIES}}
+        <p>
+            <strong>Artículo.</strong> Remitir copia de la presente Resolución Sub Directoral, adjuntando copia del Informe de Supervisión N° ${NRO_REFERENCIA} a la <strong>{{html item[1]}}</strong> para {{html item[2]}}
+        </p>
+        {{/each}}
+        {{/if}}
+        <p>
+            <strong>Artículo.</strong> Adjuntar al expediente que se genere el récord de sanciones administrativas de la administrada que pueda existir en el OSINFOR.
+        </p>
+    </div>
+</script>
+
+<script id="tmpl-pie-pagina" type="text/x-jquery-tmpl">
+    Esta es una copia auténtica imprimible de un documento electrónico archivado en el Organismo de Supervisión de los Recursos Forestales y
+    de Fauna Silvestre, aplicando lo dispuesto por el Art. 25 de D.S. 070 – 2013 PCM y la Tercera Disposición Complementaria Final del D.S. 026-
+    2016-PCM. Su autenticidad e integridad pueden ser contrastadas a través de la siguiente web:
+    <a href="http://mpv.osinfor.gob.pe:8083/visor-osinfor-pide">http://mpv.osinfor.gob.pe:8083/visor-osinfor-pide</a> e ingresando la siguiente clave-std: PASSWORD
+</script>
+
+<script id="tmpl-notificacion-calidad" type="text/x-jquery-tmpl">
+    <p>
+        Estimado(a)<br /><br />Adjunto el enlace de descarga de la Resolución Sub Directoral Nro ${NUM_INFORME_SITD},
+        debidamente revisado y firmado por los involucrados para el control de calidad respectivo.<br /><br />
+        <strong>URL Descarga:</strong>&nbsp;<a target="_blank" href="${URL_DESCARGA}">${NUM_INFORME_SITD || 'Enlace de descarga'}</a><br /><br />
+        Atentamente<br />
+        ${USUARIO}
+    </p>
+</script>

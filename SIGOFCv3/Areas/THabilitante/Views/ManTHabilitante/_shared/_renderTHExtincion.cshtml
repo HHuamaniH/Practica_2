@@ -1,0 +1,150 @@
+﻿@model CapaEntidad.ViewModel.VM_THabilitante
+
+@{
+    ViewBag.Title = "_renderTHExtincion";
+}
+<script type="text/javascript">
+    var Extincion = {};
+    var cod_secuencial;
+    var indice;
+    Extincion.tbEliTABLA = [];
+
+    Extincion.fnInitDataTable01 = function () {
+        var columns_label = [], columns_data = [], options = {};
+        columns_label = ["Motivo", "Num. Resolución", "Fecha", "Observación"];
+        columns_data = ["MOTIVO", "NUM_RESOLUCION", "FECHA", "OBSERVACION"];
+
+        options = {
+            page_length: 10, row_index: true, row_delete: true, row_fnDelete: "Extincion.fnDelete(this)", page_sort: true
+        };
+
+        Extincion.dtListExt = utilDt.fnLoadDataTable_Detail(Extincion.frm.find("#tbExtincionTH"), columns_label, columns_data, options);
+        Extincion.dtListExt.rows.add(JSON.parse('@Html.Raw(Json.Encode(@Model.ListTHExtincion))')).draw();
+    }
+
+    Extincion.fnAdd = function () {
+        var cod_motivo = Extincion.frm.find("#ddTHExtincionId").val();
+        var motivo = Extincion.frm.find("#ddTHExtincionId option:selected").text();
+        var resolucion = Extincion.frm.find("#txtResolucionExt").val();
+        var fecha = Extincion.frm.find("#txtfechaExt").val();
+        var observacion = Extincion.frm.find("#txtObservacionExt").val();
+
+        var model = {
+            'COD_MOTIVO': cod_motivo,
+            'MOTIVO': motivo,
+            'NUM_RESOLUCION': resolucion,
+            'FECHA': fecha,
+            'OBSERVACION': observacion,
+            'RegEstado': 1
+        }
+       
+        if (cod_motivo != '0000000') {
+            if (resolucion != '') {
+                if (fecha != '') {
+                    Extincion.dtListExt.rows.add([model]).draw();
+                    Extincion.dtListExt.page('last').draw('page');
+                }
+                else {
+                    utilSigo.toastWarning("Aviso", "Ingrese fecha");
+                }
+            }
+            else {
+                utilSigo.toastWarning("Aviso", "Ingrese Resolución");
+            }
+        }
+        else {
+            utilSigo.toastWarning("Aviso", "Seleccione motivo de extincion");
+        }
+
+        Extincion.frm.find("#ddTHExtincionId").val('0000000');
+        Extincion.frm.find("#txtResolucionExt").val('');
+        Extincion.frm.find("#txtfechaExt").val('');
+        Extincion.frm.find("#txtObservacionExt").val('');
+
+    }
+
+    Extincion.fnGetList = function () {
+        let list = [], rows, countFilas, data;
+        rows = Extincion.dtListExt.$("tr");
+        countFilas = rows.length;
+        if (countFilas > 0) {
+            $.each(rows, function (i, o) {
+                data = Extincion.dtListExt.row($(o)).data();
+                list.push(utilSigo.fnConvertArrayToObject(data));
+            });
+        }
+        return list;
+    }
+
+    Extincion.fnDelete = function (obj) {
+        var data = Extincion.dtListExt.row($(obj).parents('tr')).data();
+        if (data["RegEstado"] == "0") {
+            Extincion.tbEliTABLA.push({
+                EliTABLA: "THABILITANTE_EXTINCION",
+                EliVALOR01: data["COD_EXTINCION"]
+            });
+        }
+        Extincion.dtListExt.row($(obj).parents('tr')).remove().draw(false);
+    }
+
+    $(document).ready(function () {
+        Extincion.frm = $("#fmrExtincionTH");
+        Extincion.fnInitDataTable01();
+    });
+
+    /**
+     * //Extincion
+ManTHabilitante.ext = {};
+*/
+</script>
+
+<div id="fmrExtincionTH">
+    <div class="card">
+        <div class="card-header text-small">
+            Extinción del Titulo Habilitante
+        </div>
+        <div class="card-body">
+            <input type="hidden" id="hdfIten_RegEstab" name="hdfIten_RegEstab" value="1" />
+            <div class="form-row">
+                <div class="form-group col-md-2">
+                    <label for="ddTHExtincion" class="text-small">Motivo de Extinción</label>
+                    @Html.DropDownListFor(m => m.ddTHExtincionId, new SelectList(Model.ddTHExtincion, "Value", "Text"), new { @class = "form-control form-control-sm" })
+                </div>
+                <div class="form-group col-md-2 divCambioEstab1">
+                    <label for="txtResolucionExt" class="text-small">Numero de Resolución</label>
+                    @Html.EditorFor(m => m.txtResolucionExt, new { htmlAttributes = new { @class = "form-control form-control-sm", placeholder = "Numero de Resolución", maxlength = "200" } })
+                </div>
+                <div class="form-group col-md-2 divCambioEstab1">
+                    <label for="txtfechaExt" class="text-small">Fecha</label>
+                    @Html.EditorFor(m => m.txtfechaExt, new { htmlAttributes = new { @class = "form-control form-control-sm", placeholder = "dd/mm/yyyy", title = "la fecha a ingresar debe ser en el formato dd/mm/yyyy", maxlength = "10" } })
+                </div>
+
+            </div>
+            <div class="divCambioEstab">
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label for="txtObservacionExt" class="text-small">Observación</label>
+                        @Html.TextAreaFor(m => m.txtObservacionExt, new { @class = "form-control form-control-sm", rows = 2 })
+                    </div>
+                </div>
+                <div class="form-inline text-right">
+                    <button type="button" id="btnAgregarExt" onclick="Extincion.fnAdd()" class="btn btn-primary btn-sm">Agregar</button>
+                </div>
+                <br /><br />
+            </div>
+            <div class="form-row">
+                <div class="table-responsive">
+                    <table id="tbExtincionTH" class="table table-hover table-bordered" width="100%">
+                        <thead>
+                            <tr>
+                                <th colspan="11" class="text-sm-center">Listado de Motivo de Extinción</th>
+                            </tr>
+
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

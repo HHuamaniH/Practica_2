@@ -1,0 +1,43 @@
+﻿<script>
+    $(function () {
+        $('#tbListDetalleIT').DataTable();
+    })
+</script>
+
+<div id="divTbResumen" style="width: 100%; overflow: auto; scrollbar-base-color: none;">
+    <div style="text-align:center; color:cadetblue">
+        <h3>@Model.tituloReporteDetalle</h3>
+    </div>
+    <table id="tbListDetalleIT" class="table table-bordered table-striped-success" style="width: 100% !important; font-size:12px">
+        <thead>
+            <tr style=" text-align: center;  background-color: #dae7f5">
+                <td style="width: 2%">N°</td>
+
+                <td style="width: 15%">Nº Informe</td>
+                <td style="width: 10%">Fecha de Emision</td>
+                <td style="width: 10%">Titular</td>
+                <td style="width: 10%">Titulo Habilitante</td>
+                <td style="width: 10%">Recomendaciones</td>
+                <td style="width: 10%">Tipo</td>
+            </tr>
+        </thead>
+        <tbody id="bodyTable">
+            @if (Model.listDetalleEL1 != null)
+            {
+                var count = 0;
+                foreach (var item in Model.listDetalleEL1)
+                {
+                    <tr>
+                        <td style="width: 2%">@(++count)</td>
+                        <td style="width: 15%">@item.Numero_Inform</td>
+                        <td style="width: 10%">@item.FECHA_EMISION</td>
+                        <td style="width: 10%">@item.TITULAR</td>
+                        <td style="width: 10%">@item.THABILITANTE</td>
+                        <td style="width: 10%">@item.Recomendaciones</td>
+                        <td style="width: 10%">@item.Tipo_Informe</td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+</div>

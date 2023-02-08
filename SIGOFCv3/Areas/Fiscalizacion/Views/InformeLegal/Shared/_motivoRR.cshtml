@@ -1,0 +1,204 @@
+﻿
+@model  CapaEntidad.ViewModel.VM_InformeLegal
+
+<script type="text/javascript">
+
+    var _renderRecursoRecon = {};
+
+    _renderRecursoRecon.fnSelectRecom = function () {
+        _renderRecursoRecon.frm.find("#divImprocedente").hide();
+        _renderRecursoRecon.frm.find("#divProcedente").hide();
+        _renderRecursoRecon.frm.find("#divInfundado").hide();
+
+        if (_renderRecursoRecon.frm.find("#chkImprocedenteRR").is(':checked')) {
+            _renderRecursoRecon.frm.find("#divImprocedente").show();
+        }
+
+        if (_renderRecursoRecon.frm.find("#chkProcedenteRR").is(':checked')) {
+            _renderRecursoRecon.frm.find("#divProcedente").show();
+        }
+
+        if (_renderRecursoRecon.frm.find("#chkInfundadoRR").is(':checked')) {
+            _renderRecursoRecon.frm.find("#divInfundado").show();
+            $.ajax({
+                url: '@Url.Action("infraccionesRR","InformeLegal")',
+                type: 'POST',
+                datatype: "json",
+                traditional: true,
+                data: { },
+                success: function (data) {
+                    $('#divListaInfracciones').html(data);
+                }
+            })
+        }
+    }
+
+    $(document).ready(function () {
+        _renderRecursoRecon.frm = $("#frmRecursoReconsidera");
+        _renderRecursoRecon.fnSelectRecom();
+    });
+
+</script>
+<!-- para tipo de evaluacion recurso de reconsideracion-->
+<div id="frmRecursoReconsidera">
+    <div>
+        <br />
+    </div>
+    <div class="form-row" style="background-color:#dae7f5">
+        <div class="form-group col-md-12">
+            <label for="chkPrimeraVisita" class="text-small">Motivo</label>
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="form-group col-md-4">
+            <label for="chkMedCautelarRR" class="text-small">Medidas cautelares</label>
+        </div>
+        <div class="form-group col-md-6">
+            @Html.CheckBoxFor(m => m.chkMedCautelarRR, new { @class = "form-check-input", style = "width:15px;height:16px;" })
+        </div>
+        <div class="form-group col-md-2">
+        </div>
+    </div>
+
+    <div class="form-row">
+        <div class="form-group col-md-4">
+            <label for="chkFinPauRR" class="text-small">Fin de PAU</label>
+        </div>
+        <div class="form-group col-md-6">
+            @Html.CheckBoxFor(m => m.chkFinPauRR, new { @class = "form-check-input", style = "width:15px;height:16px;" })
+        </div>
+        <div class="form-group col-md-2">
+        </div>
+    </div>
+
+    <div class="form-row" style="background-color:#dae7f5">
+        <div class="form-group col-md-12">
+            <label class="text-small">Opinión</label>
+        </div>
+    </div>
+
+    <div class="form-row">
+        <div class="form-group col-md-4">
+            <label for="chkImprocedenteRR" class="text-small">Improcedente</label>
+        </div>
+        <div class="form-group col-md-6">
+            @Html.CheckBoxFor(m => m.chkImprocedenteRR, new
+           {
+               @class = "form-check-input",
+               style = "width:15px;height:16px;",
+               @onchange = "_renderRecursoRecon.fnSelectRecom()"
+           })
+        </div>
+        <div class="form-group col-md-2">
+        </div>
+    </div>
+
+    <div id="divImprocedente" style="display:none;">
+        <div class="form-row">
+            <div class="form-group col-md-4">
+            </div>
+            <div class="form-group col-md-4">
+                <label for="chkFueraPlazoRR" class="text-small">Fuera de plazo</label>
+            </div>
+            <div class="form-group col-md-4">
+                @Html.CheckBoxFor(m => m.chkFueraPlazoRR, new { @class = "form-check-input", style = "width:15px;height:16px;" })
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group col-md-4">
+            </div>
+            <div class="form-group col-md-4">
+                <label for="chkFaltaPruebasRR" class="text-small">Falta de nuevas pruebas</label>
+            </div>
+            <div class="form-group col-md-4">
+                @Html.CheckBoxFor(m => m.chkFaltaPruebasRR, new { @class = "form-check-input", style = "width:15px;height:16px;" })
+            </div>
+        </div>
+    </div>
+
+    <div class="form-row">
+        <div class="form-group col-md-4">
+            <label for="chkProcedenteRR" class="text-small">Procedente</label>
+        </div>
+        <div class="form-group col-md-6">
+            @Html.CheckBoxFor(m => m.chkProcedenteRR, new
+            {
+                @class = "form-check-input",
+                style = "width:15px;height:16px;",
+                @onchange = "_renderRecursoRecon.fnSelectRecom()"
+             })
+        </div>
+        <div class="form-group col-md-2">
+        </div>
+    </div>
+
+    <div id="divProcedente" style="display:none;">
+        <div class="form-row">
+            <div class="form-group col-md-4">
+            </div>
+            <div class="form-group col-md-4">
+                <label for="chkFundadoRR" class="text-small">Fundado</label>
+            </div>
+            <div class="form-group col-md-4">
+                @Html.CheckBoxFor(m => m.chkFundadoRR, new { @class = "form-check-input", style = "width:15px;height:16px;" })
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group col-md-4">
+            </div>
+            <div class="form-group col-md-4">
+                <label for="chkFundadoParteRR" class="text-small">Fundado en Parte</label>
+            </div>
+            <div class="form-group col-md-4">
+                @Html.CheckBoxFor(m => m.chkFundadoParteRR, new { @class = "form-check-input", style = "width:15px;height:16px;" })
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group col-md-4">
+            </div>
+            <div class="form-group col-md-4">
+                <label for="chkInfundadoRR" class="text-small">Infundado</label>
+            </div>
+            <div class="form-group col-md-4">
+                @Html.CheckBoxFor(m => m.chkInfundadoRR, new
+                {
+                    @class = "form-check-input",
+                    style = "width:15px;height:16px;",
+                    @onchange = "_renderRecursoRecon.fnSelectRecom()"
+                })
+            </div>
+        </div>
+        <div id="divInfundado" style="display:none;">
+            <div class="form-row">
+                <div class="form-group col-md-4">
+                </div>
+                <div class="form-group col-md-6" id="divListaInfracciones">
+                    @Html.Partial("~/Areas/Fiscalizacion/Views/InformeLegal/Shared/_renderInfraccionesRR.cshtml", Model)
+                </div>
+                <div class="form-group col-md-2">
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group col-md-4">
+                </div>
+                <div class="form-group col-md-6">
+                    @Html.TextAreaFor(m => m.txtInfundadoObsRR, 3, 1, new { @class = "form-control form-control-sm" })
+                </div>
+                <div class="form-group col-md-2">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="form-row">
+        <div class="form-group col-md-4">
+            <label for="txtPruebasPresentadasRR" class="text-small">Pruebas presentadas</label>
+        </div>
+        <div class="form-group col-md-6">
+            @Html.TextAreaFor(m => m.txtPruebasPresentadasRR, 3, 1, new { @class = "form-control form-control-sm" })
+        </div>
+        <div class="form-group col-md-2">
+        </div>
+    </div>
+
+</div>

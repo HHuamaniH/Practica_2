@@ -1,0 +1,143 @@
+﻿@model CapaEntidad.ViewModel.VM_InformeSuspension
+@{
+    ViewBag.Title = "AddEdit";
+    Layout = "~/Views/Shared/_LayoutMain.cshtml";
+}
+
+<script src="~/Areas/Supervision/js/ManInformeSusp/AddEdit.js"></script>
+<link href="~/Areas/Supervision/css/ManInforme/AddEdit.css" rel="stylesheet" />
+@section scripts{
+    <script>
+        "use strict"; var rol = '';
+    $(document).ready(function () {
+        //Validamos el rol del usuario
+        utilSigo.ValidaRol('@ViewBag.VAliasRol', 'btnRegistrar', '@Model.vmControlCalidad.ddlIndicadorId');
+    });
+    </script>
+}
+<div class="container-fluid">
+    <div class="card">
+        <div class="card-header text-right">
+            @Model.lblTituloCabecera
+        </div>
+        <div class="card-body">
+            <div class="card">
+                <div class="card-header text-small">
+                    <a id="btnRegistrar" href="javascript:void(0)" style="cursor:pointer;" data-toggle="tooltip" data-placement="top" title="Guardar" onclick="ManInfSup_AddEdit.fnSaveForm()"><i class="fa mx-2 fa-lg fa-save"></i></a>
+                    <a style="cursor:pointer;" data-toggle="tooltip" data-placement="top" title="Regresar" onclick="ManInfSup_AddEdit.regresar()"><i class="fa mx-2 fa-lg fa-reply"></i></a>
+
+                </div>
+                <div class="card-body">
+                    <form id="frmManInformeSusp_AddEdit">
+                        @Html.HiddenFor(m => m.hdfCodInforme)
+                        @Html.HiddenFor(m => m.hdfRegEstado)
+                        @Html.HiddenFor(m => m.hdfCodNotificacion)
+                        @Html.HiddenFor(m => m.hdfCodThabilitante)
+
+                        <ul class="nav nav-tabs" id="myTab" role="tablist">
+                            <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#navEstado" role="tab" aria-controls="home" aria-selected="true">Estado Situacional</a></li>
+                            <li class="nav-item"><a class="nav-link active" data-toggle="tab" href="#navDatos" role="tab" aria-controls="home" aria-selected="true">Datos Generales</a></li>
+                        </ul>
+                        <div class="tab-content">
+                            <div class="tab-pane fade show" id="navEstado" role="tabpanel" aria-labelledby="nav-home-tab">
+                                @{ Html.RenderAction("_ControlCalidad", "Controles", new { area = "GENERAL", dto = Model.vmControlCalidad }); }
+                            </div>
+                            <div class="tab-pane fade show active" id="navDatos" role="tabpanel" aria-labelledby="nav-home-tab">
+                                <div class="card">
+                                    <div class="card-header text-small"></div>
+                                    <div class="card-body">
+                                        <div class="form-row">
+                                            <div class="form-group col-md-4">
+                                                <div class="custom-control custom-checkbox my-1 mr-sm-2">
+                                                    @Html.CheckBoxFor(m => m.chkPublicar, new { @class = "custom-control-input" })
+                                                    <label for="chkPublicar" class="custom-control-label" style="margin-top:6px;">Publicar en el Observatorio</label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="card-header text-small">Datos Título Habilitante/Carta de Notificación</div>
+                                    <div class="card-body">
+                                        <div class="form-row">
+                                            <div class="form-group col-md-4" style="margin-bottom:0px;">
+                                                <label for="txtTHabilitante" class="text-small">Título Habilitante</label>
+                                                <div class="input-group">
+                                                    @Html.TextBoxFor(m => m.txtTHabilitante, new { @class = "form-control form-control-sm", disabled = "disabled" })
+
+                                                </div>
+                                            </div>
+                                            <div class="form-group col-md-8" style="margin-bottom:0px;">
+                                                <label for="txtCNotificacion" class="text-small">Carta de Notificación</label>
+                                                <div class="input-group">
+                                                    @Html.TextBoxFor(m => m.txtCNotificacion, new { @class = "form-control form-control-sm", disabled = "disabled" })
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="card-header text-small">Datos del Informe</div>
+                                    <div class="card-body">
+                                        <div class="form-row">
+                                            <div class="form-group col-md-4">
+                                                <label for="ddlOdId" class="text-small">O.D. desde donde registra la información</label>
+                                                @Html.DropDownListFor(m => m.txtIDOD, new SelectList(Model.ListOD, "CODIGO", "DESCRIPCION"),
+                                                                    new
+                                                                         {
+                                                                             @class = "form-control form-control-sm",
+                                                                             @id = "ddODs"
+                                                                        })
+                                            </div>
+                                            <div class="form-group col-md-4">
+                                                <label for="txtNumInforme" class="text-small">N° de Informe de Supervisión</label>
+                                                @Html.TextBoxFor(m => m.txtNumInforme, new { @class = "form-control form-control-sm" })
+                                            </div>
+                                            <div class="form-group col-md-4">
+                                                <label for="txtNumInforme" class="text-small">Suspen. Motivo</label>
+                                                @Html.DropDownListFor(m => m.txtIdMotivo, new SelectList(Model.ListMotivo, "CODIGO", "DESCRIPCION"),
+                                                               new
+                                                                    {
+                                                                        @class = "form-control form-control-sm",
+                                                                        @id = "ddMotivo"
+                                                                   })
+                                            </div>
+
+                                            <div class="form-group col-md-4">
+                                                <label for="chkPlanAmazonasAnio" class="text-small">Fecha emisión</label>
+                                                @Html.EditorFor(m => m.txtFechaEmision, new { htmlAttributes = new { @class = "form-control form-control-sm", placeholder = "dd/mm/yyyy", title = "la fecha a ingresar debe ser en el formato dd/mm/yyyy", maxlength = "10" } })
+
+                                            </div>
+                                            <div class="form-group col-md-4">
+                                                <label for="chkPlanAmazonas" class="text-small">Fecha del Acta de Suspensión</label>
+                                                @Html.EditorFor(m => m.txtFechaActa, new { htmlAttributes = new { @class = "form-control form-control-sm", placeholder = "dd/mm/yyyy", title = "la fecha a ingresar debe ser en el formato dd/mm/yyyy", maxlength = "10" } })
+
+                                            </div>
+                                            <div class="form-group col-md-4">
+
+                                            </div>
+                                            <div class="col-md-12">
+                                                @Html.Partial("~/Areas/Supervision/Views/ManInforme/Render/_renderSupervisor.cshtml", Model.tbSupervisor)
+                                            </div>
+                                            <div class="form-group col-md-12">
+                                                <br />
+                                            </div>
+                                            <div class="col-md-12">
+                                                <div class="card-header text-small">Observacion</div>
+                                            </div>
+                                            <div class="col-md-12">
+                                                @Html.TextAreaFor(m => m.txtObservacion, 8, 1, new { @class = "form-control form-control-sm" })
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade hide" id="mdlBuscarPersona" role="dialog"></div>
+    <div class="modal fade" id="modalAddEditPersona" tabindex="-1" role="dialog"></div>
+    <div class="modal fade hide" id="mdlControles_Ubigeo" role="dialog"></div>
+
+</div>

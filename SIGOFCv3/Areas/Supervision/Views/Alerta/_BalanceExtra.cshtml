@@ -1,0 +1,139 @@
+﻿<style>
+    .my-custom-scrollbar { position: relative; height: 400px; overflow: auto; }
+    .table-wrapper-scroll-y { display: block; }
+</style>
+<div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+        <div class="modal-header text-small" style="cursor:move;padding:0.5rem;">
+            <h5 id="lblTituloBuscarPersona" class="modal-title">Importar Especies del Balance de Extracción</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body">
+            <form id="frmBalanceExtra" method="get">  
+                <div class="table-wrapper-scroll-y my-custom-scrollbar">
+                    <table id="tbBuscarBalanceExtra" class="table table-hover table-bordered" width="100%">
+                        <thead>
+                            <tr>
+                                <th>N°</th>
+                                <th>Selec.</th>
+                                <th>CODIGO</th>
+                                <th>Especie</th>
+                                <th>Fecha de Balance</th>
+                                <th>Total de arboles Aprobados</th>
+                                <th>Volumen Autorizado (m³)</th>
+                                <th>Volumen Movilizado (m³)</th>
+                                <th>Saldo</th>
+                                <th>PO</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+                @*<div class="table-responsive">
+                    
+                </div>*@
+                <button type="submit" style="display:none;"></button>
+            </form>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-outline-info btn-sm" onclick="_BalanceExtra.fnAgregar()" title="Agregar Items Seleccionados">
+                Agregar
+            </button>
+            <button type="button" class="btn btn-outline-info btn-sm" data-dismiss="modal" title="Cancelar">
+                Cancelar
+            </button>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    var _BalanceExtra = { 
+        fnExiste: (COD_ESPECIES, COD_THABILITANTE, NUM_POA) => {
+            var result = false;
+            _BalExtra.dt.rows().every(function (rowIdx, tableLoop, rowLoop) {
+                var data = this.data();
+                if (COD_ESPECIES == data["COD_ESPECIES"] && COD_THABILITANTE == data["COD_THABILITANTE"]
+                    && parseInt(NUM_POA) == parseInt(data["NUM_POA"]) ) {
+                    result = true;
+                    return result;
+                }
+            });
+
+            return result;
+        },
+        fnGetData: () => {
+            let model = [];           
+            $.each(_BalanceExtra.dt.$("tr"), function (i, o) {
+                if ($(o).find(".chkSelect").is(":checked")) {
+                    let data = _BalanceExtra.dt.row($(o)).data();
+                    if (!_BalanceExtra.fnExiste(data.COD_ESPECIES, data.COD_THABILITANTE, data.NUM_POA)) {
+                        model.push(data);
+                    }                  
+                }
+            });
+            return model;
+        },
+        fnAgregar: () => {
+            let list = _BalanceExtra.fnGetData();
+            _BalExtra.dt.rows.add(list).draw();
+            $("#mdlAddBalanceExtra").modal('hide');
+        },
+        fnBuildTable: () => {
+            let columns = [
+                {
+                    "name": "ROW_INDE", "width": "2%", "orderable": false, "mRender": function (data, type, row, meta) {
+                        return parseInt(meta.row) + 1;
+                    }
+                },
+                {
+                    "data": "", "width": "2%", "orderable": false, "searchable": false, "mRender": function (data, type, row) {
+                        return `<div style="text-align: center;"><input type="checkbox" class="chkSelect"/></div>`;
+                    }
+                },
+                { "data": "COD_ESPECIES", "autoWidth": true, "orderable": false },
+                { "data": "ESPECIES", "autoWidth": true, "orderable": false },
+                { "data": "FECHA_BALANCE", "autoWidth": true, "orderable": false },
+                { "data": "TOTAL_ARBOLES", "autoWidth": true, "orderable": false },
+                { "data": "VOLUMEN_AUTORIZADO", "autoWidth": true, "orderable": false },
+                { "data": "VOLUMEN_MOVILIZADO", "autoWidth": true, "orderable": false },
+                { "data": "SALDO", "autoWidth": true, "orderable": false },
+                { "data": "NOMBRE_POA", "autoWidth": true, "orderable": false }                
+            ];
+            _BalanceExtra.dt = $("#tbBuscarBalanceExtra").DataTable({
+                processing: true,
+                serverSide: false,
+                searching: false,
+                ordering: false,
+                paging: true,
+                //"bPaginate": true,
+                ajax: {
+                    "url": urlLocalSigo + "Supervision/Alerta/GetAllEspecieBExtxCodNot",
+                    "data": function (d) {
+                        d.codNotificacion = $("#frmAddEdit").find("#COD_CNOTIFICACION").val();
+                    },
+                    "error": function (jqXHR) {
+                        utilSigo.unblockUIGeneral();
+                        utilSigo.toastError("Error", "Sucedio un error");
+                    },
+                    "statusCode": {
+                        203: () => { utilSigo.unblockUIGeneral(); utilSigo.toastInfo("Aviso", "El usuario perdio la sesión. Vuelva ingresar al sistema"); }
+                    }
+                },
+                columns: columns,
+                bInfo: true,
+                bLengthChange: false,
+                // "lengthMenu": [[10, 20, 50, 100], [10, 20, 50, 100]],
+                "aaSorting": [],
+                "pageLength": 20000,
+                // "displayStart": optDt.iStart,
+                "oLanguage": initSigo.oLanguage,
+                "drawCallback": initSigo.showPagination
+            });
+
+        }
+    }
+    $(document).ready(function () {
+        _BalanceExtra.fnBuildTable();
+    });
+</script>

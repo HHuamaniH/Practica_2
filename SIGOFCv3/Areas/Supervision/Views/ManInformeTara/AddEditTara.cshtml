@@ -1,0 +1,638 @@
+﻿@model CapaEntidad.ViewModel.VM_Informe_Tara
+@{
+    ViewBag.Title = "AddEditTara";
+    Layout = "~/Views/Shared/_LayoutMain.cshtml";
+}
+
+<script src="~/Scripts/ckeditor5/ckeditor.js"></script>
+<script src="~/Scripts/sigo/utility.uploadFile.js"></script>
+<script src="~/Areas/Supervision/js/ManInformeTara/AddEditTara.js"></script>
+<script type="text/javascript">
+    ManInforme_AddEditTara.fnLoadData('@Html.Raw(Json.Encode(@Model.tbTaraConcepto))', "DataTaraConcepto");
+    ManInforme_AddEditTara.fnLoadData('@Html.Raw(Json.Encode(@Model.tbManPlantacion))', "DataManPlantacion");
+    ManInforme_AddEditTara.fnLoadData('@Html.Raw(Json.Encode(@Model.tbAprovechamiento))', "DataAprovechamiento");
+    ManInforme_AddEditTara.fnLoadData('@Html.Raw(Json.Encode(@Model.tbCapacitacion))', "DataCapacitacion");
+    ManInforme_AddEditTara.fnLoadData('@Html.Raw(Json.Encode(@Model.tbProduccionFruto))', "DataProduccionFruto");
+    ManInforme_AddEditTara.fnLoadData('@Html.Raw(Json.Encode(@Model.tbAprovechaForestal))', "DataAprovechaForestal");
+    ManInforme_AddEditTara.fnLoadData('@Html.Raw(Json.Encode(@Model.tbCenso))', "DataCenso");
+    ManInforme_AddEditTara.fnLoadData('@Html.Raw(Json.Encode(@Model.tbKardex))', "DataKardex");
+</script>
+@section scripts{
+    <script>
+        "use strict"; var rol = '';
+    $(document).ready(function () {
+        //Validamos el rol del usuario
+        utilSigo.ValidaRol('@ViewBag.VAliasRol', 'btnRegistrar', '@Model.vmControlCalidad.ddlIndicadorId');
+    });
+    </script>
+}
+<div class="container-fluid">
+    <div class="card">
+        <div class="card-header text-right">
+            @Model.lblTituloCabecera
+        </div>
+        <div class="card-body">
+            <div class="card">
+                <div class="card-header text-small">
+                    <a id="btnRegistrar" href="javascript:void(0)" style="cursor:pointer;" data-toggle="tooltip" data-placement="top" title="Guardar" onclick="ManInforme_AddEditTara.fnSubmitForm()"><i class="fa mx-2 fa-lg fa-save"></i></a>
+                    <a style="cursor:pointer;" data-toggle="tooltip" data-placement="top" title="Regresar" onclick="ManInforme_AddEditTara.fnReturnIndex()"><i class="fa mx-2 fa-lg fa-reply"></i></a>
+                    @Model.lblTituloEstado
+                </div>
+                <div class="card-body">
+                    <form id="frmManInforme_AddEditTara" action="@Url.Action("AddEditTara", "ManInformeTara", new { Area= "Supervision" })">
+                        @Html.HiddenFor(m => m.hdfCodInforme)
+                        @Html.HiddenFor(m => m.hdfRegEstado)
+                        <input type="hidden" name="hdfCodMTipo" value="0000005" />
+                        @Html.HiddenFor(m => m.hdfPerfil)
+
+                        <ul class="nav nav-tabs" id="myTab" role="tablist">
+                            <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#navEstado" role="tab" aria-controls="home" aria-selected="true">Estado Situacional</a></li>
+                            <li class="nav-item"><a class="nav-link active" data-toggle="tab" href="#navDatos" role="tab" aria-controls="home" aria-selected="true">Datos Generales</a></li>
+                            <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#navObligacion" role="tab" aria-controls="home" aria-selected="true">Obligaciones</a></li>
+                            <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#navResultado" role="tab" aria-controls="home" aria-selected="true">Resultados</a></li>
+                            <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#navCenso" role="tab" aria-controls="home" aria-selected="true">Censo | Kardex</a></li>
+                            <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#navAnalisis" role="tab" aria-controls="home" aria-selected="true">Análisis</a></li>
+                            <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#navConclusion" role="tab" aria-controls="home" aria-selected="true">Conclusiones</a></li>
+                            <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#navIncidencias" role="tab" aria-controls="home" aria-selected="true">Incidencias</a></li>
+                            <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#navInformeDigital" role="tab" aria-controls="home" aria-selected="true" style="display:none">Informe digital</a></li>
+                        </ul>
+                        <div class="tab-content">
+                            <div class="tab-pane fade show" id="navEstado" role="tabpanel" aria-labelledby="nav-home-tab">
+                                @{ Html.RenderAction("_ControlCalidad", "Controles", new { area = "GENERAL", dto = Model.vmControlCalidad, disableControl = true }); }
+                                @Html.Action("_FormatoControlCalidad", "ManInforme", new { COD_INFORME = Model.hdfCodInforme })
+                            </div>
+                            <div class="tab-pane fade show active" id="navDatos" role="tabpanel" aria-labelledby="nav-home-tab">
+                                <div class="card">
+                                    <div class="card-header text-small"></div><br />
+                                    <div class="card-header text-small">Datos Título Habilitante/Carta de Notificación</div>
+                                    <div class="card-body">
+                                        @Html.Partial("~/Areas/Supervision/Views/ManInforme/Render/_renderCNotificacion.cshtml", Model.vmInfCNotificacion
+                                        , new ViewDataDictionary { { "TIPO", "SIMPLE" } })
+                                    </div>
+                                    <div class="card-header text-small">Datos del Informe</div>
+                                    <div class="card-body">
+                                        <div class="form-row">
+                                            <div class="form-group col-md-3">
+                                                <label for="ddlOdId" class="text-small">O.D. desde donde registra la información</label>
+                                                @Html.DropDownListFor(m => m.ddlOdId, new SelectList(Model.ddlOd, "Value", "Text"), new { @class = "form-control form-control-sm" })
+                                            </div>
+                                            <div class="form-group col-md-3">
+                                                <label for="txtNumInforme" class="text-small">N° de Informe de Supervisión</label>
+                                                @Html.TextBoxFor(m => m.txtNumInforme, new { @class = "form-control form-control-sm" })
+                                            </div>
+                                            <div class="form-group col-md-2">
+                                                <label for="txtFechaEntrega" class="text-small">Fecha Entrega del Informe</label>
+                                                @Html.TextBoxFor(m => m.txtFechaEntrega, new { @class = "form-control form-control-sm", placeholder = "dd/mm/aaaa", maxlength = "10" })
+                                            </div>
+                                            <div class="form-group col-md-4">
+                                                <label for="txtDirector" class="text-small">Director</label>
+                                                <div class="input-group">
+                                                    @Html.TextBoxFor(m => m.txtDirector, new { @class = "form-control form-control-sm", disabled = "disabled" })
+                                                    @Html.HiddenFor(m => m.hdfCodDirector)
+                                                    <div class="input-group-prepend">
+                                                        <span class="input-group-text" style="cursor:pointer;" onclick="ManInforme_AddEditTara.fnBuscarPersona('DIRECTOR','TODOS')"><i class="fa fa-search" data-toggle="tooltip" data-placement="top" title="Seleccione el director"></i></span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-row">
+                                            <div class="form-group col-md-3">
+                                                <label for="txtFechaEmision" class="text-small">Fecha Emisión</label>
+                                                @Html.TextBoxFor(m => m.txtFechaEmision, new { @class = "form-control form-control-sm", placeholder = "dd/mm/aaaa", maxlength = "10" })
+                                            </div>
+                                        </div>
+                                        <div class="form-row">
+                                            <div class="form-group col-md-5">
+                                                <div class="card">
+                                                    <div class="card-header">
+                                                        Denuncia
+                                                    </div>
+                                                    <div class="card-body">
+                                                        <div class="form-row ">
+                                                            <div class="form-group col-md-7">
+                                                                <label class="text-small" id="lblExpediente">Tramite STID</label>
+                                                                <div class="input-group">
+                                                                    <input type="text" id="inptExpediente" class="form-control form-control-sm" />
+                                                                    <div class="input-group-prepend">
+                                                                        <span class="input-group-text" id="idAddInforme">
+                                                                            <i class="fa fa-search" style="cursor:pointer;color:forestgreen"
+                                                                               onclick="ManInforme_AddEdit.Denuncia.buscarTramite();">
+                                                                            </i>
+                                                                        </span>
+                                                                    </div>
+                                                                    <div class="input-group-prepend">
+                                                                        <span class="input-group-text" id="idAddInforme">
+                                                                            <i class="fa fa-close" style="cursor:pointer;color:darkred"
+                                                                               onclick="ManInforme_AddEdit.Denuncia.eliminarTramite();">
+                                                                            </i>
+                                                                        </span>
+                                                                    </div>
+                                                                    <div class="input-group-prepend responseOk" style="display:none">
+                                                                        <span class="input-group-text">
+                                                                            <i class="fa fa-check-circle" data-toggle="tooltip" data-placement="top" title="N° Tramite OK" style="color:forestgreen">
+                                                                            </i>
+                                                                        </span>
+                                                                    </div>
+                                                                    <div class="input-group-prepend responseError" style="display:none">
+                                                                        <span class="input-group-text">
+                                                                            <i class="fa fa-times-circle" data-toggle="tooltip" data-placement="top" title="No existe N° de Tramite" style="color:darkred">
+                                                                            </i>
+                                                                        </span>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="form-group col-md-5">
+                                                                <label class="text-small">Atendido</label>
+                                                                <div style="margin-top:7px;">
+                                                                    <div class="custom-control custom-radio custom-control-inline">
+                                                                        <input type="radio" class="custom-control-input" id="rbtnAtendido1" name="rbtnAtendido" value="1">
+                                                                        <label class="custom-control-label" for="rbtnAtendido1">Atendido</label>
+                                                                    </div>
+                                                                    <div class="custom-control custom-radio custom-control-inline">
+                                                                        <input type="radio" class="custom-control-input" id="rbtnAtendido2" name="rbtnAtendido" value="2">
+                                                                        <label class="custom-control-label" for="rbtnAtendido2">En Proceso</label>
+                                                                    </div>
+                                                                    <div class="custom-control custom-radio custom-control-inline">
+                                                                        <input type="radio" class="custom-control-input" id="rbtnAtendido3" name="rbtnAtendido" value="3">
+                                                                        <label class="custom-control-label" for="rbtnAtendido3">Trasladado</label>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-row">
+                                            <div class="col-md-12">
+                                                @Html.Partial("~/Areas/Supervision/Views/ManInforme/Render/_renderSupervisorCalidad.cshtml", new CapaEntidad.ViewModel.VM_SupervisorCalidad() { hdSupervisor_Calidad = Model.hdSupervisor_Calidad, Nombre_Supervisor_Calidad = Model.Nombre_Supervisor_Calidad })
+                                            </div>
+                                        </div>
+                                        <div class="form-row">
+                                            <div class="col-md-6">
+                                                @Html.Partial("~/Areas/Supervision/Views/ManInforme/Render/_renderSupervisor.cshtml", Model.tbSupervisor)
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="card-header text-small">Datos de la Supervisión</div>
+                                    <div class="card-body">
+                                        @Html.Partial("~/Areas/Supervision/Views/ManInforme/Render/_renderDatosSupervision.cshtml", Model.vmDatoSupervision)
+                                    </div>
+                                    <div class="card-header text-small">Ubicación del Título Habilitante</div>
+                                    <div class="card-body">
+                                        <div class="form-row">
+                                            <div class="col-md-6 mb-3">
+                                                <label for="txtUbigeo" class="text-small">Ubigeo</label>
+                                                <div class="input-group">
+                                                    <div class="input-group-prepend">
+                                                        <span class="input-group-text"><i class="fa fa-search" style="cursor:pointer;" data-toggle="tooltip" data-placement="top" title="Seleccionar Ubigeo" onclick="ManInforme_AddEditTara.fnViewModalUbigeo();"></i></span>
+                                                    </div>
+                                                    @Html.EditorFor(m => m.txtUbigeo, new { htmlAttributes = new { @class = "form-control form-control-sm", @disabled = "disabled" } })
+                                                    @Html.HiddenFor(m => m.hdfCodUbigeo)
+                                                </div>
+                                            </div>
+                                            <div class="form-group col-md-6">
+                                                <label for="txtSector" class="text-small">Sector</label>
+                                                @Html.TextBoxFor(m => m.txtSector, new { @class = "form-control form-control-sm" })
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="card-header text-small">Desplazamiento</div>
+                                    <div class="card-body">
+                                        <div class="form-row">
+                                            <div class="col-md-12">
+                                                @Html.Partial("~/Areas/Supervision/Views/ManInforme/Render/_renderDesplazamiento.cshtml", Model.tbDesplazamiento)
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="card-header text-small">Archivos Cargados en el SIADO</div>
+                                    <div class="card-body">
+                                        <div class="form-row">
+                                            @{
+                                                Html.RenderAction("_IntegracionSIADO", "Controles", new { area = "GENERAL", asCriterio = "SUBTIP_TITDOCSIGO", asSubCriterio = "0006", asValor = Model.hdfCodInforme });
+                                            }
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="tab-pane fade show" id="navObligacion" role="tabpanel" aria-labelledby="nav-home-tab">
+                                <div class="card">
+                                    <div class="card-header text-small"></div><br />
+                                    @Html.Partial("~/Areas/Supervision/Views/ManInforme/Render/_renderObligacionTitular.cshtml", Model.tbObligTitular)
+                                </div>
+                            </div>
+                            <div class="tab-pane fade show" id="navResultado" role="tabpanel" aria-labelledby="nav-home-tab">
+                                <div class="card">
+                                    <div class="card-header text-small"></div><br />
+                                    <div class="card-header text-small">Cumplimiento del PGMF</div>
+                                    <div class="card-body">
+                                        <div class="form-row">
+                                            <div class="form-group col-md-6">
+                                                <label for="chkLineamientoMapa" class="text-small">
+                                                    Los mapas contienen información según lo especificado en los lineamientos del PGMF
+                                                    @Html.CheckBoxFor(m => m.chkLineamientoMapa, new { style = "width:14px;height:14px;" })
+                                                </label>
+                                                @Html.TextAreaFor(m => m.txtLineamientoMapa, new { @class = "form-control form-control-sm", @rows = "3" })
+                                            </div>
+                                            <div class="form-group col-md-6">
+                                                <label for="txtAreaManejo" class="text-small">Establecimiento del área de manejo</label>
+                                                @Html.TextAreaFor(m => m.txtAreaManejo, new { @class = "form-control form-control-sm", @rows = "3" })
+                                            </div>
+                                        </div>
+                                        <div class="form-row">
+                                            <div class="form-group col-md-6">
+                                                <label for="txtPlantacion" class="text-small">Establecimiento de la Plantación</label>
+                                                @Html.TextAreaFor(m => m.txtPlantacion, new { @class = "form-control form-control-sm", @rows = "3" })
+                                            </div>
+                                            <div class="form-group col-md-6">
+                                                <label for="chkForestacion" class="text-small">
+                                                    Existen indicios de forestación o reforestación
+                                                    @Html.CheckBoxFor(m => m.chkForestacion, new { style = "width:14px;height:14px;" })
+                                                </label>
+                                                @Html.TextAreaFor(m => m.txtForestacion, new { @class = "form-control form-control-sm", @rows = "3" })
+                                            </div>
+                                        </div>
+                                        <div class="form-row">
+                                            <div class="form-group col-md-6">
+                                                <label for="chkForestacion" class="text-small">
+                                                    La producción de plantones se da por
+                                                    @Html.DropDownListFor(m => m.ddlPlantonId, new SelectList(Model.ddlPlanton, "Value", "Text"), new { @class = "form-control-sm" })
+                                                </label>
+                                                @Html.TextAreaFor(m => m.txtPlanton, new { @class = "form-control form-control-sm", @rows = "3" })
+                                            </div>
+                                        </div>
+                                        <div class="form-row">
+                                            <div class="table-responsive">
+                                                <table id="tbManPlantacion" style="width:100%" class="table table-hover table-bordered">
+                                                    <thead>
+                                                        <tr>
+                                                            <th colspan="6" class="text-sm-left">
+                                                                <div class="form-inline">
+                                                                    <i class="fa mx-2 fa-lg fa-file-o" style="cursor:pointer;" onclick="ManInforme_AddEditTara.fnAddEditTara('', 'MAN_PLANTACION');" data-toggle="tooltip" data-placement="top" title="Nuevo"></i>
+                                                                    <i class="fa mx-2 fa-lg fa-window-close-o" style="cursor:pointer;" onclick="ManInforme_AddEditTara.fnDeleteAllTara('MAN_PLANTACION');" data-toggle="tooltip" data-placement="top" title="Eliminar Todos"></i>
+                                                                    <strong>
+                                                                        Mantenimiento de la Plantación
+                                                                    </strong>
+                                                                </div>
+                                                            </th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody></tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="card-header text-small">Del Aprovechamiento</div>
+                                    <div class="card-body">
+                                        <div class="form-row">
+                                            <div class="table-responsive">
+                                                <table id="tbTConceptoAprovecha" style="width:100%" class="table table-hover table-bordered">
+                                                    <thead></thead>
+                                                    <tbody></tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                        <div class="form-row">
+                                            <div class="table-responsive">
+                                                <table id="tbAprovechamiento" style="width:100%" class="table table-hover table-bordered">
+                                                    <thead>
+                                                        <tr>
+                                                            <th colspan="10" class="text-sm-left">
+                                                                <div class="form-inline">
+                                                                    <i class="fa mx-2 fa-lg fa-file-o" style="cursor:pointer;" onclick="ManInforme_AddEditTara.fnAddEditTara('', 'APROVECHAMIENTO');" data-toggle="tooltip" data-placement="top" title="Nuevo"></i>
+                                                                    <i class="fa mx-2 fa-lg fa-window-close-o" style="cursor:pointer;" onclick="ManInforme_AddEditTara.fnDeleteAllTara('APROVECHAMIENTO');" data-toggle="tooltip" data-placement="top" title="Eliminar Todos"></i>
+                                                                    <strong>
+                                                                        Aprovechamiento
+                                                                    </strong>
+                                                                </div>
+                                                            </th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody></tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="card-header text-small">De los Impactos</div>
+                                    <div class="card-body">
+                                        <div class="form-row">
+                                            <div class="table-responsive">
+                                                <table id="tbTConceptoImpacto" style="width:100%" class="table table-hover table-bordered">
+                                                    <thead></thead>
+                                                    <tbody></tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="card-header text-small">Capacitaciones</div>
+                                    <div class="card-body">
+                                        <div class="form-row">
+                                            <div class="table-responsive">
+                                                <table id="tbCapacitacion" style="width:100%" class="table table-hover table-bordered">
+                                                    <thead>
+                                                        <tr>
+                                                            <th colspan="6" class="text-sm-left">
+                                                                <div class="form-inline">
+                                                                    <i class="fa mx-2 fa-lg fa-file-o" style="cursor:pointer;" onclick="ManInforme_AddEditTara.fnAddEditTara('', 'CAPACITACION');" data-toggle="tooltip" data-placement="top" title="Nuevo"></i>
+                                                                    <i class="fa mx-2 fa-lg fa-window-close-o" style="cursor:pointer;" onclick="ManInforme_AddEditTara.fnDeleteAllTara('CAPACITACION');" data-toggle="tooltip" data-placement="top" title="Eliminar Todos"></i>
+                                                                    <strong>
+                                                                        Capacitación
+                                                                    </strong>
+                                                                </div>
+                                                            </th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody></tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="card-header text-small">Comercialización</div>
+                                    <div class="card-body">
+                                        <div class="form-row">
+                                            <div class="form-group col-md-12">
+                                                <label for="txtComercializacion" class="text-small">Destino final del producto</label>
+                                                @Html.TextAreaFor(m => m.txtComercializacion, new { @class = "form-control form-control-sm", @rows = "3" })
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="tab-pane fade show" id="navCenso" role="tabpanel" aria-labelledby="nav-home-tab">
+                                <div class="card">
+                                    <div class="card-header text-small"></div><br />
+                                    <div class="card-header text-small">Censo Comercial</div>
+                                    <div class="card-body">
+                                        <div class="form-row">
+                                            <div class="table-responsive">
+                                                <table id="tbTConceptoCenso" style="width:100%" class="table table-hover table-bordered">
+                                                    <thead></thead>
+                                                    <tbody></tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                        <div class="form-row">
+                                            <div class="table-responsive">
+                                                <table id="tbCenso" style="width:100%;margin:0px !important;" class="table table-hover table-bordered">
+                                                    <thead>
+                                                        <tr>
+                                                            <th colspan="14" class="text-sm-left">
+                                                                <div class="form-inline">
+                                                                    <i class="fa mx-2 fa-lg fa-file-o" style="cursor:pointer;" onclick="ManInforme_AddEditTara.fnAddEditTara('', 'ARBOL_SUPERVISADO');" data-toggle="tooltip" data-placement="top" title="Nuevo"></i>
+                                                                    <i class="fa mx-2 fa-lg fa-window-close-o" style="cursor:pointer;" onclick="ManInforme_AddEditTara.fnDeleteAllTara('ARBOL_SUPERVISADO');" data-toggle="tooltip" data-placement="top" title="Eliminar Todos"></i>
+                                                                    <label style="cursor:pointer;" class="fa mx-2 fa-lg fa-file-excel-o" title="Importar Archivo" data-toggle="tooltip">
+                                                                        <input type="file" id="fileselect" name="fileselect" style="display:none" size="60" onchange="ManInforme_AddEditTara.fnImport(event, this,'CENSO')">
+                                                                    </label>
+                                                                    <a href="@Url.Content("~/Archivos/Plantilla/RegArbolesSuperv_v2.xlsx")"> <i class="fa mx-2 fa-lg fa-folder-open" style="cursor:pointer;" data-toggle="tooltip" data-placement="top" title="Descargar Plantilla"></i></a>
+                                                                    <strong>Registro de los árboles supervisados</strong>
+                                                                </div>
+                                                            </th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody></tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="card-header text-small">Kardex de Productos Forestales Diferentes a la Madera</div>
+                                    <div class="card-body">
+                                        <div class="form-row">
+                                            <div class="table-responsive">
+                                                <table id="tbKardex" style="width:100%;margin:0px !important;" class="table table-hover table-bordered">
+                                                    <thead>
+                                                        <tr>
+                                                            <th colspan="11" class="text-sm-left">
+                                                                <div class="form-inline">
+                                                                    <i class="fa mx-2 fa-lg fa-file-o" style="cursor:pointer;" onclick="ManInforme_AddEditTara.fnAddEditTara('', 'KARDEX');" data-toggle="tooltip" data-placement="top" title="Nuevo"></i>
+                                                                    <i class="fa mx-2 fa-lg fa-window-close-o" style="cursor:pointer;" onclick="ManInforme_AddEditTara.fnDeleteAllTara('KARDEX');" data-toggle="tooltip" data-placement="top" title="Eliminar Todos"></i>
+                                                                    <label style="cursor:pointer;" class="fa mx-2 fa-lg fa-file-excel-o" title="Importar Archivo" data-toggle="tooltip">
+                                                                        <input type="file" id="fileselect" name="fileselect" style="display:none" size="60" onchange="ManInforme_AddEditTara.fnImport(event, this,'KARDEX')">
+                                                                    </label>
+                                                                    <a href="@Url.Content("~/Archivos/Plantilla/InformeKardexTara.xlsx")"> <i class="fa mx-2 fa-lg fa-folder-open" style="cursor:pointer;" data-toggle="tooltip" data-placement="top" title="Descargar Plantilla"></i></a>
+                                                                    <strong>Fecha de emisión del kardex por la Autoridad Forestal</strong>
+                                                                </div>
+                                                            </th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody></tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="tab-pane fade show" id="navAnalisis" role="tabpanel" aria-labelledby="nav-home-tab">
+                                <div class="card-header text-small"></div>
+                                <div class="card-body">
+                                    <div class="form-row">
+                                        <div class="form-group col-md-12">
+                                            <label for="txtRevAcervo" class="text-small">Revisión de acervo documentario</label>
+                                            @Html.TextAreaFor(m => m.txtRevAcervo, new { @class = "form-control form-control-sm", @rows = "3" })
+                                        </div>
+                                    </div>
+                                    <div class="form-row">
+                                        <div class="table-responsive">
+                                            <table id="tbTConceptoAnalisis" style="width:100%" class="table table-hover table-bordered">
+                                                <thead></thead>
+                                                <tbody></tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                    <div class="form-row">
+                                        <div class="table-responsive">
+                                            <table id="tbProduccionFruto" style="width:100%" class="table table-hover table-bordered">
+                                                <thead>
+                                                    <tr>
+                                                        <th colspan="7" class="text-sm-left">
+                                                            <div class="form-inline">
+                                                                <i class="fa mx-2 fa-lg fa-file-o" style="cursor:pointer;" onclick="ManInforme_AddEditTara.fnAddEditTara('', 'PRODUCCION_FRUTO');" data-toggle="tooltip" data-placement="top" title="Nuevo"></i>
+                                                                <i class="fa mx-2 fa-lg fa-window-close-o" style="cursor:pointer;" onclick="ManInforme_AddEditTara.fnDeleteAllTara('PRODUCCION_FRUTO');" data-toggle="tooltip" data-placement="top" title="Eliminar Todos"></i>
+                                                                <strong>
+                                                                    Producción Promedio de Frutos
+                                                                </strong>
+                                                            </div>
+                                                        </th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody></tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                    <div class="form-row">
+                                        <div class="table-responsive">
+                                            <table id="tbAprovechaForestal" style="width:100%" class="table table-hover table-bordered">
+                                                <thead>
+                                                    <tr>
+                                                        <th colspan="13" class="text-sm-left">
+                                                            <div class="form-inline">
+                                                                <i class="fa mx-2 fa-lg fa-file-o" style="cursor:pointer;" onclick="ManInforme_AddEditTara.fnAddEditTara('', 'APROVECHA_FORESTAL');" data-toggle="tooltip" data-placement="top" title="Nuevo"></i>
+                                                                <i class="fa mx-2 fa-lg fa-window-close-o" style="cursor:pointer;" onclick="ManInforme_AddEditTara.fnDeleteAllTara('APROVECHA_FORESTAL');" data-toggle="tooltip" data-placement="top" title="Eliminar Todos"></i>
+                                                                <strong>
+                                                                    Del Aprovechamiento Forestal
+                                                                </strong>
+                                                            </div>
+                                                        </th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody></tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="tab-pane fade show" id="navConclusion" role="tabpanel" aria-labelledby="nav-home-tab">
+                                <div class="card">
+                                    <div class="card-header text-small"></div>
+                                    <div class="card-body">
+                                        <div class="form-row">
+                                            <div class="form-group col-md-12">
+                                                <label for="txtObservacion" class="text-small">Observaciones</label>
+                                                @Html.TextAreaFor(m => m.txtObservacion, new { @class = "form-control form-control-sm", @rows = "7" })
+                                            </div>
+                                        </div>
+                                        <div class="form-row">
+                                            <div class="form-group col-md-12">
+                                                <label for="txtConclusion" class="text-small">Conclusiones del Informe de Supervisión</label>
+                                                <div id="txtConclusion" class="ckeditor-inf">
+                                                    <div class="toolbar-container"></div>
+                                                    <div class="editor-container">
+                                                        <div class="editor">
+                                                            @Html.Raw(Model.txtConclusion)
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                @Html.HiddenFor(m => m.txtConclusion)
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="tab-pane fade show" id="navIncidencias" role="tabpanel" aria-labelledby="nav-home-tab">
+                                <div class="card-header text-small">
+                                    Incidencias
+                                </div>
+                                <div class="card-body">
+                                    <input type="hidden" id="h1" value="" />
+                                    <input type="hidden" id="h2" value="" />
+                                    <div class="form-row">
+                                        <input type="hidden" id="COD_IINCIDENCIA" value="0">
+                                        <div class="form-group col-md-4">
+                                            <label for="txt_FECHA_SUCESO" class="text-small">FECHA SUCESO:</label>
+                                            <input type="date" id="txt_FECHA_SUCESO" name="txt_FECHA_SUCESO" class="form-control form-control-sm valid">
+                                        </div>
+                                        <div class="form-group col-md-4">
+                                            <label for="txt_HORA_SUCESO" class="text-small">
+                                                HORA SUCESO:
+                                            </label>
+                                            <input class="form-control form-control-sm" type="time" id="txt_HORA_SUCESO" />
+                                        </div>
+                                    </div>
+                                    <div class="form-row">
+                                        <div class="form-group col-md-4">
+                                            <label for="cboRIESGO" class="text-small">RIESGO</label>
+                                            <select class="form-control form-control-sm" id="cboRIESGO" name="cboRIESGO">
+                                                <option value="00">--Seleccionar--</option>
+                                            </select><div id="tooltip_containerRIESGO"></div>
+                                        </div>
+                                        <div class="form-group col-md-4">
+                                            <label for="cboPROCESO" class="text-small">PROCESO</label>
+                                            <select class="form-control form-control-sm" id="cboPROCESO" name="cboPROCESO">
+                                                <option value="00">--Seleccionar--</option>
+                                            </select><div id="tooltip_containerPROCESO"></div>
+                                        </div>
+                                        <div class="form-group col-md-4">
+                                            <label for="cboCIRCUNSTANCIA" class="text-small">CIRCUNSTANCIA</label>
+                                            <select class="form-control form-control-sm" id="cboCIRCUNSTANCIA" name="cboCIRCUNSTANCIA">
+                                                <option value="00">--Seleccionar--</option>
+                                            </select><div id="tooltip_containerCIRCUNSTANCIA"></div>
+                                        </div>
+                                        <div class="form-group col-md-4">
+                                            <label for="txt_UBICACION" class="text-small">
+                                                UBICACION:
+                                            </label>
+                                            <input class="form-control form-control-sm" type="text" id="txt_UBICACION" />
+                                        </div>
+                                        <div class="form-group col-md-4">
+                                            <label for="cboEFECTO" class="text-small">EFECTO</label>
+                                            <select class="form-control form-control-sm" id="cboEFECTO" name="cboEFECTO">
+                                                <option value="00">--Seleccionar--</option>
+                                            </select><div id="tooltip_containerEFECTO"></div>
+                                        </div>
+                                    </div>
+                                    <div class="form-row">
+                                        <div class="form-group col-md-4">
+                                            <label for="NIVEL_1" class="text-small">NIVEL 1</label>
+                                            <select class="form-control form-control-sm" id="NIVEL_1" name="NIVEL_1">
+                                                <option selected="selected" value="00">--Seleccionar--</option>
+                                            </select><div id="tooltip_containerNIVEL_1"></div>
+                                        </div>
+                                        <div class="form-group col-md-4">
+                                            <label for="NIVEL_2" class="text-small">NIVEL 2</label>
+                                            <select class="form-control form-control-sm" id="NIVEL_2" name="NIVEL_2">
+                                                <option selected="selected" value="00">--Seleccionar--</option>
+                                            </select><div id="tooltip_containerNIVEL_2"></div>
+                                        </div>
+                                        <div class="form-group col-md-4">
+                                            <label for="txt_DSCRP_INCIDENCIA" class="text-small">
+                                                INCIDENCIA:
+                                            </label>
+                                            <input class="form-control form-control-sm" type="text" id="txt_DSCRP_INCIDENCIA" />
+                                        </div>
+                                    </div>
+                                    <div class="form-row ValidateHidden" style="margin-top:10px;">
+                                        <div class="form-group col-md-8">
+                                            <label for="txt_OBSERVACIONES" class="text-small">
+                                                OBSERVACIONES:
+                                            </label>
+                                            <textarea id="txt_OBSERVACIONES" style="height:200px" class="form-control form-control-sm"></textarea>
+                                        </div>
+                                        <div class="form-group col-md-4">
+                                            <div class="btn-group derecha">
+                                                <button id="BtnLimpiar" type="button" class="btn btn-small btn-info tip" title="" data-original-title="Limpiar">LIMPIAR</button>
+                                                <button id="BtnGuardar" type="button" class="btn btn-small btn-info tip" title="" data-original-title="Nuevo">GUARDAR</button>
+                                                <button id="BtnExportar" type="button" class="btn btn-small btn-info tip" title="" data-original-title="Exportar">EXPORTAR</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-row">
+                                        <div class="col-md-12">
+                                            <table id="GridIINCIDENCIA" class="table table-hover table-bordered" width="100%" cellspacing="0"></table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="tab-pane fade" id="navInformeDigital" role="tabpanel" aria-labelledby="nav-home-tab">
+                                @Html.Partial("~/Areas/Supervision/Views/ManInforme/_InformeDigital.cshtml")
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script type="text/javascript">
+        setTimeout(function () {
+            $("#ddlIndicadorId").val("0000001");
+            $("#ddlIndicadorId").prop("disabled", "disabled");
+        }, 2000);
+    </script>
+
+    @* Para el modal _THabilitanteGeneral usado en el control _renderCNotificacion *@
+    <div class="modal fade hide" id="mdlManInforme_THabilitanteGeneral" tabindex="-1" role="dialog"></div>
+    @* Para el modal _BuscarPersonaGeneral usado en este control y _renderSupervisor *@
+    <div class="modal fade hide" id="mdlControles_BuscarPersonaGeneral" tabindex="-1" role="dialog"></div>
+    @* Para el modal _DenunciaSITD usado en este control *@
+    <div class="modal fade hide" id="mdlControles_DenunciaSITD" tabindex="-1" role="dialog"></div>
+    @* Para los modals usados en este control *@
+    <div class="modal fade hide" id="mdlManInformeTara" role="dialog"></div>
+    @* Para el modal _Ubigeo usado en este control *@
+    <div class="modal fade hide" id="mdlControles_Ubigeo" role="dialog"></div>
+    @* Para los modals relacionados este control Global*@
+    <div class="modal fade hide" id="mdlManInforme_Global" role="dialog"></div>
+
+    @* Para el control genérico de personas *@
+    <div class="modal fade hide" id="mdlBuscarPersona" role="dialog"></div>
+    <div class="modal fade" id="modalAddEditPersona" tabindex="-1" role="dialog"></div>
+    <div class="modal fade hide" id="personaUbigeoModal" role="dialog"></div>
+</div>

@@ -1,0 +1,343 @@
+﻿@model CapaEntidad.ViewModel.VM_Resodirec
+<script type="text/javascript">
+    var _renderReconsideracion = {};
+    _renderReconsideracion.tbEliTABLA = [];
+    _renderReconsideracion.tbEliTABLAInfraccion = [];
+
+    _renderReconsideracion.fncSelect = function () {
+        _renderReconsideracion.frm.find("#divInfracionesRecon").hide();
+        var chkFundParte = _renderReconsideracion.frm.find("#chkFundadaParte").is(':checked');
+        if (chkFundParte == true) {
+             _renderReconsideracion.frm.find("#divInfracionesRecon").show();
+        }
+    }
+
+    _renderReconsideracion.fncbuscaExpSubsanacion = function () {
+        var url = urlLocalSigo + "General/Controles/_ConsultaSITD";
+        var option = { url: url, datos: { op: "DOC_ENTRADA" }, type: 'GET', divId: 'modalBuscarReconsideracion' };
+        utilSigo.fnOpenModal(option, function () {
+            _cSITD.fnAsignarDatos = function (obj) {
+                if (obj != null && obj != "") {
+                    var data = _cSITD.dt.row($(obj).parents('tr')).data();
+                    _renderReconsideracion.fnAsignarSTID02(data, "DOC_ENTRADA");
+                }
+            }
+            _cSITD.fnInit();
+        });
+    };
+
+    _renderReconsideracion.fnAsignarSTID02 = function (data, op) {
+        if (op == "DOC_ENTRADA") {
+            var model = {
+
+                'CODIGO': data.cCodificacion,
+                'NUMERO': data.cNroDocumento,
+                'TIPO_DOCUMENTO': data.cDescTipoDoc,
+                'PDF_DOCUMENTO': data.PDF_TRAMITE_SITD,
+                'RegEstado': 1
+            };
+            console.log(model);
+            _renderReconsideracion.dtSubsanacionReconsideracion.rows.add([model]).draw();
+            _renderReconsideracion.dtSubsanacionReconsideracion.page('last').draw('page');
+        }
+        utilSigo.toastSuccess("", "Se selecciono correctamente el documento");
+        utilSigo.fnCloseModal("modalBuscarReconsideracion");
+    }
+
+     _renderReconsideracion.fncArticulos = function () {
+        var idArticulo = _renderReconsideracion.frm.find("#ddlArticuloId").val();
+        var DescArticulo = _renderReconsideracion.frm.find("#ddlArticuloId option:selected").text();
+        $.ajax({
+              url: '@Url.Action("_inicisos","ManResolucion")',
+              type: 'GET',
+                 datatype: "json",
+                 traditional: true,
+                 data: {'idArticulo' :   idArticulo, 'descArticulo': DescArticulo},
+                 success: function (data) {
+                        $("#divEncisosFI").html(data);
+                 }
+        });
+     }
+
+    _renderReconsideracion.fnGetListSubsanacion = function () {
+        let list = [], rows, countFilas, data;
+        rows = _renderReconsideracion.dtSubsanacionReconsideracion.$("tr");
+        countFilas = rows.length;
+        if (countFilas > 0) {
+            $.each(rows, function (i, o) {
+                data = _renderReconsideracion.dtSubsanacionReconsideracion.row($(o)).data();
+                list.push(utilSigo.fnConvertArrayToObject(data));
+            });
+        }
+        return list;
+    }
+
+    _renderReconsideracion.fnGetListInfraccion = function () {
+        let list = [], rows, countFilas, data;
+        rows = _renderReconsideracion.dtRenderListInforme.$("tr");
+        countFilas = rows.length;
+        if (countFilas > 0) {
+            $.each(rows, function (i, o) {
+                data = _renderReconsideracion.dtRenderListInforme.row($(o)).data();
+                list.push(utilSigo.fnConvertArrayToObject(data));
+            });
+        }
+        return list;
+    }
+
+    var descargarTramite = function (row) {
+        var urlSITD = 'https://sitd.osinfor.gob.pe:8443/std/cInterfaseUsuario_SITD/download.php?direccion=sitd-almacen&file=' + row.PDF_DOCUMENTO;
+        window.open(urlSITD, "_blank");
+    };
+
+    _renderReconsideracion.fnDeleteSubsanacion = function (obj) {
+        var data = _renderReconsideracion.dtSubsanacionReconsideracion.row($(obj).parents('tr')).data();
+        if (data["RegEstado"] == "0") {
+            _renderReconsideracion.tbEliTABLA.push({
+                EliTABLA: "RESODIREC_DET_ACCION",
+                EliVALOR01: data["COD_RDACCION"]
+            });
+        }
+        _renderReconsideracion.dtSubsanacionReconsideracion.row($(obj).parents('tr')).remove().draw(false);
+    }
+
+    _renderReconsideracion.fnDeleteInfraccion = function (obj) {
+        var data = _renderReconsideracion.dtRenderListInforme.row($(obj).parents('tr')).data();
+        if (data["RegEstado"] == "0") {
+            data["ESTADO"] = 0;
+            _renderReconsideracion.tbEliTABLAInfraccion.push(data);
+        }
+        _renderReconsideracion.dtRenderListInforme.row($(obj).parents('tr')).remove().draw(false);
+    }
+
+    _renderReconsideracion.fnInitDataTableSubsanacion = function () {
+        var columns_label = [], columns_data = [], options = {}, data_extend = [];;
+
+        columns_label = ["Codigo", "Num. Documento", "Tipo Documento"];
+        columns_data = ["CODIGO", "NUMERO", "TIPO_DOCUMENTO"];
+        data_extend = [
+            {
+                render: function (data, type, row) {
+                    return "<a href='#' data-toggle='tooltip' data-placement='top'  onClick='descargarTramite(" + JSON.stringify(row) + ")' > Descargar</a>";
+                }, title: "Descargar"
+            }
+        ]
+        options = {
+            page_length: 10, row_index: true, row_delete: true, row_fnDelete: "_renderReconsideracion.fnDeleteSubsanacion(this)", page_sort: true,
+            data_extend: data_extend
+        };
+
+        _renderReconsideracion.dtSubsanacionReconsideracion = utilDt.fnLoadDataTable_Detail(_renderReconsideracion.frm.find("#tbSubsanacionReconsideracion"), columns_label, columns_data, options);
+        _renderReconsideracion.dtSubsanacionReconsideracion.rows.add(JSON.parse('@Html.Raw(Json.Encode(@Model.ListSTD02))')).draw();
+    }
+
+    _renderReconsideracion.fnInitDataTable_ListIncisos = function () {
+        var columns_label = [], columns_data = [], options = {};
+
+        columns_label = ["Codigo", "Articulo", "Inciso"];
+        columns_data = ["COD_ENCISOS", "ARTICULO", "INCISO"];
+        options = {
+            page_length: 10, row_index: true, row_delete: true, row_fnDelete: "_renderReconsideracion.fnDeleteInfraccion(this)", page_sort: true
+        };
+        _renderReconsideracion.dtRenderListInforme = utilDt.fnLoadDataTable_Detail(_renderReconsideracion.frm.find("#tbRenderListIncisos"), columns_label, columns_data, options);
+        _renderReconsideracion.dtRenderListInforme.rows.add(JSON.parse('@Html.Raw(Json.Encode(@Model.listaInfracciones))')).draw();
+    }
+
+    $(document).ready(function () {
+        _renderReconsideracion.frm = $("#divfmrReconsideracion");
+        _renderReconsideracion.fncSelect();
+        _renderReconsideracion.fnInitDataTableSubsanacion();
+        _renderReconsideracion.fnInitDataTable_ListIncisos();
+    });
+</script>
+<div id="divfmrReconsideracion">
+    <div class="card-header text-small">Determinación</div>
+    <div><br /></div>
+    <div class="form-row">
+        <div class="form-group col-md-4">
+            <label for="chkGTF" class="text-small">Inadmisible</label>
+        </div>
+        <div class="form-group col-md-6">
+            @Html.CheckBoxFor(m => m.chkInadmisible, new
+            {
+               @class = "form-check-input",
+               style = "width:15px;height:16px;",
+               @onchange = "_renderReconsideracion.fncSelect()",
+               @id = "chkInadmisible",
+           })
+        </div>
+        <div class="form-group col-md-2">
+        </div>
+    </div>
+
+    <div class="form-row">
+        <div class="form-group col-md-4">
+            <label for="chkGTF" class="text-small">Improcedente</label>
+        </div>
+        <div class="form-group col-md-6">
+            @Html.CheckBoxFor(m => m.chkImprocedente, new
+            {
+                @class = "form-check-input",
+                style = "width:15px;height:16px;",
+                @onchange = "_renderReconsideracion.fncSelect()",
+                @id = "chkImprocedente",
+            })
+        </div>
+        <div class="form-group col-md-2">
+        </div>
+    </div>
+
+    <div class="form-row">
+        <div class="form-group col-md-4">
+            <label for="chkGTF" class="text-small">Fundada</label>
+        </div>
+        <div class="form-group col-md-6">
+            @Html.CheckBoxFor(m => m.chkFundada, new
+            {
+                @class = "form-check-input",
+                style = "width:15px;height:16px;",
+                @onchange = "_renderReconsideracion.fncSelect()",
+                @id = "chkFundada",
+            })
+        </div>
+        <div class="form-group col-md-2">
+        </div>
+    </div>
+
+    <div class="form-row">
+        <div class="form-group col-md-4">
+            <label for="chkGTF" class="text-small">Fundada en parte</label>
+        </div>
+        <div class="form-group col-md-6">
+            @Html.CheckBoxFor(m => m.chkFundadaParte, new
+            {
+                @class = "form-check-input",
+                style = "width:15px;height:16px;",
+                @onchange = "_renderReconsideracion.fncSelect()",
+                @id = "chkFundadaParte",
+            })
+        </div>
+        <div class="form-group col-md-2">
+        </div>
+    </div>
+
+    <div id="divInfracionesRecon" style="display:none;">
+        @Html.Partial("~/Areas/Fiscalizacion/Views/ManResolucion/_Shared/_generic/_renderReconsideracion.cshtml", Model)
+    </div>
+
+    <div class="form-row">
+        <div class="form-group col-md-4">
+            <label for="chkGTF" class="text-small">Infundada</label>
+        </div>
+        <div class="form-group col-md-6">
+            @Html.CheckBoxFor(m => m.chkInFundada, new
+            {
+                @class = "form-check-input",
+                style = "width:15px;height:16px;",
+                @onchange = "_renderReconsideracion.fncSelect()",
+                @id = "chkInFundada",
+            })
+        </div>
+        <div class="form-group col-md-2">
+        </div>
+    </div>
+
+    <div class="form-row">
+        <div class="form-group col-md-4">
+            <label for="chkGTF" class="text-small">Levantar la caducidad del Título Habilitante</label>
+        </div>
+        <div class="form-group col-md-6">
+            @Html.CheckBoxFor(m => m.chkLevantarCaducidad, new { @class = "form-check-input", style = "width:15px;height:16px;" })
+        </div>
+        <div class="form-group col-md-2">
+        </div>
+    </div>
+
+    <div class="form-row">
+        <div class="form-group col-md-4">
+            <label for="chkGTF" class="text-small">Cambio de Monto de Multa</label>
+        </div>
+        <div class="form-group col-md-2">
+            @Html.CheckBoxFor(m => m.chkCambioMulta, new { @class = "form-check-input", style = "width:15px;height:16px;" })
+        </div>
+        <div class="form-group col-md-4">
+            @Html.EditorFor(m => m.txtMonMultaRecon, new { htmlAttributes = new { @class = "form-control form-control-sm", placeholder = "Ingrese el cambio de multa", onkeypress = "return utilSigo.onKeyDecimal(event, this);", maxlength = "20" } })
+        </div>
+        <div class="form-group col-md-2">
+        </div>
+    </div>
+
+    <!--Rectificacion-->
+    <div>
+        @Html.Partial("~/Areas/Fiscalizacion/Views/ManResolucion/_Shared/_generic/_renderRectificacion.cshtml", Model)
+    </div>
+
+    <!--Acciones-->
+    <div class="form-row">
+        <div class="form-group col-md-12">
+            <div class="card-header text-small">Acciones</div>
+            <br />
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="form-group col-md-4">
+            <label for="lblSubsanacion" class="text-small">Subsanación voluntaria</label>
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="form-group col-md-12">
+            <button style="font-size:11px !important;" onclick="_renderReconsideracion.fncbuscaExpSubsanacion()" class="btn btn-primary " type="button"><i class="fa fa-search"></i>&nbsp;Buscar Expdiente en SITD</button>
+            <br />
+            <table id="tbSubsanacionReconsideracion" style="width:100%;margin:0px !important;" class="table table-hover table-bordered">
+                <thead>
+                    <tr>
+                        <th colspan="6" class="text-sm-left">
+                            <div class="form-inline">
+                                <strong>Lista de expedientes de SITD</strong>
+                            </div>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="form-group col-md-12">
+            <div class="card-header text-small">Infracciones subsanadas</div>
+            <br />
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="form-group col-md-2">
+            <label for="lblArticulo" class="text-small">Artículo</label>
+        </div>
+        <div class="form-group col-md-4">
+            @Html.DropDownListFor(m => m.ddlArticuloId, new SelectList(Model.listaArticulos, "Value", "Text"), new { @class = "form-control form-control-sm", @onchange = "_renderReconsideracion.fncArticulos()" })
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="form-group col-md-12" id="divEncisosFI">
+            <label for="lblInciso" class="text-small">Inciso</label>
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="form-group col-md-12">
+            <div class="table-responsive">
+                <table id="tbRenderListIncisos" style="width:100%;margin:0px !important;" class="table table-hover table-bordered">
+                    <thead>
+                        <tr>
+                            <th colspan="6" class="text-sm-left">
+                                <div class="form-inline">
+                                    <strong> Infracciones subsanadas</strong>
+                                </div>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade hide" id="modalBuscarReconsideracion" tabindex="-1" role="dialog"></div>

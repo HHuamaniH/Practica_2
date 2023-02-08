@@ -1,0 +1,149 @@
+﻿
+@model List<CapaEntidad.DOC.Ent_INFORME_CAMBIO_USO>
+
+<style type="text/css">
+    #tbRenderCambioUso_wrapper {
+        padding: 0px;
+    }
+</style>
+
+<script type="text/javascript">
+    var _renderCambioUso = {};
+    _renderCambioUso.tbEliTABLA = [];
+
+    _renderCambioUso.fnInitDataTable_Detail = function () {
+        var columns_label = [], columns_data = [], options = {};
+
+        columns_label = ["Actividad", "Área", "Zona", "Autorizado", "Coord. Este", "Coord.norte", "Observación"];
+        columns_data = ["NOM_TIP_CAMBIOUSO", "AREA", "ZONA", "AUTORIZADO", "COORDENADA_ESTE", "COORDENADA_NORTE", "OBSERVACION"];
+        options = {
+            page_length: 10, row_index: true, row_edit: true, row_fnEdit: "_renderCambioUso.fnAddEdit(this)"
+            , row_delete: true, row_fnDelete: "_renderCambioUso.fnDelete(this)"
+            , button_copy: true, button_csv: true, button_excel: true, button_pdf: true, button_print: true
+            , export_title: $("#tbRenderCambioUso").find("thead tr")[0].innerText.trim()
+            , page_sort: true
+        };
+        _renderCambioUso.dtCambioUso = utilDt.fnLoadDataTable_Detail($("#tbRenderCambioUso"), columns_label, columns_data, options);
+    }
+
+    _renderCambioUso.fnAddEdit = function (obj) {
+        var url = urlLocalSigo + "Supervision/ManInforme/_CambioUso";
+        var option = { url: url, type: 'POST', datos: {}, divId: "mdlManInforme_CambioUso" };
+        utilSigo.fnOpenModal(option, function () {
+            _CambioUso.fnSaveForm = function (data) {
+                if (data != null) {
+                    var dt = _renderCambioUso.dtCambioUso;
+                    if (obj == null || obj == "") {//Nuevo Registro
+                        dt.rows.add([data]).draw();
+                        dt.page('last').draw('page');
+                        utilSigo.toastSuccess("Exito", "Datos guardados correctamente");
+
+                        _CambioUso.frm.find("#ddlCambioUsoId").val("0000000").change();
+                        _CambioUso.frm.find("#ddlAutorizado").val("");
+                        _CambioUso.frm.find("#txtArea").val("");
+                        _CambioUso.frm.find("#txtCoordEste").val("");
+                        _CambioUso.frm.find("#txtCoordNorte").val("");
+                        _CambioUso.frm.find("#txtObservacion").val("");       
+
+                    } else {//Modificar
+                        var row = dt.row($(obj).parents('tr')).data();
+                        row = data;
+                        dt.row($(obj).parents('tr')).data(row).draw(false);
+                        utilSigo.toastSuccess("Exito", "Datos actualizados correctamente");
+                        $("#mdlManInforme_CambioUso").modal('hide'); 
+                    }
+                    
+                    //$("#mdlManInforme_CambioUso").modal('hide');  llanos
+                } else {
+                    utilSigo.toastError("Error", "No se pudieron guardar los datos");
+                }
+            }
+
+            if (obj != null && obj != "") {
+                var data = _renderCambioUso.dtCambioUso.row($(obj).parents('tr')).data();
+                _CambioUso.fnInit(utilSigo.fnConvertArrayToObject(data));
+            } else { _CambioUso.fnInit(""); }
+        });
+    }
+
+    _renderCambioUso.fnDeleteAll = function () {
+        var rows, countFilas, data;
+
+        rows = _renderCambioUso.dtCambioUso.$("tr");
+        countFilas = rows.length;
+        if (countFilas > 0) {
+            utilSigo.dialogConfirm("", "Está seguro de Eliminar Todos los Registros?", function (r) {
+                if (r) {
+                    $.each(rows, function (i, o) {
+                        data = _renderCambioUso.dtCambioUso.row($(o)).data();
+                        if (data["RegEstado"] == "0" || data["RegEstado"] == "2") {
+                            _renderCambioUso.tbEliTABLA.push({
+                                EliTABLA: "ISUPERVISION_CAMBIO_USO",
+                                COD_SECUENCIAL: data["COD_SECUENCIAL"]
+                            });
+                        }
+                    });
+                    _renderCambioUso.dtCambioUso.clear().draw();
+                }
+            });
+        } else {
+            utilSigo.toastWarning("Aviso", "No se encontraron registros a eliminar");
+        }
+    }
+
+    _renderCambioUso.fnDelete = function (obj) {
+        var data = _renderCambioUso.dtCambioUso.row($(obj).parents('tr')).data();
+
+        if (data["RegEstado"] == "0" || data["RegEstado"] == "2") {
+            _renderCambioUso.tbEliTABLA.push({
+                EliTABLA: "ISUPERVISION_CAMBIO_USO",
+                COD_SECUENCIAL: data["COD_SECUENCIAL"]
+            });
+        }
+        _renderCambioUso.dtCambioUso.row($(obj).parents('tr')).remove().draw(false);
+    }
+
+    _renderCambioUso.fnGetList = function () {
+        var list = [], rows, countFilas, data;
+
+        rows = _renderCambioUso.dtCambioUso.$("tr");
+        countFilas = rows.length;
+        if (countFilas > 0) {
+            $.each(rows, function (i, o) {
+                data = _renderCambioUso.dtCambioUso.row($(o)).data();
+                if (data["RegEstado"] == "1" || data["RegEstado"] == "2") {
+                    list.push(utilSigo.fnConvertArrayToObject(data));
+                }
+            });
+        }
+        return list;
+    }
+
+    _renderCambioUso.fnGetListEliTABLA = function () { return _renderCambioUso.tbEliTABLA }
+
+    $(document).ready(function () {
+        _renderCambioUso.frm = $("#frmRenderCambioUso");
+
+        _renderCambioUso.fnInitDataTable_Detail();
+        _renderCambioUso.dtCambioUso.rows.add(JSON.parse('@Html.Raw(Json.Encode(@Model))')).draw();
+    });
+</script>
+
+<div id="frmRenderCambioUso">
+    <div class="table-responsive">
+        <table id="tbRenderCambioUso" style="width:100%;margin:0px !important;" class="table table-hover table-bordered">
+            <thead>
+                <tr>
+                    <th colspan="11" class="text-sm-left">
+                        <div class="form-inline">
+                            <i class="fa mx-2 fa-lg fa-file-o" style="cursor:pointer;" onclick="_renderCambioUso.fnAddEdit('');" data-toggle="tooltip" data-placement="top" title="Nuevo"></i>
+                            <i class="fa mx-2 fa-lg fa-window-close-o" style="cursor:pointer;" onclick="_renderCambioUso.fnDeleteAll();" data-toggle="tooltip" data-placement="top" title="Eliminar Todos"></i>
+                            <strong>Cobertura Boscosa</strong>  
+                        </div>
+                    </th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
+</div>

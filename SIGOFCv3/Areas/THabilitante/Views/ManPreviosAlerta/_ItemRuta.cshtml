@@ -1,0 +1,60 @@
+﻿<script src="~/Areas/THabilitante/js/ManPreviosAlerta/_ItemRuta.js"></script>
+<style>
+    #frmItemRuta input[type=text] {
+        text-transform: uppercase;
+    }
+</style>
+
+<div class="modal-dialog modal-lg" role="document" id="divItemRuta">
+    <div class="modal-content">
+        <div class="modal-header text-small" style="cursor:move;padding:0.5rem;">
+            <h5 class="modal-title" id="h5Titulo">Nuevo</h5>
+            <button type="button"   class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body">
+            <form id="frmItemRuta">
+                <input type="hidden" id="hdRutaCodRuta" name="hdRutaCodRuta" value="0" />
+                @*<div class="form-row">
+            <div class="form-group col-md-12">
+                <label for="txRutaCOD_RUTA" class="text-small">Codigo</label>
+                <input type="email" id="txtRutaCodRuta" name="txtRutaCodRuta" class="form-control form-control-sm" required />
+            </div>
+        </div>*@
+
+                <div class="form-row">
+                    <div class="form-group col-md-12">
+                        <label for="ddlRutaCodUbiDepartamentoId" class="text-small">Departamento</label>
+                        @Html.DropDownList("ddlRutaCodUbiDepartamentoId", new SelectList(Model.ddlRutaCodUbiDepartamento, "Value", "Text"), new { @class = "form-control form-control-sm" })
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-12">
+                        <label for="txtRutaTramo" class="text-small">Tramo</label>
+                        <input type="text" id="txtRutaTramo" name="txtRutaTramo" class="form-control form-control-sm" required />
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-12">
+                        <label for="txtRutaOrigenDestino" class="text-small">Origen-Destino</label>
+                        <input type="text" id="txtRutaOrigenDestino" name="txtRutaOrigenDestino" class="form-control form-control-sm" required />
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-12">
+                        <label for="cbRutaEstado" class="text-small">Estado</label>
+                        <select id="cbRutaEstado" name="cbRutaEstado" class="form-control form-control-sm">
+                            <option value="1">Activo</option>
+                            <option value="0">Desactivo</option>
+                        </select>
+
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="modal-footer">
+            <button type="button" id="btnGuardar" class="btn btn-primary" onclick="">Guardar</button>
+        </div>
+    </div>
+</div>

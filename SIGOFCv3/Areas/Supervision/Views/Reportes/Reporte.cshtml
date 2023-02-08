@@ -1,0 +1,142 @@
+﻿@model CapaEntidad.ViewModel.VM_ReporteGeneral
+@{
+    ViewBag.Title = "Reporte";
+    Layout = "~/Views/Shared/_LayoutMain.cshtml";
+}
+<link href="~/Content/datatables/buttons.dataTables.min.css" rel="stylesheet" />
+<link href="~/Areas/Supervision/css/Reportes/Reporte.css" rel="stylesheet" />
+
+<script src="~/Scripts/datatables/Extensions/dataTables.buttons.js"></script>
+<script src="~/Scripts/datatables/Extensions/buttons.flash.min.js"></script>
+<script src="~/Scripts/datatables/Extensions/jszip.min.js"></script>
+<script src="~/Scripts/datatables/Extensions/pdfmake.js"></script>
+<script src="~/Scripts/datatables/Extensions/vfs_fonts.js"></script>
+<script src="~/Scripts/datatables/Extensions/buttons.html5.js"></script>
+<script src="~/Scripts/datatables/Extensions/buttons.print.js"></script>
+
+<script src="~/Areas/Supervision/js/Reportes/Reporte.js"></script>
+
+
+<div class="container-fluid">
+    <div class="card">
+        <div class="card-header text-right">
+            REPORTES GENERALES
+        </div>
+        <div class="card-body">
+            <div class="card-header text-sm-center">
+                @Model.lblTituloCabecera
+            </div>
+            <div id="dvContenedorFiltro" class="card" style="margin-bottom:10px;">
+                <div id="dvFiltro" class="card-body">
+                    <form id="frmReporteGeneral" action="@Url.Action("Reporte", "Reportes", new { Area= "General" })">
+                        @Html.HiddenFor(m => m.hdfTipoReporte)
+                        <div class="form-row">
+                            <div id="dvFiltroAnio" class="form-group col-md-1" style="display:none;">
+                                <label for="lblChkAnioId" class="text-small">Año</label>
+                                <div id="dvChkAnioAll" class="custom-control custom-checkbox" style="display:none;">
+                                    @Html.CheckBox("chkAnioAll", new { @class = "custom-control-input" })
+                                    <label for="chkAnioAll" class="custom-control-label">Todos</label>
+                                </div>
+                                <div style="max-height:150px;overflow:auto;">
+                                    @Html.EditorFor(m => m.lstChkAnio)
+                                    @Html.HiddenFor(m => m.lstChkAnioId)
+                                </div>
+                            </div>
+                            <div id="dvFiltroOD" class="form-group col-md-2" style="display:none;">
+                                <label for="lblChkMesId" class="text-small">Oficina Desconcentrada</label>
+                                <div class="custom-control custom-checkbox">
+                                    @Html.CheckBox("chkOdAll", new { @class = "custom-control-input" })
+                                    <label for="chkOdAll" class="custom-control-label">Todos</label>
+                                </div>
+                                <div style="max-height:150px;overflow:auto;">
+                                    @Html.EditorFor(m => m.lstChkOd)
+                                    @Html.HiddenFor(m => m.lstChkOdId)
+                                </div>
+                            </div>
+                            <div id="dvFiltroModalidad" class="form-group col-md-4" style="display:none;">
+                                <label for="lblChkModalidadId" class="text-small">Modalidad</label>
+                                <div class="custom-control custom-checkbox">
+                                    @Html.CheckBox("chkModalidadAll", new { @class = "custom-control-input" })
+                                    <label for="chkModalidadAll" class="custom-control-label">Todos</label>
+                                </div>
+                                <div style="max-height:150px;overflow:auto;">
+                                    @Html.EditorFor(m => m.lstChkModalidad)
+                                    @Html.HiddenFor(m => m.lstChkModalidadId)
+                                </div>
+                            </div>
+                            <div id="dvFiltroDepartamento" class="form-group col-md-2" style="display:none;">
+                                <label for="lblChkDepartamentoId" class="text-small">Departamento</label>
+                                <div class="custom-control custom-checkbox">
+                                    @Html.CheckBox("chkDepartamentoAll", new { @class = "custom-control-input" })
+                                    <label for="chkDepartamentoAll" class="custom-control-label">Todos</label>
+                                </div>
+                                <div style="max-height:150px;overflow:auto;">
+                                    @Html.EditorFor(m => m.lstChkDepartamento)
+                                    @Html.HiddenFor(m => m.lstChkDepartamentoId)
+                                </div>
+                            </div>
+                            <div id="dvFiltroDLinea" class="form-group col-md-2" style="display:none;">
+                                <label for="lblChkDLineaId" class="text-small">Dirección de Línea</label>
+                                <div class="custom-control custom-checkbox">
+                                    @Html.CheckBox("chkDLineaAll", new { @class = "custom-control-input" })
+                                    <label for="chkDLineaAll" class="custom-control-label">Todos</label>
+                                </div>
+                                <div style="max-height:150px;overflow:auto;">
+                                    @Html.EditorFor(m => m.lstChkDLinea)
+                                    @Html.HiddenFor(m => m.lstChkDLineaId)
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                    <button type="button" id="btnConsultarReporte" class="btn btn-primary btn-sm" onclick="_reporteGeneral.fnSubmitForm()">Consultar</button>
+                </div>
+                <div class="card-body" style="padding-top:0px;padding-bottom:0px;">
+                    <div class="form-row">
+                        <div id="dvHideFiltro" class="form-group col-md-12" style="text-align:center; margin:0px;cursor:pointer;" title="Ocultar Filtros">
+                            <img alt="Ocultar Filtros" src="~/Content/images/General/flecha-contraer.png" width="50" height="30" />
+                        </div>
+                        <div id="dvShowFiltro" class="form-group col-md-12" style="text-align:center; margin:0px;cursor:pointer; display:none;" title="Mostrar Filtros">
+                            <img alt="Mostrar Filtros" src="~/Content/images/General/flecha-ampliar.png" width="50" height="30" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body" id="dvSabanaInforme" style="display:none;">
+                <div class="form-row">
+                    <div class="table-responsive">
+                        <table id="tbSabanaInforme" style="width:100%" class="table table-hover table-bordered">
+                            <thead>
+                                <tr>
+                                    <th colspan="132" class="text-sm-left">
+                                        <div class="form-inline">
+                                            <strong>Listado de Informes de Supervisión</strong>
+                                        </div>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body" id="dvSabanaPlanManejo" style="display:none;">
+                <div class="form-row">
+                    <div class="table-responsive">
+                        <table id="tbSabanaPlanManejo" style="width:100%" class="table table-hover table-bordered">
+                            <thead>
+                                <tr>
+                                    <th colspan="142" class="text-sm-left">
+                                        <div class="form-inline">
+                                            <strong>Listado de Planes de Manejo de Supervisados</strong>
+                                        </div>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,156 @@
+﻿@model CapaEntidad.ViewModel.VM_InformeFundamentado
+@{
+    ViewBag.Title = "AddEdit";
+    Layout = "~/Views/Shared/_LayoutMain.cshtml";
+}
+
+<script src="~/Areas/Fiscalizacion/js/InformeFundamentado/AddEdit.js"></script>
+@section scripts{
+    <script>
+        "use strict"; var rol = '';
+    $(document).ready(function () {
+        //Validamos el rol del usuario
+        utilSigo.ValidaRol('@ViewBag.VAliasRol', 'btnRegistrar', '@Model.vmControlCalidad.ddlIndicadorId');
+    });
+    </script>
+}
+<script type="text/javascript">
+    ManInfFundamentado_AddEdit.fnLoadData('@Html.Raw(Json.Encode(@Model.listaProfesionales))', "DataProfesional");
+    ManInfFundamentado_AddEdit.fnLoadData('@Html.Raw(Json.Encode(@Model.listaEntidades))', "DataEntidad");
+</script>
+
+<div class="container-fluid">
+    <div class="card">
+        <div class="card-header text-right">
+            @Model.lblTituloCabecera
+        </div>
+        <div class="card-body">
+            <div class="card">
+                <div class="card-header text-small">
+                    <a id="btnRegistrar" href="javascript:void(0)" style="cursor:pointer;" data-toggle="tooltip" data-placement="top" title="Guardar" onclick="ManInfFundamentado_AddEdit.fnSaveForm()"><i class="fa mx-2 fa-lg fa-save"></i></a>
+                    <a style="cursor:pointer;" data-toggle="tooltip" data-placement="top" title="Regresar" onclick="ManInfFundamentado_AddEdit.regresar()"><i class="fa mx-2 fa-lg fa-reply"></i></a>
+                    @Model.lblTituloEstado
+                </div>
+                <div class="card-body">
+                    <form id="frmInfFundamentadoRegistro">
+                        <!-- form-->
+                        @Html.HiddenFor(m => m.hdfCodInfFundamentado)
+                        @Html.HiddenFor(m => m.hdfCodTipoInfFundamentado)
+                        @Html.HiddenFor(m => m.RegEstado)
+
+                        <!--para el tipo antes del PAU-->
+                        @Html.HiddenFor(m => m.hdfCodigoInfFundamentadoAlerta)
+
+
+                        <ul class="nav nav-tabs" id="myTab" role="tablist">
+                            <li class="nav-item"><a class="nav-link active" data-toggle="tab" href="#navEstado" role="tab" aria-controls="home" aria-selected="true">Estado Situacional</a></li>
+                            <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#navDatos" role="tab" aria-controls="home" aria-selected="true">Datos Generales</a></li>
+                            <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#navEntidades" role="tab" aria-controls="home" aria-selected="true">Entidades</a></li>
+                            <li id="idNavConclusiones" class="nav-item"><a class="nav-link" data-toggle="tab" href="#navConclusion" role="tab" aria-controls="home" aria-selected="true">Conclusiones</a></li>
+                            <li id="idNavObservaciones" class="nav-item"><a class="nav-link" data-toggle="tab" href="#navObservacion" role="tab" aria-controls="home" aria-selected="true">Observaciones</a></li>
+                        </ul>
+                        <div class="tab-content">
+                            <div class="tab-pane fade show active" id="navEstado" role="tabpanel" aria-labelledby="nav-home-tab">
+                                @{ Html.RenderAction("_ControlCalidad", "Controles", new { area = "GENERAL", dto = Model.vmControlCalidad }); }
+                            </div>
+                            <div class="tab-pane fade show" id="navDatos" role="tabpanel" aria-labelledby="nav-home-tab">
+                                <div class="form-row">
+                                    <div class="form-group col-md-3">
+                                        <label for="lblOdId" class="text-small">O.D. desde donde registra la información</label>
+                                        @Html.DropDownListFor(m => m.ddlOdId, new SelectList(Model.ddlOd, "Value", "Text"), new { @class = "form-control form-control-sm" })
+                                    </div>
+                                    <div class="form-group col-md-12">
+                                        <label for="lblTipoILegal" class="text-small">Tipo de Informe Fundamentado</label>
+                                        @Html.TextBoxFor(m => m.txtTipoInfFundamentado, new { @class = "form-control form-control-sm", disabled = "disabled" })
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group col-md-4">
+                                        <label for="txtFechaFundamentado" class="text-small">Fecha de Emisión</label>
+                                        @Html.EditorFor(m => m.txtFechaFundamentado, new { htmlAttributes = new { @class = "form-control form-control-sm", placeholder = "dd/mm/yyyy", title = "la fecha a ingresar debe ser en el formato dd/mm/yyyy", maxlength = "10" } })
+                                    </div>
+                                    <div class="form-group col-md-4">
+                                        <label for="txtNumInfFundamentado" class="text-small">Número Informe Fundamentado</label>
+                                        @Html.EditorFor(m => m.txtNumInfFundamentado, new { htmlAttributes = new { @class = "form-control form-control-sm" } })
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="table-responsive">
+                                        <table id="tbProfesionales" style="width:100%" class="table table-hover table-bordered">
+                                            <thead>
+                                                <tr>
+                                                    <th colspan="17" class="text-sm-left">
+                                                        <div class="form-inline">
+                                                            <i class="fa mx-2 fa-lg fa-file-o" style="cursor:pointer;" onclick="ManInfFundamentado_AddEdit.fnBuscarPersona('PROFESIONAL', 'N');" data-toggle="tooltip" data-placement="top" title="Nuevo"></i>
+                                                            <i class="fa mx-2 fa-lg fa-window-close-o" style="cursor:pointer;" onclick="ManInfFundamentado_AddEdit.fnDeleteAll('PROFESIONAL');" data-toggle="tooltip" data-placement="top" title="Eliminar Todos"></i>
+                                                            <strong>
+                                                                Profesionales responsables
+                                                            </strong>
+                                                        </div>
+                                                    </th>
+                                                </tr>
+                                            </thead>
+                                        </table>
+                                    </div>
+                                </div>
+                                <div id="dvRenderListInforme" class="form-row" style="margin-bottom:10px;">
+                                    <div class="col-md-12">
+                                        @Html.Partial("~/Areas/Fiscalizacion/Views/InformeFundamentado/Shared/_renderListInforme.cshtml", Model)
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="tab-pane fade show" id="navEntidades" role="tabpanel" aria-labelledby="nav-home-tab">
+                                <div class="form-row">
+                                    <div class="form-group col-md-3">
+                                        <label for="lblEntidad" class="text-small">Entidad</label>
+                                        @Html.DropDownListFor(m => m.ddlEntidadId, new SelectList(Model.ddlEntidad, "Value", "Text"), new { @class = "form-control form-control-sm" })
+                                    </div>
+                                    <div class="form-group col-md-3">
+                                        <label for="lblSubEntidad" class="text-small">Departamento</label>
+                                        @Html.DropDownListFor(m => m.ddlSubEntidadId, new SelectList(Model.ddlSubEntidad, "Value", "Text"), new { @class = "form-control form-control-sm" })
+                                    </div>
+                                    <div class="form-group col-md-3">
+                                        <label class="text-small">&ensp;</label><br />
+                                        <button type="button" id="btnAddEntidades" class="btn btn-info btn-sm">Agregar Entidades</button>
+                                    </div>
+                                </div>
+                                <br />
+                                <div class="form-row">
+                                    <div class="table-responsive">
+                                        <table id="tbEntidades" style="width:100%" class="table table-hover table-bordered">
+                                            <thead></thead>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="tab-pane fade show" id="navConclusion" role="tabpanel" aria-labelledby="nav-home-tab">
+                                <div class="card">
+                                    <div class="form-row">
+                                        <div class="form-group col-md-12">
+                                            <label for="txtConclusiones" class="text-small">Conclusiones</label>
+                                            @Html.TextAreaFor(m => m.txtConclusiones, 3, 1, new { @class = "form-control form-control-sm" })
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="tab-pane fade show" id="navObservacion" role="tabpanel" aria-labelledby="nav-home-tab">
+                                <div class="card">
+                                    <div class="form-row">
+                                        <div class="form-group col-md-12">
+                                            <label for="txtObservaciones" class="text-small">Observaciones</label>
+                                            @Html.TextAreaFor(m => m.txtObservaciones, 3, 1, new { @class = "form-control form-control-sm" })
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@* Para el control genérico de personas *@
+<div class="modal fade hide" id="mdlBuscarPersona" role="dialog"></div>
+<div class="modal fade" id="modalAddEditPersona" tabindex="-1" role="dialog"></div>

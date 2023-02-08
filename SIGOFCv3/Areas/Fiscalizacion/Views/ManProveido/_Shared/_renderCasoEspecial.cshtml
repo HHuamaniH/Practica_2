@@ -1,0 +1,95 @@
+﻿
+@model CapaEntidad.ViewModel.VM_Proveido
+
+<div id="divCasoEspecial" class="text-small">
+    <div><br /><br /></div>
+
+    <div class="form-row">
+        <div class="form-group col-md-12">
+            <label for="lblTipoILegal" class="text-small">Recomienda</label>
+            @Html.TextAreaFor(m => m.txtRecomienda, 4, 1, new { @class = "form-control form-control-sm" })
+        </div>
+    </div>
+    <div class="card-header text-small">
+        Motivo de archivo
+    </div>
+    <div><br /></div>
+    <div class="form-row">
+        <div class="form-group col-md-4">
+            Nueva Supervision
+        </div>
+        <div class="form-group col-md-6">
+            @Html.CheckBoxFor(m => m.chkNuevSuperv, new { @class = "form-check-input", style = "width:15px;height:16px;" })
+        </div>
+        <div class="form-group col-md-2">
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="form-group col-md-4">
+            Evidencia de irregularidades cuya sanción no es competencia de OSINFOR
+        </div>
+        <div class="form-group col-md-6">
+            @Html.CheckBoxFor(m => m.chkEvidIrregular, new { @class = "form-check-input", style = "width:15px;height:16px;" })
+        </div>
+        <div class="form-group col-md-2">
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="form-group col-md-4">
+            Sin indicios de infracción
+        </div>
+        <div class="form-group col-md-6">
+            @Html.CheckBoxFor(m => m.chkSinIndicios, new { @class = "form-check-input", style = "width:15px;height:16px;" })
+        </div>
+        <div class="form-group col-md-2">
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="form-group col-md-4">
+            Deficiente notificación
+        </div>
+        <div class="form-group col-md-6">
+            @Html.CheckBoxFor(m => m.chkDefNot, new { @class = "form-check-input", style = "width:15px;height:16px;" })
+
+        </div>
+        <div class="form-group col-md-2">
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="form-group col-md-4">
+            Deficiencia técnica
+        </div>
+        <div class="form-group col-md-6">
+            @Html.CheckBoxFor(m => m.chkDefTec, new { @class = "form-check-input", style = "width:15px;height:16px;" })
+
+        </div>
+        <div class="form-group col-md-2">
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="form-group col-md-4">
+            Fallecimiento Titular
+        </div>
+        <div class="form-group col-md-6">
+            @Html.CheckBoxFor(m => m.chkFallTit, new { @class = "form-check-input", style = "width:15px;height:16px;" })
+        </div>
+        <div class="form-group col-md-2">
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="form-group col-md-4">
+            Otros
+        </div>
+        <div class="form-group col-md-6">
+            @Html.TextAreaFor(m => m.txtOtros, 8, 1, new { @class = "form-control form-control-sm" })
+        </div>
+        <div class="form-group col-md-2">
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="form-group col-md-12">
+            @Html.Partial("~/Areas/Fiscalizacion/Views/ManProveido/_Shared/_renderNotificacion.cshtml", Model)
+        </div>
+    </div>
+</div>
+

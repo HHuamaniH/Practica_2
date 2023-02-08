@@ -1,0 +1,23 @@
+﻿@model CapaEntidad.ViewModel.VM_Paspeq
+<div class="modal-dialog" role="document">
+    <div class="modal-content">
+        <div class="modal-header text-small" style="cursor:move;padding:0.5rem;">
+            <h5 class="modal-title">Paspeq @DateTime.Now.AddYears(1).Year</h5>
+        </div>
+        <div class="modal-body">
+            <form id="frmManPaspeq" method="post">
+                <div class="form-row">
+                    <div class="form-group col-md-12">
+                        <label for="usuario" class="text-small">Se creará una nueva plantilla de Paspeq para el presente año</label>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="modal-footer">
+            <button id="btnGuardar" class="btn btn-primary btn-sm" onclick="_manPaspeq.fnSave();">Generar</button>
+            <button id="btnCancelar" class="btn btn-secondary btn-sm" onclick="_manPaspeq.fnClose();">Cancelar</button>
+        </div>
+    </div>
+</div>
+
+<script src="~/Areas/PlanFocalizacion/js/Paspeq/_Paspeq.js"></script>

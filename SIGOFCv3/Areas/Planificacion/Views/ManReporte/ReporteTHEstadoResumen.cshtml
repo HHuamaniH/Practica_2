@@ -1,0 +1,158 @@
+﻿
+@{
+    ViewBag.Title = "ReporteTHEstadoResumen";
+    Layout = "~/Views/Shared/_LayoutMain.cshtml";
+}
+
+<link href="~/Content/datatables/buttons.dataTables.min.css" rel="stylesheet" />
+
+<style type="text/css">
+    table .custom-row-reporte th {
+        text-align: center;
+        background-color: lightblue;
+    }
+
+    button.dt-button{
+        font-weight: 400;
+        border: 1px solid transparent;
+
+        padding: 0.25rem 0.5rem;
+        font-size: 0.875rem;
+        line-height: 1.5;
+        border-radius: 0;
+
+        color: #17a2b8;
+        background-color: transparent;
+        background-image: none;
+        border-color: #17a2b8;
+    }
+
+    button.dt-button:hover:not(.disabled){
+        text-decoration: none;
+        color: #fff;
+        background-color: #17a2b8;
+        border-color: #17a2b8;
+        background-image:none;
+    }
+
+    button.dt-button:active:not(.disabled), button.dt-button:hover:not(.disabled):active:not(.disabled){
+        color: #fff;
+        background-color: #17a2b8;
+        border-color: #17a2b8;
+        box-shadow: 0 0 0 0.2rem rgba(23, 162, 184, 0.5);
+        background-image:none;
+    }
+</style>
+
+<div class="container-fluid">
+    <div class="card">
+        <div class="card-header text-right">
+            Reporte de Estado de Títulos Habilitantes
+        </div>
+        <div class="card-body">
+            <div class="form-row">
+                <div class="form-group col-md-2">
+                    <label for="ddlPlanAnioId" class="text-small">Año PASPEQ</label>
+                    @Html.DropDownList("ddlPlanAnioId", new SelectList(ViewBag.ddlPlanAnio, "Value", "Text"), new { @class = "form-control form-control-sm" })
+                </div>
+            </div>
+            <br />
+            <div class="form-row">
+                <div class="col-md-6">
+                    <div class="table-responsive">
+                        <table id="tbTHEstadoResumen" style="width: 100%" class="table table-hover table-bordered">
+                            <thead>
+                                <tr>
+                                    <th colspan="6" class="text-sm-left">
+                                        <div class="form-inline">
+                                            <strong>
+                                                Estado de Títulos Habilitantes
+                                            </strong>
+                                        </div>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                            <tfoot>
+                                <tr class="custom-row-reporte">
+                                    <th><span id="col1">Total</span></th>
+                                    <th><span id="col2">0</span></th>
+                                    <th><span id="col3">0</span></th>
+                                    <th><span id="col4">0</span></th>
+                                    <th><span id="col5">0</span></th>
+                                    <th><span id="col6">0</span></th>
+                                </tr>
+                            </tfoot>
+                        </table>
+                        <p class="text-small" style="padding-left:6px;">(*) Obtenido del universo de títulos habilitantes y planes de manejo correspondientes al PASPEQ seleccionado.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="~/Scripts/datatables/Extensions/dataTables.buttons.js"></script>
+<script src="~/Scripts/datatables/Extensions/buttons.flash.min.js"></script>
+<script src="~/Scripts/datatables/Extensions/jszip.min.js"></script>
+<script src="~/Scripts/datatables/Extensions/pdfmake.js"></script>
+<script src="~/Scripts/datatables/Extensions/vfs_fonts.js"></script>
+<script src="~/Scripts/datatables/Extensions/buttons.html5.js"></script>
+<script src="~/Scripts/datatables/Extensions/buttons.print.js"></script>
+
+<script type="text/javascript">
+    let _THEstadoResumen = {
+        fnBuildTable: () => {
+            var columns_label = [], columns_data = [], options = {};
+
+            columns_label = ["Modalidad", "Total", "Caducidad", "Supervisados", "No supervisados", "Inactivos"];
+            columns_data = ["MODALIDAD", "TOTAL_TH", "TOTAL_CADUCIDAD", "TOTAL_SUPERVISADO", "NO_SUPERVISADO", "TOTAL_INACTIVO"];
+            options = {
+                page_length: 100, row_edit: false, row_delete: false, row_index: false, page_autowidth: false, page_sort: true
+                , button_excel: true, button_pdf: true, button_print: true, export_title: $("#tbTHEstadoResumen").find("thead tr")[0].innerText.trim()
+            };
+
+            return utilDt.fnLoadDataTable_Detail($("#tbTHEstadoResumen"), columns_label, columns_data, options);
+        },
+        fnLoadTable: () => {
+            let cod_plan = $("#ddlPlanAnioId").val();
+            var url = urlLocalSigo + "Planificacion/ManReporte/ListarTHEstadoResumen";
+            const option = { url: url, datos: { asCodPlan: cod_plan }, type: 'GET' };
+
+            utilSigo.fnAjax(option, function (result) {
+                if (result.success) {
+                    _THEstadoResumen.dtTHEstadoResumen.clear().draw();
+                    _THEstadoResumen.dtTHEstadoResumen.rows.add(result.data).draw();
+
+                    var c2 = 0, c3 = 0, c4 = 0, c5 = 0, c6 = 0;
+                    for (var i = 0; i < result.data.length; i++) {
+                        c2 += parseInt(result.data[i]["TOTAL_TH"]); c3 += parseInt(result.data[i]["TOTAL_CADUCIDAD"]);
+                        c4 += parseInt(result.data[i]["TOTAL_SUPERVISADO"]); c5 += parseInt(result.data[i]["NO_SUPERVISADO"]);
+                        c6 += parseInt(result.data[i]["TOTAL_INACTIVO"]);
+                    }
+
+                    var tb = $("#tbTHEstadoResumen");
+                    tb.find("#col2").text(c2); tb.find("#col3").text(c3); tb.find("#col4").text(c4); tb.find("#col5").text(c5); tb.find("#col6").text(c6);
+                } else {
+                    utilSigo.toastError("Error", "Ocurrió un problema al listar los criterios");
+                }
+            });
+        },
+        fnInit: () => {
+            $.fn.select2.defaults.set("theme", "bootstrap4");
+            $('[data-toggle="tooltip"]').tooltip();
+
+            $("#ddlPlanAnioId").select2({ minimumResultsForSearch: -1 });
+
+            _THEstadoResumen.dtTHEstadoResumen = _THEstadoResumen.fnBuildTable();
+
+            $("#ddlPlanAnioId").change(function () {
+                _THEstadoResumen.fnLoadTable();
+            });
+        }
+    }
+
+    $(document).ready(function () {
+        _THEstadoResumen.fnInit();
+    });
+</script>

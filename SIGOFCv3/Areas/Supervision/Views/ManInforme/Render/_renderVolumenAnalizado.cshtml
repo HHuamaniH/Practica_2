@@ -1,0 +1,203 @@
+﻿
+@model List<CapaEntidad.DOC.Ent_INFORME_VOL_ANALIZADO>
+
+<style type="text/css">
+    #tbRenderVolumenAnalizado_wrapper {
+        padding: 0px;
+    }
+
+    table .custom-row-foot th {
+        text-align: center;
+        background-color: lightblue;
+    }
+</style>
+
+<script type="text/javascript">
+    var _renderVolumenAnalizado = {};
+    _renderVolumenAnalizado.tbEliTABLA = [];
+
+    _renderVolumenAnalizado.fnInitDataTable_Detail = function () {
+        var columns_label = [], columns_data = [], options = {};
+
+        columns_label = ["Especie", "Volumen Aprobado Analizado","Volumen Movilizado Analizado","Volumen Injustificado","Volumen Justificado", "PC","Observaciones"];
+        columns_data = ["ESPECIES", "VOLUMEN_APROBADO", "VOLUMEN_MOVILIZADO", "VOLUMEN_INJUSTIFICADO", "VOLUMEN_JUSTIFICADO", "PCA","OBSERVACION"];
+        options = {
+            page_length: 10, row_index: true, row_edit: true, row_fnEdit: "_renderVolumenAnalizado.fnAddEdit(this)"
+            , row_delete: true, row_fnDelete: "_renderVolumenAnalizado.fnDelete(this)"
+            , button_copy: true, button_csv: true, button_excel: true, button_pdf: true, button_print: true
+            //, export_title: $("#tbRenderVolumenAnalizado").find("thead tr")[0].innerText.trim()
+            , page_sort: true
+        };
+        _renderVolumenAnalizado.dtVolAnalizado = utilDt.fnLoadDataTable_Detail($("#tbRenderVolumenAnalizado"), columns_label, columns_data, options);
+    }
+
+    _renderVolumenAnalizado.fnAddEdit = function (obj) {
+
+        var url = urlLocalSigo + "Supervision/ManInforme/_VolumenAnalizado";
+        var option = { url: url, type: 'POST', datos: { asCodTHabilitante: _DatosCampo.hdfCodTHabilitante, aiNumPoa: _DatosCampo.hdfNumPoa}, divId: "mdlManInforme_VolumenAnalizado" };
+        utilSigo.fnOpenModal(option, function () {
+            _VolumenAnalizado.fnSaveForm = function (data) {
+                if (data != null) {
+                    var dt = _renderVolumenAnalizado.dtVolAnalizado;
+
+                    if (obj == null || obj == "") {//Nuevo Registro
+                        dt.rows.add([data]).draw();
+                        dt.page('last').draw('page');
+                        utilSigo.toastSuccess("Exito", "Datos guardados correctamente");
+                    } else {//Modificar
+                        var row = dt.row($(obj).parents('tr')).data();
+                        row = data;
+                        dt.row($(obj).parents('tr')).data(row).draw(false);
+                        utilSigo.toastSuccess("Exito", "Datos actualizados correctamente");
+                    }
+                    _renderVolumenAnalizado.fnSetTotal();
+                    $("#mdlManInforme_VolumenAnalizado").modal('hide');
+                } else {
+                    utilSigo.toastError("Error", "No se pudieron guardar los datos");
+                }
+            }
+
+            if (obj != null && obj != "") {
+                var data = _renderVolumenAnalizado.dtVolAnalizado.row($(obj).parents('tr')).data();
+                _VolumenAnalizado.fnInit(utilSigo.fnConvertArrayToObject(data));
+            } else { _VolumenAnalizado.fnInit(""); }
+        });
+    }
+
+    _renderVolumenAnalizado.fnDeleteAll = function () {
+        var rows, countFilas, data;
+
+        rows = _renderVolumenAnalizado.dtVolAnalizado.$("tr");
+        countFilas = rows.length;
+        if (countFilas > 0) {
+            utilSigo.dialogConfirm("", "Está seguro de Eliminar Todos los Registros?", function (r) {
+                if (r) {
+                    $.each(rows, function (i, o) {
+                        data = _renderVolumenAnalizado.dtVolAnalizado.row($(o)).data();
+                        if (data["RegEstado"] == "0" || data["RegEstado"] == "2") {
+                            _renderVolumenAnalizado.tbEliTABLA.push({
+                                EliTABLA: "ISUPERVISION_DET_VOLUMEN",
+                                COD_SECUENCIAL: data["COD_SECUENCIAL"]
+                            });
+                        }
+                    });
+                    _renderVolumenAnalizado.dtVolAnalizado.clear().draw();
+                    _renderVolumenAnalizado.fnSetTotal();
+                }
+            });
+        } else {
+            utilSigo.toastWarning("Aviso", "No se encontraron registros a eliminar");
+        }
+    }
+
+    _renderVolumenAnalizado.fnDelete = function (obj) {
+        var data = _renderVolumenAnalizado.dtVolAnalizado.row($(obj).parents('tr')).data();
+
+        if (data["RegEstado"] == "0" || data["RegEstado"] == "2") {
+            _renderVolumenAnalizado.tbEliTABLA.push({
+                EliTABLA: "ISUPERVISION_DET_VOLUMEN",
+                COD_SECUENCIAL: data["COD_SECUENCIAL"]
+            });
+        }
+        _renderVolumenAnalizado.dtVolAnalizado.row($(obj).parents('tr')).remove().draw(false);
+        _renderVolumenAnalizado.fnSetTotal();
+    }
+
+    _renderVolumenAnalizado.fnImport = function (e, obj) {
+        var url = urlLocalSigo + "Supervision/ManInforme/ImportarDatosInformeSimple";
+        var bExiste = false;
+
+        uploadFile.fileSelectHandler(e, obj, url, { asTipo: "VOLUMEN_ANALIZADO" }, function (data) {
+            for (var i = 0; i < data.length; i++) {
+                _renderVolumenAnalizado.dtVolAnalizado.rows.add([data[i]]).draw();
+                _renderVolumenAnalizado.dtVolAnalizado.page('last').draw('page');
+            }
+            _renderVolumenAnalizado.fnSetTotal();
+        });
+    }
+
+    _renderVolumenAnalizado.fnGetList = function () {
+        var list = [], rows, countFilas, data;
+
+        rows = _renderVolumenAnalizado.dtVolAnalizado.$("tr");
+        countFilas = rows.length;
+        if (countFilas > 0) {
+            $.each(rows, function (i, o) {
+                data = _renderVolumenAnalizado.dtVolAnalizado.row($(o)).data();
+                if (data["RegEstado"] == "1" || data["RegEstado"] == "2") {
+                    list.push(utilSigo.fnConvertArrayToObject(data));
+                }
+            });
+        }
+        return list;
+    }
+
+    _renderVolumenAnalizado.fnGetListEliTABLA = function () { return _renderVolumenAnalizado.tbEliTABLA }
+
+    _renderVolumenAnalizado.fnSetTotal = function () {
+        var rows, data, vol_aprobado = 0, vol_movilizado = 0, vol_injustificado = 0, vol_justificado = 0;
+
+        rows = _renderVolumenAnalizado.dtVolAnalizado.$("tr");
+        if (rows.length > 0) {
+            $.each(rows, function (i, o) {
+                data = _renderVolumenAnalizado.dtVolAnalizado.row($(o)).data();
+                vol_aprobado += parseFloat(data["VOLUMEN_APROBADO"]);
+                vol_movilizado += parseFloat(data["VOLUMEN_MOVILIZADO"]);
+                vol_injustificado += parseFloat(data["VOLUMEN_INJUSTIFICADO"]);
+                vol_justificado += parseFloat(data["VOLUMEN_JUSTIFICADO"]);
+            });
+        }
+
+        _renderVolumenAnalizado.frm.find("#totalVolAprobado").text(Math.round(vol_aprobado * 100) / 100);
+        _renderVolumenAnalizado.frm.find("#totalVolMovilizado").text(Math.round(vol_movilizado * 100) / 100);
+        _renderVolumenAnalizado.frm.find("#totalVolInjustificado").text(Math.round(vol_injustificado * 100) / 100);
+        _renderVolumenAnalizado.frm.find("#totalVolJustificado").text(Math.round(vol_justificado * 100) / 100);
+    }
+
+    $(document).ready(function () {
+        _renderVolumenAnalizado.frm = $("#frmRendeVolumenAnalizado");
+
+        _renderVolumenAnalizado.fnInitDataTable_Detail();
+        _renderVolumenAnalizado.dtVolAnalizado.rows.add(JSON.parse('@Html.Raw(Json.Encode(@Model))')).draw();
+        _renderVolumenAnalizado.fnSetTotal();
+    });
+</script>
+
+<div id="frmRendeVolumenAnalizado">
+    <div class="table-responsive">
+        <table id="tbRenderVolumenAnalizado" style="width:100%;margin:0px !important;" class="table table-hover table-bordered">
+            <thead>
+                <tr>
+                    <th colspan="11" class="text-sm-left">
+                        <div class="form-inline">
+                            <i class="fa mx-2 fa-lg fa-file-o" style="cursor:pointer;" onclick="_renderVolumenAnalizado.fnAddEdit('');" data-toggle="tooltip" data-placement="top" title="Nuevo"></i>
+                            <i class="fa mx-2 fa-lg fa-window-close-o" style="cursor:pointer;" onclick="_renderVolumenAnalizado.fnDeleteAll();" data-toggle="tooltip" data-placement="top" title="Eliminar Todos"></i>
+                            <label style="cursor:pointer;" class="fa mx-2 fa-lg fa-file-excel-o" title="Importar Archivo" data-toggle="tooltip">
+                                <input type="file" id="fileselect" name="fileselect" style="display:none" size="60" onchange="_renderVolumenAnalizado.fnImport(event, this)">
+                            </label>
+                            <a href="@Url.Content("~/Archivos/Plantilla/VolInjus_v2.xlsx")"> <i class="fa mx-2 fa-lg fa-folder-open" style="cursor:pointer;" data-toggle="tooltip" data-placement="top" title="Descargar Plantilla"></i></a>
+                            <strong>Volumen analizado en la supervisión</strong>
+                        </div>
+                    </th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+            <tfoot>
+                <tr class="custom-row-foot">
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th>Total</th>
+                    <th><span id="totalVolAprobado">0</span></th>
+                    <th><span id="totalVolMovilizado">0</span></th>
+                    <th><span id="totalVolInjustificado">0</span></th>
+                    <th><span id="totalVolJustificado">0</span></th>
+                    <th></th>
+                    <th></th>
+
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+</div>

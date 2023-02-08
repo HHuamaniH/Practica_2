@@ -1,0 +1,57 @@
+﻿
+<script src="~/Areas/Supervision/js/ManInformeConservacion/_CoordenadaUTM.js"></script>
+
+<div class="modal-dialog" role="document">
+    <div class="modal-content">
+        <div class="modal-header text-small" style="cursor:move;">
+            <span>Coordenada UTM</span>
+            <i class="fa fa-close" style="cursor:pointer;" data-dismiss="modal" aria-label="Close"></i>
+        </div>
+        <div class="modal-body">
+            <form id="frmItemCoordenadaUTM">
+                @Html.Hidden("hdfRegEstado")
+                @Html.Hidden("hdfCodSecuencial")
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label for="txtVertice" class="text-small">Vértice</label>
+                        @Html.TextBox("txtVertice", "", new { @class = "form-control form-control-sm" })
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label for="ddlZonaId" class="text-small">Zona UTM</label>
+                        @Html.DropDownList("ddlZonaId", new SelectList(ViewBag.ddlZona, "Value", "Text"), new { @class = "form-control form-control-sm" })
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="ddlZonaCampoId" class="text-small">Zona UTM Campo</label>
+                        @Html.DropDownList("ddlZonaCampoId", new SelectList(ViewBag.ddlZona, "Value", "Text"), new { @class = "form-control form-control-sm" })
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label for="txtCEste" class="text-small">Coordenada Este</label>
+                        @Html.TextBox("txtCEste", "", new { @class = "form-control form-control-sm", type = "number", maxlength = "6" })
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="txtCNorte" class="text-small">Coordenada Norte</label>
+                        @Html.TextBox("txtCNorte", "", new { @class = "form-control form-control-sm", type = "number", maxlength = "7" })
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label for="txtCEsteCampo" class="text-small">Coordenada Este Campo</label>
+                        @Html.TextBox("txtCEsteCampo", "", new { @class = "form-control form-control-sm", type = "number", maxlength = "6" })
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="txtCNorteCampo" class="text-small">Coordenada Norte Campo</label>
+                        @Html.TextBox("txtCNorteCampo", "", new { @class = "form-control form-control-sm", type = "number", maxlength = "7" })
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-primary btn-sm" onclick="_CoordenadaUTM.fnSubmitForm()">Guardar</button>
+            <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Cancelar</button>
+        </div>
+    </div>
+</div>

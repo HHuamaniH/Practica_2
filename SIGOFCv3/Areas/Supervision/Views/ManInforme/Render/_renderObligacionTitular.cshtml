@@ -1,0 +1,88 @@
+﻿
+@model List<CapaEntidad.DOC.Ent_INFORME_OBLIGTITULAR>
+
+<script type="text/javascript">
+    var _renderObligacionTitular = {};
+
+    _renderObligacionTitular.fnInitDataTable_Detail = function () {
+        var columns_label = [], columns_data = [], options = {};
+
+        columns_label = ["Obligación"];
+        columns_data = ["OBLIGTITULAR"];
+        var data_extend = [
+            {
+                "data": "EVAL_OBLIGTITULAR", "title": "SI", "width": "3%", "orderable": false, "searchable": false, "mRender": function (data, type, row, meta) {
+                    var checked = (data == "S") ? "checked" : "";
+                    return '<div class="custom-control custom-radio custom-control-inline"><input type="radio" class="custom-control-input" name="chkEvalIndicadorOT_' + meta.row + '" id="chkEvalIndicadorOT2_' + meta.row + '" ' + checked + ' value="S"><label class="custom-control-label" for="chkEvalIndicadorOT2_' + meta.row + '"></label></div>';
+                }
+            },
+            {
+                "data": "EVAL_OBLIGTITULAR", "title": "NO", "width": "3%", "orderable": false, "searchable": false, "mRender": function (data, type, row, meta) {
+                    var checked = (data == "N") ? "checked" : "";
+                    return '<div class="custom-control custom-radio custom-control-inline"><input type="radio" class="custom-control-input" name="chkEvalIndicadorOT_' + meta.row + '" id="chkEvalIndicadorOT1_' + meta.row + '" ' + checked + ' value="N"><label class="custom-control-label" for="chkEvalIndicadorOT1_' + meta.row + '"></label></div>';
+                }
+            },
+            {
+                "data": "EVAL_OBLIGTITULAR", "title": "NO APLICA", "width": "3%", "orderable": false, "searchable": false, "mRender": function (data, type, row, meta) {
+                    var checked = (data == "NA") ? "checked" : "";
+                    return '<div class="custom-control custom-radio custom-control-inline"><input type="radio" class="custom-control-input" name="chkEvalIndicadorOT_' + meta.row + '" id="chkEvalIndicadorOT0_' + meta.row + '" ' + checked + ' value="NA"><label class="custom-control-label" for="chkEvalIndicadorOT0_' + meta.row + '"></label></div>';
+                }
+            },
+            {
+                "data": "EVAL_OBLIGTITULAR", "title": "NO TIENE INFORMACIÓN/OTROS", "width": "3%", "orderable": false, "searchable": false, "mRender": function (data, type, row, meta) {
+                    var checked = (data == "NI") ? "checked" : "";
+                    return '<div class="custom-control custom-radio custom-control-inline"><input type="radio" class="custom-control-input" name="chkEvalIndicadorOT_' + meta.row + '" id="chkEvalIndicadorOT3_' + meta.row + '" ' + checked + ' value="NI"><label class="custom-control-label" for="chkEvalIndicadorOT3_' + meta.row + '"></label></div>';
+                }
+            },
+            {
+                "data": "OBSERVACION", "title": "Observación", "width": "50%", "orderable": false, "searchable": false, "mRender": function (data, type, row, meta) {
+                    return '<input class="form-control form-control-sm" type="text" value="' + data + '" style="width:100%;">';
+                }
+            }
+        ];
+        options = {
+            page_length: 50, row_index: true, data_extend: data_extend, page_autowidth: false
+        };
+        _renderObligacionTitular.dtRenderObligacionTitular = utilDt.fnLoadDataTable_Detail(_renderObligacionTitular.frm.find("#tbRenderObligacionTitular"), columns_label, columns_data, options);
+    }
+
+    _renderObligacionTitular.fnGetList = function () {
+        var list = [], data, dataHtml, opcionSelect = "";
+
+        if (_renderObligacionTitular.dtRenderObligacionTitular.$("tr").length > 0) {
+            $.each(_renderObligacionTitular.dtRenderObligacionTitular.$("tr"), function (i, o) {
+                data = _renderObligacionTitular.dtRenderObligacionTitular.row($(o)).data();
+                dataHtml = $(o)[0];
+                opcionSelect = "";
+                opcionSelect = $($($(dataHtml).find("td")[2]).find('input')[0]).is(":checked") ? $($($(dataHtml).find("td")[2]).find('input')[0]).val() : opcionSelect;
+                opcionSelect = $($($(dataHtml).find("td")[3]).find('input')[0]).is(":checked") ? $($($(dataHtml).find("td")[3]).find('input')[0]).val() : opcionSelect;
+                opcionSelect = $($($(dataHtml).find("td")[4]).find('input')[0]).is(":checked") ? $($($(dataHtml).find("td")[4]).find('input')[0]).val() : opcionSelect;
+                opcionSelect = $($($(dataHtml).find("td")[5]).find('input')[0]).is(":checked") ? $($($(dataHtml).find("td")[5]).find('input')[0]).val() : opcionSelect;
+                data["EVAL_OBLIGTITULAR"] = opcionSelect;
+                data["OBSERVACION"] = $($($(dataHtml).find("td")[6]).find("input")[0]).val();
+                data["OBLIGTITULAR"] = "";
+                list.push(utilSigo.fnConvertArrayToObject(data));
+            });
+        }
+        return list;
+    }
+
+    $(document).ready(function () {
+        _renderObligacionTitular.frm = $("#frmRenderObligacionTitular");
+
+        _renderObligacionTitular.fnInitDataTable_Detail();
+        _renderObligacionTitular.dtRenderObligacionTitular.rows.add(JSON.parse('@Html.Raw(Json.Encode(@Model))')).draw();
+    });
+</script>
+
+<div id="frmRenderObligacionTitular">
+    <div class="card-header text-small">Obligaciones de los Titulares de Títulos Habilitantes</div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table id="tbRenderObligacionTitular" style="width:100%;margin:0px !important;" class="table table-hover table-bordered">
+                <thead></thead>
+                <tbody></tbody>
+            </table>
+        </div>
+    </div>
+</div>

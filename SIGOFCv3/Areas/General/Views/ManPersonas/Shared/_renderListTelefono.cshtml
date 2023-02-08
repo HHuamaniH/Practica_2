@@ -1,0 +1,194 @@
+﻿@model CapaEntidad.ViewModel.VM_Persona
+
+<style type="text/css">
+    #tbRenderListTelefono_wrapper {
+        padding: 0px;
+    }
+</style>
+
+<script type="text/javascript">
+    var _renderListTelefono = {};
+    _renderListTelefono.tbElimTelefono = [];
+    _renderListTelefono.opc;
+    _renderListTelefono.estado;
+    _renderListTelefono.codsecuencial;
+    _renderListTelefono.dataTelefono;
+    // iniciar datos en la tabla
+    _renderListTelefono.fnInitDataTable_Detail = function () {
+        var columns_label = [], columns_data = [], options = {};
+
+        columns_label = ["Tipo", "Número", "Anexo"];
+        columns_data = ["TIPO_TELEFONO", "NUMERO", "ANEXO"];
+        options = {
+            page_length: 10, row_index: true, row_edit: true, row_fnEdit: "_renderListTelefono.fnEdit(this,'MOD')", row_delete: true, row_fnDelete: "_renderListTelefono.fnDelete(this)", page_sort: true
+        };
+        _renderListTelefono.dtRenderListTelefono = utilDt.fnLoadDataTable_Detail(_renderListTelefono.frm.find("#tbRenderListTelefono"), columns_label, columns_data, options);
+        _renderListTelefono.dtRenderListTelefono.rows.add(JSON.parse('@Html.Raw(Json.Encode(@Model.tbTelefono))')).draw();
+    }
+
+    _renderListTelefono.fnAddEditTelefono = function (opc) {
+        _renderListTelefono.fnLimpiarCampos();
+
+        if (opc == 'NUE') _renderListTelefono.frm.find("label[for='lblTituloRegistro']").text("Teléfono - Nuevo Registro");
+        else _renderListTelefono.frm.find("label[for='lblTituloRegistro']").text("Teléfono - Modificando Registro");
+
+        utilSigo.modalDraggable(_renderListTelefono.frm.find("#mdlRegistraTelefono"), '.modal-header');
+        _renderListTelefono.frm.find("#mdlRegistraTelefono").modal({ keyboard: true, backdrop: 'static' });
+
+        _renderListTelefono.opc = opc;
+    }
+
+    _renderListTelefono.fnCloseModal = function () {
+        _renderListTelefono.frm.find('#mdlRegistraTelefono').modal('hide');
+        _renderListTelefono.fnLimpiarCampos();
+    }
+
+    _renderListTelefono.fnLimpiarCampos = function () {
+        _renderListTelefono.frm.find("#txtMItemTelefono_Numero").val("");
+        _renderListTelefono.frm.find("#txtMItemTelefono_Anexo").val("");
+    }
+
+    _renderListTelefono.fnEdit = function (obj, opc) {
+        _renderListTelefono.fnAddEditTelefono(opc);
+
+        _renderListTelefono.dataTelefono = _renderListTelefono.dtRenderListTelefono.row($(obj).parents('tr'));
+
+        var data = _renderListTelefono.dtRenderListTelefono.row($(obj).parents('tr')).data();
+
+        _renderListTelefono.frm.find("#ddlMItemTelefono_TTelefonoId").val(data["COD_TTELEFONO"]);
+        _renderListTelefono.frm.find("#txtMItemTelefono_Numero").val(data["NUMERO"]);
+        _renderListTelefono.frm.find("#txtMItemTelefono_Anexo").val(data["ANEXO"]);
+        _renderListTelefono.estado = data["RegEstado"];
+        _renderListTelefono.codsecuencial = data["COD_SECUENCIAL"];
+    }
+
+    _renderListTelefono.fnDelete = function (obj) {
+        utilSigo.dialogConfirm("Confirmacion", "¿Está seguro de Eliminar el Registro Seleccionado?", function (r) {
+            if (r) {
+                var data = _renderListTelefono.dtRenderListTelefono.row($(obj).parents('tr')).data();
+                if (data["RegEstado"] != "1") {
+                    _renderListTelefono.tbElimTelefono.push({
+                        EliTABLA: "PERSONA_DET_TELEFONO",
+                        COD_SECUENCIAL: data["COD_SECUENCIAL"]
+                    });
+                }
+                _renderListTelefono.dtRenderListTelefono.row($(obj).parents('tr')).remove().draw(false);
+                utilSigo.toastSuccess("Éxito", "El elemento ha sido eliminado correctamente");
+            }
+        });
+    }
+
+    _renderListTelefono.fnGetListElimTelefono = function () { return _renderListTelefono.tbElimTelefono }
+
+    _renderListTelefono.fnSubmitForm = function () {
+        if (_renderListTelefono.frm.find("#txtMItemTelefono_Numero").val().trim() == '') {
+            utilSigo.toastWarning("Aviso", "Ingrese el número"); return false;
+        }
+
+        _renderListTelefono.fnSaveTelefono();
+    }
+
+    _renderListTelefono.fnSaveTelefono = function () {
+        var data = {};
+        data.COD_TTELEFONO = _renderListTelefono.frm.find("#ddlMItemTelefono_TTelefonoId").val();
+        data.TIPO_TELEFONO = _renderListTelefono.frm.find("#ddlMItemTelefono_TTelefonoId option:selected").text(),
+        data.NUMERO = _renderListTelefono.frm.find("#txtMItemTelefono_Numero").val();
+        data.ANEXO = _renderListTelefono.frm.find("#txtMItemTelefono_Anexo").val();
+
+        if (ManPersonas_AddEdit.frm.find("#RegEstado").val() == 1) data.RegEstado = 1;
+        else data.RegEstado = (_renderListTelefono.estado == 0) ? 2 : _renderListTelefono.estado;
+
+        if (_renderListTelefono.opc == 'NUE') {
+            data.RegEstado = 1;
+            data.COD_SECUENCIAL = 0; 
+            _renderListTelefono.dtRenderListTelefono.rows.add([data]).draw();
+            _renderListTelefono.dtRenderListTelefono.page('last').draw('page');
+        }
+        else {
+            data.COD_SECUENCIAL = _renderListTelefono.codsecuencial; 
+            _renderListTelefono.dataTelefono.data(data).draw(false);
+        }
+
+        _renderListTelefono.fnCloseModal();
+    }
+
+    _renderListTelefono.fnGetListTelefono = function () {
+        let list = [], rows, countFilas, data;
+
+        rows = _renderListTelefono.dtRenderListTelefono.$("tr");
+        countFilas = rows.length;
+        if (countFilas > 0) {
+            $.each(rows, function (i, o) {
+                data = _renderListTelefono.dtRenderListTelefono.row($(o)).data();
+               // if (data["RegEstado"] == "1" || data["RegEstado"] == "2") {
+                list.push(utilSigo.fnConvertArrayToObject(data));
+               // }
+            });
+        }
+        return list;
+    }
+
+   $(document).ready(function () {
+       _renderListTelefono.frm = $("#frmRenderListTelefono");
+       //inicializa la tabla con los campos obtenidos del model
+       _renderListTelefono.fnInitDataTable_Detail();
+   });
+
+</script>
+<div id="frmRenderListTelefono">
+    <div class="table-responsive">
+        <table id="tbRenderListTelefono" style="width:100%;margin:0px !important;" class="table table-hover table-bordered">
+            <thead>
+                <tr>
+                    <th colspan="8" class="text-sm-left">
+                        <div class="form-inline">
+                            <i class="fa mx-2 fa-lg fa-file-o" style="cursor:pointer;" onclick="_renderListTelefono.fnAddEditTelefono('NUE');" data-toggle="tooltip" data-placement="top" title="Nuevo"></i>
+                            <strong>Teléfono</strong>
+                        </div>
+                    </th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
+
+    <div class="modal fade hide" id="mdlRegistraTelefono" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header text-small" style="cursor:move;">
+                    <label for="lblTituloRegistro"></label>
+                    <i class="fa fa-close" style="cursor:pointer;" data-dismiss="modal" aria-label="Close"></i>
+                </div>
+                <div class="modal-body">
+                    <div id="frmRegistrarTelefono">
+                        <div class="form-group row" style="margin-bottom:0px;">
+                            <label for="lblMItemTelefono_TTelefonoId" class="col-md-3 col-form-label text-small">Tipo:</label>
+                            <div class="col-md-9">
+                                @Html.DropDownList("ddlMItemTelefono_TTelefonoId", new SelectList(ViewBag.ddlMItemTelefono_TTelefono, "Value", "Text"), new { @class = "form-control form-control-sm", @style = "width:auto;" })
+                            </div>
+                        </div>
+                        <div class="form-group row" style="margin-bottom:0px;">
+                            <label for="lblMItemTelefono_Numero" class="col-md-3 col-form-label text-small">Número:</label>
+                            <div class="col-md-9">
+                                @Html.TextBox("txtMItemTelefono_Numero", "", new { @class = "form-control form-control-sm", pattern = "[0-9]{1,6}", title = "Solo debe ingresar números enteros", onkeypress = "return utilSigo.onKeyEntero(event, this);" })
+                            </div>
+                        </div>
+                        <div class="form-group row" style="margin-bottom:0px;">
+                            <label for="lblMItemTelefono_Anexo" class="col-md-3 col-form-label text-small">Anexo:</label>
+                            <div class="col-md-9">
+                                @Html.TextBox("txtMItemTelefono_Anexo", "", new { @class = "form-control form-control-sm", pattern = "[0-9]{1,6}", title = "Solo debe ingresar números enteros", onkeypress = "return utilSigo.onKeyEntero(event, this);" })
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" id="btnGuardarTelefono" class="btn btn-primary btn-sm" onclick="_renderListTelefono.fnSubmitForm()">Guardar</button>
+                    <button type="button" id="btnCancelarTelefono" class="btn btn-secondary btn-sm" onclick="_renderListTelefono.fnCloseModal()">Cancelar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+

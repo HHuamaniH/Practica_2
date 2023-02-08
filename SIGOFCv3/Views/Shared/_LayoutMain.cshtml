@@ -1,0 +1,87 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title - SIGO|sfc</title>
+    <link rel="icon" type="image/png" href="~/Content/images/logo/arbol osinfor blanco con verde.png" />
+    @*@Styles.Render("~/Content/css")
+        @Scripts.Render("~/bundles/modernizr")*@
+
+    <link href="~/Content/bootstrap.min.css" rel="stylesheet" />
+    <link href="~/Content/select2/select2.min.css" rel="stylesheet" />
+    <link href="~/Content/select2/select2-bootstrap4.css" rel="stylesheet" />
+    <link href="~/Content/font-awesome/css/font-awesome.min.css" rel="stylesheet" />
+    <link href="~/Content/css/fontastic.css" rel="stylesheet" />
+    <link href="~/Scripts/malihu-custom-scrollbar-plugin/jquery.mCustomScrollbar.css" rel="stylesheet" />
+    <link href="~/Content/css/style.default.css" rel="stylesheet" />
+
+    <link href="~/Content/datatables/dataTables.bootstrap4.min.css" rel="stylesheet" />
+    <link href="~/Content/bootstrap-datepicker/datepicker.css" rel="stylesheet" />
+    <link href="~/Content/toastr.min.css" rel="stylesheet" />
+    <link href="~/Content/css/custom.css?v=2" rel="stylesheet" />
+
+    <script src="~/Scripts/jquery-3.3.1.min.js"></script>
+    <script src="~/Scripts/jquery.validate.min.js"></script>
+    <script src="~/Scripts/additional-methods.js"></script>
+    <script src="~/Scripts/redirect/jquery.redirect.js"></script>
+
+    <script src="~/Scripts/bootstrap-datepicker/bootstrap-datepicker.js"></script>
+    <script src="~/Scripts/bootstrap-datepicker/bootstrap-datepicker.es.js"></script>
+
+    <script src="~/Content/js/grasp_mobile_progress_circle-1.0.0.min.js"></script>
+    <script src="~/Scripts/jquery.cookie/jquery.cookie.js"></script>
+    <script src="~/Scripts/popper/popper.min.js"></script>
+
+    <script src="~/Scripts/bootstrap.min.js"></script>
+    <script src="~/Scripts/jquery-loadingModal/jquery.blockUI.js"></script>
+
+    <script src="~/Scripts/jquery-loadingModal/jquery-ui.min.js"></script>
+    <script src="~/Scripts/malihu-custom-scrollbar-plugin/jquery.mCustomScrollbar.concat.min.js"></script>
+    <script src="~/Content/js/front.js"></script>
+
+    <script src="~/Scripts/datatables/jquery.dataTables.min.js"></script>
+    <script src="~/Scripts/datatables/dataTables.bootstrap4.min.js"></script>
+    <script src="~/Scripts/select2/select2.min.js"></script>
+    <script src="~/Scripts/toastr.js"></script>
+    <script src="~/Scripts/bootbox/bootbox.min.js"></script>
+
+    <script src="~/Scripts/datatables/dataTables.fixedColumns.min.js"></script>
+
+    @RenderSection("styles", required: false)
+    @Scripts.Render("~/bundles/sigo")
+    <script type="text/javascript">
+        var urlLocalSigo = window.location.protocol + "//" + window.location.host + '@Url.Content("~")';
+        initSigo.urlControllerGeneral= urlLocalSigo + "General/Controles/";
+    </script>
+</head>   
+<body>
+    @{Html.RenderAction("_Menu", "Principal", new { Area = "Main" });}
+    <div class="page">
+        @{Html.RenderAction("_Header", "Principal", new { Area = "Main" });}
+        <div>
+            @RenderBody()
+        </div>
+
+        @{Html.RenderAction("_Footer", "Principal", new { Area = "Main" });}
+
+
+    </div>
+
+    @*@Scripts.Render("~/bundles/jquery")
+        @Scripts.Render("~/bundles/bootstrap")*@
+    @RenderSection("scripts", required: false)
+
+
+<script>
+    $(document).ready(function () {
+        if ('@(ViewBag.lanzarterminosUso)'=="1")
+        {
+            $(".terminosUso").click();
+        }
+    });
+</script>
+
+</body>
+</html>

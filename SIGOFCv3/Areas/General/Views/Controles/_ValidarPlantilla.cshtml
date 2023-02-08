@@ -1,0 +1,48 @@
+﻿<style type="text/css">
+    .table-wrapper-scroll-y {
+        display: block;
+        max-height: 500px;
+        overflow-y: auto;
+        -ms-overflow-style: -ms-autohiding-scrollbar;
+    }
+
+    .fileselect {
+        display: none;
+    }
+
+    .divArchivo {
+        text-align: center;
+    }
+
+    .divRespuesta {
+        display: -ms-flexbox;
+        -ms-flex-wrap: wrap;
+        padding: .75rem 1rem;
+        margin-bottom: 1rem;
+        list-style: none;
+        background-color: #e9ecef;
+        border-radius: .25rem;
+        word-wrap: break-word;
+    }
+
+    .colNro {
+        width: 30px;
+    }
+</style>
+
+<div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+        <div class="modal-header text-small" style="cursor:move;padding:0.5rem;">
+            <h5 class="modal-title">Validar Plantillas</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body" id="divLstVal">
+            @Html.Partial("_ValidarPlantilla_")
+        </div>
+        <div class="modal-footer">
+
+        </div>
+    </div>
+</div> 

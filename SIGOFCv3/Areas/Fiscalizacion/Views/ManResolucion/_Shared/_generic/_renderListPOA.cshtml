@@ -1,0 +1,93 @@
+﻿@model CapaEntidad.ViewModel.VM_Resodirec
+
+<script type="text/javascript">
+    var _renderPOA = {};
+
+    /*
+    this.ddListarPCVertice = function () {
+        var pcList = [];
+        $('#txtParcelaRD').find('option').remove().end();
+        var parcela = _frmParcela.fnGetList();
+        var countFilas = parcela.length;
+        if (countFilas > 0) {
+            $.each(parcela, function (i, o) {
+                //alert(parcela[i].PCA);
+                //pcList.push(utilSigo.fnConvertArrayToObject(parcela[i].PCA));
+                $('#txtParcelaRD').append($('<option>', {
+                    value: parcela[i].PCA,
+                    text: parcela[i].PCA
+                }));
+            });
+        }
+    }*/
+    _renderPOA.fncParcelas = function (codEnSelect) {
+        var idPoa = _renderInfracciones.frm.find("#ddlPOA").val();
+        var codResodirec = ManRD_AddEdit.frm.find("#hdfCodResodirec").val();
+        $.ajax({
+            url: '@Url.Action("listaParcela", "ManResolucion")',
+            type: 'GET',
+            datatype: "json",
+            traditional: true,
+            data: { 'CodResodirec': codResodirec, 'NumPoa': idPoa },
+            success: function (data) {
+                var dataList = data.data;
+                var countFilas = dataList.length;
+                if (countFilas > 0) {
+                    $.each(dataList, function (i, o) {
+                       
+                        $('#txtParcelaRD').append($('<option>', {
+                            value: dataList[i].CODIGO,
+                            text: dataList[i].DESCRIPCION
+                        }));
+                    });
+                }
+            }
+        });
+        
+    };
+
+    $(document).ready(function () {
+        _renderPOA.frm = $("#fmrPOA");       
+        _renderPOA.fncParcelas();
+
+    });
+
+</script>
+<div id="fmrPOA">
+    <div class="form-row">
+        <div class="form-group col-md-4">
+            <label for="lblArticulos" class="text-small">POA</label>
+        </div>
+        <div class="form-group col-md-6">
+            @if (Model.ListPOA.Count > 0)
+            {
+                @Html.DropDownListFor(m => m.txtIdPOA, new SelectList(Model.ListPOA, "NUM_POA", "POA"),
+                                 new
+                                 {
+                                     @class = "form-control form-control-sm",
+                                     @id = "ddlPOA",
+                                     @onchange = "_renderPOA.fncParcelas('')"
+                                 })
+            }
+            else
+            {
+                <h5>Seleccionar expediente o informe que contenga POA</h5>
+            }
+
+        </div>
+        <div class="form-group col-md-2">
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="form-group col-md-4">
+            <label for="lblArticulos" class="text-small">PC</label>
+        </div>
+        <div class="form-group col-md-6">
+            <select id="txtParcelaRD" class="form-control-sm">
+            </select>
+        </div>
+        <div class="form-group col-md-2">
+
+        </div>
+    </div>
+</div>

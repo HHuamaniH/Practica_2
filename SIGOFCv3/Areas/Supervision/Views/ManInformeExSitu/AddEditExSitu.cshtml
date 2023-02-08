@@ -1,0 +1,1697 @@
+﻿@model CapaEntidad.ViewModel.VM_Informe_ExSitu
+@{
+    ViewBag.Title = "AddEditExSitu";
+    Layout = "~/Views/Shared/_LayoutMain.cshtml";
+
+    var serializer = new System.Web.Script.Serialization.JavaScriptSerializer();
+    serializer.MaxJsonLength = Int32.MaxValue;
+    var jsonModel = serializer.Serialize(Model.tbAreaExSitu);
+}
+
+@*<script src="~/Scripts/ckeditor5/ckeditor.js"></script>*@
+<script src="~/Scripts/sigo/utility.uploadFile.js"></script>
+<script src="~/Scripts/datatables/Extensions/dataTables.buttons.js"></script>
+<script src="~/Scripts/datatables/Extensions/buttons.flash.min.js"></script>
+<script src="~/Scripts/datatables/Extensions/jszip.min.js"></script>
+<script src="~/Scripts/datatables/Extensions/pdfmake.js"></script>
+<script src="~/Scripts/datatables/Extensions/vfs_fonts.js"></script>
+<script src="~/Scripts/datatables/Extensions/buttons.html5.js"></script>
+<script src="~/Scripts/datatables/Extensions/buttons.print.js"></script>
+<script src="~/Scripts/ckeditor5/ckeditor.js"></script>
+<script src="~/Areas/Supervision/js/ManInformeExSitu/AddEditExSitu.js?noCache=@Guid.NewGuid().ToString()"></script>
+@section scripts{
+    <script>
+        "use strict"; var rol = '';
+    $(document).ready(function () {
+        //Validamos el rol del usuario
+        utilSigo.ValidaRol('@ViewBag.VAliasRol', 'btnRegistrar', '@Model.vmControlCalidad.ddlIndicadorId');
+    });
+    </script>
+}
+<script type="text/javascript">
+    ManInforme_AddEditExSitu.fnLoadData('@Html.Raw(jsonModel)', "DataInfrArea");
+    ManInforme_AddEditExSitu.fnLoadData('@Html.Raw(Json.Encode(@Model.tbGrupoTaxonomico))', "DataCautGrupoTaxo");
+    ManInforme_AddEditExSitu.fnLoadData('@Html.Raw(Json.Encode(@Model.tbEquipoContFisico))', "DataCautEqContFisica");
+    ManInforme_AddEditExSitu.fnLoadData('@Html.Raw(Json.Encode(@Model.tbEquipoContQuimico))', "DataCautEqContQuimica");
+    ManInforme_AddEditExSitu.fnLoadData('@Html.Raw(Json.Encode(@Model.tbEquipoLimpieza))', "DataCautEqLimpieza");
+    ManInforme_AddEditExSitu.fnLoadData('@Html.Raw(Json.Encode(@Model.tbMaterialDesinfeccion))', "DataCautMatDesinfeccion");
+    ManInforme_AddEditExSitu.fnLoadData('@Html.Raw(Json.Encode(@Model.tbEquipoDesinfeccion))', "DataCautEqDesinfeccion");
+    ManInforme_AddEditExSitu.fnLoadData('@Html.Raw(Json.Encode(@Model.tbControlPlaga))', "DataCautControlPlaga");
+    ManInforme_AddEditExSitu.fnLoadData('@Html.Raw(Json.Encode(@Model.tbManejoRegistro))', "DataCautManRegistro");
+    ManInforme_AddEditExSitu.fnLoadData('@Html.Raw(Json.Encode(@Model.tbEnriquecimientoAmb))', "DataCautEnriquecimientoAmb");
+    ManInforme_AddEditExSitu.fnLoadData('@Html.Raw(Json.Encode(@Model.tbEspecieReproducida))', "DataCautEspecieReprod");
+    ManInforme_AddEditExSitu.fnLoadData('@Html.Raw(Json.Encode(@Model.tbEspecieCapturada))', "DataCautEspecieCapturada");
+    ManInforme_AddEditExSitu.fnLoadData('@Html.Raw(Json.Encode(@Model.tbCapacitacion))', "DataCautCapacitacion");
+    ManInforme_AddEditExSitu.fnLoadData('@Html.Raw(Json.Encode(@Model.tbEspecieNacimiento))', "DataCautEspecieNacimiento");
+    ManInforme_AddEditExSitu.fnLoadData('@Html.Raw(Json.Encode(@Model.tbEspecieEgreso))', "DataCautEspecieEgreso");
+    ManInforme_AddEditExSitu.fnLoadData('@Html.Raw(Json.Encode(@Model.tbRelPelCentroCria))', "DataRelPelCentroCria");
+    ManInforme_AddEditExSitu.fnLoadData('@Html.Raw(Json.Encode(@Model.tbEspecieCenso))', "DataCautEspecieCenso");
+    ManInforme_AddEditExSitu.fnLoadData('@Html.Raw(Json.Encode(@Model.tbActividadEducacion))', "DataCautActEducacion");
+    ManInforme_AddEditExSitu.fnLoadData('@Html.Raw(Json.Encode(@Model.tbActividadInvestigacion))', "DataCautActInvestigacion");
+    ManInforme_AddEditExSitu.fnLoadData('@Html.Raw(Json.Encode(@Model.tbEvalZoObservatorio))', "DataEvalZoObservatorio");
+    ManInforme_AddEditExSitu.fnLoadData('@Html.Raw(Json.Encode(@Model.tbBalanceIngEgr))', "DataCautBalanceIngEgr");
+</script>
+
+<link href="~/Areas/Supervision/css/ManInforme/AddEdit.css" rel="stylesheet" />
+
+<div class="container-fluid">
+    <div class="card">
+        <div class="card-header text-right">
+            @Model.lblTituloCabecera
+        </div>
+        <div class="card-body">
+            <div class="card">
+                <div class="card-header text-small">
+                    <a id="btnRegistrar" href="javascript:void(0)" style="cursor:pointer;" data-toggle="tooltip" data-placement="top" title="Guardar" onclick="ManInforme_AddEditExSitu.fnSubmitForm()"><i class="fa mx-2 fa-lg fa-save"></i></a>
+                    <a style="cursor:pointer;" data-toggle="tooltip" data-placement="top" title="Regresar" onclick="ManInforme_AddEditExSitu.fnReturnIndex()"><i class="fa mx-2 fa-lg fa-reply"></i></a>
+                    @Model.lblTituloEstado
+                </div>
+                <div class="card-body">
+                    <form id="frmManInforme_AddEditExSitu" action="@Url.Action("AddEditExSitu", "ManInformeExSitu", new { Area= "Supervision" })">
+                        @Html.HiddenFor(m => m.hdfCodInforme)
+                        @Html.HiddenFor(m => m.hdfRegEstado)
+                        @Html.HiddenFor(m => m.hdfCodMTipo)
+                        @Html.HiddenFor(m => m.hdfPerfil)
+                        <ul class="nav nav-tabs" id="myTab" role="tablist">
+                            <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#navEstado" role="tab" aria-controls="home" aria-selected="true">Estado Situacional</a></li>
+                            <li class="nav-item"><a class="nav-link active" data-toggle="tab" href="#navDatos" role="tab" aria-controls="home" aria-selected="true">Datos Generales</a></li>
+                            <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#navInfraestructura" role="tab" aria-controls="home" aria-selected="true">Infraestructura</a></li>
+                            <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#navCautiverio" role="tab" aria-controls="home" aria-selected="true">Manejo</a></li>
+                            <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#navImagenes" role="tab" aria-controls="home" aria-selected="true">Imágenes</a></li>
+                            <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#navZoObservatorio" role="tab" aria-controls="home" aria-selected="true">ZoObservatorio</a></li>
+                            <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#navObligTitular" role="tab" aria-controls="home" aria-selected="true">Obligaciones del TH</a></li>
+                            <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#navIncidencias" role="tab" aria-controls="home" aria-selected="true">Incidencias</a></li>
+                            <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#navConclusion" role="tab" aria-controls="home" aria-selected="true">Conclusiones</a></li>
+                            <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#navInformeDigital" role="tab" aria-controls="home" aria-selected="true">Informe digital</a></li>
+                        </ul>
+                        <div class="tab-content">
+                            <div class="tab-pane fade show" id="navEstado" role="tabpanel" aria-labelledby="nav-home-tab">
+                                @{ Html.RenderAction("_ControlCalidad", "Controles", new { area = "GENERAL", dto = Model.vmControlCalidad, disableControl = true }); }
+                                @Html.Action("_FormatoControlCalidad", "ManInforme", new { COD_INFORME = Model.hdfCodInforme })
+                            </div>
+                            <div class="tab-pane fade show active" id="navDatos" role="tabpanel" aria-labelledby="nav-home-tab">
+                                <div class="card">
+                                    <div class="card-header text-small"></div>
+                                    <div class="card-body">
+                                        <div class="form-row">
+                                            <div class="form-group col-md-2">
+                                                <label for="ddlOdId" class="text-small">Publicar en el Observatorio</label><br />
+                                                <div class="custom-control custom-radio custom-control-inline">
+                                                    @Html.RadioButton("chkPublicar", 1, Model.chkPublicar, new { @class = "custom-control-input", id = "rdbPublicarSi" })
+                                                    @Html.Label("rdbPublicarSi", "Si", new { @class = "custom-control-label", style = "margin-top:5px;font-size:14px;" })
+                                                </div>
+                                                <div class="custom-control custom-radio custom-control-inline">
+                                                    @Html.RadioButton("chkPublicar", 0, !Model.chkPublicar, new { @class = "custom-control-input", id = "rdbPublicarNo" })
+                                                    @Html.Label("rdbPublicarNo", "No", new { @class = "custom-control-label", style = "margin-top:5px;font-size:14px;" })
+                                                </div>
+                                            </div>
+                                            <div id="dvObsPublicar" class="form-group col-md-10" style="display:none;">
+                                                <label for="txtObsPublicar" class="text-small">Descripción del por qué no se publica en el Observatorio</label>
+                                                @Html.TextAreaFor(m => m.txtObsPublicar, new { @class = "form-control form-control-sm", @rows = "2" })
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="card-header text-small">Datos Título Habilitante/Carta de Notificación</div>
+                                    <div class="card-body">
+                                        @Html.Partial("~/Areas/Supervision/Views/ManInforme/Render/_renderCNotificacion.cshtml", Model.vmInfCNotificacion
+                                        , new ViewDataDictionary { { "TIPO", "SIMPLE" } })
+                                    </div>
+                                    <div class="card-header text-small">Datos del Informe</div>
+                                    <div class="card-body">
+                                        <div class="form-row">
+                                            <div class="form-group col-md-3">
+                                                <label for="ddlOdId" class="text-small">O.D. desde donde registra la información</label>
+                                                @Html.DropDownListFor(m => m.ddlOdId, new SelectList(Model.ddlOd, "Value", "Text"), new { @class = "form-control form-control-sm" })
+                                            </div>
+                                            <div class="form-group col-md-3">
+                                                <label for="txtNumInforme" class="text-small">N° Proyecto de Informe de Supervisión</label>
+                                                @Html.TextBoxFor(m => m.txtNumInforme, new { @class = "form-control form-control-sm" })
+                                            </div>
+                                            <div class="form-group col-md-2">
+                                                <label for="txtFechaEntrega" class="text-small">Fecha Entrega del Informe</label>
+                                                @Html.TextBoxFor(m => m.txtFechaEntrega, new { @class = "form-control form-control-sm", placeholder = "dd/mm/aaaa", maxlength = "10" })
+                                            </div>
+                                        </div>
+                                        <div class="form-row">
+                                            <div class="form-group col-md-5">
+                                                <div class="card">
+                                                    <div class="card-header">
+                                                        Denuncia
+                                                    </div>
+                                                    <div class="card-body">
+                                                        <div class="form-row ">
+                                                            <div class="form-group col-md-7">
+                                                                <label class="text-small" id="lblExpediente">Tramite STID</label>
+                                                                <div class="input-group">
+                                                                    <input type="text" id="inptExpediente" class="form-control form-control-sm" />
+                                                                    <div class="input-group-prepend">
+                                                                        <span class="input-group-text" id="idAddInforme">
+                                                                            <i class="fa fa-search" style="cursor:pointer;color:forestgreen"
+                                                                               onclick="ManInforme_AddEditExSitu.Denuncia.buscarTramite();">
+                                                                            </i>
+                                                                        </span>
+                                                                    </div>
+                                                                    <div class="input-group-prepend">
+                                                                        <span class="input-group-text" id="idAddInforme">
+                                                                            <i class="fa fa-close" style="cursor:pointer;color:darkred"
+                                                                               onclick="ManInforme_AddEditExSitu.Denuncia.eliminarTramite();">
+                                                                            </i>
+                                                                        </span>
+                                                                    </div>
+                                                                    <div class="input-group-prepend responseOk" style="display:none">
+                                                                        <span class="input-group-text">
+                                                                            <i class="fa fa-check-circle" data-toggle="tooltip" data-placement="top" title="N° Tramite OK" style="color:forestgreen">
+                                                                            </i>
+                                                                        </span>
+                                                                    </div>
+                                                                    <div class="input-group-prepend responseError" style="display:none">
+                                                                        <span class="input-group-text">
+                                                                            <i class="fa fa-times-circle" data-toggle="tooltip" data-placement="top" title="No existe N° de Tramite" style="color:darkred">
+                                                                            </i>
+                                                                        </span>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="form-group col-md-5">
+                                                                <label class="text-small">Atendido</label>
+                                                                <div style="margin-top:7px;">
+                                                                    <div class="custom-control custom-radio custom-control-inline">
+                                                                        <input type="radio" class="custom-control-input" id="rbtnAtendido1" name="rbtnAtendido" value="1">
+                                                                        <label class="custom-control-label" for="rbtnAtendido1">Atendido</label>
+                                                                    </div>
+                                                                    <div class="custom-control custom-radio custom-control-inline">
+                                                                        <input type="radio" class="custom-control-input" id="rbtnAtendido2" name="rbtnAtendido" value="2">
+                                                                        <label class="custom-control-label" for="rbtnAtendido2">En Proceso</label>
+                                                                    </div>
+                                                                    <div class="custom-control custom-radio custom-control-inline">
+                                                                        <input type="radio" class="custom-control-input" id="rbtnAtendido3" name="rbtnAtendido" value="3">
+                                                                        <label class="custom-control-label" for="rbtnAtendido3">Trasladado</label>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-row">
+                                            <div class="form-group col-md-4">
+                                                <div class="card">
+                                                    <div class="card-header text-small">
+                                                        Aspectos Evaluados
+                                                    </div>
+                                                    <div class="card-body" id="divAspectosEvaluados">
+                                                        <div class="form-row">
+                                                            <div class="form-group col-md-6">
+                                                                <div style="margin-top:7px;">
+                                                                    <div class="form-check form-check-inline">
+                                                                        @Html.CheckBoxFor(m => m.chkTodos, new { @class = "form-check-input", style = "width:15px;height:16px;" })
+                                                                        <label class="form-check-label" for="chkTodos">Todos los indicadores</label>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="form-group col-md-6">
+                                                                <div style="margin-top:7px;">
+                                                                    <div class="form-check form-check-inline">
+                                                                        @Html.CheckBoxFor(m => m.chkHechos, new { @class = "form-check-input", style = "width:15px;height:16px;" })
+                                                                        <label class="form-check-label" for="chkHechos">Hechos Denunciados</label>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+
+                                                        </div>
+                                                        <div class="form-row">
+                                                            <div class="form-group col-md-6">
+                                                                <div style="margin-top:7px;">
+                                                                    <div class="form-check form-check-inline">
+                                                                        @Html.CheckBoxFor(m => m.chkMandatos, new { @class = "form-check-input", style = "width:15px;height:16px;" })
+                                                                        <label class="form-check-label" for="chkMandatos">Mandatos</label>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="form-group col-md-6">
+                                                                <div style="margin-top:7px;">
+                                                                    <div class="form-check form-check-inline">
+                                                                        @Html.CheckBoxFor(m => m.chkMedidas, new { @class = "form-check-input", style = "width:15px;height:16px;" })
+                                                                        <label class="form-check-label" for="chkMedidas">Medidas Correctivas</label>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        @*<div class="form-row">
+                            <div class="form-group col-md-4">
+                                <div class="card">
+                                    <div class="card-header text-small">
+                                        Médico Veterinario
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="form-row">
+                                            <div class="form-group col-md-6">
+                                                <label for="ddlOdId" class="text-small">Cuenta?</label>
+                                                @Html.DropDownListFor(m => m.ddlCuentaVetMedId, new SelectList(Model.ddlCuentaVetMed, "Value", "Text"), new { @class = "form-control form-control-sm" })
+                                            </div>
+                                            @if (Model.ddlCuentaVetMedId == "0000002")
+                                            {
+                                                <div class="form-group col-md-6" id="divTipoMedVet">
+                                                    <label for="ddlOdId" class="text-small">Tipo</label>
+                                                    @Html.DropDownListFor(m => m.ddlTipoVisMedId, new SelectList(Model.ddlTipoVisMed, "Value", "Text"), new { @class = "form-control form-control-sm" })
+                                                </div>
+                                            }
+                                            else
+                                            {
+                                                <div class="form-group col-md-6" id="divTipoMedVet" hidden>
+                                                    <label for="ddlOdId" class="text-small">Tipo</label>
+                                                    @Html.DropDownListFor(m => m.ddlTipoVisMedId, new SelectList(Model.ddlTipoVisMed, "Value", "Text"), new { @class = "form-control form-control-sm" })
+                                                </div>
+                                            }
+
+                                        </div>
+                                        @if (Model.ddlCuentaVetMedId == "0000002")
+                                        {
+                                            <div class="form-row" id="divVisitaMedVet">
+                                                <div class="form-group col-md-6">
+                                                    <label for="txtFechaEntrega" class="text-small">Visitas por Mes</label>
+                                                    @Html.TextBoxFor(m => m.txtVisitaporMes, new { @class = "form-control form-control-sm", placeholder = "Ingrese Valor", maxlength = "40" })
+                                                </div>
+                                                <div class="form-group col-md-6">
+                                                    <label for="txtFechaEntrega" class="text-small">Observaciones</label>
+                                                    @Html.TextBoxFor(m => m.txtObsMedVet, new { @class = "form-control form-control-sm", placeholder = "Ingrese Valor", maxlength = "200" })
+                                                </div>
+                                            </div>
+
+                                        }
+                                        else
+                                        {
+                                            <div class="form-row" id="divVisitaMedVet" hidden>
+                                                <div class="form-group col-md-6">
+                                                    <label for="txtFechaEntrega" class="text-small">Visita por Mes</label>
+                                                    @Html.TextBoxFor(m => m.txtVisitaporMes, new { @class = "form-control form-control-sm", placeholder = "Ingrese Valor", maxlength = "40" })
+                                                </div>
+                                                <div class="form-group col-md-6">
+                                                    <label for="txtFechaEntrega" class="text-small">Observaciones</label>
+                                                    @Html.TextBoxFor(m => m.txtObsMedVet, new { @class = "form-control form-control-sm", placeholder = "Ingrese Valor", maxlength = "200" })
+                                                </div>
+                                            </div>
+                                        }
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>*@
+                                        @*<div class="form-row">
+                            <div class="col-md-6">
+                                @Html.Partial("~/Areas/Supervision/Views/ManInforme/Render/_renderPersonalTecProf.cshtml", Model.tbPersonalTecProf)
+                            </div>
+                        </div>*@
+                                        <br />
+                                        <div class="form-row">
+                                            <div class="col-md-12">
+                                                @Html.Partial("~/Areas/Supervision/Views/ManInforme/Render/_renderSupervisorCalidad.cshtml", new CapaEntidad.ViewModel.VM_SupervisorCalidad() { hdSupervisor_Calidad = Model.hdSupervisor_Calidad, Nombre_Supervisor_Calidad = Model.Nombre_Supervisor_Calidad })
+                                            </div>
+                                        </div>
+                                        <div class="form-row">
+                                            <div class="col-md-6">
+                                                @Html.Partial("~/Areas/Supervision/Views/ManInforme/Render/_renderSupervisor.cshtml", Model.tbSupervisor)
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="card-header text-small">Datos de la Supervisión</div>
+                                    <div class="card-body">
+                                        @Html.Partial("~/Areas/Supervision/Views/ManInforme/Render/_renderDatosSupervision.cshtml", Model.vmDatoSupervision)
+                                    </div>
+                                    <div class="card-header text-small">Licencia de Funcionamiento</div>
+                                    <div class="card-body">
+                                        <div class="form-row">
+                                            <div class="form-group col-md-1">
+                                                <label for="chkLicFuncionamiento" class="text-small">Cuenta?</label>
+                                                <div style="margin-top:7px;">
+                                                    <div class="form-check form-check-inline">
+                                                        @Html.CheckBoxFor(m => m.chkLicFuncionamiento, new { @class = "form-check-input", style = "width:15px;height:16px;" })
+                                                        <label class="form-check-label" for="chkLicFuncionamiento"></label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div id="dvDatosLicFuncionamiento" class="form-group col-md-5" style="display:none;">
+                                                <label for="txtLicFuncionamiento" class="text-small">N° de Licencia</label>
+                                                @Html.TextBoxFor(m => m.txtLicFuncionamiento, new { @class = "form-control form-control-sm" })
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="card-header text-small">Ubicación del Título Habilitante</div>
+                                    <div class="card-body">
+                                        <div class="form-row">
+                                            <div class="col-md-6 mb-3">
+                                                <label for="txtUbigeo" class="text-small">Ubigeo<i class="fa fa-cog fa-spin text-danger" id="iconUbigeo" style="display:none;" data-toggle="tooltip" data-placement="top" title="Seleccione Ubigeo"></i></label>
+                                                <div class="input-group">
+                                                    <div class="input-group-prepend">
+                                                        <span class="input-group-text"><i class="fa fa-search" style="cursor:pointer;" data-toggle="tooltip" data-placement="top" title="Seleccionar Ubigeo" onclick="ManInforme_AddEditExSitu.fnViewModalUbigeo();"></i></span>
+                                                    </div>
+                                                    @Html.EditorFor(m => m.txtUbigeo, new { htmlAttributes = new { @class = "form-control form-control-sm", @disabled = "disabled" } })
+                                                    @Html.HiddenFor(m => m.hdfCodUbigeo)
+                                                </div>
+                                            </div>
+                                            <div class="form-group col-md-6">
+                                                <label for="txtSector" class="text-small">Sector</label>
+                                                @Html.TextBoxFor(m => m.txtSector, new { @class = "form-control form-control-sm" })
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="card-header text-small">Regente a Cargo</div>
+                                    <div class="card-body">
+                                        <div class="form-row">
+                                            <div class="form-group col-md-1">
+                                                <label for="chkRegente" class="text-small">Cuenta?</label>
+                                                <div style="margin-top:7px;">
+                                                    <div class="form-check form-check-inline">
+                                                        @Html.CheckBoxFor(m => m.chkRegente, new { @class = "form-check-input", style = "width:15px;height:16px;" })
+                                                        <label class="form-check-label" for="chkRegente"></label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-group col-md-5 dvDatosRegente" style="display:none;">
+                                                <label for="txtRegente" class="text-small">Regente<i class="fa fa-cog fa-spin text-danger" id="iconRegente" style="display:none;" data-toggle="tooltip" data-placement="top" title="Seleccione el regente"></i></label>
+                                                <div class="input-group">
+                                                    @Html.TextBoxFor(m => m.txtRegente, new { @class = "form-control form-control-sm", disabled = "disabled" })
+                                                    @Html.HiddenFor(m => m.hdfCodRegente)
+                                                    <div class="input-group-prepend">
+                                                        <span class="input-group-text" style="cursor:pointer;" onclick="ManInforme_AddEditExSitu.fnBuscarPersona('REGENTE', '0000020,0000003')"><i class="fa fa-search" data-toggle="tooltip" data-placement="top" title="Seleccionar el regente a cargo"></i></span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-group col-md-2 dvDatosRegente" style="display:none;">
+                                                <label for="txtCodigoRegente" class="text-small">Código Regente</label>
+                                                @Html.TextBoxFor(m => m.txtCodigoRegente, new { @class = "form-control form-control-sm" })
+                                            </div>
+                                            <div class="form-group col-md-2 dvDatosRegente" style="display:none;">
+                                                <label for="txtFecIniRegencia" class="text-small">Fecha Inicio Regencia</label>
+                                                @Html.TextBoxFor(m => m.txtFecIniRegencia, new { @class = "form-control form-control-sm", placeholder = "dd/mm/aaaa", maxlength = "10" })
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="card-header text-small">Fines de Creación</div>
+                                    <div class="card-body">
+                                        @*<div class="form-row">
+                            <div class="form-group col-md-6">
+                                <div style="margin-top:7px;">
+                                    <div class="form-check form-check-inline">
+                                        @Html.CheckBoxFor(m => m.chkTodos, new { @class = "form-check-input", style = "width:15px;height:16px;" })
+                                        <label class="form-check-label" for="chkTodos">Todos los indicadores</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>*@
+                                        <div class="form-row">
+                                            <div class="form-group col-md-6">
+                                                <label for="txtObjetivoActual" class="text-small">Objetivos Actuales</label>
+                                                @Html.TextAreaFor(m => m.txtObjetivoActual, new { @class = "form-control form-control-sm", @rows = "2" })
+                                            </div>
+                                            <div class="form-group col-md-6">
+                                                <label for="txtObjetivoPrincipal" class="text-small">Objetivos Principales</label>
+                                                @Html.TextAreaFor(m => m.txtObjetivoPrincipal, new { @class = "form-control form-control-sm", @rows = "2" })
+                                            </div>
+                                        </div>
+                                        <div class="form-row">
+                                            <div class="form-group col-md-1">
+                                                <label for="chkRecibeVisita" class="text-small">Recibe Visitas</label>
+                                                <div style="margin-top:7px;">
+                                                    <div class="form-check form-check-inline">
+                                                        @Html.CheckBoxFor(m => m.chkRecibeVisita, new { @class = "form-check-input", style = "width:15px;height:16px;" })
+                                                        <label class="form-check-label" for="chkRecibeVisita"></label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-group col-md-3">
+                                                <label for="chkReproduceEspCautiverio" class="text-small">Reproduce Especies en Cautiverio Bajo Manejo</label>
+                                                <div style="margin-top:7px;">
+                                                    <div class="form-check form-check-inline">
+                                                        @Html.CheckBoxFor(m => m.chkReproduceEspCautiverio, new { @class = "form-check-input", style = "width:15px;height:16px;" })
+                                                        <label class="form-check-label" for="chkReproduceEspCautiverio"></label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="card-header text-small">Fuentes de Financiamiento</div>
+                                    <div class="card-body">
+                                        <div class="form-row">
+                                            <div class="form-group col-md-6 mb-0">
+                                                <div class="form-check form-check-inline">
+                                                    <label class="text-small">TIPO</label>
+                                                    @Html.CheckBoxFor(m => m.chkFFPropia, new { @class = "form-check-input ml-4", style = "margin-left:18px!important;width:15px;height:16px;" })
+                                                    <label class="form-check-label text-small" for="chkFFPropia">Propia</label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-row">
+                                            <div class="form-group col-md-6 mb-0">
+                                                <div class="form-check form-check-inline ml-5">
+                                                    @Html.CheckBoxFor(m => m.chkFFDonaciones, new { @class = "form-check-input", style = "width:15px;height:16px;" })
+                                                    <label class="form-check-label text-small" for="chkFFDonaciones">Donaciones</label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-row">
+                                            <div class="form-group col-md-6 mb-0">
+                                                <div class="form-check form-check-inline ml-5">
+                                                    @Html.CheckBoxFor(m => m.chkFFCredito, new { @class = "form-check-input", style = "width:15px;height:16px;" })
+                                                    <label class="form-check-label text-small" for="chkFFCredito">Crédito/Prestamo</label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-row">
+                                            <div class="form-group col-md-6 mb-0">
+                                                <div class="form-check form-check-inline ml-5">
+                                                    @Html.CheckBoxFor(m => m.chkFFInversionista, new { @class = "form-check-input", style = "width:15px;height:16px;" })
+                                                    <label class="form-check-label text-small" for="chkFFInversionista">Inversionista</label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-row">
+                                            <div class="form-group col-md-6 mb-0">
+                                                <div class="form-check form-check-inline ml-5">
+                                                    @Html.CheckBoxFor(m => m.chkFFApoyo, new { @class = "form-check-input", style = "width:15px;height:16px;" })
+                                                    <label class="form-check-label text-small" for="chkFFApoyo">Apoyo Internacional</label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-row">
+                                            <div class="form-group col-md-6 mb-0">
+                                                <div class="form-check form-check-inline ml-5">
+                                                    @Html.CheckBoxFor(m => m.chkFFVoluntario, new { @class = "form-check-input", style = "width:15px;height:16px;" })
+                                                    <label class="form-check-label text-small" for="chkFFVoluntario">Voluntario</label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-row">
+                                            <div class="form-group">
+                                                <label for="txtFFOtro" class="text-small">OTRO</label>
+                                            </div>
+                                            <div class="form-group col-md-3 ml-2">
+                                                @Html.TextBoxFor(m => m.txtFFOtro, new { @class = "form-control form-control-sm", maxlength = "45" })
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="card-header text-small">Desplazamiento</div>
+                                    <div class="card-body">
+                                        <div class="form-row">
+                                            <div class="col-md-12">
+                                                @Html.Partial("~/Areas/Supervision/Views/ManInforme/Render/_renderDesplazamiento.cshtml", Model.tbDesplazamiento)
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="card-header text-small">Observación</div>
+                                    <div class="card-body">
+                                        <div class="form-row">
+                                            <div class="form-group col-md-12">
+                                                @Html.TextAreaFor(m => m.txtObservacion, new { @class = "form-control form-control-sm", @rows = "4" })
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="card-header text-small">Archivos Cargados en el SIADO</div>
+                                    <div class="card-body">
+                                        <div class="form-row">
+                                            @{
+                                                Html.RenderAction("_IntegracionSIADO", "Controles", new { area = "GENERAL", asCriterio = "SUBTIP_TITDOCSIGO", asSubCriterio = "0006", asValor = Model.hdfCodInforme });
+                                            }
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="tab-pane fade show" id="navInfraestructura" role="tabpanel" aria-labelledby="nav-home-tab">
+                                <div class="card">
+                                    <div class="card-header text-small"></div>
+                                    <div class="card-body">
+                                        <div class="form-row">
+                                            <div class="form-group col-md-2">
+                                                <label for="chkCroquis" class="text-small">Cuenta con Croquis</label>
+                                                <div style="margin-top:7px;">
+                                                    <div class="form-check form-check-inline">
+                                                        @Html.CheckBoxFor(m => m.chkCroquis, new { @class = "form-check-input", style = "width:15px;height:16px;" })
+                                                        <label class="form-check-label" for="chkCroquis"></label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-group col-md-2">
+                                                <label for="chkViaSenalizada" class="text-small">Cuenta con Vías Señalizada</label>
+                                                <div style="margin-top:7px;">
+                                                    <div class="form-check form-check-inline">
+                                                        @Html.CheckBoxFor(m => m.chkViaSenalizada, new { @class = "form-check-input", style = "width:15px;height:16px;" })
+                                                        <label class="form-check-label" for="chkViaSenalizada"></label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-group col-md-2">
+                                                <label for="chkCartelAreaAdmin" class="text-small">Tiene Cartel Área Administrativa</label>
+                                                <div style="margin-top:7px;">
+                                                    <div class="form-check form-check-inline">
+                                                        @Html.CheckBoxFor(m => m.chkCartelAreaAdmin, new { @class = "form-check-input", style = "width:15px;height:16px;" })
+                                                        <label class="form-check-label" for="chkCartelAreaAdmin"></label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-group col-md-2">
+                                                <label for="chkCartelSSHH" class="text-small">Tiene Cartel Servicios Higiénicos</label>
+                                                <div style="margin-top:7px;">
+                                                    <div class="form-check form-check-inline">
+                                                        @Html.CheckBoxFor(m => m.chkCartelSSHH, new { @class = "form-check-input", style = "width:15px;height:16px;" })
+                                                        <label class="form-check-label" for="chkCartelSSHH"></label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <hr />
+                                        <div class="form-row">
+                                            <div>
+                                                <button type="button" class="dt-button buttons-excel buttons-html5 ml-2" onclick="ManInforme_AddEditExSitu.fnAddEditExportarExcel(ManInforme_AddEditExSitu.dtInfrArea_Exhibicion,'AREA_EXHIBICION',1);">Excel</button>
+                                            </div>
+                                            <div class="table-responsive">
+                                                <table id="tbInfrArea_Exhibicion" style="width:100%" class="table table-hover table-bordered">
+                                                    <thead>
+                                                        <tr>
+                                                            <th colspan="8" class="text-sm-left">
+                                                                <div class="form-inline">
+                                                                    <i class="fa mx-2 fa-lg fa-file-o" style="cursor:pointer;" onclick="ManInforme_AddEditExSitu.fnAddEditArea('0000001', '');" data-toggle="tooltip" data-placement="top" title="Nuevo"></i>
+                                                                    <i class="fa mx-2 fa-lg fa-window-close-o" style="cursor:pointer;" onclick="ManInforme_AddEditExSitu.fnDeleteAllArea('0000001');" data-toggle="tooltip" data-placement="top" title="Eliminar Todos"></i>
+                                                                    <label style="cursor:pointer;" class="fa mx-2 fa-lg fa-file-excel-o" title="Importar Archivo" data-toggle="tooltip">
+                                                                        <input type="file" id="fileselect" name="fileselect" style="display:none" size="60" onchange="ManInforme_AddEditExSitu.fnImportArea('0000001', event, this)">
+                                                                    </label>
+                                                                    <a href="@Url.Content("~/Archivos/Plantilla/InformeFaunaInfraestructura.xlsx")"> <i class="fa mx-2 fa-lg fa-folder-open" style="cursor:pointer;" data-toggle="tooltip" data-placement="top" title="Descargar Plantilla"></i></a>
+                                                                    <strong>
+                                                                        Registro de Áreas de Exhibición
+                                                                    </strong>
+                                                                </div>
+                                                            </th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody></tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                        <hr />
+                                        <div class="form-row">
+                                            <div>
+                                                <button type="button" class="dt-button buttons-excel buttons-html5 ml-2" onclick="ManInforme_AddEditExSitu.fnAddEditExportarExcel(ManInforme_AddEditExSitu.dtInfrArea_Crianza,'AREAS_DE_CRIANZA/REPRODUCCION',1);">Excel</button>
+                                            </div>
+                                            <div class="table-responsive">
+                                                <table id="tbInfrArea_Crianza" style="width:100%" class="table table-hover table-bordered">
+                                                    <thead>
+                                                        <tr>
+                                                            <th colspan="8" class="text-sm-left">
+                                                                <div class="form-inline">
+                                                                    <i class="fa mx-2 fa-lg fa-file-o" style="cursor:pointer;" onclick="ManInforme_AddEditExSitu.fnAddEditArea('0000002', '');" data-toggle="tooltip" data-placement="top" title="Nuevo"></i>
+                                                                    <i class="fa mx-2 fa-lg fa-window-close-o" style="cursor:pointer;" onclick="ManInforme_AddEditExSitu.fnDeleteAllArea('0000002');" data-toggle="tooltip" data-placement="top" title="Eliminar Todos"></i>
+                                                                    <label style="cursor:pointer;" class="fa mx-2 fa-lg fa-file-excel-o" title="Importar Archivo" data-toggle="tooltip">
+                                                                        <input type="file" id="fileselect" name="fileselect" style="display:none" size="60" onchange="ManInforme_AddEditExSitu.fnImportArea('0000002', event, this)">
+                                                                    </label>
+                                                                    <a href="@Url.Content("~/Archivos/Plantilla/InformeFaunaInfraestructura.xlsx")"> <i class="fa mx-2 fa-lg fa-folder-open" style="cursor:pointer;" data-toggle="tooltip" data-placement="top" title="Descargar Plantilla"></i></a>
+                                                                    <strong>
+                                                                        Registro de Áreas de Crianza / Reproducción
+                                                                    </strong>
+                                                                </div>
+                                                            </th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody></tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                        <hr />
+                                        <div class="form-row">
+                                            <div>
+                                                <button type="button" class="dt-button buttons-excel buttons-html5 ml-2" onclick="ManInforme_AddEditExSitu.fnAddEditExportarExcel(ManInforme_AddEditExSitu.dtInfrArea_Preparacion,'PREPARACION_DE_ALIMENTOS',2);">Excel</button>
+                                            </div>
+                                            <div class="table-responsive">
+                                                <table id="tbInfrArea_Preparacion" style="width:100%" class="table table-hover table-bordered">
+                                                    <thead>
+                                                        <tr>
+                                                            <th colspan="8" class="text-sm-left">
+                                                                <div class="form-inline">
+                                                                    <i class="fa mx-2 fa-lg fa-file-o" style="cursor:pointer;" onclick="ManInforme_AddEditExSitu.fnAddEditArea('0000003', '');" data-toggle="tooltip" data-placement="top" title="Nuevo"></i>
+                                                                    <i class="fa mx-2 fa-lg fa-window-close-o" style="cursor:pointer;" onclick="ManInforme_AddEditExSitu.fnDeleteAllArea('0000003');" data-toggle="tooltip" data-placement="top" title="Eliminar Todos"></i>
+                                                                    <label style="cursor:pointer;" class="fa mx-2 fa-lg fa-file-excel-o" title="Importar Archivo" data-toggle="tooltip">
+                                                                        <input type="file" id="fileselect" name="fileselect" style="display:none" size="60" onchange="ManInforme_AddEditExSitu.fnImportArea('0000003', event, this)">
+                                                                    </label>
+                                                                    <a href="@Url.Content("~/Archivos/Plantilla/InformeFaunaInfraestructura.xlsx")"> <i class="fa mx-2 fa-lg fa-folder-open" style="cursor:pointer;" data-toggle="tooltip" data-placement="top" title="Descargar Plantilla"></i></a>
+                                                                    <strong>
+                                                                        Registro de Áreas de Preparación de Alimentos
+                                                                    </strong>
+                                                                </div>
+                                                            </th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody></tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                        <hr />
+                                        <div class="form-row">
+                                            <div>
+                                                <button type="button" class="dt-button buttons-excel buttons-html5 ml-2" onclick="ManInforme_AddEditExSitu.fnAddEditExportarExcel(ManInforme_AddEditExSitu.dtInfrArea_Almacen,'ALMACEN_DE_ALIMENTOS',2);">Excel</button>
+                                            </div>
+                                            <div class="table-responsive">
+                                                <table id="tbInfrArea_Almacen" style="width:100%" class="table table-hover table-bordered">
+                                                    <thead>
+                                                        <tr>
+                                                            <th colspan="8" class="text-sm-left">
+                                                                <div class="form-inline">
+                                                                    <i class="fa mx-2 fa-lg fa-file-o" style="cursor:pointer;" onclick="ManInforme_AddEditExSitu.fnAddEditArea('0000004', '');" data-toggle="tooltip" data-placement="top" title="Nuevo"></i>
+                                                                    <i class="fa mx-2 fa-lg fa-window-close-o" style="cursor:pointer;" onclick="ManInforme_AddEditExSitu.fnDeleteAllArea('0000004');" data-toggle="tooltip" data-placement="top" title="Eliminar Todos"></i>
+                                                                    <label style="cursor:pointer;" class="fa mx-2 fa-lg fa-file-excel-o" title="Importar Archivo" data-toggle="tooltip">
+                                                                        <input type="file" id="fileselect" name="fileselect" style="display:none" size="60" onchange="ManInforme_AddEditExSitu.fnImportArea('0000004', event, this)">
+                                                                    </label>
+                                                                    <a href="@Url.Content("~/Archivos/Plantilla/InformeFaunaInfraestructura.xlsx")"> <i class="fa mx-2 fa-lg fa-folder-open" style="cursor:pointer;" data-toggle="tooltip" data-placement="top" title="Descargar Plantilla"></i></a>
+                                                                    <strong>
+                                                                        Registro de Áreas de Almacén de Alimentos
+                                                                    </strong>
+                                                                </div>
+                                                            </th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody></tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                        <hr />
+                                        <div class="form-row">
+                                            <div>
+                                                <button type="button" class="dt-button buttons-excel buttons-html5 ml-2" onclick="ManInforme_AddEditExSitu.fnAddEditExportarExcel(ManInforme_AddEditExSitu.dtInfrArea_Topico,'AREAS_DE_TOPICO',2);">Excel</button>
+                                            </div>
+                                            <div class="table-responsive">
+                                                <table id="tbInfrArea_Topico" style="width:100%" class="table table-hover table-bordered">
+                                                    <thead>
+                                                        <tr>
+                                                            <th colspan="8" class="text-sm-left">
+                                                                <div class="form-inline">
+                                                                    <i class="fa mx-2 fa-lg fa-file-o" style="cursor:pointer;" onclick="ManInforme_AddEditExSitu.fnAddEditArea('0000005', '');" data-toggle="tooltip" data-placement="top" title="Nuevo"></i>
+                                                                    <i class="fa mx-2 fa-lg fa-window-close-o" style="cursor:pointer;" onclick="ManInforme_AddEditExSitu.fnDeleteAllArea('0000005');" data-toggle="tooltip" data-placement="top" title="Eliminar Todos"></i>
+                                                                    <label style="cursor:pointer;" class="fa mx-2 fa-lg fa-file-excel-o" title="Importar Archivo" data-toggle="tooltip">
+                                                                        <input type="file" id="fileselect" name="fileselect" style="display:none" size="60" onchange="ManInforme_AddEditExSitu.fnImportArea('0000005', event, this)">
+                                                                    </label>
+                                                                    <a href="@Url.Content("~/Archivos/Plantilla/InformeFaunaInfraestructura.xlsx")"> <i class="fa mx-2 fa-lg fa-folder-open" style="cursor:pointer;" data-toggle="tooltip" data-placement="top" title="Descargar Plantilla"></i></a>
+                                                                    <strong>
+                                                                        Registro de Áreas de Tópico
+                                                                    </strong>
+                                                                </div>
+                                                            </th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody></tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                        <hr />
+                                        <div class="form-row">
+                                            <div>
+                                                <button type="button" class="dt-button buttons-excel buttons-html5 ml-2" onclick="ManInforme_AddEditExSitu.fnAddEditExportarExcel(ManInforme_AddEditExSitu.dtInfrArea_Cuarentena,'ÁREAS_DE_CUARENTENA',1);">Excel</button>
+                                            </div>
+                                            <div class="table-responsive">
+                                                <table id="tbInfrArea_Cuarentena" style="width:100%" class="table table-hover table-bordered">
+                                                    <thead>
+                                                        <tr>
+                                                            <th colspan="8" class="text-sm-left">
+                                                                <div class="form-inline">
+                                                                    <i class="fa mx-2 fa-lg fa-file-o" style="cursor:pointer;" onclick="ManInforme_AddEditExSitu.fnAddEditArea('0000006', '');" data-toggle="tooltip" data-placement="top" title="Nuevo"></i>
+                                                                    <i class="fa mx-2 fa-lg fa-window-close-o" style="cursor:pointer;" onclick="ManInforme_AddEditExSitu.fnDeleteAllArea('0000006');" data-toggle="tooltip" data-placement="top" title="Eliminar Todos"></i>
+                                                                    <label style="cursor:pointer;" class="fa mx-2 fa-lg fa-file-excel-o" title="Importar Archivo" data-toggle="tooltip">
+                                                                        <input type="file" id="fileselect" name="fileselect" style="display:none" size="60" onchange="ManInforme_AddEditExSitu.fnImportArea('0000006', event, this)">
+                                                                    </label>
+                                                                    <a href="@Url.Content("~/Archivos/Plantilla/InformeFaunaInfraestructura.xlsx")"> <i class="fa mx-2 fa-lg fa-folder-open" style="cursor:pointer;" data-toggle="tooltip" data-placement="top" title="Descargar Plantilla"></i></a>
+                                                                    <strong>
+                                                                        Registro de Áreas de Cuarentena
+                                                                    </strong>
+                                                                </div>
+                                                            </th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody></tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                        <div class="form-row">
+                                            <div class="form-group col-md-12">
+                                                <label for="txtDescOtroAmbiente" class="text-small">Especifique Otros Ambientes</label>
+                                                @Html.TextAreaFor(m => m.txtDescOtroAmbiente, new { @class = "form-control form-control-sm", @rows = "3" })
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="tab-pane fade show" id="navCautiverio" role="tabpanel" aria-labelledby="nav-home-tab">
+                                <div class="card">
+                                    <div class="card-header text-small"></div>
+                                    <div class="card-body">
+                                        <div class="form-row">
+                                            <div class="form-group col-md-4">
+                                                <div class="card mb-0">
+                                                    <div class="card-header text-small">
+                                                        Médico Veterinario
+                                                    </div>
+                                                    <div class="card-body">
+                                                        <div class="form-row">
+                                                            <div class="form-group col-md-6">
+                                                                <label for="ddlOdId" class="text-small">Cuenta?</label>
+                                                                @Html.DropDownListFor(m => m.ddlCuentaVetMedId, new SelectList(Model.ddlCuentaVetMed, "Value", "Text"), new { @class = "form-control form-control-sm" })
+                                                            </div>
+                                                            @if (Model.ddlCuentaVetMedId == "0000002")
+                                                            {
+                                                                <div class="form-group col-md-6" id="divTipoMedVet">
+                                                                    <label for="ddlOdId" class="text-small">Tipo</label>
+                                                                    @Html.DropDownListFor(m => m.ddlTipoVisMedId, new SelectList(Model.ddlTipoVisMed, "Value", "Text"), new { @class = "form-control form-control-sm" })
+                                                                </div>
+                                                            }
+                                                            else
+                                                            {
+                                                                <div class="form-group col-md-6" id="divTipoMedVet" hidden>
+                                                                    <label for="ddlOdId" class="text-small">Tipo</label>
+                                                                    @Html.DropDownListFor(m => m.ddlTipoVisMedId, new SelectList(Model.ddlTipoVisMed, "Value", "Text"), new { @class = "form-control form-control-sm" })
+                                                                </div>
+                                                            }
+
+                                                        </div>
+                                                        @if (Model.ddlCuentaVetMedId == "0000002")
+                                                        {
+                                                            <div class="form-row" id="divVisitaMedVet">
+                                                                <div class="form-group col-md-6">
+                                                                    <label for="txtFechaEntrega" class="text-small">Visitas por Mes</label>
+                                                                    @Html.TextBoxFor(m => m.txtVisitaporMes, new { @class = "form-control form-control-sm", placeholder = "Ingrese Valor", maxlength = "40" })
+                                                                </div>
+                                                                <div class="form-group col-md-6">
+                                                                    <label for="txtFechaEntrega" class="text-small">Observaciones</label>
+                                                                    @Html.TextBoxFor(m => m.txtObsMedVet, new { @class = "form-control form-control-sm", placeholder = "Ingrese Valor", maxlength = "200" })
+                                                                </div>
+                                                            </div>
+
+                                                        }
+                                                        else
+                                                        {
+                                                            <div class="form-row" id="divVisitaMedVet" hidden>
+                                                                <div class="form-group col-md-6">
+                                                                    <label for="txtFechaEntrega" class="text-small">Visita por Mes</label>
+                                                                    @Html.TextBoxFor(m => m.txtVisitaporMes, new { @class = "form-control form-control-sm", placeholder = "Ingrese Valor", maxlength = "40" })
+                                                                </div>
+                                                                <div class="form-group col-md-6">
+                                                                    <label for="txtFechaEntrega" class="text-small">Observaciones</label>
+                                                                    @Html.TextBoxFor(m => m.txtObsMedVet, new { @class = "form-control form-control-sm", placeholder = "Ingrese Valor", maxlength = "200" })
+                                                                </div>
+                                                            </div>
+                                                        }
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-row">
+                                            <div class="form-group col-md-4">
+                                                <label for="txtResponsable" class="text-small">Responsable</label>
+                                                <div class="input-group">
+                                                    @Html.TextBoxFor(m => m.txtResponsable, new { @class = "form-control form-control-sm", disabled = "disabled" })
+                                                    @Html.HiddenFor(m => m.hdfCodResponsable)
+                                                    <div class="input-group-prepend">
+                                                        <span class="input-group-text" style="cursor:pointer;" onclick="ManInforme_AddEditExSitu.fnBuscarPersona('RESPONSABLE','TODOS')"><i class="fa fa-search-plus" data-toggle="tooltip" data-placement="top" title="Seleccione el responsable"></i></span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-row">
+                                            <div class="col-md-6">
+                                                @Html.Partial("~/areas/supervision/views/maninforme/render/_renderpersonaltecprof.cshtml", Model.tbPersonalTecProf)
+                                            </div>
+                                        </div>
+                                        <div class="form-row">
+                                            <div class="table-responsive">
+                                                <table id="tbRelPerCentroCria" style="width:100%" class="table table-hover table-bordered">
+                                                    <thead>
+                                                        <tr>
+                                                            <th colspan="4" class="text-sm-left">
+                                                                <div class="form-inline">
+                                                                    <i class="fa mx-2 fa-lg fa-file-o" style="cursor:pointer;" onclick="ManInforme_AddEditExSitu.fnAddEditRelPerCentroCria('RELPER_CENTROCRIA', '');" data-toggle="tooltip" data-placement="top" title="Nuevo"></i>
+                                                                    <strong>
+                                                                        Relación del Personal del centro de cría
+                                                                    </strong>
+                                                                </div>
+                                                            </th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody></tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="card-header text-small">Manejo Alimentario</div>
+                                    <div class="card-body">
+                                        <div class="form-row">
+                                            <div class="form-group col-md-2">
+                                                <label for="chkProgAlimentacion" class="text-small">Programa de Alimentación</label>
+                                                <div style="margin-top:7px;">
+                                                    <div class="form-check form-check-inline">
+                                                        @Html.CheckBoxFor(m => m.chkProgAlimentacion, new { @class = "form-check-input", style = "width:15px;height:16px;" })
+                                                        <label class="form-check-label" for="chkProgAlimentacion"></label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-group col-md-2">
+                                                <label for="chkProtAlimentacion" class="text-small">Protocolo de Alimentación</label>
+                                                <div style="margin-top:7px;">
+                                                    <div class="form-check form-check-inline">
+                                                        @Html.CheckBoxFor(m => m.chkProtAlimentacion, new { @class = "form-check-input", style = "width:15px;height:16px;" })
+                                                        <label class="form-check-label" for="chkProtAlimentacion"></label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-row">
+                                            <div class="form-group col-md-6">
+                                                <label for="txtHoraRepAlimento" class="text-small">Horario de reparto de alimento</label>
+                                                @Html.TextAreaFor(m => m.txtHoraRepAlimento, new { @class = "form-control form-control-sm", @rows = "2" })
+                                            </div>
+                                            <div class="form-group col-md-6">
+                                                <label for="txtDiaAbastecimiento" class="text-small">Días de abastecimiento</label>
+                                                @Html.TextAreaFor(m => m.txtDiaAbastecimiento, new { @class = "form-control form-control-sm", @rows = "2" })
+                                            </div>
+                                        </div>
+                                        @*<div class="form-row">
+                            <div class="table-responsive">
+                                <table id="tbRelPerCentroCria" style="width:100%" class="table table-hover table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <th colspan="4" class="text-sm-left">
+                                                <div class="form-inline">
+                                                    <i class="fa mx-2 fa-lg fa-file-o" style="cursor:pointer;" onclick="ManInforme_AddEditExSitu.fnAddEditRelPerCentroCria('RELPER_CENTROCRIA', '');" data-toggle="tooltip" data-placement="top" title="Nuevo"></i>
+                                                    <strong>
+                                                        Relación del Personal del centro de cría
+                                                    </strong>
+                                                </div>
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody></tbody>
+                                </table>
+                            </div>
+                        </div>*@
+                                        <div class="form-row">
+                                            <div class="table-responsive">
+                                                <table id="tbCauti_GrupoTaxonomico" style="width:100%" class="table table-hover table-bordered">
+                                                    <thead>
+                                                        <tr>
+                                                            <th colspan="8" class="text-sm-left">
+                                                                <div class="form-inline">
+                                                                    <i class="fa mx-2 fa-lg fa-file-o" style="cursor:pointer;" onclick="ManInforme_AddEditExSitu.fnAddEditGrupoTaxonomico('GRUPO_TAXONOMICO', '');" data-toggle="tooltip" data-placement="top" title="Nuevo"></i>
+                                                                    <strong>
+                                                                        Registro de Dietas
+                                                                    </strong>
+                                                                </div>
+                                                            </th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody></tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="card-header text-small">Programa de Contención y Manejo Sanitario</div>
+                                    <div class="card-body">
+                                        <div class="form-row">
+                                            <div class="form-group col-md-2">
+                                                <label for="ddlProgContencionId" class="text-small">Realizar el Programa</label>
+                                                @Html.DropDownListFor(m => m.ddlProgContencionId, new SelectList(Model.ddlOpcionSiNo, "Value", "Text"), new { @class = "form-control form-control-sm" })
+                                            </div>
+                                            <div class="form-group col-md-2">
+                                                <label for="ddlProtContingenciaId" class="text-small">Protocolo de contingencia</label>
+                                                @Html.DropDownListFor(m => m.ddlProtContingenciaId, new SelectList(Model.ddlOpcionSiNo, "Value", "Text"), new { @class = "form-control form-control-sm" })
+                                            </div>
+                                            <div class="form-group col-md-2">
+                                                <label for="ddlProtAccionId" class="text-small">Protocolos de acción frente a</label>
+                                                @Html.DropDownListFor(m => m.ddlProtAccionId, new SelectList(Model.ddlProtAccion, "Value", "Text"), new { @class = "form-control form-control-sm" })
+                                            </div>
+                                            <div class="form-group col-md-6">
+                                                <label for="txtObsProtAccion" class="text-small">Observaciones</label>
+                                                @Html.TextAreaFor(m => m.txtObsProtAccion, new { @class = "form-control form-control-sm", @rows = "2" })
+                                            </div>
+                                        </div>
+                                        <div class="form-row">
+                                            <div class="col-md-6" style="padding:0px;">
+                                                <div class="table-responsive">
+                                                    <table id="tbCauti_EquipoContFisico" style="width:100%" class="table table-hover table-bordered">
+                                                        <thead>
+                                                            <tr>
+                                                                <th colspan="5" class="text-sm-left">
+                                                                    <div class="form-inline">
+                                                                        <i class="fa mx-2 fa-lg fa-file-o" style="cursor:pointer;" onclick="ManInforme_AddEditExSitu.fnAddEditEquipoContencion('CONTENCION_FISICA', '');" data-toggle="tooltip" data-placement="top" title="Nuevo"></i>
+                                                                        <strong>
+                                                                            Registro de Materiales y Equipos de Contención Física
+                                                                        </strong>
+                                                                    </div>
+                                                                </th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody></tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6" style="padding:0px;">
+                                                <div class="table-responsive">
+                                                    <table id="tbCauti_EquipoContQuimico" style="width:100%" class="table table-hover table-bordered">
+                                                        <thead>
+                                                            <tr>
+                                                                <th colspan="5" class="text-sm-left">
+                                                                    <div class="form-inline">
+                                                                        <i class="fa mx-2 fa-lg fa-file-o" style="cursor:pointer;" onclick="ManInforme_AddEditExSitu.fnAddEditEquipoContencion('CONTENCION_QUIMICA', '');" data-toggle="tooltip" data-placement="top" title="Nuevo"></i>
+                                                                        <strong>
+                                                                            Registro de Materiales y Equipos de Contención Química
+                                                                        </strong>
+                                                                    </div>
+                                                                </th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody></tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="card-header text-small">Programa de Bioseguridad</div>
+                                    <div class="card-body">
+                                        <div class="form-row">
+                                            <div class="form-group col-md-2">
+                                                <label for="ddlProgBioseguridadId" class="text-small">Realizar el Programa</label>
+                                                @Html.DropDownListFor(m => m.ddlProgBioseguridadId, new SelectList(Model.ddlOpcionSiNo, "Value", "Text"), new { @class = "form-control form-control-sm" })
+                                            </div>
+                                            <div class="form-group col-md-2">
+                                                <label for="chkProtLimpieza" class="text-small">Protocolo de Limpieza</label>
+                                                <div style="margin-top:7px;">
+                                                    <div class="form-check form-check-inline">
+                                                        @Html.CheckBoxFor(m => m.chkProtLimpieza, new { @class = "form-check-input", style = "width:15px;height:16px;" })
+                                                        <label class="form-check-label" for="chkProtLimpieza"></label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-group col-md-2">
+                                                <label for="ddlFrecLimpiezaId" class="text-small">Frecuencia de Limpieza</label>
+                                                @Html.DropDownListFor(m => m.ddlFrecLimpiezaId, new SelectList(Model.ddlFrecFecha, "Value", "Text"), new { @class = "form-control form-control-sm" })
+                                            </div>
+                                            <div id="dvFrecLimpieza" class="form-group col-md-2" style="display:none;">
+                                                <label for="txtFrecLimpieza" class="text-small">Descripción frecuencia</label>
+                                                @Html.TextBoxFor(m => m.txtFrecLimpieza, "", new { @class = "form-control form-control-sm" })
+                                            </div>
+                                            <div class="form-group col-md-2">
+                                                <label for="chkPediluvio" class="text-small">Pediluvios</label>
+                                                <div style="margin-top:7px;">
+                                                    <div class="form-check form-check-inline">
+                                                        @Html.CheckBoxFor(m => m.chkPediluvio, new { @class = "form-check-input", style = "width:15px;height:16px;" })
+                                                        <label class="form-check-label" for="chkPediluvio"></label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-group col-md-2">
+                                                <label for="chkManejoResiduo" class="text-small">Manejo de Residuos Sólidos</label>
+                                                <div style="margin-top:7px;">
+                                                    <div class="form-check form-check-inline">
+                                                        @Html.CheckBoxFor(m => m.chkManejoResiduo, new { @class = "form-check-input", style = "width:15px;height:16px;" })
+                                                        <label class="form-check-label" for="chkManejoResiduo"></label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-row">
+                                            <div class="col-md-6" style="padding:0px;">
+                                                <div class="table-responsive" style="overflow-x:hidden;">
+                                                    <table id="tbCauti_EquipoLimpieza" style="width:100%" class="table table-hover table-bordered">
+                                                        <thead>
+                                                            <tr>
+                                                                <th colspan="3">
+                                                                    <div class="form-group row" style="margin-bottom:0px;">
+                                                                        <label for="ddlEquipoLimpiezaId" class="col-md-7 col-form-label text-small" style="padding-right:0px;">Registro de Materiales y Equipos Para Limpieza</label>
+                                                                        <div class="col-md-5" style="margin-bottom:0px;">
+                                                                            @Html.DropDownList("ddlEquipoLimpiezaId", new SelectList(ViewBag.ddlEquipoLimpieza, "Value", "Text"), new { @class = "form-control form-control-sm" })
+                                                                        </div>
+                                                                    </div>
+                                                                </th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody></tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-row">
+                                            <div class="form-group col-md-2">
+                                                <label for="ddlFrecDesinfeccionId" class="text-small">Frecuencia de Desinfección</label>
+                                                @Html.DropDownListFor(m => m.ddlFrecDesinfeccionId, new SelectList(Model.ddlFrecFecha, "Value", "Text"), new { @class = "form-control form-control-sm" })
+                                            </div>
+                                            <div id="dvFrecDesinfeccion" class="form-group col-md-4" style="display:none;">
+                                                <label for="txtFrecDesinfeccion" class="text-small">Descripción frecuencia</label>
+                                                @Html.TextBoxFor(m => m.txtFrecDesinfeccion, "", new { @class = "form-control form-control-sm" })
+                                            </div>
+                                        </div>
+                                        <div class="form-row">
+                                            <div class="col-md-6" style="padding:0px;">
+                                                <div class="table-responsive" style="overflow-x:hidden;">
+                                                    <table id="tbCauti_MaterialDesinfeccion" style="width:100%" class="table table-hover table-bordered">
+                                                        <thead>
+                                                            <tr>
+                                                                <th colspan="3">
+                                                                    <div class="form-group row" style="margin-bottom:0px;">
+                                                                        <label for="ddlMaterialDesinfeccionId" class="col-md-7 col-form-label text-small" style="padding-right:0px;">Registro de Materiales Para Desinfección</label>
+                                                                        <div class="col-md-5" style="margin-bottom:0px;">
+                                                                            @Html.DropDownList("ddlMaterialDesinfeccionId", new SelectList(ViewBag.ddlMaterialDesinfeccion, "Value", "Text"), new { @class = "form-control form-control-sm" })
+                                                                        </div>
+                                                                    </div>
+                                                                </th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody></tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6" style="padding:0px;">
+                                                <div class="table-responsive">
+                                                    <table id="tbCauti_EquipoDesinfeccion" style="width:100%" class="table table-hover table-bordered">
+                                                        <thead>
+                                                            <tr>
+                                                                <th colspan="5" class="text-sm-left">
+                                                                    <div class="form-inline">
+                                                                        <i class="fa mx-2 fa-lg fa-file-o" style="cursor:pointer;" onclick="ManInforme_AddEditExSitu.fnAddEditEquipoContencion('EQUIPO_DESINFECCION', '');" data-toggle="tooltip" data-placement="top" title="Nuevo"></i>
+                                                                        <strong>
+                                                                            Registro de Equipos Para Desinfección
+                                                                        </strong>
+                                                                    </div>
+                                                                </th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody></tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="card-header text-small">Disposición de Residuos Sólidos</div>
+                                    <div class="card-body">
+                                        <div class="form-row">
+                                            <div class="form-group col-md-3">
+                                                <label for="ddlDispResiduoOrgId" class="text-small">Orgánicos</label>
+                                                @Html.DropDownListFor(m => m.ddlDispResiduoOrgId, new SelectList(Model.ddlDispResiduoOrg, "Value", "Text"), new { @class = "form-control form-control-sm" })
+                                            </div>
+                                            <div class="form-group col-md-3">
+                                                <label for="ddlDispResiduoInorgId" class="text-small">Inorgánicos</label>
+                                                @Html.DropDownListFor(m => m.ddlDispResiduoInorgId, new SelectList(Model.ddlDispResiduoInorg, "Value", "Text"), new { @class = "form-control form-control-sm" })
+                                            </div>
+                                            <div class="form-group col-md-3">
+                                                <label for="ddlDispResiduoCadaverId" class="text-small">Disposición Final de los Cadáveres</label>
+                                                @Html.DropDownListFor(m => m.ddlDispResiduoCadaverId, new SelectList(Model.ddlDispResiduoCadaver, "Value", "Text"), new { @class = "form-control form-control-sm" })
+                                            </div>
+                                        </div>
+                                        <div class="form-row">
+                                            <div class="table-responsive">
+                                                <table id="tbCauti_ControlPlaga" style="width:100%" class="table table-hover table-bordered">
+                                                    <thead>
+                                                        <tr>
+                                                            <th colspan="8" class="text-sm-left">
+                                                                <div class="form-inline">
+                                                                    <i class="fa mx-2 fa-lg fa-file-o" style="cursor:pointer;" onclick="ManInforme_AddEditExSitu.fnAddEditControlPlaga('CONTROL_PLAGA', '');" data-toggle="tooltip" data-placement="top" title="Nuevo"></i>
+                                                                    <strong>
+                                                                        Registro de Control de Plagas
+                                                                    </strong>
+                                                                </div>
+                                                            </th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody></tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                        <div class="form-row">
+                                            <div class="table-responsive">
+                                                <table id="tbCauti_ManejoRegistro" style="width:100%" class="table table-hover table-bordered">
+                                                    <thead>
+                                                        <tr>
+                                                            <th colspan="6" class="text-sm-left">
+                                                                <div class="form-inline">
+                                                                    <i class="fa mx-2 fa-lg fa-file-o" style="cursor:pointer;" onclick="ManInforme_AddEditExSitu.fnAddEditManejoRegistro('MANEJO_REGISTRO', '');" data-toggle="tooltip" data-placement="top" title="Nuevo"></i>
+                                                                    <strong>
+                                                                        Manejo de Registros
+                                                                    </strong>
+                                                                </div>
+                                                            </th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody></tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                        <div class="form-row">
+                                            <div class="form-group col-md-3">
+                                                <label for="ddlPresentInfEjecPMId" class="text-small">Presentación de Informes de ejecución del plan de manejo</label>
+                                                @Html.DropDownListFor(m => m.ddlPresentInfEjecPMId, new SelectList(Model.ddlOpcionSiNo, "Value", "Text"), new { @class = "form-control form-control-sm" })
+                                            </div>
+                                            <div class="form-group col-md-3">
+                                                <label for="txtAnioPresentInfEjec" class="text-small">Años</label>
+                                                @Html.TextBoxFor(m => m.txtAnioPresentInfEjec, new { @class = "form-control form-control-sm" })
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="card-header text-small">Programa de Enriquecimiento Ambiental</div>
+                                    <div class="card-body">
+                                        <div class="form-row">
+                                            <div class="form-group col-md-2">
+                                                <label for="ddlProgEnriquecimientoId" class="text-small">Realiza el Programa</label>
+                                                @Html.DropDownListFor(m => m.ddlProgEnriquecimientoId, new SelectList(Model.ddlOpcionSiNo, "Value", "Text"), new { @class = "form-control form-control-sm" })
+                                            </div>
+                                        </div>
+                                        <div class="form-row">
+                                            <div class="table-responsive">
+                                                <table id="tbCauti_EnriquecimientoAmb" style="width:100%" class="table table-hover table-bordered">
+                                                    <thead>
+                                                        <tr>
+                                                            <th colspan="7" class="text-sm-left">
+                                                                <div class="form-inline">
+                                                                    <i class="fa mx-2 fa-lg fa-file-o" style="cursor:pointer;" onclick="ManInforme_AddEditExSitu.fnAddEditEnriquecimientoAmb('ENRIQUECIMIENTO_AMBIENTAL', '');" data-toggle="tooltip" data-placement="top" title="Nuevo"></i>
+                                                                    <strong>
+                                                                        REGISTRO DE GRUPOS TAXONÓMICOS
+                                                                    </strong>
+                                                                </div>
+                                                            </th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody></tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="card-header text-small">Programa de Manejo Genético y/o Reproductivo</div>
+                                    <div class="card-body">
+                                        <div class="form-row">
+                                            <div class="form-group col-md-2">
+                                                <label for="ddlProgGeneticoId" class="text-small">Realiza el Programa</label>
+                                                @Html.DropDownListFor(m => m.ddlProgGeneticoId, new SelectList(Model.ddlOpcionSiNo, "Value", "Text"), new { @class = "form-control form-control-sm" })
+                                            </div>
+                                        </div>
+                                        <div class="form-row">
+                                            <div class="table-responsive">
+                                                <table id="tbCauti_EspecieReproducida" style="width:100%" class="table table-hover table-bordered">
+                                                    <thead>
+                                                        <tr>
+                                                            <th colspan="11" class="text-sm-left">
+                                                                <div class="form-inline">
+                                                                    <i class="fa mx-2 fa-lg fa-file-o" style="cursor:pointer;" onclick="ManInforme_AddEditExSitu.fnAddEditEspecieReprod('ESPECIE_REPRODUCIDA', '');" data-toggle="tooltip" data-placement="top" title="Nuevo"></i>
+                                                                    <strong>
+                                                                        REGISTRO DE ESPECIES REPRODUCIDAS
+                                                                    </strong>
+                                                                </div>
+                                                            </th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody></tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="card-header text-small">Programa de Educación Ambiental</div>
+                                    <div class="card-body">
+                                        <div class="form-row">
+                                            <div class="form-group col-md-2">
+                                                <label for="ddlProgEducacionId" class="text-small">Realiza el Programa</label>
+                                                @Html.DropDownListFor(m => m.ddlProgEducacionId, new SelectList(Model.ddlOpcionSiNo, "Value", "Text"), new { @class = "form-control form-control-sm" })
+                                            </div>
+                                        </div>
+                                        <div class="form-row">
+                                            <div class="table-responsive">
+                                                <table id="tbCauti_ActEducacion" style="width:100%" class="table table-hover table-bordered">
+                                                    <thead>
+                                                        <tr>
+                                                            <th colspan="6" class="text-sm-left">
+                                                                <div class="form-inline">
+                                                                    <i class="fa mx-2 fa-lg fa-file-o" style="cursor:pointer;" onclick="ManInforme_AddEditExSitu.fnAddEditActEducacion('');" data-toggle="tooltip" data-placement="top" title="Nuevo"></i>
+                                                                    <strong>
+                                                                        Registro de Actividades Realizadas
+                                                                    </strong>
+                                                                </div>
+                                                            </th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody></tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="card-header text-small">Programa de Investigación Científica</div>
+                                    <div class="card-body">
+                                        <div class="form-row">
+                                            <div class="form-group col-md-2">
+                                                <label for="ddlProgInvetigacionId" class="text-small">Realiza el Programa</label>
+                                                @Html.DropDownListFor(m => m.ddlProgInvetigacionId, new SelectList(Model.ddlOpcionSiNo, "Value", "Text"), new { @class = "form-control form-control-sm" })
+                                            </div>
+                                        </div>
+                                        <div class="form-row">
+                                            <div class="table-responsive">
+                                                <table id="tbCauti_ActInvestigacion" style="width:100%" class="table table-hover table-bordered">
+                                                    <thead>
+                                                        <tr>
+                                                            <th colspan="7" class="text-sm-left">
+                                                                <div class="form-inline">
+                                                                    <i class="fa mx-2 fa-lg fa-file-o" style="cursor:pointer;" onclick="ManInforme_AddEditExSitu.fnAddEditActInvestigacion('');" data-toggle="tooltip" data-placement="top" title="Nuevo"></i>
+                                                                    <strong>
+                                                                        Registro de Investigaciones Realizadas
+                                                                    </strong>
+                                                                </div>
+                                                            </th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody></tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="card-header text-small">Programa de Colecta y/o Captura</div>
+                                    <div class="card-body">
+                                        <div class="form-row">
+                                            <div class="form-group col-md-2">
+                                                <label for="ddlProgCapturaId" class="text-small">Realiza el Programa</label>
+                                                @Html.DropDownListFor(m => m.ddlProgCapturaId, new SelectList(Model.ddlOpcionSiNo, "Value", "Text"), new { @class = "form-control form-control-sm" })
+                                            </div>
+                                        </div>
+                                        <div class="form-row">
+                                            <div class="table-responsive">
+                                                <table id="tbCauti_EspecieCapturada" style="width:100%" class="table table-hover table-bordered">
+                                                    <thead>
+                                                        <tr>
+                                                            <th colspan="7" class="text-sm-left">
+                                                                <div class="form-inline">
+                                                                    <i class="fa mx-2 fa-lg fa-file-o" style="cursor:pointer;" onclick="ManInforme_AddEditExSitu.fnAddEditEspecieCapturada('ESPECIE_CAPTURADA', '');" data-toggle="tooltip" data-placement="top" title="Nuevo"></i>
+                                                                    <strong>
+                                                                        Registro de Especies Capturadas
+                                                                    </strong>
+                                                                </div>
+                                                            </th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody></tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="card-header text-small">Programa de Capacitación</div>
+                                    <div class="card-body">
+                                        <div class="form-row">
+                                            <div class="form-group col-md-2">
+                                                <label for="ddlProgCapturaId" class="text-small">Realiza el Programa</label>
+                                                @Html.DropDownListFor(m => m.ddlProgCapacitacionId, new SelectList(Model.ddlOpcionSiNo, "Value", "Text"), new { @class = "form-control form-control-sm" })
+                                            </div>
+                                        </div>
+                                        <div class="form-row">
+                                            <div class="table-responsive">
+                                                <table id="tbCauti_Capacitacion" style="width:100%" class="table table-hover table-bordered">
+                                                    <thead>
+                                                        <tr>
+                                                            <th colspan="6" class="text-sm-left">
+                                                                <div class="form-inline">
+                                                                    <i class="fa mx-2 fa-lg fa-file-o" style="cursor:pointer;" onclick="ManInforme_AddEditExSitu.fnAddEditCapacitacion('');" data-toggle="tooltip" data-placement="top" title="Nuevo"></i>
+                                                                    <strong>
+                                                                        Registro de Capacitaciones
+                                                                    </strong>
+                                                                </div>
+                                                            </th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody></tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="card-body">
+                                        <hr />
+                                        <div class="form-row">
+                                            <div>
+                                                <button type="button" class="dt-button buttons-excel buttons-html5 ml-2" onclick="ManInforme_AddEditExSitu.fnAddEditExportarExcelManejo(ManInforme_AddEditExSitu.dtCauti_EspecieNacimiento,'NACIMIENTO_ESPECIE');">Excel</button>
+                                            </div>
+                                            <div class="table-responsive">
+                                                <table id="tbCauti_EspecieNacimiento" style="width:100%" class="table table-hover table-bordered">
+                                                    <thead>
+                                                        <tr>
+                                                            <th colspan="10" class="text-sm-left">
+                                                                <div class="form-inline">
+                                                                    <i class="fa mx-2 fa-lg fa-file-o" style="cursor:pointer;" onclick="ManInforme_AddEditExSitu.fnAddEditEspecieNacimiento('NACIMIENTO_ESPECIE', '');" data-toggle="tooltip" data-placement="top" title="Nuevo"></i>
+                                                                    <i class="fa mx-2 fa-lg fa-window-close-o" style="cursor:pointer;" onclick="ManInforme_AddEditExSitu.fnDeleteAllCautiverio('NACIMIENTO_ESPECIE');" data-toggle="tooltip" data-placement="top" title="Eliminar Todos"></i>
+                                                                    <label style="cursor:pointer;" class="fa mx-2 fa-lg fa-file-excel-o" title="Importar Archivo" data-toggle="tooltip">
+                                                                        <input type="file" id="fileselect" name="fileselect" style="display:none" size="60" onchange="ManInforme_AddEditExSitu.fnImportCautiverio('NACIMIENTO_ESPECIE', event, this)">
+                                                                    </label>
+                                                                    <a href="@Url.Content("~/Archivos/Plantilla/InformeSup/InformeBalanceFauna.xlsx")"> <i class="fa mx-2 fa-lg fa-folder-open" style="cursor:pointer;" data-toggle="tooltip" data-placement="top" title="Descargar Plantilla"></i></a>
+                                                                    <strong>
+                                                                        Registro de Nacimientos
+                                                                    </strong>
+                                                                </div>
+                                                            </th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody></tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                        <hr />
+                                        <div class="form-row">
+                                            <div>
+                                                <button type="button" class="dt-button buttons-excel buttons-html5 ml-2" onclick="ManInforme_AddEditExSitu.fnAddEditExportarExcelManejo(ManInforme_AddEditExSitu.dtCauti_EspecieEgreso,'EGRESO_ESPECIE');">Excel</button>
+                                            </div>
+                                            <div class="table-responsive">
+                                                <table id="tbCauti_EspecieEgreso" style="width:100%" class="table table-hover table-bordered">
+                                                    <thead>
+                                                        <tr>
+                                                            <th colspan="14" class="text-sm-left">
+                                                                <div class="form-inline">
+                                                                    <i class="fa mx-2 fa-lg fa-file-o" style="cursor:pointer;" onclick="ManInforme_AddEditExSitu.fnAddEditEspecieNacimiento('EGRESO_ESPECIE', '');" data-toggle="tooltip" data-placement="top" title="Nuevo"></i>
+                                                                    <i class="fa mx-2 fa-lg fa-window-close-o" style="cursor:pointer;" onclick="ManInforme_AddEditExSitu.fnDeleteAllCautiverio('EGRESO_ESPECIE');" data-toggle="tooltip" data-placement="top" title="Eliminar Todos"></i>
+                                                                    <label style="cursor:pointer;" class="fa mx-2 fa-lg fa-file-excel-o" title="Importar Archivo" data-toggle="tooltip">
+                                                                        <input type="file" id="fileselect" name="fileselect" style="display:none" size="60" onchange="ManInforme_AddEditExSitu.fnImportCautiverio('EGRESO_ESPECIE', event, this)">
+                                                                    </label>
+                                                                    <a href="@Url.Content("~/Archivos/Plantilla/InformeSup/InformeBalanceFauna.xlsx")"> <i class="fa mx-2 fa-lg fa-folder-open" style="cursor:pointer;" data-toggle="tooltip" data-placement="top" title="Descargar Plantilla"></i></a>
+                                                                    <strong>
+                                                                        Registro de Egresos
+                                                                    </strong>
+                                                                </div>
+                                                            </th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody></tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                        <hr />
+                                        <div class="form-row">
+                                            <div>
+                                                <button type="button" class="dt-button buttons-excel buttons-html5 ml-2" onclick="ManInforme_AddEditExSitu.fnAddEditExportarExcelManejo(ManInforme_AddEditExSitu.dtCauti_EspecieVertebrado,'ESPECIE_VERTEBRADO');">Excel</button>
+                                            </div>
+                                            <div class="table-responsive">
+                                                <table id="tbCauti_EspecieVertebrado" style="width:100%" class="table table-hover table-bordered">
+                                                    <thead>
+                                                        <tr>
+                                                            <th colspan="11" class="text-sm-left">
+                                                                <div class="form-inline">
+                                                                    <i class="fa mx-2 fa-lg fa-file-o" style="cursor:pointer;" onclick="ManInforme_AddEditExSitu.fnAddEditEspecieCenso('ESPECIE_VERTEBRADO', '');" data-toggle="tooltip" data-placement="top" title="Nuevo"></i>
+                                                                    <i class="fa mx-2 fa-lg fa-window-close-o" style="cursor:pointer;" onclick="ManInforme_AddEditExSitu.fnDeleteAllCautiverio('ESPECIE_VERTEBRADO');" data-toggle="tooltip" data-placement="top" title="Eliminar Todos"></i>
+                                                                    <label style="cursor:pointer;" class="fa mx-2 fa-lg fa-file-excel-o" title="Importar Archivo" data-toggle="tooltip">
+                                                                        <input type="file" id="fileselect" name="fileselect" style="display:none" size="60" onchange="ManInforme_AddEditExSitu.fnImportCautiverio('ESPECIE_VERTEBRADO', event, this)">
+                                                                    </label>
+                                                                    <a href="@Url.Content("~/Archivos/Plantilla/InformeVertebradosMayores.xlsx")"> <i class="fa mx-2 fa-lg fa-folder-open" style="cursor:pointer;" data-toggle="tooltip" data-placement="top" title="Descargar Plantilla"></i></a>
+                                                                    <strong>
+                                                                        Censo Vertebrados
+                                                                    </strong>
+                                                                </div>
+                                                            </th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody></tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                        <hr />
+                                        <div class="form-row">
+                                            <div>
+                                                <button type="button" class="dt-button buttons-excel buttons-html5 ml-2" onclick="ManInforme_AddEditExSitu.fnAddEditExportarExcelManejo(ManInforme_AddEditExSitu.dtCauti_EspecieInvertebrado,'ESPECIE_INVERTEBRADO');">Excel</button>
+                                            </div>
+                                            <div class="table-responsive">
+                                                <table id="tbCauti_EspecieInvertebrado" style="width:100%" class="table table-hover table-bordered">
+                                                    <thead>
+                                                        <tr>
+                                                            <th colspan="8" class="text-sm-left">
+                                                                <div class="form-inline">
+                                                                    <i class="fa mx-2 fa-lg fa-file-o" style="cursor:pointer;" onclick="ManInforme_AddEditExSitu.fnAddEditEspecieCenso('ESPECIE_INVERTEBRADO', '');" data-toggle="tooltip" data-placement="top" title="Nuevo"></i>
+                                                                    <i class="fa mx-2 fa-lg fa-window-close-o" style="cursor:pointer;" onclick="ManInforme_AddEditExSitu.fnDeleteAllCautiverio('ESPECIE_INVERTEBRADO');" data-toggle="tooltip" data-placement="top" title="Eliminar Todos"></i>
+                                                                    <label style="cursor:pointer;" class="fa mx-2 fa-lg fa-file-excel-o" title="Importar Archivo" data-toggle="tooltip">
+                                                                        <input type="file" id="fileselect" name="fileselect" style="display:none" size="60" onchange="ManInforme_AddEditExSitu.fnImportCautiverio('ESPECIE_INVERTEBRADO', event, this)">
+                                                                    </label>
+                                                                    <a href="@Url.Content("~/Archivos/Plantilla/InformeVertebradosMenores.xlsx")"> <i class="fa mx-2 fa-lg fa-folder-open" style="cursor:pointer;" data-toggle="tooltip" data-placement="top" title="Descargar Plantilla"></i></a>
+                                                                    <strong>
+                                                                        Censo Invertebrados
+                                                                    </strong>
+                                                                </div>
+                                                            </th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody></tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                        <hr />
+                                        <div class="form-row">
+                                            <div>
+                                                <button type="button" class="dt-button buttons-excel buttons-html5 ml-2" onclick="ManInforme_AddEditExSitu.fnAddEditExportarExcelManejo(ManInforme_AddEditExSitu.dtCauti_BalanceIngEgr,'BALANCE_ING_EGR');">Excel</button>
+                                            </div>
+                                            <div class="table-responsive">
+                                                <table id="tbCauti_BalanceIngEgr" style="width:100%" class="table table-hover table-bordered">
+                                                    <thead>
+                                                        <tr>
+                                                            <th colspan="16" class="text-sm-left">
+                                                                <div class="form-inline">
+                                                                    <i class="fa mx-2 fa-lg fa-window-close-o" style="cursor:pointer;" onclick="ManInforme_AddEditExSitu.fnDeleteAllCautiverio('BALANCE_ING_EGR');" data-toggle="tooltip" data-placement="top" title="Eliminar Todos"></i>
+                                                                    <label style="cursor:pointer;" class="fa mx-2 fa-lg fa-file-excel-o" title="Importar Archivo" data-toggle="tooltip">
+                                                                        <input type="file" id="fileselect" name="fileselect" style="display:none" size="60" onchange="ManInforme_AddEditExSitu.fnImportCautiverio('BALANCE_ING_EGR', event, this)">
+                                                                    </label>
+                                                                    <a href="@Url.Content("~/Archivos/Plantilla/InformeSup/InformeBalanceFauna.xlsx")"> <i class="fa mx-2 fa-lg fa-folder-open" style="cursor:pointer;" data-toggle="tooltip" data-placement="top" title="Descargar Plantilla"></i></a>
+                                                                    <strong>
+                                                                        Balance de ingreso y egreso de especímenes
+                                                                    </strong>
+                                                                </div>
+                                                            </th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody></tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="tab-pane fade show" id="navImagenes" role="tabpanel" aria-labelledby="nav-home-tab">
+                                <div class="card">
+                                    <div class="card-header text-small"></div>
+                                    <div class="card-body">
+                                        <div class="form-row">
+                                            <div class="col-md-12">
+                                                @Html.Partial("~/Areas/Supervision/Views/ManInforme/Render/_renderFotoSupervision.cshtml", Model.tbFotoSupervision, new ViewDataDictionary { { "cod_informe", Model.hdfCodInforme } })
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="tab-pane fade show" id="navZoObservatorio" role="tabpanel" aria-labelledby="nav-home-tab">
+                                <div class="card">
+                                    <div class="card-header text-small"></div>
+                                    <div class="card-body">
+                                        <div class="form-row">
+                                            <div class="table-responsive">
+                                                <table id="tbZoo_Evaluacion" style="width:100%" class="table table-hover table-bordered">
+                                                    <thead>
+                                                        <tr>
+                                                            <th></th>
+                                                            <th></th>
+                                                            <th colspan="3" class="text-sm-center">
+                                                                <strong>Calificación</strong>
+                                                            </th>
+                                                            <th></th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody></tbody>
+                                                    <tfoot>
+                                                        <tr>
+                                                            <th colspan="2" class="text-sm-center"><span>Total</span></th>
+                                                            <th colspan="3" class="text-sm-center"><span id="lblCalificacionZoo">@Model.txtCalificacionZoo</span></th>
+                                                            <th></th>
+                                                        </tr>
+                                                    </tfoot>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="tab-pane fade show" id="navObligTitular" role="tabpanel" aria-labelledby="nav-home-tab">
+                                <div class="card">
+                                    @Html.Partial("~/Areas/Supervision/Views/ManInforme/Render/_renderObligacionTitular.cshtml", Model.tbObligacionTitular)
+                                </div>
+                            </div>
+                            <div class="tab-pane fade show" id="navIncidencias" role="tabpanel" aria-labelledby="nav-home-tab">
+                                <div class="card-header text-small">
+                                    Incidencias
+                                </div>
+                                <div class="card-body">
+                                    <input type="hidden" id="h1" value="" />
+                                    <input type="hidden" id="h2" value="" />
+                                    <div class="form-row">
+                                        <input type="hidden" id="COD_IINCIDENCIA" value="0">
+                                        <div class="form-group col-md-4">
+                                            <label for="txt_FECHA_SUCESO" class="text-small">FECHA SUCESO:</label>
+                                            <input type="date" id="txt_FECHA_SUCESO" name="txt_FECHA_SUCESO" class="form-control form-control-sm valid">
+                                        </div>
+                                        <div class="form-group col-md-4">
+                                            <label for="txt_HORA_SUCESO" class="text-small">
+                                                HORA SUCESO:
+                                            </label>
+                                            <input class="form-control form-control-sm" type="time" id="txt_HORA_SUCESO" />
+                                        </div>
+                                    </div>
+                                    <div class="form-row">
+                                        <div class="form-group col-md-4">
+                                            <label for="cboRIESGO" class="text-small">RIESGO</label>
+                                            <select class="form-control form-control-sm" id="cboRIESGO" name="cboRIESGO">
+                                                <option value="00">--Seleccionar--</option>
+                                            </select><div id="tooltip_containerRIESGO"></div>
+                                        </div>
+                                        <div class="form-group col-md-4">
+                                            <label for="cboPROCESO" class="text-small">PROCESO</label>
+                                            <select class="form-control form-control-sm" id="cboPROCESO" name="cboPROCESO">
+                                                <option value="00">--Seleccionar--</option>
+                                            </select><div id="tooltip_containerPROCESO"></div>
+                                        </div>
+                                        <div class="form-group col-md-4">
+                                            <label for="cboCIRCUNSTANCIA" class="text-small">CIRCUNSTANCIA</label>
+                                            <select class="form-control form-control-sm" id="cboCIRCUNSTANCIA" name="cboCIRCUNSTANCIA">
+                                                <option value="00">--Seleccionar--</option>
+                                            </select><div id="tooltip_containerCIRCUNSTANCIA"></div>
+                                        </div>
+                                        <div class="form-group col-md-4">
+                                            <label for="txt_UBICACION" class="text-small">
+                                                UBICACION:
+                                            </label>
+                                            <input class="form-control form-control-sm" type="text" id="txt_UBICACION" />
+                                        </div>
+                                        <div class="form-group col-md-4">
+                                            <label for="cboEFECTO" class="text-small">EFECTO</label>
+                                            <select class="form-control form-control-sm" id="cboEFECTO" name="cboEFECTO">
+                                                <option value="00">--Seleccionar--</option>
+                                            </select><div id="tooltip_containerEFECTO"></div>
+                                        </div>
+                                    </div>
+                                    <div class="form-row">
+                                        <div class="form-group col-md-4">
+                                            <label for="NIVEL_1" class="text-small">NIVEL 1</label>
+                                            <select class="form-control form-control-sm" id="NIVEL_1" name="NIVEL_1">
+                                                <option selected="selected" value="00">--Seleccionar--</option>
+                                            </select><div id="tooltip_containerNIVEL_1"></div>
+                                        </div>
+                                        <div class="form-group col-md-4">
+                                            <label for="NIVEL_2" class="text-small">NIVEL 2</label>
+                                            <select class="form-control form-control-sm" id="NIVEL_2" name="NIVEL_2">
+                                                <option selected="selected" value="00">--Seleccionar--</option>
+                                            </select><div id="tooltip_containerNIVEL_2"></div>
+                                        </div>
+                                        <div class="form-group col-md-4">
+                                            <label for="txt_DSCRP_INCIDENCIA" class="text-small">
+                                                INCIDENCIA:
+                                            </label>
+                                            <input class="form-control form-control-sm" type="text" id="txt_DSCRP_INCIDENCIA" />
+                                        </div>
+                                    </div>
+                                    <div class="form-row ValidateHidden" style="margin-top:10px;">
+                                        <div class="form-group col-md-8">
+                                            <label for="txt_OBSERVACIONES" class="text-small">
+                                                OBSERVACIONES:
+                                            </label>
+                                            <textarea id="txt_OBSERVACIONES" style="height:200px" class="form-control form-control-sm"></textarea>
+                                        </div>
+                                        <div class="form-group col-md-4">
+                                            <div class="btn-group derecha">
+                                                <button id="BtnLimpiar" type="button" class="btn btn-small btn-info tip" title="" data-original-title="Limpiar">LIMPIAR</button>
+                                                <button id="BtnGuardar" type="button" class="btn btn-small btn-info tip" title="" data-original-title="Nuevo">GUARDAR</button>
+                                                <button id="BtnExportar" type="button" class="btn btn-small btn-info tip" title="" data-original-title="Exportar">EXPORTAR</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-row">
+                                        <div class="col-md-12">
+                                            <table id="GridIINCIDENCIA" class="table table-hover table-bordered" width="100%" cellspacing="0"></table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="tab-pane fade" id="navInformeDigital" role="tabpanel" aria-labelledby="nav-home-tab">
+                                @Html.Partial("~/Areas/Supervision/Views/ManInforme/_InformeDigital.cshtml")
+                            </div>
+                            <div class="tab-pane fade show" id="navConclusion" role="tabpanel" aria-labelledby="nav-home-tab">
+                                <div class="card">
+                                    <div class="card-header text-small"></div>
+                                    <div class="card-body">
+                                        <div class="form-row">
+                                            <div class="form-group col-md-2">
+                                                <label for="ddlOdId" class="text-small">Se recomienda mandato:</label><br />
+                                                <div class="custom-control custom-radio custom-control-inline">
+                                                    @Html.RadioButton("chkRecomendar", 1, Model.chkRecomendar, new { @class = "custom-control-input", id = "rdbRecomendarSi" })
+                                                    @Html.Label("rdbRecomendarSi", "Si", new { @class = "custom-control-label", style = "margin-top:5px;font-size:14px;" })
+                                                </div>
+                                                <div class="custom-control custom-radio custom-control-inline">
+                                                    @Html.RadioButton("chkRecomendar", 0, !Model.chkRecomendar, new { @class = "custom-control-input", id = "rdbRecomendarNo" })
+                                                    @Html.Label("rdbRecomendarNo", "No", new { @class = "custom-control-label", style = "margin-top:5px;font-size:14px;" })
+                                                </div>
+                                            </div>
+                                            <div class="form-group col-md-2">
+                                                <label for="txtObsPublicar" class="text-small">Número de Mandatos:</label>
+                                                @Html.TextBoxFor(m => m.txtMandatos, new { @class = "form-control form-control-sm", maxlength = "150" })
+                                            </div>
+                                        </div>
+                                        <div class="form-row">
+                                            <div class="form-group col-md-12">
+                                                <label for="txtConclusion" class="text-small">Conclusiones del Informe de Supervisión</label>
+                                                <div id="txtConclusion" class="ckeditor-inf">
+                                                    <div class="toolbar-container"></div>
+                                                    <div class="editor-container">
+                                                        <div class="editor">
+                                                            @Html.Raw(Model.txtConclusion)
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                @Html.HiddenFor(m => m.txtConclusion)
+                                                @*<label for="txtConclusion" class="text-small">Conclusiones de informe de Supervisión</label>
+                                @Html.TextAreaFor(m => m.txtConclusion, new { @class = "form-control form-control-sm", @rows = "7" })*@
+                                            </div>
+
+                                        </div>
+                                        <div class="form-row">
+                                            <div class="form-group col-md-12">
+                                                <label for="txtRecomendacion" class="text-small">Recomendaciones</label>
+                                                @Html.TextAreaFor(m => m.txtRecomendacion, new { @class = "form-control form-control-sm", @rows = "7" })
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="tab-pane fade" id="navInformeDigital" role="tabpanel" aria-labelledby="nav-home-tab">
+                                @Html.Partial("~/Areas/Supervision/Views/ManInforme/_InformeDigital.cshtml")
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script type="text/javascript">
+        setTimeout(function () {
+            $("#ddlIndicadorId").val("0000001");
+            $("#ddlIndicadorId").prop("disabled", "disabled");
+        }, 2000);
+    </script>
+
+    @* Para el modal _THabilitanteGeneral usado en el control _renderCNotificacion *@
+    <div class="modal fade hide" id="mdlManInforme_THabilitanteGeneral" tabindex="-1" role="dialog"></div>
+    @* Para el modal _Ubigeo usado en este control *@
+    <div class="modal fade hide" id="mdlControles_Ubigeo" role="dialog"></div>
+    @* Para el modal _BuscarPersonaGeneral usado en este control y _renderSupervisor *@
+    <div class="modal fade hide" id="mdlControles_BuscarPersonaGeneral" tabindex="-1" role="dialog"></div>
+    @* Para el modal _DenunciaSITD usado en este control *@
+    <div class="modal fade hide" id="mdlControles_DenunciaSITD" tabindex="-1" role="dialog"></div>
+    @* Para el modal _AreaExSitu usado en este control *@
+    <div class="modal fade hide" id="mdlManInforme_AreaExSitu" role="dialog"></div>
+    @* Para el modal _FotoSupervision usado en el control _renderFotoSupervision *@
+    <div class="modal fade hide" id="mdlManInforme_FotoSupervision" role="dialog"></div>
+    @* Para el modal _GrupoTaxonomico (y otros de la sección cautiverio) usado en este control *@
+    <div class="modal fade hide" id="mdlManInformeExSitu_Cautiverio" role="dialog"></div>
+    @* Para los modals relacionados este control Global*@
+    <div class="modal fade hide" id="mdlManInforme_Global" role="dialog"></div>
+
+    @* Para el control genérico de personas *@
+    <div class="modal fade hide" id="mdlBuscarPersona" role="dialog"></div>
+    <div class="modal fade" id="modalAddEditPersona" tabindex="-1" role="dialog"></div>
+    <div class="modal fade hide" id="personaUbigeoModal" role="dialog"></div>
+</div>

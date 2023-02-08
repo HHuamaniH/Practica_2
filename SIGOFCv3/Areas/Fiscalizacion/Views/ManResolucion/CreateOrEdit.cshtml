@@ -1,0 +1,450 @@
+﻿
+@model CapaEntidad.ViewModel.VM_Resodirec
+@{
+    ViewBag.Title = "AddEdit";
+    Layout = "~/Views/Shared/_LayoutMain.cshtml";
+}
+<script src="~/Areas/Fiscalizacion/js/ManResolucion/AddEdit.js?V=15.5"></script>
+<script type="text/javascript">
+    ManRD_AddEdit.userApp = JSON.parse('@Html.Raw(Json.Encode(ViewBag.Usuario))');
+</script>
+@section scripts{
+    <script>
+        "use strict"; var rol = '';
+    $(document).ready(function () {
+        //Validamos el rol del usuario
+        utilSigo.ValidaRol('@ViewBag.VAliasRol', 'btnRegistrar', '@Model.vmControlCalidad.ddlIndicadorId');
+    });
+    </script>
+}
+<div class="container-fluid">
+    <div class="card">
+        <div class="card-header text-right">Resolución</div>
+        <div class="card-body">
+            <div class="card">
+                <div class="card-header text-small">
+                    <a id="btnRegistrar" href="javascript:void(0)" style="cursor:pointer;" data-toggle="tooltip" data-placement="top" title="Guardar" onclick="ManRD_AddEdit.fnSaveForm()"><i class="fa mx-2 fa-lg fa-save"></i></a>
+                    <a style="cursor:pointer;" data-toggle="tooltip" data-placement="top" title="Regresar" onclick="ManRD_AddEdit.regresar()"><i class="fa mx-2 fa-lg fa-reply"></i></a>
+                    @Model.lblTituloCabecera
+                </div>
+                <div class="card-body">
+                    <form id="frmAddOrEditRD">
+                        <!-- form-->
+                        @Html.HiddenFor(m => m.hdfCodResodirec)
+                        @Html.HiddenFor(m => m.hdfCodFCTipo)
+                        @Html.HiddenFor(m => m.hdfCodPersona)
+                        @Html.HiddenFor(m => m.RegEstado)
+                        @Html.HiddenFor(m => m.hdfCodTitular)
+                        @Html.HiddenFor(m => m.hdfCodExTitulat)
+                        @Html.HiddenFor(m => m.hdfTipoDocumento)
+                        @Html.HiddenFor(m => m.hdfCodTerceroSolidario)
+
+                        <!--para el tipo antes del PAU-->
+
+                        <ul class="nav nav-tabs" id="myTab" role="tablist">
+                            <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#navEstado" role="tab" aria-controls="home" aria-selected="true">Estado Situacional</a></li>
+                            <li class="nav-item"><a class="nav-link active" data-toggle="tab" href="#navDatos" role="tab" aria-controls="home" aria-selected="true">Datos Generales</a></li>
+                            <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#navInformeDigital" role="tab" aria-controls="home" aria-selected="true">PAU Digital</a></li>
+                            @if (Model.hdfCodFCTipo == "0000009")
+                            {
+                                <li id="idnavRecomIniPAu" class="nav-item"><a class="nav-link" data-toggle="tab" href="#navRDInicio" role="tab" aria-controls="home" aria-selected="true">Recomendaciones</a></li>
+                            }
+                            @if (Model.hdfCodFCTipo == "0000011")
+                            {
+                                <li id="idnavRecomTermPAu" class="nav-item"><a class="nav-link" data-toggle="tab" href="#navRDTermino" role="tab" aria-controls="home" aria-selected="true">Recomendaciones</a></li>
+                            }
+                            @if (Model.hdfCodFCTipo == "0000014")
+                            {
+                                <li id="idnavRecomReconsideracion" class="nav-item"><a class="nav-link" data-toggle="tab" href="#navRDReconsideracion" role="tab" aria-controls="home" aria-selected="true">Recomendaciones</a></li>
+                            }
+                            @if (Model.hdfCodFCTipo == "0000016")
+                            {
+                                <li id="idnavRecomOtros" class="nav-item"><a class="nav-link" data-toggle="tab" href="#navRDOtros" role="tab" aria-controls="home" aria-selected="true">Recomendaciones</a></li>
+                            }
+                            @if (Model.hdfCodFCTipo == "0000008")
+                            {
+                                <li id="idnavRecomArchivo" class="nav-item"><a class="nav-link" data-toggle="tab" href="#navRDArchivoInf" role="tab" aria-controls="home" aria-selected="true">Recomendaciones</a></li>
+                            }
+                            @if (Model.hdfCodFCTipo == "0000010")
+                            {
+                                <li id="idnavRecomAmpliacion" class="nav-item"><a class="nav-link" data-toggle="tab" href="#navRDAmpliacion" role="tab" aria-controls="home" aria-selected="true">Recomendaciones</a></li>
+                            }
+                            @if (Model.hdfCodFCTipo == "0000012")
+                            {
+                                <li id="idnavRecomRectificacion" class="nav-item"><a class="nav-link" data-toggle="tab" href="#navRDRectificacion" role="tab" aria-controls="home" aria-selected="true">Recomendaciones</a></li>
+                            }
+                            @if (Model.hdfCodFCTipo == "0000015")
+                            {
+                                <li id="idnavRecomVariacionCaut" class="nav-item"><a class="nav-link" data-toggle="tab" href="#navRDVariacionCaut" role="tab" aria-controls="home" aria-selected="true">Recomendaciones</a></li>
+                            }
+                            @if (Model.hdfCodFCTipo == "0000075")
+                            {
+                                <li id="idnavRecomCaducidadTH" class="nav-item"><a class="nav-link" data-toggle="tab" href="#navRDCaducidadTH" role="tab" aria-controls="home" aria-selected="true">Recomendaciones</a></li>
+                            }
+                            @if (Model.hdfCodFCTipo == "0000088")
+                            {
+                                <li id="idnavRecomConservacionActoAdm" class="nav-item"><a class="nav-link" data-toggle="tab" href="#navRDConservacionAA" role="tab" aria-controls="home" aria-selected="true">Recomendaciones</a></li>
+                            }
+                            @if (Model.hdfCodFCTipo == "0000111")
+                            {
+                                <li id="idnavRecomAplicacion" class="nav-item"><a class="nav-link" data-toggle="tab" href="#navRDAplicMedAPAU" role="tab" aria-controls="home" aria-selected="true">Recomendaciones</a></li>
+                            }
+                            @if (Model.hdfCodFCTipo == "0000130")
+                            {
+                                <li id="idnavRecomAdecMulta" class="nav-item"><a class="nav-link" data-toggle="tab" href="#navRDAdecMulta" role="tab" aria-controls="home" aria-selected="true">Recomendaciones</a></li>
+                            }
+                            @if (Model.hdfCodFCTipo == "0000105")
+                            {
+                                <li id="idnavRDRecomVarImplCargo" class="nav-item"><a class="nav-link" data-toggle="tab" href="#navRDVariacionImpCargo" role="tab" aria-controls="home" aria-selected="true">Recomendaciones</a></li>
+                            }
+                            @if (Model.hdfCodFCTipo == "0000013")
+                            {
+                                <li id="idnavRDRecomAcumulacion" class="nav-item"><a class="nav-link" data-toggle="tab" href="#navRDAcumulacion" role="tab" aria-controls="home" aria-selected="true">Recomendaciones</a></li>
+                            }
+                            <li id="idnavRDNotificacion" class="nav-item"><a class="nav-link" data-toggle="tab" href="#navRDNotificacion" role="tab" aria-controls="home" aria-selected="true">Notificaciones</a></li>
+                            <li id="idNavObservaciones" class="nav-item"><a class="nav-link" data-toggle="tab" href="#navObservacion" role="tab" aria-controls="home" aria-selected="true">Observaciones</a></li>
+                        </ul>
+
+                        <div class="tab-content">
+                            <div class="tab-pane fade show mt-3" id="navInformeDigital" role="tabpanel" aria-labelledby="nav-home-tab">
+                                @Html.Partial("~/Areas/Fiscalizacion/Views/ManPAU/_InformeResSubDir.cshtml")
+                            </div>
+                            <div class="tab-pane fade" id="navEstado" role="tabpanel" aria-labelledby="nav-home-tab">
+                                @{ Html.RenderAction("_ControlCalidad", "Controles", new { area = "GENERAL", dto = Model.vmControlCalidad }); }
+                            </div>
+                            <div class="tab-pane fade show active" id="navDatos" role="tabpanel" aria-labelledby="nav-home-tab">
+                                <div class="card">
+                                    <div class="form-row">
+                                        <div class="col-md-12"><br /><br /></div>
+                                        <div class="form-group col-md-12">
+                                            <label for="lblTipoILegal" class="text-small">Tipo de resolución directoral</label>
+                                            @Html.TextBoxFor(m => m.txtTipoFiscaliza, new { @class = "form-control form-control-sm", disabled = "disabled" })
+                                        </div>
+                                    </div>
+                                    <!---->
+                                    <div class="form-row">
+                                        <div class="form-group col-md-4">
+                                            <label for="txtProfesional" class="text-small texto-recortado">Nombre del funcionario<i class="fa fa-cog fa-spin text-danger" id="iconRLegalCodigo" style="display:none;" data-toggle="tooltip" data-placement="top" title="Seleccione funcionario"></i></label>
+                                            <div class="input-group">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text"><i class="fa fa-plus" style="cursor:pointer;" onclick="ManRD_AddEdit.fnBuscarPersona('PROFESIONAL', 'N');" data-toggle="tooltip" data-placement="top" title="Agregar"></i></span>
+                                                </div>
+                                                @Html.EditorFor(m => m.txtApellidosNombres, new { htmlAttributes = new { @class = "form-control form-control-sm", @disabled = "disabled" } })
+                                                <input type="hidden" id="hdTipoProfesional" />
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group col-md-4">
+                                            <label for="txtNumLegal" class="text-small">Número Resolución</label>
+                                            @Html.EditorFor(m => m.txtNumeroResolucion, new { htmlAttributes = new { @class = "form-control form-control-sm" } })
+                                        </div>
+
+                                        <div class="form-group col-md-4">
+                                            <label for="txtFechaLegal" class="text-small">Fecha de emisión</label>
+                                            @Html.EditorFor(m => m.txtFechaEmision, new { htmlAttributes = new { @class = "form-control form-control-sm", placeholder = "dd/mm/yyyy", title = "la fecha a ingresar debe ser en el formato dd/mm/yyyy", maxlength = "10" } })
+                                        </div>
+                                    </div>
+
+                                    <div class="form-row">
+                                        <div class="form-group col-md-4">
+                                            <label for="chkPublicar" class="text-small">Publicar en el observatorio</label>
+                                            <div style="margin-top:7px;">
+                                                <div class="form-check form-check-inline">
+                                                    @Html.CheckBoxFor(m => m.chkPublicar, new { @class = "form-check-input", style = "width:15px;height:16px;" })
+                                                    <label for="chkPublicarObservatorio" class="text-small">Publicar R.D.</label>
+                                                </div>
+                                                <br /><br />
+                                                @if (Model.RegEstado == 0)
+                                                {
+
+                                                    if (Model.ListPOAOBSERVATORIO != null)
+                                                    {
+                                                        <label for="chkPublicarObservatorio" class="text-small">Publicar POA en el Observatorio</label>
+                                                        <ul id="idlPOAObservatorio" class="list-group">
+                                                            @foreach (var item in Model.ListPOAOBSERVATORIO)
+                                                            {
+
+                                                                <li style="font-size: 12px !important">
+                                                                    <div class="checkbox">
+                                                                        <label>
+                                                                            <input type="checkbox" class="check" value="@item.NUM_POA" checked="@item.PUBLICAR" />
+                                                                            @item.POA
+                                                                        </label>
+                                                                    </div>
+                                                                </li>
+                                                            }
+                                                        </ul>
+                                                    }
+                                                }
+                                            </div>
+                                        </div>
+                                        <div class="form-group col-md-4">
+                                            @if (Model.RegEstado == 0)
+                                            {
+                                                <label for="chkPublicar" class="text-small">Simular en el observatorio</label>
+                                                <ul id="idlPOASimular" class="list-group">
+                                                    @if (Model.ListPOA != null)
+                                                    {
+                                                        foreach (var item in Model.ListPOA)
+                                                        {
+                                                            <li style="font-size: 12px !important">
+                                                                <div class="checkbox">
+                                                                    <label>
+                                                                        <input type="checkbox" class="check" value="@item.NUM_POA" checked="@item.PUBLICAR">
+                                                                        @item.POA
+                                                                    </label>
+                                                                </div>
+                                                            </li>
+
+                                                        }
+                                                    }
+                                                </ul>
+                                                <div style="margin-top:7px;">
+                                                    <div class="form-check form-check-inline">
+                                                        <button type="button" id="btnSimular" class="btn btn-info btn-sm" onclick="ManRD_AddEdit.fnSimular()">Simular Observatorio</button>
+                                                    </div>
+                                                </div>
+                                            }
+                                        </div>
+                                        <div class="form-group col-md-4">
+                                        </div>
+                                    </div>
+
+                                    <div class="form-row">
+                                        <div class="form-group col-md-4">
+                                            <label for="chkPublicar" class="text-small">Fecha Anulación (para los casos donde el TFFS declara nulidad total de la resolución y se retrotrae el proceso, se considera la fecha de emisión de la Res. del TFFS)</label>
+                                            <div style="margin-top:7px;">
+                                                <div class="form-check form-check-inline">
+                                                    @Html.EditorFor(m => m.txtFechaAnulacion, new { htmlAttributes = new { @class = "form-control form-control-sm", placeholder = "dd/mm/yyyy", title = "la fecha a ingresar debe ser en el formato dd/mm/yyyy", maxlength = "10" } })
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group col-md-4">
+                                        </div>
+                                        <div class="form-group col-md-4">
+                                        </div>
+                                    </div>
+                                    <div class="form-row">
+                                        <div class="form-group col-md-4">
+                                            <label for="txtPresentoProyecto" class="text-small">Resolución directoral</label>
+                                            <div style="margin-top:7px;">
+                                                <div class="form-check form-check-inline">
+                                                    @Html.CheckBoxFor(m => m.chkResDir, new { @class = "form-check-input", style = "width:15px;height:16px;" })
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group col-md-4">
+                                            <label for="txtInfDirectoral" class="text-small">Resolucion sub directoral</label>
+                                            <div style="margin-top:7px;">
+                                                <div class="form-check form-check-inline">
+                                                    @Html.CheckBoxFor(m => m.chkResSubDir, new { @class = "form-check-input", style = "width:15px;height:16px;" })
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group col-md-4">
+
+                                        </div>
+                                    </div>
+
+                                    <div id="dvRenderListInforme" class="form-row" style="margin-bottom:10px;">
+                                        <div class="col-md-12">
+                                            @Html.Partial("~/Areas/Fiscalizacion/Views/ManResolucion/_Shared/_renderListaInforme.cshtml", Model)
+                                        </div>
+                                    </div>
+
+
+
+                                    <div class="card-header text-small">Archivos cargados en el SIADO</div>
+                                    <div class="card-body">
+                                        <div class="form-row">
+                                            @{Html.RenderAction("_IntegracionSIADO", "Controles", new { area = "GENERAL", asCriterio = "SUBTIP_TITDOCSIGO", asSubCriterio = "0010", asValor = Model.hdfCodResodirec });}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!--Recomendaciones Rd inicio PAu-->
+                            @if (Model.hdfCodFCTipo == "0000009")
+                            {
+                                <div class="tab-pane fade show" id="navRDInicio" role="tabpanel" aria-labelledby="nav-home-tab">
+                                    <div class="card">
+                                        <div class="col-md-12">
+                                            @Html.Partial("~/Areas/Fiscalizacion/Views/ManResolucion/_Shared/_renderInicioPau.cshtml", Model)
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                            @if (Model.hdfCodFCTipo == "0000011")
+                            {
+                                <!--para Rd termino de pau-->
+                                <div class="tab-pane fade show" id="navRDTermino" role="tabpanel" aria-labelledby="nav-home-tab">
+                                    <div class="card">
+                                        <div class="col-md-12">
+                                            @Html.Partial("~/Areas/Fiscalizacion/Views/ManResolucion/_Shared/_renderTerminoPau.cshtml", Model)
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                            @if (Model.hdfCodFCTipo == "0000014")
+                            {
+                                <!--para Rd de reconsideracion-->
+                                <div class="tab-pane fade show" id="navRDReconsideracion" role="tabpanel" aria-labelledby="nav-home-tab">
+                                    <div class="card">
+                                        <div class="col-md-12">
+                                            @Html.Partial("~/Areas/Fiscalizacion/Views/ManResolucion/_Shared/_renderReconsideracion.cshtml", Model)
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                            @if (Model.hdfCodFCTipo == "0000016")
+                            {
+                                <!--RD Otros-->
+                                <div class="tab-pane fade show" id="navRDOtros" role="tabpanel" aria-labelledby="nav-home-tab">
+                                    <div class="card">
+                                        <div class="col-md-12">
+                                            @Html.Partial("~/Areas/Fiscalizacion/Views/ManResolucion/_Shared/_renderOtros.cshtml", Model)
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                            @if (Model.hdfCodFCTipo == "0000008")
+                            {
+                                <!--RD Archivo del informe de supervision-->
+                                <div class="tab-pane fade show" id="navRDArchivoInf" role="tabpanel" aria-labelledby="nav-home-tab">
+                                    <div class="card">
+                                        <div class="col-md-12">
+                                            @Html.Partial("~/Areas/Fiscalizacion/Views/ManResolucion/_Shared/_renderArchivoInfSup.cshtml", Model)
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                            @if (Model.hdfCodFCTipo == "0000010")
+                            {
+                                <!--RD Ampliacion PAU-->
+                                <div class="tab-pane fade show" id="navRDAmpliacion" role="tabpanel" aria-labelledby="nav-home-tab">
+                                    <div class="card">
+                                        <div class="col-md-12">
+                                            @Html.Partial("~/Areas/Fiscalizacion/Views/ManResolucion/_Shared/_renderAmpliacion.cshtml", Model)
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                            @if (Model.hdfCodFCTipo == "0000012")
+                            {
+                                <!--RD Rectificacion-->
+                                <div class="tab-pane fade show" id="navRDRectificacion" role="tabpanel" aria-labelledby="nav-home-tab">
+                                    <div class="card">
+                                        <div class="col-md-12">
+                                            @Html.Partial("~/Areas/Fiscalizacion/Views/ManResolucion/_Shared/_renderRectificacion.cshtml", Model)
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                            @if (Model.hdfCodFCTipo == "0000015")
+                            {
+                                <!--RD Variacion cautelares-->
+                                <div class="tab-pane fade show" id="navRDVariacionCaut" role="tabpanel" aria-labelledby="nav-home-tab">
+                                    <div class="card">
+                                        <div class="col-md-12">
+                                            @Html.Partial("~/Areas/Fiscalizacion/Views/ManResolucion/_Shared/_renderVariacionCautelares.cshtml", Model)
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                            @if (Model.hdfCodFCTipo == "0000075")
+                            {
+                                <!--RD Renuncia titular-->
+                                <div class="tab-pane fade show" id="navRDCaducidadTH" role="tabpanel" aria-labelledby="nav-home-tab">
+                                    <div class="card">
+                                        <div class="col-md-12">
+                                            @Html.Partial("~/Areas/Fiscalizacion/Views/ManResolucion/_Shared/_renderCaducidad.cshtml", Model)
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                            @if (Model.hdfCodFCTipo == "0000088")
+                            {
+                                <!--RD Conservacion Acto Administrativo-->
+                                <div class="tab-pane fade show" id="navRDConservacionAA" role="tabpanel" aria-labelledby="nav-home-tab">
+                                    <div class="card">
+                                        <div class="col-md-12">
+                                            @Html.Partial("~/Areas/Fiscalizacion/Views/ManResolucion/_Shared/_renderConservacionAA.cshtml", Model)
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                            @if (Model.hdfCodFCTipo == "0000111")
+                            {
+                                <!--RD  Aplicación de Medidas Cautelares (Antes del PAU)-->
+                                <div class="tab-pane fade show" id="navRDAplicMedAPAU" role="tabpanel" aria-labelledby="nav-home-tab">
+                                    <div class="card">
+                                        <div class="col-md-12">
+                                            @Html.Partial("~/Areas/Fiscalizacion/Views/ManResolucion/_Shared/_renderAplicacionMedCorrectiva.cshtml", Model)
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                            @if (Model.hdfCodFCTipo == "0000130")
+                            {
+                                <!--RD  Adecuacion de multa-->
+                                <div class="tab-pane fade show" id="navRDAdecMulta" role="tabpanel" aria-labelledby="nav-home-tab">
+                                    <div class="card">
+                                        <div class="col-md-12">
+                                            @Html.Partial("~/Areas/Fiscalizacion/Views/ManResolucion/_Shared/_renderAdecuacionMulta.cshtml", Model)
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                            @if (Model.hdfCodFCTipo == "0000105")
+                            {
+                                <!--RD  Variación de Imputación de Cargos-->
+                                <div class="tab-pane fade show" id="navRDVariacionImpCargo" role="tabpanel" aria-labelledby="nav-home-tab">
+                                    <div class="card">
+                                        <div class="col-md-12">
+                                            @Html.Partial("~/Areas/Fiscalizacion/Views/ManResolucion/_Shared/_renderVariacionImpCargos.cshtml", Model)
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                            @if (Model.hdfCodFCTipo == "0000013")
+                            {
+                                <!--RD  Acumulación de Expedientes con PAU-->
+                                <div class="tab-pane fade show" id="navRDAcumulacion" role="tabpanel" aria-labelledby="nav-home-tab">
+                                    <div class="card">
+                                        <div class="col-md-12">
+                                            @Html.Partial("~/Areas/Fiscalizacion/Views/ManResolucion/_Shared/_renderAcumulacionExpe.cshtml", Model)
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+
+
+                            <!--para las notificaciones a instituciones-->
+                            <div class="tab-pane fade show" id="navRDNotificacion" role="tabpanel" aria-labelledby="nav-home-tab">
+                                <div class="card">
+                                    <div class="col-md-12">
+                                        @Html.Partial("~/Areas/Fiscalizacion/Views/ManResolucion/_Shared/_renderNotificacion.cshtml", Model)
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="tab-pane fade show" id="navObservacion" role="tabpanel" aria-labelledby="nav-home-tab">
+                                <div class="card">
+                                    <div class="form-row">
+                                        <div class="form-group col-md-12">
+                                            <label for="txtObservaciones" class="text-small">Observaciones</label>
+                                            @Html.TextAreaFor(m => m.txtObservacones, 8, 1, new { @class = "form-control form-control-sm" })
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade hide" id="mdlBuscarPersona" role="dialog"></div>
+<div class="modal fade" id="modalAddEditPersona" tabindex="-1" role="dialog"></div>
+<div class="modal fade hide" id="personaUbigeoModal" role="dialog"></div>

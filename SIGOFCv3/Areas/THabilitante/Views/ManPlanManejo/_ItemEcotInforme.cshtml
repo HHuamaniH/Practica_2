@@ -1,0 +1,64 @@
+﻿<div id="divItemESituAnual" class="modal-dialog modal-lg" role="document">
+    <div class="modal-content" id="contenedorEcoInforme">
+        <div class="modal-header text-small" style="cursor:move;padding:0.5rem;">
+            <h5 class="modal-title" id="h5Titulo">Nuevo</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body">
+            <form id="frmEcoInforme">
+                <input type="hidden" id="COD_SECUENCIAL" name="COD_SECUENCIAL" value="0" />
+                <input type="hidden" id="RegEstado" name="RegEstado" value="1" />
+                <input type="hidden" id="RegEstadoClient" name="RegEstadoClient" value="1" />
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label for="ANO_EJECUTADO" class="text-small">Periodo Informado</label>
+                        <input type="text" id="ANO_EJECUTADO" name="ANO_EJECUTADO" class="form-control form-control-sm" maxlength="4" onkeypress="return utilSigo.onKeyEntero(event, this);" />
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="FECHA_EMISION" class="text-small">Fecha de Presentacion</label>
+                        <input type="text" id="FECHA_EMISION" name="FECHA_EMISION" class="form-control form-control-sm" maxlength="10" />
+                    </div>
+                </div>
+                <div class="card-header text-small">
+                    Persona que elaboró el Informe Anual
+                </div>
+                <div class="card-body" style="border:1.5px;">
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label for="PROFESIONAL_NOMBRE" class="text-small">Nombres<i class="fa fa-cog fa-spin text-danger" id="iconProfesional" style="display:none;" data-toggle="tooltip" data-placement="top" title="Seleccione Profesional"></i></label>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"><i id="btnAddProfesional" class="fa fa-plus" style="cursor:pointer;" data-toggle="tooltip" data-placement="top" title="Agregar"></i></span>
+                                </div>
+                                <input type="text" id="PROFESIONAL_NOMBRE" name="PROFESIONAL_NOMBRE" class="form-control form-control-sm" maxlength="200" disabled="disabled" />
+                                <input type="hidden" id="PROFESIONAL_CODIGO" name="PROFESIONAL_CODIGO" />
+                            </div>
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label for="PROFESIONAL_DNI" class="text-small">DNI</label>
+                            <input type="text" id="PROFESIONAL_DNI" name="PROFESIONAL_DNI" class="form-control form-control-sm" maxlength="20" disabled="disabled" />
+                        </div>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-12">
+                        <label for="PRINCIPAL_ACCION_DESARROLLA" class="text-small">Principales acciones desarrolladas</label>
+                        <textarea id="PRINCIPAL_ACCION_DESARROLLA" name="PRINCIPAL_ACCION_DESARROLLA" class="form-control form-control-sm" rows="2"></textarea>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-12">
+                        <label for="OBSERVACION" class="text-small">Observación</label>
+                        <textarea id="OBSERVACION" name="OBSERVACION" class="form-control form-control-sm" rows="2"></textarea>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="modal-footer">
+            <button id="btnGuardar" class="btn btn-primary btn-sm">Aceptar</button>            
+        </div>
+    </div>
+</div>
+<script src="~/Areas/THabilitante/js/ManPlanManejo/_ItemEcotInforme.js"></script>

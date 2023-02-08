@@ -1,0 +1,139 @@
+﻿
+@{
+    ViewBag.Title = "reporteDenuncia";
+    Layout = "~/Views/Shared/_LayoutMain.cshtml";
+}
+
+
+<script src="~/Areas/Supervision/js/Denuncias/VistaDenuncia.js"></script>
+
+
+<div class="container-fluid">
+    <div class="card">
+        <div class="card-header text-right">
+            VistaDenuncia
+        </div>
+        <div class="card-body">
+            <div class="card">
+                <div class="card-header text-small">
+                    @*<a href="javascript:void(0)" style="cursor:pointer;" data-toggle="tooltip" data-placement="top" title="Guardar" onclick="ManInforme_AddEdit.fnSubmitForm()"><i class="fa mx-2 fa-lg fa-save"></i></a>*@
+                    <a style="cursor:pointer;" data-toggle="tooltip" data-placement="top" title="Regresar" onclick="returnIndex()"><i class="fa mx-2 fa-lg fa-reply"></i></a>
+                </div>
+                <div class="card-body">
+                    <ul class="nav nav-tabs" id="TabsDenuncia" role="tablist">
+                        <li class="nav-item"><a class="nav-link active show" data-toggle="tab" href="#navEstado" role="tab" aria-controls="home" aria-selected="true">Informe</a></li>
+                        <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#navDatos" role="tab" aria-controls="home" aria-selected="false">Denuncia</a></li>
+                    </ul>
+                    <div class="tab-content">
+                        <div class="tab-pane fade show active" id="navEstado" role="tabpanel" aria-labelledby="nav-home-tab">
+                            <div class="card-header text-small">
+                                Datos del Informe
+                            </div>
+                            <div class="card-body">
+                                <div class="form-row">
+                                    <div class="form-group col-md-12 mb-3 ">
+                                        <label for="txtnum_informe" class="text-small">N° Informe</label>
+                                        <input class="form-control form-control-sm text-box single-line" disabled="disabled" id="txtnum_informe" name="txtnum_informe" type="text">
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group col-md-4">
+                                        <label for="txtNotificacion" class="text-small">Notificacion</label>
+                                        <input class="form-control form-control-sm" disabled="disabled" id="txtNotificacion" name="txtNotificacion" type="text">
+                                    </div>
+                                    <div class="form-group col-md-4">
+                                        <label for="txtFechaInicio" class="text-small">Fecha de Supervision Inicio</label>
+                                        <input class="form-control form-control-sm" disabled="disabled" id="txtFechaInicio" name="txtFechaInicio" type="text">
+                                    </div>
+                                    <div class="form-group col-md-4">
+                                        <label for="txtFechaFin" class="text-small">Fecha de Supervision Fin</label>
+                                        <input class="form-control form-control-sm" disabled="disabled" id="txtFechaFin" name="txtFechaFin" type="text">
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group col-md-4 mb-3">
+                                        <label for="txtModalidad" class="text-small">Modalidad</label>
+                                        <input class="form-control form-control-sm" disabled="disabled" id="txtModalidad" name="txtModalidad" type="text">
+                                    </div>
+                                    <div class="form-group col-md-4 mb-3">
+                                        <label for="txtDepartamento" class="text-small">Departamento</label>
+                                        <input class="form-control form-control-sm" disabled="disabled" id="txtDepartamento" name="txtDepartamento" type="text">
+                                    </div>
+                                </div>
+                                <div id="pndatos_InfAutOtros">
+                                    <div class="form-row">
+                                        <div class="form-group col-md-4 mb-3">
+                                            <label for="txtTHablitante" class="text-small">T. Habilitante</label>
+                                            <input class="form-control form-control-sm" disabled="disabled" id="txtTHablitante" name="txtTHablitante" type="text">
+                                        </div>
+                                        <div class="form-group col-md-4 mb-3">
+                                            <label for="txtTitular" class="text-small">Titular</label>
+                                            <input class="form-control form-control-sm" disabled="disabled" id="txtTitular" name="txtTitular" type="text">
+                                        </div>
+                                        <div class="form-group col-md-4 mb-3">
+                                            <label for="txtDLinea" class="text-small">D. Linea</label>
+                                            <input class="form-control form-control-sm" disabled="disabled" id="txtDLinea" name="txtDLinea" type="text">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="tab-pane fade show" id="navDatos" role="tabpanel" aria-labelledby="nav-home-tab">
+                            <div class="card-header text-small">
+                                Datos de la Denuncia
+                            </div>
+                            <div class="card">
+                                <div class="card-body">
+                                    <div class="form-row">
+                                        <div class="form-group col-md-4">
+                                            <div class="custom-control custom-checkbox my-1 mr-sm-2">
+                                                <input disabled="disabled" class="custom-control-input" data-val="true" data-val-required="El campo chkDenuncia es obligatorio." id="chkDenuncia" name="chkDenuncia" type="checkbox" value="true"><input name="chkDenuncia" type="hidden" value="false">
+                                                <label for="chkDenuncia" class="custom-control-label" style="margin-top:6px;">Denuncia</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-row ValidateHiddenMain">
+                                        <div id="dvComboMotSupervision" class="form-group col-md-2">
+                                            <label for="tipoDenuncia" class="text-small">Tipo de Denuncia</label>
+                                            <select class="form-control form-control-sm" disabled="disabled" id="tipoDenuncia" name="tipoDenuncia">
+                                                <option value="00">--Seleccionar--</option>
+                                                <option value="01">Ordinario</option>
+                                                <option value="02">Extraordinario</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="card-header text-small">
+                                        Expedientes
+                                    </div>
+                                    <div class="form-row ValidateHidden" style="margin-top:10px;">
+                                        <div class="form-row ValidateHidden" style="margin-top:10px;">
+                                            <div class="input-group col-md-12" id="htmlExpedientes"></div>
+                                        </div>
+                                    </div>
+                                    <div class="card-header text-small">
+                                        Informes
+                                    </div>
+                                    <div class="form-row ValidateHidden" style="margin-top:10px;">
+                                        <div class="input-group col-md-12" id="htmlInformes"></div>
+                                    </div>
+                                    <div class="form-row ValidateHidden" style="margin-top:10px;">
+                                        <div class="form-group col-md-6">
+                                            <label for="txtConclusionDenuncia" class="text-small">Conclusiones</label>
+                                            <textarea id="txtConclusionDenuncia" disabled="disabled" style="height:200px" class="form-control form-control-sm"></textarea>
+                                        </div>
+                                        <div class="form-group col-md-6">
+                                            <label for="txtRecomendacionDenuncia" class="text-small">Recomendaciones</label>
+                                            <textarea id="txtRecomendacionDenuncia" disabled="disabled" style="height:200px" class="form-control form-control-sm"></textarea>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+

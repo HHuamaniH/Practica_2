@@ -1,0 +1,227 @@
+﻿@{
+    ViewBag.Title = "Reporte de Notificaciones";
+    Layout = "~/Views/Shared/_LayoutMain.cshtml";
+}
+@section styles{
+    <style>
+        #frmNotificaciones input[type=text] {
+            text-transform: uppercase;
+        }
+
+        .c-pointer {
+            cursor: pointer !important;
+        }
+    </style>
+}
+
+@section scripts
+{
+    <script src="~/Scripts/datatables/Extensions/dataTables.buttons.js"></script>
+    <script src="~/Scripts/datatables/Extensions/buttons.flash.min.js"></script>
+    <script src="~/Scripts/datatables/Extensions/jszip.min.js"></script>
+
+    <script src="~/Scripts/datatables/Extensions/vfs_fonts.js"></script>
+
+
+    <link href="~/Content/datatables/buttons.dataTables.min.css" rel="stylesheet" />
+
+}
+
+
+<div id="divPlanTrabajo" class="container-fluid">
+    <div class="card">
+        <div class="card-header text-left">
+            <h5>Reporte de Notificaciones</h5>
+        </div>
+        <div class="card-body">
+            <div class="col-12">
+                <form id="frmNotificaciones">
+                    <div class="form-row">
+                        <div class="form-group col-md-3">
+                            <label>Año de Consulta</label>
+                            <select class="form-control form-control-sm" id="cboOpciones">
+                                <option value="2021">2021</option>
+                                <option value="2020">2020</option>
+                                <option value="2019">2019</option>
+                                <option value="2018">2018</option>
+                                <option value="2017">2017</option>
+                                <option value="2016">2016</option>
+                                <option value="2015">2015</option>
+                                <option value="2014">2014</option>
+                                <option value="2013">2013</option>
+                                <option value="TODOS">TODOS</option>
+                            </select>
+                        </div>
+                        <div class="form-group col-md-3">
+                            <label>Titular</label>
+                            <input class="form-control form-control-sm" type="text" id="txtTitular" />
+                        </div>
+                        <div class="btn-group col-md-2 mt-4" style="padding-top:5px;">
+                            <a id="btnSearch" style="cursor:pointer;" data-toggle="tooltip" data-placement="top" title="Buscar" onclick="_manReporte.fnSearch()"><span class="fa mx-2 fa-lg fa-search"></span></a>
+                            <a id="btnDownload" style="cursor:pointer;" data-toggle="tooltip" data-placement="top" title="Exportar" onclick="_manReporte.fnExport()" data-original-title="Descargar"><span class="fa mx-2 fa-lg fa-file-excel-o"></span></a>
+                            @*<a id="btnAdd" style="cursor:pointer;" data-toggle="tooltip" data-placement="top" title="" onclick="_manReporte.fnCrear()" data-original-title="Crear un nuevo registro"><span class="fa mx-2 fa-lg fa-plus"></span></a>*@
+
+                        </div>
+                    </div>
+                    <div class="table-responsive-md">
+                        <table id="tbNotificaciones" class="table table-hover table-bordered" style="width:100%;">
+                            <thead>
+                                <tr>
+                                    <th>N°</th>
+                                    <th>Fecha de Registro</th>
+                                    <th>Tipo de Documento</th>
+                                    <th>N° de Documento</th>
+                                    <th>Destinatario</th>
+                                    <th>Dirección</th>
+                                    <th>F. de entrega a Administrado</th>
+                                    <th>F. primera visita</th>
+                                    <th>F. segunda visita</th>
+                                    <th>Persona Notificada</th>
+                                    <th>Vinculo</th>
+                                    <th>Dirección donde se notificó</th>
+                                    <th>Variación de domicilio</th>
+                                    <th>OD Responsable</th>
+                                    <th>Estado</th>
+                                    <th>Observaciones</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </form>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    var _manReporte = {
+
+        fnBuilTable: () => {
+            const columns = [
+                {
+                    "name": "ROW_INDE", "width": "2%", "orderable": false, "searchable": false, "mRender": function (data, type, row, meta) {
+                        return parseInt(meta.row) + 1 + meta.settings._iDisplayStart;
+                    }
+                },
+                { "data": "FECHA_CREACION", "autoWidth": true },
+                { "data": "TIPO_DOCUMENTO", "autoWidth": true },
+                { "data": "N_DOC", "autoWidth": true },
+                { "data": "DESTINATARIO", "autoWidth": true },
+                { "data": "DIRECCION", "autoWidth": true },
+                { "data": "FECHA_ADMINISTRADO", "autoWidth": true },
+                { "data": "FECHA_PRIMERA_VISITA", "autoWidth": true },
+                { "data": "FECHA_SEGUNDA_VISITA", "autoWidth": true },
+                { "data": "PERSONA_NOT", "autoWidth": true },
+                { "data": "VINCULO", "autoWidth": true },
+                { "data": "DIRECCION_NOT", "autoWidth": true },
+                { "data": "VARIACION_DOMICILIO", "autoWidth": true },
+                { "data": "OD_RESPONSABLE", "autoWidth": true },
+                { "data": "ESTADO", "autoWidth": true },
+                { "data": "OBSERVACIONES", "autoWidth": true },
+            ];
+            const optDt = { iLength: 20, iStart: 0, aSort: [] };
+            _manReporte.dt = _manReporte.frm.find("#tbNotificaciones").DataTable({
+                processing: true,
+                serverSide: true,
+                searching: false,
+                ordering: false,
+                paging: true,
+                ajax: {
+                    // "url": `${urlLocalSigo}/General/Controles/GetListaGeneralPaging`,
+                    "url": `${urlLocalSigo}/General/Controles/GetListaGeneralPaging`,
+                    //   let baseUrl = urlLocalSigo + "Fiscalizacion/ReporteFiscalizacion/";
+                    "data": function (d) {
+                        d.CustomSearchForm = "NOTIFICACIONES";
+                        d.CustomSearchType = _manReporte.frm.find("#txtTitular").val();
+                        d.CustomSearchValue = _manReporte.frm.find("#cboOpciones").val();
+                        d.customSearchEnabled = true;
+                        //d.id = "";
+                        //for (var i = 0; i < d.order.length; i++) {
+                        //    d.order[i]["column_name"] = d.columns[d.order[i]["column"]]["data"];
+
+                        //    if (d.order[i].column_name != 0 || d.order[i].column_name != "") {
+                        //        d.sort = d.order[i].column_name + " " + d.order[i].dir;
+                        //    }
+                        //}
+                        d.columns = null;
+                    },
+                    "error": function (jqXHR) {
+                        // utilSigo.unblockUIGeneral();
+                        if (jqXHR.status != 401 && jqXHR.status != 403 && jqXHR.status != 404) {
+                            utilSigo.toastError("Error", initSigo.MessageError);
+                        }
+                        //console.log(jqXHR);
+                    },
+                    "statusCode": {
+                        203: () => { utilSigo.toastInfo("Aviso", "El usuario perdio la sesión. Vuelva ingresar al sistema"); }
+                    }
+                },
+                columns: columns,
+                bInfo: true,
+                "lengthMenu": [[10, 20, 50, 100], [10, 20, 50, 100]],
+                // "aaSorting": optDt.aSort,
+                "pageLength": optDt.iLength,
+                "displayStart": optDt.iStart,
+                "oLanguage": initSigo.oLanguage,
+                "drawCallback": initSigo.showPagination
+            });
+        },
+        fnSearch: () => {
+            _manReporte.dt.ajax.reload();
+        },
+        fnExport: () => {
+            var url = urlLocalSigo + "Fiscalizacion/ReporteFiscalizacion/ExportarNotificaciones";
+            var data = new Object();
+            data.TIPO_REPORTE = "EXPORTARNOTIFICACIONES";
+            data.DESTINATARIO = _manReporte.frm.find("#txtTitular").val();
+            data.ANIO = _manReporte.frm.find("#cboOpciones").val();
+            data.v_pagesize = 1;
+            data.columns = null;
+
+            // var option = { url: url, datos: JSON.stringify({ data}), type: 'POST' };
+
+
+            $.ajax({
+                url: url,
+                type: 'POST',
+                data: JSON.stringify(data),
+                contentType: 'application/json;charset=utf-8',
+                dataType: 'json',
+                beforeSend: utilSigo.beforeSendAjax,
+                complete: utilSigo.completeAjax,
+                error: utilSigo.errorAjax,
+                success: function (data) {
+                    if (data.success) {
+                        document.location = urlLocalSigo + "Archivos/Plantilla/Reg_Usu/" + data.values;
+                    }
+                    else {
+                        utilSigo.toastWarning("Aviso", "Sucedio un error, Comuníquese con el Administrador");
+                        console.log(data.msj);
+                    }
+                }.bind(this)
+            });
+
+            //utilSigo.fnAjax(option, function (data) {
+            //    if (data.success) {
+            //        document.location = urlLocalSigo + "Archivos/Plantilla/Reg_Usu/" + data.msj;
+            //    }
+            //    else {
+            //        utilSigo.toastWarning("Aviso", "Sucedio un error, Comuníquese con el Administrador");
+            //        console.log(data.msj);
+            //    }
+            //});
+        }
+    };
+    $(document).ready(function () {
+
+        _manReporte.frm = $("#frmNotificaciones");
+        _manReporte.fnBuilTable();
+        _manReporte.frm.submit(function (e) {
+            e.preventDefault();
+            _manReporte.fnSearch();
+        });
+
+    });
+</script>

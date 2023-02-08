@@ -1,0 +1,144 @@
+﻿
+@model dynamic
+@{
+    Layout = null;
+}
+<script type="text/javascript">
+    var _renderIncisos ={}
+    $(document).ready(function () {
+        $("[id*=btnAddInfracciones]").click(function () {
+            var value = [];
+            $("[id*=chkIncisos] input:checked").each(function () {
+                value.push($(this).attr('value'));
+            });
+
+            if (value.length > 0) {
+                for (let item of value) {
+                    var codFCTipo = '@Model.hdfCodFCTipo';
+                    var band = 0;
+                    var listaInforme, data;
+
+                    let model = {
+                        COD_ENCISOS: item,
+                        INCISO: _renderIncisos.buscaEnciso(item),
+                        ARTICULO: '@Model.txtArticulo',
+                        RegEstado: 1 //nuevo registro
+                    }
+
+                    switch (codFCTipo) {
+                        case "0000008":
+                            listaInforme = _renderArchivoInfSup.dtRenderListInforme.$("tr");
+                            for (let elem of listaInforme) {
+                                data = _renderArchivoInfSup.dtRenderListInforme.row($(elem)).data();
+                                if (data.COD_ENCISOS == model.COD_ENCISOS) {
+                                    //existe
+                                    band = 1;
+                                }
+                            }
+
+                            if (band == 0) {
+                                _renderArchivoInfSup.dtRenderListInforme.rows.add([model]).draw();
+                                _renderArchivoInfSup.dtRenderListInforme.page('last').draw('page');
+                            }
+                            break;
+
+                        case "0000009":
+                            listaInforme = _renderInicioPau.dtRenderListInforme.$("tr");
+                            for (let elem of listaInforme) {
+                                data = _renderInicioPau.dtRenderListInforme.row($(elem)).data();
+                                if (data.COD_ENCISOS == model.COD_ENCISOS) {
+                                    //existe
+                                    band = 1;
+                                }
+                            }
+
+                            if (band == 0) {
+                                _renderInicioPau.dtRenderListInforme.rows.add([model]).draw();
+                                _renderInicioPau.dtRenderListInforme.page('last').draw('page');
+                            }
+                            break;
+
+                        case "0000011":
+                            listaInforme = _renderTerminoPau.dtRenderListInforme.$("tr");
+                            for (let elem of listaInforme) {
+                                data = _renderTerminoPau.dtRenderListInforme.row($(elem)).data();
+                                if (data.COD_ENCISOS == model.COD_ENCISOS) {
+                                    //existe
+                                    band = 1;
+                                }
+                            }
+
+                            if (band == 0) {
+                                _renderTerminoPau.dtRenderListInforme.rows.add([model]).draw();
+                                _renderTerminoPau.dtRenderListInforme.page('last').draw('page');
+                            }
+                            break;
+
+                        case "0000014":
+                            listaInforme = _renderReconsideracion.dtRenderListInforme.$("tr");
+                            for (let elem of listaInforme) {
+                                data = _renderReconsideracion.dtRenderListInforme.row($(elem)).data();
+                                if (data.COD_ENCISOS == model.COD_ENCISOS) {
+                                    //existe
+                                    band = 1;
+                                }
+                            }
+
+                            if (band == 0) {
+                                _renderReconsideracion.dtRenderListInforme.rows.add([model]).draw();
+                                _renderReconsideracion.dtRenderListInforme.page('last').draw('page');
+                            }
+                            break;
+                    }  
+                }
+            }
+            else {
+                if (value.length == 0) {
+                    alert("Seleccion una infracción");
+                }
+            }
+        });
+    });
+
+    _renderIncisos.buscaEnciso = function (codEnciso) {
+        var descEnciso = "";
+        var listaIncisos = JSON.parse('@Html.Raw(Json.Encode(@Model.listaIncisos))');
+
+        for (var item of listaIncisos)
+        {
+            if (item.Value == codEnciso) {
+                descEnciso = item.Text;
+            }
+        }
+        return descEnciso;
+    }
+</script>
+<div style="width: 100%;">
+    <div class="form-row">
+        <div class="form-group col-md-12">
+            <label for="chkPrimeraVisita" class="text-small">Inciso</label>
+        </div>
+        <div class="form-group col-md-12">
+            <div id="chkIncisos" class="container">
+                @if (Model.listaIncisos != null)
+                {
+                    <ul class="list-group list-group-horizontal">
+                        @foreach (var item in Model.listaIncisos)
+                        {
+                            <li class="list-group-item">
+                                <div class="checkbox">
+                                    <label>
+                                        <input type="checkbox" class="check" value="@item.Value">
+                                        @item.Text
+                                    </label>
+                                </div>
+                            </li>
+                        }
+                    </ul>
+                }
+            </div>
+            <br>
+            <button type="button" id="btnAddInfracciones" class="btn btn-info btn-sm"> Agregar Infracción</button>
+        </div>
+    </div>
+</div>

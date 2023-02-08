@@ -1,0 +1,72 @@
+﻿
+<script type="text/javascript">
+    _renderComboEspecie = {};
+
+    _renderComboEspecie.fnInit = function (tipoEspecie, codEspecie, nomEspecie) {
+       
+        $("#ddlRenderComboEspecieId").select2({
+            placeholder: "Seleccione Especie",
+            minimumInputLength: 2,
+            allowClear: true,
+            ajax: {
+                url: initSigo.urlControllerGeneral + "GetComboEspeciePaging",
+                dataType: 'json',
+                delay: 250,
+                data: function (params) {
+                    //alert(Object.values(params));                    
+                    var term = params.term.trim();
+                    var type = params._type.trim();
+                    //alert(term);
+                    return {
+                        pageSize: 10,
+                       // pageNum: params.page || 1,
+                        pageNum: 1,
+                        searchTerm: term,
+                        tipoEspecie: tipoEspecie,
+                        type: type
+                    };
+                },
+                processResults: function (data, params) {
+                   // params.page = params.page || 1;
+                    params.page = 1;
+                    console.log(data.Results);
+                   
+                    return {
+                        results: data.Results,
+                        pagination: {
+                            more: (params.page * 10) < data.Total
+                        }
+                    };
+                },
+                transport: function (params, success, failure) {
+                    var $request = $.ajax(params);
+                    $request.then(success);
+                    $request.fail(failure);
+                    return $request;
+                },
+                statusCode: {
+                    203: () => { utilSigo.unblockUIGeneral(); utilSigo.toastWarning("Aviso", "El usuario perdio la sesión. Vuelva ingresar al sistema"); }
+                }
+            }
+        });
+        console.log("comboespecie :"+codEspecie);
+        if (codEspecie != "" && codEspecie != "0000000") {            
+            var $newOption = $("<option></option>").val(codEspecie).text(nomEspecie);
+            $("#ddlRenderComboEspecieId").append($newOption).trigger('change');
+        }
+    }
+
+    _renderComboEspecie.fnGetCodEspecie = function () {
+        return $("#ddlRenderComboEspecieId").val();
+    }
+    _renderComboEspecie.fnGetEspecie = function () {
+        if ($("#ddlRenderComboEspecieId").val()==null) {
+            return "";
+        }
+
+        return $("#ddlRenderComboEspecieId").select2("data")[0].text;
+    }
+</script>
+
+<label id="lblRenderComboEspecieId" for="ddlRenderComboEspecieId" class="text-small">Especie</label>
+<select id="ddlRenderComboEspecieId" class="form-control input-sm"></select>

@@ -1,0 +1,135 @@
+﻿@model CapaEntidad.GENE.Ent_USUARIO_CUENTA
+<script type="text/javascript">
+    "use strict";
+    function ejecutarMenu(obj) {
+        var $frmMenuGeneralSigo = $("#frmMenuGeneral");
+        var reenviarUrl = $frmMenuGeneralSigo.attr("action");
+        var $obtenerDatosSigo = $(obj).closest("li");
+        $frmMenuGeneralSigo.find("#idModulo").val($obtenerDatosSigo.find("#hdCodModulo").val())
+        var codMenuItemSigo = $obtenerDatosSigo.find("#hdCodMenu").val();
+        $frmMenuGeneralSigo.find("#idMenu").val(codMenuItemSigo.split('/')[0]);
+        $frmMenuGeneralSigo.find("#titleMenu").val($obtenerDatosSigo.find("#htTitleMenu").val());
+        $frmMenuGeneralSigo.submit();
+    }
+    $(document).ready(function () {
+
+    });
+</script>
+@if (Model != null)
+{
+    <form id="frmMenuGeneral" method="post" action="@Url.Action("Index","Controles",new {Area="THabilitante"})">
+        @Html.Hidden("idModulo")
+        @Html.Hidden("idMenu")
+        @Html.Hidden("titleMenu")
+        @Html.Hidden("busModuloConsulta", "")
+    </form>
+    <nav class="side-navbar">
+        <div class="side-navbar-wrapper">
+            <!-- Sidebar Header    -->
+            <div class="sidenav-header d-flex align-items-center justify-content-center">
+                <!-- User Info-->
+                <div class="sidenav-header-inner text-center">
+                    <h2 class="h5">@Model.USUARIO_LOGIN</h2><span></span>
+                </div>
+                <div class="sidenav-header-logo"><a href="index.html" class="brand-small text-center"> <strong></strong><strong class="text-primary"></strong></a></div>
+            </div>
+            <nav class="side-navbar">
+                <div class="side-navbar-wrapper">
+                    <!-- Sidebar Header    -->
+                    <div class="sidenav-header d-flex align-items-center justify-content-center">
+                        <!-- User Info-->
+                        <div class="sidenav-header-inner text-center">
+                            <h2 class="h5">@Model.USUARIO_LOGIN</h2><span></span>
+                        </div>
+                        <div class="sidenav-header-logo"><a href="index.html" class="brand-small text-center"> <strong></strong><strong class="text-primary"></strong></a></div>
+                    </div>
+                    <nav class="navbar-default navbar-static-side" role="navigation">
+                        <div class="sidebar-collapse">
+                            <ul class="nav metismenu" id="side-menu">
+                                @{
+                                    var item = Model.ListUCDMMENU[0];
+                                    var contador = 1;
+                                    foreach (var item2 in item.ListMENUGRUPO)
+                                    {
+                                        var caracter = "#";
+                                        var subMenu = "subMenu" + contador.ToString();
+                                        var subMenuConcat = caracter + subMenu;
+                                        <li>
+                                            <a><span class="nav-label">@item2.GRUPO</span></a>
+                                            <ul class="nav nav-second-level collapse">
+                                                <li>
+                                                    <ul id="side-main-menu" class="side-menu list-unstyled">
+                                                        @foreach (var item3 in item2.ListMENUPADRE)
+                                                        {
+                                                        <li>
+
+                                                            @if (item3.ListMENUMENU.Count() == 1 && item3.ListMENUMENU[0].MENU_URL_HIJO_MVC == "" && @item3.ListMENUMENU[0].MENU_URL_PADRE_MVC == "")
+                                                            {
+                                                                String url = "#";
+                                                                //if(!url.Equals("javascript:;"))
+                                                                //url = url + "?idModulo=" + @item4.COD_SMODULOS + "&titleMenu=" + @item4.MENU_HIJO + "&idMenu=" + @item4.COD_SECUENCIAL_HIJO.ToString().Split('/')[0];
+                                                                <ul>
+                                                                    <li>
+                                                                        <input type="hidden" id="hdCodModulo" value=@item3.ListMENUMENU[0].COD_SMODULOS />
+                                                                        <input type="hidden" id="hdCodMenu" value=@item3.ListMENUMENU[0].COD_SECUENCIAL_HIJO />
+                                                                        <input type="hidden" id="htTitleMenu" value=@item3.ListMENUMENU[0].MENU_PADRE />
+                                                                        <a class="side-navbar-item" href="@url" style="cursor:pointer;">@item3.ListMENUMENU[0].MENU_PADRE</a>
+                                                                    </li>
+                                                                </ul>
+                                                            }
+                                                            else if (item3.ListMENUMENU.Count() == 1 && item3.ListMENUMENU[0].MENU_URL_HIJO_MVC == "")
+                                                            {
+                                                                String url = Url.Content("~") + @item3.ListMENUMENU[0].MENU_URL_PADRE_MVC;
+                                                                //if(!url.Equals("javascript:;"))
+                                                                //url = url + "?idModulo=" + @item4.COD_SMODULOS + "&titleMenu=" + @item4.MENU_HIJO + "&idMenu=" + @item4.COD_SECUENCIAL_HIJO.ToString().Split('/')[0];
+                                                                <ul>
+                                                                    <li>
+                                                                        <input type="hidden" id="hdCodModulo" value=@item3.ListMENUMENU[0].COD_SMODULOS />
+                                                                        <input type="hidden" id="hdCodMenu" value=@item3.ListMENUMENU[0].COD_SECUENCIAL_HIJO />
+                                                                        <input type="hidden" id="htTitleMenu" value=@item3.ListMENUMENU[0].MENU_PADRE />
+                                                                        <a class="side-navbar-item" href="@url" style="cursor:pointer;">@item3.ListMENUMENU[0].MENU_PADRE</a>
+                                                                    </li>
+                                                                </ul>
+                                                            }
+                                                            else if (item3.ListMENUMENU.Count() >= 1 && item3.MENU_URL_HIJO_MVC != "")
+                                                            { <a href=@subMenuConcat aria-expanded="false" data-toggle="collapse">@item3.MENU_PADRE </a>
+                                                            <ul id=@subMenu class="collapse list-unstyled">
+                                                                @foreach (var item4 in item3.ListMENUMENU)
+                                                                {
+
+                                                                    String url = @item4.MENU_URL_HIJO_MVC == "" || @item4.MENU_URL_HIJO_MVC == " " ? "" : Url.Content("~") + @item4.MENU_URL_HIJO_MVC;
+                                                                    <li>
+                                                                        <input type="hidden" id="hdCodModulo" value=@item4.COD_SMODULOS />
+                                                                        <input type="hidden" id="hdCodMenu" value=@item4.COD_SECUENCIAL_HIJO />
+                                                                        <input type="hidden" id="htTitleMenu" value=@item4.MENU_HIJO />
+                                                                        <a class="side-navbar-item" href="@url" style="cursor:pointer;">@item4.MENU_HIJO</a>
+                                                                    </li>
+
+
+
+                                                                }
+                                                            </ul>
+
+                                                        }
+                                                        </li>
+                                                            contador++;
+                                                            subMenu = "subMenu" + contador.ToString();
+                                                            subMenuConcat = caracter + subMenu;
+                                                        }
+
+                                                    </ul>
+                                                </li>
+                                            </ul>
+                                        </li>
+                                    }
+                                }
+
+                            </ul>
+                        </div>
+                    </nav>
+                </div>
+            </nav>
+        </div>
+    </nav>
+
+                                    }

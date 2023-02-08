@@ -1,0 +1,148 @@
+﻿<script src="~/Scripts/datatables/Extensions/dataTables.buttons.js"></script>
+<script src="~/Scripts/datatables/Extensions/buttons.flash.min.js"></script>
+<script src="~/Scripts/datatables/Extensions/jszip.min.js"></script>
+<script src="~/Scripts/datatables/Extensions/pdfmake.js"></script>
+<script src="~/Scripts/datatables/Extensions/vfs_fonts.js"></script>
+<script src="~/Scripts/datatables/Extensions/buttons.html5.js"></script>
+<script src="~/Scripts/datatables/Extensions/buttons.print.js"></script>
+
+<link href="~/Content/datatables/buttons.dataTables.min.css" rel="stylesheet" />
+<style>
+    button.dt-button {
+        font-weight: 400;
+        border: 1px solid transparent;
+        padding: 0.25rem 0.5rem;
+        font-size: 0.875rem;
+        line-height: 1.5;
+        border-radius: 0;
+        color: #17a2b8;
+        background-color: transparent;
+        background-image: none;
+        border-color: #17a2b8;
+    }
+
+    button.dt-button:hover:not(.disabled) {
+        text-decoration: none;
+        color: #fff;
+        background-color: #17a2b8;
+        border-color: #17a2b8;
+        background-image: none;
+    }
+
+    button.dt-button:active:not(.disabled), button.dt-button:hover:not(.disabled):active:not(.disabled) {
+        color: #fff;
+        background-color: #17a2b8;
+        border-color: #17a2b8;
+        box-shadow: 0 0 0 0.2rem rgba(23, 162, 184, 0.5);
+        background-image: none;
+    }
+
+    .text-small {
+        margin-bottom: 5px;
+        font-size: 14px;
+    }
+
+    .custom-checkbox {
+        font-size: 13px;
+    }
+
+    .custom-control-label {
+        margin-top: 6px;
+    }
+
+    #divTbResumen .dataTables_info {
+        color: #33b35a;
+        font-size: 15px;
+        margin-top: 17px;
+    }
+
+    #divTbResumen .dataTables_paginate {
+        margin-top: -25px;
+    }
+</style>
+
+<script>
+    $(function () {
+        var columns_label = [], columns_data = [], options = {};
+
+        switch ('@Model.tipoReporte') {
+            case 'TITULO_HABILITANTE':
+                columns_label = ["Nro. THabilitante", "Titular", "Dir. Línea", "Modalidad", "Departamento", "Título Habilitante Vértice"];
+                columns_data = ["NUM_THABILITANTE", "TITULAR", "D_LINEA", "MODALIDAD", "DEPARTAMENTO", "THV"];
+                break;
+            case 'POA':
+                columns_label = ["Nro. THabilitante", "Titular", "Dir. Línea", "POA", "POA Censo Maderable", "POA Censo No Maderable", "Nro. Resolución", "Departamento"];
+                columns_data = ["NUM_THABILITANTE", "TITULAR", "D_LINEA", "NUM_POA", "POAM", "POANMAD", "NUM_RESOLUCION", "DEPARTAMENTO"];
+                break;
+            case 'PLAN_MANEJO':
+                columns_label = ["Nro. THabilitante", "Titular", "Dir. Línea", "Nro. Resolución", "Departamento", "Plan de Manejo Coordenadas", "Plan de Manejo Tara Inventario"];
+                columns_data = ["NUM_THABILITANTE", "TITULAR", "D_LINEA", "NUM_RESOLUCION", "DEPARTAMENTO", "PMTC", "PMTI"];
+                break;
+            case 'CAPACITACION':
+                columns_label = ["Nombre", "Dir. Línea", "OD", "Fecha de Inicio", "Departamento", "Nro. Participantes"];
+                columns_data = ["NOM_CAPACITACION", "D_LINEA", "NOM_OD", "FECHA_INICIO", "DEPARTAMENTO", "CAPPART"];
+                break;
+            case 'CARTA_NOTIFICACION':
+            case 'CARTA_NOTIFICACION_NTF':
+                columns_label = ["Nro. Carta Notificación", "Nro. THabilitante", "Titular", "Dir. Línea", "Departamento", "Fecha de Notificación", "Fecha de Registro"];
+                columns_data = ["NUM_CNOTIFICACION", "NUM_THABILITANTE", "TITULAR", "D_LINEA", "DEPARTAMENTO", "FECHA_NOTIFICACION", "FECHA_CREACION"];
+                break;
+            case 'NOTIFICACION_FISCALIZACION':
+            case 'NOTIFICACION_FISCALIZACION_NTF':
+                columns_label = ["Nro. Carta Notificación", "Tipo", "Nro. THabilitante", "Titular", "Nro. Informe", "Nro. Resolución", "Dir. Línea", "Departamento", "Fecha de Notificación", "Fecha de Registro"];
+                columns_data = ["NUM_CNOTIFICACION", "TIPO_DOCUMENTO", "NUM_THABILITANTE", "TITULAR", "NUM_INFORME", "NUM_RESOLUCION", "D_LINEA", "DEPARTAMENTO", "FECHA_NOTIFICACION", "FECHA_CREACION"];
+                break;
+            case 'INFORME_SUPERVISION':
+                columns_label = ["Nro. Informe Supervisión", "Nro. THabilitante", "Titular", "Dir. Línea", "Modalidad", "Fecha Inicio", "Fecha Fin", "Supervisión Maderable", "Supervisión No Maderable"];
+                columns_data = ["NUM_INFORME", "NUM_THABILITANTE", "TITULAR", "D_LINEA", "MODALIDAD", "FECHA_INICIO", "FECHA_TERMINO", "ISUPM", "ISUPNM"];
+                break;
+            case 'GUIA_TRANSPORTE':
+                columns_label = ["Nro. Guía Transporte", "Nro. THabilitante", "Titular", "Guía"];
+                columns_data = ["NUM_GUIA", "NUM_THABILITANTE", "TITULAR", "NOM_GUIA"];
+                break;
+            case 'INFORME_LEGAL':
+                columns_label = ["Nro. Informe Legal", "Nro. THabilitante", "Titular", "Dir. Línea", "Modalidad", "Fecha de Emisión"];
+                columns_data = ["NUM_INFORME", "NUM_THABILITANTE", "TITULAR", "D_LINEA", "MODALIDAD", "FECHA_EMISION"];
+                break;
+            case 'RESOLUCION_DIRECTORAL':
+                columns_label = ["Nro. Resolución", "Nro. THabilitante", "Titular", "Dir. Línea", "Modalidad", "Fecha de Emisión"];
+                columns_data = ["NUM_RESOLUCION", "NUM_THABILITANTE", "TITULAR", "D_LINEA", "MODALIDAD", "FECHA_EMISION"];
+                break;
+            case 'INFORME_FUNDAMENTADO':
+                columns_label = ["Nro. Informe", "Nro. THabilitante", "Titular", "Dir. Línea", "Modalidad", "Departamento", "Fecha de Emisión"];
+                columns_data = ["NUM_INFORME", "NUM_THABILITANTE", "TITULAR", "D_LINEA", "MODALIDAD", "DEPARTAMENTO", "FECHA_EMISION"];
+                break;
+            case 'INFORMACION_TITULAR':
+                columns_label = ["Nro. Informe", "Nro. THabilitante", "Titular", "Dir. Línea", "Modalidad", "Tipo Documento", "Fecha de Presentación"];
+                columns_data = ["NUM_INFORME", "NUM_THABILITANTE", "TITULAR", "D_LINEA", "MODALIDAD", "TIPO_DOCUMENTO", "FECHA_EMISION"];
+                break;
+        }
+
+        options = {
+            page_length: 10, row_edit: false, row_delete: false
+            , row_index: true, button_copy: true, button_csv: true, button_excel: true, button_pdf: true, button_print: true
+            , export_title: '@Model.tituloReporteDetalle'
+            , page_search: true, page_info: true, page_sort: true
+        };
+
+        dtListDetalle = utilDt.fnLoadDataTable_Detail($("#tbListDetalle"), columns_label, columns_data, options);
+        dtListDetalle.rows.add(JSON.parse('@Html.Raw(Json.Encode(@Model.listProduccionUDetalle))')).draw();
+    })
+</script>
+
+<div id="divTbResumen" style="width: 100%; overflow: auto; scrollbar-base-color: none;">
+    <div style="text-align:center; color:cadetblue">
+        <h3>@Model.tituloReporteDetalle</h3>
+    </div>
+    <table id="tbListDetalle" class="table table-bordered table-striped-success" style="width: 100% !important; font-size:12px">
+        <thead>
+            <tr>
+                <th colspan="8" class="text-sm-left">
+                    <div class="form-inline">
+                        <strong></strong>
+                    </div>
+                </th>
+            </tr>
+        </thead>
+    </table>
+</div>

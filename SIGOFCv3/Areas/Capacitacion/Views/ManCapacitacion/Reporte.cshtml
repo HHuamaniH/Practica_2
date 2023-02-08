@@ -1,0 +1,640 @@
+﻿@model CapaEntidad.ViewModel.VM_Capacitacion_Reporte
+@{
+    ViewBag.Title = "Reporte";
+    Layout = "~/Views/Shared/_LayoutMain.cshtml";
+}
+
+<script src="~/Scripts/datatables/Extensions/dataTables.buttons.js"></script>
+<script src="~/Scripts/datatables/Extensions/buttons.flash.min.js"></script>
+<script src="~/Scripts/datatables/Extensions/jszip.min.js"></script>
+<script src="~/Scripts/datatables/Extensions/pdfmake.js"></script>
+<script src="~/Scripts/datatables/Extensions/vfs_fonts.js"></script>
+<script src="~/Scripts/datatables/Extensions/buttons.html5.js"></script>
+<script src="~/Scripts/datatables/Extensions/buttons.print.js"></script>
+<script src="~/Scripts/chart/Chart.min.js"></script>
+<script src="~/Scripts/chart/custom.js"></script>
+<script src="~/Areas/Capacitacion/js/ManCapacitacion/Reporte.js"></script>
+
+<link href="~/Content/datatables/buttons.dataTables.min.css" rel="stylesheet" />
+<link href="~/Areas/Capacitacion/css/ManCapacitacion/Reporte.css" rel="stylesheet" />
+
+<div class="container-fluid">
+    <div class="card">
+        <div class="card-header text-right">
+            REPORTE CAPACITACIÓN
+        </div>
+        <div class="card-body">
+            <div class="card-header text-sm-center">
+                @Model.lblTituloCabecera
+            </div>
+            <div id="dvContenedorFiltro" class="card" style="margin-bottom:10px;">
+                <div id="dvFiltro" class="card-body">
+                    <form id="frmReporteCapacitacion" action="@Url.Action("Reporte", "ManCapacitacion", new { Area= "Capacitacion" })">
+                        @Html.HiddenFor(m=>m.hdfTipoReporte)
+                        <div class="form-row">
+                            <div id="dvTipoFiltro" class="form-group col-md-2" style="display:none;">
+                                <label for="ddlTipoFiltroId" class="text-small">Filtro</label>
+                                @Html.DropDownListFor(m => m.ddlTipoFiltroId, new SelectList(Model.ddlTipoFiltro, "Value", "Text"), new { @class = "form-control form-control-sm" })
+                            </div>
+                            <div id="dvTipoFiltro_Persona" class="col-md-3 mb-3" style="display:none;">
+                                <label for="lblPersonaText" class="text-small">Persona<i class="fa fa-cog fa-spin text-danger" id="iconFiltroPersona" style="display:none;" data-toggle="tooltip" data-placement="top" title="Seleccione la persona"></i></label>
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text"><i class="fa fa-search" style="cursor:pointer;" data-toggle="tooltip" data-placement="top" title="Seleccionar persona" onclick="_reporte.fnBuscarPersona();"></i></span>
+                                    </div>
+                                    @Html.Editor("lblFiltroPersona", new { htmlAttributes = new { @class = "form-control form-control-sm", @disabled = "disabled" } })
+                                    @Html.HiddenFor(m => m.hdfCodPersona)
+                                </div>
+                            </div>
+                            <div id="dvTipoFiltro_THabilitante" class="col-md-3 mb-3" style="display:none;">
+                                <label for="lblTHabilitanteText" class="text-small">Título Habilitante<i class="fa fa-cog fa-spin text-danger" id="iconFiltroTHabilitante" style="display:none;" data-toggle="tooltip" data-placement="top" title="Seleccione el título habilitante"></i></label>
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text"><i class="fa fa-search" style="cursor:pointer;" data-toggle="tooltip" data-placement="top" title="Seleccionar título habilitante" onclick="_reporte.modaViewTHabilitante();"></i></span>
+                                    </div>
+                                    @Html.Editor("lblFiltroTHabilitante", new { htmlAttributes = new { @class = "form-control form-control-sm", @disabled = "disabled" } })
+                                    @Html.HiddenFor(m => m.hdfCodTHabilitante)
+                                </div>
+                            </div>
+                            <div id="dvTipoFiltro_ComunidadNativa" class="form-group col-md-3" style="display:none;">
+                                <label for="ddlComunidadNativaId" class="text-small">Comunidad Nativa</label>
+                                @Html.DropDownListFor(m => m.ddlComunidadNativaId, new SelectList(Model.ddlComunidadNativa, "Value", "Text"), new { @class = "form-control form-control-sm" })
+                            </div>
+                            <div id="dvTipoFiltro_Etnia" class="form-group col-md-3" style="display:none;">
+                                <label for="ddlEtniaId" class="text-small">Etnia</label>
+                                @Html.DropDownListFor(m => m.ddlEtniaId, new SelectList(Model.ddlEtnia, "Value", "Text"), new { @class = "form-control form-control-sm" })
+                            </div>
+                            <div id="dvTipoFiltro_ChkInstitucion" class="form-group col-md-2" style="display:none;">
+                                <label for="lblChkInstitucionId" class="text-small">Institución</label>
+                                <div id="dvChkInstitucionAll" class="custom-control custom-checkbox" style="display:none;">
+                                    @Html.CheckBox("chkInstitucionAll", new { @class = "custom-control-input" })
+                                    <label for="chkInstitucionAll" class="custom-control-label">Todos</label>
+                                </div>
+                                <div style="max-height:150px;overflow:auto;">
+                                    @Html.EditorFor(m => m.lstChkInstitucion)
+                                    @Html.HiddenFor(m => m.lstChkInstitucionId)
+                                </div>
+                            </div>
+                            <div id="dvFiltroAnio" class="form-group col-md-1" style="display:none;">
+                                <label for="lblChkAnioId" class="text-small">Año</label>
+                                <div id="dvChkAnioAll" class="custom-control custom-checkbox" style="display:none;">
+                                    @Html.CheckBox("chkAnioAll", new { @class = "custom-control-input" })
+                                    <label for="chkAnioAll" class="custom-control-label">Todos</label>
+                                </div>
+                                <div style="max-height:150px;overflow:auto;">
+                                    @Html.EditorFor(m => m.lstChkAnio)
+                                    @Html.HiddenFor(m => m.lstChkAnioId)
+                                </div>
+                            </div>
+                            <div id="dvFiltroMes" class="form-group col-md-2" style="display:none;">
+                                <label for="lblChkMesId" class="text-small">Mes</label>
+                                <div class="custom-control custom-checkbox">
+                                    @Html.CheckBox("chkMesAll", new { @class = "custom-control-input" })
+                                    <label for="chkMesAll" class="custom-control-label">Todos</label>
+                                </div>
+                                <div style="max-height:150px;overflow:auto;">
+                                    @Html.EditorFor(m => m.lstChkMes)
+                                    @Html.HiddenFor(m => m.lstChkMesId)
+                                </div>
+                            </div>
+                            <div id="dvFiltroOD" class="form-group col-md-2" style="display:none;">
+                                <label for="lblChkMesId" class="text-small">Oficina Desconcentrada</label>
+                                <div class="custom-control custom-checkbox">
+                                    @Html.CheckBox("chkOdAll", new { @class = "custom-control-input" })
+                                    <label for="chkOdAll" class="custom-control-label">Todos</label>
+                                </div>
+                                <div style="max-height:150px;overflow:auto;">
+                                    @Html.EditorFor(m => m.lstChkOd)
+                                    @Html.HiddenFor(m => m.lstChkOdId)
+                                </div>
+                            </div>
+                            <div id="dvFiltroTipoCapacitacion" class="form-group col-md-3" style="display:none;">
+                                <label for="lblTipCapacitacionId" class="text-small">Tipo Capacitación</label>
+                                <div class="custom-control custom-checkbox">
+                                    @Html.CheckBox("chkTipCapacitacionAll", new { @class = "custom-control-input" })
+                                    <label for="chkTipCapacitacionAll" class="custom-control-label">Todos</label>
+                                </div>
+                                <div style="max-height:150px;overflow:auto;">
+                                    @Html.EditorFor(m => m.lstChkTipCapacitacion)
+                                    @Html.HiddenFor(m => m.lstChkTipCapacitacionId)
+                                </div>
+                            </div>
+                            <div id="dvFiltroDepartamento" class="form-group col-md-2" style="display:none;">
+                                <label for="lblChkDepartamentoId" class="text-small">Departamento</label>
+                                <div class="custom-control custom-checkbox">
+                                    @Html.CheckBox("chkDepartamentoAll", new { @class = "custom-control-input" })
+                                    <label for="chkDepartamentoAll" class="custom-control-label">Todos</label>
+                                </div>
+                                <div style="max-height:150px;overflow:auto;">
+                                    @Html.EditorFor(m => m.lstChkDepartamento)
+                                    @Html.HiddenFor(m => m.lstChkDepartamentoId)
+                                </div>
+                            </div>
+                            <div id="dvFiltroTHCapacitados" class="form-group col-md-1" style="display:none;">
+                                <label for="ddlTHCapacitadosId" class="text-small">THs Capacitados</label>
+                                @Html.DropDownListFor(m => m.ddlTHCapacitadosId, new SelectList(Model.ddlTHCapacitados, "Value", "Text"), new { @class = "form-control form-control-sm" })
+                            </div>
+                            <div id="dvFiltroOtrosEventos" class="form-group col-md-1" style="display:none;">
+                                <label for="ddlOtrosEventosId" class="text-small">Otros Eventos</label>
+                                @Html.DropDownListFor(m => m.ddlOtrosEventosId, new SelectList(Model.ddlOtrosEventos, "Value", "Text"), new { @class = "form-control form-control-sm" })
+                            </div>
+                            <div id="dvFiltroMetaPoi" class="form-group col-md-1" style="display:none;">
+                                <label for="ddlSumMetPoiId" class="text-small">Meta POI</label>
+                                @Html.DropDownListFor(m => m.ddlSumMetPoiId, new SelectList(Model.ddlSumMetPoi, "Value", "Text"), new { @class = "form-control form-control-sm" })
+                            </div>
+                            <div id="dvFiltroEntFinancia" class="form-group col-md-2" style="display:none;">
+                                <label for="ddlEntFinanciaId" class="text-small">Entidad Financia</label>
+                                @Html.DropDownListFor(m => m.ddlEntFinanciaId, new SelectList(Model.ddlEntFinancia, "Value", "Text"), new { @class = "form-control form-control-sm" })
+                            </div>
+                            <div id="dvFiltroPublicoObjectivo" class="form-group col-md-4" style="display:none;">
+                                <label for="lblPublicoObjetivoId" class="text-small">Público</label>
+                                <div class="custom-control custom-checkbox">
+                                    @Html.CheckBox("chkPObjetivoAll", new { @class = "custom-control-input" })
+                                    <label for="chkPObjetivoAll" class="custom-control-label">Todos</label>
+                                </div>
+                                <div style="max-height:150px;overflow:auto;">
+                                    @if (Model.lstChkPublicoObjetivo.ToList().Count > 0)
+                                    {
+                                        var chkGroup = Model.lstChkPublicoObjetivo.Select(m => m.Group).Distinct().ToList();
+                                        foreach (var group in chkGroup)
+                                        {
+                                            <h6 style="margin-bottom:0px;margin-top:5px;">@group</h6>
+                                            List<CapaEntidad.ViewModel.VM_Chk> lstChkPO = new List<CapaEntidad.ViewModel.VM_Chk>();
+                                            foreach (var pobjetivo in Model.lstChkPublicoObjetivo.Where(m => m.Group == group).ToList())
+                                            {
+                                                lstChkPO.Add(new CapaEntidad.ViewModel.VM_Chk() { Value = pobjetivo.Value, Text = pobjetivo.Text, Checked = pobjetivo.Checked });
+                                            }
+                                            Model.lstChkPObjetivoGroup = lstChkPO;
+                                            @Html.EditorFor(m => m.lstChkPObjetivoGroup)
+                                        }
+                                    }
+                                    @Html.HiddenFor(m => m.lstChkPublicoObjetivoId)
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                    <button type="button" id="btnConsultarReporte" class="btn btn-primary btn-sm" onclick="_reporte.fnSubmitForm()">Consultar</button>
+                </div>
+                <div class="card-body" style="padding-top:0px;padding-bottom:0px;">
+                    <div class="form-row">
+                        <div id="dvHideFiltro" class="form-group col-md-12" style="text-align:center; margin:0px;cursor:pointer;" title="Ocultar Filtros">
+                            <img alt="Ocultar Filtros" src="~/Content/images/General/flecha-contraer.png" width="50" height="30" />
+                        </div>
+                        <div id="dvShowFiltro" class="form-group col-md-12" style="text-align:center; margin:0px;cursor:pointer; display:none;" title="Mostrar Filtros">
+                            <img alt="Mostrar Filtros" src="~/Content/images/General/flecha-ampliar.png" width="50" height="30" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body" id="dvConsultaParticipante" style="display:none;">
+                <div class="form-row">
+                    <div class="table-responsive">
+                        <table id="tbConsultaParticipante" style="width:100%" class="table table-hover table-bordered">
+                            <thead>
+                                <tr>
+                                    <th colspan="25" class="text-sm-left">
+                                        <div class="form-inline">
+                                            <strong>Listado de Capacitaciones</strong>
+                                        </div>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                            <tfoot>
+                                <tr><th colspan="25"><strong style="text-transform:lowercase">(*) Solo se muestran los 5000 primeros registros</strong></th></tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body" id="dvProgramaVSEjecucion" style="display:none;">
+                <div class="form-row">
+                    <div class="table-responsive">
+                        <table id="tbProgramaVSEjecucion_Resumen" style="width:100%" class="table table-hover table-bordered">
+                            <thead>
+                                <tr>
+                                    <th colspan="18" class="text-sm-left">
+                                        <div class="form-inline">
+                                            <strong>
+                                                Programación VS Ejecución de Capacitaciones
+                                            </strong>
+                                        </div>
+                                    </th>
+                                </tr>
+                                <tr class="custom-row-rptcapacitacion">
+                                    <th colspan="2"></th>
+                                    <th colspan="2">Difusión</th>
+                                    <th colspan="2">Socialización</th>
+                                    <th colspan="2">Formación</th>
+                                    <th colspan="2">Fortalecimiento</th>
+                                    <th colspan="2">Pansantía</th>
+                                    <th colspan="2">Especialización</th>
+                                    <th colspan="2">Otros</th>
+                                    <th colspan="2">Total</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                            <tfoot>
+                                <tr class="custom-row-rptcapacitacion">
+                                    <th colspan="2"><a href="javascript:void(0)" style="cursor: pointer;" title="Ver detalle" onclick="utilDt.fnEventColumn('', 1)"><span id="col1">Total</span></a></th>
+                                    <th><a href="javascript:void(0)" style="cursor: pointer;" title="Ver detalle" onclick="utilDt.fnEventColumn('', 3)"><span id="col3">0</span></a></th>
+                                    <th><span id="col4">0</span></th>
+                                    <th><a href="javascript:void(0)" style="cursor: pointer;" title="Ver detalle" onclick="utilDt.fnEventColumn('', 5)"><span id="col5">0</span></a></th>
+                                    <th><span id="col6">0</span></th>
+                                    <th><a href="javascript:void(0)" style="cursor: pointer;" title="Ver detalle" onclick="utilDt.fnEventColumn('', 7)"><span id="col7">0</span></a></th>
+                                    <th><span id="col8">0</span></th>
+                                    <th><a href="javascript:void(0)" style="cursor: pointer;" title="Ver detalle" onclick="utilDt.fnEventColumn('', 9)"><span id="col9">0</span></a></th>
+                                    <th><span id="col10">0</span></th>
+                                    <th><a href="javascript:void(0)" style="cursor: pointer;" title="Ver detalle" onclick="utilDt.fnEventColumn('', 11)"><span id="col11">0</span></a></th>
+                                    <th><span id="col12">0</span></th>
+                                    <th><a href="javascript:void(0)" style="cursor: pointer;" title="Ver detalle" onclick="utilDt.fnEventColumn('', 13)"><span id="col13">0</span></a></th>
+                                    <th><span id="col14">0</span></th>
+                                    <th><a href="javascript:void(0)" style="cursor: pointer;" title="Ver detalle" onclick="utilDt.fnEventColumn('', 15)"><span id="col15">0</span></a></th>
+                                    <th><span id="col16">0</span></th>
+                                    <th><a href="javascript:void(0)" style="cursor: pointer;" title="Ver detalle" onclick="utilDt.fnEventColumn('', 17)"><span id="col17">0</span></a></th>
+                                    <th><span id="col18">0</span></th>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                </div>
+                <br />
+                <div class="form-row">
+                    <div class="table-responsive">
+                        <table id="tbProgramaVSEjecucion_Detalle" style="width:100%" class="table table-hover table-bordered">
+                            <thead>
+                                <tr>
+                                    <th colspan="21" class="text-sm-left">
+                                        <div class="form-inline">
+                                            <strong>Listado de Capacitaciones Programadas</strong>
+                                        </div>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body" id="dvTotalCapacitacion" style="display:none;">
+                <div class="form-row">
+                    <div class="col-md-6">
+                        <div class="table-responsive">
+                            <table id="tbTotalCapacitacion_Resumen" style="width:100%" class="table table-hover table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th colspan="6" class="text-sm-left">
+                                            <div class="form-inline">
+                                                <strong>Listado del Total de Capacitaciones</strong>
+                                            </div>
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                                <tfoot>
+                                    <tr class="custom-row-rptcapacitacion">
+                                        <th colspan="2"><span id="col1">Total</span></th>
+                                        <th><a href="javascript:void(0)" style="cursor: pointer;" title="Ver detalle" onclick="utilDt.fnEventColumn('', 3)"><span id="col3">0</span></a></th>
+                                        <th><span id="col4">0</span></th>
+                                        <th><span id="col5">0</span></th>
+                                        <th><span id="col6">0</span></th>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                            <h6>
+                                * Para los años 2012 - 2015 se han realizado proyecciones de los datos de hombres y mujeres debido a que no se cuenta con el total de registro de participantes, las proyecciones se han realizando de la siguiente forma:
+                                2012 -> M:79% F:21%, 2013 -> M:81% F:19%, 2014 -> M:75% F:25%, 2015 -> M:72%, F: 28%
+                            </h6>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <canvas id="cnvTotalCapacitacion_Resumen"></canvas>
+                    </div>
+                </div>
+                <br />
+                <div class="form-row">
+                    <div class="table-responsive">
+                        <table id="tbTotalCapacitacion_Detalle" style="width:100%" class="table table-hover table-bordered">
+                            <thead>
+                                <tr>
+                                    <th colspan="22" class="text-sm-left">
+                                        <div class="form-inline">
+                                            <strong>Listado de Capacitaciones</strong>
+                                        </div>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body" id="dvCapacitacionMensual" style="display:none;">
+                <div class="form-row">
+                    <div class="col-md-6">
+                        <div class="table-responsive">
+                            <table id="tbCapacitacionMensual_Resumen" style="width:100%;" class="table table-hover table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th colspan="6" class="text-sm-left">
+                                            <div class="form-inline">
+                                                <strong>Listado de Capacitaciones Mensuales</strong>
+                                            </div>
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                                <tfoot>
+                                    <tr class="custom-row-rptcapacitacion">
+                                        <th colspan="2"><span id="col1">Total</span></th>
+                                        <th><a href="javascript:void(0)" style="cursor: pointer;" title="Ver detalle" onclick="utilDt.fnEventColumn('', 3)"><span id="col3">0</span></a></th>
+                                        <th><span id="col4">0</span></th>
+                                        <th><span id="col5">0</span></th>
+                                        <th><span id="col6">0</span></th>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <canvas id="cnvCapacitacionMensual_Resumen"></canvas>
+                    </div>
+                </div>
+                <br />
+                <div class="form-row">
+                    <div class="table-responsive">
+                        <table id="tbCapacitacionMensual_Detalle" style="width:100%" class="table table-hover table-bordered">
+                            <thead>
+                                <tr>
+                                    <th colspan="22" class="text-sm-left">
+                                        <div class="form-inline">
+                                            <strong>Listado de Capacitaciones</strong>
+                                        </div>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body" id="dvRelacionCapacitacion" style="display:none;">
+                <div class="form-row">
+                    <div class="table-responsive">
+                        <table id="tbRelacionCapacitacion" style="width:100%" class="table table-hover table-bordered">
+                            <thead>
+                                <tr>
+                                    <th colspan="10" class="text-sm-left">
+                                        <div class="form-inline">
+                                            <strong>Listado de Capacitaciones/Otros Eventos</strong>
+                                        </div>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body" id="dvGrupoPublicoObjetivo" style="display:none;">
+                <div class="form-row">
+                    <div class="col-md-4"></div>
+                    <div class="col-md-4">
+                        <div class="table-responsive">
+                            <table id="tbPublicoObjetivoResumen" style="width:100%" class="table table-hover table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th colspan="6" class="text-sm-left">
+                                            <div class="form-inline">
+                                                <strong>Número de Capacitaciones (Resumen)</strong>
+                                            </div>
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                                <tfoot>
+                                    <tr class="custom-row-rptcapacitacion">
+                                        <th colspan="2"><span id="col1">Total</span></th>
+                                        <th><a href="javascript:void(0)" style="cursor: pointer;" title="Ver detalle" onclick="utilDt.fnEventColumn('', 3)"><span id="col3">0</span></a></th>
+                                        <th><span id="col4">0</span></th>
+                                        <th><span id="col5">0</span></th>
+                                        <th><span id="col6">0</span></th>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                            <h6>
+                                *  La diferencia en la cantidad de registrados respecto al reporte de total de capacitaciones se debe a que existen talleres en el cual no se ha indicado a los asistentes a que publico participante pertenecen
+                            </h6>
+                        </div>
+                    </div>
+                    <div class="col-md-4"></div>
+                </div>
+                <br />
+                <div class="form-row">
+                    <div class="table-responsive">
+                        <table id="tbGrupoPublicoObjetivo" style="width:100%" class="table table-hover table-bordered">
+                            <thead>
+                                <tr>
+                                    <th colspan="27" class="text-sm-left">
+                                        <div class="form-inline">
+                                            <strong>Número de Capacitaciones por Público (Agrupado)</strong>
+                                        </div>
+                                    </th>
+                                </tr>
+                                <tr class="custom-row-rptcapacitacion">
+                                    <th colspan="2"></th>
+                                    <th colspan="1"></th>
+                                    <th colspan="2">2012</th>
+                                    <th colspan="2">2013</th>
+                                    <th colspan="2">2014</th>
+                                    <th colspan="2">2015</th>
+                                    <th colspan="2">2016</th>
+                                    <th colspan="2">2017</th>
+                                    <th colspan="2">2018</th>
+                                    <th colspan="2">2019</th>
+                                    <th colspan="2">2020</th>
+                                    <th colspan="2">2021</th>
+                                    <th colspan="2">2022</th>
+                                    <th colspan="2">Total</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </div>
+                <br />
+                <div class="form-row">
+                    <div class="table-responsive">
+                        <table id="tbPublicoObjetivo" style="width:100%" class="table table-hover table-bordered">
+                            <thead>
+                                <tr>
+                                    <th colspan="27" class="text-sm-left">
+                                        <div class="form-inline">
+                                            <strong>Número de Capacitaciones por Público</strong>
+                                        </div>
+                                    </th>
+                                </tr>
+                                <tr class="custom-row-rptcapacitacion">
+                                    <th colspan="2"></th>
+                                    <th colspan="1"></th>
+                                    <th colspan="2">2012</th>
+                                    <th colspan="2">2013</th>
+                                    <th colspan="2">2014</th>
+                                    <th colspan="2">2015</th>
+                                    <th colspan="2">2016</th>
+                                    <th colspan="2">2017</th>
+                                    <th colspan="2">2018</th>
+                                    <th colspan="2">2019</th>
+                                    <th colspan="2">2020</th>
+                                    <th colspan="2">2021</th>
+                                    <th colspan="2">2022</th>
+                                    <th colspan="2">Total</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </div>
+                <br />
+                <div class="form-row">
+                    <div class="table-responsive">
+                        <table id="tbCapacitacionPublicoObjetivo" style="width:100%" class="table table-hover table-bordered">
+                            <thead>
+                                <tr>
+                                    <th colspan="23" class="text-sm-left">
+                                        <div class="form-inline">
+                                            <strong>Listado de Capacitaciones por Público</strong>
+                                        </div>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                        <h6>Se encontraron 32 capacitaciones en el SIGOsfc con 0 asistentes registrados.</h6>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body" id="dvCapacitacionDptoAnio" style="display:none;">
+                <div class="form-row">
+                    <div class="col-md-6">
+                        <div class="table-responsive">
+                            <table id="tbCapacitacionDptoAnio" style="width:100%" class="table table-hover table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th colspan="10" class="text-sm-left">
+                                            <div class="form-inline">
+                                                <strong>Número de Capacitaciones por Departamento y Año</strong>
+                                            </div>
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                                <tfoot>
+                                    <tr class="custom-row-rptcapacitacion">
+                                        <th colspan="2"><span id="col1">Total</span></th>
+                                        <th><span id="col3">0</span></th>
+                                        <th><span id="col4">0</span></th>
+                                        <th><span id="col5">0</span></th>
+                                        <th><span id="col6">0</span></th>
+                                        <th><span id="col7">0</span></th>
+                                        <th><span id="col8">0</span></th>
+                                        <th><span id="col9">0</span></th>
+                                        <th><span id="col10">0</span></th>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <canvas id="cnvCapacitacionDpto"></canvas>
+                    </div>
+                </div>
+                <br />
+                <div class="form-row">
+                    <div class="col-md-6">
+                        <div class="table-responsive">
+                            <table id="tbCapacitacionParticipanteAnio" style="width:100%" class="table table-hover table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th colspan="7" class="text-sm-left">
+                                            <div class="form-inline">
+                                                <strong>Número de Personas Capacitadas por Año</strong>
+                                            </div>
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                                <tfoot>
+                                    <tr class="custom-row-rptcapacitacion">
+                                        <th colspan="2"><span id="col1">Total</span></th>
+                                        <th><span id="col3">0</span></th>
+                                        <th><span id="col4">0</span></th>
+                                        <th><span id="col5">0</span></th>
+                                        <th><span id="col6">0</span></th>
+                                        <th><span id="col7">0</span></th>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <canvas id="cnvCapacitacionAnio"></canvas>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body" id="dvCapacitacionTHabilitante" style="display:none;">
+                <div class="form-row">
+                    <div class="col-md-3"></div>
+                    <div class="col-md-6">
+                        <div class="table-responsive">
+                            <table id="tbCapacitacionTHabilitante" style="width:100%" class="table table-hover table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th colspan="4" class="text-sm-left">
+                                            <div class="form-inline">
+                                                <strong>Capacitación Título Habilitante</strong>
+                                            </div>
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                                <tfoot>
+                                    <tr class="custom-row-rptcapacitacion">
+                                        <th colspan="2"><span>Total</span></th>
+                                        <th><a href="javascript:void(0)" style="cursor: pointer;" title="Ver detalle" onclick="utilDt.fnEventColumn('', 3)"><span id="col3">0</span></a></th>
+                                        <th><span id="col4">0</span></th>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="col-md-3"></div>
+                </div>
+                <br />
+                <div class="form-row">
+                    <div class="table-responsive">
+                        <table id="tbCapacitacionTHabilitanteDetalle" style="width:100%" class="table table-hover table-bordered">
+                            <thead>
+                                <tr>
+                                    <th colspan="46" class="text-sm-left">
+                                        <div class="form-inline">
+                                            <strong>Listado de Títulos Habilitante Capacitados</strong>
+                                        </div>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @* Para el control genérico de personas *@
+    <div class="modal fade hide" id="mdlBuscarPersona" role="dialog"></div>
+    <div class="modal fade hide" id="modalAddEditPersona" role="dialog"></div>
+    <div class="modal fade hide" id="personaUbigeoModal" role="dialog"></div>
+
+    <div class="modal fade hide" id="mdlParticipanteTHabilitante" tabindex="-1" role="dialog"></div>
+</div>

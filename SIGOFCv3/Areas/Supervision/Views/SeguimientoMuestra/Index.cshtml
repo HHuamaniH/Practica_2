@@ -1,0 +1,24 @@
+﻿
+@{
+
+    ViewBag.Title = ViewBag.TituloFormulario;
+    Layout = "~/Views/Shared/_LayoutMain.cshtml";
+}
+@section scripts{
+    <script>
+    "use strict";
+    var rol = '';
+    $(document).ready(function () {
+        //Validamos el rol del usuario
+        utilSigo.ValidaRol('@ViewBag.VAliasRol', 'btnAdd');
+    });
+    </script>
+}
+<form id="frmManSeguimientoM">
+    @Html.Hidden("tipoFormulario", (string)ViewBag.Formulario)
+    @Html.Hidden("titleMenu", (string)ViewBag.TituloFormulario)
+    @Html.Hidden("alertaFormulario", (string)ViewBag.AlertaInicial)
+
+    <div id="dvManSeguimientoMContenedor" class="container-fluid"></div>
+</form>
+@Scripts.Render("~/bundles/SeguimientoMuestra/Index")

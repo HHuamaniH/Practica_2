@@ -1,0 +1,353 @@
+﻿@model CapaEntidad.ViewModel.VM_PlanCasuistica
+
+<style type="text/css">
+    .dataTables_info {
+        color: #33b35a;
+        font-size: 15px !important;
+        margin-top: 17px;
+    }
+
+    .dataTables_paginate {
+        margin-top: -25px;
+    }
+</style>
+
+<div class="modal-dialog modal-custom-tb" role="document">
+    <div class="modal-content">
+        <div class="modal-header text-small" style="cursor:move;">
+            <span>Criterio</span>
+            <i class="fa fa-close" style="cursor:pointer;" data-dismiss="modal" aria-label="Close"></i>
+        </div>
+        <div class="modal-body">
+            <form id="frmPlanCasuistica">
+                @Html.HiddenFor(m => m.hdfCodCasuistica)
+                @Html.HiddenFor(m => m.hdfCodPlan)
+                <div class="card">
+                    <div class="card-header text-small">Datos de la casuística</div>
+                    <div class="card-body">
+                        <div class="form-row">
+                            <div class="col-md-6">
+                                <div class="form-row">
+                                    <div class="form-group col-md-8">
+                                        <label for="txtCodigo" class="text-small">Casuística</label>
+                                        @Html.TextBoxFor(m => m.txtCasuistica, new { @class = "form-control form-control-sm" })
+                                    </div>
+                                    <div class="form-group col-md-4">
+                                        <label for="ddlTipoCriterioId" class="text-small">Tipo de criterio a aplicar</label>
+                                        @Html.DropDownListFor(m => m.ddlTipoCriterioId, new SelectList(Model.ddlTipoCriterio, "Value", "Text"), new { @class = "form-control form-control-sm" })
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group col-md-12">
+                                        <label for="txtDescripcion" class="text-small">Descripción</label>
+                                        @Html.TextAreaFor(m => m.txtDescripcion, new { @class = "form-control form-control-sm", @rows = "3" })
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-row">
+                                    <div class="col-md-12">
+                                        <div class="table-responsive">
+                                            <table id="tbCasuisticaCriterio" style="width:100%" class="table table-hover table-bordered">
+                                                <thead>
+                                                    <tr>
+                                                        <th colspan="5" class="text-sm-left">
+                                                            <div class="form-inline">
+                                                                <strong>
+                                                                    Criterios de priorización a aplicar
+                                                                </strong>
+                                                            </div>
+                                                        </th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody></tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-header text-small">Aplicación de criterios al universo de la casuística</div>
+                    <div class="card-body">
+                        <div class="form-row">
+                            <div class="col-md-12">
+                                <div class="table-responsive">
+                                    <table id="tbPlanUniverso" style="width:100%" class="table table-hover table-bordered">
+                                        <thead>
+                                            <tr>
+                                                <th colspan="100" class="text-sm-left">
+                                                    <div class="form-inline">
+                                                        <label style="cursor:pointer;" class="fa mx-2 fa-lg fa-upload" title="Importar universo casuística" data-toggle="tooltip">
+                                                            <input type="file" id="fileselect" name="fileselect" style="display:none" size="60" onchange="_PlanCasuistica.fnImportTableUniverso(event, this)">
+                                                        </label>
+                                                        <label style="cursor:pointer;" class="fa mx-2 fa-lg fa-download" title="Descargar universo casuística" data-toggle="tooltip" onclick="_PlanCasuistica.fnExportTableUniverso()"></label>
+                                                        <strong>Listado</strong>
+                                                    </div>
+                                                </th>
+                                            </tr>
+                                            <tr>
+                                                <th colspan="27" class="text-sm-left" style="background-color:darkseagreen">
+                                                    <div class="form-inline"><strong>DATOS DEL TÍTULO HABILITANTE</strong></div>
+                                                </th>
+                                                <th colspan="73" class="text-sm-left" style="background-color:cornflowerblue">
+                                                    <div class="form-inline"><strong>DATOS DEL PLAN DE MANEJO</strong></div>
+                                                </th>
+                                            </tr>
+                                        </thead>
+                                        <tbody></tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                        <br />
+                        <div class="form-row">
+                            <div class="form-group col-md-12">
+                                <label for="txtDescripcionFiltro" class="text-small">Descripción de los filtros aplicados al universo</label>
+                                @Html.TextAreaFor(m => m.txtDescripcionFiltro, new { @class = "form-control form-control-sm", @rows = "3" })
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-primary btn-sm" onclick="_PlanCasuistica.fnSubmitForm()">Guardar</button>
+            <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Cancelar</button>
+        </div>
+    </div>
+</div>
+
+<script src="~/Scripts/sigo/utility.uploadFile.js"></script>
+
+<script type="text/javascript">
+    var _PlanCasuistica = {
+        fnBuildTableCasuisticaCriterio: () => {
+            var columns_label = [], columns_data = [], options = {}, data_extend = [];
+
+            columns_label = ["Criterio", "Tipo aplicación", "Columna"];
+            columns_data = ["PCRITERIO", "TAPLICACION", "PCOLUMNA"];
+            data_extend = [
+                {
+                    "data": "COD_PCASUISTICA", "title": "Aplicar", "width":"10%", "orderable": false, "searchable": false, "mRender": function (data, type, row, meta) {
+                        if (data == "0000000") {
+                            return '<i class="fa fa-square-o" style="cursor:pointer; font-size:16px;" onclick="_PlanCasuistica.fnSetCasuisticaCriterio(this,true)"></i>';
+                        } else {
+                            return '<i class="fa fa-check-square-o" style="cursor:pointer; font-size:16px;" onclick="_PlanCasuistica.fnSetCasuisticaCriterio(this,false)"></i>';
+                        }
+                    }
+                }
+            ];
+            options = {
+                page_length: 10, row_edit: false, row_delete: false, row_index: true, page_autowidth: false, data_extend: data_extend
+            };
+
+            return utilDt.fnLoadDataTable_Detail(_PlanCasuistica.frm.find("#tbCasuisticaCriterio"), columns_label, columns_data, options);
+        },
+        fnLoadTableCasuisticaCriterio: () => {
+            let cod_pcasuistica = _PlanCasuistica.frm.find("#hdfCodCasuistica").val();
+            let cod_tcriterio = _PlanCasuistica.frm.find("#ddlTipoCriterioId").val();
+            var url = urlLocalSigo + "Planificacion/ManCasuistica/ListarPlanCasuisticaCriterio";
+            const option = { url: url, datos: { asCodPCasuistica: cod_pcasuistica, asCodTCriterio: cod_tcriterio }, type: 'GET' };
+
+            utilSigo.fnAjax(option, function (result) {
+                if (result.success) {
+                    _PlanCasuistica.dtCasuisticaCriterio.clear().draw();
+                    _PlanCasuistica.dtCasuisticaCriterio.rows.add(result.data).draw();
+
+                    if (_PlanCasuistica.dtPlanUniverso != null) {
+                        _PlanCasuistica.dtPlanUniverso.destroy();
+                        $($(_PlanCasuistica.frm.find("#tbPlanUniverso")[0]).find("thead tr")[2]).remove();
+                        $($(_PlanCasuistica.frm.find("#tbPlanUniverso")[0]).find("tbody")[0]).find("tr").remove();
+                    }
+                    _PlanCasuistica.dtPlanUniverso = _PlanCasuistica.fnBuildTableUniverso();
+                    _PlanCasuistica.fnLoadTableUniverso();
+                } else {
+                    utilSigo.toastError("Error", "Ocurrió un problema al listar los criterios a aplicar.");
+                }
+            });
+        },
+        fnSetCasuisticaCriterio: (obj, asignar) => {
+            var url = urlLocalSigo + "Planificacion/ManCasuistica/GrabarPlanCasuisticaCriterio";
+            var data = _PlanCasuistica.dtCasuisticaCriterio.row($(obj).parents('tr')).data();
+            var params = {
+                asCodPCasuistica: _PlanCasuistica.frm.find("#hdfCodCasuistica").val(),
+                asCodPCriterio: data.COD_PCRITERIO,
+                abAsignar: asignar
+            };
+            var option = { url: url, datos: JSON.stringify(params), type: 'POST' };
+
+            utilSigo.fnAjax(option, function (data) {
+                if (data.success) {
+                    utilSigo.toastSuccess("Éxito", data.msj);
+                    _PlanCasuistica.fnLoadTableCasuisticaCriterio();
+                }
+                else {
+                    utilSigo.toastWarning("Aviso", data.msj);
+                }
+            });
+        },
+        fnBuildTableUniverso: () => {
+            var columns_label = [], columns_data = [], options = {};
+            var n_criterio = 0;
+
+            if (_PlanCasuistica.frm.find("#ddlTipoCriterioId").val()=="0000002") {
+                n_criterio = _PlanCasuistica.dtCasuisticaCriterio.rows().data().filter(m => m.COD_PCASUISTICA != "0000000").count();
+            }
+
+            columns_label = ["Título habilitante", "Titular actual", "Rep. legal", "Departamento", "Provincia", "Distrito","Sector", "Modalidad"
+                , "OD Ámbito", "Área", "Fecha inicio", "Fecha fin", "Caducidad", "Med. Cauterlar", "Med. Precautoria"
+                , "Nro. supervisiones", "Nro. superv. infracción", "% infracción", "Req. entidad", "Denuncia", "Est. establecimiento"
+                , "Última superv.", "Inactivo", "Nro. planes", "Est. calidad", "Fecha registro", "Tipo plan", "Nombre plan"
+                , "Resol. aprueba", "Fecha aprob.", "Área", "Fecha inicio", "Fecha fin", "Consultor"
+                , "Nro. censo made.", "Nro. censo no made.", "Nro. especies aprob.", "Volumen aprob.", "Nro. especies balance"
+                , "Zona UTM", "Coord. este", "Coord. norte", "Nro. superv. plan", "Acto adm. superv.", "Plan supervisado"
+                , "Superv. antes", "Superv. durante", "Superv. despúes", "Amenaza CITE", "Amenaza DS", "Amenaza"
+                , "Nro. acervo", "Programado", "Est. calidad", "Fecha registro"];
+            columns_data = ["NUM_THABILITANTE", "TITULAR_ACTUAL", "RLEGAL", "DEPARTAMENTO", "PROVINCIA", "DISTRITO", "SECTOR", "MODALIDAD"
+                , "OD_AMBITO", "AREA", "FECHA_INICIO", "FECHA_FIN", "CADUCIDAD", "MEDIDA_CAUTELAR", "MEDIDA_PRECAUTORIA"
+                , "N_SUPERVISION", "N_SUPERVISION_INFRAC", "PORC_INFRACCION", "REQ_ENTIDAD", "DENUNCIA", "ESTADO_ESTABLECIMIENTO"
+                , "ANIO_ULTIMA_SUPERV", "INACTIVO", "N_PMANEJO", "ESTADO_CALIDAD", "FECHA_REGISTRO", "TIPO_PMANEJO", "NOMBRE_PMANEJO"
+                , "RESOLUCION_PMANEJO", "FEC_APRUEBA_PMANEJO", "AREA_PMANEJO", "FEC_INICIO_PMANEJO", "FEC_FIN_PMANEJO", "CONSULTOR_PMANEJO"
+                , "N_CENSO_MADE_PMANEJO", "N_CENSO_NOMADE_PMANEJO", "N_ESPECIE_APROBADO_PMANEJO", "VOL_APROBADO_PMANEJO", "N_ESPECIE_BEXTRACCION_PMANEJO"
+                , "ZONA_UTM_PMANEJO", "CESTE_PMANEJO", "CNORTE_PMANEJO", "N_SUPERVISION_PMANEJO", "ACTO_SUPERVISADO_PMANEJO", "SUPERVISADO_PMANEJO"
+                , "SUPERVISADO_ANTES_PMANEJO", "SUPERVISADO_DURANTE_PMANEJO", "SUPERVISADO_DESPUES_PMANEJO", "AMENAZA_CITE_PMANEJO", "AMENAZA_DS_PMANEJO", "ESPECIE_AMENAZADA_PMANEJO"
+                , "N_ACERVODOC_PMANEJO", "PROGRAMADO", "ESTADO_CALIDAD_PMANEJO", "FECREG_PMANEJO"];
+            options = {
+                page_length: 50, row_index: true, page_info: true, page_render: false, page_search: true
+            };
+
+            if (n_criterio > 0) {
+                for (var i = 1; i <= n_criterio; i++) {
+                    columns_label.push("Criterio");
+                    columns_label.push("Valor");
+                    columns_label.push("Riesgo");
+                    columns_label.push("Resultado");
+                    columns_data.push("CRITERIO_" + i);
+                    columns_data.push("VALOR_" + i);
+                    columns_data.push("RIESGO_" + i);
+                    columns_data.push("RESULTADO_" + i);
+                }
+                columns_label.push("Resultado total");
+                columns_data.push("RESULTADO_TOTAL");
+            }
+
+            return utilDt.fnLoadDataTable_Detail(_PlanCasuistica.frm.find("#tbPlanUniverso"), columns_label, columns_data, options);
+        },
+        fnLoadTableUniverso: () => {
+            var cod_pcasuistica = _PlanCasuistica.frm.find("#hdfCodCasuistica").val();
+            var cod_plan = _PlanCasuistica.frm.find("#hdfCodPlan").val();
+            var url = urlLocalSigo + "Planificacion/ManCasuistica/ListarPlanCasuisticaUniverso";
+            const option = { url: url, datos: { asCodPCasuistica: cod_pcasuistica, asCodPlan: cod_plan }, type: 'GET' };
+
+            utilSigo.fnAjax(option, function (result) {
+                if (result.success) {
+                    _PlanCasuistica.dtPlanUniverso.clear().draw();
+                    _PlanCasuistica.dtPlanUniverso.rows.add(result.data).draw();
+                }
+            });
+        },
+        fnImportTableUniverso: (e, obj) => {
+            var url = urlLocalSigo + "Planificacion/ManCasuistica/ImportarPlanCasuisticaUniverso";
+            var cod_pcasuistica = _PlanCasuistica.frm.find("#hdfCodCasuistica").val();
+            var cod_plan = _PlanCasuistica.frm.find("#hdfCodPlan").val();
+
+            uploadFile.fileSelectHandler(e, obj, url, { asCodPlan: cod_plan, asCodPCasuistica: cod_pcasuistica }, function (data) {
+                if (_PlanCasuistica.dtPlanUniverso != null) {
+                    _PlanCasuistica.dtPlanUniverso.destroy();
+                    $($(_PlanCasuistica.frm.find("#tbPlanUniverso")[0]).find("thead tr")[2]).remove();
+                    $($(_PlanCasuistica.frm.find("#tbPlanUniverso")[0]).find("tbody")[0]).find("tr").remove();
+                }
+                _PlanCasuistica.dtPlanUniverso = _PlanCasuistica.fnBuildTableUniverso();
+                _PlanCasuistica.fnLoadTableUniverso();
+            });
+        },
+        fnExportTableUniverso: () => {
+            var cod_pcasuistica = _PlanCasuistica.frm.find("#hdfCodCasuistica").val();
+            var cod_plan = _PlanCasuistica.frm.find("#hdfCodPlan").val();
+            var url = urlLocalSigo + "Planificacion/ManCasuistica/ExportarPlanCasuisticaUniverso?asCodPlan=" + cod_plan + "&asCodPCasuistica=" + cod_pcasuistica;
+            window.location = url;
+        },
+        fnInit: () => {
+            $.fn.select2.defaults.set("theme", "bootstrap4");
+            $('[data-toggle="tooltip"]').tooltip();
+
+            _PlanCasuistica.frm.find("#ddlTipoCriterioId").select2({ minimumResultsForSearch: -1 });
+
+            _PlanCasuistica.dtCasuisticaCriterio = _PlanCasuistica.fnBuildTableCasuisticaCriterio();
+            _PlanCasuistica.fnLoadTableCasuisticaCriterio();
+
+            _PlanCasuistica.frm.find("#ddlTipoCriterioId").change(function () {
+                _PlanCasuistica.fnLoadTableCasuisticaCriterio();
+            });
+        },
+        fnSubmitForm: () => {
+            _PlanCasuistica.frm.submit();
+        },
+        fnSaveForm: () => {
+            var datosCaso = _PlanCasuistica.frm.serializeObject();
+
+            $.ajax({
+                url: urlLocalSigo + "Planificacion/ManCasuistica/GrabarPlanCasuistica",
+                type: 'POST',
+                data: JSON.stringify(datosCaso),
+                contentType: 'application/json; charset=utf-8',
+                dataType: 'json',
+                success: function (data) {
+                    utilSigo.unblockUIGeneral();
+                    if (data.success) {
+                        utilSigo.toastSuccess("Éxito", data.msj);
+                        _PlanCasuistica.fnSaved();
+                    }
+                    else utilSigo.toastWarning("Aviso", data.msj);
+                },
+                beforeSend: function () {
+                    utilSigo.blockUIGeneral();
+                },
+                error: function (jqXHR, error, errorThrown) {
+                    utilSigo.unblockUIGeneral();
+                    utilSigo.toastError("Error", "Ocurrió un error, comuníquese con el administrador");
+                }
+            });
+        },
+        fnSaved: () => {
+            /*Implementar en donde se instancia*/
+        }
+    };
+
+    $(document).ready(function () {
+        _PlanCasuistica.frm = $("#frmPlanCasuistica");
+
+        _PlanCasuistica.fnInit();
+
+        //=====-----Para el registro de datos del formulario-----=====
+        //Validación personalizada
+        jQuery.validator.addMethod("invalidFrmCasuistica", function (value, element) {
+            switch ($(element).attr('id')) {
+                case 'ddlTipoCriterioId': return value == '0000000' ? false : true;
+            }
+        });
+
+        _PlanCasuistica.frm.validate(utilSigo.fnValidate({
+            rules: {
+                txtCasuistica: { required: true },
+                ddlTipoCriterioId: { invalidFrmCasuistica: true }
+            },
+            messages: {
+                txtCasuistica: { required: "Ingrese la casuística" },
+                ddlTipoCriterioId: { invalidFrmCasuistica: "Seleccione el tipo de criterio" }
+            },
+            fnSubmit: function (form) {
+                utilSigo.dialogConfirm('', 'Desea continuar con el registro?', function (r) {
+                    if (r) {
+                        _PlanCasuistica.fnSaveForm();
+                    }
+                });
+            }
+        }));
+        //Validación de controles que usan Select2
+        _PlanCasuistica.frm.find("select.select2-hidden-accessible").on("change", function (e) {
+            $(this).valid();
+        });
+    });
+</script>

@@ -1,0 +1,139 @@
+﻿
+@model CapaEntidad.DOC.Ent_THABILITANTE
+
+<script type="text/javascript">
+    var _THabilitanteGeneral = {};
+    $(document).ready(function () {
+        _THabilitanteGeneral.frm = $("#frmTHabilitanteGeneral");
+
+        _THabilitanteGeneral.frm.find("#dvDatosNoFauna").hide();
+        if (!('0000011|0000012|0000013|0000001|0000002|0000003|0000004|0000023').includes('@Model.COD_MTIPO')) {
+            _THabilitanteGeneral.frm.find("#dvDatosNoFauna").show();
+        }
+    });
+</script>
+
+<div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+        <div class="modal-header text-small" style="cursor:move;padding:0.5rem;">
+            <h5 class="modal-title">Datos Generales del Título Habilitante</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body" style="padding-top:0px;padding-bottom:0px;">
+            <form id="frmTHabilitanteGeneral">
+                <div class="form-group row" style="margin-bottom:0px;">
+                    <label class="col-sm-4 col-form-label" style="padding-bottom:0px;padding-right:0px;font-size:13px;">Nombre del Titular</label>
+                    <label class="col-sm-1 col-form-label" style="padding-bottom:0px;font-size:14px;">:</label>
+                    <label class="col-sm-7 col-form-label" style="padding-bottom:0px;padding-left:0px;font-size:14px;">@Model.PERSONA_TITULAR</label>
+                </div>
+                <div class="form-group row" style="margin-bottom:0px;">
+                    <label class="col-sm-4 col-form-label" style="padding-bottom:0px;padding-right:0px;font-size:13px;">Representante Legal</label>
+                    <label class="col-sm-1 col-form-label" style="padding-bottom:0px;font-size:14px;">:</label>
+                    <label class="col-sm-7 col-form-label" style="padding-bottom:0px;padding-left:0px;font-size:14px;">@Model.PERSONA_RLEGAL</label>
+                </div>
+                <div class="form-group row" style="margin-bottom:0px;">
+                    <label class="col-sm-4 col-form-label" style="padding-bottom:0px;padding-right:0px;font-size:13px;">N° de Contrato o Permiso</label>
+                    <label class="col-sm-1 col-form-label" style="padding-bottom:0px;font-size:14px;">:</label>
+                    <label class="col-sm-7 col-form-label" style="padding-bottom:0px;padding-left:0px;font-size:14px;">@Model.NUMERO</label>
+                </div>
+                <div class="form-group row" style="margin-bottom:0px;">
+                    <label class="col-sm-4 col-form-label" style="padding-bottom:0px;padding-right:0px;font-size:13px;">RUC</label>
+                    <label class="col-sm-1 col-form-label" style="padding-bottom:0px;font-size:14px;">:</label>
+                    <label class="col-sm-7 col-form-label" style="padding-bottom:0px;padding-left:0px;font-size:14px;">@Model.N_RUC</label>
+                </div>
+                <div class="form-group row" style="margin-bottom:0px;">
+                    <label class="col-sm-4 col-form-label" style="padding-bottom:0px;padding-right:0px;font-size:13px;">Estado del RUC</label>
+                    <label class="col-sm-1 col-form-label" style="padding-bottom:0px;font-size:14px;">:</label>
+                    <label class="col-sm-7 col-form-label" style="padding-bottom:0px;padding-left:0px;font-size:14px;">@Model.ESTADO_DOC</label>
+                </div>
+                <div class="form-group row" style="margin-bottom:0px;">
+                    <label class="col-sm-4 col-form-label" style="padding-bottom:0px;padding-right:0px;font-size:13px;">Dirección Legal</label>
+                    <label class="col-sm-1 col-form-label" style="padding-bottom:0px;font-size:14px;">:</label>
+                    <label class="col-sm-7 col-form-label" style="padding-bottom:0px;padding-left:0px;font-size:14px;">@Model.DIRECCION</label>
+                </div>
+                <div class="form-group row" style="margin-bottom:0px;">
+                    <label class="col-sm-4 col-form-label" style="padding-bottom:0px;padding-right:0px;font-size:13px;">N° Telefónico del Titular</label>
+                    <label class="col-sm-1 col-form-label" style="padding-bottom:0px;font-size:14px;">:</label>
+                    <label class="col-sm-7 col-form-label" style="padding-bottom:0px;padding-left:0px;font-size:14px;">@Model.TELEFONO</label>
+                </div>
+                <div class="form-group row" style="margin-bottom:0px;">
+                    <label class="col-sm-4 col-form-label" style="padding-bottom:0px;padding-right:0px;font-size:13px;">Área del Título Habilitante o APF</label>
+                    <label class="col-sm-1 col-form-label" style="padding-bottom:0px;font-size:14px;">:</label>
+                    <label class="col-sm-7 col-form-label" style="padding-bottom:0px;padding-left:0px;font-size:14px;">@Model.AREA_OTORGADA</label>
+                </div>
+                <div class="form-group row" style="margin-bottom:0px;">
+                    <label class="col-sm-4 col-form-label" style="padding-bottom:0px;padding-right:0px;font-size:13px;">Nombre del Consultor/Regente que Elaboró el PGMF</label>
+                    <label class="col-sm-1 col-form-label" style="padding-bottom:0px;font-size:14px;">:</label>
+                    <label class="col-sm-7 col-form-label" style="padding-bottom:0px;padding-left:0px;font-size:14px;">@Model.REGENTE_PGMF</label>
+                </div>
+                <div class="form-group row" style="margin-bottom:0px;">
+                    <label class="col-sm-4 col-form-label" style="padding-bottom:0px;padding-right:0px;font-size:13px;">N° Registro del Consultor/Regente</label>
+                    <label class="col-sm-1 col-form-label" style="padding-bottom:0px;font-size:14px;">:</label>
+                    <label class="col-sm-7 col-form-label" style="padding-bottom:0px;padding-left:0px;font-size:14px;">@Model.NUMREG_REGENTE_PGMF</label>
+                </div>
+                <div class="form-group row" style="margin-bottom:0px;">
+                    <label class="col-sm-4 col-form-label" style="padding-bottom:0px;font-size:13px;">N° Telefónico del Consultor o Regente</label>
+                    <label class="col-sm-1 col-form-label" style="padding-bottom:0px;font-size:14px;">:</label>
+                    <label class="col-sm-7 col-form-label" style="padding-bottom:0px;padding-left:0px;font-size:14px;">@Model.TELEFONO_REGENTE_PGMF</label>
+                </div>
+                <div class="form-group row" style="margin-bottom:0px;">
+                    <label class="col-sm-4 col-form-label" style="padding-bottom:0px;padding-right:0px;font-size:13px;">Resolución de Aprobación PGMF</label>
+                    <label class="col-sm-1 col-form-label" style="padding-bottom:0px;font-size:14px;">:</label>
+                    <label class="col-sm-7 col-form-label" style="padding-bottom:0px;padding-left:0px;font-size:14px;">@Model.NUMRES_APROB_PGMF</label>
+                </div>
+                <div id="dvDatosNoFauna" style="display:none;">
+                    <div class="form-group row" style="margin-bottom:0px;">
+                        <label class="col-sm-4 col-form-label" style="padding-bottom:0px;padding-right:0px;font-size:13px;">N° de Plan Operativo</label>
+                        <label class="col-sm-1 col-form-label" style="padding-bottom:0px;font-size:14px;">:</label>
+                        <label class="col-sm-7 col-form-label" style="padding-bottom:0px;padding-left:0px;font-size:14px;">@Model.POA</label>
+                    </div>
+                    <div class="form-group row" style="margin-bottom:0px;">
+                        <label class="col-sm-4 col-form-label" style="padding-bottom:0px;padding-right:0px;font-size:13px;">Área del Plan Operativo</label>
+                        <label class="col-sm-1 col-form-label" style="padding-bottom:0px;font-size:14px;">:</label>
+                        <label class="col-sm-7 col-form-label" style="padding-bottom:0px;padding-left:0px;font-size:14px;">@Model.POA_AREA</label>
+                    </div>
+                    <div class="form-group row" style="margin-bottom:0px;">
+                        <label class="col-sm-4 col-form-label" style="padding-bottom:0px;padding-right:0px;font-size:13px;">N° PC (de ser el caso)</label>
+                        <label class="col-sm-1 col-form-label" style="padding-bottom:0px;font-size:14px;">:</label>
+                        <label class="col-sm-7 col-form-label" style="padding-bottom:0px;padding-left:0px;font-size:14px;">@Model.POA_COMPLEMENTARIO</label>
+                    </div>
+                    <div class="form-group row" style="margin-bottom:0px;">
+                        <label class="col-sm-4 col-form-label" style="padding-bottom:0px;padding-right:0px;font-size:13px;">Año Operativo</label>
+                        <label class="col-sm-1 col-form-label" style="padding-bottom:0px;font-size:14px;">:</label>
+                        <label class="col-sm-7 col-form-label" style="padding-bottom:0px;padding-left:0px;font-size:14px;">@Model.ANIO_OPERATIVO</label>
+                    </div>
+                    <div class="form-group row" style="margin-bottom:0px;">
+                        <label class="col-sm-4 col-form-label" style="padding-bottom:0px;padding-right:0px;font-size:13px;">Nombre del Regente que Elaboró el PO</label>
+                        <label class="col-sm-1 col-form-label" style="padding-bottom:0px;font-size:14px;">:</label>
+                        <label class="col-sm-7 col-form-label" style="padding-bottom:0px;padding-left:0px;font-size:14px;">@Model.REGENTE_ELAB_POA</label>
+                    </div>
+                    <div class="form-group row" style="margin-bottom:0px;">
+                        <label class="col-sm-4 col-form-label" style="padding-bottom:0px;padding-right:0px;font-size:13px;">Nombre del Profesional que Realizó la Inspección Ocular del PO</label>
+                        <label class="col-sm-1 col-form-label" style="padding-bottom:0px;font-size:14px;">:</label>
+                        <label class="col-sm-7 col-form-label" style="padding-bottom:0px;padding-left:0px;font-size:14px;">@Model.PROF_INSP_POA</label>
+                    </div>
+                    <div class="form-group row" style="margin-bottom:0px;">
+                        <label class="col-sm-4 col-form-label" style="padding-bottom:0px;padding-right:0px;font-size:13px;">Nombre del Profesional que Recomendó la Aprobación del PO</label>
+                        <label class="col-sm-1 col-form-label" style="padding-bottom:0px;font-size:14px;">:</label>
+                        <label class="col-sm-7 col-form-label" style="padding-bottom:0px;padding-left:0px;font-size:14px;">@Model.PROF_RECOM_APROB_POA</label>
+                    </div>
+                    <div class="form-group row" style="margin-bottom:0px;">
+                        <label class="col-sm-4 col-form-label" style="padding-bottom:0px;padding-right:0px;font-size:13px;">Resolución de Aprobación PO</label>
+                        <label class="col-sm-1 col-form-label" style="padding-bottom:0px;font-size:14px;">:</label>
+                        <label class="col-sm-7 col-form-label" style="padding-bottom:0px;padding-left:0px;font-size:14px;">@Model.NUMRES_APROB_POA</label>
+                    </div>
+                    <div class="form-group row" style="margin-bottom:0px;">
+                        <label class="col-sm-4 col-form-label" style="padding-bottom:0px;padding-right:0px;font-size:13px;">Nombre del Funcionario que Aprobó el PO</label>
+                        <label class="col-sm-1 col-form-label" style="padding-bottom:0px;font-size:14px;">:</label>
+                        <label class="col-sm-7 col-form-label" style="padding-bottom:0px;padding-left:0px;font-size:14px;">@Model.FUNCIONARIO_APROB_POA</label>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Cerrar</button>
+        </div>
+    </div>
+</div>

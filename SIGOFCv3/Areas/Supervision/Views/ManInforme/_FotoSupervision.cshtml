@@ -1,0 +1,73 @@
+﻿
+@model CapaEntidad.ViewModel.VM_Informe_Foto
+
+<script src="~/Areas/Supervision/js/ManInforme/_FotoSupervision.js"></script>
+
+<style type="text/css">
+    .custom-file-input ~ .custom-file-label::after {
+        content: "Elegir";
+    }
+</style>
+
+<div class="modal-dialog" role="document">
+    <div class="modal-content">
+        <div class="modal-header text-small" style="cursor:move;">
+            <span>Subir Foto de la Supervisión</span>
+            <i class="fa fa-close" style="cursor:pointer;" data-dismiss="modal" aria-label="Close"></i>
+        </div>
+        <div class="modal-body">
+            <form id="frmItemAvistamientoFauna">
+                @Html.HiddenFor(m=>m.hdfCodInforme)
+                @Html.HiddenFor(m=>m.hdfNumInforme)
+                <div class="form-row">
+                    <div class="form-group col-md-12">
+                        <label for="txtDescripcion" class="text-small">Descripción</label>
+                        @Html.TextAreaFor(m=>m.txtDescripcion, new { @class = "form-control form-control-sm", rows = "4" })
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-12">
+                        <label for="txtFuente" class="text-small">Fuente</label>
+                        @Html.TextBoxFor(m=>m.txtFuente, new { @class = "form-control form-control-sm" })
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-12">
+                        <label for="txtNumTHabilitante" class="text-small">Título Habilitante</label>
+                        @Html.TextBoxFor(m=>m.txtNumTHabilitante, new { @class = "form-control form-control-sm", disabled = "disabled" })
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-8">
+                        <label for="txtUsuarioRegistro" class="text-small">Registrado Por</label>
+                        @Html.TextBoxFor(m=>m.txtUsuarioRegistro, new { @class = "form-control form-control-sm", disabled = "disabled" })
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label for="txtFechaRegistro" class="text-small">Fecha Registro</label>
+                        @Html.TextBoxFor(m=>m.txtFechaRegistro, new { @class = "form-control form-control-sm", disabled = "disabled" })
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-12">
+                        <label for="txtDispositivo" class="text-small">Dispositivo</label>
+                        @Html.TextBoxFor(m=>m.txtDispositivo, new { @class = "form-control form-control-sm" })
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-12">
+                        <div class="custom-file">
+                            <input type="file" accept="image/*" class="custom-file-input" id="imgFotoSupervision" aria-describedby="fileHelp" onchange="_FotoSupervision.fnSelectFile(event, this)">
+                            <label class="custom-file-label" for="imgFotoSupervision" style="color:#989797">
+                                Seleccionar Foto
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-primary btn-sm" onclick="_FotoSupervision.fnSubmitForm()">Guardar</button>
+            <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Cancelar</button>
+        </div>
+    </div>
+</div>

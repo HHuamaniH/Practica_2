@@ -1,0 +1,162 @@
+﻿<div class="modal-dialog" role="document">
+    <div class="modal-content">
+        <div class="modal-header text-small" style="cursor:move;">
+            <span>Kardex</span>
+            <i class="fa fa-close" style="cursor:pointer;" data-dismiss="modal" aria-label="Close"></i>
+        </div>
+        <div class="modal-body">
+            <form id="frmBExtKardex">
+                @Html.Hidden("hdfCodTHabilitante", (object)ViewBag.hdfCodTHabilitante)
+                @Html.Hidden("hdfNumPoa", (object)ViewBag.hdfNumPoa)
+                @Html.Hidden("hdfCodSecuencial")
+                @Html.Hidden("hdfRegEstado")
+                <div class="form-row">
+                    <div class="form-group col-md-12">
+                        @Html.Partial("~/Areas/General/Views/Controles/_renderComboEspecie.cshtml")
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label for="txtFechaEmision" class="text-small">Fecha de emisión</label>
+                        @Html.TextBox("txtFechaEmision", "", new { @class = "form-control form-control-sm", placeholder = "dd/mm/aaaa", maxlength = "10" })
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-12">
+                        <label for="txtGtf" class="text-small">Guía de transporte</label>
+                        @Html.TextBox("txtGtf", "", new { @class = "form-control form-control-sm" })
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label for="ddlProductoId" class="text-small">Producto</label>
+                        @Html.DropDownList("ddlProductoId", new SelectList(ViewBag.ddlItemkeardexProducto, "Value", "Text"), new { @class = "form-control form-control-sm" })
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="ddlProductoDescId" class="text-small">Descripción</label>
+                        @Html.DropDownList("ddlProductoDescId", new SelectList(ViewBag.ddlItemkeardexDescripcion, "Value", "Text"), new { @class = "form-control form-control-sm" })
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label for="txtCantidad" class="text-small">Producción latas</label>
+                        @Html.TextBox("txtCantidad", "", new { @class = "form-control form-control-sm", maxlength = "10", @onkeypress = "return utilSigo.onKeyEntero(event, this);" })
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="txtKg" class="text-small">Kg.</label>
+                        @Html.TextBox("txtKg", "", new { @class = "form-control form-control-sm", maxlength = "10", @onkeypress = "return utilSigo.onKeyDecimal(event, this);" })
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label for="txtM3" class="text-small">m³</label>
+                        @Html.TextBox("txtM3", "", new { @class = "form-control form-control-sm", maxlength = "10", @onkeypress = "return utilSigo.onKeyDecimal(event, this);" })
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="txtAcumulado" class="text-small">Acumulado (m³)</label>
+                        @Html.TextBox("txtAcumulado", "", new { @class = "form-control form-control-sm", maxlength = "10", @onkeypress = "return utilSigo.onKeyDecimal(event, this);" })
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label for="txtSaldo" class="text-small">Saldo (m³)</label>
+                        @Html.TextBox("txtSaldo", "", new { @class = "form-control form-control-sm", maxlength = "10", @onkeypress = "return utilSigo.onKeyDecimal(event, this);" })
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-12">
+                        <label for="txtObservacion" class="text-small">Observacion</label>
+                        @Html.TextArea("txtObservacion", "", new { @class = "form-control form-control-sm", rows = "3" })
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-primary btn-sm" onclick="_BExtraccionKardex.fnSave()">Guardar</button>
+            <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Cancelar</button>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    var _BExtraccionKardex = {
+        fnSave: () => {
+            if (_renderComboEspecie.fnGetCodEspecie() == null) {
+                utilSigo.toastError("Error", "Seleccione la especie"); return false;
+            }
+            if (utilSigo.ValidaTexto("txtFechaEmision", "Ingrese la fecha de emisión") == false) return false;
+            if (utilSigo.ValidaTexto("txtGtf", "Ingrese elnúmero de guía de transporte") == false) return false;
+            if (utilSigo.ValidaTexto("txtCantidad", "Ingrese cantidad de producción de latas") == false) return false;
+            if (utilSigo.ValidaTexto("txtKg", "Ingrese los kg") == false) return false;
+            if (utilSigo.ValidaTexto("txtM3", "Ingrese los m³") == false) return false;
+            if (utilSigo.ValidaTexto("txtAcumulado", "Ingrese el acumulado") == false) return false;
+            if (utilSigo.ValidaTexto("txtSaldo", "Ingrese el saldo") == false) return false;
+
+            var data = {
+                COD_THABILITANTE: _BExtraccionKardex.frm.find("#hdfCodTHabilitante").val(),
+                NUM_POA: _BExtraccionKardex.frm.find("#hdfNumPoa").val(),
+                COD_SECUENCIAL: _BExtraccionKardex.frm.find("#hdfCodSecuencial").val(),
+                COD_ESPECIES: _renderComboEspecie.fnGetCodEspecie(),
+                ESPECIES: "",
+                FECHA_EMISIONKARDEX: _BExtraccionKardex.frm.find("#txtFechaEmision").val(),
+                GUIA_TRANSPORTE: _BExtraccionKardex.frm.find("#txtGtf").val(),
+                COD_KARDEX_PRODUCTO: _BExtraccionKardex.frm.find("#ddlProductoId").val(),
+                COD_KARDEX_DESCRIPCION: _BExtraccionKardex.frm.find("#ddlProductoDescId").val(),
+                CANTIDAD: _BExtraccionKardex.frm.find("#txtCantidad").val(),
+                KILOGRAMOS_KARDEX: _BExtraccionKardex.frm.find("#txtKg").val(),
+                M3: _BExtraccionKardex.frm.find("#txtM3").val(),
+                ACUMULADO: _BExtraccionKardex.frm.find("#txtAcumulado").val(),
+                SALDO_KARDEX: _BExtraccionKardex.frm.find("#txtSaldo").val(),
+                OBSERVACION_KARDEX: _BExtraccionKardex.frm.find("#txtObservacion").val(),
+                RegEstado: _BExtraccionKardex.frm.find("#hdfRegEstado").val()
+            };
+            var url = urlLocalSigo + "THabilitante/ManBalanceExtraccion/GrabarBExtraccionKardex";
+            var option = { url: url, datos: JSON.stringify(data), type: 'POST' };
+
+            utilSigo.dialogConfirm('', 'Desea continuar con el registro?', function (r) {
+                if (r) {
+                    utilSigo.fnAjax(option, function (data) {
+                        if (data.success) {
+                            utilSigo.toastSuccess("Éxito", data.msj);
+                            _BExtraccionKardex.fnSaved();
+                        }
+                        else {
+                            utilSigo.toastWarning("Aviso", data.msj);
+                        }
+                    });
+                }
+            });
+        },
+        fnInit: (data) => {
+            _BExtraccionKardex.frm = $("#frmBExtKardex");
+
+            $.fn.select2.defaults.set("theme", "bootstrap4");
+            _BExtraccionKardex.frm.find("#ddlProductoId").select2({ minimumResultsForSearch: -1 });
+            _BExtraccionKardex.frm.find("#ddlProductoDescId").select2({ minimumResultsForSearch: -1 });
+            utilSigo.fnFormatDate(_BExtraccionKardex.frm.find("#txtFechaEmision"));
+
+            if (data == "") { //Nuevo registro
+                _BExtraccionKardex.frm.find("#hdfCodSecuencial").val(0);
+                _BExtraccionKardex.frm.find("#hdfRegEstado").val(1);
+                _renderComboEspecie.fnInit("FORESTAL", "", "");
+            } else { //Modificar registro
+                _BExtraccionKardex.frm.find("#hdfCodSecuencial").val(data.COD_SECUENCIAL);
+                _BExtraccionKardex.frm.find("#hdfRegEstado").val(data.RegEstado);
+                _renderComboEspecie.fnInit("FORESTAL", data.COD_ESPECIES, data.ESPECIES);
+                _BExtraccionKardex.frm.find("#txtFechaEmision").val(data.FECHA_EMISIONKARDEX);
+                _BExtraccionKardex.frm.find("#txtGtf").val(data.GUIA_TRANSPORTE);
+                _BExtraccionKardex.frm.find("#ddlProductoId").val(data.COD_KARDEX_PRODUCTO).trigger("change");
+                _BExtraccionKardex.frm.find("#ddlProductoDescId").val(data.COD_KARDEX_DESCRIPCION).trigger("change");
+                _BExtraccionKardex.frm.find("#txtCantidad").val(data.CANTIDAD);
+                _BExtraccionKardex.frm.find("#txtKg").val(data.KILOGRAMOS_KARDEX);
+                _BExtraccionKardex.frm.find("#txtM3").val(data.M3);
+                _BExtraccionKardex.frm.find("#txtAcumulado").val(data.ACUMULADO);
+                _BExtraccionKardex.frm.find("#txtSaldo").val(data.SALDO_KARDEX);
+                _BExtraccionKardex.frm.find("#txtObservacion").val(data.OBSERVACION_KARDEX);
+            }
+        },
+        fnSaved: () => {
+            /*Implementar en donde se instancia*/
+        }
+    };
+</script>

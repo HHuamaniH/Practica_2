@@ -1,0 +1,42 @@
+﻿
+<script src="~/Areas/General/js/Controles/_ConsultaSITD.js"></script>
+<div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+        <div class="modal-header text-small" style="cursor:move;padding:0.5rem;">
+            <h5 class="modal-title">Buscar Documento SITD</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body">
+            <form id="frmConsultarDocSITD" method="get">                
+                <input type="hidden" id="hdBusFormulario" value="@ViewBag.busFormularioSITD" />
+                
+                <div class="form-row">
+                    <div class="col-md-4 mb-3">
+                        @Html.DropDownList("cboCriterio", (IEnumerable<SelectListItem>)ViewBag.lspOpcionSITD, new { @class = "form-control form-control-sm" })
+                    </div>
+
+                    <div class="col-md-8 mb-3">
+                        <div class="input-group">
+                            <input type="text" id="txtValor" class="form-control form-control-sm" maxlength="50" />
+                            <div class="input-group-prepend">
+                                <span class="input-group-text" id="btnBuscar" style="cursor:pointer;color:forestgreen"><i class="fa fa-search" data-toggle="tooltip" data-placement="top" title="Buscar"></i></span>                                
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="table-responsive">
+                    <table id="tbBuscarDocumento" class="table table-hover table-bordered" style="width:100%;">
+                        <thead></thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+                <button type="submit" style="display:none;"></button>
+            </form>
+        </div>
+        <div class="modal-footer">
+
+        </div>
+    </div>
+</div>

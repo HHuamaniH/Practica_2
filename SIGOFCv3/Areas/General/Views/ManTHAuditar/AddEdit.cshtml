@@ -1,0 +1,46 @@
+﻿@model CapaEntidad.ViewModel.VM_THabilitantePOI
+
+<script src="~/Areas/General/js/ManTHAuditar/AddEdit.js"></script>
+
+<div id="divRegTHPOA" class="modal-dialog modal-sm" role="document">
+    <div class="modal-content">
+        <div class="modal-header text-small" style="cursor:move;padding:0.5rem;">
+            <h5 class="modal-title">@Model.lblTitulo</h5>
+        </div>
+        <div class="modal-body">
+            <form id="frmAddEditTHPOI" method="post">
+                @Html.HiddenFor(m => m.hdfCodTHPOI)
+                @Html.HiddenFor(m => m.hdfEstado)
+                @Html.HiddenFor(m => m.RegEstado)
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label for="ddlAnioId" class="text-small">Año</label>
+                        @Html.DropDownListFor(m => m.ddlAnioId, new SelectList(Model.ddlAnio, "Value", "Text"), new { @class = "form-control form-control-sm" })
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label for="ddlTrimestreId" class="text-small">Trimestre</label>
+                        @Html.DropDownListFor(m => m.ddlTrimestreId, new SelectList(Model.ddlTrimestre, "Value", "Text"), new { @class = "form-control form-control-sm" })
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-11">
+                        <label for="descr" class="text-small">Valor de Auditoría</label>
+                        @Html.EditorFor(m => m.txtValorAuditoria, new { htmlAttributes = new { @class = "form-control form-control-sm", pattern = "[0-9]{1,6}", maxlength = "4" , title = "Solo debe ingresar números enteros", onkeypress = "return utilSigo.onKeyEntero(event, this);" } })
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-11">
+                        <label for="descr" class="text-small">Valor de Supervisión</label>
+                        @Html.EditorFor(m => m.txtValorSupervision, new { htmlAttributes = new { @class = "form-control form-control-sm", pattern = "[0-9]{1,6}", maxlength = "4", title = "Solo debe ingresar números enteros", onkeypress = "return utilSigo.onKeyEntero(event, this);" } })
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="modal-footer">
+            <button id="btnCancelar" class="btn btn-secondary btn-sm" onclick="AddEdit.fnClose();">Cancelar</button>
+            <button id="btnGuardar" class="btn btn-primary btn-sm">Registrar</button>
+        </div>
+    </div>
+</div>

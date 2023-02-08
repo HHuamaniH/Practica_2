@@ -1,0 +1,255 @@
+﻿@model CapaEntidad.ViewModel.VM_Proveido
+<script type="text/javascript">
+    var _renderArchivoSup = {};
+
+    _renderArchivoSup.fnSelectRecom = function () {
+        _renderArchivoSup.frm.find("#divDescSobArchivo").hide();
+        _renderArchivoSup.frm.find("#divMedidaDetalle").hide();
+        _renderArchivoSup.frm.find("#divConstObli").hide();
+
+        if (_renderArchivoSup.frm.find("#ddlSobArchivo").val() == '0000006') {
+            _renderArchivoSup.frm.find("#divDescSobArchivo").show();
+        }
+        if (_renderArchivoSup.frm.find("#ddlSobArchivo").val() == '0000005') {
+            _renderArchivoSup.frm.find("#divConstObli").show();
+        }
+
+        if (_renderArchivoSup.frm.find("#ddlMedida").val() == '0000008') {
+            _renderArchivoSup.frm.find("#divMedidaDesc").val('Medidas Correctivas');
+            _renderArchivoSup.frm.find("#divMedidaDetalle").show();
+
+        }
+
+        if (_renderArchivoSup.frm.find("#ddlMedida").val() == '0000009') {
+            _renderArchivoSup.frm.find("#divMedidaDesc").val('Mandatos');
+            _renderArchivoSup.frm.find("#divMedidaDetalle").show();
+
+        }
+      
+    }
+    
+    _renderArchivoSup.fnShowSubsVoluntaria = function () {
+        if (_renderArchivoSup.frm.find("#chkSubsVoluntaria").is(':checked')) {
+            _renderArchivoSup.frm.find("#divSubsVoluntaria").show();
+        }
+        else {
+            _renderArchivoSup.frm.find("#divSubsVoluntaria").hide();
+            _renderArchivoSup.frm.find("#txtSubsVoluntaria").val(null);
+        }
+    }
+
+    $(document).ready(function () {
+        _renderArchivoSup.frm = $("#divArchivoInfSup");
+        _renderArchivoSup.fnSelectRecom();
+        _renderArchivoSup.fnShowSubsVoluntaria();
+    });
+</script>
+<div id="divArchivoInfSup" class="text-small">
+    <div><br /><br /></div>
+    <div class="form-row">
+        <div class="form-group col-md-4">
+            Sobre el Archivo
+        </div>
+        <div class="form-group col-md-6">
+            @Html.DropDownListFor(m => m.txtIdSobArchivo, new SelectList(Model.ListMComboTipoArchivo, "CODIGO", "DESCRIPCION"),
+                                                                 new
+                                                                      {
+                                                                          @class = "form-control form-control-sm",
+                                                                          @id = "ddlSobArchivo",
+                                                                          @onchange = "_renderArchivoSup.fnSelectRecom()"
+                                                                     })
+        </div>
+        <div class="form-group col-md-2">
+        </div>
+    </div>
+    <div class="form-row" id="divDescSobArchivo" style="display:none;">
+        <div class="form-group col-md-4">
+            Descripción Sobre el Archivo
+        </div>
+        <div class="form-group col-md-6">
+            @Html.TextAreaFor(m => m.txtSobreArchivo, 8, 1, new { @class = "form-control form-control-sm" })
+        </div>
+        <div class="form-group col-md-2">
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="form-group col-md-4">
+            Se dicta alguna medida
+        </div>
+        <div class="form-group col-md-6">
+            @Html.DropDownListFor(m => m.txtIdMedida, new SelectList(Model.ListMComboTipoMedidas, "CODIGO", "DESCRIPCION"),
+                                                            new
+                                                                 {
+                                                                     @class = "form-control form-control-sm",
+                                                                     @id = "ddlMedida",
+                                                                     @onchange = "_renderArchivoSup.fnSelectRecom()"
+                                                                })
+
+        </div>
+        <div class="form-group col-md-2">
+        </div>
+    </div>
+
+    <div class="form-row" id="divMedidaDetalle" style="display:none;">
+        <div class="form-group col-md-4">
+            <output id="divMedidaDesc" type="text" value="Seleccionar"></output>
+        </div>
+        <div class="form-group col-md-6">
+            @Html.TextAreaFor(m => m.txtDictaMedida, 8, 1, new { @class = "form-control form-control-sm" })
+        </div>
+        <div class="form-group col-md-2">
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="form-group col-md-12">
+            <label for="lblTipoILegal" class="text-small">Recomienda</label>
+            @Html.TextAreaFor(m => m.txtRecomienda, 4, 1, new { @class = "form-control form-control-sm" })
+        </div>
+    </div>
+    <div class="form-row" id="divConstObli" style="display:none;">
+        <div class="form-group col-md-4">
+            Se emite constancia
+        </div>
+        <div class="form-group col-md-6">
+            @Html.DropDownListFor(m => m.txtIdEmiteConst, new SelectList(Model.ListMComboEmiteConst, "CODIGO", "DESCRIPCION"),
+                                                                 new
+                                                                      {
+                                                                          @class = "form-control form-control-sm",
+                                                                          @id = "ddlEmiteConst",
+                                                                          @onchange = "_renderArchivoSup.fnSelectRecom()"
+                                                                     })
+        </div>
+        <div class="form-group col-md-2">
+        </div>
+    </div>
+    <div class="card-header text-small">
+        Motivo de archivo
+    </div>
+    <div><br /></div>
+    <div class="form-row">
+        <div class="form-group col-md-4">
+            Nueva Supervision
+        </div>
+        <div class="form-group col-md-6">
+            @Html.CheckBoxFor(m => m.chkNuevSuperv, new { @class = "form-check-input", style = "width:15px;height:16px;" })
+        </div>
+        <div class="form-group col-md-2">
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="form-group col-md-4">
+            Evidencia de irregularidades cuya sanción no es competencia de OSINFOR
+        </div>
+        <div class="form-group col-md-6">
+            @Html.CheckBoxFor(m => m.chkEvidIrregular, new { @class = "form-check-input", style = "width:15px;height:16px;" })
+        </div>
+        <div class="form-group col-md-2">
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="form-group col-md-4">
+            @if (Model.hdfTipoProveido == "0000006")
+            {
+                <div>Cumplimiento de Obligaciones</div>
+            }
+            else
+            {
+                <div>Sin indicios de infracción</div>
+            }
+        </div>
+        <div class="form-group col-md-6">
+            @Html.CheckBoxFor(m => m.chkSinIndicios, new { @class = "form-check-input", style = "width:15px;height:16px;" })
+        </div>
+        <div class="form-group col-md-2">
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="form-group col-md-4">
+            Deficiente notificación
+        </div>
+        <div class="form-group col-md-6">
+            @Html.CheckBoxFor(m => m.chkDefNot, new { @class = "form-check-input", style = "width:15px;height:16px;" })
+
+        </div>
+        <div class="form-group col-md-2">
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="form-group col-md-4">
+            Deficiencia técnica
+        </div>
+        <div class="form-group col-md-6">
+            @Html.CheckBoxFor(m => m.chkDefTec, new { @class = "form-check-input", style = "width:15px;height:16px;" })
+
+        </div>
+        <div class="form-group col-md-2">
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="form-group col-md-4">
+            Fallecimiento Titular
+        </div>
+        <div class="form-group col-md-6">
+            @Html.CheckBoxFor(m => m.chkFallTit, new { @class = "form-check-input", style = "width:15px;height:16px;" })
+        </div>
+        <div class="form-group col-md-2">
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="form-group col-md-4">
+            Incumplimiento de la Directiva de Supervisión
+        </div>
+        <div class="form-group col-md-6">
+            @Html.CheckBoxFor(m => m.chkIncumpleDirectiva, new { @class = "form-check-input", style = "width:15px;height:16px;" })
+        </div>
+        <div class="form-group col-md-2">
+        </div>
+    </div>
+    @if (Model.hdfTipoProveido == "0000006")
+    {
+        <div class="form-row">
+            <div class="form-group col-md-4">
+                Archivo Temporal
+            </div>
+            <div class="form-group col-md-6">
+                @Html.CheckBoxFor(m => m.chkArchTemp, new { @class = "form-check-input", style = "width:15px;height:16px;" })
+            </div>
+            <div class="form-group col-md-2">
+            </div>
+        </div>
+    }
+    <div class="form-row">
+        <div class="form-group col-md-4">
+            Subsanación voluntaria
+        </div>
+        <div class="form-group col-md-6">
+            @Html.CheckBoxFor(m => m.chkSubsVoluntaria, new { @class = "form-check-input", style = "width:15px;height:16px;", @onchange = "_renderArchivoSup.fnShowSubsVoluntaria()" })
+        </div>
+        <div class="form-group col-md-2">
+        </div>
+    </div>
+    <div class="form-row" id="divSubsVoluntaria" style="display:none;">
+        <div class="form-group col-md-4">
+        </div>
+        <div class="form-group col-md-6">
+            @Html.TextAreaFor(m => m.txtSubsVoluntaria, 7, 1, new { @class = "form-control form-control-sm" })
+        </div>
+        <div class="form-group col-md-2">
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="form-group col-md-4">
+            Otros
+        </div>
+        <div class="form-group col-md-6">
+            @Html.TextAreaFor(m => m.txtOtros, 8, 1, new { @class = "form-control form-control-sm" })
+        </div>
+        <div class="form-group col-md-2">
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="form-group col-md-12">
+            @Html.Partial("~/Areas/Fiscalizacion/Views/ManProveido/_Shared/_renderNotificacion.cshtml", Model)
+        </div>
+    </div>
+</div>

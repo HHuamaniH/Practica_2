@@ -1,0 +1,248 @@
+﻿@model CapaEntidad.ViewModel.VM_Persona
+
+<style type="text/css">
+    #tbRenderListDomicilio_wrapper {
+        padding: 0px;
+    }
+</style>
+
+<script type="text/javascript">
+    var _renderListDomicilio = {};
+    _renderListDomicilio.tbElimDomicilio = [];
+    _renderListDomicilio.opc;
+    _renderListDomicilio.estado;
+    _renderListDomicilio.codsecuencial;
+    _renderListDomicilio.dataDomicilio;
+    // iniciar datos en la tabla
+    _renderListDomicilio.fnInitDataTable_Detail = function () {
+        var columns_label = [], columns_data = [], options = {};
+
+        columns_label = ["Ubigeo", "Dirección", "Referencia","Estado"];
+        columns_data = ["UBIGEO", "DIRECCION", "DATOS_REFERENCIALES","NACTIVO_NOM"];
+        options = {
+            page_length: 10, row_index: true, row_edit: true, row_fnEdit: "_renderListDomicilio.fnEdit(this,'MOD')", row_delete: true, row_fnDelete: "_renderListDomicilio.fnDelete(this)", page_sort: true
+        };
+        _renderListDomicilio.dtRenderListDomicilio = utilDt.fnLoadDataTable_Detail(_renderListDomicilio.frm.find("#tbRenderListDomicilio"), columns_label, columns_data, options);
+        _renderListDomicilio.dtRenderListDomicilio.rows.add(JSON.parse('@Html.Raw(Json.Encode(@Model.tbDomicilio))')).draw();
+    }
+
+    _renderListDomicilio.fnBuscarUbigeo = function () {
+        var url = urlLocalSigo + "General/Controles/_Ubigeo";
+        var option = { url: url, type: 'POST', datos: {}, divId: "mdlBuscarUbigeo" };
+        utilSigo.fnOpenModal(option, function () {
+            _Ubigeo.fnSelectUbigeo = function (_ubigeoText, _ubigeoId) {
+                _renderListDomicilio.frm.find("#hdfMItemDomicilio_Ubigeo").val(_ubigeoId);
+                _renderListDomicilio.frm.find("#txtMItemDomicilio_Ubigeo").val(_ubigeoText);
+                $("#mdlBuscarUbigeo").modal('hide');
+            }
+
+            _Ubigeo.fnLoadModalView(_renderListDomicilio.frm.find("#hdfMItemDomicilio_Ubigeo").val());
+        }, _renderListDomicilio.fnCustomValidateForm);
+    };
+
+    _renderListDomicilio.fnAddEditDomicilio = function (opc) {
+        _renderListDomicilio.fnLimpiarCampos();
+
+        if (opc == 'NUE') _renderListDomicilio.frm.find("label[for='lblTituloRegistro']").text("Domicilio - Nuevo Registro");
+        else _renderListDomicilio.frm.find("label[for='lblTituloRegistro']").text("Domicilio - Modificando Registro");
+
+        utilSigo.modalDraggable(_renderListDomicilio.frm.find("#mdlRegistraDomicilio"), '.modal-header');
+        _renderListDomicilio.frm.find("#mdlRegistraDomicilio").modal({ keyboard: true, backdrop: 'static' });
+
+        _renderListDomicilio.opc = opc;
+    }
+
+    _renderListDomicilio.fnCloseModal = function () {
+        _renderListDomicilio.frm.find('#mdlRegistraDomicilio').modal('hide');
+        _renderListDomicilio.fnLimpiarCampos();
+    }
+
+    _renderListDomicilio.fnLimpiarCampos = function () {
+        _renderListDomicilio.frm.find("#hdfMItemDomicilio_Ubigeo").val("");
+        _renderListDomicilio.frm.find("#txtMItemDomicilio_Ubigeo").val("");
+        _renderListDomicilio.frm.find("#txtMItemDomicilio_Direccion").val("");
+        _renderListDomicilio.frm.find("#txtMItemDomicilio_Referencia").val("");
+    }
+
+    _renderListDomicilio.fnEdit = function (obj, opc) {
+        _renderListDomicilio.fnAddEditDomicilio(opc);
+
+        _renderListDomicilio.dataDomicilio = _renderListDomicilio.dtRenderListDomicilio.row($(obj).parents('tr'));
+
+        var data = _renderListDomicilio.dtRenderListDomicilio.row($(obj).parents('tr')).data();
+        //debugger
+        _renderListDomicilio.frm.find("#hdfMItemDomicilio_Ubigeo").val(data["COD_UBIGEO"]);
+        _renderListDomicilio.frm.find("#txtMItemDomicilio_Ubigeo").val(data["UBIGEO"]);
+        _renderListDomicilio.frm.find("#txtMItemDomicilio_Direccion").val(data["DIRECCION"]);
+        _renderListDomicilio.frm.find("#txtMItemDomicilio_Referencia").val(data["DATOS_REFERENCIALES"]);
+        if (data["NACTIVO"] == 1) $("#nactivo").prop('checked', true);
+        else $("#nactivo").prop('checked',false);
+       // _renderListDomicilio.frm.find("#nactivo").val(data["NACTIVO"]);
+        _renderListDomicilio.estado = data["RegEstado"];
+        _renderListDomicilio.codsecuencial = data["COD_SECUENCIAL"];
+    }
+
+    _renderListDomicilio.fnDelete = function (obj) {
+        utilSigo.dialogConfirm("Confirmacion", "¿Está seguro de Eliminar el Registro Seleccionado?", function (r) {
+            if (r) {
+                var data = _renderListDomicilio.dtRenderListDomicilio.row($(obj).parents('tr')).data();
+                if (data["RegEstado"] != "1") {
+                    _renderListDomicilio.tbElimDomicilio.push({
+                        EliTABLA: "PERSONA_DET_DOMICILIO",
+                        COD_SECUENCIAL: data["COD_SECUENCIAL"]
+                    });
+                }
+                _renderListDomicilio.dtRenderListDomicilio.row($(obj).parents('tr')).remove().draw(false);
+                utilSigo.toastSuccess("Éxito", "El elemento ha sido eliminado correctamente");
+            }
+        });
+    }
+
+    _renderListDomicilio.fnGetListElimDomicilio = function () { return _renderListDomicilio.tbElimDomicilio }
+
+    _renderListDomicilio.fnSubmitForm = function () {
+        if (_renderListDomicilio.frm.find("#hdfMItemDomicilio_Ubigeo").val() == '') {
+            utilSigo.toastWarning("Aviso", "Debe seleccionar el ubigeo"); return false;
+        }
+        if (_renderListDomicilio.frm.find("#txtMItemDomicilio_Direccion").val().trim() == '') {
+            utilSigo.toastWarning("Aviso", "Ingrese la dirección"); return false;
+        }
+
+        _renderListDomicilio.fnSaveDomicilio();
+    }
+
+    _renderListDomicilio.fnSaveDomicilio = function () {
+        var data = {};
+        data.COD_UBIGEO = _renderListDomicilio.frm.find("#hdfMItemDomicilio_Ubigeo").val();
+        data.UBIGEO = _renderListDomicilio.frm.find("#txtMItemDomicilio_Ubigeo").val();
+        data.DIRECCION = _renderListDomicilio.frm.find("#txtMItemDomicilio_Direccion").val();
+        data.DATOS_REFERENCIALES = _renderListDomicilio.frm.find("#txtMItemDomicilio_Referencia").val();
+        data.NACTIVO = $("#nactivo").prop('checked')? 1:0;
+        data.NACTIVO_NOM = data.NACTIVO == 1 ? 'Activo' : 'Inactivo';
+        if (ManPersonas_AddEdit.frm.find("#RegEstado").val() == 1) data.RegEstado = 1;
+        else data.RegEstado = (_renderListDomicilio.estado == 0) ? 2 : _renderListDomicilio.estado;
+        let items = _renderListDomicilio.dtRenderListDomicilio.data().count();
+        let array = [];
+        for (var i = 0; i < items; i++) {
+            let d = _renderListDomicilio.dtRenderListDomicilio.data()[i];
+             d.RegEstado = 2;
+            d.NACTIVO = 0;
+            d.NACTIVO_NOM = 'Inactivo'; array.push(d);
+            
+        }
+        _renderListDomicilio.dtRenderListDomicilio.rows().remove().draw();
+        _renderListDomicilio.dtRenderListDomicilio.rows.add(array).draw();
+        if (_renderListDomicilio.opc == 'NUE') {
+            data.RegEstado = 1;
+            data.COD_SECUENCIAL = 0;
+
+            _renderListDomicilio.dtRenderListDomicilio.rows.add([data]).draw();
+            _renderListDomicilio.dtRenderListDomicilio.page('last').draw('page');
+        }
+        else {
+            data.COD_SECUENCIAL = _renderListDomicilio.codsecuencial;
+            _renderListDomicilio.dataDomicilio.data(data).draw(false);
+        }
+
+        _renderListDomicilio.fnCloseModal();
+    }
+
+    _renderListDomicilio.fnGetListDomicilio = function () {
+        let list = [], rows, countFilas, data;
+
+        rows = _renderListDomicilio.dtRenderListDomicilio.$("tr");
+        countFilas = rows.length;
+        if (countFilas > 0) {
+            $.each(rows, function (i, o) {
+                data = _renderListDomicilio.dtRenderListDomicilio.row($(o)).data();
+               // if (data["RegEstado"] == "1" || data["RegEstado"] == "2") {
+                list.push(utilSigo.fnConvertArrayToObject(data));
+               // }
+            });
+        }
+        return list;
+    }
+
+   $(document).ready(function () {
+       _renderListDomicilio.frm = $("#frmRenderListDomicilio");
+       //inicializa la tabla con los campos obtenidos del model
+       _renderListDomicilio.fnInitDataTable_Detail();
+   });
+
+</script>
+<div id="frmRenderListDomicilio">
+    <div class="table-responsive">
+        <table id="tbRenderListDomicilio" style="width:100%;margin:0px !important;" class="table table-hover table-bordered">
+            <thead>
+                <tr>
+                    <th colspan="8" class="text-sm-left">
+                        <div class="form-inline">
+                            <i class="fa mx-2 fa-lg fa-file-o" style="cursor:pointer;" onclick="_renderListDomicilio.fnAddEditDomicilio('NUE');" data-toggle="tooltip" data-placement="top" title="Nuevo"></i>
+                            <strong>Dirección Real</strong>
+                        </div>
+                    </th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
+
+    <div class="modal fade hide" id="mdlRegistraDomicilio" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header text-small" style="cursor:move;">
+                    <label for="lblTituloRegistro"></label>
+                    <i class="fa fa-close" style="cursor:pointer;" data-dismiss="modal" aria-label="Close"></i>
+                </div>
+                <div class="modal-body">
+                    <div id="frmRegistrarDomicilio">
+                        <div class="form-group row" style="margin-bottom:0px;">
+                            <label for="lblMItemDomicilio_Ubigeo" class="col-md-4 col-form-label text-small">Ubigeo:</label>
+                            <div class="col-md-8">
+                                <i class="fa fa-cog fa-spin text-danger" id="iconUbigeo" style="display:none;" data-toggle="tooltip" data-placement="top" title="Seleccione Ubigeo"></i>
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text"><i class="fa fa-search" style="cursor:pointer;" data-toggle="tooltip" data-placement="top" title="Seleccionar Ubigeo" onclick="_renderListDomicilio.fnBuscarUbigeo();"></i></span>
+                                    </div>
+                                    @Html.Editor("txtMItemDomicilio_Ubigeo", new { htmlAttributes = new { @class = "form-control form-control-sm", @disabled = "disabled" } })
+                                    @Html.Hidden("hdfMItemDomicilio_Ubigeo")
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group row" style="margin-bottom:0px;">
+                            <label for="lblMItemDomicilio_Direccion" class="col-md-4 col-form-label text-small">Dirección:</label>
+                            <div class="col-md-8">
+                                @Html.TextArea("txtMItemDomicilio_Direccion", "", new { @class = "form-control form-control-sm", @rows = "3" })
+                            </div>
+                        </div>
+                        <div class="form-group row" style="margin-bottom:0px;">
+                            <label for="lblMItemDomicilio_Referencia" class="col-md-4 col-form-label text-small">Referencia:</label>
+                            <div class="col-md-8">
+                                @Html.TextArea("txtMItemDomicilio_Referencia", "", new { @class = "form-control form-control-sm", @rows = "3" })
+                            </div>
+                        </div>
+                        <div class="form-group row" style="margin-bottom:0px;">
+                            <label for="lblMItemDomicilio_Referencia" class="col-md-4 col-form-label text-small">Estado:</label>
+                            <div class="col-md-8">
+                               
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="checkbox" id="nactivo" value="1" checked>
+                                    <label class="form-check-label" for="nactivo">Activo</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" id="btnGuardarDomicilio" class="btn btn-primary btn-sm" onclick="_renderListDomicilio.fnSubmitForm()">Guardar</button>
+                    <button type="button" id="btnCancelarDomicilio" class="btn btn-secondary btn-sm" onclick="_renderListDomicilio.fnCloseModal()">Cancelar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade hide" id="mdlBuscarUbigeo" role="dialog"></div>
+
+
+

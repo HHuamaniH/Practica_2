@@ -1,0 +1,433 @@
+﻿@model CapaEntidad.DOC.Ent_Reporte_Historial_TH
+<script>
+    $(function () {
+        $('.tbListResumenSup').DataTable({
+            "ordering": false
+        });
+        let ob = { anio: '', supervision: 0, archivo_pre: '' };
+        var lstModel = [];
+
+
+    })
+</script>
+<style>
+    .table-footer tr {
+        background-color: aliceblue;
+    }
+
+        .table-footer tr > td {
+            font-weight: 600;
+        }
+
+        #bodyTable tr > td,
+        .table-footer tr > td {
+            text-align: right;
+        }
+
+    .width-20 {
+        width: 20%;
+    }
+</style>
+<div id="divTbResumen" style="width: 100%;  scrollbar-base-color: none;">
+    <br />
+    <div class="form-group">
+        <nav class="navbar navbar-light bg-light justify-content-between">
+            <span class="navbar-brand">1. RESUMEN DE DEUDA </span>
+            <button class="btn btn-sm btn-outline-primary my-2 my-sm-0 d-none" type="button" onclick="_RtpTHDet.fnResumeDescargar()">Descargar<i class="fa fa-file-excel-o fa-fw"></i></button>
+        </nav>
+    </div>
+    <div class="table-responsive">
+        <table id="tbListResumenDeudas" class="table table-bordered table-striped-success tbListResumenSup table-hover" style="width: 100% !important; font-size:11px">
+            <thead>
+                <tr style=" text-align: center;  background-color: #dae7f5">
+                    <td>UIT	</td>
+                    <td>FACTOR UIT</td>
+                    <td>MULTA IMPUESTA</td>
+                    <td>PAGO DE MULTA</td>
+                    <td>AJUSTE ADECUACION</td>
+                    <td>DESCUENTO</td>
+                    <td>COMPENSACION</td>
+                    <td>SALDO</td>
+                    <td>INTERES POR COBRAR</td>
+                    <td>TOTAL DEUDA POR COBRAR</td>
+                    <td>OTROS INGRESOS</td>
+
+                </tr>
+            </thead>
+            @if (Model.ListDEUDAS.Count > 0)
+            {
+                decimal MULTAIMPUESTA = 0; decimal PAGOMULTA = 0; decimal COMPENSACION = 0; decimal SALDO = 0; decimal INTERES = 0; decimal TOTAL = 0;
+
+                <tbody id="bodyTable">
+
+
+                    @foreach (var item in Model.ListDEUDAS)
+                    {
+                        MULTAIMPUESTA = MULTAIMPUESTA + item.MULTA_IMPUESTA_D; PAGOMULTA = PAGOMULTA + item.PAGO_MULTA_D; COMPENSACION = COMPENSACION + item.COMPENSACION_D; SALDO = SALDO + item.SALDO_D;
+                        INTERES = INTERES + item.INTERES_D; TOTAL = TOTAL + item.TOTAL_D;
+                        <tr>
+
+                            <td>@item.UIT_D.ToString("###,##0.0000")</td>
+                            <td>@item.FACTOR_UIT_D.ToString("###,##0.0000")</td>
+                            <td>@Math.Round(item.MULTA_IMPUESTA_D, 2).ToString("###,##0.00")</td>
+                            <td>@Math.Round(item.PAGO_MULTA_D, 2).ToString("###,##0.00")</td>
+                            <td>@Math.Round(item.AJUSTE_D, 2).ToString("###,##0.00")</td>
+                            <td>@Math.Round(item.DESCUENTO_D, 2).ToString("###,##0.00")</td>
+                            <td>@Math.Round(item.COMPENSACION_D, 2).ToString("###,##0.00")</td>
+                            <td>@Math.Round(item.SALDO_D, 2).ToString("###,##0.00")</td>
+                            <td>@Math.Round(item.INTERES_D, 2).ToString("###,##0.00")</td>
+                            <td>@Math.Round(item.TOTAL_D, 2).ToString("###,##0.00")</td>
+                            <td>@Math.Round(item.OTROS_INGRESOS_D, 2).ToString("###,##0.00")</td>
+                        </tr>
+
+
+                    }
+                </tbody>
+                <tfoot class="table-footer">
+
+                    <tr>
+                        <td>Total</td>
+                        <td></td>
+                        <td>@Math.Round(MULTAIMPUESTA, 2).ToString("###,##0.00")</td>
+                        <td>@Math.Round(PAGOMULTA, 2).ToString("###,##0.00")</td>
+                        <td></td>
+                        <td></td>
+                        <td>@Math.Round(COMPENSACION, 2).ToString("###,##0.00")</td>
+                        <td>@Math.Round(SALDO, 2).ToString("###,##0.00")</td>
+                        <td>@Math.Round(INTERES, 2).ToString("###,##0.00")</td>
+                        <td>@Math.Round(TOTAL, 2).ToString("###,##0.00")</td>
+                        <td></td>
+
+                    </tr>
+                </tfoot>
+
+            }
+            else
+            {
+                <tbody>
+                    <tr>
+                        <td colspan="11" class="tdcenter"> Sin datos</td>
+                    </tr>
+                </tbody>
+
+            }
+
+        </table>
+    </div>
+    
+    <br />
+    <div class="form-group">
+        <nav class="navbar navbar-light bg-light justify-content-between">
+            <span class="navbar-brand">2. RESUMEN DE PAGOS REALIZADOS </span>
+            <button class="btn btn-sm btn-outline-primary my-2 my-sm-0 d-none" type="button" onclick="_RtpTHDet.fnResumeDescargar()">Descargar<i class="fa fa-file-excel-o fa-fw"></i></button>
+        </nav>
+    </div>
+    <div class="table-responsive">
+        <table id="tbListResumenPagos" class="table table-bordered table-striped-success tbListResumenSup table-hover" style="width: 100% !important; font-size:11px">
+            <thead>
+                <tr style=" text-align: center;  background-color: #dae7f5">
+                    <td>FECHA</td>
+                    <td>MULTA</td>
+                    <td>INTERES</td>
+                    <td>CUOTAS</td>
+                    <td>RECIBO</td>
+                    <td>TIPO</td>
+                    <td>OTROS INGRESOS</td>
+                </tr>
+            </thead>
+            @if (Model.ListPAGOS.Count > 0)
+            {
+                double MULTA = 0; double INTERES = 0; double CUOTA = 0;
+
+                <tbody id="bodyTable">
+
+
+                    @foreach (var item in Model.ListPAGOS)
+                    {
+                        MULTA = MULTA + item.MULTA_P; INTERES = INTERES + item.INTERES_P; CUOTA = CUOTA + item.CUOTA_P;
+                        <tr>
+
+                            <td>@item.FECHA_P</td>
+                            <td>@item.MULTA_P.ToString("###,##0.00")</td>
+                            <td>@item.INTERES_P.ToString("###,##0.00")</td>
+                            <td>@item.CUOTA_P.ToString("###,##0.00")</td>
+                            <td>@item.RECIBO_P</td>
+                            <td>@item.BAND_P</td>
+                            <td>@item.OTROSINGRESOS_P</td>
+                        </tr>
+
+
+                    }
+                </tbody>
+                <tfoot class="table-footer">
+
+                    <tr>
+                        <td>Total</td>
+                        <td>@MULTA.ToString("###,##0.00")</td>
+                        <td>@INTERES.ToString("###,##0.00")</td>
+                        <td>@CUOTA.ToString("###,##0.00")</td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                </tfoot>
+
+            }
+            else
+            {
+                <tbody>
+                    <tr>
+                        <td colspan="7" class="tdcenter"> Sin datos</td>
+                    </tr>
+                </tbody>
+
+            }
+
+        </table>
+    </div>
+    
+    <br />
+    <div class="form-group">
+        <nav class="navbar navbar-light bg-light justify-content-between">
+            <span class="navbar-brand">3. CRONOGRAMA DE FRACCIONAMIENTO </span>
+            <button class="btn btn-sm btn-outline-primary my-2 my-sm-0 d-none" type="button" onclick="_RtpTHDet.fnResumeDescargar()">Descargar<i class="fa fa-file-excel-o fa-fw"></i></button>
+        </nav>
+    </div>
+    <div class="table-responsive">
+        <table id="tbListResumenCronograma" class="table table-bordered table-striped-success tbListResumenSup table-hover" style="width: 100% !important; font-size:11px">
+            <thead>
+                <tr style=" text-align: center;  background-color: #dae7f5">
+                    <td colspan="6">CRONOGRAMA DE FRACCIONAMIENTO	</td>
+                    <td></td>
+                    <td colspan="6">FRACCIONAMIENTO PAGADO</td>
+
+                </tr>
+                <tr style=" text-align: center;  background-color: #dae7f5">
+                    <td>PERIODO	</td>
+                    <td>FECHA</td>
+                    <td>SALDO</td>
+                    <td>MULTA</td>
+                    <td>INTERES</td>
+                    <td>CUOTAS</td>
+                    <td></td>
+                    <td>FECHA</td>
+                    <td>SALDO</td>
+                    <td>MULTA</td>
+                    <td>INTERES</td>
+                    <td>CUOTAS</td>
+                    <td>RECIBO</td>
+                </tr>
+            </thead>
+            @if (Model.ListCRONOGRAMA.Count > 0)
+            {
+                decimal MULTA = 0; decimal INTERES = 0; decimal CUOTA = 0; decimal MULTA_P = 0; decimal INTERES_P = 0; decimal CUOTA_P = 0; int index = 0;
+
+                <tbody id="bodyTable">
+
+
+                    @foreach (var item in Model.ListCRONOGRAMA)
+                    {
+                        MULTA = MULTA + item.MULTA_C; INTERES = INTERES + item.INTERES_C; CUOTA = CUOTA + item.CUOTA_C;
+                        MULTA_P = MULTA_P + item.MULTA_P_C; INTERES_P = INTERES_P + item.INTERES_P_C; CUOTA_P = CUOTA_P + item.CUOTA_P_C;
+                        if (index == 0) { item.SALDO_P_C = 0; item.MULTA_P_C = 0; item.INTERES_P_C = 0; item.CUOTA_P_C = 0; index++; }
+
+                        <tr>
+
+                            <td>@item.PERIODO_C</td>
+                            <td>@item.FECHA_C</td>
+                            <td>@Math.Round(item.SALDO_C, 2).ToString("###,##0.00")</td>
+                            <td>@Math.Round(item.MULTA_C, 2).ToString("###,##0.00")</td>
+                            <td>@Math.Round(item.INTERES_C, 2).ToString("###,##0.00")</td>
+                            <td>@Math.Round(item.CUOTA_C, 2).ToString("###,##0.00")</td>
+                            <td></td>
+                            <td>@item.FECHA_P_C</td>
+                            <td>@(item.FECHA_P_C == ""?" ":Math.Round(item.SALDO_P_C, 2).ToString("###,##0.00"))</td>
+                            <td>@(item.FECHA_P_C == ""?" ":Math.Round(item.MULTA_P_C, 2).ToString("###,##0.00"))</td>
+                            <td>@(item.FECHA_P_C == ""?" ":Math.Round(item.INTERES_P_C, 2).ToString("###,##0.00"))</td>
+                            <td>@(item.FECHA_P_C == ""?" ":Math.Round(item.CUOTA_P_C, 2).ToString("###,##0.00"))</td>
+                            <td>@(item.FECHA_P_C == "" ? " ":item.NRORECIBO_P_C)</td>
+                        </tr>
+
+
+                    }
+                </tbody>
+                <tfoot class="table-footer">
+
+                    <tr>
+                        <td>Total</td>
+                        <td></td>
+                        <td></td>
+                        <td>@MULTA.ToString("###,##0.00")</td>
+                        <td>@INTERES.ToString("###,##0.00")</td>
+                        <td>@CUOTA.ToString("###,##0.00")</td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td>@MULTA_P.ToString("###,##0.00")</td>
+                        <td>@INTERES_P.ToString("###,##0.00")</td>
+                        <td>@CUOTA_P.ToString("###,##0.00")</td>
+                        <td></td>
+
+                    </tr>
+                </tfoot>
+
+            }
+            else
+            {
+                <tbody>
+                    <tr>
+                        <td colspan="13" class="tdcenter"> Sin datos</td>
+                    </tr>
+                </tbody>
+
+            }
+        </table>
+    </div>
+        
+        <br />
+        <div class="form-group">
+            <nav class="navbar navbar-light bg-light justify-content-between">
+                <span class="navbar-brand">4. COMPENSACIÓN </span>
+                <button class="btn btn-sm btn-outline-primary my-2 my-sm-0 d-none" type="button" onclick="_RtpTHDet.fnResumeDescargar()">Descargar<i class="fa fa-file-excel-o fa-fw"></i></button>
+            </nav>
+        </div>
+        <div class="table-responsive">
+            <table id="tbListResumenCompensacion" class="table table-bordered table-striped-success tbListResumenSup table-hover" style="width: 100% !important; font-size:11px">
+                <thead>
+                    <tr style=" text-align: center;  background-color: #dae7f5">
+                        <td>DETALLE	</td>
+                        <td>NRO. RJ</td>
+                        <td>FECHA RJ</td>
+                        <td>ACTA NOTIFICACION</td>
+                        <td>FECHA NOTIFICACION</td>
+                    </tr>
+                </thead>
+                @if (Model.ListCOMPENSACION.Count > 0)
+                {
+                    <tbody id="bodyTable">
+                        @foreach (var item in Model.ListCOMPENSACION)
+                        {
+                            <tr>
+                                <td class="width-20">APROBACIÓN</td>
+                                <td class="width-20">@item.RESJEFAPROBCOMP_NRO_CM</td>
+                                <td class="width-20">@item.RESJEFAPROBCOMP_FECHA_CM</td>
+                                <td class="width-20">@item.RESJEFAPROBCOMP_NROACTA_CM</td>
+                                <td class="width-20">@item.RESJEFAPROBCOMP_FECHANOT_CM</td>
+                            </tr>
+                            <tr>
+                                <td class="width-20">APROBACIÓN COMP.Y FRACC.</td>
+                                <td>@item.RESJEFAPROBCOMPFRACC_NRO_CM</td>
+                                <td>@item.RESJEFAPROBCOMPFRACC_FECHA_CM</td>
+                                <td>@item.RESJEFAPROBCOMPFRACC_NROACTA_CM</td>
+                                <td>@item.RESJEFAPROBCOMPFRACC_FECHANOT_CM</td>
+                            </tr>
+                            <tr>
+                                <td class="width-20">PÉRDIDA</td>
+                                <td>@item.RESJEFPERDCOMP_NRO_CM</td>
+                                <td>@item.RESJEFPERDCOMP_FECHA_CM</td>
+                                <td>@item.RESJEFPERDCOMP_NROACTA_CM</td>
+                                <td>@item.RESJEFPERDCOMP_FECHANOT_CM</td>
+                            </tr>
+                            <tr>
+                                <td class="width-20">PÉRDIDA COMP.Y FRACC.</td>
+                                <td>@item.RESJEFPERDCOMPFRACC_NRO_CM</td>
+                                <td>@item.RESJEFPERDCOMPFRACC_FECHA_CM</td>
+                                <td>@item.RESJEFPERDCOMPFRACC_NROACTA_CM</td>
+                                <td>@item.RESJEFPERDCOMPFRACC_FECHANOT_CM</td>
+                            </tr>
+                        }
+                    </tbody>
+                }
+
+            </table>
+        </div>
+        <br />
+        <div class="form-group">
+            <nav class="navbar navbar-light bg-light justify-content-between">
+                <span class="navbar-brand">5. CRONOGRAMA DE COMPENSACIÓN </span>
+                <button class="btn btn-sm btn-outline-primary my-2 my-sm-0 d-none" type="button" onclick="_RtpTHDet.fnResumeDescargar()">Descargar<i class="fa fa-file-excel-o fa-fw"></i></button>
+            </nav>
+        </div>
+        <div class="table-responsive">
+            <table id="tbListResumenCroCompensacion" class="table table-bordered table-striped-success tbListResumenSup table-hover" style="width: 100% !important; font-size:11px">
+                <thead>
+                    <tr style=" text-align: center;  background-color: #dae7f5">
+                        <td colspan="2">
+                            DEUDA COMPENSABLE
+                        </td>
+                        <td></td>
+                        <td colspan="2">DEUDA COMPENSADA</td>
+                        <td colspan="4">AUTORIZACION DE COMPENSACION</td>
+                        <td>CUENTA </td>
+                    </tr>
+                    <tr style=" text-align: center;  background-color: #dae7f5">
+
+                        <td>AÑO	</td>
+                        <td>MONTO COMPENSABLE</td>
+                        <td></td>
+                        <td>FECHA</td>
+                        <td>MONTO COMPENSADO</td>
+                        <td>NRO. INFORME</td>
+                        <td>FECHA</td>
+                        <td>NRO. RJ</td>
+                        <td>FECHA</td>
+                        <td>CONTABLE</td>
+                    </tr>
+                </thead>
+                @if (Model.ListCRONOCOMPENSACION.Count > 0)
+                {
+                    decimal MONTO = 0; decimal MONTO_C = 0;
+                    <tbody id="bodyTable">
+                        @foreach (var item in Model.ListCRONOCOMPENSACION)
+                        {
+                            MONTO = MONTO + item.MONTOCOMPENSABLE_CC; MONTO_C = MONTO_C + item.MONTOCOMPENSABLE_P_CC;
+                        <tr>
+
+                            <td>@item.ANIO_CC</td>
+                            <td>@item.MONTOCOMPENSABLE_CC.ToString("###,##0.00")</td>
+                            <td></td>
+                            <td>@item.FECHA_P_CC</td>
+                            <td>@(item.FECHA_P_CC == ""?" ":item.MONTOCOMPENSABLE_P_CC.ToString("###,##0.00"))</td>
+                            <td>@item.NROINFORME_CC</td>
+                            <td>@item.FECHAINFORME_CC</td>
+                            <td>@item.NRORJ_CC</td>
+                            <td>@item.FECHARJ_CC</td>
+                            <td>@(item.FECHA_P_CC == ""?" ":item.CUENTACONTABLE_CC)</td>
+                        </tr>
+                        }
+                    </tbody>
+                    <tfoot class="table-footer">
+
+                        <tr>
+                            <td>Total</td>
+                            <td>@MONTO.ToString("###,##0.00")</td>
+                            <td></td>
+                            <td></td>
+                            <td>@MONTO_C.ToString("###,##0.00")</td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+
+                        </tr>
+                    </tfoot>
+
+                }
+                else
+                {
+                    <tbody>
+                        <tr>
+                            <td colspan="10" class="tdcenter"> Sin datos</td>
+                        </tr>
+                    </tbody>
+
+                }
+
+
+
+            </table>
+        </div>
+
+        <br />
+    </div>

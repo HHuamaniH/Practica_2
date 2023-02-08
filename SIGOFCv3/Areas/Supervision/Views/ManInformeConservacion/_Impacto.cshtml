@@ -1,0 +1,480 @@
+﻿@model CapaEntidad.ViewModel.VM_Informe_Conservacion
+
+<script type="text/javascript">
+    var _frmImpacto = {};
+    var cod_secuencial;
+    var cod_secuencial2;
+
+    var indice;
+    var indice2;
+
+    _frmImpacto.tbEliTABLA = [];
+    _frmImpacto.fnInitDataTable_Detail = function () {
+        var columns_label = [], columns_data = [], options = {};
+        columns_label = ["Nombre Cientifico", "Nombre Común", "Diámetro 01 (cm)", "Diámetro 02 (cm)", "Longitud (m)", "Estado",
+            "Zona UTM", "Coord. Este", "Coord. Norte", "Observaciones"];
+        columns_data = ["NOM_CIENTIFICO", "NOM_COMUN", "DIAMETRO1", "DIAMETRO2", "LONGITUD"
+            , "ESTADO", "ZONA", "COORDENADA_ESTE", "COORDENADA_NORTE", "OBSERVACIONES"];
+        options = {
+            page_length: 10, row_index: true, row_edit: true, row_fnEdit: "_frmImpacto.fnEdit(this)"
+            , row_delete: true, row_fnDelete: "_frmImpacto.fnDelete(this)"
+            , button_copy: true, button_csv: true, button_excel: true, button_pdf: true, button_print: true
+            , export_title: $("#tbImpacto").find("thead tr")[0].innerText.trim()
+            , page_sort: true
+        };
+        _frmImpacto.dtImpacto = utilDt.fnLoadDataTable_Detail($("#tbImpacto"), columns_label, columns_data, options);
+        _frmImpacto.dtImpacto.rows.add(JSON.parse('@Html.Raw(Json.Encode(@Model.tbImpacto))') || []).draw();
+    }
+
+    _frmImpacto.fnInitDataTable_Afectacion = function () {
+        var columns_label = [], columns_data = [], options = {};
+        columns_label = ["Actividad", "Zona UTM", "Coord. Este", "Coord. Norte", "Área", "Observaciones"];
+        columns_data = ["ACTIVIDAD", "ZONA", "COORDENADA_ESTE", "COORDENADA_NORTE", "AREA", "OBSERVACIONES"];
+        options = {
+            page_length: 10, row_index: true, row_edit: true, row_fnEdit: "_frmImpacto.fnEditAfectacion(this)"
+            , row_delete: true, row_fnDelete: "_frmImpacto.fnDeleteAfectacion(this)"
+            , button_copy: true, button_csv: true, button_excel: true, button_pdf: true, button_print: true
+            , export_title: $("#tbAfectacion").find("thead tr")[0].innerText.trim()
+            , page_sort: true
+        };
+        _frmImpacto.dtAfectacion = utilDt.fnLoadDataTable_Detail($("#tbAfectacion"), columns_label, columns_data, options);
+        _frmImpacto.dtAfectacion.rows.add(JSON.parse('@Html.Raw(Json.Encode(@Model.tbAfectacion))') || []).draw();
+    }
+
+    _frmImpacto.fnDelete = function (obj) {
+        var data = _frmImpacto.dtImpacto.row($(obj).parents('tr')).data();
+        if (data["RegEstado"] == "0") {
+            //let EliTabla = "";
+            if (data["COD_INFORME"] != " ") {
+                _frmImpacto.tbEliTABLA.push({
+                    EliTABLA: "INFORME_IMPACTO",
+                    COD_INFORME: data["COD_RESODIREC"],
+                    COD_SECUENCIAL: data["COD_SECUENCIAL"]
+
+                });
+            }
+        }
+        _frmImpacto.dtImpacto.row($(obj).parents('tr')).remove().draw(false);
+    }
+
+    _frmImpacto.fnAddEdit = function (obj) {
+        _frmImpacto.frm.find("#frmMdlImpacto").show();
+    }
+
+    _frmImpacto.fnEdit = function (obj) {
+        var data = _frmImpacto.dtImpacto.row($(obj).parents('tr')).data();
+        indice = _frmImpacto.dtImpacto.row($(obj).parents('tr')).index();
+        _frmImpacto.frm.find("#hdfRegEstado").val(data["RegEstado"]);
+        _frmImpacto.frm.find("#hdfCodSecuencial").val(data["COD_SECUENCIAL"]);
+        _frmImpacto.frm.find("#txtDiametro1").val(data["DIAMETRO1"]);
+        _frmImpacto.frm.find("#txtDiametro2").val(data["DIAMETRO2"]);
+        _frmImpacto.frm.find("#txtLongitud").val(data["LONGITUD"]);
+        _frmImpacto.frm.find("#txtCoordEste").val(data["COORDENADA_ESTE"]);
+        _frmImpacto.frm.find("#txtCoordNorte").val(data["COORDENADA_NORTE"]);
+        _frmImpacto.frm.find("#txtDescripcion").val(data["OBSERVACIONES"]);
+        _frmImpacto.frm.find("#txtDescripcion").val(data["OBSERVACIONES"]);
+        _frmImpacto.frm.find("#ddlZonaId").val(data["ZONA"]);
+        _frmImpacto.frm.find("#ddlEstadoId").val(data["ESTADO"]);
+        var descEspecie = data["NOM_CIENTIFICO"] + " | " + data["NOM_COMUN"];
+        _renderComboEspecie.fnInit("FORESTAL", data["COD_ESPECIE"], descEspecie);
+        cod_secuencial = data['COD_SECUENCIAL'];
+        _frmImpacto.frm.find("#frmMdlImpacto").show();
+    }
+
+    _frmImpacto.fnAdd = function (obj) {
+        var idEspecie = _renderComboEspecie.fnGetCodEspecie();
+        var Nombre = _renderComboEspecie.fnGetEspecie();
+        let nombre_cient = Nombre.split("|")[0];
+        let nombre_comun = Nombre.split("|")[1];
+        let diametro1 = _frmImpacto.frm.find("#txtDiametro1").val();
+        let diametro2 = _frmImpacto.frm.find("#txtDiametro2").val();
+        let longitud = _frmImpacto.frm.find("#txtLongitud").val();
+        let coordenadaeste = _frmImpacto.frm.find("#txtCoordEste").val();
+        let coordenadanorte = _frmImpacto.frm.find("#txtCoordNorte").val();
+        let observacion = _frmImpacto.frm.find("#txtDescripcion").val();
+        let regEstado = _frmImpacto.frm.find("#hdfRegEstado").val();
+        let zona = _frmImpacto.frm.find("#ddlZonaId").val();
+        let estado = _frmImpacto.frm.find("#ddlEstadoId").val();
+        if (regEstado == 0) {
+            regEstado = 2;
+        }
+        let model = {
+            'COD_ESPECIE': idEspecie,
+            'NOM_CIENTIFICO': nombre_cient,
+            'NOM_COMUN': nombre_comun,
+            'DIAMETRO1': diametro1,
+            'DIAMETRO2': diametro2,
+            'LONGITUD': longitud,
+            'ESTADO': estado,
+            'OBSERVACIONES': observacion,
+            'COORDENADA_ESTE': coordenadaeste,
+            'COORDENADA_NORTE': coordenadanorte,
+            'ZONA': zona,
+            'TIPO' : 1,
+            'COD_SECUENCIAL': cod_secuencial,
+            'RegEstado': regEstado
+        }
+            if (indice == null) {
+                _frmImpacto.dtImpacto.rows.add([model]).draw();
+                _frmImpacto.dtImpacto.page('last').draw('page');
+            }
+            else {
+                _frmImpacto.dtImpacto.row(indice).data(model).draw(false);
+        }
+        //limpiar
+        _frmImpacto.frm.find("#txtDiametro1").val('');
+        _frmImpacto.frm.find("#txtDiametro2").val('');
+        _frmImpacto.frm.find("#hdfRegEstado").val('1');
+        _frmImpacto.frm.find("#txtLongitud").val('');
+        _frmImpacto.frm.find("#txtAltitud").val('');
+        _frmImpacto.frm.find("#hdfCodSecuencial").val('0');
+        _frmImpacto.frm.find("#txtCoordEste").val('');
+        _frmImpacto.frm.find("#txtCoordNorte").val('');
+        _frmImpacto.frm.find("#txtDescripcion").val('');
+        _frmImpacto.frm.find("#ddlZonaId").val('0000000');
+        _frmImpacto.frm.find("#ddlEstadoId").val('0');
+        _renderComboEspecie.fnInit("FORESTAL", "", "");
+
+        /*_frmImpacto.frm.find("#ddComoboMotivoRecId").val('0000000');
+        _frmImpacto.frm.find("#ddModalidadTHId").val('0000000');
+        */
+        indice = null;
+        // cerrar modal
+        // table.row(i).data(tempRow);
+        _frmImpacto.frm.find("#frmMdlImpacto").hide();
+    }
+    _frmImpacto.fnCancelarImpacto = function () {
+        //limpiar
+        _frmImpacto.frm.find("#txtDiametro1").val('');
+        _frmImpacto.frm.find("#txtDiametro2").val('');
+        _frmImpacto.frm.find("#hdfRegEstado").val('1');
+        _frmImpacto.frm.find("#txtLongitud").val('');
+        _frmImpacto.frm.find("#txtAltitud").val('');
+        _frmImpacto.frm.find("#hdfCodSecuencial").val('0');
+        _frmImpacto.frm.find("#txtCoordEste").val('');
+        _frmImpacto.frm.find("#txtCoordNorte").val('');
+        _frmImpacto.frm.find("#txtDescripcion").val('');
+        _frmImpacto.frm.find("#ddlZonaId").val('0000000');
+        _frmImpacto.frm.find("#ddlEstadoId").val('0');
+        _renderComboEspecie.fnInit("FORESTAL", "", "");
+        indice = null;
+        _frmImpacto.frm.find("#frmMdlImpacto").hide();
+    }
+
+    _frmImpacto.fnGetList = function () {
+        let list = [], rows, countFilas, data;
+        rows = _frmImpacto.dtImpacto.$("tr");
+        countFilas = rows.length;
+        if (countFilas > 0) {
+            $.each(rows, function (i, o) {
+                data = _frmImpacto.dtImpacto.row($(o)).data();
+                list.push(utilSigo.fnConvertArrayToObject(data));
+            });
+        }
+        return list;
+    }
+
+    _frmImpacto.fnLoadDatos = function (data) {
+        if (data != null && data != "") {
+            _frmImpacto.frm.find("#hdfRegEstado").val(data["RegEstado"]);
+            _frmImpacto.frm.find("#hdfCodSecuencial").val(data["COD_SECUENCIAL"]);
+            _frmImpacto.frm.find("#txtNombreComun").val(data["NOMBRE_COMUN"]);
+            _frmImpacto.frm.find("#txtNombreCientifico").val(data["NOM_CIENTIFICO"]);
+            _frmImpacto.frm.find("#txtDiametro1").val(data["DIAMETRO1"]);
+            _frmImpacto.frm.find("#txtDiametro2").val(data["DIAMETRO2"]);
+            _frmImpacto.frm.find("#txtLongitud").val(data["LONGITUD"]);
+
+            _frmImpacto.frm.find("#txtCoordEste").val(data["COORDENADA_ESTE"]);
+            _frmImpacto.frm.find("#txtCoordNorte").val(data["COORDENADA_NORTE"]);
+            _frmImpacto.frm.find("#txtDescripcion").val(data["OBSERVACIONES"]);
+            _renderComboEspecie.fnInit("FORESTAL", data["COD_ESPECIES"], data["DESC_ESPECIES"]);
+        } else {
+            _frmImpacto.frm.find("#hdfRegEstado").val("1");
+            _frmImpacto.frm.find("#hdfCodSecuencial").val("0");
+            _frmImpacto.frm.find("#hdfRegEstado2").val("1");
+            _frmImpacto.frm.find("#hdfCodSecuencial2").val("0");
+            _renderComboEspecie.fnInit("FORESTAL", "", "");
+        }
+        _frmImpacto.frm.find("#frmMdlImpacto").hide();
+        _frmImpacto.frm.find("#frmMdlAfectacion").hide();
+    }
+
+    /**
+     * area para afectaciones
+     */
+    _frmImpacto.fnAddEditAfectacion = function (obj) {
+        _frmImpacto.frm.find("#frmMdlAfectacion").show();
+    }
+    _frmImpacto.fnAddAfectacion = function (obj) {
+
+        let actividad = _frmImpacto.frm.find("#txtActividad").val();
+        let zona = _frmImpacto.frm.find("#ddlZonaId2").val();
+        let coordenadaeste = _frmImpacto.frm.find("#txtCoordEste2").val();
+        let coordenadanorte = _frmImpacto.frm.find("#txtCoordNorte2").val();
+        let area = _frmImpacto.frm.find("#txtArea").val();
+        let observacion = _frmImpacto.frm.find("#txtDescripcion2").val();
+        let regEstado = _frmImpacto.frm.find("#hdfRegEstado2").val();
+        if (regEstado == 0) {
+            regEstado = 2;
+        }
+        let model = {
+            'ACTIVIDAD': actividad,
+            'ZONA': zona,
+            'COORDENADA_ESTE': coordenadaeste,
+            'COORDENADA_NORTE': coordenadanorte,
+            'AREA': area,
+            'OBSERVACIONES': observacion,
+            'TIPO': 2,
+            'COD_SECUENCIAL': cod_secuencial2,
+            'RegEstado': regEstado
+        }
+        if (indice2 == null) {
+            _frmImpacto.dtAfectacion.rows.add([model]).draw();
+            _frmImpacto.dtAfectacion.page('last').draw('page');
+        }
+        else {
+            _frmImpacto.dtAfectacion.row(indice2).data(model).draw(false);
+        }
+        //limpiar
+        _frmImpacto.frm.find("#txtActividad").val('');
+        _frmImpacto.frm.find("#txtArea").val('');
+        _frmImpacto.frm.find("#hdfRegEstado2").val('1');
+        _frmImpacto.frm.find("#hdfCodSecuencial2").val('0');
+        _frmImpacto.frm.find("#txtCoordEste2").val('');
+        _frmImpacto.frm.find("#txtCoordNorte2").val('');
+        _frmImpacto.frm.find("#txtDescripcion2").val('');
+        _frmImpacto.frm.find("#ddlZonaId2").val('0000000');
+
+        /*_frmImpacto.frm.find("#ddComoboMotivoRecId").val('0000000');
+        _frmImpacto.frm.find("#ddModalidadTHId").val('0000000');
+        */
+        indice2 = null;
+        // cerrar modal
+        // table.row(i).data(tempRow);
+        _frmImpacto.frm.find("#frmMdlAfectacion").hide();
+    }
+
+    _frmImpacto.fnEditAfectacion = function (obj) {
+        var data = _frmImpacto.dtAfectacion.row($(obj).parents('tr')).data();
+        indice2 = _frmImpacto.dtAfectacion.row($(obj).parents('tr')).index();
+        _frmImpacto.frm.find("#hdfRegEstado2").val(data["RegEstado"]);
+        _frmImpacto.frm.find("#hdfCodSecuencial2").val(data["COD_SECUENCIAL"]);
+        _frmImpacto.frm.find("#txtActividad").val(data["ACTIVIDAD"]);
+        _frmImpacto.frm.find("#txtArea").val(data["AREA"]);
+        _frmImpacto.frm.find("#txtCoordEste2").val(data["COORDENADA_ESTE"]);
+        _frmImpacto.frm.find("#txtCoordNorte2").val(data["COORDENADA_NORTE"]);
+        _frmImpacto.frm.find("#txtDescripcion2").val(data["OBSERVACIONES"]);
+        _frmImpacto.frm.find("#ddlZonaId2").val(data["ZONA"]);
+        cod_secuencial2 = data['COD_SECUENCIAL'];
+        _frmImpacto.frm.find("#frmMdlAfectacion").show();
+    }
+
+    _frmImpacto.fnDeleteAfectacion = function (obj) {
+        var data = _frmImpacto.dtAfectacion.row($(obj).parents('tr')).data();
+        if (data["RegEstado"] == "0") {
+            //let EliTabla = "";
+            if (data["COD_INFORME"] != " ") {
+                _frmImpacto.tbEliTABLA.push({
+                    EliTABLA: "INFORME_IMPACTO",
+                    COD_INFORME: data["COD_RESODIREC"],
+                    COD_SECUENCIAL: data["COD_SECUENCIAL"]
+                });
+            }
+        }
+        _frmImpacto.dtAfectacion.row($(obj).parents('tr')).remove().draw(false);
+    }
+    _frmImpacto.fnCancelarAfectacion = function () {
+        _frmImpacto.frm.find("#txtActividad").val('');
+        _frmImpacto.frm.find("#txtArea").val('');
+        _frmImpacto.frm.find("#hdfRegEstado2").val('1');
+        _frmImpacto.frm.find("#hdfCodSecuencial2").val('0');
+        _frmImpacto.frm.find("#txtCoordEste2").val('');
+        _frmImpacto.frm.find("#txtCoordNorte2").val('');
+        _frmImpacto.frm.find("#txtDescripcion2").val('');
+        _frmImpacto.frm.find("#ddlZonaId2").val('0000000');
+        indice2 = null;
+        _frmImpacto.frm.find("#frmMdlAfectacion").hide();
+    }
+
+    _frmImpacto.fnGetListAfectacion = function () {
+        let list = [], rows, countFilas, data;
+        rows = _frmImpacto.dtAfectacion.$("tr");
+        countFilas = rows.length;
+        if (countFilas > 0) {
+            $.each(rows, function (i, o) {
+                data = _frmImpacto.dtAfectacion.row($(o)).data();
+                list.push(utilSigo.fnConvertArrayToObject(data));
+            });
+        }
+        return list;
+    }
+
+    $(document).ready(function () {
+        _frmImpacto.frm = $("#frmImpacto");
+        _frmImpacto.fnInitDataTable_Detail();
+        _frmImpacto.fnLoadDatos();
+        _frmImpacto.fnInitDataTable_Afectacion();
+    });
+</script>
+<div id="frmImpacto">
+    <div id="frmAdd">
+        <div id="frmMdlImpacto" class="container">
+            @Html.Hidden("hdfRegEstado")
+            @Html.Hidden("hdfCodSecuencial")
+            <div class="form-row">
+                <div class="form-group col-md-12">
+                    @Html.Partial("~/Areas/General/Views/Controles/_renderComboEspecie.cshtml")
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group col-md-6">
+                    <label for="ddlTipoAvistRegistroId" class="text-small">Diametro 01 (cm)</label>
+                    @Html.TextBox("txtDiametro1", "", new { @class = "form-control form-control-sm", maxlength = "6", type = "number" })
+
+                </div>
+                <div class="form-group col-md-6">
+                    <label for="ddlTipoAvistEstratoId" class="text-small">Diametro 02 (cm)</label>
+                    @Html.TextBox("txtDiametro2", "", new { @class = "form-control form-control-sm", maxlength = "6", type = "number" })
+
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group col-md-6">
+                    <label for="txtFecha" class="text-small">Longitud comercial (m)</label>
+                    @Html.TextBox("txtLongitud", "", new { @class = "form-control form-control-sm", maxlength = "6", type = "number" })
+                </div>
+                <div class="form-group col-md-6">
+                    <label for="txtHora" class="text-small">Estado</label>
+                    <select class="form-control form-control-sm" id="ddlEstadoId">
+                        <option value="0">Seleccionar</option>
+                        <option value="Movilizado">Movilizado</option>
+                        <option value="Tumbado">Tumbado</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group col-md-6">
+                    <label for="ddlZonaId" class="text-small">Zona UTM</label>
+                    @Html.DropDownListFor(m => m.ddlZonaId, new SelectList(Model.ddlZona, "Value", "Text"),
+                                 new
+                                 {
+                                     @class = "form-control form-control-sm",
+                                     @id = "ddlZonaId"
+                                 })
+                </div>
+
+            </div>
+            <div class="form-row">
+                <div class="form-group col-md-6">
+                    <label for="txtCoordEste" class="text-small">Coordenada Este</label>
+                    @Html.TextBox("txtCoordEste", "", new { @class = "form-control form-control-sm", maxlength = "6", type = "number" })
+                </div>
+                <div class="form-group col-md-6">
+                    <label for="txtCoordNorte" class="text-small">Coordenada Norte</label>
+                    @Html.TextBox("txtCoordNorte", "", new { @class = "form-control form-control-sm", maxlength = "7", type = "number" })
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group col-md-12">
+                    <label for="txtDescripcion" class="text-small">Observaciones</label>
+                    @Html.TextArea("txtDescripcion", "", new { @class = "form-control form-control-sm", rows = "3" })
+                </div>
+            </div>
+            <div class="form-row">
+                <button type="button" class="btn btn-primary btn-sm" onclick="_frmImpacto.fnAdd()">Guardar</button>&nbsp;&nbsp;
+                <button type="button" class="btn btn-secondary btn-sm" onclick="_frmImpacto.fnCancelarImpacto()">Cancelar</button>
+            </div>
+        </div>
+    </div>
+    <hr />
+    <div class="table-responsive">
+        <table id="tbImpacto" style="width:100%;margin:0px !important;" class="table table-hover table-bordered">
+            <thead>
+                <tr>
+                    <th colspan="15" class="text-sm-left">
+                        <div class="form-inline">
+                            <i class="fa mx-2 fa-lg fa-file-o" style="cursor:pointer;" onclick="_frmImpacto.fnAddEdit();" data-toggle="tooltip" data-placement="top" title="Nuevo"></i>
+                            <i class="fa mx-2 fa-lg fa-window-close-o" style="cursor:pointer;" onclick="_renderAvistamientoFauna.fnDeleteAll();" data-toggle="tooltip" data-placement="top" title="Eliminar Todos"></i>
+                            <strong id="lblTitle">Aprovechamiento no autorizado de especies forestales maderables</strong>
+                        </div>
+                    </th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
+    <hr />
+    <div id="frmAddAfectacion">
+        <div id="frmMdlAfectacion" class="container">
+            @Html.Hidden("hdfRegEstado2")
+            @Html.Hidden("hdfCodSecuencial2")
+
+            <div class="form-row">
+                <div class="form-group col-md-6">
+                    <label for="ddlTipoAvistRegistroId" class="text-small">Actividad</label>
+                    @Html.TextBox("txtActividad", "", new { @class = "form-control form-control-sm" })
+
+                </div>
+                <div class="form-group col-md-6">
+                    <label for="ddlZonaId" class="text-small">Zona UTM</label>
+                    @Html.DropDownListFor(m => m.ddlZonaId, new SelectList(Model.ddlZona, "Value", "Text"),
+                                 new
+                                 {
+                                     @class = "form-control form-control-sm",
+                                     @id = "ddlZonaId2"
+                                 })
+                </div>
+
+            </div>
+            <div class="form-row">
+                <div class="form-group col-md-6">
+                    <label for="txtCoordEste" class="text-small">Coordenada Este</label>
+                    @Html.TextBox("txtCoordEste2", "", new { @class = "form-control form-control-sm", maxlength = "6", type = "number" })
+                </div>
+                <div class="form-group col-md-6">
+                    <label for="txtCoordNorte" class="text-small">Coordenada Norte</label>
+                    @Html.TextBox("txtCoordNorte2", "", new { @class = "form-control form-control-sm", maxlength = "7", type = "number" })
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group col-md-6">
+                    <label for="ddlTipoAvistEstratoId" class="text-small">Área</label>
+                    @Html.TextBox("txtArea", "", new { @class = "form-control form-control-sm", maxlength = "6", type = "number" })
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group col-md-12">
+                    <label for="txtDescripcion" class="text-small">Observaciones</label>
+                    @Html.TextArea("txtDescripcion2", "", new { @class = "form-control form-control-sm", rows = "3" })
+                </div>
+            </div>
+            <div class="form-row">
+                <button type="button" class="btn btn-primary btn-sm" onclick="_frmImpacto.fnAddAfectacion()">Guardar</button>&nbsp;&nbsp;
+                <button type="button" class="btn btn-secondary btn-sm" onclick="_frmImpacto.fnCancelarAfectacion()">Cancelar</button>
+            </div>
+        </div>
+    </div>
+    <hr />
+    <div class="col-md-12">
+        <div class="table-responsive">
+            <table id="tbAfectacion" style="width:100%" class="table table-hover table-bordered">
+                <thead>
+                    <tr>
+                        <th colspan="10" class="text-sm-left">
+                            <div class="form-inline">
+                                <i class="fa mx-2 fa-lg fa-file-o" style="cursor:pointer;" onclick="_frmImpacto.fnAddEditAfectacion();" data-toggle="tooltip" data-placement="top" title="Nuevo"></i>
+                                <i class="fa mx-2 fa-lg fa-window-close-o" style="cursor:pointer;" onclick="ManInforme_AddEditConservacion.fnDeleteAllConservacion('INFRAESTRUCTURA_CONS');" data-toggle="tooltip" data-placement="top" title="Eliminar Todos"></i>
+                                <strong>
+                                    Afectación de la cobertura boscosa (Desbosque y/o cambio de uso)
+                                </strong>
+                            </div>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+    </div>
+
+</div>

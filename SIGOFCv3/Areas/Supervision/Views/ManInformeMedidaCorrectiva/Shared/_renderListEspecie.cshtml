@@ -1,0 +1,330 @@
+﻿@model CapaEntidad.ViewModel.VM_InformeMedidaCorrectiva
+
+<style type="text/css">
+    #tbRenderListEspecie_wrapper {
+        padding: 0px;
+    }
+</style>
+
+<script src="~/Scripts/sigo/utility.uploadFile.js"></script>
+
+<script type="text/javascript">
+    var _renderListEspecie = {};
+    _renderListEspecie.tbElimEspecie = [];
+    _renderListEspecie.opc;
+    _renderListEspecie.estado;
+    _renderListEspecie.dataEspecie;
+    _renderListEspecie.dataCodSecuencial;
+    // iniciar datos en la tabla
+    _renderListEspecie.fnInitDataTable_Detail = function () {
+        var columns_label = [], columns_data = [], options = {};
+
+        columns_label = ["Especie", "Diámetro (cm)", "Altura (m)", "Zona UTM", "Coordenada Este", "Coordenada Norte", "Estado", "Observaciones"];
+        columns_data = ["DESCRIPCION_ESPECIE", "DIAMETRO", "ALTURA", "ZONA", "COORDENADA_ESTE", "COORDENADA_NORTE", "ESTADO_ESPECIE", "OBSERVACION"];
+        options = {
+            page_length: 10, row_index: true, row_edit: true, row_fnEdit: "_renderListEspecie.fnEdit(this,'MOD')", row_delete: true, row_fnDelete: "_renderListEspecie.fnDelete(this)", page_sort: true
+        };
+        _renderListEspecie.dtRenderListEspecie = utilDt.fnLoadDataTable_Detail(_renderListEspecie.frm.find("#tbRenderListEspecie"), columns_label, columns_data, options);
+        _renderListEspecie.dtRenderListEspecie.rows.add(JSON.parse('@Html.Raw(Json.Encode(@Model.tbEspecie))')).draw();
+    }
+
+    _renderListEspecie.fnAddEditEspecie = function (opc) {
+        _renderListEspecie.fnLimpiarCampos();
+
+        if (opc == 'NUE') _renderListEspecie.frm.find("label[for='lblTituloRegistro']").text("Especies Reforestada / Reemplazada - Nuevo Registro");
+        else _renderListEspecie.frm.find("label[for='lblTituloRegistro']").text("Especies Reforestada/Reemplazada - Modificando Registro");
+        
+        utilSigo.modalDraggable(_renderListEspecie.frm.find("#mdlRegistraEspecie"), '.modal-header');
+        _renderListEspecie.frm.find("#mdlRegistraEspecie").modal({ keyboard: true, backdrop: 'static' });
+
+        _renderListEspecie.opc = opc;
+    }
+
+    _renderListEspecie.fnCloseModal = function () {
+        _renderListEspecie.frm.find("#mdlRegistraEspecie").modal('hide');
+        _renderListEspecie.fnLimpiarCampos();
+    }
+
+    _renderListEspecie.fnLimpiarCampos = function () {
+        _renderListEspecie.frm.find("#ddlItemEspecieRefId :nth-child(3)").prop('selected', true);
+        _renderListEspecie.frm.find("#txtItemDiametroEspecieRef").val("");
+        _renderListEspecie.frm.find("#txtItemAlturaEspecieRef").val("");
+        _renderListEspecie.frm.find("#ddlItemZonaEspecieRefId").val("00S");
+        _renderListEspecie.frm.find("#txtItemCEsteEspecieRef").val("");
+        _renderListEspecie.frm.find("#txtItemCNorteEspecieRef").val("");
+        _renderListEspecie.frm.find("#ddlItemEstadoEspecieRefId").val("0");
+        _renderListEspecie.frm.find("#txtItemObservacionEspecieRef").val("");
+    }
+
+    _renderListEspecie.fnEdit = function (obj, opc) {
+        _renderListEspecie.fnAddEditEspecie(opc);
+
+        _renderListEspecie.dataEspecie = _renderListEspecie.dtRenderListEspecie.row($(obj).parents('tr'));
+
+        var data = _renderListEspecie.dtRenderListEspecie.row($(obj).parents('tr')).data();
+
+        if (data["COD_ESPECIES"] == null) {           
+            _renderListEspecie.fnselectByText(data["DESCRIPCION_ESPECIE"]);
+        }
+        else _renderListEspecie.frm.find("#ddlItemEspecieRefId").val(data["COD_ESPECIES"]);
+        
+        _renderListEspecie.frm.find("#txtItemDiametroEspecieRef").val(data["DIAMETRO"]);
+        _renderListEspecie.frm.find("#txtItemAlturaEspecieRef").val(data["ALTURA"]);
+        _renderListEspecie.frm.find("#ddlItemZonaEspecieRefId").val(data["ZONA"]);
+        _renderListEspecie.frm.find("#txtItemCEsteEspecieRef").val(data["COORDENADA_ESTE"]);
+        _renderListEspecie.frm.find("#txtItemCNorteEspecieRef").val(data["COORDENADA_NORTE"]);
+        _renderListEspecie.frm.find("#ddlItemEstadoEspecieRefId").val(data["ESTADO_ESPECIE"]);
+        _renderListEspecie.frm.find("#txtItemObservacionEspecieRef").val(data["OBSERVACION"]);        
+        _renderListEspecie.dataCodSecuencial = data["COD_SECUENCIAL"];   
+        _renderListEspecie.estado = data["RegEstado"];                   
+    }
+
+    _renderListEspecie.fnselectByText = function (txt) {
+        _renderListEspecie.frm.find("#ddlItemEspecieRefId option").filter(function () { return $.trim($(this).text()) == txt; }).prop('selected', true);
+    }
+
+    _renderListEspecie.fnDelete = function (obj) {
+        utilSigo.dialogConfirm("Confirmacion", "¿Está seguro de Eliminar el Registro Seleccionado?", function (r) {
+            if (r) {
+                var data = _renderListEspecie.dtRenderListEspecie.row($(obj).parents('tr')).data();
+                if (data["RegEstado"] != "1") {
+                    _renderListEspecie.tbElimEspecie.push({
+                        EliTABLA: "IMEDIDA_DET_ESPECIES",
+                        COD_SECUENCIAL: data["COD_SECUENCIAL"]
+                    });
+                }
+                _renderListEspecie.dtRenderListEspecie.row($(obj).parents('tr')).remove().draw(false);
+                utilSigo.toastSuccess("Éxito", "El elemento ha sido eliminado correctamente");
+            }
+        });
+    }
+
+    _renderListEspecie.fnDeleteEspecieAll = function () {
+        var dt, rows, countFilas, data;
+        dt = _renderListEspecie.dtRenderListEspecie;
+        rows = dt.$("tr");
+        countFilas = rows.length;
+
+        if (countFilas > 0) {
+            utilSigo.dialogConfirm("", "Está seguro de Eliminar Todos los Registros?", function (r) {
+                if (r) {
+                    $.each(rows, function (i, o) {
+                        data = dt.row($(o)).data();
+                        if (data["RegEstado"] == "0" || data["RegEstado"] == "2") {
+                            _renderListEspecie.tbElimEspecie.push({
+                                EliTABLA: "IMEDIDA_DET_ESPECIES",
+                                COD_SECUENCIAL: data["COD_SECUENCIAL"]
+                            });
+                        }
+                    });
+                    dt.clear().draw();
+                }
+            });
+        } else {
+            utilSigo.toastWarning("Aviso", "No hay Registros a Eliminar");
+        }
+    }
+
+    _renderListEspecie.fnGetListElimEspecie = function () { return _renderListEspecie.tbElimEspecie }
+
+    _renderListEspecie.fnSubmitForm = function () {
+        if (_renderListEspecie.frm.find("#txtItemAlturaEspecieRef").val().trim() == '') {
+            utilSigo.toastWarning("Aviso", "Ingrese la altura"); return false;
+        }
+        if (_renderListEspecie.frm.find("#ddlItemZonaEspecieRefId").val() == '00S') {
+            utilSigo.toastWarning("Aviso", "Debe seleccionar la zona UTM"); return false;
+        }
+        if (_renderListEspecie.frm.find("#txtItemCEsteEspecieRef").val().trim() == '') {
+            utilSigo.toastWarning("Aviso", "Ingrese la coordenada este"); return false;
+        }
+        if (_renderListEspecie.frm.find("#txtItemCNorteEspecieRef").val().trim() == '') {
+            utilSigo.toastWarning("Aviso", "Ingrese la coordenada norte"); return false;
+        }
+        if (_renderListEspecie.frm.find("#ddlItemEstadoEspecieRefId").val() == '0') {
+            utilSigo.toastWarning("Aviso", "Debe seleccionar el estado de la especie"); return false;
+        }
+        
+        _renderListEspecie.fnAddEspecie();
+    }
+
+    _renderListEspecie.fnAddEspecie = function () {
+        if (_renderListEspecie.frm.find("#txtItemDiametroEspecieRef").val().trim() != '' && !$.isNumeric(_renderListEspecie.frm.find("#txtItemDiametroEspecieRef").val().trim())) {
+            utilSigo.toastWarning("Aviso", "La cadena de entrada no tiene el formato correcto."); return false;
+        }
+        if (!$.isNumeric(_renderListEspecie.frm.find("#txtItemAlturaEspecieRef").val().trim())) {
+            utilSigo.toastWarning("Aviso", "La cadena de entrada no tiene el formato correcto."); return false;
+        }
+
+        if (!$.isNumeric(_renderListEspecie.frm.find("#txtItemCEsteEspecieRef").val().trim())) {
+            utilSigo.toastWarning("Aviso", "La cadena de entrada no tiene el formato correcto."); return false;
+        }
+        else {
+            if (_renderListEspecie.frm.find("#txtItemCEsteEspecieRef").val().trim() - Math.floor(_renderListEspecie.frm.find("#txtItemCEsteEspecieRef").val().trim()) != 0) {
+                utilSigo.toastWarning("Aviso", "La cadena de entrada no tiene el formato correcto."); return false;
+            }
+        }
+
+        if (!$.isNumeric(_renderListEspecie.frm.find("#txtItemCNorteEspecieRef").val().trim())) {
+            utilSigo.toastWarning("Aviso", "La cadena de entrada no tiene el formato correcto."); return false;
+        }
+        else {
+            if (_renderListEspecie.frm.find("#txtItemCNorteEspecieRef").val().trim() - Math.floor(_renderListEspecie.frm.find("#txtItemCNorteEspecieRef").val().trim()) != 0) {
+                utilSigo.toastWarning("Aviso", "La cadena de entrada no tiene el formato correcto."); return false;
+            }
+        }
+
+        var data = {};
+        data.COD_ESPECIES = _renderListEspecie.frm.find("#ddlItemEspecieRefId").val();
+        data.DESCRIPCION_ESPECIE = _renderListEspecie.frm.find("#ddlItemEspecieRefId option:selected").text();
+        data.DIAMETRO = parseFloat((_renderListEspecie.frm.find("#txtItemDiametroEspecieRef").val().trim() == "") ? "0" : _renderListEspecie.frm.find("#txtItemDiametroEspecieRef").val().trim());
+        data.ALTURA = parseFloat((_renderListEspecie.frm.find("#txtItemAlturaEspecieRef").val().trim() == "") ? "0" : _renderListEspecie.frm.find("#txtItemAlturaEspecieRef").val().trim());
+        data.ZONA = _renderListEspecie.frm.find("#ddlItemZonaEspecieRefId").val();
+        data.COORDENADA_ESTE = parseInt((_renderListEspecie.frm.find("#txtItemCEsteEspecieRef").val().trim() == "") ? "0" : _renderListEspecie.frm.find("#txtItemCEsteEspecieRef").val().trim());
+        data.COORDENADA_NORTE = parseInt((_renderListEspecie.frm.find("#txtItemCNorteEspecieRef").val().trim() == "") ? "0" : _renderListEspecie.frm.find("#txtItemCNorteEspecieRef").val().trim());
+        data.ESTADO_ESPECIE = _renderListEspecie.frm.find("#ddlItemEstadoEspecieRefId").val(); 
+        data.OBSERVACION = _renderListEspecie.frm.find("#txtItemObservacionEspecieRef").val();
+
+        if (_renderListEspecie.estado == 1) data.RegEstado = 1; 
+        else data.RegEstado = 2; 
+        //if (ManInfMedidaCorrectiva_AddEdit.frm.find("#RegEstado").val() == 1) data.RegEstado = 1;
+        //else data.RegEstado = (_renderListEspecie.estado == 0) ? 2 : _renderListEspecie.estado;
+
+        if (_renderListEspecie.opc == 'NUE') {
+            data.RegEstado = 1;
+            data.COD_SECUENCIAL = 0;              
+            _renderListEspecie.dtRenderListEspecie.rows.add([data]).draw();
+            _renderListEspecie.dtRenderListEspecie.page('last').draw('page');
+        }
+        else {
+            data.COD_SECUENCIAL = _renderListEspecie.dataCodSecuencial;  
+            _renderListEspecie.dataEspecie.data(data).draw(false);
+        }
+
+        _renderListEspecie.fnCloseModal();
+    }
+
+    _renderListEspecie.fnGetListEspecie = function () {
+        let list = [], rows, countFilas, data;
+
+        rows = _renderListEspecie.dtRenderListEspecie.$("tr");
+        countFilas = rows.length;
+        if (countFilas > 0) {
+            $.each(rows, function (i, o) {
+                data = _renderListEspecie.dtRenderListEspecie.row($(o)).data();
+               // if (data["RegEstado"] == "1" || data["RegEstado"] == "2") {
+                list.push(utilSigo.fnConvertArrayToObject(data));
+               // }
+            });
+        }
+        return list;
+    }
+
+    _renderListEspecie.fnImportarDatosEspecie = function (_tipoRegistro, e, obj) {
+        var url = urlLocalSigo + "Supervision/ManInformeMedidaCorrectiva/ImportarDatosEspecie";
+        uploadFile.fileSelectHandler(e, obj, url, { hdfTipo: _tipoRegistro }, function (data) {
+            _renderListEspecie.dtRenderListEspecie.rows.add(data).draw();
+            _renderListEspecie.dtRenderListEspecie.page('last').draw('page');
+        });
+    }
+
+   $(document).ready(function () {
+       _renderListEspecie.frm = $("#frmRenderListEspecie");
+       //inicializa la tabla con los campos obtenidos del model
+       _renderListEspecie.fnInitDataTable_Detail();
+       //inicializa los componentes necesarios
+       //_renderListEspecie.fnInit();
+   });
+
+</script>
+<div id="frmRenderListEspecie">
+    <div class="table-responsive">
+        <table id="tbRenderListEspecie" style="width:100%;margin:0px !important;" class="table table-hover table-bordered">
+            <thead>
+                <tr>
+                    <th colspan="11" class="text-sm-left">
+                        <div class="form-inline">
+                            <i class="fa mx-2 fa-lg fa-file-o" style="cursor:pointer;" onclick="_renderListEspecie.fnAddEditEspecie('NUE');" data-toggle="tooltip" data-placement="top" title="Nuevo"></i>
+                            <i class="fa mx-2 fa-lg fa-window-close-o" style="cursor:pointer;" onclick="_renderListEspecie.fnDeleteEspecieAll();" data-toggle="tooltip" data-placement="top" title="Eliminar Todo"></i>
+                            <label style="cursor:pointer;" class="fa mx-2 fa-lg fa-file-excel-o" title="Importar Excel" data-toggle="tooltip">
+                                <input type="file" id="fileselectEspecie" name="fileselectEspecie" style="display:none" size="60" onchange="_renderListEspecie.fnImportarDatosEspecie('ESPECIESREFORESTADAS',event, this);">
+                            </label>
+                            <a href="@Url.Content("~/Archivos/Plantilla/EspeciesReforestadas.xlsx")"> <i class="fa mx-2 fa-lg fa-folder-open" style="cursor:pointer;" data-toggle="tooltip" data-placement="top" title="Descargar Plantilla Excel"></i></a>
+                            <strong>Listado de plantas reforestadas/reemplazadas</strong>
+                        </div>
+                    </th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
+
+    <div class="modal fade hide" id="mdlRegistraEspecie" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header text-small" style="cursor:move;">
+                    <label for="lblTituloRegistro"></label>
+                    <i class="fa fa-close" style="cursor:pointer;" data-dismiss="modal" aria-label="Close"></i>
+                </div>
+                <div class="modal-body">
+                    <div id="frmRegistrarEspecie">
+                        <div class="form-group row" style="margin-bottom:0px;">
+                            <label for="lblItemEspecieRefId" class="col-md-4 col-form-label text-small">Especie:</label>
+                            <div class="col-md-8">
+                                @Html.DropDownList("ddlItemEspecieRefId", new SelectList(ViewBag.ddlItemEspecieRef, "Value", "Text"), new { @class = "form-control form-control-sm", @style = "width:auto;" })
+                            </div>
+                        </div>
+                        <div class="form-group row" style="margin-bottom:0px;">
+                            <label for="lblItemDiametroEspecieRef" class="col-md-4 col-form-label text-small">Díametro (cm):</label>
+                            <div class="col-md-3">
+                                @Html.TextBox("txtItemDiametroEspecieRef", "", new { @class = "form-control form-control-sm" })
+                            </div>
+                        </div>
+                        <div class="form-group row" style="margin-bottom:0px;">
+                            <label for="lblItemAlturaEspecieRef" class="col-md-4 col-form-label text-small">Altura (m):</label>
+                            <div class="col-md-3">
+                                @Html.TextBox("txtItemAlturaEspecieRef", "", new { @class = "form-control form-control-sm" })
+                            </div>
+                        </div>
+                        <div class="form-group row" style="margin-bottom:0px;">
+                            <label for="lblItemZonaEspecieRefId" class="col-md-4 col-form-label text-small">Zona UTM:</label>
+                            <div class="col-md-8">
+                                @Html.DropDownList("ddlItemZonaEspecieRefId", new SelectList(ViewBag.ddlItemZonaEspecieRef, "Value", "Text"), new { @class = "form-control form-control-sm", @style = "width:auto;" })
+                            </div>
+                        </div>
+                        <div class="form-group row" style="margin-bottom:0px;">
+                            <label for="lblItemCEsteEspecieRef" class="col-md-4 col-form-label text-small">Coordenada Este:</label>
+                            <div class="col-md-3">
+                                @Html.TextBox("txtItemCEsteEspecieRef", "", new { @class = "form-control form-control-sm" })
+                            </div>
+                        </div>
+                        <div class="form-group row" style="margin-bottom:0px;">
+                            <label for="lblItemCNorteEspecieRef" class="col-md-4 col-form-label text-small">Coordenada Norte:</label>
+                            <div class="col-md-3">
+                                @Html.TextBox("txtItemCNorteEspecieRef", "", new { @class = "form-control form-control-sm" })
+                            </div>
+                        </div>
+                        <div class="form-group row" style="margin-bottom:0px;">
+                            <label for="lblddlItemEstadoEspecieRefId" class="col-md-4 col-form-label text-small">Estado:</label>
+                            <div class="col-md-8">
+                                @Html.DropDownList("ddlItemEstadoEspecieRefId", new SelectList(ViewBag.ddlItemEstadoEspecieRef, "Value", "Text"), new { @class = "form-control form-control-sm", @style = "width:auto;" })
+                            </div>
+                        </div>
+                        <div class="form-group row" style="margin-bottom:0px;">
+                            <label for="lblItemObservacionEspecieRef" class="col-md-4 col-form-label text-small">Observación:</label>
+                            <div class="col-md-8">
+                                @Html.TextArea("txtItemObservacionEspecieRef", "", new { @class = "form-control form-control-sm", @rows = "3" })
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" id="btnGuardarEspecie" class="btn btn-primary btn-sm" onclick="_renderListEspecie.fnSubmitForm()">Guardar</button>
+                    <button type="button" id="btnCancelarEspecie" class="btn btn-secondary btn-sm" onclick="_renderListEspecie.fnCloseModal()">Cancelar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+    

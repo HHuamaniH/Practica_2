@@ -1,0 +1,410 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_LayoutMain.cshtml";
+}
+@section scripts{
+    <script>
+        "use strict"; var rol = '';
+    $(document).ready(function () {
+        //Validamos el rol del usuario
+        utilSigo.ValidaRol('@ViewBag.VAliasRol', 'btnRegistrar', 'Edit');
+    });
+    </script>
+}
+<div id="divPlanTrabajo" class="container-fluid">
+    <div class="card">
+        <div class="card-header text-left">
+            <h5>Listado de Especies</h5>
+        </div>
+        <div class="card-body">
+            <div class="col-12">
+                <form id="frmManEspecies">
+                    <div class="form-row">
+                        <div class="form-group col-md-3">
+                            <select class="form-control form-control-sm" id="cboOpciones">
+                                <option value="NOMBRE_ESPECIE">Especie</option>
+                            </select>
+                        </div>
+                        <div class="form-group col-md-3">
+                            <input type="text" id="txtValorBuscar" class="form-control form-control-sm" placeholder="" maxlength="100" style="text-transform:uppercase;" />
+                        </div>
+                        <div class="btn-group col-md-2" style="padding-top:5px;">
+                            <a id="btnSearch" style="cursor:pointer;" data-toggle="tooltip" data-placement="top" title="Buscar" onclick="_manEspecie.fnSearch()"><span class="fa mx-2 fa-lg fa-search"></span></a>
+                            <a id="btnAdd" style="cursor:pointer;" data-toggle="tooltip" data-placement="top" title="" onclick="_manEspecie.fnCrear()" data-original-title="Crear un nuevo registro"><span class="fa mx-2 fa-lg fa-plus"></span></a>
+
+                        </div>
+                    </div>
+                    <div class="table-responsive-md">
+                        <table id="tbEspecies" class="table table-hover table-bordered" style="width:100%;">
+                            <thead>
+                                <tr>
+                                    <th>N°</th>
+                                    <th>Editar</th>
+                                    <th>Cod. N. Científico</th>
+                                    <th>N. Científico A</th>
+                                    <th>N. Científico</th>
+                                    <th>Cod. Especies</th>
+                                    <th>N. Común A</th>
+                                    <th hidden>Cod. EspeciesN</th>
+                                    <th>N. Común</th>
+                                    <th>G. Amenaza CITES A</th>
+                                    <th>G. Amenaza CITES</th>
+                                    <th>G. Amenaza D.S. A</th>
+                                    <th>G. Amenaza D.S.</th>
+                                    <th>G. Importancia</th>
+                                    <th>Fecha Registro</th>
+                                    <th>Fecha Actualización</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </form>
+
+            </div>
+        </div>
+    </div>
+    <div class="modal fade hide" id="modalModEspecie" role="dialog">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header text-small" style="cursor:move;padding:0.5rem;">
+                    <h5 class="modal-title" id="h5TituloEspecie">Modificar Especie</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body" id="divModEspecie">
+                    <input type="hidden" id="hdRegEstado" value="1" />
+                    <input type="hidden" id="hdCodCientifico" />
+                    <input type="hidden" id="hdCodEspecie" />
+                    <div class="form-row">
+                        <div class="form-group col-md-4">
+                            <label for="txtCodCientifico">Código N. Científico</label>
+                            <input class="form-control form-control-sm" disabled="disabled" id="txtCodCientifico" type="text">
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label for="txtNomCientifico">Nombre Científico</label>
+                            <input class="form-control form-control-sm" id="txtNomCientifico" type="text">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-4">
+                            <label for="txtCodEspecie">Código Especie (N. Común)</label>
+                            <input class="form-control form-control-sm" disabled="disabled" id="txtCodEspecie" type="text">
+                        </div>
+                        <div class="form-group col-md-3">
+                            <label for="txtNomComun">Nombre Común A</label>
+                            <input class="form-control form-control-sm" id="txtNomComun" type="text">
+                        </div>
+                        <div class="form-group col-md-5">
+                            @Html.Partial("~/Areas/General/Views/Controles/_renderComboEspecie.cshtml")
+                            @*<label for="cboNomCientificoN">Especie Sinónimo</label>
+                                <select class="form-control form-control-sm" id="cboNomCientificoN">
+                                    @foreach (var item in ViewBag.ListNEspecies)
+                                    {
+                                        <option value="@item.CODIGO">@item.DESCRIPCION</option>
+                                    }
+                                </select>*@
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label for="cboTipo">Tipo</label>
+                            <select class="form-control form-control-sm" id="cboTipo">
+                                <option value="N">Forestal Maderable</option>
+                                <option value="NM">Forestal No Maderable</option>
+                                <option value="FA">Fauna</option>
+                            </select>
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label for="txtFuente">Fuente</label>
+                            <input class="form-control form-control-sm" id="txtFuente" type="text">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-4">
+                            <label for="cboGenero">Género</label>
+                            <select class="form-control form-control-sm" id="cboGenero">
+                                <option value="0000000">Seleccionar</option>
+
+                            </select>
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label for="cboEspecieCites">G. Amenaza CITES A</label>
+                            <select class="form-control form-control-sm" id="cboEspecieCites">
+                                <option value="0000000">( Ninguno ) | ( Ninguno )</option>
+                                <option value="0000001">CITES | 1</option>
+                                <option value="0000002">CITES | 2</option>
+                                <option value="0000003">CITES | 3</option>
+                            </select>
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label for="cboEspecieCitesN">G. Amenaza CITES</label>
+                            <select class="form-control form-control-sm" id="cboEspecieCitesN">
+                                <option value="0000000">( Ninguno ) | ( Ninguno )</option>
+                                <option value="0000001">CITES | 1</option>
+                                <option value="0000002">CITES | 2</option>
+                                <option value="0000003">CITES | 3</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-4">
+                            <label for="cboCatAmenazada">G. Amenaza Decreto Supremo A</label>
+                            <select class="form-control form-control-sm" id="cboCatAmenazada">
+                                <option value="0000008">No incluida</option>
+                                <option value="0000007">Casi Amenazado</option>
+                                <option value="0000006">Vulnerable</option>
+                                <option value="0000005">En peligro</option>
+                                <option value="0000004">En peligro critico</option>
+                            </select>
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label for="cboCatAmenazadaN">G. Amenaza Decreto Supremo</label>
+                            <select class="form-control form-control-sm" id="cboCatAmenazadaN">
+                                <option value="0000008">No incluida</option>
+                                <option value="0000009">Datos Insuficientes - Dd</option>
+                                <option value="0000007">Casi Amenazado</option>
+                                <option value="0000006">Vulnerable</option>
+                                <option value="0000005">En peligro</option>
+                                <option value="0000004">En peligro critico</option>
+                            </select>
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label for="cboCatMaderable">Tipo de especie maderable</label>
+                            <select class="form-control form-control-sm" id="cboCatMaderable">
+                                <option value="0000000">Seleccionar</option>
+                                <option value="0000001">Otras (E)</option>
+                                <option value="0000002">Potencial (D)</option>
+                                <option value="0000003">Intermedia (C)</option>
+                                <option value="0000004">Valiosa (B)</option>
+                                <option value="0000005">Altamente valiosa (A)</option>
+                            </select>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary btn-sm" onclick="_manEspecie.fnEspecieUpdate()">Guardar</button>
+                    <button id="btnCerrarModEspecie" class="btn btn-secondary btn-sm" data-dismiss="modal">Cancelar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    var _manEspecie = {
+        fnCrear: () => {
+            _manEspecie.fnLimpiar();
+            $("#h5TituloEspecie").text("Crear Especie");
+            $("#hdRegEstado").val("1");
+            $("#modalModEspecie").modal({ keyboard: true, backdrop: 'static' });
+            _renderComboEspecie.fnInit("FAUNA", "", "");
+            $('#ddlRenderComboEspecieId').val("").trigger("change");
+        },
+        fnLimpiar: () => {
+            let frm = $("#divModEspecie");
+            frm.find("#hdCodCientifico").val('');
+            frm.find("#hdCodEspecie").val('');
+            frm.find("#txtCodCientifico").val('');
+            frm.find("#txtNomCientifico").val('');
+            frm.find("#txtCodEspecie").val('');
+            frm.find("#txtNomComun").val('');
+            frm.find("#cboNomCientificoN").val('');
+            frm.find("#txtFuente").val('');
+            frm.find("#cboTipo").val("N");
+            frm.find("#cboGenero").val("0000000");
+            frm.find("#cboEspecieCites").val("0000000");
+            frm.find("#cboEspecieCitesN").val("0000000");
+            frm.find("#cboCatAmenazada").val("0000008");
+            frm.find("#cboCatAmenazadaN").val("0000008");
+            frm.find("#cboCatMaderable").val("0000000");
+            
+        },
+        fnEdit: (obj) => {
+
+            $("#h5TituloEspecie").text("Modificar Especie");
+            _manEspecie.fnLimpiar();
+            $("#hdRegEstado").val("0");
+            let frm = $("#divModEspecie");
+            let $tr = $(obj).closest("tr");
+            let dataRow = _manEspecie.dt.row($tr).data();
+
+            frm.find("#txtCodCientifico").val(dataRow.COD_ENCIENTIFICO);
+            frm.find("#hdCodCientifico").val(dataRow.COD_ENCIENTIFICO);
+            frm.find("#txtNomCientifico").val(dataRow.NOMBRE_CIENTIFICO);
+            frm.find("#txtCodEspecie").val(dataRow.COD_ESPECIES);
+            frm.find("#hdCodEspecie").val(dataRow.COD_ESPECIES);
+            frm.find("#txtNomComun").val(dataRow.NOMBRE_COMUN);
+            frm.find("#cboNomCientificoN").val(dataRow.COD_ESPECIESN);
+           // console.log(dataRow.COD_ESPECIESN, dataRow.NOMBRE_CIENTIFICON + ' | ' + dataRow.NOMBRE_COMUNN);            
+            
+            _renderComboEspecie.fnInit("FAUNA", dataRow.COD_ESPECIESN, dataRow.NOMBRE_CIENTIFICON + ' | ' + dataRow.NOMBRE_COMUNN);
+            
+            $('#ddlRenderComboEspecieId').val(dataRow.COD_ESPECIESN).trigger("change");
+
+            if (dataRow.COD_AGRADO_DS == "0000004" || dataRow.COD_AGRADO_DS == "0000005" || dataRow.COD_AGRADO_DS == "0000006" || dataRow.COD_AGRADO_DS == "0000007" ||
+                dataRow.COD_AGRADO_DS == "0000008") {
+                frm.find("#cboCatAmenazada").val(dataRow.COD_AGRADO_DS);
+            } else {
+                frm.find("#cboCatAmenazada").val("0000008");
+            }
+            if (dataRow.COD_AGRADO_DSN == "0000004" || dataRow.COD_AGRADO_DSN == "0000005" || dataRow.COD_AGRADO_DSN == "0000006" || dataRow.COD_AGRADO_DSN == "0000007" ||
+                dataRow.COD_AGRADO_DSN == "0000008" || dataRow.COD_AGRADO_DSN == "0000009") {
+                frm.find("#cboCatAmenazadaN").val(dataRow.COD_AGRADO_DSN);
+            } else {
+                frm.find("#cboCatAmenazadaN").val("0000008");
+            }
+            if (dataRow.COD_IMPORTANCIA == "0000001" || dataRow.COD_IMPORTANCIA == "0000002" || dataRow.COD_IMPORTANCIA == "0000003" || dataRow.COD_IMPORTANCIA == "0000004" ||
+                dataRow.COD_IMPORTANCIA == "0000005") {
+                frm.find("#cboCatMaderable").val(dataRow.COD_IMPORTANCIA);
+            } else {
+                frm.find("#cboCatMaderable").val("0000000");
+            }
+            if (dataRow.COD_AGRADO_CITE != "0000000") {
+                frm.find("#cboEspecieCites").val(dataRow.COD_AGRADO_CITE);
+            } else {
+                frm.find("#cboEspecieCites").val("0000000");
+            }
+            if (dataRow.COD_AGRADO_CITEN != "0000000") {
+                frm.find("#cboEspecieCitesN").val(dataRow.COD_AGRADO_CITEN);
+            } else {
+                frm.find("#cboEspecieCitesN").val("0000000");
+            }
+            frm.find("#cboTipo").val(dataRow.TIPO);
+            frm.find("#txtFuente").val(dataRow.FUENTE);
+            $("#modalModEspecie").modal({ keyboard: true, backdrop: 'static' });
+        },
+        fnEspecieUpdate: () => {
+            let frm = $("#divModEspecie");
+            let model = {
+                COD_ENCIENTIFICO: frm.find("#hdCodCientifico").val(),
+                COD_ESPECIES: frm.find("#hdCodEspecie").val(),
+                NOMBRE_CIENTIFICO: frm.find("#txtNomCientifico").val().trim().replace(/<.+?>/gi, ""),
+                NOMBRE_COMUN: frm.find("#txtNomComun").val().trim().replace(/<.+?>/gi, ""),
+                COD_ESPECIESN: _renderComboEspecie.fnGetCodEspecie(),
+                FUENTE: frm.find("#txtFuente").val().replace(/<.+?>/gi, ""),
+                COD_GENERO: frm.find("#cboGenero").val() == "0000000" ? null : frm.find("#cboGenero").val(),
+                COD_AGRADO_CITE: frm.find("#cboEspecieCites").val(),
+                COD_AGRADO_CITEN: frm.find("#cboEspecieCitesN").val(),
+                COD_AGRADO_DS: frm.find("#cboCatAmenazada").val(),
+                COD_AGRADO_DSN: frm.find("#cboCatAmenazadaN").val(),
+                COD_IMPORTANCIA: frm.find("#cboCatMaderable").val() == "0000000" ? null : frm.find("#cboCatMaderable").val(),
+                TIPO_REGISTRO: "ESPECIES",
+                TIPO: frm.find("#cboTipo").val(),
+                RegEstado: $("#hdRegEstado").val()
+            };
+            if (model.NOMBRE_CIENTIFICO == "" || model.NOMBRE_COMUN == "") {
+                utilSigo.toastWarning("Éxito", "Los campos de nombre no deben ser vacios");
+                return false;
+            }
+
+
+            let url = urlLocalSigo + "General/Especies/Operaciones";
+            let option = { url: url, datos: JSON.stringify(model), type: 'POST' };
+            utilSigo.fnAjax(option, function (data) {
+                if (data.success) {
+                    utilSigo.toastSuccess("Éxito", data.msj);
+                    $("#btnCerrarModEspecie").click();
+                    _manEspecie.fnSearch();
+                }
+                else {
+                    utilSigo.toastWarning("Aviso", data.msj);
+                }
+            });
+        },
+        fnBuilTable: () => {
+            const columns = [
+                {
+                    "name": "ROW_INDE", "width": "2%", "orderable": false, "searchable": false, "mRender": function (data, type, row, meta) {
+                        return parseInt(meta.row) + 1 + meta.settings._iDisplayStart;
+                    }
+                },
+                {
+                    "data": "", "className": "text-center", "width": "2%", "orderable": false, "searchable": false, "mRender": function (data, type, row) {
+                        return '<div><i class="fa fa-lg fa-pencil-square-o" style="color:blue;cursor:pointer;" title="Editar plan de trabajo" onclick="_manEspecie.fnEdit(this)"></i></div>';
+                    }
+                },
+                { "data": "COD_ENCIENTIFICO", "autoWidth": true },
+                { "data": "NOMBRE_CIENTIFICO", "autoWidth": true },
+                { "data": "NOMBRE_CIENTIFICON", "autoWidth": true },
+                { "data": "COD_ESPECIES", "autoWidth": true },
+                { "data": "NOMBRE_COMUN", "autoWidth": true },
+                { "data": "COD_ESPECIESN", visible: false },
+                { "data": "NOMBRE_COMUNN", "autoWidth": true },
+                { "data": "DES_AGRADO_CITE", "autoWidth": true },
+                { "data": "DES_AGRADO_CITEN", "autoWidth": true },
+                { "data": "DES_AGRADO_DS", "autoWidth": true },
+                { "data": "DES_AGRADO_DSN", "autoWidth": true },
+                { "data": "DES_IMPORTANCIA", "autoWidth": true },
+                { "data": "FECHA_CREACION", "autoWidth": true },
+                { "data": "FECHA_MODIFICAR", "autoWidth": true }
+            ];
+            const optDt = { iLength: 20, iStart: 0, aSort: [] };
+            _manEspecie.dt = _manEspecie.frm.find("#tbEspecies").DataTable({
+                processing: true,
+                serverSide: true,
+                searching: false,
+                ordering: false,
+                paging: true,
+                ajax: {
+                    "url": `${urlLocalSigo}/General/Controles/GetListaGeneralPaging`,
+                    "data": function (d) {
+                        d.CustomSearchForm = "ESPECIES";
+                        d.CustomSearchType = _manEspecie.frm.find("#cboOpciones").val();
+                        d.CustomSearchValue = _manEspecie.frm.find("#txtValorBuscar").val().trim();
+                        d.customSearchEnabled = true;
+                        //d.id = "";
+                        //for (var i = 0; i < d.order.length; i++) {
+                        //    d.order[i]["column_name"] = d.columns[d.order[i]["column"]]["data"];
+
+                        //    if (d.order[i].column_name != 0 || d.order[i].column_name != "") {
+                        //        d.sort = d.order[i].column_name + " " + d.order[i].dir;
+                        //    }
+                        //}
+                        d.columns = null;
+                    },
+                    "error": function (jqXHR) {
+                        // utilSigo.unblockUIGeneral();
+                        if (jqXHR.status != 401 && jqXHR.status != 403 && jqXHR.status != 404) {
+                            utilSigo.toastError("Error", initSigo.MessageError);
+                        }
+                        //console.log(jqXHR);
+                    },
+                    "statusCode": {
+                        203: () => { utilSigo.toastInfo("Aviso", "El usuario perdio la sesión. Vuelva ingresar al sistema"); }
+                    }
+                },
+                columns: columns,
+                bInfo: true,
+                "lengthMenu": [[10, 20, 50, 100], [10, 20, 50, 100]],
+                // "aaSorting": optDt.aSort,
+                "pageLength": optDt.iLength,
+                "displayStart": optDt.iStart,
+                "oLanguage": initSigo.oLanguage,
+                "drawCallback": initSigo.showPagination
+            });
+        },
+        fnSearch: () => {
+            _manEspecie.dt.ajax.reload();
+        }
+    };
+    $(document).ready(function () {
+
+        _manEspecie.frm = $("#frmManEspecies");
+        _manEspecie.fnBuilTable();
+        _manEspecie.frm.submit(function (e) {
+            e.preventDefault();
+            _manEspecie.fnSearch();
+        });
+
+
+        //_renderComboEspecie.fnInit("FAUNA", "", "");
+
+        $('#lblRenderComboEspecieId').removeAttr('Class');
+        $('#lblRenderComboEspecieId').html('Especie Sinónimo');
+
+    });
+</script>
+

@@ -1,0 +1,128 @@
+﻿
+@model CapaEntidad.ViewModel.VM_FlujoFiscalizacion
+<script src="~/Scripts/datatables/Extensions/dataTables.buttons.js"></script>
+<script src="~/Scripts/datatables/Extensions/buttons.flash.min.js"></script>
+<script src="~/Scripts/datatables/Extensions/jszip.min.js"></script>
+<script src="~/Scripts/datatables/Extensions/pdfmake.js"></script>
+<script src="~/Scripts/datatables/Extensions/vfs_fonts.js"></script>
+<script src="~/Scripts/datatables/Extensions/buttons.html5.js"></script>
+<script src="~/Scripts/datatables/Extensions/buttons.print.js"></script>
+
+<link href="~/Content/datatables/buttons.dataTables.min.css" rel="stylesheet" />
+<link href="~/Areas/General/css/Reportes/Reporte.css" rel="stylesheet" />
+
+<script type="text/javascript">
+    var _renderListaDFFFS = {};
+
+    _renderListaDFFFS.fnSubmitForm = function (opc,cell) {
+        _renderListaDFFFS.dtReporte.clear().draw();
+
+        var idTab = _reporte.frm.find("#idTab").val();
+        var idReporte = opc;
+        var cellReporte = cell;
+        var txtfechainiDFFFS = _renderDFFFS.frm.find("#txtfechainiDFFFS").val();
+        var txtfechafinDFFFS = _renderDFFFS.frm.find("#txtfechafinDFFFS").val();
+        var params = { idTab, idReporte, cellReporte, txtfechainiDFFFS, txtfechafinDFFFS };
+
+        var url = urlLocalSigo + "General/ReporteFlujoFiscalizacion/Reporte";
+        var option = { url: url, datos: JSON.stringify(params), type: 'POST' };
+
+        utilSigo.fnAjax(option, function (data) {
+            if (data.success) {
+                _renderListaDFFFS.dtReporte.rows.add(data.data).draw();
+            }
+            else {
+                utilSigo.toastWarning("Aviso", "Sucedio un error, Comuníquese con el Administrador");
+                console.log(data.msj);
+            }
+        });
+
+        return false;
+    }
+
+    _renderListaDFFFS.regresar = function () {
+        /*var url = urlLocalSigo + "General/ReporteFlujoFiscalizacion/Index?_idTab=" + _reporte.frm.find("#idTab").val();
+        window.location = url;*/
+        $("#frmDFFFS").show();
+        $("#divlistaDFFFS").hide();
+        _renderListaDFFFS.dtReporte.clear().draw();
+    };
+
+    _renderListaDFFFS.rptInitDataTable = function () {
+        var columns_label = [], columns_data = [], options = {};
+
+        columns_label = ["Año del Informe", "Sub Dirección de Línea", "Oficina Desconcentrada", "Modalidad de Aprovechamiento", "Ubigeo del TH: Departamento",
+            "Ubigeo del TH: Provincia", "Ubigeo del TH: Distrito", "Título Habilitante", "Titular Actual", "Titular Sancionado", "Informe", "Control de calidad Informe",
+            "Tipo de Informe", "Fecha Emisión Inf. Supervisión", "Volumen Injustificado (m3)", "Volumen Justificado (m3)", "Es Alerta", "Fecha Derivación DFFFS (SIGOsfc)",
+            "Devuelto DFFFS->DSFFS", "Fecha Recepción Derivación DFFFS->SUBDIR (SITD)", "DFFFS->SUBDIR Delegado a: (SITD)", "Inf. Legal de Eval.",
+            "Fecha Emision Inf Legal", "Recomendación Inf. Legal", "Sin indicios de infracción", "Fallecimiento Titular", "Nro Res. Archivo",
+            "Fecha Emisión Res. Archivo", "Nro Expediente Administrativo", "Nro. Res. Inicio PAU", "Inicio PAU", "Infracciones Res. Inicio",
+            "Causal de Caducidad", "Medidas Cautelares", "Notificaciones Ini PAU", "Res. Ampliación PAU", "Fecha Emisión Res. Ampliación PAU",
+            "Infracciones Res. Amp. PAU", "Notificaciones Amplicación de PAU", "Res. Variación Imputación de Cargos", "Fecha Emi. Variación Imputación de Cargos",
+            "Infracciones Res. Variación Imp. Cargos", "Notificaciones Var. Imputación de Cargos", "Inf. Final de Instrucción", "Fecha Emi. Inf. Final de Instrucción",
+            "Notificaciones Inf. Final de Instrucción", "Días despúes de la notificación del IFI", "Fecha derivación Dirección", "Res. de Término de PAU",
+            "Fecha de Emisión de la Res. de Término de PAU", "Infracciones Res. Término PAU", "Determinación Res. Término PAU", "¿Res. Término PAU dicta caducidad?",
+            "Monto Multa U.I.T.", "Amonestación", "Medidas Provisorias", "RLFFS 27308 ART. 363: i) (m3)", "RLFFS 27308 ART. 363: k) (m3)", "RLFFS 27308 ART. 363: n) (m3)",
+            "RLFFS 27308 ART. 363: w) (m3)", "DS 018-2015-MINAGRI ART. 207.3: e) (m3)", "DS 018-2015-MINAGRI ART. 207.3: l) (m3)", "DS 021-2015-MINAGRI ART. 137.3: e) (m3)",
+            "DS 021-2015-MINAGRI ART. 137.3: l) (m3)", "¿Se impusieron Med. Correctivas?", "Descripción Medida Correctiva", "Gravedad de Daño",
+            "Notificación de la Resolución de Término de PAU", "Nuevas pruebas presentadas", "Resolución Reconsideración", "Fecha emisión RD Reconsideración",
+            "Determinación Reconsideración", "Notificación de la Resolución de Reconsideración", "¿Levantar Caducidad Recons 1?", "Nro Resolución TFFS", "Fecha Emisión Res. TFFS",
+            "Recurso de Apelación", "Determina", "¿Confirma Resolución?", "Res. Inicio PAU por Nulidad Parcial o total 2", "Fecha Emisión Res. Ini. 2",
+            "Infracciones Res. Inicio PAU 2", "Res. de Término de PAU 2", "Fecha de Emisión de la Res. de Término de PAU 2", "Infracciones Res. Término PAU 2",
+            "Determinación Res. Término PAU 2", "¿Res. Término PAU 2 dicta caducidad?", "Monto de la Multa U.I.T.", "Amonestación", "Proveido Archivo del Informe de Supervisión",
+            "Proveido Firmeza", "Estado PAU (Glosario RP 121-2017)", "Estado PAU (Interno)", "Caducidad del T.H.", "Monto Multa Final U.I.T.", "Infracciones Confirmadas"];
+
+        columns_data = ["ANIO_INFORME", "DLINEA", "OD_AMBITO_TH", "MTIPO", "DEPARTAMENTO_TH", "PROVINCIA_TH", "DISTRITO_TH", "NUM_THABILITANTE", "TITULAR", "TITULAR_SANCIONADO",
+            "NUM_INFORME", "ESTADO_DOCUMENTO", "TIPO_INFORME", "FECEMI_INFORME", "VOLINJ_INFORME", "VOLJUS_INFORME", "ES_ALERTA", "FECDER_FISCA", "DEVUELTO_DFFFS_DSFFS",
+            "FECDERIVA_DFFFS_SUBDIR_RECEPCION", "DERIVA_DFFFS_SUBDIR_DELEGADO", "NUM_ILEGAL", "FECHA_IL", "DETER_IL", "ARCH_BUEMAN_IL", "ARCH_MUETIT_IL", "NUM_RDARCH",
+            "FECEMI_RDARCH", "NUMERO_EXPEDIENTE", "NUM_RDINI", "FECEMI_RDINI", "INFRAC_RDINI", "CAUCAD_RDINI", "MEDCAU_RDINI", "NUM_FISNOTI_RDINI", "NUM_RDAMP", "FECEMI_RDAMP",
+            "INFRAC_RDAMP", "NUM_FISNOTI_RDAMP", "NUM_RDVARIMP", "FECEMI_RDVARIMP", "INFRAC_RDVARIMP", "NUM_FISNOTI_RDVARIMP", "NUM_IFI", "FECEMI_IFI", "NUM_FISNOTI_IFI",
+            "EXPEDITO_IFI", "FECDER_IFI", "NUM_RDTER", "FECEMI_RDTER", "DETER_RDTER", "INFRAC_RDTER", "CADUCIDAD_RDTER", "MULTA_RDTER", "AMONESTA_RDTER", "MEDPRO_RDTER",
+            "VOLUMEN_i_i_TER", "VOLUMEN_k_i_TER", "VOLUMEN_n_i_TER", "VOLUMEN_e_i_1TER", "VOLUMEN_e_i_2TER", "VOLUMEN_w_w_TER", "VOLUMEN_l_w_1TER", "VOLUMEN_l_w_2TER",
+            "MEDCOR_RDTER", "DESC_MEDCOR_RDTER", "GRAVEDAD_RDTER", "NUM_FISNOTI_RDTER", "ARCH_NUEPRU_RDTER", "NUM_RDREC_1", "FECEMI_RDREC_1", "DETER_RDREC_1", "NUM_FISNOTI_RDREC_1",
+            "LEVCAD_RDREC_1", "NUM_RTFFS_1", "FECEMI_RTFFS_1", "RECAPE_RTFFS_1", "DETER_RTFFS_1", "CONFIRM_RTFFS_1", "NUM_RDINITF_2", "FECEMI_RDINITF_2", "INFRAC_RDINITF_2",
+            "NUM_RDTERTF_2", "FECEMI_RDTERTF_2", "INFRAC_RDTERTF_2", "DETER_RDTERTF_2", "CADUCIDAD_RDTERTF_2", "MULTA_RDTERTF_2", "AMONESTA_RDTERTF_2", "PROVEIDO_INFORME",
+            "PROVEIDO_FIRMEZA", "ESTADO_PAU", "ESTADO_PAU_INTERNO", "CADUCADO_TH", "MULTA_CONFIRM", "INFRAC_CONFIRM"];
+
+        options = {
+            page_length: 50, button_excel: true, export_title: $("#tbReporteDFFFS").find("thead tr")[0].innerText.trim()
+            , page_search: true, page_info: true, row_index: true, row_data_index: "ROW_INDEX"
+        };
+
+        _renderListaDFFFS.dtReporte = utilDt.fnLoadDataTable_Detail($("#tbReporteDFFFS"), columns_label, columns_data, options);
+    }
+
+    $(document).ready(function () {
+        _renderListaDFFFS.frm = $("#frmListaDFFFS");
+        _renderListaDFFFS.rptInitDataTable();
+    });
+</script>
+
+<div id="frmListaDFFFS" class="text-small">
+    <div><br /></div>
+    <div class="form-row">
+        <div class="form-group col-md-12">
+            <div class="card-header text-small">
+                <a style="cursor:pointer;" data-toggle="tooltip" data-placement="top" title="Regresar" onclick="_renderListaDFFFS.regresar()"><i class="fa mx-2 fa-lg fa-reply"></i></a>
+            </div>
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="form-group col-md-12">
+            <div class="table-responsive">
+                <table id="tbReporteDFFFS" style="width:100%" class="table table-hover table-bordered">
+                    <thead>
+                        <tr>
+                            <th colspan="97" class="text-sm-left">
+                                <div class="form-inline">
+                                    <strong id="tituloTablaDFFFS"></strong>
+                                </div>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

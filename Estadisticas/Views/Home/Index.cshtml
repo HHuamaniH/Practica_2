@@ -1,0 +1,157 @@
+﻿<link href="~/Styles/Proyectos/menuEstadisticas.min.css" rel="stylesheet" />
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<script type="text/javascript">
+
+    function fnHideOptions() {
+        $(".dvArffs").hide();
+        $(".dvSupervision").hide();
+        $(".dvFiscalizacion").hide();
+        $(".dvCapacitacion").hide();
+    }
+    function fnShowOptions(_grupo,obj) {
+        fnHideOptions();
+        
+        switch (_grupo) {
+            case "ARFFS": $(".dvArffs").show(); break;
+            case "SUPERVISION": $(".dvSupervision").show(); break;
+            case "FISCALIZACION": $(".dvFiscalizacion").show(); break;
+            case "CAPACITACION": $(".dvCapacitacion").show(); break;
+        }
+
+        $(".ui-widget").removeClass("ui-widget-selected");
+        $(obj).addClass("ui-widget-selected");
+
+        var altura = $(document).height();
+        $("html, body").animate({ scrollTop: altura + "px" });
+    }
+
+    $(document).ready(function () {
+
+    });
+</script>
+
+<div class="mainBotonera">
+    <div class="msjMenu">
+        <div>
+            <div></div>
+            <div><h1>Reportes Estadísticos</h1></div>
+        </div>
+        <div class="submsjMenu"><p>Reportes estadísticos generados en base a la información del OSINFOR.</p></div>
+    </div>
+    <div style="text-align:center;">
+        <!--Fuente diseño: https://codepen.io/andygongea/pen/KVePRe-->
+        <div class="ui-widget" onclick="fnShowOptions('ARFFS',this)" style="background-image: url('/Imagenes/Estadisticas/iconoRecurso_1.png'); background-size: cover;">
+            @*<span class="ui-label">Información enviada por la ARFFS</span>*@
+        </div>
+        <div class="ui-widget" onclick="fnShowOptions('SUPERVISION',this)" style="background-image: url('/Imagenes/Estadisticas/iconoRecurso_2.png'); background-size: cover;">
+            @*<span class="ui-label">Supervisión</span>*@
+        </div>
+        <div class="ui-widget" onclick="fnShowOptions('FISCALIZACION',this)" style="background-image: url('/Imagenes/Estadisticas/iconoRecurso_3.png'); background-size: cover;">
+            @*<span class="ui-label">Fiscalización</span>*@
+        </div>
+        <div class="ui-widget" onclick="fnShowOptions('CAPACITACION',this)" style="background-image: url('/Imagenes/Estadisticas/iconoRecurso_4.png'); background-size: cover;">
+            @*<span class="ui-label">Capacitación</span>*@
+        </div>
+        <div>
+            <a class="dvArffs" href=@Url.Action("Reportes","Home",new { id=1 }) style="display:none;">
+                <div class="ui-widget-item">
+                    <span class="ui-label">Principales especies forestales maderables aprobadas</span>
+                </div>
+            </a>
+            <a class="dvSupervision" href=@Url.Action("Reportes","Home",new { id=2 }) style="display:none;">
+                <div class="ui-widget-item">
+                    <span class="ui-label">Supervisiones efectuadas: departamento y modalidad</span>
+                </div>
+            </a>
+            <a class="dvCapacitacion" href=@Url.Action("Reportes","Home",new { id=3 }) style="display:none;">
+                <div class="ui-widget-item">
+                    <span class="ui-label">Capacitaciones por departamento</span>
+                </div>
+            </a>
+            <a class="dvFiscalizacion" href=@Url.Action("Reportes","Home",new { id=4 }) style="display:none;">
+                <div class="ui-widget-item">
+                    <span class="ui-label">Procesos de fiscalización - Primera instancia</span>
+                </div>
+            </a>
+            <a class="dvSupervision" href=@Url.Action("Reportes","Home",new { id=5 }) style="display:none;">
+                <div class="ui-widget-item">
+                    <span class="ui-label">Número de árboles supervisados</span>
+                </div>
+            </a>
+            <a class="dvSupervision" href=@Url.Action("Reportes","Home",new { id=6 }) style="display:none;">
+                <div class="ui-widget-item">
+                    <span class="ui-label">Planes de manejo maderables supervisados</span>
+                </div>
+            </a>
+            <a class="dvSupervision" href=@Url.Action("Reportes","Home",new { id=7 }) style="display:none;">
+                <div class="ui-widget-item">
+                    <span class="ui-label">Principales especies forestales con volumen injustificado</span>
+                </div>
+            </a>
+            <a class="dvFiscalizacion" href=@Url.Action("Reportes","Home",new { id=8 }) style="display:none;">
+                <div class="ui-widget-item">
+                    <span class="ui-label">Principales especies forestales extraídas provenientes de árboles no autorizados</span>
+                </div>
+            </a>
+            <a class="dvFiscalizacion" href=@Url.Action("Reportes","Home",new { id=9 }) style="display:none;">
+                <div class="ui-widget-item">
+                    <span class="ui-label">Volumen movilizado proveniente de extracción no autorizada</span>
+                </div>
+            </a>
+            @*<a class="dvFiscalizacion" href=@Url.Action("Reportes","Home",new { id=10 }) style="display:none;">
+                <div class="ui-widget-item">
+                    <span class="ui-label">Planes de manejo sancionados</span>
+                </div>
+            </a>*@
+            <a class="dvArffs" href=@Url.Action("Reportes","Home",new { id=11 }) style="display:none;">
+                <div class="ui-widget-item">
+                    <span class="ui-label">Oportunidad de envío de planes de manejo forestal por las Autoridades Regionales al OSINFOR</span>
+                </div>
+            </a>
+            <a class="dvSupervision" href=@Url.Action("Reportes","Home",new { id=12 }) style="display:none;">
+                <div class="ui-widget-item">
+                    <span class="ui-label">Volumen movilizado proveniente de extracción no autorizada</span>
+                </div>
+            </a>
+        </div>
+    </div>
+    @*<div class="subBotoneraEst">
+        <a href=@Url.Action("Reportes","Home",new { id=1 })>
+            <div></div><div>Principales especies forestales maderables aprobadas</div>
+        </a>
+        <a href=@Url.Action("Reportes","Home",new { id=2 })>
+            <div></div><div>Supervisiones efectuadas por el OSINFOR: departamento y modalidad</div>
+        </a>
+        <a href=@Url.Action("Reportes","Home",new { id=3 })>
+            <div></div><div>Capacitaciones por Departamento</div>
+        </a>
+        <a href=@Url.Action("Reportes","Home",new { id=4 })>
+            <div></div><div>Procesos de fiscalización del OSINFOR - Primera Instancia</div>
+        </a>
+        <a href=@Url.Action("Reportes","Home",new { id=5 })>
+            <div></div><div>Número de árboles supervisados por el OSINFOR</div>
+        </a>
+        <a href=@Url.Action("Reportes","Home",new { id=6 })>
+            <div></div><div>Planes de manejo maderables supervisados por el OSINFOR - Etapa de Supervisión</div>
+        </a>
+        <a href=@Url.Action("Reportes","Home",new { id=7 })>
+            <div></div><div>Principales especies forestales con volumen injustificado - Etapa de Supervisión</div>
+        </a>
+        <a href=@Url.Action("Reportes","Home",new { id=8 })>
+            <div></div><div>Principales especies forestales extraídas provenientes de árboles no autorizados - Etapa de Fiscalización</div>
+        </a>
+        <a href=@Url.Action("Reportes","Home",new { id=9 })>
+            <div></div><div>Volumen movilizado proveniente de extracción no autorizada</div>
+        </a>
+        <a href=@Url.Action("Reportes","Home",new { id=10 })>
+            <div></div><div>Planes de manejo sancionados por el OSINFOR</div>
+        </a>
+        <a href=@Url.Action("Reportes","Home",new { id=11 })>
+            <div></div><div>Oportunidad de envío de planes de manejo forestal por las Autoridades Regionales al OSINFOR</div>
+        </a>
+    </div>*@
+</div>

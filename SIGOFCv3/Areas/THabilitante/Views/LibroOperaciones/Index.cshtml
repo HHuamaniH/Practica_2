@@ -1,0 +1,133 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_LayoutMain.cshtml";
+}
+<script>
+    var libroOP = libroOP || {
+        addNew: () => {
+            window.location = urlLocalSigo + "THabilitante/LibroOperaciones/LibroOperaciones";
+        },
+        update: (obj) => {
+            var data = libroOP.dt.row($(obj).parents('tr')).data();
+            let id = data.LIBRO_OPERACIONES_TH_ID;            
+            window.location = urlLocalSigo + "THabilitante/LibroOperaciones/LibroOperaciones?id="+id;
+        },
+        fnBuildTable: () => {
+            let table_columns = [
+                {
+                    "name": "ROW_INDE", "width": "2%", "orderable": false, "searchable": false, "mRender": function (data, type, row) {
+                        return '<i class="fa fa-lg fa-pencil-square-o" style="color:blue;cursor:pointer;" title="Ir" onclick="libroOP.update(this)"></i>';
+                    }
+                },
+                {
+                    "name": "ROW_INDE", "width": "2%", "orderable": false, "mRender": function (data, type, row, meta) {
+                        return parseInt(meta.row) + 1;
+                    }
+                },
+                { "data": "NUMERO", "autoWidth": true },
+                { "data": "TITULAR_ACTUAL", "autoWidth": true },
+                { "data": "NOMBRE_POA", "autoWidth": true },
+                { "data": "ZAFRA_PCA", "autoWidth": true },
+                { "data": "ARESOLUCION_NUM", "autoWidth": true},
+                {
+                    "data": "", "width": "2%", "orderable": false, "searchable": false, "mRender": function (data, type, row) {
+                        return '<i class="fa fa-lg fa-window-close" style="color:red;cursor:pointer;" title="Eliminar Item" onclick=""></i>';
+                    }
+                }       
+            ];
+            libroOP.dt= $("#tbLibroOperacionesTH").DataTable({
+                processing: true,
+                serverSide: true,
+                searching: false,
+                ordering: false,
+                paging: true,
+                ajax: {
+                    "url": initSigo.urlControllerGeneral + "/GetListaGeneralPaging",
+                    "data": function (d) {
+                        d.customSearchEnabled = true;
+                        d.customSearchForm = "LIBRO_OPERACIONES_TH";  
+                        d.customSearchType = "";
+                        d.customSearchValue = libroOP.frm.find("#txtValorBuscar").val();                         
+                    },
+                    "error": function (jqXHR) {
+                        utilSigo.unblockUIGeneral();
+                        utilSigo.toastError("Error", initSigo.MessageError);
+                        console.log(jqXHR.responseText);
+                    },
+                    "statusCode": {
+                        203: () => { utilSigo.unblockUIGeneral(); utilSigo.toastInfo("Aviso", "El usuario perdio la sesión. Vuelva ingresar al sistema"); }
+                    }
+                },
+                columns: table_columns,
+                //bInfo: true,
+                //"lengthMenu": [[10, 20, 50, 100], [10, 20, 50, 100]],
+                "aaSorting": [],
+                "pageLength": 20,
+                "displayStart": 0,
+                "oLanguage": initSigo.oLanguage,
+                "drawCallback": initSigo.showPagination
+            });
+        },
+        fnSearch: () => {
+            let valorBusqueda = libroOP.frm.find("#txtValorBuscar").val().trim();
+            if (valorBusqueda.trim() == "") {
+                utilSigo.toastWarning("Aviso", "Ingrese Valor a Buscar");
+                libroOP.frm.find("#txtValorBuscar").focus();
+                return false;
+            }
+            else {
+                var cantCarateres = valorBusqueda.length;
+                if (cantCarateres < 4) {
+                    utilSigo.toastWarning("Aviso", "La longitud del criterio de búsqueda debe ser mayor a tres caracteres");
+                    libroOP.frm.find("#txtValorBuscar").focus();
+                    return false;
+                }
+                libroOP.dt.ajax.reload();
+            }
+        }
+    };
+    $(document).ready(function () {
+        libroOP.frm = $("#frmLibroOperacionesTH");
+        libroOP.fnBuildTable();
+    });
+</script>
+<div class="container-fluid">
+    <div class="card">
+        <div class="card-header text-left">
+            <h5>Libro de operaciones de Título Habilitante</h5>
+        </div>
+        <div class="card-body">
+            <form id="frmLibroOperacionesTH">
+                <div class="form-row">                     
+                    <div class="form-group col-md-8">
+                        <input type="text" class="form-control form-control-sm" id="txtValorBuscar"  placeholder="N° Título Habilitante" maxlength="100">
+                    </div>
+                    <div class="btn-group col-md-2" style="padding-top:5px;">
+                        <a id="btnSearch" style="cursor:pointer;" data-toggle="tooltip" data-placement="top" title="Buscar el registro" onclick=""><span class="fa mx-2 fa-lg fa-search"></span></a>
+                        <a id="btnRefresh" style="cursor:pointer;" data-toggle="tooltip" data-placement="top" title="Actualizar el listado" onclick=""><span class="fa mx-2 fa-lg fa-refresh"></span></a>
+                        <a id="btnAdd" style="cursor:pointer;" data-toggle="tooltip" data-placement="top" title="Crear un nuevo registro" onclick="libroOP.addNew()"><span class="fa mx-2 fa-lg fa-plus"></span></a>
+                    </div>
+                </div>
+            </form>
+            <div class="table-responsive">
+                <table id="tbLibroOperacionesTH" class="table table-hover table-bordered" style="width:100%;">
+                    <thead>
+                        <tr>
+                            <th title="Ver detalle"></th>
+                            <th>N°</th>
+                            <th><strong>Título habilitante</strong></th>
+                            <th><strong>Titular</strong></th>
+                            <th><strong>POA</strong></th>
+                            <th><strong>Zafra</strong></th>
+                            <th><strong>Resolución</strong></th>
+                            <th title="Eliminar">E</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+

@@ -1,0 +1,27 @@
+﻿
+<script src="~/Areas/General/js/Controles/_IntegracionSIADO.js"></script>
+
+<div id="dvFrmIntegracionSIADO" style="width:100%">
+    @Html.Hidden("hdfCriterio",(object)ViewBag.hdfCriterio)
+    @Html.Hidden("hdfSubCriterio", (object)ViewBag.hdfSubCriterio)
+    @Html.Hidden("hdfValor", (object)ViewBag.hdfValor)
+    <div class="table-responsive">
+        <table id="tbIntegracionSIADO" style="width:100%" class="table table-hover table-bordered">
+            <thead>
+                @*<tr>
+                    <th colspan="16" class="text-sm-left">
+                        <div class="form-inline">
+                            <strong>
+                                Archivos Cargados en el SIADO
+                            </strong>
+                        </div>
+                    </th>
+                </tr>
+                    Actualizar en la vista que lo usas para una mejor presentación; ver informe supervisión
+                    *@
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
+</div>
+ 

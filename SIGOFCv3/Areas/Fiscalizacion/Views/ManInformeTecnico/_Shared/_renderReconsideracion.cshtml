@@ -1,0 +1,35 @@
+﻿@model CapaEntidad.ViewModel.VM_InformeTecnico
+<div id="divReconsideracion">
+    <div class="card-header text-small">Evaluación Recurso Reconsideración</div>
+    <div><br /></div>
+
+    <div class="form-row" id="divRectificacion">
+        <div class="form-group col-md-4">
+            <label for="chkGTF" class="text-small">Conclusiones</label>
+        </div>
+        <div class="form-group col-md-6">
+            @Html.TextAreaFor(m => m.txtConclusionR, 4, 1, new { @class = "form-control form-control-sm" })
+        </div>
+        <div class="form-group col-md-2">
+        </div>
+    </div>
+    <div class="form-row" id="divRectificacion">
+        <div class="form-group col-md-4">
+            <label for="chkGTF" class="text-small">Recomendaciones</label>
+        </div>
+        <div class="form-group col-md-6">
+            @Html.TextAreaFor(m => m.txtRecomendacion, 4, 1, new { @class = "form-control form-control-sm" })
+        </div>
+        <div class="form-group col-md-2">
+        </div>
+    </div>
+
+    <div>
+        @Html.Partial("~/Areas/Fiscalizacion/Views/ManInformeTecnico/_Shared/_renderSSupervision.cshtml", Model)
+    </div>
+</div>
+
+
+
+
+

@@ -1,0 +1,32 @@
+﻿@model  CapaEntidad.ViewModel.VM_InformeTecnico
+@{
+    Layout = null;
+}
+<div id="divIdMaderable">
+    <div class="form-row">
+        <div class="form-group col-md-12">
+            <table style="width:100%;margin:0px !important;" class="table table-hover table-bordered">
+                <thead>
+                    <tr>
+                        <th class="text-sm-left">
+                            <div class="form-inline">
+                                <a href="@Url.Content("~/Archivos/Plantilla/VolInjus_v2.xlsx")" type="button" title="descargar plantilla">
+                                    <i class="fa fa-cloud-download"></i>&nbsp;
+                                </a>
+                                <label style="cursor:pointer;" class="fa mx-2 fa-lg fa-file-excel-o" title="Importar Archivo" data-toggle="tooltip"
+                                       title="importar">
+                                    <input type="file" id="fileselect" name="fileselect" style="display:none" size="60"
+                                           onchange="_renderVolumen.ItemExcelImportarVentana(event,this)">
+                                </label>
+                                <strong>Datos de Campo de la Muestra Maderable</strong>
+                            </div>
+                        </th>
+                    </tr>
+                </thead>
+            </table>
+        </div>
+    </div>
+    <div id="divVolumenDetalle">
+        @Html.Partial("~/Areas/Fiscalizacion/Views/ManInformeTecnico/_Shared/_renderListVolumenes.cshtml", Model)
+    </div>
+</div>

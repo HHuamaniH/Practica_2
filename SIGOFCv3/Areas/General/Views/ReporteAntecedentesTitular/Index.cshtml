@@ -1,0 +1,67 @@
+﻿@model CapaEntidad.ViewModel.VM_ReporteAntecedentesTitular
+@{
+    ViewBag.Title = ViewBag.TituloFormulario;
+    Layout = "~/Views/Shared/_LayoutMain.cshtml";
+}
+
+<script src="~/Areas/General/js/ReporteAntecedentesTitular/Index.js"></script>
+
+<div class="container-fluid">
+    <div class="card">
+        <div class="card-header text-left">
+            <h5>@ViewBag.TituloFormulario</h5>
+        </div>
+        <div class="card-body">
+            <form id="frmBuscarTitular"> 
+                @Html.Hidden("tipoFormulario", (object)ViewBag.Formulario)
+                @Html.Hidden("titleMenu", (object)ViewBag.TituloFormulario)
+                <div class="form-row">
+                    <div class="form-group col-md-3">
+                        @Html.DropDownList("ddlTipoBusquedaTitularId", (IEnumerable<SelectListItem>)ViewBag.ddlTipoBusquedaTitular, new { @class = "form-control form-control-sm" })
+                    </div>
+                    <div class="form-group col-md-4">
+                        <input type="text" class="form-control form-control-sm" id="txtBusquedaTitular" placeholder="Ingrese Valor a Buscar">
+                    </div>
+                    <div class="btn-group col-md-2" style="padding-top:5px;">
+                        <a id="btnSearch" style="cursor:pointer;" data-toggle="tooltip" data-placement="top" title="Buscar el registro" onclick="_reporte.fnSearch()"><span class="fa mx-2 fa-lg fa-search"></span></a>
+                    </div>
+                </div>
+            </form>
+            <div id="dvListTitular" class="table-responsive" style="display:none;">
+                <table id="tbListTitular" class="table table-hover table-bordered" style="width:100%;">
+                    <thead></thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+            <br/><br/>
+                 <div id="dvExportaReporte" style="display:none; width:90%; margin:auto; text-align:right;">
+                     <a style="cursor:pointer;" data-toggle="tooltip" data-placement="top" title="Descargar reporte en formato PDF" onclick="_reporte.fnExportReportPDF()"><span class="fa mx-2 fa-lg fa-file-pdf-o"></span></a>
+                 </div><br/>
+            <div id="dvReporte" class="table-responsive" style="display:none;">
+                <div style="border:double; border-color:#C1C9CF; width:90%; margin:auto;">
+                    <div style="display:table;width:100%;">
+                        <div style="text-align:center;background-color:#DAE7F5;color:#384E73;font: 11px/14px 'segoe ui',arial,sans-serif;font-weight:bold;height:25px;display:table-cell;vertical-align:middle;">
+                            REPORTE DE SANCIÓN Y/O CADUCIDAD POR TITULAR
+                        </div>
+                    </div>
+                    <div>
+                        <div id="dvCabeceraReporte" style="text-align:left; font-size:12px;padding-left:10px;">
+                            <br/>
+                            <label for="lblDescripcionReporte" class="text-small" style="font-weight:bold;color:#384E73;"></label>
+                            @Html.HiddenFor(m => m.hdfCodTitularReporte)
+                        </div>
+                        <br/>
+                        <div id="dvDetalleReporte" style="display: none; text-align: center; margin-left: 5px; width: 99%;">
+                            <table id="tbReporte" class="table table-hover table-bordered" style="width:100%;">
+                                <thead></thead>
+                                <tbody></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="divIframe"></div>

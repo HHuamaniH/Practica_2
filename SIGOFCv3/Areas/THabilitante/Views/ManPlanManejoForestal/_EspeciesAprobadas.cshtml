@@ -1,0 +1,153 @@
+﻿@model CapaEntidad.ViewModel.VM_ESPECIE_APROBADAS
+<script>
+    "use strict";
+    var AddEditEsp = {};
+    AddEditEsp.estado;
+    AddEditEsp.codSecuencial;
+
+    AddEditEsp.closeModal = function () {
+        $('#modalEspeciePM').modal('hide');
+        $('#modalEspeciePM').html('');
+    }
+    AddEditEsp.limpiarForm = function () {
+        AddEditEsp.frm.find("#txtNumArb").val('');
+        AddEditEsp.frm.find("#txtVolumen").val('');
+        AddEditEsp.frm.find("#cbespeciesinipauforestId").val('0002484').trigger('change');
+    }
+    AddEditEsp.addEspecie = function () {
+        var valDescripcionEsp = AddEditEsp.frm.find("#cbespeciesinipauforestId").select2('data')[0].text;
+        var valEspecie = AddEditEsp.frm.find("#cbespeciesinipauforestId").val();
+        var valBlo = "";
+        var valEsPMFI = AddEditEsp.frm.find("#esPMFI").val();
+        if (parseInt(valEsPMFI) == 0) valBlo = AddEditEsp.frm.find("#dlBloqueId").val();
+        var valNArb = AddEditEsp.frm.find("#txtNumArb").val();
+        var valVol = AddEditEsp.frm.find("#txtVolumen").val();
+
+        ManPM.agregarEspecies(valEspecie, valDescripcionEsp, valBlo, valNArb, valVol, AddEditEsp.codSecuencial, AddEditEsp.estado);
+        AddEditEsp.limpiarForm();
+    }
+    AddEditEsp.fnselectByText = function (txt) {
+        var valortxt = AddEditEsp.frm.find("#cbespeciesinipauforestId option").filter(function () { return this.text == txt }).val();
+        AddEditEsp.frm.find("#cbespeciesinipauforestId").val(valortxt).change();
+        AddEditEsp.frm.find("#cbespeciesinipauforestId").attr("disabled", true);
+        ManPM.dataEditar.find(".hdCodEspecie").val(valortxt);
+    }
+    $(document).ready(function () {
+        $('[data-toggle="tooltip"]').tooltip();
+        $.fn.select2.defaults.set("theme", "bootstrap4");
+        AddEditEsp.frm = $("#frmEspeciesModal");
+        AddEditEsp.frm.find("#cbespeciesinipauforestId").select2();
+        AddEditEsp.frm.find("#dlBloqueId").select2();
+
+        if (ManPM.opcRegItem == 'NUE') {
+            $('#tituloRegistro').html('Nuevo Registro');
+            $('#btnGuardarEspecies').html('Agregar');
+        }
+        else {
+            $('#tituloRegistro').html('Modificando Registro');
+            $('#btnGuardarEspecies').html('Guardar');
+
+            if (ManPM.dataEditar.find(".hdCodEspecie").val() == null || ManPM.dataEditar.find(".hdCodEspecie").val() == "undefined") {
+                AddEditEsp.fnselectByText(ManPM.dataEditar.find(".hdDescEspecie").val());
+            }
+            else {
+                AddEditEsp.frm.find("#cbespeciesinipauforestId").val(ManPM.dataEditar.find(".hdCodEspecie").val()).change();
+                AddEditEsp.frm.find("#cbespeciesinipauforestId").attr("disabled", true);
+            }
+
+            AddEditEsp.frm.find("#dlBloqueId").val(ManPM.dataEditar.find(".hdNumBloque").val()).change();
+            AddEditEsp.frm.find("#txtNumArb").val(ManPM.dataEditar.find(".hdNumArbol").val());
+            AddEditEsp.frm.find("#txtVolumen").val(ManPM.dataEditar.find(".hdVolumen").val());
+            AddEditEsp.codSecuencial = ManPM.dataEditar.find(".hdCodSecuencial").val();
+            AddEditEsp.estado = ManPM.dataEditar.find(".hdEstadoItem").val()
+        }
+
+        $("#btnGuardarEspecies").click(function () {
+            AddEditEsp.frm.submit();
+        });
+        $("#btnCancelarEspecies").click(function () {
+            AddEditEsp.closeModal();
+        });
+        AddEditEsp.frm.validate({
+            focusInvalid: true,
+            //ignore: '', hiden predeterminado
+            rules: {
+                txtNumArb: { required: true },
+                txtVolumen: { required: true }
+            },
+            messages: {
+                txtNumArb: { required: "Ingrese Valor" },
+                txtVolumen: { required: "Ingrese Volumen" }
+            },
+            invalidHandler: function (event, validator) {
+            },
+            errorPlacement: function (error, element) {
+                var especieElement = $(element);
+                especieElement.addClass('border-danger');
+                especieElement.attr('data-toggle', 'tooltip');
+                especieElement.attr('data-placement', 'top');
+                especieElement.attr('data-original-title', error.text());
+                $('[data-toggle="tooltip"]').tooltip();
+            },
+            highlight: function (element) {
+            },
+            unhighlight: function (element) {
+            },
+            success: function (label, element) {
+                var especieElement = $(element);
+                especieElement.removeClass('border-danger');
+                especieElement.removeAttr('data-toggle', 'tooltip');
+                especieElement.removeAttr('data-placement', 'top');
+            },
+            submitHandler: function (form) {
+                AddEditEsp.addEspecie();
+                if (ManPM.opcRegItem == 'NUE') utilSigo.toastSuccess("Aviso", "Se agregó el registro");
+                else utilSigo.toastSuccess("Aviso", "Se actualizó el registro");
+                AddEditEsp.closeModal();
+            }
+        });
+    });
+</script>
+<div class="modal-dialog" role="document">
+    <div class="modal-content">
+        <div class="modal-header text-small" style="cursor:move;">
+            <span id="tituloRegistro"></span>
+        </div>
+        <div class="modal-body">
+            <form id="frmEspeciesModal">
+                @Html.HiddenFor(m => m.esPMFI)
+                <div class="form-group row">
+                    <label for="cbespeciesinipauforestId" class="col-md-5 col-form-label text-small">Especie</label>
+                    <div class="col-md-7">
+                        @Html.DropDownListFor(m => m.cbespeciesinipauforestId, new SelectList(Model.cbespeciesinipauforest, "Value", "Text"), new { @class = "form-control form-control-sm", @style = "width:auto;" })
+                    </div>
+                </div>
+                @if (Model.esPMFI == 0)
+                {
+                    <div class="form-group row">
+                        <label for="dlBloqueId" class="col-md-5 col-form-label text-small">Bloque</label>
+                        <div class="col-md-7">
+                            @Html.DropDownListFor(m => m.dlBloqueId, new SelectList(Model.dlBloque, "Value", "Text"), new { @class = "form-control form-control-sm", @style = "width:auto;" })
+                        </div>
+                    </div>
+                }
+                <div class="form-group row">
+                    <label for="txtNumArb" class="col-md-5 col-form-label text-small">Número de árboles</label>
+                    <div class="col-md-7">
+                        @Html.EditorFor(m => m.txtNumArb, new { htmlAttributes = new { @class = "form-control form-control-sm", placeholder = "N° de árboles", maxlength = "10", onkeypress = "return utilSigo.onKeyEntero(event, this);" } })
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="txtVolumen" class="col-md-5 col-form-label text-small">Volumen (m³)</label>
+                    <div class="col-md-7">
+                        @Html.EditorFor(m => m.txtVolumen, new { htmlAttributes = new { @class = "form-control form-control-sm", placeholder = "Volumen", maxlength = "10", onkeypress = "return utilSigo.onKeyDecimal(event, this);" } })
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="modal-footer">
+            <button type="button" id="btnGuardarEspecies" class="btn btn-primary btn-sm"></button>
+            <button type="button" id="btnCancelarEspecies" class="btn btn-secondary btn-sm">Cancelar</button>
+        </div>
+    </div>
+</div>

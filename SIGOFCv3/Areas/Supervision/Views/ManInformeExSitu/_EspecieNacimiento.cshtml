@@ -1,0 +1,81 @@
+﻿
+<script src="~/Areas/Supervision/js/ManInformeExSitu/_EspecieNacimiento.js"></script>
+
+<div class="modal-dialog" role="document">
+    <div class="modal-content">
+        <div class="modal-header text-small" style="cursor:move;">
+            <span id="lblItemEspecieNacimientoTitulo">Nacimiento</span>
+            <i class="fa fa-close" style="cursor:pointer;" data-dismiss="modal" aria-label="Close"></i>
+        </div>
+        <div class="modal-body">
+            <form id="frmItemEspecieNacimiento">
+                @Html.Hidden("hdfRegEstado")
+                @Html.Hidden("hdfCodSecuencial")
+                @Html.Hidden("hdfTipo",(string)ViewBag.hdfTipo)
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        @Html.Partial("~/Areas/General/Views/Controles/_renderComboEspecie.cshtml")
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="ddlEspecieSexoId" class="text-small">Sexo</label>
+                        @Html.DropDownList("ddlEspecieSexoId", new SelectList(ViewBag.ddlEspecieSexo, "Value", "Text"), new { @class = "form-control form-control-sm" })
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label for="txtNumeroIndiv" class="text-small">N° Individuos</label>
+                        @Html.TextBox("txtNumeroIndiv", "", new { @class = "form-control form-control-sm", type = "number" })
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="txtFecha" class="text-small">Fecha</label>
+                        @Html.TextBox("txtFecha", "", new { @class = "form-control form-control-sm" })
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label for="txtDocumento" class="text-small">Documento</label>
+                        @Html.TextBox("txtDocumento", "", new { @class = "form-control form-control-sm" })
+                    </div>
+                    <div class="form-group col-md-6 datos_nacimiento" style="display:none;">
+                        <label for="ddlProgramaId" class="text-small">Programa</label>
+                        @Html.DropDownList("ddlProgramaId", new SelectList(ViewBag.ddlOpcionSiNo, "Value", "Text"), new { @class = "form-control form-control-sm" })
+                    </div>
+                    <div class="form-group col-md-6 datos_egreso" style="display:none;">
+                        <label for="ddlMotivoId" class="text-small">Motivo</label>
+                        @Html.DropDownList("ddlMotivoId", new SelectList(ViewBag.ddlEstadoEgreso, "Value", "Text"), new { @class = "form-control form-control-sm" })
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div id="dvNecropsia" class="form-group col-md-4 datos_egreso" style="display:none;">
+                        <label for="ddlNecropsiaId" class="text-small">Necropsia</label>
+                        @Html.DropDownList("ddlNecropsiaId", new SelectList(ViewBag.ddlOpcionSiNo, "Value", "Text"), new { @class = "form-control form-control-sm" })
+                    </div>
+                    <div class="form-group col-md-4 datos_egreso" style="display:none;">
+                        <label for="txtEdad" class="text-small">Edad</label>
+                        @Html.TextBox("txtEdad", "", new { @class = "form-control form-control-sm" })
+                    </div>
+                    <div class="form-group col-md-4 datos_egreso" style="display:none;">
+                        <label for="txtCodigo" class="text-small">Código/ID</label>
+                        @Html.TextBox("txtCodigo", "", new { @class = "form-control form-control-sm" })
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div id="dvDiagnostico" class="form-group col-md-12 datos_egreso" style="display:none;">
+                        <label for="txtDiagnostico" class="text-small">Diagnóstico</label>
+                        @Html.TextArea("txtDiagnostico", "", new { @class = "form-control form-control-sm", rows = "3" })
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-12">
+                        <label for="txtObservacion" class="text-small">Observación</label>
+                        @Html.TextArea("txtObservacion", "", new { @class = "form-control form-control-sm", rows = "3" })
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-primary btn-sm" onclick="_EspecieNacimiento.fnSubmitForm()">Guardar</button>
+            <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Cancelar</button>
+        </div>
+    </div>
+</div>

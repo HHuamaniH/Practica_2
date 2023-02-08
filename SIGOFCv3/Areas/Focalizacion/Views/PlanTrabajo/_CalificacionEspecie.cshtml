@@ -1,0 +1,235 @@
+﻿@model List<CapaEntidad.ViewModel.VM_PlanTrabajoDetalleEspecie>
+<br />
+<br />
+<div class="form-row">
+    <input type="hidden" id="hdTipoPManejo" value="@ViewBag.tipoPManejo" />
+    <div class="form-group">
+        @if (Model.Count > 0 || @ViewBag.existeConsolidado==1)
+        {
+            <button type="button" class="btn btn-info btn-sm" onclick="_calEspecie.fnEliminarCalificacion()">Eliminar Calificación</button>            
+        }
+        else
+        {
+            <button type="button" class="btn btn-info btn-sm" onclick="_calEspecie.fnGenerar()">Generar Calificación</button>           
+        }
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-12">
+        <div class="table-responsive">
+            <table id="tbCalificacionEspecie" class="table table-hover table-bordered" style="width:100%">
+                <thead>
+                    <tr>
+                        <th colspan="15" style="text-align:center">
+                            <h5 class="card-title">Listado de especies del plan de manejo</h5>
+                        </th>
+                    </tr>
+                    <tr>
+                        <th>N°</th>
+                        <th title="Editar">E</th>
+                        <th title="Seleccionar">S</th>
+                        <th>Especie</th>
+                        <th>Total individuos</th>
+                        <th>N° de Aprov.</th>
+                        <th>N° de Sem.</th>
+                        <th>V. autorizado</th>
+                        <th>V. movilizado</th>
+                        <th>Abundancia</th>
+                        <th>V. aprobado</th>
+                        <th>V. movilizado</th>
+                        <th>Amenazados</th>
+                        <th>Cat. maderables</th>
+                        <th>P. total</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @{
+                        var cont = 1;
+                        Int32 totalIndividuos = 0, numApro = 0, numSem = 0, puntajeF = 0;
+                        decimal volAut = 0, volMov = 0, puntajeFPorcentaje = 0;
+                    }
+                    @if (Model.Count > 0)
+                    {
+
+                        foreach (var i in Model)
+                        {
+
+                    <tr>
+                        <td>@cont</td>
+                        <td><i class="fa fa-lg fa-pencil-square-o" style="color:blue;cursor:pointer;" title="Editar Calificación" onclick="_calEspecie.fnEdit(@i.id)"></i></td>
+                        @if (i.perteneceMuestraMinima > 0)
+                        {
+                            <td></td>
+                        }
+                        else
+                        {
+                            <td><i class="fa fa-lg fa-paper-plane" style="color:blue;cursor:pointer;" title="Agregar especie adicional al consolidado" onclick="_calEspecie.fnModalAdicionarAlConsolidado(@i.idCabecera,@i.id,1,this)"></i></td>
+                        }
+                        <td>@i.descripcionEspecie</td>
+                        <td>@i.totalIndividuos</td>
+                        <td>@i.numAprov</td>
+                        <td>@i.numSemilleros</td>
+                        <td>@string.Format("{0:#,0.000}", i.volAutorizado)</td>
+                        <td>@string.Format("{0:#,0.000}", i.volMovilizado)</td>
+                        <td>@string.Format("{0:#,0.00}", i.abundanciaCalificacion)&nbsp;&nbsp;|&nbsp; &nbsp;@i.abundanciaPuntaje</td>
+                        <td>@string.Format("{0:#,0.00}", i.volAprobadoCalificacion)&nbsp;&nbsp;|&nbsp; &nbsp;@i.volAprobadoPuntaje</td>
+                        <td>@string.Format("{0:#,0.00}", i.volMovilizadoCalificacion)&nbsp;&nbsp;|&nbsp; &nbsp;@i.volMovilizadoPuntaje</td>
+                        @if (@i.puntajeEspeciesAmenazadas > 0)
+                        {
+                            <td>@string.Format("{0:#,0.00}", i.calEspeciesAmenazadas)&nbsp;&nbsp;|&nbsp; &nbsp;@i.puntajeEspeciesAmenazadas</td>
+                        }
+                        else
+                        {
+                            <td></td>}
+                        @if (@i.puntajeCategoriaMad > 0)
+                        {
+                            <td>@string.Format("{0:#,0.00}", i.calCategoriaMad)&nbsp;&nbsp;|&nbsp; &nbsp;@i.puntajeCategoriaMad</td>
+                        }
+                        else
+                        {
+                            <td></td>}
+                        <td>@i.puntajeTotalCalificacion&nbsp;&nbsp;|&nbsp; &nbsp;@i.puntajeTotalPorcentaje</td>
+                    </tr>
+                            cont = cont + 1;
+                            totalIndividuos = totalIndividuos + i.totalIndividuos;
+                            numApro = numApro + i.numAprov;
+                            numSem = numSem + i.numSemilleros;
+                            volAut = volAut + i.volAutorizado;
+                            volMov = volMov + i.volMovilizado;
+                            puntajeF = puntajeF + i.puntajeTotalCalificacion;
+                            puntajeFPorcentaje = puntajeFPorcentaje + i.puntajeTotalPorcentaje;
+                        }
+                    }
+                    else
+                    {
+                        <tr><td colspan="15" style="text-align:center">No existe registros</td></tr>
+                    }
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td style="font-weight:bold">@totalIndividuos</td>
+                        <td style="font-weight:bold">@numApro</td>
+                        <td style="font-weight:bold">@numSem</td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td style="font-weight:bold">@puntajeF&nbsp;&nbsp;|&nbsp; &nbsp;@Math.Round(@puntajeFPorcentaje, 0)%</td>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    var _calEspecie = {
+        fnEdit: (id) => {
+            let frm = $("#divValAdicional");             
+            frm.find("#hdIdDet").val(id);
+            $("#modalCalificacionAdicional").modal();
+        },
+        fnModalAdicionarAlConsolidado: (idPlanDetalle, idPlanDetalleEspecie,tipo,obj) => {
+            let trSelect = $(obj).closest('tr');            
+            let frm = $("#divEspecieAdicional");
+            frm.find("#hdIdDetAdicional").val(idPlanDetalle);
+            frm.find("#hdIdDetEspecieAdicional").val(idPlanDetalleEspecie);
+            frm.find("#hdTipoAdicional").val(tipo);
+            frm.find("#txtEspecieAdicional").val(trSelect.find("td:eq(3)").text());
+            frm.find("#txtCantidadAprovAdd").val(parseInt(trSelect.find("td:eq(5)").text()));
+            frm.find("#txtCantidadSemAdd").val(parseInt(trSelect.find("td:eq(6)").text()));
+            frm.find("#txtObsAdd").val('');
+            $("#modalEspecieAdicional").modal();
+        },         
+        fnActualizarCalificacion: () => {
+            let frm = $("#divValAdicional");   
+            let frmCabecera = $("#cardMuestraCalificacion");
+            let codPlanSupervisionDetalle = frmCabecera.find("#hdPlanTrabajoDetId").val();
+            let id = frm.find("#hdIdDet").val();
+            let valAmenazada = frm.find("#cboCatAmenazada").val();
+            let valMaderable = frm.find("#cboCatMaderable").val();
+            let model = {
+                idCabecera:codPlanSupervisionDetalle,
+                id:id,
+                IdPuntajeEspeciesAmenazadas:valAmenazada.split('|')[0],
+                puntajeEspeciesAmenazadas:valAmenazada.split('|')[1],
+                IdPuntajeCategoriaMad:valMaderable.split('|')[0],
+                puntajeCategoriaMad:valMaderable.split('|')[1]
+            };
+            let url = urlLocalSigo + "Focalizacion/PlanTrabajo/ActualizarPTSDetalleCalificacion";
+            let option = { url: url, datos: JSON.stringify(model), type: 'POST' };
+            utilSigo.fnAjax(option, function (data) {
+                if (data.success) {
+                    utilSigo.toastSuccess("Éxito", data.msj);
+                    $("#btnCerrarCalificacion").click();
+                   // $('#modalCalificacionAdicional').modal('hide');
+                    
+                    planT.fnGetCalificacionPartial(codPlanSupervisionDetalle);
+                }
+                else {
+                    utilSigo.toastWarning("Aviso", data.msj);
+                }
+            }); 
+        },
+        fnEliminarCalificacion: () => {
+            let frm = $("#cardMuestraCalificacion");
+            let codPlanSupervisionDetalle = frm.find("#hdPlanTrabajoDetId").val();
+            let model = { codPlanSupervisionDetalle: codPlanSupervisionDetalle };
+            utilSigo.dialogConfirm("", "Está seguro de eliminar la calificación?", function (r) {
+                if (r) {
+                    let url = urlLocalSigo + "Focalizacion/PlanTrabajo/PlanTrabajoDetEspecieDelete";
+                    let option = { url: url, datos: JSON.stringify(model), type: 'POST' };
+                    utilSigo.fnAjax(option, function (data) {
+                        if (data.success) {
+                            utilSigo.toastSuccess("Éxito", data.msj);
+                            planT.fnGetCalificacionPartial(codPlanSupervisionDetalle);
+                            planT.fnGetConsolidadoPartial(codPlanSupervisionDetalle);
+                        }
+                        else {
+                            utilSigo.toastWarning("Aviso", data.msj);
+                        }
+                    });
+                }
+            });
+        },
+        fnGenerar: () => {
+            let frm = $("#cardMuestraCalificacion");
+            let codTH = frm.find("#hdCodTH").val();
+            let numPoa = frm.find("#hdNumPoa").val();
+            let codPlanSupervisionDetalle = frm.find("#hdPlanTrabajoDetId").val();
+            let frmCabecera = $("#cardMuestraCalificacion");
+            let hdTipoPManejo = frmCabecera.find("#detTipoPM").val();
+            let model = {
+                codTH: codTH,
+                numPoa: numPoa,
+                codPlanSupervisionDetalle: codPlanSupervisionDetalle,
+                tipoPManejo: hdTipoPManejo
+            };
+            utilSigo.dialogConfirm("", "Está seguro de generar la calificación?", function (r) {
+                if (r) {
+                    let url = urlLocalSigo + "Focalizacion/PlanTrabajo/GenerarCalificacionMuestra";
+                    let option = { url: url, datos: JSON.stringify(model), type: 'POST' };
+                    utilSigo.fnAjax(option, function (data) {
+                        if (data.success) {
+                            utilSigo.toastSuccess("Éxito", data.msj);
+                            planT.fnGetCalificacionPartial(codPlanSupervisionDetalle);
+                            planT.fnGetConsolidadoPartial(codPlanSupervisionDetalle);
+                        }
+                        else {
+                            utilSigo.toastWarning("Aviso", data.msj);
+                        }
+                    });
+                }
+            });
+        }
+    };
+    $(document).ready(function () {
+
+    })
+</script>

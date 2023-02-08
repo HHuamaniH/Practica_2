@@ -1,0 +1,53 @@
+﻿@model CapaEntidad.ViewModel.General.VM_Acceso
+
+<script src="~/Areas/Seguridad/js/Usuario/_UsuarioAccesoControl.js"></script>
+
+<div class="modal-dialog" role="document">
+    <div class="modal-content">
+        <div class="modal-header text-small" style="cursor:move;padding:0.5rem;">
+            <h5 class="modal-title">@Model.titulo</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body">
+            <form id="frmManUsuarioAccesoControl_AddEdit" method="post">
+                @Html.HiddenFor(m => m.codUsuario)
+                @Html.HiddenFor(m => m.id_acceso)
+                @Html.HiddenFor(m => m.estado)
+                <div class="form-row">
+                    <div class="form-group col-md-12">
+                        <div class="custom-control custom-checkbox my-1 mr-sm-2">
+                            @Html.CheckBoxFor(m => m.accesoNoCaduca, new { @class = "custom-control-input" })
+                            <label class="custom-control-label" id="lblCheckaccesoNoCaduca" style="margin-top:4px;" for="accesoNoCaduca">
+                                Acceso no caduca (Indeterminado)
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-12">
+                        <label for="fechaSolicitud" class="text-small">Fecha Solicitud</label>
+                        @Html.EditorFor(m => m.fecha_solicitud, new { htmlAttributes = new { @placeholder = "dd/mm/yyy", @class = "form-control form-control-sm", @maxlength = "20" } })
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-12">
+                        <label for="fechaDesde" class="text-small">Fecha Desde</label>
+                        @Html.EditorFor(m => m.fecha_desde, new { htmlAttributes = new { @placeholder = "dd/mm/yyy", @class = "form-control form-control-sm", @maxlength = "20" } })
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-12">
+                        <label for="fechaHasta" class="text-small">Fecha Hasta</label>
+                        @Html.EditorFor(m => m.fecha_hasta, new { htmlAttributes = new { @placeholder = "dd/mm/yyy", @class = "form-control form-control-sm", @maxlength = "20" } })
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="modal-footer">
+            <button id="btnGuardar" class="btn btn-primary btn-sm" onclick="ManUsuarioAccesoControl_AddEdit.fnSubmit();">Registrar</button>
+            <button id="btnCancelar" class="btn btn-secondary btn-sm" onclick="ManUsuarioAccesoControl_AddEdit.fnClose();">Cancelar</button>
+        </div>
+    </div>
+</div>

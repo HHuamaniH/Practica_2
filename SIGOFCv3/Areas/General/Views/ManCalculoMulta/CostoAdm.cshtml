@@ -1,0 +1,340 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_LayoutMain.cshtml";
+}
+
+
+<script src="~/Scripts/datatables/Extensions/dataTables.buttons.js"></script>
+<script src="~/Scripts/datatables/Extensions/buttons.flash.min.js"></script>
+<script src="~/Scripts/datatables/Extensions/jszip.min.js"></script>
+
+<script src="~/Scripts/datatables/Extensions/vfs_fonts.js"></script>
+<script src="~/Scripts/datatables/Extensions/buttons.html5.js"></script>
+<script src="~/Scripts/datatables/Extensions/buttons.print.js"></script>
+
+
+<link href="~/Content/datatables/buttons.dataTables.min.css" rel="stylesheet" />
+<link href="~/Areas/General/css/ManCalculoMulta/ManCalculoMulta.css" rel="stylesheet" />
+<div id="divCostoAdm" class="container-fluid">
+    <div class="card">
+        <div class="card-header text-left">
+            <h5>Costo administrativo</h5>
+        </div>
+        <div class="card-body">
+            <div class="col-12">
+                <form id="frmManCostoAdm">
+                    <div class="form-row">
+                        <div class="form-group col-md-3">
+                            <select class="form-control form-control-sm" id="cboDescripcion">
+                                <option value="DESCRIPCION">Modalidad</option>
+                            </select>
+                        </div>
+                        <div class="form-group col-md-3">
+                            <input type="text" id="txtValorBuscar" class="form-control form-control-sm" placeholder="" maxlength="100" style="text-transform:uppercase;" />
+                        </div>
+                        <div class="btn-group col-md-2" style="padding-top:5px;">
+                            <a id="btnSearch" style="cursor:pointer;" data-toggle="tooltip" data-placement="top" title="Buscar" onclick="_manCostoAdm.fnSearch()"><span class="fa mx-2 fa-lg fa-search"></span></a>
+                            <a id="btnRefresh" style="cursor:pointer;" data-toggle="tooltip" data-placement="top" title="Actualizar" onclick="_manCostoAdm.fnRefresh()"><span class="fa mx-2 fa-lg fa-refresh"></span></a>
+                            <a id="btnAdd" style="cursor:pointer;" data-toggle="tooltip" data-placement="top" title="" onclick="_manCostoAdm.fnCrear()" data-original-title="Crear un nuevo registro"><span class="fa mx-2 fa-lg fa-plus"></span></a>
+
+                        </div>
+                    </div>
+                    <div class="table-responsive-md">
+                        <table id="tbCostoAdm" class="table table-hover table-bordered" style="width:100%;">
+                            <thead>
+                                <tr>
+                                    <th></th>
+                                    <th></th>
+                                    <th>N°</th>
+                                    <th>Código</th>
+                                    <th>Modalidad</th>
+                                    <th>Tipo</th>
+                                    <th>Valor</th>
+                                    <th>Estado</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </form>
+
+            </div>
+        </div>
+    </div>
+    <div class="modal fade hide" id="modalCostoAdm" role="dialog">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header text-small" style="cursor:move;padding:0.5rem;">
+                    <h5 class="modal-title" id="h5TituloCostoAdm">Modificar</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body" id="divModCostoAdm">
+                    <input type="hidden" id="hdRegEstado" value="1" />
+                    <input type="hidden" id="hdNCodCostoAdm" value="0" />
+                    <input type="hidden" id="hdEstado" value="1" />
+                    <div class="form-row" id="divVariable">
+                        <div class="form-group col-md-6">
+                            <label for="cboModalidad">Modalidad</label>
+                            @*<input class="form-control form-control-sm" id="cboModalidad" type="text" maxlength="150">*@
+                            <select class="form-control form-control-sm" id="cboModalidad">
+                                <option value="PERMISO/AUTORIZACIÓN">Permiso/Autorización</option>                               
+                                <option value="CONCESIÓN">Concesión</option>
+                            </select>
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label for="cboTipo">Tipo</label>
+                            @*<input class="form-control form-control-sm" id="cboTipo" type="text" maxlength="200">*@
+                            <select class="form-control form-control-sm" id="cboTipo">
+                                <option value="0">Reconoce Infracción</option>
+                                <option value="1">No Reconoce Infracción</option>
+                            </select>
+
+                        </div>
+                    </div>
+                    @*<div class="form-row">
+
+                        </div>*@
+                    <div class="form-row" id="divCalificacion">
+                        <div class="form-group col-md-6">
+                            <label for="txtValor">Valor</label>
+                            <input class="form-control form-control-sm" id="txtValor" type="number" maxlength="3">
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label for="txtValor">Estado</label>
+                            <select class="form-control form-control-sm" id="cboEstado">
+                                <option value="0">Inactivo</option>
+                                <option value="1">Activo</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-row" id="">
+
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary btn-sm" onclick="_manCostoAdm.fnCostoAdmUpdate()">Guardar</button>
+                    <button id="btnCerrarModFactorAA" class="btn btn-secondary btn-sm" data-dismiss="modal">Cancelar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    var _manCostoAdm = {
+
+        fnRefresh: () => {
+            $("#txtValorBuscar").val('');
+            _manCostoAdm.fnSearch();
+            //location.reload();
+        },
+        fnCrear: () => {
+            _manCostoAdm.fnLimpiar();
+            $("#h5TituloCostoAdm").text("Nuevo");
+            $("#hdRegEstado").val("1");
+            $("#modalCostoAdm").modal({ keyboard: true, backdrop: 'static' });
+            //_renderComboEspecie.fnInit("FAUNA", "", "");
+            //$('#ddlRenderComboEspecieId').val("").trigger("change");
+        },
+        fnLimpiar: () => {
+            let frm = $("#divModCostoAdm");
+            frm.find("#hdNCodCostoAdm").val('0');
+            frm.find("#cboModalidad").val('');
+            frm.find("#cboTipo").val('');
+            frm.find("#txtValor").val('');
+            frm.find("#cboEstado").val('0');
+        },
+        fnDelete: (obj) => {
+
+            let frm = $("#divModCostoAdm");
+            let $tr = $(obj).closest("tr");
+            let dataRow = _manCostoAdm.dt.row($tr).data();
+
+            let model = {
+                NCODCOSTOADM: dataRow.NCODCOSTOADM,
+                VMODALIDAD: frm.find("#cboModalidad").val(),
+                VTIPO: frm.find("#cboTipo").val(),
+                NVALOR: frm.find("#txtValor").val(),
+                NESTADO: 0,
+                //  NCODFACTORAADEP: frm.find("#hdNCodCostoAdmDep").val(),
+                RegEstado: 3
+            };
+
+            let url = urlLocalSigo + "General/ManCalculoMulta/GuardarCostoAdm";
+            let option = { url: url, datos: JSON.stringify(model), type: 'POST' };
+            utilSigo.fnAjax(option, function (data) {
+                if (data.success) {
+                    utilSigo.toastSuccess("Éxito", data.msj);
+                    _manCostoAdm.fnSearch();
+                }
+                else {
+                    utilSigo.toastWarning("Aviso", data.msj);
+                }
+            });
+
+        },
+        fnEdit: (obj) => {
+
+            $("#h5TituloCostoAdm").text("Modificar");
+            _manCostoAdm.fnLimpiar();
+            $("#hdRegEstado").val("2");
+            let frm = $("#divModCostoAdm");
+            let $tr = $(obj).closest("tr");
+            let dataRow = _manCostoAdm.dt.row($tr).data();
+            let estado = dataRow.NESTADO == "INACTIVO" ? 0 : 1;
+
+            frm.find("#cboModalidad").val(dataRow.VMODALIDAD);
+
+            switch (dataRow.VTIPO) {
+                case "RECONOCE INFRACCIÓN": frm.find("#cboTipo").val("0");
+                    break;
+                case "NO RECONOCE INFRACCIÓN": frm.find("#cboTipo").val("1");
+                    break;
+            }
+
+            let tipo = dataRow.NESTADO == "INACTIVO" ? 0 : 1;
+
+            frm.find("#hdNCodCostoAdm").val(dataRow.NCODCOSTOADM);
+
+            frm.find("#txtValor").val(dataRow.NVALOR);
+            frm.find("#cboEstado").val(estado);
+
+            $("#modalCostoAdm").modal({ keyboard: true, backdrop: 'static' });
+        },
+        fnCostoAdmUpdate: () => {
+            let frm = $("#divModCostoAdm");
+            let model = {
+                NCODCOSTOADM: frm.find("#hdNCodCostoAdm").val(),
+                VMODALIDAD: frm.find("#cboModalidad").val(),
+                VTIPO: frm.find("#cboTipo").val(),
+                NVALOR: frm.find("#txtValor").val(),
+                RegEstado: 1
+            };
+
+            model.RegEstado = model.NCODCOSTOADM == "0" ? 1 : 2;
+            model.NESTADO = $("#cboEstado").val() == "0" ? 0 : 1;
+
+            if (model.VMODALIDAD == "") {
+                utilSigo.toastWarning("Warning", "Ingresar Modalidad");
+                return false;
+            } else if (model.VTIPO == "") {
+                utilSigo.toastWarning("Warning", "Ingresar Tipo");
+                return false;
+            } else if (model.NVALOR == "") {
+                utilSigo.toastWarning("Warning", "Ingresar Valor");
+                return false;
+            }
+
+
+            let url = urlLocalSigo + "General/ManCalculoMulta/GuardarCostoAdm";
+            let option = { url: url, datos: JSON.stringify(model), type: 'POST' };
+            utilSigo.fnAjax(option, function (data) {
+                if (data.success) {
+                    utilSigo.toastSuccess("Éxito", data.msj);
+                    $("#btnCerrarModFactorAA").click();
+                    _manCostoAdm.fnSearch();
+                }
+                else {
+                    utilSigo.toastWarning("Aviso", data.msj);
+                }
+            });
+        },
+        fnBuilTable: () => {
+            const columns = [                
+                {
+                    "data": "", "className": "text-center", "width": "2%", "orderable": false, "searchable": false, "mRender": function (data, type, row) {
+                        return '<div><i class="fa fa-lg fa-pencil-square-o" style="color:blue;cursor:pointer;" title="Editar plan de trabajo" onclick="_manCostoAdm.fnEdit(this)"></i></div>';
+                    }
+                },
+                {
+                    "data": "", "className": "text-center", "width": "2%", "orderable": false, "searchable": false, "mRender": function (data, type, row) {
+                        return '<div><i class="cellDel fa fa-lg fa-window-close" style="color:red;cursor:pointer;" title="Editar plan de trabajo" onclick="_manCostoAdm.fnDelete(this)"></i></div>';
+                    }
+                },
+                {
+                    "name": "ROW_INDE", "width": "2%", "orderable": false, "searchable": false, "mRender": function (data, type, row, meta) {
+                        return parseInt(meta.row) + 1 + meta.settings._iDisplayStart;
+                    }
+                },
+                { "data": "NCODCOSTOADM", visible: false },
+                { "data": "VMODALIDAD", "autoWidth": true },
+                { "data": "VTIPO", "autoWidth": true },
+                { "data": "NVALOR", "autoWidth": true },
+                { "data": "NESTADO", "autoWidth": true }
+
+            ];
+            const optDt = { iLength: 20, iStart: 0, aSort: [] };
+            _manCostoAdm.dt = _manCostoAdm.frm.find("#tbCostoAdm").DataTable({
+                processing: true,
+                serverSide: true,
+                searching: false,
+                ordering: false,
+                paging: true,
+                dom: 'Bfrtip',   
+                buttons: [{
+                    extend: 'excelHtml5',
+                    messageTop: 'Costo Administrativo',
+                    exportOptions: {                       
+                       // columns: [1, ':visible'],
+                      //  columns: [2, ':visible'],
+                     //   columns: [3, ':visible'],
+                       // columns: [8, ':visible'],
+                        //columns: [4, ':visible'],
+                    }
+                }],
+                ajax: {
+                    "url": `${urlLocalSigo}/General/Controles/GetCostoAdm`,
+                    "data": function (d) {
+                        d.CustomSearchForm = "CALCULOMULTA";
+                        d.CustomSearchType = "COSTOADM";
+                        d.CustomSearchValue = $("#txtValorBuscar").val();
+                        d.customSearchEnabled = true;        
+                        d.columns = null;
+                    },
+                    "error": function (jqXHR) {
+                        // utilSigo.unblockUIGeneral();
+                        if (jqXHR.status != 401 && jqXHR.status != 403 && jqXHR.status != 404) {
+                            utilSigo.toastError("Error", initSigo.MessageError);
+                        }
+                        //console.log(jqXHR);
+                    },
+                    "statusCode": {
+                        203: () => { utilSigo.toastInfo("Aviso", "El usuario perdio la sesión. Vuelva ingresar al sistema"); }
+                    }
+                },
+                columns: columns,
+                bInfo: true,
+                "lengthMenu": [[10, 20, 50, 100], [10, 20, 50, 100]],
+                // "aaSorting": optDt.aSort,
+                "pageLength": optDt.iLength,
+                "displayStart": optDt.iStart,
+                "oLanguage": initSigo.oLanguage,
+                "drawCallback": initSigo.showPagination
+            });
+        },
+        fnSearch: () => {
+            _manCostoAdm.dt.ajax.reload();
+        }
+    };
+    $(document).ready(function () {
+
+        _manCostoAdm.frm = $("#frmManCostoAdm");
+        _manCostoAdm.fnBuilTable();
+        _manCostoAdm.frm.submit(function (e) {
+            e.preventDefault();
+            _manCostoAdm.fnSearch();
+        });
+
+
+        //_renderComboEspecie.fnInit("FAUNA", "", "");
+
+        $('#lblRenderComboEspecieId').removeAttr('Class');
+        $('#lblRenderComboEspecieId').html('Especie Sinónimo');
+
+    });
+</script>
+
+
+

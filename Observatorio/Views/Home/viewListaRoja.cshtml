@@ -1,0 +1,114 @@
+﻿@model PagedList.IPagedList<CapaEntidad.DOC.Ent_Reporte_OBSERVATORIO>
+@using PagedList.Mvc;
+@{
+    ViewBag.Title = "viewListaRoja";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<link href="~/Styles/Proyectos/listaObservatorio.min.css" rel="stylesheet" />
+<script>
+    function ubicarRojo(P1, P2) {
+        if ($(P1).Lenght == 12) { P1 = "000" + P1; }
+        window.open('https://sisfor.osinfor.gob.pe/visor/sisforv4/geoObsROJO/' + P1 + '|' + P2);
+    }
+</script>
+
+<div class="tituloLista">
+    <h2>OBSERVATORIO OSINFOR: Lista Roja</h2>
+</div>
+<div class="toolsLista">
+    <div class="navLista">
+        <a href="@Url.Action("Menu","Home")" title="Volver al Inicio"><span class="icon-arrow-back"></span><span>Volver al Inicio</span></a>
+    </div>
+    <div class="toolBusqueda">
+        @using (Html.BeginForm("listaRoja", "Home", FormMethod.Get))
+        {
+            <span>Ingrese título habilitante o titular:</span> @Html.TextBox("SearchString", ViewBag.CurrentFilter as string, new { Title = "Ingrese el Título Habilitante, titular, modalidad de aprovechamiento o el departamento" })
+            <input type="submit" value="Buscar" />
+        }
+    </div>
+</div>
+<div class="opcionLista">
+    <div class="opcionDescargaR">
+        <span>Descargar relación de titulares</span><a href="@Url.Action("descargaResumenPDF","Home",new { Color="ROJO" })" title="Descargar relación de titulares"><span class="icon-download5"></span></a>
+    </div>
+
+    <div class="opcionImagenR" style="font-size:16px !important">
+        <span>Descargar relación de especies</span>&nbsp;<a href="@Url.Action("dowloadEcxel","Home",new { Color="ROJO" })" title="Descargar relación de especies"><span class="icon-download2"></span></a>
+    </div>
+</div>
+
+<div class="GrillaDivMarco">
+    <table id="tbListaRoja" class="GrillaRojo">
+        <thead>
+            <tr>
+                @{
+                    <th>N°</th>
+                    <th>@Html.ActionLink("Titular", "listaRoja", new { sortOrder = ViewBag.TitularSort, currentFilter = ViewBag.CurrentFilter })</th>
+                    <th>@Html.ActionLink("Título Habilitante", "listaRoja", new { sortOrder = ViewBag.THabilitanteSort, currentFilter = ViewBag.CurrentFilter })</th>
+                    <th>@Html.ActionLink("Modalidad", "listaRoja", new { sortOrder = ViewBag.ModalidadSort, currentFilter = ViewBag.CurrentFilter })</th>
+                    <th>@Html.ActionLink("Departamento", "listaRoja", new { sortOrder = ViewBag.DepartamentoSort, currentFilter = ViewBag.CurrentFilter })</th>
+                    <th>@Html.ActionLink("N° POA", "listaRoja", new { sortOrder = ViewBag.NumPOASort, currentFilter = ViewBag.CurrentFilter })</th>
+                    <th>@Html.ActionLink("Inicio de Vigencia del POA", "listaRoja", new { sortOrder = ViewBag.VigenciaSort, currentFilter = ViewBag.CurrentFilter })</th>
+                    <th>@Html.ActionLink("Zafra o Periodo", "listaRoja", new { sortOrder = ViewBag.ZafraSort, currentFilter = ViewBag.CurrentFilter })</th>
+                    <th>@Html.ActionLink("Alerta", "listaRoja", new { sortOrder = ViewBag.AlertaSort, currentFilter = ViewBag.CurrentFilter })</th>
+                    <th>Ver detalle</th>
+                    <th>Ver Ubicación en el SISFOR</th>
+                }
+            </tr>
+        </thead>
+        <tbody>
+            @{
+                var counter = 0;
+            }
+
+            @if (Model != null)
+            {
+                foreach (var item in Model)
+                {
+            <tr>
+                <td>@(((Model.PageNumber - 1) * 20) + (++counter))</td>
+                <td>@item.TITULAR</td>
+                <td>@item.NUM_THABILITANTE</td>
+                <td>@item.MODALIDAD</td>
+                <td>@item.REGION</td>
+                <td>@item.NUM_POA</td>
+                <td>@item.VIGENCIA</td>
+                <td>@item.ZAFRA</td>
+                <td>
+                    @if (item.ALERTA =="Si")
+                    {
+                        <a target="_blank" href="https://observatorio.osinfor.gob.pe/AlertasOSINFOR" title="Alerta OSINFOR"><img src="~/Imagenes/iconos/ALERTA.png"/></a>
+                    }
+                    </td>
+                <td><a href='@Url.Action("descargaPDFrojo", "Home", new { idRegistro = item.ID_REGISTRO })' target='_blank' title="Detalle"><img src="~/Imagenes/iconos/Buscar4.png" /></a></td>
+                <td><img src="~/Imagenes/iconos/map_sisfor.png" style="cursor:pointer;" onclick="ubicarRojo(@item.COD_THABILITANTE,@item.NUM_POA_INT.ToString())"  title="SISFOR"/></td>
+
+            </tr>
+                }
+            }
+        </tbody>
+    </table>
+</div>
+<div class="divPaginacionRojo">
+    Página @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) de @Model.PageCount
+
+    @Html.PagedListPager(Model, page => Url.Action("listaRoja",
+    new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter }))
+</div>
+<div class="pieLista">
+    <div>
+        <p>* Incluye:</p>
+    </div>
+    <ul>
+        <li>Títulos habilitantes que están en el marco de un Procedimiento Administrativo Único (PAU), cuya resolución final podría variar su condición actual.</li>
+        <li>Concesiones Forestales Maderables.</li>
+        <li>Concesiones Forestales No Maderables con Planes Complementarios.</li>
+        <li>Concesiones de Forestación y/o Reforestación.</li>
+        <li>Permisos Forestales en Comunidades Nativas.</li>
+        <li>Permisos Forestales en Predios Privados.</li>
+        <li>Contratos de Administración de Bosques Locales supervisados por el OSINFOR.</li>
+    </ul>
+</div>
+<div id="fechaHora">
+    <div><strong>* Actualizado al: </strong>@ViewBag.fechaProcess</div><div><strong>Fecha y Hora de Consulta:</strong> @DateTime.Now</div>
+</div>

@@ -1,0 +1,410 @@
+﻿@model CapaEntidad.ViewModel.VM_Resodirec
+
+<script type="text/javascript">
+    var _renderMedCorrect = {};
+    _renderMedCorrect.tbEliTABLA = [];
+    _renderMedCorrect.fnSelectRecom = function () {
+        _renderMedCorrect.frm.find("#divMedidaCorrectiva").hide();
+
+        if (_renderMedCorrect.frm.find("#chkMCorrectivas").is(':checked')) {
+            _renderMedCorrect.frm.find("#divMedidaCorrectiva").show();
+        }
+    }
+
+    _renderMedCorrect.fnInitDataTable_Detail = function () {
+        var columns_label = [], columns_data = [], options = {};
+        columns_label = ["Mandato", "Plazo Impl. Días", "Plazo Impl. Meses","Plazo Impl. Años", "Plazo Post Impl. Días","Plazo Post Impl. Meses","Plazo Post Impl. Años", "Plazo Inf. Días", "Plazo Inf. Meses","Plazo Inf. Años"];
+        columns_data = ["MEDIDA", "PLAZO_IMPL_DIA", "PLAZO_IMPL_MES", "PLAZO_IMPL_ANIO","PLAZO_POST_DIA","PLAZO_POST_MES","PLAZO_POST_ANIO", "PLAZO_INF_DIA", "PLAZO_INF_MES", "PLAZO_INF_ANIO"];
+        options = {
+            page_length: 10, row_index: true, row_delete: true, row_fnDelete: "_renderMedCorrect.fnDelete(this)", row_select: false, row_fnSelect: "_renderMedCorrect.fnSelect(this)", page_sort: true
+        };
+        _renderMedCorrect.dtRenderListInforme = utilDt.fnLoadDataTable_Detail(_renderMedCorrect.frm.find("#tbRenderMedCorrectiva"), columns_label, columns_data, options);
+        _renderMedCorrect.dtRenderListInforme.rows.add(JSON.parse('@Html.Raw(Json.Encode(@Model.ListMedCorrectiva))')).draw();
+    }
+
+    _renderMedCorrect.fnSelect = function (obj) {
+         var data = _renderMedCorrect.dtRenderListInforme.row($(obj).parents('tr')).data();
+        /*if (!utilDt.existValorSearch(_renderMedCorrect.dtRenderListInforme, "COD_MEDIDA", data["COD_MEDIDA"])) {
+            data["RegEstado"] = 1;
+            _renderMedCorrect.dtRenderListInforme.rows.add([data]).draw();
+            _renderMedCorrect.dtRenderListInforme.page('last').draw('page');
+        } else {
+            utilSigo.toastWarning("Aviso", "No se encontraron registros");
+        }*/
+
+        alert(data["COD_MEDIDA"]);
+         //utilSigo.modalDraggable(_renderMedCorrect.frm.find("#mdlEspeciesMedCorrectiva"), '.modal-header');
+        //_renderMedCorrect.frm.find("#mdlEspeciesMedCorrectiva").modal({ keyboard: true, backdrop: 'static' });
+    }
+    _renderMedCorrect.fnDelete = function (obj) {
+        var data = _renderMedCorrect.dtRenderListInforme.row($(obj).parents('tr')).data();
+          if (data["COD_MEDIDA"] > 0) {
+            _renderMedCorrect.tbEliTABLA.push({
+                EliTABLA: "RESODIREC_DET_MEDIDA",
+                EliVALOR02: data["COD_MEDIDA"]
+            });
+        }
+        _renderMedCorrect.dtRenderListInforme.row($(obj).parents('tr')).remove().draw(false);
+    }
+
+    _renderMedCorrect.fnAdd = function (obj) {
+        let mandato = _renderMedCorrect.frm.find("#txtDescripcionMandato").val();
+        let diasImp = _renderMedCorrect.frm.find("#txtDiasImpl").val();
+        let mesImpl = _renderMedCorrect.frm.find("#txtMesesImpl").val();
+        let anioImpl = _renderMedCorrect.frm.find("#txtAnioImpl").val();
+
+        let diasPostImp = _renderMedCorrect.frm.find("#txtDiasPostImpl").val();
+        let mesPostImpl = _renderMedCorrect.frm.find("#txtMesePostImpl").val();
+        let anioPostImpl = _renderMedCorrect.frm.find("#txtAnioPostImpl").val();
+
+        let diaInf = _renderMedCorrect.frm.find("#txtDiasInf").val();
+        let mesInf = _renderMedCorrect.frm.find("#txtMeseInf").val();
+        let anioInf = _renderMedCorrect.frm.find("#txtAnioInf").val();
+
+        if (mandato != "") { //&& diasImp != "" && mesImpl != "" && anioImpl != "" && diasPostImp != "" && mesPostImpl != "" && anioPostImpl != ""  && diaInf != "" && mesInf != "" && anioInf != "" ) {
+            var data = {
+                "COD_MEDIDA": 0,
+                "MEDIDA": mandato,
+                "MAE_TIP_MEDIDA": "0000008",
+                "PLAZO_IMPL_DIA": diasImp == "" ? 0 : diasImp,
+                "PLAZO_IMPL_MES": mesImpl == "" ? 0 : mesImpl,
+                "PLAZO_IMPL_ANIO": anioImpl == "" ? 0 : anioImpl,
+
+                "PLAZO_POST_DIA": diasPostImp == "" ? 0 : diasPostImp,
+                "PLAZO_POST_MES": mesPostImpl == "" ? 0 : mesPostImpl,
+                "PLAZO_POST_ANIO": anioPostImpl == "" ? 0 : anioPostImpl,
+
+                "PLAZO_INF_DIA": diaInf == "" ? 0 : diaInf,
+                "PLAZO_INF_MES": mesInf == "" ? 0 : mesInf,
+                "PLAZO_INF_ANIO": anioInf == "" ? 0 : anioInf,
+                "RegEstado" : 1
+            };
+            _renderMedCorrect.dtRenderListInforme.rows.add([data]).draw();
+        }
+        else {
+              utilSigo.toastWarning("Aviso", "debe ingresar valores para agregar medidas correctivas");
+        }
+        _renderMedCorrect.frm.find("#txtDescripcionMandato").val("");
+        _renderMedCorrect.frm.find("#txtDiasImpl").val("");
+        _renderMedCorrect.frm.find("#txtMesesImpl").val("");
+        _renderMedCorrect.frm.find("#txtDiasInf").val("");
+        _renderMedCorrect.frm.find("#txtMeseInf").val("");
+        _renderMedCorrect.frm.find("#txtAnioImpl").val("");
+        _renderMedCorrect.frm.find("#txtDiasPostImpl").val("");
+        _renderMedCorrect.frm.find("#txtMesePostImpl").val("");
+        _renderMedCorrect.frm.find("#txtAnioPostImpl").val("");
+        _renderMedCorrect.frm.find("#txtAnioInf").val("");
+
+
+    }
+
+    _renderMedCorrect.fnGetList = function () {
+        let list = [], rows, countFilas, data;
+        rows = _renderMedCorrect.dtRenderListInforme.$("tr");
+        countFilas = rows.length;
+        if (countFilas > 0) {
+            $.each(rows, function (i, o) {
+                data = _renderMedCorrect.dtRenderListInforme.row($(o)).data();
+                list.push(utilSigo.fnConvertArrayToObject(data));
+            });
+        }
+        return list;
+    }
+
+    _renderMedCorrect.fnViewModalConsulta = function () {
+        utilSigo.modalDraggable(_renderMedCorrect.frm.find("#mdlEspecie"), '.modal-header');
+        _renderMedCorrect.frm.find("#mdlEspecie").modal({ keyboard: true, backdrop: 'static' });
+    }
+
+     _renderMedCorrect.fnAddEspecie = function () {
+        var codEspecie = _renderMedCorrect.frm.find("#ddlEspecies").val();
+        var especie = _renderMedCorrect.frm.find("#ddlEspecies option:selected").text();
+        var volumen = _renderMedCorrect.frm.find("#txtVolumenEspecie").val();
+        var arboles = _renderMedCorrect.frm.find("#txtNroArboles").val();
+        var observacion = _renderMedCorrect.frm.find("#txtObservacionesArch").val();
+        $.ajax({
+            url: '@Url.Action("agregarEspeciesMC","ManResolucion")',
+            type: 'POST',
+            datatype: "json",
+            traditional: true,
+            data: { 'codEspecie': codEspecie, 'especie': especie, 'volumen': volumen, 'arboles': arboles, 'observaciones': observacion },
+            success: function (data) {
+             $('#frmRenderListaEspecies').html(data);
+            }
+        });
+        _renderMedCorrect.frm.find("#ddlEspecies").val('0002226');
+        _renderMedCorrect.frm.find("#txtVolumenEspecie").val('');
+        _renderMedCorrect.frm.find("#txtNroArboles").val('');
+        _renderMedCorrect.frm.find("#txtObservacionesArch").val('');
+    }
+
+    _renderMedCorrect.ItemExcelImportarVentana = function (e, objeto) {
+
+        var idFile = $(objeto).attr("id");
+        _renderMedCorrect.fileSelectHandler(e, idFile);
+    }
+
+    _renderMedCorrect.fileSelectHandler = function (e, control) {
+
+        if (e.dataTransfer != undefined &&
+            e.dataTransfer.files != undefined) {
+        }
+        var files = e.target.files || e.dataTransfer.files;
+        if (files != undefined && files.length > 0) {
+            this.uploadFileToServer(files[0]);
+        }
+    }
+
+     _renderMedCorrect.uploadFileToServer = function (file) {
+        var formdata = new FormData();
+        formdata.append(file.name, file);
+        $.ajax({
+            url:  '@Url.Action("ImportarEspecieMC","ManResolucion")',
+            type: 'POST',
+            data: formdata,
+            contentType: false,
+            dataType: 'json',
+            processData: false,
+            success: function (data) {
+                _renderMedCorrect.fnAddEspecie();
+            },
+            error: function (jqXHR, error, errorThrown) {
+                utilSigo.unblockUIGeneral();
+                utilSigo.toastError("Error", initSigo.MessageError);
+                console.log(jqXHR.responseText);
+            }
+        });
+    }
+
+    $(document).ready(function () {
+        _renderMedCorrect.frm = $("#frmMedCorrectiva");
+        _renderMedCorrect.fnSelectRecom();
+        _renderMedCorrect.fnInitDataTable_Detail();
+    });
+
+    function isNumberKey(evt) {
+        var charCode = (evt.which) ? evt.which : evt.keyCode
+        if (charCode > 31 && (charCode < 48 || charCode > 57))
+            return false;
+        return true;
+    }
+</script>
+
+<div id="frmMedCorrectiva">
+    <div class="card-header text-small">Medidas Correctivas</div>
+    <div><br /></div>
+    <div class="form-row">
+        <div class="form-group col-md-4">
+            <label for="chkMandatos" class="text-small">¿Se disponen medidas correctivas?</label>
+        </div>
+        <div class="form-group col-md-6">
+            @Html.CheckBoxFor(m => m.chkMCorrectivas, new
+            {
+                @class = "form-check-input",
+                style = "width:15px;height:16px;",
+                @onchange = "_renderMedCorrect.fnSelectRecom()"
+            })
+        </div>
+        <div class="form-group col-md-2">
+        </div>
+    </div>
+    <div id="divMedidaCorrectiva" style="display:none;">
+        <div class="form-row">
+            <div class="form-group col-md-4">
+                <label class="text-small">Descripción de la medida correctiva</label>
+            </div>
+            <div class="form-group col-md-6">
+                @Html.TextAreaFor(m => m.txtDescripcionMandato, 3, 1, new { @class = "form-control form-control-sm" })
+            </div>
+            <div class="form-group col-md-2">
+            </div>
+        </div>
+
+        <div class="form-row">
+            <div class="form-group col-md-4">
+                <label class="text-small">Plazo de implementación</label>
+            </div>
+            <div class="form-group col-md-2">
+                <label for="txtImplMCDias" class="text-small">Días:</label>
+                @Html.TextBoxFor(m => m.txtDiasImpl, new { @class = "form-control form-control-sm", onkeypress = "return isNumberKey(event)", maxlength = "10" })
+            </div>
+            <div class="form-group col-md-2">
+                <label for="txtImplMCMeses" class="text-small"> Meses: </label>
+                @Html.TextBoxFor(m => m.txtMesesImpl, new { @class = "form-control form-control-sm", onkeypress = "return isNumberKey(event)", maxlength = "10" })
+            </div>
+            <div class="form-group col-md-2">
+                <label for="txtImplMCMeses" class="text-small"> Año: </label>
+                @Html.TextBoxFor(m => m.txtAnioImpl, new { @class = "form-control form-control-sm", onkeypress = "return isNumberKey(event)", maxlength = "10" })
+            </div>
+            <div class="form-group col-md-2">
+            </div>
+        </div>
+
+        <div class="form-row">
+            <div class="form-group col-md-4">
+                <label class="text-small"> Plazo de post-implementación</label>
+            </div>
+            <div class="form-group col-md-2">
+                <label for="txtInfMCDia" class="text-small">Días:</label>
+                @Html.TextBoxFor(m => m.txtDiasPostImpl, new { @class = "form-control form-control-sm", onkeypress = "return isNumberKey(event)" })
+            </div>
+            <div class="form-group col-md-2">
+                <label for="txtInfMCMeses" class="text-small">Meses:</label>
+                @Html.TextBoxFor(m => m.txtMesePostImpl, new { @class = "form-control form-control-sm", onkeypress = "return isNumberKey(event)" })
+            </div>
+            <div class="form-group col-md-2">
+                <label for="txtImplMCMeses" class="text-small"> Año: </label>
+                @Html.TextBoxFor(m => m.txtAnioPostImpl, new { @class = "form-control form-control-sm", onkeypress = "return isNumberKey(event)" })
+            </div>
+            <div class="form-group col-md-2">
+            </div>
+        </div>
+
+        <div class="form-row">
+            <div class="form-group col-md-4">
+                <label class="text-small"> Plazo para presentar el informe de implementación</label>
+            </div>
+            <div class="form-group col-md-2">
+                <label for="txtInfMCDia" class="text-small">Días:</label>
+                @Html.TextBoxFor(m => m.txtDiasInf, new { @class = "form-control form-control-sm", onkeypress = "return isNumberKey(event)", maxlength = "3" })
+            </div>
+            <div class="form-group col-md-2">
+                <label for="txtInfMCMeses" class="text-small">Meses:</label>
+                @Html.TextBoxFor(m => m.txtMeseInf, new { @class = "form-control form-control-sm", onkeypress = "return isNumberKey(event)", maxlength = "3" })
+            </div>
+            <div class="form-group col-md-2">
+                <label for="txtImplMCMeses" class="text-small"> Año: </label>
+                @Html.TextBoxFor(m => m.txtAnioInf, new { @class = "form-control form-control-sm", onkeypress = "return isNumberKey(event)" })
+            </div>
+            <div class="form-group col-md-2">
+            </div>
+        </div>
+
+        <div class="form-row">
+            <div class="form-group col-md-4"></div>
+            <div class="form-group col-md-6">
+                <button type="button" id="btnAddInfracciones" class="btn btn-info btn-sm" onclick="_renderMedCorrect.fnAdd()"> Agregar Medida Correctiva</button>
+            </div>
+            <div class="form-group col-md-2"></div>
+        </div>
+
+        <div class="form-group col-md-12" id="divListaMandato">
+            <div class="table-responsive">
+                <table id="tbRenderMedCorrectiva" style="width:100%;margin:0px !important;" class="table table-hover table-bordered">
+                    <thead>
+                        <tr>
+                            <th colspan="13" class="text-sm-left">
+                                <div class="form-inline">
+                                    <strong>Listado de medidas correctivas</strong>
+                                </div>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
+        <div class="card-header text-small">Especies Medidas Correctivas</div>
+        <div id="divListEspeciesMedCorrectiva">
+            @Html.Partial("~/Areas/Fiscalizacion/Views/ManResolucion/_Shared/_generic/_renderEspecieMC.cshtml", Model)
+        </div>
+    </div>
+
+
+    <!--modal especies de medidas correctivas-->
+
+    <div class="modal fade hide" id="mdlEspeciesMedCorrectiva" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header text-small" style="cursor:move;">
+                    Especies con medidas correctivas
+                    <i class="fa fa-close" style="cursor:pointer;" data-dismiss="modal" aria-label="Close"></i>
+                </div>
+                <div class="modal-body" style="padding:0px;">
+                    <div id="frmEspecieMC">
+                        <div class="card-body">
+
+                        </div>
+                    </div>
+                    <div class="modal-footer"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- modal de especies-->
+    <div class="modal fade hide" id="mdlEspecie" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header text-small" style="cursor:move;">
+                    Especie Medida Correctiva - Nuevo Registro
+                    <i class="fa fa-close" style="cursor:pointer;" data-dismiss="modal" aria-label="Close"></i>
+                </div>
+                <div class="modal-body" style="padding:0px;">
+                    <div id="frmEspecie">
+                        <div class="row">
+                            <div class="col-sm-1"></div>
+                            <div class="col-sm-10">
+                                <div class="form-row">
+                                    <div class="form-group col-md-4">
+                                        <label for="txtIdEspecie" class="text-small">Especie</label>
+                                    </div>
+                                    <div class="form-group col-md-8">
+                                        <div style="margin-top:7px;">
+                                            <div class="form-check form-check-inline">
+                                                @Html.DropDownListFor(m => m.txtIdEnciso, new SelectList(Model.listaEspeciesFloraCombo, "CODIGO", "DESCRIPCION"),
+                                                        new { @class = "form-control form-control-sm", @id = "ddlEspecies" })
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="form-row">
+                                    <div class="form-group col-md-4">
+                                        <label class="text-small">Volumen movilizado sin autorizacion (m3)</label>
+                                    </div>
+                                    <div class="form-group col-md-8">
+                                        <div style="margin-top:7px;">
+                                            <input type="text" class="form-control form-control-sm" id="txtVolumenEspecie">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="form-row">
+                                    <div class="form-group col-md-4">
+                                        <label class="text-small">Nro de árboles a reponer (reforestar) y/o reemplazar</label>
+                                    </div>
+                                    <div class="form-group col-md-8|">
+                                        <div style="margin-top:7px;">
+                                            <input type="text" class="form-control form-control-sm" id="txtNroArboles">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="form-row">
+                                    <div class="form-group col-md-4">
+                                        <label class="text-small">Observación</label>
+                                    </div>
+                                    <div class="form-group col-md-8">
+                                        <div style="margin-top:7px;">
+                                            <textarea class="form-control form-control-sm" aria-label="With textarea" id="txtObservacionesArch"></textarea>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-1"></div>
+
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" id="btnAddEspecies" class="btn btn-info btn-sm" onclick="_renderMedCorrect.fnAddEspecie()"> Agregar Especies</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+  
+</div>
+

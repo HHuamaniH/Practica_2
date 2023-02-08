@@ -1,0 +1,329 @@
+﻿@model CapaEntidad.DOC.Ent_Reporte_Historial_TH
+<div class="container">
+    <div class="card-header text-small" id="divTitle">
+        <a id="btnRegresarusuario" style="cursor:pointer;" data-toggle="tooltip" data-placement="top" title="Regresar" onclick="_RtpTHDet.fnRegresar()"><i class="fa mx-2 fa-lg fa-reply"></i></a>
+    </div>
+    <br />
+    <div class="bloqueFormTitulo">
+        <div>Historial Título Habilitante</div>
+    </div>
+    <br />
+    <div class="bloqueFormContent2">
+        <div class="bloqueFormContent2LeftDoble">
+            <div>N° Título Habilitante</div>
+            <div>:</div>
+        </div>
+        <div class="bloqueFormContent2Right">
+            <div>
+                <span id="cphPrincipal_lblNumTH">@Model.TITULO</span>
+            </div>
+        </div>
+    </div>
+    <div class="bloqueFormContent2">
+        <div class="bloqueFormContent2LeftDoble">
+            <div>Área del Título Habilitante</div>
+            <div>:</div>
+        </div>
+        <div class="bloqueFormContent2Right">
+            <div>
+                <span id="cphPrincipal_lblAreaTH">@Model.AREA_O</span>
+            </div>
+        </div>
+    </div>
+    <div class="bloqueFormContent2">
+        <div class="bloqueFormContent2LeftDoble">
+            <div>Fecha inicio</div>
+            <div>:</div>
+        </div>
+        <div class="bloqueFormContent2Right">
+            <div>
+                <span id="cphPrincipal_lblFechaInicioTH">@Model.FECHA_INICIO</span>
+            </div>
+        </div>
+    </div>
+    <div class="bloqueFormContent2">
+        <div class="bloqueFormContent2LeftDoble">
+            <div>Fecha Término</div>
+            <div>:</div>
+        </div>
+        <div class="bloqueFormContent2Right">
+            <div>
+                <span id="cphPrincipal_lblFechaTerminoTH">@Model.FECHA_FIN</span>
+            </div>
+        </div>
+    </div>
+    <div class="bloqueFormContent2">
+        <div class="bloqueFormContent2LeftDoble">
+            <div>Ubicación</div>
+            <div>:</div>
+        </div>
+        <div class="bloqueFormContent2Right">
+            <div>
+                <span id="cphPrincipal_lblUbicacionTH">@Model.UBICACION</span>
+            </div>
+        </div>
+    </div>
+    <div class="bloqueFormContent2">
+        <div class="bloqueFormContent2LeftDoble">
+            <div>Titular</div>
+            <div>:</div>
+        </div>
+        <div class="bloqueFormContent2Right">
+            <div>
+                <span id="lblTitularTH">@Model.TITULAR</span>
+            </div>
+        </div>
+    </div>
+    <div class="bloqueFormContent2">
+        <div class="bloqueFormContent2LeftDoble">
+            <div>Dirección Titular</div>
+            <div>:</div>
+        </div>
+        <div class="bloqueFormContent2Right">
+            <div>
+                <span id="cphPrincipal_lblDireccionTH">@Model.DIRECCION_TH</span>
+            </div>
+        </div>
+    </div>
+    <div class="bloqueFormContent2">
+        <div class="bloqueFormContent2LeftDoble">
+            <div>Representante Legal</div>
+            <div>:</div>
+        </div>
+        <div class="bloqueFormContent2Right">
+            <div>
+                <span id="cphPrincipal_lblRepresentanteTH">@Model.REPRESENTANTE_LEG</span>
+            </div>
+        </div>
+    </div>
+    @if (Model.ESTADO_CONTA != "No")
+    {
+        <div class="bloqueFormContent2" id="divEstadoTH">
+            <div class="bloqueFormContent2LeftDoble">
+                <div>Estado del título habilitante</div>
+                <div>:</div>
+            </div>
+            <div class="bloqueFormContent2Right">
+                <div>
+                    <span id="cphPrincipal_lblRepresentanteTH" style="color:red">Caducado</span>
+                </div>
+            </div>
+        </div>
+    }
+    <br />
+    <div id="cphPrincipal_Div1" class="bloqueFormTitulo">
+        <div>
+            Listado de POA
+        </div>
+    </div>
+    <br />
+    <table class="Grilla">
+        <thead>
+            <tr>
+                <th>N° POA</th>
+                <th>ZAFRA</th>
+                <th>N° RESOLUCIÓN APROBACIÓN DEL POA</th>
+                <th>FECHA RESOLUCIÓN</th>
+                <th>NÚMERO DE ESPECIES</th>
+                <th>VOLUMEN TOTAL APROBADO (m3)</th>
+                <th>CONSULTOR</th>
+                <th>N° INFORME</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model.ListPOATH.Count > 0)
+            {
+                foreach (var item in Model.ListPOATH)
+                {
+                    string onclick = String.Format("_RtpTHDet.fnResolucion('{0}')", item.COD_INFORME);
+                    <tr>
+                        <td>@item.NUM_POA_STRING</td>
+                        <td>@item.ZAFRA</td>
+                        <td>@item.ARESOLUCION_NUM</td>
+                        <td>@item.fecha_aprobacion</td>
+                        <td><a href="javascript: void(0);" onclick="_RtpTHDet.fnArboles(@item.NUM_POA)">@item.NUMERO_ARBOLES</a></td>
+                        <td>@item.VOLUMEN_ARBOLES</td>
+                        <td>@item.consultor</td>
+                        <td><a href="javascript: void(0);" onclick="@onclick">@item.NUM_INFORME</a></td>
+                    </tr>
+                }
+            }
+            else
+            {
+                <tr>
+                    <td>No hay datos</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <br />
+    <br />
+    <div id="divHistorialAdicional">
+
+    </div>
+    <br />
+    <br />
+    @if (Model.ListAdendas != null)
+    {
+        if (Model.ListAdendas.Count > 0)
+        {
+            <div class="bloqueFormTitulo">
+                <div>
+                    Adendas del título habilitante
+                </div>
+            </div>
+            <br />
+            <table class="Grilla">
+                <thead>
+                    <tr>
+                        <th>Tipo</th>
+                        <th>Fecha</th>
+                        <th>Observaciones</th>
+                        <th>Titular</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model.ListAdendas)
+                    {
+                        <tr>
+                            <td>@item.Tipo_Inicio</td>
+                            <td>@item.fecha_aprobacion</td>
+                            <td>@item.OBSERVACIONES</td>
+                            <td>@item.TITULAR</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+    }
+    <br />
+    @if (Model.ListDomicilio != null)
+    {
+        if (Model.ListDomicilio.Count > 0)
+        {
+            <div class="bloqueFormTitulo">
+                <div>
+                    Adendas del título habilitante
+                </div>
+            </div>
+            <br />
+            <table class="Grilla">
+                <thead>
+                    <tr>
+                        <th>Fuente</th>
+                        <th>Fecha</th>
+                        <th>Domicilio</th>                        
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model.ListDomicilio)
+                    {
+                        <tr>
+                            <td>@item.Tipo_Inicio</td>
+                            <td>@item.fecha_aprobacion</td>
+                            <td>@item.OBSERVACIONES</td>                             
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+    }
+</div> 
+<div class="modal fade" id="mResumenMulta" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="mResumenMulta" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="mResumenMultaLabel">Resumen de Multas</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row" >
+                    <div class="col-12 rMulta">
+
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                <button type="button" class="btn btn-primary d-none">Understood</button>
+            </div>
+        </div>
+    </div>
+</div> 
+<script type="text/javascript">
+    var _RtpTHDet = {
+        fnRegresar: () => {
+            $("#divPrincipal").slideDown(); 
+                $("#divHistorialTH").slideUp();
+        },
+        fnArboles: (numPoa) => {
+            let url = urlLocalSigo + "General/Reportes/_Rpt_HistorialTHDetalle_Especie";
+            let option = {
+                url: url, datos: { numPoa:numPoa}, type: 'GET' };
+            $("#divHistorialAdicional").html('');
+            utilSigo.fnAjax(option, function (r) {
+                if (r.success) {
+                    let data = r.data;                   
+                    $("#divHistorialAdicional").html('');
+                    $("#divHistorialAdicional").append(data);
+                }
+                else {
+                    utilSigo.toastWarning("Aviso", initSigo.MessageError);
+                }
+            });
+        },
+        fnResolucion: (cod_informe) => {
+            let titular = $("#lblTitularTH").val();
+            titular = titular == null ? "" : titular;
+            let url = urlLocalSigo + "General/Reportes/_Rpt_HistorialTHDetalle_SelectInf";
+            let option = {
+                url: url, datos: { COD_INFORME: cod_informe, titular: titular}, type: 'GET'
+            };
+            $("#divHistorialAdicional").html('');
+            utilSigo.fnAjax(option, function (r) {
+                if (r.success) {
+                    let data = r.data;
+                    $("#divHistorialAdicional").html('');
+                    $("#divHistorialAdicional").append(data);
+                }
+                else {
+                    utilSigo.toastWarning("Aviso", initSigo.MessageError);
+                }
+            });
+        },
+        fnResumenRecaudacionesC: (id) => {
+            let anio = $('#Fecha').val(); //_rendReporteSup.frm.find("#chkAnio").val();
+
+            let url = urlLocalSigo + "General/Reportes/ResumenRecaudacionCobranza";
+            $.ajax({
+                url: url,
+                type: 'POST',
+                datatype: "json",
+                traditional: true,
+                beforeSend: function () { utilSigo.beforeSendAjax(); },
+                data: { 'id': id },
+                success: function (data) {
+
+                    $('.rMulta').html(data);
+                    $('#mResumenMulta').modal('show');
+
+                },
+                complete: function () { utilSigo.unblockUIGeneral(); }
+            });
+        },
+        fnResumeDescargar: () => {
+
+        }
+    };
+    $(document).ready(function () {
+
+
+    });
+</script> 
+<style>
+    .modal-xl {
+        max-width: 90%;
+    }
+</style>

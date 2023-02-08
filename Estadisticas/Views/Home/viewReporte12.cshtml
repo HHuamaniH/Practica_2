@@ -1,0 +1,147 @@
+﻿
+@{
+    ViewBag.Title = "viewReporte12";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<link href="~/Styles/Proyectos/reporteEstadisticas.min.css" rel="stylesheet" />
+<script src="~/Scripts/chart/Chart.min.js"></script>
+<script src="~/Scripts/chart/custom.js"></script>
+
+<script>
+    $(document).ready(function () {
+        $("#btnReporte").on("click", function () {
+            if (ItemValidarFiltrosBusqueda()) {
+                $("#cnvReporteEst12").remove();
+                $("#dvChartReporteEst12").append("<canvas id='cnvReporteEst12'></canvas>");
+
+                $.ajax({
+                    url: '@Url.Action("generarReporte12", "Estadisticos")',
+                    type: 'POST',
+                    dataType: 'json',
+                    contentType: 'application/json; charset=utf-8',
+                    data: JSON.stringify({
+                        'busAnio': ObtenerListaAnio(),
+                        'busModalidad': ObtenerListaModalidad(),
+                        'busRegion': ObtenerListaRegiones()
+                    }),
+                    success: function (data) {
+                        $(".resultadoRpt12").show();
+                        var subTitulo = "Volumen movilizado proveniente de extracción no autorizada";
+                        $("#subTituloReport12>h3").text(subTitulo);
+                        var cantColumns = 9; fila = "";
+                        var i = 0;
+                        var arrayTotal = [0, 0, 0, 0, 0, 0, 0, 0, 0];
+                        $("#tbReportEst12>tbody").empty();
+                        $(data).each(function () {
+                            fila = "<tr><td>" + (++i) + "</td><td>" + $(this)[0] + "</td>";
+                            for (var k = 0; k < cantColumns; k++) {
+                                arrayTotal[k] += parseFloat($(this)[k + 1]);
+                                fila += "<td>" + agregarSeparador($(this)[k + 1], ',') + "</td>";
+                            }
+                            fila += "</tr>";
+                            $("#tbReportEst12>tbody").append(fila);
+                        });
+
+                        fila = "<tr><td></td><td>Total</td>";
+                        for (var k = 0; k < cantColumns; k++) {
+
+                            var n = arrayTotal[k];
+                            var s = n.toString();
+                            if (n.toString().split(".").length<=1) {
+                                s = s + ".";
+                            }
+                            s = s + "000";
+                            s = s.substr(0, s.indexOf(".") + 3 + 1);
+
+                            fila += "<td>" + agregarSeparador(s.toString(), ',') + "</td>";
+                        }
+                        fila += "</tr>";
+                        $("#tbReportEst12>tbody").append(fila);
+
+                        var dataGrafico = new Array();
+                        dataGrafico.push(["Bosques Secos", arrayTotal[0]]); dataGrafico.push(["Concesiones Forestación y/o Reforestación", arrayTotal[1]]);
+                        dataGrafico.push(["Concesiones Forestales Maderables", arrayTotal[2]]); dataGrafico.push(["Permisos en CCNN", arrayTotal[3]]);
+                        dataGrafico.push(["Permisos en Predios Privados", arrayTotal[4]]); dataGrafico.push(["Permisos en CCCC", arrayTotal[5]]);
+                        dataGrafico.push(["Contratos de Administración de Bosques Locales", arrayTotal[6]]); dataGrafico.push(["Concesiones No Maderables", arrayTotal[7]]);
+                        dataGrafico = dataGrafico.sort(function (a, b) { return b[1] - a[1] });
+                        customChart.LoadBarraSimple(dataGrafico, 0, { colIndex: [1], color: ["blue"], legend: ["Volumen Movilizado (m³)"] }, { type: "H", title: "Volumen Movilizado por Modalidad de Aprovechamiento", legend: false, xTitle: "Volumen Movilizado (m³)", yTitle: "Modalidad de Aprovechamiento", canvas: "cnvReporteEst12" });
+                        unloader();
+                    },
+                    beforeSend: function () {
+                        loader();
+                    },
+                    error: function () {
+                        unloader();
+                    }
+                });
+            }
+        });
+    }); 
+</script>
+
+<div class="contenedorReporte">
+    <div class="filtroReporte">
+        <div class="toolsLista">
+            <div class="navLista">
+                <a href="@Url.Action("Index","Home")" title="Volver al Inicio"><span class="icon-arrow-back"></span><span>Volver al Inicio</span></a>
+            </div>
+            <div class="tituloLista">
+                <h2>Volumen movilizado proveniente de extracción no autorizada</h2>
+            </div>
+        </div>
+        @Html.Partial("Controles/_MasterFiltro")
+        <div class="divbtnReporte">
+            <input id="btnReporte" type="button" value="Generar Reporte" class="btnBotonFormSIGO" />
+        </div>
+    </div>
+    <div class="informacionReporte">
+        <h3 style="margin:0px;">¿Qué contiene este reporte?</h3>
+        <ul style="padding-left:15px;margin-top:5px;margin-bottom:5px;">
+            <li>Muestra el volumen de madera movilizada por titulares, en cuya supervisión se determinó que provino de la extracción de árboles no autorizados. Con opciones de búsqueda por año de supervisión, departamento y modalidad de aprovechamiento.</li>
+        </ul>
+    </div>
+    <div class="resultadoReporte resultadoRpt12" style="display:none;">
+        <div id="subTituloReport12" class="subTituloReport">
+            <h3></h3>
+        </div>
+        <div class="bloqueResultado">
+            <div class="bloqueResultado1">
+                <div class="GrillaDivMarco">
+                    <table id="tbReportEst12" class="Grilla" style="width:100%;">
+                        <thead>
+                            <tr>
+                                <th>Nº</th>
+                                <th>Departamento</th>
+                                <th>Bosques Secos</th>
+                                <th>Concesiones Forestación y/o Reforestación</th>
+                                <th>Concesiones Forestales Maderables</th>
+                                <th>Permisos en CCNN</th>
+                                <th>Permisos en Predios Privados</th>
+                                <th>Permisos en CCCC</th>
+                                <th>Contratos de Administración de Bosques Locales</th>
+                                <th>Concesiones No Maderables</th>
+                                <th>Total Volumen en m³</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <br />
+        <div class="bloqueResultado">
+            <div class="bloqueResultado4"></div>
+            <div class="bloqueResultado2">
+                <div id="dvChartReporteEst12"></div>
+            </div>
+            <div class="bloqueResultado4"></div>
+        </div>
+    </div>
+    <div class="informacionReporte resultadoRpt12" style="display:none;">
+        <ul style="padding-left:20px;margin-top:5px;margin-bottom:5px;">
+            <li style="margin-top:10px;"><strong>Actualizado al: </strong>@ViewBag.fechaProcess</li>
+            <li><strong>Fecha y Hora de Consulta:</strong> @DateTime.Now</li>
+        </ul>
+    </div>
+</div>

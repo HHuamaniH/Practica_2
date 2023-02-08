@@ -1,0 +1,180 @@
+﻿@model CapaEntidad.ViewModel.VM_Alerta
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_LayoutMain.cshtml";
+
+}
+
+@section scripts{
+    <script>
+        "use strict";
+        let mainAlert = {
+            fnSeguimiento: (obj) => {
+                let itemData = mainAlert.dt.row($(obj).parents('tr')).data();
+                var codigoComplementario = itemData.COD_THABILITANTE + "|" + itemData.COD_SECUENCIAL;
+                const url = `${urlLocalSigo}Supervision/Alerta/Seguimiento?codigoDato=${itemData.COD_BITACORA}&codigoComplementario=${codigoComplementario}`;
+                document.location = url;
+            },
+            fnEditar: (obj) => {
+                let itemData = mainAlert.dt.row($(obj).parents('tr')).data();
+                var codigoComplementario = itemData.COD_THABILITANTE + "|" + itemData.COD_SECUENCIAL;
+                const url = `${urlLocalSigo}Supervision/Alerta/AddEdit?codigoDato=${itemData.COD_BITACORA}&codigoComplementario=${codigoComplementario}`;
+                document.location = url;
+            },
+            fnDownload: () => {
+                const url = `${urlLocalSigo}/Supervision/Alerta/DescargarLista`;
+                utilSigo.file.getBinary("ALerta.xlsx", url);
+            },
+            fnBuilTable: () => {
+                const columns = [
+                    {
+                        "name": "ROW_INDE", "width": "2%", "orderable": false, "searchable": false, "mRender": function (data, type, row, meta) {
+                            return parseInt(meta.row) + 1 + meta.settings._iDisplayStart;
+                        }
+                    },
+                    {
+                        "data": "", "className": "text-center", "width": "2%", "orderable": false, "searchable": false, "mRender": function (data, type, row) {
+                            return '<div><i class="fa fa-lg fa-indent" style="color:blue;cursor:pointer;" title="Editar" onclick="mainAlert.fnSeguimiento(this)"></i></div>';
+                        }
+                    },
+                    {
+                        "data": "", "className": "text-center", "width": "2%", "orderable": false, "searchable": false, "mRender": function (data, type, row) {
+                            return '<div><i class="fa fa-lg fa-pencil-square-o" style="color:blue;cursor:pointer;" title="Editar" onclick="mainAlert.fnEditar(this)"></i></div>';
+                        }
+                    },
+                    { "data": "FECHA_SALIDA", "autoWidth": true },
+                    { "data": "FECHA_LLEGADA", "autoWidth": true },
+                    { "data": "OD", "autoWidth": true },
+                    { "data": "CARTA_NOTIFICACION", "autoWidth": true },
+                    { "data": "NUM_THABILITANTE", "autoWidth": true },
+                    { "data": "SUPERVISOR", "autoWidth": true },
+                    { "data": "SUPERVISADO", "autoWidth": true },
+                    { "data": "TIPO_INFORME", "autoWidth": true },
+                    { "data": "ENVIAR_ALERTA_TEXT", "autoWidth": true }
+                ];
+                const optDt = { iLength: initSigo.pageLength, iStart: 0, aSort: [] };
+                mainAlert.dt = mainAlert.frm.find("#grvAlerta").DataTable({
+                    processing: true,
+                    serverSide: true,
+                    searching: false,
+                    ordering: false,
+                    paging: true,
+                    ajax: {
+                        "url": `${urlLocalSigo}/Supervision/Alerta/GetAll`,
+                        "data": function (d) {
+                            d.criterio = mainAlert.frm.find("#dllOpcionBusqueda").select2("val");
+                            d.valorBusqueda = mainAlert.frm.find("#txtParamBusqueda").val().trim()
+                            for (var i = 0; i < d.order.length; i++) {
+                                d.order[i]["column_name"] = d.columns[d.order[i]["column"]]["data"];
+                                if (d.order[i].column_name != 0 || d.order[i].column_name != "") {
+                                    d.sort = d.order[i].column_name + " " + d.order[i].dir;
+                                }
+                            }
+                            d.columns = null;
+                        },
+                        "error": function (jqXHR) {
+                            // utilSigo.unblockUIGeneral();
+                            if (jqXHR.status != 401 && jqXHR.status != 403 && jqXHR.status != 404) {
+                                utilSigo.toastError("Error", initSigo.MessageError);
+                            }
+                            //console.log(jqXHR);
+                        },
+                        "statusCode": {
+                            203: () => { utilSigo.toastInfo("Aviso", "El usuario perdio la sesión. Vuelva ingresar al sistema"); }
+                        }
+                    },
+                    columns: columns,
+                    bInfo: true,
+                    "lengthMenu": [[10, 20, 50, 100], [10, 20, 50, 100]],
+                    // "aaSorting": optDt.aSort,
+                    "pageLength": optDt.iLength,
+                    "displayStart": optDt.iStart,
+                    "oLanguage": initSigo.oLanguage,
+                    "drawCallback": initSigo.showPagination
+                });
+            },
+            fnSearch: () => {
+                mainAlert.dt.ajax.reload();
+            },
+            fnActualizar: () => {
+                mainAlert.frm = $("#frmAlertaOsinfor");
+                mainAlert.frm.find("#txtParamBusqueda").val("");
+                mainAlert.dt.ajax.reload();
+            },
+            fnInit: () => {
+                mainAlert.frm = $("#frmAlertaOsinfor");
+                mainAlert.frm.find("#dllOpcionBusqueda").select2();
+                mainAlert.fnBuilTable();
+                mainAlert.fnSearch();
+                mainAlert.frm.find("#txtParamBusqueda").keypress(function (e) {
+                    let code = e.which;
+                    if (code == 13) {
+                        mainAlert.fnSearch();
+                        return false;
+                    }
+                });
+            }
+        };
+        $(document).ready(function () {
+            $.fn.select2.defaults.set("theme", "bootstrap4");
+            mainAlert.fnInit();
+             //Validamos el rol del usuario
+        utilSigo.ValidaRol('@ViewBag.VAliasRol', 'btnManGrillaNuevo');
+        });
+    </script>
+}
+
+<div id="divPlanTrabajo" class="container-fluid">
+    <div class="card">
+        <div class="card-header text-left">
+            <h5>ALERTAS OSINFOR</h5>
+        </div>
+        <div class="card-body">
+            <div class="col-12">
+                <form id="frmAlertaOsinfor">
+                    <div class="form-row">
+                        <div class="form-group col-md-4">
+                            <select id="dllOpcionBusqueda" class="form-control form-control-sm">
+                                <option selected="selected" value="TH_NUMERO">Nro Título Habilitante</option>
+                                <option value="INF_SUPERVISOR">Supervisor</option>
+                                <option value="CN_NUMERO">Nro Carta Notificación</option>
+                                <option value="OD_DESCRIPCION">Oficina Desconcentrada</option>
+                            </select>
+                        </div>
+                        <div class="form-group col-md-4">
+                            <input type="text" id="txtParamBusqueda" class="form-control form-control-sm" />
+                        </div>
+                        <div class="btn-group col-md-4" style="padding-top:5px;">
+                            <a id="btnSearch" style="cursor:pointer;" data-toggle="tooltip" data-placement="top" title="Buscar" onclick="mainAlert.fnSearch()"><span class="fa mx-2 fa-lg fa-search"></span></a>
+                            <a id="btnManGrillaReload" style="cursor:pointer;" data-toggle="tooltip" data-placement="top" title="Actualizar el listado" onclick="mainAlert.fnActualizar()"><span class="fa mx-2 fa-lg fa-refresh"></span></a>
+                            <!--<a id="btnAdd" style="cursor:pointer;" data-toggle="tooltip" data-placement="top" title="Crear un nuevo registro" onclick="_Itenerario.fnAgregar()"><span class="fa mx-2 fa-lg fa-plus"></span></a>-->
+                            <a id="btnExportar" style="cursor:pointer;" data-toggle="tooltip" data-placement="top" title="Descargar" onclick="mainAlert.fnDownload()"><span class="fa mx-2 fa-lg fa-file-excel-o"></span></a>
+                        </div>
+                    </div>
+                    <div class="table-responsive-md">
+                        <table id="grvAlerta" class="table table-hover table-bordered" style="width:100%;">
+                            <thead>
+                                <tr>
+                                    <th>Nº</th>
+                                    <th>Seg.</th>
+                                    <th>Editar</th>
+                                    <th>Fecha Salida Oficina</th>
+                                    <th>Fecha Inicio Labores Oficina</th>
+                                    <th>Oficina Desconcentrada</th>
+                                    <th>Nro CNotificación</th>
+                                    <th>Nro THabililitante</th>
+                                    <th>Supervisor</th>
+                                    <th>Supervisado</th>
+                                    <th>Tipo de informe</th>
+                                    <th>Alerta Enviada</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </form>
+
+            </div>
+        </div>
+    </div>
+</div>

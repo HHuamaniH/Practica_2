@@ -1,0 +1,165 @@
+﻿<script src="~/Areas/Supervision/js/ManInforme/_EspecieCarrizoCampoEdit.js"></script>
+
+<script type="text/javascript">
+
+    //_EspecieCarrizoCampoEdit.fnInit = function () {
+    //    _renderComboEspecie.fnInit("FORESTAL", '', '');
+
+    //    _EspecieCarrizoCampoEdit.frm = $("#frmItemCarrizoCampoEdit");
+    //    var regEstado = "1"; // Nuevo
+
+    //    _EspecieCarrizoCampoEdit.frm.find("#hdfRegEstado").val(regEstado);
+
+    //    _EspecieCarrizoCampoEdit.frm.find("#hdfCodSecuencial").val("0");
+    //};
+
+    //_EspecieCarrizoCampoEdit.fnSubmitForm = function () {
+    //    if (_EspecieCarrizoCampoEdit.fnCustomValidateForm()) {
+    //        var oEspecie = utilSigo.fnConvertArrayToObject(_EspecieCarrizoCampoEdit.fnSetDatos());
+    //        var url = urlLocalSigo + "Supervision/ManInforme/GrabarEspecieCarrizoCampo";
+    //        var option = { url: url, datos: JSON.stringify(oEspecie), type: 'POST' };
+    //        utilSigo.fnAjax(option, function (data) {
+    //            if (data.success) {
+    //                _EspecieCarrizoCampoEdit.fnSaveForm(oEspecie);
+    //                utilSigo.toastSuccess("Aviso", "Datos guardados correctamente");
+    //            }
+    //            else {
+    //                utilSigo.toastWarning("Aviso", data.msj);
+    //            }
+    //        });
+    //    }
+    //};
+
+    //$(document).ready(function () {
+    //    _EspecieCarrizoCampoEdit.fnInit();
+        
+    //    _EspecieCarrizoCampoEdit.frm = $("#frmItemCarrizoCampoEdit");
+    //    _EspecieCarrizoCampoEdit.frm.find(".dvDatosCarrizo").hide();
+    //    _EspecieCarrizoCampoEdit.frm.find(".dvDatosPlantaMedicinal").hide();
+    //    if (_EspecieCarrizoCampoEdit.frm.find("#hdfCodMTipo").val() == "0000020") {
+    //        _EspecieCarrizoCampoEdit.frm.find(".dvDatosCarrizo").show();
+    //    } else {
+    //        _EspecieCarrizoCampoEdit.frm.find(".dvDatosPlantaMedicinal").show();
+    //    }
+        
+    //    _renderComboEspecie.fnInit("FORESTAL", '', '');
+    //});
+
+</script>
+
+<style>
+    .select-css {
+        width: 100%;
+        display: block;
+        font-size: 16px;
+        font-family: "Roboto", sans-serif;
+        font-weight: 300;
+        font-size: 1rem;
+        color: #444;
+        line-height: 1.5;
+        padding: 0.31rem 0.75rem;
+        border: 1px solid #ced4da;
+        border-radius: 0.25rem;
+        background-color: #fff;
+        background-repeat: no-repeat, repeat;
+        background-position: right .7em top 50%, 0 0;
+        background-size: .65em auto, 100%;
+    }
+
+        .select-css::-ms-expand {
+            display: none;
+        }
+
+        .select-css:hover {
+            border-color: #888;
+        }
+
+        .select-css:focus {
+            border-color: #aaa;
+            box-shadow: 0 0 1px 3px rgba(59, 153, 252, .7);
+            box-shadow: 0 0 0 3px -moz-mac-focusring;
+            color: #222;
+            outline: none;
+        }
+
+        .select-css option {
+            font-weight: normal;
+        }
+</style>
+
+<div class="modal-dialog" role="document">
+    <div class="modal-content">
+        <div class="modal-header text-small" style="cursor:move;">
+            <span>Individuo No Maderable</span>
+            <i class="fa fa-close" style="cursor:pointer;" data-dismiss="modal" aria-label="Close"></i>
+        </div>
+        <div class="modal-body">
+            <form id="frmItemCarrizoCampoEdit">
+                @Html.Hidden("hdfCodInforme", (string)ViewBag.hdfCodInforme)
+                @Html.Hidden("hdfNumPoa", (Int32)ViewBag.hdfNumPoa)
+                @Html.Hidden("hdfCodMTipo", (string)ViewBag.hdfCodMTipo)
+                @Html.Hidden("hdfRegEstado")
+                @Html.Hidden("hdfCodMuestra")
+                @Html.Hidden("hdfCodTHabilitante")
+                <div class="form-row">
+                    <div class="form-group col-md-12">
+                        @Html.Partial("~/Areas/General/Views/Controles/_renderComboEspecie.cshtml")
+                    </div>
+                </div>
+                <div class="form-row dvDatosCarrizo">
+                    <div class="form-group col-md-6">
+                        <label for="txtTotalMuestra" class="text-small">Total de individuos por m2 o mata</label>
+                        @Html.TextBox("txtTotalMuestra", "", new { @class = "form-control form-control-sm", type = "number" })
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="txtTotalMuestraAprov" class="text-small">Individuos aprovechables o comerciales por m2 o mata</label>
+                        @Html.TextBox("txtTotalMuestraAprov", "", new { @class = "form-control form-control-sm", type = "number" })
+                    </div>
+                </div>
+                @*<div class="form-row dvDatosPlantaMedicinal">
+                    <div class="form-group col-md-6">
+                        <label for="txtUnidadMedida" class="text-small">Unidad de Medida</label>
+                        @Html.TextBox("txtUnidadMedida", "", new { @class = "form-control form-control-sm" })
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="txtNumIndividuo" class="text-small">Nro. de Individuos</label>
+                        @Html.TextBox("txtNumIndividuo", "", new { @class = "form-control form-control-sm", type = "number" })
+                    </div>
+                </div>*@
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label for="ddlZonaId" class="text-small">Zona UTM</label>
+                        @Html.DropDownList("ddlZonaId", new SelectList(ViewBag.ddlZona, "Value", "Text"), new { @class = "form-control form-control-sm" })
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label for="txtCEste" class="text-small">Coordenada Este Campo</label>
+                        @Html.TextBox("txtCEste", "", new { @class = "form-control form-control-sm", type = "number", maxlength = "6" })
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="txtCNorte" class="text-small">Coordenada Norte Campo</label>
+                        @Html.TextBox("txtCNorte", "", new { @class = "form-control form-control-sm", type = "number", maxlength = "7" })
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label for="ddlProductoId" class="text-small">Producto a extraer</label>
+                        @Html.DropDownList("ddlProductoId", new SelectList(ViewBag.ddlProducto, "Value", "Text"), new { @class = "form-control form-control-sm" })
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-12">
+                        <label for="txtObservacion" class="text-small">Observaciones</label>
+                        @Html.TextArea("txtObservacion", "", new { @class = "form-control form-control-sm", rows = "3" })
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-primary btn-sm" onclick="_EspecieCarrizoCampoEdit.fnSubmitForm()">Guardar</button>
+            <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Cancelar</button>
+        </div>
+    </div>
+</div>
+

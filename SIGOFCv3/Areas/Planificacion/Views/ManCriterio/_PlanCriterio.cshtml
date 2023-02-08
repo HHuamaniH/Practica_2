@@ -1,0 +1,371 @@
+﻿@model CapaEntidad.ViewModel.VM_PlanCriterio
+
+<div class="modal-dialog modal-custom-tb" role="document">
+    <div class="modal-content">
+        <div class="modal-header text-small" style="cursor:move;">
+            <span>Criterio</span>
+            <i class="fa fa-close" style="cursor:pointer;" data-dismiss="modal" aria-label="Close"></i>
+        </div>
+        <div class="modal-body">
+            <form id="frmPlanCriterio">
+                @Html.HiddenFor(m => m.hdfCodCriterio)
+                @Html.HiddenFor(m => m.hdfCodPlan)
+                <div class="card">
+                    <div class="card-header text-small">Datos del criterio</div>
+                    <div class="card-body">
+                        <div class="form-row">
+                            <div class="form-group col-md-2">
+                                <label for="ddlTipoCriterioId" class="text-small">Tipo de criterio</label>
+                                @Html.DropDownListFor(m => m.ddlTipoCriterioId, new SelectList(Model.ddlTipoCriterio, "Value", "Text"), new { @class = "form-control form-control-sm" })
+                            </div>
+                            <div class="form-group col-md-2">
+                                <label for="txtCodigo" class="text-small">Código</label>
+                                @Html.TextBoxFor(m => m.txtCodigo, new { @class = "form-control form-control-sm" })
+                            </div>
+                            <div class="form-group col-md-4">
+                                <label for="txtCriterio" class="text-small">Criterio</label>
+                                @Html.TextBoxFor(m => m.txtCriterio, new { @class = "form-control form-control-sm" })
+                            </div>
+                            <div class="form-group col-md-2 dvTipoAplicacion" style="display:none;">
+                                <label for="ddlTipoAplicacionId" class="text-small">Tipo de aplicación</label>
+                                @Html.DropDownListFor(m => m.ddlTipoAplicacionId, new SelectList(Model.ddlTipoAplicacion, "Value", "Text"), new { @class = "form-control form-control-sm" })
+                            </div>
+                            <div class="form-group col-md-2 dvOpcionColumna" style="display:none;">
+                                <label for="ddlColumnaId" class="text-small">Columna</label>
+                                @Html.DropDownListFor(m => m.ddlColumnaId, new SelectList(Model.ddlColumna, "Value", "Text"), new { @class = "form-control form-control-sm" })
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group col-md-12">
+                                <label for="txtDescripcion" class="text-small">Descripción</label>
+                                @Html.TextAreaFor(m => m.txtDescripcion, new { @class = "form-control form-control-sm", @rows = "3" })
+                            </div>
+                        </div>
+                    </div>
+                    <div id="dvOpcionCriterio" style="display:none;">
+                        <div class="card-header text-small">Valoración del criterio y riesgo</div>
+                        <div class="card-body">
+                            <div class="form-row">
+                                <div class="col-md-6">
+                                    <div class="table-responsive">
+                                        <table id="tbOpcionCriterio" style="width:100%" class="table table-hover table-bordered">
+                                            <thead>
+                                                <tr>
+                                                    <th colspan="15" class="text-sm-left">
+                                                        <div class="form-inline">
+                                                            <i class="fa mx-2 fa-lg fa-file-o" style="cursor:pointer;" onclick="_PlanCriterio.fnAddEditOpcionCriterio('');" data-toggle="tooltip" data-placement="top" title="Nuevo"></i>
+                                                        </div>
+                                                    </th>
+                                                </tr>
+                                            </thead>
+                                            <tbody></tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-primary btn-sm" onclick="_PlanCriterio.fnSubmitForm()">Guardar</button>
+            <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Cancelar</button>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    var _PlanCriterio = {
+        fnShow: () => {
+            const cod_criterio = _PlanCriterio.frm.find("#hdfCodCriterio").val();
+            const tipo_criterio = _PlanCriterio.frm.find("#ddlTipoCriterioId").val();
+            const tipo_aplic = _PlanCriterio.frm.find("#ddlTipoAplicacionId").val();
+            const opcion_columna = _PlanCriterio.frm.find("#ddlColumnaId").val();
+            const criterio_activo = _PlanCriterio.frm.find("#hdfActivo").val();
+
+            switch (tipo_criterio) {
+                case "0000000":
+                    _PlanCriterio.frm.find(".dvTipoAplicacion").hide();
+                    _PlanCriterio.frm.find(".dvOpcionColumna").hide();
+                    break;
+                case "0000001":
+                case "0000002":
+                    _PlanCriterio.frm.find(".dvTipoAplicacion").show();
+
+                    switch (tipo_aplic) {
+                        case "0000000":
+                        case "0000003":
+                            _PlanCriterio.frm.find(".dvOpcionColumna").hide();
+                            break;
+                        case "0000004":
+                        case "0000005":
+                            _PlanCriterio.frm.find(".dvOpcionColumna").show();
+                            break;
+                    }
+                    break;
+            }
+
+            if (cod_criterio != "") {
+                let n_opcion = _PlanCriterio.dtOpcionCriterio.data().count();
+
+                if (opcion_columna != "0000000" && tipo_criterio != "0000000" && tipo_aplic != "0000000" && tipo_aplic!="0000003") {
+                    _PlanCriterio.frm.find("#dvOpcionCriterio").show();
+                } else {
+                    _PlanCriterio.frm.find("#dvOpcionCriterio").hide();
+                }
+
+                if (n_opcion > 0) {
+                    _PlanCriterio.frm.find("#ddlTipoCriterioId").prop("disabled", true);
+                    _PlanCriterio.frm.find("#ddlTipoAplicacionId").prop("disabled", true);
+                    _PlanCriterio.frm.find("#ddlColumnaId").prop("disabled", true);
+                } else {
+                    _PlanCriterio.frm.find("#ddlTipoCriterioId").prop("disabled", false);
+                    _PlanCriterio.frm.find("#ddlTipoAplicacionId").prop("disabled", false);
+                    _PlanCriterio.frm.find("#ddlColumnaId").prop("disabled", false);
+                }
+            }
+
+            if (criterio_activo == 'True') {
+                _PlanCriterio.frm.find("#ddlTipoCriterioId").prop("disabled", true);
+                _PlanCriterio.frm.find("#txtCodigo").prop("disabled", true);
+                _PlanCriterio.frm.find("#txtCriterio").prop("disabled", true);
+                _PlanCriterio.frm.find("#ddlTipoAplicacionId").prop("disabled", true);
+                _PlanCriterio.frm.find("#ddlColumnaId").prop("disabled", true);
+            }
+        },
+        fnBuildTableOpcionCriterio: () => {
+            var columns_label = [], columns_data = [], options = {};
+
+            columns_label = ["Opción 1", "Opción 1", "Opción 2", "Opción 1", "Opción 2", "Valor", "Riesgo"];
+            columns_data = ["OPCION_TEXTO_1", "OPCION_NUMERO_1", "OPCION_NUMERO_2", "OPCION_FECHA_1", "OPCION_FECHA_2", "VALOR", "RIESGO"];
+            options = {
+                page_length: 10, row_edit: true, row_fnEdit: "_PlanCriterio.fnAddEditOpcionCriterio(this)"
+                , row_delete: true, row_fnDelete: "_PlanCriterio.fnDeleteOpcionCriterio(this)"
+                , row_index: true, page_autowidth: false
+            };
+
+            return utilDt.fnLoadDataTable_Detail(_PlanCriterio.frm.find("#tbOpcionCriterio"), columns_label, columns_data, options);
+        },
+        fnLoadTableOpcionCriterio: () => {
+            let cod_pcriterio = _PlanCriterio.frm.find("#hdfCodCriterio").val();
+            var url = urlLocalSigo + "Planificacion/ManCriterio/ListarPlanCriterioValor";
+            const option = { url: url, datos: { asCodPCriterio: cod_pcriterio }, type: 'GET' };
+
+            utilSigo.fnAjax(option, function (result) {
+                if (result.success) {
+                    _PlanCriterio.dtOpcionCriterio.clear().draw();
+                    _PlanCriterio.dtOpcionCriterio.rows.add(result.data).draw();
+                    _PlanCriterio.fnShow();
+                } else {
+                    utilSigo.toastError("Error", "Ocurrió un problema al listar las opciones.");
+                }
+            });
+        },
+        fnAddEditOpcionCriterio: (obj) => {
+            var url = urlLocalSigo + "Planificacion/ManCriterio/_PlanCriterioValor";
+            let cod_pcriterio = _PlanCriterio.frm.find("#hdfCodCriterio").val();
+            let cod_pcolumna = _PlanCriterio.frm.find("#ddlColumnaId").val();
+            let cod_taplicacion = _PlanCriterio.frm.find("#ddlTipoAplicacionId").val();
+            let cod_secuencial = 0;
+
+            if (obj != null && obj != "") {
+                var data = _PlanCriterio.dtOpcionCriterio.row($(obj).parents('tr')).data();
+                cod_secuencial = data.COD_SECUENCIAL;
+            }
+
+            var option = {
+                url: url, type: 'POST', datos: {
+                    asCodPCriterio: cod_pcriterio, aiCodSecuencial: cod_secuencial
+                    ,asCodPColumna: cod_pcolumna, asCodTAplicacion: cod_taplicacion
+                }, divId: "mdlPlanCriterioValor"
+            };
+
+            utilSigo.fnOpenModal(option, function () {
+                _PlanCriterioValor.fnSaved = function () {
+                    _PlanCriterio.fnLoadTableOpcionCriterio();
+                    $("#mdlPlanCriterioValor").modal('hide');
+                }
+            });
+        },
+        fnDeleteOpcionCriterio: (obj) => {
+            var url = urlLocalSigo + "Planificacion/ManCriterio/EliminarPlanCriterioValor";
+            var data = _PlanCriterio.dtOpcionCriterio.row($(obj).parents('tr')).data();
+            var params = {
+                asCodPCriterio: _PlanCriterio.frm.find("#hdfCodCriterio").val(),
+                aiCodSecuencial: data.COD_SECUENCIAL
+            };
+            var option = { url: url, datos: JSON.stringify(params), type: 'POST' };
+
+            utilSigo.dialogConfirm('', "¿Desea eliminar el registro?", function (r) {
+                if (r) {
+                    utilSigo.fnAjax(option, function (data) {
+                        if (data.success) {
+                            utilSigo.toastSuccess("Éxito", data.msj);
+                            _PlanCriterio.fnLoadTableOpcionCriterio();
+                        }
+                        else {
+                            utilSigo.toastWarning("Aviso", data.msj);
+                        }
+                    });
+                }
+            });
+        },
+        fnShowColumnTableOpcionCriterio: () => {
+            var url = urlLocalSigo + "Planificacion/ManCriterio/ObtenerPlanColumnaTipoDato";
+            const cod_criterio = _PlanCriterio.frm.find("#hdfCodCriterio").val();
+            const opcion_columna = _PlanCriterio.frm.find("#ddlColumnaId").val();
+            const tipo_aplic = _PlanCriterio.frm.find("#ddlTipoAplicacionId").val();
+            const tipo_criterio = _PlanCriterio.frm.find("#ddlTipoCriterioId").val();
+            var option = { url: url, datos: JSON.stringify({asCodPColumna: opcion_columna}), type: 'POST' };
+
+            _PlanCriterio.dtOpcionCriterio.column(3).visible(false);
+            _PlanCriterio.dtOpcionCriterio.column(4).visible(false);
+            _PlanCriterio.dtOpcionCriterio.column(5).visible(false);
+            _PlanCriterio.dtOpcionCriterio.column(6).visible(false);
+            _PlanCriterio.dtOpcionCriterio.column(7).visible(false);
+
+            if (cod_criterio!="" && opcion_columna != "0000000" && tipo_criterio != "0000000" && tipo_aplic != "0000000" && tipo_aplic!="0000003") {
+                utilSigo.fnAjax(option, function (data) {
+                    if (data.success) {
+                        switch (tipo_aplic) {
+                            case "0000004":
+                                switch (data.data) {
+                                    case "texto":
+                                    case "combo":
+                                        _PlanCriterio.dtOpcionCriterio.column(3).visible(true);
+                                        break;
+                                    case "numero":
+                                        _PlanCriterio.dtOpcionCriterio.column(4).visible(true);
+                                        break;
+                                    case "fecha":
+                                        _PlanCriterio.dtOpcionCriterio.column(6).visible(true);
+                                        break;
+                                }
+                                break;
+                            case "0000005":
+                                switch (data.data) {
+                                    case "texto":
+                                    case "combo":
+                                        utilSigo.toastWarning("Aviso", "Esta columna no soporta el tipo de aplicación");
+                                        break;
+                                    case "numero":
+                                        _PlanCriterio.dtOpcionCriterio.column(4).visible(true);
+                                        _PlanCriterio.dtOpcionCriterio.column(5).visible(true);
+                                        break;
+                                    case "fecha":
+                                        _PlanCriterio.dtOpcionCriterio.column(6).visible(true);
+                                        _PlanCriterio.dtOpcionCriterio.column(7).visible(true);
+                                        break;
+                                }
+                                break;
+                        }
+
+                    }
+                });
+            }
+        },
+        fnInit: () => {
+            _PlanCriterio.frm.find("#ddlTipoCriterioId").select2({ minimumResultsForSearch: -1 });
+            _PlanCriterio.frm.find("#ddlTipoAplicacionId").select2({ minimumResultsForSearch: -1 });
+            _PlanCriterio.frm.find("#ddlColumnaId").select2();
+
+            _PlanCriterio.dtOpcionCriterio = _PlanCriterio.fnBuildTableOpcionCriterio();
+            _PlanCriterio.fnLoadTableOpcionCriterio();
+
+            _PlanCriterio.fnShow();
+            _PlanCriterio.fnShowColumnTableOpcionCriterio();
+            _PlanCriterio.frm.find("#ddlTipoCriterioId").change(function () {
+                _PlanCriterio.fnShow();
+                _PlanCriterio.fnShowColumnTableOpcionCriterio();
+            });
+            _PlanCriterio.frm.find("#ddlTipoAplicacionId").change(function () {
+                _PlanCriterio.fnShow();
+                _PlanCriterio.fnShowColumnTableOpcionCriterio();
+            });
+            _PlanCriterio.frm.find("#ddlColumnaId").change(function () {
+                _PlanCriterio.fnShow();
+                _PlanCriterio.fnShowColumnTableOpcionCriterio();
+            });
+        },
+        fnSubmitForm: () => {
+            _PlanCriterio.frm.submit();
+        },
+        fnSaveForm: () => {
+            var datosCriterio = _PlanCriterio.frm.serializeObject();
+            datosCriterio.ddlTipoCriterioId = _PlanCriterio.frm.find("#ddlTipoCriterioId").val();
+            datosCriterio.ddlTipoAplicacionId = _PlanCriterio.frm.find("#ddlTipoAplicacionId").val();
+            datosCriterio.ddlColumnaId = _PlanCriterio.frm.find("#ddlColumnaId").val();
+
+            $.ajax({
+                url: urlLocalSigo + "Planificacion/ManCriterio/GrabarPlanCriterio",
+                type: 'POST',
+                data: JSON.stringify(datosCriterio),
+                contentType: 'application/json; charset=utf-8',
+                dataType: 'json',
+                success: function (data) {
+                    utilSigo.unblockUIGeneral();
+                    if (data.success) {
+                        utilSigo.toastSuccess("Éxito", data.msj);
+                        _PlanCriterio.frm.find("#hdfCodCriterio").val(data.data);
+                        _PlanCriterio.fnSaved();
+                        _PlanCriterio.fnShow();
+                        _PlanCriterio.fnShowColumnTableOpcionCriterio();
+                    }
+                    else utilSigo.toastWarning("Aviso", data.msj);
+                },
+                beforeSend: function () {
+                    utilSigo.blockUIGeneral();
+                },
+                error: function (jqXHR, error, errorThrown) {
+                    utilSigo.unblockUIGeneral();
+                    utilSigo.toastError("Error", "Ocurrió un error, comuníquese con el administrador");
+                }
+            });
+        },
+        fnSaved: () => {
+            /*Implementar en donde se instancia*/
+        }
+    };
+
+    $(document).ready(function () {
+        _PlanCriterio.frm = $("#frmPlanCriterio");
+
+        _PlanCriterio.fnInit();
+
+        //=====-----Para el registro de datos del formulario-----=====
+        //Validación personalizada
+        jQuery.validator.addMethod("invalidFrmCriterio", function (value, element) {
+            switch ($(element).attr('id')) {
+                case 'ddlTipoCriterioId':
+                case 'ddlTipoAplicacionId': return value == '0000000' ? false : true;
+            }
+        });
+
+        _PlanCriterio.frm.validate(utilSigo.fnValidate({
+            rules: {
+                ddlTipoCriterioId: { invalidFrmCriterio: true },
+                txtCodigo: { required: true },
+                txtCriterio: { required: true },
+                ddlTipoAplicacionId: { invalidFrmCriterio: true }
+            },
+            messages: {
+                ddlTipoCriterioId: { invalidFrmCriterio: "Seleccione el tipo de criterio" },
+                txtCodigo: { required: "Ingrese el código del criterio" },
+                txtCriterio: { required: "Ingrese el nombre del criterio" },
+                ddlTipoAplicacionId: { invalidFrmCriterio: "Seleccione el tipo de aplicación del criterio" }
+            },
+            fnSubmit: function (form) {
+                utilSigo.dialogConfirm('', 'Desea continuar con el registro?', function (r) {
+                    if (r) {
+                        _PlanCriterio.fnSaveForm();
+                    }
+                });
+            }
+        }));
+        //Validación de controles que usan Select2
+        _PlanCriterio.frm.find("select.select2-hidden-accessible").on("change", function (e) {
+            $(this).valid();
+        });
+    });
+</script>

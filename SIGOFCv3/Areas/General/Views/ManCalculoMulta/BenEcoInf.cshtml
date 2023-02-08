@@ -1,0 +1,359 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_LayoutMain.cshtml";
+}
+<script src="~/Scripts/datatables/Extensions/dataTables.buttons.js"></script>
+<script src="~/Scripts/datatables/Extensions/buttons.flash.min.js"></script>
+<script src="~/Scripts/datatables/Extensions/jszip.min.js"></script>
+
+<script src="~/Scripts/datatables/Extensions/vfs_fonts.js"></script>
+<script src="~/Scripts/datatables/Extensions/buttons.html5.js"></script>
+<script src="~/Scripts/datatables/Extensions/buttons.print.js"></script>
+
+
+<link href="~/Content/datatables/buttons.dataTables.min.css" rel="stylesheet" />
+<link href="~/Areas/General/css/ManCalculoMulta/ManCalculoMulta.css" rel="stylesheet" />
+<div id="divBenEcoInf" class="container-fluid">
+    <div class="card">
+        <div class="card-header text-left">
+            <h5>Beneficio Económico por el Infractor</h5>
+        </div>
+        <div class="card-body">
+            <div class="col-12">
+                <form id="frmManBenEcoInf">
+                    <div class="form-row">
+                        <div class="form-group col-md-3">
+                            <select class="form-control form-control-sm" id="cboDescripcion">
+                                <option value="0">Todos</option>                                
+                            </select>
+                        </div>
+                        @*<div class="form-group col-md-3">
+                                <input type="text" id="txtValorBuscar" class="form-control form-control-sm" placeholder="" maxlength="100" style="text-transform:uppercase;" />
+                            </div>*@
+                    <div class="btn-group col-md-2" style="padding-top:5px;">
+                        <a id="btnSearch" style="cursor:pointer;" data-toggle="tooltip" data-placement="top" title="Buscar" onclick="_manBenEcoInf.fnSearch()"><span class="fa mx-2 fa-lg fa-search"></span></a>
+                        <a id="btnRefresh" style="cursor:pointer;" data-toggle="tooltip" data-placement="top" title="Buscar" onclick="_manBenEcoInf.fnRefresh()"><span class="fa mx-2 fa-lg fa-refresh"></span></a>
+                        <a id="btnAdd" style="cursor:pointer;" data-toggle="tooltip" data-placement="top" title="" onclick="_manBenEcoInf.fnCrear()" data-original-title="Crear un nuevo registro"><span class="fa mx-2 fa-lg fa-plus"></span></a>
+
+                    </div>
+                    </div>
+                    <div class="table-responsive-md">
+                        <table id="tbBenEcoInf" class="table table-hover table-bordered" style="width:100%;">
+                            <thead>
+                                <tr>
+                                    <th></th>
+                                    <th></th>
+                                    <th>N°</th>
+                                    <th>Código</th>
+                                    <th>Literal</th>
+                                    <th>Rango Inicial de volumen m3</th>
+                                    <th>Rango Final de volumen m3</th>
+                                    <th>Beneficio (S/. por m3)</th>
+                                    <th>Estado</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </form>
+
+            </div>
+        </div>
+    </div>
+    <div class="modal fade hide" id="modalBenEcoInf" role="dialog">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header text-small" style="cursor:move;padding:0.5rem;">
+                    <h5 class="modal-title" id="h5TituloBenEcoInf">Modificar</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body" id="divModBenEcoInf">
+                    <input type="hidden" id="hdRegEstado" value="1" />
+                    <input type="hidden" id="hdNCodBenEcoInf" value="0" />
+                    <input type="hidden" id="hdEstado" value="1" />
+                    <div class="form-row" id="divVariable">
+                        <div class="form-group col-md-6">
+                            <label for="cboTipo">Literal</label>
+                            @Html.DropDownList("cboTipo", new SelectList(ViewBag.ddlLiteral, "Value", "Text"), new { @class = "form-control form-control-sm" })
+                            @*<select class="form-control form-control-sm" id="cboTipo">
+            <option value="e">Literal e)</option>
+            <option value="l">Literal l)</option>
+            <option value="m">Literal m)</option>
+        </select>*@
+                        </div>
+                        <div class="form-group col-md-3">
+                            <label for="txtRangoInicial">De:</label>
+                            <input class="form-control form-control-sm" id="txtRangoInicial" type="number">
+                        </div>
+                        <div class="form-group col-md-3">
+                            <label for="txtRangoFinal">Hasta</label>
+                            <input class="form-control form-control-sm" id="txtRangoFinal" type="number">
+                        </div>
+                    </div>
+                    <div class="form-row" id="divCalificacion">
+                        <div class="form-group col-md-4">
+                            <label for="txtBeneficio">Beneficio</label>
+                            <input class="form-control form-control-sm" id="txtBeneficio" type="number">
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label for="txtValor">Estado</label>
+                            <select class="form-control form-control-sm" id="cboEstado">
+                                <option value="0">Inactivo</option>
+                                <option value="1">Activo</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-row" id="">
+
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary btn-sm" onclick="_manBenEcoInf.fnBenEcoInfUpdate()">Guardar</button>
+                    <button id="btnCerrarModFactorAA" class="btn btn-secondary btn-sm" data-dismiss="modal">Cancelar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    var _manBenEcoInf = {
+        fnRefresh: () => {
+            $("#cboDescripcion").val('0');;
+            _manBenEcoInf.fnSearch();            
+        },
+        fnCrear: () => {
+            _manBenEcoInf.fnLimpiar();
+            $("#h5TituloBenEcoInf").text("Nuevo");
+            $("#hdRegEstado").val("1");
+            $("#modalBenEcoInf").modal({ keyboard: true, backdrop: 'static' });
+
+        },
+        fnLimpiar: () => {
+            let frm = $("#divModBenEcoInf");
+            frm.find("#hdNCodBenEcoInf").val('0');
+            frm.find("#cboTipo").val('');
+            frm.find("#txtRangoInicial").val('');
+            frm.find("#txtRangoFinal").val('');
+            frm.find("#txtBeneficio").val('');
+            frm.find("#cboEstado").val('0');
+        },
+        fnDelete: (obj) => {
+
+            let frm = $("#divModBenEcoInf");
+            let $tr = $(obj).closest("tr");
+            let dataRow = _manBenEcoInf.dt.row($tr).data();
+
+            let model = {
+                NCODBENECOINF: dataRow.NCODBENECOINF,
+                VTIPO: frm.find("#cboTipo").val(),
+                NRANGOINICIAL: frm.find("#txtRangoInicial").val(),
+                NRANGOFINAL: frm.find("#txtRangoFinal").val(),
+                NBENEFICIO: frm.find("#txtBeneficio").val(),
+                NESTADO: 0,
+                //  NCODFACTORAADEP: frm.find("#hdNCodBenEcoInfDep").val(),
+                RegEstado: 3
+            };
+
+            let url = urlLocalSigo + "General/ManCalculoMulta/GuardarBenEcoInf";
+            let option = { url: url, datos: JSON.stringify(model), type: 'POST' };
+            utilSigo.fnAjax(option, function (data) {
+                if (data.success) {
+                    utilSigo.toastSuccess("Éxito", data.msj);
+                    _manBenEcoInf.fnSearch();
+                }
+                else {
+                    utilSigo.toastWarning("Aviso", data.msj);
+                }
+            });
+
+        },
+        fnEdit: (obj) => {
+
+            $("#h5TituloBenEcoInf").text("Modificar");
+            _manBenEcoInf.fnLimpiar();
+            $("#hdRegEstado").val("2");
+            let frm = $("#divModBenEcoInf");
+            let $tr = $(obj).closest("tr");
+            let dataRow = _manBenEcoInf.dt.row($tr).data();
+            let estado = dataRow.NESTADO == "INACTIVO" ? 0 : 1;
+
+            frm.find("#cboModalidad").val(dataRow.VMODALIDAD);
+
+            switch (dataRow.VTIPO) {
+                case "ART. 207° (207.3) del D.S. N° 018-2015-MINAGRI, Literal e)": frm.find("#cboTipo").val("E");
+                    break;
+                case "ART. 207° (207.3) del D.S. N° 018-2015-MINAGRI, Literal l)": frm.find("#cboTipo").val("L");
+                    break;
+                case "Anexo 1 del D.S. N° 007-2021-MIDAGRI, Literal 21)": frm.find("#cboTipo").val("21");
+                    break;
+                case "Anexo 1 del D.S. N° 007-2021-MIDAGRI, Literal 26)": frm.find("#cboTipo").val("26");
+                    break;
+            }
+
+            frm.find("#hdNCodBenEcoInf").val(dataRow.NCODBENECOINF);
+            frm.find("#txtRangoInicial").val(dataRow.NRANGOINICIAL);
+            frm.find("#txtRangoFinal").val(dataRow.NRANGOFINAL);
+            frm.find("#txtBeneficio").val(dataRow.NBENEFICIO);
+            frm.find("#cboEstado").val(estado);
+
+            $("#modalBenEcoInf").modal({ keyboard: true, backdrop: 'static' });
+        },
+        fnBenEcoInfUpdate: () => {
+            let frm = $("#divModBenEcoInf");
+            let model = {
+                NCODBENECOINF: frm.find("#hdNCodBenEcoInf").val(),
+                VTIPO: frm.find("#cboTipo").val(),
+                NRANGOINICIAL: frm.find("#txtRangoInicial").val(),
+                NRANGOFINAL: frm.find("#txtRangoFinal").val(),
+                NBENEFICIO: frm.find("#txtBeneficio").val(),
+                RegEstado: 1
+            };
+
+            model.RegEstado = model.NCODBENECOINF == "0" ? 1 : 2;
+            model.NESTADO = $("#cboEstado").val() == "0" ? 0 : 1;
+
+            if (model.VTIPO == "" || model.VTIPO == null) {
+                utilSigo.toastWarning("Warning", "Ingresar Tipo");
+                return false;
+            } else if (model.NRANGOINICIAL == "") {
+                utilSigo.toastWarning("Warning", "Ingresar Rango Inicial");
+                return false;
+            } else if (model.NRANGOFINAL == "") {
+                utilSigo.toastWarning("Warning", "Ingresar Rango Final");
+                return false;
+            } else if (model.NBENEFICIO == "") {
+                utilSigo.toastWarning("Warning", "Ingresar Beneficio");
+                return false;
+            }
+
+            if (model.NRANGOINICIAL != "" && model.NRANGOFINAL != "") {
+                let diferencia = parseFloat(model.NRANGOFINAL) - parseFloat(model.NRANGOINICIAL);
+                if (diferencia < 0) {
+                    utilSigo.toastWarning("Warning", "El Rango mayor no puede ser menor al rango Inicial");
+                    return false;
+                }
+            }
+
+
+            let url = urlLocalSigo + "General/ManCalculoMulta/GuardarBenEcoInf";
+            let option = { url: url, datos: JSON.stringify(model), type: 'POST' };
+            utilSigo.fnAjax(option, function (data) {
+                if (data.success) {
+                    utilSigo.toastSuccess("Éxito", data.msj);
+                    $("#btnCerrarModFactorAA").click();
+                    _manBenEcoInf.fnSearch();
+                }
+                else {
+                    utilSigo.toastWarning("Aviso", data.msj);
+                }
+            });
+        },
+        fnBuilTable: () => {
+            const columns = [
+                {
+                    "name": "ROW_INDE", "width": "2%", "orderable": false, "searchable": false, "mRender": function (data, type, row, meta) {
+                        return parseInt(meta.row) + 1 + meta.settings._iDisplayStart;
+                    }
+                },
+                {
+                    "data": "", "className": "text-center", "width": "2%", "orderable": false, "searchable": false, "mRender": function (data, type, row) {
+                        return '<div><i class="fa fa-lg fa-pencil-square-o" style="color:blue;cursor:pointer;" title="Editar plan de trabajo" onclick="_manBenEcoInf.fnEdit(this)"></i></div>';
+                    }
+                },
+                {
+                    "data": "", "className": "text-center", "width": "2%", "orderable": false, "searchable": false, "mRender": function (data, type, row) {
+                        return '<div><i class="cellDel fa fa-lg fa-window-close" style="color:red;cursor:pointer;" title="Editar plan de trabajo" onclick="_manBenEcoInf.fnDelete(this)"></i></div>';
+                    }
+                },
+                { "data": "NCODBENECOINF", visible: false },
+                { "data": "VTIPO", "autoWidth": true },
+                { "data": "NRANGOINICIAL", "autoWidth": true },
+                { "data": "NRANGOFINAL", "autoWidth": true },
+                { "data": "NBENEFICIO", "autoWidth": true },
+                { "data": "NESTADO", "autoWidth": true }
+
+            ];
+            const optDt = { iLength: 20, iStart: 0, aSort: [] };
+            _manBenEcoInf.dt = _manBenEcoInf.frm.find("#tbBenEcoInf").DataTable({
+                processing: true,
+                serverSide: true,
+                searching: false,
+                ordering: false,
+                paging: true,
+                dom: 'Bfrtip',
+                buttons: [{
+                    extend: 'excelHtml5',
+                    messageTop: 'Costo Administrativo',
+                    exportOptions: {
+                        // columns: [1, ':visible'],
+                        //  columns: [2, ':visible'],
+                        //   columns: [3, ':visible'],
+                        // columns: [8, ':visible'],
+                        //columns: [4, ':visible'],
+                    }
+                }],
+                ajax: {
+                    "url": `${urlLocalSigo}/General/Controles/GetBenEcoInf`,
+                    "data": function (d) {
+                        d.CustomSearchForm = "CALCULOMULTA";
+                        d.CustomSearchType = "BENECOINF";
+                        d.CustomSearchValue = $("#cboDescripcion").val();
+                        d.customSearchEnabled = true;
+                        //d.id = "";
+                        //for (var i = 0; i < d.order.length; i++) {
+                        //    d.order[i]["column_name"] = d.columns[d.order[i]["column"]]["data"];
+
+                        //    if (d.order[i].column_name != 0 || d.order[i].column_name != "") {
+                        //        d.sort = d.order[i].column_name + " " + d.order[i].dir;
+                        //    }
+                        //}
+                        d.columns = null;
+                    },
+                    "error": function (jqXHR) {
+                        // utilSigo.unblockUIGeneral();
+                        if (jqXHR.status != 401 && jqXHR.status != 403 && jqXHR.status != 404) {
+                            utilSigo.toastError("Error", initSigo.MessageError);
+                        }
+                        //console.log(jqXHR);
+                    },
+                    "statusCode": {
+                        203: () => { utilSigo.toastInfo("Aviso", "El usuario perdio la sesión. Vuelva ingresar al sistema"); }
+                    }
+                },
+                columns: columns,
+                bInfo: true,
+                "lengthMenu": [[10, 20, 50, 100], [10, 20, 50, 100]],
+                // "aaSorting": optDt.aSort,
+                "pageLength": optDt.iLength,
+                "displayStart": optDt.iStart,
+                "oLanguage": initSigo.oLanguage,
+                "drawCallback": initSigo.showPagination
+            });
+        },
+        fnSearch: () => {
+            _manBenEcoInf.dt.ajax.reload();
+        }
+    };
+    $(document).ready(function () {
+
+        _manBenEcoInf.frm = $("#frmManBenEcoInf");
+        _manBenEcoInf.fnBuilTable();
+        _manBenEcoInf.frm.submit(function (e) {
+            e.preventDefault();
+            _manBenEcoInf.fnSearch();
+        });
+
+
+        //_renderComboEspecie.fnInit("FAUNA", "", "");
+
+        $('#lblRenderComboEspecieId').removeAttr('Class');
+        $('#lblRenderComboEspecieId').html('Especie Sinónimo');
+
+    });
+</script>
+
+
+

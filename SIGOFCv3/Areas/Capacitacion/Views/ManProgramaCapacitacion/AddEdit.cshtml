@@ -1,0 +1,141 @@
+﻿@model CapaEntidad.ViewModel.VM_ProgramaCapacitacion
+@{
+    ViewBag.Title = "AddEdit";
+    Layout = "~/Views/Shared/_LayoutMain.cshtml";
+}
+
+
+<script src="~/Areas/Capacitacion/js/ManProgramaCapacitacion/AddEdit.js"></script>
+@section scripts{
+    <script>
+        "use strict"; var rol = '';
+    $(document).ready(function () {
+        //Validamos el rol del usuario
+        utilSigo.ValidaRol('@ViewBag.VAliasRol', 'btnRegistrarProgCapacitacion', 'Edit');
+    });
+    </script>
+}
+<div class="container-fluid">
+    <div class="card">
+        <div class="card-header text-right">
+            @Model.lblTituloCabecera
+        </div>
+        <div class="card-body">
+            <div class="card">
+                <div class="card-header text-small">
+                    <a id="btnRegistrarProgCapacitacion" href="javascript:void(0)" style="cursor:pointer;" data-toggle="tooltip" data-placement="top" title="Guardar" onclick="ManProgramaCapacitacion_AddEdit.fnSubmitForm()"><i class="fa mx-2 fa-lg fa-save"></i></a>
+                    <a id="btnRegresarProgCapacitacion" style="cursor:pointer;" data-toggle="tooltip" data-placement="top" title="Regresar" onclick="ManProgramaCapacitacion_AddEdit.fnReturnIndex()"><i class="fa mx-2 fa-lg fa-reply"></i></a>
+                    @Model.lblTituloEstado
+                </div>
+                <div class="card-body">
+                    <form id="frmProgramaCapacitacion" action="@Url.Action("AddEdit", "ManProgramaCapacitacion", new { Area= "Capacitacion" })"
+                          data-request_url="@Url.Action("Index", "ManProgramaCapacitacion", new { Area= "Capacitacion" })">
+                        @Html.HiddenFor(m => m.hdfCodPCapacitacion)
+                        @Html.HiddenFor(m => m.hdfRegEstado)
+                        <ul class="nav nav-tabs" id="myTab" role="tablist">
+                            <li class="nav-item"><a class="nav-link active" data-toggle="tab" href="#navDatos" role="tab" aria-controls="home" aria-selected="true">Datos Generales</a></li>
+                            <li class="nav-item" id="tabConvenios" style="display:none;"><a class="nav-link" data-toggle="tab" href="#navConvenios" role="tab" aria-controls="home" aria-selected="false">Convenios</a></li>
+                        </ul>
+                        <div class="tab-content" id="nav-tabContent">
+                            <div class="tab-pane fade show active" id="navDatos" role="tabpanel" aria-labelledby="nav-home-tab">
+                                <div class="card">
+                                    <div class="card-header text-small"></div>
+                                    <div class="card-body">
+                                        <div class="form-row">
+                                            <div class="form-group col-md-12">
+                                                <label for="lblNomPCapacitacion" class="text-small">Nombre del Taller</label>
+                                                @Html.TextAreaFor(m => m.txtNomPCapacitacion, new { @class = "form-control form-control-sm", @rows = "2" })
+                                            </div>
+                                        </div>
+                                        <div class="form-row">
+                                            <div class="form-group col-md-3">
+                                                <label for="lblTipPCapacitacion" class="text-small">Tipo</label>
+                                                @Html.DropDownListFor(m => m.ddlTipPCapacitacionId, new SelectList(Model.ddlTipPCapacitacion, "Value", "Text"), new { @class = "form-control form-control-sm" })
+                                            </div>
+                                            <div class="form-group col-md-3">
+                                                <label for="lblOd" class="text-small">Oficina Desconcentrada</label>
+                                                @Html.DropDownListFor(m => m.ddlOdId, new SelectList(Model.ddlOd, "Value", "Text"), new { @class = "form-control form-control-sm" })
+                                            </div>
+                                            <div class="form-group col-md-3">
+                                                <label for="lblSumMetPoi" class="text-small">Suma la Meta POI</label>
+                                                @Html.DropDownListFor(m => m.ddlSumMetPoiId, new SelectList(Model.ddlSumMetPoi, "Value", "Text"), new { @class = "form-control form-control-sm" })
+                                            </div>
+                                            <div class="form-group col-md-3">
+                                                <label for="lblFecInicio" class="text-small">Fecha de Inicio</label>
+                                                @Html.TextBoxFor(m => m.txtFecInicio, new { @class = "form-control form-control-sm", placeholder = "dd/mm/aaaa", maxlength = "10" })
+                                            </div>
+                                        </div>
+                                        <div class="form-row">
+                                            <div class="form-group col-md-6">
+                                                <label for="lblDirigido" class="text-small">Dirigido a</label>
+                                                @Html.TextAreaFor(m => m.txtDirigido, new { @class = "form-control form-control-sm", @rows = "3" })
+                                            </div>
+                                            <div class="form-group col-md-3">
+                                                <label for="lblEntFinancia" class="text-small">Entidad que Financia el Taller</label>
+                                                @Html.DropDownListFor(m => m.ddlEntFinanciaId, new SelectList(Model.ddlEntFinancia, "Value", "Text"), new { @class = "form-control form-control-sm" })
+                                            </div>
+                                            <div class="form-group col-md-3" id="dvEntFinancia_FuenteCoop" style="display:none;">
+                                                <label for="lblFueCooperante" class="text-small">Fuente Cooperante</label>
+                                                @Html.TextAreaFor(m => m.txtFueCooperante, new { @class = "form-control form-control-sm", @rows = "3" })
+                                            </div>
+                                        </div>
+                                        <div class="form-row">
+                                            <div class="form-group col-md-4">
+                                                <div class="custom-control custom-checkbox my-1 mr-sm-2">
+                                                    @Html.CheckBoxFor(m => m.chkMarConvenio, new { @class = "custom-control-input" })
+                                                    <label for="chkMarConvenio" class="custom-control-label" style="margin-top:4px;">Evento realizado en marco de un convenio</label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="card-header text-small">
+                                        Ubicación donde se llevará a cabo
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="form-row">
+                                            <div class="col-md-6 mb-3">
+                                                <label for="lblUbigeoText" class="text-small">Ubigeo<i class="fa fa-cog fa-spin text-danger" id="iconUbigeo" style="display:none;" data-toggle="tooltip" data-placement="top" title="Seleccione Ubigeo"></i></label>
+                                                <div class="input-group">
+                                                    <div class="input-group-prepend">
+                                                        <span class="input-group-text"><i class="fa fa-search" style="cursor:pointer;" data-toggle="tooltip" data-placement="top" title="Ubigeo" onclick="ManProgramaCapacitacion_AddEdit.fnViewModalUbigeo();"></i></span>
+                                                    </div>
+                                                    @Html.EditorFor(m => m.lblUbigeo, new { htmlAttributes = new { @class = "form-control form-control-sm", @disabled = "disabled" } })
+                                                    @Html.HiddenFor(m => m.hdfUbigeo)
+                                                </div>
+                                            </div>
+                                            <div class="form-group col-md-6">
+                                                <label for="lblLugar" class="text-small">Lugar</label>
+                                                @Html.TextBoxFor(m => m.txtLugar, new { @class = "form-control form-control-sm" })
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="tab-pane fade show" id="navConvenios" role="tabpanel" aria-labelledby="nav-home-tab">
+                                <div class="card">
+                                    <div class="card-header text-small"></div>
+                                    <div class="card-body">
+                                        <div class="form-row">
+                                            <div class="form-group col-md-6">
+                                                <label for="lblConvenio" class="text-small">Listado de Convenios OSINFOR</label>
+                                                @Html.DropDownList("ddlConvenioOsinforId", new SelectList(Model.ddlConvenio, "Value", "Text", "Group", null, null), new { @class = "form-control form-control-sm", multiple = "multiple", style = "height:500px; overflow:auto;" })
+                                            </div>
+                                            <div class="form-group col-md-6">
+                                                <label for="lblConvenio" class="text-small">Evento Realizado en Marco de los Convenios</label>
+                                                @Html.DropDownList("ddlConvenioCapacitacionId", new SelectList(Model.ddlConvenio, "Value", "Text", "Group", null, null), new { @class = "form-control form-control-sm", multiple = "multiple", style = "height:500px; overflow:auto;" })
+                                                @Html.HiddenFor(m => m.ddlConvenioId)
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @* MODAL's *@
+    <div class="modal fade hide" id="mdlManProgCapacitacion_AddEdit_Ubigeo" role="dialog"></div>
+</div>

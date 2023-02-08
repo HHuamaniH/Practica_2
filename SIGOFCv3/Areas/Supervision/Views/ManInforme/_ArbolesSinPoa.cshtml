@@ -1,0 +1,43 @@
+﻿@model CapaEntidad.ViewModel.VM_Informe_POASupervisado
+
+<script src="~/Areas/Supervision/js/ManInforme/_ArbolesSinPoa.js"></script>
+<div class="modal-dialog modal-custom-tb" role="document">
+    <div class="modal-content" style="height:100%;">
+        <div class="modal-header text-small" style="cursor:move;">
+            <strong>@Model.lblTituloEstado</strong>
+            <i class="fa fa-close" style="cursor:pointer;" data-dismiss="modal" aria-label="Close"></i>
+        </div>
+        <div class="card" style="margin-bottom:0px;">
+            <div class="card-header text-small" style="padding-top:3px;padding-bottom:4.5px;">
+                <a href="javascript:void(0)" style="cursor:pointer;" data-toggle="tooltip" data-placement="top" title="Guardar datos" onclick="_POASupervisado.fnSubmitForm()"><i class="fa mx-2 fa-lg fa-save"></i></a>
+                <a href="javascript:void(0)" style="cursor:pointer;" data-toggle="tooltip" data-placement="top" title="Cancelar" data-dismiss="modal"><i class="fa mx-2 fa-lg fa-reply"></i></a>
+            </div>
+            <div id="dvManInf_POASupervisado" class="card-body" style="overflow-y:auto;">
+                <form id="frmManInf_POASupervisado" action="@Url.Action("GrabarPOArboles", "ManInforme", new { Area = "Supervision" })">
+                    <div class="card">
+                        @Html.HiddenFor(m => m.hdfCodInforme)
+                        @Html.HiddenFor(m => m.hdfNumPoa)
+                        @Html.HiddenFor(m => m.hdfCodMTipo)
+                        @Html.HiddenFor(m => m.hdfCodNoPoa)
+                        <div id="dvOpcionPoaResultado">
+                            <div class="card-header text-small">Evaluación de árboles</div>
+                            <div class="card-body">
+                                <div class="form-row">
+                                    <div class="col-md-12">
+                                        @Html.Partial("~/Areas/Supervision/Views/ManInforme/Render/_renderEvalArbolAdicional.cshtml", Model.tbEvalArbolAdicional)
+                                    </div>
+                                </div>
+                                <br />
+                                <div class="form-row">
+                                    <div class="col-md-12">
+                                        @Html.Partial("~/Areas/Supervision/Views/ManInforme/Render/_renderEvalArbolNoAutorizado.cshtml", Model.tbEvalArbolNoAutorizado)
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

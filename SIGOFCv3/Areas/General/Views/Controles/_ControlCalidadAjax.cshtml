@@ -1,0 +1,144 @@
+﻿@model CapaEntidad.ViewModel.VM_ControlCalidad_2
+
+ <script>
+     "use strict";
+     var _ControlCalidadEjax = {
+         banderaCKEDITOR:0,
+         banderaCKEDITORBD: 0,  
+         iniciarCKEDITOR: (form, codigo) => {
+             _ControlCalidadEjax.banderaCKEDITORBD = 1;
+             $.ajax({
+                 url: urlLocalSigo + "General/Controles/_VPCKEDITOR",
+                 type: 'GET',
+                 data: { formulario: form, codigo: codigo },
+                 dataType: 'html',
+                 success: function (data) {                    
+                     utilSigo.unblockUIElement("#divCKEDITOR");
+                     _ControlCalidadEjax.frm.find("#divCKEDITOR").html(data);
+                     console.log(_ControlCalidadEjax.frm.find("#ddlIndicadorEnable").val());
+                     if (_ControlCalidadEjax.frm.find("#ddlIndicadorEnable").val() == "False") {
+                         _ControlCalidadEjax.frm.find("#OBSERVACIONES_CONTROL").attr('disabled', 'disabled');
+                     }
+                 },
+                 beforeSend: function () {                   
+                     utilSigo.blockUIElement("#divCKEDITOR");
+                 },
+                 error: function (jqXHR, error, errorThrown) {                    
+                     utilSigo.unblockUIElement("#divCKEDITOR");
+                     utilSigo.toastError("Error", "Sucedio un Error Inesperado al cargar datos de control de calidad, Comuniquese con el Administrador");                                         
+                 },
+                 statusCode: {
+                     203: () => { utilSigo.unblockUIGeneral(); utilSigo.toastInfo("Aviso", "El usuario perdio la sesión. Vuelva ingresar al sistema"); }
+                 }
+             });
+         },
+         save: () => {
+             let check = _ControlCalidadEjax.frm.find("#chkObsSubsanada");
+             let state = check.is(":checked");
+             let obs = "";
+             if (_ControlCalidadEjax.banderaCKEDITORBD == 1)
+                 obs = CKEDITOR.instances["OBSERVACIONES_CONTROL"].getData();
+
+             let model = {
+                 hdIdControl: _ControlCalidadEjax.frm.find("#hdIdControl").val(),
+                 ddlIndicadorId: _ControlCalidadEjax.frm.find("#ddlIndicadorId").val(),
+                 chkObsSubsanada: state,
+                 txtControlCalidadObservaciones: obs
+             };   
+             let url = urlLocalSigo + "PlanFocalizacion/Focalizacion/actualizarCalidadPlan";
+             let option = { url: url, datos: JSON.stringify(model), type: 'POST' };
+             utilSigo.fnAjax(option, function (data) {
+                 if (data.success) {
+                     utilSigo.toastSuccess("Aviso", data.msj);
+                     ManPlanTrabajo.dtManGrillaPaging.ajax.reload();
+                     utilSigo.fnCloseModal("manControlCalidadModal");                      
+                 }
+                 else {
+                     utilSigo.toastError("Error", data.msj);
+                 }
+             });
+          }         
+
+     };
+     $(document).ready(function () {
+         _ControlCalidadEjax.frm = $("#frmControlCalidadAjax");
+         _ControlCalidadEjax.origenForm = _ControlCalidadEjax.frm.find("#hdFrmControl").val();
+         _ControlCalidadEjax.origenId = _ControlCalidadEjax.frm.find("#hdIdControl").val();
+         if (_ControlCalidadEjax.frm.find("#ddlIndicadorId").val() == "0000007") {
+             _ControlCalidadEjax.frm.find("#divCKEDITOR").removeAttr("style");
+             _ControlCalidadEjax.frm.find("#dvObservacionSubsanar").removeAttr("style");
+             _ControlCalidadEjax.frm.find("#dvObservacionSubsanar").removeAttr("style");
+             if (_ControlCalidadEjax.banderaCKEDITOR == 0)
+                 _ControlCalidadEjax.iniciarCKEDITOR(_ControlCalidadEjax.origenForm, _ControlCalidadEjax.origenId);
+             _ControlCalidadEjax.banderaCKEDITOR = 1;
+             _ControlCalidadEjax.banderaCKEDITORBD = 1;
+         }
+         //calidad
+         
+         _ControlCalidadEjax.frm.find("#ddlIndicadorId").change(function () {              
+             if ($(this).val() == "0000007") {
+                 _ControlCalidadEjax.frm.find("#divCKEDITOR").removeAttr("style");
+                 if (_ControlCalidadEjax.banderaCKEDITOR == 0)
+                     _ControlCalidadEjax.iniciarCKEDITOR(_ControlCalidadEjax.origenForm, _ControlCalidadEjax.origenId);
+                 _ControlCalidadEjax.banderaCKEDITOR = 1;
+                 _ControlCalidadEjax.banderaCKEDITORBD = 1;
+             }
+             else {
+                 _ControlCalidadEjax.frm.find("#divCKEDITOR").attr("style", "display:none;");
+                 _ControlCalidadEjax.banderaCKEDITORBD = 0;
+             }
+
+         });
+     });
+ </script>
+ <div id="frmControlCalidadAjax">
+     @Html.Hidden("hdfCodGrupoUsuario", (object)ViewBag.hdfCodGrupoUsuario)
+     @Html.HiddenFor(m => m.hdFrmControl)
+     @Html.HiddenFor(m => m.hdIdControl)
+     <div class="card-body">
+         <div class="form-row">
+             <div class="form-group col-md-6">
+                 <label for="ddlIndicadorId" class="text-small">Indicador</label>
+                 @if(Model.ddlIndicadorEnable){
+                 @Html.DropDownListFor(m => m.ddlIndicadorId, new SelectList(Model.ddlIndicador, "Value", "Text"), new { @class = "form-control form-control-sm" })
+                 }
+                 else{
+                 @Html.DropDownListFor(m => m.ddlIndicadorId, new SelectList(Model.ddlIndicador, "Value", "Text"), new { @class = "form-control form-control-sm", disabled = "disabled" })
+                 }
+                 @Html.HiddenFor(m => m.ddlIndicadorEnable)
+             </div>
+             <div class="form-group col-md-6">
+                 <label for="txtUsuarioRegistro" class="text-small">Usuario que ingresó el registro</label>
+                 @Html.TextBoxFor(m => m.txtUsuarioRegistro, new { @class = "form-control form-control-sm", disabled = "disabled" })
+             </div>
+
+         </div>
+         <div class="form-row">
+             <div class="form-group col-md-6">
+                 <label for="txtUsuarioControl" class="text-small">Usuario que asignó el útimo estado situacional al registro</label>
+                 @Html.TextBoxFor(m => m.txtUsuarioControl, new { @class = "form-control form-control-sm", disabled = "disabled" })
+             </div>
+         </div>
+         <div class="form-row">
+             <div class="form-group col-md-12">
+                 <div id="divCKEDITOR" style="display:none;">
+
+                 </div>
+                 <!--Se cargara por ajax cuando se necesite-->
+                 @*Html.TextAreaFor(m => m.txtControlCalidadObservaciones, new { @class = "form-control form-control-sm" })*@
+             </div>
+         </div>
+         <div class="form-row" id="dvObservacionSubsanar" style="display:none;">
+             <div class="form-group col-md-4">
+                 <div class="custom-control custom-checkbox my-1 mr-sm-2">
+                     @Html.CheckBoxFor(m => m.chkObsSubsanada, new { @class = "custom-control-input" })
+                     <label for="chkObsSubsanada" class="custom-control-label" style="margin-top:4px;">Observaciones Subsanadas?</label>
+                 </div>
+             </div>
+         </div>
+     </div>
+     <div class="modal-footer">
+         <button type="button" class="btn btn-primary btn-sm" onclick="_ControlCalidadEjax.save()">Guardar</button>
+         <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Cancelar</button>
+     </div>
+ </div>

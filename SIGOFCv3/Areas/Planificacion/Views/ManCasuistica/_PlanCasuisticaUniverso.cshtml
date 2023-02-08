@@ -1,0 +1,129 @@
+﻿@model CapaEntidad.ViewModel.VM_PlanCasuisticaUniverso
+
+<div class="modal-dialog modal-sm" role="document">
+    <div class="modal-content">
+        <div class="modal-header text-small" style="cursor:move;">
+            @if (Model.hdfTipo == "OBSERVAR")
+            {
+                <span>Observar Registro</span>
+            }
+            else if (Model.hdfTipo == "REVISAR")
+            {
+                <span>Revisar Observación</span>
+            }
+            <i class="fa fa-close" style="cursor:pointer;" data-dismiss="modal" aria-label="Close"></i>
+        </div>
+        <div class="modal-body">
+            <form id="frmPlanCriterioValor">
+                @Html.HiddenFor(m => m.hdfCodPCasuistica)
+                @Html.HiddenFor(m => m.hdfCodPlan)
+                @Html.HiddenFor(m => m.hdfCodSecuencial)
+                @Html.HiddenFor(m => m.hdfTipo)
+                @Html.HiddenFor(m => m.hdfObservar)
+                <div class="form-row">
+                    <div class="form-group col-md-12">
+                        <label for="txtObservacion" class="text-small">Observación</label>
+                        @Html.TextAreaFor(m => m.txtObservacion, new { @class = "form-control form-control-sm", @rows = "4" })
+                    </div>
+                </div>
+                <div class="form-row dvRevision" style="display:none;">
+                    <div class="form-group col-md-12">
+                        <label for="txtUsuario" class="text-small">Usuario observación</label>
+                        @Html.TextBoxFor(m => m.txtUsuario, new { @class = "form-control form-control-sm" })
+                    </div>
+                </div>
+                <div class="form-row dvRevision" style="display:none;">
+                    <div class="form-group col-md-12">
+                        <label for="txtRevision" class="text-small">Revisión</label>
+                        @Html.TextAreaFor(m => m.txtRevision, new { @class = "form-control form-control-sm", @rows = "4" })
+                    </div>
+                </div>
+                <div class="form-row dvRevision" style="display:none;">
+                    <div class="form-group col-md-12">
+                        <div class="custom-control custom-checkbox my-1 mr-sm-2">
+                            @Html.CheckBoxFor(m => m.chkRevisar, new { @class = "custom-control-input" })
+                            <label for="chkRevisar" class="custom-control-label" style="margin-top:6px;">Observación revisada</label>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="modal-footer">
+            @if (Model.hdfTipo == "OBSERVAR")
+            {
+                <button type="button" class="btn btn-primary btn-sm" onclick="_PlanCasuisticaUniverso.fnSave()">Observar</button>
+            }
+            else if (Model.hdfTipo == "REVISAR")
+            {
+                <button type="button" class="btn btn-primary btn-sm" onclick="_PlanCasuisticaUniverso.fnSave()">Guardar</button>
+            }
+            <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Cancelar</button>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    var _PlanCasuisticaUniverso = {
+        fnInit: () => {
+            let tipo = _PlanCasuisticaUniverso.frm.find("#hdfTipo").val();
+
+            if (tipo=="REVISAR") {
+                _PlanCasuisticaUniverso.frm.find(".dvRevision").show();
+            }
+        },
+        fnSave: () => {
+            let tipo = _PlanCasuisticaUniverso.frm.find("#hdfTipo").val();
+            let url = "";
+            var data = {};
+
+            if (tipo == "REVISAR") {
+                url = urlLocalSigo + "Planificacion/ManCasuistica/RevisarConsolidadoPlanCasuisticaUniverso";
+                data = {
+                    hdfCodPCasuistica: _PlanCasuisticaUniverso.frm.find("#hdfCodPCasuistica").val(),
+                    hdfCodPlan: _PlanCasuisticaUniverso.frm.find("#hdfCodPlan").val(),
+                    hdfCodSecuencial: _PlanCasuisticaUniverso.frm.find("#hdfCodSecuencial").val(),
+                    chkRevisar: _PlanCasuisticaUniverso.frm.find("#chkRevisar").is(":checked"),
+                    txtRevision: _PlanCasuisticaUniverso.frm.find("#txtRevision").val()
+                };
+            } else {
+                url = urlLocalSigo + "Planificacion/ManCasuistica/ObservarConsolidadoPlanCasuisticaUniverso";
+                data = {
+                    hdfCodPCasuistica: _PlanCasuisticaUniverso.frm.find("#hdfCodPCasuistica").val(),
+                    hdfCodPlan: _PlanCasuisticaUniverso.frm.find("#hdfCodPlan").val(),
+                    hdfCodSecuencial: _PlanCasuisticaUniverso.frm.find("#hdfCodSecuencial").val(),
+                    txtObservacion: _PlanCasuisticaUniverso.frm.find("#txtObservacion").val()
+                };
+            }
+
+            var option = { url: url, datos: JSON.stringify(data), type: 'POST' };
+
+            utilSigo.dialogConfirm('', 'Desea continuar con el registro?', function (r) {
+                if (r) {
+                    utilSigo.fnAjax(option, function (data) {
+                        if (data.success) {
+                            utilSigo.toastSuccess("Éxito", data.msj);
+
+                            if (tipo == "REVISAR") {
+                                _PlanCasuisticaUniverso.fnSaved(_PlanCasuisticaUniverso.frm.find("#chkRevisar").is(":checked"));
+                            } else {
+                                _PlanCasuisticaUniverso.fnSaved();
+                            }
+                        }
+                        else {
+                            utilSigo.toastWarning("Aviso", data.msj);
+                        }
+                    });
+                }
+            });
+        },
+        fnSaved: () => {
+            /*Implementar en donde se instancia*/
+        }
+    };
+
+    $(document).ready(function () {
+        _PlanCasuisticaUniverso.frm = $("#frmPlanCriterioValor");
+
+        _PlanCasuisticaUniverso.fnInit();
+    });
+</script>

@@ -1,0 +1,199 @@
+﻿
+<script src="~/Areas/Supervision/js/ManInforme/_EspecieBosqueSeco.js"></script>
+
+<div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+        <div class="modal-header text-small" style="cursor:move;">
+            <span>Individuo Bosque Seco</span>
+            <i class="fa fa-close" style="cursor:pointer;" data-dismiss="modal" aria-label="Close"></i>
+        </div>
+        <div class="modal-body">
+            <form id="frmItemEspecieBosqueSeco">
+                @Html.Hidden("hdfCodInforme", (string)ViewBag.hdfCodInforme)
+                @Html.Hidden("hdfRegEstado")
+                @Html.Hidden("hdfCodSecuencial")
+                @Html.Hidden("hdfCodTHabilitante")
+                @Html.Hidden("hdfNumPoa")
+                @Html.Hidden("hdfNombrePoa")
+                @Html.Hidden("hdfCodEspecie")
+                @Html.Hidden("hdfDescAmenCite")
+                @Html.Hidden("hdfDescAmenDs")
+                <div class="form-row">
+                    <div class="form-group col-md-4">
+                        <label for="txtEspecie" class="text-small">Especie</label>
+                        @Html.TextBox("txtEspecie", "", new { @class = "form-control form-control-sm", disabled = "disabled" })
+                    </div>
+                    <div class="form-group col-md-8">
+                        @Html.Partial("~/Areas/General/Views/Controles/_renderComboEspecie.cshtml")
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-2">
+                        <label for="txtBloque" class="text-small">Bloque</label>
+                        @Html.TextBox("txtBloque", "", new { @class = "form-control form-control-sm", disabled = "disabled" })
+                    </div>
+                    <div class="form-group col-md-2">
+                        <label for="txtFaja" class="text-small">Faja</label>
+                        @Html.TextBox("txtFaja", "", new { @class = "form-control form-control-sm", disabled = "disabled" })
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label for="txtBloqueCampo" class="text-small">Bloque Campo</label>
+                        @Html.TextBox("txtBloqueCampo", "", new { @class = "form-control form-control-sm" })
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label for="txtFajaCampo" class="text-small">Faja Campo</label>
+                        @Html.TextBox("txtFajaCampo", "", new { @class = "form-control form-control-sm" })
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-2">
+                        <label for="txtCodigo" class="text-small">Código</label>
+                        @Html.TextBox("txtCodigo", "", new { @class = "form-control form-control-sm", disabled = "disabled" })
+                    </div>
+                    <div class="form-group col-md-2">
+                        <label for="txtDap" class="text-small">DAP (cm)</label>
+                        @Html.TextBox("txtDap", "", new { @class = "form-control form-control-sm", disabled = "disabled" })
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label for="txtCodigoCampo" class="text-small">Código Campo</label>
+                        @Html.TextBox("txtCodigoCampo", "", new { @class = "form-control form-control-sm" })
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label for="txtDapCampo" class="text-small">DAP Campo (cm)</label>
+                        @Html.TextBox("txtDapCampo", "", new { @class = "form-control form-control-sm",type="number" })
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-2">
+                        <label for="txtAc" class="text-small">AC (m)</label>
+                        @Html.TextBox("txtAc", "", new { @class = "form-control form-control-sm", disabled = "disabled" })
+                    </div>
+                    <div class="form-group col-md-2">
+                        <label for="txtZona" class="text-small">Zona UTM</label>
+                        @Html.TextBox("txtZona", "", new { @class = "form-control form-control-sm", disabled = "disabled" })
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label for="txtAcCampo" class="text-small">AC Campo (m)</label>
+                        @Html.TextBox("txtAcCampo", "", new { @class = "form-control form-control-sm", type = "number" })
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label for="ddlZonaCampoId" class="text-small">Zona UTM Campo</label>
+                        @Html.DropDownList("ddlZonaCampoId", new SelectList(ViewBag.ddlZona, "Value", "Text"), new { @class = "form-control form-control-sm" })
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-2">
+                        <label for="txtCEste" class="text-small">Coordenada Este</label>
+                        @Html.TextBox("txtCEste", "", new { @class = "form-control form-control-sm", disabled = "disabled" })
+                    </div>
+                    <div class="form-group col-md-2">
+                        <label for="txtCNorte" class="text-small">Coordenada Norte</label>
+                        @Html.TextBox("txtCNorte", "", new { @class = "form-control form-control-sm", disabled = "disabled" })
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label for="txtCEsteCampo" class="text-small">Coordenada Este Campo</label>
+                        @Html.TextBox("txtCEsteCampo", "", new { @class = "form-control form-control-sm", type = "number", maxlength = "6" })
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label for="txtCNorteCampo" class="text-small">Coordenada Norte Campo</label>
+                        @Html.TextBox("txtCNorteCampo", "", new { @class = "form-control form-control-sm", type = "number", maxlength = "6" })
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-2">
+                        <label for="txtEstado" class="text-small">Estado</label>
+                        @Html.TextBox("txtEstado", "", new { @class = "form-control form-control-sm", disabled = "disabled" })
+                    </div>
+                    <div class="form-group col-md-2"></div>
+                    <div class="form-group col-md-4">
+                        <label for="ddlEstadoCampoId" class="text-small">Estado Campo</label>
+                        @Html.DropDownList("ddlEstadoCampoId", new SelectList(ViewBag.ddlEstado, "Value", "Text"), new { @class = "form-control form-control-sm" })
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-4"></div>
+                    <div class="form-group col-md-2">
+                        <label for="txtAlturaTotal" class="text-small">Altura Total</label>
+                        @Html.TextBox("txtAlturaTotal", "", new { @class = "form-control form-control-sm", type = "number" })
+                    </div>
+                    <div class="form-group col-md-2">
+                        <label for="txtD1" class="text-small">D1</label>
+                        @Html.TextBox("txtD1", "", new { @class = "form-control form-control-sm", type = "number" })
+                    </div>
+                    <div class="form-group col-md-2">
+                        <label for="txtD2" class="text-small">D2</label>
+                        @Html.TextBox("txtD2", "", new { @class = "form-control form-control-sm", type = "number" })
+                    </div>
+                    <div class="form-group col-md-2">
+                        <label for="txtD3" class="text-small">D3</label>
+                        @Html.TextBox("txtD3", "", new { @class = "form-control form-control-sm", type = "number" })
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-4"></div>
+                    <div class="form-group col-md-2">
+                        <label for="txtD4" class="text-small">D4</label>
+                        @Html.TextBox("txtD4", "", new { @class = "form-control form-control-sm", type = "number" })
+                    </div>
+                    <div class="form-group col-md-2">
+                        <label for="txtD5" class="text-small">D5</label>
+                        @Html.TextBox("txtD5", "", new { @class = "form-control form-control-sm", type = "number" })
+                    </div>
+                    <div class="form-group col-md-2">
+                        <label for="txtD6" class="text-small">D6</label>
+                        @Html.TextBox("txtD6", "", new { @class = "form-control form-control-sm", type = "number" })
+                    </div>
+                    <div class="form-group col-md-2">
+                        <label for="txtD7" class="text-small">D7</label>
+                        @Html.TextBox("txtD7", "", new { @class = "form-control form-control-sm", type = "number" })
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-4"></div>
+                    <div class="form-group col-md-2">
+                        <label for="txtL1" class="text-small">L1</label>
+                        @Html.TextBox("txtL1", "", new { @class = "form-control form-control-sm", type = "number" })
+                    </div>
+                    <div class="form-group col-md-2">
+                        <label for="txtL2" class="text-small">L2</label>
+                        @Html.TextBox("txtL2", "", new { @class = "form-control form-control-sm", type = "number" })
+                    </div>
+                    <div class="form-group col-md-2">
+                        <label for="txtL3" class="text-small">L3</label>
+                        @Html.TextBox("txtL3", "", new { @class = "form-control form-control-sm", type = "number" })
+                    </div>
+                    <div class="form-group col-md-2">
+                        <label for="txtL4" class="text-small">L4</label>
+                        @Html.TextBox("txtL4", "", new { @class = "form-control form-control-sm", type = "number" })
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-4"></div>
+                    <div class="form-group col-md-2">
+                        <label for="txtL5" class="text-small">L5</label>
+                        @Html.TextBox("txtL5", "", new { @class = "form-control form-control-sm", type = "number" })
+                    </div>
+                    <div class="form-group col-md-2">
+                        <label for="txtL6" class="text-small">L6</label>
+                        @Html.TextBox("txtL6", "", new { @class = "form-control form-control-sm", type = "number" })
+                    </div>
+                    <div class="form-group col-md-2">
+                        <label for="txtL7" class="text-small">L7</label>
+                        @Html.TextBox("txtL7", "", new { @class = "form-control form-control-sm", type = "number" })
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-4"></div>
+                    <div class="form-group col-md-8">
+                        <label for="txtObservacion" class="text-small">Observación</label>
+                        @Html.TextArea("txtObservacion", "", new { @class = "form-control form-control-sm", rows = "2" })
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-primary btn-sm" onclick="_EspecieBosqueSeco.fnSubmitForm()">Guardar</button>
+            <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Cancelar</button>
+        </div>
+    </div>
+</div>

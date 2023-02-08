@@ -1,0 +1,97 @@
+﻿
+<script type="text/javascript">
+"use strict";
+var _BuscarCN = {};
+    _BuscarCN.url = urlLocalSigo + "Supervision/ManInformeQuinquenal/GetAllCartaNotificacion?";
+_BuscarCN.fnAsignarDatos = function (obj) { /*se implementa en cada llamada*/ }
+
+_BuscarCN.fnBuscarCarta = function () {
+    var valBuscar = _BuscarCN.frm.find("#txtValor").val().trim();
+    var url = _BuscarCN.url + "BusValor=" + valBuscar;
+    if (valBuscar == "") {
+        utilSigo.toastWarning("Aviso", "Ingrese el dato a buscar");
+        return false;
+    }
+    if (valBuscar.length < 3) {
+        utilSigo.toastWarning("Aviso", "El dato a buscar debe ser mayor a dos caracteres");
+        return false;
+    }
+
+    _BuscarCN.dtBuscarCarta.ajax.url(url).load(function (data) {
+        if (data.success == false) {
+            utilSigo.toastError("Error", "Sucedió un error al realizar la consulta, por favor comuníquese con el administrador");
+            console.log(data.er);
+        }
+    });
+}
+
+_BuscarCN.fnInitEventos = function () {
+    _BuscarCN.frm.find("#btnBuscarCarta").click(function () {
+        _BuscarCN.fnBuscarCarta();
+    });
+    _BuscarCN.frm.submit(function (e) {
+        _BuscarCN.fnBuscarCarta();
+        e.preventDefault();
+    });
+
+}
+
+_BuscarCN.fnInitDataTable_Detail = function () {
+    var columns_label = ["N° THabilitante","Modalidad", "N° Notificación"];
+    var columns_data = ["TITULO_TH", "MODALIDAD", "NUMERO_RESOLUCION"];
+    var options = { page_length: initSigo.pageLengthBuscar, row_select: true, row_fnSelect: "_BuscarCN.fnAsignarDatos(this)", row_index: true };
+    _BuscarCN.dtBuscarCarta = utilDt.fnLoadDataTable_Detail(_BuscarCN.frm.find("#tbBuscarCarta"), columns_label, columns_data, options);
+}
+
+_BuscarCN.fnInit = function () {
+    $('[data-toggle="tooltip"]').tooltip();
+    _BuscarCN.frm = $("#frmBuscarCartaNotificacion");
+
+    $('.modal').on('shown.bs.modal', function () {
+        _BuscarCN.frm.find("#txtValor").focus();
+    });
+    _BuscarCN.fnInitDataTable_Detail();
+    _BuscarCN.fnInitEventos();
+
+}
+</script>
+<div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+        <div class="modal-header text-small" style="cursor:move;padding:0.5rem;">
+            <h5 id="lblTituloBuscarPersona" class="modal-title">Buscar Carta de Notificación</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body">
+            <form id="frmBuscarCartaNotificacion" method="get">
+                <div class="form-row">
+                    <div class="col-md-4 mb-3">
+                        <select id="cboCriterio" class="form-control form-control-sm">
+                            <option value="0000000">N° Carta de Notificación</option>
+                        </select>
+                    </div>
+                    <div class="col-md-8 mb-3">
+                        <div class="input-group">
+                            <input type="text" id="txtValor" class="form-control form-control-sm" maxlength="50" style="text-transform:uppercase;" />
+                            <div class="input-group-prepend">
+                                <span class="input-group-text" id="btnBuscarCarta" style="cursor:pointer;color:forestgreen"><i class="fa fa-search" data-toggle="tooltip" data-placement="top" title="Buscar"></i></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="table-responsive">
+                    <table id="tbBuscarCarta" class="table table-hover table-bordered" width="100%">
+                        <thead>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+                <button type="submit" style="display:none;"></button>
+            </form>
+        </div>
+        <div class="modal-footer">
+
+        </div>
+    </div>
+</div>

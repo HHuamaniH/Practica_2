@@ -1,0 +1,104 @@
+﻿@model List<CapaEntidad.DOC.Ent_REPORTE_ISUPERVISION>
+<div class="form-row">
+    <div class="col-md-2">
+
+    </div>
+    <div class="col-md-8">
+        <input type="hidden" id="hdfFiltro_Anio" value="@ViewBag.Busanio" />
+        <input type="hidden" id="hdfFiltro_DLinea" value="@ViewBag.BusDLinea" />
+        <input type="hidden" id="hdfFiltro_MTipo" value="@ViewBag.BusModalidad" />
+        <input type="hidden" id="hdfFiltro_OD" value="@ViewBag.BusOD" />
+        <input type="hidden" id="hdfFiltro_Departamento" value="@ViewBag.BusRegion" />
+        <div class="table-responsive">
+            <table class="table table-hover table-bordered" style="width:100%;">
+                <thead>
+                    <tr>
+                        <th>Meses</th>
+                        <th>N° planes de manejo supervisados antes de la extracción</th>
+                        <th>N° planes de manejo supervisados durante la extracción</th>
+                        <th>N° planes de manejo supervisados post aprovechamiento</th>
+                        <th>Total planes de manejo supervisados</th>
+                        <th>Total supervisiones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model.Count > 0)
+                    {
+                        foreach (var item in Model)
+                        {
+                            var codMes = item.COD_MES.Trim() == "" ? "-1" : item.COD_MES;
+                            <tr>
+                                <td>@item.MES</td>
+                                <td><a href="javascript: void(0);" onclick="_spResumen.fnBuscar(@codMes,1)">@item.NPLANSUPERVISADO_ANTES</a></td>
+                                <td><a href="javascript: void(0);" onclick="_spResumen.fnBuscar(@codMes,2)">@item.NPLANSUPERVISADO_DURANTE</a></td>
+                                <td><a href="javascript: void(0);" onclick="_spResumen.fnBuscar(@codMes,3)">@item.NPLANSUPERVISADO_DESPUES</a></td>
+                                <td><a href="javascript: void(0);" onclick="_spResumen.fnBuscar(@codMes,4)">@item.NPLANSUPERVISADO</a></td>
+                                <td>@item.NISUPERVISION</td>
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr><td colspan="6" style="text-align:center">No existe registros</td></tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="col-md-2">
+
+    </div>
+</div>
+<br />
+<br />
+<div class="form-row">
+    <div class="col-md-12" id="containerLoadDetalle">
+        
+    </div>
+</div>
+<script>
+    var _spResumen = {
+        fnBuscar: (cod, i) => {
+            let valAdi = "";
+          
+            switch (i) {
+                case 1: valAdi = "|0000019"; break;
+                case 2: valAdi = "|0000020"; break;
+                case 3: valAdi = "|0000021"; break;
+                case 4: valAdi = "|"; break;
+            }
+            if (cod == "-1") {
+                cod = "";
+            }
+            let model = {
+                Busanio: $("#hdfFiltro_Anio").val(),
+                BusDLinea: $("#hdfFiltro_DLinea").val(),
+                BusModalidad: $("#hdfFiltro_MTipo").val(),
+                BusOD: $("#hdfFiltro_OD").val(),
+                BusRegion: $("#hdfFiltro_Departamento").val(),
+                cod: cod + valAdi
+            };
+            $.ajax({
+                url: urlLocalSigo + "Supervision/Reportes/_SupervisioneSegunOportunidadDetalle",
+                type: 'POST',
+               // async: false,
+                data: JSON.stringify(model),
+                contentType: 'application/json; charset=utf-8',
+                dataType: 'html',
+                beforeSend: utilSigo.beforeSendAjax,
+                error: utilSigo.errorAjax,
+                complete: utilSigo.completeAjax,
+                success: function (data) {                  
+                    $("#containerLoadDetalle").html('');
+                    $("#containerLoadDetalle").append(data);
+                },
+                statusCode: {
+                    203: () => { utilSigo.unblockUIGeneral(); utilSigo.toastInfo("Aviso", "El usuario perdio la sesión. Vuelva ingresar al sistema"); }
+                }
+            });
+        }
+    };
+    $(document).ready(function () {
+
+    });
+</script>

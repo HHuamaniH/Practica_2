@@ -1,0 +1,105 @@
+﻿<script>
+    $(function () {
+        $('.tbListResumenSup').DataTable();
+        let ob = { anio: '', supervision: 0, archivo_pre: '' };
+        var lstModel = [];
+        _rendReporteSup.lista=@Html.Raw(Json.Encode(Model));
+        
+    })
+</script>
+<style>
+    .table-footer tr {
+        background-color: aliceblue;
+       
+    }
+        .table-footer tr > td {
+            font-weight: 600;
+        }
+        #bodyTable tr > td,
+        .table-footer tr > td {
+            text-align: center;
+        }
+</style>
+@{ var count = 0;}
+@foreach (var vm in Model)
+{
+    count++;
+
+<div id="divTbResumen" style="width: 100%; overflow: auto; scrollbar-base-color: none;">
+    <br />
+    <div class="form-group">
+        <nav class="navbar navbar-light bg-light justify-content-between">
+            <span class="navbar-brand">@count. @vm.tituloReporte </span>
+            <button class="btn btn-sm btn-outline-primary my-2 my-sm-0 rpt_@count" type="button" onclick="_rendReporteSup.fnExportResumen(@count)">Descargar<i class="fa fa-file-excel-o fa-fw"></i></button>
+        </nav>
+    </div>
+    
+    <table id="tbListResumenSup" class="table table-bordered table-striped-success tbListResumenSup table-hover" style="width: 100% !important; font-size:11px">
+        <thead>
+            <tr style=" text-align: center;  background-color: #dae7f5">
+                <td>Año</td>
+                <td>N° @(count==1?"Supervisiones":"Informes") </td>
+                <td>N° Archivos Informe @(count==1?"Supervisiones":"")</td>
+                <td>N° PAU Iniciados</td>
+                <td>N° Informes @(count==1?"Supervisiones":"") evaluados en 1ra Etapa</td>
+                <td>% Procesos evaluados en Primera Etapa</td>
+                <td>N° PAU Concluidos</td>
+                <td>% PAU Concluidos</td>
+                <td>N° casos concluidos (Nro archivo preliminar + Nro informes cuyo PAU ha concluido)</td>
+                <td>% casos Concluidos (Nro de Casos / total de informes)</td>
+
+            </tr>
+        </thead>
+        @if (vm.listPauConcluido != null)
+        {
+            var SUPERVISION = 0; var ARCHIVO_PRELIMINAR = 0; var INI_PAU = 0; var CANTIDAD = 0; var TERMINO_PAU = 0; var CASOS = 0;
+
+            <tbody id="bodyTable">
+
+
+                @foreach (var item in vm.listPauConcluido)
+                {
+                    SUPERVISION = item.SUPERVISION + SUPERVISION; ARCHIVO_PRELIMINAR = item.ARCHIVO_PRELIMINAR + ARCHIVO_PRELIMINAR; INI_PAU = item.INI_PAU + INI_PAU; CANTIDAD = item.CANTIDAD + CANTIDAD;
+                    TERMINO_PAU = item.TERMINO_PAU + TERMINO_PAU; CASOS = item.CASOS + CASOS;
+                    <tr>
+
+                        <td>@item.ANIO</td>
+                        <td>@item.SUPERVISION</td>
+                        <td>@item.ARCHIVO_PRELIMINAR</td>
+                        <td>@item.INI_PAU</td>
+                        <td>@item.CANTIDAD</td>
+                        <td>@Math.Round((item.AVANCE * 100), 2) %</td>
+                        <td>@item.TERMINO_PAU</td>
+                        <td>@Math.Round((item.AVANCE1 * 100), 2) %</td>
+                        <td>@item.CASOS</td>
+                        <td>@Math.Round((item.AVANCE_CASOS * 100), 2) %</td>
+
+                    </tr>
+
+
+
+                }
+            </tbody>
+            <tfoot class="table-footer">
+
+                <tr>
+                    <td>Total</td>
+                    <td>@SUPERVISION</td>
+                    <td>@ARCHIVO_PRELIMINAR</td>
+                    <td>@INI_PAU</td>
+                    <td>@CANTIDAD</td>
+                    <td>@( SUPERVISION>0 && CANTIDAD > 0 ? Math.Round((double)CANTIDAD / SUPERVISION * 100, 2):0) %</td>
+                    <td>@TERMINO_PAU</td>
+                    <td>@(SUPERVISION>0 && TERMINO_PAU > 0 ? Math.Round((double)TERMINO_PAU / INI_PAU * 100, 2):0) %</td>
+                    <td>@CASOS</td>
+                    <td>@(SUPERVISION>0 && CASOS > 0 ? Math.Round((double)CASOS / SUPERVISION * 100, 2):0) %</td>
+                </tr>
+            </tfoot>
+
+        }
+
+    </table>
+    <br />
+</div>
+			}
+

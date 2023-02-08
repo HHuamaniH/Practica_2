@@ -1,0 +1,65 @@
+﻿
+<script src="~/Areas/Supervision/js/ManInforme/_Desplazamiento.js"></script>
+
+<div class="modal-dialog" role="document">
+    <div class="modal-content">
+        <div class="modal-header text-small" style="cursor:move;">
+            <span>Desplazamiento</span>
+            <i class="fa fa-close" style="cursor:pointer;" data-dismiss="modal" aria-label="Close"></i>
+        </div>
+        <div class="modal-body">
+            <form id="frmItemDesplazamiento">
+                @Html.Hidden("hdfRegEstado")
+                @Html.Hidden("hdfCodDesplazamiento")
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label for="ddlZonaId" class="text-small">Punto Inicial Zona UTM</label>
+                        @Html.DropDownList("ddlZonaId", new SelectList(ViewBag.ddlZona, "Value", "Text"), new { @class = "form-control form-control-sm" })
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label for="txtCoordEste" class="text-small">Punto Inicial Coordenada Este</label>
+                        @Html.TextBox("txtCoordEste", "", new { @class = "form-control form-control-sm", maxlength = "6", type = "number" })
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="txtCoordNorte" class="text-small">Punto Inicial Coordenada Norte</label>
+                        @Html.TextBox("txtCoordNorte", "", new { @class = "form-control form-control-sm", maxlength = "7", type = "number" })
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label for="ddlZonaFinId" class="text-small">Punto Final Zona UTM</label>
+                        @Html.DropDownList("ddlZonaFinId", new SelectList(ViewBag.ddlZona, "Value", "Text"), new { @class = "form-control form-control-sm" })
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label for="txtCoordEsteFin" class="text-small">Punto Final Coordenada Este</label>
+                        @Html.TextBox("txtCoordEsteFin", "", new { @class = "form-control form-control-sm", maxlength = "6", type = "number" })
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="txtCoordNorteFin" class="text-small">Punto Final Coordenada Norte</label>
+                        @Html.TextBox("txtCoordNorteFin", "", new { @class = "form-control form-control-sm", maxlength = "7", type = "number" })
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label for="ddlTipoViaId" class="text-small">Tipo de Vía</label>
+                        @Html.DropDownList("ddlTipoViaId", new SelectList(ViewBag.ddlTipoVia, "Value", "Text"), new { @class = "form-control form-control-sm" })
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-12">
+                        <label for="txtDescripcion" class="text-small">Descripción</label>
+                        @Html.TextArea("txtDescripcion", "", new { @class = "form-control form-control-sm", rows = "3" })
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-primary btn-sm" onclick="_Desplazamiento.fnSubmitForm()">Guardar</button>
+            <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Cancelar</button>
+        </div>
+    </div>
+</div>

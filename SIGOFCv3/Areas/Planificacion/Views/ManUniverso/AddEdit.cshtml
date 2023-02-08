@@ -1,0 +1,277 @@
+﻿@model CapaEntidad.ViewModel.VM_PlanUniverso
+
+@{
+    ViewBag.Title = "AddEdit";
+    Layout = "~/Views/Shared/_LayoutMain.cshtml";
+}
+
+<style type="text/css">
+    .dataTables_info {
+        color: #33b35a;
+        font-size: 15px !important;
+        margin-top: 17px;
+    }
+
+    .dataTables_paginate {
+        margin-top: -25px;
+    }
+</style>
+
+<div class="container-fluid">
+    <div class="card">
+        <div class="card-header text-right">
+            @Model.lblTituloCabecera
+        </div>
+        <div class="card-body">
+            <div class="card">
+                <div class="card-header text-small">
+                    <a style="cursor:pointer;" data-toggle="tooltip" data-placement="top" title="Regresar" onclick="_EditUniverso.fnReturn()"><i class="fa mx-2 fa-lg fa-reply"></i></a>
+                    @Model.lblTituloEstado
+                </div>
+                <div class="card-body">
+                    <form id="frmEditUniverso">
+                        @Html.HiddenFor(m => m.hdfCodPlan)
+                        @Html.HiddenFor(m => m.hdfPlanCompleto)
+                        <div class="card">
+                            <div class="card-header text-small">Configuración</div>
+                            <div class="card-body">
+                                <div class="form-row">
+                                    <div class="form-group col-md-2">
+                                        <label for="txtAnioPlan" class="text-small">Año PASPEQ</label>
+                                        @Html.TextBoxFor(m => m.txtAnioPlan, new { @class = "form-control form-control-sm", disabled = "disabled" })
+                                    </div>
+                                    <div class="form-group col-md-2">
+                                        <label for="txtFechaCorte" class="text-small">Fecha de corte</label>
+                                        @Html.TextBoxFor(m => m.txtFechaCorte, new { @class = "form-control form-control-sm", placeholder = "dd/mm/aaaa" })
+                                    </div>
+                                    <div class="form-group col-md-2">
+                                        <label for="txtCriterio" class="text-small">Hora</label>
+                                        @Html.TextBoxFor(m => m.txtHoraCorte, new { @class = "form-control form-control-sm", placeholder = "hh:mm" })
+                                    </div>
+                                    <div class="form-group col-md-6" style="margin-top:23px;">
+                                        <input id="btnGenerarUniverso" type="button" class="btn btn-sm btn-success" value="Generar" onclick="_EditUniverso.fnExeUniverso()" />
+                                        <input id="btnLimpiarUniverso" type="button" class="btn btn-sm btn-success" value="Limpiar" onclick="_EditUniverso.fnClearUniverso()" />
+                                        <input id="btnExportarUniverso" type="button" class="btn btn-sm btn-success" value="Exportar" onclick="_EditUniverso.fnExportUniverso()" />
+                                        <input id="btnActualizarUniverso" type="button" class="btn btn-sm btn-success" value="Actualizar" onclick="_EditUniverso.fnUpdateUniverso()" />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-header text-small">Universo</div>
+                            <div class="card-body">
+                                <div class="form-row">
+                                    <div class="col-md-12">
+                                        <div class="table-responsive">
+                                            <table id="tbPlanUniverso" style="width:100%" class="table table-hover table-bordered">
+                                                <thead>
+                                                    <tr>
+                                                        <th colspan="100" class="text-sm-left">
+                                                            <div class="form-inline"><strong>Listado</strong></div>
+                                                        </th>
+                                                    </tr>
+                                                    <tr>
+                                                        <th colspan="27" class="text-sm-left" style="background-color:darkseagreen">
+                                                            <div class="form-inline"><strong>DATOS DEL TÍTULO HABILITANTE</strong></div>
+                                                        </th>
+                                                        <th colspan="63" class="text-sm-left" style="background-color:cornflowerblue">
+                                                            <div class="form-inline"><strong>DATOS DEL PLAN DE MANEJO</strong></div>
+                                                        </th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody></tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    let _EditUniverso = {
+        fnReturn: (alertaInicial) => {
+            var url = urlLocalSigo + "Planificacion/ManPlan/Index";
+
+            if (alertaInicial == null || alertaInicial == "") {
+                window.location = url;
+            } else {
+                window.location = url + "?_alertaIncial=" + alertaInicial;
+            }
+        },
+        fnShow: () => {
+            const plan_completo = _EditUniverso.frm.find("#hdfPlanCompleto").val();
+            const num_universo = _EditUniverso.dtPlanUniverso.data().count();
+
+            _EditUniverso.frm.find("#btnGenerarUniverso").prop("disabled", true);
+            _EditUniverso.frm.find("#btnLimpiarUniverso").prop("disabled", true);
+            _EditUniverso.frm.find("#btnExportarUniverso").prop("disabled", true);
+            _EditUniverso.frm.find("#btnActualizarUniverso").prop("disabled", true);
+            _EditUniverso.frm.find("#txtFechaCorte").prop("disabled", true);
+            _EditUniverso.frm.find("#txtHoraCorte").prop("disabled", true);
+
+            if (plan_completo == "True") {
+                if (num_universo > 0) {
+                    _EditUniverso.frm.find("#btnExportarUniverso").prop("disabled", false);
+                }
+            } else {
+                if (num_universo > 0) {
+                    _EditUniverso.frm.find("#btnLimpiarUniverso").prop("disabled", false);
+                    _EditUniverso.frm.find("#btnExportarUniverso").prop("disabled", false);
+                    _EditUniverso.frm.find("#btnActualizarUniverso").prop("disabled", false);
+                } else {
+                    _EditUniverso.frm.find("#btnGenerarUniverso").prop("disabled", false);
+                    _EditUniverso.frm.find("#txtFechaCorte").prop("disabled", false);
+                    _EditUniverso.frm.find("#txtHoraCorte").prop("disabled", false);
+                }
+            }
+        },
+        fnBuildTableUniverso: () => {
+            var columns_label = [], columns_data = [], options = {};
+
+            columns_label = ["Título habilitante", "Titular actual", "Rep. legal", "Departamento", "Provincia", "Distrito", "Sector", "Modalidad"
+                , "OD Ámbito", "Área", "Fecha inicio", "Fecha fin", "Caducidad", "Med. Cauterlar", "Med. Precautoria"
+                , "Nro. supervisiones", "Nro. superv. infracción", "% infracción", "Req. entidad", "Denuncia", "Est. establecimiento"
+                , "Última superv.", "Inactivo", "Nro. planes", "Est. calidad", "Fecha registro", "Tipo plan", "Nombre plan"
+                , "Resol. aprueba", "Fecha aprob.", "Área", "Fecha inicio", "Fecha fin", "Consultor"
+                , "Nro. censo made.", "Nro. censo no made.", "Nro. especies aprob.", "Volumen aprob."
+                , "Volumen Movilizado", "Volumen Injustificado", "Lista Roja", "Lista Verde", "Nro. especies balance"
+                , "Zona UTM", "Coord. este", "Coord. norte", "Nro. superv. plan", "Acto adm. superv.", "Plan supervisado"
+                , "Superv. antes", "Superv. durante", "Superv. despúes", "Amenaza CITE", "Amenaza DS", "Amenaza"
+                , "Nro. acervo", "Programado", "Est. calidad", "Fecha registro"];
+            columns_data = ["NUM_THABILITANTE", "TITULAR_ACTUAL", "RLEGAL", "DEPARTAMENTO", "PROVINCIA", "DISTRITO", "SECTOR", "MODALIDAD"
+                , "OD_AMBITO", "AREA", "FECHA_INICIO", "FECHA_FIN", "CADUCIDAD", "MEDIDA_CAUTELAR", "MEDIDA_PRECAUTORIA"
+                , "N_SUPERVISION", "N_SUPERVISION_INFRAC", "PORC_INFRACCION", "REQ_ENTIDAD", "DENUNCIA", "ESTADO_ESTABLECIMIENTO"
+                , "ANIO_ULTIMA_SUPERV", "INACTIVO", "N_PMANEJO", "ESTADO_CALIDAD", "FECHA_REGISTRO", "TIPO_PMANEJO", "NOMBRE_PMANEJO"
+                , "RESOLUCION_PMANEJO", "FEC_APRUEBA_PMANEJO", "AREA_PMANEJO", "FEC_INICIO_PMANEJO", "FEC_FIN_PMANEJO", "CONSULTOR_PMANEJO"
+                , "N_CENSO_MADE_PMANEJO", "N_CENSO_NOMADE_PMANEJO", "N_ESPECIE_APROBADO_PMANEJO", "VOL_APROBADO_PMANEJO"
+                , "VOL_MOVILIZADO", "VOL_INJUSTIFICADO", "VERDE", "ROJO", "N_ESPECIE_BEXTRACCION_PMANEJO"
+                , "ZONA_UTM_PMANEJO", "CESTE_PMANEJO", "CNORTE_PMANEJO", "N_SUPERVISION_PMANEJO", "ACTO_SUPERVISADO_PMANEJO", "SUPERVISADO_PMANEJO"
+                , "SUPERVISADO_ANTES_PMANEJO", "SUPERVISADO_DURANTE_PMANEJO", "SUPERVISADO_DESPUES_PMANEJO", "AMENAZA_CITE_PMANEJO", "AMENAZA_DS_PMANEJO", "ESPECIE_AMENAZADA_PMANEJO"
+                , "N_ACERVODOC_PMANEJO", "PROGRAMADO", "ESTADO_CALIDAD_PMANEJO", "FECREG_PMANEJO"];
+            options = {
+                page_length: 100, row_index: true, page_info: true, page_render: false, page_search: true
+            };
+
+            return utilDt.fnLoadDataTable_Detail(_EditUniverso.frm.find("#tbPlanUniverso"), columns_label, columns_data, options);
+        },
+        fnLoadTableUniverso: () => {
+            var cod_plan = _EditUniverso.frm.find("#hdfCodPlan").val();
+            var url = urlLocalSigo + "Planificacion/ManUniverso/ListarPlanUniverso";
+            const option = { url: url, datos: { asCodPlan: cod_plan }, type: 'GET' };
+
+            utilSigo.fnAjax(option, function (result) {
+                if (result.success) {
+                    _EditUniverso.dtPlanUniverso.clear().draw();
+                    _EditUniverso.dtPlanUniverso.rows.add(result.data).draw();
+                    _EditUniverso.fnShow();
+                }
+            });
+        },
+        fnInit: () => {
+            $.fn.select2.defaults.set("theme", "bootstrap4");
+            utilSigo.fnFormatDate(_EditUniverso.frm.find("#txtFechaCorte"));
+
+            _EditUniverso.dtPlanUniverso = _EditUniverso.fnBuildTableUniverso();
+            _EditUniverso.fnLoadTableUniverso();
+        },
+        fnExeUniverso: () => {
+            var url = urlLocalSigo + "Planificacion/ManUniverso/GenerarPlanUniverso";
+            const fecha_corte = _EditUniverso.frm.find("#txtFechaCorte").val();
+            const hora_corte = _EditUniverso.frm.find("#txtHoraCorte").val();
+
+            if (fecha_corte == "") {
+                utilSigo.toastWarning("Aviso", "Ingrese la fecha de corte");
+                _EditUniverso.frm.find("#txtFechaCorte").focus();
+                return false;
+            }
+            if (hora_corte == "") {
+                utilSigo.toastWarning("Aviso", "Ingrese la hora de corte");
+                _EditUniverso.frm.find("#txtHoraCorte").focus();
+                return false;
+            }
+
+            var params = {
+                asCodPlan: _EditUniverso.frm.find("#hdfCodPlan").val(),
+                asFechaCorte: fecha_corte,
+                asHoraCorte: hora_corte
+            };
+            var option = { url: url, datos: JSON.stringify(params), type: 'POST' };
+
+            utilSigo.dialogConfirm('', "¿Desea generar el universo? Esto puede tardar unos cuantos minutos", function (r) {
+                if (r) {
+                    utilSigo.fnAjax(option, function (data) {
+                        if (data.success) {
+                            utilSigo.toastSuccess("Éxito", data.msj);
+                            _EditUniverso.fnLoadTableUniverso();
+                        }
+                        else {
+                            utilSigo.toastWarning("Aviso", data.msj);
+                        }
+                    });
+                }
+            });
+        },
+        fnClearUniverso: () => {
+            var url = urlLocalSigo + "Planificacion/ManUniverso/LimpiarPlanUniverso";
+
+            var params = {
+                asCodPlan: _EditUniverso.frm.find("#hdfCodPlan").val()
+            };
+
+            var option = { url: url, datos: JSON.stringify(params), type: 'POST' };
+
+            utilSigo.dialogConfirm('', "¿Desea eliminar el universo generado?", function (r) {
+                if (r) {
+                    utilSigo.fnAjax(option, function (data) {
+                        if (data.success) {
+                            utilSigo.toastSuccess("Éxito", data.msj);
+                            _EditUniverso.fnLoadTableUniverso();
+                            _EditUniverso.frm.find("#txtFechaCorte").val("");
+                            _EditUniverso.frm.find("#txtHoraCorte").val("");
+                        }
+                        else {
+                            utilSigo.toastWarning("Aviso", data.msj);
+                        }
+                    });
+                }
+            });
+        },
+        fnUpdateUniverso: () => {
+            var url = urlLocalSigo + "Planificacion/ManUniverso/ActualizarPlanUniverso";
+
+            var params = {
+                asCodPlan: _EditUniverso.frm.find("#hdfCodPlan").val()
+            };
+
+            var option = { url: url, datos: JSON.stringify(params), type: 'POST' };
+
+            utilSigo.dialogConfirm('', "¿Desea actualizar los datos del universo generado? Esto puede tardar unos cuantos minutos", function (r) {
+                if (r) {
+                    utilSigo.fnAjax(option, function (data) {
+                        if (data.success) {
+                            utilSigo.toastSuccess("Éxito", data.msj);
+                            _EditUniverso.fnLoadTableUniverso();
+                        }
+                        else {
+                            utilSigo.toastWarning("Aviso", data.msj);
+                        }
+                    });
+                }
+            });
+        },
+        fnExportUniverso: () => {
+            var url = urlLocalSigo + "Planificacion/ManUniverso/ExportarPlanUniverso?asCodPlan=" + _EditUniverso.frm.find("#hdfCodPlan").val();
+            window.location = url;
+        }
+    };
+
+    $(document).ready(function () {
+        _EditUniverso.frm = $("#frmEditUniverso");
+
+        _EditUniverso.fnInit();
+    });
+</script>

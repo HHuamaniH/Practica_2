@@ -1,0 +1,130 @@
+﻿
+@model  CapaEntidad.ViewModel.VM_ResolucionTFFS
+<style type="text/css">
+    #tbRenderListILegal_wrapper {
+        padding: 0px;
+    }
+
+    #tbConsultaILegal_info {
+        color: #33b35a;
+        font-size: 12px;
+        margin-top: 12px;
+    }
+</style>
+
+<script type="text/javascript">
+    var _renderListaEspeciesMC = {};
+     _renderListaEspeciesMC.tbEliTABLA = [];
+
+    // iniciar datos en la tabla
+    _renderListaEspeciesMC.fnInitDataTable_Detail = function () {
+        var columns_label = [], columns_data = [], options = {};
+
+        columns_label = ["Especie", "POA"];
+        columns_data = ["DESCRIPCION_ESPECIE", 'POA'];
+        options = {
+            page_length: 10, row_index: true, row_delete: true, row_fnDelete: "_renderListaEspeciesMC.fnDelete(this)", page_sort: true
+        };
+        _renderListaEspeciesMC.dtRenderListInforme = utilDt.fnLoadDataTable_Detail(_renderListaEspeciesMC.frm.find("#tbRenderListEspeciesMC"), columns_label, columns_data, options);
+        _renderListaEspeciesMC.dtRenderListInforme.rows.add(JSON.parse('@Html.Raw(Json.Encode(@Model.ListEspeciesMC))')).draw();
+
+        
+    }
+
+
+    /*Listado de registros (render)*/
+    _renderListaEspeciesMC.fnDelete = function (obj) {
+        var data = _renderListaEspeciesMC.dtRenderListInforme.row($(obj).parents('tr')).data();
+
+        if (data["RegEstado"] == "0") {
+            _renderListaEspeciesMC.tbEliTABLA.push({
+                EliTABLA: "RESODIREC_MED_ESPECIES",
+                EliVALOR01: "",
+                EliVALOR02: data["COD_SECUENCIAL"]
+
+            });
+        }
+        _renderListaEspeciesMC.dtRenderListInforme.row($(obj).parents('tr')).remove().draw(false);
+    }
+
+    _renderListaEspeciesMC.fnGetListEliTABLA = function () { return _renderListaEspeciesMC.tbEliTABLA }
+
+       //devuelve la lista de especies
+    _renderListaEspeciesMC.fnGetList = function () {
+        let list = [], rows, countFilas, data;
+        rows = _renderListaEspeciesMC.dtRenderListInforme.$("tr");
+        countFilas = rows.length;
+        if (countFilas > 0) {
+            $.each(rows, function (i, o) {
+                data = _renderListaEspeciesMC.dtRenderListInforme.row($(o)).data();
+                list.push(utilSigo.fnConvertArrayToObject(data));
+            });
+        }
+        return list;
+    }
+
+    _renderListaEspeciesMC.fnAdd = function (obj) {
+        var codEspecie = _renderListaEspeciesMC.frm.find("#ddlEspeciesAP").val();
+        var especie = _renderListaEspeciesMC.frm.find("#ddlEspeciesAP option:selected").text();
+        var idPoa = _renderListaEspeciesMC.frm.find("#ddlPOA").val();
+        var desPoa = _renderListaEspeciesMC.frm.find("#ddlPOA option:selected").text();
+        if (codEspecie != "0002226") {
+          
+                var data = {
+                    "COD_ESPECIES": codEspecie,
+                    "DESCRIPCION_ESPECIE": especie,
+                    "COD_SECUENCIAL": 0,
+                    "NUM_POA" : idPoa,
+                    "POA": desPoa,
+                    "RegEstado": 1
+                }
+                _renderListaEspeciesMC.dtRenderListInforme.rows.add([data]).draw();
+                _renderListaEspeciesMC.dtRenderListInforme.page('last').draw('page');
+    
+        }
+        else {
+             utilSigo.toastWarning("Aviso", "Seleccione una especie");
+        }
+    }
+
+    $(document).ready(function () {
+       _renderListaEspeciesMC.frm = $("#frmListaEspecieMC");
+       _renderListaEspeciesMC.fnInitDataTable_Detail();
+   });
+</script>
+
+<div id="frmListaEspecieMC">
+    <div class="col-md-12">
+        @Html.DropDownListFor(m => m.txtCodEspecie, new SelectList(Model.listaEspeciesFloraCombo, "CODIGO", "DESCRIPCION"),
+                  new { @class = "form-control form-control-sm", @id = "ddlEspeciesAP" })
+    </div>
+    <div class="col-md-12">
+        @if (Model.ListPOA.Count > 0)
+        {
+            @Html.DropDownListFor(m => m.txtIdPOA, new SelectList(Model.ListPOA, "NUM_POA", "POA"),
+                             new
+                                  {
+                                     @class = "form-control form-control-sm",
+                                     @id = "ddlPOA"
+                                  })
+        }
+        else
+        {
+            <h1>Seleccionar expediente o informe</h1>
+        }
+    </div>
+    <div class="col-md-12">
+        <button type="button" id="btnEspecies" class="btn btn-info btn-sm" onclick="_renderListaEspeciesMC.fnAdd()"> Agregar Especie</button>
+    </div>
+    <div class="col-md-12">
+        <div class="table-responsive">
+            <table id="tbRenderListEspeciesMC" style="width:100%;margin:0px !important;" class="table table-hover table-bordered">
+                <thead></thead>
+                <tbody></tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+
+

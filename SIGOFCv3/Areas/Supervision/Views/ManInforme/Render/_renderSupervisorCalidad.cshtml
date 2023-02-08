@@ -1,0 +1,38 @@
+﻿@model CapaEntidad.ViewModel.VM_SupervisorCalidad
+<script type="text/javascript">
+    var _renderSupervisorCalidad = {};
+    _renderSupervisorCalidad.tbEliTABLA = [];
+
+    _renderSupervisorCalidad.fnBuscarPersona = function (_dom) {
+        var url = urlLocalSigo + "General/Controles/_BuscarPersonaGeneral";
+        var option = { url: url, type: 'GET', datos: { asBusGrupo: "SUPERVISOR_ESPECIALISTA" }, divId: "mdlBuscarPersona" };
+        utilSigo.fnOpenModal(option, function () {
+            _bPerGen.fnAsignarDatos = function (obj) {
+                if (obj != null && obj != "") {                    
+                    var data = _bPerGen.dtBuscarPerona.row($(obj).parents('tr')).data();
+                    $("#Nombre_Supervisor_Calidad").val(data.PERSONA);
+                    $("#hdSupervisor_Calidad").val(data.COD_PERSONA);
+                    utilSigo.fnCloseModal("mdlBuscarPersona");
+                }
+            }
+            _bPerGen.fnInit();
+        });
+    }
+
+   
+    $(document).ready(function () {
+        
+    });
+</script>
+<div class="form-row">
+    <div class="form-group col-md-12">
+        <label for="ddlOdId" class="text-small">Especialista de control de calidad</label>
+        <div class="input-group">
+            @Html.TextBoxFor(m => m.Nombre_Supervisor_Calidad, new { @class = "form-control form-control-sm", disabled = "disabled" })
+            @Html.HiddenFor(m => m.hdSupervisor_Calidad)
+            <div class="input-group-prepend">
+                <span class="input-group-text" style="cursor:pointer;" onclick="_renderSupervisorCalidad.fnBuscarPersona('SUPERVISOR');"><i class="fa fa-search-plus" data-toggle="tooltip" data-placement="top" title="Seleccione especialista de control de calidad"></i></span>
+            </div>
+        </div>
+    </div>
+</div>

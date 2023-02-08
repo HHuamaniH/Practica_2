@@ -1,0 +1,283 @@
+﻿@model CapaEntidad.ViewModel.VM_InformeMedidaCorrectiva
+
+<style type="text/css">
+    #tbRenderListVertice_wrapper {
+        padding: 0px;
+    }
+</style>
+
+<script src="~/Scripts/sigo/utility.uploadFile.js"></script>
+
+<script type="text/javascript">
+    var _renderListVertice = {};
+    _renderListVertice.tbElimVertice = [];
+    _renderListVertice.opc;
+    _renderListVertice.estado;
+    _renderListVertice.dataVertice;
+    _renderListVertice.dataCodSecuencial;
+    // iniciar datos en la tabla
+    _renderListVertice.fnInitDataTable_Detail = function () {
+        var columns_label = [], columns_data = [], options = {};
+
+        columns_label = ["Vértices", "Zona UTM", "Coordenada Este", "Coordenada Norte", "Observaciones"];
+        columns_data = ["VERTICE", "ZONA", "COORDENADA_ESTE", "COORDENADA_NORTE", "OBSERVACION"];
+        options = {
+            page_length: 10, row_index: true, row_edit: true, row_fnEdit: "_renderListVertice.fnEdit(this,'MOD')", row_delete: true, row_fnDelete: "_renderListVertice.fnDelete(this)", page_sort: true
+        };
+        _renderListVertice.dtRenderListVertice = utilDt.fnLoadDataTable_Detail(_renderListVertice.frm.find("#tbRenderListVertice"), columns_label, columns_data, options);
+        _renderListVertice.dtRenderListVertice.rows.add(JSON.parse('@Html.Raw(Json.Encode(@Model.tbVertice))')).draw();
+    }
+
+    _renderListVertice.fnAddEditVertice = function (opc) {
+        _renderListVertice.fnLimpiarCampos();
+
+        if (opc == 'NUE') _renderListVertice.frm.find("label[for='lblTituloRegistro']").text("Vértice - Nuevo Registro");
+        else _renderListVertice.frm.find("label[for='lblTituloRegistro']").text("Vértice - Modificando Registro");
+
+        utilSigo.modalDraggable(_renderListVertice.frm.find("#mdlRegistraVertice"), '.modal-header');
+        _renderListVertice.frm.find("#mdlRegistraVertice").modal({ keyboard: true, backdrop: 'static' });
+
+        _renderListVertice.opc = opc;
+    }
+
+    _renderListVertice.fnCloseModal = function () {
+        _renderListVertice.frm.find('#mdlRegistraVertice').modal('hide');
+        _renderListVertice.fnLimpiarCampos();
+    }
+
+    _renderListVertice.fnLimpiarCampos = function () {
+        _renderListVertice.frm.find("#txtItemVerticeRef").val("");
+        _renderListVertice.frm.find("#ddlItemZonaVerticeRefId").val("00S");
+        _renderListVertice.frm.find("#txtItemCEsteVerticeRef").val("");
+        _renderListVertice.frm.find("#txtItemCNorteVerticeRef").val("");
+        _renderListVertice.frm.find("#txtItemObservacionVerticeRef").val("");
+    }
+
+    _renderListVertice.fnEdit = function (obj, opc) {
+        _renderListVertice.fnAddEditVertice(opc);
+
+        _renderListVertice.dataVertice = _renderListVertice.dtRenderListVertice.row($(obj).parents('tr'));
+
+        var data = _renderListVertice.dtRenderListVertice.row($(obj).parents('tr')).data();
+
+        _renderListVertice.frm.find("#txtItemVerticeRef").val(data["VERTICE"]);
+        _renderListVertice.frm.find("#ddlItemZonaVerticeRefId").val(data["ZONA"]);
+        _renderListVertice.frm.find("#txtItemCEsteVerticeRef").val(data["COORDENADA_ESTE"]);
+        _renderListVertice.frm.find("#txtItemCNorteVerticeRef").val(data["COORDENADA_NORTE"]);
+        _renderListVertice.frm.find("#txtItemObservacionVerticeRef").val(data["OBSERVACION"]);
+        _renderListVertice.dataCodSecuencial = data["COD_SECUENCIAL"];
+        _renderListVertice.estado = data["RegEstado"];           
+    }
+
+    _renderListVertice.fnDelete = function (obj) {
+        utilSigo.dialogConfirm("Confirmacion", "¿Está seguro de Eliminar el Registro Seleccionado?", function (r) {
+            if (r) {
+                var data = _renderListVertice.dtRenderListVertice.row($(obj).parents('tr')).data();
+                if (data["RegEstado"] != "1") {
+                    _renderListVertice.tbElimVertice.push({
+                        EliTABLA: "IMEDIDA_DET_VERTICES",
+                        COD_SECUENCIAL: data["COD_SECUENCIAL"]
+                    });
+                }
+                _renderListVertice.dtRenderListVertice.row($(obj).parents('tr')).remove().draw(false);
+                utilSigo.toastSuccess("Éxito", "El elemento ha sido eliminado correctamente");
+            }
+        });
+    }
+
+    _renderListVertice.fnDeleteVerticeAll = function () {
+        var dt, rows, countFilas, data;
+        dt = _renderListVertice.dtRenderListVertice;
+        rows = dt.$("tr");
+        countFilas = rows.length;
+
+        if (countFilas > 0) {
+            utilSigo.dialogConfirm("", "Está seguro de Eliminar Todos los Registros?", function (r) {
+                if (r) {
+                    $.each(rows, function (i, o) {
+                        data = dt.row($(o)).data();
+                        if (data["RegEstado"] == "0" || data["RegEstado"] == "2") {
+                            _renderListVertice.tbElimVertice.push({
+                                EliTABLA: "IMEDIDA_DET_VERTICES",
+                                COD_SECUENCIAL: data["COD_SECUENCIAL"]
+                            });
+                        }
+                    });
+                    dt.clear().draw();
+                }
+            });
+        } else {
+            utilSigo.toastWarning("Aviso", "No hay Registros a Eliminar");
+        }
+    }
+
+    _renderListVertice.fnGetListElimVertice = function () { return _renderListVertice.tbElimVertice }
+
+    _renderListVertice.fnSubmitForm = function () {
+        if (_renderListVertice.frm.find("#txtItemVerticeRef").val().trim() == '') {
+            utilSigo.toastWarning("Aviso", "Ingrese el vértice"); return false;
+        }
+        if (_renderListVertice.frm.find("#ddlItemZonaVerticeRefId").val() == '00S') {
+            utilSigo.toastWarning("Aviso", "Debe seleccionar la zona UTM"); return false;
+        }
+        if (_renderListVertice.frm.find("#txtItemCEsteVerticeRef").val().trim() == '') {
+            utilSigo.toastWarning("Aviso", "Ingrese la coordenada este"); return false;
+        }
+        if (_renderListVertice.frm.find("#txtItemCNorteVerticeRef").val().trim() == '') {
+            utilSigo.toastWarning("Aviso", "Ingrese la coordenada norte"); return false;
+        }
+
+        _renderListVertice.fnAddVertice();
+    }
+
+    _renderListVertice.fnAddVertice = function () {
+        if (!$.isNumeric(_renderListVertice.frm.find("#txtItemCEsteVerticeRef").val().trim())) {
+            utilSigo.toastWarning("Aviso", "La cadena de entrada no tiene el formato correcto."); return false;
+        }
+        else {
+            if (_renderListVertice.frm.find("#txtItemCEsteVerticeRef").val().trim() - Math.floor(_renderListVertice.frm.find("#txtItemCEsteVerticeRef").val().trim()) != 0) {
+                utilSigo.toastWarning("Aviso", "La cadena de entrada no tiene el formato correcto."); return false;
+            }
+        }
+
+        if (!$.isNumeric(_renderListVertice.frm.find("#txtItemCNorteVerticeRef").val().trim())) {
+            utilSigo.toastWarning("Aviso", "La cadena de entrada no tiene el formato correcto."); return false;
+        }
+        else {
+            if (_renderListVertice.frm.find("#txtItemCNorteVerticeRef").val().trim() - Math.floor(_renderListVertice.frm.find("#txtItemCNorteVerticeRef").val().trim()) != 0) {
+                utilSigo.toastWarning("Aviso", "La cadena de entrada no tiene el formato correcto."); return false;
+            }
+        }
+
+        var data = {};
+        data.VERTICE = _renderListVertice.frm.find("#txtItemVerticeRef").val();        
+        data.ZONA = _renderListVertice.frm.find("#ddlItemZonaVerticeRefId").val();
+        data.COORDENADA_ESTE = parseInt((_renderListVertice.frm.find("#txtItemCEsteVerticeRef").val().trim() == "") ? "0" : _renderListVertice.frm.find("#txtItemCEsteVerticeRef").val().trim());
+        data.COORDENADA_NORTE = parseInt((_renderListVertice.frm.find("#txtItemCNorteVerticeRef").val().trim() == "") ? "0" : _renderListVertice.frm.find("#txtItemCNorteVerticeRef").val().trim());
+        data.OBSERVACION = _renderListVertice.frm.find("#txtItemObservacionVerticeRef").val();
+
+        if (_renderListVertice.estado == 1) data.RegEstado = 1;
+        else data.RegEstado = 2; 
+        //if (ManInfMedidaCorrectiva_AddEdit.frm.find("#RegEstado").val() == 1) data.RegEstado = 1;
+        //else data.RegEstado = (_renderListVertice.estado == 0) ? 2 : _renderListVertice.estado;
+
+        if (_renderListVertice.opc == 'NUE') {
+            data.RegEstado = 1;
+            data.COD_SECUENCIAL = 0;    
+            _renderListVertice.dtRenderListVertice.rows.add([data]).draw();
+            _renderListVertice.dtRenderListVertice.page('last').draw('page');
+        }
+        else {
+            data.COD_SECUENCIAL = _renderListVertice.dataCodSecuencial;  
+            _renderListVertice.dataVertice.data(data).draw(false);
+        }
+
+        _renderListVertice.fnCloseModal();
+    }
+
+    _renderListVertice.fnGetListVertice = function () {
+        let list = [], rows, countFilas, data;
+
+        rows = _renderListVertice.dtRenderListVertice.$("tr");
+        countFilas = rows.length;
+        if (countFilas > 0) {
+            $.each(rows, function (i, o) {
+                data = _renderListVertice.dtRenderListVertice.row($(o)).data();
+               // if (data["RegEstado"] == "1" || data["RegEstado"] == "2") {
+                list.push(utilSigo.fnConvertArrayToObject(data));
+               // }
+            });
+        }
+        return list;
+    }
+
+    _renderListVertice.fnImportarDatosVertice = function (_tipoRegistro, e, obj) {
+        var url = urlLocalSigo + "Supervision/ManInformeMedidaCorrectiva/ImportarDatosVertice";
+        uploadFile.fileSelectHandler(e, obj, url, { hdfTipo: _tipoRegistro }, function (data) {
+            _renderListVertice.dtRenderListVertice.rows.add(data).draw();
+            _renderListVertice.dtRenderListVertice.page('last').draw('page');
+        });
+    }
+
+
+   $(document).ready(function () {
+       _renderListVertice.frm = $("#frmRenderListVertice");
+       //inicializa la tabla con los campos obtenidos del model
+       _renderListVertice.fnInitDataTable_Detail();
+       //inicializa los componentes necesarios
+       //_renderListVertice.fnInit();
+   });
+
+</script>
+<div id="frmRenderListVertice">
+    <div class="table-responsive">
+        <table id="tbRenderListVertice" style="width:100%;margin:0px !important;" class="table table-hover table-bordered">
+            <thead>
+                <tr>
+                    <th colspan="8" class="text-sm-left">
+                        <div class="form-inline">
+                            <i class="fa mx-2 fa-lg fa-file-o" style="cursor:pointer;" onclick="_renderListVertice.fnAddEditVertice('NUE');" data-toggle="tooltip" data-placement="top" title="Nuevo"></i>
+                            <i class="fa mx-2 fa-lg fa-window-close-o" style="cursor:pointer;" onclick="_renderListVertice.fnDeleteVerticeAll();" data-toggle="tooltip" data-placement="top" title="Eliminar Todo"></i>
+                            <label style="cursor:pointer;" class="fa mx-2 fa-lg fa-file-excel-o" title="Importar Excel" data-toggle="tooltip">
+                                <input type="file" id="fileselectVertice" name="fileselectVertice" style="display:none" size="60" onchange="_renderListVertice.fnImportarDatosVertice('VERTICESREFORESTADAS',event, this);">
+                            </label>
+                            <a href="@Url.Content("~/Archivos/Plantilla/VerticesReforestadas.xlsx")"> <i class="fa mx-2 fa-lg fa-folder-open" style="cursor:pointer;" data-toggle="tooltip" data-placement="top" title="Descargar Plantilla Excel"></i></a>
+                            <strong>Vértices del área de manejo de regeneración natural y/o reforestada</strong>
+                        </div>
+                    </th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
+
+    <div class="modal fade hide" id="mdlRegistraVertice" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header text-small" style="cursor:move;">
+                    <label for="lblTituloRegistro"></label>
+                    <i class="fa fa-close" style="cursor:pointer;" data-dismiss="modal" aria-label="Close"></i>
+                </div>
+                <div class="modal-body">
+                    <div id="frmRegistrarVertice">
+                        <div class="form-group row" style="margin-bottom:0px;">
+                            <label for="lblItemVerticeRef" class="col-md-4 col-form-label text-small">Vértice:</label>
+                            <div class="col-md-3">
+                                @Html.TextBox("txtItemVerticeRef", "", new { @class = "form-control form-control-sm" })
+                            </div>
+                        </div>
+                        <div class="form-group row" style="margin-bottom:0px;">
+                            <label for="lblItemZonaVerticeRefId" class="col-md-4 col-form-label text-small">Zona UTM:</label>
+                            <div class="col-md-8">
+                                @Html.DropDownList("ddlItemZonaVerticeRefId", new SelectList(ViewBag.ddlItemZonaVerticeRef, "Value", "Text"), new { @class = "form-control form-control-sm", @style = "width:auto;" })
+                            </div>
+                        </div>
+                        <div class="form-group row" style="margin-bottom:0px;">
+                            <label for="lblItemCEsteVerticeRef" class="col-md-4 col-form-label text-small">Coordenada Este:</label>
+                            <div class="col-md-3">
+                                @Html.TextBox("txtItemCEsteVerticeRef", "", new { @class = "form-control form-control-sm" })
+                            </div>
+                        </div>
+                        <div class="form-group row" style="margin-bottom:0px;">
+                            <label for="lblItemCNorteVerticeRef" class="col-md-4 col-form-label text-small">Coordenada Norte:</label>
+                            <div class="col-md-3">
+                                @Html.TextBox("txtItemCNorteVerticeRef", "", new { @class = "form-control form-control-sm" })
+                            </div>
+                        </div>
+                        <div class="form-group row" style="margin-bottom:0px;">
+                            <label for="lblItemObservacionVerticeRef" class="col-md-4 col-form-label text-small">Observación:</label>
+                            <div class="col-md-8">
+                                @Html.TextArea("txtItemObservacionVerticeRef", "", new { @class = "form-control form-control-sm", @rows = "3" })
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" id="btnGuardarVertice" class="btn btn-primary btn-sm" onclick="_renderListVertice.fnSubmitForm()">Guardar</button>
+                    <button type="button" id="btnCancelarVertice" class="btn btn-secondary btn-sm" onclick="_renderListVertice.fnCloseModal()">Cancelar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

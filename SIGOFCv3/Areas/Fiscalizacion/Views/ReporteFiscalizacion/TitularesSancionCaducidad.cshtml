@@ -1,0 +1,247 @@
+﻿@model CapaEntidad.ViewModel.VM_ReporteFiscalizacion
+
+@{
+    ViewBag.Title = "Reporte de Titulares con Sanción y/o Caducidad";
+    Layout = "~/Views/Shared/_LayoutMain.cshtml";
+}
+@section styles
+{
+    <style type="text/css">
+        #divReporte { margin-top: 20px; }
+        .title { margin: 0 0 15px 0; clear: both; border-bottom: thin ridge #add8e6; padding: 5px 0; color: #1b4a6f; }
+        [role=button] { cursor: pointer; user-select: none; }
+        .collapsed .fa::before { content: "\f055" !important; }
+        .custom-control-label::before, .custom-control-label::after { top: 0; }
+        .box { padding: 5px; max-height: 220px; overflow: auto; font-size: 0.9em; }
+        .table thead th { text-transform: none; }
+        .table .fa, .table a { cursor: pointer; outline: none; box-shadow: none; }
+    </style>
+}
+@section scripts
+{
+    <script src="~/Areas/Fiscalizacion/js/ReporteFiscalizacion/Utils.js"></script>
+    <script type="text/javascript">
+        var _reporte = {};
+
+        _reporte.fnParams = function () {
+            let modalidad = $('[name*=moda]:checked').map(function () { return $(this).val() }).get();
+            let region = $('[name*=reg]:checked').map(function () { return $(this).val() }).get();
+
+            return {
+                MODALIDAD: modalidad.join(','),
+                REGION: region.join(',')
+            };
+        }
+
+        _reporte.fnReporte = function () {
+            let p = _reporte.fnParams();
+
+            let params = {
+                type: 'post',
+                url: urlLocalSigo + "Fiscalizacion/ReporteFiscalizacion/TitularesSancionCaducidad_Resumen",
+                datos: JSON.stringify({ modalidad: p.MODALIDAD, region: p.REGION })
+            };
+
+            utilSigo.fnAjax(params, function (res) {                
+                let options = {
+                    id: 'tblResumen',
+                    columns: [
+                        { title: 'N°', render: function (_, meta) { return meta.row + 1 }, className: 'text-center' },
+                        { title: 'Departamento', render: 'DEPARTAMENTO' },
+                        {
+                            title: 'Titulares con Sanción y/o Caducidad',
+                            render: function (col, meta) {
+                                return '<a class="btn btn-link p-0">' + col.CADUCADOS + '</a>';
+                            },
+                            className: 'text-center',
+                        },
+                    ],
+                    data: res,
+                    searching: false,
+                    lengthChange: false,
+                    paging: false
+                };
+
+                let dt = fnDrawTable(options);
+                $('#' + options.id).on('click', '.btn-link', function () {
+                    let tr = $(this).closest('tr');
+                    let data = dt.row(tr).data();
+                    _reporte.fnDetalle(data);
+                });
+
+                $('#box-resumen').css('visibility', 'visible');
+            });
+        }
+
+        _reporte.fnDetalle = function (data) {
+            $('#dpto').html(data.DEPARTAMENTO);
+
+            let p = _reporte.fnParams();
+
+            let params = {
+                type: 'post',
+                url: urlLocalSigo + "Fiscalizacion/ReporteFiscalizacion/TitularesSancionCaducidad_Detalle",
+                datos: JSON.stringify({ modalidad: p.MODALIDAD, region: p.REGION, departamento: data.DEPARTAMENTO })
+            };
+
+            utilSigo.fnAjax(params, function (res) {
+                let datos = res.map(function (item) {
+                    return {
+                        TITULAR: item.TITULAR,
+                        TH_NUMERO: item.TH_NUMERO,
+                        MODALIDAD: item.MODALIDAD,
+                        DEPARTAMENTO: item.DEPARTAMENTO,
+                        TITULAR_SANCIONADO: item.TITULAR_SANCIONADO,
+                        RDCADUCA: item.RDCADUCA,
+                        CADUCIDAD: item.CADUCIDAD,
+                        RDCADUCA_PUBLICAR: item.RDCADUCA_PUBLICAR,
+                        RDRECONSIDERA: item.RDRECONSIDERA,
+                        RDRECONSIDERA_PUBLICAR: item.RDRECONSIDERA_PUBLICAR,
+                        PROVEIDO: item.PROVEIDO,
+                        PROVEIDO_FECHA: item.PROVEIDO_FECHA,
+                        RTFFS: item.RTFFS,
+                        RTFFS_PUBLICAR: item.RTFFS_PUBLICAR,
+                    }
+                });
+                
+                let options = {
+                    id: 'tblDetalle',
+                    columns: [
+                        { title: 'N°', render: function (_, meta) { return meta.row + 1 }, className: 'text-center' },
+                        { title: 'Titular', render: 'TITULAR' },
+                        { title: 'Título Habilitante', render: 'TH_NUMERO' },
+                        { title: 'Modalidad', render: 'MODALIDAD' },
+                        { title: 'Departamento', render: 'DEPARTAMENTO' },
+                        { title: 'Titular Sancionado', render: 'TITULAR_SANCIONADO' },
+                        { title: 'Resolución', render: 'RDCADUCA' },
+                        { title: 'Se Dispuso Caducidad', render: 'CADUCIDAD' },
+                        { title: 'Publicado Observatorio', render: 'RDCADUCA_PUBLICAR' },
+                        { title: 'Resolución de Reconsideración', render: 'RDRECONSIDERA' },
+                        { title: 'Publicado Observatorio', render: 'RDRECONSIDERA_PUBLICAR' },
+                        { title: 'Proveído', render: 'PROVEIDO' },
+                        { title: 'Proveído Fecha', render: 'PROVEIDO_FECHA' },
+                        { title: 'Resolución del TFFS', render: 'RTFFS' },
+                        { title: 'Publicado Observatorio', render: 'RTFFS_PUBLICAR' }
+                    ],
+                    data: datos,
+                    searching: false,
+                    lengthChange: false,
+                    //paging: false
+                };
+
+                _reporte.detalle = fnDrawTable(options);
+
+                $('#box-detalle').css('visibility', 'visible');
+            });
+        }
+
+        _reporte.fnExportar = function () {
+            let data = _reporte.detalle.rows().data().toArray();
+
+            let params = {
+                detalle: data
+            };
+
+            $.ajax({
+                type: 'post',
+                url: urlLocalSigo + "Fiscalizacion/ReporteFiscalizacion/TitularesSancionCaducidad_Excel",
+                data: JSON.stringify(params),
+                contentType: 'application/json',
+                dataType: 'binary',
+                xhrFields: {
+                    'responseType': 'blob'
+                },
+                beforeSend: function () { utilSigo.blockUIGeneral(); },
+                complete: function () { utilSigo.unblockUIGeneral(); }
+            }).done(function (result) {
+                utilSigo.file.downloadBlob(new Blob([result]), 'REPORTE_SANCION_CADUCIDAD.xlsx');                
+            });
+        }
+
+        $(function () {
+            $("#chkTodoM, #reg_00").on("change", function () {
+                let isChecked = $(this).is(":checked");
+                $(this).closest('.box').find(".custom-control-input").prop("checked", isChecked);
+            });
+        });
+    </script>
+}
+
+<div id="divReporte">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-12">
+                <h4 class="title">Reporte de Titulares con Sanción y/o Caducidad</h4>
+                <h5 class="collapsed" data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
+                    <i class="fa fa-minus-circle text-success"></i> Opciones de búsqueda
+                </h5>
+                <div class="collapse" id="collapseExample">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <h5>Modalidad</h5>
+                                    <div class="box">
+                                        <div class="custom-control custom-checkbox">
+                                            <input type="checkbox" class="custom-control-input" id="chkTodoM" name="chkTodoM" checked>
+                                            <label class="custom-control-label" for="chkTodoM">Seleccionar todo</label>
+                                        </div>
+                                        @if (Model.lstChkModalidad != null)
+                                        {
+                                            foreach (var item in Model.lstChkModalidad)
+                                            {
+                                                <div class="custom-control custom-checkbox">
+                                                    <input type="checkbox" class="custom-control-input" id="moda_@item.Value" name="moda_@item.Value" value="@item.Value" checked>
+                                                    <label class="custom-control-label" for="moda_@item.Value">@item.Text</label>
+                                                </div>
+                                            }
+                                        }
+                                    </div>
+                                </div>
+                                <div class="col-sm-3">
+                                    <h5>Región</h5>
+                                    <div class="box">
+                                        @if (Model.lstChkRegion != null)
+                                        {
+                                            foreach (var item in Model.lstChkRegion)
+                                            {
+                                                <div class="custom-control custom-checkbox">
+                                                    <input type="checkbox" class="custom-control-input" id="reg_@item.Value" name="reg_@item.Value" value="@item.Value" checked>
+                                                    <label class="custom-control-label" for="reg_@item.Value">@item.Text</label>
+                                                </div>
+                                            }
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <button type="button" class="btn btn-primary" onclick="_reporte.fnReporte()">
+                        Generar reporte
+                    </button>
+                </div>
+                <div id="box-resumen" style="visibility: hidden">
+                    <div class="row justify-content-center">
+                        <div class="col-sm-6">
+                            <h5>Listado Resumen de Titulares con Sanción y/o Caducidad por Departamento</h5>
+                            <table id="tblResumen" class="table table-bordered"></table>
+                        </div>
+                    </div>
+                </div>
+                <div id="box-detalle" class="mt-4" style="visibility: hidden">
+                    <h5 class="mb-4">
+                        Listado de Titulares con Sanción y/o Caducidad del Departamento [<span id="dpto"></span>]
+                        <button type="button" class="btn btn-primary btn-sm float-right" onclick="_reporte.fnExportar()">
+                            Exportar listado
+                        </button>
+                    </h5>
+                    <div class="table-responsive">
+                        <table id="tblDetalle" class="table table-bordered"></table>
+                    </div>                    
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,74 @@
+﻿<div class="modal-dialog modal-sm" role="document">
+    <div class="modal-content">
+        <div class="modal-header text-small" style="cursor:move;">
+            <span>Balance de Extracción</span>
+            <i class="fa fa-close" style="cursor:pointer;" data-dismiss="modal" aria-label="Close"></i>
+        </div>
+        <div class="modal-body">
+            <form id="frmBExtFecEmi">
+                @Html.Hidden("hdfCodTHabilitante", (object)ViewBag.hdfCodTHabilitante)
+                @Html.Hidden("hdfNumPoa", (object)ViewBag.hdfNumPoa)
+                @Html.Hidden("hdfCodSecuencial")
+                @Html.Hidden("hdfRegEstado")
+                <div class="form-row">
+                    <div class="form-group col-md-12">
+                        <label for="txtFechaEmision" class="text-small">Fecha de Emisión</label>
+                        @Html.TextBox("txtFechaEmision", "", new { @class = "form-control form-control-sm", placeholder = "dd/mm/aaaa", maxlength = "10" })
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-primary btn-sm" onclick="_BExtraccionFecEmi.fnSave()">Guardar</button>
+            <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Cancelar</button>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    var _BExtraccionFecEmi = {
+        fnSave: () => {
+            if (utilSigo.ValidaTexto("txtFechaEmision", "Seleccione la fecha de emisión del balance de extracción") == false) return false;
+
+            var data = {
+                COD_THABILITANTE: _BExtraccionFecEmi.frm.find("#hdfCodTHabilitante").val(),
+                NUM_POA: _BExtraccionFecEmi.frm.find("#hdfNumPoa").val(),
+                COD_SECUENCIAL: _BExtraccionFecEmi.frm.find("#hdfCodSecuencial").val(),
+                RegEstado: _BExtraccionFecEmi.frm.find("#hdfRegEstado").val(),
+                BEXTRACCION_FEMISION: _BExtraccionFecEmi.frm.find("#txtFechaEmision").val()
+            };
+            var url = urlLocalSigo + "THabilitante/ManBalanceExtraccion/GrabarBExtraccionFecEmi";
+            var option = { url: url, datos: JSON.stringify(data), type: 'POST' };
+
+            utilSigo.dialogConfirm('', 'Desea continuar con el registro?', function (r) {
+                if (r) {
+                    utilSigo.fnAjax(option, function (data) {
+                        if (data.success) {
+                            utilSigo.toastSuccess("Éxito", data.msj);
+                            _BExtraccionFecEmi.fnSaved();
+                        }
+                        else {
+                            utilSigo.toastWarning("Aviso", data.msj);
+                        }
+                    });
+                }
+            });
+        },
+        fnInit: (data) => {
+            _BExtraccionFecEmi.frm = $("#frmBExtFecEmi");
+            utilSigo.fnFormatDate(_BExtraccionFecEmi.frm.find("#txtFechaEmision"));
+
+            if (data == "") { //Nuevo registro
+                _BExtraccionFecEmi.frm.find("#hdfCodSecuencial").val(0);
+                _BExtraccionFecEmi.frm.find("#hdfRegEstado").val(1);
+            } else { //Modificar registro
+                _BExtraccionFecEmi.frm.find("#hdfCodSecuencial").val(data.COD_SECUENCIAL);
+                _BExtraccionFecEmi.frm.find("#hdfRegEstado").val(data.RegEstado);
+                _BExtraccionFecEmi.frm.find("#txtFechaEmision").val(data.BEXTRACCION_FEMISION);
+            }
+        },
+        fnSaved: () => {
+            /*Implementar en donde se instancia*/
+        }
+    };
+</script>

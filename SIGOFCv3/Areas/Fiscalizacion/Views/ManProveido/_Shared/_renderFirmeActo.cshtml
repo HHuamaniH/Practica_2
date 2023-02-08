@@ -1,0 +1,100 @@
+﻿@model CapaEntidad.ViewModel.VM_Proveido
+<script type="text/javascript">
+    var _renderFirmeActo = {};
+
+    _renderFirmeActo.fnSelectRecom = function () {
+        _renderFirmeActo.frm.find("#divDetalleFirme").hide();
+
+        if (_renderFirmeActo.frm.find("#ddlTipoFirmez").val() == '0000002') {
+            _renderFirmeActo.frm.find("#divDetalleFirme").show();
+        }
+
+    }
+
+    $(document).ready(function () {
+        _renderFirmeActo.frm = $("#divFirmeActo");
+        _renderFirmeActo.fnSelectRecom();
+    });
+</script>
+<div id="divFirmeActo" class="text-small">
+    <div><br /><br /></div>
+    <div class="form-row">
+        <div class="form-group col-md-4">
+            Sobre la Firmeza
+        </div>
+        <div class="form-group col-md-6">
+            @Html.DropDownListFor(m => m.txtIdTipoFirmeza, new SelectList(Model.ListMComboTipoFirmeza, "CODIGO", "DESCRIPCION"),
+                                                                   new
+                                                                        {
+                                                                            @class = "form-control form-control-sm",
+                                                                            @id = "ddlTipoFirmez",
+                                                                            @onchange = "_renderFirmeActo.fnSelectRecom()"
+                                                                       })
+        </div>
+        <div class="form-group col-md-2">
+        </div>
+    </div>
+    <div id="divDetalleFirme" style="display:none;">
+        <div class="form-row">
+            <div class="form-group col-md-4">
+                Caducidad
+            </div>
+            <div class="form-group col-md-6">
+                @Html.DropDownListFor(m => m.txtIdCaducidaF, new SelectList(Model.ListComboFirmeza, "Value", "Text"),
+                                        new { @class = "form-control form-control-sm", @id = "ddlCaducidadF" })
+            </div>
+            <div class="form-group col-md-2">
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group col-md-4">
+                Art. 363 i)
+            </div>
+            <div class="form-group col-md-6">
+                @Html.DropDownListFor(m => m.txtIdArt363IF, new SelectList(Model.ListComboFirmeza, "Value", "Text"),
+                                       new { @class = "form-control form-control-sm", @id = "ddlArticuloF" })
+            </div>
+            <div class="form-group col-md-2">
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group col-md-4">
+                Multa
+            </div>
+            <div class="form-group col-md-6">
+                @Html.DropDownListFor(m => m.txtIdMultaF, new SelectList(Model.ListComboFirmeza, "Value", "Text"),
+                                         new { @class = "form-control form-control-sm", @id = "ddlMultaF" })
+            </div>
+            <div class="form-group col-md-2">
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group col-md-4">
+                Medidas Correctivas
+            </div>
+            <div class="form-group col-md-6">
+                @Html.DropDownListFor(m => m.txtIdMedcorrectivaF, new SelectList(Model.ListComboFirmeza, "Value", "Text"),
+                                       new { @class = "form-control form-control-sm", @id = "ddlMedCorrectivaF" })
+            </div>
+            <div class="form-group col-md-2">
+            </div>
+        </div>
+    </div>
+
+    <div class="form-row">
+        <div class="form-group col-md-4">
+            Fecha en que Adquiere la Firmeza
+        </div>
+        <div class="form-group col-md-6">
+            @Html.EditorFor(m => m.txtFechaFirmezaF, new { htmlAttributes = new { @class = "form-control form-control-sm", placeholder = "dd/mm/yyyy", title = "la fecha a ingresar debe ser en el formato dd/mm/yyyy", maxlength = "10" } })
+        </div>
+        <div class="form-group col-md-2">
+        </div>
+    </div>
+
+    <div class="form-row">
+        <div class="form-group col-md-12">
+            @Html.Partial("~/Areas/Fiscalizacion/Views/ManProveido/_Shared/_renderNotificacion.cshtml", Model)
+        </div>
+    </div>
+</div>

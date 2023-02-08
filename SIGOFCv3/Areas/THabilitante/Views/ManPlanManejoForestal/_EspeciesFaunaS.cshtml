@@ -1,0 +1,91 @@
+﻿@model CapaEntidad.ViewModel.VM_ESPECIE_FS
+<script>
+    "use strict";
+    var AddEspF = {};
+    AddEspF.estado;
+    AddEspF.codSecuencial;
+
+    AddEspF.closeModal = function () {
+        $('#modalEspecieFSPM').modal('hide');
+        $('#modalEspecieFSPM').html('');
+    }
+    AddEspF.limpiarFrm = function () {
+        AddEspF.frm.find("#dplEspecieFaunaId").val('0003496').trigger('change');
+        AddEspF.frm.find("#dplGradoAmenazaEspecieId").val('0000000').trigger('change');
+        AddEspF.frm.find("#txtObservaFauna").val('');
+    }
+    AddEspF.addEspecieFS = function () {
+        var valDescripcionEsp = AddEspF.frm.find("#dplEspecieFaunaId").select2('data')[0].text;
+        var valEspecie = AddEspF.frm.find("#dplEspecieFaunaId").val();
+        var valDescripcionAmenaza = AddEspF.frm.find("#dplGradoAmenazaEspecieId").select2('data')[0].text;
+        var valAmenaza = AddEspF.frm.find("#dplGradoAmenazaEspecieId").val();
+        var valObservacion = AddEspF.frm.find("#txtObservaFauna").val().trim();
+        ManPM.agregarEspeciesFS(valDescripcionEsp, valEspecie, valDescripcionAmenaza, valAmenaza, valObservacion, AddEspF.codSecuencial, AddEspF.estado);
+        if (ManPM.opcRegItem == 'NUE') utilSigo.toastSuccess("Aviso", "Se agregó el registro");
+        else utilSigo.toastSuccess("Aviso", "Se actualizó el registro");
+        AddEspF.limpiarFrm();
+        AddEspF.closeModal();
+    }
+    $(document).ready(function () {
+        $.fn.select2.defaults.set("theme", "bootstrap4");
+        AddEspF.frm = $("#frmEspeciesFSModal");
+        AddEspF.frm.find("#dplEspecieFaunaId").select2();
+        AddEspF.frm.find("#dplGradoAmenazaEspecieId").select2();
+
+        if (ManPM.opcRegItem == 'NUE') {
+            $('#tituloRegistro').html('Nuevo Registro');
+            $('#btnGuardarEspeciesFS').html('Agregar');
+        }
+        else {
+            $('#tituloRegistro').html('Modificando Registro');
+            $('#btnGuardarEspeciesFS').html('Guardar');
+
+            AddEspF.frm.find("#dplEspecieFaunaId").val(ManPM.dataEditar.find(".hdCodEspecie").val()).change();
+            AddEspF.frm.find("#dplEspecieFaunaId").attr("disabled", true);
+            AddEspF.frm.find("#dplGradoAmenazaEspecieId").val(ManPM.dataEditar.find(".hdCodAmenaza").val()).change();
+            AddEspF.frm.find("#txtObservaFauna").val(ManPM.dataEditar.find(".hdObservacion").val());
+            AddEspF.codSecuencial = ManPM.dataEditar.find(".hdCodSecuencial").val();
+            AddEspF.estado = ManPM.dataEditar.find(".hdEstadoItem").val()
+        }
+
+        $("#btnGuardarEspeciesFS").click(function () {
+            AddEspF.addEspecieFS();
+        });
+        $("#btnCancelarEspeciesFS").click(function () {
+            AddEspF.closeModal();
+        });
+    });
+</script>
+<div class="modal-dialog" role="document">
+    <div class="modal-content">
+        <div class="modal-header text-small" style="cursor:move;">
+            <span id="tituloRegistro"></span>
+        </div>
+        <div class="modal-body">
+            <form id="frmEspeciesFSModal">
+                <div class="form-group row">
+                    <label for="dplEspecieFaunaId" class="col-md-4 col-form-label text-small">Especie</label>
+                    <div class="col-md-8">
+                        @Html.DropDownListFor(m => m.dplEspecieFaunaId, new SelectList(Model.dplEspecieFauna, "Value", "Text"), new { @class = "form-control form-control-sm", @style = "width:auto;" })
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="dplGradoAmenazaEspecieId" class="col-md-4 col-form-label text-small">Grado de amenaza</label>
+                    <div class="col-md-8">
+                        @Html.DropDownListFor(m => m.dplGradoAmenazaEspecieId, new SelectList(Model.dplGradoAmenazaEspecie, "Value", "Text"), new { @class = "form-control form-control-sm", @style = "width:auto;" })
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="txtNumArb" class="col-md-4 col-form-label text-small">Observación</label>
+                    <div class="col-md-8">
+                        @Html.TextAreaFor(m => m.txtObservaFauna, new { htmlAttributes = new { @class = "form-control form-control-sm", maxlength = "100", rows = 2 } })
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="modal-footer">
+            <button type="button" id="btnGuardarEspeciesFS" class="btn btn-primary btn-sm">Agregar</button>
+            <button type="button" id="btnCancelarEspeciesFS" class="btn btn-secondary btn-sm">Cancelar</button>
+        </div>
+    </div>
+</div>

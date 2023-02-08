@@ -1,0 +1,71 @@
+﻿<div id="divTbResumen" style="width: 100%; overflow: auto; scrollbar-base-color: none;">
+    <div style="text-align:center; color:cadetblue">
+        <h3>@Model.tituloReporteDetalle</h3>
+    </div>
+    <table id="tbListDetalleEL2" class="table table-bordered table-striped-success" style="width: 100% !important; font-size:12px">
+        <thead>
+            <tr style=" text-align: center;  background-color: #dae7f5">
+                <td style="width: 2%">N°</td>
+                <td style="width: 15%">Especialista</td>
+                <td style="width: 10%">CCNN y/o CCCC</td>
+                <td style="width: 10%">Predio Privado</td>
+                <td style="width: 10%">Bosques Secos</td>
+                <td style="width: 10%">Bosques Locales</td>
+                <td style="width: 10%">Fauna Silvestre</td>
+                <td style="width: 10%">Concesiones Maderables</td>
+                <td style="width: 10%">Concesiones No Maderables</td>
+                <td style="width: 10%">Forestación y/o Reforestación</td>
+                <td style="width: 10%">Ecoturismo</td>
+                <td style="width: 10%">Conservación</td>
+                <td style="width: 10%">Fauna Silvestre</td>
+                <td style="width: 10%">Total</td>
+            </tr>
+        </thead>
+
+        <tbody id="bodyTable">
+            @if (Model.listDetalleEL1 != null)
+            {
+                var count = 0;
+                foreach (var item in Model.listDetalleEL1)
+                {
+                    <tr style=" text-align: center;">
+                        <td style="width: 2%">@(++count)</td>
+                        <td style="width: 15%">@item.APELLIDOS_NOMBRES</td>
+                        <td style="width: 10%">@item.CANT_CCCC_CCNN</td>
+                        <td style="width: 10%">@item.CANT_PP</td>
+                        <td style="width: 10%">@item.CANT_BS</td>
+                        <td style="width: 10%">@item.CANT_BL</td>
+                        <td style="width: 10%">@item.CANT_PFAUNA</td>
+                        <td style="width: 10%">@item.CANT_CMADE</td>
+                        <td style="width: 10%">@item.CANT_NM</td>
+                        <td style="width: 10%">@item.CANT_FYR</td>
+                        <td style="width: 10%">@item.CANT_ECO</td>
+                        <td style="width: 10%">@item.CANT_CONS</td>
+                        <td style="width: 10%">@item.CANT_CFAUNA</td>
+                        <td style="width: 10%">@item.TOTAL</td>
+                    </tr>
+                }
+            }
+        </tbody>
+        <tfoot>
+            <tr style=" text-align: center;  background-color: #dae7f5">
+                <td style="width: 2%"></td>
+                <td style="width: 20%">Total</td>
+                <td style="width: 10%">@Model.subT01</td>
+                <td style="width: 10%">@Model.subT02</td>
+                <td style="width: 10%">@Model.subT03</td>
+                <td style="width: 10%">@Model.subT04</td>
+                <td style="width: 10%">@Model.subT05</td>
+                <td style="width: 10%">@Model.subT06</td>
+                <td style="width: 10%">@Model.subT07</td>
+                <td style="width: 10%">@Model.subT08</td>
+                <td style="width: 10%">@Model.subT09</td>
+                <td style="width: 10%">@Model.subT10</td>
+                <td style="width: 10%">@Model.subT11</td>
+                <td style="width: 10%">@Model.subT12</td>
+            </tr>
+        </tfoot>
+    </table>
+</div>
+
+

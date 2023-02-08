@@ -1,0 +1,652 @@
+﻿@using CapaEntidad.ViewModel
+@model CapaEntidad.ViewModel.VM_GuiaTransporte
+
+@{
+    ViewBag.Title = "Index";
+    //Layout = "~/Views/Shared/_LayoutMain.cshtml";
+    Layout = "~/Views/Shared/_LayoutEstudio.cshtml";
+    var perfils = Model.codSPerfils.Split(',');
+
+}
+
+
+<script src="~/Scripts/ckeditor/ckeditor.js"></script>
+
+
+@Scripts.Render("~/bundles/ManGuiaTransporteForestal/AddEdit")
+@section scripts{
+    <script>
+        "use strict";
+
+        var ManGuiaTransporte = new GuiaTransporte();
+        var ItemProducto = new Producto("ItemProducto","I");
+        var ItemTHabilitante = new THabilitante();       
+
+        $(document).ready(function () {
+            $('[data-toggle="tooltip"]').tooltip();
+            ManGuiaTransporte.init();
+            ItemProducto.init();
+            utilSigo.ValidaRol('@ViewBag.VAliasRol', 'btnRegistrar', 0);
+
+            $('.checkOrigen').click(function () {
+                if ($(this).is(':checked')) {
+                    $('.grpCheck input[type=checkbox]').each(function () {
+                        $(this).prop("checked", false); //$('#sel').text('Un-Select All');
+                    });
+                    $(this).prop("checked", true);
+                }
+                else {
+                    //$('.grpCheck input[type=checkbox]').each(function () {
+                    //    $(this).prop("checked", true); //$('#sel').text('Select All');
+                    //});
+                    $(this).prop("checked", false);
+                }
+            });
+
+
+            var list = [];
+            @foreach(var item in Model.ListProducto)
+            {
+                <text>
+
+            list.push({
+                NUMERO_PRODUCTO: "@item.NUMERO_PRODUCTO",
+                NOMBRE_PRODUCTO: "@item.NOMBRE_PRODUCTO",
+                TIPO_PRODUCTO: "@item.TIPO_PRODUCTO",
+                DESCRIPCION_PRODUCTO: "@item.DESCRIPCION_PRODUCTO",
+                CANTIDAD_PRODUCTO: @item.CANTIDAD_PRODUCTO,
+                UNIDAD_MEDIDA_PROD: "@item.UNIDAD_MEDIDA_PROD",
+                TOTAL_PRODUCTO: @item.TOTAL_PRODUCTO,
+                CODIGO_PRODUCTO: "@item.CODIGO_PRODUCTO",
+                COD_ESPECIES: "@item.COD_ESPECIES",
+                OBSERVACIONES_PROD_DETALLE: "@item.OBSERVACIONES_PROD_DETALLE",
+                RegEstado: RegEstadoSigo.INITIAL
+            });
+            </text>
+            }
+            //console.log(list);
+            ItemProducto.dt.rows.add(list).draw();           
+
+        });
+
+
+
+
+    </script>
+}
+<div class="container-fluid">
+    <div class="card">
+        <div class="card-header text-right">
+            <h5>   @Model.Titulo</h5>
+        </div>
+        <div class="card-body">
+            <div class="card">
+                <div class="card-header text-small" id="divTitle">
+                    <div class="text-left">
+                        <a id="btnRegistrar" href="javascript:void(0)" style="cursor:pointer;" data-toggle="tooltip" data-placement="top" title="Guardar" onclick="ManGuiaTransporte.save()"><i class="fa mx-2 fa-lg fa-save"></i></a>
+                        <a style="cursor:pointer;" data-toggle="tooltip" data-placement="top" title="Regresar" href="@Url.Content("~/THabilitante/ManGuiaTransporteForestal/Index")"><i class="fa mx-2 fa-lg fa-reply"></i></a>
+                    </div>
+                    <div class="text-center"><h3>@Model.SubTitulo</h3></div>
+
+                </div>
+                <div class="card-body">
+                    <form id="frmGuiaTransporte">
+                        @Html.HiddenFor(m => m.hdfManRegEstado)
+                        @Html.HiddenFor(m => m.TipoFormulario)
+
+                        @Html.HiddenFor(m => m.COD_GUIA_TRANS)
+                        @Html.HiddenFor(m => m.codUGrupo)
+
+                        <ul class="nav nav-tabs" id="myTab" role="tablist">
+                            <li class="nav-item" id="navDatosTab"><a class="nav-link active font-weight-bold" data-toggle="tab" href="#navDatos" role="tab" aria-controls="home" aria-selected="true"> Datos Generales de la Guía de Transporte Forestal </a></li>
+
+                        </ul>
+                        <div class="tab-content" id="nav-tabContent">
+
+                            <div class="tab-pane fade show active" id="navDatos" role="tabpanel" aria-labelledby="nav-home-tab">
+
+                                <div class="card-body">
+                                    <div class="form-row">
+                                        <div class="form-group col-md-3 mb-3">
+                                            <label for="txtNumGuia" class="text-small">Nº de Guia de Transporte</label>
+                                            @Html.EditorFor(m => m.txtNumGuia, new { htmlAttributes = new { @class = "form-control form-control-sm", Maxlength = 200, required = "required" } })
+                                        </div>
+                                        @if (!perfils.Contains("0000030"))
+                                        {
+                                            <div class="form-group col-md-6 mb-3">
+                                                <label for="txtNomGuia" class="text-small">Nombre de la Entidad que Emite la Guia</label>
+                                                @Html.EditorFor(m => m.txtNomGuia, new { htmlAttributes = new { @class = "form-control form-control-sm", Maxlength = 200, required = "required" } })
+
+                                            </div>
+                                            <div class="form-group col-md-3 mb-3">
+                                                <label for="txtSede" class="text-small">Sede</label>
+                                                @Html.EditorFor(m => m.txtSede, new { htmlAttributes = new { @class = "form-control form-control-sm", Maxlength = 200 } })
+
+                                            </div>
+                                        }
+
+
+                                    </div>
+                                    @if (!perfils.Contains("0000030"))
+                                    {
+                                        <div class="form-row">
+                                            <div class="form-group col-md-3 mb-3">
+                                                <label for="txtItemFechaExp" class="text-small">Fecha de Expedición</label>
+                                                @Html.EditorFor(m => m.txtItemFechaExp, new { htmlAttributes = new { @class = "form-control form-control-sm", Maxlength = 10, Pattern = "[0-9]{2}/[0-9]{2}/[0-9]{4}", Placeholder = "dd/mm/aaaa", Title = "la fecha a ingresar debe ser en el formato dd/mm/aaaa"/*, required = "required"*/ } })
+                                            </div>
+                                            <div class="col-md-9 mb-3">
+                                                <label for="txtItemFechaExp" class="text-small">Origen del recurso</label>
+                                                <div class="row grpCheck">
+                                                    <div class="col-md-3">
+                                                        <div class="form-check">
+                                                            @Html.CheckBoxFor(m => m.chkOrigenConc, new { @class = "form-check-input checkOrigen" })
+                                                            <label class="form-check-label" for="chkOrigenConc">
+                                                                Concesión
+                                                            </label>
+                                                        </div>
+                                                        <div class="form-check">
+                                                            @Html.CheckBoxFor(m => m.chkOrigenPerm, new { @class = "form-check-input checkOrigen" })
+                                                            <label class="form-check-label" for="chkOrigenPerm">
+                                                                Permiso
+                                                            </label>
+                                                        </div>
+                                                        <div class="form-check">
+                                                            @Html.CheckBoxFor(m => m.chkOrigenAut, new { @class = "form-check-input checkOrigen" })
+                                                            <label class="form-check-label" for="chkOrigenAut">
+                                                                Autorización
+                                                            </label>
+                                                        </div>
+                                                        <div class="form-check">
+                                                            @Html.CheckBoxFor(m => m.chkOrigenBL, new { @class = "form-check-input checkOrigen" })
+                                                            <label class="form-check-label" for="chkOrigenBL">
+                                                                Bosque Local
+                                                            </label>
+                                                        </div>
+                                                        <div class="form-check">
+                                                            @Html.CheckBoxFor(m => m.chkOrigenDesbloque, new { @class = "form-check-input checkOrigen" })
+                                                            <label class="form-check-label" for="chkOrigenDesbloque">
+                                                                Desbloque
+                                                            </label>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-9">
+                                                        <div class="form-check">
+                                                            @Html.CheckBoxFor(m => m.chkOrigenCambUso, new { @class = "form-check-input checkOrigen" })
+                                                            <label class="form-check-label" for="chkOrigenCambUso">
+                                                                Cambio de Uso
+                                                            </label>
+                                                        </div>
+                                                        <div class="form-check">
+                                                            @Html.CheckBoxFor(m => m.chkOrigenPlant, new { @class = "form-check-input checkOrigen" })
+                                                            <label class="form-check-label" for="chkOrigenPlant">  Plantación </label>
+                                                        </div>
+                                                        <div class="form-check">
+                                                            @Html.CheckBoxFor(m => m.chkOrigenPMConsolidado, new { @class = "form-check-input checkOrigen" })
+                                                            <label class="form-check-label" for="chkOrigenPMConsolidado">  Plan de Manejo Consolidado </label>
+                                                        </div>
+                                                        <div class="form-check">
+                                                            @Html.CheckBoxFor(m => m.chkOrigenOtros, new {  @class = "form-check-input checkOrigen" } )
+                                                            <label class="form-check-label" for="chkOrigenOtros">  Otros </label>
+                                                            @Html.EditorFor(m => m.txtOrigenOtros, new { htmlAttributes = new { @class = "form-control form-control-sm", Maxlength = 200 } })
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group col-md-3 mb-3">
+                                                <label for="txtItemFechaExp" class="text-small">Fecha de Vencimiento</label>
+                                                @Html.EditorFor(m => m.txtItemFechaVen, new { htmlAttributes = new { @class = "form-control form-control-sm", Maxlength = 10, Pattern = "[0-9]{2}/[0-9]{2}/[0-9]{4}", Placeholder = "dd/mm/aaaa", Title = "la fecha a ingresar debe ser en el formato dd/mm/aaaa" } })
+                                            </div>
+                                        </div>
+
+
+                                        @*<div id="pnFormUsuOSINFOR_1" style="visibility:hidden">
+                                            <div class="form-row align-items-end">
+                                                <div class="form-group col-md-3 mb-3">
+                                                    <label for="ddlPlanAmazonasId" class="text-small">Año de ejecución del Plan Amazona</label>
+                                                    @Html.DropDownListFor(m => m.ddlPlanAmazonasId, new SelectList(
+
+                                             new List<VM_Cbo>
+                                                 (){
+                                                        new VM_Cbo(){Text="Ninguno",Value="Ninguno" },
+                                                        new VM_Cbo(){Text="2014",Value="2014" },
+                                                        new VM_Cbo(){Text="2015",Value="2015" }
+                                                 }, "Value", "Text"),
+                                                 new{
+                                                     @class = "form-control form-control-sm"
+
+                                                 })
+
+
+                                                </div>
+                                                <div class="form-check col-md-6 mb-3">
+                                                    @Html.CheckBoxFor(m => m.chkPlanAmazonas, new { htmlAttributes = new { @class = "form-check-input" } })
+                                                    <label class="form-check-label" for="chkPlanAmazonas">
+                                                        ¿Guia de Transporte pertenece al Plan Amazonas?
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </div>*@
+                                    }
+
+
+                                    <div class="card-header text-small font-weight-bold">
+                                        Datos del Título Habilitante
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="form-row align-items-end">
+                                            <div class="col-md-5 mb-3">
+
+                                                <label for="lblnum_Thabilitante" class="text-small"> Título Habilitante </label>
+                                                @*@Html.RadioButtonFor(m => m.rdbListTH, "1", new { id = "rdSi" })
+                                                <label for="rdSi" class="text-small"> Si  </label>
+                                                @Html.RadioButtonFor(m => m.rdbListTH, "2", new { id = "rdNo" })
+                                                <label for="rdNo" class="text-small">No</label>*@
+                                                <div class="input-group">
+                                                    <div class="input-group-prepend" style="cursor:pointer" onclick="ItemTHabilitante.showModal();">
+                                                        <span class="input-group-text"><i class="fa fa-search" data-toggle="tooltip" data-placement="top" title="Buscar Titulo Habilitante"></i></span>
+                                                    </div>
+                                                    @Html.EditorFor(m => m.txtItemTituloHabilitante, new { htmlAttributes = new { @class = "form-control form-control-sm", required = "required" } })
+
+                                                    @Html.HiddenFor(m => m.hdfItemCodTHabilitante)
+                                                </div>
+
+                                            </div>
+
+                                            <div class="col-md-7 mb-3">
+                                                <label for="txtItemNombreTitularh" class="text-small"> Nombre Completo del Titular </label>
+                                                <div class="input-group">
+                                                    <div class="input-group-prepend" style="cursor:pointer" onclick="ManGuiaTransporte.fnBuscarPersona('TITULAR','TODOS','0000001');">
+                                                        <span class="input-group-text">
+                                                            <i class="fa fa-search" data-toggle="tooltip" data-placement="top" title="Buscar Habilitante"></i>
+                                                        </span>
+                                                    </div>
+                                                    @Html.EditorFor(m => m.txtItemNombreTitularh, new { htmlAttributes = new { @class = "form-control form-control-sm", MaxLength = 200, Disabled = "disabled" } })
+                                                    @Html.HiddenFor(m => m.hdfCodTitularHab)
+                                                </div>
+                                            </div>
+                                        </div>
+                                        @*@if (!perfils.Contains("0000030"))
+                                        {*@
+                                            <div class="form-row">
+                                                <div class="col-md-12 mb-3">
+                                                    <label for="txtItemNombreRLegalh" class="text-small"> Representante Legal </label>
+                                                    <div class="input-group">
+                                                        <div class="input-group-prepend" style="cursor:pointer" onclick="ManGuiaTransporte.fnBuscarPersona('RLEGAL','N','0000002');">
+                                                            <span class="input-group-text">
+                                                                <i class="fa fa-search" data-toggle="tooltip" data-placement="top" title="Buscar Represtante Legal"></i>
+                                                            </span>
+                                                        </div>
+                                                        @Html.EditorFor(m => m.txtItemNombreRLegalh, new { htmlAttributes = new { @class = "form-control form-control-sm", MaxLength = 200, Disabled = "disabled" } })
+                                                        @Html.HiddenFor(m => m.hdfCodRLegalHab)
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                        @*}*@
+                                        <div class="form-row">
+                                            @*@if (!perfils.Contains("0000030"))
+                                            {<div class="form-group col-md-2 mb-3">
+                                                    <label for="txtNumPOA" class="text-small">Nº POA</label>
+                                                    @Html.EditorFor(m => m.txtNumPOA, new { htmlAttributes = new { @class = "form-control form-control-sm", Maxlength = 3, onkeypress = "return utilSigo.onKeyEntero(event, this);" } })
+                                                </div>
+                                            }*@
+
+                                            <div class="form-group col-md-6 mb-3">
+                                                <label for="txtNumResPOA" class="text-small">Nº Resolución</label>
+                                                @Html.EditorFor(m => m.txtNumResPOA, new { htmlAttributes = new { @class = "form-control form-control-sm", Maxlength = 250 } })
+                                            </div>
+
+                                            @*@if (!perfils.Contains("0000030"))
+                                            {*@
+                                                <div class="form-group col-md-4 mb-3" id="pnFormUsuOSINFOR_2">
+                                                    <label for="txtTipoPM" class="text-small">Plan de Manejo (Tipo)</label>
+                                                    @Html.EditorFor(m => m.txtTipoPM, new { htmlAttributes = new { @class = "form-control form-control-sm", Maxlength = 100 } })
+                                                </div>
+                                                @*//}*@
+
+                                        </div>
+                                        @*@if (!perfils.Contains("0000030"))
+                                        {*@
+
+                                            <div class="form-row">
+                                                <div class="col-md-4 mb-3">
+                                                    <label for="lblItemEstUbigeo" class="text-small">Ubigeo </label>
+                                                    <div class="input-group">
+                                                        <div class="input-group-prepend" style="cursor:pointer" onclick="ManGuiaTransporte.cargarUbigeoModal('T');">
+                                                            <span class="input-group-text">
+                                                                <i class="fa fa-search" data-toggle="tooltip" data-placement="top" title="Buscar Ubigeo"></i>
+                                                            </span>
+                                                        </div>
+                                                        @Html.EditorFor(m => m.lblItemEstUbigeo, new { htmlAttributes = new { @class = "form-control form-control-sm", disabled = "Disabled" } })
+                                                        @Html.HiddenFor(m => m.hdfItemEstUbigeoCodigo)
+                                                    </div>
+                                                </div>
+                                                <div class="form-group col-md-8 mb-3">
+                                                    <label for="txtDireccionHabilitante" class="text-small">Dirección</label>
+                                                    @Html.EditorFor(m => m.txtDireccionHabilitante, new { htmlAttributes = new { @class = "form-control form-control-sm", Maxlength = 200, Disabled = "Disabled" } })
+                                                </div>
+                                            </div>
+                                        @*}*@
+
+
+                                        @*@if (!perfils.Contains("0000030"))
+                                        {*@
+                                            <div class="form-row">
+                                                <div class="form-group col-md-4 mb-3" id="pnFormUsuOSINFOR_3">
+                                                    <label for="txtDNIHab" class="text-small">DNI</label>
+                                                    @Html.EditorFor(m => m.txtDNIHab, new { htmlAttributes = new { @class = "form-control form-control-sm", Maxlength = 12, Disabled = "Disabled", onkeypress = "return utilSigo.onKeyEntero(event, this);" } })
+                                                </div>
+                                                <div class="form-group col-md-4 mb-3" id="pnFormUsuOSINFOR_4">
+                                                    <label for="txtRucHab" class="text-small">RUC/RUS Nº</label>
+                                                    @Html.EditorFor(m => m.txtRucHab, new { htmlAttributes = new { @class = "form-control form-control-sm", Maxlength = 200, Disabled = "Disabled", onkeypress = "return utilSigo.onKeyEntero(event, this);" } })
+                                                </div>
+                                            </div>
+                                        @*}*@
+
+
+
+                                    </div>
+                                    @*@if (Model.codUGrupo != "0000014")*@
+                                    @*@if (!perfils.Contains("0000030"))
+                                    {*@
+                                        <div id="pnFormUsuOSINFOR_5">
+                                            <div class="card-header text-small font-weight-bold">
+                                                PROPIETARIO
+                                            </div>
+                                            <div class="card-body">
+                                                <div class="form-row">
+                                                    <div class="col-md-8 mb-3">
+                                                        <label for="txtNomProp" class="text-small">Propietario </label>
+                                                        <div class="input-group">
+                                                            <div class="input-group-prepend" style="cursor:pointer" onclick="ManGuiaTransporte.fnBuscarPersona('PROPIETARIO','TODOS','TODOS');">
+                                                                <span class="input-group-text"><i class="fa fa-search" data-toggle="tooltip" data-placement="top" title="Buscar Propietario"></i></span>
+                                                            </div>
+                                                            @Html.EditorFor(m => m.txtNomProp, new { htmlAttributes = new { @class = "form-control form-control-sm", Disabled = "disabled" } })
+
+                                                            @Html.HiddenFor(m => m.hdfCodPropietario)
+                                                        </div>
+
+                                                    </div>
+                                                    <div class="form-group col-md-2 mb-3">
+                                                        <label for="txtDNIProp" class="text-small">DNI</label>
+                                                        @Html.EditorFor(m => m.txtDNIProp, new { htmlAttributes = new { @class = "form-control form-control-sm", Disabled = "disabled" } })
+                                                    </div>
+                                                    <div class="form-group col-md-2 mb-3">
+                                                        <label for="txtRucProp" class="text-small">RUC/RUS Nº</label>
+                                                        @Html.EditorFor(m => m.txtRucProp, new { htmlAttributes = new { @class = "form-control form-control-sm", Disabled = "disabled" } })
+                                                    </div>
+                                                </div>
+
+                                                <div class="form-row">
+                                                    <div class="form-group col-md-12 mb-3">
+                                                        <label for="txtDireccProp" class="text-small">Dirección</label>
+                                                        @Html.EditorFor(m => m.txtDireccProp, new { htmlAttributes = new { @class = "form-control form-control-sm", Disabled = "disabled" } })
+                                                    </div>
+                                                </div>
+                                                @*<div class="form-row">
+                                                    <div class="form-group col-md-8 mb-3">
+                                                        <label for="txtTipoComprobante" class="text-small">Tipo de Comprobante de Compra o Venta</label>
+                                                        @Html.EditorFor(m => m.txtTipoComprobante, new { htmlAttributes = new { @class = "form-control form-control-sm", Maxlength = 250 } })
+                                                    </div>
+                                                    <div class="form-group col-md-4 mb-3">
+                                                        <label for="txtNumComprobante" class="text-small">N° de Comprobante</label>
+                                                        @Html.EditorFor(m => m.txtNumComprobante, new { htmlAttributes = new { @class = "form-control form-control-sm", Maxlength = 250 } })
+                                                    </div>
+                                                </div>*@
+
+                                            </div>
+                                            <div class="card-header text-small font-weight-bold">
+                                                DESTINATARIO
+                                            </div>
+                                            <div class="card-body">
+                                                <div class="form-row">
+                                                    <div class="col-md-12 mb-3">
+                                                        <label for="txtNomDest" class="text-small">Destinatario </label>
+                                                        <div class="input-group">
+                                                            <div class="input-group-prepend" style="cursor:pointer" onclick="ManGuiaTransporte.fnBuscarPersona('DESTINATARIO','TODOS','TODOS');">
+                                                                <span class="input-group-text"><i class="fa fa-search" data-toggle="tooltip" data-placement="top" title="Nuevo"></i></span>
+                                                            </div>
+                                                            @Html.EditorFor(m => m.txtNomDest, new { htmlAttributes = new { @class = "form-control form-control-sm", ReadOnly = true, Maxlength = 1000 } })
+                                                            @Html.HiddenFor(m => m.hdfCodDestinatario)
+                                                        </div>
+
+                                                    </div>
+                                                </div>
+                                                <div class="form-row">
+                                                    <div class="form-group col-md-12 mb-3">
+                                                        <label for="txtDirecDest" class="text-small">Dirección</label>
+                                                        @Html.EditorFor(m => m.txtDirecDest, new { htmlAttributes = new { @class = "form-control form-control-sm", ReadOnly = true, Maxlength = 250 } })
+                                                    </div>
+                                                </div>
+                                                <div class="form-row">
+                                                    <div class="form-group col-md-4 mb-3">
+                                                        <label for="txtDNIDest" class="text-small">DNI</label>
+                                                        @Html.EditorFor(m => m.txtDNIDest, new { htmlAttributes = new { @class = "form-control form-control-sm", ReadOnly = true, Maxlength = 80 } })
+                                                    </div>
+                                                    <div class="form-group col-md-4 mb-3">
+                                                        <label for="txtRucDest" class="text-small">RUC/RUS Nº</label>
+                                                        @Html.EditorFor(m => m.txtRucDest, new { htmlAttributes = new { @class = "form-control form-control-sm", ReadOnly = true, Maxlength = 11 } })
+                                                    </div>
+                                                    <div class="col-md-4 mb-3">
+                                                        <label for="lblItemEstUbigeo1" class="text-small">Ubigeo </label>
+                                                        <div class="input-group">
+                                                            <div class="input-group-prepend" style="cursor:pointer" onclick="ManGuiaTransporte.cargarUbigeoModal('D');">
+                                                                <span class="input-group-text"><i class="fa fa-search" data-toggle="tooltip" data-placement="top" title="Nuevo"></i></span>
+                                                            </div>
+                                                            @Html.EditorFor(m => m.lblItemEstUbigeo1, new { htmlAttributes = new { @class = "form-control form-control-sm", Disabled = "disabled" } })
+                                                            @Html.HiddenFor(m => m.hdfItemEstUbigeoCodigo1)
+                                                        </div>
+
+                                                    </div>
+                                                </div>
+
+
+                                            </div>
+                                            @*<div class="card-header text-small font-weight-bold" style="display:none">
+                                                PAGOS EFECTUADOS POR EL EXTRACTOR
+                                            </div>
+                                            <div class="card-body" style="display:none">
+                                                <div class="form-row">
+                                                    <div class="form-group col-md-12 mb-3">
+                                                        <label for="txtReciboProd" class="text-small">Producto al Estado Natural / Recibo Nº</label>
+                                                        @Html.EditorFor(m => m.txtReciboProd, new { htmlAttributes = new { @class = "form-control form-control-sm", Maxlength = 200 } })
+                                                    </div>
+                                                </div>
+                                                <div class="form-row">
+                                                    <div class="form-group col-md-12 mb-3">
+                                                        <label for="txtMontoProduct" class="text-small">Monto Producto S/.</label>
+                                                        @Html.EditorFor(m => m.txtMontoProduct, new { htmlAttributes = new { @class = "form-control form-control-sm", Maxlength = 200 } })
+                                                    </div>
+                                                </div>
+                                                <div class="form-row">
+                                                    <div class="form-group col-md-12 mb-3">
+                                                        <label for="txtReciboCanon" class="text-small">Canon Reforestación / Recibo Nº"</label>
+                                                        @Html.EditorFor(m => m.txtReciboCanon, new { htmlAttributes = new { @class = "form-control form-control-sm", Maxlength = 200 } })
+                                                    </div>
+                                                </div>
+                                                <div class="form-row">
+                                                    <div class="form-group col-md-12 mb-3">
+                                                        <label for="txtMontoCanon" class="text-small">Monto Canon S/.</label>
+                                                        @Html.EditorFor(m => m.txtMontoCanon, new { htmlAttributes = new { @class = "form-control form-control-sm", Maxlength = 200 } })
+                                                    </div>
+                                                </div>
+                                            </div>*@
+                                            <div class="card-header text-small font-weight-bold">
+                                                TRANSPORTE
+                                            </div>
+                                            <div class="card-body">
+                                                <div class="form-row">
+                                                    <div class="form-group col-md-8 mb-3">
+                                                        <label for="txtTipoTransp" class="text-small">Tipo Transporte</label>
+                                                        @Html.EditorFor(m => m.txtTipoTransp, new { htmlAttributes = new { @class = "form-control form-control-sm", Maxlength = 200 } })
+                                                    </div>
+                                                    @*<div class="form-group col-md-4 mb-3">
+                                                        <label for="txtPlacaTransp" class="text-small">Vehículo Placa Nº</label>
+                                                        @Html.EditorFor(m => m.txtPlacaTransp, new { htmlAttributes = new { @class = "form-control form-control-sm", Maxlength = 200 } })
+                                                    </div>*@
+                                                </div>
+
+                                                @*<div class="form-row">
+                                                    <div class="col-md-8 mb-3">
+                                                        <label for="txtNomCondTransp" class="text-small">Conductor </label>
+                                                        <div class="input-group">
+                                                            <div class="input-group-prepend" style="cursor:pointer" onclick="ManGuiaTransporte.fnBuscarPersona('CONDUCTOR','N','TODOS');">
+                                                                <span class="input-group-text"><i class="fa fa-search" data-toggle="tooltip" data-placement="top" title="Nuevo"></i></span>
+                                                            </div>
+                                                            @Html.EditorFor(m => m.txtNomCondTransp, new { htmlAttributes = new { @class = "form-control form-control-sm", MaxLength = 200, ReadOnly = true } })
+                                                            @Html.HiddenFor(m => m.hdfCodConductor)
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group col-md-4 mb-3">
+                                                        <label for="txtLicTransp" class="text-small">Licencia Nº</label>
+                                                        @Html.EditorFor(m => m.txtLicTransp, new { htmlAttributes = new { @class = "form-control form-control-sm", Maxlength = 200 } })
+                                                    </div>
+                                                </div>*@
+
+
+                                            </div>
+                                            <div class="card-header text-small font-weight-bold">
+                                                DETALLE DEL PRODUCTO
+                                            </div>
+                                            <div class="card-body">
+                                                @*<div class="form-row">
+                                                    <div class="form-group col-md-12 mb-3">
+                                                        <label for="txtZafra" class="text-small">Lista de Trozas N°</label>
+                                                        @Html.EditorFor(m => m.txtZafra, new { htmlAttributes = new { @class = "form-control form-control-sm", Maxlength = 500, required = "required" } })
+                                                    </div>
+                                                </div>*@
+                                                <div class="form-row">
+                                                    <div class="table-responsive">
+                                                        <table id="grvItemProducto" class="table table-hover table-bordered">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th colspan="9" class="text-sm-left">
+                                                                        <div class="form-inline">
+                                                                            <i class="fa mx-2 fa-lg fa-file-o" style="cursor:pointer;" onclick="ItemProducto.showModal(1, this);" data-toggle="tooltip" data-placement="top" title="Nuevo"></i>
+                                                                            <i class="fa mx-2 fa-lg fa-window-close-o" style="cursor:pointer;" onclick="ItemProducto.deleteAll();" data-toggle="tooltip" data-placement="top" title="Eliminar Todos"></i>
+                                                                        </div>
+                                                                    </th>
+                                                                </tr>
+                                                                <tr>
+                                                                    <th></th>
+                                                                    <th></th>
+                                                                    <th>Nº</th>
+                                                                    @*<th>Código</th>*@
+                                                                    <th>Nombre Científico</th>
+                                                                    <th>Tipo de Producto</th>
+                                                                    <th>Descripción</th>
+                                                                    <th>Cantidad</th>
+                                                                    <th>Unidad de Medida</th>
+                                                                    <th>Total</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody></tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                                <br />
+                                                <div class="form-row">
+                                                    <div class="form-group col-md-12 mb-3">
+                                                        <label for="txtObservacion" class="text-small">Observación Productos</label>
+                                                        @Html.TextAreaFor(m => m.txtObservacion, new { @class = "form-control form-control-sm" })
+                                                    </div>
+                                                </div>
+                                                <div class="form-row" style="display:none">
+                                                    <div class="form-group col-md-12 mb-3">
+                                                        <label for="txtPeso" class="text-small">Peso</label>
+                                                        @Html.EditorFor(m => m.txtPeso, new { htmlAttributes = new { @class = "form-control form-control-sm", Maxlength = 200 } })
+                                                    </div>
+                                                </div>
+                                                <div class="form-row" style="display:none">
+                                                    <div class="col-md-8 mb-3">
+                                                        <label for="txtDespachado" class="text-small">Despachado por </label>
+                                                        <div class="input-group">
+                                                            <div class="input-group-prepend" style="cursor:pointer" onclick="ManGuiaTransporte.fnBuscarPersona('DESPACHO','N','TODOS');">
+                                                                <span class="input-group-text"><i class="fa fa-search" data-toggle="tooltip" data-placement="top" title="Nuevo"></i></span>
+                                                            </div>
+                                                            @Html.EditorFor(m => m.txtDespachado, new { htmlAttributes = new { @class = "form-control form-control-sm", MaxLength = 200, ReadOnly = true } })
+                                                            @Html.HiddenFor(m => m.hdfCodDespachante)
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="form-row">
+                                                    <div class="col-md-12 mb-3">
+                                                        <label for="txtAutorizado" class="text-small">Nombres y apellidos del emisor </label>
+                                                        <div class="input-group">
+                                                            <div class="input-group-prepend" style="cursor:pointer" onclick="ManGuiaTransporte.fnBuscarPersona('EMISOR','N','TODOS');">
+                                                                <span class="input-group-text"><i class="fa fa-search" data-toggle="tooltip" data-placement="top" title="Nuevo"></i></span>
+                                                            </div>
+                                                            @Html.EditorFor(m => m.txtAutorizado, new { htmlAttributes = new { @class = "form-control form-control-sm", ReadOnly = true } })
+                                                            @Html.HiddenFor(m => m.hdfCodAutorizante)
+                                                        </div>
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    @*}*@
+
+
+
+                                    @Html.Hidden("archivoSubido", "0")
+                                    @Html.HiddenFor(m => m.GTF_ARCHIVO)
+                                    @Html.HiddenFor(m => m.GTF_ARCHIVO_TEXT)
+
+
+                                    <div class="form-row">
+                                        <div class="form-group col-md-7">
+                                            <label class="text-small">Cargar la Guia de Transporte en formato PDF</label>
+                                            <div class="custom-file" id="customFile">
+                                                <input type="file" class="custom-file-input" accept=".pdf" id="txtArchivoAdjunto" name="txtArchivoAdjunto" aria-describedby="fileHelp" onchange="ManGuiaTransporte.importarExcel(event, this)">
+                                                <label class="custom-file-label" for="txtArchivoAdjunto" style="color:#989797">
+                                                    Seleccionar Archivo
+                                                </label>
+
+                                            </div>
+                                        </div>
+                                        <div class="col-md-5 pt-4">
+                                            <label class="text-small"> Archivo Cargado:</label>
+                                            <a target="_blank" id="lblArchivoSeleccionado" href="@Url.Content("~/Archivos/Archivo_GTF/"+Model.GTF_ARCHIVO)">@Model.GTF_ARCHIVO_TEXT</a>
+                                        </div>
+                                    </div>
+
+
+
+
+                                    @*@if (!perfils.Contains("0000030"))
+                                    {*@   <div class="form-row">
+                                            <div class="form-group col-md-12 mb-3">
+                                                <label for="txtObserGuia" class="text-small">Observación Guia</label>
+                                                @Html.TextAreaFor(m => m.txtObserGuia, new { @class = "form-control form-control-sm" })
+                                            </div>
+                                        </div>
+                                    @*}*@
+
+
+
+                                </div>
+                            </div>
+
+
+
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    @* Para el control genérico de personas *@
+    <div class="modal fade hide" id="mdlBuscarPersona" role="dialog"></div>
+    <div class="modal fade hide" id="modalAddEditPersona" role="dialog"></div>
+    <div class="modal fade hide" id="personaUbigeoModal" role="dialog"></div>
+</div>
+
+
+<div class="modal fade" id="modalAddEditProducto" role="dialog"></div>
+<div class="modal fade" id="modalBuscarTitular" role="dialog"></div>
+<div class="modal fade" id="modalBuscarPersona" role="dialog"></div>
+@*   <div class="modal fade" id="modalBuscarPersona" tabindex="-1" role="dialog"></div>*@

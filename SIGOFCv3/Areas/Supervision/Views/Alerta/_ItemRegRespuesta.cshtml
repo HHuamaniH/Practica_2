@@ -1,0 +1,172 @@
+﻿@*@{
+        ViewBag.Title = "Registro Respuesta";
+        Layout = "~/Views/Shared/_LayoutMain.cshtml";
+    }*@
+
+
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AddEdit - SIGO|sfc</title>
+    <link rel="icon" type="image/png" href="~/Content/images/logo/arbol osinfor blanco con verde.png">
+
+    <link href="~/Content/bootstrap.min.css" rel="stylesheet" />
+    <link href="~/Content/select2/select2.min.css" rel="stylesheet" />
+    <link href="~/Content/select2/select2-bootstrap4.css" rel="stylesheet" />
+    <link href="~/Content/font-awesome/css/font-awesome.min.css" rel="stylesheet" />
+    <link href="~/Content/css/fontastic.css" rel="stylesheet" />
+    <link href="~/Scripts/malihu-custom-scrollbar-plugin/jquery.mCustomScrollbar.css" rel="stylesheet" />
+    <link href="~/Content/css/style.default.css" rel="stylesheet" />
+
+    <link href="~/Content/datatables/dataTables.bootstrap4.min.css" rel="stylesheet" />
+    <link href="~/Content/bootstrap-datepicker/datepicker.css" rel="stylesheet" />
+    <link href="~/Content/toastr.min.css" rel="stylesheet" />
+    <link href="~/Content/css/custom.css" rel="stylesheet" />
+
+    <script src="~/Scripts/jquery-3.3.1.min.js"></script>
+    <script src="~/Scripts/jquery.validate.min.js"></script>
+    <script src="~/Scripts/additional-methods.js"></script>
+    <script src="~/Scripts/redirect/jquery.redirect.js"></script>
+    <script src="~/Scripts/sigo/utility.sigo.js"></script>
+    <script src="~/Scripts/bootstrap-datepicker/bootstrap-datepicker.js"></script>
+    <script src="~/Scripts/bootstrap-datepicker/bootstrap-datepicker.es.js"></script>
+
+    <script src="~/Content/js/grasp_mobile_progress_circle-1.0.0.min.js"></script>
+    <script src="~/Scripts/jquery.cookie/jquery.cookie.js"></script>
+    <script src="~/Scripts/popper/popper.min.js"></script>
+
+    <script src="~/Scripts/bootstrap.min.js"></script>
+    <script src="~/Scripts/jquery-loadingModal/jquery.blockUI.js"></script>
+
+    <script src="~/Scripts/jquery-loadingModal/jquery-ui.min.js"></script>
+    <script src="~/Scripts/malihu-custom-scrollbar-plugin/jquery.mCustomScrollbar.concat.min.js"></script>
+    <script src="~/Content/js/front.js"></script>
+
+    <script src="~/Scripts/datatables/jquery.dataTables.min.js"></script>
+    <script src="~/Scripts/datatables/dataTables.bootstrap4.min.js"></script>
+    <script src="~/Scripts/select2/select2.min.js"></script>
+    <script src="~/Scripts/toastr.js"></script>
+    <script src="~/Scripts/bootbox/bootbox.min.js"></script>
+
+    <script type="text/javascript">
+        let urlLocalSigo = "@Url.Action("index")";
+    </script>
+
+    <script src="~/Areas/Supervision/js/Alerta/ItemRegRespuesta.js"></script>
+
+    <style>
+        #frm_ItemDocRecibido input[type=text] {
+            text-transform: uppercase;
+        }
+    </style>
+
+    <link rel="stylesheet" type="text/css" href="~/Scripts/ckeditor/skins/kama/editor.css?t=D03G5XL">
+
+</head>
+<body>
+    <div class="container-fluid mt-3" id="itemRegRespuesta">
+        <div class="card">
+            <div class="card-header text-left">
+                Alerta Osinfor
+            </div>
+            <div class="card-body">
+                <div class="card">
+                    <div class="card-header text-small">
+                        <a id="btnRegistrarCapacitacion" href="javascript:void(0)" style="cursor:pointer;" data-toggle="tooltip" data-placement="top" title="Guardar" onclick="_ItemRegRespuesta.confirmarRegistro()"><i class="fa mx-2 fa-lg fa-save"></i></a>
+                        @*<a id="btnRegresarCapacitacion" style="cursor:pointer;" data-toggle="tooltip" data-placement="top" title="" onclick="ItemDocRecibido.fnReturnIndex()" data-original-title="Regresar"><i class="fa mx-2 fa-lg fa-reply"></i></a>*@
+                        <b>Enlace de seguimiento</b>
+                    </div>
+                    <div class="card-body">
+                        <form id="frmItemRegRespuesta">
+                            <input type="hidden" id="hddCOD_BITACORA" name="hddCOD_BITACORA" value="@ViewBag.COD_BITACORA" />
+                            <input type="hidden" id="hddCOD_THABILITANTE" name="hddCOD_THABILITANTE" value="@ViewBag.COD_THABILITANTE" />
+                            <input type="hidden" id="hddCOD_SECUENCIAL" name="hddCOD_SECUENCIAL" value="@ViewBag.COD_SECUENCIAL" />
+                            <input type="hidden" id="hddCORREO" name="hddCORREO" value="@ViewBag.CORREO" />
+                            <input type="hidden" id="hddTOKEN" name="hddTOKEN" value="@ViewBag.TOKEN" />
+
+                            <div class="card">
+                                @*<div class="text-small">
+                                        <b>1. Documento de Evaluación Fiscal de la Alerta</b>
+                                    </div>*@
+                                <div class="card-body">
+                                    <div class="form-row">
+                                        <b>1. Documento de Evaluación Fiscal de la Alerta</b>
+                                    </div>
+                                    <div class="form-row">
+                                        <div class="col-md-3">
+                                            <div class="form-group">
+                                                <div class="form-row">
+                                                    <div class="form-group col-md-12">
+                                                        <label for="txtDocumento" class="text-small">
+                                                            <b>Documento</b>
+                                                        </label>
+                                                        <input type="text" id="txtDocumento" name="txtDocumento" class="form-control form-control-sm" required placeholder="Ingrese Documento" maxlength="140"/>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <div class="form-group">
+                                                <div class="form-group col-md-12">
+                                                    <label for="txtFecha" class="text-small">
+                                                        <b>Fecha</b>
+                                                    </label>
+                                                    <input type="date" id="txtFecha" name="txtFecha" class="form-control form-control-sm" required />
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-row">
+                                        <b>2. Inicio de Procedimiento preventivo</b>
+                                    </div>
+                                    <div class="form-row">
+                                        <div class="form-group col-md-3">
+                                            <select id="cbProcedimiento" name="cbProcedimiento" class="form-control form-control-sm">
+                                                <option value="No ha Lugar">No ha Lugar</option>
+                                                <option value="Ha Lugar">Ha Lugar</option>
+                                            </select>
+
+                                        </div>
+                                    </div>
+                                    <div class="form-row">
+                                        <b>3. Recomendación a la autoridad</b>
+                                    </div>
+                                    <div class="form-row">
+                                        <div class="form-group col-md-9">
+                                            <textarea id="txtRecomendacion" rows="2" class="form-control form-control-sm" required placeholder="Recomendación..."></textarea>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal fade" id="modalAddDocRecibido" tabindex="-1" role="dialog"></div>
+
+    </div>
+    <div id="divCaduco" hidden>
+        <br /><br />
+        <div class="card">
+            <div class="card-header text-center">
+                <b>El link ya no está disponible</b>
+            </div>
+        </div>
+    </div>
+    <div id="divRegistrado" hidden>
+        <br /><br />
+        <div class="card">
+            <div class="card-header text-center">
+                <b>Se registro su respuesta con éxito, se deshabilita el link</b>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+
+
+

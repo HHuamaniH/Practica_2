@@ -1,0 +1,788 @@
+﻿/*Grilla Formato */
+.GrillaPoa,.Grilla, .GrillaCelda, .GrillaNoCelda
+{
+    /*font-family: Verdana, Geneva, sans-serif;*/
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 12px;
+    color: #333;
+    border: 1px solid #BBD1EE;
+    width: 100%;
+    cursor: default;
+}
+
+.GrillaHeader
+{
+    font-size: 11px;
+    color: #2c506c;
+    text-align : center;
+}
+.ocultarcolumas
+{
+    visibility:hidden;
+}
+
+.datagrid table { 
+    border-collapse: collapse; text-align: left; } 
+
+.datagrid {
+    font: normal 12px/150% Arial, Helvetica, sans-serif; background: #fff; 
+     border: 1px solid #006699; -webkit-border-radius: 3px; -moz-border-radius: 3px; border-radius: 3px;
+     
+          }
+
+.datagrid table td, .datagrid table th {
+     padding: 3px 10px; 
+}
+
+.datagridHeader
+{
+    background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #006699), color-stop(1, #00557F) );background:-moz-linear-gradient( center top, #006699 5%, #00557F 100% );filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#006699', endColorstr='#00557F');background-color:#006699; color:#FFFFFF; font-size: 11px; font-family:Arial; border-left: 1px solid #0070A8;  height:60px; margin: 5px; padding:5px;
+} 
+.datagridFooter
+{
+ text-decoration: none;border-color: #006699; color: #FFFFFF; background: none; background-color:#00557F;}
+
+.datagrid table thead th {background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #006699), color-stop(1, #00557F) );background:-moz-linear-gradient( center top, #006699 5%, #00557F 100% );filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#006699', endColorstr='#00557F');background-color:#006699; color:#FFFFFF; font-size: 15px; font-weight: bold; border-left: 1px solid #0070A8; } 
+.datagrid table thead th:first-child { border: none; }
+.datagrid table tbody td { color: #00496B; border-left: 1px solid #E1EEF4;font-size: 12px;font-weight: normal; }
+.datagrid table tbody .alt td { background: #E1EEF4; color: #00496B; }
+.datagrid table tbody td:first-child { border-left: none; }
+.datagrid table tbody tr:last-child td { border-bottom: none; }
+.datagrid table tfoot td div { border-top: 1px solid #006699;} 
+.datagrid table tfoot td { padding: 0; font-size: 12px } 
+.datagrid table tfoot td div{ padding: 2px; }
+.datagrid table tfoot td ul { margin: 0; padding:0; list-style: none; text-align: right; }
+.datagrid table tfoot  li { display: inline; }
+.datagrid table tfoot li a { text-decoration: none; display: inline-block;  padding: 2px 8px; margin: 1px;color: #FFFFFF;border: 1px solid #006699;-webkit-border-radius: 3px; -moz-border-radius: 3px; border-radius: 3px; background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #006699), color-stop(1, #00557F) );background:-moz-linear-gradient( center top, #006699 5%, #00557F 100% );filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#006699', endColorstr='#00557F');background-color:#006699; }
+.datagrid table tfoot ul.active, .datagrid table tfoot ul a:hover { text-decoration: none;border-color: #006699; color: #FFFFFF; background: none; background-color:#00557F;}
+div.dhtmlx_window_active, div.dhx_modal_cover_dv { position: fixed !important; }
+
+.datagridMedium
+{
+    font-size:11px;
+    font-family:Arial;
+}
+
+.DivChartGeneral
+{
+    width: 98%;
+    margin: 10px 5px 10px 5px;
+    
+}
+
+.GraficoZona
+{
+    width:95%;
+    margin: 10px auto;
+    height: 70%;
+    text-align:center;
+}
+.GrillaRojo th{
+    background-color:pink;
+}
+.GrillaRojo th ,.GrillaRojo th a {
+    color:black;
+}
+.GrillaAmbar th{
+    background-color:yellow;
+}
+.GrillaAmbar th ,.GrillaAmbar th a {
+    color:black;
+}
+.GrillaVerde th{
+    background-color:lightgreen;
+}
+.GrillaVerde th ,.GrillaVerde th a {
+    color:black;
+}
+
+.GrillaRojo th, .GrillaAmbar th ,.GrillaVerde th
+{
+    font-size: 11px;
+    font-weight: bold;
+    color: black;   
+    height: 19px;
+    border: solid 1px white;
+}
+.GrillaRojo td,.GrillaAmbar td ,.GrillaVerde td
+{
+    border-style: none solid none solid;
+    height: 20px;
+    border-right-width: 1px;
+    border-left-width: 1px;
+    border-right-color: white;
+    border-left-color: white;
+    font-size: 12px;
+}
+#huellaroja {
+    width:420px;
+    height:30px;
+    float:right;
+    background: url(../Imagenes/Observatorio/huella_rojo.png) repeat-x;
+}
+#huellaambar {
+    width:420px;
+    height:30px;
+    float:right;
+    background: url(../Imagenes/Observatorio/huella_ambar.png) repeat-x;
+}
+#huellaverde {
+    width:420px;
+    height:30px;
+    float:right;
+    background: url(../Imagenes/Observatorio/huella_verde.png) repeat-x;
+}
+
+.GrillaPoa th,.Grilla th,.GrillaCelda th, .GrillaNoCelda th
+{
+    font-size: 11px;
+    font-weight: bold;
+    /*color: black;*/
+    color: #2c506c;
+    /*background: url(../Imagenes/Grilla/GrillaHeader1.png) repeat;*/
+    background-color:#BFE3FB;
+    height: 19px;
+    border: solid 1px #BBD1EE;
+}
+.GrillaPoa th a,.Grilla th a, .GrillaCelda th a, .GrillaNoCelda th a
+{
+    /*color: black;*/
+    color: #2c506c;
+}
+.GrillaPoa td,.Grilla td
+{
+    border-style: none solid none solid;
+    height: 20px;
+    border-right-width: 1px;
+    border-left-width: 1px;
+    padding-right:4px;
+    padding-left:4px;
+    border-right-color: #BBD1EE;
+    border-left-color: #BBD1EE;
+}
+.GrillaCelda
+{
+    margin-bottom : 10px;
+}
+
+
+
+.GrillaNoCelda
+{
+    
+}
+.GrillaCelda td
+{
+    border-width: 1px;
+    border-color: #BBD1EE;
+    border-style: solid solid solid solid;
+    height: 20px;
+}
+.GrillaNoCelda td
+{
+    border-style: none;
+    height: 20px;
+}
+.GrillaNone
+{
+    font-family: Verdana, Geneva, sans-serif;
+    font-size: 8pt;
+    color: #333;
+    cursor: default;
+    border-style: none;
+    width: 100%;
+}
+.GrillaNone td
+{
+    border-style: none;
+    height: 20px;
+    margin-bottom: 5px;
+}
+.DivCombcontenedor, .DivCombRegion
+{
+    border-radius: 6px;
+    cursor:pointer;
+	color: #2c506c;
+	font-weight: bold;
+	/*background: url(../Imagenes/Grilla/GrillaHeader1.png) repeat;*/
+	height: 20px;
+	overflow: auto;
+	position: absolute;
+	transition: height 2s;
+	
+}
+
+.DivCombContenedorMejorado th, .DivCombContenedorMejorado td, .DivCombContenedorRegion th, .DivCombContenedorRegion td
+{
+    font-size: 11px;
+    font-weight: bold;
+    color: #2c506c;
+    /*background: url(../Imagenes/Grilla/GrillaHeader1.png) repeat;*/
+    border: solid 1px #BBD1EE;
+    white-space: nowrap;
+    cursor: pointer;
+
+}
+
+.DivCombContenedorMejorado
+{
+    border-radius: 6px;
+    color: #2c506c;
+    font-weight: bold;
+    height: 19px;
+    overflow: auto;
+    position: absolute;
+    transition: height 2s;
+    width: 380px;
+    
+}
+
+.DivCombContenedorRegion
+{
+    border-radius: 6px;
+    color: #2c506c;
+    font-weight: bold;
+    height: 19px;
+    overflow: auto;
+    position: absolute;
+    transition: height 2s;
+    width: 210px;
+    
+}
+
+.DivCombContenedorMejorado:hover, .DivCombContenedorRegion:hover{
+	height: 300px;
+	transition: height 2s;
+}
+
+.DivCombcontenedor{
+	width: 300px;
+    z-index: 10000;
+}
+
+.DivCombRegion{
+	width: 150px;
+    z-index: 1000;
+}
+
+.DivCombcontenedor:hover, .DivCombRegion:hover{
+	height: 300px;
+	transition: height 2s;
+}
+
+
+
+
+
+#DivContenedorIzquierda
+{
+    width: 70%;
+}
+
+#DivContenedorIzquierda, #DivContenedorDerecha
+{
+  display: inline-block;
+  vertical-align: top;
+}
+  
+#DivContenedorDerecha
+{
+    float: left; width: 70%;
+}
+
+
+.GrillaDiv, .GrillaDivMarco
+{
+    padding: 1px 0px 1px 0px; width: 100%; overflow: auto; background-color: #FFFFFF;
+}
+.GrillaDivMarco
+{
+    padding: -10px; border: 1px solid #BBD1EE;    
+}
+.GrillaDivMarco table
+{
+    margin:-1px;
+}
+.GrillaRowAlternating
+{
+	background-color: #EFF8FB; cursor: default;
+}
+.GrillaRowAlternatingRojo
+{
+	background-color: pink; cursor: default;
+}
+.GrillaRowAlternatingAmbar
+{
+	background-color: yellow; cursor: default;
+}
+.GrillaRowAlternatingVerde
+{
+	background-color: lightgreen; cursor: default;
+}
+
+
+   
+.GrillaSeleccion
+{
+    /*Este Esta Amrrado a la Funcion GrillaChangeBackColor, el color de HTML a RGB es rgb(114, 254, 56)*/
+    background-color: #72FE38;
+}
+.GrillaSeleccion td
+{
+    background-color: #72FE38;
+}
+
+.GrillaFocus
+{
+    background-color: #D9FF66;
+}
+.GrillaCheck
+{
+    background-color: #72FE38;
+}
+.GrillaRowOcultar
+{
+    display: none;
+}
+.GrillaColBlanco {
+    background-color: #FFFFFF;
+}
+
+/*Formato Celdas*/
+.TablaGeneral
+{
+    padding: 0px;
+    border-collapse: collapse;
+    border-spacing: 0px;
+    width: 100%;
+}
+.TablaGeneral2
+{
+    padding: 0px; border-collapse: collapse; border-spacing: 0px;
+}
+.TablaGeneral td, .TablaGeneral2 td
+{
+    padding: 2px 4px 2px 4px;
+}
+.TablaGeneralHeader, .TablaGeneralHeader2, .TablaGeneralHeader3, .TablaGeneralHeader4
+{
+    padding: 0px; margin: 0px; border-collapse: collapse; width: 100%; font-size: 11px; font-weight: bold; color: #2c506c; cursor: default;
+}
+.TablaGeneralHeader td, .TablaGeneralHeader2 td, .TablaGeneralHeader3 td, .TablaGeneralHeader4 td
+{
+    border: solid 1px #BBD1EE;
+    text-align: center;
+    vertical-align: middle;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 12px;
+    height: 17px;
+}
+.tdright, .tdrightTop, .tdrightTopLinea
+{
+    text-align: right;
+    background-color: #E8F3FB;
+}
+.tdright
+{
+    vertical-align: middle;
+}
+.tdrightLinea
+{
+    text-align: right;
+    vertical-align: middle;
+    text-decoration: underline;
+}
+.tdrightTop
+{
+    vertical-align:text-top;
+}
+.tdrightTopLinea
+{
+    vertical-align:text-top;
+    text-decoration: underline;
+}
+.tdrightAli
+{
+    text-align: right;
+    vertical-align: middle;
+}
+.tdleft, .tdleftTop, .tdleftTopLinea
+{
+    text-align: left;
+    background-color: #E8F3FB;
+}
+.tdleft
+{
+    vertical-align: middle;
+}
+.tdleftLinea
+{
+    text-align: left;
+    vertical-align: middle;
+    text-decoration: underline;
+}
+.tdleftLineaSuper
+{
+    border-style: solid none none solid;
+    border-width: 1px;
+    border-color: #BFE3FB;
+    text-align: left;
+    vertical-align: middle;
+    font-size: 1em;
+    width: 100%;
+    background-color:#BFE3FB;
+}
+.tdleftLineaSuper2 {
+    border-style: solid none none none;
+    border-width: 1px;
+    border-color: #BFE3FB;
+    text-align: left;
+    vertical-align: middle;
+    font-size: 1em;
+    width: 100%;
+}
+.tdleftLineaInferior {
+    border-style: none none solid solid;
+    border-width: 1px;
+    border-color: #BFE3FB;
+    text-align: left;
+    vertical-align: middle;
+    font-size: 1em;
+    width: 100%;
+    background-color: #E8F3FB;
+}
+.tdleftLineaInferior2 {
+    border-style: none none solid none;
+    border-width: 1px;
+    border-color: #BFE3FB;
+    text-align: left;
+    vertical-align: middle;
+    font-size: 1em;
+    width: 100%;
+}
+.tdleftLineaInferior3 {
+    border-style: none none solid none;
+    border-width: 1px;
+    border-color: #BFE3FB;
+    width: 100%;
+}
+.tdleftTop
+{
+    vertical-align:text-top;
+}
+.tdleftTopAli
+{
+    text-align: left;
+    vertical-align:text-top;
+}
+.tdleftTopLinea
+{
+    vertical-align:text-top;
+    text-decoration: underline;
+}
+.tdleftAli
+{
+    text-align: left;
+    vertical-align: middle;
+}
+.tdcenter, .tdcenterTop, .tdcenterTopLinea
+{
+    text-align: center;
+    background-color: #E8F3FB;
+}
+.tdcenter
+{
+    vertical-align: middle;
+}
+.tdcenterLinea
+{
+    text-align: center;
+    vertical-align: middle;
+    text-decoration: underline;
+}
+.tdcenterTop
+{
+    vertical-align:text-top;
+}
+.tdcenterTopAli
+{
+    text-align: center;
+    vertical-align:text-top;
+}
+.tdcenterTopLinea
+{
+    vertical-align:text-top;
+    text-decoration: underline;
+}
+.tdcenterAli {
+    text-align: center;
+    vertical-align: middle;
+}
+.tdPasos {
+    text-align: left;
+    vertical-align: middle;
+    font-size: 1.5em;
+    color: #000066;
+    font-weight: bold;
+}
+.tdPasosSub {
+    text-align: left;
+    vertical-align: bottom;
+    color: #000066;
+}
+/*Grilla Popup Menu*/
+.grvPopupTool
+{
+    background: transparent url(../Imagenes/Grilla/Herramienta.png) no-repeat;
+    width: 17px;
+    height: 17px;
+    border: 0px;
+    z-index:900;
+}
+.grvPopupDiv
+{
+    padding: 2px 2px 6px 2px;   
+    position: fixed;
+    display: none;
+    border: 1px solid #C0C0C0;
+    background-color: #FFFFFF;
+    border-radius: 4px;
+    width: 90px;
+    z-index:900;
+}
+/*.grvPopupDiv p
+{
+    padding: 0px;
+    margin: 2px;
+    text-align: left;
+}*/
+.grvPopupDiv span
+{
+    cursor:pointer;
+    text-decoration: none;
+    color: #1d60ff;
+}
+.grvPopupDiv span:hover
+{
+    /*text-decoration: none;*/
+    color: #CC0000;
+}
+.grvPopupDivImg
+{
+    margin: 1px 5px 1px 5px;
+    width: 15px;
+    height: 15px;
+}
+.grvPopupDivImgPanel
+{
+    background: transparent url(../Imagenes/Grilla/Candado.png) no-repeat;
+    width: 17px;
+    height: 17px;
+    border: 0px;
+}
+.TituloGrilla
+{
+    padding: 30px;
+    color: #000066;
+    font-family: Verdana, Geneva, sans-serif;
+    font-size: 15px;
+    text-align: right;
+    font-weight: bold;
+    background-color: #81B4D9;
+    border-radius: 5px;
+    box-shadow: inset -2px -2px 2px 2px #69A5D1;
+}
+.BotonExpandir
+{
+    cursor: pointer;
+    font-size: 1.5em;
+    font-weight: bold;
+    color: #000099;
+}
+/*Formato Lista*/
+.ListaGrilla
+{
+    width: 100%;
+}
+.ListaGrillaOculto
+{
+    width: 100%;
+    display: none;
+}
+/*GridviewScroll ---------------------------------------------------------------------*/
+.GridviewScroll
+{
+    font-family: Verdana, Geneva, sans-serif;
+    font-size: 8pt;
+    color: #333;
+    border: 1px solid #BBD1EE;
+    cursor: default;
+}
+.GridviewScrollHeader th, .GridviewScrollHeader td
+{
+    font-size: 11px;
+    font-weight: bold;
+    color: #2c506c;
+    /*background: url(../Imagenes/Grilla/GrillaHeader1.png) repeat;*/
+    background-color:#BFE3FB;
+    /*height: 19px;*/
+    border: solid 1px #BBD1EE;
+    /*white-space: nowrap;*/
+    vertical-align: middle;
+    text-align: center;
+    padding: 1px 2px 1px 2px;
+}
+.GridviewScrollItem 
+{
+    background-color: #FFFFFF;
+}
+.GridviewScrollItem td, .GridviewScrollItemAlternating td
+{
+    height: 20px;
+    border-right: 1px solid #BBD1EE;
+    border-left: 1px solid #BBD1EE;
+    cursor: default;
+    padding: 1px 2px 1px 2px;
+}
+.GridviewScrollItemAlternating
+{
+    background-color: #EFF8FB;
+}
+.GridviewScrollPager
+{
+    border-top: 1px solid #AAAAAA;
+    text-align: left;
+    vertical-align: middle;
+    background-color: #359BD2;
+    color: #FFFFFF;
+    box-shadow: inset 0 0 4px 4px #2C8FC5;
+}
+.GridviewScrollPager td
+{
+    font-size: 9pt;
+    padding-top: 3px;
+    padding-left: 5px;
+    padding-right: 5px;
+    
+}
+.GridviewScrollPager a
+{
+    color: #FFFFFF;
+    font-weight:bold;
+}
+
+
+.PieGrilla {   
+    border-collapse: collapse;
+    border-spacing: 0px;
+    overflow:hidden;
+    padding: 0px;
+    width: 98%;
+}
+    .PieGrilla > div {
+        float:left;        
+        vertical-align: middle;
+    }
+    .PieGrilla > div:nth-child(1) {
+        width: 2%;    
+        text-align: center;    
+    }
+    .PieGrilla > div:nth-child(2) {
+        width: 2%;
+        text-align: center;
+    }
+    .PieGrilla > div:nth-child(3) {
+        width: 15%;
+        text-align: center;
+    }
+    .PieGrilla > div:nth-child(4) {
+        width: 2%;  
+        text-align: center;
+    }
+    .PieGrilla > div:nth-child(5) {
+        width: 2%;  
+        text-align: center;
+    }
+    .PieGrilla > div:nth-child(6) {
+        width: 77%;  
+        text-align:right;
+    }
+    .Grilla tr:nth-child(even) {background:#eff8fb }
+    .Grilla tr:nth-child(odd) {background: #FFF}
+
+.Grilla tr:hover,.GrillaRojo tr:hover,.GrillaVerde tr:hover {
+        background-color:#D9FF66;
+    }
+
+.GrillaPagerstyle {
+    background-color: #359BD2 !important;
+    text-align: left;
+    vertical-align: middle;
+    background-color: #359BD2;
+    color: #FFFFFF;
+}
+
+.GrillaPagerstyle a:link, a:visited, a:active
+{
+    text-decoration: none;
+    font-weight:bold;
+    
+}
+.GrillaPagerstyle a:hover
+{
+    text-decoration: underline;
+    color: #66FF33;
+}
+
+/*-----------------------------------------------------------------------------------*/
+@media screen and (max-width:800px) {
+    .GrillaPoa,.Grilla, .GrillaCelda, .GrillaNoCelda
+{
+    /*font-family: Verdana, Geneva, sans-serif;*/
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 11px;
+    color: #333;
+    border: 1px solid #BBD1EE;
+    width: 99%;
+    cursor: default;
+}
+
+    .PieGrilla {   
+    border-collapse: collapse;
+    border-spacing: 0px;
+    overflow:hidden;
+    padding: 0px;
+    width: 98%;
+}
+    .PieGrilla > div {
+        float:left;
+        
+        vertical-align: middle;
+    }
+    .PieGrilla > div:nth-child(1) {
+        width: 4%;    
+        text-align: center;    
+    }
+    .PieGrilla > div:nth-child(2) {
+        width: 4%;
+        text-align: center;
+    }
+    .PieGrilla > div:nth-child(3) {
+        width: 20%;
+        text-align: center;
+    }
+    .PieGrilla > div:nth-child(4) {
+        width: 4%;  
+        text-align: center;
+    }
+    .PieGrilla > div:nth-child(5) {
+        width: 4%;  
+        text-align: center;
+    }
+    .PieGrilla > div:nth-child(6) {
+        width: 64%;  
+        text-align:right;
+    }
+
+
+}

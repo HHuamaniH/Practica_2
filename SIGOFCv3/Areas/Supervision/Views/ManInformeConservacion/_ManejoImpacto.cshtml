@@ -1,0 +1,45 @@
+﻿
+<script src="~/Areas/Supervision/js/ManInformeConservacion/_ManejoImpacto.js"></script>
+
+<div class="modal-dialog" role="document">
+    <div class="modal-content">
+        <div class="modal-header text-small" style="cursor:move;">
+            <span>Impacto</span>
+            <i class="fa fa-close" style="cursor:pointer;" data-dismiss="modal" aria-label="Close"></i>
+        </div>
+        <div class="modal-body">
+            <form id="frmItemManejoImpacto">
+                @Html.Hidden("hdfRegEstado")
+                @Html.Hidden("hdfCodSecuencial")
+                <div class="form-row">
+                    <div class="form-group col-md-12">
+                        <label for="txtTipoImpacto" class="text-small">Tipo de Impacto</label>
+                        @Html.TextBox("txtTipoImpacto", "", new { @class = "form-control form-control-sm" })
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-12">
+                        <label for="txtRiesgo" class="text-small">Riesgo Potencial</label>
+                        @Html.TextBox("txtRiesgo", "", new { @class = "form-control form-control-sm" })
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-12">
+                        <label for="txtActividad" class="text-small">Actividades Preventivas/Correctivas</label>
+                        @Html.TextBox("txtActividad", "", new { @class = "form-control form-control-sm" })
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-12">
+                        <label for="txtResultado" class="text-small">Resultado</label>
+                        @Html.TextBox("txtResultado", "", new { @class = "form-control form-control-sm" })
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-primary btn-sm" onclick="_ManejoImpacto.fnSubmitForm()">Guardar</button>
+            <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Cancelar</button>
+        </div>
+    </div>
+</div>

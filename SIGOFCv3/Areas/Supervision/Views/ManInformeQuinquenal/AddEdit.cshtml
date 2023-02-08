@@ -1,0 +1,226 @@
+﻿@model CapaEntidad.ViewModel.VM_InformeQuinquenal
+@{
+    ViewBag.Title = "AddEdit";
+    Layout = "~/Views/Shared/_LayoutMain.cshtml";
+}
+
+<script src="~/Scripts/datatables/Extensions/dataTables.buttons.js"></script>
+<script src="~/Scripts/datatables/Extensions/buttons.flash.min.js"></script>
+<script src="~/Scripts/datatables/Extensions/jszip.min.js"></script>
+<script src="~/Scripts/datatables/Extensions/pdfmake.js"></script>
+<script src="~/Scripts/datatables/Extensions/vfs_fonts.js"></script>
+<script src="~/Scripts/datatables/Extensions/buttons.html5.js"></script>
+<script src="~/Scripts/datatables/Extensions/buttons.print.js"></script>
+<script src="~/Scripts/ckeditor/ckeditor.js"></script>
+<script src="~/Scripts/sigo/utility.uploadFile.js"></script>
+<script src="~/Areas/Supervision/js/ManInformeQuinquenal/AddEdit.js?v1"></script>
+
+<link href="~/Content/datatables/buttons.dataTables.min.css" rel="stylesheet" />
+<link href="~/Areas/Supervision/css/ManInforme/AddEdit.css" rel="stylesheet" />
+@section scripts{
+    <script>
+        "use strict"; var rol = '';
+    $(document).ready(function () {
+        //Validamos el rol del usuario
+        utilSigo.ValidaRol('@ViewBag.VAliasRol', 'btnRegistrar', '@Model.vmControlCalidad.ddlIndicadorId');
+    });
+    </script>
+}
+
+<div class="container-fluid">
+    <div class="card">
+        <div class="card-header text-right">
+            @Model.lblTituloCabecera
+        </div>
+        <div class="card-body">
+            <div class="card">
+                <div class="card-header text-small">
+                    <a id="btnRegistrar" href="javascript:void(0)" style="cursor:pointer;" data-toggle="tooltip" data-placement="top" title="Guardar" onclick="ManInforme_AddEdit.fnSaveForm()"><i class="fa mx-2 fa-lg fa-save"></i></a>
+                    <a style="cursor:pointer;" data-toggle="tooltip" data-placement="top" title="Regresar" onclick="ManInforme_AddEdit.fnReturnIndex('')"><i class="fa mx-2 fa-lg fa-reply"></i></a>
+                    @Model.lblTituloEstado
+                </div>
+                <div class="card-body">
+                    <form id="frmManInforme_AddEdit" action="@Url.Action("AddEdit", "ManInformeQuinquenal", new { Area = "Supervision" })">
+                        @Html.HiddenFor(m => m.hdfManCodTInforme)
+                        @Html.HiddenFor(m => m.hdfRegEstado)
+                        @Html.HiddenFor(m => m.hdfManCodFCTipo)
+
+                        <ul class="nav nav-tabs" id="myTab" role="tablist">
+                            <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#navEstado" role="tab" aria-controls="home" aria-selected="true">Estado Situacional</a></li>
+                            <li class="nav-item"><a class="nav-link active" data-toggle="tab" href="#navDatos" role="tab" aria-controls="home" aria-selected="true">Datos Generales</a></li>
+                            @*<li class="nav-item"><a class="nav-link" data-toggle="tab" href="#navSupervision" role="tab" aria-controls="home" aria-selected="true">Resultados</a></li>*@
+                        </ul>
+                        <div class="tab-content">
+                            <div class="tab-pane fade show" id="navEstado" role="tabpanel" aria-labelledby="nav-home-tab">
+                                @{ Html.RenderAction("_ControlCalidad", "Controles", new { area = "GENERAL", dto = Model.vmControlCalidad }); }
+                            </div>
+                            <div class="tab-pane fade show active" id="navDatos" role="tabpanel" aria-labelledby="nav-home-tab">
+                                <div class="card">
+                                    <div class="card-header text-small"></div>
+
+                                    <div class="card-header text-small">Datos del Informe</div>
+                                    <div class="card-body">
+                                        <div class="form-row">
+                                            <div class="form-group col-md-6">
+                                                <label for="ddlOdId" class="text-small">Tipo de Informe</label>
+                                                @Html.DropDownListFor(m => m.ddlTipoInformeId, new SelectList(Model.ddlTipoInforme, "Value", "Text"), new { @class = "form-control form-control-sm" })
+                                            </div>
+                                            <div class="form-group col-md-6">
+                                                <label for="lblDirector" class="text-small">Nombre del Director<i class="fa fa-cog fa-spin text-danger" id="iconDirector" style="display:none;" data-toggle="tooltip" data-placement="top" title="Seleccione el director"></i></label>
+                                                <div class="input-group">
+                                                    @Html.TextBoxFor(m => m.lblDirector, new { @class = "form-control form-control-sm", disabled = "disabled" })
+                                                    @Html.HiddenFor(m => m.hdfCodDirector)
+                                                    <div class="input-group-prepend">
+                                                        <span class="input-group-text" style="cursor:pointer;" onclick="ManInforme_AddEdit.fnBuscarPersona('DIRECTOR')"><i class="fa fa-search-plus" data-toggle="tooltip" data-placement="top" title="Seleccione el director"></i></span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-row">
+                                            <div class="form-group col-md-6">
+                                                <label for="txtFechaEmision" class="text-small">Fecha emisión</label>
+                                                @Html.TextBoxFor(m => m.txtFechaEmision, new { @class = "form-control form-control-sm", placeholder = "dd/mm/aaaa", maxlength = "10" })
+                                            </div>
+                                            <div class="form-group col-md-6">
+                                                <label for="txtNumInform" class="text-small">Número de Informe</label>
+                                                @Html.TextBoxFor(m => m.txtNumInform, new { @class = "form-control form-control-sm", placeholder = "N° Informe Quinquenal" })
+                                            </div>
+                                        </div>
+                                        <div class="form-row" id="dvFechaAuditoria" style="display:none">
+                                            <div class="form-group col-md-2">
+                                                <label for="txtFechaInicioAuditoria" class="text-small">Fecha de Inicio de Auditoría</label>
+                                                @Html.TextBoxFor(m => m.txtFechaInicioAuditoria, new { @class = "form-control form-control-sm", placeholder = "dd/mm/aaaa", maxlength = "10" })
+                                            </div>
+                                            <div class="form-group col-md-2">
+                                                <label for="txtFechaFinAuditoria" class="text-small">Fecha de Fin de Auditoría</label>
+                                                @Html.TextBoxFor(m => m.txtFechaFinAuditoria, new { @class = "form-control form-control-sm", placeholder = "dd/mm/aaaa", maxlength = "10" })
+                                            </div>
+                                        </div>
+                                        <div class="form-row">
+                                            <div class="col-md-6">
+                                                @Html.Partial("~/Areas/Supervision/Views/ManInformeQuinquenal/_renderProfesional.cshtml", Model.tbListProfesionales)
+                                            </div>
+                                            <div class="col-md-6">
+                                                @Html.Partial("~/Areas/Supervision/Views/ManInformeQuinquenal/_renderRDQuinquenal.cshtml", Model.tbListRDQuinquenal)
+                                            </div>
+                                        </div>
+                                        <div id="divHallazgos" style="display:none">
+                                            <div class="form-row">
+                                                <div class="form-group col-md-12">
+                                                    <label for="txtDocumentacionRevisada" class="text-small">Documentación revisada</label>
+                                                    <textarea id="txtDocumentacionRevisada" rows="4" class="form-control form-control-sm">@Model.txtDocumentacionRevisada</textarea>
+                                                </div>
+                                            </div>
+                                            <div class="card-header text-small">Resultados</div>
+                                            <br />
+                                            @Html.Partial("~/Areas/Supervision/Views/ManInformeQuinquenal/_renderRHallazgos.cshtml", Model.tbListHallazgos)
+
+
+                                        </div>
+                                        <div id="divOtros" style="display:none">
+                                            <br />
+                                            <div class="form-row">
+                                                <div class="form-group col-md-12">
+                                                    <label for="txtAsunto" class="text-small">Asunto</label>
+                                                    <textarea id="txtAsunto" rows="4" class="form-control form-control-sm">@Model.txtAsunto</textarea>
+                                                </div>
+                                            </div>
+                                            <div class="form-row">
+                                                <div class="form-group">
+                                                    @if (Model.hdfManCodTInforme != "")
+                                                    {
+
+                                                        var cantidadQuinquenio = Model.cantidadQuinquenio.Count();
+
+                                                        if (cantidadQuinquenio == 1)
+                                                        {
+                                                            <button class="btn btn-primary btn-sm" type="button" onclick="ManInforme_AddEdit.fnOpenQuinquenio(1)">I Quinquenio</button>
+                                                        }
+                                                        else if (cantidadQuinquenio == 2)
+                                                        {
+                                                            <button class="btn btn-primary btn-sm" type="button" onclick="ManInforme_AddEdit.fnOpenQuinquenio(1)">I Quinquenio</button>
+                                                            <button class="btn btn-primary btn-sm" type="button" onclick="ManInforme_AddEdit.fnOpenQuinquenio(2)">II Quinquenio</button>
+                                                        }
+                                                        else if (cantidadQuinquenio == 3)
+                                                        {
+                                                            <button class="btn btn-primary btn-sm" type="button" onclick="ManInforme_AddEdit.fnOpenQuinquenio(1)">I Quinquenio</button>
+                                                            <button class="btn btn-primary btn-sm" type="button" onclick="ManInforme_AddEdit.fnOpenQuinquenio(2)">II Quinquenio</button>
+                                                            <button class="btn btn-primary btn-sm" type="button" onclick="ManInforme_AddEdit.fnOpenQuinquenio(3)">III Quinquenio</button>
+                                                        }
+                                                        else if (cantidadQuinquenio == 4)
+                                                        {
+                                                            <button class="btn btn-primary btn-sm" type="button" onclick="ManInforme_AddEdit.fnOpenQuinquenio(1)">I Quinquenio</button>
+                                                            <button class="btn btn-primary btn-sm" type="button" onclick="ManInforme_AddEdit.fnOpenQuinquenio(2)">II Quinquenio</button>
+                                                            <button class="btn btn-primary btn-sm" type="button" onclick="ManInforme_AddEdit.fnOpenQuinquenio(3)">III Quinquenio</button>
+                                                            <button class="btn btn-primary btn-sm" type="button" onclick="ManInforme_AddEdit.fnOpenQuinquenio(4)">III Quinquenio</button>
+                                                        }
+                                                    }
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <br />
+                                        <div class="form-row">
+                                            <div class="form-group col-md-12">
+                                                <label for="txtRecomendaciones" class="text-small">Recomendaciones</label>
+                                                <textarea id="txtRecomendaciones" rows="4" class="form-control form-control-sm">@Model.txtRecomendaciones</textarea>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                            @*<div class="tab-pane fade show" id="navSupervision" role="tabpanel" aria-labelledby="nav-home-tab">
+                                    <div class="card">
+                                        @if (Model.hdfManCodFCTipo == "0000104")
+                                        {
+                                            @Html.Partial("~/Areas/Supervision/Views/ManInformeQuinquenal/_renderResultadoQuinquenal.cshtml", Model)
+                                        }
+                                    </div>
+                                </div>*@
+
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    @* Para el modal _Ubigeo usado en este control *@
+    <div class="modal fade hide" id="mdlControles_Ubigeo" role="dialog"></div>
+
+    @* Para el control genérico de personas *@
+    <div class="modal fade hide" id="mdlBuscarPersona" role="dialog"></div>
+    <div class="modal fade" id="modalAddEditPersona" tabindex="-1" role="dialog"></div>
+    <div class="modal fade hide" id="personaUbigeoModal" role="dialog"></div>
+    <div class="modal fade hide" id="mdlBuscarRDQuinquenal" role="dialog"></div>
+    <div class="modal fade hide" id="mdlQuinquenio" role="dialog"></div>
+    <div class="modal fade hide" id="mdlHallazgo" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header text-small" style="cursor:move;padding:0.5rem;">
+                    <h5 class="modal-title">Nuevo Hallazgo</h5>
+                </div>
+                <div class="modal-body">
+                    <form id="frmNewHallazgo" method="post">
+                        <div class="form-group col-md-12">
+                            <label for="txtNewHallazgo" class="text-small">Hallazgo</label>
+                            <textarea id="txtNewHallazgo" rows="2" class="form-control form-control-sm"></textarea>
+                        </div>
+                    </form>
+
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-primary btn-sm" onclick="_renderHallazgo.fnAgregar()">Agregar</button>
+                    <button class="btn btn-secondary btn-sm" data-dismiss="modal">Cancelar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script type="text/javascript">
+        setTimeout(function () {
+            $("#ddlIndicadorId").val("0000001");
+
+        }, 2000);
+    </script>
+</div>

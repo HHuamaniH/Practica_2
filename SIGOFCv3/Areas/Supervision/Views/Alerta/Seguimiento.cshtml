@@ -1,0 +1,196 @@
+﻿@model CapaEntidad.ViewModel.VM_Alerta
+@{
+    ViewBag.Title = "AddEdit";
+    Layout = "~/Views/Shared/_LayoutMain.cshtml";
+}
+
+<script src="~/Scripts/datatables/Extensions/dataTables.buttons.js"></script>
+<script src="~/Scripts/datatables/Extensions/buttons.flash.min.js"></script>
+<script src="~/Scripts/datatables/Extensions/jszip.min.js"></script>
+<script src="~/Scripts/datatables/Extensions/pdfmake.js"></script>
+<script src="~/Scripts/datatables/Extensions/vfs_fonts.js"></script>
+<script src="~/Scripts/datatables/Extensions/buttons.html5.js"></script>
+<script src="~/Scripts/datatables/Extensions/buttons.print.js"></script>
+<script src="~/Scripts/sigo/utility.uploadFile.js"></script>
+<script src="~/Scripts/ckeditor/ckeditor.js"></script>
+
+<link href="~/Content/datatables/buttons.dataTables.min.css" rel="stylesheet" />
+<link href="~/Areas/Capacitacion/css/ManCapacitacion/AddEdit.css" rel="stylesheet" />
+@*@Scripts.Render("~/bundles/MainAlerta/MainAlerta")*@
+<script src="~/Areas/Supervision/js/Alerta/Seguimiento.js"></script>
+
+@section scripts{
+    <script>
+        "use strict";
+
+        var ManSeguimiento = new Seguimiento();
+        var ItemDocRecibido = new DocRecibido('ItemDocRecibido', 'DocRecibido');
+        var ItemRptaEnlace = new RptaEnlace('ItemRptaEnlace', 'RptaEnlace');
+
+
+        $(document).ready(function () {
+            $('[data-toggle="tooltip"]').tooltip();
+
+            ManSeguimiento.init();
+            ItemDocRecibido.init();
+            ItemRptaEnlace.init();
+             var list = [];
+            @foreach(var item in Model.entidad.ListDocRecibido)
+            {
+                <text>
+
+                list.push({
+                    COD_DOCRECIBIDO: @item.COD_DOCRECIBIDO,
+                    EXPEDIENTE: "@Html.Raw(item.EXPEDIENTE)",
+                    FECHA_EXPEDIENTE: "@item.FECHA_EXPEDIENTE" ,
+                    DOCUMENTO: "@Html.Raw(item.DOCUMENTO)" ,
+                    OFICINA: "@Html.Raw(item.OFICINA)" ,
+                    OBSERVACIONES: "@Html.Raw(item.OBSERVACIONES)" ,
+                    RegEstado:RegEstadoSigo.INITIAL
+                });
+             </text>
+            }
+            ItemDocRecibido.dt.rows.add(list).draw();
+        list=[];
+
+         @foreach(var item in Model.entidad.ListRptaEnlace)
+         {
+            <text>
+
+                list.push({
+                    COD_RPTAENLACE: @item.COD_RPTAENLACE,
+                    DOCUMENTO: "@Html.Raw(item.DOCUMENTO)",
+                    FECHA_RESPUESTA: "@item.FECHA_RESPUESTA" ,
+                    PROCEDIMIENTO: "@Html.Raw(item.PROCEDIMIENTO)" ,
+                    RECOMENDACION: "@Html.Raw(item.RECOMENDACION)"
+                });
+            </text>
+        }
+            ItemRptaEnlace.dt.rows.add(list).draw();
+
+ //Validamos el rol del usuario
+        utilSigo.ValidaRol('@ViewBag.VAliasRol', 'btnManGrillaNuevo','Edit');
+        });
+    </script>
+}
+
+<div class="container-fluid">
+    <div class="card">
+        <div class="card-header text-right">
+            Alerta Osinfor
+        </div>
+        <div class="card-body">
+            <div class="card">
+                <div class="card-header text-small">
+                    @*<a id="btnRegistrarCapacitacion" href="javascript:void(0)" style="cursor:pointer;" data-toggle="tooltip" data-placement="top" title="Guardar" onclick="ItemDocRecibido.confirmarRegistro()"><i class="fa mx-2 fa-lg fa-save"></i></a>*@
+                    <a id="btnRegresarCapacitacion" style="cursor:pointer;" data-toggle="tooltip" data-placement="top" title="Regresar" onclick="ItemDocRecibido.fnReturnIndex()"><i class="fa mx-2 fa-lg fa-reply"></i></a>
+                    Registro de seguimiento
+                </div>
+                <div class="card-body">
+                    <form id="fmrSeguimiento">
+                        @Html.HiddenFor(m => m.codigoDato, new { Name = "codigoDato", id = "codigoDato" })
+                        @Html.HiddenFor(m => m.codigoComplementario, new { Name = "codigoComplementario", id = "codigoComplementario" })
+
+                        <div class="card">
+                            <div class="card-header text-small">Datos de la Supervisión</div>
+                            <div class="card-body">
+                                <div class="form-row">
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label for="cartaNotificacion" class="text-small"><strong>Carta de Notificación:</strong></label>
+                                            <div class="">
+                                                <label class="text-small col-form-label">@Model.entidad.NUM_CNOTIFICACION</label>
+                                                @Html.HiddenFor(m => m.entidad.NUM_CNOTIFICACION, new { Name = "NUM_CNOTIFICACION", id = "NUM_CNOTIFICACION" })
+                                                @Html.HiddenFor(m => m.entidad.COD_CNOTIFICACION, new { Name = "COD_CNOTIFICACION", id = "COD_CNOTIFICACION" })
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label for="" class="text-small"><strong>Título Habilitante:</strong></label>
+                                            <div class="">
+                                                <label class="text-small col-form-label">@Model.entidad.NUM_THABILITANTE</label>
+                                                @Html.HiddenFor(m => m.entidad.NUM_THABILITANTE, new { Name = "NUM_THABILITANTE", id = "NUM_THABILITANTE" })
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label for="" class="text-small"><strong>Modalidad de Aprovechamiento:</strong></label>
+                                            <div class="">
+                                                <label class="text-small col-form-label">@Model.entidad.MODALIDAD</label>
+                                                @Html.HiddenFor(m => m.entidad.MODALIDAD, new { Name = "MODALIDAD", id = "MODALIDAD" })
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label for="" class="text-small"><strong>Titular:</strong></label>
+                                            <div class="">
+                                                <label class="text-small col-form-label">@Model.entidad.TITULAR</label>
+                                                @Html.HiddenFor(m => m.entidad.TITULAR, new { Name = "TITULAR", id = "TITULAR" })
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="card-header text-small">
+                                <i class="fa mx-2 fa-lg fa-file-o" style="cursor:pointer;" onclick="ItemDocRecibido.showModal(1, this);" data-toggle="tooltip" data-placement="top" title="Nuevo"></i>
+                                Lista de Documentos Recibidos
+                            </div>
+                            <div class="card-body">
+                                <div class="form-row">
+                                    <div class="form-group col-md-12">
+                                        <table id="grvDocRecibido" class="table table-hover table-bordered" style="width:100%">
+                                            <thead>
+                                                <tr>
+                                                    <th></th>
+                                                    <th></th>
+                                                    <th>Codigo</th>
+                                                    <th>Expediente</th>
+                                                    <th>Fecha</th>
+                                                    <th>Documento</th>
+                                                    <th>Entidad/Oficina</th>
+                                                    <th>Observacion</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody></tbody>
+                                        </table>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="card-header text-small">Lista de Respuestas por Enlace</div>
+                            <div class="card-body">
+                                <div class="form-row">
+                                    <div class="form-group col-md-12">
+                                        <table id="grvRptaEnlace" class="table table-hover table-bordered" style="width:100%">
+                                            <thead>
+                                                <tr>
+                                                    @*<th></th>*@
+                                                    <th>Codigo</th>
+                                                    <th>Fecha</th>
+                                                    <th>Documento</th>
+                                                    <th>Procedimiento</th>
+                                                    <th>Recomendacion</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody></tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="modalAddDocRecibido" tabindex="-1" role="dialog"></div>
+
+</div>

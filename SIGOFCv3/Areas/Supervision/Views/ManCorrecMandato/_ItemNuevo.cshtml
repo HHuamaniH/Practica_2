@@ -1,0 +1,47 @@
+﻿<style>
+    #frmItemDestinatario input[type=text] {
+        text-transform: uppercase;
+    }
+</style>
+
+<script src="~/Areas/Supervision/js/ManCorrecMandato/modal_std.js"></script>
+
+
+<div class="modal-dialog modal-lg" role="document" id="divItemDestinatario">
+    <div class="modal-content">
+        <div class="modal-header text-small" style="cursor:move;padding:0.5rem;">
+            <h5 class="modal-title" id="h5Titulo">Expedientes</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body">
+            <form id="frmItemExpediente">
+                <div class="form-row">
+                    <div class="col-md-12 ">
+                        <label for="txtUbigeo" class="text-small">Nro Tramite</label>
+                        <div class="input-group">
+                            <input id="COD_INFORME" class="form-control form-control-sm" placeholder="Nro Expediente" />
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">
+                                    <i class="fa fa-search" style="cursor:pointer;" data-toggle="tooltip" data-placement="top"
+                                       title="Ingrese Nro Expediente" onclick="buscarExpediente();">
+                                    </i>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="col-md-12">
+                        <table id="grvExpedientes" class="table responsive table-hover table-bordered" width="100%"></table>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="modal-footer">
+            <button type="button" data-dismiss="modal" aria-label="Close" class="btn btn-primary">Cerrar</button>
+        </div>
+    </div>
+</div>
+@*<script src="~/Areas/Supervision/js/ManInforme/_ModalExpediente.js?noCache=@Guid.NewGuid().ToString()"></script>*@

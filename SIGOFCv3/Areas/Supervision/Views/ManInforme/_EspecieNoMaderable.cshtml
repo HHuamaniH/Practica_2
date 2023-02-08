@@ -1,0 +1,166 @@
+﻿
+<script src="~/Areas/Supervision/js/ManInforme/_EspecieNoMaderable.js"></script>
+
+<div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+        <div class="modal-header text-small" style="cursor:move;">
+            <span>Individuo No Maderable</span>
+            <i class="fa fa-close" style="cursor:pointer;" data-dismiss="modal" aria-label="Close"></i>
+        </div>
+        <div class="modal-body">
+            <form id="frmItemEspecieNoMaderable">
+                @Html.Hidden("hdfCodInforme", (string)ViewBag.hdfCodInforme)
+                @Html.Hidden("hdfRegEstado")
+                @Html.Hidden("hdfCodSecuencial")
+                @Html.Hidden("hdfCodTHabilitante")
+                @Html.Hidden("hdfNumPoa")
+                @Html.Hidden("hdfNombrePoa")
+                @Html.Hidden("hdfCodEspecie")
+                <div class="form-row">
+                    <div class="form-group col-md-4">
+                        <label for="txtEspecie" class="text-small">Especie</label>
+                        @Html.TextBox("txtEspecie", "", new { @class = "form-control form-control-sm", disabled = "disabled" })
+                    </div>
+                    <div class="form-group col-md-8">
+                        @Html.Partial("~/Areas/General/Views/Controles/_renderComboEspecie.cshtml")
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-2">
+                        <label for="txtEstrada" class="text-small">Estrada</label>
+                        @Html.TextBox("txtEstrada", "", new { @class = "form-control form-control-sm", disabled = "disabled" })
+                    </div>
+                    <div class="form-group col-md-2">
+                        <label for="txtCodigo" class="text-small">Código</label>
+                        @Html.TextBox("txtCodigo", "", new { @class = "form-control form-control-sm", disabled = "disabled" })
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label for="txtEstradaCampo" class="text-small">Estrada Campo</label>
+                        @Html.TextBox("txtEstradaCampo", "", new { @class = "form-control form-control-sm" })
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label for="txtCodigoCampo" class="text-small">Código Campo</label>
+                        @Html.TextBox("txtCodigoCampo", "", new { @class = "form-control form-control-sm" })
+                    </div>
+                </div>
+                @*<div class="form-row">
+            <div class="form-group col-md-2">
+                <label for="txtDiametro" class="text-small">Diámetro (cm)</label>
+                @Html.TextBox("txtDiametro", "", new { @class = "form-control form-control-sm", disabled = "disabled" })
+            </div>
+            <div class="form-group col-md-2">
+                <label for="txtAltura" class="text-small">Altura (m)</label>
+                @Html.TextBox("txtAltura", "", new { @class = "form-control form-control-sm", disabled = "disabled" })
+            </div>
+            <div class="form-group col-md-4">
+                <label for="txtDiametroCampo" class="text-small">Diámetro Campo (cm)</label>
+                @Html.TextBox("txtDiametroCampo", "", new { @class = "form-control form-control-sm", type = "number" })
+            </div>
+            <div class="form-group col-md-4">
+                <label for="txtAlturaCampo" class="text-small">Altura Campo (cm)</label>
+                @Html.TextBox("txtAlturaCampo", "", new { @class = "form-control form-control-sm", type = "number" })
+            </div>
+        </div>*@
+                <div class="form-row">
+                    <div class="form-group col-md-2">
+                        <label for="txtZona" class="text-small">Zona UTM</label>
+                        @Html.TextBox("txtZona", "", new { @class = "form-control form-control-sm", disabled = "disabled" })
+                    </div>
+                    <div class="form-group col-md-2">
+                        @*<label for="txtProdLata" class="text-small">Producción de Latas</label>
+                @Html.TextBox("txtProdLata", "", new { @class = "form-control form-control-sm", disabled = "disabled" })*@
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label for="ddlZonaCampoId" class="text-small">Zona UTM Campo</label>
+                        @Html.DropDownList("ddlZonaCampoId", new SelectList(ViewBag.ddlZona, "Value", "Text"), new { @class = "form-control form-control-sm" })
+                    </div>
+                    <div class="form-group col-md-4">
+                        @*<label for="txtProdLataCampo" class="text-small">Producción de Latas Campo</label>
+                @Html.TextBox("txtProdLataCampo", "", new { @class = "form-control form-control-sm", type = "number" })*@
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-2">
+                        <label for="txtCEste" class="text-small">Coordenada Este</label>
+                        @Html.TextBox("txtCEste", "", new { @class = "form-control form-control-sm", disabled = "disabled" })
+                    </div>
+                    <div class="form-group col-md-2">
+                        <label for="txtCNorte" class="text-small">Coordenada Norte</label>
+                        @Html.TextBox("txtCNorte", "", new { @class = "form-control form-control-sm", disabled = "disabled" })
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label for="txtCEsteCampo" class="text-small">Coordenada Este Campo</label>
+                        @Html.TextBox("txtCEsteCampo", "", new { @class = "form-control form-control-sm", type = "number", maxlength = "6" })
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label for="txtCNorteCampo" class="text-small">Coordenada Norte Campo</label>
+                        @Html.TextBox("txtCNorteCampo", "", new { @class = "form-control form-control-sm", type = "number", maxlength = "7" })
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-4"></div>
+                    <div class="form-group col-md-4">
+                        <label for="ddlEstadoCampoId" class="text-small">Estado</label>
+                        @Html.DropDownList("ddlEstadoCampoId", new SelectList(ViewBag.ddlEstado, "Value", "Text"), new { @class = "form-control form-control-sm" })
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label for="ddlEstadoFitoId" class="text-small">Estado Fitosanitario</label>
+                        @Html.DropDownList("ddlEstadoFitoId", new SelectList(ViewBag.ddlEstadoFito, "Value", "Text"), new { @class = "form-control form-control-sm" })
+                    </div>
+                    @*<div class="form-group col-md-2">
+            <label for="txtCocoAbierto" class="text-small">Cocos Abiertos</label>
+            @Html.TextBox("txtCocoAbierto", "", new { @class = "form-control form-control-sm", type = "number" })
+        </div>
+        <div class="form-group col-md-2">
+            <label for="txtCocoCerrado" class="text-small">Cocos Cerrados</label>
+            @Html.TextBox("txtCocoCerrado", "", new { @class = "form-control form-control-sm", type = "number" })
+        </div>*@
+                </div>
+                @*<div class="form-row">
+            <div class="form-group col-md-4"></div>
+            <div class="form-group col-md-4">
+                <label for="ddlCFusteId" class="text-small">C. Fuste</label>
+                @Html.DropDownList("ddlCFusteId", new SelectList(ViewBag.ddlCFuste, "Value", "Text"), new { @class = "form-control form-control-sm" })
+            </div>
+            <div class="form-group col-md-4">
+                <label for="ddlPCopaId" class="text-small">P. Copa</label>
+                @Html.DropDownList("ddlPCopaId", new SelectList(ViewBag.ddlPCopa, "Value", "Text"), new { @class = "form-control form-control-sm" })
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group col-md-4"></div>
+            <div class="form-group col-md-4">
+                <label for="ddlFCopaId" class="text-small">F. Copa</label>
+                @Html.DropDownList("ddlFCopaId", new SelectList(ViewBag.ddlFCopa, "Value", "Text"), new { @class = "form-control form-control-sm" })
+            </div>
+            <div class="form-group col-md-4">
+                <label for="ddlFenologiaId" class="text-small">Fenología</label>
+                @Html.DropDownList("ddlFenologiaId", new SelectList(ViewBag.ddlFenologia, "Value", "Text"), new { @class = "form-control form-control-sm" })
+            </div>
+        </div>*@
+                <div class="form-row">
+                    <div class="form-group col-md-4"></div>      
+                    <div class="form-group col-md-4">
+                        <label for="ddlGradoInfestId" class="text-small">Grado de infestación de Lianas</label>
+                        @Html.DropDownList("ddlGradoInfestId", new SelectList(ViewBag.ddlGradoInfest, "Value", "Text"), new { @class = "form-control form-control-sm" })
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label for="ddlCondicionId" class="text-small">Condición</label>
+                        @Html.DropDownList("ddlCondicionId", new SelectList(ViewBag.ddlCondicion, "Value", "Text"), new { @class = "form-control form-control-sm" })
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-4"></div>
+                    <div class="form-group col-md-8">
+                        <label for="txtObservacion" class="text-small">Observación</label>
+                        @Html.TextArea("txtObservacion", "", new { @class = "form-control form-control-sm", rows = "2" })
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-primary btn-sm" onclick="_EspecieNoMaderable.fnSubmitForm()">Guardar</button>
+            <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Cancelar</button>
+        </div>
+    </div>
+</div>

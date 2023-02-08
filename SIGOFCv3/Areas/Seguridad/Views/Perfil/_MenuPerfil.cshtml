@@ -1,0 +1,95 @@
+﻿@model CapaEntidad.ViewModel.General.VM_Perfil_Menu
+<style type="text/css">
+    table#tbListMenus thead tr th {
+        text-align: center;
+    }
+    table#tbListMenus tbody tr td[colspan="3"] {
+        font-weight: bold;
+    }
+    /*table#tbListMenusSeleccionados thead tr th {
+        text-align: center;
+    }
+
+    table#tbListMenusSeleccionados tbody tr td[colspan="3"] {
+        font-weight: bold;
+    }*/
+    .colAction {
+        width: 30px;
+    }
+    .colPadre {
+        width: 150px;
+    }
+    .table-wrapper-scroll-y {
+        display: block;
+        max-height: 600px;
+        overflow-y: auto;
+        -ms-overflow-style: -ms-autohiding-scrollbar;
+    }    
+</style>
+<div class="card">
+    <div class="card-header text-right">
+        Asignacion de menus al perfil : <strong> @Model.nPerfil</strong>
+    </div>
+    <div class="card-body">
+        <div class="card">
+            <div class="card-header text-small" id="divTitle">                
+                <a id="btnRegresarPerfil" style="cursor:pointer;" data-toggle="tooltip" data-placement="top" title="Regresar"><i class="fa mx-2 fa-lg fa-reply"></i></a>                
+            </div>
+            <div class="card-body">
+                <form id="frmoPerfilMenu">
+                    @Html.HiddenFor(m => m.codPerfil)
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label for="cboModulo" class="text-small">Modulo</label>
+                            @Html.DropDownList("cboModulo", new SelectList(Model.cboModulo, "Value", "Text"), new { @class = "form-control form-control-sm" })
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label for="cboModulo" class="text-small">Grupo</label>
+                            @Html.DropDownList("cboGrupo", new SelectList(Model.cboGrupo, "Value", "Text"), new { @class = "form-control form-control-sm" })
+                        </div>
+                    </div>                     
+                </form>
+                <div class="row">
+                    <div class="col-sm-6">
+                        <h5 class="card-title">No Asignados</h5>
+                        <div class="table-responsive table-wrapper-scroll-y">
+                            <table id="tbListMenus" class="table table-hover table-bordered" style="width:100%">
+                                <thead>
+                                    <tr>
+                                        <th class="colAction">Nro</th>
+                                        <th class="colPadre">Menú Padre</th>
+                                        <th>Menú Hijo</th>
+                                        <th class="colAction"><i class="cellCheck fa fa-lg fa-check" title="Asignar todos los menus al perfil" onclick="_MenuPerfil.fnAsignar(-1);"></i></th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <h5 class="card-title">Asignados</h5>
+                        <div class="table-responsive table-wrapper-scroll-y">
+                            <table id="tbListMenusAsignados" class="table table-hover table-bordered" style="width:100%">
+                                <thead>
+                                    <tr>
+                                        <th class="colAction"><i class="cellDel fa fa-lg fa-window-close" title="Quitar todos los menus del perfil" onclick="_MenuPerfil.fnQuitar(-1)"></i></th>
+                                        <th class="colAction">Nro</th>
+                                        <th class="colPadre">Menú Padre</th>
+                                        <th>Menú Hijo</th>
+                                        <th>Rol</th>
+                                        <th>#</th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+                        </div>
+
+                    </div>
+                </div>
+                 
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade hide" id="manRolModal" tabindex="-1" role="dialog"></div>
+<script src="~/Areas/Seguridad/js/_MenuPerfil.js?noCache=@Guid.NewGuid().ToString()"></script>

@@ -1,0 +1,508 @@
+﻿@model CapaEntidad.ViewModel.VM_Informe
+@{
+    ViewBag.Title = "AddEdit";
+    Layout = "~/Views/Shared/_LayoutMain.cshtml";
+}
+
+<script src="~/Scripts/datatables/Extensions/dataTables.buttons.js"></script>
+<script src="~/Scripts/datatables/Extensions/buttons.flash.min.js"></script>
+<script src="~/Scripts/datatables/Extensions/jszip.min.js"></script>
+<script src="~/Scripts/datatables/Extensions/pdfmake.js"></script>
+<script src="~/Scripts/datatables/Extensions/vfs_fonts.js"></script>
+<script src="~/Scripts/datatables/Extensions/buttons.html5.js"></script>
+<script src="~/Scripts/datatables/Extensions/buttons.print.js"></script>
+<script src="~/Scripts/ckeditor5/ckeditor.js"></script>
+
+<script src="~/Scripts/sigo/utility.uploadFile.js"></script>
+<script src="~/Areas/Supervision/js/ManInforme/AddEdit.js?noCache=@Guid.NewGuid().ToString()"></script>
+
+<link href="~/Content/datatables/buttons.dataTables.min.css" rel="stylesheet" />
+<link href="~/Areas/Supervision/css/ManInforme/AddEdit.css" rel="stylesheet" />
+@section scripts{
+    <script>
+        "use strict"; var rol = '';
+    $(document).ready(function () {
+        //Validamos el rol del usuario
+        utilSigo.ValidaRol('@ViewBag.VAliasRol', 'btnRegistrar', '@Model.vmControlCalidad.ddlIndicadorId');
+    });
+    </script>
+}
+<div class="container-fluid">
+    <div class="card">
+        <div class="card-header text-right">
+            @Model.lblTituloCabecera
+        </div>
+        <div class="card-body">
+            <div class="card">
+                <div class="card-header text-small">
+                    <a id="btnRegistrar" href="javascript:void(0)" style="cursor:pointer;" data-toggle="tooltip" data-placement="top" title="Guardar" onclick="ManInforme_AddEdit.fnSubmitForm()"><i class="fa mx-2 fa-lg fa-save"></i></a>
+                    <a style="cursor:pointer;" data-toggle="tooltip" data-placement="top" title="Regresar" onclick="ManInforme_AddEdit.fnReturnIndex()"><i class="fa mx-2 fa-lg fa-reply"></i></a>
+                    <a style="cursor:pointer;" data-toggle="tooltip" data-placement="top" title="Descargar Datos Supervisión" onclick="ManInforme_AddEdit.fnDownloadDatosInforme()"><i class="fa mx-2 fa-lg fa-download"></i></a>
+                    @Model.lblTituloEstado
+                </div>
+                <div class="card-body">
+                    <form id="frmManInforme_AddEdit" action="@Url.Action("AddEdit", "ManInforme", new { Area = "Supervision" })">
+                        @Html.HiddenFor(m => m.hdfCodInforme)
+                        @Html.HiddenFor(m => m.hdfRegEstado)
+                        @Html.HiddenFor(m => m.hdfCodMTipo)
+                        @Html.HiddenFor(m => m.hdfPerfil)                        
+                        <ul class="nav nav-tabs" id="myTab" role="tablist">
+                            <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#navEstado" role="tab" aria-controls="home" aria-selected="true">Estado Situacional</a></li>
+                            <li class="nav-item"><a class="nav-link active" data-toggle="tab" href="#navDatos" role="tab" aria-controls="home" aria-selected="true">Datos Generales</a></li>
+                            <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#navSupervision" role="tab" aria-controls="home" aria-selected="true">Sobre la Supervisión</a></li>
+                            <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#navObligacion" role="tab" aria-controls="home" aria-selected="true">Obligaciones</a></li>
+                            <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#navConclusion" role="tab" aria-controls="home" aria-selected="true">Conclusiones</a></li>
+                            @*<li class="nav-item"><a class="nav-link" data-toggle="tab" href="#navDenuncias" role="tab" aria-controls="home" aria-selected="true">Denuncias</a></li>*@
+                            <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#navIncidencias" role="tab" aria-controls="home" aria-selected="true">Incidencias</a></li>
+                            <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#navInformeDigital" role="tab" aria-controls="home" aria-selected="true">Informe digital</a></li>
+                        </ul>
+                        <div class="tab-content">
+                            <div class="tab-pane fade show" id="navEstado" role="tabpanel" aria-labelledby="nav-home-tab">
+                                @{ Html.RenderAction("_ControlCalidad", "Controles", new { area = "GENERAL", dto = Model.vmControlCalidad, disableControl = true }); }
+                                @Html.Action("_FormatoControlCalidad", "ManInforme", new { COD_INFORME = Model.hdfCodInforme })
+                            </div>
+                            <div class="tab-pane fade show active" id="navDatos" role="tabpanel" aria-labelledby="nav-home-tab">
+                                <div class="card">
+                                    <div class="card-header text-small"></div>
+                                    <div class="card-body">
+                                        <div class="form-row">
+                                            <div class="form-group col-md-4">
+                                                <div class="custom-control custom-checkbox my-1 mr-sm-2">
+                                                    @Html.CheckBoxFor(m => m.chkPublicar, new { @class = "custom-control-input" })
+                                                    <label for="chkPublicar" class="custom-control-label" style="margin-top:6px;">Publicar en el Observatorio</label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="card-header text-small">Datos Título Habilitante/Carta de Notificación</div>
+                                    <div class="card-body">
+                                        @Html.Partial("~/Areas/Supervision/Views/ManInforme/Render/_renderCNotificacion.cshtml", Model.vmInfCNotificacion
+                                        , new ViewDataDictionary { { "TIPO", "DETALLE" }, { "cod_grupo_usuario", (object)ViewBag.hdfCodGrupoUsuario }, { "cod_informe", Model.hdfCodInforme } })
+                                    </div>
+                                    <div class="card-header text-small">Datos del Informe</div>
+                                    <div class="card-body">
+                                        <div class="form-row">
+                                            <div class="form-group col-md-3">
+                                                <label for="ddlOdId" class="text-small">O.D. desde donde registra la información</label>
+                                                @Html.DropDownListFor(m => m.ddlOdId, new SelectList(Model.ddlOd, "Value", "Text"), new { @class = "form-control form-control-sm" })
+                                            </div>
+                                            <div class="form-group col-md-3">
+                                                <label for="txtNumInforme" class="text-small">N° de Informe de Supervisión</label>
+                                                @Html.TextBoxFor(m => m.txtNumInforme, new { @class = "form-control form-control-sm" })
+                                            </div>
+                                            <div class="form-group col-md-3">
+                                                <label for="chkPlanAmazonasAnio" class="text-small">Año de ejecución del Plan Amazonas</label>
+                                                <div style="margin-top:7px;">
+                                                    <div class="form-check form-check-inline">
+                                                        @Html.CheckBoxFor(m => m.chkPlanAmazonas2014, new { @class = "form-check-input" })
+                                                        <label class="form-check-label" for="chkPlanAmazonas2014">2014</label>
+                                                    </div>
+                                                    <div class="form-check form-check-inline">
+                                                        @Html.CheckBoxFor(m => m.chkPlanAmazonas2015, new { @class = "form-check-input" })
+                                                        <label class="form-check-label" for="chkPlanAmazonas2015">2015</label>
+                                                    </div>
+                                                    <div class="form-check form-check-inline">
+                                                        @Html.CheckBoxFor(m => m.chkPlanAmazonas2016, new { @class = "form-check-input" })
+                                                        <label class="form-check-label" for="chkPlanAmazonas2016">2016</label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-group col-md-3">
+                                                <label for="chkPlanAmazonas" class="text-small">¿El Informe pertenece al Plan Amazonas?</label>
+                                                <div style="margin-top:7px;">
+                                                    <div class="form-check form-check-inline">
+                                                        @Html.CheckBoxFor(m => m.chkPlanAmazonas, new { @class = "form-check-input" })
+                                                        <label class="form-check-label" for="chkPlanAmazonas"></label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-row">
+                                            <div class="form-group col-md-3">
+                                                <label for="txtFechaEntrega" class="text-small">Fecha de Entrega del Informe</label>
+                                                @Html.TextBoxFor(m => m.txtFechaEntrega, new { @class = "form-control form-control-sm", placeholder = "dd/mm/aaaa", maxlength = "10" })
+                                            </div>
+                                            <div class="form-group col-md-4">
+                                                <label for="txtDirector" class="text-small">Director<i class="fa fa-cog fa-spin text-danger" id="iconDirector" style="display:none;" data-toggle="tooltip" data-placement="top" title="Seleccione el director"></i></label>
+                                                <div class="input-group">
+                                                    @Html.TextBoxFor(m => m.txtDirector, new { @class = "form-control form-control-sm", disabled = "disabled" })
+                                                    @Html.HiddenFor(m => m.hdfCodDirector)
+                                                    <div class="input-group-prepend">
+                                                        <span class="input-group-text" style="cursor:pointer;" onclick="ManInforme_AddEdit.fnBuscarPersona('DIRECTOR')"><i class="fa fa-search-plus" data-toggle="tooltip" data-placement="top" title="Seleccione el director"></i></span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-group col-md-5">
+                                                <div class="card">
+                                                    <div class="card-header">
+                                                        Denuncia
+                                                    </div>
+                                                    <div class="card-body">
+                                                        <div class="form-row ">
+                                                            <div class="form-group col-md-7">
+                                                                <label class="text-small" id="lblExpediente">Tramite STID</label>
+                                                                <div class="input-group">
+                                                                    <input type="text" id="inptExpediente" class="form-control form-control-sm" />
+                                                                    <div class="input-group-prepend">
+                                                                        <span class="input-group-text" id="idAddInforme">
+                                                                            <i class="fa fa-search" style="cursor:pointer;color:forestgreen"
+                                                                               onclick="ManInforme_AddEdit.Denuncia.buscarTramite();">
+                                                                            </i>
+                                                                        </span>
+                                                                    </div>
+                                                                    <div class="input-group-prepend">
+                                                                        <span class="input-group-text" id="idAddInforme">
+                                                                            <i class="fa fa-close" style="cursor:pointer;color:darkred"
+                                                                               onclick="ManInforme_AddEdit.Denuncia.eliminarTramite();">
+                                                                            </i>
+                                                                        </span>
+                                                                    </div>
+                                                                    <div class="input-group-prepend responseOk" style="display:none">
+                                                                        <span class="input-group-text">
+                                                                            <i class="fa fa-check-circle" data-toggle="tooltip" data-placement="top" title="N° Tramite OK" style="color:forestgreen">
+                                                                            </i>
+                                                                        </span>
+                                                                    </div>
+                                                                    <div class="input-group-prepend responseError" style="display:none">
+                                                                        <span class="input-group-text">
+                                                                            <i class="fa fa-times-circle" data-toggle="tooltip" data-placement="top" title="No existe N° de Tramite" style="color:darkred">
+                                                                            </i>
+                                                                        </span>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="form-group col-md-5">
+                                                                <label class="text-small">Atendido</label>
+                                                                <div style="margin-top:7px;">
+                                                                    <div class="custom-control custom-radio custom-control-inline">
+                                                                        <input type="radio" class="custom-control-input" id="rbtnAtendido1" name="rbtnAtendido" value="1">
+                                                                        <label class="custom-control-label" for="rbtnAtendido1">Atendido</label>
+                                                                    </div>
+                                                                    <div class="custom-control custom-radio custom-control-inline">
+                                                                        <input type="radio" class="custom-control-input" id="rbtnAtendido2" name="rbtnAtendido" value="2">
+                                                                        <label class="custom-control-label" for="rbtnAtendido2">En Proceso</label>
+                                                                    </div>
+                                                                    <div class="custom-control custom-radio custom-control-inline">
+                                                                        <input type="radio" class="custom-control-input" id="rbtnAtendido3" name="rbtnAtendido" value="3">
+                                                                        <label class="custom-control-label" for="rbtnAtendido3">Trasladado</label>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-row">
+                                            <div class="col-md-12">
+                                                @Html.Partial("~/Areas/Supervision/Views/ManInforme/Render/_renderSupervisorCalidad.cshtml", new CapaEntidad.ViewModel.VM_SupervisorCalidad() { hdSupervisor_Calidad = Model.hdSupervisor_Calidad, Nombre_Supervisor_Calidad = Model.Nombre_Supervisor_Calidad })
+                                            </div>
+                                        </div>
+                                        <div class="form-row">
+                                            <div class="col-md-12">
+                                                @Html.Partial("~/Areas/Supervision/Views/ManInforme/Render/_renderSupervisor.cshtml", Model.tbSupervisor)
+                                            </div>
+                                        </div>
+                                        <div class="form-row" style="margin-top:10px;">
+                                            <div class="form-group col-md-6">
+                                                <label for="txtAsunto" class="text-small">Asunto</label>
+                                                @Html.TextAreaFor(m => m.txtAsunto, new { @class = "form-control form-control-sm", @rows = "7" })
+                                            </div>
+                                            <div class="form-group col-md-6">
+                                                <label for="txtContenido" class="text-small">Contenido</label>
+                                                @Html.TextAreaFor(m => m.txtContenido, new { @class = "form-control form-control-sm", @rows = "7" })
+                                            </div>
+                                        </div>
+                                        <div class="card-header text-small">Archivos Cargados en el SIADO</div>
+                                        <div class="card-body">
+                                            <div class="form-row">
+                                                @{
+                                                    Html.RenderAction("_IntegracionSIADO", "Controles", new { area = "GENERAL", asCriterio = "SUBTIP_TITDOCSIGO", asSubCriterio = "0006", asValor = Model.hdfCodInforme });
+                                                }
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="tab-pane fade show" id="navSupervision" role="tabpanel" aria-labelledby="nav-home-tab">
+                                <div class="card">
+                                    <div class="card-header text-small"></div>
+                                    <div class="card-body">
+                                        @Html.Partial("~/Areas/Supervision/Views/ManInforme/Render/_renderDatosSupervision.cshtml", Model.vmDatoSupervision)
+                                        <div class="form-row">
+                                            <div id="dvRealizaVeedorForest" class="form-group col-md-2" style="display:none;">
+                                                <label for="ddlRealizadoVeedorId" class="text-small">Realizado con Veedor(es) Forestal</label>
+                                                @Html.DropDownListFor(m => m.ddlRealizadoVeedorId, new SelectList(Model.ddlRealizadoVeedor, "Value", "Text"), new { @class = "form-control form-control-sm" })
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="card-header text-small">Descripción del Área Supervisada</div>
+                                    <div class="card-body">
+                                        <div class="form-row">
+                                            <div class="col-md-6 mb-3">
+                                                <label for="txtUbigeo" class="text-small">Ubigeo<i class="fa fa-cog fa-spin text-danger" id="iconUbigeo" style="display:none;" data-toggle="tooltip" data-placement="top" title="Seleccione Ubigeo"></i></label>
+                                                <div class="input-group">
+                                                    <div class="input-group-prepend">
+                                                        <span class="input-group-text"><i class="fa fa-search" style="cursor:pointer;" data-toggle="tooltip" data-placement="top" title="Seleccionar Ubigeo" onclick="ManInforme_AddEdit.fnViewModalUbigeo();"></i></span>
+                                                    </div>
+                                                    @Html.EditorFor(m => m.txtUbigeo, new { htmlAttributes = new { @class = "form-control form-control-sm", @disabled = "disabled" } })
+                                                    @Html.HiddenFor(m => m.hdfCodUbigeo)
+                                                </div>
+                                            </div>
+                                            <div class="form-group col-md-6">
+                                                <label for="txtSector" class="text-small">Sector</label>
+                                                @Html.TextBoxFor(m => m.txtSector, new { @class = "form-control form-control-sm" })
+                                            </div>
+                                        </div>
+                                        <div class="form-row">
+                                            <div class="col-md-12">
+                                                @Html.Partial("~/Areas/Supervision/Views/ManInforme/Render/_renderVerticeTHCampo.cshtml", Model.tbVerticeTHCampo, new ViewDataDictionary { { "cod_informe", Model.hdfCodInforme }, { "cod_cnotificacion", Model.vmInfCNotificacion.hdfCodCNotificacion } })
+                                            </div>
+                                        </div>
+                                    </div>
+                                    @* Mostrar Censo Comercial en caso se trate de una devolución de madera *@
+                                    @if (Model.hdfEstadoOrigen == "DM")
+                                    {
+                                        <div>
+                                            <div class="card-header text-small">Censo Comercial</div>
+                                            <div class="card-body col-md-12">
+                                                @{ Html.RenderAction("_DatosCampo", "ManInforme", new { area = "Supervision", asCodInforme = Model.hdfCodInforme, aiNumPoa = 0 }); }
+                                            </div>
+                                        </div>
+                                    }
+                                    else
+                                    {<br />}
+                                    <div class="card-header text-small">Avistamiento de Fauna</div>
+                                    <div class="card-body">
+                                        <div class="form-row">
+                                            <div class="col-md-12">
+                                                @Html.Partial("~/Areas/Supervision/Views/ManInforme/Render/_renderAvistamientoFauna.cshtml", Model.tbAvistamientoFauna)
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="card-header text-small">Fotos de la Supervisión</div>
+                                    <div class="card-body">
+                                        <div class="form-row">
+                                            <div class="col-md-12">
+                                                @Html.Partial("~/Areas/Supervision/Views/ManInforme/Render/_renderFotoSupervision.cshtml", Model.tbFotoSupervision, new ViewDataDictionary { { "cod_informe", Model.hdfCodInforme } })
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="card-header text-small">Desplazamiento</div>
+                                    <div class="card-body">
+                                        <div class="form-row">
+                                            <div class="col-md-12">
+                                                @Html.Partial("~/Areas/Supervision/Views/ManInforme/Render/_renderDesplazamiento.cshtml", Model.tbDesplazamiento)
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="tab-pane fade show" id="navObligacion" role="tabpanel" aria-labelledby="nav-home-tab">
+                                <div class="card">
+                                    <div class="card-header text-small"></div><br />
+                                    <div id="dvObligacionContractual" style="display:none;">
+                                        @Html.Partial("~/Areas/Supervision/Views/ManInforme/Render/_renderObligContractual.cshtml", Model.tbObligacion)
+                                    </div>
+                                    @Html.Partial("~/Areas/Supervision/Views/ManInforme/Render/_renderObligacionTitular.cshtml", Model.tbObligTitular)
+                                    <div class="form-group col-md-2">
+                                        <label for="ddlId" class="text-small">Buen desempeño</label>
+                                        @Html.DropDownListFor(m => m.ddlBuenDesempenioId, new SelectList(Model.ddlBuenDesempenio, "Value", "Text"), new { @class = "form-control form-control-sm" })
+                                    </div>
+                                    <div class="form-group col-md-2">
+                                        <label for="ddlId" class="text-small">Se Archiva Informe</label>
+                                        @Html.DropDownListFor(m => m.ddlArchivaInformeId, new SelectList(Model.ddlArchivaInforme, "Value", "Text"), new { @class = "form-control form-control-sm" })
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="tab-pane fade show" id="navConclusion" role="tabpanel" aria-labelledby="nav-home-tab">
+                                <div class="card">
+                                    <div class="card-header text-small"></div>
+                                    <div class="card-body">
+                                        <div class="form-row">
+                                            <div class="form-group col-md-12">
+                                                <label for="txtObservacion" class="text-small">Observaciones</label>
+                                                @Html.TextAreaFor(m => m.txtObservacion, new { @class = "form-control form-control-sm", @rows = "7" })
+                                            </div>
+                                        </div>
+                                        <div class="form-row">
+                                            <div class="form-group col-md-12">
+                                                <label for="txtConclusion" class="text-small">Conclusiones del Informe de Supervisión</label>
+                                                <div id="txtConclusion" class="ckeditor-inf">
+                                                    <div class="toolbar-container"></div>
+                                                    <div class="editor-container">
+                                                        <div class="editor">
+                                                            @Html.Raw(Model.txtConclusion)
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                @Html.HiddenFor(m => m.txtConclusion)
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="tab-pane fade show" id="navIncidencias" role="tabpanel" aria-labelledby="nav-home-tab">
+                                <div class="card-header text-small">
+                                    Incidencias
+                                </div>
+                                <div class="card-body">
+                                    <input type="hidden" id="h1" value="" />
+                                    <input type="hidden" id="h2" value="" />
+                                    <div class="form-row">
+                                        <input type="hidden" id="COD_IINCIDENCIA" value="0">
+                                        <div class="form-group col-md-4">
+                                            <label for="txt_FECHA_SUCESO" class="text-small">FECHA SUCESO:</label>
+                                            <input type="date" id="txt_FECHA_SUCESO" name="txt_FECHA_SUCESO" class="form-control form-control-sm valid">
+                                        </div>
+                                        <div class="form-group col-md-4">
+                                            <label for="txt_HORA_SUCESO" class="text-small">
+                                                HORA SUCESO:
+                                            </label>
+                                            <input class="form-control form-control-sm" type="time" id="txt_HORA_SUCESO" />
+                                        </div>
+                                    </div>
+                                    <div class="form-row">
+                                        <div class="form-group col-md-4">
+                                            <label for="cboRIESGO" class="text-small">RIESGO</label>
+                                            <select class="form-control form-control-sm" id="cboRIESGO" name="cboRIESGO">
+                                                <option value="00">--Seleccionar--</option>
+                                            </select><div id="tooltip_containerRIESGO"></div>
+                                        </div>
+                                        <div class="form-group col-md-4">
+                                            <label for="cboPROCESO" class="text-small">PROCESO</label>
+                                            <select class="form-control form-control-sm" id="cboPROCESO" name="cboPROCESO">
+                                                <option value="00">--Seleccionar--</option>
+                                            </select><div id="tooltip_containerPROCESO"></div>
+                                        </div>
+                                        <div class="form-group col-md-4">
+                                            <label for="cboCIRCUNSTANCIA" class="text-small">CIRCUNSTANCIA</label>
+                                            <select class="form-control form-control-sm" id="cboCIRCUNSTANCIA" name="cboCIRCUNSTANCIA">
+                                                <option value="00">--Seleccionar--</option>
+                                            </select><div id="tooltip_containerCIRCUNSTANCIA"></div>
+                                        </div>
+                                        <div class="form-group col-md-4">
+                                            <label for="txt_UBICACION" class="text-small">
+                                                UBICACION:
+                                            </label>
+                                            <input class="form-control form-control-sm" type="text" id="txt_UBICACION" />
+                                        </div>
+                                        <div class="form-group col-md-4">
+                                            <label for="cboEFECTO" class="text-small">EFECTO</label>
+                                            <select class="form-control form-control-sm" id="cboEFECTO" name="cboEFECTO">
+                                                <option value="00">--Seleccionar--</option>
+                                            </select><div id="tooltip_containerEFECTO"></div>
+                                        </div>
+                                    </div>
+                                    <div class="form-row">
+                                        <div class="form-group col-md-4">
+                                            <label for="NIVEL_1" class="text-small">NIVEL 1</label>
+                                            <select class="form-control form-control-sm" id="NIVEL_1" name="NIVEL_1">
+                                                <option selected="selected" value="00">--Seleccionar--</option>
+                                            </select><div id="tooltip_containerNIVEL_1"></div>
+                                        </div>
+                                        <div class="form-group col-md-4">
+                                            <label for="NIVEL_2" class="text-small">NIVEL 2</label>
+                                            <select class="form-control form-control-sm" id="NIVEL_2" name="NIVEL_2">
+                                                <option selected="selected" value="00">--Seleccionar--</option>
+                                            </select><div id="tooltip_containerNIVEL_2"></div>
+                                        </div>
+                                        <div class="form-group col-md-4">
+                                            <label for="txt_DSCRP_INCIDENCIA" class="text-small">
+                                                INCIDENCIA:
+                                            </label>
+                                            <input class="form-control form-control-sm" type="text" id="txt_DSCRP_INCIDENCIA" />
+                                        </div>
+                                    </div>
+                                    <div class="form-row ValidateHidden" style="margin-top:10px;">
+                                        <div class="form-group col-md-8">
+                                            <label for="txt_OBSERVACIONES" class="text-small">
+                                                OBSERVACIONES:
+                                            </label>
+                                            <textarea id="txt_OBSERVACIONES" style="height:200px" class="form-control form-control-sm"></textarea>
+                                        </div>
+                                        <div class="form-group col-md-4">
+                                            <div class="btn-group derecha">
+                                                <button id="BtnLimpiar" type="button" class="btn btn-small btn-info tip" title="" data-original-title="Limpiar">LIMPIAR</button>
+                                                <button id="BtnGuardar" type="button" class="btn btn-small btn-info tip" title="" data-original-title="Nuevo">GUARDAR</button>
+                                                <button id="BtnExportar" type="button" class="btn btn-small btn-info tip" title="" data-original-title="Exportar">EXPORTAR</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-row">
+                                        <div class="col-md-12">
+                                            <table id="GridIINCIDENCIA" class="table table-hover table-bordered" width="100%" cellspacing="0"></table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="tab-pane fade" id="navInformeDigital" role="tabpanel" aria-labelledby="nav-home-tab">
+                                @Html.Partial("~/Areas/Supervision/Views/ManInforme/_InformeDigital.cshtml")
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    setTimeout(function () {
+        $("#ddlIndicadorId").val("0000001");
+        $("#ddlIndicadorId").prop("disabled", "disabled");
+    }, 2000);
+</script>
+
+@* Para el modal _Ubigeo usado en este control *@
+<div class="modal fade hide" id="mdlControles_Ubigeo" role="dialog"></div>
+@* Para el modal _POASupervisado usado en el control _renderCNotificacion *@
+<div class="modal fade hide" id="mdlManInforme_POASupervisado" tabindex="-1" role="dialog"></div>
+@* Para el modal _CNotificacion usado en el control _renderCNotificacion *@
+<div class="modal fade hide" id="mdlControles_CNotificacion" tabindex="-1" role="dialog"></div>
+@* Para el modal _THabilitanteGeneral usado en el control _renderCNotificacion *@
+<div class="modal fade hide" id="mdlManInforme_THabilitanteGeneral" tabindex="-1" role="dialog"></div>
+@* Para el modal _VerticeTHCampo usado en el control _renderVerticeTHCampo *@
+<div class="modal fade hide" id="mdlManInforme_VerticeTHCampo" role="dialog"></div>
+@* Para el modal _FotoSupervision usado en el control _renderFotoSupervision *@
+<div class="modal fade hide" id="mdlManInforme_FotoSupervision" role="dialog"></div>
+@* Para el modal _AvistamientoFauna usado en el control _renderAvistamientoFauna *@
+<div class="modal fade hide" id="mdlManInforme_AvistamientoFauna" role="dialog"></div>
+@* Para el modal _VerticeArea usado en el control _renderVerticeArea *@
+<div class="modal fade hide" id="mdlManInforme_VerticeArea" tabindex="-1" role="dialog"></div>
+@* Para el modal _EvaluacionArbol usado en el control _renderEvalArbolAdicional y _renderEvalArbolNoAutorizado *@
+<div class="modal fade hide" id="mdlManInforme_EvaluacionArbol" role="dialog"></div>
+@* Para el modal _Huayrona usado en el control _renderHuayrona *@
+<div class="modal fade hide" id="mdlManInforme_Huayrona" tabindex="-1" role="dialog"></div>
+@* Para el modal _ActividadSilvicultural usado en el control _renderActividadSilvicultural *@
+<div class="modal fade hide" id="mdlManInforme_ActividadSilvicultural" role="dialog"></div>
+@* Para el modal _CambioUso usado en el control _renderCambioUso *@
+<div class="modal fade hide" id="mdlManInforme_CambioUso" tabindex="-1" role="dialog"></div>
+@* Para el modal _EvaluacionOtro usado en el control _renderEvalOtro *@
+<div class="modal fade hide" id="mdlManInforme_EvaluacionOtro" tabindex="-1" role="dialog"></div>
+@* Para el modal _BuscarPersonaGeneral usado en este control, _renderSupervisor,_POASupervisado *@
+<div class="modal fade hide" id="mdlControles_BuscarPersonaGeneral" tabindex="-1" role="dialog"></div>
+@* Para el modal _VolumenAnalizado usado en el control _renderVolumenAnalizado *@
+<div class="modal fade hide" id="mdlManInforme_VolumenAnalizado" role="dialog"></div>
+@* Para el modal _DatosCampoMaderable,_DatosCampoBosqueSeco usado en el control _POASupervisado *@
+<div class="modal fade hide" id="mdlManInforme_DatosCampo" tabindex="-1" role="dialog"></div>
+@* Para el modal _EspecieMaderable,_EspecieBosqueSeco usado en el control _DatosCampoMaderable *@
+<div class="modal fade hide" id="mdlManInforme_EspecieCampo" role="dialog"></div>
+@* Para el modal _DenunciaSITD usado en este control _renderDatosSupervision *@
+<div class="modal fade hide" id="mdlControles_DenunciaSITD" tabindex="-1" role="dialog"></div>
+@* Para los modals relacionados a las Obligaciones Contractuales usado en este control *@
+<div class="modal fade hide" id="mdlManInforme_Obligacion" role="dialog"></div>
+@* Para los modals relacionados este control Global*@
+<div class="modal fade hide" id="mdlManInforme_Global" role="dialog"></div>
+@* Para el modal _Expediente usado en este control *@
+<div class="modal fade hide" id="mdlManInforme_Expedientes" role="dialog"></div>
+@* Para el modal _Informe usado en este control *@
+<div class="modal fade hide" id="mdlManInforme_Informes" role="dialog"></div>
+@* Para el modal _DetalleExpediente usado en este control *@
+<div class="modal fade hide" id="mdlManInforme_DetalleExpediente" role="dialog"></div>
+
+@* Para el control genérico de personas *@
+<div class="modal fade hide" id="mdlBuscarPersona" role="dialog"></div>
+<div class="modal fade" id="modalAddEditPersona" tabindex="-1" role="dialog"></div>
+<div class="modal fade hide" id="personaUbigeoModal" role="dialog"></div>
+<div class="modal fade hide" id="mdlBuscarUbigeo" role="dialog"></div>

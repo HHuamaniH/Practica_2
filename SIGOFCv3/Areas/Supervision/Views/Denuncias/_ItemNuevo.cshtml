@@ -1,0 +1,83 @@
+﻿
+<style>
+    #frmItemDestinatario input[type=text] {
+        text-transform: uppercase;
+    }
+</style>
+
+<div class="modal-dialog modal-lg" role="document" id="divItemDestinatario">
+    <div class="modal-content">
+        <div class="modal-header text-small" style="cursor:move;padding:0.5rem;">
+            <h5 class="modal-title" id="h5Titulo">Nuevo</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body">
+            <form id="frmItemDestinatario">
+                <input type="hidden" id="hdCodDestinatario" name="hdCodDestinatario" value="0" />
+
+                <div class="form-row">
+                    <div class="col-md-12 mb-3">
+
+                        <label for="lbDestinatarioPersona" class="text-small">
+                            Funcionarios
+                        </label>
+                        <div class="input-group">
+                            <div class="input-group-prepend" onclick="vpItemDestinatario.fnBuscarPersona('FUNCIONARIO','0000006');" style="cursor:pointer;">
+                                <span class="input-group-text"><i class="fa fa-search-plus" data-toggle="tooltip" data-placement="top" title="Buscar Funcionarios"></i></span>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label for="txtDestinatarioCargo" class="text-small">Cargo</label>
+                        <input type="text" id="txtDestinatarioCargo" name="txtDestinatarioCargo" class="form-control form-control-sm" required />
+                    </div>
+
+                    <div class="form-group col-md-6">
+                        <label for="txtDestinatarioCorreo" class="text-small">Correo</label>
+                        <input type="email" id="txtDestinatarioCorreo" name="txtDestinatarioCorreo" class="form-control form-control-sm" required />
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label for="txtDestinatarioDocumento" class="text-small">Documento</label>
+                        <input type="text" id="txtDestinatarioDocumento" name="txtDestinatarioDocumento" class="form-control form-control-sm" required />
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="txtDestinatarioFechaDocumento" class="text-small">Fecha Documento</label>
+                        <input type="date" id="txtDestinatarioFechaDocumento" name="txtDestinatarioFechaDocumento" class="form-control form-control-sm" required />
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label for="txtDestinatarioOficina" class="text-small">Oficina</label>
+                        <input type="text" id="txtDestinatarioOficina" name="txtDestinatarioOficina" class="form-control form-control-sm" required />
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="cbDestinatarioEstado" class="text-small">Estado</label>
+                        <select id="cbDestinatarioEstado" name="cbDestinatarioEstado" class="form-control form-control-sm">
+                            <option value="1">Activo</option>
+                            <option value="0">Desactivo</option>
+                        </select>
+
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-12">
+                        <label for="txtObservacion" class="text-small">Observacion</label>
+                        <textarea type="text" id="txtObservacion" name="txtObservacion" class="form-control form-control-sm" maxlength="8000"></textarea>
+                    </div>
+
+                </div>
+            </form>
+        </div>
+        <div class="modal-footer">
+            <button type="button" id="btnGuardar" class="btn btn-primary" onclick="">Guardar</button>
+        </div>
+    </div>
+</div>

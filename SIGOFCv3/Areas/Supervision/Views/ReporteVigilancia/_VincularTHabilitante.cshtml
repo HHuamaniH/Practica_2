@@ -1,0 +1,35 @@
+﻿<script src="~/Areas/Supervision/js/ReporteVigilancia/_VincularTHabilitante.js"></script>
+
+<div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+        <div class="modal-header text-small" style="cursor:move;">
+            <span>Seleccion Titulo Habilitante</span>
+            <i class="fa fa-close" style="cursor:pointer;" data-dismiss="modal" aria-label="Close"></i>
+        </div>
+        <div class="modal-body">
+            <form id="frmBuscarTH">
+                <div class="form-row">
+                    <div class="col-md-4 mb-3">
+                        @Html.DropDownList("ddlOpcId", new SelectList(ViewBag.ddlOpc, "Value", "Text"), new { @class = "form-control form-control-sm" })
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <input type="text" id="txtValor" class="form-control form-control-sm" maxlength="50" />
+                    </div>
+                    <div class="col-md-2 mb-3" style="padding-top:6px;">
+                        <a style="cursor:pointer;" data-toggle="tooltip" data-placement="top" title="Buscar el registro" onclick="_VincularTHabilitante.fnBuscarTH()"><span class="fa mx-2 fa-lg fa-search"></span></a>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="col-md-12 text-center">
+                        <div class="table-responsive">
+                            <table id="tbTHabilitante" class="table table-hover table-bordered" style="width:100%;">
+                                <thead></thead>
+                                <tbody></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

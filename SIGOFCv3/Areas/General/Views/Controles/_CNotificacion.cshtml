@@ -1,0 +1,45 @@
+﻿<script src="~/Areas/General/js/Controles/_CNotificacion.js"></script>
+
+<div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+        <div class="modal-header text-small" style="cursor:move;padding:0.5rem;">
+            <h5 class="modal-title">Seleccionar Carta de Notificación</h5>
+            @*<h5 class="modal-title">Seleccionar Notificación</h5>*@
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body">
+            <form id="frmCNotificacion">
+                @Html.Hidden("hdfFormulario", (object)ViewBag.hdfFormulario)
+                @Html.Hidden("hdfCriterio", (object)ViewBag.hdfCriterio)
+                @Html.Hidden("hdfValor", (object)ViewBag.hdfValor)
+                @*@Html.Hidden("hdfTipo", (object)ViewBag.hdfTipo)*@
+                @Html.Hidden("hdfControlInstancia", (object)ViewBag.hdfControlInstancia)
+                <div class="form-row" id="dvFiltroBusqueda">
+                    <div class="col-md-4 mb-3">
+                        <select id="ddlCriterio" class="form-control form-control-sm">
+                            <option value="CN_NUMCN_ISUPERVISION">Carta de Notificación</option>
+                            @*<option value="FN_NUM_ISUPERVISION">Notificación</option>*@
+                        </select>
+                    </div>
+                    <div class="col-md-8 mb-3">
+                        <div class="input-group">
+                            <input type="text" id="txtValor" class="form-control form-control-sm" maxlength="50" />
+                            <div class="input-group-prepend">
+                                <span class="input-group-text" style="cursor:pointer;color:forestgreen" onclick="_CNotificacion.fnBuscarCNotificacion(true)"><i class="fa fa-search" data-toggle="tooltip" data-placement="top" title="Buscar"></i></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="table-responsive">
+                    <table id="tbCNotificacion" class="table table-hover table-bordered" width="100%">
+                        <thead></thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </form>
+        </div>
+        <div class="modal-footer"></div>
+    </div>
+</div>

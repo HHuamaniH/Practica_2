@@ -1,0 +1,240 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:tns="http://tempuri.org/" xmlns:s="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tm="http://microsoft.com/wsdl/mime/textMatching/" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" targetNamespace="http://tempuri.org/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:types>
+    <s:schema elementFormDefault="qualified" targetNamespace="http://tempuri.org/">
+      <s:element name="escribirDetallePDFIndex">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="idRegistro" type="s:int" />
+            <s:element minOccurs="0" maxOccurs="1" name="mapPath" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="varSession" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="escribirDetallePDFIndexResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="escribirDetallePDFIndexResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="escribirDetallePDF">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="elementListado" type="tns:Ent_Reporte_OBSERVATORIO" />
+            <s:element minOccurs="0" maxOccurs="1" name="Color" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="mapPath" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="varSession" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="Ent_Reporte_OBSERVATORIO">
+        <s:sequence>
+          <s:element minOccurs="1" maxOccurs="1" name="ID_REGISTRO" type="s:int" />
+          <s:element minOccurs="0" maxOccurs="1" name="TITULAR" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="TITULAR_BUSQUEDA" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="NUM_THABILITANTE" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="RUC" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="COD_MTIPO" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="MODALIDAD" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="UBICACION" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="REGION" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="PROVINCIA" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="DISTRITO" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="NUM_POA" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="PLAN_MANEJO_TOP" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="VOLUMEN" type="s:decimal" />
+          <s:element minOccurs="0" maxOccurs="1" name="RES_APROBACION_POA" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="RES_REFORMULA_POA" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="VIGENCIA" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="FIN_VIGENCIA" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="ZAFRA" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="COLOR" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="TRAZA" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="INF_FALSA" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="ARBOLES_INEX" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="CAMBIO_USO" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="AREA_CAMBIO_USO" type="s:decimal" />
+          <s:element minOccurs="0" maxOccurs="1" name="ESTADO" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="DESCRIPCION_ESTADO" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="COD_RESODIREC" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="NUM_RESOLUCION" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="TIPO_RESOLUCION" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="MEDIDA_CAUTELAR" />
+          <s:element minOccurs="0" maxOccurs="1" name="MEDIDA_PRECAUTORIA" />
+          <s:element minOccurs="0" maxOccurs="1" name="CADUCIDAD" />
+          <s:element minOccurs="0" maxOccurs="1" name="CADUCADO" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="MONTO" type="s:decimal" />
+          <s:element minOccurs="0" maxOccurs="1" name="IMPROCEDENTE" />
+          <s:element minOccurs="0" maxOccurs="1" name="FUNDADA" />
+          <s:element minOccurs="0" maxOccurs="1" name="FUNDADA_PARTE" />
+          <s:element minOccurs="0" maxOccurs="1" name="INFUNDADA" />
+          <s:element minOccurs="0" maxOccurs="1" name="DESISTIMIENTO" />
+          <s:element minOccurs="0" maxOccurs="1" name="INADMISIBLE" />
+          <s:element minOccurs="0" maxOccurs="1" name="NULIDAD" />
+          <s:element minOccurs="0" maxOccurs="1" name="REVOCAR" />
+          <s:element minOccurs="0" maxOccurs="1" name="SUSPENSION" />
+          <s:element minOccurs="0" maxOccurs="1" name="LEVANTAR_CADUCIDAD" />
+          <s:element minOccurs="0" maxOccurs="1" name="CAMBIO_MULTA" />
+          <s:element minOccurs="0" maxOccurs="1" name="DETERMINACION" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="INCISO" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="DESC_ESPECIES" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="TIPO_REPORTE" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="PARAMETRO" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="FECHA" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="FECHA_INICIO_TH" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="FECHA_TERMINO_TH" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="NUM_INFORME" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="FECHA_SUPERVISION_INICIO" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="FECHA_SUPERVISION_TERMINO" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="ANIO_REFERENCIA" type="s:int" />
+          <s:element minOccurs="1" maxOccurs="1" name="NUM_ARBOLES_INEX" type="s:int" />
+          <s:element minOccurs="0" maxOccurs="1" name="COD_INFORME" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="COD_ENCIENTIFICO" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="NOM_CIENTIFICO" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="NOMBRE_COMUN" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="OBSERVACION" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="FECHA_INGRESO" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="PORCENT_BEXT" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="PORCENT_AUT" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="PORCENT_INEX" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="PORCENT_INJUS_VOL" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="VOL_INJUS" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="COD_ITIPO" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="COD_THABILITANTE" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="NUM_POA_INT" type="s:int" />
+          <s:element minOccurs="1" maxOccurs="1" name="VOLUMEN_BEXT" type="s:decimal" />
+          <s:element minOccurs="1" maxOccurs="1" name="VOLUMEN_AUT" type="s:decimal" />
+          <s:element minOccurs="1" maxOccurs="1" name="VOLUMEN_DECLARADO" type="s:decimal" />
+          <s:element minOccurs="1" maxOccurs="1" name="VOLUMEN_VERIFICADO" type="s:decimal" />
+          <s:element minOccurs="1" maxOccurs="1" name="NUM_ARB_MUESTRA" type="s:int" />
+          <s:element minOccurs="1" maxOccurs="1" name="NUM_ARB_INEX" type="s:int" />
+          <s:element minOccurs="1" maxOccurs="1" name="NUM_ARB_EXIST" type="s:int" />
+          <s:element minOccurs="0" maxOccurs="1" name="FECHA_BEXT" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="INFRACCIONES" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="TEXTO" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="RD_MOSTRAR_INCISOS" />
+          <s:element minOccurs="0" maxOccurs="1" name="TEXTO_CADUCA" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="URL_RESOLUCION" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="CONSULTOR" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="REGENTE_IMPLEMENTA" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="ES_ALERTA_OSINFOR" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="TIPO_SUPERVISION" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="TIPO_MEDIDA" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="NUM_RESOLUCION_DERICTORAL" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="PERDIDA_COBERTURA" type="s:decimal" />
+          <s:element minOccurs="1" maxOccurs="1" name="APROV_NO_AUTORIZADO" type="s:decimal" />
+          <s:element minOccurs="1" maxOccurs="1" name="SIGNIFICANCIA" type="s:int" />
+          <s:element minOccurs="1" maxOccurs="1" name="IRREPARABILIDAD" type="s:int" />
+          <s:element minOccurs="1" maxOccurs="1" name="VALOR_IMPACTO" type="s:int" />
+          <s:element minOccurs="1" maxOccurs="1" name="VALOR_PROBABILIDAD_1" type="s:int" />
+          <s:element minOccurs="1" maxOccurs="1" name="VALOR_PROBABILIDAD_2" type="s:int" />
+          <s:element minOccurs="1" maxOccurs="1" name="VALOR_PROBABILIDAD_3" type="s:int" />
+          <s:element minOccurs="1" maxOccurs="1" name="RESULTADO" type="s:int" />
+          <s:element minOccurs="1" maxOccurs="1" name="CANT_ESP_VOL_INJUS" type="s:int" />
+          <s:element minOccurs="1" maxOccurs="1" name="CANT_ESP_SUPER" type="s:int" />
+          <s:element minOccurs="0" maxOccurs="1" name="List_Resumen_ROJO" type="tns:ArrayOfEnt_Reporte_OBSERVATORIO" />
+          <s:element minOccurs="0" maxOccurs="1" name="List_Resumen_AMBAR" type="tns:ArrayOfEnt_Reporte_OBSERVATORIO" />
+          <s:element minOccurs="0" maxOccurs="1" name="List_Resumen_VERDE" type="tns:ArrayOfEnt_Reporte_OBSERVATORIO" />
+          <s:element minOccurs="0" maxOccurs="1" name="List_Resoluciones" type="tns:ArrayOfEnt_Reporte_OBSERVATORIO" />
+          <s:element minOccurs="0" maxOccurs="1" name="List_Detalle_Titular" type="tns:ArrayOfEnt_Reporte_OBSERVATORIO" />
+          <s:element minOccurs="0" maxOccurs="1" name="BusValor" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="ESTADO_TH" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="NUM_RDINICIO" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="NUM_RDTERMINO" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="ARCH_EVI_IRREG" />
+          <s:element minOccurs="0" maxOccurs="1" name="NUMERO_RESOLUCION_ALERTA" />
+          <s:element minOccurs="0" maxOccurs="1" name="ALERTA" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="FECHA_ENVIO_ALERTA" />
+          <s:element minOccurs="0" maxOccurs="1" name="NUM_RESOLUCION_ANT_PAU" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="NUMERO_ALERTA" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="VOLUMEN_ALERTA" type="s:decimal" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="ArrayOfEnt_Reporte_OBSERVATORIO">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="Ent_Reporte_OBSERVATORIO" nillable="true" type="tns:Ent_Reporte_OBSERVATORIO" />
+        </s:sequence>
+      </s:complexType>
+      <s:element name="escribirDetallePDFResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="escribirDetallePDFResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+    </s:schema>
+  </wsdl:types>
+  <wsdl:message name="escribirDetallePDFIndexSoapIn">
+    <wsdl:part name="parameters" element="tns:escribirDetallePDFIndex" />
+  </wsdl:message>
+  <wsdl:message name="escribirDetallePDFIndexSoapOut">
+    <wsdl:part name="parameters" element="tns:escribirDetallePDFIndexResponse" />
+  </wsdl:message>
+  <wsdl:message name="escribirDetallePDFSoapIn">
+    <wsdl:part name="parameters" element="tns:escribirDetallePDF" />
+  </wsdl:message>
+  <wsdl:message name="escribirDetallePDFSoapOut">
+    <wsdl:part name="parameters" element="tns:escribirDetallePDFResponse" />
+  </wsdl:message>
+  <wsdl:portType name="WSObservatorioSoap">
+    <wsdl:operation name="escribirDetallePDFIndex">
+      <wsdl:input message="tns:escribirDetallePDFIndexSoapIn" />
+      <wsdl:output message="tns:escribirDetallePDFIndexSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="escribirDetallePDF">
+      <wsdl:input message="tns:escribirDetallePDFSoapIn" />
+      <wsdl:output message="tns:escribirDetallePDFSoapOut" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="WSObservatorioSoap" type="tns:WSObservatorioSoap">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="escribirDetallePDFIndex">
+      <soap:operation soapAction="http://tempuri.org/escribirDetallePDFIndex" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="escribirDetallePDF">
+      <soap:operation soapAction="http://tempuri.org/escribirDetallePDF" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="WSObservatorioSoap12" type="tns:WSObservatorioSoap">
+    <soap12:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="escribirDetallePDFIndex">
+      <soap12:operation soapAction="http://tempuri.org/escribirDetallePDFIndex" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="escribirDetallePDF">
+      <soap12:operation soapAction="http://tempuri.org/escribirDetallePDF" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="WSObservatorio">
+    <wsdl:port name="WSObservatorioSoap" binding="tns:WSObservatorioSoap">
+      <soap:address location="http://10.10.11.21:8099/wsobservatorio.asmx" />
+    </wsdl:port>
+    <wsdl:port name="WSObservatorioSoap12" binding="tns:WSObservatorioSoap12">
+      <soap12:address location="http://10.10.11.21:8099/wsobservatorio.asmx" />
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

@@ -1,0 +1,213 @@
+﻿@model CapaEntidad.ViewModel.VM_PlanCriterioValor
+
+<div class="modal-dialog modal-sm" role="document">
+    <div class="modal-content">
+        <div class="modal-header text-small" style="cursor:move;">
+            <span>Valoración del criterio</span>
+            <i class="fa fa-close" style="cursor:pointer;" data-dismiss="modal" aria-label="Close"></i>
+        </div>
+        <div class="modal-body">
+            <form id="frmPlanCriterioValor">
+                @Html.HiddenFor(m => m.hdfCodPCriterio)
+                @Html.HiddenFor(m => m.hdfCodSecuencial)
+                @Html.HiddenFor(m => m.hdfCodPColumna)
+                @Html.HiddenFor(m => m.hdfCodTAplicacion)
+                @Html.HiddenFor(m => m.hdfTipoDato)
+                <div class="form-row" id="dvOpcionCombo_1" style="display:none;">
+                    <div class="form-group col-md-12">
+                        <label for="ddlOpcionTexto_1_Id" class="text-small">Opción 1</label>
+                        @Html.DropDownList("ddlOpcionTexto_1_Id", new SelectList(Model.ddlOpcionTexto_1, "Value", "Text"), new { @class = "form-control form-control-sm" })
+                    </div>
+                </div>
+                <div class="form-row" id="dvOpcionTexto_1" style="display:none;">
+                    <div class="form-group col-md-12">
+                        <label for="txtOpcionTexto_1" class="text-small">Opción 1</label>
+                        @Html.TextBoxFor(m => m.txtOpcionTexto_1, new { @class = "form-control form-control-sm" })
+                    </div>
+                </div>
+                <div class="form-row" id="dvOpcionNumero_1" style="display:none;">
+                    <div class="form-group col-md-12">
+                        <label for="txtOpcionNumero_1" class="text-small">Opción 1</label>
+                        @Html.TextBoxFor(m => m.txtOpcionNumero_1, new { @class = "form-control form-control-sm", @onkeypress = "return utilSigo.onKeyDecimal(event, this);" })
+                    </div>
+                </div>
+                <div class="form-row" id="dvOpcionNumero_2" style="display:none;">
+                    <div class="form-group col-md-12">
+                        <label for="txtOpcionNumero_2" class="text-small">Opción 2</label>
+                        @Html.TextBoxFor(m => m.txtOpcionNumero_2, new { @class = "form-control form-control-sm", @onkeypress = "return utilSigo.onKeyDecimal(event, this);" })
+                    </div>
+                </div>
+                <div class="form-row" id="dvOpcionFecha_1" style="display:none;">
+                    <div class="form-group col-md-12">
+                        <label for="txtOpcionFecha_1" class="text-small">Opción 1</label>
+                        @Html.TextBoxFor(m => m.txtOpcionFecha_1, new { @class = "form-control form-control-sm", placeholder = "dd/mm/aaaa", maxlength = "10" })
+                    </div>
+                </div>
+                <div class="form-row" id="dvOpcionFecha_2" style="display:none;">
+                    <div class="form-group col-md-12">
+                        <label for="txtOpcionFecha_2" class="text-small">Opción 2</label>
+                        @Html.TextBoxFor(m => m.txtOpcionFecha_2, new { @class = "form-control form-control-sm", placeholder = "dd/mm/aaaa", maxlength = "10" })
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-12">
+                        <label for="txtValor" class="text-small">Valor</label>
+                        @Html.TextBoxFor(m => m.txtValor, new { @class = "form-control form-control-sm", @onkeypress = "return utilSigo.onKeyDecimal(event, this);" })
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-12">
+                        <label for="txtRiesgo" class="text-small">Riesgo</label>
+                        @Html.DropDownListFor(m => m.txtRiesgo, new SelectList(Model.ddlValorRiesgo, "Value", "Text"), new { @class = "form-control form-control-sm" })
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-primary btn-sm" onclick="_PlanCriterioValor.fnSave()">Guardar</button>
+            <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Cancelar</button>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    var _PlanCriterioValor = {
+        fnInit: () => {
+            _PlanCriterioValor.frm.find("#ddlOpcionTexto_1_Id").select2();
+            _PlanCriterioValor.frm.find("#txtRiesgo").select2({ minimumResultsForSearch: -1 });
+            utilSigo.fnFormatDate(_PlanCriterioValor.frm.find("#txtOpcionFecha_1"));
+            utilSigo.fnFormatDate(_PlanCriterioValor.frm.find("#txtOpcionFecha_2"));
+
+            let cod_taplicacion = _PlanCriterioValor.frm.find("#hdfCodTAplicacion").val();
+            let tipo_dato = _PlanCriterioValor.frm.find("#hdfTipoDato").val();
+
+            switch (tipo_dato) {
+                case "texto":
+                    _PlanCriterioValor.frm.find("#dvOpcionTexto_1").show();
+                    break;
+                case "combo":
+                    _PlanCriterioValor.frm.find("#dvOpcionCombo_1").show();
+                    break;
+                case "fecha":
+                    _PlanCriterioValor.frm.find("#dvOpcionFecha_1").show();
+
+                    if (cod_taplicacion=="0000005") {
+                        _PlanCriterioValor.frm.find("#dvOpcionFecha_2").show();
+                    }
+                    break;
+                case "numero":
+                    _PlanCriterioValor.frm.find("#dvOpcionNumero_1").show();
+
+                    if (cod_taplicacion=="0000005") {
+                        _PlanCriterioValor.frm.find("#dvOpcionNumero_2").show();
+                    }
+                    break;
+            }
+
+            if (parseInt(@Model.txtRiesgo)!=0) {
+                _PlanCriterioValor.frm.find("#txtRiesgo").val(parseInt(@Model.txtRiesgo)).trigger("change");
+            }
+        },
+        fnSave: () => {
+            let op_texto_1, op_numero_1, op_numero_2, op_fecha_1, op_fecha_2;
+            let cod_taplicacion = _PlanCriterioValor.frm.find("#hdfCodTAplicacion").val();
+            let tipo_dato = _PlanCriterioValor.frm.find("#hdfTipoDato").val();
+
+            if (_PlanCriterioValor.frm.find("#txtValor").val() == "") {
+                utilSigo.toastWarning("Aviso", "Ingrese el valor");
+                _PlanCriterioValor.frm.find("#txtValor").focus();
+                return false;
+            }
+            if (_PlanCriterioValor.frm.find("#txtRiesgo").val() == "0000000") {
+                utilSigo.toastWarning("Aviso", "Seleccione el riesgo");
+                _PlanCriterioValor.frm.find("#txtRiesgo").focus();
+                return false;
+            }
+
+            switch (tipo_dato) {
+                case "texto":
+                    op_texto_1 = _PlanCriterioValor.frm.find("#txtOpcionTexto_1").val();
+                    if (op_texto_1 == "") {
+                        utilSigo.toastWarning("Aviso", "Ingrese la opción");
+                        _PlanCriterioValor.frm.find("#txtOpcionTexto_1").focus();
+                        return false;
+                    }
+                    break;
+                case "combo":
+                    op_texto_1 = _PlanCriterioValor.frm.find("#ddlOpcionTexto_1_Id").val();
+                    break;
+                case "fecha":
+                    op_fecha_1 = _PlanCriterioValor.frm.find("#txtOpcionFecha_1").val();
+                    if (op_fecha_1 == "") {
+                        utilSigo.toastWarning("Aviso", "Ingrese la fecha (opción)");
+                        _PlanCriterioValor.frm.find("#txtOpcionFecha_1").focus();
+                        return false;
+                    }
+
+                    if (cod_taplicacion=="0000005") {
+                        op_fecha_2 = _PlanCriterioValor.frm.find("#txtOpcionFecha_2").val();
+                        if (op_fecha_2 == "") {
+                            utilSigo.toastWarning("Aviso", "Ingrese la fecha (opción)");
+                            _PlanCriterioValor.frm.find("#txtOpcionFecha_2").focus();
+                            return false;
+                        }
+                    }
+                    break;
+                case "numero":
+                    op_numero_1 = _PlanCriterioValor.frm.find("#txtOpcionNumero_1").val();
+                    if (op_numero_1 == "") {
+                        utilSigo.toastWarning("Aviso", "Ingrese el número (opción)");
+                        _PlanCriterioValor.frm.find("#txtOpcionNumero_1").focus();
+                        return false;
+                    }
+
+                    if (cod_taplicacion=="0000005") {
+                        op_numero_2 = _PlanCriterioValor.frm.find("#txtOpcionNumero_2").val();
+                        if (op_numero_2 == "") {
+                            utilSigo.toastWarning("Aviso", "Ingrese el número (opción)");
+                            _PlanCriterioValor.frm.find("#txtOpcionNumero_2").focus();
+                            return false;
+                        }
+                    }
+                    break;
+            }
+
+            var data = {
+                COD_PCRITERIO: _PlanCriterioValor.frm.find("#hdfCodPCriterio").val(),
+                COD_SECUENCIAL: _PlanCriterioValor.frm.find("#hdfCodSecuencial").val(),
+                OPCION_TEXTO_1: op_texto_1,
+                OPCION_NUMERO_1: op_numero_1,
+                OPCION_NUMERO_2: op_numero_2,
+                OPCION_FECHA_1: op_fecha_1,
+                OPCION_FECHA_2: op_fecha_2,
+                VALOR: _PlanCriterioValor.frm.find("#txtValor").val(),
+                RIESGO: _PlanCriterioValor.frm.find("#txtRiesgo").val()
+            };
+            var url = urlLocalSigo + "Planificacion/ManCriterio/GrabarPlanCriterioValor";
+            var option = { url: url, datos: JSON.stringify(data), type: 'POST' };
+
+            utilSigo.dialogConfirm('', 'Desea continuar con el registro?', function (r) {
+                if (r) {
+                    utilSigo.fnAjax(option, function (data) {
+                        if (data.success) {
+                            utilSigo.toastSuccess("Éxito", data.msj);
+                            _PlanCriterioValor.fnSaved();
+                        }
+                        else {
+                            utilSigo.toastWarning("Aviso", data.msj);
+                        }
+                    });
+                }
+            });
+        },
+        fnSaved: () => {
+            /*Implementar en donde se instancia*/
+        }
+    };
+
+    $(document).ready(function () {
+        _PlanCriterioValor.frm = $("#frmPlanCriterioValor");
+
+        _PlanCriterioValor.fnInit();
+    });
+</script>
