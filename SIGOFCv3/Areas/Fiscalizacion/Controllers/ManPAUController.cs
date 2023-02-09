@@ -70,7 +70,7 @@ namespace SIGOFCv3.Areas.Fiscalizacion.Controllers
                     //cambiando estado 3 - Cargado archivo 
                     //new Log_Informe_Digital().CambiarEstado(codInformeDigital, DateTime.Now, 3, usuarioLogin.COD_UCUENTA);
 
-                    return Json(new { success = true, msj = "Archivo subido correctamente" });
+                    return Json(new { fileName = documentName, success = true, msj = "Archivo subido correctamente" });
                 }
                 catch (Exception)
                 {

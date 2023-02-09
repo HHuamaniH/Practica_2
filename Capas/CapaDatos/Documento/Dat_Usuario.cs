@@ -59,36 +59,6 @@ namespace CapaDatos.DOC
                 throw ex;
             }
         }
-        public List<VM_Cbo> GetCombo(OracleConnection cn, CEntidad oCEntidad)
-        {
-            List<VM_Cbo> listCbo = null;
-            try
-            {
-                using (OracleDataReader dr = dBOracle.SelDrdDefault(cn, null, "DOC_OSINFOR_ERP_MIGRACION.spGeneral_Combo_Listar", oCEntidad))
-                {
-                    if (dr != null)
-                    {
-                        VM_Cbo oCampos;
-                        listCbo = new List<VM_Cbo>();
-                        if (dr.HasRows)
-                        {
-                            while (dr.Read())
-                            {                                
-                                oCampos = new VM_Cbo();
-                                oCampos.Value = dr["CODIGO"].ToString();
-                                oCampos.Text = dr["DESCRIPCION"].ToString();
-                                listCbo.Add(oCampos);
-                            }
-                        }                        
-                    }
-                }
-                return listCbo;
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-        }
         /// <summary>
         /// 
         /// </summary>
@@ -474,11 +444,6 @@ namespace CapaDatos.DOC
                                     string COD_UGRUPO = dr["COD_UGRUPO"].ToString();
                                     vm.esPublico = COD_UGRUPO.Trim() == "0000013" ? true : false;                                    
                                     vm.activo = Convert.ToBoolean(dr["ESTADO_ACTIVO"]);
-                                    vm.ddlTipoPersonalId = dr["TIPO_PERSONAL"].ToString();
-                                    vm.cargo = dr["CARGO"].ToString();
-                                    vm.ddlLugarTrabajoId = dr["LUGAR_TRABAJO"].ToString();
-                                    vm.oficina = dr["OFICINA"].ToString();
-                                    vm.institucion = dr["INSTITUCION"].ToString();
                                     vm.estado = 0;
                                 }
                             }

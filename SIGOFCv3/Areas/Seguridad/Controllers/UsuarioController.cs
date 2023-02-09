@@ -30,7 +30,7 @@ namespace SIGOFCv3.Areas.Seguridad.Controllers
         [HttpPost]
         public ActionResult _Usuario(string id = "")
         {
-            logUser = new Log_Usuario();            
+            logUser = new Log_Usuario();
             return PartialView(logUser.UsuarioInt(id));
         }
         [HttpGet]

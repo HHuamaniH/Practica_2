@@ -142,34 +142,6 @@ namespace CapaDatos.DOC//9
                         }
                         oCampos.ListCEspecialidad = lsDetDetalle;
                         dr.NextResult();
-                        //Categoria de Regente
-                        lsDetDetalle = new List<CEntidad>();
-                        if (dr.HasRows)
-                        {
-                            while (dr.Read())
-                            {
-                                oCamposDet = new CEntidad();
-                                oCamposDet.CODIGO = dr["CODIGO"].ToString();
-                                oCamposDet.DESCRIPCION = dr["DESCRIPCION"].ToString();
-                                lsDetDetalle.Add(oCamposDet);
-                            }
-                        }
-                        oCampos.ListCCategoria = lsDetDetalle;
-                        dr.NextResult();
-                        //Estado de Regente
-                        lsDetDetalle = new List<CEntidad>();
-                        if (dr.HasRows)
-                        {
-                            while (dr.Read())
-                            {
-                                oCamposDet = new CEntidad();
-                                oCamposDet.CODIGO = dr["CODIGO"].ToString();
-                                oCamposDet.DESCRIPCION = dr["DESCRIPCION"].ToString();
-                                lsDetDetalle.Add(oCamposDet);
-                            }
-                        }
-                        oCampos.ListCEstado = lsDetDetalle;
-                        dr.NextResult();
                     }
                 }
                 return oCampos;
@@ -200,7 +172,6 @@ namespace CapaDatos.DOC//9
                         oCampos.ListTelefono = new List<CEntidad>();
                         oCampos.ListCorreo = new List<CEntidad>();
                         oCampos.ListTipoCargo = new List<CEntidad>();
-                        oCampos.ListMencion = new List<CEntidad>();
 
                         if (dr.HasRows)
                         {
@@ -224,14 +195,6 @@ namespace CapaDatos.DOC//9
                             oCampos.COLEGIATURA_NUM = dr.GetString(dr.GetOrdinal("COLEGIATURA_NUM"));
                             oCampos.NUM_REGISTRO_PROFESIONAL = dr.GetString(dr.GetOrdinal("NUM_REGISTRO_PROFESIONAL"));
                             oCampos.NINTERNET = dr.GetInt32(dr.GetOrdinal("NINTERNET"));
-                            oCampos.ANIO = dr.GetString(dr.GetOrdinal("ANIO"));
-                            oCampos.NROLICENCIA = dr.GetString(dr.GetOrdinal("NROLICENCIA"));
-                            oCampos.RESAPROBACION = dr.GetString(dr.GetOrdinal("RESAPROBACION"));
-                            oCampos.OTORGAMIENTO = dr.GetString(dr.GetOrdinal("OTORGAMIENTO"));
-                            oCampos.COD_CATEGORIA = dr.GetString(dr.GetOrdinal("COD_CATEGORIA"));
-                            oCampos.ESTADO_REGENTE = dr.GetString(dr.GetOrdinal("ESTADO_REGENTE"));
-                            oCampos.CIP = dr.GetString(dr.GetOrdinal("CIP"));
-                            oCampos.OTRO = dr.GetString(dr.GetOrdinal("OTRO"));
                             oCampos.RegEstado = 0;
                             //Detalle Domicilio
                             dr.NextResult();
@@ -298,20 +261,6 @@ namespace CapaDatos.DOC//9
                                     oCamposDet.COD_PTIPO = dr.GetString(dr.GetOrdinal("COD_PTIPO"));
                                     oCamposDet.RegEstado = 0;
                                     oCampos.ListTipoCargo.Add(oCamposDet);
-                                }
-                            }
-                            //Detalle Mencion Regencia
-                            dr.NextResult();
-                            if (dr.HasRows)
-                            {
-                                while (dr.Read())
-                                {
-                                    oCamposDet = new CEntidad();
-                                    oCamposDet.COD_PERSONA = dr.GetString(dr.GetOrdinal("COD_PERSONA"));
-                                    oCamposDet.COD_SECUENCIAL = dr.GetInt32(dr.GetOrdinal("COD_SECUENCIAL"));
-                                    oCamposDet.COD_MENSION = dr.GetString(dr.GetOrdinal("COD_MENSION"));
-                                    oCamposDet.MENSION = dr.GetString(dr.GetOrdinal("MENSION"));
-                                    oCampos.ListMencion.Add(oCamposDet);
                                 }
                             }
                         }
@@ -435,22 +384,7 @@ namespace CapaDatos.DOC//9
                         oCamposDet.COD_PTIPO = itemCar.COD_PTIPO;
                         oCamposDet.COD_UCUENTA = oCEntidad.COD_UCUENTA;
                         oCamposDet.RegEstado = itemCar.RegEstado;
-                        oCamposDet.BusFormulario = "DIRECTORIO_UNICO";
                         dBOracle.ManExecute(cn, tr, "GENE_OSINFOR_ERP_MIGRACION.spPERSONA_DET_TIPOGrabar", oCamposDet);
-                    }
-                }
-                if (oCEntidad.ListMencion != null)
-                {
-                    foreach (var itemMen in oCEntidad.ListMencion)
-                    {
-                        oCamposDet = new CEntidad();
-                        oCamposDet.COD_PERSONA = oCEntidad.COD_PERSONA;
-                        oCamposDet.COD_SECUENCIAL = itemMen.COD_SECUENCIAL;
-                        oCamposDet.COD_MENSION = itemMen.COD_MENSION;
-                        oCamposDet.COD_UCUENTA = oCEntidad.COD_UCUENTA;
-                        oCamposDet.RegEstado = itemMen.RegEstado;
-                        oCamposDet.BusFormulario = "DIRECTORIO_UNICO";
-                        dBOracle.ManExecute(cn, tr, "GENE_OSINFOR_ERP_MIGRACION.spPERSONA_DET_MENSIONGrabar", oCamposDet);
                     }
                 }
 
@@ -482,38 +416,6 @@ namespace CapaDatos.DOC//9
             }
             catch (Exception ex)
             {
-                throw ex;
-            }
-        }
-
-        public String GrabarTipoCargo(OracleConnection cn, CEntidad oCEntidad)
-        {
-            OracleTransaction tr = null;
-            String OUTPUTPARAM01 = "";
-
-            try
-            {
-                tr = cn.BeginTransaction();
-                using (OracleCommand cmd = dBOracle.ManExecuteOutput(cn, tr, "GENE_OSINFOR_ERP_MIGRACION.spPERSONA_TIPOGrabar", oCEntidad))
-                {
-                    cmd.ExecuteNonQuery();
-                    OUTPUTPARAM01 = (String)cmd.Parameters["OUTPUTPARAM01"].Value;
-
-                    if (OUTPUTPARAM01.Split('|')[0] == "0")
-                    {
-                        throw new Exception(OUTPUTPARAM01.Split('|')[1]);
-                    }
-                }
-
-                tr.Commit();
-                return OUTPUTPARAM01;
-            }
-            catch (Exception ex)
-            {
-                if (tr != null)
-                {
-                    tr.Rollback();
-                }
                 throw ex;
             }
         }

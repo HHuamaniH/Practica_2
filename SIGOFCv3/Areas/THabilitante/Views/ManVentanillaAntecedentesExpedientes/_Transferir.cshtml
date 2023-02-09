@@ -1,10 +1,7 @@
 ﻿@model CapaEntidad.ViewModel.DOC.VM_Transferir
 
-<script src="~/Areas/THabilitante/js/ManVentanillaAntecedentesExpedientes/_Transferir.js?v3.39"></script>
-<script>
+<script src="~/Areas/THabilitante/js/ManVentanillaAntecedentesExpedientes/_Transferir.js?v3.16"></script>
 
-
-</script>
 <div id="divItemESituAnual" class="modal-dialog modal-lg" role="document">
     <div class="modal-content">
         <div class="modal-header text-small" style="cursor:move;padding:0.5rem;">
@@ -133,10 +130,10 @@
                             <div id="pnlItemMsjPoaTransferir" class="alert alert-danger" role="alert">
                                 El plan de manejo se encuentra registrado en el SIGOsfc.<br />
                                 <!--@@if (Model.EXISTE_PGMF || Model.EXISTE_PM || Model.EXISTE_POA)
-            {
-                <div style="color:red"><i class="fa fa-cog fa-spin fa-fw"></i>Nota: El sistema SITD y SIGOsfc no estan sincronizados. Para sincronizar dar clik en: </div>
-                <button type="button" id="btnSincronizarP" onclick="_transf.PM_Sincronizar()" class="btn btn-primary btn-sm">Sincronizar</button>
-            }-->
+                                {
+                                    <div style="color:red"><i class="fa fa-cog fa-spin fa-fw"></i>Nota: El sistema SITD y SIGOsfc no estan sincronizados. Para sincronizar dar clik en: </div>
+                                    <button type="button" id="btnSincronizarP" onclick="_transf.PM_Sincronizar()" class="btn btn-primary btn-sm">Sincronizar</button>
+                                }-->
 
                             </div>
                         }
@@ -150,21 +147,6 @@
                         {
                             <div id="pnlItemPlanManejoTransferir" style="text-align:right">
                                 <button type="button" id="btnTransferirPOA" onclick="_transf.TPM()" class="btn btn-primary btn-sm">Transferir Plan de Manejo</button>
-                            </div>
-                        }
-                        @if (ViewBag.Obs == "CENSO")
-                        {
-                            <br />
-                            <div style="text-align:right">
-                                <button type="button" id="btnTransferirCenso" onclick="_transf.VERPOA()" class="btn btn-primary btn-sm">
-                                    Transferir CENSO
-                                </button>
-                            </div>
-                            <br />
-                            <div style="text-align:right">
-                                <button type="button" id="btnTransferirCenso" onclick="anteExpedientes.fnDownloadDocCenso(this)" class="btn btn-primary btn-sm">
-                                    Descarga CENSO Pre-procesado <i class="fa fa-lg fa-download" title="Descargar Documento" ></i>
-                                </button>
                             </div>
                         }
                         <br />

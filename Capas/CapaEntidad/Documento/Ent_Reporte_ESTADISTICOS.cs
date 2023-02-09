@@ -127,8 +127,6 @@ namespace CapaEntidad.DOC
         public Int32 DOSMILVEINTIUNO { get; set; }
         [Description("DOSMILVEINTIDOS")]
         public Int32 DOSMILVEINTIDOS { get; set; }
-        [Description("DOSMILVEINTITRES")]
-        public Int32 DOSMILVEINTITRES { get; set; }
         [Description("NUM_CAPACITACIONES")]
         public Int32 NUM_CAPACITACIONES { get; set; }
         [Description("NUM_PARTICIPANTES")]
@@ -269,7 +267,6 @@ namespace CapaEntidad.DOC
             DOSMILVEINTE = -1;
             DOSMILVEINTIUNO = -1;
             DOSMILVEINTIDOS = -1;
-            DOSMILVEINTITRES = -1;
             NUM_CAPACITACIONES = -1;
             NUM_PARTICIPANTES = -1;
             NUM_HOMBRES = -1;

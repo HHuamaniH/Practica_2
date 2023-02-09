@@ -120,15 +120,6 @@ namespace CapaEntidad.DOC
         [Category("LIST"), Description("ListCEspecialidad")]
         public List<Ent_Persona> ListCEspecialidad { get; set; }
 
-        //TGS 25-11-2022: Agrega lista de categoría, mención y estado de Regente
-        [Category("LIST"), Description("ListCCategoria")]
-        public List<Ent_Persona> ListCCategoria { get; set; }
-        [Category("LIST"), Description("ListCMencion")]
-        public List<Ent_Persona> ListCMencion { get; set; }
-        [Category("LIST"), Description("ListCEstado")]
-        public List<Ent_Persona> ListCEstado { get; set; }
-        //
-
         [Category("LIST"), Description("ListDomicilio")]
         public List<Ent_Persona> ListDomicilio { get; set; }
         [Category("LIST"), Description("ListTelefono")]
@@ -137,8 +128,6 @@ namespace CapaEntidad.DOC
         public List<Ent_Persona> ListCorreo { get; set; }
         [Category("LIST"), Description("ListTipoCargo")]
         public List<Ent_Persona> ListTipoCargo { get; set; }
-        [Category("LIST"), Description("ListMencion")]
-        public List<Ent_Persona> ListMencion { get; set; }
 
         //Eliminar registro
         [Description("EliTABLA")]
@@ -155,32 +144,6 @@ namespace CapaEntidad.DOC
         [Description("RegEstado")]
         public Int32 RegEstado { get; set; }
 
-        //22-11-22 TGS: Atributos de PERSONA_TIPO
-        [Description("DESCRIPCION_ABREV")]
-        public String DESCRIPCION_ABREV { get; set; }
-        [Description("ESTADO")]
-        public Int32 ESTADO { get; set; }
-        [Description("COD_MENSION")]
-        public String COD_MENSION { get; set; }
-        [Description("MENSION")]
-        public String MENSION { get; set; }
-        [Description("ANIO")]
-        public String ANIO { get; set; }
-        [Description("NROLICENCIA")]
-        public String NROLICENCIA { get; set; }
-        [Description("RESAPROBACION")]
-        public String RESAPROBACION { get; set; }
-        [Description("OTORGAMIENTO")]
-        public String OTORGAMIENTO { get; set; }
-        [Description("COD_CATEGORIA")]
-        public String COD_CATEGORIA { get; set; }
-        [Description("ESTADO_REGENTE")]
-        public String ESTADO_REGENTE { get; set; }
-        [Description("CIP")]
-        public String CIP { get; set; }
-        [Description("OTRO")]
-        public String OTRO { get; set; }
-
         public Ent_Persona()
         {
             RegEstado = -1;
@@ -188,7 +151,6 @@ namespace CapaEntidad.DOC
             COD_SECUENCIAL = -1;
             NINTERNET = -1;
             NACTIVO = -1;
-            ESTADO = -1;
         }
     }
 }

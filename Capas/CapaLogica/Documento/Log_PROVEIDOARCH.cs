@@ -782,9 +782,6 @@ namespace CapaLogica.DOC
 
                 switch (oCEntidadProv.COD_FCTIPO)
                 {
-                    case "0000106":
-                        oCEntidadProv.COD_DLINEA = _dto.hdfTipoProveido;
-                        break;
                     case "0000061":
                         oCEntidadProv.MAE_TIP_PROVARCHIVO = _dto.txtIdSobArchivo;
                         oCEntidadProv.DESCRIPCION_PROVARCHIVO = _dto.txtIdSobArchivo == "0000006" ? _dto.txtSobreArchivo : null;

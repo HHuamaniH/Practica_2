@@ -3,7 +3,10 @@
     ViewBag.Title = "AddEdit";
     Layout = "~/Views/Shared/_LayoutMain.cshtml";
 }
-<script src="~/Areas/Fiscalizacion/js/InformeLegal/AddEdit.js"></script>
+<script src="~/Areas/Fiscalizacion/js/InformeLegal/AddEdit.js?v=2"></script>
+<script type="text/javascript">
+    ManInfLegal_AddEdit.userApp = JSON.parse('@Html.Raw(Json.Encode(ViewBag.Usuario))');
+</script>
 @section scripts{
     <script>
         "use strict"; var rol = '';
@@ -40,6 +43,7 @@
                         <ul class="nav nav-tabs" id="myTab" role="tablist">
                             <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#navEstado" role="tab" aria-controls="home" aria-selected="true">Estado Situacional</a></li>
                             <li class="nav-item"><a class="nav-link active" data-toggle="tab" href="#navDatos" role="tab" aria-controls="home" aria-selected="true">Datos Generales</a></li>
+                            <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#navInformeDigital" role="tab" aria-controls="home" aria-selected="true">IFI Digital</a></li>
                             @if (Model.hdfCodTipoIlegal == "0000001")
                             {
                                 <li id="idNavRecomendaciones" class="nav-item"><a class="nav-link" data-toggle="tab" href="#navRecomendacion" role="tab" aria-controls="home" aria-selected="true">Recomendaciones</a></li>
@@ -158,6 +162,9 @@
                                         </div>
                                     </div>
                                 </div>
+                            </div>
+                            <div class="tab-pane fade show mt-3" id="navInformeDigital" role="tabpanel" aria-labelledby="nav-home-tab">
+                                @Html.Partial("~/Areas/Fiscalizacion/Views/InformeLegal/Shared/_InformeIFI.cshtml")
                             </div>
                             @if (Model.hdfCodTipoIlegal == "0000001")
                             {

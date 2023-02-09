@@ -1,0 +1,28 @@
+﻿<p>
+    De conformidad con lo establecido en el numeral 4 del artículo 255 del Texto Único Ordenado de la Ley N° 27444, Ley del Procedimiento Administrativo General, aprobado por Decreto Supremo N° 004-2019-JUS (en adelante, TUO de la Ley N° 27444) con el respectivo descargo o sin él, la autoridad que instruye el procedimiento realizará todas las actuaciones necesarias para el examen de los hechos, recabando los datos e informaciones que sean relevantes para determinar, en su caso, la existencia de responsabilidad susceptible de sanción.
+</p>
+<p>
+    En tal sentido, resulta necesario confrontar los hechos advertidos en la supervisión y las actuaciones administrativas del presente procedimiento, a fin de determinar fehacientemente si existe coherencia y correspondencia entre ellos, así como responsabilidad administrativa emanada de las conductas de la administrada; bajo esta premisa, corresponde analizar las imputaciones formuladas sobre la base de lo señalado previamente con el objeto de acreditar o no su comisión.
+</p>
+{{if INFRACCIONES.length}}
+<ol style="list-style-type:lower-alpha" start="1">
+    {{each(i, item) INFRACCIONES}}
+    <li>
+        <span>
+            <strong>${item.titulo}</strong>
+        </span>
+    </li>
+    {{/each}}
+</ol>
+{{/if}}
+
+@* Sin Descargos *@
+{{if COD_TIPO_INFORME == 1}}
+<p>
+    En ese contexto, de acuerdo a lo señalado precedentemente, se confirma que la administrada cometió la infracción tipificada en el numeral 22 del Cuadro de Infracciones y Sanciones en Materia de Fauna Silvestre del Anexo 2 del Reglamento de Infracciones y Sanciones en Materia Forestal y de Fauna Silvestre, aprobado mediante Decreto Supremo N° 007-2021-MIDAGRI.
+</p>
+{{else COD_TIPO_INFORME == 2}}
+<p>
+    En ese contexto, de acuerdo a lo señalado precedentemente, se confirma que la administrada cometió la infracción tipificada en el numeral 22 del Cuadro de Infracciones y Sanciones en Materia de Fauna Silvestre del Anexo 2 del Reglamento de Infracciones y Sanciones en Materia Forestal y de Fauna Silvestre, aprobado mediante Decreto Supremo N° 007-2021-MIDAGRI.
+</p>
+{{/if}}

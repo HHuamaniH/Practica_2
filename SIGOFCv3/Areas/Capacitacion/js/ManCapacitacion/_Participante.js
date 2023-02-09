@@ -26,11 +26,9 @@ _Participante.fnShowDatosParticipante = function () {
     _Participante.frm.find("#dvItemPart_Funcion").hide();
     _Participante.frm.find("#dvItemPart_Tema").hide();
     _Participante.frm.find("#dvItemPart_Institucion").hide();
-    _Participante.frm.find("#dvItemPart_Mochila").hide();
     if (_Participante.frm.find("#hdfItemPart_TipoParticipante").val() == "ASISTENTE") {
         _Participante.frm.find(".dvItemPart_DatosAsistente").show();
         _Participante.frm.find("#dvItemPart_Constancia").show();
-        _Participante.frm.find("#dvItemPart_Mochila").show();
     } else if (_Participante.frm.find("#hdfItemPart_TipoParticipante").val() == "PONENTE") {
         _Participante.frm.find("#dvItemPart_Constancia").show();
         _Participante.frm.find("#dvItemPart_Tema").show();
@@ -165,7 +163,6 @@ _Participante.fnLoadDatosParticipante = function (data) {
         _Participante.fnCargarPublicoParticipante(data["MAE_COD_GRUPOPUBLICOPARTICIPANTE"], function () {
             _Participante.frm.find("#ddlItemPart_PublicoId").select2("val", [data["MAE_COD_PUBLICOPARTICIPANTE"]]);
         });
-        _Participante.frm.find("#ddlItemPart_MochilaId").val((data["MOCHILAFORESTAL"].trim() == "") ? "0000000" : data["MOCHILAFORESTAL"]);
     } else {
         _Participante.frm.find("#hdfItemPart_RegEstado").val("1");
         _Participante.frm.find("#hdfItemPart_Participante").val("");
@@ -200,8 +197,7 @@ _Participante.fnSetDatosParticipante = function () {
     if (_Participante.frm.find("#hdfItemPart_TipoParticipante").val() == "PONENTE") {
         data["FUNCION"] = _Participante.frm.find("#txtItemPart_Tema").val();
     }
-    data["COD_CONSTANCIA"] = _Participante.frm.find("#txtItemPart_Constancia").val();
-    data["MOCHILAFORESTAL"] = _Participante.frm.find("#ddlItemPart_MochilaId").val();
+    data["COD_CONSTANCIA"]=_Participante.frm.find("#txtItemPart_Constancia").val();
     data["OBSERVACION"] = _Participante.frm.find("#txtItemPart_Observacion").val();
     data["MAE_COD_GRUPOPUBLICOPARTICIPANTE"] = _Participante.frm.find("#ddlItemPart_GrupoPublicoId").val();
     data["GRUPOPUBLICOPARTICIPANTE"] = data["MAE_COD_GRUPOPUBLICOPARTICIPANTE"] == "0000000" ? "" : _Participante.frm.find("#ddlItemPart_GrupoPublicoId").select2("data")[0].text;
@@ -219,12 +215,6 @@ _Participante.fnSetDatosParticipante = function () {
 
 _Participante.fnCustomValidateForm = function () {
     if (!utilSigo.fnValidateForm_HideControl(_Participante.frm, _Participante.frm.find("#hdfItemPart_Participante"), _Participante.frm.find("#iconPersona"), false)) return false;
-    if (_Participante.frm.find("#hdfItemPart_TipoParticipante").val() == "ASISTENTE" && _Participante.frm.find("#ddlItemPart_MochilaId").val() == "0000000") {
-        utilSigo.toastWarning("Aviso", "Seleccione una opción a la consulta");
-        _Participante.frm.find("#ddlItemPart_MochilaId").focus();
-        return false;
-    }
-
     return true;
 }
 _Participante.fnShowIsAnio2021 = function (fecha) {

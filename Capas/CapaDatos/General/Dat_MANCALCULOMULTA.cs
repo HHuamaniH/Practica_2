@@ -260,7 +260,7 @@ namespace CapaDatos.GENE
                     cmd.ExecuteNonQuery();
                     OUTPUTPARAM01 = (String)cmd.Parameters["OUTPUTPARAM01"].Value;
                     OUTPUTPARAM02 = (String)cmd.Parameters["OUTPUTPARAM02"].Value;
-                    if (OUTPUTPARAM02 != " ")
+                    if (OUTPUTPARAM01 == " ")
                     {
                         tr.Rollback();
                         tr = null;
@@ -295,7 +295,7 @@ namespace CapaDatos.GENE
                     tr.Commit();
                     #endregion
                 }
-                return OUTPUTPARAM02;
+                return OUTPUTPARAM01;
             }
             catch (Exception ex)
             {

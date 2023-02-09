@@ -450,9 +450,9 @@ ManCapacitacion_AddEdit.fnInitDataTable_Detail = function () {
 
     //Cargar Participante - Asistentes
     columns_label = ["Apellidos y Nombres", "N° Documento", "Grupo Público", "Público", "Cargo", "Género", "Edad", "Título Habilitante"
-        , "Comunidad Nativa", "Etnia", "Teléfono", "Correo", "Constancia", "Recibió Mochila Forestal", "Observación"];
+                        ,"Comunidad Nativa","Etnia", "Teléfono", "Correo", "Constancia", "Observación"];
     columns_data = ["APELLIDOS_NOMBRES", "N_DOCUMENTO", "GRUPOPUBLICOPARTICIPANTE", "PUBLICOPARTICIPANTE", "CARGO", "GENERO", "EDAD", "NUM_THABILITANTE"
-        , "CCNN", "ETNIA", "TELEFONO", "CORREO", "COD_CONSTANCIA", "MOCHILAFORESTAL", "OBSERVACION"];
+                        , "CCNN", "ETNIA", "TELEFONO", "CORREO", "COD_CONSTANCIA", "OBSERVACION"];
     options = {
         page_length: 10, row_edit: true, row_fnEdit: "ManCapacitacion_AddEdit.fnAddEditParticipante(this,'ASISTENTE')"
         , row_delete: true, row_fnDelete: "ManCapacitacion_AddEdit.fnDeleteParticipante(this,'ASISTENTE')"
@@ -588,7 +588,7 @@ ManCapacitacion_AddEdit.fnAddEditParticipante = function (obj,_tipoParticipante)
                         break;
                 }
 
-                if (obj == null || obj == "") {//Nuevo Registro
+                if (data["RegEstado"] == "1") {//Nuevo Registro
                     dt.rows.add([data]).draw();
                     dt.page('last').draw('page');
                     utilSigo.toastSuccess("Exito", "Datos guardados correctamente");

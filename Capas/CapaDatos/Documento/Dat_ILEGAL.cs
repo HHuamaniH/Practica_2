@@ -797,7 +797,7 @@ namespace CapaDatos.DOC
                                 lsCEntidad.COD_ILEGAL = dr.GetString(dr.GetOrdinal("cod_ilegal"));
                                 lsCEntidad.COD_FCTIPO = dr.GetString(dr.GetOrdinal("COD_FCTIPO"));
                                 lsCEntidad.TIPO_FISCALIZA = dr.GetString(dr.GetOrdinal("TIPO_FISCALIZA"));
-                                lsCEntidad.ILEGAL_NUMERO = dr.GetString(dr.GetOrdinal("ILEGAL_NUMERO"));
+                                lsCEntidad.ILEGAL_NUMERO = dr["ILEGAL_NUMERO"] != DBNull.Value ? dr.GetString(dr.GetOrdinal("ILEGAL_NUMERO")) : null;
                                 lsCEntidad.COD_PROFESIONAL = dr.GetString(dr.GetOrdinal("COD_PROFESIONAL"));
                                 lsCEntidad.APELLIDOS_NOMBRES = dr.GetString(dr.GetOrdinal("APELLIDOS_NOMBRES"));
                                 lsCEntidad.ILEGAL_FECHA_EMISION = dr.GetString(dr.GetOrdinal("ILEGAL_FECHA_EMISION"));

@@ -7,8 +7,8 @@ ManUsuario.fnLoadManGrillaPaging = function () {
     var option = { url: url, datos: JSON.stringify(data), type: 'POST', dataType: 'html' };
 
     var columns_label = [], columns_data = [], options = {};
-    columns_label = ["Fecha de registro", "Usuario", "Nombres", "Tipo Persona", "Lugar Trabajo", "Oficina", "Estado"];
-    columns_data = ["fCreacion", "usuario", "descripcion", "tipo_persona", "lugar_trabajo", "oficina", "estado"];
+    columns_label = ["Fecha de registro", "Usuario", "Nombres ", "Estado"];
+    columns_data = ["fCreacion", "usuario", "descripcion", "estado"];
     var data_extend = [
         {
             "data": "codigo", "title": "Perfil", "orderable": false, "searchable": false, "mRender": function (data, type, row, meta) {

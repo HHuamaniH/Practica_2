@@ -110,7 +110,7 @@ anteExpedientes.fnLoadManGrillaPaging = function () {
         {
             "data": "", "width": "2%", "orderable": false, "searchable": false, "mRender": function (data, type, row) {
                 if (row.CCODDOC.trim() != "")
-                    return '<div><i class="fa fa-lg fa-download" style="cursor:pointer;color:dodgerblue;" title="Descargar Documento del SIADO" onclick="anteExpedientes.fnDownloadDocSIADO(this)"></i>';
+                    return '<div><i class="fa fa-lg fa-download" style="cursor:pointer;color:dodgerblue;" title="Descargar Documento del SIADO" onclick="anteExpedientes.fnDownloadDocSIADO(\'' + row.CCODDOC.trim() + '\')"></i>';
                 else return "";
             }
         },
@@ -132,7 +132,7 @@ anteExpedientes.fnLoadManGrillaPaging = function () {
                     }
                     else
                         return "";
-                    //return '<div><i class="fa fa-lg fa-sign-in" style="cursor:pointer;color:dodgerblue;" title="Transferir" onclick="anteExpedientes.fnTransferir(this,1)"></i>';
+                        //return '<div><i class="fa fa-lg fa-sign-in" style="cursor:pointer;color:dodgerblue;" title="Transferir" onclick="anteExpedientes.fnTransferir(this,1)"></i>';
 
                 }
             }
@@ -358,99 +358,13 @@ anteExpedientes.fnDownloadDocSITD = function (nombreArchivo) {
     document.location = "https://sitd.osinfor.gob.pe:8443/std/cInterfaseUsuario_SITD/download.php?direccion=sitd-almacen&file=" + nombreArchivo;
 };
 
-anteExpedientes.fnDownloadDocSIADO = function (obj) {
-    var $tr = $(obj).closest('tr');
-    var row = anteExpedientes.dtManGrillaPaging.row($tr).data();
-    console.log('row',row)
-    switch (row.OBSERVACION) {
-        case 'CENSO':
-            //JL
-            window.open("https://apptest.osinfor.gob.pe:7009/pdf-gore/" + row.CCODDOC.trim() +"."+ row.EXTENSION, '_blank'); break;
-            //var url = urlLocalSigo + "THabilitante/ManVentanillaAntecedentesExpedientes/DownloadCenso";//ExportarRegistroUsuario
-            //var option = { url: url, datos: JSON.stringify({ coddoc: row.CCODDOC }), type: 'POST' };
-
-            ////utilSigo.fnAjax(option, function (data) {
-            ////    if (data.success) {
-            ////        document.location = urlLocalSigo + "Archivos/Plantilla/" + data.msj;
-            ////    }
-            ////    else {
-            ////        utilSigo.toastWarning("Aviso", "Sucedio un error, Comuníquese con el Administrador");
-            ////        console.log(data.msj);
-            ////    }
-            ////});
-            //$.ajax({
-            //    url: url,
-            //    type: 'POST',
-            //    data: { coddoc: row.CCODDOC},
-            //    dataType: 'json',
-            //    success: function (data) {
-            //        //utilSigo.unblockUIGeneral();
-            //       utilSigo.unblockUIGeneral();
-            //        if (data.success) {
-            //            window.location.href = urlLocalSigo + "THabilitante/ManVentanillaAntecedentesExpedientes" + "/Download?file=" + data.values[0];
-            //        }
-            //        else utilSigo.toastWarning("Error", data.msj);
-            //    },
-            //    beforeSend: function () {
-            //        utilSigo.blockUIGeneral();
-            //    },
-            //    error: function (jqXHR, error, errorThrown) {
-            //        utilSigo.unblockUIGeneral();
-            //        utilSigo.toastError("Error", "Sucedio un error, Comuniquese con el Administrador");
-            //        console.log(jqXHR.responseText);
-            //    }
-            //});
-
-
-
-            //break;
-        default: window.open("https://apptest.osinfor.gob.pe:7009/pdf-gore/" + row.CCODDOC.trim() + "." + row.EXTENSION, '_blank'); break;
-    }
-
-};
-anteExpedientes.fnDownloadDocCenso = function () {
-    var url = urlLocalSigo + "THabilitante/ManVentanillaAntecedentesExpedientes/DownloadCenso";//ExportarRegistroUsuario
-    switch (rowTransferir.OBSERVACION) {
-        case 'CENSO':
-            //JL
-            $.ajax({
-                url: url,
-                type: 'POST',
-                data: { coddoc: rowTransferir.CCODDOC },
-                dataType: 'json',
-                success: function (data) {
-                    //utilSigo.unblockUIGeneral();
-                    utilSigo.unblockUIGeneral();
-                    if (data.success) {
-                        window.location.href = urlLocalSigo + "THabilitante/ManVentanillaAntecedentesExpedientes" + "/Download?file=" + data.values[0];
-                    }
-                    else utilSigo.toastWarning("Error", data.msj);
-                },
-                beforeSend: function () {
-                    utilSigo.blockUIGeneral();
-                },
-                error: function (jqXHR, error, errorThrown) {
-                    utilSigo.unblockUIGeneral();
-                    utilSigo.toastError("Error", "Sucedio un error, Comuniquese con el Administrador");
-                    console.log(jqXHR.responseText);
-                }
-            });
-
-
-
-            break;
-        default: window.open("https://siadoregion.osinfor.gob.pe/PDF-GORE/" + row.CCODDOC.trim() + ".pdf", '_blank'); break;
-    }
-
-};
-
-anteExpedientes.fnDownloadSiado = function (nombreArchivo) {
+anteExpedientes.fnDownloadDocSIADO = function (nombreArchivo) {
     window.open("https://siadoregion.osinfor.gob.pe/PDF-GORE/" + nombreArchivo + ".pdf", '_blank');
 };
 
 anteExpedientes.fnTransferir = function (obj, opcion) {
     var $tr = $(obj).closest('tr');
-    var row = anteExpedientes.dtManGrillaPaging.row($tr).data(); console.log('fila', row);
+    var row = anteExpedientes.dtManGrillaPaging.row($tr).data();
     anteExpedientes.fnTransferirModal(row, opcion);
 };
 
@@ -458,13 +372,12 @@ anteExpedientes.fnTransferirModal = function (row, opcion) { //0 anular, 1 trans
 
     var tipoOpcion = opcion == 0 ? 'ANULAR' : 'TRANSFERIR';
     rowTransferir = row;
-    debugger
     if (row.COD_DREFERENCIA == "0302" || row.COD_DREFERENCIA == "0609") //Forma 20, otros, documento no soportado
     {
         utilSigo.toastWarning("Aviso", "Documento no soportado por el SIGOsfc");
         return false;
     }
-    var model = { tipo: tipoOpcion, COD_DREFERENCIA: row.COD_DREFERENCIA, DOC_REFERENCIA: row.DOC_REFERENCIA, COD_AEXPEDIENTE_SITD: row.COD_AEXPEDIENTE_SITD, COD_TRAMITE_SITD: row.COD_TRAMITE_SITD, SUBTIPO: row.SUBTIPO, obs: row.OBSERVACION };
+    var model = { tipo: tipoOpcion, COD_DREFERENCIA: row.COD_DREFERENCIA, DOC_REFERENCIA: row.DOC_REFERENCIA, COD_AEXPEDIENTE_SITD: row.COD_AEXPEDIENTE_SITD, COD_TRAMITE_SITD: row.COD_TRAMITE_SITD, SUBTIPO: row.SUBTIPO };
     var url = urlLocalSigo + "THabilitante/ManVentanillaAntecedentesExpedientes/_Transferir";
     var option = { url: url, type: 'GET', datos: model, divId: "transferirModal" };
     utilSigo.fnOpenModal(option, function () {

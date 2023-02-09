@@ -1,4 +1,5 @@
 ﻿using CapaEntidad.DOC;
+using CapaEntidad.ViewModel;
 using GeneralSQL;
 using Oracle.ManagedDataAccess.Client;
 using System;
@@ -35,7 +36,7 @@ namespace CapaDatos.DOC
 
             try
             {
-                tr = cn.BeginTransaction();                
+                tr = cn.BeginTransaction();
 
                 //Grabando Cabecera
                 using (OracleCommand cmd = dBOracle.ManExecuteOutput(cn, tr, "doc_osinfor_erp_migracion.spRESODIREC_Grabar", oCEntidad))
@@ -500,7 +501,7 @@ namespace CapaDatos.DOC
                                 }
                             }
                         }
-                       
+
                     }
                 }
 
@@ -729,7 +730,7 @@ namespace CapaDatos.DOC
                             dr.Read();
                             lsCEntidad.COD_FCTIPO = dr.GetString(dr.GetOrdinal("COD_FCTIPO"));
                             lsCEntidad.TIPO_FISCALIZA = dr.GetString(dr.GetOrdinal("TIPO_FISCALIZA"));
-                            if(dr["NUMERO_RESOLUCION"] != DBNull.Value) lsCEntidad.NUMERO_RESOLUCION = dr.GetString(dr.GetOrdinal("NUMERO_RESOLUCION"));
+                            if (dr["NUMERO_RESOLUCION"] != DBNull.Value) lsCEntidad.NUMERO_RESOLUCION = dr.GetString(dr.GetOrdinal("NUMERO_RESOLUCION"));
                             lsCEntidad.COD_PERSONA = dr.GetString(dr.GetOrdinal("COD_PERSONA"));
                             lsCEntidad.APELLIDOS_NOMBRES = dr.GetString(dr.GetOrdinal("APELLIDOS_NOMBRES"));
                             lsCEntidad.FECHA_EMISION = dr.GetString(dr.GetOrdinal("FECHA_EMISION"));
@@ -2454,5 +2455,97 @@ namespace CapaDatos.DOC
                 throw ex;
             }
         }
+
+        public VM_RSD_Resumen RSD_Resumen(OracleConnection cn, string COD_RESDIR, string asCodTipoIL)
+        {
+            VM_RSD_Resumen result = null;
+
+            try
+            {
+                using (OracleDataReader dr = dBOracle.SelDrdDefaultTR(cn, null, "doc_osinfor_erp_migracion.SPFISCALIZACION_RSD_RESUMEN", COD_RESDIR))
+                {
+                    if (dr != null)
+                    {
+
+                        if (dr.HasRows)
+                        {
+                            while (dr.Read())
+                            {
+                                result = new VM_RSD_Resumen();
+                                result.COD_THABILITANTE = dr["COD_THABILITANTE"].ToString();
+                                result.COD_TITULAR = dr["COD_TITULAR"].ToString();                                
+                                result.NUM_THABILITANTE = dr["NUM_THABILITANTE"].ToString();
+                                result.TITULAR = dr["TITULAR"].ToString();
+                                result.TITULAR_DOCUMENTO = dr["TITULAR_DOCUMENTO"].ToString();
+                                result.TITULAR_RUC = dr["TITULAR_RUC"].ToString();
+                                result.COD_RLEGAL = dr["COD_RLEGAL"].ToString();
+                                result.R_LEGAL = dr["R_LEGAL"].ToString();
+                                result.R_LEGAL_DOCUMENTO = dr["R_LEGAL_DOCUMENTO"].ToString();
+                                result.UBIGEO_DEPARTAMENTO = dr["UBIGEO_DEPARTAMENTO"].ToString();
+                                result.UBIGEO_PROVINCIA = dr["UBIGEO_PROVINCIA"].ToString();
+                                result.UBIGEO_DISTRITO = dr["UBIGEO_DISTRITO"].ToString();
+                            }
+                        }
+
+                        dr.NextResult();
+
+                        if (result != null && dr.HasRows)
+                        {
+                            while (dr.Read())
+                            {
+                                var ocampoEnt = new VM_RSD_INFRACCIONES();
+                                ocampoEnt.COD_ILEGAL_ENCISOS = dr["COD_ILEGAL_ENCISOS"].ToString();
+                                ocampoEnt.DESCRIPCION_ARTICULOS = dr["DESCRIPCION_ARTICULOS"].ToString();
+                                ocampoEnt.DESCRIPCION_ENCISOS = dr["DESCRIPCION_ENCISOS"].ToString();
+                                ocampoEnt.TEXTO_ENCISO = dr["TEXTO_ENCISO"].ToString();
+                                ocampoEnt.COD_ESPECIES = dr["COD_ESPECIES"].ToString();
+                                ocampoEnt.DESCRIPCION_ESPECIE = dr["DESCRIPCION_ESPECIE"].ToString();
+                                ocampoEnt.VOLUMEN = Decimal.Parse(dr["VOLUMEN"].ToString());
+                                ocampoEnt.AREA = Decimal.Parse(dr["AREA"].ToString());
+                                ocampoEnt.NUMERO_INDIVIDUOS = Int32.Parse(dr["NUMERO_INDIVIDUOS"].ToString());
+                                ocampoEnt.DESCRIPCION_INFRACCIONES = dr["DESCRIPCION_INFRACCIONES"].ToString();
+                                ocampoEnt.NUM_POA = dr["NUM_POA"].ToString();
+                                ocampoEnt.POA = dr["POA"].ToString();
+                                ocampoEnt.TIPOMADERABLE = dr["TIPOMADERABLE"].ToString();
+
+                                //ocampoEnt.COD_ILEGAL_ARTICULOS = dr["cod_ilegal_articulos"].ToString();
+                                //ocampoEnt.DETERMINACION = "";
+                                //if (oCEntidad.BusValor == "INICIO_PAU")
+                                //{
+                                //    ocampoEnt.COD_SECUENCIAL = 0;
+                                //}
+                                //else if (oCEntidad.BusValor == "TERMINO_PAU" || oCEntidad.BusValor == "TERMINO_PAU_TFFS")
+                                //{
+                                //    ocampoEnt.COD_SECUENCIAL = Int32.Parse(dr["COD_SECUENCIAL"].ToString());
+                                //    ocampoEnt.DETERMINACION = "No Evaluado";
+                                //    ocampoEnt.DESCRIPCION_INFRACCIONES = "";
+                                //    ocampoEnt.RegEstado = 1;
+                                //    ocampoEnt.BTN_LITERALES = false;
+                                //    ocampoEnt.BTN_LITERALES2 = true;
+
+                                //    if (oCEntidad.BusValor == "TERMINO_PAU_TFFS")
+                                //    {
+                                //        ocampoEnt.COD_FCTIPO = dr["COD_FCTIPO"].ToString();
+                                //        ocampoEnt.COD_RESODIREC = dr["COD_RESODIREC"].ToString();
+                                //        ocampoEnt.MAE_ESTDETERMINA_ART363I = "0000000";
+                                //        ocampoEnt.ESTDETERMINA_ART363I = "No Evaluado";
+                                //    }
+                                //}
+
+                                result.LIST_INFRACCIONES.Add(ocampoEnt);
+                            }
+                        }
+                    }
+                    cn.Close();
+                }
+                return result;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+
     }
 }

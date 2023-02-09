@@ -258,7 +258,7 @@ var _transf = {
                 band = 1;
             }
         }
-       
+
         if (band == 1) {
             let url = urlLocalSigo + "THabilitante/ManVentanillaAntecedentesExpedientes/asociarPM";
             let option = { url: url, datos: JSON.stringify(model), type: 'POST' };
@@ -390,49 +390,6 @@ var _transf = {
     },
     fnCloseModal: () => {
         utilSigo.fnCloseModal("transferirModal");
-    },
-    VERPOA: () => {
-        var url = urlLocalSigo + "THabilitante/ManVentanillaAntecedentesExpedientes/asociarPOA";
-        rowTransferir.COD_THABILITANTE = _transf.frm.find("#ItemCodTHabilitante").val().trim();
-        rowTransferir.BusValor = rowTransferir.COD_THABILITANTE + "|" + rowTransferir.RESOLUCIONAPROBACION;
-        var option = { url: url, datos: JSON.stringify(rowTransferir), type: 'POST' };
-        utilSigo.fnAjax(option, function (data) {
-            console.log("bUSQUEDA", data);
-            let row = [];
-            if (data.length > 1) {
-                row = data[0];
-                utilSigo.toastWarning("Aviso", "Se encontro mas de un POA asociado a un Número de Resolución");
-                document.getElementById('btnTransferirCenso').setAttribute('disabled', '');
-                
-            }
-
-            if (data.length == 1) { 
-                row = data[0];
-                let CodigoComplementario = row.CODIGO + '|' + row.NUMERO + '|' + row.PARAMETRO08 + '|' + row.PARAMETRO05 + '|' + row.PARAMETRO07.replace(/[|]/g, ";") + '|' + row.PARAMETRO06;
-
-                
-                let appDataGAER= rowTransferir.COD_AEXPEDIENTE_SITD //[0]
-                    + "¬" + rowTransferir.COD_TRAMITE_SITD       //[1]
-                    + "¬" + rowTransferir.COD_DREFERENCIA        //[2]
-                    + "¬" + _transf.frm.find("#ItemCodTHabilitante").val()//data.COD_TH                          //[3]
-                    + "¬" + rowTransferir.NUM_THABILITANTE       //[4]
-                    + "¬" + rowTransferir.RESOLUCION_POA         //[5]
-                    + "¬" + _transf.frm.find("#txtItemObservacionTransferir").val().trim() //[6]      
-                    + "¬" + _transf.frm.find("#COD_PGMF").val()//data.COD_PGMF                          //[7] 
-                    + "¬" + _transf.frm.find("#COD_PMANEJO").val();// data.COD_PMANEJO;                     //[8]
-                let appClientGAER = "SIGOsfc_VentanillaSITD|TRANSFERIR|PLAN";
-                let ruta = urlLocalSigo + "THabilitante/ManPOA/AddEdit" +
-                    "?codigo=" + encodeURIComponent(row.PARAMETRO01) +
-                    "&descripcion=" + encodeURIComponent(CodigoComplementario) +
-                    "&nuevo=0" +
-                    "&tipoFrmulario=POA&siado=1&appClientGAER=" + appClientGAER + "&appDataGAER=" + appDataGAER;
-                anteExpedientes.fnConfig();
-                _transf.StorageConfig();
-                document.location = ruta;// window.open(ruta, '_blank'); //
-            } else {
-                utilSigo.toastWarning("Aviso", "No se encontraron resultados");
-            }
-        });
     }
 };
 $(function () {
@@ -449,6 +406,5 @@ $(function () {
     _transf.frm.find("#ItemResolucionPoa").val(rowTransferir.RESOLUCION_POA);
     _transf.frm.find("#ItemResolActoAdmin").val(rowTransferir.RESOLUCION_POA);
     utilSigo.fnFormatDate(_transf.frm.find("#txtItemFecEmiBExtraccion"));
-    document.getElementById('btnTransferirCenso').removeAttribute("disabled");
 
 });

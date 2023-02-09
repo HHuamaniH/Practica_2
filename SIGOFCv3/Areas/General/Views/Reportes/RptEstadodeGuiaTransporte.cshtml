@@ -137,8 +137,9 @@
     function construirPDF() {
         window.open(urlLocalSigo + "General/Reportes/generaReportePDF", '_blank');
     };
-    function descargaPDF(archivo, origen) {
-        window.open(urlLocalSigo + "General/Reportes/DescargarEstadoGuiaTransporte?hdfFileDescarga=" + archivo + "&hdfFileOrigen=" + origen, '_blank');
+    function descargaPDF(archivo) {
+        
+        window.open(urlLocalSigo + "General/Reportes/DescargarEstadoGuiaTransporte?hdfFileDescarga=" + archivo, '_blank');
     };
     let _RptETH = {
         fnVer: (obj) => {

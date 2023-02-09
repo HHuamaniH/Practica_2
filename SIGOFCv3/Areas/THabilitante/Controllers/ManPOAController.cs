@@ -565,8 +565,8 @@ namespace SIGOFCv3.Areas.THabilitante.Controllers
                                                 oCampos.RENDIMIENTO = workSheet.Cells[rowIterator, 8].Value == null ? 0 : Decimal.Parse(workSheet.Cells[rowIterator, 8].Value.ToString().Trim());
                                                 oCampos.UNIDAD_MEDIDA = workSheet.Cells[rowIterator, 9].Value == null ? "" : workSheet.Cells[rowIterator, 9].Value.ToString().Trim();
                                                 oCampos.TIPOMADERABLE = workSheet.Cells[rowIterator, 10].Value == null ? "" : workSheet.Cells[rowIterator, 10].Value.ToString().Trim();
-                                                oCampos.PCA = workSheet.Cells[rowIterator, 11].Value == null ? "" : workSheet.Cells[rowIterator, 11].Value.ToString().Trim();
-                                                oCampos.OBSERVACION = workSheet.Cells[rowIterator, 12].Value == null ? "" : workSheet.Cells[rowIterator, 12].Value.ToString().Trim();
+                                                oCampos.PCA = workSheet.Cells[rowIterator, 12].Value == null ? "" : workSheet.Cells[rowIterator, 12].Value.ToString().Trim();
+                                                oCampos.OBSERVACION = workSheet.Cells[rowIterator, 13].Value == null ? "" : workSheet.Cells[rowIterator, 13].Value.ToString().Trim();
                                                 oCampos.RegEstado = 1;
 
                                                 if (!(workSheet.Cells[rowIterator, 3].Value == null ? "" : workSheet.Cells[rowIterator, 3].Value.ToString().Trim()).Equals(""))
@@ -1518,9 +1518,7 @@ namespace SIGOFCv3.Areas.THabilitante.Controllers
                              NRO = i++,
                              PERSONA = cust.PERSONA,
                              N_DOCUMENTO = cust.N_DOCUMENTO,
-                             //CARGO = cust.CARGO,
-                             COD_PTIPO=cust.COD_PTIPO,
-                             TIPO_CARGO = cust.TIPO_CARGO,
+                             CARGO = cust.CARGO,
                              COD_PERSONA = cust.COD_PERSONA,
                              RegEstado = cust.RegEstado
                          };
@@ -1541,9 +1539,7 @@ namespace SIGOFCv3.Areas.THabilitante.Controllers
                              NRO = i++,
                              PERSONA = cust.PERSONA,
                              N_DOCUMENTO = cust.N_DOCUMENTO,
-                             //CARGO = cust.CARGO,
-                             COD_PTIPO = cust.COD_PTIPO,
-                             TIPO_CARGO = cust.TIPO_CARGO,
+                             CARGO = cust.CARGO,
                              COD_PERSONA = cust.COD_PERSONA,
                              RegEstado = cust.RegEstado
                          };
@@ -1563,9 +1559,7 @@ namespace SIGOFCv3.Areas.THabilitante.Controllers
                              NRO = i++,
                              PERSONA = cust.PERSONA,
                              N_DOCUMENTO = cust.N_DOCUMENTO,
-                             //CARGO = cust.CARGO,
-                             COD_PTIPO = cust.COD_PTIPO,
-                             TIPO_CARGO = cust.TIPO_CARGO,
+                             CARGO = cust.CARGO,
                              COD_PERSONA = cust.COD_PERSONA,
                              RegEstado = cust.RegEstado
                          };

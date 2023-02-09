@@ -605,8 +605,7 @@ namespace CapaEntidad.DOC
 
       
         public String INF_NUMERO { get; set; }
-        public String COD_ITIPO { get; set; }
-
+       
         public String ANIO_SUPER { get; set; }
      
         public string FECHA_INI { get; set; }
@@ -766,11 +765,9 @@ namespace CapaEntidad.DOC
 
      
         public String DOC_SIADO_ARESOL { get; set; }
-        public String DOC_ORIGEN_ARESOL { get; set; }
-
+       
         public String DOC_SIADO_REFOR { get; set; }
-        public String DOC_ORIGEN_REFOR { get; set; }
-
+       
         public String DOC_SIADO_INFORME { get; set; }
        
         public String DOC_SIADO_ILEGAL { get; set; }

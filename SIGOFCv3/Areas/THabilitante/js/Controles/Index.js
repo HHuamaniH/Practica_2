@@ -18,8 +18,7 @@ controles_TH.editarPlanManejoGeneral = function (obj) {
 controles_TH.eliminarPOA = function (obj) { };
 
 controles_TH.editarPOA = function (obj) {
-    debugger;
-    var fila = $(obj).closest('tr'); console.log('fila POA', controles_TH.dtGrillaGeneral.row(fila).data());
+    var fila = $(obj).closest('tr');
     var CodigoDato = fila.find(".hdCodigoDato").val();
     var CodigoComplementario = fila.find(".hdCodigoComplementario").val();
 

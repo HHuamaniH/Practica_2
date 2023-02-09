@@ -220,11 +220,6 @@ namespace SIGOFCv3.Areas.Capacitacion.Controllers
             ViewBag.ddlItemPart_Cargo = exeBus.RegMostComboIndividual("CARGO", "");
             ViewBag.ddlItemPart_GrupoPublico = exeBus.RegMostComboIndividual("GRUPO_PUBLICO_PARTICIPANTE", "");
             ViewBag.ddlItemPart_Publico = new List<VM_Cbo>() { new VM_Cbo() { Text = "Seleccionar", Value = "0000000" } };
-            ViewBag.ddlItemPart_Mochila = new List<VM_Cbo>() {
-                new VM_Cbo() { Text = "Seleccionar", Value = "0000000" },
-                new VM_Cbo() { Text = "SI", Value = "SI" },
-                new VM_Cbo() { Text = "NO", Value = "NO" },
-            };
 
             return PartialView();
         }

@@ -106,12 +106,10 @@ namespace CapaLogica.DOC
         #region "Sigo V3"
         public VM_Usuario UsuarioInt(string codigo)
         {
-            VM_Usuario vm = new VM_Usuario();
-            Dat_Usuario oCDatos = new Dat_Usuario();
-            CEntidad oCEntidad = new CEntidad();
+            VM_Usuario vm;
             if (string.IsNullOrEmpty(codigo))
             {//nuevo
-
+                vm = new VM_Usuario();
                 vm.id = "";
                 vm.activo = true;
                 vm.titulo = "Nuevo Usuario";
@@ -119,46 +117,15 @@ namespace CapaLogica.DOC
             }
             else
             {//edit
-
-
+                vm = new VM_Usuario();
+                Dat_Usuario dat = new Dat_Usuario();
                 Ent_BUSQUEDA_V3 ent = new Ent_BUSQUEDA_V3();
                 ent.BusFormulario = "USUARIO";
                 ent.BusCriterio = "GET_ID_USUARIO";
                 ent.BusValor = codigo;
-                vm = oCDatos.GetIdUsuario(ent);
+                vm = dat.GetIdUsuario(ent);
                 vm.titulo = "Modificar Usuario";
             }
-            try
-            {
-                using (OracleConnection cn = new OracleConnection(CapaDatos.BDConexion.Conexion_Cadena_SIGO()))
-                {
-                    cn.Open();
-                    oCEntidad.BusFormulario = "USUARIO";
-                    oCEntidad.BusCriterio = "TIPOPERSONAL";
-                    vm.ddlTipoPersonal =  oCDatos.GetCombo(cn, oCEntidad);
-                }
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-
-            try
-            {
-                using (OracleConnection cn = new OracleConnection(CapaDatos.BDConexion.Conexion_Cadena_SIGO()))
-                {
-                    cn.Open();
-                    oCEntidad.BusFormulario = "USUARIO";
-                    oCEntidad.BusCriterio = "LUGARTRABAJO";
-                    vm.ddlLugarTrabajo = oCDatos.GetCombo(cn, oCEntidad);
-                }
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-
-            
             return vm;
         }
         public VM_Acceso AccesoInt(string codigo, int idAcceso)
@@ -301,20 +268,10 @@ namespace CapaLogica.DOC
                 ent.ESTADO_ACTIVO = vm.activo;        
                 ent.NOTIFICADO = vm.remPassword;
                 ent.esPublico = vm.esPublico;
-                ent.TIPO_PERSONAL = vm.ddlTipoPersonalId;
-                ent.CARGO = vm.cargo;
-                ent.LUGAR_TRABAJO = vm.ddlLugarTrabajoId;
-                ent.OFICINA = vm.oficina;
-                ent.INSTITUCION = vm.institucion;
-                ent.esPublico = vm.esPublico;
                 if (ent.COD_PERSONA.Trim() == "" || ent.USUARIO_LOGIN.Trim() == "")
                 {
                     throw new Exception("Ingrese los datos de la persona");
                 }
-                if (string.IsNullOrEmpty(ent.CARGO)) { throw new Exception("Ingrese el cargo de la persona"); }
-                if (string.IsNullOrEmpty(ent.OFICINA)) { throw new Exception("Ingrese la oficina de la persona"); }
-                if (string.IsNullOrEmpty(ent.INSTITUCION)) { throw new Exception("Ingrese la institución de la persona"); }
-
                 if (ent.RegEstado == 1 || (ent.RegEstado != 1 && vm.modPassword)) //Nuevo
                 {
                     if (vm.password.Trim() != vm.passwordR.Trim())
@@ -571,8 +528,6 @@ namespace CapaLogica.DOC
             }
 
         }
-
-
 
 
         #endregion

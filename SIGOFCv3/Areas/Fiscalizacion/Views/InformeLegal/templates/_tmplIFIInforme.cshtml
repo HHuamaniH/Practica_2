@@ -1,0 +1,249 @@
+﻿<script id="tmpl-exportar" type="text/x-jquery-tmpl">
+    <div style="font-family: Arial; font-size: 10pt; line-height: 150%;">
+        <div>
+            <p style="font-weight: bold; text-align: center; font-size: 10pt; margin: 15pt 0; font-style: italic;">
+                "Decenio de la igualdad de oportunidades para mujeres y hombres"<br />
+                "Año de la unidad, la paz y el desarrollo"
+            </p>
+            <p style="text-align: center; font-size: 11pt;">
+                <strong>INFORME FINAL DE INSTRUCCIÓN N° ${NUM_INFORME_SITD || '00XXX-2023-OSINFOR/08.2.1'}</strong>
+            </p>
+            <table width="100%" cellpadding="4" style="border: 0; font-family: Arial; font-size: 10pt; border-collapse: collapse; line-height: 150%;">
+                <tbody>
+                    <tr>
+                        <td style="vertical-align: top;"><strong>A</strong></td>
+                        <td style="width: 30px; vertical-align: top;">:</td>
+                        <td style="vertical-align: top;">
+                            <strong>Luisa Cóndor Meza</strong><br />
+                            <span>${PROCEDENCIA}</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="vertical-align: top;"><strong>Asunto</strong></td>
+                        <td style="width: 30px; vertical-align: top;">:</td>
+                        <td style="vertical-align: top;">
+                            Resultados de la fase instructora del Procedimiento Administrativo Único iniciado a ${TITULAR || '(indicar por defecto el nombre del/la concesionario/a)'}, titular del ${NUM_CONTRATO || '(indicar por defecto el contrato de concesión)'}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="vertical-align: top;"><strong>Referencia</strong></td>
+                        <td style="width: 30px; vertical-align: top;">:</td>
+                        <td style="vertical-align: top;">Expediente Administrativo N° ${EXPEDIENTES_ADM || 'XXXXX-XXXX-OSINFOR/08.2'}</td>
+                    </tr>
+                    <tr>
+                        <td style="vertical-align: top;"><strong>Fecha</strong></td>
+                        <td style="width: 30px; vertical-align: top;">:</td>
+                        <td style="vertical-align: top;">Magdalena del Mar, ${FECHA}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <hr style="height: 1px; border-top: 1px solid #000;" />
+
+        <p style="text-align: justify;">
+            Por medio del presente me dirijo a usted, en atención al documento de la referencia, a efectos de evaluar
+            lo actuado en la etapa instructora del Procedimiento Administrativo Único (en adelante, PAU), iniciado a
+            ${TITULAR || '(indicar por defecto el nombre del/la concesionario/a)'} (en adelante, concesionario/a),
+            identificado/a con D.N.I./RUC N° ${TITULAR_DOCUMENTO || TITULAR_RUC}, titular del (indicar por defecto el contrato de concesión)
+            (en adelante, contrato de concesión); en virtud al artículo 22 del Reglamento del PAU del Organismo de
+            Supervisión de los Recursos Forestales y de Fauna Silvestre (en adelante, Reglamento del PAU), aprobado
+            por Resolución de Jefatura N° 00043-2021-OSINFOR/01.1.
+        </p>
+        <div style="text-align: justify;">
+            <ol style="list-style-type: upper-roman;">
+                <li>
+                    <strong>ANTECEDENTES</strong><br />
+                    <span>
+                        <ol style="list-style-type: decimal;">
+                            <li>Con fecha XX de XXXXX de XXXX, el Estado Peruano, a través del Instituto Nacional de Recursos Forestales y de Fauna Silvestre (ex INRENA), y de otra parte, el concesionario suscribieron el contrato de concesión, por el cual se le otorgó el derecho al aprovechamiento sostenible de (detallar según lo expuesto en el contrato de concesión).</li>
+                            <li>Mediante Carta N° XXXXX-XXXX-OSINFOR/08.1, de fecha XX de XXXXX de XXXX, notificada el XX de XXXXX de XXXX, la Dirección de Supervisión Forestal y de Fauna Silvestre (en adelante, DSFFS) comunicó al/la concesionario/a la supervisión ordinaria/extraordinaria al (indicar plan de manejo forestal), correspondiente al periodo XXXX-XXXX y, asimismo, le requirió diversa información concerniente al cumplimiento de obligaciones como titular del contrato de concesión.</li>
+                        </ol>
+                    </span>
+                </li>
+                <li>
+                    <strong>BASE LEGAL</strong><br />
+                    <span>
+                        <ul style="list-style-type: disc;">
+                            <li>
+                                Constitución Política del Perú de 1993.
+                                <a style="mso-footnote-id:ftn1" href="#_ftn1" name="_ftnref1" title="">
+                                    <sup class=MsoFootnoteReference>
+                                        <span style="mso-special-character:footnote">
+                                            <![if !supportFootnotes]>
+                                            <span class=MsoFootnoteReference>[1]</span>
+                                            <![endif]>
+                                        </span>
+                                    </sup>
+                                </a>
+                            </li>
+                            <li>Ley N° 26821, Ley Orgánica para el aprovechamiento sostenible de los Recursos Naturales.</li>
+                            <li>Ley N° 29763, Ley Forestal y de Fauna Silvestre.</li>
+                            <li>Decreto Legislativo N° 1085, Ley que crea el Organismo de Supervisión de los Recursos Forestales y de Fauna Silvestre y sus modificatorias.</li>
+                            <li>Decreto Supremo N° 018-2015-MINAGRI, que aprueba el Reglamento para la Gestión Forestal.</li>
+
+                            {{if COD_MODALIDAD == '01'}}
+                            <li>Decreto Supremo N° 029-2017-PCM, que aprueba el Reglamento de Organización y Funciones del OSINFOR.</li>
+                            <li>Decreto Supremo N° 004-2019-JUS, que aprueba el Texto Único Ordenado de la Ley N° 27444, Ley del Procedimiento Administrativo General.</li>
+                            <li>Resolución Presidencial N° 021-2018-OSINFOR, que aprueba la Metodología del Cálculo del Monto de las Multas a Imponer por el Organismo de Supervisión de los Recursos Forestales y de Fauna Silvestre - OSINFOR, por infracción a la legislación Forestal y de Fauna Silvestre.</li>
+                            <li>Resolución de Jefatura N° 059-2019-OSINFOR, que aprueba los Criterios Técnicos para Determinar la Gravedad del Daño por la Comisión de Infracciones en Materia Forestal.</li>
+                            <li>Resolución de Dirección Ejecutiva N° 008-2020-MINAGRI-SERFOR-DE, que aprueba los Lineamientos para el ejercicio de la potestad sancionadora y desarrollo del procedimiento administrativo sancionador.</li>
+                            <li>Resolución de Jefatura N° 00043-2021-OSINFOR/01.1, que aprueba el Reglamento del Procedimiento Administrativo Único del OSINFOR.</li>
+                            {{/if}}
+
+                            {{if ['02', '03', '04'].indexOf(COD_MODALIDAD) != -1}}
+                            <li>Decreto Supremo N° 004-2019-JUS, Texto Único Ordenado de la Ley de Procedimiento Administrativo General, Ley Nº 27444.</li>
+                            <li>Decreto Supremo N° 024-2010-PCM, Reglamento del Decreto Legislativo N° 1085, modificado por los Decretos Supremos N° 034-2015-PCM y 126-2019-PCM.</li>
+                            {{/if}}
+
+                            {{if COD_MODALIDAD == '02'}}
+                            <li>Decreto Supremo Nº 065-2009-PCM, Reglamento de Organización y Funciones del OSINFOR, modificado por el Decreto Supremo Nº 029-2017-PCM.</li>
+                            <li>Decreto Supremo Nº 043-2006-AG, Categorización de Especies Amenazadas de Flora Silvestre.</li>
+                            <li>Decreto Supremo Nº 007-2021-MIDAGRI, que aprueba el Reglamento de Infracciones y Sanciones en Materia Forestal y de Fauna Silvestre.</li>
+                            <li>Resolución de Jefatura Nº 059-2019-OSINFOR, Criterios SGC-M1-CRI-001-V.02 "Criterios para estimar la gravedad del daño por la comisión de infracciones en materia forestal".</li>
+                            <li>Resolución de Jefatura Nº 00043-2021-OSINFOR/01.1, Reglamento del Procedimiento Administrativo Único del OSINFOR.</li>
+                            <li>Resolución de Jefatura N° 00055-2020-OSINFOR/01.1, que determina los "Criterios para la disposición, seguimiento y verificación de las medidas correctivas y/o mandatos en materia forestal y de fauna silvestre del OSINFOR".</li>
+                            <li>Resolución Directoral N° 001-2017-OSINFOR-DFFFS, que determina a la Sub Dirección de Fiscalización de Permisos y Autorizaciones Forestales y de Fauna Silvestre actúe como autoridad instructora.</li>
+
+                            {{else COD_MODALIDAD == '03'}}
+                            <li>Decreto Supremo Nº 029-2017-PCM, que aprueba el Reglamento de Organización y Funciones del OSINFOR.</li>
+                            <li>Decreto Supremo N° 007-2021-MIDAGRI, que aprueba el Reglamento de Infracciones y Sanciones en Materia Forestal y de Fauna Silvestre</li>
+                            <li>Decreto Supremo Nº 043-2006-AG, Categorización de Especies Amenazadas de Flora Silvestre.</li>
+                            <li>Resolución de Jefatura Nº 059-2019-OSINFOR, Criterios SGC-M1-CRI-001-V.02 "Criterios para estimar la gravedad del daño por la comisión de infracciones en materia forestal".</li>
+                            <li>Resolución de Jefatura Nº 043-2021-OSINFOR/01.1, Reglamento del Procedimiento Administrativo Único del OSINFOR.</li>
+                            <li>Resolución de Jefatura N° 00055-2020-OSINFOR/01.1, que determina los "Criterios para la disposición, seguimiento y verificación de las medidas correctivas y/o mandatos en materia forestal y de fauna silvestre del OSINFOR".</li>
+                            <li>Resolución Directoral N° 001-2017-OSINFOR-DFFFS, que determina a la Sub Dirección de Fiscalización de Permisos y Autorizaciones Forestales y de Fauna Silvestre actúe como autoridad instructora.</li>
+
+                            {{else COD_MODALIDAD == '04'}}
+                            <li>Decreto Supremo Nº 065-2009-PCM, Reglamento de Organización y Funciones del OSINFOR, modificado por el Decreto Supremo Nº 029-2017-PCM.</li>
+                            <li>Decreto Supremo Nº 043-2006-AG, Categorización de Especies Amenazadas de Flora Silvestre.</li>
+                            <li>Decreto Supremo Nº 007-2021-MIDAGRI, que aprueba el Reglamento de Infracciones y Sanciones en Materia Forestal y de Fauna Silvestre.</li>
+                            <li>Resolución de Jefatura Nº 059-2019-OSINFOR, Criterios SGC-M1-CRI-001-V.02 "Criterios para estimar la gravedad del daño por la comisión de infracciones en materia forestal".</li>
+                            <li>Resolución de Jefatura Nº 00043-2021-OSINFOR/01.1, Reglamento del Procedimiento Administrativo Único del OSINFOR.</li>
+                            <li>Resolución de Jefatura N° 00055-2020-OSINFOR/01.1, que determina los "Criterios para la disposición, seguimiento y verificación de las medidas correctivas y/o mandatos en materia forestal y de fauna silvestre del OSINFOR".</li>
+                            <li>Resolución Directoral N° 001-2017-OSINFOR-DFFFS, que determina a la Sub Dirección de Fiscalización de Permisos y Autorizaciones Forestales y de Fauna Silvestre actúe como autoridad instructora.</li>
+                            {{/if}}
+                        </ul>
+                    </span>
+                </li>
+                <li>
+                    <strong>ANÁLISIS</strong><br />
+                    <span>
+                        {{if COD_MODALIDAD == "01"}}
+                        @Html.Partial("~/Areas/Fiscalizacion/Views/InformeLegal/templates/_tmplIFIConcesiones.cshtml")
+
+                        {{else COD_MODALIDAD == "02"}}
+                        @Html.Partial("~/Areas/Fiscalizacion/Views/InformeLegal/templates/_tmplIFIPredios.cshtml")
+
+                        {{else COD_MODALIDAD == "03"}}
+                        @Html.Partial("~/Areas/Fiscalizacion/Views/InformeLegal/templates/_tmplIFICCNN.cshtml")
+                        {{/if}}
+
+                        <h5><u><strong>Plazo para presentación de descargos al presente Informe Final de Instrucción</strong></u></h5>
+                        <ul>
+                            <li>
+                                Se otorga al/la concesionario/a un plazo improrrogable de quince (15)/veinte (20) días hábiles contados a partir del día siguiente de notificado el presente Informe Final de Instrucción, más el término de la distancia, para que presente los descargos que considere pertinentes, ya sea de forma virtual, por la Mesa de Partes Digital a través del portal web del OSINFOR: https://facilita.gob.pe/t/677 y solo si el archivo a adjuntar excede los 10 MB, remitirlo al correo mesa.partes@osinfor.gob.pe, o de forma presencial, ante la mesa de partes de la sede central del OSINFOR en la ciudad de Lima o ante cualquier mesa de partes de sus oficinas desconcentradas. De la misma manera, podrá señalar una dirección de correo electrónico y/o casilla electrónica del OSINFOR, en caso lo tuviere, para notificarle las diferentes actuaciones administrativas que deriven del presente PAU.
+                            </li>
+                            <li>
+                                Asimismo, es oportuno precisar que el/la concesionario/a tiene expedito su derecho de requerir información, acceder y obtener copias de los actuados contenidos en el presente procedimiento administrativo, en cualquier momento y estado de su tramitación, en virtud de lo estipulado en el numeral 1.19 del artículo IV del TUO de la Ley N° 27444.
+                            </li>
+                        </ul>
+                    </span>
+                </li>
+                <li>
+                    <strong>CONCLUSIONES</strong><br />
+                    <span>
+                        Del análisis efectuado en el presente informe, ha quedado acreditado que el/la concesionario es responsable por la comisión de las infracciones tipificadas en los numerales X, X, X y X del Cuadro de Infracciones y Sanciones en Materia Forestal del Anexo 1 del RISMFFS.
+                    </span>
+                </li>
+                <li>
+                    <strong>RECOMENDACIONES</strong><br />
+                    <span>
+                        <ol style="list-style-type: decimal;">
+                            <li>
+                                Remitir el presente informe a la Autoridad Decisora para que proceda conforme a su competencia, adjuntando para tal efecto el Expediente Administrativo N° ${EXPEDIENTES_ADM || 'XXXXX-XXXX-OSINFOR/08.2'}, para los fines correspondientes.
+                            </li>
+                            {{if COD_MODALIDAD == '01'}}
+                            <li>
+                                Amonestar al/la concesionario/a por la comisión de la(s) infracción(es) previstas en el/los numeral(es) X y X del Cuadro de Infracciones y Sanciones en Materia Forestal del Anexo 1 del RISMFFS.
+                            </li>
+                            <li>
+                                Sancionar al/la concesionario/a por la comisión de la(s) infracción(es) previstas en el/los numeral(es) X y X del Cuadro de Infracciones y Sanciones en Materia Forestal del Anexo 1 del RISMFFS, debiendo imponérsele una multa ascendente a ${SANCION_UIT} UIT detallado en el Anexo I del presente informe.
+                            </li>
+                            {{if FLG_MEDIDA_CORRECTIVA}}
+                            <li>
+                                Disponer que el/la concesionaria cumpla con la medida correctiva detallada en el Anexo II del presente informe.
+                            </li>
+                            {{/if}}
+                            {{if FLG_MEDIDA_COMPLEMENTARIA}}
+                            <li>
+                                Disponer que el/la concesionario/a cumpla con la medida complementaria detallada en el Anexo III del presente informe.
+                            </li>
+                            {{/if}}
+                            {{/if}}
+                            <li>
+                                Comunicar a la ARFFS, para que en el marco de sus funciones y competencias dispongan acciones necesarias que consideren pertinentes.
+                            </li>
+                        </ol>
+                    </span>
+                </li>
+            </ol>
+        </div>
+        {{if IMG_SANCION?.length}}
+        <div style="text-align:center;">
+            <br clear=all style="mso-special-character:line-break;page-break-before:always">
+            <h5>Anexos</h5>
+            {{each(i, img) IMG_SANCION}}
+            <img alt="Calculo de multa" src="${img}" width="500" height="720" />
+            {{/each}}
+        </div>
+        {{/if}}
+    </div>
+</script>
+
+<script id="tmpl-footnotes" type="text/x-jquery-tmpl">
+    <div style="mso-element:footnote-list; font-size: 9pt;">
+        <![if !supportFootnotes]>
+        <br clear=all>
+        <hr align=left size=1 width="33%">
+        <![endif]>
+
+        <div style="mso-element: footnote;" id="ftn1">
+            <div class=MsoFootnoteText>
+                <a style="mso-footnote-id: ftn1;" href="#_ftnref1" name="_ftn1">
+                    <sup class=MsoFootnoteReference>
+                        <span style="mso-special-character:footnote">
+                            <![if !supportFootnotes]>
+                            <span class="MsoFootnoteReference">[1]</span>
+                            <![endif]>
+                        </span>
+                    </sup>
+                </a>
+                &nbsp;<strong>Constitución Política del Perú de 1993</strong><br />
+                Artículo 103.- (…) La ley, desde su entrada en vigencia, se aplica a las consecuencias de las relaciones y situaciones jurídicas existentes y no tiene fuerza ni efectos retroactivos; salvo, en ambos supuestos, en materia penal cuando favorece al reo. (…).
+            </div>
+        </div>
+    </div>
+</script>
+
+<script id="tmpl-pie-pagina" type="text/x-jquery-tmpl">
+    Esta es una copia auténtica imprimible de un documento electrónico archivado en el Organismo de Supervisión de los Recursos Forestales y
+    de Fauna Silvestre, aplicando lo dispuesto por el Art. 25 de D.S. 070 – 2013 PCM y la Tercera Disposición Complementaria Final del D.S. 026-
+    2016-PCM. Su autenticidad e integridad pueden ser contrastadas a través de la siguiente web:
+    <a href="http://mpv.osinfor.gob.pe:8083/visor-osinfor-pide">http://mpv.osinfor.gob.pe:8083/visor-osinfor-pide</a> e ingresando la siguiente clave-std: ${SITD_PASSWORD}
+</script>
+
+<script id="tmpl-pie-pagina-estructura" type="text/x-jquery-tmpl">
+    <table border="0" cellspacing="0" cellpadding="0" style="margin: 0in 0in 0in 900in; width: 1px; height: 1px; overflow: hidden;">
+        <tr>
+            <td>
+                <!--Footer Primera página => id = ff1 -->
+                <div style="mso-element: footer; text-align: justify; font-size: 8pt;" id="googoose-footer">
+                    <p class="MsoFooter">
+                        {{html PIE_PAGINA}}
+                        <table style="width: 100%;"><tr><td style="text-align: center;">Página #CURRENTPAGE# de #TOTALPAGES#</td></tr></table>
+                    </p>
+                </div>
+            </td>
+        </tr>
+    </table>
+</script>

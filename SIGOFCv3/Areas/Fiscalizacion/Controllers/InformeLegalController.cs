@@ -57,6 +57,7 @@ namespace SIGOFCv3.Areas.Fiscalizacion.Controllers
                 ViewBag.VAliasRol = mr.VALIAS;
                 //Pasamos el Rol del usuario
                 vmInfLegal.vmControlCalidad.VALIAS_ROL = mr.VALIAS;
+                ViewBag.Usuario = ModelSession.GetSession()?.FirstOrDefault();
 
                 return View(vmInfLegal);
                
@@ -345,8 +346,6 @@ namespace SIGOFCv3.Areas.Fiscalizacion.Controllers
             }
             return PartialView("~/Areas/Fiscalizacion/Views/InformeLegal/Shared/_renderListaEncisos.cshtml", vmInfLegal);
         }
-
-
 
         #endregion
     }

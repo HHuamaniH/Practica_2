@@ -383,7 +383,7 @@ namespace CapaLogica.DOC
         private void ValidarDatos(VM_InformeLegal _dto)
         {
             if (_dto.vmControlCalidad.ddlIndicadorId == "0000000") throw new Exception("Seleccione el estado actual del registro");
-            if (string.IsNullOrEmpty(_dto.txtNumIlegal)) throw new Exception("Ingrese el número de informe legal");
+            //if (string.IsNullOrEmpty(_dto.txtNumIlegal)) throw new Exception("Ingrese el número de informe legal");
             if (string.IsNullOrEmpty(_dto.txtFechaLegal)) throw new Exception("Seleccione la fecha de emisión");
             if (_dto.tbInforme == null) throw new Exception("Seleccione un informe, expediente");
             if (_dto.hdfCodProfesional == null) throw new Exception("Seleccione Responsable del Informe");
@@ -610,10 +610,9 @@ namespace CapaLogica.DOC
                 paramIL.ListEspeciesMCorrectiva = _dto.listaEspeciesMC;
                 paramIL.ListEspecies = _dto.listaEspeciesAP;
 
+                var OUTPUTPARAM1 = this.RegILEGAL_Grabar(paramIL);
 
-                var estado_final = this.RegILEGAL_Grabar(paramIL);
-
-                result.AddResultado("La Muestra se Guardo Correctamente", true);
+                result.AddResultado("La Muestra se Guardo Correctamente", true, new List<string>() { OUTPUTPARAM1 });
             }
             catch (Exception ex)
             {

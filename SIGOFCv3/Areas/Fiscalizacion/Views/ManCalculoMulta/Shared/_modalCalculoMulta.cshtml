@@ -1,0 +1,779 @@
+﻿<input type="hidden" id="hiddenUIT" value="4950" />
+
+<div id="modalCalMul" class="modal fade hide" role="dialog" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog modal-xl" role="document">
+        <div class="modal-content">
+            <div class="modal-header text-small" style="cursor:move;padding:0.5rem;">
+                <h5 class="modal-title" id="h5TituloCalMul">Modificar</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="modal-body" id="divModCalMul">
+                <input type="hidden" id="hdRegEstado" value="1" />
+                <input type="hidden" id="hdNCodCalMul" value="0" />
+                <input type="hidden" id="hdEstado" value="1" />
+                <div class="form-row">
+                    <div class="col-md-3 mb-3">
+                        <label for="lbDestinatarioPersona" class="text-small">
+                            EXPEDIENTE
+                        </label>
+                        <div class="input-group">
+                            <div class="input-group-prepend" onclick="_manCalMul.fnBuscarExpediente();" style="cursor:pointer;">
+                                <span class="input-group-text"><i class="fa fa-search-plus" data-toggle="tooltip" data-placement="top" title="Buscar Funcionarios"></i></span>
+                            </div>
+                            <input type="text" class="form-control form-control-sm" id="txtExpediente" disabled />
+                        </div>
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <label for="lbDestinatarioPersona" class="text-small">
+                            ADMINISTRADO
+                        </label>
+                        <input type="text" class="form-control form-control-sm" id="txtAdministrado" disabled />
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <label for="lbDestinatarioPersona" class="text-small">
+                            RUC Nº / D.N.I.  Nº:
+                        </label>
+                        <input type="text" class="form-control form-control-sm" id="txtNroDocumento" disabled />
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <label for="lbDestinatarioPersona" class="text-small">
+                            TITULO HABILITANTE
+                        </label>
+                        <input type="text" class="form-control form-control-sm" id="txtTituloHabilitante" disabled />
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-3">
+                        <label for="ddlCategoriasId">Categoría</label>
+                        @Html.DropDownList("ddlModalidadId", new SelectList(ViewBag.ddlModalidad, "Value", "Text"), new { @class = "form-control form-control-sm" })
+                    </div>
+                    <div class="form-group col-md-1">
+                        <label for="txtFactor">Factor K</label>
+                        <input class="form-control form-control-sm" id="txtFactor" value="0.00" type="number" disabled />
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label for="cboInfraccion">Infracción</label>
+                        @Html.DropDownList("ddlLiteralId", new SelectList(ViewBag.ddlLiteral, "Value", "Text"), new { @class = "form-control form-control-sm" })
+                    </div>
+                    <div class="form-group col-md-4">
+                        @Html.Partial("~/Areas/General/Views/Controles/_renderComboEspecie.cshtml")
+                    </div>
+                </div>
+                <div class="form-row mt-2" id="">
+                    <div class="form-group col-md-3">
+                        <label for="txtMargen" hidden>Margen Unitario (S/. por m3)</label>
+                        <input class="form-control form-control-sm" id="txtMargen" name="txtMargen" value="0.00" type="number" v-model="cabecera.margen" hidden />
+                    </div>
+                    <div class="form-group col-md-3">
+                        <label for="txtVolumen">Volumen (m3)</label>
+                        <input class="form-control form-control-sm" id="txtVolumen" value="0.000" type="number" v-model="cabecera.volumen" />
+                    </div>
+                    <div class="form-group col-md-2">
+                        <label for="ddlIPCId">Fecha Infracción</label>
+                        @Html.DropDownList("ddlIPCId", new SelectList(ViewBag.ddlIPC, "Value", "Text"), new { @class = "form-control form-control-sm" })
+                    </div>
+                    <div class="form-group col-md-2">
+                        <label for="txtFechaIPC">Fecha IPC</label>
+                        <input class="form-control form-control-sm" id="txtFechaIPC" value="0.00" type="number" v-model="cabecera.fechaipc" disabled />
+                    </div>
+                    <div class="form-group col-md-2">
+                        <label for="txtIPC">IPC</label>
+                        <input class="form-control form-control-sm" id="txtIPC" value="62.16" type="number" v-model="cabecera.ipc" />
+                    </div>
+                </div>
+                <div class="form-row mt-2 align-items-end" id="">
+                    <div class="form-group col-md-2">
+                    </div>
+                    <div class="form-group col-md-1">
+                        <label for="txtPd">Prob. Det.</label>
+                        <input class="form-control form-control-sm" id="txtPd" value="0.00" type="number" v-model="cabecera.pd" disabled />
+                    </div>
+                    <div class="form-group col-md-3">
+                        <label for="txtVEN">VEN (S/ por m3)</label>
+                        <input class="form-control form-control-sm" id="txtVEN" type="text" v-model="cabecera.ven" disabled />
+                    </div>
+                    <div class="form-group col-md-1">
+                        <label for="txtGravedad">Gravedad</label>
+                        <input class="form-control form-control-sm" id="txtGravedad" value="0.00" type="number" v-model="cabecera.gravedad" />
+                    </div>
+                    <div class="form-group col-md-1">
+                        <label for="txtAfectacion">Afectación</label>
+                        <input class="form-control form-control-sm" id="txtAfectacion" value="0.00" type="number" v-model="cabecera.afectacion" />
+                    </div>
+                    <div class="form-group col-md-1">
+                        <label for="txtRegenarcion">Regeneración</label>
+                        <input class="form-control form-control-sm" id="txtRegenarcion" value="0.00" type="number" v-model="cabecera.regeneracion" />
+                    </div>
+                    <div class="form-group col-md-3">
+                        <label for="txtVENGAR">VEN (G+A+R)</label>
+                        <div class="input-group">
+                            <input class="form-control form-control-sm" id="txtVENGAR" value="0.00" type="number" v-model="cabecera.vengar" disabled />
+                            <div class="input-group-append">
+                                <button type="button" class="btn btn-primary btn-sm" v-on:click="CalcularVENGAR()"><i class="fa fa-calculator"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-row mt-2 align-items-end">
+                    <div class="form-group col-md-10"></div>
+                    <div class="form-group col-md-2">
+                        <button type="button" class="btn btn-primary" v-on:click="AgregarLiteral()">
+                            <i class="fa fa-plus"></i> Agregar
+                        </button>
+                    </div>
+                </div>
+
+                <div v-for="(item, k) in c_literales">
+                    <div class="form-row" v-if="item.especies">
+                        <div class="table-responsive" style="overflow-x:hidden;">
+                            <table id="tbEspecieCalMul" style="width:100%" class="table table-hover table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th></th>
+                                        <th>Infracción</th>
+                                        <th>Especie</th>
+                                        <th>Margen</th>
+                                        <th>Volumen</th>
+                                        <th>IPC</th>
+                                        <th>B</th>
+                                        <th>VEN</th>
+                                        <th>G</th>
+                                        <th>A</th>
+                                        <th>R</th>
+                                        <th>VEN(G+A+R)</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr v-for="(especie, i) in item.especies">
+                                        <td>
+                                            <i class="fa fa-trash-o" v-on:click="EliminarEspecie(item, i, k)"></i>
+                                        </td>
+                                        <td>{{especie.literal}}</td>
+                                        <td>{{especie.especie}}</td>
+                                        <td>{{especie.margen}}</td>
+                                        <td>{{especie.volumen}}</td>
+                                        <td>{{especie.ipc}}</td>
+                                        <td>{{especie.beneficio}}</td>
+                                        <td>{{especie.ven}}</td>
+                                        <td>{{especie.gravedad}}</td>
+                                        <td>{{especie.afectacion}}</td>
+                                        <td>{{especie.regeneracion}}</td>
+                                        <td>{{especie.vengar}}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="form-row mt-2">
+                        <div class="form-group col-md-2">
+                            <label for="txtSumatoriaK">K</label>
+                            <input class="form-control form-control-sm" id="txtSumatoriaK" type="text" v-model="item.SumatoriaK" />
+                        </div>
+                        <div class="form-group col-md-2">
+                            <label for="txtSumatoriaB">Sumatoria B</label>
+                            <input class="form-control form-control-sm" id="txtSumatoriaB" type="text" v-model="item.SumatoriaB" />
+                        </div>
+                        <div class="form-group col-md-2">
+                            <label for="txtSumatoriaCE">CE</label>
+                            <input class="form-control form-control-sm" id="txtSumatoriaCE" type="text" v-model="item.SumatoriaCE" />
+                        </div>
+                        <div class="form-group col-md-2">
+                            <label for="txtSumatoriaPd">Pd</label>
+                            <input class="form-control form-control-sm" id="txtSumatoriaPd" type="text" v-model="item.SumatoriaPD" />
+                        </div>
+                        <div class="form-group col-md-2">
+                            <label for="txtSumatoriaVEN">Sumatoria VEN</label>
+                            <input class="form-control form-control-sm" id="txtSumatoriaVEN" type="text" v-model="item.SumatoriaVEN" />
+                        </div>
+                        <div class="form-group col-md-2">
+                            <label for="txtSumatoriaF">F</label>
+                            <input class="form-control form-control-sm" id="txtSumatoriaF" type="text" v-model="item.SumatoriaF" />
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+
+                        </div>
+                        <div class="form-group col-md-3">
+                            <label for="txtSubTotalS">SUB TOTAL  (S/)</label>
+                            <input class="form-control form-control-sm" id="txtSubTotalS" type="text" v-model="item.SubTotal" />
+                        </div>
+                        <div class="form-group col-md-3">
+                            <label for="txtSubTotalUIT">TOTAL (U.I.T.)</label>
+                            <input class="form-control form-control-sm" id="txtSubTotalUIT" type="text" v-model="item.Total" />
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" onclick="_manCalMul.fnCalMulUpdate()">Guardar</button>
+                <button type="button" id="btnCerrarModal" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="modalExpediente" class="modal fade hide" role="dialog" data-backdrop="static">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header text-small" style="cursor:move;padding:0.5rem;">
+                <h5 class="modal-title" id="h5TituloCalMul">Buscar Expediente</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="modal-body" id="divExpediente">
+                <div id="frmBuscarPersona">
+                    <div class="form-row">
+                        <div class="col-md-4 mb-3">
+                            <select id="cboCriterio" class="form-control form-control-sm">
+                                <option value="DOCUMENTO">Expediente</option>
+                            </select>
+                        </div>
+
+                        <div class="col-md-8 mb-3">
+                            <div class="input-group">
+                                <input type="text" id="txtValor" class="form-control form-control-sm text-uppercase" maxlength="50" />
+                                <div class="input-group-prepend">
+                                    <button type="button" class="btn btn-success btn-sm" id="btnBuscarExpediente" onclick="_manCalMul.fnActionBuscarExpediente()">
+                                        <i class="fa fa-search" data-toggle="tooltip" data-placement="top" title="Buscar"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="table-responsive">
+                        <table id="tbBuscarExpediente" class="table table-hover table-bordered" width="100%">
+                            <thead>
+
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    var modal_cal = new Vue({
+        el: '#modalCalMul',
+        data: {
+            cabecera: {
+                literal: 'LE',
+                cod_especie: null,
+                especie: null,
+                margen: '0.00',
+                volumen: '0.000',
+                fechaipc: '0.00',
+                ipc: '62.16',
+                beneficio: '0.00',
+                ven: '0.00',
+                gravedad: '0.00',
+                afectacion: '0.00',
+                regeneracion: '0.00',
+                vengar: '0.00',
+                pd: '0.00',
+            },
+            literales: []
+        },
+        methods: {
+            AgregarLiteral: function () {
+                let cab = { ...this.cabecera };
+                let ipc = cab.ipc;
+                let pd = Math.round(cab.pd * 100) / 10000;
+                let margenLiteral = $('#ddlLiteralId').val();
+
+                cab.literal = $('#ddlLiteralId').val().split('-')[0];
+                cab.cod_especie = $('#ddlRenderComboEspecieId').val();
+                cab.especie = $("#ddlRenderComboEspecieId option:selected").text()//$('#ddlRenderComboEspecieId').text();
+                console.log(cab);
+                if (cab.cod_especie == null || cab.cod_especie == '') {
+                    utilSigo.toastWarning("Aviso", "Seleccione especie.");
+                    return;
+                } else if (cab.volumen == 0) {
+                    utilSigo.toastWarning("Aviso", "Ingresar volumen.");
+                    return;
+                } else if (cab.vengar == 0 && (cab.literal == 'LE' || cab.literal == 'L21')) {
+                    utilSigo.toastWarning("Aviso", "Calcular el Valor de VENGAR.");
+                    return;
+                }
+                let esp_row = cab;
+
+                let row = this.literales.find(x => x.literal == cab.literal);
+
+                if (row) {
+                    row.especies.push(esp_row);
+                } else {
+                    let flag = 0;
+
+                    for (var i = 0; i < this.c_literales.length; i++) {
+                        if (this.c_literales[i].SumatoriaK > 0) {
+                            flag++;
+                        }
+                    }
+
+                    if (parseFloat($('#txtFactor').val()) > 0 && flag > 0) {
+                        utilSigo.toastWarning("Aviso", "Ya existe factor K asignado a una infracción mayor a cero.");
+                        return;
+                    }
+
+                    let data = {
+                        literal: cab.literal,
+                        especies: [esp_row],
+                        SumatoriaK: parseFloat($('#txtFactor').val()),
+                        SumatoriaB: 0,
+                        SumatoriaCE: 0,
+                        SumatoriaPD: pd,
+                        SumatoriaVEN: 0,
+                        SumatoriaF: 0,
+                        SubTotal: 0,
+                        Total: 0,
+                        margenLiteral: margenLiteral
+                    };
+
+                    this.literales.push(data);
+                    console.log('lista', this.literales)
+
+                }
+
+                //Limpiar
+                this.LimpiarForm();
+                this.cabecera.ipc = ipc;
+                this.ActualizarMargen();
+            },
+            CalcularBeneficio: function () {
+                this.cabecera.beneficio = Math.round((this.cabecera.margen * 1) * (this.cabecera.volumen * 1) * ($('#txtFechaIPC').val() * 1) / (this.cabecera.ipc * 1) * 100 / 100);
+            },
+            CalcularVENGAR: function () {
+                let gar = (this.cabecera.gravedad * 1) + (this.cabecera.afectacion * 1) + (this.cabecera.regeneracion * 1);
+                if (gar >= 1) {
+                    this.cabecera.vengar = Math.round(this.cabecera.volumen * this.cabecera.ven * 100) / 100;
+                } else {
+                    this.cabecera.vengar = Math.round(this.cabecera.volumen * this.cabecera.ven * gar * 100) / 100;
+                }
+            },
+            ValidarRow: function (row) {
+
+                if (row.literal == null || row.literal == "") {
+                    utilSigo.toastWarning("Advertencia", "Seleccionar literal");
+                } else if (row.cod_especie == null || row.cod_especie == "") {
+                    utilSigo.toastWarning("Advertencia", "Seleccionar Especie");
+                } else if (row.margen == null || row.margen == "") {
+                    utilSigo.toastWarning("Advertencia", "Seleccionar Margen");
+                } else if (row.volumen == null || row.volumen == "") {
+                    utilSigo.toastWarning("Advertencia", "Seleccionar Volumne");
+                } else if (row.ipc == null || row.ipc == "") {
+                    utilSigo.toastWarning("Advertencia", "Seleccionar IPC");
+                }
+
+
+                //beneficio: null,
+                //    ven: null,
+                //        gravedad: null,
+                //            afectacion: null,
+                //                regeneracion: null
+
+
+                for (let key in this.cabecera) {
+                    this.cabecera[key] = null;
+                }
+
+                $('#ddlRenderComboEspecieId').val("").trigger("change");
+                //this.cabecera.literal = 'LE';
+            },
+            LimpiarForm: function () {
+                for (let key in this.cabecera) {
+                    this.cabecera[key] = null;
+                }
+
+                $('#ddlRenderComboEspecieId').val("").trigger("change");
+                this.cabecera.literal = 'LE';
+                //this.cabecera.margen = '0.00';
+                let lit = $('#ddlLiteralId').val().split('-')[0];
+                _manCalMul.fnObtenerMargen($('#ddlLiteralId').val(), 0);//this.cabecera.margen = '0.00';
+                _manCalMul.fnObtenerIPC($('#ddlIPCId').val());//this.cabecera.fechaipc = '0.00';
+                _manCalMul.fnObtenerK($('#ddlModalidadId').val());
+                _manCalMul.fnObtenerPd(lit.substring(1, lit.length));//this.cabecera.pd = '0.00';
+                this.cabecera.volumen = '0.00';
+                // this.cabecera.ipc = '1.00';
+                this.cabecera.beneficio = '0.00';
+                this.cabecera.ven = '0.00';
+                this.cabecera.gravedad = '0.00';
+                this.cabecera.afectacion = '0.00';
+                this.cabecera.regeneracion = '0.00';
+                this.cabecera.vengar = '0.00';
+            },
+            ActualizarMargen: function () {
+                var volumenLiteral = [];
+                for (var i = 0; i < this.c_literales.length; i++) {
+                    volumenLiteral[i] = 0;
+                    for (var j = 0; j < this.c_literales[i].especies.length; j++) {
+                        volumenLiteral[i] += (this.c_literales[i].especies[j].volumen * 1);
+                    }
+                    for (var j = 0; j < this.c_literales[i].especies.length; j++) {
+                        this.c_literales[i].especies[j].margen = _manCalMul.fnObtenerMargen(this.c_literales[i].margenLiteral, volumenLiteral[i]);
+                        this.cabecera.vengar = Math.round(this.cabecera.volumen * this.cabecera.ven * 100) / 100;
+                        this.c_literales[i].especies[j].beneficio = Math.round(this.c_literales[i].especies[j].margen * this.c_literales[i].especies[j].volumen * this.c_literales[i].especies[j].fechaipc * 100 / this.cabecera.ipc) / 100;
+                    }
+                }
+            },
+            EliminarEspecie: function (item, i, k) {
+                item.especies.splice(i, 1);
+
+                if (!item.especies.length) {
+                    this.literales.splice(k, 1);
+                }
+                this.ActualizarMargen();
+            },
+            Guardar: function () {
+                const lista = JSON.parse(JSON.stringify(this.literales));
+                console.log(lista);
+            }//,
+            //ObtenerVEN: function (cod_especie) {
+            //    alert(cod_especie);
+            //}
+        },
+        computed: {
+            c_literales: function () {
+                return this.literales.map(function (item) {
+                    if (item.especies) {
+                        let sumB = 0;
+                        let sumVEN = 0;
+                        let sumBCE = 0;
+                        let subTotal = 0;
+                        let uit = parseFloat($('#hiddenUIT').val());
+
+                        //let sumK = parseFloat($('#txtFactor').val());
+                        item.especies.forEach(function (esp) {
+                            sumB += esp.beneficio * 1;
+                            sumVEN += esp.vengar * 1;
+                        });
+                        //item.SumatoriaK = sumK;
+                        item.SumatoriaB = Math.round(sumB * 100) / 100;
+                        item.SumatoriaVEN = Math.round(sumVEN * 100) / 100;
+
+                        sumBCE = (item.SumatoriaB * 1 + item.SumatoriaCE * 1) / item.SumatoriaPD;
+                        item.SubTotal = Math.round(((item.SumatoriaK * 1) + sumBCE + (item.SumatoriaVEN * 1)) * (1 + item.SumatoriaF) * 100) / 100;
+                        let calTotal = Math.round((item.SubTotal / uit) * 1000) / 1000;
+                        item.Total = calTotal;
+                    }
+
+                    return item;
+                });
+            }
+        }
+    });
+
+    var _manCalMul = {
+        fnObtenerEspecie: function (cod_especie) {
+            let url = urlLocalSigo + "Fiscalizacion/ManCalculoMulta/ObtenerEspecie";
+            let option = { url: url, datos: { cod_especie }, type: 'GET' };
+            utilSigo.fnAjax(option, function (data) {
+                if (data.success) {
+                    if (data.ven.length > 0) {
+                        modal_cal.cabecera.ven = data.ven[0].Text;
+                        //$("#txtVEN").val(data.ven[0].Text);
+                    } else {
+                        utilSigo.toastWarning("Aviso", "No se encontró VEN configurado para la especie seleccionada.");
+                    }
+                }
+                else {
+                    utilSigo.toastWarning("Aviso", data.msj);
+                }
+            });
+        },
+        fnObtenerIPC: function (cod_fecha) {
+            let url = urlLocalSigo + "Fiscalizacion/ManCalculoMulta/ObtenerIPC";
+            let option = { url: url, datos: { cod_fecha }, type: 'GET' };
+            utilSigo.fnAjax(option, function (data) {
+                if (data.success) {
+                    if (data.ven.length > 0) {
+                        modal_cal.cabecera.fechaipc = data.ven[0].Text;
+                        //$("#txtFechaIPC").val(data.ven[0].Text);
+                    } else {
+                        utilSigo.toastWarning("Aviso", "No se encontró IPC configurado para la fecha IPC.");
+                    }
+                }
+                else {
+                    utilSigo.toastWarning("Aviso", data.msj);
+                }
+            });
+        },
+        fnObtenerK: function (factor) {
+            $('#txtFactor').val(factor);
+        },
+        fnObtenerPd: function (literal) {
+            let url = urlLocalSigo + "Fiscalizacion/ManCalculoMulta/ObtenerPd";
+            let option = { url: url, datos: { literal }, type: 'GET' };
+            utilSigo.fnAjax(option, function (data) {
+
+                if (data.success) {
+                    modal_cal.cabecera.pd = 0.0;
+                    if (data.Pd.length > 0) {
+                        modal_cal.cabecera.pd = data.Pd[0].Value;
+                    } else {
+                        utilSigo.toastWarning("Aviso", "No se encontró Pd configurado el literal seleccionado.");
+                    }
+                }
+                else {
+                    utilSigo.toastWarning("Aviso", data.msj);
+                }
+            });
+        },
+        fnObtenerMargen: function (literal, volumen) {
+            modal_cal.cabecera.margen = 0.00;
+            var item = literal.split('-');
+            for (var i = 1; i < item.length; i++) {
+                var margen = item[i].split('|');
+                if (margen[1] <= volumen && volumen <= margen[2]) {
+                    return margen[0].replace(',', '.') * 1;
+                }
+            }
+        },
+        fnAgregar: function () {
+
+        },
+        fnCrearTabla: function (data) {
+
+        },
+        
+        fnCrear: () => {
+            _manCalMul.fnLimpiar();
+            $("#h5TituloCalMul").text("Nuevo");
+            $('#hdNCodCalMul').val("0")
+            $("#hdRegEstado").val("1");
+            $("#modalCalMul").modal('show');
+            _renderComboEspecie.fnInit("MADERABLE", "", "");
+            $('#ddlRenderComboEspecieId').val("").trigger("change");
+
+        },
+        fnLimpiar: () => {
+            $('#txtExpediente').val('');
+            $('#txtAdministrado').val('');
+            $('#txtNroDocumento').val('');
+            $('#txtTituloHabilitante').val('');
+
+            modal_cal.literales.splice(0, modal_cal.literales.length);
+
+
+        }, 
+        fnEdit: (dataRow) => {
+
+            $("#h5TituloCalMul").text("Modificar");
+            _manCalMul.fnLimpiar();
+            $("#hdRegEstado").val("2");
+            let frm = $("#divModCalMul");
+
+            frm.find("#hdNCodCalMul").val(dataRow.CODCALCULOMULTA);
+            let codCalculoMulta = dataRow.CODCALCULOMULTA;
+
+            let url = urlLocalSigo + "General/ManCalculoMulta/GetCalculoMulta?codCalculoMulta=" + codCalculoMulta;
+            let option = { url: url, codCalculoMulta: JSON.stringify(codCalculoMulta), type: 'GET' };
+
+            utilSigo.fnAjax(option, function (data) {
+                if (data.success) {
+                    if (data.result != null) {
+                        //utilSigo.toastSuccess("Éxito", "Transacción exitosa.");
+                        _manCalMul.fnSetCalculoMulta(data.result);
+                    } else if (data.msj == "IDF99") {
+                        utilSigo.toastInfo("Informativo", "Ya existe especie registrada.");
+                    } else {
+                        utilSigo.toastSuccess("Éxito", data.msj);
+                    }
+                    $("#modalCalMul").modal("hide");
+                    if (_manCalMul.fnSearch) _manCalMul.fnSearch();
+                }
+                else {
+                    utilSigo.toastWarning("Aviso", data.msj);
+                }
+            });
+
+            $("#modalCalMul").modal('show');
+            _renderComboEspecie.fnInit("MADERABLE", dataRow.COD_ESPECIES, dataRow.DESCRIPCION);
+            $('#ddlRenderComboEspecieId').val(dataRow.COD_ESPECIES).trigger("change");
+        },
+        fnSetCalculoMulta: (obj) => {
+
+            $('#txtExpediente').val(obj.Expediente);
+            $('#txtAdministrado').val(obj.Administrado);
+            $('#txtNroDocumento').val(obj.NroDocumento);
+            $('#txtTituloHabilitante').val(obj.TituloHabilitante);
+            let detalle = obj.DetalleCalculoMulta;
+            let ddlliteral = document.getElementById('ddlLiteralId');
+            let rowesp = [];
+            for (var i = 0; i < detalle.length; i++) {
+                let especiedet = detalle[i].especies;
+                rowesp = [];
+                for (var j = 0; j < especiedet.length; j++) {
+                    let cabecera = {
+                        literal: especiedet[j].literal,
+                        cod_especie: especiedet[j].cod_especie,
+                        especie: especiedet[j].especie,
+                        margen: parseFloat(especiedet[j].margen),
+                        volumen: parseFloat(especiedet[j].volumen),
+                        ipc: parseFloat(especiedet[j].ipc),
+                        fechaipc: parseFloat(especiedet[j].fechaipc),
+                        beneficio: parseFloat(especiedet[j].beneficio),
+                        ven: parseFloat(especiedet[j].ven),
+                        gravedad: parseFloat(especiedet[j].gravedad),
+                        afectacion: parseFloat(especiedet[j].afectacion),
+                        regeneracion: parseFloat(especiedet[j].regeneracion),
+                        vengar: parseFloat(especiedet[j].vengar),
+                        pd: 0,
+                    }
+                    rowesp.push(cabecera);
+                };
+                for (var j = 0; j < ddlliteral.length; j++) {
+                    if (ddlliteral[j].value.split('-')[0] == detalle[i].literal) {
+                        detalle[i].literal = ddlliteral[j].value;
+                    }
+                }
+                let data = {
+                    literal: detalle[i].literal.split('-')[0],
+                    especies: rowesp,
+                    SumatoriaK: parseFloat(detalle[i].SumatoriaK),
+                    SumatoriaB: parseFloat(detalle[i].SumatoriaB),
+                    SumatoriaCE: parseFloat(detalle[i].SumatoriaCE),
+                    SumatoriaPD: parseFloat(detalle[i].SumatoriaPD),
+                    SumatoriaVEN: parseFloat(detalle[i].SumatoriaVEN),
+                    SumatoriaF: parseFloat(detalle[i].SumatoriaF),
+                    SubTotal: parseFloat(detalle[i].SubTotal),
+                    Total: parseFloat(detalle[i].Total),
+                    margenLiteral: detalle[i].literal
+                };
+                modal_cal.literales.push(data);
+            }
+
+        },        
+        fnCalMulUpdate: () => {
+            //_manCalMul.fnGuardar?.resolve({ success: true, message: 'test promesa' });
+            //$("#modalCalMul").modal("hide");
+            //return;
+
+            let count = 0;
+            for (var i = 0; i < modal_cal.c_literales.length; i++) {
+                if (modal_cal.c_literales[i].SumatoriaK > 1) {
+                    count++
+                }
+            }
+            if (count == 0) {
+                utilSigo.toastWarning("Aviso", "Ingresar un valor mayor a cero para alguna de las infracciones.");
+                return;
+            }
+            let data = {
+                CodCalculoMulta: $('#hdNCodCalMul').val(),
+                Expediente: $('#txtExpediente').val(),
+                Administrado: $('#txtAdministrado').val(),
+                NroDocumento: $('#txtNroDocumento').val(),
+                TituloHabilitante: $('#txtTituloHabilitante').val(),
+                RegEstado: $('#hdRegEstado').val(),
+                DetalleCalculoMulta: modal_cal.c_literales
+            };
+            if (data.Expediente == null || data.Expediente == '') {
+                utilSigo.toastWarning("Aviso", "Seleccione expediente.");
+                return;
+            }
+
+            let url = urlLocalSigo + "General/ManCalculoMulta/GuardarCalculoMulta";
+            let option = { url: url, datos: JSON.stringify(data), type: 'POST' };
+            utilSigo.fnAjax(option, function (data) {
+                if (data.success) {
+                    if (data.msj != " ") {
+                        utilSigo.toastSuccess("Éxito", "Transacción exitosa.");
+                    }
+
+                    $("#modalCalMul").modal("hide");
+                    if (_manCalMul.fnSearch) _manCalMul.fnSearch();
+
+                    //Para formularios que reutilicen el modal de cálculo de multa
+                    const c_literales = JSON.parse(JSON.stringify(modal_cal.c_literales));
+                    const total_uit = c_literales.reduce((a, b) => a + b.Total * 1, 0);
+
+                    //promesa para cuando se guarda el formulario, crear en la funcion padre: _manCalMul.fnGuardar = $.Deferred();
+                    _manCalMul.fnGuardar?.resolve({ ...data, c_literales, total_uit });
+                }
+                else {
+                    _manCalMul.fnGuardar?.reject(data);
+                    utilSigo.toastWarning("Aviso", data.msj);
+                }
+            });
+        },
+        fnInitEspecie: () => {
+            let literal = $('#ddlLiteralId').val().split('-')[0];
+            _manCalMul.fnObtenerIPC($('#ddlIPCId').val());
+            _manCalMul.fnObtenerK($('#ddlModalidadId').val());
+            _manCalMul.fnObtenerPd(literal.substring(1, literal.length));
+            modal_cal.cabecera.margen = _manCalMul.fnObtenerMargen($('#ddlLiteralId').val(), 0);
+            $.fn.select2.defaults.set("theme", "bootstrap4");
+        },
+        
+        fnBuscarExpediente: () => {
+            $("#modalExpediente").modal("show");
+            $("#txtValor").keyup(function (e) {
+                if (e.keyCode === 13) {
+                    _manCalMul.fnActionBuscarExpediente();
+                }
+            }).val('');
+
+            var table = $('#tbBuscarExpediente').DataTable();
+            table.clear().draw();
+        },
+        fnActionBuscarExpediente: () => {
+            var expediente = $('#txtValor').val();
+            var valFormulario = "CALCULOMULTA";
+            var valCriterio = "EXPEDIENTE";
+            var url = urlLocalSigo + "General/Controles/buscarExpediente?asBusFormulario=" + valFormulario + "&asBusCriterio=" + valCriterio + "&asExpediente=" + expediente;
+            _manCalMul.dtBuscarExpediente.ajax.url(url).load(function (data) {
+                if (data.success == false) {
+                    utilSigo.toastError("Error", "Sucedió un error al realizar la consulta, por favor comuníquese con el administrador");
+                    console.log(data.er);
+                }
+            });
+        },
+        fnInitDataTable_Expediente: () => {
+            var columns_label = ["Expediente", "Administrado", "Documento", "Título Habilitante"];
+            var columns_data = ["EXPEDIENTE", "ADMINISTRADO", "TIPO_DOC", "THABILITANTE"];
+            var options = { page_length: initSigo.pageLengthBuscar, row_select: true, row_fnSelect: "_manCalMul.fnAsignarExpediente(this)", row_index: true };
+            _manCalMul.dtBuscarExpediente = utilDt.fnLoadDataTable_Detail($("#tbBuscarExpediente"), columns_label, columns_data, options);
+        },
+        fnAsignarExpediente: (obj) => {
+            var data = _manCalMul.dtBuscarExpediente.row($(obj).parents('tr')).data();
+            _manCalMul.fnAsignarDatosExpediente(data);
+            $("#modalExpediente").modal("hide");
+        },
+        fnAsignarDatosExpediente: (data) => {
+            $('#txtExpediente').val(data.EXPEDIENTE);
+            $('#txtAdministrado').val(data.ADMINISTRADO);
+            $('#txtNroDocumento').val(data.TIPO_DOC);
+            $('#txtTituloHabilitante').val(data.THABILITANTE);
+        }
+    };
+</script>
+<script>
+    $(function () {
+        _manCalMul.fnInitEspecie();
+        _manCalMul.fnInitDataTable_Expediente();
+
+        $('#ddlRenderComboEspecieId').on('select2:selecting', function (e) {
+            _manCalMul.fnObtenerEspecie(e.params.args.data.id);
+        });
+
+        $('#ddlIPCId').on('change', function (e) {
+            _manCalMul.fnObtenerIPC($('#ddlIPCId').val());
+        });
+
+        $('#ddlModalidadId').on('change', function (e) {
+            _manCalMul.fnObtenerK($('#ddlModalidadId').val());
+        });
+        $('#ddlLiteralId').on('change', function (e) {
+            let literal = $('#ddlLiteralId').val().split('-')[0];
+            _manCalMul.fnObtenerPd(literal.substring(1, literal.length));
+            modal_cal.cabecera.margen = _manCalMul.fnObtenerMargen($('#ddlLiteralId').val(), 0);
+        });
+    });
+</script>
