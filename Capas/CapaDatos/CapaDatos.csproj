@@ -1,0 +1,198 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{BF545AD9-4151-4739-BFEA-D522F2B215B6}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>CapaDatos</RootNamespace>
+    <AssemblyName>CapaDatos</AssemblyName>
+    <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x64\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
+    <OutputPath>bin\x64\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL" />
+    <Reference Include="Oracle.ManagedDataAccess, Version=4.122.19.1, Culture=neutral, PublicKeyToken=89b483f429c47342, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Oracle.ManagedDataAccess.19.8.0\lib\net40\Oracle.ManagedDataAccess.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data.OracleClient" />
+    <Reference Include="System.Web.Mvc">
+      <HintPath>..\..\Estadisticas\bin\System.Web.Mvc.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="BDConexion.cs" />
+    <Compile Include="DataUtilidad.cs" />
+    <Compile Include="DDetalleInforme.cs" />
+    <Compile Include="DListados.cs" />
+    <Compile Include="Documento\Dat_Actividad.cs" />
+    <Compile Include="Documento\Dat_AEXPEDIENTE_INTEROP.cs" />
+    <Compile Include="Documento\Dat_ALERTA.cs" />
+    <Compile Include="Documento\Dat_ANTECEDENTE_EXPEDIENTE.cs" />
+    <Compile Include="Documento\Dat_BEXTRACCION.cs" />
+    <Compile Include="Documento\Dat_BITACORA_SUPER.cs" />
+    <Compile Include="Documento\Dat_BUSQUEDA.cs" />
+    <Compile Include="Documento\Dat_CAPACITACION.cs" />
+    <Compile Include="Documento\Dat_CNOTIFICACION.cs" />
+    <Compile Include="Documento\Dat_Constancia.cs" />
+    <Compile Include="Documento\Dat_ControlCalidad.cs" />
+    <Compile Include="Documento\Dat_CSUPERVISION.cs" />
+    <Compile Include="Documento\Dat_Denuncia.cs" />
+    <Compile Include="Documento\Dat_DENUNCIA_SITD.cs" />
+    <Compile Include="Documento\Dat_DEVOLUCION_MADERA.cs" />
+    <Compile Include="Documento\Dat_FISNOTI.cs" />
+    <Compile Include="Documento\Dat_FISNOTI2da.cs" />
+    <Compile Include="Documento\Dat_Focalizacion.cs" />
+    <Compile Include="Documento\Dat_GuiaTransporte.cs" />
+    <Compile Include="Documento\Dat_Informe_Digital.cs" />
+    <Compile Include="Documento\Dat_IndicadorFiltro.cs" />
+    <Compile Include="Documento\Dat_Itenerario.cs" />
+    <Compile Include="Documento\Dat_MiBosque_Obligacion.cs" />
+    <Compile Include="Documento\Dat_MiBosque_Obligacion_Observacion.cs" />
+    <Compile Include="Documento\Dat_Meta.cs" />
+    <Compile Include="Documento\Dat_PAU_Digital.cs" />
+    <Compile Include="Documento\Dat_PlanTrabajo.cs" />
+    <Compile Include="Documento\Dat_IMEDIDA.cs" />
+    <Compile Include="Documento\Dat_InformeQuinquenal.cs" />
+    <Compile Include="Documento\Dat_PROGRAMA_CAPACITACION.cs" />
+    <Compile Include="Documento\Dat_Reporte_OBSERVATORIO_SIMULACION..cs" />
+    <Compile Include="Documento\Dat_Reporte_AntecedentesTitular.cs" />
+    <Compile Include="Documento\Dat_Reporte_ESTADISTICOS.cs" />
+    <Compile Include="Documento\Dat_GENEPERSONA.cs" />
+    <Compile Include="Documento\Dat_Historial_TH.cs" />
+    <Compile Include="Documento\Dat_ILEGAL.cs" />
+    <Compile Include="Documento\Dat_INFFUN.cs" />
+    <Compile Include="Documento\Dat_INFORME.cs" />
+    <Compile Include="Documento\Dat_InformeAutoridadForestal.cs" />
+    <Compile Include="Documento\Dat_INFTEC.cs" />
+    <Compile Include="Documento\Dat_INFTIT.cs" />
+    <Compile Include="Documento\Dat_IntSIADO.cs" />
+    <Compile Include="Documento\Dat_IntSISFOR.cs" />
+    <Compile Include="Documento\Dat_ISUSPENSION.cs" />
+    <Compile Include="Documento\Dat_MasterFiltro.cs" />
+    <Compile Include="Documento\Dat_NOTIFICACION.cs" />
+    <Compile Include="Documento\Dat_Paspeq.cs" />
+    <Compile Include="Documento\Dat_Persona.cs" />
+    <Compile Include="Documento\Dat_PLANIFICACION.cs" />
+    <Compile Include="Documento\Dat_PLAN_MANEJO.cs" />
+    <Compile Include="Documento\Dat_POA.cs" />
+    <Compile Include="Documento\Dat_PrecioEspecie.cs" />
+    <Compile Include="Documento\Dat_PREVIOS_ALERTA.cs" />
+    <Compile Include="Documento\Dat_Priorizacion.cs" />
+    <Compile Include="Documento\Dat_PROVEIDO.cs" />
+    <Compile Include="Documento\Dat_PROVEIDOARCH.cs" />
+    <Compile Include="Documento\Dat_REMOINS.cs" />
+    <Compile Include="Documento\Dat_ReporteDigitadoresOD.cs" />
+    <Compile Include="Documento\Dat_ReporteEstadoCuenta.cs" />
+    <Compile Include="Documento\Dat_REPORTEGERENCIAL.cs" />
+    <Compile Include="Documento\Dat_Reporte_BuenasPracticas.cs" />
+    <Compile Include="Documento\Dat_Reporte_CAPACITACION.cs" />
+    <Compile Include="Documento\Dat_Reporte_ControlTiemposFiscalizacion.cs" />
+    <Compile Include="Documento\Dat_REPORTE_FISCALIZACION.cs" />
+    <Compile Include="Documento\Dat_REPORTE_GENERAL.cs" />
+    <Compile Include="Documento\Dat_REPORTE_GESTION_AVANCE.cs" />
+    <Compile Include="Documento\Dat_REPORTE_ISUPERVISION.cs" />
+    <Compile Include="Documento\Dat_Reporte_OBSERVATORIO.cs" />
+    <Compile Include="Documento\Dat_Reporte_PlanManejo.cs" />
+    <Compile Include="Documento\Dat_Reporte_ProduccionItinerarioSupervision.cs" />
+    <Compile Include="Documento\Dat_Reporte_ProduccionXDigitadores.cs" />
+    <Compile Include="Documento\Dat_Reporte_SEGUIMIENTO_INFORMEScs.cs" />
+    <Compile Include="Documento\Dat_REPORTE_TRAFICO_TALA_ILEGAL.cs" />
+    <Compile Include="Documento\Dat_RESODIREC.cs" />
+    <Compile Include="Documento\Dat_Reunion.cs" />
+    <Compile Include="Documento\Dat_SeguimientoMuestra.cs" />
+    <Compile Include="Documento\Dat_SINCRONIZACION.cs" />
+    <Compile Include="Documento\Dat_SOLEXT.cs" />
+    <Compile Include="Documento\Dat_SOLINF_THABILITANTE_SITD.cs" />
+    <Compile Include="Documento\Dat_SOLINT.cs" />
+    <Compile Include="Documento\Dat_SUPERVISION_GENERAL.cs" />
+    <Compile Include="Documento\Dat_Tablero.cs" />
+    <Compile Include="Documento\Dat_TFFS.cs" />
+    <Compile Include="Documento\Dat_THABILITANTE.cs" />
+    <Compile Include="Documento\Dat_THABILITANTE_POI.cs" />
+    <Compile Include="Documento\Dat_THComportamiento.cs" />
+    <Compile Include="Documento\Dat_Usuario.cs" />
+    <Compile Include="Documento\Dat_Veeduria.cs" />
+    <Compile Include="Documento\Dat_WS_OSINFOR.cs" />
+    <Compile Include="General\Dat_ESPECIES.cs" />
+    <Compile Include="General\Dat_DEPENDENCIA_UBIGEO.cs" />
+    <Compile Include="General\Dat_MANCALCULOMULTA.cs" />
+    <Compile Include="General\Dat_Perfil.cs" />
+    <Compile Include="General\Dat_UBIGEO.cs" />
+    <Compile Include="General\Dat_USUARIO_CUENTA.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\CapaEntidad\CapaEntidad.csproj">
+      <Project>{34248fd8-654d-480d-b7b2-e420137bf6f8}</Project>
+      <Name>CapaEntidad</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\GeneralSQL\GeneralSQL.csproj">
+      <Project>{eaf99876-705b-4560-a374-712e6b122a53}</Project>
+      <Name>GeneralSQL</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+    <None Include="packages.config" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

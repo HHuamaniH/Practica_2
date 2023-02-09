@@ -1,0 +1,2612 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="..\packages\EntityFramework.6.4.4\build\EntityFramework.props" Condition="Exists('..\packages\EntityFramework.6.4.4\build\EntityFramework.props')" />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.Default.props" Condition="Exists('$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.Default.props')" />
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>
+    </ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{18696DE0-1065-402E-8754-A048A18229B3}</ProjectGuid>
+    <ProjectTypeGuids>{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>SIGOFCv3</RootNamespace>
+    <AssemblyName>SIGOFCv3</AssemblyName>
+    <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
+    <MvcBuildViews>false</MvcBuildViews>
+    <UseIISExpress>true</UseIISExpress>
+    <IISExpressSSLPort>
+    </IISExpressSSLPort>
+    <IISExpressAnonymousAuthentication>
+    </IISExpressAnonymousAuthentication>
+    <IISExpressWindowsAuthentication>
+    </IISExpressWindowsAuthentication>
+    <IISExpressUseClassicPipelineMode>
+    </IISExpressUseClassicPipelineMode>
+    <UseGlobalApplicationHostFile />
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
+    <TypeScriptToolsVersion>1.8</TypeScriptToolsVersion>
+    <Use64BitIISExpress>false</Use64BitIISExpress>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Antlr3.Runtime, Version=3.5.0.2, Culture=neutral, PublicKeyToken=eb42632606e9261f, processorArchitecture=MSIL">
+      <HintPath>..\packages\Antlr3.Runtime.3.5.1\lib\net40-client\Antlr3.Runtime.dll</HintPath>
+    </Reference>
+    <Reference Include="DocumentFormat.OpenXml, Version=2.18.0.0, Culture=neutral, PublicKeyToken=8fb06cb64d019a17, processorArchitecture=MSIL">
+      <HintPath>..\packages\DocumentFormat.OpenXml.2.18.0\lib\net46\DocumentFormat.OpenXml.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.4.4\lib\net45\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.4.4\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+    </Reference>
+    <Reference Include="EPPlus">
+      <HintPath>..\dll\EPPlus.dll</HintPath>
+    </Reference>
+    <Reference Include="HtmlToOpenXml, Version=2.1.0.0, Culture=neutral, PublicKeyToken=6ad79d83e2b60e63, processorArchitecture=MSIL">
+      <HintPath>..\packages\HtmlToOpenXml.dll.2.2.0\lib\net46\HtmlToOpenXml.dll</HintPath>
+    </Reference>
+    <Reference Include="itextsharp, Version=5.5.13.1, Culture=neutral, PublicKeyToken=8354ae6d2174ddca, processorArchitecture=MSIL">
+      <HintPath>..\packages\iTextSharp.5.5.13.1\lib\itextsharp.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.AI.Agent.Intercept, Version=1.2.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.ApplicationInsights.Agent.Intercept.1.2.1\lib\net45\Microsoft.AI.Agent.Intercept.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.AI.DependencyCollector, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.ApplicationInsights.DependencyCollector.2.0.0\lib\net45\Microsoft.AI.DependencyCollector.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.AI.PerfCounterCollector, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.ApplicationInsights.PerfCounterCollector.2.0.0\lib\net45\Microsoft.AI.PerfCounterCollector.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.AI.ServerTelemetryChannel, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.ApplicationInsights.WindowsServer.TelemetryChannel.2.0.0\lib\net45\Microsoft.AI.ServerTelemetryChannel.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.AI.Web, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.ApplicationInsights.Web.2.0.0\lib\net45\Microsoft.AI.Web.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.AI.WindowsServer, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.ApplicationInsights.WindowsServer.2.0.0\lib\net45\Microsoft.AI.WindowsServer.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.ApplicationInsights, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.ApplicationInsights.2.0.0\lib\net45\Microsoft.ApplicationInsights.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Microsoft.ReportViewer.Common, Version=15.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.ReportingServices.ReportViewerControl.WebForms.150.1427.0\lib\net40\Microsoft.ReportViewer.Common.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.ReportViewer.DataVisualization, Version=15.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.ReportingServices.ReportViewerControl.WebForms.150.1427.0\lib\net40\Microsoft.ReportViewer.DataVisualization.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.ReportViewer.Design, Version=15.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.ReportingServices.ReportViewerControl.WebForms.150.1427.0\lib\net40\Microsoft.ReportViewer.Design.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.ReportViewer.ProcessingObjectModel, Version=15.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.ReportingServices.ReportViewerControl.WebForms.150.1427.0\lib\net40\Microsoft.ReportViewer.ProcessingObjectModel.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.ReportViewer.WebDesign, Version=15.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.ReportingServices.ReportViewerControl.WebForms.150.1427.0\lib\net40\Microsoft.ReportViewer.WebDesign.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.ReportViewer.WebForms, Version=15.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.ReportingServices.ReportViewerControl.WebForms.150.1427.0\lib\net40\Microsoft.ReportViewer.WebForms.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.SqlServer.Types, Version=14.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.SqlServer.Types.14.0.1016.290\lib\net40\Microsoft.SqlServer.Types.dll</HintPath>
+    </Reference>
+    <Reference Include="Oracle.ManagedDataAccess, Version=4.122.19.1, Culture=neutral, PublicKeyToken=89b483f429c47342, processorArchitecture=MSIL">
+      <HintPath>..\packages\Oracle.ManagedDataAccess.19.8.0\lib\net40\Oracle.ManagedDataAccess.dll</HintPath>
+    </Reference>
+    <Reference Include="Oracle.ManagedDataAccess.EntityFramework, Version=6.122.19.1, Culture=neutral, PublicKeyToken=89b483f429c47342, processorArchitecture=MSIL">
+      <HintPath>..\packages\Oracle.ManagedDataAccess.EntityFramework.19.7.0\lib\net45\Oracle.ManagedDataAccess.EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="PresentationCore" />
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.IO.FileSystem.Primitives, Version=4.0.2.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.IO.FileSystem.Primitives.4.3.0\lib\net46\System.IO.FileSystem.Primitives.dll</HintPath>
+    </Reference>
+    <Reference Include="System.IO.Packaging, Version=4.0.5.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.IO.Packaging.4.7.0\lib\net46\System.IO.Packaging.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Management.Automation, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Management.Automation.dll.10.0.10586.0\lib\net40\System.Management.Automation.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Security" />
+    <Reference Include="System.Security.Cryptography.Algorithms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Security.Cryptography.Algorithms.4.3.0\lib\net46\System.Security.Cryptography.Algorithms.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Security.Cryptography.Encoding, Version=4.0.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Security.Cryptography.Encoding.4.3.0\lib\net46\System.Security.Cryptography.Encoding.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Security.Cryptography.Primitives, Version=4.0.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Security.Cryptography.Primitives.4.3.0\lib\net46\System.Security.Cryptography.Primitives.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Security.Cryptography.X509Certificates, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Security.Cryptography.X509Certificates.4.3.0\lib\net46\System.Security.Cryptography.X509Certificates.dll</HintPath>
+    </Reference>
+    <Reference Include="System.ServiceModel" />
+    <Reference Include="System.Web.DynamicData" />
+    <Reference Include="System.Web.Entity" />
+    <Reference Include="System.Web.ApplicationServices" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Web.Abstractions" />
+    <Reference Include="System.Web.Routing" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Web.Services" />
+    <Reference Include="System.EnterpriseServices" />
+    <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Net.Http.WebRequest">
+    </Reference>
+    <Reference Include="System.Web.Helpers, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.Helpers.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Mvc, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.AspNet.Mvc.5.2.3\lib\net45\System.Web.Mvc.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Optimization">
+      <HintPath>..\packages\Microsoft.AspNet.Web.Optimization.1.1.3\lib\net40\System.Web.Optimization.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Razor, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.AspNet.Razor.3.2.3\lib\net45\System.Web.Razor.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.WebPages.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages.Deployment, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.WebPages.Deployment.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages.Razor, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.WebPages.Razor.dll</HintPath>
+    </Reference>
+    <Reference Include="WebGrease">
+      <Private>True</Private>
+      <HintPath>..\packages\WebGrease.1.5.2\lib\WebGrease.dll</HintPath>
+    </Reference>
+    <Reference Include="WindowsBase" />
+    <Reference Include="wnvwordtopdf, Version=8.0.0.0, Culture=neutral, PublicKeyToken=b12703d35a33ff98, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\dll\wnvwordtopdf.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\packages\Newtonsoft.Json.6.0.4\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="App_Start\BundleConfig.cs" />
+    <Compile Include="App_Start\CustomJsonValueProviderFactory.cs" />
+    <Compile Include="App_Start\FilterConfig.cs" />
+    <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="Areas\Capacitacion\CapacitacionAreaRegistration.cs" />
+    <Compile Include="Areas\Capacitacion\Controllers\ManCapacitacionController.cs" />
+    <Compile Include="Areas\Capacitacion\Controllers\ManProgramaCapacitacionController.cs" />
+    <Compile Include="Areas\Capacitacion\Models\ManCapacitacion\ExportarDatos.cs" />
+    <Compile Include="Areas\Capacitacion\Models\ManCapacitacion\ImportarDatos.cs" />
+    <Compile Include="Areas\Capacitacion\Models\ManProgramaCapacitacion\ExportarDatos.cs" />
+    <Compile Include="Areas\Capacitacion\Reporte\ReporteCapacitacion.aspx.cs">
+      <DependentUpon>ReporteCapacitacion.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Areas\Capacitacion\Reporte\ReporteCapacitacion.aspx.designer.cs">
+      <DependentUpon>ReporteCapacitacion.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Areas\Fiscalizacion\Controllers\FiscalizacionNotificacionController.cs" />
+    <Compile Include="Areas\Fiscalizacion\Controllers\GestionConstanciaController.cs" />
+    <Compile Include="Areas\Fiscalizacion\Controllers\InformacionTitularController.cs" />
+    <Compile Include="Areas\Fiscalizacion\Controllers\InformeLegalController.cs" />
+    <Compile Include="Areas\Fiscalizacion\Controllers\ManCalculoMultaController.cs" />
+    <Compile Include="Areas\Fiscalizacion\Controllers\ManILegalController.cs" />
+    <Compile Include="Areas\Fiscalizacion\Controllers\InformeFundamentadoController.cs" />
+    <Compile Include="Areas\Fiscalizacion\Controllers\ManInformeTecnicoController.cs" />
+    <Compile Include="Areas\Fiscalizacion\Controllers\ManPAUController.cs" />
+    <Compile Include="Areas\Fiscalizacion\Controllers\ManProveidoController.cs" />
+    <Compile Include="Areas\Fiscalizacion\Controllers\ManProveidoElevacionController.cs" />
+    <Compile Include="Areas\Fiscalizacion\Controllers\ManResolucionController.cs" />
+    <Compile Include="Areas\Fiscalizacion\Controllers\ReporteFiscalizacionController.cs" />
+    <Compile Include="Areas\Fiscalizacion\FiscalizacionAreaRegistration.cs" />
+    <Compile Include="Areas\Fiscalizacion\Models\FiscalizacionNotificacion\ExportarDatos.cs" />
+    <Compile Include="Areas\Fiscalizacion\Models\GestionConstancia\ExportarDatos.cs" />
+    <Compile Include="Areas\Fiscalizacion\Models\InformacionTitular\ExportarDatos.cs" />
+    <Compile Include="Areas\Fiscalizacion\Models\InformeFundamentado\ExportarDatos.cs" />
+    <Compile Include="Areas\Focalizacion\Controllers\PlanTrabajoController.cs" />
+    <Compile Include="Areas\Focalizacion\Controllers\PriorizacionController.cs" />
+    <Compile Include="Areas\Focalizacion\FocalizacionAreaRegistration.cs" />
+    <Compile Include="Areas\General\Controllers\ControlesController.cs" />
+    <Compile Include="Areas\General\Controllers\EspeciesController.cs" />
+    <Compile Include="Areas\General\Controllers\ManMetaController.cs" />
+    <Compile Include="Areas\General\Controllers\ManPEIController.cs" />
+    <Compile Include="Areas\General\Controllers\ManCalculoMultaController.cs" />
+    <Compile Include="Areas\General\Controllers\ManPersonasController.cs" />
+    <Compile Include="Areas\General\Controllers\ManTHAuditarController.cs" />
+    <Compile Include="Areas\General\Controllers\ReporteAntecedentesTitularController.cs" />
+    <Compile Include="Areas\General\Controllers\ReporteFiscalizacionController.cs" />
+    <Compile Include="Areas\General\Controllers\ReporteFlujoFiscalizacionController.cs" />
+    <Compile Include="Areas\General\Controllers\ReportesController.cs" />
+    <Compile Include="Areas\General\Controllers\ReporteSeguimientoRegistroController.cs" />
+    <Compile Include="Areas\General\GeneralAreaRegistration.cs" />
+    <Compile Include="Areas\General\Models\ManGrillaViewModel.cs" />
+    <Compile Include="Areas\General\Models\ManPersonas\ExportarDatos.cs" />
+    <Compile Include="Areas\Main\Controllers\PrincipalController.cs" />
+    <Compile Include="Areas\Main\MainAreaRegistration.cs" />
+    <Compile Include="Areas\PlanFocalizacion\Controllers\FocalizacionController.cs" />
+    <Compile Include="Areas\PlanFocalizacion\Controllers\PaspeqController.cs" />
+    <Compile Include="Areas\PlanFocalizacion\Controllers\PriorizacionController.cs" />
+    <Compile Include="Areas\PlanFocalizacion\PlanFocalizacionAreaRegistration.cs" />
+    <Compile Include="Areas\Planificacion\Controllers\ManCasuisticaController.cs" />
+    <Compile Include="Areas\Planificacion\Controllers\ManCriterioController.cs" />
+    <Compile Include="Areas\Planificacion\Controllers\ManPlanController.cs" />
+    <Compile Include="Areas\Planificacion\Controllers\ManReporteController.cs" />
+    <Compile Include="Areas\Planificacion\Controllers\ManUniversoController.cs" />
+    <Compile Include="Areas\Planificacion\Models\ExportarDatos.cs" />
+    <Compile Include="Areas\Planificacion\Models\ImportarDatos.cs" />
+    <Compile Include="Areas\Planificacion\PlanificacionAreaRegistration.cs" />
+    <Compile Include="Areas\Seguridad\Controllers\PerfilController.cs" />
+    <Compile Include="Areas\Seguridad\Controllers\UsuarioController.cs" />
+    <Compile Include="Areas\Seguridad\SeguridadAreaRegistration.cs" />
+    <Compile Include="Areas\Supervision\Controllers\AdmEquipoController.cs" />
+    <Compile Include="Areas\Supervision\Controllers\AlertaController.cs" />
+    <Compile Include="Areas\Supervision\Controllers\DenunciasController.cs" />
+    <Compile Include="Areas\Supervision\Controllers\IndicadoresController.cs" />
+    <Compile Include="Areas\Supervision\Controllers\ManCNotificacionController.cs" />
+    <Compile Include="Areas\Supervision\Controllers\ManCorrecMandatoController.cs" />
+    <Compile Include="Areas\Supervision\Controllers\ManInformeMedidaCorrectivaController.cs" />
+    <Compile Include="Areas\Supervision\Controllers\ManInformeConservacionController.cs" />
+    <Compile Include="Areas\Supervision\Controllers\ManInformeController.cs" />
+    <Compile Include="Areas\Supervision\Controllers\ManInformeExSituController.cs" />
+    <Compile Include="Areas\Supervision\Controllers\ManInformeFaunaController.cs" />
+    <Compile Include="Areas\Supervision\Controllers\ManInformeQuinquenalController.cs" />
+    <Compile Include="Areas\Supervision\Controllers\ManInformeTaraController.cs" />
+    <Compile Include="Areas\Supervision\Controllers\ManInfSuspensionController.cs" />
+    <Compile Include="Areas\Supervision\Controllers\ManItenerarioController.cs" />
+    <Compile Include="Areas\Supervision\Controllers\ReportesController.cs" />
+    <Compile Include="Areas\Supervision\Controllers\ReporteVigilanciaController.cs" />
+    <Compile Include="Areas\Supervision\Controllers\SeguimientoMuestraController.cs" />
+    <Compile Include="Areas\Supervision\Models\Helper\HelperExcel.cs" />
+    <Compile Include="Areas\Supervision\Models\ManCNotificacion\ExportarDatos.cs" />
+    <Compile Include="Areas\Supervision\Models\ManCNotificacion\ImportarDatos.cs" />
+    <Compile Include="Areas\Supervision\Models\ManInformeMedidaCorrectiva\ExportarDatos.cs" />
+    <Compile Include="Areas\Supervision\Models\ManInformeMedidaCorrectiva\ImportarDatos.cs" />
+    <Compile Include="Areas\Supervision\Models\ManInforme\ExportarDatos.cs" />
+    <Compile Include="Areas\Supervision\Models\ManInforme\ImportarDatos.cs" />
+    <Compile Include="Areas\Supervision\Models\ReporteVigilancia\ExportarDatos.cs" />
+    <Compile Include="Areas\Supervision\SupervisionAreaRegistration.cs" />
+    <Compile Include="Areas\THabilitante\Controllers\ControlesController.cs" />
+    <Compile Include="Areas\THabilitante\Controllers\ManBalanceExtraccionController.cs" />
+    <Compile Include="Areas\THabilitante\Controllers\ManDevolucionMaderaController.cs" />
+    <Compile Include="Areas\THabilitante\Controllers\ManGuiaTransporteForestalController.cs" />
+    <Compile Include="Areas\THabilitante\Controllers\ManInformeAutoridadForestalController.cs" />
+    <Compile Include="Areas\THabilitante\Controllers\ManObligacionController.cs" />
+    <Compile Include="Areas\THabilitante\Controllers\ManObligacionesController.cs" />
+    <Compile Include="Areas\THabilitante\Controllers\ManPlanManejoController.cs" />
+    <Compile Include="Areas\THabilitante\Controllers\ManPlanManejoForestalController.cs" />
+    <Compile Include="Areas\THabilitante\Controllers\ManPOAController.cs" />
+    <Compile Include="Areas\THabilitante\Controllers\ManPreviosAlertaController.cs" />
+    <Compile Include="Areas\THabilitante\Controllers\ManTHabilitanteController.cs" />
+    <Compile Include="Areas\THabilitante\Controllers\ManVentanillaAntecedentesExpedientesController.cs" />
+    <Compile Include="Areas\THabilitante\Models\GrillaPOAViewModel.cs" />
+    <Compile Include="Areas\THabilitante\Models\ManBalanceExtraccion\ExportarDatos.cs" />
+    <Compile Include="Areas\THabilitante\Models\ManBalanceExtraccion\ImportarDatos.cs" />
+    <Compile Include="Areas\THabilitante\Models\ManGrillaViewModel.cs" />
+    <Compile Include="Areas\THabilitante\Models\ManGrillaViewModelMiBosque.cs" />
+    <Compile Include="Areas\THabilitante\Models\ManPlanManejoForestal\ImportarDatos.cs" />
+    <Compile Include="Areas\THabilitante\Models\ManVentanillaAntecedentesExpedientes\ExportarDatos.cs" />
+    <Compile Include="Areas\THabilitante\Models\Obligacion.cs" />
+    <Compile Include="Areas\THabilitante\Models\Tipo.cs" />
+    <Compile Include="Areas\THabilitante\Models\TipoMibosque.cs" />
+    <Compile Include="Areas\THabilitante\THabilitanteAreaRegistration.cs" />
+    <Compile Include="Areas\Tribunal\Controllers\ManTribunalController.cs" />
+    <Compile Include="Areas\Tribunal\Controllers\TribunalNotificacion2daController.cs" />
+    <Compile Include="Areas\Tribunal\Models\TribunalNotificacion2da\ExportarDatos.cs" />
+    <Compile Include="Areas\Tribunal\TribunalAreaRegistration.cs" />
+    <Compile Include="Controllers\LoginController.cs" />
+    <Compile Include="Controllers\RefirmaInvokerController.cs" />
+    <Compile Include="frmDownload.aspx.cs">
+      <DependentUpon>frmDownload.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="frmDownload.aspx.designer.cs">
+      <DependentUpon>frmDownload.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Global.asax.cs">
+      <DependentUpon>Global.asax</DependentUpon>
+    </Compile>
+    <Compile Include="Helper\Auditoria.cs" />
+    <Compile Include="Helper\BinaryContentResult.cs" />
+    <Compile Include="Helper\ConnectToSharedFolder.cs" />
+    <Compile Include="Helper\CustomAuthorizeAttribute.cs" />
+    <Compile Include="Helper\DeleteFileAttribute.cs" />
+    <Compile Include="Helper\EpplusExcel.cs" />
+    <Compile Include="Helper\Ftp.cs" />
+    <Compile Include="Helper\HelperSigo.cs" />
+    <Compile Include="Helper\HelperWord.cs" />
+    <Compile Include="Helper\MimeTypeMap.cs" />
+    <Compile Include="Helper\RequiredAuthenticationFilter.cs" />
+    <Compile Include="Models\DataTables\DataTableColumn.cs" />
+    <Compile Include="Models\DataTables\DataTableModelBinder.cs" />
+    <Compile Include="Models\DataTables\DataTableOrder.cs" />
+    <Compile Include="Models\DataTables\DataTableRequest.cs" />
+    <Compile Include="Models\DataTables\DataTableResponse.cs" />
+    <Compile Include="Models\DataTables\DataTableSearch.cs" />
+    <Compile Include="Models\ModelSession.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Reportes\General\ReporteManGrilla.cs" />
+    <Compile Include="Reportes\Paspeq\ReportePaspeq.cs" />
+    <Compile Include="Reportes\Paspeq\ReportePlanTrabajo.cs" />
+    <Compile Include="Reportes\Paspeq\ReportePriorizacion.cs" />
+    <Compile Include="Reportes\THabilitante\ReporteInformeAutoridadForestal.cs" />
+    <Compile Include="Reportes\THabilitante\ReportePOA.cs" />
+    <Compile Include="Reportes\THabilitante\ReporteTHabilitante.cs" />
+    <Compile Include="Service References\pideOSF_Reniec\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Compile>
+    <Compile Include="Service References\pideOSF_Sunat\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Compile>
+    <Compile Include="Service References\sigoWSObservatorio\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Compile>
+    <Compile Include="Service References\sigoWSSupervision\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Compile>
+    <Compile Include="SqlServerTypes\Loader.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Archivos\Plantilla\EspeciesHalladas.xlsx" />
+    <Content Include="Areas\Capacitacion\css\ManCapacitacion\AddEdit.css" />
+    <Content Include="Areas\Capacitacion\css\ManCapacitacion\Reporte.css" />
+    <Content Include="Areas\Capacitacion\js\ManCapacitacion\AddEdit.js" />
+    <Content Include="Areas\Capacitacion\js\ManCapacitacion\Index.js" />
+    <Content Include="Areas\Capacitacion\js\ManCapacitacion\Reporte.js" />
+    <Content Include="Areas\Capacitacion\js\ManCapacitacion\_NotaExamen.js" />
+    <Content Include="Areas\Capacitacion\js\ManCapacitacion\_Participante.js" />
+    <Content Include="Areas\Capacitacion\js\ManCapacitacion\_PreguntaEncuesta.js" />
+    <Content Include="Areas\Capacitacion\js\ManProgramaCapacitacion\AddEdit.js" />
+    <Content Include="Areas\Capacitacion\js\ManProgramaCapacitacion\Index.js" />
+    <Content Include="Areas\Capacitacion\Reporte\ReporteCapacitacion.aspx" />
+    <Content Include="Areas\Fiscalizacion\css\ReporteFiscalizacion\Index.css" />
+    <Content Include="Areas\Fiscalizacion\js\FiscalizacionNotificacion\AddEdit.js" />
+    <Content Include="Areas\Fiscalizacion\js\GestionConstancia\Index.js" />
+    <Content Include="Areas\Fiscalizacion\js\InformacionTitular\AddEdit.js" />
+    <Content Include="Areas\Fiscalizacion\js\InformacionTitular\Index.js" />
+    <Content Include="Areas\Fiscalizacion\js\InformeFundamentado\AddEdit.js" />
+    <Content Include="Areas\Fiscalizacion\js\InformeFundamentado\Index.js" />
+    <Content Include="Areas\Fiscalizacion\js\InformeLegal\AddEdit.js" />
+    <Content Include="Areas\Fiscalizacion\js\InformeLegal\index.js" />
+    <Content Include="Areas\Fiscalizacion\js\ManInformeTecnico\AddEdit.js" />
+    <Content Include="Areas\Fiscalizacion\js\ManInformeTecnico\Index.js" />
+    <Content Include="Areas\Fiscalizacion\js\ManPAU\config.js" />
+    <Content Include="Areas\Fiscalizacion\js\ManPAU\RSD.js" />
+    <Content Include="Areas\Fiscalizacion\js\ManProveidoElevacion\AddEdit.js" />
+    <Content Include="Areas\Fiscalizacion\js\ManProveidoElevacion\Index.js" />
+    <Content Include="Areas\Fiscalizacion\js\ManProveido\AddEdit.js" />
+    <Content Include="Areas\Fiscalizacion\js\ManProveido\IndexFisca.js" />
+    <Content Include="Areas\Fiscalizacion\js\ManResolucion\Index.js" />
+    <Content Include="Areas\Fiscalizacion\js\ManResolucion\AddEdit.js" />
+    <Content Include="Areas\Fiscalizacion\js\FiscalizacionNotificacion\Index.js" />
+    <Content Include="Areas\Fiscalizacion\js\Notificacion\Index.js" />
+    <Content Include="Areas\Fiscalizacion\js\ReporteFiscalizacion\Index.js" />
+    <Content Include="Areas\Fiscalizacion\js\ReporteFiscalizacion\Notificaciones.js" />
+    <Content Include="Areas\Fiscalizacion\js\ReporteFiscalizacion\Utils.js" />
+    <Content Include="Areas\Fiscalizacion\Views\ReporteFiscalizacion\RecursosImpugnatorios.cshtml" />
+    <Content Include="Areas\General\css\Controles\sumoselect.css" />
+    <Content Include="Areas\General\css\Controles\_ManGrilla.css" />
+    <Content Include="Areas\General\css\ManCalculoMulta\ManCalculoMulta.css" />
+    <Content Include="Areas\General\css\ReporteSeguimientoRegistro\Index.css" />
+    <Content Include="Areas\General\css\Reportes\Reporte.css" />
+    <Content Include="Areas\General\js\Controles\_ActualizaCargoPersona.js" />
+    <Content Include="Areas\General\js\Controles\_BuscarPersonaGeneral.js" />
+    <Content Include="Areas\General\js\Controles\_cambiarPass.js" />
+    <Content Include="Areas\General\js\Controles\_CNotificacion.js" />
+    <Content Include="Areas\General\js\Controles\_MemConsultaSITD.js" />
+    <Content Include="Areas\General\js\Controles\_ConsultaSITD.js" />
+    <Content Include="Areas\General\js\Controles\_ControlCalidad.js" />
+    <Content Include="Areas\General\js\Controles\_DenunciaSITD.js" />
+    <Content Include="Areas\General\js\Controles\_DevolucionMadera.js" />
+    <Content Include="Areas\General\js\Controles\_IntegracionSIADO.js" />
+    <Content Include="Areas\General\js\Controles\_ManGrilla.js" />
+    <Content Include="Areas\General\js\Controles\_ManGrillaPaging.js" />
+    <Content Include="Areas\General\js\Controles\_ManGrillaPaging_v3.js" />
+    <Content Include="Areas\General\js\Controles\_Persona.js" />
+    <Content Include="Areas\General\js\Controles\_POA.js" />
+    <Content Include="Areas\General\js\Controles\_terminosUso.js" />
+    <Content Include="Areas\General\js\Controles\_THabilitante.js" />
+    <Content Include="Areas\General\js\Controles\_Ubigeo.js" />
+    <Content Include="Areas\General\js\ManMeta\AddEdit.js" />
+    <Content Include="Areas\General\js\ManMeta\Index.js" />
+    <Content Include="Areas\General\js\ManPEI\AddEdit.js" />
+    <Content Include="Areas\General\js\ManPEI\Index.js" />
+    <Content Include="Areas\General\js\ManPersonas\AddEdit.js" />
+    <Content Include="Areas\General\js\ManPersonas\Index.js" />
+    <Content Include="Areas\General\js\ManTHAuditar\AddEdit.js" />
+    <Content Include="Areas\General\js\ManTHAuditar\Index.js" />
+    <Content Include="Areas\General\js\ReporteAntecedentesTitular\Index.js" />
+    <Content Include="Areas\General\js\ReporteFlujoFiscalizacion\FormatoFecha.js" />
+    <Content Include="Areas\General\js\ReporteFlujoFiscalizacion\Index.js" />
+    <Content Include="Areas\General\js\ReporteSeguimientoRegistro\Index.js" />
+    <Content Include="Areas\General\js\Reportes\Reporte.js" />
+    <Content Include="Areas\General\Views\ReporteFiscalizacion\Pau.cshtml" />
+    <Content Include="Areas\General\Views\ReporteFiscalizacion\PauResumen.cshtml" />
+    <Content Include="Areas\General\Views\ReporteFiscalizacion\PauResumenTotal.cshtml" />
+    <Content Include="Areas\General\Views\ReporteFiscalizacion\_sharedRptFiscalizacionPau\_renderDetalle.cshtml" />
+    <Content Include="Areas\General\Views\ReporteFiscalizacion\_sharedRptFiscalizacionPau\_renderResumen.cshtml" />
+    <Content Include="Areas\PlanFocalizacion\js\Focalizacion\Index.js" />
+    <Content Include="Areas\PlanFocalizacion\js\Focalizacion\_PlanTrabajo.js" />
+    <Content Include="Areas\PlanFocalizacion\js\Focalizacion\_PlanTrabajoAprobar.js" />
+    <Content Include="Areas\PlanFocalizacion\js\Focalizacion\_PlanTrabajoDetalle.js" />
+    <Content Include="Areas\PlanFocalizacion\js\Focalizacion\_PlanTrabajoEliminar.js" />
+    <Content Include="Areas\PlanFocalizacion\js\Focalizacion\_PlanTrabajoEspecies.js" />
+    <Content Include="Areas\PlanFocalizacion\js\Focalizacion\_PlanTrabajoEspeciesEdit.js" />
+    <Content Include="Areas\PlanFocalizacion\js\Index.js" />
+    <Content Include="Areas\PlanFocalizacion\js\Paspeq\_PaspeqEliminar.js" />
+    <Content Include="Areas\PlanFocalizacion\js\Paspeq\_PaspeqSeleccion.js" />
+    <Content Include="Areas\PlanFocalizacion\js\Paspeq\_Paspeq.js" />
+    <Content Include="Areas\PlanFocalizacion\js\Paspeq\_PaspeqDetalle.js" />
+    <Content Include="Areas\PlanFocalizacion\js\Priorizacion\Index.js" />
+    <Content Include="Areas\Seguridad\js\Index.js" />
+    <Content Include="Areas\Seguridad\js\Usuario\Index.js" />
+    <Content Include="Areas\Seguridad\js\Usuario\_Usuario.js" />
+    <Content Include="Areas\Seguridad\js\Usuario\_UsuarioAcceso.js" />
+    <Content Include="Areas\Seguridad\js\Usuario\_UsuarioAccesoControl.js" />
+    <Content Include="Areas\Seguridad\js\Usuario\_UsuarioMenu.js" />
+    <Content Include="Areas\Seguridad\js\Usuario\_UsuarioPerfil.js" />
+    <Content Include="Areas\Seguridad\js\_cambiarPass.js" />
+    <Content Include="Areas\Seguridad\js\_MenuPerfil.js" />
+    <Content Include="Areas\Supervision\css\Alerta\AddEdit.css" />
+    <Content Include="Areas\Supervision\css\Indicadores\Reporte.css" />
+    <Content Include="Areas\Supervision\css\ManCNotificacion\AddEdit.css" />
+    <Content Include="Areas\Supervision\css\ManInforme\AddEdit.css" />
+    <Content Include="Areas\Supervision\css\ManInforme\AddEditExSitu.css" />
+    <Content Include="Areas\Supervision\css\Reportes\Reporte.css" />
+    <Content Include="Areas\Supervision\js\AdmEquipo\DetalleEquipo.js" />
+    <Content Include="Areas\Supervision\js\AdmEquipo\Index.js" />
+    <Content Include="Areas\Supervision\js\Alerta\AddEdit.js" />
+    <Content Include="Areas\Supervision\js\Alerta\ItemRegRespuesta.js" />
+    <Content Include="Areas\Supervision\js\Alerta\MainAlerta.js" />
+    <Content Include="Areas\Supervision\js\Alerta\Seguimiento.js" />
+    <Content Include="Areas\Supervision\js\Alerta\ItemDocRecibido.js" />
+    <Content Include="Areas\Supervision\js\Denuncias\IndexDenuncia.js" />
+    <Content Include="Areas\Supervision\js\Denuncias\ModalDocInforme.js" />
+    <Content Include="Areas\Supervision\js\Denuncias\ModalInformesSITD.js" />
+    <Content Include="Areas\Supervision\js\Denuncias\ModalTHabilitante.js" />
+    <Content Include="Areas\Supervision\js\Denuncias\TramiteDenuncia.js" />
+    <Content Include="Areas\Supervision\js\Denuncias\VistaDenuncia.js" />
+    <Content Include="Areas\Supervision\js\Index.js" />
+    <Content Include="Areas\Supervision\js\Indicadores\customChart.js" />
+    <Content Include="Areas\Supervision\js\Indicadores\Index.js" />
+    <Content Include="Areas\Supervision\js\Indicadores\_Shared\_renderMAPRO.js" />
+    <Content Include="Areas\Supervision\js\Indicadores\_Shared\_renderPEI.js" />
+    <Content Include="Areas\Supervision\js\Indicadores\_Shared\_renderPOI.js" />
+    <Content Include="Areas\Supervision\js\ManCNotificacion\AddEdit - Copy.js" />
+    <Content Include="Areas\Supervision\js\ManCNotificacion\AddEdit.js" />
+    <Content Include="Areas\Supervision\js\ManCNotificacion\Index.js" />
+    <Content Include="Areas\Supervision\js\ManCNotificacion\Muestra.js" />
+    <Content Include="Areas\Supervision\js\ManCorrecMandato\AddEdit.js" />
+    <Content Include="Areas\Supervision\js\ManCorrecMandato\Index.js" />
+    <Content Include="Areas\Supervision\js\ManCorrecMandato\modalFisca.js" />
+    <Content Include="Areas\Supervision\js\ManCorrecMandato\modalInf.js" />
+    <Content Include="Areas\Supervision\js\ManCorrecMandato\modal_std.js" />
+    <Content Include="Areas\Supervision\js\ManCorrecMandato\_ItemExpMandato.js" />
+    <Content Include="Areas\Supervision\js\ManCorrecMandato\_modalInfMa.js" />
+    <Content Include="Areas\Supervision\js\ManInformeExSitu\_RelPerCentroCria.js" />
+    <Content Include="Areas\Supervision\js\ManInformeMedidaCorrectiva\AddEdit.js" />
+    <Content Include="Areas\Supervision\js\ManInformeMedidaCorrectiva\Index.js" />
+    <Content Include="Areas\Supervision\js\ManInformeConservacion\AddEditConservacion.js" />
+    <Content Include="Areas\Supervision\js\ManInformeConservacion\_ActividadCapacitacion.js" />
+    <Content Include="Areas\Supervision\js\ManInformeConservacion\_ActividadInvestigacion.js" />
+    <Content Include="Areas\Supervision\js\ManInformeConservacion\_ActividadLocalCons.js" />
+    <Content Include="Areas\Supervision\js\ManInformeConservacion\_ActividadObligacion.js" />
+    <Content Include="Areas\Supervision\js\ManInformeConservacion\_AprovEspecieObligacion.js" />
+    <Content Include="Areas\Supervision\js\ManInformeConservacion\_CapacitacionEfectuadaCons.js" />
+    <Content Include="Areas\Supervision\js\ManInformeConservacion\_CoordenadaUTM.js" />
+    <Content Include="Areas\Supervision\js\ManInformeConservacion\_DocumentoGestionCons.js" />
+    <Content Include="Areas\Supervision\js\ManInformeConservacion\_EquipamientoCons.js" />
+    <Content Include="Areas\Supervision\js\ManInformeConservacion\_InfraestructuraImpl.js" />
+    <Content Include="Areas\Supervision\js\ManInformeConservacion\_ManejoImpacto.js" />
+    <Content Include="Areas\Supervision\js\ManInformeConservacion\_RegistroFlora.js" />
+    <Content Include="Areas\Supervision\js\ManInformeConservacion\_RegistroPaisaje.js" />
+    <Content Include="Areas\Supervision\js\ManInformeExSitu\_ActividadCapacitacion.js" />
+    <Content Include="Areas\Supervision\js\ManInformeExSitu\_ActividadEducacion.js" />
+    <Content Include="Areas\Supervision\js\ManInformeExSitu\_ActividadInvestigacion.js" />
+    <Content Include="Areas\Supervision\js\ManInformeExSitu\_ControlPlaga.js" />
+    <Content Include="Areas\Supervision\js\ManInformeExSitu\_EnriquecimientoAmb.js" />
+    <Content Include="Areas\Supervision\js\ManInformeExSitu\_EquipoContencion.js" />
+    <Content Include="Areas\Supervision\js\ManInformeExSitu\_EspecieCapturada.js" />
+    <Content Include="Areas\Supervision\js\ManInformeExSitu\_EspecieCenso.js" />
+    <Content Include="Areas\Supervision\js\ManInformeExSitu\_EspecieNacimiento.js" />
+    <Content Include="Areas\Supervision\js\ManInformeExSitu\_EspecieReproducida.js" />
+    <Content Include="Areas\Supervision\js\ManInformeExSitu\_GrupoTaxonomico.js" />
+    <Content Include="Areas\Supervision\js\ManInformeExSitu\_ManejoRegistro.js" />
+    <Content Include="Areas\Supervision\js\ManInformeFauna\AddEditFauna.js" />
+    <Content Include="Areas\Supervision\js\ManInformeFauna\_ActoObligacion.js" />
+    <Content Include="Areas\Supervision\js\ManInformeFauna\_AprovSostenible.js" />
+    <Content Include="Areas\Supervision\js\ManInformeFauna\_InfraestructuraImpl.js" />
+    <Content Include="Areas\Supervision\js\ManInformeFauna\_POAFaunaSupervisado.js" />
+    <Content Include="Areas\Supervision\js\ManInformeFauna\_ResponsabilidadSocial.js" />
+    <Content Include="Areas\Supervision\js\ManInformeFauna\_Zonificacion.js" />
+    <Content Include="Areas\Supervision\js\ManInformeQuinquenal\AddEdit.js" />
+    <Content Include="Areas\Supervision\js\ManInformeQuinquenal\Index.js" />
+    <Content Include="Areas\Supervision\js\ManInformeQuinquenal\_BuscarRDQuinquenal.js" />
+    <Content Include="Areas\Supervision\js\ManInformeSusp\AddEdit.js" />
+    <Content Include="Areas\Supervision\js\ManInformeSusp\Index.js" />
+    <Content Include="Areas\Supervision\js\ManInformeTara\AddEditTara.js" />
+    <Content Include="Areas\Supervision\js\ManInformeTara\_AprovechaForestal.js" />
+    <Content Include="Areas\Supervision\js\ManInformeTara\_Aprovechamiento.js" />
+    <Content Include="Areas\Supervision\js\ManInformeTara\_ArbolSupervisado.js" />
+    <Content Include="Areas\Supervision\js\ManInformeTara\_Capacitacion.js" />
+    <Content Include="Areas\Supervision\js\ManInformeTara\_Kardex.js" />
+    <Content Include="Areas\Supervision\js\ManInformeTara\_ManPlantacion.js" />
+    <Content Include="Areas\Supervision\js\ManInformeTara\_ProduccionFruto.js" />
+    <Content Include="Areas\Supervision\js\ManInforme\AddEdit.js" />
+    <Content Include="Areas\Supervision\js\ManInformeExSitu\AddEditExSitu.js" />
+    <Content Include="Areas\Supervision\js\ManInformeExSitu\_AreaExSitu.js" />
+    <Content Include="Areas\Supervision\js\ManInforme\Index_suspension.js" />
+    <Content Include="Areas\Supervision\js\ManInforme\_ArbolesSinPoa.js" />
+    <Content Include="Areas\Supervision\js\ManInforme\_ModalCartaOficios.js" />
+    <Content Include="Areas\Supervision\js\ManInforme\_PersonalTecProf.js" />
+    <Content Include="Areas\Supervision\js\ManInforme\_Desplazamiento.js" />
+    <Content Include="Areas\Supervision\js\ManInforme\_EspecieCarrizoCampo.js" />
+    <Content Include="Areas\Supervision\js\ManInforme\_EspecieCarrizoCampoEdit.js" />
+    <Content Include="Areas\Supervision\js\ManInforme\_EspecieMaderaAserrada.js" />
+    <Content Include="Areas\Supervision\js\ManInforme\_EspecieMaderaAserradaEdit.js" />
+    <Content Include="Areas\Supervision\js\ManInforme\_EspecieMaderableEdit.js" />
+    <Content Include="Areas\Supervision\js\ManInforme\_EspecieNoMaderableEdit.js" />
+    <Content Include="Areas\Supervision\js\ManInforme\_EspecieSemilleroEdit.js" />
+    <Content Include="Areas\Supervision\js\ManInforme\_EspecieTrozaCampo.js" />
+    <Content Include="Areas\Supervision\js\ManInforme\Index.js" />
+    <Content Include="Areas\Supervision\js\ManInforme\_ActividadSilvicultural.js" />
+    <Content Include="Areas\Supervision\js\ManInforme\_AvistamientoFauna.js" />
+    <Content Include="Areas\Supervision\js\ManInforme\_CambioUso.js" />
+    <Content Include="Areas\Supervision\js\ManInforme\_EspecieBosqueSeco.js" />
+    <Content Include="Areas\Supervision\js\ManInforme\_EspecieMaderable.js" />
+    <Content Include="Areas\Supervision\js\ManInforme\_EspecieNoMaderable.js" />
+    <Content Include="Areas\Supervision\js\ManInforme\_EspecieSemillero.js" />
+    <Content Include="Areas\Supervision\js\ManInforme\_EspecieTrozaCampoEdit.js" />
+    <Content Include="Areas\Supervision\js\ManInforme\_EvaluacionArbol.js" />
+    <Content Include="Areas\Supervision\js\ManInforme\_EvaluacionOtro.js" />
+    <Content Include="Areas\Supervision\js\ManInforme\_FotoSupervision.js" />
+    <Content Include="Areas\Supervision\js\ManInforme\_Huayrona.js" />
+    <Content Include="Areas\Supervision\js\ManInforme\_ModalExpediente.js" />
+    <Content Include="Areas\Supervision\js\ManInforme\_ModalInforme.js" />
+    <Content Include="Areas\Supervision\js\ManInforme\_POASupervisado.js" />
+    <Content Include="Areas\Supervision\js\ManInforme\_VerticeArea.js" />
+    <Content Include="Areas\Supervision\js\ManInforme\_VerticeTHCampo.js" />
+    <Content Include="Areas\Supervision\js\ManInforme\_VerticeVerificado.js" />
+    <Content Include="Areas\Supervision\js\ManInforme\_VolumenAnalizado.js" />
+    <Content Include="Areas\Supervision\js\Reportes\Reporte.js" />
+    <Content Include="Areas\Supervision\js\Reportes\ReporteMandatos.js" />
+    <Content Include="Areas\Supervision\js\Reportes\ReporteMCorrectiva.js" />
+    <Content Include="Areas\Supervision\js\ReporteVigilancia\ComunicarHallazgo.js" />
+    <Content Include="Areas\Supervision\js\ReporteVigilancia\Index.js" />
+    <Content Include="Areas\Supervision\js\ReporteVigilancia\ValidarHallazgo.js" />
+    <Content Include="Areas\Supervision\js\ReporteVigilancia\_AddEditDetHallazgo.js" />
+    <Content Include="Areas\Supervision\js\ReporteVigilancia\_EnviarCorreo.js" />
+    <Content Include="Areas\Supervision\js\ReporteVigilancia\_VincularTHabilitante.js" />
+    <Content Include="Areas\Supervision\js\SeguimientoMuestra\AddEdit.js" />
+    <Content Include="Areas\Supervision\js\SeguimientoMuestra\Index.js" />
+    <Content Include="Areas\Supervision\js\SeguimientoMuestra\_AddEditMuestra.js" />
+    <Content Include="Areas\Supervision\js\SeguimientoMuestra\_buscarInformeS.js" />
+    <Content Include="Areas\THabilitante\css\controles.css" />
+    <Content Include="Areas\THabilitante\css\ManPoa\AddEdit.css" />
+    <Content Include="Areas\THabilitante\css\ManPreviosAlerta\AddEdit.css" />
+    <Content Include="Areas\THabilitante\js\Controles\Index.js" />
+    <Content Include="Areas\THabilitante\js\Controles\Persona.js" />
+    <Content Include="Areas\THabilitante\js\Controles\Thabilitante.js" />
+    <Content Include="Areas\THabilitante\js\Controles\Ubigeo.js" />
+    <Content Include="Areas\THabilitante\js\ManDevolucionMadera\AddEdit.js" />
+    <Content Include="Areas\THabilitante\js\ManDevolucionMadera\Index.js" />
+    <Content Include="Areas\THabilitante\js\ManGuiaTransporteForestal\AddEdit.js" />
+    <Content Include="Areas\THabilitante\js\ManGuiaTransporteForestal\Index.js" />
+    <Content Include="Areas\THabilitante\js\ManGuiaTransporteForestal\_ItemProducto.js" />
+    <Content Include="Areas\THabilitante\js\ManInformeAutoridadForestal\AddEdit.js" />
+    <Content Include="Areas\THabilitante\js\ManInformeAutoridadForestal\Index.js" />
+    <Content Include="Areas\THabilitante\js\ManObligaciones\Index.js" />
+    <Content Include="Areas\THabilitante\js\ManObligaciones\ValidarObligacion.js" />
+    <Content Include="Areas\THabilitante\js\ManObligacion\Index.js" />
+    <Content Include="Areas\THabilitante\js\ManObligacion\_ManGrilla.js" />
+    <Content Include="Areas\THabilitante\js\ManObligacion\_ManGrillaObligacion.js" />
+    <Content Include="Areas\THabilitante\js\ManPlanManejoForestal\AddEdit.js" />
+    <Content Include="Areas\THabilitante\js\ManPlanManejoForestal\ValidarFecha.js" />
+    <Content Include="Areas\THabilitante\js\ManPlanManejo\AddEditPM.js" />
+    <Content Include="Areas\THabilitante\js\ManPlanManejo\EditExSitu.js" />
+    <Content Include="Areas\THabilitante\js\ManPlanManejo\Index.js" />
+    <Content Include="Areas\THabilitante\js\ManPlanManejo\_Balance.js" />
+    <Content Include="Areas\THabilitante\js\ManPlanManejo\_CoordenadaUTM.js" />
+    <Content Include="Areas\THabilitante\js\ManPlanManejo\_ErrorMaterial.js" />
+    <Content Include="Areas\THabilitante\js\ManPlanManejo\_InventarioFauna.js" />
+    <Content Include="Areas\THabilitante\js\ManPlanManejo\_InventarioFlora.js" />
+    <Content Include="Areas\THabilitante\js\ManPlanManejo\_ItemEcotInforme.js" />
+    <Content Include="Areas\THabilitante\js\ManPlanManejo\_ItemESituIAnual.js" />
+    <Content Include="Areas\THabilitante\js\ManPlanManejo\_ItemESituPGenetico.js" />
+    <Content Include="Areas\THabilitante\js\ManPlanManejo\_ItemTaraAEAprov.js" />
+    <Content Include="Areas\THabilitante\js\ManPlanManejo\_ItemTaraAutoExtraer.js" />
+    <Content Include="Areas\THabilitante\js\ManPlanManejo\_ItemTaraInventario.js" />
+    <Content Include="Areas\THabilitante\js\ManPlanManejo\_ItemTaraOpcion.js" />
+    <Content Include="Areas\THabilitante\js\ManPlanManejo\_ItemTaraPApro.js" />
+    <Content Include="Areas\THabilitante\js\ManPoa\AddEdit.js" />
+    <Content Include="Areas\THabilitante\js\ManPoa\_ErrorMaterial.js" />
+    <Content Include="Areas\THabilitante\js\ManPreviosAlerta\AddEdit.js" />
+    <Content Include="Areas\THabilitante\js\ManPreviosAlerta\_ItemDestinatario.js" />
+    <Content Include="Areas\THabilitante\js\ManPreviosAlerta\_ItemDestinatarioCC.js" />
+    <Content Include="Areas\THabilitante\js\ManPreviosAlerta\_ItemDestinatarioRuta.js" />
+    <Content Include="Areas\THabilitante\js\ManPreviosAlerta\_ItemCOAdministrador.js" />
+    <Content Include="Areas\THabilitante\js\ManPreviosAlerta\_ItemSupuesto.js" />
+    <Content Include="Areas\THabilitante\js\ManPreviosAlerta\_ItemRuta.js" />
+    <Content Include="Areas\THabilitante\js\ManTHabilitante\Index.js" />
+    <Content Include="Areas\THabilitante\js\ManTHabilitante\_ErrorMaterial.js" />
+    <Content Include="Areas\THabilitante\js\ManTHabilitante\_FormatoFecha.js" />
+    <Content Include="Areas\THabilitante\js\ManVentanillaAntecedentesExpedientes\Index.js" />
+    <Content Include="Areas\THabilitante\js\ManVentanillaAntecedentesExpedientes\_Transferir.js" />
+    <Content Include="Areas\THabilitante\js\ManVentanillaDenuncia\Index.js" />
+    <Content Include="Areas\THabilitante\js\ManVentanillaDenuncia\RevisarDenuncia.js" />
+    <Content Include="Areas\THabilitante\js\ManVentanillaSolicitud\Index.js" />
+    <Content Include="Areas\THabilitante\js\ManVentanillaSolicitud\Transferir.js" />
+    <Content Include="Areas\THabilitante\js\ManVentanillaSolicitud\_Transferir.js" />
+    <Content Include="Areas\Tribunal\Js\Index.js" />
+    <Content Include="Areas\Tribunal\Js\ManTribunal\AddEdit.js" />
+    <Content Include="Areas\Tribunal\Js\ManTribunal\Index.js" />
+    <Content Include="Areas\Tribunal\Js\TribunalNotificacion2da\AddEdit.js" />
+    <Content Include="Areas\Tribunal\Js\TribunalNotificacion2da\Index.js" />
+    <Content Include="Areas\Tribunal\Views\Web.config" />
+    <Content Include="bin\es\System.Web.Helpers.resources.dll" />
+    <Content Include="bin\es\System.Web.Mvc.resources.dll" />
+    <Content Include="bin\es\System.Web.Optimization.resources.dll" />
+    <Content Include="bin\es\System.Web.Razor.resources.dll" />
+    <Content Include="bin\es\System.Web.WebPages.Deployment.resources.dll" />
+    <Content Include="bin\es\System.Web.WebPages.Razor.resources.dll" />
+    <Content Include="bin\es\System.Web.WebPages.resources.dll" />
+    <Content Include="Content\bootstrap-datepicker\datepicker.css" />
+    <Content Include="Content\bootstrap-grid.css" />
+    <Content Include="Content\bootstrap-grid.min.css" />
+    <Content Include="Content\bootstrap-reboot.css" />
+    <Content Include="Content\bootstrap-reboot.min.css" />
+    <Content Include="Content\bootstrap.css" />
+    <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\cssLogin\AdminLTE.css" />
+    <Content Include="Content\css\custom.css" />
+    <Content Include="Content\css\fontastic.css" />
+    <Content Include="Content\css\style.default.css" />
+    <Content Include="Content\datatables\buttons.dataTables.min.css" />
+    <Content Include="Content\datatables\dataTables.bootstrap4.min.css" />
+    <Content Include="Content\datatables\datatables.min.css" />
+    <Content Include="Content\font-awesome\css\font-awesome.css" />
+    <Content Include="Content\font-awesome\css\font-awesome.min.css" />
+    <Content Include="Content\font-awesome\fonts\fontawesome-webfont.svg" />
+    <Content Include="Content\fonts\dashboard.svg" />
+    <Content Include="Content\Grilla.css" />
+    <Content Include="Content\images\General\cargando.gif" />
+    <Content Include="Content\images\General\Delete-file-icon.png" />
+    <Content Include="Content\images\General\flecha-ampliar.png" />
+    <Content Include="Content\images\General\flecha-contraer.png" />
+    <Content Include="Content\images\logo\arbol osinfor blanco con verde.png" />
+    <Content Include="Content\images\logo\escudo-peruano-firma.png" />
+    <Content Include="Content\images\logo\escudo-peruano.jpg" />
+    <Content Include="Content\images\logo\Icono-Estudio.png" />
+    <Content Include="Content\images\logo\Logo-sigo-2.png" />
+    <Content Include="Content\images\logo\osinfor-footer.png" />
+    <Content Include="Content\images\logo\osinfor-header-1.png" />
+    <Content Include="Content\images\logo\osinfor-header-2.png" />
+    <Content Include="Content\images\logo\osinfor-logo.png" />
+    <Content Include="Content\images\logo\osinfor.png" />
+    <Content Include="Content\images\logo\sign-check.png" />
+    <Content Include="Content\images\ui-bg_diagonals-thick_75_f3d8d8_40x40.png" />
+    <Content Include="Content\images\ui-bg_flat_0_aaaaaa_40x100.png" />
+    <Content Include="Content\images\ui-bg_flat_75_ffffff_40x100.png" />
+    <Content Include="Content\images\ui-bg_glass_55_fbf9ee_1x400.png" />
+    <Content Include="Content\images\ui-bg_glass_65_ffffff_1x400.png" />
+    <Content Include="Content\images\ui-bg_glass_75_dadada_1x400.png" />
+    <Content Include="Content\images\ui-bg_glass_75_e6e6e6_1x400.png" />
+    <Content Include="Content\images\ui-bg_glass_95_fef1ec_1x400.png" />
+    <Content Include="Content\images\ui-bg_highlight-soft_75_cccccc_1x100.png" />
+    <Content Include="Content\images\ui-icons_222222_256x240.png" />
+    <Content Include="Content\images\ui-icons_2e83ff_256x240.png" />
+    <Content Include="Content\images\ui-icons_444444_256x240.png" />
+    <Content Include="Content\images\ui-icons_454545_256x240.png" />
+    <Content Include="Content\images\ui-icons_555555_256x240.png" />
+    <Content Include="Content\images\ui-icons_777620_256x240.png" />
+    <Content Include="Content\images\ui-icons_777777_256x240.png" />
+    <Content Include="Content\images\ui-icons_888888_256x240.png" />
+    <Content Include="Content\images\ui-icons_cc0000_256x240.png" />
+    <Content Include="Content\images\ui-icons_cd0a0a_256x240.png" />
+    <Content Include="Content\images\ui-icons_ffffff_256x240.png" />
+    <Content Include="Content\img\avatar-1.jpg" />
+    <Content Include="Content\img\avatar-2.jpg" />
+    <Content Include="Content\img\avatar-3.jpg" />
+    <Content Include="Content\img\avatar-4.jpg" />
+    <Content Include="Content\img\avatar-5.jpg" />
+    <Content Include="Content\img\avatar-6.jpg" />
+    <Content Include="Content\img\favicon.ico" />
+    <Content Include="Content\img\mockup1.jpg" />
+    <Content Include="Content\img\mockup2.jpg" />
+    <Content Include="Content\img\mockup3.jpg" />
+    <Content Include="Content\img\mockup4.jpg" />
+    <Content Include="Content\img\mockup5.jpg" />
+    <Content Include="Content\img\mockup6.jpg" />
+    <Content Include="Content\img\mockup7.jpg" />
+    <Content Include="Content\img\template-mac.png" />
+    <Content Include="Content\jquery-loadingModal\jquery.loadingModal.css" />
+    <Content Include="Content\js\charts-custom.js" />
+    <Content Include="Content\js\charts-home.js" />
+    <Content Include="Content\js\front.js" />
+    <Content Include="Content\js\grasp_mobile_progress_circle-1.0.0.min.js" />
+    <Content Include="Content\login.css" />
+    <Content Include="Content\login.min.css" />
+    <Content Include="Content\newSIGOFormulario.min.css" />
+    <Content Include="Content\PaginaPrinSIGO.min.css" />
+    <Content Include="Content\select2\select2-bootstrap4.css" />
+    <Content Include="Content\select2\select2.min.css" />
+    <Content Include="Content\toastr.css" />
+    <Content Include="Content\toastr.min.css" />
+    <Content Include="favicon.ico" />
+    <Content Include="fonts\glyphicons-halflings-regular.svg" />
+    <Content Include="frmDownload.aspx" />
+    <Content Include="Global.asax" />
+    <Content Include="Content\Site.css" />
+    <Content Include="Imagenes\BonMan\Aceptar.png" />
+    <Content Include="Imagenes\BonMan\Aceptar2.png" />
+    <Content Include="Imagenes\BonMan\Actualizar.png" />
+    <Content Include="Imagenes\BonMan\Actualizar2.png" />
+    <Content Include="Imagenes\BonMan\Actualizar3.png" />
+    <Content Include="Imagenes\BonMan\Actualizar4.png" />
+    <Content Include="Imagenes\BonMan\actualizar_muestra.png" />
+    <Content Include="Imagenes\BonMan\Alerta.png" />
+    <Content Include="Imagenes\BonMan\alert_download.png" />
+    <Content Include="Imagenes\BonMan\Anular.png" />
+    <Content Include="Imagenes\BonMan\Anular2.png" />
+    <Content Include="Imagenes\BonMan\Anular3.png" />
+    <Content Include="Imagenes\BonMan\Anular4.png" />
+    <Content Include="Imagenes\BonMan\Atras.png" />
+    <Content Include="Imagenes\BonMan\Atras2.png" />
+    <Content Include="Imagenes\BonMan\Atras3.png" />
+    <Content Include="Imagenes\BonMan\bg-menu-item-green.gif" />
+    <Content Include="Imagenes\BonMan\body_bg_new.jpg" />
+    <Content Include="Imagenes\BonMan\Buscar.png" />
+    <Content Include="Imagenes\BonMan\Buscar2.png" />
+    <Content Include="Imagenes\BonMan\Buscar3.png" />
+    <Content Include="Imagenes\BonMan\Buscar4.png" />
+    <Content Include="Imagenes\BonMan\Buscar5.png" />
+    <Content Include="Imagenes\BonMan\Cancelar.png" />
+    <Content Include="Imagenes\BonMan\Cancelar2.png" />
+    <Content Include="Imagenes\BonMan\Cancelar3.png" />
+    <Content Include="Imagenes\BonMan\Cancelar4.png" />
+    <Content Include="Imagenes\BonMan\cancel_download.png" />
+    <Content Include="Imagenes\BonMan\CarpetaAbrir.png" />
+    <Content Include="Imagenes\BonMan\CarpetaAbrir2.png" />
+    <Content Include="Imagenes\BonMan\CarpetaAbrir3.png" />
+    <Content Include="Imagenes\BonMan\comobuscar.jpg" />
+    <Content Include="Imagenes\BonMan\Consolidar.png" />
+    <Content Include="Imagenes\BonMan\Devolucion.png" />
+    <Content Include="Imagenes\BonMan\Devolucion2.png" />
+    <Content Include="Imagenes\BonMan\download.png" />
+    <Content Include="Imagenes\BonMan\Eliminar.png" />
+    <Content Include="Imagenes\BonMan\Eliminar2.png" />
+    <Content Include="Imagenes\BonMan\Eliminar3.png" />
+    <Content Include="Imagenes\BonMan\Eliminar4.png" />
+    <Content Include="Imagenes\BonMan\ExportarExcel.png" />
+    <Content Include="Imagenes\BonMan\ExportarExcel_reportes.png" />
+    <Content Include="Imagenes\BonMan\fechaabajo.png" />
+    <Content Include="Imagenes\BonMan\Filtrar.png" />
+    <Content Include="Imagenes\BonMan\Filtrar2.png" />
+    <Content Include="Imagenes\BonMan\Filtrar3.png" />
+    <Content Include="Imagenes\BonMan\GenerandoReporte.gif" />
+    <Content Include="Imagenes\BonMan\GenerarReporteFiscalizacion.png" />
+    <Content Include="Imagenes\BonMan\Grabar.png" />
+    <Content Include="Imagenes\BonMan\Grabar2.png" />
+    <Content Include="Imagenes\BonMan\Grabar3.png" />
+    <Content Include="Imagenes\BonMan\Grabar4.png" />
+    <Content Include="Imagenes\BonMan\GrabarUno.png" />
+    <Content Include="Imagenes\BonMan\GrabarVarios.png" />
+    <Content Include="Imagenes\BonMan\Imprimir.png" />
+    <Content Include="Imagenes\BonMan\Imprimir2.png" />
+    <Content Include="Imagenes\BonMan\Imprimir3.png" />
+    <Content Include="Imagenes\BonMan\Imprimir4.png" />
+    <Content Include="Imagenes\BonMan\Inventario.png" />
+    <Content Include="Imagenes\BonMan\map_sisfor.png" />
+    <Content Include="Imagenes\BonMan\minus_remove_green.png" />
+    <Content Include="Imagenes\BonMan\Modificar.png" />
+    <Content Include="Imagenes\BonMan\Modificar2.png" />
+    <Content Include="Imagenes\BonMan\Modificar3.png" />
+    <Content Include="Imagenes\BonMan\Modificar4.png" />
+    <Content Include="Imagenes\BonMan\Nuevo.png" />
+    <Content Include="Imagenes\BonMan\Nuevo2.png" />
+    <Content Include="Imagenes\BonMan\Nuevo3.png" />
+    <Content Include="Imagenes\BonMan\PDF.png" />
+    <Content Include="Imagenes\BonMan\PDF_boton.png" />
+    <Content Include="Imagenes\BonMan\PL.png" />
+    <Content Include="Imagenes\BonMan\plus_add_green.png" />
+    <Content Include="Imagenes\BonMan\Regresar.png" />
+    <Content Include="Imagenes\BonMan\reparar.png" />
+    <Content Include="Imagenes\BonMan\Seleccionar_Todo.png" />
+    <Content Include="Imagenes\BonMan\Siguiente.png" />
+    <Content Include="Imagenes\Estadisticas\estadisticas_osinfor.png" />
+    <Content Include="Imagenes\Estadisticas\icono_est.png" />
+    <Content Include="Imagenes\Fondos\acceso_denegado.jpg" />
+    <Content Include="Imagenes\Fondos\barra-fondo.jpg" />
+    <Content Include="Imagenes\Fondos\fondosys.jpg" />
+    <Content Include="Imagenes\Fondos\mensaje_fauna.jpg" />
+    <Content Include="Imagenes\Fondos\mensaje_observatorio.png" />
+    <Content Include="Imagenes\Fondos\mensaje_observatorio_temp.png" />
+    <Content Include="Imagenes\General\barra-fondo.jpg" />
+    <Content Include="Imagenes\General\Calendario.png" />
+    <Content Include="Imagenes\General\Candado.png" />
+    <Content Include="Imagenes\General\cargando.gif" />
+    <Content Include="Imagenes\General\Cargando.old.gif" />
+    <Content Include="Imagenes\General\Cargando2.gif" />
+    <Content Include="Imagenes\General\Comentario01.png" />
+    <Content Include="Imagenes\General\Comentario02.gif" />
+    <Content Include="Imagenes\General\Comentario03.png" />
+    <Content Include="Imagenes\General\Herramienta.png" />
+    <Content Include="Imagenes\General\I.png" />
+    <Content Include="Imagenes\General\key.png" />
+    <Content Include="Imagenes\General\login.png" />
+    <Content Include="Imagenes\General\MasterLogo.jpg" />
+    <Content Include="Imagenes\General\Menu.png" />
+    <Content Include="Imagenes\General\ModAdmin.png" />
+    <Content Include="Imagenes\General\Nota01.png" />
+    <Content Include="Imagenes\General\Nota02.png" />
+    <Content Include="Imagenes\General\Nota03.png" />
+    <Content Include="Imagenes\General\O.png" />
+    <Content Include="Imagenes\General\OK.png" />
+    <Content Include="Imagenes\General\Persona01.png" />
+    <Content Include="Imagenes\General\Persona02.png" />
+    <Content Include="Imagenes\General\reporte.ico" />
+    <Content Include="Imagenes\General\report_icon.png" />
+    <Content Include="Imagenes\Grilla\arrowhl.png" />
+    <Content Include="Imagenes\Grilla\arrowhr.png" />
+    <Content Include="Imagenes\Grilla\arrowvb.png" />
+    <Content Include="Imagenes\Grilla\arrowvt.png" />
+    <Content Include="Imagenes\Grilla\Herramienta.png" />
+    <Content Include="Imagenes\Grilla\Menu.png" />
+    <Content Include="Imagenes\Grilla\Menu2.png" />
+    <Content Include="Imagenes\iconos\add_carta.png" />
+    <Content Include="Imagenes\iconos\anterior_blue.png" />
+    <Content Include="Imagenes\iconos\anterior_gray.png" />
+    <Content Include="Imagenes\iconos\apagar.png" />
+    <Content Include="Imagenes\iconos\check_all.png" />
+    <Content Include="Imagenes\iconos\delete_carta.png" />
+    <Content Include="Imagenes\iconos\encender.png" />
+    <Content Include="Imagenes\iconos\excel_xls.ico" />
+    <Content Include="Imagenes\iconos\flags.png" />
+    <Content Include="Imagenes\iconos\guardado.png" />
+    <Content Include="Imagenes\iconos\guardar.png" />
+    <Content Include="Imagenes\iconos\map_sisfor.png" />
+    <Content Include="Imagenes\iconos\primero_blue.png" />
+    <Content Include="Imagenes\iconos\primero_gray.png" />
+    <Content Include="Imagenes\iconos\refresh.png" />
+    <Content Include="Imagenes\iconos\services.png" />
+    <Content Include="Imagenes\iconos\siguiente_blue.png" />
+    <Content Include="Imagenes\iconos\siguiente_gray.png" />
+    <Content Include="Imagenes\iconos\track_1.png" />
+    <Content Include="Imagenes\iconos\track_2.jpg" />
+    <Content Include="Imagenes\iconos\ultimo_blue.png" />
+    <Content Include="Imagenes\iconos\ultimo_gray.png" />
+    <Content Include="Imagenes\iconos\uncheck_all.png" />
+    <Content Include="Imagenes\Login\key.png" />
+    <Content Include="Imagenes\Login\mws-login-circle.png" />
+    <Content Include="Imagenes\Login\mws-login-stitch.png" />
+    <Content Include="Imagenes\Login\user.png" />
+    <Content Include="Imagenes\Login\user_green.png" />
+    <Content Include="Imagenes\Login\user_orange.png" />
+    <Content Include="Imagenes\Login\user_red.png" />
+    <Content Include="Imagenes\Login\user_suit.png" />
+    <Content Include="Imagenes\Logo\fauna.png" />
+    <Content Include="Imagenes\Logo\infractores.png" />
+    <Content Include="Imagenes\Logo\infractores_supervision.png" />
+    <Content Include="Imagenes\Logo\logo osinfor-01.png" />
+    <Content Include="Imagenes\Logo\logo pcm-01.png" />
+    <Content Include="Imagenes\Logo\Logo-sigo-2-mini.png" />
+    <Content Include="Imagenes\Logo\Logo-sigo-2.png" />
+    <Content Include="Imagenes\Logo\logo-sigo-transparente.png" />
+    <Content Include="Imagenes\Logo\Logo02.jpg" />
+    <Content Include="Imagenes\Logo\logo_osinfor_01.png" />
+    <Content Include="Imagenes\Logo\logo_pcm_01.png" />
+    <Content Include="Imagenes\Logo\top_logos.png" />
+    <Content Include="Imagenes\Mensaje\alerta.png" />
+    <Content Include="Imagenes\Mensaje\error.png" />
+    <Content Include="Imagenes\Mensaje\exito.png" />
+    <Content Include="Imagenes\Mensaje\info.png" />
+    <Content Include="lib\wnvwordtopdf.dll" />
+    <Content Include="PlantillaPDF\huella_osinfor_normal.png" />
+    <Content Include="Ruta_SITD_Anexos\-Supuesto.png" />
+    <Content Include="Ruta_SITD_Anexos\002-2016-OSINFOR-TFFS-Cargo.jpg" />
+    <Content Include="Ruta_SITD_Anexos\002-2016-OSINFOR-TFFS-Cargo.txt" />
+    <Content Include="Ruta_SITD_Anexos\021-2016-OSINFOR-TFFS-Cargo.jpg" />
+    <Content Include="Ruta_SITD_Anexos\021-2016-OSINFOR-TFFS-Cargo.txt" />
+    <Content Include="Ruta_SITD_Anexos\026-2016-OSINFOR-TFFS-Cargo.txt" />
+    <Content Include="Ruta_SITD_Anexos\028-2016-OSINFOR-TFFS-Cargo.txt" />
+    <Content Include="Ruta_SITD_Anexos\030-2016-OSINFOR-TFFS-Cargo.txt" />
+    <Content Include="Ruta_SITD_Anexos\032-2016-OSINFOR-TFFS-Cargo.txt" />
+    <Content Include="Scripts\additional-methods.js" />
+    <Content Include="Scripts\ai.0.22.9-build00167.js" />
+    <Content Include="Scripts\ai.0.22.9-build00167.min.js" />
+    <Content Include="ApplicationInsights.config">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Scripts\apexcharts\apexcharts.amd.js" />
+    <Content Include="Scripts\apexcharts\apexcharts.common.js" />
+    <Content Include="Scripts\apexcharts\apexcharts.esm.js" />
+    <Content Include="Scripts\apexcharts\apexcharts.js" />
+    <Content Include="Scripts\apexcharts\apexcharts.min.js" />
+    <Content Include="Scripts\apexcharts\css\apexcharts.css" />
+    <Content Include="Scripts\bootbox\bootbox.min.js" />
+    <Content Include="Scripts\bootstrap-datepicker\bootstrap-datepicker.es.js" />
+    <Content Include="Scripts\bootstrap-datepicker\bootstrap-datepicker.js" />
+    <Content Include="Scripts\bootstrap.bundle.js" />
+    <Content Include="Scripts\bootstrap.bundle.min.js" />
+    <Content Include="Scripts\bootstrap.js" />
+    <Content Include="Scripts\bootstrap.min.js" />
+    <Content Include="Scripts\chart\chart.js" />
+    <Content Include="Scripts\chart\Chart.min.js" />
+    <Content Include="Scripts\chart\custom.js" />
+    <Content Include="Scripts\ckeditor5\ckeditor.js" />
+    <Content Include="Scripts\ckeditor5\translations\af.js" />
+    <Content Include="Scripts\ckeditor5\translations\ar.js" />
+    <Content Include="Scripts\ckeditor5\translations\ast.js" />
+    <Content Include="Scripts\ckeditor5\translations\az.js" />
+    <Content Include="Scripts\ckeditor5\translations\bg.js" />
+    <Content Include="Scripts\ckeditor5\translations\ca.js" />
+    <Content Include="Scripts\ckeditor5\translations\cs.js" />
+    <Content Include="Scripts\ckeditor5\translations\da.js" />
+    <Content Include="Scripts\ckeditor5\translations\de-ch.js" />
+    <Content Include="Scripts\ckeditor5\translations\de.js" />
+    <Content Include="Scripts\ckeditor5\translations\el.js" />
+    <Content Include="Scripts\ckeditor5\translations\en-au.js" />
+    <Content Include="Scripts\ckeditor5\translations\en-gb.js" />
+    <Content Include="Scripts\ckeditor5\translations\en.js" />
+    <Content Include="Scripts\ckeditor5\translations\eo.js" />
+    <Content Include="Scripts\ckeditor5\translations\et.js" />
+    <Content Include="Scripts\ckeditor5\translations\eu.js" />
+    <Content Include="Scripts\ckeditor5\translations\fa.js" />
+    <Content Include="Scripts\ckeditor5\translations\fi.js" />
+    <Content Include="Scripts\ckeditor5\translations\fr.js" />
+    <Content Include="Scripts\ckeditor5\translations\gl.js" />
+    <Content Include="Scripts\ckeditor5\translations\gu.js" />
+    <Content Include="Scripts\ckeditor5\translations\he.js" />
+    <Content Include="Scripts\ckeditor5\translations\hi.js" />
+    <Content Include="Scripts\ckeditor5\translations\hr.js" />
+    <Content Include="Scripts\ckeditor5\translations\hu.js" />
+    <Content Include="Scripts\ckeditor5\translations\id.js" />
+    <Content Include="Scripts\ckeditor5\translations\it.js" />
+    <Content Include="Scripts\ckeditor5\translations\ja.js" />
+    <Content Include="Scripts\ckeditor5\translations\kk.js" />
+    <Content Include="Scripts\ckeditor5\translations\km.js" />
+    <Content Include="Scripts\ckeditor5\translations\kn.js" />
+    <Content Include="Scripts\ckeditor5\translations\ko.js" />
+    <Content Include="Scripts\ckeditor5\translations\ku.js" />
+    <Content Include="Scripts\ckeditor5\translations\lt.js" />
+    <Content Include="Scripts\ckeditor5\translations\lv.js" />
+    <Content Include="Scripts\ckeditor5\translations\ms.js" />
+    <Content Include="Scripts\ckeditor5\translations\nb.js" />
+    <Content Include="Scripts\ckeditor5\translations\ne.js" />
+    <Content Include="Scripts\ckeditor5\translations\nl.js" />
+    <Content Include="Scripts\ckeditor5\translations\no.js" />
+    <Content Include="Scripts\ckeditor5\translations\oc.js" />
+    <Content Include="Scripts\ckeditor5\translations\pl.js" />
+    <Content Include="Scripts\ckeditor5\translations\pt-br.js" />
+    <Content Include="Scripts\ckeditor5\translations\pt.js" />
+    <Content Include="Scripts\ckeditor5\translations\ro.js" />
+    <Content Include="Scripts\ckeditor5\translations\ru.js" />
+    <Content Include="Scripts\ckeditor5\translations\si.js" />
+    <Content Include="Scripts\ckeditor5\translations\sk.js" />
+    <Content Include="Scripts\ckeditor5\translations\sl.js" />
+    <Content Include="Scripts\ckeditor5\translations\sq.js" />
+    <Content Include="Scripts\ckeditor5\translations\sr-latn.js" />
+    <Content Include="Scripts\ckeditor5\translations\sr.js" />
+    <Content Include="Scripts\ckeditor5\translations\sv.js" />
+    <Content Include="Scripts\ckeditor5\translations\th.js" />
+    <Content Include="Scripts\ckeditor5\translations\tk.js" />
+    <Content Include="Scripts\ckeditor5\translations\tr.js" />
+    <Content Include="Scripts\ckeditor5\translations\tt.js" />
+    <Content Include="Scripts\ckeditor5\translations\ug.js" />
+    <Content Include="Scripts\ckeditor5\translations\uk.js" />
+    <Content Include="Scripts\ckeditor5\translations\vi.js" />
+    <Content Include="Scripts\ckeditor5\translations\zh-cn.js" />
+    <Content Include="Scripts\ckeditor5\translations\zh.js" />
+    <Content Include="Scripts\ckeditor\adapters\jquery.js" />
+    <Content Include="Scripts\ckeditor\CHANGES.html" />
+    <Content Include="Scripts\ckeditor\ckeditor.js" />
+    <Content Include="Scripts\ckeditor\ckeditor_basic.js" />
+    <Content Include="Scripts\ckeditor\config.js" />
+    <Content Include="Scripts\ckeditor\contents.css" />
+    <Content Include="Scripts\ckeditor\images\spacer.gif" />
+    <Content Include="Scripts\ckeditor\INSTALL.html" />
+    <Content Include="Scripts\ckeditor\lang\af.js" />
+    <Content Include="Scripts\ckeditor\lang\ar.js" />
+    <Content Include="Scripts\ckeditor\lang\bg.js" />
+    <Content Include="Scripts\ckeditor\lang\bn.js" />
+    <Content Include="Scripts\ckeditor\lang\bs.js" />
+    <Content Include="Scripts\ckeditor\lang\ca.js" />
+    <Content Include="Scripts\ckeditor\lang\cs.js" />
+    <Content Include="Scripts\ckeditor\lang\cy.js" />
+    <Content Include="Scripts\ckeditor\lang\da.js" />
+    <Content Include="Scripts\ckeditor\lang\de.js" />
+    <Content Include="Scripts\ckeditor\lang\el.js" />
+    <Content Include="Scripts\ckeditor\lang\en-au.js" />
+    <Content Include="Scripts\ckeditor\lang\en-ca.js" />
+    <Content Include="Scripts\ckeditor\lang\en-gb.js" />
+    <Content Include="Scripts\ckeditor\lang\en.js" />
+    <Content Include="Scripts\ckeditor\lang\eo.js" />
+    <Content Include="Scripts\ckeditor\lang\es.js" />
+    <Content Include="Scripts\ckeditor\lang\et.js" />
+    <Content Include="Scripts\ckeditor\lang\eu.js" />
+    <Content Include="Scripts\ckeditor\lang\fa.js" />
+    <Content Include="Scripts\ckeditor\lang\fi.js" />
+    <Content Include="Scripts\ckeditor\lang\fo.js" />
+    <Content Include="Scripts\ckeditor\lang\fr-ca.js" />
+    <Content Include="Scripts\ckeditor\lang\fr.js" />
+    <Content Include="Scripts\ckeditor\lang\gl.js" />
+    <Content Include="Scripts\ckeditor\lang\gu.js" />
+    <Content Include="Scripts\ckeditor\lang\he.js" />
+    <Content Include="Scripts\ckeditor\lang\hi.js" />
+    <Content Include="Scripts\ckeditor\lang\hr.js" />
+    <Content Include="Scripts\ckeditor\lang\hu.js" />
+    <Content Include="Scripts\ckeditor\lang\id.js" />
+    <Content Include="Scripts\ckeditor\lang\is.js" />
+    <Content Include="Scripts\ckeditor\lang\it.js" />
+    <Content Include="Scripts\ckeditor\lang\ja.js" />
+    <Content Include="Scripts\ckeditor\lang\ka.js" />
+    <Content Include="Scripts\ckeditor\lang\km.js" />
+    <Content Include="Scripts\ckeditor\lang\ko.js" />
+    <Content Include="Scripts\ckeditor\lang\ku.js" />
+    <Content Include="Scripts\ckeditor\lang\lt.js" />
+    <Content Include="Scripts\ckeditor\lang\lv.js" />
+    <Content Include="Scripts\ckeditor\lang\mk.js" />
+    <Content Include="Scripts\ckeditor\lang\mn.js" />
+    <Content Include="Scripts\ckeditor\lang\ms.js" />
+    <Content Include="Scripts\ckeditor\lang\nb.js" />
+    <Content Include="Scripts\ckeditor\lang\nl.js" />
+    <Content Include="Scripts\ckeditor\lang\no.js" />
+    <Content Include="Scripts\ckeditor\lang\pl.js" />
+    <Content Include="Scripts\ckeditor\lang\pt-br.js" />
+    <Content Include="Scripts\ckeditor\lang\pt.js" />
+    <Content Include="Scripts\ckeditor\lang\ro.js" />
+    <Content Include="Scripts\ckeditor\lang\ru.js" />
+    <Content Include="Scripts\ckeditor\lang\sk.js" />
+    <Content Include="Scripts\ckeditor\lang\sl.js" />
+    <Content Include="Scripts\ckeditor\lang\sr-latn.js" />
+    <Content Include="Scripts\ckeditor\lang\sr.js" />
+    <Content Include="Scripts\ckeditor\lang\sv.js" />
+    <Content Include="Scripts\ckeditor\lang\th.js" />
+    <Content Include="Scripts\ckeditor\lang\tr.js" />
+    <Content Include="Scripts\ckeditor\lang\ug.js" />
+    <Content Include="Scripts\ckeditor\lang\uk.js" />
+    <Content Include="Scripts\ckeditor\lang\vi.js" />
+    <Content Include="Scripts\ckeditor\lang\zh-cn.js" />
+    <Content Include="Scripts\ckeditor\lang\zh.js" />
+    <Content Include="Scripts\ckeditor\lang\_languages.js" />
+    <Content Include="Scripts\ckeditor\lang\_translationstatus.txt" />
+    <Content Include="Scripts\ckeditor\LICENSE.html" />
+    <Content Include="Scripts\ckeditor\plugins\a11yhelp\dialogs\a11yhelp.js" />
+    <Content Include="Scripts\ckeditor\plugins\a11yhelp\lang\cs.js" />
+    <Content Include="Scripts\ckeditor\plugins\a11yhelp\lang\cy.js" />
+    <Content Include="Scripts\ckeditor\plugins\a11yhelp\lang\da.js" />
+    <Content Include="Scripts\ckeditor\plugins\a11yhelp\lang\de.js" />
+    <Content Include="Scripts\ckeditor\plugins\a11yhelp\lang\el.js" />
+    <Content Include="Scripts\ckeditor\plugins\a11yhelp\lang\en.js" />
+    <Content Include="Scripts\ckeditor\plugins\a11yhelp\lang\eo.js" />
+    <Content Include="Scripts\ckeditor\plugins\a11yhelp\lang\fa.js" />
+    <Content Include="Scripts\ckeditor\plugins\a11yhelp\lang\fi.js" />
+    <Content Include="Scripts\ckeditor\plugins\a11yhelp\lang\fr.js" />
+    <Content Include="Scripts\ckeditor\plugins\a11yhelp\lang\gu.js" />
+    <Content Include="Scripts\ckeditor\plugins\a11yhelp\lang\he.js" />
+    <Content Include="Scripts\ckeditor\plugins\a11yhelp\lang\it.js" />
+    <Content Include="Scripts\ckeditor\plugins\a11yhelp\lang\ku.js" />
+    <Content Include="Scripts\ckeditor\plugins\a11yhelp\lang\lv.js" />
+    <Content Include="Scripts\ckeditor\plugins\a11yhelp\lang\mk.js" />
+    <Content Include="Scripts\ckeditor\plugins\a11yhelp\lang\nb.js" />
+    <Content Include="Scripts\ckeditor\plugins\a11yhelp\lang\nl.js" />
+    <Content Include="Scripts\ckeditor\plugins\a11yhelp\lang\no.js" />
+    <Content Include="Scripts\ckeditor\plugins\a11yhelp\lang\pt-br.js" />
+    <Content Include="Scripts\ckeditor\plugins\a11yhelp\lang\ro.js" />
+    <Content Include="Scripts\ckeditor\plugins\a11yhelp\lang\sk.js" />
+    <Content Include="Scripts\ckeditor\plugins\a11yhelp\lang\tr.js" />
+    <Content Include="Scripts\ckeditor\plugins\a11yhelp\lang\ug.js" />
+    <Content Include="Scripts\ckeditor\plugins\a11yhelp\lang\vi.js" />
+    <Content Include="Scripts\ckeditor\plugins\a11yhelp\lang\zh-cn.js" />
+    <Content Include="Scripts\ckeditor\plugins\a11yhelp\lang\_translationstatus.txt" />
+    <Content Include="Scripts\ckeditor\plugins\about\dialogs\about.js" />
+    <Content Include="Scripts\ckeditor\plugins\about\dialogs\logo_ckeditor.png" />
+    <Content Include="Scripts\ckeditor\plugins\adobeair\plugin.js" />
+    <Content Include="Scripts\ckeditor\plugins\ajax\plugin.js" />
+    <Content Include="Scripts\ckeditor\plugins\autogrow\plugin.js" />
+    <Content Include="Scripts\ckeditor\plugins\bbcode\plugin.js" />
+    <Content Include="Scripts\ckeditor\plugins\clipboard\dialogs\paste.js" />
+    <Content Include="Scripts\ckeditor\plugins\colordialog\dialogs\colordialog.js" />
+    <Content Include="Scripts\ckeditor\plugins\devtools\lang\bg.js" />
+    <Content Include="Scripts\ckeditor\plugins\devtools\lang\cs.js" />
+    <Content Include="Scripts\ckeditor\plugins\devtools\lang\cy.js" />
+    <Content Include="Scripts\ckeditor\plugins\devtools\lang\da.js" />
+    <Content Include="Scripts\ckeditor\plugins\devtools\lang\de.js" />
+    <Content Include="Scripts\ckeditor\plugins\devtools\lang\el.js" />
+    <Content Include="Scripts\ckeditor\plugins\devtools\lang\en.js" />
+    <Content Include="Scripts\ckeditor\plugins\devtools\lang\eo.js" />
+    <Content Include="Scripts\ckeditor\plugins\devtools\lang\et.js" />
+    <Content Include="Scripts\ckeditor\plugins\devtools\lang\fa.js" />
+    <Content Include="Scripts\ckeditor\plugins\devtools\lang\fi.js" />
+    <Content Include="Scripts\ckeditor\plugins\devtools\lang\fr.js" />
+    <Content Include="Scripts\ckeditor\plugins\devtools\lang\gu.js" />
+    <Content Include="Scripts\ckeditor\plugins\devtools\lang\he.js" />
+    <Content Include="Scripts\ckeditor\plugins\devtools\lang\hr.js" />
+    <Content Include="Scripts\ckeditor\plugins\devtools\lang\it.js" />
+    <Content Include="Scripts\ckeditor\plugins\devtools\lang\ku.js" />
+    <Content Include="Scripts\ckeditor\plugins\devtools\lang\lv.js" />
+    <Content Include="Scripts\ckeditor\plugins\devtools\lang\nb.js" />
+    <Content Include="Scripts\ckeditor\plugins\devtools\lang\nl.js" />
+    <Content Include="Scripts\ckeditor\plugins\devtools\lang\no.js" />
+    <Content Include="Scripts\ckeditor\plugins\devtools\lang\pl.js" />
+    <Content Include="Scripts\ckeditor\plugins\devtools\lang\pt-br.js" />
+    <Content Include="Scripts\ckeditor\plugins\devtools\lang\sk.js" />
+    <Content Include="Scripts\ckeditor\plugins\devtools\lang\tr.js" />
+    <Content Include="Scripts\ckeditor\plugins\devtools\lang\ug.js" />
+    <Content Include="Scripts\ckeditor\plugins\devtools\lang\uk.js" />
+    <Content Include="Scripts\ckeditor\plugins\devtools\lang\vi.js" />
+    <Content Include="Scripts\ckeditor\plugins\devtools\lang\zh-cn.js" />
+    <Content Include="Scripts\ckeditor\plugins\devtools\lang\_translationstatus.txt" />
+    <Content Include="Scripts\ckeditor\plugins\devtools\plugin.js" />
+    <Content Include="Scripts\ckeditor\plugins\dialog\dialogDefinition.js" />
+    <Content Include="Scripts\ckeditor\plugins\div\dialogs\div.js" />
+    <Content Include="Scripts\ckeditor\plugins\docprops\dialogs\docprops.js" />
+    <Content Include="Scripts\ckeditor\plugins\docprops\plugin.js" />
+    <Content Include="Scripts\ckeditor\plugins\find\dialogs\find.js" />
+    <Content Include="Scripts\ckeditor\plugins\flash\dialogs\flash.js" />
+    <Content Include="Scripts\ckeditor\plugins\flash\images\placeholder.png" />
+    <Content Include="Scripts\ckeditor\plugins\forms\dialogs\button.js" />
+    <Content Include="Scripts\ckeditor\plugins\forms\dialogs\checkbox.js" />
+    <Content Include="Scripts\ckeditor\plugins\forms\dialogs\form.js" />
+    <Content Include="Scripts\ckeditor\plugins\forms\dialogs\hiddenfield.js" />
+    <Content Include="Scripts\ckeditor\plugins\forms\dialogs\radio.js" />
+    <Content Include="Scripts\ckeditor\plugins\forms\dialogs\select.js" />
+    <Content Include="Scripts\ckeditor\plugins\forms\dialogs\textarea.js" />
+    <Content Include="Scripts\ckeditor\plugins\forms\dialogs\textfield.js" />
+    <Content Include="Scripts\ckeditor\plugins\forms\images\hiddenfield.gif" />
+    <Content Include="Scripts\ckeditor\plugins\iframedialog\plugin.js" />
+    <Content Include="Scripts\ckeditor\plugins\iframe\dialogs\iframe.js" />
+    <Content Include="Scripts\ckeditor\plugins\iframe\images\placeholder.png" />
+    <Content Include="Scripts\ckeditor\plugins\image\dialogs\image.js" />
+    <Content Include="Scripts\ckeditor\plugins\link\dialogs\anchor.js" />
+    <Content Include="Scripts\ckeditor\plugins\link\dialogs\link.js" />
+    <Content Include="Scripts\ckeditor\plugins\link\images\anchor.gif" />
+    <Content Include="Scripts\ckeditor\plugins\liststyle\dialogs\liststyle.js" />
+    <Content Include="Scripts\ckeditor\plugins\pagebreak\images\pagebreak.gif" />
+    <Content Include="Scripts\ckeditor\plugins\pastefromword\filter\default.js" />
+    <Content Include="Scripts\ckeditor\plugins\pastetext\dialogs\pastetext.js" />
+    <Content Include="Scripts\ckeditor\plugins\placeholder\dialogs\placeholder.js" />
+    <Content Include="Scripts\ckeditor\plugins\placeholder\lang\bg.js" />
+    <Content Include="Scripts\ckeditor\plugins\placeholder\lang\cs.js" />
+    <Content Include="Scripts\ckeditor\plugins\placeholder\lang\cy.js" />
+    <Content Include="Scripts\ckeditor\plugins\placeholder\lang\da.js" />
+    <Content Include="Scripts\ckeditor\plugins\placeholder\lang\de.js" />
+    <Content Include="Scripts\ckeditor\plugins\placeholder\lang\el.js" />
+    <Content Include="Scripts\ckeditor\plugins\placeholder\lang\en.js" />
+    <Content Include="Scripts\ckeditor\plugins\placeholder\lang\eo.js" />
+    <Content Include="Scripts\ckeditor\plugins\placeholder\lang\et.js" />
+    <Content Include="Scripts\ckeditor\plugins\placeholder\lang\fa.js" />
+    <Content Include="Scripts\ckeditor\plugins\placeholder\lang\fi.js" />
+    <Content Include="Scripts\ckeditor\plugins\placeholder\lang\fr.js" />
+    <Content Include="Scripts\ckeditor\plugins\placeholder\lang\he.js" />
+    <Content Include="Scripts\ckeditor\plugins\placeholder\lang\hr.js" />
+    <Content Include="Scripts\ckeditor\plugins\placeholder\lang\it.js" />
+    <Content Include="Scripts\ckeditor\plugins\placeholder\lang\ku.js" />
+    <Content Include="Scripts\ckeditor\plugins\placeholder\lang\lv.js" />
+    <Content Include="Scripts\ckeditor\plugins\placeholder\lang\nb.js" />
+    <Content Include="Scripts\ckeditor\plugins\placeholder\lang\nl.js" />
+    <Content Include="Scripts\ckeditor\plugins\placeholder\lang\no.js" />
+    <Content Include="Scripts\ckeditor\plugins\placeholder\lang\pl.js" />
+    <Content Include="Scripts\ckeditor\plugins\placeholder\lang\pt-br.js" />
+    <Content Include="Scripts\ckeditor\plugins\placeholder\lang\sk.js" />
+    <Content Include="Scripts\ckeditor\plugins\placeholder\lang\tr.js" />
+    <Content Include="Scripts\ckeditor\plugins\placeholder\lang\ug.js" />
+    <Content Include="Scripts\ckeditor\plugins\placeholder\lang\uk.js" />
+    <Content Include="Scripts\ckeditor\plugins\placeholder\lang\vi.js" />
+    <Content Include="Scripts\ckeditor\plugins\placeholder\lang\zh-cn.js" />
+    <Content Include="Scripts\ckeditor\plugins\placeholder\lang\_translationstatus.txt" />
+    <Content Include="Scripts\ckeditor\plugins\placeholder\placeholder.gif" />
+    <Content Include="Scripts\ckeditor\plugins\placeholder\plugin.js" />
+    <Content Include="Scripts\ckeditor\plugins\preview\preview.html" />
+    <Content Include="Scripts\ckeditor\plugins\scayt\dialogs\options.js" />
+    <Content Include="Scripts\ckeditor\plugins\scayt\dialogs\toolbar.css" />
+    <Content Include="Scripts\ckeditor\plugins\showblocks\images\block_address.png" />
+    <Content Include="Scripts\ckeditor\plugins\showblocks\images\block_blockquote.png" />
+    <Content Include="Scripts\ckeditor\plugins\showblocks\images\block_div.png" />
+    <Content Include="Scripts\ckeditor\plugins\showblocks\images\block_h1.png" />
+    <Content Include="Scripts\ckeditor\plugins\showblocks\images\block_h2.png" />
+    <Content Include="Scripts\ckeditor\plugins\showblocks\images\block_h3.png" />
+    <Content Include="Scripts\ckeditor\plugins\showblocks\images\block_h4.png" />
+    <Content Include="Scripts\ckeditor\plugins\showblocks\images\block_h5.png" />
+    <Content Include="Scripts\ckeditor\plugins\showblocks\images\block_h6.png" />
+    <Content Include="Scripts\ckeditor\plugins\showblocks\images\block_p.png" />
+    <Content Include="Scripts\ckeditor\plugins\showblocks\images\block_pre.png" />
+    <Content Include="Scripts\ckeditor\plugins\smiley\dialogs\smiley.js" />
+    <Content Include="Scripts\ckeditor\plugins\smiley\images\angel_smile.gif" />
+    <Content Include="Scripts\ckeditor\plugins\smiley\images\angry_smile.gif" />
+    <Content Include="Scripts\ckeditor\plugins\smiley\images\broken_heart.gif" />
+    <Content Include="Scripts\ckeditor\plugins\smiley\images\confused_smile.gif" />
+    <Content Include="Scripts\ckeditor\plugins\smiley\images\cry_smile.gif" />
+    <Content Include="Scripts\ckeditor\plugins\smiley\images\devil_smile.gif" />
+    <Content Include="Scripts\ckeditor\plugins\smiley\images\embaressed_smile.gif" />
+    <Content Include="Scripts\ckeditor\plugins\smiley\images\envelope.gif" />
+    <Content Include="Scripts\ckeditor\plugins\smiley\images\heart.gif" />
+    <Content Include="Scripts\ckeditor\plugins\smiley\images\kiss.gif" />
+    <Content Include="Scripts\ckeditor\plugins\smiley\images\lightbulb.gif" />
+    <Content Include="Scripts\ckeditor\plugins\smiley\images\omg_smile.gif" />
+    <Content Include="Scripts\ckeditor\plugins\smiley\images\regular_smile.gif" />
+    <Content Include="Scripts\ckeditor\plugins\smiley\images\sad_smile.gif" />
+    <Content Include="Scripts\ckeditor\plugins\smiley\images\shades_smile.gif" />
+    <Content Include="Scripts\ckeditor\plugins\smiley\images\teeth_smile.gif" />
+    <Content Include="Scripts\ckeditor\plugins\smiley\images\thumbs_down.gif" />
+    <Content Include="Scripts\ckeditor\plugins\smiley\images\thumbs_up.gif" />
+    <Content Include="Scripts\ckeditor\plugins\smiley\images\tounge_smile.gif" />
+    <Content Include="Scripts\ckeditor\plugins\smiley\images\whatchutalkingabout_smile.gif" />
+    <Content Include="Scripts\ckeditor\plugins\smiley\images\wink_smile.gif" />
+    <Content Include="Scripts\ckeditor\plugins\specialchar\dialogs\specialchar.js" />
+    <Content Include="Scripts\ckeditor\plugins\specialchar\lang\cs.js" />
+    <Content Include="Scripts\ckeditor\plugins\specialchar\lang\cy.js" />
+    <Content Include="Scripts\ckeditor\plugins\specialchar\lang\de.js" />
+    <Content Include="Scripts\ckeditor\plugins\specialchar\lang\el.js" />
+    <Content Include="Scripts\ckeditor\plugins\specialchar\lang\en.js" />
+    <Content Include="Scripts\ckeditor\plugins\specialchar\lang\eo.js" />
+    <Content Include="Scripts\ckeditor\plugins\specialchar\lang\et.js" />
+    <Content Include="Scripts\ckeditor\plugins\specialchar\lang\fa.js" />
+    <Content Include="Scripts\ckeditor\plugins\specialchar\lang\fi.js" />
+    <Content Include="Scripts\ckeditor\plugins\specialchar\lang\fr.js" />
+    <Content Include="Scripts\ckeditor\plugins\specialchar\lang\he.js" />
+    <Content Include="Scripts\ckeditor\plugins\specialchar\lang\hr.js" />
+    <Content Include="Scripts\ckeditor\plugins\specialchar\lang\it.js" />
+    <Content Include="Scripts\ckeditor\plugins\specialchar\lang\ku.js" />
+    <Content Include="Scripts\ckeditor\plugins\specialchar\lang\lv.js" />
+    <Content Include="Scripts\ckeditor\plugins\specialchar\lang\nb.js" />
+    <Content Include="Scripts\ckeditor\plugins\specialchar\lang\nl.js" />
+    <Content Include="Scripts\ckeditor\plugins\specialchar\lang\no.js" />
+    <Content Include="Scripts\ckeditor\plugins\specialchar\lang\pt-br.js" />
+    <Content Include="Scripts\ckeditor\plugins\specialchar\lang\sk.js" />
+    <Content Include="Scripts\ckeditor\plugins\specialchar\lang\tr.js" />
+    <Content Include="Scripts\ckeditor\plugins\specialchar\lang\ug.js" />
+    <Content Include="Scripts\ckeditor\plugins\specialchar\lang\zh-cn.js" />
+    <Content Include="Scripts\ckeditor\plugins\specialchar\lang\_translationstatus.txt" />
+    <Content Include="Scripts\ckeditor\plugins\stylesheetparser\plugin.js" />
+    <Content Include="Scripts\ckeditor\plugins\styles\styles\default.js" />
+    <Content Include="Scripts\ckeditor\plugins\tableresize\plugin.js" />
+    <Content Include="Scripts\ckeditor\plugins\tabletools\dialogs\tableCell.js" />
+    <Content Include="Scripts\ckeditor\plugins\table\dialogs\table.js" />
+    <Content Include="Scripts\ckeditor\plugins\templates\dialogs\templates.js" />
+    <Content Include="Scripts\ckeditor\plugins\templates\templates\default.js" />
+    <Content Include="Scripts\ckeditor\plugins\templates\templates\images\template1.gif" />
+    <Content Include="Scripts\ckeditor\plugins\templates\templates\images\template2.gif" />
+    <Content Include="Scripts\ckeditor\plugins\templates\templates\images\template3.gif" />
+    <Content Include="Scripts\ckeditor\plugins\uicolor\dialogs\uicolor.js" />
+    <Content Include="Scripts\ckeditor\plugins\uicolor\lang\bg.js" />
+    <Content Include="Scripts\ckeditor\plugins\uicolor\lang\cs.js" />
+    <Content Include="Scripts\ckeditor\plugins\uicolor\lang\cy.js" />
+    <Content Include="Scripts\ckeditor\plugins\uicolor\lang\da.js" />
+    <Content Include="Scripts\ckeditor\plugins\uicolor\lang\de.js" />
+    <Content Include="Scripts\ckeditor\plugins\uicolor\lang\el.js" />
+    <Content Include="Scripts\ckeditor\plugins\uicolor\lang\en.js" />
+    <Content Include="Scripts\ckeditor\plugins\uicolor\lang\eo.js" />
+    <Content Include="Scripts\ckeditor\plugins\uicolor\lang\et.js" />
+    <Content Include="Scripts\ckeditor\plugins\uicolor\lang\fa.js" />
+    <Content Include="Scripts\ckeditor\plugins\uicolor\lang\fi.js" />
+    <Content Include="Scripts\ckeditor\plugins\uicolor\lang\fr.js" />
+    <Content Include="Scripts\ckeditor\plugins\uicolor\lang\he.js" />
+    <Content Include="Scripts\ckeditor\plugins\uicolor\lang\hr.js" />
+    <Content Include="Scripts\ckeditor\plugins\uicolor\lang\it.js" />
+    <Content Include="Scripts\ckeditor\plugins\uicolor\lang\ku.js" />
+    <Content Include="Scripts\ckeditor\plugins\uicolor\lang\lv.js" />
+    <Content Include="Scripts\ckeditor\plugins\uicolor\lang\mk.js" />
+    <Content Include="Scripts\ckeditor\plugins\uicolor\lang\nb.js" />
+    <Content Include="Scripts\ckeditor\plugins\uicolor\lang\nl.js" />
+    <Content Include="Scripts\ckeditor\plugins\uicolor\lang\no.js" />
+    <Content Include="Scripts\ckeditor\plugins\uicolor\lang\pl.js" />
+    <Content Include="Scripts\ckeditor\plugins\uicolor\lang\pt-br.js" />
+    <Content Include="Scripts\ckeditor\plugins\uicolor\lang\sk.js" />
+    <Content Include="Scripts\ckeditor\plugins\uicolor\lang\tr.js" />
+    <Content Include="Scripts\ckeditor\plugins\uicolor\lang\ug.js" />
+    <Content Include="Scripts\ckeditor\plugins\uicolor\lang\uk.js" />
+    <Content Include="Scripts\ckeditor\plugins\uicolor\lang\vi.js" />
+    <Content Include="Scripts\ckeditor\plugins\uicolor\lang\zh-cn.js" />
+    <Content Include="Scripts\ckeditor\plugins\uicolor\lang\_translationstatus.txt" />
+    <Content Include="Scripts\ckeditor\plugins\uicolor\plugin.js" />
+    <Content Include="Scripts\ckeditor\plugins\uicolor\uicolor.gif" />
+    <Content Include="Scripts\ckeditor\plugins\uicolor\yui\assets\hue_bg.png" />
+    <Content Include="Scripts\ckeditor\plugins\uicolor\yui\assets\hue_thumb.png" />
+    <Content Include="Scripts\ckeditor\plugins\uicolor\yui\assets\picker_mask.png" />
+    <Content Include="Scripts\ckeditor\plugins\uicolor\yui\assets\picker_thumb.png" />
+    <Content Include="Scripts\ckeditor\plugins\uicolor\yui\assets\yui.css" />
+    <Content Include="Scripts\ckeditor\plugins\uicolor\yui\yui.js" />
+    <Content Include="Scripts\ckeditor\plugins\wsc\dialogs\ciframe.html" />
+    <Content Include="Scripts\ckeditor\plugins\wsc\dialogs\tmpFrameset.html" />
+    <Content Include="Scripts\ckeditor\plugins\wsc\dialogs\wsc.css" />
+    <Content Include="Scripts\ckeditor\plugins\wsc\dialogs\wsc.js" />
+    <Content Include="Scripts\ckeditor\plugins\xml\plugin.js" />
+    <Content Include="Scripts\ckeditor\skins\kama\dialog.css" />
+    <Content Include="Scripts\ckeditor\skins\kama\editor.css" />
+    <Content Include="Scripts\ckeditor\skins\kama\icons.png" />
+    <Content Include="Scripts\ckeditor\skins\kama\icons_rtl.png" />
+    <Content Include="Scripts\ckeditor\skins\kama\images\dialog_sides.gif" />
+    <Content Include="Scripts\ckeditor\skins\kama\images\dialog_sides.png" />
+    <Content Include="Scripts\ckeditor\skins\kama\images\dialog_sides_rtl.png" />
+    <Content Include="Scripts\ckeditor\skins\kama\images\mini.gif" />
+    <Content Include="Scripts\ckeditor\skins\kama\images\noimage.png" />
+    <Content Include="Scripts\ckeditor\skins\kama\images\sprites.png" />
+    <Content Include="Scripts\ckeditor\skins\kama\images\sprites_ie6.png" />
+    <Content Include="Scripts\ckeditor\skins\kama\images\toolbar_start.gif" />
+    <Content Include="Scripts\ckeditor\skins\kama\skin.js" />
+    <Content Include="Scripts\ckeditor\skins\kama\templates.css" />
+    <Content Include="Scripts\ckeditor\skins\office2003\dialog.css" />
+    <Content Include="Scripts\ckeditor\skins\office2003\editor.css" />
+    <Content Include="Scripts\ckeditor\skins\office2003\icons.png" />
+    <Content Include="Scripts\ckeditor\skins\office2003\icons_rtl.png" />
+    <Content Include="Scripts\ckeditor\skins\office2003\images\dialog_sides.gif" />
+    <Content Include="Scripts\ckeditor\skins\office2003\images\dialog_sides.png" />
+    <Content Include="Scripts\ckeditor\skins\office2003\images\dialog_sides_rtl.png" />
+    <Content Include="Scripts\ckeditor\skins\office2003\images\mini.gif" />
+    <Content Include="Scripts\ckeditor\skins\office2003\images\noimage.png" />
+    <Content Include="Scripts\ckeditor\skins\office2003\images\sprites.png" />
+    <Content Include="Scripts\ckeditor\skins\office2003\images\sprites_ie6.png" />
+    <Content Include="Scripts\ckeditor\skins\office2003\skin.js" />
+    <Content Include="Scripts\ckeditor\skins\office2003\templates.css" />
+    <Content Include="Scripts\ckeditor\skins\v2\dialog.css" />
+    <Content Include="Scripts\ckeditor\skins\v2\editor.css" />
+    <Content Include="Scripts\ckeditor\skins\v2\icons.png" />
+    <Content Include="Scripts\ckeditor\skins\v2\icons_rtl.png" />
+    <Content Include="Scripts\ckeditor\skins\v2\images\dialog_sides.gif" />
+    <Content Include="Scripts\ckeditor\skins\v2\images\dialog_sides.png" />
+    <Content Include="Scripts\ckeditor\skins\v2\images\dialog_sides_rtl.png" />
+    <Content Include="Scripts\ckeditor\skins\v2\images\mini.gif" />
+    <Content Include="Scripts\ckeditor\skins\v2\images\noimage.png" />
+    <Content Include="Scripts\ckeditor\skins\v2\images\sprites.png" />
+    <Content Include="Scripts\ckeditor\skins\v2\images\sprites_ie6.png" />
+    <Content Include="Scripts\ckeditor\skins\v2\images\toolbar_start.gif" />
+    <Content Include="Scripts\ckeditor\skins\v2\skin.js" />
+    <Content Include="Scripts\ckeditor\skins\v2\templates.css" />
+    <Content Include="Scripts\ckeditor\themes\default\theme.js" />
+    <Content Include="Scripts\datatables\dataTables.bootstrap4.min.js" />
+    <Content Include="Scripts\datatables\dataTables.fixedColumns.min.js" />
+    <Content Include="Scripts\datatables\datatables.min.js" />
+    <Content Include="Scripts\datatables\extensions\buttons.flash.min.js" />
+    <Content Include="Scripts\datatables\extensions\buttons.html5.js" />
+    <Content Include="Scripts\datatables\extensions\buttons.print.js" />
+    <Content Include="Scripts\datatables\extensions\dataTables.buttons.js" />
+    <Content Include="Scripts\datatables\extensions\jszip.min.js" />
+    <Content Include="Scripts\datatables\extensions\pdfmake.js" />
+    <Content Include="Scripts\datatables\extensions\pdfmake.min.js" />
+    <Content Include="Scripts\datatables\extensions\vfs_fonts.js" />
+    <Content Include="Scripts\datatables\jquery.dataTables.min.js" />
+    <Content Include="Scripts\esm\popper-utils.js" />
+    <Content Include="Scripts\esm\popper-utils.min.js" />
+    <Content Include="Scripts\esm\popper.js" />
+    <Content Include="Scripts\esm\popper.min.js" />
+    <Content Include="Scripts\esm\popper.min.js.map" />
+    <Content Include="Scripts\esm\popper.js.map" />
+    <Content Include="Scripts\esm\popper-utils.min.js.map" />
+    <Content Include="Scripts\esm\popper-utils.js.map" />
+    <Content Include="Scripts\bootstrap.min.js.map" />
+    <Content Include="Scripts\bootstrap.js.map" />
+    <Content Include="Scripts\bootstrap.bundle.min.js.map" />
+    <Content Include="Scripts\bootstrap.bundle.js.map" />
+    <Content Include="Content\bootstrap.min.css.map" />
+    <Content Include="Content\bootstrap.css.map" />
+    <Content Include="Content\bootstrap-reboot.min.css.map" />
+    <Content Include="Content\bootstrap-reboot.css.map" />
+    <Content Include="Content\bootstrap-grid.min.css.map" />
+    <Content Include="Content\bootstrap-grid.css.map" />
+    <Content Include="Areas\Supervision\Views\web.config" />
+    <Content Include="Areas\Fiscalizacion\Views\web.config" />
+    <Content Include="Content\fonts\dashboard.eot" />
+    <Content Include="Content\fonts\dashboard.ttf" />
+    <Content Include="Content\fonts\dashboard.woff" />
+    <Content Include="Areas\Main\Views\web.config" />
+    <Content Include="Areas\Main\Views\Principal\_Menu.cshtml" />
+    <Content Include="Areas\Main\Views\Principal\AccesoUsuario.cshtml" />
+    <Content Include="Areas\Main\Views\Principal\_Header.cshtml" />
+    <Content Include="Areas\Main\Views\Principal\_Footer.cshtml" />
+    <Content Include="Areas\Main\Views\Principal\Demo.cshtml" />
+    <Content Include="Content\font-awesome\fonts\fontawesome-webfont.eot" />
+    <Content Include="Content\font-awesome\fonts\fontawesome-webfont.ttf" />
+    <Content Include="Content\font-awesome\fonts\fontawesome-webfont.woff" />
+    <Content Include="Content\font-awesome\fonts\fontawesome-webfont.woff2" />
+    <Content Include="Content\font-awesome\fonts\FontAwesome.otf" />
+    <Content Include="fonts\glyphicons-halflings-regular.woff" />
+    <Content Include="fonts\glyphicons-halflings-regular.ttf" />
+    <Content Include="fonts\glyphicons-halflings-regular.eot" />
+    <Content Include="Archivos\Plantilla\Reg_Usu\THABILITANTE_Reg_Usu.xlsx" />
+    <Content Include="Archivos\Plantilla\PoaVertice.xlsx" />
+    <Content Include="Archivos\Plantilla\THabilitanteVertice.xlsx" />
+    <Content Include="Archivos\Plantilla\PoaMaderableRAprob.xlsx" />
+    <Content Include="Archivos\Plantilla\PoaMaderableRAprobPCarr_v2.xlsx" />
+    <Content Include="Archivos\Plantilla\PoaMaderableRAprobPMed_v2.xlsx" />
+    <Content Include="Archivos\Plantilla\PoaMaderableRAprob_v2.xlsx" />
+    <Content Include="Archivos\Plantilla\PoaMaderableBExtraccion_v2.xlsx" />
+    <Content Include="Areas\Capacitacion\Views\ManProgramaCapacitacion\Index.cshtml" />
+    <Content Include="Areas\Capacitacion\Views\web.config" />
+    <Content Include="Areas\General\Views\web.config" />
+    <Content Include="Areas\General\Views\Controles\_ManGrilla.cshtml" />
+    <Content Include="Archivos\Plantilla\PoaNoMaderableBExtraccion_v2.xlsx" />
+    <Content Include="Archivos\Plantilla\PoaNoMaderableCarrBExtraccion_v2.xlsx" />
+    <Content Include="Archivos\Plantilla\PoaNoMaderablePMedBExtraccion_v2.xlsx" />
+    <Content Include="Archivos\Plantilla\PoaInSituBExtraccion_v2.xlsx" />
+    <Content Include="Archivos\Plantilla\PoaInSituRAprob_v2.xlsx" />
+    <Content Include="Archivos\Plantilla\PoaMaderable_Censo_v2.xlsx" />
+    <Content Include="Archivos\Plantilla\PoaNoMaderable_Censo_v2.xlsx" />
+    <Content Include="Archivos\Plantilla\Reg_Usu\DEMA_Reg_Usu.xlsx" />
+    <Content Include="Areas\Capacitacion\Views\ManProgramaCapacitacion\AddEdit.cshtml" />
+    <Content Include="Areas\Capacitacion\Views\ManCapacitacion\Index.cshtml" />
+    <Content Include="Areas\General\Views\Controles\_Ubigeo.cshtml" />
+    <Content Include="Areas\General\Views\Controles\_THabilitante.cshtml" />
+    <Content Include="Areas\Capacitacion\Views\ManCapacitacion\AddEdit.cshtml" />
+    <Content Include="Areas\General\Views\Controles\_BuscarPersonaGeneral.cshtml" />
+    <Content Include="Areas\General\Views\Controles\_POA.cshtml" />
+    <Content Include="Areas\Capacitacion\Views\ManCapacitacion\_Participante.cshtml" />
+    <Content Include="Archivos\Plantilla\DevolArbolCenso.xlsx" />
+    <Content Include="Archivos\Plantilla\DevolToconCenso.xlsx" />
+    <Content Include="Archivos\Plantilla\DevolTrozaCenso.xlsx" />
+    <Content Include="Archivos\Plantilla\DevolucionVertice.xlsx" />
+    <Content Include="Archivos\Plantilla\EspeciesDevueltas.xlsx" />
+    <Content Include="Archivos\Plantilla\DevolucionMaderableBExtraccion.xlsx" />
+    <Content Include="Areas\Capacitacion\Views\ManCapacitacion\_PreguntaEncuesta.cshtml" />
+    <Content Include="Areas\Capacitacion\Views\ManCapacitacion\_NotaExamen.cshtml" />
+    <Content Include="Archivos\Plantilla\CapacitacionEvaluacionParticipantes.xlsx" />
+    <Content Include="Archivos\Plantilla\CapacitacionParticipantes.xlsx" />
+    <Content Include="Archivos\Plantilla\CapacitacionParticipantesOSINFOR.xlsx" />
+    <Content Include="Archivos\Plantilla\CapacitacionParticipantesPonente.xlsx" />
+    <Content Include="Archivos\Plantilla\CapacitacionResumenEncuesta.xlsx" />
+    <Content Include="Archivos\Plantilla\CapacitacionResumenEncuestaExport.xlsx" />
+    <Content Include="Archivos\Plantilla\PManejoTaraVertice.xlsx" />
+    <Content Include="Archivos\Plantilla\VolInjus_v2.xlsx" />
+    <Content Include="Areas\Capacitacion\Views\ManCapacitacion\Reporte.cshtml" />
+    <Content Include="Archivos\Plantilla\PManejoTaraInventario.xlsx" />
+    <Content Include="Areas\General\Views\Reportes\Reporte.cshtml" />
+    <Content Include="Areas\General\Views\Controles\_Persona.cshtml" />
+    <Content Include="Areas\Supervision\Views\ManCNotificacion\Index.cshtml" />
+    <Content Include="Areas\Supervision\Views\ManCNotificacion\AddEdit.cshtml" />
+    <Content Include="Areas\General\Views\Controles\_CNotificacion.cshtml" />
+    <Content Include="Areas\General\Views\Controles\_IntegracionSIADO.cshtml" />
+    <Content Include="Areas\General\Views\Controles\_DevolucionMadera.cshtml" />
+    <Content Include="Areas\Supervision\Views\Reportes\Reporte.cshtml" />
+    <Content Include="Areas\Supervision\Views\ManCNotificacion\Muestra.cshtml" />
+    <Content Include="Archivos\Plantilla\Reg_Usu\CAPACITACION_Reg_Usu.xlsx" />
+    <Content Include="Archivos\Plantilla\Reg_Usu\CNOTIFICACION_Reg_Usu.xlsx" />
+    <Content Include="Archivos\Plantilla\Reg_Usu\DEVOLUCIONMAD_Reg_Usu.xlsx" />
+    <Content Include="Archivos\Plantilla\Reg_Usu\PROGRAMA_CAPACITACION_Reg_Usu.xlsx" />
+    <Content Include="Archivos\Plantilla\Reg_Usu\RENUNCIACONCESION_Reg_Usu.xlsx" />
+    <Content Include="Areas\Supervision\Views\SeguimientoMuestra\Index.cshtml" />
+    <Content Include="Areas\Supervision\Views\SeguimientoMuestra\AddEdit.cshtml" />
+    <Content Include="Areas\Supervision\Views\SeguimientoMuestra\_AddEditMuestra.cshtml" />
+    <Content Include="Areas\General\Views\Controles\_ManGrillaPaging.cshtml" />
+    <Content Include="Areas\Supervision\Views\SeguimientoMuestra\_BuscarInformeSupervision.cshtml" />
+    <Content Include="Areas\General\Views\Controles\_ControlCalidad.cshtml" />
+    <Content Include="Areas\Supervision\Views\ManInforme\AddEdit.cshtml" />
+    <Content Include="Areas\Supervision\Views\ManInforme\Index.cshtml" />
+    <Content Include="Areas\Supervision\Views\ManInforme\Render\_renderCNotificacion.cshtml" />
+    <Content Include="Areas\General\Views\Controles\_ConsultaSITD.cshtml" />
+    <Content Include="Areas\Seguridad\Views\web.config" />
+    <Content Include="Areas\Seguridad\Views\Perfil\Index.cshtml" />
+    <Content Include="Areas\Seguridad\Views\Perfil\_AddEdit.cshtml" />
+    <Content Include="Areas\Seguridad\Views\Perfil\_MenuPerfil.cshtml" />
+    <Content Include="Areas\Supervision\Views\ManInformeExSitu\AddEditExSitu.cshtml" />
+    <Content Include="Areas\Supervision\Views\ManInforme\Render\_renderSupervisor.cshtml" />
+    <Content Include="Areas\Supervision\Views\ManInforme\Render\_renderVerticeTHCampo.cshtml" />
+    <Content Include="Areas\Supervision\Views\ManInforme\_THabilitanteGeneral.cshtml" />
+    <Content Include="Areas\Supervision\Views\ManInforme\_VerticeTHCampo.cshtml" />
+    <Content Include="Areas\General\Views\Controles\_DenunciaSITD.cshtml" />
+    <Content Include="Areas\Supervision\Views\ManInforme\Render\_renderAvistamientoFauna.cshtml" />
+    <Content Include="Areas\Seguridad\Views\Usuario\Index.cshtml" />
+    <Content Include="Areas\Seguridad\Views\Usuario\_Usuario.cshtml" />
+    <Content Include="Areas\Seguridad\Views\Usuario\_UsuarioMenu.cshtml" />
+    <Content Include="Areas\Seguridad\Views\Usuario\_UsuarioPerfil.cshtml" />
+    <Content Include="Areas\Supervision\Views\ManInforme\_AvistamientoFauna.cshtml" />
+    <Content Include="Areas\General\Views\Controles\_renderComboEspecie.cshtml" />
+    <Content Include="Areas\Supervision\Views\ManInforme\Render\_renderFotoSupervision.cshtml" />
+    <Content Include="Areas\Supervision\Views\ManInforme\_FotoSupervision.cshtml" />
+    <Content Include="Areas\Supervision\Views\ManInforme\_POASupervisado.cshtml" />
+    <Content Include="Areas\Supervision\Views\ManInforme\_VerticeArea.cshtml" />
+    <Content Include="Areas\Supervision\Views\ManInforme\Render\_renderEvalArbolAdicional.cshtml" />
+    <Content Include="Areas\Supervision\Views\ManInforme\Render\_renderEvalArbolNoAutorizado.cshtml" />
+    <Content Include="Areas\Supervision\Views\ManInforme\_EvaluacionArbol.cshtml" />
+    <Content Include="Areas\Supervision\Views\ManInforme\Render\_renderHuayrona.cshtml" />
+    <Content Include="Areas\Supervision\Views\ManInforme\_Huayrona.cshtml" />
+    <Content Include="Areas\Supervision\Views\ManInforme\Render\_renderVerticeArea.cshtml" />
+    <Content Include="Areas\General\Views\Controles\_ValidarPlantilla.cshtml" />
+    <Content Include="Areas\Supervision\Views\ManInforme\Render\_renderActividadSilvicultural.cshtml" />
+    <Content Include="Areas\Supervision\Views\ManInforme\_ActividadSilvicultural.cshtml" />
+    <Content Include="Areas\Supervision\Views\ManInforme\Render\_renderCambioUso.cshtml" />
+    <Content Include="Areas\Supervision\Views\ManInforme\_CambioUso.cshtml" />
+    <Content Include="Areas\Supervision\Views\ManInforme\Render\_renderEvalOtro.cshtml" />
+    <Content Include="Areas\Supervision\Views\ManInforme\_EvaluacionOtro.cshtml" />
+    <Content Include="Areas\Supervision\Views\ManInforme\Render\_renderVolumenAnalizado.cshtml" />
+    <Content Include="Areas\Supervision\Views\ManInforme\_VolumenAnalizado.cshtml" />
+    <Content Include="Areas\Supervision\Views\ManInforme\_DatosCampo.cshtml" />
+    <Content Include="Areas\Supervision\Views\ManInforme\_DatosCampoMaderable.cshtml" />
+    <Content Include="Areas\Supervision\Views\ManInforme\_EspecieMaderable.cshtml" />
+    <Content Include="Areas\Supervision\Views\ManInforme\_DatosCampoBosqueSeco.cshtml" />
+    <Content Include="Areas\Supervision\Views\ManInforme\_EspecieBosqueSeco.cshtml" />
+    <Content Include="Areas\Supervision\Views\ManInforme\_DatosCampoSemillero.cshtml" />
+    <Content Include="Areas\Supervision\Views\ManInforme\_EspecieSemillero.cshtml" />
+    <Content Include="Areas\Supervision\Views\ManInforme\_DatosCampoNoMaderable.cshtml" />
+    <Content Include="Areas\Supervision\Views\ManInforme\_EspecieNoMaderable.cshtml" />
+    <Content Include="Areas\Supervision\Views\ManInforme\_DatosTrozaCampo.cshtml" />
+    <Content Include="Areas\Supervision\Views\ManInforme\_EspecieTrozaCampo.cshtml" />
+    <Content Include="Areas\Supervision\Views\ManInforme\_DatosMaderaAserrada.cshtml" />
+    <Content Include="Areas\Supervision\Views\ManInforme\_EspecieMaderaAserrada.cshtml" />
+    <Content Include="Areas\Supervision\Views\ManInforme\_DatosCarrizoCampo.cshtml" />
+    <Content Include="Areas\Supervision\Views\ManInforme\_EspecieCarrizoCampo.cshtml" />
+    <Content Include="Areas\Supervision\Views\ManInforme\_DatosPlantaMedicinal.cshtml" />
+    <Content Include="Archivos\Plantilla\CN_Datos_POA.xlsx" />
+    <Content Include="Archivos\Plantilla\CN_Muestra_Maderable.xlsx" />
+    <Content Include="Archivos\Plantilla\CN_Muestra_NoMaderable.xlsx" />
+    <Content Include="Archivos\Plantilla\IndAdicNoAut_Mad_v2.xlsx" />
+    <Content Include="Archivos\Plantilla\InformeActividadSilvicultural.xlsx" />
+    <Content Include="Archivos\Plantilla\InformeAvistamientoFauna.xlsx" />
+    <Content Include="Archivos\Plantilla\InformeHuayrona.xlsx" />
+    <Content Include="Archivos\Plantilla\MaderaAserradaCampo.xlsx" />
+    <Content Include="Archivos\Plantilla\Otros_Puntos_Eval.xlsx" />
+    <Content Include="Archivos\Plantilla\PoaBosqueSecoCenso_Modificar.xlsx" />
+    <Content Include="Archivos\Plantilla\PoaCensoNoMaderableCarrizo.xlsx" />
+    <Content Include="Archivos\Plantilla\PoaCensoNoMaderablePlantaMedicinal.xlsx" />
+    <Content Include="Archivos\Plantilla\PoaMaderableCenso_Modificar_semillero_v2.xlsx" />
+    <Content Include="Archivos\Plantilla\PoaMaderableCenso_Modificar_v2.xlsx" />
+    <Content Include="Archivos\Plantilla\PoaNoMaderableCenso_Modificar.xlsx" />
+    <Content Include="Archivos\Plantilla\THabilitanteVerticeCampo.xlsx" />
+    <Content Include="Archivos\Plantilla\TrozaCampo.xlsx" />
+    <Content Include="Areas\Supervision\Views\ManInforme\_DatosVerticeVerificado.cshtml" />
+    <Content Include="Areas\Supervision\Views\ManInforme\_VerticeVerificado.cshtml" />
+    <Content Include="Areas\Supervision\Views\ManInforme\Render\_renderDatosSupervision.cshtml" />
+    <Content Include="Areas\Supervision\Views\ManInformeExSitu\_AreaExSitu.cshtml" />
+    <Content Include="Areas\Supervision\Views\ManInformeExSitu\_GrupoTaxonomico.cshtml" />
+    <Content Include="Areas\Supervision\Views\ManInformeExSitu\_EquipoContencion.cshtml" />
+    <Content Include="Areas\Supervision\Views\ManInformeExSitu\_ControlPlaga.cshtml" />
+    <Content Include="Areas\Supervision\Views\ManInformeExSitu\_ManejoRegistro.cshtml" />
+    <Content Include="Areas\Supervision\Views\ManInformeExSitu\_EnriquecimientoAmb.cshtml" />
+    <Content Include="Areas\Supervision\Views\ManInformeExSitu\_EspecieReproducida.cshtml" />
+    <Content Include="Areas\Supervision\Views\ManInfSuspension\Index.cshtml" />
+    <Content Include="Areas\Supervision\Views\ManInfSuspension\AddEdit.cshtml" />
+    <Content Include="Areas\Supervision\Views\ManInformeExSitu\_EspecieCapturada.cshtml" />
+    <Content Include="Areas\Supervision\Views\ManInformeExSitu\_EspecieNacimiento.cshtml" />
+    <Content Include="Areas\Supervision\Views\ManInformeExSitu\_EspecieCenso.cshtml" />
+    <Content Include="Areas\Supervision\Views\ManInformeExSitu\_ActividadEducacion.cshtml" />
+    <Content Include="Areas\Supervision\Views\ManInformeExSitu\_ActividadInvestigacion.cshtml" />
+    <Content Include="Areas\Supervision\Views\ManInformeConservacion\AddEditConservacion.cshtml" />
+    <Content Include="Areas\Supervision\Views\ManInformeConservacion\_CoordenadaUTM.cshtml" />
+    <Content Include="Areas\Supervision\Views\ManInformeConservacion\_InfraestructuraImpl.cshtml" />
+    <Content Include="Areas\Supervision\Views\ManInformeConservacion\_ActividadCapacitacion.cshtml" />
+    <Content Include="Areas\Supervision\Views\ManInformeConservacion\_ActividadInvestigacion.cshtml" />
+    <Content Include="Areas\Supervision\Views\ManInformeConservacion\_ManejoImpacto.cshtml" />
+    <Content Include="Areas\Supervision\Views\ManInformeConservacion\_RegistroFlora.cshtml" />
+    <Content Include="Areas\Supervision\Views\ManInformeConservacion\_RegistroPaisaje.cshtml" />
+    <Content Include="Areas\Supervision\Views\ManInformeFauna\AddEditFauna.cshtml" />
+    <Content Include="Areas\Supervision\Views\ManInformeFauna\_ResponsabilidadSocial.cshtml" />
+    <Content Include="Areas\Supervision\Views\ManInformeFauna\_POAFaunaSupervisado.cshtml" />
+    <Content Include="Areas\Supervision\Views\ManInformeFauna\_InfraestructuraImpl.cshtml" />
+    <Content Include="Areas\Supervision\Views\ManInformeFauna\_Zonificacion.cshtml" />
+    <Content Include="Areas\Supervision\Views\ManInformeFauna\_AprovSostenible.cshtml" />
+    <Content Include="Areas\Supervision\Views\ManInformeFauna\_ActoObligacion.cshtml" />
+    <Content Include="Areas\Supervision\Views\ManInformeConservacion\_EquipamientoCons.cshtml" />
+    <Content Include="Areas\Supervision\Views\ManInformeConservacion\_CapacitacionEfectuadaCons.cshtml" />
+    <Content Include="Areas\Supervision\Views\ManInformeConservacion\_ActividadLocalCons.cshtml" />
+    <Content Include="Areas\Supervision\Views\ManInformeConservacion\_DocumentoGestionCons.cshtml" />
+    <Content Include="Areas\Supervision\Views\ManInformeConservacion\_ActividadObligacion.cshtml" />
+    <Content Include="Areas\Supervision\Views\ManInformeConservacion\_AprovEspecieObligacion.cshtml" />
+    <Content Include="Areas\Supervision\Views\ManInformeTara\AddEditTara.cshtml" />
+    <Content Include="Areas\Supervision\Views\ManInformeTara\_ManPlantacion.cshtml" />
+    <Content Include="Areas\Supervision\Views\ManInformeTara\_Aprovechamiento.cshtml" />
+    <Content Include="Areas\Supervision\Views\ManInformeTara\_Capacitacion.cshtml" />
+    <Content Include="Areas\Supervision\Views\ManInformeTara\_ProduccionFruto.cshtml" />
+    <Content Include="Areas\Supervision\Views\ManInformeTara\_AprovechaForestal.cshtml" />
+    <Content Include="Areas\Supervision\Views\ManInformeTara\_ArbolSupervisado.cshtml" />
+    <Content Include="Areas\Supervision\Views\ManInformeTara\_Kardex.cshtml" />
+    <Content Include="Areas\Supervision\Views\ManInforme\Render\_renderObligacionTitular.cshtml" />
+    <Content Include="Areas\Supervision\Views\ManInforme\Render\_renderObligContractual.cshtml" />
+    <Content Include="Areas\Supervision\Views\ManInforme\Render\_renderDesplazamiento.cshtml" />
+    <Content Include="Areas\Supervision\Views\ManInforme\_Desplazamiento.cshtml" />
+    <Content Include="Areas\Supervision\Views\Shared\_renderListInforme.cshtml" />
+    <Content Include="Areas\General\Views\Controles\_ValidarPlantilla_.cshtml" />
+    <Content Include="Areas\General\Views\Controles\ValidarPlantilla.cshtml" />
+    <Content Include="Areas\Fiscalizacion\Views\Shared\_renderListExpediente.cshtml" />
+    <Content Include="Areas\Fiscalizacion\Views\Shared\_renderListResolucion.cshtml" />
+    <Content Include="Areas\Fiscalizacion\Views\Shared\_renderListILegal.cshtml" />
+    <Content Include="Areas\Supervision\Views\ManInforme\_FormatoControlCalidad.cshtml" />
+    <Content Include="Areas\General\Views\Controles\_VPCKEDITOR.cshtml" />
+    <Content Include="Areas\General\Views\Controles\_ControlCalidadAjax.cshtml" />
+    <Content Include="Areas\PlanFocalizacion\Views\Focalizacion\Index.cshtml" />
+    <Content Include="Areas\PlanFocalizacion\Views\Focalizacion\_PlanTrabajo.cshtml" />
+    <Content Include="Areas\PlanFocalizacion\Views\Focalizacion\_PlanTrabajoAprobar.cshtml" />
+    <Content Include="Areas\PlanFocalizacion\Views\Focalizacion\_PlanTrabajoDetalle.cshtml" />
+    <Content Include="Areas\PlanFocalizacion\Views\Focalizacion\_PlanTrabajoEliminar.cshtml" />
+    <Content Include="Areas\PlanFocalizacion\Views\Priorizacion\Index.cshtml" />
+    <Content Include="Areas\PlanFocalizacion\Views\Focalizacion\_Calidad.cshtml" />
+    <Content Include="Areas\PlanFocalizacion\Views\Focalizacion\_PlanManejoAdd.cshtml" />
+    <Content Include="Archivos\Plantilla\Paspeq\paspeq_plan_items.xlsx" />
+    <Content Include="Areas\PlanFocalizacion\Views\Focalizacion\_PlanTrabajoEspecies.cshtml" />
+    <Content Include="Areas\PlanFocalizacion\Views\Focalizacion\_PlanManejoAddExtra.cshtml" />
+    <Content Include="Areas\PlanFocalizacion\Views\Focalizacion\_PlanTrabajoEspeciesEdit.cshtml" />
+    <Content Include="Areas\Supervision\Views\ManInformeQuinquenal\Index.cshtml" />
+    <Content Include="Archivos\Plantilla\PManejo.xlsx" />
+    <Content Include="Archivos\Plantilla\PGMF.xlsx" />
+    <Content Include="Areas\Supervision\Views\ManInformeQuinquenal\AddEdit.cshtml" />
+    <Content Include="Areas\Supervision\Views\ManInformeQuinquenal\_renderProfesional.cshtml" />
+    <Content Include="Areas\Supervision\Views\ManInformeQuinquenal\_renderRDQuinquenal.cshtml" />
+    <Content Include="Areas\Supervision\Views\ManInformeQuinquenal\_renderResultadoQuinquenal.cshtml" />
+    <Content Include="Areas\Supervision\Views\ManInformeQuinquenal\_BuscarRDQuinquenal.cshtml" />
+    <Content Include="Areas\PlanFocalizacion\Views\Paspeq\_PaspeqEliminar.cshtml" />
+    <Content Include="Areas\PlanFocalizacion\Views\Paspeq\_PaspeqSeleccion.cshtml" />
+    <Content Include="Archivos\Plantilla\Reg_Usu\ISUPERVISION_Reg_Usu.xlsx" />
+    <Content Include="Archivos\Documentos\guiaFormatoControlCalidad.pdf" />
+    <Content Include="Areas\Supervision\Views\Denuncias\_ItemNuevo.cshtml" />
+    <Content Include="Areas\Supervision\Views\ManInforme\modalExpediente.cshtml" />
+    <Content Include="Areas\Supervision\Views\ManInforme\modalInforme.cshtml" />
+    <Content Include="Areas\Supervision\Views\Denuncias\VistaDenuncia.cshtml" />
+    <Content Include="Areas\Supervision\Views\Denuncias\IndexDenuncia.cshtml" />
+    <Content Include="Areas\Supervision\Views\Denuncias\TramiteDenuncia.cshtml" />
+    <Content Include="Areas\Supervision\Views\Denuncias\modalDocInforme.cshtml" />
+    <Content Include="Areas\Supervision\Views\Denuncias\reporteDenuncia.cshtml" />
+    <Content Include="Areas\Supervision\Views\ManCorrecMandato\AddEdit.cshtml" />
+    <Content Include="Areas\Supervision\Views\ManCorrecMandato\Index.cshtml" />
+    <Content Include="Areas\Supervision\Views\ManCorrecMandato\_ItemExpMandato.cshtml" />
+    <Content Include="Areas\Supervision\Views\ManCorrecMandato\_ItemNuevo.cshtml" />
+    <Content Include="Areas\Supervision\Views\ManCorrecMandato\_modalFisca.cshtml" />
+    <Content Include="Areas\Supervision\Views\ManCorrecMandato\_modalInf.cshtml" />
+    <Content Include="Areas\Supervision\Views\ManCorrecMandato\_modalInfMa.cshtml" />
+    <Content Include="Areas\Supervision\Views\ManInforme\_ArbolesSinPoa.cshtml" />
+    <Content Include="Areas\Supervision\Views\Denuncias\modalTHabilitante.cshtml" />
+    <Content Include="Areas\Supervision\Views\Reportes\ReporteMandatos.cshtml" />
+    <Content Include="Areas\Supervision\Views\Reportes\MedidasCorrectivas.cshtml" />
+    <Content Include="Areas\Supervision\Views\ManCorrecMandato\_modalArchivo.cshtml" />
+    <Content Include="Areas\Planificacion\Views\web.config" />
+    <Content Include="Areas\Planificacion\Views\ManPlan\Index.cshtml" />
+    <Content Include="Areas\Planificacion\Views\ManUniverso\AddEdit.cshtml" />
+    <Content Include="Areas\Planificacion\Views\ManCriterio\_PlanCriterioValor.cshtml" />
+    <Content Include="Areas\Planificacion\Views\ManPlan\AddEdit.cshtml" />
+    <Content Include="Areas\Planificacion\Views\ManCriterio\_PlanCriterio.cshtml" />
+    <Content Include="Areas\Planificacion\Views\ManReporte\ReporteTHEstadoResumen.cshtml" />
+    <Content Include="Areas\Planificacion\Views\ManReporte\ReporteTHModPorDpto.cshtml" />
+    <Content Include="Areas\Planificacion\Views\ManCasuistica\_PlanCasuistica.cshtml" />
+    <Content Include="Areas\Planificacion\Views\ManCasuistica\RevisionConsolidadoOd.cshtml" />
+    <Content Include="Areas\Planificacion\Views\ManCasuistica\_PlanCasuisticaUniverso.cshtml" />
+    <Content Include="Archivos\Plantilla\plantilla_priorizacion.xlsx" />
+    <Content Include="Archivos\Plantilla\Focalizacion\Plantilla_PriorizacionV1.xlsx" />
+    <Content Include="Areas\Focalizacion\Views\web.config" />
+    <Content Include="Areas\Focalizacion\Views\Priorizacion\Index.cshtml" />
+    <Content Include="Areas\Focalizacion\Views\PlanTrabajo\Index.cshtml" />
+    <Content Include="Areas\Focalizacion\Views\PlanTrabajo\_AddPlan.cshtml" />
+    <Content Include="Areas\Focalizacion\Views\Priorizacion\_Calificación.cshtml" />
+    <Content Include="Areas\Focalizacion\Views\PlanTrabajo\Plan.cshtml" />
+    <Content Include="Areas\Focalizacion\Views\PlanTrabajo\_PlanManejoOrd.cshtml" />
+    <Content Include="Areas\Focalizacion\Views\PlanTrabajo\_CalificacionEspecie.cshtml" />
+    <Content Include="Areas\Focalizacion\Views\PlanTrabajo\_MuestraMinimaEspecie.cshtml" />
+    <Content Include="Archivos\Plantilla\Focalizacion\PlantillaR_Calificacion.xlsx" />
+    <Content Include="Archivos\Plantilla\Focalizacion\PlantillaR_PlanDet.xlsx" />
+    <Content Include="Archivos\Plantilla\Focalizacion\PlantillaR_PlanCabecera.xlsx" />
+    <Content Include="Areas\Focalizacion\Views\PlanTrabajo\_PlanManejoExtra.cshtml" />
+    <Content Include="Areas\Focalizacion\Views\PlanTrabajo\_Consolidado.cshtml" />
+    <Content Include="Areas\Planificacion\Views\ManCriterio\_ReplicarPlanCriterio.cshtml" />
+    <Content Include="Archivos\Mandato\Plantilla_Mandato.xlsx" />
+    <Content Include="Archivos\MCorrectivas\Plantilla_MCorrectiva.xlsx" />
+    <Content Include="Areas\Focalizacion\Views\PlanTrabajo\_ModificarEspecieConsolidado.cshtml" />
+    <Content Include="Areas\Supervision\Views\Reportes\ReporteTitularResumen.cshtml" />
+    <Content Include="Areas\General\Views\Especies\Index.cshtml" />
+    <Content Include="Areas\Supervision\Views\ManInformeExSitu\_ActividadCapacitacion.cshtml" />
+    <Content Include="Areas\Seguridad\Views\Usuario\_UsuarioAcceso.cshtml" />
+    <Content Include="Areas\Seguridad\Views\Usuario\_UsuarioAccesoControl.cshtml" />
+    <Content Include="Areas\Main\Views\Principal\_cambiarPass.cshtml" />
+    <Content Include="Areas\Main\Views\Principal\_terminosUso.cshtml" />
+    <Content Include="Archivos\Plantilla\Focalizacion\PlanTrabajo\PPlanTrabajo.docx" />
+    <Content Include="Areas\Supervision\Views\Shared\_Layout.cshtml" />
+    <Content Include="Areas\Seguridad\Views\Shared\_Layout.cshtml" />
+    <Content Include="Areas\Fiscalizacion\Views\InformeLegal\Index.cshtml" />
+    <Content Include="Areas\General\Views\Controles\_ManGrillaPaging_v3.cshtml" />
+    <Content Include="Areas\Fiscalizacion\Views\InformeLegal\CreateOrEdit.cshtml" />
+    <Content Include="Areas\Fiscalizacion\Views\InformeLegal\Shared\_renderListInforme.cshtml" />
+    <Content Include="Areas\Supervision\Views\ManItenerario\AddEdit.cshtml" />
+    <Content Include="Areas\Supervision\Views\ManItenerario\Index.cshtml" />
+    <Content Include="Areas\Supervision\Views\ManItenerario\AddEdit.cshtml" />
+    <Content Include="Areas\Supervision\Views\Alerta\MainAlerta.cshtml" />
+    <Content Include="Areas\Supervision\Views\Alerta\AddEdit.cshtml" />
+    <Content Include="Areas\Fiscalizacion\Views\Shared\_Layout.cshtml" />
+    <Content Include="Areas\Fiscalizacion\Views\InformeLegal\Shared\_recomendaciones.cshtml" />
+    <Content Include="Areas\Supervision\Views\ManItenerario\_renderSupervisor.cshtml" />
+    <Content Include="Areas\Fiscalizacion\Views\InformeLegal\Shared\_archivo.cshtml" />
+    <Content Include="Areas\Fiscalizacion\Views\InformeLegal\Shared\_incisos.cshtml" />
+    <Content Include="Areas\Fiscalizacion\Views\InformeLegal\Shared\_renderListaEncisos.cshtml" />
+    <Content Include="Areas\Fiscalizacion\Views\InformeLegal\Shared\_renderListaEspecies.cshtml" />
+    <Content Include="Areas\Fiscalizacion\Views\InformeLegal\Shared\_recomendacionesAP.cshtml" />
+    <Content Include="Areas\Fiscalizacion\Views\InformeLegal\Shared\_motivoRR.cshtml" />
+    <Content Include="Areas\Fiscalizacion\Views\InformeLegal\Shared\_finalInstruccion.cshtml" />
+    <Content Include="Areas\Fiscalizacion\Views\InformeLegal\Shared\_otros.cshtml" />
+    <Content Include="Areas\Fiscalizacion\Views\InformeLegal\Shared\_renderListaEspecieAP.cshtml" />
+    <Content Include="Areas\Fiscalizacion\Views\InformeLegal\Shared\_renderInfraccionesRR.cshtml" />
+    <Content Include="Areas\Fiscalizacion\Views\InformeLegal\Shared\_renderListaEncisosFI.cshtml" />
+    <Content Include="Areas\Supervision\Views\ManItenerario\_BuscarCartaNotificacion.cshtml" />
+    <Content Include="Areas\Supervision\Views\ManItenerario\_renserSupervisiones.cshtml" />
+    <Content Include="Areas\Supervision\Views\ManItenerario\_CartaBitacora.cshtml" />
+    <Content Include="Archivos\Plantilla\supuesto_A.docx" />
+    <Content Include="Archivos\Plantilla\supuesto_B.docx" />
+    <Content Include="Areas\Fiscalizacion\Views\ManResolucion\Index.cshtml" />
+    <Content Include="Archivos\Plantilla\Reg_Usu\RESODIREC_REG.xlsx" />
+    <Content Include="Areas\Fiscalizacion\Views\ManResolucion\CreateOrEdit.cshtml" />
+    <Content Include="Imagenes\Fondos\cambio_diseño.docx" />
+    <Content Include="Imagenes\Logo\logo-sigo.psd" />
+    <Content Include="Imagenes\Logo\LOGOTIPO ALTAIR 12.cdr" />
+    <Content Include="Areas\Fiscalizacion\Views\InformeFundamentado\AddEdit.cshtml" />
+    <Content Include="Areas\Fiscalizacion\Views\InformeFundamentado\Index.cshtml" />
+    <Content Include="Areas\Fiscalizacion\Views\InformeFundamentado\Shared\_renderListInforme.cshtml" />
+    <Content Include="Areas\Fiscalizacion\Views\FiscalizacionNotificacion\Index.cshtml" />
+    <Content Include="Archivos\Plantilla\Reg_Usu\IFUNDAMENTADO_Reg_Usu.xlsx" />
+    <Content Include="Archivos\Plantilla\Reg_Usu\FISNOTI_Reg_Usu.xlsx" />
+    <Content Include="Areas\Fiscalizacion\Views\FiscalizacionNotificacion\AddEdit.cshtml" />
+    <Content Include="Areas\Fiscalizacion\Views\FiscalizacionNotificacion\Shared\_renderListInforme.cshtml" />
+    <Content Include="Areas\Fiscalizacion\Views\InformacionTitular\Index.cshtml" />
+    <Content Include="Archivos\Plantilla\Reg_Usu\INFTITULAR_Reg_Usu.xlsx" />
+    <Content Include="Areas\Fiscalizacion\Views\InformacionTitular\AddEdit.cshtml" />
+    <Content Include="Areas\Fiscalizacion\Views\InformacionTitular\Shared\_renderListInforme.cshtml" />
+    <Content Include="Areas\Supervision\Views\ManInformeMedidaCorrectiva\Index.cshtml" />
+    <Content Include="Archivos\Plantilla\Reg_Usu\IMEDIDA_Reg_Usu.xlsx" />
+    <Content Include="Areas\Supervision\Views\ManInformeMedidaCorrectiva\AddEdit.cshtml" />
+    <Content Include="Areas\Supervision\Views\ManInformeMedidaCorrectiva\Shared\_renderListResponsable.cshtml" />
+    <Content Include="Areas\Supervision\Views\ManInformeMedidaCorrectiva\Shared\_renderListExpediente.cshtml" />
+    <Content Include="Areas\Supervision\Views\ManInformeMedidaCorrectiva\Shared\_renderListEspecie.cshtml" />
+    <Content Include="Areas\Supervision\Views\ManInformeMedidaCorrectiva\Shared\_renderListVertice.cshtml" />
+    <Content Include="Archivos\Plantilla\EspeciesReforestadas.xlsx" />
+    <Content Include="Archivos\Plantilla\VerticesReforestadas.xlsx" />
+    <Content Include="Archivos\Plantilla\CapacitacionParticipantes_v3.xlsx" />
+    <Content Include="Archivos\Plantilla\EspeciesMedidaCorrectiva.xlsx" />
+    <Content Include="Archivos\Plantilla\InformeCAUTEgresos.xlsx" />
+    <Content Include="Archivos\Plantilla\InformeCAUTNacimiento.xlsx" />
+    <Content Include="Archivos\Plantilla\InformeFaunaInfraestructura.xlsx" />
+    <Content Include="Archivos\Plantilla\InformeKardexTara.xlsx" />
+    <Content Include="Archivos\Plantilla\InformeVertebradosMayores.xlsx" />
+    <Content Include="Archivos\Plantilla\InformeVertebradosMenores.xlsx" />
+    <Content Include="Archivos\Plantilla\PlantillaUniveroTHyPM.xlsx" />
+    <Content Include="Archivos\Plantilla\PlantillaUniveroTHyPM_Consolidado.xlsx" />
+    <Content Include="Archivos\Plantilla\PlantillaUniveroTHyPM_Criterio_0.xlsx" />
+    <Content Include="Archivos\Plantilla\PlantillaUniveroTHyPM_Criterio_1.xlsx" />
+    <Content Include="Archivos\Plantilla\PlantillaUniveroTHyPM_Criterio_2.xlsx" />
+    <Content Include="Archivos\Plantilla\PlantillaUniveroTHyPM_Criterio_3.xlsx" />
+    <Content Include="Archivos\Plantilla\PlantillaUniveroTHyPM_Criterio_4.xlsx" />
+    <Content Include="Archivos\Plantilla\PlantillaUniveroTHyPM_Criterio_5.xlsx" />
+    <Content Include="Archivos\Plantilla\PoaCensoNoMaderableVertices.xlsx" />
+    <Content Include="Archivos\Plantilla\RegArbolesSuperv_v2.xlsx" />
+    <Content Include="Archivos\Plantilla\supuesto_C.docx" />
+    <Content Include="Areas\Fiscalizacion\Views\ManProveidoElevacion\CreateOrEdit.cshtml" />
+    <Content Include="Areas\Fiscalizacion\Views\ManProveidoElevacion\Index.cshtml" />
+    <Content Include="Areas\Fiscalizacion\Views\ManProveidoElevacion\Shared\_renderListaInforme.cshtml" />
+    <Content Include="Areas\Fiscalizacion\Views\ManProveido\CreateorEdit.cshtml" />
+    <Content Include="Areas\Fiscalizacion\Views\ManProveido\IndexFisca.cshtml" />
+    <Content Include="Areas\Fiscalizacion\Views\ManProveido\IndexSup.cshtml" />
+    <Content Include="Areas\Fiscalizacion\Views\ManProveido\_Shared\_renderAdmisibilidad.cshtml" />
+    <Content Include="Areas\Fiscalizacion\Views\ManProveido\_Shared\_renderAgotadaVAdm.cshtml" />
+    <Content Include="Areas\Fiscalizacion\Views\ManProveido\_Shared\_renderArchivoInfSup.cshtml" />
+    <Content Include="Areas\Fiscalizacion\Views\ManProveido\_Shared\_renderCasoEspecial.cshtml" />
+    <Content Include="Areas\Fiscalizacion\Views\ManProveido\_Shared\_renderCumplimiento.cshtml" />
+    <Content Include="Areas\Fiscalizacion\Views\ManProveido\_Shared\_renderDisposicionJudicial.cshtml" />
+    <Content Include="Areas\Fiscalizacion\Views\ManProveido\_Shared\_renderDisposicionPJ.cshtml" />
+    <Content Include="Areas\Fiscalizacion\Views\ManProveido\_Shared\_renderFallTitular.cshtml" />
+    <Content Include="Areas\Fiscalizacion\Views\ManProveido\_Shared\_renderFirmeActo.cshtml" />
+    <Content Include="Areas\Fiscalizacion\Views\ManProveido\_Shared\_renderListaInforme.cshtml" />
+    <Content Include="Areas\Fiscalizacion\Views\ManProveido\_Shared\_renderListProfesional.cshtml" />
+    <Content Include="Areas\Fiscalizacion\Views\ManProveido\_Shared\_renderMandato.cshtml" />
+    <Content Include="Areas\Fiscalizacion\Views\ManProveido\_Shared\_renderNotificacion.cshtml" />
+    <Content Include="Areas\Fiscalizacion\Views\ManProveido\_Shared\_renderOtros.cshtml" />
+    <Content Include="Areas\Fiscalizacion\Views\Notificacion\Index.cshtml" />
+    <Content Include="Archivos\Plantilla\InformeSup\Desplazamiento_supervisor_v2.xlsx" />
+    <Content Include="Archivos\Plantilla\InformeSup\InformeBalanceFauna.xlsx" />
+    <Content Include="Archivos\Plantilla\InformeSup\plantilla_descarga.xls" />
+    <Content Include="Archivos\Plantilla\InformeSup\ReporteDescargaSupervision.xls" />
+    <Content Include="Archivos\Plantilla\Paspeq\muestra_supervisar.xlsx" />
+    <Content Include="Archivos\Plantilla\Reg_Usu\BITACORASUPER_Reg_Usu.xlsx" />
+    <Content Include="Archivos\Plantilla\Reg_Usu\GTF_Reg_Usu.xlsx" />
+    <Content Include="Archivos\Plantilla\Reg_Usu\ILEGAL_REG.xlsx" />
+    <Content Include="Archivos\Plantilla\Reg_Usu\INFAUTFORESTAL_Reg_Usu.xlsx" />
+    <Content Include="Archivos\Plantilla\Reg_Usu\NOTIFICACION_Reg_Usu_v3.xlsx" />
+    <Content Include="Archivos\Plantilla\Reg_Usu\PlantillaAlertaOsinfor.xlsx" />
+    <Content Include="Archivos\Plantilla\Reg_Usu\PMFI_Reg_Usu.xlsx" />
+    <Content Include="Archivos\Plantilla\Reg_Usu\POA_Reg_Usu.xlsx" />
+    <Content Include="Archivos\Plantilla\Reg_Usu\PROVEIDOARCH_REG.xlsx" />
+    <Content Include="Archivos\Plantilla\Reg_Usu\PROVEIDONOTAE_REG.xlsx" />
+    <Content Include="Areas\Supervision\Views\Alerta\_BalanceExtra.cshtml" />
+    <Content Include="Areas\THabilitante\Views\Controles\Index.cshtml" />
+    <Content Include="Areas\THabilitante\Views\Controles\_BuscarPersona.cshtml" />
+    <Content Include="Areas\THabilitante\Views\Controles\_BuscarPersonaGeneral.cshtml" />
+    <Content Include="Areas\THabilitante\Views\Controles\_ManGrilla.cshtml" />
+    <Content Include="Areas\THabilitante\Views\Controles\_ManModalidad.cshtml" />
+    <Content Include="Areas\THabilitante\Views\Controles\_Persona.cshtml" />
+    <Content Include="Areas\THabilitante\Views\Controles\_THabilitante.cshtml" />
+    <Content Include="Areas\THabilitante\Views\Controles\_Ubigeo.cshtml" />
+    <Content Include="Areas\THabilitante\Views\Controles\_VPCKEDITOR.cshtml" />
+    <Content Include="Areas\THabilitante\Views\LibroOperaciones\Index.cshtml" />
+    <Content Include="Areas\THabilitante\Views\LibroOperaciones\LibroOperaciones.cshtml" />
+    <Content Include="Areas\THabilitante\Views\ManBalanceExtraccion\AddEdit.cshtml" />
+    <Content Include="Areas\THabilitante\Views\ManBalanceExtraccion\Index.cshtml" />
+    <Content Include="Areas\THabilitante\Views\ManBalanceExtraccion\_BExtraccionFecEmi.cshtml" />
+    <Content Include="Areas\THabilitante\Views\ManBalanceExtraccion\_BExtraccionKardex.cshtml" />
+    <Content Include="Areas\THabilitante\Views\ManBalanceExtraccion\_BExtraccionMaderable.cshtml" />
+    <Content Include="Areas\THabilitante\Views\ManBalanceExtraccion\_BExtraccionNoMaderable.cshtml" />
+    <Content Include="Areas\THabilitante\Views\ManDevolucionMadera\AddEdit.cshtml" />
+    <Content Include="Areas\THabilitante\Views\ManDevolucionMadera\Index.cshtml" />
+    <Content Include="Areas\THabilitante\Views\ManGuiaTransporteForestal\AddEdit.cshtml" />
+    <Content Include="Areas\THabilitante\Views\ManGuiaTransporteForestal\Index.cshtml" />
+    <Content Include="Areas\THabilitante\Views\ManGuiaTransporteForestal\_ItemProducto.cshtml" />
+    <Content Include="Areas\THabilitante\Views\ManInformeAutoridadForestal\AddEdit.cshtml" />
+    <Content Include="Areas\THabilitante\Views\ManInformeAutoridadForestal\Index.cshtml" />
+    <Content Include="Areas\THabilitante\Views\ManPlanManejoForestal\AddEdit.cshtml" />
+    <Content Include="Areas\THabilitante\Views\ManPlanManejoForestal\Index.cshtml" />
+    <Content Include="Areas\THabilitante\Views\ManPlanManejoForestal\_Coordenadas.cshtml" />
+    <Content Include="Areas\THabilitante\Views\ManPlanManejoForestal\_EspeciesAprobadas.cshtml" />
+    <Content Include="Areas\THabilitante\Views\ManPlanManejoForestal\_EspeciesFaunaS.cshtml" />
+    <Content Include="Areas\THabilitante\Views\ManPlanManejo\AddEditPM.cshtml" />
+    <Content Include="Areas\THabilitante\Views\ManPlanManejo\EditExSitu.cshtml" />
+    <Content Include="Areas\THabilitante\Views\ManPlanManejo\Index.cshtml" />
+    <Content Include="Areas\THabilitante\Views\ManPlanManejo\_Balance.cshtml" />
+    <Content Include="Areas\THabilitante\Views\ManPlanManejo\_CoordenadaUTM.cshtml" />
+    <Content Include="Areas\THabilitante\Views\ManPlanManejo\_InventarioFauna.cshtml" />
+    <Content Include="Areas\THabilitante\Views\ManPlanManejo\_InventarioFlora.cshtml" />
+    <Content Include="Areas\THabilitante\Views\ManPlanManejo\_ItemEcotInforme.cshtml" />
+    <Content Include="Areas\THabilitante\Views\ManPlanManejo\_ItemESituIAnual.cshtml" />
+    <Content Include="Areas\THabilitante\Views\ManPlanManejo\_ItemESituPGenetico.cshtml" />
+    <Content Include="Areas\THabilitante\Views\ManPlanManejo\_ItemISituCArea.cshtml" />
+    <Content Include="Areas\THabilitante\Views\ManPlanManejo\_ItemTaraAEAprov.cshtml" />
+    <Content Include="Areas\THabilitante\Views\ManPlanManejo\_ItemTaraAutoExtraer.cshtml" />
+    <Content Include="Areas\THabilitante\Views\ManPlanManejo\_ItemTaraInventario.cshtml" />
+    <Content Include="Areas\THabilitante\Views\ManPlanManejo\_ItemTaraOpcion.cshtml" />
+    <Content Include="Areas\THabilitante\Views\ManPlanManejo\_ItemTaraPApro.cshtml" />
+    <Content Include="Areas\THabilitante\Views\ManPlanManejo\_pnlItemInSitu.cshtml" />
+    <Content Include="Areas\THabilitante\Views\ManPlanManejo\_pnlItemTara.cshtml" />
+    <Content Include="Areas\THabilitante\Views\ManPlanManejo\_trItemEcoturismo.cshtml" />
+    <Content Include="Areas\THabilitante\Views\ManPOA\AddEdit.cshtml" />
+    <Content Include="Areas\THabilitante\Views\ManPOA\Index.cshtml" />
+    <Content Include="Areas\THabilitante\Views\ManPreviosAlerta\AddEdit.cshtml" />
+    <Content Include="Areas\THabilitante\Views\ManPreviosAlerta\_ItemDestinatario.cshtml" />
+    <Content Include="Areas\THabilitante\Views\ManPreviosAlerta\_ItemDestinatarioRuta.cshtml" />
+    <Content Include="Areas\THabilitante\Views\ManPreviosAlerta\_ItemRuta.cshtml" />
+    <Content Include="Areas\THabilitante\Views\ManTHabilitante\Index.cshtml" />
+    <Content Include="Areas\THabilitante\Views\ManTHabilitante\ManTHabilitanteV.cshtml" />
+    <Content Include="Areas\THabilitante\Views\ManTHabilitante\_PnlItemTitulares.cshtml" />
+    <Content Include="Areas\THabilitante\Views\ManVentanillaAntecedentesExpedientes\Index.cshtml" />
+    <Content Include="Areas\THabilitante\Views\ManVentanillaAntecedentesExpedientes\_Transferir.cshtml" />
+    <Content Include="Areas\THabilitante\Views\ManVentanillaDenuncia\Index.cshtml" />
+    <Content Include="Areas\THabilitante\Views\ManVentanillaDenuncia\RevisarDenuncia.cshtml" />
+    <Content Include="Areas\THabilitante\Views\ManVentanillaSolicitud\Index.cshtml" />
+    <Content Include="Areas\THabilitante\Views\ManVentanillaSolicitud\Transferir.cshtml" />
+    <Content Include="Areas\THabilitante\Views\ManVentanillaSolicitud\_Transferir.cshtml" />
+    <Content Include="Areas\THabilitante\Views\web.config" />
+    <Content Include="Areas\Fiscalizacion\Views\ManInformeTecnico\CreateOrEdit.cshtml" />
+    <Content Include="Areas\Fiscalizacion\Views\ManInformeTecnico\Index.cshtml" />
+    <Content Include="Areas\Fiscalizacion\Views\ManResolucion\_Shared\_generic\_renderEncisos.cshtml" />
+    <Content Include="Areas\Fiscalizacion\Views\ManResolucion\_Shared\_generic\_renderEspecieMC.cshtml" />
+    <Content Include="Areas\Fiscalizacion\Views\ManResolucion\_Shared\_generic\_renderInfracciones.cshtml" />
+    <Content Include="Areas\Fiscalizacion\Views\ManResolucion\_Shared\_generic\_renderListaEncisos.cshtml" />
+    <Content Include="Areas\Fiscalizacion\Views\ManResolucion\_Shared\_generic\_renderListaEspeciesMC.cshtml" />
+    <Content Include="Areas\Fiscalizacion\Views\ManResolucion\_Shared\_generic\_renderListaEspeciesMP.cshtml" />
+    <Content Include="Areas\Fiscalizacion\Views\ManResolucion\_Shared\_generic\_renderListaMotiva.cshtml" />
+    <Content Include="Areas\Fiscalizacion\Views\ManResolucion\_Shared\_generic\_renderMandato.cshtml" />
+    <Content Include="Areas\Fiscalizacion\Views\ManResolucion\_Shared\_generic\_renderMedCaut.cshtml" />
+    <Content Include="Areas\Fiscalizacion\Views\ManResolucion\_Shared\_generic\_renderMedCorrectiva.cshtml" />
+    <Content Include="Areas\Fiscalizacion\Views\ManResolucion\_Shared\_generic\_renderMedPrecautoria.cshtml" />
+    <Content Include="Areas\Fiscalizacion\Views\ManResolucion\_Shared\_generic\_renderMotivoArchivo.cshtml" />
+    <Content Include="Areas\Fiscalizacion\Views\ManResolucion\_Shared\_generic\_renderRectificacion.cshtml" />
+    <Content Include="Areas\Fiscalizacion\Views\ManResolucion\_Shared\_renderAcumulacionExpe.cshtml" />
+    <Content Include="Areas\Fiscalizacion\Views\ManResolucion\_Shared\_renderAdecuacionMulta.cshtml" />
+    <Content Include="Areas\Fiscalizacion\Views\ManResolucion\_Shared\_renderAmpliacion.cshtml" />
+    <Content Include="Areas\Fiscalizacion\Views\ManResolucion\_Shared\_renderAplicacionMedCorrectiva.cshtml" />
+    <Content Include="Areas\Fiscalizacion\Views\ManResolucion\_Shared\_renderArchivoInfSup.cshtml" />
+    <Content Include="Areas\Fiscalizacion\Views\ManResolucion\_Shared\_renderCaducidad.cshtml" />
+    <Content Include="Areas\Fiscalizacion\Views\ManResolucion\_Shared\_renderConservacionAA.cshtml" />
+    <Content Include="Areas\Fiscalizacion\Views\ManResolucion\_Shared\_renderInicioPau.cshtml" />
+    <Content Include="Areas\Fiscalizacion\Views\ManResolucion\_Shared\_renderListaEspecie.cshtml" />
+    <Content Include="Areas\Fiscalizacion\Views\ManResolucion\_Shared\_renderListaInforme.cshtml" />
+    <Content Include="Areas\Fiscalizacion\Views\ManResolucion\_Shared\_renderNotificacion.cshtml" />
+    <Content Include="Areas\Fiscalizacion\Views\ManResolucion\_Shared\_renderOtros.cshtml" />
+    <Content Include="Areas\Fiscalizacion\Views\ManResolucion\_Shared\_renderReconsideracion.cshtml" />
+    <Content Include="Areas\Fiscalizacion\Views\ManResolucion\_Shared\_renderRectificacion.cshtml" />
+    <Content Include="Areas\Fiscalizacion\Views\ManResolucion\_Shared\_renderTerminoPAU.cshtml" />
+    <Content Include="Areas\Fiscalizacion\Views\ManResolucion\_Shared\_renderVariacionCautelares.cshtml" />
+    <Content Include="Areas\Fiscalizacion\Views\ManResolucion\_Shared\_renderVariacionImpCargos.cshtml" />
+    <Content Include="Areas\Fiscalizacion\Views\ManInformeTecnico\_Shared\_renderListaInforme.cshtml" />
+    <Content Include="Areas\Fiscalizacion\Views\ManInformeTecnico\_Shared\_renderOtros.cshtml" />
+    <Content Include="Areas\Fiscalizacion\Views\ManInformeTecnico\_Shared\_renderAclaracion.cshtml" />
+    <Content Include="Areas\Fiscalizacion\Views\ManInformeTecnico\_Shared\_renderComplementario.cshtml" />
+    <Content Include="Areas\Fiscalizacion\Views\ManInformeTecnico\_Shared\_renderReconsideracion.cshtml" />
+    <Content Include="Areas\Fiscalizacion\Views\ManInformeTecnico\_Shared\_renderIDeterminacionMulta.cshtml" />
+    <Content Include="Areas\Fiscalizacion\Views\ManInformeTecnico\_Shared\_renderInsOcular.cshtml" />
+    <Content Include="Areas\Fiscalizacion\Views\ManInformeTecnico\_Shared\_renderEvaDescargo.cshtml" />
+    <Content Include="Areas\Fiscalizacion\Views\ManInformeTecnico\_Shared\_renderFormatoMulta.cshtml" />
+    <Content Include="Areas\Fiscalizacion\Views\ManInformeTecnico\_Shared\_renderSSupervision.cshtml" />
+    <Content Include="Areas\Fiscalizacion\Views\ManInformeTecnico\_Shared\_renderVolumen.cshtml" />
+    <Content Include="Areas\Fiscalizacion\Views\ManInformeTecnico\_Shared\_renderListVolumenes.cshtml" />
+    <Content Include="Areas\Fiscalizacion\Views\ManInformeTecnico\_Shared\_renderMaderable.cshtml" />
+    <Content Include="Areas\Fiscalizacion\Views\ManInformeTecnico\_Shared\_renderMaderableDetalle.cshtml" />
+    <Content Include="Areas\Fiscalizacion\Views\ManInformeTecnico\_Shared\_renderSemillero.cshtml" />
+    <Content Include="Areas\Fiscalizacion\Views\ManInformeTecnico\_Shared\_renderSemilleroDetalle.cshtml" />
+    <Content Include="Areas\General\Views\ManPersonas\AddEdit.cshtml" />
+    <Content Include="Areas\General\Views\ManPersonas\Index.cshtml" />
+    <Content Include="Areas\General\Views\ManPersonas\Shared\_renderListCorreo.cshtml" />
+    <Content Include="Areas\General\Views\ManPersonas\Shared\_renderListDomicilio.cshtml" />
+    <Content Include="Areas\General\Views\ManPersonas\Shared\_renderListTelefono.cshtml" />
+    <Content Include="Areas\Supervision\Views\ManInformeQuinquenal\_BuscarCartaNotificacion.cshtml" />
+    <Content Include="Areas\Supervision\Views\ManInformeQuinquenal\_renderRHallazgos.cshtml" />
+    <Content Include="Archivos\Plantilla\Reg_Usu\INFTECNICO_REG.xlsx" />
+    <Content Include="Archivos\Plantilla\Reg_Usu\OTROSINFORMES_Reg_Usu.xlsx" />
+    <Content Include="Areas\General\Views\Shared\_Layout.cshtml" />
+    <Content Include="Areas\Supervision\Views\ManInformeQuinquenal\_renderQuinquenio.cshtml" />
+    <Content Include="Areas\Supervision\Views\ManCNotificacion\AddEdit - Copy.cshtml" />
+    <Content Include="Archivos\Plantilla\ResultadosHallazgos.xlsx" />
+    <Content Include="Archivos\Plantilla\RPT_InformeQuinquenal.xlsx" />
+    <Content Include="Areas\General\Views\Reportes\RptEstadodeGuiaTransporte.cshtml" />
+    <Content Include="Areas\General\Views\Reportes\Rpt_Historial_Titulo_Habilitante.cshtml" />
+    <Content Include="Areas\General\Views\Reportes\_Rpt_HistorialTHDetalle.cshtml" />
+    <Content Include="Areas\General\Views\Reportes\Rpt_Control_Calidad.cshtml" />
+    <Content Include="Areas\General\Views\Reportes\Rpt_Produccion_Usuarios.cshtml" />
+    <Content Include="Areas\General\Views\Reportes\_sharedRptProdU\_renderRPUResumen.cshtml" />
+    <Content Include="Areas\General\Views\Reportes\_sharedRptProdU\_renderRPUDetalle.cshtml" />
+    <Content Include="Areas\General\Views\ReporteSeguimientoRegistro\Index.cshtml" />
+    <Content Include="Archivos\Plantilla\Reg_Usu\ISUSPEN_REG.xlsx" />
+    <Content Include="Areas\General\Views\Reportes\ReporteRegistroInformacion01.cshtml" />
+    <Content Include="Areas\General\Views\Reportes\_ResumenRegistroInformacion01.cshtml" />
+    <Content Include="Areas\General\Views\Reportes\ReporteRegistroInformacion02.cshtml" />
+    <Content Include="Areas\General\Views\Reportes\_ResumenRegistroInformacion02.cshtml" />
+    <Content Include="Areas\General\Views\Reportes\ReporteRegistroInformacion03.cshtml" />
+    <Content Include="Areas\General\Views\Reportes\_ResumenRegistroInformacion03.cshtml" />
+    <Content Include="Areas\General\Views\Reportes\ReporteRegistroInformacion04.cshtml" />
+    <Content Include="Archivos\Plantilla\ReporteInformacionRegistradaTaller.xlsx" />
+    <Content Include="Archivos\Plantilla\RegistroInformacionSIGO.xlsx" />
+    <Content Include="Archivos\Plantilla\ReporteInformacionRegistradaDL.xlsx" />
+    <Content Include="Archivos\Plantilla\ReporteInformacionRegistra2.xlsx" />
+    <Content Include="Archivos\Plantilla\ReporteInformacionRegistradaExpediente.xlsx" />
+    <Content Include="Archivos\Plantilla\ReporteInformacionRegistradaExpedienteD.xlsx" />
+    <Content Include="Archivos\Plantilla\DescSupervisiones.xlsx" />
+    <Content Include="Areas\General\Views\Reportes\_sharedRptProdU\_renderRSDetalle.cshtml" />
+    <Content Include="Areas\General\Views\Reportes\_sharedRptProdU\_renderRSResumen.cshtml" />
+    <Content Include="Areas\General\Views\Reportes\Rpt_Prod_supervisores.cshtml" />
+    <Content Include="Archivos\Plantilla\Report_SupervisionesXsupervisorDetalle.xlsx" />
+    <Content Include="Archivos\Plantilla\Report_SupervisionesXsupervisorResumen.xlsx" />
+    <Content Include="Archivos\Plantilla\PlantillaConsolidado.xlsx" />
+    <Content Include="Areas\Supervision\Views\ManInforme\_ReporteAnalisisMaderable.cshtml" />
+    <Content Include="Areas\Supervision\Views\ManInforme\_ReporteConsolidado.cshtml" />
+    <Content Include="Areas\Supervision\Views\ManInforme\_ReporteConsolidadoNN.cshtml" />
+    <Content Include="Areas\Supervision\Views\ManInforme\_EspecieCarrizoCampoEdit.cshtml" />
+    <Content Include="Areas\Supervision\Views\ManInforme\_EspecieMaderaAserradaEdit.cshtml" />
+    <Content Include="Areas\Supervision\Views\ManInforme\_EspecieMaderableEdit.cshtml" />
+    <Content Include="Areas\Supervision\Views\ManInforme\_EspecieNoMaderableEdit.cshtml" />
+    <Content Include="Areas\Supervision\Views\ManInforme\_EspecieSemilleroEdit.cshtml" />
+    <Content Include="Areas\Supervision\Views\ManInforme\_EspecieTrozaCampoEdit.cshtml" />
+    <Content Include="Areas\Supervision\Views\ManInforme\_ReporteMaderable.cshtml" />
+    <Content Include="Areas\Tribunal\Views\_ViewStart.cshtml" />
+    <Content Include="Areas\Tribunal\Views\ManTribunal\CreateOrEdit.cshtml" />
+    <Content Include="Areas\Tribunal\Views\ManTribunal\Index.cshtml" />
+    <Content Include="Areas\Tribunal\Views\ManTribunal\_Shared\_renderAcumulacionExpe.cshtml" />
+    <Content Include="Areas\Tribunal\Views\ManTribunal\_Shared\_renderAdecuacionMulta.cshtml" />
+    <Content Include="Areas\Tribunal\Views\ManTribunal\_Shared\_renderAmpliacion.cshtml" />
+    <Content Include="Areas\Tribunal\Views\ManTribunal\_Shared\_renderAplicacionMedCorrectiva.cshtml" />
+    <Content Include="Areas\Tribunal\Views\ManTribunal\_Shared\_renderArchivoInfSup.cshtml" />
+    <Content Include="Areas\Tribunal\Views\ManTribunal\_Shared\_renderCaducidad.cshtml" />
+    <Content Include="Areas\Tribunal\Views\ManTribunal\_Shared\_renderConservacionAA.cshtml" />
+    <Content Include="Areas\Tribunal\Views\ManTribunal\_Shared\_renderDatos.cshtml" />
+    <Content Include="Areas\Tribunal\Views\ManTribunal\_Shared\_renderInicioPau.cshtml" />
+    <Content Include="Areas\Tribunal\Views\ManTribunal\_Shared\_renderListBuscarResolucionTFFS.cshtml" />
+    <Content Include="Areas\Tribunal\Views\ManTribunal\_Shared\_renderListNResolTFFS.cshtml" />
+    <Content Include="Areas\Tribunal\Views\ManTribunal\_Shared\_renderListRSApeladas.cshtml" />
+    <Content Include="Areas\Tribunal\Views\ManTribunal\_Shared\_renderListSInfracciones.cshtml" />
+    <Content Include="Areas\Tribunal\Views\ManTribunal\_Shared\_renderNotificacion.cshtml" />
+    <Content Include="Areas\Tribunal\Views\ManTribunal\_Shared\_renderOtros.cshtml" />
+    <Content Include="Areas\Tribunal\Views\ManTribunal\_Shared\_renderReconsideracion.cshtml" />
+    <Content Include="Areas\Tribunal\Views\ManTribunal\_Shared\_renderRectificacion.cshtml" />
+    <Content Include="Areas\Tribunal\Views\ManTribunal\_Shared\_renderTerminoPAU.cshtml" />
+    <Content Include="Areas\Tribunal\Views\ManTribunal\_Shared\_renderVariacionCautelares.cshtml" />
+    <Content Include="Areas\Tribunal\Views\ManTribunal\_Shared\_renderVariacionImpCargos.cshtml" />
+    <Content Include="Areas\Tribunal\Views\ManTribunal\_Shared\generic\_renderEncisos.cshtml" />
+    <Content Include="Areas\Tribunal\Views\ManTribunal\_Shared\generic\_renderEspecieMC.cshtml" />
+    <Content Include="Areas\Tribunal\Views\ManTribunal\_Shared\generic\_renderInfracciones.cshtml" />
+    <Content Include="Areas\Tribunal\Views\ManTribunal\_Shared\generic\_renderListaEncisos.cshtml" />
+    <Content Include="Areas\Tribunal\Views\ManTribunal\_Shared\generic\_renderListaEspeciesMC.cshtml" />
+    <Content Include="Areas\Tribunal\Views\ManTribunal\_Shared\generic\_renderListaEspeciesMP.cshtml" />
+    <Content Include="Areas\Tribunal\Views\ManTribunal\_Shared\generic\_renderListaMotiva.cshtml" />
+    <Content Include="Areas\Tribunal\Views\ManTribunal\_Shared\generic\_renderMandato.cshtml" />
+    <Content Include="Areas\Tribunal\Views\ManTribunal\_Shared\generic\_renderMedCaut.cshtml" />
+    <Content Include="Areas\Tribunal\Views\ManTribunal\_Shared\generic\_renderMedCorrectiva.cshtml" />
+    <Content Include="Areas\Tribunal\Views\ManTribunal\_Shared\generic\_renderMedPrecautoria.cshtml" />
+    <Content Include="Areas\Tribunal\Views\ManTribunal\_Shared\generic\_renderMotivoArchivo.cshtml" />
+    <Content Include="Areas\Tribunal\Views\ManTribunal\_Shared\generic\_renderRectificacion.cshtml" />
+    <Content Include="Areas\Tribunal\Views\TribunalNotificacion2da\AddEdit.cshtml" />
+    <Content Include="Areas\Tribunal\Views\TribunalNotificacion2da\Index.cshtml" />
+    <Content Include="Areas\Tribunal\Views\TribunalNotificacion2da\Shared\_renderListInforme.cshtml" />
+    <Content Include="Areas\Tribunal\Views\ManTribunal\_Shared\_renderListARFFS.cshtml" />
+    <Content Include="Areas\Tribunal\Views\ManTribunal\_Shared\_renderListadoPersonasTFFS.cshtml" />
+    <Content Include="Areas\General\Views\ReporteAntecedentesTitular\Index.cshtml" />
+    <Content Include="Areas\General\Views\Reportes\Rpt_Prod_EspLegal.cshtml" />
+    <Content Include="Areas\General\Views\Reportes\_sharedRptProdU\_renderRELResumen.cshtml" />
+    <Content Include="Areas\General\Views\Reportes\_sharedRptProdU\_renderRELDetalle1.cshtml" />
+    <Content Include="Areas\General\Views\Reportes\_sharedRptProdU\_renderRELDetalle2.cshtml" />
+    <Content Include="Areas\Supervision\Views\Reportes\SupervisioneSegunOportunidad.cshtml" />
+    <Content Include="Areas\Supervision\Views\Reportes\_SupervisioneSegunOportunidadResumen.cshtml" />
+    <Content Include="Areas\Supervision\Views\Reportes\_SupervisioneSegunOportunidadDetalle.cshtml" />
+    <Content Include="Areas\Fiscalizacion\Views\ReporteFiscalizacion\Index.cshtml" />
+    <Content Include="Archivos\Plantilla\ReporteSupervisioneSegunOportunidad.xlsx" />
+    <Content Include="PlantillaPDF\PlantillaOsinfor.pdf" />
+    <Content Include="Areas\General\Views\Reportes\Rpt_Produccion_ItinerarioSupervision.cshtml" />
+    <Content Include="Areas\General\Views\Reportes\_sharedRptProdItinerario\_renderResumen.cshtml" />
+    <Content Include="Areas\General\Views\Reportes\_sharedRptProdItinerario\_renderDetalle.cshtml" />
+    <Content Include="Archivos\Plantilla\ExportarISupervisionBase.xlsx" />
+    <Content Include="Archivos\Plantilla\ExportarISupervisionInfoGeoBase.xlsx" />
+    <Content Include="Areas\Fiscalizacion\Views\ReporteFiscalizacion\DocumentosTitular.cshtml" />
+    <Content Include="Areas\Fiscalizacion\Views\ReporteFiscalizacion\TitularesSancionCaducidad.cshtml" />
+    <Content Include="Areas\General\Views\Reportes\_sharedRptProdItinerario\_renderDetalle.cshtml" />
+    <Content Include="Areas\General\Views\Reportes\_sharedRptProdItinerario\_renderResumen.cshtml" />
+    <Content Include="Areas\General\Views\Reportes\Rpt_Produccion_ItinerarioSupervision.cshtml" />
+    <Content Include="Archivos\Plantilla\RptFiscalizacionPauResumen.xlsx" />
+    <Content Include="Archivos\Plantilla\RptFiscalizacionPauDetalle.xlsx" />
+    <Content Include="Areas\General\Views\Reportes\Rpt_Tecnico_EspLegal.cshtml" />
+    <Content Include="Areas\General\Views\Reportes\_sharedRptInformeTecnico\_renderRptaResumen.cshtml" />
+    <Content Include="Areas\General\Views\Reportes\_sharedRptInformeTecnico\_renderRpteDetalle01.cshtml" />
+    <Content Include="Areas\General\Views\Reportes\_sharedRptInformeTecnico\_renderRpteDetalle02.cshtml" />
+    <Content Include="Archivos\Plantilla\ExportarReporteRecImpugnatorios.xlsx" />
+    <Content Include="Archivos\Plantilla\ReporteDetalleCaducidad.xlsx" />
+    <Content Include="Archivos\Plantilla\ReporteDetalleMedidasCautelares.xlsx" />
+    <Content Include="Archivos\Plantilla\ReporteDetalleMedidasPrecautorias.xlsx" />
+    <Content Include="Areas\Fiscalizacion\Views\ReporteFiscalizacion\MedidasCautelares.cshtml" />
+    <Content Include="Areas\General\Views\Reportes\Rpt_ProduccionEL.cshtml" />
+    <Content Include="Areas\General\Views\Reportes\_sharedRptProdEL\_renderRptProdEL.cshtml" />
+    <Content Include="Archivos\Plantilla\Report_SupervisionesDispObligaciones.xlsx" />
+    <Content Include="Archivos\Plantilla\Report_SupervisionesDispObligacionesNM.xlsx" />
+    <Content Include="Areas\THabilitante\Views\ManPreviosAlerta\_ItemSupuesto.cshtml" />
+    <Content Include="Areas\THabilitante\Views\ManPreviosAlerta\_ItemDestinatarioCC.cshtml" />
+    <Content Include="Areas\General\Views\Reportes\_sharedResumenMultas\_renderResumenMultas.cshtml" />
+    <Content Include="Areas\General\Views\Reportes\ResumenRecaudacionCobranza.cshtml" />
+    <Content Include="Areas\Fiscalizacion\Views\ManResolucion\_Shared\_generic\_renderListPOA.cshtml" />
+    <Content Include="Areas\Fiscalizacion\Views\ManResolucion\_Shared\_generic\_renderReconsideracion.cshtml" />
+    <Content Include="Areas\Supervision\Views\ManInforme\_InformeDigital.cshtml" />
+    <Content Include="Archivos\Plantilla\InformeSup\InformeDigital.docx" />
+    <Content Include="Areas\Fiscalizacion\Views\ManPAU\_InformeResSubDir.cshtml" />
+    <Content Include="Areas\Supervision\Views\ManInforme\_ResumenInforme.cshtml" />
+    <Content Include="Areas\Fiscalizacion\Views\ManPAU\templates\_tmplRSDObligaciones.cshtml" />
+    <Content Include="Areas\Fiscalizacion\Views\ManPAU\templates\_tmplRSDInforme.cshtml" />
+    <Content Include="Archivos\Plantilla\Report_SupervisionesDispObligaciones_new.xlsx" />
+    <Content Include="Areas\Supervision\Views\ManInformeConservacion\_ActTuristica.cshtml" />
+    <Content Include="Areas\Supervision\Views\ManInformeConservacion\_Impacto.cshtml" />
+    <Content Include="Areas\Supervision\Views\ManInformeConservacion\_SeguridadTuristica.cshtml" />
+    <Content Include="Areas\Supervision\Views\ManInformeConservacion\_InterpretacionAmbiental.cshtml" />
+    <Content Include="Areas\Supervision\Views\ManInformeConservacion\_ActInvestigacion.cshtml" />
+    <Content Include="Areas\Supervision\Views\ManInformeConservacion\_ActOtrosProgramas.cshtml" />
+    <Content Include="Areas\Supervision\Views\ManInformeConservacion\_ActVisitas.cshtml" />
+    <Content Include="Archivos\Plantilla\Report_SupervisionesDispObligacionesNM_new.xlsx" />
+    <Content Include="Archivos\Plantilla\Report_SupervisionesDispObligacionesFauna.xlsx" />
+    <Content Include="Archivos\Plantilla\Report_SupervisionesDispObligacionesFauna_new.xlsx" />
+    <Content Include="Areas\Supervision\Views\ManInforme\Render\_renderPersonalTecProf.cshtml" />
+    <Content Include="Areas\Supervision\Views\ManInforme\_PersonalTecProf.cshtml" />
+    <Content Include="Areas\Supervision\Views\ManInformeExSitu\_RelPerCentroCria.cshtml" />
+    <Content Include="Areas\THabilitante\Views\Shared\_Layout.cshtml" />
+    <Content Include="Areas\THabilitante\Views\ManTHabilitante\_shared\_renderRecategorizarFR.cshtml" />
+    <Content Include="Areas\THabilitante\Views\ManPreviosAlerta\_ItemCOAdministrador.cshtml" />
+    <Content Include="Areas\Supervision\Views\Alerta\Seguimiento.cshtml" />
+    <Content Include="Areas\Supervision\Views\Alerta\_ItemDocRecibido.cshtml" />
+    <Content Include="Areas\Supervision\Views\Alerta\_ItemRegRespuesta.cshtml" />
+    <Content Include="Areas\General\Views\Controles\_MemConsultaSITD.cshtml" />
+    <Content Include="Archivos\Documentos\guiaFormatoDenuncia.pdf" />
+    <Content Include="Archivos\Plantilla\Reg_Usu\RESODIREC_INFRACCIONES.xlsx" />
+    <Content Include="Archivos\Plantilla\CapacitacionPrograma.xlsx" />
+    <Content Include="Archivos\Plantilla\PlantillaMaderable.xlsx" />
+    <Content Include="Areas\General\Views\ReporteFlujoFiscalizacion\Index.cshtml" />
+    <Content Include="Areas\General\Views\ReporteFlujoFiscalizacion\_Shared\_renderDFFFS.cshtml" />
+    <Content Include="Areas\General\Views\ReporteFlujoFiscalizacion\_Shared\_renderListaDFFFS.cshtml" />
+    <Content Include="Areas\General\Views\ReporteFlujoFiscalizacion\_Shared\_renderListaDFFFSDias.cshtml" />
+    <Content Include="Areas\General\Views\ReporteFlujoFiscalizacion\_Shared\_renderListaMAPRO.cshtml" />
+    <Content Include="Areas\General\Views\ReporteFlujoFiscalizacion\_Shared\_renderListaPEI.cshtml" />
+    <Content Include="Areas\General\Views\ReporteFlujoFiscalizacion\_Shared\_renderListaSubdireccion.cshtml" />
+    <Content Include="Areas\General\Views\ReporteFlujoFiscalizacion\_Shared\_renderMAPRO.cshtml" />
+    <Content Include="Areas\General\Views\ReporteFlujoFiscalizacion\_Shared\_renderPEI.cshtml" />
+    <Content Include="Areas\General\Views\ReporteFlujoFiscalizacion\_Shared\_renderSubdireccion.cshtml" />
+    <Content Include="Areas\THabilitante\Views\ManPlanManejo\_ErrorMaterial.cshtml" />
+    <Content Include="Areas\THabilitante\Views\ManPOA\_ErrorMaterial.cshtml" />
+    <Content Include="Areas\THabilitante\Views\ManTHabilitante\_ErrorMaterial.cshtml" />
+    <Content Include="Archivos\Plantilla\CapacitacionCronograma.xlsx" />
+    <Content Include="Areas\Supervision\Views\Denuncias\modalInformesSITD.cshtml" />
+    <Content Include="Areas\Supervision\Views\ManInforme\modalCartaOficios.cshtml" />
+    <Content Include="Archivos\Plantilla\EspeciesAprobadas.xlsx" />
+    <Content Include="Archivos\Plantilla\EspeciesFS.xlsx" />
+    <Content Include="Archivos\Plantilla\PoaMaderableBExtraccion_v3.xlsx" />
+    <Content Include="Archivos\Plantilla\PoaMaderableRAprobPCarr_v3.xlsx" />
+    <Content Include="Archivos\Plantilla\PoaMaderableRAprobPMed_v3.xlsx" />
+    <Content Include="Archivos\Plantilla\PoaMaderableRAprob_v3.xlsx" />
+    <Content Include="Archivos\Plantilla\PoaMadNoMadBExtraccion_v3.xlsx" />
+    <Content Include="Archivos\Plantilla\PoaMadNoMadCarrBExtraccion_v3.xlsx" />
+    <Content Include="Archivos\Plantilla\PoaMadNoMadPMedBExtraccion_v3.xlsx" />
+    <Content Include="Archivos\Plantilla\PoaNoMaderableBExtraccion_v3.xlsx" />
+    <Content Include="Archivos\Plantilla\PoaNoMaderableCarrBExtraccion_v3.xlsx" />
+    <Content Include="Archivos\Plantilla\PoaNoMaderablePMedBExtraccion_v3.xlsx" />
+    <Content Include="Archivos\Plantilla\THabilitanteVertice_v2.xlsx" />
+    <Content Include="Archivos\Plantilla\VerticesPMForestal.xlsx" />
+    <Content Include="Areas\Fiscalizacion\Views\ReporteFiscalizacion\Notificaciones.cshtml" />
+    <Content Include="Areas\THabilitante\Views\ManPOA\_renderParcelas.cshtml" />
+    <Content Include="Archivos\Plantilla\Reg_Usu\NOTIFICACIONES.xlsx" />
+    <Content Include="Archivos\Plantilla\PoaVerticeCampo.xlsx" />
+    <Content Include="Areas\Main\Views\Principal\_HeaderEstudio.cshtml" />
+    <Content Include="Areas\Main\Views\Principal\AccesoEstudio.cshtml" />
+    <Content Include="Areas\Main\Views\Principal\_terminosUsoEstudio.cshtml" />
+    <Content Include="Areas\THabilitante\Views\ManObligacion\Index.cshtml" />
+    <Content Include="Areas\General\Views\ReporteFiscalizacion\TableroEstadistico.cshtml" />
+    <Content Include="Areas\General\Views\ReporteFiscalizacion\_sharedRptFiscalizacionPau\_renderDetalle01.cshtml" />
+    <Content Include="Areas\General\Views\ReporteFiscalizacion\_sharedRptFiscalizacionPau\_renderDetalle02.cshtml" />
+    <Content Include="Archivos\Plantilla\Reg_Usu\REPORTE_DETALLE01.xlsx" />
+    <Content Include="Archivos\Plantilla\Reg_Usu\REPORTE_DETALLE02.xlsx" />
+    <Content Include="Areas\Supervision\Views\Indicadores\Index.cshtml" />
+    <Content Include="Areas\Supervision\Views\Indicadores\_Shared\_renderMAPRO.cshtml" />
+    <Content Include="Areas\Supervision\Views\Indicadores\_Shared\_renderPEI.cshtml" />
+    <Content Include="Areas\Supervision\Views\Indicadores\_Shared\_renderPOI.cshtml" />
+    <Content Include="Areas\General\Views\ManTHAuditar\Index.cshtml" />
+    <Content Include="Areas\General\Views\ManTHAuditar\AddEdit.cshtml" />
+    <Content Include="Areas\General\Views\ManPEI\Index.cshtml" />
+    <Content Include="Areas\General\Views\ManPEI\AddEdit.cshtml" />
+    <Content Include="Areas\Fiscalizacion\Views\GestionConstancia\Index.cshtml" />
+    <Content Include="Archivos\Plantilla\PlantillaConstancia.xlsx" />
+    <Content Include="Areas\General\Views\ManMeta\Index.cshtml" />
+    <Content Include="Areas\General\Views\ManMeta\AddEdit.cshtml" />
+    <Content Include="Archivos\Constancias\PlantillaConstanciasTH.docx" />
+    <Content Include="Areas\Supervision\Views\ManInforme\_InformeDigital.cshtml" />
+    <Content Include="Archivos\DocFirmados\documento.pdf" />
+    <Content Include="Areas\Seguridad\Views\Perfil\_MenuRol.cshtml" />
+    <Content Include="Areas\Seguridad\Views\Usuario\_MenuRol.cshtml" />
+    <Content Include="Archivos\Plantilla\PlantillaRptHallazgo.xlsx" />
+    <Content Include="Archivos\Plantilla\PMF_Especies.xlsx" />
+    <Content Include="Areas\Supervision\Views\_ViewStart.cshtml" />
+    <Content Include="Areas\Supervision\Views\AdmEquipo\DetalleEquipo.cshtml" />
+    <Content Include="Areas\Supervision\Views\AdmEquipo\Index.cshtml" />
+    <Content Include="Areas\Supervision\Views\ReporteVigilancia\_AddEditDetHallazgo.cshtml" />
+    <Content Include="Areas\Supervision\Views\ReporteVigilancia\_EnviarCorreo.cshtml" />
+    <Content Include="Areas\Supervision\Views\ReporteVigilancia\_VincularTHabilitante.cshtml" />
+    <Content Include="Areas\Supervision\Views\ReporteVigilancia\ComunicarHallazgo.cshtml" />
+    <Content Include="Areas\Supervision\Views\ReporteVigilancia\Index.cshtml" />
+    <Content Include="Areas\Supervision\Views\ReporteVigilancia\ValidarHallazgo.cshtml" />
+    <Content Include="Areas\Supervision\Views\ManInforme\Render\_renderSupervisorCalidad.cshtml" />
+    <Content Include="Areas\THabilitante\Views\_ViewStart.cshtml" />
+    <Content Include="Areas\THabilitante\Views\ManObligacion\_ManGrilla.cshtml" />
+    <Content Include="Areas\THabilitante\Views\ManObligacion\OblicacionMiBosque.cshtml" />
+    <Content Include="Areas\THabilitante\Views\ManObligacion\_ManGrillaObligacion.cshtml" />
+    <Content Include="Areas\THabilitante\Views\ManObligaciones\Index.cshtml" />
+    <Content Include="Areas\THabilitante\Views\ManObligaciones\ValidarObligacion.cshtml" />
+    <Content Include="Areas\General\Views\Reportes\IndicadoresOSINFOR_1.cshtml" />
+    <Content Include="Areas\General\Views\Reportes\IndicadoresOSINFOR_2.cshtml" />
+    <Content Include="Areas\General\Views\Reportes\IndicadoresOSINFOR_3.cshtml" />
+    <Content Include="Areas\Fiscalizacion\Views\_ViewStart.cshtml" />
+    <Content Include="Areas\Fiscalizacion\Views\ManCalculoMulta\Index.cshtml" />
+    <Content Include="Areas\General\Views\_ViewStart.cshtml" />
+    <Content Include="Areas\General\Views\ManCalculoMulta\Index.cshtml" />
+    <Content Include="Areas\General\Views\ManCalculoMulta\RegenEsp.cshtml" />
+    <Content Include="Areas\General\Views\ManCalculoMulta\CostoAdm.cshtml" />
+    <Content Include="Areas\General\Views\ManCalculoMulta\BenEcoInf.cshtml" />
+    <Content Include="Areas\General\Views\ManCalculoMulta\ManIndPreCon.cshtml" />
+    <Content Include="Areas\General\Views\ManCalculoMulta\ManInfProDet.cshtml" />
+    <Content Include="Areas\General\Views\ManCalculoMulta\ManVENMaderable.cshtml" />
+    <Content Include="Areas\General\Views\ManCalculoMulta\ManCatEspMad.cshtml" />
+    <Content Include="Areas\General\Views\ManCalculoMulta\ManValComFau.cshtml" />
+    <Content Include="Areas\General\Views\ManCalculoMulta\ManClaEspAme.cshtml" />
+    <Content Include="Areas\General\Views\FirmaDigital\_FirmaModal.cshtml" />
+    <Content Include="Areas\General\Views\Reportes\Rpt_TH_Comportamiento.cshtml" />
+    <Content Include="Areas\General\Views\Reportes\ViewTHComportamiento.cshtml" />
+    <Content Include="Archivos\Plantilla\ReporteComportamiento\THComportamiento.xlsx" />
+    <Content Include="Areas\Fiscalizacion\Views\ManResolucion\_Shared\_incisos.cshtml" />
+    <Content Include="Areas\Fiscalizacion\Views\InformeLegal\Shared\_incisosSubsanables.cshtml" />
+    <Content Include="Areas\THabilitante\Views\ManTHabilitante\_shared\_renderTHExtincion.cshtml" />
+    <Content Include="Areas\General\Views\ManPersonas\_AddTipoCargo.cshtml" />
+    <Content Include="Areas\General\Views\Controles\_ActualizaCargoPersona.cshtml" />
+    <None Include="Properties\PublishProfiles\CustomProfile.pubxml" />
+    <Content Include="Areas\PlanFocalizacion\Views\web.config" />
+    <Content Include="Areas\PlanFocalizacion\Views\Shared\_Layout.cshtml" />
+    <Content Include="Areas\PlanFocalizacion\Views\Paspeq\Index.cshtml" />
+    <Content Include="Areas\PlanFocalizacion\Views\Paspeq\_PaspeqDetalle.cshtml" />
+    <Content Include="Areas\PlanFocalizacion\Views\Paspeq\_Paspeq.cshtml" />
+    <Content Include="Archivos\Plantilla\plantilla_paspeq.xlsx" />
+    <None Include="Properties\PublishProfiles\CustomProfile.pubxml" />
+    <None Include="Properties\PublishProfiles\CustomProfile1.pubxml" />
+    <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
+    <None Include="Properties\PublishProfiles\IISProfile.pubxml" />
+    <None Include="Properties\PublishProfiles\Prueba.pubxml" />
+    <None Include="Properties\PublishProfiles\sigo-sfc-v3-demo.pubxml" />
+    <None Include="Properties\PublishProfiles\sigo-sfc-v3.pubxml" />
+    <Content Include="Scripts\ckeditor5\ckeditor.js.map" />
+    <Content Include="Scripts\apexcharts\locales\ar.json" />
+    <Content Include="Scripts\apexcharts\locales\ca.json" />
+    <Content Include="Scripts\apexcharts\locales\cs.json" />
+    <Content Include="Scripts\apexcharts\locales\de.json" />
+    <Content Include="Scripts\apexcharts\locales\el.json" />
+    <Content Include="Scripts\apexcharts\locales\en.json" />
+    <Content Include="Scripts\apexcharts\locales\es.json" />
+    <Content Include="Scripts\apexcharts\locales\fa.json" />
+    <Content Include="Scripts\apexcharts\locales\fi.json" />
+    <Content Include="Scripts\apexcharts\locales\fr.json" />
+    <Content Include="Scripts\apexcharts\locales\he.json" />
+    <Content Include="Scripts\apexcharts\locales\hi.json" />
+    <Content Include="Scripts\apexcharts\locales\hr.json" />
+    <Content Include="Scripts\apexcharts\locales\hu.json" />
+    <Content Include="Scripts\apexcharts\locales\hy.json" />
+    <Content Include="Scripts\apexcharts\locales\id.json" />
+    <Content Include="Scripts\apexcharts\locales\it.json" />
+    <Content Include="Scripts\apexcharts\locales\ja.json" />
+    <Content Include="Scripts\apexcharts\locales\ka.json" />
+    <Content Include="Scripts\apexcharts\locales\ko.json" />
+    <Content Include="Scripts\apexcharts\locales\lt.json" />
+    <Content Include="Scripts\apexcharts\locales\nb.json" />
+    <Content Include="Scripts\apexcharts\locales\nl.json" />
+    <Content Include="Scripts\apexcharts\locales\pl.json" />
+    <Content Include="Scripts\apexcharts\locales\pt-br.json" />
+    <Content Include="Scripts\apexcharts\locales\pt.json" />
+    <Content Include="Scripts\apexcharts\locales\rs.json" />
+    <Content Include="Scripts\apexcharts\locales\ru.json" />
+    <Content Include="Scripts\apexcharts\locales\se.json" />
+    <Content Include="Scripts\apexcharts\locales\sk.json" />
+    <Content Include="Scripts\apexcharts\locales\sl.json" />
+    <Content Include="Scripts\apexcharts\locales\sq.json" />
+    <Content Include="Scripts\apexcharts\locales\th.json" />
+    <Content Include="Scripts\apexcharts\locales\tr.json" />
+    <Content Include="Scripts\apexcharts\locales\ua.json" />
+    <Content Include="Scripts\apexcharts\locales\zh-cn.json" />
+    <None Include="Scripts\jquery-1.10.2.intellisense.js" />
+    <Content Include="Scripts\jquery-1.10.2.js" />
+    <Content Include="Scripts\jquery-1.10.2.min.js" />
+    <Content Include="Scripts\jquery-1.10.2.min.map" />
+    <None Include="Scripts\jquery-3.0.0-vsdoc.js" />
+    <Content Include="Scripts\jquery-3.0.0.js" />
+    <Content Include="Scripts\jquery-3.0.0.min.js" />
+    <Content Include="Scripts\jquery-3.0.0.slim.js" />
+    <Content Include="Scripts\jquery-3.0.0.slim.min.js" />
+    <Content Include="Scripts\jquery-3.0.0.slim.min.map" />
+    <Content Include="Scripts\jquery-3.0.0.min.map" />
+    <None Include="Scripts\jquery.validate-vsdoc.js" />
+    <Content Include="Scripts\jquery-3.3.1.min.js" />
+    <Content Include="Scripts\jquery-loadingModal\jquery-ui.min.js" />
+    <Content Include="Scripts\jquery-loadingModal\jquery.blockUI.js" />
+    <Content Include="Scripts\jquery-loadingModal\jquery.loadingModal.js" />
+    <Content Include="Scripts\jquery-loadingModal\jquery.loadingModal.min.js" />
+    <Content Include="Scripts\jquery-ui\images\ui-icons_444444_256x240.png" />
+    <Content Include="Scripts\jquery-ui\images\ui-icons_555555_256x240.png" />
+    <Content Include="Scripts\jquery-ui\images\ui-icons_777620_256x240.png" />
+    <Content Include="Scripts\jquery-ui\images\ui-icons_777777_256x240.png" />
+    <Content Include="Scripts\jquery-ui\images\ui-icons_cc0000_256x240.png" />
+    <Content Include="Scripts\jquery-ui\images\ui-icons_ffffff_256x240.png" />
+    <Content Include="Scripts\jquery-ui\jquery-ui.min.css" />
+    <Content Include="Scripts\jquery-ui\jquery-ui.min.js" />
+    <Content Include="Scripts\jquery-validate\additional-methods.min.js" />
+    <Content Include="Scripts\jquery-validate\jquery.validate.min.js" />
+    <Content Include="Scripts\jquery.cookie\jquery.cookie.js" />
+    <Content Include="Scripts\jquery.googoose.js" />
+    <Content Include="Scripts\jquery.sumoselect.min.js" />
+    <Content Include="Scripts\jquery.tmpl.min.js" />
+    <Content Include="Scripts\jquery.validate.js" />
+    <Content Include="Scripts\jquery.validate.min.js" />
+    <Content Include="Scripts\jquery.validate.unobtrusive.js" />
+    <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
+    <Content Include="Scripts\libExcel\custom.js" />
+    <Content Include="Scripts\libExcel\jszip.js" />
+    <Content Include="Scripts\libExcel\xlsx.js" />
+    <Content Include="Scripts\malihu-custom-scrollbar-plugin\jquery.mCustomScrollbar.concat.min.js" />
+    <Content Include="Scripts\malihu-custom-scrollbar-plugin\jquery.mCustomScrollbar.css" />
+    <Content Include="Scripts\malihu-custom-scrollbar-plugin\jquery.mCustomScrollbar.js" />
+    <Content Include="Scripts\malihu-custom-scrollbar-plugin\mCSB_buttons.png" />
+    <Content Include="Scripts\modernizr-2.6.2.js" />
+    <Content Include="Scripts\pdfjs\pdf.min.js" />
+    <Content Include="Scripts\pdfjs\pdf.worker.min.js" />
+    <Content Include="Scripts\popper-utils.js" />
+    <Content Include="Scripts\popper-utils.min.js" />
+    <Content Include="Scripts\popper.js" />
+    <Content Include="Scripts\popper.min.js" />
+    <Content Include="Scripts\popper\popper.js" />
+    <Content Include="Scripts\popper\popper.min.js" />
+    <Content Include="Scripts\popper\tooltip.min.js" />
+    <Content Include="Scripts\respond.js" />
+    <Content Include="Scripts\respond.min.js" />
+    <Content Include="Scripts\select2\select2.min.js" />
+    <Content Include="Scripts\Sigo\init.sigo.js" />
+    <Content Include="Scripts\Sigo\utility.uploadFile.js" />
+    <Content Include="Scripts\Sigo\utility.datatable.js" />
+    <Content Include="Scripts\Sigo\utility.sigo.js" />
+    <Content Include="Scripts\toastr.js" />
+    <Content Include="Scripts\tokenfield\bootstrap-tokenfield.min.js" />
+    <Content Include="Scripts\tokenfield\css\bootstrap-tokenfield.min.css" />
+    <Content Include="Scripts\tokenfield\css\tokenfield-typeahead.min.css" />
+    <Content Include="Scripts\tokenfield\typeahead.bundle.min.js" />
+    <Content Include="Scripts\umd\popper-utils.js" />
+    <Content Include="Scripts\umd\popper-utils.min.js" />
+    <Content Include="Scripts\umd\popper.js" />
+    <Content Include="Scripts\umd\popper.min.js" />
+    <Content Include="Scripts\vue-ckeditor5.js" />
+    <Content Include="Scripts\vue.js" />
+    <Content Include="Scripts\vue.min.js" />
+    <Content Include="Scripts\vuejs\vuejs2.5.min.js" />
+    <Content Include="Scripts\_references.js" />
+    <Content Include="Scripts\redirect\jquery.redirect.js" />
+    <None Include="Service References\pideOSF_Reniec\ReniecService.disco" />
+    <None Include="Service References\pideOSF_Reniec\configuration91.svcinfo" />
+    <None Include="Service References\pideOSF_Reniec\configuration.svcinfo" />
+    <None Include="Service References\pideOSF_Reniec\Reference.svcmap">
+      <Generator>WCF Proxy Generator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
+    <Content Include="Service References\pideOSF_Sunat\SIGOFCv3.pideOSF_Sunat.DatosRucResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <None Include="Service References\pideOSF_Sunat\SunatService.disco" />
+    <None Include="Service References\pideOSF_Sunat\configuration91.svcinfo" />
+    <None Include="Service References\pideOSF_Sunat\configuration.svcinfo" />
+    <None Include="Service References\pideOSF_Sunat\Reference.svcmap">
+      <Generator>WCF Proxy Generator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
+    <Content Include="Service References\sigoWSObservatorio\SIGOFCv3.sigoWSObservatorio.escribirDetallePDFIndexResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Service References\sigoWSObservatorio\SIGOFCv3.sigoWSObservatorio.escribirDetallePDFResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <None Include="Service References\sigoWSObservatorio\WSObservatorio.disco" />
+    <None Include="Service References\sigoWSObservatorio\configuration91.svcinfo" />
+    <None Include="Service References\sigoWSObservatorio\configuration.svcinfo" />
+    <None Include="Service References\sigoWSObservatorio\Reference.svcmap">
+      <Generator>WCF Proxy Generator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
+    <None Include="Service References\pideOSF_Reniec\ReniecService.wsdl" />
+    <None Include="Service References\pideOSF_Reniec\ReniecService.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\pideOSF_Reniec\ReniecService1.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\pideOSF_Reniec\ReniecService2.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\pideOSF_Reniec\ReniecService3.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <Content Include="Service References\pideOSF_Reniec\SIGOFCv3.pideOSF_Reniec.PersonaResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <None Include="Service References\pideOSF_Sunat\SunatService.wsdl" />
+    <None Include="Service References\pideOSF_Sunat\SunatService.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\pideOSF_Sunat\SunatService1.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\pideOSF_Sunat\SunatService2.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\pideOSF_Sunat\SunatService3.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\sigoWSObservatorio\WSObservatorio.wsdl" />
+    <Content Include="Service References\sigoWSSupervision\SIGOFCv3.sigoWSSupervision.cargaDatosCampoMaderableResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Service References\sigoWSSupervision\SIGOFCv3.sigoWSSupervision.cargaDatosCampoNoMaderableResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Service References\sigoWSSupervision\SIGOFCv3.sigoWSSupervision.listaCNotificacionesResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Service References\sigoWSSupervision\SIGOFCv3.sigoWSSupervision.listaDatosPOAsResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Service References\sigoWSSupervision\SIGOFCv3.sigoWSSupervision.listaDatosPOAs_v3Response.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Service References\sigoWSSupervision\SIGOFCv3.sigoWSSupervision.listaEspNCientificoResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Service References\sigoWSSupervision\SIGOFCv3.sigoWSSupervision.listaEspNComunResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Service References\sigoWSSupervision\SIGOFCv3.sigoWSSupervision.listaInformesResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Service References\sigoWSSupervision\SIGOFCv3.sigoWSSupervision.listaMuestraResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <None Include="Service References\sigoWSSupervision\wssupervision.disco" />
+    <None Include="Service References\sigoWSSupervision\configuration91.svcinfo" />
+    <None Include="Service References\sigoWSSupervision\configuration.svcinfo" />
+    <None Include="Service References\sigoWSSupervision\Reference.svcmap">
+      <Generator>WCF Proxy Generator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
+    <Content Include="SqlServerTypes\readme.htm" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Web.Debug.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </Content>
+    <Content Include="Web.Release.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </Content>
+    <Content Include="Views\Web.config" />
+    <Content Include="Views\Shared\Error.cshtml" />
+    <Content Include="Views\Shared\_LayoutMain.cshtml" />
+    <Content Include="Scripts\umd\popper.min.js.map" />
+    <Content Include="Scripts\umd\popper.js.map" />
+    <Content Include="Scripts\umd\popper-utils.min.js.map" />
+    <Content Include="Scripts\umd\popper-utils.js.map" />
+    <Content Include="Scripts\README.md" />
+    <Content Include="Scripts\popper.min.js.map" />
+    <Content Include="Scripts\popper.js.map" />
+    <Content Include="Scripts\popper-utils.min.js.map" />
+    <Content Include="Scripts\popper-utils.js.map" />
+    <Content Include="Views\Shared\_Layout.cshtml" />
+    <Content Include="Views\Login\Index.cshtml" />
+    <Content Include="Views\Shared\_LayoutLogin.cshtml" />
+    <Content Include="Scripts\libExcel\menuBusquedaCoordenadas.cshtml" />
+    <Content Include="Views\Login\ErrorC.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\VM_Chk.cshtml" />
+    <None Include="Service References\sigoWSSupervision\wssupervision.wsdl" />
+    <Content Include="Views\Login\LoginEstudio.cshtml" />
+    <Content Include="Views\Shared\_LayoutEstudio.cshtml" />
+    <Content Include="Views\Login\Acceso.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="App_Data\" />
+    <Folder Include="Archivos\Archivo_Capacitacion\Temp\" />
+    <Folder Include="Archivos\Archivo_GTF\Temp\" />
+    <Folder Include="Archivos\Constancias\Firmados\" />
+    <Folder Include="Archivos\DatosImportacion\" />
+    <Folder Include="Archivos\Denuncia\" />
+    <Folder Include="Archivos\Incidencia\" />
+    <Folder Include="Archivos\InfEvalMandatos\" />
+    <Folder Include="Archivos\Modulo\Libro_Operaciones\Temp\" />
+    <Folder Include="Archivos\Modulo\Supervision\Itinerario\Historico\" />
+    <Folder Include="Archivos\Modulo\Supervision\Itinerario\Temp\" />
+    <Folder Include="Archivos\Modulo\Supervision\MuestraDendrologica\Historico\" />
+    <Folder Include="Archivos\Modulo\Supervision\MuestraDendrologica\Temp\" />
+    <Folder Include="Archivos\Modulo\Supervision\Oficio\Temp\" />
+    <Folder Include="Archivos\Plantilla\Paspeq\temp\" />
+    <Folder Include="Archivos\Temporales\" />
+    <Folder Include="Archivos\TransferidosSITD\" />
+    <Folder Include="Areas\Capacitacion\Views\Shared\" />
+    <Folder Include="Areas\Fiscalizacion\Views\ManILegal\" />
+    <Folder Include="Areas\Fiscalizacion\Views\ManResolucion\shared\" />
+    <Folder Include="Areas\Focalizacion\Models\" />
+    <Folder Include="Areas\Focalizacion\Views\Shared\" />
+    <Folder Include="Areas\Main\Models\" />
+    <Folder Include="Areas\Main\Views\Shared\" />
+    <Folder Include="Areas\PlanFocalizacion\Models\" />
+    <Folder Include="Areas\Planificacion\Views\Shared\" />
+    <Folder Include="Areas\Seguridad\Models\" />
+    <Folder Include="bin\roslyn\" />
+    <Folder Include="Fotos\" />
+    <Folder Include="PlantillaPDF\Descargas\" />
+    <Folder Include="Scripts\jquery.cookie\demo\" />
+    <Folder Include="SqlServerTypes\x64\" />
+    <Folder Include="SqlServerTypes\x86\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="packages.config" />
+    <None Include="Project_Readme.html" />
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{4A0DDDB5-7A95-4FBF-97CC-616D07737A77}" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Capas\CapaEntidad\CapaEntidad.csproj">
+      <Project>{34248fd8-654d-480d-b7b2-e420137bf6f8}</Project>
+      <Name>CapaEntidad</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Capas\CapaLogica\CapaLogica.csproj">
+      <Project>{0175db47-db82-4046-9b5a-e52121314d7f}</Project>
+      <Name>CapaLogica</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Capas\Herramienta\Herramienta.csproj">
+      <Project>{91facf82-bd98-4a38-8dd1-a396f1649039}</Project>
+      <Name>Herramienta</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadataStorage Include="Service References\pideOSF_Reniec\" />
+    <WCFMetadataStorage Include="Service References\pideOSF_Sunat\" />
+    <WCFMetadataStorage Include="Service References\sigoWSObservatorio\" />
+    <WCFMetadataStorage Include="Service References\sigoWSSupervision\" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Areas\Capacitacion\Reporte\ReporteGraficoEvaluacion.rdlc" />
+    <EmbeddedResource Include="Areas\Capacitacion\Reporte\ReporteGraficoEvaluacionEncuesta.rdlc" />
+    <EmbeddedResource Include="Areas\Capacitacion\Reporte\ReporteGraficoParticipante.rdlc" />
+    <EmbeddedResource Include="Areas\Capacitacion\Reporte\ReporteMemoria.rdlc" />
+    <EmbeddedResource Include="Areas\Capacitacion\Reporte\ReporteNotaConceptual.rdlc" />
+  </ItemGroup>
+  <PropertyGroup>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
+    <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+  </PropertyGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.targets" Condition="Exists('$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.targets')" />
+  <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" Condition="false" />
+  <Target Name="MvcBuildViews" AfterTargets="AfterBuild" Condition="'$(MvcBuildViews)'=='true'">
+    <AspNetCompiler VirtualPath="temp" PhysicalPath="$(WebProjectOutputDir)" />
+  </Target>
+  <ProjectExtensions>
+    <VisualStudio>
+      <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
+        <WebProjectProperties>
+          <UseIIS>True</UseIIS>
+          <AutoAssignPort>True</AutoAssignPort>
+          <DevelopmentServerPort>65353</DevelopmentServerPort>
+          <DevelopmentServerVPath>/</DevelopmentServerVPath>
+          <IISUrl>http://localhost:15164/</IISUrl>
+          <OverrideIISAppRootUrl>True</OverrideIISAppRootUrl>
+          <IISAppRootUrl>http://localhost:15164/</IISAppRootUrl>
+          <NTLMAuthentication>False</NTLMAuthentication>
+          <UseCustomServer>False</UseCustomServer>
+          <CustomServerUrl>
+          </CustomServerUrl>
+          <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
+        </WebProjectProperties>
+      </FlavorProperties>
+    </VisualStudio>
+  </ProjectExtensions>
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>Este proyecto hace referencia a los paquetes NuGet que faltan en este equipo. Use la restauración de paquetes NuGet para descargarlos. Para obtener más información, consulte http://go.microsoft.com/fwlink/?LinkID=322105. El archivo que falta es {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\packages\EntityFramework.6.4.4\build\EntityFramework.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\EntityFramework.6.4.4\build\EntityFramework.props'))" />
+    <Error Condition="!Exists('..\packages\EntityFramework.6.4.4\build\EntityFramework.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\EntityFramework.6.4.4\build\EntityFramework.targets'))" />
+  </Target>
+  <Import Project="..\packages\EntityFramework.6.4.4\build\EntityFramework.targets" Condition="Exists('..\packages\EntityFramework.6.4.4\build\EntityFramework.targets')" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target> -->
+</Project>

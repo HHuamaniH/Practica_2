@@ -1,0 +1,297 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{34248FD8-654D-480D-B7B2-E420137BF6F8}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>CapaEntidad</RootNamespace>
+    <AssemblyName>CapaEntidad</AssemblyName>
+    <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x64\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
+    <OutputPath>bin\x64\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Documento\Ent_Actividad.cs" />
+    <Compile Include="Documento\Ent_ActividadOficina.cs" />
+    <Compile Include="Documento\Ent_AEXPEDIENTE_INTEROP.cs" />
+    <Compile Include="Documento\Ent_ALERTA.cs" />
+    <Compile Include="Documento\Ent_ANTECEDENTE_EXPEDIENTE.cs" />
+    <Compile Include="Documento\Ent_BEXTRACCION.cs" />
+    <Compile Include="Documento\Ent_BITACORA_SUPER.cs" />
+    <Compile Include="Documento\Ent_BUSQUEDA.cs" />
+    <Compile Include="Documento\Ent_CAPACITACION.cs" />
+    <Compile Include="Documento\Ent_CNOTIFICACION.cs" />
+    <Compile Include="Documento\Ent_Constancia.cs" />
+    <Compile Include="Documento\Ent_ControlCalidad.cs" />
+    <Compile Include="Documento\Ent_Criterio_Focalizacion.cs" />
+    <Compile Include="Documento\Ent_CSUPERVISION.cs" />
+    <Compile Include="Documento\Ent_Denuncias.cs" />
+    <Compile Include="Documento\Ent_DENUNCIA_SITD.cs" />
+    <Compile Include="Documento\Ent_Destinatario.cs" />
+    <Compile Include="Documento\Ent_DEVOLUCION_MADERA.cs" />
+    <Compile Include="Documento\Ent_ERRORMATERIAL.cs" />
+    <Compile Include="Documento\Ent_Especie.cs" />
+    <Compile Include="Documento\Ent_FControlCalidadSupervision.cs" />
+    <Compile Include="Documento\Ent_FISNOTI.cs" />
+    <Compile Include="Documento\Ent_FISNOTI2da.cs" />
+    <Compile Include="Documento\Ent_Focalizacion_PlanTrabajo.cs" />
+    <Compile Include="Documento\ENT_Focalizacion_Priorizacion.cs" />
+    <Compile Include="Documento\Ent_IndicadorFiltro.cs" />
+    <Compile Include="Documento\Ent_Itenerario.cs" />
+    <Compile Include="Documento\Ent_Libro_Operaciones.cs" />
+    <Compile Include="Documento\Ent_LIBRO_OPERACIONES_ARCHIVO.cs" />
+    <Compile Include="Documento\Ent_Libro_Operaciones_Movimientos.cs" />
+    <Compile Include="Documento\Ent_Libro_Operaciones_THabilitante.cs" />
+    <Compile Include="Documento\Ent_MiBosque_Obligacion.cs" />
+    <Compile Include="Documento\Ent_MiBosque_Obligacion_Observacion.cs" />
+    <Compile Include="Documento\Ent_Meta.cs" />
+    <Compile Include="Documento\Ent_NOTIFICACION.cs" />
+    <Compile Include="Documento\Ent_Obligacion.cs" />
+    <Compile Include="Documento\Ent_Paspeq.cs" />
+    <Compile Include="Documento\Ent_Paspeq_Detalle.cs" />
+    <Compile Include="Documento\Ent_Paspeq_Detalle_V3.cs" />
+    <Compile Include="Documento\Ent_PLANIFICACION.cs" />
+    <Compile Include="Documento\Ent_PlanManejo_Especies.cs" />
+    <Compile Include="Documento\Ent_Plan_Manejo_Supervisado.cs" />
+    <Compile Include="Documento\Ent_Plan_T_Detalle_Especie.cs" />
+    <Compile Include="Documento\Ent_Priorizacion.cs" />
+    <Compile Include="Documento\Ent_Priorizacion_Detalle.cs" />
+    <Compile Include="Documento\Ent_ResSubDirTabInforme.cs" />
+    <Compile Include="Documento\Ent_Ruta.cs" />
+    <Compile Include="Documento\Ent_PREVIOS_ALERTA.cs" />
+    <Compile Include="Documento\Ent_GENEPERSONA.cs" />
+    <Compile Include="Documento\Ent_GUIA_TRANSPORTE.cs" />
+    <Compile Include="Documento\Ent_ILEGAL.cs" />
+    <Compile Include="Documento\Ent_IMEDIDA.cs" />
+    <Compile Include="Documento\Ent_INFFUN.cs" />
+    <Compile Include="Documento\Ent_INFORME.cs" />
+    <Compile Include="Documento\Ent_InformeAutoridadForestal.cs" />
+    <Compile Include="Documento\Ent_InfQuinquenal.cs" />
+    <Compile Include="Documento\Ent_INFTEC.cs" />
+    <Compile Include="Documento\Ent_INFTIT.cs" />
+    <Compile Include="Documento\Ent_IntSIADO.cs" />
+    <Compile Include="Documento\Ent_ISUPERVISION_DET_EMADERABLE.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Documento\Ent_ISUPERVISION_EXSITU_INFRA_AREA.cs" />
+    <Compile Include="Documento\Ent_ISUSPENSION.cs" />
+    <Compile Include="Documento\Ent_MasterFiltro.cs" />
+    <Compile Include="Documento\Ent_Persona.cs" />
+    <Compile Include="Documento\Ent_PlanTrabajo.cs" />
+    <Compile Include="Documento\Ent_PLAN_MANEJO.cs" />
+    <Compile Include="Documento\Ent_POA.cs" />
+    <Compile Include="Documento\Ent_PrecioEspecie.cs" />
+    <Compile Include="Documento\Ent_PreVisualizar.cs" />
+    <Compile Include="Documento\Ent_PROGRAMA_CAPACITACION.cs" />
+    <Compile Include="Documento\Ent_PROVEIDO.cs" />
+    <Compile Include="Documento\Ent_PROVEIDOARCHIVO.cs" />
+    <Compile Include="Documento\Ent_REMOINS.cs" />
+    <Compile Include="Documento\Ent_REPORTEGERENCIAL.cs" />
+    <Compile Include="Documento\Ent_Reporte_AntecedentesTitular.cs" />
+    <Compile Include="Documento\Ent_Reporte_BuenasPracticas.cs" />
+    <Compile Include="Documento\Ent_Reporte_CAPACITACION.cs" />
+    <Compile Include="Documento\Ent_Reporte_ControlTiemposFiscalizacion.cs" />
+    <Compile Include="Documento\Ent_Reporte_DigitadoresOD.cs" />
+    <Compile Include="Documento\Ent_Reporte_ESTADISTICOS.cs" />
+    <Compile Include="Documento\Ent_Reporte_EstadoCuenta.cs" />
+    <Compile Include="Documento\Ent_REPORTE_FISCALIZACION.cs" />
+    <Compile Include="Documento\Ent_REPORTE_GENERAL.cs" />
+    <Compile Include="Documento\Ent_REPORTE_GESTION_AVANCE.cs" />
+    <Compile Include="Documento\Ent_Reporte_Historial_TH.cs" />
+    <Compile Include="Documento\Ent_REPORTE_ISUPERVISION.cs" />
+    <Compile Include="Documento\Ent_Reporte_OBSERVATORIO.cs" />
+    <Compile Include="Documento\Ent_Reporte_PAU_CONCLUIDO.cs" />
+    <Compile Include="Documento\Ent_Reporte_PlanManejo.cs" />
+    <Compile Include="Documento\Ent_Reporte_ProduccionItinerarioSupervision.cs" />
+    <Compile Include="Documento\Ent_Reporte_ProduccionXDigitadores.cs" />
+    <Compile Include="Documento\Ent_Reporte_SEGUIMIENTO_INFORMES.cs" />
+    <Compile Include="Documento\Ent_REPORTE_SUPERVISION_GENERAL.cs" />
+    <Compile Include="Documento\Ent_REPORTE_TRAFICO_TALA_ILEGAL.cs" />
+    <Compile Include="Documento\Ent_RESODIREC.cs" />
+    <Compile Include="Documento\Ent_Reunion.cs" />
+    <Compile Include="Documento\Ent_SeguimientoMuestra.cs" />
+    <Compile Include="Documento\Ent_SINCRONIZACION.cs" />
+    <Compile Include="Documento\Ent_SOLEXT.cs" />
+    <Compile Include="Documento\Ent_SOLINF_THABILITANTE_SITD.cs" />
+    <Compile Include="Documento\Ent_SOLINT.cs" />
+    <Compile Include="Documento\Ent_SupervisionTabInformeDigital.cs" />
+    <Compile Include="Documento\Ent_Tablero.cs" />
+    <Compile Include="Documento\Ent_TFFS.cs" />
+    <Compile Include="Documento\Ent_THABILITANTE.cs" />
+    <Compile Include="Documento\Ent_THABILITANTE_POI.cs" />
+    <Compile Include="Documento\Ent_Usuario.cs" />
+    <Compile Include="Documento\Ent_Veeduria.cs" />
+    <Compile Include="Documento\Ent_WS_OSINFOR.cs" />
+    <Compile Include="EDetalleInforme.cs" />
+    <Compile Include="General\Ent_AUDITORIA.cs" />
+    <Compile Include="General\Ent_BUSQUEDA_V3.cs" />
+    <Compile Include="General\Ent_CALCULOMULTA.cs" />
+    <Compile Include="General\Ent_DETALLECALCULOMULTA.cs" />
+    <Compile Include="General\Ent_ESPECIECM.cs" />
+    <Compile Include="General\Ent_ESPECIES.cs" />
+    <Compile Include="General\Ent_DEPENDENCIA_UBIGEO.cs" />
+    <Compile Include="General\Ent_MANCALCULOMULTA.cs" />
+    <Compile Include="General\Ent_Perfil.cs" />
+    <Compile Include="General\Ent_UBIGEO.cs" />
+    <Compile Include="General\Ent_USUARIO_CUENTA.cs" />
+    <Compile Include="General\Ent_LOG_CARGA_ARCHIVOS.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ViewModel\Documento\VM_ALERTA_SUPERVISION.cs" />
+    <Compile Include="ViewModel\Documento\VM_CONSTANCIA.cs" />
+    <Compile Include="ViewModel\Documento\VM_DENUNCIA_SITD.cs" />
+    <Compile Include="ViewModel\Documento\VM_FControlCalidadSupervision.cs" />
+    <Compile Include="ViewModel\Documento\VM_Itenerario.cs" />
+    <Compile Include="ViewModel\Documento\VM_Paspeq_Detalle_Mensual.cs" />
+    <Compile Include="ViewModel\Documento\VM_Paspeq_PlanTrabajo_Item.cs" />
+    <Compile Include="ViewModel\Documento\VM_SOLINF_THABILITANTE.cs" />
+    <Compile Include="ViewModel\Documento\VM_Transferir.cs" />
+    <Compile Include="ViewModel\Documento\VM_Usuario.cs" />
+    <Compile Include="ViewModel\General\VM_Acceso.cs" />
+    <Compile Include="ViewModel\General\VM_Perfil.cs" />
+    <Compile Include="ViewModel\General\VM_Perfil_Menu.cs" />
+    <Compile Include="ViewModel\General\VM_Usuario_Menu.cs" />
+    <Compile Include="ViewModel\General\VM_ValidacionFormatos.cs" />
+    <Compile Include="ViewModel\ListResult.cs" />
+    <Compile Include="ViewModel\VM_Alerta.cs" />
+    <Compile Include="ViewModel\VM_BalanceExtraccion.cs" />
+    <Compile Include="ViewModel\VM_CartaNotificacion.cs" />
+    <Compile Include="ViewModel\VM_Cbo.cs" />
+    <Compile Include="ViewModel\VM_ControlCalidad.cs" />
+    <Compile Include="ViewModel\VM_Especies.cs" />
+    <Compile Include="ViewModel\VM_FiscalizaNotificacion.cs" />
+    <Compile Include="ViewModel\VM_FlujoFiscalizacion.cs" />
+    <Compile Include="ViewModel\VM_Focalizacion_PlanTrabajo.cs" />
+    <Compile Include="ViewModel\VM_Focalizacion_Priorizacion.cs" />
+    <Compile Include="ViewModel\VM_GuiaTransporte_Producto.cs" />
+    <Compile Include="ViewModel\VM_GuiaTransporte.cs" />
+    <Compile Include="ViewModel\VM_Destinatarios.cs" />
+    <Compile Include="ViewModel\VM_Helper.cs" />
+    <Compile Include="ViewModel\VM_IndicadorFiltro.cs" />
+    <Compile Include="ViewModel\VM_InformacionTitular.cs" />
+    <Compile Include="ViewModel\VM_Informe.cs" />
+    <Compile Include="ViewModel\VM_InformeFundamentado.cs" />
+    <Compile Include="ViewModel\VM_InformeLegal.cs" />
+    <Compile Include="ViewModel\VM_InformeMedidaCorrectiva.cs" />
+    <Compile Include="ViewModel\VM_InformeQuinquenal.cs" />
+    <Compile Include="ViewModel\VM_InformeSuspension.cs" />
+    <Compile Include="ViewModel\VM_InformeTecnico.cs" />
+    <Compile Include="ViewModel\VM_MiBosqueObligacion.cs" />
+    <Compile Include="ViewModel\VM_INFORME_DIGITAL.cs" />
+    <Compile Include="ViewModel\VM_Informe_Supervision.cs" />
+    <Compile Include="ViewModel\VM_Libro_Operaciones_THabilitante.cs" />
+    <Compile Include="ViewModel\VM_Meta.cs" />
+    <Compile Include="ViewModel\VM_Notificacion.cs" />
+    <Compile Include="ViewModel\VM_Obligacion.cs" />
+    <Compile Include="ViewModel\VM_Paspeq.cs" />
+    <Compile Include="ViewModel\VM_PaspeqDetalle.cs" />
+    <Compile Include="ViewModel\VM_RSD_DIGITAL.cs" />
+    <Compile Include="ViewModel\VM_Proveido.cs" />
+    <Compile Include="ViewModel\VM_ProveidoElevacion.cs" />
+    <Compile Include="ViewModel\VM_ReporteAntecedentesTitular.cs" />
+    <Compile Include="ViewModel\VM_ReporteFiscalizacion.cs" />
+    <Compile Include="ViewModel\VM_ReporteInformacion.cs" />
+    <Compile Include="ViewModel\VM_ReporteSeguimientoRegistro.cs" />
+    <Compile Include="ViewModel\VM_Resodirec.cs" />
+    <Compile Include="ViewModel\VM_ResolucionTFFS.cs" />
+    <Compile Include="ViewModel\VM_SeguimientoMedida.cs" />
+    <Compile Include="ViewModel\VM_Planificacion.cs" />
+    <Compile Include="ViewModel\VM_PlanManejoCalificacion.cs" />
+    <Compile Include="ViewModel\VM_PlanTrabajo.cs" />
+    <Compile Include="ViewModel\VM_PlanTrabajoDetalle.cs" />
+    <Compile Include="ViewModel\VM_PlanManejoEspecies.cs" />
+    <Compile Include="ViewModel\VM_PlanTrabajoDetalleEspecie.cs" />
+    <Compile Include="ViewModel\VM_PlanTrabajoMuestra.cs" />
+    <Compile Include="ViewModel\VM_PreviosAlerta.cs" />
+    <Compile Include="ViewModel\VM_InformeAutoridadForestal.cs" />
+    <Compile Include="ViewModel\VM_ExSitu.cs" />
+    <Compile Include="ViewModel\VM_Persona.cs" />
+    <Compile Include="ViewModel\VM_PlanManejo.cs" />
+    <Compile Include="ViewModel\VM_PlanManejoGeneral.cs" />
+    <Compile Include="ViewModel\VM_PlanManejoExituList.cs" />
+    <Compile Include="ViewModel\VM_DevolucionMadera.cs" />
+    <Compile Include="ViewModel\VM_POA.cs" />
+    <Compile Include="ViewModel\VM_Capacitacion.cs" />
+    <Compile Include="ViewModel\VM_ProgramaCapacitacion.cs" />
+    <Compile Include="ViewModel\VM_ReporteGeneral.cs" />
+    <Compile Include="ViewModel\VM_ReporteTitularResumen.cs" />
+    <Compile Include="ViewModel\VM_SeguimientoMuestra.cs" />
+    <Compile Include="ViewModel\VM_TableroEstadistico.cs" />
+    <Compile Include="ViewModel\VM_THabilitante.cs" />
+    <Compile Include="ViewModel\VM_THabilitantePOI.cs" />
+    <Compile Include="ViewModel\VM_THComportamiento.cs" />
+    <Compile Include="ViewModel\VM_TRAMITE.cs" />
+    <Compile Include="ViewModel\VM_TribunalNotificacion2da.cs" />
+    <Compile Include="ViewModel\VM_Veeduria.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="bin\Debug\CapaEntidad.dll" />
+    <Content Include="bin\Debug\CapaEntidad.pdb" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="bin\Release\" />
+    <Folder Include="bin\x64\Debug\" />
+    <Folder Include="bin\x64\Release\" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

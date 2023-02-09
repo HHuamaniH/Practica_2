@@ -1,0 +1,209 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{0175DB47-DB82-4046-9B5A-E52121314D7F}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>CapaLogica</RootNamespace>
+    <AssemblyName>CapaLogica</AssemblyName>
+    <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x64\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
+    <OutputPath>bin\x64\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="EPPlus, Version=5.3.0.0, Culture=neutral, PublicKeyToken=ea159fdaa78159a1, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\EPPlus.5.3.0\lib\net45\EPPlus.dll</HintPath>
+    </Reference>
+    <Reference Include="itextsharp, Version=5.5.13.1, Culture=neutral, PublicKeyToken=8354ae6d2174ddca, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\dll\itextsharp.dll</HintPath>
+    </Reference>
+    <Reference Include="Oracle.ManagedDataAccess, Version=4.122.19.1, Culture=neutral, PublicKeyToken=89b483f429c47342, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Oracle.ManagedDataAccess.19.8.0\lib\net40\Oracle.ManagedDataAccess.dll</HintPath>
+    </Reference>
+    <Reference Include="PresentationCore" />
+    <Reference Include="System" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Security" />
+    <Reference Include="System.Threading.Tasks" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="BDConexion.cs" />
+    <Compile Include="Documento\Log_Alerta.cs" />
+    <Compile Include="Documento\Log_ANTECEDENTE_EXPEDIENTE.cs" />
+    <Compile Include="Documento\Log_BEXTRACCION.cs" />
+    <Compile Include="Documento\Log_BITACORA_SUPER.cs" />
+    <Compile Include="Documento\Log_BUSQUEDA.cs" />
+    <Compile Include="Documento\Log_CAPACITACION.cs" />
+    <Compile Include="Documento\Log_CNOTIFICACION.cs" />
+    <Compile Include="Documento\Log_Constancia.cs" />
+    <Compile Include="Documento\Log_ControlCalidad.cs" />
+    <Compile Include="Documento\Log_Denuncia.cs" />
+    <Compile Include="Documento\Log_DEVOLUCION_MADERA.cs" />
+    <Compile Include="Documento\Log_FISNOTI2da.cs" />
+    <Compile Include="Documento\Log_Focalizacion.cs" />
+    <Compile Include="Documento\Log_GuiaTransporte.cs" />
+    <Compile Include="Documento\Log_IndicadorFiltro.cs" />
+    <Compile Include="Documento\Log_Informe_Digital.cs" />
+    <Compile Include="Documento\Log_Itenerario.cs" />
+    <Compile Include="Documento\Log_MiBosque_Obligacion.cs" />
+    <Compile Include="Documento\Log_MiBosque_Obligacion_Observacion.cs" />
+    <Compile Include="Documento\Log_Meta.cs" />
+    <Compile Include="Documento\Log_NOTIFICACION.cs" />
+    <Compile Include="Documento\Log_Paspeq.cs" />
+    <Compile Include="Documento\Log_PAU_Digital.cs" />
+    <Compile Include="Documento\Log_PLANIFICACION.cs" />
+    <Compile Include="Documento\Log_PlanTrabajo.cs" />
+    <Compile Include="Documento\Log_PREVIOS_ALERTA.cs" />
+    <Compile Include="Documento\Log_FISNOTI.cs" />
+    <Compile Include="Documento\Log_GENEPERSONA.cs" />
+    <Compile Include="Documento\Log_ILEGAL.cs" />
+    <Compile Include="Documento\Log_IMEDIDA.cs" />
+    <Compile Include="Documento\Log_INFFUN.cs" />
+    <Compile Include="Documento\Log_INFORME.cs" />
+    <Compile Include="Documento\Log_InformeAutoridadForestal.cs" />
+    <Compile Include="Documento\Log_InformeQuinquenal.cs" />
+    <Compile Include="Documento\Log_INFTEC.cs" />
+    <Compile Include="Documento\Log_INFTIT.cs" />
+    <Compile Include="Documento\Log_IntSIADO.cs" />
+    <Compile Include="Documento\Log_ISUSPENSION.cs" />
+    <Compile Include="Documento\Log_MasterFiltro.cs" />
+    <Compile Include="Documento\Log_Persona.cs" />
+    <Compile Include="Documento\Log_PLAN_MANEJO.cs" />
+    <Compile Include="Documento\Log_POA.cs" />
+    <Compile Include="Documento\Log_Priorizacion.cs" />
+    <Compile Include="Documento\Log_PROGRAMA_CAPACITACION.cs" />
+    <Compile Include="Documento\Log_PROVEIDO.cs" />
+    <Compile Include="Documento\Log_PROVEIDOARCH.cs" />
+    <Compile Include="Documento\Log_REPORTEGERENCIAL.cs" />
+    <Compile Include="Documento\Log_Reporte_AntecedentesTitular.cs" />
+    <Compile Include="Documento\Log_Reporte_BuenasPracticas.cs" />
+    <Compile Include="Documento\Log_Reporte_ControlTiemposFiscalizacion.cs" />
+    <Compile Include="Documento\Log_Reporte_DigitadoresOD.cs" />
+    <Compile Include="Documento\Log_Reporte_ESTADISTICOS.cs" />
+    <Compile Include="Documento\Log_Reporte_EstadoCuenta.cs" />
+    <Compile Include="Documento\Log_REPORTE_FISCALIZACION.cs" />
+    <Compile Include="Documento\Log_REPORTE_GENERAL.cs" />
+    <Compile Include="Documento\Log_REPORTE_GESTION_AVANCE.cs" />
+    <Compile Include="Documento\Log_REPORTE_ISUPERVISION.cs" />
+    <Compile Include="Documento\Log_Reporte_OBSERVATORIO_SIMULACION.cs" />
+    <Compile Include="Documento\Log_Reporte_OBSERVATORIO.cs" />
+    <Compile Include="Documento\Log_Reporte_PlanManejo.cs" />
+    <Compile Include="Documento\Log_Reporte_ProduccionItinerarioSupervision.cs" />
+    <Compile Include="Documento\Log_Reporte_ProduccionXDigitadores.cs" />
+    <Compile Include="Documento\Log_Reporte_SEGUIMIENTO_INFORMES.cs" />
+    <Compile Include="Documento\Log_REPORTE_TRAFICO_TALA_ILEGAL.cs" />
+    <Compile Include="Documento\Log_RESODIREC.cs" />
+    <Compile Include="Documento\Log_RHistorial_TH.cs" />
+    <Compile Include="Documento\Log_SeguimientoMuestra.cs" />
+    <Compile Include="Documento\Log_SUPERVISION_GENERAL.cs" />
+    <Compile Include="Documento\Log_Tablero.cs" />
+    <Compile Include="Documento\Log_TFFS.cs" />
+    <Compile Include="Documento\Log_THABILITANTE.cs" />
+    <Compile Include="Documento\Log_THABILITANTE_POI.cs" />
+    <Compile Include="Documento\Log_THComportamiento.cs" />
+    <Compile Include="Documento\Log_Usuario.cs" />
+    <Compile Include="Documento\Log_Veeduria.cs" />
+    <Compile Include="Documento\Log_WS_OSINFOR.cs" />
+    <Compile Include="General\Log_ESPECIES.cs" />
+    <Compile Include="General\Log_DEPENDENCIA_UBIGEO.cs" />
+    <Compile Include="General\Log_MANCALCULOMULTA.cs" />
+    <Compile Include="General\Log_Perfil.cs" />
+    <Compile Include="General\Log_UBIGEO.cs" />
+    <Compile Include="General\Log_USUARIO_CUENTA.cs" />
+    <Compile Include="Log_Helper.cs" />
+    <Compile Include="NDetalleInforme.cs" />
+    <Compile Include="NListados.cs" />
+    <Compile Include="PDFFooterSimulacion.cs" />
+    <Compile Include="PDFFooter.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\CapaDatos\CapaDatos.csproj">
+      <Project>{bf545ad9-4151-4739-bfea-d522f2b215b6}</Project>
+      <Name>CapaDatos</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\CapaEntidad\CapaEntidad.csproj">
+      <Project>{34248fd8-654d-480d-b7b2-e420137bf6f8}</Project>
+      <Name>CapaEntidad</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\GeneralSQL\GeneralSQL.csproj">
+      <Project>{EAF99876-705B-4560-A374-712E6B122A53}</Project>
+      <Name>GeneralSQL</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Herramienta\Herramienta.csproj">
+      <Project>{91facf82-bd98-4a38-8dd1-a396f1649039}</Project>
+      <Name>Herramienta</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+    <None Include="ClassDiagram1.cd" />
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="bin\Debug\" />
+    <Folder Include="bin\Release\" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
