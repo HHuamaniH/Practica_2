@@ -1398,11 +1398,13 @@ namespace SIGOFCv3.Areas.Supervision.Models.ManInforme
                                 insertar = insertar + ",'" + listaInf.COORDENADA_NORTE.ToString() + "'";
                                 insertar = insertar + ",'" + listaInf.TITULAR + "'";
                                 insertar = insertar + ",'" + listaInf.COD_THABILITANTE + "'";
-                                insertar = insertar + ",'" + listaInf.NUM_POA.ToString() + "'";
+                                insertar = insertar + ",'" + (listaInf.NUM_POA == 0 ? "" : listaInf.NUM_POA.ToString()) + "'";
                                 insertar = insertar + ",'" + listaInf.COD_INFORME.ToString() + "'";
 
-                                cmd.CommandText = "INSERT INTO [ver_poa$A" + i.ToString().Trim() + ":M" + (oCEntidadInfTemp.ListPOAs.Count + 1).ToString() + "] VALUES (" + insertar + ")";
+                                cmd.CommandText = "INSERT INTO [shp_ver_pm$A" + i.ToString().Trim() + ":M" + (oCEntidadInfTemp.ListPOAs.Count + 1).ToString() + "] VALUES (" + insertar + ")";
                                 cmd.ExecuteNonQuery();
+
+                                result.data = listaInf.NUMERO;
                             }
                         }
                         //campo
@@ -1418,11 +1420,13 @@ namespace SIGOFCv3.Areas.Supervision.Models.ManInforme
                                 insertar = insertar + ",'" + listaInf.COORDENADA_NORTE.ToString() + "'";
                                 insertar = insertar + ",'" + (listaInf.OBSERVACION.Length > 254 ? listaInf.OBSERVACION.Substring(0, 254) : listaInf.OBSERVACION) + "'";
                                 insertar = insertar + ",'" + listaInf.COD_THABILITANTE + "'";
-                                insertar = insertar + ",'" + listaInf.NUM_POA.ToString() + "'";
+                                insertar = insertar + ",'" + (listaInf.NUM_POA == 0 ? "" : listaInf.NUM_POA.ToString()) + "'";
                                 insertar = insertar + ",'" + listaInf.COD_INFORME.ToString() + "'";
-                                insertar = insertar + ",'" + listaInf.COD_SECUENCIAL.ToString() + "'";
-                                cmd.CommandText = "INSERT INTO [ver_campo$A" + i.ToString().Trim() + ":J" + (oCEntidadInfTemp.ListPOAsCampo.Count + 1).ToString() + "] VALUES (" + insertar + ")";
+                                insertar = insertar + ",'" + (listaInf.COD_SECUENCIAL == 0 ? "" : listaInf.COD_SECUENCIAL.ToString()) + "'";
+                                cmd.CommandText = "INSERT INTO [shp_ver_campo$A" + i.ToString().Trim() + ":J" + (oCEntidadInfTemp.ListPOAsCampo.Count + 1).ToString() + "] VALUES (" + insertar + ")";
                                 cmd.ExecuteNonQuery();
+
+                                result.data = listaInf.NUMERO;
                             }
 
                         }
@@ -1459,6 +1463,8 @@ namespace SIGOFCv3.Areas.Supervision.Models.ManInforme
 
                                 cmd.CommandText = "INSERT INTO [arb_sup$A" + i.ToString().Trim() + ":W" + (oCEntidadInfTemp.ListISupervMaderableAprov.Count + 1).ToString() + "] VALUES (" + insertar + ")";
                                 cmd.ExecuteNonQuery();
+
+                                result.data = listaInf.NUMERO;
                             }
                         }
                         //TROZA
@@ -1481,6 +1487,8 @@ namespace SIGOFCv3.Areas.Supervision.Models.ManInforme
                                 insertar = insertar + ",'" + listaInf.FUENTE_FOTO.ToString() + "'";
                                 cmd.CommandText = "INSERT INTO [ptos_ref$A" + i.ToString().Trim() + ":L" + (oCEntidadInfTemp.ListTrozaCampo.Count + 1).ToString() + "] VALUES (" + insertar + ")";
                                 cmd.ExecuteNonQuery();
+
+                                result.data = listaInf.NUMERO;
                             }
                         }
                         //HUAYRONAS
@@ -1500,6 +1508,8 @@ namespace SIGOFCv3.Areas.Supervision.Models.ManInforme
                                 insertar = insertar + ",'" + listaInf.COD_INFORME.ToString() + "'";
                                 cmd.CommandText = "INSERT INTO [prod_carbon$A" + i.ToString().Trim() + ":K" + (oCEntidadInfTemp.ListHuayronas.Count + 1).ToString() + "] VALUES (" + insertar + ")";
                                 cmd.ExecuteNonQuery();
+
+                                result.data = listaInf.NUMERO;
                             }
                         }
 

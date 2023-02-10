@@ -143,7 +143,6 @@ namespace SIGOFCv3.Areas.Supervision.Controllers
             if (result.success)
             {
                 ruta = Server.MapPath("~/PlantillaPDF/Descargas/" + result.msj + ".pdf");
-                //ruta = Server.MapPath("~/Archivos/Plantilla/01-AMA_PER-FMC-2017-007_50_13_09_2018_04-52-55_pxmx.pdf");//OK
             }
 
             byte[] oBytes = System.IO.File.ReadAllBytes(ruta);
@@ -152,16 +151,17 @@ namespace SIGOFCv3.Areas.Supervision.Controllers
         }
         public FileResult DescargarDatosInforme(string asCodInforme)
         {
-            string ruta = "";
+            string ruta = "", nombreDescarga= "ReporteSupervision_";
             ListResult result = ExportarDatos.DatosInforme(asCodInforme);
             if (result.success)
             {
                 ruta = Server.MapPath("~/Archivos/Plantilla/InformeSup/" + result.msj);
+                nombreDescarga += string.IsNullOrEmpty(result.data) ? asCodInforme : result.data.Substring(result.data.Length - 4, 4);
             }
 
             byte[] oBytes = System.IO.File.ReadAllBytes(ruta);
 
-            return File(oBytes, "application/xlsx", "ReporteSupervision.xls");
+            return File(oBytes, "application/xlsx", nombreDescarga + ".xls");
         }
         #endregion
         #region "Mantenimiento Informe"
