@@ -2158,7 +2158,9 @@ ManInforme_AddEditExSitu.fnSaveForm = function () {
             datosInforme.tbEliTABLA = datosInforme.tbEliTABLA.concat(_renderSupervisor.fnGetListEliTABLA());
             datosInforme.tbBalanceIngEgr = ManInforme_AddEditExSitu.fnGetListCautiverio("BALANCE_ING_EGR");
             datosInforme.tbObligacionTitular = _renderObligacionTitular.fnGetList();
-            datosInforme.ddlTipoInformeId = _renderDatosSupervision.frm.find("#ddlTipoInformeId").val();
+            datosInforme.ddlTipoInformeId = _renderDatosSupervision.frm.find("#ddlTipoInformeId").val();            
+            datosInforme.tbMandatos = _renderMandatos.fnGetList();
+            datosInforme.tbMandatos = datosInforme.tbMandatos.concat(_renderMandatos.fnGetListEliTABLA());
             
             var option = { url: ManInforme_AddEditExSitu.frm[0].action, datos: JSON.stringify({ dto: datosInforme }), type: 'POST' };
             utilSigo.fnAjax(option, function (data) {

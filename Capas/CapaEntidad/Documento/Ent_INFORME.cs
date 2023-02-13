@@ -1959,6 +1959,9 @@ namespace CapaEntidad.DOC
         [Description("TERCERO_SOLIDARIO")]
         public String TERCERO_SOLIDARIO { get; set; }
 
+        [Category("LIST"), Description("ListMandato")]
+        public List<Ent_MANDATOS> ListMandatos { get; set; }
+
         #region "Constructor"
         public Ent_INFORME()
         {
@@ -3303,6 +3306,32 @@ namespace CapaEntidad.DOC
         public Ent_INFORME_OBLIGTITULAR()
         {
 
+        }
+    }
+
+    public class Ent_MANDATOS
+    {
+        [Description("COD_INFORME")]
+        public String COD_INFORME { get; set; }
+        [Description("COD_SECUENCIAL")]
+        public Int32 COD_SECUENCIAL { get; set; }       
+        [Description("MANDATO")]
+        public String MANDATO { get; set; }
+        [Description("PLAZO_IMPL_DIA")]
+        public Int32 PLAZO_IMPL_DIA { get; set; }
+        [Description("PLAZO_POST_DIA")]
+        public Int32 PLAZO_POST_DIA { get; set; }
+        [Description("PLAZO_INF_DIA")]
+        public Int32 PLAZO_INF_DIA { get; set; }
+        [Description("COD_UCUENTA")]
+        public String COD_UCUENTA { get; set; }
+        [Description("RegEstado")]
+        public Int32 RegEstado { get; set; }
+
+        public Ent_MANDATOS()
+        {
+            COD_SECUENCIAL = -1;
+            RegEstado = -1;
         }
     }
 

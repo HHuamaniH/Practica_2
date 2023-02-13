@@ -83,6 +83,7 @@
                             <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#navIncidencias" role="tab" aria-controls="home" aria-selected="true">Incidencias</a></li>
                             <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#navConclusion" role="tab" aria-controls="home" aria-selected="true">Conclusiones</a></li>
                             <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#navInformeDigital" role="tab" aria-controls="home" aria-selected="true">Informe digital</a></li>
+                            <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#navMandatos" role="tab" aria-controls="home" aria-selected="true">Mandatos</a></li>
                         </ul>
                         <div class="tab-content">
                             <div class="tab-pane fade show" id="navEstado" role="tabpanel" aria-labelledby="nav-home-tab">
@@ -243,70 +244,70 @@
                                             </div>
                                         </div>
                                         @*<div class="form-row">
-                            <div class="form-group col-md-4">
-                                <div class="card">
-                                    <div class="card-header text-small">
-                                        Médico Veterinario
-                                    </div>
-                                    <div class="card-body">
-                                        <div class="form-row">
-                                            <div class="form-group col-md-6">
-                                                <label for="ddlOdId" class="text-small">Cuenta?</label>
-                                                @Html.DropDownListFor(m => m.ddlCuentaVetMedId, new SelectList(Model.ddlCuentaVetMed, "Value", "Text"), new { @class = "form-control form-control-sm" })
-                                            </div>
-                                            @if (Model.ddlCuentaVetMedId == "0000002")
-                                            {
-                                                <div class="form-group col-md-6" id="divTipoMedVet">
-                                                    <label for="ddlOdId" class="text-small">Tipo</label>
-                                                    @Html.DropDownListFor(m => m.ddlTipoVisMedId, new SelectList(Model.ddlTipoVisMed, "Value", "Text"), new { @class = "form-control form-control-sm" })
-                                                </div>
-                                            }
-                                            else
-                                            {
-                                                <div class="form-group col-md-6" id="divTipoMedVet" hidden>
-                                                    <label for="ddlOdId" class="text-small">Tipo</label>
-                                                    @Html.DropDownListFor(m => m.ddlTipoVisMedId, new SelectList(Model.ddlTipoVisMed, "Value", "Text"), new { @class = "form-control form-control-sm" })
-                                                </div>
-                                            }
-
+                        <div class="form-group col-md-4">
+                            <div class="card">
+                                <div class="card-header text-small">
+                                    Médico Veterinario
+                                </div>
+                                <div class="card-body">
+                                    <div class="form-row">
+                                        <div class="form-group col-md-6">
+                                            <label for="ddlOdId" class="text-small">Cuenta?</label>
+                                            @Html.DropDownListFor(m => m.ddlCuentaVetMedId, new SelectList(Model.ddlCuentaVetMed, "Value", "Text"), new { @class = "form-control form-control-sm" })
                                         </div>
                                         @if (Model.ddlCuentaVetMedId == "0000002")
                                         {
-                                            <div class="form-row" id="divVisitaMedVet">
-                                                <div class="form-group col-md-6">
-                                                    <label for="txtFechaEntrega" class="text-small">Visitas por Mes</label>
-                                                    @Html.TextBoxFor(m => m.txtVisitaporMes, new { @class = "form-control form-control-sm", placeholder = "Ingrese Valor", maxlength = "40" })
-                                                </div>
-                                                <div class="form-group col-md-6">
-                                                    <label for="txtFechaEntrega" class="text-small">Observaciones</label>
-                                                    @Html.TextBoxFor(m => m.txtObsMedVet, new { @class = "form-control form-control-sm", placeholder = "Ingrese Valor", maxlength = "200" })
-                                                </div>
+                                            <div class="form-group col-md-6" id="divTipoMedVet">
+                                                <label for="ddlOdId" class="text-small">Tipo</label>
+                                                @Html.DropDownListFor(m => m.ddlTipoVisMedId, new SelectList(Model.ddlTipoVisMed, "Value", "Text"), new { @class = "form-control form-control-sm" })
                                             </div>
-
                                         }
                                         else
                                         {
-                                            <div class="form-row" id="divVisitaMedVet" hidden>
-                                                <div class="form-group col-md-6">
-                                                    <label for="txtFechaEntrega" class="text-small">Visita por Mes</label>
-                                                    @Html.TextBoxFor(m => m.txtVisitaporMes, new { @class = "form-control form-control-sm", placeholder = "Ingrese Valor", maxlength = "40" })
-                                                </div>
-                                                <div class="form-group col-md-6">
-                                                    <label for="txtFechaEntrega" class="text-small">Observaciones</label>
-                                                    @Html.TextBoxFor(m => m.txtObsMedVet, new { @class = "form-control form-control-sm", placeholder = "Ingrese Valor", maxlength = "200" })
-                                                </div>
+                                            <div class="form-group col-md-6" id="divTipoMedVet" hidden>
+                                                <label for="ddlOdId" class="text-small">Tipo</label>
+                                                @Html.DropDownListFor(m => m.ddlTipoVisMedId, new SelectList(Model.ddlTipoVisMed, "Value", "Text"), new { @class = "form-control form-control-sm" })
                                             </div>
                                         }
 
                                     </div>
+                                    @if (Model.ddlCuentaVetMedId == "0000002")
+                                    {
+                                        <div class="form-row" id="divVisitaMedVet">
+                                            <div class="form-group col-md-6">
+                                                <label for="txtFechaEntrega" class="text-small">Visitas por Mes</label>
+                                                @Html.TextBoxFor(m => m.txtVisitaporMes, new { @class = "form-control form-control-sm", placeholder = "Ingrese Valor", maxlength = "40" })
+                                            </div>
+                                            <div class="form-group col-md-6">
+                                                <label for="txtFechaEntrega" class="text-small">Observaciones</label>
+                                                @Html.TextBoxFor(m => m.txtObsMedVet, new { @class = "form-control form-control-sm", placeholder = "Ingrese Valor", maxlength = "200" })
+                                            </div>
+                                        </div>
+
+                                    }
+                                    else
+                                    {
+                                        <div class="form-row" id="divVisitaMedVet" hidden>
+                                            <div class="form-group col-md-6">
+                                                <label for="txtFechaEntrega" class="text-small">Visita por Mes</label>
+                                                @Html.TextBoxFor(m => m.txtVisitaporMes, new { @class = "form-control form-control-sm", placeholder = "Ingrese Valor", maxlength = "40" })
+                                            </div>
+                                            <div class="form-group col-md-6">
+                                                <label for="txtFechaEntrega" class="text-small">Observaciones</label>
+                                                @Html.TextBoxFor(m => m.txtObsMedVet, new { @class = "form-control form-control-sm", placeholder = "Ingrese Valor", maxlength = "200" })
+                                            </div>
+                                        </div>
+                                    }
+
                                 </div>
                             </div>
-                        </div>*@
+                        </div>
+                    </div>*@
                                         @*<div class="form-row">
-                            <div class="col-md-6">
-                                @Html.Partial("~/Areas/Supervision/Views/ManInforme/Render/_renderPersonalTecProf.cshtml", Model.tbPersonalTecProf)
-                            </div>
-                        </div>*@
+                        <div class="col-md-6">
+                            @Html.Partial("~/Areas/Supervision/Views/ManInforme/Render/_renderPersonalTecProf.cshtml", Model.tbPersonalTecProf)
+                        </div>
+                    </div>*@
                                         <br />
                                         <div class="form-row">
                                             <div class="col-md-12">
@@ -395,15 +396,15 @@
                                     <div class="card-header text-small">Fines de Creación</div>
                                     <div class="card-body">
                                         @*<div class="form-row">
-                            <div class="form-group col-md-6">
-                                <div style="margin-top:7px;">
-                                    <div class="form-check form-check-inline">
-                                        @Html.CheckBoxFor(m => m.chkTodos, new { @class = "form-check-input", style = "width:15px;height:16px;" })
-                                        <label class="form-check-label" for="chkTodos">Todos los indicadores</label>
-                                    </div>
+                        <div class="form-group col-md-6">
+                            <div style="margin-top:7px;">
+                                <div class="form-check form-check-inline">
+                                    @Html.CheckBoxFor(m => m.chkTodos, new { @class = "form-check-input", style = "width:15px;height:16px;" })
+                                    <label class="form-check-label" for="chkTodos">Todos los indicadores</label>
                                 </div>
                             </div>
-                        </div>*@
+                        </div>
+                    </div>*@
                                         <div class="form-row">
                                             <div class="form-group col-md-6">
                                                 <label for="txtObjetivoActual" class="text-small">Objetivos Actuales</label>
@@ -874,24 +875,24 @@
                                             </div>
                                         </div>
                                         @*<div class="form-row">
-                            <div class="table-responsive">
-                                <table id="tbRelPerCentroCria" style="width:100%" class="table table-hover table-bordered">
-                                    <thead>
-                                        <tr>
-                                            <th colspan="4" class="text-sm-left">
-                                                <div class="form-inline">
-                                                    <i class="fa mx-2 fa-lg fa-file-o" style="cursor:pointer;" onclick="ManInforme_AddEditExSitu.fnAddEditRelPerCentroCria('RELPER_CENTROCRIA', '');" data-toggle="tooltip" data-placement="top" title="Nuevo"></i>
-                                                    <strong>
-                                                        Relación del Personal del centro de cría
-                                                    </strong>
-                                                </div>
-                                            </th>
-                                        </tr>
-                                    </thead>
-                                    <tbody></tbody>
-                                </table>
-                            </div>
-                        </div>*@
+                        <div class="table-responsive">
+                            <table id="tbRelPerCentroCria" style="width:100%" class="table table-hover table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th colspan="4" class="text-sm-left">
+                                            <div class="form-inline">
+                                                <i class="fa mx-2 fa-lg fa-file-o" style="cursor:pointer;" onclick="ManInforme_AddEditExSitu.fnAddEditRelPerCentroCria('RELPER_CENTROCRIA', '');" data-toggle="tooltip" data-placement="top" title="Nuevo"></i>
+                                                <strong>
+                                                    Relación del Personal del centro de cría
+                                                </strong>
+                                            </div>
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+                        </div>
+                    </div>*@
                                         <div class="form-row">
                                             <div class="table-responsive">
                                                 <table id="tbCauti_GrupoTaxonomico" style="width:100%" class="table table-hover table-bordered">
@@ -1615,20 +1616,20 @@
                                     <div class="card-body">
                                         <div class="form-row">
                                             @*<div class="form-group col-md-2">
-                                                <label for="ddlOdId" class="text-small">Se recomienda mandato:</label><br />
-                                                <div class="custom-control custom-radio custom-control-inline">
-                                                    @Html.RadioButton("chkRecomendar", 1, Model.chkRecomendar, new { @class = "custom-control-input", id = "rdbRecomendarSi" })
-                                                    @Html.Label("rdbRecomendarSi", "Si", new { @class = "custom-control-label", style = "margin-top:5px;font-size:14px;" })
-                                                </div>
-                                                <div class="custom-control custom-radio custom-control-inline">
-                                                    @Html.RadioButton("chkRecomendar", 0, !Model.chkRecomendar, new { @class = "custom-control-input", id = "rdbRecomendarNo" })
-                                                    @Html.Label("rdbRecomendarNo", "No", new { @class = "custom-control-label", style = "margin-top:5px;font-size:14px;" })
-                                                </div>
-                                            </div>
-                                            <div class="form-group col-md-2">
-                                                <label for="txtObsPublicar" class="text-small">Número de Mandatos:</label>
-                                                @Html.TextBoxFor(m => m.txtMandatos, new { @class = "form-control form-control-sm", maxlength = "150" })
-                                            </div>*@
+                            <label for="ddlOdId" class="text-small">Se recomienda mandato:</label><br />
+                            <div class="custom-control custom-radio custom-control-inline">
+                                @Html.RadioButton("chkRecomendar", 1, Model.chkRecomendar, new { @class = "custom-control-input", id = "rdbRecomendarSi" })
+                                @Html.Label("rdbRecomendarSi", "Si", new { @class = "custom-control-label", style = "margin-top:5px;font-size:14px;" })
+                            </div>
+                            <div class="custom-control custom-radio custom-control-inline">
+                                @Html.RadioButton("chkRecomendar", 0, !Model.chkRecomendar, new { @class = "custom-control-input", id = "rdbRecomendarNo" })
+                                @Html.Label("rdbRecomendarNo", "No", new { @class = "custom-control-label", style = "margin-top:5px;font-size:14px;" })
+                            </div>
+                        </div>
+                        <div class="form-group col-md-2">
+                            <label for="txtObsPublicar" class="text-small">Número de Mandatos:</label>
+                            @Html.TextBoxFor(m => m.txtMandatos, new { @class = "form-control form-control-sm", maxlength = "150" })
+                        </div>*@
                                         </div>
                                         <div class="form-row">
                                             <div class="form-group col-md-12">
@@ -1643,7 +1644,7 @@
                                                 </div>
                                                 @Html.HiddenFor(m => m.txtConclusion)
                                                 @*<label for="txtConclusion" class="text-small">Conclusiones de informe de Supervisión</label>
-                                @Html.TextAreaFor(m => m.txtConclusion, new { @class = "form-control form-control-sm", @rows = "7" })*@
+                            @Html.TextAreaFor(m => m.txtConclusion, new { @class = "form-control form-control-sm", @rows = "7" })*@
                                             </div>
 
                                         </div>
@@ -1658,6 +1659,10 @@
                             </div>
                             <div class="tab-pane fade" id="navInformeDigital" role="tabpanel" aria-labelledby="nav-home-tab">
                                 @Html.Partial("~/Areas/Supervision/Views/ManInforme/_InformeDigital.cshtml")
+                            </div>
+                            <div class="tab-pane fade" id="navMandatos" role="tabpanel" aria-labelledby="nav-home-tab">
+                                @Html.Partial("~/Areas/Supervision/Views/ManInformeExSitu/_shared/_Mandatos.cshtml", Model.tbMandatos)
+
                             </div>
                         </div>
                     </form>

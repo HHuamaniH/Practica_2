@@ -1,0 +1,198 @@
+﻿@model List<CapaEntidad.DOC.Ent_MANDATOS> 
+
+<script type="text/javascript">
+    var _renderMandatos = {};
+    _renderMandatos.tbEliTABLA = [];
+    _renderMandatos.fnSelectRecom = function () {
+        _renderMandatos.frm.find("#divMandatos").hide();
+
+        if (_renderMandatos.frm.find("#chkobjMandatos").is(':checked')) {
+            _renderMandatos.frm.find("#divMandatos").show();
+        }
+    }
+
+    _renderMandatos.fnInitDataTable_Detail = function () {
+        var columns_label = [], columns_data = [], options = {};
+        columns_label = ["Mandato", "Plazo Impl. Días", "Plazo Post Impl. Días", "Plazo Inf. Días"];
+        columns_data = ["MANDATO", "PLAZO_IMPL_DIA","PLAZO_POST_DIA", "PLAZO_INF_DIA"];
+        options = {
+            page_length: 10, row_index: true, row_delete: true, row_fnDelete: "_renderMandatos.fnDelete(this)", row_select: false, row_fnSelect: "_renderMandatos.fnSelect(this)", page_sort: true
+        };
+        _renderMandatos.dtRenderListMandatos = utilDt.fnLoadDataTable_Detail(_renderMandatos.frm.find("#tbRenderMandatos"), columns_label, columns_data, options);
+
+        var tbMandatos = '@Model.Count()';
+        if (tbMandatos != '0') {
+            var chkobjMandatos = document.getElementById('chkobjMandatos');
+            chkobjMandatos.checked = true;            
+            _renderMandatos.frm.find("#divMandatos").show();
+            _renderMandatos.dtRenderListMandatos.rows.add(JSON.parse('@Html.Raw(Json.Encode(@Model))')).draw();
+        }
+
+    }
+
+    _renderMandatos.fnSelect = function (obj) {
+         var data = _renderMandatos.dtRenderListMandatos.row($(obj).parents('tr')).data();
+        /*if (!utilDt.existValorSearch(_renderMandatos.dtRenderListMandatos, "COD_MEDIDA", data["COD_MEDIDA"])) {
+            data["RegEstado"] = 1;
+            _renderMandatos.dtRenderListMandatos.rows.add([data]).draw();
+            _renderMandatos.dtRenderListMandatos.page('last').draw('page');
+        } else {
+            utilSigo.toastWarning("Aviso", "No se encontraron registros");
+        }*/
+
+        alert(data["COD_SECUENCIAL"]);
+         //utilSigo.modalDraggable(_renderMandatos.frm.find("#mdlEspeciesMedCorrectiva"), '.modal-header');
+        //_renderMandatos.frm.find("#mdlEspeciesMedCorrectiva").modal({ keyboard: true, backdrop: 'static' });
+    }
+    _renderMandatos.fnDelete = function (obj) {
+        var data = _renderMandatos.dtRenderListMandatos.row($(obj).parents('tr')).data();
+        if (data["COD_SECUENCIAL"] > 0) {
+            _renderMandatos.tbEliTABLA.push({
+                COD_SECUENCIAL: data["COD_SECUENCIAL"],
+                RegEstado: 2                
+            });
+        }
+        _renderMandatos.dtRenderListMandatos.row($(obj).parents('tr')).remove().draw(false);
+    }
+
+    _renderMandatos.fnAdd = function (obj) {
+        let mandato = _renderMandatos.frm.find("#txtDescripcionMandato").val();
+        let diasImp = _renderMandatos.frm.find("#txtDiasImpl").val();
+        let diasPostImp = _renderMandatos.frm.find("#txtDiasPostImpl").val();
+        let diaInf = _renderMandatos.frm.find("#txtDiasInf").val();
+
+        if (mandato != "") {
+            var data = {
+                "COD_SECUENCIAL": 0,
+                "MANDATO": mandato,
+                "PLAZO_IMPL_DIA": diasImp == "" ? 0 : diasImp,
+                "PLAZO_POST_DIA": diasPostImp == "" ? 0 : diasPostImp,
+                "PLAZO_INF_DIA": diaInf == "" ? 0 : diaInf,
+                "RegEstado": 1
+            };
+            _renderMandatos.dtRenderListMandatos.rows.add([data]).draw();
+        }
+        else {
+              utilSigo.toastWarning("Aviso", "debe ingresar valores para agregar el mandato");
+        }
+        _renderMandatos.frm.find("#txtDescripcionMandato").val("");
+        _renderMandatos.frm.find("#txtDiasImpl").val("");
+        _renderMandatos.frm.find("#txtDiasPostImpl").val("");
+        _renderMandatos.frm.find("#txtDiasInf").val("");
+
+    }
+
+    _renderMandatos.fnGetList = function () {
+        let list = [], rows, countFilas, data;
+        rows = _renderMandatos.dtRenderListMandatos.$("tr");
+        countFilas = rows.length;
+        if (countFilas > 0) {
+            $.each(rows, function (i, o) {                
+                data = _renderMandatos.dtRenderListMandatos.row($(o)).data();
+                if (data.RegEstado!=0) {
+                    list.push(utilSigo.fnConvertArrayToObject(data));
+                }                
+            });
+        }
+        return list;
+    }
+
+    _renderMandatos.fnGetListEliTABLA = function () { return _renderMandatos.tbEliTABLA }
+
+    $(document).ready(function () {
+        _renderMandatos.frm = $("#frmMandatos");
+        _renderMandatos.fnSelectRecom();
+        _renderMandatos.fnInitDataTable_Detail();
+    });
+
+    function isNumberKey(evt) {
+        var charCode = (evt.which) ? evt.which : evt.keyCode
+        if (charCode > 31 && (charCode < 48 || charCode > 57))
+            return false;
+        return true;
+    }
+</script>
+
+<div id="frmMandatos">
+    <div class="card-header text-small">Mandatos</div>
+    <div><br /></div>
+    <div class="form-row">
+        <div class="form-group col-md-4">
+            <label for="chkobjMandatos" class="text-small">¿Se disponen medidas correctivas?</label>
+        </div>
+        <div class="form-group col-md-6">
+            <input class="form-check-input" data-val="true" data-val-required="El campo chkMCorrectivas es obligatorio."
+                   id="chkobjMandatos" name="chkobjMandatos" onchange="_renderMandatos.fnSelectRecom()"
+                   style="width:15px;height:16px;" type="checkbox" value="true">           
+        </div>
+        <div class="form-group col-md-2">
+        </div>
+    </div>
+    <div id="divMandatos" style="display:none;">
+        <div class="form-row">
+            <div class="form-group col-md-4">
+                <label class="text-small">Descripción del mandato</label>
+            </div>
+            <div class="form-group col-md-6">
+                <textarea class="form-control form-control-sm" cols="1" id="txtDescripcionMandato" name="txtDescripcionMandato" rows="3"></textarea>
+            </div>            
+            <div class="form-group col-md-2">
+            </div>
+        </div>
+
+        <div class="form-row">
+            <div class="form-group col-md-4">
+                <label class="text-small">Plazo de implementación</label>
+            </div>
+            <div class="form-group col-md-2">
+                <label for="txtImplMCDias" class="text-small">Días:</label>
+                <input class="form-control form-control-sm" id="txtDiasImpl" maxlength="10" name="txtDiasImpl" onkeypress="return isNumberKey(event)" type="text" value="">                
+            </div>           
+        </div>
+
+        <div class="form-row">
+            <div class="form-group col-md-4">
+                <label class="text-small"> Plazo de post-implementación</label>
+            </div>
+            <div class="form-group col-md-2">
+                <label for="txtInfMCDia" class="text-small">Días:</label>
+                <input class="form-control form-control-sm" id="txtDiasPostImpl" name="txtDiasPostImpl" onkeypress="return isNumberKey(event)" type="text" value="">                
+            </div>           
+        </div>
+
+        <div class="form-row">
+            <div class="form-group col-md-4">
+                <label class="text-small"> Plazo para presentar el informe de implementación</label>
+            </div>
+            <div class="form-group col-md-2">
+                <label for="txtInfMCDia" class="text-small">Días:</label>
+                <input class="form-control form-control-sm" id="txtDiasInf" maxlength="3" name="txtDiasInf" onkeypress="return isNumberKey(event)" type="text" value="">                
+            </div>           
+        </div>
+
+        <div class="form-row">
+            <div class="form-group col-md-4"></div>
+            <div class="form-group col-md-6">
+                <button type="button" id="btnAddInfracciones" class="btn btn-info btn-sm" onclick="_renderMandatos.fnAdd()"> Agregar Mandato</button>
+            </div>
+            <div class="form-group col-md-2"></div>
+        </div>
+
+        <div class="form-group col-md-12" id="divListaMandato">
+            <div class="table-responsive">
+                <table id="tbRenderMandatos" style="width:100%;margin:0px !important;" class="table table-hover table-bordered">
+                    <thead>
+                        <tr>
+                            <th colspan="13" class="text-sm-left">
+                                <div class="form-inline">
+                                    <strong>Listado de Mandatos</strong>
+                                </div>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>       
+    </div>
+</div>
