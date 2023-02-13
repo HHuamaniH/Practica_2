@@ -1452,7 +1452,6 @@ namespace SIGOFCv3.Areas.Supervision.Models.ManInforme
                                 insertar = insertar + ",'" + listaInf.AC_CAMPO.ToString() + "'";
                                 insertar = insertar + ",'" + listaInf.ESTADO_CAMPO.ToString() + "'";
                                 insertar = insertar + ",'" + listaInf.CONDICION_CAMPO.ToString() + "'";
-                                //insertar = insertar + ",'" + listaInf.OBSERVACION + "'";
                                 insertar = insertar + ",'" + (listaInf.OBSERVACION.Length > 254 ? listaInf.OBSERVACION.Substring(0, 254) : listaInf.OBSERVACION) + "'";
                                 insertar = insertar + ",'" + listaInf.COD_THABILITANTE + "'";
                                 insertar = insertar + ",'" + listaInf.NUM_POA.ToString() + "'";
@@ -1461,7 +1460,43 @@ namespace SIGOFCv3.Areas.Supervision.Models.ManInforme
                                 insertar = insertar + ",'" + listaInf.COD_SECUENCIAL.ToString() + "'";
                                 insertar = insertar + ",'" + listaInf.FUENTE_FOTO.ToString() + "'";
 
-                                cmd.CommandText = "INSERT INTO [arb_sup$A" + i.ToString().Trim() + ":W" + (oCEntidadInfTemp.ListISupervMaderableAprov.Count + 1).ToString() + "] VALUES (" + insertar + ")";
+                                cmd.CommandText = "INSERT INTO [shp_arb_sup$A" + i.ToString().Trim() + ":W" + (oCEntidadInfTemp.ListISupervMaderableAprov.Count + 1).ToString() + "] VALUES (" + insertar + ")";
+                                cmd.ExecuteNonQuery();
+
+                                result.data = listaInf.NUMERO;
+                            }
+                        }
+                        //NO MADERABLE
+                        if (oCEntidadInfTemp.ListISupervNoMaderableAprov.Count > 0)
+                        {
+                            foreach (var listaInf in oCEntidadInfTemp.ListISupervNoMaderableAprov)
+                            {
+                                insertar = "";
+                                insertar = "'" + listaInf.POA + "'";
+                                insertar = insertar + ",'" + listaInf.NUMERO + "'";
+                                insertar = insertar + ",'" + listaInf.FAJA + "'";
+                                insertar = insertar + ",'" + listaInf.FAJA_CAMPO + "'";
+                                insertar = insertar + ",'" + listaInf.CODIGO + "'";
+                                insertar = insertar + ",'" + listaInf.CODIGO_CAMPO + "'";
+                                insertar = insertar + ",'" + listaInf.ESPECIES + "'";
+                                insertar = insertar + ",'" + listaInf.DESC_ESPECIES_CAMPO + "'";
+                                insertar = insertar + ",'" + listaInf.COORDENADA_ESTE.ToString() + "'";
+                                insertar = insertar + ",'" + listaInf.COORDENADA_ESTE_CAMPO.ToString() + "'";
+                                insertar = insertar + ",'" + listaInf.COORDENADA_NORTE.ToString() + "'";
+                                insertar = insertar + ",'" + listaInf.COORDENADA_NORTE_CAMPO.ToString() + "'";
+                                insertar = insertar + ",'" + listaInf.DAP_CAMPO.ToString() + "'";
+                                insertar = insertar + ",'" + listaInf.AC_CAMPO.ToString() + "'";
+                                insertar = insertar + ",'" + listaInf.ESTADO_CAMPO.ToString() + "'";
+                                insertar = insertar + ",'" + listaInf.CONDICION_CAMPO.ToString() + "'";
+                                insertar = insertar + ",'" + (listaInf.OBSERVACION.Length > 254 ? listaInf.OBSERVACION.Substring(0, 254) : listaInf.OBSERVACION) + "'";
+                                insertar = insertar + ",'" + listaInf.COD_THABILITANTE + "'";
+                                insertar = insertar + ",'" + listaInf.NUM_POA.ToString() + "'";
+                                insertar = insertar + ",'" + listaInf.COD_INFORME.ToString() + "'";
+                                insertar = insertar + ",'" + listaInf.COD_ESPECIES + "'";
+                                insertar = insertar + ",'" + listaInf.COD_SECUENCIAL.ToString() + "'";
+                                insertar = insertar + ",'" + listaInf.FUENTE_FOTO.ToString() + "'";
+
+                                cmd.CommandText = "INSERT INTO [shp_nomad_sup$A" + i.ToString().Trim() + ":W" + (oCEntidadInfTemp.ListISupervNoMaderableAprov.Count + 1).ToString() + "] VALUES (" + insertar + ")";
                                 cmd.ExecuteNonQuery();
 
                                 result.data = listaInf.NUMERO;
@@ -1485,14 +1520,14 @@ namespace SIGOFCv3.Areas.Supervision.Models.ManInforme
                                 insertar = insertar + ",'" + listaInf.COD_INFORME.ToString() + "'";
                                 insertar = insertar + ",'" + listaInf.COD_ESPECIES.ToString() + "'";
                                 insertar = insertar + ",'" + listaInf.FUENTE_FOTO.ToString() + "'";
-                                cmd.CommandText = "INSERT INTO [ptos_ref$A" + i.ToString().Trim() + ":L" + (oCEntidadInfTemp.ListTrozaCampo.Count + 1).ToString() + "] VALUES (" + insertar + ")";
+                                cmd.CommandText = "INSERT INTO [shp_ptos_ref$A" + i.ToString().Trim() + ":L" + (oCEntidadInfTemp.ListTrozaCampo.Count + 1).ToString() + "] VALUES (" + insertar + ")";
                                 cmd.ExecuteNonQuery();
 
                                 result.data = listaInf.NUMERO;
                             }
                         }
                         //HUAYRONAS
-                        if (oCEntidadInfTemp.ListHuayronas.Count > 0)
+                        /*if (oCEntidadInfTemp.ListHuayronas.Count > 0)
                         {
                             foreach (var listaInf in oCEntidadInfTemp.ListHuayronas)
                             {
@@ -1511,7 +1546,7 @@ namespace SIGOFCv3.Areas.Supervision.Models.ManInforme
 
                                 result.data = listaInf.NUMERO;
                             }
-                        }
+                        }*/
 
                     }
                     //Cerramos la conexión

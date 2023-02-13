@@ -8904,16 +8904,17 @@ namespace CapaDatos.DOC
                     lsCEntidad.ListPOAs = new List<CEntidad>();
                     lsCEntidad.ListPOAsCampo = new List<CEntidad>();
                     lsCEntidad.ListISupervMaderableAprov = new List<CEntidad>();
-                    lsCEntidad.ListISupervMaderableSemillero = new List<CEntidad>();
-                    lsCEntidad.ListCastaña = new List<CEntidad>();
+                    //lsCEntidad.ListISupervMaderableSemillero = new List<CEntidad>();
+                    //lsCEntidad.ListCastaña = new List<CEntidad>();
                     lsCEntidad.ListTrozaCampo = new List<CEntidad>();
-                    lsCEntidad.ListMadeAserradaCampo = new List<CEntidad>();
-                    lsCEntidad.ListISupervMaderableAdicional = new List<CEntidad>();
-                    lsCEntidad.ListISupervMaderableNoAutorizado = new List<CEntidad>();
-                    lsCEntidad.ListHuayronas = new List<CEntidad>();
-                    lsCEntidad.ListEvaluacionOtros = new List<CEntidad>();
-                    lsCEntidad.ListAvistamientoFauna = new List<CEntidad>();
-                    lsCEntidad.ListMuestraNoMadeCarrizos = new List<CEntidad>();
+                    //lsCEntidad.ListMadeAserradaCampo = new List<CEntidad>();
+                    //lsCEntidad.ListISupervMaderableAdicional = new List<CEntidad>();
+                    //lsCEntidad.ListISupervMaderableNoAutorizado = new List<CEntidad>();
+                    //lsCEntidad.ListHuayronas = new List<CEntidad>();
+                    //lsCEntidad.ListEvaluacionOtros = new List<CEntidad>();
+                    //lsCEntidad.ListAvistamientoFauna = new List<CEntidad>();
+                    lsCEntidad.ListISupervNoMaderableAprov = new List<CEntidad>();
+
                     //POA
                     if (dr.HasRows)
                     {
@@ -8994,6 +8995,42 @@ namespace CapaDatos.DOC
                         }
                     }
 
+                    //NO MADERABLE
+                    dr.NextResult();
+                    if (dr.HasRows)
+                    {
+                        while (dr.Read())
+                        {
+                            oCEntidadTemp = new CEntidad();
+                            oCEntidadTemp.POA = dr["NOMBRE_POA"].ToString();
+                            oCEntidadTemp.NUMERO = dr["TITULO"].ToString();
+                            oCEntidadTemp.FAJA = dr["FAJA"].ToString();
+                            oCEntidadTemp.FAJA_CAMPO = dr["FAJA_CAMPO"].ToString();
+                            oCEntidadTemp.CODIGO = dr["CODIGO"].ToString();
+                            oCEntidadTemp.CODIGO_CAMPO = dr["CODIGO_CAMPO"].ToString();
+                            oCEntidadTemp.ESPECIES = dr["ESPECIE"].ToString();
+                            oCEntidadTemp.DESC_ESPECIES_CAMPO = dr["ESPECIE_CAMPO"].ToString();
+                            oCEntidadTemp.COORDENADA_ESTE = Int32.Parse(dr["COORDENADA_ESTE"].ToString());
+                            oCEntidadTemp.COORDENADA_ESTE_CAMPO = Int32.Parse(dr["COORDENADA_ESTE_CAMPO"].ToString());
+                            oCEntidadTemp.COORDENADA_NORTE = Int32.Parse(dr["COORDENADA_NORTE"].ToString());
+                            oCEntidadTemp.COORDENADA_NORTE_CAMPO = Int32.Parse(dr["COORDENADA_NORTE_CAMPO"].ToString());
+                            oCEntidadTemp.DAP_CAMPO = Decimal.Parse(dr["DAP_CAMPO"].ToString());
+                            oCEntidadTemp.AC_CAMPO = Decimal.Parse(dr["AC_CAMPO"].ToString());
+                            oCEntidadTemp.ESTADO_CAMPO = dr["ESTADO_CAMPO"].ToString();
+                            oCEntidadTemp.CONDICION_CAMPO = dr["CONDICION_CAMPO"].ToString();
+                            oCEntidadTemp.OBSERVACION = dr["OBSERVACION"].ToString();
+                            oCEntidadTemp.COD_THABILITANTE = dr["COD_THABILITANTE"].ToString();
+                            oCEntidadTemp.NUM_POA = Int32.Parse(dr["NUM_POA"].ToString());
+                            oCEntidadTemp.COD_ESPECIES = dr["COD_ESPECIES"].ToString();
+                            oCEntidadTemp.COD_SECUENCIAL = Int32.Parse(dr["COD_SECUENCIAL"].ToString());
+                            oCEntidadTemp.FECHA_SUPERVISION_INICIO = dr["FECHA_INICIO"].ToString();
+                            oCEntidadTemp.FECHA_SUPERVISION_FIN = dr["FECHA_FIN"].ToString();
+                            oCEntidadTemp.COD_INFORME = dr["COD_INFORME"].ToString();
+                            oCEntidadTemp.FUENTE_FOTO = dr["FUENTE"].ToString();
+                            lsCEntidad.ListISupervNoMaderableAprov.Add(oCEntidadTemp);
+                        }
+                    }
+
                     ///TROZAS
                     ///25/05/2018 CAR
                     dr.NextResult();
@@ -9023,7 +9060,7 @@ namespace CapaDatos.DOC
 
                     ///HUAYRONAS
                     ///21/05/2018 CAR
-                    dr.NextResult();
+                    /*dr.NextResult();
                     if (dr.HasRows)
                     {
                         while (dr.Read())
@@ -9041,12 +9078,12 @@ namespace CapaDatos.DOC
                             oCEntidadTemp.COD_INFORME = dr["COD_INFORME"].ToString();
                             lsCEntidad.ListHuayronas.Add(oCEntidadTemp);
                         }
-                    }
+                    }*/
                     ///12/10/2018 CAR
                     /// CARRIZOS ESPECIES --SUPERVISADAS
                     ///MADERABLE ADICIONALES
                     ///21/05/2018 CAR
-                    dr.NextResult();
+                    /*dr.NextResult();
                     if (dr.HasRows)
                     {
                         while (dr.Read())
@@ -9069,7 +9106,7 @@ namespace CapaDatos.DOC
 
                             lsCEntidad.ListMuestraNoMadeCarrizos.Add(oCEntidadTemp);
                         }
-                    }
+                    }*/
                 }
                 return lsCEntidad;
             }
