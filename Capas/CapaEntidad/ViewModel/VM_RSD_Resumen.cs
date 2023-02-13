@@ -41,7 +41,7 @@ namespace CapaEntidad.ViewModel
         public int COD_SECUENCIAL { get; set; }
         public string TIPOMADERABLE { get; set; }
         public string NUM_POA { get; set; }
-        public string POA { get; set; }
+        //public string POA { get; set; }
 
     }
 }

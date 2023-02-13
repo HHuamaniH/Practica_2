@@ -800,7 +800,7 @@ namespace CapaDatos.DOC
                                 lsCEntidad.ILEGAL_NUMERO = dr["ILEGAL_NUMERO"] != DBNull.Value ? dr.GetString(dr.GetOrdinal("ILEGAL_NUMERO")) : null;
                                 lsCEntidad.COD_PROFESIONAL = dr.GetString(dr.GetOrdinal("COD_PROFESIONAL"));
                                 lsCEntidad.APELLIDOS_NOMBRES = dr.GetString(dr.GetOrdinal("APELLIDOS_NOMBRES"));
-                                lsCEntidad.ILEGAL_FECHA_EMISION = dr.GetString(dr.GetOrdinal("ILEGAL_FECHA_EMISION"));
+                                lsCEntidad.ILEGAL_FECHA_EMISION = dr["ILEGAL_FECHA_EMISION"] != DBNull.Value ? dr.GetString(dr.GetOrdinal("ILEGAL_FECHA_EMISION")): "";
                                 //lsCEntidad.ILEGAL_FECHA_DERIVACION = dr.GetString(dr.GetOrdinal("ILEGAL_FECHA_DERIVACION"));
                                 lsCEntidad.PRESENTO_PROYECTO_RD = dr.GetBoolean(dr.GetOrdinal("PRESENTO_PROYECTO_RD"));
                                 lsCEntidad.COD_ILEGAL_INF_SUP_TIPO = dr.GetString(dr.GetOrdinal("COD_ILEGAL_INF_SUP_TIPO"));

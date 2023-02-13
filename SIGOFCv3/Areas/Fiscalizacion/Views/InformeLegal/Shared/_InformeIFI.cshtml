@@ -5,7 +5,7 @@
 <script src="~/Scripts/vue.min.js"></script>
 <script src="~/Scripts/ckeditor5/ckeditor.js"></script>
 <script src="~/Scripts/jquery.tmpl.min.js"></script>
-<script src="~/Scripts/jquery.googoose.js?v=7"></script>
+<script src="~/Scripts/jquery.googoose.js?v=8"></script>
 <script src="~/Scripts/pdfjs/pdf.min.js"></script>
 <script type="text/javascript">
     pdfjsLib.GlobalWorkerOptions.workerSrc = urlLocalSigo + 'Scripts/pdfjs/pdf.worker.min.js';
@@ -18,16 +18,6 @@
     function toBase() {
         $('#myTab a.nav-link[href="#navDatos"]').tab("show");
     }
-
-    $(function () {
-        if (!$('#txtFechaLegal').val()) $('#txtFechaLegal').val(fnDate.text(new Date()));
-
-        //if (window.location.search.indexOf('type=rd') != -1) {
-        //    $('#chkResDir').attr('checked', true);
-        //} else {
-        //    $('#chkResSubDir').attr('checked', true);
-        //}
-    });
 </script>
 <script src="~/Areas/General/js/Informes/general.js?v=1"></script>
 <script src="~/Scripts/ckeditor5/config.js?v=1"></script>
@@ -189,21 +179,49 @@
                             </template>
                         </div>
                     </div>
-                </div>
-                <div class="col-sm-auto">
-                    <div class="form-group form-group-sm">
-                        <label class="col-form-label text-small">Expediente Administrativo SITD</label>
-                        <div>
-                            <a class="chip badge badge-success text-white rounded mr-2 mt-1" v-for="(item, index) in Informe.EXPEDIENTES">
-                                {{item.NUM_INFORME}}
-                            </a>
-                            <template v-if="!Informe.EXPEDIENTES?.length">
-                                <span class="chip badge badge-danger rounded mt-1">
-                                    <i class="fa fa-info-circle"></i> No hay expedientes asociados
-                                </span>
-                            </template>
-                        </div>
-                    </div>
+                </div>                
+            </div>
+            <div class="mt-1 mb-3">                
+                <div class="table-responsive">
+                    <table class="table table-hover table-bordered" style="margin-bottom: 0 !important;">
+                        <thead>
+                            <tr role="row">
+                                <th colspan="100%" class="text-sm-left" rowspan="1">
+                                    <div class="form-inline">
+                                        <i class="fa mx-2 fa-lg fa-file-o" style="cursor:pointer;" onclick="modal_expedientes.Abrir();" v-if="Informe.ESTADO != States.FINALIZADO" data-toggle="tooltip" data-placement="top" title="Nuevo"></i>
+                                        <strong>Lista de expedientes SITD</strong>
+                                    </div>
+                                </th>
+                            </tr>
+                            <tr>
+                                <th style="width: 30px;" v-if="Informe.ESTADO != States.FINALIZADO"></th>
+                                <th class="text-center" style="width: 30px;">N°</th>
+                                <th class="text-center">GRUPO</th>
+                                <th class="text-center">CÓDIGO</th>
+                                <th class="text-center">NUM. DOCUMENTO</th>
+                                <th class="text-center">TIPO DOCUMENTO</th>
+                                <th class="text-center">DESCARGAR</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr v-for="(item, index) in Informe.EXPEDIENTES">
+                                <td class="text-center" v-if="Informe.ESTADO != States.FINALIZADO">
+                                    <i class="fa fa-lg fa-window-close" style="color:red;cursor:pointer;" title="Eliminar" v-on:click="_informe.fnEliminarExpediente(item, index)"></i>
+                                </td>
+                                <td class="text-center">{{index + 1}}</td>
+                                <td class="text-center">{{item.SUBTIPO_DETALLE}}</td>
+                                <td class="text-center">{{item.CODIGO}}</td>
+                                <td class="text-center">{{item.NUMERO}}</td>
+                                <td class="text-center">{{item.TIPO_DOCUMENTO}}</td>
+                                <td class="text-center">
+                                    <a href="javascript:void(0);" v-on:click="_informe.DescargarDocumentoSITD(item)" v-if="item.PDF_DOCUMENTO">Descargar</a>
+                                </td>
+                            </tr>
+                            <tr class="odd" v-if="!Informe.EXPEDIENTES?.length">
+                                <td valign="top" colspan="100" class="text-center">No existen datos registrados</td>
+                            </tr>
+                        </tbody>
+                    </table>                    
                 </div>
             </div>
             <h5>Administrado</h5>
@@ -418,7 +436,7 @@
                                         <label class="form-check-label" v-bind:for="'rb_subsana_no_'+index">No subsana</label>
                                     </div>
                                 </template>
-                            </div>                           
+                            </div>
                         </div>
                     </li>
                 </ol>
@@ -690,10 +708,10 @@
                     </div>
                 </div>
                 <div class="form-group">
-                    <label class="col-form-label">Referencias:</label>
+                    <label class="col-form-label">Referencias (Expedientes SITD):</label>
                     <div>
-                        <span class="chip badge badge-success rounded mr-2 mt-1" v-for="(item, index) in app.Inf_Supervision">
-                            {{item.NUM_INFORME}}
+                        <span class="chip badge badge-success rounded mr-2 mt-1" v-for="(item, index) in app.Informe.EXPEDIENTES">
+                            {{item.CODIGO}}
                         </span>
                     </div>
                 </div>
@@ -795,6 +813,54 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-primary btn-sm" v-on:click="upload" v-if="file && !loading && percent !== 100">Cargar</button>
+                <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Salir</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="modal-expedientes" class="modal fade" data-backdrop="static">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header text-small" style="cursor:move;">
+                <span>Expedientes SITD</span>
+                <i class="fa fa-close" style="cursor:pointer;" data-dismiss="modal" aria-label="Close"></i>
+            </div>
+            <div class="modal-body">
+                <div class="form-row">
+                    <div class="col-md-auto mb-3">
+                        <label class="control-label small">Grupo</label>
+                        <select class="form-control form-control-sm" v-model="subtipo">
+                            <option v-for="item in subtipos" v-bind:value="item.SUBTIPO">{{item.DESCRIPCION}}</option>
+                        </select>
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <label class="control-label small">Filtrar por</label>
+                        <select class="form-control form-control-sm" v-model="filtro">
+                            <option value="CNRODOCUMENTO">Nro Documento</option>
+                            <option value="CCODIFICACION">Codigo Asignado</option>
+                        </select>
+                    </div>
+                    <div class="col-md mb-3">
+                        <label class="control-label small">&nbsp;</label>
+                        <div class="input-group input-group-sm">
+                            <input type="text" class="form-control form-control-sm" maxlength="50" v-model="texto" v-on:keyup.enter="Buscar()" />
+                            <div class="input-group-btn">
+                                <button type="button" class="btn btn-outline-success btn-sm" v-on:click="Buscar()">
+                                    <i class="fa fa-search" data-toggle="tooltip" data-placement="top" title="Buscar"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="table-responsive">
+                    <table id="dtExpedientes" class="table table-hover table-bordered w-100">
+                        <thead></thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="modal-footer">
                 <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Salir</button>
             </div>
         </div>

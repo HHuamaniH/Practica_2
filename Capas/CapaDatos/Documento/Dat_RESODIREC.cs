@@ -2505,7 +2505,7 @@ namespace CapaDatos.DOC
                                 ocampoEnt.NUMERO_INDIVIDUOS = Int32.Parse(dr["NUMERO_INDIVIDUOS"].ToString());
                                 ocampoEnt.DESCRIPCION_INFRACCIONES = dr["DESCRIPCION_INFRACCIONES"].ToString();
                                 ocampoEnt.NUM_POA = dr["NUM_POA"].ToString();
-                                ocampoEnt.POA = dr["POA"].ToString();
+                                //ocampoEnt.POA = dr["POA"].ToString();
                                 ocampoEnt.TIPOMADERABLE = dr["TIPOMADERABLE"].ToString();
 
                                 //ocampoEnt.COD_ILEGAL_ARTICULOS = dr["cod_ilegal_articulos"].ToString();

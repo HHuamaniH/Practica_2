@@ -8,6 +8,7 @@ namespace CapaEntidad.ViewModel
         public VM_INFORME_LEGAL_DIGITAL()
         {
             this.RSD = new List<VM_INFORME_LEGAL_DIGITAL_VS_RSD>();
+            this.EXPEDIENTES = new List<VM_INFORME_LEGAL_EXPEDIENTE_SITD>();
             this.DOCUMENTOS = new List<VM_INFORME_LEGAL_DIGITAL_DOCUMENTO>();
             this.PARTICIPANTES = new List<VM_INFORME_LEGAL_DIGITAL_PARTICIPANTE>();
             this.INFRACCIONES = new List<VM_INFORME_LEGAL_DIGITAL_INFRACCION>();
@@ -59,6 +60,7 @@ namespace CapaEntidad.ViewModel
         public int ESTADO { get; set; }
 
         public List<VM_INFORME_LEGAL_DIGITAL_VS_RSD> RSD { get; set; }
+        public List<VM_INFORME_LEGAL_EXPEDIENTE_SITD> EXPEDIENTES { get; set; }
         public List<VM_INFORME_LEGAL_DIGITAL_DOCUMENTO> DOCUMENTOS { get; set; }
         public List<VM_INFORME_LEGAL_DIGITAL_PARTICIPANTE> PARTICIPANTES { get; set; }
         public List<VM_INFORME_LEGAL_DIGITAL_INFRACCION> INFRACCIONES { get; set; }
@@ -73,6 +75,18 @@ namespace CapaEntidad.ViewModel
         public string numInforme { get; set; }
         public int estado { get; set; }
         public int accion { get; set; }
+    }
+
+    public class VM_INFORME_LEGAL_EXPEDIENTE_SITD
+    {
+        public string COD_ILEGAL { get; set; }
+        public string COD_ILACCION { get; set; }
+        public string CODIGO { get; set; }
+        public string NUMERO { get; set; }
+        public string PDF_DOCUMENTO { get; set; }
+        public string TIPO_DOCUMENTO { get; set; }
+        public string SUBTIPO { get; set; }
+        public int RegEstado { get; set; }
     }
 
     public class VM_INFORME_LEGAL_DIGITAL_DOCUMENTO
@@ -118,8 +132,8 @@ namespace CapaEntidad.ViewModel
 
     public class VM_INFORME_LEGAL_DIGITAL_ELIMINAR
     {
-        public string codInformeDigital { get; set; }
-        public int item { get; set; }
+        public string codInforme { get; set; }
+        public object item { get; set; }
         public string origen { get; set; } //DOCUMENTO,PARTICIPANTE,INFRACCION,RSD
     }
 

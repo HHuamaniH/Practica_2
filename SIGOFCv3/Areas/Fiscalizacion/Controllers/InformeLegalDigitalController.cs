@@ -2,14 +2,10 @@
 using CapaEntidad.ViewModel;
 using CapaLogica.DOC;
 using CapaLogica.Documento;
-using DocumentFormat.OpenXml.Drawing;
-using DocumentFormat.OpenXml.Wordprocessing;
 using SIGOFCv3.Helper;
 using SIGOFCv3.Models;
 using System;
 using System.Collections.Generic;
-using System.Net.Http;
-using System.Web;
 using System.Web.Mvc;
 
 namespace SIGOFCv3.Areas.Fiscalizacion.Controllers
@@ -68,9 +64,9 @@ namespace SIGOFCv3.Areas.Fiscalizacion.Controllers
         }
 
         [HttpGet]
-        public PartialViewResult PlantillaInforme()
+        public ActionResult PlantillaInforme()
         {
-            return PartialView("~/Areas/Fiscalizacion/Views/InformeLegal/templates/_tmplIFIInforme.cshtml");
+            return PartialView("~/Areas/Fiscalizacion/Views/InformeLegal/templates/_tmplInforme.cshtml");
         }
 
         [HttpGet]

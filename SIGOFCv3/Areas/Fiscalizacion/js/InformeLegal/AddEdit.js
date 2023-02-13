@@ -164,11 +164,11 @@ ManInfLegal_AddEdit.fnSaveForm = function () {
     let txtMotivoOtros = ManInfLegal_AddEdit.frm.find("#txtMotivoOtros").val()
     let txtRecomendacionOtros = ManInfLegal_AddEdit.frm.find("#txtRecomendacionOtros").val();
 
-    if (txtFechaLegal == "") {
+    /*if (txtFechaLegal == "") {
         utilSigo.toastWarning("Validación", "Ingrese la fecha del informe legal");
-        frm.find("#txtFechaLegal").focus();
+        ManInfLegal_AddEdit.frm.find("#txtFechaLegal").focus();
         return false;
-    }
+    }*/
     let model = {
         hdfCodInfLegal, RegEstado, hdfCodTipoIlegal, hdfCodProfesional, txtProfesional, txtNumIlegal, txtFechaLegal, txtPresentoProyecto, txtInfDirectoral, txtInfSubDirectoral,
         txtObservaciones, txtIdRecomendacion, chkInexEspecie, chkDifEspecie, chkSobreEstimacion, chkNuevaSupervision, chkEvidencia, chkSinIndicios, chkDeficienciaNot,

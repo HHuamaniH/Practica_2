@@ -44,7 +44,7 @@
             footerarea: 'div.googoose.footer',
             headerid: 'googoose-header',
             footerid: 'googoose-footer',
-            footeridfirst: 'ff1',
+            footeridfirst: null, //ff1
             footeridland: 'googoose-footer-landscape',
             headermargin: '.5in',
             footermargin: '.5in',
@@ -368,9 +368,9 @@
                 'mso-footer-margin:' + options.footermargin + ';' +
                 'mso-header:' + options.headerid + ';' +
                 'mso-footer:' + options.footerid + ';' +
-                'mso-title-page: yes;' +
+                //'mso-title-page: yes;' +
                 'mso-first-header: ' + options.headerid + ';' +
-                'mso-first-footer: ' + options.footeridfirst + ';' +
+                ((options.footeridfirst) ? ('mso-first-footer:' + options.footeridfirst + ';') : '') +
                 'mso-paper-source:0;' +
                 '}\n';
             html += '.Container { page:Container; }\n';
@@ -379,13 +379,10 @@
                 'mso-header-margin:' + options.headermargin + ';' +
                 'mso-footer-margin:' + options.footermargin + ';' +
                 'mso-first-header: ' + options.headerid + ';' +
-                'mso-first-footer:' + options.footerid + ';' +
+                ((options.footeridfirst) ? ('mso-first-footer:' + options.footeridfirst + ';') : '') +
                 'mso-header:' + options.headerid + ';' +
                 'mso-footer:' + options.footerid + ';' +
-                'mso-title-page: yes;' +
-
-                //'mso-first-header: ' + options.headerid + ';' +
-                //'mso-first-footer: ' + options.footeridfirst + ';' +
+                //'mso-title-page: yes;' +
                 '}\n';
             html += '.portrait { page:portrait; }\n';
             html += '@page landscape {' +
@@ -395,16 +392,16 @@
                 'mso-header-margin:' + options.headermargin + ';' +
                 'mso-footer-margin:' + options.footermargin + ';' +
                 'mso-first-header: ' + options.headerid + ';' +
-                'mso-first-footer: ' + options.footeridland + ';' +
+                ((options.footeridland) ? ('mso-first-footer:' + options.footeridland + ';') : '') +
                 'mso-header: ' + options.headerid + ';' +
                 'mso-footer: ' + options.footeridland + ';' +
-                'mso-title-page: yes;' +
+                //'mso-title-page: yes;' +
                 '}\n';
             html += '.landscape {page:landscape;}\n';
             html += 'body, table, table tr th, table tr td, p, ul, ol, span, strong, div { line-height: 1em; }\n';
             html += 'body, table { font-family: Arial; font-size: 10pt; }\n';
             html += 'ul { margin-left: -25px; list-style: disc; }\n';
-            html += 'ul li, ol li { margin-bottom: 12px; }';
+            html += 'ul li, ol li { margin-bottom: 12px; }';            
             html += '-->\n';
             html += '</style>\n';
 

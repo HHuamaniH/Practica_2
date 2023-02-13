@@ -229,7 +229,7 @@ _informe.Exportar = function () {
     html = _informe.EnumerarCuadros(html);
 
     //console.log(html);
-    $(document).googoose({ html, header, footeridfirst: 'googoose-footer' });
+    $(document).googoose({ html, header });
     //$(document).googoose({ html, header, footeridfirst: 'ff1' });
 }
 

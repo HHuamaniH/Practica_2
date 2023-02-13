@@ -50,11 +50,11 @@
             por Resolución de Jefatura N° 00043-2021-OSINFOR/01.1.
         </p>
         <div style="text-align: justify;">
-            <ol style="list-style-type: upper-roman;">
+            <ol style="list-style-type: upper-roman; margin-left: -14.2pt;">
                 <li>
                     <strong>ANTECEDENTES</strong><br />
                     <span>
-                        <ol style="list-style-type: decimal;">
+                        <ol class="continue" style="margin-left: -35pt;">
                             <li>Con fecha XX de XXXXX de XXXX, el Estado Peruano, a través del Instituto Nacional de Recursos Forestales y de Fauna Silvestre (ex INRENA), y de otra parte, el concesionario suscribieron el contrato de concesión, por el cual se le otorgó el derecho al aprovechamiento sostenible de (detallar según lo expuesto en el contrato de concesión).</li>
                             <li>Mediante Carta N° XXXXX-XXXX-OSINFOR/08.1, de fecha XX de XXXXX de XXXX, notificada el XX de XXXXX de XXXX, la Dirección de Supervisión Forestal y de Fauna Silvestre (en adelante, DSFFS) comunicó al/la concesionario/a la supervisión ordinaria/extraordinaria al (indicar plan de manejo forestal), correspondiente al periodo XXXX-XXXX y, asimismo, le requirió diversa información concerniente al cumplimiento de obligaciones como titular del contrato de concesión.</li>
                         </ol>
@@ -66,14 +66,8 @@
                         <ul style="list-style-type: disc;">
                             <li>
                                 Constitución Política del Perú de 1993.
-                                <a style="mso-footnote-id:ftn1" href="#_ftn1" name="_ftnref1" title="">
-                                    <sup class=MsoFootnoteReference>
-                                        <span style="mso-special-character:footnote">
-                                            <![if !supportFootnotes]>
-                                            <span class=MsoFootnoteReference>[1]</span>
-                                            <![endif]>
-                                        </span>
-                                    </sup>
+                                <a style="mso-footnote-id: foot_constitucion" href="#_foot_constitucion" title="">
+                                    <sup class=MsoFootnoteReference><span style="mso-special-character:footnote"></span></sup>
                                 </a>
                             </li>
                             <li>Ley N° 26821, Ley Orgánica para el aprovechamiento sostenible de los Recursos Naturales.</li>
@@ -129,36 +123,40 @@
                     <strong>ANÁLISIS</strong><br />
                     <span>
                         {{if COD_MODALIDAD == "01"}}
-                        @Html.Partial("~/Areas/Fiscalizacion/Views/InformeLegal/templates/_tmplIFIConcesiones.cshtml")
+                        @Html.Partial("~/Areas/Fiscalizacion/Views/InformeLegal/templates/_tmplConcesiones.cshtml")
 
                         {{else COD_MODALIDAD == "02"}}
-                        @Html.Partial("~/Areas/Fiscalizacion/Views/InformeLegal/templates/_tmplIFIPredios.cshtml")
+                        @Html.Partial("~/Areas/Fiscalizacion/Views/InformeLegal/templates/_tmplPredios.cshtml")
 
                         {{else COD_MODALIDAD == "03"}}
-                        @Html.Partial("~/Areas/Fiscalizacion/Views/InformeLegal/templates/_tmplIFICCNN.cshtml")
+                        @Html.Partial("~/Areas/Fiscalizacion/Views/InformeLegal/templates/_tmplCCNN.cshtml")
                         {{/if}}
 
                         <h5><u><strong>Plazo para presentación de descargos al presente Informe Final de Instrucción</strong></u></h5>
-                        <ul>
+                        <ol class="continue" style="margin-left: -37pt;">
                             <li>
                                 Se otorga al/la concesionario/a un plazo improrrogable de quince (15)/veinte (20) días hábiles contados a partir del día siguiente de notificado el presente Informe Final de Instrucción, más el término de la distancia, para que presente los descargos que considere pertinentes, ya sea de forma virtual, por la Mesa de Partes Digital a través del portal web del OSINFOR: https://facilita.gob.pe/t/677 y solo si el archivo a adjuntar excede los 10 MB, remitirlo al correo mesa.partes@osinfor.gob.pe, o de forma presencial, ante la mesa de partes de la sede central del OSINFOR en la ciudad de Lima o ante cualquier mesa de partes de sus oficinas desconcentradas. De la misma manera, podrá señalar una dirección de correo electrónico y/o casilla electrónica del OSINFOR, en caso lo tuviere, para notificarle las diferentes actuaciones administrativas que deriven del presente PAU.
                             </li>
                             <li>
                                 Asimismo, es oportuno precisar que el/la concesionario/a tiene expedito su derecho de requerir información, acceder y obtener copias de los actuados contenidos en el presente procedimiento administrativo, en cualquier momento y estado de su tramitación, en virtud de lo estipulado en el numeral 1.19 del artículo IV del TUO de la Ley N° 27444.
                             </li>
-                        </ul>
+                        </ol>
                     </span>
                 </li>
                 <li>
                     <strong>CONCLUSIONES</strong><br />
-                    <span>
-                        Del análisis efectuado en el presente informe, ha quedado acreditado que el/la concesionario es responsable por la comisión de las infracciones tipificadas en los numerales X, X, X y X del Cuadro de Infracciones y Sanciones en Materia Forestal del Anexo 1 del RISMFFS.
-                    </span>
+                    <ol class="continue" style="margin-left: -37pt;">
+                        <li>
+                            <span>
+                                Del análisis efectuado en el presente informe, ha quedado acreditado que el/la concesionario es responsable por la comisión de las infracciones tipificadas en los numerales X, X, X y X del Cuadro de Infracciones y Sanciones en Materia Forestal del Anexo 1 del RISMFFS.
+                            </span>
+                        </li>
+                    </ol>
                 </li>
                 <li>
                     <strong>RECOMENDACIONES</strong><br />
                     <span>
-                        <ol style="list-style-type: decimal;">
+                        <ol class="continue" style="margin-left: -37pt;">
                             <li>
                                 Remitir el presente informe a la Autoridad Decisora para que proceda conforme a su competencia, adjuntando para tal efecto el Expediente Administrativo N° ${EXPEDIENTES_ADM || 'XXXXX-XXXX-OSINFOR/08.2'}, para los fines correspondientes.
                             </li>
@@ -197,33 +195,18 @@
             {{/each}}
         </div>
         {{/if}}
-    </div>
-</script>
-
-<script id="tmpl-footnotes" type="text/x-jquery-tmpl">
-    <div style="mso-element:footnote-list; font-size: 9pt;">
-        <![if !supportFootnotes]>
-        <br clear=all>
-        <hr align=left size=1 width="33%">
-        <![endif]>
-
-        <div style="mso-element: footnote;" id="ftn1">
-            <div class=MsoFootnoteText>
-                <a style="mso-footnote-id: ftn1;" href="#_ftnref1" name="_ftn1">
-                    <sup class=MsoFootnoteReference>
-                        <span style="mso-special-character:footnote">
-                            <![if !supportFootnotes]>
-                            <span class="MsoFootnoteReference">[1]</span>
-                            <![endif]>
-                        </span>
-                    </sup>
-                </a>
-                &nbsp;<strong>Constitución Política del Perú de 1993</strong><br />
-                Artículo 103.- (…) La ley, desde su entrada en vigencia, se aplica a las consecuencias de las relaciones y situaciones jurídicas existentes y no tiene fuerza ni efectos retroactivos; salvo, en ambos supuestos, en materia penal cuando favorece al reo. (…).
-            </div>
+        <br clear=all style="mso-special-character:line-break;page-break-before:always">
+        <div>
+            Firmado digitalmente por<br />
+            <strong>${SUBDIRECTOR}</strong><br />
+            Sub Director<br />
+            ${PROCEDENCIA}<br />
+            OSINFOR
         </div>
     </div>
 </script>
+
+@Html.Partial("~/Areas/Fiscalizacion/Views/InformeLegal/templates/_tmplFootnotes.cshtml")
 
 <script id="tmpl-pie-pagina" type="text/x-jquery-tmpl">
     Esta es una copia auténtica imprimible de un documento electrónico archivado en el Organismo de Supervisión de los Recursos Forestales y

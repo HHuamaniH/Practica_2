@@ -243,7 +243,7 @@ namespace CapaLogica.DOC
                     vm.txtNumIlegal = datInfLegal.ILEGAL_NUMERO;
                     vm.txtProfesional = datInfLegal.APELLIDOS_NOMBRES;
                     vm.hdfCodProfesional = datInfLegal.COD_PROFESIONAL;
-                    vm.txtFechaLegal = datInfLegal.ILEGAL_FECHA_EMISION.ToString();
+                    vm.txtFechaLegal = datInfLegal.ILEGAL_FECHA_EMISION?.ToString() ?? "";
                     vm.txtPresentoProyecto = (bool)datInfLegal.PRESENTO_PROYECTO_RD;
                     vm.txtInfDirectoral = (bool)datInfLegal.INFDIR;
                     vm.txtInfSubDirectoral = (bool)datInfLegal.INFSUBDIR;
@@ -384,7 +384,7 @@ namespace CapaLogica.DOC
         {
             if (_dto.vmControlCalidad.ddlIndicadorId == "0000000") throw new Exception("Seleccione el estado actual del registro");
             //if (string.IsNullOrEmpty(_dto.txtNumIlegal)) throw new Exception("Ingrese el número de informe legal");
-            if (string.IsNullOrEmpty(_dto.txtFechaLegal)) throw new Exception("Seleccione la fecha de emisión");
+            //if (string.IsNullOrEmpty(_dto.txtFechaLegal)) throw new Exception("Seleccione la fecha de emisión");
             if (_dto.tbInforme == null) throw new Exception("Seleccione un informe, expediente");
             if (_dto.hdfCodProfesional == null) throw new Exception("Seleccione Responsable del Informe");
             if (_dto.hdfCodTipoIlegal == "0000001" && _dto.txtIdRecomendacion == "0000000") throw new Exception("Seleccione una recomendación");
@@ -404,7 +404,9 @@ namespace CapaLogica.DOC
                 paramIL.PUBLICAR = _dto.chkPublicar;
 
                 paramIL.ILEGAL_NUMERO = _dto.txtNumIlegal;
-                paramIL.ILEGAL_FECHA_EMISION = Convert.ToDateTime(_dto.txtFechaLegal);
+
+                if (!string.IsNullOrEmpty(_dto.txtFechaLegal))
+                    paramIL.ILEGAL_FECHA_EMISION = Convert.ToDateTime(_dto.txtFechaLegal);
 
                 paramIL.PRESENTO_PROYECTO_RD = _dto.txtPresentoProyecto;
                 paramIL.INFDIR = _dto.txtInfDirectoral;

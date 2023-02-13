@@ -44,6 +44,17 @@ namespace CapaDatos.Documento
                                 dBOracle.ManExecute(cn, tr, "DOC_OSINFOR_ERP_MIGRACION.SPFISCALIZACION_INFORME_LEGAL_DIGITAL_RSD_GRABAR", param);
                             }
                         }
+                        if (oILegal.EXPEDIENTES != null)
+                        {
+                            foreach (var item in oILegal.EXPEDIENTES)
+                            {
+                                if(item.RegEstado == 1) //Nuevo o modificado
+                                {
+                                    object[] param = { item.COD_ILEGAL, item.CODIGO, item.NUMERO, item.PDF_DOCUMENTO, item.TIPO_DOCUMENTO, item.SUBTIPO, 1 };
+                                    dBOracle.ManExecute(cn, tr, "DOC_OSINFOR_ERP_MIGRACION.spILEGAL_DET_ACCIONGrabar", param);
+                                }                                
+                            }
+                        }
                         if (oILegal.DOCUMENTOS != null)
                         {
                             foreach (var item in oILegal.DOCUMENTOS)
@@ -73,7 +84,7 @@ namespace CapaDatos.Documento
                         {
                             foreach (var item in oILegal.ELIMINAR)
                             {
-                                object[] param = { item.codInformeDigital, item.item, item.origen };
+                                object[] param = { item.codInforme, item.item, item.origen };
                                 dBOracle.ManExecute(cn, tr, "DOC_OSINFOR_ERP_MIGRACION.SPFISCALIZACION_INFORME_LEGAL_DIGITAL_DET_ELIMINAR", param);
                             }
                         }
