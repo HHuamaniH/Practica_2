@@ -121,7 +121,7 @@ namespace SIGOFCv3.Areas.General.Controllers
         /// <param name="anio"></param>
         /// <param name="departamento"></param>
         /// <returns></returns>
-        public ActionResult ReporteFiscalizacionPauConcluido(String[] modalidad, String[] direccion, String[] direccionFisc, string anio, String[] departamento)
+        public ActionResult ReporteFiscalizacionPauConcluido(String[] modalidad, String[] direccion, string anio, String[] departamento)
         {
             List<VM_ReporteGeneral> lstvm = new List<VM_ReporteGeneral>();
             List<Ent_Reporte_PAU_CONCLUIDO> ListCampos = new List<Ent_Reporte_PAU_CONCLUIDO>();
@@ -129,7 +129,6 @@ namespace SIGOFCv3.Areas.General.Controllers
             Log_REPORTE_FISCALIZACION exeBus = new Log_REPORTE_FISCALIZACION();
             oCEntidad.BusModalidad = ObtenerCadenaArray(modalidad);
             oCEntidad.BusDireccion = ObtenerCadenaArray(direccion);
-            oCEntidad.BusDireccion2 = ObtenerCadenaArray(direccionFisc);
             oCEntidad.BusRegion = ObtenerCadenaArray(departamento);
             oCEntidad.BusFechaFin = anio;
             oCEntidad.COD_ITIPO = "'0000001'";
@@ -170,7 +169,7 @@ namespace SIGOFCv3.Areas.General.Controllers
 
             return PartialView("~/Areas/General/Views/ReporteFiscalizacion/_sharedRptFiscalizacionPau/_renderDetalle.cshtml", lstvm);
         }
-        public ActionResult ReporteResumenFiscalizacionPau(String[] modalidad, String[] direccion, String[] direccionFisc, string anio, String[] departamento, string instancia)
+        public ActionResult ReporteResumenFiscalizacionPau(String[] modalidad, String[] direccion, string anio, String[] departamento, string instancia)
         {
 
             List<VM_ReporteGeneral> lstvm = new List<VM_ReporteGeneral>();
@@ -179,8 +178,7 @@ namespace SIGOFCv3.Areas.General.Controllers
             Log_REPORTE_FISCALIZACION exeBus = new Log_REPORTE_FISCALIZACION();
             oCEntidad.BusInstancia = instancia;//asBusInstancia == "DFFFS" ? "DFFFS" : "DFFFS,TFFS,PJ";
             oCEntidad.BusModalidad = ObtenerCadenaArray(modalidad);
-            oCEntidad.BusDireccion = ObtenerCadenaArray(direccion);
-            oCEntidad.BusDireccion2 = ObtenerCadenaArray(direccionFisc);
+            oCEntidad.BusDireccion = ObtenerCadenaArray(direccion);            
             oCEntidad.BusRegion = ObtenerCadenaArray(departamento);
             oCEntidad.BusFechaFin = anio;
             oCEntidad.BusCriterio = "RESUMEN";
