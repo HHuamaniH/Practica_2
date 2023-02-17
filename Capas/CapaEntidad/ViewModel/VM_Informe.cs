@@ -66,6 +66,8 @@ namespace CapaEntidad.ViewModel
         public string ddlArchivaInformeId { get; set; }
         public IEnumerable<VM_Cbo> ddlArchivaInforme { get; set; }
         public string hdfPerfil { get; set; }
+        public List<Ent_MANDATOS> tbMandatos { get; set; }
+        public List<Ent_MANDATOS> ListMandatos { get; set; }
         public VM_Informe()
         {
             vmControlCalidad = new VM_ControlCalidad_2();
@@ -89,6 +91,7 @@ namespace CapaEntidad.ViewModel
             tbObligTitular = new List<Ent_INFORME_OBLIGTITULAR>();
             tbObligacion = new List<Ent_INFORME>();
             tbDesplazamiento = new List<Ent_INFORME>();
+            tbMandatos = new List<Ent_MANDATOS>();
         }
     }
 
@@ -256,6 +259,11 @@ namespace CapaEntidad.ViewModel
         public bool chkTodos { get; set; }
         public bool chkHechos { get; set; }
         public bool chkMandatos { get; set; }
+        public bool chkobjMandatos { get; set; }
+        public string txtobjDescripcionMandato { get; set; }
+        public string txtobjDiasImpl { get; set; }
+        public string txtobjDiasPostImpl { get; set; }
+        public string txtobjDiasInf { get; set; }
         public bool chkMedidas { get; set; }
         public string txtNumInforme { get; set; }
         public string txtFechaEntrega { get; set; }
@@ -364,6 +372,7 @@ namespace CapaEntidad.ViewModel
         public List<Ent_ISUPERVISION_EXSITU_INFRA_AREA> tbActividadEducacion { get; set; }
         public List<Ent_ISUPERVISION_EXSITU_INFRA_AREA> tbActividadInvestigacion { get; set; }
         public List<Ent_INFORME_OBLIGTITULAR> tbObligacionTitular { get; set; }
+        public List<Ent_MANDATOS> tbMandatos { get; set; }
 
         public List<Ent_INFORME> tbFotoSupervision { get; set; }
         public double txtCalificacionZoo { get; set; }
@@ -374,6 +383,8 @@ namespace CapaEntidad.ViewModel
         public List<Ent_ISUPERVISION_EXSITU_INFRA_AREA> tbBalanceIngEgr { get; set; }
 
         public List<Ent_GENEPERSONA> tbRelPelCentroCria { get; set; }
+        public Ent_MANDATOS oMandatos { get; set; }
+        public List<Ent_MANDATOS> ListMandatos { get; set; }
 
 
         public VM_Informe_ExSitu()
@@ -424,6 +435,7 @@ namespace CapaEntidad.ViewModel
             tbEliTABLA = new List<Ent_INFORME>();
             tbDesplazamiento = new List<Ent_INFORME>();
             tbBalanceIngEgr = new List<Ent_ISUPERVISION_EXSITU_INFRA_AREA>();
+            tbMandatos = new List<Ent_MANDATOS>();
         }
     }
 
@@ -530,6 +542,8 @@ namespace CapaEntidad.ViewModel
         public string ddlArchivaInformeId { get; set; }
         public IEnumerable<VM_Cbo> ddlArchivaInforme { get; set; }
         public string ddlTipoInformeId { get; set; }
+        public List<Ent_MANDATOS> tbMandatos { get; set; }
+        public List<Ent_MANDATOS> ListMandatos { get; set; }
 
         public VM_Informe_Conservacion()
         {
@@ -568,6 +582,7 @@ namespace CapaEntidad.ViewModel
             tbEliTABLAImpacto = new List<Ent_INFORME>();
             tbAfectacion = new List<Ent_INFORME_IMPACTO>();
             tbEliTABLAfectacion = new List<Ent_INFORME>();
+            tbMandatos = new List<Ent_MANDATOS>();
         }
     }
 
@@ -626,6 +641,8 @@ namespace CapaEntidad.ViewModel
 
         public string hdfCodMTipo { get; set; }
         public string ddlTipoInformeId { get; set; }
+        public List<Ent_MANDATOS> tbMandatos { get; set; }
+        public List<Ent_MANDATOS> ListMandatos { get; set; }
 
         public VM_Informe_Fauna()
         {
@@ -649,6 +666,7 @@ namespace CapaEntidad.ViewModel
             tbResponsabilidadSocial = new List<Ent_INFORME>();
             tbObligacionContrac = new List<Ent_INFORME>();
             tbDesplazamiento = new List<Ent_INFORME>();
+            tbMandatos = new List<Ent_MANDATOS>();
         }
     }
 
@@ -731,6 +749,8 @@ namespace CapaEntidad.ViewModel
         //TGS:25/09/2021
         public string ddlArchivaInformeId { get; set; }
         public IEnumerable<VM_Cbo> ddlArchivaInforme { get; set; }
+        public List<Ent_MANDATOS> tbMandatos { get; set; }
+        public List<Ent_MANDATOS> ListMandatos { get; set; }
 
         public VM_Informe_Tara()
         {
@@ -751,6 +771,8 @@ namespace CapaEntidad.ViewModel
             tbEliTABLA = new List<Ent_INFORME>();
             tbObligTitular = new List<Ent_INFORME_OBLIGTITULAR>();
             tbDesplazamiento = new List<Ent_INFORME>();
+            ListMandatos = new List<Ent_MANDATOS>();
         }
     }
+
 }

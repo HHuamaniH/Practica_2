@@ -1362,6 +1362,9 @@ ManInforme_AddEditConservacion.fnSaveForm = function () {
 			datosInforme.hdfRegEstado = datosInforme.hdfRegEstado[0];
 			datosInforme.ddlTipoInformeId = _renderDatosSupervision.frm.find("#ddlTipoInformeId").val();
 
+			datosInforme.tbMandatos = _renderMandatos.fnGetList();
+			datosInforme.tbMandatos = datosInforme.tbMandatos.concat(_renderMandatos.fnGetListEliTABLA());
+
 			var option = { url: ManInforme_AddEditConservacion.frm[0].action, datos: JSON.stringify({ dto: datosInforme }), type: 'POST' };
 			utilSigo.fnAjax(option, function (data) {
 				if (data.success) {

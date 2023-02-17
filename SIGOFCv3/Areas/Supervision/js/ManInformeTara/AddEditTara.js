@@ -752,6 +752,8 @@ ManInforme_AddEditTara.fnSaveForm = function () {
             datosInforme.tbEliTABLA = datosInforme.tbEliTABLA.concat(_renderDesplazamiento.fnGetListEliTABLA());
             //datosInforme.txtConclusion = CKEDITOR.instances["txtConclusion"].getData();
             datosInforme.txtConclusion = window.editor_txtConclusion.getData();
+            datosInforme.tbMandatos = _renderMandatos.fnGetList();
+            datosInforme.tbMandatos = datosInforme.tbMandatos.concat(_renderMandatos.fnGetListEliTABLA());
 
             var option = { url: ManInforme_AddEditTara.frm[0].action, datos: JSON.stringify(datosInforme), type: 'POST' };
             $.ajax({
