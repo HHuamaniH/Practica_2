@@ -499,6 +499,10 @@ namespace CapaLogica.DOC
                         vm.txtIdNotPJ = CEntProveidoArchItems.NOTIFICA_AUTOR;
 
                     }
+                    else if (CEntProveidoArchItems.COD_FCTIPO == "0000185")
+                    {
+                        vm.txtFechaFirmezaF = CEntProveidoArchItems.FECHA_FIRMEZA.ToString();
+                    }
 
                     //cambiacbtipo(hdfItemCategoriaCodigo.Value); 
 
