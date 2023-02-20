@@ -40,6 +40,12 @@ namespace CapaEntidad.DOC
         [Description("nV_CODUCUENTA")]
         public string nV_CODUCUENTA { get; set; }
 
+        //Atributos de obtención de datos
+        [Description("isSuccess")]
+        public bool isSuccess { get; set; }
+        [Description("data")]
+        public Ent_Obligacion data { get; set; }
+
         //Atributos compartidos de las obligaciones
         [Description("id")]
         public string id { get; set; }
@@ -322,9 +328,31 @@ namespace CapaEntidad.DOC
         [Description("inCoordenadaNorte")]
         public Int32 inCoordenadaNorte { get; set; }
 
+        //Evento
+        [Description("inidevento")]
+        public Int32 inidevento { get; set; }
+        [Description("coD_THABILITANTE")]
+        public string coD_THABILITANTE { get; set; }
+        [Description("nuM_POA")]
+        public Int32 nuM_POA { get; set; }
+        [Description("vanameobligacion")]
+        public string vanameobligacion { get; set; }
+        [Description("fE_REGISTRO")]
+        public string fE_REGISTRO { get; set; }
+        [Description("vaevento")]
+        public string vaevento { get; set; }
+        [Description("nuusuario")]
+        public Int32 nuusuario { get; set; }
+
         //Listas
         [Category("LIST"), Description("result")]
         public List<Ent_Obligacion> result { get; set; }
+        [Category("LIST"), Description("listaCoordenada")]
+        public List<Ent_Obligacion> listaCoordenada { get; set; }
+        [Category("LIST"), Description("listaArchivo")]
+        public List<Ent_Obligacion> listaArchivo { get; set; }
+        [Category("LIST"), Description("listaEvento")]
+        public List<Ent_Obligacion> listaEvento { get; set; }
 
         public Ent_Obligacion()
         {
@@ -350,6 +378,9 @@ namespace CapaEntidad.DOC
             inTipoObligacion = -1;
             inIdElemento = -1;
             inTipoArchivo = -1;
+            inidevento = -1;
+            nuM_POA = -1;
+            nuusuario = -1;
         }
     }
 }
