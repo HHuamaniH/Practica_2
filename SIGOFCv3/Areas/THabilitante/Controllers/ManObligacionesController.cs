@@ -188,9 +188,9 @@ namespace SIGOFCv3.Areas.THabilitante.Controllers
                     {
                         case "1": /** Informe de ejecución **/
                             vm.txtnumARFFS = objO.vaarffsNroRegistro;
-                            vm.txtfechaARFFS = (!formatoFecha(objO.faarffsFecha).Equals("01/01/0001") && !formatoFecha(objO.faarffsFecha).Equals("01/01/1900")) ? formatoFecha(objO.faarffsFecha) : "";
+                            vm.txtfechaARFFS = (objO.faarffsFecha!=null) ? formatoFecha(objO.faarffsFecha) : "";
                             vm.txtnumOSINFOR = objO.vaosinforNroRegistro;
-                            vm.txtfechaOSINFOR = (!formatoFecha(objO.faosinforFecha).Equals("01/01/0001") && !formatoFecha(objO.faosinforFecha).Equals("01/01/1900")) ? formatoFecha(objO.faosinforFecha) : "";
+                            vm.txtfechaOSINFOR = (objO.faosinforFecha != null) ? formatoFecha(objO.faosinforFecha) : "";
 
                             //datos de archivo
                             /*using (WebClient obj = new WebClient())
@@ -216,11 +216,11 @@ namespace SIGOFCv3.Areas.THabilitante.Controllers
 
                         case "2": /** Regente Forestal **/
                             vm.txtnomregente = objO.vaNombreRegente;
-                            vm.txtfechaini = (!formatoFecha(objO.faFechaInicio).Equals("01/01/0001") && !formatoFecha(objO.faFechaInicio).Equals("01/01/1900")) ? formatoFecha(objO.faFechaInicio) : "";
-                            vm.txtfechafin = (!formatoFecha(objO.faFechaFin).Equals("01/01/0001") && !formatoFecha(objO.faFechaFin).Equals("01/01/1900")) ? formatoFecha(objO.faFechaFin) : "";
+                            vm.txtfechaini = (objO.faFechaInicio != null) ? formatoFecha(objO.faFechaInicio) : "";
+                            vm.txtfechafin = (objO.faFechaFin != null) ? formatoFecha(objO.faFechaFin) : ""; 
                             vm.txtobsregente = objO.vaObservaciones;
                             vm.hdfCese = objO.chCese;
-                            vm.txtfechacese = (!formatoFecha(objO.faFechaCese).Equals("01/01/0001") && !formatoFecha(objO.faFechaCese).Equals("01/01/1900")) ? formatoFecha(objO.faFechaCese) : "";
+                            vm.txtfechacese = (objO.faFechaCese != null) ? formatoFecha(objO.faFechaCese) : "";
                             vm.txtmotivocese = objO.vaMotivoCese;
 
                             using (WebClient obj = new WebClient())
@@ -383,7 +383,7 @@ namespace SIGOFCv3.Areas.THabilitante.Controllers
                             vm.chktalailegal = (objO.chTalaIlegal == "1") ? true : false;
                             vm.chkninguno = (objO.chNinguno == "1") ? true : false;
                             vm.txtotroresultado = objO.vaOtroResultado;
-                            vm.txtfechapatrullaje = (!formatoFecha(objO.faFechaPatrullaje).Equals("01/01/0001") && !formatoFecha(objO.faFechaPatrullaje).Equals("01/01/1900")) ? formatoFecha(objO.faFechaPatrullaje) : "";
+                            vm.txtfechapatrullaje = (objO.faFechaPatrullaje != null) ? formatoFecha(objO.faFechaPatrullaje) : ""; 
                             vm.txtdetallepatrullaje = objO.vaDescripcion;
                             vm.txtareaafectada = objO.vaAreaAfectada;
                             vm.txtzona = objO.vaZonaUTM;
@@ -476,12 +476,12 @@ namespace SIGOFCv3.Areas.THabilitante.Controllers
                             break;
 
                         case "5": /** Contrato con tercero **/
-                            vm.txtfechaini = (!formatoFecha(objO.faFechaInicio).Equals("01/01/0001") && !formatoFecha(objO.faFechaInicio).Equals("01/01/1900")) ? formatoFecha(objO.faFechaInicio) : "";
-                            vm.txtfechafin = (!formatoFecha(objO.faFechaFin).Equals("01/01/0001") && !formatoFecha(objO.faFechaFin).Equals("01/01/1900")) ? formatoFecha(objO.faFechaFin) : "";
+                            vm.txtfechaini = (objO.faFechaInicio != null) ? formatoFecha(objO.faFechaInicio) : "";
+                            vm.txtfechafin = (objO.faFechaFin != null) ? formatoFecha(objO.faFechaFin) : "";
                             vm.txtruc = objO.vaRucEmpresa;
                             vm.txtentidad = objO.vaNombre;
                             vm.hdfCese = objO.chCese;
-                            vm.txtfechacese = (!formatoFecha(objO.faFechaCese).Equals("01/01/0001") && !formatoFecha(objO.faFechaCese).Equals("01/01/1900")) ? formatoFecha(objO.faFechaCese) : "";
+                            vm.txtfechacese = (objO.faFechaCese != null) ? formatoFecha(objO.faFechaCese) : "";
                             vm.txtmotivocese = objO.vaMotivoCese;
 
                             //datos de archivo
@@ -555,8 +555,8 @@ namespace SIGOFCv3.Areas.THabilitante.Controllers
                             break;
 
                         case "7": /** Garantía de fiel cumplimiento **/
-                            vm.txtfechaini = (!formatoFecha(objO.faVigenciaInicio).Equals("01/01/0001") && !formatoFecha(objO.faVigenciaInicio).Equals("01/01/1900")) ? formatoFecha(objO.faVigenciaInicio) : "";
-                            vm.txtfechafin = (!formatoFecha(objO.faVigenciaFin).Equals("01/01/0001") && !formatoFecha(objO.faVigenciaFin).Equals("01/01/1900")) ? formatoFecha(objO.faVigenciaFin) : "";
+                            vm.txtfechaini = (objO.faVigenciaInicio != null) ? formatoFecha(objO.faVigenciaInicio) : "";
+                            vm.txtfechafin = (objO.faVigenciaFin != null) ? formatoFecha(objO.faVigenciaFin) : "";
 
                             //datos de archivo
                             /*using (WebClient obj = new WebClient())
@@ -582,11 +582,11 @@ namespace SIGOFCv3.Areas.THabilitante.Controllers
 
                         case "8": /** Movilización de frutos, productos y sub productos **/
                             vm.txtgtfprimera = objO.vaPrimeraSerieNumGTF;
-                            vm.txtfechagtfprimera = (!formatoFecha(objO.faPrimeraSerieFechaEmision).Equals("01/01/0001") && !formatoFecha(objO.faPrimeraSerieFechaEmision).Equals("01/01/1900")) ? formatoFecha(objO.faPrimeraSerieFechaEmision) : "";
+                            vm.txtfechagtfprimera = (objO.faPrimeraSerieFechaEmision != null) ? formatoFecha(objO.faPrimeraSerieFechaEmision) : ""; 
                             vm.txtprimernumtrozas_primera = objO.vaPrimeraSeriePrimerNumListasTrozas;
                             vm.txtultimonumtrozas_primera = objO.vaPrimeraSerieUltimoNumListasTrozas;
                             vm.txtgtfultima = objO.vaUltimaSerieNumGTF;
-                            vm.txtfechagtfultima = (!formatoFecha(objO.faUltimaSerieFechaEmision).Equals("01/01/0001") && !formatoFecha(objO.faUltimaSerieFechaEmision).Equals("01/01/1900")) ? formatoFecha(objO.faUltimaSerieFechaEmision) : "";
+                            vm.txtfechagtfultima = (objO.faUltimaSerieFechaEmision != null) ? formatoFecha(objO.faUltimaSerieFechaEmision) : "";
                             vm.txtprimernumtrozas_ultima = objO.vaUltimaSeriePrimerNumListasTrozas;
                             vm.txtultimonumtrozas_ultima = objO.vaUltimaSerieUltimoNumListasTrozas;
 
@@ -655,7 +655,7 @@ namespace SIGOFCv3.Areas.THabilitante.Controllers
                             vm.hdfTipoMedida = objO.chTipo;
                             vm.txttipomedida = (objO.chTipo == "1") ? "Medida correctiva" : "Mandato";
                             vm.txtnumresolucion = objO.vaNumResolucion;
-                            vm.txtfechaplazo = (!formatoFecha(objO.faPresentacion).Equals("01/01/0001") && !formatoFecha(objO.faPresentacion).Equals("01/01/1900")) ? formatoFecha(objO.faPresentacion) : "";
+                            vm.txtfechaplazo = (objO.faPresentacion != null) ? formatoFecha(objO.faPresentacion) : "";
                             vm.txtdescripcion = objO.vaDescripcion;
 
                             //datos de archivo
@@ -682,11 +682,11 @@ namespace SIGOFCv3.Areas.THabilitante.Controllers
 
                         case "11": /** Actos Administrativos **/
                             vm.txtresaprobacion = objO.vaNumResolucion;
-                            vm.txtfechaini = (!formatoFecha(objO.faFechaInicio).Equals("01/01/0001") && !formatoFecha(objO.faFechaInicio).Equals("01/01/1900")) ? formatoFecha(objO.faFechaInicio) : "";
-                            vm.txtfechafin = (!formatoFecha(objO.faFechaFin).Equals("01/01/0001") && !formatoFecha(objO.faFechaFin).Equals("01/01/1900")) ? formatoFecha(objO.faFechaFin) : "";
+                            vm.txtfechaini = (objO.faFechaInicio != null) ? formatoFecha(objO.faFechaInicio) : "";
+                            vm.txtfechafin = (objO.faFechaFin != null) ? formatoFecha(objO.faFechaFin) : "";
                             vm.txtnumdocumento = objO.vaOtrasNroDocumento;
                             vm.txtnumregistro = objO.vaOtrasNroRegistro;
-                            vm.txtfechaactadmin = (!formatoFecha(objO.faOtrasFecha).Equals("01/01/0001") && !formatoFecha(objO.faOtrasFecha).Equals("01/01/1900")) ? formatoFecha(objO.faOtrasFecha) : "";
+                            vm.txtfechaactadmin = (objO.faOtrasFecha != null) ? formatoFecha(objO.faOtrasFecha) : "";
                             vm.txtdescripcion = objO.vaOtrasDescripcion;
 
                             vm.ddlTipoRegistro = new List<VM_Cbo>
