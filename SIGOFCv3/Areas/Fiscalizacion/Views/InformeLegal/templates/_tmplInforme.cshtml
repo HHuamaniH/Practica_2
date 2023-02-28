@@ -55,8 +55,40 @@
                     <strong>ANTECEDENTES</strong><br />
                     <span>
                         <ol class="continue" style="margin-left: -35pt;">
-                            <li>Con fecha XX de XXXXX de XXXX, el Estado Peruano, a través del Instituto Nacional de Recursos Forestales y de Fauna Silvestre (ex INRENA), y de otra parte, el concesionario suscribieron el contrato de concesión, por el cual se le otorgó el derecho al aprovechamiento sostenible de (detallar según lo expuesto en el contrato de concesión).</li>
-                            <li>Mediante Carta N° XXXXX-XXXX-OSINFOR/08.1, de fecha XX de XXXXX de XXXX, notificada el XX de XXXXX de XXXX, la Dirección de Supervisión Forestal y de Fauna Silvestre (en adelante, DSFFS) comunicó al/la concesionario/a la supervisión ordinaria/extraordinaria al (indicar plan de manejo forestal), correspondiente al periodo XXXX-XXXX y, asimismo, le requirió diversa información concerniente al cumplimiento de obligaciones como titular del contrato de concesión.</li>
+                            <li>
+                                Con fecha XX de XXXXX de XXXX, el Estado Peruano, a través del Instituto Nacional de Recursos Forestales y de Fauna Silvestre (ex INRENA), y de otra parte, el concesionario suscribieron el contrato de concesión, por el cual se le otorgó el derecho al aprovechamiento sostenible de (detallar según lo expuesto en el contrato de concesión).
+                            </li>
+                            {{each(n, ant) ANTECEDENTES}}
+                            {{if ant.tipoDocumento == 'Carta'}}
+                            <li>
+                                Mediante <strong>Carta N° ${ant.numero}</strong>, de fecha ${ant.fechaEmisionTexto || 'XX de XXXXX de XXXX'}, notificada el ${ant.fechaNotificacionTexto || 'XX de XXXXX de XXXX'}, la Dirección de Supervisión Forestal y de Fauna Silvestre (en adelante, DSFFS) comunicó al/la concesionario/a la supervisión ordinaria/extraordinaria al (indicar plan de manejo forestal), correspondiente al periodo XXXX-XXXX y, asimismo, le requirió diversa información concerniente al cumplimiento de obligaciones como titular del contrato de concesión.
+                            </li>
+                            {{else ant.tipoDocumento == 'Informe de Supervisión'}}
+                            <li>
+                                Por <strong>Informe de Supervisión N° ${ant.numero}</strong>, de fecha ${ant.fechaEmisionTexto || 'XX de XXXXX de XXXX'}, la DSFFS dio cuenta de los resultados de la supervisión ordinaria/extraordinaria al (indicar plan de manejo forestal), correspondiente al periodo XXXX-XXXX, del contrato de concesión, además del cumplimiento de las obligaciones contractuales del citado contrato, diligencia de campo realizada del (indicar por defecto la fecha).
+                            </li>
+                            {{else ant.tipoDocumento == 'Resolución Sub Directoral'}}
+                            <li>
+                                <span>
+                                    Por <strong>Resolución Sub Directoral N° ${ant.numero}</strong>, de fecha ${ant.fechaEmisionTexto || 'XX de XXXXX de XXXX'}, se inició el PAU al/la concesionario/a, por haber incurrido presuntamente en lo siguiente:<br />
+                                    <ol style="list-style: lower-roman">
+                                        {{each(i, inf) ant.INFRACCIONES}}
+                                        <li>${inf.titulo}</li>
+                                        {{/each}}
+                                    </ol>
+                                </span>
+                            </li>
+                            {{else ant.tipoDocumento == 'Cédula de Notificación'}}
+                            <li>
+                                Mediante <strong>Cédula de Notificación N° ${ant.numero}</strong>, de fecha ${ant.fechaEmisionTexto || 'XX de XXXXX de XXXX'}, , notificada el ${ant.fechaNotificacionTexto || 'XX de XXXXX de XXXX'}, se notificó al/la concesionario/a la Resolución Sub Directoral N° XXXXX-XXXX-OSINFOR/08.2.1 y copia del Informe de Supervisión N° XXXXX-XXXX-OSINFOR/08.1.1.
+                            </li>
+                            {{/if}}
+                            {{/each}}
+                            {{if COD_TIPO_INFORME == 1}}
+                            <li>
+                                Por Escrito/Carta, de fecha XX de XXXXX de XXXX, ingresado al OSINFOR el XX de XX de XXXX con Registro N° XXXX, el concesionario <strong>presentó sus descargos</strong> contra la Resolución Sub Directoral N° XXXXX-XXXX-OSINFOR/08.2.1.
+                            </li>
+                            {{/if}}
                         </ol>
                     </span>
                 </li>
@@ -186,6 +218,14 @@
                 </li>
             </ol>
         </div>
+        <br /><br />
+        <div>
+            Firmado digitalmente por<br />
+            <strong>${SUBDIRECTOR}</strong><br />
+            Sub Director<br />
+            ${PROCEDENCIA}<br />
+            OSINFOR
+        </div>
         {{if IMG_SANCION?.length}}
         <div style="text-align:center;">
             <br clear=all style="mso-special-character:line-break;page-break-before:always">
@@ -195,14 +235,6 @@
             {{/each}}
         </div>
         {{/if}}
-        <br clear=all style="mso-special-character:line-break;page-break-before:always">
-        <div>
-            Firmado digitalmente por<br />
-            <strong>${SUBDIRECTOR}</strong><br />
-            Sub Director<br />
-            ${PROCEDENCIA}<br />
-            OSINFOR
-        </div>
     </div>
 </script>
 

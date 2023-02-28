@@ -5,12 +5,14 @@
     En tal sentido, resulta necesario confrontar los hechos advertidos en la supervisión y las actuaciones administrativas del presente procedimiento, a fin de determinar fehacientemente si existe coherencia y correspondencia entre ellos, así como responsabilidad administrativa emanada de las conductas del titular; bajo esta premisa, corresponde analizar las imputaciones formuladas sobre la base de lo señalado previamente con el objeto de acreditar o no su comisión.
 </p>
 {{if INFRACCIONES.length}}
-<ol style="list-style-type:lower-alpha" start="1">
-    {{each(i, item) INFRACCIONES}}
+<h5 style="margin-left: -5pt;"><u><strong>Sobre las infracciones imputadas</strong></u></h5>
+<ol style="list-style-type: lower-alpha; margin-left: -40pt;" start="1">
+    {{each(i, infra) INFRACCIONES}}
     <li>
         <span>
-            <strong>${item.titulo}</strong>
+            <strong>${infra.titulo}</strong>
         </span>
+        {{html infra.parrafos}}
     </li>
     {{/each}}
 </ol>

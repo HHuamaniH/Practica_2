@@ -2,7 +2,8 @@
 
 let _informe = {};
 let app,
-    modal_expedientes,
+    modal_referencias,
+    modal_referencias_tipo,
     modal_notificar,
     modal_doc,
     modal_rsd,
@@ -176,9 +177,6 @@ _informe.render = function (html) {
 };
 
 _informe.tmpl = {
-    //General: function (data) {
-    //    return $("<div>").append($("#tmpl-exportar").tmpl(data || {})).getUnformattedText();
-    //},
     get: function (html, tmplId, data) {
         const _dom = $("<div>", { html });
         const partial = _dom.find(tmplId);
@@ -189,9 +187,9 @@ _informe.tmpl = {
 
 _informe.EnumerarCuadros = function (html) {
     let index = 0;
-    return html.replace(/<strong>Cuadro.<\/strong>/gi, function (m) {
+    return html.replace(/(Cuadro N°|NRO) XX/gi, function (m, p) {
         index++;
-        return `<strong>Cuadro ${index}.</strong>`;
+        return `${p} ${index}`;
     });
 }
 
@@ -199,8 +197,24 @@ _informe.EnumerarListas = function (html) {
     let num = 1;
     var $html = $('<div />', { html: html });
     $html.find('ol.continue').each((index, el) => {
-        $(el).addClass('xxxxx').attr('start', num);
+        $(el).attr('start', num);
         num += $(el).find('>li').length;
+    });
+
+    return $html.html();
+}
+
+/**
+ Funcion para revisar las notas al pie y eliminar las que no pertenezcan a ninguna infracción
+ */
+_informe.RevisarFootnotes = function (infracciones, html) {
+    var $html = $('<div />', { html: html });
+
+    $html.find('[data-enciso]').each((i, el) => {
+        const inciso = $(el).data('enciso');
+        if (!infracciones.find(x => x.inciso == inciso)) {
+            $(el).html('');
+        }
     });
 
     return $html.html();
@@ -210,21 +224,15 @@ _informe.Exportar = async function () {
     const informe = _informe.Estructura();
     const [procedencias, materias] = JSON.parse(JSON.stringify([app.Procedencias, app.Materias]));
 
-    //informe.EXPEDIENTE_ADM = $('#txtNumeroExpediente').val();
     informe.PROCEDENCIA = procedencias.find(function (x) { return x.COD_PROCEDENCIA === informe.COD_PROCEDENCIA })?.PROCEDENCIA;
     informe.MATERIA = materias.find(function (x) { return x.COD_MATERIA === informe.COD_MATERIA })?.MATERIA;
     informe.FECHA = fnDate.text_long(informe.RES_DIRECTORAL_FECHA || new Date());
-    //informe.VISTOS = _informe.render(informe.VISTOS);
-    //informe.ANTECEDENTES = _informe.render(informe.ANTECEDENTES);
-    //informe.COMPETENCIA = _informe.render(informe.COMPETENCIA);
-    //informe.ANALISIS = _informe.render(informe.ANALISIS);
-    //informe.PIE_PAGINA = _informe.render(informe.PIE_PAGINA);
     informe.SITD_PASSWORD = app.Tramite?.password || '';
     informe.SUBDIRECTOR = informe.PARTICIPANTES.find(function (x) { return x.funcion === 'Subdirector' })?.apellidosNombres || '[INDICAR SUBDIRECTOR]';
     //console.log(informe); //return;
 
-    //EXPEDIENTES
-    informe.EXPEDIENTES_ADM = informe.EXPEDIENTES.map(x => (x.NUMERO || 'S/N')).join(', ');
+    //EXPEDIENTES ADMINISTRATIVOS
+    informe.EXPEDIENTES_ADM = informe.REFERENCIAS.filter(x => x.TIPO_DOCUMENTO == 'EXPEDIENTE').map(x => (x.NUMERO || 'S/N')).join(', ');
 
     //INFRACCIONES
     for (var i = 0; i < informe.INFRACCIONES.length; i++) {
@@ -232,6 +240,21 @@ _informe.Exportar = async function () {
         const parrafos = await _informe.ExtraerParrafoInfraccion(infraccion, informe);
         infraccion.parrafos = parrafos;
     }
+
+    //Asociamos las infracciones a las RSD en los antecedentes
+    informe.ANTECEDENTES.forEach(item => {
+        if (item.tipoDocumento == 'Resolución Sub Directoral') {
+            item.INFRACCIONES = informe.INFRACCIONES
+                .filter(x => x.codResolucion == item.codResolucion)
+                .map(x => {
+                    x.titulo = x.titulo.replace(/(Respecto a la imputación)\s+(.*)/gi, (m, p1, p2) => {
+                        return p2.charAt(0).toUpperCase() + p2.slice(1);
+                    });
+
+                    return x;
+                });
+        }
+    });
 
     const header = `<p style="text-align:center;"><img width="550" alt="" src="${urlLocalSigo}content/images/logo/osinfor-header-3.png"></p>`;
     //let footer = `<table style="width: 100%;"><tr><td style="text-align: right;">#CURRENTPAGE#</td></tr></table>`;
@@ -249,7 +272,10 @@ _informe.Exportar = async function () {
     let html = '';
     html += _informe.tmpl.get(template, '#tmpl-exportar', informe);
     html += _informe.tmpl.get(template, '#tmpl-pie-pagina-estructura', informe);
-    html += _informe.tmpl.get(template, '#tmpl-footnotes', informe);
+
+    let footnotes = _informe.tmpl.get(template, '#tmpl-footnotes', informe);
+    footnotes = _informe.RevisarFootnotes(informe.INFRACCIONES, footnotes);
+    html += footnotes;
 
     //Enumeracion de listas
     html = _informe.EnumerarListas(html);
@@ -358,11 +384,14 @@ _informe.Guardar = function (parametros) {
             data.DOCUMENTOS.forEach(function (x) { x.accion = 1; });
             data.RSD.forEach(function (x) { x.accion = 1; });
             data.INFRACCIONES.forEach(function (x) { x.accion = 1; });
+            data.ANTECEDENTES.forEach(function (x) { x.accion = 1; });
+            app.Informe.REFERENCIAS.forEach(function (x) { x.RegEstado = 0; });
 
             app.Informe.PARTICIPANTES = data.PARTICIPANTES;
             app.Informe.DOCUMENTOS = data.DOCUMENTOS;
             app.Informe.RSD = data.RSD;
             app.Informe.INFRACCIONES = data.INFRACCIONES;
+            app.Informe.ANTECEDENTES = data.ANTECEDENTES;
             app.Informe.ELIMINAR = [];
 
             _informe.CambiarEstado(app.Informe.ESTADO || States.INGRESADO);
@@ -385,22 +414,24 @@ _informe.Estructura = function () {
     data.PARTICIPANTES.forEach(function (x, i) {
         if (!x.flgAplica) x.estado = 0;
         else x.estado = x.estado || 1;
-        //x.item = i + 1;
     });
 
     data.DOCUMENTOS.forEach(function (x, i) {
         if (x.estado === null) x.estado = 1;
-        //x.item = i + 1;
     });
 
     data.INFRACCIONES.forEach(function (x, i) {
         if (x.estado === null) x.estado = 1;
-        //x.item = i + 1;
     });
 
     data.RSD.forEach(function (x, i) {
         if (x.estado === null) x.estado = 1;
-        //x.item = i + 1;
+    });
+
+    data.ANTECEDENTES.forEach(function (x, i) {
+        if (x.estado === null) x.estado = 1;
+        x.fechaEmisionTexto = x.fechaEmision ? fnDate.text_long(x.fechaEmision) : '';
+        x.fechaNotificacionTexto = x.fechaNotificacion ? fnDate.text_long(x.fechaNotificacion) : '';
     });
 
     let parametros = {
@@ -426,6 +457,80 @@ _informe.CARGAR_ARCHIVO = function () {
     modal_doc.show({ name: app.Tramite.cCodificacion, callback });
 }
 
+_informe.ENVIAR_CONTROL_CALIDAD = function () {
+    const user = ManInfLegal_AddEdit.userApp || {};
+    const data = {
+        NUM_INFORME_SITD: app.Informe.NUM_INFORME_SITD,
+        URL_DESCARGA: _informe.RutaDocumentoDescarga(),
+        USUARIO: user.PERSONA
+    }
+
+    const message = $('#tmpl-notificacion-calidad').tmpl(data).html();
+    modal_notificar.form.Mensaje = message;
+    modal_notificar.callback = function () {
+        console.log('Notificado a control de calidad');
+    }
+    modal_notificar.Abrir([]);
+}
+
+_informe.TRANSFERIR = function () {
+    let flgSignAll = app.Informe.PARTICIPANTES.filter(function (x) { return x.flgAplica && x.estado < 3 }).length === 0;
+    if (!flgSignAll) {
+        utilSigo.toastWarning('Firmas incompletas', 'Se deben completar todas las firmas antes de transferir el documento final');
+        return;
+    }
+
+    utilSigo.dialogConfirm('Transferir', '¿Desea transferir al SITD el documento firmado?', function (r) {
+        if (r) {
+            utilSigo.fnAjax({
+                type: 'post',
+                url: `${urlLocalSigo}Fiscalizacion/InformeLegalDigital/TransferirDocSITD`,
+                datos: JSON.stringify({
+                    tramiteId: app.Tramite.iCodTramite,
+                    codInformeDigital: app.Informe.COD_INFORME_DIGITAL,
+                    codInforme: app.Informe.COD_INFORME,
+                    codificacion: _informe.fileName()
+                })
+            }, function (res) {
+                if (res.success) {
+                    _informe.CambiarEstado(States.FINALIZADO);
+                    utilSigo.toastSuccess('Transferido', res.msj);
+                } else {
+                    utilSigo.toastError('Atención', res.msj);
+                }
+            });
+        }
+    });
+};
+
+_informe.ANULAR = function () {
+    utilSigo.dialogConfirm('Eliminar firmas', 'Esta acción retornará al estado COMPLETADO y podrá cargar nuevamente el documento. ¿Desea continuar?', function (r) {
+        if (r) {
+            utilSigo.fnAjax({
+                type: 'post',
+                url: `${urlLocalSigo}Fiscalizacion/InformeLegalDigital/AnularFirmaPorInforme`,
+                datos: JSON.stringify({
+                    codInforme: app.Informe.COD_INFORME_DIGITAL,
+                    codificacion: _informe.fileName()
+                })
+            }, function (res) {
+                if (res.success) {
+                    _informe.CambiarEstado(States.COMPLETADO);
+
+                    //Actualizar tabla de supervisores FLAG_FIRMA
+                    app.Informe.PARTICIPANTES.forEach(function (item) {
+                        if (item.flgAplica && item.estado > 3) item.estado = 3;
+                    });
+
+                    utilSigo.toastSuccess('Listo', res.msj);
+                } else {
+                    utilSigo.toastError('Error', res.msj);
+                }
+            });
+        }
+    });
+}
+
 _informe.ObtenerRutaResolucion = function (item) {
     return `${urlLocalSigo}Fiscalizacion/ManResolucion/CreateOrEdit?asCodRD=${item.codResolucion}&show_informe=true`;
 }
@@ -435,25 +540,21 @@ _informe.DescargarDocumentoSITD = function (item) {
     descargarTramite(data); //_finalInstruccion.cshtml
 }
 
-_informe.fnEliminarExpediente = function (item, index) {
-    utilSigo.dialogConfirm("", "¿Desea eliminar el registro?", function (r) {
-        if (r) {
-            if (item.COD_ILACCION)
-                app.Informe.ELIMINAR.push({ codInforme: app.Informe.COD_INFORME, item: item.COD_ILACCION, origen: 'EXPEDIENTE' });
+_informe.fnEliminarReferencia = function (item, index) {
+    if (item.COD_ILACCION)
+        app.Informe.ELIMINAR.push({ codInforme: app.Informe.COD_INFORME, item: item.COD_ILACCION, origen: 'REFERENCIA' });
 
-            if (item.SUBTIPO == '01') {
-                const data = _renderFinalInstruccion.dtAllanamientoFinalInstruccion.rows().data().toArray();
-                const i = data.findIndex(x => x.CODIGO == item.CODIGO);
-                _renderFinalInstruccion.dtAllanamientoFinalInstruccion.row(i).remove().draw();
-            } else if (item.SUBTIPO == '02') {
-                const data = _renderFinalInstruccion.dtSubsanacionFinalInstruccion.rows().data().toArray();
-                const i = data.findIndex(x => x.CODIGO == item.CODIGO);
-                _renderFinalInstruccion.dtSubsanacionFinalInstruccion.row(i).remove().draw();
-            }
+    if (item.SUBTIPO == '01') {
+        const data = _renderFinalInstruccion.dtAllanamientoFinalInstruccion.rows().data().toArray();
+        const i = data.findIndex(x => x.CODIGO == item.CODIGO);
+        _renderFinalInstruccion.dtAllanamientoFinalInstruccion.row(i).remove().draw();
+    } else if (item.SUBTIPO == '02') {
+        const data = _renderFinalInstruccion.dtSubsanacionFinalInstruccion.rows().data().toArray();
+        const i = data.findIndex(x => x.CODIGO == item.CODIGO);
+        _renderFinalInstruccion.dtSubsanacionFinalInstruccion.row(i).remove().draw();
+    }
 
-            app.Informe.EXPEDIENTES.splice(index, 1);
-        }
-    });
+    app.Informe.REFERENCIAS.splice(index, 1);
 }
 
 _informe.EliminarResolucion = function (item, index) {
@@ -492,10 +593,17 @@ _informe.EliminarResolucion = function (item, index) {
             .forEach(item => {
                 app.Informe.ELIMINAR.push({ codInforme: item.codInformeDigital, item: item.item, origen: 'DOCUMENTO' });
             });
+
+        app.Informe.ANTECEDENTES
+            .filter(x => x.codResolucion == item.codResolucion)
+            .forEach(item => {
+                app.Informe.ELIMINAR.push({ codInforme: item.codInformeDigital, item: item.item, origen: 'ANTECEDENTE' });
+            });
     }
 
     app.Informe.INFRACCIONES = app.Informe.INFRACCIONES.filter(x => x.codResolucion != item.codResolucion);
     app.Informe.DOCUMENTOS = app.Informe.DOCUMENTOS.filter(x => x.codResolucion != item.codResolucion);
+    app.Informe.ANTECEDENTES = app.Informe.ANTECEDENTES.filter(x => x.codResolucion != item.codResolucion);
 
     app.Informe.RSD.splice(index, 1);
 }
@@ -685,7 +793,7 @@ _informe.AbrirCalculoMulta = function () {
             _manCalMul.fnCrear();
 
             const administrado = {
-                EXPEDIENTE: app.Informe.EXPEDIENTES[0]?.CODIGO,
+                EXPEDIENTE: app.Informe.REFERENCIAS[0]?.CODIGO,
                 ADMINISTRADO: app.Informe.R_LEGAL || app.Informe.TITULAR,
                 TIPO_DOC: app.Informe.R_LEGAL_DOCUMENTO || app.Informe.R_LEGAL_RUC || app.Informe.TITULAR_DOCUMENTO || app.Informe.TITULAR_RUC,
                 THABILITANTE: app.Informe.NUM_CONTRATO,
@@ -739,8 +847,8 @@ $(function () {
                 COD_MATERIA: null,
                 MATERIA: null,
                 COD_MODALIDAD: null,
-                INF_FECHA: null,
-                INF_ANTECEDENTES: null,
+                //INF_FECHA: null,
+                //INF_ANTECEDENTES: null,
                 COD_THABILITANTE: null,
                 NUM_CONTRATO: null,
                 COD_TITULAR: null,
@@ -768,7 +876,8 @@ $(function () {
                 FLG_RESP_SOLIDARIO: true,
                 FLG_COMUNICACION_GORE: true,
                 RSD: [],
-                EXPEDIENTES: [],
+                REFERENCIAS: [],
+                ANTECEDENTES: [],
                 PARTICIPANTES: [],
                 DOCUMENTOS: [],
                 INFRACCIONES: [],
@@ -834,16 +943,16 @@ $(function () {
                 const self = this;
 
                 //Expedientes
-                /*self.Informe.EXPEDIENTES = _renderListExpediente.dtRenderListInforme.rows().data().toArray();
-                self.Informe.EXPEDIENTES.forEach(x => {
+                /*self.Informe.REFERENCIAS = _renderListExpediente.dtRenderListInforme.rows().data().toArray();
+                self.Informe.REFERENCIAS.forEach(x => {
                     x.CODIGO = x.NUM_INFORME.replace('(Exp. Adm.)', '').trim();
                 });*/
 
                 return new Promise((resolve, reject) => {
                     let params = {
-                        type: 'post',
+                        type: 'get',
                         url: `${urlLocalSigo}Fiscalizacion/InformeLegalDigital/ObtenerIFI`,
-                        datos: JSON.stringify({ COD_RESOLUCION: self.Informe.COD_INFORME })
+                        datos: { COD_RESOLUCION: self.Informe.COD_INFORME }
                     };
 
                     utilSigo.fnAjax(params, function (res) {
@@ -864,12 +973,12 @@ $(function () {
                             self.Informe.NUM_INFORME_SITD = res.informe.NUM_INFORME_SITD || values.NUM_INFORME_SITD || null;
                             self.Informe.R_LEGAL = res.informe.R_LEGAL || values.R_LEGAL || null;
 
-                            //EXPEDIENTES
+                            //REFERENCIAS
                             const lstSITD01 = _renderFinalInstruccion.dtAllanamientoFinalInstruccion.rows().data().toArray().map(x => ({
                                 COD_ILACCION: x.COD_ILACCION,
                                 COD_ILEGAL: self.Informe.COD_INFORME,
                                 SUBTIPO: '01',
-                                SUBTIPO_DETALLE: modal_expedientes.subtipos.find(s => s.SUBTIPO == '01').DESCRIPCION,
+                                SUBTIPO_DETALLE: modal_referencias.subtipos.find(s => s.SUBTIPO == '01').DESCRIPCION,
                                 CODIGO: x.CODIGO,
                                 NUMERO: x.NUMERO,
                                 TIPO_DOCUMENTO: x.TIPO_DOCUMENTO,
@@ -881,7 +990,7 @@ $(function () {
                                 COD_ILACCION: x.COD_ILACCION,
                                 COD_ILEGAL: self.Informe.COD_INFORME,
                                 SUBTIPO: '02',
-                                SUBTIPO_DETALLE: modal_expedientes.subtipos.find(s => s.SUBTIPO == '02').DESCRIPCION,
+                                SUBTIPO_DETALLE: modal_referencias.subtipos.find(s => s.SUBTIPO == '02').DESCRIPCION,
                                 CODIGO: x.CODIGO,
                                 NUMERO: x.NUMERO,
                                 TIPO_DOCUMENTO: x.TIPO_DOCUMENTO,
@@ -890,7 +999,7 @@ $(function () {
                             }));
 
                             //console.log(lstSITD01, lstSITD02);
-                            self.Informe.EXPEDIENTES = [...lstSITD01, ...lstSITD02];
+                            self.Informe.REFERENCIAS = [...lstSITD01, ...lstSITD02];
                         }
 
                         if (!res.informe) {
@@ -903,6 +1012,25 @@ $(function () {
 
                 //const data = JSON.parse(JSON.stringify(self.Informe));
                 //self.Informe.PIE_PAGINA = _informe.tmpl.get('#tmpl-pie-pagina', data);
+            },
+            ExtraerAntecedentes: function (COD_RESOLUCION) {
+                const self = this;
+                const COD_THABILITANTE = self.Informe.COD_THABILITANTE;
+
+                const params = {
+                    type: 'get',
+                    url: `${urlLocalSigo}Fiscalizacion/InformeLegalDigital/ObtenerAntecedentes`,
+                    data: { COD_RESOLUCION, COD_THABILITANTE },
+                    global: false
+                }
+
+                const promise = new Promise((resolve, reject) => {
+                    $.ajax(params).done(function (res) {
+                        resolve(res);
+                    });
+                });
+
+                return promise;
             },
             TramiteByID: function (datos) {
                 const self = this;
@@ -993,40 +1121,49 @@ $(function () {
                     }
                 });
             },
+            AbrirModalPersona: function () {
+                return new Promise((resolve, reject) => {
+                    var option = {
+                        url: `${urlLocalSigo}General/Controles/_BuscarPersonaGeneral`,
+                        type: 'GET',
+                        datos: { asBusGrupo: "PERSONA", asCodPTipo: "TODOS", asTipoPersona: "N" },
+                        divId: "mdlBuscarPersona"
+                    };
+                    utilSigo.fnOpenModal(option, function () {
+                        resolve();
+
+                        _bPerGen.fnInit();
+                    });
+                })
+
+            },
             BuscarPersona: function (item) {
                 const self = this;
 
-                var option = {
-                    url: `${urlLocalSigo}General/Controles/_BuscarPersonaGeneral`,
-                    type: 'GET',
-                    datos: { asBusGrupo: "PERSONA", asCodPTipo: "TODOS", asTipoPersona: "N" },
-                    divId: "mdlBuscarPersona"
-                };
-                utilSigo.fnOpenModal(option, function () {
+                self.AbrirModalPersona().then(data => {
                     _bPerGen.fnAsignarDatos = function (obj) {
                         if (obj) {
-                            var data = _bPerGen.dtBuscarPerona.row($(obj).parents('tr')).data();
-                            console.log(data);
-
+                            const data = _bPerGen.dtBuscarPerona.row($(obj).parents('tr')).data();
                             item.codPersona = data.COD_PERSONA;
                             item.apellidosNombres = data.PERSONA;
                             item.estado = 1;
 
                             self.Informe.FLG_ACTUALIZAR = true;
-
                             utilSigo.fnCloseModal("mdlBuscarPersona");
                         }
                     }
-                    _bPerGen.fnInit();
+
                 });
             },
             AgregarRSD: function () {
                 modal_rsd.Abrir();
             },
-            AbrirModalExpedientes: function () {
-                modal_expedientes.Abrir();
+            AbrirModalReferencias: function () {
+                modal_referencias.Abrir();
             },
+
             Abrir_Notificar: function (item) {
+                const self = this;
                 modal_notificar.form.Mensaje = 'Por favor revisar el informe para la continuidad del proceso.';
 
                 let users = [];
@@ -1034,62 +1171,36 @@ $(function () {
                 if (item) users = [item.codPersona];
                 else users = this.Informe.PARTICIPANTES.map(user => user.codPersona);
 
-                let params = {
-                    type: 'post',
-                    url: `${urlLocalSigo}Fiscalizacion/InformeLegalDigital/ObtenerCorreos`,
-                    datos: JSON.stringify(users)
-                };
+                modal_notificar.ObtenerCorreos(users).then(res => {
 
-                utilSigo.fnAjax(params, function (res) {
-                    var destinatarios = res
-                        .filter(item => (item?.CORREO || '').indexOf('@') != -1)
-                        .map(item => ({ codPersona: item.COD_PERSONA, email: item.CORREO }));
+                    //Actualizar los participantes despues de notificar
+                    modal_notificar.callback = function () {
+                        const personas = self.Informe.PARTICIPANTES
+                            .filter(item => res.find(x => x.codPersona == item.codPersona));
 
-                    modal_notificar.Abrir(destinatarios);
-                });
-            },
-            Notificar: function (destinatarios, cc, mensaje) {
-                const self = this;
+                        const participantes = personas.map(item => ({
+                            ...item,
+                            codInformeDigital: self.Informe.COD_INFORME_DIGITAL,
+                            estado: item.estado > 2 ? item.estado : 2
+                        }));
 
-                const notificacion = {
-                    DESTINATARIOS: destinatarios.map(item => item.email).join(','),
-                    CC_DESTINATARIOS: cc,
-                    COD_INFORME: self.Informe.NUM_INFORME_SITD,
-                    MENSAJE_ENVIO_ALERTA: mensaje,
-                    URL_LOCAL: window.location.href
-                };
+                        let params = {
+                            type: 'post',
+                            url: `${urlLocalSigo}Fiscalizacion/InformeLegalDigital/ParticipanteActualizar`,
+                            datos: JSON.stringify({ participantes })
+                        };
 
-                const personas = self.Informe.PARTICIPANTES
-                    .filter(item => destinatarios.find(x => x.codPersona == item.codPersona));
-
-                const participantes = personas.map(item => ({
-                    ...item,
-                    codInformeDigital: self.Informe.COD_INFORME_DIGITAL,
-                    estado: item.estado > 2 ? item.estado : 2
-                }));
-
-                //console.log(notificacion, participantes); return;
-
-                let params = {
-                    type: 'post',
-                    url: `${urlLocalSigo}Fiscalizacion/InformeLegalDigital/Notificar`,
-                    datos: JSON.stringify({ notificacion, participantes })
-                };
-
-                utilSigo.fnAjax(params, function (res) {
-                    if (res) {
-                        //Actualizamos en la vista
-                        self.Informe.PARTICIPANTES.forEach(x => {
-                            const data = participantes.find(item => item.item == x.item);
-                            if (data) {
-                                x.estado = data.estado;
-                            }
+                        utilSigo.fnAjax(params, function (res) {
+                            self.Informe.PARTICIPANTES.forEach(x => {
+                                const data = participantes.find(item => item.item == x.item);
+                                if (data) {
+                                    x.estado = data.estado;
+                                }
+                            });
                         });
-
-                        utilSigo.toastSuccess('Enviado', res);
-                    } else {
-                        utilSigo.toastWarning('Atención', 'No se ha encontrado ningún correo asociado al usuario');
                     }
+
+                    modal_notificar.Abrir(res);
                 });
             },
             Revisar: function (item, index) {
@@ -1326,6 +1437,19 @@ $(function () {
                     app.Informe.RSD.push(RESOLUCION);
                     app.Informe.INFRACCIONES = infracciones;
 
+                    //Antecedentes
+                    app.ExtraerAntecedentes(item.COD_RESODIREC, app.Informe.COD_TITULAR).then(res => {
+                        res.forEach(a => {
+                            a.codResolucion = item.COD_RESODIREC;
+                            const n = a.numero?.match(/([0-9]*-[0-9]{4}-OSINFOR\/[0-9]{1,2}\.[0-9]{1,2}(\.[0-9]{1,2})?)/gi) || [];
+                            a.numero = n[0];
+                            a.estado = 1;
+                        });
+
+                        app.Informe.ANTECEDENTES = res;
+                    });
+
+                    //Archivos relacionados
                     app.ObtenerArchivos(item.COD_RESODIREC).then(function (files) {
                         //console.log("LOAD FILES SIADO...", files);
                         files = files.filter(function (file) {
@@ -1348,9 +1472,10 @@ $(function () {
         }
     });
 
-    modal_expedientes = new Vue({
-        el: '#modal-expedientes',
+    modal_referencias = new Vue({
+        el: '#modal-referencias',
         data: {
+            categoria: 'DOC_GENERADOS',
             subtipo: '01',
             filtro: 'CNRODOCUMENTO',
             texto: '',
@@ -1365,8 +1490,8 @@ $(function () {
                 const self = this;
                 const url = urlLocalSigo + "General/Controles/GetListaDocumentosSITDPaging";
 
-                if (!window.dtbExpedientes) {
-                    window.dtbExpedientes = $('#dtExpedientes').DataTable({
+                if (!window.dtbReferencias) {
+                    window.dtbReferencias = $('#dtReferencias').DataTable({
                         processing: true,
                         serverSide: true,
                         searching: false,
@@ -1377,7 +1502,7 @@ $(function () {
                             url,
                             data: function (d) {
                                 d.customSearchEnabled = true;
-                                d.customSearchForm = 'DOC_ENTRADA';
+                                d.customSearchForm = self.categoria;
                                 d.customSearchType = self.filtro;
                                 d.customSearchValue = self.texto;
                                 for (var i = 0; i < d.order.length; i++) {
@@ -1404,7 +1529,7 @@ $(function () {
                                 data: null,
                                 width: '30px',
                                 render: (data, type, row, meta) => {
-                                    return `<i class="fa fa-lg fa-check text-success px-2" onclick="modal_expedientes.Agregar(this)"></i>`;
+                                    return `<i class="fa fa-lg fa-check text-success px-2" onclick="modal_referencias.Seleccionar(this)"></i>`;
                                 }
                             }
                         ],
@@ -1418,30 +1543,38 @@ $(function () {
                         drawCallback: initSigo.showPagination,
                     });
 
-                    $('#modal-expedientes').on('shown.bs.modal', function () {
+                    $('#modal-referencias').on('shown.bs.modal', function () {
                         $(this).find('input[type="text"]').focus();
                     });
                 }
 
-                $('#modal-expedientes').modal('show');
+                $('#modal-referencias').modal('show');
             },
             Buscar: function () {
-                window.dtbExpedientes?.draw();
+                window.dtbReferencias?.draw();
             },
-            Agregar: function (obj) {
-                const self = this;
+            Seleccionar: function (obj) {
                 const row = $(obj).closest('tr');
-                const data = window.dtbExpedientes?.row(row).data();
+                const data = window.dtbReferencias?.row(row).data();
                 if (!data) return;
 
                 //Buscamos que no se repita
-                const existe = app.Informe.EXPEDIENTES.find(x => x.CODIGO == data.cCodificacion);
+                const existe = app.Informe.REFERENCIAS.find(x => x.CODIGO == data.cCodificacion?.trim());
                 if (existe) {
-                    utilSigo.toastWarning('Alerta', 'El expediente ya existe en la lista');
+                    utilSigo.toastWarning('Alerta', 'El documento ya existe en la lista');
                     return;
                 }
 
-                let subSel = self.subtipos.find(x => x.SUBTIPO == self.subtipo);
+                const oneExp = app.Informe.REFERENCIAS.find(x => x.TIPO_DOCUMENTO == 'EXPEDIENTE');
+                if (oneExp && data.cDescTipoDoc?.trim() == 'EXPEDIENTE') {
+                    utilSigo.toastWarning('Alerta', 'Ya existe un EXPEDIENTE en la lista, no se pueden agregar más');
+                    return;
+                }
+
+                modal_referencias_tipo.Abrir(data);
+            },
+            Agregar: function (data, subSel) {
+                const self = this;
 
                 var model = {
                     COD_ILEGAL: app.Informe.COD_INFORME,
@@ -1454,7 +1587,7 @@ $(function () {
                     RegEstado: 1
                 };
 
-                app.Informe.EXPEDIENTES.push(model);
+                app.Informe.REFERENCIAS.push(model);
 
                 if (self.subtipo == '01') {
                     _renderFinalInstruccion.dtAllanamientoFinalInstruccion.rows.add([model]).draw();
@@ -1462,7 +1595,32 @@ $(function () {
                     _renderFinalInstruccion.dtSubsanacionFinalInstruccion.rows.add([model]).draw();
                 }
 
-                utilSigo.toastSuccess('Agregado', 'Se agregó un expediente a la lista');
+                utilSigo.toastSuccess('Agregado', 'Se agregó un documento a la lista');
+            }
+        }
+    });
+
+    modal_referencias_tipo = new Vue({
+        el: '#modal-referencias-tipo',
+        data: {
+            subtipo: '01',
+            subtipos: [
+                { SUBTIPO: '01', DESCRIPCION: 'Allanamiento de responsabilidad' },
+                { SUBTIPO: '02', DESCRIPCION: 'Subsanación voluntaria' },
+                { SUBTIPO: null, DESCRIPCION: 'Otro' },
+            ]
+        },
+        methods: {
+            Abrir: function (obj) {
+                window.DOC_SEL_ITEM = obj;
+                $('#modal-referencias-tipo').modal('show');
+            },
+            Aceptar: function () {
+                const self = this;
+                const obj = window.DOC_SEL_ITEM;
+                const subtipo = self.subtipos.find(x => x.SUBTIPO == self.subtipo);
+                modal_referencias.Agregar(obj, subtipo);
+                $('#modal-referencias-tipo').modal('hide');
             }
         }
     });
@@ -1534,13 +1692,101 @@ $(function () {
                 $('#modal-notificar').modal('show');
             },
             Cerrar: function () {
+                delete this.callback;
                 $('#modal-notificar').modal('hide');
             },
-            Notificar: function () {
-                const correos = this.form.Seleccionados;
-                app.Notificar(correos, this.form.CC, _informe.render(this.form.Mensaje));
+            ObtenerCorreos: function (codPersonas) {
+                return new Promise((resolve, reject) => {
+                    let params = {
+                        type: 'post',
+                        url: `${urlLocalSigo}Fiscalizacion/InformeLegalDigital/ObtenerCorreos`,
+                        datos: JSON.stringify(codPersonas)
+                    };
 
-                this.Cerrar();
+                    utilSigo.fnAjax(params, function (res) {
+                        const correos = res
+                            .filter(item => (item?.CORREO || '').indexOf('@') != -1)
+                            .map(item => ({
+                                codPersona: item.COD_PERSONA,
+                                persona: `${item.NOMBRES} ${item.APE_PATERNO} ${item.APE_MATERNO}`,
+                                email: item.CORREO
+                            }));
+
+                        resolve(correos);
+                    });
+                });
+            },
+            Agregar: function () {
+                const self = this;
+
+                app.AbrirModalPersona().then(() => {
+                    _bPerGen.fnAsignarDatos = function (obj) {
+                        if (obj) {
+                            const data = _bPerGen.dtBuscarPerona.row($(obj).parents('tr')).data();
+
+                            const existe = self.form.Destinatarios.find(item => item.codPersona == data.COD_PERSONA);
+                            if (existe) {
+                                utilSigo.toastWarning('', `La persona ${data.PERSONA} ya existe en la lista`);
+                                return;
+                            }
+
+                            self.ObtenerCorreos([data.COD_PERSONA]).then(res => {
+                                if (res.length) {
+                                    self.form.Destinatarios.push(res[0]);
+                                    utilSigo.toastSuccess('', `Se agregó a ${data.PERSONA} a la lista`);
+                                }
+                                else utilSigo.toastWarning('', `No existe un correo asociado a ${data.PERSONA}`);
+                            });
+                        }
+                    }
+                });
+            },
+            Agregar_CC: function () {
+                const self = this;
+
+                app.AbrirModalPersona().then(() => {
+                    _bPerGen.fnAsignarDatos = function (obj) {
+                        if (obj) {
+                            const data = _bPerGen.dtBuscarPerona.row($(obj).parents('tr')).data();
+
+                            self.ObtenerCorreos([data.COD_PERSONA]).then(res => {
+                                if (res.length) {
+                                    self.form.CC += `${res[0].email};`;
+                                    utilSigo.toastSuccess('', `Se agregó a ${data.PERSONA} a la lista`);
+                                }
+                                else utilSigo.toastWarning('', `No existe un correo asociado a ${data.PERSONA}`);
+                            });
+                        }
+                    }
+                });
+            },
+            Notificar: function () {
+                const self = this;
+                const notificacion = {
+                    DESTINATARIOS: self.form.Seleccionados.map(item => item.email).join(','),
+                    CC_DESTINATARIOS: self.form.CC,
+                    COD_INFORME: app.Informe.NUM_INFORME_SITD,
+                    MENSAJE_ENVIO_ALERTA: _informe.render(self.form.Mensaje),
+                    URL_LOCAL: window.location.href
+                };
+
+                let params = {
+                    type: 'post',
+                    url: `${urlLocalSigo}Fiscalizacion/InformeLegalDigital/Notificar`,
+                    datos: JSON.stringify({ notificacion })
+                };
+
+                utilSigo.fnAjax(params, function (res) {
+                    if (res) {
+                        //Para ejecutar cualquier acción despues de enviar un correo
+                        if (typeof self.callback === 'function') self.callback(res);
+                        utilSigo.toastSuccess('Enviado', res);
+                    } else {
+                        utilSigo.toastWarning('Atención', 'No se ha encontrado ningún correo asociado al usuario');
+                    }
+
+                    self.Cerrar();
+                });
             }
         }
     });

@@ -6,6 +6,8 @@ using SIGOFCv3.Helper;
 using SIGOFCv3.Models;
 using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 using System.Web.Mvc;
 
 namespace SIGOFCv3.Areas.Fiscalizacion.Controllers
@@ -39,13 +41,21 @@ namespace SIGOFCv3.Areas.Fiscalizacion.Controllers
             return Json(new { success, msj, data = result });
         }
 
-        [HttpPost]
+        [HttpGet]
         public JsonResult ObtenerIFI(string COD_RESOLUCION)
         {
             oLog_Informe_Legal_Digital = new Log_Informe_Legal_Digital();
             var informe = oLog_Informe_Legal_Digital.ObtenerInforme(COD_RESOLUCION);
             //var inf_supervision = oLog_Informe_Legal_Digital.ObtenerRSDCabeceraByReferencia(COD_RESOLUCION, 3);
             return Json(new { informe }, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpGet]
+        public JsonResult ObtenerAntecedentes(string COD_RESOLUCION, string COD_THABILITANTE)
+        {
+            oLog_Informe_Legal_Digital = new Log_Informe_Legal_Digital();
+            var result = oLog_Informe_Legal_Digital.ObtenerAntecedentesRSD(COD_RESOLUCION, COD_THABILITANTE);
+            return Json(result, JsonRequestBehavior.AllowGet);
         }
 
         [HttpPost]
@@ -152,21 +162,23 @@ namespace SIGOFCv3.Areas.Fiscalizacion.Controllers
         }
 
         [HttpPost, ValidateInput(false)]
-        public JsonResult Notificar(Informe_Notificacion notificacion, List<VM_INFORME_LEGAL_DIGITAL_PARTICIPANTE> participantes)
+        public JsonResult Notificar(Informe_Notificacion notificacion)
         {
             oLog_Informe_Legal_Digital = new Log_Informe_Legal_Digital();
+            var result = oLog_Informe_Legal_Digital.Notificar(notificacion);            
+            return Json(result);
+        }
 
-            var result = oLog_Informe_Legal_Digital.Notificar(notificacion);
-
-            if (!string.IsNullOrEmpty(result))
+        [HttpPost]
+        public JsonResult ParticipanteActualizar(List<VM_INFORME_LEGAL_DIGITAL_PARTICIPANTE> participantes)
+        {
+            oLog_Informe_Legal_Digital = new Log_Informe_Legal_Digital();
+            foreach (var item in participantes)
             {
-                foreach (var item in participantes)
-                {
-                    oLog_Informe_Legal_Digital.ParticipanteActualizar(item);
-                }
+                oLog_Informe_Legal_Digital.ParticipanteActualizar(item);
             }
 
-            return Json(result);
+            return Json(true);
         }
 
         [HttpGet]
@@ -180,6 +192,98 @@ namespace SIGOFCv3.Areas.Fiscalizacion.Controllers
 
             var result = HelperSigo.LLenarCombos(exeBus.RegOpcionesCombo(paramsBus), "");
             return Json(result, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpPost]
+        public JsonResult TransferirDocSITD(int tramiteId, string codInformeDigital, string codInforme, string codificacion)
+        {
+            bool success = false; string msj = "";
+            string pathDocumentoOrigen = Server.MapPath("~/" + System.Configuration.ConfigurationManager.AppSettings["pathInvoker"]);
+            string pathDocumentoDestino = Server.MapPath("~/" + System.Configuration.ConfigurationManager.AppSettings["pathTransferidoSITD"]);
+            string pathGeneradoOrigen = string.Empty, pathGeneradoDestino = string.Empty, nombreDocumentoNuevo = string.Empty;
+            oLog_Informe_Legal_Digital = new Log_Informe_Legal_Digital();
+            try
+            {
+                var usuarioLogin = ModelSession.GetSession().FirstOrDefault();               
+
+                pathGeneradoOrigen = Path.Combine(pathDocumentoOrigen, $"{codificacion}");
+                if (!System.IO.File.Exists(pathGeneradoOrigen))
+                {
+                    throw new Exception($"0|No existe el documento {codificacion} a transferir");
+                }
+                if (!Directory.Exists(pathDocumentoDestino))
+                {
+                    Directory.CreateDirectory(pathDocumentoDestino);
+                }
+
+                VM_TRAMITE tramite = new Log_Informe_Digital().TramiteGetById(tramiteId, "", "");
+                tramite.cDescTipoDoc = tramite.cDescTipoDoc.Trim().Replace(' ', '-');
+                tramite.cCodificacion = tramite.cCodificacion.Trim().Replace('/', '-');
+                nombreDocumentoNuevo = $"{tramite.cDescTipoDoc}-{tramite.cCodificacion}.pdf";
+                pathGeneradoDestino = Path.Combine(pathDocumentoDestino, nombreDocumentoNuevo);
+
+                //cambiando de ubicación el archivo
+                try
+                {
+                    if (System.IO.File.Exists(pathGeneradoDestino))
+                    {
+                        System.IO.File.Delete(pathGeneradoDestino);
+                    }
+                    System.IO.File.Move(pathGeneradoOrigen, pathGeneradoDestino);
+                }
+                catch (Exception)
+                {
+                    throw new Exception($"0|Sucedió un error al mover el archivo al repositorio de trámite");
+                }
+
+                //cambiando a estado 5 Transferido documento a trámite
+                success = oLog_Informe_Legal_Digital.CambiarEstado(codInformeDigital, DateTime.Now, 5, usuarioLogin.COD_UCUENTA);
+
+                if (success)
+                {
+                    var oLog_Informe_Digital = new Log_Informe_Digital();
+                    oLog_Informe_Digital.TramiteDigitalGrabar(tramiteId, codificacion, nombreDocumentoNuevo, DateTime.Now);
+                }
+
+                msj = "Se transfirió correctamente el documento";
+            }
+            catch (Exception ex)
+            {
+                success = false;
+                string[] mensaje = ex.Message.Split('|');
+                if (mensaje[0] == "0")
+                    msj = mensaje[1];
+                else msj = "Sucedió un error, no se puede continuar";
+            }
+
+            return Json(new { success, msj });
+        }
+
+        [HttpPost]
+        public JsonResult AnularFirmaPorInforme(string codInforme, string codificacion)
+        {
+            bool success = false; string msj = "";
+            try
+            {
+                string pathDocumento = Server.MapPath("~/" + System.Configuration.ConfigurationManager.AppSettings["pathInvoker"]);
+                //var usuarioLogin = ModelSession.GetSession().FirstOrDefault();
+
+                oLog_Informe_Legal_Digital = new Log_Informe_Legal_Digital();
+                success = oLog_Informe_Legal_Digital.AnularFirmaPorInforme(codInforme);
+                if (success)
+                {
+                    string pathGenerado = Path.Combine(pathDocumento, $"{codificacion}");
+                    if (System.IO.File.Exists(pathGenerado)) System.IO.File.Delete(pathGenerado);
+                }
+                msj = "Se anularon las firmas correctamente";
+            }
+            catch (Exception)
+            {
+                success = false;
+                msj = "Error al anular firmas";
+            }
+
+            return Json(new { success, msj });
         }
 
     }

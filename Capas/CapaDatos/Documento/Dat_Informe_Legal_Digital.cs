@@ -44,15 +44,15 @@ namespace CapaDatos.Documento
                                 dBOracle.ManExecute(cn, tr, "DOC_OSINFOR_ERP_MIGRACION.SPFISCALIZACION_INFORME_LEGAL_DIGITAL_RSD_GRABAR", param);
                             }
                         }
-                        if (oILegal.EXPEDIENTES != null)
+                        if (oILegal.REFERENCIAS != null)
                         {
-                            foreach (var item in oILegal.EXPEDIENTES)
+                            foreach (var item in oILegal.REFERENCIAS)
                             {
-                                if(item.RegEstado == 1) //Nuevo o modificado
+                                if (item.RegEstado == 1) //Nuevo o modificado
                                 {
                                     object[] param = { item.COD_ILEGAL, item.CODIGO, item.NUMERO, item.PDF_DOCUMENTO, item.TIPO_DOCUMENTO, item.SUBTIPO, 1 };
                                     dBOracle.ManExecute(cn, tr, "DOC_OSINFOR_ERP_MIGRACION.spILEGAL_DET_ACCIONGrabar", param);
-                                }                                
+                                }
                             }
                         }
                         if (oILegal.DOCUMENTOS != null)
@@ -77,6 +77,23 @@ namespace CapaDatos.Documento
                             {
                                 object[] param = { codInformeDigital, item.item, item.codResolucion, item.codInciso, item.titulo, Convert.ToInt16(item.flgDesvirtua), Convert.ToInt16(item.flgSubsana), item.parrafos, item.estado, item.accion };
                                 dBOracle.ManExecute(cn, tr, "DOC_OSINFOR_ERP_MIGRACION.SPFISCALIZACION_INFORME_LEGAL_DIGITAL_INFRACCION_GRABAR", param);
+                            }
+                        }
+                        if (oILegal.ANTECEDENTES != null)
+                        {
+                            foreach (var item in oILegal.ANTECEDENTES)
+                            {
+                                object[] param = {
+                                    codInformeDigital,
+                                    item.item, item.codResolucion,
+                                    item.tipoDocumento, item.numero,
+                                    string.IsNullOrEmpty(item.fechaEmision) ? default(DateTime?) : Convert.ToDateTime(item.fechaEmision),
+                                    string.IsNullOrEmpty(item.fechaNotificacion) ? default(DateTime?) : Convert.ToDateTime(item.fechaNotificacion),
+                                    item.estado,
+                                    item.accion
+                                };
+
+                                dBOracle.ManExecute(cn, tr, "DOC_OSINFOR_ERP_MIGRACION.SPFISCALIZACION_INFORME_LEGAL_DIGITAL_ANTECEDENTES_GRABAR", param);
                             }
                         }
 
@@ -126,7 +143,7 @@ namespace CapaDatos.Documento
                                 while (dr.Read())
                                 {
                                     vm.COD_INFORME_DIGITAL = dr["VCODINFORMEDIGITAL"].ToString();
-                                    vm.COD_INFORME = dr["VCODINFORME"].ToString();                                    
+                                    vm.COD_INFORME = dr["VCODINFORME"].ToString();
                                     vm.TRAMITE_ID = dr["NTRAMITEID"] != DBNull.Value ? Convert.ToInt32(dr["NTRAMITEID"]) : default(int?);
                                     vm.NUM_INFORME_SITD = dr["VNUMINFORMESITD"].ToString();
                                     vm.COD_PROCEDENCIA = dr["VCODPROCEDENCIA"].ToString();
@@ -251,6 +268,28 @@ namespace CapaDatos.Documento
                                     vm.INFRACCIONES.Add(objEN);
                                 }
                             }
+
+                            //ANTECEDENTES
+                            dr.NextResult();
+                            if (dr.HasRows)
+                            {
+                                VM_INFORME_LEGAL_DIGITAL_ANTECEDENTE objEN = null;
+                                while (dr.Read())
+                                {
+                                    objEN = new VM_INFORME_LEGAL_DIGITAL_ANTECEDENTE();
+                                    objEN.codInformeDigital = dr["VCODINFORMEDIGITAL"].ToString();
+                                    objEN.item = Convert.ToInt32(dr["NITEM"]);
+                                    objEN.codResolucion = dr["VCODRESOLUCION"].ToString();
+                                    objEN.tipoDocumento = dr["VTIPODOCUMENTO"].ToString();
+                                    objEN.numero = dr["VNUMERO"].ToString();
+                                    objEN.fechaEmision = dr["DFECHAEMISION"] != DBNull.Value ? Convert.ToDateTime(dr["DFECHAEMISION"]).ToShortDateString() : null;
+                                    objEN.fechaNotificacion = dr["DFECHANOTIFICACION"] != DBNull.Value ? Convert.ToDateTime(dr["DFECHANOTIFICACION"]).ToShortDateString() : null;
+                                    objEN.estado = Convert.ToInt32(dr["NESTADO"]);
+                                    objEN.accion = 1;
+
+                                    vm.ANTECEDENTES.Add(objEN);
+                                }
+                            }
                         }
                     }
 
@@ -262,6 +301,47 @@ namespace CapaDatos.Documento
 
                 throw ex;
             }
+        }
+
+        public List<VM_INFORME_LEGAL_DIGITAL_ANTECEDENTE> ObtenerAntecedentesRSD(string COD_RESOLUCION, string COD_THABILITANTE)
+        {
+            List<VM_INFORME_LEGAL_DIGITAL_ANTECEDENTE> vm = null;
+
+            try
+            {
+                using (OracleConnection cn = new OracleConnection(BDConexion.Conexion_Cadena_SIGO()))
+                {
+                    cn.Open();
+                    using (OracleDataReader dr = dBOracle.SelDrdDefault(cn, "DOC_OSINFOR_ERP_MIGRACION.SPFISCALIZACION_INFORME_LEGAL_DIGITAL_ANTECEDENTES", COD_RESOLUCION, COD_THABILITANTE))
+                    {
+                        if (dr != null)
+                        {
+                            if (dr.HasRows)
+                            {
+                                vm = new List<VM_INFORME_LEGAL_DIGITAL_ANTECEDENTE>();
+
+                                VM_INFORME_LEGAL_DIGITAL_ANTECEDENTE objEN = null;
+
+                                while (dr.Read())
+                                {
+                                    objEN = new VM_INFORME_LEGAL_DIGITAL_ANTECEDENTE();
+                                    objEN.tipoDocumento = dr["TIPO_DOCUMENTO"].ToString();
+                                    objEN.numero = dr["NUMERO"].ToString();
+                                    objEN.fechaEmision = (dr["FECHA_EMISION"] != DBNull.Value) ? dr["FECHA_EMISION"].ToString().Trim() : null;
+                                    objEN.fechaNotificacion = (dr["FECHA_NOTIFICACION"] != DBNull.Value) ? dr["FECHA_NOTIFICACION"].ToString().Trim() : null;
+                                    vm.Add(objEN);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+
+            return vm;
         }
 
         public VM_PERSONA_DET_CORREO PersonaCorreo(string COD_PERSONA)
@@ -390,6 +470,58 @@ namespace CapaDatos.Documento
             }
 
             return txSuccess;
+        }
+
+        public bool CambiarEstado(string codInformeDigital, DateTime fechaOperacion, int estado, string codUsuarioOperacion)
+        {
+
+            bool success = false;
+            using (OracleConnection cn = new OracleConnection(BDConexion.Conexion_Cadena_SIGO()))
+            {
+                cn.Open();
+
+                try
+                {
+                    object[] param = { codInformeDigital, fechaOperacion, estado, codUsuarioOperacion };
+                    dBOracle.ManExecute(cn, null, "DOC_OSINFOR_ERP_MIGRACION.SPFISCALIZACION_INFORME_LEGAL_DIGITAL_ESTADO_ACTUALIZAR", param);
+                    success = true;
+                }
+                catch (Exception ex)
+                {
+                    throw ex;
+                }
+            }
+            return success;
+        }
+
+        public bool AnularFirmaPorInforme(string codInforme)
+        {
+
+            bool success = false;
+            OracleTransaction tr = null;
+            using (OracleConnection cn = new OracleConnection(BDConexion.Conexion_Cadena_SIGO()))
+            {
+                cn.Open();
+                tr = cn.BeginTransaction();
+                try
+                {
+                    object[] param = { codInforme, "ANULAR_FIRMA_POR_INFORME", "" };
+                    dBOracle.ManExecute(cn, tr, "DOC_OSINFOR_ERP_MIGRACION.SPFISCALIZACION_INFORME_LEGAL_DIGITAL_OPERACION", param);
+                    tr.Commit();
+                    success = true;
+                }
+                catch (Exception ex)
+                {
+                    if (tr != null)
+                    {
+                        tr.Rollback();
+                        tr.Dispose();
+                        tr = null;
+                    }
+                    throw ex;
+                }
+            }
+            return success;
         }
     }
 }

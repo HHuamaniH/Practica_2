@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 
 namespace CapaEntidad.ViewModel
@@ -8,7 +9,8 @@ namespace CapaEntidad.ViewModel
         public VM_INFORME_LEGAL_DIGITAL()
         {
             this.RSD = new List<VM_INFORME_LEGAL_DIGITAL_VS_RSD>();
-            this.EXPEDIENTES = new List<VM_INFORME_LEGAL_EXPEDIENTE_SITD>();
+            this.ANTECEDENTES = new List<VM_INFORME_LEGAL_DIGITAL_ANTECEDENTE>();
+            this.REFERENCIAS = new List<VM_INFORME_LEGAL_REFERENCIA_SITD>();
             this.DOCUMENTOS = new List<VM_INFORME_LEGAL_DIGITAL_DOCUMENTO>();
             this.PARTICIPANTES = new List<VM_INFORME_LEGAL_DIGITAL_PARTICIPANTE>();
             this.INFRACCIONES = new List<VM_INFORME_LEGAL_DIGITAL_INFRACCION>();
@@ -60,7 +62,8 @@ namespace CapaEntidad.ViewModel
         public int ESTADO { get; set; }
 
         public List<VM_INFORME_LEGAL_DIGITAL_VS_RSD> RSD { get; set; }
-        public List<VM_INFORME_LEGAL_EXPEDIENTE_SITD> EXPEDIENTES { get; set; }
+        public List<VM_INFORME_LEGAL_DIGITAL_ANTECEDENTE> ANTECEDENTES { get; set; }
+        public List<VM_INFORME_LEGAL_REFERENCIA_SITD> REFERENCIAS { get; set; }
         public List<VM_INFORME_LEGAL_DIGITAL_DOCUMENTO> DOCUMENTOS { get; set; }
         public List<VM_INFORME_LEGAL_DIGITAL_PARTICIPANTE> PARTICIPANTES { get; set; }
         public List<VM_INFORME_LEGAL_DIGITAL_INFRACCION> INFRACCIONES { get; set; }
@@ -77,7 +80,7 @@ namespace CapaEntidad.ViewModel
         public int accion { get; set; }
     }
 
-    public class VM_INFORME_LEGAL_EXPEDIENTE_SITD
+    public class VM_INFORME_LEGAL_REFERENCIA_SITD
     {
         public string COD_ILEGAL { get; set; }
         public string COD_ILACCION { get; set; }
@@ -126,6 +129,19 @@ namespace CapaEntidad.ViewModel
         public bool flgDesvirtua { get; set; }
         public bool flgSubsana { get; set; }
         public string parrafos { get; set; }
+        public int? estado { get; set; }
+        public int accion { get; set; }
+    }
+
+    public class VM_INFORME_LEGAL_DIGITAL_ANTECEDENTE
+    {
+        public string codInformeDigital { get; set; }
+        public int item { get; set; }
+        public string codResolucion { get; set; }
+        public string tipoDocumento { get; set; }
+        public string numero { get; set; }
+        public string fechaEmision { get; set; }
+        public string fechaNotificacion { get; set; }
         public int? estado { get; set; }
         public int accion { get; set; }
     }

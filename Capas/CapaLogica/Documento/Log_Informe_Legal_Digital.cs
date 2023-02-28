@@ -3,6 +3,7 @@ using CapaDatos.Documento;
 using CapaEntidad.Documento;
 using CapaEntidad.ViewModel;
 using System;
+using System.Collections.Generic;
 
 namespace CapaLogica.Documento
 {
@@ -55,6 +56,11 @@ namespace CapaLogica.Documento
             return oDat_Informe_Legal_Digital.ObtenerInforme(COD_RESOLUCION);
         }
 
+        public List<VM_INFORME_LEGAL_DIGITAL_ANTECEDENTE> ObtenerAntecedentesRSD(string COD_RESOLUCION, string COD_THABILITANTE)
+        {
+            return oDat_Informe_Legal_Digital.ObtenerAntecedentesRSD(COD_RESOLUCION, COD_THABILITANTE);
+        }
+
         public VM_PERSONA_DET_CORREO PersonaCorreo(string COD_PERSONA)
         {
             return oDat_Informe_Legal_Digital.PersonaCorreo(COD_PERSONA);
@@ -73,6 +79,16 @@ namespace CapaLogica.Documento
         public bool ParticipanteActualizar(VM_INFORME_LEGAL_DIGITAL_PARTICIPANTE item)
         {
             return oDat_Informe_Legal_Digital.ParticipanteActualizar(item);
+        }
+
+        public bool CambiarEstado(string codInformeDigital, DateTime fechaOperacion, int estado, string codUsuarioOperacion)
+        {
+            return oDat_Informe_Legal_Digital.CambiarEstado(codInformeDigital, fechaOperacion, estado, codUsuarioOperacion);
+        }
+
+        public bool AnularFirmaPorInforme(string codInforme)
+        {
+            return oDat_Informe_Legal_Digital.AnularFirmaPorInforme(codInforme);
         }
     }
 }

@@ -43,7 +43,7 @@
                         <a class="dropdown-item" href="javascript:void(0);" onclick="_informe.ENVIAR_REVISION()">Enviar a revisión</a>
                     </template>
                     <template v-if="Informe.ESTADO == States.EN_REVISION">
-                        <a class="dropdown-item" href="javascript:void(0);" onclick="_informe.SITD_OPEN()">Generar/Modificar expediente SITD</a>
+                        <a class="dropdown-item" href="javascript:void(0);" onclick="_informe.SITD_OPEN()">Generar/Modificar documento SITD</a>
                         <div class="dropdown-divider"></div>
                         <a class="dropdown-item" href="javascript:void(0);" onclick="_informe.DESCARGAR_ARCHIVO_REVISION()">Descargar documento para revisión</a>
                         <a class="dropdown-item" href="javascript:void(0);" onclick="_informe.REVISION_CARGAR_ARCHIVO()">Cargar documento revisado</a>
@@ -118,25 +118,47 @@
     <div class="card-body" v-if="Informe.COD_INFORME">
         <fieldset class="fs-border" v-bind:disabled="Informe.ESTADO > States.EN_REVISION">
             <legend>Datos Generales</legend>
-            <div class="form-row">
-                <div class="col-sm-4">
-                    <div class="form-group form-group-sm">
-                        <label class="col-form-label text-small">Procedencia</label>
-                        <select class="form-control form-control-sm" v-model="Informe.COD_PROCEDENCIA">
-                            <option v-for="(item, index) in Procedencias" :value="item.COD_PROCEDENCIA">{{item.PROCEDENCIA}}</option>
-                        </select>
+            <div class="form-row align-items-center">
+                <div class="col-sm-7">
+                    <div class="form-row">
+                        <div class="col-sm-6">
+                            <div class="form-group form-group-sm">
+                                <label class="col-form-label text-small">Procedencia</label>
+                                <select class="form-control form-control-sm" v-model="Informe.COD_PROCEDENCIA">
+                                    <option v-for="(item, index) in Procedencias" :value="item.COD_PROCEDENCIA">{{item.PROCEDENCIA}}</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group form-group-sm">
+                                <label class="col-form-label text-small">Tipo de IFI</label>
+                                <select class="form-control form-control-sm" v-model="Informe.COD_TIPO_INFORME">
+                                    <option value="1">Con Descargo</option>
+                                    <option value="2">Sin Descargo</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="col-sm-6">
+                            <div class="form-group form-group-sm">
+                                <label class="col-form-label text-small">Materia</label>
+                                <select class="form-control form-control-sm" v-on:change="MateriaOnChange()" v-model="Informe.COD_MATERIA">
+                                    <option v-for="(item, index) in Materias" :value="item.COD_MATERIA">{{item.MATERIA}}</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group form-group-sm">
+                                <label class="col-form-label text-small">Modalidad</label>
+                                <select class="form-control form-control-sm" v-model="Informe.COD_MODALIDAD">
+                                    <option v-for="(item, index) in Modalidades" :value="item.COD_MODALIDAD">{{item.MODALIDAD}}</option>
+                                </select>
+                            </div>
+                        </div>
                     </div>
                 </div>
-                <div class="col-sm-2">
-                    <div class="form-group form-group-sm">
-                        <label class="col-form-label text-small">Tipo de IFI</label>
-                        <select class="form-control form-control-sm" v-model="Informe.COD_TIPO_INFORME">
-                            <option value="1">Con Descargo</option>
-                            <option value="2">Sin Descargo</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="col-sm-4 ml-auto">
+                <div class="col-sm-5">
                     <div class="form-group form-group-sm text-center">
                         <label class="col-form-label text-small">N° de Informe Final de Instrucción</label>
                         <h4 class="mt-2">
@@ -145,58 +167,39 @@
                     </div>
                 </div>
             </div>
-            <div class="form-row">
-                <div class="col-sm-2">
-                    <div class="form-group form-group-sm">
-                        <label class="col-form-label text-small">Materia</label>
-                        <select class="form-control form-control-sm" v-on:change="MateriaOnChange()" v-model="Informe.COD_MATERIA">
-                            <option v-for="(item, index) in Materias" :value="item.COD_MATERIA">{{item.MATERIA}}</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="col-sm-2">
-                    <div class="form-group form-group-sm">
-                        <label class="col-form-label text-small">Modalidad</label>
-                        <select class="form-control form-control-sm" v-model="Informe.COD_MODALIDAD">
-                            <option v-for="(item, index) in Modalidades" :value="item.COD_MODALIDAD">{{item.MODALIDAD}}</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="col-sm-auto">
-                    <div class="form-group form-group-sm">
-                        <label class="col-form-label text-small">
-                            Referencia N° RSD <a class="btn btn-link btn-sm p-0 ml-2 text-success" v-on:click="AgregarRSD()" style="font-size: 0.8rem;">Agregar</a>
-                        </label>
-                        <div>
-                            <span class="chip badge badge-success rounded mr-2 mt-1" v-for="(item, index) in Informe.RSD">
-                                <a class="text-white" target="_blank" v-bind:href="_informe.ObtenerRutaResolucion(item)">{{item.numInforme}}</a>
-                                <i class="fa fa-times-circle" title="Eliminar resolución" v-on:click="_informe.EliminarResolucion(item, index)"></i>
+            <div class="mt-1 mb-3">
+                <h5>Referencias</h5>
+                <div class="form-group form-group-sm">
+                    <label class="col-form-label text-small">
+                        Resoluciones Sub Directorales (RSD) <a class="btn btn-link btn-sm p-0 ml-2 text-success" v-on:click="AgregarRSD()" style="font-size: 0.8rem;">Agregar</a>
+                    </label>
+                    <div>
+                        <span class="chip badge badge-success rounded mr-2 mt-1" v-for="(item, index) in Informe.RSD">
+                            <a class="text-white" target="_blank" v-bind:href="_informe.ObtenerRutaResolucion(item)">{{item.numInforme}}</a>
+                            <i class="fa fa-times-circle" title="Eliminar resolución" v-on:click="_informe.EliminarResolucion(item, index)"></i>
+                        </span>
+                        <template v-if="!Informe.RSD?.length">
+                            <span class="chip badge badge-danger rounded mt-1">
+                                <i class="fa fa-info-circle"></i> No hay resoluciones asociadas
                             </span>
-                            <template v-if="!Informe.RSD?.length">
-                                <span class="chip badge badge-danger rounded mt-1">
-                                    <i class="fa fa-info-circle"></i> No hay resoluciones asociadas
-                                </span>
-                            </template>
-                        </div>
+                        </template>
                     </div>
-                </div>                
-            </div>
-            <div class="mt-1 mb-3">                
+                </div>
                 <div class="table-responsive">
                     <table class="table table-hover table-bordered" style="margin-bottom: 0 !important;">
                         <thead>
                             <tr role="row">
                                 <th colspan="100%" class="text-sm-left" rowspan="1">
                                     <div class="form-inline">
-                                        <i class="fa mx-2 fa-lg fa-file-o" style="cursor:pointer;" onclick="modal_expedientes.Abrir();" v-if="Informe.ESTADO != States.FINALIZADO" data-toggle="tooltip" data-placement="top" title="Nuevo"></i>
-                                        <strong>Lista de expedientes SITD</strong>
+                                        <i class="fa mx-2 fa-lg fa-file-o" style="cursor:pointer;" onclick="modal_referencias.Abrir();" v-if="Informe.ESTADO != States.FINALIZADO" data-toggle="tooltip" data-placement="top" title="Nuevo"></i>
+                                        <strong>Otras referencias / documentos SITD</strong>
                                     </div>
                                 </th>
                             </tr>
                             <tr>
                                 <th style="width: 30px;" v-if="Informe.ESTADO != States.FINALIZADO"></th>
                                 <th class="text-center" style="width: 30px;">N°</th>
-                                <th class="text-center">GRUPO</th>
+                                <th class="text-center"></th>
                                 <th class="text-center">CÓDIGO</th>
                                 <th class="text-center">NUM. DOCUMENTO</th>
                                 <th class="text-center">TIPO DOCUMENTO</th>
@@ -204,9 +207,9 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr v-for="(item, index) in Informe.EXPEDIENTES">
+                            <tr v-for="(item, index) in Informe.REFERENCIAS">
                                 <td class="text-center" v-if="Informe.ESTADO != States.FINALIZADO">
-                                    <i class="fa fa-lg fa-window-close" style="color:red;cursor:pointer;" title="Eliminar" v-on:click="_informe.fnEliminarExpediente(item, index)"></i>
+                                    <i class="fa fa-lg fa-window-close" style="color:red;cursor:pointer;" title="Eliminar" v-on:click="_informe.fnEliminarReferencia(item, index)"></i>
                                 </td>
                                 <td class="text-center">{{index + 1}}</td>
                                 <td class="text-center">{{item.SUBTIPO_DETALLE}}</td>
@@ -217,11 +220,11 @@
                                     <a href="javascript:void(0);" v-on:click="_informe.DescargarDocumentoSITD(item)" v-if="item.PDF_DOCUMENTO">Descargar</a>
                                 </td>
                             </tr>
-                            <tr class="odd" v-if="!Informe.EXPEDIENTES?.length">
+                            <tr class="odd" v-if="!Informe.REFERENCIAS?.length">
                                 <td valign="top" colspan="100" class="text-center">No existen datos registrados</td>
                             </tr>
                         </tbody>
-                    </table>                    
+                    </table>
                 </div>
             </div>
             <h5>Administrado</h5>
@@ -284,7 +287,7 @@
                     </div>
                 </div>
             </div>
-            <h5>Lugar donde se registra</h5>
+            <h5>Ubicación del Titular</h5>
             <div class="form-row">
                 <div class="col-sm-4">
                     <div class="form-group">
@@ -627,12 +630,15 @@
             <div class="modal-body">
                 <div class="row align-items-start mb-2">
                     <div class="col-auto">
-                        <span class="col-form-label col-form-label-sm">Destinatarios</span>
+                        <span class="col-form-label col-form-label-sm">
+                            Destinatarios
+                            <i class="fa fa-plus-circle fa-lg ml-2 text-success cursor-pointer" v-on:click="Agregar()" title="Agregar destinatario"></i>
+                        </span>
                     </div>
                     <div class="col">
                         <div class="form-check form-check-inline mb-3" v-for="(item, index) in form.Destinatarios">
                             <input class="form-check-input" type="checkbox" :id="'cb_'+ index" :value="item" v-model="form.Seleccionados" checked>
-                            <label class="form-check-label mt-0" :for="'cb_'+ index">{{item.email}}</label>
+                            <label class="form-check-label mt-0 small" :for="'cb_'+ index" v-bind:title="item.email">{{item.persona}}</label>
                         </div>
                         <span class="small" v-if="!form.Destinatarios.length">
                             No hay destinatarios disponibles
@@ -640,7 +646,14 @@
                     </div>
                 </div>
                 <div class="mb-3">
-                    <input type="text" class="form-control" placeholder="C.C." v-model="form.CC" />
+                    <div class="input-group input-group-sm">
+                        <input type="text" class="form-control" placeholder="C.C." v-model="form.CC" />
+                        <div class="input-group-append">
+                            <button type="button" class="btn btn-outline-secondary" v-on:click="Agregar_CC()">
+                                <i class="fa fa-search"></i>
+                            </button>
+                        </div>
+                    </div>
                 </div>
                 <editor v-model="form.Mensaje"></editor>
             </div>
@@ -708,10 +721,10 @@
                     </div>
                 </div>
                 <div class="form-group">
-                    <label class="col-form-label">Referencias (Expedientes SITD):</label>
+                    <label class="col-form-label">Referencias:</label>
                     <div>
-                        <span class="chip badge badge-success rounded mr-2 mt-1" v-for="(item, index) in app.Informe.EXPEDIENTES">
-                            {{item.CODIGO}}
+                        <span class="chip badge badge-success rounded mr-2 mt-1" v-for="(item, index) in app.Informe.REFERENCIAS">
+                            {{item.CODIGO || 'S/N'}}
                         </span>
                     </div>
                 </div>
@@ -819,28 +832,31 @@
     </div>
 </div>
 
-<div id="modal-expedientes" class="modal fade" data-backdrop="static">
+<div id="modal-referencias" class="modal fade" data-backdrop="static">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header text-small" style="cursor:move;">
-                <span>Expedientes SITD</span>
+                <span>Documentos SITD</span>
                 <i class="fa fa-close" style="cursor:pointer;" data-dismiss="modal" aria-label="Close"></i>
             </div>
             <div class="modal-body">
                 <div class="form-row">
                     <div class="col-md-auto mb-3">
-                        <label class="control-label small">Grupo</label>
-                        <select class="form-control form-control-sm" v-model="subtipo">
-                            <option v-for="item in subtipos" v-bind:value="item.SUBTIPO">{{item.DESCRIPCION}}</option>
+                        <label class="control-label small">Categoria</label>
+                        <select class="form-control form-control-sm" v-model="categoria">
+                            <option value="DOC_SALIDA">Documentos de Salida</option>
+                            <option value="DOC_ENTRADA">Documentos de Entrada</option>
+                            <option value="DOC_GENERADOS">Documentos Internos</option>
+                            <option value="DOC_SALIDA_MEM">Documentos de Salida (Memorandums)</option>
                         </select>
                     </div>
-                    <div class="col-md-3 mb-3">
-                        <label class="control-label small">Filtrar por</label>
-                        <select class="form-control form-control-sm" v-model="filtro">
-                            <option value="CNRODOCUMENTO">Nro Documento</option>
-                            <option value="CCODIFICACION">Codigo Asignado</option>
-                        </select>
-                    </div>
+                    @*<div class="col-md-3 mb-3">
+                            <label class="control-label small">Filtrar por</label>
+                            <select class="form-control form-control-sm" v-model="filtro">
+                                <option value="CNRODOCUMENTO">Nro Documento</option>
+                                <option value="CCODIFICACION">Codigo Asignado</option>
+                            </select>
+                        </div>*@
                     <div class="col-md mb-3">
                         <label class="control-label small">&nbsp;</label>
                         <div class="input-group input-group-sm">
@@ -854,7 +870,7 @@
                     </div>
                 </div>
                 <div class="table-responsive">
-                    <table id="dtExpedientes" class="table table-hover table-bordered w-100">
+                    <table id="dtReferencias" class="table table-hover table-bordered w-100">
                         <thead></thead>
                         <tbody></tbody>
                     </table>
@@ -866,5 +882,40 @@
         </div>
     </div>
 </div>
+
+<div id="modal-referencias-tipo" class="modal fade" data-backdrop="static">
+    <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content">
+            <div class="modal-header text-small" style="cursor:move;">
+                <span>Agregar documento como...</span>
+                <i class="fa fa-close" style="cursor:pointer;" data-dismiss="modal" aria-label="Close"></i>
+            </div>
+            <div class="modal-body">
+                <div class="form-row">
+                    <div class="col-md-auto mb-3">
+                        <label class="control-label small">Grupo</label>
+                        <select class="form-control form-control-sm" v-model="subtipo">
+                            <option v-for="item in subtipos" v-bind:value="item.SUBTIPO">{{item.DESCRIPCION}}</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary btn-sm" v-on:click="Aceptar()">Aceptar</button>
+                <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Salir</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script id="tmpl-notificacion-calidad" type="text/x-jquery-tmpl">
+    <p>
+        Estimado(a)<br /><br />Adjunto el enlace de descarga del Informe Final de Instrucción Nro ${NUM_INFORME_SITD},
+        debidamente revisado y firmado por los involucrados para el control de calidad respectivo.<br /><br />
+        <strong>URL Descarga:</strong>&nbsp;<a target="_blank" href="${URL_DESCARGA}">${NUM_INFORME_SITD || 'Enlace de descarga'}</a><br /><br />
+        Atentamente<br />
+        ${USUARIO}
+    </p>
+</script>
 
 <div id="partialviews"></div>
