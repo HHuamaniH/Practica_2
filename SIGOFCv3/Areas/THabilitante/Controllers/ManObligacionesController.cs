@@ -24,6 +24,7 @@ namespace SIGOFCv3.Areas.THabilitante.Controllers
             try
             {
                 ViewBag.TituloFormulario = "Obligación";
+                ServicePointManager.SecurityProtocol = (SecurityProtocolType)3072;
 
                 using (WebClient obj = new WebClient())
                 {
