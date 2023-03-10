@@ -18,7 +18,7 @@ const States = {
     FINALIZADO: 5
 };
 
-const regExpOSINFOR = /([0-9]*-[0-9]{4}-OSINFOR\/[0-9]{1,2}\.[0-9]{1,2}(\.[0-9]{1,2})?)/gi;
+const regExpOSINFOR = /([^\s]+-OSINFOR\/[0-9]{1,}\.[0-9]{1,}(\.[0-9]{1,})?)/gi;
 
 const data = {
     Modalidades: [
