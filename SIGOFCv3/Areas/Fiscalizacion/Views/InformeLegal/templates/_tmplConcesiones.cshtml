@@ -116,7 +116,7 @@
             <ul>
                 {{each(i, infr) INFRACCIONES}}
                 <li>
-                    Respecto de la infracción tipificada como ${infr.gravedad?.toLowerCase()} en el numeral ${infr.inciso} del Cuadro de Infracciones y Sanciones en Materia Forestal del Anexo 1 del RISMFFS, con una {{if infr.tipoInfraccion > 1}}multa ascendente a XXX UIT{{else}}amonestación{{/if}}.
+                    Respecto de la infracción tipificada como ${infr.gravedad?.toLowerCase()} en el numeral ${infr.inciso} del Cuadro de Infracciones y Sanciones en Materia Forestal del Anexo 1 del RISMFFS, con una {{if infr.tipoInfraccion > 1}}multa ascendente ${infr.rangoSancion || 'XX A XX UIT'} {{else}}amonestación{{/if}}.
                 </li>
                 {{/each}}
             </ul>

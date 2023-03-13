@@ -1411,6 +1411,7 @@ $(function () {
                                     inciso: infraccion.DESCRIPCION_ENCISOS,
                                     gravedad: infraccion.GRAVEDAD,
                                     tipoInfraccion: infraccion.TIPO_INFRACCION,
+                                    rangoSancion: infraccion.RANGO_SANCION,
                                     titulo,
                                     detalle: infraccion.DESCRIPCION_INFRACCIONES,
                                     flgDesvirtua: false,

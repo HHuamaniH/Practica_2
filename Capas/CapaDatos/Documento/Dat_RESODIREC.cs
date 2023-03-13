@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
+using System.Runtime.Remoting;
 using CEntidadC = CapaEntidad.DOC.Ent_RESODIREC;
 using SQL = GeneralSQL.Data.SQL;
 using Tra_M_Tramite = CapaEntidad.DOC.Tra_M_Tramite;
@@ -2500,6 +2501,7 @@ namespace CapaDatos.DOC
                                 ocampoEnt.TEXTO_ENCISO = dr["TEXTO_ENCISO"].ToString();
                                 ocampoEnt.GRAVEDAD = dr["GRAVEDAD"]?.ToString();
                                 ocampoEnt.TIPO_INFRACCION = dr["TIPO_INFRACCION"] != DBNull.Value ? Int32.Parse(dr["TIPO_INFRACCION"].ToString()) : default(int?);
+                                ocampoEnt.RANGO_SANCION = dr["RANGO_SANCION"]?.ToString();
                                 ocampoEnt.COD_ESPECIES = dr["COD_ESPECIES"].ToString();
                                 ocampoEnt.DESCRIPCION_ESPECIE = dr["DESCRIPCION_ESPECIE"].ToString();
                                 ocampoEnt.VOLUMEN = Decimal.Parse(dr["VOLUMEN"].ToString());

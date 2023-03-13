@@ -126,6 +126,7 @@ namespace CapaEntidad.ViewModel
         public string inciso { get; set; }
         public string gravedad { get; set; }
         public int? tipoInfraccion { get; set; }
+        public string rangoSancion { get; set; }
         public string titulo { get; set; }
         public string detalle { get; set; }
         public bool flgDesvirtua { get; set; }

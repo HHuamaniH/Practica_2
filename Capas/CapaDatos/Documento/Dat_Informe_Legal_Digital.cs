@@ -261,6 +261,7 @@ namespace CapaDatos.Documento
                                     objEN.detalle = dr["DESCRIPCION_INFRACCIONES"].ToString();
                                     objEN.gravedad = dr["GRAVEDAD"]?.ToString();
                                     objEN.tipoInfraccion = dr["TIPO_INFRACCION"] != DBNull.Value ? Convert.ToInt32(dr["TIPO_INFRACCION"].ToString()) : default(int?);
+                                    objEN.rangoSancion = dr["RANGO_SANCION"]?.ToString();
                                     objEN.flgDesvirtua = Convert.ToBoolean(dr["NFLAGDESVIRTUA"]);
                                     objEN.flgSubsana = Convert.ToBoolean(dr["NFLAGSUBSANA"]);
                                     objEN.parrafos = dr["VPARRAFOS"] != DBNull.Value ? dr["VPARRAFOS"].ToString() : null;
