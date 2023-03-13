@@ -22,10 +22,10 @@ const regExpOSINFOR = /([^\s]+-OSINFOR\/[0-9]{1,}\.[0-9]{1,}(\.[0-9]{1,})?)/gi;
 
 const data = {
     Modalidades: [
-        { COD_MODALIDAD: '01', COD_MATERIA: '02', MODALIDAD: 'Concesiones' },
-        { COD_MODALIDAD: '02', COD_MATERIA: '02', MODALIDAD: 'Predios privados' },
-        { COD_MODALIDAD: '03', COD_MATERIA: '02', MODALIDAD: 'Comunidades nativas' },
-        { COD_MODALIDAD: '04', COD_MATERIA: '01', MODALIDAD: 'Fauna' },
+        { COD_MODALIDAD: '01', COD_MATERIA: '02', MODALIDAD: 'Concesiones', CONTRATO: 'contrato de concesión' },
+        { COD_MODALIDAD: '02', COD_MATERIA: '02', MODALIDAD: 'Predios privados', CONTRATO: 'contrato de predios privados' },
+        { COD_MODALIDAD: '03', COD_MATERIA: '02', MODALIDAD: 'Comunidades nativas', CONTRATO: 'contrato de comunidades nativas' },
+        { COD_MODALIDAD: '04', COD_MATERIA: '01', MODALIDAD: 'Fauna', CONTRATO: 'contrato de fauna' },
     ]
 };
 
@@ -224,24 +224,18 @@ _informe.RevisarFootnotes = function (infracciones, html) {
 
 _informe.Exportar = async function () {
     const informe = _informe.Estructura();
-    const [procedencias, materias] = JSON.parse(JSON.stringify([app.Procedencias, app.Materias]));
+    const [procedencias, materias, modalidades] = JSON.parse(JSON.stringify([app.Procedencias, app.Materias, data.Modalidades]));
 
     informe.PROCEDENCIA = procedencias.find(function (x) { return x.COD_PROCEDENCIA === informe.COD_PROCEDENCIA })?.PROCEDENCIA;
     informe.MATERIA = materias.find(function (x) { return x.COD_MATERIA === informe.COD_MATERIA })?.MATERIA;
+    informe.TIPO_CONTRATO = materias.find(function (x) { return x.COD_MODALIDAD === informe.COD_MODALIDAD })?.CONTRATO || '';
     informe.FECHA = fnDate.text_long(informe.RES_DIRECTORAL_FECHA || new Date());
     informe.SITD_PASSWORD = app.Tramite?.password || '';
     informe.SUBDIRECTOR = informe.PARTICIPANTES.find(function (x) { return x.funcion === 'Subdirector' })?.apellidosNombres || '[INDICAR SUBDIRECTOR]';
     //console.log(informe); //return;
 
     //EXPEDIENTES ADMINISTRATIVOS
-    informe.EXPEDIENTES_ADM = informe.REFERENCIAS.filter(x => x.TIPO_DOCUMENTO == 'EXPEDIENTE').map(x => (x.NUMERO || 'S/N')).join(', ');
-
-    //INFRACCIONES
-    for (var i = 0; i < informe.INFRACCIONES.length; i++) {
-        const infraccion = informe.INFRACCIONES[i];
-        const parrafos = await _informe.ExtraerParrafoInfraccion(infraccion, informe);
-        infraccion.parrafos = parrafos;
-    }
+    informe.EXPEDIENTE_ADM = informe.REFERENCIAS.filter(x => x.TIPO_DOCUMENTO == 'EXPEDIENTE').map(x => (x.NUMERO || 'S/N')).join(', ');
 
     //Asociamos las infracciones a las RSD en los antecedentes
     informe.ANTECEDENTES.forEach(item => {
@@ -258,11 +252,25 @@ _informe.Exportar = async function () {
         }
     });
 
+    informe.ANTECEDENTES_DOCS = {};
+    informe.ANTECEDENTES_DOCS.Carta = informe.ANTECEDENTES.find(x => x.tipoDocumento == 'Carta') || {};
+    informe.ANTECEDENTES_DOCS.Inf_Sup = informe.ANTECEDENTES.find(x => x.tipoDocumento == 'Informe de Supervisión') || {};
+    informe.ANTECEDENTES_DOCS.RSD = informe.ANTECEDENTES.find(x => x.tipoDocumento == 'Resolución Sub Directoral') || {};
+    informe.ANTECEDENTES_DOCS.Ced_Noti = informe.ANTECEDENTES.find(x => x.tipoDocumento == 'Cédula de Notificación') || {};
+    informe.ANTECEDENTES_DOCS.Escrito = informe.ANTECEDENTES.find(x => x.tipoDocumento == 'Escrito') || {};
+
+    //INFRACCIONES
+    for (var i = 0; i < informe.INFRACCIONES.length; i++) {
+        const infraccion = informe.INFRACCIONES[i];
+        const parrafos = await _informe.ExtraerParrafoInfraccion(infraccion, informe);
+        infraccion.parrafos = parrafos;
+    }
+
     const header = `<p style="text-align:center;"><img width="550" alt="" src="${urlLocalSigo}content/images/logo/osinfor-header-3.png"></p>`;
     //let footer = `<table style="width: 100%;"><tr><td style="text-align: right;">#CURRENTPAGE#</td></tr></table>`;
 
     informe.IMG_SANCION = [];
-    if (informe.FLG_SANCION && informe.SANCION_COD_CALCULO) {
+    if ([2,3].includes(informe.FLG_SANCION) && informe.SANCION_COD_CALCULO) {
         const images = await _informe.PDFToImgCalculoMulta();
         informe.IMG_SANCION = images;
     }
@@ -870,7 +878,7 @@ $(function () {
                 FLG_CUESTION_PREVIA: true,
                 FLG_REC_RESPONSABILIDAD: true,
                 FLG_GRAVEDAD_RIESGO: true,
-                FLG_SANCION: true,
+                FLG_SANCION: 0, // 0: Ninguna, 1: Amonestación, 2: Multa, 3: Amonestación y multa
                 SANCION_UIT: 0,
                 SANCION_COD_CALCULO: null,
                 FLG_MEDIDA_CORRECTIVA: true,
@@ -1401,6 +1409,8 @@ $(function () {
                                     codResolucion: item.COD_RESODIREC,
                                     codInciso: infraccion.COD_ILEGAL_ENCISOS,
                                     inciso: infraccion.DESCRIPCION_ENCISOS,
+                                    gravedad: infraccion.GRAVEDAD,
+                                    tipoInfraccion: infraccion.TIPO_INFRACCION,
                                     titulo,
                                     detalle: infraccion.DESCRIPCION_INFRACCIONES,
                                     flgDesvirtua: false,

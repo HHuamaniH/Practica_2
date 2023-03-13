@@ -171,7 +171,7 @@ namespace CapaDatos.Documento
                                     vm.FLG_CUESTION_PREVIA = Convert.ToBoolean(dr["NFLAGCUESTIONPREVIA"]);
                                     vm.FLG_REC_RESPONSABILIDAD = Convert.ToBoolean(dr["NFLAGRECRESPONSABILIDAD"]);
                                     vm.FLG_GRAVEDAD_RIESGO = Convert.ToBoolean(dr["NFLAGGRAVEDADRIESGO"]);
-                                    vm.FLG_SANCION = Convert.ToBoolean(dr["NFLAGSANCION"]);
+                                    vm.FLG_SANCION = Convert.ToInt16(dr["NFLAGSANCION"]);
                                     vm.SANCION_UIT = Convert.ToDecimal(dr["NSANCIONUIT"]);
                                     vm.SANCION_COD_CALCULO = dr["VSANCIONCODCALCULO"].ToString();
                                     vm.FLG_MEDIDA_CORRECTIVA = Convert.ToBoolean(dr["NFLAGMEDIDACORRECTIVA"]);
@@ -259,6 +259,8 @@ namespace CapaDatos.Documento
                                     objEN.inciso = dr["VINCISO"].ToString();
                                     objEN.titulo = dr["VTITULO"].ToString();
                                     objEN.detalle = dr["DESCRIPCION_INFRACCIONES"].ToString();
+                                    objEN.gravedad = dr["GRAVEDAD"]?.ToString();
+                                    objEN.tipoInfraccion = dr["TIPO_INFRACCION"] != DBNull.Value ? Convert.ToInt32(dr["TIPO_INFRACCION"].ToString()) : default(int?);
                                     objEN.flgDesvirtua = Convert.ToBoolean(dr["NFLAGDESVIRTUA"]);
                                     objEN.flgSubsana = Convert.ToBoolean(dr["NFLAGSUBSANA"]);
                                     objEN.parrafos = dr["VPARRAFOS"] != DBNull.Value ? dr["VPARRAFOS"].ToString() : null;

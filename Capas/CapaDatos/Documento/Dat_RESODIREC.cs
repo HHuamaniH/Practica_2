@@ -2473,7 +2473,7 @@ namespace CapaDatos.DOC
                             {
                                 result = new VM_RSD_Resumen();
                                 result.COD_THABILITANTE = dr["COD_THABILITANTE"].ToString();
-                                result.COD_TITULAR = dr["COD_TITULAR"].ToString();                                
+                                result.COD_TITULAR = dr["COD_TITULAR"].ToString();
                                 result.NUM_THABILITANTE = dr["NUM_THABILITANTE"].ToString();
                                 result.TITULAR = dr["TITULAR"].ToString();
                                 result.TITULAR_DOCUMENTO = dr["TITULAR_DOCUMENTO"].ToString();
@@ -2498,6 +2498,8 @@ namespace CapaDatos.DOC
                                 ocampoEnt.DESCRIPCION_ARTICULOS = dr["DESCRIPCION_ARTICULOS"].ToString();
                                 ocampoEnt.DESCRIPCION_ENCISOS = dr["DESCRIPCION_ENCISOS"].ToString();
                                 ocampoEnt.TEXTO_ENCISO = dr["TEXTO_ENCISO"].ToString();
+                                ocampoEnt.GRAVEDAD = dr["GRAVEDAD"]?.ToString();
+                                ocampoEnt.TIPO_INFRACCION = dr["TIPO_INFRACCION"] != DBNull.Value ? Int32.Parse(dr["TIPO_INFRACCION"].ToString()) : default(int?);
                                 ocampoEnt.COD_ESPECIES = dr["COD_ESPECIES"].ToString();
                                 ocampoEnt.DESCRIPCION_ESPECIE = dr["DESCRIPCION_ESPECIE"].ToString();
                                 ocampoEnt.VOLUMEN = Decimal.Parse(dr["VOLUMEN"].ToString());

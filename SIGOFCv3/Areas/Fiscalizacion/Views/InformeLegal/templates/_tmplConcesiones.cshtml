@@ -66,7 +66,7 @@
 
     </li>
     <li>
-        En atención a lo antes señalado, <strong>el concesionario ha reconocido su responsabilidad de forma expresa, por escrito y sin ninguna ambigüedad</strong>, respecto a las infracciones cuya comisión se le imputó en la Resolución Sub Directoral N° 00019-2022-OSINFOR/08.2.1; concluyéndose que su reconocimiento de responsabilidad reviste las formalidades previstas en la norma para considerarlo como tal, lo que constituye condición atenuante de responsabilidad.
+        En atención a lo antes señalado, <strong>el concesionario ha reconocido su responsabilidad de forma expresa, por escrito y sin ninguna ambigüedad</strong>, respecto a las infracciones cuya comisión se le imputó en la Resolución Sub Directoral N° ${ANTECEDENTES_DOCS.RSD.numero || 'XXXXX-XXXX-OSINFOR/08.2.1'}; concluyéndose que su reconocimiento de responsabilidad reviste las formalidades previstas en la norma para considerarlo como tal, lo que constituye condición atenuante de responsabilidad.
     </li>
     <li>
         <span>
@@ -114,29 +114,25 @@
         <span>
             La(s) infracción(es) acreditada(s) es(son) pasible(s) de ser sancionada(s) de la siguiente manera:
             <ul>
+                {{each(i, infr) INFRACCIONES}}
                 <li>
-                    Respecto de la infracción tipificada como leve en el numeral XX del Cuadro de Infracciones y Sanciones en Materia Forestal del Anexo 1 del RISMFFS, con una amonestación.
+                    Respecto de la infracción tipificada como ${infr.gravedad?.toLowerCase()} en el numeral ${infr.inciso} del Cuadro de Infracciones y Sanciones en Materia Forestal del Anexo 1 del RISMFFS, con una {{if infr.tipoInfraccion > 1}}multa ascendente a XXX UIT{{else}}amonestación{{/if}}.
                 </li>
-                <li>
-                    Respecto de la infracción tipificada como grave en el numeral XX del Cuadro de Infracciones y Sanciones en Materia Forestal del Anexo 1 del RISMFFS, con una multa ascendente a ${SANCION_UIT} UIT.
-                </li>
-                <li>
-                    Respecto de la infracción tipificada como muy grave en el numeral XX del Cuadro de Infracciones y Sanciones en Materia Forestal del Anexo 1 del RISMFFS, con una multa ascendente a ${SANCION_UIT} UIT.
-                </li>
+                {{/each}}
             </ul>
         </span>
     </li>
     <li>
-        Ahora bien, de acuerdo con el Reporte de Antecedentes, de fecha XX de XXXXXX de XXXX, se advierte que el/la concesionario/a no registra sanción de amonestación y/o multa impuesta por la Dirección de Fiscalización Forestal y de Fauna Silvestre. En esa línea, se puede considerar que la concesionaria no ha incurrido en reincidencia.
+        Ahora bien, de acuerdo con el Reporte de Antecedentes, de fecha XX de XXXXXX de XXXX, se advierte que el/la concesionario/a no registra sanción de amonestación y/o multa impuesta por la Dirección de Fiscalización Forestal y de Fauna Silvestre. En esa línea, se puede considerar que <strong>la concesionaria no ha incurrido en reincidencia</strong>.
     </li>
     <li>
-        <span>
-            Ahora bien, de acuerdo con el Reporte de Antecedentes, de fecha XX de XXXXXX de XXXX, se advierte que el/la concesionario/a, sí registra sanción y multa impuesta por la Dirección de Fiscalización Forestal y de Fauna Silvestre, de acuerdo al siguiente detalle:
-            <ul>
-                <li>Mediante Resolución Directoral N° XXXXX-XXXX-OSINFOR-XXXXX, de fecha XX de XXXX de XXXX, se sancionó al/la concesionario/a, por la comisión de las infracciones a la legislación forestal y de fauna silvestre previstas en (indicar la norma donde se encuentran tipificadas las infracciones), con una sanción de amonestación y sanción de multa ascendente a ${SANCION_UIT} UIT, quedando firme el acto administrativo.</li>
-                <li style="color: red;">(En caso contar con más sanciones seguir el mismo esquema del párrafo precedente).</li>
-            </ul>
-        </span>
+        {{if FLG_SANCION == 1}}
+        En tal sentido, teniendo en consideración la aplicación a la metodología aprobada, corresponde imponer una <strong>sanción de amonestación</strong> respecto de (precisar las infracciones acreditadas) del Cuadro de Infracciones y Sanciones en Materia Forestal del Anexo 1 del RISMFFS.
+        {{else FLG_SANCION == 2}}
+        En tal sentido, teniendo en consideración la aplicación a la metodología aprobada, corresponde imponer una <strong>sanción de multa ascendente a ${SANCION_UIT || 0} UIT</strong>, vigente a la fecha en que se cumpla con el pago de esta respecto de (precisar las infracciones acreditadas) del Cuadro de Infracciones y Sanciones en Materia Forestal del RISMFFS.
+        {{else FLG_SANCION == 3}}
+        En tal sentido, teniendo en consideración la aplicación a la metodología aprobada, corresponde imponer una <strong>sanción de amonestación</strong> respecto de (precisar las infracciones acreditadas) del Cuadro de Infracciones y Sanciones en Materia Forestal del Anexo 1 del RISMFFS, asi como una <strong>sanción de multa ascendente a ${SANCION_UIT || 0} UIT</strong>, vigente a la fecha en que se cumpla con el pago de esta respecto de (precisar las infracciones acreditadas) del Cuadro de Infracciones y Sanciones en Materia Forestal del citado reglamento.
+        {{/if}}
     </li>
 </ol>
 {{/if}}
@@ -197,7 +193,7 @@
                             </tbody>
                         </table>
                         <div style="text-align: center; font-size: 8.5pt; margin-top: 0;">
-                            <strong>Fuente:</strong> Elaboración propia en base al Informe de Supervisión N° XXXXX-XXXX-OSINFOR/08.1.1
+                            <strong>Fuente:</strong> Elaboración propia en base al Informe de Supervisión N° ${ANTECEDENTES_DOCS.Inf_Sup.numero || 'XXXXX-XXXX-OSINFOR/08.1.1'}
                         </div>
                         <div style="text-align: center;">
                             <strong>Cuadro N° XX: Ubicación de retiro de cobertura vegetal</strong>
@@ -226,7 +222,7 @@
                             </tbody>
                         </table>
                         <div style="text-align: center; font-size: 8.5pt; margin-top: 0;">
-                            <strong>Fuente:</strong> Elaboración propia en base al Informe de Supervisión N° XXXXX-XXXX-OSINFOR/08.1.1
+                            <strong>Fuente:</strong> Elaboración propia en base al Informe de Supervisión N° ${ANTECEDENTES_DOCS.Inf_Sup.numero || 'XXXXX-XXXX-OSINFOR/08.1.1'}
                         </div>
                     </span>
                 </li>
@@ -402,7 +398,7 @@
 <ol class="continue" style="margin-left: -40pt;">
     <li>
         <span>
-            Se debe señalar que mediante la Resolución Sub Directoral N° XXXXX-XXXX-OSINFOR/08.2.1, de fecha XX de XXXX de XXXX, se dispusieron medidas cautelares, las cuales fueron confirmadas mediante la Resolución Sub Directoral N° XXXXX-XXXX-OSINFOR/08.2.1, de fecha XX de XXXX de XXXX, conforme al siguiente detalle:
+            Se debe señalar que mediante la Resolución Sub Directoral N° ${ANTECEDENTES_DOCS.RSD.numero || 'XXXXX-XXXX-OSINFOR/08.2.1'}, de fecha ${ANTECEDENTES_DOCS.RSD.fechaEmisionTexto ||'XX de XXXX'}, se dispusieron medidas cautelares, las cuales fueron confirmadas mediante la Resolución Sub Directoral N° XXXXX-XXXX-OSINFOR/08.2.1, de fecha XX de XXXX de XXXX, conforme al siguiente detalle:
             <ul style="color: green;">
                 <li>
                     (Detallar las medidas correctivas dispuestas).
@@ -420,7 +416,7 @@
         Ahora bien, se debe señalar que el inciso a.1 del literal a) del numeral 9.1 del artículo 9 del Reglamento de Infracciones y Sanciones en Materia Forestal y de Fauna Silvestre, establece que, de manera complementaria a la sanción a imponerse, puede aplicarse el decomiso de especímenes, productos o subproductos forestales y de fauna silvestre sobre los que no pueda acreditarse su origen legal o provengan de operaciones de extracción, caza colecta o capturas no autorizadas.
     </li>
     <li>
-        A través de Resolución Sub Directoral N° XXXXX-XXXX-OSINFOR/08.2.1, de fecha XX de XXXX de XXXX, confirmada mediante la Resolución Sub Directoral N° XXXXX-XXXX-OSINFOR/08.2.1, de fecha XX de XXXX de XXXX (mediante la cual también se dispuso el inicio del PAU), se dictaron medidas cautelares, a fin de que la decisión final a emitirse en el presente procedimiento logre eficacia y se puedan salvaguardar los recursos que forman parte del patrimonio forestal que fue extraído sin autorización, suspendiéndose los efectos de las Guías de Transporte Forestal y correspondientes Listas de Trozas, del Plan de Manejo Forestal aprobado a favor del concesionario.
+        A través de Resolución Sub Directoral N° ${ANTECEDENTES_DOCS.RSD.numero || 'XXXXX-XXXX-OSINFOR/08.2.1'}, de fecha ${ANTECEDENTES_DOCS.RSD.fechaEmisionTexto ||'XX de XXXX'}, confirmada mediante la Resolución Sub Directoral N° XXXXX-XXXX-OSINFOR/08.2.1, de fecha XX de XXXX de XXXX (mediante la cual también se dispuso el inicio del PAU), se dictaron medidas cautelares, a fin de que la decisión final a emitirse en el presente procedimiento logre eficacia y se puedan salvaguardar los recursos que forman parte del patrimonio forestal que fue extraído sin autorización, suspendiéndose los efectos de las Guías de Transporte Forestal y correspondientes Listas de Trozas, del Plan de Manejo Forestal aprobado a favor del concesionario.
     </li>
     <li>
         De esta manera, corresponde dictar la medida complementaria de decomiso, con la finalidad de eliminar o mitigar los efectos producidos por la comisión de las infracciones acreditadas en el presente procedimiento, tales como el transporte o comercialización de los productos forestales provenientes de extracción no autorizada, conforme a lo detallado en el Anexo III del presente informe.
@@ -435,7 +431,7 @@
 <h5 style="margin-left: -5pt;"><u><strong>Comunicación al GORE</strong></u></h5>
 <ol class="continue" style="margin-left: -40pt;">
     <li>
-        Finalmente, se advierte que la Resolución Sub Directoral N° XXXXX-XXXX-OSINFOR/08.2.1, que dio inicio al PAU fue oportunamente remitida a la ARFFS, para que, luego de conocer los resultados de la supervisión del OSINFOR y la disposición del inicio del PAU, en el marco de su atribución fiscalizadora, pueda ejercer las funciones de su competencia. En ese sentido, corresponde comunicarle el resultado y conclusión del presente procedimiento, para los fines pertinentes, para que en el marco de sus competencias ejecuten las acciones correspondientes.
+        Finalmente, se advierte que la Resolución Sub Directoral N° ${ANTECEDENTES_DOCS.RSD.numero || 'XXXXX-XXXX-OSINFOR/08.2.1'}, que dio inicio al PAU fue oportunamente remitida a la ARFFS, para que, luego de conocer los resultados de la supervisión del OSINFOR y la disposición del inicio del PAU, en el marco de su atribución fiscalizadora, pueda ejercer las funciones de su competencia. En ese sentido, corresponde comunicarle el resultado y conclusión del presente procedimiento, para los fines pertinentes, para que en el marco de sus competencias ejecuten las acciones correspondientes.
     </li>
 </ol>
 {{/if}}

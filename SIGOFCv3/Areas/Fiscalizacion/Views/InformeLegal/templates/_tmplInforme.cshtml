@@ -15,20 +15,20 @@
                         <td style="width: 30px; vertical-align: top;">:</td>
                         <td style="vertical-align: top;">
                             <strong>Luisa Cóndor Meza</strong><br />
-                            <span>${PROCEDENCIA}</span>
+                            <span>Ejecutiva de la Sub Dirección de Sanción</span>
                         </td>
                     </tr>
                     <tr>
                         <td style="vertical-align: top;"><strong>Asunto</strong></td>
                         <td style="width: 30px; vertical-align: top;">:</td>
                         <td style="vertical-align: top;">
-                            Resultados de la fase instructora del Procedimiento Administrativo Único iniciado a ${TITULAR || '(indicar por defecto el nombre del/la concesionario/a)'}, titular del ${NUM_CONTRATO || '(indicar por defecto el contrato de concesión)'}
+                            Resultados de la fase instructora del Procedimiento Administrativo Único iniciado a ${TITULAR || '(indicar por defecto el nombre del/la concesionario/a)'}, titular del ${TIPO_CONTRATO} N° ${NUM_CONTRATO || '(indicar por defecto el contrato de concesión)'}
                         </td>
                     </tr>
                     <tr>
                         <td style="vertical-align: top;"><strong>Referencia</strong></td>
                         <td style="width: 30px; vertical-align: top;">:</td>
-                        <td style="vertical-align: top;">Expediente Administrativo N° ${EXPEDIENTES_ADM || 'XXXXX-XXXX-OSINFOR/08.2'}</td>
+                        <td style="vertical-align: top;">Expediente Administrativo N° ${EXPEDIENTE_ADM || 'XXXXX-XXXX-OSINFOR/08.2'}</td>
                     </tr>
                     <tr>
                         <td style="vertical-align: top;"><strong>Fecha</strong></td>
@@ -44,7 +44,7 @@
             Por medio del presente me dirijo a usted, en atención al documento de la referencia, a efectos de evaluar
             lo actuado en la etapa instructora del Procedimiento Administrativo Único (en adelante, PAU), iniciado a
             ${TITULAR || '(indicar por defecto el nombre del/la concesionario/a)'} (en adelante, concesionario/a),
-            identificado/a con D.N.I./RUC N° ${TITULAR_DOCUMENTO || TITULAR_RUC}, titular del (indicar por defecto el contrato de concesión)
+            identificado/a con D.N.I./RUC N° ${TITULAR_DOCUMENTO || TITULAR_RUC}, titular del ${TIPO_CONTRATO}
             (en adelante, contrato de concesión); en virtud al artículo 22 del Reglamento del PAU del Organismo de
             Supervisión de los Recursos Forestales y de Fauna Silvestre (en adelante, Reglamento del PAU), aprobado
             por Resolución de Jefatura N° 00043-2021-OSINFOR/01.1.
@@ -58,16 +58,14 @@
                             <li>
                                 Con fecha XX de XXXXX de XXXX, el Estado Peruano, a través del Instituto Nacional de Recursos Forestales y de Fauna Silvestre (ex INRENA), y de otra parte, el concesionario suscribieron el contrato de concesión, por el cual se le otorgó el derecho al aprovechamiento sostenible de (detallar según lo expuesto en el contrato de concesión).
                             </li>
+                            <li>
+                                Mediante <strong>Carta N° ${ANTECEDENTES_DOCS.Carta.numero}</strong>, de fecha ${ANTECEDENTES_DOCS.Carta.fechaEmisionTexto || 'XX de XXXXX de XXXX'}, notificada el ${ANTECEDENTES_DOCS.Carta.fechaNotificacionTexto || 'XX de XXXXX de XXXX'}, la Dirección de Supervisión Forestal y de Fauna Silvestre (en adelante, DSFFS) comunicó al/la concesionario/a la supervisión ordinaria/extraordinaria al (indicar plan de manejo forestal), correspondiente al periodo XXXX-XXXX y, asimismo, le requirió diversa información concerniente al cumplimiento de obligaciones como titular del contrato de concesión.
+                            </li>
+                            <li>
+                                Por <strong>Informe de Supervisión N° ${ANTECEDENTES_DOCS.Inf_Sup.numero}</strong>, de fecha ${ANTECEDENTES_DOCS.Inf_Sup.fechaEmisionTexto || 'XX de XXXXX de XXXX'}, la DSFFS dio cuenta de los resultados de la supervisión ordinaria/extraordinaria al (indicar plan de manejo forestal), correspondiente al periodo XXXX-XXXX, del contrato de concesión, además del cumplimiento de las obligaciones contractuales del citado contrato, diligencia de campo realizada del (indicar por defecto la fecha).
+                            </li>
                             {{each(n, ant) ANTECEDENTES}}
-                            {{if ant.tipoDocumento == 'Carta'}}
-                            <li>
-                                Mediante <strong>Carta N° ${ant.numero}</strong>, de fecha ${ant.fechaEmisionTexto || 'XX de XXXXX de XXXX'}, notificada el ${ant.fechaNotificacionTexto || 'XX de XXXXX de XXXX'}, la Dirección de Supervisión Forestal y de Fauna Silvestre (en adelante, DSFFS) comunicó al/la concesionario/a la supervisión ordinaria/extraordinaria al (indicar plan de manejo forestal), correspondiente al periodo XXXX-XXXX y, asimismo, le requirió diversa información concerniente al cumplimiento de obligaciones como titular del contrato de concesión.
-                            </li>
-                            {{else ant.tipoDocumento == 'Informe de Supervisión'}}
-                            <li>
-                                Por <strong>Informe de Supervisión N° ${ant.numero}</strong>, de fecha ${ant.fechaEmisionTexto || 'XX de XXXXX de XXXX'}, la DSFFS dio cuenta de los resultados de la supervisión ordinaria/extraordinaria al (indicar plan de manejo forestal), correspondiente al periodo XXXX-XXXX, del contrato de concesión, además del cumplimiento de las obligaciones contractuales del citado contrato, diligencia de campo realizada del (indicar por defecto la fecha).
-                            </li>
-                            {{else ant.tipoDocumento == 'Resolución Sub Directoral'}}
+                            {{if ant.tipoDocumento == 'Resolución Sub Directoral'}}
                             <li>
                                 <span>
                                     Por <strong>Resolución Sub Directoral N° ${ant.numero}</strong>, de fecha ${ant.fechaEmisionTexto || 'XX de XXXXX de XXXX'}, se inició el PAU al/la concesionario/a, por haber incurrido presuntamente en lo siguiente:<br />
@@ -80,13 +78,13 @@
                             </li>
                             {{else ant.tipoDocumento == 'Cédula de Notificación'}}
                             <li>
-                                Mediante <strong>Cédula de Notificación N° ${ant.numero}</strong>, de fecha ${ant.fechaEmisionTexto || 'XX de XXXXX de XXXX'}, , notificada el ${ant.fechaNotificacionTexto || 'XX de XXXXX de XXXX'}, se notificó al/la concesionario/a la Resolución Sub Directoral N° XXXXX-XXXX-OSINFOR/08.2.1 y copia del Informe de Supervisión N° XXXXX-XXXX-OSINFOR/08.1.1.
+                                Mediante <strong>Cédula de Notificación N° ${ant.numero}</strong>, de fecha ${ant.fechaEmisionTexto || 'XX de XXXXX de XXXX'}, , notificada el ${ant.fechaNotificacionTexto || 'XX de XXXXX de XXXX'}, se notificó al/la concesionario/a la Resolución Sub Directoral N° ${ANTECEDENTES_DOCS.RSD?.numero || 'XXXXX-XXXX-OSINFOR/08.2.1'} y copia del Informe de Supervisión N° ${ANTECEDENTES_DOCS.Inf_Sup?.numero || 'XXXXX-XXXX-OSINFOR/08.1.1'}.
                             </li>
                             {{/if}}
                             {{/each}}
                             {{if COD_TIPO_INFORME == 1}}
                             <li>
-                                Por Escrito/Carta, de fecha XX de XXXXX de XXXX, ingresado al OSINFOR el XX de XX de XXXX con Registro N° XXXX, el concesionario <strong>presentó sus descargos</strong> contra la Resolución Sub Directoral N° XXXXX-XXXX-OSINFOR/08.2.1.
+                                Por Escrito/Carta, de fecha XX de XXXXX de XXXX, ingresado al OSINFOR el XX de XX de XXXX con Registro N° XXXX, el concesionario <strong>presentó sus descargos</strong> contra la Resolución Sub Directoral N° ${ANTECEDENTES_DOCS.RSD?.numero || 'XXXXX-XXXX-OSINFOR/08.2.1'}.
                             </li>
                             {{/if}}
                         </ol>
@@ -188,9 +186,10 @@
                 <li>
                     <strong>RECOMENDACIONES</strong><br />
                     <span>
+                        En base a lo expuesto, se procede a formular las siguientes recomendaciones:<br />
                         <ol class="continue" style="margin-left: -37pt;">
                             <li>
-                                Remitir el presente informe a la Autoridad Decisora para que proceda conforme a su competencia, adjuntando para tal efecto el Expediente Administrativo N° ${EXPEDIENTES_ADM || 'XXXXX-XXXX-OSINFOR/08.2'}, para los fines correspondientes.
+                                Remitir el presente informe a la Autoridad Decisora para que proceda conforme a su competencia, adjuntando para tal efecto el Expediente Administrativo N° ${EXPEDIENTE_ADM || 'XXXXX-XXXX-OSINFOR/08.2'}, para los fines correspondientes.
                             </li>
                             {{if COD_MODALIDAD == '01'}}
                             <li>
@@ -209,6 +208,12 @@
                                 Disponer que el/la concesionario/a cumpla con la medida complementaria detallada en el Anexo III del presente informe.
                             </li>
                             {{/if}}
+                            <li>
+                                Notificar el presente informe final de instrucción al/la concesionario/a, en el (consignar domicilio), otorgándole el plazo de quince (15) días hábiles más el término de la distancia, en caso corresponda, contados a partir del día siguiente de la fecha de notificación, para que formule los descargos que considere pertinentes a su derecho de defensa, debiendo consignar el domicilio donde desea ser notificada en el curso del procedimiento. Dicha información, deberá remitirla de forma virtual, por la mesa de partes digital ,a través del portal web del OSINFOR: https://facilita.gob.pe/t/677 y solo si el archivo a adjuntar excede los 10 MB, remitirlo al correo mesa.partes@osinfor.gob.pe, o de forma presencial, ante la mesa de partes de la sede central del OSINFOR en la ciudad de Lima o ante cualquier mesa de partes de sus oficinas desconcentradas. De la misma manera, se le recuerda que puede tramitar se le asigne una Casilla Electrónica brindada por el OSINFOR que le permitirá recibir las diferentes comunicaciones o actuaciones administrativas que emita la Entidad .
+                            </li>
+                            <li>
+                                Asimismo, se solicita que los documentos que presente en el marco del PAU consignen el siguiente número de expediente: ${EXPEDIENTE_ADM || 'XXXXX-XXXX-OSINFOR/08.2'}.
+                            </li>
                             {{/if}}
                             <li>
                                 Comunicar a la ARFFS, para que en el marco de sus funciones y competencias dispongan acciones necesarias que consideren pertinentes.

@@ -50,7 +50,7 @@ namespace CapaEntidad.ViewModel
         public bool FLG_CUESTION_PREVIA { get; set; }
         public bool FLG_REC_RESPONSABILIDAD { get; set; }
         public bool FLG_GRAVEDAD_RIESGO { get; set; }
-        public bool FLG_SANCION { get; set; }
+        public int FLG_SANCION { get; set; }
         public decimal? SANCION_UIT { get; set; }
         public string SANCION_COD_CALCULO { get; set; }
         public bool FLG_MEDIDA_CORRECTIVA { get; set; }
@@ -124,6 +124,8 @@ namespace CapaEntidad.ViewModel
         public string codResolucion { get; set; }
         public string codInciso { get; set; }
         public string inciso { get; set; }
+        public string gravedad { get; set; }
+        public int? tipoInfraccion { get; set; }
         public string titulo { get; set; }
         public string detalle { get; set; }
         public bool flgDesvirtua { get; set; }

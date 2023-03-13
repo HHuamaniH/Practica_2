@@ -24,7 +24,7 @@
 </table>
 <ol class="continue" style="margin-left: -37pt;">
     <li>
-        Mediante la Resolución Sub Directoral N° XXXXX-XXXX-OSINFOR/08.2.1, de fecha XX de XXXX, se imputó al/la concesionario/a presuntamente talar, extraer y/o aprovechar recursos forestales, sin autorización, en su condición o no de titular del título habilitante por un volumen de XX.XXX m3 (descripción del volumen total injustificado, precisando el volumen correspondiente a cada especie), a excepción de los aprovechados por subsistencia.
+        Mediante la Resolución Sub Directoral N° ${informe.ANTECEDENTES_DOCS.RSD.numero || 'XXXXX-XXXX-OSINFOR/08.2.1'}, de fecha ${informe.ANTECEDENTES_DOCS.RSD.fechaEmisionTexto ||'XX de XXXX'}, se imputó al/la concesionario/a presuntamente talar, extraer y/o aprovechar recursos forestales, sin autorización, en su condición o no de titular del título habilitante por un volumen de XX.XXX m3 (descripción del volumen total injustificado, precisando el volumen correspondiente a cada especie), a excepción de los aprovechados por subsistencia.
     </li>
     <li>
         <span>
@@ -108,7 +108,7 @@
                             </tbody>
                         </table>
                         <div style="font-size: 9pt; margin-top: 0; text-align: center;">
-                            <strong>Fuente:</strong> Elaboración propia en base al Informe de Supervisión N° 000XX-XXXX-OSINFOR/08.1.1
+                            <strong>Fuente:</strong> Elaboración propia en base al Informe de Supervisión N° ${informe.ANTECEDENTES_DOCS.Inf_Sup.numero || 'XXXXX-XXXX-OSINFOR/08.1.1'}
                         </div>
                     </span>
                 </li>

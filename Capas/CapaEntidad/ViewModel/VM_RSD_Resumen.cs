@@ -32,6 +32,8 @@ namespace CapaEntidad.ViewModel
         public string DESCRIPCION_ARTICULOS { get; set; }
         public string DESCRIPCION_ENCISOS { get; set; }
         public string TEXTO_ENCISO { get; set; }
+        public string GRAVEDAD { get; set; }
+        public int? TIPO_INFRACCION { get; set; }
         public string COD_ESPECIES { get; set; }
         public string DESCRIPCION_ESPECIE { get; set; }
         public decimal VOLUMEN { get; set; }

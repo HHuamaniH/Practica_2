@@ -24,10 +24,10 @@
         </tr>
     </tbody>
 </table>
-{{if !infraccion.flgDesvirtua}}
+{{if infraccion.flgDesvirtua}}
 <ol class="continue" style="margin-left: -37pt;">
     <li>
-        Mediante la Resolución Sub Directoral N° 00XXX-XXXX-OSINFOR/08.2.1, de fecha XX de XXXX, se imputó al/la concesionario/a presuntamente (descripción de la conducta).
+        Mediante la Resolución Sub Directoral N° ${informe.ANTECEDENTES_DOCS.RSD.numero || 'XXXXX-XXXX-OSINFOR/08.2.1'}, de fecha ${informe.ANTECEDENTES_DOCS.RSD.fechaEmisionTexto ||'XX de XXXX'}, se imputó al/la concesionario/a presuntamente (descripción de la conducta).
     </li>
     <li>
         <span>
@@ -62,7 +62,7 @@
             <ul>
                 <li>
                     <span>
-                        El/la concesionario/concesionaria no cumplió con establecer y mantener los linderos, hitos u otras señales que permitan identificar el área del título habilitante, como se evidencia en el numeral XX del Informe de Supervisión N° XXXXX-XXXX-OSINFOR/08.1.1, por el cual se verificó durante el recorrido de supervisión efectuado del XX de XXXX de XXXX al XX de XXXX el vértice XX, no presentó señalización, además, no se evidenció linderos, en el área de manejo, tal como se puede apreciar en las siguientes imágenes:
+                        El/la concesionario/concesionaria no cumplió con establecer y mantener los linderos, hitos u otras señales que permitan identificar el área del título habilitante, como se evidencia en el numeral XX del Informe de Supervisión N° ${informe.ANTECEDENTES_DOCS.Inf_Sup.numero || 'XXXXX-XXXX-OSINFOR/08.1.1'}, por el cual se verificó durante el recorrido de supervisión efectuado del XX de XXXX de XXXX al XX de XXXX el vértice XX, no presentó señalización, además, no se evidenció linderos, en el área de manejo, tal como se puede apreciar en las siguientes imágenes:
                         <br />
                         <h5 style="text-align:center; color: green;">Imagen N° XX: Extracto del Acta de Supervisión</h5>
                         <div style="text-align: center; color: green; font-size: 9pt;">(pegar imagen)<br />Fuente: Acta de Supervisión</div>
