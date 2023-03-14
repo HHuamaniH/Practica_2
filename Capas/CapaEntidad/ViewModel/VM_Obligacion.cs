@@ -86,6 +86,8 @@ namespace CapaEntidad.ViewModel
         public bool isSuccess { get; set; }
         public string data { get; set; }
         public string tx_Mensaje { get; set; }
+        public string hdfIdTH { get; set; }
+        public string hdfIdPM { get; set; }
 
         public IEnumerable<VM_Cbo> ddlEstado { get; set; }
         public string ddlEstadoId { get; set; }
@@ -104,5 +106,6 @@ namespace CapaEntidad.ViewModel
         public List<Ent_Obligacion> listArchivoDenuncia { get; set; }
         public List<Ent_Obligacion> listArchivoOtros { get; set; }
         public List<Ent_Obligacion> listArchivo { get; set; }
+        public List<Ent_Obligacion> listEvento { get; set; }
     }
 }

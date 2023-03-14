@@ -262,6 +262,11 @@ namespace SIGOFCv3.Areas.Supervision.Controllers
             Combo.Text = "N° Expediente";
             listCombo.Add(Combo);
 
+            Combo = new Ent_SBusqueda();
+            Combo.Value = "LISTA_NUM_INFORME";
+            Combo.Text = "N° Informe de Supervisión";
+            listCombo.Add(Combo);
+
             vmIMC.txtTituloModal = "Buscar Registro";
 
             vmIMC.sBusqueda = listCombo;

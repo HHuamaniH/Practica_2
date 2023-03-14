@@ -5,6 +5,7 @@ ValidarObligacion.DataHallazgo = [];
 ValidarObligacion.DataArchivoDenuncia = [];
 ValidarObligacion.DataArchivoOtros = [];
 ValidarObligacion.DataArchivo = [];
+ValidarObligacion.DataEvento = [];
 
 ValidarObligacion.fnLoadData = function (obj, tipo) {
     switch (tipo) {
@@ -13,6 +14,7 @@ ValidarObligacion.fnLoadData = function (obj, tipo) {
         case "DataArchivoDenuncia": ValidarObligacion.DataArchivoDenuncia = obj; break;
         case "DataArchivoOtros": ValidarObligacion.DataArchivoOtros = obj; break;
         case "DataArchivo": ValidarObligacion.DataArchivo = obj; break;
+        case "DataEvento": ValidarObligacion.DataEvento = obj; break;
     }
 };
 
@@ -26,6 +28,8 @@ ValidarObligacion.fnSaveForm = function () {
     let nU_ESTADO_BUSQUEDA = parseInt(ValidarObligacion.frm.find("#ddlEstadoId").val());
     let nV_CODIGO_BUSQUEDA = ValidarObligacion.frm.find("#hdfCodObligacion").val();
     let nV_OBSERVACION = ValidarObligacion.frm.find("#txtobservacion").val();
+    let inIdTituloHabilitante = ValidarObligacion.frm.find("#hdfIdTH").val();
+    let inIdPlanManejo = ValidarObligacion.frm.find("#hdfIdPM").val();
 
     if (nU_ESTADO_BUSQUEDA == 2) {
         $('a[href="#navEstado"]').tab('show');
@@ -41,7 +45,10 @@ ValidarObligacion.fnSaveForm = function () {
         }
     }
 
-    let model = { nU_OBLIGACION_BUSQUEDA, nU_ESTADO_BUSQUEDA, nV_CODIGO_BUSQUEDA, nV_OBSERVACION };
+    let model = {
+        nU_OBLIGACION_BUSQUEDA, nU_ESTADO_BUSQUEDA, nV_CODIGO_BUSQUEDA, nV_OBSERVACION,
+        inIdTituloHabilitante, inIdPlanManejo
+    };
 
     utilSigo.dialogConfirm("", "¿Está seguro de procesar los datos?", function (r) {
         if (r) {
@@ -393,6 +400,60 @@ ValidarObligacion.fnInitDataTable_Archivo = function () {
     utilSigo.enumTB(ValidarObligacion.dtArchivo, 1);
 };
 
+ValidarObligacion.fnInitDataTable_Evento = function () {
+    var columns_label = [], columns_data = [];
+
+    columns_label = ["N°", "Fecha", "Evento", "Descripción", "Usuario"];
+    columns_data = [
+        { "name": "ROW_INDEX", "width": "2%", "orderable": false, "searchable": false, "defaultContent": "" },
+        {
+            "data": "", "autoWidth": true, "mRender": function (data, type, row) {
+                return ValidarObligacion.formatoFecha(row.fE_REGISTRO);
+            }
+        },
+        { "data": "vaevento", "autoWidth": true},     
+        { "data": "vaDescripcion", "autoWidth": true },
+        { "data": "vaUsuRegistra", "autoWidth": true }
+    ];
+
+    //**Cabecera**----
+    var theadTable = "<tr>";
+    for (var i = 0; i < columns_label.length; i++) {
+        theadTable += '<th>' + columns_label[i] + '</th>';
+    }
+    theadTable += "</tr>";
+    $("#tbEvento").find("thead").append(theadTable);
+
+    var optDt = { iLength: 20, aSort: [] };
+
+    ValidarObligacion.dtEvento = ValidarObligacion.frm.find("#tbEvento").DataTable({
+        processing: true,
+        ServerSide: false,
+        bFilter: false,
+        bLengthChange: false,
+        ordering: true,
+        paging: true,
+        bInfo: true,
+        aaSorting: optDt.aSort,
+        pageLength: optDt.iLength,
+        oLanguage: initSigo.oLanguage,
+        drawCallback: initSigo.showPagination,
+        columns: columns_data
+    });
+
+    ValidarObligacion.dtEvento.rows.add(JSON.parse(ValidarObligacion.DataEvento)).draw();
+    utilSigo.enumTB(ValidarObligacion.dtEvento, 0);
+};
+
+ValidarObligacion.formatoFecha = function (fecha) {
+    var parts = fecha.split('-');
+    var anio = parts[0];
+    var mes = parts[1];
+    var dia = parts[2].substring(0, 2);
+
+    return dia + "/" + mes + "/" + anio + " " + fecha.split('T')[1].substring(0, 8);
+};
+
 ValidarObligacion.fnFiltrarEstado = function (value) {
     if (value == "4") {
         $("#dvObservacion").show();
@@ -521,6 +582,7 @@ $(document).ready(function () {
 
     ValidarObligacion.idTipoObligacion = ValidarObligacion.frm.find("#hdfTipoObligacionId").val();
     ValidarObligacion.fnInitEventos();
+    ValidarObligacion.fnInitDataTable_Evento();
     
     if (ValidarObligacion.idTipoObligacion != "6") {
         ValidarObligacion.fnInitDataTable_Archivo();

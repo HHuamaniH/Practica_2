@@ -70,6 +70,7 @@
                             <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#navIncidencias" role="tab" aria-controls="home" aria-selected="true">Incidencias</a></li>
                             <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#navImpacto" role="tab" aria-controls="home" aria-selected="true">Impactos</a></li>
                             <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#navInformeDigital" role="tab" aria-controls="home" aria-selected="true">Informe digital</a></li>
+                            <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#navMandatos" role="tab" aria-controls="home" aria-selected="true">Mandatos</a></li>
                         </ul>
                         <div class="tab-content">
                             <div class="tab-pane fade show" id="navEstado" role="tabpanel" aria-labelledby="nav-home-tab">
@@ -190,7 +191,7 @@
                                                 </div>
                                                 @Html.HiddenFor(m => m.txtContenido)
                                                 @*<label for="txtContenido" class="text-small">Contenido</label>
-                                @Html.TextAreaFor(m => m.txtContenido, new { @class = "form-control form-control-sm", @rows = "5" })*@
+                            @Html.TextAreaFor(m => m.txtContenido, new { @class = "form-control form-control-sm", @rows = "5" })*@
                                             </div>
                                         </div>
                                     </div>
@@ -882,7 +883,7 @@
                                                 </div>
                                                 @Html.HiddenFor(m => m.txtConclusion)
                                                 @*<label for="txtConclusion" class="text-small">Conclusiones del Informe de Supervisión</label>
-                                @Html.TextAreaFor(m => m.txtConclusion, new { @class = "form-control form-control-sm" })*@
+                            @Html.TextAreaFor(m => m.txtConclusion, new { @class = "form-control form-control-sm" })*@
                                             </div>
                                         </div>
                                     </div>
@@ -991,7 +992,9 @@
                             <div class="tab-pane fade" id="navInformeDigital" role="tabpanel" aria-labelledby="nav-home-tab">
                                 @Html.Partial("~/Areas/Supervision/Views/ManInforme/_InformeDigital.cshtml")
                             </div>
-
+                            <div class="tab-pane fade" id="navMandatos" role="tabpanel" aria-labelledby="nav-home-tab">
+                                @Html.Partial("~/Areas/Supervision/Views/ManInformeExSitu/_shared/_Mandatos.cshtml", Model.tbMandatos)
+                            </div>
                         </div>
                     </form>
                 </div>

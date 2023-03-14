@@ -623,6 +623,9 @@ ManInforme_AddEdit.fnSaveForm = function () {
             datosInforme.tbEliTABLA = datosInforme.tbEliTABLA.concat(_renderObligContractual.fnGetListEliTABLA());
             datosInforme.tbDesplazamiento = _renderDesplazamiento.fnGetList();
             datosInforme.tbEliTABLA = datosInforme.tbEliTABLA.concat(_renderDesplazamiento.fnGetListEliTABLA());
+
+            datosInforme.tbMandatos = _renderMandatos.fnGetList();
+            datosInforme.tbMandatos = datosInforme.tbMandatos.concat(_renderMandatos.fnGetListEliTABLA());
             
             var option = { url: ManInforme_AddEdit.frm.action, datos: JSON.stringify({ dto: datosInforme }), type: 'POST' };
             $.ajax({

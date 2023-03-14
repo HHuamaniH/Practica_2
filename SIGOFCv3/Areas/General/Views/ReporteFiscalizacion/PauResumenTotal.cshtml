@@ -35,11 +35,7 @@
         let direccion = [];
         $("[id*=chkDireccionSup] input:checked").each(function () {
             direccion.push($(this).attr('value'));
-        });
-        let direccionFisc = [];
-        $("[id*=chkDireccionFisc] input:checked").each(function () {
-            direccionFisc.push($(this).attr('value'));
-        });
+        });        
         let departamento = [];
         $("[id*=chkDepartamento] input:checked").each(function () {
             departamento.push($(this).attr('value'));
@@ -54,7 +50,7 @@
                         datatype: "json",
                         traditional: true,
                         beforeSend: function () { utilSigo.beforeSendAjax(); },
-                        data: { 'modalidad': modalidad, 'direccion': direccion, 'direccionFisc': direccionFisc, 'anio': anio, 'departamento': departamento, instancia: 'DFFFS,TFFS,PJ' },
+                        data: { 'modalidad': modalidad, 'direccion': direccion, 'anio': anio, 'departamento': departamento, instancia: 'DFFFS,TFFS,PJ' },
                         success: function (data) {
                             $('div#divReporte').html(data);
                         },
@@ -220,12 +216,12 @@
                                 </div>
                                 <div class="col-sm-3">
                                     <div class="listFiltro card-body">
-                                        <h6 class="card-title">Supervisión: SD Línea</h6>
+                                        <h6 class="card-title">Tipo Modalidad</h6>
                                         <p class="card-text">
                                             <div id="chkDireccionSup" class="box">
                                                 <div class="custom-control custom-checkbox">
                                                     <input type="checkbox" class="custom-control-input check-all" id="chkTodoSup" value="00" name="chkTodoSup" checked>
-                                                    <label class="custom-control-label" for="chkTodoSup">Todas las DL</label>
+                                                    <label class="custom-control-label" for="chkTodoSup">Todos</label>
                                                 </div>
                                                 @if (Model.listDireccionLineaSupervision != null)
                                                 {
@@ -242,32 +238,7 @@
                                         </p>
 
                                     </div>
-                                </div>
-                                <div class="col-sm-3">
-                                    <div class="listFiltro card-body">
-                                        <h6 class="card-title">Fiscalización: SD Línea</h6>
-                                        <p class="card-text">
-                                            <div id="chkDireccionFisc" class="box ">
-                                                <div class="custom-control custom-checkbox">
-                                                    <input type="checkbox" class="custom-control-input check-all" id="chkTodoFisc" value="00" name="chkTodoFisc" checked>
-                                                    <label class="custom-control-label" for="chkTodoFisc">Todas las DL</label>
-                                                </div>
-                                                @if (Model.listDireccionLineaFiscalizacion != null)
-                                                {
-                                                    foreach (var item in Model.listDireccionLineaFiscalizacion)
-                                                    {
-                                                        <div class="custom-control custom-checkbox">
-                                                            <input type="checkbox" class="custom-control-input" id="fcheck_@item.CODIGO" name="fcheck_@item.CODIGO" value="@item.CODIGO" checked>
-                                                            <label class="custom-control-label" for="fcheck_@item.CODIGO">@item.DESCRIPCION</label>
-                                                        </div>
-                                                    }
-                                                }
-                                            </div>
-
-                                        </p>
-
-                                    </div>
-                                </div>
+                                </div>                                
                                 <div class="col-sm-4">
                                     <div class="form-group card-body">
                                         <h6 class="card-title">Fecha Fin</h6>

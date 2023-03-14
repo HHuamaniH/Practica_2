@@ -145,6 +145,7 @@ namespace CapaEntidad.ViewModel
         public string txtDesRectificacion { get; set; }
         public bool chkMedCautXEspecie { get; set; }
         public bool chkMandatos { get; set; }
+        public bool chkobjMandatos { get; set; }
         public Int32 RegEstado { get; set; }
         public string txtObservacones { get; set; }
 
@@ -162,13 +163,17 @@ namespace CapaEntidad.ViewModel
         /// variables para mandatos
         /// </summary>
         public string txtDescripcionMandato { get; set; }
+        public string txtobjDescripcionMandato { get; set; }
         public string txtDiasImpl { get; set; }
+        public string txtobjDiasImpl { get; set; }
         public string txtMesesImpl { get; set; }
         public string txtDiasInf { get; set; }
+        public string txtobjDiasInf { get; set; }
         public string txtMeseInf { get; set; }
         public string txtAnioImpl { get; set; }
         public string txtAnioInf { get; set; }
         public string txtDiasPostImpl { get; set; }
+        public string txtobjDiasPostImpl { get; set; }
         public string txtMesePostImpl { get; set; }
         public string txtAnioPostImpl { get; set; }
         ///para mandatos
@@ -178,7 +183,7 @@ namespace CapaEntidad.ViewModel
         /// variables para medida correctiva
         /// </summary>
         public Ent_RESODIREC_MEDIDA oMedCorrectiva { get; set; }
-        public List<Ent_RESODIREC_MEDIDA> ListMedCorrectiva { get; set; }
+        public List<Ent_RESODIREC_MEDIDA> ListMedCorrectiva { get; set; }        
         public List<Ent_RESODIREC_MEDIDA_ESPECIE> ListEspecieMedCorrectiva { get; set; }
 
         public List<Ent_RESODIREC> ListPOA { get; set; }

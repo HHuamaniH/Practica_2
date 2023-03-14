@@ -12,6 +12,7 @@
     ValidarObligacion.fnLoadData('@Html.Raw(Json.Encode(@Model.listArchivoDenuncia))', 'DataArchivoDenuncia');
     ValidarObligacion.fnLoadData('@Html.Raw(Json.Encode(@Model.listArchivoOtros))', 'DataArchivoOtros');
     ValidarObligacion.fnLoadData('@Html.Raw(Json.Encode(@Model.listArchivo))', 'DataArchivo');
+    ValidarObligacion.fnLoadData('@Html.Raw(Json.Encode(@Model.listEvento))', 'DataEvento');
 </script>
 
 <style type="text/css">
@@ -51,6 +52,8 @@
                         @Html.HiddenFor(m => m.hdfTipoObligacionId)
                         @Html.HiddenFor(m => m.hdfCodUCuenta)
                         @Html.HiddenFor(m => m.hdfCodUsuarioControl)
+                        @Html.HiddenFor(m => m.hdfIdTH)
+                        @Html.HiddenFor(m => m.hdfIdPM)
 
                         <ul class="nav nav-tabs" id="myTab" role="tablist">
                             <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#navEstado" role="tab" aria-controls="home" aria-selected="true">Estado Situacional</a></li>
@@ -74,14 +77,31 @@
                                         @Html.TextAreaFor(m => m.txtobservacion, 3, 1, new { @class = "form-control form-control-sm" })
                                     </div>
                                 </div>
-                                <div class="form-row">
-                                    <div class="form-group col-md-4">
-                                        <label for="lblUsuarioRegistro" class="text-small">Usuario que ingresó el registro</label>
-                                        @Html.EditorFor(m => m.txtUsuarioRegistro, new { htmlAttributes = new { @class = "form-control form-control-sm", disabled = true } })
-                                    </div>
-                                    <div class="form-group col-md-4">
-                                        <label for="lblUsuarioControl" class="text-small">Usuario que asignó el útimo estado situacional al registro</label>
-                                        @Html.EditorFor(m => m.txtUsuarioControl, new { htmlAttributes = new { @class = "form-control form-control-sm", disabled = true } })
+                                @*<div class="form-row">
+                    <div class="form-group col-md-4">
+                        <label for="lblUsuarioRegistro" class="text-small">Usuario que ingresó el registro</label>
+                        @Html.EditorFor(m => m.txtUsuarioRegistro, new { htmlAttributes = new { @class = "form-control form-control-sm", disabled = true } })
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label for="lblUsuarioControl" class="text-small">Usuario que asignó el útimo estado situacional al registro</label>
+                        @Html.EditorFor(m => m.txtUsuarioControl, new { htmlAttributes = new { @class = "form-control form-control-sm", disabled = true } })
+                    </div>
+                </div>*@
+                                <div class="form-row" style="margin-top:10px;">
+                                    <div class="col-md-12">
+                                        <div class="table-responsive">
+                                            <table id="tbEvento" style="width:100%" class="table table-hover table-bordered">
+                                                <thead>
+                                                    <tr>
+                                                        <th colspan="5" class="text-sm-left">
+                                                            <div class="form-inline">
+                                                                <strong>Eventos</strong>
+                                                            </div>
+                                                        </th>
+                                                    </tr>
+                                                </thead>
+                                            </table>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
