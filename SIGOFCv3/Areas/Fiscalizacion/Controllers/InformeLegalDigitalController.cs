@@ -58,6 +58,14 @@ namespace SIGOFCv3.Areas.Fiscalizacion.Controllers
             return Json(result, JsonRequestBehavior.AllowGet);
         }
 
+        [HttpGet]
+        public JsonResult ObtenerExpediente(string NRO_DOCUMENTO)
+        {
+            oLog_Informe_Legal_Digital = new Log_Informe_Legal_Digital();
+            var result = oLog_Informe_Legal_Digital.ObtenerExpedienteSITD(NRO_DOCUMENTO);
+            return Json(result, JsonRequestBehavior.AllowGet);
+        }
+
         [HttpPost]
         public JsonResult ObtenerCorreos(List<string> CPERSONAS)
         {

@@ -235,7 +235,7 @@ _informe.Exportar = async function () {
     //console.log(informe); //return;
 
     //EXPEDIENTES ADMINISTRATIVOS
-    informe.EXPEDIENTE_ADM = informe.REFERENCIAS.filter(x => x.TIPO_DOCUMENTO == 'EXPEDIENTE').map(x => (x.NUMERO || 'S/N')).join(', ');
+    informe.EXPEDIENTE_ADM = informe.REFERENCIAS.filter(x => x.TIPO_DOCUMENTO?.indexOf('EXPEDIENTE') != -1).map(x => (x.NUMERO || 'S/N')).join(', ');
 
     //Asociamos las infracciones a las RSD en los antecedentes
     informe.ANTECEDENTES.forEach(item => {
@@ -270,7 +270,7 @@ _informe.Exportar = async function () {
     //let footer = `<table style="width: 100%;"><tr><td style="text-align: right;">#CURRENTPAGE#</td></tr></table>`;
 
     informe.IMG_SANCION = [];
-    if ([2,3].includes(informe.FLG_SANCION) && informe.SANCION_COD_CALCULO) {
+    if ([2, 3].includes(informe.FLG_SANCION) && informe.SANCION_COD_CALCULO) {
         const images = await _informe.PDFToImgCalculoMulta();
         informe.IMG_SANCION = images;
     }
@@ -556,12 +556,15 @@ _informe.fnEliminarReferencia = function (item, index) {
 
     if (item.SUBTIPO == '01') {
         const data = _renderFinalInstruccion.dtAllanamientoFinalInstruccion.rows().data().toArray();
-        const i = data.findIndex(x => x.CODIGO == item.CODIGO);
-        _renderFinalInstruccion.dtAllanamientoFinalInstruccion.row(i).remove().draw();
+        const i = data.findIndex(x => x.CODIGO == item.CODIGO && x.TIPO_DOCUMENTO == item.TIPO_DOCUMENTO);
+        i != -1 && _renderFinalInstruccion.dtAllanamientoFinalInstruccion.row(i).remove().draw();
     } else if (item.SUBTIPO == '02') {
         const data = _renderFinalInstruccion.dtSubsanacionFinalInstruccion.rows().data().toArray();
-        const i = data.findIndex(x => x.CODIGO == item.CODIGO);
-        _renderFinalInstruccion.dtSubsanacionFinalInstruccion.row(i).remove().draw();
+        const i = data.findIndex(x => x.CODIGO == item.CODIGO && x.TIPO_DOCUMENTO == item.TIPO_DOCUMENTO);
+        i != -1 && _renderFinalInstruccion.dtSubsanacionFinalInstruccion.row(i).remove().draw();
+    } else {
+        const i = _renderFinalInstruccion.dtOtrosDocumentos.findIndex(x => x.CODIGO == item.CODIGO && x.TIPO_DOCUMENTO == item.TIPO_DOCUMENTO);
+        i != -1 && _renderFinalInstruccion.dtOtrosDocumentos.splice(i, 1);
     }
 
     app.Informe.REFERENCIAS.splice(index, 1);
@@ -978,43 +981,44 @@ $(function () {
                             self.Informe.R_LEGAL = res.informe.R_LEGAL || values.R_LEGAL || null;
 
                             //REFERENCIAS
-                            const lstSITD01 = _renderFinalInstruccion.dtAllanamientoFinalInstruccion.rows().data().toArray().map(x => ({
-                                COD_ILACCION: x.COD_ILACCION,
-                                COD_ILEGAL: self.Informe.COD_INFORME,
-                                SUBTIPO: '01',
-                                SUBTIPO_DETALLE: modal_referencias.subtipos.find(s => s.SUBTIPO == '01').DESCRIPCION,
-                                CODIGO: x.CODIGO,
-                                NUMERO: x.NUMERO,
-                                TIPO_DOCUMENTO: x.TIPO_DOCUMENTO,
-                                PDF_DOCUMENTO: x.PDF_DOCUMENTO,
-                                RegEstado: 0
-                            }));
+                            const getReferences = (lst, SUBTIPO) => {
+                                return lst.map(x => ({
+                                    COD_ILACCION: x.COD_ILACCION,
+                                    COD_ILEGAL: self.Informe.COD_INFORME,
+                                    SUBTIPO: SUBTIPO,
+                                    SUBTIPO_DETALLE: modal_referencias.subtipos.find(s => s.SUBTIPO == SUBTIPO)?.DESCRIPCION,
+                                    CODIGO: x.CODIGO,
+                                    NUMERO: x.NUMERO,
+                                    TIPO_DOCUMENTO: x.TIPO_DOCUMENTO,
+                                    PDF_DOCUMENTO: x.PDF_DOCUMENTO,
+                                    RegEstado: 0
+                                }));
+                            }
 
-                            const lstSITD02 = _renderFinalInstruccion.dtSubsanacionFinalInstruccion.rows().data().toArray().map(x => ({
-                                COD_ILACCION: x.COD_ILACCION,
-                                COD_ILEGAL: self.Informe.COD_INFORME,
-                                SUBTIPO: '02',
-                                SUBTIPO_DETALLE: modal_referencias.subtipos.find(s => s.SUBTIPO == '02').DESCRIPCION,
-                                CODIGO: x.CODIGO,
-                                NUMERO: x.NUMERO,
-                                TIPO_DOCUMENTO: x.TIPO_DOCUMENTO,
-                                PDF_DOCUMENTO: x.PDF_DOCUMENTO,
-                                RegEstado: 0
-                            }));
+                            const lstSITD01 = getReferences(_renderFinalInstruccion.dtAllanamientoFinalInstruccion.rows().data().toArray(), '01');
+                            const lstSITD02 = getReferences(_renderFinalInstruccion.dtSubsanacionFinalInstruccion.rows().data().toArray(), '02');
+                            const lstSITD03 = getReferences(_renderFinalInstruccion.dtOtrosDocumentos, null);
 
                             //console.log(lstSITD01, lstSITD02);
-                            self.Informe.REFERENCIAS = [...lstSITD01, ...lstSITD02];
+                            self.Informe.REFERENCIAS = [...lstSITD01, ...lstSITD02, ...lstSITD03];
                         }
 
                         if (!res.informe) {
                             //Expedientes del TAB Datos Generales
-                            const expedientes = _renderListExpediente.dtRenderListInforme.rows().data().toArray();
-                            expedientes.forEach(x => {
-                                x.NUM_INFORME = x.NUM_INFORME.match(regExpOSINFOR)[0];
-                            });
+                            const expedientes = _renderListExpediente.dtRenderListInforme.rows().data().toArray()
+                                .map(x => {
+                                    const match = x.NUM_INFORME.match(regExpOSINFOR);
+                                    x.NUM_INFORME = match ? match[0] : x.NUM_INFORME;
+                                    return x;
+                                });
 
                             //console.log(expedientes);
-                            //self.Informe.REFERENCIAS = expedientes;
+
+                            if (expedientes.length > 0) {
+                                self.ExtraerExpediente(expedientes[0].NUM_INFORME).then(res => {
+                                    app.Informe.REFERENCIAS.push(res);
+                                });
+                            }
                         }
 
                         resolve(res);
@@ -1023,6 +1027,33 @@ $(function () {
 
                 //const data = JSON.parse(JSON.stringify(self.Informe));
                 //self.Informe.PIE_PAGINA = _informe.tmpl.get('#tmpl-pie-pagina', data);
+            },
+            ExtraerExpediente: function (NRO_DOCUMENTO) {
+                return new Promise((resolve, reject) => {
+                    const params = {
+                        type: 'get',
+                        url: `${urlLocalSigo}Fiscalizacion/InformeLegalDigital/ObtenerExpediente`,
+                        data: { NRO_DOCUMENTO }
+                    };
+
+                    $.ajax(params)
+                        .done(function (res) {
+                            var model = {
+                                COD_ILEGAL: app.Informe.COD_INFORME,
+                                SUBTIPO: null,
+                                SUBTIPO_DETALLE: 'Otro',
+                                CODIGO: res.cCodificacion,
+                                NUMERO: res.cNroDocumento,
+                                TIPO_DOCUMENTO: res.cDescTipoDoc,
+                                PDF_DOCUMENTO: res.PDF_TRAMITE_SITD,
+                                RegEstado: 1
+                            };
+
+                            resolve(model);
+                        }).fail(function (xhr) {
+                            reject();
+                        });
+                })
             },
             ExtraerAntecedentes: function (COD_RESOLUCION) {
                 const self = this;
@@ -1388,7 +1419,7 @@ $(function () {
                             utilSigo.toastWarning('Sin datos', 'No se encontró información de la resolución')
                         }
                     })
-                    .done(async function (res) {                       
+                    .done(async function (res) {
                         //Extraemos los parrafos de las infracciones
                         //const ìnfracciones = await _informe.ExtraerInfracciones();
 
@@ -1573,14 +1604,14 @@ $(function () {
                 if (!data) return;
 
                 //Buscamos que no se repita
-                const existe = app.Informe.REFERENCIAS.find(x => x.CODIGO == data.cCodificacion?.trim());
+                const existe = app.Informe.REFERENCIAS.find(x => x.CODIGO == data.cCodificacion?.trim() && x.TIPO_DOCUMENTO == data.cDescTipoDoc?.trim());
                 if (existe) {
                     utilSigo.toastWarning('Alerta', 'El documento ya existe en la lista');
                     return;
                 }
 
-                const oneExp = app.Informe.REFERENCIAS.find(x => x.TIPO_DOCUMENTO == 'EXPEDIENTE');
-                if (oneExp && data.cDescTipoDoc?.trim() == 'EXPEDIENTE') {
+                const oneExp = app.Informe.REFERENCIAS.find(x => x.TIPO_DOCUMENTO?.indexOf('EXPEDIENTE') != -1);
+                if (oneExp && data.cDescTipoDoc?.trim().indexOf('EXPEDIENTE') != -1) {
                     utilSigo.toastWarning('Alerta', 'Ya existe un EXPEDIENTE en la lista, no se pueden agregar más');
                     return;
                 }
@@ -1603,10 +1634,12 @@ $(function () {
 
                 app.Informe.REFERENCIAS.push(model);
 
-                if (self.subtipo == '01') {
+                if (model.SUBTIPO == '01') {
                     _renderFinalInstruccion.dtAllanamientoFinalInstruccion.rows.add([model]).draw();
-                } else if (self.subtipo == '02') {
+                } else if (model.SUBTIPO == '02') {
                     _renderFinalInstruccion.dtSubsanacionFinalInstruccion.rows.add([model]).draw();
+                } else {
+                    _renderFinalInstruccion.dtOtrosDocumentos.push(model);
                 }
 
                 utilSigo.toastSuccess('Agregado', 'Se agregó un documento a la lista');

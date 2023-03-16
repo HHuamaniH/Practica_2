@@ -199,6 +199,8 @@ namespace CapaLogica.DOC
                     //20/09/2022 TGS
                     vm.ListSTD01 = new List<CEntidad>();
                     vm.ListSTD02 = new List<CEntidad>();
+                    vm.ListSTD03 = new List<CEntidad>();
+
                     vm.listaArticulosSubsanables = initArticulos("ARTICULOS_SUBSANADOS", "");
                     vm.listaInfraccionesSubsanadas = new List<CEntidad>();
 
@@ -366,6 +368,7 @@ namespace CapaLogica.DOC
                     //20/09/2022 TGS
                     vm.ListSTD01 = datInfLegal.listSTD01;
                     vm.ListSTD02 = datInfLegal.listSTD02;
+                    vm.ListSTD03 = datInfLegal.listSTD03;
                     vm.chkTerceroSolidario = (datInfLegal.COD_TERCERO_SOLIDARIO.Trim() == "") ? false : true;
                     vm.hdfCodTerceroSolidario = datInfLegal.COD_TERCERO_SOLIDARIO;
                     vm.txtTerceroSolidario = datInfLegal.TERCERO_SOLIDARIO;
@@ -405,7 +408,7 @@ namespace CapaLogica.DOC
 
                 paramIL.ILEGAL_NUMERO = _dto.txtNumIlegal;
 
-                if (!string.IsNullOrEmpty(_dto.txtFechaLegal))
+                if (!string.IsNullOrEmpty((_dto.txtFechaLegal ?? "").Trim()))
                     paramIL.ILEGAL_FECHA_EMISION = Convert.ToDateTime(_dto.txtFechaLegal);
 
                 paramIL.PRESENTO_PROYECTO_RD = _dto.txtPresentoProyecto;
@@ -541,6 +544,7 @@ namespace CapaLogica.DOC
                     //lista de expedientes de tramite documentario 20/09/2022 TGS
                     paramIL.listSTD01 = _dto.ListSTD01;
                     paramIL.listSTD02 = _dto.ListSTD02;
+                    paramIL.listSTD03 = _dto.ListSTD03;
                     paramIL.listEliTSTD01 = _dto.ListEliTSTD01;
                     paramIL.COD_TERCERO_SOLIDARIO = _dto.hdfCodTerceroSolidario == " " ? null : _dto.hdfCodTerceroSolidario;
                     paramIL.ListIncisosSubsanados = _dto.listaInfraccionesSubsanadas;

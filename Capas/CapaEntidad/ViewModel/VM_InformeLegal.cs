@@ -137,6 +137,7 @@ namespace CapaEntidad.ViewModel
         //Incorporación de lista de allanamiento y subsanación para informe final de instrucción 20/09/2022 TGS
         public List<Ent_ILEGAL> ListSTD01 { get; set; }
         public List<Ent_ILEGAL> ListSTD02 { get; set; }
+        public List<Ent_ILEGAL> ListSTD03 { get; set; }
         public List<Ent_ILEGAL> ListEliTSTD01 { get; set; }
         public bool chkTerceroSolidario { get; set; }
         public string hdfCodTerceroSolidario { get; set; }

@@ -1,22 +1,23 @@
 ﻿using CapaEntidad.Documento;
+using CapaEntidad.ViewModel;
 using GeneralSQL;
+using Oracle.ManagedDataAccess.Client;
 using System;
 using System.Collections.Generic;
-using Oracle.ManagedDataAccess.Client;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using CapaEntidad.ViewModel;
+using System.Data.SqlClient;
+using SQL = GeneralSQL.Data.SQL;
 
 namespace CapaDatos.Documento
 {
     public class Dat_Informe_Legal_Digital
     {
         private DBOracle dBOracle;
+        private SQL oGDataSQL;
 
         public Dat_Informe_Legal_Digital()
         {
             dBOracle = new DBOracle();
+            oGDataSQL = new SQL();
         }
 
         public string RegInformeGrabar(Ent_InformeLegalPAUDigital informeDigital, VM_INFORME_LEGAL_DIGITAL oILegal)
@@ -347,6 +348,46 @@ namespace CapaDatos.Documento
             return vm;
         }
 
+        public VM_TRA_M_TRAMITE_SITD ObtenerExpedienteSITD(string NRO_DOCUMENTO)
+        {
+            VM_TRA_M_TRAMITE_SITD vm = null;
+            try
+            {
+                //using (OracleConnection cn = new OracleConnection(BDConexion.Conexion_Cadena_SIGO()))
+                using (SqlConnection cn = new SqlConnection(BDConexion.Conexion_Cadena_SITD()))
+                {
+                    cn.Open();
+                    //using (OracleDataReader dr = dBOracle.SelDrdDefault(cn, "DOC_OSINFOR_ERP_MIGRACION.TRA_M_TRAMITE_OBTENER_EXPEDIENTE", NRO_DOCUMENTO))
+                    using (SqlDataReader dr = oGDataSQL.SelDrdDefault(cn, "usp_Consultar_Documentos_SITD_Expediente", NRO_DOCUMENTO))
+                    {
+                        if (dr != null)
+                        {
+                            if (dr.HasRows)
+                            {
+                                vm = new VM_TRA_M_TRAMITE_SITD();
+
+                                while (dr.Read())
+                                {
+                                    vm.iCodTramite = Convert.ToInt32(dr["iCodTramite"].ToString());
+                                    vm.cCodificacion = dr["cCodificacion"]?.ToString();
+                                    vm.cNroDocumento = dr["cNroDocumento"]?.ToString();
+                                    vm.fFecDocumento = dr["fFecDocumento"] != DBNull.Value? Convert.ToDateTime(dr["fFecDocumento"].ToString()): default(DateTime?);
+                                    vm.cDescTipoDoc = dr["cDescTipoDoc"]?.ToString();
+                                    vm.PDF_TRAMITE_SITD = dr["PDF_TRAMITE_SITD"]?.ToString();
+                                }
+                            }
+                        }
+                    }
+                }
+
+                return vm;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
         public VM_PERSONA_DET_CORREO PersonaCorreo(string COD_PERSONA)
         {
             VM_PERSONA_DET_CORREO vm = null;
@@ -399,7 +440,6 @@ namespace CapaDatos.Documento
                 }
                 catch (Exception ex)
                 {
-
                     throw ex;
                 }
 

@@ -787,6 +787,7 @@ namespace CapaDatos.DOC
                             //20/09/2022 TGS
                             lsCEntidad.listSTD01 = new List<CEntidadC>();
                             lsCEntidad.listSTD02 = new List<CEntidadC>();
+                            lsCEntidad.listSTD03 = new List<CEntidadC>();
                             lsCEntidad.ListIncisosSubsanados = new List<CEntidadC>();
 
                             CEntidadC ocampoEnt;
@@ -800,7 +801,7 @@ namespace CapaDatos.DOC
                                 lsCEntidad.ILEGAL_NUMERO = dr["ILEGAL_NUMERO"] != DBNull.Value ? dr.GetString(dr.GetOrdinal("ILEGAL_NUMERO")) : null;
                                 lsCEntidad.COD_PROFESIONAL = dr.GetString(dr.GetOrdinal("COD_PROFESIONAL"));
                                 lsCEntidad.APELLIDOS_NOMBRES = dr.GetString(dr.GetOrdinal("APELLIDOS_NOMBRES"));
-                                lsCEntidad.ILEGAL_FECHA_EMISION = dr["ILEGAL_FECHA_EMISION"] != DBNull.Value ? dr.GetString(dr.GetOrdinal("ILEGAL_FECHA_EMISION")): "";
+                                lsCEntidad.ILEGAL_FECHA_EMISION = dr["ILEGAL_FECHA_EMISION"] != DBNull.Value ? dr.GetString(dr.GetOrdinal("ILEGAL_FECHA_EMISION")) : "";
                                 //lsCEntidad.ILEGAL_FECHA_DERIVACION = dr.GetString(dr.GetOrdinal("ILEGAL_FECHA_DERIVACION"));
                                 lsCEntidad.PRESENTO_PROYECTO_RD = dr.GetBoolean(dr.GetOrdinal("PRESENTO_PROYECTO_RD"));
                                 lsCEntidad.COD_ILEGAL_INF_SUP_TIPO = dr.GetString(dr.GetOrdinal("COD_ILEGAL_INF_SUP_TIPO"));
@@ -973,7 +974,7 @@ namespace CapaDatos.DOC
                             }
 
                             //20/09/2022 TGS
-                            //lista de expedientes de allanamiento
+                            //lista de expedientes de allanamiento / subsanacion
                             dr.NextResult();
                             if (dr.HasRows)
                             {
@@ -983,30 +984,16 @@ namespace CapaDatos.DOC
                                 {
                                     oCEntidadSTD = new CEntidadC();
                                     oCEntidadSTD.COD_ILACCION = dr.GetString(dr.GetOrdinal("COD_ILACCION"));
-                                    oCEntidadSTD.CODIGO = dr.GetString(dr.GetOrdinal("CODIGO")).ToString();
-                                    oCEntidadSTD.NUMERO = dr.GetString(dr.GetOrdinal("NUMERO")).ToString();
-                                    oCEntidadSTD.TIPO_DOCUMENTO = dr.GetString(dr.GetOrdinal("TIPO"));
-                                    oCEntidadSTD.PDF_DOCUMENTO = dr.GetString(dr.GetOrdinal("DESCARGA"));
+                                    oCEntidadSTD.CODIGO = dr["CODIGO"] != DBNull.Value ? dr["CODIGO"].ToString() : null;
+                                    oCEntidadSTD.NUMERO = dr["NUMERO"] != DBNull.Value ? dr["NUMERO"].ToString() : null;
+                                    oCEntidadSTD.TIPO_DOCUMENTO = dr["TIPO"] != DBNull.Value ? dr["TIPO"].ToString() : null;
+                                    oCEntidadSTD.PDF_DOCUMENTO = dr["DESCARGA"] != DBNull.Value ? dr["DESCARGA"].ToString() : null;
                                     oCEntidadSTD.RegEstado = 0;
-                                    lsCEntidad.listSTD01.Add(oCEntidadSTD);
-                                }
-                            }
-                            //lista de expedientes de subsanacion
-                            dr.NextResult();
-                            if (dr.HasRows)
-                            {
-                                CEntidadC oCEntidadSTD = new CEntidadC();
 
-                                while (dr.Read())
-                                {
-                                    oCEntidadSTD = new CEntidadC();
-                                    oCEntidadSTD.COD_ILACCION = dr.GetString(dr.GetOrdinal("COD_ILACCION"));
-                                    oCEntidadSTD.CODIGO = dr.GetString(dr.GetOrdinal("CODIGO")).ToString();
-                                    oCEntidadSTD.NUMERO = dr.GetString(dr.GetOrdinal("NUMERO")).ToString();
-                                    oCEntidadSTD.TIPO_DOCUMENTO = dr.GetString(dr.GetOrdinal("TIPO"));
-                                    oCEntidadSTD.PDF_DOCUMENTO = dr.GetString(dr.GetOrdinal("DESCARGA"));
-                                    oCEntidadSTD.RegEstado = 0;
-                                    lsCEntidad.listSTD02.Add(oCEntidadSTD);
+                                    string SUBTIPO = dr["SUBTIPO"] != DBNull.Value ? dr["SUBTIPO"].ToString() : null;
+                                    if (SUBTIPO == "1") lsCEntidad.listSTD01.Add(oCEntidadSTD);
+                                    else if (SUBTIPO == "2") lsCEntidad.listSTD02.Add(oCEntidadSTD);
+                                    else lsCEntidad.listSTD03.Add(oCEntidadSTD);
                                 }
                             }
 

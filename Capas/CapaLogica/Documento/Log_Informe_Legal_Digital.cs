@@ -61,6 +61,11 @@ namespace CapaLogica.Documento
             return oDat_Informe_Legal_Digital.ObtenerAntecedentesRSD(COD_RESOLUCION, COD_THABILITANTE);
         }
 
+        public VM_TRA_M_TRAMITE_SITD ObtenerExpedienteSITD(string NRO_DOCUMENTO)
+        {
+            return oDat_Informe_Legal_Digital.ObtenerExpedienteSITD(NRO_DOCUMENTO);
+        }
+
         public VM_PERSONA_DET_CORREO PersonaCorreo(string COD_PERSONA)
         {
             return oDat_Informe_Legal_Digital.PersonaCorreo(COD_PERSONA);
