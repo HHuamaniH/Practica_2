@@ -2473,18 +2473,18 @@ namespace CapaDatos.DOC
                             while (dr.Read())
                             {
                                 result = new VM_RSD_Resumen();
-                                result.COD_THABILITANTE = dr["COD_THABILITANTE"].ToString();
-                                result.COD_TITULAR = dr["COD_TITULAR"].ToString();
-                                result.NUM_THABILITANTE = dr["NUM_THABILITANTE"].ToString();
-                                result.TITULAR = dr["TITULAR"].ToString();
-                                result.TITULAR_DOCUMENTO = dr["TITULAR_DOCUMENTO"].ToString();
-                                result.TITULAR_RUC = dr["TITULAR_RUC"].ToString();
-                                result.COD_RLEGAL = dr["COD_RLEGAL"].ToString();
-                                result.R_LEGAL = dr["R_LEGAL"].ToString();
-                                result.R_LEGAL_DOCUMENTO = dr["R_LEGAL_DOCUMENTO"].ToString();
-                                result.UBIGEO_DEPARTAMENTO = dr["UBIGEO_DEPARTAMENTO"].ToString();
-                                result.UBIGEO_PROVINCIA = dr["UBIGEO_PROVINCIA"].ToString();
-                                result.UBIGEO_DISTRITO = dr["UBIGEO_DISTRITO"].ToString();
+                                result.COD_THABILITANTE = dr["COD_THABILITANTE"] != DBNull.Value ? dr["COD_THABILITANTE"].ToString() : null;
+                                result.COD_TITULAR = dr["COD_TITULAR"] != DBNull.Value ? dr["COD_TITULAR"].ToString() : null;
+                                result.NUM_THABILITANTE = dr["NUM_THABILITANTE"] != DBNull.Value ? dr["NUM_THABILITANTE"].ToString() : null;
+                                result.TITULAR = dr["TITULAR"] != DBNull.Value ? dr["TITULAR"].ToString() : null;
+                                result.TITULAR_DOCUMENTO = dr["TITULAR_DOCUMENTO"] != DBNull.Value ? dr["TITULAR_DOCUMENTO"].ToString() : null;
+                                result.TITULAR_RUC = dr["TITULAR_RUC"] != DBNull.Value ? dr["TITULAR_RUC"].ToString() : null;
+                                result.COD_RLEGAL = dr["COD_RLEGAL"] != DBNull.Value ? dr["COD_RLEGAL"].ToString() : null;
+                                result.R_LEGAL = dr["R_LEGAL"] != DBNull.Value ? dr["R_LEGAL"].ToString() : null;
+                                result.R_LEGAL_DOCUMENTO = dr["R_LEGAL_DOCUMENTO"] != DBNull.Value ? dr["R_LEGAL_DOCUMENTO"].ToString() : null;
+                                result.UBIGEO_DEPARTAMENTO = dr["UBIGEO_DEPARTAMENTO"] != DBNull.Value ? dr["UBIGEO_DEPARTAMENTO"].ToString() : null;
+                                result.UBIGEO_PROVINCIA = dr["UBIGEO_PROVINCIA"] != DBNull.Value ? dr["UBIGEO_PROVINCIA"].ToString() : null;
+                                result.UBIGEO_DISTRITO = dr["UBIGEO_DISTRITO"] != DBNull.Value ? dr["UBIGEO_DISTRITO"].ToString() : null;
                             }
                         }
 
@@ -2496,45 +2496,20 @@ namespace CapaDatos.DOC
                             {
                                 var ocampoEnt = new VM_RSD_INFRACCIONES();
                                 ocampoEnt.COD_ILEGAL_ENCISOS = dr["COD_ILEGAL_ENCISOS"].ToString();
-                                ocampoEnt.DESCRIPCION_ARTICULOS = dr["DESCRIPCION_ARTICULOS"].ToString();
-                                ocampoEnt.DESCRIPCION_ENCISOS = dr["DESCRIPCION_ENCISOS"].ToString();
-                                ocampoEnt.TEXTO_ENCISO = dr["TEXTO_ENCISO"].ToString();
-                                ocampoEnt.GRAVEDAD = dr["GRAVEDAD"]?.ToString();
+                                ocampoEnt.DESCRIPCION_ARTICULOS = dr["DESCRIPCION_ARTICULOS"] != DBNull.Value ? dr["DESCRIPCION_ARTICULOS"].ToString() : null;
+                                ocampoEnt.DESCRIPCION_ENCISOS = dr["DESCRIPCION_ENCISOS"] != DBNull.Value ? dr["DESCRIPCION_ENCISOS"].ToString() : null;
+                                ocampoEnt.TEXTO_ENCISO = dr["TEXTO_ENCISO"] != DBNull.Value ? dr["TEXTO_ENCISO"].ToString() : null;
+                                ocampoEnt.GRAVEDAD = dr["GRAVEDAD"] != DBNull.Value ? dr["GRAVEDAD"].ToString() : null;
                                 ocampoEnt.TIPO_INFRACCION = dr["TIPO_INFRACCION"] != DBNull.Value ? Int32.Parse(dr["TIPO_INFRACCION"].ToString()) : default(int?);
-                                ocampoEnt.RANGO_SANCION = dr["RANGO_SANCION"]?.ToString();
-                                ocampoEnt.COD_ESPECIES = dr["COD_ESPECIES"].ToString();
-                                ocampoEnt.DESCRIPCION_ESPECIE = dr["DESCRIPCION_ESPECIE"].ToString();
-                                ocampoEnt.VOLUMEN = Decimal.Parse(dr["VOLUMEN"].ToString());
-                                ocampoEnt.AREA = Decimal.Parse(dr["AREA"].ToString());
-                                ocampoEnt.NUMERO_INDIVIDUOS = Int32.Parse(dr["NUMERO_INDIVIDUOS"].ToString());
-                                ocampoEnt.DESCRIPCION_INFRACCIONES = dr["DESCRIPCION_INFRACCIONES"].ToString();
-                                ocampoEnt.NUM_POA = dr["NUM_POA"].ToString();
-                                //ocampoEnt.POA = dr["POA"].ToString();
-                                ocampoEnt.TIPOMADERABLE = dr["TIPOMADERABLE"].ToString();
-
-                                //ocampoEnt.COD_ILEGAL_ARTICULOS = dr["cod_ilegal_articulos"].ToString();
-                                //ocampoEnt.DETERMINACION = "";
-                                //if (oCEntidad.BusValor == "INICIO_PAU")
-                                //{
-                                //    ocampoEnt.COD_SECUENCIAL = 0;
-                                //}
-                                //else if (oCEntidad.BusValor == "TERMINO_PAU" || oCEntidad.BusValor == "TERMINO_PAU_TFFS")
-                                //{
-                                //    ocampoEnt.COD_SECUENCIAL = Int32.Parse(dr["COD_SECUENCIAL"].ToString());
-                                //    ocampoEnt.DETERMINACION = "No Evaluado";
-                                //    ocampoEnt.DESCRIPCION_INFRACCIONES = "";
-                                //    ocampoEnt.RegEstado = 1;
-                                //    ocampoEnt.BTN_LITERALES = false;
-                                //    ocampoEnt.BTN_LITERALES2 = true;
-
-                                //    if (oCEntidad.BusValor == "TERMINO_PAU_TFFS")
-                                //    {
-                                //        ocampoEnt.COD_FCTIPO = dr["COD_FCTIPO"].ToString();
-                                //        ocampoEnt.COD_RESODIREC = dr["COD_RESODIREC"].ToString();
-                                //        ocampoEnt.MAE_ESTDETERMINA_ART363I = "0000000";
-                                //        ocampoEnt.ESTDETERMINA_ART363I = "No Evaluado";
-                                //    }
-                                //}
+                                ocampoEnt.RANGO_SANCION = dr["RANGO_SANCION"] != DBNull.Value ? dr["RANGO_SANCION"].ToString() : null;
+                                ocampoEnt.COD_ESPECIES = dr["COD_ESPECIES"] != DBNull.Value ? dr["COD_ESPECIES"].ToString() : null;
+                                ocampoEnt.DESCRIPCION_ESPECIE = dr["DESCRIPCION_ESPECIE"] != DBNull.Value ? dr["DESCRIPCION_ESPECIE"].ToString() : null;
+                                ocampoEnt.VOLUMEN = dr["VOLUMEN"] != DBNull.Value ? Decimal.Parse(dr["VOLUMEN"].ToString()) : default(decimal);
+                                ocampoEnt.AREA = dr["AREA"] != DBNull.Value ? Decimal.Parse(dr["AREA"].ToString()) : default(decimal);
+                                ocampoEnt.NUMERO_INDIVIDUOS = dr["NUMERO_INDIVIDUOS"] != DBNull.Value ? Int32.Parse(dr["NUMERO_INDIVIDUOS"].ToString()) : default(int);
+                                ocampoEnt.DESCRIPCION_INFRACCIONES = dr["DESCRIPCION_INFRACCIONES"] != DBNull.Value ? dr["DESCRIPCION_INFRACCIONES"].ToString() : null;
+                                ocampoEnt.NUM_POA = dr["NUM_POA"] != DBNull.Value ? dr["NUM_POA"].ToString() : null;
+                                ocampoEnt.TIPOMADERABLE = dr["TIPOMADERABLE"] != DBNull.Value ? dr["TIPOMADERABLE"].ToString() : null;
 
                                 result.LIST_INFRACCIONES.Add(ocampoEnt);
                             }

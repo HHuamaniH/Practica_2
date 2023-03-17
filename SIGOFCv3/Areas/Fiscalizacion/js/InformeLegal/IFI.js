@@ -1355,22 +1355,21 @@ $(function () {
                                 columns: [
                                     { data: 'FECHA', title: 'FECHA' },
                                     { data: 'NUMERO_RESOLUCION', title: 'N° RESOLUCIÓN' },
-                                    { data: 'PROCEDENCIA', title: 'PROCEDENCIA' },
-                                    { data: 'MATERIA', title: 'MATERIA' },
+                                    //{ data: 'PROCEDENCIA', title: 'PROCEDENCIA' },
+                                    //{ data: 'MATERIA', title: 'MATERIA' },
                                     { data: 'ADMINISTRADO', title: 'ADMINISTRADO' },
                                     { data: 'TITULO_HABILITANTE', title: 'TITULO HABILITANTE' },
-                                    { data: 'NRO_REFERENCIA', title: 'REFERENCIA' },
-                                ],
-                                columnDefs: [
+                                    //{ data: 'NRO_REFERENCIA', title: 'REFERENCIA' },
                                     {
-                                        targets: 7,
                                         orderable: false,
                                         data: null,
+                                        width: '20px',
                                         render: (data, type, row, meta) => {
                                             return `<i class="fa fa-lg fa-check text-success px-2" onclick="modal_rsd.Agregar(this)"></i>`;
                                         }
                                     }
                                 ],
+                                autoWidth: false,
                                 lengthMenu: [[10, 20, 50, 100], [10, 20, 50, 100]],
                                 //bLengthChange: false,
                                 aaSorting: [],
