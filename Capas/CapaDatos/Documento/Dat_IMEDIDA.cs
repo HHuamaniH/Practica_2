@@ -295,6 +295,7 @@ namespace CapaDatos.DOC
                             oCompoExp.COD_INFORME = oCEntidad.COD_INFORME;
                             oCompoExp.COD_RESODIREC = loDatos.COD_RESODIREC;
                             oCompoExp.COD_UCUENTA = oCEntidad.COD_UCUENTA;
+                            oCompoExp.COD_INFORME_EXP = loDatos.COD_INFORME;
                             dBOracle.ManExecute(cn, tr, "DOC_OSINFOR_ERP_MIGRACION.spIMEDIDA_VS_EXP_Grabar", oCompoExp);
                         }
                     }
@@ -541,6 +542,7 @@ namespace CapaDatos.DOC
                             while (dr.Read())
                             {
                                 oCampos = new Ent_IMEDIDA_EXPEDIENTE();
+                                oCampos.COD_INFORME = dr["COD_INFORME"].ToString();
                                 oCampos.COD_RESODIREC = dr["COD_RESODIREC"].ToString();
                                 oCampos.NUM_RESOLUCION = dr["NUM_RESOLUCION"].ToString();
                                 oCampos.TIPO_RESOLUCION = dr["TIPO_RESOLUCION"].ToString();

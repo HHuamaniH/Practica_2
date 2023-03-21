@@ -96,7 +96,16 @@
 
             _renderListExpediente.fnCargarMedidas();  
         } else {
-            utilSigo.toastWarning("Aviso", "El expediente ya se encuentra en la lista");
+            if (!utilDt.existValorSearch(_renderListExpediente.dtRenderListExpediente, "COD_INFORME", data["COD_INFORME"])) {
+                data["RegEstado"] = 1;
+                _renderListExpediente.dtRenderListExpediente.rows.add([data]).draw();
+                _renderListExpediente.dtRenderListExpediente.page('last').draw('page');
+
+                _renderListExpediente.fnCargarMedidas();
+            } else {
+                utilSigo.toastWarning("Aviso", "El expediente ya se encuentra en la lista");
+            }
+            
         }
         _renderListExpediente.frm.find('#mdlConsultaExpediente').modal('hide');
     }
