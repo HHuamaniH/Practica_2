@@ -181,7 +181,9 @@ namespace CapaEntidad.DOC
         public string TITULAR { get; set; }
         [Description("MODALIDAD")]
         public string MODALIDAD { get; set; }
-        [Description("RegEstado")]
+        [Description("COD_INFORME_EXP")]
+        public string COD_INFORME_EXP { get; set; }
+        [Description("RegEstado")]        
         public int RegEstado { get; set; }
         [Description("COD_UCUENTA")]
         public String COD_UCUENTA { get; set; }
