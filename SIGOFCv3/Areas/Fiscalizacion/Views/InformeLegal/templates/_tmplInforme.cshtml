@@ -153,13 +153,17 @@
                     <strong>ANÁLISIS</strong><br />
                     <span>
                         {{if COD_MODALIDAD == "01"}}
-                        @Html.Partial("~/Areas/Fiscalizacion/Views/InformeLegal/templates/_tmplConcesiones.cshtml")
+                        @Html.Partial("~/Areas/Fiscalizacion/Views/InformeLegal/templates/Concesiones/_tmpl.cshtml")
 
                         {{else COD_MODALIDAD == "02"}}
-                        @Html.Partial("~/Areas/Fiscalizacion/Views/InformeLegal/templates/_tmplPredios.cshtml")
+                        @Html.Partial("~/Areas/Fiscalizacion/Views/InformeLegal/templates/Predios privados/_tmpl.cshtml")
 
                         {{else COD_MODALIDAD == "03"}}
-                        @Html.Partial("~/Areas/Fiscalizacion/Views/InformeLegal/templates/_tmplCCNN.cshtml")
+                        @Html.Partial("~/Areas/Fiscalizacion/Views/InformeLegal/templates/Comunidades nativas/_tmpl.cshtml")
+
+                        {{else COD_MODALIDAD == "04"}}
+                        @Html.Partial("~/Areas/Fiscalizacion/Views/InformeLegal/templates/Fauna/_tmpl.cshtml")
+
                         {{/if}}
 
                         <h5><u><strong>Plazo para presentación de descargos al presente Informe Final de Instrucción</strong></u></h5>

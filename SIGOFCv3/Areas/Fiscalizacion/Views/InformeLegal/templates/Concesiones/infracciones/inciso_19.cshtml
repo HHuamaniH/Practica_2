@@ -29,6 +29,7 @@
     <li>
         Mediante la Resolución Sub Directoral N° ${informe.ANTECEDENTES_DOCS.RSD.numero || 'XXXXX-XXXX-OSINFOR/08.2.1'}, de fecha ${informe.ANTECEDENTES_DOCS.RSD.fechaEmisionTexto ||'XX de XXXX'}, se imputó al/la concesionario/a presuntamente incumplir con las obligaciones legamente establecidas en el contrato de concesión y el plan de manejo aprobado, al no haber declarado el aprovechamiento de un volumen de XX.XXX m3 (descripción del volumen total no declarado, precisando el volumen correspondiente a cada especie).
     </li>
+    {{if informe.COD_TIPO_INFORME == 1}}
     <li>
         <span>
             Por Escrito/Carta de fecha XX de XX de 20XX ingresado al OSINFOR con Registro N° XXXXXXXXX, e/la concesionario/a presentó sus descargos, donde se advierte los siguientes argumentos que guarda relación con la imputación materia de análisis:<br />
@@ -55,6 +56,7 @@
             </ul>
         </span>
     </li>
+    {{/if}}
     <li>
         <span>
             En el presente caso, de acuerdo a la documentación que obra en el expediente administrativo, ha quedado acreditado lo siguiente:<br />
@@ -122,7 +124,7 @@
         </span>
     </li>
     <li>
-        Por ello, estando a la evaluación realizada a los actuados en el presente procedimiento, 
+        Por ello, estando a la evaluación realizada a los actuados en el presente procedimiento,
         <strong>y siendo que el/la concesionario/a no presentó argumentos de defensa suficientes que logren desacreditar los hechos que sustentan la imputación materia de análisis</strong>, ha quedado
         acreditada la comisión de la infracción tipificada en el numeral 19 del Cuadro de Infracciones y Sanciones en Materia Forestal del Anexo 1 del RISMFFS.
     </li>

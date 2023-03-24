@@ -30,6 +30,7 @@
     <li>
         Mediante la Resolución Sub Directoral N° ${informe.ANTECEDENTES_DOCS.RSD.numero || 'XXXXX-XXXX-OSINFOR/08.2.1'}, de fecha ${informe.ANTECEDENTES_DOCS.RSD.fechaEmisionTexto ||'XX de XXXX'}, se imputó al/la concesionario/a presuntamente la incursión en la causal de caducidad por la extracción o movilización de recursos forestales y de fauna silvestre y de fauna silvestre por un volumen de XX.XXX m<sup>3</sup> (descripción del volumen total injustificado, precisando el volumen correspondiente a cada especie).
     </li>
+    {{if informe.COD_TIPO_INFORME == 1}}
     <li>
         <span>
             Por Escrito/Carta de fecha XX de XX de 20XX ingresado al OSINFOR con Registro N° XXXXXXXXX, e/la concesionario/a presentó sus descargos, donde se advierte los siguientes argumentos que guarda relación con la imputación materia de análisis:<br />
@@ -56,6 +57,7 @@
             </ul>
         </span>
     </li>
+    {{/if}}
     <li>
         En el presente procedimiento se dilucida la posibilidad de declarar la caducidad como conclusión anticipada de la vigencia del título habilitante otorgado al/la concesionario/a, para lo cual es menester conocer la naturaleza jurídica de dicha institución. En ese sentido, de acuerdo con la doctrina, la caducidad es la facultad que tiene la Administración para dar por terminado un título habilitante, por la ocurrencia de uno de los hechos previstos por la ley, por culpa imputable al/la concesionario/a; en otras palabras, la caducidad es entendida como una medida máxima o de última ratio.
     </li>
@@ -70,7 +72,7 @@
                     Conforme se ha venido desarrollando en el presente informe, se ha acreditado que la extracción y movilización de XX.XXX m3 (descripción del volumen total injustificado, precisando el volumen correspondiente a cada especie), provino de árboles distintos a los que formaron parte del censo forestal, quedando demostrado que se ha realizado un aprovechamiento sin considerar los criterios de sostenibilidad e incumpliendo lo establecido en los instrumentos de gestión.
                 </li>
                 <li>
-                    Es pertinente acotar que la correcta implementación del/la concesionario/a instrumentos de gestión aprobados constituye una obligación fundamental del titular, puesto que dichos instrumentos permiten controlar y planificar el aprovechamiento racional de los recursos forestales que el Estado le ha otorgado, a efectos de procurar el aprovechamiento sostenible del recurso (manejo racional del recurso teniendo en cuenta su capacidad de renovación), 
+                    Es pertinente acotar que la correcta implementación del/la concesionario/a instrumentos de gestión aprobados constituye una obligación fundamental del titular, puesto que dichos instrumentos permiten controlar y planificar el aprovechamiento racional de los recursos forestales que el Estado le ha otorgado, a efectos de procurar el aprovechamiento sostenible del recurso (manejo racional del recurso teniendo en cuenta su capacidad de renovación),
                     de conformidad al artículo 28
                     <a style="mso-footnote-id: foot_infraccion_b_1" href="#_foot_infraccion_b_1" title="">
                         <sup class=MsoFootnoteReference><span style="mso-special-character:footnote"></span></sup>

@@ -29,6 +29,7 @@
     <li>
         Mediante la Resolución Sub Directoral N° ${informe.ANTECEDENTES_DOCS.RSD.numero || 'XXXXX-XXXX-OSINFOR/08.2.1'}, de fecha ${informe.ANTECEDENTES_DOCS.RSD.fechaEmisionTexto ||'XX de XXXX'}, se imputó al/la concesionario/a presuntamente no contar con regente forestal para la implementación del plan de manejo forestal.
     </li>
+    {{if informe.COD_TIPO_INFORME == 1}}
     <li>
         <span>
             Por Escrito/Carta de fecha XX de XX de 20XX ingresado al OSINFOR con Registro N° XXXXXXXXX, e/la concesionario/a presentó sus descargos, donde se advierte los siguientes argumentos que guarda relación con la imputación materia de análisis:<br />
@@ -55,6 +56,7 @@
             </ul>
         </span>
     </li>
+    {{/if}}
     <li>
         <span>
             En el presente caso, de acuerdo a la documentación que obra en el expediente administrativo, ha quedado acreditado lo siguiente:

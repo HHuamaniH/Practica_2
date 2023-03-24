@@ -9,31 +9,35 @@
     <tbody>
         <tr>
             <td style="border: 1px solid #000;">
-                Tener y mantener actualizado el libro de operaciones de acuerdo a los lineamientos aprobados por el SERFOR.
+                El/la concesionario/a no cumplió con la presentación del (precisar el tipo de informe de ejecución y el periodo), dentro del plazo establecido en el RGF.
             </td>
             <td style="border: 1px solid #000;">
-                El literal d) numeral 43.1 artículo 43 del RGF
-                <a style="mso-footnote-id: foot_infraccion_11" href="#_foot_infraccion_11" title="">
+                Literal b) del numeral 43.1 del artículo 43
+                <a style="mso-footnote-id: foot_infraccion_2_1" href="#_foot_infraccion_2_1" title="">
                     <sup class=MsoFootnoteReference><span style="mso-special-character:footnote"></span></sup>
-                </a>.
+                </a>, concordado con el artículo 66
+                <a style="mso-footnote-id: foot_infraccion_2_2" href="#_foot_infraccion_2_2" title="">
+                    <sup class=MsoFootnoteReference><span style="mso-special-character:footnote"></span></sup>
+                </a> del RGF
             </td>
             <td style="border: 1px solid #000;">
-                Numeral 11 del Cuadro de Infracciones y Sanciones en Materia Forestal del Anexo 1 del RISMFFS
-                <br /><br />
-                <i>"No tener libro de operaciones o no registrar la información en dicho libro, de acuerdo a las disposiciones establecidas".</i>
+                Numeral 2 del Anexo 1 del RISMFFS.<br /><br />
+                <i>"No entregar o presentar información o documentación legalmente exigible en el plazo previsto, o cuando la autoridad competente lo requiera"</i>
             </td>
         </tr>
     </tbody>
 </table>
+
+{{if infraccion.flgDesvirtua}}
 <ol class="continue" style="margin-left: -37pt;">
     <li>
-        Mediante la Resolución Sub Directoral N° ${informe.ANTECEDENTES_DOCS.RSD.numero || 'XXXXX-XXXX-OSINFOR/08.2.1'}, de fecha ${informe.ANTECEDENTES_DOCS.RSD.fechaEmisionTexto ||'XX de XXXX'}, se imputó al/la concesionario/a presuntamente no tener el Libro de Operaciones.
+        Mediante la Resolución Sub Directoral N° 00XXX-XXXX-OSINFOR/08.2.1, de fecha XX de XXXX, se imputó al/la concesionario/a presuntamente incumplir con la presentación (descripción del tipo de informe de ejecución y el periodo).
     </li>
+    {{if informe.COD_TIPO_INFORME == 1}}
     <li>
         <span>
-            Por Escrito/Carta de fecha XX de XX de 20XX ingresado al OSINFOR con Registro N° XXXXXXXXX, e/la concesionario/a presentó sus descargos, donde se advierte los siguientes argumentos que guarda relación con la imputación materia de análisis:
-            <br />
-            <ol style="list-style-type: lower-alpha;">
+            Por Escrito/Carta de fecha XX de XX de 20XX ingresado al OSINFOR con Registro N° XXXXXXXXX, e/la concesionario/a presentó sus descargos, donde se advierte los siguientes argumentos que guarda relación con la imputación materia de análisis:<br /><br />
+            <ol style="list-style-type: lower-alpha">
                 <li>(Agregar texto original).</li>
                 <li>(Agregar texto original).</li>
                 <li>(Agregar texto original).</li>
@@ -42,7 +46,7 @@
     </li>
     <li>
         <span>
-            Respecto a lo señalado por el/la concesionario/a, se advierte el siguiente análisis:<br />
+            Respecto a lo señalado por el/la concesionario/a, se advierte el siguiente análisis:
             <ul>
                 <li>
                     Con relación al argumento señalado en el acápite a), <strong>XXXXXXXXXXXXXXXXXXXXXXXXXXX</strong>.
@@ -56,14 +60,15 @@
             </ul>
         </span>
     </li>
+    {{/if}}
 </ol>
+{{/if}}
 {{if infraccion.flgSubsana}}
 <h5><strong>Sobre la subsanación voluntaria</strong></h5>
 <ol class="continue" style="margin-left: -37pt;">
     <li>
         <span>
-            En tal sentido, teniendo en consideración que las condiciones y forma en cómo se procederá a realizar la subsanación voluntaria ya se encuentra establecida en el RISMFFS, resulta pertinente aplicar los criterios señalados en dicho Reglamento teniéndose en cuenta los siguientes requisitos:
-            <br />
+            En tal sentido, teniendo en consideración que las condiciones y forma en cómo se procederá a realizar la subsanación voluntaria ya se encuentra establecida en el RISMFFS, resulta pertinente aplicar los criterios señalados en dicho Reglamento teniéndose en cuenta los siguientes requisitos:<br />
             <div style="text-align: center; margin-bottom: 0;">
                 <strong>
                     Cuadro N° XX: Evaluación de los presupuestos para la configuración de la subsanación voluntaria
@@ -83,7 +88,7 @@
                             Presupuestos básicos
                         </td>
                         <td style="border: 1px solid #000;">
-                            (i) Realizar la presentación dentro del plazo previsto para la presentación de los descargos en la fase instructora.
+                            (ii) Realizar la presentación dentro del plazo previsto para la presentación de los descargos en la fase instructora.
                         </td>
                         <td style="border: 1px solid #000;">
                             En el presente caso, se advierte que el/la concesionario/a presentó ante el (indicar entidad e informe de ejecución objeto de imputación, así como el periodo correspondiente y fecha de presentación); es decir, dentro del plazo previsto para la presentación de los descargos (esto es hasta el XX de XXXX de XXXX).
@@ -92,7 +97,7 @@
                     </tr>
                     <tr>
                         <td style="border: 1px solid #000;">
-                            (ii) No ser sujeto infractor reincidente.
+                            (i) No ser sujeto infractor reincidente.
                         </td>
                         <td style="border: 1px solid #000;">
                             Según el Reporte de Antecedentes, de fecha XX de XXXX de XXXX, se aprecia que el/la concesionario/a no registra sanción y/o multa impuesta por la Dirección de Fiscalización Forestal y de Fauna Silvestre, por lo que, se tiene por cumplido el requisito analizado.
@@ -100,14 +105,14 @@
                         <td style="border: 1px solid #000; text-align: center;">SI</td>
                     </tr>
                     <tr>
-                        <td style="border: 1px solid #000; background-color: #bfbfbf; text-align: center;">
-                            Presupuestos específico
+                        <td style="border: 1px solid #000; background-color: #bfbfbf; text-align: center;" rowspan="2">
+                            Presupuesto específico
                         </td>
                         <td style="border: 1px solid #000;">
-                            (i) Actualizar el Libro de Operaciones.
+                            (i) Entregar la información o documentación.
                         </td>
                         <td style="border: 1px solid #000;">
-                            De la revisión del Libro de Operaciones remitido por Escrito/Carta de fecha XX de XX de 20XX ingresado al OSINFOR con Registro N° XXXXXXXXX, se advierte que el/la concesionario/a presentó el Libro de Operaciones, el cual producto de la evaluación técnica se encuentra actualizado, por lo que, se tiene por cumplido el requisito analizado.
+                            De la revisión del Escrito/Carta de fecha XX de XX de 20XX ingresado al OSINFOR con Registro N° XXXXXXXXX, se advierte que el/la concesionario/a presentó ante el (indicar entidad e informe de ejecución objeto de imputación, así como el periodo correspondiente y fecha de presentación), por lo que, se tiene por cumplido el requisito analizado.
                         </td>
                         <td style="border: 1px solid #000; text-align: center;">SI</td>
                     </tr>
@@ -121,13 +126,13 @@
 </ol>
 <ol class="continue" style="margin-left: -37pt;">
     <li>
-        En atención a lo señalado precedentemente, se advierte que la conducta <strong>del/la concesionario/a</strong> <u>cumple con los requisitos para la aplicación de la figura de subsanación voluntaria respecto de la infracción materia de análisis</u>.
+        En atención a lo señalado precedentemente, se advierte que la conducta <strong>del/la concesionario/a</strong> cumple con los requisitos para la aplicación de la figura de subsanación voluntaria respecto de la infracción materia de análisis.
     </li>
     <li>
-        En ese sentido, de acuerdo a lo señalado precedentemente, y considerando la configuración de la subsanación voluntaria, se <strong>desestima</strong> que la concesionaria haya cometido la infracción tipificada en el numeral 11 del Cuadro de Infracciones y Sanciones en Materia Forestal del Anexo 1 del RISMFFS.
+        En ese sentido, de acuerdo a lo señalado precedentemente, y considerando la configuración de la subsanación voluntaria, se desestima que la concesionaria haya cometido la infracción tipificada en el numeral 2 del Cuadro de Infracciones y Sanciones en Materia Forestal del Anexo 1 del RISMFFS.
     </li>
     <li>
-        Sin perjuicio de lo señalado anteriormente, se <strong>exhorta al/la concesionario/a</strong> a cumplir con su obligación como titular del contrato de concesión de remitir tener y mantener actualizado el Libro de Operaciones de acuerdo a los lineamientos aprobados por el SERFOR, a fin de evitar incurrir en futuras infracciones administrativas.
+        Sin perjuicio de lo señalado anteriormente, se exhorta al/la concesionario/a a cumplir con su obligación como titular del contrato de concesión, y de remitir a esta Administración, los informes de ejecución, dentro del plazo y forma establecida en la normativa vigente; es decir dentro de los cuarenta y cinco (45) días calendario de culminado el año operativo y suscrito por el regente, en los casos que corresponda, a fin de evitar incurrir en futuras infracciones administrativas.
     </li>
 </ol>
 {{/if}}

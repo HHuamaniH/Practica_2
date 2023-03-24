@@ -29,6 +29,7 @@
     <li>
         Mediante la Resolución Sub Directoral N° ${informe.ANTECEDENTES_DOCS.RSD.numero || 'XXXXX-XXXX-OSINFOR/08.2.1'}, de fecha ${informe.ANTECEDENTES_DOCS.RSD.fechaEmisionTexto ||'XX de XXXX'}, se imputó al/la concesionario/a presuntamente incumplir con las obligaciones legamente establecidas en el contrato de concesión y el plan de manejo aprobado, al no haber declarado el aprovechamiento de un volumen de XX.XXX m3 (descripción del volumen total no declarado, precisando el volumen correspondiente a cada especie).
     </li>
+    {{if informe.COD_TIPO_INFORME == 1}}
     <li>
         <span>
             Por Escrito/Carta de fecha XX de XX de 20XX ingresado al OSINFOR con Registro N° XXXXXXXXX, e/la concesionario/a presentó sus descargos, donde se advierte los siguientes argumentos que guarda relación con la imputación materia de análisis:<br />
@@ -39,6 +40,7 @@
             </ol>
         </span>
     </li>
+    {{/if}}
     <li>
         <span>
             En el presente caso, de acuerdo a la documentación que obra en el expediente administrativo, se tiene lo siguiente:

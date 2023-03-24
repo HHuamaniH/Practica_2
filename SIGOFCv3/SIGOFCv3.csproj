@@ -30,7 +30,8 @@
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
     <TypeScriptToolsVersion>1.8</TypeScriptToolsVersion>
-    <Use64BitIISExpress>false</Use64BitIISExpress>
+    <Use64BitIISExpress>
+    </Use64BitIISExpress>
     <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -2236,25 +2237,44 @@
     <Content Include="Areas\THabilitante\Views\ManTHabilitante\_shared\_renderTHExtincion.cshtml" />
     <Content Include="Areas\Fiscalizacion\Views\InformeLegal\Shared\_InformeIFI.cshtml" />
     <Content Include="Areas\Fiscalizacion\Views\InformeLegal\templates\_tmplInforme.cshtml" />
-    <Content Include="Areas\Fiscalizacion\Views\InformeLegal\templates\_tmplConcesiones.cshtml" />
-    <Content Include="Areas\Fiscalizacion\Views\InformeLegal\templates\_tmplPredios.cshtml" />
-    <Content Include="Areas\Fiscalizacion\Views\InformeLegal\templates\_tmplCCNN.cshtml" />
-    <Content Include="Areas\Fiscalizacion\Views\InformeLegal\templates\_tmplFauna.cshtml" />
-    <Content Include="Areas\Fiscalizacion\Views\InformeLegal\templates\infracciones\inciso_1.cshtml" />
-    <Content Include="Areas\Fiscalizacion\Views\InformeLegal\templates\infracciones\inciso_e.cshtml" />
-    <Content Include="Areas\Fiscalizacion\Views\InformeLegal\templates\infracciones\inciso_11.cshtml" />
-    <Content Include="Areas\Fiscalizacion\Views\InformeLegal\templates\infracciones\inciso_2.cshtml" />
-    <Content Include="Areas\Fiscalizacion\Views\InformeLegal\templates\infracciones\inciso_10.cshtml" />
-    <Content Include="Areas\Fiscalizacion\Views\InformeLegal\templates\infracciones\inciso_13.cshtml" />
-    <Content Include="Areas\Fiscalizacion\Views\InformeLegal\templates\infracciones\inciso_16.cshtml" />
-    <Content Include="Areas\Fiscalizacion\Views\InformeLegal\templates\infracciones\inciso_19.cshtml" />
-    <Content Include="Areas\Fiscalizacion\Views\InformeLegal\templates\infracciones\inciso_21.cshtml" />
-    <Content Include="Areas\Fiscalizacion\Views\InformeLegal\templates\infracciones\inciso_26.cshtml" />
-    <Content Include="Areas\Fiscalizacion\Views\InformeLegal\templates\infracciones\inciso_29.cshtml" />
-    <Content Include="Areas\Fiscalizacion\Views\InformeLegal\templates\infracciones\inciso_32.cshtml" />
-    <Content Include="Areas\Fiscalizacion\Views\InformeLegal\templates\infracciones\inciso_b.cshtml" />
+    <Content Include="Areas\Fiscalizacion\Views\InformeLegal\templates\Concesiones\_tmpl.cshtml" />
+    <Content Include="Areas\Fiscalizacion\Views\InformeLegal\templates\Predios privados\_tmpl.cshtml" />
+    <Content Include="Areas\Fiscalizacion\Views\InformeLegal\templates\Comunidades nativas\_tmpl.cshtml" />
+    <Content Include="Areas\Fiscalizacion\Views\InformeLegal\templates\Fauna\_tmpl.cshtml" />
+    <Content Include="Areas\Fiscalizacion\Views\InformeLegal\templates\Concesiones\infracciones\inciso_1.cshtml" />
+    <Content Include="Areas\Fiscalizacion\Views\InformeLegal\templates\Concesiones\infracciones\inciso_e.cshtml" />
+    <Content Include="Areas\Fiscalizacion\Views\InformeLegal\templates\Concesiones\infracciones\inciso_11.cshtml" />
+    <Content Include="Areas\Fiscalizacion\Views\InformeLegal\templates\Concesiones\infracciones\inciso_2.cshtml" />
+    <Content Include="Areas\Fiscalizacion\Views\InformeLegal\templates\Concesiones\infracciones\inciso_10.cshtml" />
+    <Content Include="Areas\Fiscalizacion\Views\InformeLegal\templates\Concesiones\infracciones\inciso_13.cshtml" />
+    <Content Include="Areas\Fiscalizacion\Views\InformeLegal\templates\Concesiones\infracciones\inciso_16.cshtml" />
+    <Content Include="Areas\Fiscalizacion\Views\InformeLegal\templates\Concesiones\infracciones\inciso_19.cshtml" />
+    <Content Include="Areas\Fiscalizacion\Views\InformeLegal\templates\Concesiones\infracciones\inciso_21.cshtml" />
+    <Content Include="Areas\Fiscalizacion\Views\InformeLegal\templates\Concesiones\infracciones\inciso_26.cshtml" />
+    <Content Include="Areas\Fiscalizacion\Views\InformeLegal\templates\Concesiones\infracciones\inciso_29.cshtml" />
+    <Content Include="Areas\Fiscalizacion\Views\InformeLegal\templates\Concesiones\infracciones\inciso_32.cshtml" />
+    <Content Include="Areas\Fiscalizacion\Views\InformeLegal\templates\Concesiones\infracciones\inciso_b.cshtml" />
     <Content Include="Areas\Fiscalizacion\Views\ManCalculoMulta\Shared\_modalCalculoMulta.cshtml" />
     <Content Include="Areas\Fiscalizacion\Views\InformeLegal\templates\_tmplFootnotes.cshtml" />
+    <Content Include="Areas\Fiscalizacion\Views\InformeLegal\templates\Comunidades nativas\infracciones\inciso_b.cshtml" />
+    <Content Include="Areas\Fiscalizacion\Views\InformeLegal\templates\Comunidades nativas\_footnotes.cshtml" />
+    <Content Include="Areas\Fiscalizacion\Views\InformeLegal\templates\Concesiones\_footnotes.cshtml" />
+    <Content Include="Areas\Fiscalizacion\Views\InformeLegal\templates\Fauna\_footnotes.cshtml" />
+    <Content Include="Areas\Fiscalizacion\Views\InformeLegal\templates\Predios privados\_footnotes.cshtml" />
+    <Content Include="Areas\Fiscalizacion\Views\InformeLegal\templates\Comunidades nativas\infracciones\inciso_1.cshtml" />
+    <Content Include="Areas\Fiscalizacion\Views\InformeLegal\templates\Comunidades nativas\infracciones\inciso_e.cshtml" />
+    <Content Include="Areas\Fiscalizacion\Views\InformeLegal\templates\Comunidades nativas\infracciones\inciso_11.cshtml" />
+    <Content Include="Areas\Fiscalizacion\Views\InformeLegal\templates\Comunidades nativas\infracciones\inciso_l.cshtml" />
+    <Content Include="Areas\Fiscalizacion\Views\InformeLegal\templates\Comunidades nativas\infracciones\inciso_c.cshtml" />
+    <Content Include="Areas\Fiscalizacion\Views\InformeLegal\templates\Fauna\infracciones\inciso_7.cshtml" />
+    <Content Include="Areas\Fiscalizacion\Views\InformeLegal\templates\Fauna\infracciones\inciso_22.cshtml" />
+    <Content Include="Areas\Fiscalizacion\Views\InformeLegal\templates\Predios privados\infracciones\inciso_b.cshtml" />
+    <Content Include="Areas\Fiscalizacion\Views\InformeLegal\templates\Predios privados\infracciones\inciso_1.cshtml" />
+    <Content Include="Areas\Fiscalizacion\Views\InformeLegal\templates\Predios privados\infracciones\inciso_g.cshtml" />
+    <Content Include="Areas\Fiscalizacion\Views\InformeLegal\templates\Predios privados\infracciones\inciso_11.cshtml" />
+    <Content Include="Areas\Fiscalizacion\Views\InformeLegal\templates\Predios privados\infracciones\inciso_e.cshtml" />
+    <Content Include="Areas\Fiscalizacion\Views\InformeLegal\templates\Predios privados\infracciones\inciso_l.cshtml" />
+    <Content Include="Areas\Fiscalizacion\Views\InformeLegal\templates\Predios privados\infracciones\inciso_c.cshtml" />
     <None Include="Properties\PublishProfiles\CustomProfile.pubxml" />
     <Content Include="Areas\PlanFocalizacion\Views\web.config" />
     <Content Include="Areas\PlanFocalizacion\Views\Shared\_Layout.cshtml" />

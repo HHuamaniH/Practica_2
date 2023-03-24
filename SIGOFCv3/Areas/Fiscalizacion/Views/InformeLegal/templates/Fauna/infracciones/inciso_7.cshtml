@@ -1,0 +1,122 @@
+﻿<table width="580" cellpadding="4" style="border: 0; font-family: Arial; font-size: 10pt; border-collapse: collapse; line-height: 150%;">
+    <thead>
+        <tr style="background-color: #bfbfbf;">
+            <th style="text-align: center; border: 1px solid #000;">Obligación Incumplida</th>
+            <th style="text-align: center; border: 1px solid #000;">Base legal de la obligación</th>
+            <th style="text-align: center; border: 1px solid #000;">Tipo infractor</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td style="border: 1px solid #000;">
+                La administrada no informó el egreso de seis (06) espécimen de Fauna Silvestre, que corresponde al espécimen de Pecari tajacu “sajino” y no informo el nacimiento de (06) especímenes que corresponden al espécimen de Pecari tajacu “sajino”
+            </td>
+            <td style="border: 1px solid #000;">
+                Numeral 59.1 del artículo 59 del RGFS
+                <a style="mso-footnote-id: foot_infraccion_7" href="#_foot_infraccion_7" title="">
+                    <sup class=MsoFootnoteReference><span style="mso-special-character:footnote"></span></sup>
+                </a>.
+            </td>
+            <td style="border: 1px solid #000;">
+                Numeral 7 del Cuadro de Infracciones y Sanciones en Materia de Fauna Silvestre del Anexo 2 del Reglamento de Infracciones y Sanciones en Materia Forestal y de Fauna Silvestre.
+                <br /><br />
+                <i>
+                    “No cumplir con notificar los nacimientos, muertes, fugas o cualquier situación que afecte a la población de fauna silvestre mantenida en el centro de cría en cautividad, dentro del plazo y conforme a las condiciones establecidas”
+                </i>
+            </td>
+        </tr>
+    </tbody>
+</table>
+
+<ol class="continue" style="margin-left: -37pt;">
+    {{if informe.COD_TIPO_INFORME == 1}}
+    <li>
+        <span>
+            Mediante el escrito, ingresado con fecha XX de XX de 2022, con registro N° XX, la/el administrada/o presentó sus descargos contra la Resolución Sub Directoral N° ${ANTECEDENTES_DOCS.RSD.numero || 'XXXXX-XXXX-OSINFOR/08.2.1'}, donde se advierten los siguientes argumentos que guardan relación con la imputación materia de análisis:<br /><br />
+            <ol style="list-style-type: lower-alpha">
+                <li>(…) XXXXXXXXXXXXXXXXXXXXX (…). (Texto original del descargo).</li>
+                <li>(…) XXXXXXXXXXXXXXXXXXXXX (…). (Texto original del descargo).</li>
+            </ol>
+        </span>
+    </li>
+    <li>
+        <span>
+            Respecto a lo señalado por el/la concesionario/a, se advierte el siguiente análisis:
+            <ul>
+                <li>
+                    Con relación al argumento señalado en el acápite a), <strong>XXXXXXXXXXXXXXXXXXXXXXXXXXX</strong>.
+                </li>
+                <li>
+                    Con relación al argumento señalado en el acápite b), <strong>XXXXXXXXXXXXXXXXXXXXXXXXXXX</strong>.
+                </li>
+                <li>
+                    Con relación al argumento señalado en el acápite c), <strong>XXXXXXXXXXXXXXXXXXXXXXXXXXX</strong>.
+                </li>
+            </ul>
+        </span>
+    </li>
+    {{/if}}
+    <li>
+        <span>
+            En el presente caso, de acuerdo a la documentación que obra en el expediente administrativo y del análisis de los descargos, ha quedado acreditado lo siguiente:
+            <br /><br />
+            El/la administrada/o no ha informado el egreso de XX especímenes de Fauna Silvestre, los cuales corresponden a XX”.
+            <br /><br />
+            Por lo que en el presente caso, se evidencia que el/la administrada/o no ha informado el egreso de  XX, como se observa del Balance de ingresos y egresos, donde no se advierte la situación de estas especies; se debe precisar que la administrada presentó toda documentación que acredita la posesión de distintas especies, así como toda documentación sobre los egresos de las mismas; sin embargo, en ninguno de estos documentos se advierte la situación de los mencionados especímenes, por lo que al evidenciarse que la administrada debe poseer estas especies y al advertir que estas no se encontraron al momento de la supervisión, se puede concluir que el/la administrada/o no ha informado sobre el egreso de las especies antes citadas.
+            <br /><br />
+            <table width="560" cellpadding="4" border="0" style="font-family: Arial; font-size: 9pt; border-collapse: collapse; line-height: 150%;">
+                <thead>
+                    <tr style="background-color: #bfbfbf;">
+                        <th style="text-align: center; border: 1px solid #000;">
+                            Espécimen
+                        </th>
+                        <th style="text-align: center; border: 1px solid #000;">
+                            Reporte Inf de Sup
+                        </th>
+                        <th style="text-align: center; border: 1px solid #000;">
+                            Egreso
+                        </th>
+                        <th style="text-align: center; border: 1px solid #000;">
+                            Motivo
+                        </th>
+                        <th style="text-align: center; border: 1px solid #000;">
+                            Balance documentario
+                        </th>
+                        <th style="text-align: center; border: 1px solid #000;">
+                            Supervisión OSINFOR
+                        </th>
+                        <th style="text-align: center; border: 1px solid #000;">
+                            Especie faltante
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {{each(a, b) [1,2,3,4,5,6]}}
+                    <tr>
+                        <td style="border: 1px solid #000; text-align: center;"></td>
+                        <td style="border: 1px solid #000; text-align: center;"></td>
+                        <td style="border: 1px solid #000; text-align: center;"></td>
+                        <td style="border: 1px solid #000; text-align: center;"></td>
+                        <td style="border: 1px solid #000; text-align: center;"></td>
+                        <td style="border: 1px solid #000; text-align: center;"></td>
+                        <td style="border: 1px solid #000; text-align: center;"></td>
+                    </tr>
+                    {{/each}}
+                    <tr style="background-color: #bfbfbf;">
+                        <td style="border: 1px solid #000; text-align: center;" colspan="6">
+                            TOTAL
+                        </td>
+                        <td style="border: 1px solid #000; text-align: center;"></td>
+                    </tr>
+                </tbody>
+            </table>
+        </span>
+    </li>
+    <li>
+        En ese contexto, de acuerdo a lo señalado precedentemente
+        {{if informe.COD_TIPO_INFORME == 1}}
+        y siendo que los descargos presentados
+        {{/if}}
+        no desacreditan los hechos que sustentan la imputación, se confirma que el administrado cometió la infracción tipificada en el literal XXXXXXXX.
+    </li>
+</ol>

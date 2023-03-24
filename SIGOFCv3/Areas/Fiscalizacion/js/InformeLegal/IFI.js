@@ -212,8 +212,8 @@ _informe.EnumerarListas = function (html) {
 _informe.RevisarFootnotes = function (infracciones, html) {
     var $html = $('<div />', { html: html });
 
-    $html.find('[data-enciso]').each((i, el) => {
-        const inciso = $(el).data('enciso');
+    $html.find('[data-inciso]').each((i, el) => {
+        const inciso = $(el).data('inciso');
         if (!infracciones.find(x => x.inciso == inciso)) {
             $(el).html('');
         }
@@ -226,9 +226,10 @@ _informe.Exportar = async function () {
     const informe = _informe.Estructura();
     const [procedencias, materias, modalidades] = JSON.parse(JSON.stringify([app.Procedencias, app.Materias, data.Modalidades]));
 
+    informe.MODALIDAD = modalidades.find(function (x) { return x.COD_MODALIDAD === informe.COD_MODALIDAD })?.MODALIDAD
     informe.PROCEDENCIA = procedencias.find(function (x) { return x.COD_PROCEDENCIA === informe.COD_PROCEDENCIA })?.PROCEDENCIA;
     informe.MATERIA = materias.find(function (x) { return x.COD_MATERIA === informe.COD_MATERIA })?.MATERIA;
-    informe.TIPO_CONTRATO = materias.find(function (x) { return x.COD_MODALIDAD === informe.COD_MODALIDAD })?.CONTRATO || '';
+    informe.TIPO_CONTRATO = modalidades.find(function (x) { return x.COD_MODALIDAD === informe.COD_MODALIDAD })?.CONTRATO || '';
     informe.FECHA = fnDate.text_long(informe.RES_DIRECTORAL_FECHA || new Date());
     informe.SITD_PASSWORD = app.Tramite?.password || '';
     informe.SUBDIRECTOR = informe.PARTICIPANTES.find(function (x) { return x.funcion === 'Subdirector' })?.apellidosNombres || '[INDICAR SUBDIRECTOR]';
@@ -651,7 +652,10 @@ _informe.ExtraerParrafoInfraccion = function (infraccion, informe) {
             type: 'get',
             url: `${urlLocalSigo}Fiscalizacion/InformeLegalDigital/ObtenerInfraccion`,
             dataType: 'html',
-            datos: { inciso: infraccion.inciso.replace(/\W+/gi, '') }
+            datos: {
+                modalidad: informe.MODALIDAD,
+                inciso: infraccion.inciso.replace(/\W+/gi, '')
+            }
         };
 
         utilSigo.fnAjax(params, function (html) {
@@ -799,6 +803,11 @@ _informe.AbrirCalculoMulta = function () {
         dataType: false
     }, (res) => {
         $("#partialviews").html(res);
+
+        if (!window._manCalMul) {
+            utilSigo.toastWarning('Atención', 'No se ha cargado correctamente el modal de cálculo de multa, intente de nuevo');
+            return;
+        };
 
         _manCalMul.fnGuardar = $.Deferred();
 
