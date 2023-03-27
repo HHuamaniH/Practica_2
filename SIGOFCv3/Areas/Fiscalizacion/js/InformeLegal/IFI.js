@@ -23,9 +23,9 @@ const regExpOSINFOR = /([^\s]+-OSINFOR\/[0-9]{1,}\.[0-9]{1,}(\.[0-9]{1,})?)/gi;
 const data = {
     Modalidades: [
         { COD_MODALIDAD: '01', COD_MATERIA: '02', MODALIDAD: 'Concesiones', CONTRATO: 'contrato de concesión' },
-        { COD_MODALIDAD: '02', COD_MATERIA: '02', MODALIDAD: 'Predios privados', CONTRATO: 'contrato de predios privados' },
-        { COD_MODALIDAD: '03', COD_MATERIA: '02', MODALIDAD: 'Comunidades nativas', CONTRATO: 'contrato de comunidades nativas' },
-        { COD_MODALIDAD: '04', COD_MATERIA: '01', MODALIDAD: 'Fauna', CONTRATO: 'contrato de fauna' },
+        { COD_MODALIDAD: '02', COD_MATERIA: '02', MODALIDAD: 'Predios privados', CONTRATO: 'permiso forestal' },
+        { COD_MODALIDAD: '03', COD_MATERIA: '02', MODALIDAD: 'Comunidades nativas', CONTRATO: 'permiso forestal' },
+        { COD_MODALIDAD: '04', COD_MATERIA: '01', MODALIDAD: 'Fauna', CONTRATO: 'permiso' },
     ]
 };
 
@@ -226,17 +226,17 @@ _informe.Exportar = async function () {
     const informe = _informe.Estructura();
     const [procedencias, materias, modalidades] = JSON.parse(JSON.stringify([app.Procedencias, app.Materias, data.Modalidades]));
 
-    informe.MODALIDAD = modalidades.find(function (x) { return x.COD_MODALIDAD === informe.COD_MODALIDAD })?.MODALIDAD
+    informe.MODALIDAD = modalidades.find(function (x) { return x.COD_MODALIDAD === informe.COD_MODALIDAD })?.MODALIDAD;
     informe.PROCEDENCIA = procedencias.find(function (x) { return x.COD_PROCEDENCIA === informe.COD_PROCEDENCIA })?.PROCEDENCIA;
     informe.MATERIA = materias.find(function (x) { return x.COD_MATERIA === informe.COD_MATERIA })?.MATERIA;
     informe.TIPO_CONTRATO = modalidades.find(function (x) { return x.COD_MODALIDAD === informe.COD_MODALIDAD })?.CONTRATO || '';
     informe.FECHA = fnDate.text_long(informe.RES_DIRECTORAL_FECHA || new Date());
     informe.SITD_PASSWORD = app.Tramite?.password || '';
     informe.SUBDIRECTOR = informe.PARTICIPANTES.find(function (x) { return x.funcion === 'Subdirector' })?.apellidosNombres || '[INDICAR SUBDIRECTOR]';
-    //console.log(informe); //return;
+    informe.DENOMINACION_TITULAR = informe.COD_MODALIDAD == '01' ? 'concesionario' : 'administrado';
 
     //EXPEDIENTES ADMINISTRATIVOS
-    informe.EXPEDIENTE_ADM = informe.REFERENCIAS.filter(x => x.TIPO_DOCUMENTO?.indexOf('EXPEDIENTE') != -1).map(x => (x.NUMERO || 'S/N')).join(', ');
+    informe.EXPEDIENTE_ADM = informe.REFERENCIAS.filter(x => x.TIPO_DOCUMENTO?.indexOf('EXPEDIENTE') != -1).map(x => (x.CODIGO || x.NUMERO || 'S/N')).join(', ');
 
     //Asociamos las infracciones a las RSD en los antecedentes
     informe.ANTECEDENTES.forEach(item => {
@@ -912,7 +912,7 @@ $(function () {
             oficinaDefault: null,
             Tramite: null,
             Procedencias: [
-                { COD_PROCEDENCIA: 'SDI', PROCEDENCIA: 'Sub Dirección de Instrucción' },
+                { COD_PROCEDENCIA: 'SDI', PROCEDENCIA: 'Subdirección de Instrucción' },
             ],
             Materias: [
                 { COD_MATERIA: '01', MATERIA: 'Fauna Silvestre' },
