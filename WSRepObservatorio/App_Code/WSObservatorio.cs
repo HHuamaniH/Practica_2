@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Globalization;
 //using System.Data.SqlClient;
 using System.IO;
+using System.Text.RegularExpressions;
 using System.Web.Services;
 using CDatos = CapaDatos.DOC.Dat_Reporte_OBSERVATORIO;
 //using CDatos = CapaDatos.DOC.Dat_Reporte_OBSERVATORIO_SIMULACION;
@@ -258,8 +259,35 @@ public class WSObservatorio : System.Web.Services.WebService
 
             tableDatos.AddCell(HerUtil.celda("Titular(es): ", 1, 1, 11, Element.ALIGN_LEFT, 0, BaseColor.BLACK, "transparent", "Negrita"));
             tableDatos.AddCell(HerUtil.celda(elementListado.TITULAR.ToString(), 2, 1, 11, Element.ALIGN_LEFT, 0, BaseColor.BLACK, "transparent", "Normal"));
-            tableDatos.AddCell(HerUtil.celda("Título Habilitante: ", 1, 1, 11, Element.ALIGN_LEFT, 0, BaseColor.BLACK, "transparent", "Negrita"));
-            tableDatos.AddCell(HerUtil.celda(elementListado.NUM_THABILITANTE.ToString(), 2, 1, 11, Element.ALIGN_LEFT, 0, BaseColor.BLACK, "transparent", "Normal"));
+
+
+            string num_thabilitante = Regex.Replace(elementListado.NUM_THABILITANTE, @"\s", "");
+            string[] lista = num_thabilitante.Split('|');
+            int cantidadTH = lista.Length;
+
+            if (cantidadTH < 3)
+            {
+                tableDatos.AddCell(HerUtil.celda("Título Habilitante: ", 1, 1, 11, Element.ALIGN_LEFT, 0, BaseColor.BLACK, "transparent", "Negrita"));
+                tableDatos.AddCell(HerUtil.celda(elementListado.NUM_THABILITANTE.ToString(), 2, 1, 11, Element.ALIGN_LEFT, 0, BaseColor.BLACK, "transparent", "Normal"));
+            }
+            else
+            {
+                tableDatos.AddCell(HerUtil.celda("Título Habilitante: ", 1, 1, 11, Element.ALIGN_LEFT, 0, BaseColor.BLACK, "transparent", "Negrita"));
+                tableDatos.AddCell(HerUtil.celda(lista[0] + " | " + lista[1], 2, 1, 11, Element.ALIGN_LEFT, 0, BaseColor.BLACK, "transparent", "Normal"));
+                for (int i = 2; i < cantidadTH; i++)
+                {
+                    if (i + 1 == cantidadTH)
+                    {
+                        tableDatos.AddCell(HerUtil.celda(string.Empty, 1, 1, 11, Element.ALIGN_LEFT, 0, BaseColor.BLACK, "transparent", "Negrita"));
+                        tableDatos.AddCell(HerUtil.celda(lista[i], 2, 1, 11, Element.ALIGN_LEFT, 0, BaseColor.BLACK, "transparent", "Normal"));
+                    }
+                    else
+                    {
+                        tableDatos.AddCell(HerUtil.celda(string.Empty, 1, 1, 11, Element.ALIGN_LEFT, 0, BaseColor.BLACK, "transparent", "Negrita"));
+                        tableDatos.AddCell(HerUtil.celda(lista[i] + " | " + lista[i + 1], 2, 1, 11, Element.ALIGN_LEFT, 0, BaseColor.BLACK, "transparent", "Normal"));
+                    }
+                }
+            }
             if ((elementListado.ANIO_REFERENCIA >= anioReferencia) && (elementListado.RUC.ToString().Trim() != ""))
             {
                 tableDatos.AddCell(HerUtil.celda("RUC: ", 1, 1, 11, Element.ALIGN_LEFT, 0, BaseColor.BLACK, "transparent", "Negrita"));
@@ -561,7 +589,7 @@ public class WSObservatorio : System.Web.Services.WebService
                             Multa = Resoles.MONTO.ToString() + " U.I.T.";
                         break;
                     case "Resolución TFFS":
-                        if (Resoles.LITERAL != "" )
+                        if (Resoles.LITERAL != "")
                         {
                             literal = 1;
                             string[] nombreliteral = Resoles.LITERAL.Split(';');
@@ -586,7 +614,7 @@ public class WSObservatorio : System.Web.Services.WebService
                             doc.Add(tableTituloBloque);
 
                         }
-                        
+
                         switch (Resoles.SENTIDO_RES)
                         {
                             case "00000118":
@@ -616,14 +644,14 @@ public class WSObservatorio : System.Web.Services.WebService
                                 tableResol.AddCell(HerUtil.celda("Sentido:", 2, 1, 11, Element.ALIGN_LEFT, 0, BaseColor.BLACK, "transparent", "Negrita"));
                                 tableResol.AddCell(HerUtil.celda("Improcedente", 2, 1, 11, Element.ALIGN_LEFT, 0, BaseColor.BLACK, "transparent", "Normal"));
                                 doc.Add(tableResol);
-                                if (Resoles.RESOL_DET!="0")
+                                if (Resoles.RESOL_DET != "0")
                                 {
                                     medCols = new float[] { .35f, .01f, .64f };
                                     tableResol = HerUtil.constructorTabla(3, page, medCols, page.Width - 90);
                                     tableResol.AddCell(HerUtil.celda("Determina:", 2, 1, 11, Element.ALIGN_LEFT, 0, BaseColor.BLACK, "transparent", "Negrita"));
                                     tableResol.AddCell(HerUtil.celda(Resoles.RESOL_DET, 2, 1, 11, Element.ALIGN_LEFT, 0, BaseColor.BLACK, "transparent", "Normal"));
                                     doc.Add(tableResol);
-                                }                                
+                                }
                                 break;
                             case "0000054":
                                 medCols = new float[] { .35f, .01f, .64f };
@@ -638,9 +666,9 @@ public class WSObservatorio : System.Web.Services.WebService
                                     tableResol.AddCell(HerUtil.celda("Determina:", 2, 1, 11, Element.ALIGN_LEFT, 0, BaseColor.BLACK, "transparent", "Negrita"));
                                     tableResol.AddCell(HerUtil.celda(Resoles.RESOL_DET2, 2, 1, 11, Element.ALIGN_LEFT, 0, BaseColor.BLACK, "transparent", "Normal"));
                                     doc.Add(tableResol);
-                                }                                    
+                                }
                                 break;
-                           
+
                             case "0000057":
                                 medCols = new float[] { .35f, .01f, .64f };
                                 tableResol = HerUtil.constructorTabla(3, page, medCols, page.Width - 90);
@@ -653,7 +681,7 @@ public class WSObservatorio : System.Web.Services.WebService
                                     tableResol = HerUtil.constructorTabla(3, page, medCols, page.Width - 90);
                                     tableResol.AddCell(HerUtil.celda("Determina:", 2, 1, 11, Element.ALIGN_LEFT, 0, BaseColor.BLACK, "transparent", "Negrita"));
                                     tableResol.AddCell(HerUtil.celda(Resoles.RESOL_DET3, 2, 1, 11, Element.ALIGN_LEFT, 0, BaseColor.BLACK, "transparent", "Normal"));
-                                    doc.Add(tableResol);                                    
+                                    doc.Add(tableResol);
                                 }
                                 break;
                             case "0000055":
@@ -663,15 +691,15 @@ public class WSObservatorio : System.Web.Services.WebService
                                 tableResol.AddCell(HerUtil.celda("Fundado", 2, 1, 11, Element.ALIGN_LEFT, 0, BaseColor.BLACK, "transparent", "Normal"));
                                 doc.Add(tableResol);
                                 determina = "Determina:";
-                                
+
 
                                 if (Resoles.CHKREVOCAR == 1)
                                 {
-                                    
+
                                     medCols = new float[] { .35f, .01f, .64f };
                                     tableResol = HerUtil.constructorTabla(3, page, medCols, page.Width - 90);
                                     tableResol.AddCell(HerUtil.celda(determina, 2, 1, 11, Element.ALIGN_LEFT, 0, BaseColor.BLACK, "transparent", "Negrita"));
-                                    descripcion = "Revocar ";                                    
+                                    descripcion = "Revocar ";
                                     switch (Resoles.RADREVOCAR)
                                     {
                                         case "1":
@@ -757,7 +785,7 @@ public class WSObservatorio : System.Web.Services.WebService
                                     tableResol.AddCell(HerUtil.celda(descripcion, 2, 1, 11, Element.ALIGN_LEFT, 0, BaseColor.BLACK, "transparent", "Normal"));
                                     doc.Add(tableResol);
                                     determina = "";
-                                    descripcion = "";                                    
+                                    descripcion = "";
                                 }
 
                                 if (Resoles.CHKPRESCRIBIR == 1)
@@ -839,8 +867,8 @@ public class WSObservatorio : System.Web.Services.WebService
                                     tableResol.AddCell(HerUtil.celda("Otro ", 2, 1, 11, Element.ALIGN_LEFT, 0, BaseColor.BLACK, "transparent", "Normal"));
                                     determina = "";
                                     doc.Add(tableResol);
-                                }                                
-                                
+                                }
+
                                 break;
 
                             case "0000056":
@@ -1024,7 +1052,7 @@ public class WSObservatorio : System.Web.Services.WebService
                                     determina = "";
                                     doc.Add(tableResol);
                                 }
-                                
+
                                 break;
 
                             case "0000058":
@@ -1109,7 +1137,7 @@ public class WSObservatorio : System.Web.Services.WebService
                             medCols = new float[] { .35f, .01f, .64f };
                             tableResol = HerUtil.constructorTabla(3, page, medCols, page.Width - 90);
                             tableResol.AddCell(HerUtil.celda("Multa Determinada:", 2, 1, 11, Element.ALIGN_LEFT, 0, BaseColor.BLACK, "transparent", "Negrita"));
-                            tableResol.AddCell(HerUtil.celda(Resoles.MULTA.ToString()+" U.I.T.", 2, 1, 11, Element.ALIGN_LEFT, 0, BaseColor.BLACK, "transparent", "Normal"));
+                            tableResol.AddCell(HerUtil.celda(Resoles.MULTA.ToString() + " U.I.T.", 2, 1, 11, Element.ALIGN_LEFT, 0, BaseColor.BLACK, "transparent", "Normal"));
                             doc.Add(tableResol);
                         }
                         break;
@@ -1133,7 +1161,7 @@ public class WSObservatorio : System.Web.Services.WebService
                         break;
                 }
             }
-            if (elementListado.INFRACCIONES.Trim() != "" && literal ==0)
+            if (elementListado.INFRACCIONES.Trim() != "" && literal == 0)
             {
                 medCols = new float[] { .30f };
                 tableTituloBloque = HerUtil.constructorTabla(1, page, medCols, page.Width - 90);
