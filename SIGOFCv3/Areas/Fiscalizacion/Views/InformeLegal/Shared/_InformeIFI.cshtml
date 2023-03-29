@@ -312,7 +312,7 @@
         <fieldset class="fs-border">
             <legend>
                 Control de Vistos
-                <a class="ml-2 btn btn-link btn-sm" v-if="Informe.ESTADO == States.INGRESADO" onclick="_informe.Agregar_Integrante()">
+                <a class="ml-2 btn btn-link btn-sm" v-if="Informe.ESTADO != States.FINALIZADO" onclick="_informe.Agregar_Integrante()">
                     <i class="fa fa-plus-circle mr-1"></i>Añadir un integrante
                 </a>
                 <a class="ml-2 btn btn-link btn-sm" v-if="Informe.ESTADO != States.FINALIZADO" v-on:click="Abrir_Notificar()">

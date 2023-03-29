@@ -1725,6 +1725,7 @@ $(function () {
             Agregar: function () {
                 const user = { ...this.form };
                 app.Informe.PARTICIPANTES.push(user);
+                app.Informe.FLG_ACTUALIZAR = true;
 
                 utilSigo.toastSuccess('Agregado', 'Se ha agregado el integrante a la lista');
                 $('#modal-integrante').modal('hide');
