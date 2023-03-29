@@ -116,7 +116,7 @@
             <ul>
                 {{each(i, infr) INFRACCIONES}}
                 <li>
-                    Respecto de la infracción tipificada como ${infr.gravedad?.toLowerCase()} en el numeral ${infr.inciso} del Cuadro de Infracciones y Sanciones en Materia Forestal del Anexo 1 del RISMFFS, con una {{if infr.tipoInfraccion > 1}}multa ascendente ${infr.rangoSancion || 'XX A XX UIT'} {{else}}amonestación{{/if}}.
+                    Respecto de la infracción tipificada como ${infr.gravedad?.toLowerCase()} en el numeral ${infr.inciso} del Cuadro de Infracciones y Sanciones en Materia Forestal del Anexo 2 del RISMFFS, con una {{if infr.tipoInfraccion > 1}}multa ascendente ${infr.rangoSancion || 'XX A XX UIT'} {{else}}amonestación{{/if}}.
                 </li>
                 {{/each}}
             </ul>
@@ -127,65 +127,69 @@
     </li>
     <li>
         {{if FLG_SANCION == 1}}
-        En tal sentido, teniendo en consideración la aplicación a la metodología aprobada, corresponde imponer una <strong>sanción de amonestación</strong> respecto de (precisar las infracciones acreditadas) del Cuadro de Infracciones y Sanciones en Materia Forestal del Anexo 1 del RISMFFS.
+        En tal sentido, teniendo en consideración la aplicación a la metodología aprobada, corresponde imponer una <strong>sanción de amonestación</strong> respecto de (precisar las infracciones acreditadas) del Cuadro de Infracciones y Sanciones en Materia Forestal del Anexo 2 del RISMFFS.
         {{else FLG_SANCION == 2}}
         En tal sentido, teniendo en consideración la aplicación a la metodología aprobada, corresponde imponer una <strong>sanción de multa ascendente a ${SANCION_UIT || 0} UIT</strong>, vigente a la fecha en que se cumpla con el pago de esta respecto de (precisar las infracciones acreditadas) del Cuadro de Infracciones y Sanciones en Materia Forestal del RISMFFS.
         {{else FLG_SANCION == 3}}
-        En tal sentido, teniendo en consideración la aplicación a la metodología aprobada, corresponde imponer una <strong>sanción de amonestación</strong> respecto de (precisar las infracciones acreditadas) del Cuadro de Infracciones y Sanciones en Materia Forestal del Anexo 1 del RISMFFS, asi como una <strong>sanción de multa ascendente a ${SANCION_UIT || 0} UIT</strong>, vigente a la fecha en que se cumpla con el pago de esta respecto de (precisar las infracciones acreditadas) del Cuadro de Infracciones y Sanciones en Materia Forestal del citado reglamento.
+        En tal sentido, teniendo en consideración la aplicación a la metodología aprobada, corresponde imponer una <strong>sanción de amonestación</strong> respecto de (precisar las infracciones acreditadas) del Cuadro de Infracciones y Sanciones en Materia Forestal del Anexo 2 del RISMFFS, asi como una <strong>sanción de multa ascendente a ${SANCION_UIT || 0} UIT</strong>, vigente a la fecha en que se cumpla con el pago de esta respecto de (precisar las infracciones acreditadas) del Cuadro de Infracciones y Sanciones en Materia Forestal del citado reglamento.
         {{/if}}
     </li>
 </ol>
 {{/if}}
 
-{{if !FLG_MEDIDA_COMPLEMENTARIA}}
-<h5 style="margin-left: -5pt;"><u><strong>De las medidas correctivas</strong></u></h5>
+{{if FLG_MEDIDA_CORRECTIVA}}
+<h5 style="margin-left: -5pt;"><u><strong>De las medidas correctivas (mandatos)</strong></u></h5>
 <ol class="continue" style="margin-left: -40pt;">
     <li>
-        En ese sentido, con la finalidad de eliminar o mitigar los efectos producidos por la comisión de la infracción acreditada en el presente procedimiento, tales como la posesión, el transporte o comercialización de los productos forestales provenientes de la extracción no autorizada, se evalúa la posibilidad de disponer como medida complementaria el decomiso de los productos forestales movilizados de forma no autorizada o que corresponden a volumen injustificado, conforme a lo establecido en el Reglamento de Infracciones y Sanciones en Materia Forestal y de Fauna Silvestre, aprobado mediante Decreto Supremo N° 007-2021-MIDAGRI, publicado con fecha 12 de abril de 2021, el cual señala que de manera complementaria a la sanción a imponerse, puede aplicarse el decomiso de especímenes, productos o subproductos, que provengan de extracción no autorizada.
-    </li>
-    <li>
-        Lo antes expuesto, también tiene como sustento legal lo regulado en el literal a.1 del numeral 9.1 del artículo 9 del RISMFFS; donde se señala que de manera complementaria a la sanción a imponerse, puede aplicarse el decomiso de especímenes, productos o subproductos, que provengan de extracción no autorizada.
-    </li>
-    <li>
-        Asimismo, respecto al decomiso de los productos forestales por parte de la autoridad forestal se debe tomar en cuenta lo establecido en el artículo 4 del Decreto Legislativo N° 1085, mediante el cual se señala la participación de los actores involucrados en el sector forestal y de fauna silvestre.
-    </li>
-    <li>
-        Por otro lado, es necesario indicar que, para poder dictar el decomiso del producto forestal maderable, este debe ser identificado plenamente, es decir, determinar las trozas o lote de madera que proviene de la extracción de individuos distintos a los autorizados, para este caso implica la revisión de las guías de transporte forestal, existe un volumen parcial injustificado que imposibilita diferenciar la madera que corresponderá a volumen justificado e injustificado. En consecuencia, no es posible recomendar emitir la mencionada medida de decomiso o incautación.
-    </li>
-    <li>
-        Por tal motivo, del análisis del presente caso, se debe precisar que del informe de supervisión, así como el Balance de Extracción/Forma 20 que se encuentra en el expediente administrativo, se evidencia que desde la última movilización del recurso forestal que fue el XX de XXXXXXX de XXXX, hasta la fecha del presente Informe Final de Instrucción, ya habrían pasado más de XX días/meses aproximadamente, en el cual los recursos ya no estarían en circulación, así como también ya habrían sido transformados; en ese sentido, no sería razonable el determinar una eventual medida complementaria de decomiso.
+        Para el presente caso, corresponde analizar si resulta viable dictar la medida correctiva por el incumplimiento del Mandato N° 02 y el incumplimiento del plan de manejo (infraestructura de respaldo), según lo dispuesto en los Criterios SGC-M1-CRI-004-V.01 “Criterios para la disposición, seguimiento y verificación de las medidas correctivas y/o mandatos en materia forestal y de fauna silvestre del Organismo de Supervisión de los Recursos Forestales y de Fauna Silvestre - OSINFOR”, aprobado mediante Resolución de Jefatura Nº 00055-2020-OSINFOR/01.1.
     </li>
 </ol>
-{{else}}
-<h5 style="margin-left: -5pt;"><u><strong>De las medidas cautelares dispuestas en la etapa de instrucción y de las medidas complementarias</strong></u></h5>
+<h5 style="margin-left: -5pt;"><u><strong>Sobre el incumplimiento del Mandado N° xx:</strong></u></h5>
 <ol class="continue" style="margin-left: -40pt;">
     <li>
-        <span>
-            Se debe señalar que mediante la Resolución Sub Directoral N° ${ANTECEDENTES_DOCS.RSD.numero || 'XXXXX-XXXX-OSINFOR/08.2.1'}, de fecha ${ANTECEDENTES_DOCS.RSD.fechaEmisionTexto ||'XX de XXXX'}, se dispusieron medidas cautelares, las cuales fueron confirmadas mediante la Resolución Sub Directoral N° XXXXX-XXXX-OSINFOR/08.2.1, de fecha XX de XXXX de XXXX, conforme al siguiente detalle:
-            <ul style="color: green;">
-                <li>
-                    (Detallar las medidas correctivas dispuestas).
-                </li>
-                <li>
-                    (Detallar las medidas correctivas dispuestas). Agregar el cuadro de incautación de productos forestales.
-                </li>
-            </ul>
-        </span>
+        Ahora bien, de acuerdo al Cuadro N° XX (Medidas correctivas en materia de fauna silvestre y plazos para su implementación) de los “Criterios para la disposición, seguimiento y verificación de las medidas correctivas y/o mandatos en materia forestal y de fauna silvestre del Organismo de Supervisión de los Recursos Forestales y de Fauna Silvestre - OSINFOR”, aprobado por Resolución Jefatural N° 00055-2020-OSINFOR, no se establece una medida específica para el incumplimiento de mandatos. No obstante, dispone que “La DFFFS evaluará la pertinencia de disponer otras medidas correctivas que no se encuentren contempladas en el presente documento”.
     </li>
     <li>
-        Cabe precisar que, en aplicación del numeral 157.3 del artículo 157 del TUO de la Ley N° 27444, corresponde caducar de pleno derecho las medidas cautelares dispuestas en la resolución sub directoral de inicio del PAU cuando se emite la resolución que pone fin al procedimiento.
+        En concordancia a ello, en el literal c) del numeral 11.2 del artículo 11 del RISMFFS, se disponen las medidas correctivas que pueden disponerse, entre las cuales se encuentra la medida de “Adopción de medidas de prevención y mitigación del riesgo o daño a los recursos otorgados a través del derecho de aprovechamiento”.
     </li>
     <li>
-        Ahora bien, se debe señalar que el inciso a.1 del literal a) del numeral 9.1 del artículo 9 del Reglamento de Infracciones y Sanciones en Materia Forestal y de Fauna Silvestre, establece que, de manera complementaria a la sanción a imponerse, puede aplicarse el decomiso de especímenes, productos o subproductos forestales y de fauna silvestre sobre los que no pueda acreditarse su origen legal o provengan de operaciones de extracción, caza colecta o capturas no autorizadas.
+        En ese sentido, y habiéndose determinado la necesidad de la implementación continua del manejo de seguridad en el Centro de Custodia Temporal, el tipo de medida correctiva de prevención y mitigación, la cual es viable acreditando la implementación de candados en todos los recintos del Centro de Custodia Temporal y deberá ser realizada conforme lo señala el Anexo II del presente informe.
+    </li>
+</ol>
+<h5 style="margin-left: -5pt;"><u><strong>Sobre la implementación del plan de manejo (infraestructura de respaldo):</strong></u></h5>
+<ol class="continue" style="margin-left: -40pt;">
+    <li>
+        Por otro lado, corresponde analizar si resulta viable dictar la medida correctiva por no implementar infraestructura de respaldo conforme al plan de manejo de fauna silvestre aprobado, según lo dispuesto en los “Criterios para la disposición, seguimiento y verificación de las medidas correctivas y/o mandatos en materia forestal y de fauna silvestre del Organismo de Supervisión de los Recursos Forestales y de Fauna Silvestre - OSINFOR”, aprobado por Resolución Jefatural N° 00055-2020-OSINFOR, el tipo de medida correctiva que corresponde aplicar sería de medida implementación del plan de manejo, la cual es viable realizando la implementación del tópico, cuarentena y almacén de acuerdo a lo descrito en el plan de manejo de fauna silvestre y deberá ser realizada conforme lo señala el Anexo II del presente informe.
     </li>
     <li>
-        A través de Resolución Sub Directoral N° ${ANTECEDENTES_DOCS.RSD.numero || 'XXXXX-XXXX-OSINFOR/08.2.1'}, de fecha ${ANTECEDENTES_DOCS.RSD.fechaEmisionTexto ||'XX de XXXX'}, confirmada mediante la Resolución Sub Directoral N° XXXXX-XXXX-OSINFOR/08.2.1, de fecha XX de XXXX de XXXX (mediante la cual también se dispuso el inicio del PAU), se dictaron medidas cautelares, a fin de que la decisión final a emitirse en el presente procedimiento logre eficacia y se puedan salvaguardar los recursos que forman parte del patrimonio forestal que fue extraído sin autorización, suspendiéndose los efectos de las Guías de Transporte Forestal y correspondientes Listas de Trozas, del Plan de Manejo Forestal aprobado a favor del administrado.
+        Finalmente, de acuerdo al literal z) del numeral 17.1 del artículo 17 del RGFS, los titulares tienen la obligación de cumplir con la implementación de las medidas correctivas y/o mandatos que se emitan como resultado de las acciones de control, supervisión y/o fiscalización, ejecutadas por la autoridad competente. Cabe señalar que el numeral 13 del anexo 2 del RISMFFS, establece que el incumplir con la implementación de las medidas correctivas constituye una infracción grave.
+    </li>
+</ol>
+{{/if}}
+
+{{if FLG_MEDIDA_COMPLEMENTARIA}}
+<h5 style="margin-left: -5pt;"><u><strong>De las medidas complementarias</strong></u></h5>
+<ol class="continue" style="margin-left: -40pt;">
+    <li>
+        En ese sentido, con la finalidad de eliminar o mitigar los efectos producidos por la comisión de la infracción acreditada en el presente procedimiento, tales como el incumplimiento de mandatos, conforme a lo establecido en el Reglamento de Infracciones y Sanciones en Materia Forestal y de Fauna Silvestre, aprobado mediante Decreto Supremo N° 007-2021-MIDAGRI, publicado con fecha 12 de abril de 2021, el cual señala que de manera complementaria a la sanción a imponerse, puede aplicarse la clausura, ya sea temporal o definitiva, de un establecimiento que desarrolla actividades prohibidas o que contravengan las disposiciones previstas en la legislación forestal y de fauna silvestre.
     </li>
     <li>
-        De esta manera, corresponde dictar la medida complementaria de decomiso, con la finalidad de eliminar o mitigar los efectos producidos por la comisión de las infracciones acreditadas en el presente procedimiento, tales como el transporte o comercialización de los productos forestales provenientes de extracción no autorizada, conforme a lo detallado en el Anexo III del presente informe.
+        Asimismo, cabe señalar que en el artículo 37 del Reglamento del Procedimiento administrativo Único, aprobado mediante Resolución de Jefatura N° 00043-2021-OSINFOR/01.1, se señala que, de manera complementaria a la sanción a imponerse, puede aplicarse la clausura.
     </li>
     <li>
-        Cabe indicar que la referida medida complementaria debe hacerse de conocimiento de la ARFFS, a fin de que lleve a cabo su ejecución; ello, teniendo en consideración que el numeral 15.2 del artículo 15 del RISMFFS, establece que el SERFOR, el OSINFOR y las ARFFS, deben colaborar entre sí, para la ejecución de las sanciones, medidas complementarias, medidas correctivas y medidas cautelares o provisionales, cuando se dispongan.
+        Por lo que, respecto a la clausura de un establecimiento por parte de la autoridad de fauna silvestre se debe tomar en cuenta lo establecido en el artículo 4 del Decreto Legislativo N° 1085, mediante el cual se señala la participación de los actores involucrados en el sector forestal y de fauna silvestre.
+    </li>
+    <li>
+        En el presente caso, habiendo verificado los requisitos establecidos en el numeral 7.1.2 de los “Criterios para dictar Medidas Cautelares y Medidas Provisionales en Primera Instancia”, mediante la Resolución Sub Directoral N° ${ANTECEDENTES_DOCS.RSD.numero || 'XXXXX-XXXX-OSINFOR/08.2.2'} de fecha ${ANTECEDENTES_DOCS.RSD.fechaEmisionTexto ||'XX de XXXX'}, se dispuso medida cautelar, conforme al siguiente detalle:
+    </li>
+    <li>
+        La suspensión de actividades del XX autorizado mediante Resolución XX
+    </li>
+    <li>
+        Cabe precisar que, en aplicación del numeral 157.3 del artículo 157 del Texto Único Ordenado de la Ley del Procedimiento Administrativo General, Ley N° 27444, corresponde que las medidas cautelares dispuestas en la resolución sub directoral de inicio del PAU caduquen cuando se emite la resolución que pone fin al procedimiento.
+    </li>
+    <li>
+        Al respecto, conforme al literal c) del numeral 9.1 del artículo 9 del RISMFFS, la medida complementaria de clausura “Consiste en el cierre de un establecimiento que desarrolla actividades prohibidas o que contravengan las disposiciones previstas en la legislación forestal y de fauna silvestre”. Asimismo, la clausura temporal “Consiste en el cierre del establecimiento por un plazo no menor de cinco (5) ni mayor a treinta (30) días hábiles, en los casos de reincidencia de infracciones graves o muy graves”, mientras que clausura definitiva “Cuando su funcionamiento esté prohibido legalmente, constituya un riesgo para la salud de las personas o, en caso de reincidencia de una infracción que contemple clausura temporal”.
     </li>
 </ol>
 {{/if}}

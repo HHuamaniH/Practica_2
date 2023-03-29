@@ -25,7 +25,7 @@ const data = {
         { COD_MODALIDAD: '01', COD_MATERIA: '02', MODALIDAD: 'Concesiones', CONTRATO: 'contrato de concesión' },
         { COD_MODALIDAD: '02', COD_MATERIA: '02', MODALIDAD: 'Predios privados', CONTRATO: 'permiso forestal' },
         { COD_MODALIDAD: '03', COD_MATERIA: '02', MODALIDAD: 'Comunidades nativas', CONTRATO: 'permiso forestal' },
-        { COD_MODALIDAD: '04', COD_MATERIA: '01', MODALIDAD: 'Fauna', CONTRATO: 'permiso' },
+        { COD_MODALIDAD: '04', COD_MATERIA: '01', MODALIDAD: 'Fauna', CONTRATO: '' },
     ]
 };
 
@@ -209,13 +209,16 @@ _informe.EnumerarListas = function (html) {
 /**
  Funcion para revisar las notas al pie y eliminar las que no pertenezcan a ninguna infracción
  */
-_informe.RevisarFootnotes = function (infracciones, html) {
+_informe.RevisarFootnotes = function (html) {
     var $html = $('<div />', { html: html });
 
-    $html.find('[data-inciso]').each((i, el) => {
-        const inciso = $(el).data('inciso');
-        if (!infracciones.find(x => x.inciso == inciso)) {
-            $(el).html('');
+    //Buscamos todos los elementos mso-element
+    $html.find('.MsoFootnoteText').each((_, e) => {
+        const element = $(e).parent();
+        const id = element.attr("id");
+        const a = $html.find('a[href*="#_' + id + '"]:not([name])');
+        if (!a.length) {
+            element.remove();
         }
     });
 
@@ -284,9 +287,8 @@ _informe.Exportar = async function () {
     html += _informe.tmpl.get(template, '#tmpl-exportar', informe);
     html += _informe.tmpl.get(template, '#tmpl-pie-pagina-estructura', informe);
 
-    let footnotes = _informe.tmpl.get(template, '#tmpl-footnotes', informe);
-    footnotes = _informe.RevisarFootnotes(informe.INFRACCIONES, footnotes);
-    html += footnotes;
+    html +=  _informe.tmpl.get(template, '#tmpl-footnotes', informe);
+    html = _informe.RevisarFootnotes(html);
 
     //Enumeracion de listas
     html = _informe.EnumerarListas(html);
