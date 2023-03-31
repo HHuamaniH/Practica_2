@@ -702,6 +702,7 @@ _informe.SITD_OPEN = function () {
             modal_sitd.form.cnNumFolio = datos.cnNumFolio || 1;
             modal_sitd.form.indicacionId = datos.indicacionId || "23";
             modal_sitd.form.prioridad = datos.prioridad || "Alta";
+            modal_sitd.form.password = datos.password;
 
             //console.log(app.oficinaDefault.id);
 
@@ -1697,6 +1698,7 @@ $(function () {
                 cnNumFolio: null,
                 indicacionId: null,
                 prioridad: null,
+                password: null,
                 lstReferencias: []
             },
             oficinas: [],

@@ -164,6 +164,7 @@
                         <h4 class="mt-2">
                             {{Informe.NUM_INFORME_SITD || 'N/A'}} <i class="fa fa-pencil-square fa-lg ml-2 cursor-pointer text-success" v-if="Informe.COD_INFORME_DIGITAL" onclick="_informe.SITD_OPEN()"></i>
                         </h4>
+                        <small class="text-muted" v-if="app.Tramite?.password"><strong>Clave STD:</strong> {{app.Tramite?.password}}</small>
                     </div>
                 </div>
             </div>
@@ -743,14 +744,14 @@
                 <div class="form-group">
                     <label class="col-form-label">Observaciones</label>
                     <textarea class="form-control form-control-sm" rows="3" v-model="form.cObservaciones"></textarea>
-                </div>
+                </div>                
                 <div class="row">
                     <div class="col-md-6">
                         <div class="form-group">
                             <label class="col-form-label">Folios</label>
                             <input type="text" class="form-control form-control-sm" v-model="form.cnNumFolio" />
                         </div>
-                    </div>
+                    </div>                    
                 </div>
                 <div class="row">
                     <div class="col-md-6">
