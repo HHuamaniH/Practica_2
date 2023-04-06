@@ -75,6 +75,7 @@
                         <div style="text-align: center;">
                             <strong>Cuadro N° XX: Volumen injustificado</strong>
                         </div>
+
                         <table width="560" cellpadding="4" border="0" style="font-family: Arial; font-size: 9pt; border-collapse: collapse; line-height: 150%;">
                             <thead>
                                 <tr style="background-color: #bfbfbf;">
@@ -101,25 +102,30 @@
                                     </th>
                                 </tr>
                             </thead>
+                            {{each(i, objEsp) informe.VOLUMENES_INJUSTIFICADOS}}
                             <tbody>
                                 <tr>
-                                    <td style="border: 1px solid #000; text-align: center;">1</td>
-                                    <td style="border: 1px solid #000; text-align: center;"></td>
-                                    <td style="border: 1px solid #000; text-align: center;"></td>
-                                    <td style="border: 1px solid #000; text-align: center;"></td>
-                                    <td style="border: 1px solid #000; text-align: center;"></td>
-                                    <td style="border: 1px solid #000; text-align: center;"></td>
-                                    <td style="border: 1px solid #000; text-align: center;"></td>
+                                    <td style="border: 1px solid #000; text-align: center;">${objEsp.ESPECIES}</td>
+                                    <td style="border: 1px solid #000; text-align: center;">${objEsp.VOLUMEN_APROBADO}</td>
+                                    <td style="border: 1px solid #000; text-align: center;">X</td>
+                                    <td style="border: 1px solid #000; text-align: center;">XXX</td>
+                                    <td style="border: 1px solid #000; text-align: center;">X</td>
+                                    <td style="border: 1px solid #000; text-align: center;">${objEsp.VOLUMEN_MOVILIZADO}</td>
+                                    <td style="border: 1px solid #000; text-align: center;">${objEsp.VOLUMEN_INJUSTIFICADO}</td>
                                 </tr>
+                            </tbody>
+                            {{/each}}
+                            <tfoot>
                                 <tr style="background-color: #bfbfbf;">
                                     <td style="border: 1px solid #000; text-align: center;" colspan="6">
                                         Total
                                     </td>
-                                    <td style="border: 1px solid #000; text-align: center;"></td>
+                                    <td style="border: 1px solid #000; text-align: center;">
+                                        ${informe.VOLUMENES_INJUSTIFICADOS_TOTAL}
+                                    </td>
                                 </tr>
-                            </tbody>
-                        </table>
-                        <br /><br />
+                            </tfoot>
+                        </table>                        
                         (En caso se requiera una precisión adicional sobre alguna de las especies se indica en este párrafo).
                         <br /><br />
                         (De forma concisa, indicar que el plan de manejo es el que define los árboles a aprovechar y que ello no se ha cumplido según lo evidenciado en la supervisión).

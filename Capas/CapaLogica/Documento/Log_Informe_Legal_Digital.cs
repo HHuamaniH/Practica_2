@@ -1,5 +1,6 @@
 ﻿using CapaDatos.DOC;
 using CapaDatos.Documento;
+using CapaEntidad.DOC;
 using CapaEntidad.Documento;
 using CapaEntidad.ViewModel;
 using System;
@@ -94,6 +95,11 @@ namespace CapaLogica.Documento
         public bool AnularFirmaPorInforme(string codInforme)
         {
             return oDat_Informe_Legal_Digital.AnularFirmaPorInforme(codInforme);
+        }
+
+        public List<Ent_INFORME_VOL_ANALIZADO> RegMostrarInfoDocumentResumenSupervisado(string COD_RESOLUCION)
+        {
+            return oDat_Informe_Legal_Digital.RegMostrarInfoDocumentResumenSupervisado(COD_RESOLUCION);
         }
     }
 }

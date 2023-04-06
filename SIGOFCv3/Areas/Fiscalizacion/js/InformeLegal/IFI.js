@@ -256,6 +256,7 @@ _informe.Exportar = async function () {
         }
     });
 
+    //DOCUMENTOS ANTECEDENTES
     informe.ANTECEDENTES_DOCS = {};
     informe.ANTECEDENTES_DOCS.Carta = informe.ANTECEDENTES.find(x => x.tipoDocumento == 'Carta') || {};
     informe.ANTECEDENTES_DOCS.Inf_Sup = informe.ANTECEDENTES.find(x => x.tipoDocumento == 'Informe de Supervisión') || {};
@@ -263,7 +264,28 @@ _informe.Exportar = async function () {
     informe.ANTECEDENTES_DOCS.Ced_Noti = informe.ANTECEDENTES.find(x => x.tipoDocumento == 'Cédula de Notificación') || {};
     informe.ANTECEDENTES_DOCS.Escrito = informe.ANTECEDENTES.find(x => x.tipoDocumento == 'Escrito') || {};
 
+    //RESUMEN INF. SUPERVISION
+    console.log("Consultando volúmenes de especies ligados al informe de supervisión...");
+    let volumenes = [];
+
+    //INCISOS AFECTOS (Donde se mostrará el cuadro)
+    const incisos_afectos = informe.INFRACCIONES.map(x => x.inciso.replace(/\W+/gi, ''));
+
+    if (incisos_afectos.find(x => ['e', '21', 'g'].includes(x))) {
+        for (var i = 0; i < informe.RSD.length; i++) {
+            const COD_RESOLUCION = informe.RSD[i].codResolucion;
+            let resumen = await _informe.RegResumenInfSupervision(COD_RESOLUCION);
+            resumen = resumen.filter(x => !!x.VOLUMEN_INJUSTIFICADO);
+            volumenes = volumenes.concat(resumen);
+        }
+    }
+
+    informe.VOLUMENES_INJUSTIFICADOS = volumenes;
+    informe.VOLUMENES_INJUSTIFICADOS_TOTAL = Math.round(volumenes.reduce((a, b) => a + b.VOLUMEN_INJUSTIFICADO, 0) * 1000) / 1000;
+    console.log(volumenes);
+
     //INFRACCIONES
+    console.log("Consultando párrafos de infracciones...");
     for (var i = 0; i < informe.INFRACCIONES.length; i++) {
         const infraccion = informe.INFRACCIONES[i];
         const parrafos = await _informe.ExtraerParrafoInfraccion(infraccion, informe);
@@ -287,7 +309,7 @@ _informe.Exportar = async function () {
     html += _informe.tmpl.get(template, '#tmpl-exportar', informe);
     html += _informe.tmpl.get(template, '#tmpl-pie-pagina-estructura', informe);
 
-    html +=  _informe.tmpl.get(template, '#tmpl-footnotes', informe);
+    html += _informe.tmpl.get(template, '#tmpl-footnotes', informe);
     html = _informe.RevisarFootnotes(html);
 
     //Enumeracion de listas
@@ -296,6 +318,20 @@ _informe.Exportar = async function () {
     //Enumeracion de cuadros
     html = _informe.EnumerarCuadros(html);
     $(document).googoose({ html, header });
+}
+
+_informe.RegResumenInfSupervision = function (COD_RESOLUCION) {
+    return new Promise(function (resolve, reject) {
+        const params = {
+            type: 'get',
+            url: `${urlLocalSigo}Fiscalizacion/InformeLegalDigital/RegMostrarInfoDocumentResumenSupervisado`,
+            datos: { COD_RESOLUCION }
+        };
+
+        utilSigo.fnAjax(params, function (res) {
+            resolve(res);
+        });
+    });
 }
 
 _informe.PDFToImgCalculoMulta = function () {
@@ -662,12 +698,17 @@ _informe.ExtraerParrafoInfraccion = function (infraccion, informe) {
 
         utilSigo.fnAjax(params, function (html) {
             if (html) {
-                const _dom = $('<div>', { html });
+                try {
+                    const script_html = `<script id="template" type="text/x-jquery-tmpl">${html}</script>`;                    
+                    //Template jquery                    
+                    html = _informe.tmpl.get(script_html, '#template', { infraccion, informe });
 
-                //Template jquery
-                html = $("<div>").append(_dom.tmpl({ infraccion, informe })).getUnformattedText();
-
-                resolve(html);
+                    resolve(html);
+                } catch (e) {
+                    const message = 'No se pudo construir los párrafos para la infracción';
+                    resolve(`<h5>${message}</h5>`);
+                    console.log(message, infraccion, e);
+                }
             }
             else reject(null);
         });

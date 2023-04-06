@@ -1,4 +1,5 @@
-﻿using CapaEntidad.Documento;
+﻿using CapaEntidad.DOC;
+using CapaEntidad.Documento;
 using CapaEntidad.ViewModel;
 using GeneralSQL;
 using Oracle.ManagedDataAccess.Client;
@@ -371,7 +372,7 @@ namespace CapaDatos.Documento
                                     vm.iCodTramite = Convert.ToInt32(dr["iCodTramite"].ToString());
                                     vm.cCodificacion = dr["cCodificacion"]?.ToString();
                                     vm.cNroDocumento = dr["cNroDocumento"]?.ToString();
-                                    vm.fFecDocumento = dr["fFecDocumento"] != DBNull.Value? Convert.ToDateTime(dr["fFecDocumento"].ToString()): default(DateTime?);
+                                    vm.fFecDocumento = dr["fFecDocumento"] != DBNull.Value ? Convert.ToDateTime(dr["fFecDocumento"].ToString()) : default(DateTime?);
                                     vm.cDescTipoDoc = dr["cDescTipoDoc"]?.ToString();
                                     vm.PDF_TRAMITE_SITD = dr["PDF_TRAMITE_SITD"]?.ToString();
                                 }
@@ -565,6 +566,50 @@ namespace CapaDatos.Documento
                 }
             }
             return success;
+        }
+
+        public List<Ent_INFORME_VOL_ANALIZADO> RegMostrarInfoDocumentResumenSupervisado(string COD_RESOLUCION)
+        {
+            var result = new List<Ent_INFORME_VOL_ANALIZADO>();
+            try
+            {
+                using (OracleConnection cn = new OracleConnection(BDConexion.Conexion_Cadena_SIGO()))
+                {
+                    cn.Open();
+                    using (OracleDataReader dr = dBOracle.SelDrdDefault(cn, "DOC_OSINFOR_ERP_MIGRACION.SPFISCALIZACION_INFORME_LEGAL_DIGITAL_ISUPERVISION_RESUMEN", COD_RESOLUCION))
+                    {
+                        if (dr != null)
+                        {
+                            //dr.NextResult();
+                            if (dr.HasRows)
+                            {
+                                Ent_INFORME_VOL_ANALIZADO ovolumen;
+                                while (dr.Read())
+                                {
+                                    ovolumen = new Ent_INFORME_VOL_ANALIZADO();
+                                    ovolumen.COD_SECUENCIAL = Int32.Parse(dr["COD_SECUENCIAL"].ToString());
+                                    ovolumen.COD_ESPECIES = dr["COD_ESPECIES"].ToString();
+                                    ovolumen.ESPECIES = dr["ESPECIES"].ToString();
+                                    ovolumen.VOLUMEN_APROBADO = Decimal.Parse(dr["VOLUMEN_APROBADO"].ToString());
+                                    ovolumen.VOLUMEN_MOVILIZADO = Decimal.Parse(dr["VOLUMEN_MOVILIZADO"].ToString());
+                                    ovolumen.VOLUMEN_INJUSTIFICADO = Decimal.Parse(dr["VOLUMEN_INJUSTIFICADO"].ToString());
+                                    ovolumen.VOLUMEN_JUSTIFICADO = Decimal.Parse(dr["VOLUMEN_JUSTIFICADO"].ToString());
+                                    ovolumen.OBSERVACION = dr["OBSERVACION"].ToString();
+                                    ovolumen.RegEstado = 0;
+                                    result.Add(ovolumen);
+                                }
+                            }
+
+                        }
+                    }
+                }
+
+                return result;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
         }
     }
 }
