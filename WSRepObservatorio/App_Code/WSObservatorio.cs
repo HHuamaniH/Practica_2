@@ -589,7 +589,7 @@ public class WSObservatorio : System.Web.Services.WebService
                             Multa = Resoles.MONTO.ToString() + " U.I.T.";
                         break;
                     case "Resolución TFFS":
-                        if (Resoles.LITERAL != "")
+                        if (!string.IsNullOrEmpty(Resoles.LITERAL))
                         {
                             literal = 1;
                             string[] nombreliteral = Resoles.LITERAL.Split(';');
@@ -614,524 +614,527 @@ public class WSObservatorio : System.Web.Services.WebService
                             doc.Add(tableTituloBloque);
 
                         }
-
-                        switch (Resoles.SENTIDO_RES)
+                        if (!string.IsNullOrEmpty(Resoles.SENTIDO_RES))
                         {
-                            case "00000118":
-                                medCols = new float[] { .35f, .01f, .64f };
-                                tableResol = HerUtil.constructorTabla(3, page, medCols, page.Width - 90);
-                                tableResol.AddCell(HerUtil.celda("Sentido:", 2, 1, 11, Element.ALIGN_LEFT, 0, BaseColor.BLACK, "transparent", "Negrita"));
-                                tableResol.AddCell(HerUtil.celda("Suspensión-Judicializado", 2, 1, 11, Element.ALIGN_LEFT, 0, BaseColor.BLACK, "transparent", "Normal"));
-                                doc.Add(tableResol);
-                                break;
-                            case "00000119":
-                                medCols = new float[] { .35f, .01f, .64f };
-                                tableResol = HerUtil.constructorTabla(3, page, medCols, page.Width - 90);
-                                tableResol.AddCell(HerUtil.celda("Sentido:", 2, 1, 11, Element.ALIGN_LEFT, 0, BaseColor.BLACK, "transparent", "Negrita"));
-                                tableResol.AddCell(HerUtil.celda("Cumplimiento de mandato judicial", 2, 1, 11, Element.ALIGN_LEFT, 0, BaseColor.BLACK, "transparent", "Normal"));
-                                doc.Add(tableResol);
-                                break;
-                            case "00000120":
-                                medCols = new float[] { .35f, .01f, .64f };
-                                tableResol = HerUtil.constructorTabla(3, page, medCols, page.Width - 90);
-                                tableResol.AddCell(HerUtil.celda("Sentido:", 2, 1, 11, Element.ALIGN_LEFT, 0, BaseColor.BLACK, "transparent", "Negrita"));
-                                tableResol.AddCell(HerUtil.celda("Desestimiento", 2, 1, 11, Element.ALIGN_LEFT, 0, BaseColor.BLACK, "transparent", "Normal"));
-                                doc.Add(tableResol);
-                                break;
-                            case "0000053":
-                                medCols = new float[] { .35f, .01f, .64f };
-                                tableResol = HerUtil.constructorTabla(3, page, medCols, page.Width - 90);
-                                tableResol.AddCell(HerUtil.celda("Sentido:", 2, 1, 11, Element.ALIGN_LEFT, 0, BaseColor.BLACK, "transparent", "Negrita"));
-                                tableResol.AddCell(HerUtil.celda("Improcedente", 2, 1, 11, Element.ALIGN_LEFT, 0, BaseColor.BLACK, "transparent", "Normal"));
-                                doc.Add(tableResol);
-                                if (Resoles.RESOL_DET != "0")
-                                {
+                            switch (Resoles.SENTIDO_RES)
+                            {
+                                case "00000118":
+                                    medCols = new float[] { .35f, .01f, .64f };
+                                    tableResol = HerUtil.constructorTabla(3, page, medCols, page.Width - 90);
+                                    tableResol.AddCell(HerUtil.celda("Sentido:", 2, 1, 11, Element.ALIGN_LEFT, 0, BaseColor.BLACK, "transparent", "Negrita"));
+                                    tableResol.AddCell(HerUtil.celda("Suspensión-Judicializado", 2, 1, 11, Element.ALIGN_LEFT, 0, BaseColor.BLACK, "transparent", "Normal"));
+                                    doc.Add(tableResol);
+                                    break;
+                                case "00000119":
+                                    medCols = new float[] { .35f, .01f, .64f };
+                                    tableResol = HerUtil.constructorTabla(3, page, medCols, page.Width - 90);
+                                    tableResol.AddCell(HerUtil.celda("Sentido:", 2, 1, 11, Element.ALIGN_LEFT, 0, BaseColor.BLACK, "transparent", "Negrita"));
+                                    tableResol.AddCell(HerUtil.celda("Cumplimiento de mandato judicial", 2, 1, 11, Element.ALIGN_LEFT, 0, BaseColor.BLACK, "transparent", "Normal"));
+                                    doc.Add(tableResol);
+                                    break;
+                                case "00000120":
+                                    medCols = new float[] { .35f, .01f, .64f };
+                                    tableResol = HerUtil.constructorTabla(3, page, medCols, page.Width - 90);
+                                    tableResol.AddCell(HerUtil.celda("Sentido:", 2, 1, 11, Element.ALIGN_LEFT, 0, BaseColor.BLACK, "transparent", "Negrita"));
+                                    tableResol.AddCell(HerUtil.celda("Desestimiento", 2, 1, 11, Element.ALIGN_LEFT, 0, BaseColor.BLACK, "transparent", "Normal"));
+                                    doc.Add(tableResol);
+                                    break;
+                                case "0000053":
+                                    medCols = new float[] { .35f, .01f, .64f };
+                                    tableResol = HerUtil.constructorTabla(3, page, medCols, page.Width - 90);
+                                    tableResol.AddCell(HerUtil.celda("Sentido:", 2, 1, 11, Element.ALIGN_LEFT, 0, BaseColor.BLACK, "transparent", "Negrita"));
+                                    tableResol.AddCell(HerUtil.celda("Improcedente", 2, 1, 11, Element.ALIGN_LEFT, 0, BaseColor.BLACK, "transparent", "Normal"));
+                                    doc.Add(tableResol);
+                                    if (Resoles.RESOL_DET != "0")
+                                    {
+                                        medCols = new float[] { .35f, .01f, .64f };
+                                        tableResol = HerUtil.constructorTabla(3, page, medCols, page.Width - 90);
+                                        tableResol.AddCell(HerUtil.celda("Determina:", 2, 1, 11, Element.ALIGN_LEFT, 0, BaseColor.BLACK, "transparent", "Negrita"));
+                                        tableResol.AddCell(HerUtil.celda(Resoles.RESOL_DET, 2, 1, 11, Element.ALIGN_LEFT, 0, BaseColor.BLACK, "transparent", "Normal"));
+                                        doc.Add(tableResol);
+                                    }
+                                    break;
+                                case "0000054":
+                                    medCols = new float[] { .35f, .01f, .64f };
+                                    tableResol = HerUtil.constructorTabla(3, page, medCols, page.Width - 90);
+                                    tableResol.AddCell(HerUtil.celda("Sentido:", 2, 1, 11, Element.ALIGN_LEFT, 0, BaseColor.BLACK, "transparent", "Negrita"));
+                                    tableResol.AddCell(HerUtil.celda("Inadmisible", 2, 1, 11, Element.ALIGN_LEFT, 0, BaseColor.BLACK, "transparent", "Normal"));
+                                    doc.Add(tableResol);
+                                    if (Resoles.RESOL_DET != "0")
+                                    {
+                                        medCols = new float[] { .35f, .01f, .64f };
+                                        tableResol = HerUtil.constructorTabla(3, page, medCols, page.Width - 90);
+                                        tableResol.AddCell(HerUtil.celda("Determina:", 2, 1, 11, Element.ALIGN_LEFT, 0, BaseColor.BLACK, "transparent", "Negrita"));
+                                        tableResol.AddCell(HerUtil.celda(Resoles.RESOL_DET2, 2, 1, 11, Element.ALIGN_LEFT, 0, BaseColor.BLACK, "transparent", "Normal"));
+                                        doc.Add(tableResol);
+                                    }
+                                    break;
+
+                                case "0000057":
+                                    medCols = new float[] { .35f, .01f, .64f };
+                                    tableResol = HerUtil.constructorTabla(3, page, medCols, page.Width - 90);
+                                    tableResol.AddCell(HerUtil.celda("Sentido:", 2, 1, 11, Element.ALIGN_LEFT, 0, BaseColor.BLACK, "transparent", "Negrita"));
+                                    tableResol.AddCell(HerUtil.celda("Infundado", 2, 1, 11, Element.ALIGN_LEFT, 0, BaseColor.BLACK, "transparent", "Normal"));
+                                    doc.Add(tableResol);
+                                    if (Resoles.RESOL_DET != "0")
+                                    {
+                                        medCols = new float[] { .35f, .01f, .64f };
+                                        tableResol = HerUtil.constructorTabla(3, page, medCols, page.Width - 90);
+                                        tableResol.AddCell(HerUtil.celda("Determina:", 2, 1, 11, Element.ALIGN_LEFT, 0, BaseColor.BLACK, "transparent", "Negrita"));
+                                        tableResol.AddCell(HerUtil.celda(Resoles.RESOL_DET3, 2, 1, 11, Element.ALIGN_LEFT, 0, BaseColor.BLACK, "transparent", "Normal"));
+                                        doc.Add(tableResol);
+                                    }
+                                    break;
+                                case "0000055":
+                                    medCols = new float[] { .35f, .01f, .64f };
+                                    tableResol = HerUtil.constructorTabla(3, page, medCols, page.Width - 90);
+                                    tableResol.AddCell(HerUtil.celda("Sentido:", 2, 1, 11, Element.ALIGN_LEFT, 0, BaseColor.BLACK, "transparent", "Negrita"));
+                                    tableResol.AddCell(HerUtil.celda("Fundado", 2, 1, 11, Element.ALIGN_LEFT, 0, BaseColor.BLACK, "transparent", "Normal"));
+                                    doc.Add(tableResol);
+                                    determina = "Determina:";
+
+
+                                    if (Resoles.CHKREVOCAR == 1)
+                                    {
+
+                                        medCols = new float[] { .35f, .01f, .64f };
+                                        tableResol = HerUtil.constructorTabla(3, page, medCols, page.Width - 90);
+                                        tableResol.AddCell(HerUtil.celda(determina, 2, 1, 11, Element.ALIGN_LEFT, 0, BaseColor.BLACK, "transparent", "Negrita"));
+                                        descripcion = "Revocar ";
+                                        switch (Resoles.RADREVOCAR)
+                                        {
+                                            case "1":
+                                                descripcion += "sanción";
+                                                break;
+                                            case "2":
+                                                descripcion += "caducidad";
+                                                break;
+                                            case "3":
+                                                descripcion += "sanción y caducidad";
+                                                break;
+                                        }
+                                        tableResol.AddCell(HerUtil.celda(descripcion, 2, 1, 11, Element.ALIGN_LEFT, 0, BaseColor.BLACK, "transparent", "Normal"));
+                                        doc.Add(tableResol);
+                                        determina = "";
+                                        descripcion = "";
+                                    }
+
+
+                                    if (Resoles.CHKREVOCARPARTE == 1)
+                                    {
+                                        medCols = new float[] { .35f, .01f, .64f };
+                                        tableResol = HerUtil.constructorTabla(3, page, medCols, page.Width - 90);
+                                        tableResol.AddCell(HerUtil.celda(determina, 2, 1, 11, Element.ALIGN_LEFT, 0, BaseColor.BLACK, "transparent", "Negrita"));
+                                        descripcion = "Revocar en Parte ";
+                                        switch (Resoles.RADREVOCAR)
+                                        {
+                                            case "1":
+                                                descripcion += "sanción";
+                                                break;
+                                            case "2":
+                                                descripcion += "caducidad";
+                                                break;
+                                            case "3":
+                                                descripcion += "sanción y caducidad";
+                                                break;
+                                        }
+                                        tableResol.AddCell(HerUtil.celda(descripcion, 2, 1, 11, Element.ALIGN_LEFT, 0, BaseColor.BLACK, "transparent", "Normal"));
+                                        doc.Add(tableResol);
+                                        determina = "";
+                                        descripcion = "";
+                                    }
+
+                                    if (Resoles.CHKRETROTRAER == 1)
+                                    {
+                                        medCols = new float[] { .35f, .01f, .64f };
+                                        tableResol = HerUtil.constructorTabla(3, page, medCols, page.Width - 90);
+                                        tableResol.AddCell(HerUtil.celda(determina, 2, 1, 11, Element.ALIGN_LEFT, 0, BaseColor.BLACK, "transparent", "Negrita"));
+                                        descripcion = "Retrotraer";
+                                        switch (Resoles.RADRETROTRAER)
+                                        {
+                                            case "1":
+                                                descripcion += " hasta notificación supervisión";
+                                                break;
+                                            case "2":
+                                                descripcion += " hasta supervisión";
+                                                break;
+                                            case "3":
+                                                descripcion += " hasta notificación de la RSD de inicio de PA";
+                                                break;
+                                            case "4":
+                                                descripcion += " hasta presentación de descargos RSD";
+                                                break;
+                                            case "5":
+                                                descripcion += " hasta informe final de instrucción";
+                                                break;
+                                            case "6":
+                                                descripcion += " hasta presentación de descargos IFI";
+                                                break;
+                                            case "7":
+                                                descripcion += " hasta RD de término de PAU";
+                                                break;
+                                            case "8":
+                                                descripcion += " hasta notificación de la RD de término de PAU";
+                                                break;
+                                            case "9":
+                                                descripcion += " hasta notificación del informe final de instrucción";
+                                                break;
+                                            case "10":
+                                                descripcion += "-Otros";
+                                                break;
+                                        }
+                                        tableResol.AddCell(HerUtil.celda(descripcion, 2, 1, 11, Element.ALIGN_LEFT, 0, BaseColor.BLACK, "transparent", "Normal"));
+                                        doc.Add(tableResol);
+                                        determina = "";
+                                        descripcion = "";
+                                    }
+
+                                    if (Resoles.CHKPRESCRIBIR == 1)
+                                    {
+                                        medCols = new float[] { .35f, .01f, .64f };
+                                        tableResol = HerUtil.constructorTabla(3, page, medCols, page.Width - 90);
+                                        tableResol.AddCell(HerUtil.celda(determina, 2, 1, 11, Element.ALIGN_LEFT, 0, BaseColor.BLACK, "transparent", "Negrita"));
+                                        tableResol.AddCell(HerUtil.celda("Prescribir ", 2, 1, 11, Element.ALIGN_LEFT, 0, BaseColor.BLACK, "transparent", "Normal"));
+                                        determina = "";
+                                        doc.Add(tableResol);
+                                    }
+
+                                    if (Resoles.CHKARCHIVAR == 1)
+                                    {
+                                        medCols = new float[] { .35f, .01f, .64f };
+                                        tableResol = HerUtil.constructorTabla(3, page, medCols, page.Width - 90);
+                                        tableResol.AddCell(HerUtil.celda(determina, 2, 1, 11, Element.ALIGN_LEFT, 0, BaseColor.BLACK, "transparent", "Negrita"));
+                                        tableResol.AddCell(HerUtil.celda("Archivar ", 2, 1, 11, Element.ALIGN_LEFT, 0, BaseColor.BLACK, "transparent", "Normal"));
+                                        determina = "";
+                                        doc.Add(tableResol);
+                                    }
+
+
+                                    if (Resoles.CHKNULIDAD == 1)
+                                    {
+                                        medCols = new float[] { .35f, .01f, .64f };
+                                        tableResol = HerUtil.constructorTabla(3, page, medCols, page.Width - 90);
+                                        tableResol.AddCell(HerUtil.celda(determina, 2, 1, 11, Element.ALIGN_LEFT, 0, BaseColor.BLACK, "transparent", "Negrita"));
+                                        descripcion = "Nulidad/Nulidad de Oficio ";
+                                        switch (Resoles.RADNULIDAD)
+                                        {
+                                            case "1":
+                                                descripcion += "RSD inicio";
+                                                break;
+                                            case "2":
+                                                descripcion += "RD final";
+                                                break;
+                                            case "3":
+                                                descripcion += "RD reconsideración";
+                                                break;
+                                            case "4":
+                                                descripcion += "IFI";
+                                                break;
+                                            case "5":
+                                                descripcion += "Otros";
+                                                break;
+                                        }
+                                        tableResol.AddCell(HerUtil.celda(descripcion, 2, 1, 11, Element.ALIGN_LEFT, 0, BaseColor.BLACK, "transparent", "Normal"));
+                                        doc.Add(tableResol);
+                                        determina = "";
+                                        descripcion = "";
+                                    }
+
+                                    if (Resoles.CHKLEVANTAR == 1)
+                                    {
+                                        medCols = new float[] { .35f, .01f, .64f };
+                                        tableResol = HerUtil.constructorTabla(3, page, medCols, page.Width - 90);
+                                        tableResol.AddCell(HerUtil.celda(determina, 2, 1, 11, Element.ALIGN_LEFT, 0, BaseColor.BLACK, "transparent", "Negrita"));
+                                        tableResol.AddCell(HerUtil.celda("Levantar suspensión ", 2, 1, 11, Element.ALIGN_LEFT, 0, BaseColor.BLACK, "transparent", "Normal"));
+                                        determina = "";
+                                        doc.Add(tableResol);
+                                    }
+
+                                    if (Resoles.CHKCARECE == 1)
+                                    {
+                                        medCols = new float[] { .35f, .01f, .64f };
+                                        tableResol = HerUtil.constructorTabla(3, page, medCols, page.Width - 90);
+                                        tableResol.AddCell(HerUtil.celda(determina, 2, 1, 11, Element.ALIGN_LEFT, 0, BaseColor.BLACK, "transparent", "Negrita"));
+                                        tableResol.AddCell(HerUtil.celda("Carece de objeto ", 2, 1, 11, Element.ALIGN_LEFT, 0, BaseColor.BLACK, "transparent", "Normal"));
+                                        determina = "";
+                                        doc.Add(tableResol);
+                                    }
+
+                                    if (Resoles.CHKOTRO == 1)
+                                    {
+                                        medCols = new float[] { .35f, .01f, .64f };
+                                        tableResol = HerUtil.constructorTabla(3, page, medCols, page.Width - 90);
+                                        tableResol.AddCell(HerUtil.celda(determina, 2, 1, 11, Element.ALIGN_LEFT, 0, BaseColor.BLACK, "transparent", "Negrita"));
+                                        tableResol.AddCell(HerUtil.celda("Otro ", 2, 1, 11, Element.ALIGN_LEFT, 0, BaseColor.BLACK, "transparent", "Normal"));
+                                        determina = "";
+                                        doc.Add(tableResol);
+                                    }
+
+                                    break;
+
+                                case "0000056":
+                                    medCols = new float[] { .35f, .01f, .64f };
+                                    tableResol = HerUtil.constructorTabla(3, page, medCols, page.Width - 90);
+                                    tableResol.AddCell(HerUtil.celda("Sentido:", 2, 1, 11, Element.ALIGN_LEFT, 0, BaseColor.BLACK, "transparent", "Negrita"));
+                                    tableResol.AddCell(HerUtil.celda("Fundado en parte", 2, 1, 11, Element.ALIGN_LEFT, 0, BaseColor.BLACK, "transparent", "Normal"));
+                                    doc.Add(tableResol);
+                                    determina = "";//"Fundado en Parte";
+                                    if (Resoles.CHKREVOCAR2 == 1)
+                                    {
+
+                                        medCols = new float[] { .35f, .01f, .64f };
+                                        tableResol = HerUtil.constructorTabla(3, page, medCols, page.Width - 90);
+                                        tableResol.AddCell(HerUtil.celda(determina, 2, 1, 11, Element.ALIGN_LEFT, 0, BaseColor.BLACK, "transparent", "Negrita"));
+                                        descripcion = "Revocar ";
+                                        switch (Resoles.RADREVOCAR2)
+                                        {
+                                            case "1":
+                                                descripcion += "sanción";
+                                                break;
+                                            case "2":
+                                                descripcion += "caducidad";
+                                                break;
+                                            case "3":
+                                                descripcion += "sanción y caducidad";
+                                                break;
+                                        }
+                                        tableResol.AddCell(HerUtil.celda(descripcion, 2, 1, 11, Element.ALIGN_LEFT, 0, BaseColor.BLACK, "transparent", "Normal"));
+                                        doc.Add(tableResol);
+                                        determina = "";
+                                        descripcion = "";
+                                    }
+
+                                    if (Resoles.CHKREVOCARPARTE2 == 1)
+                                    {
+                                        medCols = new float[] { .35f, .01f, .64f };
+                                        tableResol = HerUtil.constructorTabla(3, page, medCols, page.Width - 90);
+                                        tableResol.AddCell(HerUtil.celda(determina, 2, 1, 11, Element.ALIGN_LEFT, 0, BaseColor.BLACK, "transparent", "Negrita"));
+                                        descripcion = "Revocar en Parte ";
+                                        switch (Resoles.RADREVOCARPARTE2)
+                                        {
+                                            case "1":
+                                                descripcion += "sanción";
+                                                break;
+                                            case "2":
+                                                descripcion += "caducidad";
+                                                break;
+                                            case "3":
+                                                descripcion += "sanción y caducidad";
+                                                break;
+                                        }
+                                        tableResol.AddCell(HerUtil.celda(descripcion, 2, 1, 11, Element.ALIGN_LEFT, 0, BaseColor.BLACK, "transparent", "Normal"));
+                                        doc.Add(tableResol);
+                                        determina = "";
+                                        descripcion = "";
+                                    }
+
+                                    if (Resoles.CHKRETROTRAER2 == 1)
+                                    {
+                                        medCols = new float[] { .35f, .01f, .64f };
+                                        tableResol = HerUtil.constructorTabla(3, page, medCols, page.Width - 90);
+                                        tableResol.AddCell(HerUtil.celda(determina, 2, 1, 11, Element.ALIGN_LEFT, 0, BaseColor.BLACK, "transparent", "Negrita"));
+                                        descripcion = "Retrotraer";
+                                        switch (Resoles.RADRETROTRAER2)
+                                        {
+                                            case "1":
+                                                descripcion += " hasta notificación supervisión";
+                                                break;
+                                            case "2":
+                                                descripcion += " hasta supervisión";
+                                                break;
+                                            case "3":
+                                                descripcion += " hasta notificación de la RSD de inicio de PA";
+                                                break;
+                                            case "4":
+                                                descripcion += " hasta presentación de descargos RSD";
+                                                break;
+                                            case "5":
+                                                descripcion += " hasta informe final de instrucción";
+                                                break;
+                                            case "6":
+                                                descripcion += " hasta presentación de descargos IFI";
+                                                break;
+                                            case "7":
+                                                descripcion += " hasta RD de término de PAU";
+                                                break;
+                                            case "8":
+                                                descripcion += " hasta notificación de la RD de término de PAU";
+                                                break;
+                                            case "9":
+                                                descripcion += " hasta notificación del informe final de instrucción";
+                                                break;
+                                            case "10":
+                                                descripcion += "-Otros";
+                                                break;
+                                        }
+                                        tableResol.AddCell(HerUtil.celda(descripcion, 2, 1, 11, Element.ALIGN_LEFT, 0, BaseColor.BLACK, "transparent", "Normal"));
+                                        doc.Add(tableResol);
+                                        determina = "";
+                                        descripcion = "";
+                                    }
+
+                                    if (Resoles.CHKPRESCRIBIR2 == 1)
+                                    {
+                                        medCols = new float[] { .35f, .01f, .64f };
+                                        tableResol = HerUtil.constructorTabla(3, page, medCols, page.Width - 90);
+                                        tableResol.AddCell(HerUtil.celda(determina, 2, 1, 11, Element.ALIGN_LEFT, 0, BaseColor.BLACK, "transparent", "Negrita"));
+                                        tableResol.AddCell(HerUtil.celda("Prescribir ", 2, 1, 11, Element.ALIGN_LEFT, 0, BaseColor.BLACK, "transparent", "Normal"));
+                                        determina = "";
+                                        doc.Add(tableResol);
+                                    }
+
+                                    if (Resoles.CHKARCHIVAR2 == 1)
+                                    {
+                                        medCols = new float[] { .35f, .01f, .64f };
+                                        tableResol = HerUtil.constructorTabla(3, page, medCols, page.Width - 90);
+                                        tableResol.AddCell(HerUtil.celda(determina, 2, 1, 11, Element.ALIGN_LEFT, 0, BaseColor.BLACK, "transparent", "Negrita"));
+                                        tableResol.AddCell(HerUtil.celda("Archivar ", 2, 1, 11, Element.ALIGN_LEFT, 0, BaseColor.BLACK, "transparent", "Normal"));
+                                        determina = "";
+                                        doc.Add(tableResol);
+                                    }
+
+
+                                    if (Resoles.CHKNULIDAD2 == 1)
+                                    {
+                                        medCols = new float[] { .35f, .01f, .64f };
+                                        tableResol = HerUtil.constructorTabla(3, page, medCols, page.Width - 90);
+                                        tableResol.AddCell(HerUtil.celda(determina, 2, 1, 11, Element.ALIGN_LEFT, 0, BaseColor.BLACK, "transparent", "Negrita"));
+                                        descripcion = "Nulidad/Nulidad de Oficio ";
+                                        switch (Resoles.RADNULIDAD2)
+                                        {
+                                            case "1":
+                                                descripcion += "RSD inicio";
+                                                break;
+                                            case "2":
+                                                descripcion += "RD final";
+                                                break;
+                                            case "3":
+                                                descripcion += "RD reconsideración";
+                                                break;
+                                            case "4":
+                                                descripcion += "IFI";
+                                                break;
+                                            case "5":
+                                                descripcion += "Otros";
+                                                break;
+                                        }
+                                        tableResol.AddCell(HerUtil.celda(descripcion, 2, 1, 11, Element.ALIGN_LEFT, 0, BaseColor.BLACK, "transparent", "Normal"));
+                                        doc.Add(tableResol);
+                                        determina = "";
+                                        descripcion = "";
+                                    }
+
+                                    if (Resoles.CHKLEVANTAR2 == 1)
+                                    {
+                                        medCols = new float[] { .35f, .01f, .64f };
+                                        tableResol = HerUtil.constructorTabla(3, page, medCols, page.Width - 90);
+                                        tableResol.AddCell(HerUtil.celda(determina, 2, 1, 11, Element.ALIGN_LEFT, 0, BaseColor.BLACK, "transparent", "Negrita"));
+                                        tableResol.AddCell(HerUtil.celda("Levantar suspensión ", 2, 1, 11, Element.ALIGN_LEFT, 0, BaseColor.BLACK, "transparent", "Normal"));
+                                        determina = "";
+                                        doc.Add(tableResol);
+                                    }
+
+                                    if (Resoles.CHKCARECE2 == 1)
+                                    {
+                                        medCols = new float[] { .35f, .01f, .64f };
+                                        tableResol = HerUtil.constructorTabla(3, page, medCols, page.Width - 90);
+                                        tableResol.AddCell(HerUtil.celda(determina, 2, 1, 11, Element.ALIGN_LEFT, 0, BaseColor.BLACK, "transparent", "Negrita"));
+                                        tableResol.AddCell(HerUtil.celda("Carece de objeto ", 2, 1, 11, Element.ALIGN_LEFT, 0, BaseColor.BLACK, "transparent", "Normal"));
+                                        determina = "";
+                                        doc.Add(tableResol);
+                                    }
+
+                                    if (Resoles.CHKOTRO2 == 1)
+                                    {
+                                        medCols = new float[] { .35f, .01f, .64f };
+                                        tableResol = HerUtil.constructorTabla(3, page, medCols, page.Width - 90);
+                                        tableResol.AddCell(HerUtil.celda(determina, 2, 1, 11, Element.ALIGN_LEFT, 0, BaseColor.BLACK, "transparent", "Negrita"));
+                                        tableResol.AddCell(HerUtil.celda("Otro ", 2, 1, 11, Element.ALIGN_LEFT, 0, BaseColor.BLACK, "transparent", "Normal"));
+                                        determina = "";
+                                        doc.Add(tableResol);
+                                    }
+
+                                    break;
+
+                                case "0000058":
+                                    medCols = new float[] { .35f, .01f, .64f };
+                                    tableResol = HerUtil.constructorTabla(3, page, medCols, page.Width - 90);
+                                    tableResol.AddCell(HerUtil.celda("Sentido:", 2, 1, 11, Element.ALIGN_LEFT, 0, BaseColor.BLACK, "transparent", "Negrita"));
+                                    tableResol.AddCell(HerUtil.celda("Nulidad", 2, 1, 11, Element.ALIGN_LEFT, 0, BaseColor.BLACK, "transparent", "Normal"));
+                                    doc.Add(tableResol);
+                                    determina = "";//"Nulidad";
+
+                                    determina += Resoles.DETERMINA_RETROTRAER == "0000084" ? "Retrotraer " : "";
+                                    determina += Resoles.DETERMINA_RETROTRAER == "0000085" ? "Archivar " : "";
+                                    determina += Resoles.RETRO_VALOR1 == "0000065" ? "notificacion supervision " : "";
+                                    determina += Resoles.RETRO_VALOR1 == "0000066" ? "supervision " : "";
+                                    determina += Resoles.RETRO_VALOR1 == "0000067" ? "notificacion de la RSD de inicio de PA " : "";
+                                    determina += Resoles.RETRO_VALOR1 == "0000068" ? "presentacion de descargos RSD " : "";
+                                    determina += Resoles.RETRO_VALOR1 == "0000069" ? "informe final de instruccion " : "";
+                                    determina += Resoles.RETRO_VALOR1 == "0000070" ? "presentacion de descargos IFI " : "";
+                                    determina += Resoles.RETRO_VALOR1 == "0000071" ? "RD de termino de PAU " : "";
+                                    determina += Resoles.RETRO_VALOR1 == "0000072" ? "notificacion de la RD de termino de PAU " : "";
+                                    determina += Resoles.RETRO_VALOR1 == "0000073" ? "notificacion del informe final de fnstruccion " : "";
+                                    determina += Resoles.RETRO_VALOR1 == "0000074" ? "otros " : "";
+
                                     medCols = new float[] { .35f, .01f, .64f };
                                     tableResol = HerUtil.constructorTabla(3, page, medCols, page.Width - 90);
                                     tableResol.AddCell(HerUtil.celda("Determina:", 2, 1, 11, Element.ALIGN_LEFT, 0, BaseColor.BLACK, "transparent", "Negrita"));
-                                    tableResol.AddCell(HerUtil.celda(Resoles.RESOL_DET, 2, 1, 11, Element.ALIGN_LEFT, 0, BaseColor.BLACK, "transparent", "Normal"));
+                                    tableResol.AddCell(HerUtil.celda(determina, 2, 1, 11, Element.ALIGN_LEFT, 0, BaseColor.BLACK, "transparent", "Normal"));
                                     doc.Add(tableResol);
-                                }
-                                break;
-                            case "0000054":
-                                medCols = new float[] { .35f, .01f, .64f };
-                                tableResol = HerUtil.constructorTabla(3, page, medCols, page.Width - 90);
-                                tableResol.AddCell(HerUtil.celda("Sentido:", 2, 1, 11, Element.ALIGN_LEFT, 0, BaseColor.BLACK, "transparent", "Negrita"));
-                                tableResol.AddCell(HerUtil.celda("Inadmisible", 2, 1, 11, Element.ALIGN_LEFT, 0, BaseColor.BLACK, "transparent", "Normal"));
-                                doc.Add(tableResol);
-                                if (Resoles.RESOL_DET != "0")
-                                {
+                                    break;
+
+                                case "0000059":
                                     medCols = new float[] { .35f, .01f, .64f };
                                     tableResol = HerUtil.constructorTabla(3, page, medCols, page.Width - 90);
-                                    tableResol.AddCell(HerUtil.celda("Determina:", 2, 1, 11, Element.ALIGN_LEFT, 0, BaseColor.BLACK, "transparent", "Negrita"));
-                                    tableResol.AddCell(HerUtil.celda(Resoles.RESOL_DET2, 2, 1, 11, Element.ALIGN_LEFT, 0, BaseColor.BLACK, "transparent", "Normal"));
+                                    tableResol.AddCell(HerUtil.celda("Sentido:", 2, 1, 11, Element.ALIGN_LEFT, 0, BaseColor.BLACK, "transparent", "Negrita"));
+                                    tableResol.AddCell(HerUtil.celda("Nulidad parcial", 2, 1, 11, Element.ALIGN_LEFT, 0, BaseColor.BLACK, "transparent", "Normal"));
                                     doc.Add(tableResol);
-                                }
-                                break;
+                                    determina = "";//"Nulidad determina";
 
-                            case "0000057":
-                                medCols = new float[] { .35f, .01f, .64f };
-                                tableResol = HerUtil.constructorTabla(3, page, medCols, page.Width - 90);
-                                tableResol.AddCell(HerUtil.celda("Sentido:", 2, 1, 11, Element.ALIGN_LEFT, 0, BaseColor.BLACK, "transparent", "Negrita"));
-                                tableResol.AddCell(HerUtil.celda("Infundado", 2, 1, 11, Element.ALIGN_LEFT, 0, BaseColor.BLACK, "transparent", "Normal"));
-                                doc.Add(tableResol);
-                                if (Resoles.RESOL_DET != "0")
-                                {
-                                    medCols = new float[] { .35f, .01f, .64f };
-                                    tableResol = HerUtil.constructorTabla(3, page, medCols, page.Width - 90);
-                                    tableResol.AddCell(HerUtil.celda("Determina:", 2, 1, 11, Element.ALIGN_LEFT, 0, BaseColor.BLACK, "transparent", "Negrita"));
-                                    tableResol.AddCell(HerUtil.celda(Resoles.RESOL_DET3, 2, 1, 11, Element.ALIGN_LEFT, 0, BaseColor.BLACK, "transparent", "Normal"));
-                                    doc.Add(tableResol);
-                                }
-                                break;
-                            case "0000055":
-                                medCols = new float[] { .35f, .01f, .64f };
-                                tableResol = HerUtil.constructorTabla(3, page, medCols, page.Width - 90);
-                                tableResol.AddCell(HerUtil.celda("Sentido:", 2, 1, 11, Element.ALIGN_LEFT, 0, BaseColor.BLACK, "transparent", "Negrita"));
-                                tableResol.AddCell(HerUtil.celda("Fundado", 2, 1, 11, Element.ALIGN_LEFT, 0, BaseColor.BLACK, "transparent", "Normal"));
-                                doc.Add(tableResol);
-                                determina = "Determina:";
-
-
-                                if (Resoles.CHKREVOCAR == 1)
-                                {
+                                    determina += Resoles.DETERMINA_RETROTRAER2 == "0000084" ? "Retrotraer " : "";
+                                    determina += Resoles.DETERMINA_RETROTRAER2 == "0000085" ? "Archivar " : "";
+                                    determina += Resoles.RETRO_VALOR2 == "0000065" ? "notificacion supervision " : "";
+                                    determina += Resoles.RETRO_VALOR2 == "0000066" ? "supervision " : "";
+                                    determina += Resoles.RETRO_VALOR2 == "0000067" ? "notificacion de la RSD de inicio de PA " : "";
+                                    determina += Resoles.RETRO_VALOR2 == "0000068" ? "presentacion de descargos RSD " : "";
+                                    determina += Resoles.RETRO_VALOR2 == "0000069" ? "informe final de instruccion " : "";
+                                    determina += Resoles.RETRO_VALOR2 == "0000070" ? "presentacion de descargos IFI " : "";
+                                    determina += Resoles.RETRO_VALOR2 == "0000071" ? "RD de termino de PAU " : "";
+                                    determina += Resoles.RETRO_VALOR2 == "0000072" ? "notificacion de la RD de termino de PAU " : "";
+                                    determina += Resoles.RETRO_VALOR2 == "0000073" ? "notificacion del informe final de instruccion " : "";
+                                    determina += Resoles.RETRO_VALOR2 == "0000074" ? "otros " : "";
 
                                     medCols = new float[] { .35f, .01f, .64f };
                                     tableResol = HerUtil.constructorTabla(3, page, medCols, page.Width - 90);
-                                    tableResol.AddCell(HerUtil.celda(determina, 2, 1, 11, Element.ALIGN_LEFT, 0, BaseColor.BLACK, "transparent", "Negrita"));
-                                    descripcion = "Revocar ";
-                                    switch (Resoles.RADREVOCAR)
-                                    {
-                                        case "1":
-                                            descripcion += "sanción";
-                                            break;
-                                        case "2":
-                                            descripcion += "caducidad";
-                                            break;
-                                        case "3":
-                                            descripcion += "sanción y caducidad";
-                                            break;
-                                    }
-                                    tableResol.AddCell(HerUtil.celda(descripcion, 2, 1, 11, Element.ALIGN_LEFT, 0, BaseColor.BLACK, "transparent", "Normal"));
+                                    tableResol.AddCell(HerUtil.celda("   Determina:", 2, 1, 11, Element.ALIGN_LEFT, 0, BaseColor.BLACK, "transparent", "Negrita"));
+                                    tableResol.AddCell(HerUtil.celda(determina, 2, 1, 11, Element.ALIGN_LEFT, 0, BaseColor.BLACK, "transparent", "Normal"));
                                     doc.Add(tableResol);
-                                    determina = "";
-                                    descripcion = "";
-                                }
-
-
-                                if (Resoles.CHKREVOCARPARTE == 1)
-                                {
+                                    break;
+                                case "00000591":
                                     medCols = new float[] { .35f, .01f, .64f };
                                     tableResol = HerUtil.constructorTabla(3, page, medCols, page.Width - 90);
-                                    tableResol.AddCell(HerUtil.celda(determina, 2, 1, 11, Element.ALIGN_LEFT, 0, BaseColor.BLACK, "transparent", "Negrita"));
-                                    descripcion = "Revocar en Parte ";
-                                    switch (Resoles.RADREVOCAR)
-                                    {
-                                        case "1":
-                                            descripcion += "sanción";
-                                            break;
-                                        case "2":
-                                            descripcion += "caducidad";
-                                            break;
-                                        case "3":
-                                            descripcion += "sanción y caducidad";
-                                            break;
-                                    }
-                                    tableResol.AddCell(HerUtil.celda(descripcion, 2, 1, 11, Element.ALIGN_LEFT, 0, BaseColor.BLACK, "transparent", "Normal"));
+                                    tableResol.AddCell(HerUtil.celda("Sentido:", 2, 1, 11, Element.ALIGN_LEFT, 0, BaseColor.BLACK, "transparent", "Negrita"));
+                                    tableResol.AddCell(HerUtil.celda("Adecuación de Multa", 2, 1, 11, Element.ALIGN_LEFT, 0, BaseColor.BLACK, "transparent", "Normal"));
                                     doc.Add(tableResol);
-                                    determina = "";
-                                    descripcion = "";
-                                }
-
-                                if (Resoles.CHKRETROTRAER == 1)
-                                {
+                                    break;
+                                case "00000592":
                                     medCols = new float[] { .35f, .01f, .64f };
                                     tableResol = HerUtil.constructorTabla(3, page, medCols, page.Width - 90);
-                                    tableResol.AddCell(HerUtil.celda(determina, 2, 1, 11, Element.ALIGN_LEFT, 0, BaseColor.BLACK, "transparent", "Negrita"));
-                                    descripcion = "Retrotraer";
-                                    switch (Resoles.RADRETROTRAER)
-                                    {
-                                        case "1":
-                                            descripcion += " hasta notificación supervisión";
-                                            break;
-                                        case "2":
-                                            descripcion += " hasta supervisión";
-                                            break;
-                                        case "3":
-                                            descripcion += " hasta notificación de la RSD de inicio de PA";
-                                            break;
-                                        case "4":
-                                            descripcion += " hasta presentación de descargos RSD";
-                                            break;
-                                        case "5":
-                                            descripcion += " hasta informe final de instrucción";
-                                            break;
-                                        case "6":
-                                            descripcion += " hasta presentación de descargos IFI";
-                                            break;
-                                        case "7":
-                                            descripcion += " hasta RD de término de PAU";
-                                            break;
-                                        case "8":
-                                            descripcion += " hasta notificación de la RD de término de PAU";
-                                            break;
-                                        case "9":
-                                            descripcion += " hasta notificación del informe final de instrucción";
-                                            break;
-                                        case "10":
-                                            descripcion += "-Otros";
-                                            break;
-                                    }
-                                    tableResol.AddCell(HerUtil.celda(descripcion, 2, 1, 11, Element.ALIGN_LEFT, 0, BaseColor.BLACK, "transparent", "Normal"));
+                                    tableResol.AddCell(HerUtil.celda("Sentido:", 2, 1, 11, Element.ALIGN_LEFT, 0, BaseColor.BLACK, "transparent", "Negrita"));
+                                    tableResol.AddCell(HerUtil.celda("Rectificación de Error Material", 2, 1, 11, Element.ALIGN_LEFT, 0, BaseColor.BLACK, "transparent", "Normal"));
                                     doc.Add(tableResol);
-                                    determina = "";
-                                    descripcion = "";
-                                }
-
-                                if (Resoles.CHKPRESCRIBIR == 1)
-                                {
+                                    break;
+                                case "00000593":
                                     medCols = new float[] { .35f, .01f, .64f };
                                     tableResol = HerUtil.constructorTabla(3, page, medCols, page.Width - 90);
-                                    tableResol.AddCell(HerUtil.celda(determina, 2, 1, 11, Element.ALIGN_LEFT, 0, BaseColor.BLACK, "transparent", "Negrita"));
-                                    tableResol.AddCell(HerUtil.celda("Prescribir ", 2, 1, 11, Element.ALIGN_LEFT, 0, BaseColor.BLACK, "transparent", "Normal"));
-                                    determina = "";
+                                    tableResol.AddCell(HerUtil.celda("Sentido:", 2, 1, 11, Element.ALIGN_LEFT, 0, BaseColor.BLACK, "transparent", "Negrita"));
+                                    tableResol.AddCell(HerUtil.celda("Sustracción de la Materia", 2, 1, 11, Element.ALIGN_LEFT, 0, BaseColor.BLACK, "transparent", "Normal"));
                                     doc.Add(tableResol);
-                                }
-
-                                if (Resoles.CHKARCHIVAR == 1)
-                                {
-                                    medCols = new float[] { .35f, .01f, .64f };
-                                    tableResol = HerUtil.constructorTabla(3, page, medCols, page.Width - 90);
-                                    tableResol.AddCell(HerUtil.celda(determina, 2, 1, 11, Element.ALIGN_LEFT, 0, BaseColor.BLACK, "transparent", "Negrita"));
-                                    tableResol.AddCell(HerUtil.celda("Archivar ", 2, 1, 11, Element.ALIGN_LEFT, 0, BaseColor.BLACK, "transparent", "Normal"));
-                                    determina = "";
-                                    doc.Add(tableResol);
-                                }
-
-
-                                if (Resoles.CHKNULIDAD == 1)
-                                {
-                                    medCols = new float[] { .35f, .01f, .64f };
-                                    tableResol = HerUtil.constructorTabla(3, page, medCols, page.Width - 90);
-                                    tableResol.AddCell(HerUtil.celda(determina, 2, 1, 11, Element.ALIGN_LEFT, 0, BaseColor.BLACK, "transparent", "Negrita"));
-                                    descripcion = "Nulidad/Nulidad de Oficio ";
-                                    switch (Resoles.RADNULIDAD)
-                                    {
-                                        case "1":
-                                            descripcion += "RSD inicio";
-                                            break;
-                                        case "2":
-                                            descripcion += "RD final";
-                                            break;
-                                        case "3":
-                                            descripcion += "RD reconsideración";
-                                            break;
-                                        case "4":
-                                            descripcion += "IFI";
-                                            break;
-                                        case "5":
-                                            descripcion += "Otros";
-                                            break;
-                                    }
-                                    tableResol.AddCell(HerUtil.celda(descripcion, 2, 1, 11, Element.ALIGN_LEFT, 0, BaseColor.BLACK, "transparent", "Normal"));
-                                    doc.Add(tableResol);
-                                    determina = "";
-                                    descripcion = "";
-                                }
-
-                                if (Resoles.CHKLEVANTAR == 1)
-                                {
-                                    medCols = new float[] { .35f, .01f, .64f };
-                                    tableResol = HerUtil.constructorTabla(3, page, medCols, page.Width - 90);
-                                    tableResol.AddCell(HerUtil.celda(determina, 2, 1, 11, Element.ALIGN_LEFT, 0, BaseColor.BLACK, "transparent", "Negrita"));
-                                    tableResol.AddCell(HerUtil.celda("Levantar suspensión ", 2, 1, 11, Element.ALIGN_LEFT, 0, BaseColor.BLACK, "transparent", "Normal"));
-                                    determina = "";
-                                    doc.Add(tableResol);
-                                }
-
-                                if (Resoles.CHKCARECE == 1)
-                                {
-                                    medCols = new float[] { .35f, .01f, .64f };
-                                    tableResol = HerUtil.constructorTabla(3, page, medCols, page.Width - 90);
-                                    tableResol.AddCell(HerUtil.celda(determina, 2, 1, 11, Element.ALIGN_LEFT, 0, BaseColor.BLACK, "transparent", "Negrita"));
-                                    tableResol.AddCell(HerUtil.celda("Carece de objeto ", 2, 1, 11, Element.ALIGN_LEFT, 0, BaseColor.BLACK, "transparent", "Normal"));
-                                    determina = "";
-                                    doc.Add(tableResol);
-                                }
-
-                                if (Resoles.CHKOTRO == 1)
-                                {
-                                    medCols = new float[] { .35f, .01f, .64f };
-                                    tableResol = HerUtil.constructorTabla(3, page, medCols, page.Width - 90);
-                                    tableResol.AddCell(HerUtil.celda(determina, 2, 1, 11, Element.ALIGN_LEFT, 0, BaseColor.BLACK, "transparent", "Negrita"));
-                                    tableResol.AddCell(HerUtil.celda("Otro ", 2, 1, 11, Element.ALIGN_LEFT, 0, BaseColor.BLACK, "transparent", "Normal"));
-                                    determina = "";
-                                    doc.Add(tableResol);
-                                }
-
-                                break;
-
-                            case "0000056":
-                                medCols = new float[] { .35f, .01f, .64f };
-                                tableResol = HerUtil.constructorTabla(3, page, medCols, page.Width - 90);
-                                tableResol.AddCell(HerUtil.celda("Sentido:", 2, 1, 11, Element.ALIGN_LEFT, 0, BaseColor.BLACK, "transparent", "Negrita"));
-                                tableResol.AddCell(HerUtil.celda("Fundado en parte", 2, 1, 11, Element.ALIGN_LEFT, 0, BaseColor.BLACK, "transparent", "Normal"));
-                                doc.Add(tableResol);
-                                determina = "";//"Fundado en Parte";
-                                if (Resoles.CHKREVOCAR2 == 1)
-                                {
-
-                                    medCols = new float[] { .35f, .01f, .64f };
-                                    tableResol = HerUtil.constructorTabla(3, page, medCols, page.Width - 90);
-                                    tableResol.AddCell(HerUtil.celda(determina, 2, 1, 11, Element.ALIGN_LEFT, 0, BaseColor.BLACK, "transparent", "Negrita"));
-                                    descripcion = "Revocar ";
-                                    switch (Resoles.RADREVOCAR2)
-                                    {
-                                        case "1":
-                                            descripcion += "sanción";
-                                            break;
-                                        case "2":
-                                            descripcion += "caducidad";
-                                            break;
-                                        case "3":
-                                            descripcion += "sanción y caducidad";
-                                            break;
-                                    }
-                                    tableResol.AddCell(HerUtil.celda(descripcion, 2, 1, 11, Element.ALIGN_LEFT, 0, BaseColor.BLACK, "transparent", "Normal"));
-                                    doc.Add(tableResol);
-                                    determina = "";
-                                    descripcion = "";
-                                }
-
-                                if (Resoles.CHKREVOCARPARTE2 == 1)
-                                {
-                                    medCols = new float[] { .35f, .01f, .64f };
-                                    tableResol = HerUtil.constructorTabla(3, page, medCols, page.Width - 90);
-                                    tableResol.AddCell(HerUtil.celda(determina, 2, 1, 11, Element.ALIGN_LEFT, 0, BaseColor.BLACK, "transparent", "Negrita"));
-                                    descripcion = "Revocar en Parte ";
-                                    switch (Resoles.RADREVOCARPARTE2)
-                                    {
-                                        case "1":
-                                            descripcion += "sanción";
-                                            break;
-                                        case "2":
-                                            descripcion += "caducidad";
-                                            break;
-                                        case "3":
-                                            descripcion += "sanción y caducidad";
-                                            break;
-                                    }
-                                    tableResol.AddCell(HerUtil.celda(descripcion, 2, 1, 11, Element.ALIGN_LEFT, 0, BaseColor.BLACK, "transparent", "Normal"));
-                                    doc.Add(tableResol);
-                                    determina = "";
-                                    descripcion = "";
-                                }
-
-                                if (Resoles.CHKRETROTRAER2 == 1)
-                                {
-                                    medCols = new float[] { .35f, .01f, .64f };
-                                    tableResol = HerUtil.constructorTabla(3, page, medCols, page.Width - 90);
-                                    tableResol.AddCell(HerUtil.celda(determina, 2, 1, 11, Element.ALIGN_LEFT, 0, BaseColor.BLACK, "transparent", "Negrita"));
-                                    descripcion = "Retrotraer";
-                                    switch (Resoles.RADRETROTRAER2)
-                                    {
-                                        case "1":
-                                            descripcion += " hasta notificación supervisión";
-                                            break;
-                                        case "2":
-                                            descripcion += " hasta supervisión";
-                                            break;
-                                        case "3":
-                                            descripcion += " hasta notificación de la RSD de inicio de PA";
-                                            break;
-                                        case "4":
-                                            descripcion += " hasta presentación de descargos RSD";
-                                            break;
-                                        case "5":
-                                            descripcion += " hasta informe final de instrucción";
-                                            break;
-                                        case "6":
-                                            descripcion += " hasta presentación de descargos IFI";
-                                            break;
-                                        case "7":
-                                            descripcion += " hasta RD de término de PAU";
-                                            break;
-                                        case "8":
-                                            descripcion += " hasta notificación de la RD de término de PAU";
-                                            break;
-                                        case "9":
-                                            descripcion += " hasta notificación del informe final de instrucción";
-                                            break;
-                                        case "10":
-                                            descripcion += "-Otros";
-                                            break;
-                                    }
-                                    tableResol.AddCell(HerUtil.celda(descripcion, 2, 1, 11, Element.ALIGN_LEFT, 0, BaseColor.BLACK, "transparent", "Normal"));
-                                    doc.Add(tableResol);
-                                    determina = "";
-                                    descripcion = "";
-                                }
-
-                                if (Resoles.CHKPRESCRIBIR2 == 1)
-                                {
-                                    medCols = new float[] { .35f, .01f, .64f };
-                                    tableResol = HerUtil.constructorTabla(3, page, medCols, page.Width - 90);
-                                    tableResol.AddCell(HerUtil.celda(determina, 2, 1, 11, Element.ALIGN_LEFT, 0, BaseColor.BLACK, "transparent", "Negrita"));
-                                    tableResol.AddCell(HerUtil.celda("Prescribir ", 2, 1, 11, Element.ALIGN_LEFT, 0, BaseColor.BLACK, "transparent", "Normal"));
-                                    determina = "";
-                                    doc.Add(tableResol);
-                                }
-
-                                if (Resoles.CHKARCHIVAR2 == 1)
-                                {
-                                    medCols = new float[] { .35f, .01f, .64f };
-                                    tableResol = HerUtil.constructorTabla(3, page, medCols, page.Width - 90);
-                                    tableResol.AddCell(HerUtil.celda(determina, 2, 1, 11, Element.ALIGN_LEFT, 0, BaseColor.BLACK, "transparent", "Negrita"));
-                                    tableResol.AddCell(HerUtil.celda("Archivar ", 2, 1, 11, Element.ALIGN_LEFT, 0, BaseColor.BLACK, "transparent", "Normal"));
-                                    determina = "";
-                                    doc.Add(tableResol);
-                                }
-
-
-                                if (Resoles.CHKNULIDAD2 == 1)
-                                {
-                                    medCols = new float[] { .35f, .01f, .64f };
-                                    tableResol = HerUtil.constructorTabla(3, page, medCols, page.Width - 90);
-                                    tableResol.AddCell(HerUtil.celda(determina, 2, 1, 11, Element.ALIGN_LEFT, 0, BaseColor.BLACK, "transparent", "Negrita"));
-                                    descripcion = "Nulidad/Nulidad de Oficio ";
-                                    switch (Resoles.RADNULIDAD2)
-                                    {
-                                        case "1":
-                                            descripcion += "RSD inicio";
-                                            break;
-                                        case "2":
-                                            descripcion += "RD final";
-                                            break;
-                                        case "3":
-                                            descripcion += "RD reconsideración";
-                                            break;
-                                        case "4":
-                                            descripcion += "IFI";
-                                            break;
-                                        case "5":
-                                            descripcion += "Otros";
-                                            break;
-                                    }
-                                    tableResol.AddCell(HerUtil.celda(descripcion, 2, 1, 11, Element.ALIGN_LEFT, 0, BaseColor.BLACK, "transparent", "Normal"));
-                                    doc.Add(tableResol);
-                                    determina = "";
-                                    descripcion = "";
-                                }
-
-                                if (Resoles.CHKLEVANTAR2 == 1)
-                                {
-                                    medCols = new float[] { .35f, .01f, .64f };
-                                    tableResol = HerUtil.constructorTabla(3, page, medCols, page.Width - 90);
-                                    tableResol.AddCell(HerUtil.celda(determina, 2, 1, 11, Element.ALIGN_LEFT, 0, BaseColor.BLACK, "transparent", "Negrita"));
-                                    tableResol.AddCell(HerUtil.celda("Levantar suspensión ", 2, 1, 11, Element.ALIGN_LEFT, 0, BaseColor.BLACK, "transparent", "Normal"));
-                                    determina = "";
-                                    doc.Add(tableResol);
-                                }
-
-                                if (Resoles.CHKCARECE2 == 1)
-                                {
-                                    medCols = new float[] { .35f, .01f, .64f };
-                                    tableResol = HerUtil.constructorTabla(3, page, medCols, page.Width - 90);
-                                    tableResol.AddCell(HerUtil.celda(determina, 2, 1, 11, Element.ALIGN_LEFT, 0, BaseColor.BLACK, "transparent", "Negrita"));
-                                    tableResol.AddCell(HerUtil.celda("Carece de objeto ", 2, 1, 11, Element.ALIGN_LEFT, 0, BaseColor.BLACK, "transparent", "Normal"));
-                                    determina = "";
-                                    doc.Add(tableResol);
-                                }
-
-                                if (Resoles.CHKOTRO2 == 1)
-                                {
-                                    medCols = new float[] { .35f, .01f, .64f };
-                                    tableResol = HerUtil.constructorTabla(3, page, medCols, page.Width - 90);
-                                    tableResol.AddCell(HerUtil.celda(determina, 2, 1, 11, Element.ALIGN_LEFT, 0, BaseColor.BLACK, "transparent", "Negrita"));
-                                    tableResol.AddCell(HerUtil.celda("Otro ", 2, 1, 11, Element.ALIGN_LEFT, 0, BaseColor.BLACK, "transparent", "Normal"));
-                                    determina = "";
-                                    doc.Add(tableResol);
-                                }
-
-                                break;
-
-                            case "0000058":
-                                medCols = new float[] { .35f, .01f, .64f };
-                                tableResol = HerUtil.constructorTabla(3, page, medCols, page.Width - 90);
-                                tableResol.AddCell(HerUtil.celda("Sentido:", 2, 1, 11, Element.ALIGN_LEFT, 0, BaseColor.BLACK, "transparent", "Negrita"));
-                                tableResol.AddCell(HerUtil.celda("Nulidad", 2, 1, 11, Element.ALIGN_LEFT, 0, BaseColor.BLACK, "transparent", "Normal"));
-                                doc.Add(tableResol);
-                                determina = "";//"Nulidad";
-
-                                determina += Resoles.DETERMINA_RETROTRAER == "0000084" ? "Retrotraer " : "";
-                                determina += Resoles.DETERMINA_RETROTRAER == "0000085" ? "Archivar " : "";
-                                determina += Resoles.RETRO_VALOR1 == "0000065" ? "notificacion supervision " : "";
-                                determina += Resoles.RETRO_VALOR1 == "0000066" ? "supervision " : "";
-                                determina += Resoles.RETRO_VALOR1 == "0000067" ? "notificacion de la RSD de inicio de PA " : "";
-                                determina += Resoles.RETRO_VALOR1 == "0000068" ? "presentacion de descargos RSD " : "";
-                                determina += Resoles.RETRO_VALOR1 == "0000069" ? "informe final de instruccion " : "";
-                                determina += Resoles.RETRO_VALOR1 == "0000070" ? "presentacion de descargos IFI " : "";
-                                determina += Resoles.RETRO_VALOR1 == "0000071" ? "RD de termino de PAU " : "";
-                                determina += Resoles.RETRO_VALOR1 == "0000072" ? "notificacion de la RD de termino de PAU " : "";
-                                determina += Resoles.RETRO_VALOR1 == "0000073" ? "notificacion del informe final de fnstruccion " : "";
-                                determina += Resoles.RETRO_VALOR1 == "0000074" ? "otros " : "";
-
-                                medCols = new float[] { .35f, .01f, .64f };
-                                tableResol = HerUtil.constructorTabla(3, page, medCols, page.Width - 90);
-                                tableResol.AddCell(HerUtil.celda("Determina:", 2, 1, 11, Element.ALIGN_LEFT, 0, BaseColor.BLACK, "transparent", "Negrita"));
-                                tableResol.AddCell(HerUtil.celda(determina, 2, 1, 11, Element.ALIGN_LEFT, 0, BaseColor.BLACK, "transparent", "Normal"));
-                                doc.Add(tableResol);
-                                break;
-
-                            case "0000059":
-                                medCols = new float[] { .35f, .01f, .64f };
-                                tableResol = HerUtil.constructorTabla(3, page, medCols, page.Width - 90);
-                                tableResol.AddCell(HerUtil.celda("Sentido:", 2, 1, 11, Element.ALIGN_LEFT, 0, BaseColor.BLACK, "transparent", "Negrita"));
-                                tableResol.AddCell(HerUtil.celda("Nulidad parcial", 2, 1, 11, Element.ALIGN_LEFT, 0, BaseColor.BLACK, "transparent", "Normal"));
-                                doc.Add(tableResol);
-                                determina = "";//"Nulidad determina";
-
-                                determina += Resoles.DETERMINA_RETROTRAER2 == "0000084" ? "Retrotraer " : "";
-                                determina += Resoles.DETERMINA_RETROTRAER2 == "0000085" ? "Archivar " : "";
-                                determina += Resoles.RETRO_VALOR2 == "0000065" ? "notificacion supervision " : "";
-                                determina += Resoles.RETRO_VALOR2 == "0000066" ? "supervision " : "";
-                                determina += Resoles.RETRO_VALOR2 == "0000067" ? "notificacion de la RSD de inicio de PA " : "";
-                                determina += Resoles.RETRO_VALOR2 == "0000068" ? "presentacion de descargos RSD " : "";
-                                determina += Resoles.RETRO_VALOR2 == "0000069" ? "informe final de instruccion " : "";
-                                determina += Resoles.RETRO_VALOR2 == "0000070" ? "presentacion de descargos IFI " : "";
-                                determina += Resoles.RETRO_VALOR2 == "0000071" ? "RD de termino de PAU " : "";
-                                determina += Resoles.RETRO_VALOR2 == "0000072" ? "notificacion de la RD de termino de PAU " : "";
-                                determina += Resoles.RETRO_VALOR2 == "0000073" ? "notificacion del informe final de instruccion " : "";
-                                determina += Resoles.RETRO_VALOR2 == "0000074" ? "otros " : "";
-
-                                medCols = new float[] { .35f, .01f, .64f };
-                                tableResol = HerUtil.constructorTabla(3, page, medCols, page.Width - 90);
-                                tableResol.AddCell(HerUtil.celda("   Determina:", 2, 1, 11, Element.ALIGN_LEFT, 0, BaseColor.BLACK, "transparent", "Negrita"));
-                                tableResol.AddCell(HerUtil.celda(determina, 2, 1, 11, Element.ALIGN_LEFT, 0, BaseColor.BLACK, "transparent", "Normal"));
-                                doc.Add(tableResol);
-                                break;
-                            case "00000591":
-                                medCols = new float[] { .35f, .01f, .64f };
-                                tableResol = HerUtil.constructorTabla(3, page, medCols, page.Width - 90);
-                                tableResol.AddCell(HerUtil.celda("Sentido:", 2, 1, 11, Element.ALIGN_LEFT, 0, BaseColor.BLACK, "transparent", "Negrita"));
-                                tableResol.AddCell(HerUtil.celda("Adecuación de Multa", 2, 1, 11, Element.ALIGN_LEFT, 0, BaseColor.BLACK, "transparent", "Normal"));
-                                doc.Add(tableResol);
-                                break;
-                            case "00000592":
-                                medCols = new float[] { .35f, .01f, .64f };
-                                tableResol = HerUtil.constructorTabla(3, page, medCols, page.Width - 90);
-                                tableResol.AddCell(HerUtil.celda("Sentido:", 2, 1, 11, Element.ALIGN_LEFT, 0, BaseColor.BLACK, "transparent", "Negrita"));
-                                tableResol.AddCell(HerUtil.celda("Rectificación de Error Material", 2, 1, 11, Element.ALIGN_LEFT, 0, BaseColor.BLACK, "transparent", "Normal"));
-                                doc.Add(tableResol);
-                                break;
-                            case "00000593":
-                                medCols = new float[] { .35f, .01f, .64f };
-                                tableResol = HerUtil.constructorTabla(3, page, medCols, page.Width - 90);
-                                tableResol.AddCell(HerUtil.celda("Sentido:", 2, 1, 11, Element.ALIGN_LEFT, 0, BaseColor.BLACK, "transparent", "Negrita"));
-                                tableResol.AddCell(HerUtil.celda("Sustracción de la Materia", 2, 1, 11, Element.ALIGN_LEFT, 0, BaseColor.BLACK, "transparent", "Normal"));
-                                doc.Add(tableResol);
-                                break;
+                                    break;
+                            }
                         }
+                        
                         if (Resoles.MULTA > 0)
                         {
                             medCols = new float[] { .35f, .01f, .64f };
