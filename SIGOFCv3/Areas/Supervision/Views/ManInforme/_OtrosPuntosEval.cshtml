@@ -1,0 +1,47 @@
+﻿
+<script src="~/Areas/Supervision/js/ManInforme/_OtrosPuntosEval.js"></script>
+
+<div class="modal-dialog" role="document">
+    <div class="modal-content">
+        <div class="modal-header text-small" style="cursor:move;">
+            <span>Otros Puntos de Evaluacion</span>
+            <i class="fa fa-close" style="cursor:pointer;" data-dismiss="modal" aria-label="Close"></i>
+        </div>
+        <div class="modal-body">
+            <form id="frmItemOtrosPuntosEval">
+                @Html.Hidden("hdfRegEstadoOPE")              
+                @Html.Hidden("hdfCodSecuencialOPE")              
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label for="ddlVerticeId" class="text-small">Evaluacion</label>
+                        @Html.TextBox("txtEvaluacion", "", new { @class = "form-control form-control-sm", maxlength = "300", oninput = "this.value = this.value.replace(/[^áéíóúa-zÁÉÍÓÚA-Z 0-9]/,'')" })
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="ddlZonaCampoId" class="text-small">Zona</label>
+                        @Html.DropDownList("ddlZonaId", new SelectList(ViewBag.ddlZona, "Value", "Text"), new { @class = "form-control form-control-sm" })
+                    </div>
+                </div>                
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label for="txtCoordEste" class="text-small">Coordenada Este</label>
+                        @Html.TextBox("txtCoordEste", "", new { @class = "form-control form-control-sm", maxlength = "6", type = "number" })
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="txtCoordNorte" class="text-small">Coordenada Norte</label>
+                        @Html.TextBox("txtCoordNorte", "", new { @class = "form-control form-control-sm", maxlength = "7", type = "number" })
+                    </div>
+                </div>               
+                <div class="form-row">
+                    <div class="form-group col-md-12">
+                        <label for="txtDescripcion" class="text-small">Descripción</label>
+                        @Html.TextArea("txtDescripcion", "", new { @class = "form-control form-control-sm", rows = "4" })
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-primary btn-sm" onclick="_OtrosPuntosEval.fnSubmitForm()">Guardar</button>
+            <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Cancelar</button>
+        </div>
+    </div>
+</div>

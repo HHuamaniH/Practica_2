@@ -906,6 +906,14 @@ namespace CapaEntidad.DOC
         public String EliVALOR01 { get; set; }
         [Description("USO")]
         public String USO { get; set; }
+        [Description("DIMENSIONES")]
+        public String DIMENSIONES { get; set; }
+        [Description("OBJETIVOS")]
+        public String OBJETIVOS { get; set; }
+        [Description("CARACTERISTICAS")]
+        public String CARACTERISTICAS { get; set; }
+        [Description("TIPO_SENIAL")]
+        public String TIPO_SENIAL { get; set; }
         [Description("ESTADO_CONSERVACION")]
         public String ESTADO_CONSERVACION { get; set; }
 
@@ -1191,6 +1199,8 @@ namespace CapaEntidad.DOC
         public String COD_MUESTRA_SUPERVISION { get; set; }
         [Description("ALTURA_PROMEDIO")]
         public Decimal ALTURA_PROMEDIO { get; set; }
+        [Description("AUTORIZADO")]
+        public String AUTORIZADO { get; set; }
         [Category("LIST"), Description("ListMuestraNoMadeCarrizos")]
         public List<Ent_INFORME> ListMuestraNoMadeCarrizos { get; set; }
 
@@ -1264,9 +1274,7 @@ namespace CapaEntidad.DOC
         public List<Ent_INFORME> ListTipoCambioUso { get; set; }
         //VERTICES LINDERAMIENTO AREA TITULO HABILITANTE
         [Description("ZONA")]
-        public String ZONA { get; set; }
-        [Description("AUTORIZADO")]
-        public String AUTORIZADO { get; set; }
+        public String ZONA { get; set; }        
         [Description("ZONA_CAMPO")]
         public String ZONA_CAMPO { get; set; }
         [Category("LIST"), Description("ListISupervLindAreaVertice")]
@@ -1352,6 +1360,14 @@ namespace CapaEntidad.DOC
         public List<Ent_INFORME> ListMadeAserradaCampo { get; set; }
         [Category("LIST"), Description("ListTHVerticeCampo")]
         public List<Ent_INFORME> ListTHVerticeCampo { get; set; }
+        [Category("LIST"), Description("ListCoberturaBoscosa")]
+        public List<Ent_INFORME> ListCoberturaBoscosa { get; set; }
+        [Category("LIST"), Description("ListOtrosPtosEval")]
+        public List<Ent_INFORME> ListOtrosPtosEval { get; set; }
+        [Category("LIST"), Description("ListInfraestructura")]
+        public List<Ent_INFORME> ListInfraestructura { get; set; }
+        [Category("LIST"), Description("ListZonifDistribEspecie")]
+        public List<Ent_INFORME> ListZonifDistribEspecie { get; set; }
         [Category("LIST"), Description("ListTHVertice")]
         public List<Ent_INFORME> ListTHVertice { get; set; }
         [Category("LIST"), Description("ListEvaluacionOtros")]
@@ -1438,7 +1454,7 @@ namespace CapaEntidad.DOC
         public Object FECHA_REGENTE { get; set; }
 
         [Description("FINES_CREACION")]
-        public String FINES_CREACION { get; set; }
+        public String FINES_CREACION { get; set; }        
         [Description("OBJETIVOS_PRINCIPALES")]
         public String OBJETIVOS_PRINCIPALES { get; set; }
         [Description("COND_ADECUADAS")]

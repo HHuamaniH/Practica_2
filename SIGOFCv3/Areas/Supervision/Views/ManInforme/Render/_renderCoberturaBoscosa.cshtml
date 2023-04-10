@@ -1,0 +1,188 @@
+﻿
+@model List<CapaEntidad.DOC.Ent_INFORME>
+
+<style type="text/css">
+    #tbRenderCoberturaBoscosa_wrapper {
+        padding: 0px;
+    }
+</style>
+
+<script type="text/javascript">
+    var _renderCoberturaBoscosa = {};
+    _renderCoberturaBoscosa.tbEliTABLA = [];
+
+    _renderCoberturaBoscosa.fnInitDataTable_Detail = function () {
+        var columns_label = [], columns_data = [], options = {};
+
+        columns_label = ["Actividad", "Area", "Zona", "Autorizado", "Coord. Este", "Coord. Norte","Observación",];
+        columns_data = ["ACTIVIDAD", "AREA", "ZONA", "AUTORIZADO", "COORDENADA_ESTE", "COORDENADA_NORTE", "OBSERVACION"];
+        options = {
+            page_length: 10, row_index: true, row_edit: true, row_fnEdit: "_renderCoberturaBoscosa.fnAddEdit(this)"
+            , row_delete: true, row_fnDelete: "_renderCoberturaBoscosa.fnDelete(this)"
+            , button_copy: true, button_csv: true, button_excel: true, button_pdf: true, button_print: true
+            , export_title: $("#tbRenderCoberturaBoscosa").find("thead tr")[0].innerText.trim()
+            , page_sort: true
+            , columnDefs: [{
+                target: 1,
+                visible: false,
+            }]
+        };
+        _renderCoberturaBoscosa.dtCoberturaBoscosa = utilDt.fnLoadDataTable_Detail($("#tbRenderCoberturaBoscosa"), columns_label, columns_data, options);
+
+       
+    }
+
+    _renderCoberturaBoscosa.fnAddEdit = function (obj) {
+        var url = urlLocalSigo + "Supervision/ManInforme/_CoberturaBoscosa";
+        var option = { url: url, type: 'POST', datos: { asCodCNotificacion: '@ViewData["cod_cnotificacion"]' }, divId: "mdlManInforme_CoberturaBoscosa" };
+        utilSigo.fnOpenModal(option, function () {
+            _CoberturaBoscosa.fnSaveForm = function (data) {
+                if (data != null) {
+                    var dt = _renderCoberturaBoscosa.dtCoberturaBoscosa;
+
+                    if (obj == null || obj == "") {//Nuevo Registro                        
+                        if (!utilDt.existValorSearch(_renderCoberturaBoscosa.dtCoberturaBoscosa, "ACTIVIDAD", data["ACTIVIDAD"])) {                            
+                            dt.rows.add([data]).draw();
+                            dt.page('last').draw('page');
+                            utilSigo.toastSuccess("Exito", "Datos guardados correctamente");
+                        } else {
+                            utilSigo.toastWarning("Error", "La actividad ya se encuentra registrado");
+                        }
+                    } else {//Modificar
+                        var row = dt.row($(obj).parents('tr')).data();
+                        row = data;
+                        dt.row($(obj).parents('tr')).data(row).draw();
+                        utilSigo.toastSuccess("Exito", "Datos actualizados correctamente");
+                    }
+                    $("#mdlManInforme_CoberturaBoscosa").modal('hide');
+                } else {
+                    utilSigo.toastError("Error", "No se pudieron guardar los datos");
+                }
+            }
+
+            if (obj != null && obj != "") {
+                var data = _renderCoberturaBoscosa.dtCoberturaBoscosa.row($(obj).parents('tr')).data();
+                _CoberturaBoscosa.fnInit(utilSigo.fnConvertArrayToObject(data));
+            } else { _CoberturaBoscosa.fnInit(""); }
+        });
+    }
+
+    _renderCoberturaBoscosa.fnDeleteAll = function () {
+        var rows, countFilas, data;
+
+        rows = _renderCoberturaBoscosa.dtCoberturaBoscosa.$("tr");
+        countFilas = rows.length;
+        if (countFilas > 0) {
+            utilSigo.dialogConfirm("", "Está seguro de Eliminar Todos los Registros?", function (r) {
+                if (r) {
+                    $.each(rows, function (i, o) {
+                        data = _renderCoberturaBoscosa.dtCoberturaBoscosa.row($(o)).data();
+                        if (data["RegEstado"] == "0" || data["RegEstado"] == "2") {
+                            _renderCoberturaBoscosa.tbEliTABLA.push({
+                                EliTABLA: "ISUPERVISION_DET_COBERT_BOSCOSA",
+                                COD_SECUENCIAL: data["COD_SECUENCIAL"]
+                            });
+                        }
+                    });
+                    _renderCoberturaBoscosa.dtCoberturaBoscosa.clear().draw();
+                }
+            });
+        } else {
+            utilSigo.toastWarning("Aviso", "No se encontraron registros a eliminar");
+        }
+    }
+
+    _renderCoberturaBoscosa.fnDelete = function (obj) {
+        var data;
+
+        data = _renderCoberturaBoscosa.dtCoberturaBoscosa.row($(obj).parents('tr')).data();
+        if (data["RegEstado"] == "0" || data["RegEstado"] == "2") {
+            _renderCoberturaBoscosa.tbEliTABLA.push({
+                EliTABLA: "ISUPERVISION_DET_COBERT_BOSCOSA",
+                //COD_THABILITANTE: "",
+                //COD_SECUENCIAL_ADENDA: "",
+                COD_SECUENCIAL: data["COD_SECUENCIAL"]
+            });
+        }
+        _renderCoberturaBoscosa.dtCoberturaBoscosa.row($(obj).parents('tr')).remove().draw(false);
+    }
+    
+    _renderCoberturaBoscosa.fnImport = function (e, obj) {
+        var url = urlLocalSigo + "Supervision/ManInforme/ImportarDatosInformeSimple";
+        uploadFile.fileSelectHandler(e, obj, url, { asTipo: "COBERTURA_BOSCOSA" }, function (data) {
+            for (var i = 0; i < data.length; i++) {
+                if (!utilDt.existValorSearch(_renderCoberturaBoscosa.dtCoberturaBoscosa, "ACTIVIDAD", data[i]["ACTIVIDAD"])) {
+                    _renderCoberturaBoscosa.dtCoberturaBoscosa.rows.add([data[i]]).draw();
+                    _renderCoberturaBoscosa.dtCoberturaBoscosa.page('last').draw('page');
+                }
+            }
+        });
+    }
+
+    _renderCoberturaBoscosa.fnExport = function () {        
+        var url = urlLocalSigo + "Supervision/ManInforme/ExportarCoberturaBoscosa";        
+        var params = {
+            asCodInforme: '@ViewData["cod_informe"]'
+            , asCodCNotificacion: '@ViewData["cod_cnotificacion"]'
+        };
+        var option = { url: url, datos: JSON.stringify(params), type: 'POST' };
+
+        utilSigo.fnAjax(option, function (data) {
+            if (data.success) {
+                document.location = urlLocalSigo + "Archivos/Plantilla/" + data.msj;
+            } else {
+                utilSigo.toastWarning("Aviso", "Sucedio un error, Comuníquese con el Administrador");
+                console.log(data.msj);
+            }
+        });
+    }
+
+    _renderCoberturaBoscosa.fnGetList = function () {
+        var list = [], rows, countFilas, data;
+
+        rows = _renderCoberturaBoscosa.dtCoberturaBoscosa.$("tr");
+        countFilas = rows.length;
+        if (countFilas > 0) {
+            $.each(rows, function (i, o) {
+                data = _renderCoberturaBoscosa.dtCoberturaBoscosa.row($(o)).data();
+                if (data["RegEstado"] == "1" || data["RegEstado"] == "2") {
+                    list.push(utilSigo.fnConvertArrayToObject(data));
+                }
+            });
+        }
+        return list;
+    }
+
+    _renderCoberturaBoscosa.fnGetListEliTABLA = function () { return _renderCoberturaBoscosa.tbEliTABLA }
+
+    $(document).ready(function () {
+        _renderCoberturaBoscosa.frm = $("#frmRenderCoberturaBoscosa");
+
+        _renderCoberturaBoscosa.fnInitDataTable_Detail();
+
+        _renderCoberturaBoscosa.dtCoberturaBoscosa.rows.add(JSON.parse('@Html.Raw(Json.Encode(@Model))')).draw();
+    });
+</script>
+
+<div id="frmRenderCoberturaBoscosa">
+    <div class="table-responsive">
+        <table id="tbRenderCoberturaBoscosa" style="width:100%;margin:0px !important;" class="table table-hover table-bordered">
+            <thead>
+                <tr>
+                    <th colspan="12" class="text-sm-left">
+                        <div class="form-inline">
+                            <i class="fa mx-2 fa-lg fa-file-o" style="cursor:pointer;" onclick="_renderCoberturaBoscosa.fnAddEdit('');" data-toggle="tooltip" data-placement="top" title="Nuevo"></i>
+                            <i class="fa mx-2 fa-lg fa-window-close-o" style="cursor:pointer;" onclick="_renderCoberturaBoscosa.fnDeleteAll();" data-toggle="tooltip" data-placement="top" title="Eliminar Todos"></i>
+                            <label style="cursor:pointer;" class="fa mx-2 fa-lg fa-file-excel-o" title="Importar Archivo" data-toggle="tooltip">
+                                <input type="file" id="fileselect" name="fileselect" style="display:none" size="60" onchange="_renderCoberturaBoscosa.fnImport(event, this)">
+                            </label>
+                            <i class="fa mx-2 fa-lg fa-folder-open" style="cursor:pointer;" onclick="_renderCoberturaBoscosa.fnExport();" data-toggle="tooltip" data-placement="top" title="Descargar Plantilla"></i>
+                            <strong>Cobertura Boscosa</strong>
+                        </div>
+                    </th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
+</div>

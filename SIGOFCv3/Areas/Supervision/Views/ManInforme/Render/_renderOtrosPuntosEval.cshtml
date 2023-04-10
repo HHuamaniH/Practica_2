@@ -1,0 +1,184 @@
+﻿
+@model List<CapaEntidad.DOC.Ent_INFORME>
+
+<style type="text/css">
+    #tbRenderOtrosPuntosEval_wrapper {
+        padding: 0px;
+    }
+</style>
+
+<script type="text/javascript">
+    var _renderOtrosPuntosEval = {};
+    _renderOtrosPuntosEval.tbEliTABLA = [];
+
+    _renderOtrosPuntosEval.fnInitDataTable_Detail = function () {
+        var columns_label = [], columns_data = [], options = {};
+
+        columns_label = ["Evaluación", "Zona", "Coord. Este", "Coord. Norte", "Descripción",];
+        columns_data = ["EVALUACION", "ZONA", "COORDENADA_ESTE", "COORDENADA_NORTE", "DESCRIPCION"];
+        options = {
+            page_length: 10, row_index: true, row_edit: true, row_fnEdit: "_renderOtrosPuntosEval.fnAddEdit(this)"
+            , row_delete: true, row_fnDelete: "_renderCoberturaBoscosa.fnDelete(this)"
+            , button_copy: true, button_csv: true, button_excel: true, button_pdf: true, button_print: true
+            , export_title: $("#tbRenderOtrosPuntosEval").find("thead tr")[0].innerText.trim()
+            , page_sort: true
+            , columnDefs: [{
+                target: 1,
+                visible: false,
+            }]
+        };
+        _renderOtrosPuntosEval.dtOtrosPuntosEval = utilDt.fnLoadDataTable_Detail($("#tbRenderOtrosPuntosEval"), columns_label, columns_data, options);
+    }
+
+    _renderOtrosPuntosEval.fnAddEdit = function (obj) {
+        var url = urlLocalSigo + "Supervision/ManInforme/_OtrosPuntosEval";
+        var option = { url: url, type: 'POST', datos: { asCodCNotificacion: '@ViewData["cod_cnotificacion"]' }, divId: "mdlManInforme_OtrosPuntosEval" };
+        utilSigo.fnOpenModal(option, function () {
+            _OtrosPuntosEval.fnSaveForm = function (data) {
+                if (data != null) {
+                    var dt = _renderOtrosPuntosEval.dtOtrosPuntosEval;
+
+                    if (obj == null || obj == "") {//Nuevo Registro
+                        if (!utilDt.existValorSearch(_renderOtrosPuntosEval.dtOtrosPuntosEval, "EVALUACION", data["EVALUACION"])) {
+                            dt.rows.add([data]).draw();
+                            dt.page('last').draw('page');
+                            utilSigo.toastSuccess("Exito", "Datos guardados correctamente");
+                        } else {
+                            utilSigo.toastWarning("Error", "La evaluación ya se encuentra registrado");
+                        }
+                    } else {//Modificar
+                        var row = dt.row($(obj).parents('tr')).data();
+                        row = data;
+                        dt.row($(obj).parents('tr')).data(row).draw(false);
+                        utilSigo.toastSuccess("Exito", "Datos actualizados correctamente");
+                    }
+                    $("#mdlManInforme_OtrosPuntosEval").modal('hide');
+                } else {
+                    utilSigo.toastError("Error", "No se pudieron guardar los datos");
+                }
+            }
+
+            if (obj != null && obj != "") {
+                var data = _renderOtrosPuntosEval.dtOtrosPuntosEval.row($(obj).parents('tr')).data();
+                _OtrosPuntosEval.fnInit(utilSigo.fnConvertArrayToObject(data));
+            } else { _OtrosPuntosEval.fnInit(""); }
+        });
+    }
+
+    _renderOtrosPuntosEval.fnDeleteAll = function () {
+        var rows, countFilas, data;
+
+        rows = _renderOtrosPuntosEval.dtOtrosPuntosEval.$("tr");
+        countFilas = rows.length;
+        if (countFilas > 0) {
+            utilSigo.dialogConfirm("", "Está seguro de Eliminar Todos los Registros?", function (r) {
+                if (r) {
+                    $.each(rows, function (i, o) {
+                        data = _renderOtrosPuntosEval.dtOtrosPuntosEval.row($(o)).data();
+                        if (data["RegEstado"] == "0" || data["RegEstado"] == "2") {
+                            _renderOtrosPuntosEval.tbEliTABLA.push({
+                                EliTABLA: "ISUPERVISION_DET_OTROS_PUNTOS_EVAL",
+                                COD_SECUENCIAL: data["COD_SECUENCIAL"]
+                            });
+                        }
+                    });
+                    _renderOtrosPuntosEval.dtOtrosPuntosEval.clear().draw();
+                }
+            });
+        } else {
+            utilSigo.toastWarning("Aviso", "No se encontraron registros a eliminar");
+        }
+    }
+
+    _renderOtrosPuntosEval.fnDelete = function (obj) {
+        var data;
+
+        data = _renderOtrosPuntosEval.dtOtrosPuntosEval.row($(obj).parents('tr')).data();
+        if (data["RegEstado"] == "0" || data["RegEstado"] == "2") {
+            _renderOtrosPuntosEval.tbEliTABLA.push({
+                EliTABLA: "ISUPERVISION_DET_OTROS_PUNTOS_EVAL",
+                COD_SECUENCIAL: data["COD_SECUENCIAL"]
+            });
+        }
+        _renderOtrosPuntosEval.dtOtrosPuntosEval.row($(obj).parents('tr')).remove().draw(false);
+    }
+
+    _renderOtrosPuntosEval.fnImport = function (e, obj) {
+        var url = urlLocalSigo + "Supervision/ManInforme/ImportarDatosInformeSimple";
+        uploadFile.fileSelectHandler(e, obj, url, { asTipo: "EVALUACION_OTRO" }, function (data) {
+            for (var i = 0; i < data.length; i++) {
+                if (!utilDt.existValorSearch(_renderOtrosPuntosEval.dtOtrosPuntosEval, "EVALUACION", data[i]["EVALUACION"])) {
+                    _renderOtrosPuntosEval.dtOtrosPuntosEval.rows.add([data[i]]).draw();
+                    _renderOtrosPuntosEval.dtOtrosPuntosEval.page('last').draw('page');
+                }
+            }
+        });
+    }
+
+    _renderOtrosPuntosEval.fnExport = function () {
+        var url = urlLocalSigo + "Supervision/ManInforme/ExportarOtrosPuntosEvaluacion";
+        var params = {
+            asCodInforme: '@ViewData["cod_informe"]'
+            , asCodCNotificacion: '@ViewData["cod_cnotificacion"]'
+        };
+        var option = { url: url, datos: JSON.stringify(params), type: 'POST' };
+
+        utilSigo.fnAjax(option, function (data) {
+            if (data.success) {
+                document.location = urlLocalSigo + "Archivos/Plantilla/" + data.msj;
+            } else {
+                utilSigo.toastWarning("Aviso", "Sucedio un error, Comuníquese con el Administrador");
+                console.log(data.msj);
+            }
+        });
+    }
+
+    _renderOtrosPuntosEval.fnGetList = function () {
+        var list = [], rows, countFilas, data;
+
+        rows = _renderOtrosPuntosEval.dtOtrosPuntosEval.$("tr");
+        countFilas = rows.length;
+        if (countFilas > 0) {
+            $.each(rows, function (i, o) {
+                data = _renderOtrosPuntosEval.dtOtrosPuntosEval.row($(o)).data();
+                if (data["RegEstado"] == "1" || data["RegEstado"] == "2") {
+                    list.push(utilSigo.fnConvertArrayToObject(data));
+                }
+            });
+        }
+        return list;
+    }
+
+    _renderOtrosPuntosEval.fnGetListEliTABLA = function () { return _renderOtrosPuntosEval.tbEliTABLA }
+
+    $(document).ready(function () {
+        _renderOtrosPuntosEval.frm = $("#frmRenderOtrosPuntosEval");
+
+        _renderOtrosPuntosEval.fnInitDataTable_Detail();
+
+        _renderOtrosPuntosEval.dtOtrosPuntosEval.rows.add(JSON.parse('@Html.Raw(Json.Encode(@Model))')).draw();
+    });
+</script>
+
+<div id="frmRenderOtrosPuntosEval">
+    <div class="table-responsive">
+        <table id="tbRenderOtrosPuntosEval" style="width:100%;margin:0px !important;" class="table table-hover table-bordered">
+            <thead>
+                <tr>
+                    <th colspan="12" class="text-sm-left">
+                        <div class="form-inline">
+                            <i class="fa mx-2 fa-lg fa-file-o" style="cursor:pointer;" onclick="_renderOtrosPuntosEval.fnAddEdit('');" data-toggle="tooltip" data-placement="top" title="Nuevo"></i>
+                            <i class="fa mx-2 fa-lg fa-window-close-o" style="cursor:pointer;" onclick="_renderOtrosPuntosEval.fnDeleteAll();" data-toggle="tooltip" data-placement="top" title="Eliminar Todos"></i>
+                            <label style="cursor:pointer;" class="fa mx-2 fa-lg fa-file-excel-o" title="Importar Archivo" data-toggle="tooltip">
+                                <input type="file" id="fileselect" name="fileselect" style="display:none" size="60" onchange="_renderOtrosPuntosEval.fnImport(event, this)">
+                            </label>
+                            <i class="fa mx-2 fa-lg fa-folder-open" style="cursor:pointer;" onclick="_renderOtrosPuntosEval.fnExport();" data-toggle="tooltip" data-placement="top" title="Descargar Plantilla"></i>
+                            <strong>Otros Puntos de Evaluación</strong>
+                        </div>
+                    </th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
+</div>

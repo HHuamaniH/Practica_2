@@ -1,0 +1,148 @@
+﻿
+@model List<CapaEntidad.DOC.Ent_INFORME>
+
+<style type="text/css">
+    #tbRenderInfraestructura_wrapper {
+        padding: 0px;
+    }
+</style>
+
+<script type="text/javascript">
+    var _renderInfraestructura = {};
+    _renderInfraestructura.tbEliTABLA = [];
+
+    _renderInfraestructura.fnInitDataTable_Detail = function () {
+        var columns_label = [], columns_data = [], options = {};
+
+        columns_label = ["Descripción", "Dimensiones", "Uso", "Estado de Conservación", "Objetivos(Investigación,Control,Capacitación, Otro)"];
+        columns_data = ["DESCRIPCION", "DIMENSIONES", "USO", "ESTADO_CONSERVACION", "OBJETIVOS"];
+        options = {
+            page_length: 10, row_index: true, row_edit: true, row_fnEdit: "_renderInfraestructura.fnAddEdit(this)"
+            , row_delete: true, row_fnDelete: "_renderInfraestructura.fnDelete(this)"         
+            , export_title: $("#tbRenderInfraestructura").find("thead tr")[0].innerText.trim()
+            , page_sort: true
+            , columnDefs: [{
+                target: 1,
+                visible: false,
+            }]
+        };
+        _renderInfraestructura.dtInfraestructura = utilDt.fnLoadDataTable_Detail($("#tbRenderInfraestructura"), columns_label, columns_data, options);
+    }
+
+    _renderInfraestructura.fnAddEdit = function (obj) {
+        var url = urlLocalSigo + "Supervision/ManInforme/_Infraestructura";
+        var option = { url: url, type: 'POST', datos: { asCodCNotificacion: '@ViewData["cod_cnotificacion"]' }, divId: "mdlManInforme_Infraestructura" };
+        utilSigo.fnOpenModal(option, function () {
+            _Infraestructura.fnSaveForm = function (data) {
+                if (data != null) {
+                    var dt = _renderInfraestructura.dtInfraestructura;
+
+                    if (obj == null || obj == "") {//Nuevo Registro
+                        if (!utilDt.existValorSearch(_renderInfraestructura.dtInfraestructura, "DESCRIPCION", data["DESCRIPCION"])) {
+                            dt.rows.add([data]).draw();
+                            dt.page('last').draw('page');
+                            utilSigo.toastSuccess("Exito", "Datos guardados correctamente");
+                        } else {
+                            utilSigo.toastWarning("Error", "La evaluación ya se encuentra registrado");
+                        }
+                    } else {//Modificar
+                        var row = dt.row($(obj).parents('tr')).data();
+                        row = data;
+                        dt.row($(obj).parents('tr')).data(row).draw(false);
+                        utilSigo.toastSuccess("Exito", "Datos actualizados correctamente");
+                    }
+                    $("#mdlManInforme_Infraestructura").modal('hide');
+                } else {
+                    utilSigo.toastError("Error", "No se pudieron guardar los datos");
+                }
+            }
+
+            if (obj != null && obj != "") {
+                var data = _renderInfraestructura.dtInfraestructura.row($(obj).parents('tr')).data();
+                _Infraestructura.fnInit(utilSigo.fnConvertArrayToObject(data));
+            } else { _Infraestructura.fnInit(""); }
+        });
+    }
+
+    _renderInfraestructura.fnDeleteAll = function () {
+        var rows, countFilas, data;
+
+        rows = _renderInfraestructura.dtInfraestructura.$("tr");
+        countFilas = rows.length;
+        if (countFilas > 0) {
+            utilSigo.dialogConfirm("", "Está seguro de Eliminar Todos los Registros?", function (r) {
+                if (r) {
+                    $.each(rows, function (i, o) {
+                        data = _renderInfraestructura.dtInfraestructura.row($(o)).data();
+                        if (data["RegEstado"] == "0" || data["RegEstado"] == "2") {
+                            _renderInfraestructura.tbEliTABLA.push({
+                                EliTABLA: "ISUPERVISION_DET_INFRAESTRUCTURA",
+                                COD_SECUENCIAL: data["COD_SECUENCIAL"]
+                            });
+                        }
+                    });
+                    _renderInfraestructura.dtInfraestructura.clear().draw();
+                }
+            });
+        } else {
+            utilSigo.toastWarning("Aviso", "No se encontraron registros a eliminar");
+        }
+    }
+
+    _renderInfraestructura.fnDelete = function (obj) {
+        var data;
+
+        data = _renderInfraestructura.dtInfraestructura.row($(obj).parents('tr')).data();
+        if (data["RegEstado"] == "0" || data["RegEstado"] == "2") {
+            _renderInfraestructura.tbEliTABLA.push({
+                EliTABLA: "ISUPERVISION_DET_INFRAESTRUCTURA",
+                COD_SECUENCIAL: data["COD_SECUENCIAL"]
+            });
+        }
+        _renderInfraestructura.dtInfraestructura.row($(obj).parents('tr')).remove().draw(false);
+    }
+
+    _renderInfraestructura.fnGetList = function () {
+        var list = [], rows, countFilas, data;
+
+        rows = _renderInfraestructura.dtInfraestructura.$("tr");
+        countFilas = rows.length;
+        if (countFilas > 0) {
+            $.each(rows, function (i, o) {
+                data = _renderInfraestructura.dtInfraestructura.row($(o)).data();
+                if (data["RegEstado"] == "1" || data["RegEstado"] == "2") {
+                    list.push(utilSigo.fnConvertArrayToObject(data));
+                }
+            });
+        }
+        return list;
+    }
+
+    _renderInfraestructura.fnGetListEliTABLA = function () { return _renderInfraestructura.tbEliTABLA }
+
+    $(document).ready(function () {
+        _renderInfraestructura.frm = $("#frmRenderInfraestructura");
+
+        _renderInfraestructura.fnInitDataTable_Detail();
+
+        _renderInfraestructura.dtInfraestructura.rows.add(JSON.parse('@Html.Raw(Json.Encode(@Model))')).draw();
+    });
+</script>
+
+<div id="frmRenderInfraestructura">
+    <div class="table-responsive">
+        <table id="tbRenderInfraestructura" style="width:100%;margin:0px !important;" class="table table-hover table-bordered">
+            <thead>
+                <tr>
+                    <th colspan="12" class="text-sm-left">
+                        <div class="form-inline">
+                            <i class="fa mx-2 fa-lg fa-file-o" style="cursor:pointer;" onclick="_renderInfraestructura.fnAddEdit('');" data-toggle="tooltip" data-placement="top" title="Nuevo"></i>                            
+                            <strong>Infraestructura</strong>
+                        </div>
+                    </th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
+</div>

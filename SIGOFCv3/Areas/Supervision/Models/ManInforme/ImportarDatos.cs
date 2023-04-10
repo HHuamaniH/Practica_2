@@ -56,6 +56,60 @@ namespace SIGOFCv3.Areas.Supervision.Models.ManInforme
 
             return lstVertice;
         }
+
+        public static List<CapaEntidad.DOC.Ent_INFORME> CoberturaBoscosa(HttpRequestBase _request)
+        {
+            List<CapaEntidad.DOC.Ent_INFORME> lstCobBoscosa = new List<CapaEntidad.DOC.Ent_INFORME>();
+
+            HttpPostedFileBase file = _request.Files[0];
+            if ((file != null) && (file.ContentLength > 0) && !string.IsNullOrEmpty(file.FileName))
+            {
+                using (var package = new ExcelPackage(file.InputStream))
+                {
+                    var currentSheet = package.Workbook.Worksheets;
+                    var workSheet = currentSheet.First();
+                    var noOfCol = workSheet.Dimension.End.Column;
+                    var noOfRow = workSheet.Dimension.End.Row;
+                    CapaEntidad.DOC.Ent_INFORME oCampos;
+                    string ceste, cnorte;
+
+                    for (int rowIterator = 2; rowIterator <= noOfRow; rowIterator++)
+                    {
+                        oCampos = new CapaEntidad.DOC.Ent_INFORME();
+                        oCampos.ACTIVIDAD = workSheet.Cells[rowIterator, 1].Value.ToString().Trim();
+                        if (!string.IsNullOrEmpty(oCampos.ACTIVIDAD))
+                        {
+                            oCampos.AREA = Decimal.Parse(workSheet.Cells[rowIterator, 2].Value.ToString().Trim());
+                            oCampos.ZONA = workSheet.Cells[rowIterator, 3].Value.ToString().Trim();
+                            if (oCampos.ZONA == "17S" || oCampos.ZONA == "18S" || oCampos.ZONA == "19S")
+                            {
+                                oCampos.AUTORIZADO = workSheet.Cells[rowIterator, 4].Value.ToString().Trim();
+                                if (!string.IsNullOrEmpty(oCampos.AUTORIZADO))
+                                {
+                                    ceste = (workSheet.Cells[rowIterator, 5].Value ?? "").ToString().Trim();
+                                    cnorte = (workSheet.Cells[rowIterator, 6].Value ?? "").ToString().Trim();
+                                    if (ceste != "" && cnorte != "")
+                                    {
+                                        oCampos.COD_SECUENCIAL = 0;
+                                        oCampos.COORDENADA_ESTE = Convert.ToInt32(workSheet.Cells[rowIterator, 5].Value.ToString().Trim());
+                                        oCampos.COORDENADA_NORTE = Convert.ToInt32(workSheet.Cells[rowIterator, 6].Value.ToString().Trim());
+                                        oCampos.OBSERVACION = (workSheet.Cells[rowIterator, 7].Value ?? "").ToString().Trim();
+                                        oCampos.RegEstado = 1;
+                                        lstCobBoscosa.Add(oCampos);
+                                    }
+                                    else { throw new Exception("Coordenada incorrecta"); }
+                                }
+                                else { throw new Exception("Autoridad incorrecta"); }
+                            }
+                            else { throw new Exception("Zona UTM incorrecta"); }
+                        }else { throw new Exception("Actividad incorrecta"); }
+
+                    }
+                }
+            }
+
+            return lstCobBoscosa;
+        }
         public static List<CapaEntidad.DOC.Ent_INFORME> AvistamientoFauna(HttpRequestBase _request)
         {
             List<CapaEntidad.DOC.Ent_INFORME> lstAvistamiento = new List<CapaEntidad.DOC.Ent_INFORME>();

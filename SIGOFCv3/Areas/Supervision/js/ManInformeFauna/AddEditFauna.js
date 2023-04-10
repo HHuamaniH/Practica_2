@@ -328,6 +328,26 @@ ManInforme_AddEditFauna.fnInitDataTable_Detail = function () {
 	options = { page_length: 10, row_index: true, data_extend: data_extend, page_autowidth: false };
 	ManInforme_AddEditFauna.dtMedidaConservacion = utilDt.fnLoadDataTable_Detail(ManInforme_AddEditFauna.frm.find("#tbMedidaConservacion"), columns_label, columns_data, options);
 	ManInforme_AddEditFauna.dtMedidaConservacion.rows.add(ManInforme_AddEditFauna.DataPrograma.filter(m => m.TIPO_PROGRAMA == "FAUNA_MEDCONSER")).draw();
+	//Cargar los criterios Zonificacion de la Distribución de Especies
+	columns_label = ["Criterio"];
+	columns_data = ["DESCRIPCION"];
+	data_extend = [
+		{
+			"data": "ESTADO_PROGRAMA", "title": "Opción", "width": "7%", "orderable": false, "searchable": false, "mRender": function (data, type, row, meta) {
+				var selectNo = (data == true) ? "" : "selected";
+				var selectSi = (data == true) ? "selected" : "";
+				return '<select class="form-control form-control-sm"><option value="SI" ' + selectSi + '>SI</option><option value="NO" ' + selectNo + '>NO</option></select>';
+			}
+		},
+		{
+			"data": "OBSERVACION", "title": "", "width": "65%", "orderable": false, "searchable": false, "mRender": function (data, type, row, meta) {
+				return '<input class="form-control form-control-sm" type="text" value="' + data + '" style="width:100%;">';
+			}
+		}
+	];
+	options = { page_length: 10, row_index: true, data_extend: data_extend, page_autowidth: false };
+	ManInforme_AddEditFauna.dtCritZonifDistribEspecie = utilDt.fnLoadDataTable_Detail(ManInforme_AddEditFauna.frm.find("#tbCritZonifDistribEspecie"), columns_label, columns_data, options);
+	ManInforme_AddEditFauna.dtCritZonifDistribEspecie.rows.add(ManInforme_AddEditFauna.DataPrograma.filter(m => m.TIPO_PROGRAMA == "FAUNA_ZONDISESP")).draw();
 	//Cargar Actividades de Manejo
 	columns_label = ["Criterio"];
 	columns_data = ["DESCRIPCION"];
@@ -586,6 +606,7 @@ ManInforme_AddEditFauna.fnGetListPrograma = function (_tipo) {
 		case "DELIMITACION_CONCESION": dt = ManInforme_AddEditFauna.dtDelimitacion; break;
 		case "ACTIVIDAD_MANEJO": dt = ManInforme_AddEditFauna.dtActividadManejo; break;
 		case "MEDIDA_CONSERVACION": dt = ManInforme_AddEditFauna.dtMedidaConservacion; break;
+		case "ZONIFICACION_ESPECIE": dt = ManInforme_AddEditFauna.dtCritZonifDistribEspecie; break;
 	}
 
 	if (dt.$("tr").length > 0) {
@@ -683,6 +704,7 @@ ManInforme_AddEditFauna.fnSaveForm = function () {
 			datosInforme.tbPrograma = ManInforme_AddEditFauna.fnGetListPrograma("DELIMITACION_CONCESION");
 			datosInforme.tbPrograma = datosInforme.tbPrograma.concat(ManInforme_AddEditFauna.fnGetListPrograma("ACTIVIDAD_MANEJO"));
 			datosInforme.tbPrograma = datosInforme.tbPrograma.concat(ManInforme_AddEditFauna.fnGetListPrograma("MEDIDA_CONSERVACION"));
+			datosInforme.tbPrograma = datosInforme.tbPrograma.concat(ManInforme_AddEditFauna.fnGetListPrograma("ZONIFICACION_ESPECIE"));
 			datosInforme.tbManejoImpacto = ManInforme_AddEditFauna.fnGetListFauna("MANEJO_IMPACTO");
 			datosInforme.tbResponsabilidadSocial = ManInforme_AddEditFauna.fnGetListFauna("RESPONSABILIDAD_SOCIAL");
 			datosInforme.tbObligacionContrac = ManInforme_AddEditFauna.fnGetListFauna("OBLIGACION_ACTO");
@@ -692,6 +714,17 @@ ManInforme_AddEditFauna.fnSaveForm = function () {
 
 			datosInforme.tbMandatos = _renderMandatos.fnGetList();
 			datosInforme.tbMandatos = datosInforme.tbMandatos.concat(_renderMandatos.fnGetListEliTABLA());
+			datosInforme.tbVerticeTHCampo = _renderVerticeTHCampo.fnGetList();
+			datosInforme.tbEliTABLA = datosInforme.tbEliTABLA.concat(_renderVerticeTHCampo.fnGetListEliTABLA());
+
+			datosInforme.tbCoberturaBoscosa = _renderCoberturaBoscosa.fnGetList();
+			datosInforme.tbEliTABLA = datosInforme.tbEliTABLA.concat(_renderCoberturaBoscosa.fnGetListEliTABLA());
+			datosInforme.tbOtrosPtosEval = _renderOtrosPuntosEval.fnGetList();
+			datosInforme.tbEliTABLA = datosInforme.tbEliTABLA.concat(_renderOtrosPuntosEval.fnGetListEliTABLA());
+			datosInforme.tbInfraestructura = _renderInfraestructura.fnGetList();
+			datosInforme.tbEliTABLA = datosInforme.tbEliTABLA.concat(_renderInfraestructura.fnGetListEliTABLA());
+			datosInforme.tbZonifDistribEspecie = _renderZonifDistribEspecie.fnGetList();
+			datosInforme.tbEliTABLA = datosInforme.tbEliTABLA.concat(_renderZonifDistribEspecie.fnGetListEliTABLA());
 
 			var option = { url: ManInforme_AddEditFauna.frm[0].action, datos: JSON.stringify({ dto: datosInforme }), type: 'POST' };
 			$.ajax({

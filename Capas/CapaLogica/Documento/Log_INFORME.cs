@@ -2672,6 +2672,11 @@ namespace CapaLogica.DOC
                     vmInf.ddlBuenDesempenioId = entInf.BUEN_DESEMPENIO.ToString();
                     vmInf.ddlArchivaInformeId = (entInf.ARCHIVA_INFORME == -1) ? "Seleccionar" : entInf.ARCHIVA_INFORME.ToString();
                     vmInf.tbMandatos = entInf.ListMandatos;
+                    vmInf.tbVerticeTHCampo = entInf.ListTHVerticeCampo;
+                    vmInf.tbCoberturaBoscosa = entInf.ListCoberturaBoscosa;
+                    vmInf.tbOtrosPtosEval = entInf.ListOtrosPtosEval;
+                    vmInf.tbInfraestructura = entInf.ListInfraestructura;
+                    vmInf.tbZonifDistribEspecie = entInf.ListZonifDistribEspecie;
                 }
             }
             catch (Exception ex)
@@ -2744,7 +2749,12 @@ namespace CapaLogica.DOC
                 paramsInf.OUTPUTPARAM01 = "";
                 paramsInf.COD_SUP_CALIDAD = _dto.hdSupervisor_Calidad;
                 paramsInf.TIPO_INFORME = _dto.ddlTipoInformeId; 
-                paramsInf.ListMandatos = _dto.tbMandatos; 
+                paramsInf.ListMandatos = _dto.tbMandatos;
+                paramsInf.ListTHVerticeCampo = _dto.tbVerticeTHCampo;
+                paramsInf.ListCoberturaBoscosa = _dto.tbCoberturaBoscosa;
+                paramsInf.ListOtrosPtosEval = _dto.tbOtrosPtosEval;
+                paramsInf.ListInfraestructura = _dto.tbInfraestructura;
+                paramsInf.ListZonifDistribEspecie = _dto.tbZonifDistribEspecie;
                 //Grabar en la base de datos
                 using (OracleConnection cn = new OracleConnection(CapaDatos.BDConexion.Conexion_Cadena_SIGO()))
                 {
