@@ -77,15 +77,14 @@
     _renderCNotificacion.fnViewModalPOASupervisado = function (obj, bool) {
         
         var codInforme = '@ViewData["cod_informe"]';
-        var _origen = '@ViewData["ORIGEN"]';
-        debugger
+        var _origen = '@ViewData["ORIGEN"]';        
         if ((typeof codInforme!=='undefined' && codInforme!="")) {
             var data = _renderCNotificacion.dtListPoa.row($(obj).parents('tr')).data();
             var url = urlLocalSigo;
-
+            debugger;
             if (data["RegEstado"] != "1") {
                 let datos = {};
-                if (bool) {
+                if (bool) {                    
                     if (_origen !== 'undefined' && _origen == 'FAUNA') {
                         url += "Supervision/ManInformeFauna/_POAFaunaSupervisado";
                     } else {
@@ -142,7 +141,7 @@
                     }
                 },
                 {
-                    "data": "SUPERVISADO", "title": "Datos", "width":"10%", "orderable": false, "searchable": false, "mRender": function (data, type, row, meta) {
+                    "data": "SUPERVISADO", "title": "Datos", "width": "10%", "orderable": false, "searchable": false, "mRender": function (data, type, row, meta) {                        
                         if (!data) {
                             return '';
                         } else {
