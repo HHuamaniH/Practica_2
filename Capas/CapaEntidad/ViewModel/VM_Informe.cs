@@ -647,6 +647,9 @@ namespace CapaEntidad.ViewModel
         public List<Ent_INFORME> tbOtrosPtosEval { get; set; }
         public List<Ent_INFORME> tbInfraestructura { get; set; }
         public List<Ent_INFORME> tbZonifDistribEspecie { get; set; }
+        public List<Ent_INFORME> tbAprovSostenible { get; set; }
+        public List<Ent_INFORME> tbRegFauna { get; set; }
+        public List<Ent_INFORME_OBLIGTITULAR> tbObligacionTitular { get; set; }
         public VM_Informe_Fauna()
         {
             vmControlCalidad = new VM_ControlCalidad_2();
@@ -675,6 +678,8 @@ namespace CapaEntidad.ViewModel
             tbOtrosPtosEval = new List<Ent_INFORME>();
             tbInfraestructura = new List<Ent_INFORME>();
             tbZonifDistribEspecie = new List<Ent_INFORME>();
+            tbAprovSostenible = new List<Ent_INFORME>();
+            tbObligacionTitular = new List<Ent_INFORME_OBLIGTITULAR>();
         }
     }
 

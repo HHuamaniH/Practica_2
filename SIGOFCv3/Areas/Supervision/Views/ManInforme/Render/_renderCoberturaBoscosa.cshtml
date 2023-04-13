@@ -22,10 +22,7 @@
             , button_copy: true, button_csv: true, button_excel: true, button_pdf: true, button_print: true
             , export_title: $("#tbRenderCoberturaBoscosa").find("thead tr")[0].innerText.trim()
             , page_sort: true
-            , columnDefs: [{
-                target: 1,
-                visible: false,
-            }]
+            , data:null
         };
         _renderCoberturaBoscosa.dtCoberturaBoscosa = utilDt.fnLoadDataTable_Detail($("#tbRenderCoberturaBoscosa"), columns_label, columns_data, options);
 
@@ -169,7 +166,7 @@
         <table id="tbRenderCoberturaBoscosa" style="width:100%;margin:0px !important;" class="table table-hover table-bordered">
             <thead>
                 <tr>
-                    <th colspan="12" class="text-sm-left">
+                    <th colspan="11" class="text-sm-left">
                         <div class="form-inline">
                             <i class="fa mx-2 fa-lg fa-file-o" style="cursor:pointer;" onclick="_renderCoberturaBoscosa.fnAddEdit('');" data-toggle="tooltip" data-placement="top" title="Nuevo"></i>
                             <i class="fa mx-2 fa-lg fa-window-close-o" style="cursor:pointer;" onclick="_renderCoberturaBoscosa.fnDeleteAll();" data-toggle="tooltip" data-placement="top" title="Eliminar Todos"></i>

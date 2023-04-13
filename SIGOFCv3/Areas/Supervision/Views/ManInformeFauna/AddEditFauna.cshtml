@@ -65,6 +65,7 @@
                             <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#navIncidencias" role="tab" aria-controls="home" aria-selected="true">Incidencias</a></li>
                             <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#navInformeDigital" role="tab" aria-controls="home" aria-selected="true">Informe digital</a></li>
                             <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#navMandatos" role="tab" aria-controls="home" aria-selected="true">Mandatos</a></li>
+                            <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#navObligTitular" role="tab" aria-controls="home" aria-selected="true">Obligaciones</a></li>
                         </ul>
                         <div class="tab-content">
                             <div class="tab-pane fade show" id="navEstado" role="tabpanel" aria-labelledby="nav-home-tab">
@@ -467,6 +468,23 @@
                                             </div>
                                         </div>
                                     </div>
+                                    <div class="card-header text-small">Aprovechamiento sostenible</div>
+                                    <div class="card-body">
+                                        <div class="form-row">
+                                            <div class="col-md-12">
+                                                @Html.Partial("~/Areas/Supervision/Views/ManInforme/Render/_renderAprovSostenible.cshtml", Model.tbAprovSostenible, new ViewDataDictionary { { "cod_informe", Model.hdfCodInforme }, { "cod_cnotificacion", Model.vmInfCNotificacion.hdfCodCNotificacion } })
+
+                                            </div>
+                                        </div>
+                                        <div class="form-row">
+                                            <div class="table-responsive">
+                                                    <table id="tbAprovSostenible" style="width:100%" class="table table-hover table-bordered">
+                                                        <thead></thead>
+                                                        <tbody></tbody>
+                                                    </table>
+                                                </div>
+                                        </div>
+                                    </div>
                                     <div class="card-body">
                                         <div class="form-row">
                                             <div class="table-responsive">
@@ -544,10 +562,16 @@
                                                     </div>
                                                 </div>
                                             </div>
+                                        </div>                                        
+                                        <div class="card-body">
+                                            <div class="form-row">
+                                                <div class="col-md-12">
+                                                    @Html.Partial("~/Areas/Supervision/Views/ManInforme/Render/_renderAvistamientoFauna.cshtml", Model.tbRegFauna
+                                                        , new ViewDataDictionary { { "TITULO", "Registro de Fauna Silvestre" } })
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
-
-
                                 </div>
                             </div>
                             <div class="tab-pane fade show" id="navConclusion" role="tabpanel" aria-labelledby="nav-home-tab">
@@ -678,6 +702,11 @@
                                 @Html.Partial("~/Areas/Supervision/Views/ManInformeExSitu/_shared/_Mandatos.cshtml", Model.tbMandatos)
 
                             </div>
+                            <div class="tab-pane fade show" id="navObligTitular" role="tabpanel" aria-labelledby="nav-home-tab">
+                                <div class="card">
+                                    @Html.Partial("~/Areas/Supervision/Views/ManInforme/Render/_renderObligacionTitular.cshtml", Model.tbObligacionTitular)
+                                </div>
+                            </div>
                         </div>
                     </form>
                 </div>
@@ -724,6 +753,8 @@
     <div class="modal fade hide" id="mdlManInforme_Infraestructura" role="dialog"></div>
     @* Para el modal _CoberturaBoscosa usado en el control _renderZonifDistribEspecie *@
     <div class="modal fade hide" id="mdlManInforme_ZonifDistribEspecie" role="dialog"></div>
+    @* Para el modal _CoberturaBoscosa usado en el control _renderAprovSostenible *@
+    <div class="modal fade hide" id="mdlManInforme_AprovSostenible" role="dialog"></div>
 
     @* Para el control genérico de personas *@
     <div class="modal fade hide" id="mdlBuscarPersona" role="dialog"></div>

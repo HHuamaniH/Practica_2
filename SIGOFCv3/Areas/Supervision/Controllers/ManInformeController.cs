@@ -413,6 +413,13 @@ namespace SIGOFCv3.Areas.Supervision.Controllers
         public PartialViewResult _ZonifDistribEspecie(string asCodCNotificacion)
         {
             return PartialView();
+        }
+        #endregion
+        #region "Aprovechamiento sostenible"
+        [HttpPost]
+        public PartialViewResult _AprovSostenible(string asCodCNotificacion)
+        {
+            return PartialView();
         }        
         #endregion
 

@@ -2677,6 +2677,24 @@ namespace CapaLogica.DOC
                     vmInf.tbOtrosPtosEval = entInf.ListOtrosPtosEval;
                     vmInf.tbInfraestructura = entInf.ListInfraestructura;
                     vmInf.tbZonifDistribEspecie = entInf.ListZonifDistribEspecie;
+                    vmInf.tbAprovSostenible = entInf.ListAprovSostenible;
+                    vmInf.tbRegFauna = entInf.ListAvistamientoFauna;
+                    //Cargar las obligaciones del titular del TH
+                    if (entInf.ListISuperExsituOBLIGF.Count > 0)
+                    {
+                        vmInf.tbObligacionTitular = new List<Ent_INFORME_OBLIGTITULAR>();
+
+                        foreach (var item in entInf.ListISuperExsituOBLIGF)
+                        {
+                            vmInf.tbObligacionTitular.Add(new Ent_INFORME_OBLIGTITULAR()
+                            {
+                                COD_OBLIGTITULAR = item.MAE_OBLIGTITULAR,
+                                OBLIGTITULAR = item.CODIGO_NOMBRE,
+                                EVAL_OBLIGTITULAR = item.EVAL_OBLIGTITULAR,
+                                OBSERVACION = item.OBSERVACION_OBLIG
+                            });
+                        }
+                    }
                 }
             }
             catch (Exception ex)
@@ -2755,6 +2773,17 @@ namespace CapaLogica.DOC
                 paramsInf.ListOtrosPtosEval = _dto.tbOtrosPtosEval;
                 paramsInf.ListInfraestructura = _dto.tbInfraestructura;
                 paramsInf.ListZonifDistribEspecie = _dto.tbZonifDistribEspecie;
+                paramsInf.ListAprovSostenible = _dto.tbAprovSostenible;
+                paramsInf.ListAvistamientoFauna = _dto.tbRegFauna;
+                foreach (var item in _dto.tbObligacionTitular)
+                {
+                    paramsInf.ListISuperExsituOBLIGF.Add(new CEntISExsitu()
+                    {
+                        MAE_OBLIGTITULAR = item.COD_OBLIGTITULAR,
+                        EVAL_OBLIGTITULAR = item.EVAL_OBLIGTITULAR,
+                        OBSERVACION_OBLIG = item.OBSERVACION ?? ""
+                    });
+                }
                 //Grabar en la base de datos
                 using (OracleConnection cn = new OracleConnection(CapaDatos.BDConexion.Conexion_Cadena_SIGO()))
                 {

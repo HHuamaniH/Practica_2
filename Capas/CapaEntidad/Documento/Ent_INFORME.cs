@@ -466,6 +466,8 @@ namespace CapaEntidad.DOC
         public String ESTADO_ORIGEN { get; set; }
         [Description("OBSERVACION")]
         public String OBSERVACION { get; set; }
+        [Description("OBSERVACION2")]
+        public String OBSERVACION2 { get; set; }
         [Description("CUENTA_AREPOSICION")]
         public String CUENTA_AREPOSICION { get; set; }
         [Description("AREA_DEMARCACION")]
@@ -1310,6 +1312,14 @@ namespace CapaEntidad.DOC
         public List<Ent_INFORME> ListISupervFaunaAprov { get; set; }
         [Description("PERIODO")]
         public String PERIODO { get; set; }
+        [Description("ESPECIE")]
+        public String ESPECIE { get; set; }
+        [Description("METODO")]
+        public String METODO { get; set; }
+        [Description("SISTEMA")]
+        public String SISTEMA { get; set; }
+        [Description("PARTES")]
+        public String PARTES { get; set; }
         [Description("CUOTA_SACA")]
         public Int32 CUOTA_SACA { get; set; }
         [Description("PERSONAL")]
@@ -1368,6 +1378,8 @@ namespace CapaEntidad.DOC
         public List<Ent_INFORME> ListInfraestructura { get; set; }
         [Category("LIST"), Description("ListZonifDistribEspecie")]
         public List<Ent_INFORME> ListZonifDistribEspecie { get; set; }
+        [Category("LIST"), Description("ListAprovSostenible")]
+        public List<Ent_INFORME> ListAprovSostenible { get; set; }
         [Category("LIST"), Description("ListTHVertice")]
         public List<Ent_INFORME> ListTHVertice { get; set; }
         [Category("LIST"), Description("ListEvaluacionOtros")]
@@ -2143,7 +2155,8 @@ namespace CapaEntidad.DOC
             ARCHIVA_INFORME = -1;
 
             COD_SECUENCIAL_POA = -1;
-        }
+            ListISuperExsituOBLIGF = new List<Ent_ISUPERVISION_EXSITU_INFRA_AREA>();
+    }
         #endregion
     }
 
@@ -3213,6 +3226,7 @@ namespace CapaEntidad.DOC
         public bool ESTADO_PROGRAMA { get; set; }
         public string TIPO_PROGRAMA { get; set; }
         public string OBSERVACION { get; set; }
+        public string OBSERVACION2 { get; set; }
         public string TIPO { get; set; }
         public string FRECUENCIA { get; set; }
         public string DESCRIPCION { get; set; }

@@ -13291,6 +13291,9 @@ namespace CapaDatos.DOC
                         lsCEntidad.ListOtrosPtosEval = new List<CEntidad>();
                         lsCEntidad.ListInfraestructura = new List<CEntidad>();
                         lsCEntidad.ListZonifDistribEspecie = new List<CEntidad>();
+                        lsCEntidad.ListAprovSostenible = new List<CEntidad>();
+                        lsCEntidad.ListAvistamientoFauna = new List<CEntidad>();
+                        lsCEntidad.ListISuperExsituOBLIGF = new List<CapaEntidad.DOC.Ent_ISUPERVISION_EXSITU_INFRA_AREA>();
                         CEntidad ocampoEnt;
 
                         #region "Datos Generales"
@@ -13431,6 +13434,7 @@ namespace CapaDatos.DOC
                                 ocampoProg.ESTADO_PROGRAMA = dr.GetBoolean(dr.GetOrdinal("ESTADO_PROGRAMA"));
                                 ocampoProg.TIPO_PROGRAMA = dr.GetString(dr.GetOrdinal("TIPO_PROGRAMA"));
                                 ocampoProg.OBSERVACION = dr.GetString(dr.GetOrdinal("OBSERVACION"));
+                                ocampoProg.OBSERVACION2 = dr.GetString(dr.GetOrdinal("OBSERVACION2"));
                                 ocampoProg.TIPO = dr.GetString(dr.GetOrdinal("TIPO"));
                                 ocampoProg.FRECUENCIA = dr.GetString(dr.GetOrdinal("FRECUENCIA"));
                                 ocampoProg.DESCRIPCION = dr.GetString(dr.GetOrdinal("DESCRIPCION"));
@@ -13631,6 +13635,72 @@ namespace CapaDatos.DOC
                             }
                         }
                         #endregion
+                        #region ListAprovSostenible
+                        dr.NextResult();
+                        if (dr.HasRows)
+                        {
+                            while (dr.Read())
+                            {
+                                ocampoEnt = new CEntidad();
+                                ocampoEnt.COD_SECUENCIAL = Int32.Parse(dr["COD_SECUENCIAL"].ToString());
+                                ocampoEnt.COD_ESPECIES = dr["COD_ESPECIES"].ToString();
+                                ocampoEnt.ESPECIE = dr["ESPECIE"].ToString();
+                                ocampoEnt.PERIODO = dr["PERIODO"].ToString();
+                                ocampoEnt.PERSONAL = dr["PERSONAL"].ToString();
+                                ocampoEnt.METODO = dr["METODO"].ToString();
+                                ocampoEnt.SISTEMA = dr["SISTEMA"].ToString();
+                                ocampoEnt.PARTES = dr["PARTES"].ToString();
+                                ocampoEnt.RegEstado = 0;
+                                lsCEntidad.ListAprovSostenible.Add(ocampoEnt);
+                            }
+                        }
+                        #endregion
+                        #region "ListAvistamientoFauna"
+                        dr.NextResult();
+                        if (dr.HasRows)
+                        {
+                            CEntidad ocampoFau;
+                            while (dr.Read())
+                            {
+                                ocampoFau = new CEntidad();
+                                ocampoFau.COD_SECUENCIAL = dr.GetInt32(dr.GetOrdinal("COD_SECUENCIAL"));
+                                ocampoFau.COD_ESPECIES = dr.GetString(dr.GetOrdinal("COD_ESPECIES"));
+                                ocampoFau.DESC_ESPECIES = dr.GetString(dr.GetOrdinal("ESPECIES"));
+                                ocampoFau.NUM_INDIVIDUOS = dr.GetInt32(dr.GetOrdinal("NUM_INDIVIDUOS"));
+                                ocampoFau.COD_TIPO_REGISTRO = dr.GetString(dr.GetOrdinal("COD_TIPO_REGISTRO"));
+                                ocampoFau.COD_ESTRATO = dr.GetString(dr.GetOrdinal("COD_ESTRATO"));
+                                ocampoFau.FECHA_AVISTAMIENTO = dr.GetString(dr.GetOrdinal("FECHA_AVISTAMIENTO"));
+                                ocampoFau.HORA_AVISTAMIENTO = dr.GetString(dr.GetOrdinal("HORA_AVISTAMIENTO"));
+                                ocampoFau.ZONA = dr.GetString(dr.GetOrdinal("ZONA"));
+                                ocampoFau.COORDENADA_NORTE = dr.GetInt32(dr.GetOrdinal("COORDENADA_NORTE"));
+                                ocampoFau.COORDENADA_ESTE = dr.GetInt32(dr.GetOrdinal("COORDENADA_ESTE"));
+                                ocampoFau.ALTITUD = dr.GetDecimal(dr.GetOrdinal("ALTITUD"));
+                                ocampoFau.DESCRIPCION = dr.GetString(dr.GetOrdinal("OBSERVACION"));
+                                ocampoFau.DESC_TIPO_REGISTRO = dr.GetString(dr.GetOrdinal("DESC_TIPO_REGISTRO"));
+                                ocampoFau.DESC_ESTRATO = dr.GetString(dr.GetOrdinal("DESC_ESTRATO"));
+                                ocampoFau.RegEstado = 0;
+                                lsCEntidad.ListAvistamientoFauna.Add(ocampoFau);
+                            }
+                        }
+                        #endregion
+                        #region Obligaciones
+                        dr.NextResult();
+                        if (dr.HasRows)
+                        {
+                            //CapaEntidad.DOC.Ent_INFORME_OBLIGTITULAR ocampooblig;
+                            while (dr.Read())
+                            {
+                                CapaEntidad.DOC.Ent_ISUPERVISION_EXSITU_INFRA_AREA ocampoEntEX = new CapaEntidad.DOC.Ent_ISUPERVISION_EXSITU_INFRA_AREA();
+                                ocampoEntEX.COD_INFORME = dr["COD_INFORME"].ToString();
+                                ocampoEntEX.MAE_OBLIGTITULAR = dr["MAE_OBLIGTITULAR"].ToString();
+                                ocampoEntEX.CODIGO_NOMBRE = dr["DESC_OBLIG"].ToString();
+                                ocampoEntEX.EVAL_OBLIGTITULAR = dr["EVAL_OBLIGTITULAR"].ToString();
+                                ocampoEntEX.OBSERVACION_OBLIG = dr["OBSERVACION_OBLIG"].ToString();
+                                ocampoEntEX.RegEstado = 0;
+                                lsCEntidad.ListISuperExsituOBLIGF.Add(ocampoEntEX);
+                            }
+                        }
+                        #endregion
                     }
                 }
                 return lsCEntidad;
@@ -13775,6 +13845,7 @@ namespace CapaDatos.DOC
                             ocampoSuper.COD_PROGRAMA = loDatos.COD_PROGRAMA;
                             ocampoSuper.ESTADO_PROGRAMA = loDatos.ESTADO_PROGRAMA;
                             ocampoSuper.OBSERVACION = loDatos.OBSERVACION;
+                            ocampoSuper.OBSERVACION2 = loDatos.OBSERVACION2;
                             ocampoSuper.TIPO = loDatos.TIPO;
                             ocampoSuper.FRECUENCIA = loDatos.FRECUENCIA;
                             ocampoSuper.RegEstado = loDatos.RegEstado;
@@ -13979,7 +14050,6 @@ namespace CapaDatos.DOC
                     }
                 }
                 #endregion
-
                 #region ListZonifDistribEspecie
                 if (oCEntidad.ListZonifDistribEspecie != null)
                 {
@@ -13999,6 +14069,75 @@ namespace CapaDatos.DOC
                             ocampoSuper.RegEstado = loDatos.RegEstado;
                             dBOracle.ManExecute(cn, tr, "DOC_OSINFOR_ERP_MIGRACION.spISUPERVISION_DET_ZONIFDISTRIBESPECIE_Grabar", ocampoSuper);
                         }
+                    }
+                }
+                #endregion
+                #region ListAprovSostenible
+                if (oCEntidad.ListAprovSostenible != null)
+                {
+                    foreach (var loDatos in oCEntidad.ListAprovSostenible)
+                    {
+                        if (loDatos.RegEstado == 1 || loDatos.RegEstado == 2) //Nuevo o Modificado
+                        {
+                            ocampoSuper = new CEntidad();
+                            ocampoSuper.COD_INFORME = OUTPUTPARAM01.Split('|')[0];
+                            ocampoSuper.COD_SECUENCIAL = loDatos.COD_SECUENCIAL;
+                            ocampoSuper.COD_ESPECIES = loDatos.COD_ESPECIES;
+                            ocampoSuper.ESPECIE = loDatos.ESPECIE;
+                            ocampoSuper.PERIODO = loDatos.PERIODO;
+                            ocampoSuper.PERSONAL = loDatos.PERSONAL;
+                            ocampoSuper.METODO = loDatos.METODO;
+                            ocampoSuper.SISTEMA = loDatos.SISTEMA;
+                            ocampoSuper.PARTES = loDatos.PARTES;
+                            ocampoSuper.COD_UCUENTA = oCEntidad.COD_UCUENTA;
+                            ocampoSuper.RegEstado = loDatos.RegEstado;
+                            dBOracle.ManExecute(cn, tr, "DOC_OSINFOR_ERP_MIGRACION.spISUPERVISION_DET_APROVSOSTENIBLE_Grabar", ocampoSuper);
+                        }
+                    }
+                }
+                #endregion
+                #region ListAvistamientoFauna
+                if (oCEntidad.ListAvistamientoFauna != null)
+                {
+                    foreach (var loDatos in oCEntidad.ListAvistamientoFauna)
+                    {
+                        if (loDatos.RegEstado == 1 || loDatos.RegEstado == 2) //Nuevo o Modificado
+                        {
+                            ocampoSuper = new CEntidad();
+                            ocampoSuper.COD_INFORME = OUTPUTPARAM01.Split('|')[0];
+                            ocampoSuper.COD_SECUENCIAL = loDatos.COD_SECUENCIAL;
+                            ocampoSuper.COD_ESPECIES = loDatos.COD_ESPECIES;
+                            ocampoSuper.NUM_INDIVIDUOS = loDatos.NUM_INDIVIDUOS;
+                            ocampoSuper.COD_TIPO_REGISTRO = loDatos.COD_TIPO_REGISTRO;
+                            ocampoSuper.COD_ESTRATO = loDatos.COD_ESTRATO;
+                            ocampoSuper.FECHA_AVISTAMIENTO = loDatos.FECHA_AVISTAMIENTO;
+                            ocampoSuper.HORA_AVISTAMIENTO = loDatos.HORA_AVISTAMIENTO;
+                            ocampoSuper.ZONA = loDatos.ZONA;
+                            ocampoSuper.COORDENADA_NORTE = loDatos.COORDENADA_NORTE;
+                            ocampoSuper.COORDENADA_ESTE = loDatos.COORDENADA_ESTE;
+                            ocampoSuper.ALTITUD = loDatos.ALTITUD;
+                            ocampoSuper.DESCRIPCION = loDatos.DESCRIPCION;
+                            ocampoSuper.RegEstado = loDatos.RegEstado;
+                            dBOracle.ManExecute(cn, tr, "DOC_OSINFOR_ERP_MIGRACION.ISUPERVISION_MADE_NOMADE_DET_AVISTAMIENTO_FAUNA_Grabar", ocampoSuper);
+                        }
+                    }
+                }
+                #endregion
+                #region Obligaciones
+                if (oCEntidad.ListISuperExsituOBLIGF != null)
+                {
+                    CEntISExsitu oCampoExsitu;
+                    foreach (var loDatos in oCEntidad.ListISuperExsituOBLIGF)
+                    {
+                        oCampoExsitu = new CEntISExsitu();
+
+                        oCampoExsitu.COD_INFORME = OUTPUTPARAM01.Split('|')[0];
+                        oCampoExsitu.MAE_OBLIGTITULAR = loDatos.MAE_OBLIGTITULAR;
+                        oCampoExsitu.EVAL_OBLIGTITULAR = loDatos.EVAL_OBLIGTITULAR;
+                        oCampoExsitu.OBSERVACION = loDatos.OBSERVACION_OBLIG;
+                        oCampoExsitu.COD_UCUENTA = oCEntidad.COD_UCUENTA;
+                        oCampoExsitu.RegEstado = loDatos.RegEstado;
+                        dBOracle.ManExecute(cn, tr, "DOC_OSINFOR_ERP_MIGRACION.spISUPERVISION_OBLIG_TITULAR_FAUNAGrabar", oCampoExsitu);
                     }
                 }
                 #endregion
