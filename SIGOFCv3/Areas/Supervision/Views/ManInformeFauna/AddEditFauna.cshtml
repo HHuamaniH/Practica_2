@@ -3,9 +3,19 @@
     ViewBag.Title = "AddEditFauna";
     Layout = "~/Views/Shared/_LayoutMain.cshtml";
 }
+
+<script src="~/Scripts/datatables/Extensions/dataTables.buttons.js"></script>
+<script src="~/Scripts/datatables/Extensions/buttons.flash.min.js"></script>
+<script src="~/Scripts/datatables/Extensions/jszip.min.js"></script>
+<script src="~/Scripts/datatables/Extensions/pdfmake.js"></script>
+<script src="~/Scripts/datatables/Extensions/vfs_fonts.js"></script>
+<script src="~/Scripts/datatables/Extensions/buttons.html5.js"></script>
+<script src="~/Scripts/datatables/Extensions/buttons.print.js"></script>
 <script src="~/Scripts/ckeditor5/ckeditor.js"></script>
 <script src="~/Scripts/sigo/utility.uploadFile.js"></script>
 <script src="~/Areas/Supervision/js/ManInformeFauna/AddEditFauna.js?noCache=@Guid.NewGuid().ToString()"></script>
+<link href="~/Content/datatables/buttons.dataTables.min.css" rel="stylesheet" />
+<link href="~/Areas/Supervision/css/ManInforme/AddEdit.css" rel="stylesheet" />
 <script type="text/javascript">
     ManInforme_AddEditFauna.fnLoadData('@Html.Raw(Json.Encode(@Model.tbPrograma))', "DataPrograma");
     ManInforme_AddEditFauna.fnLoadData('@Html.Raw(Json.Encode(@Model.tbManejoImpacto))', "DataManejoImpacto");
@@ -50,10 +60,12 @@
                             <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#navEstado" role="tab" aria-controls="home" aria-selected="true">Estado Situacional</a></li>
                             <li class="nav-item"><a class="nav-link active" data-toggle="tab" href="#navDatos" role="tab" aria-controls="home" aria-selected="true">Datos Generales</a></li>
                             <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#navSupervision" role="tab" aria-controls="home" aria-selected="true">Sobre la Supervisión</a></li>
+                            <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#navPlanManejo" role="tab" aria-controls="home" aria-selected="true">Plan de Manejo</a></li>
                             <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#navConclusion" role="tab" aria-controls="home" aria-selected="true">Conclusiones</a></li>
                             <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#navIncidencias" role="tab" aria-controls="home" aria-selected="true">Incidencias</a></li>
                             <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#navInformeDigital" role="tab" aria-controls="home" aria-selected="true">Informe digital</a></li>
                             <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#navMandatos" role="tab" aria-controls="home" aria-selected="true">Mandatos</a></li>
+                            <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#navObligTitular" role="tab" aria-controls="home" aria-selected="true">Obligaciones</a></li>
                         </ul>
                         <div class="tab-content">
                             <div class="tab-pane fade show" id="navEstado" role="tabpanel" aria-labelledby="nav-home-tab">
@@ -219,31 +231,31 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="card-header text-small">Sobre el PMFS</div>
-                                    <div class="card-body">
-                                        <div class="form-row">
-                                            <div class="col-md-4 mb-3">
-                                                <label for="txtTitularEjecutaPgmf" class="text-small">Titular que Ejecutó el PMFS</label>
-                                                <div class="input-group">
-                                                    @Html.EditorFor(m => m.txtTitularEjecutaPgmf, new { htmlAttributes = new { @class = "form-control form-control-sm", @disabled = "disabled" } })
-                                                    @Html.HiddenFor(m => m.hdfCodTitularEjecutaPgmf)
-                                                    <div class="input-group-prepend">
-                                                        <span class="input-group-text" style="cursor:pointer;" onclick="ManInforme_AddEditFauna.fnBuscarPersona('TITULAR_EJECUTA','0000001');"><i class="fa fa-search" data-toggle="tooltip" data-placement="top" title="Seleccionar titular"></i></span>
+                                    @*<div class="card-header text-small">Sobre el PMFS</div>
+                                        <div class="card-body">
+                                            <div class="form-row">
+                                                <div class="col-md-4 mb-3">
+                                                    <label for="txtTitularEjecutaPgmf" class="text-small">Titular que Ejecutó el PMFS</label>
+                                                    <div class="input-group">
+                                                        @Html.EditorFor(m => m.txtTitularEjecutaPgmf, new { htmlAttributes = new { @class = "form-control form-control-sm", @disabled = "disabled" } })
+                                                        @Html.HiddenFor(m => m.hdfCodTitularEjecutaPgmf)
+                                                        <div class="input-group-prepend">
+                                                            <span class="input-group-text" style="cursor:pointer;" onclick="ManInforme_AddEditFauna.fnBuscarPersona('TITULAR_EJECUTA','0000001');"><i class="fa fa-search" data-toggle="tooltip" data-placement="top" title="Seleccionar titular"></i></span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-4 mb-3">
+                                                    <label for="txtRegenteImplPgmf" class="text-small">Regente Encargado de la Implementación</label>
+                                                    <div class="input-group">
+                                                        @Html.EditorFor(m => m.txtRegenteImplPgmf, new { htmlAttributes = new { @class = "form-control form-control-sm", @disabled = "disabled" } })
+                                                        @Html.HiddenFor(m => m.hdfCodRegenteImplPgmf)
+                                                        <div class="input-group-prepend">
+                                                            <span class="input-group-text" style="cursor:pointer;" onclick="ManInforme_AddEditFauna.fnBuscarPersona('REGENTE_IMPLEMENTA', '0000020,0000003');"><i class="fa fa-search" data-toggle="tooltip" data-placement="top" title="Seleccionar regente"></i></span>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div class="col-md-4 mb-3">
-                                                <label for="txtRegenteImplPgmf" class="text-small">Regente Encargado de la Implementación</label>
-                                                <div class="input-group">
-                                                    @Html.EditorFor(m => m.txtRegenteImplPgmf, new { htmlAttributes = new { @class = "form-control form-control-sm", @disabled = "disabled" } })
-                                                    @Html.HiddenFor(m => m.hdfCodRegenteImplPgmf)
-                                                    <div class="input-group-prepend">
-                                                        <span class="input-group-text" style="cursor:pointer;" onclick="ManInforme_AddEditFauna.fnBuscarPersona('REGENTE_IMPLEMENTA', '0000020,0000003');"><i class="fa fa-search" data-toggle="tooltip" data-placement="top" title="Seleccionar regente"></i></span>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
+                                        </div>*@
                                     <div class="card-header text-small">Descripción del Área Supervisada</div>
                                     <div class="card-body">
                                         <div class="form-row">
@@ -260,6 +272,11 @@
                                             <div class="form-group col-md-6">
                                                 <label for="txtSector" class="text-small">Sector</label>
                                                 @Html.TextBoxFor(m => m.txtSector, new { @class = "form-control form-control-sm" })
+                                            </div>
+                                        </div>
+                                        <div class="form-row">
+                                            <div class="col-md-12">
+                                                @Html.Partial("~/Areas/Supervision/Views/ManInforme/Render/_renderVerticeTHCampo.cshtml", Model.tbVerticeTHCampo, new ViewDataDictionary { { "cod_informe", Model.hdfCodInforme }, { "cod_cnotificacion", Model.vmInfCNotificacion.hdfCodCNotificacion } })
                                             </div>
                                         </div>
                                     </div>
@@ -281,16 +298,194 @@
                                             </div>
                                         </div>
                                     </div>
+                                    @*<div class="card-header text-small">Actividades de Manejo</div>
+                                        <div class="card-body">
+                                            <div class="form-row">
+                                                <div class="table-responsive">
+                                                    <table id="tbActividadManejo" style="width:100%" class="table table-hover table-bordered">
+                                                        <thead></thead>
+                                                        <tbody></tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                            <div class="form-row">
+                                                <div class="table-responsive">
+                                                    <table id="tbImpactoAmb" style="width:100%" class="table table-hover table-bordered">
+                                                        <thead>
+                                                            <tr>
+                                                                <th colspan="7" class="text-sm-left">
+                                                                    <div class="form-inline">
+                                                                        <i class="fa mx-2 fa-lg fa-file-o" style="cursor:pointer;" onclick="ManInforme_AddEditFauna.fnAddEditFauna('', 'MANEJO_IMPACTO');" data-toggle="tooltip" data-placement="top" title="Nuevo"></i>
+                                                                        <i class="fa mx-2 fa-lg fa-window-close-o" style="cursor:pointer;" onclick="ManInforme_AddEditFauna.fnDeleteAllFauna('MANEJO_IMPACTO');" data-toggle="tooltip" data-placement="top" title="Eliminar Todos"></i>
+                                                                        <strong>
+                                                                            Medidas de Prevención y Mitigación de Impactos Ambientales
+                                                                        </strong>
+                                                                    </div>
+                                                                </th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody></tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>*@
+                                    @*<div class="card-header text-small">Medidas de Conservación</div>
+                                        <div class="card-body">
+                                            <div class="form-row">
+                                                <div class="table-responsive">
+                                                    <table id="tbMedidaConservacion" style="width:100%" class="table table-hover table-bordered">
+                                                        <thead></thead>
+                                                        <tbody></tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                            <div class="form-row">
+                                                <div class="table-responsive">
+                                                    <table id="tbResponsabilidadSocial" style="width:100%" class="table table-hover table-bordered">
+                                                        <thead>
+                                                            <tr>
+                                                                <th colspan="8" class="text-sm-left">
+                                                                    <div class="form-inline">
+                                                                        <i class="fa mx-2 fa-lg fa-file-o" style="cursor:pointer;" onclick="ManInforme_AddEditFauna.fnAddEditFauna('', 'RESPONSABILIDAD_SOCIAL');" data-toggle="tooltip" data-placement="top" title="Nuevo"></i>
+                                                                        <i class="fa mx-2 fa-lg fa-window-close-o" style="cursor:pointer;" onclick="ManInforme_AddEditFauna.fnDeleteAllFauna('RESPONSABILIDAD_SOCIAL');" data-toggle="tooltip" data-placement="top" title="Eliminar Todos"></i>
+                                                                        <strong>
+                                                                            Medidas de Responsabilidad Social
+                                                                        </strong>
+                                                                    </div>
+                                                                </th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody></tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>*@
+                                    @*<div id="dvObligacionContractual" style="display:none;">
+                                            <div class="card-header text-small">Cumplimiento de las Obligaciones Contractuales</div>
+                                            <div class="card-body">
+                                                <div class="form-row">
+                                                    <div class="col-md-6">
+                                                        <h6 style="font-weight:normal;">¿Se han observado actos que implique grave riesgo o cause severos perjuicios al ambiente y la biodiversidad?</h6>
+                                                        <div class="table-responsive">
+                                                            <table id="tbObligacionActo" style="width:100%" class="table table-hover table-bordered">
+                                                                <thead>
+                                                                    <tr>
+                                                                        <th colspan="5" class="text-sm-left">
+                                                                            <div class="form-inline">
+                                                                                <i class="fa mx-2 fa-lg fa-file-o" style="cursor:pointer;" onclick="ManInforme_AddEditFauna.fnAddEditFauna('', 'OBLIGACION_ACTO');" data-toggle="tooltip" data-placement="top" title="Nuevo"></i>
+                                                                                <i class="fa mx-2 fa-lg fa-window-close-o" style="cursor:pointer;" onclick="ManInforme_AddEditFauna.fnDeleteAllFauna('OBLIGACION_ACTO');" data-toggle="tooltip" data-placement="top" title="Eliminar Todos"></i>
+                                                                                <strong>
+                                                                                    Actos Observados
+                                                                                </strong>
+                                                                            </div>
+                                                                        </th>
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody></tbody>
+                                                            </table>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <h6 style="font-weight:normal;">¿Se han observado actos de terceros que invadan, altere los límites, impida o limite los derechos sobre el área concesionada?</h6>
+                                                        <div class="table-responsive">
+                                                            <table id="tbObligacionActoTercero" style="width:100%" class="table table-hover table-bordered">
+                                                                <thead>
+                                                                    <tr>
+                                                                        <th colspan="5" class="text-sm-left">
+                                                                            <div class="form-inline">
+                                                                                <i class="fa mx-2 fa-lg fa-file-o" style="cursor:pointer;" onclick="ManInforme_AddEditFauna.fnAddEditFauna('', 'OBLIGACION_ACTO_TERCERO');" data-toggle="tooltip" data-placement="top" title="Nuevo"></i>
+                                                                                <i class="fa mx-2 fa-lg fa-window-close-o" style="cursor:pointer;" onclick="ManInforme_AddEditFauna.fnDeleteAllFauna('OBLIGACION_ACTO_TERCERO');" data-toggle="tooltip" data-placement="top" title="Eliminar Todos"></i>
+                                                                                <strong>
+                                                                                    Actos Observados
+                                                                                </strong>
+                                                                            </div>
+                                                                        </th>
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody></tbody>
+                                                            </table>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>*@
+                                    <div class="card-header text-small">Fotos de la Supervisión</div>
+                                    <div class="card-body">
+                                        <div class="form-row">
+                                            <div class="col-md-12">
+                                                @Html.Partial("~/Areas/Supervision/Views/ManInforme/Render/_renderFotoSupervision.cshtml", Model.tbFotoSupervision, new ViewDataDictionary { { "cod_informe", Model.hdfCodInforme } })
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="card-header text-small">Desplazamiento</div>
+                                    <div class="card-body">
+                                        <div class="form-row">
+                                            <div class="col-md-12">
+                                                @Html.Partial("~/Areas/Supervision/Views/ManInforme/Render/_renderDesplazamiento.cshtml", Model.tbDesplazamiento)
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="card-header text-small">Impactos</div>
+                                    <div class="card-body">
+                                        <div class="form-row">
+                                            <div class="col-md-12">
+                                                @Html.Partial("~/Areas/Supervision/Views/ManInforme/Render/_renderCoberturaBoscosa.cshtml", Model.tbCoberturaBoscosa, new ViewDataDictionary { { "cod_informe", Model.hdfCodInforme }, { "cod_cnotificacion", Model.vmInfCNotificacion.hdfCodCNotificacion } })
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="form-row">
+                                            <div class="col-md-12">
+                                                @Html.Partial("~/Areas/Supervision/Views/ManInforme/Render/_renderOtrosPuntosEval.cshtml", Model.tbOtrosPtosEval, new ViewDataDictionary { { "cod_informe", Model.hdfCodInforme }, { "cod_cnotificacion", Model.vmInfCNotificacion.hdfCodCNotificacion } })
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="tab-pane fade show" id="navPlanManejo" role="tabpanel" aria-labelledby="nav-home-tab">
+                                <div class="card">
+                                    <div class="card-header text-small">Infraestructura</div>
+                                    <div class="card-body">
+                                        <div class="form-row">
+                                            <div class="col-md-12">
+                                                @Html.Partial("~/Areas/Supervision/Views/ManInforme/Render/_renderInfraestructura.cshtml", Model.tbInfraestructura, new ViewDataDictionary { { "cod_informe", Model.hdfCodInforme }, { "cod_cnotificacion", Model.vmInfCNotificacion.hdfCodCNotificacion } })
+                                            </div>
+                                        </div>
+                                    </div>
                                     <div class="card-header text-small">Actividades de Manejo</div>
                                     <div class="card-body">
                                         <div class="form-row">
+                                            <div class="col-md-12">
+                                                @Html.Partial("~/Areas/Supervision/Views/ManInforme/Render/_renderZonifDistribEspecie.cshtml", Model.tbZonifDistribEspecie, new ViewDataDictionary { { "cod_informe", Model.hdfCodInforme }, { "cod_cnotificacion", Model.vmInfCNotificacion.hdfCodCNotificacion } })
+                                            </div>
+                                        </div>
+                                        <div class="form-row">
                                             <div class="table-responsive">
-                                                <table id="tbActividadManejo" style="width:100%" class="table table-hover table-bordered">
+                                                <table id="tbCritZonifDistribEspecie" style="width:100%" class="table table-hover table-bordered">
                                                     <thead></thead>
                                                     <tbody></tbody>
                                                 </table>
                                             </div>
                                         </div>
+                                    </div>
+                                    <div class="card-header text-small">Aprovechamiento sostenible</div>
+                                    <div class="card-body">
+                                        <div class="form-row">
+                                            <div class="col-md-12">
+                                                @Html.Partial("~/Areas/Supervision/Views/ManInforme/Render/_renderAprovSostenible.cshtml", Model.tbAprovSostenible, new ViewDataDictionary { { "cod_informe", Model.hdfCodInforme }, { "cod_cnotificacion", Model.vmInfCNotificacion.hdfCodCNotificacion } })
+
+                                            </div>
+                                        </div>
+                                        <div class="form-row">
+                                            <div class="table-responsive">
+                                                    <table id="tbAprovSostenible" style="width:100%" class="table table-hover table-bordered">
+                                                        <thead></thead>
+                                                        <tbody></tbody>
+                                                    </table>
+                                                </div>
+                                        </div>
+                                    </div>
+                                    <div class="card-body">
                                         <div class="form-row">
                                             <div class="table-responsive">
                                                 <table id="tbImpactoAmb" style="width:100%" class="table table-hover table-bordered">
@@ -311,100 +506,69 @@
                                                 </table>
                                             </div>
                                         </div>
-                                    </div>
-                                    <div class="card-header text-small">Medidas de Conservación</div>
-                                    <div class="card-body">
-                                        <div class="form-row">
-                                            <div class="table-responsive">
-                                                <table id="tbMedidaConservacion" style="width:100%" class="table table-hover table-bordered">
-                                                    <thead></thead>
-                                                    <tbody></tbody>
-                                                </table>
-                                            </div>
-                                        </div>
-                                        <div class="form-row">
-                                            <div class="table-responsive">
-                                                <table id="tbResponsabilidadSocial" style="width:100%" class="table table-hover table-bordered">
-                                                    <thead>
-                                                        <tr>
-                                                            <th colspan="8" class="text-sm-left">
-                                                                <div class="form-inline">
-                                                                    <i class="fa mx-2 fa-lg fa-file-o" style="cursor:pointer;" onclick="ManInforme_AddEditFauna.fnAddEditFauna('', 'RESPONSABILIDAD_SOCIAL');" data-toggle="tooltip" data-placement="top" title="Nuevo"></i>
-                                                                    <i class="fa mx-2 fa-lg fa-window-close-o" style="cursor:pointer;" onclick="ManInforme_AddEditFauna.fnDeleteAllFauna('RESPONSABILIDAD_SOCIAL');" data-toggle="tooltip" data-placement="top" title="Eliminar Todos"></i>
-                                                                    <strong>
-                                                                        Medidas de Responsabilidad Social
-                                                                    </strong>
-                                                                </div>
-                                                            </th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody></tbody>
-                                                </table>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div id="dvObligacionContractual" style="display:none;">
-                                        <div class="card-header text-small">Cumplimiento de las Obligaciones Contractuales</div>
+
+                                        <div class="card-header text-small">Medidas de Conservación</div>
                                         <div class="card-body">
                                             <div class="form-row">
-                                                <div class="col-md-6">
-                                                    <h6 style="font-weight:normal;">¿Se han observado actos que implique grave riesgo o cause severos perjuicios al ambiente y la biodiversidad?</h6>
-                                                    <div class="table-responsive">
-                                                        <table id="tbObligacionActo" style="width:100%" class="table table-hover table-bordered">
-                                                            <thead>
-                                                                <tr>
-                                                                    <th colspan="5" class="text-sm-left">
-                                                                        <div class="form-inline">
-                                                                            <i class="fa mx-2 fa-lg fa-file-o" style="cursor:pointer;" onclick="ManInforme_AddEditFauna.fnAddEditFauna('', 'OBLIGACION_ACTO');" data-toggle="tooltip" data-placement="top" title="Nuevo"></i>
-                                                                            <i class="fa mx-2 fa-lg fa-window-close-o" style="cursor:pointer;" onclick="ManInforme_AddEditFauna.fnDeleteAllFauna('OBLIGACION_ACTO');" data-toggle="tooltip" data-placement="top" title="Eliminar Todos"></i>
-                                                                            <strong>
-                                                                                Actos Observados
-                                                                            </strong>
-                                                                        </div>
-                                                                    </th>
-                                                                </tr>
-                                                            </thead>
-                                                            <tbody></tbody>
-                                                        </table>
-                                                    </div>
+                                                <div class="table-responsive">
+                                                    <table id="tbMedidaConservacion" style="width:100%" class="table table-hover table-bordered">
+                                                        <thead></thead>
+                                                        <tbody></tbody>
+                                                    </table>
                                                 </div>
-                                                <div class="col-md-6">
-                                                    <h6 style="font-weight:normal;">¿Se han observado actos de terceros que invadan, altere los límites, impida o limite los derechos sobre el área concesionada?</h6>
-                                                    <div class="table-responsive">
-                                                        <table id="tbObligacionActoTercero" style="width:100%" class="table table-hover table-bordered">
-                                                            <thead>
-                                                                <tr>
-                                                                    <th colspan="5" class="text-sm-left">
-                                                                        <div class="form-inline">
-                                                                            <i class="fa mx-2 fa-lg fa-file-o" style="cursor:pointer;" onclick="ManInforme_AddEditFauna.fnAddEditFauna('', 'OBLIGACION_ACTO_TERCERO');" data-toggle="tooltip" data-placement="top" title="Nuevo"></i>
-                                                                            <i class="fa mx-2 fa-lg fa-window-close-o" style="cursor:pointer;" onclick="ManInforme_AddEditFauna.fnDeleteAllFauna('OBLIGACION_ACTO_TERCERO');" data-toggle="tooltip" data-placement="top" title="Eliminar Todos"></i>
-                                                                            <strong>
-                                                                                Actos Observados
-                                                                            </strong>
-                                                                        </div>
-                                                                    </th>
-                                                                </tr>
-                                                            </thead>
-                                                            <tbody></tbody>
-                                                        </table>
-                                                    </div>
+                                            </div>
+                                            <div class="form-row">
+                                                <div class="table-responsive">
+                                                    <table id="tbResponsabilidadSocial" style="width:100%" class="table table-hover table-bordered">
+                                                        <thead>
+                                                            <tr>
+                                                                <th colspan="8" class="text-sm-left">
+                                                                    <div class="form-inline">
+                                                                        <i class="fa mx-2 fa-lg fa-file-o" style="cursor:pointer;" onclick="ManInforme_AddEditFauna.fnAddEditFauna('', 'RESPONSABILIDAD_SOCIAL');" data-toggle="tooltip" data-placement="top" title="Nuevo"></i>
+                                                                        <i class="fa mx-2 fa-lg fa-window-close-o" style="cursor:pointer;" onclick="ManInforme_AddEditFauna.fnDeleteAllFauna('RESPONSABILIDAD_SOCIAL');" data-toggle="tooltip" data-placement="top" title="Eliminar Todos"></i>
+                                                                        <strong>
+                                                                            Medidas de Responsabilidad Social
+                                                                        </strong>
+                                                                    </div>
+                                                                </th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody></tbody>
+                                                    </table>
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
-                                    <div class="card-header text-small">Fotos de la Supervisión</div>
-                                    <div class="card-body">
-                                        <div class="form-row">
-                                            <div class="col-md-12">
-                                                @Html.Partial("~/Areas/Supervision/Views/ManInforme/Render/_renderFotoSupervision.cshtml", Model.tbFotoSupervision, new ViewDataDictionary { { "cod_informe", Model.hdfCodInforme } })
+                                        <div class="card-header text-small">Sobre el PMFS</div>
+                                        <div class="card-body">
+                                            <div class="form-row">
+                                                <div class="col-md-4 mb-3">
+                                                    <label for="txtTitularEjecutaPgmf" class="text-small">Titular que Ejecutó el PMFS</label>
+                                                    <div class="input-group">
+                                                        @Html.EditorFor(m => m.txtTitularEjecutaPgmf, new { htmlAttributes = new { @class = "form-control form-control-sm", @disabled = "disabled" } })
+                                                        @Html.HiddenFor(m => m.hdfCodTitularEjecutaPgmf)
+                                                        <div class="input-group-prepend">
+                                                            <span class="input-group-text" style="cursor:pointer;" onclick="ManInforme_AddEditFauna.fnBuscarPersona('TITULAR_EJECUTA','0000001');"><i class="fa fa-search" data-toggle="tooltip" data-placement="top" title="Seleccionar titular"></i></span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-4 mb-3">
+                                                    <label for="txtRegenteImplPgmf" class="text-small">Regente Encargado de la Implementación</label>
+                                                    <div class="input-group">
+                                                        @Html.EditorFor(m => m.txtRegenteImplPgmf, new { htmlAttributes = new { @class = "form-control form-control-sm", @disabled = "disabled" } })
+                                                        @Html.HiddenFor(m => m.hdfCodRegenteImplPgmf)
+                                                        <div class="input-group-prepend">
+                                                            <span class="input-group-text" style="cursor:pointer;" onclick="ManInforme_AddEditFauna.fnBuscarPersona('REGENTE_IMPLEMENTA', '0000020,0000003');"><i class="fa fa-search" data-toggle="tooltip" data-placement="top" title="Seleccionar regente"></i></span>
+                                                        </div>
+                                                    </div>
+                                                </div>
                                             </div>
-                                        </div>
-                                    </div>
-                                    <div class="card-header text-small">Desplazamiento</div>
-                                    <div class="card-body">
-                                        <div class="form-row">
-                                            <div class="col-md-12">
-                                                @Html.Partial("~/Areas/Supervision/Views/ManInforme/Render/_renderDesplazamiento.cshtml", Model.tbDesplazamiento)
+                                        </div>                                        
+                                        <div class="card-body">
+                                            <div class="form-row">
+                                                <div class="col-md-12">
+                                                    @Html.Partial("~/Areas/Supervision/Views/ManInforme/Render/_renderAvistamientoFauna.cshtml", Model.tbRegFauna
+                                                        , new ViewDataDictionary { { "TITULO", "Registro de Fauna Silvestre" } })
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -538,6 +702,11 @@
                                 @Html.Partial("~/Areas/Supervision/Views/ManInformeExSitu/_shared/_Mandatos.cshtml", Model.tbMandatos)
 
                             </div>
+                            <div class="tab-pane fade show" id="navObligTitular" role="tabpanel" aria-labelledby="nav-home-tab">
+                                <div class="card">
+                                    @Html.Partial("~/Areas/Supervision/Views/ManInforme/Render/_renderObligacionTitular.cshtml", Model.tbObligacionTitular)
+                                </div>
+                            </div>
                         </div>
                     </form>
                 </div>
@@ -574,6 +743,18 @@
     <div class="modal fade hide" id="mdlManInforme_Global" role="dialog"></div>
     @* Para el modal _EvaluacionArbol usado en el control _renderEvalArbolAdicional y _renderEvalArbolNoAutorizado *@
     <div class="modal fade hide" id="mdlManInforme_EvaluacionArbol" role="dialog"></div>
+    @* Para el modal _VerticeTHCampo usado en el control _renderVerticeTHCampo *@
+    <div class="modal fade hide" id="mdlManInforme_VerticeTHCampo" role="dialog"></div>
+    @* Para el modal _CoberturaBoscosa usado en el control _renderCoberturaBoscosa *@
+    <div class="modal fade hide" id="mdlManInforme_CoberturaBoscosa" role="dialog"></div>
+    @* Para el modal _CoberturaBoscosa usado en el control _renderOtrosPuntosEval *@
+    <div class="modal fade hide" id="mdlManInforme_OtrosPuntosEval" role="dialog"></div>
+    @* Para el modal _CoberturaBoscosa usado en el control _renderOtrosPuntosEval *@
+    <div class="modal fade hide" id="mdlManInforme_Infraestructura" role="dialog"></div>
+    @* Para el modal _CoberturaBoscosa usado en el control _renderZonifDistribEspecie *@
+    <div class="modal fade hide" id="mdlManInforme_ZonifDistribEspecie" role="dialog"></div>
+    @* Para el modal _CoberturaBoscosa usado en el control _renderAprovSostenible *@
+    <div class="modal fade hide" id="mdlManInforme_AprovSostenible" role="dialog"></div>
 
     @* Para el control genérico de personas *@
     <div class="modal fade hide" id="mdlBuscarPersona" role="dialog"></div>

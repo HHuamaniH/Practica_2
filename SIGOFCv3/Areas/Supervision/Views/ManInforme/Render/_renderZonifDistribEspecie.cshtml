@@ -1,0 +1,149 @@
+﻿
+@model List<CapaEntidad.DOC.Ent_INFORME>
+
+<style type="text/css">
+    #tbRenderZonifDistribEspecie_wrapper {
+        padding: 0px;
+    }
+</style>
+
+<script type="text/javascript">
+    var _renderZonifDistribEspecie = {};
+    _renderZonifDistribEspecie.tbEliTABLA = [];
+
+    _renderZonifDistribEspecie.fnInitDataTable_Detail = function () {
+        var columns_label = [], columns_data = [], options = {};
+
+        columns_label = ["Nombre de la Zona", "Características", "Coordenadas Este", "Coordenadas Norte","Tipo de señalización"];
+        columns_data = ["ZONA", "CARACTERISTICAS", "COORDENADA_ESTE", "COORDENADA_NORTE", "TIPO_SENIAL"];
+        options = {
+            page_length: 10, row_index: true, row_edit: true, row_fnEdit: "_renderZonifDistribEspecie.fnAddEdit(this)"
+            , row_delete: true, row_fnDelete: "_renderZonifDistribEspecie.fnDelete(this)"         
+            , export_title: $("#tbRenderZonifDistribEspecie").find("thead tr")[0].innerText.trim()
+            , page_sort: true
+            , columnDefs: [{
+                target: 1,
+                visible: false,
+            }]
+        };
+        _renderZonifDistribEspecie.dtZonifDistribEspecie = utilDt.fnLoadDataTable_Detail($("#tbRenderZonifDistribEspecie"), columns_label, columns_data, options);
+    }
+
+    _renderZonifDistribEspecie.fnAddEdit = function (obj) {
+        var url = urlLocalSigo + "Supervision/ManInforme/_ZonifDistribEspecie";
+        var option = { url: url, type: 'POST', datos: { asCodCNotificacion: '@ViewData["cod_cnotificacion"]' }, divId: "mdlManInforme_ZonifDistribEspecie" };
+        utilSigo.fnOpenModal(option, function () {
+            _ZonifDistribEspecie.fnSaveForm = function (data) {
+                if (data != null) {
+                    var dt = _renderZonifDistribEspecie.dtZonifDistribEspecie;
+
+                    if (obj == null || obj == "") {//Nuevo Registro
+                        if (!utilDt.existValorSearch(_renderZonifDistribEspecie.dtZonifDistribEspecie, "ZONA", data["ZONA"])) {
+                            dt.rows.add([data]).draw();
+                            dt.page('last').draw('page');
+                            utilSigo.toastSuccess("Exito", "Datos guardados correctamente");
+                        } else {
+                            utilSigo.toastWarning("Error", "La evaluación ya se encuentra registrado");
+                        }
+                    } else {//Modificar
+                        var row = dt.row($(obj).parents('tr')).data();
+                        row = data;
+                        dt.row($(obj).parents('tr')).data(row).draw(false);
+                        utilSigo.toastSuccess("Exito", "Datos actualizados correctamente");
+                    }
+                    $("#mdlManInforme_ZonifDistribEspecie").modal('hide');
+                } else {
+                    utilSigo.toastError("Error", "No se pudieron guardar los datos");
+                }
+            }
+
+            if (obj != null && obj != "") {
+                var data = _renderZonifDistribEspecie.dtZonifDistribEspecie.row($(obj).parents('tr')).data();
+                _ZonifDistribEspecie.fnInit(utilSigo.fnConvertArrayToObject(data));
+            } else { _ZonifDistribEspecie.fnInit(""); }
+        });
+    }
+
+    _renderZonifDistribEspecie.fnDeleteAll = function () {
+        var rows, countFilas, data;
+
+        rows = _renderZonifDistribEspecie.dtZonifDistribEspecie.$("tr");
+        countFilas = rows.length;
+        if (countFilas > 0) {
+            utilSigo.dialogConfirm("", "Está seguro de Eliminar Todos los Registros?", function (r) {
+                if (r) {
+                    $.each(rows, function (i, o) {
+                        data = _renderZonifDistribEspecie.dtZonifDistribEspecie.row($(o)).data();
+                        if (data["RegEstado"] == "0" || data["RegEstado"] == "2") {
+                            _renderZonifDistribEspecie.tbEliTABLA.push({
+                                EliTABLA: "ISUPERVISION_DET_ZONIFDISTRIBESPECIE",
+                                COD_SECUENCIAL: data["COD_SECUENCIAL"]
+                            });
+                        }
+                    });
+                    _renderZonifDistribEspecie.dtZonifDistribEspecie.clear().draw();
+                }
+            });
+        } else {
+            utilSigo.toastWarning("Aviso", "No se encontraron registros a eliminar");
+        }
+    }
+
+    _renderZonifDistribEspecie.fnDelete = function (obj) {
+        var data;
+
+        data = _renderZonifDistribEspecie.dtZonifDistribEspecie.row($(obj).parents('tr')).data();
+        if (data["RegEstado"] == "0" || data["RegEstado"] == "2") {
+            _renderZonifDistribEspecie.tbEliTABLA.push({
+                EliTABLA: "ISUPERVISION_DET_ZONIFDISTRIBESPECIE",
+                COD_SECUENCIAL: data["COD_SECUENCIAL"]
+            });
+        }
+        _renderZonifDistribEspecie.dtZonifDistribEspecie.row($(obj).parents('tr')).remove().draw(false);
+    }
+
+    _renderZonifDistribEspecie.fnGetList = function () {
+        var list = [], rows, countFilas, data;
+
+        rows = _renderZonifDistribEspecie.dtZonifDistribEspecie.$("tr");
+        countFilas = rows.length;
+        if (countFilas > 0) {
+            $.each(rows, function (i, o) {
+                data = _renderZonifDistribEspecie.dtZonifDistribEspecie.row($(o)).data();
+                if (data["RegEstado"] == "1" || data["RegEstado"] == "2") {
+                    list.push(utilSigo.fnConvertArrayToObject(data));
+                }
+            });
+        }
+        return list;
+    }
+
+    _renderZonifDistribEspecie.fnGetListEliTABLA = function () { return _renderZonifDistribEspecie.tbEliTABLA }
+
+    $(document).ready(function () {
+        _renderZonifDistribEspecie.frm = $("#frmRenderZonifDistribEspecie");
+
+        _renderZonifDistribEspecie.fnInitDataTable_Detail();
+
+        _renderZonifDistribEspecie.dtZonifDistribEspecie.rows.add(JSON.parse('@Html.Raw(Json.Encode(@Model))')).draw();
+    });
+</script>
+
+<div id="frmRenderZonifDistribEspecie">
+    <div class="table-responsive">
+        <table id="tbRenderZonifDistribEspecie" style="width:100%;margin:0px !important;" class="table table-hover table-bordered">
+            <thead>
+                <tr>
+                    <th colspan="12" class="text-sm-left">
+                        <div class="form-inline">
+                            <i class="fa mx-2 fa-lg fa-file-o" style="cursor:pointer;" onclick="_renderZonifDistribEspecie.fnAddEdit('');" data-toggle="tooltip" data-placement="top" title="Nuevo"></i>                            
+                            <strong>Zonificación de la distribución de la especie y ordenamiento en el área manejada
+                            </strong>
+                        </div>
+                    </th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
+</div>

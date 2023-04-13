@@ -91,6 +91,7 @@ namespace SIGOFCv3.Areas.Supervision.Controllers
                         case "EVALUACION_OTRO": result = ImportarDatos.EvaluacionOtro(Request); break;
                         case "VOLUMEN_ANALIZADO": result = ImportarDatos.VolumenAnalizado(Request); break;
                         case "DESPLAZAMIENTO_SUPERVISION": result = ImportarDatos.DesplazamientoSupervision(Request); break;
+                        case "COBERTURA_BOSCOSA": result = ImportarDatos.CoberturaBoscosa(Request); break;
                     }
                 }
             }
@@ -341,6 +342,87 @@ namespace SIGOFCv3.Areas.Supervision.Controllers
             }
         }
         #endregion
+
+        #region "Cobertura Boscosa"
+        [HttpPost]
+        public PartialViewResult _CoberturaBoscosa(string asCodCNotificacion)
+        {
+            CapaLogica.DOC.Log_BUSQUEDA exeBus = new CapaLogica.DOC.Log_BUSQUEDA();
+            
+            ViewBag.ddlZona = new List<VM_Cbo>()
+            {
+                new VM_Cbo() {Value="0000000",Text="Seleccionar" },new VM_Cbo() {Value="17S",Text="17S" },new VM_Cbo() {Value="18S",Text="18S" },new VM_Cbo() {Value="19S",Text="19S" }
+            };
+
+            return PartialView();
+        }
+        [HttpPost]
+        public JsonResult ExportarCoberturaBoscosa(string asCodInforme, string asCodCNotificacion)
+        {
+            try
+            {
+                ListResult result = new ListResult();
+                result = ExportarDatos.CoberturaBoscosa(asCodInforme, asCodCNotificacion);
+                return Json(result);
+            }
+            catch (Exception ex)
+            {
+                return Json(new { success = false, msj = ex.Message });
+            }
+        }
+        #endregion
+
+        #region "Otros Puntos de Evaluación"
+        [HttpPost]
+        public PartialViewResult _OtrosPuntosEval(string asCodCNotificacion)
+        {
+            CapaLogica.DOC.Log_BUSQUEDA exeBus = new CapaLogica.DOC.Log_BUSQUEDA();
+
+            ViewBag.ddlZona = new List<VM_Cbo>()
+            {
+                new VM_Cbo() {Value="0000000",Text="Seleccionar" },new VM_Cbo() {Value="17S",Text="17S" },new VM_Cbo() {Value="18S",Text="18S" },new VM_Cbo() {Value="19S",Text="19S" }
+            };
+
+            return PartialView();
+        }
+        [HttpPost]
+        public JsonResult ExportarOtrosPuntosEvaluacion(string asCodInforme, string asCodCNotificacion)
+        {
+            try
+            {
+                ListResult result = new ListResult();
+                result = ExportarDatos.OtrosPuntosEval(asCodInforme, asCodCNotificacion);
+                return Json(result);
+            }
+            catch (Exception ex)
+            {
+                return Json(new { success = false, msj = ex.Message });
+            }
+        }
+        #endregion
+
+        #region "Infraestructura"
+        [HttpPost]
+        public PartialViewResult _Infraestructura(string asCodCNotificacion)
+        {
+            return PartialView();
+        }        
+        #endregion
+        #region "Zonificación de la Distribución de Especie"
+        [HttpPost]
+        public PartialViewResult _ZonifDistribEspecie(string asCodCNotificacion)
+        {
+            return PartialView();
+        }
+        #endregion
+        #region "Aprovechamiento sostenible"
+        [HttpPost]
+        public PartialViewResult _AprovSostenible(string asCodCNotificacion)
+        {
+            return PartialView();
+        }        
+        #endregion
+
         #region "Mantenimiento Foto de Supervisión"
         [HttpPost]
         public PartialViewResult _FotoSupervision(string asCodInforme)
