@@ -2445,8 +2445,14 @@ namespace CapaEntidad.DOC
         public String COD_ESPECIES { get; set; }
         [Description("ESPECIES")]
         public String ESPECIES { get; set; }
+        [Description("NUM_ARBOLES")]
+        public decimal NUM_ARBOLES { get; set; }
+        [Description("BALANCE_EXTRACCION")]
+        public decimal BALANCE_EXTRACCION { get; set; }
+        [Description("ESTADO_CAMPO")]
+        public string ESTADO_CAMPO { get; set; }
         [Description("VOLUMEN_APROBADO")]
-        public decimal VOLUMEN_APROBADO { get; set; }
+        public decimal VOLUMEN_APROBADO { get; set; }         
         [Description("VOLUMEN_MOVILIZADO")]
         public decimal VOLUMEN_MOVILIZADO { get; set; }
         [Description("VOLUMEN_INJUSTIFICADO")]

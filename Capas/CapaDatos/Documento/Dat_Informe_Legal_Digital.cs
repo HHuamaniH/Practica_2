@@ -590,6 +590,9 @@ namespace CapaDatos.Documento
                                     ovolumen.COD_SECUENCIAL = Int32.Parse(dr["COD_SECUENCIAL"].ToString());
                                     ovolumen.COD_ESPECIES = dr["COD_ESPECIES"].ToString();
                                     ovolumen.ESPECIES = dr["ESPECIES"].ToString();
+                                    ovolumen.NUM_ARBOLES = Decimal.Parse(dr["NUM_ARBOLES"].ToString());
+                                    ovolumen.BALANCE_EXTRACCION = Decimal.Parse(dr["BALANCE_EXTRACCION"].ToString());
+                                    ovolumen.ESTADO_CAMPO = dr["ESTADO_CAMPO"].ToString();
                                     ovolumen.VOLUMEN_APROBADO = Decimal.Parse(dr["VOLUMEN_APROBADO"].ToString());
                                     ovolumen.VOLUMEN_MOVILIZADO = Decimal.Parse(dr["VOLUMEN_MOVILIZADO"].ToString());
                                     ovolumen.VOLUMEN_INJUSTIFICADO = Decimal.Parse(dr["VOLUMEN_INJUSTIFICADO"].ToString());

@@ -70,7 +70,7 @@
             <ul>
                 <li>
                     <span>
-                        Existe un volumen movilizado de XX correspondiente a la especie XX que no fue declarado ante la autoridad forestal competente, de acuerdo al siguiente detalle:
+                        Existe un volumen movilizado de ${informe.VOLUMENES_INJUSTIFICADOS_TOTAL} m3 que no fue justificado en campo, de acuerdo al siguiente detalle:
                         <br /><br />
                         <div style="text-align: center;">
                             <strong>Cuadro N° XX: Volumen injustificado</strong>
@@ -107,9 +107,9 @@
                                 <tr>
                                     <td style="border: 1px solid #000; text-align: center;">${objEsp.ESPECIES}</td>
                                     <td style="border: 1px solid #000; text-align: center;">${objEsp.VOLUMEN_APROBADO}</td>
-                                    <td style="border: 1px solid #000; text-align: center;">X</td>
-                                    <td style="border: 1px solid #000; text-align: center;">XXX</td>
-                                    <td style="border: 1px solid #000; text-align: center;">X</td>
+                                    <td style="border: 1px solid #000; text-align: center;">${objEsp.NUM_ARBOLES}</td>
+                                    <td style="border: 1px solid #000; text-align: center;">${objEsp.ESTADO_CAMPO}</td>
+                                    <td style="border: 1px solid #000; text-align: center;">${objEsp.BALANCE_EXTRACCION}</td>
                                     <td style="border: 1px solid #000; text-align: center;">${objEsp.VOLUMEN_MOVILIZADO}</td>
                                     <td style="border: 1px solid #000; text-align: center;">${objEsp.VOLUMEN_INJUSTIFICADO}</td>
                                 </tr>
@@ -125,7 +125,7 @@
                                     </td>
                                 </tr>
                             </tfoot>
-                        </table>                        
+                        </table>
                         (En caso se requiera una precisión adicional sobre alguna de las especies se indica en este párrafo).
                         <br /><br />
                         (De forma concisa, indicar que el plan de manejo es el que define los árboles a aprovechar y que ello no se ha cumplido según lo evidenciado en la supervisión).
