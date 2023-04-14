@@ -19,16 +19,16 @@
                     //alert(term);
                     return {
                         pageSize: 10,
-                       // pageNum: params.page || 1,
-                        pageNum: 1,
+                        pageNum: params.page || 1,
+                        //pageNum: 1,
                         searchTerm: term,
                         tipoEspecie: tipoEspecie,
-                        type: type
+                        //type: type
                     };
                 },
                 processResults: function (data, params) {
-                   // params.page = params.page || 1;
-                    params.page = 1;
+                    params.page = params.page || 1;
+                    //params.page = 1;
                     console.log(data.Results);
                    
                     return {

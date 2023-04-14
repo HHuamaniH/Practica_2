@@ -328,8 +328,8 @@
         _ValP.content.find("#cboEstadoNoM").select2();
         _ValP.content.find("#cboUTM").select2();
         _ValP.content.find("#cboInstitu").select2();
-        _ValP.fnInitEspecie("cboEspecieCC", "MCIEN_COMUN", 0, 100);
-        _ValP.fnInitEspecie("cboEspecieCientifico", "MCIENTIFICO", 0, 100);
+        _ValP.fnInitEspecie("cboEspecieCC", "MCIEN_COMUN", 0, 10);
+        _ValP.fnInitEspecie("cboEspecieCientifico", "MCIENTIFICO", 0, 10);
         _ValP.content.find('select').on('select2:select', function (e) {
             var data = e.params.data;
             var seleccion = '<strong>' + data.text + '</strong>';
