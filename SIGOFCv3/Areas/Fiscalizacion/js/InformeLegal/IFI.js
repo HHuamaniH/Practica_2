@@ -302,7 +302,7 @@ _informe.Exportar = async function () {
     }
 
     const template = await _informe.ExtraerPlantilla();
-    informe.PIE_PAGINA = _informe.tmpl.get(template, '#tmpl-pie-pagina', informe);
+    informe.PIE_PAGINA = _informe.tmpl.get(template, '#tmpl-pie-pagina', { informe, urlLocalSigo });
 
     //let html = _informe.tmpl.General(informe);
     let html = '';
