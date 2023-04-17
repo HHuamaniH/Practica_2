@@ -11693,7 +11693,7 @@ namespace CapaDatos.DOC
                                     oCampo.CODIGO = dr["CODIGO"].ToString();
                                     oCampo.RegEstado = 1;
 
-                                    var itemExiste = lsCEntidad.Where(x => x.COD_ESPECIES == oCampo.COD_ESPECIES).FirstOrDefault();
+                                    /*var itemExiste = lsCEntidad.Where(x => x.COD_ESPECIES == oCampo.COD_ESPECIES).FirstOrDefault();
                                     if (itemExiste != null)
                                     {
                                         itemExiste.DAP1 = itemExiste.DAP1 + oCampo.DAP1;
@@ -11702,9 +11702,9 @@ namespace CapaDatos.DOC
                                         itemExiste.RegEstado = itemExiste.RegEstado + oCampo.RegEstado;
                                     }
                                     else
-                                    {
-                                        lsCEntidad.Add(oCampo);
-                                    }
+                                    {*/
+                                    lsCEntidad.Add(oCampo);
+                                    //}
                                 }
                             }
                         }
