@@ -11691,7 +11691,7 @@ namespace CapaDatos.DOC
                                     oCampo.LC = Decimal.Parse(dr["LC"].ToString());
                                     oCampo.OBSERVACION = dr["OBSERVACION"].ToString();
                                     oCampo.CODIGO = dr["CODIGO"].ToString();
-                                    oCampo.RegEstado = 1;
+                                    oCampo.RegEstado = 0;
 
                                     /*var itemExiste = lsCEntidad.Where(x => x.COD_ESPECIES == oCampo.COD_ESPECIES).FirstOrDefault();
                                     if (itemExiste != null)
