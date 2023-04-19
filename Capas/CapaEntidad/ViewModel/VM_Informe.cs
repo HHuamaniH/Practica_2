@@ -680,6 +680,7 @@ namespace CapaEntidad.ViewModel
             tbZonifDistribEspecie = new List<Ent_INFORME>();
             tbAprovSostenible = new List<Ent_INFORME>();
             tbObligacionTitular = new List<Ent_INFORME_OBLIGTITULAR>();
+            tbRegFauna = new List<Ent_INFORME>();
         }
     }
 

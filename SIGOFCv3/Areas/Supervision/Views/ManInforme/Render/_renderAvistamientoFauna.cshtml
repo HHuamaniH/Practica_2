@@ -129,9 +129,7 @@
 
     $(document).ready(function () {
         _renderAvistamientoFauna.frm = $("#frmRenderAvistamientoFauna");
-
         _renderAvistamientoFauna.fnInitDataTable_Detail();
-
         _renderAvistamientoFauna.dtAvistamientoFauna.rows.add(JSON.parse('@Html.Raw(Json.Encode(@Model))')).draw();
 
         var title = '@ViewData["TITULO"]';

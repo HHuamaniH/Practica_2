@@ -13666,6 +13666,7 @@ namespace CapaDatos.DOC
                                 ocampoFau.COD_SECUENCIAL = dr.GetInt32(dr.GetOrdinal("COD_SECUENCIAL"));
                                 ocampoFau.COD_ESPECIES = dr.GetString(dr.GetOrdinal("COD_ESPECIES"));
                                 ocampoFau.DESC_ESPECIES = dr.GetString(dr.GetOrdinal("ESPECIES"));
+                                ocampoFau.NOMBRE_COMUN = dr.GetString(dr.GetOrdinal("NOMBRE_COMUN"));
                                 ocampoFau.NUM_INDIVIDUOS = dr.GetInt32(dr.GetOrdinal("NUM_INDIVIDUOS"));
                                 ocampoFau.COD_TIPO_REGISTRO = dr.GetString(dr.GetOrdinal("COD_TIPO_REGISTRO"));
                                 ocampoFau.COD_ESTRATO = dr.GetString(dr.GetOrdinal("COD_ESTRATO"));
@@ -14107,9 +14108,13 @@ namespace CapaDatos.DOC
                             ocampoSuper.COD_INFORME = OUTPUTPARAM01.Split('|')[0];
                             ocampoSuper.COD_SECUENCIAL = loDatos.COD_SECUENCIAL;
                             ocampoSuper.COD_ESPECIES = loDatos.COD_ESPECIES;
+                            ocampoSuper.DESC_ESPECIES = loDatos.DESC_ESPECIES;
+                            ocampoSuper.NOMBRE_COMUN = loDatos.NOMBRE_COMUN;
                             ocampoSuper.NUM_INDIVIDUOS = loDatos.NUM_INDIVIDUOS;
                             ocampoSuper.COD_TIPO_REGISTRO = loDatos.COD_TIPO_REGISTRO;
+                            ocampoSuper.DESC_TIPO_REGISTRO = loDatos.DESC_TIPO_REGISTRO;
                             ocampoSuper.COD_ESTRATO = loDatos.COD_ESTRATO;
+                            ocampoSuper.DESC_ESTRATO = loDatos.DESC_ESTRATO;
                             ocampoSuper.FECHA_AVISTAMIENTO = loDatos.FECHA_AVISTAMIENTO;
                             ocampoSuper.HORA_AVISTAMIENTO = loDatos.HORA_AVISTAMIENTO;
                             ocampoSuper.ZONA = loDatos.ZONA;
@@ -14118,6 +14123,8 @@ namespace CapaDatos.DOC
                             ocampoSuper.ALTITUD = loDatos.ALTITUD;
                             ocampoSuper.DESCRIPCION = loDatos.DESCRIPCION;
                             ocampoSuper.RegEstado = loDatos.RegEstado;
+                            ocampoSuper.NUM_POA = loDatos.NUM_POA;
+
                             dBOracle.ManExecute(cn, tr, "DOC_OSINFOR_ERP_MIGRACION.ISUPERVISION_MADE_NOMADE_DET_AVISTAMIENTO_FAUNA_Grabar", ocampoSuper);
                         }
                     }

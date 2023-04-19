@@ -27,13 +27,13 @@
                         @Html.TextBox("txtUso", "", new { @class = "form-control form-control-sm", maxlength = "150", oninput = "this.value = this.value.replace(/[^áéíóúa-zÁÉÍÓÚA-Z 0-9]/,'')" })
                     </div>
                     <div class="form-group col-md-6">
-                        <label for="txtEstadoConservacion" class="text-small">Coordenada Norte</label>
+                        <label for="txtEstadoConservacion" class="text-small">Estado de Conservación</label>
                         @Html.TextBox("txtEstadoConservacion", "", new { @class = "form-control form-control-sm", maxlength = "200", oninput = "this.value = this.value.replace(/[^áéíóúa-zÁÉÍÓÚA-Z 0-9]/,'')" })
                     </div>
                 </div>               
                 <div class="form-row">
                     <div class="form-group col-md-12">
-                        <label for="txtObjetivos" class="text-small">Descripción</label>
+                        <label for="txtObjetivos" class="text-small">Objetivos</label>
                         @Html.TextArea("txtObjetivos", "", new { @class = "form-control form-control-sm", rows = "4" })
                     </div>
                 </div>
