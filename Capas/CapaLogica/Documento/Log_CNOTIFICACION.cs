@@ -730,8 +730,8 @@ namespace CapaLogica.DOC
             }
             catch (Exception ex)
             {
-                //  result.AddResultado(ex.Message, false);
-                result.AddResultado("Hubo un problema en el registro, por favor de verifique sus datos o intente en unos minutos.", false);
+                result.AddResultado(ex.Message, false);
+                //result.AddResultado("Hubo un problema en el registro, por favor de verifique sus datos o intente en unos minutos.", false);
             }
 
             return result;
