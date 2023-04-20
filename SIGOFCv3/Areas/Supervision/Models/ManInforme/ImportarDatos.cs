@@ -131,7 +131,8 @@ namespace SIGOFCv3.Areas.Supervision.Models.ManInforme
                         oCampos = new CapaEntidad.DOC.Ent_INFORME();
                         oCampos.COD_SECUENCIAL = 0;
                         oCampos.COD_ESPECIES = "";
-                        oCampos.DESC_ESPECIES = workSheet.Cells[rowIterator, 1].Value.ToString().Trim() + " | " + workSheet.Cells[rowIterator, 2].Value.ToString().Trim();
+                        oCampos.DESC_ESPECIES = workSheet.Cells[rowIterator, 1].Value.ToString().Trim(); //+ " | " + workSheet.Cells[rowIterator, 2].Value.ToString().Trim();
+                        oCampos.NOMBRE_COMUN = workSheet.Cells[rowIterator, 2].Value.ToString().Trim();
                         oCampos.ZONA = (workSheet.Cells[rowIterator, 8].Value ?? "").ToString().Trim();
                         if (oCampos.ZONA == "17S" || oCampos.ZONA == "18S" || oCampos.ZONA == "19S")
                         {
