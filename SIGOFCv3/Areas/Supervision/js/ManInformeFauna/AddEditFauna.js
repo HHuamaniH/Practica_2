@@ -367,8 +367,8 @@ ManInforme_AddEditFauna.fnInitDataTable_Detail = function () {
         }
     ];
     options = { page_length: 10, row_index: true, data_extend: data_extend, page_autowidth: false };
-    ManInforme_AddEditFauna.dtCritZonifDistribEspecie = utilDt.fnLoadDataTable_Detail(ManInforme_AddEditFauna.frm.find("#tbAprovSostenible"), columns_label, columns_data, options);
-    ManInforme_AddEditFauna.dtCritZonifDistribEspecie.rows.add(ManInforme_AddEditFauna.DataPrograma.filter(m => m.TIPO_PROGRAMA == "FAUNA_APROVSOST")).draw();
+    ManInforme_AddEditFauna.dtAprovSostenible = utilDt.fnLoadDataTable_Detail(ManInforme_AddEditFauna.frm.find("#tbAprovSostenible"), columns_label, columns_data, options);
+    ManInforme_AddEditFauna.dtAprovSostenible.rows.add(ManInforme_AddEditFauna.DataPrograma.filter(m => m.TIPO_PROGRAMA == "FAUNA_APROVSOST")).draw();
     //Cargar Actividades de Manejo
     columns_label = ["Criterio"];
     columns_data = ["DESCRIPCION"];
@@ -628,7 +628,7 @@ ManInforme_AddEditFauna.fnGetListPrograma = function (_tipo) {
         case "ACTIVIDAD_MANEJO": dt = ManInforme_AddEditFauna.dtActividadManejo; break;
         case "MEDIDA_CONSERVACION": dt = ManInforme_AddEditFauna.dtMedidaConservacion; break;
         case "ZONIFICACION_ESPECIE": dt = ManInforme_AddEditFauna.dtCritZonifDistribEspecie; break;
-        case "APROVECHAMIENTO_SOSTENIBLE": dt = ManInforme_AddEditFauna.dtCritZonifDistribEspecie; break;
+        case "APROVECHAMIENTO_SOSTENIBLE": dt = ManInforme_AddEditFauna.dtAprovSostenible; break;
     }
 
     if (dt.$("tr").length > 0) {
