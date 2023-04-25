@@ -312,8 +312,8 @@ namespace SIGOFCv3.Areas.General.Controllers
                     cadReporte += "<div><div>Distrito:</div><div>" + oCamposView.DISTRITO + "</div></div>";
                     cadReporte += "<div><div>Sector:</div><div>" + oCamposView.SECTOR + "</div></div>";
                     cadReporte += "<div><div>Plan de Manejo:</div><div>" + oCamposView.POA + "</div></div>";
-                    cadReporte += "<div><div>Resolución de Aprobación:</div><div>" + (oCamposView.ARESOLUCION_NUM.Trim() == "" || oCamposView.ARESOLUCION_NUM.Trim() == "NO CONSIGNA" ? " - " : "<a href='#' onclick=\"descargaPDF('" + oCamposView.DOC_SIADO_ARESOL + "')\">" + oCamposView.ARESOLUCION_NUM + "</a>") + "</div></div>";
-                    cadReporte += "<div><div>Resolución que Reformula:</div><div>" + (oCamposView.REFORMULA_NUM.Trim() == "" || oCamposView.REFORMULA_NUM.Trim() == "NO CONSIGNA" ? " - " : "<a href='#' onclick=\"descargaPDF('" + oCamposView.DOC_SIADO_ARESOL + "')\">" + oCamposView.REFORMULA_NUM + "</a>") + "</div></div>";
+                    cadReporte += "<div><div>Resolución de Aprobación:</div><div>" + (oCamposView.ARESOLUCION_NUM.Trim() == "" || oCamposView.ARESOLUCION_NUM.Trim() == "NO CONSIGNA" ? " - " : "<a href='#' onclick=\"descargaPDF('" + oCamposView.DOC_SIADO_ARESOL + "','" + oCamposView.DOC_ORIGEN_ARESOL + "')\">" + oCamposView.ARESOLUCION_NUM + "</a>") + "</div></div>";
+                    cadReporte += "<div><div>Resolución que Reformula:</div><div>" + (oCamposView.REFORMULA_NUM.Trim() == "" || oCamposView.REFORMULA_NUM.Trim() == "NO CONSIGNA" ? " - " : "<a href='#' onclick=\"descargaPDF('" + oCamposView.DOC_SIADO_ARESOL + "','" + oCamposView.DOC_ORIGEN_REFOR + "')\">" + oCamposView.REFORMULA_NUM + "</a>") + "</div></div>";
                     cadReporte += "<div><div>Zafra:</div><div>" + oCamposView.ZAFRA + "</div></div>";
                     cadReporte += "<div><div>Inicio de Vigencia:</div><div>" + oCamposView.INICIO_VIGENCIA.ToString() + "</div></div>";
 
@@ -358,8 +358,17 @@ namespace SIGOFCv3.Areas.General.Controllers
                     }
                     else
                     {
-                        cadReporte += "<div><div>Supervisión:</div><div> SI </div></div>";
-                        cadReporte += "<div><div>Nro Informe de Supervisión:</div><div>" + (oCamposView.INF_NUMERO.Trim() == "" ? " - " : "<a href='#' onclick=\"descargaPDF('" + oCamposView.DOC_SIADO_INFORME.Trim() + "')\">" + oCamposView.INF_NUMERO + "</a>") + "</div></div>";
+                        if (oCamposView.COD_ITIPO != "0000003")
+                        {
+                            cadReporte += "<div><div>Supervisión:</div><div> SI </div></div>";
+                            cadReporte += "<div><div>Nro Informe de Supervisión:</div><div>" + (oCamposView.INF_NUMERO.Trim() == "" ? " - " : "<a href='#' onclick=\"descargaPDF('" + oCamposView.DOC_SIADO_INFORME.Trim() + "')\">" + oCamposView.INF_NUMERO + "</a>") + "</div></div>";
+                        }
+                        else
+                        {
+                            cadReporte += "<div><div>Supervisión:</div><div> NO </div></div>";
+                            cadReporte += "<div><div>Nro Informe:</div><div>" + (oCamposView.INF_NUMERO.Trim() == "" ? " - " : oCamposView.INF_NUMERO + " (" + oCamposView.TIPO_DOCUMENTO + ")") + "</div></div>";
+                        }
+
                         cadReporte += "<div><div>Fecha de inicio de la supervisión en campo:</div><div>" + oCamposView.FECHA_INI + "</div></div>";
                         cadReporte += "<div><div>Fecha de término de la supervisión en campo:</div><div>" + oCamposView.FECHA_TERMINO + "</div></div>";
                         cadReporte += "<h2>Fiscalización del OSINFOR</h2>";
@@ -1389,7 +1398,7 @@ namespace SIGOFCv3.Areas.General.Controllers
             }
         }
         [HttpGet]
-        public ActionResult DescargarEstadoGuiaTransporte(string hdfFileDescarga)
+        public ActionResult DescargarEstadoGuiaTransporte(string hdfFileDescarga, string hdfFileOrigen = "SIADO")
         {
             hdfFileDescarga = hdfFileDescarga ?? "";
             try
@@ -1403,7 +1412,14 @@ namespace SIGOFCv3.Areas.General.Controllers
 
                 List<Ent_PreVisualizar> listPAus = (List<Ent_PreVisualizar>)Session["listPAus"];
                 if (listPAus == null) { listPAus = new List<Ent_PreVisualizar>(); }
+
                 String RutaSIADO = Server.MapPath("~/Ruta_SIADO/");
+
+                if (hdfFileOrigen == "SIADO-REGION")
+                {
+                    RutaSIADO = Server.MapPath("~/Ruta_SIADO_Region/");
+                }
+
                 if (hdfFileDescarga == "0" || hdfFileDescarga == "")
                 {
 

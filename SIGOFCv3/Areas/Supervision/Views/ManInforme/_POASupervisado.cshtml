@@ -6,7 +6,7 @@
 
 <script type="text/javascript">
     _POASupervisado.fnLoadDataCondicionArea('@Html.Raw(Json.Encode(@Model.tbCondicionArea))');
-    
+
         _POASupervisado.ReporteAnalisis = function (obj) {
 
             var url = urlLocalSigo + "Supervision/ManInforme/_ReporteAnalisis";
@@ -14,7 +14,7 @@
             utilSigo.fnOpenModal(option, function () {
                 _POASupervisado.fnInit("");
             });
-        }     
+        }
 </script>
 
 <div class="modal-dialog modal-custom-tb" role="document" style="height:95%;">
@@ -392,7 +392,7 @@
                                                 @Html.TextBoxFor(m => m.txtTerceroSolidario, new { @class = "form-control form-control-sm", disabled = "disabled" })
                                                 @Html.HiddenFor(m => m.hdfCodTerceroSolidario)
                                                 <div class="input-group-prepend">
-                                                    <span class="input-group-text" style="cursor:pointer;" onclick="_POASupervisado.fnBuscarPersona('TERCERO', '0000001')"><i class="fa fa-search-plus" data-toggle="tooltip" data-placement="top" title="Seleccionar tercero"></i></span>
+                                                    <span class="input-group-text" style="cursor:pointer;" onclick="_POASupervisado.fnBuscarPersona('TERCERO', 'TODOS')"><i class="fa fa-search-plus" data-toggle="tooltip" data-placement="top" title="Seleccionar tercero"></i></span>
                                                 </div>
                                             </div>
                                         </div>
@@ -402,7 +402,7 @@
                         </div>
                         @*//*@
                         <div id="dvOpcionPoaDatosProcesados" style="display:none;">
-                            <div  style="margin-top:15px;margin-bottom:20px;text-align:center;">
+                            <div style="margin-top:15px;margin-bottom:20px;text-align:center;">
                                 <div class="btn-group btn-group-toggle" data-toggle="buttons">
                                     @foreach (var item in Model.lstChkParcelaCorta)
                                     {
@@ -411,7 +411,7 @@
                                         </label>
                                     }
                                 </div>
-                            </div> 
+                            </div>
                             <div id="dvAnalsisVolumen">
                                 <div class="card-header text-small">Analisis Maderable</div>
                                 <div class="card-body">

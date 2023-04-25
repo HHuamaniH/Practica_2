@@ -70,7 +70,7 @@
         _renderListDomicilio.dataDomicilio = _renderListDomicilio.dtRenderListDomicilio.row($(obj).parents('tr'));
 
         var data = _renderListDomicilio.dtRenderListDomicilio.row($(obj).parents('tr')).data();
-        debugger
+        //debugger
         _renderListDomicilio.frm.find("#hdfMItemDomicilio_Ubigeo").val(data["COD_UBIGEO"]);
         _renderListDomicilio.frm.find("#txtMItemDomicilio_Ubigeo").val(data["UBIGEO"]);
         _renderListDomicilio.frm.find("#txtMItemDomicilio_Direccion").val(data["DIRECCION"]);
@@ -119,7 +119,6 @@
         data.DATOS_REFERENCIALES = _renderListDomicilio.frm.find("#txtMItemDomicilio_Referencia").val();
         data.NACTIVO = $("#nactivo").prop('checked')? 1:0;
         data.NACTIVO_NOM = data.NACTIVO == 1 ? 'Activo' : 'Inactivo';
-        debugger
         if (ManPersonas_AddEdit.frm.find("#RegEstado").val() == 1) data.RegEstado = 1;
         else data.RegEstado = (_renderListDomicilio.estado == 0) ? 2 : _renderListDomicilio.estado;
         let items = _renderListDomicilio.dtRenderListDomicilio.data().count();
@@ -129,7 +128,7 @@
              d.RegEstado = 2;
             d.NACTIVO = 0;
             d.NACTIVO_NOM = 'Inactivo'; array.push(d);
-            
+
         }
         _renderListDomicilio.dtRenderListDomicilio.rows().remove().draw();
         _renderListDomicilio.dtRenderListDomicilio.rows.add(array).draw();
@@ -225,7 +224,7 @@
                         <div class="form-group row" style="margin-bottom:0px;">
                             <label for="lblMItemDomicilio_Referencia" class="col-md-4 col-form-label text-small">Estado:</label>
                             <div class="col-md-8">
-                               
+
                                 <div class="form-check form-check-inline">
                                     <input class="form-check-input" type="checkbox" id="nactivo" value="1" checked>
                                     <label class="form-check-label" for="nactivo">Activo</label>

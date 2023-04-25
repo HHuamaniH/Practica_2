@@ -7,43 +7,100 @@
 <link href="~/Content/newSIGOFormulario.min.css" rel="stylesheet" />
 <link href="~/Content/Grilla.css" rel="stylesheet" />
 <style>
-    .datosGral, .datosBloque { }
+    .datosGral, .datosBloque {
+    }
 
-    .datosGral > div, .datosBloque > div { width: 100%; float: none; font-size: 12px; height: 100%; overflow: auto; }
+        .datosGral > div, .datosBloque > div {
+            width: 100%;
+            float: none;
+            font-size: 12px;
+            height: 100%;
+            overflow: auto;
+        }
 
-    .datosGral > div > div:first-child, .datosBloque > div > div:first-child { background-color: #e8f3fb; width: 29%; padding-left: 1%; height: 100%; padding-bottom: 2px; padding-top: 2px; }
+            .datosGral > div > div:first-child, .datosBloque > div > div:first-child {
+                background-color: #e8f3fb;
+                width: 29%;
+                padding-left: 1%;
+                height: 100%;
+                padding-bottom: 2px;
+                padding-top: 2px;
+            }
 
-    .datosGral > div > div:last-child, .datosBloque > div > div:last-child { width: 69%; height: 100%; padding-left: 1%; }
+            .datosGral > div > div:last-child, .datosBloque > div > div:last-child {
+                width: 69%;
+                height: 100%;
+                padding-left: 1%;
+            }
 
-    .datosGral > div > div, .datosBloque > div > div { float: left; }
-       
-    .sepBloque { width: 100% !important; }
+            .datosGral > div > div, .datosBloque > div > div {
+                float: left;
+            }
 
-    .GrillaDivReporte { width: 98% !important; margin: 10px 10px 10px 10px; }
+    .sepBloque {
+        width: 100% !important;
+    }
 
-    .Grilla { border-collapse: collapse; }
+    .GrillaDivReporte {
+        width: 98% !important;
+        margin: 10px 10px 10px 10px;
+    }
 
-    .Grilla tr:nth-child(even) { background: #eff8fb }
+    .Grilla {
+        border-collapse: collapse;
+    }
 
-    .Grilla tr:nth-child(odd) { background: #FFF }
+        .Grilla tr:nth-child(even) {
+            background: #eff8fb
+        }
 
-    .Grilla tr:hover { background-color: #D9FF66; }
+        .Grilla tr:nth-child(odd) {
+            background: #FFF
+        }
 
-    #tbVolInjus > tbody > tr > td:nth-child(1) { text-align: center; width: 4%; }
+        .Grilla tr:hover {
+            background-color: #D9FF66;
+        }
 
-    #tbVolInjus > tbody > tr > td:nth-child(2) { text-align: left; width: 30%; }
+    #tbVolInjus > tbody > tr > td:nth-child(1) {
+        text-align: center;
+        width: 4%;
+    }
 
-    #tbVolInjus > tbody > tr > td:nth-child(3) { text-align: right; width: 12%; }
+    #tbVolInjus > tbody > tr > td:nth-child(2) {
+        text-align: left;
+        width: 30%;
+    }
 
-    #tbVolInjus > tbody > tr > td:nth-child(4) { text-align: right; width: 12%; }
+    #tbVolInjus > tbody > tr > td:nth-child(3) {
+        text-align: right;
+        width: 12%;
+    }
 
-    #tbVolInjus > tbody > tr > td:nth-child(5) { text-align: right; width: 12%; }
+    #tbVolInjus > tbody > tr > td:nth-child(4) {
+        text-align: right;
+        width: 12%;
+    }
 
-    #tbVolInjus > tbody > tr > td:nth-child(6) { text-align: right; width: 15%; }
+    #tbVolInjus > tbody > tr > td:nth-child(5) {
+        text-align: right;
+        width: 12%;
+    }
 
-    #tbVolInjus > tbody > tr > td:nth-child(7) { text-align: right; width: 15%; }
+    #tbVolInjus > tbody > tr > td:nth-child(6) {
+        text-align: right;
+        width: 15%;
+    }
 
-    .GrillaPagerstyle { background-color: #359BD2 !important; }
+    #tbVolInjus > tbody > tr > td:nth-child(7) {
+        text-align: right;
+        width: 15%;
+    }
+
+    .GrillaPagerstyle {
+        background-color: #359BD2 !important;
+    }
+
     .modal-xl {
         max-width: 90%;
     }
@@ -137,9 +194,8 @@
     function construirPDF() {
         window.open(urlLocalSigo + "General/Reportes/generaReportePDF", '_blank');
     };
-    function descargaPDF(archivo) {
-        
-        window.open(urlLocalSigo + "General/Reportes/DescargarEstadoGuiaTransporte?hdfFileDescarga=" + archivo, '_blank');
+    function descargaPDF(archivo, origen) {
+        window.open(urlLocalSigo + "General/Reportes/DescargarEstadoGuiaTransporte?hdfFileDescarga=" + archivo + "&hdfFileOrigen=" + origen, '_blank');
     };
     let _RptETH = {
         fnVer: (obj) => {

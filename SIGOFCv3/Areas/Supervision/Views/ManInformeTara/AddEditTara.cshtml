@@ -43,19 +43,20 @@
                         @Html.HiddenFor(m => m.hdfCodInforme)
                         @Html.HiddenFor(m => m.hdfRegEstado)
                         <input type="hidden" name="hdfCodMTipo" value="0000005" />
+                        @Html.HiddenFor(m => m.hdfPerfil)
 
-                    <ul class="nav nav-tabs" id="myTab" role="tablist">
-                        <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#navEstado" role="tab" aria-controls="home" aria-selected="true">Estado Situacional</a></li>
-                        <li class="nav-item"><a class="nav-link active" data-toggle="tab" href="#navDatos" role="tab" aria-controls="home" aria-selected="true">Datos Generales</a></li>
-                        <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#navObligacion" role="tab" aria-controls="home" aria-selected="true">Obligaciones</a></li>
-                        <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#navResultado" role="tab" aria-controls="home" aria-selected="true">Resultados</a></li>
-                        <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#navCenso" role="tab" aria-controls="home" aria-selected="true">Censo | Kardex</a></li>
-                        <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#navAnalisis" role="tab" aria-controls="home" aria-selected="true">Análisis</a></li>
-                        <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#navConclusion" role="tab" aria-controls="home" aria-selected="true">Conclusiones</a></li>
-                        <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#navIncidencias" role="tab" aria-controls="home" aria-selected="true">Incidencias</a></li>
-                        <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#navInformeDigital" role="tab" aria-controls="home" aria-selected="true" style="display:none">Informe digital</a></li>
-                        <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#navMandatos" role="tab" aria-controls="home" aria-selected="true">Mandatos</a></li>
-                    </ul>
+                        <ul class="nav nav-tabs" id="myTab" role="tablist">
+                            <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#navEstado" role="tab" aria-controls="home" aria-selected="true">Estado Situacional</a></li>
+                            <li class="nav-item"><a class="nav-link active" data-toggle="tab" href="#navDatos" role="tab" aria-controls="home" aria-selected="true">Datos Generales</a></li>
+                            <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#navObligacion" role="tab" aria-controls="home" aria-selected="true">Obligaciones</a></li>
+                            <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#navResultado" role="tab" aria-controls="home" aria-selected="true">Resultados</a></li>
+                            <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#navCenso" role="tab" aria-controls="home" aria-selected="true">Censo | Kardex</a></li>
+                            <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#navAnalisis" role="tab" aria-controls="home" aria-selected="true">Análisis</a></li>
+                            <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#navConclusion" role="tab" aria-controls="home" aria-selected="true">Conclusiones</a></li>
+                            <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#navIncidencias" role="tab" aria-controls="home" aria-selected="true">Incidencias</a></li>
+                            <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#navInformeDigital" role="tab" aria-controls="home" aria-selected="true" style="display:none">Informe digital</a></li>
+                            <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#navMandatos" role="tab" aria-controls="home" aria-selected="true">Mandatos</a></li>
+                        </ul>
                         <div class="tab-content">
                             <div class="tab-pane fade show" id="navEstado" role="tabpanel" aria-labelledby="nav-home-tab">
                                 @{ Html.RenderAction("_ControlCalidad", "Controles", new { area = "GENERAL", dto = Model.vmControlCalidad, disableControl = true }); }
@@ -501,7 +502,7 @@
                                                         </div>
                                                     </div>
                                                 </div>
-                                                @Html.HiddenFor(m => m.txtConclusion)                                               
+                                                @Html.HiddenFor(m => m.txtConclusion)
                                             </div>
                                         </div>
                                     </div>

@@ -174,6 +174,7 @@ namespace CapaDatos.DOC
                                 oCamposDet.MAE_COD_PUBLICOPARTICIPANTE = dr.GetString(dr.GetOrdinal("MAE_COD_PUBLICOPARTICIPANTE"));
                                 oCamposDet.PUBLICOPARTICIPANTE = dr.GetString(dr.GetOrdinal("PUBLICOPARTICIPANTE"));
                                 oCamposDet.FECHA_CREACION = dr.GetString(dr.GetOrdinal("FECHA_CREACION"));
+                                oCamposDet.MOCHILAFORESTAL = dr.GetString(dr.GetOrdinal("MOCHILAFORESTAL"));
                                 oCamposDet.RegEstado = 0;
 
                                 switch (oCamposDet.MAE_COD_TIPOPARTICIPANTE)
@@ -1448,6 +1449,7 @@ namespace CapaDatos.DOC
                         oCamposDet.MAE_COD_PUBLICOPARTICIPANTE = loDatos.MAE_COD_PUBLICOPARTICIPANTE;
                         oCamposDet.PUBLICOPARTICIPANTE = (loDatos.GRUPOPUBLICOPARTICIPANTE ?? "") + " | " + (loDatos.PUBLICOPARTICIPANTE ?? "");
                         oCamposDet.COD_UCUENTA = oCEntidad.COD_UCUENTA;
+                        oCamposDet.MOCHILAFORESTAL = (loDatos.MOCHILAFORESTAL == null || loDatos.MOCHILAFORESTAL.Equals("0000000") || loDatos.MOCHILAFORESTAL.Trim().Equals("")) ? null : loDatos.MOCHILAFORESTAL;
                         oCamposDet.RegEstado = loDatos.RegEstado;
                         dBOracle.ManExecute(cn, tr, "DOC_OSINFOR_ERP_MIGRACION.spCAPACITACION_PARTICIPANTES_Grabar", oCamposDet);
                     }

@@ -189,6 +189,7 @@ namespace SIGOFCv3.Areas.Supervision.Controllers
                         vmInfTara.hdSupervisor_Calidad = codEspecialista;
                         //Actualizamos el valor para el control de calidad
                         vmInfTara.vmControlCalidad.VALIAS_ROL = mr.VALIAS;
+                        vmInfTara.hdfPerfil = mr.PERFIL;
                         return View("~/Areas/Supervision/Views/ManInformeTara/AddEditTara.cshtml", vmInfTara);
                     case "0000011":
                     case "0000012"://Conservación
@@ -198,6 +199,7 @@ namespace SIGOFCv3.Areas.Supervision.Controllers
                         vmInfConserv.hdSupervisor_Calidad = codEspecialista;
                         //Actualizamos el valor para el control de calidad
                         vmInfConserv.vmControlCalidad.VALIAS_ROL = mr.VALIAS;
+                        vmInfConserv.hdfPerfil = mr.PERFIL;
                         return View("~/Areas/Supervision/Views/ManInformeConservacion/AddEditConservacion.cshtml", vmInfConserv);
                     case "0000013"://Concesión Fauna
                     case "0000028"://Permiso Fauna
@@ -208,6 +210,7 @@ namespace SIGOFCv3.Areas.Supervision.Controllers
                         ViewBag.hdfCodGrupoUsuario = (ModelSession.GetSession())[0].COD_UGRUPO;
                         //Actualizamos el valor para el control de calidad
                         vmInfFauna.vmControlCalidad.VALIAS_ROL = mr.VALIAS;
+                        vmInfFauna.hdfPerfil = mr.PERFIL;
                         return View("~/Areas/Supervision/Views/ManInformeFauna/AddEditFauna.cshtml", vmInfFauna);
                     case "0000001":
                     case "0000002":
@@ -223,7 +226,8 @@ namespace SIGOFCv3.Areas.Supervision.Controllers
                         ViewBag.ddlMaterialDesinfeccion = exeBus.RegMostComboIndividual("MATERIAL_DESINFECCION_EXSITU", "");
                         //Actualizamos el valor para el control de calidad
                         vmInfExSitu.vmControlCalidad.VALIAS_ROL = mr.VALIAS;
-                        return View("~/Areas/Supervision/Views/ManInformeExSitu/AddEditExSitu.cshtml", vmInfExSitu); 
+                        vmInfExSitu.hdfPerfil = mr.PERFIL;
+                        return View("~/Areas/Supervision/Views/ManInformeExSitu/AddEditExSitu.cshtml", vmInfExSitu);
                     default:
                         CEntVM vmInf = exeInf.InitDatosInforme(asCodInforme, asCodCNotificacion, asCodMTipo, (ModelSession.GetSession())[0].COD_UCUENTA);
                         vmInf.hdfCodMTipo = asCodMTipo;
@@ -232,6 +236,7 @@ namespace SIGOFCv3.Areas.Supervision.Controllers
                         vmInf.hdSupervisor_Calidad = codEspecialista;
                         //Actualizamos el valor para el control de calidad
                         vmInf.vmControlCalidad.VALIAS_ROL = mr.VALIAS;
+                        vmInf.hdfPerfil = mr.PERFIL;
                         return View(vmInf);
                 }
             }
@@ -576,7 +581,7 @@ namespace SIGOFCv3.Areas.Supervision.Controllers
         }
         #endregion
         #region "Mantenimiento Datos de Campo"
-        public PartialViewResult _DatosCampo(string asCodInforme, Int32 aiNumPoa, bool abMaderable=false, bool abNoMaderable = false)
+        public PartialViewResult _DatosCampo(string asCodInforme, Int32 aiNumPoa, bool abMaderable = false, bool abNoMaderable = false)
         {
             CLogica exeInf = new CLogica();
             CEntidad datInf = exeInf.RegMostrarDatosCabecera(asCodInforme);
@@ -813,7 +818,7 @@ namespace SIGOFCv3.Areas.Supervision.Controllers
             ViewBag.ddlEstado = exeBus.RegMostComboIndividual("ESTADO_ESPECIE", "");
             ViewBag.ddlZona = exeBus.RegMostComboIndividual("ZONA_UTM", "");
             //ViewBag.ddlFenologia = exeBus.RegMostComboIndividual("EFENOLOGICO", "");
-           // ViewBag.ddlCFuste = exeBus.RegMostComboIndividual("CFUSTE", "");
+            // ViewBag.ddlCFuste = exeBus.RegMostComboIndividual("CFUSTE", "");
             //ViewBag.ddlFCopa = exeBus.RegMostComboIndividual("FCOPA", "");
             //ViewBag.ddlPCopa = exeBus.RegMostComboIndividual("PCOPA", "");
             ViewBag.ddlEstadoFito = exeBus.RegMostComboIndividual("ESANITARIO", "");
@@ -829,7 +834,7 @@ namespace SIGOFCv3.Areas.Supervision.Controllers
             ListResult result = new ListResult();
             try
             {
-                result= exeInf.RegInsertarMuestraDatosCampoNoMade(dto);
+                result = exeInf.RegInsertarMuestraDatosCampoNoMade(dto);
                 if (result.msj != "Ok")
                 {
                     throw new ArgumentNullException();
@@ -840,7 +845,7 @@ namespace SIGOFCv3.Areas.Supervision.Controllers
 
                 throw ex;
             }
-                
+
             return Json(result);
         }
 
@@ -1454,13 +1459,13 @@ namespace SIGOFCv3.Areas.Supervision.Controllers
         {
             bool success = false; string msj = "";
             VM_TRAMITE tramiteVerificar = null;
-           // VM_INFORME_DIGITAL iDigital = null;
+            // VM_INFORME_DIGITAL iDigital = null;
             int tramiteId = 0;
             try
             {
                 Log_Informe_Digital CLogInforme = new Log_Informe_Digital();
 
-             
+
                 /* prueba
                  iDigital = CLogInforme.ObtenerInformeDigitalShort(tramite.cod_Informe);
 
@@ -1480,13 +1485,13 @@ namespace SIGOFCv3.Areas.Supervision.Controllers
 
                         //actualizando número de informe de supervisión
                         tramiteVerificar.cCodificacion = tramiteVerificar.cCodificacion ?? "";
-                        
+
                         CLogica logInforme = new CLogica();
                         logInforme.ModificarNumeroInforme(tramiteVerificar.cod_Informe, tramiteVerificar.cCodificacion, tramiteVerificar.cAsunto, DateTime.Now);
 
                         //actualizando Informe digital
                         CLogInforme.ActualizarDatosSITD(tramiteVerificar.cod_Informe, tramiteVerificar.cCodificacion, tramiteVerificar.iCodTramite,
-                                                         tramiteVerificar.fechaRegistro,DateTime.Now, (ModelSession.GetSession())[0].COD_UCUENTA);
+                                                         tramiteVerificar.fechaRegistro, DateTime.Now, (ModelSession.GetSession())[0].COD_UCUENTA);
                         success = true;
                         msj = "Datos guardados Correctamente";
                     }
@@ -1518,10 +1523,10 @@ namespace SIGOFCv3.Areas.Supervision.Controllers
             outStream.Flush();
             outStream.Close();
         }
-        private void ModificarInformeWord(string codInformeDigital, string archivo,string correlativo,string clave)
-        {  
+        private void ModificarInformeWord(string codInformeDigital, string archivo, string correlativo, string clave)
+        {
             string path = Server.MapPath("~/" +
-                System.Configuration.ConfigurationManager.AppSettings["pathInformeDigital"]);            
+                System.Configuration.ConfigurationManager.AppSettings["pathInformeDigital"]);
             string pathFolder = Path.Combine(path, codInformeDigital);
             string pathFile = Path.Combine(pathFolder, archivo);
             if (System.IO.File.Exists(pathFile))
@@ -1532,7 +1537,7 @@ namespace SIGOFCv3.Areas.Supervision.Controllers
                     mem.Write(byteFile, 0, (int)byteFile.Length);
                     using (WordprocessingDocument wordDoc = WordprocessingDocument.Open(mem, true))
                     {
-                        var body = wordDoc.MainDocumentPart.Document.Body;                     
+                        var body = wordDoc.MainDocumentPart.Document.Body;
                         var paras = body.Elements<wp.Paragraph>();
                         HelperWord.BuscarReemplazarTexto(paras, "VAR_CORRELATIVO_SITD", correlativo);
                         HelperWord.SearchAndReplace(wordDoc, "VAR_PASSWORD_SITD", clave, true);
@@ -1540,7 +1545,7 @@ namespace SIGOFCv3.Areas.Supervision.Controllers
                     }
                     this.GuardarMemoryStream(mem, pathFile);
                 }
-            }  
+            }
         }
         [HttpGet]
         public JsonResult TramiteGetById(int id, string codTHabilitante = "", string codInforme = "")
@@ -1593,7 +1598,7 @@ namespace SIGOFCv3.Areas.Supervision.Controllers
                     CLogInforme.ActualizarDatosSITD(tramiteVerificar.cod_Informe, tramiteVerificar.cCodificacion, tramiteVerificar.iCodTramite,
                                                      tramiteVerificar.fechaRegistro, DateTime.Now, (ModelSession.GetSession())[0].COD_UCUENTA);
                 }
-              
+
 
                 success = true;
                 msj = "Datos actualizados Correctamente";
@@ -1604,13 +1609,62 @@ namespace SIGOFCv3.Areas.Supervision.Controllers
                 msj = "Error al actualizar los datos";
             }
 
-            return Json(new { success, msj ,data= tramiteVerificar });
+            return Json(new { success, msj, data = tramiteVerificar });
         }
         #endregion
-        #region Informe Digital      
-        
+        #region Informe Digital
+        //public PartialViewResult _InformeDigital()
+        //{
+        //var CLogInforme = new Log_Informe_Digital();
+        //var result = CLogInforme.GeneralListar("INFORME_DIGITAL_DESTINATARIO", "");
+        //return PartialView();
+        //}
+
+        public string UrlBase {
+            get {
+                return string.Format("{0}://{1}{2}", Request.Url.Scheme, Request.Url.Authority, Url.Content("~"));
+            }
+        }
+
+        public string PathCkeditor {
+            get {
+                return System.Configuration.ConfigurationManager.AppSettings["pathCkeditor"];
+            }
+        }
+
+        public JsonResult ckEditor()
+        {
+            //string command = Request["command"];
+
+            if (Request.Files.Count > 0)
+            {
+                HttpFileCollectionBase files = Request.Files;
+
+                HttpPostedFileBase file = files[0];
+                string extension = Path.GetExtension(file.FileName);
+                string name = string.Format("{0}{1}", DateTime.Now.ToString("yyyyMMddHHmmssfff"), extension);
+
+                //Configuracion base
+                string folderBase = this.PathCkeditor;
+
+                string folder = Server.MapPath("~/" + folderBase);
+                if (!Directory.Exists(folder))
+                {
+                    Directory.CreateDirectory(folder);
+                }
+
+                file.SaveAs(folder + "/" + name);
+
+                string url = string.Format("{0}{1}/{2}", this.UrlBase, folderBase, name);
+
+                return Json(new { fileName = name, uploaded = 1, url = url });
+            }
+
+            return Json(new { error = new { message = "No hay imágenes para cargar" } });
+        }
+
         [HttpPost]
-        public JsonResult NotificarAEspecialista(string codInforme,string codInformeDigital,string numTH)
+        public JsonResult NotificarAEspecialista(string codInforme, string codInformeDigital, string numTH)
         {
             bool success = false; string msj = "";
             Log_Informe_Digital logInforme = new Log_Informe_Digital();
@@ -1657,7 +1711,7 @@ namespace SIGOFCv3.Areas.Supervision.Controllers
                 if (mensaje[0] == "0")
                     msj = mensaje[1];
                 else msj = "Error al notificar al especialista";
-                success = false;                
+                success = false;
             }
             return Json(new { success, msj });
         }
@@ -1752,7 +1806,7 @@ namespace SIGOFCv3.Areas.Supervision.Controllers
                         antecedentes = CLogInforme.ObtenerAntecedentesFaunaConcesiones(COD_INFORME, cabecera.FirstOrDefault().COD_THABILITANTE, COD_MTIPO);
                         vertices = cabecera.Count() > 0 ? CLogInforme.ObtenerVerticeTH_Fauna(cabecera.FirstOrDefault().COD_THABILITANTE) : new List<VM_INFORME_DIGITAL_VERTICE>();
                         planManejo = CLogInforme.PlanManejoListarMaderable(COD_INFORME);
-                      //  planManejo = new List<VM_INFORME_DIGITAL_PM>();
+                        //  planManejo = new List<VM_INFORME_DIGITAL_PM>();
                         success = true;
                         break;
                     //Fauna Autorizaciones
@@ -1765,12 +1819,12 @@ namespace SIGOFCv3.Areas.Supervision.Controllers
                         cabecera = CLogInforme.ObtenerCabeceraFauna(COD_INFORME);//se trae informacion de las distitntas fuentes
                         iDigital = CLogInforme.ObtenerInformeDigital(/*codInformeDigital,*/ COD_INFORME); //se trae informacion de la base de datos de informe digital
                         antecedentes = CLogInforme.ObtenerAntecedentesFauna(COD_INFORME, cabecera.FirstOrDefault().COD_THABILITANTE, COD_MTIPO);
-                       // planManejoTH_Obs = CLogInforme.getPlanManejoTHabilitanteObservatorio(cabecera.FirstOrDefault().COD_THABILITANTE);
+                        // planManejoTH_Obs = CLogInforme.getPlanManejoTHabilitanteObservatorio(cabecera.FirstOrDefault().COD_THABILITANTE);
                         vertices = cabecera.Count() > 0 ? CLogInforme.ObtenerVerticeTH_Fauna(cabecera.FirstOrDefault().COD_THABILITANTE) : new List<VM_INFORME_DIGITAL_VERTICE>();
                         planManejo = new List<VM_INFORME_DIGITAL_PM>();
                         success = true;
                         break;
-                    default:                      
+                    default:
                         message = $"Falta implementar la obtención de datos para la modalidad con código {COD_MTIPO}";
                         break;
 
@@ -1779,10 +1833,10 @@ namespace SIGOFCv3.Areas.Supervision.Controllers
                 oficinaDefault = CLogInforme.ObtenerOficinaXModalidad(COD_MTIPO);
             }
             catch (Exception ex)
-            {               
+            {
                 message = $"Sucedió un error en el servidor. {ex.Message}";
             }
-            var jsonResult = Json(new { success, message, cabecera, antecedentes, planManejoTH_Obs, vertices, verticeTHSupervisado, iDigital, planManejo, oficinaDefault }, JsonRequestBehavior.AllowGet); 
+            var jsonResult = Json(new { success, message, cabecera, antecedentes, planManejoTH_Obs, vertices, verticeTHSupervisado, iDigital, planManejo, oficinaDefault }, JsonRequestBehavior.AllowGet);
             jsonResult.MaxJsonLength = int.MaxValue;
             return jsonResult;
         }
@@ -1805,7 +1859,7 @@ namespace SIGOFCv3.Areas.Supervision.Controllers
         [HttpPost]
         public JsonResult CambiarEstadoDigital(string codInformeDigital, int estado)
         {
-            bool success = false; string msj = "";        
+            bool success = false; string msj = "";
 
             try
             {
@@ -2003,7 +2057,7 @@ namespace SIGOFCv3.Areas.Supervision.Controllers
                 pathGeneradoDestino = Path.Combine(pathDocumentoDestino, nombreDocumentoNuevo);
 
 
-                
+
                 if (System.IO.File.Exists(pathGeneradoDestino))
                 { //si existe no se debe poder reemplazar ni eliminar del repositorio del SITD
                     throw new Exception($"0|El documento con el nombre {nombreDocumentoNuevo} existe en el repositorio del SITD, por lo tanto no se puede transferir. !!Comunicar a Soporte");
@@ -2075,19 +2129,19 @@ namespace SIGOFCv3.Areas.Supervision.Controllers
                 informeDigital.INFORME_DIGITAL = "";
                 new Log_Informe_Digital().ImportarInformeDigital(informeDigital, "DELETE");
 
-                
+
                 try
                 {
                     //eliminando archivo
                     string pathDocumento = Server.MapPath("~/" +
-                     System.Configuration.ConfigurationManager.AppSettings["pathInformeDigital"]);                    
-                   
+                     System.Configuration.ConfigurationManager.AppSettings["pathInformeDigital"]);
+
                     string codInformeDigital = COD_INFORME_DIGITAL;
                     string pathFolderGenerado = Path.Combine(pathDocumento, codInformeDigital);
                     if (System.IO.File.Exists(Path.Combine(pathFolderGenerado, nombreArchivo)))
-                       System.IO.File.Delete(Path.Combine(pathFolderGenerado, nombreArchivo));
+                        System.IO.File.Delete(Path.Combine(pathFolderGenerado, nombreArchivo));
                 }
-                catch (Exception){}
+                catch (Exception) { }
                 return Json(new { success = true, msj = "Archivo eliminado correctamente" });
             }
             catch (Exception)
@@ -2098,7 +2152,7 @@ namespace SIGOFCv3.Areas.Supervision.Controllers
         [HttpPost]
         public JsonResult CargarInformeDigital()
         {
-            string pathDocumento = Server.MapPath("~/" + 
+            string pathDocumento = Server.MapPath("~/" +
                 System.Configuration.ConfigurationManager.AppSettings["pathInformeDigital"]);
             if (Request.Files.Count > 0)
             {
@@ -2112,17 +2166,17 @@ namespace SIGOFCv3.Areas.Supervision.Controllers
                         Directory.CreateDirectory(pathFolderGenerado);
                     }
                     HttpPostedFileBase file = Request.Files[0];
-                    file.SaveAs(Path.Combine(pathFolderGenerado,file.FileName));
+                    file.SaveAs(Path.Combine(pathFolderGenerado, file.FileName));
                     VM_INFORME_DIGITAL informeDigital = new VM_INFORME_DIGITAL();
                     informeDigital.COD_INFORME_DIGITAL = codInformeDigital;
                     informeDigital.INFORME_DIGITAL = file.FileName;
                     new Log_Informe_Digital().ImportarInformeDigital(informeDigital);
 
-                    return Json(new { success = true, archivo = informeDigital.INFORME_DIGITAL , msj = "Archivo subido correctamente" });
+                    return Json(new { success = true, archivo = informeDigital.INFORME_DIGITAL, msj = "Archivo subido correctamente" });
                 }
                 catch (Exception ex)
                 {
-                    return Json(new { success = false, msj = "Sucedió un error al subir el archivo" ,error=ex.Message});
+                    return Json(new { success = false, msj = "Sucedió un error al subir el archivo", error = ex.Message });
                 }
             }
             else
@@ -2469,6 +2523,8 @@ namespace SIGOFCv3.Areas.Supervision.Controllers
         [HttpPost]
         public ActionResult GuardarFormatoControlCalidad(VM_FControlCalidadSupervision vm)
         {
+            VM_Menu_Rol mr = HelperSigo.GetRol("MODULO SUPERVISION", "Informe de Supervisión");
+            vm.codPerfil = mr.PERFIL;
             string codUsuario = (ModelSession.GetSession())[0].COD_UCUENTA;
             CLogica log = new CLogica();
             return Json(log.registrarFControlCalidad(vm, codUsuario));

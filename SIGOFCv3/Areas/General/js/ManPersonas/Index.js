@@ -46,7 +46,8 @@ ManPersonas.fnLoadManGrillaPaging = function () {
 
             _ManGrillaPaging.fnReadConfigManGrillaPaging();
 
-            window.location = url_crud + "?asCodPersona=" + codpersona + '&' + 'tipo=' + be.titleMenu.substring(0, 1);
+            //window.location = url_crud + "?asCodPersona=" + codpersona + '&' + 'tipo=' + be.titleMenu.substring(0, 1);
+            window.location = url_crud + "?asCodPersona=" + codpersona;
         }
     });
 }

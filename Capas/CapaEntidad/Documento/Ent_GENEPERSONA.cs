@@ -100,14 +100,44 @@ namespace CapaEntidad.DOC
         [Description("OUTPUTPARAM01")]
         public String OUTPUTPARAM01 { get; set; }
 
+        //TGS 29-11-2022: Agrega atributos para tipo de cargo
+        [Description("ANIO")]
+        public String ANIO { get; set; }
+        [Description("NROLICENCIA")]
+        public String NROLICENCIA { get; set; }
+        [Description("RESAPROBACION")]
+        public String RESAPROBACION { get; set; }
+        [Description("OTORGAMIENTO")]
+        public String OTORGAMIENTO { get; set; }
+        [Description("COD_CATEGORIA")]
+        public String COD_CATEGORIA { get; set; }
+        [Description("ESTADO_REGENTE")]
+        public String ESTADO_REGENTE { get; set; }
+        [Description("CIP")]
+        public String CIP { get; set; }
+        [Description("COD_MENSION")]
+        public String COD_MENSION { get; set; }
+        [Description("MENSION")]
+        public String MENSION { get; set; }
+        [Description("COD_SECUENCIAL")]
+        public Int32 COD_SECUENCIAL { get; set; }
+        [Description("TIPO_CARGO")]
+        public String TIPO_CARGO { get; set; }
+
         [Category("LIST"), Description("ListMComboDIdentidad")]
         public List<Ent_GENEPERSONA> ListMComboDIdentidad { get; set; }
         [Category("LIST"), Description("ListCTipoPersona")]
         public List<Ent_GENEPERSONA> ListCTipoPersona { get; set; }
+        [Category("LIST"), Description("ListTipoCargo")]
+        public List<Ent_GENEPERSONA> ListTipoCargo { get; set; }
+        [Category("LIST"), Description("ListMencion")]
+        public List<Ent_GENEPERSONA> ListMencion { get; set; }
+
         public Ent_GENEPERSONA()
         {
             RegEstado = -1;
             this.FLAG_FIRMA = -1;
+            COD_SECUENCIAL = -1;
         }
     }
 }

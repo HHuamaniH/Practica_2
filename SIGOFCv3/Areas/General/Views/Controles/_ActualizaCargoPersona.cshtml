@@ -1,0 +1,186 @@
+﻿
+@model CapaEntidad.ViewModel.VM_Persona
+
+<script src="~/Areas/General/js/Controles/_ActualizaCargoPersona.js"></script>
+<script src="~/Scripts/jquery.sumoselect.min.js"></script>
+<link href="~/Areas/General/css/Controles/sumoselect.css" rel="stylesheet" />
+
+<script type="text/javascript">
+    _ActualizaCargoPersona.fnLoadData('@Html.Raw(Json.Encode(@Model.ddlITipoCargo))');
+</script>
+
+<style type="text/css">
+    .open {
+        transform: rotate(0deg);
+    }
+
+    .SumoSelect {
+        width: 99%;
+    }
+
+        .SumoSelect > .optWrapper {
+            position: unset;
+            width: 100%;
+        }
+</style>
+
+<div class="modal-dialog modal-lg" role="document" id="divActualizaCargo">
+    <div class="modal-content">
+        <div class="modal-header text-small" style="cursor:move;padding:0.5rem;">
+            <h5>Editar Tipo de Cargo</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar" id="btnCloseDialog">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body">
+            @Html.HiddenFor(m => m.codigoPersona)
+            @Html.Hidden("hdfFormulario", (string)ViewBag.hdfFormulario)
+            @Html.Hidden("hdfTipoPersona", (string)ViewBag.hdfTipoPersona)
+
+            <form id="frmActualizaCargo" method="post">
+                <fieldset class="border p-2 m-1">
+                    <div class="card">
+                        <div id="dvTituloPNatural" class="card-header text-small text-bold" style="display:none">
+                            Documento de Identidad
+                        </div>
+                        <div class="card-body">
+                            <div id="dvPNatural" style="display:none">
+                                <div class="form-row">
+                                    <div class="form-group col-md-5">
+                                        <label for="ddlItemPN_DITipoId" class="text-small">Tipo de Documento</label>
+                                        @Html.DropDownListFor(m => m.ddlItemPN_DITipoId, new SelectList(Model.ddlItemPN_DITipo, "Value", "Text"), new { @class = "form-control form-control-sm", disabled = true })
+                                    </div>
+                                    <div class="form-group col-md-3">
+                                        <label for="txtItemPN_DINumero" class="text-small">Número</label>
+                                        <div class="input-group" style="cursor:pointer">
+                                            @Html.EditorFor(m => m.txtItemPN_DINumero, new { htmlAttributes = new { @class = "form-control form-control-sm", placeholder = "Número", readOnly = true } })
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-md-4">
+                                        <label for="txtItemPN_DIRUC" class="text-small">RUC</label>
+                                        @Html.EditorFor(m => m.txtItemPN_DIRUC, new { htmlAttributes = new { @class = "form-control form-control-sm", placeholder = "RUC", style = "text-transform:uppercase", readOnly = true } })
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group col-md-4">
+                                        <label for="txtItemPN_APaterno" class="text-small">Apellido Paterno</label>
+                                        @Html.EditorFor(m => m.txtItemPN_APaterno, new { htmlAttributes = new { @class = "form-control form-control-sm", placeholder = "Apellido Paterno", style = "text-transform:uppercase", readOnly = true } })
+                                    </div>
+                                    <div class="form-group col-md-4">
+                                        <label for="txtItemPN_AMaterno" class="text-small">Apellido Materno</label>
+                                        @Html.EditorFor(m => m.txtItemPN_AMaterno, new { htmlAttributes = new { @class = "form-control form-control-sm", placeholder = "Apellido Materno", style = "text-transform:uppercase", readOnly = true } })
+                                    </div>
+                                    <div class="form-group col-md-4">
+                                        <label for="txtItemPN_Nombres" class="text-small">Nombres</label>
+                                        @Html.EditorFor(m => m.txtItemPN_Nombres, new { htmlAttributes = new { @class = "form-control form-control-sm", placeholder = "Nombres", style = "text-transform:uppercase", readOnly = true } })
+                                    </div>
+                                </div>
+                            </div>
+                            <div id="dvPJuridica" style="display:none">
+                                <div class="form-row">
+                                    <div class="form-group col-md-3">
+                                        <label for="txtItemPJ_RUC" class="text-small">RUC</label>
+                                        <div class="input-group" style="cursor:pointer">
+                                            @Html.EditorFor(m => m.txtItemPJ_RUC, new { htmlAttributes = new { @class = "form-control form-control-sm", placeholder = "Número", readOnly = true } })
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-md-9">
+                                        <label for="txtItemPJ_RSocial" class="text-small">Razón Social</label>
+                                        @Html.EditorFor(m => m.txtItemPJ_RSocial, new { htmlAttributes = new { @class = "form-control form-control-sm", placeholder = "Razón Social", style = "text-transform:uppercase", readOnly = true } })
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group col-md-6">
+                                    <label class="col-form-label text-small">Tipo de Cargo</label>
+                                    @Html.DropDownListFor(m => m.ddlITipoCargoId, new SelectList(Model.ddlITipoCargo, "Value", "Text"), new { @class = "form-control form-control-sm" })
+                                    @Html.HiddenFor(m => m.hdfITipoCargo)
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div id="dvINumRegFfs" class="form-group col-md-4">
+                                    <label for="lblINumRegFfs" class="text-small">Nro. Registro FFS</label>
+                                    @Html.EditorFor(m => m.txtINumRegFfs, new { htmlAttributes = new { @class = "form-control form-control-sm" } })
+                                </div>
+                                <div id="dvINumRegProf" class="form-group col-md-4">
+                                    <label for="lblINumRegProf" class="text-small">Nro. Registro Profesional</label>
+                                    @Html.EditorFor(m => m.txtINumRegProf, new { htmlAttributes = new { @class = "form-control form-control-sm" } })
+                                </div>
+                                <div id="dvICargo" class="form-group col-md-4">
+                                    <label for="lblICargo" class="text-small">Cargo</label>
+                                    @Html.EditorFor(m => m.txtICargo, new { htmlAttributes = new { @class = "form-control form-control-sm" } })
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div id="dvINumColegiatura" class="form-group col-md-4">
+                                    <label for="lblINumRegProf" class="text-small">Nro. Colegiatura</label>
+                                    @Html.EditorFor(m => m.txtINumColegiatura, new { htmlAttributes = new { @class = "form-control form-control-sm" } })
+                                </div>
+                                <div id="dvINivelAcademico" class="form-group col-md-4">
+                                    <label for="lblINivelAcademicoId" class="text-small">Nivel Académico</label>
+                                    @Html.DropDownListFor(m => m.ddlINivelAcademicoId, new SelectList(Model.ddlINivelAcademico, "Value", "Text"), new { @class = "form-control form-control-sm" })
+                                </div>
+                                <div id="dvIEspecialidad" class="form-group col-md-4">
+                                    <label for="lblIEspecialidadId" class="text-small">Especialidad</label>
+                                    @Html.DropDownListFor(m => m.ddlIEspecialidadId, new SelectList(Model.ddlIEspecialidad, "Value", "Text"), new { @class = "form-control form-control-sm" })
+                                </div>
+                            </div>
+                            <div id="dvRegente">
+                                <div class="form-row">
+                                    <div class="form-group col-md-2">
+                                        <label for="lblAnio" class="text-small">Año</label>
+                                        @Html.DropDownListFor(m => m.ddlAnioId, new SelectList(Model.ddlAnio, "Value", "Text"), new { @class = "form-control form-control-sm" })
+                                    </div>
+                                    <div class="form-group col-md-3">
+                                        <label for="lblNroLicencia" class="text-small">Nro. Licencia</label>
+                                        @Html.EditorFor(m => m.txtNroLicencia, new { htmlAttributes = new { @class = "form-control form-control-sm" } })
+                                    </div>
+                                    <div class="form-group col-md-3">
+                                        <label for="lblFecLicencia" class="text-small">Fecha de Otorgamiento</label>
+                                        @Html.EditorFor(m => m.txtFecLicencia, new { htmlAttributes = new { @class = "form-control form-control-sm", placeholder = "dd/mm/yyyy", title = "la fecha a ingresar debe ser en el formato dd/mm/yyyy", maxlength = "10" } })
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group col-md-5">
+                                        <label for="lblResolucion" class="text-small">Nro. Resolución Directoral</label>
+                                        @Html.EditorFor(m => m.txtResolucion, new { htmlAttributes = new { @class = "form-control form-control-sm" } })
+                                    </div>
+                                    <div class="form-group col-md-7">
+                                        <label for="lblCategoriaId" class="text-small">Categoría</label>
+                                        @Html.DropDownListFor(m => m.ddlCategoriaId, new SelectList(Model.ddlCategoria, "Value", "Text"), new { @class = "form-control form-control-sm" })
+                                    </div>
+                                </div>
+                                <div id="dvIMencionRegencia" class="form-row" style="display:none;">
+                                    <div class="form-group col-md-12">
+                                        <label for="lblMencionRegenciaId" class="text-small">Menciones de la Regencia</label>
+                                        @Html.DropDownListFor(m => m.ddlMencionRegenciaId, new SelectList(Model.ddlMencionRegencia, "Value", "Text"), new { @class = "form-control form-control-sm", @multiple = "multiple" })
+                                        @Html.HiddenFor(m => m.hdfMencionRegencia)
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group col-md-4">
+                                        <label for="lblCIP" class="text-small">Nro. CIP</label>
+                                        @Html.EditorFor(m => m.txtCIP, new { htmlAttributes = new { @class = "form-control form-control-sm" } })
+                                    </div>
+                                    <div class="form-group col-md-4">
+                                        <label for="lblEstado" class="text-small">Estado</label>
+                                        @Html.DropDownListFor(m => m.ddlEstadoId, new SelectList(Model.ddlEstado, "Value", "Text"), new { @class = "form-control form-control-sm" })
+                                    </div>
+                                </div>
+                            </div>
+                            <div id="dvOtro" class="form-row">
+                                <div class="form-group col-md-5">
+                                    <label for="lblOtro" class="text-small">Otros: Descripción</label>
+                                    @Html.EditorFor(m => m.txtOtro, new { htmlAttributes = new { @class = "form-control form-control-sm" } })
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </fieldset>
+            </form>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-primary btn-sm" onclick="_ActualizaCargoPersona.save()">Guardar</button>
+        </div>
+    </div>
+</div>

@@ -119,6 +119,7 @@ namespace CapaDatos.DOC
                                 oCampos.DOSMILVEINTE = Int32.Parse(dr["'2020'"].ToString());
                                 oCampos.DOSMILVEINTIUNO = Int32.Parse(dr["'2021'"].ToString());
                                 oCampos.DOSMILVEINTIDOS = Int32.Parse(dr["'2022'"].ToString());
+                                oCampos.DOSMILVEINTITRES = Int32.Parse(dr["'2023'"].ToString());
                                 oCampos.TOTAL = Int32.Parse(dr["TOTAL"].ToString());
                                 oCEntReporte.ListISupervision_Modalidad_Anio.Add(oCampos);
                             }
@@ -149,6 +150,7 @@ namespace CapaDatos.DOC
                                 oCampos.DOSMILVEINTE = Int32.Parse(dr["'2020'"].ToString());
                                 oCampos.DOSMILVEINTIUNO = Int32.Parse(dr["'2021'"].ToString());
                                 oCampos.DOSMILVEINTIDOS = Int32.Parse(dr["'2022'"].ToString());
+                                oCampos.DOSMILVEINTITRES = Int32.Parse(dr["'2023'"].ToString());
                                 oCampos.TOTAL = Int32.Parse(dr["TOTAL"].ToString());
                                 oCEntReporte.ListISupervision_Region_Anio.Add(oCampos);
                             }
@@ -200,6 +202,7 @@ namespace CapaDatos.DOC
                                 oCampos.DOSMILVEINTE = Int32.Parse(dr["DOSMILVEINTE"].ToString());
                                 oCampos.DOSMILVEINTIUNO = Int32.Parse(dr["DOSMILVEINTIUNO"].ToString());
                                 oCampos.DOSMILVEINTIDOS = Int32.Parse(dr["DOSMILVEINTIDOS"].ToString());
+                                oCampos.DOSMILVEINTITRES = Int32.Parse(dr["DOSMILVEINTITRES"].ToString());
                                 oCampos.TOTAL = Int32.Parse(dr["TOTAL"].ToString());
 
                                 lsCEntidad.ListCapacitacionRegion.Add(oCampos);

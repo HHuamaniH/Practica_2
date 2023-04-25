@@ -8,6 +8,7 @@ namespace CapaEntidad.ViewModel.DOC
         public string fechaRecepcionIS { get; set; }
         public string eJefeODC { get; set; }
         public string eJefeODCID { get; set; }
+        public string codPerfil { get; set; }
         public List<VM_FControlCalidadSupervision_Det> lstISupervision { get; set; }
         public List<VM_FControlCalidadSupervision_Det> lstDatosReg { get; set; }
     }

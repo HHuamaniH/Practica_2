@@ -26,9 +26,11 @@ _Participante.fnShowDatosParticipante = function () {
     _Participante.frm.find("#dvItemPart_Funcion").hide();
     _Participante.frm.find("#dvItemPart_Tema").hide();
     _Participante.frm.find("#dvItemPart_Institucion").hide();
+    _Participante.frm.find("#dvItemPart_Mochila").hide();
     if (_Participante.frm.find("#hdfItemPart_TipoParticipante").val() == "ASISTENTE") {
         _Participante.frm.find(".dvItemPart_DatosAsistente").show();
         _Participante.frm.find("#dvItemPart_Constancia").show();
+        _Participante.frm.find("#dvItemPart_Mochila").show();
     } else if (_Participante.frm.find("#hdfItemPart_TipoParticipante").val() == "PONENTE") {
         _Participante.frm.find("#dvItemPart_Constancia").show();
         _Participante.frm.find("#dvItemPart_Tema").show();
@@ -44,7 +46,7 @@ _Participante.fnViewModalTHabilitante = function () {
     var option = { url: url, type: 'GET', datos: { hdfFormulario: "TITULO_HABILITANTE" }, divId: "mdlManCapacitacion_Participante_THabilitante" };
     utilSigo.fnOpenModal(option, function () {
         vpTHabilitante.fnAsignarDatos = function (obj) {
-            if (obj!=null && obj != "") {
+            if (obj != null && obj != "") {
                 var data = vpTHabilitante.dtTituloHabilitante.row($(obj).parents('tr')).data();
                 _Participante.frm.find("#hdfItemPart_THabilitante").val(data["CODIGO"]);
                 _Participante.frm.find("#lblItemPart_THabilitante").val(data["NUMERO"]);
@@ -67,7 +69,7 @@ _Participante.fnViewModalTHabilitante = function () {
                     case "Forestación y/o Reforestación": publico = "0000078"; break;
                     case "No Maderables Aguaje": publico = "0000079"; break;
                 }
-                _Participante.frm.find("#ddlItemPart_PublicoId").select2('val',[publico]);
+                _Participante.frm.find("#ddlItemPart_PublicoId").select2('val', [publico]);
 
                 $("#mdlManCapacitacion_Participante_THabilitante").modal('hide');
             }
@@ -125,7 +127,7 @@ _Participante.fnEvents = function () {
         _Participante.fnShowTHabilitante()
     });
 }
-_Participante.fnCargarPublicoParticipante = function (codGrupoPublico,fn) {
+_Participante.fnCargarPublicoParticipante = function (codGrupoPublico, fn) {
     var urlPublico = urlLocalSigo + "Capacitacion/ManCapacitacion/GetPublicoParticipante";
     utilSigo.loadAjaxCombo(urlPublico, _Participante.frm.find("#ddlItemPart_PublicoId"), { codGrupoPublico: codGrupoPublico }, null, false, fn);
 }
@@ -148,12 +150,12 @@ _Participante.fnLoadDatosParticipante = function (data) {
         } else {
             _Participante.frm.find("#txtItemPart_Cargo").val(data["CARGO"]);
         }
-        
+
         _Participante.frm.find("#txtItemPart_Telefono").val(data["TELEFONO"]);
         _Participante.frm.find("#txtItemPart_Edad").val(data["EDAD"]);
         _Participante.frm.find("#ddlItemPart_ComunidadId").select2("val", [data["COD_CCNN"]]);
         var etnia = data["ETNIA"] == "" ? "0000000" : data["ETNIA"];
-        _Participante.frm.find("#ddlItemPart_EtniaId").select2("val",[etnia]);
+        _Participante.frm.find("#ddlItemPart_EtniaId").select2("val", [etnia]);
         _Participante.frm.find("#txtItemPart_Correo").val(data["CORREO"]);
         _Participante.frm.find("#txtItemPart_Funcion").val(data["FUNCION"]);
         _Participante.frm.find("#txtItemPart_Tema").val(data["FUNCION"]);
@@ -163,6 +165,7 @@ _Participante.fnLoadDatosParticipante = function (data) {
         _Participante.fnCargarPublicoParticipante(data["MAE_COD_GRUPOPUBLICOPARTICIPANTE"], function () {
             _Participante.frm.find("#ddlItemPart_PublicoId").select2("val", [data["MAE_COD_PUBLICOPARTICIPANTE"]]);
         });
+        _Participante.frm.find("#ddlItemPart_MochilaId").val((data["MOCHILAFORESTAL"].trim() == "") ? "0000000" : data["MOCHILAFORESTAL"]);
     } else {
         _Participante.frm.find("#hdfItemPart_RegEstado").val("1");
         _Participante.frm.find("#hdfItemPart_Participante").val("");
@@ -175,10 +178,10 @@ _Participante.fnSetDatosParticipante = function () {
     data["RegEstado"] = regEstado == "0" ? "2" : regEstado;
     data["COD_INSTITUCION"] = _Participante.frm.find("#ddlItemPart_InstitucionId").val();
     data["NOM_INSTITUCION"] = data["COD_INSTITUCION"] == "0000000" ? "" : _Participante.frm.find("#ddlItemPart_InstitucionId").select2("data")[0].text;
-    data["NUM_THABILITANTE"]=_Participante.frm.find("#lblItemPart_THabilitante").val();
-    data["COD_THABILITANTE"]=_Participante.frm.find("#hdfItemPart_THabilitante").val();
-    data["APELLIDOS_NOMBRES"]=_Participante.frm.find("#lblItemPart_Participante").val();
-    data["COD_PERSONA"]=_Participante.frm.find("#hdfItemPart_Participante").val();
+    data["NUM_THABILITANTE"] = _Participante.frm.find("#lblItemPart_THabilitante").val();
+    data["COD_THABILITANTE"] = _Participante.frm.find("#hdfItemPart_THabilitante").val();
+    data["APELLIDOS_NOMBRES"] = _Participante.frm.find("#lblItemPart_Participante").val();
+    data["COD_PERSONA"] = _Participante.frm.find("#hdfItemPart_Participante").val();
     data["GENERO"] = _Participante.frm.find("#hdfItemPart_Genero").val();
     data["N_DOCUMENTO"] = _Participante.frm.find("#hdfItemPart_Documento").val();
     if (_Participante.fnIsAnio2021()) {
@@ -186,8 +189,8 @@ _Participante.fnSetDatosParticipante = function () {
     } else {
         data["CARGO"] = _Participante.frm.find("#txtItemPart_Cargo").val();
     }
-    data["TELEFONO"]=_Participante.frm.find("#txtItemPart_Telefono").val();
-    data["EDAD"]=_Participante.frm.find("#txtItemPart_Edad").val();
+    data["TELEFONO"] = _Participante.frm.find("#txtItemPart_Telefono").val();
+    data["EDAD"] = _Participante.frm.find("#txtItemPart_Edad").val();
     data["COD_CCNN"] = _Participante.frm.find("#ddlItemPart_ComunidadId").val();
     data["CCNN"] = data["COD_CCNN"] == "0000000" ? "" : _Participante.frm.find("#ddlItemPart_ComunidadId").select2("data")[0].text;
     data["ETNIA"] = _Participante.frm.find("#ddlItemPart_EtniaId").val();
@@ -197,7 +200,8 @@ _Participante.fnSetDatosParticipante = function () {
     if (_Participante.frm.find("#hdfItemPart_TipoParticipante").val() == "PONENTE") {
         data["FUNCION"] = _Participante.frm.find("#txtItemPart_Tema").val();
     }
-    data["COD_CONSTANCIA"]=_Participante.frm.find("#txtItemPart_Constancia").val();
+    data["COD_CONSTANCIA"] = _Participante.frm.find("#txtItemPart_Constancia").val();
+    data["MOCHILAFORESTAL"] = _Participante.frm.find("#ddlItemPart_MochilaId").val();
     data["OBSERVACION"] = _Participante.frm.find("#txtItemPart_Observacion").val();
     data["MAE_COD_GRUPOPUBLICOPARTICIPANTE"] = _Participante.frm.find("#ddlItemPart_GrupoPublicoId").val();
     data["GRUPOPUBLICOPARTICIPANTE"] = data["MAE_COD_GRUPOPUBLICOPARTICIPANTE"] == "0000000" ? "" : _Participante.frm.find("#ddlItemPart_GrupoPublicoId").select2("data")[0].text;
@@ -215,6 +219,12 @@ _Participante.fnSetDatosParticipante = function () {
 
 _Participante.fnCustomValidateForm = function () {
     if (!utilSigo.fnValidateForm_HideControl(_Participante.frm, _Participante.frm.find("#hdfItemPart_Participante"), _Participante.frm.find("#iconPersona"), false)) return false;
+    if (_Participante.frm.find("#hdfItemPart_TipoParticipante").val() == "ASISTENTE" && _Participante.frm.find("#ddlItemPart_MochilaId").val() == "0000000") {
+        utilSigo.toastWarning("Aviso", "Seleccione una opción a la consulta");
+        _Participante.frm.find("#ddlItemPart_MochilaId").focus();
+        return false;
+    }
+
     return true;
 }
 _Participante.fnShowIsAnio2021 = function (fecha) {
@@ -239,7 +249,7 @@ _Participante.fnIsAnio2021 = function (fechaCreacion) {
     return isMoreAnio2021;
 }
 _Participante.fnShowSelectCargo = function () {
-    var cssSelectCargo= _Participante.frm.find(".cssSelectCargo");
+    var cssSelectCargo = _Participante.frm.find(".cssSelectCargo");
     _Participante.frm.find(".cssTxtCargo").remove();
     cssSelectCargo.attr('id', 'txtItemPart_Cargo');
     cssSelectCargo.attr('name', 'txtItemPart_Cargo');
@@ -277,7 +287,7 @@ _Participante.fnInit = function (_tipoParticipante, data) {
     jQuery.validator.addMethod("invalidFrmParticipante", function (value, element) {
         switch ($(element).attr('id')) {
             case 'ddlItemPart_InstitucionId':
-                if (_Participante.frm.find("#dvItemPart_Institucion")[0].style.display=="none") {
+                if (_Participante.frm.find("#dvItemPart_Institucion")[0].style.display == "none") {
                     return true;
                 }
                 return (value == '0000000') ? false : true;

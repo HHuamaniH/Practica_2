@@ -349,13 +349,14 @@ namespace SIGOFCv3.Helper
         {
             CEntidadUC result = new CEntidadUC();
             var data = ModelSession.GetSession();
-            VM_Menu_Rol mr =new VM_Menu_Rol();
+            VM_Menu_Rol mr = new VM_Menu_Rol();
             if (data != null)
             {
                 result = (CEntidadUC)data[0];
                 bool _break = false;
                 if (result.ListUCDMMENU.Count > 0)
                 {
+                    mr.PERFIL = result.COD_SPERFIL;
                     foreach (var item in result.ListUCDMMENU)
                     {
                         if (item.ListMENUGRUPO.Count > 0)

@@ -59,6 +59,36 @@ namespace CapaDatos.DOC
                 throw ex;
             }
         }
+        public List<VM_Cbo> GetCombo(OracleConnection cn, CEntidad oCEntidad)
+        {
+            List<VM_Cbo> listCbo = null;
+            try
+            {
+                using (OracleDataReader dr = dBOracle.SelDrdDefault(cn, null, "DOC_OSINFOR_ERP_MIGRACION.spGeneral_Combo_Listar", oCEntidad))
+                {
+                    if (dr != null)
+                    {
+                        VM_Cbo oCampos;
+                        listCbo = new List<VM_Cbo>();
+                        if (dr.HasRows)
+                        {
+                            while (dr.Read())
+                            {
+                                oCampos = new VM_Cbo();
+                                oCampos.Value = dr["CODIGO"].ToString();
+                                oCampos.Text = dr["DESCRIPCION"].ToString();
+                                listCbo.Add(oCampos);
+                            }
+                        }
+                    }
+                }
+                return listCbo;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
         /// <summary>
         /// 
         /// </summary>
@@ -442,8 +472,13 @@ namespace CapaDatos.DOC
                                     vm.desPersona = dr["APELLIDOS_NOMBRES"].ToString();
                                     vm.usuario = dr["USUARIO_LOGIN"].ToString();
                                     string COD_UGRUPO = dr["COD_UGRUPO"].ToString();
-                                    vm.esPublico = COD_UGRUPO.Trim() == "0000013" ? true : false;                                    
+                                    vm.esPublico = COD_UGRUPO.Trim() == "0000013" ? true : false;
                                     vm.activo = Convert.ToBoolean(dr["ESTADO_ACTIVO"]);
+                                    vm.ddlTipoPersonalId = dr["TIPO_PERSONAL"].ToString();
+                                    vm.cargo = dr["CARGO"].ToString();
+                                    vm.ddlLugarTrabajoId = dr["LUGAR_TRABAJO"].ToString();
+                                    vm.oficina = dr["OFICINA"].ToString();
+                                    vm.institucion = dr["INSTITUCION"].ToString();
                                     vm.estado = 0;
                                 }
                             }
@@ -472,13 +507,13 @@ namespace CapaDatos.DOC
                             if (dr.HasRows)
                             {
                                 while (dr.Read())
-                                {         
+                                {
                                     vm.id_acceso = dr.GetInt32(dr.GetOrdinal("ID_ACCESO"));
                                     vm.accesoNoCaduca = Convert.ToBoolean(dr["ACCESO_NOCADUCA"]);
                                     vm.fecha_registro = dr.GetString(dr.GetOrdinal("FECHA_CREACION"));
                                     vm.fecha_solicitud = dr.GetString(dr.GetOrdinal("FECHA_SOLICITUD"));
                                     vm.fecha_desde = dr.GetString(dr.GetOrdinal("FECHA_DESDE"));
-                                    vm.fecha_hasta = dr.GetString(dr.GetOrdinal("FECHA_HASTA"));                     
+                                    vm.fecha_hasta = dr.GetString(dr.GetOrdinal("FECHA_HASTA"));
                                     vm.estado = 1;
                                 }
                             }
@@ -601,7 +636,7 @@ namespace CapaDatos.DOC
                     tr = cn.BeginTransaction();
                     //Grabando asignacion
                     dBOracle.ManExecute(cn, tr, "GENE_OSINFOR_ERP_MIGRACION.uspSistema_Seguridad_ListarV3", oCEntidad);
-                    tr.Commit();                   
+                    tr.Commit();
                 }
                 catch (Exception ex)
                 {

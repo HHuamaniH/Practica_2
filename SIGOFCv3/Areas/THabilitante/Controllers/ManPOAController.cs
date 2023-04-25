@@ -63,7 +63,7 @@ namespace SIGOFCv3.Areas.THabilitante.Controllers
 
                 ViewBag.hdfTipoFormulario = "3";
                 ViewBag.AlertaInicial = _alertaIncial;
-              
+
                 return View();
             }
             catch (Exception)
@@ -99,7 +99,7 @@ namespace SIGOFCv3.Areas.THabilitante.Controllers
                                 ViewBag.thBusFormulario = "POA";
                                 ViewBag.thTitleMenu = "POA/PO";
                                 ViewBag.thBusCriterio = "TODOS";
-                                
+
                             }
                             if (lstMenu == "2")
                             {
@@ -107,7 +107,7 @@ namespace SIGOFCv3.Areas.THabilitante.Controllers
                                 ViewBag.thBusFormulario = "DEMA";
                                 ViewBag.thTitleMenu = "Declaracion de Manejo";
                                 ViewBag.thBusCriterio = "TODOS";
-                               
+
                             }
                             if (lstMenu == "3")
                             {
@@ -115,7 +115,7 @@ namespace SIGOFCv3.Areas.THabilitante.Controllers
                                 ViewBag.thBusFormulario = "PMFI";
                                 ViewBag.thTitleMenu = "PMFI";
                                 ViewBag.thBusCriterio = "TODOS";
-                               
+
                             }
 
                             ViewBag.hdfTipoFormulario = "3";
@@ -149,21 +149,21 @@ namespace SIGOFCv3.Areas.THabilitante.Controllers
                 if (tipoFrmulario == "POA")
                 {
                     //obtenemos el rol sobre el formulario
-                     mr = HelperSigo.GetRol("MODULO TITULO HABILITANTE", "POA/PO");
+                    mr = HelperSigo.GetRol("MODULO TITULO HABILITANTE", "POA/PO");
                     ViewBag.CodRol = mr.NCODROL;
                     ViewBag.VAliasRol = mr.VALIAS;
                 }
                 if (tipoFrmulario == "DEMA")
                 {
                     //obtenemos el rol sobre el formulario
-                     mr = HelperSigo.GetRol("MODULO TITULO HABILITANTE", "Declaración de Manejo");
+                    mr = HelperSigo.GetRol("MODULO TITULO HABILITANTE", "Declaración de Manejo");
                     ViewBag.CodRol = mr.NCODROL;
                     ViewBag.VAliasRol = mr.VALIAS;
                 }
                 if (tipoFrmulario == "PMFI")
                 {
                     //obtenemos el rol sobre el formulario
-                     mr = HelperSigo.GetRol("MODULO TITULO HABILITANTE", "PMFI");
+                    mr = HelperSigo.GetRol("MODULO TITULO HABILITANTE", "PMFI");
                     ViewBag.CodRol = mr.NCODROL;
                     ViewBag.VAliasRol = mr.VALIAS;
                 }
@@ -197,7 +197,7 @@ namespace SIGOFCv3.Areas.THabilitante.Controllers
                 objVM.ListMadeCENSO = null;
                 objVM.ListNoMadeCENSO = null;
                 objVM.ListKARDEX = null;
-               
+
                 return View(objVM);
 
 
@@ -565,8 +565,8 @@ namespace SIGOFCv3.Areas.THabilitante.Controllers
                                                 oCampos.RENDIMIENTO = workSheet.Cells[rowIterator, 8].Value == null ? 0 : Decimal.Parse(workSheet.Cells[rowIterator, 8].Value.ToString().Trim());
                                                 oCampos.UNIDAD_MEDIDA = workSheet.Cells[rowIterator, 9].Value == null ? "" : workSheet.Cells[rowIterator, 9].Value.ToString().Trim();
                                                 oCampos.TIPOMADERABLE = workSheet.Cells[rowIterator, 10].Value == null ? "" : workSheet.Cells[rowIterator, 10].Value.ToString().Trim();
-                                                oCampos.PCA = workSheet.Cells[rowIterator, 12].Value == null ? "" : workSheet.Cells[rowIterator, 12].Value.ToString().Trim();
-                                                oCampos.OBSERVACION = workSheet.Cells[rowIterator, 13].Value == null ? "" : workSheet.Cells[rowIterator, 13].Value.ToString().Trim();
+                                                oCampos.PCA = workSheet.Cells[rowIterator, 11].Value == null ? "" : workSheet.Cells[rowIterator, 11].Value.ToString().Trim();
+                                                oCampos.OBSERVACION = workSheet.Cells[rowIterator, 12].Value == null ? "" : workSheet.Cells[rowIterator, 12].Value.ToString().Trim();
                                                 oCampos.RegEstado = 1;
 
                                                 if (!(workSheet.Cells[rowIterator, 3].Value == null ? "" : workSheet.Cells[rowIterator, 3].Value.ToString().Trim()).Equals(""))
@@ -748,7 +748,7 @@ namespace SIGOFCv3.Areas.THabilitante.Controllers
                                             isAdd = true;
 
                                             codEspecie = objLog.GetCodEspecie(
-                                                workSheet.Cells[rowIterator, 1].Value == null ? "" : workSheet.Cells[rowIterator, 1].Value.ToString().Trim(), 
+                                                workSheet.Cells[rowIterator, 1].Value == null ? "" : workSheet.Cells[rowIterator, 1].Value.ToString().Trim(),
                                                 workSheet.Cells[rowIterator, 2].Value == null ? "" : workSheet.Cells[rowIterator, 2].Value.ToString().Trim()
                                             );
 
@@ -769,7 +769,8 @@ namespace SIGOFCv3.Areas.THabilitante.Controllers
                                                 if (oCampos.TIPOMADERABLE.Equals("MADERABLES")) oCampos.UNIDAD_MEDIDA = "M3";
                                                 else if (oCampos.TIPOMADERABLE.Equals("CARBON")) oCampos.UNIDAD_MEDIDA = "KG";
 
-                                                if (!(workSheet.Cells[rowIterator, 3].Value == null ? "" : workSheet.Cells[rowIterator, 3].Value.ToString().Trim()).Equals("")) {
+                                                if (!(workSheet.Cells[rowIterator, 3].Value == null ? "" : workSheet.Cells[rowIterator, 3].Value.ToString().Trim()).Equals(""))
+                                                {
                                                     codEspecieSerfor = objLog.GetCodEspecie(
                                                         workSheet.Cells[rowIterator, 3].Value == null ? "" : workSheet.Cells[rowIterator, 3].Value.ToString().Trim(),
                                                         workSheet.Cells[rowIterator, 4].Value == null ? "" : workSheet.Cells[rowIterator, 4].Value.ToString().Trim()
@@ -784,7 +785,7 @@ namespace SIGOFCv3.Areas.THabilitante.Controllers
                                                 }
 
                                                 if (isAdd) ListPOAItemsDetalle.Add(oCampos);
-                                            }  
+                                            }
                                         }
                                     }
                                     else if (
@@ -883,7 +884,7 @@ namespace SIGOFCv3.Areas.THabilitante.Controllers
                                                     }
 
                                                     if (isAdd) ListPOAItemsDetalle.Add(oCampos);
-                                                }  
+                                                }
                                             }
                                         }
                                         else
@@ -928,7 +929,7 @@ namespace SIGOFCv3.Areas.THabilitante.Controllers
                                                     }
 
                                                     if (isAdd) ListPOAItemsDetalle.Add(oCampos);
-                                                }    
+                                                }
                                             }
                                         }
                                     }
@@ -1001,7 +1002,7 @@ namespace SIGOFCv3.Areas.THabilitante.Controllers
                                                     }
 
                                                     if (isAdd) ListPOAItemsDetalle.Add(oCampos);
-                                                }  
+                                                }
                                             }
                                         }
                                         else if (hdfItemCod_MTipo == "0000020")
@@ -1072,7 +1073,7 @@ namespace SIGOFCv3.Areas.THabilitante.Controllers
                                                     }
 
                                                     if (isAdd) ListPOAItemsDetalle.Add(oCampos);
-                                                }                                                   
+                                                }
                                             }
                                         }
                                         else
@@ -1108,13 +1109,14 @@ namespace SIGOFCv3.Areas.THabilitante.Controllers
                                                         if (oCampos.TIPOMADERABLE.Equals("MADERABLES")) oCampos.UNIDAD_MEDIDA = "M3";
                                                         else oCampos.UNIDAD_MEDIDA = "KG";
                                                     }
-                                                    else if (oCampos.TIPOMADERABLE.Equals("NO MADERABLES")) {
+                                                    else if (oCampos.TIPOMADERABLE.Equals("NO MADERABLES"))
+                                                    {
                                                         oCampos.UNIDAD_MEDIDA = "KG";
 
                                                         //Para que valores numéricos no vayan con -1
                                                         oCampos.DMC = 0;
                                                         oCampos.TOTAL_ARBOLES = 0;
-                                                    } 
+                                                    }
 
                                                     if (!(workSheet.Cells[rowIterator, 3].Value == null ? "" : workSheet.Cells[rowIterator, 3].Value.ToString().Trim()).Equals(""))
                                                     {
@@ -1132,13 +1134,13 @@ namespace SIGOFCv3.Areas.THabilitante.Controllers
                                                     }
 
                                                     if (isAdd) ListPOAItemsDetalle.Add(oCampos);
-                                                }    
+                                                }
                                             }
                                         }
                                     }
 
                                     break;
-                                #endregion
+                                    #endregion
                             }
 
 
@@ -1228,7 +1230,7 @@ namespace SIGOFCv3.Areas.THabilitante.Controllers
         }
         [HttpPost]
         public JsonResult ExportarExcel(string TVentana, string COD_THABILITANTE, int NumPoa, string hdfItemCod_MTipo,
-            string estado_origen, string indicador="")
+            string estado_origen, string indicador = "")
         {
 
 
@@ -1414,7 +1416,7 @@ namespace SIGOFCv3.Areas.THabilitante.Controllers
                             (estado_origen.Equals("PC"))
                         )
                         {
-                            result = ReportePOA.DescargaExceles("PoaMaderableBExtraccion_v3.xlsx", listParam);  
+                            result = ReportePOA.DescargaExceles("PoaMaderableBExtraccion_v3.xlsx", listParam);
                         }
                         else if (
                             (estado_origen.Equals("PN") && indicador.Equals("NM")) ||
@@ -1448,7 +1450,7 @@ namespace SIGOFCv3.Areas.THabilitante.Controllers
                             {
                                 result = ReportePOA.DescargaExceles("PoaMadNoMadBExtraccion_v3.xlsx", listParam);
                             }
-                        }    
+                        }
                     }
                     else
                     {
@@ -1500,7 +1502,7 @@ namespace SIGOFCv3.Areas.THabilitante.Controllers
                              OBSERVACION = cust.OBSERVACION,
                              COD_SECUENCIAL = cust.COD_SECUENCIAL,
                              RegEstado = cust.RegEstado
-                           
+
                          };
             var jsonResult = Json(new { data = lstMin }, JsonRequestBehavior.AllowGet);
             jsonResult.MaxJsonLength = int.MaxValue;
@@ -1518,7 +1520,9 @@ namespace SIGOFCv3.Areas.THabilitante.Controllers
                              NRO = i++,
                              PERSONA = cust.PERSONA,
                              N_DOCUMENTO = cust.N_DOCUMENTO,
-                             CARGO = cust.CARGO,
+                             //CARGO = cust.CARGO,
+                             COD_PTIPO = cust.COD_PTIPO,
+                             TIPO_CARGO = cust.TIPO_CARGO,
                              COD_PERSONA = cust.COD_PERSONA,
                              RegEstado = cust.RegEstado
                          };
@@ -1539,7 +1543,9 @@ namespace SIGOFCv3.Areas.THabilitante.Controllers
                              NRO = i++,
                              PERSONA = cust.PERSONA,
                              N_DOCUMENTO = cust.N_DOCUMENTO,
-                             CARGO = cust.CARGO,
+                             //CARGO = cust.CARGO,
+                             COD_PTIPO = cust.COD_PTIPO,
+                             TIPO_CARGO = cust.TIPO_CARGO,
                              COD_PERSONA = cust.COD_PERSONA,
                              RegEstado = cust.RegEstado
                          };
@@ -1559,7 +1565,9 @@ namespace SIGOFCv3.Areas.THabilitante.Controllers
                              NRO = i++,
                              PERSONA = cust.PERSONA,
                              N_DOCUMENTO = cust.N_DOCUMENTO,
-                             CARGO = cust.CARGO,
+                             //CARGO = cust.CARGO,
+                             COD_PTIPO = cust.COD_PTIPO,
+                             TIPO_CARGO = cust.TIPO_CARGO,
                              COD_PERSONA = cust.COD_PERSONA,
                              RegEstado = cust.RegEstado
                          };
@@ -1687,6 +1695,6 @@ namespace SIGOFCv3.Areas.THabilitante.Controllers
         {
             return PartialView();
         }
-       
+
     }
 }

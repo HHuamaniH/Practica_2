@@ -79,6 +79,37 @@ namespace CapaDatos.DOC
                                                 lsCEntidad.Add(oCampos);
                                             }
                                             break;
+                                        case "CODDOC_POA_CENSO":
+                                            while (dr.Read())
+                                            {
+                                                oCampos = new CEntidad();
+                                                if (dr["IdSistema"].ToString() != "0")
+                                                {
+                                                    oCampos.PARAMETRO01 = dr["Numero"].ToString();
+                                                    oCampos.PARAMETRO02 = dr["Bloque"].ToString();
+                                                    oCampos.PARAMETRO03 = dr["Faja"].ToString();
+                                                    oCampos.PARAMETRO04 = dr["CodArbol"].ToString();
+                                                    oCampos.PARAMETRO05 = dr["NombreComun"].ToString();
+                                                    oCampos.PARAMETRO06 = dr["NombreCientifico"].ToString();
+                                                    oCampos.PARAMETRO07 = dr["DAP"].ToString();
+                                                    oCampos.PARAMETRO08 = dr["HCT"].ToString();
+                                                    oCampos.PARAMETRO09 = dr["CF"].ToString();
+                                                    oCampos.PARAMETRO10 = dr["CoordenadaEste"].ToString();
+                                                    oCampos.PARAMETRO11 = dr["CoordenadaNorte"].ToString();
+                                                    oCampos.PARAMETRO12 = dr["Volumen"].ToString();
+                                                    oCampos.PARAMETRO13 = dr["Condicion"].ToString();
+                                                    oCampos.PARAMETRO14 = dr["TipoArbol"].ToString();
+                                                    oCampos.PARAMETRO15 = dr["ParcelaCorta"].ToString();
+                                                    oCampos.PARAMETRO16 = dr["NroExpediente"].ToString();
+                                                    oCampos.PARAMETRO17 = dr["NroResolucionAprobacion"].ToString();
+                                                    oCampos.PARAMETRO18 = dr["NroArbolVolumen"].ToString();
+                                                    oCampos.PARAMETRO19 = dr["NroArbol"].ToString();
+                                                    oCampos.PARAMETRO20 = dr["NroPlanManejo"].ToString();
+                                                    lsCEntidad.Add(oCampos);
+                                                }
+
+                                            }
+                                            break;
                                         default:
                                             while (dr.Read())
                                             {

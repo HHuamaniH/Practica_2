@@ -216,16 +216,36 @@ namespace CapaLogica.DOC
                 throw ex;
             }
         }
-        public ListResult GrabarPersonaSimple_v3(VM_Persona vm)
+        public ListResult GrabarPersonaSimple_v3(String coducuenta, VM_Persona vm)
         {
             ListResult resultado = new ListResult();
             try
             {
                 string msjRespuesta = "Se guardo con exito";
                 CEntidad oCampos = new CEntidad();
+                oCampos.COD_UCUENTA = coducuenta;
                 oCampos.COD_PERSONA = vm.codigoPersona;
                 oCampos.TIPO_PERSONA = vm.tipoPersona;
+                oCampos.TELEFONO = vm.txtTelefono != null ? vm.txtTelefono.Trim() : null;
+                oCampos.CORREO = vm.txtCorreo != null ? vm.txtCorreo.Trim() : null;
+                oCampos.COD_PTIPO = vm.hdfITipoCargo;
+                oCampos.NUM_REGISTRO_FFS = (vm.txtINumRegFfs != null) ? vm.txtINumRegFfs.Trim() : null;
+                oCampos.NUM_REGISTRO_PROFESIONAL = (vm.txtINumRegProf != null) ? vm.txtINumRegProf.Trim() : null;
+                oCampos.CARGO = (vm.txtICargo != null) ? vm.txtICargo.Trim() : null;
+                oCampos.COLEGIATURA_NUM = (vm.txtINumColegiatura != null) ? vm.txtINumColegiatura.Trim() : null;
+                oCampos.COD_NACADEMICO = vm.ddlINivelAcademicoId;
+                oCampos.COD_DPESPECIALIDAD = vm.ddlIEspecialidadId;
+                oCampos.ANIO = vm.ddlAnioId;
+                oCampos.NROLICENCIA = (vm.txtNroLicencia != null) ? vm.txtNroLicencia.Trim() : null;
+                oCampos.OTORGAMIENTO = (vm.txtFecLicencia != null) ? vm.txtFecLicencia.Trim() : null;
+                oCampos.RESAPROBACION = (vm.txtResolucion != null) ? vm.txtResolucion.Trim() : null;
+                oCampos.COD_CATEGORIA = (vm.ddlCategoriaId == "0000000") ? null : vm.ddlCategoriaId;
+                oCampos.CIP = (vm.txtCIP != null) ? vm.txtCIP.Trim() : null;
+                oCampos.ESTADO_REGENTE = (vm.ddlEstadoId == "-") ? null : vm.ddlEstadoId;
+                oCampos.OTRO = (vm.txtOtro != null) ? vm.txtOtro.Trim() : null;
+                oCampos.RegEstado = vm.RegEstadoPersona;
                 oCampos.OUTPUTPARAM01 = "";
+
                 if (vm.tipoPersona == "N")
                 {
                     if (string.IsNullOrEmpty(vm.txtItemPN_DINumero))
@@ -239,8 +259,6 @@ namespace CapaLogica.DOC
                     oCampos.DIRECCION = vm.txtItemPN_DLDireccion == null ? "" : vm.txtItemPN_DLDireccion;
                     oCampos.COD_UBIGEO = vm.hdfItemPN_DLUbigeo;
                     oCampos.UBIGEO = vm.hdlblItemPN_DLUbigeo;
-                    oCampos.CARGO = vm.txtICargo;
-                    oCampos.COD_PTIPO = vm.COD_PTIPO;
                 }
                 else //Jurídica
                 {
@@ -253,6 +271,40 @@ namespace CapaLogica.DOC
                     oCampos.UBIGEO = vm.hdlblItemPJ_DLUbigeo;
                     oCampos.FICHA_REGISTRAL = vm.txtItemPJ_FichaRegistral;
                 }
+
+                oCampos.ListTipoCargo = new List<CEntidad>();
+                if (vm.hdfITipoCargo != null && vm.hdfITipoCargo != "")
+                {
+                    CEntidad oParamsCargo;
+                    string[] codTipCargos = vm.hdfITipoCargo.Split(',');
+
+                    for (int i = 1; i < codTipCargos.Length; i++)
+                    {
+                        oParamsCargo = new CEntidad();
+                        oParamsCargo.COD_PTIPO = codTipCargos[i];
+                        oParamsCargo.RegEstado = 1;
+
+                        oCampos.ListTipoCargo.Add(oParamsCargo);
+                    }
+                }
+
+                oCampos.ListMencion = new List<CEntidad>();
+                if (vm.hdfMencionRegencia != null && vm.hdfMencionRegencia != "")
+                {
+                    CEntidad oParamsMencion;
+                    string[] codMencion = vm.hdfMencionRegencia.Split(',');
+
+                    for (int i = 1; i < codMencion.Length; i++)
+                    {
+                        oParamsMencion = new CEntidad();
+                        oParamsMencion.COD_MENSION = codMencion[i];
+                        oParamsMencion.COD_SECUENCIAL = 0;
+                        oParamsMencion.RegEstado = 1;
+
+                        oCampos.ListMencion.Add(oParamsMencion);
+                    }
+                }
+
                 oCDatos.RegPersonaGrabarSimple_v3(oCampos);
                 resultado.AddResultado(msjRespuesta, true);
             }
@@ -262,6 +314,61 @@ namespace CapaLogica.DOC
             }
             return resultado;
 
+        }
+
+        public ListResult GrabarTipoCargo(String coducuenta, VM_Persona vm)
+        {
+
+            ListResult resultado = new ListResult();
+            try
+            {
+                CEntidad oCampos = new CEntidad();
+                oCampos.BusFormulario = "ADICIONA_CARGO";
+                oCampos.COD_UCUENTA = coducuenta;
+                oCampos.COD_PERSONA = vm.codigoPersona;
+                oCampos.COD_PTIPO = vm.ddlITipoCargoId;
+                oCampos.NUM_REGISTRO_FFS = (vm.txtINumRegFfs != null) ? vm.txtINumRegFfs.Trim() : null;
+                oCampos.NUM_REGISTRO_PROFESIONAL = (vm.txtINumRegProf != null) ? vm.txtINumRegProf.Trim() : null;
+                oCampos.CARGO = (vm.txtICargo != null) ? vm.txtICargo.Trim() : null;
+                oCampos.COLEGIATURA_NUM = (vm.txtINumColegiatura != null) ? vm.txtINumColegiatura.Trim() : null;
+                oCampos.COD_NACADEMICO = vm.ddlINivelAcademicoId;
+                oCampos.COD_DPESPECIALIDAD = vm.ddlIEspecialidadId;
+                oCampos.ANIO = vm.ddlAnioId;
+                oCampos.NROLICENCIA = (vm.txtNroLicencia != null) ? vm.txtNroLicencia.Trim() : null;
+                oCampos.OTORGAMIENTO = (vm.txtFecLicencia != null) ? vm.txtFecLicencia.Trim() : null;
+                oCampos.RESAPROBACION = (vm.txtResolucion != null) ? vm.txtResolucion.Trim() : null;
+                oCampos.COD_CATEGORIA = (vm.ddlCategoriaId == "0000000") ? null : vm.ddlCategoriaId;
+                oCampos.CIP = (vm.txtCIP != null) ? vm.txtCIP.Trim() : null;
+                oCampos.ESTADO_REGENTE = (vm.ddlEstadoId == "-") ? null : vm.ddlEstadoId;
+                oCampos.OTRO = (vm.txtOtro != null) ? vm.txtOtro.Trim() : null;
+                oCampos.RegEstado = 1;
+                oCampos.OUTPUTPARAM01 = "";
+
+                oCampos.ListMencion = new List<CEntidad>();
+                if (vm.hdfMencionRegencia != null && vm.hdfMencionRegencia != "")
+                {
+                    CEntidad oParamsMencion;
+                    string[] codMencion = vm.hdfMencionRegencia.Split(',');
+
+                    for (int i = 1; i < codMencion.Length; i++)
+                    {
+                        oParamsMencion = new CEntidad();
+                        oParamsMencion.COD_MENSION = codMencion[i];
+                        oParamsMencion.COD_SECUENCIAL = 0;
+                        oParamsMencion.RegEstado = 1;
+
+                        oCampos.ListMencion.Add(oParamsMencion);
+                    }
+                }
+
+                string msjRespuesta = oCDatos.RegTipoCargoGrabar(oCampos);
+                resultado.AddResultado(msjRespuesta, true);
+            }
+            catch (Exception ex)
+            {
+                resultado.AddResultado("", false, ex.Message);
+            }
+            return resultado;
         }
         #endregion
     }

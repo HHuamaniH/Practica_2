@@ -48,8 +48,9 @@ namespace SIGOFCv3.Areas.Capacitacion.Models.ManCapacitacion
                         oCampos.TELEFONO = (workSheet.Cells[rowIterator, 12].Value ?? "").ToString().Trim();
                         oCampos.CORREO = (workSheet.Cells[rowIterator, 13].Value ?? "").ToString().Trim();
                         oCampos.COD_CONSTANCIA = (workSheet.Cells[rowIterator, 14].Value ?? "").ToString().Trim();
-                        oCampos.OBSERVACION = (workSheet.Cells[rowIterator, 15].Value ?? "").ToString().Trim();
-                        oCampos.NUM_THABILITANTE = (workSheet.Cells[rowIterator, 16].Value ?? "").ToString().Trim();
+                        oCampos.MOCHILAFORESTAL = (workSheet.Cells[rowIterator, 15].Value ?? "").ToString().Trim();
+                        oCampos.OBSERVACION = (workSheet.Cells[rowIterator, 16].Value ?? "").ToString().Trim();
+                        oCampos.NUM_THABILITANTE = (workSheet.Cells[rowIterator, 17].Value ?? "").ToString().Trim();
                         oCampos.RegEstado = 1;
 
                         if (oCampos.N_DOCUMENTO == "" || oCampos.N_DOCUMENTO.Length < 8 || oCampos.N_DOCUMENTO.Length > 8)
@@ -240,7 +241,7 @@ namespace SIGOFCv3.Areas.Capacitacion.Models.ManCapacitacion
                         oCampos = new CEntidad();
                         oCampos.FECHA_PROGRAMA = (workSheet.Cells[rowIterator, 1].Value ?? "").ToString().Trim().ToUpper().Substring(0, 10);
                         oCampos.HORA = (workSheet.Cells[rowIterator, 2].Value ?? "").ToString().Trim().ToUpper();
-                        oCampos.TEMA = (workSheet.Cells[rowIterator, 3].Value ?? "").ToString().Trim().ToUpper();                        
+                        oCampos.TEMA = (workSheet.Cells[rowIterator, 3].Value ?? "").ToString().Trim().ToUpper();
                         oCampos.RESPONSABLE = (workSheet.Cells[rowIterator, 4].Value ?? "").ToString().Trim();
                         oCampos.RegEstado = 1;
                         oCampos.COD_SECUENCIAL = 0;

@@ -352,6 +352,7 @@ namespace CapaEntidad.ViewModel
         //TGS:25/09/2021
         public string ddlArchivaInformeId { get; set; }
         public IEnumerable<VM_Cbo> ddlArchivaInforme { get; set; }
+        public string hdfPerfil { get; set; }
 
         public List<Ent_ISUPERVISION_EXSITU_INFRA_AREA> tbGrupoTaxonomico { get; set; }
         public List<Ent_ISUPERVISION_EXSITU_INFRA_AREA> tbEquipoContFisico { get; set; }
@@ -384,7 +385,6 @@ namespace CapaEntidad.ViewModel
         public List<Ent_GENEPERSONA> tbRelPelCentroCria { get; set; }
         public Ent_MANDATOS oMandatos { get; set; }
         public List<Ent_MANDATOS> ListMandatos { get; set; }
-
 
         public VM_Informe_ExSitu()
         {
@@ -502,6 +502,7 @@ namespace CapaEntidad.ViewModel
         public string txtConclusion { get; set; }
         public string txtAsunto { get; set; }
         public string txtContenido { get; set; }
+        public string hdfPerfil { get; set; }
         public List<Ent_INFORME_VERTICE> tbCoordenadaUTM { get; set; }
         public List<Ent_INFORME> tbEliTABLA { get; set; }
         public List<Ent_INFORME_PROGRAMA> tbPrograma { get; set; }
@@ -621,6 +622,7 @@ namespace CapaEntidad.ViewModel
         public string txtSector { get; set; }
         public string txtObservacion { get; set; }
         public string txtConclusion { get; set; }
+        public string hdfPerfil { get; set; }
         public List<Ent_INFORME> tbFotoSupervision { get; set; }
         public List<Ent_INFORME_PROGRAMA> tbPrograma { get; set; }
         public List<Ent_INFORME> tbManejoImpacto { get; set; }
@@ -725,6 +727,7 @@ namespace CapaEntidad.ViewModel
         public string txtPlanton { get; set; }
         public string txtComercializacion { get; set; }
         public string txtRevAcervo { get; set; }
+        public string hdfPerfil { get; set; }
         public List<Ent_INFORME_TCONCEPTO> tbTaraConcepto { get; set; }
         public List<Ent_INFORME_TCONCEPTO> tbManPlantacion { get; set; }
         public List<Ent_INFORME> tbAprovechamiento { get; set; }
@@ -770,5 +773,4 @@ namespace CapaEntidad.ViewModel
             ListMandatos = new List<Ent_MANDATOS>();
         }
     }
-
 }

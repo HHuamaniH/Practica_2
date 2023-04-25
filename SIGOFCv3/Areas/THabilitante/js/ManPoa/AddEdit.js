@@ -66,7 +66,7 @@ var ManPOA = {};
                     {
                         autoWidth: true, bSortable: false, visible: true,
                         mRender: function (data, type, row) {
-                            return '<i class="fa fa-lg fa-pencil-square-o" style="color:blue;cursor:pointer;" title="Editar" onclick="ManPOA.fnEditarPersona(this, ManPOA.dtItemAOcular);"></i>';
+                            return '<i class="fa fa-lg fa-pencil-square-o" style="color:blue;cursor:pointer;" title="Editar" onclick="ManPOA.fnEditarPersona(this, ManPOA.dtItemAOcular, ' + "'IOCULAR'" + ');"></i>';
 
                         }
                     },
@@ -79,7 +79,9 @@ var ManPOA = {};
                     { data: "NRO", autoWidth: true },
                     { data: "PERSONA", autoWidth: true },
                     { data: "N_DOCUMENTO", autoWidth: true },
-                    { data: "CARGO", autoWidth: true },
+                    //{ data: "CARGO", autoWidth: true },
+                    { data: "TIPO_CARGO", autoWidth: true },
+                    { data: "COD_PTIPO", visible: false },
                     { data: "RegEstado", visible: false }
                 ]
 
@@ -108,7 +110,7 @@ var ManPOA = {};
                     {
                         autoWidth: true, bSortable: false, visible: true,
                         mRender: function (data, type, row) {
-                            return '<i class="fa fa-lg fa-pencil-square-o" style="color:blue;cursor:pointer;" title="Editar" onclick="ManPOA.fnEditarPersona(this, ManPOA.dtItemIOcular);"></i>';
+                            return '<i class="fa fa-lg fa-pencil-square-o" style="color:blue;cursor:pointer;" title="Editar" onclick="ManPOA.fnEditarPersona(this, ManPOA.dtItemIOcular,' + "'ITIOCULAR'" + ');"></i>';
 
                         }
                     },
@@ -122,7 +124,9 @@ var ManPOA = {};
                     { data: "NRO", autoWidth: true },
                     { data: "PERSONA", autoWidth: true },
                     { data: "N_DOCUMENTO", autoWidth: true },
-                    { data: "CARGO", autoWidth: true },
+                    //{ data: "CARGO", autoWidth: true },
+                    { data: "TIPO_CARGO", autoWidth: true },
+                    { data: "COD_PTIPO", visible: false },
                     { data: "COD_PERSONA", visible: false },
                     { data: "RegEstado", visible: false }
                 ]
@@ -152,7 +156,7 @@ var ManPOA = {};
                     {
                         autoWidth: true, bSortable: false, visible: true,
                         mRender: function (data, type, row) {
-                            return '<i class="fa fa-lg fa-pencil-square-o" style="color:blue;cursor:pointer;" title="Editar" onclick="ManPOA.fnEditarPersona(this, ManPOA.dtItemTRAprobacion);"></i>';
+                            return '<i class="fa fa-lg fa-pencil-square-o" style="color:blue;cursor:pointer;" title="Editar" onclick="ManPOA.fnEditarPersona(this, ManPOA.dtItemTRAprobacion,' + "'ITRAPROBACION'" + ');"></i>';
 
                         }
                     },
@@ -166,7 +170,9 @@ var ManPOA = {};
                     { data: "NRO", autoWidth: true },
                     { data: "PERSONA", autoWidth: true },
                     { data: "N_DOCUMENTO", autoWidth: true },
-                    { data: "CARGO", autoWidth: true },
+                    //{ data: "CARGO", autoWidth: true },
+                    { data: "TIPO_CARGO", autoWidth: true },
+                    { data: "COD_PTIPO", visible: false },
                     { data: "RegEstado", visible: false }
 
                 ]
@@ -427,7 +433,7 @@ var ManPOA = {};
             if (this.value != "-") {
                 if (this.value == "CARBON" || this.value == "NO MADERABLES") {
                     ManPOA.ItemRAPoa.frmResolAprob.find("#ddlRAPoaUM").val("KG");
-                    }
+                }
                 else if (this.value == "MADERABLES") ManPOA.ItemRAPoa.frmResolAprob.find("#ddlRAPoaUM").val("M3");
 
                 ManPOA.ItemRAPoa.frmResolAprob.find("#ddlRAPoaUM").attr("disabled", true);
@@ -437,6 +443,11 @@ var ManPOA = {};
                 ManPOA.ItemRAPoa.frmResolAprob.find("#ddlRAPoaUM").attr("disabled", false);
             }
         });
+
+        //MEJORA INTEGRACION SIADO
+        if (true) {
+
+        }
     };
     this.validacionGeneral = function () {
         var ids = ["ddlItemIndicadorId", "ddlODRegistroId"];
@@ -538,7 +549,6 @@ var ManPOA = {};
     }
 
     this.fnBuscarPersona = function (_dom, _tipoPersonaSIGOsfc) {
-        debugger
         var url = urlLocalSigo + "General/Controles/_BuscarPersonaGeneral";
         var option = { url: url, type: 'GET', datos: { asBusGrupo: "PERSONA", asCodPTipo: _tipoPersonaSIGOsfc, asTipoPersona: "N" }, divId: "mdlBuscarPersona" };
         utilSigo.fnOpenModal(option, function () {
@@ -547,27 +557,89 @@ var ManPOA = {};
                     var data = _bPerGen.dtBuscarPerona.row($(obj).parents('tr')).data();
                     switch (_dom) {
                         case "REGENTE":
-                            debugger
-                            ManPOA.fnSetPersonaCompleto(_dom, data["COD_PERSONA"]);
+                            ManPOA.fnSetPersonaCompleto(_dom, data["COD_PERSONA"], data["COD_PTIPO"], data["TIPO_CARGO"]);
                             ManPOA.frmPOARegistro.find("#txtCodUbigeo").val(data["COD_UBIGEO"]);
                             ManPOA.frmPOARegistro.find("#txtUbigeo").val(data["UBIGEO"]);
                             ManPOA.frmPOARegistro.find("#txtDirecion").val(data["DIRECCION"]);
                             break;
                         case "FAPROBACION":
-                            ManPOA.fnSetPersonaCompleto(_dom, data["COD_PERSONA"]); break;
+                            ManPOA.fnSetPersonaCompleto(_dom, data["COD_PERSONA"], data["COD_PTIPO"], data["TIPO_CARGO"]); break;
                         case "IOCULAR":
                             if (!utilDt.existValorSearch(ManPOA.dtItemAOcular, "COD_PERSONA", data["COD_PERSONA"])) {
-                                ManPOA.fnSetPersonaCompleto(_dom, data["COD_PERSONA"]);
+                                if (data["COD_PTIPO"] != null && data["COD_PTIPO"].trim() != "" &&
+                                    _tipoPersonaSIGOsfc != "TODOS" && _tipoPersonaSIGOsfc != "") {
+                                    let tipoCargo = _tipoPersonaSIGOsfc.split(',');
+                                    let band = 0;
+
+                                    for (let i = 0; i < tipoCargo.length; i++) {
+                                        if (tipoCargo[i] == data["COD_PTIPO"]) {
+                                            band = 1;
+                                            break;
+                                        }
+                                    }
+
+                                    if (band == 0) {
+                                        utilSigo.toastWarning("Aviso", "El cargo asignado no corresponde a lo requerido en la lista");
+                                    }
+                                    else {
+                                        ManPOA.fnSetPersonaCompleto(_dom, data["COD_PERSONA"], data["COD_PTIPO"], data["TIPO_CARGO"]);
+                                    }
+                                }
+                                else {
+                                    ManPOA.fnSetPersonaCompleto(_dom, data["COD_PERSONA"], data["COD_PTIPO"], data["TIPO_CARGO"]);
+                                }
                             } else { utilSigo.toastWarning("Aviso", "El técnico del acta de inspección ocular ya se encuentra registrado"); }
                             break;
                         case "ITIOCULAR":
                             if (!utilDt.existValorSearch(ManPOA.dtItemIOcular, "COD_PERSONA", data["COD_PERSONA"])) {
-                                ManPOA.fnSetPersonaCompleto(_dom, data["COD_PERSONA"]);
+                                if (data["COD_PTIPO"] != null && data["COD_PTIPO"].trim() != "" &&
+                                    _tipoPersonaSIGOsfc != "TODOS" && _tipoPersonaSIGOsfc != "") {
+                                    let tipoCargo = _tipoPersonaSIGOsfc.split(',');
+                                    let band = 0;
+
+                                    for (let i = 0; i < tipoCargo.length; i++) {
+                                        if (tipoCargo[i] == data["COD_PTIPO"]) {
+                                            band = 1;
+                                            break;
+                                        }
+                                    }
+
+                                    if (band == 0) {
+                                        utilSigo.toastWarning("Aviso", "El cargo asignado no corresponde a lo requerido en la lista");
+                                    }
+                                    else {
+                                        ManPOA.fnSetPersonaCompleto(_dom, data["COD_PERSONA"], data["COD_PTIPO"], data["TIPO_CARGO"]);
+                                    }
+                                }
+                                else {
+                                    ManPOA.fnSetPersonaCompleto(_dom, data["COD_PERSONA"], data["COD_PTIPO"], data["TIPO_CARGO"]);
+                                }
                             } else { utilSigo.toastWarning("Aviso", "El técnico de la inspección ocular ya se encuentra registrado"); }
                             break;
                         case "ITRAPROBACION":
                             if (!utilDt.existValorSearch(ManPOA.dtItemTRAprobacion, "COD_PERSONA", data["COD_PERSONA"])) {
-                                ManPOA.fnSetPersonaCompleto(_dom, data["COD_PERSONA"]);
+                                if (data["COD_PTIPO"] != null && data["COD_PTIPO"].trim() != "" &&
+                                    _tipoPersonaSIGOsfc != "TODOS" && _tipoPersonaSIGOsfc != "") {
+                                    let tipoCargo = _tipoPersonaSIGOsfc.split(',');
+                                    let band = 0;
+
+                                    for (let i = 0; i < tipoCargo.length; i++) {
+                                        if (tipoCargo[i] == data["COD_PTIPO"]) {
+                                            band = 1;
+                                            break;
+                                        }
+                                    }
+
+                                    if (band == 0) {
+                                        utilSigo.toastWarning("Aviso", "El cargo asignado no corresponde a lo requerido en la lista");
+                                    }
+                                    else {
+                                        ManPOA.fnSetPersonaCompleto(_dom, data["COD_PERSONA"], data["COD_PTIPO"], data["TIPO_CARGO"]);
+                                    }
+                                }
+                                else {
+                                    ManPOA.fnSetPersonaCompleto(_dom, data["COD_PERSONA"], data["COD_PTIPO"], data["TIPO_CARGO"]);
+                                }
                             } else { utilSigo.toastWarning("Aviso", "El técnico que recomienda la aprobación ya se encuentra registrado"); }
                             break;
                         case "EVACERVO":
@@ -581,7 +653,7 @@ var ManPOA = {};
             _bPerGen.fnInit();
         });
     }
-    this.fnSetPersonaCompleto = function (_dom, codPersona) {
+    this.fnSetPersonaCompleto = function (_dom, codPersona, codPTipo, tipoCargo) {
         $.ajax({
             url: urlLocalSigo + "General/Controles/GetPersona",
             type: 'POST',
@@ -611,7 +683,7 @@ var ManPOA = {};
                                 default: return false;
                             }
                             var codSecC = parseInt(dt.$("tr").length) + 1;
-                            var item = { NRO: codSecC, CARGO: data.data["CARGO"], COD_PERSONA: data.data["COD_PERSONA"], N_DOCUMENTO: data.data["N_DOCUMENTO"], PERSONA: data.data["APELLIDOS_NOMBRES"], RegEstado: "1" };
+                            var item = { NRO: codSecC, /*CARGO: data.data["CARGO"],*/ COD_PERSONA: data.data["COD_PERSONA"], N_DOCUMENTO: data.data["N_DOCUMENTO"], PERSONA: data.data["APELLIDOS_NOMBRES"], COD_PTIPO: codPTipo, TIPO_CARGO: tipoCargo, RegEstado: "1" };
                             dt.row.add(item).draw(); dt.page('last').draw('page');
                             break;
                         case "FAPROBACION":
@@ -630,20 +702,29 @@ var ManPOA = {};
     }
 
     //Editar persona desde un datatable del formulario
-    this.fnEditarPersona = function (e, dt) {
+    this.fnEditarPersona = function (e, dt, _dom) {
         //ManPOA.dtItemAOcular
         //grItemAOcular
 
         let row = dt.row($(e).parents('tr'));
         let data_row = row.data();
+        let codPTipo = "TODOS";
+
+        if (_dom == "ITIOCULAR") {
+            codPTipo = "0000005";
+        }
+        else if (_dom == "ITRAPROBACION") {
+            codPTipo = "0000021";
+        }
+
         //console.log(data_row);
 
-        let params = {
+        /*let params = {
             type: 'post',
             url: initSigo.urlControllerGeneral + 'GetPersona',
             datos: JSON.stringify({ asCodPersona: data_row.COD_PERSONA })
         };
-
+        
         utilSigo.fnAjax(params, function (res) {
             let option = {
                 url: initSigo.urlControllerGeneral + "/_Persona", divId: "modalAddEditPersona", datos: {}
@@ -661,6 +742,27 @@ var ManPOA = {};
                     row.data(data_row).draw();
                 }
             });
+        });*/
+
+        let params = {
+            url: initSigo.urlControllerGeneral + "/_ActualizaCargoPersona",
+            divId: "modalAddEditPersona",
+            datos: {
+                asFormulario: "POA",
+                asCodPersona: data_row.COD_PERSONA
+            }
+        };
+
+        utilSigo.fnOpenModal(params, function () {
+            _ActualizaCargoPersona.fnAsignarDatos = function (datos) {
+                data_row.COD_PTIPO = datos.ddlITipoCargoId;
+                data_row.TIPO_CARGO = datos.txtITipoCargo;
+
+                if (data_row.RegEstado == 0) data_row.RegEstado = 2;
+
+                row.data(data_row).draw();
+            };
+            _ActualizaCargoPersona.fnInit(codPTipo, data_row.COD_PTIPO);
         });
     }
 
@@ -892,7 +994,7 @@ var ManPOA = {};
         ) {
             ManPOA.frmPOARegistro.find("#txtgrvItemBExt").html("Balance de Extracción o Kardex del POA (Maderable)");
             ManPOA.frmPOARegistro.find("#hplMaderableItemBExtDownload").show();
-            ManPOA.frmPOARegistro.find("#btnDownloadBExtMadNoMad").attr("title","Descargar balance de Extracción Maderable registrado");
+            ManPOA.frmPOARegistro.find("#btnDownloadBExtMadNoMad").attr("title", "Descargar balance de Extracción Maderable registrado");
 
             ManPOA.ItemBExt.columns = [
                 { autoWidth: true, bSortable: false, mRender: ManPOA.ItemBExt.cellEdit },
@@ -1121,12 +1223,12 @@ var ManPOA = {};
                     { data: "COD_SECUENCIAL", visible: false }
                 ];
             }
-        } 
+        }
     }
     this.seteaNoMadPermisos = function () {
         var codMTipo = ManPOA.frmPOARegistro.find("#hdfItemCod_MTipo").val();
         if (codMTipo == "0000021") {
-            
+
             ManPOA.frmPOARegistro.find("#btnExcelRANormal,#btnExcelRAPCarr").hide();
             ManPOA.frmPOARegistro.find("#btnExcelRAPMed").show();
 
@@ -1184,7 +1286,7 @@ var ManPOA = {};
 
         }
         else if (codMTipo == "0000020") {
-            
+
             ManPOA.frmPOARegistro.find("#btnExcelRAPMed,#btnExcelRANormal").hide();
             ManPOA.frmPOARegistro.find("#btnExcelRAPCarr").show();
 
@@ -1372,11 +1474,12 @@ var ManPOA = {};
         var list = [];
         this.dtItemAOcular.rows().every(function (rowIdx, tableLoop, rowLoop) {
             var row = this.data();
-            if (row.RegEstado == 1) {
+            if (row.RegEstado == 1 || row.RegEstado == 2) {
                 list.push({
                     PERSONA: row.PERSONA,
                     N_DOCUMENTO: row.N_DOCUMENTO,
-                    CARGO: row.CARGO,
+                    //CARGO: row.CARGO,
+                    COD_PTIPO: row.COD_PTIPO,
                     COD_PERSONA: row.COD_PERSONA,
                     RegEstado: row.RegEstado
                 });
@@ -1389,11 +1492,12 @@ var ManPOA = {};
         var ListTIOCULAR = [];
         this.dtItemIOcular.rows().every(function (rowIdx, tableLoop, rowLoop) {
             var row = this.data();
-            if (row.RegEstado == 1) {
+            if (row.RegEstado == 1 || row.RegEstado == 2) {
                 ListTIOCULAR.push({
                     PERSONA: row.PERSONA,
                     N_DOCUMENTO: row.N_DOCUMENTO,
-                    CARGO: row.CARGO,
+                    //CARGO: row.CARGO,
+                    COD_PTIPO: row.COD_PTIPO,
                     COD_PERSONA: row.COD_PERSONA,
                     RegEstado: row.RegEstado
                 });
@@ -1405,11 +1509,12 @@ var ManPOA = {};
         var ListTRAPROBACION = [];
         this.dtItemTRAprobacion.rows().every(function (rowIdx, tableLoop, rowLoop) {
             var row = this.data();
-            if (row.RegEstado == 1) {
+            if (row.RegEstado == 1 || row.RegEstado == 2) {
                 ListTRAPROBACION.push({
                     PERSONA: row.PERSONA,
                     N_DOCUMENTO: row.N_DOCUMENTO,
-                    CARGO: row.CARGO,
+                    //CARGO: row.CARGO,
+                    COD_PTIPO: row.COD_PTIPO,
                     COD_PERSONA: row.COD_PERSONA,
                     RegEstado: row.RegEstado
                 });
@@ -1818,6 +1923,15 @@ var ManPOA = {};
         datosPOA.ListEliTABLAParcela = _frmParcela.tbEliTABLA;
 
         datosPOA.txtDirecion = $("#txtDirecion").val();
+
+
+        //Mejora SIADO CENSO
+        debugger
+        if (ManPOA.getParameterByName('siado') == '1') {
+            datosPOA.appClient = ManPOA.getParameterByName('appClientGAER');
+            datosPOA.appData = ManPOA.getParameterByName('appDataGAER');
+        }
+
         //enviando datos al servidor
         $.ajax({
             url: ManPOA.controller + "/RegistrarPOA",
@@ -1830,14 +1944,14 @@ var ManPOA = {};
             error: utilSigo.errorAjax,
             success: function (data) {
                 if (data.success) {
-                    if (ManPOA.frmPOARegistro.find("#opRegresar").val() == 0) {
+                    if (ManPOA.frmPOARegistro.find("#opRegresar").val() == 0 && ManPOA.getParameterByName('siado') != '1') {
                         ManPOA.regresar(data.msj, '');
                     } else {
                         ManPOA.regresar('', data.appServer);
                     }
                 }
                 else {
-                    if (ManPOA.frmPOARegistro.find("#opRegresar").val() == 0) {
+                    if (ManPOA.frmPOARegistro.find("#opRegresar").val() == 0 && ManPOA.getParameterByName('siado') != '1') {
                         utilSigo.toastWarning("Aviso", data.msj);
                     } else {
                         ManPOA.regresar('', data.appServer);
@@ -1848,8 +1962,8 @@ var ManPOA = {};
         });
     }
     this.regresar = function (msj, appServer) {
-
-        if (ManPOA.frmPOARegistro.find("#opRegresar").val() === '0') {
+        debugger
+        if (ManPOA.frmPOARegistro.find("#opRegresar").val() === '0' && ManPOA.getParameterByName('siado') != '1') {
             let tipoFormulario = $("#TipoFormulario").val();
             let numrpta = 0;
             if (tipoFormulario === "POA") numrpta = 1;
@@ -1858,11 +1972,18 @@ var ManPOA = {};
             let url = ManPOA.controller + "/Index?lstManMenu=" + numrpta + "&_alertaIncial=" + msj;
             window.location = url;
         } else {
-            var appClient = ManPOA.frmPOARegistro.find("#appClient").val();
-            var appData = ManPOA.frmPOARegistro.find("#appData").val();
+
+            var appClient = ManPOA.getParameterByName('siado') != '1' ? ManPOA.frmPOARegistro.find("#appClient").val() : ManPOA.getParameterByName('appClientGAER');
+            var appData = ManPOA.getParameterByName('siado') != '1' ? ManPOA.frmPOARegistro.find("#appData").val() : ManPOA.getParameterByName('appDataGAER');
             let url = urlLocalSigo + "THabilitante/ManVentanillaAntecedentesExpedientes/Index?appClient=" + appClient + "&appData=" + appData + "&appServer=" + appServer;
             window.location = url;
         }
+    }
+    this.getParameterByName = function (name) {
+        name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
+        var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
+            results = regex.exec(location.search);
+        return results === null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
     }
 }).apply(ManPOA);
 //RaPOA
@@ -1899,18 +2020,18 @@ var ManPOA = {};
         });
 
 
-                // Total over all pages
-                var columnas;
+        // Total over all pages
+        var columnas;
 
-                if (hdfItemCod_MTipo == "0000021") {
-                    columnas = [9, 10, 11, 12, 13];
-                }
-                else if (hdfItemCod_MTipo == "0000020") {
-                    columnas = [7, 8];
-                }
-                else {
-                    columnas = [5, 6];
-                }
+        if (hdfItemCod_MTipo == "0000021") {
+            columnas = [9, 10, 11, 12, 13];
+        }
+        else if (hdfItemCod_MTipo == "0000020") {
+            columnas = [7, 8];
+        }
+        else {
+            columnas = [5, 6];
+        }
         if (hdfItemCod_MTipo != "0000021" && hdfItemCod_MTipo != "0000020") {
             //$(this.dtItemRAPoa.column(6).header()).text((hdfItemIndicador == "M" ? "Volumen (m³)" : "Kilogramos"));
             //$(this.dtItemRAPoa.column(6).header()).text((hdfItemIndicador == "M" ? "Cantidad" : "Kilogramos"));
@@ -1929,7 +2050,7 @@ var ManPOA = {};
 
         this.dtItemRAPoa.on("draw", function () {//Llama a la función cuando los datos de la tabla se terminan de dibujar
             ManPOA.ItemRAPoa.CalculaPOA(hdfItemCod_MTipo);
-        });  
+        });
     }
     this.CalculaPOA = function (codmtipo) {
         //Tipo de Aprovechamiento: Maderable
@@ -2187,7 +2308,7 @@ var ManPOA = {};
         this.frmResolAprob.find("#txtRendimiento").val('');
         this.frmResolAprob.find("#txtItemRAPoaObservacion").val('');
         this.frmResolAprob.find("#ddlRAPoaUM").val('-');
-        this.frmResolAprob.find("#ddlRAPoaUM").attr("disabled",false);
+        this.frmResolAprob.find("#ddlRAPoaUM").attr("disabled", false);
 
         switch (ManPOA.frmPOARegistro.find("#hdfItemCod_MTipo").val()) {
             case "0000008":
@@ -2230,7 +2351,7 @@ var ManPOA = {};
         if (this.frmResolAprob.find("#ddlItemRAPoaEspeciesId").val() == "-") {
             utilSigo.toastError("Error", "Seleccione Especie");
             return false;
-        }      
+        }
 
         if (hdfItemCod_MTipo == "0000020") {
             if (this.frmResolAprob.find("#txtSuperficieHa").val() == null ||
@@ -2297,7 +2418,7 @@ var ManPOA = {};
                 utilSigo.toastError("Error", "Ingrese Unidad de Medida");
                 return false;
             }
-        }     
+        }
         //}
 
 
@@ -2689,7 +2810,7 @@ var ManPOA = {};
 
         if (this.frmRAPoaInSitu.find("#hdfItemRAPoaInSitu_RegEstado").val() == '1') {
             if (utilSigo.ValidaCombo("ddlItemRAPoaInSituEspecies", "Seleccione Especie") == false) return false;
-        }                
+        }
         if (utilSigo.ValidaTexto("txtItemRAPoaInSituPeriodo", "Ingrese Periodo") == false) return false;
         if (utilSigo.ValidaTexto("txtItemRAPoaInSituCuota_Saca", "Ingrese Cuota de Saca") == false) return false;
         if (utilSigo.ValidaTexto("txtItemRAPoaInSituMetodo_Caza", "Ingrese Método de caza o captura") == false) return false;
@@ -3558,7 +3679,7 @@ var ManPOA = {};
                 else {
                     this.frmBExt.find("#ddlUnidadMedida_BExt").val("-");
                     this.frmBExt.find("#ddlUnidadMedida_BExt").attr("disabled", false);
-                }            
+                }
             }
         }
     }
@@ -3653,11 +3774,11 @@ var ManPOA = {};
                 if (RegEstado == 1) {
                     PDivTitulo = 'Nuevo Registro';
                     this.frmBExt.find("#ddlTipo_BExt").attr("disabled", false);
-                } 
+                }
                 else if (RegEstado == 0) {
                     PDivTitulo = 'Modificando Registro';
                     this.frmBExt.find("#ddlTipo_BExt").attr("disabled", true);
-                } 
+                }
 
                 this.frmBExt.find("#trEspecieSERFOR").after(this.frmBExt.find("#trTipoBalance"));
                 this.frmBExt.find("#trDMC").toggle(false);
@@ -3699,7 +3820,7 @@ var ManPOA = {};
                 this.frmBExt.find("#txtCantidadKardexCarrizo").val(row.CANTIDAD);
                 this.frmBExt.find("#txtItemBExtSaldo").val(row.SALDO);
                 this.frmBExt.find("#ddlUnidadMedida_BExt").val(row.UNIDAD_MEDIDA);
-                this.frmBExt.find("#txtItemBExtObservacion").val(row.OBSERVACION);           
+                this.frmBExt.find("#txtItemBExtObservacion").val(row.OBSERVACION);
             }
 
             this.divModal.find(".spTitulo").html(PDivTitulo);
@@ -3753,7 +3874,7 @@ var ManPOA = {};
             (hdfItemEstadoOrigen == "PC")
         ) {
             //if (this.frmBExt.find("#hdfItemBExt_RegEstado").val() == '1') {
-                if (utilSigo.ValidaCombo("ddlItemBExtEspecies", "Seleccione Especie") == false) return false;
+            if (utilSigo.ValidaCombo("ddlItemBExtEspecies", "Seleccione Especie") == false) return false;
             //}
             if (utilSigo.ValidaTexto("txtItemBExtDmc", "Ingrese DMC") == false) return false;
             if (utilSigo.ValidaTexto("txtItemBExtTotal_Arboles", "Ingrese Total Arboles") == false) return false;
@@ -3767,16 +3888,16 @@ var ManPOA = {};
             (hdfItemEstadoOrigen == "PCN")
         ) {
             //if (this.frmBExt.find("#hdfItemBExt_RegEstado").val() == '1') {
-                if (utilSigo.ValidaCombo("ddlItemBExtEspecies", "Seleccione Especie") == false) return false;
+            if (utilSigo.ValidaCombo("ddlItemBExtEspecies", "Seleccione Especie") == false) return false;
             //}
         }
         else {
             //if (this.frmBExt.find("#hdfItemBExt_RegEstado").val() == '1') {
-                if (utilSigo.ValidaCombo("ddlItemBExtEspecies", "Seleccione Especie") == false) return false;
+            if (utilSigo.ValidaCombo("ddlItemBExtEspecies", "Seleccione Especie") == false) return false;
             //}
             if (utilSigo.ValidaCombo("ddlTipo_BExt", "Seleccione el Tipo de Aprovechamiento") == false) return false;
             else {
-                if (this.frmBExt.find("#ddlTipo_BExt").val() == "MADERABLES" || this.frmBExt.find("#ddlTipo_BExt").val() == "CARBON" ){
+                if (this.frmBExt.find("#ddlTipo_BExt").val() == "MADERABLES" || this.frmBExt.find("#ddlTipo_BExt").val() == "CARBON") {
                     if (utilSigo.ValidaTexto("txtItemBExtDmc", "Ingrese DMC") == false) return false;
                     if (utilSigo.ValidaTexto("txtItemBExtTotal_Arboles", "Ingrese Total Arboles") == false) return false;
                     if (utilSigo.ValidaTexto("txtItemBExtVolumen_Autorizado", "Ingrese Cantidad Autorizada") == false) return false;
@@ -3820,7 +3941,7 @@ var ManPOA = {};
                     COD_ESPECIES_SERFOR: this.frmBExt.find("#ddlItemBExtEspecies_Serfor").val(),
                     RegEstado: 1,
                     index: (codSecC - 1),
-                    COD_SECUENCIAL: 0 
+                    COD_SECUENCIAL: 0
                 };
 
                 if (ManPOA.indexBExtPOA === "") {
@@ -3862,7 +3983,7 @@ var ManPOA = {};
                 ManPOA.listBExtPOA[ManPOA.indexBExtPOA].listMadeBEXTRACCION[row.index] = row;
                 this.dtItemBExt.row(this.tr).data(row).draw(false);
                 utilSigo.toastSuccess("Exito", "Se modificó con exito");
-                this.closeModal();   
+                this.closeModal();
             }
             ManPOA.ItemBExt.CalculaTotal();
         }
@@ -3977,7 +4098,7 @@ var ManPOA = {};
                 indicador: ManPOA.frmPOARegistro.find("#hdfItemIndicador").val()
             },
             dataType: 'json',
-            success: function (data) {             
+            success: function (data) {
                 if (data.success) {
                     window.location.href = ManPOA.controller + "/Download?file=" + data.values[0];
                 }
@@ -4109,12 +4230,12 @@ var ManPOA = {};
         if (ManPOA.frmPOARegistro.find("#hdfSelectBExtPOA_Index").val() != '') {
 
             var PDivTitulo = '';
-            this.frmBExtMaderable.find("#txtItemBExtMaderableUM").attr("disabled",true);
+            this.frmBExtMaderable.find("#txtItemBExtMaderableUM").attr("disabled", true);
 
             if (RegEstado == 1) {
                 PDivTitulo = 'Nuevo Registro';
                 this.frmBExtMaderable.find("#txtItemBExtMaderableUM").val("M3");
-            }  
+            }
             else {
                 if (RegEstado == 0) {
                     PDivTitulo = 'Modificando Registro';

@@ -16,6 +16,7 @@ namespace CapaEntidad.ViewModel.General
         public Int32? NCODROL { get; set; }
         public String VDESCRIPCION { get; set; }
         public String VALIAS { get; set; }
+        public String PERFIL { get; set; }
     }
     public class VM_Menu_List
     {

@@ -33,7 +33,7 @@
     }
 </style>
 <script type="text/javascript">
-    
+
     let fControlCal = {
         getUrlParameter: (sParam) => {
             var sPageURL = window.location.search.substring(1),
@@ -175,7 +175,7 @@
                 datos: JSON.stringify(model), type: 'POST'
             };
             let url;
-            
+
             utilSigo.dialogConfirm('', '¿Desea guardar el formato?', function (r) {
                 if (r) {
                     utilSigo.fnAjax(option, function (data) {
@@ -193,7 +193,7 @@
         },
         fnCheck: (id) => {
             if (id == 150) {
-                if ($('input[name="chkECC_150"]:checked').val() == "S") 
+                if ($('input[name="chkECC_150"]:checked').val() == "S")
                     $("#chkECC_136").prop("checked", false);
             }
             if (id == 136) {
@@ -266,8 +266,8 @@
                 rows += '<td class="csPO">';//inicio td
 
                 if (r.id == 135) {
-
-                    if (($("#hdfCodGrupoUsuario").val() != '0000011') && ($("#hdfCodGrupoUsuario").val() != '0000001')) {
+                    if (($("#hdfPerfil").val() != '0000058') && ($("#hdfPerfil").val() != '0000071')) {
+                    //if (($("#hdfCodGrupoUsuario").val() != '0000011') && ($("#hdfCodGrupoUsuario").val() != '0000001')) {
                         enable135 = " disabled ";
                     }
                     else {
@@ -282,7 +282,8 @@
                 } else if (r.id == 84) {
 
                     check84 = r.PRESENTA_OBS;
-                    if (($("#hdfCodGrupoUsuario").val() != '0000011') && ($("#hdfCodGrupoUsuario").val() != '0000001')) {
+                    //if (($("#hdfCodGrupoUsuario").val() != '0000011') && ($("#hdfCodGrupoUsuario").val() != '0000001')) {
+                    if (($("#hdfPerfil").val() != '0000058') && ($("#hdfPerfil").val() != '0000071')) {
                         enable84 = " disabled ";
                     }
                     else {
@@ -303,7 +304,8 @@
                 } else if (r.id == 85) {
 
                     check85 = r.PRESENTA_OBS;
-                    if (($("#hdfCodGrupoUsuario").val() != '0000002') && ($("#hdfCodGrupoUsuario").val() != '0000001')) {
+                    //if (($("#hdfCodGrupoUsuario").val() != '0000002') && ($("#hdfCodGrupoUsuario").val() != '0000001')) {
+                    if (($("#hdfPerfil").val() != '0000063') && ($("#hdfPerfil").val() != '0000071')) {
                         enable85 = " disabled ";
                     }
                     else {
@@ -329,7 +331,8 @@
                 } else if (r.id == 86) {
 
                     check86 = r.PRESENTA_OBS;
-                    if (($("#hdfCodGrupoUsuario").val() != '0000011') && ($("#hdfCodGrupoUsuario").val() != '0000001')) {
+                    //if (($("#hdfCodGrupoUsuario").val() != '0000011') && ($("#hdfCodGrupoUsuario").val() != '0000001')) {
+                    if (($("#hdfPerfil").val() != '0000058') && ($("#hdfPerfil").val() != '0000071')) {
                         enable86 = " disabled ";
                     }
                     else {
@@ -359,7 +362,8 @@
                 } else if (r.id == 87) {
 
                     check87 = r.PRESENTA_OBS;
-                    if (($("#hdfCodGrupoUsuario").val() != '0000002') && ($("#hdfCodGrupoUsuario").val() != '0000001')) {
+                    //if (($("#hdfCodGrupoUsuario").val() != '0000002') && ($("#hdfCodGrupoUsuario").val() != '0000001')) {
+                    if (($("#hdfPerfil").val() != '0000063') && ($("#hdfPerfil").val() != '0000071')) {//digitador
                         enable87 = " disabled ";
                     }
                     else {
@@ -391,7 +395,8 @@
                 }
                 else if (r.id == 150) {
 
-                    if (($("#hdfCodGrupoUsuario").val() != '0000011') && ($("#hdfCodGrupoUsuario").val() != '0000001')) {
+                    //if (($("#hdfCodGrupoUsuario").val() != '0000011') && ($("#hdfCodGrupoUsuario").val() != '0000001')) {
+                    if (($("#hdfPerfil").val() != '0000058') && ($("#hdfPerfil").val() != '0000071')) {
                         enable150 = " disabled ";
                     }
                     else {
@@ -425,7 +430,8 @@
                 }
                 else if (r.id == 136) {
 
-                    if (($("#hdfCodGrupoUsuario").val() != '0000011') && ($("#hdfCodGrupoUsuario").val() != '0000001')) {
+                    //if (($("#hdfCodGrupoUsuario").val() != '0000011') && ($("#hdfCodGrupoUsuario").val() != '0000001')) {
+                    if (($("#hdfPerfil").val() != '0000058') && ($("#hdfPerfil").val() != '0000071')) {
                         enable136 = " disabled ";
                     }
                     else {
@@ -538,14 +544,14 @@
                 rows += '<td>Fecha: <input type="text" class="form-control form-control-sm" id="txtfecha_' + `${r.id}` + '" maxlength="10" readonly="readonly" placeholder="dd/mm/aa" value="' + r.FECHA_VARIOS + '" /></td>';
                 rows += '<td colspan=3 ><input type="text" class="form-control form-control-sm" id="detECC_' + `${r.id}` + '" maxlength="400" value="' + `${r.DETALLE}` + '" /></td>';
                 rows += '</tr>';
-                
+
             } else {
 
                 if (($("#hdfCodGrupoUsuario").val() !== '0000011') && ($("#hdfCodGrupoUsuario").val() !== '0000001')) {
                     disableRows = " disabled ";
                 } else if ($("#ddlIndicadorId").val() == '0000006')
                 {
-                    disableRows = " disabled ";                    
+                    disableRows = " disabled ";
                 }
 
                 if (r.padre !== padre) {
@@ -787,10 +793,10 @@
                         break;
                     default:
                         rows += '<td><input type="text" class="form-control form-control-sm" id="detR_' + `${r.id}` + '" maxlength="400" value="' + r.DETALLE + '" /></td>';
-                } 
+                }
                // rows += '<td><input type="text" class="form-control form-control-sm" id="detR_' + `${r.id}` + '" maxlength="400" value="' + r.DETALLE + '" /></td>';
                 rows += '<td><input type="text" class="form-control form-control-sm" id="obsR_' + `${r.id}` + '" maxlength="400" value="' + r.OBS_ADICIONALES+'"/></td>';
-                
+
                 switch (r.id) {
                     case 143:
                     case 144:
@@ -818,7 +824,7 @@
                         rows += '</div>';
                         rows += '</td >';//fin td
                 }
-                
+
                 rows += '</tr>';
             //}
         });
@@ -851,7 +857,7 @@
             $('#btnGrabarControlCalidad').prop('disabled', true);
         }
 
-        
+
 
     });
 </script>
@@ -885,69 +891,69 @@
                 <a href="@Url.Content("~/Archivos/Documentos/guiaFormatoControlCalidad.pdf")" target="_blank"> <i class="fa mx-2 fa-lg fa-download" style="cursor:pointer;" data-toggle="tooltip" data-placement="top" title="Descargar Guía"></i></a>
             </div>
         </div>
-            <ul class="nav nav-tabs" id="tabFormato" role="tablist">
-                <li class="nav-item"><a class="nav-link active" data-toggle="tab" href="#navIS" role="tab" aria-selected="true">Informe de Supervisión</a></li>
-                <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#navDR" role="tab" aria-selected="true">Datos Registrados en el SIGO-SFC</a></li>
-            </ul>
-            <div class="tab-content">
-                <div class="tab-pane fade show active" id="navIS">
-                    <div class="row">
-                        <div class="col-md-12">
-                            <div class="table-responsive">
-                                <table id="tbFormatoCalidad" class="table table-hover table-bordered" style="width:100%">
-                                    <thead>
-                                        <tr>
-                                            <th class="colN" rowspan="2">N°</th>
-                                            <th class="colItem" rowspan="2">Item</th>
-                                            <th class="colPO" colspan="2">¿Presenta observaciones?</th>
-                                            <th style=" width: 20px;" rowspan="2">Código</th>
-                                            <th class="colObs" rowspan="2">Alcance de las observaciones</th>
-                                            <th rowspan="2">Detalles adicionales</th>
-                                            <th colspan="2">¿Levantó las observaciones?</th>
-                                        </tr>
-                                        <tr>
-                                            <th>SI</th>
-                                            <th>NO</th>
-                                            <th style="width:2px;">SI</th>
-                                            <th style="width:2px;">NO</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody></tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="tab-pane fade show" id="navDR">
-                    <div class="row">
-                        <div class="col-md-12">
-                            <div class="table-responsive">
-                                <table id="tbFormatoCalidad1" class="table table-hover table-bordered" style="width:100%">
-                                    <thead>
-                                        <tr>
-                                            <th rowspan="2">N°</th>
-                                            <th rowspan="2">Sección</th>
-                                            <th colspan="2">Conforme</th>
-                                            <th rowspan="2">Detalle</th>
-                                            <th rowspan="2">Observaciones</th>
-                                            <th colspan="2">¿Levantó las observaciones?</th>
-                                        </tr>
-                                        <tr>
-                                            <th style="width:2px;">SI</th>
-                                            <th style="width:2px;">NO</th>
-                                            <th style="width:2px;">SI</th>
-                                            <th style="width:2px;">NO</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody></tbody>
-                                </table>
-                            </div>
-
+        <ul class="nav nav-tabs" id="tabFormato" role="tablist">
+            <li class="nav-item"><a class="nav-link active" data-toggle="tab" href="#navIS" role="tab" aria-selected="true">Informe de Supervisión</a></li>
+            <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#navDR" role="tab" aria-selected="true">Datos Registrados en el SIGO-SFC</a></li>
+        </ul>
+        <div class="tab-content">
+            <div class="tab-pane fade show active" id="navIS">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="table-responsive">
+                            <table id="tbFormatoCalidad" class="table table-hover table-bordered" style="width:100%">
+                                <thead>
+                                    <tr>
+                                        <th class="colN" rowspan="2">N°</th>
+                                        <th class="colItem" rowspan="2">Item</th>
+                                        <th class="colPO" colspan="2">¿Presenta observaciones?</th>
+                                        <th style=" width: 20px;" rowspan="2">Código</th>
+                                        <th class="colObs" rowspan="2">Alcance de las observaciones</th>
+                                        <th rowspan="2">Detalles adicionales</th>
+                                        <th colspan="2">¿Levantó las observaciones?</th>
+                                    </tr>
+                                    <tr>
+                                        <th>SI</th>
+                                        <th>NO</th>
+                                        <th style="width:2px;">SI</th>
+                                        <th style="width:2px;">NO</th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
                         </div>
                     </div>
                 </div>
             </div>
+            <div class="tab-pane fade show" id="navDR">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="table-responsive">
+                            <table id="tbFormatoCalidad1" class="table table-hover table-bordered" style="width:100%">
+                                <thead>
+                                    <tr>
+                                        <th rowspan="2">N°</th>
+                                        <th rowspan="2">Sección</th>
+                                        <th colspan="2">Conforme</th>
+                                        <th rowspan="2">Detalle</th>
+                                        <th rowspan="2">Observaciones</th>
+                                        <th colspan="2">¿Levantó las observaciones?</th>
+                                    </tr>
+                                    <tr>
+                                        <th style="width:2px;">SI</th>
+                                        <th style="width:2px;">NO</th>
+                                        <th style="width:2px;">SI</th>
+                                        <th style="width:2px;">NO</th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
         </div>
+    </div>
 </div>
 
 

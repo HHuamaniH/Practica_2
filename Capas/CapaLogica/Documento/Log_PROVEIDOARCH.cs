@@ -344,7 +344,7 @@ namespace CapaLogica.DOC
                     vm.txtRecomienda = CEntProveidoArchItems.RECOMENDACION.ToString();
                     vm.txtReferencia = CEntProveidoArchItems.REFERENCIA.ToString();
                     vm.txtObservaciones = CEntProveidoArchItems.OBSERVACION;
-                    vm.txtResuelve =  CEntProveidoArchItems.RESUELVE == " " ? string.Empty : CEntProveidoArchItems.RESUELVE;
+                    vm.txtResuelve = CEntProveidoArchItems.RESUELVE == " " ? string.Empty : CEntProveidoArchItems.RESUELVE;
                     vm.txtIdODs = CEntProveidoArchItems.COD_OD_REGISTRO;
                     vm.ListInfOrExp = new List<CEntidad>();
                     vm.ListInfOrExp = CEntProveidoArchItems.ListInformes;
@@ -498,10 +498,6 @@ namespace CapaLogica.DOC
                         vm.txtObservacionesTSC = CEntProveidoArchItems.OBSERVACIONES_TSC;
                         vm.txtIdNotPJ = CEntProveidoArchItems.NOTIFICA_AUTOR;
 
-                    }
-                    else if (CEntProveidoArchItems.COD_FCTIPO == "0000185")
-                    {
-                        vm.txtFechaFirmezaF = CEntProveidoArchItems.FECHA_FIRMEZA.ToString();
                     }
 
                     //cambiacbtipo(hdfItemCategoriaCodigo.Value); 
@@ -690,7 +686,7 @@ namespace CapaLogica.DOC
             if (_dto.ListInfOrExp == null) throw new Exception("Seleccione un informe, expediente");
             if (_dto.txtResolucionDirectoral == null) throw new Exception("Ingrese Resolución Directoral");
             if (_dto.txtResolucionTribunal == null && _dto.hdfCodTipoProve == "0000184") throw new Exception("Ingrese Resolución Tribunal");
-            if (_dto.chkResFundado == false && 
+            if (_dto.chkResFundado == false &&
                 _dto.chkResInfundado == false &&
                 _dto.chkResImprocedente == false &&
                 _dto.txtResuelve == null &&
@@ -786,6 +782,9 @@ namespace CapaLogica.DOC
 
                 switch (oCEntidadProv.COD_FCTIPO)
                 {
+                    case "0000106":
+                        oCEntidadProv.COD_DLINEA = _dto.hdfTipoProveido;
+                        break;
                     case "0000061":
                         oCEntidadProv.MAE_TIP_PROVARCHIVO = _dto.txtIdSobArchivo;
                         oCEntidadProv.DESCRIPCION_PROVARCHIVO = _dto.txtIdSobArchivo == "0000006" ? _dto.txtSobreArchivo : null;

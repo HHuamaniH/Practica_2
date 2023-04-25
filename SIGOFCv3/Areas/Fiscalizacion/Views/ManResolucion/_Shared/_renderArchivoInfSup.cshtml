@@ -35,7 +35,7 @@
             else {
                 _renderArchivoInfSup.frm.find("#divSubsVoluntaria").hide();
                 _renderArchivoInfSup.frm.find("#ddlArticuloId").val("0000000").trigger("change");
-            }  
+            }
         }
     }
 
@@ -104,7 +104,7 @@
         };
         _renderArchivoInfSup.dtRenderListInforme = utilDt.fnLoadDataTable_Detail(_renderArchivoInfSup.frm.find("#tbRenderListIncisos"), columns_label, columns_data, options);
         _renderArchivoInfSup.dtRenderListInforme.rows.add(JSON.parse('@Html.Raw(Json.Encode(@Model.listaInfracciones))')).draw();
-        
+
     }
 
     $(document).ready(function () {
@@ -121,7 +121,7 @@
             <label for="chkGTF" class="text-small">N° Expediente asignado</label>
         </div>
         <div class="form-group col-md-6">
-            @Html.EditorFor(m => m.txtNumExpeAsignado, new { htmlAttributes = new { @class = "form-control form-control-sm", placeholder = "Expediente Administrativo", disabled = "disabled" } })
+            @Html.EditorFor(m => m.txtNumExpeAsignado, new { htmlAttributes = new { @class = "form-control form-control-sm", placeholder = "Expediente Administrativo" } })
         </div>
         <div class="form-group col-md-2">
             <button type="button" id="btnExpediente" class="btn btn-info btn-sm" onclick="ManRD_AddEdit.fnGenerarNumeracionArchivo()">Generar</button>
@@ -201,7 +201,7 @@
         <div class="form-row">
             <div class="form-group col-md-1">
             </div>
-            <div class="form-group col-md-11"  style="background-color:#dae7f5">
+            <div class="form-group col-md-11" style="background-color:#dae7f5">
                 <label for="lblInfraccionesSubsanadas" class="text-small">Infracciones subsanadas</label>
             </div>
         </div>

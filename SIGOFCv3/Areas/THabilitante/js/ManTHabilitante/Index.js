@@ -114,9 +114,9 @@ ManTHabilitante.validacionGeneral = function () {
         band = 1;
     }
 
-    if (($("#cod_Modalidad").val() == "0000005" || $("#cod_Modalidad").val() == "0000009") && band==0) {
+    if (($("#cod_Modalidad").val() == "0000005" || $("#cod_Modalidad").val() == "0000009") && band == 0) {
         valRetorno = ManTHabilitante.ValidarFecha();
-    } 
+    }
 
     return valRetorno;
 };
@@ -208,7 +208,7 @@ ManTHabilitante.iniciarEventosGenerales = function () {
     }));
 
     $("#btnRegistrarTH").click(function () {
-        
+
         if (!ManTHabilitante.validacionGeneral()) {
             return ManTHabilitante.frmTHabilitanteRegistro.valid();
         }
@@ -232,20 +232,34 @@ ManTHabilitante.fnInit = function () {
 };
 
 ManTHabilitante.fnBuscarPersona = function (_dom, _tipoPersona) {
-    
+    var valCodPTipo;
+
+    switch (_dom) {
+        case "TITULAR":
+        case "TITULAR_ADENDA":
+            valCodPTipo = "0000001"; break;
+        case "RLEGAL":
+            valCodPTipo = "0000002"; break;
+        case "FUNC_APRUEBA_PROYECTO":
+        case "FUNC_AUTORIZA_FUNCIONAMIENTO":
+            valCodPTipo = "0000006"; break;
+        default:
+            valCodPTipo = "TODOS";
+    }
+
     var url = urlLocalSigo + "General/Controles/_BuscarPersonaGeneral";
     var option = {
         url: url,
         type: 'GET',
         datos: {
-            asBusGrupo: "PERSONA", asCodPTipo: "TODOS", asTipoPersona: _tipoPersona,
+            asBusGrupo: "PERSONA", asCodPTipo: valCodPTipo, asTipoPersona: _tipoPersona,
             asFormulario: "THabilitante", asCodMod: ManTHabilitante.frmTHabilitanteRegistro.find("#hdfItemModalidadCodigo").val(), asTipoCargo: _dom
         },
         divId: "mdlBuscarPersona"
     };
     utilSigo.fnOpenModal(option, function () {
         _bPerGen.fnAsignarDatos = function (obj) {
-            
+
             if (obj != null && obj != "") {
                 var data = _bPerGen.dtBuscarPerona.row($(obj).parents('tr')).data();
                 //console.log('datos', data);
@@ -301,7 +315,7 @@ ManTHabilitante.cargarUbigeoModal = function (control) {
         error: function (jqXHR, error, errorThrown) {
             utilSigo.unblockUIGeneral();
             utilSigo.toastError("Error", "Sucedio un Error Inesperado, Comuniquese con el Administrador");
-           // console.log(jqXHR.responseText);
+            // console.log(jqXHR.responseText);
         },
         statusCode: {
             203: () => { utilSigo.unblockUIGeneral(); utilSigo.toastInfo("Aviso", "El usuario perdio la sesión. Vuelva ingresar al sistema"); }
@@ -312,7 +326,7 @@ ManTHabilitante.cargarUbigeoModal = function (control) {
 ManTHabilitante.iniciarModalidadFauna = function () {
     ManTHabilitante.frmTHabilitanteRegistro.find("#txtItemRAPFecha").datepicker({ format: "dd/mm/yyyy", autoclose: true, language: 'es' });
     ManTHabilitante.frmTHabilitanteRegistro.find("#txtItemRAFFecha").datepicker({ format: "dd/mm/yyyy", autoclose: true, language: 'es' });
-   
+
 };
 //PnlItemDGeneral
 ManTHabilitante.DGeneral = {};
@@ -621,7 +635,7 @@ ManTHabilitante.recat.limpiarControles = function () {
     ManTHabilitante.frmTHabilitanteRegistro.find("#txtFechaRecat").val('');
     ManTHabilitante.frmTHabilitanteRegistro.find("#txtNumRDRect").val('');
     ManTHabilitante.frmTHabilitanteRegistro.find("#ddModalidadTHId").val('0000000');
-    ManTHabilitante.frmTHabilitanteRegistro.find("#ddClaseZoologicoRECId").val('0');    
+    ManTHabilitante.frmTHabilitanteRegistro.find("#ddClaseZoologicoRECId").val('0');
     ManTHabilitante.frmTHabilitanteRegistro.find("#txtObsRecat").val('');
     ManTHabilitante.frmTHabilitanteRegistro.find("#btnAgregarRecat").text('Agregar');
     ManTHabilitante.recat.filaEditarRecategorizacion = "";
@@ -638,7 +652,7 @@ ManTHabilitante.recat.agregarRecategorizacion = function () {
     var nuevaModalidadRecId = ManTHabilitante.frmTHabilitanteRegistro.find("#ddModalidadTHId").val();
     var nuevaClaseZoologicoRECId = ManTHabilitante.frmTHabilitanteRegistro.find("#ddClaseZoologicoRECId").val();
 
-    ManTHabilitante.frmTHabilitanteRegistro.find("#ddClaseZoologicoId").val(ManTHabilitante.frmTHabilitanteRegistro.find("#ddClaseZoologicoRECId").val()) ;
+    ManTHabilitante.frmTHabilitanteRegistro.find("#ddClaseZoologicoId").val(ManTHabilitante.frmTHabilitanteRegistro.find("#ddClaseZoologicoRECId").val());
     if (nuevaModalidadRecId == "0000000") {
         utilSigo.toastWarning("", "Seleccione una Nueva Modalidad diferente a Ninguno");
         return false;
@@ -653,7 +667,7 @@ ManTHabilitante.recat.agregarRecategorizacion = function () {
                 , fechaRec
                 , resolucionRec
                 , nuevaModalidadRec
-                , observacionRec ]);
+                , observacionRec]);
         ManTHabilitante.recat.limpiarControles();
         var tRecNum = $('#tbRecategorizar').DataTable();
         tRecNum.on('order.dt', function () {
@@ -683,7 +697,7 @@ ManTHabilitante.recat.agregarRecategorizacion = function () {
     }
 };
 ManTHabilitante.recat.cargarEditRecat = function (obj) {
-    
+
     ManTHabilitante.frmTHabilitanteRegistro.find(".divCambioRect").slideDown();
     ManTHabilitante.recat.filaEditarRecategorizacion = $(obj).closest('tr');
     var filaEdit = ManTHabilitante.recat.filaEditarRecategorizacion;
@@ -694,7 +708,7 @@ ManTHabilitante.recat.cargarEditRecat = function (obj) {
     var columnasEdit = filaEdit.find('td');
     ManTHabilitante.frmTHabilitanteRegistro.find("#ddComoboMotivoRecId").val(filaEdit.find(".hdCOD_MADENDA").val());
     ManTHabilitante.frmTHabilitanteRegistro.find("#txtFechaRecat").val(columnasEdit.eq(3).text().trim());
-    ManTHabilitante.frmTHabilitanteRegistro.find("#txtNumRDRect").val(columnasEdit.eq(4).text().trim());    
+    ManTHabilitante.frmTHabilitanteRegistro.find("#txtNumRDRect").val(columnasEdit.eq(4).text().trim());
     ManTHabilitante.frmTHabilitanteRegistro.find("#ddModalidadTHId").val(filaEdit.find(".hdCOD_MTIPO").val().trim());
     ManTHabilitante.frmTHabilitanteRegistro.find("#txtObsRecat").val(columnasEdit.eq(6).text().trim());
 };
@@ -728,15 +742,15 @@ ManTHabilitante.recat.iniciarEventosRecategorizacion = function () {
         if (idSelect == '0000000') {
             ManTHabilitante.recat.limpiarControles();
         }
-        else ManTHabilitante.frmTHabilitanteRegistro.find(".divCambioRect").slideDown();        
+        else ManTHabilitante.frmTHabilitanteRegistro.find(".divCambioRect").slideDown();
     });
-    ManTHabilitante.frmTHabilitanteRegistro.find("#ddModalidadTHId").change(function () {        
+    ManTHabilitante.frmTHabilitanteRegistro.find("#ddModalidadTHId").change(function () {
         if (ManTHabilitante.frmTHabilitanteRegistro.find("#ddComoboMotivoRecId").val() == "0000007") {
 
             switch (ManTHabilitante.frmTHabilitanteRegistro.find("#hdfItemModalidadCodigo").val()) {
                 case "0000002":
                 case "0000003":
-                case "0000004":               
+                case "0000004":
                 case "0000023":
 
                     if (ManTHabilitante.frmTHabilitanteRegistro.find("#ddModalidadTHId").val() == "0000001") {
@@ -744,14 +758,14 @@ ManTHabilitante.recat.iniciarEventosRecategorizacion = function () {
                     } else {
                         ManTHabilitante.frmTHabilitanteRegistro.find("#divClaseZoologico").attr('hidden', 'hidden');
                     }
-                    
+
                     //  ManTHabilitante.frmTHabilitanteRegistro.find("#ddClaseZoologicoId").val("0"); 
                     break;
                 default:
                     ManTHabilitante.frmTHabilitanteRegistro.find("#divClaseZoologico").attr('hidden', 'hidden');
                     break;
             }
-        } 
+        }
     });
 
     //configurando tabla
@@ -906,7 +920,7 @@ ManTHabilitante.estab.prepararDatosReg = function () {
             var _columnaEstab = $(o).find('td');
             var _DataEstab = {
                 COD_MOTIVO_EV: $(o).find('.hdddEstablecimientoTHId').val(),
-                COD_THABILITANTE_EVALUACION_FAUNA: $(o).find('.hdCodTHEvaFauna').val(),                
+                COD_THABILITANTE_EVALUACION_FAUNA: $(o).find('.hdCodTHEvaFauna').val(),
                 NUMERO: _columnaEstab.eq(3).text(),
                 FECHA_AFFS: _columnaEstab.eq(4).text(),
                 NOMBRE_FIRMA_RES: _columnaEstab.eq(5).text(),
@@ -1574,7 +1588,7 @@ ManTHabilitante.uploadFile.uploadFileToServer = function (file, control) {
         error: function (jqXHR, error, errorThrown) {
             utilSigo.unblockUIGeneral();
             utilSigo.toastError("Error", "Sucedio un error, Comuniquese con el Administrador");
-           // console.log(jqXHR.responseText);
+            // console.log(jqXHR.responseText);
         }
     });
 };
@@ -1598,7 +1612,7 @@ ManTHabilitante.adend.exportarVerticeExcel = function () {
         error: function (jqXHR, error, errorThrown) {
             utilSigo.unblockUIGeneral();
             utilSigo.toastError("Error", "Sucedio un error, Comuniquese con el Administrador");
-           // console.log(jqXHR.responseText);
+            // console.log(jqXHR.responseText);
         }
     });
 };

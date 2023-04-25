@@ -552,104 +552,105 @@ namespace CapaEntidad.DOC
     {
         #region entidades y propiedades
 
-        
+
         public String COD_THABILITANTE { get; set; }
 
-       
+
         public String COD_INFORME { get; set; }
 
-        
+
         public String COD_RDINICIO { get; set; }
 
-       
+
         public String COD_RDTERMINO { get; set; }
 
-       
+
         public String MODALIDAD { get; set; }
 
-       
+
         public String TITULAR { get; set; }
 
-       
+
         public String PERMISO_AUTORIZACION { get; set; }
 
-      
+
         public String REGION { get; set; }
-       
+
         public String DEPARTAMENTO { get; set; }
-      
+
         public String PROVINCIA { get; set; }
-       
+
         public String DISTRITO { get; set; }
 
-       
+
         public String Parentesco { get; set; }
 
-       
+
         public String SECTOR { get; set; }
 
-      
+
         public String POA { get; set; }
-    
+
         public Int32 NUM_POA { get; set; }
-      
+
         public String ARESOLUCION_NUM { get; set; }
-      
+
         public String REFORMULA_NUM { get; set; }
-       
+
         public string INICIO_VIGENCIA { get; set; }
-       
+
         public string BEXTRACCION_FEMISION { get; set; }
-      
+
         public string FECHA_INFORME { get; set; }
 
-      
+
         public String INF_NUMERO { get; set; }
-       
+        public String COD_ITIPO { get; set; }
+
         public String ANIO_SUPER { get; set; }
-     
+
         public string FECHA_INI { get; set; }
-      
+
         public string FECHA_TERMINO { get; set; }
 
         public String INF_LEGAL { get; set; }
-        
+
         public String DETER_INF_LEGAL { get; set; }
-       
+
         public String MOTIVO_ARCHIVO { get; set; }
 
-       
+
         public String RD_INICIO_PAU { get; set; }
-       
+
         public String RD_TERMINO_PAU { get; set; }
-       
+
         public string MEDIDAS_CAUTELARES { get; set; }
-      
+
         public string RD_INICIO_INF_FALSA { get; set; }
 
-       
+
         public String RD_RECONSIDERACION { get; set; }
-        
+
         public String DETER_RECONSIDERACION { get; set; }
 
-       
+
         public string LEV_CADUC_RD_REC { get; set; }
 
-        
+
         public String RES_TFFS { get; set; }
-        
+
         public String NOM_RECAPE_TFFS { get; set; }
-        
+
         public String NOM_TIPDET_TFFS { get; set; }
-       
+
         public String NOM_MOTDET_TFFS { get; set; }
 
-       
+
         public String PROVEIDO { get; set; }
-      
+
         public String APELA { get; set; }
 
-        
+
         public String COD_UCUENTA { get; set; }
 
         //[Description("FIN_FOR_f")]
@@ -667,131 +668,133 @@ namespace CapaEntidad.DOC
         //[Description("FIN_FOR_w")]
         //public String FIN_FOR_w { get; set; }
 
-       
+
         public String PAU_FIN_TIPO { get; set; }
 
-      
+
         public string CADUCIDAD { get; set; }
 
-        
+
         public String ARCH { get; set; }
 
-       
+
 
         //para las inexistencias 
-      
+
         public String NOMBRE_CIENTIFICO { get; set; }
-       
+
         public String NOMBRE_COMUN { get; set; }
-      
+
         public Decimal VOLUMEN_APROBADO_RESOLUCION { get; set; }
-      
+
         public Decimal VOLUMEN_EXTRAIDO { get; set; }
-     
+
         public Int32 MUESTRA { get; set; }
-      
+
         public Int32 INEX { get; set; }
-       
+
         public Decimal VOL_RD { get; set; }
 
         //para la busqueda de reportes
-     
+
         public String BusCriterio { get; set; }
 
-     
+
         public String BusValor { get; set; }
 
-      
+
         public String ZAFRA { get; set; }
 
-       
+
         public Decimal Porcentaje { get; set; }
 
         //notificacion
-       
+
         public String NUMERO_RESOLUCION { get; set; }
-       
+
         public String PERSONA_NOTIFICADA { get; set; }
-       
+
         public String Autoridad { get; set; }
-       
+
         public String NUMERO_EXPEDIENTE { get; set; }
 
 
-        
+
         public String NUMERO_NOTIFICACION { get; set; }
-       
+
         public Object FECHA_NOTIFICACION { get; set; }
-       
+
         public String TIPO_NOTIFICACION { get; set; }
 
-        
+
         public String COD_RESODIREC { get; set; }
 
 
 
-       
+
         public String ARTICULO { get; set; }
-        
+
         public String ENCISO { get; set; }
 
-       
+
         public Decimal VOLUMEN { get; set; }
         //[Description("VOLUMEN_INI")]
         //public Decimal VOLUMEN_INI { get; set; }
         //[Description("VOLUMEN_TER")]
         //public Decimal VOLUMEN_TER { get; set; }
-       
+
         public Decimal SALDO { get; set; }
 
-       
+
         public String ESPECIES { get; set; }
 
-        
+
         public Decimal AREA { get; set; }
 
-        
+
         public Int32 NUMERO_INDIVIDUOS { get; set; }
 
-        
+
         public String INFRACCIONES { get; set; }
 
-       
+
         public String OBSERVACION { get; set; }
 
         //literales de sancion
-       
+
         public String sanciones { get; set; }
 
-     
+
         public String DOC_SIADO_ARESOL { get; set; }
-       
+        public String DOC_ORIGEN_ARESOL { get; set; }
+
         public String DOC_SIADO_REFOR { get; set; }
-       
+        public String DOC_ORIGEN_REFOR { get; set; }
+
         public String DOC_SIADO_INFORME { get; set; }
-       
+
         public String DOC_SIADO_ILEGAL { get; set; }
-       
+
         public String DOC_SIADO_INI { get; set; }
-        
+
         public String DOC_SIADO_TER { get; set; }
-       
+
         public String DOC_SIADO_REC { get; set; }
 
 
-       
+
         public String TIPO_DOCUMENTO { get; set; }
-      
+
         public String FECHA_HORA_CONSULTA { get; set; }
 
         //14/11/2019 RD DE ADCUACION Y MULTA
-       
+
         public String RD_ADECUACION { get; set; }
-       
+
         public string FECHA_ADECUACION { get; set; }
-       
+
         public String TIPO_ADECUACION { get; set; }
-      
+
         public Decimal MULTA_PAU { get; set; }
         #endregion
         #region constructor

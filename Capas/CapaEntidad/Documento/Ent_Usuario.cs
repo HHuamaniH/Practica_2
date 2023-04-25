@@ -29,6 +29,17 @@ namespace CapaEntidad.DOC
         public String COD_UGRUPO { get; set; }
         [Description("USUARIO_LOGIN")]
         public String USUARIO_LOGIN { get; set; }
+        [Description("TIPO_PERSONAL")]
+        public String TIPO_PERSONAL { get; set; }
+        [Description("CARGO")]
+        public String CARGO { get; set; }
+        [Description("LUGAR_TRABAJO")]
+        public String LUGAR_TRABAJO { get; set; }
+        [Description("OFICINA")]
+        public String OFICINA { get; set; }
+        [Description("INSTITUCION")]
+        public String INSTITUCION { get; set; }
+
         [Description("USUARIO_CONTRASENA")]
         public String USUARIO_CONTRASENA { get; set; }
         [Description("CONTRASENA_CAMBIAR")]
@@ -37,7 +48,7 @@ namespace CapaEntidad.DOC
         public String APELLIDOS_NOMBRES { get; set; }
         [Description("ESTADO_ACTIVO")]
         public Object ESTADO_ACTIVO { get; set; }
-        
+
         [Description("esPublico")]
         public Object esPublico { get; set; }
         [Description("NOTIFICADO")]
@@ -78,10 +89,10 @@ namespace CapaEntidad.DOC
         public Object ACCESO_NOCADUCA { get; set; }
         [Category("FECHA"), Description("FECHA_SOLICITUD")]
         public Object FECHA_SOLICITUD { get; set; }
-        
+
         [Category("FECHA"), Description("FECHA_DESDE")]
         public Object FECHA_DESDE { get; set; }
-        
+
         [Category("FECHA"), Description("FECHA_HASTA")]
         public Object FECHA_HASTA { get; set; }
 

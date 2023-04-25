@@ -18,7 +18,7 @@ namespace CapaDatos.DOC
         public List<Ent_PreVisualizarv1> Reporte_EstadodeGuiaTransporte(string criterio, string valorBusqueda, int currentPage, int pageSize, string sort, ref int rowCount)
         {
             List<Ent_PreVisualizarv1> lstResult = new List<Ent_PreVisualizarv1>();
-            
+
             rowCount = 0;
 
             try
@@ -32,7 +32,7 @@ namespace CapaDatos.DOC
                         {
                             if (dr.HasRows)
                             {
-                                Ent_PreVisualizarv1 oCampos;                              
+                                Ent_PreVisualizarv1 oCampos;
 
                                 while (dr.Read())
                                 {
@@ -55,6 +55,7 @@ namespace CapaDatos.DOC
                                     oCampos.BEXTRACCION_FEMISION = dr["BEXTRACCION_FEMISION"].ToString();
                                     oCampos.COD_INFORME = dr["COD_INF"].ToString();
                                     oCampos.INF_NUMERO = dr["INF_NUMERO"].ToString();
+                                    oCampos.COD_ITIPO = dr["COD_ITIPO"].ToString();
                                     oCampos.ANIO_SUPER = dr["ANIO_SUPER"].ToString();
                                     oCampos.FECHA_INI = dr["FECHA_INI"].ToString();
                                     oCampos.FECHA_TERMINO = dr["FECHA_TERMINO"].ToString();
@@ -63,7 +64,9 @@ namespace CapaDatos.DOC
                                     oCampos.MOTIVO_ARCHIVO = dr["MOTIVO_ARCHIVO"].ToString();
 
                                     oCampos.DOC_SIADO_ARESOL = dr["DOC_SIADO_ARESOL"].ToString();
+                                    oCampos.DOC_ORIGEN_ARESOL = dr["DOC_ORIGEN_ARESOL"].ToString();
                                     oCampos.DOC_SIADO_REFOR = dr["DOC_SIADO_REFOR"].ToString();
+                                    oCampos.DOC_ORIGEN_REFOR = dr["DOC_ORIGEN_REFOR"].ToString();
                                     oCampos.DOC_SIADO_INFORME = dr["DOC_SIADO_INFORME"].ToString();
                                     oCampos.DOC_SIADO_ILEGAL = dr["DOC_SIADO_ILEGAL"].ToString();
                                     //14/11/2019 carr adicion de tipo informe
@@ -114,7 +117,7 @@ namespace CapaDatos.DOC
                                 for (int i = 0; i < dr.FieldCount; i++)
                                 {
                                     sColumn = dr.GetName(i);
-                                    sFila.Add(sColumn, dr[sColumn].ToString());                              
+                                    sFila.Add(sColumn, dr[sColumn].ToString());
                                 }
                                 lstResult.Add(sFila);
                             }

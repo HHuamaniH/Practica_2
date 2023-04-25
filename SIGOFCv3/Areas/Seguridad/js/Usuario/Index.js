@@ -7,8 +7,8 @@ ManUsuario.fnLoadManGrillaPaging = function () {
     var option = { url: url, datos: JSON.stringify(data), type: 'POST', dataType: 'html' };
 
     var columns_label = [], columns_data = [], options = {};
-    columns_label = ["Fecha de registro", "Usuario", "Nombres ", "Estado"];
-    columns_data = ["fCreacion", "usuario", "descripcion", "estado"];
+    columns_label = ["Fecha de registro", "Usuario", "Nombres", "Tipo Persona", "Lugar Trabajo", "Oficina", "Estado"];
+    columns_data = ["fCreacion", "usuario", "descripcion", "tipo_persona", "lugar_trabajo", "oficina", "estado"];
     var data_extend = [
         {
             "data": "codigo", "title": "Perfil", "orderable": false, "searchable": false, "mRender": function (data, type, row, meta) {
@@ -34,7 +34,7 @@ ManUsuario.fnLoadManGrillaPaging = function () {
     utilSigo.fnAjax(option, function (data) {
         ManUsuario.frm.find("#dvManUsuarioContenedor").html(data);
         _ManGrillaPaging.fnInit(columns_label, columns_data, options);
-       
+
         //Eliminar los elementos DOM tipoFormulario y titleMenu para solucionar error "non-unique"
         ManUsuario.frm.find("#tipoFormulario").remove();
         ManUsuario.frm.find("#titleMenu").remove();
@@ -42,25 +42,25 @@ ManUsuario.fnLoadManGrillaPaging = function () {
         _ManGrillaPaging.fnCreate = function (obj) {
             _ManGrillaPaging.fnReadConfigManGrillaPaging();
             var codUser = "";
-            if (obj != null && obj!="") {
+            if (obj != null && obj != "") {
                 var itemRow = _ManGrillaPaging.dtManGrillaPaging.row($(obj).parents('tr')).data();
                 codUser = itemRow.codigo;
             }
 
             var url = urlLocalSigo + "Seguridad/Usuario/_Usuario";
             var option = { url: url, type: 'POST', datos: { id: codUser }, divId: "mdlManUsuario_Global" };
-            utilSigo.fnOpenModal(option, function () {});
+            utilSigo.fnOpenModal(option, function () { });
         }
 
     });
 }
-ManUsuario.fnLoadOpcion = function (obj,op) {
+ManUsuario.fnLoadOpcion = function (obj, op) {
     var itemRow = _ManGrillaPaging.dtManGrillaPaging.row($(obj).parents('tr')).data();
     if (op == 1) { ManUsuario.fnLoadUsuarioMenu(itemRow.codigo); }
     else if (op == 2) { ManUsuario.fnLoadUsuarioPerfil(itemRow.codigo, itemRow.descripcion); }
     else if (op == 3) { ManUsuario.fnLoadUsuarioAccesos(itemRow.codigo, itemRow.descripcion); }
-} 
-ManUsuario.fnLoadUsuarioPerfil = function (codUsuario,usuario) {
+}
+ManUsuario.fnLoadUsuarioPerfil = function (codUsuario, usuario) {
     var url = urlLocalSigo + "Seguridad/Usuario/_UsuarioPerfil";
     var option = { url: url, datos: { idUser: codUsuario, desc: usuario }, dataType: 'html' };
     utilSigo.fnAjax(option, function (data) {
@@ -88,7 +88,7 @@ ManUsuario.fnShowHide = function (opcion) {
     if (opcion == 1) {
         $("#divManUsuarioMenu").slideDown();
         $("#divManUsuario").slideUp();
-    }   
+    }
     else {
         $("#divManUsuario").slideDown();
         $("#divManUsuarioMenu").slideUp();

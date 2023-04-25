@@ -12,6 +12,7 @@ using CEntidad = CapaEntidad.DOC.Ent_ANTECEDENTE_EXPEDIENTE;
 using CLogica = CapaLogica.DOC.Log_ANTECEDENTE_EXPEDIENTE;
 using SIGOFCv3.Areas.THabilitante.Models.ManVentanillaAntecedentesExpedientes;
 using SIGOFCv3.Helper;
+using System.IO;
 
 namespace SIGOFCv3.Areas.THabilitante.Controllers
 {
@@ -130,9 +131,10 @@ namespace SIGOFCv3.Areas.THabilitante.Controllers
         }
 
         [HttpGet]
-        public ActionResult _Transferir(string tipo, string COD_DREFERENCIA, string DOC_REFERENCIA, string COD_AEXPEDIENTE_SITD, string COD_TRAMITE_SITD, string SUBTIPO)
+        public ActionResult _Transferir(string tipo, string COD_DREFERENCIA, string DOC_REFERENCIA, string COD_AEXPEDIENTE_SITD, string COD_TRAMITE_SITD, string SUBTIPO, string obs)
         {
             CLogica log = new CLogica();
+            ViewBag.Obs = obs;
             return PartialView(log.InitTransferir(tipo, COD_DREFERENCIA, DOC_REFERENCIA, COD_AEXPEDIENTE_SITD, COD_TRAMITE_SITD, SUBTIPO));
         }
 
@@ -146,6 +148,26 @@ namespace SIGOFCv3.Areas.THabilitante.Controllers
             dto.ListPOA = vmRD.ListPOA;*/
             ListResult result = log.sincronizar(dto, codCuenta);
             return Json(result);
+        }
+
+        //29/11/2022 ENLACE AL FORMULARIO POA
+        [HttpPost]
+        public JsonResult asociarPOA(CEntidad dto)
+        {
+            string codCuenta = (ModelSession.GetSession())[0].COD_UCUENTA;
+            Ent_BUSQUEDA oCampos = new Ent_BUSQUEDA();
+            String codFormulario = "";
+            oCampos.BusFormulario = "POA";
+            oCampos.BusCriterio = "CODTH_RESOLUCION";
+            oCampos.BusValor = dto.BusValor;
+            List<Ent_BUSQUEDA> lista = new List<Ent_BUSQUEDA>();
+            Log_BUSQUEDA oCLogica = new Log_BUSQUEDA();
+            lista = oCLogica.RegMostrarLista(oCampos);
+            /* CLogica log = new CLogica();
+             CLogica exeBus = new CLogica();
+             dto.ListPOA = vmRD.ListPOA;
+             ListResult result = log.sincronizar(dto, codCuenta);*/
+            return Json(lista);
         }
 
         [HttpGet]
@@ -224,6 +246,31 @@ namespace SIGOFCv3.Areas.THabilitante.Controllers
             {
                 return Json(new { success = false, msj = ex.Message }, JsonRequestBehavior.AllowGet);
             }
+        }
+        [HttpPost]
+        public ActionResult DownloadCenso(string coddoc, string file = "PoaMaderable_Censo_v2.xlsx")
+        {
+            //dto.ListMadeCENSO = objVM2.ListMadeCENSO;
+            string codCuenta = (ModelSession.GetSession())[0].COD_UCUENTA;
+            Ent_BUSQUEDA oCampos = new Ent_BUSQUEDA();
+            String codFormulario = "";
+            oCampos.BusFormulario = "POA";
+            oCampos.BusCriterio = "CODDOC_POA_CENSO";
+            oCampos.BusValor = coddoc;
+            List<Ent_BUSQUEDA> lista = new List<Ent_BUSQUEDA>();
+            Log_BUSQUEDA oCLogica = new Log_BUSQUEDA();
+            lista = oCLogica.RegMostrarLista(oCampos);
+            object result = new object();
+            result = Reportes.THabilitante.ReportePOA.DescargaExcelCENSO(lista);
+
+            return Json(result);
+        }
+        [HttpGet]
+        [DeleteFileAttribute]
+        public ActionResult Download(string file = "PoaMaderable_Censo_v2.xlsx")
+        {
+            string fullPath = Path.Combine(Server.MapPath("~/Archivos/Plantilla"), file);
+            return File(fullPath, "application/vnd.ms-excel", file);
         }
     }
 }

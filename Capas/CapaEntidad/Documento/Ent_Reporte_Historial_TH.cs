@@ -57,6 +57,9 @@ namespace CapaEntidad.DOC
         //[Description("BusLinea")]
         //public String BusLinea { get; set; }
 
+        [Description("V_MESES")]
+        public Int32 V_MESES { get; set; }
+
         [Description("NUM_POA")]
         public Int32 NUM_POA { get; set; }
 
@@ -1033,6 +1036,7 @@ namespace CapaEntidad.DOC
             MONTOCOMPENSABLE_CC = -1;
             MONTOCOMPENSABLE_P_CC = -1;
             COMPESTADO_CC = -1;
+            V_MESES = -1;
         }
         #endregion
     }

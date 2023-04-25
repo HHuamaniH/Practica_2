@@ -105,7 +105,7 @@ namespace CapaEntidad.DOC
         public Object ITECNICO_REFORMULA_POA_FECHA { get; set; }
 
         //DIRECCION UBIGEO REGENTE
-       
+
         [Description("DIRECCION_REGENTE")]
         public String DIRECCION_REGENTE { get; set; }
         [Description("UBIGEO_REGENTE")]
@@ -488,6 +488,12 @@ namespace CapaEntidad.DOC
         [Description("ESPECIES_SERFOR")]
         public String ESPECIES_SERFOR { get; set; }
 
+        //TGS 26-12-2022: Agrega atributos del tipo de cargo
+        [Description("COD_PTIPO")]
+        public String COD_PTIPO { get; set; }
+        [Description("TIPO_CARGO")]
+        public String TIPO_CARGO { get; set; }
+
         [Category("LIST"), Description("ListMComboEspeciesSerfor")]
         public List<Ent_POA> ListMComboEspeciesSerfor { get; set; }
 
@@ -620,16 +626,16 @@ namespace CapaEntidad.DOC
         //05/05/2021
         [Category("LIST"), Description("ListParcela")]
         public List<Ent_POA> ListParcela { get; set; }
-       
+
         //Error Material
         [Category("LIST"), Description("ListPOAErrorMaterialG")]
         public List<Ent_ERRORMATERIAL> ListPOAErrorMaterialG { get; set; }
         [Category("LIST"), Description("ListPOAErrorMaterialA")]
         public List<Ent_ERRORMATERIAL> ListPOAErrorMaterialA { get; set; }
-       
+
         #endregion
-       
-        
+
+
         #region "Constructor"
         public Ent_POA()
         {

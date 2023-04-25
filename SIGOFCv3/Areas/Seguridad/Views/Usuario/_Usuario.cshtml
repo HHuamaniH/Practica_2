@@ -33,6 +33,36 @@
                         @Html.EditorFor(m => m.usuario, new { htmlAttributes = new { @class = "form-control form-control-sm", @maxlength = "20" } })
                     </div>
                 </div>
+                <div class="form-row">
+                    <div class="form-group col-md-12">
+                        <label for="usuario" class="text-small">Tipo de Persona</label>
+                        @Html.DropDownListFor(m => m.ddlTipoPersonalId, new SelectList(Model.ddlTipoPersonal, "Value", "Text"), new { @class = "form-control form-control-sm" })
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-12">
+                        <label for="usuario" class="text-small">Cargo/Funcion</label>
+                        @Html.EditorFor(m => m.cargo, new { htmlAttributes = new { @class = "form-control form-control-sm", oninput = "this.value = this.value.replace(/[^áéíóúa-zÁÉÍÓÚA-Z 0-9]/,'')", @maxlength = "90" } })
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-12">
+                        <label for="usuario" class="text-small">Lugar de Trabajo</label>
+                        @Html.DropDownListFor(m => m.ddlLugarTrabajoId, new SelectList(Model.ddlLugarTrabajo, "Value", "Text"), new { @class = "form-control form-control-sm" })
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-12">
+                        <label for="usuario" class="text-small">Oficina/Unidad/Area del Trabajo</label>
+                        @Html.EditorFor(m => m.oficina, new { htmlAttributes = new { @class = "form-control form-control-sm", oninput = "this.value = this.value.replace(/[^áéíóúa-zÁÉÍÓÚA-Z 0-9]/,'')", @maxlength = "150" } })
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-12">
+                        <label for="usuario" class="text-small">Institución</label>
+                        @Html.EditorFor(m => m.institucion, new { htmlAttributes = new { @class = "form-control form-control-sm", oninput = "this.value = this.value.replace(/[^áéíóúa-zÁÉÍÓÚA-Z 0-9]/,'')", @maxlength = "150" } })
+                    </div>
+                </div>
                 <div class="form-row" id="divMod" style="display:none;">
                     <div class="form-group col-md-12">
                         <div class="custom-control custom-checkbox my-1 mr-sm-2">
@@ -74,7 +104,7 @@
                             </label>
                         </div>
                     </div>
-                </div>               
+                </div>
                 <div class="form-row">
                     <div class="form-group col-md-12">
                         <div class="custom-control custom-checkbox my-1 mr-sm-2">

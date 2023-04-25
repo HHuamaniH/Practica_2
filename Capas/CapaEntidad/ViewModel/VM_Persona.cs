@@ -54,6 +54,7 @@ namespace CapaEntidad.ViewModel
         public string ddlISexoId { get; set; }
         public IEnumerable<VM_Cbo> ddlITipoCargo { get; set; }
         public string ddlITipoCargoId { get; set; }
+        public string txtITipoCargo { get; set; }
         public string hdfITipoCargo { get; set; }
         public IEnumerable<VM_Cbo> ddlINivelAcademico { get; set; }
         public string ddlINivelAcademicoId { get; set; }
@@ -69,7 +70,24 @@ namespace CapaEntidad.ViewModel
         public int NACTIVO { get; set; }
         public string NACTIVO_NOM { get; set; }
         public int RegEstadoPersona { get; set; }
+        public string txtTelefono { get; set; }
+        public string txtCorreo { get; set; }
 
+        //TGS 25-11-2022: Agrega información de tipo cargo Regente
+        public string ddlAnioId { get; set; }
+        public IEnumerable<VM_Cbo> ddlAnio { get; set; }
+        public string txtNroLicencia { get; set; }
+        public string txtFecLicencia { get; set; }
+        public string txtResolucion { get; set; }
+        public string ddlCategoriaId { get; set; }
+        public IEnumerable<VM_Cbo> ddlCategoria { get; set; }
+        public string ddlMencionRegenciaId { get; set; }
+        public string hdfMencionRegencia { get; set; }
+        public IEnumerable<VM_Cbo> ddlMencionRegencia { get; set; }
+        public string txtCIP { get; set; }
+        public string ddlEstadoId { get; set; }
+        public IEnumerable<VM_Cbo> ddlEstado { get; set; }
+        public string txtOtro { get; set; }
 
         public List<Ent_Persona> tbTipoCargo { get; set; }
         public List<Ent_Persona> tbDomicilio { get; set; }

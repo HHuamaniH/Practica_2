@@ -120,11 +120,11 @@
                     </div>
                 </div>
                 @**************************************************INICIO*********************************************************
-        ////////////////////////////////////////////////////////////////////////////////////////////////////////////*@
-                <div class="card-header text-small" style="display: none">
-                    Listado de archivos - Encryptado
+                    ////////////////////////////////////////////////////////////////////////////////////////////////////////////*@
+                <div class="card-header text-small">
+                    Listado de archivos - Encriptado
                 </div>
-                <div class="card-body" style="display: none">
+                <div class="card-body">
                     <div class="form-row">
                         <div class="form-group col-md-12" style="text-align:right">
                             <button type="button" class="btn btn-outline-info btn-sm" style="margin-top:3px;" onclick="_cartaMod.fnImportFileEncryp()" title="Subir archivo">Subir</button>
@@ -157,7 +157,7 @@
                                                     Archivos
                                                 </strong>
                                             </div>
-                                            
+
                                         </th>
                                     </tr>
                                 </thead>
@@ -169,7 +169,7 @@
                 </div>
 
                 @***************************************************FIN******************************************
-        ////////////////////////////////////////////////////////////////////////////////////////////*@
+                    ////////////////////////////////////////////////////////////////////////////////////////////*@
                 <div class="card-header text-small">
                     Listado de archivos - Información geográfica
                 </div>
@@ -227,7 +227,7 @@
     var _cartaMod = {
         selectFile: [],
         selectFileInfoGeo: [],
-        selectFileEncrip:[],
+        selectFileEncrip: [],
         lstdelete: [],
         fnGetDataTableActa: () => {
             var list = [];
@@ -260,10 +260,10 @@
             return list;
         },
 
-        // **************************Encryptado*****************************************
+        // **************************Encriptado*****************************************
         fnImportFileEncryp: () => {
             if (_cartaMod.selectFileEncrip != null) {
-                // Checking whether FormData is available in browser  
+                // Checking whether FormData is available in browser
                 if (window.FormData !== undefined) {
                     var url = urlLocalSigo + "Supervision/ManItenerario/UploadFilesEncryp";
                     var fileData = new FormData();
@@ -273,8 +273,8 @@
                     $.ajax({
                         url: url,
                         type: "POST",
-                        contentType: false, // Not to set any content header  
-                        processData: false, // Not to process data  
+                        contentType: false, // Not to set any content header
+                        processData: false, // Not to process data
                         data: fileData,
                         success: function (result) {
                             utilSigo.unblockUIGeneral();
@@ -315,7 +315,7 @@
             var columns_data = ["NOMBRE_ARCH", "EXTENSION_ARCH"]
             data_extend = [
                 {
-                    "data": "","title": "", "width": "2%", "orderable": false, "searchable": false, "mRender": function (data, type, row) {
+                    "data": "", "title": "", "width": "2%", "orderable": false, "searchable": false, "mRender": function (data, type, row) {
 
                         if (row.NOMBRE_ARCH != null) {
                             return '<div><i class="fa fa-cloud-download" style="color:black;cursor:pointer;" title="Descargar archivo desenciptado" onclick="_cartaMod.fnDownloadFileDesencryp(this)"></i>';
@@ -327,7 +327,7 @@
                 }
             ];
             var options = {
-                page_length: 6, row_delete: true, row_fnDelete: "_cartaMod.fnDeleteFileEncryp(this)"
+                page_length: 6, row_delete: false, row_fnDelete: "_cartaMod.fnDeleteFileEncryp(this)"
                 , row_download: true, row_fnDownload: "_cartaMod.fnDownloadFileEncryp(this)"
                 , row_index: true, data_extend: data_extend
             };
@@ -410,16 +410,16 @@
                 window.open(urlLocalSigo + "Archivos/Modulo/Supervision/Itinerario/Encriptado/" + data["COD_BITACORA"] + "-" + data["NOMBRE_ARCH"] + "." + data["EXTENSION_ARCH"], '_blank');
             } else if (parseInt(data["RegEstado"]) != 0 && data["NOM_ARCH_TEMP"] != null) {
                 window.open(urlLocalSigo + "Archivos/Modulo/Supervision/Itinerario/Temp/" + data["NOM_ARCH_TEMP"], "_blank");
-            } 
-                
-            
+            }
+
+
         },
         fnDownloadFileDesencryp: (obj) => {
             var dt = _cartaMod.dtFileEncryp;
             var data = dt.row($(obj).parents('tr')).data();
             if (parseInt(data["RegEstado"]) == 0) {
                 window.open(urlLocalSigo + "Archivos/Modulo/Supervision/Itinerario/Encriptado/Desencriptado/" + data["NOMBRE_ARCH"] + ".csv", '_blank');
-            } 
+            }
         },
 
         fnDeleteFileEncryp: (obj) => {
@@ -483,7 +483,7 @@
             var dt = _cartaMod.dtFileActa;
             var data = dt.row($(obj).parents('tr')).data();
             if (parseInt(data["COD_SECUENCIAL_ACTA"]) != 0) {
-                window.open(urlLocalSigo + "Archivos/Modulo/Supervision/Itinerario/" + data["NOM_ARCH_TEMP"], '_blank');
+                window.open(urlLocalSigo + "Archivos/Modulo/Supervision/Itinerario/" + data["COD_BITACORA"] + data["COD_SECUENCIAL_ACTA"] + "." + data["EXTENSION_ARCH"], '_blank');
             } else {
                 window.open(urlLocalSigo + "Archivos/Modulo/Supervision/Itinerario/Temp/" + data["NOM_ARCH_TEMP"], "_blank");
             }
@@ -540,7 +540,7 @@
             if (parseInt(data["RegEstado"]) != 0) {
                 window.open(urlLocalSigo + "Archivos/Modulo/Supervision/Itinerario/" + data["NOM_ARCH_TEMP"], '_blank');
             } else {
-                let url = urlLocalSigo + "Supervision/ManItenerario/DownloadFileInfoGeo?ruta=" + data["RUTA_ARCH"] + "&nombre=" + data["NOMBRE_ARCH"];                
+                let url = urlLocalSigo + "Supervision/ManItenerario/DownloadFileInfoGeo?ruta=" + data["RUTA_ARCH"] + "&nombre=" + data["NOMBRE_ARCH"];
                 window.open(url, "_blank");
             }
         },
@@ -577,7 +577,7 @@
         },
         fnImportFile: () => {
             if (_cartaMod.selectFile != null) {
-                // Checking whether FormData is available in browser  
+                // Checking whether FormData is available in browser
                 if (window.FormData !== undefined) {
                     var url = urlLocalSigo + "Supervision/ManItenerario/UploadFilesAlerta";
                     var fileData = new FormData();
@@ -587,8 +587,8 @@
                     $.ajax({
                         url: url,
                         type: "POST",
-                        contentType: false, // Not to set any content header  
-                        processData: false, // Not to process data  
+                        contentType: false, // Not to set any content header
+                        processData: false, // Not to process data
                         data: fileData,
                         success: function (result) {
                             utilSigo.unblockUIGeneral();
@@ -623,7 +623,7 @@
         },
         fnImportFileInfoGeo: () => {
             if (_cartaMod.selectFileInfoGeo != null) {
-                // Checking whether FormData is available in browser  
+                // Checking whether FormData is available in browser
                 if (window.FormData !== undefined) {
                     var url = urlLocalSigo + "Supervision/ManItenerario/UploadFilesInfoGeo";
                     var fileData = new FormData();
@@ -633,8 +633,8 @@
                     $.ajax({
                         url: url,
                         type: "POST",
-                        contentType: false, // Not to set any content header  
-                        processData: false, // Not to process data  
+                        contentType: false, // Not to set any content header
+                        processData: false, // Not to process data
                         data: fileData,
                         success: function (result) {
                             utilSigo.unblockUIGeneral();
@@ -714,7 +714,7 @@
                 // else {
                 $("#" + idFile).next().text(fileNames.join(","));
 
-                
+
                 // }
 
             }
@@ -774,7 +774,7 @@
         fnClose: () => {
             utilSigo.fnCloseModal("mdlCartaModificar");
         },
-        fnGuardar: () => {          
+        fnGuardar: () => {
             let frm = $("#frmModificarCartaBitacora");
             let txtFInitSupervision = frm.find("#txtFInitSupervision").val();
             if (txtFInitSupervision.trim() == "") {
@@ -802,7 +802,7 @@
             let hdCodReque = frm.find("#hdCodReque").val();
             let txtVolInjustAlerta = frm.find("#txtVolInjustAlerta").val();
             if (parseFloat(txtVolInjustAlerta) < 0) txtVolInjustAlerta = 0;
-          
+
             let model = {
                 FECHA_SALIDA: _IteEdit.frm.find("#fechaSalida").val(),
                 COD_BITACORA: hdCodBitacora,
@@ -810,10 +810,10 @@
                 COD_THABILITANTE: hdCodTH,
                 NUM_THABILITANTE: hdNumTH,
                 COD_SECUENCIAL: hdCodSecuencial,
-                SUPERVISADO: SUPERVISADO_TEXT == "SN" ? null : (SUPERVISADO_TEXT=="SI"?1:0),
+                SUPERVISADO: SUPERVISADO_TEXT == "SN" ? null : (SUPERVISADO_TEXT == "SI" ? 1 : 0),
                 COD_ITIPO: COD_ITIPO == "0000000" ? null : COD_ITIPO,
                 OBSERVACIONES: txtObservaciones,
-                ALERTA_ILEGAL: ALERTA_ILEGAL_TEXT == "SN" ? null : (ALERTA_ILEGAL_TEXT=="SI"?1:0),
+                ALERTA_ILEGAL: ALERTA_ILEGAL_TEXT == "SN" ? null : (ALERTA_ILEGAL_TEXT == "SI" ? 1 : 0),
                 DES_ALERTA_ILEGAL: ALERTA_ILEGAL_TEXT == "SI" ? txtDesAlerta : "",
                 OTROS_HECHO: ALERTA_ILEGAL_TEXT == "SI" ? txtOtrosHechos : "",
                 COD_REQUE: hdCodReque,
@@ -821,7 +821,7 @@
                 ACTA_ARCHIVO_TEXT: "",
                 NOTIFICAR_ARCHIVO: 0,
                 ARCHIVOS_NTF: "",
-                VOLUMEN_INJUSTIFICADO: ALERTA_ILEGAL_TEXT == "SI"?txtVolInjustAlerta:0,
+                VOLUMEN_INJUSTIFICADO: ALERTA_ILEGAL_TEXT == "SI" ? txtVolInjustAlerta : 0,
                 FECHA_INICIO_SUPERVISION: txtFInitSupervision,
                 FECHA_FIN_SUPERVISION: txtFTerminoSupervision,
                 RegEstado: 2
@@ -830,7 +830,7 @@
             model.ListDetActa = _cartaMod.fnGetDataTableActa();
             model.ListInfoGeo = _cartaMod.fnGetDataTableInfoGeo();
             model.ListEncryp = _cartaMod.fnGetDataTableEncryp();
-            model.ListInformeDetSupervisor = _renderSupervisor.fnGetListAll();              
+            model.ListInformeDetSupervisor = _renderSupervisor.fnGetListAll();
             utilSigo.dialogConfirm("", "Está seguro registrar los datos?", function (r) {
                 if (r) {
                     let url = urlLocalSigo + "Supervision/ManItenerario/GuardarCartaBitacora";
@@ -845,7 +845,7 @@
                             utilSigo.toastWarning("Aviso", data.msj);
                         }
                     });
-                   
+
                 }
             });
         }
@@ -858,7 +858,7 @@
         frm.find("#txtFInitSupervision").datepicker(initSigo.formatDatePicker);
         frm.find("#txtFTerminoSupervision").datepicker(initSigo.formatDatePicker);
         let valAlertaItegal = $("#ALERTA_ILEGAL_TEXT").val();
-        if (valAlertaItegal == "SN" || valAlertaItegal=="NO") {
+        if (valAlertaItegal == "SN" || valAlertaItegal == "NO") {
             $("#divIlegal").hide();
         }
         else if (valAlertaItegal == "SI") {

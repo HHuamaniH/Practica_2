@@ -241,7 +241,7 @@ namespace CapaDatos.DOC
                             oCampos.AD_CANroTomos = dr["AD_CANroTomos"] == DBNull.Value ? "" : dr.GetInt32(dr.GetOrdinal("AD_CANroTomos")).ToString();
                             oCampos.AD_CANroFolios = dr["AD_CANroFolios"] == DBNull.Value ? "" : dr.GetInt32(dr.GetOrdinal("AD_CANroFolios")).ToString();
 
-                            oCampos.AD_RSConcluido = dr.GetBoolean(dr.GetOrdinal("AD_RSConcluido")); 
+                            oCampos.AD_RSConcluido = dr.GetBoolean(dr.GetOrdinal("AD_RSConcluido"));
 
                             oCampos.AD_RSProceso = dr.GetBoolean(dr.GetOrdinal("AD_RSProceso"));
                             oCampos.AD_RSPendiente = dr.GetBoolean(dr.GetOrdinal("AD_RSPendiente"));
@@ -264,7 +264,9 @@ namespace CapaDatos.DOC
                                 oCamposDet.COD_PERSONA = dr["COD_PERSONA"].ToString();
                                 oCamposDet.PERSONA = dr["PERSONA"].ToString();
                                 oCamposDet.N_DOCUMENTO = dr["N_DOCUMENTO"].ToString();
-                                oCamposDet.CARGO = dr["CARGO"].ToString();
+                                //oCamposDet.CARGO = dr["CARGO"].ToString();
+                                oCamposDet.COD_PTIPO = dr["COD_PTIPO"].ToString();
+                                oCamposDet.TIPO_CARGO = dr["TIPO_CARGO"].ToString();
                                 oCamposDet.RegEstado = 0;
                                 oCampos.ListTIOCULAR.Add(oCamposDet);
                             }
@@ -279,7 +281,9 @@ namespace CapaDatos.DOC
                                 oCamposDet.COD_PERSONA = dr["COD_PERSONA"].ToString();
                                 oCamposDet.PERSONA = dr["PERSONA"].ToString();
                                 oCamposDet.N_DOCUMENTO = dr["N_DOCUMENTO"].ToString();
-                                oCamposDet.CARGO = dr["CARGO"].ToString();
+                                //oCamposDet.CARGO = dr["CARGO"].ToString();
+                                oCamposDet.COD_PTIPO = dr["COD_PTIPO"].ToString();
+                                oCamposDet.TIPO_CARGO = dr["TIPO_CARGO"].ToString();
                                 oCamposDet.RegEstado = 0;
                                 oCampos.ListTRAPROBACION.Add(oCamposDet);
                             }
@@ -359,9 +363,9 @@ namespace CapaDatos.DOC
 
                                     if (oCamposDet.UNIDAD_MEDIDA.Trim().Equals("") || oCamposDet.UNIDAD_MEDIDA.Equals("-"))
                                     {
-                                        if(oCamposDet.TIPOMADERABLE.Equals("CARBON") || oCamposDet.TIPOMADERABLE.Equals("NO MADERABLES"))
+                                        if (oCamposDet.TIPOMADERABLE.Equals("CARBON") || oCamposDet.TIPOMADERABLE.Equals("NO MADERABLES"))
                                             oCamposDet.UNIDAD_MEDIDA = "KG";
-                                        else if(oCamposDet.TIPOMADERABLE.Equals("MADERABLES")) oCamposDet.UNIDAD_MEDIDA = "M3";
+                                        else if (oCamposDet.TIPOMADERABLE.Equals("MADERABLES")) oCamposDet.UNIDAD_MEDIDA = "M3";
                                     }
 
                                     oCamposDet.PCA = dr["PCA"].ToString();
@@ -551,14 +555,18 @@ namespace CapaDatos.DOC
                             int pt1 = dr.GetOrdinal("COD_PERSONA");
                             int pt2 = dr.GetOrdinal("PERSONA");
                             int pt3 = dr.GetOrdinal("N_DOCUMENTO");
-                            int pt4 = dr.GetOrdinal("CARGO");
+                            //int pt4 = dr.GetOrdinal("CARGO");
+                            int pt4 = dr.GetOrdinal("COD_PTIPO");
+                            int pt5 = dr.GetOrdinal("TIPO_CARGO");
                             while (dr.Read())
                             {
                                 oCamposDet = new CEntidad();
                                 oCamposDet.COD_PERSONA = dr.GetString(pt1);
                                 oCamposDet.PERSONA = dr.GetString(pt2);
                                 oCamposDet.N_DOCUMENTO = dr.GetString(pt3);
-                                oCamposDet.CARGO = dr.GetString(pt4);
+                                //oCamposDet.CARGO = dr.GetString(pt4);
+                                oCamposDet.COD_PTIPO = dr.GetString(pt4);
+                                oCamposDet.TIPO_CARGO = dr.GetString(pt5);
                                 oCamposDet.RegEstado = 0;
                                 oCampos.ListAOCULAR.Add(oCamposDet);
                             }
@@ -760,9 +768,10 @@ namespace CapaDatos.DOC
                                 {
                                     if (oCamposDet.TIPOMADERABLE.Equals("MADERABLES")) oCamposDet.UNIDAD_MEDIDA = "M3";
                                     else if (oCamposDet.TIPOMADERABLE.Equals("CARBON")) oCamposDet.UNIDAD_MEDIDA = "KG";
-                                    else if (oCamposDet.TIPOMADERABLE.Equals("NO MADERABLES")) {
-                                        if(!oCampos.COD_MTIPO.Equals("0000020")) oCamposDet.UNIDAD_MEDIDA = "KG";
-                                    } 
+                                    else if (oCamposDet.TIPOMADERABLE.Equals("NO MADERABLES"))
+                                    {
+                                        if (!oCampos.COD_MTIPO.Equals("0000020")) oCamposDet.UNIDAD_MEDIDA = "KG";
+                                    }
                                 }
 
                                 for (int i = 0; i < oCampos.ListBExtPOA.Count; i++)
@@ -871,7 +880,7 @@ namespace CapaDatos.DOC
                                 oCamposDet.AREA = decimal.Parse(dr["AREA"].ToString());
                                 oCamposDet.RegEstado = 0;
                                 oCampos.ListParcela.Add(oCamposDet);
-                           
+
                             }
                         }
 
@@ -1850,6 +1859,7 @@ namespace CapaDatos.DOC
                         oCamposDet.COD_THABILITANTE = oCEntidad.COD_THABILITANTE;
                         oCamposDet.NUM_POA = oCEntidad.NUM_POA;
                         oCamposDet.COD_POCULAR = loDatos.COD_PERSONA;
+                        oCamposDet.COD_PTIPO = loDatos.COD_PTIPO;
                         dBOracle.ManExecute(cn, tr, "DOC_OSINFOR_ERP_MIGRACION.spPOA_DET_AIOCULARGrabar", oCamposDet);
 
                     }
@@ -1864,6 +1874,7 @@ namespace CapaDatos.DOC
                         oCamposDet.COD_THABILITANTE = oCEntidad.COD_THABILITANTE;
                         oCamposDet.NUM_POA = oCEntidad.NUM_POA;
                         oCamposDet.COD_TIOCULAR = loDatos.COD_PERSONA;
+                        oCamposDet.COD_PTIPO = loDatos.COD_PTIPO;
                         dBOracle.ManExecute(cn, tr, "DOC_OSINFOR_ERP_MIGRACION.spPOA_DET_TIOCULARGrabar", oCamposDet);
 
                     }
@@ -1878,6 +1889,7 @@ namespace CapaDatos.DOC
                         oCamposDet.COD_THABILITANTE = oCEntidad.COD_THABILITANTE;
                         oCamposDet.NUM_POA = oCEntidad.NUM_POA;
                         oCamposDet.COD_TRAPROBACION = loDatos.COD_PERSONA;
+                        oCamposDet.COD_PTIPO = loDatos.COD_PTIPO;
                         dBOracle.ManExecute(cn, tr, "DOC_OSINFOR_ERP_MIGRACION.spPOA_DET_TRAPROBACIONGrabar", oCamposDet);
 
                     }

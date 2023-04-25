@@ -592,7 +592,7 @@
                                                     <label for="txtUbigeo" class="text-small">Ubigeo Real</label>
                                                     <div class="input-group">
                                                         @Html.EditorFor(m => m.txtUbigeo, new { htmlAttributes = new { @class = "form-control form-control-sm", @disabled = "disabled" } })
-                                                        @Html.HiddenFor(m => m.txtCodUbigeo)  
+                                                        @Html.HiddenFor(m => m.txtCodUbigeo)
                                                     </div>
                                                 </div>
                                                 <div class="form-group col-md-6">
@@ -636,7 +636,7 @@
                                                         <tr>
                                                             <th colspan="6" class="text-sm-left">
                                                                 <div class="form-inline">
-                                                                    <i class="fa mx-2 fa-lg fa-file-o" style="cursor:pointer;" onclick="ManPOA.fnBuscarPersona('IOCULAR', '0000005');" data-toggle="tooltip" data-placement="top" title="Nuevo"></i>
+                                                                    <i class="fa mx-2 fa-lg fa-file-o" style="cursor:pointer;" onclick="ManPOA.fnBuscarPersona('IOCULAR', 'TODOS');" data-toggle="tooltip" data-placement="top" title="Nuevo"></i>
                                                                 </div>
                                                             </th>
                                                         </tr>
@@ -715,7 +715,7 @@
                                                     <tr>
                                                         <th colspan="6" class="text-sm-left">
                                                             <div class="form-inline">
-                                                                <i class="fa mx-2 fa-lg fa-file-o" style="cursor:pointer;" onclick="ManPOA.fnBuscarPersona('ITRAPROBACION', '0000004');" data-toggle="tooltip" data-placement="top" title="Nuevo"></i>
+                                                                <i class="fa mx-2 fa-lg fa-file-o" style="cursor:pointer;" onclick="ManPOA.fnBuscarPersona('ITRAPROBACION', '0000021');" data-toggle="tooltip" data-placement="top" title="Nuevo"></i>
                                                             </div>
                                                         </th>
                                                     </tr>
@@ -2092,7 +2092,7 @@
                     <div class="form-group row">
                         <label for="ddlParcelaId" class="text-small col-md-3">PC</label>
                         <div class="col-md-9">
-                            <select id="txtParcelaEspecie"class="form-control-sm" >
+                            <select id="txtParcelaEspecie" class="form-control-sm">
                             </select>
                         </div>
                     </div>

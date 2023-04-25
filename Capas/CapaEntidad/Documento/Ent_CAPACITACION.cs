@@ -400,6 +400,9 @@ namespace CapaEntidad.DOC
         public String MAE_COD_PUBLICOPARTICIPANTE { get; set; }
         [Description("PUBLICOPARTICIPANTE")]
         public String PUBLICOPARTICIPANTE { get; set; }
+        //TGS: 16-12-2022
+        [Description("MOCHILAFORESTAL")]
+        public String MOCHILAFORESTAL { get; set; }
 
         [Category("LIST"), Description("ListPublicoParticipante")]
         public List<Ent_CAPACITACION> ListPublicoParticipante { get; set; }
@@ -414,9 +417,9 @@ namespace CapaEntidad.DOC
         [Category("FECHA"), Description("FECHA_CREACION")]
         public Object FECHA_CREACION { get; set; }
         #endregion
-        
-        
-        
+
+
+
         #region "Constructor"
         public Ent_CAPACITACION()
         {

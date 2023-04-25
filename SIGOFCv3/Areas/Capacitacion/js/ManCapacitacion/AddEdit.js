@@ -214,7 +214,7 @@ ManCapacitacion_AddEdit.fnInit = function () {
     ManCapacitacion_AddEdit.frm.find("#ddlZonaUtmId").select2({ minimumResultsForSearch: -1 });
     ManCapacitacion_AddEdit.frm.find("#ddlTipoAdjuntoId").select2({ minimumResultsForSearch: -1 });
 
-    if (ManCapacitacion_AddEdit.frm.find("#hdfCodCapacitacion").val()!="") {
+    if (ManCapacitacion_AddEdit.frm.find("#hdfCodCapacitacion").val() != "") {
         ManCapacitacion_AddEdit.frm.find("#ddlOdId").prop("disabled", "disabled");
         ManCapacitacion_AddEdit.frm.find("#ddlCapacitacionEjecutarId").prop("disabled", "disabled");
     }
@@ -238,7 +238,7 @@ ManCapacitacion_AddEdit.fnInit = function () {
     ManCapacitacion_AddEdit.frm.find("#ddlApoyoCoorganizadorId").select2("val", [ManCapacitacion_AddEdit.frm.find("#hdfApoyoCoorganizadorId").val().split(',')]);
 }
 
-ManCapacitacion_AddEdit.fnLoadComboCapacitacionEjecutar=function(_codOd) {
+ManCapacitacion_AddEdit.fnLoadComboCapacitacionEjecutar = function (_codOd) {
     $.ajax({
         url: urlLocalSigo + "CAPACITACION/ManProgramaCapacitacion/GetListCapacitacionProgramadaOd",
         type: 'GET',
@@ -282,8 +282,8 @@ ManCapacitacion_AddEdit.fnLoadDataCapacitacionProgramada = function (_codPCapaci
             utilSigo.unblockUIGeneral();
 
             ManCapacitacion_AddEdit.frm.find("#txtNomCapacitacion").val(result.data.txtNomPCapacitacion);
-            ManCapacitacion_AddEdit.frm.find("#ddlTipCapacitacionId").select2("val",[result.data.ddlTipPCapacitacionId]);
-            ManCapacitacion_AddEdit.frm.find("#ddlSumMetPoiId").select2("val",[result.data.ddlSumMetPoiId]);
+            ManCapacitacion_AddEdit.frm.find("#ddlTipCapacitacionId").select2("val", [result.data.ddlTipPCapacitacionId]);
+            ManCapacitacion_AddEdit.frm.find("#ddlSumMetPoiId").select2("val", [result.data.ddlSumMetPoiId]);
             ManCapacitacion_AddEdit.frm.find("#chkMarConvenio").prop("checked", result.data.chkMarConvenio);
             ManCapacitacion_AddEdit.frm.find("#txtFecInicio").val(result.data.txtFecInicio);
             ManCapacitacion_AddEdit.frm.find("#lblUbigeo").val(result.data.lblUbigeo);
@@ -408,7 +408,7 @@ ManCapacitacion_AddEdit.fnViewModalUbigeo = function () {
     var url = urlLocalSigo + "General/Controles/_Ubigeo";
     var option = { url: url, type: 'POST', datos: {}, divId: "mdlManCapacitacion_AddEdit_Ubigeo" };
     utilSigo.fnOpenModal(option, function () {
-        _Ubigeo.fnSelectUbigeo = function (_ubigeoText,_ubigeoId) {
+        _Ubigeo.fnSelectUbigeo = function (_ubigeoText, _ubigeoId) {
             ManCapacitacion_AddEdit.frm.find("#hdfUbigeo").val(_ubigeoId);
             ManCapacitacion_AddEdit.frm.find("#lblUbigeo").val(_ubigeoText);
             $("#mdlManCapacitacion_AddEdit_Ubigeo").modal('hide');
@@ -445,14 +445,14 @@ ManCapacitacion_AddEdit.fnInitDataTable_Detail = function () {
     };
     ManCapacitacion_AddEdit.dtCronograma = utilDt.fnLoadDataTable_Detail(ManCapacitacion_AddEdit.frm.find("#tbCronograma"), columns_label, columns_data, options);
     ManCapacitacion_AddEdit.dtCronograma.rows.add(JSON.parse(ManCapacitacion_AddEdit.DataCronograma)).draw();
-    
-    
+
+
 
     //Cargar Participante - Asistentes
     columns_label = ["Apellidos y Nombres", "N° Documento", "Grupo Público", "Público", "Cargo", "Género", "Edad", "Título Habilitante"
-                        ,"Comunidad Nativa","Etnia", "Teléfono", "Correo", "Constancia", "Observación"];
+        , "Comunidad Nativa", "Etnia", "Teléfono", "Correo", "Constancia", "Recibió Mochila Forestal", "Observación"];
     columns_data = ["APELLIDOS_NOMBRES", "N_DOCUMENTO", "GRUPOPUBLICOPARTICIPANTE", "PUBLICOPARTICIPANTE", "CARGO", "GENERO", "EDAD", "NUM_THABILITANTE"
-                        , "CCNN", "ETNIA", "TELEFONO", "CORREO", "COD_CONSTANCIA", "OBSERVACION"];
+        , "CCNN", "ETNIA", "TELEFONO", "CORREO", "COD_CONSTANCIA", "MOCHILAFORESTAL", "OBSERVACION"];
     options = {
         page_length: 10, row_edit: true, row_fnEdit: "ManCapacitacion_AddEdit.fnAddEditParticipante(this,'ASISTENTE')"
         , row_delete: true, row_fnDelete: "ManCapacitacion_AddEdit.fnDeleteParticipante(this,'ASISTENTE')"
@@ -462,7 +462,7 @@ ManCapacitacion_AddEdit.fnInitDataTable_Detail = function () {
     };
     ManCapacitacion_AddEdit.dtParticipante_Asistentes = utilDt.fnLoadDataTable_Detail(ManCapacitacion_AddEdit.frm.find("#tbParticipante_Asistentes"), columns_label, columns_data, options);
     ManCapacitacion_AddEdit.dtParticipante_Asistentes.rows.add(JSON.parse(ManCapacitacion_AddEdit.DataAsistente)).draw();
-    
+
     //Cargar Participante - Equipo Apoyo
     columns_label = ["Apellidos y Nombres", "N° Documento", "Institución", "Cargo", "Función", "Observación"];
     columns_data = ["APELLIDOS_NOMBRES", "N_DOCUMENTO", "NOM_INSTITUCION", "CARGO", "FUNCION", "OBSERVACION"];
@@ -488,7 +488,7 @@ ManCapacitacion_AddEdit.fnInitDataTable_Detail = function () {
     ManCapacitacion_AddEdit.dtParticipante_Ponentes.rows.add(JSON.parse(ManCapacitacion_AddEdit.DataPonentes)).draw();
 
     //Cargar Evaluación - Aportes
-    columns_label =["Apellidos y Nombres", "N° Documento", "Institución", "Aporte"];
+    columns_label = ["Apellidos y Nombres", "N° Documento", "Institución", "Aporte"];
     columns_data = ["APELLIDOS_NOMBRES", "N_DOCUMENTO", "NOM_INSTITUCION", "APORTE"];
     options = {
         page_length: 10, row_index: true, button_copy: true, button_csv: true, button_excel: true, button_pdf: true, button_print: true
@@ -499,10 +499,10 @@ ManCapacitacion_AddEdit.fnInitDataTable_Detail = function () {
 
     //Cargar Evaluación - Encuestas
     columns_label = ["Pregunta", "N° de participantes que marcaron Bueno", "% de participantes que marcaron Bueno"
-                    ,"N° de participantes que marcaron Regular", "% de participantes que marcaron Regular", "N° de participantes que marcaron Malo"
-                    , "% de participantes que marcaron Malo", "N° de participantes que NO marcaron", "% de participantes que NO marcaron", "Total participantes evaluados"];
+        , "N° de participantes que marcaron Regular", "% de participantes que marcaron Regular", "N° de participantes que marcaron Malo"
+        , "% de participantes que marcaron Malo", "N° de participantes que NO marcaron", "% de participantes que NO marcaron", "Total participantes evaluados"];
     columns_data = ["DES_PREGUNTA", "N_CHECK_BUENO", "P_CHECK_BUENO", "N_CHECK_REGULAR", "P_CHECK_REGULAR"
-                    , "N_CHECK_MALO", "P_CHECK_MALO", "N_NO_CHECK", "P_NO_CHECK", "N_PARTICIPANTES"];
+        , "N_CHECK_MALO", "P_CHECK_MALO", "N_NO_CHECK", "P_NO_CHECK", "N_PARTICIPANTES"];
     options = {
         page_length: 10, row_edit: true, row_fnEdit: "ManCapacitacion_AddEdit.fnAddEditPreguntaEncuesta(this,'ENCUESTA')"
         , row_delete: true, row_fnDelete: "ManCapacitacion_AddEdit.fnDeleteEvaluacion(this,'ENCUESTA')"
@@ -514,10 +514,10 @@ ManCapacitacion_AddEdit.fnInitDataTable_Detail = function () {
 
     //Cargar Evaluación - Evaluación Inicial
     columns_label = ["Pregunta", "N° de participantes que marcaron Bueno", "% de participantes que marcaron Bueno"
-                    , "N° de participantes que marcaron Regular", "% de participantes que marcaron Regular", "N° de participantes que marcaron Malo"
-                    , "% de participantes que marcaron Malo", "N° de participantes que NO marcaron", "% de participantes que NO marcaron", "Total participantes evaluados"];
+        , "N° de participantes que marcaron Regular", "% de participantes que marcaron Regular", "N° de participantes que marcaron Malo"
+        , "% de participantes que marcaron Malo", "N° de participantes que NO marcaron", "% de participantes que NO marcaron", "Total participantes evaluados"];
     columns_data = ["DES_PREGUNTA", "N_CHECK_BUENO", "P_CHECK_BUENO", "N_CHECK_REGULAR", "P_CHECK_REGULAR"
-                    , "N_CHECK_MALO", "P_CHECK_MALO", "N_NO_CHECK", "P_NO_CHECK", "N_PARTICIPANTES"];
+        , "N_CHECK_MALO", "P_CHECK_MALO", "N_NO_CHECK", "P_NO_CHECK", "N_PARTICIPANTES"];
     options = {
         page_length: 10, row_edit: true, row_fnEdit: "ManCapacitacion_AddEdit.fnAddEditPreguntaEncuesta(this,'EVALINICIAL')"
         , row_delete: true, row_fnDelete: "ManCapacitacion_AddEdit.fnDeleteEvaluacion(this,'EVALINICIAL')"
@@ -529,10 +529,10 @@ ManCapacitacion_AddEdit.fnInitDataTable_Detail = function () {
 
     //Cargar Evaluación - Evaluación Final
     columns_label = ["Pregunta", "N° de participantes que marcaron Bueno", "% de participantes que marcaron Bueno"
-                    , "N° de participantes que marcaron Regular", "% de participantes que marcaron Regular", "N° de participantes que marcaron Malo"
-                    , "% de participantes que marcaron Malo", "N° de participantes que NO marcaron", "% de participantes que NO marcaron", "Total participantes evaluados"];
+        , "N° de participantes que marcaron Regular", "% de participantes que marcaron Regular", "N° de participantes que marcaron Malo"
+        , "% de participantes que marcaron Malo", "N° de participantes que NO marcaron", "% de participantes que NO marcaron", "Total participantes evaluados"];
     columns_data = ["DES_PREGUNTA", "N_CHECK_BUENO", "P_CHECK_BUENO", "N_CHECK_REGULAR", "P_CHECK_REGULAR"
-                    , "N_CHECK_MALO", "P_CHECK_MALO", "N_NO_CHECK", "P_NO_CHECK", "N_PARTICIPANTES"];
+        , "N_CHECK_MALO", "P_CHECK_MALO", "N_NO_CHECK", "P_NO_CHECK", "N_PARTICIPANTES"];
     options = {
         page_length: 10, row_edit: true, row_fnEdit: "ManCapacitacion_AddEdit.fnAddEditPreguntaEncuesta(this,'EVALFINAL')"
         , row_delete: true, row_fnDelete: "ManCapacitacion_AddEdit.fnDeleteEvaluacion(this,'EVALFINAL')"
@@ -555,7 +555,7 @@ ManCapacitacion_AddEdit.fnInitDataTable_Detail = function () {
     ManCapacitacion_AddEdit.dtEvaluacion_Examenes.rows.add(JSON.parse(ManCapacitacion_AddEdit.DataExamenes)).draw();
 
     //Cargar Documentos Adjuntos
-    columns_label = ["Tipo","Archivo", "Extensión", "Observaciones"];
+    columns_label = ["Tipo", "Archivo", "Extensión", "Observaciones"];
     columns_data = ["TIPO_ADJUNTO", "NOMBRE_ARCHIVO", "EXTENSION", "OBSERVACION"];
     options = {
         page_length: 10, row_delete: true, row_fnDelete: "ManCapacitacion_AddEdit.fnDeleteDocumentoAdjunto(this)"
@@ -568,7 +568,7 @@ ManCapacitacion_AddEdit.fnInitDataTable_Detail = function () {
 }
 
 /*Controles PARTICIPANTES*/
-ManCapacitacion_AddEdit.fnAddEditParticipante = function (obj,_tipoParticipante) {
+ManCapacitacion_AddEdit.fnAddEditParticipante = function (obj, _tipoParticipante) {
     var url = urlLocalSigo + "Capacitacion/ManCapacitacion/_Participante";
     var option = { url: url, type: 'POST', datos: {}, divId: "mdlManCapacitacion_AddEdit_Participante" };
     utilSigo.fnOpenModal(option, function () {
@@ -588,7 +588,7 @@ ManCapacitacion_AddEdit.fnAddEditParticipante = function (obj,_tipoParticipante)
                         break;
                 }
 
-                if (data["RegEstado"] == "1") {//Nuevo Registro
+                if (obj == null || obj == "") {//Nuevo Registro
                     dt.rows.add([data]).draw();
                     dt.page('last').draw('page');
                     utilSigo.toastSuccess("Exito", "Datos guardados correctamente");
@@ -624,7 +624,7 @@ ManCapacitacion_AddEdit.fnAddEditParticipante = function (obj,_tipoParticipante)
     });
 }
 
-ManCapacitacion_AddEdit.fnGetListParticipante = function (_tipoParticipante,isEventSave) {
+ManCapacitacion_AddEdit.fnGetListParticipante = function (_tipoParticipante, isEventSave) {
     var dt, list = [], rows, countFilas, data;
 
     switch (_tipoParticipante) {
@@ -641,10 +641,10 @@ ManCapacitacion_AddEdit.fnGetListParticipante = function (_tipoParticipante,isEv
 
     rows = dt.$("tr");
     countFilas = rows.length;
-    if (countFilas>0) {
+    if (countFilas > 0) {
         $.each(rows, function (i, o) {
             data = dt.row($(o)).data();
-            if (data["RegEstado"] == "1" || data["RegEstado"] == "2" || isEventSave==false) {
+            if (data["RegEstado"] == "1" || data["RegEstado"] == "2" || isEventSave == false) {
                 list.push(utilSigo.fnConvertArrayToObject(data));
             }
         });
@@ -681,7 +681,7 @@ ManCapacitacion_AddEdit.fnDeleteParticipante = function (obj, _tipoParticipante)
 }
 
 ManCapacitacion_AddEdit.fnDeleteParticipanteAll = function (_tipoParticipante) {
-    var dt, rows, countFilas,data;
+    var dt, rows, countFilas, data;
 
     switch (_tipoParticipante) {
         case "ASISTENTE":
@@ -720,7 +720,7 @@ ManCapacitacion_AddEdit.fnDeleteParticipanteAll = function (_tipoParticipante) {
 /*Fin Participante*/
 
 /*Controles EVALUACION*/
-ManCapacitacion_AddEdit.fnAddEditPreguntaEncuesta = function (obj,_tipoEncuesta) {
+ManCapacitacion_AddEdit.fnAddEditPreguntaEncuesta = function (obj, _tipoEncuesta) {
     var url = urlLocalSigo + "Capacitacion/ManCapacitacion/_PreguntaEncuesta";
     var option = { url: url, type: 'POST', datos: {}, divId: "mdlManCapacitacion_Evaluacion_Encuesta" };
     utilSigo.fnOpenModal(option, function () {
@@ -738,7 +738,7 @@ ManCapacitacion_AddEdit.fnAddEditPreguntaEncuesta = function (obj,_tipoEncuesta)
                     case "EVALFINAL":
                         dt = ManCapacitacion_AddEdit.dtEvaluacion_EvalFinal;
                         break;
-                    
+
                 }
 
                 if (obj == null || obj == "") {//Nuevo Registro
@@ -773,7 +773,7 @@ ManCapacitacion_AddEdit.fnAddEditPreguntaEncuesta = function (obj,_tipoEncuesta)
 
             _PreguntaEncuesta.fnInit(_tipoEncuesta, utilSigo.fnConvertArrayToObject(data));
         } else { _PreguntaEncuesta.fnInit(_tipoEncuesta, ""); }
-        
+
     });
 }
 
@@ -803,7 +803,7 @@ ManCapacitacion_AddEdit.fnAddEditNotaExamen = function (obj) {
         }
 
         if (obj != null && obj != "") {
-            var data=ManCapacitacion_AddEdit.dtEvaluacion_Examenes.row($(obj).parents('tr')).data();
+            var data = ManCapacitacion_AddEdit.dtEvaluacion_Examenes.row($(obj).parents('tr')).data();
             _NotaExamen.fnInit(utilSigo.fnConvertArrayToObject(data));
         } else { _NotaExamen.fnInit(""); }
     });
@@ -923,7 +923,7 @@ ManCapacitacion_AddEdit.fnDeleteEvaluacionAll = function (_tipoEvaluacion) {
 /*Controles Nota Conceptual Programacion / cronograma */
 ManCapacitacion_AddEdit.fnGetListProgramacion = function () {
     var dt, list = [], rows, countFilas, data;
-    dt = ManCapacitacion_AddEdit.dtProgramacion;   
+    dt = ManCapacitacion_AddEdit.dtProgramacion;
 
     rows = dt.$("tr");
     countFilas = rows.length;
@@ -938,14 +938,14 @@ ManCapacitacion_AddEdit.fnGetListProgramacion = function () {
 
 ManCapacitacion_AddEdit.fnDeleteProgramacion = function (obj) {
     var dt, data;
-   
+
     dt = ManCapacitacion_AddEdit.dtProgramacion;
     data = dt.row($(obj).parents('tr')).data();
     if (data["RegEstado"] == "0" || data["RegEstado"] == "2") {
         ManCapacitacion_AddEdit.tbEliTABLA.push({
             EliTABLA: "CAPACITACION_PROGRAMA",
             EliVALOR02: data["COD_SECUENCIAL"],
-            
+
         });
     }
     dt.row($(obj).parents('tr')).remove().draw(false);
@@ -968,7 +968,7 @@ ManCapacitacion_AddEdit.fnDeleteProgramacionALL = function () {
                         ManCapacitacion_AddEdit.tbEliTABLA.push({
                             EliTABLA: "CAPACITACION_PROGRAMA",
                             EliVALOR02: data["COD_SECUENCIAL"],
-                            
+
                         });
                     }
                 });
@@ -1108,10 +1108,10 @@ ManCapacitacion_AddEdit.fnSelectDocAdjunto = function (e, obj) {
 
 ManCapacitacion_AddEdit.fnSaveDocumentoAdjunto = function () {
     var cod_capacitacion = ManCapacitacion_AddEdit.frm.find("#hdfCodCapacitacion").val();
-    if ((typeof cod_capacitacion==='undefined' || cod_capacitacion=="")) {
+    if ((typeof cod_capacitacion === 'undefined' || cod_capacitacion == "")) {
         utilSigo.toastWarning("Aviso", "Primero debe registrar la capacitación para luego poder agregar documento"); return false;
     }
-    if (ManCapacitacion_AddEdit.selectFile==null) {
+    if (ManCapacitacion_AddEdit.selectFile == null) {
         utilSigo.toastWarning("Aviso", "Seleccione el documento a adjuntar"); return false;
     }
 
@@ -1198,7 +1198,7 @@ ManCapacitacion_AddEdit.fnDownloadDocumentoAdjunto = function (obj) {
     var data = dt.row($(obj).parents('tr')).data();
 
     if (data["COD_SECUENCIAL"] != "") {
-        window.open(urlLocalSigo + "Archivos/Archivo_Capacitacion/" + ManCapacitacion_AddEdit.frm.find("#hdfCodCapacitacion").val() + data["COD_SECUENCIAL"] + data["EXTENSION"],'_blank');
+        window.open(urlLocalSigo + "Archivos/Archivo_Capacitacion/" + ManCapacitacion_AddEdit.frm.find("#hdfCodCapacitacion").val() + data["COD_SECUENCIAL"] + data["EXTENSION"], '_blank');
     } else {
         window.open(urlLocalSigo + "Archivos/Archivo_Capacitacion/Temp/" + data["URL"], "_blank");
     }

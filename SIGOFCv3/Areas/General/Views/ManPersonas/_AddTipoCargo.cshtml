@@ -1,0 +1,77 @@
+﻿<script type="text/javascript">
+    var _AddTipoCargo = {};
+
+    _AddTipoCargo.fnReload = function () { /*Implementar en donde se instancia*/ };
+
+    _AddTipoCargo.fnSave = function () {
+        if (_AddTipoCargo.frm.valid()) {
+            let DESCRIPCION = _AddTipoCargo.frm.find("#txtDescripcion").val().trim().toUpperCase();
+            let DESCRIPCION_ABREV = _AddTipoCargo.frm.find("#txtAbreviatura").val().trim().toUpperCase();
+            let RegEstado = 1;
+
+            let model = { DESCRIPCION, DESCRIPCION_ABREV, RegEstado };
+
+            let url = urlLocalSigo + "General/ManPersonas//GrabarTipoCargo";
+            let option = { url: url, datos: JSON.stringify(model), type: 'POST' };
+            utilSigo.fnAjax(option, function (data) {
+                if (data.success) {
+                    _AddTipoCargo.fnReload();
+                    utilSigo.fnCloseModal("mdlAddTipoCargo");
+                    utilSigo.toastSuccess("Éxito", data.msj);
+                }
+                else {
+                    utilSigo.toastWarning("Aviso", "Sucedio un error, Comuníquese con el Administrador");
+                    console.log(data.msj);
+                }
+            });
+        }
+        else {
+            _AddTipoCargo.frm.validate().focusInvalid();
+        }
+    };
+
+    _AddTipoCargo.fnInit = function () {
+        _AddTipoCargo.frm = $("#frmTipoCargo");
+
+        _AddTipoCargo.frm.validate(utilSigo.fnValidate({
+            rules: {
+                txtDescripcion: { required: true },
+                txtAbreviatura: { required: true }
+            },
+            messages: {
+                txtDescripcion: { required: "Ingrese Descripción" },
+                txtAbreviatura: { required: "Ingrese Abreviatura" }
+            }
+        }));
+    };
+</script>
+
+<div class="modal-dialog" role="document">
+    <div class="modal-content">
+        <div class="modal-header text-small" style="cursor:move;">
+            <span>Tipo de Cargo</span>
+            <i class="fa fa-close" style="cursor:pointer;" data-dismiss="modal" aria-label="Close"></i>
+        </div>
+        <div class="modal-body">
+            <form id="frmTipoCargo">
+                <div class="form-row">
+                    <div class="form-group col-md-12">
+                        <label for="lblDescripcion" class="text-small">Descripción</label>
+                        @Html.Editor("txtDescripcion", new { htmlAttributes = new { @class = "form-control form-control-sm", maxlength = "50", style = "text-transform: uppercase;" } })
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label for="lblDescripcion" class="text-small">Abreviatura</label>
+                        @Html.Editor("txtAbreviatura", new { htmlAttributes = new { @class = "form-control form-control-sm", maxlength = "10", style = "text-transform: uppercase;" } })
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Cancelar</button>
+            <button type="button" class="btn btn-primary btn-sm" onclick="_AddTipoCargo.fnSave()">Guardar</button>
+        </div>
+    </div>
+</div>
+
