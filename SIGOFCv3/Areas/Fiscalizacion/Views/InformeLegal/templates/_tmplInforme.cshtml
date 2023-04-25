@@ -52,11 +52,11 @@
             por Resolución de Jefatura N° 00043-2021-OSINFOR/01.1.
         </p>
         <div style="text-align: justify;">
-            <ol style="list-style-type: upper-roman; margin-left: -15px;">
+            <ol style="list-style-type: upper-roman; margin-left: ${MARGIN_LEFT.ROOT};">
                 <li>
                     <strong>ANTECEDENTES</strong><br />
                     <span>
-                        <ol class="continue" style="margin-left: -37pt;">
+                        <ol class="continue" style="margin-left: ${MARGIN_LEFT.OL};">
                             <li>
                                 Por <strong>Informe de Supervisión N° ${ANTECEDENTES_DOCS.Inf_Sup.numero}</strong>, de fecha ${ANTECEDENTES_DOCS.Inf_Sup.fechaEmisionTexto || 'XX de XXXXX de XXXX'}, la DSFFS dio cuenta de los resultados de la supervisión ordinaria/extraordinaria al (indicar plan de manejo forestal), correspondiente al periodo XXXX-XXXX, del ${TIPO_CONTRATO}, además del cumplimiento de las obligaciones contractuales del citado contrato, diligencia de campo realizada del (indicar por defecto la fecha).
                             </li>
@@ -166,7 +166,7 @@
                         {{/if}}
 
                         <h5><u><strong>Plazo para presentación de descargos al presente Informe Final de Instrucción</strong></u></h5>
-                        <ol class="continue" style="margin-left: -37pt;">
+                        <ol class="continue" style="margin-left: ${MARGIN_LEFT.OL};">
                             <li>
                                 Se otorga al/la ${DENOMINACION_TITULAR}/a un plazo improrrogable de quince (15)/veinte (20) días hábiles contados a partir del día siguiente de notificado el presente Informe Final de Instrucción, más el término de la distancia, para que presente los descargos que considere pertinentes, ya sea de forma virtual, por la Mesa de Partes Digital a través del portal web del OSINFOR: https://facilita.gob.pe/t/677 y solo si el archivo a adjuntar excede los 10 MB, remitirlo al correo mesa.partes@osinfor.gob.pe, o de forma presencial, ante la mesa de partes de la sede central del OSINFOR en la ciudad de Lima o ante cualquier mesa de partes de sus oficinas desconcentradas. De la misma manera, podrá señalar una dirección de correo electrónico y/o casilla electrónica del OSINFOR, en caso lo tuviere, para notificarle las diferentes actuaciones administrativas que deriven del presente PAU.
                             </li>
@@ -178,7 +178,7 @@
                 </li>
                 <li>
                     <strong>CONCLUSIONES</strong><br />
-                    <ol class="continue" style="margin-left: -37pt;">
+                    <ol class="continue" style="margin-left: ${MARGIN_LEFT.OL};">
                         <li>
                             <span>
                                 Del análisis efectuado en el presente informe, ha quedado acreditado que el/la ${DENOMINACION_TITULAR} es responsable por la comisión de las infracciones tipificadas en los numerales X, X, X y X del Cuadro de Infracciones y Sanciones en Materia Forestal del Anexo ${COD_MODALIDAD != '04'?'1':'2'} del RISMFFS.
@@ -190,7 +190,7 @@
                     <strong>RECOMENDACIONES</strong><br />
                     <span>
                         En base a lo expuesto, se procede a formular las siguientes recomendaciones:<br />
-                        <ol class="continue" style="margin-left: -37pt;">
+                        <ol class="continue" style="margin-left: ${MARGIN_LEFT.OL};">
                             <li>
                                 Remitir el presente informe a la Autoridad Decisora para que proceda conforme a su competencia, adjuntando para tal efecto el Expediente Administrativo N° ${EXPEDIENTE_ADM || 'XXXXX-XXXX-OSINFOR/08.2'}, para los fines correspondientes.
                             </li>

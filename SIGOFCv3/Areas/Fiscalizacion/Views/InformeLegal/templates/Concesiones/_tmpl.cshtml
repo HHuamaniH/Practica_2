@@ -1,11 +1,11 @@
-﻿<ol class="continue" style="margin-left: -37pt;">
+﻿<ol class="continue" style="margin-left: ${MARGIN_LEFT.OL};">
     <li>De conformidad con lo establecido en el numeral 4 del artículo 255 del Texto Único Ordenado de la Ley N° 27444, Ley del Procedimiento Administrativo General, aprobado por Decreto Supremo N° 004-2019-JUS (en adelante, TUO de la Ley N° 27444) con el respectivo descargo o sin él, la autoridad que instruye el procedimiento realizará todas las actuaciones necesarias para el examen de los hechos, recabando los datos e informaciones que sean relevantes para determinar, en su caso, la existencia de responsabilidad susceptible de sanción.</li>
     <li>En tal sentido, resulta necesario confrontar los hechos advertidos en la supervisión y las actuaciones administrativas del presente procedimiento, a fin de determinar fehacientemente si existe coherencia y correspondencia entre ellos, así como responsabilidad administrativa emanada de las conductas del titular; bajo esta premisa, corresponde analizar las imputaciones formuladas sobre la base de lo señalado previamente con el objeto de acreditar o no su comisión.</li>
 </ol>
 
 {{if FLG_CUESTION_PREVIA}}
-<h5 style="margin-left: -5pt;"><u><strong>Cuestión previa: Rectificación de error material</strong></u></h5>
-<ol class="continue" style="margin-left: -37pt;">
+<h5 style="margin-left: ${MARGIN_LEFT.H};"><u><strong>Cuestión previa: Rectificación de error material</strong></u></h5>
+<ol class="continue" style="margin-left: ${MARGIN_LEFT.OL};">
     <li>
         Antes de efectuar el análisis correspondiente al PAU iniciado al/la concesionario/a, es necesario señalar que, (detallar el error material identificado), siendo lo correcto XXXXXX XXXXXXX XXXXXXXXXX. Por lo tanto, se procede a realizar una rectificación de error material
         <a style="mso-footnote-id: foot_cuestion_previa" href="#_foot_cuestion_previa" title="">
@@ -33,8 +33,8 @@
 {{/if}}
 
 {{if FLG_REC_RESPONSABILIDAD}}
-<h5 style="margin-left: -5pt;"><u><strong>Sobre el reconocimiento de responsabilidad</strong></u></h5>
-<ol class="continue" style="margin-left: -37pt; ">
+<h5 style="margin-left: ${MARGIN_LEFT.OL};"><u><strong>Sobre el reconocimiento de responsabilidad</strong></u></h5>
+<ol class="continue" style="margin-left: ${MARGIN_LEFT.OL}; ">
     <li>
         <span>
             Mediante Escrito/Carta N°/S/N, de fecha XX de XXXX de XXXX, ingresado al OSINFOR el XX de XXXXX de XXXX con Registro N° XXXXXXXXX, el/la concesionario/a reconoce su responsabilidad en la comisión de las infracciones imputadas, señalando lo siguiente:
@@ -82,8 +82,8 @@
 {{/if}}
 
 {{if INFRACCIONES.length}}
-<h5 style="margin-left: -5pt;"><u><strong>Sobre las infracciones imputadas</strong></u></h5>
-<ol style="list-style-type: lower-alpha; margin-left: -37pt;" start="1">
+<h5 style="margin-left: ${MARGIN_LEFT.OL};"><u><strong>Sobre las infracciones imputadas</strong></u></h5>
+<ol style="list-style-type: lower-alpha; margin-left: ${MARGIN_LEFT.OL};" start="1">
     {{each(i, infra) INFRACCIONES}}
     <li>
         <span>
@@ -96,8 +96,8 @@
 {{/if}}
 
 {{if FLG_GRAVEDAD_RIESGO}}
-<h5 style="margin-left: -5pt;"><u><strong>Determinación de la gravedad y/o riesgo generado</strong></u></h5>
-<ol class="continue" style="margin-left: -37pt;">
+<h5 style="margin-left: ${MARGIN_LEFT.H};"><u><strong>Determinación de la gravedad y/o riesgo generado</strong></u></h5>
+<ol class="continue" style="margin-left: ${MARGIN_LEFT.OL};">
     <li>
         De acuerdo a la opinión técnica vertida en el presente procedimiento, el volumen total extraído de X.XXX m<sup>3</sup>, que fue movilizado de árboles no autorizados, incluido el semillero movilizado / árboles fuera del censo, el retiro de cobertura vegetal de X.XXX hectáreas, así como el nivel de impacto causado por metro cúbico no autorizado (0.0167 hectáreas/ m3 no autorizado), habría ocasionado la afectación de X.XXX hectáreas de cobertura boscosa, lo que implica una afectación de magnitud “XXXX” a la cobertura boscosa natural que integra el Patrimonio Forestal Nacional; ello, en aplicación de los criterios SGC-M1-CRI-001-V.02, “Criterios para estimar la gravedad del daño por la comisión de infracciones en materia forestal”, aprobado por Resolución de Jefatura N° 059-2019-OSINFOR.
     </li>
@@ -108,8 +108,8 @@
 {{/if}}
 
 {{if FLG_SANCION}}
-<h5 style="margin-left: -5pt;"><u><strong>Sobre la imposición de sanción</strong></u></h5>
-<ol class="continue" style="margin-left: -37pt;">
+<h5 style="margin-left: ${MARGIN_LEFT.H};"><u><strong>Sobre la imposición de sanción</strong></u></h5>
+<ol class="continue" style="margin-left: ${MARGIN_LEFT.OL};">
     <li>
         <span>
             La(s) infracción(es) acreditada(s) es(son) pasible(s) de ser sancionada(s) de la siguiente manera:
@@ -137,9 +137,9 @@
 </ol>
 {{/if}}
 
-<h5 style="margin-left: -5pt;"><u><strong>De las medidas correctivas</strong></u></h5>
+<h5 style="margin-left: ${MARGIN_LEFT.H};"><u><strong>De las medidas correctivas</strong></u></h5>
 {{if FLG_MEDIDA_CORRECTIVA}}
-<ol class="continue" style="margin-left: -37pt;">
+<ol class="continue" style="margin-left: ${MARGIN_LEFT.OL};">
     <li>
         Es preciso indicar que “La imposición de una medida correctiva pretende educar y corregir la distorsión en el ambiente, precisamente porque de lo que se trata es revertir, o disminuir en lo posible, el efecto nocivo que la conducta infractora hubiera podido producir en el ambiente, los recursos naturales y la salud de las personas”, lo que se condice con lo establecido en el numeral 5.09 del artículo 5 del Reglamento del PAU del OSINFOR, en concordancia con el literal l) del numeral 5 (Definiciones) de los “Criterios para la disposición, seguimiento y verificación de las medidas correctivas y/o mandatos en materia forestal y de fauna silvestre del OSINFOR”, aprobado mediante Resolución de Jefatura  N° 00055-2020-OSINFOR/01.1, de fecha 30 de diciembre de 2020, publicada en el Diario Oficial “El Peruano”, con fecha 02 de enero de 2021.
     </li>
@@ -361,7 +361,7 @@
     </li>
 </ol>
 {{else}}
-<ol class="continue" style="margin-left: -37pt;">
+<ol class="continue" style="margin-left: ${MARGIN_LEFT.OL};">
     <li>
         Es preciso indicar que “La imposición de una medida correctiva pretende educar y corregir la distorsión en el ambiente, precisamente porque de lo que se trata es revertir, o disminuir en lo posible, el efecto nocivo que la conducta infractora hubiera podido producir en el ambiente, los recursos naturales y la salud de las personas”, lo que se condice con lo establecido en el numeral 5.09 del artículo 5 del Reglamento del PAU del OSINFOR, en concordancia con el literal l) del numeral 5 (Definiciones) de los “Criterios para la disposición, seguimiento y verificación de las medidas correctivas y/o mandatos en materia forestal y de fauna silvestre del OSINFOR”, aprobado mediante Resolución de Jefatura  N° 00055-2020-OSINFOR/01.1, de fecha 30 de diciembre de 2020, publicada en el Diario Oficial “El Peruano”, con fecha 02 de enero de 2021.
     </li>
@@ -375,8 +375,8 @@
 {{/if}}
 
 {{if !FLG_MEDIDA_COMPLEMENTARIA}}
-<h5 style="margin-left: -5pt;"><u><strong>De las medidas correctivas</strong></u></h5>
-<ol class="continue" style="margin-left: -37pt;">
+<h5 style="margin-left: ${MARGIN_LEFT.H};"><u><strong>De las medidas correctivas</strong></u></h5>
+<ol class="continue" style="margin-left: ${MARGIN_LEFT.OL};">
     <li>
         En ese sentido, con la finalidad de eliminar o mitigar los efectos producidos por la comisión de la infracción acreditada en el presente procedimiento, tales como la posesión, el transporte o comercialización de los productos forestales provenientes de la extracción no autorizada, se evalúa la posibilidad de disponer como medida complementaria el decomiso de los productos forestales movilizados de forma no autorizada o que corresponden a volumen injustificado, conforme a lo establecido en el Reglamento de Infracciones y Sanciones en Materia Forestal y de Fauna Silvestre, aprobado mediante Decreto Supremo N° 007-2021-MIDAGRI, publicado con fecha 12 de abril de 2021, el cual señala que de manera complementaria a la sanción a imponerse, puede aplicarse el decomiso de especímenes, productos o subproductos, que provengan de extracción no autorizada.
     </li>
@@ -394,8 +394,8 @@
     </li>
 </ol>
 {{else}}
-<h5 style="margin-left: -5pt;"><u><strong>De las medidas cautelares dispuestas en la etapa de instrucción y de las medidas complementarias</strong></u></h5>
-<ol class="continue" style="margin-left: -37pt;">
+<h5 style="margin-left: ${MARGIN_LEFT.H};"><u><strong>De las medidas cautelares dispuestas en la etapa de instrucción y de las medidas complementarias</strong></u></h5>
+<ol class="continue" style="margin-left: ${MARGIN_LEFT.OL};">
     <li>
         <span>
             Se debe señalar que mediante la Resolución Sub Directoral N° ${ANTECEDENTES_DOCS.RSD.numero || 'XXXXX-XXXX-OSINFOR/08.2.1'}, de fecha ${ANTECEDENTES_DOCS.RSD.fechaEmisionTexto ||'XX de XXXX'}, se dispusieron medidas cautelares, las cuales fueron confirmadas mediante la Resolución Sub Directoral N° XXXXX-XXXX-OSINFOR/08.2.1, de fecha XX de XXXX de XXXX, conforme al siguiente detalle:
@@ -428,8 +428,8 @@
 {{/if}}
 
 {{if FLG_COMUNICACION_GORE}}
-<h5 style="margin-left: -5pt;"><u><strong>Comunicación al GORE</strong></u></h5>
-<ol class="continue" style="margin-left: -37pt;">
+<h5 style="margin-left: ${MARGIN_LEFT.H};"><u><strong>Comunicación al GORE</strong></u></h5>
+<ol class="continue" style="margin-left: ${MARGIN_LEFT.OL};">
     <li>
         Finalmente, se advierte que la Resolución Sub Directoral N° ${ANTECEDENTES_DOCS.RSD.numero || 'XXXXX-XXXX-OSINFOR/08.2.1'}, que dio inicio al PAU fue oportunamente remitida a la ARFFS, para que, luego de conocer los resultados de la supervisión del OSINFOR y la disposición del inicio del PAU, en el marco de su atribución fiscalizadora, pueda ejercer las funciones de su competencia. En ese sentido, corresponde comunicarle el resultado y conclusión del presente procedimiento, para los fines pertinentes, para que en el marco de sus competencias ejecuten las acciones correspondientes.
     </li>
@@ -438,8 +438,8 @@
 
 @* Con Descargos *@
 {{if COD_TIPO_INFORME == 1}}
-<h5 style="margin-left: -5pt;"><u><strong>Plazo para presentación de descargos al presente Informe Final de Instrucción</strong></u></h5>
-<ol class="continue" style="margin-left: -37pt;">
+<h5 style="margin-left: ${MARGIN_LEFT.H};"><u><strong>Plazo para presentación de descargos al presente Informe Final de Instrucción</strong></u></h5>
+<ol class="continue" style="margin-left: ${MARGIN_LEFT.OL};">
     <li>
         Se otorga al/la concesionario/a un plazo improrrogable de quince (15)/veinte (20) días hábiles contados a partir del día siguiente de notificado el presente Informe Final de Instrucción, más el término de la distancia, <strong>para que presente los descargos que considere pertinentes</strong>, ya sea de forma virtual, por la Mesa de Partes Digital a través del portal web del OSINFOR: https://facilita.gob.pe/t/677 y solo si el archivo a adjuntar excede los 10 MB, remitirlo al correo mesa.partes@osinfor.gob.pe, o de forma presencial, ante la mesa de partes de la sede central del OSINFOR en la ciudad de Lima o ante cualquier mesa de partes de sus oficinas desconcentradas.
         De la misma manera, podrá señalar una dirección de correo electrónico y/o casilla electrónica del OSINFOR, en caso lo tuviere, para notificarle las diferentes actuaciones administrativas que deriven del presente PAU.
