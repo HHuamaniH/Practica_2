@@ -164,11 +164,11 @@ ManInfLegal_AddEdit.fnSaveForm = function () {
     let txtMotivoOtros = ManInfLegal_AddEdit.frm.find("#txtMotivoOtros").val()
     let txtRecomendacionOtros = ManInfLegal_AddEdit.frm.find("#txtRecomendacionOtros").val();
 
-    if (txtFechaLegal == "") {
+    /*if (txtFechaLegal == "") {
         utilSigo.toastWarning("Validación", "Ingrese la fecha del informe legal");
-        frm.find("#txtFechaLegal").focus();
+        ManInfLegal_AddEdit.frm.find("#txtFechaLegal").focus();
         return false;
-    }
+    }*/
     let model = {
         hdfCodInfLegal, RegEstado, hdfCodTipoIlegal, hdfCodProfesional, txtProfesional, txtNumIlegal, txtFechaLegal, txtPresentoProyecto, txtInfDirectoral, txtInfSubDirectoral,
         txtObservaciones, txtIdRecomendacion, chkInexEspecie, chkDifEspecie, chkSobreEstimacion, chkNuevaSupervision, chkEvidencia, chkSinIndicios, chkDeficienciaNot,
@@ -217,16 +217,17 @@ ManInfLegal_AddEdit.fnSaveForm = function () {
 
     if (hdfCodTipoIlegal != "0000002" || hdfCodTipoIlegal != "0000003") {
 
-
         utilSigo.dialogConfirm("", "Está seguro registrar los datos?", function (r) {
             if (r) {
                 let url = urlLocalSigo + "Fiscalizacion/InformeLegal/AddEdit";
                 let option = { url: url, datos: JSON.stringify(model), type: 'POST' };
                 utilSigo.fnAjax(option, function (data) {
-                    if (data.success) {
-
-                        window.location = `${urlLocalSigo}/Fiscalizacion/InformeLegal/Index`;
+                    if (data.success) { 
                         utilSigo.toastSuccess("Éxito", "Datos actualizados correctamente");
+
+                        var codigo = data.values[0]?.split('|')[0];
+                        window.location.href = `${window.location.href.split('?')[0]}?asCodInfLegal=${codigo}&asCodTipoIL=`;
+                        //window.location = `${urlLocalSigo}/Fiscalizacion/InformeLegal/Index`;                        
                     }
                     else {
                         utilSigo.toastWarning("Aviso", data.msj);

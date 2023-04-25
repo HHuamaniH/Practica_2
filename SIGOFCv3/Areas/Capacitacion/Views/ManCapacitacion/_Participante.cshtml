@@ -72,7 +72,7 @@
                 <div class="form-group row dvItemPart_DatosAsistente" style="margin-bottom:0px; display:none;">
                     <label for="lblItemPart_Edad" class="col-md-4 col-form-label text-small">Edad</label>
                     <div class="col-md-4">
-                        @Html.TextBox("txtItemPart_Edad", "", new { @class = "form-control form-control-sm", type = "number" })
+                        @Html.TextBox("txtItemPart_Edad", "", new { @class = "form-control form-control-sm",type="number" })
                     </div>
                 </div>
                 <div class="form-group row dvItemPart_DatosAsistente" style="margin-bottom:0px; display:none;">
@@ -111,16 +111,10 @@
                         @Html.TextBox("txtItemPart_Constancia", "", new { @class = "form-control form-control-sm" })
                     </div>
                 </div>
-                <div class="form-group row" style="margin-bottom:0px; display:none;" id="dvItemPart_Mochila">
-                    <label for="lblItemPart_Mochila" class="col-md-4 col-form-label text-small">Recibió Mochila Forestal</label>
-                    <div class="col-md-8">
-                        @Html.DropDownList("ddlItemPart_MochilaId", new SelectList(ViewBag.ddlItemPart_Mochila, "Value", "Text"), new { @class = "form-control form-control-sm", @style = "width:auto;" })
-                    </div>
-                </div>
                 <div class="form-group row" style="margin-bottom:0px;">
                     <label for="lblItemPart_Observacion" class="col-md-4 col-form-label text-small">Observaciones</label>
                     <div class="col-md-8">
-                        @Html.TextArea("txtItemPart_Observacion", "", new { @class = "form-control form-control-sm", @rows = "3" })
+                        @Html.TextArea("txtItemPart_Observacion","", new { @class = "form-control form-control-sm", @rows = "3" })
                     </div>
                 </div>
             </form>

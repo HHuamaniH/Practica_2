@@ -80,6 +80,16 @@
         {
             $(".terminosUso").click();
         }
+
+        $(document).on({
+            'show.bs.modal': function () {
+                var zIndex = 1040 + (10 * $('.modal:visible').not(this).length) + 1;
+                $(this).css('z-index', zIndex);
+            },            
+            'hidden.bs.modal': function () {
+                $('.modal:visible').length && $(document.body).addClass('modal-open');
+            }
+        }, '.modal');
     });
 </script>
 

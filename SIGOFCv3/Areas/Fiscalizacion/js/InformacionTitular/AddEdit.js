@@ -149,17 +149,8 @@ ManInfTitular_AddEdit.regresar = function (appServer) {
 };
 
 ManInfTitular_AddEdit.fnBuscarPersona = function (_dom, _tipoPersona) {
-    var valCodPTipo;
-
-    switch (_dom) {
-        case "TI":
-            valCodPTipo = "0000001"; break;
-        default:
-            valCodPTipo = "TODOS";
-    }
-
     var url = urlLocalSigo + "General/Controles/_BuscarPersonaGeneral";
-    var option = { url: url, type: 'GET', datos: { asBusGrupo: "PERSONA", asCodPTipo: valCodPTipo, asTipoPersona: _tipoPersona }, divId: "mdlBuscarPersona" };
+    var option = { url: url, type: 'GET', datos: { asBusGrupo: "PERSONA", asCodPTipo: "TODOS", asTipoPersona: _tipoPersona }, divId: "mdlBuscarPersona" };
     utilSigo.fnOpenModal(option, function () {
         _bPerGen.fnAsignarDatos = function (obj) {
             if (obj != null && obj != "") {

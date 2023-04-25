@@ -147,6 +147,14 @@ namespace SIGOFCv3.Areas.Fiscalizacion.Controllers
             }
         }
 
+        [HttpGet]
+        public JsonResult ObtenerResolucion(string asCodRD = "", string asCodTipoIL = "")
+        {
+            var result = logRD.RSD_Resumen(asCodRD, asCodTipoIL);
+            
+            return Json(result, JsonRequestBehavior.AllowGet);
+        }
+
         /// <summary>
         /// metodo para consultar la lista de expedientes  de la resolucion
         /// </summary>

@@ -12,15 +12,6 @@ namespace SIGOFCv3.Models
         /// </summary>
         public static void Initialize(List<Ent_USUARIO_CUENTA> listLogin)
         {
-            if (listLogin.Count > 0)
-            {
-                string[] perfiles = listLogin[0].COD_SPERFILS.Split(',');
-                if (perfiles.Length == 2)
-                {
-                    listLogin[0].COD_SPERFIL = perfiles[1];
-                }
-            }
-
             HttpContext.Current.Session[keySession] = listLogin;
         }
         /// <summary>

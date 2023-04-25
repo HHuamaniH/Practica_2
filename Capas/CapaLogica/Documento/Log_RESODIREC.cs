@@ -677,6 +677,22 @@ namespace CapaLogica.DOC
         }
         #endregion
 
+        public VM_RSD_Resumen RSD_Resumen(string COD_RESDIR, string asCodTipoIL)
+        {
+            try
+            {
+                using (OracleConnection cn = new OracleConnection(BDConexion.Conexion_Cadena_SIGO()))
+                {
+                    cn.Open();
+                    return oCDatos.RSD_Resumen(cn, COD_RESDIR, asCodTipoIL);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
         //CARR migracion
         public VM_Resodirec initRD(string asCodResodirec, string asCodTipo)
         {

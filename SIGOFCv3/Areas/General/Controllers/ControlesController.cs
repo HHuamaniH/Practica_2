@@ -181,7 +181,7 @@ namespace SIGOFCv3.Areas.General.Controllers
             }
             else if (paramsBus.BusFormulario == "AEXPEDIENTE_SITD")
             {
-                 lstResult = exeBus.RegMostrarListaPaging(paramsBus, ref rowcount);
+                lstResult = exeBus.RegMostrarListaPaging(paramsBus, ref rowcount);
 
                 if (paramsBus.BusCriterio1 != "TODOS")
                 {
@@ -192,7 +192,6 @@ namespace SIGOFCv3.Areas.General.Controllers
             {
                 lstResult = exeBus.RegMostrarListaPaging(paramsBus, ref rowcount);
             }
-
 
             var jsonResult = Json(new
             {
@@ -527,7 +526,8 @@ namespace SIGOFCv3.Areas.General.Controllers
                     BusValor = asExpediente
                 };
                 Log_BUSQUEDA exeBus = new Log_BUSQUEDA();
-                Ent_BUSQUEDA paramsBus = new Ent_BUSQUEDA() {
+                Ent_BUSQUEDA paramsBus = new Ent_BUSQUEDA()
+                {
                     BusFormulario = asBusFormulario,
                     BusCriterio = asBusCriterio,
                     BusValor = asExpediente is null ? "0" : asExpediente
@@ -696,7 +696,7 @@ namespace SIGOFCv3.Areas.General.Controllers
         /// <param name="asTipoPersona">'TODOS' o ('N,J')</param>
         /// <returns></returns>
         [HttpGet]
-        public ActionResult _BuscarPersonaGeneral(string asBusGrupo, string asCodPTipo, string asTipoPersona, string asFormulario="", string asCodMod= "",string asTipoCargo="")
+        public ActionResult _BuscarPersonaGeneral(string asBusGrupo, string asCodPTipo, string asTipoPersona, string asFormulario = "", string asCodMod = "", string asTipoCargo = "")
         {
             ViewBag.hdfBusGrupo = asBusGrupo;
             ViewBag.hdfCodPTipo = asCodPTipo;
@@ -704,7 +704,7 @@ namespace SIGOFCv3.Areas.General.Controllers
             ViewBag.hdfFormulario = asFormulario;
             ViewBag.hdfCodMod = asCodMod;
             ViewBag.hdfTipoCargo = asTipoCargo;
-            
+
             return PartialView();
         }
         /// <summary>
@@ -745,16 +745,15 @@ namespace SIGOFCv3.Areas.General.Controllers
                                  PTIPO = c.PTIPO,
                                  NUM_REGISTRO_PROFESIONAL = c.NUM_REGISTRO_PROFESIONAL,
                                  FICHA_REGISTRAL = c.FICHA_REGISTRAL,
-                                 
-                                 DIRECCION=c.DIRECCION,
+
+                                 DIRECCION = c.DIRECCION,
                                  COD_UBIGEO = c.COD_UBIGEO,
-                                 UBIGEO=c.UBIGEO,
-                                 NOMBRES=c.NOMBRES,
-                                 APE_PATERNO=c.APE_PATERNO,
-                                 APE_MATERNO=c.APE_MATERNO,
-                                 N_RUC = c.N_RUC,
-                                 COD_PTIPO=c.COD_PTIPO,
-                                 TIPO_CARGO =c.TIPO_CARGO
+                                 UBIGEO = c.UBIGEO,
+                                 NOMBRES = c.NOMBRES,
+                                 APE_PATERNO = c.APE_PATERNO,
+                                 APE_MATERNO = c.APE_MATERNO,
+                                 N_RUC = c.N_RUC
+
                              };
                 var jsonResult = Json(new { data = result, success = true, er = "" }, JsonRequestBehavior.AllowGet);
                 jsonResult.MaxJsonLength = int.MaxValue;
@@ -770,132 +769,18 @@ namespace SIGOFCv3.Areas.General.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet]
-        public ActionResult _Persona(string asFormulario="", string asCodMod="", string asCodPersona="", int opc = 0)
+        public ActionResult _Persona(string asFormulario = "", string asCodMod = "")
         {
             VM_Persona objPersona = new VM_Persona();
-            //Ent_BUSQUEDA oCampos = new Ent_BUSQUEDA();
-            //Log_BUSQUEDA oCLogica = new Log_BUSQUEDA();
+            Ent_BUSQUEDA oCampos = new Ent_BUSQUEDA();
+            Log_BUSQUEDA oCLogica = new Log_BUSQUEDA();
 
-            /*objPersona.ddlItemPN_DITipo = oCLogica.RegMostComboIndividualV3("COMBO_INDIVIDUAL", "TIPO_DOCUMENTO_IDENTIDAD", "");
-            oCampos.BusFormulario = "DIRECTORIO_UNICO";
-            oCampos.BusCriterio = "PERSONA_TIPO";
-            var lstTipoCargo = oCLogica.RegOpcionesCombo(oCampos).Select(i => new VM_Cbo { Value = i.CODIGO, Text = i.DESCRIPCION }).ToList();
-            lstTipoCargo.Insert(0, new VM_Cbo { Value = "-", Text = "Seleccionar" });
-            objPersona.ddlITipoCargo = lstTipoCargo;*/
-
-            Ent_Persona entP = new Ent_Persona();
-            Log_Persona logP = new Log_Persona();
-
-            entP.BusFormulario = "DIRECTORIO_UNICO";
-            entP.BusCriterio = "TODOS";
-            entP.COD_UCUENTA = (ModelSession.GetSession())[0].COD_UCUENTA;
-            entP = logP.RegMostCombo(entP);
-            objPersona.ddlItemPN_DITipo = entP.ListCTipoDocIdentidad.Select(i => new VM_Cbo { Value = i.CODIGO, Text = i.DESCRIPCION });
-            objPersona.ddlITipoCargo = entP.ListCTipoCargo.Select(i => new VM_Cbo { Value = i.CODIGO, Text = i.DESCRIPCION });
-            objPersona.ddlINivelAcademico = entP.ListCNivelAcademico.Select(i => new VM_Cbo { Value = i.CODIGO, Text = i.DESCRIPCION });
-            objPersona.ddlIEspecialidad = entP.ListCEspecialidad.Select(i => new VM_Cbo { Value = i.CODIGO, Text = i.DESCRIPCION });
-            var lstCategoria = entP.ListCCategoria.Select(i => new VM_Cbo { Value = i.CODIGO, Text = i.DESCRIPCION }).ToList();
-            lstCategoria.Insert(0, new VM_Cbo { Value = "0000000", Text = "Seleccionar" });
-            objPersona.ddlCategoria = lstCategoria;
-            objPersona.ddlMencionRegencia = new List<VM_Cbo>();
-            var lstEstado = entP.ListCEstado.Select(i => new VM_Cbo { Value = i.CODIGO, Text = i.DESCRIPCION }).ToList();
-            lstEstado.Insert(0, new VM_Cbo { Value = "-", Text = "Seleccionar" });
-            objPersona.ddlEstado = lstEstado;
-
-            var lstAnio = new List<VM_Chk>();
-            for (int i = DateTime.Now.Year; i >= 2016; i--)
-            {
-                lstAnio.Add(new VM_Chk() { Value = i.ToString(), Text = i.ToString() });
-            }
-            objPersona.ddlAnio = lstAnio.Select(i => new VM_Cbo { Value = i.Value, Text = i.Text });
-
+            objPersona.ddlItemPN_DITipo = oCLogica.RegMostComboIndividualV3("COMBO_INDIVIDUAL", "TIPO_DOCUMENTO_IDENTIDAD", "");
+            ViewBag.Titulo = "Nuevo Registro";
             ViewBag.hdfFormulario = asFormulario;
             ViewBag.hdfCodMod = asCodMod;
-            ViewBag.hdfOpc = opc;
-
-            if (String.IsNullOrEmpty(asCodPersona))
-            {
-                ViewBag.Titulo = "Nuevo Registro";
-                objPersona.RegEstadoPersona = 1;
-            }
-            else
-            {
-                entP = logP.RegMostrarListaItem(new Ent_Persona() { COD_PERSONA = asCodPersona });
-                objPersona.codigoPersona = asCodPersona;
-
-                if (entP.COD_TPERSONA.Equals("N"))
-                {
-                    objPersona.ddlItemPN_DITipoId = entP.COD_DIDENTIDAD;
-                    objPersona.txtItemPN_DINumero = entP.N_DOCUMENTO;
-                    objPersona.txtItemPN_DIRUC = entP.N_RUC;
-                    objPersona.txtItemPN_APaterno = entP.APE_PATERNO;
-                    objPersona.txtItemPN_AMaterno = entP.APE_MATERNO;
-                    objPersona.txtItemPN_Nombres = entP.NOMBRES;
-                }
-                else
-                {
-                    objPersona.txtItemPJ_RUC = entP.N_RUC;
-                    objPersona.txtItemPJ_RSocial = entP.RAZON_SOCIAL;
-                }
-
-                if (opc == 1)
-                {
-                    ViewBag.Titulo = "Adiciona Tipo Cargo";
-                }
-                else
-                {
-                    ViewBag.Titulo = "Editar Registro";
-                    objPersona.txtINumRegFfs = entP.NUM_REGISTRO_FFS;
-                    objPersona.txtINumRegProf = entP.NUM_REGISTRO_PROFESIONAL;
-                    objPersona.txtICargo = entP.CARGO;
-                    objPersona.txtINumColegiatura = entP.COLEGIATURA_NUM;
-                    objPersona.ddlINivelAcademicoId = entP.COD_NACADEMICO == "" ? "0000000" : entP.COD_NACADEMICO;
-                    objPersona.ddlIEspecialidadId = entP.COD_DPESPECIALIDAD == "" ? "0000000" : entP.COD_DPESPECIALIDAD;
-                    objPersona.ddlAnioId = entP.ANIO;
-                    objPersona.txtNroLicencia = entP.NROLICENCIA;
-                    objPersona.txtFecLicencia = entP.OTORGAMIENTO;
-                    objPersona.txtResolucion = entP.RESAPROBACION;
-                    objPersona.ddlCategoriaId = entP.COD_CATEGORIA == "" ? "0000000" : entP.COD_CATEGORIA;
-                    objPersona.txtCIP = entP.CIP;
-                    objPersona.ddlEstadoId = entP.ESTADO_REGENTE == "" ? "-" : entP.ESTADO_REGENTE;
-                    objPersona.txtOtro = entP.OTRO;
-
-                    foreach (var itemCargo in entP.ListTipoCargo)
-                    {
-                        objPersona.hdfITipoCargo += "," + itemCargo.COD_PTIPO;
-                    }
-
-                    foreach (var itemMencion in entP.ListMencion)
-                    {
-                        objPersona.hdfMencionRegencia += "," + itemMencion.COD_MENSION;
-                    }
-                }
-
-                objPersona.RegEstadoPersona = 0;
-            }
 
             return PartialView(objPersona);
-        }
-
-        [HttpPost]
-        public JsonResult ListarMencionRegencia(string idcategoria)
-        {
-            try
-            {
-                Log_BUSQUEDA exeBus = new Log_BUSQUEDA();
-                Ent_BUSQUEDA paramsBus = new Ent_BUSQUEDA();
-                paramsBus.BusFormulario = "DIRECTORIO_UNICO";
-                paramsBus.BusCriterio = "REGENTE_MENCION";
-                paramsBus.BusValor = idcategoria;
-
-                List<Ent_BUSQUEDA> list = exeBus.RegOpcionesCombo(paramsBus);
-                var ddlMencionRegencia = list.Select(i => new VM_Cbo { Value = i.CODIGO, Text = i.DESCRIPCION });
-                return Json(new { success = true, result = ddlMencionRegencia });
-            }
-            catch (Exception ex)
-            {
-                return Json(new { success = false, result = ex.Message });
-            }
         }
 
         /// <summary>
@@ -910,10 +795,9 @@ namespace SIGOFCv3.Areas.General.Controllers
             try
             {
                 Log_GENEPERSONA oCLogPersona = new Log_GENEPERSONA();
-                String coducuenta = (ModelSession.GetSession())[0].COD_UCUENTA;
-                result = oCLogPersona.GrabarPersonaSimple_v3(coducuenta, vm);
+                result = oCLogPersona.GrabarPersonaSimple_v3(vm);
             }
-            catch (Exception )
+            catch (Exception)
             {
                 result.success = false;
                 // result.msj = ex.Message;
@@ -945,9 +829,9 @@ namespace SIGOFCv3.Areas.General.Controllers
                     pideOSF_Reniec.ConsultaInfoRequest infoReniec = new pideOSF_Reniec.ConsultaInfoRequest();
                     infoReniec.App = "SIGOsfc v3";
                     infoReniec.IPTerminal = Request.UserHostAddress;
-                    if (asFormulario == "GTF"){ infoReniec.UserName = "mlaurente"; }
+                    if (asFormulario == "GTF") { infoReniec.UserName = "mlaurente"; }
                     else { infoReniec.UserName = (ModelSession.GetSession())[0].USUARIO_LOGIN; }
-                    
+
                     pideOSF_Reniec.PersonaResponse resultReniec = new pideOSF_Reniec.PersonaResponse();
 
                     resultReniec = wsReniec.ConsultaDatosPersonaPorDNI(paramsReniec, infoReniec);
@@ -1141,15 +1025,23 @@ namespace SIGOFCv3.Areas.General.Controllers
         {
             try
             {
-                //List<Ent_IntSIADO> lstSIADO = new List<Ent_IntSIADO>();
-                Ent_IntSIADO paramSIADO = new Ent_IntSIADO();
+                var result = new List<Ent_IntSIADO_V3>();
                 Log_IntSIADO exeSIADO = new Log_IntSIADO();
+                Ent_IntSIADO paramSIADO;
 
-                paramSIADO.BusCriterio = asCriterio;
-                paramSIADO.BusValor = asSubCriterio;
-                paramSIADO.Parametro = asValor;
-                var lstSIADO = exeSIADO.RegMostrarListaSIADO_V3(paramSIADO);
-                var jsonResult = Json(new { success = true, data = lstSIADO }, JsonRequestBehavior.AllowGet);
+                string[] asSubCriterioList = (asSubCriterio ?? "").Split(',');
+
+                foreach (var asSubCriterioItem in asSubCriterioList)
+                {
+                    paramSIADO = new Ent_IntSIADO();
+                    paramSIADO.BusCriterio = asCriterio;
+                    paramSIADO.BusValor = asSubCriterioItem;
+                    paramSIADO.Parametro = asValor;
+                    var lstSIADO = exeSIADO.RegMostrarListaSIADO_V3(paramSIADO);
+                    result.AddRange(lstSIADO);
+                }
+
+                var jsonResult = Json(new { success = true, data = result }, JsonRequestBehavior.AllowGet);
                 jsonResult.MaxJsonLength = int.MaxValue;
                 return jsonResult;
             }
@@ -1157,7 +1049,7 @@ namespace SIGOFCv3.Areas.General.Controllers
             {
                 return Json(new { data = "", success = false, msj = ex.Message });
             }
-        }
+        }        
         public ActionResult VerificaSIADO(string fileName, string origen)
         {
             string pathRepo = "";
@@ -1212,24 +1104,20 @@ namespace SIGOFCv3.Areas.General.Controllers
                     break;
             }
 
-            //Extensiones soportadas
-            string[] extensiones = { ".pdf", ".zip", ".7z", ".rar" };
-
-            foreach (var ext in extensiones)
+            string FilePath = pathRepo + fileName + ".pdf";
+            if (System.IO.File.Exists(FilePath))
             {
-                string FilePath = pathRepo + fileName + ext;
-                if (System.IO.File.Exists(FilePath))
+                return new BinaryContentResult
                 {
-                    return new BinaryContentResult
-                    {
-                        FileName = fileName + ext,
-                        ContentType = "application/octet-stream",
-                        Content = System.IO.File.ReadAllBytes(FilePath)
-                    };
-                }
+                    FileName = fileName + ".pdf",
+                    ContentType = "application/octet-stream",
+                    Content = System.IO.File.ReadAllBytes(FilePath)
+                };
             }
-
-            return new HttpStatusCodeResult(0);
+            else
+            {
+                return new HttpStatusCodeResult(0);
+            }
 
         }
         #endregion
@@ -1583,7 +1471,7 @@ namespace SIGOFCv3.Areas.General.Controllers
                         #endregion
                         #region POARAMPMED
                         case "POARAMPMED":
-                            if (Datos.Columns.Count != 12)
+                            if (Datos.Columns.Count != 11)
                             {
                                 throw new Exception("La plantilla seleccionada no es la correcta para Datos de la Resolución de Aprobación del POA Plantas Medicinales");
                             }
@@ -1829,7 +1717,7 @@ namespace SIGOFCv3.Areas.General.Controllers
                                     if (Fila[8].ToString().Trim() == "" || !Double.TryParse(Fila[8].ToString().Trim(), out diL)) { oCampos.OBSERVACION = oCampos.OBSERVACION + "Campo DAP vacío o irreconocible, "; }
                                     if (Fila[9].ToString().Trim() == "" || !Double.TryParse(Fila[9].ToString().Trim(), out diL)) { oCampos.OBSERVACION = oCampos.OBSERVACION + "Campo AC vacío o irreconocible, "; }
                                     if (Fila[10].ToString().Trim() == "" || !Double.TryParse(Fila[10].ToString().Trim(), out diL)) { oCampos.OBSERVACION = oCampos.OBSERVACION + "Campo DMC vacío o irreconocible, "; }
-                                    
+
                                     if (Fila[12].ToString().Trim() == "")
                                     {
                                         oCampos.OBSERVACION = oCampos.OBSERVACION + "debe seleccionar el estado de la especie; ";
@@ -3073,7 +2961,7 @@ namespace SIGOFCv3.Areas.General.Controllers
             int rowcount = 0;
             int page = request.Start == 0 ? 1 : (request.Start / request.Length) + 1;
 
-          //  paramsBus.BusFormulario = request.CustomSearchForm;
+            //  paramsBus.BusFormulario = request.CustomSearchForm;
             paramsBus.BusCriterio = request.CustomSearchType;
             paramsBus.BusValor = request.CustomSearchValue;
             paramsBus.BusCriterio1 = request.CustomSearchType1;
@@ -3099,105 +2987,8 @@ namespace SIGOFCv3.Areas.General.Controllers
 
         #endregion
 
-        [HttpGet]
-        public ActionResult _ActualizaCargoPersona(string asFormulario, string asCodPersona)
-        {
-            VM_Persona objPersona = new VM_Persona();
-            Ent_Persona entP = new Ent_Persona();
-            Log_Persona logP = new Log_Persona();
 
-            entP.BusFormulario = "DIRECTORIO_UNICO";
-            entP.BusCriterio = "TODOS";
-            entP.COD_UCUENTA = (ModelSession.GetSession())[0].COD_UCUENTA;
-            entP = logP.RegMostCombo(entP);
-            objPersona.ddlItemPN_DITipo = entP.ListCTipoDocIdentidad.Select(i => new VM_Cbo { Value = i.CODIGO, Text = i.DESCRIPCION });
-            objPersona.ddlITipoCargo = entP.ListCTipoCargo.Select(i => new VM_Cbo { Value = i.CODIGO, Text = i.DESCRIPCION });
-            objPersona.ddlINivelAcademico = entP.ListCNivelAcademico.Select(i => new VM_Cbo { Value = i.CODIGO, Text = i.DESCRIPCION });
-            objPersona.ddlIEspecialidad = entP.ListCEspecialidad.Select(i => new VM_Cbo { Value = i.CODIGO, Text = i.DESCRIPCION });
-            var lstCategoria = entP.ListCCategoria.Select(i => new VM_Cbo { Value = i.CODIGO, Text = i.DESCRIPCION }).ToList();
-            lstCategoria.Insert(0, new VM_Cbo { Value = "0000000", Text = "Seleccionar" });
-            objPersona.ddlCategoria = lstCategoria;
-            objPersona.ddlMencionRegencia = new List<VM_Cbo>();
-            var lstEstado = entP.ListCEstado.Select(i => new VM_Cbo { Value = i.CODIGO, Text = i.DESCRIPCION }).ToList();
-            lstEstado.Insert(0, new VM_Cbo { Value = "-", Text = "Seleccionar" });
-            objPersona.ddlEstado = lstEstado;
-
-            var lstAnio = new List<VM_Chk>();
-            for (int i = DateTime.Now.Year; i >= 2016; i--)
-            {
-                lstAnio.Add(new VM_Chk() { Value = i.ToString(), Text = i.ToString() });
-            }
-            objPersona.ddlAnio = lstAnio.Select(i => new VM_Cbo { Value = i.Value, Text = i.Text });
-
-            entP = logP.RegMostrarListaItem(new Ent_Persona() { COD_PERSONA = asCodPersona });
-            objPersona.codigoPersona = asCodPersona;
-
-            ViewBag.hdfFormulario = asFormulario;
-            ViewBag.hdfTipoPersona = entP.COD_TPERSONA;
-
-            if (entP.COD_TPERSONA.Equals("N"))
-            {
-                objPersona.ddlItemPN_DITipoId = entP.COD_DIDENTIDAD;
-                objPersona.txtItemPN_DINumero = entP.N_DOCUMENTO;
-                objPersona.txtItemPN_DIRUC = entP.N_RUC;
-                objPersona.txtItemPN_APaterno = entP.APE_PATERNO;
-                objPersona.txtItemPN_AMaterno = entP.APE_MATERNO;
-                objPersona.txtItemPN_Nombres = entP.NOMBRES;
-            }
-            else
-            {
-                objPersona.txtItemPJ_RUC = entP.N_RUC;
-                objPersona.txtItemPJ_RSocial = entP.RAZON_SOCIAL;
-            }
-
-            objPersona.txtINumRegFfs = entP.NUM_REGISTRO_FFS;
-            objPersona.txtINumRegProf = entP.NUM_REGISTRO_PROFESIONAL;
-            objPersona.txtICargo = entP.CARGO;
-            objPersona.txtINumColegiatura = entP.COLEGIATURA_NUM;
-            objPersona.ddlINivelAcademicoId = entP.COD_NACADEMICO == "" ? "0000000" : entP.COD_NACADEMICO;
-            objPersona.ddlIEspecialidadId = entP.COD_DPESPECIALIDAD == "" ? "0000000" : entP.COD_DPESPECIALIDAD;
-            objPersona.ddlAnioId = entP.ANIO;
-            objPersona.txtNroLicencia = entP.NROLICENCIA;
-            objPersona.txtFecLicencia = entP.OTORGAMIENTO;
-            objPersona.txtResolucion = entP.RESAPROBACION;
-            objPersona.ddlCategoriaId = entP.COD_CATEGORIA == "" ? "0000000" : entP.COD_CATEGORIA;
-            objPersona.txtCIP = entP.CIP;
-            objPersona.ddlEstadoId = entP.ESTADO_REGENTE == "" ? "-" : entP.ESTADO_REGENTE;
-            objPersona.txtOtro = entP.OTRO;
-
-            foreach (var itemCargo in entP.ListTipoCargo)
-            {
-                objPersona.hdfITipoCargo += "," + itemCargo.COD_PTIPO;
-            }
-
-            foreach (var itemMencion in entP.ListMencion)
-            {
-                objPersona.hdfMencionRegencia += "," + itemMencion.COD_MENSION;
-            }
-
-            return PartialView(objPersona);
-        }
-
-        [HttpPost]
-        public JsonResult _ActualizaCargoPersona(VM_Persona vm)
-        {
-            ListResult result = new ListResult();
-            try
-            {
-                Log_GENEPERSONA oCLogPersona = new Log_GENEPERSONA();
-                String coducuenta = (ModelSession.GetSession())[0].COD_UCUENTA;
-                result = oCLogPersona.GrabarTipoCargo(coducuenta, vm);
-            }
-            catch (Exception)
-            {
-                result.success = false;
-                result.msj = "Ocurrio un error en el registro, verifique los datos e intente de nuevo";
-
-            }
-            return Json(result);
-        }
     }
-
     public class BinaryContentResult : ActionResult
     {
         public BinaryContentResult()

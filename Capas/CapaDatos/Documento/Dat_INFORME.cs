@@ -14902,7 +14902,7 @@ namespace CapaDatos.DOC
                         var lstInformeCalidad = mv.lstISupervision.Where(x => idControl.Contains(x.id));
                         foreach (var item in lstInformeCalidad)
                         {
-                            using (OracleDataReader dr = dBOracle.SelDrdDefault(cn, "DOC_OSINFOR_ERP_MIGRACION.usp_InformeFormatoControlCalidadValidar_V3", mv.conInforme, item.id, usuarioId, item.PRESENTA_OBS, mv.codPerfil))
+                            using (OracleDataReader dr = dBOracle.SelDrdDefault(cn, "DOC_OSINFOR_ERP_MIGRACION.usp_InformeFormatoControlCalidadValidar_V3", mv.conInforme, item.id, usuarioId, item.PRESENTA_OBS))
                             {
                                 if (dr != null)
                                 {
@@ -14926,7 +14926,7 @@ namespace CapaDatos.DOC
                         var lstDatosSigoSfcCalidad = mv.lstDatosReg.Where(x => idControl.Contains(x.id));
                         foreach (var item in lstDatosSigoSfcCalidad)
                         {
-                            using (OracleDataReader dr = dBOracle.SelDrdDefault(cn, "DOC_OSINFOR_ERP_MIGRACION.usp_InformeFormatoControlCalidadValidar_V3", mv.conInforme, item.id, usuarioId, item.PRESENTA_OBS, mv.codPerfil))
+                            using (OracleDataReader dr = dBOracle.SelDrdDefault(cn, "DOC_OSINFOR_ERP_MIGRACION.usp_InformeFormatoControlCalidadValidar_V3", mv.conInforme, item.id, usuarioId, item.PRESENTA_OBS))
                             {
                                 if (dr != null)
                                 {

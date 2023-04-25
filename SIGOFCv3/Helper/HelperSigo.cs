@@ -356,7 +356,6 @@ namespace SIGOFCv3.Helper
                 bool _break = false;
                 if (result.ListUCDMMENU.Count > 0)
                 {
-                    mr.PERFIL = result.COD_SPERFIL;
                     foreach (var item in result.ListUCDMMENU)
                     {
                         if (item.ListMENUGRUPO.Count > 0)

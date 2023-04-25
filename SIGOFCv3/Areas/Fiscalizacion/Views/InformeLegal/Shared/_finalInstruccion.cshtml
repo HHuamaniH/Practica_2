@@ -309,6 +309,11 @@
         _renderFinalInstruccion.dtSubsanacionFinalInstruccion.rows.add(JSON.parse('@Html.Raw(Json.Encode(@Model.ListSTD02))')).draw();
     }
 
+    _renderFinalInstruccion.fnInitDataTableOtrosDocumentos = function () {
+        const data = JSON.parse('@Html.Raw(Json.Encode(@Model.ListSTD03))');
+        _renderFinalInstruccion.dtOtrosDocumentos = data;
+    }
+
     _renderFinalInstruccion.fnInitDataTable_ListIncisosSubsanados = function () {
         var columns_label = [], columns_data = [], options = {};
 
@@ -338,6 +343,7 @@
         _renderFinalInstruccion.fnInitDataTable_Detail();
         _renderFinalInstruccion.fnInitDataTableAllanamiento();
         _renderFinalInstruccion.fnInitDataTableSubsanacion();
+        _renderFinalInstruccion.fnInitDataTableOtrosDocumentos();
         _renderFinalInstruccion.fnShowTerceroSolidario();
         _renderFinalInstruccion.fnInitDataTable_ListIncisosSubsanados();
     });
@@ -601,7 +607,7 @@
     </div>
     <div class="form-row">
         <div class="form-group col-md-12">
-            <button style="font-size:11px !important;" onclick="_renderFinalInstruccion.fncbuscaExpAllanamiento()" class="btn btn-primary " type="button"><i class="fa fa-search"></i>&nbsp;Buscar Expdiente en SITD</button>
+            <button style="font-size:11px !important;" onclick="_renderFinalInstruccion.fncbuscaExpAllanamiento()" class="btn btn-primary " type="button"><i class="fa fa-search"></i>&nbsp;Buscar Expediente en SITD</button>
             <br />
             <table id="tbAllanamientoFinalInstruccion" style="width:100%;margin:0px !important;" class="table table-hover table-bordered">
                 <thead>
@@ -624,7 +630,7 @@
     </div>
     <div class="form-row">
         <div class="form-group col-md-12">
-            <button style="font-size:11px !important;" onclick="_renderFinalInstruccion.fncbuscaExpSubsanacion()" class="btn btn-primary " type="button"><i class="fa fa-search"></i>&nbsp;Buscar Expdiente en SITD</button>
+            <button style="font-size:11px !important;" onclick="_renderFinalInstruccion.fncbuscaExpSubsanacion()" class="btn btn-primary " type="button"><i class="fa fa-search"></i>&nbsp;Buscar Expediente en SITD</button>
             <br />
             <table id="tbSubsanacionFinalInstruccion" style="width:100%;margin:0px !important;" class="table table-hover table-bordered">
                 <thead>

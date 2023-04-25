@@ -7,193 +7,6 @@
     #sign-logo .icon { cursor: pointer; user-select: none; border: 1px solid #e1e1e1; }
     #sign-logo .icon.selected { background: rgb(246, 250, 255); border-color: #15ab4a !important; transform: scale(1.4); z-index: 9; position: relative; }
 </style>
-<script src="~/Scripts/pdfjs/pdf.min.js"></script>
-<script type="text/javascript">
-    pdfjsLib.GlobalWorkerOptions.workerSrc = urlLocalSigo + 'Scripts/pdfjs/pdf.worker.min.js';
-</script>
-<script src="https://dsp.reniec.gob.pe/refirma_invoker/resources/js/client.js"></script>
-<script type="text/javascript">
-    var _modalInvoker = {};
-
-    window.addEventListener('getArguments', function (e) {
-        type = e.detail; //W | L
-        ObtieneArgumentosParaFirma(type);
-    });
-
-    function getArguments() {
-        dispatchEventClient('sendArguments', window['refirmaArgs']);
-    }
-
-    window.addEventListener('invokerOk', invokerOk);
-    window.addEventListener('invokerCancel', invokerCancel);
-
-    /* Funciones implementadas */
-    function ObtieneArgumentosParaFirma(type) {
-        const data = _modalInvoker.data;
-
-        let posy = data.top,
-            posx = data.left,
-            reason = data.reason,
-            page = data.page,
-            logo = data.logo;
-
-        let postArgs = {
-            type: type,
-            fileDownloadUrl: `${urlLocalSigo}${_modalInvoker.urlDocument}`, //`${urlLocalSigo}${urlBaseDoc}/${docName}?v=${new Date().getTime()}`, //URL del documento
-            reason: reason,
-            pageNumber: page,
-            posx: posx,
-            posy: posy,
-            outputFile: `${_modalInvoker.outputFile}`,
-            logo: logo || 'osinfor-logo.png',
-            folder: _modalInvoker.outputFolder
-        };
-
-        $.post(urlLocalSigo + "RefirmaInvoker/postArguments", postArgs,
-            function (data, status) {
-                window['refirmaArgs'] = data;
-                getArguments();
-            });
-    }
-
-    function invokerOk(e) {
-        _modalInvoker.ExtraerPagina(null, `${_modalInvoker.outputFolder}/${_modalInvoker.outputFile}`);
-        $('.sign-toggle, #sign-container .sign-drag').hide();
-
-        if (typeof _modalInvoker.invokerOk === 'function') {
-            _modalInvoker.invokerOk(e);
-        }
-    }
-
-    function invokerCancel(e) {
-        utilSigo.toastWarning('Invoker cancelado', 'Se ha cancelado la llamada al componente de firma');
-    }
-</script>
-<script type="text/javascript">
-    _modalInvoker.ExtraerPagina = function (pageNumber, urlDocument) {
-        pageNumber = pageNumber || $('#sign-page').val() * 1;
-        //if (!_modalInvoker.outputFile) _modalInvoker.outputFile = `${app.Tramite?.cCodificacion.replace('/', '-')}.pdf`;
-
-        let promise = new Promise(function (resolve, reject) {
-            let params = {
-                sourcePdfPath: urlDocument || _modalInvoker.urlDocument,
-                pageNumber: pageNumber,
-            };
-
-            utilSigo.blockUIGeneral();
-
-            $.post(urlLocalSigo + '/RefirmaInvoker/PdfExtractPages', params, { responseType: 'arraybuffer' })
-                .then(function (res) {
-                    utilSigo.unblockUIGeneral();
-
-                    /*const byteCharacters = atob(response);
-                    const byteNumbers = new Array(byteCharacters.length);
-                    for (let i = 0; i < byteCharacters.length; i++) {
-                        byteNumbers[i] = byteCharacters.charCodeAt(i);
-                    }
-
-                    const byteArray = new Uint8Array(byteNumbers);
-
-                    var blob = new Blob([byteArray], { type: 'application/pdf' });
-                    var url = (window.URL || window.webkitURL).createObjectURL(blob);
-                    window.open(url);
-
-                    return;*/
-
-                    $('#sign-page').attr('title', res.pageCount + ' páginas en total');
-
-                    var pdfData = atob(res.page);
-
-                    pdfjsLib.getDocument({ data: pdfData }).promise.then(function (pdf) {
-                        //console.log("the pdf has ", pdf.numPages, "page(s).")
-
-                        pdf.getPage(pdf.numPages).then(function (page) {
-
-                            var scale = 2.0;
-                            var viewport = page.getViewport({ scale: scale });
-
-                            // Prepare canvas using PDF page dimensions
-                            var canvas = document.getElementById('pdf-viewer');
-                            var context = canvas.getContext('2d');
-                            canvas.height = viewport.height;
-                            canvas.width = viewport.width;
-
-                            // Render PDF page into canvas context
-                            var renderContext = {
-                                canvasContext: context,
-                                viewport: viewport
-                            };
-                            var renderTask = page.render(renderContext);
-                            renderTask.promise.then(function () {
-                                console.log('PDF rendered');
-                                resolve();
-                            });
-
-                        });
-
-                    });
-                })
-                .catch(function (xhr) {
-                    utilSigo.unblockUIGeneral();
-                    reject(xhr);
-                });
-        });
-
-        return promise;
-    }
-
-    _modalInvoker.VerDocumento = function () {
-        throw 'Método no implementado en el formulario local';
-    }
-
-    _modalInvoker.IniciarFirma = function () {      
-        _modalInvoker.ExtraerPagina().then(function () {
-            $('.sign-toggle, #sign-container .sign-drag').show();
-            $('#modal-firma').modal('show');
-           // $("#modal-anexo").modal('show');
-            $('#sign-container .sign-drag').draggable({ containment: 'parent' });            
-        }).catch(function (xhr) {
-            utilSigo.toastError('Atención', xhr.statusText);
-        });
-    }
-
-    _modalInvoker.Firmar = function () {
-        let ctrlSign = $('.sign-drag'),
-            signDoc = $('#sign-container'),
-            reason = $('#sign-reason').val(),
-            page = $("#sign-page").val() * 1;
-
-        let pos = ctrlSign.position(),
-            w = signDoc.outerWidth(),
-            h = signDoc.outerHeight();
-
-        //let factor = signDoc.find('canvas').attr('width') / signDoc.find('canvas').attr('height');
-
-        let f_ver = (signDoc.find('canvas').attr('height') / h) / 2.0; // scale
-        let f_hor = (signDoc.find('canvas').attr('width') / w) / 2.0; // scale
-
-        //console.log(pos, f_hor, f_ver);
-        let logo = $('#sign-logo .selected img').attr('src').split('/').reverse()[0];
-
-        _modalInvoker.data = {
-            reason: reason,
-            page: page - 1,
-            top: Math.round(pos.top * f_ver), // 1.255
-            left: Math.round(pos.left * f_hor), // 1.255
-            logo: logo
-        }
-
-        if (window['initInvoker']) initInvoker('W'); //W | L
-        else utilSigo.toastError('', 'No se encontró el metodo initInvoker del archivo de RENIEC');
-    }
-
-    $(function () {
-        $('body').on('click', '#sign-logo .icon', function (e) {
-            $(this).closest('#sign-logo').find('.icon').removeClass('selected');
-            $(this).addClass('selected');
-        });
-    });
-</script>
 <!-- REFIRMA -->
 <div id="addComponent"></div>
 <!---->
@@ -270,3 +83,202 @@
         </div>
     </div>
 </div>
+<script type="text/javascript">
+    if (!window['pdfjsLib']) {
+        $.getScript(urlLocalSigo + 'Scripts/pdfjs/pdf.min.js').done(() => {
+            pdfjsLib.GlobalWorkerOptions.workerSrc = urlLocalSigo + 'Scripts/pdfjs/pdf.worker.min.js';
+            console.log('load pdf js');
+        });
+    }
+
+    // Hack para cargar js de reniec y ejecutar la funcion insertFrame llamado en window.onload
+    // (que no es invocado en vistas parciales con llamadas ajax)
+    $.getScript('https://dsp.reniec.gob.pe/refirma_invoker/resources/js/client.js')
+        .done(() => {
+            (typeof window.insertFrame === 'function') && window.insertFrame();
+        }).fail(() => {
+            console.error('No se pudo cargar el script de ejecución de RENIEC');
+        });
+</script>
+<script type="text/javascript">
+    var _modalInvoker = {};
+
+    window.addEventListener('getArguments', function (e) {
+        type = e.detail; //W | L
+        ObtieneArgumentosParaFirma(type);
+    });
+
+    function getArguments() {
+        dispatchEventClient('sendArguments', window['refirmaArgs']);
+    }
+
+    window.addEventListener('invokerOk', invokerOk);
+    window.addEventListener('invokerCancel', invokerCancel);
+
+    /* Funciones implementadas */
+    function ObtieneArgumentosParaFirma(type) {
+        const data = _modalInvoker.data;
+
+        let posy = data.top,
+            posx = data.left,
+            reason = data.reason,
+            page = data.page,
+            logo = data.logo;
+
+        let postArgs = {
+            type: type,
+            fileDownloadUrl: `${urlLocalSigo}${_modalInvoker.urlDocument}`, //`${urlLocalSigo}${urlBaseDoc}/${docName}?v=${new Date().getTime()}`, //URL del documento
+            reason: reason,
+            pageNumber: page,
+            posx: posx,
+            posy: posy,
+            outputFile: `${_modalInvoker.outputFile}`,
+            logo: logo || 'osinfor-logo.png',
+            folder: _modalInvoker.outputFolder
+        };
+
+        $.post(urlLocalSigo + "General/FirmaDigital/postArguments", postArgs,
+            function (data, status) {
+                window['refirmaArgs'] = data;
+                getArguments();
+            });
+    }
+
+    function invokerOk(e) {
+        _modalInvoker.ExtraerPagina(null, `${_modalInvoker.outputFolder}/${_modalInvoker.outputFile}`);
+        $('.sign-toggle, #sign-container .sign-drag').hide();
+
+        if (typeof _modalInvoker.invokerOk === 'function') {
+            _modalInvoker.invokerOk(e);
+        }
+    }
+
+    function invokerCancel(e) {
+        utilSigo.toastWarning('Invoker cancelado', 'Se ha cancelado la llamada al componente de firma');
+    }
+</script>
+<script type="text/javascript">
+    _modalInvoker.ExtraerPagina = function (pageNumber, urlDocument) {
+        pageNumber = pageNumber || $('#sign-page').val() * 1;
+        //if (!_modalInvoker.outputFile) _modalInvoker.outputFile = `${app.Tramite?.cCodificacion.replace('/', '-')}.pdf`;
+
+        let promise = new Promise(function (resolve, reject) {
+            let params = {
+                sourcePdfPath: urlDocument || _modalInvoker.urlDocument,
+                pageNumber: pageNumber,
+            };
+
+            utilSigo.blockUIGeneral();
+
+            $.post(urlLocalSigo + 'General/FirmaDigital/PdfExtractPages', params, { responseType: 'arraybuffer' })
+                .then(function (res) {
+                    utilSigo.unblockUIGeneral();
+
+                    /*const byteCharacters = atob(response);
+                    const byteNumbers = new Array(byteCharacters.length);
+                    for (let i = 0; i < byteCharacters.length; i++) {
+                        byteNumbers[i] = byteCharacters.charCodeAt(i);
+                    }
+
+                    const byteArray = new Uint8Array(byteNumbers);
+
+                    var blob = new Blob([byteArray], { type: 'application/pdf' });
+                    var url = (window.URL || window.webkitURL).createObjectURL(blob);
+                    window.open(url);
+
+                    return;*/
+
+                    $('#sign-page').attr('title', res.pageCount + ' páginas en total');
+
+                    const pdfData = atob(res.page);
+
+                    pdfjsLib.getDocument({ data: pdfData }).promise.then(function (pdf) {
+                        //console.log("the pdf has ", pdf.numPages, "page(s).")
+
+                        pdf.getPage(1).then(function (page) {
+
+                            const scale = 2.0;
+                            const viewport = page.getViewport({ scale });
+
+                            // Prepare canvas using PDF page dimensions
+                            const canvas = document.getElementById('pdf-viewer');
+                            const context = canvas.getContext('2d');
+                            canvas.height = viewport.height;
+                            canvas.width = viewport.width;
+
+                            // Render PDF page into canvas context
+                            const renderContext = {
+                                canvasContext: context,
+                                viewport: viewport
+                            };
+                            let renderTask = page.render(renderContext);
+                            renderTask.promise.then(function () {
+                                console.log('PDF rendered!');
+                                resolve();
+                            });
+
+                        });
+
+                    });
+                })
+                .catch(function (xhr) {
+                    utilSigo.unblockUIGeneral();
+                    reject(xhr);
+                });
+        });
+
+        return promise;
+    }
+
+    _modalInvoker.VerDocumento = function () {
+        throw 'Método no implementado en el formulario local';
+    }
+
+    _modalInvoker.IniciarFirma = function () {
+        _modalInvoker.ExtraerPagina().then(function () {
+            $('.sign-toggle, #sign-container .sign-drag').show();
+            $('#modal-firma').modal('show');
+            // $("#modal-anexo").modal('show');
+            $('#sign-container .sign-drag').draggable({ containment: 'parent' });
+        }).catch(function (xhr) {
+            utilSigo.toastError('Atención', xhr.statusText);
+        });
+    }
+
+    _modalInvoker.Firmar = function () {
+        let ctrlSign = $('.sign-drag'),
+            signDoc = $('#sign-container'),
+            reason = $('#sign-reason').val(),
+            page = $("#sign-page").val() * 1;
+
+        let pos = ctrlSign.position(),
+            w = signDoc.outerWidth(),
+            h = signDoc.outerHeight();
+
+        //let factor = signDoc.find('canvas').attr('width') / signDoc.find('canvas').attr('height');
+
+        let f_ver = (signDoc.find('canvas').attr('height') / h) / 2.0; // scale
+        let f_hor = (signDoc.find('canvas').attr('width') / w) / 2.0; // scale
+
+        //console.log(pos, f_hor, f_ver);
+        let logo = $('#sign-logo .selected img').attr('src').split('/').reverse()[0];
+
+        _modalInvoker.data = {
+            reason: reason,
+            page: page - 1,
+            top: Math.round(pos.top * f_ver), // 1.255
+            left: Math.round(pos.left * f_hor), // 1.255
+            logo: logo
+        }
+
+        if (window['initInvoker']) initInvoker('W'); //W | L
+        else utilSigo.toastError('', 'No se encontró el metodo initInvoker del archivo de RENIEC');
+    }
+
+    $(function () {
+        $('body').on('click', '#sign-logo .icon', function (e) {
+            $(this).closest('#sign-logo').find('.icon').removeClass('selected');
+            $(this).addClass('selected');
+        });
+    });
+</script>

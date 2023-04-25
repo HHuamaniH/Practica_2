@@ -199,6 +199,8 @@ namespace CapaLogica.DOC
                     //20/09/2022 TGS
                     vm.ListSTD01 = new List<CEntidad>();
                     vm.ListSTD02 = new List<CEntidad>();
+                    vm.ListSTD03 = new List<CEntidad>();
+
                     vm.listaArticulosSubsanables = initArticulos("ARTICULOS_SUBSANADOS", "");
                     vm.listaInfraccionesSubsanadas = new List<CEntidad>();
 
@@ -243,7 +245,7 @@ namespace CapaLogica.DOC
                     vm.txtNumIlegal = datInfLegal.ILEGAL_NUMERO;
                     vm.txtProfesional = datInfLegal.APELLIDOS_NOMBRES;
                     vm.hdfCodProfesional = datInfLegal.COD_PROFESIONAL;
-                    vm.txtFechaLegal = datInfLegal.ILEGAL_FECHA_EMISION.ToString();
+                    vm.txtFechaLegal = datInfLegal.ILEGAL_FECHA_EMISION?.ToString() ?? "";
                     vm.txtPresentoProyecto = (bool)datInfLegal.PRESENTO_PROYECTO_RD;
                     vm.txtInfDirectoral = (bool)datInfLegal.INFDIR;
                     vm.txtInfSubDirectoral = (bool)datInfLegal.INFSUBDIR;
@@ -366,6 +368,7 @@ namespace CapaLogica.DOC
                     //20/09/2022 TGS
                     vm.ListSTD01 = datInfLegal.listSTD01;
                     vm.ListSTD02 = datInfLegal.listSTD02;
+                    vm.ListSTD03 = datInfLegal.listSTD03;
                     vm.chkTerceroSolidario = (datInfLegal.COD_TERCERO_SOLIDARIO.Trim() == "") ? false : true;
                     vm.hdfCodTerceroSolidario = datInfLegal.COD_TERCERO_SOLIDARIO;
                     vm.txtTerceroSolidario = datInfLegal.TERCERO_SOLIDARIO;
@@ -383,8 +386,8 @@ namespace CapaLogica.DOC
         private void ValidarDatos(VM_InformeLegal _dto)
         {
             if (_dto.vmControlCalidad.ddlIndicadorId == "0000000") throw new Exception("Seleccione el estado actual del registro");
-            if (string.IsNullOrEmpty(_dto.txtNumIlegal)) throw new Exception("Ingrese el número de informe legal");
-            if (string.IsNullOrEmpty(_dto.txtFechaLegal)) throw new Exception("Seleccione la fecha de emisión");
+            //if (string.IsNullOrEmpty(_dto.txtNumIlegal)) throw new Exception("Ingrese el número de informe legal");
+            //if (string.IsNullOrEmpty(_dto.txtFechaLegal)) throw new Exception("Seleccione la fecha de emisión");
             if (_dto.tbInforme == null) throw new Exception("Seleccione un informe, expediente");
             if (_dto.hdfCodProfesional == null) throw new Exception("Seleccione Responsable del Informe");
             if (_dto.hdfCodTipoIlegal == "0000001" && _dto.txtIdRecomendacion == "0000000") throw new Exception("Seleccione una recomendación");
@@ -404,7 +407,9 @@ namespace CapaLogica.DOC
                 paramIL.PUBLICAR = _dto.chkPublicar;
 
                 paramIL.ILEGAL_NUMERO = _dto.txtNumIlegal;
-                paramIL.ILEGAL_FECHA_EMISION = Convert.ToDateTime(_dto.txtFechaLegal);
+
+                if (!string.IsNullOrEmpty((_dto.txtFechaLegal ?? "").Trim()))
+                    paramIL.ILEGAL_FECHA_EMISION = Convert.ToDateTime(_dto.txtFechaLegal);
 
                 paramIL.PRESENTO_PROYECTO_RD = _dto.txtPresentoProyecto;
                 paramIL.INFDIR = _dto.txtInfDirectoral;
@@ -539,6 +544,7 @@ namespace CapaLogica.DOC
                     //lista de expedientes de tramite documentario 20/09/2022 TGS
                     paramIL.listSTD01 = _dto.ListSTD01;
                     paramIL.listSTD02 = _dto.ListSTD02;
+                    paramIL.listSTD03 = _dto.ListSTD03;
                     paramIL.listEliTSTD01 = _dto.ListEliTSTD01;
                     paramIL.COD_TERCERO_SOLIDARIO = _dto.hdfCodTerceroSolidario == " " ? null : _dto.hdfCodTerceroSolidario;
                     paramIL.ListIncisosSubsanados = _dto.listaInfraccionesSubsanadas;
@@ -610,10 +616,9 @@ namespace CapaLogica.DOC
                 paramIL.ListEspeciesMCorrectiva = _dto.listaEspeciesMC;
                 paramIL.ListEspecies = _dto.listaEspeciesAP;
 
+                var OUTPUTPARAM1 = this.RegILEGAL_Grabar(paramIL);
 
-                var estado_final = this.RegILEGAL_Grabar(paramIL);
-
-                result.AddResultado("La Muestra se Guardo Correctamente", true);
+                result.AddResultado("La Muestra se Guardo Correctamente", true, new List<string>() { OUTPUTPARAM1 });
             }
             catch (Exception ex)
             {

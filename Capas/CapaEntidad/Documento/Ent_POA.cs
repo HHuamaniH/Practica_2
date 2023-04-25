@@ -488,12 +488,6 @@ namespace CapaEntidad.DOC
         [Description("ESPECIES_SERFOR")]
         public String ESPECIES_SERFOR { get; set; }
 
-        //TGS 26-12-2022: Agrega atributos del tipo de cargo
-        [Description("COD_PTIPO")]
-        public String COD_PTIPO { get; set; }
-        [Description("TIPO_CARGO")]
-        public String TIPO_CARGO { get; set; }
-
         [Category("LIST"), Description("ListMComboEspeciesSerfor")]
         public List<Ent_POA> ListMComboEspeciesSerfor { get; set; }
 

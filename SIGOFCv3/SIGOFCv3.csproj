@@ -30,7 +30,7 @@
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
     <TypeScriptToolsVersion>1.8</TypeScriptToolsVersion>
-    <Use64BitIISExpress>true</Use64BitIISExpress>
+    <Use64BitIISExpress>false</Use64BitIISExpress>
     <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -242,6 +242,7 @@
     <Compile Include="Areas\Fiscalizacion\Controllers\GestionConstanciaController.cs" />
     <Compile Include="Areas\Fiscalizacion\Controllers\InformacionTitularController.cs" />
     <Compile Include="Areas\Fiscalizacion\Controllers\InformeLegalController.cs" />
+    <Compile Include="Areas\Fiscalizacion\Controllers\InformeLegalDigitalController.cs" />
     <Compile Include="Areas\Fiscalizacion\Controllers\ManCalculoMultaController.cs" />
     <Compile Include="Areas\Fiscalizacion\Controllers\ManILegalController.cs" />
     <Compile Include="Areas\Fiscalizacion\Controllers\InformeFundamentadoController.cs" />
@@ -260,6 +261,7 @@
     <Compile Include="Areas\Focalizacion\Controllers\PriorizacionController.cs" />
     <Compile Include="Areas\Focalizacion\FocalizacionAreaRegistration.cs" />
     <Compile Include="Areas\General\Controllers\ControlesController.cs" />
+    <Compile Include="Areas\General\Controllers\EditorController.cs" />
     <Compile Include="Areas\General\Controllers\EspeciesController.cs" />
     <Compile Include="Areas\General\Controllers\ManMetaController.cs" />
     <Compile Include="Areas\General\Controllers\ManPEIController.cs" />
@@ -347,7 +349,7 @@
     <Compile Include="Areas\Tribunal\Models\TribunalNotificacion2da\ExportarDatos.cs" />
     <Compile Include="Areas\Tribunal\TribunalAreaRegistration.cs" />
     <Compile Include="Controllers\LoginController.cs" />
-    <Compile Include="Controllers\RefirmaInvokerController.cs" />
+    <Compile Include="Areas\General\Controllers\FirmaDigitalController.cs" />
     <Compile Include="frmDownload.aspx.cs">
       <DependentUpon>frmDownload.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -419,6 +421,7 @@
     <Content Include="Areas\Capacitacion\js\ManProgramaCapacitacion\AddEdit.js" />
     <Content Include="Areas\Capacitacion\js\ManProgramaCapacitacion\Index.js" />
     <Content Include="Areas\Capacitacion\Reporte\ReporteCapacitacion.aspx" />
+    <Content Include="Areas\Fiscalizacion\css\InformeLegal\IFIDigital.css" />
     <Content Include="Areas\Fiscalizacion\css\ReporteFiscalizacion\Index.css" />
     <Content Include="Areas\Fiscalizacion\js\FiscalizacionNotificacion\AddEdit.js" />
     <Content Include="Areas\Fiscalizacion\js\GestionConstancia\Index.js" />
@@ -427,10 +430,10 @@
     <Content Include="Areas\Fiscalizacion\js\InformeFundamentado\AddEdit.js" />
     <Content Include="Areas\Fiscalizacion\js\InformeFundamentado\Index.js" />
     <Content Include="Areas\Fiscalizacion\js\InformeLegal\AddEdit.js" />
+    <Content Include="Areas\Fiscalizacion\js\InformeLegal\IFI.js" />
     <Content Include="Areas\Fiscalizacion\js\InformeLegal\index.js" />
     <Content Include="Areas\Fiscalizacion\js\ManInformeTecnico\AddEdit.js" />
     <Content Include="Areas\Fiscalizacion\js\ManInformeTecnico\Index.js" />
-    <Content Include="Areas\Fiscalizacion\js\ManPAU\config.js" />
     <Content Include="Areas\Fiscalizacion\js\ManPAU\RSD.js" />
     <Content Include="Areas\Fiscalizacion\js\ManProveidoElevacion\AddEdit.js" />
     <Content Include="Areas\Fiscalizacion\js\ManProveidoElevacion\Index.js" />
@@ -449,7 +452,6 @@
     <Content Include="Areas\General\css\ManCalculoMulta\ManCalculoMulta.css" />
     <Content Include="Areas\General\css\ReporteSeguimientoRegistro\Index.css" />
     <Content Include="Areas\General\css\Reportes\Reporte.css" />
-    <Content Include="Areas\General\js\Controles\_ActualizaCargoPersona.js" />
     <Content Include="Areas\General\js\Controles\_BuscarPersonaGeneral.js" />
     <Content Include="Areas\General\js\Controles\_cambiarPass.js" />
     <Content Include="Areas\General\js\Controles\_CNotificacion.js" />
@@ -467,6 +469,7 @@
     <Content Include="Areas\General\js\Controles\_terminosUso.js" />
     <Content Include="Areas\General\js\Controles\_THabilitante.js" />
     <Content Include="Areas\General\js\Controles\_Ubigeo.js" />
+    <Content Include="Areas\General\js\Informes\general.js" />
     <Content Include="Areas\General\js\ManMeta\AddEdit.js" />
     <Content Include="Areas\General\js\ManMeta\Index.js" />
     <Content Include="Areas\General\js\ManPEI\AddEdit.js" />
@@ -480,6 +483,7 @@
     <Content Include="Areas\General\js\ReporteFlujoFiscalizacion\Index.js" />
     <Content Include="Areas\General\js\ReporteSeguimientoRegistro\Index.js" />
     <Content Include="Areas\General\js\Reportes\Reporte.js" />
+    <Content Include="Areas\General\js\Informes\components.js" />
     <Content Include="Areas\General\Views\ReporteFiscalizacion\Pau.cshtml" />
     <Content Include="Areas\General\Views\ReporteFiscalizacion\PauResumen.cshtml" />
     <Content Include="Areas\General\Views\ReporteFiscalizacion\PauResumenTotal.cshtml" />
@@ -738,9 +742,11 @@
     <Content Include="Content\images\logo\escudo-peruano.jpg" />
     <Content Include="Content\images\logo\Icono-Estudio.png" />
     <Content Include="Content\images\logo\Logo-sigo-2.png" />
+    <Content Include="Content\images\logo\osinfor-footer-punche.png" />
     <Content Include="Content\images\logo\osinfor-footer.png" />
     <Content Include="Content\images\logo\osinfor-header-1.png" />
     <Content Include="Content\images\logo\osinfor-header-2.png" />
+    <Content Include="Content\images\logo\osinfor-header-3.png" />
     <Content Include="Content\images\logo\osinfor-logo.png" />
     <Content Include="Content\images\logo\osinfor.png" />
     <Content Include="Content\images\logo\sign-check.png" />
@@ -962,7 +968,6 @@
     <Content Include="Imagenes\Mensaje\info.png" />
     <Content Include="lib\wnvwordtopdf.dll" />
     <Content Include="PlantillaPDF\huella_osinfor_normal.png" />
-    <Content Include="Ruta_SITD_Anexos\-Supuesto.png" />
     <Content Include="Scripts\additional-methods.js" />
     <Content Include="Scripts\ai.0.22.9-build00167.js" />
     <Content Include="Scripts\ai.0.22.9-build00167.min.js" />
@@ -986,6 +991,7 @@
     <Content Include="Scripts\chart\Chart.min.js" />
     <Content Include="Scripts\chart\custom.js" />
     <Content Include="Scripts\ckeditor5\ckeditor.js" />
+    <Content Include="Scripts\ckeditor5\config.js" />
     <Content Include="Scripts\ckeditor5\translations\af.js" />
     <Content Include="Scripts\ckeditor5\translations\ar.js" />
     <Content Include="Scripts\ckeditor5\translations\ast.js" />
@@ -2229,6 +2235,48 @@
     <Content Include="Areas\Fiscalizacion\Views\ManResolucion\_Shared\_incisos.cshtml" />
     <Content Include="Areas\Fiscalizacion\Views\InformeLegal\Shared\_incisosSubsanables.cshtml" />
     <Content Include="Areas\THabilitante\Views\ManTHabilitante\_shared\_renderTHExtincion.cshtml" />
+    <Content Include="Areas\Fiscalizacion\Views\InformeLegal\Shared\_InformeIFI.cshtml" />
+    <Content Include="Areas\Fiscalizacion\Views\InformeLegal\templates\_tmplInforme.cshtml" />
+    <Content Include="Areas\Fiscalizacion\Views\InformeLegal\templates\Concesiones\_tmpl.cshtml" />
+    <Content Include="Areas\Fiscalizacion\Views\InformeLegal\templates\Predios privados\_tmpl.cshtml" />
+    <Content Include="Areas\Fiscalizacion\Views\InformeLegal\templates\Comunidades nativas\_tmpl.cshtml" />
+    <Content Include="Areas\Fiscalizacion\Views\InformeLegal\templates\Fauna\_tmpl.cshtml" />
+    <Content Include="Areas\Fiscalizacion\Views\InformeLegal\templates\Concesiones\infracciones\inciso_1.cshtml" />
+    <Content Include="Areas\Fiscalizacion\Views\InformeLegal\templates\Concesiones\infracciones\inciso_e.cshtml" />
+    <Content Include="Areas\Fiscalizacion\Views\InformeLegal\templates\Concesiones\infracciones\inciso_11.cshtml" />
+    <Content Include="Areas\Fiscalizacion\Views\InformeLegal\templates\Concesiones\infracciones\inciso_2.cshtml" />
+    <Content Include="Areas\Fiscalizacion\Views\InformeLegal\templates\Concesiones\infracciones\inciso_10.cshtml" />
+    <Content Include="Areas\Fiscalizacion\Views\InformeLegal\templates\Concesiones\infracciones\inciso_13.cshtml" />
+    <Content Include="Areas\Fiscalizacion\Views\InformeLegal\templates\Concesiones\infracciones\inciso_16.cshtml" />
+    <Content Include="Areas\Fiscalizacion\Views\InformeLegal\templates\Concesiones\infracciones\inciso_19.cshtml" />
+    <Content Include="Areas\Fiscalizacion\Views\InformeLegal\templates\Concesiones\infracciones\inciso_21.cshtml" />
+    <Content Include="Areas\Fiscalizacion\Views\InformeLegal\templates\Concesiones\infracciones\inciso_26.cshtml" />
+    <Content Include="Areas\Fiscalizacion\Views\InformeLegal\templates\Concesiones\infracciones\inciso_29.cshtml" />
+    <Content Include="Areas\Fiscalizacion\Views\InformeLegal\templates\Concesiones\infracciones\inciso_32.cshtml" />
+    <Content Include="Areas\Fiscalizacion\Views\InformeLegal\templates\Concesiones\infracciones\inciso_b.cshtml" />
+    <Content Include="Areas\Fiscalizacion\Views\ManCalculoMulta\Shared\_modalCalculoMulta.cshtml" />
+    <Content Include="Areas\Fiscalizacion\Views\InformeLegal\templates\_tmplFootnotes.cshtml" />
+    <Content Include="Areas\Fiscalizacion\Views\InformeLegal\templates\Comunidades nativas\infracciones\inciso_b.cshtml" />
+    <Content Include="Areas\Fiscalizacion\Views\InformeLegal\templates\Comunidades nativas\_footnotes.cshtml" />
+    <Content Include="Areas\Fiscalizacion\Views\InformeLegal\templates\Concesiones\_footnotes.cshtml" />
+    <Content Include="Areas\Fiscalizacion\Views\InformeLegal\templates\Fauna\_footnotes.cshtml" />
+    <Content Include="Areas\Fiscalizacion\Views\InformeLegal\templates\Predios privados\_footnotes.cshtml" />
+    <Content Include="Areas\Fiscalizacion\Views\InformeLegal\templates\Comunidades nativas\infracciones\inciso_1.cshtml" />
+    <Content Include="Areas\Fiscalizacion\Views\InformeLegal\templates\Comunidades nativas\infracciones\inciso_e.cshtml" />
+    <Content Include="Areas\Fiscalizacion\Views\InformeLegal\templates\Comunidades nativas\infracciones\inciso_11.cshtml" />
+    <Content Include="Areas\Fiscalizacion\Views\InformeLegal\templates\Comunidades nativas\infracciones\inciso_l.cshtml" />
+    <Content Include="Areas\Fiscalizacion\Views\InformeLegal\templates\Comunidades nativas\infracciones\inciso_c.cshtml" />
+    <Content Include="Areas\Fiscalizacion\Views\InformeLegal\templates\Fauna\infracciones\inciso_7.cshtml" />
+    <Content Include="Areas\Fiscalizacion\Views\InformeLegal\templates\Fauna\infracciones\inciso_22.cshtml" />
+    <Content Include="Areas\Fiscalizacion\Views\InformeLegal\templates\Predios privados\infracciones\inciso_b.cshtml" />
+    <Content Include="Areas\Fiscalizacion\Views\InformeLegal\templates\Predios privados\infracciones\inciso_1.cshtml" />
+    <Content Include="Areas\Fiscalizacion\Views\InformeLegal\templates\Predios privados\infracciones\inciso_g.cshtml" />
+    <Content Include="Areas\Fiscalizacion\Views\InformeLegal\templates\Predios privados\infracciones\inciso_11.cshtml" />
+    <Content Include="Areas\Fiscalizacion\Views\InformeLegal\templates\Predios privados\infracciones\inciso_e.cshtml" />
+    <Content Include="Areas\Fiscalizacion\Views\InformeLegal\templates\Predios privados\infracciones\inciso_l.cshtml" />
+    <Content Include="Areas\Fiscalizacion\Views\InformeLegal\templates\Predios privados\infracciones\inciso_c.cshtml" />
+    <Content Include="Areas\Fiscalizacion\Views\InformeLegal\templates\Fauna\infracciones\inciso_b.cshtml" />
+    <Content Include="Areas\Fiscalizacion\Views\InformeLegal\templates\Fauna\infracciones\inciso_17.cshtml" />
     <Content Include="Areas\General\Views\ManPersonas\_AddTipoCargo.cshtml" />
     <Content Include="Areas\General\Views\Controles\_ActualizaCargoPersona.cshtml" />
     <Content Include="Areas\Supervision\Views\ManInformeExSitu\_shared\_Mandatos.cshtml" />
@@ -2246,7 +2294,6 @@
     <None Include="Properties\PublishProfiles\Prueba.pubxml" />
     <None Include="Properties\PublishProfiles\sigo-sfc-v3-demo.pubxml" />
     <None Include="Properties\PublishProfiles\sigo-sfc-v3.pubxml" />
-    <Content Include="Scripts\ckeditor5\ckeditor.js.map" />
     <Content Include="Scripts\apexcharts\locales\ar.json" />
     <Content Include="Scripts\apexcharts\locales\ca.json" />
     <Content Include="Scripts\apexcharts\locales\cs.json" />
@@ -2283,6 +2330,7 @@
     <Content Include="Scripts\apexcharts\locales\tr.json" />
     <Content Include="Scripts\apexcharts\locales\ua.json" />
     <Content Include="Scripts\apexcharts\locales\zh-cn.json" />
+    <Content Include="Scripts\ckeditor5\ckeditor.js.map" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
@@ -2515,6 +2563,7 @@
     <Folder Include="bin\roslyn\" />
     <Folder Include="Fotos\" />
     <Folder Include="PlantillaPDF\Descargas\" />
+    <Folder Include="Ruta_SITD_Anexos\" />
     <Folder Include="Scripts\jquery.cookie\demo\" />
     <Folder Include="SqlServerTypes\x64\" />
     <Folder Include="SqlServerTypes\x86\" />

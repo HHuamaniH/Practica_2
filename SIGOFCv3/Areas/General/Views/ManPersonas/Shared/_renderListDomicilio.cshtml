@@ -70,7 +70,7 @@
         _renderListDomicilio.dataDomicilio = _renderListDomicilio.dtRenderListDomicilio.row($(obj).parents('tr'));
 
         var data = _renderListDomicilio.dtRenderListDomicilio.row($(obj).parents('tr')).data();
-        //debugger
+        debugger
         _renderListDomicilio.frm.find("#hdfMItemDomicilio_Ubigeo").val(data["COD_UBIGEO"]);
         _renderListDomicilio.frm.find("#txtMItemDomicilio_Ubigeo").val(data["UBIGEO"]);
         _renderListDomicilio.frm.find("#txtMItemDomicilio_Direccion").val(data["DIRECCION"]);
@@ -119,6 +119,7 @@
         data.DATOS_REFERENCIALES = _renderListDomicilio.frm.find("#txtMItemDomicilio_Referencia").val();
         data.NACTIVO = $("#nactivo").prop('checked')? 1:0;
         data.NACTIVO_NOM = data.NACTIVO == 1 ? 'Activo' : 'Inactivo';
+        debugger
         if (ManPersonas_AddEdit.frm.find("#RegEstado").val() == 1) data.RegEstado = 1;
         else data.RegEstado = (_renderListDomicilio.estado == 0) ? 2 : _renderListDomicilio.estado;
         let items = _renderListDomicilio.dtRenderListDomicilio.data().count();

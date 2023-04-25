@@ -110,7 +110,7 @@ anteExpedientes.fnLoadManGrillaPaging = function () {
         {
             "data": "", "width": "2%", "orderable": false, "searchable": false, "mRender": function (data, type, row) {
                 if (row.CCODDOC.trim() != "")
-                    return '<div><i class="fa fa-lg fa-download" style="cursor:pointer;color:dodgerblue;" title="Descargar Documento del SIADO" onclick="anteExpedientes.fnDownloadDocSIADO(this)"></i>';
+                    return '<div><i class="fa fa-lg fa-download" style="cursor:pointer;color:dodgerblue;" title="Descargar Documento del SIADO" onclick="anteExpedientes.fnDownloadDocSIADO(\'' + row.CCODDOC.trim() + '\')"></i>';
                 else return "";
             }
         },
@@ -132,7 +132,7 @@ anteExpedientes.fnLoadManGrillaPaging = function () {
                     }
                     else
                         return "";
-                    //return '<div><i class="fa fa-lg fa-sign-in" style="cursor:pointer;color:dodgerblue;" title="Transferir" onclick="anteExpedientes.fnTransferir(this,1)"></i>';
+                        //return '<div><i class="fa fa-lg fa-sign-in" style="cursor:pointer;color:dodgerblue;" title="Transferir" onclick="anteExpedientes.fnTransferir(this,1)"></i>';
 
                 }
             }
@@ -450,7 +450,7 @@ anteExpedientes.fnDownloadSiado = function (nombreArchivo) {
 
 anteExpedientes.fnTransferir = function (obj, opcion) {
     var $tr = $(obj).closest('tr');
-    var row = anteExpedientes.dtManGrillaPaging.row($tr).data(); console.log('fila', row);
+    var row = anteExpedientes.dtManGrillaPaging.row($tr).data();
     anteExpedientes.fnTransferirModal(row, opcion);
 };
 
@@ -458,13 +458,12 @@ anteExpedientes.fnTransferirModal = function (row, opcion) { //0 anular, 1 trans
 
     var tipoOpcion = opcion == 0 ? 'ANULAR' : 'TRANSFERIR';
     rowTransferir = row;
-    debugger
     if (row.COD_DREFERENCIA == "0302" || row.COD_DREFERENCIA == "0609") //Forma 20, otros, documento no soportado
     {
         utilSigo.toastWarning("Aviso", "Documento no soportado por el SIGOsfc");
         return false;
     }
-    var model = { tipo: tipoOpcion, COD_DREFERENCIA: row.COD_DREFERENCIA, DOC_REFERENCIA: row.DOC_REFERENCIA, COD_AEXPEDIENTE_SITD: row.COD_AEXPEDIENTE_SITD, COD_TRAMITE_SITD: row.COD_TRAMITE_SITD, SUBTIPO: row.SUBTIPO, obs: row.OBSERVACION };
+    var model = { tipo: tipoOpcion, COD_DREFERENCIA: row.COD_DREFERENCIA, DOC_REFERENCIA: row.DOC_REFERENCIA, COD_AEXPEDIENTE_SITD: row.COD_AEXPEDIENTE_SITD, COD_TRAMITE_SITD: row.COD_TRAMITE_SITD, SUBTIPO: row.SUBTIPO };
     var url = urlLocalSigo + "THabilitante/ManVentanillaAntecedentesExpedientes/_Transferir";
     var option = { url: url, type: 'GET', datos: model, divId: "transferirModal" };
     utilSigo.fnOpenModal(option, function () {

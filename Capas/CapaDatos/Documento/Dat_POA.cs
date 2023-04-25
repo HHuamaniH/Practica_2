@@ -264,9 +264,7 @@ namespace CapaDatos.DOC
                                 oCamposDet.COD_PERSONA = dr["COD_PERSONA"].ToString();
                                 oCamposDet.PERSONA = dr["PERSONA"].ToString();
                                 oCamposDet.N_DOCUMENTO = dr["N_DOCUMENTO"].ToString();
-                                //oCamposDet.CARGO = dr["CARGO"].ToString();
-                                oCamposDet.COD_PTIPO = dr["COD_PTIPO"].ToString();
-                                oCamposDet.TIPO_CARGO = dr["TIPO_CARGO"].ToString();
+                                oCamposDet.CARGO = dr["CARGO"].ToString();
                                 oCamposDet.RegEstado = 0;
                                 oCampos.ListTIOCULAR.Add(oCamposDet);
                             }
@@ -281,9 +279,7 @@ namespace CapaDatos.DOC
                                 oCamposDet.COD_PERSONA = dr["COD_PERSONA"].ToString();
                                 oCamposDet.PERSONA = dr["PERSONA"].ToString();
                                 oCamposDet.N_DOCUMENTO = dr["N_DOCUMENTO"].ToString();
-                                //oCamposDet.CARGO = dr["CARGO"].ToString();
-                                oCamposDet.COD_PTIPO = dr["COD_PTIPO"].ToString();
-                                oCamposDet.TIPO_CARGO = dr["TIPO_CARGO"].ToString();
+                                oCamposDet.CARGO = dr["CARGO"].ToString();
                                 oCamposDet.RegEstado = 0;
                                 oCampos.ListTRAPROBACION.Add(oCamposDet);
                             }
@@ -555,18 +551,14 @@ namespace CapaDatos.DOC
                             int pt1 = dr.GetOrdinal("COD_PERSONA");
                             int pt2 = dr.GetOrdinal("PERSONA");
                             int pt3 = dr.GetOrdinal("N_DOCUMENTO");
-                            //int pt4 = dr.GetOrdinal("CARGO");
-                            int pt4 = dr.GetOrdinal("COD_PTIPO");
-                            int pt5 = dr.GetOrdinal("TIPO_CARGO");
+                            int pt4 = dr.GetOrdinal("CARGO");
                             while (dr.Read())
                             {
                                 oCamposDet = new CEntidad();
                                 oCamposDet.COD_PERSONA = dr.GetString(pt1);
                                 oCamposDet.PERSONA = dr.GetString(pt2);
                                 oCamposDet.N_DOCUMENTO = dr.GetString(pt3);
-                                //oCamposDet.CARGO = dr.GetString(pt4);
-                                oCamposDet.COD_PTIPO = dr.GetString(pt4);
-                                oCamposDet.TIPO_CARGO = dr.GetString(pt5);
+                                oCamposDet.CARGO = dr.GetString(pt4);
                                 oCamposDet.RegEstado = 0;
                                 oCampos.ListAOCULAR.Add(oCamposDet);
                             }
@@ -1858,7 +1850,6 @@ namespace CapaDatos.DOC
                         oCamposDet.COD_THABILITANTE = oCEntidad.COD_THABILITANTE;
                         oCamposDet.NUM_POA = oCEntidad.NUM_POA;
                         oCamposDet.COD_POCULAR = loDatos.COD_PERSONA;
-                        oCamposDet.COD_PTIPO = loDatos.COD_PTIPO;
                         dBOracle.ManExecute(cn, tr, "DOC_OSINFOR_ERP_MIGRACION.spPOA_DET_AIOCULARGrabar", oCamposDet);
 
                     }
@@ -1873,7 +1864,6 @@ namespace CapaDatos.DOC
                         oCamposDet.COD_THABILITANTE = oCEntidad.COD_THABILITANTE;
                         oCamposDet.NUM_POA = oCEntidad.NUM_POA;
                         oCamposDet.COD_TIOCULAR = loDatos.COD_PERSONA;
-                        oCamposDet.COD_PTIPO = loDatos.COD_PTIPO;
                         dBOracle.ManExecute(cn, tr, "DOC_OSINFOR_ERP_MIGRACION.spPOA_DET_TIOCULARGrabar", oCamposDet);
 
                     }
@@ -1888,7 +1878,6 @@ namespace CapaDatos.DOC
                         oCamposDet.COD_THABILITANTE = oCEntidad.COD_THABILITANTE;
                         oCamposDet.NUM_POA = oCEntidad.NUM_POA;
                         oCamposDet.COD_TRAPROBACION = loDatos.COD_PERSONA;
-                        oCamposDet.COD_PTIPO = loDatos.COD_PTIPO;
                         dBOracle.ManExecute(cn, tr, "DOC_OSINFOR_ERP_MIGRACION.spPOA_DET_TRAPROBACIONGrabar", oCamposDet);
 
                     }

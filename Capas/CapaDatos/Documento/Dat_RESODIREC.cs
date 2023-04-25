@@ -1,4 +1,5 @@
 ﻿using CapaEntidad.DOC;
+using CapaEntidad.ViewModel;
 using GeneralSQL;
 using Oracle.ManagedDataAccess.Client;
 using System;
@@ -6,6 +7,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
+using System.Runtime.Remoting;
 using CEntidadC = CapaEntidad.DOC.Ent_RESODIREC;
 using SQL = GeneralSQL.Data.SQL;
 using Tra_M_Tramite = CapaEntidad.DOC.Tra_M_Tramite;
@@ -35,7 +37,7 @@ namespace CapaDatos.DOC
 
             try
             {
-                tr = cn.BeginTransaction();                
+                tr = cn.BeginTransaction();
 
                 //Grabando Cabecera
                 using (OracleCommand cmd = dBOracle.ManExecuteOutput(cn, tr, "doc_osinfor_erp_migracion.spRESODIREC_Grabar", oCEntidad))
@@ -500,7 +502,7 @@ namespace CapaDatos.DOC
                                 }
                             }
                         }
-                       
+
                     }
                 }
 
@@ -729,7 +731,7 @@ namespace CapaDatos.DOC
                             dr.Read();
                             lsCEntidad.COD_FCTIPO = dr.GetString(dr.GetOrdinal("COD_FCTIPO"));
                             lsCEntidad.TIPO_FISCALIZA = dr.GetString(dr.GetOrdinal("TIPO_FISCALIZA"));
-                            if(dr["NUMERO_RESOLUCION"] != DBNull.Value) lsCEntidad.NUMERO_RESOLUCION = dr.GetString(dr.GetOrdinal("NUMERO_RESOLUCION"));
+                            if (dr["NUMERO_RESOLUCION"] != DBNull.Value) lsCEntidad.NUMERO_RESOLUCION = dr.GetString(dr.GetOrdinal("NUMERO_RESOLUCION"));
                             lsCEntidad.COD_PERSONA = dr.GetString(dr.GetOrdinal("COD_PERSONA"));
                             lsCEntidad.APELLIDOS_NOMBRES = dr.GetString(dr.GetOrdinal("APELLIDOS_NOMBRES"));
                             lsCEntidad.FECHA_EMISION = dr.GetString(dr.GetOrdinal("FECHA_EMISION"));
@@ -2454,5 +2456,75 @@ namespace CapaDatos.DOC
                 throw ex;
             }
         }
+
+        public VM_RSD_Resumen RSD_Resumen(OracleConnection cn, string COD_RESDIR, string asCodTipoIL)
+        {
+            VM_RSD_Resumen result = null;
+
+            try
+            {
+                using (OracleDataReader dr = dBOracle.SelDrdDefaultTR(cn, null, "doc_osinfor_erp_migracion.SPFISCALIZACION_RSD_RESUMEN", COD_RESDIR))
+                {
+                    if (dr != null)
+                    {
+
+                        if (dr.HasRows)
+                        {
+                            while (dr.Read())
+                            {
+                                result = new VM_RSD_Resumen();
+                                result.COD_THABILITANTE = dr["COD_THABILITANTE"] != DBNull.Value ? dr["COD_THABILITANTE"].ToString() : null;
+                                result.COD_TITULAR = dr["COD_TITULAR"] != DBNull.Value ? dr["COD_TITULAR"].ToString() : null;
+                                result.NUM_THABILITANTE = dr["NUM_THABILITANTE"] != DBNull.Value ? dr["NUM_THABILITANTE"].ToString() : null;
+                                result.TITULAR = dr["TITULAR"] != DBNull.Value ? dr["TITULAR"].ToString() : null;
+                                result.TITULAR_DOCUMENTO = dr["TITULAR_DOCUMENTO"] != DBNull.Value ? dr["TITULAR_DOCUMENTO"].ToString() : null;
+                                result.TITULAR_RUC = dr["TITULAR_RUC"] != DBNull.Value ? dr["TITULAR_RUC"].ToString() : null;
+                                result.COD_RLEGAL = dr["COD_RLEGAL"] != DBNull.Value ? dr["COD_RLEGAL"].ToString() : null;
+                                result.R_LEGAL = dr["R_LEGAL"] != DBNull.Value ? dr["R_LEGAL"].ToString() : null;
+                                result.R_LEGAL_DOCUMENTO = dr["R_LEGAL_DOCUMENTO"] != DBNull.Value ? dr["R_LEGAL_DOCUMENTO"].ToString() : null;
+                                result.UBIGEO_DEPARTAMENTO = dr["UBIGEO_DEPARTAMENTO"] != DBNull.Value ? dr["UBIGEO_DEPARTAMENTO"].ToString() : null;
+                                result.UBIGEO_PROVINCIA = dr["UBIGEO_PROVINCIA"] != DBNull.Value ? dr["UBIGEO_PROVINCIA"].ToString() : null;
+                                result.UBIGEO_DISTRITO = dr["UBIGEO_DISTRITO"] != DBNull.Value ? dr["UBIGEO_DISTRITO"].ToString() : null;
+                            }
+                        }
+
+                        dr.NextResult();
+
+                        if (result != null && dr.HasRows)
+                        {
+                            while (dr.Read())
+                            {
+                                var ocampoEnt = new VM_RSD_INFRACCIONES();
+                                ocampoEnt.COD_ILEGAL_ENCISOS = dr["COD_ILEGAL_ENCISOS"].ToString();
+                                ocampoEnt.DESCRIPCION_ARTICULOS = dr["DESCRIPCION_ARTICULOS"] != DBNull.Value ? dr["DESCRIPCION_ARTICULOS"].ToString() : null;
+                                ocampoEnt.DESCRIPCION_ENCISOS = dr["DESCRIPCION_ENCISOS"] != DBNull.Value ? dr["DESCRIPCION_ENCISOS"].ToString() : null;
+                                ocampoEnt.TEXTO_ENCISO = dr["TEXTO_ENCISO"] != DBNull.Value ? dr["TEXTO_ENCISO"].ToString() : null;
+                                ocampoEnt.GRAVEDAD = dr["GRAVEDAD"] != DBNull.Value ? dr["GRAVEDAD"].ToString() : null;
+                                ocampoEnt.TIPO_INFRACCION = dr["TIPO_INFRACCION"] != DBNull.Value ? Int32.Parse(dr["TIPO_INFRACCION"].ToString()) : default(int?);
+                                ocampoEnt.RANGO_SANCION = dr["RANGO_SANCION"] != DBNull.Value ? dr["RANGO_SANCION"].ToString() : null;
+                                ocampoEnt.COD_ESPECIES = dr["COD_ESPECIES"] != DBNull.Value ? dr["COD_ESPECIES"].ToString() : null;
+                                ocampoEnt.DESCRIPCION_ESPECIE = dr["DESCRIPCION_ESPECIE"] != DBNull.Value ? dr["DESCRIPCION_ESPECIE"].ToString() : null;
+                                ocampoEnt.VOLUMEN = dr["VOLUMEN"] != DBNull.Value ? Decimal.Parse(dr["VOLUMEN"].ToString()) : default(decimal);
+                                ocampoEnt.AREA = dr["AREA"] != DBNull.Value ? Decimal.Parse(dr["AREA"].ToString()) : default(decimal);
+                                ocampoEnt.NUMERO_INDIVIDUOS = dr["NUMERO_INDIVIDUOS"] != DBNull.Value ? Int32.Parse(dr["NUMERO_INDIVIDUOS"].ToString()) : default(int);
+                                ocampoEnt.DESCRIPCION_INFRACCIONES = dr["DESCRIPCION_INFRACCIONES"] != DBNull.Value ? dr["DESCRIPCION_INFRACCIONES"].ToString() : null;
+                                ocampoEnt.NUM_POA = dr["NUM_POA"] != DBNull.Value ? dr["NUM_POA"].ToString() : null;
+                                ocampoEnt.TIPOMADERABLE = dr["TIPOMADERABLE"] != DBNull.Value ? dr["TIPOMADERABLE"].ToString() : null;
+
+                                result.LIST_INFRACCIONES.Add(ocampoEnt);
+                            }
+                        }
+                    }
+                    cn.Close();
+                }
+                return result;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+
     }
 }

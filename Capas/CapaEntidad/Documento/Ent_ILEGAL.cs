@@ -362,6 +362,7 @@ namespace CapaEntidad.DOC
 
         public List<Ent_ILEGAL> listSTD01 { get; set; }
         public List<Ent_ILEGAL> listSTD02 { get; set; }
+        public List<Ent_ILEGAL> listSTD03 { get; set; }
         public List<Ent_ILEGAL> listEliTSTD01 { get; set; }
        
 

@@ -1,27 +1,6 @@
 ﻿@model CapaEntidad.ViewModel.VM_Persona
 
 <script src="~/Areas/General/js/Controles/_Persona.js?v=@Guid.NewGuid()"></script>
-<script src="~/Scripts/jquery.sumoselect.min.js"></script>
-<link href="~/Areas/General/css/Controles/sumoselect.css" rel="stylesheet" />
-
-<script type="text/javascript">
-    _bPerAddEdit.fnLoadData('@Html.Raw(Json.Encode(@Model.ddlITipoCargo))');
-</script>
-
-<style type="text/css">
-    .open {
-        transform: rotate(0deg);
-    }
-
-    .SumoSelect {
-        width: 99%;
-    }
-
-    .SumoSelect > .optWrapper {
-        position: unset;
-        width: 100%;
-    }
-</style>
 
 <div class="modal-dialog modal-lg" role="document" id="divPersonaAddEdit">
     <div class="modal-content">
@@ -32,13 +11,10 @@
             </button>
         </div>
         <div class="modal-body">
-            @Html.HiddenFor(m => m.codigoPersona)
             @Html.HiddenFor(m => m.tipoPersona)
-            @Html.HiddenFor(m => m.RegEstadoPersona)
             @Html.Hidden("hdfFormulario", (string)ViewBag.hdfFormulario)
             @Html.Hidden("hdfCodMod", (string)ViewBag.hdfCodMod)
-            @Html.Hidden("hdfOpc", (int)ViewBag.hdfOpc)
-
+            @Html.Hidden("hdfTipoCargo", (string)ViewBag.hdfTipoCargo)
             <fieldset class="border p-2" id="divOpcionTPersona" style="display:none">
                 <strong class="text-small">Tipo de Persona:</strong>
                 <input type="radio" id="rdTipoPersonaNatural" name="rdTipoPersona" value="N" />
@@ -46,230 +22,143 @@
                 <input type="radio" id="rdTipoPersonaJuridico" name="rdTipoPersona" value="J" />
                 <label for="rdTipoPersonaJuridico" class="text-small"> Jurídica</label>
             </fieldset>
-            <form id="frmPersona" method="post">
+            <form id="frmPersonaNatural" method="post" style="display:none">
                 <fieldset class="border p-2 m-1">
-                    <div class="card">
-                        <div id="dvTituloPNatural" class="card-header text-small text-bold" style="display:none">
+                    <div class="card" id="divDocumento">
+                        <div class="card-header text-small text-bold">
                             Documento de Identidad
                         </div>
                         <div class="card-body">
-                            <div id="dvPNatural" style="display:none">
-                                <div class="form-row">
-                                    <div class="form-group col-md-5">
-                                        <label for="ddlItemPN_DITipoId" class="text-small">Tipo de Documento</label>
-                                        @Html.DropDownListFor(m => m.ddlItemPN_DITipoId, new SelectList(Model.ddlItemPN_DITipo, "Value", "Text"), new { @class = "form-control form-control-sm" })
-                                    </div>
-                                    <div class="form-group col-md-3">
-                                        <label for="txtItemPN_DINumero" class="text-small">Número</label>
-                                        <div class="input-group" style="cursor:pointer">
-                                            @Html.EditorFor(m => m.txtItemPN_DINumero, new { htmlAttributes = new { @class = "form-control form-control-sm", @onkeypress = "return utilSigo.onKeyEntero(event, this);", placeholder = "Número" } })
-                                            <div class="input-group-prepend" id="divBuscarPN">
-                                                <span class="input-group-text"><i class="fa fa-search" data-toggle="tooltip" data-placement="top" title="Buscar Persona"></i></span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="form-group col-md-4">
-                                        <label for="txtItemPN_DIRUC" class="text-small">RUC</label>
-                                        @Html.EditorFor(m => m.txtItemPN_DIRUC, new { htmlAttributes = new { @class = "form-control form-control-sm", placeholder = "RUC", style = "text-transform:uppercase" } })
-                                    </div>
+                            <div class="form-row">
+                                <div class="form-group col-md-5">
+                                    <label for="ddlItemPN_DITipoId" class="text-small">Tipo de Documento</label>
+                                    @Html.DropDownListFor(m => m.ddlItemPN_DITipoId, new SelectList(Model.ddlItemPN_DITipo, "Value", "Text"), new { @class = "form-control form-control-sm" })
                                 </div>
-                                <!--<div id="dvItemPN_Noconsigna" class="form-row">
-                                    <div class="form-group col-md-5">
-                                    </div>
-                                    <div class="form-group col-md-3">
-                                        <label class="text-small"><input type="checkbox" id="chkNoconsignaDNIPN" name="chkNoconsignaDNIPN">No consigna DNI</label>
-                                    </div>
-                                    <div class="form-group col-md-4">
-                                        <label class="text-small"><input type="checkbox" id="chkNoconsignaRUCPN" name="chkNoconsignaRUCPN">No consigna RUC</label>
-                                    </div>
-                                </div>-->
-                                <div class="form-row">
-                                    <div class="form-group col-md-4">
-                                        <label for="txtItemPN_APaterno" class="text-small">Apellido Paterno</label>
-                                        @Html.EditorFor(m => m.txtItemPN_APaterno, new { htmlAttributes = new { @class = "form-control form-control-sm", placeholder = "Apellido Paterno", style = "text-transform:uppercase", required = "required" } })
-                                    </div>
-                                    <div class="form-group col-md-4">
-                                        <label for="txtItemPN_AMaterno" class="text-small">Apellido Materno</label>
-                                        @Html.EditorFor(m => m.txtItemPN_AMaterno, new { htmlAttributes = new { @class = "form-control form-control-sm", placeholder = "Apellido Materno", style = "text-transform:uppercase", required = "required" } })
-                                    </div>
-                                    <div class="form-group col-md-4">
-                                        <label for="txtItemPN_Nombres" class="text-small">Nombres</label>
-                                        @Html.EditorFor(m => m.txtItemPN_Nombres, new { htmlAttributes = new { @class = "form-control form-control-sm", placeholder = "Nombres", style = "text-transform:uppercase", required = "required" } })
-                                    </div>
-                                </div>
-                                <div id="dvItemPN_RazonSocial" class="form-row" style="display:none;">
-                                    <div class="form-group col-md-12">
-                                        <span id="lblItemPN_RazonSocial" style="color:cadetblue;font-size:12px;"></span>
-                                    </div>
-                                </div>
-                                <div id="dvItemPN_Ubigeo" class="form-row">
-                                    <div class="col-md-6 mb-3">
-                                        <label for="lblItemEstUbigeo" class="text-small">Ubigeo </label>
-                                        <div class="input-group">
-                                            <div class="input-group-prepend" style="cursor:pointer" id="btnUbigeoN">
-                                                <span class="input-group-text">
-                                                    <i class="fa fa-search" data-toggle="tooltip" data-placement="top" title="Buscar Ubigeo"></i>
-                                                </span>
-                                            </div>
-                                            @Html.EditorFor(m => m.lblItemPN_DLUbigeo, new { htmlAttributes = new { @class = "form-control form-control-sm", disabled = "Disabled" } })
-                                            @Html.HiddenFor(m => m.hdfItemPN_DLUbigeo)
-                                            @Html.HiddenFor(m => m.hdlblItemPN_DLUbigeo)
-                                        </div>
-                                    </div>
-                                    <div class="form-group col-md-6">
-                                        <label for="txtItemPJ_DLDireccion" class="text-small">Dirección</label>
-                                        @Html.EditorFor(m => m.txtItemPN_DLDireccion, new { htmlAttributes = new { @class = "form-control form-control-sm", placeholder = "Dirección", style = "text-transform:uppercase", Maxlength = 200 } })
-                                    </div>
-                                </div>
-                            </div>
-                            <div id="dvPJuridica" style="display:none">
-                                <div class="form-row">
-                                    <div class="form-group col-md-3">
-                                        <label for="txtItemPJ_RUC" class="text-small">RUC</label>
-                                        <div class="input-group" style="cursor:pointer">
-                                            @Html.EditorFor(m => m.txtItemPJ_RUC, new { htmlAttributes = new { @class = "form-control form-control-sm", @onkeypress = "return utilSigo.onKeyEntero(event, this);", placeholder = "Número", maxlength = 11 } })
-                                            <div class="input-group-prepend" id="divBuscarPJ">
-                                                <span class="input-group-text"><i class="fa fa-search" data-toggle="tooltip" data-placement="top" title="Buscar RUC"></i></span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="form-group col-md-9">
-                                        <label for="txtItemPJ_RSocial" class="text-small">Razón Social</label>
-                                        @Html.EditorFor(m => m.txtItemPJ_RSocial, new { htmlAttributes = new { @class = "form-control form-control-sm", placeholder = "Razón Social", style = "text-transform:uppercase", Maxlength = 150, required = "required" } })
-                                    </div>
-                                </div>
-                                <!--<div id="dvItemPJ_Noconsigna" class="form-row">
-                                    <div class="form-group col-md-3">
-                                        <label class="text-small"><input type="checkbox" id="chkNoconsignaRUCPJ" name="chkNoconsignaRUCPJ">No consigna RUC</label>
-                                    </div>
-                                    <div class="form-group col-md-9">
-                                    </div>
-                                </div>-->
-                                <div id="divFichaRegistral" class="form-row" style="display:none">
-                                    <div class="form-group col-md-6">
-                                        <label for="txtItemPJ_FichaRegistral" class="text-small">Ficha Registral</label>
-                                        @Html.EditorFor(m => m.txtItemPJ_FichaRegistral, new { htmlAttributes = new { @class = "form-control form-control-sm", style = "text-transform:uppercase", Maxlength = 50 } })
-                                    </div>
-                                </div>
-                                <div id="dvItemPJ_Ubigeo" class="card">
-                                    <div class="card-header text-small text-bold">
-                                        Dirección Legal
-                                    </div>
-                                    <div class="card-body">
-                                        <div class="form-row">
-                                            <div class="col-md-6 mb-3">
-                                                <label for="lblItemEstUbigeo" class="text-small">Ubigeo Real</label>
-                                                <div class="input-group">
-                                                    <div class="input-group-prepend" style="cursor:pointer" id="btnUbigeoJ">
-                                                        <span class="input-group-text">
-                                                            <i class="fa fa-search" data-toggle="tooltip" data-placement="top" title="Buscar Ubigeo"></i>
-                                                        </span>
-                                                    </div>
-                                                    @Html.EditorFor(m => m.lblItemPJ_DLUbigeo, new { htmlAttributes = new { @class = "form-control form-control-sm", disabled = "Disabled" } })
-                                                    @Html.HiddenFor(m => m.hdfItemPJ_DLUbigeo)
-                                                    @Html.HiddenFor(m => m.hdlblItemPJ_DLUbigeo)
-                                                </div>
-                                            </div>
-                                            <div class="form-group col-md-6">
-                                                <label for="txtItemPJ_DLDireccion" class="text-small">Dirección Real</label>
-                                                @Html.EditorFor(m => m.txtItemPJ_DLDireccion, new { htmlAttributes = new { @class = "form-control form-control-sm", placeholder = "Direccion", style = "text-transform:uppercase", Maxlength = 200, required = "required" } })
-                                            </div>
+                                <div class="form-group col-md-3">
+                                    <label for="txtItemPN_DINumero" class="text-small">Número</label>
+                                    <div class="input-group" style="cursor:pointer">
+
+                                        @Html.EditorFor(m => m.txtItemPN_DINumero, new { htmlAttributes = new { @class = "form-control form-control-sm", @onkeypress = "return utilSigo.onKeyEntero(event, this);", placeholder = "Número" } })
+                                        <div class="input-group-prepend" id="divBuscarPN">
+                                            <span class="input-group-text"><i class="fa fa-search" data-toggle="tooltip" data-placement="top" title="Buscar Persona"></i></span>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                            <div id="dvItemTelefonoCorreo" class="form-row">
                                 <div class="form-group col-md-4">
-                                    <label class="col-form-label text-small">Teléfono</label>
-                                    @Html.EditorFor(m => m.txtTelefono, new { htmlAttributes = new { @class = "form-control form-control-sm", title = "Solo debe ingresar números enteros", onkeypress = "return utilSigo.onKeyEntero(event, this);" } })
+                                    <label for="txtItemPN_Nombres" class="text-small">RUC</label>
+                                    @Html.EditorFor(m => m.txtItemPN_DIRUC, new { htmlAttributes = new { @class = "form-control form-control-sm", placeholder = "RUC", style = "text-transform:uppercase" } })
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group col-md-5">
+                                </div>
+                                <div class="form-group col-md-3">
+                                    <label class="text-small"><input type="checkbox" id="chkNoconsignaDNIPN" name="chkNoconsignaDNIPN">No consigna DNI</label>
+                                </div>
+                                <div class="form-group col-md-4">
+                                    <label class="text-small"><input type="checkbox" id="chkNoconsignaRUCPN" name="chkNoconsignaRUCPN">No consigna RUC</label>
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group col-md-4">
+                                    <label for="txtItemPN_APaterno" class="text-small">Apellido Paterno(*)</label>
+                                    @Html.EditorFor(m => m.txtItemPN_APaterno, new { htmlAttributes = new { @class = "form-control form-control-sm", placeholder = "Apellido Paterno", style = "text-transform:uppercase", required = "required" } })
+                                </div>
+                                <div class="form-group col-md-4">
+                                    <label for="txtItemPN_AMaterno" class="text-small">Apellido Materno</label>
+                                    @Html.EditorFor(m => m.txtItemPN_AMaterno, new { htmlAttributes = new { @class = "form-control form-control-sm", placeholder = "Apellido Materno", style = "text-transform:uppercase", required = "required" } })
+                                </div>
+                                <div class="form-group col-md-4">
+                                    <label for="txtItemPN_Nombres" class="text-small">Nombres(*)</label>
+                                    @Html.EditorFor(m => m.txtItemPN_Nombres, new { htmlAttributes = new { @class = "form-control form-control-sm", placeholder = "Nombres", style = "text-transform:uppercase", required = "required" } })
+                                </div>
+                            </div>
+                            <div id="dvItemPN_RazonSocial" class="form-row" style="display:none;">
+                                <div class="form-group col-md-12">
+                                    <span id="lblItemPN_RazonSocial" style="color:cadetblue;font-size:12px;"></span>
+                                </div>
+                            </div>
+                            <div class="form-row" id="ItemBUbigeo">
+                                <div class="col-md-6 mb-3">
+                                    <label for="lblItemEstUbigeo" class="text-small">Ubigeo </label>
+                                    <div class="input-group">
+                                        <div class="input-group-prepend" style="cursor:pointer" id="btnUbigeoN">
+                                            <span class="input-group-text">
+                                                <i class="fa fa-search" data-toggle="tooltip" data-placement="top" title="Buscar Ubigeo"></i>
+                                            </span>
+                                        </div>
+                                        @Html.EditorFor(m => m.lblItemPN_DLUbigeo, new { htmlAttributes = new { @class = "form-control form-control-sm", disabled = "Disabled" } })
+                                        @Html.HiddenFor(m => m.hdfItemPN_DLUbigeo)
+                                        @Html.HiddenFor(m => m.hdlblItemPN_DLUbigeo)
+                                    </div>
                                 </div>
                                 <div class="form-group col-md-6">
-                                    <label class="col-form-label text-small">Correo</label>
-                                    @Html.EditorFor(m => m.txtCorreo, new { htmlAttributes = new { @class = "form-control form-control-sm" } })
+                                    <label for="txtItemPJ_DLDireccion" class="text-small">Dirección</label>
+                                    @Html.EditorFor(m => m.txtItemPN_DLDireccion, new { htmlAttributes = new { @class = "form-control form-control-sm", placeholder = "Dirección", style = "text-transform:uppercase", Maxlength = 200 } })
                                 </div>
                             </div>
                             <div class="form-row">
                                 <div class="form-group col-md-12">
-                                    <label class="col-form-label text-small">Tipo de Cargo</label>
-                                    @Html.DropDownListFor(m => m.ddlITipoCargoId, new SelectList(Model.ddlITipoCargo, "Value", "Text"), new { @class = "form-control form-control-sm", @multiple = "multiple" })
-                                    @Html.HiddenFor(m => m.hdfITipoCargo)
-                                </div>
-                            </div>
-                            <div class="form-row">
-                                <div id="dvINumRegFfs" class="form-group col-md-4">
-                                    <label for="lblINumRegFfs" class="text-small">Nro. Registro FFS</label>
-                                    @Html.EditorFor(m => m.txtINumRegFfs, new { htmlAttributes = new { @class = "form-control form-control-sm" } })
-                                </div>
-                                <div id="dvINumRegProf" class="form-group col-md-4">
-                                    <label for="lblINumRegProf" class="text-small">Nro. Registro Profesional</label>
-                                    @Html.EditorFor(m => m.txtINumRegProf, new { htmlAttributes = new { @class = "form-control form-control-sm" } })
-                                </div>
-                                <div id="dvICargo" class="form-group col-md-4">
-                                    <label for="lblICargo" class="text-small">Cargo</label>
+                                    <label class="col-form-label text-small">Cargo</label>
+                                    @*<input type="text" class="form-control form-control-sm" name="txtICargo" />*@
                                     @Html.EditorFor(m => m.txtICargo, new { htmlAttributes = new { @class = "form-control form-control-sm" } })
                                 </div>
                             </div>
+                </fieldset>
+            </form>
+            <form id="frmPersonaJuridica" method="post" style="display:none">
+                <fieldset class="border p-2 m-1">
+                    <div class="form-row">
+                        <div class="form-group col-md-3">
+                            <label for="txtItemPJ_RUC" class="text-small">RUC</label>
+                            <div class="input-group" style="cursor:pointer">
+                                @Html.EditorFor(m => m.txtItemPJ_RUC, new { htmlAttributes = new { @class = "form-control form-control-sm", @onkeypress = "return utilSigo.onKeyEntero(event, this);", placeholder = "Número", maxlength = 11 } })
+                                <div class="input-group-prepend" id="divBuscarPJ">
+                                    <span class="input-group-text"><i class="fa fa-search" data-toggle="tooltip" data-placement="top" title="Buscar RUC"></i></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group col-md-9">
+                            <label for="txtItemPJ_RSocial" class="text-small">Razón Social</label>
+                            @Html.EditorFor(m => m.txtItemPJ_RSocial, new { htmlAttributes = new { @class = "form-control form-control-sm", placeholder = "Razón Social", style = "text-transform:uppercase", Maxlength = 150, required = "required" } })
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-3">
+                            <label class="text-small"><input type="checkbox" id="chkNoconsignaRUCPJ" name="chkNoconsignaRUCPJ">No consigna RUC</label>
+                        </div>
+                        <div class="form-group col-md-9">
+                        </div>
+                    </div>
+                    <div class="form-row" id="divFichaRegistral" style="display:none">
+                        <div class="form-group col-md-6">
+                            <label for="txtItemPJ_FichaRegistral" class="text-small">Ficha Registral</label>
+                            @Html.EditorFor(m => m.txtItemPJ_FichaRegistral, new { htmlAttributes = new { @class = "form-control form-control-sm", style = "text-transform:uppercase", Maxlength = 50 } })
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-header text-small text-bold">
+                            Dirección Legal
+
+                        </div>
+                        <div class="card-body">
                             <div class="form-row">
-                                <div id="dvINumColegiatura" class="form-group col-md-4">
-                                    <label for="lblINumRegProf" class="text-small">Nro. Colegiatura</label>
-                                    @Html.EditorFor(m => m.txtINumColegiatura, new { htmlAttributes = new { @class = "form-control form-control-sm" } })
-                                </div>
-                                <div id="dvINivelAcademico" class="form-group col-md-4">
-                                    <label for="lblINivelAcademicoId" class="text-small">Nivel Académico</label>
-                                    @Html.DropDownListFor(m => m.ddlINivelAcademicoId, new SelectList(Model.ddlINivelAcademico, "Value", "Text"), new { @class = "form-control form-control-sm" })
-                                </div>
-                                <div id="dvIEspecialidad" class="form-group col-md-4">
-                                    <label for="lblIEspecialidadId" class="text-small">Especialidad</label>
-                                    @Html.DropDownListFor(m => m.ddlIEspecialidadId, new SelectList(Model.ddlIEspecialidad, "Value", "Text"), new { @class = "form-control form-control-sm" })
-                                </div>
-                            </div>
-                            <div id="dvRegente">
-                                <div class="form-row">
-                                    <div class="form-group col-md-2">
-                                        <label for="lblAnio" class="text-small">Año</label>
-                                        @Html.DropDownListFor(m => m.ddlAnioId, new SelectList(Model.ddlAnio, "Value", "Text"), new { @class = "form-control form-control-sm" })
-                                    </div>
-                                    <div class="form-group col-md-3">
-                                        <label for="lblNroLicencia" class="text-small">Nro. Licencia</label>
-                                        @Html.EditorFor(m => m.txtNroLicencia, new { htmlAttributes = new { @class = "form-control form-control-sm" } })
-                                    </div>
-                                    <div class="form-group col-md-3">
-                                        <label for="lblFecLicencia" class="text-small">Fecha de Otorgamiento</label>
-                                        @Html.EditorFor(m => m.txtFecLicencia, new { htmlAttributes = new { @class = "form-control form-control-sm", placeholder = "dd/mm/yyyy", title = "la fecha a ingresar debe ser en el formato dd/mm/yyyy", maxlength = "10" } })
+                                <div class="col-md-6 mb-3">
+                                    <label for="lblItemEstUbigeo" class="text-small">Ubigeo Real(*) </label>
+                                    <div class="input-group">
+                                        <div class="input-group-prepend" style="cursor:pointer" id="btnUbigeoJ">
+                                            <span class="input-group-text">
+                                                <i class="fa fa-search" data-toggle="tooltip" data-placement="top" title="Buscar Ubigeo"></i>
+                                            </span>
+                                        </div>
+                                        @Html.EditorFor(m => m.lblItemPJ_DLUbigeo, new { htmlAttributes = new { @class = "form-control form-control-sm", disabled = "Disabled" } })
+                                        @Html.HiddenFor(m => m.hdfItemPJ_DLUbigeo)
+                                        @Html.HiddenFor(m => m.hdlblItemPJ_DLUbigeo)
                                     </div>
                                 </div>
-                                <div class="form-row">
-                                    <div class="form-group col-md-5">
-                                        <label for="lblResolucion" class="text-small">Nro. Resolución Directoral</label>
-                                        @Html.EditorFor(m => m.txtResolucion, new { htmlAttributes = new { @class = "form-control form-control-sm" } })
-                                    </div>
-                                    <div class="form-group col-md-7">
-                                        <label for="lblCategoriaId" class="text-small">Categoría</label>
-                                        @Html.DropDownListFor(m => m.ddlCategoriaId, new SelectList(Model.ddlCategoria, "Value", "Text"), new { @class = "form-control form-control-sm" })
-                                    </div>
-                                </div>
-                                <div id="dvIMencionRegencia" class="form-row" style="display:none;">
-                                    <div class="form-group col-md-12">
-                                        <label for="lblMencionRegenciaId" class="text-small">Menciones de la Regencia</label>
-                                        @Html.DropDownListFor(m => m.ddlMencionRegenciaId, new SelectList(Model.ddlMencionRegencia, "Value", "Text"), new { @class = "form-control form-control-sm", @multiple = "multiple" })
-                                        @Html.HiddenFor(m => m.hdfMencionRegencia)
-                                    </div>
-                                </div>
-                                <div class="form-row">
-                                    <div class="form-group col-md-4">
-                                        <label for="lblCIP" class="text-small">Nro. CIP</label>
-                                        @Html.EditorFor(m => m.txtCIP, new { htmlAttributes = new { @class = "form-control form-control-sm" } })
-                                    </div>
-                                    <div class="form-group col-md-4">
-                                        <label for="lblEstado" class="text-small">Estado</label>
-                                        @Html.DropDownListFor(m => m.ddlEstadoId, new SelectList(Model.ddlEstado, "Value", "Text"), new { @class = "form-control form-control-sm" })
-                                    </div>
-                                </div>
-                            </div>
-                            <div id="dvOtro" class="form-row">
-                                <div class="form-group col-md-5">
-                                    <label for="lblOtro" class="text-small">Otros: Descripción</label>
-                                    @Html.EditorFor(m => m.txtOtro, new { htmlAttributes = new { @class = "form-control form-control-sm" } })
+                                <div class="form-group col-md-6">
+                                    <label for="txtItemPJ_DLDireccion" class="text-small">Dirección Real(*)</label>
+                                    @Html.EditorFor(m => m.txtItemPJ_DLDireccion, new { htmlAttributes = new { @class = "form-control form-control-sm", placeholder = "Direccion", style = "text-transform:uppercase", Maxlength = 200, required = "required" } })
                                 </div>
                             </div>
                         </div>
@@ -278,7 +167,8 @@
             </form>
         </div>
         <div class="modal-footer">
-            <button type="button" id="btnRegistrarPersona" class="btn btn-primary btn-sm" onclick="_bPerAddEdit.save()">Registrar</button>
+            <button type="button" id="btnRegistrarPersonaN" class="btn btn-primary btn-sm" onclick="_bPerAddEdit.save()">Registrar</button>
+            <button type="button" id="btnRegistrarPersonaJ" class="btn btn-primary btn-sm" onclick="_bPerAddEdit.save()">Registrar</button>
         </div>
     </div>
 </div>

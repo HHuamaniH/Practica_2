@@ -232,27 +232,13 @@ ManTHabilitante.fnInit = function () {
 };
 
 ManTHabilitante.fnBuscarPersona = function (_dom, _tipoPersona) {
-    var valCodPTipo;
-
-    switch (_dom) {
-        case "TITULAR":
-        case "TITULAR_ADENDA":
-            valCodPTipo = "0000001"; break;
-        case "RLEGAL":
-            valCodPTipo = "0000002"; break;
-        case "FUNC_APRUEBA_PROYECTO":
-        case "FUNC_AUTORIZA_FUNCIONAMIENTO":
-            valCodPTipo = "0000006"; break;
-        default:
-            valCodPTipo = "TODOS";
-    }
     
     var url = urlLocalSigo + "General/Controles/_BuscarPersonaGeneral";
     var option = {
         url: url,
         type: 'GET',
         datos: {
-            asBusGrupo: "PERSONA", asCodPTipo: valCodPTipo, asTipoPersona: _tipoPersona,
+            asBusGrupo: "PERSONA", asCodPTipo: "TODOS", asTipoPersona: _tipoPersona,
             asFormulario: "THabilitante", asCodMod: ManTHabilitante.frmTHabilitanteRegistro.find("#hdfItemModalidadCodigo").val(), asTipoCargo: _dom
         },
         divId: "mdlBuscarPersona"

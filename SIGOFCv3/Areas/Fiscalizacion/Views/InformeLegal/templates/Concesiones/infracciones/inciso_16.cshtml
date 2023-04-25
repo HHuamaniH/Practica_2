@@ -1,0 +1,119 @@
+﻿<table width="580" cellpadding="4" style="border: 0; font-family: Arial; font-size: 10pt; border-collapse: collapse; line-height: 150%;">
+    <thead>
+        <tr style="background-color: #bfbfbf;">
+            <th style="text-align: center; border: 1px solid #000;">Obligación Incumplida</th>
+            <th style="text-align: center; border: 1px solid #000;">Base legal de la obligación</th>
+            <th style="text-align: center; border: 1px solid #000;">Tipo infractor</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td style="border: 1px solid #000;">
+                Demostrar el origen legal de los productos aprovechados, así como movilizar los frutos, productos y subproductos con los documentos autorizados para el transporte.
+            </td>
+            <td style="border: 1px solid #000;">
+                Literales k) y r) del numeral 43.1 del artículo 43 del RGF
+                <a style="mso-footnote-id: foot_infraccion_16" href="#_foot_infraccion_16" title="">
+                    <sup class=MsoFootnoteReference><span style="mso-special-character:footnote"></span></sup>
+                </a>.
+            </td>
+            <td style="border: 1px solid #000;">
+                Numeral 16 del Cuadro de Infracciones y Sanciones en Materia Forestal del Anexo 1 del RISMFFS.
+                <br /><br />
+                <i>"Incumplir con las obligaciones o condiciones establecidas en los títulos habilitantes, planes de manejo u otros actos administrativos, diferentes a las causales de caducidad"</i>
+            </td>
+        </tr>
+    </tbody>
+</table>
+<ol class="continue" style="margin-left: -37pt;">
+    <li>
+        Mediante la Resolución Sub Directoral N° ${informe.ANTECEDENTES_DOCS.RSD.numero || 'XXXXX-XXXX-OSINFOR/08.2.1'}, de fecha ${informe.ANTECEDENTES_DOCS.RSD.fechaEmisionTexto ||'XX de XXXX'}, se imputó al/la concesionario/a presuntamente incumplir con las obligaciones legamente establecidas en el contrato de concesión y el plan de manejo aprobado, al no haber declarado el aprovechamiento de un volumen de XX.XXX m3 (descripción del volumen total no declarado, precisando el volumen correspondiente a cada especie).
+    </li>
+    {{if informe.COD_TIPO_INFORME == 1}}
+    <li>
+        <span>
+            Por Escrito/Carta de fecha XX de XX de 20XX ingresado al OSINFOR con Registro N° XXXXXXXXX, e/la concesionario/a presentó sus descargos, donde se advierte los siguientes argumentos que guarda relación con la imputación materia de análisis:<br />
+            <ol style="list-style-type: lower-alpha">
+                <li>(Agregar texto original).</li>
+                <li>(Agregar texto original).</li>
+                <li>(Agregar texto original).</li>
+            </ol>
+        </span>
+    </li>
+    {{/if}}
+    <li>
+        <span>
+            En el presente caso, de acuerdo a la documentación que obra en el expediente administrativo, se tiene lo siguiente:
+            <br />
+            <ul>
+                <li>
+                    Del análisis complementario a los resultados obtenidos en la supervisión, cotejado con el Balance de Extracción de fecha XX de XXXX de XXXX, se advierte que existe un volumen no declarado (su último día para declararlo fue el XX de XXXX de XXXX), conforme se detalla a continuación:
+                    <br />
+                    <div style="text-align: center;">
+                        <strong>Cuadro N° XX: Volumen aprovechado no declarado</strong>
+                    </div>
+                    <table width="480" cellpadding="4" border="0" style="font-family: Arial; font-size: 10pt; border-collapse: collapse; line-height: 150%;">
+                        <thead>
+                            <tr style="background-color: #bfbfbf;">
+                                <th style="text-align: center; border: 1px solid #000;">
+                                    Especie supervisada
+                                </th>
+                                <th style="text-align: center; border: 1px solid #000;">
+                                    Volumen aprobado
+                                </th>
+                                <th style="text-align: center; border: 1px solid #000;">
+                                    Árboles aprobados
+                                </th>
+                                <th style="text-align: center; border: 1px solid #000;">
+                                    Árboles super-visados
+                                </th>
+                                <th style="text-align: center; border: 1px solid #000;">
+                                    Estado de los árboles en campo
+                                </th>
+                                <th style="text-align: center; border: 1px solid #000;">
+                                    Volumen movilizado en el Balance de Extracción
+                                </th>
+                                <th style="text-align: center; border: 1px solid #000;">
+                                    Volumen advertido en campo
+                                </th>
+                                <th style="text-align: center; border: 1px solid #000;">
+                                    Volumen no declarado
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td style="border: 1px solid #000; text-align: center;">1</td>
+                                <td style="border: 1px solid #000; text-align: center;"></td>
+                                <td style="border: 1px solid #000; text-align: center;"></td>
+                                <td style="border: 1px solid #000; text-align: center;"></td>
+                                <td style="border: 1px solid #000; text-align: center;"></td>
+                                <td style="border: 1px solid #000; text-align: center;"></td>
+                                <td style="border: 1px solid #000; text-align: center;"></td>
+                                <td style="border: 1px solid #000; text-align: center;"></td>
+                            </tr>
+                            <tr style="background-color: #bfbfbf;">
+                                <td style="border: 1px solid #000; text-align: center;" colspan="7">
+                                    Total
+                                </td>
+                                <td style="border: 1px solid #000; text-align: center;"></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div style="font-size: 9pt; margin-top: 0; text-align: center;">
+                        <strong>Fuente:</strong> Elaboración propia en base al Informe de Supervisión N° 000XX-XXXX-OSINFOR/08.1.1
+                    </div>
+                </li>
+                <li>
+                    Para su configuración se debe tener en consideración que nos encontramos ante una conducta que una vez cometida se extiende en el tiempo y se mantiene durante todo el momento en que ocurre la falta de movilización bajo las condiciones legales establecidas. Ello, debido a que no existe para el/la concesionario/a la obligatoriedad de realizar la movilización de los productos forestales de manera inmediata, luego de que han sido extraídos o de realizarla en bloque (todo el volumen autorizado) en un solo momento, sino que tiene la potestad de elegir el momento en el que desea realizar la movilización sin más restricción que hacerlo de conformidad con el procedimiento establecido y dentro del periodo de vigencia del plan de manejo forestal.
+                </li>
+                <li>
+                    La omisión del/la concesionario/a imposibilitó las acciones de control y vigilancia por parte de la autoridad forestal competente; acciones destinadas, entre otros, a la verificación del origen legal de la madera movilizada o transportada en el ámbito de su jurisdicción.
+                </li>
+            </ul>
+        </span>
+    </li>
+    <li>
+        Por ello, estando a la evaluación realizada a los actuados en el presente procedimiento, y siendo que el/la concesionario/a no presentó argumentos de defensa suficientes que logren desacreditar los hechos que sustentan la imputación materia de análisis, ha quedado acreditada la comisión de la infracción tipificada en el numeral 16 del Cuadro de Infracciones y Sanciones en Materia Forestal del Anexo 1 del RISMFFS.
+    </li>
+</ol>

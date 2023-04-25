@@ -13,12 +13,16 @@ namespace SIGOFCv3.Areas.Fiscalizacion.Controllers
     {
         // GET: Fiscalizacion/ManCalculoMulta
         public ActionResult Index()
+        {          
+            return View();
+        }
+        public ActionResult ModalCalculo()
         {
             Log_MANCALCULOMULTA log_MANCALCULOMULTA = new Log_MANCALCULOMULTA();
             ViewBag.ddlModalidad = log_MANCALCULOMULTA.RegMostComboIndividual_v3("MODALIDAD", "0");
             ViewBag.ddlIPC = log_MANCALCULOMULTA.RegMostComboIndividual_v3("IPC", "");
             ViewBag.ddlLiteral = log_MANCALCULOMULTA.RegMostComboIndividual_v3("LITERALMANCALMUL", "");
-            return View();
+            return PartialView("~/Areas/Fiscalizacion/Views/ManCalculoMulta/Shared/_modalCalculoMulta.cshtml");
         }
         [HttpGet]
         public JsonResult ObtenerEspecie(string cod_especie)

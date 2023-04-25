@@ -189,7 +189,6 @@ namespace SIGOFCv3.Areas.Supervision.Controllers
                         vmInfTara.hdSupervisor_Calidad = codEspecialista;
                         //Actualizamos el valor para el control de calidad
                         vmInfTara.vmControlCalidad.VALIAS_ROL = mr.VALIAS;
-                        vmInfTara.hdfPerfil = mr.PERFIL;
                         return View("~/Areas/Supervision/Views/ManInformeTara/AddEditTara.cshtml", vmInfTara);
                     case "0000011":
                     case "0000012"://Conservación
@@ -199,7 +198,6 @@ namespace SIGOFCv3.Areas.Supervision.Controllers
                         vmInfConserv.hdSupervisor_Calidad = codEspecialista;
                         //Actualizamos el valor para el control de calidad
                         vmInfConserv.vmControlCalidad.VALIAS_ROL = mr.VALIAS;
-                        vmInfConserv.hdfPerfil = mr.PERFIL;
                         return View("~/Areas/Supervision/Views/ManInformeConservacion/AddEditConservacion.cshtml", vmInfConserv);
                     case "0000013"://Concesión Fauna
                     case "0000028"://Permiso Fauna
@@ -210,7 +208,6 @@ namespace SIGOFCv3.Areas.Supervision.Controllers
                         ViewBag.hdfCodGrupoUsuario = (ModelSession.GetSession())[0].COD_UGRUPO;
                         //Actualizamos el valor para el control de calidad
                         vmInfFauna.vmControlCalidad.VALIAS_ROL = mr.VALIAS;
-                        vmInfFauna.hdfPerfil = mr.PERFIL;
                         return View("~/Areas/Supervision/Views/ManInformeFauna/AddEditFauna.cshtml", vmInfFauna);
                     case "0000001":
                     case "0000002":
@@ -226,7 +223,6 @@ namespace SIGOFCv3.Areas.Supervision.Controllers
                         ViewBag.ddlMaterialDesinfeccion = exeBus.RegMostComboIndividual("MATERIAL_DESINFECCION_EXSITU", "");
                         //Actualizamos el valor para el control de calidad
                         vmInfExSitu.vmControlCalidad.VALIAS_ROL = mr.VALIAS;
-                        vmInfExSitu.hdfPerfil = mr.PERFIL;
                         return View("~/Areas/Supervision/Views/ManInformeExSitu/AddEditExSitu.cshtml", vmInfExSitu); 
                     default:
                         CEntVM vmInf = exeInf.InitDatosInforme(asCodInforme, asCodCNotificacion, asCodMTipo, (ModelSession.GetSession())[0].COD_UCUENTA);
@@ -236,7 +232,6 @@ namespace SIGOFCv3.Areas.Supervision.Controllers
                         vmInf.hdSupervisor_Calidad = codEspecialista;
                         //Actualizamos el valor para el control de calidad
                         vmInf.vmControlCalidad.VALIAS_ROL = mr.VALIAS;
-                        vmInf.hdfPerfil = mr.PERFIL;
                         return View(vmInf);
                 }
             }
@@ -1612,56 +1607,7 @@ namespace SIGOFCv3.Areas.Supervision.Controllers
             return Json(new { success, msj ,data= tramiteVerificar });
         }
         #endregion
-        #region Informe Digital
-        //public PartialViewResult _InformeDigital()
-        //{
-        //var CLogInforme = new Log_Informe_Digital();
-        //var result = CLogInforme.GeneralListar("INFORME_DIGITAL_DESTINATARIO", "");
-        //return PartialView();
-        //}
-
-        public string UrlBase {
-            get {
-                return string.Format("{0}://{1}{2}", Request.Url.Scheme, Request.Url.Authority, Url.Content("~"));
-            }
-        }
-
-        public string PathCkeditor {
-            get {
-                return System.Configuration.ConfigurationManager.AppSettings["pathCkeditor"];
-            }
-        }
-
-        public JsonResult ckEditor()
-        {
-            //string command = Request["command"];
-
-            if (Request.Files.Count > 0)
-            {
-                HttpFileCollectionBase files = Request.Files;
-
-                HttpPostedFileBase file = files[0];
-                string extension = Path.GetExtension(file.FileName);
-                string name = string.Format("{0}{1}", DateTime.Now.ToString("yyyyMMddHHmmssfff"), extension);
-
-                //Configuracion base
-                string folderBase = this.PathCkeditor;
-
-                string folder = Server.MapPath("~/" + folderBase);
-                if (!Directory.Exists(folder))
-                {
-                    Directory.CreateDirectory(folder);
-                }
-
-                file.SaveAs(folder + "/" + name);
-
-                string url = string.Format("{0}{1}/{2}", this.UrlBase, folderBase, name);
-
-                return Json(new { fileName = name, uploaded = 1, url = url });
-            }
-
-            return Json(new { error = new { message = "No hay imágenes para cargar" } });
-        }
+        #region Informe Digital      
         
         [HttpPost]
         public JsonResult NotificarAEspecialista(string codInforme,string codInformeDigital,string numTH)
@@ -2523,8 +2469,6 @@ namespace SIGOFCv3.Areas.Supervision.Controllers
         [HttpPost]
         public ActionResult GuardarFormatoControlCalidad(VM_FControlCalidadSupervision vm)
         {
-            VM_Menu_Rol mr = HelperSigo.GetRol("MODULO SUPERVISION", "Informe de Supervisión");
-            vm.codPerfil = mr.PERFIL;
             string codUsuario = (ModelSession.GetSession())[0].COD_UCUENTA;
             CLogica log = new CLogica();
             return Json(log.registrarFControlCalidad(vm, codUsuario));

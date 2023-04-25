@@ -1321,7 +1321,7 @@ namespace SIGOFCv3.Reportes.THabilitante
                     nomPlantilla = "PoaNoMaderable_Censo_v2.xlsx";
 
                 FileInfo template = new FileInfo(directorio + nomPlantilla);
-                int rowStart = 2;
+                int rowStart = 2;                
                 using (var package = new ExcelPackage(template))
                 {
                     var workbook = package.Workbook;
@@ -1335,12 +1335,12 @@ namespace SIGOFCv3.Reportes.THabilitante
                             case "PoaMaderable_Censo_v2.xlsx":
                                 foreach (var item in vModel.ListMadeCENSO)
                                 {
-                                    column = 0;
+                                    column = 0;                                   
 
                                     string[] especies = (item.ESPECIES ?? "").Split('|');
                                     worksheet.Cells[HelperSigo.GetColum(++column) + rowStart.ToString()].Value = especies.Length > 0 ? especies[0] : "";
                                     worksheet.Cells[HelperSigo.GetColum(++column) + rowStart.ToString()].Value = especies.Length > 1 ? especies[1] : "";
-                                    string[] especies_areresolucion = (item.ESPECIES_ARESOLUCION ?? "").Split('|');
+                                    string[] especies_areresolucion = (item.ESPECIES_ARESOLUCION ?? "").Split('|');                                    
                                     worksheet.Cells[HelperSigo.GetColum(++column) + rowStart.ToString()].Value = especies_areresolucion.Length > 0 ? especies_areresolucion[0] : "";
                                     worksheet.Cells[HelperSigo.GetColum(++column) + rowStart.ToString()].Value = especies_areresolucion.Length > 1 ? especies_areresolucion[1] : "";
                                     worksheet.Cells[HelperSigo.GetColum(++column) + rowStart.ToString()].Value = item.BLOQUE;
@@ -1383,112 +1383,6 @@ namespace SIGOFCv3.Reportes.THabilitante
                                     worksheet.Cells[HelperSigo.GetColum(++column) + rowStart.ToString()].Value = item.OBSERVACION;
                                     rowStart++;
                                 }
-                                break;
-                        }
-
-                        package.SaveAs(new FileInfo(directorio + nombreFile));
-
-                    }
-
-                    List<string> lstResult = new List<string> { nombreFile };
-                    result.AddResultado("Ok", true, lstResult);
-
-                }
-            }
-            catch (Exception ex)
-            {
-                result.AddResultado(ex.Message, false);
-
-            }
-            return result;
-        }
-        //nuevo
-        public static ListResult DescargaExcelCENSO(List<Ent_BUSQUEDA> vModel)
-        {
-            string nombreFile = "";
-            string directorio = HttpContext.Current.Server.MapPath("~/Archivos/Plantilla/");
-
-            nombreFile = DateTime.Now.Year.ToString() +
-                DateTime.Now.Month.ToString() +
-                DateTime.Now.Day.ToString() +
-                DateTime.Now.Hour.ToString() +
-                DateTime.Now.Minute.ToString() +
-                DateTime.Now.Second.ToString() +
-                DateTime.Now.Millisecond.ToString() + ".xlsx";
-
-            ListResult result = new ListResult();
-            try
-            {
-                string nomPlantilla = "";
-
-                //if (vModel.TVentana == "CMADE")
-                //    nomPlantilla = "PoaMaderable_Censo_v2.xlsx";
-                //if (vModel.TVentana == "CNOMADE")
-                nomPlantilla = "PoaMaderable_Censo_v2.xlsx";
-
-                FileInfo template = new FileInfo(directorio + nomPlantilla);
-                int rowStart = 2;
-                using (var package = new ExcelPackage(template))
-                {
-                    var workbook = package.Workbook;
-                    ExcelWorksheet worksheet = workbook.Worksheets.First();
-
-                    if (vModel.Count>0 )
-                    {
-                        int column = 0;
-                        switch (nomPlantilla)
-                        {
-                            case "PoaMaderable_Censo_v2.xlsx":
-                                foreach (var item in vModel)
-                                {
-                                    column = 0;
-
-                                    //string[] especies = (item.ESPECIES ?? "").Split('|');
-                                    worksheet.Cells[HelperSigo.GetColum(++column) + rowStart.ToString()].Value =item.PARAMETRO06;
-                                    worksheet.Cells[HelperSigo.GetColum(++column) + rowStart.ToString()].Value =item.PARAMETRO05;
-                                    //string[] especies_areresolucion = (item.ESPECIES_ARESOLUCION ?? "").Split('|');
-                                    worksheet.Cells[HelperSigo.GetColum(++column) + rowStart.ToString()].Value = "";
-                                    worksheet.Cells[HelperSigo.GetColum(++column) + rowStart.ToString()].Value = "";
-                                    worksheet.Cells[HelperSigo.GetColum(++column) + rowStart.ToString()].Value = item.PARAMETRO02;
-                                    worksheet.Cells[HelperSigo.GetColum(++column) + rowStart.ToString()].Value = item.PARAMETRO03;
-                                    worksheet.Cells[HelperSigo.GetColum(++column) + rowStart.ToString()].Value = item.PARAMETRO04;
-                                    worksheet.Cells[HelperSigo.GetColum(++column) + rowStart.ToString()].Value = item.PARAMETRO12;
-                                    worksheet.Cells[HelperSigo.GetColum(++column) + rowStart.ToString()].Value = item.PARAMETRO07;
-                                    worksheet.Cells[HelperSigo.GetColum(++column) + rowStart.ToString()].Value = item.PARAMETRO08;
-                                    worksheet.Cells[HelperSigo.GetColum(++column) + rowStart.ToString()].Value = item.PARAMETRO09;
-                                    worksheet.Cells[HelperSigo.GetColum(++column) + rowStart.ToString()].Value = item.PARAMETRO13;
-                                    worksheet.Cells[HelperSigo.GetColum(++column) + rowStart.ToString()].Value = "";
-                                    worksheet.Cells[HelperSigo.GetColum(++column) + rowStart.ToString()].Value = "";
-                                    worksheet.Cells[HelperSigo.GetColum(++column) + rowStart.ToString()].Value = item.PARAMETRO10;
-                                    worksheet.Cells[HelperSigo.GetColum(++column) + rowStart.ToString()].Value = item.PARAMETRO11;
-                                    worksheet.Cells[HelperSigo.GetColum(++column) + rowStart.ToString()].Value = item.PARAMETRO15;
-                                    worksheet.Cells[HelperSigo.GetColum(++column) + rowStart.ToString()].Value = "";
-                                    rowStart++;
-                                }
-                                break;
-                            case "PoaNoMaderable_Censo_v2.xlsx":
-                                //foreach (var item in vModel.ListNoMadeCENSO)
-                                //{
-                                //    column = 0;
-
-                                //    string[] especies = (item.ESPECIES ?? "").Split('|');
-                                //    worksheet.Cells[HelperSigo.GetColum(++column) + rowStart.ToString()].Value = especies.Length > 0 ? especies[0] : "";
-                                //    worksheet.Cells[HelperSigo.GetColum(++column) + rowStart.ToString()].Value = especies.Length > 1 ? especies[1] : "";
-                                //    string[] especies_areresolucion = (item.ESPECIES_ARESOLUCION ?? "").Split('|');
-                                //    worksheet.Cells[HelperSigo.GetColum(++column) + rowStart.ToString()].Value = especies_areresolucion.Length > 0 ? especies_areresolucion[0] : "";
-                                //    worksheet.Cells[HelperSigo.GetColum(++column) + rowStart.ToString()].Value = especies_areresolucion.Length > 1 ? especies_areresolucion[1] : "";
-                                //    worksheet.Cells[HelperSigo.GetColum(++column) + rowStart.ToString()].Value = item.NUM_ESTRADA;
-                                //    worksheet.Cells[HelperSigo.GetColum(++column) + rowStart.ToString()].Value = item.CODIGO;
-                                //    worksheet.Cells[HelperSigo.GetColum(++column) + rowStart.ToString()].Value = item.DIAMETRO.ToString();
-                                //    worksheet.Cells[HelperSigo.GetColum(++column) + rowStart.ToString()].Value = item.ALTURA.ToString();
-                                //    worksheet.Cells[HelperSigo.GetColum(++column) + rowStart.ToString()].Value = item.PRODUCCION_LATAS.ToString();
-                                //    worksheet.Cells[HelperSigo.GetColum(++column) + rowStart.ToString()].Value = item.CONDICION;
-                                //    worksheet.Cells[HelperSigo.GetColum(++column) + rowStart.ToString()].Value = item.ZONA;
-                                //    worksheet.Cells[HelperSigo.GetColum(++column) + rowStart.ToString()].Value = item.COORDENADA_ESTE.ToString();
-                                //    worksheet.Cells[HelperSigo.GetColum(++column) + rowStart.ToString()].Value = item.COORDENADA_NORTE.ToString();
-                                //    worksheet.Cells[HelperSigo.GetColum(++column) + rowStart.ToString()].Value = item.OBSERVACION;
-                                //    rowStart++;
-                                //}
                                 break;
                         }
 

@@ -121,10 +121,10 @@
                 </div>
                 @**************************************************INICIO*********************************************************
         ////////////////////////////////////////////////////////////////////////////////////////////////////////////*@
-                <div class="card-header text-small">
-                    Listado de archivos - Encriptado
+                <div class="card-header text-small" style="display: none">
+                    Listado de archivos - Encryptado
                 </div>
-                <div class="card-body">
+                <div class="card-body" style="display: none">
                     <div class="form-row">
                         <div class="form-group col-md-12" style="text-align:right">
                             <button type="button" class="btn btn-outline-info btn-sm" style="margin-top:3px;" onclick="_cartaMod.fnImportFileEncryp()" title="Subir archivo">Subir</button>
@@ -260,7 +260,7 @@
             return list;
         },
 
-        // **************************Encriptado*****************************************
+        // **************************Encryptado*****************************************
         fnImportFileEncryp: () => {
             if (_cartaMod.selectFileEncrip != null) {
                 // Checking whether FormData is available in browser  
@@ -327,7 +327,7 @@
                 }
             ];
             var options = {
-                page_length: 6, row_delete: false, row_fnDelete: "_cartaMod.fnDeleteFileEncryp(this)"
+                page_length: 6, row_delete: true, row_fnDelete: "_cartaMod.fnDeleteFileEncryp(this)"
                 , row_download: true, row_fnDownload: "_cartaMod.fnDownloadFileEncryp(this)"
                 , row_index: true, data_extend: data_extend
             };
@@ -483,7 +483,7 @@
             var dt = _cartaMod.dtFileActa;
             var data = dt.row($(obj).parents('tr')).data();
             if (parseInt(data["COD_SECUENCIAL_ACTA"]) != 0) {
-                window.open(urlLocalSigo + "Archivos/Modulo/Supervision/Itinerario/" + data["COD_BITACORA"] + data["COD_SECUENCIAL_ACTA"] +"." + data["EXTENSION_ARCH"] , '_blank');
+                window.open(urlLocalSigo + "Archivos/Modulo/Supervision/Itinerario/" + data["NOM_ARCH_TEMP"], '_blank');
             } else {
                 window.open(urlLocalSigo + "Archivos/Modulo/Supervision/Itinerario/Temp/" + data["NOM_ARCH_TEMP"], "_blank");
             }

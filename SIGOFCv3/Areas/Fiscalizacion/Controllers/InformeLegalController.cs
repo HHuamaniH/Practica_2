@@ -47,24 +47,17 @@ namespace SIGOFCv3.Areas.Fiscalizacion.Controllers
 
         public ActionResult CreateOrEdit(string asCodInfLegal = "", string asCodTipoIL = "")
         {
-            try
-            {
-                vmInfLegal = logILegal.initIlegal(asCodInfLegal, asCodTipoIL);
+            vmInfLegal = logILegal.initIlegal(asCodInfLegal, asCodTipoIL);
 
-                //obtenemos el rol sobre el formulario
-                VM_Menu_Rol mr = HelperSigo.GetRol("MODULO FISCALIZACION", "Informe Final de Instrucción");
-                ViewBag.CodRol = mr.NCODROL;
-                ViewBag.VAliasRol = mr.VALIAS;
-                //Pasamos el Rol del usuario
-                vmInfLegal.vmControlCalidad.VALIAS_ROL = mr.VALIAS;
+            //obtenemos el rol sobre el formulario
+            VM_Menu_Rol mr = HelperSigo.GetRol("MODULO FISCALIZACION", "Informe Final de Instrucción");
+            ViewBag.CodRol = mr.NCODROL;
+            ViewBag.VAliasRol = mr.VALIAS;
+            //Pasamos el Rol del usuario
+            vmInfLegal.vmControlCalidad.VALIAS_ROL = mr.VALIAS;
+            ViewBag.Usuario = ModelSession.GetSession()?.FirstOrDefault();
 
-                return View(vmInfLegal);
-               
-            }
-            catch (Exception)
-            {
-                return View("Index");
-            }
+            return View(vmInfLegal);
 
         }
         [HttpPost]
@@ -345,8 +338,6 @@ namespace SIGOFCv3.Areas.Fiscalizacion.Controllers
             }
             return PartialView("~/Areas/Fiscalizacion/Views/InformeLegal/Shared/_renderListaEncisos.cshtml", vmInfLegal);
         }
-
-
 
         #endregion
     }

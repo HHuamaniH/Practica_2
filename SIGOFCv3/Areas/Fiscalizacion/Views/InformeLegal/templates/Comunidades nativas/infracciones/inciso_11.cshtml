@@ -1,0 +1,76 @@
+﻿<table width="580" cellpadding="4" style="border: 0; font-family: Arial; font-size: 10pt; border-collapse: collapse; line-height: 150%;">
+    <thead>
+        <tr style="background-color: #bfbfbf;">
+            <th style="text-align: center; border: 1px solid #000;">Obligación Incumplida</th>
+            <th style="text-align: center; border: 1px solid #000;">Base legal de la obligación</th>
+            <th style="text-align: center; border: 1px solid #000;">Tipo infractor</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td style="border: 1px solid #000;">
+                Tener y mantener actualizado el libro de operaciones de acuerdo a los lineamientos aprobados por el SERFOR.
+            </td>
+            <td style="border: 1px solid #000;">
+                El literal d) numeral 29.1 artículo 29 del RGFFSCNCC
+                <a style="mso-footnote-id: foot_infraccion_11" href="#_foot_infraccion_11" title="">
+                    <sup class=MsoFootnoteReference><span style="mso-special-character:footnote"></span></sup>
+                </a>.<br /><br />
+                (Indicar si el TH también contiene la obligación)
+            </td>
+            <td style="border: 1px solid #000;">
+                Numeral 11 del Anexo 1 del RISMFFS.
+                <br /><br />
+                <i>“No tener libro de operaciones o no registrar la información en dicho libro, de acuerdo a las disposiciones establecidas”.</i>
+            </td>
+        </tr>
+    </tbody>
+</table>
+<ol class="continue" style="margin-left: -37pt;">
+    {{if informe.COD_TIPO_INFORME == 1}}
+    <li>
+        <span>
+            Mediante Escrito S/N de fecha XX de XX de 20XX con Registro XX, el administrado presentó sus descargos, donde se advierte los siguientes argumentos que guarda relación con la imputación materia de análisis:<br /><br />
+            <ol style="list-style-type: lower-alpha">
+                <li>(…) XXXXXXXXXXXXXXXXXXXXX (…). (Texto original del descargo).</li>
+                <li>(…) XXXXXXXXXXXXXXXXXXXXX (…). (Texto original del descargo).</li>
+                <li>(…) XXXXXXXXXXXXXXXXXXXXX (…). (Texto original del descargo).</li>
+            </ol>
+        </span>
+    </li>
+    <li>
+        <span>
+            Respecto a lo señalado por la administrada, se advierte el siguiente análisis:<br /><br />
+            <ul>
+                <li>Con relación al argumento señalado en el acápite a) xxxxxxxxxxxxxxxxxxx</li>
+                <li>Con relación al argumento señalado en el acápite b) xxxxxxxxxxxxxxxxxxx</li>
+                <li>Con relación al argumento señalado en el acápite c) xxxxxxxxxxxxxxxxxxx</li>
+            </ul>
+        </span>
+    </li>
+    {{/if}}
+    <li>
+        <span>
+            En el presente caso, de acuerdo a la documentación que obra en el expediente administrativo y del análisis de los descargos, ha quedado acreditado lo siguiente:
+            <br /><br />
+            <ul>
+                <li>
+                    El Libro de operaciones es exigible a partir de 02 de marzo de 2020, conforme a lo establecido en la Resolución de Dirección Ejecutiva Nº 264-2019-MINAGRI-SERFOR-DE.
+                </li>
+                <li>
+                    La administrada realizo movilización de madera rolliza entre las fechas XX, las cuales son posteriores a la fecha 02 de marzo de acuerdo a lo reportado en el Libro Forma 20.
+                </li>
+                <li>
+                    La administrada no cumplió con presentar el Libro de Operaciones, a pesar de haber sido solicitado mediante la Carta Nº XX-20XX-OSINFOR/08.1 y la Carta Nº XX-20XX-OSINFOR/08.1, así como en la diligencia de supervisión según consta en el acta de coordinación previa a la supervisión. Asimismo, dicho incumplimiento por la ARFFS mediante el Oficio Nº XX (oficio de autoridad).
+                </li>
+            </ul>
+        </span>
+    </li>
+    <li>
+        En ese contexto, de acuerdo a lo señalado precedentemente
+        {{if informe.COD_TIPO_INFORME == 1}}
+        y siendo que los descargos presentados
+        {{/if}}
+        por la administrada no desacreditan los hechos que sustentan la imputación, se confirma que la administrada cometió la infracción tipificada en el literal XXXXXXXX.
+    </li>
+</ol>

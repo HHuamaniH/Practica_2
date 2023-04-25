@@ -229,8 +229,6 @@ namespace CapaDatos.DOC
         {
             String OUTPUTPARAM01 = "";
             OracleTransaction tr = null;
-            CEntidad oCamposDet;
-
             using (OracleConnection cn = new OracleConnection(BDConexion.Conexion_Cadena_SIGO()))
             {
                 try
@@ -250,46 +248,6 @@ namespace CapaDatos.DOC
                             case "3": throw new Exception("El número de documento de identidad no corresponde al tipo de documento");
                         }
                     }
-
-                    oCEntidad.COD_PERSONA = OUTPUTPARAM01;
-
-                    if (oCEntidad.ListTipoCargo != null)
-                    {
-                        foreach (var itemCar in oCEntidad.ListTipoCargo)
-                        {
-                            oCamposDet = new CEntidad();
-                            oCamposDet.COD_PERSONA = oCEntidad.COD_PERSONA;
-                            oCamposDet.COD_PTIPO = itemCar.COD_PTIPO;
-                            oCamposDet.COD_UCUENTA = oCEntidad.COD_UCUENTA;
-                            oCamposDet.RegEstado = itemCar.RegEstado;
-                            oCamposDet.BusFormulario = "ADICIONA_CARGO";
-                            using (OracleCommand cmd1 = dBOracle.ManExecuteOutput(cn, tr, "GENE_OSINFOR_ERP_MIGRACION.spPERSONA_DET_TIPOGrabar", oCamposDet))
-                            {
-                                cmd1.ExecuteNonQuery();
-                                String result = Convert.ToString(cmd1.Parameters["OUTPUTPARAM01"].Value);
-
-                                if (result.Split('|')[0] != "1")
-                                {
-                                    throw new Exception(result.Split('|')[1]);
-                                }
-                            }
-                        }
-                    }
-                    if (oCEntidad.ListMencion != null)
-                    {
-                        foreach (var itemMen in oCEntidad.ListMencion)
-                        {
-                            oCamposDet = new CEntidad();
-                            oCamposDet.COD_PERSONA = oCEntidad.COD_PERSONA;
-                            oCamposDet.COD_SECUENCIAL = itemMen.COD_SECUENCIAL;
-                            oCamposDet.COD_MENSION = itemMen.COD_MENSION;
-                            oCamposDet.COD_UCUENTA = oCEntidad.COD_UCUENTA;
-                            oCamposDet.RegEstado = itemMen.RegEstado;
-                            oCamposDet.BusFormulario = "ADICIONA_CARGO";
-                            dBOracle.ManExecute(cn, tr, "GENE_OSINFOR_ERP_MIGRACION.spPERSONA_DET_MENSIONGrabar", oCamposDet);
-                        }
-                    }
-
                     tr.Commit();
                     return OUTPUTPARAM01;
                 }
@@ -303,7 +261,6 @@ namespace CapaDatos.DOC
                 }
             }
         }
-
         public List<CEntidad> RegPersonaBuscarSimple_v3(CEntidad oCEntidad)
         {
             List<CEntidad> lsCEntidad = new List<CEntidad>();
@@ -343,8 +300,6 @@ namespace CapaDatos.DOC
                                     oCampos.APE_PATERNO = dr["APE_PATERNO"].ToString();
                                     oCampos.APE_MATERNO = dr["APE_MATERNO"].ToString();
                                     oCampos.N_RUC = dr["N_RUC"].ToString();
-                                    oCampos.COD_PTIPO = dr["COD_PTIPO"].ToString();
-                                    oCampos.TIPO_CARGO = dr["TIPO_CARGO"].ToString();
                                     lsCEntidad.Add(oCampos);
                                 }
                             }
@@ -356,86 +311,6 @@ namespace CapaDatos.DOC
             catch (Exception ex)
             {
                 throw ex;
-            }
-        }
-
-        public String RegTipoCargoGrabar(CEntidad oCEntidad)
-        {
-            String OUTPUTPARAM01 = "";
-            OracleTransaction tr = null;
-
-            CEntidad oCampos = new CEntidad();
-            oCampos.COD_PERSONA = oCEntidad.COD_PERSONA;
-            oCampos.COD_PTIPO = oCEntidad.COD_PTIPO;
-            oCampos.COD_UCUENTA = oCEntidad.COD_UCUENTA;
-            oCampos.RegEstado = oCEntidad.RegEstado;
-            oCampos.BusFormulario = oCEntidad.BusFormulario;
-
-            using (OracleConnection cn = new OracleConnection(BDConexion.Conexion_Cadena_SIGO()))
-            {
-                try
-                {
-                    cn.Open();
-                    tr = cn.BeginTransaction();
-                    using (OracleCommand cmd = dBOracle.ManExecuteOutput(cn, tr, "GENE_OSINFOR_ERP_MIGRACION.spPERSONA_DET_TIPOGrabar", oCampos))
-                    {
-                        cmd.ExecuteNonQuery();
-                        OUTPUTPARAM01 = Convert.ToString(cmd.Parameters["OUTPUTPARAM01"].Value);
-
-                        if (OUTPUTPARAM01.Split('|')[0] == "0")
-                        {
-                            throw new Exception(OUTPUTPARAM01.Split('|')[1]);
-                        }
-                    }
-
-                    if (OUTPUTPARAM01.Split('|')[0] == "1")
-                    {
-                        oCampos = new CEntidad();
-                        oCampos.COD_PERSONA = oCEntidad.COD_PERSONA;
-                        oCampos.COD_PTIPO = ","+ oCEntidad.COD_PTIPO;
-                        oCampos.NUM_REGISTRO_FFS = oCEntidad.NUM_REGISTRO_FFS;
-                        oCampos.NUM_REGISTRO_PROFESIONAL = oCEntidad.NUM_REGISTRO_PROFESIONAL;
-                        oCampos.CARGO = oCEntidad.CARGO;
-                        oCampos.COLEGIATURA_NUM = oCEntidad.COLEGIATURA_NUM;
-                        oCampos.COD_NACADEMICO = oCEntidad.COD_NACADEMICO;
-                        oCampos.COD_DPESPECIALIDAD = oCEntidad.COD_DPESPECIALIDAD;
-                        oCampos.ANIO = oCEntidad.ANIO;
-                        oCampos.NROLICENCIA = oCEntidad.NROLICENCIA;
-                        oCampos.OTORGAMIENTO = oCEntidad.OTORGAMIENTO;
-                        oCampos.RESAPROBACION = oCEntidad.RESAPROBACION;
-                        oCampos.COD_CATEGORIA = oCEntidad.COD_CATEGORIA;
-                        oCampos.CIP = oCEntidad.CIP;
-                        oCampos.ESTADO_REGENTE = oCEntidad.ESTADO_REGENTE;
-                        oCampos.OTRO = oCEntidad.OTRO;
-                        dBOracle.ManExecute(cn, tr, "GENE_OSINFOR_ERP_MIGRACION.SPPERSONA_DPROFESIONALESGRABAR", oCampos);
-
-                        if (oCEntidad.ListMencion != null)
-                        {
-                            foreach (var itemMen in oCEntidad.ListMencion)
-                            {
-                                oCampos = new CEntidad();
-                                oCampos.COD_PERSONA = oCEntidad.COD_PERSONA;
-                                oCampos.COD_SECUENCIAL = itemMen.COD_SECUENCIAL;
-                                oCampos.COD_MENSION = itemMen.COD_MENSION;
-                                oCampos.COD_UCUENTA = oCEntidad.COD_UCUENTA;
-                                oCampos.RegEstado = itemMen.RegEstado;
-                                oCampos.BusFormulario = oCEntidad.BusFormulario;
-                                dBOracle.ManExecute(cn, tr, "GENE_OSINFOR_ERP_MIGRACION.spPERSONA_DET_MENSIONGrabar", oCampos);
-                            }
-                        }
-                    }
-
-                    tr.Commit();
-                    return OUTPUTPARAM01;
-                }
-                catch (Exception ex)
-                {
-                    if (tr != null)
-                    {
-                        tr.Rollback();
-                    }
-                    throw ex;
-                }
             }
         }
         #endregion

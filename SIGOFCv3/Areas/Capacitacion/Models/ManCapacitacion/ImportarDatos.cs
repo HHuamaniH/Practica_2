@@ -48,9 +48,8 @@ namespace SIGOFCv3.Areas.Capacitacion.Models.ManCapacitacion
                         oCampos.TELEFONO = (workSheet.Cells[rowIterator, 12].Value ?? "").ToString().Trim();
                         oCampos.CORREO = (workSheet.Cells[rowIterator, 13].Value ?? "").ToString().Trim();
                         oCampos.COD_CONSTANCIA = (workSheet.Cells[rowIterator, 14].Value ?? "").ToString().Trim();
-                        oCampos.MOCHILAFORESTAL = (workSheet.Cells[rowIterator, 15].Value ?? "").ToString().Trim();
-                        oCampos.OBSERVACION = (workSheet.Cells[rowIterator, 16].Value ?? "").ToString().Trim();
-                        oCampos.NUM_THABILITANTE = (workSheet.Cells[rowIterator, 17].Value ?? "").ToString().Trim();
+                        oCampos.OBSERVACION = (workSheet.Cells[rowIterator, 15].Value ?? "").ToString().Trim();
+                        oCampos.NUM_THABILITANTE = (workSheet.Cells[rowIterator, 16].Value ?? "").ToString().Trim();
                         oCampos.RegEstado = 1;
 
                         if (oCampos.N_DOCUMENTO == "" || oCampos.N_DOCUMENTO.Length < 8 || oCampos.N_DOCUMENTO.Length > 8)

@@ -93,7 +93,9 @@
         //}
     });
 </script>
-<script src="~/Areas/Fiscalizacion/js/ManPAU/config.js?v=2"></script>
+<script src="~/Scripts/ckeditor5/config.js?v=1"></script>
+<script src="~/Areas/General/js/Informes/general.js?v=1"></script>
+<script src="~/Areas/General/js/Informes/components.js?v=1"></script>
 <script src="~/Areas/Fiscalizacion/js/ManPAU/RSD.js?noCache=@Guid.NewGuid().ToString()" type="text/javascript"></script>
 
 <div id="frmInforme" class="card loading">
@@ -422,7 +424,7 @@
                             <div class="file-attach-details">
                                 {{item.tipo}}
                             </div>
-                            <span class="file-attach-remove" v-on:click="Eliminar_Archivo(index, index)"
+                            <span class="file-attach-remove" v-on:click="Eliminar_Archivo(item, index)"
                                   v-if="Informe.ESTADO == States.INGRESADO">&times;</span>
                         </div>
                     </div>

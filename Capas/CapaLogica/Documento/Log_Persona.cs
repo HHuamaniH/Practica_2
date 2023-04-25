@@ -75,21 +75,5 @@ namespace CapaLogica.DOC//6
             }
         }
 
-        public String GrabarTipoCargo(CEntidad oCampoEntrada)
-        {
-            try
-            {
-                using (OracleConnection cn = new OracleConnection(CapaDatos.BDConexion.Conexion_Cadena_SIGO()))
-                {
-                    cn.Open();
-                    return oCDatos.GrabarTipoCargo(cn, oCampoEntrada);
-                }
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-        }
-
     }
 }
