@@ -365,7 +365,8 @@ anteExpedientes.fnDownloadDocSIADO = function (obj) {
     switch (row.OBSERVACION) {
         case 'CENSO':
             //JL
-            window.open("https://apptest.osinfor.gob.pe:7009/pdf-gore/" + row.CCODDOC.trim() + "." + row.EXTENSION, '_blank'); break;
+            //window.open("https://apptest.osinfor.gob.pe:7009/pdf-gore/" + row.CCODDOC.trim() + "." + row.EXTENSION, '_blank'); break;
+            window.open("https://siadoregion.osinfor.gob.pe/PDF-GORE/" + row.CCODDOC.trim() + "." + row.EXTENSION, '_blank'); break;
         //var url = urlLocalSigo + "THabilitante/ManVentanillaAntecedentesExpedientes/DownloadCenso";//ExportarRegistroUsuario
         //var option = { url: url, datos: JSON.stringify({ coddoc: row.CCODDOC }), type: 'POST' };
 
@@ -404,7 +405,8 @@ anteExpedientes.fnDownloadDocSIADO = function (obj) {
 
 
         //break;
-        default: window.open("https://apptest.osinfor.gob.pe:7009/pdf-gore/" + row.CCODDOC.trim() + "." + row.EXTENSION, '_blank'); break;
+        //default: window.open("https://apptest.osinfor.gob.pe:7009/pdf-gore/" + row.CCODDOC.trim() + "." + row.EXTENSION, '_blank'); break;
+        default: window.open("https://siadoregion.osinfor.gob.pe/PDF-GORE/" + row.CCODDOC.trim() + "." + row.EXTENSION, '_blank'); break;
     }
 
 };
