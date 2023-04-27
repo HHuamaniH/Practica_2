@@ -2796,7 +2796,7 @@ namespace CapaLogica.DOC
             }
             catch (Exception ex)
             {
-                result.AddResultado(ex.Message, false);
+                result.AddResultado("Ocurrió un error al registrar comuniquese con el Administrador", false);
             }
             return result;
         }

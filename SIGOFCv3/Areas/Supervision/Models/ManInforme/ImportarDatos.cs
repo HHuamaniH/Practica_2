@@ -23,7 +23,7 @@ namespace SIGOFCv3.Areas.Supervision.Models.ManInforme
                     var noOfCol = workSheet.Dimension.End.Column;
                     var noOfRow = workSheet.Dimension.End.Row;
                     CapaEntidad.DOC.Ent_INFORME oCampos;
-                    string ceste, cnorte;
+                    string ceste, cnorte,vertice;
 
                     for (int rowIterator = 2; rowIterator <= noOfRow; rowIterator++)
                     {
@@ -37,7 +37,11 @@ namespace SIGOFCv3.Areas.Supervision.Models.ManInforme
                             if (ceste != "" && cnorte != "")
                             {
                                 oCampos.VERTICE = workSheet.Cells[rowIterator, 2].Value.ToString().Trim();
-                                oCampos.VERTICE_CAMPO = (workSheet.Cells[rowIterator, 3].Value ?? "").ToString().Trim();
+                                vertice = (workSheet.Cells[rowIterator, 3].Value ?? "").ToString().Trim();
+                                if (vertice != "")
+                                {
+                                    oCampos.VERTICE_CAMPO = vertice;
+                                }else { throw new Exception("Vertice Supervisado incorrecto"); }
                                 oCampos.ZONA = (workSheet.Cells[rowIterator, 4].Value ?? "").ToString().Trim();
                                 oCampos.COORDENADA_ESTE = Convert.ToInt32(workSheet.Cells[rowIterator, 6].Value.ToString().Trim());
                                 oCampos.COORDENADA_ESTE_CAMPO = Convert.ToInt32(ceste);
