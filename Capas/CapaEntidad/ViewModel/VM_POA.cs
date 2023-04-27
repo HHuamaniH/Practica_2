@@ -194,6 +194,7 @@ namespace CapaEntidad.ViewModel
         //Error Material
         public List<Ent_ERRORMATERIAL> ListPOAErrorMaterialG { get; set; }
         public List<Ent_ERRORMATERIAL> ListPOAErrorMaterialA { get; set; }
+        public List<Ent_ERRORMATERIAL> ListPOARegenteImplementa { get; set; }
     }
 
 }

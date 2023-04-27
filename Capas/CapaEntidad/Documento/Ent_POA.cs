@@ -626,7 +626,9 @@ namespace CapaEntidad.DOC
         //05/05/2021
         [Category("LIST"), Description("ListParcela")]
         public List<Ent_POA> ListParcela { get; set; }
-       
+
+        [Category("LIST"), Description("ListPOARegenteImplementa")]
+        public List<Ent_ERRORMATERIAL> ListPOARegenteImplementa { get; set; }
         //Error Material
         [Category("LIST"), Description("ListPOAErrorMaterialG")]
         public List<Ent_ERRORMATERIAL> ListPOAErrorMaterialG { get; set; }

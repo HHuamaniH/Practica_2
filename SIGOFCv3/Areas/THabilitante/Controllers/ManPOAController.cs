@@ -187,6 +187,7 @@ namespace SIGOFCv3.Areas.THabilitante.Controllers
                 TempData["ListKARDEX"] = objVM.ListKARDEX;
                 TempData["listPOAErrorMaterialG"] = objVM.ListPOAErrorMaterialG;
                 TempData["listPOAErrorMaterialA"] = objVM.ListPOAErrorMaterialA;
+                TempData["listPOARegenteImplementa"] = objVM.ListPOARegenteImplementa;
                 objVM.opRegresar = opRegresar;
                 objVM.TipoFormulario = tipoFrmulario;
                 objVM.ListVERTICE = null;
@@ -1693,6 +1694,10 @@ namespace SIGOFCv3.Areas.THabilitante.Controllers
         {
             return PartialView();
         }
-       
+        [HttpPost]
+        public PartialViewResult _DetRegente()
+        {
+            return PartialView();
+        }
     }
 }

@@ -179,8 +179,38 @@
             //ManPOA.ItemBExt.dtItemBExt.rows.add(ManPOA.listBExtPOA[0].listMadeBEXTRACCION).draw();
             //ManPOA.ItemBExtMaderable.dtItemBExtMaderable.rows.add(ManPOA.listBExtPOA[0].listMadeBEXTRACCION).draw();
             //ManPOA.ItemBExtNoMaderable.dtItemBExtNoMaderable.rows.add(ManPOA.listBExtPOA[0].ListNoMadeBEXTRACCION).draw();
-            ManPOA.ItemBExtISitu.dtItemBExtISitu.rows.add(ManPOA.listBExtPOA[0].ListISituBEXTRACCION).draw();
+        ManPOA.ItemBExtISitu.dtItemBExtISitu.rows.add(ManPOA.listBExtPOA[0].ListISituBEXTRACCION).draw();
             </text>
+            }
+        }
+        @if (Model.ListPOARegenteImplementa != null)
+        {
+            if (Model.ListPOARegenteImplementa.Count() > 0)
+            {
+                <text>
+                    var j = 1;
+                </text>
+
+                foreach (var item in Model.ListPOARegenteImplementa)
+                {
+                    <text>
+                        ManPOA.listPOADetRegente.push({
+                            NRO: j,
+                            COD_SECUENCIAL: "@item.COD_SECUENCIAL",
+                            DA_FECRESOLUCION: "@item.DA_FECRESOLUCION",
+                            NV_RESOLUCION: "@item.NV_RESOLUCION",
+                            NV_NOMCAMPO: "@item.NV_NOMCAMPO",
+                            NV_VALANTERIOR: "@item.NV_VALANTERIOR",
+                            NV_VALACTUAL: "@item.NV_VALACTUAL",
+                            NV_OBSERVACION: "@item.NV_OBSERVACION"
+                        });
+                        j++;
+                    </text>
+                }
+                <text>
+                    //console.log(ManPOA.listPOAEMGeneral);
+                    ManPOA.dtRegente_Implementa.rows.add(ManPOA.listPOADetRegente).draw();
+                </text>
             }
         }
 
@@ -545,7 +575,7 @@
                                     <div id="trItemConsultorA">
                                         @Html.HiddenFor(m => m.hdfItemConsultorCodigo)
                                         <div class="card-header text-small">
-                                            Regente
+                                            Regente suscribe
                                         </div>
                                         <div class="card-body">
                                             <div class="form-row">
@@ -592,7 +622,7 @@
                                                     <label for="txtUbigeo" class="text-small">Ubigeo Real</label>
                                                     <div class="input-group">
                                                         @Html.EditorFor(m => m.txtUbigeo, new { htmlAttributes = new { @class = "form-control form-control-sm", @disabled = "disabled" } })
-                                                        @Html.HiddenFor(m => m.txtCodUbigeo)  
+                                                        @Html.HiddenFor(m => m.txtCodUbigeo)
                                                     </div>
                                                 </div>
                                                 <div class="form-group col-md-6">
@@ -604,6 +634,39 @@
                                     </div>
 
                                 }
+                                <div class="card-header text-small">Regente implementa</div>
+                                <div class="card-body">
+                                    <div class="form-row">
+                                        <div class="table-responsive">
+                                            <table id="grvRegente_implementa" style="width:100%" class="table table-hover table-bordered">
+                                                <thead>
+                                                    <tr>
+                                                        <th colspan="9" class="text-sm-left">
+                                                            <div class="form-inline">
+                                                                <i class="fa mx-1 fa-lg fa-file-o" style="cursor:pointer;" onclick="ManPOA.fnAddRegenteImplementa('DG');" data-toggle="tooltip" data-placement="top" title="Nuevo"></i>
+                                                                <strong>
+                                                                    Historial regentes implementan
+                                                                </strong>
+                                                            </div>
+                                                        </th>
+                                                    </tr>
+                                                    <tr>
+                                                        <th>Nº</th>
+                                                        <th>Nombres</th>
+                                                        <th>DNI</th>
+                                                        <th>N° Registro Consultor</th>
+                                                        <th>N° Registro Regente</th>
+                                                        <th>N° Registro Profesional</th>
+                                                        <th>N° Licencia</th>
+                                                        <th>Email</th>
+                                                        <th>Estado</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody></tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
                                 <div class="card-header text-small">
                                     Acta de Inspección Ocular
                                 </div>
@@ -2909,3 +2972,4 @@
 </div>
 <div class="modal fade" id="funcionarioAgregarModal" tabindex="-1" role="dialog"></div>
 <div class="modal fade hide" id="modalAddErrorMaterial" role="dialog"></div>
+<div class="modal fade hide" id="modalAddDetRegente" role="dialog"></div>
