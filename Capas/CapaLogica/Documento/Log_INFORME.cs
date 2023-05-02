@@ -1858,7 +1858,19 @@ namespace CapaLogica.DOC
                     vmInf.vmInfCNotificacion.txtTHabilitante = entCN.NUM_THABILITANTE;
                     vmInf.tbPersonalTecProf = new List<Ent_GENEPERSONA>();
                     vmInf.hdfRegEstado = 1;
-                }
+                    var lstEnfermedad = exeBus.RegMostComboIndividual("ENFERMEDADES", "");
+                    foreach (var item in lstEnfermedad)
+                    {
+                        vmInf.tbEnfermedad.Add(new CapaEntidad.DOC.Ent_INFORME_ENFERMEDAD()
+                        {
+                            COD_ENFERMEDAD = Convert.ToInt32(item.Value.Split('|')[0]),
+                            GRUPO = item.Value.Split('|')[1],
+                            TIPO = item.Value.Split('|')[2],
+                            DESCRIPCION = item.Text,
+                            OBSERVACION = ""
+                        });
+                    }
+                }                
                 else
                 {
                     //Obtener datos del informe
@@ -1986,6 +1998,10 @@ namespace CapaLogica.DOC
                     vmInf.tbActividadEducacion = entInf.LisCautiverioActividadRealizada;
                     vmInf.tbActividadInvestigacion = entInf.LisCautiverioCensoICientifica;
                     vmInf.tbMandatos = entInf.ListMandatos;
+                    vmInf.tbEnfermedad = entInf.ListEnfermedad;
+
+                    vmInf.txtAsunto = entInf.ASUNTO;
+                    vmInf.txtContenido = entInf.CONTENIDO.ToString();
 
                     vmInf.tbFotoSupervision = entInf.ListFotos;
                     vmInf.txtCalificacionZoo = entInf.CALIFICACION_EVALZOO;
@@ -2065,6 +2081,9 @@ namespace CapaLogica.DOC
                 paramsInf.TIPOVISMED = _dto.ddlTipoVisMedId;
                 paramsInf.VISITAMES = _dto.txtVisitaporMes ?? "";
                 paramsInf.OBSMEDVET = _dto.txtObsMedVet ?? "";
+
+                paramsInf.ASUNTO = _dto.txtAsunto;
+                paramsInf.CONTENIDO = _dto.txtContenido;
 
                 paramsInf.OBSERVACION_PUBLICAR = _dto.txtObsPublicar ?? "";
                 paramsInf.COD_CNOTIFICACION = _dto.vmInfCNotificacion.hdfCodCNotificacion;
@@ -2158,6 +2177,7 @@ namespace CapaLogica.DOC
                 paramsInf.ListISuperExsituBalance = _dto.tbBalanceIngEgr;
                 paramsInf.ListRelPelCentroCria = _dto.tbRelPelCentroCria;
                 paramsInf.ListMandatos = _dto.tbMandatos;
+                paramsInf.ListEnfermedad = _dto.tbEnfermedad;
 
                 double puntuacion = 0;
                 foreach (var item in paramsInf.ListEvalZoObservatorio)
@@ -2595,6 +2615,18 @@ namespace CapaLogica.DOC
                             FRECUENCIA = ""
                         });
                     }
+                    var lstEnfermedad = exeBus.RegMostComboIndividual("ENFERMEDADES", "");
+                    foreach (var item in lstEnfermedad)
+                    {
+                        vmInf.tbEnfermedad.Add(new CapaEntidad.DOC.Ent_INFORME_ENFERMEDAD()
+                        {
+                            COD_ENFERMEDAD = Convert.ToInt32(item.Value.Split('|')[0]),
+                            GRUPO = item.Value.Split('|')[1],
+                            TIPO = item.Value.Split('|')[2],
+                            DESCRIPCION = item.Text,                            
+                            OBSERVACION = ""
+                        });
+                    }
                 }
                 else
                 {
@@ -2665,6 +2697,7 @@ namespace CapaLogica.DOC
 
                     vmInf.tbFotoSupervision = entInf.ListFotos;
                     vmInf.tbPrograma = entInf.ListPrograma;
+                    vmInf.tbEnfermedad = entInf.ListEnfermedad;
                     vmInf.tbManejoImpacto = entInf.ListISUPERVISION_IDENTMANEJOIMPACTO;
                     vmInf.tbResponsabilidadSocial = entInf.ListISUPERVISION_DET_CAPACITACION_ACTDES;
                     vmInf.tbObligacionContrac = entInf.ListOCActosTercero;
@@ -2756,6 +2789,7 @@ namespace CapaLogica.DOC
                 paramsInf.CONCLUSION = _dto.txtConclusion ?? "";
 
                 paramsInf.ListPrograma = _dto.tbPrograma;
+                paramsInf.ListEnfermedad = _dto.tbEnfermedad;
                 paramsInf.ListISUPERVISION_IDENTMANEJOIMPACTO = _dto.tbManejoImpacto;
                 paramsInf.ListISUPERVISION_DET_CAPACITACION_ACTDES = _dto.tbResponsabilidadSocial;
                 paramsInf.ListOCActosTercero = _dto.tbObligacionContrac;

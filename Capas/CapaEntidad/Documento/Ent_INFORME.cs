@@ -250,8 +250,8 @@ namespace CapaEntidad.DOC
         // [Description("C_CERRADO")]
         // public Int32 C_CERRADO { get; set; }
 
-
-
+        [Description("COD_ENFERMEDAD")]
+        public Int32 COD_ENFERMEDAD { get; set; }
 
         //Aprovechamiento
         [Description("N_ARBOL_FVERDE")]
@@ -1948,6 +1948,7 @@ namespace CapaEntidad.DOC
         //Objetos de clases para el formulario de Conservación y Ecoturismo
         public List<Ent_INFORME_VERTICE> ListVertice { get; set; }
         public List<Ent_INFORME_PROGRAMA> ListPrograma { get; set; }
+        public List<Ent_INFORME_ENFERMEDAD> ListEnfermedad { get; set; }
         public List<Ent_INFORME_REGFLORA> ListRegistroFlora { get; set; }
         public List<Ent_INFORME_REGPAISAJE> ListRegistroPaisaje { get; set; }
         [Description("ESTADO_ESPECIE")]
@@ -2154,8 +2155,11 @@ namespace CapaEntidad.DOC
             BUEN_DESEMPENIO = -1;
             ARCHIVA_INFORME = -1;
 
+            COD_ENFERMEDAD = -1;
+
             COD_SECUENCIAL_POA = -1;
             ListISuperExsituOBLIGF = new List<Ent_ISUPERVISION_EXSITU_INFRA_AREA>();
+            ListEnfermedad = new List<Ent_INFORME_ENFERMEDAD>();
     }
         #endregion
     }
@@ -3235,6 +3239,22 @@ namespace CapaEntidad.DOC
         public Ent_INFORME_PROGRAMA()
         {
             COD_PROGRAMA = -1; RegEstado = -1;
+        }
+    }
+
+    public class Ent_INFORME_ENFERMEDAD
+    {
+        public string COD_INFORME { get; set; }
+        public Int32 COD_ENFERMEDAD { get; set; }
+        public string GRUPO { get; set; }
+        public string TIPO { get; set; }
+        public string OBSERVACION { get; set; }
+        public string DESCRIPCION { get; set; }
+        public Int32 RegEstado { get; set; }
+
+        public Ent_INFORME_ENFERMEDAD()
+        {
+            COD_ENFERMEDAD = -1; RegEstado = -1;
         }
     }
     public class Ent_INFORME_REGFLORA
