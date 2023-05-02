@@ -230,9 +230,11 @@ ManInforme_AddEdit.Incidencia = {
     }
 }
 
+
+
 ManInforme_AddEditFauna.fnLoadData = function (obj, tipo) {
     switch (tipo) {
-        case "DataPrograma": ManInforme_AddEditFauna.DataPrograma = JSON.parse(obj) || []; break;
+        case "DataPrograma": ManInforme_AddEditFauna.DataPrograma = JSON.parse(obj) || []; break;        
         case "DataManejoImpacto": ManInforme_AddEditFauna.DataManejoImpacto = JSON.parse(obj) || []; break;
         case "DataResponsabilidadSocial": ManInforme_AddEditFauna.DataResponsabilidadSocial = JSON.parse(obj) || []; break;
         case "DataObligacionContrac": ManInforme_AddEditFauna.DataObligacionContrac = JSON.parse(obj) || []; break;
@@ -341,7 +343,7 @@ ManInforme_AddEditFauna.fnInitDataTable_Detail = function () {
             }
         },
         {
-            "data": "OBSERVACION", "title": "", "width": "65%", "orderable": false, "searchable": false, "mRender": function (data, type, row, meta) {                
+            "data": "OBSERVACION", "title": "", "width": "65%", "orderable": false, "searchable": false, "mRender": function (data, type, row, meta) {
                 return '<input class="form-control form-control-sm" type="text" value="' + data + '" style="width:100%;"/> <br/>';
             }
         }
@@ -638,7 +640,7 @@ ManInforme_AddEditFauna.fnGetListPrograma = function (_tipo) {
 
             data.RegEstado = data.RegEstado == "0" || data.RegEstado == "2" ? "2" : "1";
             data.ESTADO_PROGRAMA = $($($(dataHtml).find("td")[2]).find('select')[0]).val() == "SI" ? true : false;
-            data["OBSERVACION"] = $($($(dataHtml).find("td")[3]).find("input")[0]).val();            
+            data["OBSERVACION"] = $($($(dataHtml).find("td")[3]).find("input")[0]).val();
 
             if (_tipo == "ACTIVIDAD_MANEJO") {
                 data["TIPO"] = $($(dataHtml).find("td")[3]).find("#txtItemTipo").val();
@@ -730,6 +732,7 @@ ManInforme_AddEditFauna.fnSaveForm = function () {
             datosInforme.tbPrograma = datosInforme.tbPrograma.concat(ManInforme_AddEditFauna.fnGetListPrograma("MEDIDA_CONSERVACION"));
             datosInforme.tbPrograma = datosInforme.tbPrograma.concat(ManInforme_AddEditFauna.fnGetListPrograma("ZONIFICACION_ESPECIE"));
             datosInforme.tbPrograma = datosInforme.tbPrograma.concat(ManInforme_AddEditFauna.fnGetListPrograma("APROVECHAMIENTO_SOSTENIBLE"));
+            datosInforme.tbEnfermedad = ManInforme_Enfermedad.fnGetEnfermedad();
             datosInforme.tbManejoImpacto = ManInforme_AddEditFauna.fnGetListFauna("MANEJO_IMPACTO");
             datosInforme.tbResponsabilidadSocial = ManInforme_AddEditFauna.fnGetListFauna("RESPONSABILIDAD_SOCIAL");
             datosInforme.tbObligacionContrac = ManInforme_AddEditFauna.fnGetListFauna("OBLIGACION_ACTO");
@@ -964,25 +967,25 @@ function getInputTwo(row) {
             html += 'Materiales y Equipos<input class="form-control form-control-sm" type="text" value="' + row.OBSERVACION2 + '" style="width:100%;"/>';
             break;
         case 57:
-            html = 'Método<input class="form-control form-control-sm" type="text" value="' + row.OBSERVACION + '" style="width:100%;"/> <br/>';            
+            html = 'Método<input class="form-control form-control-sm" type="text" value="' + row.OBSERVACION + '" style="width:100%;"/> <br/>';
             break;
         case 58:
-            html = '<input class="form-control form-control-sm" type="text" value="' + row.OBSERVACION + '" style="width:100%;"/> <br/>';            
+            html = '<input class="form-control form-control-sm" type="text" value="' + row.OBSERVACION + '" style="width:100%;"/> <br/>';
             break;
-    }    
+    }
     return html;
 };
 
-function getSelect(row, selectNo, selectSi) {    
-    var  html = '';
+function getSelect(row, selectNo, selectSi) {
+    var html = '';
     switch (row.COD_PROGRAMA) {
         case 58:
-            html = '';            
+            html = '';
             break;
         default:
             html = '<select class="form-control form-control-sm"><option value="SI" ' + selectSi + '>SI</option><option value="NO" ' + selectNo + '>NO</option></select>';
             break;
-    }    
+    }
     return html;
 };
 
@@ -991,7 +994,7 @@ $(document).ready(function () {
     ManInforme_AddEditFauna.frm = $("#frmManInforme_AddEditFauna");
 
     ManInforme_AddEditFauna.fnInit();
-    ManInforme_AddEditFauna.fnInitDataTable_Detail();
+    ManInforme_AddEditFauna.fnInitDataTable_Detail();    
 
     $('[data-toggle="tooltip"]').tooltip();
 

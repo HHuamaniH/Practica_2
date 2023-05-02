@@ -81,6 +81,7 @@
                             <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#navZoObservatorio" role="tab" aria-controls="home" aria-selected="true">ZoObservatorio</a></li>
                             <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#navObligTitular" role="tab" aria-controls="home" aria-selected="true">Obligaciones del TH</a></li>
                             <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#navIncidencias" role="tab" aria-controls="home" aria-selected="true">Incidencias</a></li>
+                            <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#navEnfermedad" role="tab" aria-controls="home" aria-selected="true">Enfermedades</a></li>
                             <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#navConclusion" role="tab" aria-controls="home" aria-selected="true">Conclusiones</a></li>
                             <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#navInformeDigital" role="tab" aria-controls="home" aria-selected="true">Informe digital</a></li>
                             <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#navMandatos" role="tab" aria-controls="home" aria-selected="true">Mandatos</a></li>
@@ -244,70 +245,70 @@
                                             </div>
                                         </div>
                                         @*<div class="form-row">
-                        <div class="form-group col-md-4">
-                            <div class="card">
-                                <div class="card-header text-small">
-                                    Médico Veterinario
+                <div class="form-group col-md-4">
+                    <div class="card">
+                        <div class="card-header text-small">
+                            Médico Veterinario
+                        </div>
+                        <div class="card-body">
+                            <div class="form-row">
+                                <div class="form-group col-md-6">
+                                    <label for="ddlOdId" class="text-small">Cuenta?</label>
+                                    @Html.DropDownListFor(m => m.ddlCuentaVetMedId, new SelectList(Model.ddlCuentaVetMed, "Value", "Text"), new { @class = "form-control form-control-sm" })
                                 </div>
-                                <div class="card-body">
-                                    <div class="form-row">
-                                        <div class="form-group col-md-6">
-                                            <label for="ddlOdId" class="text-small">Cuenta?</label>
-                                            @Html.DropDownListFor(m => m.ddlCuentaVetMedId, new SelectList(Model.ddlCuentaVetMed, "Value", "Text"), new { @class = "form-control form-control-sm" })
-                                        </div>
-                                        @if (Model.ddlCuentaVetMedId == "0000002")
-                                        {
-                                            <div class="form-group col-md-6" id="divTipoMedVet">
-                                                <label for="ddlOdId" class="text-small">Tipo</label>
-                                                @Html.DropDownListFor(m => m.ddlTipoVisMedId, new SelectList(Model.ddlTipoVisMed, "Value", "Text"), new { @class = "form-control form-control-sm" })
-                                            </div>
-                                        }
-                                        else
-                                        {
-                                            <div class="form-group col-md-6" id="divTipoMedVet" hidden>
-                                                <label for="ddlOdId" class="text-small">Tipo</label>
-                                                @Html.DropDownListFor(m => m.ddlTipoVisMedId, new SelectList(Model.ddlTipoVisMed, "Value", "Text"), new { @class = "form-control form-control-sm" })
-                                            </div>
-                                        }
-
+                                @if (Model.ddlCuentaVetMedId == "0000002")
+                                {
+                                    <div class="form-group col-md-6" id="divTipoMedVet">
+                                        <label for="ddlOdId" class="text-small">Tipo</label>
+                                        @Html.DropDownListFor(m => m.ddlTipoVisMedId, new SelectList(Model.ddlTipoVisMed, "Value", "Text"), new { @class = "form-control form-control-sm" })
                                     </div>
-                                    @if (Model.ddlCuentaVetMedId == "0000002")
-                                    {
-                                        <div class="form-row" id="divVisitaMedVet">
-                                            <div class="form-group col-md-6">
-                                                <label for="txtFechaEntrega" class="text-small">Visitas por Mes</label>
-                                                @Html.TextBoxFor(m => m.txtVisitaporMes, new { @class = "form-control form-control-sm", placeholder = "Ingrese Valor", maxlength = "40" })
-                                            </div>
-                                            <div class="form-group col-md-6">
-                                                <label for="txtFechaEntrega" class="text-small">Observaciones</label>
-                                                @Html.TextBoxFor(m => m.txtObsMedVet, new { @class = "form-control form-control-sm", placeholder = "Ingrese Valor", maxlength = "200" })
-                                            </div>
-                                        </div>
+                                }
+                                else
+                                {
+                                    <div class="form-group col-md-6" id="divTipoMedVet" hidden>
+                                        <label for="ddlOdId" class="text-small">Tipo</label>
+                                        @Html.DropDownListFor(m => m.ddlTipoVisMedId, new SelectList(Model.ddlTipoVisMed, "Value", "Text"), new { @class = "form-control form-control-sm" })
+                                    </div>
+                                }
 
-                                    }
-                                    else
-                                    {
-                                        <div class="form-row" id="divVisitaMedVet" hidden>
-                                            <div class="form-group col-md-6">
-                                                <label for="txtFechaEntrega" class="text-small">Visita por Mes</label>
-                                                @Html.TextBoxFor(m => m.txtVisitaporMes, new { @class = "form-control form-control-sm", placeholder = "Ingrese Valor", maxlength = "40" })
-                                            </div>
-                                            <div class="form-group col-md-6">
-                                                <label for="txtFechaEntrega" class="text-small">Observaciones</label>
-                                                @Html.TextBoxFor(m => m.txtObsMedVet, new { @class = "form-control form-control-sm", placeholder = "Ingrese Valor", maxlength = "200" })
-                                            </div>
-                                        </div>
-                                    }
-
-                                </div>
                             </div>
+                            @if (Model.ddlCuentaVetMedId == "0000002")
+                            {
+                                <div class="form-row" id="divVisitaMedVet">
+                                    <div class="form-group col-md-6">
+                                        <label for="txtFechaEntrega" class="text-small">Visitas por Mes</label>
+                                        @Html.TextBoxFor(m => m.txtVisitaporMes, new { @class = "form-control form-control-sm", placeholder = "Ingrese Valor", maxlength = "40" })
+                                    </div>
+                                    <div class="form-group col-md-6">
+                                        <label for="txtFechaEntrega" class="text-small">Observaciones</label>
+                                        @Html.TextBoxFor(m => m.txtObsMedVet, new { @class = "form-control form-control-sm", placeholder = "Ingrese Valor", maxlength = "200" })
+                                    </div>
+                                </div>
+
+                            }
+                            else
+                            {
+                                <div class="form-row" id="divVisitaMedVet" hidden>
+                                    <div class="form-group col-md-6">
+                                        <label for="txtFechaEntrega" class="text-small">Visita por Mes</label>
+                                        @Html.TextBoxFor(m => m.txtVisitaporMes, new { @class = "form-control form-control-sm", placeholder = "Ingrese Valor", maxlength = "40" })
+                                    </div>
+                                    <div class="form-group col-md-6">
+                                        <label for="txtFechaEntrega" class="text-small">Observaciones</label>
+                                        @Html.TextBoxFor(m => m.txtObsMedVet, new { @class = "form-control form-control-sm", placeholder = "Ingrese Valor", maxlength = "200" })
+                                    </div>
+                                </div>
+                            }
+
                         </div>
-                    </div>*@
+                    </div>
+                </div>
+            </div>*@
                                         @*<div class="form-row">
-                        <div class="col-md-6">
-                            @Html.Partial("~/Areas/Supervision/Views/ManInforme/Render/_renderPersonalTecProf.cshtml", Model.tbPersonalTecProf)
-                        </div>
-                    </div>*@
+                <div class="col-md-6">
+                    @Html.Partial("~/Areas/Supervision/Views/ManInforme/Render/_renderPersonalTecProf.cshtml", Model.tbPersonalTecProf)
+                </div>
+            </div>*@
                                         <br />
                                         <div class="form-row">
                                             <div class="col-md-12">
@@ -323,6 +324,16 @@
                                     <div class="card-header text-small">Datos de la Supervisión</div>
                                     <div class="card-body">
                                         @Html.Partial("~/Areas/Supervision/Views/ManInforme/Render/_renderDatosSupervision.cshtml", Model.vmDatoSupervision)
+                                    </div>
+                                    <div class="form-row" style="margin-top:10px;">
+                                        <div class="form-group col-md-6">
+                                            <label for="txtAsunto" class="text-small">Asunto</label>
+                                            @Html.TextAreaFor(m => m.txtAsunto, new { @class = "form-control form-control-sm", @rows = "7" })
+                                        </div>
+                                        <div class="form-group col-md-6">
+                                            <label for="txtContenido" class="text-small">Contenido</label>
+                                            @Html.TextAreaFor(m => m.txtContenido, new { @class = "form-control form-control-sm", @rows = "7" })
+                                        </div>
                                     </div>
                                     <div class="card-header text-small">Licencia de Funcionamiento</div>
                                     <div class="card-body">
@@ -396,15 +407,15 @@
                                     <div class="card-header text-small">Fines de Creación</div>
                                     <div class="card-body">
                                         @*<div class="form-row">
-                        <div class="form-group col-md-6">
-                            <div style="margin-top:7px;">
-                                <div class="form-check form-check-inline">
-                                    @Html.CheckBoxFor(m => m.chkTodos, new { @class = "form-check-input", style = "width:15px;height:16px;" })
-                                    <label class="form-check-label" for="chkTodos">Todos los indicadores</label>
-                                </div>
-                            </div>
+                <div class="form-group col-md-6">
+                    <div style="margin-top:7px;">
+                        <div class="form-check form-check-inline">
+                            @Html.CheckBoxFor(m => m.chkTodos, new { @class = "form-check-input", style = "width:15px;height:16px;" })
+                            <label class="form-check-label" for="chkTodos">Todos los indicadores</label>
                         </div>
-                    </div>*@
+                    </div>
+                </div>
+            </div>*@
                                         <div class="form-row">
                                             <div class="form-group col-md-6">
                                                 <label for="txtObjetivoActual" class="text-small">Objetivos Actuales</label>
@@ -1606,6 +1617,10 @@
                                         </div>
                                     </div>
                                 </div>
+                            </div>
+                            <div class="tab-pane fade show" id="navEnfermedad" role="tabpanel" aria-labelledby="nav-home-tab">
+                                @Html.Partial("~/Areas/Supervision/Views/ManInforme/Render/_renderEnfermedades.cshtml", Model.tbEnfermedad
+                                                        , new ViewDataDictionary { { "TITULO", "" } })
                             </div>
                             <div class="tab-pane fade" id="navInformeDigital" role="tabpanel" aria-labelledby="nav-home-tab">
                                 @Html.Partial("~/Areas/Supervision/Views/ManInforme/_InformeDigital.cshtml")

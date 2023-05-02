@@ -4580,6 +4580,21 @@ namespace CapaDatos.DOC
                     }
                 }
 
+                #region ListEnfermedad
+                if (oCEntidad.ListEnfermedad != null)
+                {
+                    foreach (var loDatos in oCEntidad.ListEnfermedad)
+                    {
+                        ocampoSuper = new CEntidad();
+                        ocampoSuper.COD_INFORME = OUTPUTPARAM01.Split('|')[0];
+                        ocampoSuper.COD_ENFERMEDAD = loDatos.COD_ENFERMEDAD;
+                        ocampoSuper.OBSERVACION = loDatos.OBSERVACION;
+                        dBOracle.ManExecute(cn, tr, "DOC_OSINFOR_ERP_MIGRACION.ISUPERVISION_DET_ENFERMEDAD_Grabar", ocampoSuper);
+                    }
+                }
+                #endregion
+
+
                 tr.Commit();
                 return OUTPUTPARAM01;
             }
@@ -5080,6 +5095,8 @@ namespace CapaDatos.DOC
                             lsCEntidad.txtOtrosMaterialesDesinf = "";
                             lsCEntidad.BUEN_DESEMPENIO = dr.GetInt32(dr.GetOrdinal("BUEN_DESEMPENIO"));
                             lsCEntidad.ARCHIVA_INFORME = (!dr.IsDBNull(dr.GetOrdinal("ARCHIVA_INFORME"))) ? dr.GetInt32(dr.GetOrdinal("ARCHIVA_INFORME")) : -1;
+                            lsCEntidad.ASUNTO = dr.GetString(dr.GetOrdinal("ASUNTO"));
+                            lsCEntidad.CONTENIDO = dr.GetString(dr.GetOrdinal("CONTENIDO"));
                         }
                         //Lista de Supervisor
                         //2
@@ -5117,7 +5134,7 @@ namespace CapaDatos.DOC
                             }
                         }
                         //3
-                        dr.NextResult();                        
+                        dr.NextResult();
                         if (dr.HasRows)
                         {
                             int pt0 = dr.GetOrdinal("COD_AREA");
@@ -5213,7 +5230,7 @@ namespace CapaDatos.DOC
                             }
                         }
                         //6
-                        dr.NextResult();                        
+                        dr.NextResult();
                         if (dr.HasRows)
                         {
                             int pt0 = dr.GetOrdinal("COD_TDESCRIPTIVA");
@@ -5230,7 +5247,7 @@ namespace CapaDatos.DOC
                             }
                         }
                         //7
-                        dr.NextResult();                        
+                        dr.NextResult();
                         if (dr.HasRows)
                         {
                             int pt0 = dr.GetOrdinal("COD_TDESCRIPTIVA");
@@ -5797,7 +5814,25 @@ namespace CapaDatos.DOC
                             }
                         }
                         #endregion
-
+                        //31
+                        #region "ListEnfermedad"
+                        dr.NextResult();
+                        if (dr.HasRows)
+                        {
+                            CapaEntidad.DOC.Ent_INFORME_ENFERMEDAD ocampoEnf;
+                            while (dr.Read())
+                            {
+                                ocampoEnf = new CapaEntidad.DOC.Ent_INFORME_ENFERMEDAD();
+                                ocampoEnf.COD_ENFERMEDAD = dr.GetInt32(dr.GetOrdinal("COD_ENFERMEDAD"));
+                                ocampoEnf.GRUPO = dr.GetString(dr.GetOrdinal("GRUPO"));
+                                ocampoEnf.TIPO = dr.GetString(dr.GetOrdinal("TIPO"));
+                                ocampoEnf.OBSERVACION = dr.GetString(dr.GetOrdinal("OBSERVACION"));
+                                ocampoEnf.DESCRIPCION = dr.GetString(dr.GetOrdinal("DESCRIPCION"));
+                                ocampoEnf.RegEstado = 0;
+                                lsCEntidad.ListEnfermedad.Add(ocampoEnf);
+                            }
+                        }
+                        #endregion
                     }
                     return lsCEntidad;
                 }
@@ -13294,6 +13329,7 @@ namespace CapaDatos.DOC
                         lsCEntidad.ListAprovSostenible = new List<CEntidad>();
                         lsCEntidad.ListAvistamientoFauna = new List<CEntidad>();
                         lsCEntidad.ListISuperExsituOBLIGF = new List<CapaEntidad.DOC.Ent_ISUPERVISION_EXSITU_INFRA_AREA>();
+                        lsCEntidad.ListEnfermedad = new List<Ent_INFORME_ENFERMEDAD>();
                         CEntidad ocampoEnt;
 
                         #region "Datos Generales"
@@ -13702,6 +13738,24 @@ namespace CapaDatos.DOC
                             }
                         }
                         #endregion
+                        #region "ListEnfermedad"
+                        dr.NextResult();
+                        if (dr.HasRows)
+                        {
+                            CapaEntidad.DOC.Ent_INFORME_ENFERMEDAD ocampoEnf;
+                            while (dr.Read())
+                            {
+                                ocampoEnf = new CapaEntidad.DOC.Ent_INFORME_ENFERMEDAD();
+                                ocampoEnf.COD_ENFERMEDAD = dr.GetInt32(dr.GetOrdinal("COD_ENFERMEDAD"));
+                                ocampoEnf.GRUPO = dr.GetString(dr.GetOrdinal("GRUPO"));
+                                ocampoEnf.TIPO = dr.GetString(dr.GetOrdinal("TIPO"));
+                                ocampoEnf.OBSERVACION = dr.GetString(dr.GetOrdinal("OBSERVACION"));
+                                ocampoEnf.DESCRIPCION = dr.GetString(dr.GetOrdinal("DESCRIPCION"));
+                                ocampoEnf.RegEstado = 0;
+                                lsCEntidad.ListEnfermedad.Add(ocampoEnf);
+                            }
+                        }
+                        #endregion
                     }
                 }
                 return lsCEntidad;
@@ -13716,7 +13770,6 @@ namespace CapaDatos.DOC
             OracleTransaction tr = null;
             String OUTPUTPARAM01 = "";
             CEntidad ocampoSuper;
-
             try
             {
                 tr = cn.BeginTransaction();
@@ -14018,7 +14071,7 @@ namespace CapaDatos.DOC
                             ocampoSuper.COD_INFORME = OUTPUTPARAM01.Split('|')[0];
                             ocampoSuper.COD_SECUENCIAL = loDatos.COD_SECUENCIAL;
                             ocampoSuper.EVALUACION = loDatos.EVALUACION;
-                            ocampoSuper.ZONA = loDatos.ZONA;                            
+                            ocampoSuper.ZONA = loDatos.ZONA;
                             ocampoSuper.COORDENADA_ESTE = loDatos.COORDENADA_ESTE;
                             ocampoSuper.COORDENADA_NORTE = loDatos.COORDENADA_NORTE;
                             ocampoSuper.DESCRIPCION = loDatos.DESCRIPCION;
@@ -14145,6 +14198,19 @@ namespace CapaDatos.DOC
                         oCampoExsitu.COD_UCUENTA = oCEntidad.COD_UCUENTA;
                         oCampoExsitu.RegEstado = loDatos.RegEstado;
                         dBOracle.ManExecute(cn, tr, "DOC_OSINFOR_ERP_MIGRACION.spISUPERVISION_OBLIG_TITULAR_FAUNAGrabar", oCampoExsitu);
+                    }
+                }
+                #endregion
+                #region ListEnfermedad
+                if (oCEntidad.ListEnfermedad != null)
+                {
+                    foreach (var loDatos in oCEntidad.ListEnfermedad)
+                    {
+                        ocampoSuper = new CEntidad();
+                        ocampoSuper.COD_INFORME = OUTPUTPARAM01.Split('|')[0];
+                        ocampoSuper.COD_ENFERMEDAD = loDatos.COD_ENFERMEDAD;
+                        ocampoSuper.OBSERVACION = loDatos.OBSERVACION;           
+                        dBOracle.ManExecute(cn, tr, "DOC_OSINFOR_ERP_MIGRACION.ISUPERVISION_DET_ENFERMEDAD_Grabar", ocampoSuper);
                     }
                 }
                 #endregion
@@ -14497,7 +14563,7 @@ namespace CapaDatos.DOC
                         lsCEntidad.ListObligacionTitular = new List<CapaEntidad.DOC.Ent_INFORME_OBLIGTITULAR>();
                         lsCEntidad.ListDesplazamientoInforme = new List<CEntidad>();
                         lsCEntidad.ListMandatos = new List<Ent_MANDATOS>();
-                        CEntidad ocampoEnt;                        
+                        CEntidad ocampoEnt;
 
                         #region "Datos Generales"
                         if (dr.HasRows)
