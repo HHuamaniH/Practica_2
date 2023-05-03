@@ -440,7 +440,7 @@ namespace SIGOFCv3.Areas.Fiscalizacion.Controllers
         {
             string codCuenta = (ModelSession.GetSession())[0].COD_UCUENTA;
             CLogica exeBus = new CLogica();
-            dto.ListPOA = vmRD.ListPOA;
+            //dto.ListPOA = vmRD.ListPOA;
             ListResult result = exeBus.GuardarDatosRD(dto, codCuenta);
             return Json(result);
         }

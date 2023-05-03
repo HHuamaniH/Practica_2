@@ -1793,10 +1793,15 @@ namespace CapaLogica.DOC
                         oCEntResodirec.ListEliTABLA.Add(eli);
                     }
                 }
+
                 oCEntResodirec.ListPOAs = new List<CEntidad>();
-                if (_dto.ListPOA != null)
+                VM_Resodirec vmPoa = new VM_Resodirec();
+                vmPoa.listInformes = _dto.listInformes;
+                initPoas(vmPoa);
+
+                if (vmPoa.ListPOA != null)
                 {
-                    foreach (Ent_RESODIREC poa in _dto.ListPOA)
+                    foreach (Ent_RESODIREC poa in vmPoa.ListPOA)
                     {
                         Ent_RESODIREC item = new Ent_RESODIREC();
                         item.NUM_POA = poa.NUM_POA;
@@ -1813,12 +1818,11 @@ namespace CapaLogica.DOC
                                 }
                             }
                         }
-                        //item.PUBLICAR = _dto.chkPublicar;
+
                         oCEntResodirec.ListPOAs.Add(item);
                     }
-                }                
+                }
 
-                //ListPOAChecked
                 var estado_final = this.RegGrabarResodirec(oCEntResodirec);
                 result.AddResultado("Guardo Correctamente", true, new List<string>() { estado_final });
             }
