@@ -77,11 +77,11 @@
                             <li class="nav-item"><a class="nav-link active" data-toggle="tab" href="#navDatos" role="tab" aria-controls="home" aria-selected="true">Datos Generales</a></li>
                             <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#navInfraestructura" role="tab" aria-controls="home" aria-selected="true">Infraestructura</a></li>
                             <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#navCautiverio" role="tab" aria-controls="home" aria-selected="true">Manejo</a></li>
+                            <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#navZoonosis" role="tab" aria-controls="home" aria-selected="true">Zoonosis</a></li>
                             <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#navImagenes" role="tab" aria-controls="home" aria-selected="true">Imágenes</a></li>
                             <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#navZoObservatorio" role="tab" aria-controls="home" aria-selected="true">ZoObservatorio</a></li>
                             <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#navObligTitular" role="tab" aria-controls="home" aria-selected="true">Obligaciones del TH</a></li>
                             <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#navIncidencias" role="tab" aria-controls="home" aria-selected="true">Incidencias</a></li>
-                            <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#navEnfermedad" role="tab" aria-controls="home" aria-selected="true">Enfermedades</a></li>
                             <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#navConclusion" role="tab" aria-controls="home" aria-selected="true">Conclusiones</a></li>
                             <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#navInformeDigital" role="tab" aria-controls="home" aria-selected="true">Informe digital</a></li>
                             <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#navMandatos" role="tab" aria-controls="home" aria-selected="true">Mandatos</a></li>
@@ -1618,7 +1618,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="tab-pane fade show" id="navEnfermedad" role="tabpanel" aria-labelledby="nav-home-tab">
+                            <div class="tab-pane fade show" id="navZoonosis" role="tabpanel" aria-labelledby="nav-home-tab">
                                 @Html.Partial("~/Areas/Supervision/Views/ManInforme/Render/_renderEnfermedades.cshtml", Model.tbEnfermedad
                                                         , new ViewDataDictionary { { "TITULO", "" } })
                             </div>
