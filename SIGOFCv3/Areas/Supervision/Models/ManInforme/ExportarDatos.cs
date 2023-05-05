@@ -293,6 +293,178 @@ namespace SIGOFCv3.Areas.Supervision.Models.ManInforme
             }
             return result;
         }
+
+        public static ListResult CoberturaBoscosa(string asCodInforme, string asCodCNotificacion)
+        {
+            ListResult result = new ListResult();
+
+            try
+            {
+                CEntidad paramCap = new CEntidad();
+                CLogica exeCap = new CLogica();
+                paramCap.TIPO_REPORTE = "COBERTURA_BOSCOSA";
+                paramCap.COD_INFORME = asCodInforme;
+                paramCap.COD_CNOTIFICACION = asCodCNotificacion;
+
+                List<Dictionary<string, string>> olResult = exeCap.ReportesInforme(paramCap);
+
+                //if (olResult.Count > 0)
+                //{
+                    string rutaBase = HttpContext.Current.Server.MapPath("~/Archivos/Plantilla/");
+                    string nombreFile = DateTime.Now.Year.ToString() + DateTime.Now.Month.ToString() + DateTime.Now.Day.ToString() + DateTime.Now.Hour.ToString() + DateTime.Now.Minute.ToString() + DateTime.Now.Second.ToString() + DateTime.Now.Millisecond.ToString() + ".xlsx";
+                    string rutaExcel = rutaBase + nombreFile;
+                    string rutaExcelBase = rutaBase + "CoberturaBoscosa.xlsx";
+
+                    try
+                    {
+                        File.Delete(@rutaExcel);
+                        File.Copy(@rutaExcelBase, @rutaExcel);
+                    }
+                    catch (IOException ix)
+                    {
+                        throw new Exception(ix.Message);
+                    }
+
+                    //Creamos la cadena de conexión con el fichero excel
+                    OleDbConnectionStringBuilder cb = new OleDbConnectionStringBuilder();
+                    cb.DataSource = rutaExcel;
+                    if (Path.GetExtension(rutaExcel).ToUpper() == ".XLS")
+                    {
+                        cb.Provider = "Microsoft.Jet.OLEDB.4.0";
+                        cb.Add("Extended Properties", "Excel 8.0;HDR=YES;IMEX=0;");
+                    }
+                    else if (Path.GetExtension(rutaExcel).ToUpper() == ".XLSX")
+                    {
+                        cb.Provider = "Microsoft.ACE.OLEDB.12.0";
+                        cb.Add("Extended Properties", "Excel 12.0 Xml;HDR=YES;IMEX=0;");
+                    }
+
+                    //using (OleDbConnection conn = new OleDbConnection(cb.ConnectionString))
+                    //{
+                    //    string insertar = "";
+                    //    int i = 1;
+                    //    //Abrimos la conexión
+                    //    conn.Open();
+                    //    //Creamos la ficha
+                    //    using (OleDbCommand cmd = conn.CreateCommand())
+                    //    {
+                    //        cmd.CommandType = CommandType.Text;
+                    //        //Construyendo las Cabeceras
+                    //        foreach (var itemPart in olResult)
+                    //        {
+                    //            insertar = "";
+                    //            insertar = insertar + "'" + (itemPart["ACTIVIDAD"] ?? "") + "'";
+                    //            insertar = insertar + ",'" + (itemPart["AREA"] ?? "") + "'";                                
+                    //            insertar = insertar + ",'" + (itemPart["ZONA"] ?? "") + "'";
+                    //            insertar = insertar + ",'" + (itemPart["AUTORIZADO"] ?? "") + "'";
+                    //            insertar = insertar + ",'" + (itemPart["COORDENADA_ESTE"] ?? "") + "'";
+                    //            insertar = insertar + ",'" + (itemPart["COORDENADA_NORTE"] ?? "") + "'";
+                    //            insertar = insertar + ",'" + ((itemPart["OBSERVACION"] ?? "").Length > 254 ? itemPart["OBSERVACION"].Substring(0, 254) : itemPart["OBSERVACION"]) + "'";
+                    //            cmd.CommandText = "INSERT INTO [Datos$A" + i.ToString().Trim() + ":AZ" + (olResult.Count + 1).ToString() + "] VALUES (" + insertar + ")";
+                    //            cmd.ExecuteNonQuery();
+                    //        }
+                    //        //Cerramos la conexión
+                    //        conn.Close();
+                    //    }
+                    //}
+
+                    result.success = true;
+                    result.msj = nombreFile;
+                //}
+                //else { throw new Exception("No se encontraron registros"); }
+            }
+            catch (Exception ex)
+            {
+                result.success = false;
+                result.msj = ex.Message;
+            }
+            return result;
+        } 
+        
+        public static ListResult OtrosPuntosEval(string asCodInforme, string asCodCNotificacion)
+        {
+            ListResult result = new ListResult();
+
+            try
+            {
+                CEntidad paramCap = new CEntidad();
+                CLogica exeCap = new CLogica();
+                paramCap.TIPO_REPORTE = "OTROS_PUNTOS_EVAL";
+                paramCap.COD_INFORME = asCodInforme;
+                paramCap.COD_CNOTIFICACION = asCodCNotificacion;
+
+                List<Dictionary<string, string>> olResult = exeCap.ReportesInforme(paramCap);
+
+                //if (olResult.Count > 0)
+                //{
+                    string rutaBase = HttpContext.Current.Server.MapPath("~/Archivos/Plantilla/");
+                    string nombreFile = DateTime.Now.Year.ToString() + DateTime.Now.Month.ToString() + DateTime.Now.Day.ToString() + DateTime.Now.Hour.ToString() + DateTime.Now.Minute.ToString() + DateTime.Now.Second.ToString() + DateTime.Now.Millisecond.ToString() + ".xlsx";
+                    string rutaExcel = rutaBase + nombreFile;
+                    string rutaExcelBase = rutaBase + "Otros_Puntos_Eval.xlsx";
+
+                    try
+                    {
+                        File.Delete(@rutaExcel);
+                        File.Copy(@rutaExcelBase, @rutaExcel);
+                    }
+                    catch (IOException ix)
+                    {
+                        throw new Exception(ix.Message);
+                    }
+
+                    //Creamos la cadena de conexión con el fichero excel
+                    OleDbConnectionStringBuilder cb = new OleDbConnectionStringBuilder();
+                    cb.DataSource = rutaExcel;
+                    if (Path.GetExtension(rutaExcel).ToUpper() == ".XLS")
+                    {
+                        cb.Provider = "Microsoft.Jet.OLEDB.4.0";
+                        cb.Add("Extended Properties", "Excel 8.0;HDR=YES;IMEX=0;");
+                    }
+                    else if (Path.GetExtension(rutaExcel).ToUpper() == ".XLSX")
+                    {
+                        cb.Provider = "Microsoft.ACE.OLEDB.12.0";
+                        cb.Add("Extended Properties", "Excel 12.0 Xml;HDR=YES;IMEX=0;");
+                    }
+
+                    //using (OleDbConnection conn = new OleDbConnection(cb.ConnectionString))
+                    //{
+                    //    string insertar = "";
+                    //    int i = 1;
+                    //    //Abrimos la conexión
+                    //    conn.Open();
+                    //    //Creamos la ficha
+                    //    using (OleDbCommand cmd = conn.CreateCommand())
+                    //    {
+                    //        cmd.CommandType = CommandType.Text;
+                    //        //Construyendo las Cabeceras
+                    //        foreach (var itemPart in olResult)
+                    //        {
+                    //            insertar = "";
+                    //            insertar = insertar + "'" + (itemPart["EVALUACION"] ?? "") + "'";                                
+                    //            insertar = insertar + ",'" + (itemPart["ZONA"] ?? "") + "'";                                
+                    //            insertar = insertar + ",'" + (itemPart["COORDENADA_ESTE"] ?? "") + "'";
+                    //            insertar = insertar + ",'" + (itemPart["COORDENADA_NORTE"] ?? "") + "'";
+                    //            insertar = insertar + ",'" + ((itemPart["DESCRIPCION"] ?? "").Length > 254 ? itemPart["DESCRIPCION"].Substring(0, 254) : itemPart["OBSERVACION"]) + "'";
+                    //            cmd.CommandText = "INSERT INTO [Datos$A" + i.ToString().Trim() + ":AZ" + (olResult.Count + 1).ToString() + "] VALUES (" + insertar + ")";
+                    //            cmd.ExecuteNonQuery();
+                    //        }
+                    //        //Cerramos la conexión
+                    //        conn.Close();
+                    //    }
+                    //}
+
+                    result.success = true;
+                    result.msj = nombreFile;
+               // }
+               // else { throw new Exception("No se encontraron registros"); }
+            }
+            catch (Exception ex)
+            {
+                result.success = false;
+                result.msj = ex.Message;
+            }
+            return result;
+        }
         public static ListResult VerticePOACampo(string asCodInforme, int aiNumPoa)
         {
             ListResult result = new ListResult();

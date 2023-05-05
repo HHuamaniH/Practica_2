@@ -19,22 +19,25 @@
                         @Html.HiddenFor(m => m.hdfNumPoa)
                         @Html.HiddenFor(m => m.hdfCodMTipo)
                         @Html.HiddenFor(m => m.hdfCodNoPoa)
-                        <div id="dvOpcionPoaResultado">
-                            <div class="card-header text-small">Evaluación de árboles</div>
-                            <div class="card-body">
-                                <div class="form-row">
-                                    <div class="col-md-12">
-                                        @Html.Partial("~/Areas/Supervision/Views/ManInforme/Render/_renderEvalArbolAdicional.cshtml", Model.tbEvalArbolAdicional)
+                        @if (Model.hdfCodMTipo != "0000013" && Model.hdfCodMTipo != "0000028")
+                        {
+                            <div id="dvOpcionPoaResultado">
+                                <div class="card-header text-small">Evaluación de árboles</div>
+                                <div class="card-body">
+                                    <div class="form-row">
+                                        <div class="col-md-12">
+                                            @Html.Partial("~/Areas/Supervision/Views/ManInforme/Render/_renderEvalArbolAdicional.cshtml", Model.tbEvalArbolAdicional)
+                                        </div>
                                     </div>
-                                </div>
-                                <br />
-                                <div class="form-row">
-                                    <div class="col-md-12">
-                                        @Html.Partial("~/Areas/Supervision/Views/ManInforme/Render/_renderEvalArbolNoAutorizado.cshtml", Model.tbEvalArbolNoAutorizado)
+                                    <br />
+                                    <div class="form-row">
+                                        <div class="col-md-12">
+                                            @Html.Partial("~/Areas/Supervision/Views/ManInforme/Render/_renderEvalArbolNoAutorizado.cshtml", Model.tbEvalArbolNoAutorizado)
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        }
                     </div>
                 </form>
             </div>

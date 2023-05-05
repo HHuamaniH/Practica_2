@@ -1,0 +1,149 @@
+﻿@model List<CapaEntidad.DOC.Ent_INFORME>
+
+<style type="text/css">
+    #tbRenderAprovSostenible_wrapper {
+        padding: 0px;
+    }
+</style>
+
+<script type="text/javascript">
+    var _renderAprovSostenible = {};
+    _renderAprovSostenible.tbEliTABLA = [];
+
+    _renderAprovSostenible.fnInitDataTable_Detail = function () {
+        var columns_label = [], columns_data = [], options = {};
+
+        columns_label = ["Especie", "Período y cuota de saca", "Personal encargado", "Método de caza o captura", "Sistema de marcaje o identificación", "Partes o derivados a aprovechar"];
+        //columns_data = ["ESPECIE", "PERIODO", "PERSONAL", "METODO", "SISTEMA", "PARTES"];
+        columns_data = ["ESPECIE", "PERIODO", "PERSONAL", "METODO", "SISTEMA", "PARTES"];
+        options = {
+            page_length: 10, row_index: true, row_edit: true, row_fnEdit: "_renderAprovSostenible.fnAddEdit(this)"
+            , row_delete: true, row_fnDelete: "_renderAprovSostenible.fnDelete(this)"         
+            , export_title: $("#tbRenderAprovSostenible").find("thead tr")[0].innerText.trim()
+            , page_sort: true
+            , columnDefs: [{
+                target: 1,
+                visible: false,
+            }]
+        };
+        _renderAprovSostenible.dtAprovSostenible = utilDt.fnLoadDataTable_Detail($("#tbRenderAprovSostenible"), columns_label, columns_data, options);
+    }
+
+    _renderAprovSostenible.fnAddEdit = function (obj) {
+        var url = urlLocalSigo + "Supervision/ManInforme/_AprovSostenible";
+        var option = { url: url, type: 'POST', datos: { asCodCNotificacion: '@ViewData["cod_cnotificacion"]' }, divId: "mdlManInforme_AprovSostenible" };
+        utilSigo.fnOpenModal(option, function () {
+            _AproSostenible.fnSaveForm = function (data) {
+                if (data != null) {
+                    var dt = _renderAprovSostenible.dtAprovSostenible;
+
+                    if (obj == null || obj == "") {//Nuevo Registro
+                        if (!utilDt.existValorSearch(_renderAprovSostenible.dtAprovSostenible, "ESPECIE", data["ESPECIE"])) {
+                            dt.rows.add([data]).draw();
+                            dt.page('last').draw('page');
+                            utilSigo.toastSuccess("Exito", "Datos guardados correctamente");
+                        } else {
+                            utilSigo.toastWarning("Error", "La especie ya se encuentra registrado");
+                        }
+                    } else {//Modificar
+                        var row = dt.row($(obj).parents('tr')).data();
+                        row = data;
+                        dt.row($(obj).parents('tr')).data(row).draw(false);
+                        utilSigo.toastSuccess("Exito", "Datos actualizados correctamente");
+                    }
+                    $("#mdlManInforme_AprovSostenible").modal('hide');
+                } else {
+                    utilSigo.toastError("Error", "No se pudieron guardar los datos");
+                }
+            }
+
+            if (obj != null && obj != "") {
+                var data = _renderAprovSostenible.dtAprovSostenible.row($(obj).parents('tr')).data();
+                _AproSostenible.fnInit(utilSigo.fnConvertArrayToObject(data));
+            } else { _AproSostenible.fnInit(""); }
+        });
+    }
+
+    _renderAprovSostenible.fnDeleteAll = function () {
+        var rows, countFilas, data;
+
+        rows = _renderAprovSostenible.dtAprovSostenible.$("tr");
+        countFilas = rows.length;
+        if (countFilas > 0) {
+            utilSigo.dialogConfirm("", "Está seguro de Eliminar Todos los Registros?", function (r) {
+                if (r) {
+                    $.each(rows, function (i, o) {
+                        data = _renderAprovSostenible.dtAprovSostenible.row($(o)).data();
+                        if (data["RegEstado"] == "0" || data["RegEstado"] == "2") {
+                            _renderAprovSostenible.tbEliTABLA.push({
+                                EliTABLA: "ISUPERVISION_DET_AprovSostenible",
+                                COD_SECUENCIAL: data["COD_SECUENCIAL"]
+                            });
+                        }
+                    });
+                    _renderAprovSostenible.dtAprovSostenible.clear().draw();
+                }
+            });
+        } else {
+            utilSigo.toastWarning("Aviso", "No se encontraron registros a eliminar");
+        }
+    }
+
+    _renderAprovSostenible.fnDelete = function (obj) {
+        var data;
+
+        data = _renderAprovSostenible.dtAprovSostenible.row($(obj).parents('tr')).data();
+        if (data["RegEstado"] == "0" || data["RegEstado"] == "2") {
+            _renderAprovSostenible.tbEliTABLA.push({
+                EliTABLA: "ISUPERVISION_DET_AprovSostenible",
+                COD_SECUENCIAL: data["COD_SECUENCIAL"]
+            });
+        }
+        _renderAprovSostenible.dtAprovSostenible.row($(obj).parents('tr')).remove().draw(false);
+    }
+
+    _renderAprovSostenible.fnGetList = function () {
+        var list = [], rows, countFilas, data;
+
+        rows = _renderAprovSostenible.dtAprovSostenible.$("tr");
+        countFilas = rows.length;
+        if (countFilas > 0) {
+            $.each(rows, function (i, o) {
+                data = _renderAprovSostenible.dtAprovSostenible.row($(o)).data();
+                if (data["RegEstado"] == "1" || data["RegEstado"] == "2") {
+                    list.push(utilSigo.fnConvertArrayToObject(data));
+                }
+            });
+        }
+        return list;
+    }
+
+    _renderAprovSostenible.fnGetListEliTABLA = function () { return _renderAprovSostenible.tbEliTABLA }
+
+    $(document).ready(function () {
+        _renderAprovSostenible.frm = $("#frmRenderAprovSostenible");
+
+        _renderAprovSostenible.fnInitDataTable_Detail();
+
+        _renderAprovSostenible.dtAprovSostenible.rows.add(JSON.parse('@Html.Raw(Json.Encode(@Model))')).draw();
+    });
+</script>
+
+<div id="frmRenderAprovSostenible">
+    <div class="table-responsive">
+        <table id="tbRenderAprovSostenible" style="width:100%;margin:0px !important;" class="table table-hover table-bordered">
+            <thead>
+                <tr>
+                    <th colspan="12" class="text-sm-left">
+                        <div class="form-inline">
+                            <i class="fa mx-2 fa-lg fa-file-o" style="cursor:pointer;" onclick="_renderAprovSostenible.fnAddEdit('');" data-toggle="tooltip" data-placement="top" title="Nuevo"></i>                            
+                            <strong>Aprovechamiento sostenible
+                            </strong>
+                        </div>
+                    </th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
+</div>

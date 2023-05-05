@@ -384,7 +384,7 @@ namespace CapaEntidad.ViewModel
 
         public List<Ent_GENEPERSONA> tbRelPelCentroCria { get; set; }
         public Ent_MANDATOS oMandatos { get; set; }
-        public List<Ent_MANDATOS> ListMandatos { get; set; }
+        public List<Ent_MANDATOS> ListMandatos { get; set; }        
 
         public VM_Informe_ExSitu()
         {
@@ -642,7 +642,14 @@ namespace CapaEntidad.ViewModel
         public string ddlTipoInformeId { get; set; }
         public List<Ent_MANDATOS> tbMandatos { get; set; }
         public List<Ent_MANDATOS> ListMandatos { get; set; }
-
+        public List<Ent_INFORME> tbVerticeTHCampo { get; set; }
+        public List<Ent_INFORME> tbCoberturaBoscosa { get; set; }
+        public List<Ent_INFORME> tbOtrosPtosEval { get; set; }
+        public List<Ent_INFORME> tbInfraestructura { get; set; }
+        public List<Ent_INFORME> tbZonifDistribEspecie { get; set; }
+        public List<Ent_INFORME> tbAprovSostenible { get; set; }
+        public List<Ent_INFORME> tbRegFauna { get; set; }
+        public List<Ent_INFORME_OBLIGTITULAR> tbObligacionTitular { get; set; }
         public VM_Informe_Fauna()
         {
             vmControlCalidad = new VM_ControlCalidad_2();
@@ -666,6 +673,14 @@ namespace CapaEntidad.ViewModel
             tbObligacionContrac = new List<Ent_INFORME>();
             tbDesplazamiento = new List<Ent_INFORME>();
             tbMandatos = new List<Ent_MANDATOS>();
+            tbVerticeTHCampo = new List<Ent_INFORME>();
+            tbCoberturaBoscosa = new List<Ent_INFORME>();
+            tbOtrosPtosEval = new List<Ent_INFORME>();
+            tbInfraestructura = new List<Ent_INFORME>();
+            tbZonifDistribEspecie = new List<Ent_INFORME>();
+            tbAprovSostenible = new List<Ent_INFORME>();
+            tbObligacionTitular = new List<Ent_INFORME_OBLIGTITULAR>();
+            tbRegFauna = new List<Ent_INFORME>();
         }
     }
 

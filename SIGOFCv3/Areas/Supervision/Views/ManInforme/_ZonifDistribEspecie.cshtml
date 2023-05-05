@@ -1,0 +1,46 @@
+﻿<script src="~/Areas/Supervision/js/ManInforme/_ZonifDistribEspecie.js"></script>
+
+<div class="modal-dialog" role="document">
+    <div class="modal-content">
+        <div class="modal-header text-small" style="cursor:move;">
+            <span>Zonificacion de la Distribución de la Especie</span>
+            <i class="fa fa-close" style="cursor:pointer;" data-dismiss="modal" aria-label="Close"></i>
+        </div>
+        <div class="modal-body">
+            <form id="frmItemZonifDistribEspecie">
+                @Html.Hidden("hdfRegEstadoZDE")              
+                @Html.Hidden("hdfCodSecuencialZDE")              
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label for="txtZona" class="text-small">Zona</label>
+                        @Html.TextBox("txtZona", "", new { @class = "form-control form-control-sm", maxlength = "200", oninput = "this.value = this.value.replace(/[^áéíóúa-zÁÉÍÓÚA-Z 0-9]/,'')" })
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="txtActividad" class="text-small">Caracteristicas</label>
+                        @Html.TextBox("txtCaracteristicas", "", new { @class = "form-control form-control-sm", maxlength = "200", oninput = "this.value = this.value.replace(/[^áéíóúa-zÁÉÍÓÚA-Z 0-9]/,'')" })
+                    </div>
+                </div>                
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label for="txtCoordEste" class="text-small">Coordenada Este</label>
+                        @Html.TextBox("txtCoordEste", "", new { @class = "form-control form-control-sm", maxlength = "6", type = "number", min = "1" })
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="txtCoordNorte" class="text-small">Coordenada Norte</label>
+                        @Html.TextBox("txtCoordNorte", "", new { @class = "form-control form-control-sm", maxlength = "7", type = "number", min = "1" })
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-12">
+                        <label for="txtObservacionCampo" class="text-small">Tipo de Señalización</label>
+                        @Html.TextBox("txtTipoSenial", "", new { @class = "form-control form-control-sm", maxlength = "200", oninput = "this.value = this.value.replace(/[^áéíóúa-zÁÉÍÓÚA-Z 0-9]/,'')" })
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-primary btn-sm" onclick="_ZonifDistribEspecie.fnSubmitForm()">Guardar</button>
+            <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Cancelar</button>
+        </div>
+    </div>
+</div>

@@ -56,8 +56,14 @@ _AvistamientoFauna.fnCustomValidateForm = function () {
     return true;
 }
 
-_AvistamientoFauna.fnSubmitForm = function () {
-    _AvistamientoFauna.frm.submit();
+_AvistamientoFauna.fnSubmitForm = function () {    
+    const fechaActual = new Date();
+    if (fechaActual.toLocaleDateString() > $("#txtFecha").val()) {
+        _AvistamientoFauna.frm.submit();
+    } else {
+        utilSigo.toastWarning("Aviso", "La Fecha seleccionada no debe ser mayor a la actual."); return false;
+    }
+    
 }
 
 _AvistamientoFauna.fnInit = function (data) {

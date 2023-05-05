@@ -1,0 +1,54 @@
+﻿
+<script src="~/Areas/Supervision/js/ManInforme/_AproSostenible.js"></script>
+
+<div class="modal-dialog" role="document">
+    <div class="modal-content">
+        <div class="modal-header text-small" style="cursor:move;">
+            <span>Aprovechamiento Sostenible</span>
+            <i class="fa fa-close" style="cursor:pointer;" data-dismiss="modal" aria-label="Close"></i>
+        </div>
+        <div class="modal-body">
+            <form id="frmItemAprovSostenible">
+                @Html.Hidden("hdfRegEstadoApSos")              
+                @Html.Hidden("hdfCodSecuencialApSos")              
+                <div class="form-row">
+                    @*<div class="form-group col-md-6">
+            <label for="txtZona" class="text-small">Especie</label>
+            @Html.TextBox("txtEspecie", "", new { @class = "form-control form-control-sm", maxlength = "200", oninput = "this.value = this.value.replace(/[^áéíóúa-zÁÉÍÓÚA-Z 0-9]/,'')" })
+        </div>*@
+                    <div class="form-group col-md-6">
+                        @Html.Partial("~/Areas/General/Views/Controles/_renderComboEspecie.cshtml")
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="txtActividad" class="text-small">Período</label>
+                        @Html.TextBox("txtPeriodo", "", new { @class = "form-control form-control-sm", maxlength = "200", oninput = "this.value = this.value.replace(/[^áéíóúa-zÁÉÍÓÚA-Z 0-9]/,'')" })
+                    </div>
+                </div>                
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label for="txtCoordEste" class="text-small">Personal</label>
+                        @Html.TextBox("txtPersonal", "", new { @class = "form-control form-control-sm", maxlength = "200", oninput = "this.value = this.value.replace(/[^áéíóúa-zÁÉÍÓÚA-Z 0-9]/,'')" })
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="txtCoordNorte" class="text-small">Método</label>
+                        @Html.TextBox("txtMetodo", "", new { @class = "form-control form-control-sm", maxlength = "200", oninput = "this.value = this.value.replace(/[^áéíóúa-zÁÉÍÓÚA-Z 0-9]/,'')" })
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label for="txtCoordEste" class="text-small">Sistema</label>
+                        @Html.TextBox("txtSistema", "", new { @class = "form-control form-control-sm", maxlength = "200", oninput = "this.value = this.value.replace(/[^áéíóúa-zÁÉÍÓÚA-Z 0-9]/,'')" })
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="txtCoordNorte" class="text-small">Partes</label>
+                        @Html.TextBox("txtPartes", "", new { @class = "form-control form-control-sm", maxlength = "200", oninput = "this.value = this.value.replace(/[^áéíóúa-zÁÉÍÓÚA-Z 0-9]/,'')" })
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-primary btn-sm" onclick="_AproSostenible.fnSubmitForm()">Guardar</button>
+            <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Cancelar</button>
+        </div>
+    </div>
+</div>
