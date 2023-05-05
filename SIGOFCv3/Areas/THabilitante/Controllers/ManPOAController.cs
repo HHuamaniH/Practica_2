@@ -176,6 +176,7 @@ namespace SIGOFCv3.Areas.THabilitante.Controllers
 
                 objVM2.ListMadeCENSO = objVM.ListMadeCENSO;
                 TempData["listVERTICE"] = objVM.ListVERTICE;
+                TempData["listDETREGENTE"] = objVM.ListDETREGENTE;
                 TempData["listAOCULAR"] = objVM.ListAOCULAR;
                 TempData["listTIOCULAR"] = objVM.ListTIOCULAR;
                 TempData["listTRAPROBACION"] = objVM.ListTRAPROBACION;
@@ -190,6 +191,7 @@ namespace SIGOFCv3.Areas.THabilitante.Controllers
                 TempData["listPOARegenteImplementa"] = objVM.ListPOARegenteImplementa;
                 objVM.opRegresar = opRegresar;
                 objVM.TipoFormulario = tipoFrmulario;
+                objVM.ListDETREGENTE = null;
                 objVM.ListVERTICE = null;
                 objVM.ListAOCULAR = null;
                 objVM.ListTIOCULAR = null;

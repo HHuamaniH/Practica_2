@@ -63,7 +63,8 @@ namespace CapaEntidad.ViewModel
         public bool chckSinInspOcu { get; set; }
         public string txtItemacta_Iocular_Num { get; set; }
         public string txtItemActa_Iocular_Fe { get; set; }
-
+        //05/05/2023
+        public List<Ent_POA> ListDETREGENTE { get; set; }
         public List<Ent_POA> ListAOCULAR { get; set; }
         //Informe Tecnico de inspeccion ocular
         public string txtItemItecnico_Iocular_Num { get; set; }

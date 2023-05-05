@@ -465,6 +465,8 @@ namespace CapaLogica.DOC
                     POA_VM.ListTRAPROBACION = datModificar.ListTRAPROBACION;
                     POA_VM.ListMadeCENSO = datModificar.ListMadeCENSO;
                     POA_VM.ListNoMadeCENSO = datModificar.ListNoMadeCENSO;
+                    //05/05/2023
+                    POA_VM.ListDETREGENTE = datModificar.ListDETREGENTE;
 
                     POA_VM.ListRAprueba = datModificar.ListRAprueba;
                     POA_VM.ListBExtPOA = datModificar.ListBExtPOA;
@@ -705,6 +707,8 @@ namespace CapaLogica.DOC
                     POA_VM.hdfItemEstadoOrigen = EstadoOrigen;
                     CEntidad oCampos = new CEntidad();
                     oCampos.ListTIOCULAR = new List<CEntidad>();
+                    //05/05/2023
+                    oCampos.ListDETREGENTE = new List<CEntidad>();
                     oCampos.ListAOCULAR = new List<CEntidad>();
                     oCampos.ListTRAPROBACION = new List<CEntidad>();
                     oCampos.ListRAprueba = new List<CEntidad>();
@@ -1039,7 +1043,8 @@ namespace CapaLogica.DOC
                     oCampos.ListEliTABLA = new List<CEntidad>();
                 else
                     oCampos.ListEliTABLA = dto.ListEliTABLA;
-
+                //05/05/2023
+                oCampos.ListDETREGENTE = dto.ListDETREGENTE;
 
                 oCampos.ListBExtPOA = dto.ListBExtPOA;
                 oCampos.ListPOARegenteImplementa = dto.ListPOARegenteImplementa;

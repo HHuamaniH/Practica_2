@@ -343,12 +343,13 @@ var ManPOA = {};
                             return parseInt(meta.row) + 1;
                         }
                     },
-                    { data: "DA_FECRESOLUCION" },
-                    { data: "NV_RESOLUCION" },
-                    { data: "NV_NOMCAMPO" },
-                    { data: "NV_VALANTERIOR" },
-                    { data: "NV_VALACTUAL" },
-                    { data: "NV_OBSERVACION" }
+                    { data: "PERSONA" },
+                    { data: "N_DOCUMENTO" },
+                    { data: "OTORGAMIENTO" },
+                    { data: "RESAPROBACION" },
+                    { data: "COD_CATEGORIA" },
+                    { data: "CIP" },
+                    { data: "ESTADO_REGENTE" }
                 ]
         });
         this.dtErrorMaterial_DGeneral = this.frmPOARegistro.find("#grvErrorMaterial_DGeneral").DataTable({
@@ -775,6 +776,10 @@ var ManPOA = {};
                             ManPOA.frmPOARegistro.find("#lblItemConsultorDNI").val(data.data["N_DOCUMENTO"]);
                             ManPOA.frmPOARegistro.find("#txtItemNRConsultor").val(data.data["NUM_REGISTRO_FFS"]);
                             ManPOA.frmPOARegistro.find("#lblItemConsultorNRProfesional").val(data.data["NUM_REGISTRO_PROFESIONAL"]);
+                            break;
+                        case "REGENTEIMPLEMENTA":
+                            var dt = null;
+                            dt: ManPOA.dtDetRegente;
                             break;
                         case "IOCULAR":
                         case "ITIOCULAR":

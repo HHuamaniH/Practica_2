@@ -439,6 +439,10 @@ namespace CapaEntidad.DOC
         public List<Ent_POA> ListREFORMULAPOA { get; set; }
         [Category("LIST"), Description("ListAOCULAR")]
         public List<Ent_POA> ListAOCULAR { get; set; }
+        //05/05/2023
+        [Category("LIST"), Description("ListDETREGENTE")]
+        public List<Ent_POA> ListDETREGENTE { get; set; }
+        //
         [Category("LIST"), Description("ListKARDEXPRODUCTO")]
         public List<Ent_POA> ListKARDEXPRODUCTO { get; set; }
         [Category("LIST"), Description("ListKARDEXDESCRIPCION")]
