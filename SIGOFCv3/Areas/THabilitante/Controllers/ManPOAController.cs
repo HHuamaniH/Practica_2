@@ -1508,6 +1508,28 @@ namespace SIGOFCv3.Areas.THabilitante.Controllers
             return jsonResult;
         }
         [HttpGet]
+        public JsonResult GetAllListDetRegente()
+        {
+            List<Ent_POA> data = (List<Ent_POA>)TempData["listDETREGENTE"];
+            data = data ?? new List<Ent_POA>();
+            int i = 1;
+            var lstMin = from cust in data
+                         select new
+                         {
+                             NRO = i++,
+                             PERSONA = cust.PERSONA,
+                             N_DOCUMENTO = cust.N_DOCUMENTO,
+                             FEC_OTORGAMIENTO = cust.OTORGAMIENTO,
+                             RESAPROBACION = cust.RESAPROBACION,
+                             CATEGORIA = cust.COD_CATEGORIA,
+                             CIP = cust.CIP,
+                             ESTADO = cust.ESTADO_REGENTE
+                         };
+            var jsonResult = Json(new { data = lstMin }, JsonRequestBehavior.AllowGet);
+            jsonResult.MaxJsonLength = int.MaxValue;
+            return jsonResult;
+        }
+        [HttpGet]
         public JsonResult GetAllListAOCULAR()
         {
             List<Ent_POA> data = (List<Ent_POA>)TempData["listAOCULAR"];

@@ -38,6 +38,8 @@ var ManPOA = {};
     this.listPOADetRegente = [];
     this.listPOAEMGeneral = [];
     this.listPOAEMAdicional = [];
+    //03/05/2023
+    this.dtDetRegente;
 
     this.indexBExtPOA = 0;
     this.ListEliTABLA = [];
@@ -84,6 +86,53 @@ var ManPOA = {};
                     { data: "TIPO_CARGO", autoWidth: true },
                     { data: "COD_PTIPO", visible: false },
                     { data: "RegEstado", visible: false }
+                ]
+
+        });
+        this.dtDetRegente = this.frmPOARegistro.find("#grItemAOcular").DataTable({
+            bServerSide: false,
+            bProcessing: true,
+            bJQueryUI: false,
+            bRetrieve: true,
+            bFilter: false,
+            aaSorting: [],
+            bPaginate: true,
+            bInfo: false,
+            bLengthChange: false,
+            scrollCollapse: true,
+            pageLength: initSigo.pageLength,
+            oLanguage: initSigo.oLanguage,
+            drawCallback: initSigo.showPagination,
+            ajax: {
+                url: ManPOA.controller + "/GetAllListDetRegente",
+                type: "GET",
+                datatype: "json"
+            },
+            columns:
+                [
+                    {
+                        autoWidth: true, bSortable: false,
+                        mRender: function (data, type, row) {
+                            return '<i class="fa fa-lg fa-window-close" style="color:red;cursor:pointer;" title="Eliminar" onclick=""></i>';
+                        }
+                    },
+                    {
+                        autoWidth: true, bSortable: false,
+                        mRender: function (data, type, row) {
+                            return '<i class="fa fa-lg fa-window-close" style="color:red;cursor:pointer;" title="Adjuntar contrato" onclick=""></i>';
+                        }
+                    },
+                    {
+                        autoWidth: true, bSortable: false,
+                        mRender: function (data, type, row) {
+                            return '<i class="fa fa-lg fa-window-close" style="color:red;cursor:pointer;" title="Descargar contrato" onclick=""></i>';
+                        }
+                    },
+                    { data: "NRO", autoWidth: true },
+                    { data: "PERSONA", autoWidth: true },
+                    { data: "N_DOCUMENTO", autoWidth: true },
+                    { data: "TIPO_CARGO", autoWidth: true },
+
                 ]
 
         });
@@ -590,6 +639,32 @@ var ManPOA = {};
                             ManPOA.frmPOARegistro.find("#txtCodUbigeo").val(data["COD_UBIGEO"]);
                             ManPOA.frmPOARegistro.find("#txtUbigeo").val(data["UBIGEO"]);
                             ManPOA.frmPOARegistro.find("#txtDirecion").val(data["DIRECCION"]);
+                            break;
+                        case "REGENTEIMPLEMENTA":
+                            if (!utilDt.existValorSearch(ManPOA.dtDetRegente, "COD_PERSONA", data["COD_PERSONA"])) {
+                                if (data["COD_PTIPO"] != null && data["COD_PTIPO"].trim() != "" &&
+                                    _tipoPersonaSIGOsfc != "TODOS" && _tipoPersonaSIGOsfc != "") {
+                                    let tipoCargo = _tipoPersonaSIGOsfc.split(',');
+                                    let band = 0;
+
+                                    for (let i = 0; i < tipoCargo.length; i++) {
+                                        if (tipoCargo[i] == data["COD_PTIPO"]) {
+                                            band = 1;
+                                            break;
+                                        }
+                                    }
+
+                                    if (band == 0) {
+                                        utilSigo.toastWarning("Aviso", "El cargo asignado no corresponde a lo requerido en la lista");
+                                    }
+                                    else {
+                                        ManPOA.fnSetPersonaCompleto(_dom, data["COD_PERSONA"], data["COD_PTIPO"], data["TIPO_CARGO"]);
+                                    }
+                                }
+                                else {
+                                    ManPOA.fnSetPersonaCompleto(_dom, data["COD_PERSONA"], data["COD_PTIPO"], data["TIPO_CARGO"]);
+                                }
+                            } else { utilSigo.toastWarning("Aviso", "El técnico del acta de inspección ocular ya se encuentra registrado"); }
                             break;
                         case "FAPROBACION":
                             ManPOA.fnSetPersonaCompleto(_dom, data["COD_PERSONA"], data["COD_PTIPO"], data["TIPO_CARGO"] ); break;

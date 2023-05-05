@@ -641,9 +641,9 @@
                                             <table id="grvRegente_implementa" style="width:100%" class="table table-hover table-bordered">
                                                 <thead>
                                                     <tr>
-                                                        <th colspan="9" class="text-sm-left">
+                                                        <th colspan="11" class="text-sm-left">
                                                             <div class="form-inline">
-                                                                <i class="fa mx-1 fa-lg fa-file-o" style="cursor:pointer;" onclick="ManPOA.fnAddRegenteImplementa('DG');" data-toggle="tooltip" data-placement="top" title="Nuevo"></i>
+                                                                <i class="fa mx-1 fa-lg fa-file-o" style="cursor:pointer;" onclick="ManPOA.fnBuscarPersona('REGENTEIMPLEMENTA','0000020');" data-toggle="tooltip" data-placement="top" title="Nuevo"></i>
                                                                 <strong>
                                                                     Historial regentes implementan
                                                                 </strong>
@@ -651,15 +651,17 @@
                                                         </th>
                                                     </tr>
                                                     <tr>
+                                                        <th></th>
+                                                        <th></th>
+                                                        <th></th>
                                                         <th>Nº</th>
                                                         <th>Nombres</th>
                                                         <th>DNI</th>
-                                                        <th>N° Registro Consultor</th>
-                                                        <th>N° Registro Regente</th>
-                                                        <th>N° Registro Profesional</th>
-                                                        <th>N° Licencia</th>
-                                                        <th>Email</th>
-                                                        <th>Estado</th>
+                                                        <th>Nro Licencia</th>
+                                                        <th>Fecha de otorgamiento</th>
+                                                        <th>Nro resolución directoral</th>
+                                                        <th>Nro CIP</th>
+                                                        <th>Contrato</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody></tbody>
@@ -1974,6 +1976,7 @@
     </div>
 
     @* Para el control genérico de personas *@
+    <div class="modal fade hide" id="modalAddDetRegente" tabindex="-1" role="dialog"></div>
     <div class="modal fade hide" id="mdlBuscarPersona" role="dialog"></div>
     <div class="modal fade hide" id="modalAddEditPersona" role="dialog"></div>
     <div class="modal fade hide" id="personaUbigeoModal" role="dialog"></div>
@@ -2972,4 +2975,3 @@
 </div>
 <div class="modal fade" id="funcionarioAgregarModal" tabindex="-1" role="dialog"></div>
 <div class="modal fade hide" id="modalAddErrorMaterial" role="dialog"></div>
-<div class="modal fade hide" id="modalAddDetRegente" role="dialog"></div>
