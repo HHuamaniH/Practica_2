@@ -1,0 +1,160 @@
+﻿
+@model List<CapaEntidad.DOC.Ent_INFORME_ENFERMEDAD>
+
+<style type="text/css">
+    #tbRenderActividadSilvicultural_wrapper {
+        padding: 0px;
+    }
+</style>
+<script src="~/Areas/Supervision/js/ManInforme/_renderEnfermedades.js?noCache=@Guid.NewGuid().ToString()"></script>
+<script type="text/javascript">
+    ManInforme_Enfermedad.fnLoadData('@Html.Raw(Json.Encode(@Model))', "DataEnfermedad");
+</script>
+<div>
+    <div class="card">
+        <div class="card-header text-small">Vigilancia de enfermedades zoonóticas, de importancia en la salud pública y/o de notificación obligatoria en centros de cría en cautividad</div>
+        <div class="card-body">
+            <div class="form-row">
+                <div class="table-responsive">
+                    <div class="card-header text-small">
+                        El centro de cría realiza actividades de prevención de enfermedades zoonóticas, importancia en la salud pública y/o de notificación obligatoria
+                    </div>
+                    <table id="tbCencria" style="width:100%" class="table table-hover">
+                        <tbody id="tbodyCencria">
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="card">
+        <div class="card-header text-small">El personal del centro de cría cuenta con vacunas para la prevención de enfermedades</div>
+        <div class="card-body">
+            <div class="form-row">
+                <div class="table-responsive">
+                    <table id="tbCencriaVacCab" style="width:100%" class="table table-hover">
+                        <tbody id="tbodyCencriaVacCab">
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="table-responsive">
+                    <table id="tbCencriaVac" style="width:100%" class="table table-hover">
+                        <tbody id="tbodyCencriaVac">
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="card">
+        <div class="card-header text-small">¿El personal del centro de cría presenta o presentó alguna enfermedad tropical infecciosa, zoonótica, accidente laboral en el manejo de fauna silvestre o de importancia en la salud pública desde la última supervisión de OSINFOR?</div>
+        <div class="card-body">
+            <div class="form-row">
+                <div class="table-responsive">
+                    <table id="tbPerCencriaCab" style="width:100%" class="table table-hover">
+                        <tbody id="tbodyPerCencriaCab">
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="table-responsive">
+                    <table id="tbPerCencria" style="width:100%" class="table table-hover">
+                        <tbody id="tbodyPerCencria">
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="card">
+        <div class="card-header text-small">¿Se registró alguna enfermedad de notificación obligatoria al SENASA o de importancia en especímenes de fauna silvestre de la colección?</div>
+        <div class="card-body">
+            <div class="form-row">
+                <div class="table-responsive">
+                    <table id="tbSenasa" style="width:100%" class="table table-hover">
+                        <tbody id="tbodySenasa">
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="card-header text-small">Enfermedades comunes varias especies</div>
+            <div class="form-row">
+                <div class="table-responsive">
+                    <table id="tbSenasaCom" style="width:100%" class="table table-hover">
+                        <tbody id="tbodySenasaCom">
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="card-header text-small">Enfermedades de bovinos</div>
+            <div class="form-row">
+                <div class="table-responsive">
+                    <table id="tbSenasaBov" style="width:100%" class="table table-hover">
+                        <tbody id="tbodySenasaBov">
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="card-header text-small">Enfermedades de Suidos</div>
+            <div class="form-row">
+                <div class="table-responsive">
+                    <table id="tbSenasaSui" style="width:100%" class="table table-hover">
+                        <tbody id="tbodySenasaSui">
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="card-header text-small">Enfermedades de Aves</div>
+            <div class="form-row">
+                <div class="table-responsive">
+                    <table id="tbSenasaAve" style="width:100%" class="table table-hover">
+                        <tbody id="tbodySenasaAve">
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="card-header text-small">Enfermedades de Equinos</div>
+            <div class="form-row">
+                <div class="table-responsive">
+                    <table id="tbSenasaEqu" style="width:100%" class="table table-hover">
+                        <tbody id="tbodySenasaEqu">
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="card-header text-small">Enfermedades de caprinos y ovinos</div>
+            <div class="form-row">
+                <div class="table-responsive">
+                    <table id="tbSenasaCap" style="width:100%" class="table table-hover">
+                        <tbody id="tbodySenasaCap">
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="card">
+        <div class="card-header text-small">Accidentes por ataques o manipulación de animales silvestres</div>
+        <div class="card-body">
+            <div class="form-row">
+                <div class="table-responsive">
+                    <table id="tbAccataCab" style="width:100%" class="table table-hover">
+                        <tbody id="tbodyAccataCab">
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="table-responsive">
+                    <table id="tbAccata" style="width:100%" class="table table-hover">
+                        <tbody id="tbodyAccata">
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
