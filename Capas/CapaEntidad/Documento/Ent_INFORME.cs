@@ -1276,7 +1276,9 @@ namespace CapaEntidad.DOC
         public List<Ent_INFORME> ListTipoCambioUso { get; set; }
         //VERTICES LINDERAMIENTO AREA TITULO HABILITANTE
         [Description("ZONA")]
-        public String ZONA { get; set; }        
+        public String ZONA { get; set; }
+        [Description("AUTORIZADO")]
+        public String AUTORIZADO { get; set; }
         [Description("ZONA_CAMPO")]
         public String ZONA_CAMPO { get; set; }
         [Category("LIST"), Description("ListISupervLindAreaVertice")]
