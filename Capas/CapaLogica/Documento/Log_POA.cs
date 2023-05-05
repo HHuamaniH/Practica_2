@@ -472,8 +472,11 @@ namespace CapaLogica.DOC
                     POA_VM.ListRApruebaISitu = datModificar.ListRApruebaISitu;
                     POA_VM.ListKARDEX = datModificar.ListKARDEX;
 
+                    POA_VM.ListPOARegenteImplementa = datModificar.ListPOARegenteImplementa;
+
                     POA_VM.ListPOAErrorMaterialG = datModificar.ListPOAErrorMaterialG;
                     POA_VM.ListPOAErrorMaterialA = datModificar.ListPOAErrorMaterialA;
+
 
                     POA_VM.txtItemNRNroLicencia = datModificar.REGENTE_NRO_LICENCIA;
                     POA_VM.txtItemNREmail = datModificar.REGENTE_EMAIL;
@@ -802,6 +805,8 @@ namespace CapaLogica.DOC
                     POA_VM.ListRApruebaISitu = oCampos.ListRApruebaISitu;
                     POA_VM.ListVERTICE = datModificar.ListVERTICE;
 
+                    POA_VM.ListPOARegenteImplementa = new List<Ent_ERRORMATERIAL>();
+
                     POA_VM.ListPOAErrorMaterialG = new List<Ent_ERRORMATERIAL>();
                     POA_VM.ListPOAErrorMaterialA = new List<Ent_ERRORMATERIAL>();
                 }
@@ -1037,6 +1042,7 @@ namespace CapaLogica.DOC
 
 
                 oCampos.ListBExtPOA = dto.ListBExtPOA;
+                oCampos.ListPOARegenteImplementa = dto.ListPOARegenteImplementa;
                 oCampos.ListPOAErrorMaterialG = dto.ListPOAErrorMaterialG;
                 oCampos.ListPOAErrorMaterialA = dto.ListPOAErrorMaterialA;
                 oCampos.NUM_CENSO_MADE_ELIM = (from p in oCampos.ListEliTABLA where p.EliTABLA == "POA_DET_MADERABLE_CENSO" select p).ToList<CEntidad>().Count;
