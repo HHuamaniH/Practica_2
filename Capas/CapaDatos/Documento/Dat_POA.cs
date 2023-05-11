@@ -124,6 +124,8 @@ namespace CapaDatos.DOC
                         //oCampos.ListBExtMedicinales = new List<CEntidad>();
                         //05/05/2021 lista de parcelas
                         oCampos.ListParcela = new List<CEntidad>();
+                        //05/09/2023
+                        oCampos.ListDETREGENTE = new List<CEntidad>();
                         CEntidad oCamposDet;
                         //
                         if (dr.HasRows)
@@ -564,13 +566,53 @@ namespace CapaDatos.DOC
                                 oCamposDet.COD_PERSONA = dr.GetString(pt1);
                                 oCamposDet.PERSONA = dr.GetString(pt2);
                                 oCamposDet.N_DOCUMENTO = dr.GetString(pt3);
-                                //oCamposDet.CARGO = dr.GetString(pt4);
                                 oCamposDet.COD_PTIPO = dr.GetString(pt4);
                                 oCamposDet.TIPO_CARGO = dr.GetString(pt5);
                                 oCamposDet.RegEstado = 0;
                                 oCampos.ListAOCULAR.Add(oCamposDet);
                             }
                         }
+                        //09/05/2023
+                        //POA_DET_REGENTE
+                        dr.NextResult();
+                        if (dr.HasRows)
+                        {
+                            int pt1 = dr.GetOrdinal("COD_PERSONA");
+                            int pt2 = dr.GetOrdinal("PERSONA");
+                            int pt3 = dr.GetOrdinal("N_DOCUMENTO");
+                            int pt4 = dr.GetOrdinal("COD_PTIPO");
+                            int pt5 = dr.GetOrdinal("TIPO_CARGO");
+                            int pt6 = dr.GetOrdinal("ANIO");
+                            int pt7 = dr.GetOrdinal("CIP");
+                            int pt8 = dr.GetOrdinal("CATEGORIA");
+                            int pt9 = dr.GetOrdinal("ESTADO_REGENTE");
+                            int pt10 = dr.GetOrdinal("NROLICENCIA");
+                            int pt11 = dr.GetOrdinal("OTORGAMIENTO");
+                            int pt12 = dr.GetOrdinal("RESAPROBACION");
+                            int pt13 = dr.GetOrdinal("COD_SECUENCIAL");
+                            int pt14 = dr.GetOrdinal("NOMBRE_ARCH");
+                            while (dr.Read())
+                            {
+                                oCamposDet = new CEntidad();
+                                oCamposDet.COD_PERSONA = dr.GetString(pt1);
+                                oCamposDet.PERSONA = dr.GetString(pt2);
+                                oCamposDet.N_DOCUMENTO = dr.GetString(pt3);
+                                oCamposDet.COD_PTIPO = dr.GetString(pt4);
+                                oCamposDet.TIPO_CARGO = dr.GetString(pt5);
+                                oCamposDet.ANIO = dr.GetString(pt6);
+                                oCamposDet.CIP = dr.GetString(pt7);
+                                oCamposDet.CATEGORIA = dr.GetString(pt8);
+                                oCamposDet.ESTADO_REGENTE = dr.GetString(pt9);
+                                oCamposDet.NROLICENCIA = dr.GetString(pt10);
+                                oCamposDet.OTORGAMIENTO = dr.GetString(pt11);
+                                oCamposDet.RESAPROBACION = dr.GetString(pt12);
+                                oCamposDet.COD_SECUENCIAL = dr.GetInt32(pt13);
+                                oCamposDet.NOMBRE_ARCH = dr.GetString(pt14);
+                                oCamposDet.RegEstado = 0;
+                                oCampos.ListDETREGENTE.Add(oCamposDet);
+                            }
+                        }
+
                         //POA_DET_KARDEX
                         dr.NextResult();
                         if (dr.HasRows)
@@ -1848,6 +1890,23 @@ namespace CapaDatos.DOC
                         dBOracle.ManExecute(cn, tr, "DOC_OSINFOR_ERP_MIGRACION.spPOAEliminarDetalle", oCamposDet);
                     }
                 }
+                //05/05/2023
+                // Grabando POA_DET_REGENTE
+                if (oCEntidad.ListDETREGENTE != null)
+                {
+                    foreach (var loDatos in oCEntidad.ListDETREGENTE)
+                    {
+
+                        oCamposDet = new CEntidad();
+                        oCamposDet.COD_THABILITANTE = oCEntidad.COD_THABILITANTE;
+                        oCamposDet.NUM_POA = oCEntidad.NUM_POA;
+                        oCamposDet.COD_PERSONA = loDatos.COD_PERSONA;
+                        oCamposDet.NOMBRE_ARCH = loDatos.NOMBRE_ARCH;
+                        oCamposDet.COD_PTIPO = loDatos.COD_PTIPO;
+                        dBOracle.ManExecute(cn, tr, "DOC_OSINFOR_ERP_MIGRACION.SPPOA_DET_REGENTEGRABAR", oCamposDet);
+
+                    }
+                }
                 // Grabando POA_DET_AIOCULAR
                 if (oCEntidad.ListAOCULAR != null)
                 {
@@ -3108,6 +3167,24 @@ namespace CapaDatos.DOC
             }
 
             return result;
+        }
+        public void setArchivoDetRegenete(OracleConnection cn, Ent_Persona entP,string name)
+        {
+            CEntidad oCamposDet;
+            try
+            {
+                oCamposDet = new CEntidad();
+                oCamposDet.COD_PERSONA = entP.COD_PERSONA;
+                oCamposDet.COD_SECUENCIAL = entP.COD_SECUENCIAL;
+                oCamposDet.NOMBRE_ARCH = name;
+                dBOracle.ManExecute(cn, null, "DOC_OSINFOR_ERP_MIGRACION.SPPOA_DET_REGENTEUPDATE", oCamposDet);
+                
+                
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
         }
     }
 }

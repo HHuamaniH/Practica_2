@@ -2,6 +2,7 @@
 using CapaEntidad.ViewModel;
 using CapaEntidad.ViewModel.General;
 using CapaLogica.DOC;
+using Newtonsoft.Json;
 using OfficeOpenXml;
 using SIGOFCv3.Helper;
 using SIGOFCv3.Models;
@@ -19,7 +20,9 @@ namespace SIGOFCv3.Areas.THabilitante.Controllers
 {
     public class ManPOAController : Controller
     {
+        private string folderConstanciaContratoRegente = "~/Archivos/Contrato/ContratoDetRegente/";
         public static VM_POA objVM2 = new VM_POA();
+        public string NOMARCHTEMP = "";
 
         //Validar que el usuario que ingresa a la acción (vista) tenga asignado el menú respectivo (Tabla: SISTEMA_MODULOS_DET_MENU: Columna: COD_SECUENCIAL)
         [HttpGet]
@@ -78,6 +81,7 @@ namespace SIGOFCv3.Areas.THabilitante.Controllers
             try
             {
                 VM_POA objVM;
+
                 Log_POA objLog = new Log_POA();
                 int nuevo = 1; Int16 opRegresar = 0;
                 string codigo = "", descripcion = "", tipoFrmulario = "", lstMenu = "";
@@ -173,7 +177,6 @@ namespace SIGOFCv3.Areas.THabilitante.Controllers
                     (ModelSession.GetSession())[0].COD_UCUENTA,
                     nuevo, appClient, appData, lstMenu, mr.VALIAS
                     );
-
                 objVM2.ListMadeCENSO = objVM.ListMadeCENSO;
                 TempData["listVERTICE"] = objVM.ListVERTICE;
                 TempData["listDETREGENTE"] = objVM.ListDETREGENTE;
@@ -1523,11 +1526,18 @@ namespace SIGOFCv3.Areas.THabilitante.Controllers
                              NRO = i++,
                              PERSONA = cust.PERSONA,
                              N_DOCUMENTO = cust.N_DOCUMENTO,
-                             FEC_OTORGAMIENTO = cust.OTORGAMIENTO,
+                             COD_PTIPO = cust.COD_PTIPO,
+                             TIPO_CARGO = cust.TIPO_CARGO,
+                             COD_PERSONA = cust.COD_PERSONA,
+                             OTORGAMIENTO = cust.OTORGAMIENTO,
                              RESAPROBACION = cust.RESAPROBACION,
-                             CATEGORIA = cust.COD_CATEGORIA,
+                             CATEGORIA = cust.CATEGORIA,
                              CIP = cust.CIP,
-                             ESTADO = cust.ESTADO_REGENTE
+                             ESTADO_REGENTE = cust.ESTADO_REGENTE,
+                             ANIO = cust.ANIO,
+                             NROLICENCIA = cust.NROLICENCIA,
+                             COD_SECUENCIAL = cust.COD_SECUENCIAL,
+                             NOMBRE_ARCH = cust.NOMBRE_ARCH
                          };
             var jsonResult = Json(new { data = lstMin }, JsonRequestBehavior.AllowGet);
             jsonResult.MaxJsonLength = int.MaxValue;
@@ -1720,10 +1730,73 @@ namespace SIGOFCv3.Areas.THabilitante.Controllers
         {
             return PartialView();
         }
+
+
         [HttpPost]
-        public PartialViewResult _DetRegente()
+        public JsonResult GrabarDocumentoAdjunto()
         {
-            return PartialView();
+            Log_POA objLog = new Log_POA();
+            // Checking no of files injected in Request object  
+            if (Request.Files.Count > 0)
+            {
+                try
+                {
+                    
+                    Ent_Persona entP = JsonConvert.DeserializeObject<Ent_Persona>(Request.Form["data"]);
+                    HttpPostedFileBase file = Request.Files[0];//  Get all files from Request object 
+
+                    if (!Directory.Exists(Server.MapPath(folderConstanciaContratoRegente)))
+                    {
+                        Directory.CreateDirectory(Server.MapPath(folderConstanciaContratoRegente));
+                    }
+                    Guid myuuid = Guid.NewGuid();
+                    string myuuidAsString = myuuid.ToString();
+                    //Guardar el doc ajunto
+                    string name = $"ContratoRegente-{myuuidAsString}.pdf";
+                    NOMARCHTEMP = name;
+                    string carpetaDestino = Server.MapPath(folderConstanciaContratoRegente);
+                    string rutaDestino = Path.Combine(carpetaDestino, name);
+
+                    if (entP.COD_SECUENCIAL > 0)
+                    {
+                        objLog.setArchivoDetRegente(entP, name);
+                    }
+                    //Get the complete folder path and store the file inside it.
+                    file.SaveAs(rutaDestino);
+                    
+
+                    return Json(new { success = true, msj = "Se subio correctamente el archivo", data = name });
+                }
+                catch (Exception ex)
+                {
+                    throw new Exception(ex.Message);
+                }
+            }
+            else
+            {
+                return Json(new { success = false, msj = "No se encontró el documento a subir" });
+            }
         }
+        //[HttpPost]
+        //public JsonResult descargarDocumentoAdjunto(string identificador)
+        //{
+        //    //Log_POA objLog = new Log_POA();
+        //    //string constancia;
+        //    //try
+        //    //{
+        //    //    constancia = objLog.ObtenerNomArch(identificador);
+        //    //}
+        //    //catch (Exception ex)
+        //    //{
+        //    //    exInterno = ex.Message;
+        //    //    success = false;
+        //    //    string[] mensaje = ex.Message.Split('|');
+        //    //    if (mensaje[0] == "0")
+        //    //        message = mensaje[1];
+        //    //    else message = "Sucedió un error al generar el documento";
+        //    //}
+        //    return Json(new { success, message, exInterno, constancia, existeArchivo });
+        //}
+
     }
 }

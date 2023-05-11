@@ -183,7 +183,7 @@
             </text>
             }
         }
-        @if (Model.ListPOARegenteImplementa != null)
+        @*@if (Model.ListPOARegenteImplementa != null)
         {
             if (Model.ListPOARegenteImplementa.Count() > 0)
             {
@@ -212,7 +212,7 @@
                     ManPOA.dtRegente_Implementa.rows.add(ManPOA.listPOADetRegente).draw();
                 </text>
             }
-        }
+        }*@
 
         @if (Model.ListPOAErrorMaterialG != null)
         {
@@ -638,15 +638,12 @@
                                 <div class="card-body">
                                     <div class="form-row">
                                         <div class="table-responsive">
-                                            <table id="grvRegente_implementa" style="width:100%" class="table table-hover table-bordered">
+                                            <table id="grvDetRegente" style="width:100%" class="table table-hover table-bordered">
                                                 <thead>
                                                     <tr>
-                                                        <th colspan="12" class="text-sm-left">
+                                                        <th colspan="14" class="text-sm-left">
                                                             <div class="form-inline">
-                                                                <i class="fa mx-1 fa-lg fa-file-o" style="cursor:pointer;" onclick="ManPOA.fnBuscarPersona('REGENTEIMPLEMENTA','0000020');" data-toggle="tooltip" data-placement="top" title="Nuevo"></i>
-                                                                <strong>
-                                                                    Historial regentes implementan
-                                                                </strong>
+                                                                <i class="fa mx-2 fa-lg fa-file-o" style="cursor:pointer;" onclick="ManPOA.fnBuscarPersona('REGENTEIMPLEMENTA', '0000020');" data-toggle="tooltip" data-placement="top" title="Nuevo"></i>
                                                             </div>
                                                         </th>
                                                     </tr>
@@ -655,14 +652,16 @@
                                                         <th></th>
                                                         <th></th>
                                                         <th>Nº</th>
-                                                        <th>Nombres</th>
-                                                        <th>DNI</th>
-                                                        <th>Fecha de otorgamiento</th>
-                                                        <th>Resolución de aprobación</th>
+                                                        <th>Apellidos y Nombres</th>
+                                                        <th>N° Documento</th>
+                                                        <th>Cargo</th>
+                                                        <th>Año</th>
+                                                        <th>CIP</th>
                                                         <th>Categoria</th>
-                                                        <th>Nro CIP</th>
-                                                        <th>Estado</th>
-                                                        <th>Contrato</th>
+                                                        <th>Estado Regente</th>
+                                                        <th>N° Licencia</th>
+                                                        <th>Fec. Otorgamiento</th>
+                                                        <th>Res. Aprobación</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody></tbody>
@@ -700,7 +699,7 @@
                                                 <table id="grItemAOcular" style="width:100%" class="table table-hover table-bordered">
                                                     <thead>
                                                         <tr>
-                                                            <th colspan="6" class="text-sm-left">
+                                                            <th colspan="7" class="text-sm-left">
                                                                 <div class="form-inline">
                                                                     <i class="fa mx-2 fa-lg fa-file-o" style="cursor:pointer;" onclick="ManPOA.fnBuscarPersona('IOCULAR', 'TODOS');" data-toggle="tooltip" data-placement="top" title="Nuevo"></i>
                                                                 </div>
@@ -709,10 +708,18 @@
                                                         <tr>
                                                             <th></th>
                                                             <th></th>
+                                                            <th></th>
                                                             <th>Nº</th>
                                                             <th>Apellidos y Nombres</th>
                                                             <th>N° Documento</th>
                                                             <th>Cargo</th>
+                                                            @*<th>Año</th>
+                                                            <th>N° Licencia</th>
+                                                            <th>Resolucion de Aprobación</th>
+                                                            <th>Fecha otorgamiento</th>
+                                                            <th>Categria</th>
+                                                            <th>CIP</th>
+                                                            <th>Estado</th>*@
                                                         </tr>
                                                     </thead>
                                                     <tbody></tbody>

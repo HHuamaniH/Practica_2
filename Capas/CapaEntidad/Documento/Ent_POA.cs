@@ -379,7 +379,14 @@ namespace CapaEntidad.DOC
         public String COD_CATEGORIA { get; set; }
         [Description("ESTADO_REGENTE")]
         public String ESTADO_REGENTE { get; set; }
-
+        [Description("NOMBRE_ARCH")]
+        public String NOMBRE_ARCH { get; set; }
+        [Description("RUTA_ARCH")]
+        public String RUTA_ARCH { get; set; }
+        [Description("CATEGORIA")]
+        public String CATEGORIA { get; set; }
+        [Description("ANIO")]
+        public String ANIO { get; set; }
 
 
         //Lista Objetos

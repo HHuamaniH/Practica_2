@@ -1039,13 +1039,13 @@ namespace CapaLogica.DOC
                 oCampos.ListMadeCENSO = dto.ListMadeCENSO;
                 oCampos.ListNoMadeCENSO = dto.ListNoMadeCENSO;
                 oCampos.ListKARDEX = dto.ListKARDEX;
+                //05/05/2023
+                oCampos.ListDETREGENTE = dto.ListDETREGENTE;
+
                 if (dto.ListEliTABLA == null)
                     oCampos.ListEliTABLA = new List<CEntidad>();
                 else
                     oCampos.ListEliTABLA = dto.ListEliTABLA;
-                //05/05/2023
-                oCampos.ListDETREGENTE = dto.ListDETREGENTE;
-
                 oCampos.ListBExtPOA = dto.ListBExtPOA;
                 oCampos.ListPOARegenteImplementa = dto.ListPOARegenteImplementa;
                 oCampos.ListPOAErrorMaterialG = dto.ListPOAErrorMaterialG;
@@ -1223,6 +1223,15 @@ namespace CapaLogica.DOC
         }
 
         #endregion
+        public void setArchivoDetRegente(Ent_Persona entP, string name)
+        {
+            
+            using (OracleConnection cn = new OracleConnection(CapaDatos.BDConexion.Conexion_Cadena_SIGO()))
+            {
+                cn.Open();
+                oCDatos.setArchivoDetRegenete(cn,entP,name);
+            }
+        }
 
     }
 }
