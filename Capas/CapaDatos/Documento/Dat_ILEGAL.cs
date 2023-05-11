@@ -991,8 +991,8 @@ namespace CapaDatos.DOC
                                     oCEntidadSTD.RegEstado = 0;
 
                                     string SUBTIPO = dr["SUBTIPO"] != DBNull.Value ? dr["SUBTIPO"].ToString() : null;
-                                    if (SUBTIPO == "1") lsCEntidad.listSTD01.Add(oCEntidadSTD);
-                                    else if (SUBTIPO == "2") lsCEntidad.listSTD02.Add(oCEntidadSTD);
+                                    if (SUBTIPO == "01") lsCEntidad.listSTD01.Add(oCEntidadSTD);
+                                    else if (SUBTIPO == "02") lsCEntidad.listSTD02.Add(oCEntidadSTD);
                                     else lsCEntidad.listSTD03.Add(oCEntidadSTD);
                                 }
                             }
