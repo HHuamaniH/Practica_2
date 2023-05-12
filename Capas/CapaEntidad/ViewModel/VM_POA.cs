@@ -57,6 +57,14 @@ namespace CapaEntidad.ViewModel
         public string txtCodUbigeo { get; set; }
         public string txtUbigeo { get; set; }
         public string txtDirecion { get; set; }
+        //11/05/2023
+        public string lblItemConsultorCARGO { get; set; }
+        public string lblItemConsultorCIP { get; set; }
+        public string lblItemConsultorCATEGORIA { get; set; }
+        public string lblItemConsultorESTADO { get; set; }
+        public string lblItemConsultorLICENCIA { get; set; }
+        public string lblItemConsultorOTORGAMIENTO { get; set; }
+        public string lblItemConsultorRESOLUCION { get; set; }
 
         //Acta de Inspeccion Ocular
 

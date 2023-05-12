@@ -758,9 +758,25 @@ ManPOA.selectFile = null;
                 if (data.success) {
                     switch (_dom) {
                         case "REGENTE":
+                            var listaPDP = data.data["ListPersonaDProfesional"];
+                            const cipR = listaPDP[0].CIP;
+                            const codCategoriaR = listaPDP[0].CATEGORIA;
+                            const estadoRegenteR = listaPDP[0].ESTADO_REGENTE;
+                            const nroLicenciaR = listaPDP[0].NROLICENCIA;
+                            const fecOtorgamientoR = listaPDP[0].OTORGAMIENTO;
+                            const resAprobacionR = listaPDP[0].RESAPROBACION;
                             ManPOA.frmPOARegistro.find("#hdfItemConsultorCodigo").val(data.data["COD_PERSONA"]);
                             ManPOA.frmPOARegistro.find("#lblItemConsultorNombre").val(data.data["APELLIDOS_NOMBRES"]);
                             ManPOA.frmPOARegistro.find("#lblItemConsultorDNI").val(data.data["N_DOCUMENTO"]);
+                            //ManPOA.frmPOARegistro.find("#lblItemConsultorCARGO").val(tipoCargo);
+                            ManPOA.frmPOARegistro.find("#lblItemConsultorCIP").val(cipR);
+                            //ManPOA.frmPOARegistro.find("#lblItemConsultorCATEGORIA").val(codCategoriaR);
+                            ManPOA.frmPOARegistro.find("#lblItemConsultorESTADO").val(estadoRegenteR);
+                            ManPOA.frmPOARegistro.find("#lblItemConsultorLICENCIA").val(nroLicenciaR);
+                            ManPOA.frmPOARegistro.find("#lblItemConsultorOTORGAMIENTO").val(fecOtorgamientoR);
+                            ManPOA.frmPOARegistro.find("#lblItemConsultorRESOLUCION").val(resAprobacionR);
+
+
                             ManPOA.frmPOARegistro.find("#txtItemNRConsultor").val(data.data["NUM_REGISTRO_FFS"]);
                             ManPOA.frmPOARegistro.find("#lblItemConsultorNRProfesional").val(data.data["NUM_REGISTRO_PROFESIONAL"]);
                             break;

@@ -146,6 +146,14 @@ namespace CapaDatos.DOC
                             oCampos.INICIO_VIGENCIA = dr.GetString(dr.GetOrdinal("INICIO_VIGENCIA")).Trim();
                             oCampos.FIN_VIGENCIA = dr.GetString(dr.GetOrdinal("FIN_VIGENCIA")).Trim();
                             oCampos.CONSULTOR_CODIGO = dr.GetString(dr.GetOrdinal("CONSULTOR_CODIGO"));
+
+                            //CAMBIOS
+                            oCampos.NROLICENCIA = dr.GetString(dr.GetOrdinal("NROLICENCIA"));
+                            oCampos.RESAPROBACION = dr.GetString(dr.GetOrdinal("RESAPROBACION"));
+                            oCampos.OTORGAMIENTO = dr.GetString(dr.GetOrdinal("OTORGAMIENTO"));
+                            oCampos.CIP = dr.GetString(dr.GetOrdinal("CIP"));
+                            oCampos.ESTADO_REGENTE = dr.GetString(dr.GetOrdinal("ESTADO_REGENTE"));
+
                             oCampos.CONSULTOR_NUM_REGISTRO_FFS = dr.GetString(dr.GetOrdinal("CONSULTOR_NUM_REGISTRO_FFS"));
                             oCampos.REGENTE_NUM_REGISTRO_FFS = dr.GetString(dr.GetOrdinal("REGENTE_NUM_REGISTRO_FFS"));
                             oCampos.CONSULTOR_NOMBRE = dr.GetString(dr.GetOrdinal("CONSULTOR_NOMBRE"));

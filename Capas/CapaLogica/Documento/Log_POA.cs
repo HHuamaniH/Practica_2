@@ -407,6 +407,13 @@ namespace CapaLogica.DOC
                     POA_VM.txtItemNRRegente = datModificar.REGENTE_NUM_REGISTRO_FFS;
                     POA_VM.lblItemConsultorNombre = datModificar.CONSULTOR_NOMBRE;
                     POA_VM.lblItemConsultorDNI = datModificar.CONSULTOR_DNI;
+                    //Actualización
+                    POA_VM.lblItemConsultorLICENCIA = datModificar.NROLICENCIA;
+                    POA_VM.lblItemConsultorRESOLUCION = datModificar.RESAPROBACION;
+                    POA_VM.lblItemConsultorOTORGAMIENTO = datModificar.OTORGAMIENTO;
+                    POA_VM.lblItemConsultorCIP = datModificar.CIP;
+                    POA_VM.lblItemConsultorESTADO = datModificar.ESTADO_REGENTE;
+
                     POA_VM.lblItemConsultorNRProfesional = datModificar.CONSULTOR_NUM_REGISTRO_PROFESIONAL;
                     POA_VM.txtItemItecnico_Iocular_Num = datModificar.ITECNICO_IOCULAR_NUM;
                     POA_VM.txtItemItecnico_Iocular_Fecha = datModificar.ITECNICO_IOCULAR_FECHA.ToString();
