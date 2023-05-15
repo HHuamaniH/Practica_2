@@ -140,8 +140,8 @@ ManPOA.selectFile = null;
                     { data: "NRO", autoWidth: true },
                     { data: "PERSONA", autoWidth: true },
                     { data: "N_DOCUMENTO", autoWidth: true },
-                    { data: "TIPO_CARGO", autoWidth: true },
-                    { data: "ANIO", autoWidth: true },
+                    //{ data: "TIPO_CARGO", autoWidth: true },
+                    //{ data: "ANIO", autoWidth: true },
                     { data: "CIP", autoWidth: true },
                     { data: "CATEGORIA", autoWidth: true },
                     { data: "ESTADO_REGENTE", autoWidth: true },
@@ -799,9 +799,9 @@ ManPOA.selectFile = null;
                                 N_DOCUMENTO: data.data["N_DOCUMENTO"],
                                 PERSONA: data.data["APELLIDOS_NOMBRES"],
                                 COD_PTIPO: codPTipo,
-                                TIPO_CARGO: tipoCargo, 
+                                //TIPO_CARGO: tipoCargo, 
                                 RegEstado: "1",
-                                ANIO: anio,
+                                //ANIO: anio,
                                 CIP: cip,
                                 CATEGORIA: codCategoria,
                                 ESTADO_REGENTE: estadoRegente,
@@ -2217,7 +2217,7 @@ ManPOA.selectFile = null;
             var fileData = new FormData();
             var url = urlLocalSigo + "THabilitante/ManPOA/GrabarDocumentoAdjunto";
             var data = {};
-            console.log(itemData);
+            //console.log(itemData);
             data.COD_PERSONA = itemData.COD_PERSONA;
             data.TIPO_CARGO = itemData.TIPO_CARGO;
             data.COD_PTIPO = itemData.COD_PTIPO;
@@ -2225,7 +2225,6 @@ ManPOA.selectFile = null;
             data.N_DOCUMENTO = itemData.N_DOCUMENTO;
             data.APELLIDOS_NOMBRES = itemData.PERSONA;
             data.RESAPROBACION = itemData.RESAPROBACION;
-            data.TIPO_CARGO = itemData.TIPO_CARGO;
             data.COD_SECUENCIAL = itemData.COD_SECUENCIAL;
 
             fileData.append("data", JSON.stringify(data));
