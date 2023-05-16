@@ -9,6 +9,7 @@ using SIGOFCv3.Models;
 using SIGOFCv3.Reportes.THabilitante;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.IO;
 using System.Linq;
 using System.Web;
@@ -20,7 +21,6 @@ namespace SIGOFCv3.Areas.THabilitante.Controllers
 {
     public class ManPOAController : Controller
     {
-        private string folderConstanciaContratoRegente = "~/Archivos/Contrato/ContratoDetRegente/";
         public static VM_POA objVM2 = new VM_POA();
         public string NOMARCHTEMP = "";
 
@@ -1741,20 +1741,20 @@ namespace SIGOFCv3.Areas.THabilitante.Controllers
             {
                 try
                 {
-                    
+                    string pathSIGOsfc = ConfigurationManager.AppSettings["pathSIGOsfc"] + "/Contrato/ContratoDetRegente/";
                     Ent_Persona entP = JsonConvert.DeserializeObject<Ent_Persona>(Request.Form["data"]);
                     HttpPostedFileBase file = Request.Files[0];//  Get all files from Request object 
 
-                    if (!Directory.Exists(Server.MapPath(folderConstanciaContratoRegente)))
+                    if (!Directory.Exists(Server.MapPath(pathSIGOsfc)))
                     {
-                        Directory.CreateDirectory(Server.MapPath(folderConstanciaContratoRegente));
+                        Directory.CreateDirectory(Server.MapPath(pathSIGOsfc));
                     }
                     Guid myuuid = Guid.NewGuid();
                     string myuuidAsString = myuuid.ToString();
                     //Guardar el doc ajunto
                     string name = $"ContratoRegente-{myuuidAsString}.pdf";
                     NOMARCHTEMP = name;
-                    string carpetaDestino = Server.MapPath(folderConstanciaContratoRegente);
+                    string carpetaDestino = Server.MapPath(pathSIGOsfc);
                     string rutaDestino = Path.Combine(carpetaDestino, name);
 
                     if (entP.COD_SECUENCIAL > 0)
@@ -1777,26 +1777,6 @@ namespace SIGOFCv3.Areas.THabilitante.Controllers
                 return Json(new { success = false, msj = "No se encontró el documento a subir" });
             }
         }
-        //[HttpPost]
-        //public JsonResult descargarDocumentoAdjunto(string identificador)
-        //{
-        //    //Log_POA objLog = new Log_POA();
-        //    //string constancia;
-        //    //try
-        //    //{
-        //    //    constancia = objLog.ObtenerNomArch(identificador);
-        //    //}
-        //    //catch (Exception ex)
-        //    //{
-        //    //    exInterno = ex.Message;
-        //    //    success = false;
-        //    //    string[] mensaje = ex.Message.Split('|');
-        //    //    if (mensaje[0] == "0")
-        //    //        message = mensaje[1];
-        //    //    else message = "Sucedió un error al generar el documento";
-        //    //}
-        //    return Json(new { success, message, exInterno, constancia, existeArchivo });
-        //}
 
     }
 }
