@@ -939,7 +939,7 @@ ManPOA.selectFile = null;
                         ManPOA.ListEliTABLA.push({
                             EliTABLA: "POA_DET_REGENTE",
                             EliVALOR01: row.COD_PERSONA,
-                            EliVALOR02: 0
+                            EliVALOR02: row.COD_SECUENCIAL
                         });
                     
                     ManPOA.dtDetRegente.row($tr).remove().draw();
