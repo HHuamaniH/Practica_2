@@ -623,10 +623,34 @@ ManPOA.selectFile = null;
                     var data = _bPerGen.dtBuscarPerona.row($(obj).parents('tr')).data();
                     switch (_dom) {
                         case "REGENTE":
-                            ManPOA.fnSetPersonaCompleto(_dom, data["COD_PERSONA"], data["COD_PTIPO"], data["TIPO_CARGO"]);
-                            ManPOA.frmPOARegistro.find("#txtCodUbigeo").val(data["COD_UBIGEO"]);
-                            ManPOA.frmPOARegistro.find("#txtUbigeo").val(data["UBIGEO"]);
-                            ManPOA.frmPOARegistro.find("#txtDirecion").val(data["DIRECCION"]);
+                            if (data["COD_PTIPO"] != null && data["COD_PTIPO"].trim() != "" && _tipoPersonaSIGOsfc != "") {
+                                let tipoCargo = _tipoPersonaSIGOsfc.split(',');
+                                let band = 0;
+
+                                for (let i = 0; i < tipoCargo.length; i++) {
+                                    if (tipoCargo[i] == data["COD_PTIPO"]) {
+                                        band = 1;
+                                        break;
+                                    }
+                                }
+
+                                if (band == 0) {
+                                    utilSigo.toastWarning("Aviso", "El cargo asignado no corresponde a lo requerido en la lista");
+                                }
+                                else {
+                                    ManPOA.fnSetPersonaCompleto(_dom, data["COD_PERSONA"], data["COD_PTIPO"], data["TIPO_CARGO"]);
+                                    ManPOA.frmPOARegistro.find("#txtCodUbigeo").val(data["COD_UBIGEO"]);
+                                    ManPOA.frmPOARegistro.find("#txtUbigeo").val(data["UBIGEO"]);
+                                    ManPOA.frmPOARegistro.find("#txtDirecion").val(data["DIRECCION"]);
+                                }
+                            }
+                            else {
+                                ManPOA.fnSetPersonaCompleto(_dom, data["COD_PERSONA"], data["COD_PTIPO"], data["TIPO_CARGO"]);
+                                ManPOA.frmPOARegistro.find("#txtCodUbigeo").val(data["COD_UBIGEO"]);
+                                ManPOA.frmPOARegistro.find("#txtUbigeo").val(data["UBIGEO"]);
+                                ManPOA.frmPOARegistro.find("#txtDirecion").val(data["DIRECCION"]);
+                            }
+                            
                             break;
                         case "REGENTEIMPLEMENTA":
                             //if (!utilDt.existValorSearch(ManPOA.dtDetRegente, "COD_PERSONA", data["COD_PERSONA"])) {
@@ -759,60 +783,78 @@ ManPOA.selectFile = null;
                     switch (_dom) {
                         case "REGENTE":
                             var listaPDP = data.data["ListPersonaDProfesional"];
-                            const cipR = listaPDP[0].CIP;
-                            const codCategoriaR = listaPDP[0].CATEGORIA;
-                            const estadoRegenteR = listaPDP[0].ESTADO_REGENTE;
-                            const nroLicenciaR = listaPDP[0].NROLICENCIA;
-                            const fecOtorgamientoR = listaPDP[0].OTORGAMIENTO;
-                            const resAprobacionR = listaPDP[0].RESAPROBACION;
-                            ManPOA.frmPOARegistro.find("#hdfItemConsultorCodigo").val(data.data["COD_PERSONA"]);
-                            ManPOA.frmPOARegistro.find("#lblItemConsultorNombre").val(data.data["APELLIDOS_NOMBRES"]);
-                            ManPOA.frmPOARegistro.find("#lblItemConsultorDNI").val(data.data["N_DOCUMENTO"]);
-                            //ManPOA.frmPOARegistro.find("#lblItemConsultorCARGO").val(tipoCargo);
-                            ManPOA.frmPOARegistro.find("#lblItemConsultorCIP").val(cipR);
-                            //ManPOA.frmPOARegistro.find("#lblItemConsultorCATEGORIA").val(codCategoriaR);
-                            ManPOA.frmPOARegistro.find("#lblItemConsultorESTADO").val(estadoRegenteR);
-                            ManPOA.frmPOARegistro.find("#lblItemConsultorLICENCIA").val(nroLicenciaR);
-                            ManPOA.frmPOARegistro.find("#lblItemConsultorOTORGAMIENTO").val(fecOtorgamientoR);
-                            ManPOA.frmPOARegistro.find("#lblItemConsultorRESOLUCION").val(resAprobacionR);
+                            if (!listaPDP || listaPDP.length === 0) {
+                                ManPOA.frmPOARegistro.find("#hdfItemConsultorCodigo").val(data.data["COD_PERSONA"]);
+                                ManPOA.frmPOARegistro.find("#lblItemConsultorNombre").val(data.data["APELLIDOS_NOMBRES"]);
+                                ManPOA.frmPOARegistro.find("#lblItemConsultorDNI").val(data.data["N_DOCUMENTO"]);
+                            } else {
+                                const cipR = listaPDP[0].CIP;
+                                const estadoRegenteR = listaPDP[0].ESTADO_REGENTE;
+                                const nroLicenciaR = listaPDP[0].NROLICENCIA;
+                                const fecOtorgamientoR = listaPDP[0].OTORGAMIENTO;
+                                const resAprobacionR = listaPDP[0].RESAPROBACION;
+                                ManPOA.frmPOARegistro.find("#hdfItemConsultorCodigo").val(data.data["COD_PERSONA"]);
+                                ManPOA.frmPOARegistro.find("#lblItemConsultorNombre").val(data.data["APELLIDOS_NOMBRES"]);
+                                ManPOA.frmPOARegistro.find("#lblItemConsultorDNI").val(data.data["N_DOCUMENTO"]);
+                                ManPOA.frmPOARegistro.find("#lblItemConsultorCIP").val(cipR);
+                                ManPOA.frmPOARegistro.find("#lblItemConsultorESTADO").val(estadoRegenteR);
+                                ManPOA.frmPOARegistro.find("#lblItemConsultorLICENCIA").val(nroLicenciaR);
+                                ManPOA.frmPOARegistro.find("#lblItemConsultorOTORGAMIENTO").val(fecOtorgamientoR);
+                                ManPOA.frmPOARegistro.find("#lblItemConsultorRESOLUCION").val(resAprobacionR);
 
-
-                            ManPOA.frmPOARegistro.find("#txtItemNRConsultor").val(data.data["NUM_REGISTRO_FFS"]);
-                            ManPOA.frmPOARegistro.find("#lblItemConsultorNRProfesional").val(data.data["NUM_REGISTRO_PROFESIONAL"]);
+                            }
+                            
                             break;
                         case "REGENTEIMPLEMENTA":
                             var dt = null;
                             dt = ManPOA.dtDetRegente;
                             var codSecC = parseInt(dt.$("tr").length) + 1;
                             var listaPDP = data.data["ListPersonaDProfesional"];
-                            const anio = listaPDP[0].ANIO;
-                            const cip = listaPDP[0].CIP;
-                            const codCategoria = listaPDP[0].CATEGORIA;
-                            const estadoRegente = listaPDP[0].ESTADO_REGENTE;
-                            const nroLicencia = listaPDP[0].NROLICENCIA;
-                            const fecOtorgamiento = listaPDP[0].OTORGAMIENTO;
-                            const resAprobacion = listaPDP[0].RESAPROBACION;
-                            const codSecuencial = listaPDP[0].COD_SECUENCIAL;
-                            var item = {
-                                NRO: codSecC,
-                                COD_PERSONA: data.data["COD_PERSONA"],
-                                N_DOCUMENTO: data.data["N_DOCUMENTO"],
-                                PERSONA: data.data["APELLIDOS_NOMBRES"],
-                                COD_PTIPO: codPTipo,
-                                //TIPO_CARGO: tipoCargo, 
-                                RegEstado: "1",
-                                //ANIO: anio,
-                                CIP: cip,
-                                CATEGORIA: codCategoria,
-                                ESTADO_REGENTE: estadoRegente,
-                                NROLICENCIA: nroLicencia,
-                                OTORGAMIENTO: fecOtorgamiento,
-                                RESAPROBACION: resAprobacion,
-                                COD_SECUENCIAL: codSecuencial,
-                                
-                            };
-                            dt.row.add(item).draw(); dt.page('last').draw('page');
-                            
+                            if (!listaPDP || listaPDP.length === 0) {
+                                console.log("1");
+                                var item = {
+
+                                    NRO: codSecC,
+                                    COD_PERSONA: data.data["COD_PERSONA"],
+                                    N_DOCUMENTO: data.data["N_DOCUMENTO"],
+                                    PERSONA: data.data["APELLIDOS_NOMBRES"],
+                                    COD_PTIPO: codPTipo,
+                                    RegEstado: "1",
+                                    CIP: "",
+                                    CATEGORIA: "",
+                                    ESTADO_REGENTE: "",
+                                    NROLICENCIA: "",
+                                    OTORGAMIENTO: "",
+                                    RESAPROBACION: "",
+                                    COD_SECUENCIAL: "",
+                                };
+                                dt.row.add(item).draw(); dt.page('last').draw('page');
+                            } else {
+                                const cip = listaPDP[0].CIP;
+                                const codCategoria = listaPDP[0].CATEGORIA;
+                                const estadoRegente = listaPDP[0].ESTADO_REGENTE;
+                                const nroLicencia = listaPDP[0].NROLICENCIA;
+                                const fecOtorgamiento = listaPDP[0].OTORGAMIENTO;
+                                const resAprobacion = listaPDP[0].RESAPROBACION;
+                                const codSecuencial = listaPDP[0].COD_SECUENCIAL;
+                                var item = {
+                                    NRO: codSecC,
+                                    COD_PERSONA: data.data["COD_PERSONA"],
+                                    N_DOCUMENTO: data.data["N_DOCUMENTO"],
+                                    PERSONA: data.data["APELLIDOS_NOMBRES"],
+                                    COD_PTIPO: codPTipo,
+                                    RegEstado: "1",
+                                    CIP: cip,
+                                    CATEGORIA: codCategoria,
+                                    ESTADO_REGENTE: estadoRegente,
+                                    NROLICENCIA: nroLicencia,
+                                    OTORGAMIENTO: fecOtorgamiento,
+                                    RESAPROBACION: resAprobacion,
+                                    COD_SECUENCIAL: codSecuencial,
+
+                                };
+                                dt.row.add(item).draw(); dt.page('last').draw('page');
+                            }
                             break;
                         case "IOCULAR":
                         case "ITIOCULAR":

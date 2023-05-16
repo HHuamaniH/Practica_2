@@ -539,25 +539,6 @@ namespace CapaDatos.DOC
                             }
                         }
 
-                        ////POA_DET_REFORMULA
-                        //dr.NextResult();
-                        //if (dr.HasRows)
-                        //{
-                        //    int pt1 = dr.GetOrdinal("COD_PERSONA");
-                        //    int pt2 = dr.GetOrdinal("PERSONA");
-                        //    int pt3 = dr.GetOrdinal("N_DOCUMENTO");
-                        //    int pt4 = dr.GetOrdinal("CARGO");
-                        //    while (dr.Read())
-                        //    {
-                        //        oCamposDet = new CEntidad();
-                        //        oCamposDet.COD_PERSONA = dr.GetString(pt1);
-                        //        oCamposDet.PERSONA = dr.GetString(pt2);
-                        //        oCamposDet.N_DOCUMENTO = dr.GetString(pt3);
-                        //        oCamposDet.CARGO = dr.GetString(pt4);
-                        //        oCamposDet.RegEstado = 0;
-                        //        oCampos.ListREFORMULAPOA.Add(oCamposDet);
-                        //    }
-                        //}
                         // POA_DET_AIOCULAR
                         dr.NextResult();
                         if (dr.HasRows)
