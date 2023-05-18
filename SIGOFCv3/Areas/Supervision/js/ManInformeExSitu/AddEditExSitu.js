@@ -2161,6 +2161,7 @@ ManInforme_AddEditExSitu.fnSaveForm = function () {
             datosInforme.ddlTipoInformeId = _renderDatosSupervision.frm.find("#ddlTipoInformeId").val();            
             datosInforme.tbMandatos = _renderMandatos.fnGetList();
             datosInforme.tbMandatos = datosInforme.tbMandatos.concat(_renderMandatos.fnGetListEliTABLA());
+            datosInforme.tbEnfermedad = ManInforme_Enfermedad.fnGetEnfermedad();
             
             var option = { url: ManInforme_AddEditExSitu.frm[0].action, datos: JSON.stringify({ dto: datosInforme }), type: 'POST' };
             utilSigo.fnAjax(option, function (data) {

@@ -277,6 +277,8 @@ namespace CapaEntidad.ViewModel
         public VM_Informe_DatoSuperv vmDatoSupervision { get; set; }
         public bool chkLicFuncionamiento { get; set; }
         public string txtLicFuncionamiento { get; set; }
+        public string txtAsunto { get; set; }
+        public string txtContenido { get; set; }
         public string hdfCodUbigeo { get; set; }
         public string txtUbigeo { get; set; }
         public string txtSector { get; set; }
@@ -373,6 +375,7 @@ namespace CapaEntidad.ViewModel
         public List<Ent_ISUPERVISION_EXSITU_INFRA_AREA> tbActividadInvestigacion { get; set; }
         public List<Ent_INFORME_OBLIGTITULAR> tbObligacionTitular { get; set; }
         public List<Ent_MANDATOS> tbMandatos { get; set; }
+        public List<Ent_INFORME_ENFERMEDAD> tbEnfermedad { get; set; }
 
         public List<Ent_INFORME> tbFotoSupervision { get; set; }
         public double txtCalificacionZoo { get; set; }
@@ -435,6 +438,7 @@ namespace CapaEntidad.ViewModel
             tbDesplazamiento = new List<Ent_INFORME>();
             tbBalanceIngEgr = new List<Ent_ISUPERVISION_EXSITU_INFRA_AREA>();
             tbMandatos = new List<Ent_MANDATOS>();
+            tbEnfermedad = new List<Ent_INFORME_ENFERMEDAD>();
         }
     }
 
@@ -625,6 +629,7 @@ namespace CapaEntidad.ViewModel
         public string hdfPerfil { get; set; }
         public List<Ent_INFORME> tbFotoSupervision { get; set; }
         public List<Ent_INFORME_PROGRAMA> tbPrograma { get; set; }
+        public List<Ent_INFORME_ENFERMEDAD> tbEnfermedad { get; set; }
         public List<Ent_INFORME> tbManejoImpacto { get; set; }
         public List<Ent_INFORME> tbResponsabilidadSocial { get; set; }
         public List<Ent_INFORME> tbObligacionContrac { get; set; }
@@ -681,7 +686,8 @@ namespace CapaEntidad.ViewModel
             tbAprovSostenible = new List<Ent_INFORME>();
             tbObligacionTitular = new List<Ent_INFORME_OBLIGTITULAR>();
             tbRegFauna = new List<Ent_INFORME>();
-        }
+            tbEnfermedad = new List<Ent_INFORME_ENFERMEDAD>();
+    }
     }
 
     public class VM_Informe_POAFaunaSupervisado
