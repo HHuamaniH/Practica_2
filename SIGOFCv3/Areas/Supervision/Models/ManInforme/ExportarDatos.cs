@@ -1615,7 +1615,16 @@ namespace SIGOFCv3.Areas.Supervision.Models.ManInforme
                                 insertar = insertar + ",'" + listaInf.CODIGO + "'";
                                 insertar = insertar + ",'" + listaInf.CODIGO_CAMPO + "'";
                                 insertar = insertar + ",'" + listaInf.ESPECIES + "'";
-                                insertar = insertar + ",'" + listaInf.DESC_ESPECIES_CAMPO + "'";
+                                if (listaInf.DESC_ESPECIES_CAMPO.Split('|').Length == 2)
+                                {
+                                    insertar = insertar + ",'" + listaInf.DESC_ESPECIES_CAMPO.Split('|')[0].Trim() + "'"; //Nombre científico
+                                    insertar = insertar + ",'" + listaInf.DESC_ESPECIES_CAMPO.Split('|')[1].Trim() + "'"; //Nombre común
+                                }
+                                else
+                                {
+                                    insertar = insertar + ",' '";
+                                    insertar = insertar + ",' '";
+                                }
                                 insertar = insertar + ",'" + listaInf.COORDENADA_ESTE.ToString() + "'";
                                 insertar = insertar + ",'" + listaInf.COORDENADA_ESTE_CAMPO.ToString() + "'";
                                 insertar = insertar + ",'" + listaInf.COORDENADA_NORTE.ToString() + "'";
@@ -1632,7 +1641,7 @@ namespace SIGOFCv3.Areas.Supervision.Models.ManInforme
                                 insertar = insertar + ",'" + listaInf.COD_SECUENCIAL.ToString() + "'";
                                 insertar = insertar + ",'" + listaInf.FUENTE_FOTO.ToString() + "'";
 
-                                cmd.CommandText = "INSERT INTO [shp_arb_sup$A" + i.ToString().Trim() + ":W" + (oCEntidadInfTemp.ListISupervMaderableAprov.Count + 1).ToString() + "] VALUES (" + insertar + ")";
+                                cmd.CommandText = "INSERT INTO [shp_arb_sup$A" + i.ToString().Trim() + ":X" + (oCEntidadInfTemp.ListISupervMaderableAprov.Count + 1).ToString() + "] VALUES (" + insertar + ")";
                                 cmd.ExecuteNonQuery();
 
                                 result.data = listaInf.NUMERO;
@@ -1651,7 +1660,16 @@ namespace SIGOFCv3.Areas.Supervision.Models.ManInforme
                                 insertar = insertar + ",'" + listaInf.CODIGO + "'";
                                 insertar = insertar + ",'" + listaInf.CODIGO_CAMPO + "'";
                                 insertar = insertar + ",'" + listaInf.ESPECIES + "'";
-                                insertar = insertar + ",'" + listaInf.DESC_ESPECIES_CAMPO + "'";
+                                if (listaInf.DESC_ESPECIES_CAMPO.Split('|').Length == 2)
+                                {
+                                    insertar = insertar + ",'" + listaInf.DESC_ESPECIES_CAMPO.Split('|')[0].Trim() + "'"; //Nombre científico
+                                    insertar = insertar + ",'" + listaInf.DESC_ESPECIES_CAMPO.Split('|')[1].Trim() + "'"; //Nombre común
+                                }
+                                else
+                                {
+                                    insertar = insertar + ",' '";
+                                    insertar = insertar + ",' '";
+                                }
                                 insertar = insertar + ",'" + listaInf.COORDENADA_ESTE.ToString() + "'";
                                 insertar = insertar + ",'" + listaInf.COORDENADA_ESTE_CAMPO.ToString() + "'";
                                 insertar = insertar + ",'" + listaInf.COORDENADA_NORTE.ToString() + "'";
@@ -1668,7 +1686,7 @@ namespace SIGOFCv3.Areas.Supervision.Models.ManInforme
                                 insertar = insertar + ",'" + listaInf.COD_SECUENCIAL.ToString() + "'";
                                 insertar = insertar + ",'" + listaInf.FUENTE_FOTO.ToString() + "'";
 
-                                cmd.CommandText = "INSERT INTO [shp_nomad_sup$A" + i.ToString().Trim() + ":W" + (oCEntidadInfTemp.ListISupervNoMaderableAprov.Count + 1).ToString() + "] VALUES (" + insertar + ")";
+                                cmd.CommandText = "INSERT INTO [shp_nomad_sup$A" + i.ToString().Trim() + ":X" + (oCEntidadInfTemp.ListISupervNoMaderableAprov.Count + 1).ToString() + "] VALUES (" + insertar + ")";
                                 cmd.ExecuteNonQuery();
 
                                 result.data = listaInf.NUMERO;
