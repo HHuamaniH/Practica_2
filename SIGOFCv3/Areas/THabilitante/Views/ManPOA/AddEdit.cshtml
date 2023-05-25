@@ -49,86 +49,7 @@
                 </text>
                 foreach (var item in Model.ListBExtPOA)
                 {
-                    /*if (item.ListMadeBEXTRACCION != null)
-                    {
-                        if (item.ListMadeBEXTRACCION.Count() > 0)
-                        {
-                            <text>
-                            listMadeBEXTRACCION = [];
-                            var i = 1;
-                            </text>
-                            foreach (var item1 in item.ListMadeBEXTRACCION)
-                            {
-                                <text>
-                                    listMadeBEXTRACCION.push({
-                                    NRO: i,
-                                    ESPECIES: "@item1.ESPECIES",
-                                    ESPECIES_SERFOR: "@item1.ESPECIES_SERFOR",
-                                    DMC: "@item1.DMC",
-                                    TOTAL_ARBOLES: "@item1.TOTAL_ARBOLES",
-                                    VOLUMEN_AUTORIZADO: "@item1.VOLUMEN_AUTORIZADO",
-                                    VOLUMEN_MOVILIZADO: "@item1.VOLUMEN_MOVILIZADO",
-                                    AUTORIZADO: "@item1.AUTORIZADO",
-                                    EXTRAIDO: "@item1.EXTRAIDO",
-                                    FECHA1: "@item1.FECHA1",
-                                    GUIA_TRANSPORTE: "@item1.GUIA_TRANSPORTE",
-                                    FECHA2: "@item1.FECHA2",
-                                    RECIBO: "@item1.RECIBO",
-                                    SALDO: "@item1.SALDO",
-                                    PCA: "@item1.PCA",
-                                    CANTIDAD: "@item1.CANTIDAD",
-                                    UNIDAD_MEDIDA: "@item1.UNIDAD_MEDIDA",
-                                    OBSERVACION: "@Html.Raw(@item1.OBSERVACION)",
-                                    TIPOMADERABLE: "@item1.TIPOMADERABLE",
-                                    COD_ESPECIES: "@item1.COD_ESPECIES",
-                                    COD_ESPECIES_SERFOR: "@item1.COD_ESPECIES_SERFOR",
-                                    RegEstado: "@item1.RegEstado",
-                                    index: (i - 1),
-                                    COD_SECUENCIAL:"@item1.COD_SECUENCIAL"
-                                });
-                                i++;
-                                </text>
-                            }
-                        }
-                    }
-                    if (item.ListNoMadeBEXTRACCION != null)
-                    {
-                        if (item.ListNoMadeBEXTRACCION.Count() > 0)
-                        {
-                            <text>
-                            ListNoMadeBEXTRACCION = [];
-                            var i = 1;
-                            </text>
-                            foreach (var item1 in item.ListNoMadeBEXTRACCION)
-                            {
-                                <text>
-                                ListNoMadeBEXTRACCION.push({
-                                    NRO: i,
-                                    ESPECIES: "@item1.ESPECIES",
-                                    ESPECIES_SERFOR: "@item1.ESPECIES_SERFOR",
-                                    KILOGRAMO_AUTORIZADO: "@item1.KILOGRAMO_AUTORIZADO",
-                                    KILOGRAMO_MOVILIZADO: "@item1.KILOGRAMO_MOVILIZADO",
-                                    AUTORIZADO: "@item1.AUTORIZADO",
-                                    EXTRAIDO: "@item1.EXTRAIDO",
-                                    FECHA1: "@item1.FECHA1",
-                                    GUIA_TRANSPORTE: "@item1.GUIA_TRANSPORTE",
-                                    FECHA2: "@item1.FECHA2",
-                                    RECIBO: "@item1.RECIBO",
-                                    SALDO: "@item1.SALDO",
-                                    CANTIDAD: "@item1.CANTIDAD",
-                                    UNIDAD_MEDIDA: "@item1.UNIDAD_MEDIDA",
-                                    OBSERVACION: "@item1.OBSERVACION",
-                                    COD_ESPECIES: "@item1.COD_ESPECIES",
-                                    COD_ESPECIES_SERFOR: "@item1.COD_ESPECIES_SERFOR",
-                                    RegEstado: "@item1.RegEstado",
-                                    index: (i - 1),
-                                    COD_SECUENCIAL:"@item1.COD_SECUENCIAL"
-                                });
-                                i++;
-                                </text>
-                            }
-                        }
-                    }*/
+                    
                     if (item.ListISituBEXTRACCION != null)
                     {
                         if (item.ListISituBEXTRACCION.Count() > 0)
@@ -671,13 +592,14 @@
                                             <table id="grvDetRegente" style="width:100%" class="table table-hover table-bordered">
                                                 <thead>
                                                     <tr>
-                                                        <th colspan="14" class="text-sm-left">
+                                                        <th colspan="15" class="text-sm-left">
                                                             <div class="form-inline">
                                                                 <i class="fa mx-2 fa-lg fa-file-o" style="cursor:pointer;" onclick="ManPOA.fnBuscarPersona('REGENTEIMPLEMENTA', '0000020');" data-toggle="tooltip" data-placement="top" title="Nuevo"></i>
                                                             </div>
                                                         </th>
                                                     </tr>
                                                     <tr>
+                                                        <th></th>
                                                         <th></th>
                                                         <th></th>
                                                         <th></th>
@@ -688,10 +610,12 @@
                                                         @*<th>Año</th>*@
                                                         <th>CIP</th>
                                                         <th>Categoria</th>
-                                                        <th>Estado Regente</th>
+                                                        @*<th>Estado Regente</th>*@
                                                         <th>N° Licencia</th>
-                                                        <th>Fec. Otorgamiento</th>
-                                                        <th>Res. Aprobación</th>
+                                                        @*<th>Fec. Otorgamiento</th>
+                                                        <th>Res. Aprobación</th>*@
+                                                        <th>Fecha Inicio</th>
+                                                        <th>Fecha Fin</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody></tbody>
@@ -3013,3 +2937,4 @@
 </div>
 <div class="modal fade" id="funcionarioAgregarModal" tabindex="-1" role="dialog"></div>
 <div class="modal fade hide" id="modalAddErrorMaterial" role="dialog"></div>
+<div class="modal fade hide" id="modalAddFechaRegencia" role="dialog"></div>

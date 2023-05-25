@@ -1537,7 +1537,9 @@ namespace SIGOFCv3.Areas.THabilitante.Controllers
                              ANIO = cust.ANIO,
                              NROLICENCIA = cust.NROLICENCIA,
                              COD_SECUENCIAL = cust.COD_SECUENCIAL,
-                             NOMBRE_ARCH = cust.NOMBRE_ARCH
+                             NOMBRE_ARCH = cust.NOMBRE_ARCH,
+                             FECHA_INI = cust.FECHA,
+                             FECHA_FIN = cust.FECHA1,
                          };
             var jsonResult = Json(new { data = lstMin }, JsonRequestBehavior.AllowGet);
             jsonResult.MaxJsonLength = int.MaxValue;
@@ -1730,7 +1732,11 @@ namespace SIGOFCv3.Areas.THabilitante.Controllers
         {
             return PartialView();
         }
-
+        [HttpPost]
+        public PartialViewResult _FechaRegencia()
+        {
+            return PartialView();
+        }
 
         [HttpPost]
         public JsonResult GrabarDocumentoAdjunto()

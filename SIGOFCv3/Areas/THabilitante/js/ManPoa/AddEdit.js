@@ -137,6 +137,12 @@ ManPOA.selectFile = null;
                             return '<i class="fa fa-lg fa-download";cursor:pointer;" title="Descargar contrato" onclick="ManPOA.fnDescargar(this);"></i>';
                         }
                     },
+                    {
+                        autoWidth: true, bSortable: false,
+                        mRender: function (data, type, row) {
+                            return '<i class="fa fa-calendar";cursor:pointer;" title="Ingresar fecha de contrato" onclick="ManPOA.fnAddFechaRegencia(this);"></i>';
+                        }
+                    },
                     { data: "NRO", autoWidth: true },
                     { data: "PERSONA", autoWidth: true },
                     { data: "N_DOCUMENTO", autoWidth: true },
@@ -144,11 +150,12 @@ ManPOA.selectFile = null;
                     //{ data: "ANIO", autoWidth: true },
                     { data: "CIP", autoWidth: true },
                     { data: "CATEGORIA", autoWidth: true },
-                    { data: "ESTADO_REGENTE", autoWidth: true },
+                    //{ data: "ESTADO_REGENTE", autoWidth: true },
                     { data: "NROLICENCIA", autoWidth: true },
-                    { data: "OTORGAMIENTO", autoWidth: true },
-                    { data: "RESAPROBACION", autoWidth: true },
-
+                    //{ data: "OTORGAMIENTO", autoWidth: true },
+                    //{ data: "RESAPROBACION", autoWidth: true },
+                    { data: "FECHA_INI", autoWidth: true },
+                    { data: "FECHA_FIN", autoWidth: true },
                 ]
             
         });
@@ -824,9 +831,11 @@ ManPOA.selectFile = null;
                                     CATEGORIA: "",
                                     ESTADO_REGENTE: "",
                                     NROLICENCIA: "",
-                                    OTORGAMIENTO: "",
-                                    RESAPROBACION: "",
+                                    //OTORGAMIENTO: "",
+                                    //RESAPROBACION: "",
                                     COD_SECUENCIAL: "",
+                                    FECHA_INI: "",
+                                    FECHA_FIN: "",
                                 };
                                 dt.row.add(item).draw(); dt.page('last').draw('page');
                             } else {
@@ -846,12 +855,13 @@ ManPOA.selectFile = null;
                                     RegEstado: "1",
                                     CIP: cip,
                                     CATEGORIA: codCategoria,
-                                    ESTADO_REGENTE: estadoRegente,
+                                    //ESTADO_REGENTE: estadoRegente,
                                     NROLICENCIA: nroLicencia,
-                                    OTORGAMIENTO: fecOtorgamiento,
-                                    RESAPROBACION: resAprobacion,
+                                    //OTORGAMIENTO: fecOtorgamiento,
+                                    //RESAPROBACION: resAprobacion,
                                     COD_SECUENCIAL: codSecuencial,
-
+                                    FECHA_INI: "",
+                                    FECHA_FIN: "",
                                 };
                                 dt.row.add(item).draw(); dt.page('last').draw('page');
                             }
@@ -1692,7 +1702,9 @@ ManPOA.selectFile = null;
                     NROLICENCIA: row.NROLICENCIA,
                     OTORGAMIENTO: row.OTORGAMIENTO,
                     RESAPROBACION: row.RESAPROBACION,
-                    NOMBRE_ARCH: NOM_ARCH
+                    NOMBRE_ARCH: NOM_ARCH,
+                    FECHA: row.FECHA_INI,
+                    FECHA1: row.FECHA_FIN
                 });
             }
 
@@ -2021,6 +2033,31 @@ ManPOA.selectFile = null;
             _ErrorMaterial.fnInit(tipo);
         });
     }
+    this.fnAddFechaRegencia = function (elemento) {
+        var fila = $(elemento).closest("tr");
+        var filaIndex = ManPOA.dtDetRegente.row(fila).index();
+        var url = urlLocalSigo + "THabilitante/ManPOA/_FechaRegencia";
+        var option = { url: url, type: 'POST', datos: {}, divId: "modalAddFechaRegencia" };
+        utilSigo.fnOpenModal(option, function () {
+            _FechaRegencia.fnCloseModal = function () {
+                $("#modalAddFechaRegencia").modal('hide');
+            };
+
+            _FechaRegencia.fnSaveForm = function (data) {
+                if (data != null) {
+                    var rowData = ManPOA.dtDetRegente.row(filaIndex).data();
+                    rowData.FECHA_INI = data["FECHA_INI"];
+                    rowData.FECHA_FIN = data["FECHA_FIN"];
+                    ManPOA.dtDetRegente.row(filaIndex).data(rowData).draw();
+                    $("#modalAddFechaRegencia").modal('hide');
+                } else {
+                    utilSigo.toastSuccess("Error", "No se pudieron guardar los datos");
+                }
+            };
+
+            _FechaRegencia.fnInit();
+        });
+    };
     this.fnGetListErrorMaterial = function (tipo) {
         var dt, list = [], rows, countFilas, data;
 
@@ -2075,7 +2112,16 @@ ManPOA.selectFile = null;
         //datos de ListDETREGENTE
         if (ManPOA.dtDetRegente != undefined) {
             datosPOA.ListDETREGENTE = ManPOA.getListDETREGENTE();
-
+            var dat = datosPOA.ListDETREGENTE;
+            console.log(dat);
+            if (dat.length != 0) {
+                if (dat[0].FECHA === undefined || dat[0].FECHA === "" || dat[0].FECHA1 === undefined
+                    || dat[0].FECHA1 === "") {
+                    utilSigo.toastWarning("Aviso", "Ingrese fecha de inicio y fin al registro de regente");
+                    return;
+                }
+            }
+            
         }
         //datos de ListAOCULAR
         if (ManPOA.dtItemAOcular != undefined) {

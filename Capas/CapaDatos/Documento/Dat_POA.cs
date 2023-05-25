@@ -580,6 +580,8 @@ namespace CapaDatos.DOC
                             int pt12 = dr.GetOrdinal("RESAPROBACION");
                             int pt13 = dr.GetOrdinal("COD_SECUENCIAL");
                             int pt14 = dr.GetOrdinal("NOMBRE_ARCH");
+                            int pt15 = dr.GetOrdinal("FECHA_INI");
+                            int pt16 = dr.GetOrdinal("FECHA_FIN");
                             while (dr.Read())
                             {
                                 oCamposDet = new CEntidad();
@@ -597,6 +599,8 @@ namespace CapaDatos.DOC
                                 oCamposDet.RESAPROBACION = dr.GetString(pt12);
                                 oCamposDet.COD_SECUENCIAL = dr.GetInt32(pt13);
                                 oCamposDet.NOMBRE_ARCH = dr.GetString(pt14);
+                                oCamposDet.FECHA = dr.GetString(pt15);
+                                oCamposDet.FECHA1 = dr.GetString(pt16);
                                 oCamposDet.RegEstado = 0;
                                 oCampos.ListDETREGENTE.Add(oCamposDet);
                             }
@@ -1892,6 +1896,8 @@ namespace CapaDatos.DOC
                         oCamposDet.COD_PERSONA = loDatos.COD_PERSONA;
                         oCamposDet.NOMBRE_ARCH = loDatos.NOMBRE_ARCH;
                         oCamposDet.COD_PTIPO = loDatos.COD_PTIPO;
+                        oCamposDet.FECHA = loDatos.FECHA;
+                        oCamposDet.FECHA1 = loDatos.FECHA1;
                         dBOracle.ManExecute(cn, tr, "DOC_OSINFOR_ERP_MIGRACION.SPPOA_DET_REGENTEGRABAR", oCamposDet);
 
                     }
