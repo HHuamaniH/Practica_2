@@ -139,6 +139,8 @@ namespace CapaEntidad.DOC
         public List<Ent_Persona> ListTipoCargo { get; set; }
         [Category("LIST"), Description("ListMencion")]
         public List<Ent_Persona> ListMencion { get; set; }
+        [Category("LIST"), Description("ListPersonaDProfesional")]
+        public List<Ent_Persona> ListPersonaDProfesional { get; set; }
 
         //Eliminar registro
         [Description("EliTABLA")]
@@ -174,12 +176,16 @@ namespace CapaEntidad.DOC
         public String OTORGAMIENTO { get; set; }
         [Description("COD_CATEGORIA")]
         public String COD_CATEGORIA { get; set; }
+        [Description("CATEGORIA")]
+        public String CATEGORIA { get; set; }
         [Description("ESTADO_REGENTE")]
         public String ESTADO_REGENTE { get; set; }
         [Description("CIP")]
         public String CIP { get; set; }
         [Description("OTRO")]
         public String OTRO { get; set; }
+
+
 
         public Ent_Persona()
         {

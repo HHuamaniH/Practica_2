@@ -49,86 +49,7 @@
                 </text>
                 foreach (var item in Model.ListBExtPOA)
                 {
-                    /*if (item.ListMadeBEXTRACCION != null)
-                    {
-                        if (item.ListMadeBEXTRACCION.Count() > 0)
-                        {
-                            <text>
-                            listMadeBEXTRACCION = [];
-                            var i = 1;
-                            </text>
-                            foreach (var item1 in item.ListMadeBEXTRACCION)
-                            {
-                                <text>
-                                    listMadeBEXTRACCION.push({
-                                    NRO: i,
-                                    ESPECIES: "@item1.ESPECIES",
-                                    ESPECIES_SERFOR: "@item1.ESPECIES_SERFOR",
-                                    DMC: "@item1.DMC",
-                                    TOTAL_ARBOLES: "@item1.TOTAL_ARBOLES",
-                                    VOLUMEN_AUTORIZADO: "@item1.VOLUMEN_AUTORIZADO",
-                                    VOLUMEN_MOVILIZADO: "@item1.VOLUMEN_MOVILIZADO",
-                                    AUTORIZADO: "@item1.AUTORIZADO",
-                                    EXTRAIDO: "@item1.EXTRAIDO",
-                                    FECHA1: "@item1.FECHA1",
-                                    GUIA_TRANSPORTE: "@item1.GUIA_TRANSPORTE",
-                                    FECHA2: "@item1.FECHA2",
-                                    RECIBO: "@item1.RECIBO",
-                                    SALDO: "@item1.SALDO",
-                                    PCA: "@item1.PCA",
-                                    CANTIDAD: "@item1.CANTIDAD",
-                                    UNIDAD_MEDIDA: "@item1.UNIDAD_MEDIDA",
-                                    OBSERVACION: "@Html.Raw(@item1.OBSERVACION)",
-                                    TIPOMADERABLE: "@item1.TIPOMADERABLE",
-                                    COD_ESPECIES: "@item1.COD_ESPECIES",
-                                    COD_ESPECIES_SERFOR: "@item1.COD_ESPECIES_SERFOR",
-                                    RegEstado: "@item1.RegEstado",
-                                    index: (i - 1),
-                                    COD_SECUENCIAL:"@item1.COD_SECUENCIAL"
-                                });
-                                i++;
-                                </text>
-                            }
-                        }
-                    }
-                    if (item.ListNoMadeBEXTRACCION != null)
-                    {
-                        if (item.ListNoMadeBEXTRACCION.Count() > 0)
-                        {
-                            <text>
-                            ListNoMadeBEXTRACCION = [];
-                            var i = 1;
-                            </text>
-                            foreach (var item1 in item.ListNoMadeBEXTRACCION)
-                            {
-                                <text>
-                                ListNoMadeBEXTRACCION.push({
-                                    NRO: i,
-                                    ESPECIES: "@item1.ESPECIES",
-                                    ESPECIES_SERFOR: "@item1.ESPECIES_SERFOR",
-                                    KILOGRAMO_AUTORIZADO: "@item1.KILOGRAMO_AUTORIZADO",
-                                    KILOGRAMO_MOVILIZADO: "@item1.KILOGRAMO_MOVILIZADO",
-                                    AUTORIZADO: "@item1.AUTORIZADO",
-                                    EXTRAIDO: "@item1.EXTRAIDO",
-                                    FECHA1: "@item1.FECHA1",
-                                    GUIA_TRANSPORTE: "@item1.GUIA_TRANSPORTE",
-                                    FECHA2: "@item1.FECHA2",
-                                    RECIBO: "@item1.RECIBO",
-                                    SALDO: "@item1.SALDO",
-                                    CANTIDAD: "@item1.CANTIDAD",
-                                    UNIDAD_MEDIDA: "@item1.UNIDAD_MEDIDA",
-                                    OBSERVACION: "@item1.OBSERVACION",
-                                    COD_ESPECIES: "@item1.COD_ESPECIES",
-                                    COD_ESPECIES_SERFOR: "@item1.COD_ESPECIES_SERFOR",
-                                    RegEstado: "@item1.RegEstado",
-                                    index: (i - 1),
-                                    COD_SECUENCIAL:"@item1.COD_SECUENCIAL"
-                                });
-                                i++;
-                                </text>
-                            }
-                        }
-                    }*/
+                    
                     if (item.ListISituBEXTRACCION != null)
                     {
                         if (item.ListISituBEXTRACCION.Count() > 0)
@@ -179,10 +100,40 @@
             //ManPOA.ItemBExt.dtItemBExt.rows.add(ManPOA.listBExtPOA[0].listMadeBEXTRACCION).draw();
             //ManPOA.ItemBExtMaderable.dtItemBExtMaderable.rows.add(ManPOA.listBExtPOA[0].listMadeBEXTRACCION).draw();
             //ManPOA.ItemBExtNoMaderable.dtItemBExtNoMaderable.rows.add(ManPOA.listBExtPOA[0].ListNoMadeBEXTRACCION).draw();
-            ManPOA.ItemBExtISitu.dtItemBExtISitu.rows.add(ManPOA.listBExtPOA[0].ListISituBEXTRACCION).draw();
+        ManPOA.ItemBExtISitu.dtItemBExtISitu.rows.add(ManPOA.listBExtPOA[0].ListISituBEXTRACCION).draw();
             </text>
             }
         }
+        @*@if (Model.ListPOARegenteImplementa != null)
+        {
+            if (Model.ListPOARegenteImplementa.Count() > 0)
+            {
+                <text>
+                    var j = 1;
+                </text>
+
+                foreach (var item in Model.ListPOARegenteImplementa)
+                {
+                    <text>
+                        ManPOA.listPOADetRegente.push({
+                            NRO: j,
+                            COD_SECUENCIAL: "@item.COD_SECUENCIAL",
+                            DA_FECRESOLUCION: "@item.DA_FECRESOLUCION",
+                            NV_RESOLUCION: "@item.NV_RESOLUCION",
+                            NV_NOMCAMPO: "@item.NV_NOMCAMPO",
+                            NV_VALANTERIOR: "@item.NV_VALANTERIOR",
+                            NV_VALACTUAL: "@item.NV_VALACTUAL",
+                            NV_OBSERVACION: "@item.NV_OBSERVACION"
+                        });
+                        j++;
+                    </text>
+                }
+                <text>
+                    //console.log(ManPOA.listPOAEMGeneral);
+                    ManPOA.dtRegente_Implementa.rows.add(ManPOA.listPOADetRegente).draw();
+                </text>
+            }
+        }*@
 
         @if (Model.ListPOAErrorMaterialG != null)
         {
@@ -545,7 +496,7 @@
                                     <div id="trItemConsultorA">
                                         @Html.HiddenFor(m => m.hdfItemConsultorCodigo)
                                         <div class="card-header text-small">
-                                            Regente
+                                            Regente suscribe
                                         </div>
                                         <div class="card-body">
                                             <div class="form-row">
@@ -564,7 +515,7 @@
                                                     <label for="lblItemConsultorDNI" class="text-small">DNI</label>
                                                     @Html.EditorFor(m => m.lblItemConsultorDNI, new { htmlAttributes = new { @class = "form-control form-control-sm", @disabled = "disabled" } })
                                                 </div>
-                                                <div class="form-group col-md-4 mb-3">
+                                                @*<div class="form-group col-md-4 mb-3">
                                                     <label for="txtItemNRConsultor" class="text-small">Nro Registro Consultor(Ley 27308)</label>
                                                     @Html.EditorFor(m => m.txtItemNRConsultor, new { htmlAttributes = new { @class = "form-control form-control-sm", maxlength = 100 } })
                                                 </div>
@@ -584,7 +535,37 @@
                                                 <div class="form-group col-md-4 mb-3">
                                                     <label for="txtItemNRNroLicencia" class="text-small">Email</label>
                                                     @Html.EditorFor(m => m.txtItemNREmail, new { htmlAttributes = new { @class = "form-control form-control-sm", @type = "email" } })
+                                                </div>*@
+                                                
+                                                @*<div class="form-group col-md-4 mb-3">
+                                                    <label for="lblItemConsultorCARGO" class="text-small">CARGO</label>
+                                                    @Html.EditorFor(m => m.lblItemConsultorCARGO, new { htmlAttributes = new { @class = "form-control form-control-sm", @disabled = "disabled" } })
+                                                </div>*@
+                                                <div class="form-group col-md-4 mb-3">
+                                                    <label for="lblItemConsultorCIP" class="text-small">CIP</label>
+                                                    @Html.EditorFor(m => m.lblItemConsultorCIP, new { htmlAttributes = new { @class = "form-control form-control-sm", @disabled = "disabled" } })
                                                 </div>
+                                                @*<div class="form-group col-md-4 mb-3">
+                                                    <label for="lblItemConsultorCATEGORIA" class="text-small">CATEGORIA</label>
+                                                    @Html.EditorFor(m => m.lblItemConsultorCATEGORIA, new { htmlAttributes = new { @class = "form-control form-control-sm", @disabled = "disabled" } })
+                                                </div>*@
+                                                <div class="form-group col-md-4 mb-3">
+                                                    <label for="lblItemConsultorESTADO" class="text-small">ESTADO REGENTE</label>
+                                                    @Html.EditorFor(m => m.lblItemConsultorESTADO, new { htmlAttributes = new { @class = "form-control form-control-sm", @disabled = "disabled" } })
+                                                </div>
+                                                <div class="form-group col-md-4 mb-3">
+                                                    <label for="lblItemConsultorLICENCIA" class="text-small">Nro LICENCIA</label>
+                                                    @Html.EditorFor(m => m.lblItemConsultorLICENCIA, new { htmlAttributes = new { @class = "form-control form-control-sm", @disabled = "disabled" } })
+                                                </div>
+                                                <div class="form-group col-md-4 mb-3">
+                                                    <label for="lblItemConsultorOTORGAMIENTO" class="text-small">FECHA OTORGAMIENTO</label>
+                                                    @Html.EditorFor(m => m.lblItemConsultorOTORGAMIENTO, new { htmlAttributes = new { @class = "form-control form-control-sm", @disabled = "disabled" } })
+                                                </div>
+                                                <div class="form-group col-md-4 mb-3">
+                                                    <label for="lblItemConsultorRESOLUCION" class="text-small">RESOLUCIÓN APROBACIÓN</label>
+                                                    @Html.EditorFor(m => m.lblItemConsultorRESOLUCION, new { htmlAttributes = new { @class = "form-control form-control-sm", @disabled = "disabled" } })
+                                                </div>
+
 
                                             </div>
                                             <div class="form-row">
@@ -604,6 +585,44 @@
                                     </div>
 
                                 }
+                                <div class="card-header text-small">Regente implementa</div>
+                                <div class="card-body">
+                                    <div class="form-row">
+                                        <div class="table-responsive">
+                                            <table id="grvDetRegente" style="width:100%" class="table table-hover table-bordered">
+                                                <thead>
+                                                    <tr>
+                                                        <th colspan="15" class="text-sm-left">
+                                                            <div class="form-inline">
+                                                                <i class="fa mx-2 fa-lg fa-file-o" style="cursor:pointer;" onclick="ManPOA.fnBuscarPersona('REGENTEIMPLEMENTA', '0000020');" data-toggle="tooltip" data-placement="top" title="Nuevo"></i>
+                                                            </div>
+                                                        </th>
+                                                    </tr>
+                                                    <tr>
+                                                        <th></th>
+                                                        <th></th>
+                                                        <th></th>
+                                                        <th></th>
+                                                        <th>Nº</th>
+                                                        <th>Apellidos y Nombres</th>
+                                                        <th>N° Documento</th>
+                                                        @*<th>Cargo</th>*@
+                                                        @*<th>Año</th>*@
+                                                        <th>CIP</th>
+                                                        <th>Categoria</th>
+                                                        @*<th>Estado Regente</th>*@
+                                                        <th>N° Licencia</th>
+                                                        @*<th>Fec. Otorgamiento</th>
+                                                        <th>Res. Aprobación</th>*@
+                                                        <th>Fecha Inicio</th>
+                                                        <th>Fecha Fin</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody></tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
                                 <div class="card-header text-small">
                                     Acta de Inspección Ocular
                                 </div>
@@ -634,7 +653,7 @@
                                                 <table id="grItemAOcular" style="width:100%" class="table table-hover table-bordered">
                                                     <thead>
                                                         <tr>
-                                                            <th colspan="6" class="text-sm-left">
+                                                            <th colspan="7" class="text-sm-left">
                                                                 <div class="form-inline">
                                                                     <i class="fa mx-2 fa-lg fa-file-o" style="cursor:pointer;" onclick="ManPOA.fnBuscarPersona('IOCULAR', 'TODOS');" data-toggle="tooltip" data-placement="top" title="Nuevo"></i>
                                                                 </div>
@@ -643,10 +662,18 @@
                                                         <tr>
                                                             <th></th>
                                                             <th></th>
+                                                            <th></th>
                                                             <th>Nº</th>
                                                             <th>Apellidos y Nombres</th>
                                                             <th>N° Documento</th>
                                                             <th>Cargo</th>
+                                                            @*<th>Año</th>
+                                                            <th>N° Licencia</th>
+                                                            <th>Resolucion de Aprobación</th>
+                                                            <th>Fecha otorgamiento</th>
+                                                            <th>Categria</th>
+                                                            <th>CIP</th>
+                                                            <th>Estado</th>*@
                                                         </tr>
                                                     </thead>
                                                     <tbody></tbody>
@@ -1911,6 +1938,7 @@
     </div>
 
     @* Para el control genérico de personas *@
+    <div class="modal fade hide" id="modalAddDetRegente" tabindex="-1" role="dialog"></div>
     <div class="modal fade hide" id="mdlBuscarPersona" role="dialog"></div>
     <div class="modal fade hide" id="modalAddEditPersona" role="dialog"></div>
     <div class="modal fade hide" id="personaUbigeoModal" role="dialog"></div>
@@ -2909,3 +2937,4 @@
 </div>
 <div class="modal fade" id="funcionarioAgregarModal" tabindex="-1" role="dialog"></div>
 <div class="modal fade hide" id="modalAddErrorMaterial" role="dialog"></div>
+<div class="modal fade hide" id="modalAddFechaRegencia" role="dialog"></div>

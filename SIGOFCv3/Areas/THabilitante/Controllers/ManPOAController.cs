@@ -2,12 +2,14 @@
 using CapaEntidad.ViewModel;
 using CapaEntidad.ViewModel.General;
 using CapaLogica.DOC;
+using Newtonsoft.Json;
 using OfficeOpenXml;
 using SIGOFCv3.Helper;
 using SIGOFCv3.Models;
 using SIGOFCv3.Reportes.THabilitante;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.IO;
 using System.Linq;
 using System.Web;
@@ -20,6 +22,7 @@ namespace SIGOFCv3.Areas.THabilitante.Controllers
     public class ManPOAController : Controller
     {
         public static VM_POA objVM2 = new VM_POA();
+        public string NOMARCHTEMP = "";
 
         //Validar que el usuario que ingresa a la acción (vista) tenga asignado el menú respectivo (Tabla: SISTEMA_MODULOS_DET_MENU: Columna: COD_SECUENCIAL)
         [HttpGet]
@@ -78,6 +81,7 @@ namespace SIGOFCv3.Areas.THabilitante.Controllers
             try
             {
                 VM_POA objVM;
+
                 Log_POA objLog = new Log_POA();
                 int nuevo = 1; Int16 opRegresar = 0;
                 string codigo = "", descripcion = "", tipoFrmulario = "", lstMenu = "";
@@ -173,9 +177,9 @@ namespace SIGOFCv3.Areas.THabilitante.Controllers
                     (ModelSession.GetSession())[0].COD_UCUENTA,
                     nuevo, appClient, appData, lstMenu, mr.VALIAS
                     );
-
                 objVM2.ListMadeCENSO = objVM.ListMadeCENSO;
                 TempData["listVERTICE"] = objVM.ListVERTICE;
+                TempData["listDETREGENTE"] = objVM.ListDETREGENTE;
                 TempData["listAOCULAR"] = objVM.ListAOCULAR;
                 TempData["listTIOCULAR"] = objVM.ListTIOCULAR;
                 TempData["listTRAPROBACION"] = objVM.ListTRAPROBACION;
@@ -187,8 +191,10 @@ namespace SIGOFCv3.Areas.THabilitante.Controllers
                 TempData["ListKARDEX"] = objVM.ListKARDEX;
                 TempData["listPOAErrorMaterialG"] = objVM.ListPOAErrorMaterialG;
                 TempData["listPOAErrorMaterialA"] = objVM.ListPOAErrorMaterialA;
+                TempData["listPOARegenteImplementa"] = objVM.ListPOARegenteImplementa;
                 objVM.opRegresar = opRegresar;
                 objVM.TipoFormulario = tipoFrmulario;
+                objVM.ListDETREGENTE = null;
                 objVM.ListVERTICE = null;
                 objVM.ListAOCULAR = null;
                 objVM.ListTIOCULAR = null;
@@ -1509,6 +1515,37 @@ namespace SIGOFCv3.Areas.THabilitante.Controllers
             return jsonResult;
         }
         [HttpGet]
+        public JsonResult GetAllListDetRegente()
+        {
+            List<Ent_POA> data = (List<Ent_POA>)TempData["listDETREGENTE"];
+            data = data ?? new List<Ent_POA>();
+            int i = 1;
+            var lstMin = from cust in data
+                         select new
+                         {
+                             NRO = i++,
+                             PERSONA = cust.PERSONA,
+                             N_DOCUMENTO = cust.N_DOCUMENTO,
+                             COD_PTIPO = cust.COD_PTIPO,
+                             TIPO_CARGO = cust.TIPO_CARGO,
+                             COD_PERSONA = cust.COD_PERSONA,
+                             OTORGAMIENTO = cust.OTORGAMIENTO,
+                             RESAPROBACION = cust.RESAPROBACION,
+                             CATEGORIA = cust.CATEGORIA,
+                             CIP = cust.CIP,
+                             ESTADO_REGENTE = cust.ESTADO_REGENTE,
+                             ANIO = cust.ANIO,
+                             NROLICENCIA = cust.NROLICENCIA,
+                             COD_SECUENCIAL = cust.COD_SECUENCIAL,
+                             NOMBRE_ARCH = cust.NOMBRE_ARCH,
+                             FECHA_INI = cust.FECHA,
+                             FECHA_FIN = cust.FECHA1,
+                         };
+            var jsonResult = Json(new { data = lstMin }, JsonRequestBehavior.AllowGet);
+            jsonResult.MaxJsonLength = int.MaxValue;
+            return jsonResult;
+        }
+        [HttpGet]
         public JsonResult GetAllListAOCULAR()
         {
             List<Ent_POA> data = (List<Ent_POA>)TempData["listAOCULAR"];
@@ -1694,6 +1731,57 @@ namespace SIGOFCv3.Areas.THabilitante.Controllers
         public PartialViewResult _ErrorMaterial()
         {
             return PartialView();
+        }
+        [HttpPost]
+        public PartialViewResult _FechaRegencia()
+        {
+            return PartialView();
+        }
+
+        [HttpPost]
+        public JsonResult GrabarDocumentoAdjunto()
+        {
+            Log_POA objLog = new Log_POA();
+            // Checking no of files injected in Request object  
+            if (Request.Files.Count > 0)
+            {
+                try
+                {
+                    string pathSIGOsfc = ConfigurationManager.AppSettings["pathSIGOsfc"] + "/Contrato/ContratoDetRegente/";
+                    Ent_Persona entP = JsonConvert.DeserializeObject<Ent_Persona>(Request.Form["data"]);
+                    HttpPostedFileBase file = Request.Files[0];//  Get all files from Request object 
+
+                    if (!Directory.Exists(Server.MapPath(pathSIGOsfc)))
+                    {
+                        Directory.CreateDirectory(Server.MapPath(pathSIGOsfc));
+                    }
+                    Guid myuuid = Guid.NewGuid();
+                    string myuuidAsString = myuuid.ToString();
+                    //Guardar el doc ajunto
+                    string name = $"ContratoRegente-{myuuidAsString}.pdf";
+                    NOMARCHTEMP = name;
+                    string carpetaDestino = Server.MapPath(pathSIGOsfc);
+                    string rutaDestino = Path.Combine(carpetaDestino, name);
+
+                    if (entP.COD_SECUENCIAL > 0)
+                    {
+                        objLog.setArchivoDetRegente(entP, name);
+                    }
+                    //Get the complete folder path and store the file inside it.
+                    file.SaveAs(rutaDestino);
+                    
+
+                    return Json(new { success = true, msj = "Se subio correctamente el archivo", data = name });
+                }
+                catch (Exception ex)
+                {
+                    throw new Exception(ex.Message);
+                }
+            }
+            else
+            {
+                return Json(new { success = false, msj = "No se encontró el documento a subir" });
+            }
         }
 
     }

@@ -201,6 +201,7 @@ namespace CapaDatos.DOC//9
                         oCampos.ListCorreo = new List<CEntidad>();
                         oCampos.ListTipoCargo = new List<CEntidad>();
                         oCampos.ListMencion = new List<CEntidad>();
+                        oCampos.ListPersonaDProfesional = new List<CEntidad>();
 
                         if (dr.HasRows)
                         {
@@ -312,6 +313,26 @@ namespace CapaDatos.DOC//9
                                     oCamposDet.COD_MENSION = dr.GetString(dr.GetOrdinal("COD_MENSION"));
                                     oCamposDet.MENSION = dr.GetString(dr.GetOrdinal("MENSION"));
                                     oCampos.ListMencion.Add(oCamposDet);
+                                }
+                            }
+                            //Detalle Regente profesional
+                            dr.NextResult();
+                            if (dr.HasRows)
+                            {
+                                while (dr.Read())
+                                {
+                                    oCamposDet = new CEntidad();
+                                    oCamposDet.COD_PERSONA = dr.GetString(dr.GetOrdinal("COD_PERSONA"));
+                                    oCamposDet.ESTADO = dr.GetInt32(dr.GetOrdinal("ESTADO"));
+                                    oCamposDet.ANIO = dr.GetString(dr.GetOrdinal("ANIO"));
+                                    oCamposDet.NROLICENCIA = dr.GetString(dr.GetOrdinal("NROLICENCIA"));
+                                    oCamposDet.RESAPROBACION = dr.GetString(dr.GetOrdinal("RESAPROBACION"));
+                                    oCamposDet.OTORGAMIENTO = dr.GetString(dr.GetOrdinal("OTORGAMIENTO"));
+                                    oCamposDet.COD_CATEGORIA = dr.GetString(dr.GetOrdinal("COD_CATEGORIA"));
+                                    oCamposDet.CIP = dr.GetString(dr.GetOrdinal("CIP"));
+                                    oCamposDet.ESTADO_REGENTE = dr.GetString(dr.GetOrdinal("ESTADO_REGENTE"));
+                                    oCamposDet.CATEGORIA = dr.GetString(dr.GetOrdinal("CATEGORIA"));
+                                    oCampos.ListPersonaDProfesional.Add(oCamposDet);
                                 }
                             }
                         }

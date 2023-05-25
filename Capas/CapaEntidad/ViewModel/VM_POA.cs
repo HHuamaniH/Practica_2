@@ -57,13 +57,22 @@ namespace CapaEntidad.ViewModel
         public string txtCodUbigeo { get; set; }
         public string txtUbigeo { get; set; }
         public string txtDirecion { get; set; }
+        //11/05/2023
+        public string lblItemConsultorCARGO { get; set; }
+        public string lblItemConsultorCIP { get; set; }
+        public string lblItemConsultorCATEGORIA { get; set; }
+        public string lblItemConsultorESTADO { get; set; }
+        public string lblItemConsultorLICENCIA { get; set; }
+        public string lblItemConsultorOTORGAMIENTO { get; set; }
+        public string lblItemConsultorRESOLUCION { get; set; }
 
         //Acta de Inspeccion Ocular
 
         public bool chckSinInspOcu { get; set; }
         public string txtItemacta_Iocular_Num { get; set; }
         public string txtItemActa_Iocular_Fe { get; set; }
-
+        //05/05/2023
+        public List<Ent_POA> ListDETREGENTE { get; set; }
         public List<Ent_POA> ListAOCULAR { get; set; }
         //Informe Tecnico de inspeccion ocular
         public string txtItemItecnico_Iocular_Num { get; set; }
@@ -194,6 +203,7 @@ namespace CapaEntidad.ViewModel
         //Error Material
         public List<Ent_ERRORMATERIAL> ListPOAErrorMaterialG { get; set; }
         public List<Ent_ERRORMATERIAL> ListPOAErrorMaterialA { get; set; }
+        public List<Ent_ERRORMATERIAL> ListPOARegenteImplementa { get; set; }
     }
 
 }
