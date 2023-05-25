@@ -366,6 +366,28 @@ namespace CapaEntidad.DOC
         public String USUARIO_REGISTRO { get; set; }
         [Description("USUARIO_CONTROL")]
         public String USUARIO_CONTROL { get; set; }
+        //03/05/2023 DetalleRegente
+        [Description("NROLICENCIA")]
+        public String NROLICENCIA { get; set; }
+        [Description("OTORGAMINETO")]
+        public String OTORGAMIENTO { get; set; }
+        [Description("RESAPROBACION")]
+        public String RESAPROBACION { get; set; }
+        [Description("CIP")]
+        public String CIP { get; set; }
+        [Description("COD_CATEGORIA")]
+        public String COD_CATEGORIA { get; set; }
+        [Description("ESTADO_REGENTE")]
+        public String ESTADO_REGENTE { get; set; }
+        [Description("NOMBRE_ARCH")]
+        public String NOMBRE_ARCH { get; set; }
+        [Description("RUTA_ARCH")]
+        public String RUTA_ARCH { get; set; }
+        [Description("CATEGORIA")]
+        public String CATEGORIA { get; set; }
+        [Description("ANIO")]
+        public String ANIO { get; set; }
+
 
         //Lista Objetos
         [Category("LIST"), Description("ListTIOCULAR")]
@@ -424,6 +446,10 @@ namespace CapaEntidad.DOC
         public List<Ent_POA> ListREFORMULAPOA { get; set; }
         [Category("LIST"), Description("ListAOCULAR")]
         public List<Ent_POA> ListAOCULAR { get; set; }
+        //05/05/2023
+        [Category("LIST"), Description("ListDETREGENTE")]
+        public List<Ent_POA> ListDETREGENTE { get; set; }
+        //
         [Category("LIST"), Description("ListKARDEXPRODUCTO")]
         public List<Ent_POA> ListKARDEXPRODUCTO { get; set; }
         [Category("LIST"), Description("ListKARDEXDESCRIPCION")]
@@ -627,6 +653,8 @@ namespace CapaEntidad.DOC
         [Category("LIST"), Description("ListParcela")]
         public List<Ent_POA> ListParcela { get; set; }
 
+        [Category("LIST"), Description("ListPOARegenteImplementa")]
+        public List<Ent_ERRORMATERIAL> ListPOARegenteImplementa { get; set; }
         //Error Material
         [Category("LIST"), Description("ListPOAErrorMaterialG")]
         public List<Ent_ERRORMATERIAL> ListPOAErrorMaterialG { get; set; }

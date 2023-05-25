@@ -407,6 +407,13 @@ namespace CapaLogica.DOC
                     POA_VM.txtItemNRRegente = datModificar.REGENTE_NUM_REGISTRO_FFS;
                     POA_VM.lblItemConsultorNombre = datModificar.CONSULTOR_NOMBRE;
                     POA_VM.lblItemConsultorDNI = datModificar.CONSULTOR_DNI;
+                    //Actualización
+                    POA_VM.lblItemConsultorLICENCIA = datModificar.NROLICENCIA;
+                    POA_VM.lblItemConsultorRESOLUCION = datModificar.RESAPROBACION;
+                    POA_VM.lblItemConsultorOTORGAMIENTO = datModificar.OTORGAMIENTO;
+                    POA_VM.lblItemConsultorCIP = datModificar.CIP;
+                    POA_VM.lblItemConsultorESTADO = datModificar.ESTADO_REGENTE;
+
                     POA_VM.lblItemConsultorNRProfesional = datModificar.CONSULTOR_NUM_REGISTRO_PROFESIONAL;
                     POA_VM.txtItemItecnico_Iocular_Num = datModificar.ITECNICO_IOCULAR_NUM;
                     POA_VM.txtItemItecnico_Iocular_Fecha = datModificar.ITECNICO_IOCULAR_FECHA.ToString();
@@ -465,6 +472,8 @@ namespace CapaLogica.DOC
                     POA_VM.ListTRAPROBACION = datModificar.ListTRAPROBACION;
                     POA_VM.ListMadeCENSO = datModificar.ListMadeCENSO;
                     POA_VM.ListNoMadeCENSO = datModificar.ListNoMadeCENSO;
+                    //05/05/2023
+                    POA_VM.ListDETREGENTE = datModificar.ListDETREGENTE;
 
                     POA_VM.ListRAprueba = datModificar.ListRAprueba;
                     POA_VM.ListBExtPOA = datModificar.ListBExtPOA;
@@ -472,8 +481,11 @@ namespace CapaLogica.DOC
                     POA_VM.ListRApruebaISitu = datModificar.ListRApruebaISitu;
                     POA_VM.ListKARDEX = datModificar.ListKARDEX;
 
+                    POA_VM.ListPOARegenteImplementa = datModificar.ListPOARegenteImplementa;
+
                     POA_VM.ListPOAErrorMaterialG = datModificar.ListPOAErrorMaterialG;
                     POA_VM.ListPOAErrorMaterialA = datModificar.ListPOAErrorMaterialA;
+
 
                     POA_VM.txtItemNRNroLicencia = datModificar.REGENTE_NRO_LICENCIA;
                     POA_VM.txtItemNREmail = datModificar.REGENTE_EMAIL;
@@ -702,6 +714,8 @@ namespace CapaLogica.DOC
                     POA_VM.hdfItemEstadoOrigen = EstadoOrigen;
                     CEntidad oCampos = new CEntidad();
                     oCampos.ListTIOCULAR = new List<CEntidad>();
+                    //05/05/2023
+                    oCampos.ListDETREGENTE = new List<CEntidad>();
                     oCampos.ListAOCULAR = new List<CEntidad>();
                     oCampos.ListTRAPROBACION = new List<CEntidad>();
                     oCampos.ListRAprueba = new List<CEntidad>();
@@ -801,6 +815,8 @@ namespace CapaLogica.DOC
                     POA_VM.ListBExtPOA = new List<CEntidad>();
                     POA_VM.ListRApruebaISitu = oCampos.ListRApruebaISitu;
                     POA_VM.ListVERTICE = datModificar.ListVERTICE;
+
+                    POA_VM.ListPOARegenteImplementa = new List<Ent_ERRORMATERIAL>();
 
                     POA_VM.ListPOAErrorMaterialG = new List<Ent_ERRORMATERIAL>();
                     POA_VM.ListPOAErrorMaterialA = new List<Ent_ERRORMATERIAL>();
@@ -1030,13 +1046,15 @@ namespace CapaLogica.DOC
                 oCampos.ListMadeCENSO = dto.ListMadeCENSO;
                 oCampos.ListNoMadeCENSO = dto.ListNoMadeCENSO;
                 oCampos.ListKARDEX = dto.ListKARDEX;
+                //05/05/2023
+                oCampos.ListDETREGENTE = dto.ListDETREGENTE;
+
                 if (dto.ListEliTABLA == null)
                     oCampos.ListEliTABLA = new List<CEntidad>();
                 else
                     oCampos.ListEliTABLA = dto.ListEliTABLA;
-
-
                 oCampos.ListBExtPOA = dto.ListBExtPOA;
+                oCampos.ListPOARegenteImplementa = dto.ListPOARegenteImplementa;
                 oCampos.ListPOAErrorMaterialG = dto.ListPOAErrorMaterialG;
                 oCampos.ListPOAErrorMaterialA = dto.ListPOAErrorMaterialA;
                 oCampos.NUM_CENSO_MADE_ELIM = (from p in oCampos.ListEliTABLA where p.EliTABLA == "POA_DET_MADERABLE_CENSO" select p).ToList<CEntidad>().Count;
@@ -1212,6 +1230,15 @@ namespace CapaLogica.DOC
         }
 
         #endregion
+        public void setArchivoDetRegente(Ent_Persona entP, string name)
+        {
+            
+            using (OracleConnection cn = new OracleConnection(CapaDatos.BDConexion.Conexion_Cadena_SIGO()))
+            {
+                cn.Open();
+                oCDatos.setArchivoDetRegenete(cn,entP,name);
+            }
+        }
 
     }
 }

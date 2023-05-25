@@ -2,6 +2,8 @@
 "use strict";
 
 var ManPOA = {};
+ManPOA.selectFile = null;
+
 (function () {
 
     $(document).ajaxStart(function () {
@@ -35,8 +37,11 @@ var ManPOA = {};
     this.listBExtPOA = [];
     //05/05/2021
     this.ListParcela = [];
+    this.listPOADetRegente = [];
     this.listPOAEMGeneral = [];
     this.listPOAEMAdicional = [];
+    //03/05/2023
+    this.dtDetRegente;
 
     this.indexBExtPOA = 0;
     this.ListEliTABLA = [];
@@ -85,6 +90,74 @@ var ManPOA = {};
                     { data: "RegEstado", visible: false }
                 ]
 
+        });
+        this.dtDetRegente = this.frmPOARegistro.find("#grvDetRegente").DataTable({
+            bServerSide: false,
+            bProcessing: true,
+            bJQueryUI: false,
+            bRetrieve: true,
+            bFilter: false,
+            aaSorting: [],
+            bPaginate: true,
+            bInfo: false,
+            bLengthChange: false,
+            scrollCollapse: true,
+            pageLength: initSigo.pageLength,
+            oLanguage: initSigo.oLanguage,
+            drawCallback: initSigo.showPagination,
+            ajax: {
+                url: ManPOA.controller + "/GetAllListDetRegente",
+                type: "GET",
+                datatype: "json",
+                
+            },
+            
+            columns:
+                [
+                    {
+                        autoWidth: true, bSortable: false,
+                        mRender: function (data, type, row) {
+                            return '<i class="fa fa-lg fa-window-close" style="color:red;cursor:pointer;" title="Eliminar" onclick="ManPOA.eliminarDetRegente(this);"></i>';
+                        }
+                    },
+                    {
+                        
+                        autoWidth: true, bSortable: false,
+                        mRender: function (data, type, row) {
+                            if (row["NOMBRE_ARCH"] === " " || row["NOMBRE_ARCH"] === null || row["NOMBRE_ARCH"] === undefined) {
+                                return '<label style="cursor:pointer;" class="fa fa-upload" title="Importar Archivo" data-toggle="tooltip"><input type = "file" id = "fileselect" name = "fileselect" style = "display:none" size = "60" onchange = "ManPOA.fnSelectDocAdjunto(event, this)" ></label >';
+                            } else {
+                                return "";
+                            }
+                        } 
+                    },
+                    {
+                        autoWidth: true, bSortable: false,
+                        mRender: function (data, type, row) {
+                            return '<i class="fa fa-lg fa-download";cursor:pointer;" title="Descargar contrato" onclick="ManPOA.fnDescargar(this);"></i>';
+                        }
+                    },
+                    {
+                        autoWidth: true, bSortable: false,
+                        mRender: function (data, type, row) {
+                            return '<i class="fa fa-calendar";cursor:pointer;" title="Ingresar fecha de contrato" onclick="ManPOA.fnAddFechaRegencia(this);"></i>';
+                        }
+                    },
+                    { data: "NRO", autoWidth: true },
+                    { data: "PERSONA", autoWidth: true },
+                    { data: "N_DOCUMENTO", autoWidth: true },
+                    //{ data: "TIPO_CARGO", autoWidth: true },
+                    //{ data: "ANIO", autoWidth: true },
+                    { data: "CIP", autoWidth: true },
+                    { data: "CATEGORIA", autoWidth: true },
+                    //{ data: "ESTADO_REGENTE", autoWidth: true },
+                    { data: "NROLICENCIA", autoWidth: true },
+                    //{ data: "OTORGAMIENTO", autoWidth: true },
+                    //{ data: "RESAPROBACION", autoWidth: true },
+                    { data: "FECHA_INI", autoWidth: true },
+                    { data: "FECHA_FIN", autoWidth: true },
+                ]
+            
         });
         this.dtItemIOcular = this.frmPOARegistro.find("#grvItemIOcular").DataTable({
             bServerSide: false,
@@ -557,10 +630,60 @@ var ManPOA = {};
                     var data = _bPerGen.dtBuscarPerona.row($(obj).parents('tr')).data();
                     switch (_dom) {
                         case "REGENTE":
-                            ManPOA.fnSetPersonaCompleto(_dom, data["COD_PERSONA"], data["COD_PTIPO"], data["TIPO_CARGO"]);
-                            ManPOA.frmPOARegistro.find("#txtCodUbigeo").val(data["COD_UBIGEO"]);
-                            ManPOA.frmPOARegistro.find("#txtUbigeo").val(data["UBIGEO"]);
-                            ManPOA.frmPOARegistro.find("#txtDirecion").val(data["DIRECCION"]);
+                            if (data["COD_PTIPO"] != null && data["COD_PTIPO"].trim() != "" && _tipoPersonaSIGOsfc != "") {
+                                let tipoCargo = _tipoPersonaSIGOsfc.split(',');
+                                let band = 0;
+
+                                for (let i = 0; i < tipoCargo.length; i++) {
+                                    if (tipoCargo[i] == data["COD_PTIPO"]) {
+                                        band = 1;
+                                        break;
+                                    }
+                                }
+
+                                if (band == 0) {
+                                    utilSigo.toastWarning("Aviso", "El cargo asignado no corresponde a lo requerido en la lista");
+                                }
+                                else {
+                                    ManPOA.fnSetPersonaCompleto(_dom, data["COD_PERSONA"], data["COD_PTIPO"], data["TIPO_CARGO"]);
+                                    ManPOA.frmPOARegistro.find("#txtCodUbigeo").val(data["COD_UBIGEO"]);
+                                    ManPOA.frmPOARegistro.find("#txtUbigeo").val(data["UBIGEO"]);
+                                    ManPOA.frmPOARegistro.find("#txtDirecion").val(data["DIRECCION"]);
+                                }
+                            }
+                            else {
+                                ManPOA.fnSetPersonaCompleto(_dom, data["COD_PERSONA"], data["COD_PTIPO"], data["TIPO_CARGO"]);
+                                ManPOA.frmPOARegistro.find("#txtCodUbigeo").val(data["COD_UBIGEO"]);
+                                ManPOA.frmPOARegistro.find("#txtUbigeo").val(data["UBIGEO"]);
+                                ManPOA.frmPOARegistro.find("#txtDirecion").val(data["DIRECCION"]);
+                            }
+                            
+                            break;
+                        case "REGENTEIMPLEMENTA":
+                            //if (!utilDt.existValorSearch(ManPOA.dtDetRegente, "COD_PERSONA", data["COD_PERSONA"])) {
+                                if (data["COD_PTIPO"] != null && data["COD_PTIPO"].trim() != "" && _tipoPersonaSIGOsfc != "")
+                                {
+                                    let tipoCargo = _tipoPersonaSIGOsfc.split(',');
+                                    let band = 0;
+
+                                    for (let i = 0; i < tipoCargo.length; i++) {
+                                        if (tipoCargo[i] == data["COD_PTIPO"]) {
+                                            band = 1;
+                                            break;
+                                        }
+                                    }
+
+                                    if (band == 0) {
+                                        utilSigo.toastWarning("Aviso", "El cargo asignado no corresponde a lo requerido en la lista");
+                                    }
+                                    else {
+                                        ManPOA.fnSetPersonaCompleto(_dom, data["COD_PERSONA"], data["COD_PTIPO"], data["TIPO_CARGO"]);
+                                    }
+                                }
+                                else {
+                                    ManPOA.fnSetPersonaCompleto(_dom, data["COD_PERSONA"], data["COD_PTIPO"], data["TIPO_CARGO"]);
+                                }
+                            //} else { utilSigo.toastWarning("Aviso", "El regente ya se encuentra registrado"); }
                             break;
                         case "FAPROBACION":
                             ManPOA.fnSetPersonaCompleto(_dom, data["COD_PERSONA"], data["COD_PTIPO"], data["TIPO_CARGO"]); break;
@@ -666,11 +789,82 @@ var ManPOA = {};
                 if (data.success) {
                     switch (_dom) {
                         case "REGENTE":
-                            ManPOA.frmPOARegistro.find("#hdfItemConsultorCodigo").val(data.data["COD_PERSONA"]);
-                            ManPOA.frmPOARegistro.find("#lblItemConsultorNombre").val(data.data["APELLIDOS_NOMBRES"]);
-                            ManPOA.frmPOARegistro.find("#lblItemConsultorDNI").val(data.data["N_DOCUMENTO"]);
-                            ManPOA.frmPOARegistro.find("#txtItemNRConsultor").val(data.data["NUM_REGISTRO_FFS"]);
-                            ManPOA.frmPOARegistro.find("#lblItemConsultorNRProfesional").val(data.data["NUM_REGISTRO_PROFESIONAL"]);
+                            var listaPDP = data.data["ListPersonaDProfesional"];
+                            if (!listaPDP || listaPDP.length === 0) {
+                                ManPOA.frmPOARegistro.find("#hdfItemConsultorCodigo").val(data.data["COD_PERSONA"]);
+                                ManPOA.frmPOARegistro.find("#lblItemConsultorNombre").val(data.data["APELLIDOS_NOMBRES"]);
+                                ManPOA.frmPOARegistro.find("#lblItemConsultorDNI").val(data.data["N_DOCUMENTO"]);
+                            } else {
+                                const cipR = listaPDP[0].CIP;
+                                const estadoRegenteR = listaPDP[0].ESTADO_REGENTE;
+                                const nroLicenciaR = listaPDP[0].NROLICENCIA;
+                                const fecOtorgamientoR = listaPDP[0].OTORGAMIENTO;
+                                const resAprobacionR = listaPDP[0].RESAPROBACION;
+                                ManPOA.frmPOARegistro.find("#hdfItemConsultorCodigo").val(data.data["COD_PERSONA"]);
+                                ManPOA.frmPOARegistro.find("#lblItemConsultorNombre").val(data.data["APELLIDOS_NOMBRES"]);
+                                ManPOA.frmPOARegistro.find("#lblItemConsultorDNI").val(data.data["N_DOCUMENTO"]);
+                                ManPOA.frmPOARegistro.find("#lblItemConsultorCIP").val(cipR);
+                                ManPOA.frmPOARegistro.find("#lblItemConsultorESTADO").val(estadoRegenteR);
+                                ManPOA.frmPOARegistro.find("#lblItemConsultorLICENCIA").val(nroLicenciaR);
+                                ManPOA.frmPOARegistro.find("#lblItemConsultorOTORGAMIENTO").val(fecOtorgamientoR);
+                                ManPOA.frmPOARegistro.find("#lblItemConsultorRESOLUCION").val(resAprobacionR);
+
+                            }
+                            
+                            break;
+                        case "REGENTEIMPLEMENTA":
+                            var dt = null;
+                            dt = ManPOA.dtDetRegente;
+                            var codSecC = parseInt(dt.$("tr").length) + 1;
+                            var listaPDP = data.data["ListPersonaDProfesional"];
+                            if (!listaPDP || listaPDP.length === 0) {
+                                console.log("1");
+                                var item = {
+
+                                    NRO: codSecC,
+                                    COD_PERSONA: data.data["COD_PERSONA"],
+                                    N_DOCUMENTO: data.data["N_DOCUMENTO"],
+                                    PERSONA: data.data["APELLIDOS_NOMBRES"],
+                                    COD_PTIPO: codPTipo,
+                                    RegEstado: "1",
+                                    CIP: "",
+                                    CATEGORIA: "",
+                                    ESTADO_REGENTE: "",
+                                    NROLICENCIA: "",
+                                    //OTORGAMIENTO: "",
+                                    //RESAPROBACION: "",
+                                    COD_SECUENCIAL: "",
+                                    FECHA_INI: "",
+                                    FECHA_FIN: "",
+                                };
+                                dt.row.add(item).draw(); dt.page('last').draw('page');
+                            } else {
+                                const cip = listaPDP[0].CIP;
+                                const codCategoria = listaPDP[0].CATEGORIA;
+                                const estadoRegente = listaPDP[0].ESTADO_REGENTE;
+                                const nroLicencia = listaPDP[0].NROLICENCIA;
+                                const fecOtorgamiento = listaPDP[0].OTORGAMIENTO;
+                                const resAprobacion = listaPDP[0].RESAPROBACION;
+                                const codSecuencial = listaPDP[0].COD_SECUENCIAL;
+                                var item = {
+                                    NRO: codSecC,
+                                    COD_PERSONA: data.data["COD_PERSONA"],
+                                    N_DOCUMENTO: data.data["N_DOCUMENTO"],
+                                    PERSONA: data.data["APELLIDOS_NOMBRES"],
+                                    COD_PTIPO: codPTipo,
+                                    RegEstado: "1",
+                                    CIP: cip,
+                                    CATEGORIA: codCategoria,
+                                    //ESTADO_REGENTE: estadoRegente,
+                                    NROLICENCIA: nroLicencia,
+                                    //OTORGAMIENTO: fecOtorgamiento,
+                                    //RESAPROBACION: resAprobacion,
+                                    COD_SECUENCIAL: codSecuencial,
+                                    FECHA_INI: "",
+                                    FECHA_FIN: "",
+                                };
+                                dt.row.add(item).draw(); dt.page('last').draw('page');
+                            }
                             break;
                         case "IOCULAR":
                         case "ITIOCULAR":
@@ -783,6 +977,25 @@ var ManPOA = {};
 
                     ManPOA.dtItemAOcular.row($tr).remove().draw();
                     utilSigo.enumTB(ManPOA.dtItemAOcular, 2);
+
+                }
+            });
+    }
+    this.eliminarDetRegente = function (obj) {
+        utilSigo.dialogConfirm("Confirmacion", "¿ Está seguro de Eliminar el Registro Seleccionado ?",
+            function (r) {
+                if (r) {
+                    var $tr = $(obj).closest('tr');
+                    var row = ManPOA.dtDetRegente.row($tr).data();
+                    
+                        ManPOA.ListEliTABLA.push({
+                            EliTABLA: "POA_DET_REGENTE",
+                            EliVALOR01: row.COD_PERSONA,
+                            EliVALOR02: row.COD_SECUENCIAL
+                        });
+                    
+                    ManPOA.dtDetRegente.row($tr).remove().draw();
+                    utilSigo.enumTB(ManPOA.dtDetRegente, 2);
 
                 }
             });
@@ -1470,6 +1683,35 @@ var ManPOA = {};
         }
         return true;
     }
+    
+    this.getListDETREGENTE = function () {
+        var list = [];
+        this.dtDetRegente.rows().every(function (rowIdx, tableLoop, rowLoop) {
+            var row = this.data();
+            if (row.RegEstado == 1 || row.RegEstado == 2) {
+                list.push({
+                    PERSONA: row.PERSONA,
+                    N_DOCUMENTO: row.N_DOCUMENTO,
+                    COD_PTIPO: row.COD_PTIPO,
+                    COD_PERSONA: row.COD_PERSONA,
+                    RegEstado: row.RegEstado,
+                    ANIO: row.ANIO,
+                    CIP: row.CIP,
+                    CATEGORIA: row.CATEGORIA,
+                    ESTADO_REGENTE: row.ESTADO_REGENTE,
+                    NROLICENCIA: row.NROLICENCIA,
+                    OTORGAMIENTO: row.OTORGAMIENTO,
+                    RESAPROBACION: row.RESAPROBACION,
+                    NOMBRE_ARCH: NOM_ARCH,
+                    FECHA: row.FECHA_INI,
+                    FECHA1: row.FECHA_FIN
+                });
+            }
+
+        });
+        
+        return list;
+    }
     this.getListAOCULAR = function () {
         var list = [];
         this.dtItemAOcular.rows().every(function (rowIdx, tableLoop, rowLoop) {
@@ -1791,6 +2033,31 @@ var ManPOA = {};
             _ErrorMaterial.fnInit(tipo);
         });
     }
+    this.fnAddFechaRegencia = function (elemento) {
+        var fila = $(elemento).closest("tr");
+        var filaIndex = ManPOA.dtDetRegente.row(fila).index();
+        var url = urlLocalSigo + "THabilitante/ManPOA/_FechaRegencia";
+        var option = { url: url, type: 'POST', datos: {}, divId: "modalAddFechaRegencia" };
+        utilSigo.fnOpenModal(option, function () {
+            _FechaRegencia.fnCloseModal = function () {
+                $("#modalAddFechaRegencia").modal('hide');
+            };
+
+            _FechaRegencia.fnSaveForm = function (data) {
+                if (data != null) {
+                    var rowData = ManPOA.dtDetRegente.row(filaIndex).data();
+                    rowData.FECHA_INI = data["FECHA_INI"];
+                    rowData.FECHA_FIN = data["FECHA_FIN"];
+                    ManPOA.dtDetRegente.row(filaIndex).data(rowData).draw();
+                    $("#modalAddFechaRegencia").modal('hide');
+                } else {
+                    utilSigo.toastSuccess("Error", "No se pudieron guardar los datos");
+                }
+            };
+
+            _FechaRegencia.fnInit();
+        });
+    };
     this.fnGetListErrorMaterial = function (tipo) {
         var dt, list = [], rows, countFilas, data;
 
@@ -1842,7 +2109,20 @@ var ManPOA = {};
         if (ManPOA.ItemRAPoaInSitu.dtItemRAPoaInSitu != undefined) {
             datosPOA.ListRApruebaISitu = ManPOA.getListRApruebaISitu();
         }
-
+        //datos de ListDETREGENTE
+        if (ManPOA.dtDetRegente != undefined) {
+            datosPOA.ListDETREGENTE = ManPOA.getListDETREGENTE();
+            var dat = datosPOA.ListDETREGENTE;
+            console.log(dat);
+            if (dat.length != 0) {
+                if (dat[0].FECHA === undefined || dat[0].FECHA === "" || dat[0].FECHA1 === undefined
+                    || dat[0].FECHA1 === "") {
+                    utilSigo.toastWarning("Aviso", "Ingrese fecha de inicio y fin al registro de regente");
+                    return;
+                }
+            }
+            
+        }
         //datos de ListAOCULAR
         if (ManPOA.dtItemAOcular != undefined) {
             datosPOA.ListAOCULAR = ManPOA.getListAOCULAR();
@@ -1864,128 +2144,240 @@ var ManPOA = {};
         if (ManPOA.listBExtPOA != undefined) {
             datosPOA.ListBExtPOA = ManPOA.getListBExtPOA();
         }
-        //datos Error Material
-        if (ManPOA.dtErrorMaterial_DGeneral != undefined) {
-            datosPOA.ListPOAErrorMaterialG = ManPOA.fnGetListErrorMaterial('DG');
-        }
-        if (ManPOA.dtErrorMaterial_DAdicional != undefined) {
-            datosPOA.ListPOAErrorMaterialA = ManPOA.fnGetListErrorMaterial('DA');
-        }
+            //datos Error Material
 
-        if (ManPOA.Itemkardex.dtItemkardex != undefined) {
-            datosPOA.ListKARDEX = ManPOA.getListKARDEX();
-        }
-
-        if (ManPOA.ListEliTABLA != undefined) {
-            datosPOA.ListEliTABLA = ManPOA.ListEliTABLA;
-        }
-        if (ManPOA.frmPOARegistro.find("#ddlItemIndicadorId").val() == "0000007") {
-            datosPOA.txtControlCalidadObservaciones = CKEDITOR.instances["txtControlCalidadObservaciones"].getData();
-        }
-
-        var check = $("#chckSinInspOcu");
-        var state = check.is(":checked");
-        datosPOA.chckSinInspOcu = state;
-
-        check = $("#chkItemCuentaFinZafra");
-        state = check.is(":checked");
-        datosPOA.chkItemCuentaFinZafra = state;
-
-        check = $("#chkItemObsSubsanada");
-        state = check.is(":checked");
-        datosPOA.chkItemObsSubsanada = state;
-
-        check = $("#chkNPNumPOA");
-        state = check.is(":checked");
-        datosPOA.chkNPNumPOA = state;
-
-        check = $("#chkPOAPO");
-        state = check.is(":checked");
-        datosPOA.chkPOAPO = state;
-
-        check = $("#chkIncluyeCD");
-        state = check.is(":checked");
-        datosPOA.chkIncluyeCD = state;
-
-        check = $("#chkConcluido");
-        state = check.is(":checked");
-        datosPOA.chkConcluido = state;
-
-        check = $("#chkProceso");
-        state = check.is(":checked");
-        datosPOA.chkProceso = state;
-
-        check = $("#chkPendiente");
-        state = check.is(":checked");
-        datosPOA.chkPendiente = state;
-
-        datosPOA.ListParcela = _frmParcela.fnGetList();
-        datosPOA.ListEliTABLAParcela = _frmParcela.tbEliTABLA;
-
-        datosPOA.txtDirecion = $("#txtDirecion").val();
-
-
-        //Mejora SIADO CENSO
-        debugger
-        if (ManPOA.getParameterByName('siado') == '1') {
-            datosPOA.appClient = ManPOA.getParameterByName('appClientGAER');
-            datosPOA.appData = ManPOA.getParameterByName('appDataGAER');
-        }
-
-        //enviando datos al servidor
-        $.ajax({
-            url: ManPOA.controller + "/RegistrarPOA",
-            type: 'POST',
-            data: JSON.stringify(datosPOA),
-            contentType: 'application/json; charset=utf-8',
-            dataType: 'json',
-            //beforeSend: utilSigo.beforeSendAjax,
-            //complete: utilSigo.completeAjax,
-            error: utilSigo.errorAjax,
-            success: function (data) {
-                if (data.success) {
-                    if (ManPOA.frmPOARegistro.find("#opRegresar").val() == 0 && ManPOA.getParameterByName('siado') != '1') {
-                        ManPOA.regresar(data.msj, '');
-                    } else {
-                        ManPOA.regresar('', data.appServer);
-                    }
-                }
-                else {
-                    if (ManPOA.frmPOARegistro.find("#opRegresar").val() == 0 && ManPOA.getParameterByName('siado') != '1') {
-                        utilSigo.toastWarning("Aviso", data.msj);
-                    } else {
-                        ManPOA.regresar('', data.appServer);
-                    }
-                }
+            if (ManPOA.dtErrorMaterial_DGeneral != undefined) {
+                datosPOA.ListPOAErrorMaterialG = ManPOA.fnGetListErrorMaterial('DG');
+            }
+            if (ManPOA.dtErrorMaterial_DAdicional != undefined) {
+                datosPOA.ListPOAErrorMaterialA = ManPOA.fnGetListErrorMaterial('DA');
             }
 
-        });
-    }
-    this.regresar = function (msj, appServer) {
-        debugger
-        if (ManPOA.frmPOARegistro.find("#opRegresar").val() === '0' && ManPOA.getParameterByName('siado') != '1') {
-            let tipoFormulario = $("#TipoFormulario").val();
-            let numrpta = 0;
-            if (tipoFormulario === "POA") numrpta = 1;
-            else if (tipoFormulario === "PMFI") numrpta = 3;
-            else numrpta = 2;
-            let url = ManPOA.controller + "/Index?lstManMenu=" + numrpta + "&_alertaIncial=" + msj;
-            window.location = url;
-        } else {
+            if (ManPOA.Itemkardex.dtItemkardex != undefined) {
+                datosPOA.ListKARDEX = ManPOA.getListKARDEX();
+            }
 
-            var appClient = ManPOA.getParameterByName('siado') != '1' ? ManPOA.frmPOARegistro.find("#appClient").val() : ManPOA.getParameterByName('appClientGAER');
-            var appData = ManPOA.getParameterByName('siado') != '1' ? ManPOA.frmPOARegistro.find("#appData").val() : ManPOA.getParameterByName('appDataGAER');
-            let url = urlLocalSigo + "THabilitante/ManVentanillaAntecedentesExpedientes/Index?appClient=" + appClient + "&appData=" + appData + "&appServer=" + appServer;
-            window.location = url;
+            if (ManPOA.ListEliTABLA != undefined) {
+                datosPOA.ListEliTABLA = ManPOA.ListEliTABLA;
+            }
+            if (ManPOA.frmPOARegistro.find("#ddlItemIndicadorId").val() == "0000007") {
+                datosPOA.txtControlCalidadObservaciones = CKEDITOR.instances["txtControlCalidadObservaciones"].getData();
+            }
+
+            var check = $("#chckSinInspOcu");
+            var state = check.is(":checked");
+            datosPOA.chckSinInspOcu = state;
+
+            check = $("#chkItemCuentaFinZafra");
+            state = check.is(":checked");
+            datosPOA.chkItemCuentaFinZafra = state;
+
+            check = $("#chkItemObsSubsanada");
+            state = check.is(":checked");
+            datosPOA.chkItemObsSubsanada = state;
+
+            check = $("#chkNPNumPOA");
+            state = check.is(":checked");
+            datosPOA.chkNPNumPOA = state;
+
+            check = $("#chkPOAPO");
+            state = check.is(":checked");
+            datosPOA.chkPOAPO = state;
+
+            check = $("#chkIncluyeCD");
+            state = check.is(":checked");
+            datosPOA.chkIncluyeCD = state;
+
+            check = $("#chkConcluido");
+            state = check.is(":checked");
+            datosPOA.chkConcluido = state;
+
+            check = $("#chkProceso");
+            state = check.is(":checked");
+            datosPOA.chkProceso = state;
+
+            check = $("#chkPendiente");
+            state = check.is(":checked");
+            datosPOA.chkPendiente = state;
+
+            datosPOA.ListParcela = _frmParcela.fnGetList();
+            datosPOA.ListEliTABLAParcela = _frmParcela.tbEliTABLA;
+
+            datosPOA.txtDirecion = $("#txtDirecion").val();
+
+
+            //Mejora SIADO CENSO
+            debugger
+            if (ManPOA.getParameterByName('siado') == '1') {
+                datosPOA.appClient = ManPOA.getParameterByName('appClientGAER');
+                datosPOA.appData = ManPOA.getParameterByName('appDataGAER');
+            }
+
+            //enviando datos al servidor
+            $.ajax({
+                url: ManPOA.controller + "/RegistrarPOA",
+                type: 'POST',
+                data: JSON.stringify(datosPOA),
+                contentType: 'application/json; charset=utf-8',
+                dataType: 'json',
+                //beforeSend: utilSigo.beforeSendAjax,
+                //complete: utilSigo.completeAjax,
+                error: utilSigo.errorAjax,
+                success: function (data) {
+                    if (data.success) {
+                        if (ManPOA.frmPOARegistro.find("#opRegresar").val() == 0 && ManPOA.getParameterByName('siado') != '1') {
+                            ManPOA.regresar(data.msj, '');
+                        } else {
+                            ManPOA.regresar('', data.appServer);
+                        }
+                    }
+                    else {
+                        if (ManPOA.frmPOARegistro.find("#opRegresar").val() == 0 && ManPOA.getParameterByName('siado') != '1') {
+                            utilSigo.toastWarning("Aviso", data.msj);
+                        } else {
+                            ManPOA.regresar('', data.appServer);
+                        }
+                    }
+                }
+
+            });
+        }
+        this.regresar = function (msj, appServer) {
+            debugger
+            if (ManPOA.frmPOARegistro.find("#opRegresar").val() === '0' && ManPOA.getParameterByName('siado') != '1') {
+                let tipoFormulario = $("#TipoFormulario").val();
+                let numrpta = 0;
+                if (tipoFormulario === "POA") numrpta = 1;
+                else if (tipoFormulario === "PMFI") numrpta = 3;
+                else numrpta = 2;
+                let url = ManPOA.controller + "/Index?lstManMenu=" + numrpta + "&_alertaIncial=" + msj;
+                window.location = url;
+            } else {
+
+                var appClient = ManPOA.getParameterByName('siado') != '1' ? ManPOA.frmPOARegistro.find("#appClient").val() : ManPOA.getParameterByName('appClientGAER');
+                var appData = ManPOA.getParameterByName('siado') != '1' ? ManPOA.frmPOARegistro.find("#appData").val() : ManPOA.getParameterByName('appDataGAER');
+                let url = urlLocalSigo + "THabilitante/ManVentanillaAntecedentesExpedientes/Index?appClient=" + appClient + "&appData=" + appData + "&appServer=" + appServer;
+                window.location = url;
+            }
+        }
+        this.getParameterByName = function (name) {
+            name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
+            var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
+                results = regex.exec(location.search);
+            return results === null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
+    }
+
+    //Cargar archivo
+    /*Controles Datos Adjuntos*/
+    this.fnSelectDocAdjunto = function (e, obj) {
+        var idFile = $(obj).attr("id");
+        var files = e.target.files || e.dataTransfer.files;
+
+        if (files != undefined && files.length > 0) {
+            //Validar extensión archivo seleccionado
+            var extension = files[0].name.substr((files[0].name.lastIndexOf('.') + 1)).toLowerCase();
+            var extensiones_no_permitidas = "pdf";
+
+            if (extensiones_no_permitidas.indexOf(extension) === -1) {
+                utilSigo.toastError("Error", "Solo se permiten archivos de tipo PDF"); return false;
+            } else {
+                //Validar el tamaño del archivo
+                var fileSize = parseFloat(files[0].size);
+                if ((fileSize / 1048576) > 4) //4MB permitido por documento PDF
+                {
+                    utilSigo.toastError("Error", "El tamaño del archivo supera los 4MB permitidos"); return false;
+                } else {
+                    $("#" + idFile).next().text(files[0].name);
+                    this.selectFile = files[0];
+                    this.fnSaveDocumentoAdjunto(obj);
+                }
+            }
         }
     }
-    this.getParameterByName = function (name) {
-        name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
-        var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
-            results = regex.exec(location.search);
-        return results === null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
+    var NOM_ARCH;
+    this.fnSaveDocumentoAdjunto = function (obj) {
+        let itemData = ManPOA.dtDetRegente.row($(obj).parents('tr')).data();
+        if (ManPOA.selectFile == null) {
+            utilSigo.toastWarning("Aviso", "Seleccione el documento a adjuntar"); return false;
+        }
+        // Checking whether FormData is available in browser  
+        if (window.FormData !== undefined) {
+            var fileData = new FormData();
+            var url = urlLocalSigo + "THabilitante/ManPOA/GrabarDocumentoAdjunto";
+            var data = {};
+            //console.log(itemData);
+            data.COD_PERSONA = itemData.COD_PERSONA;
+            data.TIPO_CARGO = itemData.TIPO_CARGO;
+            data.COD_PTIPO = itemData.COD_PTIPO;
+            data.NROLICENCIA = itemData.NROLICENCIA;
+            data.N_DOCUMENTO = itemData.N_DOCUMENTO;
+            data.APELLIDOS_NOMBRES = itemData.PERSONA;
+            data.RESAPROBACION = itemData.RESAPROBACION;
+            data.COD_SECUENCIAL = itemData.COD_SECUENCIAL;
+
+            fileData.append("data", JSON.stringify(data));
+            fileData.append(ManPOA.selectFile.name, ManPOA.selectFile);
+
+            $.ajax({
+                url: url,
+                type: "POST",
+                contentType: false, // Not to set any content header  
+                processData: false, // Not to process data  
+                data: fileData,
+                success: function (result) {
+                    if (result.success) {
+                        result.data;        
+                        NOM_ARCH = result.data;
+                        ManPOA.selectFile = null;
+                        utilSigo.toastSuccess("Éxito", result.msj);
+
+                    }
+                    else {
+                        utilSigo.toastWarning("Aviso", result.msj);
+                    }
+                },
+                error: function (err) {
+                    utilSigo.toastWarning("Aviso", "Sucedio un error, Comuníquese con el Administrador");
+                    //console.log(err.statusText);
+                }
+            });
+        } else {
+            utilSigo.toastWarning("Aviso", "Sucedio un error, Comuníquese con el Administrador");
+            //console.log("FormData is not available in your browser");
+        }
+    };
+
+    //DESCARGAR DOCUMENTO
+    this.fnDescargar = function (obj) {
+        let itemData = ManPOA.dtDetRegente.row($(obj).parents('tr')).data();
+        var nomarch = itemData.NOMBRE_ARCH;
+        let urlFile = "";
+        const carpeta = "Archivos/Contrato/ContratoDetRegente/";
+        if (nomarch != " ") {
+            if (carpeta != "") {
+                urlFile = `${urlLocalSigo}${carpeta}/${nomarch}`;
+                // Agregar validación de archivo
+                fetch(urlFile, { method: 'HEAD' }).then(response => {
+                    if (response.ok) {
+                        // Descargar archivo si existe
+                        //window.location = urlFile;
+                        window.open(urlFile, 'Documento');
+                    } else {
+                        // Mostrar mensaje de error si no existe
+                        utilSigo.toastWarning("Aviso", "No existe archivo");
+                    }
+                }).catch(error => {
+                    
+                });
+             }
+             else {
+                 tilSigo.toastWarning("Aviso", "No existe archivo");
+             }
+         } else {
+                 utilSigo.toastWarning("Aviso", "Documento no existe");
+         }
     }
-}).apply(ManPOA);
+    }).apply(ManPOA);
 //RaPOA
 (function () {
     this.dtItemRAPoa;
