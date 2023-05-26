@@ -22,12 +22,10 @@
 </script>
 
 <div id="fmrMedPrecuatoria">
-    <div class="card-header text-small"> Medidas Precautorias<br /></div>
-    <div><br /></div>
-
+    <div class="card-header text-small"> Medidas Complementarias y Seguimiento (Precautorias)<br /></div>
     <div class="form-row">
         <div class="form-group col-md-4">
-            <label for="chkGTF" class="text-small">Con Medidas Precautorias</label>
+            <label for="chkMedCautelar" class="text-small">¿Requiere implementar medidas?</label>
         </div>
         <div class="form-group col-md-6">
             @Html.CheckBoxFor(m => m.chkMedCautelar, new
@@ -45,29 +43,27 @@
             <div class="form-group col-md-4">
             </div>
             <div class="form-group col-md-4">
-                <label for="chkGTF" class="text-small">Guía Transporte Forestal</label>
+                <label for="chkGTFMP" class="text-small">Guía Transporte Forestal</label>
             </div>
             <div class="form-group col-md-4">
                 @Html.CheckBoxFor(m => m.chkGTFMP, new { @class = "form-check-input", style = "width:15px;height:16px;" })
             </div>
         </div>
-
         <div class="form-row">
             <div class="form-group col-md-4">
             </div>
             <div class="form-group col-md-4">
-                <label for="chkGTF" class="text-small">Listas de Trozas</label>
+                <label for="chkMedLisTrozasMP" class="text-small">Listas de Trozas</label>
             </div>
             <div class="form-group col-md-4">
                 @Html.CheckBoxFor(m => m.chkMedLisTrozasMP, new { @class = "form-check-input", style = "width:15px;height:16px;" })
             </div>
         </div>
-
         <div class="form-row">
             <div class="form-group col-md-4">
             </div>
             <div class="form-group col-md-4">
-                <label for="chkGTF" class="text-small">Por especie</label>
+                <label for="chkMedEspecieMP" class="text-small">Por especie</label>
             </div>
             <div class="form-group col-md-4">
                 @Html.CheckBoxFor(m => m.chkMedEspecieMP, new
@@ -78,7 +74,6 @@
                 })
             </div>
         </div>
-
         <div class="form-row" id="divEspecieMedPrecautoria" style="display:none;">
             <div class="form-group col-md-4">
             </div>
@@ -87,11 +82,40 @@
             </div>
             <div class="col-md-2"></div>
         </div>
+        <div class="form-row">
+            <div class="form-group col-md-4">
+            </div>
+            <div class="form-group col-md-4">
+                <label for="chkDecomiso" class="text-small">Decomiso</label>
+            </div>
+            <div class="form-group col-md-4">
+                @Html.CheckBoxFor(m => m.chkDecomiso, new { @class = "form-check-input", style = "width:15px;height:16px;" })
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group col-md-4">
+            </div>
+            <div class="form-group col-md-4">
+                <label for="chkPlanCierre" class="text-small">Caducidad - Plan de cierre</label>
+            </div>
+            <div class="form-group col-md-4">
+                @Html.CheckBoxFor(m => m.chkPlanCierre, new { @class = "form-check-input", style = "width:15px;height:16px;" })
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group col-md-4">
+            </div>
+            <div class="form-group col-md-4">
+                <label for="chkDisposicionFauna" class="text-small">Disposición Fauna</label>
+            </div>
+            <div class="form-group col-md-4">
+                @Html.CheckBoxFor(m => m.chkDisposicionFauna, new { @class = "form-check-input", style = "width:15px;height:16px;" })
+            </div>
+        </div>
     </div>
-
     <div class="form-row">
         <div class="form-group col-md-4">
-            <label for="chkGTF" class="text-small">Descripción de Medidas Cautelares</label>
+            <label for="txtDescMedidaCautelar" class="text-small"> Descripción de Medidas Complementarias</label>
         </div>
         <div class="form-group col-md-6">
             @Html.TextAreaFor(m => m.txtDescMedidaCautelar, 4, 1, new { @class = "form-control form-control-sm" })
@@ -99,6 +123,5 @@
         <div class="form-group col-md-2">
         </div>
     </div>
-
 </div>
 

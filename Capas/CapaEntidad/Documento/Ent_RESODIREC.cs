@@ -625,8 +625,8 @@ namespace CapaEntidad.DOC
         [Description("CHK_SUBSANACION")]
         public object CHK_SUBSANACION { get; set; }
 
-        [Description("CHK_MEDCOMPLE")]
-        public object CHK_MEDCOMPLE { get; set; }
+        //[Description("CHK_MEDCOMPLE")]
+        //public object CHK_MEDCOMPLE { get; set; }
 
         [Description("CHK_DECOMISO")]
         public object CHK_DECOMISO { get; set; }

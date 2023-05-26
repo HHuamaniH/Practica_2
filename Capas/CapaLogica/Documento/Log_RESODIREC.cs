@@ -980,7 +980,7 @@ namespace CapaLogica.DOC
                     vm.chkAccion = (bool)oCEntidadRD.CHK_ACCION;
                     vm.chkAllanamiento = (bool)oCEntidadRD.CHK_ALLANAMIENTO;
                     vm.chkSubsanacion = (bool)oCEntidadRD.CHK_SUBSANACION;
-                    vm.chkMedidaCompl = (bool)oCEntidadRD.CHK_MEDCOMPLE;
+                    //vm.chkMedidaCompl = (bool)oCEntidadRD.CHK_MEDCOMPLE;
                     vm.chkDecomiso = (bool)oCEntidadRD.CHK_DECOMISO;
                     vm.chkPlanCierre = (bool)oCEntidadRD.CHK_PLANCIERRE;
                     vm.chkDisposicionFauna = (bool)oCEntidadRD.CHK_DIPOSICIONFAUNA;
@@ -1603,7 +1603,7 @@ namespace CapaLogica.DOC
                         oCEntResodirec.CHK_ACCION = _dto.chkAccion;
                         oCEntResodirec.CHK_ALLANAMIENTO = _dto.chkAllanamiento;
                         oCEntResodirec.CHK_SUBSANACION = _dto.chkSubsanacion;
-                        oCEntResodirec.CHK_MEDCOMPLE = _dto.chkMedidaCompl;
+                        //oCEntResodirec.CHK_MEDCOMPLE = _dto.chkMedidaCompl;
                         oCEntResodirec.CHK_DECOMISO = _dto.chkDecomiso;
                         oCEntResodirec.CHK_PLANCIERRE = _dto.chkPlanCierre;
                         oCEntResodirec.CHK_DIPOSICIONFAUNA = _dto.chkDisposicionFauna;

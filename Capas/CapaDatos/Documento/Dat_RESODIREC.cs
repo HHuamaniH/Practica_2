@@ -890,7 +890,7 @@ namespace CapaDatos.DOC
                             lsCEntidad.CHK_ACCION = dr.GetBoolean(dr.GetOrdinal("ACCION"));
                             lsCEntidad.CHK_ALLANAMIENTO = dr.GetBoolean(dr.GetOrdinal("ALLANAMIENTO"));
                             lsCEntidad.CHK_SUBSANACION = dr.GetBoolean(dr.GetOrdinal("SUBSANACION"));
-                            lsCEntidad.CHK_MEDCOMPLE = dr.GetBoolean(dr.GetOrdinal("MEDIDA_COMPLEMENTARIA"));
+                            //lsCEntidad.CHK_MEDCOMPLE = dr.GetBoolean(dr.GetOrdinal("MEDIDA_COMPLEMENTARIA"));
                             lsCEntidad.CHK_DECOMISO = dr.GetBoolean(dr.GetOrdinal("DECOMISO"));
                             lsCEntidad.CHK_PLANCIERRE = dr.GetBoolean(dr.GetOrdinal("PLAN_CIERRE"));
                             lsCEntidad.CHK_DIPOSICIONFAUNA = dr.GetBoolean(dr.GetOrdinal("DISPOSICION_FAUNA"));
