@@ -9007,15 +9007,7 @@ namespace CapaDatos.DOC
                     lsCEntidad.ListPOAs = new List<CEntidad>();
                     lsCEntidad.ListPOAsCampo = new List<CEntidad>();
                     lsCEntidad.ListISupervMaderableAprov = new List<CEntidad>();
-                    //lsCEntidad.ListISupervMaderableSemillero = new List<CEntidad>();
-                    //lsCEntidad.ListCastaña = new List<CEntidad>();
                     lsCEntidad.ListTrozaCampo = new List<CEntidad>();
-                    //lsCEntidad.ListMadeAserradaCampo = new List<CEntidad>();
-                    //lsCEntidad.ListISupervMaderableAdicional = new List<CEntidad>();
-                    //lsCEntidad.ListISupervMaderableNoAutorizado = new List<CEntidad>();
-                    //lsCEntidad.ListHuayronas = new List<CEntidad>();
-                    //lsCEntidad.ListEvaluacionOtros = new List<CEntidad>();
-                    //lsCEntidad.ListAvistamientoFauna = new List<CEntidad>();
                     lsCEntidad.ListISupervNoMaderableAprov = new List<CEntidad>();
 
                     //POA
@@ -9035,9 +9027,8 @@ namespace CapaDatos.DOC
                             oCEntidadTemp.SUPERVISOR = dr["SUPERVISORES"].ToString();
                             oCEntidadTemp.COD_THABILITANTE = dr["COD_THABILITANTE"].ToString();
                             oCEntidadTemp.NUM_POA = Int32.Parse(dr["NUM_POA"].ToString());
-                            oCEntidadTemp.FECHA_SUPERVISION_INICIO = dr["FECHA_INICIO"].ToString();
-                            oCEntidadTemp.FECHA_SUPERVISION_FIN = dr["FECHA_FIN"].ToString();
                             oCEntidadTemp.COD_INFORME = dr["COD_INFORME"].ToString();
+                            oCEntidadTemp.PCA = dr["PC"].ToString();
                             lsCEntidad.ListPOAs.Add(oCEntidadTemp);
                         }
                     }
@@ -9058,6 +9049,7 @@ namespace CapaDatos.DOC
                             oCEntidadTemp.NUM_POA = Int32.Parse(dr["NUM_POA"].ToString());
                             oCEntidadTemp.COD_INFORME = dr["COD_INFORME"].ToString();
                             oCEntidadTemp.COD_SECUENCIAL = Int32.Parse(dr["COD_SECUENCIAL"].ToString());
+                            oCEntidadTemp.PCA = dr["PC"].ToString();
                             lsCEntidad.ListPOAsCampo.Add(oCEntidadTemp);
                         }
                     }
@@ -9090,8 +9082,6 @@ namespace CapaDatos.DOC
                             oCEntidadTemp.NUM_POA = Int32.Parse(dr["NUM_POA"].ToString());
                             oCEntidadTemp.COD_ESPECIES = dr["COD_ESPECIES"].ToString();
                             oCEntidadTemp.COD_SECUENCIAL = Int32.Parse(dr["COD_SECUENCIAL"].ToString());
-                            oCEntidadTemp.FECHA_SUPERVISION_INICIO = dr["FECHA_INICIO"].ToString();
-                            oCEntidadTemp.FECHA_SUPERVISION_FIN = dr["FECHA_FIN"].ToString();
                             oCEntidadTemp.COD_INFORME = dr["COD_INFORME"].ToString();
                             oCEntidadTemp.FUENTE_FOTO = dr["FUENTE"].ToString();
                             lsCEntidad.ListISupervMaderableAprov.Add(oCEntidadTemp);
@@ -9126,8 +9116,6 @@ namespace CapaDatos.DOC
                             oCEntidadTemp.NUM_POA = Int32.Parse(dr["NUM_POA"].ToString());
                             oCEntidadTemp.COD_ESPECIES = dr["COD_ESPECIES"].ToString();
                             oCEntidadTemp.COD_SECUENCIAL = Int32.Parse(dr["COD_SECUENCIAL"].ToString());
-                            oCEntidadTemp.FECHA_SUPERVISION_INICIO = dr["FECHA_INICIO"].ToString();
-                            oCEntidadTemp.FECHA_SUPERVISION_FIN = dr["FECHA_FIN"].ToString();
                             oCEntidadTemp.COD_INFORME = dr["COD_INFORME"].ToString();
                             oCEntidadTemp.FUENTE_FOTO = dr["FUENTE"].ToString();
                             lsCEntidad.ListISupervNoMaderableAprov.Add(oCEntidadTemp);
@@ -9153,63 +9141,11 @@ namespace CapaDatos.DOC
                             oCEntidadTemp.NUM_POA = Int32.Parse(dr["NUM_POA"].ToString());
                             oCEntidadTemp.COD_ESPECIES = dr["COD_ESPECIES"].ToString();
                             oCEntidadTemp.COD_SECUENCIAL = Int32.Parse(dr["COD_SECUENCIAL"].ToString());
-                            oCEntidadTemp.FECHA_SUPERVISION_INICIO = dr["FECHA_INICIO"].ToString();
-                            oCEntidadTemp.FECHA_SUPERVISION_FIN = dr["FECHA_FIN"].ToString();
                             oCEntidadTemp.COD_INFORME = dr["COD_INFORME"].ToString();
                             oCEntidadTemp.FUENTE_FOTO = dr["FUENTE"].ToString();
                             lsCEntidad.ListTrozaCampo.Add(oCEntidadTemp);
                         }
                     }
-
-                    ///HUAYRONAS
-                    ///21/05/2018 CAR
-                    /*dr.NextResult();
-                    if (dr.HasRows)
-                    {
-                        while (dr.Read())
-                        {
-                            oCEntidadTemp = new CEntidad();
-                            oCEntidadTemp.POA = dr["NOMBRE_POA"].ToString();
-                            oCEntidadTemp.NUMERO = dr["TITULO"].ToString();
-                            oCEntidadTemp.CODIGO = dr["NUMERO"].ToString();
-                            oCEntidadTemp.CONDICION = dr["CONDICION"].ToString();
-                            oCEntidadTemp.COORDENADA_ESTE = Int32.Parse(dr["COORDENADA_ESTE"].ToString());
-                            oCEntidadTemp.COORDENADA_NORTE = Int32.Parse(dr["COORDENADA_NORTE"].ToString());
-                            oCEntidadTemp.VOLUMEN = Decimal.Parse(dr["VOLUMEN"].ToString());
-                            oCEntidadTemp.COD_THABILITANTE = dr["COD_THABILITANTE"].ToString();
-                            oCEntidadTemp.NUM_POA = Int32.Parse(dr["NUM_POA"].ToString());
-                            oCEntidadTemp.COD_INFORME = dr["COD_INFORME"].ToString();
-                            lsCEntidad.ListHuayronas.Add(oCEntidadTemp);
-                        }
-                    }*/
-                    ///12/10/2018 CAR
-                    /// CARRIZOS ESPECIES --SUPERVISADAS
-                    ///MADERABLE ADICIONALES
-                    ///21/05/2018 CAR
-                    /*dr.NextResult();
-                    if (dr.HasRows)
-                    {
-                        while (dr.Read())
-                        {
-                            oCEntidadTemp = new CEntidad();
-                            oCEntidadTemp.CODIGO = dr["CODIGO"].ToString();
-                            oCEntidadTemp.NUMERO = dr["TITULO"].ToString();
-                            oCEntidadTemp.ESPECIES = dr["ESPECIE"].ToString();
-                            oCEntidadTemp.TOTAL_UNIDAD_MUEST = Int32.Parse(dr["TOTAL_UNIDAD_MUEST"].ToString());
-                            oCEntidadTemp.TOTAL_UNIDADES_APROV = Int32.Parse(dr["TOTAL_UNIDADES_APROV"].ToString());
-                            oCEntidadTemp.COORDENADA_ESTE = Int32.Parse(dr["COORDENADA_ESTE"].ToString());
-                            oCEntidadTemp.COORDENADA_NORTE = Int32.Parse(dr["COORDENADA_NORTE"].ToString());
-                            oCEntidadTemp.ALTURA_PROMEDIO = Decimal.Parse(dr["ALTURA_PROMEDIO"].ToString());
-                            oCEntidadTemp.OBSERVACION = dr["OBSERVACION"].ToString();
-                            oCEntidadTemp.COD_THABILITANTE = dr["COD_THABILITANTE"].ToString();
-                            oCEntidadTemp.NUM_POA = Int32.Parse(dr["NUM_POA"].ToString());
-                            oCEntidadTemp.COD_INFORME = dr["COD_INFORME"].ToString();
-                            oCEntidadTemp.COD_ESPECIES = dr["COD_ESPECIES"].ToString();
-                            oCEntidadTemp.COD_SECUENCIAL = Int32.Parse(dr["COD_SECUENCIAL"].ToString());
-
-                            lsCEntidad.ListMuestraNoMadeCarrizos.Add(oCEntidadTemp);
-                        }
-                    }*/
                 }
                 return lsCEntidad;
             }
