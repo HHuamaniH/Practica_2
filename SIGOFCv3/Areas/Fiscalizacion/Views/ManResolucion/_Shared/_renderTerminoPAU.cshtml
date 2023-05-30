@@ -574,60 +574,10 @@
             </div>
         </div><br />
     </div>
-    <div class="form-row">
-        <div class="form-group col-md-12">
-            <div class="card-header text-small">Medidas Complementarias y Seguimiento</div>
-            <br />
-        </div>
-    </div>
-    <div class="form-row">
-        <div class="form-group col-md-4">
-            <label for="chkAprov" class="text-small">¿Requiere implementar medidas?</label>
-        </div>
-        <div class="form-group col-md-6">
-            @Html.CheckBoxFor(m => m.chkMedidaCompl, new { @class = "form-check-input", style = "width:15px;height:16px;", @onchange = "_renderTerminoPau.fncSelectAM()" })
-        </div>
-        <div class="form-group col-md-2">
-        </div>
-    </div>
-    <div id="divMedComplementaria">
-        <div class="form-row">
-            <div class="form-group col-md-4">
-                <label for="chkAprov" class="text-small">Decomiso</label>
-            </div>
-            <div class="form-group col-md-6">
-                @Html.CheckBoxFor(m => m.chkDecomiso, new { @class = "form-check-input", style = "width:15px;height:16px;" })
-            </div>
-            <div class="form-group col-md-2">
-            </div>
-        </div>
-        <div class="form-row">
-            <div class="form-group col-md-4">
-                <label for="chkAprov" class="text-small">Caducidad - Plan de cierre</label>
-            </div>
-            <div class="form-group col-md-6">
-                @Html.CheckBoxFor(m => m.chkPlanCierre, new { @class = "form-check-input", style = "width:15px;height:16px;" })
-            </div>
-            <div class="form-group col-md-2">
-            </div>
-        </div>
-        <div class="form-row">
-            <div class="form-group col-md-4">
-                <label for="chkAprov" class="text-small">Disposición Fauna</label>
-            </div>
-            <div class="form-group col-md-6">
-                @Html.CheckBoxFor(m => m.chkDisposicionFauna, new { @class = "form-check-input", style = "width:15px;height:16px;" })
-            </div>
-            <div class="form-group col-md-2">
-            </div>
-        </div>
 
-    </div>
     <!--Infracciones-->
     <div id="divInfracciones">
         @Html.Partial("~/Areas/Fiscalizacion/Views/ManResolucion/_Shared/_generic/_renderInfracciones.cshtml", Model)
     </div>
-
-
 </div>
 <div class="modal fade hide" id="modalBuscarDocSITD" tabindex="-1" role="dialog"></div>

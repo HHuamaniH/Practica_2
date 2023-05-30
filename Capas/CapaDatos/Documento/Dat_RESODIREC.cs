@@ -757,15 +757,7 @@ namespace CapaDatos.DOC
                             else
                             {
                                 lsCEntidad.MEDIDAS_CORRECTIVAS = dr.GetBoolean(dr.GetOrdinal("MEDIDAS_CORRECTIVAS"));
-                                //lsCEntidad.DESCRIPCION_MED_CORRECTIVAS = dr.GetString(dr.GetOrdinal("DESCRIPCION_MED_CORRECTIVAS"));
                             }
-
-                            //lsCEntidad.DIA_IMPLEMENT_MCORRECTIVA = dr.GetInt32(dr.GetOrdinal("DIA_IMPLEMENT_MCORRECTIVA"));
-                            //lsCEntidad.MES_IMPLEMENT_MCORRECTIVA = dr.GetInt32(dr.GetOrdinal("MES_IMPLEMENT_MCORRECTIVA"));
-                            //lsCEntidad.ANIO_IMPLEMENT_MCORRECTIVA = dr.GetInt32(dr.GetOrdinal("ANIO_IMPLEMENT_MCORRECTIVA"));
-                            //lsCEntidad.DIA_INFORME_MCORRECTIVA = dr.GetInt32(dr.GetOrdinal("DIA_INFORME_MCORRECTIVA"));
-                            //lsCEntidad.MES_INFORME_MCORRECTIVA = dr.GetInt32(dr.GetOrdinal("MES_INFORME_MCORRECTIVA"));
-                            //lsCEntidad.ANIO_INFORME_MCORRECTIVA = dr.GetInt32(dr.GetOrdinal("ANIO_INFORME_MCORRECTIVA"));
 
                             lsCEntidad.COD_RESODIREC_GRAVEDAD = dr.GetString(dr.GetOrdinal("COD_RESODIREC_GRAVEDAD"));
                             lsCEntidad.CAUSALES_CADUCIDAD = dr.GetBoolean(dr.GetOrdinal("CAUSALES_CADUCIDAD"));
@@ -779,7 +771,6 @@ namespace CapaDatos.DOC
                             lsCEntidad.SUNAT = dr.GetBoolean(dr.GetOrdinal("SUNAT"));
                             lsCEntidad.SERFOR = dr.GetBoolean(dr.GetOrdinal("SERFOR"));
                             lsCEntidad.OTROS = dr.GetBoolean(dr.GetOrdinal("OTROS"));
-                            //lsCEntidad.TIPO = dr.GetString(dr.GetOrdinal("TIPO"));
                             //cambios de la RD agregando Ministerio de Enenrgi y Minas
                             lsCEntidad.MIN_ENERGIA_MINAS = dr.GetBoolean(dr.GetOrdinal("MIN_ENERGIA_MINAS"));
                             lsCEntidad.DETALLE_MINENMIN = dr.GetString(dr.GetOrdinal("DETALLE_MINENMIN"));
@@ -838,14 +829,11 @@ namespace CapaDatos.DOC
                             lsCEntidad.NO_LEV_MED_CAUTELAR = dr.GetBoolean(dr.GetOrdinal("NO_LEV_MED_CAUTELAR"));
                             lsCEntidad.DESCRIPCION_OTROS = dr.GetString(dr.GetOrdinal("DESCRIPCION_OTROS"));
 
-                            //lsCEntidad.DESCRIPCION_MEDIDAS_CAUTELARES = dr.GetString(dr.GetOrdinal("DESCRIPCION_MEDIDAS_CAUTELARES"));
-                            //lsCEntidad.MOTIVO_AMPLIACION = dr.GetString(dr.GetOrdinal("MOTIVO_AMPLIACION"));
                             lsCEntidad.MOTAMP_AMPIMP = dr.GetBoolean(dr.GetOrdinal("MOTAMP_AMPIMP"));
                             lsCEntidad.MOTAMP_AMPOTRINF = dr.GetBoolean(dr.GetOrdinal("MOTAMP_AMPOTRINF"));
                             lsCEntidad.MOTAMP_AMPPORPLA = dr.GetBoolean(dr.GetOrdinal("MOTAMP_AMPPORPLA"));
                             lsCEntidad.MOTAMP_OTROS = dr.GetString(dr.GetOrdinal("MOTAMP_OTROS"));
 
-                            //lsCEntidad.INFORMACION_FALSA = dr.GetBoolean(dr.GetOrdinal("INFORMACION_FALSA"));
                             lsCEntidad.INFORMACION_FALSA_INEX = dr.GetBoolean(dr.GetOrdinal("INFORMACION_FALSA_INEX"));
                             lsCEntidad.INFORMACION_FALSA_DIF = dr.GetBoolean(dr.GetOrdinal("INFORMACION_FALSA_DIF"));
                             lsCEntidad.INFORMACION_FALSA_DAS = dr.GetBoolean(dr.GetOrdinal("INFORMACION_FALSA_DAS"));
@@ -880,26 +868,27 @@ namespace CapaDatos.DOC
                             lsCEntidad.DESC_RECTIFICACION = dr.GetString(dr.GetOrdinal("DESC_RECTIFICACION"));
 
                             lsCEntidad.MED_CAUT_XESPECIE = dr.GetBoolean(dr.GetOrdinal("MED_CAUT_XESPECIE"));
-                            //lsCEntidad.ESMANDATO = Convert.ToInt32(dr.GetBoolean(dr.GetOrdinal("ESMANDATO")));
-                            //lsCEntidad.MANDATO = dr.GetString(dr.GetOrdinal("MANDATO"));
-                            //lsCEntidad.CANTMESES = dr.GetInt32(dr.GetOrdinal("CANT_MESES"));
-                            //lsCEntidad.CANTDIAS = dr.GetInt32(dr.GetOrdinal("CANT_DIAS"));
                             lsCEntidad.MANDATOS = dr.GetBoolean(dr.GetOrdinal("MANDATOS"));
                             lsCEntidad.DESCUENTO = dr.GetBoolean(dr.GetOrdinal("DESCUENTO"));
 
                             lsCEntidad.CHK_ACCION = dr.GetBoolean(dr.GetOrdinal("ACCION"));
                             lsCEntidad.CHK_ALLANAMIENTO = dr.GetBoolean(dr.GetOrdinal("ALLANAMIENTO"));
                             lsCEntidad.CHK_SUBSANACION = dr.GetBoolean(dr.GetOrdinal("SUBSANACION"));
-                            lsCEntidad.CHK_MEDCOMPLE = dr.GetBoolean(dr.GetOrdinal("MEDIDA_COMPLEMENTARIA"));
-                            lsCEntidad.CHK_DECOMISO = dr.GetBoolean(dr.GetOrdinal("DECOMISO"));
-                            lsCEntidad.CHK_PLANCIERRE = dr.GetBoolean(dr.GetOrdinal("PLAN_CIERRE"));
-                            lsCEntidad.CHK_DIPOSICIONFAUNA = dr.GetBoolean(dr.GetOrdinal("DISPOSICION_FAUNA"));
+
+                            lsCEntidad.CHK_DECOMISO = dr.GetBoolean(dr.GetOrdinal("MC_DECOMISO"));
+                            lsCEntidad.CHK_PLANCIERRE = dr.GetBoolean(dr.GetOrdinal("MC_PLAN_CIERRE"));
+                            lsCEntidad.CHK_DIPOSICIONFAUNA = dr.GetBoolean(dr.GetOrdinal("MC_DISPOSICION_FAUNA"));
+                            lsCEntidad.CHK_PARALIZACION = dr.GetBoolean(dr.GetOrdinal("MC_PARALIZACION"));
+                            lsCEntidad.CHK_CLAUSURATEMPORAL = dr.GetBoolean(dr.GetOrdinal("MC_CLAUSURA_TEMPORAL"));
+                            lsCEntidad.CHK_CLAUSURADEFINITIVA = dr.GetBoolean(dr.GetOrdinal("MC_CLAUSURA_DEFINITIVA"));
+                            lsCEntidad.CHK_INHABILITACIONTEMPORAL = dr.GetBoolean(dr.GetOrdinal("MC_INHABILITACION_TEMPORAL"));
+                            lsCEntidad.CHK_INHABILITACIONDEFINITIVA = dr.GetBoolean(dr.GetOrdinal("MC_INHABILITACION_DEFINITIVA"));
+                            lsCEntidad.CHK_INMOVILIZACION = dr.GetBoolean(dr.GetOrdinal("MC_INMOVILIZACION"));
 
                             //21.09.2022 TGS
                             lsCEntidad.COD_TERCERO_SOLIDARIO = dr.GetString(dr.GetOrdinal("COD_TERCERO_SOLIDARIO"));
                             lsCEntidad.TERCERO_SOLIDARIO = dr.GetString(dr.GetOrdinal("TERCERO_SOLIDARIO"));
                             lsCEntidad.SUBSANACION_VOLUNTARIA = dr.GetBoolean(dr.GetOrdinal("SUBSANACION_VOLUNTARIA"));
-
                         }
                         //Estado (Calidad)
                         dr.NextResult();

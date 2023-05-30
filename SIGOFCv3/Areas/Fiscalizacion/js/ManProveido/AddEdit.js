@@ -38,7 +38,7 @@ ManProv_AddEdit.fnDownloadDocSITD = function (idControl) {
     if (idArchivo != "" && idArchivo != null) {
         let carpeta = "";
         carpeta = "Ruta_SITD";
-        document.location = `${urlLocalSigo}${carpeta}` + idArchivo;
+        document.location = `${urlLocalSigo}/${carpeta}` + idArchivo;
     }
     else {
         utilSigo.toastWarning("Aviso", "No existe archivo a descargar");
