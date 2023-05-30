@@ -227,6 +227,12 @@ ManRD_AddEdit.fnEstructura = function () {
     let chkDecomiso = ManRD_AddEdit.frm.find("#chkDecomiso").is(':checked');
     let chkPlanCierre = ManRD_AddEdit.frm.find("#chkPlanCierre").is(':checked');
     let chkDisposicionFauna = ManRD_AddEdit.frm.find("#chkDisposicionFauna").is(':checked');
+    let chkParalizacion = ManRD_AddEdit.frm.find("#chkParalizacion").is(':checked');
+    let chkClausuraTemporal = ManRD_AddEdit.frm.find("#chkClausuraTemporal").is(':checked');
+    let chkClausuraDefinitiva = ManRD_AddEdit.frm.find("#chkClausuraDefinitiva").is(':checked');
+    let chkInhabilitacionTemporal = ManRD_AddEdit.frm.find("#chkInhabilitacionTemporal").is(':checked');
+    let chkInhabilitacionDefinitiva = ManRD_AddEdit.frm.find("#chkInhabilitacionDefinitiva").is(':checked');
+    let chkInmovilizacion = ManRD_AddEdit.frm.find("#chkInmovilizacion").is(':checked');
 
     let modelRD = {
         hdfCodResodirec,
@@ -349,7 +355,13 @@ ManRD_AddEdit.fnEstructura = function () {
         chkMedidaCompl,
         chkDecomiso,
         chkPlanCierre,
-        chkDisposicionFauna
+        chkDisposicionFauna,
+        chkParalizacion,
+        chkClausuraTemporal,
+        chkClausuraDefinitiva,
+        chkInhabilitacionTemporal,
+        chkInhabilitacionDefinitiva,
+        chkInmovilizacion
     }
     ///control de calidad
     modelRD.vmControlCalidad = _ControlCalidad.fnGetDatosControlCalidad();

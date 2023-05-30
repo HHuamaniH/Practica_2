@@ -636,6 +636,18 @@ namespace CapaEntidad.DOC
 
         [Description("CHK_DIPOSICIONFAUNA")]
         public object CHK_DIPOSICIONFAUNA { get; set; }
+        [Description("CHK_PARALIZACION")]
+        public object CHK_PARALIZACION { get; set; }
+        [Description("CHK_CLAUSURATEMPORAL")]
+        public object CHK_CLAUSURATEMPORAL { get; set; }
+        [Description("CHK_CLAUSURADEFINITIVA")]
+        public object CHK_CLAUSURADEFINITIVA { get; set; }
+        [Description("CHK_INHABILITACIONTEMPORAL")]
+        public object CHK_INHABILITACIONTEMPORAL { get; set; }
+        [Description("CHK_INHABILITACIONDEFINITIVA")]
+        public object CHK_INHABILITACIONDEFINITIVA { get; set; }
+        [Description("CHK_INMOVILIZACION")]
+        public object CHK_INMOVILIZACION { get; set; }
 
 
         [Description("TIPO_DOCUMENTO")]

@@ -312,10 +312,16 @@ namespace CapaEntidad.ViewModel
         public bool chkAccion { get; set; }
         public bool chkAllanamiento { get; set; }
         public bool chkSubsanacion { get; set; }
-        public bool chkMedidaCompl { get; set; }
+        //public bool chkMedidaCompl { get; set; }
         public bool chkDecomiso { get; set; }
         public bool chkPlanCierre { get; set; }
         public bool chkDisposicionFauna { get; set; }
+        public bool chkParalizacion { get; set; }
+        public bool chkClausuraTemporal { get; set; }
+        public bool chkClausuraDefinitiva { get; set; }
+        public bool chkInhabilitacionTemporal { get; set; }
+        public bool chkInhabilitacionDefinitiva { get; set; }
+        public bool chkInmovilizacion { get; set; }
 
         //07.09.2021
         public List<Ent_RESODIREC> ListSTD01 { get; set; }
