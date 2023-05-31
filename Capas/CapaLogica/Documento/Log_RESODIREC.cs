@@ -980,11 +980,18 @@ namespace CapaLogica.DOC
                     vm.chkAccion = (bool)oCEntidadRD.CHK_ACCION;
                     vm.chkAllanamiento = (bool)oCEntidadRD.CHK_ALLANAMIENTO;
                     vm.chkSubsanacion = (bool)oCEntidadRD.CHK_SUBSANACION;
-                    vm.chkMedidaCompl = (bool)oCEntidadRD.CHK_MEDCOMPLE;
+
+
+
                     vm.chkDecomiso = (bool)oCEntidadRD.CHK_DECOMISO;
                     vm.chkPlanCierre = (bool)oCEntidadRD.CHK_PLANCIERRE;
                     vm.chkDisposicionFauna = (bool)oCEntidadRD.CHK_DIPOSICIONFAUNA;
-
+                    vm.chkParalizacion = (bool)oCEntidadRD.CHK_PARALIZACION;
+                    vm.chkClausuraTemporal = (bool)oCEntidadRD.CHK_CLAUSURATEMPORAL;
+                    vm.chkClausuraDefinitiva = (bool)oCEntidadRD.CHK_CLAUSURADEFINITIVA;
+                    vm.chkInhabilitacionTemporal = (bool)oCEntidadRD.CHK_INHABILITACIONTEMPORAL;
+                    vm.chkInhabilitacionDefinitiva = (bool)oCEntidadRD.CHK_INHABILITACIONDEFINITIVA;
+                    vm.chkInmovilizacion = (bool)oCEntidadRD.CHK_INMOVILIZACION;
 
                     if (oCEntidadRD.ListMedidasCorrectivas.Count > 0)
                     {
@@ -1339,13 +1346,13 @@ namespace CapaLogica.DOC
             //if (string.IsNullOrEmpty(_dto.txtNumeroResolucion)) throw new Exception("Ingrese el número de Resolución Directoral");
             if (string.IsNullOrEmpty(_dto.txtFechaEmision)) throw new Exception("Seleccione la fecha de emisión");
             if (_dto.listInformes == null) throw new Exception("Seleccione un informe, expediente");
-            if (_dto.chkMedidaCompl == true)
+            /*if (_dto.chkMedidaCompl == true)
             {
                 if (_dto.chkDecomiso == false && _dto.chkPlanCierre == false && _dto.chkDisposicionFauna == false)
                 {
                     throw new Exception("Seleccione una medida complementaria");
                 }
-            }
+            }*/
             if (_dto.chkAccion == true)
             {
                 if (_dto.chkAllanamiento == false && _dto.chkSubsanacion == false)
@@ -1603,13 +1610,17 @@ namespace CapaLogica.DOC
                         oCEntResodirec.CHK_ACCION = _dto.chkAccion;
                         oCEntResodirec.CHK_ALLANAMIENTO = _dto.chkAllanamiento;
                         oCEntResodirec.CHK_SUBSANACION = _dto.chkSubsanacion;
-                        oCEntResodirec.CHK_MEDCOMPLE = _dto.chkMedidaCompl;
+
                         oCEntResodirec.CHK_DECOMISO = _dto.chkDecomiso;
                         oCEntResodirec.CHK_PLANCIERRE = _dto.chkPlanCierre;
                         oCEntResodirec.CHK_DIPOSICIONFAUNA = _dto.chkDisposicionFauna;
+                        oCEntResodirec.CHK_PARALIZACION = _dto.chkParalizacion;
+                        oCEntResodirec.CHK_CLAUSURATEMPORAL = _dto.chkClausuraTemporal;
+                        oCEntResodirec.CHK_CLAUSURADEFINITIVA = _dto.chkClausuraDefinitiva;
+                        oCEntResodirec.CHK_INHABILITACIONTEMPORAL = _dto.chkInhabilitacionTemporal;
+                        oCEntResodirec.CHK_INHABILITACIONDEFINITIVA = _dto.chkInhabilitacionDefinitiva;
+                        oCEntResodirec.CHK_INMOVILIZACION = _dto.chkInmovilizacion;
 
-                        //oCEntResodirec.listEliTSTD01 = _dto.listEliTSTD01;
-                        //oCEntResodirec.listEliTSTD02 = _dto.listEliTSTD02;
                         oCEntResodirec.listSTD01 = _dto.ListSTD01;
                         oCEntResodirec.listSTD02 = _dto.ListSTD02;
                         oCEntResodirec.listEliTSTD01 = _dto.ListEliTSTD01;
