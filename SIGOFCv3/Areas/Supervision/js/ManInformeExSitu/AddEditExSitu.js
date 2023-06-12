@@ -16,6 +16,7 @@ ManInforme_AddEditExSitu.DataManejoRegistro = [];
 ManInforme_AddEditExSitu.DataEnriquecimientoAmb = [];
 ManInforme_AddEditExSitu.DataEspecieReprod = [];
 ManInforme_AddEditExSitu.DataEspecieCapturada = [];
+ManInforme_AddEditExSitu.DataTraslocEspec = [];
 ManInforme_AddEditExSitu.DataCapacitacion = [];
 ManInforme_AddEditExSitu.DataEspecieNacimiento = [];
 ManInforme_AddEditExSitu.DataEspecieEgreso = [];
@@ -497,6 +498,7 @@ ManInforme_AddEditExSitu.fnLoadData = function (obj, tipo) {
         case "DataCautManRegistro": ManInforme_AddEditExSitu.DataManejoRegistro = JSON.parse(obj) || []; break;
         case "DataCautEnriquecimientoAmb": ManInforme_AddEditExSitu.DataEnriquecimientoAmb = JSON.parse(obj) || []; break;
         case "DataCautEspecieReprod": ManInforme_AddEditExSitu.DataEspecieReprod = JSON.parse(obj) || []; break;
+        case "DataCautTraslocEspec": ManInforme_AddEditExSitu.DataTraslocEspec = JSON.parse(obj) || []; break;
         case "DataCautEspecieCapturada": ManInforme_AddEditExSitu.DataEspecieCapturada = JSON.parse(obj) || []; break;
         case "DataCautCapacitacion": ManInforme_AddEditExSitu.DataCapacitacion = JSON.parse(obj) || []; break;
         case "DataCautEspecieNacimiento": ManInforme_AddEditExSitu.DataEspecieNacimiento = JSON.parse(obj) || []; break;
@@ -506,7 +508,7 @@ ManInforme_AddEditExSitu.fnLoadData = function (obj, tipo) {
         case "DataCautActInvestigacion": ManInforme_AddEditExSitu.DataActInvestigacion = JSON.parse(obj) || []; break;
         case "DataEvalZoObservatorio": ManInforme_AddEditExSitu.DataEvalZoObservatorio = JSON.parse(obj) || []; break;
         case "DataCautBalanceIngEgr": ManInforme_AddEditExSitu.DataBalanceIngEgr = JSON.parse(obj) || []; break;
-        case "DataRelPelCentroCria": ManInforme_AddEditExSitu.DataRelPerCentroCria = JSON.parse(obj) || []; break;
+        case "DataRelPelCentroCria": ManInforme_AddEditExSitu.DataRelPerCentroCria = JSON.parse(obj) || []; break;        
     }
 }
 
@@ -1166,6 +1168,39 @@ ManInforme_AddEditExSitu.fnAddEditEspecieCapturada = function (_tipo, obj) {
         } else { _EspecieCapturada.fnInit(""); }
     });
 }
+ManInforme_AddEditExSitu.fnAddEditTraslocEspec = function (_tipo, obj) {
+    var dt, url;
+    switch (_tipo) {
+        case "TRASLOC_ESPECIMENES": dt = ManInforme_AddEditExSitu.dtCauti_TraslocEspec; break;
+    }
+    url = urlLocalSigo + "Supervision/ManInformeExSitu/_TraslocEspec";
+    var option = { url: url, type: 'POST', datos: { asTipo: _tipo }, divId: "mdlManInformeExSitu_Cautiverio" };
+
+    utilSigo.fnOpenModal(option, function () {
+        _TraslocEspec.fnSaveForm = function (data) {            
+            if (data != null) {                
+                if (obj == null || obj == "") {//Nuevo Registro                    
+                    dt.rows.add([data]).draw();
+                    dt.page('last').draw('page');
+                    utilSigo.toastSuccess("Exito", "Datos guardados correctamente");                    
+                } else {//Modificar
+                    var row = dt.row($(obj).parents('tr')).data();
+                    row = data;
+                    dt.row($(obj).parents('tr')).data(row).draw(false);
+                    utilSigo.toastSuccess("Exito", "Datos actualizados correctamente");
+                }
+                $("#mdlManInformeExSitu_Cautiverio").modal('hide');
+            } else {
+                utilSigo.toastError("Error", "No se pudieron guardar los datos");
+            }
+        }
+
+        if (obj != null && obj != "") {
+            var data = dt.row($(obj).parents('tr')).data();
+            _TraslocEspec.fnInit(utilSigo.fnConvertArrayToObject(data));
+        } else { _TraslocEspec.fnInit(""); }
+    });
+}
 ManInforme_AddEditExSitu.fnAddEditCapacitacion = function (obj) {
     var dt = ManInforme_AddEditExSitu.dtCauti_Capacitacion;
     var url = urlLocalSigo + "Supervision/ManInformeExSitu/_ActividadCapacitacion";
@@ -1341,6 +1376,7 @@ ManInforme_AddEditExSitu.fnDeleteCautiverio = function (_tipo, obj) {
         case "ENRIQUECIMIENTO_AMBIENTAL": dt = ManInforme_AddEditExSitu.dtCauti_EnriquecimientoAmb; break;
         case "ESPECIE_REPRODUCIDA": dt = ManInforme_AddEditExSitu.dtCauti_EspecieReproducida; break;
         case "ESPECIE_CAPTURADA": dt = ManInforme_AddEditExSitu.dtCauti_EspecieCapturada; break;
+        case "TRASLOC_ESPEC": dt = ManInforme_AddEditExSitu.dtCauti_TraslocEspec; break;
         case "CAPACITACION": dt = ManInforme_AddEditExSitu.dtCauti_Capacitacion; break;
         case "NACIMIENTO_ESPECIE": dt = ManInforme_AddEditExSitu.dtCauti_EspecieNacimiento; break;
         case "EGRESO_ESPECIE": dt = ManInforme_AddEditExSitu.dtCauti_EspecieEgreso; break;
@@ -1419,6 +1455,12 @@ ManInforme_AddEditExSitu.fnDeleteCautiverio = function (_tipo, obj) {
             case "ESPECIE_CAPTURADA":
                 ManInforme_AddEditExSitu.tbEliTABLA.push({
                     EliTABLA: "CAUTI_PCOLECTA",
+                    COD_SECUENCIAL: data["COD_SECUENCIAL"]
+                });
+                break;
+            case "TRASLOC_ESPEC":
+                ManInforme_AddEditExSitu.tbEliTABLA.push({
+                    EliTABLA: "CAUTI_TESPEC",
                     COD_SECUENCIAL: data["COD_SECUENCIAL"]
                 });
                 break;
@@ -1559,6 +1601,7 @@ ManInforme_AddEditExSitu.fnGetListCautiverio = function (_tipo) {
         case "ENRIQUECIMIENTO_AMBIENTAL": dt = ManInforme_AddEditExSitu.dtCauti_EnriquecimientoAmb; break;
         case "ESPECIE_REPRODUCIDA": dt = ManInforme_AddEditExSitu.dtCauti_EspecieReproducida; break;
         case "ESPECIE_CAPTURADA": dt = ManInforme_AddEditExSitu.dtCauti_EspecieCapturada; break;
+        case "TRASLOC_ESPEC": dt = ManInforme_AddEditExSitu.dtCauti_TraslocEspec; break;
         case "CAPACITACION": dt = ManInforme_AddEditExSitu.dtCauti_Capacitacion; break;
         case "NACIMIENTO_ESPECIE": dt = ManInforme_AddEditExSitu.dtCauti_EspecieNacimiento; break;
         case "EGRESO_ESPECIE": dt = ManInforme_AddEditExSitu.dtCauti_EspecieEgreso; break;
@@ -1689,8 +1732,8 @@ ManInforme_AddEditExSitu.fnAddEditExportarExcel = function (dt, nombreexcel, tip
     data.each(function (item) {
         let obj = {};
         switch (tipo) {
-            case 1: obj = { NUMERO: item.NUMERO, LARGO: item.LARGO, ANCHO: item.ANCHO, ALTURA: item.ALTURA, AREA: item.AREA }; break;
-            case 2: obj = { LARGO: item.LARGO, ANCHO: item.ANCHO, ALTURA: item.ALTURA, AREA: item.AREA }; break;
+            case 1: obj = { NUMERO: item.NUMERO, LARGO: item.LARGO, ANCHO: item.ANCHO, ALTURA: item.ALTURA, AREA: item.AREA, COORDENADA_ESTE: item.COORDENADA_ESTE, COORDENADA_NORTE: item.COORDENADA_NORTE}; break;
+            case 2: obj = { LARGO: item.LARGO, ANCHO: item.ANCHO, ALTURA: item.ALTURA, AREA: item.AREA, COORDENADA_ESTE: item.COORDENADA_ESTE, COORDENADA_NORTE: item.COORDENADA_NORTE }; break;
         }
         //let obj = { NUMERO: item.NUMERO, LARGO: item.LARGO, ANCHO: item.ANCHO, ALTURA: item.ALTURA, AREA: item.AREA };
 
@@ -1726,8 +1769,8 @@ ManInforme_AddEditExSitu.fnInitDataTable_Detail = function () {
     var columns_label = [], columns_data = [], options = {};
 
     //Cargar Infraestructura Area - Exhibición
-    columns_label = ["Número", "Largo", "Ancho", "Altura", "Área"];
-    columns_data = ["NUMERO", "LARGO", "ANCHO", "ALTURA", "AREA"];
+    columns_label = ["Número", "Largo", "Ancho", "Altura", "Área", "Coordenada Este", "Coordenada Norte"];
+    columns_data = ["NUMERO", "LARGO", "ANCHO", "ALTURA", "AREA", "COORDENADA_ESTE", "COORDENADA_NORTE"];
     options = {
         page_length: 10, row_edit: true, row_fnEdit: "ManInforme_AddEditExSitu.fnAddEditArea('0000001',this)"
         , row_delete: true, row_fnDelete: "ManInforme_AddEditExSitu.fnDeleteArea('0000001',this)", row_index: true, page_sort: true
@@ -1747,8 +1790,8 @@ ManInforme_AddEditExSitu.fnInitDataTable_Detail = function () {
     ManInforme_AddEditExSitu.dtInfrArea_Cuarentena = utilDt.fnLoadDataTable_Detail(ManInforme_AddEditExSitu.frm.find("#tbInfrArea_Cuarentena"), columns_label, columns_data, options);
     ManInforme_AddEditExSitu.dtInfrArea_Cuarentena.rows.add(ManInforme_AddEditExSitu.DataInfraestructuraArea.filter(m => m.COD_AREA == "0000006")).draw();
 
-    columns_label = ["Largo", "Ancho", "Altura", "Área"];
-    columns_data = ["LARGO", "ANCHO", "ALTURA", "AREA"];
+    columns_label = ["Largo", "Ancho", "Altura", "Área", "Coordenada Este", "Coordenada Norte"];
+    columns_data = ["LARGO", "ANCHO", "ALTURA", "AREA", "COORDENADA_ESTE", "COORDENADA_NORTE"];
     options = {
         page_length: 10, row_edit: true, row_fnEdit: "ManInforme_AddEditExSitu.fnAddEditArea('0000003',this)"
         , row_delete: true, row_fnDelete: "ManInforme_AddEditExSitu.fnDeleteArea('0000003',this)", row_index: true, page_sort: true
@@ -1863,6 +1906,15 @@ ManInforme_AddEditExSitu.fnInitDataTable_Detail = function () {
     };
     ManInforme_AddEditExSitu.dtCauti_EspecieReproducida = utilDt.fnLoadDataTable_Detail(ManInforme_AddEditExSitu.frm.find("#tbCauti_EspecieReproducida"), columns_label, columns_data, options);
     ManInforme_AddEditExSitu.dtCauti_EspecieReproducida.rows.add(ManInforme_AddEditExSitu.DataEspecieReprod).draw();
+    //Traslocación de Especímenes
+    columns_label = ["Especie", "N° Individuos", "Año", "Zona de Liberación", "Registro de Seguimiento"];
+    columns_data = ["DESCRIPCION", "NUM_INDIVIDUOS", "ANIO", "ZONA_LIBERACION", "REGISTRO_SEG"];
+    options = {
+        page_length: 10, row_edit: true, row_fnEdit: "ManInforme_AddEditExSitu.fnAddEditTraslocEspec('TRASLOC_ESPECIMENES',this)"
+        , row_delete: true, row_fnDelete: "ManInforme_AddEditExSitu.fnDeleteCautiverio('TRASLOC_ESPEC',this)", row_index: true, page_sort: true
+    };
+    ManInforme_AddEditExSitu.dtCauti_TraslocEspec = utilDt.fnLoadDataTable_Detail(ManInforme_AddEditExSitu.frm.find("#tbCauti_TraslocEspec"), columns_label, columns_data, options);
+    ManInforme_AddEditExSitu.dtCauti_TraslocEspec.rows.add(ManInforme_AddEditExSitu.DataTraslocEspec).draw();
     //Especies Capturadas
     columns_label = ["Especie", "N° Individuos Capturados", "Zona de Captura", "Observación"];
     columns_data = ["DESCRIPCION", "NUM_ICAPTURADOS", "ZONA_CAPTURA", "OBSERVACION"];
@@ -2062,6 +2114,9 @@ ManInforme_AddEditExSitu.fnSubmitForm = function () {
     if (!utilSigo.fnValidateForm(ManInforme_AddEditExSitu.frm, controls)) {
         return ManInforme_AddEditExSitu.frm.valid();
     }
+    if (!_renderObligacionMandatos.fnValidate()) {
+        return false;
+    }
     ManInforme_AddEditExSitu.frm.submit();
 };
 
@@ -2141,6 +2196,7 @@ ManInforme_AddEditExSitu.fnSaveForm = function () {
             datosInforme.tbEnriquecimientoAmb = ManInforme_AddEditExSitu.fnGetListCautiverio("ENRIQUECIMIENTO_AMBIENTAL");
             datosInforme.tbEspecieReproducida = ManInforme_AddEditExSitu.fnGetListCautiverio("ESPECIE_REPRODUCIDA");
             datosInforme.tbEspecieCapturada = ManInforme_AddEditExSitu.fnGetListCautiverio("ESPECIE_CAPTURADA");
+            datosInforme.tbTraslocEspec = ManInforme_AddEditExSitu.fnGetListCautiverio("TRASLOC_ESPEC");
             datosInforme.tbCapacitacion = ManInforme_AddEditExSitu.fnGetListCautiverio("CAPACITACION");
             datosInforme.tbEspecieNacimiento = ManInforme_AddEditExSitu.fnGetListCautiverio("NACIMIENTO_ESPECIE");
             datosInforme.tbEspecieEgreso = ManInforme_AddEditExSitu.fnGetListCautiverio("EGRESO_ESPECIE");
@@ -2162,6 +2218,9 @@ ManInforme_AddEditExSitu.fnSaveForm = function () {
             datosInforme.tbMandatos = _renderMandatos.fnGetList();
             datosInforme.tbMandatos = datosInforme.tbMandatos.concat(_renderMandatos.fnGetListEliTABLA());
             datosInforme.tbEnfermedad = ManInforme_Enfermedad.fnGetEnfermedad();
+            datosInforme.tbObligMandatos = _renderObligacionMandatos.fnGetList();
+            datosInforme.tbObligMandatos = datosInforme.tbObligMandatos.concat(_renderObligacionMandatos.fnGetListEliTABLA());
+
             
             var option = { url: ManInforme_AddEditExSitu.frm[0].action, datos: JSON.stringify({ dto: datosInforme }), type: 'POST' };
             utilSigo.fnAjax(option, function (data) {

@@ -89,6 +89,11 @@ namespace SIGOFCv3.Areas.Supervision.Controllers
             return PartialView();
         }
         [HttpPost]
+        public PartialViewResult _TraslocEspec()
+        {
+            return PartialView();
+        }
+        [HttpPost]
         public PartialViewResult _EspecieNacimiento(string asTipo)
         {
             CapaLogica.DOC.Log_BUSQUEDA exeBus = new CapaLogica.DOC.Log_BUSQUEDA();

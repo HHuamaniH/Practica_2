@@ -332,6 +332,8 @@ namespace CapaEntidad.ViewModel
         public string ddlProgEducacionId { get; set; }
         public string ddlProgInvetigacionId { get; set; }
         public string ddlProgCapturaId { get; set; }
+        public string ddlTraslocEspecId { get; set; }
+        public string ddlLiberEspecId { get; set; }
         public string ddlProgCapacitacionId { get; set; }
         public string txtHoraRepAlimento { get; set; }
         public string txtDiaAbastecimiento { get; set; }
@@ -367,6 +369,7 @@ namespace CapaEntidad.ViewModel
         public List<Ent_ISUPERVISION_EXSITU_INFRA_AREA> tbEnriquecimientoAmb { get; set; }
         public List<Ent_ISUPERVISION_EXSITU_INFRA_AREA> tbEspecieReproducida { get; set; }
         public List<Ent_ISUPERVISION_EXSITU_INFRA_AREA> tbEspecieCapturada { get; set; }
+        public List<Ent_ISUPERVISION_EXSITU_INFRA_AREA> tbTraslocEspec { get; set; }
         public List<Ent_ISUPERVISION_EXSITU_INFRA_AREA> tbCapacitacion { get; set; }
         public List<Ent_ISUPERVISION_EXSITU_INFRA_AREA> tbEspecieNacimiento { get; set; }
         public List<Ent_ISUPERVISION_EXSITU_INFRA_AREA> tbEspecieEgreso { get; set; }
@@ -375,6 +378,7 @@ namespace CapaEntidad.ViewModel
         public List<Ent_ISUPERVISION_EXSITU_INFRA_AREA> tbActividadInvestigacion { get; set; }
         public List<Ent_INFORME_OBLIGTITULAR> tbObligacionTitular { get; set; }
         public List<Ent_MANDATOS> tbMandatos { get; set; }
+        public List<Ent_MANDATOS> tbObligMandatos { get; set; }
         public List<Ent_INFORME_ENFERMEDAD> tbEnfermedad { get; set; }
 
         public List<Ent_INFORME> tbFotoSupervision { get; set; }
@@ -438,6 +442,7 @@ namespace CapaEntidad.ViewModel
             tbDesplazamiento = new List<Ent_INFORME>();
             tbBalanceIngEgr = new List<Ent_ISUPERVISION_EXSITU_INFRA_AREA>();
             tbMandatos = new List<Ent_MANDATOS>();
+            tbObligMandatos = new List<Ent_MANDATOS>();
             tbEnfermedad = new List<Ent_INFORME_ENFERMEDAD>();
         }
     }

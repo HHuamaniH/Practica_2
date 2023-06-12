@@ -1,0 +1,46 @@
+﻿
+<script src="~/Areas/Supervision/js/ManInformeExSitu/_TraslocEspec.js"></script>
+
+<div class="modal-dialog" role="document">
+    <div class="modal-content">
+        <div class="modal-header text-small" style="cursor:move;">
+            <span>Traslocación de Especímenes</span>
+            <i class="fa fa-close" style="cursor:pointer;" data-dismiss="modal" aria-label="Close"></i>
+        </div>
+        <div class="modal-body">
+            <form id="frmItemTraslocEspec">
+                @Html.Hidden("hdfRegEstado")
+                @Html.Hidden("hdfCodSecuencial")
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        @Html.Partial("~/Areas/General/Views/Controles/_renderComboEspecie.cshtml")
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="txtIndividuosTE" class="text-small">N° Individuos</label>
+                        @Html.TextBox("txtIndividuosTE", "", new { @class = "form-control form-control-sm", type = "text", maxlength="10", onkeypress= "return utilSigo.checkNum(event)" })
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label for="txtAnioTE" class="text-small">Año</label>
+                        @Html.TextBox("txtAnioTE", "", new { @class = "form-control form-control-sm", type = "text", maxlength = "4", onkeypress = "return utilSigo.checkNum(event)" })
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="txtZonaLiberacionTE" class="text-small">Zona de Liberación</label>
+                        @Html.TextBox("txtZonaLiberacionTE", "", new { @class = "form-control form-control-sm", maxlength = "200", onkeypress = "return utilSigo.checkLetter(event)" })
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-12">
+                        <label for="txtObservacion" class="text-small">Registro de Seguimiento</label>
+                        @Html.TextBox("txtRegistroSegTE", "", new { @class = "form-control form-control-sm", maxlength = "200", onkeypress = "return utilSigo.checkLetter(event)" })
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-primary btn-sm" onclick="_TraslocEspec.fnSubmitForm()">Guardar</button>
+            <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Cancelar</button>
+        </div>
+    </div>
+</div>

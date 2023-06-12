@@ -1009,11 +1009,13 @@ namespace SIGOFCv3.Areas.Supervision.Models.ManInforme
                         oCampos.ANCHO = Convert.ToDecimal(workSheet.Cells[rowIterator, 3].Value.ToString().Trim());
                         oCampos.ALTURA = Convert.ToDecimal(workSheet.Cells[rowIterator, 4].Value.ToString().Trim());
                         oCampos.AREA = Convert.ToDecimal(workSheet.Cells[rowIterator, 5].Value.ToString().Trim());
+                        oCampos.COORDENADA_ESTE = Convert.ToDecimal(workSheet.Cells[rowIterator, 6].Value.ToString().Trim());
+                        oCampos.COORDENADA_NORTE = Convert.ToDecimal(workSheet.Cells[rowIterator, 7].Value.ToString().Trim());
                         oCampos.COD_SECUENCIAL = 0;
                         oCampos.RegEstado = 1;
 
                         CapaEntidad.DOC.Ent_ISUPERVISION_EXSITU_INFRA_AREA oCampoDet;
-                        for (int i = 6; i <= 21; i++)
+                        for (int i = 8; i <= 23; i++)
                         {
                             if ((workSheet.Cells[rowIterator, i].Value ?? "").ToString().Trim() != "")
                             {
@@ -1022,9 +1024,9 @@ namespace SIGOFCv3.Areas.Supervision.Models.ManInforme
                                 oCampoDet.COD_AREA = asCodArea;
                                 oCampoDet.DESCRIPCION = (workSheet.Cells[rowIterator, i].Value ?? "").ToString().Trim();
                                 //IM/IC/IE  
-                                if (i >= 6 && i <= 10) { oCampoDet.TIPO = "IM"; }
-                                if (i >= 11 && i <= 13) { oCampoDet.TIPO = "IC"; }
-                                if (i >= 14 && i <= 21) { oCampoDet.TIPO = "IE"; }
+                                if (i >= 8 && i <= 12) { oCampoDet.TIPO = "IM"; }
+                                if (i >= 13 && i <= 15) { oCampoDet.TIPO = "IC"; }
+                                if (i >= 16 && i <= 23) { oCampoDet.TIPO = "IE"; }
                                 oCampoDet.COD_SECUENCIAL = 0;
                                 oCampoDet.RegEstado = 1;
                                 oCampos.ListISupervision_exsitu_recinto_equipo.Add(oCampoDet);

@@ -30,7 +30,7 @@
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
     <TypeScriptToolsVersion>1.8</TypeScriptToolsVersion>
-    <Use64BitIISExpress>true</Use64BitIISExpress>
+    <Use64BitIISExpress>false</Use64BitIISExpress>
     <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -453,6 +453,7 @@
     <Content Include="Areas\General\css\ReporteSeguimientoRegistro\Index.css" />
     <Content Include="Areas\General\css\Reportes\Reporte.css" />
     <Content Include="Areas\General\js\Controles\_ActualizaCargoPersona.js" />
+    <Content Include="Areas\General\js\Controles\_BuscarMandatos.js" />
     <Content Include="Areas\General\js\Controles\_BuscarPersonaGeneral.js" />
     <Content Include="Areas\General\js\Controles\_cambiarPass.js" />
     <Content Include="Areas\General\js\Controles\_CNotificacion.js" />
@@ -548,6 +549,7 @@
     <Content Include="Areas\Supervision\js\ManCorrecMandato\modal_std.js" />
     <Content Include="Areas\Supervision\js\ManCorrecMandato\_ItemExpMandato.js" />
     <Content Include="Areas\Supervision\js\ManCorrecMandato\_modalInfMa.js" />
+    <Content Include="Areas\Supervision\js\ManInformeExSitu\_TraslocEspec.js" />
     <Content Include="Areas\Supervision\js\ManInformeExSitu\_RelPerCentroCria.js" />
     <Content Include="Areas\Supervision\js\ManInformeMedidaCorrectiva\AddEdit.js" />
     <Content Include="Areas\Supervision\js\ManInformeMedidaCorrectiva\Index.js" />
@@ -2286,11 +2288,9 @@
     <Content Include="Areas\Fiscalizacion\Views\InformeLegal\templates\Predios privados\infracciones\inciso_c.cshtml" />
     <Content Include="Areas\Fiscalizacion\Views\InformeLegal\templates\Fauna\infracciones\inciso_b.cshtml" />
     <Content Include="Areas\Fiscalizacion\Views\InformeLegal\templates\Fauna\infracciones\inciso_17.cshtml" />
-    <Content Include="Areas\Supervision\Views\ManInformeExSitu\_shared\_Mandatos.cshtml" />
     <Content Include="Areas\General\Views\Controles\_ActualizaCargoPersona.cshtml" />
     <Content Include="Areas\General\Views\ManPersonas\_AddTipoCargo.cshtml" />
     <Content Include="Areas\General\Views\Controles\_ActualizaCargoPersona.cshtml" />
-    <Content Include="Areas\Supervision\Views\ManInformeExSitu\_shared\_Mandatos.cshtml" />
     <Content Include="Areas\Supervision\Views\ManInforme\Render\_renderCoberturaBoscosa.cshtml" />
     <Content Include="Areas\Supervision\Views\ManInforme\Render\_renderInfraestructura.cshtml" />
     <Content Include="Areas\Supervision\Views\ManInforme\_CoberturaBoscosa.cshtml" />
@@ -2304,6 +2304,10 @@
     <Content Include="Areas\THabilitante\Views\ManPOA\_DetRegente.cshtml" />
     <Content Include="Areas\Supervision\Views\ManInforme\Render\_renderEnfermedades.cshtml" />
     <Content Include="Areas\THabilitante\Views\ManPOA\_FechaRegencia.cshtml" />
+    <Content Include="Areas\Supervision\Views\ManInformeExSitu\_TraslocEspec.cshtml" />
+    <Content Include="Areas\Supervision\Views\ManInformeExSitu\_shared\_Mandatos.cshtml" />
+    <Content Include="Areas\Supervision\Views\ManInforme\Render\_renderObligacionMandatos.cshtml" />
+    <Content Include="Areas\General\Views\Controles\_BuscarMandatos.cshtml" />
     <None Include="Properties\PublishProfiles\CustomProfile.pubxml" />
     <Content Include="Areas\PlanFocalizacion\Views\web.config" />
     <Content Include="Areas\PlanFocalizacion\Views\Shared\_Layout.cshtml" />

@@ -1,4 +1,4 @@
-﻿@model List<CapaEntidad.DOC.Ent_MANDATOS> 
+﻿@model List<CapaEntidad.DOC.Ent_MANDATOS>
 
 <script type="text/javascript">
     var _renderMandatos = {};
@@ -13,8 +13,8 @@
 
     _renderMandatos.fnInitDataTable_Detail = function () {
         var columns_label = [], columns_data = [], options = {};
-        columns_label = ["Mandato", "Plazo Impl. Días", "Plazo Post Impl. Días", "Plazo Inf. Días"];
-        columns_data = ["MANDATO", "PLAZO_IMPL_DIA","PLAZO_POST_DIA", "PLAZO_INF_DIA"];
+        columns_label = ["Mandato", "Plazo Impl. Días", "Plazo Inf. Días"];
+        columns_data = ["MANDATO", "PLAZO_IMPL_DIA", "PLAZO_INF_DIA"];
         options = {
             page_length: 10, row_index: true, row_delete: true, row_fnDelete: "_renderMandatos.fnDelete(this)", row_select: false, row_fnSelect: "_renderMandatos.fnSelect(this)", page_sort: true
         };
@@ -23,7 +23,7 @@
         var tbMandatos = '@Model.Count()';
         if (tbMandatos != '0') {
             var chkobjMandatos = document.getElementById('chkobjMandatos');
-            chkobjMandatos.checked = true;            
+            chkobjMandatos.checked = true;
             _renderMandatos.frm.find("#divMandatos").show();
             _renderMandatos.dtRenderListMandatos.rows.add(JSON.parse('@Html.Raw(Json.Encode(@Model))')).draw();
         }
@@ -49,7 +49,7 @@
         if (data["COD_SECUENCIAL"] > 0) {
             _renderMandatos.tbEliTABLA.push({
                 COD_SECUENCIAL: data["COD_SECUENCIAL"],
-                RegEstado: 2                
+                RegEstado: 2
             });
         }
         _renderMandatos.dtRenderListMandatos.row($(obj).parents('tr')).remove().draw(false);
@@ -87,11 +87,11 @@
         rows = _renderMandatos.dtRenderListMandatos.$("tr");
         countFilas = rows.length;
         if (countFilas > 0) {
-            $.each(rows, function (i, o) {                
+            $.each(rows, function (i, o) {
                 data = _renderMandatos.dtRenderListMandatos.row($(o)).data();
                 if (data.RegEstado!=0) {
                     list.push(utilSigo.fnConvertArrayToObject(data));
-                }                
+                }
             });
         }
         return list;
@@ -123,7 +123,7 @@
         <div class="form-group col-md-6">
             <input class="form-check-input" data-val="true" data-val-required="El campo chkMCorrectivas es obligatorio."
                    id="chkobjMandatos" name="chkobjMandatos" onchange="_renderMandatos.fnSelectRecom()"
-                   style="width:15px;height:16px;" type="checkbox" value="true">           
+                   style="width:15px;height:16px;" type="checkbox" value="true">
         </div>
         <div class="form-group col-md-2">
         </div>
@@ -135,7 +135,7 @@
             </div>
             <div class="form-group col-md-6">
                 <textarea class="form-control form-control-sm" cols="1" id="txtDescripcionMandato" name="txtDescripcionMandato" rows="3"></textarea>
-            </div>            
+            </div>
             <div class="form-group col-md-2">
             </div>
         </div>
@@ -146,28 +146,28 @@
             </div>
             <div class="form-group col-md-2">
                 <label for="txtImplMCDias" class="text-small">Días:</label>
-                <input class="form-control form-control-sm" id="txtDiasImpl" maxlength="10" name="txtDiasImpl" onkeypress="return isNumberKey(event)" type="text" value="">                
-            </div>           
+                <input class="form-control form-control-sm" id="txtDiasImpl" maxlength="10" name="txtDiasImpl" onkeypress="return isNumberKey(event)" type="text" value="">
+            </div>
         </div>
 
-        <div class="form-row">
+        @*<div class="form-row">
             <div class="form-group col-md-4">
                 <label class="text-small"> Plazo de post-implementación</label>
             </div>
             <div class="form-group col-md-2">
                 <label for="txtInfMCDia" class="text-small">Días:</label>
-                <input class="form-control form-control-sm" id="txtDiasPostImpl" name="txtDiasPostImpl" onkeypress="return isNumberKey(event)" type="text" value="">                
-            </div>           
-        </div>
+                <input class="form-control form-control-sm" id="txtDiasPostImpl" name="txtDiasPostImpl" onkeypress="return isNumberKey(event)" type="text" value="">
+            </div>
+        </div>*@
 
         <div class="form-row">
             <div class="form-group col-md-4">
                 <label class="text-small"> Plazo para presentar el informe de implementación</label>
             </div>
             <div class="form-group col-md-2">
-                <label for="txtInfMCDia" class="text-small">Días:</label>
-                <input class="form-control form-control-sm" id="txtDiasInf" maxlength="3" name="txtDiasInf" onkeypress="return isNumberKey(event)" type="text" value="">                
-            </div>           
+                <label for="txtInfMCDia" class="text-small">Días Calendarios:</label>
+                <input class="form-control form-control-sm" id="txtDiasInf" maxlength="3" name="txtDiasInf" onkeypress="return isNumberKey(event)" type="text" value="">
+            </div>
         </div>
 
         <div class="form-row">
@@ -193,6 +193,6 @@
                     <tbody></tbody>
                 </table>
             </div>
-        </div>       
+        </div>
     </div>
 </div>

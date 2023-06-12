@@ -143,6 +143,17 @@ utilSigo.modalDraggable = function ($modalNumeracionComprobante, htmlTitle) {
         $modalNumeracionComprobante.removeAttr('style');
     });*/
 }
+utilSigo.check = function (e) {
+    var tecla = (document.all) ? e.keyCode : e.which;
+
+    if (tecla == 8 || tecla == 32) {
+        return true;
+    }
+    var patron = "/[A-Za-z0-9]";
+    var tecla_final = String.fromCharCode(tecla);
+    return patron.test(tecla_final);
+    
+}
 utilSigo.loadAjaxCombo = function (_url, combo, _data, itemDefault, isasync, fn) {
     $.ajax({
         type: 'POST',
@@ -707,6 +718,24 @@ utilSigo.obtenerFechaHora = function () {
     return arrayReturn;
 };
 
+utilSigo.convertirFechaHoraStandar = function (fecha) {
+    var returns='';
+    if (fecha != null || fecha != '') {
+        var arr = fecha.split('/');
+        returns = arr[2] + '-' + arr[1] + '-' + arr[0];
+        
+    }
+    return returns;   
+};
+
+utilSigo.isFechaMayor = function (date1,date2) {
+    let returns = false;
+    if (date1 > date2) {
+        returns = true;
+    }
+    return returns;
+};
+
 utilSigo.recortarTextos = function (str, lenght) {
     if (str.length > lenght) {
         return str.substr(0, lenght) + '...';
@@ -808,4 +837,28 @@ utilSigo.disabledOpc = function () {
         $('.no-bloqueo-rol textarea').prop("disabled", false);
         $('.no-bloqueo-rol select').prop("disabled", false);
     }, 2000);
+}
+
+utilSigo.checkNum = function (e) {
+    var tecla = (document.all) ? e.keyCode : e.which;
+
+    if (tecla == 8 || tecla == 32) {
+        return true;
+    }
+
+    var patron = /[0-9]/;
+    var tecla_final = String.fromCharCode(tecla);
+    return patron.test(tecla_final);
+}
+
+utilSigo.checkLetter = function (e) {
+    var tecla = (document.all) ? e.keyCode : e.which;
+
+    if (tecla == 8 || tecla == 32) {
+        return true;
+    }
+
+    var patron = /[ A-Za-z0-9]/;
+    var tecla_final = String.fromCharCode(tecla);
+    return patron.test(tecla_final);
 }

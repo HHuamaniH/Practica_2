@@ -749,6 +749,10 @@ namespace CapaEntidad.DOC
         public String REALIZA_PEDUCAMB { get; set; }
         [Description("REALIZA_PINVCIENT")]
         public String REALIZA_PINVCIENT { get; set; }
+        [Description("TRASLOCA_ESPEC")]
+        public String TRASLOCA_ESPEC { get; set; }
+        [Description("LIBER_ESPEC")]
+        public String LIBER_ESPEC { get; set; }
         [Description("REALIZA_PCOLECTA")]
         public String REALIZA_PCOLECTA { get; set; }
 
@@ -984,6 +988,8 @@ namespace CapaEntidad.DOC
         public List<Ent_ISUPERVISION_EXSITU_INFRA_AREA> LisCautiverioPublicoObjetivo { get; set; }
         [Category("LIST"), Description("LisCautiverioECapturado")]
         public List<Ent_ISUPERVISION_EXSITU_INFRA_AREA> LisCautiverioECapturado { get; set; }
+        [Category("LIST"), Description("LisCautiverioTraslocEspec")]
+        public List<Ent_ISUPERVISION_EXSITU_INFRA_AREA> LisCautiverioTraslocEspec { get; set; }
         //06/12/2018 LISTA DE CAPACITACIONES FAUNA
         [Category("LIST"), Description("LisCapacitacionFauna")]
         public List<Ent_ISUPERVISION_EXSITU_INFRA_AREA> LisCapacitacionFauna { get; set; }
@@ -1990,6 +1996,7 @@ namespace CapaEntidad.DOC
 
         [Category("LIST"), Description("ListMandato")]
         public List<Ent_MANDATOS> ListMandatos { get; set; }
+        public List<Ent_MANDATOS> ListObligMandatos { get; set; }
 
         #region "Constructor"
         public Ent_INFORME()
@@ -2160,6 +2167,9 @@ namespace CapaEntidad.DOC
             COD_SECUENCIAL_POA = -1;
             ListISuperExsituOBLIGF = new List<Ent_ISUPERVISION_EXSITU_INFRA_AREA>();
             ListEnfermedad = new List<Ent_INFORME_ENFERMEDAD>();
+            LisCautiverioTraslocEspec = new List<Ent_ISUPERVISION_EXSITU_INFRA_AREA>();
+            ListMandatos = new List<Ent_MANDATOS>();
+            ListObligMandatos = new List<Ent_MANDATOS>();     
     }
         #endregion
     }
@@ -3367,10 +3377,20 @@ namespace CapaEntidad.DOC
 
     public class Ent_MANDATOS
     {
+        [Description("BusValor")]
+        public String BusValor { get; set; }
+        [Description("COD_SECUENCIAL")]
+        public Int32 COD_SECUENCIAL { get; set; }
         [Description("COD_INFORME")]
         public String COD_INFORME { get; set; }
-        [Description("COD_SECUENCIAL")]
-        public Int32 COD_SECUENCIAL { get; set; }       
+        [Description("NUM_INFORME")]
+        public String NUM_INFORME { get; set; }
+        [Description("TH_NUMERO")]
+        public String TH_NUMERO { get; set; }
+        [Description("TITULAR_ACTUAL")]
+        public String TITULAR_ACTUAL { get; set; }
+        [Description("MODALIDAD")]
+        public String MODALIDAD { get; set; }
         [Description("MANDATO")]
         public String MANDATO { get; set; }
         [Description("PLAZO_IMPL_DIA")]
@@ -3379,8 +3399,21 @@ namespace CapaEntidad.DOC
         public Int32 PLAZO_POST_DIA { get; set; }
         [Description("PLAZO_INF_DIA")]
         public Int32 PLAZO_INF_DIA { get; set; }
+        [Description("CUMPLIO_MANDATO")]
+        public Int32 CUMPLIO_MANDATO { get; set; }
+        [Description("OBSERVACION")]
+        public String OBSERVACION { get; set; }
+        [Description("PRESENTA_INFORME_IMPL")]
+        public Int32 PRESENTA_INFORME_IMPL { get; set; }
+        [Description("PRESENTA_INFORME_DP")]
+        public Int32 PRESENTA_INFORME_DP { get; set; }
+        [Category("FECHA"), Description("FECHA_PRESENT_INF")]
+        public Object FECHA_PRESENT_INF { get; set; }
+        [Description("COD_INFORME_REF")]
+        public String COD_INFORME_REF { get; set; }
         [Description("COD_UCUENTA")]
         public String COD_UCUENTA { get; set; }
+
         [Description("RegEstado")]
         public Int32 RegEstado { get; set; }
 
@@ -3388,6 +3421,12 @@ namespace CapaEntidad.DOC
         {
             COD_SECUENCIAL = -1;
             RegEstado = -1;
+            PLAZO_IMPL_DIA = -1;
+            PLAZO_POST_DIA = -1;
+            PLAZO_INF_DIA = -1;
+            CUMPLIO_MANDATO = -1;
+            PRESENTA_INFORME_IMPL = -1;
+            PRESENTA_INFORME_DP = -1;
         }
     }
 

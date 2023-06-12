@@ -1977,6 +1977,8 @@ namespace CapaLogica.DOC
                     vmInf.ddlProgGeneticoId = entInf.REALIZA_PMANEJOGEN;
                     vmInf.ddlProgEducacionId = entInf.REALIZA_PEDUCAMB;
                     vmInf.ddlProgInvetigacionId = entInf.REALIZA_PINVCIENT;
+                    vmInf.ddlTraslocEspecId = entInf.TRASLOCA_ESPEC;
+                    vmInf.ddlLiberEspecId = entInf.LIBER_ESPEC;
                     vmInf.ddlProgCapturaId = entInf.REALIZA_PCOLECTA;
                     vmInf.ddlProgCapacitacionId = entInf.REALIZA_CAPCITAC;
                     vmInf.tbGrupoTaxonomico = entInf.ListGrupoToxonomico;
@@ -1990,6 +1992,7 @@ namespace CapaLogica.DOC
                     vmInf.tbEnriquecimientoAmb = entInf.LisCautiverioEnriquecAmbiental;
                     vmInf.tbEspecieReproducida = entInf.LisCautiverioEspecieReproducida;
                     vmInf.tbEspecieCapturada = entInf.LisCautiverioECapturado;
+                    vmInf.tbTraslocEspec = entInf.LisCautiverioTraslocEspec;
                     vmInf.tbCapacitacion = entInf.LisCapacitacionFauna;
                     vmInf.tbEspecieNacimiento = entInf.ListNacimientosEspecies;
                     vmInf.tbEspecieEgreso = entInf.ListEgresosEspecies;
@@ -1997,8 +2000,9 @@ namespace CapaLogica.DOC
                     vmInf.tbRelPelCentroCria = entInf.ListRelPelCentroCria;
                     vmInf.tbActividadEducacion = entInf.LisCautiverioActividadRealizada;
                     vmInf.tbActividadInvestigacion = entInf.LisCautiverioCensoICientifica;
-                    vmInf.tbMandatos = entInf.ListMandatos;
+                    vmInf.tbMandatos = entInf.ListMandatos;                    
                     vmInf.tbEnfermedad = entInf.ListEnfermedad;
+                    vmInf.tbObligMandatos = entInf.ListObligMandatos;
 
                     vmInf.txtAsunto = entInf.ASUNTO;
                     vmInf.txtContenido = entInf.CONTENIDO.ToString();
@@ -2154,6 +2158,8 @@ namespace CapaLogica.DOC
                 paramsInf.REALIZA_PMANEJOGEN = _dto.ddlProgGeneticoId;
                 paramsInf.REALIZA_PEDUCAMB = _dto.ddlProgEducacionId;
                 paramsInf.REALIZA_PINVCIENT = _dto.ddlProgInvetigacionId;
+                paramsInf.TRASLOCA_ESPEC = _dto.ddlTraslocEspecId;
+                paramsInf.LIBER_ESPEC = _dto.ddlLiberEspecId;
                 paramsInf.REALIZA_PCOLECTA = _dto.ddlProgCapturaId;
                 paramsInf.REALIZA_CAPCITAC = _dto.ddlProgCapacitacionId;
                 paramsInf.ListGrupoToxonomico = _dto.tbGrupoTaxonomico;
@@ -2166,6 +2172,7 @@ namespace CapaLogica.DOC
                 paramsInf.LisCautiveriotManejoRegistro = _dto.tbManejoRegistro;
                 paramsInf.LisCautiverioEnriquecAmbiental = _dto.tbEnriquecimientoAmb;
                 paramsInf.LisCautiverioEspecieReproducida = _dto.tbEspecieReproducida;
+                paramsInf.LisCautiverioTraslocEspec = _dto.tbTraslocEspec;
                 paramsInf.LisCautiverioECapturado = _dto.tbEspecieCapturada;
                 paramsInf.LisCapacitacionFauna = _dto.tbCapacitacion;
                 paramsInf.ListNacimientosEspecies = _dto.tbEspecieNacimiento;
@@ -2178,6 +2185,7 @@ namespace CapaLogica.DOC
                 paramsInf.ListRelPelCentroCria = _dto.tbRelPelCentroCria;
                 paramsInf.ListMandatos = _dto.tbMandatos;
                 paramsInf.ListEnfermedad = _dto.tbEnfermedad;
+                paramsInf.ListObligMandatos = _dto.tbObligMandatos;
 
                 double puntuacion = 0;
                 foreach (var item in paramsInf.ListEvalZoObservatorio)
@@ -3320,6 +3328,21 @@ namespace CapaLogica.DOC
         public List<Dictionary<string, string>> Maderable(string asCodInf, int iNumPoa, string idPC)
         {
             return oCDatos.ListarMaderable(new Ent_INFORME() { COD_INFORME = asCodInf, NUM_POA = iNumPoa, COD_PARCELA = (idPC == "") ? null : idPC });
+        }
+
+        #endregion
+
+        #region Mandatos
+        public List<Ent_MANDATOS> BuscarMandatos(Ent_MANDATOS oCEntidad)
+        {
+            try
+            {
+                return oCDatos.RegMandatosBuscar(oCEntidad);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
         }
 
         #endregion
