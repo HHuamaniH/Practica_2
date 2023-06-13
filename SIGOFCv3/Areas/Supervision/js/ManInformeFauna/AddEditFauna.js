@@ -696,6 +696,9 @@ ManInforme_AddEditFauna.fnSubmitForm = function () {
     if (!utilSigo.fnValidateForm(ManInforme_AddEditFauna.frm, controls)) {
         return ManInforme_AddEditFauna.frm.valid();
     }
+    if (!_renderObligacionMandatos.fnValidate()) {
+        return false;
+    }
     ManInforme_AddEditFauna.frm.submit();
 }
 
@@ -758,6 +761,9 @@ ManInforme_AddEditFauna.fnSaveForm = function () {
             datosInforme.tbRegFauna = _renderAvistamientoFauna.fnGetList();
             datosInforme.tbEliTABLA = datosInforme.tbEliTABLA.concat(_renderAvistamientoFauna.fnGetListEliTABLA());
             datosInforme.tbObligacionTitular = _renderObligacionTitular.fnGetList();
+
+            datosInforme.tbObligMandatos = _renderObligacionMandatos.fnGetList();
+            datosInforme.tbObligMandatos = datosInforme.tbObligMandatos.concat(_renderObligacionMandatos.fnGetListEliTABLA());
 
             var option = { url: ManInforme_AddEditFauna.frm[0].action, datos: JSON.stringify({ dto: datosInforme }), type: 'POST' };
             $.ajax({

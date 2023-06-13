@@ -42,7 +42,7 @@ _bMandatos.fnInitEventos = function () {
 }
 
 _bMandatos.fnInitDataTable_Detail = function () {
-    var columns_label = ["N°", "N° de Informe", "Título Habilitante", "Titular", "Modalidad", "", ""];
+    var columns_label = ["N°", "N° de Informe", "Título Habilitante", "Titular", "Modalidad", "Mandato", "", ""];
     var columns_data = [
         {
             "name": "ROW_INDE", "width": "2%", "orderable": false, "searchable": false, "mRender": function (data, type, row, meta) {
@@ -53,6 +53,7 @@ _bMandatos.fnInitDataTable_Detail = function () {
         { "data": "TH_NUMERO", "autoWidth": true },
         { "data": "TITULAR_ACTUAL", "autoWidth": true },
         { "data": "MODALIDAD", "autoWidth": true },             
+        { "data": "MANDATO", "autoWidth": true },             
         {
             "data": "", "width": "2%", "orderable": false, "searchable": false, "mRender": function (data, type, row) {
                 return '<div><i class="fa fa-lg fa-check" style="cursor: pointer;color:forestgreen;" title="Seleccionar" onclick="_bMandatos.fnAsignarDatos(this)"></i>';
@@ -66,8 +67,7 @@ _bMandatos.fnInitDataTable_Detail = function () {
         { "data": "OBSERVACION", "visible": false },
         { "data": "PRESENTA_INFORME_IMPL", "visible": false },
         { "data": "FECHA_PRESENT_INF", "visible": false },
-        { "data": "PRESENTA_INFORME_DP", "visible": false },
-        { "data": "MANDATO", "visible": false },
+        { "data": "PRESENTA_INFORME_DP", "visible": false }
     ];
 
     //**Cabecera**----

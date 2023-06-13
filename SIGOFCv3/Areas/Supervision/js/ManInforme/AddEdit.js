@@ -575,7 +575,9 @@ ManInforme_AddEdit.fnSubmitForm = function () {
     if (!utilSigo.fnValidateForm(ManInforme_AddEdit.frm, controls)) {
         return ManInforme_AddEdit.frm.valid();
     }
-
+    if (!_renderObligacionMandatos.fnValidate()) {
+        return false;
+    }
     ManInforme_AddEdit.frm.submit();
 }
 
@@ -626,6 +628,8 @@ ManInforme_AddEdit.fnSaveForm = function () {
 
             datosInforme.tbMandatos = _renderMandatos.fnGetList();
             datosInforme.tbMandatos = datosInforme.tbMandatos.concat(_renderMandatos.fnGetListEliTABLA());
+            datosInforme.tbObligMandatos = _renderObligacionMandatos.fnGetList();
+            datosInforme.tbObligMandatos = datosInforme.tbObligMandatos.concat(_renderObligacionMandatos.fnGetListEliTABLA());
             
             var option = { url: ManInforme_AddEdit.frm.action, datos: JSON.stringify({ dto: datosInforme }), type: 'POST' };
             $.ajax({

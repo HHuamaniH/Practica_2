@@ -67,7 +67,9 @@ namespace CapaEntidad.ViewModel
         public IEnumerable<VM_Cbo> ddlArchivaInforme { get; set; }
         public string hdfPerfil { get; set; }
         public List<Ent_MANDATOS> tbMandatos { get; set; }
+        public List<Ent_MANDATOS> tbObligMandatos { get; set; }
         public List<Ent_MANDATOS> ListMandatos { get; set; }
+        public List<Ent_MANDATOS> ListObligMandatos { get; set; }
         public VM_Informe()
         {
             vmControlCalidad = new VM_ControlCalidad_2();
@@ -92,6 +94,7 @@ namespace CapaEntidad.ViewModel
             tbObligacion = new List<Ent_INFORME>();
             tbDesplazamiento = new List<Ent_INFORME>();
             tbMandatos = new List<Ent_MANDATOS>();
+            tbObligMandatos = new List<Ent_MANDATOS>();
         }
     }
 
@@ -551,7 +554,9 @@ namespace CapaEntidad.ViewModel
         public IEnumerable<VM_Cbo> ddlArchivaInforme { get; set; }
         public string ddlTipoInformeId { get; set; }
         public List<Ent_MANDATOS> tbMandatos { get; set; }
+        public List<Ent_MANDATOS> tbObligMandatos { get; set; }
         public List<Ent_MANDATOS> ListMandatos { get; set; }
+        public List<Ent_MANDATOS> ListObligMandatos { get; set; }
 
         public VM_Informe_Conservacion()
         {
@@ -591,6 +596,7 @@ namespace CapaEntidad.ViewModel
             tbAfectacion = new List<Ent_INFORME_IMPACTO>();
             tbEliTABLAfectacion = new List<Ent_INFORME>();
             tbMandatos = new List<Ent_MANDATOS>();
+            ListObligMandatos = new List<Ent_MANDATOS>();
         }
     }
 
@@ -651,7 +657,9 @@ namespace CapaEntidad.ViewModel
         public string hdfCodMTipo { get; set; }
         public string ddlTipoInformeId { get; set; }
         public List<Ent_MANDATOS> tbMandatos { get; set; }
+        public List<Ent_MANDATOS> tbObligMandatos { get; set; }
         public List<Ent_MANDATOS> ListMandatos { get; set; }
+        public List<Ent_MANDATOS> ListObligMandatos { get; set; }
         public List<Ent_INFORME> tbVerticeTHCampo { get; set; }
         public List<Ent_INFORME> tbCoberturaBoscosa { get; set; }
         public List<Ent_INFORME> tbOtrosPtosEval { get; set; }
@@ -692,6 +700,7 @@ namespace CapaEntidad.ViewModel
             tbObligacionTitular = new List<Ent_INFORME_OBLIGTITULAR>();
             tbRegFauna = new List<Ent_INFORME>();
             tbEnfermedad = new List<Ent_INFORME_ENFERMEDAD>();
+            ListObligMandatos = new List<Ent_MANDATOS>();
     }
     }
 
@@ -775,7 +784,9 @@ namespace CapaEntidad.ViewModel
         public string ddlArchivaInformeId { get; set; }
         public IEnumerable<VM_Cbo> ddlArchivaInforme { get; set; }
         public List<Ent_MANDATOS> tbMandatos { get; set; }
+        public List<Ent_MANDATOS> tbObligMandatos { get; set; }
         public List<Ent_MANDATOS> ListMandatos { get; set; }
+        public List<Ent_MANDATOS> ListObligMandatos { get; set; }
 
         public VM_Informe_Tara()
         {
@@ -797,6 +808,7 @@ namespace CapaEntidad.ViewModel
             tbObligTitular = new List<Ent_INFORME_OBLIGTITULAR>();
             tbDesplazamiento = new List<Ent_INFORME>();
             ListMandatos = new List<Ent_MANDATOS>();
+            ListObligMandatos = new List<Ent_MANDATOS>();
         }
     }
 }

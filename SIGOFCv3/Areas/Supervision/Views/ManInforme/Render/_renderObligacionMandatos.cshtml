@@ -87,11 +87,11 @@
     _renderObligacionMandatos.fnGetList = function () {
         for (var i = 0; i < _renderObligacionMandatos.listObligacionMandatos.length; i++) {
             var item = _renderObligacionMandatos.listObligacionMandatos[i];
-            _renderObligacionMandatos.listObligacionMandatos[i].CUMPLIO_MANDATO = $('#cboCM_' + item.COD_SECUENCIAL + '_' + item.NUM_INFORME).val();
-            _renderObligacionMandatos.listObligacionMandatos[i].OBSERVACION = $('#txtOBS_' + item.COD_SECUENCIAL + '_' + item.NUM_INFORME).val();
-            _renderObligacionMandatos.listObligacionMandatos[i].PRESENTA_INFORME_IMPL = $('#cboPI_' + item.COD_SECUENCIAL + '_' + item.NUM_INFORME).val();
-            _renderObligacionMandatos.listObligacionMandatos[i].PRESENTA_INFORME_DP = $('#cboPIPL_' + item.COD_SECUENCIAL + '_' + item.NUM_INFORME).val();
-            _renderObligacionMandatos.listObligacionMandatos[i].FECHA_PRESENT_INF = $('#txtPREFEC_' + item.COD_SECUENCIAL + '_' + item.NUM_INFORME).val();
+            _renderObligacionMandatos.listObligacionMandatos[i].CUMPLIO_MANDATO = $('#cboCM_' + item.COD_SECUENCIAL + '_' + item.COD_INFORME).val();
+            _renderObligacionMandatos.listObligacionMandatos[i].OBSERVACION = $('#txtOBS_' + item.COD_SECUENCIAL + '_' + item.COD_INFORME).val();
+            _renderObligacionMandatos.listObligacionMandatos[i].PRESENTA_INFORME_IMPL = $('#cboPI_' + item.COD_SECUENCIAL + '_' + item.COD_INFORME).val();
+            _renderObligacionMandatos.listObligacionMandatos[i].PRESENTA_INFORME_DP = $('#cboPIPL_' + item.COD_SECUENCIAL + '_' + item.COD_INFORME).val();
+            _renderObligacionMandatos.listObligacionMandatos[i].FECHA_PRESENT_INF = $('#txtPREFEC_' + item.COD_SECUENCIAL + '_' + item.COD_INFORME).val();
         }
         return _renderObligacionMandatos.listObligacionMandatos;
     }
@@ -100,10 +100,12 @@
         var returns = true
         var list = _renderObligacionMandatos.fnGetList()
         for (var i = 0; i < list.length; i++) {
-            if (utilSigo.isFechaMayor(utilSigo.convertirFechaHoraStandar(list[i].FECHA_PRESENT_INF), utilSigo.obtenerFechaHora()[0])) {
-                console.log(utilSigo.convertirFechaHoraStandar(list[i].FECHA_PRESENT_INF) + ' : ' + utilSigo.obtenerFechaHora()[0]);
-                returns = false;
-                utilSigo.toastWarning("Aviso", "La Fecha de Obligación del Mandato " + list[i].MANDATO + " no debe ser mayor a la fecha actual");
+            let fechaStandar = utilSigo.convertirFechaHoraStandar(list[i].FECHA_PRESENT_INF);            
+            if (fechaStandar != '') {
+                if (utilSigo.isFechaMayor(fechaStandar, utilSigo.obtenerFechaHora()[0])) {
+                    returns = false;
+                    utilSigo.toastWarning("Aviso", "La Fecha de Obligación del Mandato \"" + list[i].MANDATO + "\" no debe ser mayor a la fecha actual");
+                }
             }
         }
         return returns;
@@ -150,28 +152,28 @@
             htmlObligMandatos += '   <td>' + item.PLAZO_IMPL_DIA + '</td>';
             htmlObligMandatos += '   <td>' + item.PLAZO_INF_DIA + '</td>';
             htmlObligMandatos += '   <td>';
-            htmlObligMandatos += '       <select id="cboCM_' + item.COD_SECUENCIAL + '_' + item.NUM_INFORME + '" class="form-control form-control-sm" type="text" value=" " style="width:100%;">';
+            htmlObligMandatos += '       <select id="cboCM_' + item.COD_SECUENCIAL + '_' + item.COD_INFORME + '" class="form-control form-control-sm" type="text" value=" " style="width:100%;">';
             htmlObligMandatos += '            <option value="1" ' + cumplioMandato + '>Si</option>';
             htmlObligMandatos += '            <option value="0" ' + noCumplioMandato + '>No</option>';
             htmlObligMandatos += '       </select>';
             htmlObligMandatos += '   </td>';
             htmlObligMandatos += '   <td>';
-            htmlObligMandatos += '       <input id="txtOBS_' + item.COD_SECUENCIAL + '_' + item.NUM_INFORME + '" class="form-control form-control-sm" type="text" maxlength = "300" maxlength = "300" onkeypress="return utilSigo.checkLetter(event)" value="' + item.OBSERVACION + '" style="width:100%;">';
+            htmlObligMandatos += '       <input id="txtOBS_' + item.COD_SECUENCIAL + '_' + item.COD_INFORME + '" class="form-control form-control-sm" type="text" maxlength = "300" maxlength = "300" onkeypress="return utilSigo.checkLetter(event)" value="' + item.OBSERVACION + '" style="width:100%;">';
             htmlObligMandatos += '   </td>';
             htmlObligMandatos += '   <td>';
-            htmlObligMandatos += '       <select id="cboPI_' + item.COD_SECUENCIAL + '_' + item.NUM_INFORME + '" class="form-control form-control-sm" type="text" value=" " style="width:100%;">';
+            htmlObligMandatos += '       <select id="cboPI_' + item.COD_SECUENCIAL + '_' + item.COD_INFORME + '" class="form-control form-control-sm" type="text" value=" " style="width:100%;">';
             htmlObligMandatos += '            <option value="1" ' + presentoInforme + '>Si</option>';
             htmlObligMandatos += '            <option value="0" ' + noPresentoInforme + '>No</option>';
             htmlObligMandatos += '       </select>';
             htmlObligMandatos += '   </td>';
             htmlObligMandatos += '   <td>';
-            htmlObligMandatos += '       <select id="cboPIPL_' + item.COD_SECUENCIAL + '_' + item.NUM_INFORME + '" class="form-control form-control-sm" type="text" value=" " style="width:100%;">';
+            htmlObligMandatos += '       <select id="cboPIPL_' + item.COD_SECUENCIAL + '_' + item.COD_INFORME + '" class="form-control form-control-sm" type="text" value=" " style="width:100%;">';
             htmlObligMandatos += '            <option value="1" ' + presentoInformePL + '>Si</option>';
             htmlObligMandatos += '            <option value="0" ' + noPresentoInformePL + '>No</option>';
             htmlObligMandatos += '       </select>';
             htmlObligMandatos += '   </td>';
             htmlObligMandatos += '   <td>';
-            htmlObligMandatos += '       <input id="txtPREFEC_' + item.COD_SECUENCIAL + '_' + item.NUM_INFORME + '" class="form-control form-control-sm" placeholder = "dd/mm/aaaa" maxlength = "10" type="text" value="' + item.FECHA_PRESENT_INF + '" style="width:100%;" readonly>';
+            htmlObligMandatos += '       <input id="txtPREFEC_' + item.COD_SECUENCIAL + '_' + item.COD_INFORME + '" class="form-control form-control-sm" placeholder = "dd/mm/aaaa" maxlength = "10" type="text" value="' + item.FECHA_PRESENT_INF + '" style="width:100%;" readonly>';
             htmlObligMandatos += '   </td>';
             htmlObligMandatos += '</tr>';
         }
@@ -184,7 +186,7 @@
     _renderObligacionMandatos.fnInitFecha = function () {
         for (var i = 0; i < _renderObligacionMandatos.listObligacionMandatos.length; i++) {
             var item = _renderObligacionMandatos.listObligacionMandatos[i];
-            let txtFecha = 'txtPREFEC_' + item.COD_SECUENCIAL + '_' + item.NUM_INFORME;
+            let txtFecha = 'txtPREFEC_' + item.COD_SECUENCIAL + '_' + item.COD_INFORME;
             $("#" + txtFecha).datepicker({ format: "dd/mm/yyyy", autoclose: true, language: 'es' });
         }
     }

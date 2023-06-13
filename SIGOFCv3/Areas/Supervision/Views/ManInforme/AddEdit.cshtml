@@ -315,6 +315,9 @@
                                         @Html.DropDownListFor(m => m.ddlArchivaInformeId, new SelectList(Model.ddlArchivaInforme, "Value", "Text"), new { @class = "form-control form-control-sm" })
                                     </div>
                                 </div>
+                                <div class="">
+                                    @Html.Partial("~/Areas/Supervision/Views/ManInforme/Render/_renderObligacionMandatos.cshtml", Model.tbObligMandatos)
+                                </div>
                             </div>
                             <div class="tab-pane fade show" id="navConclusion" role="tabpanel" aria-labelledby="nav-home-tab">
                                 <div class="card">
@@ -511,3 +514,4 @@
 <div class="modal fade" id="modalAddEditPersona" tabindex="-1" role="dialog"></div>
 <div class="modal fade hide" id="personaUbigeoModal" role="dialog"></div>
 <div class="modal fade hide" id="mdlBuscarUbigeo" role="dialog"></div>
+<div class="modal fade hide" id="mdlBuscarObligacionMandatos" role="dialog"></div>

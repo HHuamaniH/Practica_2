@@ -989,6 +989,7 @@ namespace CapaLogica.DOC
                     vmInf.ddlBuenDesempenioId = entInf.BUEN_DESEMPENIO.ToString();
                     vmInf.ddlArchivaInformeId = (entInf.ARCHIVA_INFORME == -1) ? "Seleccionar" : entInf.ARCHIVA_INFORME.ToString();
                     vmInf.tbMandatos = entInf.ListMandatos;
+                    vmInf.tbObligMandatos = entInf.ListObligMandatos;
                 }
             }
             catch (Exception ex)
@@ -1077,6 +1078,7 @@ namespace CapaLogica.DOC
                 paramsInf.OUTPUTPARAM01 = "";
                 paramsInf.COD_SUP_CALIDAD = _dto.hdSupervisor_Calidad;
                 paramsInf.ListMandatos = _dto.tbMandatos;
+                paramsInf.ListObligMandatos = _dto.tbObligMandatos;
                 ReglInsertarInforme_v3(paramsInf);
 
                 string msjRespuesta = _dto.hdfRegEstado == 1 ? "El Registro se Guardo Correctamente" : "El Registro se Modifico Correctamente";
@@ -2422,6 +2424,7 @@ namespace CapaLogica.DOC
                     vmInf.ddlBuenDesempenioId = entInf.BUEN_DESEMPENIO.ToString();
                     vmInf.ddlArchivaInformeId = (entInf.ARCHIVA_INFORME == -1) ? "Seleccionar" : entInf.ARCHIVA_INFORME.ToString();
                     vmInf.tbMandatos = entInf.ListMandatos;
+                    vmInf.tbObligMandatos = entInf.ListObligMandatos;
                 }
             }
             catch (Exception ex)
@@ -2505,6 +2508,7 @@ namespace CapaLogica.DOC
                 paramsInf.COD_SUP_CALIDAD = _dto.hdSupervisor_Calidad;
                 paramsInf.TIPO_INFORME = _dto.vmDatoSupervision.ddlTipoInformeId;
                 paramsInf.ListMandatos = _dto.tbMandatos;
+                paramsInf.ListObligMandatos = _dto.tbObligMandatos;
                 //Grabar en la base de datos
                 using (OracleConnection cn = new OracleConnection(CapaDatos.BDConexion.Conexion_Cadena_SIGO()))
                 {
@@ -2713,6 +2717,7 @@ namespace CapaLogica.DOC
                     vmInf.ddlBuenDesempenioId = entInf.BUEN_DESEMPENIO.ToString();
                     vmInf.ddlArchivaInformeId = (entInf.ARCHIVA_INFORME == -1) ? "Seleccionar" : entInf.ARCHIVA_INFORME.ToString();
                     vmInf.tbMandatos = entInf.ListMandatos;
+                    vmInf.tbObligMandatos = entInf.ListObligMandatos;
                     vmInf.tbVerticeTHCampo = entInf.ListTHVerticeCampo;
                     vmInf.tbCoberturaBoscosa = entInf.ListCoberturaBoscosa;
                     vmInf.tbOtrosPtosEval = entInf.ListOtrosPtosEval;
@@ -2817,6 +2822,7 @@ namespace CapaLogica.DOC
                 paramsInf.ListZonifDistribEspecie = _dto.tbZonifDistribEspecie;
                 paramsInf.ListAprovSostenible = _dto.tbAprovSostenible;
                 paramsInf.ListAvistamientoFauna = _dto.tbRegFauna;
+                paramsInf.ListObligMandatos = _dto.tbObligMandatos;
                 foreach (var item in _dto.tbObligacionTitular)
                 {
                     paramsInf.ListISuperExsituOBLIGF.Add(new CEntISExsitu()
@@ -3080,6 +3086,7 @@ namespace CapaLogica.DOC
                     vmInf.ddlBuenDesempenioId = entInf.BUEN_DESEMPENIO.ToString();
                     vmInf.ddlArchivaInformeId = (entInf.ARCHIVA_INFORME == -1) ? "Seleccionar" : entInf.ARCHIVA_INFORME.ToString();
                     vmInf.tbMandatos = entInf.ListMandatos;
+                    vmInf.tbObligMandatos = entInf.ListObligMandatos;
                 }
             }
             catch (Exception ex)
@@ -3149,6 +3156,7 @@ namespace CapaLogica.DOC
                 paramsInf.ListObligacionTitular = _dto.tbObligTitular;
                 paramsInf.ListDesplazamientoInforme = _dto.tbDesplazamiento;
                 paramsInf.ListMandatos = _dto.tbMandatos;
+                paramsInf.ListObligMandatos = _dto.tbObligMandatos;
 
                 paramsInf.COD_UCUENTA = asCodUCuenta;
                 paramsInf.RegEstado = _dto.hdfRegEstado;

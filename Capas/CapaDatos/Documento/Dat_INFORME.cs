@@ -4573,8 +4573,7 @@ namespace CapaDatos.DOC
                         ocampo.COD_INFORME = OUTPUTPARAM01.Split('|')[0];
                         ocampo.COD_SECUENCIAL = loDatos.COD_SECUENCIAL;
                         ocampo.MANDATO = loDatos.MANDATO;
-                        ocampo.PLAZO_IMPL_DIA = loDatos.PLAZO_IMPL_DIA;
-                        ocampo.PLAZO_POST_DIA = loDatos.PLAZO_POST_DIA;
+                        ocampo.PLAZO_IMPL_DIA = loDatos.PLAZO_IMPL_DIA;                       
                         ocampo.PLAZO_INF_DIA = loDatos.PLAZO_INF_DIA;
                         ocampo.COD_UCUENTA = oCEntidad.COD_UCUENTA;
                         ocampo.RegEstado = loDatos.RegEstado;
@@ -5905,7 +5904,7 @@ namespace CapaDatos.DOC
                         }
                         #endregion
                         //33
-                        #region "ListEnfermedad"
+                        #region "ListObligMandatos"
                         dr.NextResult();
                         if (dr.HasRows)
                         {
@@ -9312,6 +9311,7 @@ namespace CapaDatos.DOC
                         lsCEntidad.ListISUPERVISION_OCARACTE_AMB01 = new List<CEntidad>();
                         lsCEntidad.ListDesplazamientoInforme = new List<CEntidad>();
                         lsCEntidad.ListMandatos = new List<Ent_MANDATOS>();
+                        lsCEntidad.ListObligMandatos = new List<Ent_MANDATOS>();
                         CEntidad ocampoEnt;
 
                         #region "Datos Generales"
@@ -9579,7 +9579,32 @@ namespace CapaDatos.DOC
                             }
                         }
                         #endregion
-
+                        #region "ListObligMandatos"
+                        dr.NextResult();
+                        if (dr.HasRows)
+                        {
+                            Ent_MANDATOS oMandatos;
+                            while (dr.Read())
+                            {
+                                oMandatos = new Ent_MANDATOS();
+                                oMandatos.COD_SECUENCIAL = dr.GetInt32(dr.GetOrdinal("COD_SECUENCIAL"));
+                                oMandatos.COD_INFORME = dr.GetString(dr.GetOrdinal("COD_INFORME"));
+                                oMandatos.NUM_INFORME = dr.GetString(dr.GetOrdinal("NUM_INFORME"));
+                                oMandatos.TH_NUMERO = dr.GetString(dr.GetOrdinal("TH_NUMERO"));
+                                oMandatos.TITULAR_ACTUAL = dr.GetString(dr.GetOrdinal("TITULAR_ACTUAL"));
+                                oMandatos.MODALIDAD = dr.GetString(dr.GetOrdinal("MODALIDAD"));
+                                oMandatos.MANDATO = dr.GetString(dr.GetOrdinal("MANDATO"));
+                                oMandatos.PLAZO_IMPL_DIA = dr.GetInt32(dr.GetOrdinal("PLAZO_IMPL_DIA"));
+                                oMandatos.PLAZO_INF_DIA = dr.GetInt32(dr.GetOrdinal("PLAZO_INF_DIA"));
+                                oMandatos.CUMPLIO_MANDATO = dr.GetInt32(dr.GetOrdinal("CUMPLIO_MANDATO"));
+                                oMandatos.OBSERVACION = dr.GetString(dr.GetOrdinal("OBSERVACION"));
+                                oMandatos.PRESENTA_INFORME_IMPL = dr.GetInt32(dr.GetOrdinal("PRESENTA_INFORME_IMPL"));
+                                oMandatos.FECHA_PRESENT_INF = dr.GetString(dr.GetOrdinal("FECHA_PRESENT_INF"));
+                                oMandatos.RegEstado = 1;
+                                lsCEntidad.ListObligMandatos.Add(oMandatos);
+                            }
+                        }
+                        #endregion
                     }
                 }
                 return lsCEntidad;
@@ -9883,8 +9908,7 @@ namespace CapaDatos.DOC
                         objcampo.COD_INFORME = OUTPUTPARAM01.Split('|')[0];
                         objcampo.COD_SECUENCIAL = loDatos.COD_SECUENCIAL;
                         objcampo.MANDATO = loDatos.MANDATO;
-                        objcampo.PLAZO_IMPL_DIA = loDatos.PLAZO_IMPL_DIA;
-                        objcampo.PLAZO_POST_DIA = loDatos.PLAZO_POST_DIA;
+                        objcampo.PLAZO_IMPL_DIA = loDatos.PLAZO_IMPL_DIA;                        
                         objcampo.PLAZO_INF_DIA = loDatos.PLAZO_INF_DIA;
                         objcampo.COD_UCUENTA = oCEntidad.COD_UCUENTA;
                         objcampo.RegEstado = loDatos.RegEstado;
@@ -9892,6 +9916,26 @@ namespace CapaDatos.DOC
                     }
                 }
                 #endregion
+                #region ListObligMandatos
+                if (oCEntidad.ListObligMandatos != null)
+                {
+                    foreach (var loDatos in oCEntidad.ListObligMandatos)
+                    {
+                        CapaEntidad.DOC.Ent_MANDATOS objcampo = new CapaEntidad.DOC.Ent_MANDATOS();
+                        objcampo.COD_INFORME_REF = OUTPUTPARAM01.Split('|')[0];
+                        objcampo.COD_INFORME = loDatos.COD_INFORME;
+                        objcampo.COD_SECUENCIAL = loDatos.COD_SECUENCIAL;
+                        objcampo.CUMPLIO_MANDATO = loDatos.CUMPLIO_MANDATO;
+                        objcampo.OBSERVACION = loDatos.OBSERVACION;
+                        objcampo.PRESENTA_INFORME_IMPL = loDatos.PRESENTA_INFORME_IMPL;
+                        objcampo.PRESENTA_INFORME_DP = loDatos.PRESENTA_INFORME_DP;
+                        objcampo.FECHA_PRESENT_INF = loDatos.FECHA_PRESENT_INF;
+                        objcampo.RegEstado = loDatos.RegEstado;
+                        dBOracle.ManExecute(cn, tr, "DOC_OSINFOR_ERP_MIGRACION.spISUPERVISION_OBLIGMANDATOSGrabar", objcampo);
+                    }
+                }
+                #endregion
+
                 tr.Commit();
                 return OUTPUTPARAM01;
             }
@@ -12207,6 +12251,7 @@ namespace CapaDatos.DOC
                         lsCEntidad.ListISDetConservActVisitas = new List<CEntidad>();
                         lsCEntidad.ListISDetConservActOtroPrograma = new List<CEntidad>();
                         lsCEntidad.ListMandatos = new List<Ent_MANDATOS>();
+                        lsCEntidad.ListObligMandatos = new List<Ent_MANDATOS>();
 
                         CEntidad ocampoEnt;
 
@@ -12710,6 +12755,32 @@ namespace CapaDatos.DOC
                                 oMandatos.PLAZO_INF_DIA = dr.GetInt32(pt4);
                                 oMandatos.RegEstado = 0;
                                 lsCEntidad.ListMandatos.Add(oMandatos);
+                            }
+                        }
+                        #endregion
+                        #region "ListObligMandatos"
+                        dr.NextResult();
+                        if (dr.HasRows)
+                        {
+                            Ent_MANDATOS oMandatos;
+                            while (dr.Read())
+                            {
+                                oMandatos = new Ent_MANDATOS();
+                                oMandatos.COD_SECUENCIAL = dr.GetInt32(dr.GetOrdinal("COD_SECUENCIAL"));
+                                oMandatos.COD_INFORME = dr.GetString(dr.GetOrdinal("COD_INFORME"));
+                                oMandatos.NUM_INFORME = dr.GetString(dr.GetOrdinal("NUM_INFORME"));
+                                oMandatos.TH_NUMERO = dr.GetString(dr.GetOrdinal("TH_NUMERO"));
+                                oMandatos.TITULAR_ACTUAL = dr.GetString(dr.GetOrdinal("TITULAR_ACTUAL"));
+                                oMandatos.MODALIDAD = dr.GetString(dr.GetOrdinal("MODALIDAD"));
+                                oMandatos.MANDATO = dr.GetString(dr.GetOrdinal("MANDATO"));
+                                oMandatos.PLAZO_IMPL_DIA = dr.GetInt32(dr.GetOrdinal("PLAZO_IMPL_DIA"));
+                                oMandatos.PLAZO_INF_DIA = dr.GetInt32(dr.GetOrdinal("PLAZO_INF_DIA"));
+                                oMandatos.CUMPLIO_MANDATO = dr.GetInt32(dr.GetOrdinal("CUMPLIO_MANDATO"));
+                                oMandatos.OBSERVACION = dr.GetString(dr.GetOrdinal("OBSERVACION"));
+                                oMandatos.PRESENTA_INFORME_IMPL = dr.GetInt32(dr.GetOrdinal("PRESENTA_INFORME_IMPL"));
+                                oMandatos.FECHA_PRESENT_INF = dr.GetString(dr.GetOrdinal("FECHA_PRESENT_INF"));
+                                oMandatos.RegEstado = 1;
+                                lsCEntidad.ListObligMandatos.Add(oMandatos);
                             }
                         }
                         #endregion
@@ -13350,12 +13421,30 @@ namespace CapaDatos.DOC
                         ocampo.COD_INFORME = OUTPUTPARAM01.Split('|')[0];
                         ocampo.COD_SECUENCIAL = loDatos.COD_SECUENCIAL;
                         ocampo.MANDATO = loDatos.MANDATO;
-                        ocampo.PLAZO_IMPL_DIA = loDatos.PLAZO_IMPL_DIA;
-                        ocampo.PLAZO_POST_DIA = loDatos.PLAZO_POST_DIA;
+                        ocampo.PLAZO_IMPL_DIA = loDatos.PLAZO_IMPL_DIA;                        
                         ocampo.PLAZO_INF_DIA = loDatos.PLAZO_INF_DIA;
                         ocampo.COD_UCUENTA = oCEntidad.COD_UCUENTA;
                         ocampo.RegEstado = loDatos.RegEstado;
                         dBOracle.ManExecute(cn, tr, "DOC_OSINFOR_ERP_MIGRACION.spISUPERVISION_MANDATOSGrabar", ocampo);
+                    }
+                }
+                #endregion
+                #region ListMandatos
+                if (oCEntidad.ListObligMandatos != null)
+                {
+                    foreach (var loDatos in oCEntidad.ListObligMandatos)
+                    {
+                        CapaEntidad.DOC.Ent_MANDATOS ocampo = new CapaEntidad.DOC.Ent_MANDATOS();
+                        ocampo.COD_INFORME_REF = OUTPUTPARAM01.Split('|')[0];
+                        ocampo.COD_INFORME = loDatos.COD_INFORME;
+                        ocampo.COD_SECUENCIAL = loDatos.COD_SECUENCIAL;
+                        ocampo.CUMPLIO_MANDATO = loDatos.CUMPLIO_MANDATO;
+                        ocampo.OBSERVACION = loDatos.OBSERVACION;
+                        ocampo.PRESENTA_INFORME_IMPL = loDatos.PRESENTA_INFORME_IMPL;
+                        ocampo.PRESENTA_INFORME_DP = loDatos.PRESENTA_INFORME_DP;
+                        ocampo.FECHA_PRESENT_INF = loDatos.FECHA_PRESENT_INF;
+                        ocampo.RegEstado = loDatos.RegEstado;
+                        dBOracle.ManExecute(cn, tr, "DOC_OSINFOR_ERP_MIGRACION.spISUPERVISION_OBLIGMANDATOSGrabar", ocampo);
                     }
                 }
                 #endregion
@@ -13400,6 +13489,7 @@ namespace CapaDatos.DOC
                         lsCEntidad.ListAvistamientoFauna = new List<CEntidad>();
                         lsCEntidad.ListISuperExsituOBLIGF = new List<CapaEntidad.DOC.Ent_ISUPERVISION_EXSITU_INFRA_AREA>();
                         lsCEntidad.ListEnfermedad = new List<Ent_INFORME_ENFERMEDAD>();
+                        lsCEntidad.ListObligMandatos = new List<Ent_MANDATOS>();
                         CEntidad ocampoEnt;
 
                         #region "Datos Generales"
@@ -13826,6 +13916,32 @@ namespace CapaDatos.DOC
                             }
                         }
                         #endregion
+                        #region "ListObligMandatos"
+                        dr.NextResult();
+                        if (dr.HasRows)
+                        {
+                            Ent_MANDATOS oMandatos;
+                            while (dr.Read())
+                            {
+                                oMandatos = new Ent_MANDATOS();
+                                oMandatos.COD_SECUENCIAL = dr.GetInt32(dr.GetOrdinal("COD_SECUENCIAL"));
+                                oMandatos.COD_INFORME = dr.GetString(dr.GetOrdinal("COD_INFORME"));
+                                oMandatos.NUM_INFORME = dr.GetString(dr.GetOrdinal("NUM_INFORME"));
+                                oMandatos.TH_NUMERO = dr.GetString(dr.GetOrdinal("TH_NUMERO"));
+                                oMandatos.TITULAR_ACTUAL = dr.GetString(dr.GetOrdinal("TITULAR_ACTUAL"));
+                                oMandatos.MODALIDAD = dr.GetString(dr.GetOrdinal("MODALIDAD"));
+                                oMandatos.MANDATO = dr.GetString(dr.GetOrdinal("MANDATO"));
+                                oMandatos.PLAZO_IMPL_DIA = dr.GetInt32(dr.GetOrdinal("PLAZO_IMPL_DIA"));
+                                oMandatos.PLAZO_INF_DIA = dr.GetInt32(dr.GetOrdinal("PLAZO_INF_DIA"));
+                                oMandatos.CUMPLIO_MANDATO = dr.GetInt32(dr.GetOrdinal("CUMPLIO_MANDATO"));
+                                oMandatos.OBSERVACION = dr.GetString(dr.GetOrdinal("OBSERVACION"));
+                                oMandatos.PRESENTA_INFORME_IMPL = dr.GetInt32(dr.GetOrdinal("PRESENTA_INFORME_IMPL"));
+                                oMandatos.FECHA_PRESENT_INF = dr.GetString(dr.GetOrdinal("FECHA_PRESENT_INF"));
+                                oMandatos.RegEstado = 1;
+                                lsCEntidad.ListObligMandatos.Add(oMandatos);
+                            }
+                        }
+                        #endregion
                     }
                 }
                 return lsCEntidad;
@@ -14072,8 +14188,7 @@ namespace CapaDatos.DOC
                         ocampo.COD_INFORME = OUTPUTPARAM01.Split('|')[0];
                         ocampo.COD_SECUENCIAL = loDatos.COD_SECUENCIAL;
                         ocampo.MANDATO = loDatos.MANDATO;
-                        ocampo.PLAZO_IMPL_DIA = loDatos.PLAZO_IMPL_DIA;
-                        ocampo.PLAZO_POST_DIA = loDatos.PLAZO_POST_DIA;
+                        ocampo.PLAZO_IMPL_DIA = loDatos.PLAZO_IMPL_DIA;                        
                         ocampo.PLAZO_INF_DIA = loDatos.PLAZO_INF_DIA;
                         ocampo.COD_UCUENTA = oCEntidad.COD_UCUENTA;
                         ocampo.RegEstado = loDatos.RegEstado;
@@ -14283,6 +14398,25 @@ namespace CapaDatos.DOC
                         dBOracle.ManExecute(cn, tr, "DOC_OSINFOR_ERP_MIGRACION.ISUPERVISION_DET_ENFERMEDAD_Grabar", ocampoSuper);
                     }
                 }
+                #endregion
+                #region ListObligMandatos
+                if (oCEntidad.ListObligMandatos != null)
+                {
+                    foreach (var loDatos in oCEntidad.ListObligMandatos)
+                    {
+                        CapaEntidad.DOC.Ent_MANDATOS ocampo = new CapaEntidad.DOC.Ent_MANDATOS();
+                        ocampo.COD_INFORME_REF = OUTPUTPARAM01.Split('|')[0];
+                        ocampo.COD_INFORME = loDatos.COD_INFORME;
+                        ocampo.COD_SECUENCIAL = loDatos.COD_SECUENCIAL;
+                        ocampo.CUMPLIO_MANDATO = loDatos.CUMPLIO_MANDATO;
+                        ocampo.OBSERVACION = loDatos.OBSERVACION;
+                        ocampo.PRESENTA_INFORME_IMPL = loDatos.PRESENTA_INFORME_IMPL;
+                        ocampo.PRESENTA_INFORME_DP = loDatos.PRESENTA_INFORME_DP;
+                        ocampo.FECHA_PRESENT_INF = loDatos.FECHA_PRESENT_INF;
+                        ocampo.RegEstado = loDatos.RegEstado;
+                        dBOracle.ManExecute(cn, tr, "DOC_OSINFOR_ERP_MIGRACION.spISUPERVISION_OBLIGMANDATOSGrabar", ocampo);
+                    }
+                }                
                 #endregion
                 tr.Commit();
                 return OUTPUTPARAM01;
@@ -14633,6 +14767,7 @@ namespace CapaDatos.DOC
                         lsCEntidad.ListObligacionTitular = new List<CapaEntidad.DOC.Ent_INFORME_OBLIGTITULAR>();
                         lsCEntidad.ListDesplazamientoInforme = new List<CEntidad>();
                         lsCEntidad.ListMandatos = new List<Ent_MANDATOS>();
+                        lsCEntidad.ListObligMandatos = new List<Ent_MANDATOS>();
                         CEntidad ocampoEnt;
 
                         #region "Datos Generales"
@@ -14922,6 +15057,32 @@ namespace CapaDatos.DOC
                                 oMandatos.PLAZO_INF_DIA = dr.GetInt32(pt4);
                                 oMandatos.RegEstado = 0;
                                 lsCEntidad.ListMandatos.Add(oMandatos);
+                            }
+                        }
+                        #endregion
+                        #region "ListObligMandatos"
+                        dr.NextResult();
+                        if (dr.HasRows)
+                        {
+                            Ent_MANDATOS oMandatos;
+                            while (dr.Read())
+                            {
+                                oMandatos = new Ent_MANDATOS();
+                                oMandatos.COD_SECUENCIAL = dr.GetInt32(dr.GetOrdinal("COD_SECUENCIAL"));
+                                oMandatos.COD_INFORME = dr.GetString(dr.GetOrdinal("COD_INFORME"));
+                                oMandatos.NUM_INFORME = dr.GetString(dr.GetOrdinal("NUM_INFORME"));
+                                oMandatos.TH_NUMERO = dr.GetString(dr.GetOrdinal("TH_NUMERO"));
+                                oMandatos.TITULAR_ACTUAL = dr.GetString(dr.GetOrdinal("TITULAR_ACTUAL"));
+                                oMandatos.MODALIDAD = dr.GetString(dr.GetOrdinal("MODALIDAD"));
+                                oMandatos.MANDATO = dr.GetString(dr.GetOrdinal("MANDATO"));
+                                oMandatos.PLAZO_IMPL_DIA = dr.GetInt32(dr.GetOrdinal("PLAZO_IMPL_DIA"));
+                                oMandatos.PLAZO_INF_DIA = dr.GetInt32(dr.GetOrdinal("PLAZO_INF_DIA"));
+                                oMandatos.CUMPLIO_MANDATO = dr.GetInt32(dr.GetOrdinal("CUMPLIO_MANDATO"));
+                                oMandatos.OBSERVACION = dr.GetString(dr.GetOrdinal("OBSERVACION"));
+                                oMandatos.PRESENTA_INFORME_IMPL = dr.GetInt32(dr.GetOrdinal("PRESENTA_INFORME_IMPL"));
+                                oMandatos.FECHA_PRESENT_INF = dr.GetString(dr.GetOrdinal("FECHA_PRESENT_INF"));
+                                oMandatos.RegEstado = 1;
+                                lsCEntidad.ListObligMandatos.Add(oMandatos);
                             }
                         }
                         #endregion
@@ -15223,12 +15384,30 @@ namespace CapaDatos.DOC
                         ocampo.COD_INFORME = OUTPUTPARAM01.Split('|')[0];
                         ocampo.COD_SECUENCIAL = loDatos.COD_SECUENCIAL;
                         ocampo.MANDATO = loDatos.MANDATO;
-                        ocampo.PLAZO_IMPL_DIA = loDatos.PLAZO_IMPL_DIA;
-                        ocampo.PLAZO_POST_DIA = loDatos.PLAZO_POST_DIA;
+                        ocampo.PLAZO_IMPL_DIA = loDatos.PLAZO_IMPL_DIA;                        
                         ocampo.PLAZO_INF_DIA = loDatos.PLAZO_INF_DIA;
                         ocampo.COD_UCUENTA = oCEntidad.COD_UCUENTA;
                         ocampo.RegEstado = loDatos.RegEstado;
                         dBOracle.ManExecute(cn, tr, "DOC_OSINFOR_ERP_MIGRACION.spISUPERVISION_MANDATOSGrabar", ocampo);
+                    }
+                }
+                #endregion
+                #region ListMandatos
+                if (oCEntidad.ListObligMandatos != null)
+                {
+                    foreach (var loDatos in oCEntidad.ListObligMandatos)
+                    {
+                        CapaEntidad.DOC.Ent_MANDATOS ocampo = new CapaEntidad.DOC.Ent_MANDATOS();
+                        ocampo.COD_INFORME_REF = OUTPUTPARAM01.Split('|')[0];
+                        ocampo.COD_INFORME = loDatos.COD_INFORME;
+                        ocampo.COD_SECUENCIAL = loDatos.COD_SECUENCIAL;
+                        ocampo.CUMPLIO_MANDATO = loDatos.CUMPLIO_MANDATO;
+                        ocampo.OBSERVACION = loDatos.OBSERVACION;
+                        ocampo.PRESENTA_INFORME_IMPL = loDatos.PRESENTA_INFORME_IMPL;
+                        ocampo.PRESENTA_INFORME_DP = loDatos.PRESENTA_INFORME_DP;
+                        ocampo.FECHA_PRESENT_INF = loDatos.FECHA_PRESENT_INF;
+                        ocampo.RegEstado = loDatos.RegEstado;
+                        dBOracle.ManExecute(cn, tr, "DOC_OSINFOR_ERP_MIGRACION.spISUPERVISION_OBLIGMANDATOSGrabar", ocampo);
                     }
                 }
                 #endregion

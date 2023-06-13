@@ -720,10 +720,9 @@ utilSigo.obtenerFechaHora = function () {
 
 utilSigo.convertirFechaHoraStandar = function (fecha) {
     var returns='';
-    if (fecha != null || fecha != '') {
+    if (fecha != null && fecha != ' ' && fecha != '') {
         var arr = fecha.split('/');
         returns = arr[2] + '-' + arr[1] + '-' + arr[0];
-        
     }
     return returns;   
 };
