@@ -95,4 +95,6 @@ _Ubigeo.fnLoadModalView = function (_ubigeoId) {
     _Ubigeo.iniciarSelect2();
     _Ubigeo.iniciarEventos();
     _Ubigeo.fnLoadData(_ubigeoId);
+
+    $($("#ubigeoModalDialogZIndex").parent()[0]).css("z-index", 1051);
 }
