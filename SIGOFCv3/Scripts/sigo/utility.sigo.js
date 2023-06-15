@@ -719,11 +719,19 @@ utilSigo.obtenerFechaHora = function () {
 };
 
 utilSigo.convertirFechaHoraStandar = function (fecha) {
-    var returns='';
+    var returns = '0';
+
     if (fecha != null && fecha != ' ' && fecha != '') {
-        var arr = fecha.split('/');
-        returns = arr[2] + '-' + arr[1] + '-' + arr[0];
+        if (fecha.split('/').length == 3) {
+            var arr = fecha.split('/');
+            returns = arr[2] + '-' + arr[1] + '-' + arr[0];
+        } else {
+            returns = '1';
+        }        
     }
+
+    
+    
     return returns;   
 };
 
@@ -856,8 +864,8 @@ utilSigo.checkLetter = function (e) {
     if (tecla == 8 || tecla == 32) {
         return true;
     }
-
-    var patron = /[ A-Za-z0-9]/;
+    
+    var patron = /[ ÁÉÍÓÚA-Záéíóúa-z0-9]/;
     var tecla_final = String.fromCharCode(tecla);
     return patron.test(tecla_final);
 }

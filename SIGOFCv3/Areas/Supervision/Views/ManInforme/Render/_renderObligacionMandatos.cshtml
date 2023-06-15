@@ -99,9 +99,13 @@
     _renderObligacionMandatos.fnValidate = function () {
         var returns = true
         var list = _renderObligacionMandatos.fnGetList()
-        for (var i = 0; i < list.length; i++) {
+        for (var i = 0; i < list.length; i++) {            
             let fechaStandar = utilSigo.convertirFechaHoraStandar(list[i].FECHA_PRESENT_INF);            
-            if (fechaStandar != '') {
+            if (fechaStandar == '1') {
+                returns = false;
+                utilSigo.toastWarning("Aviso", "La Fecha de Obligación del Mandato \"" + list[i].MANDATO + "\" no tiene formato correcto de fecha dd/mm/yyyy");
+                
+            } else if (fechaStandar != '0'){
                 if (utilSigo.isFechaMayor(fechaStandar, utilSigo.obtenerFechaHora()[0])) {
                     returns = false;
                     utilSigo.toastWarning("Aviso", "La Fecha de Obligación del Mandato \"" + list[i].MANDATO + "\" no debe ser mayor a la fecha actual");
@@ -173,7 +177,7 @@
             htmlObligMandatos += '       </select>';
             htmlObligMandatos += '   </td>';
             htmlObligMandatos += '   <td>';
-            htmlObligMandatos += '       <input id="txtPREFEC_' + item.COD_SECUENCIAL + '_' + item.COD_INFORME + '" class="form-control form-control-sm" placeholder = "dd/mm/aaaa" maxlength = "10" type="text" value="' + item.FECHA_PRESENT_INF + '" style="width:100%;" readonly>';
+            htmlObligMandatos += '       <input id="txtPREFEC_' + item.COD_SECUENCIAL + '_' + item.COD_INFORME + '" class="form-control form-control-sm" placeholder = "dd/mm/aaaa" maxlength = "10" type="text" value="' + item.FECHA_PRESENT_INF + '" style="width:100%;" >';
             htmlObligMandatos += '   </td>';
             htmlObligMandatos += '</tr>';
         }
