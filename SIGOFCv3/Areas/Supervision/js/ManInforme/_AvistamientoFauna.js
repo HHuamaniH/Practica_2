@@ -22,7 +22,7 @@ _AvistamientoFauna.fnLoadDatos = function (data) {
     } else {
         _AvistamientoFauna.frm.find("#hdfRegEstado").val("1");
         _AvistamientoFauna.frm.find("#hdfCodSecuencial").val("0");
-        _renderComboEspecie.fnInit("FAUNA","", "");
+        _renderComboEspecie.fnInit("FAUNA", "", "");
     }
 }
 
@@ -50,20 +50,30 @@ _AvistamientoFauna.fnSetDatos = function () {
 }
 
 _AvistamientoFauna.fnCustomValidateForm = function () {
-    if (_renderComboEspecie.fnGetCodEspecie()==null) {
+    if (_renderComboEspecie.fnGetCodEspecie() == null) {
         utilSigo.toastWarning("Aviso", "Seleccione la especie a registrar"); return false;
     }
     return true;
 }
 
-_AvistamientoFauna.fnSubmitForm = function () {    
+_AvistamientoFauna.fnSubmitForm = function () {
     const fechaActual = new Date();
-    if (fechaActual.toLocaleDateString() > $("#txtFecha").val()) {
-        _AvistamientoFauna.frm.submit();
+
+    let fecha = ($("#txtFecha").val()).split('/');
+
+    if (fecha.length == 3) {
+        let fechaStr = fecha[2] + "-" + fecha[1] + "-" + fecha[0]
+        const fechaIngresada = new Date(fechaStr);
+        if (fechaActual > fechaIngresada) {
+            _AvistamientoFauna.frm.submit();
+        } else {
+            utilSigo.toastWarning("Aviso", "La Fecha seleccionada no debe ser mayor a la actual."); return false;
+        }
     } else {
-        utilSigo.toastWarning("Aviso", "La Fecha seleccionada no debe ser mayor a la actual."); return false;
+        utilSigo.toastWarning("Aviso", "La Fecha seleccionada no es válido."); return false;
     }
-    
+
+
 }
 
 _AvistamientoFauna.fnInit = function (data) {
