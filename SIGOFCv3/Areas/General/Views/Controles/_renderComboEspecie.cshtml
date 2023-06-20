@@ -1,10 +1,22 @@
-﻿
+﻿@model string
+@{
+    string nombreCombo = "";
+
+    if (string.IsNullOrEmpty(Model))
+    {
+        nombreCombo = "ddlRenderComboEspecieId";
+    }
+    else
+    {
+        nombreCombo = Model;
+    }
+}
 <script type="text/javascript">
     _renderComboEspecie = {};
 
     _renderComboEspecie.fnInit = function (tipoEspecie, codEspecie, nomEspecie) {
-       
-        $("#ddlRenderComboEspecieId").select2({
+
+        $("#@nombreCombo").select2({
             placeholder: "Seleccione Especie",
             minimumInputLength: 2,
             allowClear: true,
@@ -13,7 +25,7 @@
                 dataType: 'json',
                 delay: 250,
                 data: function (params) {
-                    //alert(Object.values(params));                    
+                    //alert(Object.values(params));
                     var term = params.term.trim();
                     var type = params._type.trim();
                     //alert(term);
@@ -30,7 +42,7 @@
                     params.page = params.page || 1;
                     //params.page = 1;
                     console.log(data.Results);
-                   
+
                     return {
                         results: data.Results,
                         pagination: {
@@ -50,23 +62,23 @@
             }
         });
         console.log("comboespecie :"+codEspecie);
-        if (codEspecie != "" && codEspecie != "0000000") {            
+        if (codEspecie != "" && codEspecie != "0000000") {
             var $newOption = $("<option></option>").val(codEspecie).text(nomEspecie);
-            $("#ddlRenderComboEspecieId").append($newOption).trigger('change');
+            $("#@nombreCombo").append($newOption).trigger('change');
         }
     }
 
     _renderComboEspecie.fnGetCodEspecie = function () {
-        return $("#ddlRenderComboEspecieId").val();
+        return $("#@nombreCombo").val();
     }
     _renderComboEspecie.fnGetEspecie = function () {
-        if ($("#ddlRenderComboEspecieId").val()==null) {
+        if ($("#@nombreCombo").val()==null) {
             return "";
         }
 
-        return $("#ddlRenderComboEspecieId").select2("data")[0].text;
+        return $("#@nombreCombo").select2("data")[0].text;
     }
 </script>
 
-<label id="lblRenderComboEspecieId" for="ddlRenderComboEspecieId" class="text-small">Especie</label>
-<select id="ddlRenderComboEspecieId" class="form-control input-sm"></select>
+<label id="lblRenderComboEspecieId2" for="@nombreCombo" class="text-small">Especie</label>
+<select id="@nombreCombo" class="form-control input-sm"></select>

@@ -323,7 +323,10 @@
             @Html.Hidden("hdfCodSecuencial")
             <div class="form-row">
                 <div class="form-group col-md-12">
-                    @Html.Partial("~/Areas/General/Views/Controles/_renderComboEspecie.cshtml")
+                    @{ 
+                        string nombreComboEspecie = "ddlRenderComboEspecieId2";
+                    }
+                    @Html.Partial("~/Areas/General/Views/Controles/_renderComboEspecie.cshtml", nombreComboEspecie)
                 </div>
             </div>
 
