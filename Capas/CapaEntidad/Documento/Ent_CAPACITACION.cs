@@ -260,6 +260,19 @@ namespace CapaEntidad.DOC
         [Description("RegNum_Orden")]
         public Int32 RegNum_Orden { get; set; }
 
+        //CREITERIOS PARA BUSCAR 
+        [Description("BusModalidad")]
+        public String BusModalidad { get; set; }
+        [Description("BusOD")]
+        public String BusOD { get; set; }
+        [Description("BusDepartamento")]
+        public String BusDepartamento { get; set; }
+
+        [Description("BusTitulo")]
+        public String BusTitulo { get; set; }
+        [Description("BusTitular")]
+        public String BusTitular { get; set; }
+
         [Description("USUARIO_REGISTRO")]
         public String USUARIO_REGISTRO { get; set; }
         [Description("USUARIO_CONTROL")]

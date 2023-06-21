@@ -1,0 +1,101 @@
+﻿<script>
+    $(function () {
+        $('#tbListUniversoPDC').DataTable();
+    })
+</script>
+
+<div id="divTbResumen" style="width: 100%; overflow: auto; scrollbar-base-color: none;">
+    <button class="btn btn-outline btn-info" title="Descargar Resumen" onclick="_rendReporteConsolidadoPDC.fnExportDetalle()"
+            type="button" style="margin-right:10px">
+        <i class="fa fa-file-excel-o"></i>
+    </button><br /><br />
+
+    <table id="tbListUniversoPDC" class="table table-bordered table-striped-success" style="width: 100% !important; font-size:12px">
+        <thead>
+            <tr style=" text-align: center;  background-color: #dae7f5">
+                <td style="width: 2%">N°</td>
+
+                <td style="width: 10%">Oficina Desconcentrada</td>
+                <td style="width: 10%">Título</td>
+                <td style="width: 10%">Modalidad</td>
+                <td style="width: 10%">Titular</td>
+                <td style="width: 10%">Representante Legal</td>
+                <td style="width: 10%">Departamento</td>
+                <td style="width: 10%">Provincia</td>
+                <td style="width: 10%">Distrito</td>
+                <td style="width: 10%">Fecha vigencia</td>
+                <td style="width: 10%">Fecha Corte</td>
+                <td style="width: 10%">Area</td>
+                <td style="width: 10%">Ultimo plan</td>
+                <td style="width: 10%">Rojo</td>
+                <td style="width: 10%">Verde</td>
+                <td style="width: 10%">Alerta</td>
+                <td style="width: 10%">PASPEQ</td>
+                <td style="width: 10%">PASPEQ enfoque</td>
+                <td style="width: 10%">Fecha supervisión</td>
+                <td style="width: 10%">volumen aprobado</td>
+                <td style="width: 10%">volumen  movilizado</td>
+                <td style="width: 10%">volumen injustificado</td>
+                <td style="width: 10%">Infracciones</td>
+                <td style="width: 10%">Multas</td>
+                <td style="width: 10%">Estado PAU</td>
+                <td style="width: 10%">Estado pago</td>
+                <td style="width: 10%">Modalidad de pago</td>
+                <td style="width: 10%">Mecanismo de compensación</td>
+                <td style="width: 10%">Nro. capacitaciones</td>
+                <td style="width: 10%">Fecha ultima capacitacion</td>
+                <td style="width: 10%">Tema de capacitación</td>
+                <td style="width: 10%">Mochila capacitación</td>
+                <td style="width: 10%">Mochila entrenamiento</td>
+                <td style="width: 10%">Prioridad</td>
+            </tr>
+        </thead>
+        <tbody id="bodyTable">
+            @if (Model.list_universoPDC != null)
+            {
+                var count = 0;
+                foreach (var item in Model.list_universoPDC)
+                {
+                    <tr>
+                        <td style="width: 2%">@(++count)</td>
+                        <td style="width: 10%">@item.OFICINA_DESCONCENTRADA</td>
+                        <td style="width: 10%">@item.TITULO</td>
+                        <td style="width: 10%">@item.MODALIDAD</td>
+                        <td style="width: 10%">@item.TITULAR</td>
+                        <td style="width: 10%">@item.REP_LEGAL</td>
+                        <td style="width: 10%">@item.DEPARTAMENTO</td>
+                        <td style="width: 10%">@item.PROVINCIA</td>
+
+                        <td style="width: 10%">@item.DISTRITO</td>
+                        <td style="width: 10%">@item.FECHA_VIGENCIA</td>
+                        <td style="width: 10%">@item.FECHA_CORTE</td>
+                        <td style="width: 10%">@item.AREA</td>
+                        <td style="width: 10%">@item.ULTIMO_PLAN</td>
+                        <td style="width: 10%">@item.ROJO</td>
+                        <td style="width: 10%">@item.VERDE</td>
+                        <td style="width: 10%">@item.ALERTA</td>
+                        <td style="width: 10%">@item.PASPEQ</td>
+                        <td style="width: 10%">@item.PASPEQ_ENFOQUE</td>
+                        <td style="width: 10%">@item.FECHA_SUPERVISION</td>
+                        <td style="width: 10%">@item.S_VOL_APROB</td>
+                        <td style="width: 10%">@item.S_VOL_MOV</td>
+                        <td style="width: 10%">@item.S_VOL_INJUST</td>
+                        <td style="width: 10%">@item.INFRACCIONES</td>
+
+                        <td style="width: 10%">@item.MULTAS</td>
+                        <td style="width: 10%">@item.ESTADO_PAU</td>
+                        <td style="width: 10%">@item.ESTADO_PAGO</td>
+                        <td style="width: 10%">@item.MODALIDAD_PAGO</td>
+                        <td style="width: 10%">@item.MEC_COMP</td>
+                        <td style="width: 10%">@item.N_CAPACITACION</td>
+                        <td style="width: 10%">@item.FECHA_ULT_CAP</td>
+                        <td style="width: 10%">@item.TEMA_ULT_CAP</td>
+                        <td style="width: 10%">@item.TEMA_MOCHILA_CAP</td>
+                        <td style="width: 10%">@item.TEMA_MOCHILA_ENT</td>
+                        <td style="width: 10%">@item.PRIORIDAD</td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+</div>

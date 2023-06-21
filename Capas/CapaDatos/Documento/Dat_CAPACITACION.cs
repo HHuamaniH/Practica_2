@@ -1,8 +1,10 @@
-﻿using GeneralSQL;
+﻿using CapaEntidad.DOC;
+using GeneralSQL;
 using Oracle.ManagedDataAccess.Client;
 using System;
 using System.Collections.Generic;   //using System.Data.SqlClient;
 using CEntidad = CapaEntidad.DOC.Ent_CAPACITACION;
+using CEntidadPDC = CapaEntidad.DOC.Ent_ReportePDC;
 using SQL = GeneralSQL.Data.SQL;
 
 namespace CapaDatos.DOC
@@ -2394,6 +2396,111 @@ namespace CapaDatos.DOC
                             oCamposDet.FECHA_INICIO_CRONOGRAMA = dr["FECHA_INICIO_CRONOGRAMA"].ToString();
                             oCamposDet.FECHA_FIN_CRONOGRAMA = dr["FECHA_FIN_CRONOGRAMA"].ToString();                            
                             lsCEntidadRGP.Add(oCamposDet);
+                        }
+                    }
+                }
+                return lsCEntidadRGP;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public List<CEntidadPDC> RepUniversoPDC(OracleConnection cn, CEntidad cEntidad)
+        {
+            List<CEntidadPDC> lsCEntidadRGP = new List<CEntidadPDC>();
+            CEntidadPDC oCamposDet = new CEntidadPDC();
+
+            try
+            {
+                using (OracleDataReader dr = dBOracle.SelDrdResult(cn, null, "DOC_OSINFOR_ERP_MIGRACION.SPREPORTECAPACITACION_UNIVERSOPDC", cEntidad))
+                {
+                    if (dr != null)
+                    {
+                        if (dr.HasRows)
+                        {
+                            while (dr.Read())
+                            {
+                                oCamposDet = new CEntidadPDC();
+                                oCamposDet.ID_REGISTRO = dr["ID_REGISTRO"].ToString();
+                                oCamposDet.COD_THABILITANTE = dr["COD_THABILITANTE"].ToString();
+                                oCamposDet.OFICINA_DESCONCENTRADA = dr["OFICINA_DESCONCENTRADA"].ToString();
+                                oCamposDet.TITULO = dr["TITULO"].ToString();
+                                oCamposDet.MODALIDAD = dr["MODALIDAD"].ToString();
+                                oCamposDet.TITULAR = dr["TITULAR"].ToString();
+                                oCamposDet.REP_LEGAL = dr["REP_LEGAL"].ToString();
+                                oCamposDet.DEPARTAMENTO = dr["DEPARTAMENTO"].ToString();
+                                oCamposDet.PROVINCIA = dr["PROVINCIA"].ToString();
+                                oCamposDet.DISTRITO = dr["DISTRITO"].ToString();
+                                oCamposDet.FECHA_VIGENCIA = dr["FECHA_VIGENCIA"].ToString();
+                                oCamposDet.FECHA_CORTE = dr["FECHA_CORTE"].ToString();
+                                oCamposDet.AREA = Decimal.Parse(dr["AREA"].ToString());
+                                oCamposDet.ULTIMO_PLAN = dr["ULTIMO_PLAN"].ToString();
+                                oCamposDet.ROJO = dr["ROJO"].ToString();
+                                oCamposDet.VERDE = dr["VERDE"].ToString();
+                                oCamposDet.ALERTA = dr["ALERTA"].ToString();
+                                oCamposDet.PASPEQ = dr["PASPEQ"].ToString();
+                                oCamposDet.PASPEQ_ENFOQUE = dr["PASPEQ_ENFOQUE"].ToString();
+                                oCamposDet.FECHA_SUPERVISION = dr["FECHA_SUPERVISION"].ToString();
+                                oCamposDet.S_VOL_APROB = Decimal.Parse(dr["S_VOL_APROB"].ToString());
+                                oCamposDet.S_VOL_MOV = Decimal.Parse(dr["S_VOL_MOV"].ToString());
+                                oCamposDet.S_VOL_INJUST = Decimal.Parse(dr["S_VOL_INJUST"].ToString());
+                                oCamposDet.INFRACCIONES = dr["INFRACCIONES"].ToString();
+                                oCamposDet.MULTAS = dr["MULTAS"].ToString();
+                                oCamposDet.ESTADO_PAU = dr["ESTADO_PAU"].ToString();
+                                oCamposDet.ESTADO_PAGO = dr["ESTADO_PAGO"].ToString();
+                                oCamposDet.MODALIDAD_PAGO = dr["MODALIDAD_PAGO"].ToString();
+                                oCamposDet.MEC_COMP = dr["MEC_COMP"].ToString();
+                                oCamposDet.N_CAPACITACION = Decimal.Parse(dr["N_CAPACITACION"].ToString());
+                                oCamposDet.FECHA_ULT_CAP = dr["FECHA_ULT_CAP"].ToString();
+                                oCamposDet.TEMA_ULT_CAP = dr["TEMA_ULT_CAP"].ToString();
+                                oCamposDet.TEMA_MOCHILA_CAP = dr["TEMA_MOCHILA_CAP"].ToString();
+                                oCamposDet.TEMA_MOCHILA_ENT = dr["TEMA_MOCHILA_ENT"].ToString();
+                                oCamposDet.PRIORIDAD = Decimal.Parse(dr["PRIORIDAD"].ToString());
+
+                                lsCEntidadRGP.Add(oCamposDet);
+                            }
+                        }
+                    }
+                }
+                return lsCEntidadRGP;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+        public List<Ent_ReportConsolidadoPDC> RepconsolidadoPDC(OracleConnection cn, CEntidad cEntidad)
+        {
+            List<Ent_ReportConsolidadoPDC> lsCEntidadRGP = new List<Ent_ReportConsolidadoPDC>();
+            Ent_ReportConsolidadoPDC oCamposDet = new Ent_ReportConsolidadoPDC();
+
+            try
+            {
+                using (OracleDataReader dr = dBOracle.SelDrdResult(cn, null, "DOC_OSINFOR_ERP_MIGRACION.SPREPORTECAPACITACION_UNIVERSOPDC", cEntidad))
+                {
+                    if (dr != null)
+                    {
+                        if (dr.HasRows)
+                        {
+                            while (dr.Read())
+                            {
+                                oCamposDet = new Ent_ReportConsolidadoPDC();
+                                oCamposDet.COD_MODALIDAD = dr["COD_MODALIDAD"].ToString();
+                                oCamposDet.MODALIDAD = dr["MODALIDAD"].ToString();
+                                oCamposDet.ATALAYA = Decimal.Parse(dr["'ATALAYA'"].ToString());
+                                oCamposDet.CHICLAYO = Decimal.Parse(dr["'CHICLAYO'"].ToString());
+                                oCamposDet.IQUITOS = Decimal.Parse(dr["'IQUITOS'"].ToString());
+                                oCamposDet.LA_MERCED = Decimal.Parse(dr["'LA MERCED'"].ToString());
+                                oCamposDet.PUCALLPA = Decimal.Parse(dr["'PUCALLPA'"].ToString());
+                                oCamposDet.PUERTO_MALDONADO = Decimal.Parse(dr["'PUERTO MALDONADO'"].ToString());
+                                oCamposDet.TARAPOTO = Decimal.Parse(dr["'TARAPOTO'"].ToString());
+                                oCamposDet.SEDE_CENTRAL = Decimal.Parse(dr["'SEDE CENTRAL'"].ToString());
+                                oCamposDet.TOTAL = oCamposDet.ATALAYA + oCamposDet.CHICLAYO + oCamposDet.IQUITOS + oCamposDet.LA_MERCED + oCamposDet.PUCALLPA + oCamposDet.PUERTO_MALDONADO + oCamposDet.TARAPOTO + oCamposDet.SEDE_CENTRAL;
+
+                                lsCEntidadRGP.Add(oCamposDet);
+                            }
                         }
                     }
                 }

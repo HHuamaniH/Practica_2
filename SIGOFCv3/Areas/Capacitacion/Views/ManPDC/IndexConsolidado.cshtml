@@ -1,0 +1,102 @@
+﻿
+@model CapaEntidad.ViewModel.VM_ReporteGeneral
+@{
+    ViewBag.Title = "Reporte";
+    Layout = "~/Views/Shared/_LayoutMain.cshtml";
+}
+
+<script type="text/javascript">
+    var _rendReporteConsolidadoPDC = {};
+
+    _rendReporteConsolidadoPDC.fnReporte = function () {
+        let codUsuario = 'Consolidado';
+        let url = urlLocalSigo + "CAPACITACION/ManPDC/ReporteConsolidado";
+        $.ajax({
+            url: url,
+            type: 'POST',
+            datatype: "json",
+            traditional: true,
+            data: { 'codUsuario': codUsuario },
+            success: function (data) {
+                $('div#divReporteConsolidado').html(data);
+
+            }
+        });
+    }
+
+    _rendReporteConsolidadoPDC.fnExportDetalle = function () {
+        var url = urlLocalSigo + "CAPACITACION/ManPDC/DescargarUniversoPDC";
+        var option = { url: url, datos: JSON.stringify({}), type: 'POST' };
+
+        utilSigo.fnAjax(option, function (data) {
+            if (data.success) {
+                document.location = urlLocalSigo + "Archivos/Plantilla/" + data.msj;
+            }
+            else {
+                utilSigo.toastWarning("Aviso", "Sucedio un error, Comuníquese con el Administrador");
+                console.log(data.msj);
+            }
+        });
+    }
+
+    _rendReporteConsolidadoPDC.fnReporteDetalle = function (TOficinaDesconcentrada, TModalidad) {
+        let OficinaDesconcentrada = TOficinaDesconcentrada;
+        let Modalidad = TModalidad;
+        let codUsuario = 'Consolidado';
+
+        let url = urlLocalSigo + "CAPACITACION/ManPDC/ReporteConsolidadoDetalle";
+        // alert(direccion)
+
+        if (codUsuario != "") {
+            $.ajax({
+                url: url,
+                type: 'POST',
+                datatype: "json",
+                traditional: true,
+                data: { 'oficina': OficinaDesconcentrada, 'modalidad': Modalidad },
+                success: function (data) {
+                    _rendReporteConsolidadoPDC.frm.find("#divReporteDetalleConsolidado").show();
+                    $('div#divReporteDetalleConsolidado').html(data);
+                }
+            });
+        } else {
+            utilSigo.toastWarning("Aviso", 'Seleccione un usuario para la consulta');
+        }
+
+    }
+
+    $(document).ready(function () {
+        _rendReporteConsolidadoPDC.frm = $("#divReporteConsolidadoPDC");
+        _rendReporteConsolidadoPDC.fnReporte();
+    });
+
+
+</script>
+
+
+
+<div id="divReporteConsolidadoPDC" class="container-fluid" style="font-size:12px !important;">
+    <div class="card">
+        <div class="card-header text-left">
+            <h5>Reporte de Consolidado del PDC</h5>
+        </div>
+    </div>
+    <div class="card-body">
+        <div class="row">
+
+        </div>
+
+        <div><hr /></div>
+        <div id="divReporteConsolidado">
+
+        </div>
+        <div><br /></div>
+        <div id="divReporteDetalleConsolidado">
+
+        </div>
+        <div><br /></div>
+        <div style="text-align:center !important;">
+            <canvas id="myChart" style="width:30% !important; height:30% !important;"></canvas>
+        </div>
+    </div>
+</div>

@@ -1,12 +1,18 @@
+using CapaEntidad.DOC;
 using CapaEntidad.ViewModel;
 using Oracle.ManagedDataAccess.Client;
 using System;
 using System.Collections.Generic;
-using System.Data; 
+using System.Data;
+using System.Data.OleDb;
+using System.IO;
 //using System.Data.SqlClient;
 using System.Linq;
+using System.Text.RegularExpressions;
+using System.Web;
 using CDatos = CapaDatos.DOC.Dat_CAPACITACION;
 using CEntidad = CapaEntidad.DOC.Ent_CAPACITACION;
+using CEntidadPDC = CapaEntidad.DOC.Ent_ReportePDC;
 
 namespace CapaLogica.DOC
 {
@@ -456,7 +462,7 @@ namespace CapaLogica.DOC
                 VM_CAP.ddlOrganizador = entCap.ListMComboOrganizador.Select(i => new VM_Cbo { Value = i.CODIGO, Text = i.DESCRIPCION });
                 VM_CAP.ddlApoyoCoorganizador = entCap.ListApoyoCoorg.Select(i => new VM_Cbo { Value = i.CODIGO, Text = i.DESCRIPCION });
                 VM_CAP.ddlModalidad = entCap.ListMComboModalidad.Select(i => new VM_Cbo { Value = i.CODIGO, Text = i.DESCRIPCION });
-                
+
                 var listMChkListTematica = entCap.ListMChkListTematica;
                 VM_CAP.lstChkTema = listMChkListTematica
                         .Where(t => "1".Equals(t.NUEVO_2021))
@@ -468,7 +474,7 @@ namespace CapaLogica.DOC
                 if (String.IsNullOrEmpty(asCodCapacitacion))
                 {
                     VM_CAP.lblTituloEstado = "Nuevo Registro";
-                    
+
                 }
                 else
                 {
@@ -651,7 +657,7 @@ namespace CapaLogica.DOC
                     string[] lstTema = _dto.lstChkTemaId.Split(',');
                     for (int i = 0; i < lstTema.Length; i++)
                     {
-                        if (lstTema[i].ToString()== "0000032")
+                        if (lstTema[i].ToString() == "0000032")
                             paramsCap.ListTematica.Add(new CEntidad() { MAE_COD_TEMA = lstTema[i].ToString(), DESCRIPCION = (_dto.txtDescTema ?? "") });
                         else
                             paramsCap.ListTematica.Add(new CEntidad() { MAE_COD_TEMA = lstTema[i].ToString() });
@@ -679,7 +685,7 @@ namespace CapaLogica.DOC
                         }
                     }
                 }
-                
+
                 paramsCap.ListParticipantes = _dto.tbParticipante_Asistentes;
                 paramsCap.ListParticipantesOsi = _dto.tbParticipante_EquipoApoyo;
                 paramsCap.ListParticipantesPonente = _dto.tbParticipante_Ponentes;
@@ -930,5 +936,187 @@ namespace CapaLogica.DOC
             return VM_CR;
         }
         #endregion
+
+        /// universo capacitable
+        public List<CEntidadPDC> RepUniversoPDC(CEntidad oCEntidad)
+        {
+            try
+            {
+                using (OracleConnection cn = new OracleConnection(CapaDatos.BDConexion.Conexion_Cadena_SIGO()))
+                {
+                    cn.Open();
+                    return oCDatos.RepUniversoPDC(cn, oCEntidad);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public List<Ent_ReportConsolidadoPDC> RepconsolidadoPDC(CEntidad oCEntidad)
+        {
+            try
+            {
+                using (OracleConnection cn = new OracleConnection(CapaDatos.BDConexion.Conexion_Cadena_SIGO()))
+                {
+                    cn.Open();
+                    return oCDatos.RepconsolidadoPDC(cn, oCEntidad);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+        static string CleanInput(string strIn)
+        {
+            // Replace invalid characters with empty strings.
+            try
+            {
+                return Regex.Replace(strIn, @"[^\w\.@-]", " ",
+                                     RegexOptions.None, TimeSpan.FromSeconds(1.5));
+            }
+            // If we timeout when replacing invalid characters,
+            // we should return Empty.
+            catch (RegexMatchTimeoutException)
+            {
+                return String.Empty;
+            }
+        }
+
+        /// <summary>
+        /// descarga de los datos del universo
+        /// </summary>
+        /// <param name="listSupModResumen"></param>
+        /// <returns></returns>
+        public ListResult DescargaUniversoPDC(List<CEntidadPDC> listUniversoPDC)
+        {
+            ListResult result = new ListResult();
+
+            try
+            {
+                int i = 1;
+                String insertar = "";
+                String RutaReporteSeguimiento = HttpContext.Current.Server.MapPath("~/Archivos/Plantilla/");
+                string nombreFile = "";
+                nombreFile = DateTime.Now.Year.ToString() + DateTime.Now.Month.ToString() + DateTime.Now.Day.ToString() + DateTime.Now.Hour.ToString() + DateTime.Now.Minute.ToString() + DateTime.Now.Second.ToString() + DateTime.Now.Millisecond.ToString() + ".xlsx";
+                string rutaExcel = RutaReporteSeguimiento + nombreFile;
+                File.Copy(RutaReporteSeguimiento + "Report_UniversoCapacitablePDC.xlsx", rutaExcel);
+                OleDbConnectionStringBuilder cb = new OleDbConnectionStringBuilder();
+                cb.DataSource = rutaExcel;
+                if (Path.GetExtension(rutaExcel).ToUpper() == ".XLS")
+                {
+                    cb.Provider = "Microsoft.Jet.OLEDB.4.0";
+                    cb.Add("Extended Properties", "Excel 8.0;HDR=YES;IMEX=0;");
+                }
+                else if (Path.GetExtension(rutaExcel).ToUpper() == ".XLSX")
+                {
+                    cb.Provider = "Microsoft.ACE.OLEDB.12.0";
+                    cb.Add("Extended Properties", "Excel 12.0 Xml;HDR=YES;IMEX=0;");
+                }
+                using (OleDbConnection conn = new OleDbConnection(cb.ConnectionString))
+                {
+                    //Abrimos la conexión
+                    conn.Open();
+                    //Creamos la ficha
+                    using (OleDbCommand cmd = conn.CreateCommand())
+                    {
+                        cmd.CommandType = CommandType.Text;
+                        //Construyendo las Cabeceras
+                        int contador = 1;
+                        foreach (var listaInf in listUniversoPDC)
+                        {
+                            insertar = "";
+                            insertar = contador++.ToString();  //a
+                            insertar = insertar + ",'" + CleanInput(listaInf.OFICINA_DESCONCENTRADA.ToString()) + "'";//B
+                            insertar = insertar + ",'" + CleanInput(listaInf.TITULO.ToString()) + "'";//C
+                            insertar = insertar + ",'" + CleanInput(listaInf.MODALIDAD.ToString()) + "'";//D
+                            insertar = insertar + ",'" + CleanInput(listaInf.TITULAR.ToString()) + "'";//E
+                            insertar = insertar + ",'" + CleanInput(listaInf.REP_LEGAL.ToString()) + "'";//F
+                            insertar = insertar + ",'" + CleanInput(listaInf.DEPARTAMENTO.ToString()) + "'";//G
+                            insertar = insertar + ",'" + CleanInput(listaInf.PROVINCIA.ToString()) + "'";//H
+                            insertar = insertar + ",'" + CleanInput(listaInf.DISTRITO.ToString()) + "'";//I
+                            insertar = insertar + ",'" + CleanInput(listaInf.FECHA_VIGENCIA.ToString()) + "'";//J
+                            insertar = insertar + ",'" + CleanInput(listaInf.FECHA_CORTE.ToString()) + "'";//K
+                            insertar = insertar + ",'" + CleanInput(listaInf.AREA.ToString()) + "'";//L
+                            insertar = insertar + ",'" + listaInf.ULTIMO_PLAN.ToString() + "'";//M
+                            insertar = insertar + ",'" + CleanInput(listaInf.ROJO.ToString()) + "'";//N
+                            insertar = insertar + ",'" + CleanInput(listaInf.VERDE.ToString()) + "'";//O
+                            insertar = insertar + ",'" + CleanInput(listaInf.ALERTA.ToString()) + "'";//P
+                            insertar = insertar + ",'" + CleanInput(listaInf.PASPEQ.ToString()) + "'";//Q
+                            insertar = insertar + ",'" + CleanInput(listaInf.PASPEQ_ENFOQUE.ToString()) + "'";//R
+                            insertar = insertar + ",'" + CleanInput(listaInf.FECHA_SUPERVISION.ToString()) + "'";//S
+                            insertar = insertar + ",'" + CleanInput(listaInf.S_VOL_APROB.ToString()) + "'";//T
+                            insertar = insertar + ",'" + CleanInput(listaInf.S_VOL_MOV.ToString()) + "'";//U
+                            insertar = insertar + ",'" + CleanInput(listaInf.S_VOL_INJUST.ToString()) + "'";//V
+                            insertar = insertar + ",'" + listaInf.INFRACCIONES.ToString() + "'";//W
+                            insertar = insertar + ",'" + CleanInput(listaInf.MULTAS.ToString()) + "'";//X
+                            insertar = insertar + ",'" + CleanInput(listaInf.ESTADO_PAU.ToString()) + "'";//Y
+                            insertar = insertar + ",'" + CleanInput(listaInf.ESTADO_PAGO.ToString()) + "'"; //z
+                            insertar = insertar + ",'" + CleanInput(listaInf.MODALIDAD_PAGO.ToString()) + "'";//aa
+                            insertar = insertar + ",'" + CleanInput(listaInf.MEC_COMP.ToString()) + "'";//ab
+                            insertar = insertar + ",'" + CleanInput(listaInf.N_CAPACITACION.ToString()) + "'";//ac
+                            insertar = insertar + ",'" + CleanInput(listaInf.FECHA_ULT_CAP.ToString()) + "'";//ad
+                            insertar = insertar + ",'" + CleanInput(listaInf.TEMA_ULT_CAP.ToString()) + "'";//ae
+                            insertar = insertar + ",'" + CleanInput(listaInf.TEMA_MOCHILA_CAP.ToString()) + "'";//af
+                            insertar = insertar + ",'" + CleanInput(listaInf.TEMA_MOCHILA_ENT.ToString()) + "'";//ah
+                            insertar = insertar + ",'" + CleanInput(listaInf.PRIORIDAD.ToString()) + "'";//ah
+                            /*
+                            insertar = insertar + ",'" + CleanInput(listaInf.OFICINA_DESCONCENTRADA.ToString()) + "'";//B
+                            insertar = insertar + ",'" + CleanInput(listaInf.TITULO.ToString()) + "'";//C
+                            insertar = insertar + ",'" + CleanInput(listaInf.MODALIDAD.ToString()) + "'";//D
+                            insertar = insertar + ",'" + CleanInput(listaInf.TITULAR.ToString()) + "'";//E
+                            insertar = insertar + ",'" + CleanInput(listaInf.REP_LEGAL.ToString())+ "'";//F
+                            insertar = insertar + ",'" + CleanInput(listaInf.DEPARTAMENTO.ToString()) + "'";//G
+                            insertar = insertar + ",'" + CleanInput(listaInf.PROVINCIA.ToString()) + "'";//H
+                            insertar = insertar + ",'" + CleanInput(listaInf.DISTRITO.ToString()) + "'";//I
+                            insertar = insertar + ",'" + CleanInput(listaInf.FECHA_VIGENCIA.ToString()) + "'";//J
+                            insertar = insertar + ",'" + CleanInput(listaInf.FECHA_CORTE.ToString()) + "'";//K
+                            insertar = insertar + ",'" + CleanInput(listaInf.AREA.ToString()) + "'";//L
+                            insertar = insertar + ",'" + CleanInput(listaInf.ULTIMO_PLAN.ToString()) + "'";//M
+                            insertar = insertar + ",'" + CleanInput(listaInf.ROJO.ToString()) + "'";//N
+                            insertar = insertar + ",'" + CleanInput(listaInf.VERDE.ToString()) + "'";//O
+                            insertar = insertar + ",'" + CleanInput(listaInf.ALERTA.ToString()) + "'";//P
+                            insertar = insertar + ",'" + CleanInput(listaInf.PASPEQ.ToString()) + "'";//Q
+                            insertar = insertar + ",'" + CleanInput(listaInf.PASPEQ_ENFOQUE.ToString()) + "'";//R
+                            insertar = insertar + ",'" + CleanInput(listaInf.FECHA_SUPERVISION.ToString()) + "'";//S
+                            insertar = insertar + ",'" + CleanInput(listaInf.S_VOL_APROB.ToString()) + "'";//T
+                            insertar = insertar + ",'" + CleanInput(listaInf.S_VOL_MOV.ToString()) + "'";//U
+                            insertar = insertar + ",'" + CleanInput(listaInf.S_VOL_INJUST.ToString()) + "'";//V
+                            insertar = insertar + ",'" + CleanInput(listaInf.INFRACCIONES.ToString()) + "'";//W
+                            insertar = insertar + ",'" + CleanInput(listaInf.MULTAS.ToString()) + "'";//X
+                            insertar = insertar + ",'" + CleanInput(listaInf.ESTADO_PAU.ToString()) + "'";//Y
+                            insertar = insertar + ",'" + CleanInput(listaInf.ESTADO_PAGO.ToString()) + "'"; //z
+                            insertar = insertar + ",'" + CleanInput(listaInf.MODALIDAD_PAGO.ToString()) + "'";//aa
+                            insertar = insertar + ",'" + CleanInput(listaInf.MEC_COMP.ToString()) + "'";//ab
+                            insertar = insertar + ",'" + CleanInput(listaInf.N_CAPACITACION.ToString()) + "'";//ac
+                            insertar = insertar + ",'" + CleanInput(listaInf.FECHA_ULT_CAP.ToString()) + "'";//ad
+                            insertar = insertar + ",'" + CleanInput(listaInf.TEMA_ULT_CAP.ToString()) + "'";//ae
+                            insertar = insertar + ",'" + CleanInput(listaInf.TEMA_MOCHILA_CAP.ToString()) + "'";//af
+                            insertar = insertar + ",'" + CleanInput(listaInf.TEMA_MOCHILA_ENT.ToString()) + "'";//ah
+                            insertar = insertar + ",'" + CleanInput(listaInf.PRIORIDAD.ToString() )+ "'";//ah
+
+                          */
+
+                            cmd.CommandText = "INSERT INTO [Datos$A" + i.ToString().Trim() + ":AH" + (listUniversoPDC.Count + 1).ToString() + "] VALUES (" + insertar + ")";
+                            cmd.ExecuteNonQuery();
+                        }
+
+                        //Cerramos la conexión
+                        conn.Close();
+                    }
+                }
+                result.success = true;
+                result.msj = nombreFile;
+            }
+            catch (Exception ex)
+            {
+                result.success = false;
+                result.msj = ex.Message;
+            }
+            return result;
+        }
+
     }
 }

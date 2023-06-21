@@ -45,6 +45,11 @@ namespace CapaEntidad.ViewModel
         public List<Ent_MasterFiltro> listDepartamentoPAU { get; set; }
         public List<Ent_MasterFiltro> listModalidadPAU { get; set; }
         public List<List<Ent_Reporte_PAU_CONCLUIDO>> listTotalModalidadPAU { get; set; }
+
+        //listado del resultado del historico del pdc
+        public List<Ent_ReportePDC> list_universoPDC { get; set; }
+        public List<Ent_ReportConsolidadoPDC> list_consolidado_PDC { get; set; }
+
         public string txtPersona { get; set; }
         public string txtIdTipo { get; set; }
         public string tipoReporte { get; set; }
