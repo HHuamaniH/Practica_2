@@ -314,6 +314,9 @@ ManInforme_AddEditTara.fnSubmitForm = function () {
     if (!utilSigo.fnValidateForm(ManInforme_AddEditTara.frm, controls)) {
         return ManInforme_AddEditTara.frm.valid();
     }
+    if (!_renderObligacionMandatos.fnValidate()) {
+        return false;
+    }
     ManInforme_AddEditTara.frm.submit();
 }
 
@@ -754,6 +757,8 @@ ManInforme_AddEditTara.fnSaveForm = function () {
             datosInforme.txtConclusion = window.editor_txtConclusion.getData();
             datosInforme.tbMandatos = _renderMandatos.fnGetList();
             datosInforme.tbMandatos = datosInforme.tbMandatos.concat(_renderMandatos.fnGetListEliTABLA());
+            datosInforme.tbObligMandatos = _renderObligacionMandatos.fnGetList();
+            datosInforme.tbObligMandatos = datosInforme.tbObligMandatos.concat(_renderObligacionMandatos.fnGetListEliTABLA());
 
             var option = { url: ManInforme_AddEditTara.frm[0].action, datos: JSON.stringify(datosInforme), type: 'POST' };
             $.ajax({

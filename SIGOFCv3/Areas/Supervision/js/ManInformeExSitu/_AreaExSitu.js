@@ -14,10 +14,14 @@ _AreaExSitu.fnLoadDatos = function (asCodArea,data) {
         _AreaExSitu.frm.find("#txtAncho").val(data["ANCHO"]);
         _AreaExSitu.frm.find("#txtAltura").val(data["ALTURA"]);
         _AreaExSitu.frm.find("#txtArea").val(data["AREA"]);
+        _AreaExSitu.frm.find("#txtCoordenadaEste").val(data["COORDENADA_ESTE"]);
+        _AreaExSitu.frm.find("#txtCoordenadaNorte").val(data["COORDENADA_NORTE"]);
 
-        _AreaExSitu.dtItemAreaExSitu_Material.rows.add(data["ListISupervision_exsitu_recinto_equipo"].filter(m=>m.TIPO == "IM")).draw();
-        _AreaExSitu.dtItemAreaExSitu_Cartel.rows.add(data["ListISupervision_exsitu_recinto_equipo"].filter(m=>m.TIPO == "IC")).draw();
-        _AreaExSitu.dtItemAreaExSitu_Equipo.rows.add(data["ListISupervision_exsitu_recinto_equipo"].filter(m=>m.TIPO == "IE")).draw();
+        if (data["ListISupervision_exsitu_recinto_equipo"] != null) {
+            _AreaExSitu.dtItemAreaExSitu_Material.rows.add(data["ListISupervision_exsitu_recinto_equipo"].filter(m => m.TIPO == "IM")).draw();
+            _AreaExSitu.dtItemAreaExSitu_Cartel.rows.add(data["ListISupervision_exsitu_recinto_equipo"].filter(m => m.TIPO == "IC")).draw();
+            _AreaExSitu.dtItemAreaExSitu_Equipo.rows.add(data["ListISupervision_exsitu_recinto_equipo"].filter(m => m.TIPO == "IE")).draw();
+        }       
     } else {
         _AreaExSitu.frm.find("#hdfRegEstado").val("1");
         _AreaExSitu.frm.find("#hdfCodArea").val(asCodArea);
@@ -40,6 +44,8 @@ _AreaExSitu.fnSetDatos = function () {
     data["ANCHO"] = _AreaExSitu.frm.find("#txtAncho").val();
     data["ALTURA"] = _AreaExSitu.frm.find("#txtAltura").val();
     data["AREA"] = _AreaExSitu.frm.find("#txtArea").val();
+    data["COORDENADA_ESTE"] = _AreaExSitu.frm.find("#txtCoordenadaEste").val();
+    data["COORDENADA_NORTE"] = _AreaExSitu.frm.find("#txtCoordenadaNorte").val();
 
     var detalle = _AreaExSitu.fnGetList("IM");
     detalle=detalle.concat(_AreaExSitu.fnGetList("IC"));

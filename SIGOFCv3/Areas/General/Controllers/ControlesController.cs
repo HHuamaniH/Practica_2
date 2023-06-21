@@ -708,6 +708,11 @@ namespace SIGOFCv3.Areas.General.Controllers
 
             return PartialView();
         }
+        [HttpGet]
+        public ActionResult _BuscarMandatos()
+        {
+            return PartialView();
+        }
         /// <summary>
         /// Método que realiza la consulta de personas registradas en el SIGOsfc
         /// </summary>
@@ -766,6 +771,49 @@ namespace SIGOFCv3.Areas.General.Controllers
                 return Json(new { data = "", success = false, er = ex.Message }, JsonRequestBehavior.AllowGet);
             }
         }
+
+        [HttpGet]
+        public JsonResult buscarMandatos(string asBusValor)
+        {
+            try
+            {
+                Log_INFORME logInforme = new Log_INFORME();
+                Ent_MANDATOS oParams = new Ent_MANDATOS()
+                {                    
+                    BusValor = asBusValor,                                     
+                };
+                List<Ent_MANDATOS> consulta = logInforme.BuscarMandatos(oParams);
+                int i = 1;
+
+                var result = from c in consulta
+                             select new
+                             {
+                                 ind = i++,
+                                 COD_SECUENCIAL = c.COD_SECUENCIAL,
+                                 COD_INFORME = c.COD_INFORME,
+                                 NUM_INFORME = c.NUM_INFORME,
+                                 TH_NUMERO = c.TH_NUMERO,
+                                 TITULAR_ACTUAL = c.TITULAR_ACTUAL,
+                                 MODALIDAD = c.MODALIDAD,
+                                 PLAZO_IMPL_DIA = c.PLAZO_IMPL_DIA,
+                                 PLAZO_INF_DIA = c.PLAZO_INF_DIA,
+                                 CUMPLIO_MANDATO = c.CUMPLIO_MANDATO,
+                                 OBSERVACION = c.OBSERVACION,
+                                 PRESENTA_INFORME_IMPL = c.PRESENTA_INFORME_IMPL,
+                                 FECHA_PRESENT_INF = c.FECHA_PRESENT_INF,
+                                 PRESENTA_INFORME_DP = c.PRESENTA_INFORME_DP,
+                                 MANDATO = c.MANDATO
+                             };
+                var jsonResult = Json(new { data = result, success = true, er = "" }, JsonRequestBehavior.AllowGet);
+                jsonResult.MaxJsonLength = int.MaxValue;
+                return jsonResult;
+            }
+            catch (Exception ex)
+            {
+                return Json(new { data = "", success = false, er = ex.Message }, JsonRequestBehavior.AllowGet);
+            }
+        }
+
         /// <summary>
         /// Ventana modal para registrar los datos básicos de una persona (natural o jurídica)
         /// </summary>

@@ -577,7 +577,7 @@
                             </div>
                             <div class="tab-pane fade show" id="navZoonosis" role="tabpanel" aria-labelledby="nav-home-tab">
                                 @Html.Partial("~/Areas/Supervision/Views/ManInforme/Render/_renderEnfermedades.cshtml", Model.tbEnfermedad
-                                                        , new ViewDataDictionary { { "TITULO", "" } })                                
+                                                        , new ViewDataDictionary { { "TITULO", "" } })
                             </div>
                             <div class="tab-pane fade show" id="navConclusion" role="tabpanel" aria-labelledby="nav-home-tab">
                                 <div class="card">
@@ -711,6 +711,9 @@
                                 <div class="card">
                                     @Html.Partial("~/Areas/Supervision/Views/ManInforme/Render/_renderObligacionTitular.cshtml", Model.tbObligacionTitular)
                                 </div>
+                                <div class="">
+                                    @Html.Partial("~/Areas/Supervision/Views/ManInforme/Render/_renderObligacionMandatos.cshtml", Model.tbObligMandatos)
+                                </div>
                             </div>
                         </div>
                     </form>
@@ -765,4 +768,5 @@
     <div class="modal fade hide" id="mdlBuscarPersona" role="dialog"></div>
     <div class="modal fade" id="modalAddEditPersona" tabindex="-1" role="dialog"></div>
     <div class="modal fade hide" id="personaUbigeoModal" role="dialog"></div>
+    <div class="modal fade hide" id="mdlBuscarObligacionMandatos" role="dialog"></div>
 </div>

@@ -1284,6 +1284,9 @@ ManInforme_AddEditConservacion.fnSubmitForm = function () {
 	if (!utilSigo.fnValidateForm(ManInforme_AddEditConservacion.frm, controls)) {
 		return ManInforme_AddEditConservacion.frm.valid();
 	}
+	if (!_renderObligacionMandatos.fnValidate()) {
+		return false;
+	}
 	ManInforme_AddEditConservacion.frm.submit();
 };
 
@@ -1364,6 +1367,8 @@ ManInforme_AddEditConservacion.fnSaveForm = function () {
 
 			datosInforme.tbMandatos = _renderMandatos.fnGetList();
 			datosInforme.tbMandatos = datosInforme.tbMandatos.concat(_renderMandatos.fnGetListEliTABLA());
+			datosInforme.tbObligMandatos = _renderObligacionMandatos.fnGetList();
+			datosInforme.tbObligMandatos = datosInforme.tbObligMandatos.concat(_renderObligacionMandatos.fnGetListEliTABLA());
 
 			var option = { url: ManInforme_AddEditConservacion.frm[0].action, datos: JSON.stringify({ dto: datosInforme }), type: 'POST' };
 			utilSigo.fnAjax(option, function (data) {

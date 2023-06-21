@@ -1,0 +1,315 @@
+﻿@model List<CapaEntidad.DOC.Ent_MANDATOS>
+
+<script type="text/javascript">
+
+    var _renderObligacionMandatos = {};
+    _renderObligacionMandatos.listObligacionMandatos = [];
+    _renderObligacionMandatos.tbEliTABLA = [];
+    _renderObligacionMandatos.inicio = 0;
+    _renderObligacionMandatos.fnSelectRecom = function () {
+        _renderObligacionMandatos.frm.find("#divObligacionMandatos").hide();
+
+        if (_renderObligacionMandatos.frm.find("#chkobjObligacionMandatos").is(':checked')) {
+            _renderObligacionMandatos.frm.find("#divObligacionMandatos").show();
+        } else {
+            if (_renderObligacionMandatos.inicio>0) {
+                _renderObligacionMandatos.listObligacionMandatos = [];
+            }
+            _renderObligacionMandatos.fnInitDataTable_Detail();
+            _renderObligacionMandatos.inicio = 1;
+        }
+    }
+
+    _renderObligacionMandatos.fnBuscarMandatos = function () {
+        var url = urlLocalSigo + "General/Controles/_BuscarMandatos";
+        var option = { url: url, type: 'GET', datos: { asBusGrupo: "PERSONA", asCodPTipo: "TODOS", asTipoPersona: "N" }, divId: "mdlBuscarObligacionMandatos" };
+        utilSigo.fnOpenModal(option, function () {
+            _bMandatos.fnAsignarDatos = function (obj) {
+                if (obj != null && obj != "") {
+                    var data = _bMandatos.dtBuscarMandatos.row($(obj).parents('tr')).data();
+                    let existe = 0;
+                    for (var i = 0; i < _renderObligacionMandatos.listObligacionMandatos.length; i++) {
+                        let item = _renderObligacionMandatos.listObligacionMandatos[i];
+                        if (item.COD_SECUENCIAL == data["COD_SECUENCIAL"] && item.COD_INFORME == data["COD_INFORME"]) {
+                            utilSigo.toastWarning("Aviso", "El supervisor ya se encuentra añadido");
+                            existe = 1;
+                            break;
+                        }
+                    }
+                    if (existe == 0) {
+                        var objObligacionMandatos = {
+                            COD_SECUENCIAL: data["COD_SECUENCIAL"],
+                            COD_INFORME: data["COD_INFORME"],
+                            NUM_INFORME: data["NUM_INFORME"],
+                            TH_NUMERO: data["TH_NUMERO"],
+                            TITULAR_ACTUAL: data["TITULAR_ACTUAL"],
+                            MODALIDAD: data["MODALIDAD"],
+                            MANDATO: data["MANDATO"],
+                            PLAZO_IMPL_DIA: data["PLAZO_IMPL_DIA"],
+                            PLAZO_INF_DIA: data["PLAZO_INF_DIA"],
+                            CUMPLIO_MANDATO: data["CUMPLIO_MANDATO"],
+                            OBSERVACION: data["OBSERVACION"],
+                            PRESENTA_INFORME_IMPL: data["PRESENTA_INFORME_IMPL"],
+                            PRESENTA_INFORME_DP: data["PRESENTA_INFORME_DP"],
+                            FECHA_PRESENT_INF: data["FECHA_PRESENT_INF"],
+                            RegEstado:0
+                        }
+                        _renderObligacionMandatos.listObligacionMandatos.push(objObligacionMandatos);
+                        _renderObligacionMandatos.fnInitDataTable_Detail();
+                    }
+
+                    utilSigo.fnCloseModal("mdlBuscarObligacionMandatos");
+                }
+            }
+            _bMandatos.fnInit();
+        });
+    }
+
+    _renderObligacionMandatos.fnDeleteMandato = function (cod_secuencial, cod_informe) {
+        console.log(cod_secuencial + ' : ' + cod_informe);
+        for (var i = 0; i < _renderObligacionMandatos.listObligacionMandatos.length; i++) {
+            var item = _renderObligacionMandatos.listObligacionMandatos[i];
+            console.log(cod_secuencial + ' : ' + item.COD_SECUENCIAL);
+            console.log(cod_informe + ' : ' + item.COD_INFORME);
+            if (cod_secuencial == item.COD_SECUENCIAL && cod_informe == item.COD_INFORME) {
+                _renderObligacionMandatos.listObligacionMandatos.splice(i, 1);
+                _renderObligacionMandatos.tbEliTABLA.push({
+                    COD_SECUENCIAL: cod_secuencial,
+                    COD_INFORME: cod_informe,
+                    RegEstado: 2
+                });
+            }
+        }
+
+        _renderObligacionMandatos.fnInitDataTable_Detail();
+    }
+
+    _renderObligacionMandatos.fnGetList = function () {
+        for (var i = 0; i < _renderObligacionMandatos.listObligacionMandatos.length; i++) {
+            var item = _renderObligacionMandatos.listObligacionMandatos[i];
+            _renderObligacionMandatos.listObligacionMandatos[i].CUMPLIO_MANDATO = $('#cboCM_' + item.COD_SECUENCIAL + '_' + item.COD_INFORME).val();
+            _renderObligacionMandatos.listObligacionMandatos[i].OBSERVACION = $('#txtOBS_' + item.COD_SECUENCIAL + '_' + item.COD_INFORME).val();
+            _renderObligacionMandatos.listObligacionMandatos[i].PRESENTA_INFORME_IMPL = $('#cboPI_' + item.COD_SECUENCIAL + '_' + item.COD_INFORME).val();
+            _renderObligacionMandatos.listObligacionMandatos[i].PRESENTA_INFORME_DP = $('#cboPIPL_' + item.COD_SECUENCIAL + '_' + item.COD_INFORME).val();
+            _renderObligacionMandatos.listObligacionMandatos[i].FECHA_PRESENT_INF = $('#txtPREFEC_' + item.COD_SECUENCIAL + '_' + item.COD_INFORME).val();
+        }
+        return _renderObligacionMandatos.listObligacionMandatos;
+    }
+
+    _renderObligacionMandatos.fnValidate = function () {
+        var returns = true
+        var list = _renderObligacionMandatos.fnGetList()
+        for (var i = 0; i < list.length; i++) {            
+            let fechaStandar = utilSigo.convertirFechaHoraStandar(list[i].FECHA_PRESENT_INF);            
+            if (fechaStandar == '1') {
+                returns = false;
+                utilSigo.toastWarning("Aviso", "La Fecha de Obligación del Mandato \"" + list[i].MANDATO + "\" no tiene formato correcto de fecha dd/mm/yyyy");
+                
+            } else if (fechaStandar != '0'){
+                if (utilSigo.isFechaMayor(fechaStandar, utilSigo.obtenerFechaHora()[0])) {
+                    returns = false;
+                    utilSigo.toastWarning("Aviso", "La Fecha de Obligación del Mandato \"" + list[i].MANDATO + "\" no debe ser mayor a la fecha actual");
+                }
+            }
+        }
+        return returns;
+    }
+
+    _renderObligacionMandatos.fnInitMandatos = function () {
+        var tbMandatos = _renderObligacionMandatos.listObligacionMandatos.length;
+        if (tbMandatos != '0') {
+            var chkobjObligacionMandatos = document.getElementById('chkobjObligacionMandatos');
+            chkobjObligacionMandatos.checked = true;
+            _renderObligacionMandatos.frm.find("#divObligacionMandatos").show();
+            }
+
+        _renderObligacionMandatos.fnInitDataTable_Detail();
+    }
+
+    _renderObligacionMandatos.fnInitDataTable_Detail = function () {
+        var htmlMandatos = '';
+        var htmlObligMandatos = '';
+
+        for (var i = 0; i < _renderObligacionMandatos.listObligacionMandatos.length; i++) {
+            var item = _renderObligacionMandatos.listObligacionMandatos[i];
+            let cumplioMandato = item.CUMPLIO_MANDATO == "1" ? "selected" : "";
+            let noCumplioMandato = item.CUMPLIO_MANDATO == "0" ? "selected" : "";
+            let presentoInforme = item.PRESENTA_INFORME_IMPL == "1" ? "selected" : "";
+            let noPresentoInforme = item.PRESENTA_INFORME_IMPL == "0" ? "selected" : "";
+            let presentoInformePL = item.PRESENTA_INFORME_DP == "1" ? "selected" : "";
+            let noPresentoInformePL = item.PRESENTA_INFORME_DP == "0" ? "selected" : "";
+
+            htmlMandatos += '<tr>';
+            htmlMandatos += '   <td> <i class="fa fa-lg fa-window-close" style = "color:red;cursor:pointer;" title = "Eliminar" onclick = "_renderObligacionMandatos.fnDeleteMandato(\'' + item.COD_SECUENCIAL + '\',\'' + item.COD_INFORME + '\')" ></i></td>';
+
+            htmlMandatos += '   <td>' + (i + 1).toString() + '</td>';
+            htmlMandatos += '   <td>' + item.NUM_INFORME + '</td>';
+            htmlMandatos += '   <td>' + item.TH_NUMERO + '</td>';
+            htmlMandatos += '   <td>' + item.TITULAR_ACTUAL + '</td>';
+            htmlMandatos += '   <td>' + item.MODALIDAD + '</td>';
+            htmlMandatos += '</tr>';
+
+            htmlObligMandatos += '<tr>';
+            htmlObligMandatos += '   <td>' + (i + 1).toString() + '</td>';
+            htmlObligMandatos += '   <td>' + item.NUM_INFORME + '</td>';
+            htmlObligMandatos += '   <td>' + item.MANDATO + '</td>';
+            htmlObligMandatos += '   <td>' + item.PLAZO_IMPL_DIA + '</td>';
+            htmlObligMandatos += '   <td>' + item.PLAZO_INF_DIA + '</td>';
+            htmlObligMandatos += '   <td>';
+            htmlObligMandatos += '       <select id="cboCM_' + item.COD_SECUENCIAL + '_' + item.COD_INFORME + '" class="form-control form-control-sm" type="text" value=" " style="width:100%;">';
+            htmlObligMandatos += '            <option value="1" ' + cumplioMandato + '>Si</option>';
+            htmlObligMandatos += '            <option value="0" ' + noCumplioMandato + '>No</option>';
+            htmlObligMandatos += '       </select>';
+            htmlObligMandatos += '   </td>';
+            htmlObligMandatos += '   <td>';
+            htmlObligMandatos += '       <input id="txtOBS_' + item.COD_SECUENCIAL + '_' + item.COD_INFORME + '" class="form-control form-control-sm" type="text" maxlength = "300" maxlength = "300" onkeypress="return utilSigo.checkLetter(event)" value="' + item.OBSERVACION + '" style="width:100%;">';
+            htmlObligMandatos += '   </td>';
+            htmlObligMandatos += '   <td>';
+            htmlObligMandatos += '       <select id="cboPI_' + item.COD_SECUENCIAL + '_' + item.COD_INFORME + '" class="form-control form-control-sm" type="text" value=" " style="width:100%;">';
+            htmlObligMandatos += '            <option value="1" ' + presentoInforme + '>Si</option>';
+            htmlObligMandatos += '            <option value="0" ' + noPresentoInforme + '>No</option>';
+            htmlObligMandatos += '       </select>';
+            htmlObligMandatos += '   </td>';
+            htmlObligMandatos += '   <td>';
+            htmlObligMandatos += '       <select id="cboPIPL_' + item.COD_SECUENCIAL + '_' + item.COD_INFORME + '" class="form-control form-control-sm" type="text" value=" " style="width:100%;">';
+            htmlObligMandatos += '            <option value="1" ' + presentoInformePL + '>Si</option>';
+            htmlObligMandatos += '            <option value="0" ' + noPresentoInformePL + '>No</option>';
+            htmlObligMandatos += '       </select>';
+            htmlObligMandatos += '   </td>';
+            htmlObligMandatos += '   <td>';
+            htmlObligMandatos += '       <input id="txtPREFEC_' + item.COD_SECUENCIAL + '_' + item.COD_INFORME + '" class="form-control form-control-sm" placeholder = "dd/mm/aaaa" maxlength = "10" type="text" value="' + item.FECHA_PRESENT_INF + '" style="width:100%;" >';
+            htmlObligMandatos += '   </td>';
+            htmlObligMandatos += '</tr>';
+        }
+
+        $('#tbodyRenderMandatos').html(htmlMandatos);
+        $('#tbodyRenderObligMandatos').html(htmlObligMandatos);
+        _renderObligacionMandatos.fnInitFecha();
+    }
+
+    _renderObligacionMandatos.fnInitFecha = function () {
+        for (var i = 0; i < _renderObligacionMandatos.listObligacionMandatos.length; i++) {
+            var item = _renderObligacionMandatos.listObligacionMandatos[i];
+            let txtFecha = 'txtPREFEC_' + item.COD_SECUENCIAL + '_' + item.COD_INFORME;
+            $("#" + txtFecha).datepicker({ format: "dd/mm/yyyy", autoclose: true, language: 'es' });
+        }
+    }
+    _renderObligacionMandatos.fnGetListEliTABLA = function () { return _renderObligacionMandatos.tbEliTABLA }
+
+    $(document).ready(function () {
+
+         @foreach (var item in Model)
+         {
+                <text>
+        _renderObligacionMandatos.listObligacionMandatos.push({
+                    COD_SECUENCIAL: @item.COD_SECUENCIAL,
+                    COD_INFORME: "@item.COD_INFORME",
+                    NUM_INFORME: "@Html.Raw(item.NUM_INFORME)",
+                    TH_NUMERO: "@Html.Raw(item.TH_NUMERO)",
+                    TITULAR_ACTUAL: "@Html.Raw(item.TITULAR_ACTUAL)",
+                    MODALIDAD: "@Html.Raw(item.MODALIDAD)",
+                    MANDATO: "@Html.Raw(item.MANDATO)",
+                    PLAZO_IMPL_DIA: @item.PLAZO_IMPL_DIA,
+                    PLAZO_INF_DIA: @item.PLAZO_INF_DIA,
+                    CUMPLIO_MANDATO: @item.CUMPLIO_MANDATO,
+                    OBSERVACION: "@Html.Raw(item.OBSERVACION)",
+                    PRESENTA_INFORME_IMPL: @item.PRESENTA_INFORME_IMPL,
+                    PRESENTA_INFORME_DP: @item.PRESENTA_INFORME_DP,
+                    FECHA_PRESENT_INF: "@Html.Raw(item.FECHA_PRESENT_INF)",
+                    RegEstado: @item.RegEstado});
+            </text>
+             }
+
+        _renderObligacionMandatos.frm = $("#frmObligacionMandatos");
+        _renderObligacionMandatos.fnSelectRecom();
+        _renderObligacionMandatos.fnInitMandatos();
+         });
+
+    function isNumberKey(evt) {
+        var charCode = (evt.which) ? evt.which : evt.keyCode
+        if (charCode > 31 && (charCode < 48 || charCode > 57))
+            return false;
+        return true;
+    }
+</script>
+
+<div id="frmObligacionMandatos">
+    <div class="card-header text-small">Evaluación de cumplimiento de Mandatos</div>
+    <div><br /></div>
+    <div class="form-row">
+        <div class="form-group col-md-4">
+            <label for="chkobjObligacionMandatos" class="text-small">¿Evaluación de cumplimiento de Mandatos?</label>
+        </div>
+        <div class="form-group col-md-6">
+            <input class="form-check-input" data-val="true" data-val-required="El campo chkMCorrectivas es obligatorio."
+                   id="chkobjObligacionMandatos" name="chkobjObligacionMandatos" onchange="_renderObligacionMandatos.fnSelectRecom()"
+                   style="width:15px;height:16px;" type="checkbox" value="true">
+        </div>
+        <div class="form-group col-md-2">
+        </div>
+    </div>
+    <div id="divObligacionMandatos" style="display:none;">
+        <div class="mb-2"><b>Documento que recomienda la disposición de mandato(s):</b></div>
+
+        <div class="form-row">
+            <div class="table-responsive">
+                <table id="tbRenderBuscarMandatos" style="width:100%;margin:0px !important;" class="table table-hover table-bordered">
+                    <thead>
+                        <tr>
+                            <th colspan="4" class="text-sm-left">
+                                <div class="form-inline">
+                                    <i class="fa mx-2 fa-lg fa-file-o" style="cursor:pointer;" onclick="_renderObligacionMandatos.fnBuscarMandatos();" data-toggle="tooltip" data-placement="right" title="Agregar supervisor"></i>
+                                    <strong>Agregar Informe</strong>
+                                </div>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="form-row">
+            <div class="table-responsive">
+                <table id="tbRenderMandatos" style="width:100%;margin:0px !important;" class="table table-hover table-bordered">
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th>N°</th>
+                            <th>N° INFORME</th>
+                            <th>TÍTULO HABILITANTE</th>
+                            <th>TITULAR</th>
+                            <th>MODALIDAD</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tbodyRenderMandatos"></tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="form-row">
+            <div class="table-responsive">
+                <table id="tbRenderObligMandatos" style="width:100%;margin:0px !important;" class="table table-hover table-bordered">
+                    <thead>
+                        <tr>
+                            <th>N°</th>
+                            <th>N° INFORME</th>
+                            <th>MANDATO</th>
+                            <th>IMPL. DIAS</th>
+                            <th>INFORME DIAS</th>
+                            <th>CUMPLIÓ EL MANDATO</th>
+                            <th>OBSERVACIÓN</th>
+                            <th>PRESENTÓ INFORME DE IMP. DEL MANDATO</th>
+                            <th>PRESENTÓ INFORME DENTRO DEL PLAZO</th>
+                            <th>FECHA DE PRESENTACIÓN DEL INFORME</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tbodyRenderObligMandatos"></tbody>
+                </table>
+            </div>
+        </div>
+
+
+
+    </div>
+</div>

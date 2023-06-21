@@ -40,6 +40,7 @@
     ManInforme_AddEditExSitu.fnLoadData('@Html.Raw(Json.Encode(@Model.tbManejoRegistro))', "DataCautManRegistro");
     ManInforme_AddEditExSitu.fnLoadData('@Html.Raw(Json.Encode(@Model.tbEnriquecimientoAmb))', "DataCautEnriquecimientoAmb");
     ManInforme_AddEditExSitu.fnLoadData('@Html.Raw(Json.Encode(@Model.tbEspecieReproducida))', "DataCautEspecieReprod");
+    ManInforme_AddEditExSitu.fnLoadData('@Html.Raw(Json.Encode(@Model.tbTraslocEspec))', "DataCautTraslocEspec");
     ManInforme_AddEditExSitu.fnLoadData('@Html.Raw(Json.Encode(@Model.tbEspecieCapturada))', "DataCautEspecieCapturada");
     ManInforme_AddEditExSitu.fnLoadData('@Html.Raw(Json.Encode(@Model.tbCapacitacion))', "DataCautCapacitacion");
     ManInforme_AddEditExSitu.fnLoadData('@Html.Raw(Json.Encode(@Model.tbEspecieNacimiento))', "DataCautEspecieNacimiento");
@@ -49,7 +50,7 @@
     ManInforme_AddEditExSitu.fnLoadData('@Html.Raw(Json.Encode(@Model.tbActividadEducacion))', "DataCautActEducacion");
     ManInforme_AddEditExSitu.fnLoadData('@Html.Raw(Json.Encode(@Model.tbActividadInvestigacion))', "DataCautActInvestigacion");
     ManInforme_AddEditExSitu.fnLoadData('@Html.Raw(Json.Encode(@Model.tbEvalZoObservatorio))', "DataEvalZoObservatorio");
-    ManInforme_AddEditExSitu.fnLoadData('@Html.Raw(Json.Encode(@Model.tbBalanceIngEgr))', "DataCautBalanceIngEgr");
+    ManInforme_AddEditExSitu.fnLoadData('@Html.Raw(Json.Encode(@Model.tbBalanceIngEgr))', "DataCautBalanceIngEgr");    
 </script>
 
 <link href="~/Areas/Supervision/css/ManInforme/AddEdit.css" rel="stylesheet" />
@@ -584,7 +585,7 @@
                                                 <table id="tbInfrArea_Exhibicion" style="width:100%" class="table table-hover table-bordered">
                                                     <thead>
                                                         <tr>
-                                                            <th colspan="8" class="text-sm-left">
+                                                            <th colspan="10" class="text-sm-left">
                                                                 <div class="form-inline">
                                                                     <i class="fa mx-2 fa-lg fa-file-o" style="cursor:pointer;" onclick="ManInforme_AddEditExSitu.fnAddEditArea('0000001', '');" data-toggle="tooltip" data-placement="top" title="Nuevo"></i>
                                                                     <i class="fa mx-2 fa-lg fa-window-close-o" style="cursor:pointer;" onclick="ManInforme_AddEditExSitu.fnDeleteAllArea('0000001');" data-toggle="tooltip" data-placement="top" title="Eliminar Todos"></i>
@@ -612,7 +613,7 @@
                                                 <table id="tbInfrArea_Crianza" style="width:100%" class="table table-hover table-bordered">
                                                     <thead>
                                                         <tr>
-                                                            <th colspan="8" class="text-sm-left">
+                                                            <th colspan="10" class="text-sm-left">
                                                                 <div class="form-inline">
                                                                     <i class="fa mx-2 fa-lg fa-file-o" style="cursor:pointer;" onclick="ManInforme_AddEditExSitu.fnAddEditArea('0000002', '');" data-toggle="tooltip" data-placement="top" title="Nuevo"></i>
                                                                     <i class="fa mx-2 fa-lg fa-window-close-o" style="cursor:pointer;" onclick="ManInforme_AddEditExSitu.fnDeleteAllArea('0000002');" data-toggle="tooltip" data-placement="top" title="Eliminar Todos"></i>
@@ -640,7 +641,7 @@
                                                 <table id="tbInfrArea_Preparacion" style="width:100%" class="table table-hover table-bordered">
                                                     <thead>
                                                         <tr>
-                                                            <th colspan="8" class="text-sm-left">
+                                                            <th colspan="10" class="text-sm-left">
                                                                 <div class="form-inline">
                                                                     <i class="fa mx-2 fa-lg fa-file-o" style="cursor:pointer;" onclick="ManInforme_AddEditExSitu.fnAddEditArea('0000003', '');" data-toggle="tooltip" data-placement="top" title="Nuevo"></i>
                                                                     <i class="fa mx-2 fa-lg fa-window-close-o" style="cursor:pointer;" onclick="ManInforme_AddEditExSitu.fnDeleteAllArea('0000003');" data-toggle="tooltip" data-placement="top" title="Eliminar Todos"></i>
@@ -668,7 +669,7 @@
                                                 <table id="tbInfrArea_Almacen" style="width:100%" class="table table-hover table-bordered">
                                                     <thead>
                                                         <tr>
-                                                            <th colspan="8" class="text-sm-left">
+                                                            <th colspan="10" class="text-sm-left">
                                                                 <div class="form-inline">
                                                                     <i class="fa mx-2 fa-lg fa-file-o" style="cursor:pointer;" onclick="ManInforme_AddEditExSitu.fnAddEditArea('0000004', '');" data-toggle="tooltip" data-placement="top" title="Nuevo"></i>
                                                                     <i class="fa mx-2 fa-lg fa-window-close-o" style="cursor:pointer;" onclick="ManInforme_AddEditExSitu.fnDeleteAllArea('0000004');" data-toggle="tooltip" data-placement="top" title="Eliminar Todos"></i>
@@ -696,7 +697,7 @@
                                                 <table id="tbInfrArea_Topico" style="width:100%" class="table table-hover table-bordered">
                                                     <thead>
                                                         <tr>
-                                                            <th colspan="8" class="text-sm-left">
+                                                            <th colspan="10" class="text-sm-left">
                                                                 <div class="form-inline">
                                                                     <i class="fa mx-2 fa-lg fa-file-o" style="cursor:pointer;" onclick="ManInforme_AddEditExSitu.fnAddEditArea('0000005', '');" data-toggle="tooltip" data-placement="top" title="Nuevo"></i>
                                                                     <i class="fa mx-2 fa-lg fa-window-close-o" style="cursor:pointer;" onclick="ManInforme_AddEditExSitu.fnDeleteAllArea('0000005');" data-toggle="tooltip" data-placement="top" title="Eliminar Todos"></i>
@@ -724,7 +725,7 @@
                                                 <table id="tbInfrArea_Cuarentena" style="width:100%" class="table table-hover table-bordered">
                                                     <thead>
                                                         <tr>
-                                                            <th colspan="8" class="text-sm-left">
+                                                            <th colspan="10" class="text-sm-left">
                                                                 <div class="form-inline">
                                                                     <i class="fa mx-2 fa-lg fa-file-o" style="cursor:pointer;" onclick="ManInforme_AddEditExSitu.fnAddEditArea('0000006', '');" data-toggle="tooltip" data-placement="top" title="Nuevo"></i>
                                                                     <i class="fa mx-2 fa-lg fa-window-close-o" style="cursor:pointer;" onclick="ManInforme_AddEditExSitu.fnDeleteAllArea('0000006');" data-toggle="tooltip" data-placement="top" title="Eliminar Todos"></i>
@@ -1277,6 +1278,38 @@
                                             </div>
                                         </div>
                                     </div>
+                                    <div class="card-header text-small">Programa de Traslocación de Especímenes</div>
+                                    <div class="card-body">
+                                        <div class="form-row">
+                                            <div class="form-group col-md-2">
+                                                <label for="ddlTraslocEspecId" class="text-small">Realiza Traslocación de Especímenes</label>
+                                                @Html.DropDownListFor(m => m.ddlTraslocEspecId, new SelectList(Model.ddlOpcionSiNo, "Value", "Text"), new { @class = "form-control form-control-sm" })
+                                            </div>
+                                            <div class="form-group col-md-2">
+                                                <label for="ddlLiberEspecId" class="text-small">Ha Liberado Especímenes</label>
+                                                @Html.DropDownListFor(m => m.ddlLiberEspecId, new SelectList(Model.ddlOpcionSiNo, "Value", "Text"), new { @class = "form-control form-control-sm" })
+                                            </div>
+                                        </div>
+                                        <div class="form-row">
+                                            <div class="table-responsive">
+                                                <table id="tbCauti_TraslocEspec" style="width:100%" class="table table-hover table-bordered">
+                                                    <thead>
+                                                        <tr>
+                                                            <th colspan="8" class="text-sm-left">
+                                                                <div class="form-inline">
+                                                                    <i class="fa mx-2 fa-lg fa-file-o" style="cursor:pointer;" onclick="ManInforme_AddEditExSitu.fnAddEditTraslocEspec('TRASLOC_ESPECIMENES', '');" data-toggle="tooltip" data-placement="top" title="Nuevo"></i>
+                                                                    <strong>
+                                                                        Registro de Traslocación de Especímenes
+                                                                    </strong>
+                                                                </div>
+                                                            </th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody></tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
                                     <div class="card-header text-small">Programa de Colecta y/o Captura</div>
                                     <div class="card-body">
                                         <div class="form-row">
@@ -1520,8 +1553,13 @@
                                 </div>
                             </div>
                             <div class="tab-pane fade show" id="navObligTitular" role="tabpanel" aria-labelledby="nav-home-tab">
-                                <div class="card">
-                                    @Html.Partial("~/Areas/Supervision/Views/ManInforme/Render/_renderObligacionTitular.cshtml", Model.tbObligacionTitular)
+                                <div class="card-body">
+                                    <div class="form-row">
+                                        @Html.Partial("~/Areas/Supervision/Views/ManInforme/Render/_renderObligacionTitular.cshtml", Model.tbObligacionTitular)
+                                    </div>
+                                    <div class="">
+                                        @Html.Partial("~/Areas/Supervision/Views/ManInforme/Render/_renderObligacionMandatos.cshtml", Model.tbObligMandatos)
+                                    </div>
                                 </div>
                             </div>
                             <div class="tab-pane fade show" id="navIncidencias" role="tabpanel" aria-labelledby="nav-home-tab">
@@ -1712,6 +1750,7 @@
 
     @* Para el control genérico de personas *@
     <div class="modal fade hide" id="mdlBuscarPersona" role="dialog"></div>
+    <div class="modal fade hide" id="mdlBuscarObligacionMandatos" role="dialog"></div>
     <div class="modal fade" id="modalAddEditPersona" tabindex="-1" role="dialog"></div>
     <div class="modal fade hide" id="personaUbigeoModal" role="dialog"></div>
 </div>

@@ -859,6 +859,9 @@
                                     @Html.Partial("~/Areas/Supervision/Views/ManInforme/Render/_renderObligContractual.cshtml", Model.tbObligacion)
                                     @Html.Partial("~/Areas/Supervision/Views/ManInforme/Render/_renderObligacionTitular.cshtml", Model.tbObligTitular)
                                 </div>
+                                <div class="">
+                                    @Html.Partial("~/Areas/Supervision/Views/ManInforme/Render/_renderObligacionMandatos.cshtml", Model.tbObligMandatos)
+                                </div>
                             </div>
                             <div class="tab-pane fade show" id="navConclusion" role="tabpanel" aria-labelledby="nav-home-tab">
                                 <div class="card">
@@ -1030,4 +1033,5 @@
     <div class="modal fade hide" id="mdlBuscarPersona" role="dialog"></div>
     <div class="modal fade" id="modalAddEditPersona" tabindex="-1" role="dialog"></div>
     <div class="modal fade hide" id="personaUbigeoModal" role="dialog"></div>
+    <div class="modal fade hide" id="mdlBuscarObligacionMandatos" role="dialog"></div>
 </div>

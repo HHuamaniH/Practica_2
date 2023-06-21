@@ -47,6 +47,10 @@ namespace CapaEntidad.DOC
         public Decimal ALTURA { get; set; }
         [Description("AREA")]
         public Decimal AREA { get; set; }
+        [Description("COORDENADA_ESTE")]
+        public Decimal COORDENADA_ESTE { get; set; }
+        [Description("COORDENADA_NORTE")]
+        public Decimal COORDENADA_NORTE { get; set; }
 
         [Category("LIST"), Description("ListISupervision_exsitu_recinto")]
         public List<Ent_ISUPERVISION_EXSITU_INFRA_AREA> ListISupervision_exsitu_recinto
@@ -113,6 +117,14 @@ namespace CapaEntidad.DOC
 
         [Description("DESCRIPCION")]
         public String DESCRIPCION { get; set; }
+        [Description("ZONA_LIBERACION")]
+        public String ZONA_LIBERACION { get; set; }
+        [Description("REGISTRO_SEG")]
+        public String REGISTRO_SEG { get; set; }
+        [Description("NUM_INDIVIDUOS")]
+        public Int32 NUM_INDIVIDUOS { get; set; }
+        [Description("ANIO")]
+        public Int32 ANIO { get; set; }
 
         [Description("FRECUENCIA_COD_TDESCRIPTIVA")]
         public String FRECUENCIA_COD_TDESCRIPTIVA { get; set; }
@@ -270,8 +282,12 @@ namespace CapaEntidad.DOC
             NUM_ICAPTURADOS = -1;
             RegEstado = -1;
             PROCEDENCIA_NUM_INDIVIDUOS = -1;
+            NUM_INDIVIDUOS = -1;
+            ANIO = -1;
             ESTADO = -1;
             NUM_BENEFICIADOS = -1;
+            COORDENADA_ESTE = -1;
+            COORDENADA_NORTE = -1;
         }
         #endregion
     }
