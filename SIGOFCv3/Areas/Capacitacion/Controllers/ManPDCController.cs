@@ -96,7 +96,8 @@ namespace SIGOFCv3.Areas.Capacitacion.Controllers
         {
             ListResult result = new ListResult();
             CapaLogica.DOC.Log_CAPACITACION exeBus = new CapaLogica.DOC.Log_CAPACITACION();
-            result = exeBus.DescargaUniversoPDC(vmReport.list_universoPDC);
+            //result = exeBus.DescargaUniversoPDC(vmReport.list_universoPDC);
+            result = exeBus.DesacargarExcelOpcion2(vmReport.list_universoPDC);
             return Json(result);
         }
 

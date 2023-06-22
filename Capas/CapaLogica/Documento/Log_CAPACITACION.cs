@@ -1,5 +1,8 @@
 using CapaEntidad.DOC;
 using CapaEntidad.ViewModel;
+using DocumentFormat.OpenXml;
+using DocumentFormat.OpenXml.Packaging;
+using DocumentFormat.OpenXml.Spreadsheet;
 using Oracle.ManagedDataAccess.Client;
 using System;
 using System.Collections.Generic;
@@ -984,7 +987,184 @@ namespace CapaLogica.DOC
                 return String.Empty;
             }
         }
+        public ListResult DesacargarExcelOpcion2(List<CEntidadPDC> universo)
+        {
+            ListResult result = new ListResult();
+            try
+            {
+                String RutaReporteSeguimiento = HttpContext.Current.Server.MapPath("~/Archivos/Plantilla/");
+                string nombreFile = "";
+                nombreFile = DateTime.Now.Year.ToString() + DateTime.Now.Month.ToString() + DateTime.Now.Day.ToString() + DateTime.Now.Hour.ToString() + DateTime.Now.Minute.ToString() + DateTime.Now.Second.ToString() + DateTime.Now.Millisecond.ToString() + ".xlsx";
+                string rutaExcel = RutaReporteSeguimiento + nombreFile;
+                File.Copy(RutaReporteSeguimiento + "Report_UniversoCapacitablePDC.xlsx", rutaExcel);
+                using(SpreadsheetDocument spreadsheetDocument = SpreadsheetDocument.Open(rutaExcel, true))
+                {
+                    // Obtener la hoja de cálculo
+                    Sheet sheet = spreadsheetDocument.WorkbookPart.Workbook.Sheets.GetFirstChild<Sheet>();
 
+                    // Obtener la referencia a la hoja de cálculo
+                    WorksheetPart worksheetPart = (WorksheetPart)spreadsheetDocument.WorkbookPart.GetPartById(sheet.Id);
+
+                    // Obtener la celda de inicio para la inserción de datos
+                    Cell startCell = worksheetPart.Worksheet.Descendants<Cell>().FirstOrDefault(c => c.CellReference.Value == "A");
+
+                    int rowIndex = 2; // int.Parse(startCell.CellReference.Value.Substring(1));
+
+                    foreach (CEntidadPDC dato in universo)
+                    {
+                 
+                        // Obtener la celda actual
+                        Cell cell1 = worksheetPart.Worksheet.Descendants<Cell>().FirstOrDefault(c => c.CellReference.Value == "A" + rowIndex);
+                        Cell cell2 = worksheetPart.Worksheet.Descendants<Cell>().FirstOrDefault(c => c.CellReference.Value == "B" + rowIndex);
+                        Cell cell3 = worksheetPart.Worksheet.Descendants<Cell>().FirstOrDefault(c => c.CellReference.Value == "C" + rowIndex);
+                        Cell cell4 = worksheetPart.Worksheet.Descendants<Cell>().FirstOrDefault(c => c.CellReference.Value == "D" + rowIndex);
+                        Cell cell5 = worksheetPart.Worksheet.Descendants<Cell>().FirstOrDefault(c => c.CellReference.Value == "E" + rowIndex);
+                        Cell cell6 = worksheetPart.Worksheet.Descendants<Cell>().FirstOrDefault(c => c.CellReference.Value == "F" + rowIndex);
+                        Cell cell7 = worksheetPart.Worksheet.Descendants<Cell>().FirstOrDefault(c => c.CellReference.Value == "G" + rowIndex);
+                        Cell cell8 = worksheetPart.Worksheet.Descendants<Cell>().FirstOrDefault(c => c.CellReference.Value == "H" + rowIndex);
+                        Cell cell9 = worksheetPart.Worksheet.Descendants<Cell>().FirstOrDefault(c => c.CellReference.Value == "I" + rowIndex);
+                        Cell cell10 = worksheetPart.Worksheet.Descendants<Cell>().FirstOrDefault(c => c.CellReference.Value == "J" + rowIndex);
+                        Cell cell11 = worksheetPart.Worksheet.Descendants<Cell>().FirstOrDefault(c => c.CellReference.Value == "K" + rowIndex);
+                        Cell cell12 = worksheetPart.Worksheet.Descendants<Cell>().FirstOrDefault(c => c.CellReference.Value == "L" + rowIndex);
+                        Cell cell13 = worksheetPart.Worksheet.Descendants<Cell>().FirstOrDefault(c => c.CellReference.Value == "M" + rowIndex);
+                        Cell cell14 = worksheetPart.Worksheet.Descendants<Cell>().FirstOrDefault(c => c.CellReference.Value == "N" + rowIndex);
+                        Cell cell15 = worksheetPart.Worksheet.Descendants<Cell>().FirstOrDefault(c => c.CellReference.Value == "O" + rowIndex);
+                        Cell cell16 = worksheetPart.Worksheet.Descendants<Cell>().FirstOrDefault(c => c.CellReference.Value == "P" + rowIndex);
+                        Cell cell17 = worksheetPart.Worksheet.Descendants<Cell>().FirstOrDefault(c => c.CellReference.Value == "Q" + rowIndex);
+                        Cell cell18 = worksheetPart.Worksheet.Descendants<Cell>().FirstOrDefault(c => c.CellReference.Value == "R" + rowIndex);
+                        Cell cell19 = worksheetPart.Worksheet.Descendants<Cell>().FirstOrDefault(c => c.CellReference.Value == "S" + rowIndex);
+                        Cell cell20 = worksheetPart.Worksheet.Descendants<Cell>().FirstOrDefault(c => c.CellReference.Value == "T" + rowIndex);
+                        Cell cell21 = worksheetPart.Worksheet.Descendants<Cell>().FirstOrDefault(c => c.CellReference.Value == "U" + rowIndex);
+                        Cell cell22 = worksheetPart.Worksheet.Descendants<Cell>().FirstOrDefault(c => c.CellReference.Value == "V" + rowIndex);
+                        Cell cell23 = worksheetPart.Worksheet.Descendants<Cell>().FirstOrDefault(c => c.CellReference.Value == "W" + rowIndex);
+                        Cell cell24 = worksheetPart.Worksheet.Descendants<Cell>().FirstOrDefault(c => c.CellReference.Value == "X" + rowIndex);
+                        Cell cell25 = worksheetPart.Worksheet.Descendants<Cell>().FirstOrDefault(c => c.CellReference.Value == "Y" + rowIndex);
+                        Cell cell26 = worksheetPart.Worksheet.Descendants<Cell>().FirstOrDefault(c => c.CellReference.Value == "Z" + rowIndex);
+                        Cell cell27 = worksheetPart.Worksheet.Descendants<Cell>().FirstOrDefault(c => c.CellReference.Value == "AA" + rowIndex);
+                        Cell cell28 = worksheetPart.Worksheet.Descendants<Cell>().FirstOrDefault(c => c.CellReference.Value == "AB" + rowIndex);
+                        Cell cell29 = worksheetPart.Worksheet.Descendants<Cell>().FirstOrDefault(c => c.CellReference.Value == "AC" + rowIndex);
+                        Cell cell30 = worksheetPart.Worksheet.Descendants<Cell>().FirstOrDefault(c => c.CellReference.Value == "AD" + rowIndex);
+                        Cell cell31 = worksheetPart.Worksheet.Descendants<Cell>().FirstOrDefault(c => c.CellReference.Value == "AE" + rowIndex);
+                        Cell cell32 = worksheetPart.Worksheet.Descendants<Cell>().FirstOrDefault(c => c.CellReference.Value == "AF" + rowIndex);
+                        Cell cell33 = worksheetPart.Worksheet.Descendants<Cell>().FirstOrDefault(c => c.CellReference.Value == "AG" + rowIndex);
+
+
+                        // Insertar el dato en la celda actual
+                        cell1.CellValue = new CellValue(dato.OFICINA_DESCONCENTRADA);
+                        cell1.DataType = new EnumValue<CellValues>(CellValues.String);
+
+                        cell2.CellValue = new CellValue(dato.TITULO);
+                        cell2.DataType = new EnumValue<CellValues>(CellValues.String);
+
+                        cell3.CellValue = new CellValue(dato.MODALIDAD);
+                        cell3.DataType = new EnumValue<CellValues>(CellValues.String);
+
+                        cell4.CellValue = new CellValue(dato.TITULAR);
+                        cell4.DataType = new EnumValue<CellValues>(CellValues.String);
+
+                        cell5.CellValue = new CellValue(dato.REP_LEGAL);
+                        cell5.DataType = new EnumValue<CellValues>(CellValues.String);
+
+                        cell6.CellValue = new CellValue(dato.DEPARTAMENTO);
+                        cell6.DataType = new EnumValue<CellValues>(CellValues.String);
+
+                        cell7.CellValue = new CellValue(dato.PROVINCIA);
+                        cell7.DataType = new EnumValue<CellValues>(CellValues.String);
+
+                        cell8.CellValue = new CellValue(dato.DISTRITO);
+                        cell8.DataType = new EnumValue<CellValues>(CellValues.String);
+
+                        cell9.CellValue = new CellValue(dato.FECHA_VIGENCIA);
+                        cell9.DataType = new EnumValue<CellValues>(CellValues.String);
+
+                        cell10.CellValue = new CellValue(dato.FECHA_CORTE);
+                        cell10.DataType = new EnumValue<CellValues>(CellValues.String);
+
+                        cell11.CellValue = new CellValue(dato.AREA);
+                        cell11.DataType = new EnumValue<CellValues>(CellValues.String);
+
+                        cell12.CellValue = new CellValue(dato.ULTIMO_PLAN);
+                        cell12.DataType = new EnumValue<CellValues>(CellValues.String);
+
+                        cell13.CellValue = new CellValue(dato.ROJO);
+                        cell13.DataType = new EnumValue<CellValues>(CellValues.String);
+
+                        cell14.CellValue = new CellValue(dato.VERDE);
+                        cell14.DataType = new EnumValue<CellValues>(CellValues.String);
+
+                        cell15.CellValue = new CellValue(dato.ALERTA);
+                        cell15.DataType = new EnumValue<CellValues>(CellValues.String);
+
+                        cell16.CellValue = new CellValue(dato.PASPEQ);
+                        cell16.DataType = new EnumValue<CellValues>(CellValues.String);
+
+                        cell17.CellValue = new CellValue(dato.PASPEQ_ENFOQUE);
+                        cell17.DataType = new EnumValue<CellValues>(CellValues.String);
+
+                        cell18.CellValue = new CellValue(dato.FECHA_SUPERVISION);
+                        cell18.DataType = new EnumValue<CellValues>(CellValues.String);
+
+                        cell19.CellValue = new CellValue(dato.S_VOL_APROB);
+                        cell19.DataType = new EnumValue<CellValues>(CellValues.String);
+
+                        cell20.CellValue = new CellValue(dato.S_VOL_MOV);
+                        cell20.DataType = new EnumValue<CellValues>(CellValues.String);
+
+                        cell21.CellValue = new CellValue(dato.S_VOL_INJUST);
+                        cell21.DataType = new EnumValue<CellValues>(CellValues.String);
+
+                        cell22.CellValue = new CellValue(dato.INFRACCIONES);
+                        cell22.DataType = new EnumValue<CellValues>(CellValues.String);
+
+                        cell23.CellValue = new CellValue(dato.MULTAS);
+                        cell23.DataType = new EnumValue<CellValues>(CellValues.String);
+
+                        cell24.CellValue = new CellValue(dato.ESTADO_PAU);
+                        cell24.DataType = new EnumValue<CellValues>(CellValues.String);
+
+                        cell25.CellValue = new CellValue(dato.ESTADO_PAGO);
+                        cell25.DataType = new EnumValue<CellValues>(CellValues.String);
+
+                        cell26.CellValue = new CellValue(dato.MODALIDAD_PAGO);
+                        cell26.DataType = new EnumValue<CellValues>(CellValues.String);
+
+                        cell27.CellValue = new CellValue(dato.MEC_COMP);
+                        cell27.DataType = new EnumValue<CellValues>(CellValues.String);
+
+                        cell28.CellValue = new CellValue(dato.N_CAPACITACION);
+                        cell28.DataType = new EnumValue<CellValues>(CellValues.String);
+
+                        cell29.CellValue = new CellValue(dato.FECHA_ULT_CAP);
+                        cell29.DataType = new EnumValue<CellValues>(CellValues.String);
+
+                        cell30.CellValue = new CellValue(dato.TEMA_ULT_CAP);
+                        cell30.DataType = new EnumValue<CellValues>(CellValues.String);
+
+                        cell31.CellValue = new CellValue(dato.TEMA_MOCHILA_CAP);
+                        cell31.DataType = new EnumValue<CellValues>(CellValues.String);
+                        
+                        cell32.CellValue = new CellValue(dato.TEMA_MOCHILA_ENT);
+                        cell32.DataType = new EnumValue<CellValues>(CellValues.String);
+                        
+                        cell33.CellValue = new CellValue(dato.PRIORIDAD);
+                        cell33.DataType = new EnumValue<CellValues>(CellValues.String);
+
+                        rowIndex++;
+                    }
+
+                    // Guardar los cambios en el archivo Excel
+                    worksheetPart.Worksheet.Save();
+                }
+                result.success = true;
+                result.msj = nombreFile;
+            }
+            catch (Exception ex)
+            {
+                result.success = false;
+                result.msj = ex.Message;
+            }
+            return result;
+        }
         /// <summary>
         /// descarga de los datos del universo
         /// </summary>
@@ -1029,40 +1209,7 @@ namespace CapaLogica.DOC
                         {
                             insertar = "";
                             insertar = contador++.ToString();  //a
-                            insertar = insertar + ",'" + CleanInput(listaInf.OFICINA_DESCONCENTRADA.ToString()) + "'";//B
-                            insertar = insertar + ",'" + CleanInput(listaInf.TITULO.ToString()) + "'";//C
-                            insertar = insertar + ",'" + CleanInput(listaInf.MODALIDAD.ToString()) + "'";//D
-                            insertar = insertar + ",'" + CleanInput(listaInf.TITULAR.ToString()) + "'";//E
-                            insertar = insertar + ",'" + CleanInput(listaInf.REP_LEGAL.ToString()) + "'";//F
-                            insertar = insertar + ",'" + CleanInput(listaInf.DEPARTAMENTO.ToString()) + "'";//G
-                            insertar = insertar + ",'" + CleanInput(listaInf.PROVINCIA.ToString()) + "'";//H
-                            insertar = insertar + ",'" + CleanInput(listaInf.DISTRITO.ToString()) + "'";//I
-                            insertar = insertar + ",'" + CleanInput(listaInf.FECHA_VIGENCIA.ToString()) + "'";//J
-                            insertar = insertar + ",'" + CleanInput(listaInf.FECHA_CORTE.ToString()) + "'";//K
-                            insertar = insertar + ",'" + CleanInput(listaInf.AREA.ToString()) + "'";//L
-                            insertar = insertar + ",'" + listaInf.ULTIMO_PLAN.ToString() + "'";//M
-                            insertar = insertar + ",'" + CleanInput(listaInf.ROJO.ToString()) + "'";//N
-                            insertar = insertar + ",'" + CleanInput(listaInf.VERDE.ToString()) + "'";//O
-                            insertar = insertar + ",'" + CleanInput(listaInf.ALERTA.ToString()) + "'";//P
-                            insertar = insertar + ",'" + CleanInput(listaInf.PASPEQ.ToString()) + "'";//Q
-                            insertar = insertar + ",'" + CleanInput(listaInf.PASPEQ_ENFOQUE.ToString()) + "'";//R
-                            insertar = insertar + ",'" + CleanInput(listaInf.FECHA_SUPERVISION.ToString()) + "'";//S
-                            insertar = insertar + ",'" + CleanInput(listaInf.S_VOL_APROB.ToString()) + "'";//T
-                            insertar = insertar + ",'" + CleanInput(listaInf.S_VOL_MOV.ToString()) + "'";//U
-                            insertar = insertar + ",'" + CleanInput(listaInf.S_VOL_INJUST.ToString()) + "'";//V
-                            insertar = insertar + ",'" + listaInf.INFRACCIONES.ToString() + "'";//W
-                            insertar = insertar + ",'" + CleanInput(listaInf.MULTAS.ToString()) + "'";//X
-                            insertar = insertar + ",'" + CleanInput(listaInf.ESTADO_PAU.ToString()) + "'";//Y
-                            insertar = insertar + ",'" + CleanInput(listaInf.ESTADO_PAGO.ToString()) + "'"; //z
-                            insertar = insertar + ",'" + CleanInput(listaInf.MODALIDAD_PAGO.ToString()) + "'";//aa
-                            insertar = insertar + ",'" + CleanInput(listaInf.MEC_COMP.ToString()) + "'";//ab
-                            insertar = insertar + ",'" + CleanInput(listaInf.N_CAPACITACION.ToString()) + "'";//ac
-                            insertar = insertar + ",'" + CleanInput(listaInf.FECHA_ULT_CAP.ToString()) + "'";//ad
-                            insertar = insertar + ",'" + CleanInput(listaInf.TEMA_ULT_CAP.ToString()) + "'";//ae
-                            insertar = insertar + ",'" + CleanInput(listaInf.TEMA_MOCHILA_CAP.ToString()) + "'";//af
-                            insertar = insertar + ",'" + CleanInput(listaInf.TEMA_MOCHILA_ENT.ToString()) + "'";//ah
-                            insertar = insertar + ",'" + CleanInput(listaInf.PRIORIDAD.ToString()) + "'";//ah
-                            /*
+                           
                             insertar = insertar + ",'" + CleanInput(listaInf.OFICINA_DESCONCENTRADA.ToString()) + "'";//B
                             insertar = insertar + ",'" + CleanInput(listaInf.TITULO.ToString()) + "'";//C
                             insertar = insertar + ",'" + CleanInput(listaInf.MODALIDAD.ToString()) + "'";//D
@@ -1097,7 +1244,6 @@ namespace CapaLogica.DOC
                             insertar = insertar + ",'" + CleanInput(listaInf.TEMA_MOCHILA_ENT.ToString()) + "'";//ah
                             insertar = insertar + ",'" + CleanInput(listaInf.PRIORIDAD.ToString() )+ "'";//ah
 
-                          */
 
                             cmd.CommandText = "INSERT INTO [Datos$A" + i.ToString().Trim() + ":AH" + (listUniversoPDC.Count + 1).ToString() + "] VALUES (" + insertar + ")";
                             cmd.ExecuteNonQuery();
