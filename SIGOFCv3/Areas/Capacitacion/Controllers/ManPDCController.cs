@@ -1,6 +1,10 @@
 ﻿using CapaEntidad.DOC;
 using CapaEntidad.ViewModel;
 using CapaLogica.DOC;
+using OfficeOpenXml;
+using SIGOFCv3.Models;
+using SIGOFCv3.Models.DataTables;
+using SIGOFCv3.Reportes.General;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,64 +17,151 @@ namespace SIGOFCv3.Areas.Capacitacion.Controllers
     public class ManPDCController : Controller
     {
         public static VM vmReport = new VM();
+        public static VM busqueda = new VM();
 
         // GET: Capacitacion/ManPDC
         public ActionResult IndexPDC()
         {
-            VM_ReporteGeneral model = new VM_ReporteGeneral();
+            vmReport = new VM();
             Log_BUSQUEDA exeBus = new Log_BUSQUEDA();
-            model.lstChkDepartamento = exeBus.RegMostComboIndividual("DEPARTAMENTO", "").Where(m => m.Value != "00").Select(i => new VM_Chk { Value = i.Value, Text = i.Text });
-            model.lstChkOd = exeBus.RegMostComboIndividual("OD", "").Where(m => m.Value != "0000000").Select(i => new VM_Chk { Value = i.Value, Text = i.Text });
+            vmReport.lstChkDepartamento = exeBus.RegMostComboIndividual("DEPARTAMENTO", "").Where(m => m.Value != "00").Select(i => new VM_Chk { Value = i.Value, Text = i.Text });
+            vmReport.lstChkOd = exeBus.RegMostComboIndividual("OD", "").Where(m => m.Value != "0000000").Select(i => new VM_Chk { Value = i.Value, Text = i.Text });
 
-            return View(model);
+            return View(vmReport);
         }
 
         public ActionResult RUniverso(String[] oficinas, String[] departamento, string titulo, string titular)
         {
-            vmReport = new VM_ReporteGeneral();
-            vmReport.list_universoPDC = new List<CapaEntidad.DOC.Ent_ReportePDC>();
-            CapaLogica.DOC.Log_CAPACITACION exeBus = new CapaLogica.DOC.Log_CAPACITACION();
-            CapaEntidad.DOC.Ent_CAPACITACION ent = new CapaEntidad.DOC.Ent_CAPACITACION();
-
             if (oficinas != null)
             {
-                ent.BusOD = ObtenerCadenaArray(oficinas).ToUpper();
+                busqueda.od = ObtenerCadenaArray(oficinas).ToUpper();
             }
             else
             {
-                ent.BusOD = "";
+                busqueda.od = "";
             }
             if (departamento != null)
             {
-                ent.BusDepartamento = ObtenerCadenaArray(departamento).ToUpper();
+                busqueda.departamento = ObtenerCadenaArray(departamento).ToUpper();
             }
             else
             {
-                ent.BusDepartamento = "";
+                busqueda.departamento = "";
             }
 
-            ent.BusTitular = titular;
-            ent.BusTitulo = titulo;
-            ent.BusFormulario = "PDC_UNIVERSO";
-            if (ent.BusOD != "" && ent.BusDepartamento != "" && ent.BusTitular == "" && ent.BusTitulo == "")
+            busqueda.titular = titular;
+            busqueda.titulo = titulo;
+            //vmReport.formulario = "PDC_UNIVERSO"; 
+            ;
+            if (busqueda.od != "" && busqueda.departamento != "" && busqueda.titular == "" && busqueda.titulo == "")
             {
-                ent.BusFormulario = "PDC_UNIVERSO_FILTROS";
+                busqueda.formulario = "PDC_UNIVERSO_FILTRO_01";
             }
-            if (ent.BusOD != "" && ent.BusDepartamento != "" && ent.BusTitular != "" && ent.BusTitulo == "")
+            if (busqueda.od != "" && busqueda.departamento != "" && (busqueda.titular != "" || busqueda.titulo != ""))
             {
-                ent.BusFormulario = "PDC_UNIVERSO_FILTROS_TITULAR";
+                busqueda.formulario = "PDC_UNIVERSO_FILTRO_02";
             }
-            if (ent.BusOD != "" && ent.BusDepartamento != "" && ent.BusTitular == "" && ent.BusTitulo != "")
+            //vmReport.list_universoPDC = exeBus.RepUniversoPDC(ent);
+            return PartialView("~/Areas/Capacitacion/Views/ManPDC/_redenTUPDC.cshtml");
+        }
+
+        [HttpGet]
+        public JsonResult ConsultTablaUniverso(DataTableRequest request = null)
+        {
+            vmReport.list_universoPDC = new List<CapaEntidad.DOC.Ent_ReportePDC>();
+
+            CapaLogica.DOC.Log_CAPACITACION exeBus = new CapaLogica.DOC.Log_CAPACITACION();
+            CapaEntidad.DOC.Ent_CAPACITACION ent = new CapaEntidad.DOC.Ent_CAPACITACION();
+
+            //int rowcount = 0;
+            int page = request.Start == 0 ? 1 : (request.Start / request.Length) + 1;
+
+            ent.BusFormulario = busqueda.formulario;
+            ent.BusOD = busqueda.od;
+            ent.BusDepartamento = busqueda.departamento;
+            ent.BusValor = busqueda.titulo + " " + busqueda.titular;
+            ent.v_pagesize = request.Length;
+            ent.v_currentpage = page;
+
+            //---modificar 
+            vmReport = exeBus.RepUniversoPDC_pag(ent);
+
+            var jsonResult = Json(new
             {
-                ent.BusFormulario = "PDC_UNIVERSO_FILTROS_TITULO";
-            }
-            if (ent.BusOD != "" && ent.BusDepartamento != "" && ent.BusTitular != "" && ent.BusTitulo != "")
+                data = vmReport.list_universoPDC.ToArray(),
+                draw = request.Draw,
+                recordsTotal = vmReport.v_ROW_INDEX,
+                recordsFiltered = vmReport.v_ROW_INDEX,
+                error = ""
+            }, JsonRequestBehavior.AllowGet);
+            jsonResult.MaxJsonLength = int.MaxValue;
+            return jsonResult;
+        }
+
+        public JsonResult DescargarUniverso()
+        {
+            vmReport.list_universoPDC = new List<Ent_ReportePDC>();
+            CapaLogica.DOC.Log_CAPACITACION exeBus = new CapaLogica.DOC.Log_CAPACITACION();
+            CapaEntidad.DOC.Ent_CAPACITACION ent = new CapaEntidad.DOC.Ent_CAPACITACION();
+            if (busqueda.formulario == "PDC_UNIVERSO_FILTRO_01")
             {
-                ent.BusFormulario = "PDC_UNIVERSO_FILTROS_TODO";
+                busqueda.formulario = "PDC_UNIVERSO_FILTRO_01_DESCARGA";
             }
+            if (busqueda.formulario == "PDC_UNIVERSO_FILTRO_02")
+            {
+                busqueda.formulario = "PDC_UNIVERSO_FILTRO_02_DESCARGA";
+            }
+
+            ent.BusFormulario = busqueda.formulario;
+            ent.BusOD = busqueda.od;
+            ent.BusDepartamento = busqueda.departamento;
+            ent.BusValor = busqueda.titulo + " " + busqueda.titular;
+
+            if (busqueda.formulario == "PDC_CONSOLIDADO_DETALLE")
+            {
+                ent.BusFormulario = "PDC_CONSOLIDADO_DETALLE_DESCARGA";
+                ent.BusDepartamento = "";
+                ent.BusValor = busqueda.departamento;
+            }           
 
             vmReport.list_universoPDC = exeBus.RepUniversoPDC(ent);
-            return PartialView("~/Areas/Capacitacion/Views/ManPDC/_redenTUPDC.cshtml", vmReport);
+
+            ListResult result = new ListResult();
+            result = ReporteManGrilla.ExportUniversoPDC(vmReport.list_universoPDC);
+
+            return Json(result);
+        }
+
+        [HttpGet]
+        public JsonResult ConsultTablaUniversoDetalle(DataTableRequest request = null)
+        {
+            vmReport.list_universoPDC = new List<CapaEntidad.DOC.Ent_ReportePDC>();
+
+            CapaLogica.DOC.Log_CAPACITACION exeBus = new CapaLogica.DOC.Log_CAPACITACION();
+            CapaEntidad.DOC.Ent_CAPACITACION ent = new CapaEntidad.DOC.Ent_CAPACITACION();
+
+            //int rowcount = 0;
+            int page = request.Start == 0 ? 1 : (request.Start / request.Length) + 1;
+
+            ent.BusFormulario = busqueda.formulario;
+            ent.BusOD = busqueda.od;
+            ent.BusValor = busqueda.departamento;
+            ent.v_pagesize = request.Length;
+            ent.v_currentpage = page;
+
+            //---modificar 
+            vmReport = exeBus.RepUniversoPDC_pag(ent);
+
+            var jsonResult = Json(new
+            {
+                data = vmReport.list_universoPDC.ToArray(),
+                draw = request.Draw,
+                recordsTotal = vmReport.v_ROW_INDEX,
+                recordsFiltered = vmReport.v_ROW_INDEX,
+                error = ""
+            }, JsonRequestBehavior.AllowGet);
+            jsonResult.MaxJsonLength = int.MaxValue;
+            return jsonResult;
         }
 
         public String ObtenerCadenaArray(String[] array)
@@ -92,14 +183,7 @@ namespace SIGOFCv3.Areas.Capacitacion.Controllers
             }
         }
 
-        public JsonResult DescargarUniversoPDC()
-        {
-            ListResult result = new ListResult();
-            CapaLogica.DOC.Log_CAPACITACION exeBus = new CapaLogica.DOC.Log_CAPACITACION();
-            //result = exeBus.DescargaUniversoPDC(vmReport.list_universoPDC);
-            result = exeBus.DesacargarExcelOpcion2(vmReport.list_universoPDC);
-            return Json(result);
-        }
+
 
         public ActionResult IndexConsolidado()
         {
@@ -119,15 +203,179 @@ namespace SIGOFCv3.Areas.Capacitacion.Controllers
 
         public ActionResult ReporteConsolidadoDetalle(string oficina, string modalidad)
         {
+            //vmReport.list_universoPDC = new List<CapaEntidad.DOC.Ent_ReportePDC>();
+            //CapaLogica.DOC.Log_CAPACITACION exeBus = new CapaLogica.DOC.Log_CAPACITACION();
+            //CapaEntidad.DOC.Ent_CAPACITACION ent = new CapaEntidad.DOC.Ent_CAPACITACION();
+            //ent.BusFormulario = "PDC_CONSOLIDADO_DETALLE";
+            //ent.BusModalidad = modalidad;
+            //ent.BusOD = oficina;
+            //vmReport.list_universoPDC = exeBus.RepUniversoPDC(ent);
+
+            busqueda.formulario = "PDC_CONSOLIDADO_DETALLE";
+            busqueda.od = oficina;
+            busqueda.departamento = modalidad;
+            return PartialView("~/Areas/Capacitacion/Views/ManPDC/_rederTUPDCDet.cshtml");
+        }
+
+
+
+        public ActionResult IndexImport()
+        {
+            return View();
+        }
+
+        public ActionResult TablaImportPASPEQ()
+        {
+            return PartialView("~/Areas/Capacitacion/Views/ManPDC/_renderTImport.cshtml");
+        }
+
+        [HttpGet]
+        public JsonResult ConsultTablaImport(DataTableRequest request = null)
+        {
             vmReport = new VM_ReporteGeneral();
             vmReport.list_universoPDC = new List<CapaEntidad.DOC.Ent_ReportePDC>();
+
             CapaLogica.DOC.Log_CAPACITACION exeBus = new CapaLogica.DOC.Log_CAPACITACION();
             CapaEntidad.DOC.Ent_CAPACITACION ent = new CapaEntidad.DOC.Ent_CAPACITACION();
-            ent.BusFormulario = "PDC_CONSOLIDADO_DETALLE";
-            ent.BusModalidad = modalidad;
-            ent.BusOD = oficina;
-            vmReport.list_universoPDC = exeBus.RepUniversoPDC(ent);
-            return PartialView("~/Areas/Capacitacion/Views/ManPDC/_rederTUPDCDet.cshtml", vmReport);
+            CapaEntidad.DOC.Ent_PDCImportPASPEQ entpaspeq = new CapaEntidad.DOC.Ent_PDCImportPASPEQ();
+
+            //int rowcount = 0;
+            int page = request.Start == 0 ? 1 : (request.Start / request.Length) + 1;
+
+            ent.BusFormulario = request.CustomSearchForm;
+            ent.BusCriterio = request.CustomSearchType;//NUM_EXPEDIENTE||NUM_RESOLUCION
+            ent.BusValor = request.Search.Value;
+
+            if (ent.BusValor.Length > 2)
+            {
+                ent.BusFormulario = "PDC_CONSOLIDADO_PASPEQ_SEARCH";
+            }
+
+            ent.v_pagesize = request.Length;
+            ent.v_currentpage = page;
+
+            vmReport.list_PDC_Import = exeBus.ImportPDC_PASPEQ(ent);
+            ent = new Ent_CAPACITACION();
+            ent.BusFormulario = "PDC_CONSOLIDADO_PASPEQ_COUNT";
+            entpaspeq = exeBus.ImportPDC_PASPEQ_COUNT(ent);
+
+            var jsonResult = Json(new
+            {
+                data = vmReport.list_PDC_Import.ToArray(),
+                draw = request.Draw,
+                recordsTotal = entpaspeq.v_ROW_INDEX,
+                recordsFiltered = entpaspeq.v_ROW_INDEX,
+                error = ""
+            }, JsonRequestBehavior.AllowGet);
+            jsonResult.MaxJsonLength = int.MaxValue;
+            return jsonResult;
         }
+
+        /// <summary>
+        /// importacion de paspeq
+        /// </summary>
+        /// <returns></returns>
+        public JsonResult ImportarPAPEQ()
+        {
+            int band = 0;
+            string mensaje = "Existe un error en: ";
+            string err = "";
+            List<Ent_PDCImportPASPEQ> listImport = new List<Ent_PDCImportPASPEQ>();
+            CapaLogica.DOC.Log_CAPACITACION exeBus = new CapaLogica.DOC.Log_CAPACITACION();
+            CapaEntidad.DOC.Ent_PDCImportPASPEQ ent = new CapaEntidad.DOC.Ent_PDCImportPASPEQ();
+            try
+            {
+                if (Request != null)
+                {
+                    HttpPostedFileBase file = Request.Files[0];
+                    if ((file != null) && (file.ContentLength > 0) && !string.IsNullOrEmpty(file.FileName))
+                    {
+                        string fileName = file.FileName;
+                        string fileContentType = file.ContentType;
+                        byte[] fileBytes = new byte[file.ContentLength];
+                        var data = file.InputStream.Read(fileBytes, 0, Convert.ToInt32(file.ContentLength));
+
+
+                        using (var package = new ExcelPackage(file.InputStream))
+                        {
+                            var currentSheet = package.Workbook.Worksheets;
+                            var workSheet = currentSheet.First();
+                            var noOfCol = workSheet.Dimension.End.Column;
+                            var noOfRow = workSheet.Dimension.End.Row;
+                            var obj = new Ent_PDCImportPASPEQ();
+                            for (int rowIterator = 2; rowIterator <= noOfRow; rowIterator++)
+                            {
+                                if (workSheet.Cells[rowIterator, 1].Value.ToString() != "")
+                                {
+                                    obj = new Ent_PDCImportPASPEQ();
+                                    obj.ESTADO = 1;
+                                    obj.ANIO = 0;
+                                    obj.ID_REGISTRO = 0;
+                                    obj.TITULO = workSheet.Cells[rowIterator, 3].Value == null ? "" : workSheet.Cells[rowIterator, 3].Value.ToString();
+                                    obj.ENFOQUE = workSheet.Cells[rowIterator, 4].Value == null ? "" : workSheet.Cells[rowIterator, 4].Value.ToString();
+                                    obj.MES_FOCALIZACION = workSheet.Cells[rowIterator, 6].Value == null ? "" : workSheet.Cells[rowIterator, 6].Value.ToString();
+                                    obj.MES = workSheet.Cells[rowIterator, 5].Value == null ? 0 : Int32.Parse(workSheet.Cells[rowIterator, 5].Value.ToString());
+
+                                    listImport.Add(obj);
+
+                                }
+                                else
+                                {
+                                    band = 1;
+                                    mensaje = mensaje + " " + workSheet.Cells[rowIterator, 1].Value.ToString() + " ,";
+                                }
+                            }
+                        }
+                    }
+                }
+                if (listImport.Count > 0)
+                {
+                    Ent_CAPACITACION entTemp = new Ent_CAPACITACION();
+                    exeBus.ImportPDC_PASPEQ_CAMBIAR_ESTADO(entTemp);
+
+                    var sesion = (ModelSession.GetSession())[0].COD_UCUENTA;
+                    ListResult result = new ListResult();
+                    foreach (Ent_PDCImportPASPEQ obj in listImport)
+                    {
+                        result = exeBus.GuardarDatosPasPEQ(obj, sesion);
+                        //(ModelSession.GetSession())[0].COD_UCUENTA
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                return Json(new { success = false, msj = ex.Message, data = "" });
+            }
+            if (band == 1)
+            {
+                err = mensaje;
+            }
+            var jsonResult = Json(new
+            {
+                //data = vmRD.ListEspecieMedCorrectiva,
+                error = err
+            }, JsonRequestBehavior.AllowGet);
+            jsonResult.MaxJsonLength = int.MaxValue;
+            return jsonResult;
+            //return PartialView("~/Areas/Fiscalizacion/Views/InformeLegal/Shared/_renderListaEspecies.cshtml", vmInfLegal);
+
+        }
+
+
+        public JsonResult ExportarPASPEQ()
+        {
+            vmReport = new VM_ReporteGeneral();
+            vmReport.list_PDC_Import = new List<Ent_PDCImportPASPEQ>();
+            CapaLogica.DOC.Log_CAPACITACION exeBus = new CapaLogica.DOC.Log_CAPACITACION();
+            CapaEntidad.DOC.Ent_CAPACITACION ent = new CapaEntidad.DOC.Ent_CAPACITACION();
+            ent.BusFormulario = "PDC_CONSOLIDADO_PASPEQ_REPORT";
+
+            vmReport.list_PDC_Import = exeBus.ImportPDC_PASPEQ(ent);
+
+            ListResult result = new ListResult();
+            result = exeBus.ExportPASPEQ(vmReport.list_PDC_Import);
+            return Json(result);
+        }
+
     }
 }

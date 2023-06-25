@@ -260,6 +260,12 @@ namespace CapaEntidad.DOC
         [Description("RegNum_Orden")]
         public Int32 RegNum_Orden { get; set; }
 
+        [Description("v_currentpage")]
+        public Int32 v_currentpage { get; set; }
+
+        [Description("v_pagesize")]
+        public Int32 v_pagesize { get; set; }
+
         //CREITERIOS PARA BUSCAR 
         [Description("BusModalidad")]
         public String BusModalidad { get; set; }
@@ -382,8 +388,6 @@ namespace CapaEntidad.DOC
         [Category("LIST"), Description("ListEliTABLA")]
         public List<Ent_CAPACITACION> ListEliTABLA { get; set; }
 
-        [Description("ROW_INDEX")]
-        public Int32 ROW_INDEX { get; set; }
         [Description("URL")]
         public String URL { get; set; }
         [Description("TIPO_REPORTE")]
@@ -462,7 +466,8 @@ namespace CapaEntidad.DOC
             N_NO_CHECK = -1;
             P_NO_CHECK = -1;
 
-            ROW_INDEX = -1;
+            v_currentpage = -1;
+            v_pagesize = -1;
         }
         #endregion
 

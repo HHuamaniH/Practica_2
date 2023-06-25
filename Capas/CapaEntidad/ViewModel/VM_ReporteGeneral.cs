@@ -1,4 +1,5 @@
 ﻿using CapaEntidad.DOC;
+using System;
 using System.Collections.Generic;
 
 namespace CapaEntidad.ViewModel
@@ -49,6 +50,8 @@ namespace CapaEntidad.ViewModel
         //listado del resultado del historico del pdc
         public List<Ent_ReportePDC> list_universoPDC { get; set; }
         public List<Ent_ReportConsolidadoPDC> list_consolidado_PDC { get; set; }
+        public List<Ent_PDCImportPASPEQ> list_PDC_Import { get; set; }
+
 
         public string txtPersona { get; set; }
         public string txtIdTipo { get; set; }
@@ -73,6 +76,15 @@ namespace CapaEntidad.ViewModel
         public string subT11 { get; set; }
         public string subT12 { get; set; }
         public string subT13 { get; set; }
+
+        public Int32 v_ROW_INDEX { get; set; }
+
+        public string od { get; set; }
+        public string departamento { get; set; }
+        public string titulo { get; set; }
+        public string titular { get; set; }
+        public string formulario { get; set; }
+
         public VM_ReporteGeneral()
         {
             txtFechaCorte = "";
@@ -85,6 +97,7 @@ namespace CapaEntidad.ViewModel
             lstChkTipoDocumentoSigoId = "";
             lstChkEstadoDocumentoId = "";
             lstChkTipoResolucionFiscalizacionId = "";
+            v_ROW_INDEX = -1;
         }
     }
 }

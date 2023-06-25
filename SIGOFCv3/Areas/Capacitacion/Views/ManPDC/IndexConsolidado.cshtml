@@ -65,6 +65,22 @@
 
     }
 
+    _rendReporteConsolidadoPDC.fnExport = function () {
+        var url = urlLocalSigo + "CAPACITACION/ManPDC/DescargarUniverso";
+
+        let option = { url: url, datos: "", type: 'POST' };
+        utilSigo.fnAjax(option, function (data) {
+            if (data.success) {
+                document.location = urlLocalSigo + "Archivos/Plantilla/" + data.msj;
+            }
+            else {
+                utilSigo.toastWarning("Aviso", "Sucedio un error, Comuníquese con el Administrador");
+                console.log(data.msj);
+            }
+        });
+    }
+
+
     $(document).ready(function () {
         _rendReporteConsolidadoPDC.frm = $("#divReporteConsolidadoPDC");
         _rendReporteConsolidadoPDC.fnReporte();

@@ -1,4 +1,5 @@
 ﻿using CapaEntidad.DOC;
+using CapaEntidad.ViewModel;
 using GeneralSQL;
 using Oracle.ManagedDataAccess.Client;
 using System;
@@ -430,7 +431,7 @@ namespace CapaDatos.DOC
                             {
                                 oCamposDet = new CEntidad();
                                 oCamposDet.COD_CAPACITACION = dr.GetString(dr.GetOrdinal("COD_CAPACITACION"));
-                                oCamposDet.COD_SECUENCIAL= dr.GetInt32(dr.GetOrdinal("COD_SECUENCIAL"));
+                                oCamposDet.COD_SECUENCIAL = dr.GetInt32(dr.GetOrdinal("COD_SECUENCIAL"));
                                 oCamposDet.ACTIVIDAD = dr.GetString(dr.GetOrdinal("ACTIVIDAD"));
                                 oCamposDet.FECHA_INICIO_CRONOGRAMA = dr.GetString(dr.GetOrdinal("FECHA_INICIO_CRONOGRAMA"));
                                 oCamposDet.FECHA_FIN_CRONOGRAMA = dr.GetString(dr.GetOrdinal("FECHA_FIN_CRONOGRAMA"));
@@ -750,7 +751,7 @@ namespace CapaDatos.DOC
                         oCamposDet.ACTIVIDAD = loCronograma.ACTIVIDAD;
                         oCamposDet.FECHA_INICIO_CRONOGRAMA = loCronograma.FECHA_INICIO_CRONOGRAMA;
                         oCamposDet.FECHA_FIN_CRONOGRAMA = loCronograma.FECHA_FIN_CRONOGRAMA;
-                        
+
 
                         //oCamposDet.MAE_GRUPO_CONVENIO = loDatos.MAE_GRUPO_CONVENIO;
                         dBOracle.ManExecute(cn, tr, "DOC_OSINFOR_ERP_MIGRACION.SPCAPACITACION_CRONOGRAMA_Grabar", oCamposDet);
@@ -1594,12 +1595,12 @@ namespace CapaDatos.DOC
                         oCamposDet = new CEntidad();
                         oCamposDet.COD_CAPACITACION = oCEntidad.COD_CAPACITACION;
                         oCamposDet.COD_SECUENCIAL = loProgramacion.COD_SECUENCIAL;
-                        oCamposDet.FECHA_PROGRAMA =loProgramacion.FECHA_PROGRAMA.ToString();
+                        oCamposDet.FECHA_PROGRAMA = loProgramacion.FECHA_PROGRAMA.ToString();
                         oCamposDet.HORA = loProgramacion.HORA;
                         oCamposDet.TEMA = loProgramacion.TEMA;
                         oCamposDet.RESPONSABLE = loProgramacion.RESPONSABLE;
                         //oCamposDet.MAE_GRUPO_CONVENIO = loDatos.MAE_GRUPO_CONVENIO;
-                        dBOracle.ManExecute(cn, tr, "DOC_OSINFOR_ERP_MIGRACION.SPCAPACITACION_PROGRAMA_Grabar", oCamposDet);                        
+                        dBOracle.ManExecute(cn, tr, "DOC_OSINFOR_ERP_MIGRACION.SPCAPACITACION_PROGRAMA_Grabar", oCamposDet);
                     }
                 }
                 if (oCEntidad.ListCronograma != null)
@@ -2000,9 +2001,9 @@ namespace CapaDatos.DOC
         {
             List<CEntidad> lsCEntidadRGP = new List<CEntidad>();
             CEntidad oCamposDet = new CEntidad();
-            
+
             try
-            {             
+            {
                 using (OracleDataReader dr = dBOracle.SelDrdDefaultPart(cn, null, "DOC_OSINFOR_ERP_MIGRACION.SPREPORTECAPACITACIONNOTA", codCapacitacion))
                 {
 
@@ -2173,7 +2174,7 @@ namespace CapaDatos.DOC
                         {
                             oCamposDet = new CEntidad();
                             oCamposDet.COD_CAPACITACION = dr["COD_CAPACITACION"].ToString();
-                            oCamposDet.ANTECEDENTES = dr["ANTECEDENTES"].ToString();                            
+                            oCamposDet.ANTECEDENTES = dr["ANTECEDENTES"].ToString();
                             oCamposDet.JUSTIFICACION = dr["JUSTIFICACION"].ToString();
                             oCamposDet.RESULTADOS_ESPERADOS = dr["RESULTADOS_ESPERADOS"].ToString();
                             oCamposDet.MATERIALES_EQUIPO = dr["MATERIALES_EQUIPO"].ToString();
@@ -2237,8 +2238,8 @@ namespace CapaDatos.DOC
                             oCamposDet.RESULTADOS_ESPERADOS = dr["ORGANIZADOR_DETALLE"].ToString();
                             oCamposDet.CONCLUSION = dr["CONCLUSION"].ToString();
                             oCamposDet.RECOMENDACIONES = dr["RECOMENDACIONES"].ToString();
-                            oCamposDet.DESCRIPCION_TEMAS = dr["ARCHIVO"].ToString(); 
-                            oCamposDet.DESCRIPCION_EJECUTIVA=dr["DESCRIPCION_EJECUTIVA"].ToString();
+                            oCamposDet.DESCRIPCION_TEMAS = dr["ARCHIVO"].ToString();
+                            oCamposDet.DESCRIPCION_EJECUTIVA = dr["DESCRIPCION_EJECUTIVA"].ToString();
                             oCamposDet.RESUMEN_INTERVENCIONES = dr["RESUMEN_INTERVENCIONES"].ToString();
                             oCamposDet.DESCRIPCION_TRABAJO = dr["DESCRIPCION_TRABAJO"].ToString();
                             lsCEntidadRGP.Add(oCamposDet);
@@ -2268,10 +2269,10 @@ namespace CapaDatos.DOC
                         while (dr.Read())
                         {
                             oCamposDet = new CEntidad();
-                            oCamposDet.N_PARTICIPANTES = int.Parse(dr["ORDEN"].ToString()); 
+                            oCamposDet.N_PARTICIPANTES = int.Parse(dr["ORDEN"].ToString());
                             oCamposDet.NOMBRE = dr["NOMBRE_APELLIDO"].ToString();
                             oCamposDet.GENERO = dr["GENERO"].ToString();
-                            oCamposDet.DESCRIPCION = dr["AREA"].ToString();   
+                            oCamposDet.DESCRIPCION = dr["AREA"].ToString();
                             lsCEntidadRGP.Add(oCamposDet);
                         }
                     }
@@ -2394,7 +2395,7 @@ namespace CapaDatos.DOC
                             oCamposDet = new CEntidad();
                             oCamposDet.ACTIVIDAD = dr["ACTIVIDAD"].ToString();
                             oCamposDet.FECHA_INICIO_CRONOGRAMA = dr["FECHA_INICIO_CRONOGRAMA"].ToString();
-                            oCamposDet.FECHA_FIN_CRONOGRAMA = dr["FECHA_FIN_CRONOGRAMA"].ToString();                            
+                            oCamposDet.FECHA_FIN_CRONOGRAMA = dr["FECHA_FIN_CRONOGRAMA"].ToString();
                             lsCEntidadRGP.Add(oCamposDet);
                         }
                     }
@@ -2471,6 +2472,84 @@ namespace CapaDatos.DOC
                 throw ex;
             }
         }
+
+        public VM_ReporteGeneral RepUniversoPDC_pag(OracleConnection cn, CEntidad cEntidad)
+        {
+            VM_ReporteGeneral result = new VM_ReporteGeneral();
+            result.list_universoPDC = new List<CEntidadPDC>();
+            CEntidadPDC oCamposDet = new CEntidadPDC();
+
+            try
+            {
+                using (OracleDataReader dr = dBOracle.SelDrdDefault(cn, null, "DOC_OSINFOR_ERP_MIGRACION.SPREPORTECAPACITACION_UNIVERSOPDC", cEntidad))
+                {
+                    if (dr != null)
+                    {
+                        if (dr.HasRows)
+                        {
+                            while (dr.Read())
+                            {
+                                oCamposDet = new CEntidadPDC();
+                                oCamposDet.ID_REGISTRO = dr["ID_REGISTRO"].ToString();
+                                oCamposDet.COD_THABILITANTE = dr["COD_THABILITANTE"].ToString();
+                                oCamposDet.OFICINA_DESCONCENTRADA = dr["OFICINA_DESCONCENTRADA"].ToString();
+                                oCamposDet.TITULO = dr["TITULO"].ToString();
+                                oCamposDet.MODALIDAD = dr["MODALIDAD"].ToString();
+                                oCamposDet.TITULAR = dr["TITULAR"].ToString();
+                                oCamposDet.REP_LEGAL = dr["REP_LEGAL"].ToString();
+                                oCamposDet.DEPARTAMENTO = dr["DEPARTAMENTO"].ToString();
+                                oCamposDet.PROVINCIA = dr["PROVINCIA"].ToString();
+                                oCamposDet.DISTRITO = dr["DISTRITO"].ToString();
+                                oCamposDet.FECHA_VIGENCIA = dr["FECHA_VIGENCIA"].ToString();
+                                oCamposDet.FECHA_CORTE = dr["FECHA_CORTE"].ToString();
+                                oCamposDet.AREA = Decimal.Parse(dr["AREA"].ToString());
+                                oCamposDet.ULTIMO_PLAN = dr["ULTIMO_PLAN"].ToString();
+                                oCamposDet.ROJO = dr["ROJO"].ToString();
+                                oCamposDet.VERDE = dr["VERDE"].ToString();
+                                oCamposDet.ALERTA = dr["ALERTA"].ToString();
+                                oCamposDet.PASPEQ = dr["PASPEQ"].ToString();
+                                oCamposDet.PASPEQ_ENFOQUE = dr["PASPEQ_ENFOQUE"].ToString();
+                                oCamposDet.FECHA_SUPERVISION = dr["FECHA_SUPERVISION"].ToString();
+                                oCamposDet.S_VOL_APROB = Decimal.Parse(dr["S_VOL_APROB"].ToString());
+                                oCamposDet.S_VOL_MOV = Decimal.Parse(dr["S_VOL_MOV"].ToString());
+                                oCamposDet.S_VOL_INJUST = Decimal.Parse(dr["S_VOL_INJUST"].ToString());
+                                oCamposDet.INFRACCIONES = dr["INFRACCIONES"].ToString();
+                                oCamposDet.MULTAS = dr["MULTAS"].ToString();
+                                oCamposDet.ESTADO_PAU = dr["ESTADO_PAU"].ToString();
+                                oCamposDet.ESTADO_PAGO = dr["ESTADO_PAGO"].ToString();
+                                oCamposDet.MODALIDAD_PAGO = dr["MODALIDAD_PAGO"].ToString();
+                                oCamposDet.MEC_COMP = dr["MEC_COMP"].ToString();
+                                oCamposDet.N_CAPACITACION = Decimal.Parse(dr["N_CAPACITACION"].ToString());
+                                oCamposDet.FECHA_ULT_CAP = dr["FECHA_ULT_CAP"].ToString();
+                                oCamposDet.TEMA_ULT_CAP = dr["TEMA_ULT_CAP"].ToString();
+                                oCamposDet.TEMA_MOCHILA_CAP = dr["TEMA_MOCHILA_CAP"].ToString();
+                                oCamposDet.TEMA_MOCHILA_ENT = dr["TEMA_MOCHILA_ENT"].ToString();
+                                oCamposDet.PRIORIDAD = Decimal.Parse(dr["PRIORIDAD"].ToString());
+
+                                result.list_universoPDC.Add(oCamposDet);
+                            }
+                        }
+                        dr.NextResult();
+                        if (dr.HasRows)
+                        {
+                            while (dr.Read())
+                            {
+                                //oCampos = new Ent_INFORME_CONSULTA_LEGAL();
+                                result.v_ROW_INDEX = Int32.Parse(dr["TOTALROW"].ToString());
+                                //lsCEntidad.Add(oCampos);
+                            }
+                        }
+
+                    }
+                }
+                return result;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
         public List<Ent_ReportConsolidadoPDC> RepconsolidadoPDC(OracleConnection cn, CEntidad cEntidad)
         {
             List<Ent_ReportConsolidadoPDC> lsCEntidadRGP = new List<Ent_ReportConsolidadoPDC>();
@@ -2511,5 +2590,171 @@ namespace CapaDatos.DOC
                 throw ex;
             }
         }
+
+        public List<Ent_PDCImportPASPEQ> ImportPDC_PASPEQ(OracleConnection cn, CEntidad cEntidad)
+        {
+            List<Ent_PDCImportPASPEQ> lsCEntidadRGP = new List<Ent_PDCImportPASPEQ>();
+            Ent_PDCImportPASPEQ oCamposDet = new Ent_PDCImportPASPEQ();
+
+            try
+            {
+                using (OracleDataReader dr = dBOracle.SelDrdResult(cn, null, "DOC_OSINFOR_ERP_MIGRACION.SPREPORTECAPACITACION_UNIVERSOPDC", cEntidad))
+                {
+                    if (dr != null)
+                    {
+                        if (dr.HasRows)
+                        {
+                            while (dr.Read())
+                            {
+                                oCamposDet = new Ent_PDCImportPASPEQ();
+                                oCamposDet.ID_REGISTRO = Int32.Parse(dr["ID_REGISTRO"].ToString());
+                                oCamposDet.COD_THABILITANTE = dr["COD_THABILITANTE"].ToString();
+                                oCamposDet.TITULO = dr["TITULO"].ToString();
+                                oCamposDet.ENFOQUE = dr["ENFOQUE"].ToString();
+                                oCamposDet.MES = Int32.Parse(dr["MES"].ToString());
+                                oCamposDet.MES_FOCALIZACION = dr["MES_FOCALIZACION"].ToString();
+                                oCamposDet.ANIO = Int32.Parse(dr["ANIO"].ToString());
+                                oCamposDet.ESTADO = Int32.Parse(dr["ESTADO"].ToString());
+
+                                lsCEntidadRGP.Add(oCamposDet);
+                            }
+
+                        }
+                    }
+                }
+                return lsCEntidadRGP;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public Ent_PDCImportPASPEQ ImportPDC_PASPEQ_COUNT(OracleConnection cn, CEntidad cEntidad)
+        {
+            Ent_PDCImportPASPEQ oCamposDet = new Ent_PDCImportPASPEQ();
+
+            try
+            {
+                using (OracleDataReader dr = dBOracle.SelDrdResult(cn, null, "DOC_OSINFOR_ERP_MIGRACION.SPREPORTECAPACITACION_UNIVERSOPDC", cEntidad))
+                {
+                    if (dr != null)
+                    {
+                        if (dr.HasRows)
+                        {
+                            while (dr.Read())
+                            {
+                                oCamposDet = new Ent_PDCImportPASPEQ();
+                                oCamposDet.v_ROW_INDEX = Int32.Parse(dr["totalRow"].ToString());
+                            }
+
+                        }
+                    }
+                }
+                return oCamposDet;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public Ent_PDCImportPASPEQ ImportPDC_PASPEQ_CAMBIAR_ESTADO(OracleConnection cn, CEntidad cEntidad)
+        {
+            Ent_PDCImportPASPEQ oCamposDet = new Ent_PDCImportPASPEQ();
+
+            try
+            {
+                using (OracleDataReader dr = dBOracle.SelDrdResult(cn, null, "DOC_OSINFOR_ERP_MIGRACION.SPREPORTPDC_IMPORT_ESTADO", cEntidad))
+                {
+                    if (dr != null)
+                    {
+                        if (dr.HasRows)
+                        {
+                            while (dr.Read())
+                            {
+                                oCamposDet = new Ent_PDCImportPASPEQ();
+                                oCamposDet.TITULO = dr["REGISTRO"].ToString();
+                            }
+
+                        }
+                    }
+                }
+                return oCamposDet;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+
+        }
+        public String GuardarDatosPasPEQ(OracleConnection cn, Ent_PDCImportPASPEQ oCEntidad)
+        {
+            OracleTransaction tr = null;
+            String OUTPUTPARAM01 = "";
+            try
+            {
+                tr = cn.BeginTransaction();
+                //Grabando Cabecera
+                using (OracleCommand cmd = dBOracle.ManExecuteOutput(cn, tr, "DOC_OSINFOR_ERP_MIGRACION.SPREPORTPDC_IMPORT_GRABAR", oCEntidad))
+                {
+                    cmd.ExecuteNonQuery();
+                    OUTPUTPARAM01 = (String)cmd.Parameters["OUTPUTPARAM01"].Value;
+                    if (OUTPUTPARAM01 == "99")
+                    {
+                        tr.Rollback();
+                        tr = null;
+                        throw new Exception("Ud. no tiene permiso para realizar esta acción");
+                    }
+                    if (OUTPUTPARAM01 == "0")
+                    {
+                        tr.Rollback();
+                        tr = null;
+                        throw new Exception("El Nombre de la Capacitación ya Existe");
+                    }
+                    else if (OUTPUTPARAM01 == "3")
+                    {
+                        tr.Rollback();
+                        tr = null;
+                        throw new Exception("Este Control de Calidad no puede modificarse");
+                    }
+                    else if (OUTPUTPARAM01 == "2")
+                    {
+                        tr.Rollback();
+                        tr = null;
+                        throw new Exception("No Tiene Permisos para Modificar este Registro");
+                    }
+                    else if (OUTPUTPARAM01 == "1")
+                    {
+                        tr.Rollback();
+                        tr = null;
+                        throw new Exception("El Nombre de la Capacitación ya Existe");
+                    }
+                    else if (OUTPUTPARAM01 == "100")
+                    {
+                        tr.Rollback();
+                        tr = null;
+                        throw new Exception("La capacitación ya se encuentra con Control de Calidad Conforme");
+                    }
+                }
+                //Reemplazando El Nuevo Codigo Creado
+                if (oCEntidad.ESTADO == 1) //Nuevo
+                {
+                    oCEntidad.ID_REGISTRO = Int32.Parse(OUTPUTPARAM01);
+                }
+
+                tr.Commit();
+                return OUTPUTPARAM01;
+            }
+            catch (Exception ex)
+            {
+                if (tr != null)
+                {
+                    tr.Rollback();
+                }
+                throw ex;
+            }
+        }
+
     }
 }

@@ -1,101 +1,99 @@
 ﻿<script>
-    $(function () {
-        $('#tbListUniversoPDC').DataTable();
-    })
+    var _renderUniversoPDC = {};
+
+    _renderUniversoPDC.fnInitDataTable_Detail = function () {
+        var columns_label = [], columns_data = [], options = {};
+        columns_label = ["Oficina Desconcentrada", "Título", "Modalidad", "Titular", "Representante Legal", "Departamento", "Provincia",
+            "Distrito", "Fecha vigencia", "Fecha Corte", "Area", "Ultimo plan", "Rojo", "Verde", "Alerta", "PASPEQ", "PASPEQ enfoque",
+            "Fecha supervisión", "volumen aprobado", "volumen  movilizado", "volumen injustificado", "Infracciones", "Multas", "Estado PAU",
+            "Estado pago", "Modalidad de pago", "Mecanismo de compensación", "Nro. capacitaciones", "Fecha ultima capacitacion",
+            "Tema de capacitación", "Mochila capacitación", "Mochila entrenamiento", "Prioridad"];
+        columns_data = ["OFICINA_DESCONCENTRADA", "TITULO", "MODALIDAD", "TITULAR", "REP_LEGAL", "DEPARTAMENTO", "PROVINCIA", "DISTRITO",
+            "FECHA_VIGENCIA", "FECHA_CORTE", "AREA", "ULTIMO_PLAN", "ROJO", "VERDE", "ALERTA", "PASPEQ", "PASPEQ_ENFOQUE", "FECHA_SUPERVISION",
+            "S_VOL_APROB", "S_VOL_MOV", "S_VOL_INJUST", "INFRACCIONES", "MULTAS", "ESTADO_PAU", "ESTADO_PAGO", "MODALIDAD_PAGO", "MEC_COMP",
+            "N_CAPACITACION", "FECHA_ULT_CAP", "TEMA_ULT_CAP", "TEMA_MOCHILA_CAP", "TEMA_MOCHILA_ENT", "PRIORIDAD"];
+        options = {
+            page_paging: true, page_length: 10, row_index: true, row_select: false
+        };
+
+        utilDt.fnLoadDataTable_Detail(_renderUniversoPDC.frm.find("#tbListUniversoPDC"), columns_label, columns_data, options);
+        _renderUniversoPDC.dtRenderUniversoPDC = _renderUniversoPDC.fnInitDataTablePaging(options);
+    }
+
+    _renderUniversoPDC.fnInitDataTablePaging = function (options) {
+        var optDt = {};
+        optDt.iLength = options.page_length;
+        optDt.iStart = 0;
+        optDt.bSearch = false;
+        optDt.bInfo = true;
+        optDt.bSort = true;
+        optDt.aSort = [];
+        return _renderUniversoPDC.frm.find("#tbListUniversoPDC").DataTable({
+            processing: true,
+            serverSide: true,
+            searching: optDt.bSearch,
+            ordering: optDt.bSort,
+            deferLoading: 0,
+            paging: true,
+            ajax: {
+                "url": urlLocalSigo + "CAPACITACION/ManPDC/ConsultTablaUniverso",
+                "data": function (d) {
+                    d.customSearchEnabled = true;
+                    d.customSearchForm = ""; //ddlModalFiscalizacion
+                    for (var i = 0; i < d.order.length; i++) {
+                        d.order[i]["column_name"] = d.columns[d.order[i]["column"]]["data"];
+                    }
+                    d.columns = null;
+                },
+                "error": function (jqXHR) {
+                    utilSigo.unblockUIGeneral();
+                    utilSigo.toastError("Error", initSigo.MessageError);
+                    console.log(jqXHR.responseText);
+                }
+            },
+            columns: options.table_columns,
+            bInfo: optDt.bInfo,
+            "lengthMenu": [[10, 20, 50, 100], [10, 20, 50, 100]],
+            //"bLengthChange": false, //para el cambio de numeros de la pagina
+            "aaSorting": optDt.aSort,
+            "pageLength": optDt.iLength,
+            "displayStart": optDt.iStart,
+            "oLanguage": initSigo.oLanguage,
+            "drawCallback": initSigo.showPagination,
+        });
+
+    }
+
+    _renderUniversoPDC.fnInit = function () {
+        _renderUniversoPDC.dtConsultaInforme.ajax.reload();
+        alert('ingreso aqui');
+    }
+
+    $(document).ready(function () {
+        _renderUniversoPDC.frm = $("#divTbResumen");
+        _renderUniversoPDC.fnInitDataTable_Detail();
+        _renderUniversoPDC.dtRenderUniversoPDC.ajax.reload();
+
+    });
 </script>
 
-<div id="divTbResumen" style="width: 100%; overflow: auto; scrollbar-base-color: none;">
-    <button class="btn btn-outline btn-info" title="Descargar Resumen" onclick="_rendReporteUPDC.fnExportDetalle()"
-            type="button" style="margin-right:10px">
-        <i class="fa fa-file-excel-o"></i>
-    </button><br /><br />
-
-    <table id="tbListUniversoPDC" class="table table-bordered table-striped-success" style="width: 100% !important; font-size:12px">
-        <thead>
-            <tr style=" text-align: center;  background-color: #dae7f5">
-                <td style="width: 2%">N°</td>
-
-                <td style="width: 10%">Oficina Desconcentrada</td>
-                <td style="width: 10%">Título</td>
-                <td style="width: 10%">Modalidad</td>
-                <td style="width: 10%">Titular</td>
-                <td style="width: 10%">Representante Legal</td>
-                <td style="width: 10%">Departamento</td>
-                <td style="width: 10%">Provincia</td>
-                <td style="width: 10%">Distrito</td>
-                <td style="width: 10%">Fecha vigencia</td>
-                <td style="width: 10%">Fecha Corte</td>
-                <td style="width: 10%">Area</td>
-                <td style="width: 10%">Ultimo plan</td>
-                <td style="width: 10%">Rojo</td>
-                <td style="width: 10%">Verde</td>
-                <td style="width: 10%">Alerta</td>
-                <td style="width: 10%">PASPEQ</td>
-                <td style="width: 10%">PASPEQ enfoque</td>
-                <td style="width: 10%">Fecha supervisión</td>
-                <td style="width: 10%">volumen aprobado</td>
-                <td style="width: 10%">volumen  movilizado</td>
-                <td style="width: 10%">volumen injustificado</td>
-                <td style="width: 10%">Infracciones</td>
-                <td style="width: 10%">Multas</td>
-                <td style="width: 10%">Estado PAU</td>
-                <td style="width: 10%">Estado pago</td>
-                <td style="width: 10%">Modalidad de pago</td>
-                <td style="width: 10%">Mecanismo de compensación</td>
-                <td style="width: 10%">Nro. capacitaciones</td>
-                <td style="width: 10%">Fecha ultima capacitacion</td>
-                <td style="width: 10%">Tema de capacitación</td>
-                <td style="width: 10%">Mochila capacitación</td>
-                <td style="width: 10%">Mochila entrenamiento</td>
-                <td style="width: 10%">Prioridad</td>
-            </tr>
-        </thead>
-        <tbody id="bodyTable">
-            @if (Model.list_universoPDC != null)
-            {
-                var count = 0;
-                foreach (var item in Model.list_universoPDC)
-                {
-                    <tr>
-                        <td style="width: 2%">@(++count)</td>
-                        <td style="width: 10%">@item.OFICINA_DESCONCENTRADA</td>
-                        <td style="width: 10%">@item.TITULO</td>
-                        <td style="width: 10%">@item.MODALIDAD</td>
-                        <td style="width: 10%">@item.TITULAR</td>
-                        <td style="width: 10%">@item.REP_LEGAL</td>
-                        <td style="width: 10%">@item.DEPARTAMENTO</td>
-                        <td style="width: 10%">@item.PROVINCIA</td>
-
-                        <td style="width: 10%">@item.DISTRITO</td>
-                        <td style="width: 10%">@item.FECHA_VIGENCIA</td>
-                        <td style="width: 10%">@item.FECHA_CORTE</td>
-                        <td style="width: 10%">@item.AREA</td>
-                        <td style="width: 10%">@item.ULTIMO_PLAN</td>
-                        <td style="width: 10%">@item.ROJO</td>
-                        <td style="width: 10%">@item.VERDE</td>
-                        <td style="width: 10%">@item.ALERTA</td>
-                        <td style="width: 10%">@item.PASPEQ</td>
-                        <td style="width: 10%">@item.PASPEQ_ENFOQUE</td>
-                        <td style="width: 10%">@item.FECHA_SUPERVISION</td>
-                        <td style="width: 10%">@item.S_VOL_APROB</td>
-                        <td style="width: 10%">@item.S_VOL_MOV</td>
-                        <td style="width: 10%">@item.S_VOL_INJUST</td>
-                        <td style="width: 10%">@item.INFRACCIONES</td>
-
-                        <td style="width: 10%">@item.MULTAS</td>
-                        <td style="width: 10%">@item.ESTADO_PAU</td>
-                        <td style="width: 10%">@item.ESTADO_PAGO</td>
-                        <td style="width: 10%">@item.MODALIDAD_PAGO</td>
-                        <td style="width: 10%">@item.MEC_COMP</td>
-                        <td style="width: 10%">@item.N_CAPACITACION</td>
-                        <td style="width: 10%">@item.FECHA_ULT_CAP</td>
-                        <td style="width: 10%">@item.TEMA_ULT_CAP</td>
-                        <td style="width: 10%">@item.TEMA_MOCHILA_CAP</td>
-                        <td style="width: 10%">@item.TEMA_MOCHILA_ENT</td>
-                        <td style="width: 10%">@item.PRIORIDAD</td>
-                    </tr>
-                }
-            }
-        </tbody>
-    </table>
+<div id="divTbResumen">
+   
+    <div class="table-responsive">
+        <table id="tbListUniversoPDC" style="width:100%;margin:0px !important;" class="table table-hover table-bordered">
+            <thead>
+                <tr>
+                    <th colspan="34" class="text-sm-left">
+                        <div class="form-inline">
+                            <strong> Datos del Universo Capacitable</strong>&nbsp;
+                            <label style="cursor:pointer;" class="fa mx-2 fa-lg fa-file-excel-o" title="Importar Archivo" data-toggle="tooltip" onclick="_rendReporteUPDC.fnExport()">
+                                &nbsp; Descargar Universo Capacitable para el PDC &nbsp;
+                            </label>
+                        </div>
+                    </th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
 </div>

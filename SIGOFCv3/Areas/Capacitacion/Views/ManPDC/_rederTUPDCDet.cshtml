@@ -1,16 +1,117 @@
 ﻿<script>
+    var _renderUniversoPDCDetalle = {};
+
+    _renderUniversoPDCDetalle.fnInitDataTable_Detail = function () {
+        var columns_label = [], columns_data = [], options = {};
+        columns_label = ["Oficina Desconcentrada", "Título", "Modalidad", "Titular", "Representante Legal", "Departamento", "Provincia",
+            "Distrito", "Fecha vigencia", "Fecha Corte", "Area", "Ultimo plan", "Rojo", "Verde", "Alerta", "PASPEQ", "PASPEQ enfoque",
+            "Fecha supervisión", "volumen aprobado", "volumen  movilizado", "volumen injustificado", "Infracciones", "Multas", "Estado PAU",
+            "Estado pago", "Modalidad de pago", "Mecanismo de compensación", "Nro. capacitaciones", "Fecha ultima capacitacion",
+            "Tema de capacitación", "Mochila capacitación", "Mochila entrenamiento", "Prioridad"];
+        columns_data = ["OFICINA_DESCONCENTRADA", "TITULO", "MODALIDAD", "TITULAR", "REP_LEGAL", "DEPARTAMENTO", "PROVINCIA", "DISTRITO",
+            "FECHA_VIGENCIA", "FECHA_CORTE", "AREA", "ULTIMO_PLAN", "ROJO", "VERDE", "ALERTA", "PASPEQ", "PASPEQ_ENFOQUE", "FECHA_SUPERVISION",
+            "S_VOL_APROB", "S_VOL_MOV", "S_VOL_INJUST", "INFRACCIONES", "MULTAS", "ESTADO_PAU", "ESTADO_PAGO", "MODALIDAD_PAGO", "MEC_COMP",
+            "N_CAPACITACION", "FECHA_ULT_CAP", "TEMA_ULT_CAP", "TEMA_MOCHILA_CAP", "TEMA_MOCHILA_ENT", "PRIORIDAD"];
+        options = {
+            page_paging: true, page_length: 10, row_index: true, row_select: false
+        };
+
+        utilDt.fnLoadDataTable_Detail(_renderUniversoPDCDetalle.frm.find("#tbListUniversoPDCDetalle"), columns_label, columns_data, options);
+        _renderUniversoPDCDetalle.dtRenderUniversoPDC = _renderUniversoPDCDetalle.fnInitDataTablePaging(options);
+    }
+
+    _renderUniversoPDCDetalle.fnInitDataTablePaging = function (options) {
+        var optDt = {};
+        optDt.iLength = options.page_length;
+        optDt.iStart = 0;
+        optDt.bSearch = false;
+        optDt.bInfo = true;
+        optDt.bSort = true;
+        optDt.aSort = [];
+        return _renderUniversoPDCDetalle.frm.find("#tbListUniversoPDCDetalle").DataTable({
+            processing: true,
+            serverSide: true,
+            searching: optDt.bSearch,
+            ordering: optDt.bSort,
+            deferLoading: 0,
+            paging: true,
+            ajax: {
+                "url": urlLocalSigo + "CAPACITACION/ManPDC/ConsultTablaUniversoDetalle",
+                "data": function (d) {
+                    d.customSearchEnabled = true;
+                    d.customSearchForm = ""; //ddlModalFiscalizacion
+                    for (var i = 0; i < d.order.length; i++) {
+                        d.order[i]["column_name"] = d.columns[d.order[i]["column"]]["data"];
+                    }
+                    d.columns = null;
+                },
+                "error": function (jqXHR) {
+                    utilSigo.unblockUIGeneral();
+                    utilSigo.toastError("Error", initSigo.MessageError);
+                    console.log(jqXHR.responseText);
+                }
+            },
+            columns: options.table_columns,
+            bInfo: optDt.bInfo,
+            "lengthMenu": [[10, 20, 50, 100], [10, 20, 50, 100]],
+            //"bLengthChange": false, //para el cambio de numeros de la pagina
+            "aaSorting": optDt.aSort,
+            "pageLength": optDt.iLength,
+            "displayStart": optDt.iStart,
+            "oLanguage": initSigo.oLanguage,
+            "drawCallback": initSigo.showPagination,
+        });
+
+    }
+
+    _renderUniversoPDCDetalle.fnInit = function () {
+        _renderUniversoPDCDetalle.dtConsultaInforme.ajax.reload();
+        alert('ingreso aqui');
+    }
+
+    $(document).ready(function () {
+        _renderUniversoPDCDetalle.frm = $("#divTbResumenDetalle");
+        _renderUniversoPDCDetalle.fnInitDataTable_Detail();
+        _renderUniversoPDCDetalle.dtRenderUniversoPDC.ajax.reload();
+
+    });
+</script>
+
+<div id="divTbResumenDetalle">
+
+    <div class="table-responsive">
+        <table id="tbListUniversoPDCDetalle" style="width:100%;margin:0px !important;" class="table table-hover table-bordered">
+            <thead>
+                <tr>
+                    <th colspan="34" class="text-sm-left">
+                        <div class="form-inline">
+                            <strong> Datos del Universo Capacitable</strong>&nbsp;
+                            <label style="cursor:pointer;" class="fa mx-2 fa-lg fa-file-excel-o" title="Importar Archivo" data-toggle="tooltip" onclick="_rendReporteConsolidadoPDC.fnExport()">
+                                &nbsp; Descargar Universo Capacitable para el PDC &nbsp;
+                            </label>
+                        </div>
+                    </th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
+</div>
+
+<!--
+<script>
     $(function () {
-        $('#tbListUniversoPDC').DataTable();
+        $('#tbListUniversoPDCDetalle').DataTable();
     })
 </script>
 
-<div id="divTbResumen" style="width: 100%; overflow: auto; scrollbar-base-color: none;">
+<div id="divTbResumenDetalle" style="width: 100%; overflow: auto; scrollbar-base-color: none;">
     <button class="btn btn-outline btn-info" title="Descargar Resumen" onclick="_rendReporteConsolidadoPDC.fnExportDetalle()"
             type="button" style="margin-right:10px">
         <i class="fa fa-file-excel-o"></i>
     </button><br /><br />
 
-    <table id="tbListUniversoPDC" class="table table-bordered table-striped-success" style="width: 100% !important; font-size:12px">
+    <table id="tbListUniversoPDCDetalle" class="table table-bordered table-striped-success" style="width: 100% !important; font-size:12px">
         <thead>
             <tr style=" text-align: center;  background-color: #dae7f5">
                 <td style="width: 2%">N°</td>
@@ -51,51 +152,52 @@
             </tr>
         </thead>
         <tbody id="bodyTable">
-            @if (Model.list_universoPDC != null)
+            4if (Model.list_universoPDC != null)
             {
                 var count = 0;
                 foreach (var item in Model.list_universoPDC)
                 {
                     <tr>
-                        <td style="width: 2%">@(++count)</td>
-                        <td style="width: 10%">@item.OFICINA_DESCONCENTRADA</td>
-                        <td style="width: 10%">@item.TITULO</td>
-                        <td style="width: 10%">@item.MODALIDAD</td>
-                        <td style="width: 10%">@item.TITULAR</td>
-                        <td style="width: 10%">@item.REP_LEGAL</td>
-                        <td style="width: 10%">@item.DEPARTAMENTO</td>
-                        <td style="width: 10%">@item.PROVINCIA</td>
+                        <td style="width: 2%">4(++count)</td>
+                        <td style="width: 10%">4item.OFICINA_DESCONCENTRADA</td>
+                        <td style="width: 10%">4item.TITULO</td>
+                        <td style="width: 10%">4item.MODALIDAD</td>
+                        <td style="width: 10%">4item.TITULAR</td>
+                        <td style="width: 10%">4item.REP_LEGAL</td>
+                        <td style="width: 10%">4item.DEPARTAMENTO</td>
+                        <td style="width: 10%">4item.PROVINCIA</td>
 
-                        <td style="width: 10%">@item.DISTRITO</td>
-                        <td style="width: 10%">@item.FECHA_VIGENCIA</td>
-                        <td style="width: 10%">@item.FECHA_CORTE</td>
-                        <td style="width: 10%">@item.AREA</td>
-                        <td style="width: 10%">@item.ULTIMO_PLAN</td>
-                        <td style="width: 10%">@item.ROJO</td>
-                        <td style="width: 10%">@item.VERDE</td>
-                        <td style="width: 10%">@item.ALERTA</td>
-                        <td style="width: 10%">@item.PASPEQ</td>
-                        <td style="width: 10%">@item.PASPEQ_ENFOQUE</td>
-                        <td style="width: 10%">@item.FECHA_SUPERVISION</td>
-                        <td style="width: 10%">@item.S_VOL_APROB</td>
-                        <td style="width: 10%">@item.S_VOL_MOV</td>
-                        <td style="width: 10%">@item.S_VOL_INJUST</td>
-                        <td style="width: 10%">@item.INFRACCIONES</td>
+                        <td style="width: 10%">4item.DISTRITO</td>
+                        <td style="width: 10%">4item.FECHA_VIGENCIA</td>
+                        <td style="width: 10%">4item.FECHA_CORTE</td>
+                        <td style="width: 10%">4item.AREA</td>
+                        <td style="width: 10%">4item.ULTIMO_PLAN</td>
+                        <td style="width: 10%">4item.ROJO</td>
+                        <td style="width: 10%">4item.VERDE</td>
+                        <td style="width: 10%">4item.ALERTA</td>
+                        <td style="width: 10%">4item.PASPEQ</td>
+                        <td style="width: 10%">4item.PASPEQ_ENFOQUE</td>
+                        <td style="width: 10%">4item.FECHA_SUPERVISION</td>
+                        <td style="width: 10%">4item.S_VOL_APROB</td>
+                        <td style="width: 10%">4item.S_VOL_MOV</td>
+                        <td style="width: 10%">4item.S_VOL_INJUST</td>
+                        <td style="width: 10%">4item.INFRACCIONES</td>
 
-                        <td style="width: 10%">@item.MULTAS</td>
-                        <td style="width: 10%">@item.ESTADO_PAU</td>
-                        <td style="width: 10%">@item.ESTADO_PAGO</td>
-                        <td style="width: 10%">@item.MODALIDAD_PAGO</td>
-                        <td style="width: 10%">@item.MEC_COMP</td>
-                        <td style="width: 10%">@item.N_CAPACITACION</td>
-                        <td style="width: 10%">@item.FECHA_ULT_CAP</td>
-                        <td style="width: 10%">@item.TEMA_ULT_CAP</td>
-                        <td style="width: 10%">@item.TEMA_MOCHILA_CAP</td>
-                        <td style="width: 10%">@item.TEMA_MOCHILA_ENT</td>
-                        <td style="width: 10%">@item.PRIORIDAD</td>
+                        <td style="width: 10%">4item.MULTAS</td>
+                        <td style="width: 10%">4item.ESTADO_PAU</td>
+                        <td style="width: 10%">4item.ESTADO_PAGO</td>
+                        <td style="width: 10%">4item.MODALIDAD_PAGO</td>
+                        <td style="width: 10%">4item.MEC_COMP</td>
+                        <td style="width: 10%">4item.N_CAPACITACION</td>
+                        <td style="width: 10%">4item.FECHA_ULT_CAP</td>
+                        <td style="width: 10%">4item.TEMA_ULT_CAP</td>
+                        <td style="width: 10%">4item.TEMA_MOCHILA_CAP</td>
+                        <td style="width: 10%">4item.TEMA_MOCHILA_ENT</td>
+                        <td style="width: 10%">4item.PRIORIDAD</td>
                     </tr>
                 }
             }
         </tbody>
     </table>
 </div>
+    -->

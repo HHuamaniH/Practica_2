@@ -1,0 +1,94 @@
+﻿
+<script>
+    var _renderLisrtImportPASPEQ = {};
+
+    _renderLisrtImportPASPEQ.fnInitDataTable_Detail = function () {
+        var columns_label = [], columns_data = [], options = {};
+        columns_label = ["Titulo Habilitante", "Enfoque", "Mes de Focalizacion", "Año Corte"];
+        columns_data = ["TITULO", "ENFOQUE", "MES_FOCALIZACION", "ANIO"];
+        options = {
+            page_paging: true, page_length: 10, row_index: true, row_select: false
+        };
+
+        utilDt.fnLoadDataTable_Detail(_renderLisrtImportPASPEQ.frm.find("#tbRenderTImportPASPEQ"), columns_label, columns_data, options);
+        _renderLisrtImportPASPEQ.dtRenderListIPASPEQ = _renderLisrtImportPASPEQ.fnInitDataTablePaging(options);
+    }
+
+    _renderLisrtImportPASPEQ.fnInitDataTablePaging = function (options) {
+        var optDt = {};
+        optDt.iLength = options.page_length;
+        optDt.iStart = 0;
+        optDt.bSearch = true;
+        optDt.bInfo = true;
+        optDt.bSort = true;
+        optDt.aSort = [];
+        return _renderLisrtImportPASPEQ.frm.find("#tbRenderTImportPASPEQ").DataTable({
+            processing: true,
+            serverSide: true,
+            searching: optDt.bSearch,
+            ordering: optDt.bSort,
+            deferLoading: 0,
+            paging: true,
+            ajax: {
+                "url": urlLocalSigo + "CAPACITACION/ManPDC/ConsultTablaImport",
+                "data": function (d) {
+                    d.customSearchEnabled = true;
+                    d.customSearchForm = "PDC_CONSOLIDADO_PASPEQ"; //ddlModalFiscalizacion
+                    //d.customSearchType = _renderLisrtImportPASPEQ.frm.find("#ddlModalFiscalizacion").val();
+                    //d.customSearchValue = _renderLisrtImportPASPEQ.frm.find("#txtConsultaILegal").val();*/
+                    for (var i = 0; i < d.order.length; i++) {
+                        d.order[i]["column_name"] = d.columns[d.order[i]["column"]]["data"];
+                    }
+                    d.columns = null;
+                },
+                "error": function (jqXHR) {
+                    utilSigo.unblockUIGeneral();
+                    utilSigo.toastError("Error", initSigo.MessageError);
+                    console.log(jqXHR.responseText);
+                }
+            },
+            columns: options.table_columns,
+            bInfo: optDt.bInfo,
+            "lengthMenu": [[10, 20, 50, 100], [10, 20, 50, 100]],
+            //"bLengthChange": false, //para el cambio de numeros de la pagina
+            "aaSorting": optDt.aSort,
+            "pageLength": optDt.iLength,
+            "displayStart": optDt.iStart,
+            "oLanguage": initSigo.oLanguage,
+            "drawCallback": initSigo.showPagination,
+        });
+
+    }
+
+    _renderLisrtImportPASPEQ.fnInit = function () {
+        _renderLisrtImportPASPEQ.dtConsultaInforme.ajax.reload();
+        alert('ingreso aqui');
+    }
+
+    $(document).ready(function () {
+        _renderLisrtImportPASPEQ.frm = $("#frmRenderTImportPASPEQ");
+        //inicializa la tabla con los campos obtenidos del model
+        _renderLisrtImportPASPEQ.fnInitDataTable_Detail();
+        _renderLisrtImportPASPEQ.dtRenderListIPASPEQ.ajax.reload();
+        //inicializa los componentes necesarios
+        //_renderLisrtImportPASPEQ.fnInit();
+
+    });
+</script>
+
+<div id="frmRenderTImportPASPEQ">
+    <div class="table-responsive">
+        <table id="tbRenderTImportPASPEQ" style="width:100%;margin:0px !important;" class="table table-hover table-bordered">
+            <thead>
+                <tr>
+                    <th colspan="6" class="text-sm-left">
+                        <div class="form-inline">
+                            <strong> Datos de la Importacion del PASPQEQ</strong>
+                        </div>
+                    </th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
+</div>
