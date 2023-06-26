@@ -2700,42 +2700,21 @@ namespace CapaDatos.DOC
                 {
                     cmd.ExecuteNonQuery();
                     OUTPUTPARAM01 = (String)cmd.Parameters["OUTPUTPARAM01"].Value;
-                    if (OUTPUTPARAM01 == "99")
-                    {
-                        tr.Rollback();
-                        tr = null;
-                        throw new Exception("Ud. no tiene permiso para realizar esta acción");
-                    }
+              
                     if (OUTPUTPARAM01 == "0")
                     {
                         tr.Rollback();
                         tr = null;
-                        throw new Exception("El Nombre de la Capacitación ya Existe");
+                        throw new Exception("Error al insertar los datos");
                     }
-                    else if (OUTPUTPARAM01 == "3")
-                    {
-                        tr.Rollback();
-                        tr = null;
-                        throw new Exception("Este Control de Calidad no puede modificarse");
-                    }
-                    else if (OUTPUTPARAM01 == "2")
-                    {
-                        tr.Rollback();
-                        tr = null;
-                        throw new Exception("No Tiene Permisos para Modificar este Registro");
-                    }
-                    else if (OUTPUTPARAM01 == "1")
+  
+                    /*else if (OUTPUTPARAM01 == "1")
                     {
                         tr.Rollback();
                         tr = null;
                         throw new Exception("El Nombre de la Capacitación ya Existe");
-                    }
-                    else if (OUTPUTPARAM01 == "100")
-                    {
-                        tr.Rollback();
-                        tr = null;
-                        throw new Exception("La capacitación ya se encuentra con Control de Calidad Conforme");
-                    }
+                    }*/
+              
                 }
                 //Reemplazando El Nuevo Codigo Creado
                 if (oCEntidad.ESTADO == 1) //Nuevo
