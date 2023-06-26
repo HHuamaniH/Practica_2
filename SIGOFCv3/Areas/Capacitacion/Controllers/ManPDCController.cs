@@ -305,16 +305,16 @@ namespace SIGOFCv3.Areas.Capacitacion.Controllers
                             var obj = new Ent_PDCImportPASPEQ();
                             for (int rowIterator = 2; rowIterator <= noOfRow; rowIterator++)
                             {
-                                if (workSheet.Cells[rowIterator, 1].Value.ToString() != "")
+                                if (workSheet.Cells[rowIterator, 2].Value.ToString() != "")
                                 {
                                     obj = new Ent_PDCImportPASPEQ();
                                     obj.ESTADO = 1;
                                     obj.ANIO = 0;
                                     obj.ID_REGISTRO = 0;
-                                    obj.TITULO = workSheet.Cells[rowIterator, 3].Value == null ? "" : workSheet.Cells[rowIterator, 3].Value.ToString();
-                                    obj.ENFOQUE = workSheet.Cells[rowIterator, 4].Value == null ? "" : workSheet.Cells[rowIterator, 4].Value.ToString();
-                                    obj.MES_FOCALIZACION = workSheet.Cells[rowIterator, 6].Value == null ? "" : workSheet.Cells[rowIterator, 6].Value.ToString();
-                                    obj.MES = workSheet.Cells[rowIterator, 5].Value == null ? 0 : Int32.Parse(workSheet.Cells[rowIterator, 5].Value.ToString());
+                                    obj.TITULO = workSheet.Cells[rowIterator, 2].Value == null ? "" : workSheet.Cells[rowIterator, 2].Value.ToString();
+                                    obj.ENFOQUE = workSheet.Cells[rowIterator, 3].Value == null ? "" : workSheet.Cells[rowIterator, 3].Value.ToString();
+                                    obj.MES_FOCALIZACION = workSheet.Cells[rowIterator, 5].Value == null ? "" : workSheet.Cells[rowIterator, 5].Value.ToString();
+                                    obj.MES = workSheet.Cells[rowIterator, 4].Value == null ? 0 : Int32.Parse(workSheet.Cells[rowIterator, 4].Value.ToString());
 
                                     listImport.Add(obj);
 
