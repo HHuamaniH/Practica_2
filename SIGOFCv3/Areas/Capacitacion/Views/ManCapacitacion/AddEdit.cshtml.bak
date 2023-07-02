@@ -13,7 +13,7 @@
 <script src="~/Scripts/datatables/Extensions/buttons.print.js"></script>
 <script src="~/Scripts/ckeditor/ckeditor.js"></script>
 <script src="~/Scripts/sigo/utility.uploadFile.js"></script>
-<script src="~/Areas/Capacitacion/js/ManCapacitacion/AddEdit.js?v3"></script>
+<script src="~/Areas/Capacitacion/js/ManCapacitacion/AddEdit.js"></script>
 <script type="text/javascript">
     ManCapacitacion_AddEdit.fnLoadData('@Html.Raw(Json.Encode(@Model.tbParticipante_Asistentes))', "DataAsistente");
     ManCapacitacion_AddEdit.fnLoadData('@Html.Raw(Json.Encode(@Model.tbParticipante_EquipoApoyo))', "DataEquipoApoyo");
@@ -89,7 +89,6 @@
                             <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#navNotaConceptual" role="tab" aria-controls="home" aria-selected="false">Nota Conceptual</a></li>
                             <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#navMemoriaTaller" role="tab" aria-controls="home" aria-selected="false">Memoria taller</a></li>
                             <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#navDocumentos" role="tab" aria-controls="home" aria-selected="false">Documentos</a></li>
-                            <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#navConstancias" role="tab" aria-controls="home" aria-selected="false">Constancias</a></li>
                         </ul>
                         <div class="tab-content">
                             <div class="tab-pane fade show" id="navEstado" role="tabpanel" aria-labelledby="nav-home-tab">
@@ -821,7 +820,6 @@
     <div class="modal fade hide" id="mdlBuscarPersona" role="dialog"></div>
     <div class="modal fade hide" id="modalAddEditPersona" role="dialog"></div>
     <div class="modal fade hide" id="personaUbigeoModal" role="dialog"></div>
-    <div class="modal fade hide" id="mdlBuscarParticipante" role="dialog"></div>
 </div>
 @*@Scripts.Render("~/jQuery")
     @Scripts.Render("~/jQueryValidate")

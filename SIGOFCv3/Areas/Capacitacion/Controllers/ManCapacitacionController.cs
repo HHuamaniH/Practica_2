@@ -13,6 +13,9 @@ using Microsoft.Reporting.WebForms;
 using System.IO;
 using CapaEntidad.ViewModel.General;
 using SIGOFCv3.Helper;
+using CapaEntidad.DOC;
+using System.Linq;
+using ICSharpCode.SharpZipLib.Zip;
 
 namespace SIGOFCv3.Areas.Capacitacion.Controllers
 {
@@ -467,5 +470,523 @@ namespace SIGOFCv3.Areas.Capacitacion.Controllers
 
 
         }
+        #region "Gestión de constancias"
+        //USAR SharpZipLib PARA DESCARGA MASIVA
+        [HttpGet]
+        public ActionResult ConstanciaDescargarAll(String codCapacitacion)
+        {
+            string folderBase = "~/Archivos/CapConstancias";
+            string folderZips = folderBase+"/Zips";
+            byte[] dataByte = null;
+            try
+            {
+                if (!Directory.Exists(Server.MapPath(folderZips)))
+                {
+                    Directory.CreateDirectory(Server.MapPath(folderZips));
+                }
+
+                CLogica exeCap = new CLogica();
+                var constancias = exeCap.ConstanciaListar(codCapacitacion);
+
+                var constanciasActivas = constancias.Where(x => x.ESTADO == 1).ToList();
+
+                if (constanciasActivas.Count > 0)
+                {
+                    string file = Path.Combine(Server.MapPath(folderZips), string.Format("{0:yyyyMMdd_HHmmss}", DateTime.Now) + ".zip");
+                    System.IO.FileStream fs = System.IO.File.Create(file);
+                    using (ZipOutputStream zip = new ZipOutputStream(fs))
+                    {
+                        foreach(var item in constanciasActivas)
+                        {
+
+                            string constanciaName = item.ARCHIVO;
+                            string pathFinal = System.IO.Path.Combine(Server.MapPath(folderBase), item.ARCHIVO_COD);     
+                            byte[] byteFile = System.IO.File.ReadAllBytes(pathFinal);
+                            ZipEntry entry;
+                            entry = new ZipEntry(constanciaName);
+                            entry.DateTime = System.DateTime.Now;
+                            zip.PutNextEntry(entry);
+                            dataByte = byteFile;
+                            zip.Write(dataByte, 0, dataByte.Length);
+                        }
+                        zip.Finish();
+                        zip.Close();
+                    }
+                    fs.Dispose(); // must dispose of it
+                    fs = System.IO.File.OpenRead(file); // must re-open the zip file
+                    dataByte = new byte[fs.Length];
+                    fs.Read(dataByte, 0, dataByte.Length);
+                    fs.Close();                  
+                }
+                else
+                {
+                   return Content("No existen constancias");
+                }
+                return File(dataByte, "application/x-zip-compressed", string.Format("{0}{1}.zip", "Constancias_", string.Format("{0:yyyyMMdd_HHmmss}", DateTime.Now)));
+            }
+            catch (Exception ex)
+            {
+                return Content("Error al descargar los cargos. Por favor comunicarse con soporte");       
+            }
+        }
+        [HttpGet]
+        public JsonResult ConstanciaListar(String codCapacitacion,int flagActivo = 0)
+        {
+            try
+            {
+                CLogica exeCap = new CLogica();
+                var constancias = exeCap.ConstanciaListar(codCapacitacion, flagActivo);               
+                var jsonResult=Json(new { success = true, data=constancias, msj = "" }, JsonRequestBehavior.AllowGet);
+                jsonResult.MaxJsonLength = int.MaxValue;
+                return jsonResult;
+            }
+            catch (Exception ex)
+            {
+                return Json(new { success = false,data="", msj = ex.Message }, JsonRequestBehavior.AllowGet);
+            }
+        }
+        [HttpGet]
+        public JsonResult ConstanciaEliminar(String codConstancia)
+        {
+            string folderBase = "~/Archivos/CapConstancias";
+            try
+            {
+                CLogica exeCap = new CLogica();
+                var constancia = exeCap.ConstanciaObtener(codConstancia);
+                if (constancia == null) throw new Exception("Constancia a eliminar no existe");
+                if (constancia.ESTADO==0) throw new Exception($"La Constancia {constancia.NRO_CONSTANCIA} ya se encuentra eliminada");
+
+                exeCap.ConstanciaEliminar(codConstancia, (ModelSession.GetSession())[0].COD_UCUENTA);
+
+                try
+                {
+                    string folderEli = folderBase + "/Eliminados";
+                    if (!Directory.Exists(Server.MapPath(folderEli)))
+                    {
+                        Directory.CreateDirectory(Server.MapPath(folderEli));
+                    }
+                    string pathOrigenDoc = Path.Combine(Server.MapPath(folderBase), $"{constancia.ARCHIVO_COD}");
+                    string pathDestinoDoc = Path.Combine(Server.MapPath(folderEli), $"{constancia.ARCHIVO_COD}");
+                    if (System.IO.File.Exists(pathOrigenDoc))
+                    {
+                        System.IO.File.Move(pathOrigenDoc, pathDestinoDoc);
+                    }
+                }
+                catch (Exception){}
+
+                return Json(new { success = true, msj = "Constancia eliminado correctamente" }, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                return Json(new { success = false,msj = ex.Message }, JsonRequestBehavior.AllowGet);
+            }
+        }
+        [HttpGet]
+        public ActionResult ConstanciaVer(String codConstancia)
+        {
+            string folderBase = "~/Archivos/CapConstancias";
+            try
+            {
+                CLogica exeCap = new CLogica();
+                var constancia= exeCap.ConstanciaObtener(codConstancia);
+
+
+
+                if (constancia == null) throw new Exception("0|Constancia no existe");
+
+                if(constancia.ESTADO==0) folderBase = "~/Archivos/CapConstancias/Eliminados";
+
+
+                Stream stream;
+                string pathFinal = System.IO.Path.Combine(Server.MapPath(folderBase), constancia.ARCHIVO_COD);
+
+                if (!System.IO.File.Exists(pathFinal)) throw new Exception("0|No existe constancia");
+
+                Byte[] byteFile = System.IO.File.ReadAllBytes(pathFinal);
+
+                stream = new MemoryStream(byteFile);
+                var contentDisposition = new System.Net.Mime.ContentDisposition
+                {
+                    FileName = constancia.ARCHIVO,
+                    Inline = true
+                };
+                Response.AppendHeader("Content-Disposition", contentDisposition.ToString());
+                return File(stream, System.Net.Mime.MediaTypeNames.Application.Pdf);
+            }
+            catch (Exception ex)
+            {
+                string msj = "Error al descargar la constancia";
+                string[] mensaje = ex.Message.Split('|');
+                if (mensaje[0] == "0")
+                    msj = mensaje[1];
+                return Json(msj, JsonRequestBehavior.AllowGet);
+            }
+        }
+        [HttpGet]
+        public JsonResult GenerarConstancias(String codCapacitacion,int cantidad,string modalidad)
+        {   
+            int ultimoCorrelativo=0;
+            int anioActual = 0;
+            string abreviatura = string.Empty;
+            string nroConstancia = string.Empty;
+            List<Ent_CAPACITACION_CONSTANCIA> constancias = null;
+            Ent_CAPACITACION_CONSTANCIA constancia = null;
+            bool flagRegBD = false;
+            //--------------------------
+            string nombrePlantilla = "Capacitacion_Constancia_Plantilla.docx";
+            string folderPlantilla = "~/Archivos/Plantilla/Capacitacion";
+            string folderBase= "~/Archivos/CapConstancias";
+            string folderTemp = folderBase+"/Temp";
+            string pathDestinoWord = string.Empty;
+            string pathDestinoPdf = string.Empty;
+            byte[] bytePlantilla = null;
+
+            //-------------------------
+            try
+            {
+                modalidad = modalidad.ToUpper();
+                CLogica exeCap = new CLogica();
+                constancias = new List<Ent_CAPACITACION_CONSTANCIA>();
+                var capacitacion= exeCap.ObtenerPorId(codCapacitacion);
+                if (capacitacion != null)
+                {
+                    DateTime fechaActual = DateTime.Now;
+                    anioActual = fechaActual.Year;
+                    ultimoCorrelativo = exeCap.ObtenerUltimoCorrelativoPorAnio(anioActual);
+                    abreviatura = exeCap.ObtenerAbreviatura(capacitacion.COD_CAPATIPO);
+                    if (string.IsNullOrEmpty(abreviatura)) throw new Exception("No existe código de abreviatura para el tipo de capacitación");
+                    if(cantidad<=0) throw new Exception("Ingrese Número de constancia mayor a 0");
+                    if(string.IsNullOrEmpty(modalidad)) throw new Exception("Ingrese modalidad válida");
+                    if (modalidad.Length<3) throw new Exception("Ingrese modalidad válida");
+
+                    ultimoCorrelativo = ultimoCorrelativo +1;
+                    int final = ultimoCorrelativo+cantidad;
+
+                    //validando existencia de plantilla de constancias
+                    try
+                    {
+                        bytePlantilla = System.IO.File.ReadAllBytes(Path.Combine(Server.MapPath(folderPlantilla), nombrePlantilla));
+
+                        if (!Directory.Exists(Server.MapPath(folderBase)))
+                        {
+                            Directory.CreateDirectory(Server.MapPath(folderBase));
+                        }
+                        if (!Directory.Exists(Server.MapPath(folderTemp)))
+                        {
+                            Directory.CreateDirectory(Server.MapPath(folderTemp));
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        throw new Exception("Error al leer la plantilla de constancia");
+                    }
+
+                    for (int i= ultimoCorrelativo; i< final; i++)
+                    {
+                        constancia = new Ent_CAPACITACION_CONSTANCIA();
+                        nroConstancia = abreviatura +"-"+ i.ToString().PadLeft(4,'0') +"-"+ anioActual;
+                        constancia.COD_CAPACITACION = codCapacitacion;
+                        constancia.CORRELATIVO = i;
+                        constancia.CORRELATIVO_ANIO = anioActual;
+                        constancia.NRO_CONSTANCIA = nroConstancia;
+                        modalidad = System.Text.RegularExpressions.Regex.Replace(modalidad, "^[a-z]", m => m.Value.ToUpper());
+                        constancia.MODALIDAD = modalidad;
+                        constancia.ARCHIVO = nroConstancia + ".pdf";
+                        constancia.ARCHIVO_COD = Guid.NewGuid().ToString();
+                        constancia.COD_UCUENTA = (ModelSession.GetSession())[0].COD_UCUENTA;
+                        constancia.FECHA_CREACION = DateTime.Now;
+                        constancia.ESTADO = 1;
+                        constancias.Add(constancia);
+                    }
+                    //creando pdfs
+                    foreach(var item in constancias)
+                    {
+                        pathDestinoWord = Path.Combine(Server.MapPath(folderTemp), $"{item.ARCHIVO_COD}.docx");
+                        pathDestinoPdf = Path.Combine(Server.MapPath(folderBase), $"{item.ARCHIVO_COD}.pdf");
+                        item.ARCHIVO_COD = item.ARCHIVO_COD + ".pdf";
+                        using (MemoryStream mem = new MemoryStream())
+                        {
+                            mem.Write(bytePlantilla, 0, (int)bytePlantilla.Length);
+                            using (DocumentFormat.OpenXml.Packaging.WordprocessingDocument wordDoc = DocumentFormat.OpenXml.Packaging.WordprocessingDocument.Open(mem, true))
+                            {
+                                var body = wordDoc.MainDocumentPart.Document.Body;
+                                var paras = body.Elements<DocumentFormat.OpenXml.Wordprocessing.Paragraph>();
+                                var tables = body.Elements<DocumentFormat.OpenXml.Wordprocessing.Table>();
+                                HelperWord.BuscarReemplazarTexto(paras, "VAR_TIPOTALLER", capacitacion.CAPATIPO);
+                                HelperWord.BuscarReemplazarTexto(paras, "VAR_NOMBRETALLER", capacitacion.NOMBRE.Replace("\"", "").Replace("“","").Replace("”",""));
+                                HelperWord.BuscarReemplazarTexto(paras, "VAR_DIRIGIDO", capacitacion.DIRIGIDO);
+                                
+                                HelperWord.BuscarReemplazarTexto(paras, "VAR_MODALIDAD",item.MODALIDAD);                               
+                               
+                                HelperWord.BuscarReemplazarTexto(paras, "VAR_HORAE", capacitacion.DURACION.ToString());
+                                HelperWord.BuscarReemplazarTexto(paras, "VAR_LUGARE", capacitacion.LUGAR);
+                                if (capacitacion.FECHA_INICIO != null)
+                                {
+                                    HelperWord.BuscarReemplazarTexto(paras, "VAR_FECHATALLER", capacitacion.FECHA_INICIO.ToString());
+                                    HelperWord.BuscarReemplazarTexto(paras, "VAR_FECHAE", HelperWord.FechaLetras(Convert.ToDateTime(capacitacion.FECHA_INICIO)));
+                                }
+                                else
+                                {
+                                    HelperWord.BuscarReemplazarTexto(paras, "VAR_FECHATALLER", "..............");
+                                    HelperWord.BuscarReemplazarTexto(paras, "VAR_FECHAE", "..............");
+                                }
+                                HelperWord.BuscarReemplazarTexto(paras, "VAR_NUMC", item.NRO_CONSTANCIA);
+                                HelperWord.SearchAndReplace(wordDoc, "VAR_NUMC", item.NRO_CONSTANCIA, true);                              
+
+
+                                wordDoc.Close();
+                            }
+                            this.GuardarMemoryStream(mem, pathDestinoWord);
+                            //  this.GenerarPDF(pathDestinoWord, pathDestinoPdf, inscripcionId);
+                            this.GenerarPDF(pathDestinoWord, pathDestinoPdf);                           
+                        }
+                        this.EliminarArchivo(pathDestinoWord);
+                    }
+                    //insertando en la base de datos
+                    flagRegBD= exeCap.ConstanciaInsertarMasivo(constancias);
+                    
+                    if (constancias.Count <= 0)
+                    {
+                        return Json(new { success = false, msj = "No se ha generado alguna constancia" }, JsonRequestBehavior.AllowGet);
+                    }
+                    else if (constancias.Count == 1)
+                    {
+                        return Json(new { success = true, msj = "Se ha generado una constancia" }, JsonRequestBehavior.AllowGet);
+                    }
+                    else
+                    {
+                        return Json(new { success = true, msj = $"Se ha generado una total de {constancias.Count} constancias" }, JsonRequestBehavior.AllowGet);
+                    }
+                }
+                else
+                {
+                    throw new Exception("Capacitación no existe");
+                }
+                
+            }
+            catch (Exception ex)
+            {
+                if(constancias != null)
+                {
+                    foreach(var eli in constancias)
+                    {
+                        pathDestinoWord = Path.Combine(Server.MapPath(folderTemp), $"{eli.ARCHIVO_COD}.docx");
+                        pathDestinoPdf = Path.Combine(Server.MapPath(folderBase), $"{eli.ARCHIVO_COD}.pdf");
+                        this.EliminarArchivo(pathDestinoWord);
+                        this.EliminarArchivo(pathDestinoPdf);
+                    }
+                }
+                return Json(new { success = false, msj = ex.Message }, JsonRequestBehavior.AllowGet);
+            }
+
+        }
+        private void GuardarMemoryStream(MemoryStream ms, string fileName)
+        {
+            FileStream outStream = System.IO.File.OpenWrite(fileName);
+            ms.WriteTo(outStream);
+            outStream.Flush();
+            outStream.Close();
+        }
+        private void GenerarPDF(string fileNameOrigen, string fileNameDestino)
+        {
+            WnvWordToPdf.WordToPdfConverter wordToPdfConverter = new WnvWordToPdf.WordToPdfConverter();
+            wordToPdfConverter.LicenseKey = "G5WGlIaHlIOFjICUhYGahJSHhZqFhpqNjY2NlIQ=";
+            try
+            {
+                byte[] outPdfBuffer = wordToPdfConverter.ConvertWordFile(fileNameOrigen);
+                System.IO.File.WriteAllBytes(fileNameDestino, outPdfBuffer);
+            }
+            catch (Exception e)
+            {
+                throw new Exception("Error al convertir a PDF");
+            }
+        }
+        private void EliminarArchivo(string fileName)
+        {
+            try
+            {
+                if (System.IO.File.Exists(fileName))
+                    System.IO.File.Delete(fileName);
+            }
+            catch (Exception) { }
+        }
+        [HttpGet]
+        public JsonResult ParticipanteListar(string codCapacitacion, string codTipoParticipante, string persona)
+        {
+            try
+            {
+                CLogica exeCap = new CLogica();
+                List<CEntidad> consulta = exeCap.ParticipanteListar(codCapacitacion, codTipoParticipante, persona);
+                int i = 1;
+                var result = from c in consulta
+                             select new
+                             {
+                                 ind = i++,
+                                 COD_CAPACITACION = c.COD_CAPACITACION,
+                                 COD_PERSONA = c.COD_PERSONA,
+                                 MAE_COD_TIPOPARTICIPANTE = c.MAE_COD_TIPOPARTICIPANTE,
+                                 N_DOCUMENTO = c.N_DOCUMENTO,
+                                 APE_PATERNO = c.APE_PATERNO,
+                                 APE_MATERNO = c.APE_MATERNO,
+                                 NOMBRES = c.NOMBRES,
+                                 APELLIDOS_NOMBRES = c.APELLIDOS_NOMBRES,
+                                 COD_INSTITUCION = c.COD_INSTITUCION,
+                                 NOM_INSTITUCION = c.NOM_INSTITUCION,
+                                 CARGO = c.CARGO,
+                                 GENERO = c.GENERO,
+                                 EDAD = c.EDAD,
+                                 TELEFONO = c.TELEFONO,
+                                 CORREO = c.CORREO,
+                                 OBSERVACION = c.OBSERVACION,
+                                 COD_CONSTANCIA = c.COD_CONSTANCIA,
+                                 FUNCION = c.FUNCION,
+                                 COD_CCNN = c.COD_CCNN,
+                                 CCNN = c.CCNN,
+                                 ETNIA = c.ETNIA,
+                                 COD_THABILITANTE = c.COD_THABILITANTE,
+                                 NUM_THABILITANTE = c.NUM_THABILITANTE,
+                                 MAE_COD_GRUPOPUBLICOPARTICIPANTE = c.MAE_COD_GRUPOPUBLICOPARTICIPANTE,
+                                 GRUPOPUBLICOPARTICIPANTE = c.GRUPOPUBLICOPARTICIPANTE,
+                                 MAE_COD_PUBLICOPARTICIPANTE = c.MAE_COD_PUBLICOPARTICIPANTE,
+                                 PUBLICOPARTICIPANTE = c.PUBLICOPARTICIPANTE,
+                                 FECHA_CREACION = c.FECHA_CREACION,
+                                 MOCHILAFORESTAL = c.MOCHILAFORESTAL,
+                                 COD_CONSTANCIA_CAP=c.COD_CONSTANCIA_CAP
+                             };
+                var jsonResult = Json(new { data = result, success = true, er = "" }, JsonRequestBehavior.AllowGet);
+                jsonResult.MaxJsonLength = int.MaxValue;
+                return jsonResult;
+            }
+            catch (Exception ex)
+            {
+                return Json(new { data = "", success = false, er = ex.Message }, JsonRequestBehavior.AllowGet);
+            }
+        }
+        [HttpGet]
+        public ActionResult _ParticitanteBuscar(string codCapacitacion, string codTipoParticipante,string codConstancia)
+        {
+            ViewBag.hdCodCapacitacion = codCapacitacion;
+            ViewBag.hdCodTipoParticipante = codTipoParticipante;
+            ViewBag.hdCodConstancia = codConstancia;
+            return PartialView();
+        }
+        [HttpGet]
+        public JsonResult ReGenerarConstancias(string codCapacitacion, string codTipoParticipante, string codConstancia,string codPersona)
+        {
+            string nuevoCodigoConstancia;
+            string nombrePlantilla = "Capacitacion_Constancia_PlantillaParticipante.docx";
+            string folderPlantilla = "~/Archivos/Plantilla/Capacitacion";
+            string folderBase = "~/Archivos/CapConstancias";
+            string folderTemp = folderBase + "/Temp";
+            string pathDestinoWord = string.Empty;
+            string pathDestinoPdf = string.Empty;
+            byte[] bytePlantilla = null;
+            try
+            {
+                CLogica exeCap = new CLogica();
+                var participante=  exeCap.ParticipanteObtener(codCapacitacion, codTipoParticipante, codPersona);
+                if (participante == null) throw new Exception("Participante no existe");
+                if (!string.IsNullOrEmpty(participante.COD_CONSTANCIA_CAP))
+                {
+                    throw new Exception("Participante ya tiene constania asignada");
+                }
+                var constancia = exeCap.ConstanciaObtener(codConstancia);
+                if (constancia == null)
+                {
+                    throw new Exception("Constancia seleccionada no existe");
+                }
+                if (constancia.FLAG_ASIGNADO >= 1)
+                {
+                    throw new Exception($"La constancia {constancia.NRO_CONSTANCIA} ya ha sido asignada");
+                }
+                var capacitacion = exeCap.ObtenerPorId(codCapacitacion);
+                if (capacitacion == null)
+                {
+                    throw new Exception("Capacitación no existe");
+                }
+                //validando existencia de plantilla de constancias
+                try
+                {
+                    bytePlantilla = System.IO.File.ReadAllBytes(Path.Combine(Server.MapPath(folderPlantilla), nombrePlantilla));
+
+                    if (!Directory.Exists(Server.MapPath(folderBase)))
+                    {
+                        Directory.CreateDirectory(Server.MapPath(folderBase));
+                    }
+                    if (!Directory.Exists(Server.MapPath(folderTemp)))
+                    {
+                        Directory.CreateDirectory(Server.MapPath(folderTemp));
+                    }
+                }
+                catch (Exception ex)
+                {
+                    throw new Exception("Error al leer la plantilla de constancia");
+                }
+                nuevoCodigoConstancia = Guid.NewGuid().ToString();
+                pathDestinoWord = Path.Combine(Server.MapPath(folderTemp), $"{nuevoCodigoConstancia}.docx");
+                pathDestinoPdf = Path.Combine(Server.MapPath(folderBase), $"{nuevoCodigoConstancia}.pdf");
+                nuevoCodigoConstancia = nuevoCodigoConstancia + ".pdf";
+                using (MemoryStream mem = new MemoryStream())
+                {
+                    mem.Write(bytePlantilla, 0, (int)bytePlantilla.Length);
+                    using (DocumentFormat.OpenXml.Packaging.WordprocessingDocument wordDoc = DocumentFormat.OpenXml.Packaging.WordprocessingDocument.Open(mem, true))
+                    {
+                        var body = wordDoc.MainDocumentPart.Document.Body;
+                        var paras = body.Elements<DocumentFormat.OpenXml.Wordprocessing.Paragraph>();
+                        var tables = body.Elements<DocumentFormat.OpenXml.Wordprocessing.Table>();
+                        string persona = participante.NOMBRES?.ToUpper() + " " + participante.APE_PATERNO?.ToUpper() +" "+ participante.APE_MATERNO?.ToUpper();
+                        HelperWord.BuscarReemplazarTexto(paras, "VAR_PARTICIPANTE", persona);
+                        HelperWord.BuscarReemplazarTexto(paras, "VAR_TIPOTALLER", capacitacion.CAPATIPO);
+                        HelperWord.BuscarReemplazarTexto(paras, "VAR_NOMBRETALLER", capacitacion.NOMBRE.Replace("\"", "").Replace("“", "").Replace("”", ""));
+                        HelperWord.BuscarReemplazarTexto(paras, "VAR_DIRIGIDO", capacitacion.DIRIGIDO);
+
+                        HelperWord.BuscarReemplazarTexto(paras, "VAR_MODALIDAD", constancia.MODALIDAD);
+
+                        HelperWord.BuscarReemplazarTexto(paras, "VAR_HORAE", capacitacion.DURACION.ToString());
+                        HelperWord.BuscarReemplazarTexto(paras, "VAR_LUGARE", capacitacion.LUGAR);
+                        if (capacitacion.FECHA_INICIO != null)
+                        {
+                            HelperWord.BuscarReemplazarTexto(paras, "VAR_FECHATALLER", capacitacion.FECHA_INICIO.ToString());
+                            HelperWord.BuscarReemplazarTexto(paras, "VAR_FECHAE", HelperWord.FechaLetras(Convert.ToDateTime(capacitacion.FECHA_INICIO)));
+                        }
+                        else
+                        {
+                            HelperWord.BuscarReemplazarTexto(paras, "VAR_FECHATALLER", "..............");
+                            HelperWord.BuscarReemplazarTexto(paras, "VAR_FECHAE", "..............");
+                        }
+                        HelperWord.BuscarReemplazarTexto(paras, "VAR_NUMC", constancia.NRO_CONSTANCIA);
+                        HelperWord.SearchAndReplace(wordDoc, "VAR_NUMC", constancia.NRO_CONSTANCIA, true);
+
+
+                        wordDoc.Close();
+                    }
+                    this.GuardarMemoryStream(mem, pathDestinoWord);
+                    //  this.GenerarPDF(pathDestinoWord, pathDestinoPdf, inscripcionId);
+                    this.GenerarPDF(pathDestinoWord, pathDestinoPdf);
+                }
+                this.EliminarArchivo(pathDestinoWord);
+
+                //actualizando participante y constancia codCapacitacion, codTipoParticipante, codPersona
+                var result= exeCap.ParticipanteAsignarConstancia(codCapacitacion, codTipoParticipante, codPersona, constancia.COD_CONSTANCIA, nuevoCodigoConstancia, (ModelSession.GetSession())[0].COD_UCUENTA, DateTime.Now);
+
+                string folderEli = folderBase + "/Eliminados";
+                if (!Directory.Exists(Server.MapPath(folderEli)))
+                {
+                    Directory.CreateDirectory(Server.MapPath(folderEli));
+                }
+                string pathOrigenDoc = Path.Combine(Server.MapPath(folderBase), $"{constancia.ARCHIVO_COD}");
+                string pathDestinoDoc = Path.Combine(Server.MapPath(folderEli), $"{constancia.ARCHIVO_COD}");
+                if (System.IO.File.Exists(pathOrigenDoc))
+                {
+                    System.IO.File.Move(pathOrigenDoc, pathDestinoDoc);
+                }
+                return Json(new { success = true, msj = "Constancia Actualizado Correctamente" }, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                return Json(new { success = false, msj = ex.Message }, JsonRequestBehavior.AllowGet);
+            }
+        }
+        #endregion
     }
 }

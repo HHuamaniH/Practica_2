@@ -21,8 +21,6 @@ namespace CapaEntidad.DOC
         public String NOMBRE { get; set; }
         [Description("COD_CAPATIPO")]
         public String COD_CAPATIPO { get; set; }
-        public String CAPATIPO { get; set; }
-        public String DIRIGIDO { get; set; }
         [Description("COD_OD")]
         public String COD_OD { get; set; }
         [Description("COD_DLINEA")]
@@ -292,9 +290,6 @@ namespace CapaEntidad.DOC
         [Description("NUM_THABILITANTE")]
         public String NUM_THABILITANTE { get; set; }
 
-        [Description("COD_CONSTANCIA_CAP")]
-        public String COD_CONSTANCIA_CAP { get; set; }
-
         //Lista Objetos
         [Category("LIST"), Description("ListMComboOD")]
         public List<Ent_CAPACITACION> ListMComboOD { get; set; }
@@ -393,8 +388,6 @@ namespace CapaEntidad.DOC
         [Category("LIST"), Description("ListEliTABLA")]
         public List<Ent_CAPACITACION> ListEliTABLA { get; set; }
 
-        [Description("ROW_INDEX")]
-        public Int32 ROW_INDEX { get; set; }
         [Description("URL")]
         public String URL { get; set; }
         [Description("TIPO_REPORTE")]
@@ -473,7 +466,6 @@ namespace CapaEntidad.DOC
             N_NO_CHECK = -1;
             P_NO_CHECK = -1;
 
-            ROW_INDEX = -1;
             v_currentpage = -1;
             v_pagesize = -1;
         }
