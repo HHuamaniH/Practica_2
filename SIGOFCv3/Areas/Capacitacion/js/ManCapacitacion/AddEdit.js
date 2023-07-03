@@ -1207,6 +1207,7 @@ ManCapacitacion_AddEdit.fnSelectDocAdjunto = function (e, obj) {
     }
 }
 ManCapacitacion_AddEdit.fnConstanciaListar = function (flagLast) {
+    alert('ingreso aqui');
     var url = urlLocalSigo + "Capacitacion/ManCapacitacion/ConstanciaListar";
     var params = {};
     params.codCapacitacion = ManCapacitacion_AddEdit.frm.find("#hdfCodCapacitacion").val();  
@@ -1559,4 +1560,6 @@ $(document).ready(function () {
     ManCapacitacion_AddEdit.frm.find("select.select2-hidden-accessible").on("change", function (e) {
         $(this).valid();
     });
+    //iniciamos constancias
+    ManCapacitacion_AddEdit.fnConstanciaListar();
 });
