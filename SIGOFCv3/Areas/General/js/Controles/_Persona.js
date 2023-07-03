@@ -856,4 +856,6 @@ _bPerAddEdit.fnInit = function (tipoPersona, codPTipo) {
         _bPerAddEdit.frm.find("#hdfMencionRegencia").val("");
         _bPerAddEdit.fnListarMencionRegencia(this.value);
     });
+
+    $($("#divPersonaAddEdit").parent()[0]).css("z-index", 1051);
 };
