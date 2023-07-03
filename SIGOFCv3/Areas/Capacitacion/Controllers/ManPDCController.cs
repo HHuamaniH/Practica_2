@@ -49,8 +49,8 @@ namespace SIGOFCv3.Areas.Capacitacion.Controllers
                 busqueda.departamento = "";
             }
 
-            busqueda.titular = titular;
-            busqueda.titulo = titulo;
+            busqueda.titular = titular.ToUpper();
+            busqueda.titulo = titulo.ToUpper();
             //vmReport.formulario = "PDC_UNIVERSO"; 
             ;
             if (busqueda.od != "" && busqueda.departamento != "" && busqueda.titular == "" && busqueda.titulo == "")
@@ -190,7 +190,7 @@ namespace SIGOFCv3.Areas.Capacitacion.Controllers
             return View();
         }
 
-        public ActionResult ReporteConsolidado(string codUsuario)
+        public ActionResult ReporteConsolidado()
         {
             vmReport = new VM_ReporteGeneral();
             vmReport.list_universoPDC = new List<CapaEntidad.DOC.Ent_ReportePDC>();

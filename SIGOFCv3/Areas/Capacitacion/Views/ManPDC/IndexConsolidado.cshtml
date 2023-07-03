@@ -9,14 +9,14 @@
     var _rendReporteConsolidadoPDC = {};
 
     _rendReporteConsolidadoPDC.fnReporte = function () {
-        let codUsuario = 'Consolidado';
+        //let codUsuario = 'Consolidado';
         let url = urlLocalSigo + "CAPACITACION/ManPDC/ReporteConsolidado";
         $.ajax({
             url: url,
             type: 'POST',
             datatype: "json",
             traditional: true,
-            data: { 'codUsuario': codUsuario },
+            data: {  },
             success: function (data) {
                 $('div#divReporteConsolidado').html(data);
 

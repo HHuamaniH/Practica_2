@@ -1207,7 +1207,7 @@ ManCapacitacion_AddEdit.fnSelectDocAdjunto = function (e, obj) {
     }
 }
 ManCapacitacion_AddEdit.fnConstanciaListar = function (flagLast) {
-    alert('ingreso aqui');
+   
     var url = urlLocalSigo + "Capacitacion/ManCapacitacion/ConstanciaListar";
     var params = {};
     params.codCapacitacion = ManCapacitacion_AddEdit.frm.find("#hdfCodCapacitacion").val();  
