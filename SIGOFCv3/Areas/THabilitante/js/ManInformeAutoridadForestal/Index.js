@@ -41,7 +41,7 @@ $(document).ready(function () {
 
     indexManIAF.frm = $("#frmAddEditManIAF");
     
-    _manGrilla.columns_label = ["", "N°", "Fecha de registro", "Nro de documento de renuncia", "N° de documento de la Autoridad", "Nro THabilitante",
+    _manGrilla.columns_label = ["", "N°", "Fecha de registro", "Nro de documento", "N° de documento de la Autoridad", "Nro THabilitante",
             "Modalidad","Titular"];
         _manGrilla.columns_data = [
             { autoWidth: true, bSortable: false, mRender: indexManIAF.cellEdit },
