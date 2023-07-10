@@ -295,6 +295,8 @@ namespace CapaEntidad.DOC
         [Description("COD_CONSTANCIA_CAP")]
         public String COD_CONSTANCIA_CAP { get; set; }
 
+        public String NRO_CONSTANCIA { get; set; }
+
         //Lista Objetos
         [Category("LIST"), Description("ListMComboOD")]
         public List<Ent_CAPACITACION> ListMComboOD { get; set; }

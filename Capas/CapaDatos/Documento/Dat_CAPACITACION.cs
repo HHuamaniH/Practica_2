@@ -1267,6 +1267,9 @@ namespace CapaDatos.DOC
                 throw ex;
             }
         }
+
+
+
         /// <summary>
         /// 
         /// </summary>
@@ -2689,6 +2692,118 @@ namespace CapaDatos.DOC
             }
 
         }
+        //09/07/2023 CAMBIAR ESTADO
+        public Ent_PDCImportPASPEQ REPORTPDC_CAMBIAR_ESTADO_TALLER(OracleConnection cn, CEntidad cEntidad)
+        {
+            Ent_PDCImportPASPEQ oCamposDet = new Ent_PDCImportPASPEQ();
+
+            try
+            {
+                using (OracleDataReader dr = dBOracle.SelDrdResult(cn, null, "DOC_OSINFOR_ERP_MIGRACION.SPREPORTPDC_ESTADO_TALLER", cEntidad))
+                {
+                    if (dr != null)
+                    {
+                        if (dr.HasRows)
+                        {
+                            while (dr.Read())
+                            {
+                                oCamposDet = new Ent_PDCImportPASPEQ();
+                                oCamposDet.TITULO = dr["REGISTRO"].ToString();
+                            }
+
+                        }
+                    }
+                }
+                return oCamposDet;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+
+        }
+
+        /// <summary>
+        /// METODO QUE DEVUELVE EL LISTADO DEL TALLER CALCULADO
+        /// </summary>
+        /// <param name="cn"></param>
+        /// <param name="cEntidad"></param>
+        /// <returns></returns>
+        public List<CEntidadPDC> PDC_TALLERES(OracleConnection cn, CEntidad cEntidad)
+        {
+            List<CEntidadPDC> lsCEntidadRGP = new List<CEntidadPDC>();
+            CEntidadPDC oCamposDet = new CEntidadPDC();
+
+            try
+            {
+                using (OracleDataReader dr = dBOracle.SelDrdResult(cn, null, "DOC_OSINFOR_ERP_MIGRACION.SPREPORTECAPACITACION_UNIVERSOPDC", cEntidad))
+                {
+                    if (dr != null)
+                    {
+                        if (dr.HasRows)
+                        {
+                            while (dr.Read())
+                            {
+                                oCamposDet = new CEntidadPDC();
+                                oCamposDet.OFICINA_DESCONCENTRADA = dr["oficina_desconcentrada"].ToString();
+                                oCamposDet.COD_MODALIDAD = dr["cod_modalidad"].ToString();
+                                oCamposDet.MODALIDAD = dr["MODALIDAD"].ToString();
+                                oCamposDet.TALLER = Decimal.Parse(dr["taller"].ToString());
+                                oCamposDet.CAPACITABLE = dr["capacitable"].ToString();
+                                oCamposDet.SUM_AREA = Decimal.Parse(dr["suma"].ToString());
+                                oCamposDet.IDREGISTRO = Decimal.Parse(dr["th"].ToString());
+
+                                lsCEntidadRGP.Add(oCamposDet);
+                            }
+                        }
+                    }
+                }
+                return lsCEntidadRGP;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public String asignar_taller(OracleConnection cn, CEntidadPDC oCEntidad)
+        {
+            OracleTransaction tr = null;
+            String OUTPUTPARAM01 = "";
+            try
+            {
+                tr = cn.BeginTransaction();
+                //Grabando Cabecera
+                using (OracleCommand cmd = dBOracle.ManExecuteOutput(cn, tr, "DOC_OSINFOR_ERP_MIGRACION.SPREPORTPDC_ASIGNAR_TALLER", oCEntidad))
+                {
+                    cmd.ExecuteNonQuery();
+                    OUTPUTPARAM01 = (String)cmd.Parameters["OUTPUTPARAM01"].Value;
+
+                    if (OUTPUTPARAM01 == "0")
+                    {
+                        tr.Rollback();
+                        tr = null;
+                        throw new Exception("Error al insertar los datos");
+                    }
+                    else
+                    {
+                        oCEntidad.ID_REGISTRO = OUTPUTPARAM01;
+                    }
+                }
+
+                tr.Commit();
+                return OUTPUTPARAM01;
+            }
+            catch (Exception ex)
+            {
+                if (tr != null)
+                {
+                    tr.Rollback();
+                }
+                throw ex;
+            }
+        }
+
         public String GuardarDatosPasPEQ(OracleConnection cn, Ent_PDCImportPASPEQ oCEntidad)
         {
             OracleTransaction tr = null;
@@ -2929,6 +3044,42 @@ namespace CapaDatos.DOC
                 throw ex;
             }
         }
+        public Ent_CAPACITACION_CONSTANCIA ConstanciaObtenerPorNroConstancia(OracleConnection cn, string nroConstancia)
+        {
+
+            Ent_CAPACITACION_CONSTANCIA constancia = null;
+
+            try
+            {
+                object[] param = { nroConstancia };
+                using (OracleDataReader dr = dBOracle.SelDrdDefault(cn, "DOC_OSINFOR_ERP_MIGRACION.SPCAPACITACION_CONSTANCIA_OBTENER_NRO", param))
+                {
+                    if (dr.HasRows)
+                    {
+                        while (dr.Read())
+                        {
+                            constancia = new Ent_CAPACITACION_CONSTANCIA();
+                            constancia.COD_CONSTANCIA = dr["COD_CONSTANCIA"].ToString();
+                            constancia.COD_CAPACITACION = dr["COD_CAPACITACION"].ToString();
+                            constancia.CORRELATIVO = Convert.ToInt32(dr["CORRELATIVO"]);
+                            constancia.CORRELATIVO_ANIO = Convert.ToInt32(dr["CORRELATIVO_ANIO"]);
+                            constancia.NRO_CONSTANCIA = dr["NRO_CONSTANCIA"].ToString();
+                            constancia.MODALIDAD = dr["MODALIDAD"].ToString();
+                            constancia.ARCHIVO = dr["ARCHIVO"].ToString();
+                            constancia.ARCHIVO_COD = dr["ARCHIVO_COD"].ToString();
+                            constancia.FLAG_ASIGNADO = Convert.ToInt32(dr["FLAG_ASIGNADO"]);
+                            constancia.ESTADO = Convert.ToInt32(dr["ESTADO"]);
+                            constancia.ESTADO_TEXT = dr["ESTADO_TEXT"].ToString();
+                        }
+                    }
+                }
+                return constancia;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
         public bool ConstanciaInsertarMasivo(List<Ent_CAPACITACION_CONSTANCIA> constancias)
         {
 
@@ -3034,6 +3185,7 @@ namespace CapaDatos.DOC
                             oCamposDet.FECHA_CREACION = dr.GetString(dr.GetOrdinal("FECHA_CREACION"));
                             oCamposDet.MOCHILAFORESTAL = dr.GetString(dr.GetOrdinal("MOCHILAFORESTAL"));
                             oCamposDet.COD_CONSTANCIA_CAP = dr["COD_CONSTANCIA_CAP"].ToString();
+                            oCamposDet.NRO_CONSTANCIA = dr["NRO_CONSTANCIA"].ToString();
                             result.Add(oCamposDet);
                         }
                     }

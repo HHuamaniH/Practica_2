@@ -1207,7 +1207,6 @@ ManCapacitacion_AddEdit.fnSelectDocAdjunto = function (e, obj) {
     }
 }
 ManCapacitacion_AddEdit.fnConstanciaListar = function (flagLast) {
-   
     var url = urlLocalSigo + "Capacitacion/ManCapacitacion/ConstanciaListar";
     var params = {};
     params.codCapacitacion = ManCapacitacion_AddEdit.frm.find("#hdfCodCapacitacion").val();  
@@ -1252,6 +1251,13 @@ ManCapacitacion_AddEdit.fnConstanciaDescargar = function (obj) {
 ManCapacitacion_AddEdit.fnConstanciaDescargarAll = function () {
     let url = urlLocalSigo + "Capacitacion/ManCapacitacion/ConstanciaDescargarAll" + "?codCapacitacion=" + ManCapacitacion_AddEdit.frm.find("#hdfCodCapacitacion").val();   
     window.open(url, "blank");
+}
+ManCapacitacion_AddEdit.fnConstanciaDescargarPlantilla = function () {
+    let url = urlLocalSigo + "Capacitacion/ManCapacitacion/DescargarPlantillaAsignacion" + "?codCapacitacion=" + ManCapacitacion_AddEdit.frm.find("#hdfCodCapacitacion").val();
+    window.open(url, "blank");
+}
+ManCapacitacion_AddEdit.fnConstanciaActualizar = function () {
+    $('#uploadBtnBOL').click();
 }
 ManCapacitacion_AddEdit.fnSoloNumero=function (el, evt) {
     let charCode = (evt.which) ? evt.which : event.keyCode;
@@ -1556,10 +1562,70 @@ $(document).ready(function () {
             }
         }
     }));
+    
     //Validación de controles que usan Select2
     ManCapacitacion_AddEdit.frm.find("select.select2-hidden-accessible").on("change", function (e) {
         $(this).valid();
     });
     //iniciamos constancias
     ManCapacitacion_AddEdit.fnConstanciaListar();
+    $('#uploadBtnBOL').on('change', function (e) {
+        let files = e.target.files;
+        let objeto = this;
+        let urlImportar = urlLocalSigo + "Capacitacion/ManCapacitacion/UploadExcel";;      
+        if (files.length > 0) {
+            if (window.FormData !== undefined) {
+                let data = new FormData();
+                data.append("file", files[0]);      
+                $.ajax({
+                    type: "POST",
+                    url: urlImportar,
+                    contentType: false,
+                    processData: false,
+                    data: data,
+                    beforeSend: utilSigo.beforeSendAjax,
+                    complete: utilSigo.completeAjax, 
+                    success: function (result) {  
+                        if (result.cantidad > 0) {
+                            ManCapacitacion_AddEdit.fnConstanciaListar();
+                        }
+                        if (result.success) {
+                            location.href = result.archivo;    
+                            if (result.cantidad > 0) {
+                                utilSigo.toastSuccess("Notificación", "Se actualizarón " + result.cantidad + " constancias");
+                                utilSigo.toastSuccess("Notificación", "Revisar el archivo excel de resultado");
+                            } else {
+                                if (result.message != "") {
+                                    utilSigo.toastWarning("Notificación", result.message);
+                                } else {
+                                    utilSigo.toastWarning("Notificación", "Revisar el archivo excel de resultado");
+                                }
+                            }
+                            
+                        } else {          
+                            if (result.archivo != "") {
+                                location.href = result.archivo;
+                                if (result.message != "") {
+                                    utilSigo.toastWarning("Notificación", result.message);
+                                } else {
+                                    utilSigo.toastWarning("Notificación", "Revisar el archivo excel de resultado");
+                                }
+                            } else {
+                                if (result.message != "") {
+                                    utilSigo.toastWarning("Notificación", result.message);
+                                } else {
+                                    utilSigo.toastError("Notificación", "Sucedió un error");
+                                }       
+                            }                                              
+                        }
+                        let idFile = $(objeto).attr("id");
+                        $("#" + idFile).val("");
+                    },
+                    error: utilSigo.errorAjax
+                });
+            } else {
+                alert("This browser doesn't support HTML5 file uploads!");
+            }
+        }
+    });
 });

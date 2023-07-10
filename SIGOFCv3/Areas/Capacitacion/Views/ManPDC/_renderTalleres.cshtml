@@ -1,0 +1,52 @@
+﻿
+
+<div id="divTbResumen" style="width: 100%; overflow: auto; scrollbar-base-color: none;">
+    <hr/>
+    <div class="card-header text-left">
+        <h5>Talleres calculados</h5>
+    </div>
+    <table id="tbListResumen" class="table table-bordered table-striped-success" style="width: 100% !important; font-size:12px">
+        <thead>
+            <tr style=" text-align: center;  background-color: #dae7f5">
+                <td style="width: 2%">N°</td>
+                <td style="width: 5%">OFICINA DESCONCENTRADA</td>
+                <td style="width: 15%">MODALIDAD</td>
+                <td style="width: 5%">LUGAR</td>
+                <td style="width: 5%">TALLERES</td>
+                <td style="width: 5%">AREA TH (ha)</td>
+                <td style="width: 5%">NRO. TH</td>
+            </tr>
+        </thead>
+        <tbody id="bodyTable">
+            @if (Model.list_universoPDC != null)
+            {
+                var count = 0;
+                foreach (var item in Model.list_universoPDC)
+                {
+                    <tr>
+                        <td style="width: 2%">@(++count)</td>
+                        <td style="width: 5%">@item.OFICINA_DESCONCENTRADA</td>
+                        <td style="width: 15%; text-align:center;">
+                            @item.MODALIDAD
+                        </td>
+                        <td style="width: 5%; text-align:center;">
+                            @item.CAPACITABLE
+                        </td>
+                        <td style="width: 5%; text-align:center;">
+                            @item.TALLER
+                        </td>
+                        <td style="width: 5%; text-align:center;">
+                            @item.SUM_AREA
+                        </td>
+                        <td style="width: 5%; text-align:center;">
+                            <a href="#" onclick="_rendReporteConsolidadoPDC.fnReporteDetalleTaller('@item.CAPACITABLE', '@item.COD_MODALIDAD')" style="cursor:pointer; font-size:12px !important;">@item.IDREGISTRO</a>
+                        </td>
+
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+
+
+</div>

@@ -16,9 +16,26 @@
             type: 'POST',
             datatype: "json",
             traditional: true,
-            data: {  },
+            data: {},
             success: function (data) {
                 $('div#divReporteConsolidado').html(data);
+                _rendReporteConsolidadoPDC.fnReporteTalleres();
+
+            }
+        });
+    }
+
+    _rendReporteConsolidadoPDC.fnReporteTalleres = function () {
+        //let codUsuario = 'Consolidado';
+        let url = urlLocalSigo + "CAPACITACION/ManPDC/ReporteTalleres";
+        $.ajax({
+            url: url,
+            type: 'POST',
+            datatype: "json",
+            traditional: true,
+            data: {},
+            success: function (data) {
+                $('div#divReporteTalleres').html(data);
 
             }
         });
@@ -42,26 +59,47 @@
     _rendReporteConsolidadoPDC.fnReporteDetalle = function (TOficinaDesconcentrada, TModalidad) {
         let OficinaDesconcentrada = TOficinaDesconcentrada;
         let Modalidad = TModalidad;
-        let codUsuario = 'Consolidado';
 
         let url = urlLocalSigo + "CAPACITACION/ManPDC/ReporteConsolidadoDetalle";
         // alert(direccion)
 
-        if (codUsuario != "") {
-            $.ajax({
-                url: url,
-                type: 'POST',
-                datatype: "json",
-                traditional: true,
-                data: { 'oficina': OficinaDesconcentrada, 'modalidad': Modalidad },
-                success: function (data) {
-                    _rendReporteConsolidadoPDC.frm.find("#divReporteDetalleConsolidado").show();
-                    $('div#divReporteDetalleConsolidado').html(data);
-                }
-            });
-        } else {
-            utilSigo.toastWarning("Aviso", 'Seleccione un usuario para la consulta');
-        }
+
+        $.ajax({
+            url: url,
+            type: 'POST',
+            datatype: "json",
+            traditional: true,
+            data: { 'oficina': OficinaDesconcentrada, 'modalidad': Modalidad },
+            success: function (data) {
+                _rendReporteConsolidadoPDC.frm.find("#divReporteDetalleConsolidado").show();
+                _rendReporteConsolidadoPDC.frm.find("#divReporteTallereDetalle").hide();
+                $('div#divReporteDetalleConsolidado').html(data);
+            }
+        });
+
+
+    }
+
+    _rendReporteConsolidadoPDC.fnReporteDetalleTaller = function (TLugar, TModalidad) {
+        let Lugar = TLugar;
+        let Modalidad = TModalidad;
+
+        let url = urlLocalSigo + "CAPACITACION/ManPDC/ReporteTallerDetalle";
+        // alert(direccion)
+
+        $.ajax({
+            url: url,
+            type: 'POST',
+            datatype: "json",
+            traditional: true,
+            data: { 'lugar': Lugar, 'modalidad': Modalidad },
+            success: function (data) {
+                _rendReporteConsolidadoPDC.frm.find("#divReporteTallereDetalle").show();
+                _rendReporteConsolidadoPDC.frm.find("#divReporteDetalleConsolidado").hide();
+                $('div#divReporteTallereDetalle').html(data);
+            }
+        });
+
 
     }
 
@@ -79,7 +117,6 @@
             }
         });
     }
-
 
     $(document).ready(function () {
         _rendReporteConsolidadoPDC.frm = $("#divReporteConsolidadoPDC");
@@ -111,8 +148,11 @@
 
         </div>
         <div><br /></div>
-        <div style="text-align:center !important;">
-            <canvas id="myChart" style="width:30% !important; height:30% !important;"></canvas>
+        <div id="divReporteTalleres">
+
+        </div>
+        <div id="divReporteTallereDetalle">
+
         </div>
     </div>
 </div>

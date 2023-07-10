@@ -1160,6 +1160,58 @@ namespace CapaLogica.DOC
             return result;
         }
 
+        public Ent_PDCImportPASPEQ REPORTPDC_CAMBIAR_ESTADO_TALLER(CEntidad oCEntidad)
+        {
+            try
+            {
+                using (OracleConnection cn = new OracleConnection(CapaDatos.BDConexion.Conexion_Cadena_SIGO()))
+                {
+                    cn.Open();
+                    return oCDatos.REPORTPDC_CAMBIAR_ESTADO_TALLER(cn, oCEntidad);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public List<CEntidadPDC> PDC_TALLERES(CEntidad oCEntidad)
+        {
+            try
+            {
+                using (OracleConnection cn = new OracleConnection(CapaDatos.BDConexion.Conexion_Cadena_SIGO()))
+                {
+                    cn.Open();
+                    return oCDatos.PDC_TALLERES(cn, oCEntidad);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        /// <summary>
+        /// metodo para asignar los talleres
+        /// </summary>
+        /// <param name="oCEntidad"></param>
+        /// <returns></returns>
+        public String asignar_taller(CEntidadPDC oCEntidad)
+        {
+            try
+            {
+                using (OracleConnection cn = new OracleConnection(CapaDatos.BDConexion.Conexion_Cadena_SIGO()))
+                {
+                    cn.Open();
+                    return oCDatos.asignar_taller(cn, oCEntidad);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
         #endregion
 
         #region "Gestión de constancias"
@@ -1237,6 +1289,21 @@ namespace CapaLogica.DOC
                 {
                     cn.Open();
                     return oCDatos.ConstanciaObtener(cn, codConstancia);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+        public Ent_CAPACITACION_CONSTANCIA ConstanciaObtenerPorNroConstancia(string nroConstancia)
+        {
+            try
+            {
+                using (OracleConnection cn = new OracleConnection(CapaDatos.BDConexion.Conexion_Cadena_SIGO()))
+                {
+                    cn.Open();
+                    return oCDatos.ConstanciaObtenerPorNroConstancia(cn, nroConstancia);
                 }
             }
             catch (Exception ex)

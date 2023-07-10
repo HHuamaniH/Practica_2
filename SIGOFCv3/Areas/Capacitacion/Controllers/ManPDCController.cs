@@ -122,7 +122,13 @@ namespace SIGOFCv3.Areas.Capacitacion.Controllers
                 ent.BusFormulario = "PDC_CONSOLIDADO_DETALLE_DESCARGA";
                 ent.BusDepartamento = "";
                 ent.BusValor = busqueda.departamento;
-            }           
+            }
+            if (busqueda.formulario == "PDC_TALLER_DETALLE")
+            {
+                ent.BusFormulario = "PDC_TALLER_DETALLE_DESCARGA";
+                ent.BusOD = busqueda.od;
+                ent.BusValor = busqueda.departamento;               
+            }
 
             vmReport.list_universoPDC = exeBus.RepUniversoPDC(ent);
 
@@ -198,23 +204,288 @@ namespace SIGOFCv3.Areas.Capacitacion.Controllers
             CapaEntidad.DOC.Ent_CAPACITACION ent = new CapaEntidad.DOC.Ent_CAPACITACION();
             ent.BusFormulario = "PDC_CONSOLIDADO";
             vmReport.list_consolidado_PDC = exeBus.RepconsolidadoPDC(ent);
+            calcularTalleres(vmReport.list_consolidado_PDC);
             return PartialView("~/Areas/Capacitacion/Views/ManPDC/_renderResumen.cshtml", vmReport);
         }
 
+        //metodo para obtener los talleres 
+        public ActionResult ReporteTalleres()
+        {
+            vmReport = new VM_ReporteGeneral();
+            vmReport.list_universoPDC = new List<CapaEntidad.DOC.Ent_ReportePDC>();
+            CapaLogica.DOC.Log_CAPACITACION exeBus = new CapaLogica.DOC.Log_CAPACITACION();
+            CapaEntidad.DOC.Ent_CAPACITACION ent = new CapaEntidad.DOC.Ent_CAPACITACION();
+            ent.BusFormulario = "PDC_TALLER";
+            vmReport.list_universoPDC = exeBus.PDC_TALLERES(ent);
+            return PartialView("~/Areas/Capacitacion/Views/ManPDC/_renderTalleres.cshtml", vmReport);
+        }
+
+        public ActionResult ReporteTallerDetalle(string lugar, string modalidad)
+        {
+            busqueda.formulario = "PDC_TALLER_DETALLE";
+            busqueda.od = lugar;
+            busqueda.departamento = modalidad;
+            return PartialView("~/Areas/Capacitacion/Views/ManPDC/_renderTallerDetalle.cshtml");
+        }
+
+        [HttpGet]
+        public JsonResult ConsultTablaTallerDetalle(DataTableRequest request = null)
+        {
+            vmReport.list_universoPDC = new List<CapaEntidad.DOC.Ent_ReportePDC>();
+
+            CapaLogica.DOC.Log_CAPACITACION exeBus = new CapaLogica.DOC.Log_CAPACITACION();
+            CapaEntidad.DOC.Ent_CAPACITACION ent = new CapaEntidad.DOC.Ent_CAPACITACION();
+
+            //int rowcount = 0;
+            int page = request.Start == 0 ? 1 : (request.Start / request.Length) + 1;
+
+            ent.BusFormulario = busqueda.formulario;
+            ent.BusOD = busqueda.od;
+            ent.BusValor = busqueda.departamento;
+            ent.v_pagesize = request.Length;
+            ent.v_currentpage = page;
+
+            //---modificar 
+            vmReport = exeBus.RepUniversoPDC_pag(ent);
+
+            var jsonResult = Json(new
+            {
+                data = vmReport.list_universoPDC.ToArray(),
+                draw = request.Draw,
+                recordsTotal = vmReport.v_ROW_INDEX,
+                recordsFiltered = vmReport.v_ROW_INDEX,
+                error = ""
+            }, JsonRequestBehavior.AllowGet);
+            jsonResult.MaxJsonLength = int.MaxValue;
+            return jsonResult;
+        }
+
+
+
         public ActionResult ReporteConsolidadoDetalle(string oficina, string modalidad)
         {
-            //vmReport.list_universoPDC = new List<CapaEntidad.DOC.Ent_ReportePDC>();
-            //CapaLogica.DOC.Log_CAPACITACION exeBus = new CapaLogica.DOC.Log_CAPACITACION();
-            //CapaEntidad.DOC.Ent_CAPACITACION ent = new CapaEntidad.DOC.Ent_CAPACITACION();
-            //ent.BusFormulario = "PDC_CONSOLIDADO_DETALLE";
-            //ent.BusModalidad = modalidad;
-            //ent.BusOD = oficina;
-            //vmReport.list_universoPDC = exeBus.RepUniversoPDC(ent);
-
             busqueda.formulario = "PDC_CONSOLIDADO_DETALLE";
             busqueda.od = oficina;
             busqueda.departamento = modalidad;
             return PartialView("~/Areas/Capacitacion/Views/ManPDC/_rederTUPDCDet.cshtml");
+        }
+
+
+        public void lugarTaller(List<Ent_ReportePDC> listaPDC)
+        {
+            CapaLogica.DOC.Log_CAPACITACION exeBus = new CapaLogica.DOC.Log_CAPACITACION();
+            CapaEntidad.DOC.Ent_ReportePDC ent = new CapaEntidad.DOC.Ent_ReportePDC();
+
+            //seccion de codigo para buscar el districo con mayor frecuencia
+            //la condicion es que sea mayor a 6 para considerarlo 
+            //variables para indicar la cantidad y el lugar del taller
+            var cant = 0;
+            var lugarT = "";
+
+            //debemos obtener el distrito con mayor frecuencia
+            var distrito = (from report in listaPDC select report.DISTRITO).Distinct();
+
+            foreach (var d in distrito)
+            {
+                var listDist = from cust in listaPDC
+                               where cust.DISTRITO == d
+                               select cust;
+                if (listDist.Count() > cant)
+                {
+                    cant = listDist.Count();
+                    lugarT = "Distrito: " + d;
+                }
+
+            }
+            if (cant == 0)
+            {
+
+                //caso contrario hacemos el recorrido a nivel de provincia
+                var provincia = (from report in listaPDC select report.PROVINCIA).Distinct();
+                foreach (var d in provincia)
+                {
+                    var listDist = from cust in listaPDC
+                                   where cust.PROVINCIA == d
+                                   select cust;
+                    if (listDist.Count() > 6 && listDist.Count() > cant)
+                    {
+                        cant = listDist.Count();
+                        lugarT = "Provincia: " + d;
+                    }
+
+                }
+                if (cant == 0)
+                {
+                    //caso contrario buscamos por departamentos
+                    var departamento = (from report in listaPDC select report.DEPARTAMENTO).Distinct();
+                    foreach (var d in departamento)
+                    {
+                        var listDist = from cust in listaPDC
+                                       where cust.DEPARTAMENTO == d
+                                       select cust;
+                        if (listDist.Count() > 6 && listDist.Count() > cant)
+                        {
+                            cant = listDist.Count();
+                            lugarT = "Departamento: " + d;
+                        }
+
+                    }
+                }
+
+            }
+            if (cant > 0)
+            {
+                //hacemos la actualizacion a nivel de base de datos en los campos creados -- implementar el metodo
+                foreach (var obj in listaPDC)
+                {
+                    ent = new Ent_ReportePDC();
+                    ent.IDREGISTRO = Int32.Parse(obj.ID_REGISTRO);
+                    ent.CAPACITABLE = lugarT;
+                    ent.TALLER = 1;
+                    var id = exeBus.asignar_taller(ent);
+
+                }
+            }
+            var result = 0;
+        }
+        /// <summary>
+        /// metodo para hacer el calculo de talleres y el lugar del taller
+        /// </summary>
+        /// <param name="oficina_desconcentrada"></param>
+        /// <param name="cod_modalidad"></param>
+        public void CantidadTaller(String oficina_desconcentrada, String cod_modalidad, int nZise)
+        {
+            CapaLogica.DOC.Log_CAPACITACION exeBus = new CapaLogica.DOC.Log_CAPACITACION();
+            CapaEntidad.DOC.Ent_CAPACITACION ent = new CapaEntidad.DOC.Ent_CAPACITACION();
+            List<Ent_ReportePDC> listTemReport = new List<Ent_ReportePDC>();
+
+            listTemReport = new List<Ent_ReportePDC>();
+            ent.BusFormulario = "PDC_CONSOLIDADO_DETALLE_DESCARGA";
+            ent.BusOD = oficina_desconcentrada;
+            ent.BusValor = cod_modalidad;
+            listTemReport = exeBus.RepUniversoPDC(ent);
+            //minimo 7 maximo 40
+            var total = listTemReport.Count();
+
+
+            if (total > nZise)
+            {
+                //dividimos entre 40 y no acercamos al numero mayor
+                //reordenamos por distrito
+                listTemReport = listTemReport.OrderBy(x => x.DISTRITO).ToList();
+
+                //otro metodo
+                var listas = new List<List<Ent_ReportePDC>>();
+                for (int i = 0; i < listTemReport.Count; i += nZise)
+                {
+                    listas.Add(listTemReport.GetRange(i, Math.Min(nZise, listTemReport.Count - i)));
+                }
+                if (listas.Count > 0)
+                {
+                    for (int j = 0; j < listas.Count; j++)
+                    {
+                        var listTemporal = listas[j];
+                        if (listTemporal.Count > 6)
+                        {
+                            lugarTaller(listTemporal);
+                        }
+                    }
+                }
+            }
+            else
+            {
+                lugarTaller(listTemReport);
+            }
+        }
+
+
+
+        /// <summary>
+        /// metodo para realizar la asignacion de los talleres
+        /// </summary>
+        /// <param name="listTemp"></param>
+        public void calcularTalleres(List<Ent_ReportConsolidadoPDC> listTemp)
+        {
+            CapaLogica.DOC.Log_CAPACITACION exeBus = new CapaLogica.DOC.Log_CAPACITACION();
+            Ent_CAPACITACION entTemp = new Ent_CAPACITACION();
+            exeBus.REPORTPDC_CAMBIAR_ESTADO_TALLER(entTemp);
+
+            foreach (var PDC in listTemp)
+            {
+                if (PDC.COD_MODALIDAD == "0000015" || PDC.COD_MODALIDAD == "0000016")
+                {
+                    if (PDC.ATALAYA > 0)
+                    {
+                        CantidadTaller("ATALAYA", PDC.COD_MODALIDAD, 20);
+                    }
+                    if (PDC.CHICLAYO > 0)
+                    {
+                        CantidadTaller("CHICLAYO", PDC.COD_MODALIDAD, 20);
+                    }
+                    if (PDC.IQUITOS > 0)
+                    {
+                        CantidadTaller("IQUITOS", PDC.COD_MODALIDAD, 20);
+                    }
+                    if (PDC.LA_MERCED > 0)
+                    {
+                        CantidadTaller("LA MERCED", PDC.COD_MODALIDAD, 20);
+                    }
+                    if (PDC.PUCALLPA > 0)
+                    {
+                        CantidadTaller("PUCALLPA", PDC.COD_MODALIDAD, 20);
+                    }
+                    if (PDC.PUERTO_MALDONADO > 0)
+                    {
+                        CantidadTaller("PUERTO MALDONADO", PDC.COD_MODALIDAD, 20);
+
+                    }
+                    if (PDC.TARAPOTO > 0)
+                    {
+                        CantidadTaller("TARAPOTO", PDC.COD_MODALIDAD, 20);
+                    }
+                    if (PDC.SEDE_CENTRAL > 0)
+                    {
+                        CantidadTaller("SEDE CENTRAL", PDC.COD_MODALIDAD, 20);
+                    }
+                }
+                else
+                {
+                    if (PDC.ATALAYA > 6)
+                    {
+                        CantidadTaller("ATALAYA", PDC.COD_MODALIDAD, 40);
+                    }
+                    if (PDC.CHICLAYO > 6)
+                    {
+                        CantidadTaller("CHICLAYO", PDC.COD_MODALIDAD, 40);
+                    }
+                    if (PDC.IQUITOS > 6)
+                    {
+                        CantidadTaller("IQUITOS", PDC.COD_MODALIDAD, 40);
+                    }
+                    if (PDC.LA_MERCED > 6)
+                    {
+                        CantidadTaller("LA MERCED", PDC.COD_MODALIDAD, 40);
+                    }
+                    if (PDC.PUCALLPA > 6)
+                    {
+                        CantidadTaller("PUCALLPA", PDC.COD_MODALIDAD, 40);
+                    }
+                    if (PDC.PUERTO_MALDONADO > 6)
+                    {
+                        CantidadTaller("PUERTO MALDONADO", PDC.COD_MODALIDAD, 40);
+
+                    }
+                    if (PDC.TARAPOTO > 6)
+                    {
+                        CantidadTaller("TARAPOTO", PDC.COD_MODALIDAD, 40);
+                    }
+                    if (PDC.SEDE_CENTRAL > 6)
+                    {
+                        CantidadTaller("SEDE CENTRAL", PDC.COD_MODALIDAD, 40);
+                    }
+                }
+            }
+
         }
 
 

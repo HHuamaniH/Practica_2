@@ -84,6 +84,20 @@ namespace CapaEntidad.DOC
         [Description("PRIORIDAD")]
         public Decimal PRIORIDAD { get; set; }
 
+        [Description("CAPACITABLE")]
+        public String CAPACITABLE { get; set; }
+        [Description("TALLER")]
+        public Decimal TALLER { get; set; }
+
+        [Description("IDREGISTRO")]
+        public Decimal IDREGISTRO { get; set; }
+
+        [Description("COD_MODALIDAD")]
+        public String COD_MODALIDAD { get; set; }
+
+        [Description("SUM_AREA")]
+        public Decimal SUM_AREA { get; set; }
+
         public Ent_ReportePDC()
         {
             AREA = -1;
@@ -92,6 +106,9 @@ namespace CapaEntidad.DOC
             S_VOL_INJUST = -1;
             N_CAPACITACION = -1;
             PRIORIDAD = -1;
+            IDREGISTRO = -1;
+            TALLER = -1;
+            SUM_AREA = -1;
         }
 
 

@@ -1,7 +1,7 @@
 ﻿<script>
-    var _renderUniversoPDCDetalle = {};
+    var _renderTallerDetalle = {};
 
-    _renderUniversoPDCDetalle.fnInitDataTable_Detail = function () {
+    _renderTallerDetalle.fnInitDataTable_Detail = function () {
         var columns_label = [], columns_data = [], options = {};
         columns_label = ["Oficina Desconcentrada", "Título", "Modalidad", "Titular", "Representante Legal", "Departamento", "Provincia",
             "Distrito", "Fecha vigencia", "Fecha Corte", "Area", "Ultimo plan", "Rojo", "Verde", "Alerta", "PASPEQ", "PASPEQ enfoque",
@@ -16,11 +16,11 @@
             page_paging: true, page_length: 10, row_index: true, row_select: false
         };
 
-        utilDt.fnLoadDataTable_Detail(_renderUniversoPDCDetalle.frm.find("#tbListUniversoPDCDetalle"), columns_label, columns_data, options);
-        _renderUniversoPDCDetalle.dtRenderUniversoPDC = _renderUniversoPDCDetalle.fnInitDataTablePaging(options);
+        utilDt.fnLoadDataTable_Detail(_renderTallerDetalle.frm.find("#tbListTallerDetalle"), columns_label, columns_data, options);
+        _renderTallerDetalle.dtRenderUniversoPDC = _renderTallerDetalle.fnInitDataTablePaging(options);
     }
 
-    _renderUniversoPDCDetalle.fnInitDataTablePaging = function (options) {
+    _renderTallerDetalle.fnInitDataTablePaging = function (options) {
         var optDt = {};
         optDt.iLength = options.page_length;
         optDt.iStart = 0;
@@ -28,7 +28,7 @@
         optDt.bInfo = true;
         optDt.bSort = true;
         optDt.aSort = [];
-        return _renderUniversoPDCDetalle.frm.find("#tbListUniversoPDCDetalle").DataTable({
+        return _renderTallerDetalle.frm.find("#tbListTallerDetalle").DataTable({
             processing: true,
             serverSide: true,
             searching: optDt.bSearch,
@@ -36,7 +36,7 @@
             deferLoading: 0,
             paging: true,
             ajax: {
-                "url": urlLocalSigo + "CAPACITACION/ManPDC/ConsultTablaUniversoDetalle",
+                "url": urlLocalSigo + "CAPACITACION/ManPDC/ConsultTablaTallerDetalle",
                 "data": function (d) {
                     d.customSearchEnabled = true;
                     d.customSearchForm = ""; //ddlModalFiscalizacion
@@ -64,29 +64,30 @@
 
     }
 
-    _renderUniversoPDCDetalle.fnInit = function () {
-        _renderUniversoPDCDetalle.dtConsultaInforme.ajax.reload();
+    _renderTallerDetalle.fnInit = function () {
+        _renderTallerDetalle.dtConsultaInforme.ajax.reload();
+        alert('ingreso aqui');
     }
 
     $(document).ready(function () {
-        _renderUniversoPDCDetalle.frm = $("#divTbResumenDetalle");
-        _renderUniversoPDCDetalle.fnInitDataTable_Detail();
-        _renderUniversoPDCDetalle.dtRenderUniversoPDC.ajax.reload();
+        _renderTallerDetalle.frm = $("#divTallerDetalle");
+        _renderTallerDetalle.fnInitDataTable_Detail();
+        _renderTallerDetalle.dtRenderUniversoPDC.ajax.reload();
 
     });
 </script>
 
-<div id="divTbResumenDetalle">
+<div id="divTallerDetalle">
 
     <div class="table-responsive">
-        <table id="tbListUniversoPDCDetalle" style="width:100%;margin:0px !important;" class="table table-hover table-bordered">
+        <table id="tbListTallerDetalle" style="width:100%;margin:0px !important;" class="table table-hover table-bordered">
             <thead>
                 <tr>
                     <th colspan="34" class="text-sm-left">
                         <div class="form-inline">
-                            <strong> Datos del Universo Capacitable</strong>&nbsp;
+                            <strong> Datos de TH Capacitables</strong>&nbsp;
                             <label style="cursor:pointer;" class="fa mx-2 fa-lg fa-file-excel-o" title="Importar Archivo" data-toggle="tooltip" onclick="_rendReporteConsolidadoPDC.fnExport()">
-                                &nbsp; Descargar Universo Capacitable para el PDC &nbsp;
+                                &nbsp; Descargar TH Capacitables &nbsp;
                             </label>
                         </div>
                     </th>
