@@ -690,6 +690,7 @@ namespace CapaEntidad.ViewModel
             tbResponsabilidadSocial = new List<Ent_INFORME>();
             tbObligacionContrac = new List<Ent_INFORME>();
             tbDesplazamiento = new List<Ent_INFORME>();
+            tbObligMandatos = new List<Ent_MANDATOS>();
             tbMandatos = new List<Ent_MANDATOS>();
             tbVerticeTHCampo = new List<Ent_INFORME>();
             tbCoberturaBoscosa = new List<Ent_INFORME>();
