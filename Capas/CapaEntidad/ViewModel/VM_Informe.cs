@@ -597,6 +597,7 @@ namespace CapaEntidad.ViewModel
             tbEliTABLAfectacion = new List<Ent_INFORME>();
             tbMandatos = new List<Ent_MANDATOS>();
             ListObligMandatos = new List<Ent_MANDATOS>();
+            tbObligMandatos = new List<Ent_MANDATOS>();
         }
     }
 
@@ -810,6 +811,7 @@ namespace CapaEntidad.ViewModel
             tbDesplazamiento = new List<Ent_INFORME>();
             ListMandatos = new List<Ent_MANDATOS>();
             ListObligMandatos = new List<Ent_MANDATOS>();
+            tbObligMandatos = new List<Ent_MANDATOS>();
         }
     }
 }
