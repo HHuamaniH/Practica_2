@@ -103,6 +103,28 @@
 
     }
 
+    _rendReporteConsolidadoPDC.fnReporteDetalleTallerPASPEQ = function (TLugar, TModalidad) {
+        let Lugar = TLugar;
+        let Modalidad = TModalidad;
+
+        let url = urlLocalSigo + "CAPACITACION/ManPDC/ReporteTallerDetallePASPEQ";
+        // alert(direccion)
+
+        $.ajax({
+            url: url,
+            type: 'POST',
+            datatype: "json",
+            traditional: true,
+            data: { 'lugar': Lugar, 'modalidad': Modalidad },
+            success: function (data) {
+                _rendReporteConsolidadoPDC.frm.find("#divReporteTallereDetalle").show();
+                _rendReporteConsolidadoPDC.frm.find("#divReporteDetalleConsolidado").hide();
+                $('div#divReporteTallereDetalle').html(data);
+            }
+        });
+
+
+    }
     _rendReporteConsolidadoPDC.fnExport = function () {
         var url = urlLocalSigo + "CAPACITACION/ManPDC/DescargarUniverso";
 

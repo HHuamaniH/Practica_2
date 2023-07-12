@@ -1,7 +1,7 @@
 ﻿
 
 <div id="divTbResumen" style="width: 100%; overflow: auto; scrollbar-base-color: none;">
-    <hr/>
+    <hr />
     <div class="card-header text-left">
         <h5>Talleres calculados</h5>
     </div>
@@ -14,6 +14,9 @@
                 <td style="width: 5%">LUGAR</td>
                 <td style="width: 5%">TALLERES</td>
                 <td style="width: 5%">AREA TH (ha)</td>
+                <td style="width: 5%">VOLUMEN APROBADO</td>
+                <td style="width: 5%">PASPEQ</td>
+                <td style="width: 5%">INFRACCIONES</td>
                 <td style="width: 5%">NRO. TH</td>
             </tr>
         </thead>
@@ -37,6 +40,15 @@
                         </td>
                         <td style="width: 5%; text-align:center;">
                             @item.SUM_AREA
+                        </td>
+                        <td style="width: 5%; text-align:center;">
+                            @item.VOL_APROB
+                        </td>
+                        <td style="width: 5%; text-align:center;">
+                            <a href="#" onclick="_rendReporteConsolidadoPDC.fnReporteDetalleTallerPASPEQ('@item.CAPACITABLE', '@item.COD_MODALIDAD')" style="cursor:pointer; font-size:12px !important;">@item.PASPEQ_COUNT</a>
+                        </td>
+                        <td style="width: 5%; text-align:center;">
+                            @item.INFRACCIONES_COUNT
                         </td>
                         <td style="width: 5%; text-align:center;">
                             <a href="#" onclick="_rendReporteConsolidadoPDC.fnReporteDetalleTaller('@item.CAPACITABLE', '@item.COD_MODALIDAD')" style="cursor:pointer; font-size:12px !important;">@item.IDREGISTRO</a>

@@ -228,6 +228,14 @@ namespace SIGOFCv3.Areas.Capacitacion.Controllers
             return PartialView("~/Areas/Capacitacion/Views/ManPDC/_renderTallerDetalle.cshtml");
         }
 
+        public ActionResult ReporteTallerDetallePASPEQ(string lugar, string modalidad)
+        {
+            busqueda.formulario = "PDC_TALLER_DETALLE_PASPEQ";
+            busqueda.od = lugar;
+            busqueda.departamento = modalidad;
+            return PartialView("~/Areas/Capacitacion/Views/ManPDC/_renderTallerDetalle.cshtml");
+        }
+
         [HttpGet]
         public JsonResult ConsultTablaTallerDetalle(DataTableRequest request = null)
         {

@@ -98,6 +98,16 @@ namespace CapaEntidad.DOC
         [Description("SUM_AREA")]
         public Decimal SUM_AREA { get; set; }
 
+        //12/07/2023
+        [Description("VOL_APROB")]
+        public Decimal VOL_APROB { get; set; }
+
+        [Description("PASPEQ_COUNT")]
+        public Decimal PASPEQ_COUNT { get; set; }
+
+        [Description("INFRACCIONES_COUNT")]
+        public Decimal INFRACCIONES_COUNT { get; set; }
+
         public Ent_ReportePDC()
         {
             AREA = -1;
@@ -109,6 +119,9 @@ namespace CapaEntidad.DOC
             IDREGISTRO = -1;
             TALLER = -1;
             SUM_AREA = -1;
+            VOL_APROB = -1;
+            PASPEQ_COUNT = -1;
+            INFRACCIONES_COUNT = -1;
         }
 
 

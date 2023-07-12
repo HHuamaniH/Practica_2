@@ -970,7 +970,7 @@ namespace SIGOFCv3.Areas.Capacitacion.Controllers
                         HelperWord.BuscarReemplazarTexto(paras, "VAR_MODALIDAD", constancia.MODALIDAD.ToLower());
 
                         HelperWord.BuscarReemplazarTexto(paras, "VAR_HORAE", " " + capacitacion.DURACION.ToString() + " ");
-                        HelperWord.BuscarReemplazarTexto(paras, "VAR_LUGARE", capacitacion.LUGAR);
+                        HelperWord.BuscarReemplazarTexto(paras, "VAR_LUGARE", capacitacion.SECTOR);
                         if (!string.IsNullOrEmpty(capacitacion.FECHA_INICIO.ToString()))
                         {
                             fechaInicio = Convert.ToDateTime(capacitacion.FECHA_INICIO);
@@ -979,15 +979,22 @@ namespace SIGOFCv3.Areas.Capacitacion.Controllers
                         {
                             fechaFin = Convert.ToDateTime(capacitacion.FECHA_TERMINO);
                         }
-                        if (fechaInicio != null && fechaFin != null)
-                        {
-                            HelperWord.BuscarReemplazarTexto(paras, "VAR_FECHATALLER", " del" + fechaInicio.Value.ToString("dd/MM/yyyy") + " al " + fechaFin.Value.ToString("dd/MM/yyyy"));
-                            HelperWord.BuscarReemplazarTexto(paras, "VAR_FECHAE", HelperWord.FechaLetras(Convert.ToDateTime(fechaFin.Value)));
-                        }
                         if (fechaInicio != null)
                         {
-                            HelperWord.BuscarReemplazarTexto(paras, "VAR_FECHATALLER", " el día" + fechaInicio.Value.ToString("dd/MM/yyyy"));
+                            HelperWord.BuscarReemplazarTexto(paras, "VAR_FECHATALLER", " el día " + HelperWord.FechaLetras(Convert.ToDateTime(fechaInicio.Value)));
                             HelperWord.BuscarReemplazarTexto(paras, "VAR_FECHAE", HelperWord.FechaLetras(Convert.ToDateTime(fechaInicio.Value)));
+
+                            if (fechaInicio != null && fechaFin != null)
+                            {
+                                HelperWord.BuscarReemplazarTexto(paras, "VAR_FECHATALLER", " del " + HelperWord.FechaLetras(Convert.ToDateTime(fechaInicio.Value)) + " al " + HelperWord.FechaLetras(Convert.ToDateTime(fechaFin.Value)));
+                                HelperWord.BuscarReemplazarTexto(paras, "VAR_FECHAE", HelperWord.FechaLetras(Convert.ToDateTime(fechaFin.Value)));
+                            }
+                            if (fechaInicio == fechaFin)
+                            {
+                                HelperWord.BuscarReemplazarTexto(paras, "VAR_FECHATALLER", " el día " + HelperWord.FechaLetras(Convert.ToDateTime(fechaInicio.Value)));
+                                HelperWord.BuscarReemplazarTexto(paras, "VAR_FECHAE", HelperWord.FechaLetras(Convert.ToDateTime(fechaInicio.Value)));
+                            }
+
                         }
                         else
                         {
