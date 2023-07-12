@@ -477,7 +477,7 @@ namespace SIGOFCv3.Areas.Capacitacion.Controllers
         public ActionResult ConstanciaDescargarAll(String codCapacitacion)
         {
             string folderBase = "~/Archivos/CapConstancias";
-            string folderZips = folderBase+"/Zips";
+            string folderZips = folderBase + "/Zips";
             byte[] dataByte = null;
             try
             {
@@ -497,11 +497,11 @@ namespace SIGOFCv3.Areas.Capacitacion.Controllers
                     System.IO.FileStream fs = System.IO.File.Create(file);
                     using (ZipOutputStream zip = new ZipOutputStream(fs))
                     {
-                        foreach(var item in constanciasActivas)
+                        foreach (var item in constanciasActivas)
                         {
 
                             string constanciaName = item.ARCHIVO;
-                            string pathFinal = System.IO.Path.Combine(Server.MapPath(folderBase), item.ARCHIVO_COD);     
+                            string pathFinal = System.IO.Path.Combine(Server.MapPath(folderBase), item.ARCHIVO_COD);
                             byte[] byteFile = System.IO.File.ReadAllBytes(pathFinal);
                             ZipEntry entry;
                             entry = new ZipEntry(constanciaName);
@@ -517,33 +517,33 @@ namespace SIGOFCv3.Areas.Capacitacion.Controllers
                     fs = System.IO.File.OpenRead(file); // must re-open the zip file
                     dataByte = new byte[fs.Length];
                     fs.Read(dataByte, 0, dataByte.Length);
-                    fs.Close();                  
+                    fs.Close();
                 }
                 else
                 {
-                   return Content("No existen constancias");
+                    return Content("No existen constancias");
                 }
                 return File(dataByte, "application/x-zip-compressed", string.Format("{0}{1}.zip", "Constancias_", string.Format("{0:yyyyMMdd_HHmmss}", DateTime.Now)));
             }
             catch (Exception ex)
             {
-                return Content("Error al descargar los cargos. Por favor comunicarse con soporte");       
+                return Content("Error al descargar los cargos. Por favor comunicarse con soporte");
             }
         }
         [HttpGet]
-        public JsonResult ConstanciaListar(String codCapacitacion,int flagActivo = 0)
+        public JsonResult ConstanciaListar(String codCapacitacion, int flagActivo = 0)
         {
             try
             {
                 CLogica exeCap = new CLogica();
-                var constancias = exeCap.ConstanciaListar(codCapacitacion, flagActivo);               
-                var jsonResult=Json(new { success = true, data=constancias, msj = "" }, JsonRequestBehavior.AllowGet);
+                var constancias = exeCap.ConstanciaListar(codCapacitacion, flagActivo);
+                var jsonResult = Json(new { success = true, data = constancias, msj = "" }, JsonRequestBehavior.AllowGet);
                 jsonResult.MaxJsonLength = int.MaxValue;
                 return jsonResult;
             }
             catch (Exception ex)
             {
-                return Json(new { success = false,data="", msj = ex.Message }, JsonRequestBehavior.AllowGet);
+                return Json(new { success = false, data = "", msj = ex.Message }, JsonRequestBehavior.AllowGet);
             }
         }
         [HttpGet]
@@ -555,7 +555,7 @@ namespace SIGOFCv3.Areas.Capacitacion.Controllers
                 CLogica exeCap = new CLogica();
                 var constancia = exeCap.ConstanciaObtener(codConstancia);
                 if (constancia == null) throw new Exception("Constancia a eliminar no existe");
-                if (constancia.ESTADO==0) throw new Exception($"La Constancia {constancia.NRO_CONSTANCIA} ya se encuentra eliminada");
+                if (constancia.ESTADO == 0) throw new Exception($"La Constancia {constancia.NRO_CONSTANCIA} ya se encuentra eliminada");
 
                 exeCap.ConstanciaEliminar(codConstancia, (ModelSession.GetSession())[0].COD_UCUENTA);
 
@@ -573,13 +573,13 @@ namespace SIGOFCv3.Areas.Capacitacion.Controllers
                         System.IO.File.Move(pathOrigenDoc, pathDestinoDoc);
                     }
                 }
-                catch (Exception){}
+                catch (Exception) { }
 
                 return Json(new { success = true, msj = "Constancia eliminado correctamente" }, JsonRequestBehavior.AllowGet);
             }
             catch (Exception ex)
             {
-                return Json(new { success = false,msj = ex.Message }, JsonRequestBehavior.AllowGet);
+                return Json(new { success = false, msj = ex.Message }, JsonRequestBehavior.AllowGet);
             }
         }
         [HttpGet]
@@ -589,13 +589,13 @@ namespace SIGOFCv3.Areas.Capacitacion.Controllers
             try
             {
                 CLogica exeCap = new CLogica();
-                var constancia= exeCap.ConstanciaObtener(codConstancia);
+                var constancia = exeCap.ConstanciaObtener(codConstancia);
 
 
 
                 if (constancia == null) throw new Exception("0|Constancia no existe");
 
-                if(constancia.ESTADO==0) folderBase = "~/Archivos/CapConstancias/Eliminados";
+                if (constancia.ESTADO == 0) folderBase = "~/Archivos/CapConstancias/Eliminados";
 
 
                 Stream stream;
@@ -624,9 +624,9 @@ namespace SIGOFCv3.Areas.Capacitacion.Controllers
             }
         }
         [HttpGet]
-        public JsonResult GenerarConstancias(String codCapacitacion,int cantidad,string modalidad)
-        {   
-            int ultimoCorrelativo=0;
+        public JsonResult GenerarConstancias(String codCapacitacion, int cantidad, string modalidad)
+        {
+            int ultimoCorrelativo = 0;
             int anioActual = 0;
             string abreviatura = string.Empty;
             string nroConstancia = string.Empty;
@@ -636,8 +636,8 @@ namespace SIGOFCv3.Areas.Capacitacion.Controllers
             //--------------------------
             string nombrePlantilla = "Capacitacion_Constancia_Plantilla.docx";
             string folderPlantilla = "~/Archivos/Plantilla/Capacitacion";
-            string folderBase= "~/Archivos/CapConstancias";
-            string folderTemp = folderBase+"/Temp";
+            string folderBase = "~/Archivos/CapConstancias";
+            string folderTemp = folderBase + "/Temp";
             string pathDestinoWord = string.Empty;
             string pathDestinoPdf = string.Empty;
             DateTime? fechaInicio = null;
@@ -650,7 +650,7 @@ namespace SIGOFCv3.Areas.Capacitacion.Controllers
                 modalidad = modalidad.ToUpper();
                 CLogica exeCap = new CLogica();
                 constancias = new List<Ent_CAPACITACION_CONSTANCIA>();
-                var capacitacion= exeCap.ObtenerPorId(codCapacitacion);
+                var capacitacion = exeCap.ObtenerPorId(codCapacitacion);
                 if (capacitacion != null)
                 {
                     DateTime fechaActual = DateTime.Now;
@@ -658,12 +658,12 @@ namespace SIGOFCv3.Areas.Capacitacion.Controllers
                     ultimoCorrelativo = exeCap.ObtenerUltimoCorrelativoPorAnio(anioActual);
                     abreviatura = exeCap.ObtenerAbreviatura(capacitacion.COD_CAPATIPO);
                     if (string.IsNullOrEmpty(abreviatura)) throw new Exception("No existe código de abreviatura para el tipo de capacitación");
-                    if(cantidad<=0) throw new Exception("Ingrese Número de constancia mayor a 0");
-                    if(string.IsNullOrEmpty(modalidad)) throw new Exception("Ingrese modalidad válida");
-                    if (modalidad.Length<3) throw new Exception("Ingrese modalidad válida");
+                    if (cantidad <= 0) throw new Exception("Ingrese Número de constancia mayor a 0");
+                    if (string.IsNullOrEmpty(modalidad)) throw new Exception("Ingrese modalidad válida");
+                    if (modalidad.Length < 3) throw new Exception("Ingrese modalidad válida");
 
-                    ultimoCorrelativo = ultimoCorrelativo +1;
-                    int final = ultimoCorrelativo+cantidad;
+                    ultimoCorrelativo = ultimoCorrelativo + 1;
+                    int final = ultimoCorrelativo + cantidad;
 
                     //validando existencia de plantilla de constancias
                     try
@@ -684,10 +684,10 @@ namespace SIGOFCv3.Areas.Capacitacion.Controllers
                         throw new Exception("Error al leer la plantilla de constancia");
                     }
 
-                    for (int i= ultimoCorrelativo; i< final; i++)
+                    for (int i = ultimoCorrelativo; i < final; i++)
                     {
                         constancia = new Ent_CAPACITACION_CONSTANCIA();
-                        nroConstancia = abreviatura+capacitacion.COD_CAPACITACION.Substring((capacitacion.COD_CAPACITACION.Length-3),3) +"-"+ i.ToString().PadLeft(3,'0') +"-"+ anioActual;
+                        nroConstancia = abreviatura + capacitacion.COD_CAPACITACION.Substring((capacitacion.COD_CAPACITACION.Length - 3), 3) + "-" + i.ToString().PadLeft(3, '0') + "-" + anioActual;
                         constancia.COD_CAPACITACION = codCapacitacion;
                         constancia.CORRELATIVO = i;
                         constancia.CORRELATIVO_ANIO = anioActual;
@@ -702,7 +702,7 @@ namespace SIGOFCv3.Areas.Capacitacion.Controllers
                         constancias.Add(constancia);
                     }
                     //creando pdfs
-                    foreach(var item in constancias)
+                    foreach (var item in constancias)
                     {
                         pathDestinoWord = Path.Combine(Server.MapPath(folderTemp), $"{item.ARCHIVO_COD}.docx");
                         pathDestinoPdf = Path.Combine(Server.MapPath(folderBase), $"{item.ARCHIVO_COD}.pdf");
@@ -716,13 +716,13 @@ namespace SIGOFCv3.Areas.Capacitacion.Controllers
                                 var paras = body.Elements<DocumentFormat.OpenXml.Wordprocessing.Paragraph>();
                                 var tables = body.Elements<DocumentFormat.OpenXml.Wordprocessing.Table>();
                                 HelperWord.BuscarReemplazarTexto(paras, "VAR_TIPOTALLER", capacitacion.CAPATIPO.ToLower());
-                                HelperWord.BuscarReemplazarTexto(paras, "VAR_NOMBRETALLER", capacitacion.NOMBRE.Replace("\"", "").Replace("“","").Replace("”",""));
+                                HelperWord.BuscarReemplazarTexto(paras, "VAR_NOMBRETALLER", capacitacion.NOMBRE.Replace("\"", "").Replace("“", "").Replace("”", ""));
                                 HelperWord.BuscarReemplazarTexto(paras, "VAR_DIRIGIDO", capacitacion.DIRIGIDO.ToLower());
-                                
-                                HelperWord.BuscarReemplazarTexto(paras, "VAR_MODALIDAD",item.MODALIDAD.ToLower());                               
-                               
-                                HelperWord.BuscarReemplazarTexto(paras, "VAR_HORAE", " "+capacitacion.DURACION.ToString()+" ");
-                                HelperWord.BuscarReemplazarTexto(paras, "VAR_LUGARE", capacitacion.LUGAR);
+
+                                HelperWord.BuscarReemplazarTexto(paras, "VAR_MODALIDAD", item.MODALIDAD.ToLower());
+
+                                HelperWord.BuscarReemplazarTexto(paras, "VAR_HORAE", " " + capacitacion.DURACION.ToString() + " ");
+                                HelperWord.BuscarReemplazarTexto(paras, "VAR_LUGARE", capacitacion.SECTOR);
                                 if (!string.IsNullOrEmpty(capacitacion.FECHA_INICIO.ToString()))
                                 {
                                     fechaInicio = Convert.ToDateTime(capacitacion.FECHA_INICIO);
@@ -731,36 +731,45 @@ namespace SIGOFCv3.Areas.Capacitacion.Controllers
                                 {
                                     fechaFin = Convert.ToDateTime(capacitacion.FECHA_TERMINO);
                                 }
-                                if (fechaInicio != null && fechaFin!=null)
-                                {
-                                    HelperWord.BuscarReemplazarTexto(paras, "VAR_FECHATALLER", "del " +fechaInicio.Value.ToString("dd/MM/yyyy") +" al "+ fechaFin.Value.ToString("dd/MM/yyyy"));
-                                    HelperWord.BuscarReemplazarTexto(paras, "VAR_FECHAE", HelperWord.FechaLetras(Convert.ToDateTime(fechaFin.Value)));
-                                }
+
                                 if (fechaInicio != null)
                                 {
-                                    HelperWord.BuscarReemplazarTexto(paras, "VAR_FECHATALLER", " el día" + fechaInicio.Value.ToString("dd/MM/yyyy"));
+                                    HelperWord.BuscarReemplazarTexto(paras, "VAR_FECHATALLER", " el día " + HelperWord.FechaLetras(Convert.ToDateTime(fechaInicio.Value)));
                                     HelperWord.BuscarReemplazarTexto(paras, "VAR_FECHAE", HelperWord.FechaLetras(Convert.ToDateTime(fechaInicio.Value)));
+
+                                    if (fechaInicio != null && fechaFin != null)
+                                    {
+                                        HelperWord.BuscarReemplazarTexto(paras, "VAR_FECHATALLER", " del " + HelperWord.FechaLetras(Convert.ToDateTime(fechaInicio.Value)) + " al " + HelperWord.FechaLetras(Convert.ToDateTime(fechaFin.Value)));
+                                        HelperWord.BuscarReemplazarTexto(paras, "VAR_FECHAE", HelperWord.FechaLetras(Convert.ToDateTime(fechaFin.Value)));
+                                    }
+                                    if (fechaInicio == fechaFin)
+                                    {
+                                        HelperWord.BuscarReemplazarTexto(paras, "VAR_FECHATALLER", " el día " + HelperWord.FechaLetras(Convert.ToDateTime(fechaInicio.Value)));
+                                        HelperWord.BuscarReemplazarTexto(paras, "VAR_FECHAE", HelperWord.FechaLetras(Convert.ToDateTime(fechaInicio.Value)));
+                                    }
+
                                 }
+
                                 else
                                 {
                                     HelperWord.BuscarReemplazarTexto(paras, "VAR_FECHATALLER", " el día ..............");
                                     HelperWord.BuscarReemplazarTexto(paras, "VAR_FECHAE", " ..............");
                                 }
                                 HelperWord.BuscarReemplazarTexto(paras, "VAR_NUMC", item.NRO_CONSTANCIA);
-                                HelperWord.SearchAndReplace(wordDoc, "VAR_NUMC", item.NRO_CONSTANCIA, true);                              
+                                HelperWord.SearchAndReplace(wordDoc, "VAR_NUMC", item.NRO_CONSTANCIA, true);
 
 
                                 wordDoc.Close();
                             }
                             this.GuardarMemoryStream(mem, pathDestinoWord);
                             //  this.GenerarPDF(pathDestinoWord, pathDestinoPdf, inscripcionId);
-                            this.GenerarPDF(pathDestinoWord, pathDestinoPdf);                           
+                            this.GenerarPDF(pathDestinoWord, pathDestinoPdf);
                         }
                         this.EliminarArchivo(pathDestinoWord);
                     }
                     //insertando en la base de datos
-                    flagRegBD= exeCap.ConstanciaInsertarMasivo(constancias);
-                    
+                    flagRegBD = exeCap.ConstanciaInsertarMasivo(constancias);
+
                     if (constancias.Count <= 0)
                     {
                         return Json(new { success = false, msj = "No se ha generado alguna constancia" }, JsonRequestBehavior.AllowGet);
@@ -778,13 +787,13 @@ namespace SIGOFCv3.Areas.Capacitacion.Controllers
                 {
                     throw new Exception("Capacitación no existe");
                 }
-                
+
             }
             catch (Exception ex)
             {
-                if(constancias != null)
+                if (constancias != null)
                 {
-                    foreach(var eli in constancias)
+                    foreach (var eli in constancias)
                     {
                         pathDestinoWord = Path.Combine(Server.MapPath(folderTemp), $"{eli.ARCHIVO_COD}.docx");
                         pathDestinoPdf = Path.Combine(Server.MapPath(folderBase), $"{eli.ARCHIVO_COD}.pdf");
@@ -867,7 +876,7 @@ namespace SIGOFCv3.Areas.Capacitacion.Controllers
                                  PUBLICOPARTICIPANTE = c.PUBLICOPARTICIPANTE,
                                  FECHA_CREACION = c.FECHA_CREACION,
                                  MOCHILAFORESTAL = c.MOCHILAFORESTAL,
-                                 COD_CONSTANCIA_CAP=c.COD_CONSTANCIA_CAP
+                                 COD_CONSTANCIA_CAP = c.COD_CONSTANCIA_CAP
                              };
                 var jsonResult = Json(new { data = result, success = true, er = "" }, JsonRequestBehavior.AllowGet);
                 jsonResult.MaxJsonLength = int.MaxValue;
@@ -879,7 +888,7 @@ namespace SIGOFCv3.Areas.Capacitacion.Controllers
             }
         }
         [HttpGet]
-        public ActionResult _ParticitanteBuscar(string codCapacitacion, string codTipoParticipante,string codConstancia)
+        public ActionResult _ParticitanteBuscar(string codCapacitacion, string codTipoParticipante, string codConstancia)
         {
             ViewBag.hdCodCapacitacion = codCapacitacion;
             ViewBag.hdCodTipoParticipante = codTipoParticipante;
@@ -887,7 +896,7 @@ namespace SIGOFCv3.Areas.Capacitacion.Controllers
             return PartialView();
         }
         [HttpGet]
-        public JsonResult ReGenerarConstancias(string codCapacitacion, string codTipoParticipante, string codConstancia,string codPersona)
+        public JsonResult ReGenerarConstancias(string codCapacitacion, string codTipoParticipante, string codConstancia, string codPersona)
         {
             string nuevoCodigoConstancia;
             string nombrePlantilla = "Capacitacion_Constancia_PlantillaParticipante.docx";
@@ -902,7 +911,7 @@ namespace SIGOFCv3.Areas.Capacitacion.Controllers
             try
             {
                 CLogica exeCap = new CLogica();
-                var participante=  exeCap.ParticipanteObtener(codCapacitacion, codTipoParticipante, codPersona);
+                var participante = exeCap.ParticipanteObtener(codCapacitacion, codTipoParticipante, codPersona);
                 if (participante == null) throw new Exception("Participante no existe");
                 if (!string.IsNullOrEmpty(participante.COD_CONSTANCIA_CAP))
                 {
@@ -952,7 +961,7 @@ namespace SIGOFCv3.Areas.Capacitacion.Controllers
                         var body = wordDoc.MainDocumentPart.Document.Body;
                         var paras = body.Elements<DocumentFormat.OpenXml.Wordprocessing.Paragraph>();
                         var tables = body.Elements<DocumentFormat.OpenXml.Wordprocessing.Table>();
-                        string persona = participante.NOMBRES?.ToUpper() + " " + participante.APE_PATERNO?.ToUpper() +" "+ participante.APE_MATERNO?.ToUpper();
+                        string persona = participante.NOMBRES?.ToUpper() + " " + participante.APE_PATERNO?.ToUpper() + " " + participante.APE_MATERNO?.ToUpper();
                         HelperWord.BuscarReemplazarTexto(paras, "VAR_PARTICIPANTE", persona);
                         HelperWord.BuscarReemplazarTexto(paras, "VAR_TIPOTALLER", capacitacion.CAPATIPO.ToLower());
                         HelperWord.BuscarReemplazarTexto(paras, "VAR_NOMBRETALLER", capacitacion.NOMBRE.Replace("\"", "").Replace("“", "").Replace("”", ""));
@@ -960,7 +969,7 @@ namespace SIGOFCv3.Areas.Capacitacion.Controllers
 
                         HelperWord.BuscarReemplazarTexto(paras, "VAR_MODALIDAD", constancia.MODALIDAD.ToLower());
 
-                        HelperWord.BuscarReemplazarTexto(paras, "VAR_HORAE", " "+capacitacion.DURACION.ToString()+" ");
+                        HelperWord.BuscarReemplazarTexto(paras, "VAR_HORAE", " " + capacitacion.DURACION.ToString() + " ");
                         HelperWord.BuscarReemplazarTexto(paras, "VAR_LUGARE", capacitacion.LUGAR);
                         if (!string.IsNullOrEmpty(capacitacion.FECHA_INICIO.ToString()))
                         {
@@ -998,7 +1007,7 @@ namespace SIGOFCv3.Areas.Capacitacion.Controllers
                 this.EliminarArchivo(pathDestinoWord);
 
                 //actualizando participante y constancia codCapacitacion, codTipoParticipante, codPersona
-                var result= exeCap.ParticipanteAsignarConstancia(codCapacitacion, codTipoParticipante, codPersona, constancia.COD_CONSTANCIA, nuevoCodigoConstancia, (ModelSession.GetSession())[0].COD_UCUENTA, DateTime.Now);
+                var result = exeCap.ParticipanteAsignarConstancia(codCapacitacion, codTipoParticipante, codPersona, constancia.COD_CONSTANCIA, nuevoCodigoConstancia, (ModelSession.GetSession())[0].COD_UCUENTA, DateTime.Now);
 
                 string folderEli = folderBase + "/Eliminados";
                 if (!Directory.Exists(Server.MapPath(folderEli)))
@@ -1024,7 +1033,7 @@ namespace SIGOFCv3.Areas.Capacitacion.Controllers
             FileInfo template = new FileInfo(Server.MapPath("~/Archivos/Plantilla/Capacitacion/CAPACITACIONES PLANTILLA CONSTANCIAS.xlsx"));
             CLogica exeCap = new CLogica();
             List<CEntidad> participantes = exeCap.ParticipanteListar(codCapacitacion, "0000016", "");
-            int rowStart = 2;          
+            int rowStart = 2;
             using (var package = new ExcelPackage(template))
             {
                 var workbook = package.Workbook;
@@ -1037,7 +1046,7 @@ namespace SIGOFCv3.Areas.Capacitacion.Controllers
                     foreach (var item in participantes)
                     {
                         column = 0;
-                        worksheet.Cells[HelperSigo.GetColum(++column) + rowStart.ToString()].Value = item.COD_CAPACITACION + "|"+item.COD_PERSONA+"|"+item.MAE_COD_TIPOPARTICIPANTE;
+                        worksheet.Cells[HelperSigo.GetColum(++column) + rowStart.ToString()].Value = item.COD_CAPACITACION + "|" + item.COD_PERSONA + "|" + item.MAE_COD_TIPOPARTICIPANTE;
                         worksheet.Cells[HelperSigo.GetColum(++column) + rowStart.ToString()].Value = item.APE_PATERNO;
                         worksheet.Cells[HelperSigo.GetColum(++column) + rowStart.ToString()].Value = item.APE_MATERNO;
                         worksheet.Cells[HelperSigo.GetColum(++column) + rowStart.ToString()].Value = item.NOMBRES;
@@ -1051,7 +1060,7 @@ namespace SIGOFCv3.Areas.Capacitacion.Controllers
                         {
                             worksheet.Cells[HelperSigo.GetColum(++column) + rowStart.ToString()].Value = "NO";
                         }
-                      
+
                         rowStart++;
                     }
                 }
@@ -1071,7 +1080,7 @@ namespace SIGOFCv3.Areas.Capacitacion.Controllers
         [HttpPost]
         public JsonResult UploadExcel()
         {
-            
+
             string archivo = string.Empty;
             string nombreFinal = string.Empty;
 
@@ -1084,7 +1093,7 @@ namespace SIGOFCv3.Areas.Capacitacion.Controllers
             {
                 if (Request != null)
                 {
-                    HttpPostedFileBase file = Request.Files[0];                    
+                    HttpPostedFileBase file = Request.Files[0];
                     if ((file != null) && (file.ContentLength > 0) && !string.IsNullOrEmpty(file.FileName))
                     {
                         using (var package = new ExcelPackage(file.InputStream))
@@ -1098,11 +1107,11 @@ namespace SIGOFCv3.Areas.Capacitacion.Controllers
 
                             string codigo = string.Empty;
                             string COD_CAPACITACION = string.Empty, COD_PERSONA = string.Empty, MAE_COD_TIPOPARTICIPANTE = string.Empty;
-                            string nroConstancia,asignado;
-                            int colCodigo = 1,colNroConstancia=7;
-                            int colResultado = 8, colAsignado=6;
+                            string nroConstancia, asignado;
+                            int colCodigo = 1, colNroConstancia = 7;
+                            int colResultado = 8, colAsignado = 6;
                             for (int rowIterator = 2; rowIterator <= noOfRow; rowIterator++)
-                            {                                
+                            {
                                 codigo = workSheet.Cells[rowIterator, colCodigo].Value == null ? "" : workSheet.Cells[rowIterator, colCodigo].Value.ToString()?.Trim();
                                 asignado = workSheet.Cells[rowIterator, colAsignado].Value == null ? "" : workSheet.Cells[rowIterator, colAsignado].Value.ToString()?.Trim();
                                 string[] codigoSplit = codigo.Split('|');
@@ -1135,7 +1144,7 @@ namespace SIGOFCv3.Areas.Capacitacion.Controllers
                                     {
                                         this.AgregarResultado(workSheet, rowIterator, colResultado, "CÓDIGO PARTICIPANTE ES INCORRECTO");
                                     }
-                                }    
+                                }
                             }
                             string nombreArchivo = file.FileName.Substring(0, file.FileName.LastIndexOf("."));
                             string extArch = file.FileName.Substring(file.FileName.LastIndexOf(".") + 1);
@@ -1151,7 +1160,7 @@ namespace SIGOFCv3.Areas.Capacitacion.Controllers
 
                             byte[] data = package.GetAsByteArray();
                             System.IO.File.WriteAllBytes(pathGenerado, data);
-                            archivo = "/Archivos/Plantilla/Capacitacion/Temp/"+ nombreFinal;
+                            archivo = "/Archivos/Plantilla/Capacitacion/Temp/" + nombreFinal;
 
                             try
                             {
@@ -1168,7 +1177,7 @@ namespace SIGOFCv3.Areas.Capacitacion.Controllers
                             {
 
                             }
-                            
+
                         }
                         success = true;
                     }
@@ -1185,13 +1194,13 @@ namespace SIGOFCv3.Areas.Capacitacion.Controllers
                 }
             }
             catch (Exception ex)
-            {                 
+            {
                 success = false;
                 message = ex.Message;
 
             }
 
-            return Json(new { success, message, archivo,cantidad= countConstanciasActualizadas });
+            return Json(new { success, message, archivo, cantidad = countConstanciasActualizadas });
 
         }
         private void AgregarResultado(ExcelWorksheet workSheet, int row, int column, string resultado)
@@ -1201,7 +1210,7 @@ namespace SIGOFCv3.Areas.Capacitacion.Controllers
             else workSheet.Cells[row, column].Style.Font.Color.SetColor(System.Drawing.Color.Red);
 
         }
-        public void ReGenerarConstanciasMasiva(string codCapacitacion, string codPersona, string codTipoParticipante, string nroConstancia,out bool flagResultado,out string msjResultado)
+        public void ReGenerarConstanciasMasiva(string codCapacitacion, string codPersona, string codTipoParticipante, string nroConstancia, out bool flagResultado, out string msjResultado)
         {
             string nuevoCodigoConstancia;
             string nombrePlantilla = "Capacitacion_Constancia_PlantillaParticipante.docx";
@@ -1330,7 +1339,7 @@ namespace SIGOFCv3.Areas.Capacitacion.Controllers
                 if (System.IO.File.Exists(pathOrigenDoc))
                 {
                     System.IO.File.Move(pathOrigenDoc, pathDestinoDoc);
-                }              
+                }
                 flagResultado = true;
                 msjResultado = "Constancia Actualizado Correctamente";
             }
