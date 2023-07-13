@@ -1232,14 +1232,14 @@ namespace CapaLogica.DOC
                 throw ex;
             }
         }
-        public int ObtenerUltimoCorrelativoPorAnio(int anio)
+        public int ObtenerUltimoCorrelativoPorAnio(string cod_capacitacion)
         {
             try
             {
                 using (OracleConnection cn = new OracleConnection(CapaDatos.BDConexion.Conexion_Cadena_SIGO()))
                 {
                     cn.Open();
-                    return oCDatos.ObtenerUltimoCorrelativoPorAnio(cn, anio);
+                    return oCDatos.ObtenerUltimoCorrelativoPorAnio(cn, cod_capacitacion);
                 }
             }
             catch (Exception ex)

@@ -2932,13 +2932,13 @@ namespace CapaDatos.DOC
                 throw ex;
             }
         }
-        public int ObtenerUltimoCorrelativoPorAnio(OracleConnection cn, int anio)
+        public int ObtenerUltimoCorrelativoPorAnio(OracleConnection cn, string cod_capacitacion)
         {
             int correlativo = 0;
 
             try
             {
-                object[] param = { anio };
+                object[] param = { cod_capacitacion };
                 using (OracleDataReader dr = dBOracle.SelDrdDefault(cn, "DOC_OSINFOR_ERP_MIGRACION.SPCAPACITACION_CONSTANCIA_OBTENER_CORRELATIVO", param))
                 {
                     if (dr.HasRows)

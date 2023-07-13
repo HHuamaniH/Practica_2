@@ -655,7 +655,7 @@ namespace SIGOFCv3.Areas.Capacitacion.Controllers
                 {
                     DateTime fechaActual = DateTime.Now;
                     anioActual = fechaActual.Year;
-                    ultimoCorrelativo = exeCap.ObtenerUltimoCorrelativoPorAnio(anioActual);
+                    ultimoCorrelativo = exeCap.ObtenerUltimoCorrelativoPorAnio(codCapacitacion);
                     abreviatura = exeCap.ObtenerAbreviatura(capacitacion.COD_CAPATIPO);
                     if (string.IsNullOrEmpty(abreviatura)) throw new Exception("No existe código de abreviatura para el tipo de capacitación");
                     if (cantidad <= 0) throw new Exception("Ingrese Número de constancia mayor a 0");
@@ -734,7 +734,7 @@ namespace SIGOFCv3.Areas.Capacitacion.Controllers
 
                                 if (fechaInicio != null)
                                 {
-                                    HelperWord.BuscarReemplazarTexto(paras, "VAR_FECHATALLER", " el día " + HelperWord.FechaLetras(Convert.ToDateTime(fechaInicio.Value)));
+                                    HelperWord.BuscarReemplazarTexto(paras, "VAR_FECHATALLER", "el día " + HelperWord.FechaLetras(Convert.ToDateTime(fechaInicio.Value)));
                                     HelperWord.BuscarReemplazarTexto(paras, "VAR_FECHAE", HelperWord.FechaLetras(Convert.ToDateTime(fechaInicio.Value)));
 
                                     if (fechaInicio != null && fechaFin != null)
@@ -744,7 +744,7 @@ namespace SIGOFCv3.Areas.Capacitacion.Controllers
                                     }
                                     if (fechaInicio == fechaFin)
                                     {
-                                        HelperWord.BuscarReemplazarTexto(paras, "VAR_FECHATALLER", " el día " + HelperWord.FechaLetras(Convert.ToDateTime(fechaInicio.Value)));
+                                        HelperWord.BuscarReemplazarTexto(paras, "VAR_FECHATALLER", "el día " + HelperWord.FechaLetras(Convert.ToDateTime(fechaInicio.Value)));
                                         HelperWord.BuscarReemplazarTexto(paras, "VAR_FECHAE", HelperWord.FechaLetras(Convert.ToDateTime(fechaInicio.Value)));
                                     }
 
@@ -752,7 +752,7 @@ namespace SIGOFCv3.Areas.Capacitacion.Controllers
 
                                 else
                                 {
-                                    HelperWord.BuscarReemplazarTexto(paras, "VAR_FECHATALLER", " el día ..............");
+                                    HelperWord.BuscarReemplazarTexto(paras, "VAR_FECHATALLER", "el día ..............");
                                     HelperWord.BuscarReemplazarTexto(paras, "VAR_FECHAE", " ..............");
                                 }
                                 HelperWord.BuscarReemplazarTexto(paras, "VAR_NUMC", item.NRO_CONSTANCIA);
