@@ -571,7 +571,7 @@ ManCapacitacion_AddEdit.fnInitDataTable_Detail = function () {
 }
 ManCapacitacion_AddEdit.fnInitDataTable_Constancias = function () {   
 
-    let columns_label = ["N°","","","","Número constancia", "Modalidad","Asignado A", "Estado"];
+    let columns_label = ["N°", "Eliminar", "Descargar", "Asignar", "Regenerar","Número constancia", "Modalidad","Asignado A", "Estado"];
     let columns_data = [
         {
             "name": "ROW_INDE", "width": "2%", "orderable": false, "searchable": false, "mRender": function (data, type, row, meta) {
@@ -593,6 +593,12 @@ ManCapacitacion_AddEdit.fnInitDataTable_Constancias = function () {
         {
             "data": "", "width": "2%", "orderable": false, "searchable": false, "mRender": function (data, type, row) {                
                 if (row.ESTADO == 1 && row.FLAG_ASIGNADO==0) return '<div><i class="fa fa-lg fa-cogs" style="color:dodgerblue;cursor:pointer;" title="Asignar" onclick="ManCapacitacion_AddEdit.fnConstanciaAsignar(this)"></i>';
+                else return "";
+            }
+        },
+        {
+            "data": "", "width": "2%", "orderable": false, "searchable": false, "mRender": function (data, type, row) {
+                if (row.ESTADO == 1 && row.FLAG_ASIGNADO == 1) return '<div><i class="fa fa-lg fa-refresh" style="color:dodgerblue;cursor:pointer;" title="Volver a generar la constancia" onclick="ManCapacitacion_AddEdit.fnConstanciaRegenerar(this)"></i>';
                 else return "";
             }
         },
@@ -644,7 +650,7 @@ ManCapacitacion_AddEdit.fnConstanciaAsignar = function (obj) {
                 let codPersona = data.COD_PERSONA;
                 let codTipoParticipante = data.MAE_COD_TIPOPARTICIPANTE
                 console.log(codConstancia);
-                let url = urlLocalSigo + "Capacitacion/ManCapacitacion/ReGenerarConstancias";
+                let url = urlLocalSigo + "Capacitacion/ManCapacitacion/AsignarConstancia";
                 let params = {};
                 params.codCapacitacion = ManCapacitacion_AddEdit.frm.find("#hdfCodCapacitacion").val(),
                 params.codTipoParticipante = codTipoParticipante;
@@ -666,6 +672,47 @@ ManCapacitacion_AddEdit.fnConstanciaAsignar = function (obj) {
             }
         }
         _buscarParticipante.fnInit();
+    });
+}
+ManCapacitacion_AddEdit.fnConstanciaRegenerar = function (obj) {
+    var dt = ManCapacitacion_AddEdit.dtConstancias;
+    var data = dt.row($(obj).parents('tr')).data();  
+
+    utilSigo.dialogConfirm("", "Está seguro de volver a generar la constancia?", function (r) {
+        if (r) {
+            var url = urlLocalSigo + "Capacitacion/ManCapacitacion/RegenerarConstancia";
+            var option = { url: url, type: 'GET', datos: { codCapacitacion: ManCapacitacion_AddEdit.frm.find("#hdfCodCapacitacion").val(), codConstancia: data.COD_CONSTANCIA } };
+            utilSigo.fnAjax(option, function (data) {
+                if (data.success) {
+                    ManCapacitacion_AddEdit.fnConstanciaListar(false);
+                    utilSigo.toastSuccess("Éxito", data.message);
+                } else {
+                    utilSigo.toastWarning("Aviso", data.message);
+                }
+            });
+        }
+    });    
+}
+ManCapacitacion_AddEdit.fnConstanciaRegenerarMasivo = function (obj) {
+    var dt = ManCapacitacion_AddEdit.dtConstancias;
+    var data = dt.row($(obj).parents('tr')).data();
+
+    utilSigo.dialogConfirm("", "Está seguro de volver a generar todas las constancias asignadas?", function (r) {
+        if (r) {
+            var url = urlLocalSigo + "Capacitacion/ManCapacitacion/RegenerarConstancias";
+            var option = { url: url, type: 'GET', datos: { codCapacitacion: ManCapacitacion_AddEdit.frm.find("#hdfCodCapacitacion").val() } };
+            utilSigo.fnAjax(option, function (result) {
+                if (result.cantidad > 0) {
+                    utilSigo.toastSuccess("Notificación", "Se actualizarón " + result.cantidad + " constancias");                   
+                } else {
+                    if (result.message != "") {
+                        utilSigo.toastWarning("Notificación", result.message);
+                    } else {
+                        utilSigo.toastWarning("Notificación", "Sucedió un error");
+                    }
+                }
+            });
+        }
     });
 }
 /*Controles PARTICIPANTES*/
@@ -1621,7 +1668,7 @@ $(document).ready(function () {
                         let idFile = $(objeto).attr("id");
                         $("#" + idFile).val("");
                     },
-                    error: utilSigo.errorAjax
+                    error: utilSigo.toastError("Notificación", "Sucedió un error al realizar la carga masiva") //utilSigo.errorAjax
                 });
             } else {
                 alert("This browser doesn't support HTML5 file uploads!");

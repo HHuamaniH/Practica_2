@@ -2750,14 +2750,8 @@ namespace CapaDatos.DOC
                                 oCamposDet.MODALIDAD = dr["MODALIDAD"].ToString();
                                 oCamposDet.TALLER = Decimal.Parse(dr["taller"].ToString());
                                 oCamposDet.CAPACITABLE = dr["capacitable"].ToString();
-                                oCamposDet.SUM_AREA = Decimal.Parse(dr["suma_area"].ToString());
-                                oCamposDet.IDREGISTRO = Decimal.Parse(dr["count_th"].ToString());
-
-                                oCamposDet.VOL_APROB = Decimal.Parse(dr["vol_aprob"].ToString());
-                                oCamposDet.PASPEQ_COUNT = Decimal.Parse(dr["paspeq"].ToString());
-                                oCamposDet.INFRACCIONES_COUNT = Decimal.Parse(dr["infracciones"].ToString());
-
-
+                                oCamposDet.SUM_AREA = Decimal.Parse(dr["suma"].ToString());
+                                oCamposDet.IDREGISTRO = Decimal.Parse(dr["th"].ToString());
 
                                 lsCEntidadRGP.Add(oCamposDet);
                             }
@@ -3212,6 +3206,59 @@ namespace CapaDatos.DOC
             {
                 object[] param = { codCapacitacion, codTipoParticipante, codPersona };
                 using (OracleDataReader dr = dBOracle.SelDrdDefault(cn, "DOC_OSINFOR_ERP_MIGRACION.SPCAPACITACION_PARTICIPANTES_OBTENER", param))
+                {
+                    if (dr.HasRows)
+                    {
+                        dr.Read();
+                        oCamposDet = new CEntidad();
+                        oCamposDet.COD_CAPACITACION = dr["COD_CAPACITACION"].ToString();
+                        oCamposDet.COD_PERSONA = dr["COD_PERSONA"].ToString();
+                        oCamposDet.MAE_COD_TIPOPARTICIPANTE = dr["MAE_COD_TIPOPARTICIPANTE"].ToString();
+                        oCamposDet.N_DOCUMENTO = dr["N_DOCUMENTO"].ToString();
+                        oCamposDet.APE_PATERNO = dr["APE_PATERNO"].ToString();
+                        oCamposDet.APE_MATERNO = dr["APE_MATERNO"].ToString();
+                        oCamposDet.NOMBRES = dr["NOMBRES"].ToString();
+                        oCamposDet.APELLIDOS_NOMBRES = dr["APELLIDOS_NOMBRES"].ToString();
+                        oCamposDet.COD_INSTITUCION = dr["COD_INSTITUCION"].ToString();
+                        oCamposDet.NOM_INSTITUCION = dr["NOM_INSTITUCION"].ToString();
+                        oCamposDet.CARGO = dr["CARGO"].ToString();
+                        oCamposDet.GENERO = dr["GENERO"].ToString();
+                        oCamposDet.EDAD = int.Parse(dr["EDAD"].ToString());
+                        oCamposDet.TELEFONO = dr["TELEFONO"].ToString();
+                        oCamposDet.CORREO = dr["CORREO"].ToString();
+                        oCamposDet.OBSERVACION = dr["OBSERVACION"].ToString();
+                        oCamposDet.COD_CONSTANCIA = dr["COD_CONSTANCIA"].ToString();
+                        oCamposDet.FUNCION = dr["FUNCION"].ToString();
+                        oCamposDet.COD_CCNN = dr.GetString(dr.GetOrdinal("COD_CCNN"));
+                        oCamposDet.CCNN = dr.GetString(dr.GetOrdinal("CCNN"));
+                        oCamposDet.ETNIA = dr.GetString(dr.GetOrdinal("ETNIA"));
+                        oCamposDet.COD_THABILITANTE = dr.GetString(dr.GetOrdinal("COD_THABILITANTE"));
+                        oCamposDet.NUM_THABILITANTE = dr.GetString(dr.GetOrdinal("NUM_THABILITANTE"));
+                        oCamposDet.MAE_COD_GRUPOPUBLICOPARTICIPANTE = dr.GetString(dr.GetOrdinal("MAE_COD_GRUPOPUBLICOPARTICIPANTE"));
+                        oCamposDet.GRUPOPUBLICOPARTICIPANTE = dr.GetString(dr.GetOrdinal("GRUPOPUBLICOPARTICIPANTE"));
+                        oCamposDet.MAE_COD_PUBLICOPARTICIPANTE = dr.GetString(dr.GetOrdinal("MAE_COD_PUBLICOPARTICIPANTE"));
+                        oCamposDet.PUBLICOPARTICIPANTE = dr.GetString(dr.GetOrdinal("PUBLICOPARTICIPANTE"));
+                        oCamposDet.FECHA_CREACION = dr.GetString(dr.GetOrdinal("FECHA_CREACION"));
+                        oCamposDet.MOCHILAFORESTAL = dr.GetString(dr.GetOrdinal("MOCHILAFORESTAL"));
+                        oCamposDet.COD_CONSTANCIA_CAP = dr["COD_CONSTANCIA_CAP"].ToString();
+                    }
+                }
+                return oCamposDet;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+        public CEntidad ParticipanteObtenerPorConstancia(OracleConnection cn,string codCapacitacion, string codConstancia)
+        {
+
+            CEntidad oCamposDet = null;
+
+            try
+            {
+                object[] param = { codCapacitacion,codConstancia };
+                using (OracleDataReader dr = dBOracle.SelDrdDefault(cn, "DOC_OSINFOR_ERP_MIGRACION.SPCAPACITACION_PARTICIPANTES_OBTENER_POR_CONSTANCIA", param))
                 {
                     if (dr.HasRows)
                     {

@@ -558,6 +558,7 @@ namespace SIGOFCv3.Areas.Capacitacion.Controllers
         {
             int band = 0;
             string mensaje = "Existe un error en: ";
+            bool resultado = true;
             string err = "";
             List<Ent_PDCImportPASPEQ> listImport = new List<Ent_PDCImportPASPEQ>();
             CapaLogica.DOC.Log_CAPACITACION exeBus = new CapaLogica.DOC.Log_CAPACITACION();
@@ -619,6 +620,12 @@ namespace SIGOFCv3.Areas.Capacitacion.Controllers
                         result = exeBus.GuardarDatosPasPEQ(obj, sesion);
                         //(ModelSession.GetSession())[0].COD_UCUENTA
                     }
+                    mensaje = "Se actualizaron los registros";
+                }
+                else
+                {
+                    mensaje = "El archivo esta vacio";
+                    resultado = false;
                 }
             }
             catch (Exception ex)
@@ -632,6 +639,8 @@ namespace SIGOFCv3.Areas.Capacitacion.Controllers
             var jsonResult = Json(new
             {
                 //data = vmRD.ListEspecieMedCorrectiva,
+                success = resultado,
+                msj=mensaje,
                 error = err
             }, JsonRequestBehavior.AllowGet);
             jsonResult.MaxJsonLength = int.MaxValue;

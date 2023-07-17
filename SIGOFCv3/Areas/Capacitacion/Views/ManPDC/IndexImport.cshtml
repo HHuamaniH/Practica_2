@@ -49,8 +49,17 @@
             contentType: false,
             dataType: 'json',
             processData: false,
+            beforeSend: utilSigo.beforeSendAjax,
+            complete: utilSigo.completeAjax,
             success: function (data) {
                 _rendImportPASPEQ.fnReporte();
+                if (data.success == true) {
+                    utilSigo.toastSuccess("Notificación", data.msj);
+                }
+                else {
+                    utilSigo.toastError("Notificación", data.msj);
+                }
+               
             },
             error: function (jqXHR, error, errorThrown) {
                 utilSigo.unblockUIGeneral();

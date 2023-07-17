@@ -1345,6 +1345,21 @@ namespace CapaLogica.DOC
                 throw ex;
             }
         }
+        public CEntidad ParticipanteObtenerPorConstancia(string codCapacitacion, string codConstancia)
+        {
+            try
+            {
+                using (OracleConnection cn = new OracleConnection(CapaDatos.BDConexion.Conexion_Cadena_SIGO()))
+                {
+                    cn.Open();
+                    return oCDatos.ParticipanteObtenerPorConstancia(cn, codCapacitacion,codConstancia);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
         public bool ParticipanteAsignarConstancia(string codCapacitacion, string codTipoParticipante, string codPersona, string codConstancia, string archivoCod, string usuarioMoficiacion, DateTime fechaModificar)
         {
             try

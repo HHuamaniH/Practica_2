@@ -13,7 +13,7 @@
 <script src="~/Scripts/datatables/Extensions/buttons.print.js"></script>
 <script src="~/Scripts/ckeditor/ckeditor.js"></script>
 <script src="~/Scripts/sigo/utility.uploadFile.js"></script>
-<script src="~/Areas/Capacitacion/js/ManCapacitacion/AddEdit.js?v4"></script>
+<script src="~/Areas/Capacitacion/js/ManCapacitacion/AddEdit.js?v5"></script>
 <script type="text/javascript">
     ManCapacitacion_AddEdit.fnLoadData('@Html.Raw(Json.Encode(@Model.tbParticipante_Asistentes))', "DataAsistente");
     ManCapacitacion_AddEdit.fnLoadData('@Html.Raw(Json.Encode(@Model.tbParticipante_EquipoApoyo))', "DataEquipoApoyo");
@@ -776,7 +776,8 @@
                                                     <button type="button" class="btn btn-outline-info btn-sm" style="margin-top:18px;" onclick="ManCapacitacion_AddEdit.fnConstanciaGenerar()">Generar</button>
                                                     <button type="button" class="btn btn-outline-info btn-sm" style="margin-top:18px;" onclick="ManCapacitacion_AddEdit.fnConstanciaDescargarAll()">Descargar Constancias</button>
                                                     <button type="button" class="btn btn-outline-info btn-sm" style="margin-top:18px;" onclick="ManCapacitacion_AddEdit.fnConstanciaDescargarPlantilla()">Descargar Plantilla</button>
-                                                    <button type="button" class="btn btn-outline-info btn-sm" style="margin-top:18px;" onclick="ManCapacitacion_AddEdit.fnConstanciaActualizar()">Actualizar constancias</button>
+                                                    <button type="button" class="btn btn-outline-info btn-sm" style="margin-top:18px;" onclick="ManCapacitacion_AddEdit.fnConstanciaActualizar()">Asignar constancias</button>
+                                                    <button type="button" class="btn btn-outline-info btn-sm" style="margin-top:18px;" onclick="ManCapacitacion_AddEdit.fnConstanciaRegenerarMasivo()">Regenerar constancias</button>
                                                     <div style="display:none;">
                                                         <input type="file" name="uploadBtnBOL" id="uploadBtnBOL" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" />
                                                     </div>
