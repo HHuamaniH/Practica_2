@@ -2750,8 +2750,11 @@ namespace CapaDatos.DOC
                                 oCamposDet.MODALIDAD = dr["MODALIDAD"].ToString();
                                 oCamposDet.TALLER = Decimal.Parse(dr["taller"].ToString());
                                 oCamposDet.CAPACITABLE = dr["capacitable"].ToString();
-                                oCamposDet.SUM_AREA = Decimal.Parse(dr["suma"].ToString());
-                                oCamposDet.IDREGISTRO = Decimal.Parse(dr["th"].ToString());
+                                oCamposDet.SUM_AREA = Decimal.Parse(dr["suma_area"].ToString());
+                                oCamposDet.IDREGISTRO = Decimal.Parse(dr["count_th"].ToString());
+                                oCamposDet.VOL_APROB = Decimal.Parse(dr["vol_aprob"].ToString());
+                                oCamposDet.PASPEQ_COUNT = Decimal.Parse(dr["paspeq"].ToString());
+                                oCamposDet.INFRACCIONES_COUNT = Decimal.Parse(dr["infracciones"].ToString());
 
                                 lsCEntidadRGP.Add(oCamposDet);
                             }

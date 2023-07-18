@@ -109,17 +109,15 @@
                         <a href="@Url.Content("~/Archivos/Plantilla/import_paspeq_plantilla.xlsx")" type="button">
                             <i class="fa fa-cloud-download"></i>&nbsp; Descargar Plantilla PASPEQ
                         </a> &nbsp;
-                        <label style="cursor:pointer;" class="fa mx-2 fa-lg fa-file-excel-o" title="Importar Archivo" data-toggle="tooltip">
+                        <label style="cursor:pointer;" class="fa mx-2 fa-lg fa-file-excel-o" title="Importar Datos del PASPEQ" data-toggle="tooltip">
                             <input type="file" id="fileselect" name="fileselect" style="display:none" size="60"
-                                   onchange="_rendImportPASPEQ.ItemExcelImportarVentana(event,this)"> &nbsp;Importar PASPEQ Priorizado
+                                   onchange="_rendImportPASPEQ.ItemExcelImportarVentana(event,this)"> &nbsp;Importar PASPEQ
                         </label> &nbsp;
-                        <label style="cursor:pointer;" class="fa mx-2 fa-lg fa-file-excel-o" title="Importar Archivo" data-toggle="tooltip">
-                            Descargar PASPEQ &nbsp;
+                        <label style="cursor:pointer;" class="fa mx-2 fa-lg fa-download" title="Descargar datos del PASPEQ" data-toggle="tooltip"  
+                               onclick="_rendImportPASPEQ.fnExport()">
+                            Descargar Datos del PASPEQ &nbsp;
 
-                            <button class="btn btn-outline btn-info" title="Descargar PASPEQ" onclick="_rendImportPASPEQ.fnExport()"
-                                    type="button" style="margin-right:10px">
-                                <i class="fa fa-file-excel-o"></i>
-                            </button> &nbsp;
+                            
                         </label>
                     </fieldset>
                 </div>

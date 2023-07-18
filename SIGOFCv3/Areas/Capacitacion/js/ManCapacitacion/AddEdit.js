@@ -1668,7 +1668,7 @@ $(document).ready(function () {
                         let idFile = $(objeto).attr("id");
                         $("#" + idFile).val("");
                     },
-                    error: utilSigo.toastError("Notificación", "Sucedió un error al realizar la carga masiva") //utilSigo.errorAjax
+                    //error: utilSigo.toastError("Notificación", "Sucedió un error al realizar la carga masiva") //utilSigo.errorAjax
                 });
             } else {
                 alert("This browser doesn't support HTML5 file uploads!");
