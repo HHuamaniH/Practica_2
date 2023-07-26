@@ -1,4 +1,5 @@
-﻿using CapaEntidad.ViewModel;
+﻿using CapaEntidad.DOC;
+using CapaEntidad.ViewModel;
 using Herramienta;
 using OfficeOpenXml;
 using SIGOFCv3.Helper;
@@ -13,7 +14,7 @@ using CLogica = CapaLogica.DOC.Log_BUSQUEDA;
 namespace SIGOFCv3.Reportes.General
 {
     public class ReporteManGrilla
-    {     
+    {
         public static ListResult GenerarReporteManGrilla(string busFormulario, string cod_UCUENTA, string moduloConsulta = "")
         {
             ListResult result = new ListResult();
@@ -214,8 +215,8 @@ namespace SIGOFCv3.Reportes.General
                                 worksheet.Cells[HelperSigo.GetColum(++column) + rowStart.ToString()].Value = listaInf.PARAMETRO51.Trim();
                                 worksheet.Cells[HelperSigo.GetColum(++column) + rowStart.ToString()].Value = listaInf.PARAMETRO52.Trim();
                                 worksheet.Cells[HelperSigo.GetColum(++column) + rowStart.ToString()].Value = listaInf.PARAMETRO53.Trim();
-                                worksheet.Cells[HelperSigo.GetColum(++column) + rowStart.ToString()].Value = listaInf.PARAMETRO54.Trim();                       
-                                worksheet.Cells[HelperSigo.GetColum(++column) + rowStart.ToString()].Value = listaInf.PARAMETRO57.Trim();                            
+                                worksheet.Cells[HelperSigo.GetColum(++column) + rowStart.ToString()].Value = listaInf.PARAMETRO54.Trim();
+                                worksheet.Cells[HelperSigo.GetColum(++column) + rowStart.ToString()].Value = listaInf.PARAMETRO57.Trim();
 
                                 rowStart++;
                             }
@@ -1061,6 +1062,92 @@ namespace SIGOFCv3.Reportes.General
             {
                 worksheet.Cells[HelperSigo.GetColum(++column) + rowStart.ToString()].Value = item;
             }
+
+        }
+
+
+
+        //se agrega para la descarga
+        public static ListResult ExportUniversoPDC(List<Ent_ReportePDC> list)
+        {
+            ListResult result = new ListResult();
+            try
+            {
+                int contador = 0;
+                String RutaReporteRegistro = HttpContext.Current.Server.MapPath("~/Archivos/Plantilla/");
+                string nombreFile = "";
+                nombreFile = DateTime.Now.ToString("yyyyMMddHHmmssfff") + ".xlsx"; //DateTime.Now.Year.ToString() + DateTime.Now.Month.ToString() + DateTime.Now.Day.ToString() + DateTime.Now.Hour.ToString() + DateTime.Now.Minute.ToString() + DateTime.Now.Second.ToString() + DateTime.Now.Millisecond.ToString() + ".xlsx";
+                string rutaExcel = RutaReporteRegistro + nombreFile;
+
+                string nombreExcelBase = "DescUniversoPDC.xlsx";
+                int rowStart = 2;
+
+                using (var package = new ExcelPackage(new FileInfo(RutaReporteRegistro + nombreExcelBase)))
+                {
+                    var workbook = package.Workbook;
+                    ExcelWorksheet worksheet = workbook.Worksheets[1];
+
+                    int column = 0;
+                    foreach (var listaInf in list)
+                    {
+
+                        column = 0;
+                        worksheet.Cells[HelperSigo.GetColum(++column) + rowStart.ToString()].Value = ++contador;
+                        worksheet.Cells[HelperSigo.GetColum(++column) + rowStart.ToString()].Value = listaInf.OFICINA_DESCONCENTRADA.Trim();
+                        worksheet.Cells[HelperSigo.GetColum(++column) + rowStart.ToString()].Value = listaInf.TITULO.Trim();
+                        worksheet.Cells[HelperSigo.GetColum(++column) + rowStart.ToString()].Value = listaInf.MODALIDAD.Trim();
+                        worksheet.Cells[HelperSigo.GetColum(++column) + rowStart.ToString()].Value = listaInf.TITULAR.Trim();
+                        worksheet.Cells[HelperSigo.GetColum(++column) + rowStart.ToString()].Value = listaInf.REP_LEGAL.Trim();
+                        worksheet.Cells[HelperSigo.GetColum(++column) + rowStart.ToString()].Value = listaInf.DEPARTAMENTO.Trim();
+                        worksheet.Cells[HelperSigo.GetColum(++column) + rowStart.ToString()].Value = listaInf.PROVINCIA.Trim();
+                        worksheet.Cells[HelperSigo.GetColum(++column) + rowStart.ToString()].Value = listaInf.DISTRITO.Trim();
+                        worksheet.Cells[HelperSigo.GetColum(++column) + rowStart.ToString()].Value = listaInf.FECHA_VIGENCIA.Trim();
+                        worksheet.Cells[HelperSigo.GetColum(++column) + rowStart.ToString()].Value = listaInf.FECHA_CORTE.Trim();
+                        worksheet.Cells[HelperSigo.GetColum(++column) + rowStart.ToString()].Value = listaInf.AREA.ToString().Trim();
+                        worksheet.Cells[HelperSigo.GetColum(++column) + rowStart.ToString()].Value = listaInf.ULTIMO_PLAN.Trim();
+                        worksheet.Cells[HelperSigo.GetColum(++column) + rowStart.ToString()].Value = listaInf.ROJO.Trim();
+                        worksheet.Cells[HelperSigo.GetColum(++column) + rowStart.ToString()].Value = listaInf.VERDE.Trim();
+                        worksheet.Cells[HelperSigo.GetColum(++column) + rowStart.ToString()].Value = listaInf.ALERTA.Trim();
+                        worksheet.Cells[HelperSigo.GetColum(++column) + rowStart.ToString()].Value = listaInf.PASPEQ.Trim();
+                        worksheet.Cells[HelperSigo.GetColum(++column) + rowStart.ToString()].Value = listaInf.PASPEQ_ENFOQUE.Trim();
+                        worksheet.Cells[HelperSigo.GetColum(++column) + rowStart.ToString()].Value = listaInf.FECHA_SUPERVISION.Trim();
+
+                        worksheet.Cells[HelperSigo.GetColum(++column) + rowStart.ToString()].Value = listaInf.S_VOL_APROB.ToString().Trim();
+                        worksheet.Cells[HelperSigo.GetColum(++column) + rowStart.ToString()].Value = listaInf.S_VOL_MOV.ToString().Trim();
+                        worksheet.Cells[HelperSigo.GetColum(++column) + rowStart.ToString()].Value = listaInf.S_VOL_INJUST.ToString().Trim();
+                        worksheet.Cells[HelperSigo.GetColum(++column) + rowStart.ToString()].Value = listaInf.INFRACCIONES.Trim();
+                        worksheet.Cells[HelperSigo.GetColum(++column) + rowStart.ToString()].Value = listaInf.MULTAS.Trim();
+                        worksheet.Cells[HelperSigo.GetColum(++column) + rowStart.ToString()].Value = listaInf.ESTADO_PAU.Trim();
+                        worksheet.Cells[HelperSigo.GetColum(++column) + rowStart.ToString()].Value = listaInf.ESTADO_PAGO.Trim();
+                        worksheet.Cells[HelperSigo.GetColum(++column) + rowStart.ToString()].Value = listaInf.MODALIDAD_PAGO.Trim();
+                        worksheet.Cells[HelperSigo.GetColum(++column) + rowStart.ToString()].Value = listaInf.MEC_COMP.Trim();
+                        worksheet.Cells[HelperSigo.GetColum(++column) + rowStart.ToString()].Value = listaInf.N_CAPACITACION.ToString().Trim();
+                        worksheet.Cells[HelperSigo.GetColum(++column) + rowStart.ToString()].Value = listaInf.FECHA_ULT_CAP.Trim();
+                        worksheet.Cells[HelperSigo.GetColum(++column) + rowStart.ToString()].Value = listaInf.TEMA_ULT_CAP.Trim();
+                        worksheet.Cells[HelperSigo.GetColum(++column) + rowStart.ToString()].Value = listaInf.TEMA_MOCHILA_CAP.Trim();
+                        worksheet.Cells[HelperSigo.GetColum(++column) + rowStart.ToString()].Value = listaInf.TEMA_MOCHILA_ENT.Trim();
+                        worksheet.Cells[HelperSigo.GetColum(++column) + rowStart.ToString()].Value = listaInf.PRIORIDAD.ToString().Trim();
+
+                        rowStart++;
+                    }
+                    package.SaveAs(new FileInfo(RutaReporteRegistro + nombreFile));
+
+                    result.success = true;
+                    result.msj = nombreFile;
+
+                   /*List<string> lstResult = new List<string> { nombreFile };
+                    result.AddResultado("Ok", true, lstResult);*/
+                }
+            }
+            catch (Exception ex)
+            {
+                //result.AddResultado(ex.Message, false);
+                result.success = false;
+                result.msj = ex.Message;
+            }
+            return result;
+
+
 
         }
     }

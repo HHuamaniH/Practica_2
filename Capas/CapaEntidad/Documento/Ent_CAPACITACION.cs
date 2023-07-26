@@ -21,6 +21,8 @@ namespace CapaEntidad.DOC
         public String NOMBRE { get; set; }
         [Description("COD_CAPATIPO")]
         public String COD_CAPATIPO { get; set; }
+        public String CAPATIPO { get; set; }
+        public String DIRIGIDO { get; set; }
         [Description("COD_OD")]
         public String COD_OD { get; set; }
         [Description("COD_DLINEA")]
@@ -260,6 +262,25 @@ namespace CapaEntidad.DOC
         [Description("RegNum_Orden")]
         public Int32 RegNum_Orden { get; set; }
 
+        [Description("v_currentpage")]
+        public Int32 v_currentpage { get; set; }
+
+        [Description("v_pagesize")]
+        public Int32 v_pagesize { get; set; }
+
+        //CREITERIOS PARA BUSCAR 
+        [Description("BusModalidad")]
+        public String BusModalidad { get; set; }
+        [Description("BusOD")]
+        public String BusOD { get; set; }
+        [Description("BusDepartamento")]
+        public String BusDepartamento { get; set; }
+
+        [Description("BusTitulo")]
+        public String BusTitulo { get; set; }
+        [Description("BusTitular")]
+        public String BusTitular { get; set; }
+
         [Description("USUARIO_REGISTRO")]
         public String USUARIO_REGISTRO { get; set; }
         [Description("USUARIO_CONTROL")]
@@ -270,6 +291,11 @@ namespace CapaEntidad.DOC
         public String COD_THABILITANTE { get; set; }
         [Description("NUM_THABILITANTE")]
         public String NUM_THABILITANTE { get; set; }
+
+        [Description("COD_CONSTANCIA_CAP")]
+        public String COD_CONSTANCIA_CAP { get; set; }
+
+        public String NRO_CONSTANCIA { get; set; }
 
         //Lista Objetos
         [Category("LIST"), Description("ListMComboOD")]
@@ -450,6 +476,8 @@ namespace CapaEntidad.DOC
             P_NO_CHECK = -1;
 
             ROW_INDEX = -1;
+            v_currentpage = -1;
+            v_pagesize = -1;
         }
         #endregion
 

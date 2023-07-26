@@ -1,12 +1,18 @@
+using CapaEntidad.DOC;
 using CapaEntidad.ViewModel;
 using Oracle.ManagedDataAccess.Client;
 using System;
 using System.Collections.Generic;
-using System.Data; 
+using System.Data;
+using System.Data.OleDb;
+using System.IO;
 //using System.Data.SqlClient;
 using System.Linq;
+using System.Web;
 using CDatos = CapaDatos.DOC.Dat_CAPACITACION;
 using CEntidad = CapaEntidad.DOC.Ent_CAPACITACION;
+using CEntidadPDC = CapaEntidad.DOC.Ent_ReportePDC;
+
 
 namespace CapaLogica.DOC
 {
@@ -456,7 +462,7 @@ namespace CapaLogica.DOC
                 VM_CAP.ddlOrganizador = entCap.ListMComboOrganizador.Select(i => new VM_Cbo { Value = i.CODIGO, Text = i.DESCRIPCION });
                 VM_CAP.ddlApoyoCoorganizador = entCap.ListApoyoCoorg.Select(i => new VM_Cbo { Value = i.CODIGO, Text = i.DESCRIPCION });
                 VM_CAP.ddlModalidad = entCap.ListMComboModalidad.Select(i => new VM_Cbo { Value = i.CODIGO, Text = i.DESCRIPCION });
-                
+
                 var listMChkListTematica = entCap.ListMChkListTematica;
                 VM_CAP.lstChkTema = listMChkListTematica
                         .Where(t => "1".Equals(t.NUEVO_2021))
@@ -468,7 +474,7 @@ namespace CapaLogica.DOC
                 if (String.IsNullOrEmpty(asCodCapacitacion))
                 {
                     VM_CAP.lblTituloEstado = "Nuevo Registro";
-                    
+
                 }
                 else
                 {
@@ -651,7 +657,7 @@ namespace CapaLogica.DOC
                     string[] lstTema = _dto.lstChkTemaId.Split(',');
                     for (int i = 0; i < lstTema.Length; i++)
                     {
-                        if (lstTema[i].ToString()== "0000032")
+                        if (lstTema[i].ToString() == "0000032")
                             paramsCap.ListTematica.Add(new CEntidad() { MAE_COD_TEMA = lstTema[i].ToString(), DESCRIPCION = (_dto.txtDescTema ?? "") });
                         else
                             paramsCap.ListTematica.Add(new CEntidad() { MAE_COD_TEMA = lstTema[i].ToString() });
@@ -679,7 +685,7 @@ namespace CapaLogica.DOC
                         }
                     }
                 }
-                
+
                 paramsCap.ListParticipantes = _dto.tbParticipante_Asistentes;
                 paramsCap.ListParticipantesOsi = _dto.tbParticipante_EquipoApoyo;
                 paramsCap.ListParticipantesPonente = _dto.tbParticipante_Ponentes;
@@ -928,6 +934,446 @@ namespace CapaLogica.DOC
             }
 
             return VM_CR;
+        }
+        #endregion
+
+        /// universo capacitable
+        public List<CEntidadPDC> RepUniversoPDC(CEntidad oCEntidad)
+        {
+            try
+            {
+                using (OracleConnection cn = new OracleConnection(CapaDatos.BDConexion.Conexion_Cadena_SIGO()))
+                {
+                    cn.Open();
+                    return oCDatos.RepUniversoPDC(cn, oCEntidad);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+        // con paginacion 
+        public VM_ReporteGeneral RepUniversoPDC_pag(CEntidad oCEntidad)
+        {
+            try
+            {
+                using (OracleConnection cn = new OracleConnection(CapaDatos.BDConexion.Conexion_Cadena_SIGO()))
+                {
+                    cn.Open();
+                    return oCDatos.RepUniversoPDC_pag(cn, oCEntidad);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public List<Ent_ReportConsolidadoPDC> RepconsolidadoPDC(CEntidad oCEntidad)
+        {
+            try
+            {
+                using (OracleConnection cn = new OracleConnection(CapaDatos.BDConexion.Conexion_Cadena_SIGO()))
+                {
+                    cn.Open();
+                    return oCDatos.RepconsolidadoPDC(cn, oCEntidad);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+
+        #region para la importacion del PASPEQ
+        //para la importacion masiva
+        public List<Ent_PDCImportPASPEQ> ImportPDC_PASPEQ(CEntidad oCEntidad)
+        {
+            try
+            {
+                using (OracleConnection cn = new OracleConnection(CapaDatos.BDConexion.Conexion_Cadena_SIGO()))
+                {
+                    cn.Open();
+                    return oCDatos.ImportPDC_PASPEQ(cn, oCEntidad);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+        //TOTAL DE REGISTROS
+        public Ent_PDCImportPASPEQ ImportPDC_PASPEQ_COUNT(CEntidad oCEntidad)
+        {
+            try
+            {
+                using (OracleConnection cn = new OracleConnection(CapaDatos.BDConexion.Conexion_Cadena_SIGO()))
+                {
+                    cn.Open();
+                    return oCDatos.ImportPDC_PASPEQ_COUNT(cn, oCEntidad);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+
+        /// <summary>
+        /// cambia el estado del listado de la tabla import paspeq
+        /// </summary>
+        /// <param name="oCEntidad"></param>
+        /// <returns></returns>
+        public Ent_PDCImportPASPEQ ImportPDC_PASPEQ_CAMBIAR_ESTADO(CEntidad oCEntidad)
+        {
+            try
+            {
+                using (OracleConnection cn = new OracleConnection(CapaDatos.BDConexion.Conexion_Cadena_SIGO()))
+                {
+                    cn.Open();
+                    return oCDatos.ImportPDC_PASPEQ_CAMBIAR_ESTADO(cn, oCEntidad);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        //guardar datos de la importacion
+        public ListResult GuardarDatosPasPEQ(Ent_PDCImportPASPEQ _dto, string asCodUCuenta)
+        {
+            ListResult result = new ListResult();
+
+            try
+            {
+
+                Ent_PDCImportPASPEQ paramsExport = new Ent_PDCImportPASPEQ();
+                paramsExport.ID_REGISTRO = 0;
+                paramsExport.COD_THABILITANTE = "";
+                paramsExport.TITULO = _dto.TITULO;
+                paramsExport.ENFOQUE = _dto.ENFOQUE;
+                paramsExport.MES = _dto.MES;
+                paramsExport.MES_FOCALIZACION = _dto.MES_FOCALIZACION;
+                paramsExport.ESTADO = 1;
+
+                //RegGrabar(paramsCap);
+                using (OracleConnection cn = new OracleConnection(CapaDatos.BDConexion.Conexion_Cadena_SIGO()))
+                {
+                    cn.Open();
+                    string registro = oCDatos.GuardarDatosPasPEQ(cn, paramsExport);
+                    //oCDatos.RegGrabar_v3(cn, paramsExport);
+                }
+
+                string msjRespuesta = "Se importo el registro: " + paramsExport.TITULO;
+                result.AddResultado(msjRespuesta, true);
+            }
+            catch (Exception ex)
+            {
+                result.AddResultado(ex.Message, false);
+            }
+
+            return result;
+        }
+
+        //metodo para exporta el archivo excel
+        public ListResult ExportPASPEQ(List<Ent_PDCImportPASPEQ> list)
+        {
+            ListResult result = new ListResult();
+            try
+            {
+                if (list.Count > 0)
+                {
+                    string rutaBase = HttpContext.Current.Server.MapPath("~/Archivos/Plantilla/");
+                    string nombreFile = DateTime.Now.Year.ToString() + DateTime.Now.Month.ToString() + DateTime.Now.Day.ToString() + DateTime.Now.Hour.ToString() + DateTime.Now.Minute.ToString() + DateTime.Now.Second.ToString() + DateTime.Now.Millisecond.ToString() + ".xlsx";
+                    string rutaExcel = rutaBase + nombreFile;
+                    string rutaExcelBase = rutaBase + "import_paspeq_plantilla.xlsx";
+
+                    try
+                    {
+                        File.Delete(@rutaExcel);
+                        File.Copy(@rutaExcelBase, @rutaExcel);
+                    }
+                    catch (IOException ix)
+                    {
+                        throw new Exception(ix.Message);
+                    }
+                    //Creamos la cadena de conexión con el fichero excel
+                    OleDbConnectionStringBuilder cb = new OleDbConnectionStringBuilder();
+                    cb.DataSource = rutaExcel;
+                    if (Path.GetExtension(rutaExcel).ToUpper() == ".XLS")
+                    {
+                        cb.Provider = "Microsoft.Jet.OLEDB.4.0";
+                        cb.Add("Extended Properties", "Excel 8.0;HDR=YES;IMEX=0;");
+                    }
+                    else if (Path.GetExtension(rutaExcel).ToUpper() == ".XLSX")
+                    {
+                        cb.Provider = "Microsoft.ACE.OLEDB.12.0";
+                        cb.Add("Extended Properties", "Excel 12.0 Xml;HDR=YES;IMEX=0;");
+                    }
+
+                    using (OleDbConnection conn = new OleDbConnection(cb.ConnectionString))
+                    {
+                        string insertar = "";
+                        int i = 1, ind = 1;
+                        //Abrimos la conexión
+                        conn.Open();
+                        //Creamos la ficha
+                        using (OleDbCommand cmd = conn.CreateCommand())
+                        {
+                            cmd.CommandType = CommandType.Text;
+                            //Construyendo las Cabeceras
+                            foreach (var itemPart in list)
+                            {
+                                insertar = "";
+                                //insertar = "'" + (ind++).ToString() + "'";
+                                insertar = insertar + "'" + (itemPart.COD_THABILITANTE ?? "") + "'";
+                                insertar = insertar + ",'" + (itemPart.TITULO ?? "") + "'";
+                                insertar = insertar + ",'" + (itemPart.ENFOQUE.ToString() ?? "") + "'";
+                                insertar = insertar + ",'" + (itemPart.MES.ToString() ?? "") + "'";
+                                insertar = insertar + ",'" + (itemPart.MES_FOCALIZACION ?? "") + "'";
+                                insertar = insertar + ",'" + (itemPart.ANIO.ToString() ?? "") + "'";
+                                insertar = insertar + ",'" + (itemPart.ESTADO.ToString() ?? "") + "'";
+
+                                cmd.CommandText = "INSERT INTO [import_paspeq$A" + i.ToString().Trim() + ":G" + (list.Count + 1).ToString() + "] VALUES (" + insertar + ")";
+                                cmd.ExecuteNonQuery();
+                            }
+
+                            //Cerramos la conexión
+                            conn.Close();
+                        }
+                    }
+
+                    result.success = true;
+                    result.msj = nombreFile;
+                }
+                else { throw new Exception("No se encontraron registros"); }
+            }
+            catch (Exception ex)
+            {
+                result.success = false;
+                result.msj = ex.Message;
+            }
+            return result;
+        }
+
+        public Ent_PDCImportPASPEQ REPORTPDC_CAMBIAR_ESTADO_TALLER(CEntidad oCEntidad)
+        {
+            try
+            {
+                using (OracleConnection cn = new OracleConnection(CapaDatos.BDConexion.Conexion_Cadena_SIGO()))
+                {
+                    cn.Open();
+                    return oCDatos.REPORTPDC_CAMBIAR_ESTADO_TALLER(cn, oCEntidad);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public List<CEntidadPDC> PDC_TALLERES(CEntidad oCEntidad)
+        {
+            try
+            {
+                using (OracleConnection cn = new OracleConnection(CapaDatos.BDConexion.Conexion_Cadena_SIGO()))
+                {
+                    cn.Open();
+                    return oCDatos.PDC_TALLERES(cn, oCEntidad);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        /// <summary>
+        /// metodo para asignar los talleres
+        /// </summary>
+        /// <param name="oCEntidad"></param>
+        /// <returns></returns>
+        public String asignar_taller(CEntidadPDC oCEntidad)
+        {
+            try
+            {
+                using (OracleConnection cn = new OracleConnection(CapaDatos.BDConexion.Conexion_Cadena_SIGO()))
+                {
+                    cn.Open();
+                    return oCDatos.asignar_taller(cn, oCEntidad);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+        #endregion
+
+        #region "Gestión de constancias"
+        public CEntidad ObtenerPorId(string COD_CAPACITACION)
+        {
+            try
+            {
+                CEntidad entCap = new CEntidad();
+                entCap.COD_CAPACITACION = COD_CAPACITACION;
+                using (OracleConnection cn = new OracleConnection(CapaDatos.BDConexion.Conexion_Cadena_SIGO()))
+                {
+                    cn.Open();
+                    return oCDatos.ObtenerPorId(cn, entCap);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+        public int ObtenerUltimoCorrelativoPorAnio(string cod_capacitacion)
+        {
+            try
+            {
+                using (OracleConnection cn = new OracleConnection(CapaDatos.BDConexion.Conexion_Cadena_SIGO()))
+                {
+                    cn.Open();
+                    return oCDatos.ObtenerUltimoCorrelativoPorAnio(cn, cod_capacitacion);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+        public string ObtenerAbreviatura(string codTipoCapacitacion)
+        {
+            try
+            {
+                using (OracleConnection cn = new OracleConnection(CapaDatos.BDConexion.Conexion_Cadena_SIGO()))
+                {
+                    cn.Open();
+                    return oCDatos.ObtenerAbreviatura(cn, codTipoCapacitacion);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+        public List<Ent_CAPACITACION_CONSTANCIA> ConstanciaListar(string codCapacitacion, int flagActivo = 0)
+        {
+            try
+            {
+                using (OracleConnection cn = new OracleConnection(CapaDatos.BDConexion.Conexion_Cadena_SIGO()))
+                {
+                    cn.Open();
+                    return oCDatos.ConstanciaListar(cn, codCapacitacion, flagActivo);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+        public bool ConstanciaInsertarMasivo(List<Ent_CAPACITACION_CONSTANCIA> constancias)
+        {
+            return oCDatos.ConstanciaInsertarMasivo(constancias);
+        }
+        public Ent_CAPACITACION_CONSTANCIA ConstanciaObtener(string codConstancia)
+        {
+            try
+            {
+                using (OracleConnection cn = new OracleConnection(CapaDatos.BDConexion.Conexion_Cadena_SIGO()))
+                {
+                    cn.Open();
+                    return oCDatos.ConstanciaObtener(cn, codConstancia);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+        public Ent_CAPACITACION_CONSTANCIA ConstanciaObtenerPorNroConstancia(string nroConstancia)
+        {
+            try
+            {
+                using (OracleConnection cn = new OracleConnection(CapaDatos.BDConexion.Conexion_Cadena_SIGO()))
+                {
+                    cn.Open();
+                    return oCDatos.ConstanciaObtenerPorNroConstancia(cn, nroConstancia);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+        public bool ConstanciaEliminar(string codConstancia, string codUsuario)
+        {
+            return oCDatos.ConstanciaEliminar(codConstancia, codUsuario);
+        }
+        public List<CEntidad> ParticipanteListar(string codCapacitacion, string codTipoParticipante, string persona)
+        {
+            try
+            {
+                using (OracleConnection cn = new OracleConnection(CapaDatos.BDConexion.Conexion_Cadena_SIGO()))
+                {
+                    cn.Open();
+                    return oCDatos.ParticipanteListar(cn, codCapacitacion, codTipoParticipante, persona);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+        public CEntidad ParticipanteObtener(string codCapacitacion, string codTipoParticipante, string codPersona)
+        {
+            try
+            {
+                using (OracleConnection cn = new OracleConnection(CapaDatos.BDConexion.Conexion_Cadena_SIGO()))
+                {
+                    cn.Open();
+                    return oCDatos.ParticipanteObtener(cn, codCapacitacion, codTipoParticipante, codPersona);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+        public CEntidad ParticipanteObtenerPorConstancia(string codCapacitacion, string codConstancia)
+        {
+            try
+            {
+                using (OracleConnection cn = new OracleConnection(CapaDatos.BDConexion.Conexion_Cadena_SIGO()))
+                {
+                    cn.Open();
+                    return oCDatos.ParticipanteObtenerPorConstancia(cn, codCapacitacion,codConstancia);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+        public bool ParticipanteAsignarConstancia(string codCapacitacion, string codTipoParticipante, string codPersona, string codConstancia, string archivoCod, string usuarioMoficiacion, DateTime fechaModificar)
+        {
+            try
+            {
+                using (OracleConnection cn = new OracleConnection(CapaDatos.BDConexion.Conexion_Cadena_SIGO()))
+                {
+                    cn.Open();
+                    return oCDatos.ParticipanteAsignarConstancia(codCapacitacion, codTipoParticipante, codPersona, codConstancia, archivoCod, usuarioMoficiacion, fechaModificar);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
         }
         #endregion
     }

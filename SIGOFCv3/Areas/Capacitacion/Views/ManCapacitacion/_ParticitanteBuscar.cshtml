@@ -1,0 +1,130 @@
+﻿
+<div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+        <div class="modal-header text-small" style="cursor:move;padding:0.5rem;">
+            <h5 id="lblTituloBuscarPersona" class="modal-title">Buscar Participante</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body" id="frmBuscarParticipante">
+            <div id="frmBuscarParticipante">
+                @Html.Hidden("hdCodCapacitacion", (string)ViewBag.hdCodCapacitacion)
+                @Html.Hidden("hdCodTipoParticipante", (string)ViewBag.hdCodTipoParticipante)
+                @Html.Hidden("hdCodConstancia", (string)ViewBag.hdCodConstancia)
+                <div class="form-row">
+                    <div class="col-md-8 mb-3">
+                        <div class="input-group">
+                            <input type="text" id="txtBuscarParticipante" class="form-control form-control-sm" maxlength="50" style="text-transform:uppercase;" />
+                            <div class="input-group-prepend">
+                                <span class="input-group-text" id="btnBuscarParticipante" style="cursor:pointer;color:forestgreen" onclick="_buscarParticipante.fnBuscarParticipante()"><i class="fa fa-search" data-toggle="tooltip" data-placement="top" title="Buscar"></i></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="table-responsive">
+                    <table id="tbBuscarParticipante" class="table table-hover table-bordered" width="100%">
+                        <thead>
+
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>                
+            </div>
+        </div>
+        <div class="modal-footer">
+
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    var _buscarParticipante = {
+
+        fnAsignarDatos: (obj) => { /*se implementa en cada llamada*/ },
+        fnBuscarParticipante: () => {
+            let codCapacitacion, codTipoParticipante, persona;
+            let frm = $("#frmBuscarParticipante");
+            codCapacitacion = frm.find("#hdCodCapacitacion").val();
+            codTipoParticipante =  frm.find("#hdCodTipoParticipante").val();
+            persona =  frm.find("#txtBuscarParticipante").val().trim();
+            
+            if (persona == "") {
+                utilSigo.toastWarning("Aviso", "Ingrese el dato de la persona a buscar");
+                return false;
+            }
+            if (persona.length < 3) {
+                utilSigo.toastWarning("Aviso", "El dato de la persona a buscar debe ser mayor a dos caracteres");
+                return false;
+            }
+
+            let url = urlLocalSigo + "Capacitacion/ManCapacitacion/ParticipanteListar?" + "codCapacitacion=" + codCapacitacion + "&codTipoParticipante=" + codTipoParticipante + "&persona=" + persona;
+
+            _buscarParticipante.dtBuscarParticipante.ajax.url(url).load(function (data) {
+                if (data.success == false) {
+                    utilSigo.toastError("Error", "Sucedió un error al realizar la consulta, por favor comuníquese con el administrador");
+                    //console.log(data.er);
+                }
+            });
+        },
+        fnInit: () => {
+            $('.modal').on('shown.bs.modal', function () {
+                $("#txtBuscarParticipante").focus();
+            });
+            $("#txtBuscarParticipante").keypress(function (e) {
+                let code = e.which;
+                if (code == 13) {
+                    _buscarParticipante.fnBuscarParticipante();
+                }
+            });
+            let columns_label = ["N°","", "Apellidos y Nombres", "Documento", "Grupo Público", "Público", "Cargo", "Género", "Edad"];
+            let columns_data = [
+                {
+                    "name": "ROW_INDE", "width": "2%", "orderable": false, "searchable": false, "mRender": function (data, type, row, meta) {
+                        return parseInt(meta.row) + 1 + meta.settings._iDisplayStart;
+                    }
+                },
+                {
+                    "data": "", "width": "2%", "orderable": false, "searchable": false, "mRender": function (data, type, row) {
+                        if (row.COD_CONSTANCIA_CAP == null || row.COD_CONSTANCIA_CAP=="")
+                            return '<div><i class="fa fa-lg fa-check" style="cursor: pointer;color:forestgreen;" title="Seleccionar" onclick="_buscarParticipante.fnAsignarDatos(this)"></i>';
+                        else return 'Asignado'
+                    }
+                },
+                { "data": "APELLIDOS_NOMBRES", "autoWidth": true },
+                { "data": "N_DOCUMENTO", "autoWidth": true },              
+                { "data": "GRUPOPUBLICOPARTICIPANTE", "autoWidth": true },
+                { "data": "PUBLICOPARTICIPANTE", "autoWidth": true },
+                { "data": "CARGO", "autoWidth": true },
+                { "data": "GENERO", "autoWidth": true },
+                { "data": "EDAD", "autoWidth": true }        
+            ];
+
+            //**Cabecera**----
+            let theadTable = "<tr>";
+            for (var i = 0; i < columns_label.length; i++) {
+                theadTable += '<th>' + columns_label[i] + '</th>';
+            }
+            theadTable += "</tr>";
+            $("#tbBuscarParticipante").find("thead").append(theadTable);
+
+            let optDt = { iLength: initSigo.pageLengthBuscar, aSort: [] };
+
+            _buscarParticipante.dtBuscarParticipante = $("#tbBuscarParticipante").DataTable({
+                processing: true,
+                ServerSide: false,
+                bFilter: false,
+                bLengthChange: false,
+                ordering: false,
+                paging: true,
+                bInfo: false,
+                aaSorting: optDt.aSort,
+                pageLength: optDt.iLength,
+                oLanguage: initSigo.oLanguage,
+                drawCallback: initSigo.showPagination,
+                columns: columns_data
+            });
+        }
+    };
+    $(document).ready(function () {        
+    });
+</script>

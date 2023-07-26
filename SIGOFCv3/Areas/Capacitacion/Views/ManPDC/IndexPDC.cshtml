@@ -1,0 +1,203 @@
+﻿
+
+@model CapaEntidad.ViewModel.VM_ReporteGeneral
+@{
+    ViewBag.Title = "Reporte Universo Capacitable PDC";
+    Layout = "~/Views/Shared/_LayoutMain.cshtml";
+}
+
+<script type="text/javascript">
+
+    $(function () {
+        $("[id*=chkTodoDep]").on("change", function () {
+            if ($(this).is(":checked")) {
+                $("[id*=chkDep] input").prop("checked", true);
+            } else {
+                $("[id*=chkDep] input").prop('checked', false);
+            }
+        });
+    });
+
+    $(function () {
+        $("[id*=chkTodoOD]").on("change", function () {
+            if ($(this).is(":checked")) {
+                $("[id*=chkOD] input").prop("checked", true);
+            } else {
+                $("[id*=chkOD] input").prop('checked', false);
+            }
+        });
+    });
+
+    var _rendReporteUPDC = {};
+
+    _rendReporteUPDC.fnReporte = function () {
+        var modalidades = [];
+        var departamentos = [];
+        $("[id*=chkOD] input:checked").each(function () {
+            modalidades.push($(this).attr('value'));
+        });
+        $("[id*=chkDep] input:checked").each(function () {
+            departamentos.push($(this).attr('value'));
+        });
+
+        var titulo = _rendReporteUPDC.frm.find("#titulo").val();
+        var titular = _rendReporteUPDC.frm.find("#titular").val();
+
+        let url = urlLocalSigo + "CAPACITACION/ManPDC/RUniverso";
+        if (modalidades.length > 0 && departamentos.length > 0) {
+            $.ajax({
+                url: url,
+                type: 'POST',
+                datatype: "json",
+                traditional: true,
+                data: { 'oficinas': modalidades, 'departamento': departamentos, 'titulo': titulo, 'titular': titular },
+                success: function (data) {
+                    $('div#divReportePDC').html(data);
+                    $('#collapseExample').collapse({
+                        toggle: false
+                    })
+                }
+            });
+        }
+        else {
+            if (modalidades.length == 0 && departamentos.length == 0) {
+                alert("Seleccione una o mas opciondes de busqueda");
+            }
+            if (modalidades.length == 0 && departamentos.length > 0) {
+                alert("Seleccione una o mas modalidades para realizar la busqueda...");
+            }
+            if (modalidades.length > 0 && departamentos.length == 0) {
+                alert("Seleccione uno o mas departamentos para realizar la busqueda...");
+            }
+        }
+    }
+  
+
+    _rendReporteUPDC.fnExport = function () {
+        var url = urlLocalSigo + "CAPACITACION/ManPDC/DescargarUniverso";
+
+        let option = { url: url, datos: "", type: 'POST' };
+        utilSigo.fnAjax(option, function (data) {
+            if (data.success) {
+                document.location = urlLocalSigo + "Archivos/Plantilla/" + data.msj;
+            }
+            else {
+                utilSigo.toastWarning("Aviso", "Sucedio un error, Comuníquese con el Administrador");
+                console.log(data.msj);
+            }
+        });
+    }
+
+
+    $(document).ready(function () {
+        _rendReporteUPDC.frm = $("#divReporteUniversoPDC");
+    });
+
+
+</script>
+
+<div id="divReporteUniversoPDC" class="container-fluid" style="font-size:12px !important;">
+    <div class="card">
+        <div class="card-header text-left">
+            <h5>Reporte Universo Capacitable para el PDC</h5>
+        </div>
+        <div class="card-body">
+            <div class="col-sm-12">
+                <a class="btn btn-outline-success" data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
+                    Opciones de busqueda
+                </a>
+                <div class="collapse" id="collapseExample">
+                    <div class="card card-body">
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <h6>Titulo Habilitante</h6>
+                                <div class="form-group  has-success" style="text-align:left !important">
+                                    <div class="col-sm-10">
+                                        <input id="titulo" class="form-control" value="" />
+                                    </div>
+                                </div>
+                                <hr />
+                                <h6>Titular</h6>
+                                <div class="form-group  has-success" style="text-align:left !important">
+                                    <div class="col-sm-10">
+                                        <input id="titular" class="form-control" value="" />
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-sm-3">
+                                <h6>Oficina Desconcentrada</h6>
+                                <ul>
+                                    <li>
+                                        <div class="checkbox">
+                                            <label>
+                                                <input type="checkbox" class="check" value="00" id="chkTodoOD">
+                                                Todas las OD
+                                            </label>
+                                        </div>
+                                    </li>
+                                    <div id="chkOD">
+                                        @if (Model.lstChkOd != null)
+                                        {
+                                            foreach (var item in Model.lstChkOd)
+                                            {
+                                            <li>
+                                                <div class="checkbox">
+                                                    <label>
+                                                        <input type="checkbox" class="check" value="@item.Text">
+                                                        @item.Text
+                                                    </label>
+                                                </div>
+                                            </li>
+                                        }
+                                    }
+                                    </ul>
+                                </div>
+
+                                <div class="col-sm-3">
+                                    <h6>Departamento</h6>
+                                    <ul>
+                                        <li>
+                                            <div class="checkbox">
+                                                <label>
+                                                    <input type="checkbox" class="check" value="00" id="chkTodoDep">
+                                                    Todas los departamentos
+                                                </label>
+                                            </div>
+                                        </li>
+                                        <div id="chkDep">
+                                            @if (Model.lstChkDepartamento != null)
+                                            {
+                                                foreach (var item in Model.lstChkDepartamento)
+                                                {
+                                                <li>
+                                                    <div class="checkbox">
+                                                        <label>
+                                                            <input type="checkbox" class="check" value="@item.Text">
+                                                            @item.Text
+                                                        </label>
+                                                    </div>
+                                                </li>
+                                            }
+                                        }
+                                        </ul>
+                                    </div>
+
+                                    <div class="col-sm-3">
+                                        <button id="btnBuscarPDC" class="btn btn-info" style="float: right" onclick="_rendReporteUPDC.fnReporte()">
+                                            <i class="fa fa-search"></i>&nbsp;&nbsp;Generar reporte
+                                        </button>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="divReportePDC">
+
+            </div>
+        </div>
+
+

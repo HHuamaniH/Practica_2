@@ -565,8 +565,156 @@ ManCapacitacion_AddEdit.fnInitDataTable_Detail = function () {
     };
     ManCapacitacion_AddEdit.dtDocumentoAdjunto = utilDt.fnLoadDataTable_Detail(ManCapacitacion_AddEdit.frm.find("#tbDocumentoAdjunto"), columns_label, columns_data, options);
     ManCapacitacion_AddEdit.dtDocumentoAdjunto.rows.add(JSON.parse(ManCapacitacion_AddEdit.DataDocumentoAdjunto)).draw();
-}
 
+    //CONSTANCIAS  
+    ManCapacitacion_AddEdit.fnInitDataTable_Constancias();
+}
+ManCapacitacion_AddEdit.fnInitDataTable_Constancias = function () {   
+
+    let columns_label = ["N°", "Eliminar", "Descargar", "Asignar", "Regenerar","Número constancia", "Modalidad","Asignado A", "Estado"];
+    let columns_data = [
+        {
+            "name": "ROW_INDE", "width": "2%", "orderable": false, "searchable": false, "mRender": function (data, type, row, meta) {
+                return parseInt(meta.row) + 1 + meta.settings._iDisplayStart;
+            }
+        },
+        {
+            "data": "", "width": "2%", "orderable": false, "searchable": false, "mRender": function (data, type, row) {             
+                if (row.ESTADO == 1) return '<div><i class="fa fa-lg fa-window-close" style="color:red;cursor:pointer;" title="Eliminar" onclick="ManCapacitacion_AddEdit.fnConstanciaEliminar(this)"></i>';
+                else return "";
+            }
+        },
+        {
+            "data": "", "width": "2%", "orderable": false, "searchable": false, "mRender": function (data, type, row) {
+                if (row.ESTADO == 1) return '<div><i class="fa fa-lg fa-download" style="cursor: pointer;color:dodgerblue;" title="Descargar" onclick="ManCapacitacion_AddEdit.fnConstanciaDescargar(this)"></i>';
+                else return '';
+            }
+        },
+        {
+            "data": "", "width": "2%", "orderable": false, "searchable": false, "mRender": function (data, type, row) {                
+                if (row.ESTADO == 1 && row.FLAG_ASIGNADO==0) return '<div><i class="fa fa-lg fa-cogs" style="color:dodgerblue;cursor:pointer;" title="Asignar" onclick="ManCapacitacion_AddEdit.fnConstanciaAsignar(this)"></i>';
+                else return "";
+            }
+        },
+        {
+            "data": "", "width": "2%", "orderable": false, "searchable": false, "mRender": function (data, type, row) {
+                if (row.ESTADO == 1 && row.FLAG_ASIGNADO == 1) return '<div><i class="fa fa-lg fa-refresh" style="color:dodgerblue;cursor:pointer;" title="Volver a generar la constancia" onclick="ManCapacitacion_AddEdit.fnConstanciaRegenerar(this)"></i>';
+                else return "";
+            }
+        },
+        { "data": "NRO_CONSTANCIA", "autoWidth": true },
+        { "data": "MODALIDAD", "autoWidth": true },
+        { "data": "PARTICIPANTE", "autoWidth": true },
+        { "data": "ESTADO_TEXT", "autoWidth": true }      
+       
+    ];
+
+    //**Cabecera**----
+    var theadTable = "<tr>";
+    for (var i = 0; i < columns_label.length; i++) {
+        theadTable += '<th>' + columns_label[i] + '</th>';
+    }
+    theadTable += "</tr>";
+    $("#tbConstancias").find("thead").append(theadTable);
+
+    var optDt = { iLength: initSigo.pageLengthBuscar, aSort: [] };
+
+    ManCapacitacion_AddEdit.dtConstancias = $("#tbConstancias").DataTable({
+        processing: true,
+        ServerSide: false,
+        bFilter: false,
+        bLengthChange: false,
+        ordering: false,
+        paging: true,
+        bInfo: false,
+        aaSorting: optDt.aSort,
+        pageLength: optDt.iLength,
+        oLanguage: initSigo.oLanguage,
+        drawCallback: initSigo.showPagination,
+        columns: columns_data
+    });
+}
+ManCapacitacion_AddEdit.fnConstanciaAsignar = function (obj) {
+    var dt = ManCapacitacion_AddEdit.dtConstancias;
+    var data = dt.row($(obj).parents('tr')).data();
+    var url = urlLocalSigo + "Capacitacion/ManCapacitacion/_ParticitanteBuscar";
+    
+    var option = { url: url, type: 'GET', datos: { codCapacitacion: ManCapacitacion_AddEdit.frm.find("#hdfCodCapacitacion").val(), codTipoParticipante: "0000016", codConstancia: data.COD_CONSTANCIA }, divId: "mdlBuscarParticipante" };
+    utilSigo.fnOpenModal(option, function () {
+        _buscarParticipante.fnAsignarDatos = function (obj) {
+            if (obj != null && obj != "") {
+                let data = _buscarParticipante.dtBuscarParticipante.row($(obj).parents('tr')).data();
+                let frm = $("#frmBuscarParticipante");
+                let codCapacitacion= frm.find("#hdCodCapacitacion").val()            
+                let codConstancia = frm.find("#hdCodConstancia").val()
+                let codPersona = data.COD_PERSONA;
+                let codTipoParticipante = data.MAE_COD_TIPOPARTICIPANTE
+                console.log(codConstancia);
+                let url = urlLocalSigo + "Capacitacion/ManCapacitacion/AsignarConstancia";
+                let params = {};
+                params.codCapacitacion = ManCapacitacion_AddEdit.frm.find("#hdfCodCapacitacion").val(),
+                params.codTipoParticipante = codTipoParticipante;
+                params.codConstancia = codConstancia;
+                params.codPersona = codPersona;
+            
+                var option = { url: url, datos: params, type: 'GET' };
+                utilSigo.fnAjax(option, function (result) {
+                    if (result.success) {
+                        ManCapacitacion_AddEdit.fnConstanciaListar();
+                        $("#mdlBuscarParticipante").modal('hide');
+                    } else {
+                        if (result.msj == "" || result.msj == null) utilSigo.toastWarning("Aviso", "Error al asignar constancia");
+                        else {
+                            utilSigo.toastWarning("Aviso", result.msj);
+                        }
+                    }
+                });
+            }
+        }
+        _buscarParticipante.fnInit();
+    });
+}
+ManCapacitacion_AddEdit.fnConstanciaRegenerar = function (obj) {
+    var dt = ManCapacitacion_AddEdit.dtConstancias;
+    var data = dt.row($(obj).parents('tr')).data();  
+
+    utilSigo.dialogConfirm("", "Está seguro de volver a generar la constancia?", function (r) {
+        if (r) {
+            var url = urlLocalSigo + "Capacitacion/ManCapacitacion/RegenerarConstancia";
+            var option = { url: url, type: 'GET', datos: { codCapacitacion: ManCapacitacion_AddEdit.frm.find("#hdfCodCapacitacion").val(), codConstancia: data.COD_CONSTANCIA } };
+            utilSigo.fnAjax(option, function (data) {
+                if (data.success) {
+                    ManCapacitacion_AddEdit.fnConstanciaListar(false);
+                    utilSigo.toastSuccess("Éxito", data.message);
+                } else {
+                    utilSigo.toastWarning("Aviso", data.message);
+                }
+            });
+        }
+    });    
+}
+ManCapacitacion_AddEdit.fnConstanciaRegenerarMasivo = function (obj) {
+    var dt = ManCapacitacion_AddEdit.dtConstancias;
+    var data = dt.row($(obj).parents('tr')).data();
+
+    utilSigo.dialogConfirm("", "Está seguro de volver a generar todas las constancias asignadas?", function (r) {
+        if (r) {
+            var url = urlLocalSigo + "Capacitacion/ManCapacitacion/RegenerarConstancias";
+            var option = { url: url, type: 'GET', datos: { codCapacitacion: ManCapacitacion_AddEdit.frm.find("#hdfCodCapacitacion").val() } };
+            utilSigo.fnAjax(option, function (result) {
+                if (result.cantidad > 0) {
+                    utilSigo.toastSuccess("Notificación", "Se actualizarón " + result.cantidad + " constancias");                   
+                } else {
+                    if (result.message != "") {
+                        utilSigo.toastWarning("Notificación", result.message);
+                    } else {
+                        utilSigo.toastWarning("Notificación", "Sucedió un error");
+                    }
+                }
+            });
+        }
+    });
+}
 /*Controles PARTICIPANTES*/
 ManCapacitacion_AddEdit.fnAddEditParticipante = function (obj, _tipoParticipante) {
     var url = urlLocalSigo + "Capacitacion/ManCapacitacion/_Participante";
@@ -1105,7 +1253,101 @@ ManCapacitacion_AddEdit.fnSelectDocAdjunto = function (e, obj) {
         }
     }
 }
+ManCapacitacion_AddEdit.fnConstanciaListar = function (flagLast) {
+    var url = urlLocalSigo + "Capacitacion/ManCapacitacion/ConstanciaListar";
+    var params = {};
+    params.codCapacitacion = ManCapacitacion_AddEdit.frm.find("#hdfCodCapacitacion").val();  
+    var option = { url: url, datos: params, type: 'GET' };
+    utilSigo.fnAjax(option, function (result) {
+        if (result.success) {
+            ManCapacitacion_AddEdit.dtConstancias.clear().draw();
+            ManCapacitacion_AddEdit.dtConstancias.rows.add(result.data).draw();
+            if (flagLast) ManCapacitacion_AddEdit.dtConstancias.page('last').draw('page');
+        } else {
+            utilSigo.toastWarning("Aviso", "Error al listar constancias");
+        }
+    });
+}
+ManCapacitacion_AddEdit.fnConstanciaEliminar = function (obj) {
+    let dt = ManCapacitacion_AddEdit.dtConstancias;
+    let data = dt.row($(obj).parents('tr')).data();
 
+    utilSigo.dialogConfirm("", "Está seguro de eliminar la constancia?", function (r) {
+        if (r) {
+            var url = urlLocalSigo + "Capacitacion/ManCapacitacion/ConstanciaEliminar";
+            var params = {};
+            params.codConstancia = data.COD_CONSTANCIA;
+            var option = { url: url, datos: params, type: 'GET' };
+            utilSigo.fnAjax(option, function (data) {
+                if (data.success) {
+                    ManCapacitacion_AddEdit.fnConstanciaListar(false);
+                    utilSigo.toastSuccess("Éxito", data.msj);
+                } else {
+                    utilSigo.toastWarning("Aviso", data.msj);
+                }
+            });
+        }
+    });
+}
+ManCapacitacion_AddEdit.fnConstanciaDescargar = function (obj) {
+    var dt = ManCapacitacion_AddEdit.dtConstancias;
+    var data = dt.row($(obj).parents('tr')).data();
+    let url = urlLocalSigo + "Capacitacion/ManCapacitacion/ConstanciaVer" + "?codConstancia=" + data.COD_CONSTANCIA;   
+    window.open(url, "blank");
+}
+ManCapacitacion_AddEdit.fnConstanciaDescargarAll = function () {
+    let url = urlLocalSigo + "Capacitacion/ManCapacitacion/ConstanciaDescargarAll" + "?codCapacitacion=" + ManCapacitacion_AddEdit.frm.find("#hdfCodCapacitacion").val();   
+    window.open(url, "blank");
+}
+ManCapacitacion_AddEdit.fnConstanciaDescargarPlantilla = function () {
+    let url = urlLocalSigo + "Capacitacion/ManCapacitacion/DescargarPlantillaAsignacion" + "?codCapacitacion=" + ManCapacitacion_AddEdit.frm.find("#hdfCodCapacitacion").val();
+    window.open(url, "blank");
+}
+ManCapacitacion_AddEdit.fnConstanciaActualizar = function () {
+    $('#uploadBtnBOL').click();
+}
+ManCapacitacion_AddEdit.fnSoloNumero=function (el, evt) {
+    let charCode = (evt.which) ? evt.which : event.keyCode;
+    if (charCode > 31 && (charCode < 48 || charCode > 57)) {
+
+        return false;
+    }
+    return true;
+}
+ManCapacitacion_AddEdit.fnConstanciaGenerar = function () {
+    let cantidadConstancia = ManCapacitacion_AddEdit.frm.find("#txtNroConstancia").val();
+    let modalidadConstancia = ManCapacitacion_AddEdit.frm.find("#txtModalidadConstancia").val().trim();
+    if (cantidadConstancia <= 0) {
+        ManCapacitacion_AddEdit.frm.find("#txtNroConstancia").focus();
+        utilSigo.toastWarning("Validación", "Ingrese un valor mayor a 0");
+        return false;
+    }
+    if (modalidadConstancia.length < 3) {
+        ManCapacitacion_AddEdit.frm.find("#txtModalidadConstancia").focus();
+        utilSigo.toastWarning("Validación", "Ingrese modalidad válida");
+        return false;
+    }
+    utilSigo.dialogConfirm("", "Está seguro de generar constancias?", function (r) {
+        if (r) {
+            var url = urlLocalSigo + "Capacitacion/ManCapacitacion/GenerarConstancias";
+            var params = {};
+            params.codCapacitacion = ManCapacitacion_AddEdit.frm.find("#hdfCodCapacitacion").val();
+            params.cantidad = ManCapacitacion_AddEdit.frm.find("#txtNroConstancia").val();
+            params.modalidad = modalidadConstancia;
+            var option = { url: url, datos: params, type: 'GET' };
+            utilSigo.fnAjax(option, function (result) {
+                if (result.success) {
+                    ManCapacitacion_AddEdit.fnConstanciaListar(true);
+                    ManCapacitacion_AddEdit.frm.find("#txtNroConstancia").val('');
+                    ManCapacitacion_AddEdit.frm.find("#txtModalidadConstancia").val('');
+                    utilSigo.toastSuccess("Éxito", result.msj);
+                } else {
+                    utilSigo.toastWarning("Aviso", "Sucedio un error, Comuníquese con el Administrador");
+                }
+            });
+        }
+    });
+}
 ManCapacitacion_AddEdit.fnSaveDocumentoAdjunto = function () {
     var cod_capacitacion = ManCapacitacion_AddEdit.frm.find("#hdfCodCapacitacion").val();
     if ((typeof cod_capacitacion === 'undefined' || cod_capacitacion == "")) {
@@ -1367,8 +1609,70 @@ $(document).ready(function () {
             }
         }
     }));
+    
     //Validación de controles que usan Select2
     ManCapacitacion_AddEdit.frm.find("select.select2-hidden-accessible").on("change", function (e) {
         $(this).valid();
+    });
+    //iniciamos constancias
+    ManCapacitacion_AddEdit.fnConstanciaListar();
+    $('#uploadBtnBOL').on('change', function (e) {
+        let files = e.target.files;
+        let objeto = this;
+        let urlImportar = urlLocalSigo + "Capacitacion/ManCapacitacion/UploadExcel";;      
+        if (files.length > 0) {
+            if (window.FormData !== undefined) {
+                let data = new FormData();
+                data.append("file", files[0]);      
+                $.ajax({
+                    type: "POST",
+                    url: urlImportar,
+                    contentType: false,
+                    processData: false,
+                    data: data,
+                    beforeSend: utilSigo.beforeSendAjax,
+                    complete: utilSigo.completeAjax, 
+                    success: function (result) {  
+                        if (result.cantidad > 0) {
+                            ManCapacitacion_AddEdit.fnConstanciaListar();
+                        }
+                        if (result.success) {
+                            location.href = result.archivo;    
+                            if (result.cantidad > 0) {
+                                utilSigo.toastSuccess("Notificación", "Se actualizarón " + result.cantidad + " constancias");
+                                utilSigo.toastSuccess("Notificación", "Revisar el archivo excel de resultado");
+                            } else {
+                                if (result.message != "") {
+                                    utilSigo.toastWarning("Notificación", result.message);
+                                } else {
+                                    utilSigo.toastWarning("Notificación", "Revisar el archivo excel de resultado");
+                                }
+                            }
+                            
+                        } else {          
+                            if (result.archivo != "") {
+                                location.href = result.archivo;
+                                if (result.message != "") {
+                                    utilSigo.toastWarning("Notificación", result.message);
+                                } else {
+                                    utilSigo.toastWarning("Notificación", "Revisar el archivo excel de resultado");
+                                }
+                            } else {
+                                if (result.message != "") {
+                                    utilSigo.toastWarning("Notificación", result.message);
+                                } else {
+                                    utilSigo.toastError("Notificación", "Sucedió un error");
+                                }       
+                            }                                              
+                        }
+                        let idFile = $(objeto).attr("id");
+                        $("#" + idFile).val("");
+                    },
+                    //error: utilSigo.toastError("Notificación", "Sucedió un error al realizar la carga masiva") //utilSigo.errorAjax
+                });
+            } else {
+                alert("This browser doesn't support HTML5 file uploads!");
+            }
+        }
     });
 });

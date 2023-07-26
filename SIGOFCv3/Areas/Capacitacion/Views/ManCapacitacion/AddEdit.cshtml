@@ -13,7 +13,7 @@
 <script src="~/Scripts/datatables/Extensions/buttons.print.js"></script>
 <script src="~/Scripts/ckeditor/ckeditor.js"></script>
 <script src="~/Scripts/sigo/utility.uploadFile.js"></script>
-<script src="~/Areas/Capacitacion/js/ManCapacitacion/AddEdit.js"></script>
+<script src="~/Areas/Capacitacion/js/ManCapacitacion/AddEdit.js?v5"></script>
 <script type="text/javascript">
     ManCapacitacion_AddEdit.fnLoadData('@Html.Raw(Json.Encode(@Model.tbParticipante_Asistentes))', "DataAsistente");
     ManCapacitacion_AddEdit.fnLoadData('@Html.Raw(Json.Encode(@Model.tbParticipante_EquipoApoyo))', "DataEquipoApoyo");
@@ -89,6 +89,7 @@
                             <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#navNotaConceptual" role="tab" aria-controls="home" aria-selected="false">Nota Conceptual</a></li>
                             <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#navMemoriaTaller" role="tab" aria-controls="home" aria-selected="false">Memoria taller</a></li>
                             <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#navDocumentos" role="tab" aria-controls="home" aria-selected="false">Documentos</a></li>
+                            <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#navConstancias" role="tab" aria-controls="home" aria-selected="false">Constancias</a></li>
                         </ul>
                         <div class="tab-content">
                             <div class="tab-pane fade show" id="navEstado" role="tabpanel" aria-labelledby="nav-home-tab">
@@ -155,11 +156,11 @@
                                             </div>
                                         </div>
                                         @*<div class="form-row">
-                                                <div class="form-group col-md-12">
-                                                    <label for="lblObsMetodologia" class="text-small">Observación Metodología</label>
-                                                    @Html.TextAreaFor(m => m.txtObsMetodologia, new { @class = "form-control form-control-sm", @rows = "5" })
-                                                </div>
-                                            </div>*@
+                        <div class="form-group col-md-12">
+                            <label for="lblObsMetodologia" class="text-small">Observación Metodología</label>
+                            @Html.TextAreaFor(m => m.txtObsMetodologia, new { @class = "form-control form-control-sm", @rows = "5" })
+                        </div>
+                    </div>*@
                                         <div class="form-row">
                                             <div class="form-group col-md-12">
                                                 <label for="lblMetodologiaId" class="text-small">Apoyo del Coorganizador</label>
@@ -639,24 +640,24 @@
                                             <br />
                                         </div>
                                         @*<div class="form-row">
-                                                <div class="form-group col-md-12">
-                                                    <label for="lblPrograma" class="text-small">Programa</label>
-                                                    @Html.TextAreaFor(m => m.txtPrograma, new { htmlAttributes = new { @class = "form-control" } })
-                                                    <script>
-                                                        CKEDITOR.replace('txtPrograma', { toolbar: initSigo.configuracionCKEDITOR });
-                                                    </script>
-                                                </div>
-                                            </div>*@
+                        <div class="form-group col-md-12">
+                            <label for="lblPrograma" class="text-small">Programa</label>
+                            @Html.TextAreaFor(m => m.txtPrograma, new { htmlAttributes = new { @class = "form-control" } })
+                            <script>
+                                CKEDITOR.replace('txtPrograma', { toolbar: initSigo.configuracionCKEDITOR });
+                            </script>
+                        </div>
+                    </div>*@
                                         @*<div class="form-row">
-                                                <div class="form-group col-md-12">
-                                                    <label for="lblCronograma" class="text-small">Cronograma</label>
-                                                    @Html.TextAreaFor(m => m.txtCronograma, new { htmlAttributes = new { @class = "form-control" } })
+                        <div class="form-group col-md-12">
+                            <label for="lblCronograma" class="text-small">Cronograma</label>
+                            @Html.TextAreaFor(m => m.txtCronograma, new { htmlAttributes = new { @class = "form-control" } })
 
-                                                    <script>
-                                                     CKEDITOR.replace('txtCronograma', {toolbar: initSigo.configuracionCKEDITOR});
-                                                    </script>
-                                                </div>
-                                            </div>*@
+                            <script>
+                             CKEDITOR.replace('txtCronograma', {toolbar: initSigo.configuracionCKEDITOR});
+                            </script>
+                        </div>
+                    </div>*@
                                     </div>
                                 </div>
                                 <a href="@Url.Action("ReporteNC",new {id= "Word",asCodCapacitacion=ViewBag.codCapacitacionreporte})"> Exportacion Nota Conceptual</a>
@@ -754,6 +755,59 @@
 
                                 </div>
                             </div>
+                            <div class="tab-pane fade show" id="navConstancias" role="tabpanel" aria-labelledby="nav-home-tab">
+                                <div class="card">
+                                    <div class="card-header text-small"></div>
+                                    <div class="card-body">
+                                        <div class="card-header text-small">
+                                            Gestión de constancias
+                                        </div>
+                                        <div class="card-body">
+                                            <div class="form-row">
+                                                <div class="form-group col-md-2">
+                                                    <label for="txtNroConstancia" class="text-small">N° Constancia:</label>
+                                                    <input type="text" id="txtNroConstancia" class="form-control form-control-sm" onkeypress="return ManCapacitacion_AddEdit.fnSoloNumero(this,event);" maxlength="4" />
+                                                </div>
+                                                <div class="form-group col-md-3">
+                                                    <label for="txtModalidadConstancia" class="text-small">Modalidad:</label>
+                                                    <input type="text" id="txtModalidadConstancia" class="form-control form-control-sm" maxlength="50" />
+                                                </div>
+                                                <div class="form-group col-md-7">
+                                                    <button type="button" class="btn btn-outline-info btn-sm" style="margin-top:18px;" onclick="ManCapacitacion_AddEdit.fnConstanciaGenerar()">Generar</button>
+                                                    <button type="button" class="btn btn-outline-info btn-sm" style="margin-top:18px;" onclick="ManCapacitacion_AddEdit.fnConstanciaDescargarAll()">Descargar Constancias</button>
+                                                    <button type="button" class="btn btn-outline-info btn-sm" style="margin-top:18px;" onclick="ManCapacitacion_AddEdit.fnConstanciaDescargarPlantilla()">Descargar Plantilla</button>
+                                                    <button type="button" class="btn btn-outline-info btn-sm" style="margin-top:18px;" onclick="ManCapacitacion_AddEdit.fnConstanciaActualizar()">Asignar constancias</button>
+                                                    <button type="button" class="btn btn-outline-info btn-sm" style="margin-top:18px;" onclick="ManCapacitacion_AddEdit.fnConstanciaRegenerarMasivo()">Regenerar constancias</button>
+                                                    <div style="display:none;">
+                                                        <input type="file" name="uploadBtnBOL" id="uploadBtnBOL" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" />
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-row">
+                                                <div class="table-responsive">
+                                                    <table id="tbConstancias" style="width:100%" class="table table-hover table-bordered">
+                                                        <thead>
+                                                            <tr>
+                                                                <th colspan="8" class="text-sm-left">
+                                                                    <div class="form-inline">
+                                                                        <strong>
+                                                                            Constancias
+                                                                        </strong>
+                                                                    </div>
+                                                                </th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody></tbody>
+                                                    </table>
+                                                </div>
+                                                <br />
+                                            </div>
+
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
                         </div>
                     </form>
                 </div>
@@ -773,6 +827,7 @@
     <div class="modal fade hide" id="mdlBuscarPersona" role="dialog"></div>
     <div class="modal fade hide" id="modalAddEditPersona" role="dialog"></div>
     <div class="modal fade hide" id="personaUbigeoModal" role="dialog"></div>
+    <div class="modal fade hide" id="mdlBuscarParticipante" role="dialog"></div>
 </div>
 @*@Scripts.Render("~/jQuery")
     @Scripts.Render("~/jQueryValidate")
