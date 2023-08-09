@@ -204,6 +204,8 @@ namespace SIGOFCv3.Areas.Supervision.Controllers
                         return View("~/Areas/Supervision/Views/ManInformeConservacion/AddEditConservacion.cshtml", vmInfConserv);
                     case "0000013"://Concesión Fauna
                     case "0000028"://Permiso Fauna
+                    case "0000032"://Comunidad Campesina
+                    case "0000033"://Predio Privado
                         VM_Informe_Fauna vmInfFauna = exeInf.InitDatosInformeFauna(asCodInforme, asCodCNotificacion);
                         vmInfFauna.hdfCodMTipo = asCodMTipo;
                         vmInfFauna.Nombre_Supervisor_Calidad = especialista;
