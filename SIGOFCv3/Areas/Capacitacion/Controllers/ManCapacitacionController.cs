@@ -734,9 +734,11 @@ namespace SIGOFCv3.Areas.Capacitacion.Controllers
 
                                 if (fechaInicio != null)
                                 {
-                                    HelperWord.BuscarReemplazarTexto(paras, "VAR_FECHATALLER", "el día " + HelperWord.FechaLetras(Convert.ToDateTime(fechaInicio.Value)));
-                                    HelperWord.BuscarReemplazarTexto(paras, "VAR_FECHAE", HelperWord.FechaLetras(Convert.ToDateTime(fechaInicio.Value)));
-
+                                    if (fechaInicio != null && fechaFin == null)
+                                    {
+                                        HelperWord.BuscarReemplazarTexto(paras, "VAR_FECHATALLER", "el día " + HelperWord.FechaLetras(Convert.ToDateTime(fechaInicio.Value)));
+                                        HelperWord.BuscarReemplazarTexto(paras, "VAR_FECHAE", HelperWord.FechaLetras(Convert.ToDateTime(fechaInicio.Value)));
+                                    }
                                     if (fechaInicio != null && fechaFin != null)
                                     {
                                         HelperWord.BuscarReemplazarTexto(paras, "VAR_FECHATALLER", " del " + HelperWord.FechaLetras(Convert.ToDateTime(fechaInicio.Value)) + " al " + HelperWord.FechaLetras(Convert.ToDateTime(fechaFin.Value)));
@@ -981,8 +983,11 @@ namespace SIGOFCv3.Areas.Capacitacion.Controllers
                         }
                         if (fechaInicio != null)
                         {
-                            HelperWord.BuscarReemplazarTexto(paras, "VAR_FECHATALLER", " el día " + HelperWord.FechaLetras(Convert.ToDateTime(fechaInicio.Value)));
-                            HelperWord.BuscarReemplazarTexto(paras, "VAR_FECHAE", HelperWord.FechaLetras(Convert.ToDateTime(fechaInicio.Value)));
+                            if (fechaInicio != null && fechaFin == null)
+                            {
+                                HelperWord.BuscarReemplazarTexto(paras, "VAR_FECHATALLER", "el día " + HelperWord.FechaLetras(Convert.ToDateTime(fechaInicio.Value)));
+                                HelperWord.BuscarReemplazarTexto(paras, "VAR_FECHAE", HelperWord.FechaLetras(Convert.ToDateTime(fechaInicio.Value)));
+                            }
 
                             if (fechaInicio != null && fechaFin != null)
                             {
@@ -1313,8 +1318,11 @@ namespace SIGOFCv3.Areas.Capacitacion.Controllers
                         }
                         if (fechaInicio != null)
                         {
-                            HelperWord.BuscarReemplazarTexto(paras, "VAR_FECHATALLER", "el día " + HelperWord.FechaLetras(Convert.ToDateTime(fechaInicio.Value)));
-                            HelperWord.BuscarReemplazarTexto(paras, "VAR_FECHAE", HelperWord.FechaLetras(Convert.ToDateTime(fechaInicio.Value)));
+                            if (fechaInicio != null && fechaFin == null)
+                            {
+                                HelperWord.BuscarReemplazarTexto(paras, "VAR_FECHATALLER", "el día " + HelperWord.FechaLetras(Convert.ToDateTime(fechaInicio.Value)));
+                                HelperWord.BuscarReemplazarTexto(paras, "VAR_FECHAE", HelperWord.FechaLetras(Convert.ToDateTime(fechaInicio.Value)));
+                            }
 
                             if (fechaInicio != null && fechaFin != null)
                             {
@@ -1402,6 +1410,8 @@ namespace SIGOFCv3.Areas.Capacitacion.Controllers
                 var constancias = exeCap.ConstanciaListar(codCapacitacion, 1);
 
                 var costanciasRegenerar = constancias.Where(x => x.ESTADO == 1 && x.FLAG_ASIGNADO == 1);
+
+                var costanciasRegenerarSinAsignar = constancias.Where(x => x.ESTADO == 1 && x.FLAG_ASIGNADO == 0); //pendiente a implementar la regeneracion 
 
                 foreach (var item in costanciasRegenerar)
                 {
@@ -1508,11 +1518,14 @@ namespace SIGOFCv3.Areas.Capacitacion.Controllers
                         {
                             fechaFin = Convert.ToDateTime(capacitacion.FECHA_TERMINO);
                         }
-                
+
                         if (fechaInicio != null)
                         {
-                            HelperWord.BuscarReemplazarTexto(paras, "VAR_FECHATALLER", "el día " + HelperWord.FechaLetras(Convert.ToDateTime(fechaInicio.Value)));
-                            HelperWord.BuscarReemplazarTexto(paras, "VAR_FECHAE", HelperWord.FechaLetras(Convert.ToDateTime(fechaInicio.Value)));
+                            if (fechaInicio != null && fechaFin == null)
+                            {
+                                HelperWord.BuscarReemplazarTexto(paras, "VAR_FECHATALLER", "el día " + HelperWord.FechaLetras(Convert.ToDateTime(fechaInicio.Value)));
+                                HelperWord.BuscarReemplazarTexto(paras, "VAR_FECHAE", HelperWord.FechaLetras(Convert.ToDateTime(fechaInicio.Value)));
+                            }
 
                             if (fechaInicio != null && fechaFin != null)
                             {
