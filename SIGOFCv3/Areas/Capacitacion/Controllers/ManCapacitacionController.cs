@@ -739,7 +739,7 @@ namespace SIGOFCv3.Areas.Capacitacion.Controllers
                                         HelperWord.BuscarReemplazarTexto(paras, "VAR_FECHATALLER", "el día " + HelperWord.FechaLetras(Convert.ToDateTime(fechaInicio.Value)));
                                         HelperWord.BuscarReemplazarTexto(paras, "VAR_FECHAE", HelperWord.FechaLetras(Convert.ToDateTime(fechaInicio.Value)));
                                     }
-                                    if (fechaInicio != null && fechaFin != null)
+                                    if (fechaInicio != null && fechaFin != null && fechaInicio != fechaFin)
                                     {
                                         HelperWord.BuscarReemplazarTexto(paras, "VAR_FECHATALLER", " del " + HelperWord.FechaLetras(Convert.ToDateTime(fechaInicio.Value)) + " al " + HelperWord.FechaLetras(Convert.ToDateTime(fechaFin.Value)));
                                         HelperWord.BuscarReemplazarTexto(paras, "VAR_FECHAE", HelperWord.FechaLetras(Convert.ToDateTime(fechaFin.Value)));
@@ -989,7 +989,7 @@ namespace SIGOFCv3.Areas.Capacitacion.Controllers
                                 HelperWord.BuscarReemplazarTexto(paras, "VAR_FECHAE", HelperWord.FechaLetras(Convert.ToDateTime(fechaInicio.Value)));
                             }
 
-                            if (fechaInicio != null && fechaFin != null)
+                            if (fechaInicio != null && fechaFin != null && fechaInicio != fechaFin)
                             {
                                 HelperWord.BuscarReemplazarTexto(paras, "VAR_FECHATALLER", " del " + HelperWord.FechaLetras(Convert.ToDateTime(fechaInicio.Value)) + " al " + HelperWord.FechaLetras(Convert.ToDateTime(fechaFin.Value)));
                                 HelperWord.BuscarReemplazarTexto(paras, "VAR_FECHAE", HelperWord.FechaLetras(Convert.ToDateTime(fechaFin.Value)));
@@ -1302,7 +1302,7 @@ namespace SIGOFCv3.Areas.Capacitacion.Controllers
                         HelperWord.BuscarReemplazarTexto(paras, "VAR_MODALIDAD", constancia.MODALIDAD.ToLower());
 
                         HelperWord.BuscarReemplazarTexto(paras, "VAR_HORAE", " " + capacitacion.DURACION.ToString() + " ");
-                        HelperWord.BuscarReemplazarTexto(paras, "VAR_LUGARE", capacitacion.LUGAR);
+                        HelperWord.BuscarReemplazarTexto(paras, "VAR_LUGARE", capacitacion.SECTOR);
                         if (!string.IsNullOrEmpty(capacitacion.FECHA_INICIO.ToString()))
                         {
                             fechaInicio = Convert.ToDateTime(capacitacion.FECHA_INICIO);
@@ -1324,7 +1324,7 @@ namespace SIGOFCv3.Areas.Capacitacion.Controllers
                                 HelperWord.BuscarReemplazarTexto(paras, "VAR_FECHAE", HelperWord.FechaLetras(Convert.ToDateTime(fechaInicio.Value)));
                             }
 
-                            if (fechaInicio != null && fechaFin != null)
+                            if (fechaInicio != null && fechaFin != null && fechaInicio != fechaFin)
                             {
                                 HelperWord.BuscarReemplazarTexto(paras, "VAR_FECHATALLER", " del " + HelperWord.FechaLetras(Convert.ToDateTime(fechaInicio.Value)) + " al " + HelperWord.FechaLetras(Convert.ToDateTime(fechaFin.Value)));
                                 HelperWord.BuscarReemplazarTexto(paras, "VAR_FECHAE", HelperWord.FechaLetras(Convert.ToDateTime(fechaFin.Value)));
@@ -1416,6 +1416,15 @@ namespace SIGOFCv3.Areas.Capacitacion.Controllers
                 foreach (var item in costanciasRegenerar)
                 {
                     ProcesoReGenerarConstancia(codCapacitacion, item.COD_CONSTANCIA, out flagResultado, out msjResultado);
+
+                    if (flagResultado)
+                    {
+                        countConstanciasActualizadas++;
+                    }
+                }
+                foreach (var item in costanciasRegenerarSinAsignar)
+                {
+                    ProcesoReGenerarConstanciaSA(codCapacitacion, item.COD_CONSTANCIA, out flagResultado, out msjResultado);
 
                     if (flagResultado)
                     {
@@ -1527,7 +1536,7 @@ namespace SIGOFCv3.Areas.Capacitacion.Controllers
                                 HelperWord.BuscarReemplazarTexto(paras, "VAR_FECHAE", HelperWord.FechaLetras(Convert.ToDateTime(fechaInicio.Value)));
                             }
 
-                            if (fechaInicio != null && fechaFin != null)
+                            if (fechaInicio != null && fechaFin != null && fechaInicio != fechaFin)
                             {
                                 HelperWord.BuscarReemplazarTexto(paras, "VAR_FECHATALLER", "del " + HelperWord.FechaLetras(Convert.ToDateTime(fechaInicio.Value)) + " al " + HelperWord.FechaLetras(Convert.ToDateTime(fechaFin.Value)));
                                 HelperWord.BuscarReemplazarTexto(paras, "VAR_FECHAE", HelperWord.FechaLetras(Convert.ToDateTime(fechaFin.Value)));
@@ -1570,6 +1579,160 @@ namespace SIGOFCv3.Areas.Capacitacion.Controllers
                 {
                     System.IO.File.Move(pathOrigenDoc, pathDestinoDoc);
                 }
+                flagResultado = true;
+                msjResultado = "Constancia regenerado Correctamente";
+            }
+            catch (Exception ex)
+            {
+                flagResultado = false;
+                msjResultado = ex.Message;
+            }
+        }
+
+        public void ProcesoReGenerarConstanciaSA(string codCapacitacion, string codConstancia, out bool flagResultado, out string msjResultado)
+        {
+            string nuevoCodigoConstancia;
+            string nombrePlantilla = "Capacitacion_Constancia_Plantilla.docx";
+            string folderPlantilla = "~/Archivos/Plantilla/Capacitacion";
+            string folderBase = "~/Archivos/CapConstancias";
+            string folderTemp = folderBase + "/Temp";
+            string pathDestinoWord = string.Empty;
+            string pathDestinoPdf = string.Empty;
+            byte[] bytePlantilla = null;
+            DateTime? fechaInicio = null;
+            DateTime? fechaFin = null;
+            flagResultado = false;
+            msjResultado = string.Empty;
+            try
+            {
+                CLogica exeCap = new CLogica();
+                //var participante = exeCap.ParticipanteObtenerPorConstancia(codCapacitacion, codConstancia);
+                //if (participante == null) throw new Exception("Participante no existe");
+
+                var constancia = exeCap.ConstanciaObtener(codConstancia);
+                if (constancia == null)
+                {
+                    throw new Exception("Constancia seleccionada no existe");
+                }
+                if (constancia.FLAG_ASIGNADO == 1)
+                {
+                    throw new Exception($"La constancia {constancia.NRO_CONSTANCIA} ya esta asignada para continuar con el proceso de actualización");
+                }
+                if (constancia.ESTADO != 1)
+                {
+                    throw new Exception($"La constancia {constancia.NRO_CONSTANCIA} esta eliminada");
+                }
+                var capacitacion = exeCap.ObtenerPorId(codCapacitacion);
+                if (capacitacion == null)
+                {
+                    throw new Exception("Capacitación no existe");
+                }
+                //validando existencia de plantilla de constancias
+                try
+                {
+                    bytePlantilla = System.IO.File.ReadAllBytes(Path.Combine(Server.MapPath(folderPlantilla), nombrePlantilla));
+
+                    if (!Directory.Exists(Server.MapPath(folderBase)))
+                    {
+                        Directory.CreateDirectory(Server.MapPath(folderBase));
+                    }
+                    if (!Directory.Exists(Server.MapPath(folderTemp)))
+                    {
+                        Directory.CreateDirectory(Server.MapPath(folderTemp));
+                    }
+                }
+                catch (Exception ex)
+                {
+                    throw new Exception("Error al leer la plantilla de constancia");
+                }
+                /*
+                nuevoCodigoConstancia = Guid.NewGuid().ToString();
+                pathDestinoWord = Path.Combine(Server.MapPath(folderTemp), $"{nuevoCodigoConstancia}.docx");
+                pathDestinoPdf = Path.Combine(Server.MapPath(folderBase), $"{nuevoCodigoConstancia}.pdf");
+                nuevoCodigoConstancia = nuevoCodigoConstancia + ".pdf";
+                */
+                nuevoCodigoConstancia = Path.GetFileNameWithoutExtension(constancia.ARCHIVO_COD);
+                pathDestinoWord = Path.Combine(Server.MapPath(folderTemp), $"{nuevoCodigoConstancia}.docx");
+                pathDestinoPdf = Path.Combine(Server.MapPath(folderBase), $"{nuevoCodigoConstancia}.pdf");
+                nuevoCodigoConstancia = nuevoCodigoConstancia + ".pdf";
+                using (MemoryStream mem = new MemoryStream())
+                {
+                    mem.Write(bytePlantilla, 0, (int)bytePlantilla.Length);
+                    using (DocumentFormat.OpenXml.Packaging.WordprocessingDocument wordDoc = DocumentFormat.OpenXml.Packaging.WordprocessingDocument.Open(mem, true))
+                    {
+                        var body = wordDoc.MainDocumentPart.Document.Body;
+                        var paras = body.Elements<DocumentFormat.OpenXml.Wordprocessing.Paragraph>();
+                        var tables = body.Elements<DocumentFormat.OpenXml.Wordprocessing.Table>();
+                        //string persona = participante.NOMBRES?.ToUpper() + " " + participante.APE_PATERNO?.ToUpper() + " " + participante.APE_MATERNO?.ToUpper();
+                        //HelperWord.BuscarReemplazarTexto(paras, "VAR_PARTICIPANTE", persona);
+                        HelperWord.BuscarReemplazarTexto(paras, "VAR_TIPOTALLER", capacitacion.CAPATIPO.ToLower());
+                        HelperWord.BuscarReemplazarTexto(paras, "VAR_NOMBRETALLER", capacitacion.NOMBRE.Replace("\"", "").Replace("“", "").Replace("”", ""));
+                        HelperWord.BuscarReemplazarTexto(paras, "VAR_DIRIGIDO", capacitacion.DIRIGIDO.ToLower());
+
+                        HelperWord.BuscarReemplazarTexto(paras, "VAR_MODALIDAD", constancia.MODALIDAD.ToLower());
+
+                        HelperWord.BuscarReemplazarTexto(paras, "VAR_HORAE", " " + capacitacion.DURACION.ToString() + " ");
+                        HelperWord.BuscarReemplazarTexto(paras, "VAR_LUGARE", capacitacion.SECTOR);
+                        if (!string.IsNullOrEmpty(capacitacion.FECHA_INICIO.ToString()))
+                        {
+                            fechaInicio = Convert.ToDateTime(capacitacion.FECHA_INICIO);
+                        }
+                        if (!string.IsNullOrEmpty(capacitacion.FECHA_TERMINO.ToString()))
+                        {
+                            fechaFin = Convert.ToDateTime(capacitacion.FECHA_TERMINO);
+                        }
+
+                        if (fechaInicio != null)
+                        {
+                            if (fechaInicio != null && fechaFin == null)
+                            {
+                                HelperWord.BuscarReemplazarTexto(paras, "VAR_FECHATALLER", "el día " + HelperWord.FechaLetras(Convert.ToDateTime(fechaInicio.Value)));
+                                HelperWord.BuscarReemplazarTexto(paras, "VAR_FECHAE", HelperWord.FechaLetras(Convert.ToDateTime(fechaInicio.Value)));
+                            }
+
+                            if (fechaInicio != null && fechaFin != null && fechaInicio != fechaFin)
+                            {
+                                HelperWord.BuscarReemplazarTexto(paras, "VAR_FECHATALLER", "del " + HelperWord.FechaLetras(Convert.ToDateTime(fechaInicio.Value)) + " al " + HelperWord.FechaLetras(Convert.ToDateTime(fechaFin.Value)));
+                                HelperWord.BuscarReemplazarTexto(paras, "VAR_FECHAE", HelperWord.FechaLetras(Convert.ToDateTime(fechaFin.Value)));
+                            }
+                            if (fechaInicio == fechaFin)
+                            {
+                                HelperWord.BuscarReemplazarTexto(paras, "VAR_FECHATALLER", "el día " + HelperWord.FechaLetras(Convert.ToDateTime(fechaInicio.Value)));
+                                HelperWord.BuscarReemplazarTexto(paras, "VAR_FECHAE", HelperWord.FechaLetras(Convert.ToDateTime(fechaInicio.Value)));
+                            }
+
+                        }
+
+                        else
+                        {
+                            HelperWord.BuscarReemplazarTexto(paras, "VAR_FECHATALLER", "el día ..............");
+                            HelperWord.BuscarReemplazarTexto(paras, "VAR_FECHAE", " ..............");
+                        }
+                        HelperWord.BuscarReemplazarTexto(paras, "VAR_NUMC", constancia.NRO_CONSTANCIA);
+                        HelperWord.SearchAndReplace(wordDoc, "VAR_NUMC", constancia.NRO_CONSTANCIA, true);
+
+
+                        wordDoc.Close();
+                    }
+                    this.GuardarMemoryStream(mem, pathDestinoWord);
+                    this.GenerarPDF(pathDestinoWord, pathDestinoPdf);
+                }
+                this.EliminarArchivo(pathDestinoWord);
+
+                //actualizando participante y constancia codCapacitacion, codTipoParticipante, codPersona
+                //var result = exeCap.ParticipanteAsignarConstancia(codCapacitacion, participante.MAE_COD_TIPOPARTICIPANTE, participante.COD_PERSONA, constancia.COD_CONSTANCIA, nuevoCodigoConstancia, (ModelSession.GetSession())[0].COD_UCUENTA, DateTime.Now);
+
+                string folderEli = folderBase + "/Eliminados";
+                if (!Directory.Exists(Server.MapPath(folderEli)))
+                {
+                    Directory.CreateDirectory(Server.MapPath(folderEli));
+                }
+                /*string pathOrigenDoc = Path.Combine(Server.MapPath(folderBase), $"{constancia.ARCHIVO_COD}");
+                string pathDestinoDoc = Path.Combine(Server.MapPath(folderEli), $"{constancia.ARCHIVO_COD}");
+                if (System.IO.File.Exists(pathOrigenDoc))
+                {
+                    System.IO.File.Move(pathOrigenDoc, pathDestinoDoc);
+                }*/
                 flagResultado = true;
                 msjResultado = "Constancia regenerado Correctamente";
             }
