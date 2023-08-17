@@ -439,6 +439,7 @@ namespace CapaEntidad.ViewModel
             txtCalificacionZoo = 0;
             tbEvalZoObservatorio = new List<Ent_ISUPERVISION_EXSITU_CAUTI_EVALZOO>();
             tbObligacionTitular = new List<Ent_INFORME_OBLIGTITULAR>();
+            tbRelPelCentroCria = new List<Ent_GENEPERSONA>();
 
             tbFotoSupervision = new List<Ent_INFORME>();
             tbEliTABLA = new List<Ent_INFORME>();
