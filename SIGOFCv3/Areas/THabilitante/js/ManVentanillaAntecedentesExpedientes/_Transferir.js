@@ -327,6 +327,9 @@ var _transf = {
                     if (_transf.frm.find("#ddlItemPoaPadreId option:selected").text().split('|')[2] == "PMFI") {
                         lstManMenu = "3";
                     }
+                    if (_transf.frm.find("#ddlItemPoaPadreId option:selected").text().split('|')[2] == "DEMA") {
+                        lstManMenu = "2";
+                    }
                     url = "THabilitante/ManPOA/AddEdit?lstManMenu=" + lstManMenu + "&appClient=" + appClient + "&appData=" + appData;
                     bandera = 0;
                     break;
