@@ -130,6 +130,7 @@ namespace SIGOFCv3.Areas.THabilitante.Controllers
                         }
                         else if (origen == "ACTO")
                         {
+                            tipoFrmulario = (lstMenu == "1") ? "POA" : (lstMenu == "2") ? "DEMA" : "PMFI";
                             nuevo = 2;
                         }
                     }
