@@ -813,6 +813,7 @@ namespace CapaEntidad.ViewModel
             ListMandatos = new List<Ent_MANDATOS>();
             ListObligMandatos = new List<Ent_MANDATOS>();
             tbObligMandatos = new List<Ent_MANDATOS>();
+            tbMandatos = new List<Ent_MANDATOS>();
         }
     }
 }
