@@ -623,8 +623,8 @@ namespace CapaLogica.DOC
                     appServer = "1|" + ex.Message;
                 }
                 resultado.appServer = appServer;
-                // resultado.AddResultado(ex.Message , false);
-                resultado.AddResultado("Ocurri� un error en el registro, por favor de verificar los datos e intente de nuevo", false);
+                resultado.AddResultado(ex.Message , false);
+                //resultado.AddResultado("Ocurri� un error en el registro, por favor de verificar los datos e intente de nuevo", false);
             }
             return resultado;
         }
