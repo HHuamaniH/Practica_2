@@ -83,9 +83,9 @@ namespace SIGOFCv3.Areas.Supervision.Controllers
                     {
                         worksheet.Cells[HelperSigo.GetColum(1) + rowStart.ToString()].Value = ++contador;
                         worksheet.Cells[HelperSigo.GetColum(2) + rowStart.ToString()].Style.Numberformat.Format = "dd/mm/yyyy";
-                        worksheet.Cells[HelperSigo.GetColum(2) + rowStart.ToString()].Value =Convert.ToDateTime(item.FECHA_SALIDA);
+                        worksheet.Cells[HelperSigo.GetColum(2) + rowStart.ToString()].Value = (item.FECHA_SALIDA == " " || string.IsNullOrEmpty(item.FECHA_SALIDA)) ? DateTime.MinValue : Convert.ToDateTime(item.FECHA_SALIDA);
                         worksheet.Cells[HelperSigo.GetColum(3) + rowStart.ToString()].Style.Numberformat.Format = "dd/mm/yyyy";// "dd/mm/yyyy HH:mm";
-                        worksheet.Cells[HelperSigo.GetColum(3) + rowStart.ToString()].Value = Convert.ToDateTime(item.FECHA_LLEGADA);
+                        worksheet.Cells[HelperSigo.GetColum(3) + rowStart.ToString()].Value = (item.FECHA_LLEGADA == " " || string.IsNullOrEmpty(item.FECHA_LLEGADA)) ? DateTime.MinValue : Convert.ToDateTime(item.FECHA_LLEGADA);
                         worksheet.Cells[HelperSigo.GetColum(4) + rowStart.ToString()].Value = item.OD;
                         worksheet.Cells[HelperSigo.GetColum(5) + rowStart.ToString()].Value = item.CARTA_NOTIFICACION;
                         worksheet.Cells[HelperSigo.GetColum(6) + rowStart.ToString()].Value = item.NUM_THABILITANTE;
