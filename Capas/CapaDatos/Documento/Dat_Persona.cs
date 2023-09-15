@@ -5,6 +5,7 @@ using Oracle.ManagedDataAccess.Client;
 //using System.Data.OracleClient;  using SQL = GeneralSQL.Data.SQL;
 using System.Data.SqlClient;
 using CEntidad = CapaEntidad.DOC.Ent_Persona;
+using CapaEntidad.ViewModel;
 
 namespace CapaDatos.DOC//9
 {
@@ -537,6 +538,35 @@ namespace CapaDatos.DOC//9
                 }
                 throw ex;
             }
+        }
+
+        public VM_PERSONA_DET_CORREO PersonaCorreo(OracleConnection cn, string COD_PERSONA)
+        {
+            VM_PERSONA_DET_CORREO vm = null;
+
+            using (OracleDataReader dr = dBOracle.SelDrdDefault(cn, "DOC_OSINFOR_ERP_MIGRACION.spPERSONA_DET_CORREO_CONSULTAR", COD_PERSONA))
+            {
+                if (dr != null)
+                {
+                    if (dr.HasRows)
+                    {
+                        vm = new VM_PERSONA_DET_CORREO();
+
+                        while (dr.Read())
+                        {
+                            vm.COD_PERSONA = dr["COD_PERSONA"].ToString();
+                            vm.APE_PATERNO = dr["APE_PATERNO"].ToString();
+                            vm.APE_MATERNO = dr["APE_MATERNO"].ToString();
+                            vm.NOMBRES = dr["NOMBRES"].ToString();
+                            vm.CORREO = dr["CORREO"].ToString();
+                            vm.ESTADO = Convert.ToInt16(dr["ESTADO"]);
+                            vm.NOTIFICAR = Convert.ToInt16(dr["NOTIFICAR"]);
+                        }
+                    }
+                }
+            }
+
+            return vm;
         }
     }
 }

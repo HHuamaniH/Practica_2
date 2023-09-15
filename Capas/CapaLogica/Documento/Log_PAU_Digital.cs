@@ -1,4 +1,5 @@
 ﻿using CapaDatos.DOC;
+using CapaDatos.Documento;
 using CapaEntidad.DOC;
 using CapaEntidad.ViewModel;
 using System;

@@ -387,46 +387,7 @@ namespace CapaDatos.Documento
             {
                 throw ex;
             }
-        }
-
-        public VM_PERSONA_DET_CORREO PersonaCorreo(string COD_PERSONA)
-        {
-            VM_PERSONA_DET_CORREO vm = null;
-            try
-            {
-                using (OracleConnection cn = new OracleConnection(BDConexion.Conexion_Cadena_SIGO()))
-                {
-                    cn.Open();
-                    using (OracleDataReader dr = dBOracle.SelDrdDefault(cn, "DOC_OSINFOR_ERP_MIGRACION.spPERSONA_DET_CORREO_CONSULTAR", COD_PERSONA))
-                    {
-                        if (dr != null)
-                        {
-                            if (dr.HasRows)
-                            {
-                                vm = new VM_PERSONA_DET_CORREO();
-
-                                while (dr.Read())
-                                {
-                                    vm.COD_PERSONA = dr["COD_PERSONA"].ToString();
-                                    vm.APE_PATERNO = dr["APE_PATERNO"].ToString();
-                                    vm.APE_MATERNO = dr["APE_MATERNO"].ToString();
-                                    vm.NOMBRES = dr["NOMBRES"].ToString();
-                                    vm.CORREO = dr["CORREO"].ToString();
-                                    vm.ESTADO = Convert.ToInt16(dr["ESTADO"]);
-                                    vm.NOTIFICAR = Convert.ToInt16(dr["NOTIFICAR"]);
-                                }
-                            }
-                        }
-                    }
-                }
-
-                return vm;
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-        }
+        }       
 
         public void ModificarNumeroInforme(string codInforme, string numeroInforme, DateTime fechaOperacion)
         {

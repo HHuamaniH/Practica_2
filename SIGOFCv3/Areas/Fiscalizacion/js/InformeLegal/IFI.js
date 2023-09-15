@@ -1260,7 +1260,7 @@ $(function () {
                 modal_referencias.Abrir();
             },
 
-            Abrir_Notificar: function (item) {
+            Abrir_Notificar: async function (item) {
                 const self = this;
                 modal_notificar.form.Mensaje = 'Por favor revisar el informe para la continuidad del proceso.';
 
@@ -1269,37 +1269,40 @@ $(function () {
                 if (item) users = [item.codPersona];
                 else users = this.Informe.PARTICIPANTES.map(user => user.codPersona);
 
-                modal_notificar.ObtenerCorreos(users).then(res => {
+                const res = await modal_notificar.ObtenerCorreos(users);
 
-                    //Actualizar los participantes despues de notificar
-                    modal_notificar.callback = function () {
-                        const personas = self.Informe.PARTICIPANTES
-                            .filter(item => res.find(x => x.codPersona == item.codPersona));
+                //Actualizar los participantes despues de notificar
+                modal_notificar.callback = function () {
+                    const personas = self.Informe.PARTICIPANTES
+                        .filter(item => res.find(x => x.codPersona == item.codPersona));
 
-                        const participantes = personas.map(item => ({
-                            ...item,
-                            codInformeDigital: self.Informe.COD_INFORME_DIGITAL,
-                            estado: item.estado > 2 ? item.estado : 2
-                        }));
+                    const participantes = personas.map(item => ({
+                        ...item,
+                        codInformeDigital: self.Informe.COD_INFORME_DIGITAL,
+                        estado: item.estado > 2 ? item.estado : 2
+                    }));
 
-                        let params = {
-                            type: 'post',
-                            url: `${urlLocalSigo}Fiscalizacion/InformeLegalDigital/ParticipanteActualizar`,
-                            datos: JSON.stringify({ participantes })
-                        };
-
-                        utilSigo.fnAjax(params, function (res) {
-                            self.Informe.PARTICIPANTES.forEach(x => {
-                                const data = participantes.find(item => item.item == x.item);
-                                if (data) {
-                                    x.estado = data.estado;
-                                }
-                            });
-                        });
+                    if (!participantes.length) {
+                        return;
                     }
 
-                    modal_notificar.Abrir(res);
-                });
+                    let params = {
+                        type: 'post',
+                        url: `${urlLocalSigo}Fiscalizacion/InformeLegalDigital/ParticipanteActualizar`,
+                        datos: JSON.stringify({ participantes })
+                    };
+
+                    utilSigo.fnAjax(params, function () {
+                        self.Informe.PARTICIPANTES.forEach(x => {
+                            const data = participantes.find(item => item.item == x.item);
+                            if (data) {
+                                x.estado = data.estado;
+                            }
+                        });
+                    });
+                }
+
+                modal_notificar.Abrir(res);
             },
             Revisar: function (item, index) {
                 //let self = this;
@@ -1803,7 +1806,7 @@ $(function () {
                 return new Promise((resolve, reject) => {
                     let params = {
                         type: 'post',
-                        url: `${urlLocalSigo}Fiscalizacion/InformeLegalDigital/ObtenerCorreos`,
+                        url: `${urlLocalSigo}General/ManPersonas/ObtenerCorreos`,
                         datos: JSON.stringify(codPersonas)
                     };
 

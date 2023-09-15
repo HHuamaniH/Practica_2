@@ -111,8 +111,10 @@ namespace CapaEntidad.ViewModel
 
     public class RSD_Notificacion
     {
-        [Description("COD_PERSONA")]
-        public string COD_PERSONA { get; set; }
+        [Description("DESTINATARIOS")]
+        public string DESTINATARIOS { get; set; }
+        [Description("CC_DESTINATARIOS")]
+        public string CC_DESTINATARIOS { get; set; }
         [Description("COD_INFORME")]
         public string COD_INFORME { get; set; }
         [Description("MENSAJE_ENVIO_ALERTA")]

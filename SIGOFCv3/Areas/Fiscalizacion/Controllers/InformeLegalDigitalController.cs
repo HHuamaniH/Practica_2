@@ -66,21 +66,6 @@ namespace SIGOFCv3.Areas.Fiscalizacion.Controllers
             return Json(result, JsonRequestBehavior.AllowGet);
         }
 
-        [HttpPost]
-        public JsonResult ObtenerCorreos(List<string> CPERSONAS)
-        {
-            oLog_Informe_Legal_Digital = new Log_Informe_Legal_Digital();
-            List<VM_PERSONA_DET_CORREO> result = new List<VM_PERSONA_DET_CORREO>();
-
-            foreach (var COD_PERSONA in CPERSONAS)
-            {
-                var data = oLog_Informe_Legal_Digital.PersonaCorreo(COD_PERSONA);
-                if (data != null) result.Add(data);
-            }
-
-            return Json(result, JsonRequestBehavior.AllowGet);
-        }
-
         [HttpGet]
         public ActionResult PlantillaInforme()
         {

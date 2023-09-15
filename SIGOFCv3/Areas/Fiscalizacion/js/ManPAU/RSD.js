@@ -4,7 +4,7 @@ let _informe = {};
 let app,
     modal_notificar,
     modal_doc,
-    modal_analisis,
+    //modal_analisis,
     modal_sitd,
     modal_integrante;
 
@@ -14,6 +14,207 @@ const States = {
     COMPLETADO: 3,
     VISADO: 4,
     FINALIZADO: 5
+};
+
+const data = {
+    Modalidades: [
+        { COD_MODALIDAD: '01', COD_MATERIA: '02', MODALIDAD: 'Concesiones', CONTRATO: 'contrato de concesión' },
+        { COD_MODALIDAD: '02', COD_MATERIA: '02', MODALIDAD: 'Predios privados', CONTRATO: 'permiso forestal' },
+        { COD_MODALIDAD: '03', COD_MATERIA: '02', MODALIDAD: 'Comunidades nativas', CONTRATO: 'permiso forestal' },
+        { COD_MODALIDAD: '04', COD_MATERIA: '01', MODALIDAD: 'Fauna', CONTRATO: '' },
+    ],
+    Infracciones: [
+        {
+            COD_MODALIDAD: '01',
+            DETALLE: [
+                {
+                    titulo: 'Con relación a la obligación de establecer y mantener los linderos, hitos u otras señales',
+                    conducta: 'No se estableció letreros, señalización de vértices, hitos que permitan identificar el área del título habilitante.',
+                    tipo_infractor: 'No establecer o no mantener los linderos, hitos u otras señales que permitan identificar el área del título habilitante.',
+                    numeral: 'Numeral 1 del Cuadro de Infracciones y Sanciones en Materia Forestal del Anexo 1 del RISMFFS',
+                    select: false, templateId: 'concesiones-1'
+                },
+                {
+                    titulo: 'Con relación a la presentación del informe de ejecución forestal',
+                    conducta: 'No presentar el Informe de Ejecución Anual del plan de manejo - PC 01, 02 y 03, correspondiente al periodo 2021-2022.',
+                    tipo_infractor: 'No entregar o presentar información o documentación legalmente exigible en el plazo previsto, o cuando la autoridad competente lo requiera.',
+                    numeral: 'Numeral 2 del Cuadro de Infracciones y Sanciones en Materia Forestal del Anexo 1 del RISMFFS',
+                    select: false, templateId: 'concesiones-2'
+                },
+                {
+                    titulo: 'Con relación al aprovechamiento del recurso forestal no autorizado (extracción de individuos de procedencia identificada - volumen no autorizado)',
+                    conducta: 'Talar, extraer y/o aprovechar recursos forestales no autorizados en el área del título habilitante, en un volumen de xxx  m3, correspondiente a 2 árboles semilleros/no censados de las especies xxx',
+                    tipo_infractor: 'Talar, extraer y/o aprovechar recursos forestales no autorizados en el área del título habilitante, cuando sea imputable al administrado en su condición de titular del título habilitante',
+                    numeral: 'Numeral 10 del Cuadro de Infracciones y Sanciones en Materia Forestal del Anexo 1 del RISMFFS',
+                    select: false, templateId: 'concesiones-3'
+                },
+                {
+                    titulo: 'Con relación a la obligación de tener y mantener actualizado el libro de operaciones',
+                    conducta: 'No registrar la información en el Libro de Operaciones, de acuerdo a las disposiciones establecidas.',
+                    tipo_infractor: 'No tener libro de operaciones o no registrar la información en dicho libro, de acuerdo a las disposiciones establecidas.',
+                    numeral: 'Numeral 11 del Cuadro de Infracciones y Sanciones en Materia Forestal del Anexo 1 del RISMFFS',
+                    select: false, templateId: 'concesiones-4'
+                },
+                {
+                    titulo: 'Con relación al aprovechamiento del recurso forestal no autorizado (extracción de individuos de procedencia no identificada - volumen injustificado).',
+                    conducta: 'Talar, extraer y/o aprovechar recursos forestales sin la correspondiente autorización por un volumen de xx m3, correspondiente a las especies xx',
+                    tipo_infractor: 'Talar, extraer y/o aprovechar recursos forestales, sin autorización, en su condición o no de titular del título habilitante, a excepción de los aprovechados por subsistencia.',
+                    numeral: 'Numeral 21 del Cuadro de Infracciones y Sanciones en Materia Forestal del Anexo 1 del RISMFFS',
+                    select: false, templateId: 'concesiones-5'
+                },
+                {
+                    titulo: 'Con relación al incumplimiento de movilizar productos forestales no autorizados con documentos aprobados por la autoridad competente',
+                    conducta: 'Utilizar indebidamente documentación otorgada por la Autoridad Regional Forestal para amparar el transporte de recursos forestales provenientes de una extracción no autorizada de un volumen de xx m3 , correspondiente a las especies xx; pues habría utilizado su contrato de concesión/permiso forestal, su Plan de Manejo, así como el Balance de Extracción para dar apariencia de legalidad al volumen de madera que provendría de individuos sobre los cuales no tenía autorización para extraer.',
+                    tipo_infractor: 'Utilizar indebidamente o facilitar la guía de transporte forestal, así como la documentación otorgada o aprobada por la autoridad competente, para amparar la extracción, transporte, transformación, almacenamiento o comercialización de los especímenes, productos o sub productos forestales obtenidos ilegalmente.',
+                    numeral: 'Numeral 26 del Cuadro de Infracciones y Sanciones en Materia Forestal del Anexo 1 del RISMFFS',
+                    select: false, templateId: 'concesiones-6'
+                },
+                {
+                    titulo: 'Con relación al incumplimiento de contar con regente forestal',
+                    conducta: 'El/la titular no cuenta con regente forestal para la implementación del Plan de Manejo N° xx, periodo xx',
+                    tipo_infractor: 'No contar con un regente para la implementación del plan de manejo, en caso corresponda',
+                    numeral: 'Numeral 29 del Cuadro de Infracciones y Sanciones en Materia Forestal del Anexo 1 del RISMFFS',
+                    select: false, templateId: 'concesiones-7'
+                },
+            ]
+        },
+        {
+            COD_MODALIDAD: '02',
+            DETALLE: [
+                {
+                    titulo: 'Con relación a la obligación de establecer y mantener los linderos, hitos u otras señales',
+                    conducta: 'No se estableció letreros, señalización de vértices, hitos que permitan identificar el área del título habilitante.',
+                    tipo_infractor: 'No establecer o no mantener los linderos, hitos u otras señales que permitan identificar el área del título habilitante.',
+                    numeral: 'Numeral 1 del Cuadro de Infracciones y Sanciones en Materia Forestal del Anexo 1 del RISMFFS',
+                    select: false, templateId: 'concesiones-1'
+                },
+                {
+                    titulo: 'Con relación a la presentación del informe de ejecución forestal',
+                    conducta: 'No presentar el Informe de Ejecución Anual del plan de manejo - PC 01, 02 y 03, correspondiente al periodo 2021-2022.',
+                    tipo_infractor: 'No entregar o presentar información o documentación legalmente exigible en el plazo previsto, o cuando la autoridad competente lo requiera.',
+                    numeral: 'Numeral 2 del Cuadro de Infracciones y Sanciones en Materia Forestal del Anexo 1 del RISMFFS',
+                    select: false, templateId: 'concesiones-2'
+                },
+                {
+                    titulo: 'Con relación al aprovechamiento del recurso forestal no autorizado (extracción de individuos de procedencia identificada - volumen no autorizado)',
+                    conducta: 'Talar, extraer y/o aprovechar recursos forestales no autorizados en el área del título habilitante, en un volumen de xxx  m3, correspondiente a 2 árboles semilleros/no censados de las especies xxx',
+                    tipo_infractor: 'Talar, extraer y/o aprovechar recursos forestales no autorizados en el área del título habilitante, cuando sea imputable al administrado en su condición de titular del título habilitante',
+                    numeral: 'Numeral 10 del Cuadro de Infracciones y Sanciones en Materia Forestal del Anexo 1 del RISMFFS',
+                    select: false, templateId: 'concesiones-3'
+                },
+                {
+                    titulo: 'Con relación a la obligación de tener y mantener actualizado el libro de operaciones',
+                    conducta: 'No registrar la información en el Libro de Operaciones, de acuerdo a las disposiciones establecidas.',
+                    tipo_infractor: 'No tener libro de operaciones o no registrar la información en dicho libro, de acuerdo a las disposiciones establecidas.',
+                    numeral: 'Numeral 11 del Cuadro de Infracciones y Sanciones en Materia Forestal del Anexo 1 del RISMFFS',
+                    select: false, templateId: 'concesiones-4'
+                },
+                {
+                    titulo: 'Con relación al aprovechamiento del recurso forestal no autorizado (extracción de individuos de procedencia no identificada - volumen injustificado).',
+                    conducta: 'Talar, extraer y/o aprovechar recursos forestales sin la correspondiente autorización por un volumen de xx m3, correspondiente a las especies xx',
+                    tipo_infractor: 'Talar, extraer y/o aprovechar recursos forestales, sin autorización, en su condición o no de titular del título habilitante, a excepción de los aprovechados por subsistencia.',
+                    numeral: 'Numeral 21 del Cuadro de Infracciones y Sanciones en Materia Forestal del Anexo 1 del RISMFFS',
+                    select: false, templateId: 'concesiones-5'
+                },
+                {
+                    titulo: 'Con relación al incumplimiento de movilizar productos forestales no autorizados con documentos aprobados por la autoridad competente',
+                    conducta: 'Utilizar indebidamente documentación otorgada por la Autoridad Regional Forestal para amparar el transporte de recursos forestales provenientes de una extracción no autorizada de un volumen de xx m3 , correspondiente a las especies xx; pues habría utilizado su contrato de concesión/permiso forestal, su Plan de Manejo, así como el Balance de Extracción para dar apariencia de legalidad al volumen de madera que provendría de individuos sobre los cuales no tenía autorización para extraer.',
+                    tipo_infractor: 'Utilizar indebidamente o facilitar la guía de transporte forestal, así como la documentación otorgada o aprobada por la autoridad competente, para amparar la extracción, transporte, transformación, almacenamiento o comercialización de los especímenes, productos o sub productos forestales obtenidos ilegalmente.',
+                    numeral: 'Numeral 26 del Cuadro de Infracciones y Sanciones en Materia Forestal del Anexo 1 del RISMFFS',
+                    select: false, templateId: 'concesiones-6'
+                },
+                {
+                    titulo: 'Con relación al incumplimiento de contar con regente forestal',
+                    conducta: 'El/la titular no cuenta con regente forestal para la implementación del Plan de Manejo N° xx, periodo xx',
+                    tipo_infractor: 'No contar con un regente para la implementación del plan de manejo, en caso corresponda',
+                    numeral: 'Numeral 29 del Cuadro de Infracciones y Sanciones en Materia Forestal del Anexo 1 del RISMFFS',
+                    select: false, templateId: 'concesiones-7'
+                },
+            ]
+        },
+        {
+            COD_MODALIDAD: '03',
+            DETALLE: [
+                {
+                    titulo: 'Con relación a la presentación del informe de ejecución forestal',
+                    conducta: 'No presentar el Informe de Ejecución Anual del plan de manejo - PC 01, 02 y 03, correspondiente al periodo 2021-2022.',
+                    tipo_infractor: 'No entregar o presentar información o documentación legalmente exigible en el plazo previsto, o cuando la autoridad competente lo requiera',
+                    numeral: 'Numeral 2 del Cuadro de Infracciones y Sanciones en Materia Forestal del Anexo 1 del RISMFFS',
+                    select: false, templateId: 'ccnn-1'
+                },
+                {
+                    titulo: 'Con relación al aprovechamiento del recurso forestal no autorizado (extracción de individuos de procedencia identificada - volumen no autorizado)',
+                    conducta: 'Talar, extraer y/o aprovechar recursos forestales no autorizados en el área del título habilitante, en un volumen de xxx  m3, correspondiente a 2 árboles semilleros/no censados de las especies xxx',
+                    tipo_infractor: 'Talar, extraer y/o aprovechar recursos forestales no autorizados en el área del título habilitante, cuando sea imputable al administrado en su condición de titular del título habilitante',
+                    numeral: 'Numeral 10 del Cuadro de Infracciones y Sanciones en Materia Forestal del Anexo 1 del RISMFFS',
+                    select: false, templateId: 'ccnn-2'
+                },
+                {
+                    titulo: 'Con relación a la obligación de tener y mantener actualizado el libro de operaciones',
+                    conducta: 'No registrar la información en el Libro de Operaciones, de acuerdo a las disposiciones establecidas.',
+                    tipo_infractor: 'No tener libro de operaciones o no registrar la información en dicho libro, de acuerdo a las disposiciones establecidas.',
+                    numeral: 'Numeral 11 del Cuadro de Infracciones y Sanciones en Materia Forestal del Anexo 1 del RISMFFS',
+                    select: false, templateId: 'ccnn-3'
+                },
+                {
+                    titulo: 'Con relación al aprovechamiento del recurso forestal no autorizado (extracción de individuos de procedencia no identificada - volumen injustificado)',
+                    conducta: 'Talar, extraer y/o aprovechar recursos forestales sin la correspondiente autorización por un volumen de xx m3, correspondiente a las especies xx',
+                    tipo_infractor: 'Talar, extraer y/o aprovechar recursos forestales, sin autorización, en su condición o no de titular del título habilitante, a excepción de los aprovechados por subsistencia.',
+                    numeral: 'Numeral 21 del Cuadro de Infracciones y Sanciones en Materia Forestal del Anexo 1 del RISMFFS',
+                    select: false, templateId: 'ccnn-4'
+                },
+                {
+                    titulo: 'Con relación al incumplimiento de movilizar productos forestales no autorizados con documentos aprobados por la autoridad competente',
+                    conducta: 'Utilizar indebidamente documentación otorgada por la Autoridad Regional Forestal para amparar el transporte de recursos forestales provenientes de una extracción no autorizada de un volumen de xx m3 , correspondiente a las especies xx; pues habría utilizado su contrato de concesión/permiso forestal, su Plan de Manejo, así como el Balance de Extracción para dar apariencia de legalidad al volumen de madera que provendría de individuos sobre los cuales no tenía autorización para extraer.',
+                    tipo_infractor: 'Utilizar indebidamente o facilitar la guía de transporte forestal, así como la documentación otorgada o aprobada por la autoridad competente, para amparar la extracción, transporte, transformación, almacenamiento o comercialización de los especímenes, productos o sub productos forestales obtenidos ilegalmente.',
+                    numeral: 'Numeral 26 del Cuadro de Infracciones y Sanciones en Materia Forestal del Anexo 1 del RISMFFS',
+                    select: false, templateId: 'ccnn-5'
+                },
+                {
+                    titulo: 'Con relación al incumplimiento de contar con regente forestal',
+                    conducta: 'El/la titular no cuenta con regente forestal para la implementación del Plan de Manejo N° xx, periodo xx',
+                    tipo_infractor: 'No contar con un regente para la implementación del plan de manejo, en caso corresponda',
+                    numeral: 'Numeral 29 del Cuadro de Infracciones y Sanciones en Materia Forestal del Anexo 1 del RISMFFS',
+                    select: false, templateId: 'ccnn-6'
+                },
+            ]
+        },
+        {
+            COD_MODALIDAD: '04',
+            DETALLE: [
+                {
+                    titulo: 'Con relación a la presentación del informe de ejecución forestal',
+                    conducta: 'No presentar el Informe de Ejecución Anual del plan de manejo - PC xx, xx y xx, correspondiente al periodo 202x-202x.',
+                    tipo_infractor: 'No entregar o presentar información o documentación legalmente exigible en el plazo previsto, o cuando la autoridad competente lo requiera',
+                    numeral: 'Numeral 2 del Cuadro de Infracciones y Sanciones en Materia de Fauna Silvestre del Anexo 2 del Reglamento de Infracciones y Sanciones',
+                    select: false, templateId: 'fauna-1'
+                },
+                {
+                    titulo: 'Con relación a la obligación de tener y mantener actualizado el libro de operaciones',
+                    conducta: 'La administrada no cuenta con información equivalente al libro de operaciones.',
+                    tipo_infractor: 'No tener libro de operaciones o no registrar la información en dicho libro, de acuerdo a las disposiciones establecidas',
+                    numeral: 'Numeral 12 del Anexo 2 del Cuadro de Infracciones y Sanciones en Materia de Fauna Silvestre del Anexo 2 del Reglamento de Infracciones y Sanciones',
+                    select: false, templateId: 'fauna-2'
+                },
+                {
+                    titulo: 'Con relación al incumplimiento de contar con regente forestal',
+                    conducta: 'No contar con regente de fauna silvestre para la implementación del plan de manejo de fauna silvestre.',
+                    tipo_infractor: 'No contar con un regente para la implementación del plan de manejo, en caso corresponda',
+                    numeral: '',
+                    select: false, templateId: 'fauna-3'
+                },
+            ]
+        }
+    ],
+    Causales_Caducidad: [
+        { titulo: 'La presentación de información falsa en los planes de manejo a la ARFFS, siempre que esté en ejecución o haya sido ejecutado.', select: false },
+        { titulo: 'La extracción o movilización de recursos forestales y de fauna silvestre no autorizadas.', select: false },
+        { titulo: 'El cambio no autorizado del uso de las tierras.', select: false },
+        { titulo: 'Causar severos perjuicios que pongan en grave riesgo al ambiente y la biodiversidad, de acuerdo con la normativa vigente.', select: false },
+        { titulo: 'El no pago por derecho de aprovechamiento al cual se encuentra sujeto, dentro de los plazos establecidos en el Reglamento o en el título respectivo, salvo que exista refinanciamiento, fraccionamiento o suspensión de obligaciones aprobados por la ARFFS.', select: false },
+        { titulo: 'La realización de actividades distintas a las otorgadas en virtud del título habilitante.', select: false },
+        { titulo: 'El incumplimiento de los compromisos de inversión acordados para el otorgamiento del título habilitante, en los casos que corresponda, salvo que se demuestre que fue causado por hechos fortuitos o de fuerza mayor.', select: false },
+    ]
 };
 
 _informe.CambiarEstado = function (state) {
@@ -114,13 +315,13 @@ _informe.FirmaVerificar = function () {
 _informe.render = function (html) {
     if (html) {
         let ht = $("<div>" + html + "</div>");
-        ht.find('table').css({ 'border': '1px solid #ccc', 'border-collapse': 'collapse' });
+        ht.find('table').css({ 'border': '1px solid #000', 'border-collapse': 'collapse' });
 
         ht.find('table').each(function (i, el) {
             if (!$(this).css('width')) $(this).css('width', '100%');
         });
 
-        ht.find('td').css({ 'border': '1px solid #ccc', 'padding': '5.76px' });
+        ht.find('td').css({ 'border': '1px solid #000', 'padding': '5.76px' });
         ht.find('.table-small td').css({ 'padding': '0' });
 
         ht.find('img').each(function (i, el) {
@@ -156,39 +357,29 @@ _informe.render = function (html) {
     return html;
 };
 
+_informe.NumeroALetra = function (numero) {
+    if (numero <= 0 || typeof numero !== 'number' || !Number.isInteger(numero)) {
+        return 'Número no válido';
+    }
+
+    let resultado = '';
+    const alfabeto = 'abcdefghijklmnopqrstuvwxyz';
+
+    while (numero > 0) {
+        const indice = (numero - 1) % 26; // Restamos 1 para ajustar a 0-based index
+        resultado = alfabeto[indice] + resultado;
+        numero = Math.floor((numero - 1) / 26); // Restamos 1 para ajustar a 0-based index
+    }
+
+    return resultado;
+}
+
 _informe.tmpl = {
-    General: function (data) {
-        return $("<div>").append($("#tmpl-exportar").tmpl(data || {})).getUnformattedText();
-    },
-    Vistos: function (data) {
-        return $("<div>").append($("#tmpl-vistos").tmpl(data || {})).getUnformattedText();
-    },
-    Antecedentes: function (data) {
-        return $("<div>").append($("#tmpl-antecedentes").tmpl(data || {})).getUnformattedText();
-    },
-    Analisis: function (data) {
-        return $("<div>").append($("#tmpl-analisis").tmpl(data || {})).getUnformattedText();
-    },
-    Competencia: function (data) {
-        return $("<div>").append($("#tmpl-competencia").tmpl(data || {})).getUnformattedText();
-    },
-    Imputacion: function (data) {
-        return $("<div>").append($("#tmpl-imputacion").tmpl(data || {})).getUnformattedText();
-    },
-    Comunicacion_Externa: function (data) {
-        return $("<div>").append($("#tmpl-comunicacion-externa").tmpl(data || {})).getUnformattedText();
-    },
-    Cliche: function (data) {
-        return $("<div>").append($("#tmpl-cliche").tmpl(data || {})).getUnformattedText();
-    },
-    Pie_Pagina: function (data) {
-        return $("<div>").append($("#tmpl-pie-pagina").tmpl(data || {})).getUnformattedText();
-    },
-    Resolucion: function (data) {
-        return $("<div>").append($("#tmpl-resolucion").tmpl(data || {})).getUnformattedText();
-    },
-    get: function (tmplId, data) {
-        return $("<div>").append($(tmplId).tmpl(data || {})).getUnformattedText();
+    get: function (html, tmplId, data) {
+        const _dom = $("<div>", { html });
+        const partial = _dom.find(tmplId);
+
+        return $('<div>').append(partial.tmpl(data || {})).getUnformattedText();
     },
 }
 
@@ -200,7 +391,51 @@ _informe.EnumerarCuadros = function (html) {
     });
 }
 
-_informe.Exportar = function () {
+/*_informe.EnumerarListas = function (html) {
+    let num = 1;
+    var $html = $('<div />', { html: html });
+    $html.find('ol.continue').each((index, el) => {
+        $(el).attr('start', num);
+        num += $(el).find('>li').length;
+    });
+
+    return $html.html();
+}*/
+
+/*_informe.EnumerarTitulos = function (html) {
+    var $html = $('<div />', { html: html });
+    $html.find('.upper-roman').each((index, el) => {
+        const html = $(el).html();
+        $(el).html(`<ol style="margin-left: -50px; list-style: upper-roman;" start="${index + 1}"><li>${html}</li></ol>`);
+    });
+
+    return $html.html();
+}*/
+
+_informe.EnumerarParrafos = function (html) {
+    var $html = $('<div />', { html: html });
+    $html.find('.enumeration').each((index, el) => {
+        const html = $(el).html();
+        $(el).html(`<ol style="margin-left: -50px;" start="${index + 1}"><li>${html}</li></ol>`);
+    });
+
+    return $html.html();
+}
+
+_informe.GenerarResolucion = function (template, informe) {
+    let index = 0;
+    informe.Inf_Supervision = app.Inf_Supervision[0];
+
+    let html = _informe.tmpl.get(template, '#tmpl-resolucion', informe);
+    html = html.replace(/<strong>Artículo.<\/strong>/gi, function (m) {
+        index++;
+        return `<strong>Artículo ${index}.</strong>`;
+    });
+
+    return html;
+}
+
+_informe.Exportar = async function () {
     const informe = _informe.Estructura();
     const [procedencias, materias] = JSON.parse(JSON.stringify([app.Procedencias, app.Materias]));
 
@@ -208,27 +443,54 @@ _informe.Exportar = function () {
     informe.PROCEDENCIA = procedencias.find(function (x) { return x.COD_PROCEDENCIA === informe.COD_PROCEDENCIA })?.PROCEDENCIA;
     informe.MATERIA = materias.find(function (x) { return x.COD_MATERIA === informe.COD_MATERIA })?.MATERIA;
     informe.FECHA = fnDate.text_long(informe.RES_DIRECTORAL_FECHA || new Date());
-    informe.VISTOS = _informe.render(informe.VISTOS);
-    informe.ANTECEDENTES = _informe.render(informe.ANTECEDENTES);
-    informe.COMPETENCIA = _informe.render(informe.COMPETENCIA);
-    informe.ANALISIS = _informe.render(informe.ANALISIS);
-    informe.IMPUTACION = _informe.render(informe.IMPUTACION);
-    informe.PARRAFOS_CLICHE = _informe.render(informe.PARRAFOS_CLICHE);
-    informe.PIE_PAGINA = _informe.render(informe.PIE_PAGINA);
-    informe.COMUNICACION_EXTERNA = _informe.render(informe.COMUNICACION_EXTERNA);
-    informe.RESOLUCION = _informe.render(informe.RESOLUCION);
+    //informe.VISTOS = _informe.render(informe.VISTOS);
+    //informe.ANTECEDENTES = _informe.render(informe.ANTECEDENTES);
+    //informe.COMPETENCIA = _informe.render(informe.COMPETENCIA);
+    //informe.ANALISIS = _informe.render(informe.ANALISIS);
+    //informe.IMPUTACION = _informe.render(informe.IMPUTACION);
+    //informe.PARRAFOS_CLICHE = _informe.render(informe.PARRAFOS_CLICHE);
+    //informe.PIE_PAGINA = _informe.render(informe.PIE_PAGINA);
+    //informe.COMUNICACION_EXTERNA = _informe.render(informe.COMUNICACION_EXTERNA);
+    //informe.RESOLUCION = _informe.render(informe.RESOLUCION);
     informe.PROCEDENCIA_FOOTER = (informe.PROCEDENCIA || '').split('Forestales').join('<br>Forestales');
     informe.SUBDIRECTOR = informe.FIRMAS.find(function (x) { return x.funcion === 'Subdirector' })?.apellidosNombres;
     //console.log(informe); //return;
 
     const header = `<p style="text-align:center;"><img height="200" width="200" alt="" src="${urlLocalSigo}content/images/logo/escudo-peruano.jpg"></p>`;
     //let footer = `<table style="width: 100%;"><tr><td style="text-align: right;">#CURRENTPAGE#</td></tr></table>`;
-    let html = _informe.tmpl.General(informe);
 
-    //Enumeracion de cuadros
+    //Plantilla general
+    const template = await _informe.Extraer_Plantilla();
+
+    informe.VISTOS = _informe.tmpl.get(template, '#tmpl-vistos', informe);
+    informe.COMPETENCIA = _informe.tmpl.get(template, '#tmpl-competencia', informe);
+
+    //Plantilla de infracciones
+    const tmplInfracciones = await _informe.Extraer_Infracciones();
+    informe.INFRACCIONES = _informe.EXTRAER_PARRAFOS_INFRACCION(tmplInfracciones);
+    informe.ANALISIS = _informe.tmpl.get(template, '#tmpl-analisis', informe);
+
+    if (informe.FLG_CADUCIDAD_EXTRACCION) {
+        informe.CAUSALES_CADUCIDAD = data.Causales_Caducidad.filter(item => item.select);
+    }
+
+    informe.IMPUTACION = _informe.tmpl.get(template, '#tmpl-imputacion', informe);
+    informe.MEDIDAS_CAUTELARES = _informe.tmpl.get(template, '#tmpl-medidas-cautelares', informe);
+    informe.COMUNICACION_EXTERNA = _informe.tmpl.get(template, '#tmpl-comunicacion-externa', informe);
+    informe.HERRAMIENTAS_SUBSANAR = _informe.tmpl.get(template, '#tmpl-herramientas-subsanar', informe);
+    informe.RESOLUCION = _informe.GenerarResolucion(template, informe);
+    informe.PIE_PAGINA = _informe.tmpl.get(template, '#tmpl-pie-pagina', { informe, urlLocalSigo });
+
+    let html = '';
+    html += _informe.tmpl.get(template, '#tmpl-exportar', informe);
+    html += _informe.tmpl.get(template, '#tmpl-pie-pagina-estructura', informe);
+
+    html += _informe.tmpl.get(template, '#tmpl-footnotes', informe);
+
+    //Enumeracion
     html = _informe.EnumerarCuadros(html);
+    html = _informe.EnumerarParrafos(html);
 
-    //console.log(html);
     $(document).googoose({ html, header });
     //$(document).googoose({ html, header, footeridfirst: 'ff1' });
 }
@@ -344,10 +606,12 @@ _informe.ENVIAR_CONTROL_CALIDAD = function () {
         USUARIO: user.PERSONA
     }
 
-    const message = _informe.tmpl.get('#tmpl-notificacion-calidad', data);
+    const message = $('#tmpl-notificacion-calidad').tmpl(data).html();
     modal_notificar.form.Mensaje = message;
-
-    modal_notificar.Abrir();
+    modal_notificar.callback = function () {
+        console.log('Notificado a control de calidad');
+    }
+    modal_notificar.Abrir([]);
 }
 
 _informe.BuscarPersonaNotificar = function () {
@@ -437,7 +701,7 @@ _informe.ResumenInforme = function () {
 
 _informe.DATA_INFORMES = {};
 
-_informe.Mostrar_Analisis = function () {
+/*_informe.Mostrar_Analisis = function () {
     utilSigo.blockUIGeneral();
 
     //Regularizar para varios informes
@@ -458,12 +722,62 @@ _informe.Mostrar_Analisis = function () {
         $('#modal-analisis').modal('show');
     });
 }
+*/
 
-_informe.Insertar_Analisis = function () {
-    let html = modal_analisis.render();
-    html += _informe.tmpl.Analisis();
-    app.Informe.ANALISIS = html;
-    $('#modal-analisis').modal('hide');
+_informe.Extraer_Infracciones = function () {
+    /*return new Promise((resolve, reject) => {
+        const params = {
+            type: 'get',
+            url: `${urlLocalSigo}Fiscalizacion/ManPAU/TemplateRSDObligaciones`,
+            dataType: 'html'
+        };
+
+        utilSigo.fnAjax(params, function (html) {
+            html ? resolve(html) : reject(null);
+        });
+    });*/
+
+    return new Promise((resolve, reject) => {
+        utilSigo.blockUIGeneral();
+
+        //Regularizar para varios informes
+        const asCodInforme = app.Inf_Supervision[0].COD_INFORME;
+        let xhr_informes = $.getJSON(urlLocalSigo + 'Supervision/ManInforme/_DataResumenInforme', { asCodInforme: asCodInforme });
+        let xhr_templates = $.get(urlLocalSigo + 'Fiscalizacion/ManPAU/TemplateRSDObligaciones');
+
+        $.when(xhr_informes, xhr_templates).then(function (res_inf, res_tmpl) {
+            _informe.DATA_INFORMES = res_inf[0]; //volumenes, especies	
+
+            //Template
+            let html = res_tmpl[0];
+
+            //if (!$('#partial-templates').length) $('<div>', { id: 'partial-templates' }).appendTo('body');
+            //$('#partial-templates').html(html);
+
+            utilSigo.unblockUIGeneral();
+            resolve(html);
+        }).fail(() => reject(null));
+    })
+}
+
+_informe.EXTRAER_INFRACCIONES_POR_MODALIDAD = function () {
+    app.Infracciones = data.Infracciones.find(x => x.COD_MODALIDAD == app.Informe.COD_MODALIDAD).DETALLE;
+}
+
+_informe.EXTRAER_PARRAFOS_INFRACCION = function (template) {
+    let informe = JSON.parse(JSON.stringify(app.Informe));
+    informe.TABLAS_INFORME = _informe.DATA_INFORMES;
+
+    const infracciones = JSON.parse(JSON.stringify(data.Infracciones))
+        .find(item => item.COD_MODALIDAD == informe.COD_MODALIDAD).DETALLE
+        .filter(item => item.select)
+        .map(function (item, index) {
+            //item.numeration = _informe.NumeroALetra(index + 1);
+            item.html = _informe.tmpl.get(template, '#tmpl-' + item.templateId, informe);
+            return item;
+        });
+
+    return infracciones;
 }
 
 _informe.SITD_OPEN = function () {
@@ -501,6 +815,20 @@ _informe.SITD_OPEN = function () {
 
             $('#modal-sitd').modal('show');
         }
+    });
+}
+
+_informe.Extraer_Plantilla = function () {
+    return new Promise(function (resolve, reject) {
+        const params = {
+            type: 'get',
+            url: `${urlLocalSigo}Fiscalizacion/ManPAU/PlantillaInforme`,
+            dataType: 'html'
+        };
+
+        utilSigo.fnAjax(params, function (html) {
+            html ? resolve(html) : reject(null);
+        });
     });
 }
 
@@ -636,10 +964,12 @@ $(function () {
                 PROCEDENCIA: null,
                 COD_MATERIA: null,
                 MATERIA: null,
+                COD_MODALIDAD: null,
+                MODALIDAD: null,
                 COD_INFORME: null, //Informe de supervision (auxiliar, obtenemos de la cabecera)
                 NRO_REFERENCIA: null,
                 INF_FECHA: null,
-                INF_ANTECEDENTES: null,
+                //INF_ANTECEDENTES: null,
                 TITULAR_SUPERVISADO: null,
                 DOCUMENTO_TITULAR: null,
                 RUC_TITULAR: null,
@@ -656,7 +986,7 @@ $(function () {
                 FIRMAS: [],
                 VISTOS: null,
                 RECURSOS: [],
-                ANTECEDENTES: null,
+                //ANTECEDENTES: null,
                 COMPETENCIA: null,
                 ANALISIS: null,
                 IMPUTACION: null,
@@ -664,6 +994,14 @@ $(function () {
                 PARRAFOS_CLICHE: null,
                 PIE_PAGINA: null,
                 RESOLUCION: null,
+
+                /** Nuevos campos */
+                FLG_CADUCIDAD_EXTRACCION: true,
+                FLG_IMPUTACION_CARGOS: true,
+                FLG_MEDIDAS_CAUTELARES: true,
+                FLG_COMUNICACION: true,
+                FLG_HERRAMIENTAS_SUBSANAR: true,
+
                 RUTA_ARCHIVO_REVISION: null,
                 FECHA_REGISTRO: new Date(),
                 ESTADO: 1
@@ -672,13 +1010,14 @@ $(function () {
             oficinaDefault: null,
             Tramite: null,
             Procedencias: [
-                { COD_PROCEDENCIA: 'SDFPAFFS', PROCEDENCIA: 'Sub Dirección de Fiscalización de Permisos y Autorizaciones Forestales y de Fauna Silvestre' },
-                { COD_PROCEDENCIA: 'SDFCFFS', PROCEDENCIA: 'Sub Dirección de Fiscalización de Concesiones Forestales y de Fauna Silvestre' },
+                { COD_PROCEDENCIA: 'SDI', PROCEDENCIA: 'Subdirección de Instrucción' },
             ],
             Materias: [
                 { COD_MATERIA: '01', MATERIA: 'Fauna Silvestre' },
                 { COD_MATERIA: '02', MATERIA: 'Recursos Forestales' },
-            ]
+            ],
+            Modalidades: [],
+            Infracciones: []
         },
         methods: {
             init: function () {
@@ -702,14 +1041,11 @@ $(function () {
                         { funcion: 'Coordinador', codPersona: null, apellidosNombres: null, flgAplica: true, estado: null },
                         { funcion: 'Subdirector', codPersona: null, apellidosNombres: null, flgAplica: true, estado: null },
                     ],
-                    RECURSOS: [
-                        //{ tipo: 'Informe de Supervisión', nombre: '', url: '', estado: null },
-                        //{ tipo: 'Anexos SIADO', nombre: '', url: '', estado: null },
-                        //{ tipo: 'Anexos SITD', nombre: '', url: '', estado: null },
-                    ],
+                    RECURSOS: [],
                 };
 
                 self.Informe = { ...self.Informe, ...values };
+                this.MateriaOnChange();
 
                 //Verificamos si existe informacion registrada en la base de datos
                 if (self.Informe.COD_RES_SUB) {
@@ -730,6 +1066,12 @@ $(function () {
 
                     });
                 }
+            },
+            MateriaOnChange: function () {
+                this.Modalidades = data.Modalidades.filter(x => x.COD_MATERIA === this.Informe.COD_MATERIA);
+                this.Informe.COD_MODALIDAD = this.Modalidades[0].COD_MODALIDAD;
+
+                _informe.EXTRAER_INFRACCIONES_POR_MODALIDAD();
             },
             Informacion: function (values) {
                 const self = this;
@@ -771,7 +1113,7 @@ $(function () {
                             self.Informe.NRO_REFERENCIA = res.inf_supervision.map(function (x) { return x.NUM_INFORME }).join(', ');
 
                             self.Informe.INF_FECHA = fnDate.text_long(cab.INF_FECHA);
-                            self.Informe.INF_ANTECEDENTES = cab.INF_ANTECEDENTES;
+                            //self.Informe.INF_ANTECEDENTES = cab.INF_ANTECEDENTES;
 
                             self.Informe.TITULAR_SUPERVISADO = cab.TITULAR_SUPERVISADO;
                             self.Informe.DOCUMENTO_TITULAR = cab.DOCUMENTO_TITULAR;
@@ -787,7 +1129,7 @@ $(function () {
                         }
 
                         // Si no está guardado aun el informe, cargamos los datos por defecto
-                        if (!res.informe) {
+                        /*if (!res.informe) {
                             const data = JSON.parse(JSON.stringify(self.Informe));
                             data.Inf_Supervision = cab || {};
 
@@ -799,7 +1141,7 @@ $(function () {
                             self.Informe.PARRAFOS_CLICHE = _informe.tmpl.Cliche(data);
                             self.Informe.PIE_PAGINA = _informe.tmpl.Pie_Pagina(data);
                             self.Informe.RESOLUCION = _informe.tmpl.Resolucion(data);
-                        }
+                        }*/
 
                         resolve(res);
                     });
@@ -871,46 +1213,6 @@ $(function () {
                     }
                 });
             },
-            GenerarResolucion: function () {
-                const self = this;
-
-                const fnTable = function (rows) {
-                    const registros = [];
-
-                    rows.each(function (index, tr) {
-                        if (index > 0) {
-                            const cols = $(tr).find('td');
-                            const array = $(cols).map(function (k, td) { return $(td).html() }).toArray();
-                            registros.push(array);
-                        }
-                    });
-
-                    return registros;
-                }
-
-                const data = JSON.parse(JSON.stringify({
-                    NRO_REFERENCIA: self.Informe.NRO_REFERENCIA,
-                    Inf_Supervision: self.Inf_Supervision[0]
-                }));
-
-                //COMUNICACION_EXTERNA
-                const rows_com_ext = $(self.Informe.COMUNICACION_EXTERNA).find('table tr');
-                data.COMPANIES = fnTable(rows_com_ext);
-
-                //TIPO DE INFRACTORES
-                const rows_infractores = $(self.Informe.IMPUTACION).find('table tr');
-                data.TIPO_INFRACTORES = fnTable(rows_infractores).map(function (col) { return col[2] }).join(', ');
-
-                //Numeración de los artículos
-                let index = 0;
-                let html = _informe.tmpl.Resolucion(data);
-                html = html.replace(/<strong>Artículo.<\/strong>/gi, function (m) {
-                    index++;
-                    return `<strong>Artículo ${index}.</strong>`;
-                });
-
-                self.Informe.RESOLUCION = html;
-            },
             ConsultaRUC: function () {
                 let self = this;
                 let RUC = self.Informe.RUC_TITULAR;
@@ -931,6 +1233,22 @@ $(function () {
                         self.Informe.DIRECCION_LEGAL = res.values[4];
                     }
                 });
+            },
+            AbrirModalPersona: function () {
+                return new Promise((resolve, reject) => {
+                    var option = {
+                        url: `${urlLocalSigo}General/Controles/_BuscarPersonaGeneral`,
+                        type: 'GET',
+                        datos: { asBusGrupo: "PERSONA", asCodPTipo: "TODOS", asTipoPersona: "N" },
+                        divId: "mdlBuscarPersona"
+                    };
+                    utilSigo.fnOpenModal(option, function () {
+                        resolve();
+
+                        _bPerGen.fnInit();
+                    });
+                })
+
             },
             BuscarPersona: function (item) {
                 let self = this;
@@ -961,9 +1279,49 @@ $(function () {
                     _bPerGen.fnInit();
                 });
             },
-            Abrir_Notificar: function (item, index) {
+            Abrir_Notificar: async function (item) {
+                const self = this;
                 modal_notificar.form.Mensaje = 'Por favor revisar el informe para la continuidad del proceso.';
-                modal_notificar.Abrir(item, index);
+
+                let users = [];
+
+                if (item) users = [item.codPersona];
+                else users = this.Informe.FIRMAS.map(user => user.codPersona);
+
+                const res = await modal_notificar.ObtenerCorreos(users);
+
+                //Actualizar los participantes despues de notificar
+                modal_notificar.callback = function () {
+                    const personas = self.Informe.FIRMAS
+                        .filter(item => res.find(x => x.codPersona == item.codPersona));
+
+                    const participantes = personas.map(item => ({
+                        ...item,
+                        codInformeDigital: self.Informe.COD_INFORME_DIGITAL,
+                        estado: item.estado > 2 ? item.estado : 2
+                    }));
+
+                    if (!participantes.length) {
+                        return;
+                    }
+
+                    let params = {
+                        type: 'post',
+                        url: `${urlLocalSigo}Fiscalizacion/ManPAU/RSDFirmaActualizar`,
+                        datos: JSON.stringify({ participantes })
+                    };
+
+                    utilSigo.fnAjax(params, function () {
+                        self.Informe.FIRMAS.forEach(x => {
+                            const data = participantes.find(item => item.item == x.item);
+                            if (data) {
+                                x.estado = data.estado;
+                            }
+                        });
+                    });
+                }
+
+                modal_notificar.Abrir(res);
             },
             Notificar: function (item, mensaje) {
                 let notificacion = {
@@ -1064,68 +1422,6 @@ $(function () {
         }
     });
 
-    modal_analisis = new Vue({
-        el: '#modal-analisis',
-        data: {
-            predios: [
-                { title: 'Respecto de la presentación del Informe de Ejecucion del plan de manejo, dentro del plazo establecido', select: false, templateId: 'predios-1' },
-                { title: 'Con relación a la obligación de establecer y mantener los linderos y vértices', select: false, templateId: 'predios-2' },
-                { title: 'Con relación a la obligación sobre declarar los volúmenes de madera movilizados.', select: false, templateId: 'predios-3' },
-                { title: 'Con relacion a la obligación de tener y mantener el libro de operaciones actualizado.', select: false, templateId: 'predios-4' },
-                { title: 'Con relacion a la implementación del plan de manejo referido al aprovechamiento no autorizado del recurso forestal.', select: false, templateId: 'predios-5' },
-                { title: 'Con relación al incumplimiento de la implementación del plan de manejo referido al volumen movilizado.', select: false, templateId: 'predios-6' },
-                { title: 'Con relación al incumplimiento de la implementación del plan de manejo referido al retiro de cobertura forestal (Desbosque).', select: false, templateId: 'predios-7' },
-                { title: 'Con relación al incumplimiento de la implementación del plan de manejo referido al retiro de cobertura forestal (Cambio de uso).', select: false, templateId: 'predios-8' },
-            ],
-            fauna: [
-                { title: 'Respecto de la presentacion del Informe de Ejecucion del plan de manejo, dentro del plazo establecido.', select: false, templateId: 'fauna-1' },
-                { title: 'Con relación a la omisión de informar el egreso de especímenes:', select: false, templateId: 'fauna-2' },
-                { title: 'Con relación a la posesión injustificada de especímenes:', select: false, templateId: 'fauna-3' },
-            ],
-            ccnn: [
-                { title: 'Respecto de la presentacion del Informe de Ejecucion del plan de manejo, dentro del plazo establecido.', select: false, templateId: 'ccnn-1' },
-                { title: 'Con relación a la obligación de establecer y mantener los linderos y vértices.', select: false, templateId: 'ccnn-2' },
-                { title: 'Con relación a la obligación sobre declarar los volúmenes de madera movilizados.', select: false, templateId: 'ccnn-3' },
-                { title: 'Con relacion a la obligación de tener y mantener el libro de operaciones actualizado.', select: false, templateId: 'ccnn-4' },
-                { title: 'Con relacion a la implementación del plan de manejo referido al aprovechamiento no autorizado del recurso forestal.', select: false, templateId: 'ccnn-5' },
-                { title: 'Con relación al incumplimiento de la implementación del plan de manejo referido al volumen movilizado.', select: false, templateId: 'ccnn-6' },
-                { title: 'Con relación al incumplimiento de la implementación del plan de manejo referido al retiro de cobertura forestal.', select: false, templateId: 'ccnn-7' },
-                { title: 'Con relación al incumplimiento de la implementación del plan de manejo referido al retiro de cobertura forestal.', select: false, templateId: 'ccnn-8' },
-            ],
-            concesiones: [
-                { title: 'Respecto de la presentacion del Informe de Ejecucion del plan de manejo, dentro del plazo establecido.', select: false, templateId: 'concesiones-1' },
-                { title: 'Con relación a la obligación de establecer y mantener los linderos y vértices', select: false, templateId: 'concesiones-2' },
-                { title: 'Con relación a la obligación sobre declarar los volúmenes de madera movilizados.', select: false, templateId: 'concesiones-3' },
-                { title: 'Con relacion a la obligación de tener y mantener el libro de operaciones actualizado.', select: false, templateId: 'concesiones-4' },
-                { title: 'Con relacion a la implementación del plan de manejo referido al aprovechamiento no autorizado del recurso forestal.', select: false, templateId: 'concesiones-5' },
-                { title: 'Con relación al incumplimiento de la implementación del plan de manejo referido al volumen movilizado.', select: false, templateId: 'concesiones-6' },
-                { title: 'Con relación al incumplimiento de la implementación del plan de manejo referido al retiro de cobertura forestal.', select: false, templateId: 'concesiones-7' },
-                { title: 'Con relación al incumplimiento de la implementación del plan de manejo referido al retiro de cobertura forestal.', select: false, templateId: 'concesiones-8' },
-                { title: 'Respecto a la causal de caducidad, por la falta de pago de derecho de aprovechamiento forestal', select: false, templateId: 'concesiones-9' },
-                { title: 'Respecto a la garantía de fiel cumplimiento', select: false, templateId: 'concesiones-10' },
-            ]
-        },
-        methods: {
-            render: function () {
-                let html = '';
-                let informe = JSON.parse(JSON.stringify(app.Informe));
-                informe.TABLAS_INFORME = _informe.DATA_INFORMES;
-
-                let fnParagraphs = function (arr) {
-                    return arr.filter(function (x) { return x.select }).map(function (x) {
-                        return _informe.tmpl.get('#tmpl-' + x.templateId, informe);
-                    }).join('');
-                }
-
-                html += fnParagraphs(this.predios);
-                html += fnParagraphs(this.fauna);
-                html += fnParagraphs(this.ccnn);
-                html += fnParagraphs(this.concesiones);
-                return html;
-            }
-        }
-    });
-
     modal_sitd = new Vue({
         el: '#modal-sitd',
         data: {
@@ -1180,20 +1476,114 @@ $(function () {
         el: '#modal-notificar',
         data: {
             form: {
-                Persona: null,
+                Destinatarios: [],
+                Seleccionados: [],
+                CC: '',
                 Mensaje: null
             }
         },
         methods: {
-            Abrir: function (item, index) {
-                this.form.Persona = item;
+            Abrir: function (items) {
+                this.form.Destinatarios = items;
+                this.form.Seleccionados = items;
                 $('#modal-notificar').modal('show');
             },
-            Notificar: function () {
-                //const data = { ...this.form };
-                app.Notificar(this.form.Persona, _informe.render(this.form.Mensaje));
-
+            Cerrar: function () {
+                delete this.callback;
                 $('#modal-notificar').modal('hide');
+            },
+            ObtenerCorreos: function (codPersonas) {
+                return new Promise((resolve, reject) => {
+                    let params = {
+                        type: 'post',
+                        url: `${urlLocalSigo}General/ManPersonas/ObtenerCorreos`,
+                        datos: JSON.stringify(codPersonas)
+                    };
+
+                    utilSigo.fnAjax(params, function (res) {
+                        const correos = res
+                            .filter(item => (item?.CORREO || '').indexOf('@') != -1)
+                            .map(item => ({
+                                codPersona: item.COD_PERSONA,
+                                persona: `${item.NOMBRES} ${item.APE_PATERNO} ${item.APE_MATERNO}`,
+                                email: item.CORREO
+                            }));
+
+                        resolve(correos);
+                    });
+                });
+            },
+            Agregar: function () {
+                const self = this;
+
+                app.AbrirModalPersona().then(() => {
+                    _bPerGen.fnAsignarDatos = function (obj) {
+                        if (obj) {
+                            const data = _bPerGen.dtBuscarPerona.row($(obj).parents('tr')).data();
+
+                            const existe = self.form.Destinatarios.find(item => item.codPersona == data.COD_PERSONA);
+                            if (existe) {
+                                utilSigo.toastWarning('', `La persona ${data.PERSONA} ya existe en la lista`);
+                                return;
+                            }
+
+                            self.ObtenerCorreos([data.COD_PERSONA]).then(res => {
+                                if (res.length) {
+                                    self.form.Destinatarios.push(res[0]);
+                                    utilSigo.toastSuccess('', `Se agregó a ${data.PERSONA} a la lista`);
+                                }
+                                else utilSigo.toastWarning('', `No existe un correo asociado a ${data.PERSONA}`);
+                            });
+                        }
+                    }
+                });
+            },
+            Agregar_CC: function () {
+                const self = this;
+
+                app.AbrirModalPersona().then(() => {
+                    _bPerGen.fnAsignarDatos = function (obj) {
+                        if (obj) {
+                            const data = _bPerGen.dtBuscarPerona.row($(obj).parents('tr')).data();
+
+                            self.ObtenerCorreos([data.COD_PERSONA]).then(res => {
+                                if (res.length) {
+                                    self.form.CC += `${res[0].email};`;
+                                    utilSigo.toastSuccess('', `Se agregó a ${data.PERSONA} a la lista`);
+                                }
+                                else utilSigo.toastWarning('', `No existe un correo asociado a ${data.PERSONA}`);
+                            });
+                        }
+                    }
+                });
+            },
+            Notificar: function () {
+                const self = this;
+                const notificacion = {
+                    DESTINATARIOS: self.form.Seleccionados.map(item => item.email).join(','),
+                    CC_DESTINATARIOS: self.form.CC,
+                    COD_INFORME: app.Informe.NUM_INFORME_SITD,
+                    MENSAJE_ENVIO_ALERTA: _informe.render(self.form.Mensaje),
+                    URL_LOCAL: window.location.href
+                };
+
+                let params = {
+                    type: 'post',
+                    url: `${urlLocalSigo}Fiscalizacion/ManPAU/Notificar`,
+                    datos: JSON.stringify({ notificacion })
+                };
+
+                utilSigo.fnAjax(params, function (res) {
+                    if (res) {
+                        //Para ejecutar cualquier acción despues de enviar un correo
+                        if (typeof self.callback === 'function') self.callback(res);
+                        utilSigo.toastSuccess('Enviado', res);
+                    } else {
+                        utilSigo.toastWarning('Atención', 'No se ha encontrado ningún correo asociado al usuario');
+                    }
+
+                    self.Cerrar();
+                });
             }
         }
     });

@@ -7,6 +7,8 @@ using System.IO;
 using SIGOFCv3.Models;
 using CapaEntidad.ViewModel;
 using CapaLogica.DOC;
+using CapaLogica.Documento;
+using System.Runtime.Remoting;
 
 namespace SIGOFCv3.Areas.Fiscalizacion.Controllers
 {
@@ -98,29 +100,39 @@ namespace SIGOFCv3.Areas.Fiscalizacion.Controllers
             CLogInforme = new Log_PAU_Digital();
             var data = CLogInforme.ObtenerRSDCabeceraByReferencia(NRO_REFERENCIA, TIPO);
             return Json(new { data }, JsonRequestBehavior.AllowGet);
-        }
+        }        
 
         [HttpPost, ValidateInput(false)]
-        public JsonResult NotificarRSD(RSD_Notificacion notificacion, VM_RSD_DIGITAL_FIRMA objEN)
+        public JsonResult Notificar(RSD_Notificacion notificacion)
         {
             CLogInforme = new Log_PAU_Digital();
             string result = CLogInforme.NotificarRSD(notificacion);
 
-            if (objEN != null && !string.IsNullOrEmpty(result))
+            /*if (objEN != null && !string.IsNullOrEmpty(result))
             {
                 bool status = CLogInforme.RSDFirmaActualizar(objEN);
                 if (!status) result = String.Empty;
-            }
+            }*/
 
             return Json(result);
         }
 
         [HttpPost]
-        public JsonResult RSDFirmaActualizar(VM_RSD_DIGITAL_FIRMA objEN)
+        public JsonResult RSDFirmaActualizar(List<VM_RSD_DIGITAL_FIRMA> participantes)
         {
             CLogInforme = new Log_PAU_Digital();
-            var result = CLogInforme.RSDFirmaActualizar(objEN);
-            return Json(new { success = result });
+            foreach (var item in participantes)
+            {
+                CLogInforme.RSDFirmaActualizar(item);
+            }
+
+            return Json(true);
+        }
+
+        [HttpGet]
+        public ActionResult PlantillaInforme()
+        {
+            return PartialView("~/Areas/Fiscalizacion/Views/ManPAU/templates/_tmplRSDInforme.cshtml");
         }
 
         public PartialViewResult TemplateRSDObligaciones()
@@ -192,7 +204,7 @@ namespace SIGOFCv3.Areas.Fiscalizacion.Controllers
         {
             bool success = false; string msj = "";
             VM_TRAMITE tramiteVerificar = null;
-         
+
             try
             {
                 Log_Informe_Digital oLog_Informe_Digital = new Log_Informe_Digital();
@@ -209,12 +221,12 @@ namespace SIGOFCv3.Areas.Fiscalizacion.Controllers
                     tramite = oLog_Informe_Digital.TramiteGetById(tramite.iCodTramite, tramite.cod_THabilitante, tramite.cod_Informe);
                 }
                 else
-                {                    
+                {
                     tramite = tramiteVerificar;
                 }
 
                 if (tramite.iCodTramite > 0)
-                {                    
+                {
                     //actualizando número de informe
                     Log_PAU_Digital logInforme = new Log_PAU_Digital();
                     logInforme.ModificarNumeroInforme(tramite.cod_Informe, tramite.cCodificacion, DateTime.Now);
@@ -284,7 +296,7 @@ namespace SIGOFCv3.Areas.Fiscalizacion.Controllers
                 VM_TRAMITE tramite = new Log_Informe_Digital().TramiteGetById(tramiteId, "", "");
                 tramite.cDescTipoDoc = tramite.cDescTipoDoc.Trim().Replace(' ', '-');
                 tramite.cCodificacion = tramite.cCodificacion.Trim().Replace('/', '-');
-                nombreDocumentoNuevo = $"{ tramite.cDescTipoDoc}-{tramite.cCodificacion}.pdf";
+                nombreDocumentoNuevo = $"{tramite.cDescTipoDoc}-{tramite.cCodificacion}.pdf";
                 pathGeneradoDestino = Path.Combine(pathDocumentoDestino, nombreDocumentoNuevo);
 
                 //cambiando de ubicación el archivo
