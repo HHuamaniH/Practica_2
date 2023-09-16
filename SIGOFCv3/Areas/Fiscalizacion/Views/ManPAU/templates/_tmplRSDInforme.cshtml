@@ -88,16 +88,14 @@
             <p><strong>SE RESUELVE:</strong></p>
             {{html RESOLUCION}}
         </div>
-        <p style="text-align: center;">
+        <p style="text-align: center; margin-bottom: 15px;">
             Regístrese y comuníquese,
         </p>
         <p style="text-align: center;">
-            Firmado digitalmente por
-        </p>
-        <p><br /><br /><br /></p>
-        <p style="text-align: center;">
-            Sub Director<br />
-            {{html PROCEDENCIA_FOOTER}}<br />
+            Firmado digitalmente por<br />
+            <strong>${SUBDIRECTOR || 'Subdirector'}</strong><br />
+            Ejecutivo<br />
+            ${PROCEDENCIA}<br />
             OSINFOR
         </p>
     </div>
@@ -212,7 +210,11 @@
 
 <script id="tmpl-analisis" type="text/x-jquery-tmpl">
     <p class="enumeration">
-        De la revisión de los resultados del Informe de Supervisión que recomienda el inicio del Procedimiento Administrativo Único (en adelante, PAU) en atención a los siguientes incumplimientos identificados:
+        De la revisión de los resultados del Informe de Supervisión que recomienda el inicio del Procedimiento Administrativo Único
+        (en adelante, PAU)
+        <a style="mso-footnote-id: foot_vistos_3" href="#_foot_vistos_3" title="">
+            <sup class=MsoFootnoteReference><span style="mso-special-character:footnote"></span></sup>
+        </a> en atención a los siguientes incumplimientos identificados:
     </p>
 
     {{each(n, item) INFRACCIONES}}
@@ -231,7 +233,10 @@
         </strong>
     </p>
     <p class="enumeration">
-        Conforme a los Criterios para la declaración de caducidad del título habilitante en el Procedimiento Administrativo Único – PAU del OSINFOR, la caducidad se encuentra definida como la “extinción del  título habilitante o del derecho para el aprovechamiento de los recursos forestales y de fauna silvestre, conforme lo establecido en la Ley Orgánica para el Aprovechamiento Sostenible de Recursos Naturales, Ley N° 26821, así como en la Ley Forestal y de Fauna Silvestre, Ley N° 29763 y sus reglamentos aprobados”.
+        Conforme a los Criterios para la declaración de caducidad del título habilitante en el Procedimiento Administrativo Único – PAU del OSINFOR
+        <a style="mso-footnote-id: foot_caducidad_1" href="#_foot_caducidad_1" title="">
+            <sup class=MsoFootnoteReference><span style="mso-special-character:footnote"></span></sup>
+        </a>, la caducidad se encuentra definida como la “extinción del  título habilitante o del derecho para el aprovechamiento de los recursos forestales y de fauna silvestre, conforme lo establecido en la Ley Orgánica para el Aprovechamiento Sostenible de Recursos Naturales, Ley N° 26821, así como en la Ley Forestal y de Fauna Silvestre, Ley N° 29763 y sus reglamentos aprobados”.
     </p>
     <p class="enumeration">
         De acuerdo a lo señalado tanto en el literal b) del artículo 153 de la Ley Forestal y de Fauna Silvestre, Ley N° 29763, como en el literal b) del artículo 44 del Reglamento para la Gestión Forestal, aprobado mediante Decreto Supremo N° 018-2015-MINAGRI, constituye una causal de caducidad, la extracción o movilización de recursos forestales no autorizados.
@@ -273,7 +278,13 @@
                             Tomando en cuenta el precitado volumen extraído sin autorización de xxx m³ correspondiente a individuos no autorizados, se habría realizado la afectación de xx hectáreas de cobertura boscosa afectados por la extracción forestal sin criterios de sostenibilidad.
                         </li>
                         <li>
-                            Ante lo expuesto, se habría configurado una afectación de nivel muy grave a la cobertura boscosa del Patrimonio Forestal Nacional, por lo cual, se cumple con el presente criterio.
+                            Ante lo expuesto, se habría configurado una afectación de nivel
+                            <strong>muy grave</strong>
+                            <a style="mso-footnote-id: foot_caducidad_2" href="#_foot_caducidad_2" title="">
+                                <sup class=MsoFootnoteReference><span style="mso-special-character:footnote"></span></sup>
+                            </a>
+                            a la cobertura boscosa del Patrimonio Forestal Nacional,
+                            por lo cual, se cumple con el presente criterio.
                         </li>
                     </ul>
                 </td>
@@ -359,7 +370,11 @@
         <tbody>
             <tr>
                 <td style="border: 1px solid #000;">
-                    Disposición Complementaria Final Cuarta del Decreto Legislativo N° 1220, Decreto Legislativo que establece medidas para la lucha contra la Tala Ilegal
+                    Disposición Complementaria Final Cuarta
+                    <a style="mso-footnote-id: foot_caducidad_3" href="#_foot_caducidad_3" title="">
+                        <sup class=MsoFootnoteReference><span style="mso-special-character:footnote"></span></sup>
+                    </a>
+                    del Decreto Legislativo N° 1220, Decreto Legislativo que establece medidas para la lucha contra la Tala Ilegal
                 </td>
                 <td style="border: 1px solid #000;">
                     Faculta al OSINFOR a ordenar medidas cautelares antes de iniciar un procedimiento administrativo sancionador o en cualquier etapa del procedimiento.
@@ -368,6 +383,9 @@
             <tr>
                 <td style="border: 1px solid #000;">
                     Artículo 157 del Texto Único Ordenado de la Ley Nº 27444, Ley del Procedimiento Administrativo General, aprobado por Decreto Supremo Nº 004-2019-JUS
+                    <a style="mso-footnote-id: foot_caducidad_4" href="#_foot_caducidad_4" title="">
+                        <sup class=MsoFootnoteReference><span style="mso-special-character:footnote"></span></sup>
+                    </a>
                 </td>
                 <td style="border: 1px solid #000;">
                     Establece que la Autoridad dispone medidas cautelares en caso exista la posibilidad de que sin su adopción, se arriesgue la eficacia de la resolución a emitir, precisándose adicionalmente que las mismas pueden ser modificadas o levantadas en caso se produzcan circunstancias sobrevinientes o que no pudieron ser consideradas en el momento de su adopción
@@ -612,7 +630,12 @@
             <thead>
                 <tr>
                     <th style="border: 1px solid #000; text-align: center;">Descripción de la infracción</th>
-                    <th style="border: 1px solid #000; text-align: center;">Sanción aplicable</th>
+                    <th style="border: 1px solid #000; text-align: center;">
+                        Sanción aplicable
+                        <a style="mso-footnote-id: foot_resolucion_1" href="#_foot_resolucion_1" title="">
+                            <sup class=MsoFootnoteReference><span style="mso-special-character:footnote"></span></sup>
+                        </a>
+                    </th>
                     <th style="border: 1px solid #000; text-align: center;">Posibilidad de subsanar</th>
                     <th style="border: 1px solid #000; text-align: center;">Forma de subsanar</th>
                 </tr>
@@ -624,9 +647,12 @@
                         <p><i>"${item.tipo_infractor}"</i></p>
                         <p>${item.numeral}</p>
                     </td>
-                    <td style="border: 1px solid #000;"></td>
-                    <td style="border: 1px solid #000;"></td>
-                    <td style="border: 1px solid #000;"></td>
+                    <td style="border: 1px solid #000;">
+                        <p>${item.sancion}</p>
+                        <p>${item.numeral}</p>
+                    </td>
+                    <td style="border: 1px solid #000; text-align: center;">Si/No</td>
+                    <td style="border: 1px solid #000;">${item.subsanar}</td>
                 </tr>
                 {{/each}}
             </tbody>
@@ -658,7 +684,10 @@
         {{/if}}
 
         <p style="text-indent: 30px;">
-            <strong>Artículo.</strong> Notificar la presente Resolución Sub Directoral, a xxx, al domicilio ubicado xx, otorgándole un plazo de quince (15) días hábiles más el término de la distancia, en caso corresponda, contados a partir del día siguiente de la fecha de notificación, para que formule los descargos que considere pertinentes.
+            <strong>Artículo.</strong> Notificar la presente Resolución Sub Directoral, a xxx, al domicilio ubicado xx
+            <a style="mso-footnote-id: foot_resolucion_2" href="#_foot_resolucion_2" title="">
+                <sup class=MsoFootnoteReference><span style="mso-special-character:footnote"></span></sup>
+            </a>, otorgándole un plazo de quince (15) días hábiles más el término de la distancia, en caso corresponda, contados a partir del día siguiente de la fecha de notificación, para que formule los descargos que considere pertinentes.
         </p>
 
         <p>
@@ -686,12 +715,28 @@
                         15 días hábiles más el término de la distancia, en caso corresponda.
                     </td>
                     <td style="border: 1px solid #000;" rowspan="5">
-                        Mesa de Partes Digital a través del portal web del OSINFOR: https://facilita.gob.pe/t/677 y sólo si el archivo a adjuntar excede los 10 MB, remitirlo al correo mesa.partes@osinfor.gob.pe, o de forma presencial, ante la mesa de partes de la sede central del OSINFOR en la ciudad de Lima o ante cualquier mesa de partes de sus Oficinas Desconcentradas del OSINFOR, pudiendo consignar adicionalmente una dirección electrónica y/o casilla electrónica del OSINFOR, en caso lo tuviere. Asimismo, se solicita que los documentos que presente en el marco del PAU consignen el siguiente número de expediente: 000xxx-202x-OSINFOR/08.2.
+                        Mesa de Partes Digital a través del portal web del OSINFOR:
+                        https://facilita.gob.pe/t/677
+                        <a style="mso-footnote-id: foot_resolucion_3" href="#_foot_resolucion_3" title="">
+                            <sup class=MsoFootnoteReference><span style="mso-special-character:footnote"></span></sup>
+                        </a>
+                        y sólo si el archivo a adjuntar excede los 10 MB, remitirlo al correo mesa.partes@osinfor.gob.pe, o de forma presencial, ante la mesa de partes de la sede central del OSINFOR en la ciudad de Lima o
+                        ante cualquier mesa de partes
+                        <a style="mso-footnote-id: foot_resolucion_4" href="#_foot_resolucion_4" title="">
+                            <sup class=MsoFootnoteReference><span style="mso-special-character:footnote"></span></sup>
+                        </a>
+                        de sus Oficinas Desconcentradas del OSINFOR, pudiendo consignar adicionalmente una dirección electrónica y/o casilla electrónica del OSINFOR, en caso lo tuviere
+                        <a style="mso-footnote-id: foot_resolucion_5" href="#_foot_resolucion_5" title="">
+                            <sup class=MsoFootnoteReference><span style="mso-special-character:footnote"></span></sup>
+                        </a>. Asimismo, se solicita que los documentos que presente en el marco del PAU consignen el siguiente número de expediente: 000xxx-202x-OSINFOR/08.2.
                     </td>
                 </tr>
                 <tr>
                     <td style="border: 1px solid #000;">
-                        Presentar alguna documentación adicional, especialmente lo siguiente:
+                        Presentar alguna documentación adicional
+                        <a style="mso-footnote-id: foot_resolucion_6" href="#_foot_resolucion_6" title="">
+                            <sup class=MsoFootnoteReference><span style="mso-special-character:footnote"></span></sup>
+                        </a>, especialmente lo siguiente:
                         <p>- Remitir el Libro de Operaciones Actualizado</p>
                         <p>- Balance de Extracción, Guías de Transporte Forestal y Forma 20 actualizado</p>
                     </td>
@@ -704,6 +749,9 @@
                 <tr>
                     <td style="border: 1px solid #000;">
                         Reconocer su responsabilidad sobre las infracciones cometidas, para reducir la multa que pudiera imponerse al finalizar el PAU
+                        <a style="mso-footnote-id: foot_resolucion_7" href="#_foot_resolucion_7" title="">
+                            <sup class=MsoFootnoteReference><span style="mso-special-character:footnote"></span></sup>
+                        </a>
                     </td>
                     <td style="border: 1px solid #000;">
                         Durante el PAU
