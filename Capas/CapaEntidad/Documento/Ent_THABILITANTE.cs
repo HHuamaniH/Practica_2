@@ -83,6 +83,8 @@ namespace CapaEntidad.DOC
         public String COD_MADENDA { get; set; }
         [Description("AREA_OTORGADA")]
         public Decimal AREA_OTORGADA { get; set; }
+        [Description("AREA_BOSQUE")]
+        public Decimal AREA_BOSQUE { get; set; }
         [Description("CONTRADO_CONDICIONAL")]
         public Object CONTRADO_CONDICIONAL { get; set; }
         [Category("FECHA"), Description("CONTRATO_FECHA_FIN")]
@@ -333,6 +335,8 @@ namespace CapaEntidad.DOC
         public List<Ent_ERRORMATERIAL> ListErrorMaterialGeneral { get; set; }
         [Category("LIST"), Description("ListErrorMaterialAdicional")]
         public List<Ent_ERRORMATERIAL> ListErrorMaterialAdicional { get; set; }
+        [Category("LIST"), Description("ListDivisionInterna")]
+        public List<Ent_DIVISIONINTERNA> ListDivisionInterna { get; set; }
 
         [Category("LIST"), Description("ListTHMotivoExtincion")]
         public List<Ent_THABILITANTE> ListTHMotivoExtincion { get; set; }
@@ -375,6 +379,7 @@ namespace CapaEntidad.DOC
         public Ent_THABILITANTE()
         {
             AREA_OTORGADA = -1;
+            AREA_BOSQUE = -1;
             COORDENADA_ESTE = -1;
             COORDENADA_NORTE = -1;
             //
@@ -397,6 +402,7 @@ namespace CapaEntidad.DOC
             iv_CONTRADO_CONDICIONAL = -1;
             iv_OBSERV_SUBSANAR = -1;
             iv_CUENTA_PLAN_MANEJO = -1;
+            ListDivisionInterna = new List<Ent_DIVISIONINTERNA>();
         }
         #endregion
     }

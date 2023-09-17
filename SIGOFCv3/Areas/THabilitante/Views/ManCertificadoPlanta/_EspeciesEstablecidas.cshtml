@@ -1,0 +1,54 @@
+﻿
+<script src="~/Areas/THabilitante/js/ManCertificadoPlanta/_EspeciesEstablecidas.js"></script>
+
+<div class="modal-dialog" role="document">
+    <div class="modal-content">
+        <div class="modal-header text-small" style="cursor:move;">
+            <span>Especie Establecida</span>
+            <i class="fa fa-close" style="cursor:pointer;" data-dismiss="modal" aria-label="Close"></i>
+        </div>
+        <div class="modal-body">
+            <form id="frmItemEspeciesEstablecidas">
+                @Html.Hidden("hdfRegEstado")
+                @Html.Hidden("hdfCodSecuencial")
+                <div class="form-row">
+                    <div class="form-group col-md-12">
+                        @Html.Partial("~/Areas/General/Views/Controles/_renderComboEspecie.cshtml")
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-12">
+                        <label for="txtSisPlanta" class="text-small">Sistema Plantación</label>
+                        @Html.TextBox("txtSisPlanta", "", new { @class = "form-control form-control-sm", maxlength = "100", onkeypress = "return utilSigo.checkLetter(event);" })
+                    </div>                    
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label for="ddlTipoAvistRegistroId" class="text-small">Unidad de Medida</label>
+                        @Html.DropDownList("ddlUnidadMedidaId", new SelectList(ViewBag.ddlUnidadMedida, "Value", "Text"), new { @class = "form-control form-control-sm" })
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="txtSisPlanta" class="text-small">Cantidad</label>
+                        @Html.TextBox("txtCantidad", "", new { @class = "form-control form-control-sm", maxlength = "10", onblur = "return utilSigo.onBlurTwoDecimal(this,'Cantidad');", onkeypress = "return utilSigo.onKeyDecimal(event, this);" })
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-12">
+                        <label for="txtFecha" class="text-small">Fines</label>
+                        @Html.TextBox("txtFines", "", new { @class = "form-control form-control-sm", maxlength = "100", onkeypress = "return utilSigo.checkLetter(event);" })
+                    </div>                    
+                </div>               
+                <div class="form-row">
+                    <div class="form-group col-md-12">
+                        <label for="txtDescripcion" class="text-small">Observación</label>
+                        @Html.TextArea("txtObservacion", "", new { @class = "form-control form-control-sm", rows = "2", maxlength = "200", onkeypress = "return utilSigo.checkLetter(event);" })
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-primary btn-sm" onclick="_EspeciesEstablecidas.fnSubmitForm()">Guardar</button>
+            <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Cancelar</button>
+        </div>
+    </div>
+</div>

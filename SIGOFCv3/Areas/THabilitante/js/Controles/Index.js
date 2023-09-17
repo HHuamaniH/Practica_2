@@ -8,6 +8,13 @@ controles_TH.editarThabilitante = function (obj) {
     document.location = url + "?codTH=" + codThabilitante + "&dtoMod=" + "";
 };
 
+controles_TH.editarCertificadoPlanta = function (obj) {
+    var fila = $(obj).closest('tr');
+    var codCertificacionPlanta = fila.find("#hdCodCertifPlanta").val();
+    var url = urlLocalSigo + "THabilitante/ManCertificadoPlanta/AddEdit";
+    document.location = url + "?codCertificacionPlanta=" + codCertificacionPlanta;
+};
+
 controles_TH.editarPlanManejoGeneral = function (obj) {
     var fila = $(obj).closest('tr');
     var codThabilitante = fila.find("#hdCodPMF").val();
@@ -184,6 +191,17 @@ controles_TH.listarBusqueda = function () {
                             data[i][7], data[i][8], data[i][9]];
                             trsAdd.push(tr);
                             console.log(4);
+                        }
+                        controles_TH.dtGrillaGeneral.rows.add(trsAdd).draw();
+                        break;
+                    case "CERTIFICADO_PLANTA":
+                        var trsAdd = [];
+                        for (i = 0; i < data.length; i++) {
+                            var tr = ['<input type="hidden" id="hdCodCertifPlanta" value="' +
+                                data[i][0] + '" /><i class="fa fa-lg fa-pencil-square-o" style="cursor:pointer;" onclick="controles_TH.editarCertificadoPlanta(this);"></i>',
+                            (i + 1), data[i][1], data[i][2], data[i][3], data[i][4], data[i][5], data[i][6],
+                            data[i][7]];
+                            trsAdd.push(tr);
                         }
                         controles_TH.dtGrillaGeneral.rows.add(trsAdd).draw();
                         break;
@@ -418,6 +436,9 @@ controles_TH.iniciarEventosManGrilla = function () {
         switch (datos.busFormulario) {
             case "TITULO_HABILITANTE":
                 url = urlLocalSigo + "THabilitante/Controles/_ManModalidad";
+                break;
+            case "CERTIFICADO_PLANTA":
+                url = urlLocalSigo + "THabilitante/Controles/_CertifPlanta";
                 break;
             case "PLAN_GENERAL_MANEJO_FORESTAL":
             case "PLAN_MANEJO_FORESTAL_INTERMEDIO":

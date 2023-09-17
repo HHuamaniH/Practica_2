@@ -96,6 +96,17 @@ namespace SIGOFCv3.Areas.THabilitante.Controllers
 
             return PartialView(latManModalidad);
         }
+        public ActionResult _CertifPlanta(string hdfFormulario, string idModal)
+        {
+
+            Log_THABILITANTE oCLogica = new Log_THABILITANTE();
+            ManGrillaViewModel latManModalidad = new ManGrillaViewModel();
+            latManModalidad.busFormulario = hdfFormulario;
+            ViewBag.idModal = idModal;
+            latManModalidad.hdfTipoFormulario = hdfFormulario;
+            latManModalidad.cboOpciones = new List<SelectListItem>() { new SelectListItem { Value = "MODTH_NUMERO", Text = "N° Título Habilitante" }, new SelectListItem { Value = "MODTH_TITULAR", Text = "Titular" } };
+            return PartialView(latManModalidad);
+        }
         [HttpPost]
         public ActionResult _BuscarPersona(ManGrillaViewModel view)
         {

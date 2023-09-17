@@ -15,6 +15,13 @@ vpTHabilitante.direccionar = function (codigoNuevo, descripcionNuevo) {
                 "&tipoFrmulario=" + vpTHabilitante.frmHabilitante.find("#hdfTipoFormulario").val() +
                 "&nuevo=1";
             break;
+        case "CERTIFICADO_PLANTA":
+            window.location = urlLocalSigo + "THabilitante/ManCertificadoPlanta/AddEdit?" +
+                "codigo=" + codigoNuevo +
+                "&descripcion=" + descripcionNuevo +
+                "&tipoFrmulario=" + vpTHabilitante.frmHabilitante.find("#hdfTipoFormulario").val() +
+                "&nuevo=1";
+            break;
         default: break;
     } 
 }
@@ -34,6 +41,18 @@ vpTHabilitante.buscarTHabilitantePMGF = function () {
     var valorBuscar = vpTHabilitante.frmHabilitante.find("#txtValor").val().trim();
     var valTipoFormulario = vpTHabilitante.frmHabilitante.find("#hdfTipoFormulario").val();
     var valtOpcion = vpTHabilitante.frmHabilitante.find("#ddlManNueCondicion").val();    
+    var url = urlLocalSigo + "THabilitante/ManPlanManejoForestal/buscarTHabilitante?hdfFormulario=" + valTipoFormulario + "&busCriterio=" + valtOpcion + "&busValor=" + valorBuscar;
+    vpTHabilitante.dtFuncionario.ajax.url(url).load(function (data) {
+        if (data.s == false) {
+            utilSigo.toastError("Error", "Sucedio un Error al cargar registros en la tabla, Comuniquese con el Administrador");
+            console.log(data.e);
+        }
+    });
+}
+vpTHabilitante.buscarCertifPlanta = function () {
+    var valorBuscar = vpTHabilitante.frmHabilitante.find("#txtValor").val().trim();
+    var valTipoFormulario = vpTHabilitante.frmHabilitante.find("#hdfTipoFormulario").val();
+    var valtOpcion = vpTHabilitante.frmHabilitante.find("#ddlManNueCondicion").val();
     var url = urlLocalSigo + "THabilitante/ManPlanManejoForestal/buscarTHabilitante?hdfFormulario=" + valTipoFormulario + "&busCriterio=" + valtOpcion + "&busValor=" + valorBuscar;
     vpTHabilitante.dtFuncionario.ajax.url(url).load(function (data) {
         if (data.s == false) {
@@ -114,6 +133,7 @@ vpTHabilitante.iniciarEventos = function () {
             case "POA":
             case "DEMA":
             case "PMFI":
+            case "CERTIFICADO_PLANTA":
                 vpTHabilitante.buscarThabilitante(); break;
             case "TITULO_HABILITANTE": vpTHabilitante.buscarTHabilitantePMGF(); break;
         }  
@@ -130,6 +150,7 @@ vpTHabilitante.iniciarTabla = function (opcion) {
         case "POA": 
         case "DEMA":
         case "PMFI":
+        case "CERTIFICADO_PLANTA":
                     vpTHabilitante.dtFuncionario = vpTHabilitante.tbHabilitante.dataTable({
                         "bServerSide": false,
                         "bAutoWidth": false,
@@ -201,8 +222,10 @@ $(document).ready(function () {
                 case "POA":
                 case "DEMA":
                 case "PMFI":
+                case "CERTIFICADO_PLANTA":
                     vpTHabilitante.buscarThabilitante(); break;
                 case "TITULO_HABILITANTE": vpTHabilitante.buscarTHabilitantePMGF(); break;
+                //case "CERTIFICADO_PLANTA": vpTHabilitante.buscarCertifPlanta(); break;
             }           
             return false;
         }

@@ -27,6 +27,7 @@
     <script type="text/javascript">
         ManTHabilitante.fnLoadData('@Html.Raw(Json.Encode(@Model.tbErrorMaterial_DGeneral))', "DGenereal");
         ManTHabilitante.fnLoadData('@Html.Raw(Json.Encode(@Model.tbErrorMaterial_DAdicional))', "DAdicional");
+        ManTHabilitante.fnLoadData('@Html.Raw(Json.Encode(@Model.tbDivisionInterna))', "DivisionInterna");
     </script>
     <script>
         "use strict";
@@ -354,26 +355,40 @@
 
                                                 </div>
                                             }
-                                            <div class="form-group col-md-2">
-                                                <label for="txtCodigoNumero" class="text-small">@Model.lblCodigoNumero</label>
-                                                @Html.EditorFor(m => m.txtCodigoNumero, new { htmlAttributes = new { @class = "form-control form-control-sm", placeholder = "Codigo N°", maxlength = "25" } })
+                                            @if (Model.hdfItemModalidadCodigo != "0000030")
+                                            {
+                                                <div class="form-group col-md-2">
+                                                    <label for="txtCodigoNumero" class="text-small">@Model.lblCodigoNumero</label>
+                                                    @Html.EditorFor(m => m.txtCodigoNumero, new { htmlAttributes = new { @class = "form-control form-control-sm", placeholder = "Codigo N°", maxlength = "25" } })
 
-                                            </div>
+                                                </div>
+                                            }
+                                        </div>
+                                        <div class="form-row">
+                                            @if (Model.hdfItemModalidadCodigo == "0000030")
+                                            {
+                                                <div class="form-group col-md-3">
+                                                    <label for="ddNivelAproId" class="text-small texto-recortado">Resolución Reconocimiento</label>
+                                                    @Html.EditorFor(m => m.txtResolucionTitular, new { htmlAttributes = new { @class = "form-control form-control-sm", maxlength = "200", onkeypress = "return utilSigo.checkLetter(event)" } })
+                                                </div>
+                                            }
+                                            else
+                                            {
+                                                <div class="form-group col-md-3">
+                                                    <label for="ddNivelAproId" class="text-small texto-recortado">Resolución Titular</label>
+                                                    @if (Model.hdCodigo_Thabilitante != "")
+                                                    {
+                                                        @Html.EditorFor(m => m.txtResolucionTitular, new { htmlAttributes = new { @class = "form-control form-control-sm", @disabled = "disabled" } })
 
-                                            <div class="form-group col-md-3">
-                                                <label for="ddNivelAproId" class="text-small texto-recortado">Resolución Titular</label>
-                                                @if (Model.hdCodigo_Thabilitante != "")
-                                                {
-                                                    @Html.EditorFor(m => m.txtResolucionTitular, new { htmlAttributes = new { @class = "form-control form-control-sm", @disabled = "disabled" } })
+                                                    }
+                                                    else
+                                                    {
+                                                        @Html.EditorFor(m => m.txtResolucionTitular, new { htmlAttributes = new { @class = "form-control form-control-sm" } })
 
-                                                }
-                                                else
-                                                {
-                                                    @Html.EditorFor(m => m.txtResolucionTitular, new { htmlAttributes = new { @class = "form-control form-control-sm" } })
-
-                                                }
-                                            </div>
-                                            @if (Model.cod_Modalidad != "0000002" )
+                                                    }
+                                                </div>
+                                            }
+                                            @if (Model.cod_Modalidad != "0000002")
                                             {
                                                 <div class="form-group col-md-3">
                                                     <label for="ddNivelAproId" class="text-small texto-recortado">Estado del Título Habilitante</label>
@@ -590,6 +605,13 @@
                                                     <label for="txtItemAOtorgada" class="text-small">Área Otorgada (ha)</label>
                                                     @Html.EditorFor(m => m.txtItemAOtorgada, new { htmlAttributes = new { @class = "form-control form-control-sm", maxlength = "20", onkeypress = "return utilSigo.onKeyDecimal(event, this);" } })
                                                 </div>
+                                                @if (Model.hdfItemModalidadCodigo == "0000030")
+                                                {
+                                                    <div class="form-group col-md-2">
+                                                        <label for="txtItemAOtorgada" class="text-small">Área de Bosque (ha)</label>
+                                                        @Html.EditorFor(m => m.txtItemABosque, new { htmlAttributes = new { @class = "form-control form-control-sm", maxlength = "20", onkeypress = "return utilSigo.onKeyDecimal(event, this);", onblur = "return utilSigo.onBlurTwoDecimal(this,'Área de Bosque');" } })@*onkeypress = "return utilSigo.onKeyTwoDecimal(event, this);" *@
+                                                    </div>
+                                                }
                                                 <div class="form-group col-md-2">
                                                     <div class="form-group">
                                                         <label for="chkItemContCuenta" id="ltrItemEtiContratoTitulo" class="text-small texto-recortado">Contrato (Ingresar fechas consolidadas)</label>
@@ -646,40 +668,43 @@
                                     <!--Obligaciones Contractuales-->
                                     @if (Model.cod_Modalidad == "0000005" || Model.cod_Modalidad == "0000009")
                                     {
-                                        <div class="card-header text-small">
-                                            @Model.lblObligacionContTitulo
-                                        </div>
-                                        <div class="card-body">
-                                            @if (Model.hdfItemModalidadCodigo == "0000011" || Model.hdfItemModalidadCodigo == "0000012")
-                                            {
-                                                <div class="form-row">
-                                                    <div class="form-group col-md-12">
-                                                        <label for="txtcaracter_ambiental" class="text-small">Carácter Ambiental</label>
-                                                        @Html.TextAreaFor(m => m.txtcaracter_ambiental, new { @class = "form-control form-control-sm", rows = 2 })
+                                        if (Model.hdfItemModalidadCodigo != "0000030")
+                                        {
+                                            <div class="card-header text-small">
+                                                @Model.lblObligacionContTitulo
+                                            </div>
+                                            <div class="card-body">
+                                                @if (Model.hdfItemModalidadCodigo == "0000011" || Model.hdfItemModalidadCodigo == "0000012")
+                                                {
+                                                    <div class="form-row">
+                                                        <div class="form-group col-md-12">
+                                                            <label for="txtcaracter_ambiental" class="text-small">Carácter Ambiental</label>
+                                                            @Html.TextAreaFor(m => m.txtcaracter_ambiental, new { @class = "form-control form-control-sm", rows = 2 })
+                                                        </div>
                                                     </div>
-                                                </div>
-                                                <div class="form-row">
-                                                    <div class="form-group col-md-12">
-                                                        <label for="txtcaracter_social" class="text-small">Carácter Social</label>
-                                                        @Html.TextAreaFor(m => m.txtcaracter_social, new { @class = "form-control form-control-sm", rows = 2 })
+                                                    <div class="form-row">
+                                                        <div class="form-group col-md-12">
+                                                            <label for="txtcaracter_social" class="text-small">Carácter Social</label>
+                                                            @Html.TextAreaFor(m => m.txtcaracter_social, new { @class = "form-control form-control-sm", rows = 2 })
+                                                        </div>
                                                     </div>
-                                                </div>
-                                                <div class="form-row">
-                                                    <div class="form-group col-md-12">
-                                                        <label for="txtcaracter_eresponsable" class="text-small">Carácter Ecológicamente Responsable</label>
-                                                        @Html.TextAreaFor(m => m.txtcaracter_eresponsable, new { @class = "form-control form-control-sm", rows = 2 })
+                                                    <div class="form-row">
+                                                        <div class="form-group col-md-12">
+                                                            <label for="txtcaracter_eresponsable" class="text-small">Carácter Ecológicamente Responsable</label>
+                                                            @Html.TextAreaFor(m => m.txtcaracter_eresponsable, new { @class = "form-control form-control-sm", rows = 2 })
+                                                        </div>
                                                     </div>
-                                                </div>
-                                            }
-                                            else
-                                            {
-                                                <div class="form-row">
-                                                    <div class="form-group col-md-12">
-                                                        @Html.TextAreaFor(m => m.txtConcesionario, new { @class = "form-control form-control-sm", rows = 3 })
+                                                }
+                                                else
+                                                {
+                                                    <div class="form-row">
+                                                        <div class="form-group col-md-12">
+                                                            @Html.TextAreaFor(m => m.txtConcesionario, new { @class = "form-control form-control-sm", rows = 3 })
+                                                        </div>
                                                     </div>
-                                                </div>
-                                            }
-                                        </div>
+                                                }
+                                            </div>
+                                        }
                                     }
                                     @if (!tipoModRecat.Contains(Model.hdfItemModalidadCodigo) && Model.hdfItemModalidadCodigo != "0000006")
                                     {
@@ -818,10 +843,13 @@
                                     }
                                     @if (Model.cod_Modalidad == "0000005" || Model.cod_Modalidad == "0000009")
                                     {
-                                        <div id="divReformulacionCat">
-                                            @Html.Partial("~/Areas/THabilitante/Views/ManTHabilitante/_shared/_renderRecategorizarFR.cshtml", Model)
+                                        if (Model.hdfItemModalidadCodigo != "0000030")
+                                        {
+                                            <div id="divReformulacionCat">
+                                                @Html.Partial("~/Areas/THabilitante/Views/ManTHabilitante/_shared/_renderRecategorizarFR.cshtml", Model)
 
-                                        </div>
+                                            </div>
+                                        }
                                     }
                                     @if (tipoModRecat.Contains(Model.hdfItemModalidadCodigo))
                                     {
@@ -1003,9 +1031,31 @@
                                             </div>
                                         </div>
                                     </div>
-                                    @if (Model.cod_Modalidad != "0000002" )
+                                    @if (Model.cod_Modalidad != "0000002")
                                     {
                                         @Html.Partial("~/Areas/THabilitante/Views/ManTHabilitante/_shared/_renderTHExtincion.cshtml", Model)
+                                    }
+                                    @if (Model.hdfItemModalidadCodigo == "0000030")
+                                    {
+                                        <div class="card">
+                                            <div class="card-header text-small">
+                                                División Interna del Predio Total
+                                            </div>
+                                            <div class="card-body">
+                                                <table id="tbDivIntPreTot" style="width:80%" class="table table-hover table-bordered">
+                                                    <thead>
+                                                        <tr>
+                                                            <th width="20%">TIPO DE ÁREA</th>
+                                                            <th width="60%">DESCRIPCIÓN DE ÁREA</th>
+                                                            <th width="20%">ÁREA (HA).</th>                                                            
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody id="tbodyDivIntPreTot">
+
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
                                     }
                                 </div>
                             </div>

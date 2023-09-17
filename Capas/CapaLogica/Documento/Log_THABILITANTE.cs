@@ -234,6 +234,7 @@ namespace CapaLogica.DOC
                     TH_VM.ddlDependencia = new List<VM_Cbo>();
                     TH_VM.tbErrorMaterial_DGeneral = new List<Ent_ERRORMATERIAL>();
                     TH_VM.tbErrorMaterial_DAdicional = new List<Ent_ERRORMATERIAL>();
+                    TH_VM.tbDivisionInterna = new List<Ent_DIVISIONINTERNA>();
 
                     TH_VM.ListTHExtincion = new List<Ent_THABILITANTE>();
                     TH_VM.ListModalidadesTH = new List<Ent_THABILITANTE>();
@@ -363,6 +364,7 @@ namespace CapaLogica.DOC
 
                     TH_VM.tbErrorMaterial_DGeneral = datModificar.ListErrorMaterialGeneral;
                     TH_VM.tbErrorMaterial_DAdicional = datModificar.ListErrorMaterialAdicional;
+                    TH_VM.tbDivisionInterna = datModificar.ListDivisionInterna;
                     TH_VM.txtResolucionTitular = datModificar.RES_TITULAR;
 
                     TH_VM.txtEstado_TH = datModificar.ESTADO_TH;
@@ -437,6 +439,7 @@ namespace CapaLogica.DOC
                 else
                 {  //Datos Generales
                     oCampos.AREA_OTORGADA = Decimal.Parse((string.IsNullOrEmpty(dto.txtItemAOtorgada) ? "0" : dto.txtItemAOtorgada));
+                    oCampos.AREA_BOSQUE = Decimal.Parse((string.IsNullOrEmpty(dto.txtItemABosque) ? "0" : dto.txtItemABosque));
                     oCampos.CONTRADO_CONDICIONAL = dto.chkItemContCuenta;
                     oCampos.CONTRATO_FECHA_INICIO = dto.txtItemContFInicio == null ? null : dto.txtItemContFInicio.Trim();
                     oCampos.CONTRATO_FECHA_FIN = dto.txtItemContFFin == null ? null : dto.txtItemContFFin.Trim();
@@ -463,6 +466,7 @@ namespace CapaLogica.DOC
                 oCampos.ListEliTABLA = dto.ListEliTABLA; //cuando se elimina datos
                 oCampos.ListModalidadesTH = dto.ListModalidadesTH;
                 oCampos.ListTHEstadoEsta = dto.ListTHEstadoEsta;
+                
                 //Variables de control de calidad
                 oCampos.COD_ESTADO_DOC = dto.vmControlCalidad.ddlIndicadorId;
                 oCampos.OBSERVACIONES_CONTROL = dto.vmControlCalidad.txtControlCalidadObservaciones ?? "";
@@ -514,6 +518,7 @@ namespace CapaLogica.DOC
 
                 oCampos.ListErrorMaterialGeneral = dto.tbErrorMaterial_DGeneral;
                 oCampos.ListErrorMaterialAdicional = dto.tbErrorMaterial_DAdicional;
+                oCampos.ListDivisionInterna = dto.tbDivisionInterna;
 
                 //agregamos las listas de extencion
                 oCampos.ListTHExtincion = (List<Ent_THABILITANTE>)dto.ListTHExtincion;
@@ -831,6 +836,13 @@ namespace CapaLogica.DOC
                     foreach (var item in lista)
                     {
                         Retorno.Add(new String[] { item.CODIGO, item.PARAMETRO10, item.PARAMETRO01, item.NUMERO, item.PARAMETRO02, item.PARAMETRO03, item.PARAMETRO04 });
+                    }
+                    break;
+                case "CERTIFICADO_PLANTA":
+                    codFormulario = "0000001";
+                    foreach (var item in lista)
+                    {
+                        Retorno.Add(new String[] { item.CODIGO, item.PARAMETRO01, item.PARAMETRO02, item.PARAMETRO03, item.PARAMETRO04, item.NUMERO, item.PARAMETRO05, item.PARAMETRO06 });
                     }
                     break;
                 case "POA":

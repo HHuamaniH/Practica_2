@@ -2,7 +2,8 @@
 using System;
 using System.Collections.Generic;
 //using System.Data.SqlClient;
-using CDatos = CapaDatos.DOC.Dat_Reporte_OBSERVATORIO;
+//using CDatos = CapaDatos.DOC.Dat_Reporte_OBSERVATORIO;
+using CDatos = CapaDatos.DOC.Dat_Reporte_OBSERVATORIO_SIMULACION;
 using CEntidad = CapaEntidad.DOC.Ent_Reporte_OBSERVATORIO;
 using Oracle.ManagedDataAccess.Client;
 //using oCLogicaFooter = CapaLogica.PDFFooter;

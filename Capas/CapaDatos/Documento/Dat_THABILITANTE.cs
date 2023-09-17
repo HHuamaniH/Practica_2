@@ -45,6 +45,7 @@ namespace CapaDatos.DOC
                         oCampos.ListErrorMaterialGeneral = new List<Ent_ERRORMATERIAL>();
                         oCampos.ListErrorMaterialAdicional = new List<Ent_ERRORMATERIAL>();
                         oCampos.ListTHExtincion = new List<CEntidad>();
+                        oCampos.ListDivisionInterna = new List<Ent_DIVISIONINTERNA>();
 
                         CEntidad oCamposDet;
                         //
@@ -381,6 +382,24 @@ namespace CapaDatos.DOC
                                 oCamposEM.OBSERVACION = dr.GetString(dr.GetOrdinal("OBSERVACIONE"));
                                 oCamposEM.RegEstado = 0;
                                 oCampos.ListTHExtincion.Add(oCamposEM);
+                            }
+                        }
+                        //LISTADO DE DIVISION INTERNA DE PREDIO
+                        dr.NextResult();
+                        if (dr.HasRows)
+                        {
+                            Ent_DIVISIONINTERNA oCamposDI;
+
+                            while (dr.Read())
+                            {
+                                oCamposDI = new Ent_DIVISIONINTERNA();
+                                oCamposDI.COD_THABILITANTE = dr.GetString(dr.GetOrdinal("COD_THABILITANTE"));
+                                oCamposDI.COD_SECUENCIAL = dr.GetInt32(dr.GetOrdinal("COD_SECUENCIAL"));
+                                oCamposDI.TIPOAREA = dr.GetInt32(dr.GetOrdinal("TIPOAREA"));
+                                oCamposDI.SUBTIPOAREA = dr.GetInt32(dr.GetOrdinal("SUBTIPOAREA"));
+                                oCamposDI.SUBTIPOAREADESC = dr.GetString(dr.GetOrdinal("SUBTIPOAREADESC"));
+                                oCamposDI.AREA = dr.GetDecimal(dr.GetOrdinal("AREA"));                                
+                                oCampos.ListDivisionInterna.Add(oCamposDI);
                             }
                         }
                     }
@@ -1289,7 +1308,7 @@ namespace CapaDatos.DOC
                             oCamposDet2.COD_SECUENCIAL_ADENDA = loDatos.COD_SECUENCIAL_ADENDA;
 
                             if (oCamposDet2.ZONA != "0000000")
-                                dBOracle.ManExecute(cn, tr, "doc_osinfor_erp_migracion.spTHABILITANTE_DGENERAL_DET_VERTICEGrabar", oCamposDet2);                                
+                                dBOracle.ManExecute(cn, tr, "doc_osinfor_erp_migracion.spTHABILITANTE_DGENERAL_DET_VERTICEGrabar", oCamposDet2);
                         }
                     }
                 }
@@ -1521,6 +1540,25 @@ namespace CapaDatos.DOC
                             oCampos.RegEstado = 1;
                             dBOracle.ManExecute(cn, tr, "DOC_OSINFOR_ERP_MIGRACION.THABILITANTE_EXTINCIONGrabar", oCampos);
                         }
+                    }
+                }
+                //para guardar Division Interna
+                if (oCEntidad.ListDivisionInterna != null)
+                {
+                    Ent_DIVISIONINTERNA oDivInterna;
+                    int i = 1;
+                    foreach (var loDatos in oCEntidad.ListDivisionInterna)
+                    {
+                        oDivInterna = new Ent_DIVISIONINTERNA();
+                        oDivInterna.COD_THABILITANTE = oCEntidad.COD_THABILITANTE;
+                        oDivInterna.COD_SECUENCIAL = i;
+                        oDivInterna.TIPOAREA = loDatos.TIPOAREA;
+                        oDivInterna.SUBTIPOAREA = loDatos.SUBTIPOAREA;
+                        oDivInterna.SUBTIPOAREADESC = loDatos.SUBTIPOAREADESC;
+                        oDivInterna.AREA = loDatos.AREA;
+                        oDivInterna.COD_UCUENTA = oCEntidad.COD_UCUENTA;
+                        dBOracle.ManExecute(cn, tr, "DOC_OSINFOR_ERP_MIGRACION.THABILITANTE_DivIntGrabar", oDivInterna);
+                        i++;
                     }
                 }
 

@@ -48,6 +48,7 @@ namespace CapaEntidad.ViewModel
         public string txtCNorteZoo { get; set; }
         //Datos Adicionales
         public string txtItemAOtorgada { get; set; }
+        public string txtItemABosque { get; set; }
         public bool chkItemContCuenta { get; set; }
         public string txtItemContFInicio { get; set; }
         public string txtItemContFFin { get; set; }
@@ -143,6 +144,9 @@ namespace CapaEntidad.ViewModel
         //Error Material
         public List<Ent_ERRORMATERIAL> tbErrorMaterial_DGeneral { get; set; }
         public List<Ent_ERRORMATERIAL> tbErrorMaterial_DAdicional { get; set; }
+        
+        //División Interna del Predio
+        public List<Ent_DIVISIONINTERNA> tbDivisionInterna { get; set; }
 
         public IEnumerable<VM_Cbo> ddTHExtincion { get; set; }
         public string ddTHExtincionId { get; set; }
@@ -158,6 +162,7 @@ namespace CapaEntidad.ViewModel
         public VM_THabilitante()
         {
             vmControlCalidad = new VM_ControlCalidad_2();
+            tbDivisionInterna = new List<Ent_DIVISIONINTERNA>();
         }
     }
 
