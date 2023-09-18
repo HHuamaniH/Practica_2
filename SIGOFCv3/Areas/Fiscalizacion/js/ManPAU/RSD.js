@@ -1091,7 +1091,7 @@ $(function () {
 
                 //Valores por defecto
                 const values = {
-                    COD_PROCEDENCIA: "SDFPAFFS",
+                    COD_PROCEDENCIA: "SDI",
                     COD_MATERIA: "02",
                     COD_RES_SUB: datos.hdfCodResodirec,
                     NUM_INFORME_SITD: datos.txtNumeroExpediente,
