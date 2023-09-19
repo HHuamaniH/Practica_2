@@ -304,6 +304,7 @@ namespace CapaLogica.DOC
                     TH_VM.ddlODRegistro = oCampos.ListODs.Select(i => new VM_Cbo { Value = i.CODIGO, Text = i.DESCRIPCION });
                     TH_VM.ddlODRegistroId = datModificar.COD_OD_REGISTRO;
                     TH_VM.txtItemAOtorgada = datModificar.AREA_OTORGADA.ToString();
+                    TH_VM.txtItemABosque = datModificar.AREA_BOSQUE.ToString();
                     TH_VM.chkItemContCuenta = (Boolean)datModificar.CONTRADO_CONDICIONAL;
                     TH_VM.txtItemContFInicio = datModificar.CONTRATO_FECHA_INICIO.ToString();
                     TH_VM.txtItemContFFin = datModificar.CONTRATO_FECHA_FIN.ToString();

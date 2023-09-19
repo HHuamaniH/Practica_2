@@ -296,7 +296,7 @@ ManTHabilitante.fnValidarArea = function (valor) {
     let returns = true;
     if (valor == "") {
         returns = false;
-    } else if (!/^\d+(\.\d{1,2,3,4})?$/.test(valor)) {
+    } else if (!/^\d+(\.\d{1,4})?$/.test(valor)) {
         returns = false;
     }
     return returns;

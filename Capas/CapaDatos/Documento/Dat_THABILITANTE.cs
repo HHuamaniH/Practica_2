@@ -76,6 +76,7 @@ namespace CapaDatos.DOC
                             //
                             //oCampos.AREA_OTORGADA = Decimal.Parse(dr.GetString(dr.GetOrdinal("AREA_OTORGADA")));
                             oCampos.AREA_OTORGADA = dr.GetDecimal(dr.GetOrdinal("AREA_OTORGADA"));
+                            oCampos.AREA_BOSQUE = dr.GetDecimal(dr.GetOrdinal("AREA_BOSQUE"));
                             oCampos.CONTRADO_CONDICIONAL = dr.GetBoolean(dr.GetOrdinal("CONTRADO_CONDICIONAL"));
                             oCampos.CONTRATO_FECHA_INICIO = dr.GetString(dr.GetOrdinal("CONTRATO_FECHA_INICIO"));
                             oCampos.CONTRATO_FECHA_FIN = dr.GetString(dr.GetOrdinal("CONTRATO_FECHA_FIN"));

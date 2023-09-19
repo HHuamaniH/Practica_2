@@ -90,13 +90,7 @@ namespace CapaEntidad.DOC
         [Description("CANTIDAD")]
         public Decimal CANTIDAD { get; set; }      
         [Description("FINES")]
-        public String FINES { get; set; }
-        [Description("ZONA_UTM")]
-        public String ZONA_UTM { get; set; }
-        [Description("COORD_ESTE")]
-        public Decimal COORD_ESTE { get; set; }
-        [Description("COORD_NORTE")]
-        public Decimal COORD_NORTE { get; set; }
+        public String FINES { get; set; }       
         [Description("OBSERVACION")]
         public String OBSERVACION { get; set; } 
         [Description("COD_UCUENTA")]
