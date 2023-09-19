@@ -80,29 +80,29 @@
                                     <div class="card-body">
                                         <div class="form-row">
                                             <div class="form-group col-md-3">
-                                                <label for="ddlODRegistroId" class="text-small texto-recortado">Título Habilitante</label>
+                                                <label for="txtItemNumero" class="text-small texto-recortado">Título Habilitante</label>
                                                 @Html.EditorFor(m => m.txtItemNumero, new { htmlAttributes = new { @class = "form-control form-control-sm", @disabled = "disabled" } })
                                             </div>
                                             <div class="form-group col-md-3">
-                                                <label for="ddlODRegistroId" class="text-small texto-recortado">Modalidad</label>
+                                                <label for="txtItemModalidad" class="text-small texto-recortado">Modalidad</label>
                                                 @Html.EditorFor(m => m.txtItemModalidad, new { htmlAttributes = new { @class = "form-control form-control-sm", @disabled = "disabled" } })
                                             </div>
                                             <div class="form-group col-md-3">
-                                                <label for="ddlODRegistroId" class="text-small texto-recortado">Tíitular</label>
+                                                <label for="txtItemTitular" class="text-small texto-recortado">Tíitular</label>
                                                 @Html.EditorFor(m => m.txtItemTitular, new { htmlAttributes = new { @class = "form-control form-control-sm", @disabled = "disabled" } })
                                             </div>
                                             <div class="form-group col-md-3">
-                                                <label for="ddlODRegistroId" class="text-small texto-recortado">Ubicación</label>
+                                                <label for="txtItemUbicacion" class="text-small texto-recortado">Ubicación</label>
                                                 @Html.EditorFor(m => m.txtItemUbicacion, new { htmlAttributes = new { @class = "form-control form-control-sm", @disabled = "disabled" } })
                                             </div>
                                         </div>
                                         <div class="form-row">
                                             <div class="form-group col-md-3">
-                                                <label for="ddlODRegistroId" class="text-small texto-recortado">Número de Inscripción</label>
+                                                <label for="txtItemNumeroInscripcion" class="text-small texto-recortado">Número de Inscripción</label>
                                                 @Html.EditorFor(m => m.txtItemNumeroInscripcion, new { htmlAttributes = new { @class = "form-control form-control-sm", maxlength = "200", onkeypress = "return utilSigo.checkLetter(event);" } })
                                             </div>
                                             <div class="form-group col-md-3">
-                                                <label for="ddlODRegistroId" class="text-small texto-recortado">Fecha de Inscripción</label>
+                                                <label for="txtItemFechaInscripcion" class="text-small texto-recortado">Fecha de Inscripción</label>
                                                 @Html.EditorFor(m => m.txtItemFechaInscripcion, new { htmlAttributes = new { @class = "form-control form-control-sm", placeholder = "dd/mm/yyyy", title = "la fecha a ingresar debe ser en el formato dd/mm/yyyy", maxlength = "10", oninput= "utilSigo.agregarSlashFecha(event)" } })
                                             </div>
                                         </div>
@@ -112,12 +112,26 @@
                                     <div class="card-body">
                                         <div class="form-row">
                                             <div class="form-group col-md-3">
-                                                <label for="ddlODRegistroId" class="text-small texto-recortado">Área Total</label>
+                                                <label for="txtItemAreaTotal" class="text-small texto-recortado">Área Total</label>
                                                 @Html.EditorFor(m => m.txtItemAreaTotal, new { htmlAttributes = new { @class = "form-control form-control-sm", maxlength = "10", onblur = "return utilSigo.onBlurTwoDecimal(this,'Área Total');", onkeypress = "return utilSigo.onKeyDecimal(event, this);" } })
                                             </div>
                                             <div class="form-group col-md-3">
-                                                <label for="ddlODRegistroId" class="text-small texto-recortado">Fecha de Establecimiento</label>
+                                                <label for="txtItemFechaEstablecimiento" class="text-small texto-recortado">Fecha de Establecimiento</label>
                                                 @Html.EditorFor(m => m.txtItemFechaEstablecimiento, new { htmlAttributes = new { @class = "form-control form-control-sm", placeholder = "dd/mm/yyyy", title = "la fecha a ingresar debe ser en el formato dd/mm/yyyy", maxlength = "10", oninput = "utilSigo.agregarSlashFecha(event)" } })
+                                            </div>
+                                        </div>                                        
+                                        <div class="form-row">
+                                            <div class="form-group col-md-3">
+                                                <label for="ddlZonaUTMId" class="text-small texto-recortado">Zona UTM</label>                                                
+                                                @Html.DropDownListFor(m => m.ddlZonaUTMId, new SelectList(ViewBag.ddlZonaUTM, "Value", "Text"), new { @class = "form-control form-control-sm" })
+                                            </div>
+                                            <div class="form-group col-md-3">
+                                                <label for="txtCoorEste" class="text-small texto-recortado">Coordenada Este</label>
+                                                @Html.EditorFor(m => m.txtCoorEste, new { htmlAttributes = new { @class = "form-control form-control-sm", maxlength = "6", onkeypress = "return utilSigo.checkNum(event);" } })
+                                            </div>
+                                            <div class="form-group col-md-3">
+                                                <label for="txtCoorNorte" class="text-small texto-recortado">Coordenada Norte</label>
+                                                @Html.EditorFor(m => m.txtCoorNorte, new { htmlAttributes = new { @class = "form-control form-control-sm", maxlength = "7", onkeypress = "return utilSigo.checkNum(event);" } })
                                             </div>
                                         </div>
                                         <div class="form-row">

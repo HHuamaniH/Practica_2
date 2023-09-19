@@ -17,8 +17,14 @@ namespace CapaEntidad.DOC
         public Object FECHA_INSCRIPCION { get; set; }
         [Description("AREATOTAL")]
         public Decimal AREATOTAL { get; set; }
-        [Category("FECHA"), Description("FECHA_ESTABLECIMIENTO")]
+        [Category("FECHA"), Description("FECHA_ESTABLECIMIENTO")]       
         public Object FECHA_ESTABLECIMIENTO { get; set; }
+        [Description("ZONA_UTM")]
+        public String ZONA_UTM { get; set; }
+        [Description("COORD_ESTE")]
+        public Int32 COORD_ESTE { get; set; }
+        [Description("COORD_NORTE")]
+        public Int32 COORD_NORTE { get; set; }
         [Description("OBSERVACIONES")]
         public String OBSERVACIONES { get; set; }  
         [Description("USUARIO_REGISTRO")]
@@ -59,6 +65,8 @@ namespace CapaEntidad.DOC
         {
             AREATOTAL = -1;
             RegEstado = -1;
+            COORD_ESTE = -1;
+            COORD_NORTE = -1;
             ListEspeciesEstablecidas = new List<Ent_EspeciesEstablecidas>();
         }
         #endregion
@@ -83,6 +91,12 @@ namespace CapaEntidad.DOC
         public Decimal CANTIDAD { get; set; }      
         [Description("FINES")]
         public String FINES { get; set; }
+        [Description("ZONA_UTM")]
+        public String ZONA_UTM { get; set; }
+        [Description("COORD_ESTE")]
+        public Decimal COORD_ESTE { get; set; }
+        [Description("COORD_NORTE")]
+        public Decimal COORD_NORTE { get; set; }
         [Description("OBSERVACION")]
         public String OBSERVACION { get; set; } 
         [Description("COD_UCUENTA")]

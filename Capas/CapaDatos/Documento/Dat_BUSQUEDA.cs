@@ -1605,6 +1605,24 @@ namespace CapaDatos.DOC
 
                                     break;
                                 #endregion
+                                #region CERTIFICADO_PLANTA
+                                case "CERTIFICADO_PLANTA":
+                                    while (dr.Read())
+                                    {
+                                        oCampos = new CEntidad();
+                                        oCampos.CODIGO = dr["COD_CERTIFPLANTA"].ToString();
+                                        oCampos.NUMERO = dr["NUMERO"].ToString();
+                                        oCampos.PARAMETRO01 = dr["FECHA_CREACION"].ToString();
+                                        oCampos.PARAMETRO02 = dr["NUMERO_INSCRIPCION"].ToString();
+                                        oCampos.PARAMETRO03 = dr["FECHA_INSCRIPCION"].ToString();
+                                        oCampos.PARAMETRO04 = dr["MODALIDAD"].ToString();
+                                        oCampos.PARAMETRO05 = dr["PERSONA_TITULAR"].ToString();
+                                        oCampos.PARAMETRO06 = dr["REGION"].ToString();
+                                        lsCEntidad.Add(oCampos);
+                                    }
+
+                                    break;
+                                #endregion
                                 case "POA":
                                     while (dr.Read())
                                     {

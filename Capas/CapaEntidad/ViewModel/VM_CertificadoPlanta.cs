@@ -20,6 +20,9 @@ namespace CapaEntidad.ViewModel
         public string txtItemFechaInscripcion { get; set; }
         public string txtItemAreaTotal { get; set; }
         public string txtItemFechaEstablecimiento { get; set; }
+        public string ddlZonaUTMId { get; set; }
+        public string txtCoorEste { get; set; }
+        public string txtCoorNorte { get; set; }
         public string txtItemObservacion { get; set; }
         public string appClient { get; set; }
         public string appData { get; set; }        

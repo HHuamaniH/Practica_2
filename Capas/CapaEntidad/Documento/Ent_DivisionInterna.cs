@@ -21,6 +21,8 @@ namespace CapaEntidad.DOC
         public String SUBTIPOAREADESC { get; set; }
         [Description("AREA")]
         public Decimal AREA { get; set; }
+        [Description("DESCRIPCIONAREA")]
+        public String DESCRIPCIONAREA { get; set; }
         [Description("COD_UCUENTA")]
         public String COD_UCUENTA { get; set; }
         public Ent_DIVISIONINTERNA()

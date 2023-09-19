@@ -15,43 +15,6 @@ namespace CapaDatos.DOC
         private SQL oGDataSQL = new SQL();        
         private DBOracle dBOracle = new DBOracle();
 
-        public CEntidad RegMostCombo(OracleConnection cn, CEntidad oCEntidad)
-
-        {
-            CEntidad oCampos = null;
-            try
-            {                
-                using (OracleDataReader dr = dBOracle.SelDrdDefault(cn, null, "doc_osinfor_erp_migracion.spGeneral_Combo_Listar", oCEntidad))
-                {
-                    if (dr != null)
-                    {
-                        oCampos = new CEntidad();
-                        List<CEntidad> lsDetDetalle;
-                        CEntidad oCamposDet;
-                        //
-                        //Modalidad
-                        lsDetDetalle = new List<CEntidad>();
-                        if (dr.HasRows)
-                        {
-                            while (dr.Read())
-                            {
-                                //PARTE_DIARIO_DETALLE
-                                oCamposDet = new CEntidad();
-                                oCamposDet.CODIGO = dr["CODIGO"].ToString();
-                                oCamposDet.DESCRIPCION = dr["DESCRIPCION"].ToString();
-                                lsDetDetalle.Add(oCamposDet);
-                            }
-                        }                        
-                    }
-                }
-                return oCampos;
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-        }
-
         public String RegGrabarV3(OracleConnection cn, CEntidad oCEntidad, OracleTransaction tr)
         {
 
@@ -168,6 +131,9 @@ namespace CapaDatos.DOC
                             oCampos.FECHA_INSCRIPCION = dr.GetString(dr.GetOrdinal("FECHA_INSCRIPCION"));
                             oCampos.AREATOTAL = dr.GetDecimal(dr.GetOrdinal("AREATOTAL"));
                             oCampos.FECHA_ESTABLECIMIENTO = dr.GetString(dr.GetOrdinal("FECHA_ESTABLECIMIENTO"));
+                            oCampos.ZONA_UTM = dr["ZONA_UTM"].ToString();
+                            oCampos.COORD_ESTE = Int32.Parse(dr["COORD_ESTE"].ToString());
+                            oCampos.COORD_NORTE = Int32.Parse(dr["COORD_NORTE"].ToString());
                             oCampos.OBSERVACIONES = dr.GetString(dr.GetOrdinal("OBSERVACIONES"));
                             oCampos.USUARIO_REGISTRO = dr.GetString(dr.GetOrdinal("USUARIO_REGISTRO"));
                             oCampos.COD_ESTADO_DOC = dr.GetString(dr.GetOrdinal("COD_ESTADO_DOC"));

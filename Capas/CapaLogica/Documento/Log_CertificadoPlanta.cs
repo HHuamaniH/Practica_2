@@ -23,14 +23,12 @@ namespace CapaLogica.DOC
             try
             {
                 CP_VM = new VM_CertificadoPlanta();
-                CEntidad oCampos = new CEntidad();
-                oCampos.COD_UCUENTA = cod_cuenta;
-                oCampos.BusFormulario = "CERTIFICADO_PLANTA";
-                oCampos = RegMostCombo(oCampos);
+
+               
                 if (String.IsNullOrEmpty(codCertificacionPlanta)) //iniciar nuevo item
                 {                  
-                    CP_VM.hdCodigo_CertificadoPlanta = codigoThabilitante;
-                    CP_VM.hdCodigo_Thabilitante = "";
+                    CP_VM.hdCodigo_CertificadoPlanta = "";
+                    CP_VM.hdCodigo_Thabilitante = codigoThabilitante;
                     CP_VM.ItemTitulo = "Nuevo Registro";                    
                     CP_VM.hdfManRegEstado = "1";
 
@@ -44,6 +42,10 @@ namespace CapaLogica.DOC
 
                     CP_VM.txtItemAreaTotal = string.Empty;
                     CP_VM.txtItemFechaEstablecimiento = string.Empty;
+
+                    CP_VM.ddlZonaUTMId = string.Empty;
+                    CP_VM.txtCoorEste = string.Empty;
+                    CP_VM.txtCoorNorte = string.Empty;
 
                     CP_VM.txtItemObservacion = string.Empty;
 
@@ -66,6 +68,11 @@ namespace CapaLogica.DOC
                     CP_VM.txtItemNumeroInscripcion = datModificar.NUMERO_INSCRIPCION;
                     CP_VM.txtItemFechaInscripcion = datModificar.FECHA_INSCRIPCION.ToString();
                     CP_VM.txtItemAreaTotal = datModificar.AREATOTAL==0 ? string.Empty : datModificar.AREATOTAL.ToString();
+                    CP_VM.txtItemFechaEstablecimiento = datModificar.FECHA_ESTABLECIMIENTO.ToString();
+                    CP_VM.ddlZonaUTMId = datModificar.ZONA_UTM;
+                    CP_VM.txtCoorEste = datModificar.COORD_ESTE == 0 ? string.Empty : datModificar.COORD_ESTE.ToString();
+                    CP_VM.txtCoorNorte = datModificar.COORD_NORTE == 0 ? string.Empty : datModificar.COORD_NORTE.ToString();
+                    CP_VM.txtItemFechaEstablecimiento = datModificar.FECHA_ESTABLECIMIENTO.ToString();
                     CP_VM.txtItemFechaEstablecimiento = datModificar.FECHA_ESTABLECIMIENTO.ToString();
                     CP_VM.txtItemObservacion = datModificar.OBSERVACIONES;
 
@@ -101,6 +108,9 @@ namespace CapaLogica.DOC
                 oCampos.FECHA_INSCRIPCION = dto.txtItemFechaInscripcion;
                 oCampos.AREATOTAL = string.IsNullOrEmpty(dto.txtItemAreaTotal) ? -1 : decimal.Parse(dto.txtItemAreaTotal);
                 oCampos.FECHA_ESTABLECIMIENTO = dto.txtItemFechaEstablecimiento;
+                oCampos.ZONA_UTM = dto.ddlZonaUTMId;
+                oCampos.COORD_ESTE = string.IsNullOrEmpty(dto.txtCoorEste) ? -1 : Int32.Parse(dto.txtCoorEste);
+                oCampos.COORD_NORTE = string.IsNullOrEmpty(dto.txtCoorNorte) ? -1 : Int32.Parse(dto.txtCoorNorte);
                 oCampos.OBSERVACIONES = dto.txtItemObservacion;
                 oCampos.COD_UCUENTA = codCuenta;
 
@@ -184,23 +194,7 @@ namespace CapaLogica.DOC
             {
                 throw ex;
             }
-        }
-        public CEntidad RegMostCombo(CEntidad oCEntidad)
-        {
-            try
-            {
-                using (OracleConnection cn = new OracleConnection(CapaDatos.BDConexion.Conexion_Cadena_SIGO()))
-                {
-                    cn.Open();
-                    return oCDatos.RegMostCombo(cn, oCEntidad);
-                    //cn.Close();
-                }
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-        }
+        }        
 
     }
 }

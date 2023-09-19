@@ -24,29 +24,6 @@
             success: function (vista) {
                 utilSigo.unblockUIGeneral();
                 $("#contenedorManGrilla").html(vista);
-                $('#btnManGrillaExportar').click(function () {
-                    let url = urlLocalSigo + "THabilitante/ManPlanManejoForestal/DownloadPGMF";
-                    var xhr = new XMLHttpRequest();
-                    xhr.onload = function () {
-                        if (xhr.readyState === 4 && xhr.status === 200) {
-                            window.location.href = url;
-
-
-                        }
-                        else if (xhr.status === 404) {
-                            utilSigo.toastWarning("Aviso", "Sucedio un error, No existe la direccion de descarga");
-                        }
-                        else if (xhr.status === 0) {
-                            utilSigo.toastWarning("Aviso", "Sucedio un error, No existe el archivo");
-                        }
-                        else {
-                            utilSigo.toastWarning("Aviso", "Sucedio un error al descargar el archivo, Comuníquese con el Administrador");
-                        }
-                    };
-                    xhr.open('head', url);
-                    xhr.send(null);
-                });
-
             },
             beforeSend: function () {
                 utilSigo.blockUIGeneral();

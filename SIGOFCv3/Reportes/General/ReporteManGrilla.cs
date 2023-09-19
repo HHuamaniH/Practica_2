@@ -138,6 +138,9 @@ namespace SIGOFCv3.Reportes.General
                     case "PROVEIDO_ARCHIVO_SUP":
                         filePlantilla = "PROVEIDOARCH_REG.xlsx";
                         break;
+                    case "CERTIFICADO_PLANTA":
+                        filePlantilla = "CERTIFICADO_PLANTA.xlsx";
+                        break;
                 }
                 int contador = 0;
                 String RutaReporteRegistro = HttpContext.Current.Server.MapPath("~/Archivos/Plantilla/Reg_Usu/");
@@ -1034,6 +1037,25 @@ namespace SIGOFCv3.Reportes.General
                                 worksheet.Cells[HelperSigo.GetColum(++column) + rowStart.ToString()].Value = listaInf.PARAMETRO07 ?? string.Empty;
                                 worksheet.Cells[HelperSigo.GetColum(++column) + rowStart.ToString()].Value = listaInf.PARAMETRO08 ?? string.Empty;
                                 worksheet.Cells[HelperSigo.GetColum(++column) + rowStart.ToString()].Value = listaInf.PARAMETRO09 ?? string.Empty;
+                                rowStart++;
+                            }
+                            break;
+                        #endregion
+                        
+                        #region CERTIFICADO_PLANTA
+                        case "CERTIFICADO_PLANTA":
+                            foreach (var listaInf in listaRegistros)
+                            {
+                                column = 0;
+                                contador++;
+                                worksheet.Cells[HelperSigo.GetColum(++column) + rowStart.ToString()].Value = contador;
+                                worksheet.Cells[HelperSigo.GetColum(++column) + rowStart.ToString()].Value = listaInf.PARAMETRO01 ?? string.Empty;
+                                worksheet.Cells[HelperSigo.GetColum(++column) + rowStart.ToString()].Value = listaInf.PARAMETRO02 ?? string.Empty;
+                                worksheet.Cells[HelperSigo.GetColum(++column) + rowStart.ToString()].Value = listaInf.PARAMETRO03 ?? string.Empty;
+                                worksheet.Cells[HelperSigo.GetColum(++column) + rowStart.ToString()].Value = listaInf.PARAMETRO04 ?? string.Empty;
+                                worksheet.Cells[HelperSigo.GetColum(++column) + rowStart.ToString()].Value = listaInf.NUMERO ?? string.Empty;
+                                worksheet.Cells[HelperSigo.GetColum(++column) + rowStart.ToString()].Value = listaInf.PARAMETRO05 ?? string.Empty;                                
+                                worksheet.Cells[HelperSigo.GetColum(++column) + rowStart.ToString()].Value = listaInf.PARAMETRO06 ?? string.Empty;
                                 rowStart++;
                             }
                             break;

@@ -421,7 +421,7 @@ controles_TH.iniciarEventosManGrilla = function () {
     });
 
     $('#btnManGrillaExportar').click(function () {
-        if ($("#busFormulario").val() !== "PLAN_GENERAL_MANEJO_FORESTAL")
+        if ($("#busFormulario").val() != "PLAN_GENERAL_MANEJO_FORESTAL")
             controles_TH.exportarListadoExcel();
     });
 

@@ -40,6 +40,8 @@ namespace SIGOFCv3.Areas.THabilitante.Controllers
             {
                 VM_CertificadoPlanta objVM = new VM_CertificadoPlanta();
                 Log_CertificadoPlanta objLog = new Log_CertificadoPlanta();
+                CapaLogica.DOC.Log_BUSQUEDA exeBus = new CapaLogica.DOC.Log_BUSQUEDA();
+
                 int nuevo = 1; Int16 opRegresar = 0;
                 string codigo = "", descripcion = "", tipoFrmulario = "", lstMenu = "";
                 string appClient = Request.QueryString["appClient"]; string appData = Request.QueryString["appData"];                
@@ -62,7 +64,9 @@ namespace SIGOFCv3.Areas.THabilitante.Controllers
                 objVM.appClient = appClient;
                 objVM.appData = appData;
                 objVM.opRegresar = opRegresar;
-                objVM.vmControlCalidad.VALIAS_ROL = mr.VALIAS;             
+                objVM.vmControlCalidad.VALIAS_ROL = mr.VALIAS;
+
+                ViewBag.ddlZonaUTM = exeBus.RegMostComboIndividual("ZONA_UTM", "");
 
                 return View(objVM);
             }

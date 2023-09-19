@@ -399,6 +399,7 @@ namespace CapaDatos.DOC
                                 oCamposDI.SUBTIPOAREA = dr.GetInt32(dr.GetOrdinal("SUBTIPOAREA"));
                                 oCamposDI.SUBTIPOAREADESC = dr.GetString(dr.GetOrdinal("SUBTIPOAREADESC"));
                                 oCamposDI.AREA = dr.GetDecimal(dr.GetOrdinal("AREA"));                                
+                                oCamposDI.DESCRIPCIONAREA = dr.GetString(dr.GetOrdinal("DESCRIPCIONAREA"));                                
                                 oCampos.ListDivisionInterna.Add(oCamposDI);
                             }
                         }
@@ -1556,6 +1557,7 @@ namespace CapaDatos.DOC
                         oDivInterna.SUBTIPOAREA = loDatos.SUBTIPOAREA;
                         oDivInterna.SUBTIPOAREADESC = loDatos.SUBTIPOAREADESC;
                         oDivInterna.AREA = loDatos.AREA;
+                        oDivInterna.DESCRIPCIONAREA = loDatos.DESCRIPCIONAREA;
                         oDivInterna.COD_UCUENTA = oCEntidad.COD_UCUENTA;
                         dBOracle.ManExecute(cn, tr, "DOC_OSINFOR_ERP_MIGRACION.THABILITANTE_DivIntGrabar", oDivInterna);
                         i++;
