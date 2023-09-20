@@ -7,8 +7,8 @@ namespace CapaEntidad.DOC
     public class Ent_CertificadoPlanta
     {
         #region "Entidades y Propiedades"
-        [Description("COD_CERTIFPLANTA")]
-        public String COD_CERTIFPLANTA { get; set; }
+        [Description("COD_CERTPLANTACION")]
+        public String COD_CERTPLANTACION { get; set; }
         [Description("COD_THABILITANTE")]
         public String COD_THABILITANTE { get; set; }
         [Description("NUMERO_INSCRIPCION")]
@@ -21,10 +21,10 @@ namespace CapaEntidad.DOC
         public Object FECHA_ESTABLECIMIENTO { get; set; }
         [Description("ZONA_UTM")]
         public String ZONA_UTM { get; set; }
-        [Description("COORD_ESTE")]
-        public Int32 COORD_ESTE { get; set; }
-        [Description("COORD_NORTE")]
-        public Int32 COORD_NORTE { get; set; }
+        [Description("COORDENADA_ESTE")]
+        public Int32 COORDENADA_ESTE { get; set; }
+        [Description("COORDENADA_NORTE")]
+        public Int32 COORDENADA_NORTE { get; set; }
         [Description("OBSERVACIONES")]
         public String OBSERVACIONES { get; set; }  
         [Description("USUARIO_REGISTRO")]
@@ -65,8 +65,8 @@ namespace CapaEntidad.DOC
         {
             AREATOTAL = -1;
             RegEstado = -1;
-            COORD_ESTE = -1;
-            COORD_NORTE = -1;
+            COORDENADA_ESTE = -1;
+            COORDENADA_NORTE = -1;
             ListEspeciesEstablecidas = new List<Ent_EspeciesEstablecidas>();
         }
         #endregion
@@ -75,18 +75,18 @@ namespace CapaEntidad.DOC
     public class Ent_EspeciesEstablecidas
     {
         #region "Entidades y Propiedades"
-        [Description("COD_CERTIFPLANTA")]
-        public String COD_CERTIFPLANTA { get; set; }
+        [Description("COD_CERTPLANTACION")]
+        public String COD_CERTPLANTACION { get; set; }
         [Description("COD_ESPECIES")]
         public String COD_ESPECIES { get; set; }
         [Description("COD_SECUENCIAL")]
         public Int32 COD_SECUENCIAL { get; set; }
         [Description("DESC_ESPECIES")]
         public String DESC_ESPECIES { get; set; }
-        [Description("SIS_PLANTA")]
-        public String SIS_PLANTA { get; set; }
-        [Description("UNI_MEDIDA")]
-        public String UNI_MEDIDA { get; set; }
+        [Description("SISTEMA_PLANTACION")]
+        public String SISTEMA_PLANTACION { get; set; }
+        [Description("UNIDAD_MEDIDA")]
+        public String UNIDAD_MEDIDA { get; set; }
         [Description("CANTIDAD")]
         public Decimal CANTIDAD { get; set; }      
         [Description("FINES")]
@@ -111,8 +111,8 @@ namespace CapaEntidad.DOC
     public class Ent_EliTabla
     {
         #region "Entidades y Propiedades"        
-        [Description("COD_CERTIFPLANTA")]
-        public String COD_CERTIFPLANTA { get; set; }
+        [Description("COD_CERTPLANTACION")]
+        public String COD_CERTPLANTACION { get; set; }
         [Description("COD_SECUENCIAL")]
         public Int32 COD_SECUENCIAL { get; set; }
         [Description("RegEstado")]

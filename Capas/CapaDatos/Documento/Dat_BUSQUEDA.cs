@@ -85,7 +85,7 @@ namespace CapaDatos.DOC
                                             while (dr.Read())
                                             {
                                                 oCampos = new CEntidad();
-                                                oCampos.CODIGO = dr["COD_CERTIFPLANTA"].ToString();
+                                                oCampos.CODIGO = dr["COD_CERTPLANTACION"].ToString();
                                                 oCampos.NUMERO = dr["NUMERO"].ToString();
                                                 oCampos.PARAMETRO01 = dr["FECHA_CREACION"].ToString();
                                                 oCampos.PARAMETRO02 = dr["NUMERO_INSCRIPCION"].ToString();
@@ -1610,7 +1610,7 @@ namespace CapaDatos.DOC
                                     while (dr.Read())
                                     {
                                         oCampos = new CEntidad();
-                                        oCampos.CODIGO = dr["COD_CERTIFPLANTA"].ToString();
+                                        oCampos.CODIGO = dr["COD_CERTPLANTACION"].ToString();
                                         oCampos.NUMERO = dr["NUMERO"].ToString();
                                         oCampos.PARAMETRO01 = dr["FECHA_CREACION"].ToString();
                                         oCampos.PARAMETRO02 = dr["NUMERO_INSCRIPCION"].ToString();

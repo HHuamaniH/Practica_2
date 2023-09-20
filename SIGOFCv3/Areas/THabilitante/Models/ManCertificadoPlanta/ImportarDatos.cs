@@ -35,14 +35,14 @@ namespace SIGOFCv3.Areas.THabilitante.Models.ManCertificadoPlanta
                         else
                         {
                             oCampos.DESC_ESPECIES = especie1 + " | " + especie2;
-                            oCampos.SIS_PLANTA = (workSheet.Cells[rowIterator, 3].Value ?? "").ToString();
-                            if (string.IsNullOrEmpty(oCampos.SIS_PLANTA)) throw new Exception("Sistema de Plantación vacía o nula");
-                            else if (oCampos.SIS_PLANTA.Length > 100) throw new Exception("Sistema de Plantación no debe exceder los 100 caracteres");
-                            else if (!Regex.IsMatch(oCampos.SIS_PLANTA, @"^[ ÁÉÍÓÚA-Záéíóúa-z0-9\-\/]+$")) throw new Exception("Sistema de Plantación no puede tener caracteres especiales");
+                            oCampos.SISTEMA_PLANTACION = (workSheet.Cells[rowIterator, 3].Value ?? "").ToString();
+                            if (string.IsNullOrEmpty(oCampos.SISTEMA_PLANTACION)) throw new Exception("Sistema de Plantación vacía o nula");
+                            else if (oCampos.SISTEMA_PLANTACION.Length > 100) throw new Exception("Sistema de Plantación no debe exceder los 100 caracteres");
+                            else if (!Regex.IsMatch(oCampos.SISTEMA_PLANTACION, @"^[ ÁÉÍÓÚA-Záéíóúa-z0-9\-\/]+$")) throw new Exception("Sistema de Plantación no puede tener caracteres especiales");
                             else
                             {
-                                oCampos.UNI_MEDIDA = (workSheet.Cells[rowIterator, 4].Value ?? "").ToString();
-                                if (string.IsNullOrEmpty(oCampos.UNI_MEDIDA)) throw new Exception("Unidad de Medida vacía o nula");
+                                oCampos.UNIDAD_MEDIDA = (workSheet.Cells[rowIterator, 4].Value ?? "").ToString();
+                                if (string.IsNullOrEmpty(oCampos.UNIDAD_MEDIDA)) throw new Exception("Unidad de Medida vacía o nula");
                                 else
                                 {
                                     string cantidad;

@@ -53,7 +53,7 @@ namespace CapaLogica.DOC
                 else //iniciar modificar item
                 {
                     CEntidad datModificar = new CEntidad();
-                    datModificar.COD_CERTIFPLANTA = codCertificacionPlanta;
+                    datModificar.COD_CERTPLANTACION = codCertificacionPlanta;
                     datModificar = RegMostrarListaItems(datModificar);
                     
                     CP_VM.ItemTitulo = "Modificando Registro";
@@ -70,8 +70,8 @@ namespace CapaLogica.DOC
                     CP_VM.txtItemAreaTotal = datModificar.AREATOTAL==0 ? string.Empty : datModificar.AREATOTAL.ToString();
                     CP_VM.txtItemFechaEstablecimiento = datModificar.FECHA_ESTABLECIMIENTO.ToString();
                     CP_VM.ddlZonaUTMId = datModificar.ZONA_UTM;
-                    CP_VM.txtCoorEste = datModificar.COORD_ESTE == 0 ? string.Empty : datModificar.COORD_ESTE.ToString();
-                    CP_VM.txtCoorNorte = datModificar.COORD_NORTE == 0 ? string.Empty : datModificar.COORD_NORTE.ToString();
+                    CP_VM.txtCoorEste = datModificar.COORDENADA_ESTE == 0 ? string.Empty : datModificar.COORDENADA_ESTE.ToString();
+                    CP_VM.txtCoorNorte = datModificar.COORDENADA_NORTE == 0 ? string.Empty : datModificar.COORDENADA_NORTE.ToString();
                     CP_VM.txtItemFechaEstablecimiento = datModificar.FECHA_ESTABLECIMIENTO.ToString();
                     CP_VM.txtItemFechaEstablecimiento = datModificar.FECHA_ESTABLECIMIENTO.ToString();
                     CP_VM.txtItemObservacion = datModificar.OBSERVACIONES;
@@ -103,14 +103,14 @@ namespace CapaLogica.DOC
             {
                 //THabilitante
                 oCampos.COD_THABILITANTE = dto.hdCodigo_Thabilitante;
-                oCampos.COD_CERTIFPLANTA = dto.hdCodigo_CertificadoPlanta;
+                oCampos.COD_CERTPLANTACION = dto.hdCodigo_CertificadoPlanta;
                 oCampos.NUMERO_INSCRIPCION = dto.txtItemNumeroInscripcion;
                 oCampos.FECHA_INSCRIPCION = dto.txtItemFechaInscripcion;
                 oCampos.AREATOTAL = string.IsNullOrEmpty(dto.txtItemAreaTotal) ? -1 : decimal.Parse(dto.txtItemAreaTotal);
                 oCampos.FECHA_ESTABLECIMIENTO = dto.txtItemFechaEstablecimiento;
                 oCampos.ZONA_UTM = dto.ddlZonaUTMId;
-                oCampos.COORD_ESTE = string.IsNullOrEmpty(dto.txtCoorEste) ? -1 : Int32.Parse(dto.txtCoorEste);
-                oCampos.COORD_NORTE = string.IsNullOrEmpty(dto.txtCoorNorte) ? -1 : Int32.Parse(dto.txtCoorNorte);
+                oCampos.COORDENADA_ESTE = string.IsNullOrEmpty(dto.txtCoorEste) ? -1 : Int32.Parse(dto.txtCoorEste);
+                oCampos.COORDENADA_NORTE = string.IsNullOrEmpty(dto.txtCoorNorte) ? -1 : Int32.Parse(dto.txtCoorNorte);
                 oCampos.OBSERVACIONES = dto.txtItemObservacion;
                 oCampos.COD_UCUENTA = codCuenta;
 
@@ -121,7 +121,7 @@ namespace CapaLogica.DOC
                 
                 if (dto.hdfManRegEstado == "0") //Modificar
                 {
-                    oCampos.COD_CERTIFPLANTA = dto.hdCodigo_CertificadoPlanta;
+                    oCampos.COD_CERTPLANTACION = dto.hdCodigo_CertificadoPlanta;
                     msjRespuesta = "El Registro se Modifico Correctamente";
                 }
 

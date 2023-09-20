@@ -9,8 +9,8 @@ _EspeciesEstablecidas.fnLoadDatos = function (data) {
         _EspeciesEstablecidas.frm.find("#hdfCodSecuencial").val(data["COD_SECUENCIAL"]);        
 
         _renderComboEspecie.fnInit("FAUNA", data["COD_ESPECIES"], data["DESC_ESPECIES"]);
-        _EspeciesEstablecidas.frm.find("#txtSisPlanta").val(data["SIS_PLANTA"]);
-        _EspeciesEstablecidas.frm.find("#ddlUnidadMedidaId").select2("val", [data["UNI_MEDIDA"]]);
+        _EspeciesEstablecidas.frm.find("#txtSisPlanta").val(data["SISTEMA_PLANTACION"]);
+        _EspeciesEstablecidas.frm.find("#ddlUnidadMedidaId").select2("val", [data["UNIDAD_MEDIDA"]]);
         _EspeciesEstablecidas.frm.find("#txtCantidad").val(data["CANTIDAD"]);
         _EspeciesEstablecidas.frm.find("#txtFines").val(data["FINES"]);
         _EspeciesEstablecidas.frm.find("#txtObservacion").val(data["OBSERVACION"]);        
@@ -28,8 +28,8 @@ _EspeciesEstablecidas.fnSetDatos = function () {
     data["COD_SECUENCIAL"] = _EspeciesEstablecidas.frm.find("#hdfCodSecuencial").val();        
     data["COD_ESPECIES"] = _renderComboEspecie.fnGetCodEspecie();
     data["DESC_ESPECIES"] = _renderComboEspecie.fnGetEspecie();    
-    data["SIS_PLANTA"] = _EspeciesEstablecidas.frm.find("#txtSisPlanta").val();
-    data["UNI_MEDIDA"] = _EspeciesEstablecidas.frm.find("#ddlUnidadMedidaId").val();    
+    data["SISTEMA_PLANTACION"] = _EspeciesEstablecidas.frm.find("#txtSisPlanta").val();
+    data["UNIDAD_MEDIDA"] = _EspeciesEstablecidas.frm.find("#ddlUnidadMedidaId").val();    
     data["CANTIDAD"] = _EspeciesEstablecidas.frm.find("#txtCantidad").val();
     data["FINES"] = _EspeciesEstablecidas.frm.find("#txtFines").val();
     data["OBSERVACION"] = _EspeciesEstablecidas.frm.find("#txtObservacion").val();    
