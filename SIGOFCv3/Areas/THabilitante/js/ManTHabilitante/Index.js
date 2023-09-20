@@ -287,10 +287,10 @@ ManTHabilitante.fnCalcularDivisionInterna = function () {
     let obj = ManTHabilitante.fnGetDivisionInterna();
     let total = 0;
     for (var i = 0; i < obj.length; i++) {
-        let valorArea = parseInt(obj[i].area);
+        let valorArea = parseFloat(obj[i].area);
         if (!isNaN(valorArea)) total += valorArea;
     }
-    $('#txtTotalDI').val(total.toFixed(2).toString());
+    $('#txtTotalDI').val(total.toFixed(4).toString());
 }
 ManTHabilitante.fnValidarArea = function (valor) {
     let returns = true;

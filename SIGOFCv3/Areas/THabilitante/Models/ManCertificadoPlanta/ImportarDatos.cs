@@ -46,8 +46,10 @@ namespace SIGOFCv3.Areas.THabilitante.Models.ManCertificadoPlanta
                                 else
                                 {
                                     string cantidad;
+                                    double cantidadD;
                                     cantidad = (workSheet.Cells[rowIterator, 5].Value ?? "").ToString();
                                     if (string.IsNullOrEmpty(cantidad)) throw new Exception("Cantidad vacía o nula");
+                                    else if (!double.TryParse(cantidad, out cantidadD)) throw new Exception("Cantidad ingresada debe ser numérico.");
                                     else if (!Regex.IsMatch(cantidad, @"^\d+(?:\.\d{1,2})?$")) throw new Exception("Cantidad ingresada no válida, sólo permite hasta 2 decimales");
                                     else if (Decimal.Parse(cantidad) > 99999) throw new Exception("Cantidad ingresada debe ser menor a los 6 digitos");
                                     {
@@ -58,7 +60,7 @@ namespace SIGOFCv3.Areas.THabilitante.Models.ManCertificadoPlanta
                                         {
                                             oCampos.OBSERVACION = (workSheet.Cells[rowIterator, 7].Value ?? "").ToString();
                                             if (!Regex.IsMatch(oCampos.OBSERVACION, @"^[ ÁÉÍÓÚA-Záéíóúa-z0-9\-\/]+$") && !string.IsNullOrEmpty(oCampos.OBSERVACION)) throw new Exception("Observación no puede tener caracteres especiales");
-                                            else if (oCampos.FINES.Length > 200) throw new Exception("Observación no debe exceder los 200 caracteres");
+                                            else if (oCampos.OBSERVACION.Length > 200) throw new Exception("Observación no debe exceder los 200 caracteres");
                                             {
                                                 oCampos.RegEstado = 1;
                                                 lstVertice.Add(oCampos);
