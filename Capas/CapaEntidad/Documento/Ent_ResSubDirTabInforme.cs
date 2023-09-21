@@ -17,6 +17,8 @@ namespace CapaEntidad.DOC
         public string pVCodProcedencia { get; set; }
         [Description("pVCodMateria")]
         public string pVCodMateria { get; set; }
+        [Description("pVCodModalidad")]
+        public string pVCodModalidad { get; set; }
         [Description("pVNroReferencia")]
         public string pVNroReferencia { get; set; }
         [Description("pVCodTitular")]
@@ -31,24 +33,35 @@ namespace CapaEntidad.DOC
         public string pVCodUndOrganica { get; set; }
         [Description("pDFechaResolucion")]
         public DateTime? pDFechaResolucion { get; set; }
-        [Description("pVVistos")]
-        public string pVVistos { get; set; }
-        [Description("pVAntecedentes")]
-        public string pVAntecedentes { get; set; }
-        [Description("pVCompetencia")]
-        public string pVCompetencia { get; set; }
-        [Description("pVAnalisis")]
-        public string pVAnalisis { get; set; }
-        [Description("pVImputacion")]
-        public string pVImputacion { get; set; }
-        [Description("pVComunicacionExterna")]
-        public string pVComunicacionExterna { get; set; }
-        [Description("pVParrafosCliche")]
-        public string pVParrafosCliche { get; set; }
-        [Description("pVPiePagina")]
-        public string pVPiePagina { get; set; }
-        [Description("pVResolucion")]
-        public string pVResolucion { get; set; }
+        //[Description("pVVistos")]
+        //public string pVVistos { get; set; }
+        //[Description("pVAntecedentes")]
+        //public string pVAntecedentes { get; set; }
+        //[Description("pVCompetencia")]
+        //public string pVCompetencia { get; set; }
+        //[Description("pVAnalisis")]
+        //public string pVAnalisis { get; set; }
+        //[Description("pVImputacion")]
+        //public string pVImputacion { get; set; }
+        //[Description("pVComunicacionExterna")]
+        //public string pVComunicacionExterna { get; set; }
+        //[Description("pVParrafosCliche")]
+        //public string pVParrafosCliche { get; set; }
+        //[Description("pVPiePagina")]
+        //public string pVPiePagina { get; set; }
+        //[Description("pVResolucion")]
+        //public string pVResolucion { get; set; }
+        [Description("pNFlagCaducidadExtraccion")]
+        public Int16 pNFlagCaducidadExtraccion { get; set; }
+        [Description("pNFlagImputacionCargos")]
+        public Int16 pNFlagImputacionCargos { get; set; }
+        [Description("pNFlagMedidasCautelares")]
+        public Int16 pNFlagMedidasCautelares { get; set; }
+        [Description("pNFlagComunicacion")]
+        public Int16 pNFlagComunicacion { get; set; }
+        [Description("pNFlagHerramientasSubsanar")]
+        public Int16 pNFlagHerramientasSubsanar { get; set; }
+
         [Description("pVRutaArchivoRevision")]
         public string pVRutaArchivoRevision { get; set; }
         [Description("pVCodUsuarioCreacion")]

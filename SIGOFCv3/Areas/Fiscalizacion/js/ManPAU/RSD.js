@@ -23,7 +23,9 @@ const data = {
         { COD_MODALIDAD: '03', COD_MATERIA: '02', MODALIDAD: 'Comunidades nativas', CONTRATO: 'permiso forestal' },
         { COD_MODALIDAD: '04', COD_MATERIA: '01', MODALIDAD: 'Fauna', CONTRATO: '' },
     ],
-    Infracciones: [
+    Infracciones: [],
+    Causales_Caducidad: []
+    /*Infracciones: [
         {
             COD_MODALIDAD: '01',
             DETALLE: [
@@ -34,7 +36,7 @@ const data = {
                     numeral: 'Numeral 1 del Cuadro de Infracciones y Sanciones en Materia Forestal del Anexo 1 del RISMFFS',
                     sancion: 'Desde una amonestación hasta una sanción pecuniaria (en caso de reincidencia)',
                     subsanar: 'Sí/Establecer los linderos, hitos u otras señales.',
-                    select: false, templateId: 'concesiones-1'
+                    select: false, codPlantilla: 'concesiones-1'
                 },
                 {
                     titulo: 'Con relación a la presentación del informe de ejecución forestal',
@@ -43,7 +45,7 @@ const data = {
                     numeral: 'Numeral 2 del Cuadro de Infracciones y Sanciones en Materia Forestal del Anexo 1 del RISMFFS',
                     sancion: 'Desde una amonestación hasta una sanción pecuniaria (en caso de reincidencia).',
                     subsanar: 'Sí /Presentar el Informe de Ejecución Anual del PMFI xx, correspondiente al periodo xx',
-                    select: false, templateId: 'concesiones-2'
+                    select: false, codPlantilla: 'concesiones-2'
                 },
                 {
                     titulo: 'Con relación al aprovechamiento del recurso forestal no autorizado (extracción de individuos de procedencia identificada - volumen no autorizado)',
@@ -52,7 +54,7 @@ const data = {
                     numeral: 'Numeral 10 del Cuadro de Infracciones y Sanciones en Materia Forestal del Anexo 1 del RISMFFS',
                     sancion: 'Sanción monetaria mayor a 3 hasta 10 UIT',
                     subsanar: 'Sí/ Reponer con otro(s) individuo(s) declarado(s) dentro de la parcela de corta del plan de manejo supervisado. Asimismo, el infractor debe Acreditar la reposición del individuo. Justificar que fue producto de un error propio del manejo forestal. Registrar la información en el libro de operaciones de títulos habilitantes y/ o informes de ejecución.',
-                    select: false, templateId: 'concesiones-3'
+                    select: false, codPlantilla: 'concesiones-3'
                 },
                 {
                     titulo: 'Con relación a la obligación de tener y mantener actualizado el libro de operaciones',
@@ -61,7 +63,7 @@ const data = {
                     numeral: 'Numeral 11 del Cuadro de Infracciones y Sanciones en Materia Forestal del Anexo 1 del RISMFFS',
                     sancion: 'Sanción monetaria mayor a 3 hasta 10 UIT',
                     subsanar: 'Si, sólo en caso de no haber registrado la información, pero se cuente con la documentación que acredite la procedencia legal del recurso / Actualizar el libro de operaciones.',
-                    select: false, templateId: 'concesiones-4'
+                    select: false, codPlantilla: 'concesiones-4'
                 },
                 {
                     titulo: 'Con relación al aprovechamiento del recurso forestal no autorizado (extracción de individuos de procedencia no identificada - volumen injustificado).',
@@ -70,7 +72,7 @@ const data = {
                     numeral: 'Numeral 21 del Cuadro de Infracciones y Sanciones en Materia Forestal del Anexo 1 del RISMFFS',
                     sancion: 'Sanción monetaria mayor a 10 UIT hasta 5000 UIT.',
                     subsanar: 'No aplica',
-                    select: false, templateId: 'concesiones-5'
+                    select: false, codPlantilla: 'concesiones-5'
                 },
                 {
                     titulo: 'Con relación al incumplimiento de movilizar productos forestales no autorizados con documentos aprobados por la autoridad competente',
@@ -79,7 +81,7 @@ const data = {
                     numeral: 'Numeral 26 del Cuadro de Infracciones y Sanciones en Materia Forestal del Anexo 1 del RISMFFS',
                     sancion: 'Sanción monetaria mayor a 10 UIT hasta 5000 UIT.',
                     subsanar: 'No aplica',
-                    select: false, templateId: 'concesiones-6'
+                    select: false, codPlantilla: 'concesiones-6'
                 },
                 {
                     titulo: 'Con relación al incumplimiento de contar con regente forestal',
@@ -88,7 +90,7 @@ const data = {
                     numeral: 'Numeral 29 del Cuadro de Infracciones y Sanciones en Materia Forestal del Anexo 1 del RISMFFS',
                     sancion: 'Sanción monetaria mayor a 10 UIT hasta 5000 UIT.',
                     subsanar: 'No aplica',
-                    select: false, templateId: 'concesiones-7'
+                    select: false, codPlantilla: 'concesiones-7'
                 },
             ]
         },
@@ -102,7 +104,7 @@ const data = {
                     numeral: 'Numeral 1 del Cuadro de Infracciones y Sanciones en Materia Forestal del Anexo 1 del RISMFFS',
                     sancion: 'Desde una amonestación hasta una sanción pecuniaria (en caso de reincidencia)',
                     subsanar: 'Sí/Establecer los linderos, hitos u otras señales.',
-                    select: false, templateId: 'concesiones-1'
+                    select: false, codPlantilla: 'concesiones-1'
                 },
                 {
                     titulo: 'Con relación a la presentación del informe de ejecución forestal',
@@ -111,7 +113,7 @@ const data = {
                     numeral: 'Numeral 2 del Cuadro de Infracciones y Sanciones en Materia Forestal del Anexo 1 del RISMFFS',
                     sancion: 'Desde una amonestación hasta una sanción pecuniaria (en caso de reincidencia).',
                     subsanar: 'Sí /Presentar el Informe de Ejecución Anual del PMFI xx, correspondiente al periodo xx',
-                    select: false, templateId: 'concesiones-2'
+                    select: false, codPlantilla: 'concesiones-2'
                 },
                 {
                     titulo: 'Con relación al aprovechamiento del recurso forestal no autorizado (extracción de individuos de procedencia identificada - volumen no autorizado)',
@@ -120,7 +122,7 @@ const data = {
                     numeral: 'Numeral 10 del Cuadro de Infracciones y Sanciones en Materia Forestal del Anexo 1 del RISMFFS',
                     sancion: 'Sanción monetaria mayor a 3 hasta 10 UIT',
                     subsanar: 'Sí/ Reponer con otro(s) individuo(s) declarado(s) dentro de la parcela de corta del plan de manejo supervisado. Asimismo, el infractor debe Acreditar la reposición del individuo. Justificar que fue producto de un error propio del manejo forestal. Registrar la información en el libro de operaciones de títulos habilitantes y/ o informes de ejecución.',
-                    select: false, templateId: 'concesiones-3'
+                    select: false, codPlantilla: 'concesiones-3'
                 },
                 {
                     titulo: 'Con relación a la obligación de tener y mantener actualizado el libro de operaciones',
@@ -129,7 +131,7 @@ const data = {
                     numeral: 'Numeral 11 del Cuadro de Infracciones y Sanciones en Materia Forestal del Anexo 1 del RISMFFS',
                     sancion: 'Sanción monetaria mayor a 3 hasta 10 UIT',
                     subsanar: 'Si, sólo en caso de no haber registrado la información, pero se cuente con la documentación que acredite la procedencia legal del recurso / Actualizar el libro de operaciones.',
-                    select: false, templateId: 'concesiones-4'
+                    select: false, codPlantilla: 'concesiones-4'
                 },
                 {
                     titulo: 'Con relación al aprovechamiento del recurso forestal no autorizado (extracción de individuos de procedencia no identificada - volumen injustificado).',
@@ -138,7 +140,7 @@ const data = {
                     numeral: 'Numeral 21 del Cuadro de Infracciones y Sanciones en Materia Forestal del Anexo 1 del RISMFFS',
                     sancion: 'Sanción monetaria mayor a 10 UIT hasta 5000 UIT.',
                     subsanar: 'No aplica',
-                    select: false, templateId: 'concesiones-5'
+                    select: false, codPlantilla: 'concesiones-5'
                 },
                 {
                     titulo: 'Con relación al incumplimiento de movilizar productos forestales no autorizados con documentos aprobados por la autoridad competente',
@@ -147,7 +149,7 @@ const data = {
                     numeral: 'Numeral 26 del Cuadro de Infracciones y Sanciones en Materia Forestal del Anexo 1 del RISMFFS',
                     sancion: 'Sanción monetaria mayor a 10 UIT hasta 5000 UIT.',
                     subsanar: 'No aplica',
-                    select: false, templateId: 'concesiones-6'
+                    select: false, codPlantilla: 'concesiones-6'
                 },
                 {
                     titulo: 'Con relación al incumplimiento de contar con regente forestal',
@@ -156,7 +158,7 @@ const data = {
                     numeral: 'Numeral 29 del Cuadro de Infracciones y Sanciones en Materia Forestal del Anexo 1 del RISMFFS',
                     sancion: 'Sanción monetaria mayor a 10 UIT hasta 5000 UIT.',
                     subsanar: 'No aplica',
-                    select: false, templateId: 'concesiones-7'
+                    select: false, codPlantilla: 'concesiones-7'
                 },
             ]
         },
@@ -170,7 +172,7 @@ const data = {
                     numeral: 'Numeral 2 del Cuadro de Infracciones y Sanciones en Materia Forestal del Anexo 1 del RISMFFS',
                     sancion: 'Desde una amonestación hasta una sanción pecuniaria (en caso de reincidencia).',
                     subsanar: 'Sí /Presentar el Informe de Ejecución Anual del PMFI xx, correspondiente al periodo xx',
-                    select: false, templateId: 'ccnn-1'
+                    select: false, codPlantilla: 'ccnn-1'
                 },
                 {
                     titulo: 'Con relación al aprovechamiento del recurso forestal no autorizado (extracción de individuos de procedencia identificada - volumen no autorizado)',
@@ -179,7 +181,7 @@ const data = {
                     numeral: 'Numeral 10 del Cuadro de Infracciones y Sanciones en Materia Forestal del Anexo 1 del RISMFFS',
                     sancion: 'Sanción monetaria mayor a 3 hasta 10 UIT',
                     subsanar: 'Sí/ Reponer con otro(s) individuo(s) declarado(s) dentro de la parcela de corta del plan de manejo supervisado. Asimismo, el infractor debe Acreditar la reposición del individuo. Justificar que fue producto de un error propio del manejo forestal. Registrar la información en el libro de operaciones de títulos habilitantes y/o informes de ejecución.',
-                    select: false, templateId: 'ccnn-2'
+                    select: false, codPlantilla: 'ccnn-2'
                 },
                 {
                     titulo: 'Con relación a la obligación de tener y mantener actualizado el libro de operaciones',
@@ -188,7 +190,7 @@ const data = {
                     numeral: 'Numeral 11 del Cuadro de Infracciones y Sanciones en Materia Forestal del Anexo 1 del RISMFFS',
                     sancion: 'Sanción monetaria mayor a 3 hasta 10 UIT',
                     subsanar: 'Si, sólo en caso de no haber registrado la información, pero se cuente con la documentación que acredite la procedencia legal del recurso / Actualizar el libro de operaciones.',
-                    select: false, templateId: 'ccnn-3'
+                    select: false, codPlantilla: 'ccnn-3'
                 },
                 {
                     titulo: 'Con relación al aprovechamiento del recurso forestal no autorizado (extracción de individuos de procedencia no identificada - volumen injustificado)',
@@ -197,7 +199,7 @@ const data = {
                     numeral: 'Numeral 21 del Cuadro de Infracciones y Sanciones en Materia Forestal del Anexo 1 del RISMFFS',
                     sancion: 'Sanción monetaria mayor a 10 UIT hasta 5000 UIT.',
                     subsanar: 'No aplica',
-                    select: false, templateId: 'ccnn-4'
+                    select: false, codPlantilla: 'ccnn-4'
                 },
                 {
                     titulo: 'Con relación al incumplimiento de movilizar productos forestales no autorizados con documentos aprobados por la autoridad competente',
@@ -206,7 +208,7 @@ const data = {
                     numeral: 'Numeral 26 del Cuadro de Infracciones y Sanciones en Materia Forestal del Anexo 1 del RISMFFS',
                     sancion: 'Sanción monetaria mayor a 10 UIT hasta 5000 UIT.',
                     subsanar: 'No aplica',
-                    select: false, templateId: 'ccnn-5'
+                    select: false, codPlantilla: 'ccnn-5'
                 },
                 {
                     titulo: 'Con relación al incumplimiento de contar con regente forestal',
@@ -215,7 +217,7 @@ const data = {
                     numeral: 'Numeral 29 del Cuadro de Infracciones y Sanciones en Materia Forestal del Anexo 1 del RISMFFS',
                     sancion: 'Sanción monetaria mayor a 10 UIT hasta 5000 UIT.',
                     subsanar: 'No aplica',
-                    select: false, templateId: 'ccnn-6'
+                    select: false, codPlantilla: 'ccnn-6'
                 },
             ]
         },
@@ -229,7 +231,7 @@ const data = {
                     numeral: 'Numeral 2 del Cuadro de Infracciones y Sanciones en Materia de Fauna Silvestre del Anexo 2 del Reglamento de Infracciones y Sanciones',
                     sancion: '',
                     subsanar: '',
-                    select: false, templateId: 'fauna-1'
+                    select: false, codPlantilla: 'fauna-1'
                 },
                 {
                     titulo: 'Con relación a la obligación de tener y mantener actualizado el libro de operaciones',
@@ -238,7 +240,7 @@ const data = {
                     numeral: 'Numeral 12 del Anexo 2 del Cuadro de Infracciones y Sanciones en Materia de Fauna Silvestre del Anexo 2 del Reglamento de Infracciones y Sanciones',
                     sancion: '',
                     subsanar: '',
-                    select: false, templateId: 'fauna-2'
+                    select: false, codPlantilla: 'fauna-2'
                 },
                 {
                     titulo: 'Con relación al incumplimiento de contar con regente forestal',
@@ -247,7 +249,7 @@ const data = {
                     numeral: '',
                     sancion: '',
                     subsanar: '',
-                    select: false, templateId: 'fauna-3'
+                    select: false, codPlantilla: 'fauna-3'
                 },
             ]
         }
@@ -260,7 +262,7 @@ const data = {
         { titulo: 'El no pago por derecho de aprovechamiento al cual se encuentra sujeto, dentro de los plazos establecidos en el Reglamento o en el título respectivo, salvo que exista refinanciamiento, fraccionamiento o suspensión de obligaciones aprobados por la ARFFS.', select: false },
         { titulo: 'La realización de actividades distintas a las otorgadas en virtud del título habilitante.', select: false },
         { titulo: 'El incumplimiento de los compromisos de inversión acordados para el otorgamiento del título habilitante, en los casos que corresponda, salvo que se demuestre que fue causado por hechos fortuitos o de fuerza mayor.', select: false },
-    ]
+    ]*/
 };
 
 _informe.CambiarEstado = function (state) {
@@ -614,23 +616,29 @@ _informe.Guardar = function (parametros) {
 }
 
 _informe.Estructura = function () {
-    let data = JSON.parse(JSON.stringify(app.Informe));
+    let objEN = JSON.parse(JSON.stringify(app.Informe));
 
-    data.FIRMAS.forEach(function (x, i) {
+    objEN.FIRMAS.forEach(function (x, i) {
         if (!x.flgAplica) x.estado = 0;
         else x.estado = x.estado || 1;
         x.item = i + 1;
     });
 
-    data.RECURSOS.forEach(function (x, i) {
+    objEN.RECURSOS.forEach(function (x, i) {
         if (x.estado === null) x.estado = 1;
         x.item = i + 1;
     });
 
+    objEN.INFRACCIONES = JSON.parse(JSON.stringify(app.Infracciones))
+        .filter(item => item.select);
+
+    objEN.CAUSALES_CADUCIDAD = JSON.parse(JSON.stringify(data.Causales_Caducidad))
+        .filter(item => item.select);
+
     let parametros = {
-        ...data,
-        //FIRMAS: data.FIRMAS,
-        ELIMINAR: data.ELIMINAR
+        ...objEN,
+        //FIRMAS: objEN.FIRMAS,
+        ELIMINAR: objEN.ELIMINAR
     };
 
     return parametros;
@@ -824,7 +832,7 @@ _informe.Extraer_Infracciones = function () {
 }
 
 _informe.EXTRAER_INFRACCIONES_POR_MODALIDAD = function () {
-    app.Infracciones = data.Infracciones.find(x => x.COD_MODALIDAD == app.Informe.COD_MODALIDAD).DETALLE;
+    app.Infracciones = data.Infracciones.filter(x => x.codModalidad == app.Informe.COD_MODALIDAD);
 }
 
 _informe.EXTRAER_PARRAFOS_INFRACCION = function (template) {
@@ -832,11 +840,10 @@ _informe.EXTRAER_PARRAFOS_INFRACCION = function (template) {
     informe.TABLAS_INFORME = _informe.DATA_INFORMES;
 
     const infracciones = JSON.parse(JSON.stringify(data.Infracciones))
-        .find(item => item.COD_MODALIDAD == informe.COD_MODALIDAD).DETALLE
-        .filter(item => item.select)
+        .filter(item => item.codModalidad == informe.COD_MODALIDAD && item.select)
         .map(function (item, index) {
             //item.numeration = _informe.NumeroALetra(index + 1);
-            item.html = _informe.tmpl.get(template, '#tmpl-' + item.templateId, informe);
+            item.html = _informe.tmpl.get(template, '#tmpl-' + item.codPlantilla, informe);
             return item;
         });
 
@@ -1047,16 +1054,18 @@ $(function () {
                 RES_DIRECTORAL_UND_ORGANICA: null,
                 RES_DIRECTORAL_FECHA: null,
                 FIRMAS: [],
-                VISTOS: null,
                 RECURSOS: [],
+                INFRACCIONES: [],
+                CAUSALES_CADUCIDAD: [],
+                //VISTOS: null,
                 //ANTECEDENTES: null,
-                COMPETENCIA: null,
-                ANALISIS: null,
-                IMPUTACION: null,
-                COMUNICACION_EXTERNA: null,
-                PARRAFOS_CLICHE: null,
-                PIE_PAGINA: null,
-                RESOLUCION: null,
+                //COMPETENCIA: null,
+                //ANALISIS: null,
+                //IMPUTACION: null,
+                //COMUNICACION_EXTERNA: null,
+                //PARRAFOS_CLICHE: null,
+                //PIE_PAGINA: null,
+                //RESOLUCION: null,
 
                 /** Nuevos campos */
                 FLG_CADUCIDAD_EXTRACCION: true,
@@ -1083,7 +1092,7 @@ $(function () {
             Infracciones: []
         },
         methods: {
-            init: function () {
+            init: async function () {
                 const self = this;
 
                 const datos = ManRD_AddEdit.frm.serializeObject();
@@ -1108,26 +1117,31 @@ $(function () {
                 };
 
                 self.Informe = { ...self.Informe, ...values };
-                this.MateriaOnChange();
+
+                //Valores por defecto infracciones, causales
+                const configuracion = await self.Configuracion();
+                
+                //Causales_Caducidad
+                data.Infracciones = configuracion.infracciones;
+                data.Causales_Caducidad = configuracion.causales_caducidad;
+
+                self.MateriaOnChange();
 
                 //Verificamos si existe informacion registrada en la base de datos
                 if (self.Informe.COD_RES_SUB) {
-                    self.Informacion(values).then(function (res_general) {
-                        self.TramiteByID().then(function (res_tramite) {
-                            if (res_tramite.success) {
-                                self.Tramite = res_tramite.data;
-                                //app.Informe.DESTINATARIO = res_tramite.data.trabajador;
-                            }
-                        }).catch(() => { });
+                    const res_general = await self.Informacion(values);
 
-                        //Recursos
-                        if (!self.Informe.COD_INFORME_DIGITAL) {
-                            self.ObtenerArchivos().then(function (res_files) {
-                                //console.log("LOAD FILES SIADO...", res_files);
-                            });
-                        }
+                    const res_tramite = await self.TramiteByID();
 
-                    });
+                    if (res_tramite.success) {
+                        self.Tramite = res_tramite.data;
+                        //app.Informe.DESTINATARIO = res_tramite.data.trabajador;
+                    }
+
+                    //Recursos
+                    if (!self.Informe.COD_INFORME_DIGITAL) {
+                        const res_files = await self.ObtenerArchivos();
+                    }
                 }
             },
             MateriaOnChange: function () {
@@ -1135,6 +1149,20 @@ $(function () {
                 this.Informe.COD_MODALIDAD = this.Modalidades[0].COD_MODALIDAD;
 
                 _informe.EXTRAER_INFRACCIONES_POR_MODALIDAD();
+            },
+            Configuracion: function () {
+                return new Promise((resolve, reject) => {
+                    let params = {
+                        type: 'get',
+                        url: `${urlLocalSigo}Fiscalizacion/ManPAU/ObtenerConfiguracion`
+                    };
+
+                    utilSigo.fnAjax(params, function (res) {
+                        resolve(res);
+                    }, function () {
+                        reject();
+                    });
+                });
             },
             Informacion: function (values) {
                 const self = this;
@@ -1164,6 +1192,15 @@ $(function () {
                             self.Informe.COD_RES_SUB = res.informe.COD_RES_SUB || values.COD_RES_SUB;
                             self.Informe.NUM_INFORME_SITD = res.informe.NUM_INFORME_SITD || values.NUM_INFORME_SITD;
                             self.Informe.REPRESENTANTE_LEGAL = res.informe.REPRESENTANTE_LEGAL || values.REPRESENTANTE_LEGAL;
+
+                            //Seleccionamos las infracciones y causales de caducidad
+                            data.Infracciones.forEach(item => {
+                                item.select = !!res.informe.INFRACCIONES.find(x => x.codInfraccion == item.codInfraccion);
+                            });
+
+                            data.Causales_Caducidad.forEach(item => {
+                                item.select = !!res.informe.CAUSALES_CADUCIDAD.find(x => x.codCausalCaducidad == item.codCausalCaducidad);
+                            });
                         }
 
                         //CABECERA

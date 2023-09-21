@@ -1,14 +1,12 @@
-﻿using System;
+﻿using CapaEntidad.ViewModel;
+using CapaLogica.DOC;
+using SIGOFCv3.Models;
+using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
-using System.IO;
-using SIGOFCv3.Models;
-using CapaEntidad.ViewModel;
-using CapaLogica.DOC;
-using CapaLogica.Documento;
-using System.Runtime.Remoting;
 
 namespace SIGOFCv3.Areas.Fiscalizacion.Controllers
 {
@@ -16,6 +14,15 @@ namespace SIGOFCv3.Areas.Fiscalizacion.Controllers
     {
         Log_PAU_Digital CLogInforme;
 
+        [HttpGet]
+        public JsonResult ObtenerConfiguracion()
+        {
+            CLogInforme = new Log_PAU_Digital();
+            var infracciones = CLogInforme.ListarInfracciones();
+            var causales_caducidad = CLogInforme.ListarCausalesCaducidad();
+            var result = new { infracciones, causales_caducidad };
+            return Json(result, JsonRequestBehavior.AllowGet);
+        }
 
         [HttpPost]
         public JsonResult GuardarRSD(VM_RSD_DIGITAL informeDigital)
@@ -40,7 +47,7 @@ namespace SIGOFCv3.Areas.Fiscalizacion.Controllers
             }
 
             return Json(new { success, msj, data = result });
-        }
+        }        
 
         [HttpPost]
         public JsonResult CargarDocumento()
@@ -107,12 +114,6 @@ namespace SIGOFCv3.Areas.Fiscalizacion.Controllers
         {
             CLogInforme = new Log_PAU_Digital();
             string result = CLogInforme.NotificarRSD(notificacion);
-
-            /*if (objEN != null && !string.IsNullOrEmpty(result))
-            {
-                bool status = CLogInforme.RSDFirmaActualizar(objEN);
-                if (!status) result = String.Empty;
-            }*/
 
             return Json(result);
         }

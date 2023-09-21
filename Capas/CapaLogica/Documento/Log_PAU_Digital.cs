@@ -1,12 +1,8 @@
 ﻿using CapaDatos.DOC;
-using CapaDatos.Documento;
 using CapaEntidad.DOC;
 using CapaEntidad.ViewModel;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace CapaLogica.DOC
 {
@@ -29,6 +25,7 @@ namespace CapaLogica.DOC
             cabecera.pNTramiteID = informeDigital.TRAMITE_ID;
             cabecera.pVCodProcedencia = informeDigital.COD_PROCEDENCIA;
             cabecera.pVCodMateria = informeDigital.COD_MATERIA;
+            cabecera.pVCodModalidad = informeDigital.COD_MODALIDAD;
             cabecera.pVNroReferencia = informeDigital.NRO_REFERENCIA;
             cabecera.pVCodTitular = informeDigital.COD_TITULAR;
             cabecera.pVRucTitularEstado = informeDigital.TITULAR_ESTADO_RUC;
@@ -36,15 +33,20 @@ namespace CapaLogica.DOC
             cabecera.pNAnioResolucion = informeDigital.RES_DIRECTORAL_ANIO;
             cabecera.pVCodUndOrganica = informeDigital.RES_DIRECTORAL_UND_ORGANICA;
             cabecera.pDFechaResolucion = informeDigital.RES_DIRECTORAL_FECHA;
-            cabecera.pVVistos = informeDigital.VISTOS;
-            cabecera.pVAntecedentes = informeDigital.ANTECEDENTES;
-            cabecera.pVCompetencia = informeDigital.COMPETENCIA;
-            cabecera.pVAnalisis = informeDigital.ANALISIS;
-            cabecera.pVImputacion = informeDigital.IMPUTACION;
-            cabecera.pVComunicacionExterna = informeDigital.COMUNICACION_EXTERNA;
-            cabecera.pVParrafosCliche = informeDigital.PARRAFOS_CLICHE;
-            cabecera.pVPiePagina = informeDigital.PIE_PAGINA;
-            cabecera.pVResolucion = informeDigital.RESOLUCION;
+            //cabecera.pVVistos = informeDigital.VISTOS;
+            //cabecera.pVAntecedentes = informeDigital.ANTECEDENTES;
+            //cabecera.pVCompetencia = informeDigital.COMPETENCIA;
+            //cabecera.pVAnalisis = informeDigital.ANALISIS;
+            //cabecera.pVImputacion = informeDigital.IMPUTACION;
+            //cabecera.pVComunicacionExterna = informeDigital.COMUNICACION_EXTERNA;
+            //cabecera.pVParrafosCliche = informeDigital.PARRAFOS_CLICHE;
+            //cabecera.pVPiePagina = informeDigital.PIE_PAGINA;
+            //cabecera.pVResolucion = informeDigital.RESOLUCION;
+            cabecera.pNFlagCaducidadExtraccion = Convert.ToInt16(informeDigital.FLG_CADUCIDAD_EXTRACCION);
+            cabecera.pNFlagComunicacion = Convert.ToInt16(informeDigital.FLG_COMUNICACION);
+            cabecera.pNFlagHerramientasSubsanar = Convert.ToInt16(informeDigital.FLG_HERRAMIENTAS_SUBSANAR);
+            cabecera.pNFlagImputacionCargos = Convert.ToInt16(informeDigital.FLG_IMPUTACION_CARGOS);
+            cabecera.pNFlagMedidasCautelares = Convert.ToInt16(informeDigital.FLG_MEDIDAS_CAUTELARES);
             cabecera.pVRutaArchivoRevision = informeDigital.RUTA_ARCHIVO_REVISION;
             cabecera.pVCodUsuarioCreacion = informeDigital.COD_USUARIO_OPERACION;
             cabecera.pVCodUsuarioModificacion = informeDigital.COD_USUARIO_OPERACION;
@@ -62,8 +64,18 @@ namespace CapaLogica.DOC
         }
 
         public bool RSDFirmaActualizar(VM_RSD_DIGITAL_FIRMA item)
-        {            
+        {
             return oDat_PAU_Digital.RSDFirmaActualizar(item);
+        }
+
+        public List<VM_RSD_DIGITAL_INFRACCIONES> ListarInfracciones()
+        {
+            return oDat_PAU_Digital.ListarInfracciones();
+        }
+
+        public List<VM_RSD_DIGITAL_CAUSALES_CADUCIDAD> ListarCausalesCaducidad()
+        {
+            return oDat_PAU_Digital.ListarCausalesCaducidad();
         }
 
         public string NotificarRSD(RSD_Notificacion notificacion)
@@ -75,11 +87,6 @@ namespace CapaLogica.DOC
         {
             oDat_PAU_Digital.ModificarNumeroInforme(codInforme, numeroInforme, fechaOperacion);
         }
-
-        /*public VM_RSD_CABECERA ObtenerRSDCabecera(string COD_RESOLUCION)
-        {
-            return oDat_PAU_Digital.ObtenerRSDCabecera(COD_RESOLUCION);
-        }*/
 
         public List<VM_Informe_Supervision> ObtenerRSDCabeceraByReferencia(string NUM_REFERENCIA, int TIPO = 1)
         {
