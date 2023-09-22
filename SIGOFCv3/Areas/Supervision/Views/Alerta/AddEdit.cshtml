@@ -201,12 +201,14 @@
                                             <div class="col-10">
                                                 <div class="form-group">
                                                     <label for="ddlItemSupuesto" class="text-small"><strong>Supuestos</strong></label>
-                                                    <select class="form-control form-control-sm" id="ddlItemSupuesto" name="ddlItemSupuesto" onchange="addEdit.seleccionarSupuesto(this);">                                                        
+                                                    @*<select class="form-control form-control-sm" id="ddlItemSupuesto" name="ddlItemSupuesto" onchange="addEdit.seleccionarSupuesto(this);">                                                        
                                                         @foreach (var item in Model.ListSupuestos)
                                                         {
                                                             <option value="@item.CODIGO">@item.DESCRIPCION</option>
                                                         }
-                                                    </select>
+                                                    </select>*@
+                                                    @Html.DropDownList("ddlItemSupuesto", new SelectList(Model.ListSupuestos, "CODIGO", "DESCRIPCION", Model.entidad.SUPUESTO), new {@class = "form-control form-control-sm", @onchange = "addEdit.seleccionarSupuesto(this);" })
+
                                                 </div>
                                             </div>
                                             <div class="col-2 mt-4">

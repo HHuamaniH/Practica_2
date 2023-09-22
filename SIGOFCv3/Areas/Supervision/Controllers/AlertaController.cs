@@ -609,11 +609,13 @@ namespace SIGOFCv3.Areas.Supervision.Controllers
                     OUTPUTPARAM01 = oCLogica.RegGrabarBitacoraBXConfirmacion(oCEntBitacora);
                     result.data = OUTPUTPARAM01;
                 }
+
                 if (OUTPUTPARAM01 == "")
                 {
                     result.msj = ("El envio de la alerta no es posible porque ya fue enviada anteriormente, revise el campo 'Fecha y hora de envio de la alerta'");
                     result.success = false;
                 }
+
                 if (OUTPUTPARAM01 != "")
                 {
                     //ItemRegistroLimpiar(); //se ejecuta por js
@@ -671,7 +673,7 @@ namespace SIGOFCv3.Areas.Supervision.Controllers
                     foreach (var correo in correos)
                     {
                         try
-                        {
+                        {                          
                             //Configuración del Mensaje
                             SmtpClient smtpClient = new SmtpClient();
                             MailMessage message = new MailMessage();
@@ -697,7 +699,7 @@ namespace SIGOFCv3.Areas.Supervision.Controllers
                             smtpClient.DeliveryMethod = SmtpDeliveryMethod.Network;
                             //enviando correo
                             smtpClient.Send(message); 
-                            //message.Dispose();
+                            //message.Dispose();                            
 
                             msjLog += "<tr><td>" + correo + "</td><td>Mensaje enviado</td></tr>";
                         }
@@ -710,6 +712,7 @@ namespace SIGOFCv3.Areas.Supervision.Controllers
                     msjLog += "</tbody></table>";
                     try
                     {
+                        
                         //Configuración del Mensaje
                         SmtpClient smtpClient = new SmtpClient();
                         MailMessage message = new MailMessage();
@@ -742,7 +745,7 @@ namespace SIGOFCv3.Areas.Supervision.Controllers
                         //enviando correo
                         smtpClient.Send(message);
                         //message.Dispose();
-
+                        
                         oCEntBitacora.COD_UCUENTA_ENVIA = (ModelSession.GetSession())[0].COD_UCUENTA;
                         oCEntBitacora.NUM_CNOTIFICACION = null;
                         oCEntBitacora.NUM_THABILITANTE = null;
@@ -757,7 +760,9 @@ namespace SIGOFCv3.Areas.Supervision.Controllers
                         oCEntBitacora.USUARIO_ENVIA = null;
                         oCEntBitacora.FECHA_SALIDA = null;
                         oCEntBitacora.FECHA_LLEGADA = null;
+                        oCEntBitacora.SUPUESTO = null;
                         oCEntBitacora.ENVIAR_ALERTA = entidad.ENVIAR_ALERTA; //jose
+                        oCEntBitacora.COD_SUPUESTO = entidad.COD_SUPUESTO;
                         oCEntBitacora.ASUNTO_ENVIO_ALERTA = entidad.ASUNTO_ENVIO_ALERTA.Trim();
                         oCEntBitacora.DESTINO_ENVIO_ALERTA = entidad.DESTINO_ENVIO_ALERTA.Trim();
                         oCEntBitacora.DESTINO_ENVIO_TEXT = entidad.DESTINO_ENVIO_TEXT.Trim();
@@ -769,14 +774,17 @@ namespace SIGOFCv3.Areas.Supervision.Controllers
                         oCEntBitacora.ACTA_ARCHIVO = null;
                         oCEntBitacora.ListBEXT = entidad.ListBEXT;                       
                         oCEntBitacora.ListEliTABLA= entidad.ListEliTABLA;
+
                         if (oCEntBitacora.ListBEXT != null && oCEntBitacora.ListBEXT.Count > 0)
                         {
                             OUTPUTPARAM01 = oCLogica.RegGrabarBitacoraBXConfirmacion(oCEntBitacora);//para guardar la lista de especies del balance 
                         }
+
                         if(oCEntBitacora.ListEliTABLA!=null && oCEntBitacora.ListEliTABLA.Count > 0)
                         {
                             OUTPUTPARAM01 = oCLogica.RegGrabarBitacoraBXConfirmacion(oCEntBitacora);
                         }
+
                         OUTPUTPARAM = oCLogica.RegEnviarAlerta(oCEntBitacora);
                         result.success = true;
                         result.msj = "Se envió la alerta a los destinatarios indicados, por favor revise el correo resumen";

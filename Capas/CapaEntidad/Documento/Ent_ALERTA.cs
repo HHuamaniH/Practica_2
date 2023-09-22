@@ -212,6 +212,10 @@ namespace CapaEntidad.DOC
         public string DESTINATARIO_CC { get; set; }
         [Description("SUPUESTO")]
         public string SUPUESTO { get; set; }
+
+        [Description("COD_SUPUESTO")]
+        public int? COD_SUPUESTO { get; set; }
+
         [Description("TOKEN")]
         public string TOKEN { get; set; }
 

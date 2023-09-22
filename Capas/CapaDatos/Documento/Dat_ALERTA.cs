@@ -125,6 +125,10 @@ namespace CapaDatos.DOC
                             lsCEntidad.ACTA_ARCHIVO = dr.GetValueString("ACTA_ARCHIVO");
                             lsCEntidad.ACTA_ARCHIVO_TEXT = dr.GetValueString("ACTA_ARCHIVO_TEXT");
                             lsCEntidad.ENVIAR_ALERTA = dr.GetValueBoolean("ENVIAR_ALERTA");
+                            //CODIGO DE SUPUESTO
+                            lsCEntidad.COD_SUPUESTO = dr.GetValueInt32("CODIGO_SUPUESTO");
+                            lsCEntidad.SUPUESTO = dr.GetValueString("SUPUESTO_DETALLE");
+
                             lsCEntidad.FECHA_ENVIO_ALERTA = dr.GetValueString("FECHA_ENVIO_ALERTA");
                             lsCEntidad.ASUNTO_ENVIO_ALERTA = dr.GetValueString("ASUNTO_ENVIO_ALERTA");
                             lsCEntidad.DESTINO_ENVIO_ALERTA = dr.GetValueString("DESTINO_ENVIO_ALERTA");

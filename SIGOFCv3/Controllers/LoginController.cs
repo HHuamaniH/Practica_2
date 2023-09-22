@@ -169,6 +169,7 @@ namespace SIGOFCv3.Controllers
                 user.OUTPUTPARAM02 = "";
                 // ListLogin = oCLogica.RegLoginValidando(user,"v3");
                 ListLogin = oCLogica.RegLoginValidandoV3(user, "v3");
+
                 if (ListLogin[0].ListUCDMMENU == null)
                     throw new Exception("|No tiene perfil o menus asignados");
                 //Session["LoginUsuario"] = ListLogin ;

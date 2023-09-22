@@ -88,6 +88,7 @@ let _BalExtra = {
        
     }
 };
+
 class AddEdit {
     constructor() {
         this.frm;
@@ -378,6 +379,22 @@ class AddEdit {
                 }
             }
         }
+
+        let supuesto = $('#ddlItemSupuesto').val();
+        let cod_supuesto;
+        if (supuesto == "supuesto_A.docx") {
+            cod_supuesto = 4;
+        }
+        else if (supuesto == "supuesto_B.docx") {
+            cod_supuesto = 2;
+        }
+        else if (supuesto == "supuesto_C.docx") {
+            cod_supuesto = 3;
+        }
+        else {
+            cod_supuesto = 0;
+        }
+
         var varMensaje = '¿ Está seguro de enviar el correo de Alerta?';
         $("#DESTINO_ENVIO_TEXT").val(this.rutasSeleccionadaText);
         $("#DESTINO_ENVIO_ALERTA").removeAttr("readonly");
@@ -386,6 +403,8 @@ class AddEdit {
             if (r) {
                 var dataEnviar = $mthis.serializeObject();
                 dataEnviar.ENVIAR_ALERTA = $mthis.find("#ENVIAR_ALERTA").is(":checked");
+                dataEnviar.COD_SUPUESTO = cod_supuesto;
+                //dataEnviar.SUPUESTO = null;
                 dataEnviar.MENSAJE_ENVIO_ALERTA = CKEDITOR.instances.MENSAJE_ENVIO_ALERTA.getData();
                 dataEnviar.CONCOPIA_ENVIO_ALERTA = $mthis.find("#CONCOPIA_ENVIO_ALERTA").val();
                 dataEnviar.DESTINO_ENVIO_ALERTA = $mthis.find("#DESTINO_ENVIO_ALERTA").val();
@@ -416,6 +435,7 @@ class AddEdit {
             }
         });
     }
+    
     chkDepartamento(obj, codigo) {
 
         if (codigo != "") {
