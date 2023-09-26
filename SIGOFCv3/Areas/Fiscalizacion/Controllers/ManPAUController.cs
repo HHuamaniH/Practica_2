@@ -47,7 +47,15 @@ namespace SIGOFCv3.Areas.Fiscalizacion.Controllers
             }
 
             return Json(new { success, msj, data = result });
-        }        
+        }
+
+        [HttpGet]
+        public JsonResult ListarPlanesManejo(string COD_INFORME, string COD_THABILITANTE, int? NUM_POA, string V_OPCION)
+        {
+            CLogInforme = new Log_PAU_Digital();
+            var result = CLogInforme.ListarPlanesManejo(COD_INFORME, COD_THABILITANTE, NUM_POA, V_OPCION);
+            return Json(result, JsonRequestBehavior.AllowGet);
+        }
 
         [HttpPost]
         public JsonResult CargarDocumento()

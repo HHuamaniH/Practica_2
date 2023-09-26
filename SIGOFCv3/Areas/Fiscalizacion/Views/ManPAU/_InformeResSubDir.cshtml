@@ -37,7 +37,7 @@
         <div>Generar Informe</div>
         <div class="options">
             <button type="button" class="btn btn-link btn-sm p-0 ml-3" onclick="_informe.Exportar()" v-if="Informe.COD_INFORME_DIGITAL && Informe.ESTADO < States.FINALIZADO">
-                <i class="fa fa-file-word-o fa-fw"></i>Exportar informe
+                <i class="fa fa-file-word-o fa-fw"></i>Crear informe
             </button>
             <button type="button" class="btn btn-link btn-sm p-0 ml-3" onclick="_informe.Registro()" v-if="Informe.COD_RES_SUB && Informe.ESTADO < States.COMPLETADO">
                 <i class="fa fa-save fa-fw"></i>Guardar
@@ -141,11 +141,12 @@
                         <h4 class="mt-2">
                             {{Informe.NUM_INFORME_SITD || 'N/A'}} <i class="fa fa-pencil-square fa-lg ml-2 cursor-pointer text-success" v-if="Informe.COD_INFORME_DIGITAL" onclick="_informe.SITD_OPEN()"></i>
                         </h4>
+                        <small class="text-muted" v-if="app.Tramite?.password"><strong>Clave STD:</strong> {{app.Tramite?.password}}</small>
                     </div>
                 </div>
             </div>
             <div class="form-row">
-                <div class="col-sm-3">
+                <div class="col-sm-2">
                     <div class="form-group form-group-sm">
                         <label class="col-form-label text-small">Materia</label>
                         <select class="form-control form-control-sm" v-on:change="MateriaOnChange()" v-model="Informe.COD_MATERIA">
@@ -153,7 +154,7 @@
                         </select>
                     </div>
                 </div>
-                <div class="col-sm-3">
+                <div class="col-sm-2">
                     <div class="form-group form-group-sm">
                         <label class="col-form-label text-small">Modalidad</label>
                         <select class="form-control form-control-sm" v-model="Informe.COD_MODALIDAD" v-on:change="_informe.EXTRAER_INFRACCIONES_POR_MODALIDAD()">
@@ -161,9 +162,9 @@
                         </select>
                     </div>
                 </div>
-                <div class="col-sm-6">
+                <div class="col-sm-auto">
                     <div class="form-group form-group-sm">
-                        <label class="col-form-label text-small">Referencia N° de informe de supervisión</label>
+                        <label class="col-form-label text-small">N° de informe de supervisión</label>
                         <div>
                             <a class="chip badge badge-success rounded mr-2 mt-1" v-for="(item, index) in Inf_Supervision"
                                target="_blank" v-bind:href="_informe.ObtenerRutaInformeSup(item)">
@@ -175,6 +176,19 @@
                                 </span>
                             </template>
                             <i class="fa fa-plus-circle fa-lg ml-3 cursor-pointer" v-if="Informe.ESTADO == States.INGRESADO" onclick="_informe.AsociarInforme()"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-auto" v-if="Inf_Supervision?.length">
+                    <div class="form-group form-group-sm">
+                        <label class="col-form-label text-small">Plan de Manejo</label>
+                        <div class="input-group input-group-sm">
+                            <input type="text" class="form-control" v-model="Informe.NOMBRE_POA" disabled />
+                            <div class="input-group-append">
+                                <button type="button" class="btn btn-secondary" v-on:click="modal_planes_manejo.Abrir()">
+                                    <i class="fa fa-search"></i>
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -771,6 +785,50 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-primary btn-sm" v-on:click="_informe.SITD_Registro()">Guardar</button>
+                <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Cancelar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="modal-planes-manejo" class="modal fade" data-backdrop="static">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header text-small" style="cursor:move;">
+                <span>Planes de manejo</span>
+                <i class="fa fa-close" style="cursor:pointer;" data-dismiss="modal" aria-label="Close"></i>
+            </div>
+            <div class="modal-body">
+                <table class="table table-bordered dataTable">
+                    <thead>
+                        <tr>
+                            <th>N° POA</th>
+                            <th>POA</th>
+                            <th>N° RESOLUCIÓN</th>
+                            <th>INICIO SUPERVISIÓN</th>
+                            <th>FECHA RESOLUCIÓN</th>
+                            <th>INICIO VIGENCIA</th>
+                            <th>FIN VIGENCIA</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr v-for="item in Planes_Manejo">
+                            <td>{{item.NUM_POA}}</td>
+                            <td>{{item.NOMBRE_POA}}</td>
+                            <td>{{item.ARESOLUCION_NUM}}</td>
+                            <td class="text-center">{{item.INICIO_SUPERVISION}}</td>
+                            <td class="text-center">{{item.ARESOLUCION_FECHA || '-'}}</td>
+                            <td class="text-center">{{item.INICIO_VIGENCIA || '-'}}</td>
+                            <td class="text-center">{{item.FIN_VIGENCIA || '-'}}</td>
+                            <td class="text-center">
+                                <i class="fa fa-hand-o-left fa-lg cursor-pointer" v-on:click="Seleccionar(item)"></i>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="modal-footer">                
                 <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Cancelar</button>
             </div>
         </div>

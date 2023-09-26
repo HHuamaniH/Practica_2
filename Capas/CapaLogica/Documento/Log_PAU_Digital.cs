@@ -27,21 +27,13 @@ namespace CapaLogica.DOC
             cabecera.pVCodMateria = informeDigital.COD_MATERIA;
             cabecera.pVCodModalidad = informeDigital.COD_MODALIDAD;
             cabecera.pVNroReferencia = informeDigital.NRO_REFERENCIA;
-            cabecera.pVCodTitular = informeDigital.COD_TITULAR;
+            cabecera.pNNumPOA = informeDigital.NUM_POA;
+            cabecera.pVCodTHabilitante = informeDigital.COD_THABILITANTE;
             cabecera.pVRucTitularEstado = informeDigital.TITULAR_ESTADO_RUC;
             cabecera.pVRucTitularCondicion = informeDigital.TITULAR_CONDICION_RUC;
             cabecera.pNAnioResolucion = informeDigital.RES_DIRECTORAL_ANIO;
             cabecera.pVCodUndOrganica = informeDigital.RES_DIRECTORAL_UND_ORGANICA;
             cabecera.pDFechaResolucion = informeDigital.RES_DIRECTORAL_FECHA;
-            //cabecera.pVVistos = informeDigital.VISTOS;
-            //cabecera.pVAntecedentes = informeDigital.ANTECEDENTES;
-            //cabecera.pVCompetencia = informeDigital.COMPETENCIA;
-            //cabecera.pVAnalisis = informeDigital.ANALISIS;
-            //cabecera.pVImputacion = informeDigital.IMPUTACION;
-            //cabecera.pVComunicacionExterna = informeDigital.COMUNICACION_EXTERNA;
-            //cabecera.pVParrafosCliche = informeDigital.PARRAFOS_CLICHE;
-            //cabecera.pVPiePagina = informeDigital.PIE_PAGINA;
-            //cabecera.pVResolucion = informeDigital.RESOLUCION;
             cabecera.pNFlagCaducidadExtraccion = Convert.ToInt16(informeDigital.FLG_CADUCIDAD_EXTRACCION);
             cabecera.pNFlagComunicacion = Convert.ToInt16(informeDigital.FLG_COMUNICACION);
             cabecera.pNFlagHerramientasSubsanar = Convert.ToInt16(informeDigital.FLG_HERRAMIENTAS_SUBSANAR);
@@ -76,6 +68,11 @@ namespace CapaLogica.DOC
         public List<VM_RSD_DIGITAL_CAUSALES_CADUCIDAD> ListarCausalesCaducidad()
         {
             return oDat_PAU_Digital.ListarCausalesCaducidad();
+        }
+
+        public List<VM_RSD_PLAN_MANEJO> ListarPlanesManejo(string COD_INFORME, string COD_THABILITANTE, int? NUM_POA, string V_OPCION)
+        {
+            return oDat_PAU_Digital.ListarPlanesManejo(COD_INFORME, COD_THABILITANTE, NUM_POA, V_OPCION);
         }
 
         public string NotificarRSD(RSD_Notificacion notificacion)

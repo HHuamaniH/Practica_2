@@ -102,7 +102,7 @@
         <tbody>
             <tr>
                 <td style="border: 1px solid #000;" rowspan="2">
-                    Plan de Manejo N° XX, correspondiente al periodo XX
+                    Plan de Manejo N° ${PLAN_MANEJO.NOMBRE_POA}, correspondiente al periodo ${PLAN_MANEJO.FIN_VIGENCIA || 'XX'}
                     <a style="mso-footnote-id: foot_concesiones_6" href="#_foot_concesiones_6" title="">
                         <sup class=MsoFootnoteReference><span style="mso-special-character:footnote"></span></sup>
                     </a>
@@ -124,10 +124,10 @@
         </tbody>
     </table>
     <p class="enumeration">
-        Al respecto, por Carta N° 0XXX-20XX-OSINFOR/08.1, del XX de XXX de 2023, notificada el XX de XX de 20XX, la DSFFS requirió a la administrada remitir, entre otros, los informes de ejecución anuales, sin que, hasta la fecha de la emisión de la presente Resolución, haya remitido respuesta alguna.
+        Al respecto, por Carta N° ${ANTECEDENTES_DOCS.Carta?.numero}, del ${ANTECEDENTES_DOCS.Carta?.fechaEmision}, notificada el ${ANTECEDENTES_DOCS.Carta?.fechaNotificacion}, la DSFFS requirió a la administrada remitir, entre otros, los informes de ejecución anuales, sin que, hasta la fecha de la emisión de la presente Resolución, haya remitido respuesta alguna.
     </p>
     <p class="enumeration">
-        Asimismo, a pesar que mediante la Carta N° 00XX-20XX-OSINFOR/08.1 de fecha XX de XX de 20XX, que notifica el Informe de Supervisión y, Formato de Notificación Preventiva N° 00XX-20XX-OSINFOR/08.1, diligenciada el XX de XX de 2023, la DSFFFS requirió a la/el administrada/o los informes de ejecución Anual, correspondiente a los periodos xxx; de la consulta efectuada en el Sistema de Información de Trámite Documentario – SITD del OSINFOR, se advierte que la administrada, a la fecha de emisión de la presente resolución, no ha remitido ante esta Administración los mencionados Informe de Ejecución, siendo que dicho incumplimiento sea imputado en su contra.
+        Asimismo, a pesar que mediante la Carta N° ${ANTECEDENTES_DOCS.Carta?.numero} de fecha ${ANTECEDENTES_DOCS.Carta?.fechaEmision}, que notifica el Informe de Supervisión y, Formato de Notificación Preventiva N° 00XX-20XX-OSINFOR/08.1, diligenciada el XX de XX de 2023, la DSFFFS requirió a la/el administrada/o los informes de ejecución Anual, correspondiente a los periodos xxx; de la consulta efectuada en el Sistema de Información de Trámite Documentario – SITD del OSINFOR, se advierte que la administrada, a la fecha de emisión de la presente resolución, no ha remitido ante esta Administración los mencionados Informe de Ejecución, siendo que dicho incumplimiento sea imputado en su contra.
     </p>
     <p class="enumeration">
         En consecuencia, se advierte que la/el titular ha incurrido presuntamente en la infracción tipificada en el numeral 2 del Anexo 1 del Cuadro de Infracciones y Sanciones en Materia Forestal del RISMFFS.
@@ -240,7 +240,7 @@
         En ese marco, conforme se indica en el Cuadro XX del Informe de Supervisión, el/la administrado/a no cumplió con mantener actualizado el Libro de Operaciones, de acuerdo a los lineamientos aprobados por el SERFOR, dado que xxx (explicación de por qué el Libro de Operaciones no estaría actualizado).
     </p>
     <p class="enumeration">
-        Cabe precisar que mediante Escrito xx ingresado el xx de xx de 20xx (Registro N° xxx), es decir, posterior a la realización de la supervisión, la/el titular presentó, entre otros, el Libro de Operaciones, de cuya evaluación se advierte no se encuentra actualizado, tal como se detalla a continuación:
+        Cabe precisar que mediante Escrito ${ANTECEDENTES_DOCS.Escrito?.numero} ingresado el ${ANTECEDENTES_DOCS.Escrito?.fechaEmision} (Registro N° xxx), es decir, posterior a la realización de la supervisión, la/el titular presentó, entre otros, el Libro de Operaciones, de cuya evaluación se advierte no se encuentra actualizado, tal como se detalla a continuación:
     </p>
     <table width="100%" cellpadding="4" style="border: 0; font-family: Arial; font-size: 10pt; border-collapse: collapse; line-height: 150%;">
         <thead>
@@ -319,18 +319,20 @@
             </tr>
         </thead>
         <tbody>
+            {{each(i, objEsp) VOLUMENES_INJUSTIFICADOS}}
             <tr>
-                <td style="border: 1px solid #000;">xx</td>
-                <td style="border: 1px solid #000;">xx</td>
-                <td style="border: 1px solid #000;">xx</td>
-                <td style="border: 1px solid #000;">xx</td>
-                <td style="border: 1px solid #000;">xx</td>
-                <td style="border: 1px solid #000;">xx</td>
+                <td style="border: 1px solid #000;">${objEsp.ESPECIES}</td>
+                <td style="border: 1px solid #000;">${objEsp.VOLUMEN_APROBADO}</td>
+                <td style="border: 1px solid #000;">${objEsp.NUM_ARBOLES}</td>
+                <td style="border: 1px solid #000;">${objEsp.BALANCE_EXTRACCION}</td>
+                <td style="border: 1px solid #000;">${objEsp.VOLUMEN_MOVILIZADO}</td>
+                <td style="border: 1px solid #000;">${objEsp.VOLUMEN_INJUSTIFICADO}</td>
             </tr>
+            {{/each}}
         </tbody>
     </table>
     <p class="enumeration">
-        En ese sentido, la/el titular habría realizado el aprovechamiento de un volumen injustificado xxx m3 de madera, conforme se muestra en el cuadro anterior. Por ello, corresponde imputar a la/el titularla comisión de la infracción establecida en el numeral 21 del Cuadro de Infracciones y Sanciones en Materia Forestal del Anexo 1 del RISMFFS.
+        En ese sentido, la/el titular habría realizado el aprovechamiento de un volumen injustificado ${VOLUMENES_INJUSTIFICADOS_TOTAL} m<sup>3</sup> de madera, conforme se muestra en el cuadro anterior. Por ello, corresponde imputar a la/el titularla comisión de la infracción establecida en el numeral 21 del Cuadro de Infracciones y Sanciones en Materia Forestal del Anexo 1 del RISMFFS.
     </p>
 </script>
 
@@ -412,14 +414,14 @@
         , el cual tiene como objeto la elaboración del expediente técnico del PO y levantamiento de observaciones formuladas por la autoridad forestal.
     </p>
     <p class="enumeration">
-        Ahora bien, el Plan de Manejo, aprobado mediante la Resolución Jefatural N° xx, de fecha xx de xx de 2021, se encuentra vigente desde el desde el xx de xxx de 20xx hasta el xx de xx de 20xx. Asimismo, de la revisión de la Forma 20, se advierte que la última movilización se realizó el xx de xx de 20xx.
+        Ahora bien, el Plan de Manejo, aprobado mediante la Resolución Jefatural N° ${PLAN_MANEJO.ARESOLUCION_NUM}, de fecha xx de xx de 202X, se encuentra vigente desde el desde el ${PLAN_MANEJO.INICIO_VIGENCIA || 'XX'} hasta el ${PLAN_MANEJO.FIN_VIGENCIA || 'XX'}. Asimismo, de la revisión de la Forma 20, se advierte que la última movilización se realizó el xx de xx de 20xx.
     </p>
     <p class="enumeration">
-        Bajo esa línea, se advierte que durante la implementación del Plan de Manejo N° xxx no se contó con Regente Forestal, debido a que en el Contrato de Regencia no se indica que el Regente Forestal tenga la obligación de la implementación del plan de manejo, sino solamente la elaboración del Plan de Manejo xx, tal como se observa a continuación:
+        Bajo esa línea, se advierte que durante la implementación del Plan de Manejo N° ${PLAN_MANEJO.NOMBRE_POA} no se contó con Regente Forestal, debido a que en el Contrato de Regencia no se indica que el Regente Forestal tenga la obligación de la implementación del plan de manejo, sino solamente la elaboración del Plan de Manejo xx, tal como se observa a continuación:
     </p>
     <p style="text-align: center;">(Print del contrato de regencia)</p>
     <p class="enumeration">
-        En el presente caso, la administrada implementó el Plan de Manejo Forestal N° xxx, sin embargo, no habría contado con regente forestal, conforme se observa en el siguiente gráfico:
+        En el presente caso, la administrada implementó el Plan de Manejo Forestal N° ${PLAN_MANEJO.NOMBRE_POA}, sin embargo, no habría contado con regente forestal, conforme se observa en el siguiente gráfico:
     </p>
     <p style="text-align: center;">Gráfico 01. Línea de tiempo</p>
     <p class="enumeration">
@@ -448,13 +450,13 @@
                     Presentar el informe sobre la ejecución del plan de manejo, de conformidad con el artículo 66 del RGF.
                 </td>
                 <td style="border: 1px solid #000;">
-                    Incumplió con presentar el Informe de Ejecución Anual del plan de manejo N° XX, correspondiente al periodo 20XX.
+                    Incumplió con presentar el Informe de Ejecución Anual del plan de manejo N° ${PLAN_MANEJO.NOMBRE_POA}, correspondiente al periodo 20XX.
                 </td>
                 <td style="border: 1px solid #000;">
                     Literal b) del numeral 29.1 del artículo 29 del RGFFSCNCC
                 </td>
                 <td style="border: 1px solid #000;">
-                    Sí /Presentar el Informe de Ejecución Anual del Plan de manejo xx, correspondiente al periodo xx
+                    Sí /Presentar el Informe de Ejecución Anual del Plan de manejo ${PLAN_MANEJO.NOMBRE_POA}, correspondiente al periodo xx
                 </td>
             </tr>
         </tbody>
@@ -485,7 +487,7 @@
         <tbody>
             <tr>
                 <td style="border: 1px solid #000;" rowspan="2">
-                    Plan de Manejo N° XX, correspondiente al periodo XX
+                    Plan de Manejo N° ${PLAN_MANEJO.NOMBRE_POA}, correspondiente al periodo XX
                     <a style="mso-footnote-id: foot_ccnn_1" href="#_foot_ccnn_1" title="">
                         <sup class=MsoFootnoteReference><span style="mso-special-character:footnote"></span></sup>
                     </a>
@@ -507,10 +509,10 @@
         </tbody>
     </table>
     <p class="enumeration">
-        Al respecto, por <strong>Carta N° 0XXX-20XX-OSINFOR/08.1</strong>, del XX de XXX de 2023, notificada el XX de XX de 20XX, la DSFFS requirió a la administrada remitir, entre otros, los informes de ejecución anuales, sin que, hasta la fecha de la emisión de la presente Resolución, haya remitido respuesta alguna.
+        Al respecto, por <strong>Carta N° ${ANTECEDENTES_DOCS.Carta?.numero}</strong>, del ${ANTECEDENTES_DOCS.Carta?.fechaEmision}, notificada el ${ANTECEDENTES_DOCS.Carta?.fechaNotificacion}, la DSFFS requirió a la administrada remitir, entre otros, los informes de ejecución anuales, sin que, hasta la fecha de la emisión de la presente Resolución, haya remitido respuesta alguna.
     </p>
     <p class="enumeration">
-        Asimismo, a pesar que mediante la <strong>Carta N° 00XX-20XX-OSINFOR/08.1</strong> de fecha XX de XX de 20XX, que notifica el Informe de Supervisión y, Formato de <strong>Notificación Preventiva N° 00XX-20XX-OSINFOR/08.1</strong>, diligenciada el XX de XX de 2023, la DSFFFS requirió a la/el administrada/o los informes de ejecución Anual, correspondiente a los periodos xxx; de la consulta efectuada en el Sistema de Información de Trámite Documentario – SITD del OSINFOR, se advierte que la administrada, a la fecha de emisión de la presente resolución, <strong>no ha remitido ante esta Administración los mencionados Informe de Ejecución</strong>, siendo que dicho incumplimiento sea imputado en su contra.
+        Asimismo, a pesar que mediante la <strong>Carta N° ${ANTECEDENTES_DOCS.Carta?.numero}</strong> de fecha ${ANTECEDENTES_DOCS.Carta?.fechaEmision}, que notifica el Informe de Supervisión y, Formato de <strong>Notificación Preventiva N° 00XX-20XX-OSINFOR/08.1</strong>, diligenciada el XX de XX de 2023, la DSFFFS requirió a la/el administrada/o los informes de ejecución Anual, correspondiente a los periodos xxx; de la consulta efectuada en el Sistema de Información de Trámite Documentario – SITD del OSINFOR, se advierte que la administrada, a la fecha de emisión de la presente resolución, <strong>no ha remitido ante esta Administración los mencionados Informe de Ejecución</strong>, siendo que dicho incumplimiento sea imputado en su contra.
     </p>
     <p class="enumeration">
         En consecuencia, se advierte que la/el titular ha incurrido presuntamente en la infracción tipificada en el numeral 2 del Anexo 1 del Cuadro de Infracciones y Sanciones en Materia Forestal del RISMFFS.
@@ -637,7 +639,7 @@
         En ese marco, conforme se indica en el Cuadro XX del Informe de Supervisión, el/la administrado/a no cumplió con mantener actualizado el Libro de Operaciones, de acuerdo a los lineamientos aprobados por el SERFOR, dado que xxx (explicación de por qué el Libro de Operaciones no estaría actualizado).
     </p>
     <p class="enumeration">
-        Cabe precisar que mediante Escrito xx ingresado el xx de xx de 20xx (Registro N° xxx), es decir, posterior a la realización de la supervisión, la/el titular presentó, entre otros, el Libro de Operaciones, de cuya evaluación se advierte no se encuentra actualizado, tal como se detalla a continuación:
+        Cabe precisar que mediante Escrito ${ANTECEDENTES_DOCS.Escrito?.numero} ingresado el ${ANTECEDENTES_DOCS.Escrito?.fechaEmision} (Registro N° xxx), es decir, posterior a la realización de la supervisión, la/el titular presentó, entre otros, el Libro de Operaciones, de cuya evaluación se advierte no se encuentra actualizado, tal como se detalla a continuación:
     </p>
     <table width="100%" cellpadding="4" style="border: 0; font-family: Arial; font-size: 10pt; border-collapse: collapse; line-height: 150%;">
         <thead>
@@ -715,20 +717,23 @@
         </thead>
         <tbody>
             <tr>
-                <td style="border: 1px solid #000;">xx</td>
-                <td style="border: 1px solid #000;">xx</td>
-                <td style="border: 1px solid #000;">xx</td>
-                <td style="border: 1px solid #000;">xx</td>
-                <td style="border: 1px solid #000;">xx</td>
+                {{each(i, objEsp) VOLUMENES_INJUSTIFICADOS}}
+                <td style="border: 1px solid #000;">${objEsp.ESPECIES}</td>
+                <td style="border: 1px solid #000;">${objEsp.VOLUMEN_APROBADO}</td>
+                <td style="border: 1px solid #000;">${objEsp.NUM_ARBOLES}</td>
+                <td style="border: 1px solid #000;">${objEsp.BALANCE_EXTRACCION}</td>
+                <td style="border: 1px solid #000;">${objEsp.VOLUMEN_MOVILIZADO}</td>
+                <td style="border: 1px solid #000;">${objEsp.VOLUMEN_INJUSTIFICADO}</td>
+                {{/each}}
             </tr>
             <tr>
                 <td style="border: 1px solid #000;" colspan="5"></td>
-                <td style="border: 1px solid #000;">xxx m<sup>3</sup></td>
+                <td style="border: 1px solid #000;">${VOLUMENES_INJUSTIFICADOS_TOTAL} m<sup>3</sup></td>
             </tr>
         </tbody>
     </table>
     <p class="enumeration">
-        En ese sentido, la/el titular habría realizado el aprovechamiento de un volumen injustificado xxx m3 de madera, conforme se muestra en el cuadro anterior. Por ello, corresponde imputar a la/el titularla comisión de la infracción establecida en el numeral 21
+        En ese sentido, la/el titular habría realizado el aprovechamiento de un volumen injustificado ${VOLUMENES_INJUSTIFICADOS_TOTAL} m<sup>3</sup> de madera, conforme se muestra en el cuadro anterior. Por ello, corresponde imputar a la/el titularla comisión de la infracción establecida en el numeral 21
         <a style="mso-footnote-id: foot_ccnn_5" href="#_foot_ccnn_5" title="">
             <sup class=MsoFootnoteReference><span style="mso-special-character:footnote"></span></sup>
         </a> del Cuadro de Infracciones y Sanciones en Materia Forestal del Anexo 1 del RISMFFS.
@@ -810,16 +815,16 @@
         </a>, el cual tiene como objeto la elaboración del expediente técnico del PO y levantamiento de observaciones formuladas por la autoridad forestal.
     </p>
     <p class="enumeration">
-        Ahora bien, el Plan de Manejo, aprobado mediante la Resolución Jefatural N° xx, de fecha xx de xx de 2021, <strong>se encuentra vigente desde el desde el xx de xxx de 20xx hasta el xx de xx de 20xx.</strong> Asimismo, de la revisión de la Forma 20, se advierte que la última movilización se realizó el <strong>xx de xx de 20xx.</strong>
+        Ahora bien, el Plan de Manejo, aprobado mediante la Resolución Jefatural N° ${PLAN_MANEJO.ARESOLUCION_NUM}, de fecha xx de xx de 202X, <strong>se encuentra vigente desde el desde el ${PLAN_MANEJO.INICIO_VIGENCIA || 'XX'} hasta el ${PLAN_MANEJO.FIN_VIGENCIA || 'XX'}.</strong> Asimismo, de la revisión de la Forma 20, se advierte que la última movilización se realizó el <strong>xx de xx de 20xx.</strong>
     </p>
     <p class="enumeration">
-        Bajo esa línea, <strong>se advierte que durante la implementación del Plan de Manejo N° xxx no se contó con Regente Forestal, debido a que en el Contrato de Regencia no se indica que el Regente Forestal tenga la obligación de la implementación del plan de manejo, sino solamente la elaboración del Plan de Manejo xx,</strong> tal como se observa a continuación:
+        Bajo esa línea, <strong>se advierte que durante la implementación del Plan de Manejo N° ${PLAN_MANEJO.NOMBRE_POA} no se contó con Regente Forestal, debido a que en el Contrato de Regencia no se indica que el Regente Forestal tenga la obligación de la implementación del plan de manejo, sino solamente la elaboración del Plan de Manejo ${PLAN_MANEJO.NOMBRE_POA},</strong> tal como se observa a continuación:
     </p>
     <p style="font-size: 7pt; text-align: center;">
         (Print del contrato de regencia)
     </p>
     <p class="enumeration">
-        En el presente caso, la administrada implementó el Plan de Manejo Forestal N° xxx, sin embargo, no habría contado con regente forestal, conforme se observa en el siguiente gráfico:
+        En el presente caso, la administrada implementó el Plan de Manejo Forestal N° ${PLAN_MANEJO.NOMBRE_POA}, sin embargo, no habría contado con regente forestal, conforme se observa en el siguiente gráfico:
     </p>
     <p style="font-size: 7pt; text-align: center;">
         <strong>Gráfico 01.</strong> Línea de tiempo
@@ -850,7 +855,7 @@
                     Presentar el informe sobre la ejecución del plan de manejo, de conformidad con el artículo 66 del RGF.
                 </td>
                 <td style="border: 1px solid #000;">
-                    Incumplió con presentar el Informe de Ejecución Anual del plan de manejo N° XX, correspondiente al periodo 20XX.
+                    Incumplió con presentar el Informe de Ejecución Anual del plan de manejo N° ${PLAN_MANEJO.NOMBRE_POA}, correspondiente al periodo 20XX.
                 </td>
                 <td style="border: 1px solid #000;">
                     Literal b) del numeral 17.1 del artículo 17 del Reglamento para la Gestión de Fauna Silvestre, aprobado por Decreto Supremo Nº 019-2015-MINAGRI (en adelante, RGFS).
@@ -859,7 +864,7 @@
                     </a>
                 </td>
                 <td style="border: 1px solid #000;">
-                    Sí /Presentar el Informe de Ejecución Anual del Plan de manejo xx, correspondiente al periodo xx
+                    Sí /Presentar el Informe de Ejecución Anual del Plan de manejo ${PLAN_MANEJO.NOMBRE_POA}, correspondiente al periodo xx
                 </td>
             </tr>
         </tbody>
@@ -890,7 +895,7 @@
         <tbody>
             <tr>
                 <td style="border: 1px solid #000;" rowspan="2">
-                    Plan de Manejo N° XX, correspondiente al periodo XX
+                    Plan de Manejo N° ${PLAN_MANEJO.NOMBRE_POA}, correspondiente al periodo XX
                     <a style="mso-footnote-id: foot_fauna_2" href="#_foot_fauna_2" title="">
                         <sup class=MsoFootnoteReference><span style="mso-special-character:footnote"></span></sup>
                     </a>
@@ -912,10 +917,10 @@
         </tbody>
     </table>
     <p class="enumeration">
-        Al respecto, por Carta N° 0XXX-20XX-OSINFOR/08.1, del XX de XXX de 2023, notificada el XX de XX de 20XX, la DSFFS requirió a la administrada remitir, entre otros, los informes de ejecución anuales, sin que, hasta la fecha de la emisión de la presente Resolución, haya remitido respuesta alguna.
+        Al respecto, por Carta N° ${ANTECEDENTES_DOCS.Carta?.numero}, del ${ANTECEDENTES_DOCS.Carta?.fechaEmision}, notificada el ${ANTECEDENTES_DOCS.Carta?.fechaNotificacion}, la DSFFS requirió a la administrada remitir, entre otros, los informes de ejecución anuales, sin que, hasta la fecha de la emisión de la presente Resolución, haya remitido respuesta alguna.
     </p>
     <p class="enumeration">
-        Asimismo, a pesar que mediante la Carta N° 00XX-20XX-OSINFOR/08.1 de fecha XX de XX de 20XX, que notifica el Informe de Supervisión y, Formato de Notificación Preventiva N° 00XX-20XX-OSINFOR/08.1, diligenciada el XX de XX de 2023, la DSFFFS requirió a la/el administrada/o los informes de ejecución Anual, correspondiente a los periodos xxx; de la consulta efectuada en el Sistema de Información de Trámite Documentario – SITD del OSINFOR, se advierte que la administrada, a la fecha de emisión de la presente resolución, no ha remitido ante esta Administración los mencionados Informe de Ejecución, siendo que dicho incumplimiento sea imputado en su contra.
+        Asimismo, a pesar que mediante la Carta N° ${ANTECEDENTES_DOCS.Carta?.numero} de fecha ${ANTECEDENTES_DOCS.Carta?.fechaEmision}, que notifica el Informe de Supervisión y, Formato de Notificación Preventiva N° 00XX-20XX-OSINFOR/08.1, diligenciada el XX de XX de 2023, la DSFFFS requirió a la/el administrada/o los informes de ejecución Anual, correspondiente a los periodos xxx; de la consulta efectuada en el Sistema de Información de Trámite Documentario – SITD del OSINFOR, se advierte que la administrada, a la fecha de emisión de la presente resolución, no ha remitido ante esta Administración los mencionados Informe de Ejecución, siendo que dicho incumplimiento sea imputado en su contra.
     </p>
     <p class="enumeration">
         En consecuencia, se advierte que la/el titular ha incurrido presuntamente en la infracción tipificada en el numeral 2 del Anexo 1 del Cuadro de Infracciones y Sanciones en Materia Forestal del RISMFFS.
@@ -946,14 +951,14 @@
         </tbody>
     </table>
     <p class="enumeration">
-        Sobre el particular, mediante la Carta N° 00258-2023-OSINFOR/08.1, notificada el 13 de abril de 2023, la DSFFFS requirió  “las Cartas y sus cargos, presentadas ante la Autoridad Regional Forestal y de Fauna Silvestre, sobre informes de sucesos de ingreso o egreso de especímenes, como hallazgos, nacimientos, muertes u otros; que no hayan sido remitidos previamente al OSINFOR”
+        Sobre el particular, mediante la Carta N° ${ANTECEDENTES_DOCS.Carta?.numero}, notificada el ${ANTECEDENTES_DOCS.Carta?.fechaNotificacion}, la DSFFFS requirió  “las Cartas y sus cargos, presentadas ante la Autoridad Regional Forestal y de Fauna Silvestre, sobre informes de sucesos de ingreso o egreso de especímenes, como hallazgos, nacimientos, muertes u otros; que no hayan sido remitidos previamente al OSINFOR”
     </p>
     <p class="enumeration">
         Siendo ello así, la DSFFFS consideró para la elaboración del balance de ingresos y egresos lo siguiente:
     </p>
     <ul>
         <li>
-            Como cantidad inicial de especímenes, se consideró la información contenida en el Informe de Supervisión N° 00027-2019-OSINFOR/08.1.2, que refleja las cantidades observadas durante la supervisión realizada el 29 de marzo de 2019.
+            Como cantidad inicial de especímenes, se consideró la información contenida en el Informe de Supervisión N° ${ANTECEDENTES_DOCS.Inf_Sup?.numero}, que refleja las cantidades observadas durante la supervisión realizada el 29 de marzo de 2019.
         </li>
         <li>
             Como documentos de egresos de especímenes se consideran los reportes de sucesos de decesos, fugas y hurto presentados por la titular, tanto a la ARFFS como al OSINFOR, así como actas de levantamiento de custodia emitidos por la ARFFS.
@@ -1049,7 +1054,7 @@
         En ese marco, conforme se indica en el Cuadro XX del Informe de Supervisión, el/la administrado/a no cumplió con mantener actualizado el Libro de Operaciones, de acuerdo a los lineamientos aprobados por el SERFOR, dado que xxx (explicación de por qué el Libro de Operaciones no estaría actualizado).
     </p>
     <p class="enumeration">
-        Cabe precisar que mediante Escrito xx ingresado el xx de xx de 20xx (Registro N° xxx), es decir, posterior a la realización de la supervisión, la/el titular presentó, entre otros, el Libro de Operaciones, de cuya evaluación se advierte no se encuentra actualizado, tal como se detalla a continuación:
+        Cabe precisar que mediante Escrito ${ANTECEDENTES_DOCS.Escrito?.numero} ingresado el ${ANTECEDENTES_DOCS.Escrito?.fechaEmision} (Registro N° xxx), es decir, posterior a la realización de la supervisión, la/el titular presentó, entre otros, el Libro de Operaciones, de cuya evaluación se advierte no se encuentra actualizado, tal como se detalla a continuación:
     </p>
     <table width="100%" cellpadding="4" style="border: 0; font-family: Arial; font-size: 10pt; border-collapse: collapse; line-height: 150%;">
         <thead>
@@ -1160,14 +1165,14 @@
         </a>, el cual tiene como <u>objeto la elaboración del expediente técnico del PO y levantamiento de observaciones formuladas por la autoridad forestal.</u>
     </p>
     <p class="enumeration">
-        Ahora bien, el Plan de Manejo, aprobado mediante la Resolución Jefatural N° xx, de fecha xx de xx de 2021, <strong>se encuentra vigente desde el desde el xx de xxx de 20xx hasta el xx de xx de 20xx.</strong> Asimismo, de la revisión de la Forma 20, se advierte que la última movilización se realizó el <strong>xx de xx de 20xx.</strong>
+        Ahora bien, el Plan de Manejo, aprobado mediante la Resolución Jefatural N° xx, de fecha xx de xx de 2021, <strong>se encuentra vigente desde el desde el ${PLAN_MANEJO.INICIO_VIGENCIA || 'XX'} hasta el ${PLAN_MANEJO.FIN_VIGENCIA || 'XX'}.</strong> Asimismo, de la revisión de la Forma 20, se advierte que la última movilización se realizó el <strong>xx de xx de 20xx.</strong>
     </p>
     <p class="enumeration">
-        Bajo esa línea, <strong>se advierte que durante la implementación del Plan de Manejo N° xxx no se contó con Regente Forestal, debido a que en el Contrato de Regencia no se indica que el Regente Forestal tenga la obligación de la implementación del plan de manejo, sino solamente la elaboración del Plan de Manejo xx,</strong> tal como se observa a continuación:
+        Bajo esa línea, <strong>se advierte que durante la implementación del Plan de Manejo N° ${PLAN_MANEJO.NOMBRE_POA} no se contó con Regente Forestal, debido a que en el Contrato de Regencia no se indica que el Regente Forestal tenga la obligación de la implementación del plan de manejo, sino solamente la elaboración del Plan de Manejo xx,</strong> tal como se observa a continuación:
     </p>
     <p style="text-align: center; font-size: 7pt;">(Print del contrato de regencia)</p>
     <p class="enumeration">
-        En el presente caso, la administrada implementó el Plan de Manejo Forestal N° xxx, sin embargo, no habría contado con regente forestal, conforme se observa en el siguiente gráfico:
+        En el presente caso, la administrada implementó el Plan de Manejo Forestal N° ${PLAN_MANEJO.NOMBRE_POA}, sin embargo, no habría contado con regente forestal, conforme se observa en el siguiente gráfico:
     </p>
     <p style="text-align: center; font-size: 7pt;"><strong>Gráfico 01.</strong> Línea de tiempo</p>
     <p class="enumeration">

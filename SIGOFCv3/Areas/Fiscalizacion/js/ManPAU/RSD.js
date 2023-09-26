@@ -3,8 +3,8 @@
 let _informe = {};
 let app,
     modal_notificar,
+    modal_planes_manejo,
     modal_doc,
-    //modal_analisis,
     modal_sitd,
     modal_integrante;
 
@@ -25,244 +25,6 @@ const data = {
     ],
     Infracciones: [],
     Causales_Caducidad: []
-    /*Infracciones: [
-        {
-            COD_MODALIDAD: '01',
-            DETALLE: [
-                {
-                    titulo: 'Con relación a la obligación de establecer y mantener los linderos, hitos u otras señales',
-                    conducta: 'No se estableció letreros, señalización de vértices, hitos que permitan identificar el área del título habilitante.',
-                    tipo_infractor: 'No establecer o no mantener los linderos, hitos u otras señales que permitan identificar el área del título habilitante.',
-                    numeral: 'Numeral 1 del Cuadro de Infracciones y Sanciones en Materia Forestal del Anexo 1 del RISMFFS',
-                    sancion: 'Desde una amonestación hasta una sanción pecuniaria (en caso de reincidencia)',
-                    subsanar: 'Sí/Establecer los linderos, hitos u otras señales.',
-                    select: false, codPlantilla: 'concesiones-1'
-                },
-                {
-                    titulo: 'Con relación a la presentación del informe de ejecución forestal',
-                    conducta: 'No presentar el Informe de Ejecución Anual del plan de manejo - PC 01, 02 y 03, correspondiente al periodo 2021-2022.',
-                    tipo_infractor: 'No entregar o presentar información o documentación legalmente exigible en el plazo previsto, o cuando la autoridad competente lo requiera.',
-                    numeral: 'Numeral 2 del Cuadro de Infracciones y Sanciones en Materia Forestal del Anexo 1 del RISMFFS',
-                    sancion: 'Desde una amonestación hasta una sanción pecuniaria (en caso de reincidencia).',
-                    subsanar: 'Sí /Presentar el Informe de Ejecución Anual del PMFI xx, correspondiente al periodo xx',
-                    select: false, codPlantilla: 'concesiones-2'
-                },
-                {
-                    titulo: 'Con relación al aprovechamiento del recurso forestal no autorizado (extracción de individuos de procedencia identificada - volumen no autorizado)',
-                    conducta: 'Talar, extraer y/o aprovechar recursos forestales no autorizados en el área del título habilitante, en un volumen de xxx  m3, correspondiente a 2 árboles semilleros/no censados de las especies xxx',
-                    tipo_infractor: 'Talar, extraer y/o aprovechar recursos forestales no autorizados en el área del título habilitante, cuando sea imputable al administrado en su condición de titular del título habilitante',
-                    numeral: 'Numeral 10 del Cuadro de Infracciones y Sanciones en Materia Forestal del Anexo 1 del RISMFFS',
-                    sancion: 'Sanción monetaria mayor a 3 hasta 10 UIT',
-                    subsanar: 'Sí/ Reponer con otro(s) individuo(s) declarado(s) dentro de la parcela de corta del plan de manejo supervisado. Asimismo, el infractor debe Acreditar la reposición del individuo. Justificar que fue producto de un error propio del manejo forestal. Registrar la información en el libro de operaciones de títulos habilitantes y/ o informes de ejecución.',
-                    select: false, codPlantilla: 'concesiones-3'
-                },
-                {
-                    titulo: 'Con relación a la obligación de tener y mantener actualizado el libro de operaciones',
-                    conducta: 'No registrar la información en el Libro de Operaciones, de acuerdo a las disposiciones establecidas.',
-                    tipo_infractor: 'No tener libro de operaciones o no registrar la información en dicho libro, de acuerdo a las disposiciones establecidas.',
-                    numeral: 'Numeral 11 del Cuadro de Infracciones y Sanciones en Materia Forestal del Anexo 1 del RISMFFS',
-                    sancion: 'Sanción monetaria mayor a 3 hasta 10 UIT',
-                    subsanar: 'Si, sólo en caso de no haber registrado la información, pero se cuente con la documentación que acredite la procedencia legal del recurso / Actualizar el libro de operaciones.',
-                    select: false, codPlantilla: 'concesiones-4'
-                },
-                {
-                    titulo: 'Con relación al aprovechamiento del recurso forestal no autorizado (extracción de individuos de procedencia no identificada - volumen injustificado).',
-                    conducta: 'Talar, extraer y/o aprovechar recursos forestales sin la correspondiente autorización por un volumen de xx m3, correspondiente a las especies xx',
-                    tipo_infractor: 'Talar, extraer y/o aprovechar recursos forestales, sin autorización, en su condición o no de titular del título habilitante, a excepción de los aprovechados por subsistencia.',
-                    numeral: 'Numeral 21 del Cuadro de Infracciones y Sanciones en Materia Forestal del Anexo 1 del RISMFFS',
-                    sancion: 'Sanción monetaria mayor a 10 UIT hasta 5000 UIT.',
-                    subsanar: 'No aplica',
-                    select: false, codPlantilla: 'concesiones-5'
-                },
-                {
-                    titulo: 'Con relación al incumplimiento de movilizar productos forestales no autorizados con documentos aprobados por la autoridad competente',
-                    conducta: 'Utilizar indebidamente documentación otorgada por la Autoridad Regional Forestal para amparar el transporte de recursos forestales provenientes de una extracción no autorizada de un volumen de xx m3 , correspondiente a las especies xx; pues habría utilizado su contrato de concesión/permiso forestal, su Plan de Manejo, así como el Balance de Extracción para dar apariencia de legalidad al volumen de madera que provendría de individuos sobre los cuales no tenía autorización para extraer.',
-                    tipo_infractor: 'Utilizar indebidamente o facilitar la guía de transporte forestal, así como la documentación otorgada o aprobada por la autoridad competente, para amparar la extracción, transporte, transformación, almacenamiento o comercialización de los especímenes, productos o sub productos forestales obtenidos ilegalmente.',
-                    numeral: 'Numeral 26 del Cuadro de Infracciones y Sanciones en Materia Forestal del Anexo 1 del RISMFFS',
-                    sancion: 'Sanción monetaria mayor a 10 UIT hasta 5000 UIT.',
-                    subsanar: 'No aplica',
-                    select: false, codPlantilla: 'concesiones-6'
-                },
-                {
-                    titulo: 'Con relación al incumplimiento de contar con regente forestal',
-                    conducta: 'El/la titular no cuenta con regente forestal para la implementación del Plan de Manejo N° xx, periodo xx',
-                    tipo_infractor: 'No contar con un regente para la implementación del plan de manejo, en caso corresponda',
-                    numeral: 'Numeral 29 del Cuadro de Infracciones y Sanciones en Materia Forestal del Anexo 1 del RISMFFS',
-                    sancion: 'Sanción monetaria mayor a 10 UIT hasta 5000 UIT.',
-                    subsanar: 'No aplica',
-                    select: false, codPlantilla: 'concesiones-7'
-                },
-            ]
-        },
-        {
-            COD_MODALIDAD: '02',
-            DETALLE: [
-                {
-                    titulo: 'Con relación a la obligación de establecer y mantener los linderos, hitos u otras señales',
-                    conducta: 'No se estableció letreros, señalización de vértices, hitos que permitan identificar el área del título habilitante.',
-                    tipo_infractor: 'No establecer o no mantener los linderos, hitos u otras señales que permitan identificar el área del título habilitante.',
-                    numeral: 'Numeral 1 del Cuadro de Infracciones y Sanciones en Materia Forestal del Anexo 1 del RISMFFS',
-                    sancion: 'Desde una amonestación hasta una sanción pecuniaria (en caso de reincidencia)',
-                    subsanar: 'Sí/Establecer los linderos, hitos u otras señales.',
-                    select: false, codPlantilla: 'concesiones-1'
-                },
-                {
-                    titulo: 'Con relación a la presentación del informe de ejecución forestal',
-                    conducta: 'No presentar el Informe de Ejecución Anual del plan de manejo - PC 01, 02 y 03, correspondiente al periodo 2021-2022.',
-                    tipo_infractor: 'No entregar o presentar información o documentación legalmente exigible en el plazo previsto, o cuando la autoridad competente lo requiera.',
-                    numeral: 'Numeral 2 del Cuadro de Infracciones y Sanciones en Materia Forestal del Anexo 1 del RISMFFS',
-                    sancion: 'Desde una amonestación hasta una sanción pecuniaria (en caso de reincidencia).',
-                    subsanar: 'Sí /Presentar el Informe de Ejecución Anual del PMFI xx, correspondiente al periodo xx',
-                    select: false, codPlantilla: 'concesiones-2'
-                },
-                {
-                    titulo: 'Con relación al aprovechamiento del recurso forestal no autorizado (extracción de individuos de procedencia identificada - volumen no autorizado)',
-                    conducta: 'Talar, extraer y/o aprovechar recursos forestales no autorizados en el área del título habilitante, en un volumen de xxx  m3, correspondiente a 2 árboles semilleros/no censados de las especies xxx',
-                    tipo_infractor: 'Talar, extraer y/o aprovechar recursos forestales no autorizados en el área del título habilitante, cuando sea imputable al administrado en su condición de titular del título habilitante',
-                    numeral: 'Numeral 10 del Cuadro de Infracciones y Sanciones en Materia Forestal del Anexo 1 del RISMFFS',
-                    sancion: 'Sanción monetaria mayor a 3 hasta 10 UIT',
-                    subsanar: 'Sí/ Reponer con otro(s) individuo(s) declarado(s) dentro de la parcela de corta del plan de manejo supervisado. Asimismo, el infractor debe Acreditar la reposición del individuo. Justificar que fue producto de un error propio del manejo forestal. Registrar la información en el libro de operaciones de títulos habilitantes y/ o informes de ejecución.',
-                    select: false, codPlantilla: 'concesiones-3'
-                },
-                {
-                    titulo: 'Con relación a la obligación de tener y mantener actualizado el libro de operaciones',
-                    conducta: 'No registrar la información en el Libro de Operaciones, de acuerdo a las disposiciones establecidas.',
-                    tipo_infractor: 'No tener libro de operaciones o no registrar la información en dicho libro, de acuerdo a las disposiciones establecidas.',
-                    numeral: 'Numeral 11 del Cuadro de Infracciones y Sanciones en Materia Forestal del Anexo 1 del RISMFFS',
-                    sancion: 'Sanción monetaria mayor a 3 hasta 10 UIT',
-                    subsanar: 'Si, sólo en caso de no haber registrado la información, pero se cuente con la documentación que acredite la procedencia legal del recurso / Actualizar el libro de operaciones.',
-                    select: false, codPlantilla: 'concesiones-4'
-                },
-                {
-                    titulo: 'Con relación al aprovechamiento del recurso forestal no autorizado (extracción de individuos de procedencia no identificada - volumen injustificado).',
-                    conducta: 'Talar, extraer y/o aprovechar recursos forestales sin la correspondiente autorización por un volumen de xx m3, correspondiente a las especies xx',
-                    tipo_infractor: 'Talar, extraer y/o aprovechar recursos forestales, sin autorización, en su condición o no de titular del título habilitante, a excepción de los aprovechados por subsistencia.',
-                    numeral: 'Numeral 21 del Cuadro de Infracciones y Sanciones en Materia Forestal del Anexo 1 del RISMFFS',
-                    sancion: 'Sanción monetaria mayor a 10 UIT hasta 5000 UIT.',
-                    subsanar: 'No aplica',
-                    select: false, codPlantilla: 'concesiones-5'
-                },
-                {
-                    titulo: 'Con relación al incumplimiento de movilizar productos forestales no autorizados con documentos aprobados por la autoridad competente',
-                    conducta: 'Utilizar indebidamente documentación otorgada por la Autoridad Regional Forestal para amparar el transporte de recursos forestales provenientes de una extracción no autorizada de un volumen de xx m3 , correspondiente a las especies xx; pues habría utilizado su contrato de concesión/permiso forestal, su Plan de Manejo, así como el Balance de Extracción para dar apariencia de legalidad al volumen de madera que provendría de individuos sobre los cuales no tenía autorización para extraer.',
-                    tipo_infractor: 'Utilizar indebidamente o facilitar la guía de transporte forestal, así como la documentación otorgada o aprobada por la autoridad competente, para amparar la extracción, transporte, transformación, almacenamiento o comercialización de los especímenes, productos o sub productos forestales obtenidos ilegalmente.',
-                    numeral: 'Numeral 26 del Cuadro de Infracciones y Sanciones en Materia Forestal del Anexo 1 del RISMFFS',
-                    sancion: 'Sanción monetaria mayor a 10 UIT hasta 5000 UIT.',
-                    subsanar: 'No aplica',
-                    select: false, codPlantilla: 'concesiones-6'
-                },
-                {
-                    titulo: 'Con relación al incumplimiento de contar con regente forestal',
-                    conducta: 'El/la titular no cuenta con regente forestal para la implementación del Plan de Manejo N° xx, periodo xx',
-                    tipo_infractor: 'No contar con un regente para la implementación del plan de manejo, en caso corresponda',
-                    numeral: 'Numeral 29 del Cuadro de Infracciones y Sanciones en Materia Forestal del Anexo 1 del RISMFFS',
-                    sancion: 'Sanción monetaria mayor a 10 UIT hasta 5000 UIT.',
-                    subsanar: 'No aplica',
-                    select: false, codPlantilla: 'concesiones-7'
-                },
-            ]
-        },
-        {
-            COD_MODALIDAD: '03',
-            DETALLE: [
-                {
-                    titulo: 'Con relación a la presentación del informe de ejecución forestal',
-                    conducta: 'No presentar el Informe de Ejecución Anual del plan de manejo - PC 01, 02 y 03, correspondiente al periodo 2021-2022.',
-                    tipo_infractor: 'No entregar o presentar información o documentación legalmente exigible en el plazo previsto, o cuando la autoridad competente lo requiera',
-                    numeral: 'Numeral 2 del Cuadro de Infracciones y Sanciones en Materia Forestal del Anexo 1 del RISMFFS',
-                    sancion: 'Desde una amonestación hasta una sanción pecuniaria (en caso de reincidencia).',
-                    subsanar: 'Sí /Presentar el Informe de Ejecución Anual del PMFI xx, correspondiente al periodo xx',
-                    select: false, codPlantilla: 'ccnn-1'
-                },
-                {
-                    titulo: 'Con relación al aprovechamiento del recurso forestal no autorizado (extracción de individuos de procedencia identificada - volumen no autorizado)',
-                    conducta: 'Talar, extraer y/o aprovechar recursos forestales no autorizados en el área del título habilitante, en un volumen de xxx  m3, correspondiente a 2 árboles semilleros/no censados de las especies xxx',
-                    tipo_infractor: 'Talar, extraer y/o aprovechar recursos forestales no autorizados en el área del título habilitante, cuando sea imputable al administrado en su condición de titular del título habilitante',
-                    numeral: 'Numeral 10 del Cuadro de Infracciones y Sanciones en Materia Forestal del Anexo 1 del RISMFFS',
-                    sancion: 'Sanción monetaria mayor a 3 hasta 10 UIT',
-                    subsanar: 'Sí/ Reponer con otro(s) individuo(s) declarado(s) dentro de la parcela de corta del plan de manejo supervisado. Asimismo, el infractor debe Acreditar la reposición del individuo. Justificar que fue producto de un error propio del manejo forestal. Registrar la información en el libro de operaciones de títulos habilitantes y/o informes de ejecución.',
-                    select: false, codPlantilla: 'ccnn-2'
-                },
-                {
-                    titulo: 'Con relación a la obligación de tener y mantener actualizado el libro de operaciones',
-                    conducta: 'No registrar la información en el Libro de Operaciones, de acuerdo a las disposiciones establecidas.',
-                    tipo_infractor: 'No tener libro de operaciones o no registrar la información en dicho libro, de acuerdo a las disposiciones establecidas.',
-                    numeral: 'Numeral 11 del Cuadro de Infracciones y Sanciones en Materia Forestal del Anexo 1 del RISMFFS',
-                    sancion: 'Sanción monetaria mayor a 3 hasta 10 UIT',
-                    subsanar: 'Si, sólo en caso de no haber registrado la información, pero se cuente con la documentación que acredite la procedencia legal del recurso / Actualizar el libro de operaciones.',
-                    select: false, codPlantilla: 'ccnn-3'
-                },
-                {
-                    titulo: 'Con relación al aprovechamiento del recurso forestal no autorizado (extracción de individuos de procedencia no identificada - volumen injustificado)',
-                    conducta: 'Talar, extraer y/o aprovechar recursos forestales sin la correspondiente autorización por un volumen de xx m3, correspondiente a las especies xx',
-                    tipo_infractor: 'Talar, extraer y/o aprovechar recursos forestales, sin autorización, en su condición o no de titular del título habilitante, a excepción de los aprovechados por subsistencia.',
-                    numeral: 'Numeral 21 del Cuadro de Infracciones y Sanciones en Materia Forestal del Anexo 1 del RISMFFS',
-                    sancion: 'Sanción monetaria mayor a 10 UIT hasta 5000 UIT.',
-                    subsanar: 'No aplica',
-                    select: false, codPlantilla: 'ccnn-4'
-                },
-                {
-                    titulo: 'Con relación al incumplimiento de movilizar productos forestales no autorizados con documentos aprobados por la autoridad competente',
-                    conducta: 'Utilizar indebidamente documentación otorgada por la Autoridad Regional Forestal para amparar el transporte de recursos forestales provenientes de una extracción no autorizada de un volumen de xx m3 , correspondiente a las especies xx; pues habría utilizado su contrato de concesión/permiso forestal, su Plan de Manejo, así como el Balance de Extracción para dar apariencia de legalidad al volumen de madera que provendría de individuos sobre los cuales no tenía autorización para extraer.',
-                    tipo_infractor: 'Utilizar indebidamente o facilitar la guía de transporte forestal, así como la documentación otorgada o aprobada por la autoridad competente, para amparar la extracción, transporte, transformación, almacenamiento o comercialización de los especímenes, productos o sub productos forestales obtenidos ilegalmente.',
-                    numeral: 'Numeral 26 del Cuadro de Infracciones y Sanciones en Materia Forestal del Anexo 1 del RISMFFS',
-                    sancion: 'Sanción monetaria mayor a 10 UIT hasta 5000 UIT.',
-                    subsanar: 'No aplica',
-                    select: false, codPlantilla: 'ccnn-5'
-                },
-                {
-                    titulo: 'Con relación al incumplimiento de contar con regente forestal',
-                    conducta: 'El/la titular no cuenta con regente forestal para la implementación del Plan de Manejo N° xx, periodo xx',
-                    tipo_infractor: 'No contar con un regente para la implementación del plan de manejo, en caso corresponda',
-                    numeral: 'Numeral 29 del Cuadro de Infracciones y Sanciones en Materia Forestal del Anexo 1 del RISMFFS',
-                    sancion: 'Sanción monetaria mayor a 10 UIT hasta 5000 UIT.',
-                    subsanar: 'No aplica',
-                    select: false, codPlantilla: 'ccnn-6'
-                },
-            ]
-        },
-        {
-            COD_MODALIDAD: '04',
-            DETALLE: [
-                {
-                    titulo: 'Con relación a la presentación del informe de ejecución forestal',
-                    conducta: 'No presentar el Informe de Ejecución Anual del plan de manejo - PC xx, xx y xx, correspondiente al periodo 202x-202x.',
-                    tipo_infractor: 'No entregar o presentar información o documentación legalmente exigible en el plazo previsto, o cuando la autoridad competente lo requiera',
-                    numeral: 'Numeral 2 del Cuadro de Infracciones y Sanciones en Materia de Fauna Silvestre del Anexo 2 del Reglamento de Infracciones y Sanciones',
-                    sancion: '',
-                    subsanar: '',
-                    select: false, codPlantilla: 'fauna-1'
-                },
-                {
-                    titulo: 'Con relación a la obligación de tener y mantener actualizado el libro de operaciones',
-                    conducta: 'La administrada no cuenta con información equivalente al libro de operaciones.',
-                    tipo_infractor: 'No tener libro de operaciones o no registrar la información en dicho libro, de acuerdo a las disposiciones establecidas',
-                    numeral: 'Numeral 12 del Anexo 2 del Cuadro de Infracciones y Sanciones en Materia de Fauna Silvestre del Anexo 2 del Reglamento de Infracciones y Sanciones',
-                    sancion: '',
-                    subsanar: '',
-                    select: false, codPlantilla: 'fauna-2'
-                },
-                {
-                    titulo: 'Con relación al incumplimiento de contar con regente forestal',
-                    conducta: 'No contar con regente de fauna silvestre para la implementación del plan de manejo de fauna silvestre.',
-                    tipo_infractor: 'No contar con un regente para la implementación del plan de manejo, en caso corresponda',
-                    numeral: '',
-                    sancion: '',
-                    subsanar: '',
-                    select: false, codPlantilla: 'fauna-3'
-                },
-            ]
-        }
-    ],
-    Causales_Caducidad: [
-        { titulo: 'La presentación de información falsa en los planes de manejo a la ARFFS, siempre que esté en ejecución o haya sido ejecutado.', select: false },
-        { titulo: 'La extracción o movilización de recursos forestales y de fauna silvestre no autorizadas.', select: false },
-        { titulo: 'El cambio no autorizado del uso de las tierras.', select: false },
-        { titulo: 'Causar severos perjuicios que pongan en grave riesgo al ambiente y la biodiversidad, de acuerdo con la normativa vigente.', select: false },
-        { titulo: 'El no pago por derecho de aprovechamiento al cual se encuentra sujeto, dentro de los plazos establecidos en el Reglamento o en el título respectivo, salvo que exista refinanciamiento, fraccionamiento o suspensión de obligaciones aprobados por la ARFFS.', select: false },
-        { titulo: 'La realización de actividades distintas a las otorgadas en virtud del título habilitante.', select: false },
-        { titulo: 'El incumplimiento de los compromisos de inversión acordados para el otorgamiento del título habilitante, en los casos que corresponda, salvo que se demuestre que fue causado por hechos fortuitos o de fuerza mayor.', select: false },
-    ]*/
 };
 
 _informe.CambiarEstado = function (state) {
@@ -448,9 +210,9 @@ _informe.EnumerarCuadros = function (html) {
     });
 
     return $html.html();
-}*/
+}
 
-/*_informe.EnumerarTitulos = function (html) {
+_informe.EnumerarTitulos = function (html) {
     var $html = $('<div />', { html: html });
     $html.find('.upper-roman').each((index, el) => {
         const html = $(el).html();
@@ -507,18 +269,35 @@ _informe.Exportar = async function () {
     informe.PROCEDENCIA = procedencias.find(function (x) { return x.COD_PROCEDENCIA === informe.COD_PROCEDENCIA })?.PROCEDENCIA;
     informe.MATERIA = materias.find(function (x) { return x.COD_MATERIA === informe.COD_MATERIA })?.MATERIA;
     informe.FECHA = fnDate.text_long(informe.RES_DIRECTORAL_FECHA || new Date());
-    //informe.VISTOS = _informe.render(informe.VISTOS);
-    //informe.ANTECEDENTES = _informe.render(informe.ANTECEDENTES);
-    //informe.COMPETENCIA = _informe.render(informe.COMPETENCIA);
-    //informe.ANALISIS = _informe.render(informe.ANALISIS);
-    //informe.IMPUTACION = _informe.render(informe.IMPUTACION);
-    //informe.PARRAFOS_CLICHE = _informe.render(informe.PARRAFOS_CLICHE);
-    //informe.PIE_PAGINA = _informe.render(informe.PIE_PAGINA);
-    //informe.COMUNICACION_EXTERNA = _informe.render(informe.COMUNICACION_EXTERNA);
-    //informe.RESOLUCION = _informe.render(informe.RESOLUCION);
-    //informe.PROCEDENCIA_FOOTER = (informe.PROCEDENCIA || '').split('Forestales').join('<br>Forestales');
     informe.SUBDIRECTOR = informe.FIRMAS.find(function (x) { return x.funcion === 'Subdirector' })?.apellidosNombres;
-    //console.log(informe); //return;
+
+    // Listar antecedentes
+    informe.ANTECEDENTES = await _informe.ExtraerAntecedentes(informe.COD_RES_SUB, informe.COD_THABILITANTE);
+    informe.ANTECEDENTES_DOCS = {};
+    informe.ANTECEDENTES_DOCS.Carta = informe.ANTECEDENTES.find(x => x.tipoDocumento == 'Carta') || {};
+    informe.ANTECEDENTES_DOCS.Inf_Sup = informe.ANTECEDENTES.find(x => x.tipoDocumento == 'Informe de Supervisión') || {};
+    informe.ANTECEDENTES_DOCS.RSD = informe.ANTECEDENTES.find(x => x.tipoDocumento == 'Resolución Sub Directoral') || {};
+    informe.ANTECEDENTES_DOCS.Ced_Noti = informe.ANTECEDENTES.find(x => x.tipoDocumento == 'Cédula de Notificación') || {};
+    informe.ANTECEDENTES_DOCS.Escrito = informe.ANTECEDENTES.find(x => x.tipoDocumento == 'Escrito') || {};
+    //console.log(informe.ANTECEDENTES); return;
+
+    //Listar planes de manejo
+    const PLANES_MANEJO = await _informe.ListarPlanesManejo('D', null, informe.COD_THABILITANTE, informe.NUM_POA);
+    const plan = PLANES_MANEJO[0] || {};
+    plan.ARESOLUCION_FECHA = fnDate.text_long(plan.ARESOLUCION_FECHA);
+    plan.INICIO_VIGENCIA = fnDate.text_long(plan.INICIO_VIGENCIA);
+    plan.FIN_VIGENCIA = fnDate.text_long(plan.FIN_VIGENCIA);
+    informe.PLAN_MANEJO = plan;
+
+    //console.log(PLANES_MANEJO);
+
+    //Volumenes injustificados
+    let resumen = await _informe.RegResumenInfSupervision(informe.COD_RES_SUB);
+    const volumenes = resumen.filter(x => !!x.VOLUMEN_INJUSTIFICADO);
+
+    informe.VOLUMENES_INJUSTIFICADOS = volumenes;
+    informe.VOLUMENES_INJUSTIFICADOS_TOTAL = Math.round(volumenes.reduce((a, b) => a + b.VOLUMEN_INJUSTIFICADO, 0) * 1000) / 1000;
+    //console.log(volumenes);
 
     const header = `<p style="text-align:center;"><img height="200" width="200" alt="" src="${urlLocalSigo}content/images/logo/escudo-peruano.jpg"></p>`;
     //let footer = `<table style="width: 100%;"><tr><td style="text-align: right;">#CURRENTPAGE#</td></tr></table>`;
@@ -531,7 +310,7 @@ _informe.Exportar = async function () {
 
     //Plantilla de infracciones
     const tmplInfracciones = await _informe.Extraer_Infracciones();
-    informe.INFRACCIONES = _informe.EXTRAER_PARRAFOS_INFRACCION(tmplInfracciones);
+    informe.INFRACCIONES = _informe.EXTRAER_PARRAFOS_INFRACCION(tmplInfracciones, informe);
     informe.ANALISIS = _informe.tmpl.get(template, '#tmpl-analisis', informe);
 
     if (informe.FLG_CADUCIDAD_EXTRACCION) {
@@ -558,6 +337,45 @@ _informe.Exportar = async function () {
 
     $(document).googoose({ html, header });
     //$(document).googoose({ html, header, footeridfirst: 'ff1' });
+}
+
+_informe.RegResumenInfSupervision = function (COD_RESOLUCION) {
+    const params = {
+        type: 'get',
+        url: `${urlLocalSigo}Fiscalizacion/InformeLegalDigital/RegMostrarInfoDocumentResumenSupervisado`,
+        datos: { COD_RESOLUCION }
+    };
+
+    return new Promise(function (resolve, reject) {
+        utilSigo.fnAjax(params, res => resolve(res), () => resolve([]));
+    });
+}
+
+_informe.ExtraerAntecedentes = function (COD_RESOLUCION) {
+    const COD_THABILITANTE = app.Informe.COD_THABILITANTE;
+
+    const params = {
+        type: 'get',
+        url: `${urlLocalSigo}Fiscalizacion/InformeLegalDigital/ObtenerAntecedentes`,
+        data: { COD_RESOLUCION, COD_THABILITANTE },
+        global: false
+    }
+
+    return new Promise((resolve, reject) => {
+        $.ajax(params).done(res => resolve(res)).fail(() => resolve([]));
+    });
+};
+
+_informe.ListarPlanesManejo = function (V_OPCION, COD_INFORME, COD_THABILITANTE, NUM_POA) {
+    const params = {
+        type: 'get',
+        url: `${urlLocalSigo}Fiscalizacion/ManPAU/ListarPlanesManejo`,
+        datos: { COD_INFORME, COD_THABILITANTE, NUM_POA, V_OPCION: V_OPCION || 'L' }
+    }
+
+    return new Promise((resolve, reject) => {
+        utilSigo.fnAjax(params, res => resolve(res), () => resolve([]));
+    });
 }
 
 _informe.Registro = function () {
@@ -772,42 +590,7 @@ _informe.ResumenInforme = function () {
 
 _informe.DATA_INFORMES = {};
 
-/*_informe.Mostrar_Analisis = function () {
-    utilSigo.blockUIGeneral();
-
-    //Regularizar para varios informes
-    const asCodInforme = app.Inf_Supervision[0].COD_INFORME;
-    let xhr_informes = $.getJSON(urlLocalSigo + 'Supervision/ManInforme/_DataResumenInforme', { asCodInforme: asCodInforme });
-    let xhr_templates = $.get(urlLocalSigo + 'Fiscalizacion/ManPAU/TemplateRSDObligaciones');
-
-    $.when(xhr_informes, xhr_templates).then(function (res_inf, res_tmpl) {
-        _informe.DATA_INFORMES = res_inf[0]; //volumenes, especies	
-
-        //Template
-        let html = res_tmpl[0];
-
-        if (!$('#partial-templates').length) $('<div>', { id: 'partial-templates' }).appendTo('body');
-        $('#partial-templates').html(html);
-
-        utilSigo.unblockUIGeneral();
-        $('#modal-analisis').modal('show');
-    });
-}
-*/
-
 _informe.Extraer_Infracciones = function () {
-    /*return new Promise((resolve, reject) => {
-        const params = {
-            type: 'get',
-            url: `${urlLocalSigo}Fiscalizacion/ManPAU/TemplateRSDObligaciones`,
-            dataType: 'html'
-        };
-
-        utilSigo.fnAjax(params, function (html) {
-            html ? resolve(html) : reject(null);
-        });
-    });*/
-
     return new Promise((resolve, reject) => {
         utilSigo.blockUIGeneral();
 
@@ -822,9 +605,6 @@ _informe.Extraer_Infracciones = function () {
             //Template
             let html = res_tmpl[0];
 
-            //if (!$('#partial-templates').length) $('<div>', { id: 'partial-templates' }).appendTo('body');
-            //$('#partial-templates').html(html);
-
             utilSigo.unblockUIGeneral();
             resolve(html);
         }).fail(() => reject(null));
@@ -835,8 +615,8 @@ _informe.EXTRAER_INFRACCIONES_POR_MODALIDAD = function () {
     app.Infracciones = data.Infracciones.filter(x => x.codModalidad == app.Informe.COD_MODALIDAD);
 }
 
-_informe.EXTRAER_PARRAFOS_INFRACCION = function (template) {
-    let informe = JSON.parse(JSON.stringify(app.Informe));
+_informe.EXTRAER_PARRAFOS_INFRACCION = function (template, informe) {
+    //let informe = JSON.parse(JSON.stringify(app.Informe));
     informe.TABLAS_INFORME = _informe.DATA_INFORMES;
 
     const infracciones = JSON.parse(JSON.stringify(data.Infracciones))
@@ -976,11 +756,6 @@ _informe.SITD_Registro = function () {
                 app.Informe.PIE_PAGINA = app.Informe.PIE_PAGINA.replace(/PASSWORD/g, res.data.password);
                 $('#txtNumeroResolucion').val(app.Informe.NUM_INFORME_SITD);
 
-                /*if (tb) {
-                    //app.Informe.COD_DESTINATARIO = tb.trabajadorId;
-                    app.Informe.DESTINATARIO = `${tb.nombres} ${tb.apellidos}`;
-                }*/
-
                 app.Tramite = res.data;
 
                 _informe.Guardar(data);
@@ -988,11 +763,6 @@ _informe.SITD_Registro = function () {
 
             $('#modal-sitd').modal('hide');
         } else {
-            //if (res.iCodTramite) {
-            //	modal_sitd.form.iCodTramite = res.iCodTramite;
-            //	app.Informe.TRAMITE_ID = res.iCodTramite;
-            //}
-
             utilSigo.toastError('Atención', res.msj);
         }
 
@@ -1010,10 +780,6 @@ _informe.ObtenerRutaInformeSup = function (item) {
 _informe.AsociarInforme = function () {
     $('#myTab a.nav-link[href="#navDatos"]').tab("show");
     _renderListExpediente.fnViewModalConsulta();
-    //_renderListExpediente.fnCallback = function (data) {
-    //	ManRD_AddEdit.fnSaveForm();
-    //	delete _renderListExpediente.fnCallback;
-    //}
 }
 
 _informe.DOMEvents = function () {
@@ -1039,7 +805,8 @@ $(function () {
                 COD_INFORME: null, //Informe de supervision (auxiliar, obtenemos de la cabecera)
                 NRO_REFERENCIA: null,
                 INF_FECHA: null,
-                //INF_ANTECEDENTES: null,
+                NUM_POA: null, // POA
+                NOMBRE_POA: null,
                 TITULAR_SUPERVISADO: null,
                 DOCUMENTO_TITULAR: null,
                 RUC_TITULAR: null,
@@ -1057,15 +824,6 @@ $(function () {
                 RECURSOS: [],
                 INFRACCIONES: [],
                 CAUSALES_CADUCIDAD: [],
-                //VISTOS: null,
-                //ANTECEDENTES: null,
-                //COMPETENCIA: null,
-                //ANALISIS: null,
-                //IMPUTACION: null,
-                //COMUNICACION_EXTERNA: null,
-                //PARRAFOS_CLICHE: null,
-                //PIE_PAGINA: null,
-                //RESOLUCION: null,
 
                 /** Nuevos campos */
                 FLG_CADUCIDAD_EXTRACCION: true,
@@ -1120,7 +878,7 @@ $(function () {
 
                 //Valores por defecto infracciones, causales
                 const configuracion = await self.Configuracion();
-                
+
                 //Causales_Caducidad
                 data.Infracciones = configuracion.infracciones;
                 data.Causales_Caducidad = configuracion.causales_caducidad;
@@ -1213,8 +971,6 @@ $(function () {
                             self.Informe.NRO_REFERENCIA = res.inf_supervision.map(function (x) { return x.NUM_INFORME }).join(', ');
 
                             self.Informe.INF_FECHA = fnDate.text_long(cab.INF_FECHA);
-                            //self.Informe.INF_ANTECEDENTES = cab.INF_ANTECEDENTES;
-
                             self.Informe.TITULAR_SUPERVISADO = cab.TITULAR_SUPERVISADO;
                             self.Informe.DOCUMENTO_TITULAR = cab.DOCUMENTO_TITULAR;
                             self.Informe.REPRESENTANTE_LEGAL = cab.REPRESENTANTE_LEGAL || cab.TITULAR_SUPERVISADO;
@@ -1228,21 +984,6 @@ $(function () {
                             }
                         }
 
-                        // Si no está guardado aun el informe, cargamos los datos por defecto
-                        /*if (!res.informe) {
-                            const data = JSON.parse(JSON.stringify(self.Informe));
-                            data.Inf_Supervision = cab || {};
-
-                            self.Informe.VISTOS = _informe.tmpl.Vistos(data);
-                            self.Informe.ANTECEDENTES = data.INF_ANTECEDENTES || _informe.tmpl.Antecedentes(data);
-                            self.Informe.COMPETENCIA = _informe.tmpl.Competencia(data);
-                            self.Informe.IMPUTACION = _informe.tmpl.Imputacion(data);
-                            self.Informe.COMUNICACION_EXTERNA = _informe.tmpl.Comunicacion_Externa(data);
-                            self.Informe.PARRAFOS_CLICHE = _informe.tmpl.Cliche(data);
-                            self.Informe.PIE_PAGINA = _informe.tmpl.Pie_Pagina(data);
-                            self.Informe.RESOLUCION = _informe.tmpl.Resolucion(data);
-                        }*/
-
                         resolve(res);
                     });
                 });
@@ -1255,7 +996,7 @@ $(function () {
 
                 const promise = new Promise((resolve, reject) => {
                     if (!datos.TRAMITE_ID || !datos.COD_THABILITANTE || !datos.COD_RES_SUB) {
-                        reject("Faltan datos para extraer información de trámite");
+                        resolve({ success: false, message: "Faltan datos para extraer información de trámite" });
                         return;
                     }
 
@@ -1333,6 +1074,9 @@ $(function () {
                         self.Informe.DIRECCION_LEGAL = res.values[4];
                     }
                 });
+            },
+            ListarPOAS: function () {
+                console.log('Listando POAs');
             },
             AbrirModalPersona: function () {
                 return new Promise((resolve, reject) => {
@@ -1571,6 +1315,27 @@ $(function () {
             }
         }
     });
+
+    modal_planes_manejo = new Vue({
+        el: '#modal-planes-manejo',
+        data: {
+            Planes_Manejo: []
+        },
+        methods: {
+            Abrir: async function () {
+                const self = this;
+                const res = await _informe.ListarPlanesManejo('L', app.Informe.COD_INFORME);
+                self.Planes_Manejo = res;
+                $('#modal-planes-manejo').modal('show');
+            },
+            Seleccionar: function (item) {
+                console.log(item);
+                app.Informe.NUM_POA = item.NUM_POA;
+                app.Informe.NOMBRE_POA = item.NOMBRE_POA;
+                $('#modal-planes-manejo').modal('hide');
+            }
+        }
+    })
 
     modal_notificar = new Vue({
         el: '#modal-notificar',

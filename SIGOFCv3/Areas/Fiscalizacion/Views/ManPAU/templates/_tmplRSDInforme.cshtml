@@ -143,15 +143,15 @@
                 <td style="border: 1px solid #000;">
                     <u>Titular:</u> ${TITULAR_SUPERVISADO} (en adelante, el/la titular)<br />
                     <u>Código de TH:</u> ${NUM_THABILITANTE}, suscrito el xx de xx del xx (en adelante, el contrato de concesión/el permiso forestal)<br />
-                    <u>Plan de Manejo supervisado:</u> PO XX, periodo XX, aprobado mediante Resolución N° xxx, de fecha xxx<br />
-                    <u>Fecha de supervisión:</u> del  XX al XX de XX  de 202X
+                    <u>Plan de Manejo supervisado:</u> PO ${PLAN_MANEJO.NOMBRE_POA}, periodo ${PLAN_MANEJO.INICIO_VIGENCIA}, aprobado mediante Resolución N° ${PLAN_MANEJO.ARESOLUCION_NUM}, de fecha ${PLAN_MANEJO.ARESOLUCION_FECHA}<br />
+                    <u>Fecha de supervisión:</u> ${INF_FECHA}
                 </td>
             </tr>
             <tr>
                 <td style="border: 1px solid #000;">2</td>
                 <td style="border: 1px solid #000;">Documentos que comunican el Informe de Supervisión</td>
                 <td style="border: 1px solid #000;">
-                    Carta N° 0xxx-20xx-OSINFOR/08.1, del xx de noviembre de 20xx, notificada el xx de xx de 20xx
+                    Carta N° ${ANTECEDENTES_DOCS.Carta?.numero}, del ${ANTECEDENTES_DOCS.Carta?.fechaEmision}, notificada el ${ANTECEDENTES_DOCS.Carta?.fechaNotificacion}
                     <a style="mso-footnote-id: foot_vistos_2" href="#_foot_vistos_2" title="">
                         <sup class=MsoFootnoteReference><span style="mso-special-character:footnote"></span></sup>
                     </a>, que remitió a copia del Informe de Supervisión a la/el titular.
@@ -424,7 +424,7 @@
                 </td>
                 <td style="border: 1px solid #000;">
                     <p>
-                        El xx de xxx de 2022, la Sub Dirección de Supervisión de Concesiones Forestales y de Fauna Silvestre informó a través de la Alerta N° XXXX, que en la supervisión al área del Plan de Manejo (xx), correspondiente al TH n° XXX, no se han encontrado en campo evidencias de actividad de aprovechamiento forestal, entre ellas no existe movilización de volumen maderable del área; por lo que, el volumen reportado en el balance de extracción y forma 20 de fecha XX de XX de 20XX, procederían de árboles no autorizados, lo cual habría generado un daño a la cobertura boscosa natural que integra el Patrimonio Forestal Nacional.
+                        El xx de xxx de 202X, la Sub Dirección de Supervisión de Concesiones Forestales y de Fauna Silvestre informó a través de la Alerta N° XXXX, que en la supervisión al área del Plan de Manejo ${PLAN_MANEJO.NOMBRE_POA}, correspondiente al TH N° ${NUM_THABILITANTE}, no se han encontrado en campo evidencias de actividad de aprovechamiento forestal, entre ellas no existe movilización de volumen maderable del área; por lo que, el volumen reportado en el balance de extracción y forma 20 de fecha XX de XX de 20XX, procederían de árboles no autorizados, lo cual habría generado un daño a la cobertura boscosa natural que integra el Patrimonio Forestal Nacional.
                     </p>
                     <p>
                         En ese sentido, los hallazgos contundentes de la supervisión permiten inferir que se ha cumplido con el primer presupuesto para emitir medidas cautelares, en el marco del presente PAU.
@@ -437,7 +437,7 @@
                 </td>
                 <td style="border: 1px solid #000;">
                     <p>
-                        La vigencia del Plan de Manejo N° xxx, aprobado mediante la Resolución N° xxx, culminará el xx de xxx de 20xxx. Asimismo, se advierte que, existe un saldo de xxx m3 de madera rolliza que el titular podría movilizar. En esa línea, existe la posibilidad que se siga realizando la afectación a la cobertura forestal.
+                        La vigencia del Plan de Manejo N° ${PLAN_MANEJO.NOMBRE_POA}, aprobado mediante la Resolución N° ${PLAN_MANEJO.ARESOLUCION_NUM}, culminará el ${PLAN_MANEJO.FIN_VIGENCIA || 'XX'}. Asimismo, se advierte que, existe un saldo de xxx m3 de madera rolliza que el titular podría movilizar. En esa línea, existe la posibilidad que se siga realizando la afectación a la cobertura forestal.
                     </p>
                     <p>
                         Es necesario adoptar medidas orientadas a prevenir que el daño irreparable generado al Patrimonio Forestal, producto de la extracción no autorizada de xxx m3 de madera rolliza, se siga incrementando durante la vigencia del aludido plan de manejo. De la misma manera, surge la necesidad de suspender los efectos del Plan de Manejo y de las GTF, a fin de evitar que se aprueben futuros reingresos y/o movilizaciones de saldos.
@@ -467,11 +467,11 @@
     </p>
     <ul style="list-style: lower-alpha;">
         <li>
-            Suspender los efectos del Plan de Manejo N° xx, aprobado mediante la Resolución Jefatural N° xxx, otorgados a favor de xxx, correspondiente al TH N° XXX; así como, suspender la autorización de eventuales reingresos y/o movilizaciones de saldos vinculados con el citado contrato/permiso forestal.
+            Suspender los efectos del Plan de Manejo N° ${PLAN_MANEJO.NOMBRE_POA}, aprobado mediante la Resolución Jefatural N° ${PLAN_MANEJO.ARESOLUCION_NUM}, otorgados a favor de ${TITULAR_SUPERVISADO}, correspondiente al TH N° ${NUM_THABILITANTE}; así como, suspender la autorización de eventuales reingresos y/o movilizaciones de saldos vinculados con el citado contrato/permiso forestal.
         </li>
         <li>
             <span>
-                Suspender los efectos de las cuatro guías de transporte forestal, de fecha XX de junio de 20XX (GTF XXX), correspondientes a las especies aprobadas en el Plan de Manejo N° xx, otorgadas a favor de XXX, correspondiente al TH N°  XXX, conforme se detalla a continuación:
+                Suspender los efectos de las cuatro guías de transporte forestal, de fecha XX de junio de 20XX (GTF XXX), correspondientes a las especies aprobadas en el Plan de Manejo N° ${PLAN_MANEJO.NOMBRE_POA}, otorgadas a favor de ${TITULAR_SUPERVISADO}, correspondiente al TH N°  ${NUM_THABILITANTE}, conforme se detalla a continuación:
                 <table width="100%" cellpadding="4" style="border: 0; font-family: Arial; font-size: 10pt; border-collapse: collapse; line-height: 150%;">
                     <thead>
                         <tr>
@@ -504,7 +504,7 @@
         <li>
             <span>
                 <p>
-                    Incautar temporalmente los recursos forestales movilizados mediante las XX Guías de Transporte Forestal de fecha XX de XXX de 20XX del Plan de Manejo N° xxx, conforme se detalla a continuación:
+                    Incautar temporalmente los recursos forestales movilizados mediante las XX Guías de Transporte Forestal de fecha XX de XXX de 20XX del Plan de Manejo N° ${PLAN_MANEJO.NOMBRE_POA}, conforme se detalla a continuación:
                 </p>
                 <table width="100%" cellpadding="4" style="border: 0; font-family: Arial; font-size: 10pt; border-collapse: collapse; line-height: 150%;">
                     <thead>

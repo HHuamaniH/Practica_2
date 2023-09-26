@@ -51,7 +51,7 @@ namespace CapaDatos.DOC
                                 dBOracle.ManExecute(cn, tr, "DOC_OSINFOR_ERP_MIGRACION.SPFISCALIZACION_RSDTABINFORMEDIGITAL_FIRMA_GRABAR", param);
                             }
                         }
-                        
+
                         dBOracle.ManExecute(cn, tr, "DOC_OSINFOR_ERP_MIGRACION.SPFISCALIZACION_RSDTABINFORMEDIGITAL_ELIMINAR_ITEMS", new object[] { codInformeDigital });
 
                         if (otros.INFRACCIONES != null)
@@ -161,21 +161,14 @@ namespace CapaDatos.DOC
                                     vm.COD_MATERIA = dr["VCodMateria"].ToString();
                                     vm.COD_MODALIDAD = dr["VCodModalidad"].ToString();
                                     vm.NRO_REFERENCIA = dr["VNroReferencia"].ToString();
-                                    vm.COD_TITULAR = dr["VCodTitular"].ToString();
-                                    vm.TITULAR_ESTADO_RUC = dr["VRucTitularEstado"].ToString();
-                                    vm.TITULAR_CONDICION_RUC = dr["VRucTitularCondicion"].ToString();
+                                    vm.NUM_POA = dr["NNumPOA"] != DBNull.Value ? Convert.ToInt32(dr["NNumPOA"]) : default(int?);
+                                    vm.NOMBRE_POA = dr["nombre_poa"] != DBNull.Value ? dr["nombre_poa"].ToString() : null;
+                                    vm.COD_THABILITANTE = dr["VCodTHabilitante"] != DBNull.Value ? dr["VCodTHabilitante"].ToString() : null;
+                                    vm.TITULAR_ESTADO_RUC = dr["VRucTitularEstado"] != DBNull.Value ? dr["VRucTitularEstado"].ToString(): null;
+                                    vm.TITULAR_CONDICION_RUC = dr["VRucTitularCondicion"] != DBNull.Value ? dr["VRucTitularCondicion"].ToString() : null;
                                     if (dr["NAnioResolucion"] != DBNull.Value) vm.RES_DIRECTORAL_ANIO = Convert.ToInt32(dr["NAnioResolucion"]);
-                                    vm.RES_DIRECTORAL_UND_ORGANICA = dr["VCodUndOrganica"].ToString();
+                                    vm.RES_DIRECTORAL_UND_ORGANICA = dr["VCodUndOrganica"] != DBNull.Value ? dr["VCodUndOrganica"].ToString() : null;
                                     if (dr["DFechaResolucion"] != DBNull.Value) vm.RES_DIRECTORAL_FECHA = DateTime.Parse(dr["DFechaResolucion"].ToString());
-                                    //vm.VISTOS = dr["VVistos"].ToString();
-                                    //vm.ANTECEDENTES = dr["VAntecedentes"].ToString();
-                                    //vm.COMPETENCIA = dr["VCompetencia"].ToString();
-                                    //vm.ANALISIS = dr["VAnalisis"].ToString();
-                                    //vm.IMPUTACION = dr["VImputacion"].ToString();
-                                    //vm.COMUNICACION_EXTERNA = dr["VComunicacionExterna"].ToString();
-                                    //vm.PARRAFOS_CLICHE = dr["VParrafosCliche"].ToString();
-                                    //vm.PIE_PAGINA = dr["VPiePagina"].ToString();
-                                    //vm.RESOLUCION = dr["VResolucion"].ToString();
                                     vm.FLG_CADUCIDAD_EXTRACCION = Convert.ToBoolean(dr["NFlagCaducidadExtraccion"]);
                                     vm.FLG_COMUNICACION = Convert.ToBoolean(dr["NFlagComunicacion"]);
                                     vm.FLG_HERRAMIENTAS_SUBSANAR = Convert.ToBoolean(dr["NFlagHerramientasSubsanar"]);
@@ -353,6 +346,51 @@ namespace CapaDatos.DOC
             }
         }
 
+        public List<VM_RSD_PLAN_MANEJO> ListarPlanesManejo(string COD_INFORME, string COD_THABILITANTE, int? NUM_POA, string V_OPCION)
+        {
+            try
+            {
+                List<VM_RSD_PLAN_MANEJO> result = new List<VM_RSD_PLAN_MANEJO>();
+
+                using (OracleConnection cn = new OracleConnection(BDConexion.Conexion_Cadena_SIGO()))
+                {
+                    cn.Open();
+
+                    using (OracleDataReader dr = dBOracle.SelDrdDefault(cn, "DOC_OSINFOR_ERP_MIGRACION.SPFISCALIZACION_RSDTABINFORMEDIGITAL_PLANES_MANEJO", COD_INFORME, COD_THABILITANTE, NUM_POA, V_OPCION))
+                    {
+                        if (dr != null)
+                        {
+                            //INFORME
+                            if (dr.HasRows)
+                            {
+                                VM_RSD_PLAN_MANEJO objEN = null;
+                                while (dr.Read())
+                                {
+                                    objEN = new VM_RSD_PLAN_MANEJO();
+                                    objEN.COD_INFORME = dr["COD_INFORME"].ToString();
+                                    objEN.INICIO_SUPERVISION = dr["INICIO_SUPERVISION"] != DBNull.Value ? DateTime.Parse(dr["INICIO_SUPERVISION"].ToString()).ToShortDateString() : null;
+                                    objEN.NUM_POA = dr["NUM_POA"].ToString();
+                                    objEN.NOMBRE_POA = dr["NOMBRE_POA"].ToString();
+                                    objEN.ARESOLUCION_NUM = dr["ARESOLUCION_NUM"] != DBNull.Value ? dr["ARESOLUCION_NUM"].ToString() : null;
+                                    objEN.ARESOLUCION_FECHA = dr["ARESOLUCION_FECHA"] != DBNull.Value ? DateTime.Parse(dr["ARESOLUCION_FECHA"].ToString()).ToShortDateString() : null;
+                                    objEN.INICIO_VIGENCIA = dr["INICIO_VIGENCIA"] != DBNull.Value ? DateTime.Parse(dr["INICIO_VIGENCIA"].ToString()).ToShortDateString() : null;
+                                    objEN.FIN_VIGENCIA = dr["FIN_VIGENCIA"] != DBNull.Value ? DateTime.Parse(dr["FIN_VIGENCIA"].ToString()).ToShortDateString() : null;
+
+                                    result.Add(objEN);
+                                }
+                            }
+                        }
+                    }
+                }
+
+                return result;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
         public string NotificarRSD(RSD_Notificacion notificacion)
         {
             string OUTPUTPARAM01 = "";
@@ -437,8 +475,7 @@ namespace CapaDatos.DOC
                                     objEN.REPRESENTANTE_LEGAL = dr["REPRESENTANTE_LEGAL"].ToString();
                                     objEN.RUC_TITULAR = dr["RUC_TITULAR"].ToString();
                                     objEN.NUM_INFORME = dr["NUM_INFORME"].ToString();
-                                    if (dr["INF_FECHA"] != null) objEN.INF_FECHA = DateTime.Parse(dr["INF_FECHA"].ToString());
-                                    objEN.INF_ANTECEDENTES = dr["INF_ANTECEDENTES"].ToString();
+                                    if (dr["INF_FECHA"] != null) objEN.INF_FECHA = DateTime.Parse(dr["INF_FECHA"].ToString());                                  
                                     objEN.ASUNTO = dr["ASUNTO"].ToString();
                                     objEN.COD_THABILITANTE = dr["COD_THABILITANTE"].ToString();
                                     objEN.NUM_THABILITANTE = dr["NUM_THABILITANTE"].ToString();
