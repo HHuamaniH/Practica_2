@@ -291,6 +291,11 @@ _informe.Exportar = async function () {
 
     //console.log(PLANES_MANEJO);
 
+    //Resumen de informe de supervision
+    const resumenInforme = await _informe.EXTRAER_RESUMEN_INFORME();    
+    informe.ESPECIES = resumenInforme.especies;
+    //informe.VOLUMENES = resumenInforme.volumenes;
+
     //Volumenes injustificados
     let resumen = await _informe.RegResumenInfSupervision(informe.COD_RES_SUB);
     const volumenes = resumen.filter(x => !!x.VOLUMEN_INJUSTIFICADO);
@@ -309,7 +314,7 @@ _informe.Exportar = async function () {
     informe.COMPETENCIA = _informe.tmpl.get(template, '#tmpl-competencia', informe);
 
     //Plantilla de infracciones
-    const tmplInfracciones = await _informe.Extraer_Infracciones();
+    const tmplInfracciones = await _informe.EXTRAER_INFRACCIONES();
     informe.INFRACCIONES = _informe.EXTRAER_PARRAFOS_INFRACCION(tmplInfracciones, informe);
     informe.ANALISIS = _informe.tmpl.get(template, '#tmpl-analisis', informe);
 
@@ -422,6 +427,7 @@ _informe.Guardar = function (parametros) {
             app.Informe.RECURSOS = data.RECURSOS;
 
             _informe.CambiarEstado(app.Informe.ESTADO || States.INGRESADO);
+            app.Informe.FLG_ACTUALIZAR = false;
             utilSigo.toastSuccess('Guardado', 'Se ha guardado el informe digital');
             deferred.resolve(res);
         } else {
@@ -588,26 +594,25 @@ _informe.ResumenInforme = function () {
     });
 }
 
-_informe.DATA_INFORMES = {};
-
-_informe.Extraer_Infracciones = function () {
+_informe.EXTRAER_RESUMEN_INFORME = function () {
     return new Promise((resolve, reject) => {
-        utilSigo.blockUIGeneral();
-
-        //Regularizar para varios informes
         const asCodInforme = app.Inf_Supervision[0].COD_INFORME;
-        let xhr_informes = $.getJSON(urlLocalSigo + 'Supervision/ManInforme/_DataResumenInforme', { asCodInforme: asCodInforme });
-        let xhr_templates = $.get(urlLocalSigo + 'Fiscalizacion/ManPAU/TemplateRSDObligaciones');
 
-        $.when(xhr_informes, xhr_templates).then(function (res_inf, res_tmpl) {
-            _informe.DATA_INFORMES = res_inf[0]; //volumenes, especies	
+        utilSigo.fnAjax({
+            type: 'get',
+            url: `${urlLocalSigo}Supervision/ManInforme/_DataResumenInforme`,
+            datos: { asCodInforme: asCodInforme }
+        }, res => resolve(res), () => resolve({ volumenes: [], especies: [] }));
+    })
+}
 
-            //Template
-            let html = res_tmpl[0];
-
-            utilSigo.unblockUIGeneral();
-            resolve(html);
-        }).fail(() => reject(null));
+_informe.EXTRAER_INFRACCIONES = function () {
+    return new Promise((resolve, reject) => {
+        utilSigo.fnAjax({
+            type: 'get',
+            dataType: 'html',
+            url: `${urlLocalSigo}Fiscalizacion/ManPAU/TemplateRSDObligaciones`
+        }, html => resolve(html), () => resolve(null));
     })
 }
 
@@ -617,7 +622,7 @@ _informe.EXTRAER_INFRACCIONES_POR_MODALIDAD = function () {
 
 _informe.EXTRAER_PARRAFOS_INFRACCION = function (template, informe) {
     //let informe = JSON.parse(JSON.stringify(app.Informe));
-    informe.TABLAS_INFORME = _informe.DATA_INFORMES;
+    //informe.TABLAS_INFORME = _informe.DATA_INFORMES;
 
     const infracciones = JSON.parse(JSON.stringify(data.Infracciones))
         .filter(item => item.codModalidad == informe.COD_MODALIDAD && item.select)
@@ -834,7 +839,8 @@ $(function () {
 
                 RUTA_ARCHIVO_REVISION: null,
                 FECHA_REGISTRO: new Date(),
-                ESTADO: 1
+                ESTADO: 1,
+                FLG_ACTUALIZAR: false,
             },
             Inf_Supervision: [],
             oficinaDefault: null,
@@ -1095,32 +1101,20 @@ $(function () {
 
             },
             BuscarPersona: function (item) {
-                let self = this;
+                const self = this;
 
-                var option = {
-                    url: `${urlLocalSigo}General/Controles/_BuscarPersonaGeneral`,
-                    type: 'GET',
-                    datos: { asBusGrupo: "PERSONA", asCodPTipo: "TODOS", asTipoPersona: "N" },
-                    divId: "mdlBuscarPersona"
-                };
-                utilSigo.fnOpenModal(option, function () {
+                self.AbrirModalPersona().then(data => {
                     _bPerGen.fnAsignarDatos = function (obj) {
                         if (obj) {
-                            var data = _bPerGen.dtBuscarPerona.row($(obj).parents('tr')).data();
-                            console.log(data);
-
+                            const data = _bPerGen.dtBuscarPerona.row($(obj).parents('tr')).data();
                             item.codPersona = data.COD_PERSONA;
                             item.apellidosNombres = data.PERSONA;
                             item.estado = 1;
 
-                            //if (self.Informe.COD_INFORME_DIGITAL) {
-                            //	item.estado = 2; //MODIFICAR
-                            //}
-
+                            self.Informe.FLG_ACTUALIZAR = true;
                             utilSigo.fnCloseModal("mdlBuscarPersona");
                         }
                     }
-                    _bPerGen.fnInit();
                 });
             },
             Abrir_Notificar: async function (item) {
@@ -1309,6 +1303,7 @@ $(function () {
             Agregar: function () {
                 const user = { ...this.form };
                 app.Informe.FIRMAS.push(user);
+                app.Informe.FLG_ACTUALIZAR = true;
 
                 utilSigo.toastSuccess('Agregado', 'Se ha agregado el integrante a la lista');
                 $('#modal-integrante').modal('hide');

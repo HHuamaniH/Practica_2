@@ -177,15 +177,17 @@
             </tr>
         </thead>
         <tbody>
+            {{each(i, esp) ESPECIES}}
             <tr>
-                <td style="border: 1px solid #000;">1</td>
-                <td style="border: 1px solid #000;">xxx</td>
-                <td style="border: 1px solid #000;">xxx</td>
-                <td style="border: 1px solid #000;">1</td>
-                <td style="border: 1px solid #000;">Xxx E – xxx N</td>
-                <td style="border: 1px solid #000;">xxxx</td>
-                <td style="border: 1px solid #000;">xxxx m<sup>3</sup></td>
+                <td style="border: 1px solid #000;">${i+1}</td>
+                <td style="border: 1px solid #000;">${esp.DESC_ESPECIES}</td>
+                <td style="border: 1px solid #000; text-align: center;">${esp.FAJA}</td>
+                <td style="border: 1px solid #000; text-align: center;">X</td>
+                <td style="border: 1px solid #000;">${esp.COORDENADA_ESTE} E – ${esp.COORDENADA_NORTE} N</td>
+                <td style="border: 1px solid #000;">${esp.DESC_EESTADO_CAMPO}</td>
+                <td style="border: 1px solid #000;">${esp.VOLUMEN} m<sup>3</sup></td>
             </tr>
+            {{/each}}
         </tbody>
     </table>
     <p class="enumeration">
@@ -562,24 +564,17 @@
             </tr>
         </thead>
         <tbody>
+            {{each(i, esp) ESPECIES}}
             <tr>
-                <td style="border: 1px solid #000;">1</td>
-                <td style="border: 1px solid #000;">xxx</td>
-                <td style="border: 1px solid #000;">xxx</td>
-                <td style="border: 1px solid #000;">1</td>
-                <td style="border: 1px solid #000;">Xxx E – xxx N</td>
-                <td style="border: 1px solid #000;">xxxx</td>
-                <td style="border: 1px solid #000;">xxxx m<sup>3</sup></td>
+                <td style="border: 1px solid #000;">${i+1}</td>
+                <td style="border: 1px solid #000;">${esp.DESC_ESPECIES}</td>
+                <td style="border: 1px solid #000; text-align: center;">${esp.FAJA}</td>
+                <td style="border: 1px solid #000; text-align: center;">X</td>
+                <td style="border: 1px solid #000;">${esp.COORDENADA_ESTE} E – ${esp.COORDENADA_NORTE} N</td>
+                <td style="border: 1px solid #000;">${esp.DESC_EESTADO_CAMPO}</td>
+                <td style="border: 1px solid #000;">${esp.VOLUMEN} m<sup>3</sup></td>
             </tr>
-            <tr>
-                <td style="border: 1px solid #000;">1</td>
-                <td style="border: 1px solid #000;">xxx</td>
-                <td style="border: 1px solid #000;">xxx</td>
-                <td style="border: 1px solid #000;">1</td>
-                <td style="border: 1px solid #000;">Xxx E – xxx N</td>
-                <td style="border: 1px solid #000;">xxxx</td>
-                <td style="border: 1px solid #000;">xxxx m<sup>3</sup></td>
-            </tr>
+            {{/each}}
             <tr>
                 <td colspan="6" style="border: 1px solid #000;">
                     TOTAL
