@@ -292,7 +292,7 @@ _informe.Exportar = async function () {
     //console.log(PLANES_MANEJO);
 
     //Resumen de informe de supervision
-    const resumenInforme = await _informe.EXTRAER_RESUMEN_INFORME();    
+    const resumenInforme = await _informe.EXTRAER_RESUMEN_INFORME();
     informe.ESPECIES = resumenInforme.especies;
     //informe.VOLUMENES = resumenInforme.volumenes;
 
@@ -327,7 +327,7 @@ _informe.Exportar = async function () {
     informe.COMUNICACION_EXTERNA = _informe.tmpl.get(template, '#tmpl-comunicacion-externa', informe);
     informe.HERRAMIENTAS_SUBSANAR = _informe.tmpl.get(template, '#tmpl-herramientas-subsanar', informe);
     informe.RESOLUCION = _informe.GenerarResolucion(template, informe);
-    informe.PIE_PAGINA = _informe.tmpl.get(template, '#tmpl-pie-pagina', { informe, urlLocalSigo });
+    informe.PIE_PAGINA = _informe.tmpl.get(template, '#tmpl-pie-pagina', { informe, urlLocalSigo })?.replace(/PASSWORD/g, app.Tramite?.password || 'PASSWORD');
 
     let html = '';
     html += _informe.tmpl.get(template, '#tmpl-exportar', informe);
@@ -753,16 +753,19 @@ _informe.SITD_Registro = function () {
                 let data = _informe.Estructura();
                 data.TRAMITE_ID = res.data.iCodTramite || data.TRAMITE_ID;
                 data.NUM_INFORME_SITD = res.data.cCodificacion || data.NUM_INFORME_SITD;
+                data.SITD_FECHA_REGISTRO = fnDate.text(res.data.fechaRegistro);
 
                 //Actualizamos las variables
                 app.Informe.TRAMITE_ID = data.TRAMITE_ID;
                 app.Informe.NUM_INFORME_SITD = data.NUM_INFORME_SITD;
 
-                app.Informe.PIE_PAGINA = app.Informe.PIE_PAGINA.replace(/PASSWORD/g, res.data.password);
-                $('#txtNumeroResolucion').val(app.Informe.NUM_INFORME_SITD);
+                $('#txtNumeroResolucion').val(data.NUM_INFORME_SITD);
+                $('#txtFechaEmision').val(data.SITD_FECHA_REGISTRO);
 
+                //Asignamos la data a la variable
                 app.Tramite = res.data;
 
+                //Guardamos
                 _informe.Guardar(data);
             }
 
@@ -1324,7 +1327,6 @@ $(function () {
                 $('#modal-planes-manejo').modal('show');
             },
             Seleccionar: function (item) {
-                console.log(item);
                 app.Informe.NUM_POA = item.NUM_POA;
                 app.Informe.NOMBRE_POA = item.NOMBRE_POA;
                 $('#modal-planes-manejo').modal('hide');

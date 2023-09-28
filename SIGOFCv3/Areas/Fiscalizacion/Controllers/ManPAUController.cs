@@ -238,7 +238,7 @@ namespace SIGOFCv3.Areas.Fiscalizacion.Controllers
                 {
                     //actualizando número de informe
                     Log_PAU_Digital logInforme = new Log_PAU_Digital();
-                    logInforme.ModificarNumeroInforme(tramite.cod_Informe, tramite.cCodificacion, DateTime.Now);
+                    logInforme.ModificarNumeroInforme(tramite.cod_Informe, tramite.cCodificacion, tramite.fechaRegistro);
 
                     success = true;
                     msj = "Datos guardados Correctamente";
