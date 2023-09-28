@@ -1,0 +1,53 @@
+﻿
+@{
+    ViewBag.Title = @ViewBag.thTitleMenu;
+    Layout = "~/Views/Shared/_LayoutMain.cshtml";
+
+}
+@section scripts{
+    <script>
+    "use strict";
+    $(document).ready(function () {
+        var url = "@Url.Action("_ManGrilla", "Controles", new { Area= "THabilitante" })";
+        var datos = {
+            tipoFrmulario: "@ViewBag.thTipoFrmulario",
+            busFormulario: "@ViewBag.thBusFormulario",
+            busCriterio: "@ViewBag.thBusCriterio",
+            titleMenu: $("#hdTituloForm").val(),
+            hdfTipoFormulario: "@ViewBag.hdfTipoFormulario"
+        };
+        $.ajax({
+            url: url,
+            type: 'POST',
+            data: datos,
+            dataType: 'html',
+            success: function (vista) {
+                utilSigo.unblockUIGeneral();
+                $("#contenedorManGrilla").html(vista);
+            },
+            beforeSend: function () {
+                utilSigo.blockUIGeneral();
+            },
+            error: function (jqXHR, error, errorThrown) {
+                utilSigo.unblockUIGeneral();
+                utilSigo.toastError("Error", "Sucedio un Error Inesperado, Comuniquese con el Administrador");
+                console.log(jqXHR.responseText);
+            },
+            complete: function () {
+                //Validamos el rol del usuario
+                utilSigo.ValidaRol('@ViewBag.VAliasRol', 'btnManGrillaNuevo');
+            }
+        });
+    });
+    </script>
+}
+<div class="container-fluid" id="contenedorManGrilla">
+
+</div>
+<div id="contenedorGrilla">
+    <input type="hidden" id="hdTituloForm" value="@ViewBag.thTitleMenu" />    
+</div>
+
+
+
+

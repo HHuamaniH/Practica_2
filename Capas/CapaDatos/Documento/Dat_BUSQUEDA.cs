@@ -58,6 +58,48 @@ namespace CapaDatos.DOC
                                     }
                                     break;
                                 #endregion
+                                #region CERTIFICADO_PLANTA
+                                case "CERTIFICADO_PLANTA":
+                                    switch (oCEntidad.BusCriterio)
+                                    {                                        
+                                        case "MODTH_NUMERO":
+                                        case "MODTH_TITULAR":
+                                            while (dr.Read())
+                                            {
+                                                oCampos = new CEntidad();
+                                                oCampos.CODIGO = dr["COD_THABILITANTE"].ToString();                                                
+                                                oCampos.NUMERO = dr["MODALIDAD"].ToString();
+                                                oCampos.PARAMETRO01 = dr["NUM_THABILITANTE"].ToString();
+                                                oCampos.PARAMETRO02 = dr["PERSONA"].ToString();
+                                                oCampos.PARAMETRO03 = dr["INDICADOR"].ToString();
+                                                oCampos.PARAMETRO04 = dr["COD_MTIPO"].ToString();
+                                                oCampos.PARAMETRO05 = dr["UBIGEO"].ToString();
+                                                oCampos.PARAMETRO06 = dr["ESTADO_ORIGEN"].ToString();
+                                                oCampos.PARAMETRO11 = dr["REPRESENTANTE_LEGAL"].ToString();
+                                                lsCEntidad.Add(oCampos);
+
+                                                lsCEntidad.Add(oCampos);
+                                            }                                            
+                                            break;
+                                        default:
+                                            while (dr.Read())
+                                            {
+                                                oCampos = new CEntidad();
+                                                oCampos.CODIGO = dr["COD_CERTPLANTACION"].ToString();
+                                                oCampos.NUMERO = dr["NUMERO"].ToString();
+                                                oCampos.PARAMETRO01 = dr["FECHA_CREACION"].ToString();
+                                                oCampos.PARAMETRO02 = dr["NUMERO_INSCRIPCION"].ToString();
+                                                oCampos.PARAMETRO03 = dr["FECHA_INSCRIPCION"].ToString();
+                                                oCampos.PARAMETRO04 = dr["MODALIDAD"].ToString();
+                                                oCampos.PARAMETRO05 = dr["PERSONA_TITULAR"].ToString();
+                                                oCampos.PARAMETRO06 = dr["REGION"].ToString();
+                                                lsCEntidad.Add(oCampos);
+                                            }
+                                            break;
+                                    }
+                                    
+                                    break;
+                                #endregion
                                 #region POA
                                 case "POA":
                                     switch (oCEntidad.BusCriterio)
@@ -1558,6 +1600,24 @@ namespace CapaDatos.DOC
                                         oCampos.PARAMETRO17 = dr["ESTADO_DOCUMENTO"].ToString();
                                         oCampos.PARAMETRO18 = dr["TIPO_PERSONA"].ToString();
                                         oCampos.PARAMETRO19 = dr["SEXO"].ToString();
+                                        lsCEntidad.Add(oCampos);
+                                    }
+
+                                    break;
+                                #endregion
+                                #region CERTIFICADO_PLANTA
+                                case "CERTIFICADO_PLANTA":
+                                    while (dr.Read())
+                                    {
+                                        oCampos = new CEntidad();
+                                        oCampos.CODIGO = dr["COD_CERTPLANTACION"].ToString();
+                                        oCampos.NUMERO = dr["NUMERO"].ToString();
+                                        oCampos.PARAMETRO01 = dr["FECHA_CREACION"].ToString();
+                                        oCampos.PARAMETRO02 = dr["NUMERO_INSCRIPCION"].ToString();
+                                        oCampos.PARAMETRO03 = dr["FECHA_INSCRIPCION"].ToString();
+                                        oCampos.PARAMETRO04 = dr["MODALIDAD"].ToString();
+                                        oCampos.PARAMETRO05 = dr["PERSONA_TITULAR"].ToString();
+                                        oCampos.PARAMETRO06 = dr["REGION"].ToString();
                                         lsCEntidad.Add(oCampos);
                                     }
 

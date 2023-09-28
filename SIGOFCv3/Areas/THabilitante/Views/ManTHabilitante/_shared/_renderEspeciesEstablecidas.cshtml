@@ -1,0 +1,157 @@
+﻿
+@model List<CapaEntidad.DOC.Ent_EspeciesEstablecidas>
+
+<style type="text/css">
+    #tbRenderEspeciesEstablecidas_wrapper {
+        padding: 0px;
+    }
+</style>
+
+<script type="text/javascript">
+    var _renderEspeciesEstablecidas = {};
+    _renderEspeciesEstablecidas.tbEliTABLA = [];
+
+    _renderEspeciesEstablecidas.fnInitDataTable_Detail = function () {
+        var columns_label = [], columns_data = [], options = {};
+
+        columns_label = ["Especie", "Sistema de Plantación", "Unidad de Medida", "Cantidad", "Fines", "Observacion"];
+        columns_data = ["DESC_ESPECIES", "SISTEMA_PLANTACION", "UNIDAD_MEDIDA", "CANTIDAD", "FINES", "OBSERVACION"];
+        options = {
+            page_length: 10, row_index: true, row_edit: true, row_fnEdit: "_renderEspeciesEstablecidas.fnAddEdit(this)"
+            , row_delete: true, row_fnDelete: "_renderEspeciesEstablecidas.fnDelete(this)"
+            , button_copy: true, button_csv: true, button_excel: true, button_pdf: true, button_print: true
+            , export_title: $("#tbRenderEspeciesEstablecidas").find("thead tr")[0].innerText.trim()
+            , page_sort: true
+        };
+        _renderEspeciesEstablecidas.dtEspeciesEstablecidas = utilDt.fnLoadDataTable_Detail($("#tbRenderEspeciesEstablecidas"), columns_label, columns_data, options);
+    }
+
+    _renderEspeciesEstablecidas.fnAddEdit = function (obj) {
+        var url = urlLocalSigo + "THabilitante/ManCertificadoPlanta/_EspeciesEstablecidas";
+        var option = { url: url, type: 'POST', datos: {}, divId: "mdlManCertificadoPlanta_EspeciesEstablecidas" };
+        utilSigo.fnOpenModal(option, function () {
+            _EspeciesEstablecidas.fnSaveForm = function (data) {
+                if (data != null) {
+                    var dt = _renderEspeciesEstablecidas.dtEspeciesEstablecidas;                    
+                    if (obj == null || obj == "") {//Nuevo Registro
+                        dt.rows.add([data]).draw();
+                        dt.page('last').draw('page');
+                        utilSigo.toastSuccess("Exito", "Datos guardados correctamente");
+                    } else {//Modificar
+                        var row = dt.row($(obj).parents('tr')).data();
+                        row = data;
+                        dt.row($(obj).parents('tr')).data(row).draw(false);
+                        utilSigo.toastSuccess("Exito", "Datos actualizados correctamente");
+                    }
+                    $("#mdlManCertificadoPlanta_EspeciesEstablecidas").modal('hide');
+                } else {
+                    utilSigo.toastError("Error", "No se pudieron guardar los datos");
+                }
+            }
+
+            if (obj != null && obj != "") {
+                var data = _renderEspeciesEstablecidas.dtEspeciesEstablecidas.row($(obj).parents('tr')).data();
+                _EspeciesEstablecidas.fnInit(utilSigo.fnConvertArrayToObject(data));
+            } else { _EspeciesEstablecidas.fnInit(""); }
+        });
+    }
+
+    _renderEspeciesEstablecidas.fnDeleteAll = function () {
+        var rows, countFilas, data;
+
+        rows = _renderEspeciesEstablecidas.dtEspeciesEstablecidas.$("tr");
+        countFilas = rows.length;
+        if (countFilas > 0) {
+            utilSigo.dialogConfirm("", "Está seguro de Eliminar Todos los Registros?", function (r) {
+                if (r) {
+                    $.each(rows, function (i, o) {
+                        data = _renderEspeciesEstablecidas.dtEspeciesEstablecidas.row($(o)).data();
+                        if (data["RegEstado"] == "0" || data["RegEstado"] == "2") {
+                            _renderEspeciesEstablecidas.tbEliTABLA.push({                                                            
+                                COD_SECUENCIAL: data["COD_SECUENCIAL"]
+                            });
+                        }
+                    });
+                    _renderEspeciesEstablecidas.dtEspeciesEstablecidas.clear().draw();
+                }
+            });
+        } else {
+            utilSigo.toastWarning("Aviso", "No se encontraron registros a eliminar");
+        }
+    }
+
+    _renderEspeciesEstablecidas.fnDelete = function (obj) {
+        var data;
+
+        data = _renderEspeciesEstablecidas.dtEspeciesEstablecidas.row($(obj).parents('tr')).data();
+        if (data["RegEstado"] == "0" || data["RegEstado"] == "2") {
+            _renderEspeciesEstablecidas.tbEliTABLA.push({
+                COD_SECUENCIAL: data["COD_SECUENCIAL"]
+            });
+        }
+        _renderEspeciesEstablecidas.dtEspeciesEstablecidas.row($(obj).parents('tr')).remove().draw(false);
+    }
+
+    _renderEspeciesEstablecidas.fnImport = function (e, obj) {
+        var url = urlLocalSigo + "THabilitante/ManCertificadoPlanta/ImportarDatosCP";
+        uploadFile.fileSelectHandler(e, obj, url, { asTipo: "ESPECIES_ESTABLECIDAS" }, function (data) {
+            for (var i = 0; i < data.length; i++) {
+                _renderEspeciesEstablecidas.dtEspeciesEstablecidas.rows.add([data[i]]).draw();
+                _renderEspeciesEstablecidas.dtEspeciesEstablecidas.page('last').draw('page');
+            }
+        });
+    }
+
+    _renderEspeciesEstablecidas.fnGetList = function () {
+        var list = [], rows, countFilas, data;
+
+        rows = _renderEspeciesEstablecidas.dtEspeciesEstablecidas.$("tr");
+        countFilas = rows.length;
+        if (countFilas > 0) {
+            $.each(rows, function (i, o) {
+                data = _renderEspeciesEstablecidas.dtEspeciesEstablecidas.row($(o)).data();
+                if (data["RegEstado"] == "1" || data["RegEstado"] == "2") {
+                    list.push(utilSigo.fnConvertArrayToObject(data));
+                }
+            });
+        }
+        return list;
+    }
+
+    _renderEspeciesEstablecidas.fnGetListEliTABLA = function () { return _renderEspeciesEstablecidas.tbEliTABLA }
+
+    $(document).ready(function () {
+        _renderEspeciesEstablecidas.frm = $("#frmRenderEspeciesEstablecidas");
+        _renderEspeciesEstablecidas.fnInitDataTable_Detail();
+        _renderEspeciesEstablecidas.dtEspeciesEstablecidas.rows.add(JSON.parse('@Html.Raw(Json.Encode(@Model))')).draw();
+
+        var title = '@ViewData["TITULO"]';
+        if (typeof title==='undefined' || title=="") {
+            title = "Formato de Avistamiento de Fauna Silvestre";
+        }
+        _renderEspeciesEstablecidas.frm.find("#lblTitle").text(title);
+    });
+</script>
+
+<div id="frmRenderEspeciesEstablecidas">
+    <div class="table-responsive">
+        <table id="tbRenderEspeciesEstablecidas" style="width:100%;margin:0px !important;" class="table table-hover table-bordered">
+            <thead>
+                <tr>
+                    <th colspan="16" class="text-sm-left">
+                        <div class="form-inline">
+                            <i class="fa mx-2 fa-lg fa-file-o" style="cursor:pointer;" onclick="_renderEspeciesEstablecidas.fnAddEdit('');" data-toggle="tooltip" data-placement="top" title="Nuevo"></i>
+                            <i class="fa mx-2 fa-lg fa-window-close-o" style="cursor:pointer;" onclick="_renderEspeciesEstablecidas.fnDeleteAll();" data-toggle="tooltip" data-placement="top" title="Eliminar Todos"></i>
+                            <label style="cursor:pointer;" class="fa mx-2 fa-lg fa-file-excel-o" title="Importar Archivo" data-toggle="tooltip">
+                                <input type="file" id="fileselect" name="fileselect" style="display:none" size="60" onchange="_renderEspeciesEstablecidas.fnImport(event, this)">
+                            </label>
+                            <a href="@Url.Content("~/Archivos/Plantilla/EspeciesEstablecidas/CertPlantaEspeciesEstablecidas.xlsx")"> <i class="fa mx-2 fa-lg fa-folder-open" style="cursor:pointer;" data-toggle="tooltip" data-placement="top" title="Descargar Plantilla"></i></a>
+                            <strong id="lblTitle">Formato de Avistamiento de Fauna Silvestre</strong>
+                        </div>
+                    </th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
+</div>

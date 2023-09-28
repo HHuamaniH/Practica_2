@@ -743,6 +743,26 @@ utilSigo.isFechaMayor = function (date1,date2) {
     return returns;
 };
 
+utilSigo.isFechaMenorDeHoy = function (fechaIngresada) {
+
+    let dateIn = utilSigo.convertirFechaHoraStandar(fechaIngresada);
+
+    if (utilSigo.isFechaMayor(dateIn, utilSigo.obtenerFechaHora()[0])) {
+        return false;
+    } else {
+        return true;
+    }
+}
+
+utilSigo.agregarSlashFecha = function (event) {
+    var input = event.target;
+    var valor = input.value.replace(/\D/g, '');
+    var dia = valor.slice(0, 2);
+    var mes = valor.slice(2, 4);
+    var anio = valor.slice(4, 8);
+    input.value = dia + '/' + mes + '/' + anio;
+}
+
 utilSigo.recortarTextos = function (str, lenght) {
     if (str.length > lenght) {
         return str.substr(0, lenght) + '...';
@@ -865,7 +885,43 @@ utilSigo.checkLetter = function (e) {
         return true;
     }
     
-    var patron = /[ ÁÉÍÓÚA-Záéíóúa-z0-9]/;
+    var patron = /[ ÁÉÍÓÚA-Záéíóúa-z0-9\-\/]/;
     var tecla_final = String.fromCharCode(tecla);
     return patron.test(tecla_final);
+}
+
+utilSigo.validarNumeroDecimal = function (numero, digitosEnteros, digitosDecimales) {
+    const regex = new RegExp(`^[0-9]{1,${digitosEnteros}}(\\.[0-9]{1,${digitosDecimales}})?$`);
+    return regex.test(numero);
+}
+
+utilSigo.onKeyTwoDecimal = function (e, thix) {
+    let numero = document.getElementById(thix.id).value;
+    var keynum = window.event ? window.event.keyCode : e.which;
+    if (document.getElementById(thix.id).value.indexOf('.') != -1 && keynum == 46)
+        return false;
+    if ((keynum == 8 || keynum == 48 || keynum == 46))
+        return true;
+    if (keynum <= 47 || keynum >= 58) return false;
+    if (numero == "") return true;
+    if (numero.charAt(numero.length - 1) == ".") return true;
+    return /^\d+(\.\d{1})?$/.test(numero);
+}
+
+utilSigo.onBlurTwoDecimal = function (thix, texto) {
+    let numero = document.getElementById(thix.id).value;
+    if (!/^\d+(\.\d{1,2})?$/.test(numero)) {
+        document.getElementById(thix.id).value = 0;
+        utilSigo.toastWarning("Aviso", "El " + texto + " solo debe tener dos decimales");
+        $("#" + thix.id).focus();
+    }    
+}
+
+utilSigo.onBlurFourDecimalDI = function (thix, texto) {
+    let numero = document.getElementById(thix.id).value;
+    if (!/^\d+(\.\d{1,4})?$/.test(numero)) {
+        document.getElementById(thix.id).value = 0;
+        utilSigo.toastWarning("Aviso", "El " + texto + " solo debe tener cuatro decimales");
+        $("#" + thix.id).focus();
+    }
 }

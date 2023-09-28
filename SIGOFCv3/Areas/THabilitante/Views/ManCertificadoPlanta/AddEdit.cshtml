@@ -1,0 +1,165 @@
+﻿@model CapaEntidad.ViewModel.VM_CertificadoPlanta
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_LayoutMain.cshtml";
+    string[] tipoModRecat = { "0000001", "0000002", "0000003", "0000004", "0000023" };
+
+}
+<style type="text/css">
+    #fileselect {
+        display: none;
+    }
+
+    #fileselectMod {
+        display: none;
+    }
+
+    #tbErrorMaterial_DGeneral_wrapper {
+        padding: 0px;
+    }
+
+    #tbErrorMaterial_DAdicional_wrapper {
+        padding: 0px;
+    }
+</style>
+<script src="~/Areas/THabilitante/js/ManCertificadoPlanta/AddEdit.js?v=@Guid.NewGuid()"></script>
+<script src="~/Scripts/sigo/utility.uploadFile.js"></script>
+@section scripts{
+    <script type="text/javascript">
+        @*ManCertificadoPlanta.fnLoadData('@Html.Raw(Json.Encode(@Model.tbErrorMaterial_DGeneral))', "DGenereal");
+        ManCertificadoPlanta.fnLoadData('@Html.Raw(Json.Encode(@Model.tbErrorMaterial_DAdicional))', "DAdicional");
+        ManCertificadoPlanta.fnLoadData('@Html.Raw(Json.Encode(@Model.tbDivisionInterna))', "DivisionInterna");*@
+    </script>
+    <script>
+        "use strict";
+        $(document).ready(function () {
+            $('[data-toggle="tooltip"]').tooltip();
+            var contadorEnumTb = 1;
+            ManCertificadoPlanta.frmCertificadoPlantaRegistro = $("#frmCertificadoPlantaRegistro");
+            ManCertificadoPlanta.fnInit();
+            ManCertificadoPlanta.iniciarEventosGenerales();
+            //Validamos el rol del usuario
+            @*utilSigo.ValidaRol('@ViewBag.VAliasRol', 'btnRegistrarTH', '@Model.vmControlCalidad.ddlIndicadorId');*@
+
+
+            });
+    </script>
+
+}
+<div class="container-fluid">
+    <div class="card">
+        <div class="card-header text-right">
+            Certificado de Inscripción en el Registro Nacional de Plantaciones Forestales
+        </div>
+        <div class="card-body">
+            <div class="card">
+                <div class="card-header text-small">
+                    <a id="btnRegistrarTH" href="javascript:void(0)" style="cursor:pointer;" data-toggle="tooltip" data-placement="top" title="Guardar"><i class="fa mx-2 fa-lg fa-save"></i></a>
+                    <a style="cursor:pointer;" data-toggle="tooltip" data-placement="top" title="Regresar"><i class="fa mx-2 fa-lg fa-reply" onclick="ManCertificadoPlanta.regresar();"></i></a>
+                    @Model.ItemTitulo
+                </div>
+                <div class="card-body">
+                    <form id="frmCertificadoPlantaRegistro">
+                        @Html.HiddenFor(m => m.opRegresar)
+                        @Html.HiddenFor(m => m.appClient)
+                        @Html.HiddenFor(m => m.appData)
+                        @Html.HiddenFor(m => m.hdfManRegEstado)
+                        @Html.HiddenFor(m => m.hdCodigo_CertificadoPlanta)                       
+                        @Html.HiddenFor(m => m.hdCodigo_Thabilitante)                       
+                        <ul class="nav nav-tabs" id="myTab" role="tablist">
+                            <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#navEstado" role="tab" aria-controls="home" aria-selected="true">Estado Situacional</a></li>
+                            <li class="nav-item"><a class="nav-link active" id="navDatosTab" data-toggle="tab" href="#navDatos" role="tab" aria-controls="home" aria-selected="true">Datos Generales</a></li>                            
+                        </ul>
+                        <div class="tab-content" id="nav-tabContent">
+                            <div class="tab-pane fade show" id="navEstado" role="tabpanel" aria-labelledby="nav-home-tab">
+                                @{ Html.RenderAction("_ControlCalidad", "Controles", new { area = "GENERAL", dto = Model.vmControlCalidad }); }
+                            </div>
+                            <div class="tab-pane fade show active" id="navDatos" role="tabpanel" aria-labelledby="nav-home-tab">                                
+                                <div class="card">
+                                    <div class="card-header text-small"></div>
+                                    <div class="card-body">
+                                        <div class="form-row">
+                                            <div class="form-group col-md-3">
+                                                <label for="txtItemNumero" class="text-small texto-recortado">Título Habilitante</label>
+                                                @Html.EditorFor(m => m.txtItemNumero, new { htmlAttributes = new { @class = "form-control form-control-sm", @disabled = "disabled" } })
+                                            </div>
+                                            <div class="form-group col-md-3">
+                                                <label for="txtItemModalidad" class="text-small texto-recortado">Modalidad</label>
+                                                @Html.EditorFor(m => m.txtItemModalidad, new { htmlAttributes = new { @class = "form-control form-control-sm", @disabled = "disabled" } })
+                                            </div>
+                                            <div class="form-group col-md-3">
+                                                <label for="txtItemTitular" class="text-small texto-recortado">Tíitular</label>
+                                                @Html.EditorFor(m => m.txtItemTitular, new { htmlAttributes = new { @class = "form-control form-control-sm", @disabled = "disabled" } })
+                                            </div>
+                                            <div class="form-group col-md-3">
+                                                <label for="txtItemUbicacion" class="text-small texto-recortado">Ubicación</label>
+                                                @Html.EditorFor(m => m.txtItemUbicacion, new { htmlAttributes = new { @class = "form-control form-control-sm", @disabled = "disabled" } })
+                                            </div>
+                                        </div>
+                                        <div class="form-row">
+                                            <div class="form-group col-md-3">
+                                                <label for="txtItemNumeroInscripcion" class="text-small texto-recortado">Número de Inscripción</label>
+                                                @Html.EditorFor(m => m.txtItemNumeroInscripcion, new { htmlAttributes = new { @class = "form-control form-control-sm", maxlength = "200", onkeypress = "return utilSigo.checkLetter(event);" } })
+                                            </div>
+                                            <div class="form-group col-md-3">
+                                                <label for="txtItemFechaInscripcion" class="text-small texto-recortado">Fecha de Inscripción</label>
+                                                @Html.EditorFor(m => m.txtItemFechaInscripcion, new { htmlAttributes = new { @class = "form-control form-control-sm", placeholder = "dd/mm/yyyy", title = "la fecha a ingresar debe ser en el formato dd/mm/yyyy", maxlength = "10", oninput= "utilSigo.agregarSlashFecha(event)" } })
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="card-header text-small">Información de la Plantación</div>
+                                    <div class="card-body">
+                                        <div class="form-row">
+                                            <div class="form-group col-md-3">
+                                                <label for="txtItemAreaTotal" class="text-small texto-recortado">Área Total</label>
+                                                @Html.EditorFor(m => m.txtItemAreaTotal, new { htmlAttributes = new { @class = "form-control form-control-sm", maxlength = "10", onblur = "return utilSigo.onBlurTwoDecimal(this,'Área Total');", onkeypress = "return utilSigo.onKeyDecimal(event, this);" } })
+                                            </div>
+                                            <div class="form-group col-md-3">
+                                                <label for="txtItemFechaEstablecimiento" class="text-small texto-recortado">Fecha de Establecimiento</label>
+                                                @Html.EditorFor(m => m.txtItemFechaEstablecimiento, new { htmlAttributes = new { @class = "form-control form-control-sm", placeholder = "dd/mm/yyyy", title = "la fecha a ingresar debe ser en el formato dd/mm/yyyy", maxlength = "10", oninput = "utilSigo.agregarSlashFecha(event)" } })
+                                            </div>
+                                        </div>                                        
+                                        <div class="form-row">
+                                            <div class="form-group col-md-3">
+                                                <label for="ddlZonaUTMId" class="text-small texto-recortado">Zona UTM</label>                                                
+                                                @Html.DropDownListFor(m => m.ddlZonaUTMId, new SelectList(ViewBag.ddlZonaUTM, "Value", "Text"), new { @class = "form-control form-control-sm" })
+                                            </div>
+                                            <div class="form-group col-md-3">
+                                                <label for="txtCoorEste" class="text-small texto-recortado">Coordenada Este</label>
+                                                @Html.EditorFor(m => m.txtCoorEste, new { htmlAttributes = new { @class = "form-control form-control-sm", maxlength = "6", onkeypress = "return utilSigo.checkNum(event);" } })
+                                            </div>
+                                            <div class="form-group col-md-3">
+                                                <label for="txtCoorNorte" class="text-small texto-recortado">Coordenada Norte</label>
+                                                @Html.EditorFor(m => m.txtCoorNorte, new { htmlAttributes = new { @class = "form-control form-control-sm", maxlength = "7", onkeypress = "return utilSigo.checkNum(event);" } })
+                                            </div>
+                                        </div>
+                                        <div class="form-row">
+                                            <div class="col-md-12">
+                                                @Html.Partial("~/Areas/THabilitante/Views/ManTHabilitante/_shared/_renderEspeciesEstablecidas.cshtml", Model.tbEspeciesEstablecidas
+                                                    , new ViewDataDictionary { { "TITULO", "Especies Establecidas" } })
+                                                
+
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                    <div class="card-header text-small"></div>
+                                    <div class="card-body">
+                                        <div class="form-row">
+                                            <div class="form-group col-md-12">
+                                                <label for="ddlODRegistroId" class="text-small texto-recortado">Observaciones</label>
+                                                @Html.TextAreaFor(m => m.txtItemObservacion, new { @class = "form-control form-control-sm", rows = 2, maxlength = "500" })
+                                            </div>                                            
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>                            
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade hide" id="mdlManCertificadoPlanta_EspeciesEstablecidas" role="dialog"></div>
+</div>
