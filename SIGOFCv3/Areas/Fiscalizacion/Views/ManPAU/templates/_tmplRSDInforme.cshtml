@@ -141,7 +141,7 @@
                     </a>
                 </td>
                 <td style="border: 1px solid #000;">
-                    <u>Titular:</u> ${TITULAR_SUPERVISADO} (en adelante, el/la titular)<br />
+                    <u>Titular:</u> ${TITULAR_SUPERVISADO} identificado con {{if RUC_TITULAR}}RUC ${RUC_TITULAR}{{else DOCUMENTO_RLEGAL}}DNI ${DOCUMENTO_RLEGAL}{{/if}} (en adelante, el/la titular)<br />
                     <u>Código de TH:</u> ${NUM_THABILITANTE}, suscrito el xx de xx del xx (en adelante, el contrato de concesión/el permiso forestal)<br />
                     <u>Plan de Manejo supervisado:</u> PO ${PLAN_MANEJO.NOMBRE_POA}, periodo ${PLAN_MANEJO.INICIO_VIGENCIA}, aprobado mediante Resolución N° ${PLAN_MANEJO.ARESOLUCION_NUM}, de fecha ${PLAN_MANEJO.ARESOLUCION_FECHA}<br />
                     <u>Fecha de supervisión:</u> ${INF_FECHA}
@@ -275,7 +275,7 @@
                             La tala, extracción y/o aprovechamiento de los recursos forestales sin autorización, el mismo que corresponde a un volumen total de xx m3, correspondiente al volumen injustificado (xx m3) de las especies xx, y a la extracción no autorizada xx m3, correspondiente a 1 árbol no autorizado de la especie xx.
                         </li>
                         <li>
-                            Tomando en cuenta el precitado volumen extraído sin autorización de xxx m³ correspondiente a individuos no autorizados, se habría realizado la afectación de xx hectáreas de cobertura boscosa afectados por la extracción forestal sin criterios de sostenibilidad.
+                            Tomando en cuenta el precitado volumen extraído sin autorización de xxx m<sup>3</sup> correspondiente a individuos no autorizados, se habría realizado la afectación de xx hectáreas de cobertura boscosa afectados por la extracción forestal sin criterios de sostenibilidad.
                         </li>
                         <li>
                             Ante lo expuesto, se habría configurado una afectación de nivel
@@ -314,7 +314,7 @@
                         Al respecto, el aprovechamiento maderable genera un nivel de daño al bosque que se ampara en el cumplimiento de los planes de manejo, debido a que, su alcance se encuentra previsto dentro del margen tolerable de sostenibilidad, teniendo en cuenta que este tiene la capacidad de regenerarse, sin afectar significativamente sus características de estructura funcional, siempre y cuando esta alteración no exceda el límite de esta capacidad regenerativa.
                     </p>
                     <p>
-                        Cabe indicar que, la/el titular habría realizado la extracción y movilización de xx m3 de madera proveniente de individuos no autorizados. En esa línea, de acuerdo a los resultados recogidos de campo, el manejo forestal dentro de la concesión es casi nula, siendo que la empresa se dedicó en gran parte a utilizar la documentación otorgada por la autoridad competente para amparar extracciones no autorizadas.
+                        Cabe indicar que, la/el titular habría realizado la extracción y movilización de xx m<sup>3</sup> de madera proveniente de individuos no autorizados. En esa línea, de acuerdo a los resultados recogidos de campo, el manejo forestal dentro de la concesión es casi nula, siendo que la empresa se dedicó en gran parte a utilizar la documentación otorgada por la autoridad competente para amparar extracciones no autorizadas.
                     </p>
                     <p>
                         En esa línea, teniendo en cuenta la magnitud del volumen proveniente de árboles no autorizados, la limitada implementación de las actividades de aprovechamiento maderable que supone la ausencia de manejo dentro del área autorizada; y el uso indebido de los documentos antes citados, es posible sostener que, la continuidad del título habilitante supone el riesgo de que se sigan afectando los recursos forestales, por lo cual, se cumple con el presente criterio.
@@ -587,8 +587,8 @@
                 <td style="background-color: #f0f0f0; text-align: center; border: 1px solid #000;">Beneficios</td>
             </tr>
             <tr>
-                <td style="border: 1px solid #000;">
-                    [Adjuntar logo]
+                <td style="border: 1px solid #000; text-align: center; vertical-align: middle;">
+                    <img width="120" height="50" src="${URL_APLICACION}content/images/logo/mibosque.jpg" />
                 </td>
                 <td style="border: 1px solid #000;">
                     Permite a los titulares de títulos habilitantes y regentes remitir y registrar información clara y oportuna para evidenciar el cumplimiento de sus obligaciones. Además, permite reportar amenazas y/o delitos ambientales que se puedan desarrollar dentro de las áreas de manejo.
@@ -599,8 +599,8 @@
                 </td>
             </tr>
             <tr>
-                <td style="border: 1px solid #000;">
-                    [Adjuntar logo]
+                <td style="border: 1px solid #000; text-align: center; vertical-align: middle;">
+                    <img width="80" height="80" src="${URL_APLICACION}content/images/logo/siado.jpg" />
                 </td>
                 <td style="border: 1px solid #000;">
                     Permite al titular del título habilitante consultar y descargar, de manera directa, rápida y ordenada, desde cualquier equipo móvil o computadora, los principales documentos del expediente administrativo que corresponden al presente PAU, a fin que pueda elaborar sus descargos y demás escritos que estime pertinente.
@@ -623,7 +623,7 @@
     <div style="text-align: justify;">
         <p style="text-indent: 30px;">
             <strong>Artículo.</strong> Iniciar el Procedimiento Administrativo Único a ${Inf_Supervision?.TITULAR_SUPERVISADO},
-            identificada con ${Inf_Supervision?.RUC_TITULAR}, titular del ${Inf_Supervision?.NUM_THABILITANTE}, por la presunta comisión de las siguientes infracciones:
+            identificada con {{if RUC_TITULAR}}RUC ${RUC_TITULAR}{{else DOCUMENTO_RLEGAL}}DNI ${DOCUMENTO_RLEGAL}{{/if}}, titular del ${Inf_Supervision?.NUM_THABILITANTE}, por la presunta comisión de las siguientes infracciones:
         </p>
 
         <table width="100%" cellpadding="4" style="border: 0; font-family: Arial; font-size: 10pt; border-collapse: collapse; line-height: 150%;">
@@ -684,7 +684,7 @@
         {{/if}}
 
         <p style="text-indent: 30px;">
-            <strong>Artículo.</strong> Notificar la presente Resolución Sub Directoral, a xxx, al domicilio ubicado xx
+            <strong>Artículo.</strong> Notificar la presente Resolución Sub Directoral, a ${TITULAR_SUPERVISADO}, al domicilio ubicado ${DIRECCION_LEGAL || 'XX'}
             <a style="mso-footnote-id: foot_resolucion_2" href="#_foot_resolucion_2" title="">
                 <sup class=MsoFootnoteReference><span style="mso-special-character:footnote"></span></sup>
             </a>, otorgándole un plazo de quince (15) días hábiles más el término de la distancia, en caso corresponda, contados a partir del día siguiente de la fecha de notificación, para que formule los descargos que considere pertinentes.
@@ -695,7 +695,7 @@
         </p>
 
         <p style="text-indent: 30px;">
-            <strong>Artículo.</strong> Informar a xx, que puede efectuar las siguientes acciones:
+            <strong>Artículo.</strong> Informar a ${TITULAR_SUPERVISADO}, que puede efectuar las siguientes acciones:
         </p>
 
         <table width="100%" cellpadding="4" style="border: 0; font-family: Arial; font-size: 10pt; border-collapse: collapse; line-height: 150%;">

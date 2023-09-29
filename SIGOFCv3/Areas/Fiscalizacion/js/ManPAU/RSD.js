@@ -265,6 +265,7 @@ _informe.Exportar = async function () {
     const informe = _informe.Estructura();
     const [procedencias, materias] = JSON.parse(JSON.stringify([app.Procedencias, app.Materias]));
 
+    informe.URL_APLICACION = urlLocalSigo;
     informe.EXPEDIENTE_ADM = $('#txtNumeroExpediente').val();
     informe.PROCEDENCIA = procedencias.find(function (x) { return x.COD_PROCEDENCIA === informe.COD_PROCEDENCIA })?.PROCEDENCIA;
     informe.MATERIA = materias.find(function (x) { return x.COD_MATERIA === informe.COD_MATERIA })?.MATERIA;
@@ -304,7 +305,7 @@ _informe.Exportar = async function () {
     informe.VOLUMENES_INJUSTIFICADOS_TOTAL = Math.round(volumenes.reduce((a, b) => a + b.VOLUMEN_INJUSTIFICADO, 0) * 1000) / 1000;
     //console.log(volumenes);
 
-    const header = `<p style="text-align:center;"><img height="200" width="200" alt="" src="${urlLocalSigo}content/images/logo/escudo-peruano.jpg"></p>`;
+    const header = `<p style="text-align:center;"><img height="200" width="200" alt="" src="${informe.URL_APLICACION}content/images/logo/escudo-peruano.jpg"></p>`;
     //let footer = `<table style="width: 100%;"><tr><td style="text-align: right;">#CURRENTPAGE#</td></tr></table>`;
 
     //Plantilla general
@@ -327,7 +328,7 @@ _informe.Exportar = async function () {
     informe.COMUNICACION_EXTERNA = _informe.tmpl.get(template, '#tmpl-comunicacion-externa', informe);
     informe.HERRAMIENTAS_SUBSANAR = _informe.tmpl.get(template, '#tmpl-herramientas-subsanar', informe);
     informe.RESOLUCION = _informe.GenerarResolucion(template, informe);
-    informe.PIE_PAGINA = _informe.tmpl.get(template, '#tmpl-pie-pagina', { informe, urlLocalSigo })?.replace(/PASSWORD/g, app.Tramite?.password || 'PASSWORD');
+    informe.PIE_PAGINA = _informe.tmpl.get(template, '#tmpl-pie-pagina', informe)?.replace(/PASSWORD/g, app.Tramite?.password || 'PASSWORD');
 
     let html = '';
     html += _informe.tmpl.get(template, '#tmpl-exportar', informe);
