@@ -912,16 +912,8 @@ utilSigo.onBlurTwoDecimal = function (thix, texto) {
     let numero = document.getElementById(thix.id).value;
     if (!/^\d+(\.\d{1,2})?$/.test(numero)) {
         document.getElementById(thix.id).value = 0;
-        utilSigo.toastWarning("Aviso", "El " + texto + " solo debe tener dos decimales");
+        utilSigo.toastWarning("Aviso", "El " + texto + " sólo debe tener dos decimales");
         $("#" + thix.id).focus();
     }    
 }
 
-utilSigo.onBlurFourDecimalDI = function (thix, texto) {
-    let numero = document.getElementById(thix.id).value;
-    if (!/^\d+(\.\d{1,4})?$/.test(numero)) {
-        document.getElementById(thix.id).value = 0;
-        utilSigo.toastWarning("Aviso", "El " + texto + " solo debe tener cuatro decimales");
-        $("#" + thix.id).focus();
-    }
-}
