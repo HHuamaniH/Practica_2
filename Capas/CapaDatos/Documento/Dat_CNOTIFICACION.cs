@@ -1360,7 +1360,7 @@ namespace CapaDatos.DOC
             try
             {
                 using (OracleDataReader dr = dBOracle.SelDrdDefault(cn, "DOC_OSINFOR_ERP_MIGRACION.spGeneral_Listar", oCEntidad.BusFormulario,
-                    oCEntidad.BusCriterio,oCEntidad.BusValor,1,20, ""))
+                    oCEntidad.BusCriterio,oCEntidad.BusValor,"",1,20))
                 {
                     if (dr != null)
                     {

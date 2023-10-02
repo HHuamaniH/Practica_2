@@ -1010,7 +1010,7 @@ namespace CapaDatos.DOC
                 using (OracleConnection cn = new OracleConnection(BDConexion.Conexion_Cadena_SIGO()))
                 {
                     cn.Open();
-                    object[] param = { BusFormulario, BusCriterio, BusValor, 1, 20, "" };
+                    object[] param = { BusFormulario, BusCriterio, BusValor, "", 1, 20 };
                     using (OracleDataReader dr = dBOracle.SelDrdDefault(cn, "DOC_OSINFOR_ERP_MIGRACION.spGeneral_Listar", param))
                     {
                         if (dr != null)

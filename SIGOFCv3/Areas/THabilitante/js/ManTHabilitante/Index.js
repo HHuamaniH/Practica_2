@@ -237,6 +237,11 @@ ManTHabilitante.fnInit = function () {
 
 ManTHabilitante.fnGetDivisionInterna = function () {
     let tbody = document.getElementById('tbodyDivIntPreTot');
+
+    if (tbody == null) {
+        return;
+    }
+
     ManTHabilitante.DataDivisionInterna = [];
     for (var i = 0; i < tbody.rows.length; i++) {
         let filas = tbody.getElementsByTagName('tr');
