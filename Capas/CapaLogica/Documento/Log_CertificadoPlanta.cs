@@ -97,7 +97,7 @@ namespace CapaLogica.DOC
             Ent_CertificadoPlanta oCampos = new CEntidad();
             String[] OUTPUTPARAM = null;
             string appServer = "";
-            string msjRespuesta = "El Registro se Guardo Correctamente";
+            string msjRespuesta = "El registro se guardó correctamente";
             //string oResultTransferir = "";//Cuando se transfiere un TH del Antecedente Expediente del SITD
             try
             {
@@ -122,7 +122,7 @@ namespace CapaLogica.DOC
                 if (dto.hdfManRegEstado == "0") //Modificar
                 {
                     oCampos.COD_CERTPLANTACION = dto.hdCodigo_CertificadoPlanta;
-                    msjRespuesta = "El Registro se Modifico Correctamente";
+                    msjRespuesta = "El registro se modificó correctamente";
                 }
 
                 oCampos.ListEliTABLA = dto.tbEliTABLA; //cuando se elimina datos

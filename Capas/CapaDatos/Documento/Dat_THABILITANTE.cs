@@ -400,7 +400,7 @@ namespace CapaDatos.DOC
                                 oCamposDI.SUBTIPOAREA = dr.GetInt32(dr.GetOrdinal("SUBTIPOAREA"));
                                 oCamposDI.SUBTIPOAREADESC = dr.GetString(dr.GetOrdinal("SUBTIPOAREADESC"));
                                 oCamposDI.AREA = dr.GetDecimal(dr.GetOrdinal("AREA"));                                
-                                oCamposDI.DESCRIPCIONAREA = dr.GetString(dr.GetOrdinal("DESCRIPCIONAREA"));                                
+                                oCamposDI.DESCRIPCIONAREA = dr.GetString(dr.GetOrdinal("DESCRIPCIONAREA")) == " " ? string.Empty : dr.GetString(dr.GetOrdinal("DESCRIPCIONAREA"));                                
                                 oCampos.ListDivisionInterna.Add(oCamposDI);
                             }
                         }
