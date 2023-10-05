@@ -127,7 +127,7 @@ ManCertificadoPlanta.iniciarEventosGenerales = function () {
         },
         fnSubmit: function (form) {
             if (ManCertificadoPlanta.validarDatosAdicionales()) {
-                utilSigo.dialogConfirm('', 'Desea continuar con la operacion?', function (r) {
+                utilSigo.dialogConfirm('', 'Desea continuar con la operación?', function (r) {
                     if (r) {
                         ManCertificadoPlanta.registrarCertificadoPlanta();
                     }

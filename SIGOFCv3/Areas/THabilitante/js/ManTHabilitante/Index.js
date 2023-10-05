@@ -200,7 +200,7 @@ ManTHabilitante.iniciarEventosGenerales = function () {
         },
         fnSubmit: function (form) {
             if (ManTHabilitante.validarDatosAdicionales()) {
-                utilSigo.dialogConfirm('', 'Desea continuar con la operacion?', function (r) {
+                utilSigo.dialogConfirm('', 'Desea continuar con la operación?', function (r) {
                     if (r) {
                         ManTHabilitante.registrarThabilitante();
                     }
@@ -342,7 +342,7 @@ ManTHabilitante.fnAgregarArea = function (input) {
         let htmlCel = "";
         htmlCel += '<div class="input-group input-group-sm">';
         htmlCel += '   <input class="form-control form-control-sm cl_2_' + stFila + '" id="atxt_2_' + stFila + '_' + (fila + 1).toString() + '" maxlength="20" placeholder="Descripción" onkeypress = "return utilSigo.checkLetter(event);" >';
-        htmlCel += '   <input class="form-control form-control-sm" id="txt_2_' + stFila + '_' + (fila + 1).toString() + '" maxlength="10" onkeypress="return utilSigo.onKeyDecimal(event, this);" onblur="return ManTHabilitante.onBlurFourDecimalDI(this,\'Área\');" >';
+        htmlCel += '   <input class="form-control form-control-sm" id="txt_2_' + stFila + '_' + (fila + 1).toString() + '" maxlength="10" placeholder="Área" onkeypress="return utilSigo.onKeyDecimal(event, this);" onblur="return ManTHabilitante.onBlurFourDecimalDI(this,\'Área\');" >';
         htmlCel += '   <span class="input-group-text" id="spa_2_' + stFila + '_' + (fila + 1).toString() + '"><i class="fa fa-plus" style="cursor:pointer;" id="i_2_' + stFila + '_' + (fila + 1).toString() + '" onclick="ManTHabilitante.fnAgregarArea(this);" data-toggle="tooltip" data-placement="top" title="Agregar"></i></span>';
         htmlCel += '   <span class="input-group-text" id="spd_2_' + stFila + '_' + (fila + 1).toString() + '"><i class="fa fa-minus" style="cursor:pointer;" id="d_2_' + stFila + '_' + (fila + 1).toString() + '" onclick="ManTHabilitante.fnEliminarArea(this);" data-toggle="tooltip" data-placement="top" title="Eliminar"></i></span>';
         htmlCel += '</div>'
@@ -447,23 +447,23 @@ ManTHabilitante.fnInitDivisionInterna = function () {
             htmlbody += '<tr>';
             htmlbody += '   <td rowspan="5">ÁREA CON COBERTURA DE BOSQUES NATURALES</td>';
             htmlbody += '   <td>Bosque primario</td>';
-            htmlbody += '   <td><input class="form-control form-control-sm" id="txt_1_1_1" maxlength="10" placeholder="área" onkeypress = "return utilSigo.onKeyDecimal(event, this);" onblur="return ManTHabilitante.onBlurFourDecimalDI(this,\'Área\');"></td>';
+            htmlbody += '   <td><input class="form-control form-control-sm" id="txt_1_1_1" maxlength="10" placeholder="Área" onkeypress = "return utilSigo.onKeyDecimal(event, this);" onblur="return ManTHabilitante.onBlurFourDecimalDI(this,\'Área\');"></td>';
             htmlbody += '</tr>';
             htmlbody += '<tr>';
             htmlbody += '   <td>Bosque secundario</td>';
-            htmlbody += '   <td><input class="form-control form-control-sm" id="txt_1_2_1" maxlength="10" placeholder="área" onkeypress = "return utilSigo.onKeyDecimal(event, this);" onblur="return ManTHabilitante.onBlurFourDecimalDI(this,\'Área\');"></td>';
+            htmlbody += '   <td><input class="form-control form-control-sm" id="txt_1_2_1" maxlength="10" placeholder="Área" onkeypress = "return utilSigo.onKeyDecimal(event, this);" onblur="return ManTHabilitante.onBlurFourDecimalDI(this,\'Área\');"></td>';
             htmlbody += '</tr>';
             htmlbody += '<tr>';
             htmlbody += '   <td>Purma</td>';
-            htmlbody += '   <td><input class="form-control form-control-sm" id="txt_1_3_1" maxlength="10" placeholder="área" onkeypress = "return utilSigo.onKeyDecimal(event, this);" onblur="return ManTHabilitante.onBlurFourDecimalDI(this,\'Área\');"></td>';
+            htmlbody += '   <td><input class="form-control form-control-sm" id="txt_1_3_1" maxlength="10" placeholder="Área" onkeypress = "return utilSigo.onKeyDecimal(event, this);" onblur="return ManTHabilitante.onBlurFourDecimalDI(this,\'Área\');"></td>';
             htmlbody += '</tr>';
             htmlbody += '<tr>';
             htmlbody += '   <td>Áreas de protección</td>';
-            htmlbody += '   <td><input class="form-control form-control-sm" id="txt_1_4_1" maxlength="10" placeholder="área" onkeypress = "return utilSigo.onKeyDecimal(event, this);" onblur="return ManTHabilitante.onBlurFourDecimalDI(this,\'Área\');"></td>';
+            htmlbody += '   <td><input class="form-control form-control-sm" id="txt_1_4_1" maxlength="10" placeholder="Área" onkeypress = "return utilSigo.onKeyDecimal(event, this);" onblur="return ManTHabilitante.onBlurFourDecimalDI(this,\'Área\');"></td>';
             htmlbody += '</tr>';
             htmlbody += '<tr>';
             htmlbody += '   <td>Otros</td>';
-            htmlbody += '   <td><input class="form-control form-control-sm" id="txt_1_5_1" maxlength="10" placeholder="área" onkeypress = "return utilSigo.onKeyDecimal(event, this);" onblur="return ManTHabilitante.onBlurFourDecimalDI(this,\'Área\');"></td>';
+            htmlbody += '   <td><input class="form-control form-control-sm" id="txt_1_5_1" maxlength="10" placeholder="Área" onkeypress = "return utilSigo.onKeyDecimal(event, this);" onblur="return ManTHabilitante.onBlurFourDecimalDI(this,\'Área\');"></td>';
             htmlbody += '</tr>';
 
             htmlbody += '<tr>';
@@ -472,21 +472,21 @@ ManTHabilitante.fnInitDivisionInterna = function () {
             htmlbody += '   <td>';
             htmlbody += '       <div class="input-group input-group-sm">';
             htmlbody += '           <input class="form-control form-control-sm cl_2_6" id="atxt_2_6_1" maxlength="20" placeholder="Descripción" onkeypress = "return utilSigo.checkLetter(event);" >';
-            htmlbody += '           <input class="form-control form-control-sm" id="txt_2_6_1" maxlength="10" placeholder="área" onkeypress="return utilSigo.onKeyDecimal(event, this);" onblur="return ManTHabilitante.onBlurFourDecimalDI(this,\'Área\');">';
+            htmlbody += '           <input class="form-control form-control-sm" id="txt_2_6_1" maxlength="10" placeholder="Área" onkeypress="return utilSigo.onKeyDecimal(event, this);" onblur="return ManTHabilitante.onBlurFourDecimalDI(this,\'Área\');">';
             htmlbody += '           <span class="input-group-text" id="spa_2_6_1"><i class="fa fa-plus" style="cursor:pointer;" id="i_2_6_1" onclick="ManTHabilitante.fnAgregarArea(this);" data-toggle="tooltip" data-placement="top" title="Agregar"></i></span>';
             htmlbody += '       </div> ';
             htmlbody += '   </td> ';
             htmlbody += '</tr>';
             htmlbody += '<tr>';
             htmlbody += '   <td>Pastizales puros</td>';
-            htmlbody += '   <td><input class="form-control form-control-sm" id="txt_2_7_1" maxlength="10" placeholder="área" onkeypress = "return utilSigo.onKeyDecimal(event, this);" onblur="return ManTHabilitante.onBlurFourDecimalDI(this,\'Área\');"></td>';
+            htmlbody += '   <td><input class="form-control form-control-sm" id="txt_2_7_1" maxlength="10" placeholder="Área" onkeypress = "return utilSigo.onKeyDecimal(event, this);" onblur="return ManTHabilitante.onBlurFourDecimalDI(this,\'Área\');"></td>';
             htmlbody += '</tr>';
             htmlbody += '<tr>';
             htmlbody += '   <td>Plantaciones forestales puras(Maciso)</td>';
             htmlbody += '   <td>';
             htmlbody += '       <div class="input-group input-group-sm">';
             htmlbody += '           <input class="form-control form-control-sm cl_2_8" id="atxt_2_8_1" maxlength="20" placeholder="Descripción" onkeypress = "return utilSigo.checkLetter(event);" >';
-            htmlbody += '           <input class="form-control form-control-sm" id="txt_2_8_1" maxlength="10" placeholder="área" onkeypress="return utilSigo.onKeyDecimal(event, this);" onblur="return ManTHabilitante.onBlurFourDecimalDI(this,\'Área\');">';
+            htmlbody += '           <input class="form-control form-control-sm" id="txt_2_8_1" maxlength="10" placeholder="Área" onkeypress="return utilSigo.onKeyDecimal(event, this);" onblur="return ManTHabilitante.onBlurFourDecimalDI(this,\'Área\');">';
             htmlbody += '           <span class="input-group-text" id="spa_2_8_1"><i class="fa fa-plus" style="cursor:pointer;" id="i_2_8_1" onclick="ManTHabilitante.fnAgregarArea(this);" data-toggle="tooltip" data-placement="top" title="Agregar"></i></span>';
             htmlbody += '       </div> ';
             htmlbody += '   </td> ';
@@ -496,22 +496,22 @@ ManTHabilitante.fnInitDivisionInterna = function () {
             htmlbody += '   <td>';
             htmlbody += '       <div class="input-group input-group-sm">';
             htmlbody += '           <input class="form-control form-control-sm cl_2_9" id="atxt_2_9_1" maxlength="20" placeholder="Descripción" onkeypress = "return utilSigo.checkLetter(event);"  >';
-            htmlbody += '           <input class="form-control form-control-sm" id="txt_2_9_1" maxlength="10" placeholder="área" onkeypress="return utilSigo.onKeyDecimal(event, this);" onblur="return ManTHabilitante.onBlurFourDecimalDI(this,\'Área\');" >';
+            htmlbody += '           <input class="form-control form-control-sm" id="txt_2_9_1" maxlength="10" placeholder="Área" onkeypress="return utilSigo.onKeyDecimal(event, this);" onblur="return ManTHabilitante.onBlurFourDecimalDI(this,\'Área\');" >';
             htmlbody += '           <span class="input-group-text" id="spa_2_9_1"><i class="fa fa-plus" style="cursor:pointer;" id="i_2_9_1" onclick="ManTHabilitante.fnAgregarArea(this);" data-toggle="tooltip" data-placement="top" title="Agregar"></i></span>';
             htmlbody += '       </div> ';
             htmlbody += '   </td> ';
             htmlbody += '</tr>';
             htmlbody += '<tr>';
             htmlbody += '   <td>Áreas destinadas para protección</td>';
-            htmlbody += '   <td><input class="form-control form-control-sm" id="txt_2_10_1" maxlength="10" placeholder="área" onkeypress = "return utilSigo.onKeyDecimal(event, this);" onblur="return ManTHabilitante.onBlurFourDecimalDI(this,\'Área\');"></td>';
+            htmlbody += '   <td><input class="form-control form-control-sm" id="txt_2_10_1" maxlength="10" placeholder="Área" onkeypress = "return utilSigo.onKeyDecimal(event, this);" onblur="return ManTHabilitante.onBlurFourDecimalDI(this,\'Área\');"></td>';
             htmlbody += '</tr>';
             htmlbody += '<tr>';
             htmlbody += '   <td>Áreas que combinan pastos con plantaciones Forestales(Silvopastoril)</td>';
-            htmlbody += '   <td><input class="form-control form-control-sm" id="txt_2_11_1" maxlength="10" placeholder="área" onkeypress = "return utilSigo.onKeyDecimal(event, this);" onblur="return ManTHabilitante.onBlurFourDecimalDI(this,\'Área\');"></td>';
+            htmlbody += '   <td><input class="form-control form-control-sm" id="txt_2_11_1" maxlength="10" placeholder="Área" onkeypress = "return utilSigo.onKeyDecimal(event, this);" onblur="return ManTHabilitante.onBlurFourDecimalDI(this,\'Área\');"></td>';
             htmlbody += '</tr>';
             htmlbody += '<tr>';
             htmlbody += '   <td>Otros usos</td>';
-            htmlbody += '   <td><input class="form-control form-control-sm" id="txt_2_12_1" maxlength="10" placeholder="área" onkeypress = "return utilSigo.onKeyDecimal(event, this);" onblur="return ManTHabilitante.onBlurFourDecimalDI(this,\'Área\');"></td>';
+            htmlbody += '   <td><input class="form-control form-control-sm" id="txt_2_12_1" maxlength="10" placeholder="Área" onkeypress = "return utilSigo.onKeyDecimal(event, this);" onblur="return ManTHabilitante.onBlurFourDecimalDI(this,\'Área\');"></td>';
             htmlbody += '</tr>';
 
         } else {
@@ -525,7 +525,7 @@ ManTHabilitante.fnInitDivisionInterna = function () {
                         htmlbody += '<tr>';
                         htmlbody += '   <td rowspan="5">ÁREA CON COBERTURA DE BOSQUES NATURALES</td>';
                         htmlbody += '   <td>' + obj.SUBTIPOAREADESC + '</td>';
-                        htmlbody += '   <td><input class="form-control form-control-sm" id="txt_' + obj.TIPOAREA + '_' + obj.SUBTIPOAREA + '_1" maxlength="10" placeholder="área" onkeypress = "return utilSigo.onKeyDecimal(event, this);" onblur="return ManTHabilitante.onBlurFourDecimalDI(this,\'Área\');" value="' + (obj.AREA == 0 ? '' : + obj.AREA) + '" ></td>';
+                        htmlbody += '   <td><input class="form-control form-control-sm" id="txt_' + obj.TIPOAREA + '_' + obj.SUBTIPOAREA + '_1" maxlength="10" placeholder="Área" onkeypress = "return utilSigo.onKeyDecimal(event, this);" onblur="return ManTHabilitante.onBlurFourDecimalDI(this,\'Área\');" value="' + (obj.AREA == 0 ? '' : + obj.AREA) + '" ></td>';
                         htmlbody += '</tr>';
                         break;
                     case 2:
@@ -538,7 +538,7 @@ ManTHabilitante.fnInitDivisionInterna = function () {
                     case 12:
                         htmlbody += '<tr>';
                         htmlbody += '   <td>' + obj.SUBTIPOAREADESC + '</td>';
-                        htmlbody += '   <td><input class="form-control form-control-sm" id="txt_' + obj.TIPOAREA + '_' + obj.SUBTIPOAREA + '_1" maxlength="10" placeholder="área" onkeypress = "return utilSigo.onKeyDecimal(event, this);" onblur="return ManTHabilitante.onBlurFourDecimalDI(this,\'Área\');" value="' + (obj.AREA == 0 ? '' : + obj.AREA) + '" ></td>';
+                        htmlbody += '   <td><input class="form-control form-control-sm" id="txt_' + obj.TIPOAREA + '_' + obj.SUBTIPOAREA + '_1" maxlength="10" placeholder="Área" onkeypress = "return utilSigo.onKeyDecimal(event, this);" onblur="return ManTHabilitante.onBlurFourDecimalDI(this,\'Área\');" value="' + (obj.AREA == 0 ? '' : + obj.AREA) + '" ></td>';
                         htmlbody += '</tr>';
                         break;
                     case 6:
@@ -557,11 +557,11 @@ ManTHabilitante.fnInitDivisionInterna = function () {
                                 htmlbody += '       <div class="input-group input-group-sm">';
                                 if (objPosSeis.length == 1) {
                                     htmlbody += '           <input class="form-control form-control-sm cl_' + objseis.TIPOAREA + '_' + objseis.SUBTIPOAREA + '" id="atxt_' + objseis.TIPOAREA + '_' + objseis.SUBTIPOAREA + '_' + (j + 1).toString() + '" maxlength="20"  placeholder="Descripción" onkeypress = "return utilSigo.checkLetter(event);" value="' + (objseis.DESCRIPCIONAREA) + '" >';
-                                    htmlbody += '           <input class="form-control form-control-sm" id="txt_' + objseis.TIPOAREA + '_' + objseis.SUBTIPOAREA + '_' + (j + 1).toString() + '" maxlength="10" placeholder="área" onkeypress="return utilSigo.onKeyDecimal(event, this);" onblur="return ManTHabilitante.onBlurFourDecimalDI(this,\'Área\');" value="' + (objseis.AREA == 0 ? '' : + objseis.AREA) + '" >';
+                                    htmlbody += '           <input class="form-control form-control-sm" id="txt_' + objseis.TIPOAREA + '_' + objseis.SUBTIPOAREA + '_' + (j + 1).toString() + '" maxlength="10" placeholder="Área" onkeypress="return utilSigo.onKeyDecimal(event, this);" onblur="return ManTHabilitante.onBlurFourDecimalDI(this,\'Área\');" value="' + (objseis.AREA == 0 ? '' : + objseis.AREA) + '" >';
                                     htmlbody += '           <span class="input-group-text" id="spa_' + objseis.TIPOAREA + '_' + objseis.SUBTIPOAREA + '_' + (j + 1).toString() + '"><i class="fa fa-plus" style="cursor:pointer;" id="i_' + objseis.TIPOAREA + '_' + objseis.SUBTIPOAREA + '_' + (j + 1).toString() + '" onclick="ManTHabilitante.fnAgregarArea(this);" data-toggle="tooltip" data-placement="top" title="Agregar"></i></span>';
                                 } else {
                                     htmlbody += '           <input class="form-control form-control-sm cl_' + objseis.TIPOAREA + '_' + objseis.SUBTIPOAREA + '" id="atxt_' + objseis.TIPOAREA + '_' + objseis.SUBTIPOAREA + '_' + (j + 1).toString() + '" maxlength="20" placeholder="Descripción" onkeypress = "return utilSigo.checkLetter(event);" disabled="disabled" value="' + (objseis.DESCRIPCIONAREA) + '" >';
-                                    htmlbody += '           <input class="form-control form-control-sm"  id="txt_' + objseis.TIPOAREA + '_' + objseis.SUBTIPOAREA + '_' + (j + 1).toString() + '" maxlength="10" placeholder="área" onkeypress="return utilSigo.onKeyDecimal(event, this);" onblur="return ManTHabilitante.onBlurFourDecimalDI(this,\'Área\');" disabled="disabled" value="' + (objseis.AREA == 0 ? '' : + objseis.AREA) + '" >';
+                                    htmlbody += '           <input class="form-control form-control-sm"  id="txt_' + objseis.TIPOAREA + '_' + objseis.SUBTIPOAREA + '_' + (j + 1).toString() + '" maxlength="10" placeholder="Área" onkeypress="return utilSigo.onKeyDecimal(event, this);" onblur="return ManTHabilitante.onBlurFourDecimalDI(this,\'Área\');" disabled="disabled" value="' + (objseis.AREA == 0 ? '' : + objseis.AREA) + '" >';
                                 }
                                 htmlbody += '       </div> ';
                                 htmlbody += '   </td> ';
@@ -571,7 +571,7 @@ ManTHabilitante.fnInitDivisionInterna = function () {
                                 htmlbody += '   <td>';
                                 htmlbody += '       <div class="input-group input-group-sm">';
                                 htmlbody += '           <input class="form-control form-control-sm cl_' + objseis.TIPOAREA + '_' + objseis.SUBTIPOAREA + '" id="atxt_' + objseis.TIPOAREA + '_' + objseis.SUBTIPOAREA + '_' + (j + 1).toString() + '" maxlength="20" placeholder="Descripción" onkeypress = "return utilSigo.checkLetter(event);" value="' + (objseis.DESCRIPCIONAREA) + '" >';
-                                htmlbody += '           <input class="form-control form-control-sm"  id="txt_' + objseis.TIPOAREA + '_' + objseis.SUBTIPOAREA + '_' + (j + 1).toString() + '" maxlength="10" placeholder="área" onkeypress="return utilSigo.onKeyDecimal(event, this);" onblur="return ManTHabilitante.onBlurFourDecimalDI(this,\'Área\');" value="' + (objseis.AREA == 0 ? '' : + objseis.AREA) + '" >';
+                                htmlbody += '           <input class="form-control form-control-sm"  id="txt_' + objseis.TIPOAREA + '_' + objseis.SUBTIPOAREA + '_' + (j + 1).toString() + '" maxlength="10" placeholder="Área" onkeypress="return utilSigo.onKeyDecimal(event, this);" onblur="return ManTHabilitante.onBlurFourDecimalDI(this,\'Área\');" value="' + (objseis.AREA == 0 ? '' : + objseis.AREA) + '" >';
                                 htmlbody += '           <span class="input-group-text" id="spa_' + objseis.TIPOAREA + '_' + objseis.SUBTIPOAREA + '_' + (j + 1).toString() + '"><i class="fa fa-plus" style="cursor:pointer;" id="i_' + objseis.TIPOAREA + '_' + objseis.SUBTIPOAREA + '_' + (j + 1).toString() + '" onclick="ManTHabilitante.fnAgregarArea(this);" data-toggle="tooltip" data-placement="top" title="Agregar"></i></span>';
                                 htmlbody += '           <span class="input-group-text" id="spd_' + objseis.TIPOAREA + '_' + objseis.SUBTIPOAREA + '_' + (j + 1).toString() + '"><i class="fa fa-minus" style="cursor:pointer;" id="i_' + objseis.TIPOAREA + '_' + objseis.SUBTIPOAREA + '_' + (j + 1).toString() + '" onclick="ManTHabilitante.fnEliminarArea(this);" data-toggle="tooltip" data-placement="top" title="Eliminar"></i></span>';
                                 htmlbody += '       </div> ';
@@ -582,7 +582,7 @@ ManTHabilitante.fnInitDivisionInterna = function () {
                                 htmlbody += '   <td>';
                                 htmlbody += '       <div class="input-group input-group-sm">';
                                 htmlbody += '           <input class="form-control form-control-sm cl_' + objseis.TIPOAREA + '_' + objseis.SUBTIPOAREA + '" id="atxt_' + objseis.TIPOAREA + '_' + objseis.SUBTIPOAREA + '_' + (j + 1).toString() + '" maxlength="20" placeholder="Descripción" onkeypress = "return utilSigo.checkLetter(event);" disabled="disabled" value="' + (objseis.DESCRIPCIONAREA) + '" >';
-                                htmlbody += '           <input class="form-control form-control-sm" id="txt_' + objseis.TIPOAREA + '_' + objseis.SUBTIPOAREA + '_' + (j + 1).toString() + '" maxlength="10" placeholder="área" onkeypress="return utilSigo.onKeyDecimal(event, this);" onblur="return ManTHabilitante.onBlurFourDecimalDI(this,\'Área\');" disabled="disabled" value="' + (objseis.AREA == 0 ? '' : + objseis.AREA) + '" >';
+                                htmlbody += '           <input class="form-control form-control-sm" id="txt_' + objseis.TIPOAREA + '_' + objseis.SUBTIPOAREA + '_' + (j + 1).toString() + '" maxlength="10" placeholder="Área" onkeypress="return utilSigo.onKeyDecimal(event, this);" onblur="return ManTHabilitante.onBlurFourDecimalDI(this,\'Área\');" disabled="disabled" value="' + (objseis.AREA == 0 ? '' : + objseis.AREA) + '" >';
                                 htmlbody += '       </div> ';
                                 htmlbody += '   </td> ';
                                 htmlbody += '</tr>';
@@ -601,11 +601,11 @@ ManTHabilitante.fnInitDivisionInterna = function () {
                                 htmlbody += '       <div class="input-group input-group-sm">';
                                 if (objPosOcho.length == 1) {
                                     htmlbody += '           <input class="form-control form-control-sm cl_' + objocho.TIPOAREA + '_' + objocho.SUBTIPOAREA + '" id="atxt_' + objocho.TIPOAREA + '_' + objocho.SUBTIPOAREA + '_' + (j + 1).toString() + '" maxlength="20" placeholder="Descripción" onkeypress = "return utilSigo.checkLetter(event);" value="' + (objocho.DESCRIPCIONAREA) + '" >';
-                                    htmlbody += '           <input class="form-control form-control-sm"  id="txt_' + objocho.TIPOAREA + '_' + objocho.SUBTIPOAREA + '_' + (j + 1).toString() + '" maxlength="10" placeholder="área" onkeypress="return utilSigo.onKeyDecimal(event, this);" onblur="return ManTHabilitante.onBlurFourDecimalDI(this,\'Área\');" value="' + (objocho.AREA == 0 ? '' : + objocho.AREA) + '" >';
+                                    htmlbody += '           <input class="form-control form-control-sm"  id="txt_' + objocho.TIPOAREA + '_' + objocho.SUBTIPOAREA + '_' + (j + 1).toString() + '" maxlength="10" placeholder="Área" onkeypress="return utilSigo.onKeyDecimal(event, this);" onblur="return ManTHabilitante.onBlurFourDecimalDI(this,\'Área\');" value="' + (objocho.AREA == 0 ? '' : + objocho.AREA) + '" >';
                                     htmlbody += '           <span class="input-group-text" id="spa_' + objocho.TIPOAREA + '_' + objocho.SUBTIPOAREA + '_' + (j + 1).toString() + '"><i class="fa fa-plus" style="cursor:pointer;" id="i_' + objocho.TIPOAREA + '_' + objocho.SUBTIPOAREA + '_' + (j + 1).toString() + '" onclick="ManTHabilitante.fnAgregarArea(this);" data-toggle="tooltip" data-placement="top" title="Agregar"></i></span>';
                                 } else {
                                     htmlbody += '           <input class="form-control form-control-sm cl_' + objocho.TIPOAREA + '_' + objocho.SUBTIPOAREA + '" id="atxt_' + objocho.TIPOAREA + '_' + objocho.SUBTIPOAREA + '_' + (j + 1).toString() + '" maxlength="20" placeholder="Descripción" onkeypress = "return utilSigo.checkLetter(event);" disabled="disabled" value="' + (objocho.DESCRIPCIONAREA) + '" >';
-                                    htmlbody += '           <input class="form-control form-control-sm" id="txt_' + objocho.TIPOAREA + '_' + objocho.SUBTIPOAREA + '_' + (j + 1).toString() + '" maxlength="10" placeholder="área" onkeypress="return utilSigo.onKeyDecimal(event, this);" onblur="return ManTHabilitante.onBlurFourDecimalDI(this,\'Área\');" disabled="disabled" value="' + (objocho.AREA == 0 ? '' : + objocho.AREA) + '" >';
+                                    htmlbody += '           <input class="form-control form-control-sm" id="txt_' + objocho.TIPOAREA + '_' + objocho.SUBTIPOAREA + '_' + (j + 1).toString() + '" maxlength="10" placeholder="Área" onkeypress="return utilSigo.onKeyDecimal(event, this);" onblur="return ManTHabilitante.onBlurFourDecimalDI(this,\'Área\');" disabled="disabled" value="' + (objocho.AREA == 0 ? '' : + objocho.AREA) + '" >';
                                 }
                                 htmlbody += '       </div> ';
                                 htmlbody += '   </td> ';
@@ -615,7 +615,7 @@ ManTHabilitante.fnInitDivisionInterna = function () {
                                 htmlbody += '   <td>';
                                 htmlbody += '       <div class="input-group input-group-sm">';
                                 htmlbody += '           <input class="form-control form-control-sm cl_' + objocho.TIPOAREA + '_' + objocho.SUBTIPOAREA + '" id="atxt_' + objocho.TIPOAREA + '_' + objocho.SUBTIPOAREA + '_' + (j + 1).toString() + '" maxlength="20" placeholder="Descripción" onkeypress = "return utilSigo.checkLetter(event);" value="' + (objocho.DESCRIPCIONAREA) + '" >';
-                                htmlbody += '           <input class="form-control form-control-sm" id="txt_' + objocho.TIPOAREA + '_' + objocho.SUBTIPOAREA + '_' + (j + 1).toString() + '" maxlength="10" placeholder="área" onkeypress="return utilSigo.onKeyDecimal(event, this);" onblur="return ManTHabilitante.onBlurFourDecimalDI(this,\'Área\');" value="' + (objocho.AREA == 0 ? '' : + objocho.AREA) + '" >';
+                                htmlbody += '           <input class="form-control form-control-sm" id="txt_' + objocho.TIPOAREA + '_' + objocho.SUBTIPOAREA + '_' + (j + 1).toString() + '" maxlength="10" placeholder="Área" onkeypress="return utilSigo.onKeyDecimal(event, this);" onblur="return ManTHabilitante.onBlurFourDecimalDI(this,\'Área\');" value="' + (objocho.AREA == 0 ? '' : + objocho.AREA) + '" >';
                                 htmlbody += '           <span class="input-group-text" id="spa_' + objocho.TIPOAREA + '_' + objocho.SUBTIPOAREA + '_' + (j + 1).toString() + '"><i class="fa fa-plus" style="cursor:pointer;" id="i_' + objocho.TIPOAREA + '_' + objocho.SUBTIPOAREA + '_' + (j + 1).toString() + '" onclick="ManTHabilitante.fnAgregarArea(this);" data-toggle="tooltip" data-placement="top" title="Agregar"></i></span>';
                                 htmlbody += '           <span class="input-group-text" id="spd_' + objocho.TIPOAREA + '_' + objocho.SUBTIPOAREA + '_' + (j + 1).toString() + '"><i class="fa fa-minus" style="cursor:pointer;" id="i_' + objocho.TIPOAREA + '_' + objocho.SUBTIPOAREA + '_' + (j + 1).toString() + '" onclick="ManTHabilitante.fnEliminarArea(this);" data-toggle="tooltip" data-placement="top" title="Eliminar"></i></span>';
                                 htmlbody += '       </div> ';
@@ -626,7 +626,7 @@ ManTHabilitante.fnInitDivisionInterna = function () {
                                 htmlbody += '   <td>';
                                 htmlbody += '       <div class="input-group input-group-sm">';
                                 htmlbody += '           <input class="form-control form-control-sm cl_' + objocho.TIPOAREA + '_' + objocho.SUBTIPOAREA + '" id="atxt_' + objocho.TIPOAREA + '_' + objocho.SUBTIPOAREA + '_' + (j + 1).toString() + '" maxlength="20" placeholder="Descripción" onkeypress = "return utilSigo.checkLetter(event);" disabled="disabled" value="' + (objocho.DESCRIPCIONAREA) + '" >';
-                                htmlbody += '           <input class="form-control form-control-sm" id="txt_' + objocho.TIPOAREA + '_' + objocho.SUBTIPOAREA + '_' + (j + 1).toString() + '" maxlength="10" placeholder="área" onkeypress="return utilSigo.onKeyDecimal(event, this);" onblur="return ManTHabilitante.onBlurFourDecimalDI(this,\'Área\');" disabled="disabled" value="' + (objocho.AREA == 0 ? '' : + objocho.AREA) + '" >';
+                                htmlbody += '           <input class="form-control form-control-sm" id="txt_' + objocho.TIPOAREA + '_' + objocho.SUBTIPOAREA + '_' + (j + 1).toString() + '" maxlength="10" placeholder="Área" onkeypress="return utilSigo.onKeyDecimal(event, this);" onblur="return ManTHabilitante.onBlurFourDecimalDI(this,\'Área\');" disabled="disabled" value="' + (objocho.AREA == 0 ? '' : + objocho.AREA) + '" >';
                                 htmlbody += '       </div> ';
                                 htmlbody += '   </td> ';
                                 htmlbody += '</tr>';
@@ -645,11 +645,11 @@ ManTHabilitante.fnInitDivisionInterna = function () {
                                 htmlbody += '       <div class="input-group input-group-sm">';
                                 if (objPosNueve.length == 1) {
                                     htmlbody += '           <input class="form-control form-control-sm cl_' + objnueve.TIPOAREA + '_' + objnueve.SUBTIPOAREA + '" id="atxt_' + objnueve.TIPOAREA + '_' + objnueve.SUBTIPOAREA + '_' + (j + 1).toString() + '" maxlength="20" placeholder="Descripción" onkeypress = "return utilSigo.checkLetter(event);" value="' + (objnueve.DESCRIPCIONAREA) + '" >';
-                                    htmlbody += '           <input class="form-control form-control-sm" id="txt_' + objnueve.TIPOAREA + '_' + objnueve.SUBTIPOAREA + '_' + (j + 1).toString() + '" maxlength="10" placeholder="área" onkeypress="return utilSigo.onKeyDecimal(event, this);" onblur="return ManTHabilitante.onBlurFourDecimalDI(this,\'Área\');" value="' + (objnueve.AREA == 0 ? '' : + objnueve.AREA) + '" >';
+                                    htmlbody += '           <input class="form-control form-control-sm" id="txt_' + objnueve.TIPOAREA + '_' + objnueve.SUBTIPOAREA + '_' + (j + 1).toString() + '" maxlength="10" placeholder="Área" onkeypress="return utilSigo.onKeyDecimal(event, this);" onblur="return ManTHabilitante.onBlurFourDecimalDI(this,\'Área\');" value="' + (objnueve.AREA == 0 ? '' : + objnueve.AREA) + '" >';
                                     htmlbody += '           <span class="input-group-text" id="spa_' + objnueve.TIPOAREA + '_' + objnueve.SUBTIPOAREA + '_' + (j + 1).toString() + '"><i class="fa fa-plus" style="cursor:pointer;" id="i_' + objnueve.TIPOAREA + '_' + objnueve.SUBTIPOAREA + '_' + (j + 1).toString() + '" onclick="ManTHabilitante.fnAgregarArea(this);" data-toggle="tooltip" data-placement="top" title="Agregar"></i></span>';
                                 } else {
                                     htmlbody += '           <input class="form-control form-control-sm cl_' + objnueve.TIPOAREA + '_' + objnueve.SUBTIPOAREA + '" id="atxt_' + objnueve.TIPOAREA + '_' + objnueve.SUBTIPOAREA + '_' + (j + 1).toString() + '" maxlength="20" placeholder="Descripción" onkeypress = "return utilSigo.checkLetter(event);" disabled="disabled" value="' + (objnueve.DESCRIPCIONAREA) + '" >';
-                                    htmlbody += '           <input class="form-control form-control-sm" id="txt_' + objnueve.TIPOAREA + '_' + objnueve.SUBTIPOAREA + '_' + (j + 1).toString() + '" maxlength="10" placeholder="área" onkeypress="return utilSigo.onKeyDecimal(event, this);" onblur="return ManTHabilitante.onBlurFourDecimalDI(this,\'Área\');" disabled="disabled" value="' + (objnueve.AREA == 0 ? '' : + objnueve.AREA) + '" >';
+                                    htmlbody += '           <input class="form-control form-control-sm" id="txt_' + objnueve.TIPOAREA + '_' + objnueve.SUBTIPOAREA + '_' + (j + 1).toString() + '" maxlength="10" placeholder="Área" onkeypress="return utilSigo.onKeyDecimal(event, this);" onblur="return ManTHabilitante.onBlurFourDecimalDI(this,\'Área\');" disabled="disabled" value="' + (objnueve.AREA == 0 ? '' : + objnueve.AREA) + '" >';
                                 }
                                 htmlbody += '       </div> ';
                                 htmlbody += '   </td> ';
@@ -659,7 +659,7 @@ ManTHabilitante.fnInitDivisionInterna = function () {
                                 htmlbody += '   <td>';
                                 htmlbody += '       <div class="input-group input-group-sm">';
                                 htmlbody += '           <input class="form-control form-control-sm cl_' + objnueve.TIPOAREA + '_' + objnueve.SUBTIPOAREA + '" id="atxt_' + objnueve.TIPOAREA + '_' + objnueve.SUBTIPOAREA + '_' + (j + 1).toString() + '" maxlength="20" placeholder="Descripción" onkeypress = "return utilSigo.checkLetter(event);" value="' + (objnueve.DESCRIPCIONAREA) + '" >';
-                                htmlbody += '           <input class="form-control form-control-sm" id="txt_' + objnueve.TIPOAREA + '_' + objnueve.SUBTIPOAREA + '_' + (j + 1).toString() + '" maxlength="10" placeholder="área" onkeypress="return utilSigo.onKeyDecimal(event, this);" onblur="return ManTHabilitante.onBlurFourDecimalDI(this,\'Área\');" value="' + (objnueve.AREA == 0 ? '' : + objnueve.AREA) + '" >';
+                                htmlbody += '           <input class="form-control form-control-sm" id="txt_' + objnueve.TIPOAREA + '_' + objnueve.SUBTIPOAREA + '_' + (j + 1).toString() + '" maxlength="10" placeholder="Área" onkeypress="return utilSigo.onKeyDecimal(event, this);" onblur="return ManTHabilitante.onBlurFourDecimalDI(this,\'Área\');" value="' + (objnueve.AREA == 0 ? '' : + objnueve.AREA) + '" >';
                                 htmlbody += '           <span class="input-group-text" id="spa_' + objnueve.TIPOAREA + '_' + objnueve.SUBTIPOAREA + '_' + (j + 1).toString() + '"><i class="fa fa-plus" style="cursor:pointer;" id="i_' + objnueve.TIPOAREA + '_' + objnueve.SUBTIPOAREA + '_' + (j + 1).toString() + '" onclick="ManTHabilitante.fnAgregarArea(this);" data-toggle="tooltip" data-placement="top" title="Agregar"></i></span>';
                                 htmlbody += '           <span class="input-group-text" id="spd_' + objnueve.TIPOAREA + '_' + objnueve.SUBTIPOAREA + '_' + (j + 1).toString() + '"><i class="fa fa-minus" style="cursor:pointer;" id="i_' + objnueve.TIPOAREA + '_' + objnueve.SUBTIPOAREA + '_' + (j + 1).toString() + '" onclick="ManTHabilitante.fnEliminarArea(this);" data-toggle="tooltip" data-placement="top" title="Eliminar"></i></span>';
                                 htmlbody += '       </div> ';
@@ -670,7 +670,7 @@ ManTHabilitante.fnInitDivisionInterna = function () {
                                 htmlbody += '   <td>';
                                 htmlbody += '       <div class="input-group input-group-sm">';
                                 htmlbody += '           <input class="form-control form-control-sm cl_' + objnueve.TIPOAREA + '_' + objnueve.SUBTIPOAREA + '" id="atxt_' + objnueve.TIPOAREA + '_' + objnueve.SUBTIPOAREA + '_' + (j + 1).toString() + '" maxlength="20" placeholder="Descripción" onkeypress = "return utilSigo.checkLetter(event);" disabled="disabled" value="' + (objnueve.DESCRIPCIONAREA) + '" >';
-                                htmlbody += '           <input class="form-control form-control-sm" id="txt_' + objnueve.TIPOAREA + '_' + objnueve.SUBTIPOAREA + '_' + (j + 1).toString() + '" maxlength="10" placeholder="área" onkeypress="return utilSigo.onKeyDecimal(event, this);" onblur="return ManTHabilitante.onBlurFourDecimalDI(this,\'Área\');" disabled="disabled" value="' + (objnueve.AREA == 0 ? '' : + objnueve.AREA) + '" >';
+                                htmlbody += '           <input class="form-control form-control-sm" id="txt_' + objnueve.TIPOAREA + '_' + objnueve.SUBTIPOAREA + '_' + (j + 1).toString() + '" maxlength="10" placeholder="Área" onkeypress="return utilSigo.onKeyDecimal(event, this);" onblur="return ManTHabilitante.onBlurFourDecimalDI(this,\'Área\');" disabled="disabled" value="' + (objnueve.AREA == 0 ? '' : + objnueve.AREA) + '" >';
                                 htmlbody += '       </div> ';
                                 htmlbody += '   </td> ';
                                 htmlbody += '</tr>';
