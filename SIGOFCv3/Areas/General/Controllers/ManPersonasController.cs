@@ -10,6 +10,7 @@ using SIGOFCv3.Models;
 using CapaEntidad.ViewModel;
 using CapaEntidad.ViewModel.General;
 using SIGOFCv3.Helper;
+using CapaLogica.DOC;
 
 namespace SIGOFCv3.Areas.General.Controllers
 {
@@ -385,6 +386,21 @@ namespace SIGOFCv3.Areas.General.Controllers
             {
                 return Json(new { success = false, result = ex.Message });
             }
+        }
+
+        [HttpPost]
+        public JsonResult ObtenerCorreos(List<string> CPERSONAS)
+        {
+            CLogica logP = new CLogica();
+            List<VM_PERSONA_DET_CORREO> result = new List<VM_PERSONA_DET_CORREO>();
+
+            foreach (var COD_PERSONA in CPERSONAS)
+            {
+                var data = logP.PersonaCorreo(COD_PERSONA);
+                if (data != null) result.Add(data);
+            }
+
+            return Json(result, JsonRequestBehavior.AllowGet);
         }
     }
 }

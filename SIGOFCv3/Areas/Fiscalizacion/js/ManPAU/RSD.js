@@ -3,8 +3,8 @@
 let _informe = {};
 let app,
     modal_notificar,
+    modal_planes_manejo,
     modal_doc,
-    modal_analisis,
     modal_sitd,
     modal_integrante;
 
@@ -14,6 +14,17 @@ const States = {
     COMPLETADO: 3,
     VISADO: 4,
     FINALIZADO: 5
+};
+
+const data = {
+    Modalidades: [
+        { COD_MODALIDAD: '01', COD_MATERIA: '02', MODALIDAD: 'Concesiones', CONTRATO: 'contrato de concesión' },
+        { COD_MODALIDAD: '02', COD_MATERIA: '02', MODALIDAD: 'Predios privados', CONTRATO: 'permiso forestal' },
+        { COD_MODALIDAD: '03', COD_MATERIA: '02', MODALIDAD: 'Comunidades nativas', CONTRATO: 'permiso forestal' },
+        { COD_MODALIDAD: '04', COD_MATERIA: '01', MODALIDAD: 'Fauna', CONTRATO: '' },
+    ],
+    Infracciones: [],
+    Causales_Caducidad: []
 };
 
 _informe.CambiarEstado = function (state) {
@@ -114,13 +125,13 @@ _informe.FirmaVerificar = function () {
 _informe.render = function (html) {
     if (html) {
         let ht = $("<div>" + html + "</div>");
-        ht.find('table').css({ 'border': '1px solid #ccc', 'border-collapse': 'collapse' });
+        ht.find('table').css({ 'border': '1px solid #000', 'border-collapse': 'collapse' });
 
         ht.find('table').each(function (i, el) {
             if (!$(this).css('width')) $(this).css('width', '100%');
         });
 
-        ht.find('td').css({ 'border': '1px solid #ccc', 'padding': '5.76px' });
+        ht.find('td').css({ 'border': '1px solid #000', 'padding': '5.76px' });
         ht.find('.table-small td').css({ 'padding': '0' });
 
         ht.find('img').each(function (i, el) {
@@ -156,39 +167,29 @@ _informe.render = function (html) {
     return html;
 };
 
+_informe.NumeroALetra = function (numero) {
+    if (numero <= 0 || typeof numero !== 'number' || !Number.isInteger(numero)) {
+        return 'Número no válido';
+    }
+
+    let resultado = '';
+    const alfabeto = 'abcdefghijklmnopqrstuvwxyz';
+
+    while (numero > 0) {
+        const indice = (numero - 1) % 26; // Restamos 1 para ajustar a 0-based index
+        resultado = alfabeto[indice] + resultado;
+        numero = Math.floor((numero - 1) / 26); // Restamos 1 para ajustar a 0-based index
+    }
+
+    return resultado;
+}
+
 _informe.tmpl = {
-    General: function (data) {
-        return $("<div>").append($("#tmpl-exportar").tmpl(data || {})).getUnformattedText();
-    },
-    Vistos: function (data) {
-        return $("<div>").append($("#tmpl-vistos").tmpl(data || {})).getUnformattedText();
-    },
-    Antecedentes: function (data) {
-        return $("<div>").append($("#tmpl-antecedentes").tmpl(data || {})).getUnformattedText();
-    },
-    Analisis: function (data) {
-        return $("<div>").append($("#tmpl-analisis").tmpl(data || {})).getUnformattedText();
-    },
-    Competencia: function (data) {
-        return $("<div>").append($("#tmpl-competencia").tmpl(data || {})).getUnformattedText();
-    },
-    Imputacion: function (data) {
-        return $("<div>").append($("#tmpl-imputacion").tmpl(data || {})).getUnformattedText();
-    },
-    Comunicacion_Externa: function (data) {
-        return $("<div>").append($("#tmpl-comunicacion-externa").tmpl(data || {})).getUnformattedText();
-    },
-    Cliche: function (data) {
-        return $("<div>").append($("#tmpl-cliche").tmpl(data || {})).getUnformattedText();
-    },
-    Pie_Pagina: function (data) {
-        return $("<div>").append($("#tmpl-pie-pagina").tmpl(data || {})).getUnformattedText();
-    },
-    Resolucion: function (data) {
-        return $("<div>").append($("#tmpl-resolucion").tmpl(data || {})).getUnformattedText();
-    },
-    get: function (tmplId, data) {
-        return $("<div>").append($(tmplId).tmpl(data || {})).getUnformattedText();
+    get: function (html, tmplId, data) {
+        const _dom = $("<div>", { html });
+        const partial = _dom.find(tmplId);
+
+        return $('<div>').append(partial.tmpl(data || {})).getUnformattedText();
     },
 }
 
@@ -200,37 +201,187 @@ _informe.EnumerarCuadros = function (html) {
     });
 }
 
-_informe.Exportar = function () {
+/*_informe.EnumerarListas = function (html) {
+    let num = 1;
+    var $html = $('<div />', { html: html });
+    $html.find('ol.continue').each((index, el) => {
+        $(el).attr('start', num);
+        num += $(el).find('>li').length;
+    });
+
+    return $html.html();
+}
+
+_informe.EnumerarTitulos = function (html) {
+    var $html = $('<div />', { html: html });
+    $html.find('.upper-roman').each((index, el) => {
+        const html = $(el).html();
+        $(el).html(`<ol style="margin-left: -50px; list-style: upper-roman;" start="${index + 1}"><li>${html}</li></ol>`);
+    });
+
+    return $html.html();
+}*/
+
+_informe.EnumerarParrafos = function (html) {
+    var $html = $('<div />', { html: html });
+    $html.find('.enumeration').each((index, el) => {
+        const html = $(el).html();
+        $(el).html(`<ol style="margin-left: -50px;" start="${index + 1}"><li>${html}</li></ol>`);
+    });
+
+    return $html.html();
+}
+
+_informe.GenerarResolucion = function (template, informe) {
+    let index = 0;
+    informe.Inf_Supervision = app.Inf_Supervision[0];
+
+    let html = _informe.tmpl.get(template, '#tmpl-resolucion', informe);
+    html = html.replace(/<strong>Artículo.<\/strong>/gi, function (m) {
+        index++;
+        return `<strong>Artículo ${index}.</strong>`;
+    });
+
+    return html;
+}
+
+_informe.RevisarFootnotes = function (html) {
+    var $html = $('<div />', { html: html });
+
+    //Buscamos todos los elementos mso-element
+    $html.find('.MsoFootnoteText').each((_, e) => {
+        const element = $(e).parent();
+        const id = element.attr("id");
+        const a = $html.find('a[href*="#_' + id + '"]:not([name])');
+        if (!a.length) {
+            element.remove();
+        }
+    });
+
+    return $html.html();
+}
+
+_informe.Exportar = async function () {
     const informe = _informe.Estructura();
     const [procedencias, materias] = JSON.parse(JSON.stringify([app.Procedencias, app.Materias]));
 
+    informe.URL_APLICACION = urlLocalSigo;
     informe.EXPEDIENTE_ADM = $('#txtNumeroExpediente').val();
     informe.PROCEDENCIA = procedencias.find(function (x) { return x.COD_PROCEDENCIA === informe.COD_PROCEDENCIA })?.PROCEDENCIA;
     informe.MATERIA = materias.find(function (x) { return x.COD_MATERIA === informe.COD_MATERIA })?.MATERIA;
     informe.FECHA = fnDate.text_long(informe.RES_DIRECTORAL_FECHA || new Date());
-    informe.VISTOS = _informe.render(informe.VISTOS);
-    informe.ANTECEDENTES = _informe.render(informe.ANTECEDENTES);
-    informe.COMPETENCIA = _informe.render(informe.COMPETENCIA);
-    informe.ANALISIS = _informe.render(informe.ANALISIS);
-    informe.IMPUTACION = _informe.render(informe.IMPUTACION);
-    informe.PARRAFOS_CLICHE = _informe.render(informe.PARRAFOS_CLICHE);
-    informe.PIE_PAGINA = _informe.render(informe.PIE_PAGINA);
-    informe.COMUNICACION_EXTERNA = _informe.render(informe.COMUNICACION_EXTERNA);
-    informe.RESOLUCION = _informe.render(informe.RESOLUCION);
-    informe.PROCEDENCIA_FOOTER = (informe.PROCEDENCIA || '').split('Forestales').join('<br>Forestales');
     informe.SUBDIRECTOR = informe.FIRMAS.find(function (x) { return x.funcion === 'Subdirector' })?.apellidosNombres;
-    //console.log(informe); //return;
 
-    const header = `<p style="text-align:center;"><img height="200" width="200" alt="" src="${urlLocalSigo}content/images/logo/escudo-peruano.jpg"></p>`;
+    // Listar antecedentes
+    informe.ANTECEDENTES = await _informe.ExtraerAntecedentes(informe.COD_RES_SUB, informe.COD_THABILITANTE);
+    informe.ANTECEDENTES_DOCS = {};
+    informe.ANTECEDENTES_DOCS.Carta = informe.ANTECEDENTES.find(x => x.tipoDocumento == 'Carta') || {};
+    informe.ANTECEDENTES_DOCS.Inf_Sup = informe.ANTECEDENTES.find(x => x.tipoDocumento == 'Informe de Supervisión') || {};
+    informe.ANTECEDENTES_DOCS.RSD = informe.ANTECEDENTES.find(x => x.tipoDocumento == 'Resolución Sub Directoral') || {};
+    informe.ANTECEDENTES_DOCS.Ced_Noti = informe.ANTECEDENTES.find(x => x.tipoDocumento == 'Cédula de Notificación') || {};
+    informe.ANTECEDENTES_DOCS.Escrito = informe.ANTECEDENTES.find(x => x.tipoDocumento == 'Escrito') || {};
+    //console.log(informe.ANTECEDENTES); return;
+
+    //Listar planes de manejo
+    const PLANES_MANEJO = await _informe.ListarPlanesManejo('D', null, informe.COD_THABILITANTE, informe.NUM_POA);
+    const plan = PLANES_MANEJO[0] || {};
+    plan.ARESOLUCION_FECHA = fnDate.text_long(plan.ARESOLUCION_FECHA);
+    plan.INICIO_VIGENCIA = fnDate.text_long(plan.INICIO_VIGENCIA);
+    plan.FIN_VIGENCIA = fnDate.text_long(plan.FIN_VIGENCIA);
+    informe.PLAN_MANEJO = plan;
+
+    //console.log(PLANES_MANEJO);
+
+    //Resumen de informe de supervision
+    const resumenInforme = await _informe.EXTRAER_RESUMEN_INFORME();
+    informe.ESPECIES = resumenInforme.especies;
+    //informe.VOLUMENES = resumenInforme.volumenes;
+
+    //Volumenes injustificados
+    let resumen = await _informe.RegResumenInfSupervision(informe.COD_RES_SUB);
+    const volumenes = resumen.filter(x => !!x.VOLUMEN_INJUSTIFICADO);
+
+    informe.VOLUMENES_INJUSTIFICADOS = volumenes;
+    informe.VOLUMENES_INJUSTIFICADOS_TOTAL = Math.round(volumenes.reduce((a, b) => a + b.VOLUMEN_INJUSTIFICADO, 0) * 1000) / 1000;
+    //console.log(volumenes);
+
+    const header = `<p style="text-align:center;"><img height="200" width="200" alt="" src="${informe.URL_APLICACION}content/images/logo/escudo-peruano.jpg"></p>`;
     //let footer = `<table style="width: 100%;"><tr><td style="text-align: right;">#CURRENTPAGE#</td></tr></table>`;
-    let html = _informe.tmpl.General(informe);
 
-    //Enumeracion de cuadros
+    //Plantilla general
+    const template = await _informe.Extraer_Plantilla();
+
+    informe.VISTOS = _informe.tmpl.get(template, '#tmpl-vistos', informe);
+    informe.COMPETENCIA = _informe.tmpl.get(template, '#tmpl-competencia', informe);
+
+    //Plantilla de infracciones
+    const tmplInfracciones = await _informe.EXTRAER_INFRACCIONES();
+    informe.INFRACCIONES = _informe.EXTRAER_PARRAFOS_INFRACCION(tmplInfracciones, informe);
+    informe.ANALISIS = _informe.tmpl.get(template, '#tmpl-analisis', informe);
+
+    if (informe.FLG_CADUCIDAD_EXTRACCION) {
+        informe.CAUSALES_CADUCIDAD = data.Causales_Caducidad.filter(item => item.select);
+    }
+
+    informe.IMPUTACION = _informe.tmpl.get(template, '#tmpl-imputacion', informe);
+    informe.MEDIDAS_CAUTELARES = _informe.tmpl.get(template, '#tmpl-medidas-cautelares', informe);
+    informe.COMUNICACION_EXTERNA = _informe.tmpl.get(template, '#tmpl-comunicacion-externa', informe);
+    informe.HERRAMIENTAS_SUBSANAR = _informe.tmpl.get(template, '#tmpl-herramientas-subsanar', informe);
+    informe.RESOLUCION = _informe.GenerarResolucion(template, informe);
+    informe.PIE_PAGINA = _informe.tmpl.get(template, '#tmpl-pie-pagina', informe)?.replace(/PASSWORD/g, app.Tramite?.password || 'PASSWORD');
+
+    let html = '';
+    html += _informe.tmpl.get(template, '#tmpl-exportar', informe);
+    html += _informe.tmpl.get(template, '#tmpl-pie-pagina-estructura', informe);
+
+    html += _informe.tmpl.get(template, '#tmpl-footnotes', informe);
+    html = _informe.RevisarFootnotes(html);
+
+    //Enumeracion
     html = _informe.EnumerarCuadros(html);
+    html = _informe.EnumerarParrafos(html);
 
-    //console.log(html);
     $(document).googoose({ html, header });
     //$(document).googoose({ html, header, footeridfirst: 'ff1' });
+}
+
+_informe.RegResumenInfSupervision = function (COD_RESOLUCION) {
+    const params = {
+        type: 'get',
+        url: `${urlLocalSigo}Fiscalizacion/InformeLegalDigital/RegMostrarInfoDocumentResumenSupervisado`,
+        datos: { COD_RESOLUCION }
+    };
+
+    return new Promise(function (resolve, reject) {
+        utilSigo.fnAjax(params, res => resolve(res), () => resolve([]));
+    });
+}
+
+_informe.ExtraerAntecedentes = function (COD_RESOLUCION) {
+    const COD_THABILITANTE = app.Informe.COD_THABILITANTE;
+
+    const params = {
+        type: 'get',
+        url: `${urlLocalSigo}Fiscalizacion/InformeLegalDigital/ObtenerAntecedentes`,
+        data: { COD_RESOLUCION, COD_THABILITANTE },
+        global: false
+    }
+
+    return new Promise((resolve, reject) => {
+        $.ajax(params).done(res => resolve(res)).fail(() => resolve([]));
+    });
+};
+
+_informe.ListarPlanesManejo = function (V_OPCION, COD_INFORME, COD_THABILITANTE, NUM_POA) {
+    const params = {
+        type: 'get',
+        url: `${urlLocalSigo}Fiscalizacion/ManPAU/ListarPlanesManejo`,
+        datos: { COD_INFORME, COD_THABILITANTE, NUM_POA, V_OPCION: V_OPCION || 'L' }
+    }
+
+    return new Promise((resolve, reject) => {
+        utilSigo.fnAjax(params, res => resolve(res), () => resolve([]));
+    });
 }
 
 _informe.Registro = function () {
@@ -277,6 +428,7 @@ _informe.Guardar = function (parametros) {
             app.Informe.RECURSOS = data.RECURSOS;
 
             _informe.CambiarEstado(app.Informe.ESTADO || States.INGRESADO);
+            app.Informe.FLG_ACTUALIZAR = false;
             utilSigo.toastSuccess('Guardado', 'Se ha guardado el informe digital');
             deferred.resolve(res);
         } else {
@@ -289,23 +441,29 @@ _informe.Guardar = function (parametros) {
 }
 
 _informe.Estructura = function () {
-    let data = JSON.parse(JSON.stringify(app.Informe));
+    let objEN = JSON.parse(JSON.stringify(app.Informe));
 
-    data.FIRMAS.forEach(function (x, i) {
+    objEN.FIRMAS.forEach(function (x, i) {
         if (!x.flgAplica) x.estado = 0;
         else x.estado = x.estado || 1;
         x.item = i + 1;
     });
 
-    data.RECURSOS.forEach(function (x, i) {
+    objEN.RECURSOS.forEach(function (x, i) {
         if (x.estado === null) x.estado = 1;
         x.item = i + 1;
     });
 
+    objEN.INFRACCIONES = JSON.parse(JSON.stringify(app.Infracciones))
+        .filter(item => item.select);
+
+    objEN.CAUSALES_CADUCIDAD = JSON.parse(JSON.stringify(data.Causales_Caducidad))
+        .filter(item => item.select);
+
     let parametros = {
-        ...data,
-        //FIRMAS: data.FIRMAS,
-        ELIMINAR: data.ELIMINAR
+        ...objEN,
+        //FIRMAS: objEN.FIRMAS,
+        ELIMINAR: objEN.ELIMINAR
     };
 
     return parametros;
@@ -344,10 +502,12 @@ _informe.ENVIAR_CONTROL_CALIDAD = function () {
         USUARIO: user.PERSONA
     }
 
-    const message = _informe.tmpl.get('#tmpl-notificacion-calidad', data);
+    const message = $('#tmpl-notificacion-calidad').tmpl(data).html();
     modal_notificar.form.Mensaje = message;
-
-    modal_notificar.Abrir();
+    modal_notificar.callback = function () {
+        console.log('Notificado a control de calidad');
+    }
+    modal_notificar.Abrir([]);
 }
 
 _informe.BuscarPersonaNotificar = function () {
@@ -435,35 +595,45 @@ _informe.ResumenInforme = function () {
     });
 }
 
-_informe.DATA_INFORMES = {};
+_informe.EXTRAER_RESUMEN_INFORME = function () {
+    return new Promise((resolve, reject) => {
+        const asCodInforme = app.Inf_Supervision[0].COD_INFORME;
 
-_informe.Mostrar_Analisis = function () {
-    utilSigo.blockUIGeneral();
-
-    //Regularizar para varios informes
-    const asCodInforme = app.Inf_Supervision[0].COD_INFORME;
-    let xhr_informes = $.getJSON(urlLocalSigo + 'Supervision/ManInforme/_DataResumenInforme', { asCodInforme: asCodInforme });
-    let xhr_templates = $.get(urlLocalSigo + 'Fiscalizacion/ManPAU/TemplateRSDObligaciones');
-
-    $.when(xhr_informes, xhr_templates).then(function (res_inf, res_tmpl) {
-        _informe.DATA_INFORMES = res_inf[0]; //volumenes, especies	
-
-        //Template
-        let html = res_tmpl[0];
-
-        if (!$('#partial-templates').length) $('<div>', { id: 'partial-templates' }).appendTo('body');
-        $('#partial-templates').html(html);
-
-        utilSigo.unblockUIGeneral();
-        $('#modal-analisis').modal('show');
-    });
+        utilSigo.fnAjax({
+            type: 'get',
+            url: `${urlLocalSigo}Supervision/ManInforme/_DataResumenInforme`,
+            datos: { asCodInforme: asCodInforme }
+        }, res => resolve(res), () => resolve({ volumenes: [], especies: [] }));
+    })
 }
 
-_informe.Insertar_Analisis = function () {
-    let html = modal_analisis.render();
-    html += _informe.tmpl.Analisis();
-    app.Informe.ANALISIS = html;
-    $('#modal-analisis').modal('hide');
+_informe.EXTRAER_INFRACCIONES = function () {
+    return new Promise((resolve, reject) => {
+        utilSigo.fnAjax({
+            type: 'get',
+            dataType: 'html',
+            url: `${urlLocalSigo}Fiscalizacion/ManPAU/TemplateRSDObligaciones`
+        }, html => resolve(html), () => resolve(null));
+    })
+}
+
+_informe.EXTRAER_INFRACCIONES_POR_MODALIDAD = function () {
+    app.Infracciones = data.Infracciones.filter(x => x.codModalidad == app.Informe.COD_MODALIDAD);
+}
+
+_informe.EXTRAER_PARRAFOS_INFRACCION = function (template, informe) {
+    //let informe = JSON.parse(JSON.stringify(app.Informe));
+    //informe.TABLAS_INFORME = _informe.DATA_INFORMES;
+
+    const infracciones = JSON.parse(JSON.stringify(data.Infracciones))
+        .filter(item => item.codModalidad == informe.COD_MODALIDAD && item.select)
+        .map(function (item, index) {
+            //item.numeration = _informe.NumeroALetra(index + 1);
+            item.html = _informe.tmpl.get(template, '#tmpl-' + item.codPlantilla, informe);
+            return item;
+        });
+
+    return infracciones;
 }
 
 _informe.SITD_OPEN = function () {
@@ -501,6 +671,20 @@ _informe.SITD_OPEN = function () {
 
             $('#modal-sitd').modal('show');
         }
+    });
+}
+
+_informe.Extraer_Plantilla = function () {
+    return new Promise(function (resolve, reject) {
+        const params = {
+            type: 'get',
+            url: `${urlLocalSigo}Fiscalizacion/ManPAU/PlantillaInforme`,
+            dataType: 'html'
+        };
+
+        utilSigo.fnAjax(params, function (html) {
+            html ? resolve(html) : reject(null);
+        });
     });
 }
 
@@ -570,31 +754,24 @@ _informe.SITD_Registro = function () {
                 let data = _informe.Estructura();
                 data.TRAMITE_ID = res.data.iCodTramite || data.TRAMITE_ID;
                 data.NUM_INFORME_SITD = res.data.cCodificacion || data.NUM_INFORME_SITD;
+                data.SITD_FECHA_REGISTRO = fnDate.text(res.data.fechaRegistro);
 
                 //Actualizamos las variables
                 app.Informe.TRAMITE_ID = data.TRAMITE_ID;
                 app.Informe.NUM_INFORME_SITD = data.NUM_INFORME_SITD;
 
-                app.Informe.PIE_PAGINA = app.Informe.PIE_PAGINA.replace(/PASSWORD/g, res.data.password);
-                $('#txtNumeroResolucion').val(app.Informe.NUM_INFORME_SITD);
+                $('#txtNumeroResolucion').val(data.NUM_INFORME_SITD);
+                $('#txtFechaEmision').val(data.SITD_FECHA_REGISTRO);
 
-                /*if (tb) {
-                    //app.Informe.COD_DESTINATARIO = tb.trabajadorId;
-                    app.Informe.DESTINATARIO = `${tb.nombres} ${tb.apellidos}`;
-                }*/
-
+                //Asignamos la data a la variable
                 app.Tramite = res.data;
 
+                //Guardamos
                 _informe.Guardar(data);
             }
 
             $('#modal-sitd').modal('hide');
         } else {
-            //if (res.iCodTramite) {
-            //	modal_sitd.form.iCodTramite = res.iCodTramite;
-            //	app.Informe.TRAMITE_ID = res.iCodTramite;
-            //}
-
             utilSigo.toastError('Atención', res.msj);
         }
 
@@ -612,10 +789,6 @@ _informe.ObtenerRutaInformeSup = function (item) {
 _informe.AsociarInforme = function () {
     $('#myTab a.nav-link[href="#navDatos"]').tab("show");
     _renderListExpediente.fnViewModalConsulta();
-    //_renderListExpediente.fnCallback = function (data) {
-    //	ManRD_AddEdit.fnSaveForm();
-    //	delete _renderListExpediente.fnCallback;
-    //}
 }
 
 _informe.DOMEvents = function () {
@@ -636,10 +809,13 @@ $(function () {
                 PROCEDENCIA: null,
                 COD_MATERIA: null,
                 MATERIA: null,
+                COD_MODALIDAD: null,
+                MODALIDAD: null,
                 COD_INFORME: null, //Informe de supervision (auxiliar, obtenemos de la cabecera)
                 NRO_REFERENCIA: null,
                 INF_FECHA: null,
-                INF_ANTECEDENTES: null,
+                NUM_POA: null, // POA
+                NOMBRE_POA: null,
                 TITULAR_SUPERVISADO: null,
                 DOCUMENTO_TITULAR: null,
                 RUC_TITULAR: null,
@@ -654,34 +830,37 @@ $(function () {
                 RES_DIRECTORAL_UND_ORGANICA: null,
                 RES_DIRECTORAL_FECHA: null,
                 FIRMAS: [],
-                VISTOS: null,
                 RECURSOS: [],
-                ANTECEDENTES: null,
-                COMPETENCIA: null,
-                ANALISIS: null,
-                IMPUTACION: null,
-                COMUNICACION_EXTERNA: null,
-                PARRAFOS_CLICHE: null,
-                PIE_PAGINA: null,
-                RESOLUCION: null,
+                INFRACCIONES: [],
+                CAUSALES_CADUCIDAD: [],
+
+                /** Nuevos campos */
+                FLG_CADUCIDAD_EXTRACCION: true,
+                FLG_IMPUTACION_CARGOS: true,
+                FLG_MEDIDAS_CAUTELARES: true,
+                FLG_COMUNICACION: true,
+                FLG_HERRAMIENTAS_SUBSANAR: true,
+
                 RUTA_ARCHIVO_REVISION: null,
                 FECHA_REGISTRO: new Date(),
-                ESTADO: 1
+                ESTADO: 1,
+                FLG_ACTUALIZAR: false,
             },
             Inf_Supervision: [],
             oficinaDefault: null,
             Tramite: null,
             Procedencias: [
-                { COD_PROCEDENCIA: 'SDFPAFFS', PROCEDENCIA: 'Sub Dirección de Fiscalización de Permisos y Autorizaciones Forestales y de Fauna Silvestre' },
-                { COD_PROCEDENCIA: 'SDFCFFS', PROCEDENCIA: 'Sub Dirección de Fiscalización de Concesiones Forestales y de Fauna Silvestre' },
+                { COD_PROCEDENCIA: 'SDI', PROCEDENCIA: 'Subdirección de Instrucción' },
             ],
             Materias: [
                 { COD_MATERIA: '01', MATERIA: 'Fauna Silvestre' },
                 { COD_MATERIA: '02', MATERIA: 'Recursos Forestales' },
-            ]
+            ],
+            Modalidades: [],
+            Infracciones: []
         },
         methods: {
-            init: function () {
+            init: async function () {
                 const self = this;
 
                 const datos = ManRD_AddEdit.frm.serializeObject();
@@ -689,7 +868,7 @@ $(function () {
 
                 //Valores por defecto
                 const values = {
-                    COD_PROCEDENCIA: "SDFPAFFS",
+                    COD_PROCEDENCIA: "SDI",
                     COD_MATERIA: "02",
                     COD_RES_SUB: datos.hdfCodResodirec,
                     NUM_INFORME_SITD: datos.txtNumeroExpediente,
@@ -702,34 +881,56 @@ $(function () {
                         { funcion: 'Coordinador', codPersona: null, apellidosNombres: null, flgAplica: true, estado: null },
                         { funcion: 'Subdirector', codPersona: null, apellidosNombres: null, flgAplica: true, estado: null },
                     ],
-                    RECURSOS: [
-                        //{ tipo: 'Informe de Supervisión', nombre: '', url: '', estado: null },
-                        //{ tipo: 'Anexos SIADO', nombre: '', url: '', estado: null },
-                        //{ tipo: 'Anexos SITD', nombre: '', url: '', estado: null },
-                    ],
+                    RECURSOS: [],
                 };
 
                 self.Informe = { ...self.Informe, ...values };
 
+                //Valores por defecto infracciones, causales
+                const configuracion = await self.Configuracion();
+
+                //Causales_Caducidad
+                data.Infracciones = configuracion.infracciones;
+                data.Causales_Caducidad = configuracion.causales_caducidad;
+
+                self.MateriaOnChange();
+
                 //Verificamos si existe informacion registrada en la base de datos
                 if (self.Informe.COD_RES_SUB) {
-                    self.Informacion(values).then(function (res_general) {
-                        self.TramiteByID().then(function (res_tramite) {
-                            if (res_tramite.success) {
-                                self.Tramite = res_tramite.data;
-                                //app.Informe.DESTINATARIO = res_tramite.data.trabajador;
-                            }
-                        }).catch(() => { });
+                    const res_general = await self.Informacion(values);
 
-                        //Recursos
-                        if (!self.Informe.COD_INFORME_DIGITAL) {
-                            self.ObtenerArchivos().then(function (res_files) {
-                                //console.log("LOAD FILES SIADO...", res_files);
-                            });
-                        }
+                    const res_tramite = await self.TramiteByID();
 
-                    });
+                    if (res_tramite.success) {
+                        self.Tramite = res_tramite.data;
+                        //app.Informe.DESTINATARIO = res_tramite.data.trabajador;
+                    }
+
+                    //Recursos
+                    if (!self.Informe.COD_INFORME_DIGITAL) {
+                        const res_files = await self.ObtenerArchivos();
+                    }
                 }
+            },
+            MateriaOnChange: function () {
+                this.Modalidades = data.Modalidades.filter(x => x.COD_MATERIA === this.Informe.COD_MATERIA);
+                this.Informe.COD_MODALIDAD = this.Modalidades[0].COD_MODALIDAD;
+
+                _informe.EXTRAER_INFRACCIONES_POR_MODALIDAD();
+            },
+            Configuracion: function () {
+                return new Promise((resolve, reject) => {
+                    let params = {
+                        type: 'get',
+                        url: `${urlLocalSigo}Fiscalizacion/ManPAU/ObtenerConfiguracion`
+                    };
+
+                    utilSigo.fnAjax(params, function (res) {
+                        resolve(res);
+                    }, function () {
+                        reject();
+                    });
+                });
             },
             Informacion: function (values) {
                 const self = this;
@@ -759,6 +960,15 @@ $(function () {
                             self.Informe.COD_RES_SUB = res.informe.COD_RES_SUB || values.COD_RES_SUB;
                             self.Informe.NUM_INFORME_SITD = res.informe.NUM_INFORME_SITD || values.NUM_INFORME_SITD;
                             self.Informe.REPRESENTANTE_LEGAL = res.informe.REPRESENTANTE_LEGAL || values.REPRESENTANTE_LEGAL;
+
+                            //Seleccionamos las infracciones y causales de caducidad
+                            data.Infracciones.forEach(item => {
+                                item.select = !!res.informe.INFRACCIONES.find(x => x.codInfraccion == item.codInfraccion);
+                            });
+
+                            data.Causales_Caducidad.forEach(item => {
+                                item.select = !!res.informe.CAUSALES_CADUCIDAD.find(x => x.codCausalCaducidad == item.codCausalCaducidad);
+                            });
                         }
 
                         //CABECERA
@@ -771,8 +981,6 @@ $(function () {
                             self.Informe.NRO_REFERENCIA = res.inf_supervision.map(function (x) { return x.NUM_INFORME }).join(', ');
 
                             self.Informe.INF_FECHA = fnDate.text_long(cab.INF_FECHA);
-                            self.Informe.INF_ANTECEDENTES = cab.INF_ANTECEDENTES;
-
                             self.Informe.TITULAR_SUPERVISADO = cab.TITULAR_SUPERVISADO;
                             self.Informe.DOCUMENTO_TITULAR = cab.DOCUMENTO_TITULAR;
                             self.Informe.REPRESENTANTE_LEGAL = cab.REPRESENTANTE_LEGAL || cab.TITULAR_SUPERVISADO;
@@ -784,21 +992,6 @@ $(function () {
                             if (cab.UBIGEO_THABILITANTE) {
                                 [self.Informe.UBIGEO_DEPARTAMENTO, self.Informe.UBIGEO_PROVINCIA, self.Informe.UBIGEO_DISTRITO] = cab.UBIGEO_THABILITANTE.split('-');
                             }
-                        }
-
-                        // Si no está guardado aun el informe, cargamos los datos por defecto
-                        if (!res.informe) {
-                            const data = JSON.parse(JSON.stringify(self.Informe));
-                            data.Inf_Supervision = cab || {};
-
-                            self.Informe.VISTOS = _informe.tmpl.Vistos(data);
-                            self.Informe.ANTECEDENTES = data.INF_ANTECEDENTES || _informe.tmpl.Antecedentes(data);
-                            self.Informe.COMPETENCIA = _informe.tmpl.Competencia(data);
-                            self.Informe.IMPUTACION = _informe.tmpl.Imputacion(data);
-                            self.Informe.COMUNICACION_EXTERNA = _informe.tmpl.Comunicacion_Externa(data);
-                            self.Informe.PARRAFOS_CLICHE = _informe.tmpl.Cliche(data);
-                            self.Informe.PIE_PAGINA = _informe.tmpl.Pie_Pagina(data);
-                            self.Informe.RESOLUCION = _informe.tmpl.Resolucion(data);
                         }
 
                         resolve(res);
@@ -813,7 +1006,7 @@ $(function () {
 
                 const promise = new Promise((resolve, reject) => {
                     if (!datos.TRAMITE_ID || !datos.COD_THABILITANTE || !datos.COD_RES_SUB) {
-                        reject("Faltan datos para extraer información de trámite");
+                        resolve({ success: false, message: "Faltan datos para extraer información de trámite" });
                         return;
                     }
 
@@ -871,46 +1064,6 @@ $(function () {
                     }
                 });
             },
-            GenerarResolucion: function () {
-                const self = this;
-
-                const fnTable = function (rows) {
-                    const registros = [];
-
-                    rows.each(function (index, tr) {
-                        if (index > 0) {
-                            const cols = $(tr).find('td');
-                            const array = $(cols).map(function (k, td) { return $(td).html() }).toArray();
-                            registros.push(array);
-                        }
-                    });
-
-                    return registros;
-                }
-
-                const data = JSON.parse(JSON.stringify({
-                    NRO_REFERENCIA: self.Informe.NRO_REFERENCIA,
-                    Inf_Supervision: self.Inf_Supervision[0]
-                }));
-
-                //COMUNICACION_EXTERNA
-                const rows_com_ext = $(self.Informe.COMUNICACION_EXTERNA).find('table tr');
-                data.COMPANIES = fnTable(rows_com_ext);
-
-                //TIPO DE INFRACTORES
-                const rows_infractores = $(self.Informe.IMPUTACION).find('table tr');
-                data.TIPO_INFRACTORES = fnTable(rows_infractores).map(function (col) { return col[2] }).join(', ');
-
-                //Numeración de los artículos
-                let index = 0;
-                let html = _informe.tmpl.Resolucion(data);
-                html = html.replace(/<strong>Artículo.<\/strong>/gi, function (m) {
-                    index++;
-                    return `<strong>Artículo ${index}.</strong>`;
-                });
-
-                self.Informe.RESOLUCION = html;
-            },
             ConsultaRUC: function () {
                 let self = this;
                 let RUC = self.Informe.RUC_TITULAR;
@@ -932,38 +1085,85 @@ $(function () {
                     }
                 });
             },
-            BuscarPersona: function (item) {
-                let self = this;
+            ListarPOAS: function () {
+                console.log('Listando POAs');
+            },
+            AbrirModalPersona: function () {
+                return new Promise((resolve, reject) => {
+                    var option = {
+                        url: `${urlLocalSigo}General/Controles/_BuscarPersonaGeneral`,
+                        type: 'GET',
+                        datos: { asBusGrupo: "PERSONA", asCodPTipo: "TODOS", asTipoPersona: "N" },
+                        divId: "mdlBuscarPersona"
+                    };
+                    utilSigo.fnOpenModal(option, function () {
+                        resolve();
 
-                var option = {
-                    url: `${urlLocalSigo}General/Controles/_BuscarPersonaGeneral`,
-                    type: 'GET',
-                    datos: { asBusGrupo: "PERSONA", asCodPTipo: "TODOS", asTipoPersona: "N" },
-                    divId: "mdlBuscarPersona"
-                };
-                utilSigo.fnOpenModal(option, function () {
+                        _bPerGen.fnInit();
+                    });
+                })
+
+            },
+            BuscarPersona: function (item) {
+                const self = this;
+
+                self.AbrirModalPersona().then(data => {
                     _bPerGen.fnAsignarDatos = function (obj) {
                         if (obj) {
-                            var data = _bPerGen.dtBuscarPerona.row($(obj).parents('tr')).data();
-                            console.log(data);
-
+                            const data = _bPerGen.dtBuscarPerona.row($(obj).parents('tr')).data();
                             item.codPersona = data.COD_PERSONA;
                             item.apellidosNombres = data.PERSONA;
                             item.estado = 1;
 
-                            //if (self.Informe.COD_INFORME_DIGITAL) {
-                            //	item.estado = 2; //MODIFICAR
-                            //}
-
+                            self.Informe.FLG_ACTUALIZAR = true;
                             utilSigo.fnCloseModal("mdlBuscarPersona");
                         }
                     }
-                    _bPerGen.fnInit();
                 });
             },
-            Abrir_Notificar: function (item, index) {
+            Abrir_Notificar: async function (item) {
+                const self = this;
                 modal_notificar.form.Mensaje = 'Por favor revisar el informe para la continuidad del proceso.';
-                modal_notificar.Abrir(item, index);
+
+                let users = [];
+
+                if (item) users = [item.codPersona];
+                else users = this.Informe.FIRMAS.map(user => user.codPersona);
+
+                const res = await modal_notificar.ObtenerCorreos(users);
+
+                //Actualizar los participantes despues de notificar
+                modal_notificar.callback = function () {
+                    const personas = self.Informe.FIRMAS
+                        .filter(item => res.find(x => x.codPersona == item.codPersona));
+
+                    const participantes = personas.map(item => ({
+                        ...item,
+                        codInformeDigital: self.Informe.COD_INFORME_DIGITAL,
+                        estado: item.estado > 2 ? item.estado : 2
+                    }));
+
+                    if (!participantes.length) {
+                        return;
+                    }
+
+                    let params = {
+                        type: 'post',
+                        url: `${urlLocalSigo}Fiscalizacion/ManPAU/RSDFirmaActualizar`,
+                        datos: JSON.stringify({ participantes })
+                    };
+
+                    utilSigo.fnAjax(params, function () {
+                        self.Informe.FIRMAS.forEach(x => {
+                            const data = participantes.find(item => item.item == x.item);
+                            if (data) {
+                                x.estado = data.estado;
+                            }
+                        });
+                    });
+                }
+
+                modal_notificar.Abrir(res);
             },
             Notificar: function (item, mensaje) {
                 let notificacion = {
@@ -1064,68 +1264,6 @@ $(function () {
         }
     });
 
-    modal_analisis = new Vue({
-        el: '#modal-analisis',
-        data: {
-            predios: [
-                { title: 'Respecto de la presentación del Informe de Ejecucion del plan de manejo, dentro del plazo establecido', select: false, templateId: 'predios-1' },
-                { title: 'Con relación a la obligación de establecer y mantener los linderos y vértices', select: false, templateId: 'predios-2' },
-                { title: 'Con relación a la obligación sobre declarar los volúmenes de madera movilizados.', select: false, templateId: 'predios-3' },
-                { title: 'Con relacion a la obligación de tener y mantener el libro de operaciones actualizado.', select: false, templateId: 'predios-4' },
-                { title: 'Con relacion a la implementación del plan de manejo referido al aprovechamiento no autorizado del recurso forestal.', select: false, templateId: 'predios-5' },
-                { title: 'Con relación al incumplimiento de la implementación del plan de manejo referido al volumen movilizado.', select: false, templateId: 'predios-6' },
-                { title: 'Con relación al incumplimiento de la implementación del plan de manejo referido al retiro de cobertura forestal (Desbosque).', select: false, templateId: 'predios-7' },
-                { title: 'Con relación al incumplimiento de la implementación del plan de manejo referido al retiro de cobertura forestal (Cambio de uso).', select: false, templateId: 'predios-8' },
-            ],
-            fauna: [
-                { title: 'Respecto de la presentacion del Informe de Ejecucion del plan de manejo, dentro del plazo establecido.', select: false, templateId: 'fauna-1' },
-                { title: 'Con relación a la omisión de informar el egreso de especímenes:', select: false, templateId: 'fauna-2' },
-                { title: 'Con relación a la posesión injustificada de especímenes:', select: false, templateId: 'fauna-3' },
-            ],
-            ccnn: [
-                { title: 'Respecto de la presentacion del Informe de Ejecucion del plan de manejo, dentro del plazo establecido.', select: false, templateId: 'ccnn-1' },
-                { title: 'Con relación a la obligación de establecer y mantener los linderos y vértices.', select: false, templateId: 'ccnn-2' },
-                { title: 'Con relación a la obligación sobre declarar los volúmenes de madera movilizados.', select: false, templateId: 'ccnn-3' },
-                { title: 'Con relacion a la obligación de tener y mantener el libro de operaciones actualizado.', select: false, templateId: 'ccnn-4' },
-                { title: 'Con relacion a la implementación del plan de manejo referido al aprovechamiento no autorizado del recurso forestal.', select: false, templateId: 'ccnn-5' },
-                { title: 'Con relación al incumplimiento de la implementación del plan de manejo referido al volumen movilizado.', select: false, templateId: 'ccnn-6' },
-                { title: 'Con relación al incumplimiento de la implementación del plan de manejo referido al retiro de cobertura forestal.', select: false, templateId: 'ccnn-7' },
-                { title: 'Con relación al incumplimiento de la implementación del plan de manejo referido al retiro de cobertura forestal.', select: false, templateId: 'ccnn-8' },
-            ],
-            concesiones: [
-                { title: 'Respecto de la presentacion del Informe de Ejecucion del plan de manejo, dentro del plazo establecido.', select: false, templateId: 'concesiones-1' },
-                { title: 'Con relación a la obligación de establecer y mantener los linderos y vértices', select: false, templateId: 'concesiones-2' },
-                { title: 'Con relación a la obligación sobre declarar los volúmenes de madera movilizados.', select: false, templateId: 'concesiones-3' },
-                { title: 'Con relacion a la obligación de tener y mantener el libro de operaciones actualizado.', select: false, templateId: 'concesiones-4' },
-                { title: 'Con relacion a la implementación del plan de manejo referido al aprovechamiento no autorizado del recurso forestal.', select: false, templateId: 'concesiones-5' },
-                { title: 'Con relación al incumplimiento de la implementación del plan de manejo referido al volumen movilizado.', select: false, templateId: 'concesiones-6' },
-                { title: 'Con relación al incumplimiento de la implementación del plan de manejo referido al retiro de cobertura forestal.', select: false, templateId: 'concesiones-7' },
-                { title: 'Con relación al incumplimiento de la implementación del plan de manejo referido al retiro de cobertura forestal.', select: false, templateId: 'concesiones-8' },
-                { title: 'Respecto a la causal de caducidad, por la falta de pago de derecho de aprovechamiento forestal', select: false, templateId: 'concesiones-9' },
-                { title: 'Respecto a la garantía de fiel cumplimiento', select: false, templateId: 'concesiones-10' },
-            ]
-        },
-        methods: {
-            render: function () {
-                let html = '';
-                let informe = JSON.parse(JSON.stringify(app.Informe));
-                informe.TABLAS_INFORME = _informe.DATA_INFORMES;
-
-                let fnParagraphs = function (arr) {
-                    return arr.filter(function (x) { return x.select }).map(function (x) {
-                        return _informe.tmpl.get('#tmpl-' + x.templateId, informe);
-                    }).join('');
-                }
-
-                html += fnParagraphs(this.predios);
-                html += fnParagraphs(this.fauna);
-                html += fnParagraphs(this.ccnn);
-                html += fnParagraphs(this.concesiones);
-                return html;
-            }
-        }
-    });
-
     modal_sitd = new Vue({
         el: '#modal-sitd',
         data: {
@@ -1169,6 +1307,7 @@ $(function () {
             Agregar: function () {
                 const user = { ...this.form };
                 app.Informe.FIRMAS.push(user);
+                app.Informe.FLG_ACTUALIZAR = true;
 
                 utilSigo.toastSuccess('Agregado', 'Se ha agregado el integrante a la lista');
                 $('#modal-integrante').modal('hide');
@@ -1176,24 +1315,138 @@ $(function () {
         }
     });
 
+    modal_planes_manejo = new Vue({
+        el: '#modal-planes-manejo',
+        data: {
+            Planes_Manejo: []
+        },
+        methods: {
+            Abrir: async function () {
+                const self = this;
+                const res = await _informe.ListarPlanesManejo('L', app.Informe.COD_INFORME);
+                self.Planes_Manejo = res;
+                $('#modal-planes-manejo').modal('show');
+            },
+            Seleccionar: function (item) {
+                app.Informe.NUM_POA = item.NUM_POA;
+                app.Informe.NOMBRE_POA = item.NOMBRE_POA;
+                $('#modal-planes-manejo').modal('hide');
+            }
+        }
+    })
+
     modal_notificar = new Vue({
         el: '#modal-notificar',
         data: {
             form: {
-                Persona: null,
+                Destinatarios: [],
+                Seleccionados: [],
+                CC: '',
                 Mensaje: null
             }
         },
         methods: {
-            Abrir: function (item, index) {
-                this.form.Persona = item;
+            Abrir: function (items) {
+                this.form.Destinatarios = items;
+                this.form.Seleccionados = items;
                 $('#modal-notificar').modal('show');
             },
-            Notificar: function () {
-                //const data = { ...this.form };
-                app.Notificar(this.form.Persona, _informe.render(this.form.Mensaje));
-
+            Cerrar: function () {
+                delete this.callback;
                 $('#modal-notificar').modal('hide');
+            },
+            ObtenerCorreos: function (codPersonas) {
+                return new Promise((resolve, reject) => {
+                    let params = {
+                        type: 'post',
+                        url: `${urlLocalSigo}General/ManPersonas/ObtenerCorreos`,
+                        datos: JSON.stringify(codPersonas)
+                    };
+
+                    utilSigo.fnAjax(params, function (res) {
+                        const correos = res
+                            .filter(item => (item?.CORREO || '').indexOf('@') != -1)
+                            .map(item => ({
+                                codPersona: item.COD_PERSONA,
+                                persona: `${item.NOMBRES} ${item.APE_PATERNO} ${item.APE_MATERNO}`,
+                                email: item.CORREO
+                            }));
+
+                        resolve(correos);
+                    });
+                });
+            },
+            Agregar: function () {
+                const self = this;
+
+                app.AbrirModalPersona().then(() => {
+                    _bPerGen.fnAsignarDatos = function (obj) {
+                        if (obj) {
+                            const data = _bPerGen.dtBuscarPerona.row($(obj).parents('tr')).data();
+
+                            const existe = self.form.Destinatarios.find(item => item.codPersona == data.COD_PERSONA);
+                            if (existe) {
+                                utilSigo.toastWarning('', `La persona ${data.PERSONA} ya existe en la lista`);
+                                return;
+                            }
+
+                            self.ObtenerCorreos([data.COD_PERSONA]).then(res => {
+                                if (res.length) {
+                                    self.form.Destinatarios.push(res[0]);
+                                    utilSigo.toastSuccess('', `Se agregó a ${data.PERSONA} a la lista`);
+                                }
+                                else utilSigo.toastWarning('', `No existe un correo asociado a ${data.PERSONA}`);
+                            });
+                        }
+                    }
+                });
+            },
+            Agregar_CC: function () {
+                const self = this;
+
+                app.AbrirModalPersona().then(() => {
+                    _bPerGen.fnAsignarDatos = function (obj) {
+                        if (obj) {
+                            const data = _bPerGen.dtBuscarPerona.row($(obj).parents('tr')).data();
+
+                            self.ObtenerCorreos([data.COD_PERSONA]).then(res => {
+                                if (res.length) {
+                                    self.form.CC += `${res[0].email};`;
+                                    utilSigo.toastSuccess('', `Se agregó a ${data.PERSONA} a la lista`);
+                                }
+                                else utilSigo.toastWarning('', `No existe un correo asociado a ${data.PERSONA}`);
+                            });
+                        }
+                    }
+                });
+            },
+            Notificar: function () {
+                const self = this;
+                const notificacion = {
+                    DESTINATARIOS: self.form.Seleccionados.map(item => item.email).join(','),
+                    CC_DESTINATARIOS: self.form.CC,
+                    COD_INFORME: app.Informe.NUM_INFORME_SITD,
+                    MENSAJE_ENVIO_ALERTA: _informe.render(self.form.Mensaje),
+                    URL_LOCAL: window.location.href
+                };
+
+                let params = {
+                    type: 'post',
+                    url: `${urlLocalSigo}Fiscalizacion/ManPAU/Notificar`,
+                    datos: JSON.stringify({ notificacion })
+                };
+
+                utilSigo.fnAjax(params, function (res) {
+                    if (res) {
+                        //Para ejecutar cualquier acción despues de enviar un correo
+                        if (typeof self.callback === 'function') self.callback(res);
+                        utilSigo.toastSuccess('Enviado', res);
+                    } else {
+                        utilSigo.toastWarning('Atención', 'No se ha encontrado ningún correo asociado al usuario');
+                    }
+
+                    self.Cerrar();
+                });
             }
         }
     });

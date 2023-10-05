@@ -67,11 +67,6 @@ namespace CapaLogica.Documento
             return oDat_Informe_Legal_Digital.ObtenerExpedienteSITD(NRO_DOCUMENTO);
         }
 
-        public VM_PERSONA_DET_CORREO PersonaCorreo(string COD_PERSONA)
-        {
-            return oDat_Informe_Legal_Digital.PersonaCorreo(COD_PERSONA);
-        }
-
         public void ModificarNumeroInforme(string codInforme, string numeroInforme, DateTime fechaOperacion)
         {
             oDat_Informe_Legal_Digital.ModificarNumeroInforme(codInforme, numeroInforme, fechaOperacion);

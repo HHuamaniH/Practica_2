@@ -23,7 +23,6 @@ namespace CapaEntidad.ViewModel
         public string RUC_TITULAR { get; set; }
         public string NUM_INFORME { get; set; }
         public DateTime? INF_FECHA { get; set; }
-        public string INF_ANTECEDENTES { get; set; }
         public string ASUNTO { get; set; }
         public string COD_THABILITANTE { get; set; }
         public string NUM_THABILITANTE { get; set; }

@@ -337,6 +337,23 @@ _informe.RegResumenInfSupervision = function (COD_RESOLUCION) {
     });
 }
 
+_informe.ExtraerAntecedentes = function (COD_RESOLUCION) {
+    const COD_THABILITANTE = app.Informe.COD_THABILITANTE;
+
+    const params = {
+        type: 'get',
+        url: `${urlLocalSigo}Fiscalizacion/InformeLegalDigital/ObtenerAntecedentes`,
+        data: { COD_RESOLUCION, COD_THABILITANTE },
+        global: false
+    }
+
+    const promise = new Promise((resolve, reject) => {
+        $.ajax(params).done(res => resolve(res)).fail(() => resolve([]));
+    });
+
+    return promise;
+};
+
 _informe.PDFToImgCalculoMulta = function () {
     const url = _informe.UrlDescargarArchivoSancion();
 
@@ -968,7 +985,7 @@ $(function () {
             Modalidades: []
         },
         methods: {
-            init: function () {
+            init: async function () {
                 const self = this;
 
                 const datos = ManInfLegal_AddEdit.frm.serializeObject();
@@ -993,15 +1010,15 @@ $(function () {
                 this.MateriaOnChange();
 
                 if (self.Informe.COD_INFORME) {
-                    self.Informacion(values).then(function (res_general) {
-                        //console.log(res_general)
-                        self.TramiteByID().then(function (res_tramite) {
-                            if (res_tramite.success) {
-                                self.Tramite = res_tramite.data;
-                                //app.Informe.DESTINATARIO = res_tramite.data.trabajador;
-                            }
-                        }).catch(() => { });
-                    });
+                    const res_general = await self.Informacion(values);
+
+                    //console.log(res_general)
+                    const res_tramite = await self.TramiteByID();
+
+                    if (res_tramite.success) {
+                        self.Tramite = res_tramite.data;
+                        //app.Informe.DESTINATARIO = res_tramite.data.trabajador;
+                    }
                 }
             },
             MateriaOnChange: function () {
@@ -1110,26 +1127,7 @@ $(function () {
                             reject();
                         });
                 })
-            },
-            ExtraerAntecedentes: function (COD_RESOLUCION) {
-                const self = this;
-                const COD_THABILITANTE = self.Informe.COD_THABILITANTE;
-
-                const params = {
-                    type: 'get',
-                    url: `${urlLocalSigo}Fiscalizacion/InformeLegalDigital/ObtenerAntecedentes`,
-                    data: { COD_RESOLUCION, COD_THABILITANTE },
-                    global: false
-                }
-
-                const promise = new Promise((resolve, reject) => {
-                    $.ajax(params).done(function (res) {
-                        resolve(res);
-                    });
-                });
-
-                return promise;
-            },
+            },            
             TramiteByID: function (datos) {
                 const self = this;
                 datos = datos || JSON.parse(JSON.stringify(self.Informe));
@@ -1260,7 +1258,7 @@ $(function () {
                 modal_referencias.Abrir();
             },
 
-            Abrir_Notificar: function (item) {
+            Abrir_Notificar: async function (item) {
                 const self = this;
                 modal_notificar.form.Mensaje = 'Por favor revisar el informe para la continuidad del proceso.';
 
@@ -1269,37 +1267,40 @@ $(function () {
                 if (item) users = [item.codPersona];
                 else users = this.Informe.PARTICIPANTES.map(user => user.codPersona);
 
-                modal_notificar.ObtenerCorreos(users).then(res => {
+                const res = await modal_notificar.ObtenerCorreos(users);
 
-                    //Actualizar los participantes despues de notificar
-                    modal_notificar.callback = function () {
-                        const personas = self.Informe.PARTICIPANTES
-                            .filter(item => res.find(x => x.codPersona == item.codPersona));
+                //Actualizar los participantes despues de notificar
+                modal_notificar.callback = function () {
+                    const personas = self.Informe.PARTICIPANTES
+                        .filter(item => res.find(x => x.codPersona == item.codPersona));
 
-                        const participantes = personas.map(item => ({
-                            ...item,
-                            codInformeDigital: self.Informe.COD_INFORME_DIGITAL,
-                            estado: item.estado > 2 ? item.estado : 2
-                        }));
+                    const participantes = personas.map(item => ({
+                        ...item,
+                        codInformeDigital: self.Informe.COD_INFORME_DIGITAL,
+                        estado: item.estado > 2 ? item.estado : 2
+                    }));
 
-                        let params = {
-                            type: 'post',
-                            url: `${urlLocalSigo}Fiscalizacion/InformeLegalDigital/ParticipanteActualizar`,
-                            datos: JSON.stringify({ participantes })
-                        };
-
-                        utilSigo.fnAjax(params, function (res) {
-                            self.Informe.PARTICIPANTES.forEach(x => {
-                                const data = participantes.find(item => item.item == x.item);
-                                if (data) {
-                                    x.estado = data.estado;
-                                }
-                            });
-                        });
+                    if (!participantes.length) {
+                        return;
                     }
 
-                    modal_notificar.Abrir(res);
-                });
+                    let params = {
+                        type: 'post',
+                        url: `${urlLocalSigo}Fiscalizacion/InformeLegalDigital/ParticipanteActualizar`,
+                        datos: JSON.stringify({ participantes })
+                    };
+
+                    utilSigo.fnAjax(params, function () {
+                        self.Informe.PARTICIPANTES.forEach(x => {
+                            const data = participantes.find(item => item.item == x.item);
+                            if (data) {
+                                x.estado = data.estado;
+                            }
+                        });
+                    });
+                }
+
+                modal_notificar.Abrir(res);
             },
             Revisar: function (item, index) {
                 //let self = this;
@@ -1545,7 +1546,7 @@ $(function () {
                         app.Informe.INFRACCIONES = infracciones;
 
                         //Antecedentes
-                        app.ExtraerAntecedentes(item.COD_RESODIREC, app.Informe.COD_TITULAR).then(res => {
+                        _informe.ExtraerAntecedentes(item.COD_RESODIREC, app.Informe.COD_TITULAR).then(res => {
                             res.forEach(a => {
                                 a.codResolucion = item.COD_RESODIREC;
                                 const n = a.numero?.match(regExpOSINFOR) || [];
@@ -1803,7 +1804,7 @@ $(function () {
                 return new Promise((resolve, reject) => {
                     let params = {
                         type: 'post',
-                        url: `${urlLocalSigo}Fiscalizacion/InformeLegalDigital/ObtenerCorreos`,
+                        url: `${urlLocalSigo}General/ManPersonas/ObtenerCorreos`,
                         datos: JSON.stringify(codPersonas)
                     };
 

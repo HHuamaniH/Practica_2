@@ -2,73 +2,7 @@
     ViewBag.Title = "Informe Digital";
 }
 
-<style type="text/css">
-    .card:not([class*="text"]) p { color: #000; line-height: inherit; }
-    #frmInforme { position: relative; }
-    #frmInforme.loading { height: 200px; }
-    #frmInforme.loading > * { display: none !important; }
-    #frmInforme.loading:before { content: "Un momento por favor..."; height: 100%; display: flex; align-items: center; justify-content: center; }
-    #informe_header { position: sticky; top: 0; left: 0; right: 0; z-index: 99; }
-
-    .caret-off::after { content: none; }
-    .ck-content hr { height: 1px; background: #000; }
-    .ck-content .table table td, .ck-content .table table th { vertical-align: middle; }
-    .ckeditor-inf .editor-container { padding: 3rem 0; background: #f0f0f0; max-height: 500px; overflow-y: auto; }
-    .ckeditor-inf .editor { font-size: 10.4pt; background-color: #fff; max-width: calc(21cm + 2px); /*min-height: calc(29.7cm + 2px);*/ margin: 0 auto; padding: 2cm 3cm; border: 1px #d3d3d3 solid !important; background-color: #fff; box-shadow: 0 0 5px rgb(0 0 0 / 10%) !important; line-height: 1.1; }
-    .ckeditor-inf.landscape .editor { max-width: calc(29.7cm + 2px); /*min-height: calc(21cm + 2px);*/ }
-    .ckeditor-inf .editor ul li, .ckeditor-inf .editor ol li { margin-bottom: 12px; }
-    .ckeditor-inf .editor table { color: #000; }
-
-    .modal .ckeditor-inf .editor-container { padding: 0; max-height: none; }
-    .modal .ckeditor-inf .editor { padding: 0 1em; }
-
-    .modal-xl { max-width: 95%; }
-    .editor-table-sm .editor table, .ckeditor-inf .editor .table-small { font-size: 7pt; }
-    .editor-antecedentes .editor > figure:nth-last-child(-n+5) table { font-size: 6pt !important; }
-    .btn-link { box-shadow: none !important; }
-    .chip { font-size: 1em; cursor: pointer; }
-
-    #modal-cargar-documento .modal-body { height: 250px; cursor: pointer; position: relative; display: flex; align-items: center; justify-content: center; }
-
-    .prevent .dropdown-menu { margin-top: 10px; box-shadow: 0 0 15px rgb(0 0 0 / 20%); }
-    .prevent .dropdown-menu .fa-times { color: #f43030; }
-    .prevent .dropdown-menu .fa-check { color: #19c545; }
-    .person-name { color: #888; font-size: 0.7em; }
-
-    .multisteps-form__progress { display: grid; grid-template-columns: repeat(auto-fit, minmax(0, 1fr)); }
-    .multisteps-form__progress-btn { position: relative; padding-top: 20px; color: rgba(108, 117, 125, 0.4); border: none; background-color: transparent; outline: none !important; cursor: pointer; }
-    .multisteps-form__progress-btn:before { position: absolute; top: 0; left: 50%; display: block; width: 13px; height: 13px; content: ''; transform: translateX(-50%); border: 2px solid currentColor; border-radius: 50%; background-color: #fff; box-sizing: border-box; z-index: 3; }
-    .multisteps-form__progress-btn:after { position: absolute; top: 5px; left: calc(-50% - 13px / 2); display: block; width: 100%; height: 2px; content: ''; background-color: currentColor; z-index: 1; }
-    .multisteps-form__progress-btn:first-child:after { display: none; }
-    .multisteps-form__progress-btn.js-active { color: #007bff; }
-    .multisteps-form__progress-btn.js-active:before { transform: translateX(-50%) scale(1.2); background-color: currentColor; }
-
-    .card-view { position: relative; animation: slideUpDown ease 0.5s; }
-    .card-view .options { position: absolute; top: 10px; right: 10px; opacity: 0.2; }
-    .card-view:hover .options { opacity: 1; }
-    .card-view .options .fa:hover { transform: scale(1.2); }
-    .toast-message ul { margin-left: 15px; padding: 0; }
-
-    .file-attach { padding: 5px; border: 1px solid #cecece; margin: 0 0 6px 0; position: relative; }
-    .file-attach-icon { float: left; width: 40px; height: 36px; }
-    .file-attach-icon img { height: 100%; max-width: 40px; }
-    .file-attach-info { padding: 0 20px 0 40px; }
-    .file-attach-info .file-attach-name { display: block; white-space: nowrap; text-overflow: ellipsis; overflow: hidden; }
-    .file-attach-info .file-attach-details { color: #909090; }
-    .file-attach-info .file-attach-remove { position: absolute; color: #696969; font-weight: 300; font-size: 25px; line-height: 15px; top: 5px; right: 5px; cursor: pointer; user-select: none; -moz-user-select: none; -ms-user-select: none; }
-
-    @@keyframes zoomIn {
-        0% { transform: scale(2); }
-        80% { transform: scale(0.8); }
-        100% { transform: scale(1); }
-    }
-
-    @@keyframes slideUpDown {
-        from { transform: translateY(-2em); }
-        to { transform: translateY(0); }
-    }
-</style>
-
+<link href="~/Areas/Fiscalizacion/css/ResSubDir/index.css" rel="stylesheet" />
 <script src="~/Scripts/vue.min.js"></script>
 <script src="~/Scripts/ckeditor5/ckeditor.js"></script>
 
@@ -103,9 +37,9 @@
         <div>Generar Informe</div>
         <div class="options">
             <button type="button" class="btn btn-link btn-sm p-0 ml-3" onclick="_informe.Exportar()" v-if="Informe.COD_INFORME_DIGITAL && Informe.ESTADO < States.FINALIZADO">
-                <i class="fa fa-file-word-o fa-fw"></i>Exportar informe
+                <i class="fa fa-file-word-o fa-fw"></i>Crear informe
             </button>
-            <button type="button" class="btn btn-link btn-sm p-0 ml-3" onclick="_informe.Registro()" v-if="Informe.COD_RES_SUB && Informe.ESTADO < States.COMPLETADO">
+            <button type="button" class="btn btn-link btn-sm p-0 ml-3" onclick="_informe.Registro()" v-if="Informe.COD_RES_SUB && Informe.ESTADO < States.COMPLETADO || Informe.FLG_ACTUALIZAR">
                 <i class="fa fa-save fa-fw"></i>Guardar
             </button>
             <div class="btn-group" v-if="Informe.COD_INFORME_DIGITAL">
@@ -207,21 +141,30 @@
                         <h4 class="mt-2">
                             {{Informe.NUM_INFORME_SITD || 'N/A'}} <i class="fa fa-pencil-square fa-lg ml-2 cursor-pointer text-success" v-if="Informe.COD_INFORME_DIGITAL" onclick="_informe.SITD_OPEN()"></i>
                         </h4>
+                        <small class="text-muted" v-if="app.Tramite?.password"><strong>Clave STD:</strong> {{app.Tramite?.password}}</small>
                     </div>
                 </div>
             </div>
             <div class="form-row">
-                <div class="col-sm-6">
+                <div class="col-sm-2">
                     <div class="form-group form-group-sm">
                         <label class="col-form-label text-small">Materia</label>
-                        <select class="form-control form-control-sm" v-model="Informe.COD_MATERIA">
+                        <select class="form-control form-control-sm" v-on:change="MateriaOnChange()" v-model="Informe.COD_MATERIA">
                             <option v-for="(item, index) in Materias" :value="item.COD_MATERIA">{{item.MATERIA}}</option>
                         </select>
                     </div>
                 </div>
-                <div class="col-sm-6">
+                <div class="col-sm-2">
                     <div class="form-group form-group-sm">
-                        <label class="col-form-label text-small">Referencia N° de informe de supervisión</label>
+                        <label class="col-form-label text-small">Modalidad</label>
+                        <select class="form-control form-control-sm" v-model="Informe.COD_MODALIDAD" v-on:change="_informe.EXTRAER_INFRACCIONES_POR_MODALIDAD()">
+                            <option v-for="(item, index) in Modalidades" :value="item.COD_MODALIDAD">{{item.MODALIDAD}}</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-sm-auto">
+                    <div class="form-group form-group-sm">
+                        <label class="col-form-label text-small">N° de informe de supervisión</label>
                         <div>
                             <a class="chip badge badge-success rounded mr-2 mt-1" v-for="(item, index) in Inf_Supervision"
                                target="_blank" v-bind:href="_informe.ObtenerRutaInformeSup(item)">
@@ -233,6 +176,19 @@
                                 </span>
                             </template>
                             <i class="fa fa-plus-circle fa-lg ml-3 cursor-pointer" v-if="Informe.ESTADO == States.INGRESADO" onclick="_informe.AsociarInforme()"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-auto" v-if="Inf_Supervision?.length">
+                    <div class="form-group form-group-sm">
+                        <label class="col-form-label text-small">Plan de Manejo</label>
+                        <div class="input-group input-group-sm">
+                            <input type="text" class="form-control" v-model="Informe.NOMBRE_POA" disabled />
+                            <div class="input-group-append">
+                                <button type="button" class="btn btn-secondary" v-on:click="modal_planes_manejo.Abrir()">
+                                    <i class="fa fa-search"></i>
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -355,22 +311,25 @@
         <fieldset class="fs-border">
             <legend>
                 Control de Vistos
-                <a class="ml-2 btn btn-link btn-sm" v-if="Informe.ESTADO == States.INGRESADO" onclick="_informe.Agregar_Integrante()">
+                <a class="ml-2 btn btn-link btn-sm" v-if="Informe.ESTADO < States.FINALIZADO" onclick="_informe.Agregar_Integrante()">
                     <i class="fa fa-plus-circle mr-1"></i>Añadir un integrante
+                </a>
+                <a class="ml-2 btn btn-link btn-sm" v-if="Informe.ESTADO != States.FINALIZADO" v-on:click="Abrir_Notificar()">
+                    <i class="fa fa-envelope-o mr-1"></i>Notificar a todos
                 </a>
             </legend>
             <div class="card-view form-row align-items-end mb-3 bg-light rounded p-2 pb-3" v-for="(item, index) in Informe.FIRMAS">
                 <div class="col-sm-4">
-                    <div class="col-form-label text-small mt-0">
-                        <div class="custom-control custom-checkbox custom-control-inline">
+                    <div class="text-small mt-0">
+                        <div class="custom-control custom-checkbox">
                             <input type="checkbox" :id="'rb_' + index + '_' + index" :name="'rb' + index" v-model="item.flgAplica" class="custom-control-input"
-                                   v-bind:disabled="Informe.ESTADO > States.INGRESADO">
-                            <label class="custom-control-label pt-1" :for="'rb_' + index + '_' + index">{{item.funcion}}</label>
+                                   v-bind:disabled="Informe.ESTADO >= States.FINALIZADO">
+                            <label class="custom-control-label" :for="'rb_' + index + '_' + index">{{item.funcion}}</label>
                         </div>
                     </div>
                     <div class="input-group input-group-sm">
                         <input type="text" class="form-control form-control-sm" v-model="item.apellidosNombres" disabled />
-                        <div class="input-group-append" v-if="Informe.ESTADO == States.INGRESADO">
+                        <div class="input-group-append" v-if="Informe.ESTADO < States.FINALIZADO">
                             <button type="button" class="btn btn-default" v-on:click="BuscarPersona(item)">
                                 <i class="fa fa-search"></i>
                             </button>
@@ -407,10 +366,10 @@
                 </div>
             </div>
         </fieldset>
-        <div class="form-group">
+        @*<div class="form-group">
             <h5>Vistos</h5>
             <editor v-model="Informe.VISTOS" :disabled="Informe.ESTADO > States.EN_REVISION"></editor>
-        </div>
+        </div>*@
         <fieldset class="fs-border" v-if="Informe.RECURSOS.length">
             <legend>Insumos para el Análisis</legend>
             <div class="form-row">
@@ -440,7 +399,88 @@
             </div>
         </fieldset>
 
-        <ul class="nav nav-tabs" id="tab-estructura" role="tablist">
+        <fieldset class="fs-border">
+            <legend>Análisis de los resultados del Informe de Supervisión</legend>
+            <h5>Incumplimiento de obligaciones</h5>
+            <div class="mt-3" v-for="(item, index) in Infracciones">
+                <div class="custom-control custom-checkbox custom-control-inline">
+                    <input type="checkbox" class="custom-control-input" :id="'inf_' + item.codInfraccion" v-model="item.select">
+                    <label class="custom-control-label" :for="'inf_' + item.codInfraccion">{{item.titulo}}</label>
+                </div>
+            </div>
+        </fieldset>
+
+        <fieldset class="fs-border">
+            <legend>Sobre las presuntas causales de caducidad</legend>
+            <div class="mb-3">
+                <h5>Sobre la causal de caducidad por la extracción o movilización de recursos forestales no autorizados</h5>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="rb_caducidad_extraccion" id="rb_caducidad_extraccion_si" v-bind:value="true" v-model="Informe.FLG_CADUCIDAD_EXTRACCION">
+                    <label class="form-check-label" for="rb_caducidad_extraccion_si">Si</label>
+                </div>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="rb_caducidad_extraccion" id="rb_caducidad_extraccion_no" v-bind:value="false" v-model="Informe.FLG_CADUCIDAD_EXTRACCION">
+                    <label class="form-check-label" for="rb_caducidad_extraccion_no">No</label>
+                </div>
+            </div>
+            <div v-if="Informe.FLG_CADUCIDAD_EXTRACCION">
+                <fieldset class="fs-border">
+                    <legend>Seleccionar criterios:</legend>
+                    <div class="mt-3" v-for="(item, index) in data.Causales_Caducidad">
+                        <div class="custom-control custom-checkbox custom-control-inline">
+                            <input type="checkbox" class="custom-control-input" :id="'rb_' + index" v-model="item.select">
+                            <label class="custom-control-label" :for="'rb_' + index">{{item.titulo}}</label>
+                        </div>
+                    </div>
+                </fieldset>
+            </div>
+            <div class="mb-3">
+                <h5>Imputación de cargos</h5>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="rb_imputacion_cargos" id="rb_imputacion_cargos_si" v-bind:value="true" v-model="Informe.FLG_IMPUTACION_CARGOS">
+                    <label class="form-check-label" for="rb_imputacion_cargos_si">Si</label>
+                </div>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="rb_imputacion_cargos" id="rb_imputacion_cargos_no" v-bind:value="false" v-model="Informe.FLG_IMPUTACION_CARGOS">
+                    <label class="form-check-label" for="rb_imputacion_cargos_no">No</label>
+                </div>
+            </div>
+            <div class="mb-3">
+                <h5>Sobre la disposición de medidas cautelares en el marco del PAU</h5>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="rb_medidas_cautelares" id="rb_medidas_cautelares_si" v-bind:value="true" v-model="Informe.FLG_MEDIDAS_CAUTELARES">
+                    <label class="form-check-label" for="rb_medidas_cautelares_si">Si</label>
+                </div>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="rb_medidas_cautelares" id="rb_medidas_cautelares_no" v-bind:value="false" v-model="Informe.FLG_MEDIDAS_CAUTELARES">
+                    <label class="form-check-label" for="rb_medidas_cautelares_no">No</label>
+                </div>
+            </div>
+            <div class="mb-3">
+                <h5>Sobre la comunicación de los actuados a otras entidades</h5>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="rb_comunicacion" id="rb_comunicacion_si" v-bind:value="true" v-model="Informe.FLG_COMUNICACION">
+                    <label class="form-check-label" for="rb_comunicacion_si">Si</label>
+                </div>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="rb_comunicacion" id="rb_comunicacion_no" v-bind:value="false" v-model="Informe.FLG_COMUNICACION">
+                    <label class="form-check-label" for="rb_comunicacion_no">No</label>
+                </div>
+            </div>
+            <div class="mb-3">
+                <h5>Sobre herramientas para subsanar infracciones y ejercer el derecho a la defensa</h5>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="rb_herramientas_subsanar" id="rb_herramientas_subsanar_si" v-bind:value="true" v-model="Informe.FLG_HERRAMIENTAS_SUBSANAR">
+                    <label class="form-check-label" for="rb_herramientas_subsanar_si">Si</label>
+                </div>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="rb_herramientas_subsanar" id="rb_herramientas_subsanar_no" v-bind:value="false" v-model="Informe.FLG_HERRAMIENTAS_SUBSANAR">
+                    <label class="form-check-label" for="rb_herramientas_subsanar_no">No</label>
+                </div>
+            </div>
+        </fieldset>
+
+        @*<ul class="nav nav-tabs" id="tab-estructura" role="tablist">
             <li class="nav-item" role="presentation">
                 <a class="nav-link active" data-toggle="tab" href="#tab-est-1" role="tab">Antecedentes</a>
             </li>
@@ -493,73 +533,12 @@
                 <i class="fa fa-arrow-down mr-2"></i>Registrar información
             </a>
             <editor v-model="Informe.RESOLUCION" class="mt-3" :disabled="Informe.ESTADO > States.EN_REVISION"></editor>
-        </fieldset>
+        </fieldset>*@
     </div>
     <div class="py-5 my-3 text-center" v-else>
         <h4>Para registrar el PAU Digital, primero genere la sección de "Datos Generales"</h4>
         <p>Especifique los documentos que serán tomados como referencia (Informes de supervisión, ...), luego guarde la resolución.</p>
         <a class="btn btn-link" onclick="toBase()">Aceptar</a>
-    </div>
-</div>
-
-<div id="modal-analisis" class="modal fade" tabindex="-1" role="dialog" data-backdrop="static">
-    <div class="modal-dialog modal-lg" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">Incumplimiento de obligaciones</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <div class="row">
-                    <div class="col-3">
-                        <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
-                            <a class="nav-link active" id="v-pills-predios-tab" data-toggle="pill" href="#v-pills-predios" role="tab">Predios</a>
-                            <a class="nav-link" id="v-pills-fauna-tab" data-toggle="pill" href="#v-pills-fauna" role="tab">Fauna</a>
-                            <a class="nav-link" id="v-pills-ccnn-tab" data-toggle="pill" href="#v-pills-ccnn" role="tab">Comunidades Nativas</a>
-                            <a class="nav-link" id="v-pills-concesiones-tab" data-toggle="pill" href="#v-pills-concesiones" role="tab">Concesiones</a>
-                        </div>
-                    </div>
-                    <div class="col-9">
-                        <div class="card h-100 mb-0">
-                            <div class="card-body">
-                                <div class="tab-content">
-                                    <div class="tab-pane fade show active" id="v-pills-predios" role="tabpanel" aria-labelledby="v-pills-predios-tab">
-                                        <div class="custom-control custom-checkbox mb-4" v-for="(item, index) in predios">
-                                            <input type="checkbox" class="custom-control-input" :id="item.templateId" v-model="item.select">
-                                            <label class="custom-control-label" :for="item.templateId">{{item.title}}</label>
-                                        </div>
-                                    </div>
-                                    <div class="tab-pane fade" id="v-pills-fauna" role="tabpanel" aria-labelledby="v-pills-fauna-tab">
-                                        <div class="custom-control custom-checkbox mb-4" v-for="(item, index) in fauna">
-                                            <input type="checkbox" class="custom-control-input" :id="item.templateId" v-model="item.select">
-                                            <label class="custom-control-label" :for="item.templateId">{{item.title}}</label>
-                                        </div>
-                                    </div>
-                                    <div class="tab-pane fade" id="v-pills-ccnn" role="tabpanel" aria-labelledby="v-pills-ccnn-tab">
-                                        <div class="custom-control custom-checkbox mb-4" v-for="(item, index) in ccnn">
-                                            <input type="checkbox" class="custom-control-input" :id="item.templateId" v-model="item.select">
-                                            <label class="custom-control-label" :for="item.templateId">{{item.title}}</label>
-                                        </div>
-                                    </div>
-                                    <div class="tab-pane fade" id="v-pills-concesiones" role="tabpanel" aria-labelledby="v-pills-concesiones-tab">
-                                        <div class="custom-control custom-checkbox mb-4" v-for="(item, index) in concesiones">
-                                            <input type="checkbox" class="custom-control-input" :id="item.templateId" v-model="item.select">
-                                            <label class="custom-control-label" :for="item.templateId">{{item.title}}</label>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-primary" onclick="_informe.Insertar_Analisis()">Insertar párrafos</button>
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-            </div>
-        </div>
     </div>
 </div>
 
@@ -661,20 +640,41 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header text-small" style="cursor:move;">
-                <span>Notificar</span>
+                <span>Notificación</span>
                 <i class="fa fa-close" style="cursor:pointer;" data-dismiss="modal" aria-label="Close"></i>
             </div>
             <div class="modal-body">
-                <label class="col-form-label col-form-label-sm">
-                    Agregue un mensaje para
-                    <a class="btn btn-link btn-sm px-0 font-weight-bold" onclick="_informe.BuscarPersonaNotificar()">
-                        {{form.Persona?.apellidosNombres || '<< Seleccionar >>'}}
-                    </a>
-                </label>
+                <div class="row align-items-start mb-2">
+                    <div class="col-auto">
+                        <span class="col-form-label col-form-label-sm">
+                            Destinatarios
+                            <i class="fa fa-plus-circle fa-lg ml-2 text-success cursor-pointer" v-on:click="Agregar()" title="Agregar destinatario"></i>
+                        </span>
+                    </div>
+                    <div class="col">
+                        <div class="form-check form-check-inline mb-3" v-for="(item, index) in form.Destinatarios">
+                            <input class="form-check-input" type="checkbox" :id="'cb_'+ index" :value="item" v-model="form.Seleccionados" checked>
+                            <label class="form-check-label mt-0 small" :for="'cb_'+ index" v-bind:title="item.email">{{item.persona}}</label>
+                        </div>
+                        <span class="small" v-if="!form.Destinatarios.length">
+                            No hay destinatarios disponibles
+                        </span>
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <div class="input-group input-group-sm">
+                        <input type="text" class="form-control" placeholder="C.C." v-model="form.CC" />
+                        <div class="input-group-append">
+                            <button type="button" class="btn btn-outline-secondary" v-on:click="Agregar_CC()">
+                                <i class="fa fa-search"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
                 <editor v-model="form.Mensaje"></editor>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-primary btn-sm" v-on:click="Notificar" v-bind:disabled="!form.Persona?.codPersona">Notificar</button>
+                <button type="button" class="btn btn-primary btn-sm" v-on:click="Notificar" v-bind:disabled="!form.Seleccionados.length">Notificar</button>
                 <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Cancelar</button>
             </div>
         </div>
@@ -791,8 +791,52 @@
     </div>
 </div>
 
+<div id="modal-planes-manejo" class="modal fade" data-backdrop="static">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header text-small" style="cursor:move;">
+                <span>Planes de manejo</span>
+                <i class="fa fa-close" style="cursor:pointer;" data-dismiss="modal" aria-label="Close"></i>
+            </div>
+            <div class="modal-body">
+                <table class="table table-bordered dataTable">
+                    <thead>
+                        <tr>
+                            <th>N° POA</th>
+                            <th>POA</th>
+                            <th>N° RESOLUCIÓN</th>
+                            <th>INICIO SUPERVISIÓN</th>
+                            <th>FECHA RESOLUCIÓN</th>
+                            <th>INICIO VIGENCIA</th>
+                            <th>FIN VIGENCIA</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr v-for="item in Planes_Manejo">
+                            <td>{{item.NUM_POA}}</td>
+                            <td>{{item.NOMBRE_POA}}</td>
+                            <td>{{item.ARESOLUCION_NUM}}</td>
+                            <td class="text-center">{{item.INICIO_SUPERVISION}}</td>
+                            <td class="text-center">{{item.ARESOLUCION_FECHA || '-'}}</td>
+                            <td class="text-center">{{item.INICIO_VIGENCIA || '-'}}</td>
+                            <td class="text-center">{{item.FIN_VIGENCIA || '-'}}</td>
+                            <td class="text-center">
+                                <i class="fa fa-hand-o-left fa-lg cursor-pointer" v-on:click="Seleccionar(item)"></i>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="modal-footer">                
+                <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Cancelar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <!--Informe-->
-@Html.Partial("~/Areas/Fiscalizacion/Views/ManPAU/templates/_tmplRSDInforme.cshtml")
+@*@Html.Partial("~/Areas/Fiscalizacion/Views/ManPAU/templates/_tmplRSDInforme.cshtml")*@
 
 <!--Firma digital-->
 @Html.Partial("~/Areas/General/Views/FirmaDigital/_FirmaModal.cshtml")
