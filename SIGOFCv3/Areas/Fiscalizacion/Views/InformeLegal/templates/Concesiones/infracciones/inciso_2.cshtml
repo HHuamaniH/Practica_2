@@ -1,32 +1,35 @@
 ﻿<table width="580" cellpadding="4" style="border: 0; font-family: Arial; font-size: 10pt; border-collapse: collapse; line-height: 150%;">
     <thead>
         <tr style="background-color: #bfbfbf;">
-            <th style="text-align: center; border: 1px solid #000;">Obligación Incumplida</th>
             <th style="text-align: center; border: 1px solid #000;">Base legal de la obligación</th>
             <th style="text-align: center; border: 1px solid #000;">Tipo infractor</th>
+            <th style="text-align: center; border: 1px solid #000;">Conducta Imputada</th>
+            <th style="text-align: center; border: 1px solid #000;">Descargo sobre la imputación formulada</th>
+            <th style="text-align: center; border: 1px solid #000;">Información complementaria/información adicional</th>
         </tr>
     </thead>
     <tbody>
         <tr>
             <td style="border: 1px solid #000;">
-                El/la concesionario/a no cumplió con la presentación del (precisar el tipo de informe de ejecución y el periodo), dentro del plazo establecido en el RGF.
+                Dependerá del caso concreto
+            </td>            
+            <td style="border: 1px solid #000;">
+                <div>Numeral 2 del Cuadro de Infracciones y Sanciones en Materia Forestal del Anexo 1 del RISMFFS</div><br />
+                <i>“No entregar o presentar información o documentación legalmente exigible en el plazo previsto, o cuando la autoridad competente lo requiera”.</i>
             </td>
             <td style="border: 1px solid #000;">
-                Literal b) del numeral 43.1 del artículo 43
-                <a style="mso-footnote-id: foot_infraccion_2_1" href="#_foot_infraccion_2_1" title="">
-                    <sup class=MsoFootnoteReference><span style="mso-special-character:footnote"></span></sup>
-                </a>, concordado con el artículo 66
-                <a style="mso-footnote-id: foot_infraccion_2_2" href="#_foot_infraccion_2_2" title="">
-                    <sup class=MsoFootnoteReference><span style="mso-special-character:footnote"></span></sup>
-                </a> del RGF
+                Se imputó contra la titular el no haber presentado el Informe de Ejecución Anual del XX, correspondiente al periodo XX, el cual debe contener las actividades de aprovechamiento de productos forestales maderables y no maderables
             </td>
             <td style="border: 1px solid #000;">
-                Numeral 2 del Anexo 1 del RISMFFS.<br /><br />
-                <i>"No entregar o presentar información o documentación legalmente exigible en el plazo previsto, o cuando la autoridad competente lo requiera"</i>
+                Dependerá del caso concreto
+            </td>
+            <td style="border: 1px solid #000;">
+                Dependerá del caso concreto
             </td>
         </tr>
     </tbody>
 </table>
+<div>Fuente: Resolución Sub Directoral N° ${informe.ANTECEDENTES_DOCS.RSD.numero || '00XX-202X-OSINFOR/08.2.X'}</div>
 
 {{if infraccion.flgDesvirtua}}
 <ol class="continue" style="margin-left: ${informe.MARGIN_LEFT.OL};">

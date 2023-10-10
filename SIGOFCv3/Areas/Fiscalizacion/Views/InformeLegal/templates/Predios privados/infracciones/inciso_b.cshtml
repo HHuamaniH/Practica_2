@@ -2,33 +2,37 @@
 <table width="580" cellpadding="4" style="border: 0; font-family: Arial; font-size: 10pt; border-collapse: collapse; line-height: 150%;">
     <thead>
         <tr style="background-color: #bfbfbf;">
-            <th style="text-align: center; border: 1px solid #000;">Obligación Incumplida</th>
             <th style="text-align: center; border: 1px solid #000;">Base legal de la obligación</th>
             <th style="text-align: center; border: 1px solid #000;">Tipo infractor</th>
+            <th style="text-align: center; border: 1px solid #000;">Conducta Imputada</th>
+            <th style="text-align: center; border: 1px solid #000;">Descargo sobre la imputación formulada</th>
+            <th style="text-align: center; border: 1px solid #000;">Información complementaria/información adicional</th>
         </tr>
     </thead>
     <tbody>
         <tr>
             <td style="border: 1px solid #000;">
-                El administrado no cumplió con la presentación del Informe de Ejecución correspondiente al periodo XX-20XX, dentro del plazo establecido en la norma.
-            </td>
-            <td style="border: 1px solid #000;">
-                Literal b) del numeral 43.1 del artículo 43
-                <a style="mso-footnote-id: foot_infraccion_b_1" href="#_foot_infraccion_b_1" title="">
-                    <sup class=MsoFootnoteReference><span style="mso-special-character:footnote"></span></sup>
-                </a>, concordado con el artículo 66
-                <a style="mso-footnote-id: foot_infraccion_b_2" href="#_foot_infraccion_b_2" title="">
-                    <sup class=MsoFootnoteReference><span style="mso-special-character:footnote"></span></sup>
-                </a> del RGF.
+                Dependerá del caso concreto
             </td>
             <td style="border: 1px solid #000;">
                 Literal “b” del numeral 207.1 del artículo 207 del RGF / Numeral 2 del Anexo 1 del RISMFFS.
                 <br /><br />
                 <i>“Incumplir con la presentación del Informe de ejecución en los plazos establecidos en el Reglamento y las normas complementarias” / “No entregar o presentar información o documentación legalmente exigible en el plazo previsto, o cuando la autoridad competente lo requiera” </i>
             </td>
+            <td style="border: 1px solid #000;">
+                El administrado no cumplió con la presentación del Informe de Ejecución correspondiente al periodo XX-20XX, dentro del plazo establecido en la norma.
+            </td>
+            <td style="border: 1px solid #000;">
+                Dependerá del caso concreto
+            </td>
+            <td style="border: 1px solid #000;">
+                Dependerá del caso concreto
+            </td>
         </tr>
     </tbody>
 </table>
+<div>Fuente: Resolución Sub Directoral N° ${informe.ANTECEDENTES_DOCS.RSD.numero || '00XX-202X-OSINFOR/08.2.X'}</div>
+
 <ol class="continue" style="margin-left: ${informe.MARGIN_LEFT.OL};">
     {{if informe.COD_TIPO_INFORME == 1}}
     <li>

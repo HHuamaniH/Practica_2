@@ -239,7 +239,7 @@ _informe.Exportar = async function () {
     informe.DENOMINACION_TITULAR = informe.COD_MODALIDAD == '01' ? 'concesionario' : 'administrado';
 
     //Configuracion de márgenes
-    informe.MARGIN_LEFT = { ROOT: '-15px', H: '-5pt', OL: '-37pt' };
+    informe.MARGIN_LEFT = { ROOT: '-15px', H: '0', OL: '-25px' };
 
     //EXPEDIENTES ADMINISTRATIVOS
     informe.EXPEDIENTE_ADM = informe.REFERENCIAS.filter(x => x.TIPO_DOCUMENTO?.indexOf('EXPEDIENTE') != -1).map(x => (x.CODIGO || x.NUMERO || 'S/N')).join(', ');

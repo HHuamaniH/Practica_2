@@ -1,10 +1,11 @@
 ﻿<ol class="continue" style="margin-left: ${MARGIN_LEFT.OL};">
-    <li>De conformidad con lo establecido en el numeral 4 del artículo 255 del Texto Único Ordenado de la Ley N° 27444, Ley del Procedimiento Administrativo General, aprobado por Decreto Supremo N° 004-2019-JUS (en adelante, TUO de la Ley N° 27444) con el respectivo descargo o sin él, la autoridad que instruye el procedimiento realizará todas las actuaciones necesarias para el examen de los hechos, recabando los datos e informaciones que sean relevantes para determinar, en su caso, la existencia de responsabilidad susceptible de sanción.</li>
-    <li>En tal sentido, resulta necesario confrontar los hechos advertidos en la supervisión y las actuaciones administrativas del presente procedimiento, a fin de determinar fehacientemente si existe coherencia y correspondencia entre ellos, así como responsabilidad administrativa emanada de las conductas del titular; bajo esta premisa, corresponde analizar las imputaciones formuladas sobre la base de lo señalado previamente con el objeto de acreditar o no su comisión.</li>
+    <li>
+        De acuerdo al Numeral 4 del artículo 255 del Texto Único Ordenado de la Ley N° 27444, Ley del Procedimiento Administrativo General, aprobado por Decreto Supremo N° 004-2019-JUS (en adelante, TUO de la Ley N° 27444), Con el respectivo descargo o sin él, la autoridad que instruye el procedimiento realizará todas las actuaciones necesarias para la evaluación de los hechos, a fin de determinar, en su caso, la existencia de responsabilidad susceptible de sanción; a continuación se analizará las imputaciones formuladas, a fin de acreditar o no su comisión.
+    </li>
 </ol>
 
 {{if FLG_CUESTION_PREVIA}}
-<h5 style="margin-left: ${MARGIN_LEFT.H};"><u><strong>Cuestión previa: Rectificación de error material</strong></u></h5>
+<h5><u><strong>Cuestión previa: Rectificación de error material</strong></u></h5>
 <ol class="continue" style="margin-left: ${MARGIN_LEFT.OL};">
     <li>
         Antes de efectuar el análisis correspondiente al PAU iniciado al/la administrado/a, es necesario señalar que, (detallar el error material identificado), siendo lo correcto XXXXXX XXXXXXX XXXXXXXXXX. Por lo tanto, se procede a realizar una rectificación de error material
@@ -33,7 +34,7 @@
 {{/if}}
 
 {{if FLG_REC_RESPONSABILIDAD}}
-<h5 style="margin-left: ${MARGIN_LEFT.H};"><u><strong>Sobre el reconocimiento de responsabilidad</strong></u></h5>
+<h5><u><strong>Sobre el reconocimiento de responsabilidad</strong></u></h5>
 <ol class="continue" style="margin-left: ${MARGIN_LEFT.OL}; ">
     <li>
         <span>
@@ -82,21 +83,19 @@
 {{/if}}
 
 {{if INFRACCIONES.length}}
-<h5 style="margin-left: ${MARGIN_LEFT.H};"><u><strong>Sobre las infracciones imputadas</strong></u></h5>
-<ol style="list-style-type: lower-alpha; margin-left: ${MARGIN_LEFT.OL};" start="1">
-    {{each(i, infra) INFRACCIONES}}
-    <li>
-        <span>
-            <strong>${infra.titulo}</strong>
-        </span>
-        {{html infra.parrafos}}
-    </li>
-    {{/each}}
-</ol>
+<h5><u><strong>Sobre las infracciones imputadas</strong></u></h5>
+{{each(i, infra) INFRACCIONES}}
+<div>
+    <ol style="list-style-type: lower-alpha; margin-left: ${MARGIN_LEFT.OL};" start="${i + 1}">
+        <li><strong>${infra.titulo}</strong></li>
+    </ol>
+    {{html infra.parrafos}}
+</div>
+{{/each}}
 {{/if}}
 
 {{if FLG_GRAVEDAD_RIESGO}}
-<h5 style="margin-left: ${MARGIN_LEFT.H};"><u><strong>Determinación de la gravedad y/o riesgo generado</strong></u></h5>
+<h5><u><strong>Determinación de la gravedad y/o riesgo generado</strong></u></h5>
 <ol class="continue" style="margin-left: ${MARGIN_LEFT.OL};">
     <li>
         De acuerdo a la opinión técnica vertida en el presente procedimiento, el volumen total extraído de X.XXX m<sup>3</sup>, que fue movilizado de árboles no autorizados, incluido el semillero movilizado / árboles fuera del censo, el retiro de cobertura vegetal de X.XXX hectáreas, así como el nivel de impacto causado por metro cúbico no autorizado (0.0167 hectáreas/ m3 no autorizado), habría ocasionado la afectación de X.XXX hectáreas de cobertura boscosa, lo que implica una afectación de magnitud “XXXX” a la cobertura boscosa natural que integra el Patrimonio Forestal Nacional; ello, en aplicación de los criterios SGC-M1-CRI-001-V.02, “Criterios para estimar la gravedad del daño por la comisión de infracciones en materia forestal”, aprobado por Resolución de Jefatura N° 059-2019-OSINFOR.
@@ -108,7 +107,7 @@
 {{/if}}
 
 {{if FLG_SANCION}}
-<h5 style="margin-left: ${MARGIN_LEFT.H};"><u><strong>Sobre la imposición de sanción</strong></u></h5>
+<h5><u><strong>Sobre la imposición de sanción</strong></u></h5>
 <ol class="continue" style="margin-left: ${MARGIN_LEFT.OL};">
     <li>
         <span>
@@ -137,7 +136,7 @@
 </ol>
 {{/if}}
 
-<h5 style="margin-left: ${MARGIN_LEFT.H};"><u><strong>De las medidas correctivas</strong></u></h5>
+<h5><u><strong>De las medidas correctivas</strong></u></h5>
 {{if FLG_MEDIDA_CORRECTIVA}}
 <ol class="continue" style="margin-left: ${MARGIN_LEFT.OL};">
     <li>
@@ -150,7 +149,7 @@
         Bajo ese contexto con relación al primer punto, cabe señalar que, según el análisis realizado en el XX del de supervisión, respecto al custodio forestal, se precisa que, la titular viene cumpliendo con dicha obligación, dado que no se evidencian disturbios en la cobertura boscosa por actividades distintas a la forestal, de ello se desprende que dentro del área de manejo no se cuentan con áreas disponibles para realizar la reposición de la especie tornillo, por lo cual, no resulta viable dictar una medida correctiva en este extremo.
     </li>
     <li>
-        No obstante, si resulta necesario que la comunidad realice el reemplazo del árbol semillero XX por otro de la misma especie (pudiendo ser uno de los individuos declarados inicialmente como aprovechables que quedaron en pie), el cual debe tener un diámetro a la altura de pecho (DAP) no menor al diámetro mínimo de corta (DMC) establecido en la Resolución Jefatural N° 458-2002-INRENA y que cumpla con las características fenotípicas idóneas para ser considerado como semilleros, cuyas coordenadas de ubicación UTM deberán ser plasmadas en el de cumplimiento de la medida correctiva, junto con las evidencias que así lo sustenten (fotografías, actas, etc.) de acuerdo a los consignado en el anexo del presente 
+        No obstante, si resulta necesario que la comunidad realice el reemplazo del árbol semillero XX por otro de la misma especie (pudiendo ser uno de los individuos declarados inicialmente como aprovechables que quedaron en pie), el cual debe tener un diámetro a la altura de pecho (DAP) no menor al diámetro mínimo de corta (DMC) establecido en la Resolución Jefatural N° 458-2002-INRENA y que cumpla con las características fenotípicas idóneas para ser considerado como semilleros, cuyas coordenadas de ubicación UTM deberán ser plasmadas en el de cumplimiento de la medida correctiva, junto con las evidencias que así lo sustenten (fotografías, actas, etc.) de acuerdo a los consignado en el anexo del presente
     </li>
 </ol>
 {{else}}
@@ -168,7 +167,7 @@
 {{/if}}
 
 {{if !FLG_MEDIDA_COMPLEMENTARIA}}
-<h5 style="margin-left: ${MARGIN_LEFT.H};"><u><strong>De las medidas correctivas</strong></u></h5>
+<h5><u><strong>De las medidas correctivas</strong></u></h5>
 <ol class="continue" style="margin-left: ${MARGIN_LEFT.OL};">
     <li>
         En ese sentido, con la finalidad de eliminar o mitigar los efectos producidos por la comisión de la infracción acreditada en el presente procedimiento, tales como la posesión, el transporte o comercialización de los productos forestales provenientes de la extracción no autorizada, se evalúa la posibilidad de disponer como medida complementaria el decomiso de los productos forestales movilizados de forma no autorizada o que corresponden a volumen injustificado, conforme a lo establecido en el Reglamento de Infracciones y Sanciones en Materia Forestal y de Fauna Silvestre, aprobado mediante Decreto Supremo N° 007-2021-MIDAGRI, publicado con fecha 12 de abril de 2021, el cual señala que de manera complementaria a la sanción a imponerse, puede aplicarse el decomiso de especímenes, productos o subproductos, que provengan de extracción no autorizada.
@@ -187,7 +186,7 @@
     </li>
 </ol>
 {{else}}
-<h5 style="margin-left: ${MARGIN_LEFT.H};"><u><strong>De las medidas cautelares dispuestas en la etapa de instrucción y de las medidas complementarias</strong></u></h5>
+<h5><u><strong>De las medidas cautelares dispuestas en la etapa de instrucción y de las medidas complementarias</strong></u></h5>
 <ol class="continue" style="margin-left: ${MARGIN_LEFT.OL};">
     <li>
         <span>
@@ -212,7 +211,7 @@
         A través de Resolución Sub Directoral N° ${ANTECEDENTES_DOCS.RSD.numero || 'XXXXX-XXXX-OSINFOR/08.2.1'}, de fecha ${ANTECEDENTES_DOCS.RSD.fechaEmisionTexto ||'XX de XXXX'}, confirmada mediante la Resolución Sub Directoral N° XXXXX-XXXX-OSINFOR/08.2.1, de fecha XX de XXXX de XXXX (mediante la cual también se dispuso el inicio del PAU), se dictaron medidas cautelares, a fin de que la decisión final a emitirse en el presente procedimiento logre eficacia y se puedan salvaguardar los recursos que forman parte del patrimonio forestal que fue extraído sin autorización, suspendiéndose los efectos de las Guías de Transporte Forestal y correspondientes Listas de Trozas, del Plan de Manejo Forestal aprobado a favor del administrado.
     </li>
     <li>
-        De esta manera, corresponde dictar la medida complementaria de decomiso, con la finalidad de eliminar o mitigar los efectos producidos por la comisión de las infracciones acreditadas en el presente procedimiento, tales como el transporte o comercialización de los productos forestales provenientes de extracción no autorizada, conforme a lo detallado en el Anexo III del presente 
+        De esta manera, corresponde dictar la medida complementaria de decomiso, con la finalidad de eliminar o mitigar los efectos producidos por la comisión de las infracciones acreditadas en el presente procedimiento, tales como el transporte o comercialización de los productos forestales provenientes de extracción no autorizada, conforme a lo detallado en el Anexo III del presente
     </li>
     <li>
         Cabe indicar que la referida medida complementaria debe hacerse de conocimiento de la ARFFS, a fin de que lleve a cabo su ejecución; ello, teniendo en consideración que el numeral 15.2 del artículo 15 del RISMFFS, establece que el SERFOR, el OSINFOR y las ARFFS, deben colaborar entre sí, para la ejecución de las sanciones, medidas complementarias, medidas correctivas y medidas cautelares o provisionales, cuando se dispongan.
@@ -221,7 +220,7 @@
 {{/if}}
 
 {{if FLG_COMUNICACION_GORE}}
-<h5 style="margin-left: ${MARGIN_LEFT.H};"><u><strong>Comunicación al GORE</strong></u></h5>
+<h5><u><strong>Comunicación al GORE</strong></u></h5>
 <ol class="continue" style="margin-left: ${MARGIN_LEFT.OL};">
     <li>
         Finalmente, se advierte que la Resolución Sub Directoral N° ${ANTECEDENTES_DOCS.RSD.numero || 'XXXXX-XXXX-OSINFOR/08.2.1'}, que dio inicio al PAU fue oportunamente remitida a la ARFFS, para que, luego de conocer los resultados de la supervisión del OSINFOR y la disposición del inicio del PAU, en el marco de su atribución fiscalizadora, pueda ejercer las funciones de su competencia. En ese sentido, corresponde comunicarle el resultado y conclusión del presente procedimiento, para los fines pertinentes, para que en el marco de sus competencias ejecuten las acciones correspondientes.

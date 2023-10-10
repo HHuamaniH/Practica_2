@@ -1,31 +1,37 @@
 ﻿<table width="580" cellpadding="4" style="border: 0; font-family: Arial; font-size: 10pt; border-collapse: collapse; line-height: 150%;">
     <thead>
         <tr style="background-color: #bfbfbf;">
-            <th style="text-align: center; border: 1px solid #000;">Obligación Incumplida</th>
             <th style="text-align: center; border: 1px solid #000;">Base legal de la obligación</th>
             <th style="text-align: center; border: 1px solid #000;">Tipo infractor</th>
+            <th style="text-align: center; border: 1px solid #000;">Conducta Imputada</th>
+            <th style="text-align: center; border: 1px solid #000;">Descargo sobre la imputación formulada</th>
+            <th style="text-align: center; border: 1px solid #000;">Información complementaria/información adicional</th>
         </tr>
     </thead>
     <tbody>
         <tr>
             <td style="border: 1px solid #000;">
-                Tener y mantener actualizado el libro de operaciones de acuerdo a los lineamientos aprobados por el SERFOR.
-            </td>
-            <td style="border: 1px solid #000;">
-                El literal d) numeral 43.1 artículo 43 del RGF
-                <a style="mso-footnote-id: foot_infraccion_11" href="#_foot_infraccion_11" title="">
-                    <sup class=MsoFootnoteReference><span style="mso-special-character:footnote"></span></sup>
-                </a>.<br /><br />
-                (Indicar si el TH también contiene la obligación)
+                Dependerá del caso concreto
             </td>
             <td style="border: 1px solid #000;">
                 Numeral 11 del Anexo 1 del RISMFFS.
                 <br /><br />
                 <i>“No tener libro de operaciones o no registrar la información en dicho libro, de acuerdo a las disposiciones establecidas”.</i>
             </td>
+            <td style="border: 1px solid #000;">
+                Tener y mantener actualizado el libro de operaciones de acuerdo a los lineamientos aprobados por el SERFOR.
+            </td>
+            <td style="border: 1px solid #000;">
+                Dependerá del caso concreto
+            </td>
+            <td style="border: 1px solid #000;">
+                Dependerá del caso concreto
+            </td>
         </tr>
     </tbody>
 </table>
+<div>Fuente: Resolución Sub Directoral N° ${informe.ANTECEDENTES_DOCS.RSD.numero || '00XX-202X-OSINFOR/08.2.X'}</div>
+
 <ol class="continue" style="margin-left: ${informe.MARGIN_LEFT.OL};">
     {{if informe.COD_TIPO_INFORME == 1}}
     <li>
