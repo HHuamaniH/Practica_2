@@ -717,7 +717,7 @@ namespace SIGOFCv3.Areas.Capacitacion.Controllers
                                 var tables = body.Elements<DocumentFormat.OpenXml.Wordprocessing.Table>();
                                 HelperWord.BuscarReemplazarTexto(paras, "VAR_TIPOTALLER", capacitacion.CAPATIPO.ToLower());
                                 HelperWord.BuscarReemplazarTexto(paras, "VAR_NOMBRETALLER", capacitacion.NOMBRE.Replace("\"", "").Replace("“", "").Replace("”", ""));
-                                HelperWord.BuscarReemplazarTexto(paras, "VAR_DIRIGIDO", capacitacion.DIRIGIDO.ToLower());
+                                HelperWord.BuscarReemplazarTexto(paras, "VAR_DIRIGIDO", capacitacion.DIRIGIDO);
 
                                 HelperWord.BuscarReemplazarTexto(paras, "VAR_MODALIDAD", item.MODALIDAD.ToLower());
 
@@ -967,7 +967,7 @@ namespace SIGOFCv3.Areas.Capacitacion.Controllers
                         HelperWord.BuscarReemplazarTexto(paras, "VAR_PARTICIPANTE", persona);
                         HelperWord.BuscarReemplazarTexto(paras, "VAR_TIPOTALLER", capacitacion.CAPATIPO.ToLower());
                         HelperWord.BuscarReemplazarTexto(paras, "VAR_NOMBRETALLER", capacitacion.NOMBRE.Replace("\"", "").Replace("“", "").Replace("”", ""));
-                        HelperWord.BuscarReemplazarTexto(paras, "VAR_DIRIGIDO", capacitacion.DIRIGIDO.ToLower());
+                        HelperWord.BuscarReemplazarTexto(paras, "VAR_DIRIGIDO", capacitacion.DIRIGIDO);
 
                         HelperWord.BuscarReemplazarTexto(paras, "VAR_MODALIDAD", constancia.MODALIDAD.ToLower());
 
@@ -1297,7 +1297,7 @@ namespace SIGOFCv3.Areas.Capacitacion.Controllers
                         HelperWord.BuscarReemplazarTexto(paras, "VAR_PARTICIPANTE", persona);
                         HelperWord.BuscarReemplazarTexto(paras, "VAR_TIPOTALLER", capacitacion.CAPATIPO.ToLower());
                         HelperWord.BuscarReemplazarTexto(paras, "VAR_NOMBRETALLER", capacitacion.NOMBRE.Replace("\"", "").Replace("“", "").Replace("”", ""));
-                        HelperWord.BuscarReemplazarTexto(paras, "VAR_DIRIGIDO", capacitacion.DIRIGIDO.ToLower());
+                        HelperWord.BuscarReemplazarTexto(paras, "VAR_DIRIGIDO", capacitacion.DIRIGIDO);
 
                         HelperWord.BuscarReemplazarTexto(paras, "VAR_MODALIDAD", constancia.MODALIDAD.ToLower());
 
@@ -1513,7 +1513,7 @@ namespace SIGOFCv3.Areas.Capacitacion.Controllers
                         HelperWord.BuscarReemplazarTexto(paras, "VAR_PARTICIPANTE", persona);
                         HelperWord.BuscarReemplazarTexto(paras, "VAR_TIPOTALLER", capacitacion.CAPATIPO.ToLower());
                         HelperWord.BuscarReemplazarTexto(paras, "VAR_NOMBRETALLER", capacitacion.NOMBRE.Replace("\"", "").Replace("“", "").Replace("”", ""));
-                        HelperWord.BuscarReemplazarTexto(paras, "VAR_DIRIGIDO", capacitacion.DIRIGIDO.ToLower());
+                        HelperWord.BuscarReemplazarTexto(paras, "VAR_DIRIGIDO", capacitacion.DIRIGIDO);
 
                         HelperWord.BuscarReemplazarTexto(paras, "VAR_MODALIDAD", constancia.MODALIDAD.ToLower());
 
@@ -1667,7 +1667,7 @@ namespace SIGOFCv3.Areas.Capacitacion.Controllers
                         //HelperWord.BuscarReemplazarTexto(paras, "VAR_PARTICIPANTE", persona);
                         HelperWord.BuscarReemplazarTexto(paras, "VAR_TIPOTALLER", capacitacion.CAPATIPO.ToLower());
                         HelperWord.BuscarReemplazarTexto(paras, "VAR_NOMBRETALLER", capacitacion.NOMBRE.Replace("\"", "").Replace("“", "").Replace("”", ""));
-                        HelperWord.BuscarReemplazarTexto(paras, "VAR_DIRIGIDO", capacitacion.DIRIGIDO.ToLower());
+                        HelperWord.BuscarReemplazarTexto(paras, "VAR_DIRIGIDO", capacitacion.DIRIGIDO);
 
                         HelperWord.BuscarReemplazarTexto(paras, "VAR_MODALIDAD", constancia.MODALIDAD.ToLower());
 
