@@ -38,7 +38,7 @@
 <ol class="continue" style="margin-left: ${MARGIN_LEFT.OL}; ">
     <li>
         <span>
-            Mediante Escrito/Carta N°/S/N, de fecha XX de XXXX de XXXX, ingresado al OSINFOR el XX de XXXXX de XXXX con Registro N° XXXXXXXXX, el/la administrado/a reconoce su responsabilidad en la comisión de las infracciones imputadas, señalando lo siguiente:
+            Mediante Escrito/Carta N° ${ANTECEDENTES_DOCS.Escrito.numero || 'XXXX'}, de fecha ${ANTECEDENTES_DOCS.Escrito.fechaEmisionTexto || 'XX de XXXX de XXXX'}, ingresado al OSINFOR el XX de XXXXX de XXXX con Registro N° XXXXXXXXX, el/la administrado/a reconoce su responsabilidad en la comisión de las infracciones imputadas, señalando lo siguiente:
             <p style="padding-left: 30px; font-style: italic;">
                 “Describir lo expuesto por el/la administrado/a”.
             </p>
@@ -96,44 +96,59 @@
 
 {{if FLG_GRAVEDAD_RIESGO}}
 <h5><u><strong>Determinación de la gravedad y/o riesgo generado</strong></u></h5>
-<ol class="continue" style="margin-left: ${MARGIN_LEFT.OL};">
-    <li>
-        De acuerdo a la opinión técnica vertida en el presente procedimiento, el volumen total extraído de X.XXX m<sup>3</sup>, que fue movilizado de árboles no autorizados, incluido el semillero movilizado / árboles fuera del censo, el retiro de cobertura vegetal de X.XXX hectáreas, así como el nivel de impacto causado por metro cúbico no autorizado (0.0167 hectáreas/ m3 no autorizado), habría ocasionado la afectación de X.XXX hectáreas de cobertura boscosa, lo que implica una afectación de magnitud “XXXX” a la cobertura boscosa natural que integra el Patrimonio Forestal Nacional; ello, en aplicación de los criterios SGC-M1-CRI-001-V.02, “Criterios para estimar la gravedad del daño por la comisión de infracciones en materia forestal”, aprobado por Resolución de Jefatura N° 059-2019-OSINFOR.
-    </li>
-    <li>
-        Cabe señalar que, las especies en cuestión no se encuentran incluidas en la lista de Clasificación Oficial de Especies Amenazadas de Flora Silvestre, aprobada mediante Decreto Supremo N° 043-2006-AG.
-    </li>
-</ol>
+<table width="580" cellpadding="4" style="border: 0; font-family: Arial; font-size: 10pt; border-collapse: collapse; line-height: 150%;">
+    <thead>
+        <tr>
+            <th style="text-align: center; border: 1px solid #000;"><strong>Normativa</strong></th>
+            <th style="text-align: center; border: 1px solid #000;"><strong>Análisis</strong></th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td style="border: 1px solid #000;">
+                “Criterios para estimar la gravedad del daño por la comisión de infracciones en materia forestal”, aprobado por Resolución de Jefatura Nº 059-2019-OSINFOR.
+            </td>
+            <td style="border: 1px solid #000;">
+                <div>
+                    Conforme a los resultados del Informe de Supervisión, la extracción de XX m3 de madera provenientes de árboles no autorizados, representa una afectación de XX hectáreas (XX hectáreas/m3 no autorizado) de nivel XX a la cobertura boscosa, la cual forma parte del Patrimonio Forestal Nacional.
+                </div>
+                <div>
+                    Cabe señalar que, las especies en cuestión no se encuentran incluidas en la lista de Clasificación Oficial de Especies Amenazadas de Flora Silvestre, aprobada mediante Decreto Supremo N° 043-2006-AG.
+                </div>
+            </td>
+        </tr>
+    </tbody>
+</table>
 {{/if}}
 
 {{if FLG_SANCION}}
 <h5><u><strong>Sobre la imposición de sanción</strong></u></h5>
 <ol class="continue" style="margin-left: ${MARGIN_LEFT.OL};">
     <li>
-        <span>
-            La(s) infracción(es) acreditada(s) es(son) pasible(s) de ser sancionada(s) de la siguiente manera:
-            <ul>
-                {{each(i, infr) INFRACCIONES}}
-                <li>
-                    Respecto de la infracción tipificada como ${infr.gravedad?.toLowerCase()} en el numeral ${infr.inciso} del Cuadro de Infracciones y Sanciones en Materia Forestal del Anexo 1 del RISMFFS, con una {{if infr.tipoInfraccion > 1}}multa ascendente ${infr.rangoSancion || 'XX A XX UIT'} {{else}}amonestación{{/if}}.
-                </li>
-                {{/each}}
-            </ul>
-        </span>
-    </li>
-    <li>
-        Ahora bien, de acuerdo con el Reporte de Antecedentes, de fecha XX de XXXXXX de XXXX, se advierte que el/la administrado/a no registra sanción de amonestación y/o multa impuesta por la Dirección de Fiscalización Forestal y de Fauna Silvestre. En esa línea, se puede considerar que <strong>la concesionaria no ha incurrido en reincidencia</strong>.
-    </li>
-    <li>
-        {{if FLG_SANCION == 1}}
-        En tal sentido, teniendo en consideración la aplicación a la metodología aprobada, corresponde imponer una <strong>sanción de amonestación</strong> respecto de (precisar las infracciones acreditadas) del Cuadro de Infracciones y Sanciones en Materia Forestal del Anexo 1 del RISMFFS.
-        {{else FLG_SANCION == 2}}
-        En tal sentido, teniendo en consideración la aplicación a la metodología aprobada, corresponde imponer una <strong>sanción de multa ascendente a ${SANCION_UIT || 0} UIT</strong>, vigente a la fecha en que se cumpla con el pago de esta respecto de (precisar las infracciones acreditadas) del Cuadro de Infracciones y Sanciones en Materia Forestal del RISMFFS.
-        {{else FLG_SANCION == 3}}
-        En tal sentido, teniendo en consideración la aplicación a la metodología aprobada, corresponde imponer una <strong>sanción de amonestación</strong> respecto de (precisar las infracciones acreditadas) del Cuadro de Infracciones y Sanciones en Materia Forestal del Anexo 1 del RISMFFS, asi como una <strong>sanción de multa ascendente a ${SANCION_UIT || 0} UIT</strong>, vigente a la fecha en que se cumpla con el pago de esta respecto de (precisar las infracciones acreditadas) del Cuadro de Infracciones y Sanciones en Materia Forestal del citado reglamento.
-        {{/if}}
-    </li>
+        De acuerdo con el reporte de antecedentes de fecha XX, se advierte que, el/la Titular no fue sancionada anteriormente por el OSINFOR, y no se identifican agravantes y atenuantes aplicables, en consecuencia, las infracciones acreditadas son pasibles de ser sancionadas de la siguiente manera:
+    </li>   
 </ol>
+<table width="580" cellpadding="4" style="border: 0; font-family: Arial; font-size: 10pt; border-collapse: collapse; line-height: 150%;">
+    <thead>
+        <tr>
+            <th style="text-align: center; border: 1px solid #000;"><strong>Infracción</strong></th>
+            <th style="text-align: center; border: 1px solid #000;"><strong>Sanción</strong></th>
+        </tr>
+    </thead>
+    <tbody>
+        {{each(i, infra) INFRACCIONES}}
+        <tr>
+            <td style="border: 1px solid #000;">
+                Numeral "${infra.inciso}" del Anexo 1 del RISMFFS.<br />
+                ${infra.titulo}
+            </td>
+            <td style="border: 1px solid #000;">
+                ${infra.rangoSancion}
+            </td>
+        </tr>
+        {{/each}}
+    </tbody>
+</table>
 {{/if}}
 
 <h5><u><strong>De las medidas correctivas</strong></u></h5>
@@ -220,10 +235,30 @@
 {{/if}}
 
 {{if FLG_COMUNICACION_GORE}}
-<h5><u><strong>Comunicación al GORE</strong></u></h5>
-<ol class="continue" style="margin-left: ${MARGIN_LEFT.OL};">
-    <li>
-        Finalmente, se advierte que la Resolución Sub Directoral N° ${ANTECEDENTES_DOCS.RSD.numero || 'XXXXX-XXXX-OSINFOR/08.2.1'}, que dio inicio al PAU fue oportunamente remitida a la ARFFS, para que, luego de conocer los resultados de la supervisión del OSINFOR y la disposición del inicio del PAU, en el marco de su atribución fiscalizadora, pueda ejercer las funciones de su competencia. En ese sentido, corresponde comunicarle el resultado y conclusión del presente procedimiento, para los fines pertinentes, para que en el marco de sus competencias ejecuten las acciones correspondientes.
-    </li>
-</ol>
+<h5><u><strong>Comunicación al GORE y/o otras autoridades</strong></u></h5>
+<table width="580" cellpadding="4" style="border: 0; font-family: Arial; font-size: 10pt; border-collapse: collapse; line-height: 150%;">
+    <thead>
+        <tr>
+            <th style="border: 1px solid #000; text-align: center;"><strong>Entidad</strong></th>
+            <th style="border: 1px solid #000; text-align: center;"><strong>Motivo</strong></th>
+        </tr>
+    </thead>
+    <tbody>
+        {{each(index, entidad) INSTITUCIONES}}
+        <tr>
+            <td style="border: 1px solid #000;">
+                ${entidad}
+            </td>
+            <td style="border: 1px solid #000;">
+                <div>
+                    En ese sentido, corresponde comunicarle a ${entidad} el resultado y conclusión del presente procedimiento, a fin que, en el marco de sus competencias, ejecute lo siguiente:
+                </div>
+                <div>
+                    - Exhorte el/la titular a cumplir las obligaciones en virtud al contrato de concesión.
+                </div>
+            </td>
+        </tr>
+        {{/each}}
+    </tbody>
+</table>
 {{/if}}

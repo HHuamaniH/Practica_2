@@ -11,14 +11,14 @@
     <tbody>
         <tr>
             <td style="border: 1px solid #000;">
-                Dependerá del caso concreto
+                Literales a) y k) del numeral 29.1 del artículo 29 del RGFFSCNCC
             </td>
             <td style="border: 1px solid #000;">
                 Numeral 10 del Cuadro de Infracciones y Sanciones en Materia Forestal del Anexo 1 del RISMFFS<br /><br />
                 <i>"Talar, extraer y/o aprovechar recursos forestales no autorizados en el área del título habilitante, cuando sea imputable al administrado en su condición de titular del título habilitante"</i>
             </td>
             <td style="border: 1px solid #000;">
-                Cumplir con la implementación del plan de manejo aprobado y demostrar el origen legal de los productos aprovechados.
+                Se imputó contra la Titular el aprovechamiento no autorizado de un volumen de XX
             </td>
             <td style="border: 1px solid #000;">
                 Dependerá del caso concreto
@@ -31,39 +31,6 @@
 </table>
 <div>Fuente: Resolución Sub Directoral N° ${informe.ANTECEDENTES_DOCS.RSD.numero || '00XX-202X-OSINFOR/08.2.X'}</div>
 
-<ol class="continue" style="margin-left: ${informe.MARGIN_LEFT.OL};">
-    <li>
-        Mediante la Resolución Sub Directoral N° ${informe.ANTECEDENTES_DOCS.RSD.numero || 'XXXXX-XXXX-OSINFOR/08.2.1'}, de fecha ${informe.ANTECEDENTES_DOCS.RSD.fechaEmisionTexto ||'XX de XXXX'}, se imputó al/la concesionario/a presuntamente incumplir con la presentación (descripción del volumen total extraído sin autorización, precisando el volumen correspondiente a cada especie).
-    </li>
-    {{if informe.COD_TIPO_INFORME == 1}}
-    <li>
-        <span>
-            Por Escrito/Carta de fecha ${informe.ANTECEDENTES_DOCS.Escrito.fechaEmisionTexto ||'XX de XXXX'} ingresado al OSINFOR con Registro N° ${informe.ANTECEDENTES_DOCS.Escrito.numero || '00XX-202X-OSINFOR/08.2.X'}, e/la concesionario/a presentó sus descargos, donde se advierte los siguientes argumentos que guarda relación con la imputación materia de análisis:<br />
-            <ol style="list-style-type: lower-alpha">
-                <li>(Agregar texto original).</li>
-                <li>(Agregar texto original).</li>
-                <li>(Agregar texto original).</li>
-            </ol>
-        </span>
-    </li>
-    <li>
-        <span>
-            Respecto a lo señalado por el/la concesionario/a, se advierte el siguiente análisis:<br />
-            <ul>
-                <li>
-                    Con relación al argumento señalado en el acápite a), <strong>XXXXXXXXXXXXXXXXXXXXXXXXXXX</strong>.
-                </li>
-                <li>
-                    Con relación al argumento señalado en el acápite b), <strong>XXXXXXXXXXXXXXXXXXXXXXXXXXX</strong>.
-                </li>
-                <li>
-                    Con relación al argumento señalado en el acápite c), <strong>XXXXXXXXXXXXXXXXXXXXXXXXXXX</strong>.
-                </li>
-            </ul>
-        </span>
-    </li>
-    {{/if}}
-</ol>
 {{if infraccion.flgSubsana}}
 <h5><strong>Sobre la subsanación voluntaria</strong></h5>
 <ol class="continue" style="margin-left: ${informe.MARGIN_LEFT.OL};">

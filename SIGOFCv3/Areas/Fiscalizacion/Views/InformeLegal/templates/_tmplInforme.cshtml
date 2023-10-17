@@ -57,9 +57,9 @@
                 <table cellpadding="4" style="border: 0; font-family: Arial; font-size: 10pt; border-collapse: collapse; line-height: 150%;">
                     <thead>
                         <tr>
-                            <th style="border: 1px solid #000; width: 30px;">N°</th>
-                            <th style="border: 1px solid #000;">DOCUMENTO</th>
-                            <th style="border: 1px solid #000;">DESCRIPCIÓN</th>
+                            <th style="border: 1px solid #000;">N°</th>
+                            <th style="border: 1px solid #000; width: 50%;">DOCUMENTO</th>
+                            <th style="border: 1px solid #000; width: 50%;">DESCRIPCIÓN</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -203,28 +203,56 @@
                             Se otorga al/la ${DENOMINACION_TITULAR}/a un plazo improrrogable de quince (15)/veinte (20) días hábiles contados a partir del día siguiente de notificado el presente Informe Final de Instrucción, más el término de la distancia, para que presente los descargos que considere pertinentes, ya sea de forma virtual, por la Mesa de Partes Digital a través del portal web del OSINFOR: https://facilita.gob.pe/t/677 y solo si el archivo a adjuntar excede los 10 MB, remitirlo al correo mesa.partes@osinfor.gob.pe, o de forma presencial, ante la mesa de partes de la sede central del OSINFOR en la ciudad de Lima o ante cualquier mesa de partes de sus oficinas desconcentradas. De la misma manera, podrá señalar una dirección de correo electrónico y/o casilla electrónica del OSINFOR, en caso lo tuviere, para notificarle las diferentes actuaciones administrativas que deriven del presente PAU.
                         </li>
                         <li>
-                            Asimismo, es oportuno precisar que el/la ${DENOMINACION_TITULAR}/a tiene expedito su derecho de requerir información, acceder y obtener copias de los actuados contenidos en el presente procedimiento administrativo, en cualquier momento y estado de su tramitación, en virtud de lo estipulado en el numeral 1.19 del artículo IV del TUO de la Ley N° 27444.
+                            Asimismo, la Titular tiene derecho de requerir información, acceder y obtener copias de los actuados contenidos en el presente procedimiento administrativo, en cualquier momento y estado de su tramitación, en virtud de lo estipulado en el numeral 1.19 del artículo IV del Texto Único Ordenado de la Ley N° 27444, Ley del Procedimiento Administrativo General.
+                        </li>
+                        <li>
+                            Finalmente, en concordancia con el Decreto Supremo N° 026-2023-PCM, mediante el cual se aprueba el uso obligatorio de la notificación vía Casilla Electrónica del OSINFOR, se le EXHORTA a realizar su afiliación a la casilla electrónica del OSINFOR ingresando al siguiente link: https://notificaciones.osinfor.gob.pe:9061/#/registro, a fin que se realice la notificación a través de ese medio. Cabe señalar que, según lo estipulado en el Reglamento del Sistema de Notificación Vía Casilla Electrónica del OSINFOR, aprobado mediante Resolución de Jefatura N° 026-2023-OSINFOR, a partir del 1 de agosto del 2023, el OSINFOR habilitará de oficio casillas electrónicas a todos los administrados. En esa línea, se le recuerda que, una vez asignada la casilla electrónica, deberá revisarla periódicamente, a efectos de tomar conocimiento oportuno de los actos administrativos y actuaciones administrativas que le hayan sido notificados por el OSINFOR".
                         </li>
                     </ol>
                 </div>
             </div>
             <div>
-                <ol style="margin-left: ${MARGIN_LEFT.ROOT}; list-style: upper-roman;" start="4"><li><strong>CONCLUSIONES</strong></li></ol>
+                <ol style="margin-left: ${MARGIN_LEFT.ROOT}; list-style: upper-roman;" start="4"><li><strong>CONCLUSIÓN</strong></li></ol>
                 <ol class="continue" style="margin-left: ${MARGIN_LEFT.OL};">
                     <li>
                         <span>
-                            Del análisis efectuado en el presente informe, ha quedado acreditado que el/la ${DENOMINACION_TITULAR} es responsable por la comisión de las infracciones tipificadas en los numerales X, X, X y X del Cuadro de Infracciones y Sanciones en Materia Forestal del Anexo ${COD_MODALIDAD != '04'?'1':'2'} del RISMFFS.
+                            Del análisis efectuado en el presente informe, ha quedado acreditado que la ${TITULAR || 'XXX'}, identificada con DNI N° ${TITULAR_DOCUMENTO || TITULAR_RUC}, titular del Contrato/permiso, es responsable por la comisión de las siguientes infracciones:
                         </span>
                     </li>
                 </ol>
+                <table width="580" cellpadding="4" style="border: 0; font-family: Arial; font-size: 10pt; border-collapse: collapse; line-height: 150%;">
+                    <thead>
+                        <tr>
+                            <th style="border: 1px solid #000; text-align: center;">N°</th>
+                            <th style="border: 1px solid #000; text-align: center; width: 50%;">Infracciones</th>
+                            <th style="border: 1px solid #000; text-align: center; width: 50%;">Descripción de la conducta</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {{each(i, infra) INFRACCIONES}}
+                        <tr>
+                            <td style="border: 1px solid #000; text-align: center;">
+                                ${i + 1}
+                            </td>
+                            <td style="border: 1px solid #000;">
+                                Numeral "${infra.inciso}" del Anexo 1 del RISMFFS.<br />
+                                ${infra.titulo}
+                            </td>
+                            <td style="border: 1px solid #000;">
+                                ${infra.detalle}
+                            </td>
+                        </tr>
+                        {{/each}}
+                    </tbody>
+                </table>
             </div>
             <div>
                 <ol style="margin-left: ${MARGIN_LEFT.ROOT}; list-style: upper-roman;" start="5"><li><strong>RECOMENDACIONES</strong></li></ol>
                 <div>
                     En base a lo expuesto, se procede a formular las siguientes recomendaciones:<br />
                     <ol class="continue" style="margin-left: ${MARGIN_LEFT.OL};">
-                        <li>
-                            Remitir el presente informe a la Autoridad Decisora para que proceda conforme a su competencia, adjuntando para tal efecto el Expediente Administrativo N° ${EXPEDIENTE_ADM || 'XXXXX-XXXX-OSINFOR/08.2'}, para los fines correspondientes.
+                        <li>                            
+                            Remitir el presente informe correspondiente al Expediente Administrativo N° ${EXPEDIENTE_ADM || 'XXXXX-XXXX-OSINFOR/08.2'}, a la Autoridad Decisora, a fin que proceda conforme a su competencia.
                         </li>
                         {{if [1,3].includes(FLG_SANCION)}}
                         <li>
@@ -260,6 +288,7 @@
                         </li>
                     </ol>
                 </div>
+                <p>Es todo cuanto informo,</p>
             </div>
         </div>
         <br /><br />

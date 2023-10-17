@@ -1,4 +1,4 @@
-﻿<table width="580" cellpadding="4" style="border: 0; font-family: Arial; font-size: 10pt; border-collapse: collapse; line-height: 150%;">
+﻿<table cellpadding="4" style="border: 0; font-family: Arial; font-size: 10pt; border-collapse: collapse; line-height: 150%;">
     <thead>
         <tr style="background-color: #bfbfbf;">
             <th style="text-align: center; border: 1px solid #000;">Base legal de la obligación</th>
@@ -39,7 +39,7 @@
     {{if informe.COD_TIPO_INFORME == 1}}
     <li>
         <span>
-            Por Escrito/Carta de fecha XX de XX de 20XX ingresado al OSINFOR con Registro N° XXXXXXXXX, e/la concesionario/a presentó sus descargos, donde se advierte los siguientes argumentos que guarda relación con la imputación materia de análisis:<br />
+            Por Escrito/Carta de fecha ${informe.ANTECEDENTES_DOCS.Escrito.fechaEmisionTexto ||'XX de XXXX'} ingresado al OSINFOR con Registro N° ${informe.ANTECEDENTES_DOCS.Escrito.numero || '00XX-202X-OSINFOR/08.2.X'}, e/la concesionario/a presentó sus descargos, donde se advierte los siguientes argumentos que guarda relación con la imputación materia de análisis:<br />
             <ol style="list-style-type: lower-alpha">
                 <li>(Agregar texto original).</li>
                 <li>(Agregar texto original).</li>
@@ -80,5 +80,14 @@
     </li>
     <li>
         Por ello, estando a la evaluación realizada a los actuados en el presente procedimiento, y siendo que el/la concesionario/a no presentó argumentos de defensa suficientes que logren desacreditar los hechos que sustentan la imputación materia de análisis, ha quedado acreditada la comisión de la infracción tipificada en el numeral 26 del Cuadro de Infracciones en Materia Forestal del Anexo 1 del RISMFFS.
+    </li>
+</ol>
+
+<ol class="continue" style="margin-left: ${informe.MARGIN_LEFT.OL};">
+    <li>
+        De acuerdo a la evaluación de la documentación del expediente administrativo, la Titular es la responsable por el uso de las Guías de Transporte Forestal, conforme a lo dispuesto en el artículo 4 de la Resolución de Dirección Ejecutiva N° 122-2015-SERFOR-DE, sin embargo utilizó Guías de Transporte Forestal otorgada por la ARFFS para amparar el transporte de recursos forestales provenientes de una extracción no autorizada, por un volumen total de XX m3 correspondiente a la especie XX.
+    </li>
+    <li>
+        De acuerdo con lo señalado XX.
     </li>
 </ol>

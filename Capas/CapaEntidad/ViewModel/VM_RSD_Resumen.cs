@@ -22,6 +22,29 @@ namespace CapaEntidad.ViewModel
         public string UBIGEO_DEPARTAMENTO { get; set; }
         public string UBIGEO_PROVINCIA { get; set; }
         public string UBIGEO_DISTRITO { get; set; }
+        
+        public bool DGFFS { get; set; }
+        public bool PROGRAMA_REGIONAL { get; set; }
+        public bool MINISTERIO_PUBLICO { get; set; }
+        public bool MIN_ENERGIA_MINAS { get; set; }
+        public bool COLEGIO_INGENIEROS { get; set; }
+        public bool ATFFS { get; set; }
+        public bool OCI { get; set; }
+        public bool OEFA { get; set; }
+        public bool SUNAT { get; set; }
+        public bool SERFOR { get; set; }
+        public bool OTROS { get; set; }
+        public string DETALLE_DGFFS { get; set; }
+        public string DETALLE_PROREG { get; set; }
+        public string DETALLE_MINPUB { get; set; }
+        public string DETALLE_MINENMIN { get; set; }
+        public string DETALLE_COLING { get; set; }
+        public string DETALLE_ATFFS { get; set; }
+        public string DETALLE_OCI { get; set; }
+        public string DETALLE_OEFA { get; set; }
+        public string DETALLE_SUNAT { get; set; }
+        public string DETALLE_SERFOR { get; set; }
+        public string DETALLE_OTROS { get; set; }
 
         public virtual List<VM_RSD_INFRACCIONES> LIST_INFRACCIONES { get; set; }
     }

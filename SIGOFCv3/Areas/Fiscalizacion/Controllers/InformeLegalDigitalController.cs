@@ -78,7 +78,7 @@ namespace SIGOFCv3.Areas.Fiscalizacion.Controllers
             string name = $"~/Areas/Fiscalizacion/Views/InformeLegal/templates/{modalidad}/infracciones/inciso_{inciso}.cshtml";
 
             ViewEngineResult result = ViewEngines.Engines.FindView(ControllerContext, name, null);
-            if (result.View == null) return Content($"<h5>No se encontró información de la infracción para el inciso {inciso}</h5>");
+            if (result.View == null) return Content($"<p>No se encontró información de la infracción para el inciso {inciso}</p>");
 
             return PartialView(name);
         }

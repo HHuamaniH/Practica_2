@@ -1,4 +1,4 @@
-﻿<table width="580" cellpadding="4" style="border: 0; font-family: Arial; font-size: 10pt; border-collapse: collapse; line-height: 150%;">
+﻿<table cellpadding="4" style="border: 0; font-family: Arial; font-size: 10pt; border-collapse: collapse; line-height: 150%;">
     <thead>
         <tr style="background-color: #bfbfbf;">
             <th style="text-align: center; border: 1px solid #000;">Base legal de la obligación</th>
@@ -20,7 +20,7 @@
             </td>
             <td style="border: 1px solid #000;">
                 Contar con el regente forestal, para la implementación del plan de manejo, y comunicar a la ARFFS y al SERFOR la designación o el cambio del mismo.
-            </td>            
+            </td>
             <td style="border: 1px solid #000;">
                 Dependerá del caso concreto
             </td>
@@ -39,7 +39,7 @@
     {{if informe.COD_TIPO_INFORME == 1}}
     <li>
         <span>
-            Por Escrito/Carta de fecha XX de XX de 20XX ingresado al OSINFOR con Registro N° XXXXXXXXX, e/la concesionario/a presentó sus descargos, donde se advierte los siguientes argumentos que guarda relación con la imputación materia de análisis:<br />
+            Por Escrito/Carta de fecha ${informe.ANTECEDENTES_DOCS.Escrito.fechaEmisionTexto ||'XX de XXXX'} ingresado al OSINFOR con Registro N° ${informe.ANTECEDENTES_DOCS.Escrito.numero || '00XX-202X-OSINFOR/08.2.X'}, e/la concesionario/a presentó sus descargos, donde se advierte los siguientes argumentos que guarda relación con la imputación materia de análisis:<br />
             <ol style="list-style-type: lower-alpha">
                 <li>(Agregar texto original).</li>
                 <li>(Agregar texto original).</li>
@@ -82,5 +82,40 @@
     </li>
     <li>
         Por ello, estando a la evaluación realizada a los actuados en el presente procedimiento, y siendo que el/la concesionario/a no presentó argumentos de defensa suficientes que logren desacreditar los hechos que sustentan la imputación materia de análisis, ha quedado acreditada la comisión de la infracción tipificada en el numeral 29 del Cuadro de Infracciones en Materia Forestal del Anexo 1 del RISMFFS.
+    </li>
+</ol>
+
+<ol class="continue" style="margin-left: ${informe.MARGIN_LEFT.OL};">
+    <li>
+        El XX de XXX de 202X, el/la Titular y el Ing. XX suscribieron el Contrato de Regencia Forestal, el cual tiene como objeto la XX.
+    </li>
+    <li>
+        De acuerdo a la evaluación del expediente administrativo, <strong><u>la Titular no contó con Regente Forestal durante la implementación, lo que se evidencia del contenido del Contrato de Regencia que solo considera los servicios del Regente Forestal para la elaboración del PMFI</u></strong>, tal como se observa a continuación:
+    </li>
+</ol>
+
+<p style="text-align: center; font-size: 7pt;">
+    Consignar Imagen<br />Fuente: Contrato de Regencia de fecha…
+</p>
+
+<ol class="continue" style="margin-left: ${informe.MARGIN_LEFT.OL};">
+    <li>
+        El PM aprobado mediante la Resolución XX, tiene vigencia hasta XX. Asimismo, de la revisión de la Forma 20, se advierte que la última movilización se realizó el 2XX.
+    </li>
+    <li>
+        En el presente caso, la administrada implementó el Plan de Manejo Forestal Intermedio Reformulado (PMFI – PO 02), sin embargo, no habría contado con regente forestal, conforme se observa en el siguiente gráfico:
+    </li>
+</ol>
+
+<p>
+    <strong>Gráfico 01.</strong> Línea de tiempo
+</p>
+
+<ol class="continue" style="margin-left: ${informe.MARGIN_LEFT.OL};">
+    <li>
+        Adicionalmente, de la consulta efectuada en el Sistema de Información de Trámite Documentario – SITD del OSINFOR, previo a la emisión del presente informe ella titular no ha remitido contrato de regencia vigente para la implementación del plan de manejo considerando que su PMFI se encuentra vigente y viene realizando las actividades de aprovechamiento.
+    </li>
+    <li>
+        Por ello, de acuerdo lo evaluado y xx.
     </li>
 </ol>

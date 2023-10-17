@@ -239,25 +239,25 @@ _informe.Exportar = async function () {
     informe.DENOMINACION_TITULAR = informe.COD_MODALIDAD == '01' ? 'concesionario' : 'administrado';
 
     //Configuracion de márgenes
-    informe.MARGIN_LEFT = { ROOT: '-15px', H: '0', OL: '-25px' };
+    informe.MARGIN_LEFT = { ROOT: '-15px', H: '0', OL: '-25px' };    
 
     //EXPEDIENTES ADMINISTRATIVOS
     informe.EXPEDIENTE_ADM = informe.REFERENCIAS.filter(x => x.TIPO_DOCUMENTO?.indexOf('EXPEDIENTE') != -1).map(x => (x.CODIGO || x.NUMERO || 'S/N')).join(', ');
 
     //Asociamos las infracciones a las RSD en los antecedentes
-    informe.ANTECEDENTES.forEach(item => {
+    for (let item of informe.ANTECEDENTES) {
         if (item.tipoDocumento == 'Resolución Sub Directoral') {
             item.INFRACCIONES = informe.INFRACCIONES
                 .filter(x => x.codResolucion == item.codResolucion)
-                .map(x => {
+                /*.map(x => {
                     x.titulo = x.titulo.replace(/(Respecto a la imputación)\s+(.*)/gi, (m, p1, p2) => {
                         return p2.charAt(0).toUpperCase() + p2.slice(1);
                     });
 
                     return x;
-                });
+                });*/
         }
-    });
+    }
 
     //DOCUMENTOS ANTECEDENTES
     informe.ANTECEDENTES_DOCS = {};
@@ -269,23 +269,30 @@ _informe.Exportar = async function () {
 
     //RESUMEN INF. SUPERVISION
     console.log("Consultando volúmenes de especies ligados al informe de supervisión...");
-    let volumenes = [];
+    let volumenes = [], instituciones = [];
 
     //INCISOS AFECTOS (Donde se mostrará el cuadro)
     const incisos_afectos = informe.INFRACCIONES.map(x => x.inciso.replace(/\W+/gi, ''));
 
-    if (incisos_afectos.find(x => ['e', '21', 'g'].includes(x))) {
-        for (var i = 0; i < informe.RSD.length; i++) {
-            const COD_RESOLUCION = informe.RSD[i].codResolucion;
+    for (var i = 0; i < informe.RSD.length; i++) {
+        const COD_RESOLUCION = informe.RSD[i].codResolucion;
+
+        //if (incisos_afectos.find(x => ['e', '21', 'g'].includes(x))) {
             let resumen = await _informe.RegResumenInfSupervision(COD_RESOLUCION);
             resumen = resumen.filter(x => !!x.VOLUMEN_INJUSTIFICADO);
             volumenes = volumenes.concat(resumen);
-        }
+        //}
+
+        //RESUMEN RSD
+        const lstInstituciones = await _informe.InstitucionesResolucion(COD_RESOLUCION);
+        instituciones = instituciones.concat(lstInstituciones);
     }
+
+    informe.INSTITUCIONES = instituciones;
 
     informe.VOLUMENES_INJUSTIFICADOS = volumenes;
     informe.VOLUMENES_INJUSTIFICADOS_TOTAL = Math.round(volumenes.reduce((a, b) => a + b.VOLUMEN_INJUSTIFICADO, 0) * 1000) / 1000;
-    console.log(volumenes);
+    //console.log(volumenes);
 
     //INFRACCIONES
     console.log("Consultando párrafos de infracciones...");
@@ -719,7 +726,7 @@ _informe.ExtraerParrafoInfraccion = function (infraccion, informe) {
         utilSigo.fnAjax(params, function (html) {
             if (html) {
                 try {
-                    const script_html = `<script id="template" type="text/x-jquery-tmpl">${html}</script>`;                    
+                    const script_html = `<script id="template" type="text/x-jquery-tmpl">${html}</script>`;
                     //Template jquery                    
                     html = _informe.tmpl.get(script_html, '#template', { infraccion, informe });
 
@@ -733,6 +740,53 @@ _informe.ExtraerParrafoInfraccion = function (infraccion, informe) {
             else reject(null);
         });
     });
+}
+
+_informe.ObtenerResolucion = function (COD_RESODIREC) {
+    const params = {
+        url: `${urlLocalSigo}Fiscalizacion/ManResolucion/ObtenerResolucion`,
+        type: 'GET',
+        data: { asCodRD: COD_RESODIREC, asCodTipoIL: "" },
+        beforeSend: function () {
+            utilSigo.blockUIGeneral();
+        },
+        complete: function () {
+            utilSigo.unblockUIGeneral();
+        }
+    };
+
+    return new Promise((resolve, reject) => {
+        $.ajax(params)
+            .fail(function (xhr) {
+                resolve(null);
+                if (xhr.status == 200) {
+                    utilSigo.toastWarning('Sin datos', 'No se encontró información de la resolución')
+                }
+            }).done(function (res) {
+                resolve(res);
+            })
+    });
+}
+
+_informe.InstitucionesResolucion = async function (COD_RESODIREC) {
+    const RESODIR = await _informe.ObtenerResolucion(COD_RESODIREC);
+    if (!RESODIR) return null;
+
+    const lst = [];
+
+    if (RESODIR.DGFFS) lst.push(RESODIR.DETALLE_DGFFS);
+    if (RESODIR.PROGRAMA_REGIONAL) lst.push(RESODIR.DETALLE_PROREG);
+    if (RESODIR.MINISTERIO_PUBLICO) lst.push(RESODIR.DETALLE_MINPUB);
+    if (RESODIR.MIN_ENERGIA_MINAS) lst.push(RESODIR.DETALLE_MINENMIN);
+    if (RESODIR.COLEGIO_INGENIEROS) lst.push(RESODIR.DETALLE_COLING);
+    if (RESODIR.ATFFS) lst.push(RESODIR.DETALLE_ATFFS);
+    if (RESODIR.OCI) lst.push(RESODIR.DETALLE_OCI);
+    if (RESODIR.OEFA) lst.push(RESODIR.DETALLE_OEFA);
+    if (RESODIR.SUNAT) lst.push(RESODIR.DETALLE_SUNAT);
+    if (RESODIR.SERFOR) lst.push(RESODIR.DETALLE_SERFOR);
+    if (RESODIR.OTROS) lst.push(RESODIR.DETALLE_OTROS);
+
+    return lst;
 }
 
 _informe.SITD_OPEN = function () {
@@ -1127,7 +1181,7 @@ $(function () {
                             reject();
                         });
                 })
-            },            
+            },
             TramiteByID: function (datos) {
                 const self = this;
                 datos = datos || JSON.parse(JSON.stringify(self.Informe));
@@ -1445,7 +1499,7 @@ $(function () {
             Buscar: function () {
                 window.dtb_rsd?.draw();
             },
-            Agregar: function (obj) {
+            Agregar: async function (obj) {
                 const row = $(obj).closest('tr');
                 const item = window.dtb_rsd?.row(row).data();
                 if (!item) return;
@@ -1457,118 +1511,97 @@ $(function () {
                     return;
                 }
 
-                var params = {
-                    url: `${urlLocalSigo}Fiscalizacion/ManResolucion/ObtenerResolucion`,
-                    type: 'GET',
-                    data: { asCodRD: item.COD_RESODIREC, asCodTipoIL: "" },
-                    beforeSend: function () {
-                        utilSigo.blockUIGeneral();
-                    },
-                    complete: function () {
-                        utilSigo.unblockUIGeneral();
-                    }
+                const RESODIREC = await _informe.ObtenerResolucion(item.COD_RESODIREC);
+
+                const RESOLUCION = {
+                    codResolucion: item.COD_RESODIREC,
+                    numInforme: item.NUMERO_RESOLUCION,
+                    estado: 1
                 };
 
-                $.ajax(params)
-                    .fail(function (xhr) {
-                        if (xhr.status == 200) {
-                            utilSigo.toastWarning('Sin datos', 'No se encontró información de la resolución')
-                        }
-                    })
-                    .done(async function (res) {
-                        //Extraemos los parrafos de las infracciones
-                        //const ìnfracciones = await _informe.ExtraerInfracciones();
+                let infracciones = app.Informe.INFRACCIONES;
 
-                        const RESOLUCION = {
+                for (var i = 0; i < RESODIREC.LIST_INFRACCIONES.length; i++) {
+                    const infraccion = RESODIREC.LIST_INFRACCIONES[i];
+                    if (!infracciones.find(x => x.inciso == infraccion.DESCRIPCION_ENCISOS)) {
+                        const titulo = `Respecto a la imputación de ${infraccion.TEXTO_ENCISO[0].toLowerCase() + infraccion.TEXTO_ENCISO.slice(1)}`;
+
+                        const model = {
                             codResolucion: item.COD_RESODIREC,
-                            numInforme: item.NUMERO_RESOLUCION,
+                            codInciso: infraccion.COD_ILEGAL_ENCISOS,
+                            inciso: infraccion.DESCRIPCION_ENCISOS,
+                            gravedad: infraccion.GRAVEDAD,
+                            tipoInfraccion: infraccion.TIPO_INFRACCION,
+                            rangoSancion: infraccion.RANGO_SANCION,
+                            titulo,
+                            detalle: infraccion.DESCRIPCION_INFRACCIONES,
+                            flgDesvirtua: false,
+                            flgSubsana: false,
+                            parrafos: null,
                             estado: 1
-                        };
-
-                        let infracciones = app.Informe.INFRACCIONES;
-
-                        for (var i = 0; i < res.LIST_INFRACCIONES.length; i++) {
-                            const infraccion = res.LIST_INFRACCIONES[i];
-                            if (!infracciones.find(x => x.inciso == infraccion.DESCRIPCION_ENCISOS)) {
-                                const titulo = `Respecto a la imputación ${infraccion.TEXTO_ENCISO[0].toLowerCase() + infraccion.TEXTO_ENCISO.slice(1)}`;
-
-                                const model = {
-                                    codResolucion: item.COD_RESODIREC,
-                                    codInciso: infraccion.COD_ILEGAL_ENCISOS,
-                                    inciso: infraccion.DESCRIPCION_ENCISOS,
-                                    gravedad: infraccion.GRAVEDAD,
-                                    tipoInfraccion: infraccion.TIPO_INFRACCION,
-                                    rangoSancion: infraccion.RANGO_SANCION,
-                                    titulo,
-                                    detalle: infraccion.DESCRIPCION_INFRACCIONES,
-                                    flgDesvirtua: false,
-                                    flgSubsana: false,
-                                    parrafos: null,
-                                    estado: 1
-                                }
-
-                                infracciones.push(model);
-                            }
                         }
 
-                        //Ordenamos los incisos
-                        infracciones = infracciones.sort((a, b) => {
-                            return (isNaN(a.inciso) || isNaN(b.inciso)) ? -1 : (+a.inciso > +b.inciso ? 1 : -1);
-                        });
+                        infracciones.push(model);
+                    }
+                }
 
-                        // Si no hay información del titular lo establecemos (Solo para la primera RSD)
-                        if (!app.Informe.COD_THABILITANTE) {
-                            const THAB = {
-                                COD_THABILITANTE: res.COD_THABILITANTE,
-                                NUM_CONTRATO: res.NUM_THABILITANTE,
-                                COD_TITULAR: res.COD_TITULAR,
-                                TITULAR_DOCUMENTO: res.TITULAR_DOCUMENTO,
-                                TITULAR: res.TITULAR,
-                                TITULAR_ESTADO_RUC: '',
-                                TITULAR_CONDICION_RUC: '',
-                                TITULAR_RUC: res.TITULAR_RUC,
-                                R_LEGAL: res.R_LEGAL,
-                                R_LEGAL_DOCUMENTO: res.R_LEGAL_DOCUMENTO,
-                                R_LEGAL_RUC: res.R_LEGAL_RUC,
-                                DIRECCION_LEGAL: '',
-                                UBIGEO_DEPARTAMENTO: res.UBIGEO_DEPARTAMENTO,
-                                UBIGEO_PROVINCIA: res.UBIGEO_PROVINCIA,
-                                UBIGEO_DISTRITO: res.UBIGEO_DISTRITO,
-                            };
+                //Ordenamos los incisos
+                infracciones = infracciones.sort((a, b) => {
+                    return (isNaN(a.inciso) || isNaN(b.inciso)) ? -1 : (+a.inciso > +b.inciso ? 1 : -1);
+                });
 
-                            app.Informe = {
-                                ...app.Informe,
-                                ...THAB
-                            }
-                        }
+                // Si no hay información del titular lo establecemos (Solo para la primera RSD)
+                if (!app.Informe.COD_THABILITANTE) {
+                    const THAB = {
+                        COD_THABILITANTE: RESODIREC.COD_THABILITANTE,
+                        NUM_CONTRATO: RESODIREC.NUM_THABILITANTE,
+                        COD_TITULAR: RESODIREC.COD_TITULAR,
+                        TITULAR_DOCUMENTO: RESODIREC.TITULAR_DOCUMENTO,
+                        TITULAR: RESODIREC.TITULAR,
+                        TITULAR_ESTADO_RUC: '',
+                        TITULAR_CONDICION_RUC: '',
+                        TITULAR_RUC: RESODIREC.TITULAR_RUC,
+                        R_LEGAL: RESODIREC.R_LEGAL,
+                        R_LEGAL_DOCUMENTO: RESODIREC.R_LEGAL_DOCUMENTO,
+                        R_LEGAL_RUC: RESODIREC.R_LEGAL_RUC,
+                        DIRECCION_LEGAL: '',
+                        UBIGEO_DEPARTAMENTO: RESODIREC.UBIGEO_DEPARTAMENTO,
+                        UBIGEO_PROVINCIA: RESODIREC.UBIGEO_PROVINCIA,
+                        UBIGEO_DISTRITO: RESODIREC.UBIGEO_DISTRITO,
+                    };
 
-                        app.Informe.RSD.push(RESOLUCION);
-                        app.Informe.INFRACCIONES = infracciones;
+                    app.Informe = {
+                        ...app.Informe,
+                        ...THAB
+                    }
+                }
 
-                        //Antecedentes
-                        _informe.ExtraerAntecedentes(item.COD_RESODIREC, app.Informe.COD_TITULAR).then(res => {
-                            res.forEach(a => {
-                                a.codResolucion = item.COD_RESODIREC;
-                                const n = a.numero?.match(regExpOSINFOR) || [];
-                                a.numero = n[0];
-                                a.estado = 1;
-                            });
+                app.Informe.RSD.push(RESOLUCION);
+                app.Informe.INFRACCIONES = infracciones;
 
-                            app.Informe.ANTECEDENTES = res;
-                        });
+                //Antecedentes
+                const ANTECEDENTES = await _informe.ExtraerAntecedentes(item.COD_RESODIREC, app.Informe.COD_TITULAR);
 
-                        //Archivos relacionados
-                        app.ObtenerArchivos(item.COD_RESODIREC).then(function (files) {
-                            //console.log("LOAD FILES SIADO...", files);
-                            files = files.filter(function (file) {
-                                return !app.Informe.DOCUMENTOS.find(x => x.codResolucion == file.codResolucion)
-                            });
+                ANTECEDENTES.forEach(a => {
+                    a.codResolucion = item.COD_RESODIREC;
+                    const n = a.numero?.match(regExpOSINFOR) || [];
+                    a.numero = n[0];
+                    a.estado = 1;
+                });
 
-                            app.Informe.DOCUMENTOS = [...app.Informe.DOCUMENTOS, ...files];
-                        });
+                app.Informe.ANTECEDENTES = ANTECEDENTES;
 
-                        $('#modal-rsd').modal('hide');
-                    });
+                //Archivos relacionados
+                let files = await app.ObtenerArchivos(item.COD_RESODIREC);
+
+                //console.log("LOAD FILES SIADO...", files);
+                files = files.filter(function (file) {
+                    return !app.Informe.DOCUMENTOS.find(x => x.codResolucion == file.codResolucion)
+                });
+
+                app.Informe.DOCUMENTOS = [...app.Informe.DOCUMENTOS, ...files];
+
+                $('#modal-rsd').modal('hide');
             }
         }
     });

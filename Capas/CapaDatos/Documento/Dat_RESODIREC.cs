@@ -2474,6 +2474,30 @@ namespace CapaDatos.DOC
                                 result.UBIGEO_DEPARTAMENTO = dr["UBIGEO_DEPARTAMENTO"] != DBNull.Value ? dr["UBIGEO_DEPARTAMENTO"].ToString() : null;
                                 result.UBIGEO_PROVINCIA = dr["UBIGEO_PROVINCIA"] != DBNull.Value ? dr["UBIGEO_PROVINCIA"].ToString() : null;
                                 result.UBIGEO_DISTRITO = dr["UBIGEO_DISTRITO"] != DBNull.Value ? dr["UBIGEO_DISTRITO"].ToString() : null;
+
+                                result.DGFFS = dr["DGFFS"].ToString() == "1";
+                                result.PROGRAMA_REGIONAL = dr["PROGRAMA_REGIONAL"].ToString() == "1";
+                                result.MINISTERIO_PUBLICO = dr["MINISTERIO_PUBLICO"].ToString() == "1";
+                                result.MIN_ENERGIA_MINAS = dr["MIN_ENERGIA_MINAS"].ToString() == "1";
+                                result.COLEGIO_INGENIEROS = dr["COLEGIO_INGENIEROS"].ToString() == "1";
+                                result.ATFFS = dr["ATFFS"].ToString() == "1";
+                                result.OCI = dr["OCI"].ToString() == "1";
+                                result.OEFA = dr["OEFA"].ToString() == "1";
+                                result.SUNAT = dr["SUNAT"].ToString() == "1";
+                                result.SERFOR = dr["SERFOR"].ToString() == "1";
+                                result.OTROS = dr["OTROS"].ToString() == "1";
+
+                                result.DETALLE_DGFFS = dr["DETALLE_DGFFS"] != DBNull.Value ? dr["DETALLE_DGFFS"].ToString() : null;
+                                result.DETALLE_PROREG = dr["DETALLE_PROREG"] != DBNull.Value ? dr["DETALLE_PROREG"].ToString() : null;
+                                result.DETALLE_MINPUB = dr["DETALLE_MINPUB"] != DBNull.Value ? dr["DETALLE_MINPUB"].ToString() : null;
+                                result.DETALLE_MINENMIN = dr["DETALLE_MINENMIN"] != DBNull.Value ? dr["DETALLE_MINENMIN"].ToString() : null;
+                                result.DETALLE_COLING = dr["DETALLE_COLING"] != DBNull.Value ? dr["DETALLE_COLING"].ToString() : null;
+                                result.DETALLE_ATFFS = dr["DETALLE_ATFFS"] != DBNull.Value ? dr["DETALLE_ATFFS"].ToString() : null;
+                                result.DETALLE_OCI = dr["DETALLE_OCI"] != DBNull.Value ? dr["DETALLE_OCI"].ToString() : null;
+                                result.DETALLE_OEFA = dr["DETALLE_OEFA"] != DBNull.Value ? dr["DETALLE_OEFA"].ToString() : null;
+                                result.DETALLE_SUNAT = dr["DETALLE_SUNAT"] != DBNull.Value ? dr["DETALLE_SUNAT"].ToString() : null;
+                                result.DETALLE_SERFOR = dr["DETALLE_SERFOR"] != DBNull.Value ? dr["DETALLE_SERFOR"].ToString() : null;
+                                result.DETALLE_OTROS = dr["DETALLE_OTROS"] != DBNull.Value ? dr["DETALLE_OTROS"].ToString() : null;
                             }
                         }
 
