@@ -415,7 +415,7 @@ ManPOA.selectFile = null;
 
 
         this.frmPOARegistro
-            .find("#txtItemInicio_Vigencia,#txtItemFin_Vigencia,#txtItemActa_Iocular_Fe,#txtItemAresolucion_Fecha,#txtItemItecnico_Raprobacion_Fecha,#txtItemFEmisionBExtracion,#txtItemItecnico_Iocular_Fecha,#txtFechaAcervo")
+            .find("#txtItemInicio_Vigencia,#txtItemFin_Vigencia,#txtItemActa_Iocular_Fe,#txtItemAresolucion_Fecha,#txtItemItecnico_Raprobacion_Fecha,#txtItemFEmisionBExtracion,#txtItemItecnico_Iocular_Fecha,#txtFechaAcervo,#txtFechaSolAprob")
             .datepicker(initSigo.formatDatePicker);
         this.visibleSinInsOcu();
         $.fn.select2.defaults.set("theme", "bootstrap4");
@@ -687,6 +687,8 @@ ManPOA.selectFile = null;
                             break;
                         case "FAPROBACION":
                             ManPOA.fnSetPersonaCompleto(_dom, data["COD_PERSONA"], data["COD_PTIPO"], data["TIPO_CARGO"]); break;
+                        case "FIOCULAR":
+                            ManPOA.fnSetPersonaCompleto(_dom, data["COD_PERSONA"], data["COD_PTIPO"], data["TIPO_CARGO"]); break;
                         case "IOCULAR":
                             if (!utilDt.existValorSearch(ManPOA.dtItemAOcular, "COD_PERSONA", data["COD_PERSONA"])) {
                                 if (data["COD_PTIPO"] != null && data["COD_PTIPO"].trim() != "" &&
@@ -884,6 +886,12 @@ ManPOA.selectFile = null;
                             ManPOA.frmPOARegistro.find("#hdfItemARFuncionarioCodigo").val(data.data["COD_PERSONA"]);
                             ManPOA.frmPOARegistro.find("#lblItemARFuncionario").val(data.data["APELLIDOS_NOMBRES"]);
                             ManPOA.frmPOARegistro.find("#lblItemARFuncionarioODatos").val(data.data["N_DOCUMENTO"] + " - " + data.data["CARGO"]);
+                            break;
+                        case "FIOCULAR":
+                            debugger;
+                            ManPOA.frmPOARegistro.find("#hdfItemIOFuncionarioCodigo").val(data.data["COD_PERSONA"]);
+                            ManPOA.frmPOARegistro.find("#lblItemIOFuncionario").val(data.data["APELLIDOS_NOMBRES"]);
+                            ManPOA.frmPOARegistro.find("#lblItemIOFuncionarioODatos").val(data.data["CARGO"]);
                             break;
                     }
                 } else {

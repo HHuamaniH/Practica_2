@@ -14,7 +14,7 @@
                 <div class="form-row">
                     <div class="form-group col-md-6">
                         <label for="ddlVerticeId" class="text-small">Evaluacion</label>
-                        @Html.TextBox("txtEvaluacion", "", new { @class = "form-control form-control-sm", maxlength = "300", oninput = "this.value = this.value.replace(/[^áéíóúa-zÁÉÍÓÚA-Z 0-9]/,'')" })
+                        @Html.TextBox("txtEvaluacion", "", new { @class = "form-control form-control-sm", maxlength = "300", onkeypress = "return utilSigo.checkLetter(event);" })
                     </div>
                     <div class="form-group col-md-6">
                         <label for="ddlZonaCampoId" class="text-small">Zona</label>
@@ -24,17 +24,17 @@
                 <div class="form-row">
                     <div class="form-group col-md-6">
                         <label for="txtCoordEste" class="text-small">Coordenada Este</label>
-                        @Html.TextBox("txtCoordEste", "", new { @class = "form-control form-control-sm", maxlength = "6", type = "number" })
+                        @Html.TextBox("txtCoordEste", "", new { @class = "form-control form-control-sm", maxlength = "6", onkeypress = "return utilSigo.checkNum(event);" })
                     </div>
                     <div class="form-group col-md-6">
                         <label for="txtCoordNorte" class="text-small">Coordenada Norte</label>
-                        @Html.TextBox("txtCoordNorte", "", new { @class = "form-control form-control-sm", maxlength = "7", type = "number" })
+                        @Html.TextBox("txtCoordNorte", "", new { @class = "form-control form-control-sm", maxlength = "7", onkeypress = "return utilSigo.checkNum(event);" })
                     </div>
                 </div>               
                 <div class="form-row">
                     <div class="form-group col-md-12">
                         <label for="txtDescripcion" class="text-small">Descripción</label>
-                        @Html.TextArea("txtDescripcion", "", new { @class = "form-control form-control-sm", rows = "4" })
+                        @Html.TextArea("txtDescripcion", "", new { @class = "form-control form-control-sm", rows = "4", onkeypress = "return utilSigo.checkLetter(event);" })
                     </div>
                 </div>
             </form>

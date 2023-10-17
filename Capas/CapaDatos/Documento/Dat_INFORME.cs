@@ -9310,6 +9310,8 @@ namespace CapaDatos.DOC
                         lsCEntidad.ListObligacionTitular = new List<CapaEntidad.DOC.Ent_INFORME_OBLIGTITULAR>();
                         lsCEntidad.ListISUPERVISION_OCARACTE_AMB01 = new List<CEntidad>();
                         lsCEntidad.ListDesplazamientoInforme = new List<CEntidad>();
+                        lsCEntidad.ListCoberturaBoscosa = new List<CEntidad>();
+                        lsCEntidad.ListOtrosPtosEval = new List<CEntidad>();
                         lsCEntidad.ListMandatos = new List<Ent_MANDATOS>();
                         lsCEntidad.ListObligMandatos = new List<Ent_MANDATOS>();
                         CEntidad ocampoEnt;
@@ -9602,6 +9604,44 @@ namespace CapaDatos.DOC
                                 oMandatos.FECHA_PRESENT_INF = dr.GetString(dr.GetOrdinal("FECHA_PRESENT_INF"));
                                 oMandatos.RegEstado = 1;
                                 lsCEntidad.ListObligMandatos.Add(oMandatos);
+                            }
+                        }
+                        #endregion
+                        #region ListCoberturaBoscosa
+                        dr.NextResult();
+                        if (dr.HasRows)
+                        {
+                            while (dr.Read())
+                            {
+                                ocampoEnt = new CEntidad();
+                                ocampoEnt.COD_SECUENCIAL = Int32.Parse(dr["COD_SECUENCIAL"].ToString());
+                                ocampoEnt.ACTIVIDAD = dr["ACTIVIDAD"].ToString();
+                                ocampoEnt.AREA = Decimal.Parse(dr["AREA"].ToString());
+                                ocampoEnt.ZONA = dr["ZONA"].ToString();
+                                ocampoEnt.AUTORIZADO = dr["AUTORIZADO"].ToString();
+                                ocampoEnt.COORDENADA_ESTE = Int32.Parse(dr["COORDENADA_ESTE"].ToString());
+                                ocampoEnt.COORDENADA_NORTE = Int32.Parse(dr["COORDENADA_NORTE"].ToString());
+                                ocampoEnt.OBSERVACION = dr["OBSERVACION"].ToString();
+                                ocampoEnt.RegEstado = 0;
+                                lsCEntidad.ListCoberturaBoscosa.Add(ocampoEnt);
+                            }
+                        }
+                        #endregion
+                        #region ListOtrosPtosEval
+                        dr.NextResult();
+                        if (dr.HasRows)
+                        {
+                            while (dr.Read())
+                            {
+                                ocampoEnt = new CEntidad();
+                                ocampoEnt.COD_SECUENCIAL = Int32.Parse(dr["COD_SECUENCIAL"].ToString());
+                                ocampoEnt.EVALUACION = dr["EVALUACION"].ToString();
+                                ocampoEnt.ZONA = dr["ZONA"].ToString();
+                                ocampoEnt.COORDENADA_ESTE = Int32.Parse(dr["COORDENADA_ESTE"].ToString());
+                                ocampoEnt.COORDENADA_NORTE = Int32.Parse(dr["COORDENADA_NORTE"].ToString());
+                                ocampoEnt.DESCRIPCION = dr["DESCRIPCION"].ToString();
+                                ocampoEnt.RegEstado = 0;
+                                lsCEntidad.ListOtrosPtosEval.Add(ocampoEnt);
                             }
                         }
                         #endregion
@@ -9932,6 +9972,52 @@ namespace CapaDatos.DOC
                         objcampo.FECHA_PRESENT_INF = loDatos.FECHA_PRESENT_INF;
                         objcampo.RegEstado = loDatos.RegEstado;
                         dBOracle.ManExecute(cn, tr, "DOC_OSINFOR_ERP_MIGRACION.spISUPERVISION_OBLIGMANDATOSGrabar", objcampo);
+                    }
+                }
+                #endregion
+                #region ListCoberturaBoscosa
+                if (oCEntidad.ListCoberturaBoscosa != null)
+                {
+                    foreach (var loDatos in oCEntidad.ListCoberturaBoscosa)
+                    {
+                        if (loDatos.RegEstado == 1 || loDatos.RegEstado == 2) //Nuevo o Modificado
+                        {
+                            ocampo = new CEntidad();
+                            ocampo.COD_INFORME = OUTPUTPARAM01.Split('|')[0];
+                            ocampo.COD_SECUENCIAL = loDatos.COD_SECUENCIAL;
+                            ocampo.ACTIVIDAD = loDatos.ACTIVIDAD;
+                            ocampo.AREA = loDatos.AREA;
+                            ocampo.ZONA = loDatos.ZONA;
+                            ocampo.AUTORIZADO = loDatos.AUTORIZADO;
+                            ocampo.COORDENADA_ESTE = loDatos.COORDENADA_ESTE;
+                            ocampo.COORDENADA_NORTE = loDatos.COORDENADA_NORTE;
+                            ocampo.OBSERVACION = loDatos.OBSERVACION;
+                            ocampo.COD_UCUENTA = oCEntidad.COD_UCUENTA;
+                            ocampo.RegEstado = loDatos.RegEstado;
+                            dBOracle.ManExecute(cn, tr, "DOC_OSINFOR_ERP_MIGRACION.spISUPERVISION_DET_COBERT_BOSCOSA_Grabar", ocampo);
+                        }
+                    }
+                }
+                #endregion
+                #region ListOtrosPtosEval
+                if (oCEntidad.ListOtrosPtosEval != null)
+                {
+                    foreach (var loDatos in oCEntidad.ListOtrosPtosEval)
+                    {
+                        if (loDatos.RegEstado == 1 || loDatos.RegEstado == 2) //Nuevo o Modificado
+                        {
+                            ocampo = new CEntidad();
+                            ocampo.COD_INFORME = OUTPUTPARAM01.Split('|')[0];
+                            ocampo.COD_SECUENCIAL = loDatos.COD_SECUENCIAL;
+                            ocampo.EVALUACION = loDatos.EVALUACION;
+                            ocampo.ZONA = loDatos.ZONA;
+                            ocampo.COORDENADA_ESTE = loDatos.COORDENADA_ESTE;
+                            ocampo.COORDENADA_NORTE = loDatos.COORDENADA_NORTE;
+                            ocampo.DESCRIPCION = loDatos.DESCRIPCION;
+                            ocampo.COD_UCUENTA = oCEntidad.COD_UCUENTA;
+                            ocampo.RegEstado = loDatos.RegEstado;
+                            dBOracle.ManExecute(cn, tr, "DOC_OSINFOR_ERP_MIGRACION.spISUPERVISION_DET_OTROS_PUNTOS_EVAL_Grabar", ocampo);
+                        }
                     }
                 }
                 #endregion

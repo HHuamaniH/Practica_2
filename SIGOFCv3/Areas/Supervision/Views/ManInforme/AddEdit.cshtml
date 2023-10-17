@@ -297,6 +297,24 @@
                                             </div>
                                         </div>
                                     </div>
+                                    @if (Model.hdfCodMTipo == "0000030")
+                                    {
+                                        <div class="card-header text-small">Impactos</div>
+                                        <div class="card-body">
+                                            <div class="form-row">
+                                                <div class="col-md-12">
+                                                    @Html.Partial("~/Areas/Supervision/Views/ManInforme/Render/_renderCoberturaBoscosa.cshtml", Model.tbCoberturaBoscosa, new ViewDataDictionary { { "cod_informe", Model.hdfCodInforme }, { "cod_cnotificacion", Model.vmInfCNotificacion.hdfCodCNotificacion } })
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="card-body">
+                                            <div class="form-row">
+                                                <div class="col-md-12">
+                                                    @Html.Partial("~/Areas/Supervision/Views/ManInforme/Render/_renderOtrosPuntosEval.cshtml", Model.tbOtrosPtosEval, new ViewDataDictionary { { "cod_informe", Model.hdfCodInforme }, { "cod_cnotificacion", Model.vmInfCNotificacion.hdfCodCNotificacion } })
+                                                </div>
+                                            </div>
+                                        </div>
+                                    }
                                 </div>
                             </div>
                             <div class="tab-pane fade show" id="navObligacion" role="tabpanel" aria-labelledby="nav-home-tab">
@@ -508,6 +526,10 @@
 <div class="modal fade hide" id="mdlManInforme_Informes" role="dialog"></div>
 @* Para el modal _DetalleExpediente usado en este control *@
 <div class="modal fade hide" id="mdlManInforme_DetalleExpediente" role="dialog"></div>
+@* Para el modal _CoberturaBoscosa usado en el control _renderCoberturaBoscosa *@
+<div class="modal fade hide" id="mdlManInforme_CoberturaBoscosa" role="dialog"></div>
+@* Para el modal _CoberturaBoscosa usado en el control _renderOtrosPuntosEval *@
+<div class="modal fade hide" id="mdlManInforme_OtrosPuntosEval" role="dialog"></div>
 
 @* Para el control genérico de personas *@
 <div class="modal fade hide" id="mdlBuscarPersona" role="dialog"></div>

@@ -263,6 +263,12 @@ namespace CapaDatos.DOC
                             oCampos.UBIGEO_REGENTE = dr.GetString(dr.GetOrdinal("UBIGEO_REGENTE"));
                             oCampos.DIRECCION_REGENTE = dr.GetString(dr.GetOrdinal("DIRECCION_REGENTE"));
 
+                            oCampos.SAPROBACION_NUM = dr.GetString(dr.GetOrdinal("SAPROBACION_NUM"));
+                            oCampos.SAPROBACION_FECHA = dr.GetString(dr.GetOrdinal("SAPROBACION_FECHA"));
+                            oCampos.ACTA_IOCULAR_COD_FUNCIONARIO = dr.GetString(dr.GetOrdinal("ACTA_IOCULAR_COD_FUNCIONARIO"));
+                            oCampos.ACTA_IOCULAR_FUNCIONARIO = dr.GetString(dr.GetOrdinal("ACTA_IOCULAR_FUNCIONARIO"));
+                            oCampos.ACTA_IOCULAR_CARGO = dr.GetString(dr.GetOrdinal("ACTA_IOCULAR_CARGO"));
+
                         }
                         //POA_DET_TIOCULAR
                         dr.NextResult();

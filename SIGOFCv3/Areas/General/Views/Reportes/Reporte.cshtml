@@ -147,20 +147,20 @@
                                 </div>
                             </div>
                             @*<div id="alerta-rptobl" class="form-group col-md-6 " style="display:none;">
-                                <div class="col-12">
-                                    <div class="alert alert-success" role="alert">
-                                        <h4 class="alert-heading">Atención!</h4>
-                                        <p class="card-text">Por mejoras del sistema, se ha actualizado las nuevas obligaciones, por ello si desea ver el reporte histórico hasta el <span class="FechaCorte">04/2021</span> , debe habilitar la siguiente opción:</p>
-                                        <hr>
-                                        <div class="navbar-brand form-check form-check-inline">
-                                            <input class="form-check-input" type="checkbox" id="chbNewRpt" value="">
-                                            <label class="form-check-label" for="chbNewRpt">Reporte hasta el  <span class="FechaCorte">04/2021</span></label>
-                                        </div>
+                            <div class="col-12">
+                                <div class="alert alert-success" role="alert">
+                                    <h4 class="alert-heading">Atención!</h4>
+                                    <p class="card-text">Por mejoras del sistema, se ha actualizado las nuevas obligaciones, por ello si desea ver el reporte histórico hasta el <span class="FechaCorte">04/2021</span> , debe habilitar la siguiente opción:</p>
+                                    <hr>
+                                    <div class="navbar-brand form-check form-check-inline">
+                                        <input class="form-check-input" type="checkbox" id="chbNewRpt" value="">
+                                        <label class="form-check-label" for="chbNewRpt">Reporte hasta el  <span class="FechaCorte">04/2021</span></label>
                                     </div>
-
                                 </div>
 
-                            </div>*@
+                            </div>
+
+                        </div>*@
                         </div>
                     </form>
                     <button type="button" id="btnConsultarReporte" class="btn btn-primary btn-sm" onclick="_reporteGeneral.fnSubmitForm()">Consultar</button>
@@ -310,7 +310,7 @@
                         <table id="tbObligacionesTitularesMaderables" style="width:100%" class="table table-hover table-bordered">
                             <thead>
                                 <tr>
-                                    <th colspan="36" class="text-sm-left">
+                                    <th colspan="41" class="text-sm-left">
                                         <div class="form-inline">
                                             <strong>Reporte de Obligaciones de los Titulares - Maderables</strong>
                                         </div>
@@ -325,7 +325,7 @@
                         <table id="tbObligacionesTitularesMaderables_new" style="width:100%" class="table table-hover table-bordered">
                             <thead>
                                 <tr>
-                                    <th colspan="39" class="text-sm-left">
+                                    <th colspan="41" class="text-sm-left">
                                         <div class="form-inline">
                                             <strong>Reporte de Obligaciones de los Titulares - Maderables</strong>
                                         </div>
@@ -350,7 +350,7 @@
                         <table id="tbObligacionesTitularesNoMaderables" style="width:100%" class="table table-hover table-bordered">
                             <thead>
                                 <tr>
-                                    <th colspan="31" class="text-sm-left">
+                                    <th colspan="41" class="text-sm-left">
                                         <div class="form-inline">
                                             <strong>Reporte de Obligaciones de los Titulares - No Maderables</strong>
                                         </div>
@@ -364,7 +364,7 @@
                         <table id="tbObligacionesTitularesNoMaderables_new" style="width:100%" class="table table-hover table-bordered">
                             <thead>
                                 <tr>
-                                    <th colspan="32" class="text-sm-left">
+                                    <th colspan="41" class="text-sm-left">
                                         <div class="form-inline">
                                             <strong>Reporte de Obligaciones de los Titulares - No Maderables</strong>
                                         </div>
@@ -388,7 +388,7 @@
                         <table id="tbObligacionesTitularesFauna" style="width:100%" class="table table-hover table-bordered">
                             <thead>
                                 <tr>
-                                    <th colspan="46" class="text-sm-left">
+                                    <th colspan="54" class="text-sm-left">
                                         <div class="form-inline">
                                             <strong>Reporte de Obligaciones de los Titulares - Fauna</strong>
                                         </div>
@@ -402,7 +402,45 @@
                         <table id="tbObligacionesTitularesFauna_new" style="width:100%" class="table table-hover table-bordered">
                             <thead>
                                 <tr>
-                                    <th colspan="46" class="text-sm-left">
+                                    <th colspan="54" class="text-sm-left">
+                                        <div class="form-inline">
+                                            <strong>Reporte de Obligaciones de los Titulares - Fauna</strong>
+                                        </div>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body" id="dvObligacionesTitularesCusaf" style="display:none;">
+                <div class="form-group">
+                    <nav class="navbar navbar-light bg-light justify-content-between">
+                        <span class="navbar-brand">4. Reporte de Obligaciones de los Titulares - CUSAF </span>
+                        <button class="btn btn-sm btn-outline-primary my-2 my-sm-0 " type="button" onclick="_reporteGeneral.fnExportResumenCusaf()">Descargar<i class="fa fa-file-excel-o fa-fw"></i></button>
+                    </nav>
+                </div>
+                <div class="form-row">
+                    <div id="tbtblobligCusaf" class="table-responsive">
+                        <table id="tbObligacionesTitularesCusaf" style="width:100%" class="table table-hover table-bordered">
+                            <thead>
+                                <tr>
+                                    <th colspan="50" class="text-sm-left">
+                                        <div class="form-inline">
+                                            <strong>Reporte de Obligaciones de los Titulares - Fauna</strong>
+                                        </div>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                    <div id="tbtblobligCusaf_new" class="table-responsive">
+                        <table id="tbObligacionesTitularesCusaf_new" style="width:100%" class="table table-hover table-bordered">
+                            <thead>
+                                <tr>
+                                    <th colspan="50" class="text-sm-left">
                                         <div class="form-inline">
                                             <strong>Reporte de Obligaciones de los Titulares - Fauna</strong>
                                         </div>
@@ -683,81 +721,81 @@
                 </div>
             </div>
             @*<div class="card-body" id="dvCuadro5Paspeq" style="display:none;">
-                    <div class="form-row">
-                        <div class="table-responsive">
-                            <table id="tbCuadro5Paspeq" style="width:100%" class="table table-hover table-bordered">
-                                <thead>
+            <div class="form-row">
+                <div class="table-responsive">
+                    <table id="tbCuadro5Paspeq" style="width:100%" class="table table-hover table-bordered">
+                        <thead>
 
-                                    <tr>
-                                        <th colspan="53" class="text-sm-left">
-                                            <div class="form-inline">
-                                                <strong>Cuadro N° 5 - Consolidado del universo de administrados</strong>
-                                            </div>
-                                        </th>
-                                    </tr>
-                                </thead>
-                                <tbody></tbody>
-                            </table>
-                        </div>
-                    </div>
+                            <tr>
+                                <th colspan="53" class="text-sm-left">
+                                    <div class="form-inline">
+                                        <strong>Cuadro N° 5 - Consolidado del universo de administrados</strong>
+                                    </div>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
                 </div>
-                <div class="card-body" id="dvCuadro6Paspeq" style="display:none;">
-                    <div class="form-row">
-                        <div class="table-responsive">
-                            <table id="tbCuadro6Paspeq" style="width:100%" class="table table-hover table-bordered">
-                                <thead>
+            </div>
+        </div>
+        <div class="card-body" id="dvCuadro6Paspeq" style="display:none;">
+            <div class="form-row">
+                <div class="table-responsive">
+                    <table id="tbCuadro6Paspeq" style="width:100%" class="table table-hover table-bordered">
+                        <thead>
 
-                                    <tr>
-                                        <th colspan="53" class="text-sm-left">
-                                            <div class="form-inline">
-                                                <strong>Cuadro N° 6 - Cantidad de títulos habilitantes por modalidades de aprovechamiento</strong>
-                                            </div>
-                                        </th>
-                                    </tr>
-                                </thead>
-                                <tbody></tbody>
-                            </table>
-                        </div>
-                    </div>
+                            <tr>
+                                <th colspan="53" class="text-sm-left">
+                                    <div class="form-inline">
+                                        <strong>Cuadro N° 6 - Cantidad de títulos habilitantes por modalidades de aprovechamiento</strong>
+                                    </div>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
                 </div>
-                <div class="card-body" id="dvCuadro7Paspeq" style="display:none;">
-                    <div class="form-row">
-                        <div class="table-responsive">
-                            <table id="tbCuadro7Paspeq" style="width:100%" class="table table-hover table-bordered">
-                                <thead>
+            </div>
+        </div>
+        <div class="card-body" id="dvCuadro7Paspeq" style="display:none;">
+            <div class="form-row">
+                <div class="table-responsive">
+                    <table id="tbCuadro7Paspeq" style="width:100%" class="table table-hover table-bordered">
+                        <thead>
 
-                                    <tr>
-                                        <th colspan="53" class="text-sm-left">
-                                            <div class="form-inline">
-                                                <strong>Cuadro N° 7 - Número de títulos habilitantes y planes de manejo por modalidades de aprovechamiento</strong>
-                                            </div>
-                                        </th>
-                                    </tr>
-                                </thead>
-                                <tbody></tbody>
-                            </table>
-                        </div>
-                    </div>
+                            <tr>
+                                <th colspan="53" class="text-sm-left">
+                                    <div class="form-inline">
+                                        <strong>Cuadro N° 7 - Número de títulos habilitantes y planes de manejo por modalidades de aprovechamiento</strong>
+                                    </div>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
                 </div>
-                <div class="card-body" id="dvCuadro8Paspeq" style="display:none;">
-                    <div class="form-row">
-                        <div class="table-responsive">
-                            <table id="tbCuadro8Paspeq" style="width:100%" class="table table-hover table-bordered">
-                                <thead>
+            </div>
+        </div>
+        <div class="card-body" id="dvCuadro8Paspeq" style="display:none;">
+            <div class="form-row">
+                <div class="table-responsive">
+                    <table id="tbCuadro8Paspeq" style="width:100%" class="table table-hover table-bordered">
+                        <thead>
 
-                                    <tr>
-                                        <th colspan="53" class="text-sm-left">
-                                            <div class="form-inline">
-                                                <strong>Cuadro N° 8 - Consolidado de títulos habilitantes y planes de manejo según modalidad de aprovechamiento</strong>
-                                            </div>
-                                        </th>
-                                    </tr>
-                                </thead>
-                                <tbody></tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>*@
+                            <tr>
+                                <th colspan="53" class="text-sm-left">
+                                    <div class="form-inline">
+                                        <strong>Cuadro N° 8 - Consolidado de títulos habilitantes y planes de manejo según modalidad de aprovechamiento</strong>
+                                    </div>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>*@
 
         </div>
     </div>
