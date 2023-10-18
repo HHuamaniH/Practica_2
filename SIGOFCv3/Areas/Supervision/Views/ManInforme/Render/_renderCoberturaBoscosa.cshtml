@@ -36,12 +36,8 @@
             _CoberturaBoscosa.fnSaveForm = function (data) {
                 if (data != null) {
                     var dt = _renderCoberturaBoscosa.dtCoberturaBoscosa;
-                    debugger;
                     if (obj == null || obj == "") {//Nuevo Registro     
-                        debugger;
                         if (!utilDt.existValorSearch(_renderCoberturaBoscosa.dtCoberturaBoscosa, "ACTIVIDAD", data["ACTIVIDAD"])) {
-                            console.log(data);
-                            debugger;
                             dt.rows.add([data]).draw();
                             dt.page('last').draw('page');
                             utilSigo.toastSuccess("Exito", "Datos guardados correctamente");
