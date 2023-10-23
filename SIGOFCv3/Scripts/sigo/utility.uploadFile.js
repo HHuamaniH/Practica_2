@@ -12,7 +12,7 @@ llamada uploadFile.fileSelectHandler(e, objeto, url, data, function(data){//Hace
 var uploadFile = {};
 (function () {
 
-    this.fileSelectHandler = function (e, objeto, url, data, fnSuccess) {
+    this.fileSelectHandler = function (e, objeto, url, data, fnSuccess, fnError) {
 
         if (e.dataTransfer != undefined &&
             e.dataTransfer.files != undefined) {
@@ -21,14 +21,14 @@ var uploadFile = {};
         }
         var files = e.target.files || e.dataTransfer.files;
         if (files != undefined && files.length > 0) {
-            this.uploadFileToServer(files[0], objeto, url, data, fnSuccess);
+            this.uploadFileToServer(files[0], objeto, url, data, fnSuccess, fnError);
         }
     }
     this.resetFileSelect = function (objeto) {
         var idFile = $(objeto).attr("id");
         $("#" + idFile).replaceWith(objeto.outerHTML);
     }
-    this.uploadFileToServer = function (file, objeto, url, data, fnSuccess) {
+    this.uploadFileToServer = function (file, objeto, url, data, fnSuccess, fnError) {
         var formdata = new FormData();
         formdata.append(file.name, file);
         //Agregamos los parametros opcionales
@@ -58,6 +58,9 @@ var uploadFile = {};
                     else {
                         utilSigo.toastWarning("Aviso", "No hay registros");
                     }
+                }
+                else if (!data.success && typeof fnError === "function") {
+                    fnError(data);
                 }
                 else utilSigo.toastWarning("Aviso", data.msj);
             },

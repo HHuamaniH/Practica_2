@@ -3,6 +3,7 @@ using OfficeOpenXml;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Web;
 
 namespace SIGOFCv3.Areas.Supervision.Models.ManInforme
@@ -23,7 +24,7 @@ namespace SIGOFCv3.Areas.Supervision.Models.ManInforme
                     var noOfCol = workSheet.Dimension.End.Column;
                     var noOfRow = workSheet.Dimension.End.Row;
                     CapaEntidad.DOC.Ent_INFORME oCampos;
-                    string ceste, cnorte,vertice;
+                    string ceste, cnorte, vertice;
 
                     for (int rowIterator = 2; rowIterator <= noOfRow; rowIterator++)
                     {
@@ -41,7 +42,8 @@ namespace SIGOFCv3.Areas.Supervision.Models.ManInforme
                                 if (vertice != "")
                                 {
                                     oCampos.VERTICE_CAMPO = vertice;
-                                }else { throw new Exception("Vertice Supervisado incorrecto"); }
+                                }
+                                else { throw new Exception("Vertice Supervisado incorrecto"); }
                                 oCampos.ZONA = (workSheet.Cells[rowIterator, 4].Value ?? "").ToString().Trim();
                                 oCampos.COORDENADA_ESTE = Convert.ToInt32(workSheet.Cells[rowIterator, 6].Value.ToString().Trim());
                                 oCampos.COORDENADA_ESTE_CAMPO = Convert.ToInt32(ceste);
@@ -94,9 +96,24 @@ namespace SIGOFCv3.Areas.Supervision.Models.ManInforme
                                     cnorte = (workSheet.Cells[rowIterator, 6].Value ?? "").ToString().Trim();
                                     if (ceste != "" && cnorte != "")
                                     {
-                                        oCampos.COD_SECUENCIAL = 0;
-                                        oCampos.COORDENADA_ESTE = Convert.ToInt32(workSheet.Cells[rowIterator, 5].Value.ToString().Trim());
-                                        oCampos.COORDENADA_NORTE = Convert.ToInt32(workSheet.Cells[rowIterator, 6].Value.ToString().Trim());
+                                        oCampos.COD_SECUENCIAL = 0;                                        
+                                        if (!Regex.IsMatch(ceste, @"^\d+$")) { throw new Exception("Coordenada Este incorrecta debe ser numérico"); }
+                                        else
+                                        {
+                                            int coord_esteInt = Convert.ToInt32(ceste);
+                                            if (coord_esteInt > 999999) { throw new Exception("Coordenada Este incorrecta no debe ser mayor a 6 digitos"); }
+                                            else
+                                            {
+                                                oCampos.COORDENADA_ESTE = Convert.ToInt32(workSheet.Cells[rowIterator, 5].Value.ToString().Trim());                                                
+                                                if (!Regex.IsMatch(cnorte, @"^\d+$")) { throw new Exception("Coordenada Norte incorrecta debe ser numérico"); }
+                                                else
+                                                {
+                                                    int coord_norteInt = Convert.ToInt32(cnorte);
+                                                    oCampos.COORDENADA_NORTE = Convert.ToInt32(workSheet.Cells[rowIterator, 6].Value.ToString().Trim());
+                                                    if (coord_norteInt > 9999999) { throw new Exception("Coordenada Norte incorrecta no debe ser mayor a 6 digitos"); }
+                                                }
+                                            }
+                                        }
                                         oCampos.OBSERVACION = (workSheet.Cells[rowIterator, 7].Value ?? "").ToString().Trim();
                                         oCampos.RegEstado = 1;
                                         lstCobBoscosa.Add(oCampos);
@@ -106,7 +123,8 @@ namespace SIGOFCv3.Areas.Supervision.Models.ManInforme
                                 else { throw new Exception("Autoridad incorrecta"); }
                             }
                             else { throw new Exception("Zona UTM incorrecta"); }
-                        }else { throw new Exception("Actividad incorrecta"); }
+                        }
+                        else { throw new Exception("Actividad incorrecta"); }
 
                     }
                 }
@@ -389,8 +407,23 @@ namespace SIGOFCv3.Areas.Supervision.Models.ManInforme
                             {
                                 oCampos.COD_SECUENCIAL = 0;
                                 oCampos.EVALUACION = (workSheet.Cells[rowIterator, 1].Value ?? "").ToString().Trim();
-                                oCampos.COORDENADA_ESTE = Convert.ToInt32(ceste);
-                                oCampos.COORDENADA_NORTE = Convert.ToInt32(cnorte);
+                                if (!Regex.IsMatch(ceste, @"^\d+$")) { throw new Exception("Coordenada Este incorrecta debe ser numérico"); }
+                                else
+                                {
+                                    int coord_esteInt = Convert.ToInt32(ceste);
+                                    if (coord_esteInt > 999999) { throw new Exception("Coordenada Este incorrecta no debe ser mayor a 6 digitos"); }
+                                    else
+                                    {
+                                        oCampos.COORDENADA_ESTE = Convert.ToInt32(workSheet.Cells[rowIterator, 3].Value.ToString().Trim());                                        
+                                        if (!Regex.IsMatch(cnorte, @"^\d+$")) { throw new Exception("Coordenada Norte incorrecta debe ser numérico"); }
+                                        else
+                                        {
+                                            int coord_norteInt = Convert.ToInt32(cnorte);
+                                            oCampos.COORDENADA_NORTE = Convert.ToInt32(workSheet.Cells[rowIterator, 4].Value.ToString().Trim());
+                                            if (coord_norteInt > 9999999) { throw new Exception("Coordenada Norte incorrecta no debe ser mayor a 6 digitos"); }
+                                        }
+                                    }
+                                }
                                 oCampos.DESCRIPCION = (workSheet.Cells[rowIterator, 5].Value ?? "").ToString().Trim();
                                 oCampos.RegEstado = 1;
                                 lstEval.Add(oCampos);

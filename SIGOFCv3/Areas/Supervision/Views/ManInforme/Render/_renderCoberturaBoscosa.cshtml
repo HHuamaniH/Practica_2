@@ -14,7 +14,7 @@
     _renderCoberturaBoscosa.fnInitDataTable_Detail = function () {
         var columns_label = [], columns_data = [], options = {};
 
-        columns_label = ["Actividad", "Area", "Zona", "Autorizado", "Coord. Este", "Coord. Norte","Observación",];
+        columns_label = ["Actividad", "Área", "Zona", "Autorizado", "Coord. Este", "Coord. Norte","Observación",];
         columns_data = ["ACTIVIDAD", "AREA", "ZONA", "AUTORIZADO", "COORDENADA_ESTE", "COORDENADA_NORTE", "OBSERVACION"];
         options = {
             page_length: 10, row_index: true, row_edit: true, row_fnEdit: "_renderCoberturaBoscosa.fnAddEdit(this)"
@@ -112,6 +112,10 @@
                     _renderCoberturaBoscosa.dtCoberturaBoscosa.page('last').draw('page');
                 }
             }
+            e.target.value = "";
+        }, function (data) {
+            e.target.value = "";
+            utilSigo.toastWarning("Error de validación", data.msj);
         });
     }
 
@@ -171,8 +175,8 @@
                             <i class="fa mx-2 fa-lg fa-window-close-o" style="cursor:pointer;" onclick="_renderCoberturaBoscosa.fnDeleteAll();" data-toggle="tooltip" data-placement="top" title="Eliminar Todos"></i>
                             <label style="cursor:pointer;" class="fa mx-2 fa-lg fa-file-excel-o" title="Importar Archivo" data-toggle="tooltip">
                                 <input type="file" id="fileselect" name="fileselect" style="display:none" size="60" onchange="_renderCoberturaBoscosa.fnImport(event, this)">
-                            </label>
-                            <i class="fa mx-2 fa-lg fa-folder-open" style="cursor:pointer;" onclick="_renderCoberturaBoscosa.fnExport();" data-toggle="tooltip" data-placement="top" title="Descargar Plantilla"></i>
+                            </label>                            
+                            <a href="@Url.Content("~/Archivos/Plantilla/CoberturaBoscosa.xlsx")"> <i class="fa mx-2 fa-lg fa-folder-open" style="cursor:pointer;" data-toggle="tooltip" data-placement="top" title="Descargar Plantilla"></i></a>
                             <strong>Cobertura Boscosa</strong>
                         </div>
                     </th>

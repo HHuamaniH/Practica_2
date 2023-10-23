@@ -487,6 +487,16 @@ ManPOA.selectFile = null;
             }
             ManPOA.frmPOARegistro.submit();
         });
+
+        $("#chckSinInspOcu").change(function () {
+            let chckSinInspOcu = document.getElementById("chckSinInspOcu");
+            if (chckSinInspOcu.checked) {
+                $("#hdfItemIOFuncionarioCodigo").val("");
+                $("#lblItemIOFuncionario").val("");
+                $("#lblItemIOFuncionarioODatos").val("");
+            }
+        });
+
         $("#chkConcluido,#chkProceso,#chkPendiente").click(function () {
             var id = $(this).attr("id");
             //console.log(id);
@@ -501,6 +511,8 @@ ManPOA.selectFile = null;
                 $("#chkConcluido,#chkProceso").prop("checked", false);
             }
         });
+
+        
 
         ManPOA.ItemRAPoa.frmResolAprob.find("#ddlTipoMaderables_RAprob").change(function () {
             if (this.value != "-") {
@@ -521,6 +533,7 @@ ManPOA.selectFile = null;
         if (true) {
 
         }
+
     };
     this.validacionGeneral = function () {
         var ids = ["ddlItemIndicadorId", "ddlODRegistroId"];
@@ -540,6 +553,7 @@ ManPOA.selectFile = null;
             $('a[href="#' + idtab + '"]').tab('show');
             idControlError.focus();
         }
+
         return valRetorno;
     }
     this.openZafraModal = function () {
@@ -891,7 +905,7 @@ ManPOA.selectFile = null;
                             debugger;
                             ManPOA.frmPOARegistro.find("#hdfItemIOFuncionarioCodigo").val(data.data["COD_PERSONA"]);
                             ManPOA.frmPOARegistro.find("#lblItemIOFuncionario").val(data.data["APELLIDOS_NOMBRES"]);
-                            ManPOA.frmPOARegistro.find("#lblItemIOFuncionarioODatos").val(data.data["CARGO"]);
+                            ManPOA.frmPOARegistro.find("#lblItemIOFuncionarioODatos").val(tipoCargo);
                             break;
                     }
                 } else {
@@ -1689,6 +1703,9 @@ ManPOA.selectFile = null;
                 return false;
             }
         }
+        if (!utilSigo.validateFechaRango("txtFechaSolAprob", "Fecha Aprobación")) {
+            return false;
+        } 
         return true;
     }
     

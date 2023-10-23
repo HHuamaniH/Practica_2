@@ -97,7 +97,10 @@ namespace SIGOFCv3.Areas.Supervision.Controllers
             }
             catch (Exception ex)
             {
-                return Json(new { success = false, msj = ex.Message });
+                return Json(new
+                {
+                    success = false, msj = ex.Message
+                });
             }
 
             return Json(new { success = true, msj = "", data = result });
@@ -152,7 +155,7 @@ namespace SIGOFCv3.Areas.Supervision.Controllers
         }
         public FileResult DescargarDatosInforme(string asCodInforme)
         {
-            string ruta = "", nombreDescarga= "ReporteSupervision_";
+            string ruta = "", nombreDescarga = "ReporteSupervision_";
             ListResult result = ExportarDatos.DatosInforme(asCodInforme);
             if (result.success)
             {
@@ -350,7 +353,7 @@ namespace SIGOFCv3.Areas.Supervision.Controllers
         public PartialViewResult _CoberturaBoscosa(string asCodCNotificacion)
         {
             CapaLogica.DOC.Log_BUSQUEDA exeBus = new CapaLogica.DOC.Log_BUSQUEDA();
-            
+
             ViewBag.ddlZona = new List<VM_Cbo>()
             {
                 new VM_Cbo() {Value="0000000",Text="Seleccionar" },new VM_Cbo() {Value="17S",Text="17S" },new VM_Cbo() {Value="18S",Text="18S" },new VM_Cbo() {Value="19S",Text="19S" }
@@ -408,7 +411,7 @@ namespace SIGOFCv3.Areas.Supervision.Controllers
         public PartialViewResult _Infraestructura(string asCodCNotificacion)
         {
             return PartialView();
-        }        
+        }
         #endregion
         #region "Zonificación de la Distribución de Especie"
         [HttpPost]
@@ -422,7 +425,7 @@ namespace SIGOFCv3.Areas.Supervision.Controllers
         public PartialViewResult _AprovSostenible(string asCodCNotificacion)
         {
             return PartialView();
-        }        
+        }
         #endregion
 
         #region "Mantenimiento Foto de Supervisión"
@@ -2137,7 +2140,7 @@ namespace SIGOFCv3.Areas.Supervision.Controllers
                 VM_TRAMITE tramite = new Log_Informe_Digital().TramiteGetById(tramiteId, "", "");
                 tramite.cDescTipoDoc = tramite.cDescTipoDoc.Trim().Replace(' ', '-');
                 tramite.cCodificacion = tramite.cCodificacion.Trim().Replace('/', '-');
-                nombreDocumentoNuevo = $"{ tramite.cDescTipoDoc}-{tramite.cCodificacion}.pdf";
+                nombreDocumentoNuevo = $"{tramite.cDescTipoDoc}-{tramite.cCodificacion}.pdf";
                 pathGeneradoDestino = Path.Combine(pathDocumentoDestino, nombreDocumentoNuevo);
 
 
