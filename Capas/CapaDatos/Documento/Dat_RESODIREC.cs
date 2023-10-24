@@ -2498,6 +2498,8 @@ namespace CapaDatos.DOC
                                 result.DETALLE_SUNAT = dr["DETALLE_SUNAT"] != DBNull.Value ? dr["DETALLE_SUNAT"].ToString() : null;
                                 result.DETALLE_SERFOR = dr["DETALLE_SERFOR"] != DBNull.Value ? dr["DETALLE_SERFOR"].ToString() : null;
                                 result.DETALLE_OTROS = dr["DETALLE_OTROS"] != DBNull.Value ? dr["DETALLE_OTROS"].ToString() : null;
+                                result.COD_ISUPERVISION = dr["COD_ISUPERVISION"] != DBNull.Value ? dr["COD_ISUPERVISION"].ToString() : null;
+                                result.NUMERO_ISUPERVISION = dr["NUMERO_ISUPERVISION"] != DBNull.Value ? dr["NUMERO_ISUPERVISION"].ToString() : null;
                             }
                         }
 

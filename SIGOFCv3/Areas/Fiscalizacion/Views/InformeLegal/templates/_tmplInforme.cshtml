@@ -45,7 +45,7 @@
         <p style="text-align: justify;">
             Me dirijo a usted, en atención al documento de la referencia, para informar los resultados de la etapa
             instructora del Procedimiento Administrativo Único (en adelante, PAU), iniciado a
-            ${TITULAR || '(indicar por defecto el nombre)'}, identificado/a con D.N.I./RUC N°
+            ${TITULAR || '(indicar por defecto el nombre)'}, identificado/a con ${TITULAR_DOCUMENTO? 'D.N.I.': 'RUC'} N°
             ${TITULAR_DOCUMENTO || TITULAR_RUC}, titular del ${TIPO_CONTRATO};
             conforme el artículo 22 del Reglamento del Procedimiento Administrativo Único del OSINFOR,
             aprobado por Resolución de Jefatura N° 00043-2021-OSINFOR/01.1 (en adelante, <strong>Reglamento PAU</strong>).
@@ -70,9 +70,9 @@
                             </td>
                             <td style="border: 1px solid #000;">
                                 <div>Titular: ${TITULAR || '(indicar por defecto el nombre)'} (en adelante, el/la titular)</div>
-                                <div>Código de TH: N° XX (en adelante, el contrato de ${TIPO_CONTRATO})</div>
-                                <div>Plan de Manejo supervisado: xx</div>
-                                <div>Fecha de supervisión: xx</div>
+                                <div>Código de TH: N° ${NUM_CONTRATO || '(indicar texto)'} (en adelante, el contrato de ${TIPO_CONTRATO})</div>
+                                <div>Plan de Manejo supervisado: ${NOMBRE_POA || 'xx'}</div>
+                                <div>Fecha de supervisión: ${ANTECEDENTES_DOCS.Inf_Sup.FECHA_SUPERVISION_INICIO_TEXTO || 'XXX'} al ${ANTECEDENTES_DOCS.Inf_Sup.FECHA_SUPERVISION_FIN_TEXTO || 'XXX'} </div>
                             </td>
                         </tr>
                         <tr>
@@ -83,9 +83,11 @@
                             <td style="border: 1px solid #000;">
                                 <p>Se inició el PAU por haber incurrido presuntamente en lo siguiente:</p>
                                 <ul style="list-style-type: lower-roman; margin-left: 0;">
+                                    {{each(index, inf) INFRACCIONES}}
                                     <li>
-                                        "Se vinculará con las imputaciones expuestas en la RSD de inicio de PAU y RSD de ampliación"
+                                        <i>${inf.detalle}</i>
                                     </li>
+                                    {{/each}}
                                 </ul>
                             </td>
                         </tr>
@@ -105,7 +107,7 @@
                                 <div>[Adjuntar evidencia]</div>
                             </td>
                             <td style="border: 1px solid #000;">
-                                Se informó al/la titular que, con fecha ${ANTECEDENTES_DOCS.Escrito.numero || 'XXXX'} se notificó la Resolución Sub Directoral N° ${ANTECEDENTES_DOCS.RSD.numero || 'XXXX'}, de fecha ${ANTECEDENTES_DOCS.RSD.fechaEmisionTexto || 'XX de XXXXX de XXXX'} y que tenía plazo para presentar los descargos de quince (15) días hábiles más el término de la distancia, en caso corresponda, contados a partir del día siguiente de la fecha de notificación, es decir, hasta el XX de XX de 202X
+                                Se informó al/la titular que, con fecha ${ANTECEDENTES_DOCS.RSD.fechaNotificacionTexto || 'XX de XXXXX de XXXX'} se notificó la Resolución Sub Directoral N° ${ANTECEDENTES_DOCS.RSD.numero || 'XXXX'}, de fecha ${ANTECEDENTES_DOCS.RSD.fechaEmisionTexto || 'XX de XXXXX de XXXX'} y que tenía plazo para presentar los descargos de quince (15) días hábiles más el término de la distancia, en caso corresponda, contados a partir del día siguiente de la fecha de notificación, es decir, hasta el XX de XX de 202X
                             </td>
                         </tr>
                         <tr>
@@ -122,63 +124,19 @@
             </div>
             <div>
                 <ol style="margin-left: ${MARGIN_LEFT.ROOT}; list-style: upper-roman;" start="2"><li><strong>BASE LEGAL</strong></li></ol>
-                <ul style="list-style-type: disc;">
-                    <li>
-                        Constitución Política del Perú de 1993.
-                        <a style="mso-footnote-id: foot_constitucion" href="#_foot_constitucion" title="">
-                            <sup class=MsoFootnoteReference><span style="mso-special-character:footnote"></span></sup>
-                        </a>
-                    </li>
-                    <li>Ley N° 26821, Ley Orgánica para el aprovechamiento sostenible de los Recursos Naturales.</li>
-                    <li>Ley N° 29763, Ley Forestal y de Fauna Silvestre.</li>
-                    <li>Decreto Legislativo N° 1085, Ley que crea el Organismo de Supervisión de los Recursos Forestales y de Fauna Silvestre y sus modificatorias.</li>
-                    {{if COD_MODALIDAD == '01' || COD_MODALIDAD == '02'}}
-                    <li>Decreto Supremo N° 018-2015-MINAGRI, que aprueba el Reglamento para la Gestión Forestal.(dependerá de la modalidad que se está evaluando).</li>
-                    {{else COD_MODALIDAD == '03'}}
-                    <li>Decreto Supremo N° 021-2015-MINAGRI, que aprueba el Reglamento para la Gestión Forestal.</li>
-                    {{else COD_MODALIDAD == '04'}}
-                    <li>Decreto Supremo N° 019-2015-MINAGRI, que aprueba el Reglamento para la Gestión Forestal.</li>
-                    {{/if}}
+                {{if COD_MODALIDAD == "01"}}
+                @Html.Partial("~/Areas/Fiscalizacion/Views/InformeLegal/templates/Concesiones/_legal.cshtml")
 
-                    {{if COD_MODALIDAD == '01'}}
-                    <li>Decreto Supremo Nº 136-2022-PCM, que aprueba el Reglamento de Organización y Funciones del OSINFOR</li>
-                    <li>Decreto Supremo N° 004-2019-JUS, que aprueba el Texto Único Ordenado de la Ley N° 27444, Ley del Procedimiento Administrativo General.</li>
-                    <li>Resolución Presidencial N° 021-2018-OSINFOR, que aprueba la Metodología del Cálculo del Monto de las Multas a Imponer por el Organismo de Supervisión de los Recursos Forestales y de Fauna Silvestre - OSINFOR, por infracción a la legislación Forestal y de Fauna Silvestre.</li>
-                    <li>Resolución de Jefatura N° 059-2019-OSINFOR, que aprueba los Criterios Técnicos para Determinar la Gravedad del Daño por la Comisión de Infracciones en Materia Forestal.</li>
-                    <li>Resolución de Dirección Ejecutiva N° 008-2020-MINAGRI-SERFOR-DE, que aprueba los Lineamientos para el ejercicio de la potestad sancionadora y desarrollo del procedimiento administrativo sancionador.</li>
-                    <li>Resolución de Jefatura N° 00043-2021-OSINFOR/01.1, que aprueba el Reglamento del Procedimiento Administrativo Único del OSINFOR.</li>
-                    {{/if}}
+                {{else COD_MODALIDAD == "02"}}
+                @Html.Partial("~/Areas/Fiscalizacion/Views/InformeLegal/templates/Predios privados/_legal.cshtml")
 
-                    {{if ['02', '03', '04'].indexOf(COD_MODALIDAD) != -1}}
-                    <li>Decreto Supremo N° 004-2019-JUS, Texto Único Ordenado de la Ley de Procedimiento Administrativo General, Ley Nº 27444.</li>
-                    <li>Decreto Supremo N° 024-2010-PCM, Reglamento del Decreto Legislativo N° 1085, modificado por los Decretos Supremos N° 034-2015-PCM y 126-2019-PCM.</li>
-                    {{/if}}
+                {{else COD_MODALIDAD == "03"}}
+                @Html.Partial("~/Areas/Fiscalizacion/Views/InformeLegal/templates/Comunidades nativas/_legal.cshtml")
 
-                    {{if COD_MODALIDAD == '02'}}
-                    <li>Decreto Supremo Nº 136-2022-PCM, Reglamento de Organización y Funciones del OSINFOR, modificado por el Decreto Supremo Nº 029-2017-PCM.</li>
-                    <li>Decreto Supremo Nº 043-2006-AG, Categorización de Especies Amenazadas de Flora Silvestre.</li>
-                    <li>Decreto Supremo Nº 007-2021-MIDAGRI, que aprueba el Reglamento de Infracciones y Sanciones en Materia Forestal y de Fauna Silvestre.</li>
-                    <li>Resolución de Jefatura Nº 059-2019-OSINFOR, Criterios SGC-M1-CRI-001-V.02 "Criterios para estimar la gravedad del daño por la comisión de infracciones en materia forestal".</li>
-                    <li>Resolución de Jefatura Nº 00043-2021-OSINFOR/01.1, Reglamento del Procedimiento Administrativo Único del OSINFOR.</li>
-                    <li>Resolución de Jefatura N° 00055-2020-OSINFOR/01.1, que determina los "Criterios para la disposición, seguimiento y verificación de las medidas correctivas y/o mandatos en materia forestal y de fauna silvestre del OSINFOR".</li>
+                {{else COD_MODALIDAD == "04"}}
+                @Html.Partial("~/Areas/Fiscalizacion/Views/InformeLegal/templates/Fauna/_legal.cshtml")
 
-                    {{else COD_MODALIDAD == '03'}}
-                    <li>Decreto Supremo Nº 136-2022-PCM, que aprueba el Reglamento de Organización y Funciones del OSINFOR</li>
-                    <li>Decreto Supremo N° 007-2021-MIDAGRI, que aprueba el Reglamento de Infracciones y Sanciones en Materia Forestal y de Fauna Silvestre</li>
-                    <li>Decreto Supremo Nº 043-2006-AG, Categorización de Especies Amenazadas de Flora Silvestre.</li>
-                    <li>Resolución de Jefatura Nº 059-2019-OSINFOR, Criterios SGC-M1-CRI-001-V.02 "Criterios para estimar la gravedad del daño por la comisión de infracciones en materia forestal".</li>
-                    <li>Resolución de Jefatura Nº 043-2021-OSINFOR/01.1, Reglamento del Procedimiento Administrativo Único del OSINFOR.</li>
-                    <li>Resolución de Jefatura N° 00055-2020-OSINFOR/01.1, que determina los "Criterios para la disposición, seguimiento y verificación de las medidas correctivas y/o mandatos en materia forestal y de fauna silvestre del OSINFOR".</li>
-
-                    {{else COD_MODALIDAD == '04'}}
-                    <li>Decreto Supremo Nº 136-2022-PCM, Reglamento de Organización y Funciones del OSINFOR, modificado por el Decreto Supremo Nº 029-2017-PCM.</li>
-                    <li>Decreto Supremo Nº 043-2006-AG, Categorización de Especies Amenazadas de Flora Silvestre.</li>
-                    <li>Decreto Supremo Nº 007-2021-MIDAGRI, que aprueba el Reglamento de Infracciones y Sanciones en Materia Forestal y de Fauna Silvestre.</li>
-                    <li>Resolución de Jefatura Nº 059-2019-OSINFOR, Criterios SGC-M1-CRI-001-V.02 "Criterios para estimar la gravedad del daño por la comisión de infracciones en materia forestal".</li>
-                    <li>Resolución de Jefatura Nº 00043-2021-OSINFOR/01.1, Reglamento del Procedimiento Administrativo Único del OSINFOR.</li>
-                    <li>Resolución de Jefatura N° 00055-2020-OSINFOR/01.1, que determina los "Criterios para la disposición, seguimiento y verificación de las medidas correctivas y/o mandatos en materia forestal y de fauna silvestre del OSINFOR".</li>
-                    {{/if}}
-                </ul>
+                {{/if}}
             </div>
             <div>
                 <ol style="margin-left: ${MARGIN_LEFT.ROOT}; list-style: upper-roman;" start="3"><li><strong>ANÁLISIS</strong></li></ol>
@@ -203,7 +161,7 @@
                             Se otorga al/la ${DENOMINACION_TITULAR}/a un plazo improrrogable de quince (15)/veinte (20) días hábiles contados a partir del día siguiente de notificado el presente Informe Final de Instrucción, más el término de la distancia, para que presente los descargos que considere pertinentes, ya sea de forma virtual, por la Mesa de Partes Digital a través del portal web del OSINFOR: https://facilita.gob.pe/t/677 y solo si el archivo a adjuntar excede los 10 MB, remitirlo al correo mesa.partes@osinfor.gob.pe, o de forma presencial, ante la mesa de partes de la sede central del OSINFOR en la ciudad de Lima o ante cualquier mesa de partes de sus oficinas desconcentradas. De la misma manera, podrá señalar una dirección de correo electrónico y/o casilla electrónica del OSINFOR, en caso lo tuviere, para notificarle las diferentes actuaciones administrativas que deriven del presente PAU.
                         </li>
                         <li>
-                            Asimismo, la Titular tiene derecho de requerir información, acceder y obtener copias de los actuados contenidos en el presente procedimiento administrativo, en cualquier momento y estado de su tramitación, en virtud de lo estipulado en el numeral 1.19 del artículo IV del Texto Único Ordenado de la Ley N° 27444, Ley del Procedimiento Administrativo General.
+                            Asimismo, el/la Titular tiene derecho de requerir información, acceder y obtener copias de los actuados contenidos en el presente procedimiento administrativo, en cualquier momento y estado de su tramitación, en virtud de lo estipulado en el numeral 1.19 del artículo IV del Texto Único Ordenado de la Ley N° 27444, Ley del Procedimiento Administrativo General.
                         </li>
                         <li>
                             Finalmente, en concordancia con el Decreto Supremo N° 026-2023-PCM, mediante el cual se aprueba el uso obligatorio de la notificación vía Casilla Electrónica del OSINFOR, se le EXHORTA a realizar su afiliación a la casilla electrónica del OSINFOR ingresando al siguiente link: https://notificaciones.osinfor.gob.pe:9061/#/registro, a fin que se realice la notificación a través de ese medio. Cabe señalar que, según lo estipulado en el Reglamento del Sistema de Notificación Vía Casilla Electrónica del OSINFOR, aprobado mediante Resolución de Jefatura N° 026-2023-OSINFOR, a partir del 1 de agosto del 2023, el OSINFOR habilitará de oficio casillas electrónicas a todos los administrados. En esa línea, se le recuerda que, una vez asignada la casilla electrónica, deberá revisarla periódicamente, a efectos de tomar conocimiento oportuno de los actos administrativos y actuaciones administrativas que le hayan sido notificados por el OSINFOR".
@@ -216,7 +174,7 @@
                 <ol class="continue" style="margin-left: ${MARGIN_LEFT.OL};">
                     <li>
                         <span>
-                            Del análisis efectuado en el presente informe, ha quedado acreditado que la ${TITULAR || 'XXX'}, identificada con DNI N° ${TITULAR_DOCUMENTO || TITULAR_RUC}, titular del Contrato/permiso, es responsable por la comisión de las siguientes infracciones:
+                            Del análisis efectuado en el presente informe, ha quedado acreditado que la ${TITULAR || 'XXX'}, identificada con ${TITULAR_DOCUMENTO? 'DNI': 'RUC'} N° ${TITULAR_DOCUMENTO || TITULAR_RUC}, titular del Contrato/permiso, es responsable por la comisión de las siguientes infracciones:
                         </span>
                     </li>
                 </ol>

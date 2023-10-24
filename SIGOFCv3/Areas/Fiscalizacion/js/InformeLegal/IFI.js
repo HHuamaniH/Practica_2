@@ -233,29 +233,33 @@ _informe.Exportar = async function () {
     informe.PROCEDENCIA = procedencias.find(function (x) { return x.COD_PROCEDENCIA === informe.COD_PROCEDENCIA })?.PROCEDENCIA;
     informe.MATERIA = materias.find(function (x) { return x.COD_MATERIA === informe.COD_MATERIA })?.MATERIA;
     informe.TIPO_CONTRATO = modalidades.find(function (x) { return x.COD_MODALIDAD === informe.COD_MODALIDAD })?.CONTRATO || '';
-    informe.FECHA = fnDate.text_long(informe.RES_DIRECTORAL_FECHA || new Date());
+    informe.FECHA = fnDate.text_long(document.querySelector('#txtFechaLegal').value.trim() || new Date());
     informe.SITD_PASSWORD = app.Tramite?.password || '';
     informe.SUBDIRECTOR = informe.PARTICIPANTES.find(function (x) { return x.funcion === 'Subdirector' })?.apellidosNombres || '[INDICAR SUBDIRECTOR]';
     informe.DENOMINACION_TITULAR = informe.COD_MODALIDAD == '01' ? 'concesionario' : 'administrado';
 
     //Configuracion de márgenes
-    informe.MARGIN_LEFT = { ROOT: '-15px', H: '0', OL: '-25px' };    
+    informe.MARGIN_LEFT = { ROOT: '-15px', H: '0', OL: '-25px' };
 
     //EXPEDIENTES ADMINISTRATIVOS
-    informe.EXPEDIENTE_ADM = informe.REFERENCIAS.filter(x => x.TIPO_DOCUMENTO?.indexOf('EXPEDIENTE') != -1).map(x => (x.CODIGO || x.NUMERO || 'S/N')).join(', ');
+    informe.EXPEDIENTE_ADM = informe.REFERENCIAS.filter(x => x.TIPO_DOCUMENTO?.indexOf('EXPEDIENTE') != -1).map(x => (x.NUMERO || x.CODIGO || 'S/N')).join(', ');
+    if (!informe.EXPEDIENTE_ADM) {
+        const row = _renderListExpediente.dtRenderListInforme.rows().data().toArray()[0] || {};
+        informe.EXPEDIENTE_ADM = row.NUM_INFORME?.match(regExpOSINFOR)[0] || null;
+    }
 
     //Asociamos las infracciones a las RSD en los antecedentes
     for (let item of informe.ANTECEDENTES) {
         if (item.tipoDocumento == 'Resolución Sub Directoral') {
             item.INFRACCIONES = informe.INFRACCIONES
                 .filter(x => x.codResolucion == item.codResolucion)
-                /*.map(x => {
-                    x.titulo = x.titulo.replace(/(Respecto a la imputación)\s+(.*)/gi, (m, p1, p2) => {
-                        return p2.charAt(0).toUpperCase() + p2.slice(1);
-                    });
+            /*.map(x => {
+                x.titulo = x.titulo.replace(/(Respecto a la imputación)\s+(.*)/gi, (m, p1, p2) => {
+                    return p2.charAt(0).toUpperCase() + p2.slice(1);
+                });
 
-                    return x;
-                });*/
+                return x;
+            });*/
         }
     }
 
@@ -267,24 +271,40 @@ _informe.Exportar = async function () {
     informe.ANTECEDENTES_DOCS.Ced_Noti = informe.ANTECEDENTES.find(x => x.tipoDocumento == 'Cédula de Notificación') || {};
     informe.ANTECEDENTES_DOCS.Escrito = informe.ANTECEDENTES.find(x => x.tipoDocumento == 'Escrito') || {};
 
+    //OFICIO
+    informe.DOC_REFERENCIAS = {};
+    informe.DOC_REFERENCIAS.Oficio = informe.REFERENCIAS.find(x => x.TIPO_DOCUMENTO == 'OFICIO') || {};
+
     //RESUMEN INF. SUPERVISION
     console.log("Consultando volúmenes de especies ligados al informe de supervisión...");
     let volumenes = [], instituciones = [];
 
     //INCISOS AFECTOS (Donde se mostrará el cuadro)
-    const incisos_afectos = informe.INFRACCIONES.map(x => x.inciso.replace(/\W+/gi, ''));
+    //const incisos_afectos = informe.INFRACCIONES.map(x => x.inciso.replace(/\W+/gi, ''));
 
-    for (var i = 0; i < informe.RSD.length; i++) {
-        const COD_RESOLUCION = informe.RSD[i].codResolucion;
+    informe.ANUM_RESOLUCION = informe.RSD[0].numAResolucion || '';
+    informe.NUM_POA = informe.RSD[0].numPOA || '';
+    informe.NOMBRE_POA = informe.RSD[0].nombrePOA || '';
 
+    for (let item of informe.RSD) {
         //if (incisos_afectos.find(x => ['e', '21', 'g'].includes(x))) {
-            let resumen = await _informe.RegResumenInfSupervision(COD_RESOLUCION);
-            resumen = resumen.filter(x => !!x.VOLUMEN_INJUSTIFICADO);
+        let INF_SUPERVISION = await _informe.RegResumenInfSupervision(item.codInformeSupervision);
+
+        if (INF_SUPERVISION) {
+            informe.ANTECEDENTES_DOCS.Inf_Sup.FECHA_SUPERVISION_INICIO = INF_SUPERVISION.FECHA_SUPERVISION_INICIO;
+            informe.ANTECEDENTES_DOCS.Inf_Sup.FECHA_SUPERVISION_INICIO_TEXTO = fnDate.text_long(INF_SUPERVISION.FECHA_SUPERVISION_INICIO);
+
+            informe.ANTECEDENTES_DOCS.Inf_Sup.FECHA_SUPERVISION_FIN = INF_SUPERVISION.FECHA_SUPERVISION_FIN;
+            informe.ANTECEDENTES_DOCS.Inf_Sup.FECHA_SUPERVISION_FIN_TEXTO = fnDate.text_long(INF_SUPERVISION.FECHA_SUPERVISION_FIN);
+
+            //VOLUMEN ANALIZADO
+            const resumen = INF_SUPERVISION.VOL_ANALIZADO?.filter(x => !!x.VOLUMEN_INJUSTIFICADO) || [];
             volumenes = volumenes.concat(resumen);
+        }
         //}
 
         //RESUMEN RSD
-        const lstInstituciones = await _informe.InstitucionesResolucion(COD_RESOLUCION);
+        const lstInstituciones = await _informe.InstitucionesResolucion(item.codResolucion);
         instituciones = instituciones.concat(lstInstituciones);
     }
 
@@ -314,6 +334,8 @@ _informe.Exportar = async function () {
     const template = await _informe.ExtraerPlantilla();
     informe.PIE_PAGINA = _informe.tmpl.get(template, '#tmpl-pie-pagina', { informe, urlLocalSigo });
 
+    console.log(informe);
+
     //let html = _informe.tmpl.General(informe);
     let html = '';
     html += _informe.tmpl.get(template, '#tmpl-exportar', informe);
@@ -327,15 +349,16 @@ _informe.Exportar = async function () {
 
     //Enumeracion de cuadros
     html = _informe.EnumerarCuadros(html);
+
     $(document).googoose({ html, header });
 }
 
-_informe.RegResumenInfSupervision = function (COD_RESOLUCION) {
+_informe.RegResumenInfSupervision = function (COD_INFORME_SUPERVISION) {
     return new Promise(function (resolve, reject) {
         const params = {
             type: 'get',
-            url: `${urlLocalSigo}Fiscalizacion/InformeLegalDigital/RegMostrarInfoDocumentResumenSupervisado`,
-            datos: { COD_RESOLUCION }
+            url: `${urlLocalSigo}Fiscalizacion/InformeLegalDigital/ObtenerInformeSupervision`,
+            datos: { COD_INFORME_SUPERVISION }
         };
 
         utilSigo.fnAjax(params, function (res) {
@@ -1106,6 +1129,8 @@ $(function () {
                             self.Informe.COD_INFORME = res.informe.COD_INFORME || values.COD_INFORME || null;
                             self.Informe.NUM_INFORME_SITD = res.informe.NUM_INFORME_SITD || values.NUM_INFORME_SITD || null;
                             self.Informe.R_LEGAL = res.informe.R_LEGAL || values.R_LEGAL || null;
+                            self.Informe.TITULAR_DOCUMENTO = (res.informe.TITULAR_DOCUMENTO || '').trim();
+                            self.Informe.TITULAR_RUC = (res.informe.TITULAR_RUC || '').trim();
 
                             //REFERENCIAS
                             const getReferences = (lst, SUBTIPO) => {
@@ -1516,6 +1541,8 @@ $(function () {
                 const RESOLUCION = {
                     codResolucion: item.COD_RESODIREC,
                     numInforme: item.NUMERO_RESOLUCION,
+                    codInformeSupervision: item.COD_ISUPERVISION,
+                    numInformeSupervision: item.NUMERO_ISUPERVISION,
                     estado: 1
                 };
 
@@ -1535,6 +1562,13 @@ $(function () {
                             rangoSancion: infraccion.RANGO_SANCION,
                             titulo,
                             detalle: infraccion.DESCRIPCION_INFRACCIONES,
+                            codEspecie: infraccion.COD_ESPECIES,
+                            especie: infraccion.DESCRIPCION_ESPECIE,
+                            volumen: infraccion.VOLUMEN,
+                            area: infraccion.AREA,
+                            nroIndividuos: infraccion.NUMERO_INDIVIDUOS,
+                            numPOA: infraccion.NUM_POA,
+                            tipoMaderable: infraccion.TIPOMADERABLE,
                             flgDesvirtua: false,
                             flgSubsana: false,
                             parrafos: null,

@@ -58,6 +58,13 @@ namespace SIGOFCv3.Areas.Fiscalizacion.Controllers
             return Json(result, JsonRequestBehavior.AllowGet);
         }
 
+        public JsonResult ObtenerInformeSupervision(string COD_INFORME_SUPERVISION)
+        {
+            oLog_Informe_Legal_Digital = new Log_Informe_Legal_Digital();
+            var result = oLog_Informe_Legal_Digital.InformeSupervisionResumen(COD_INFORME_SUPERVISION);
+            return Json(result, JsonRequestBehavior.AllowGet);
+        }
+
         [HttpGet]
         public JsonResult ObtenerExpediente(string NRO_DOCUMENTO)
         {
@@ -277,15 +284,7 @@ namespace SIGOFCv3.Areas.Fiscalizacion.Controllers
             }
 
             return Json(new { success, msj });
-        }
-
-        [HttpGet]
-        public JsonResult RegMostrarInfoDocumentResumenSupervisado(string COD_RESOLUCION)
-        {
-            oLog_Informe_Legal_Digital = new Log_Informe_Legal_Digital();
-            var result = oLog_Informe_Legal_Digital.RegMostrarInfoDocumentResumenSupervisado(COD_RESOLUCION);
-            return Json(result, JsonRequestBehavior.AllowGet);
-        }
+        }        
 
     }
 }

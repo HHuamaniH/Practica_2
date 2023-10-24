@@ -5,26 +5,22 @@
             <th style="text-align: center; border: 1px solid #000;">Tipo infractor</th>
             <th style="text-align: center; border: 1px solid #000;">Conducta Imputada</th>
             <th style="text-align: center; border: 1px solid #000;">Descargo sobre la imputación formulada</th>
-            <th style="text-align: center; border: 1px solid #000;">Información complementaria/información adicional</th>
         </tr>
     </thead>
     <tbody>
         <tr>
             <td style="border: 1px solid #000;">
-                Dependerá del caso concreto
+                Literal b) del numeral 43.1 del artículo 43 , concordado con el artículo 66  del RGF
             </td>
             <td style="border: 1px solid #000;">
                 <div>Numeral 2 del Cuadro de Infracciones y Sanciones en Materia Forestal del Anexo 1 del RISMFFS</div><br />
                 <i>“No entregar o presentar información o documentación legalmente exigible en el plazo previsto, o cuando la autoridad competente lo requiera”.</i>
             </td>
             <td style="border: 1px solid #000;">
-                Se imputó contra la titular el no haber presentado el Informe de Ejecución Anual del XX, correspondiente al periodo XX, el cual debe contener las actividades de aprovechamiento de productos forestales maderables y no maderables
+                Se imputó contra el/la Titular ${infraccion.detalle || 'XX'}
             </td>
-            <td style="border: 1px solid #000;">
-                Dependerá del caso concreto
-            </td>
-            <td style="border: 1px solid #000;">
-                Dependerá del caso concreto
+            <td style="border: 1px solid #000; text-align: center;">
+                ${informe.COD_TIPO_INFORME?'Si':'No'}
             </td>
         </tr>
     </tbody>
@@ -34,12 +30,12 @@
 {{if infraccion.flgDesvirtua}}
 <ol class="continue" style="margin-left: ${informe.MARGIN_LEFT.OL};">
     <li>
-        Mediante la Resolución Sub Directoral N° ${informe.ANTECEDENTES_DOCS.RSD.numero || '00XX-202X-OSINFOR/08.2.X'}, de fecha XX de XXXX, se imputó al/la concesionario/a presuntamente incumplir con la presentación (descripción del tipo de informe de ejecución y el periodo).
+        Mediante la Resolución Sub Directoral N° ${informe.ANTECEDENTES_DOCS.RSD.numero || '00XX-202X-OSINFOR/08.2.X'}, de fecha ${informe.ANTECEDENTES_DOCS.RSD.fechaEmisionTexto || 'XX de XXX del 202X'}, se imputó al/la concesionario/a presuntamente incumplir con la presentación (descripción del tipo de informe de ejecución y el periodo).
     </li>
     {{if informe.COD_TIPO_INFORME == 1}}
     <li>
         <span>
-            Por Escrito/Carta de fecha ${ANTECEDENTES_DOCS.Escrito.fechaEmisionTexto || 'XX de XXX del 202X'} ingresado al OSINFOR con Registro N° ${ANTECEDENTES_DOCS.Escrito.numero || 'XXXX'}, e/la concesionario/a presentó sus descargos, donde se advierte los siguientes argumentos que guarda relación con la imputación materia de análisis:<br /><br />
+            Por Escrito/Carta de fecha ${informe.ANTECEDENTES_DOCS.Escrito.fechaEmisionTexto || informe.ANTECEDENTES_DOCS.Carta.fechaEmisionTexto || 'XX de XXX del 202X'} ingresado al OSINFOR con Registro N° ${informe.ANTECEDENTES_DOCS.Escrito.numero || informe.ANTECEDENTES_DOCS.Carta.numero || 'XXXX'}, e/la concesionario/a presentó sus descargos, donde se advierte los siguientes argumentos que guarda relación con la imputación materia de análisis:<br /><br />
             <ol style="list-style-type: lower-alpha">
                 <li>(Agregar texto original).</li>
                 <li>(Agregar texto original).</li>
@@ -115,7 +111,7 @@
                             (i) Entregar la información o documentación.
                         </td>
                         <td style="border: 1px solid #000;">
-                            De la revisión del Escrito/Carta de fecha ${ANTECEDENTES_DOCS.Escrito.fechaEmisionTexto || 'XX de XXX del 202X'} ingresado al OSINFOR con Registro N° ${ANTECEDENTES_DOCS.Escrito.numero || 'XXXX'}, se advierte que el/la concesionario/a presentó ante el (indicar entidad e informe de ejecución objeto de imputación, así como el periodo correspondiente y fecha de presentación), por lo que, se tiene por cumplido el requisito analizado.
+                            De la revisión del Escrito/Carta de fecha ${informe.ANTECEDENTES_DOCS.Escrito.fechaEmisionTexto || 'XX de XXX del 202X'} ingresado al OSINFOR con Registro N° ${informe.ANTECEDENTES_DOCS.Escrito.numero || 'XXXX'}, se advierte que el/la concesionario/a presentó ante el (indicar entidad e informe de ejecución objeto de imputación, así como el periodo correspondiente y fecha de presentación), por lo que, se tiene por cumplido el requisito analizado.
                         </td>
                         <td style="border: 1px solid #000; text-align: center;">SI</td>
                     </tr>
@@ -209,4 +205,7 @@
 
 <ol class="continue" style="margin-left: ${informe.MARGIN_LEFT.OL};">
     <li>De acuerdo a lo señalado precedentemente XX.</li>
+    <li>
+        En consecuencia, estando a la evaluación realizada a los actuados en el presente procedimiento, y siendo que el/la titular no presentó descargos que logren desacreditar los hechos que sustentan la imputación materia de análisis, ha quedado acreditada la comisión de la infracción tipificada en el numeral 2 del Anexo 2 del Cuadro de Infracciones y Sanciones en Materia de Fauna Silvestre del RISMFFS.
+    </li>
 </ol>

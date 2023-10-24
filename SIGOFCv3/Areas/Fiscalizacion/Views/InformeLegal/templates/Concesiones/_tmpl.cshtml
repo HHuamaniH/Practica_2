@@ -38,7 +38,7 @@
 <ol class="continue" style="margin-left: ${MARGIN_LEFT.OL}; ">
     <li>
         <span>
-            Mediante Escrito/Carta N° ${ANTECEDENTES_DOCS.Escrito.numero || 'XXXX'}, de fecha ${ANTECEDENTES_DOCS.Escrito.fechaEmisionTexto || 'XX de XXXX de XXXX'}, ingresado al OSINFOR el XX de XXXXX de XXXX con Registro N° XXXXXXXXX, el/la concesionario/a reconoce su responsabilidad en la comisión de las infracciones imputadas, señalando lo siguiente:
+            Mediante Escrito/Carta, de fecha ${ANTECEDENTES_DOCS.Escrito.fechaNotificacionTexto || ANTECEDENTES_DOCS.Carta.fechaNotificacionTexto || 'XX de XXXX de XXXX'}, ingresado al OSINFOR el ${ANTECEDENTES_DOCS.Escrito.fechaEmisionTexto || ANTECEDENTES_DOCS.Carta.fechaEmisionTexto || 'XX de XXXX de XXXX'} con Registro N° ${ANTECEDENTES_DOCS.Escrito.numero || ANTECEDENTES_DOCS.Carta.numero || 'XXXX'}, el/la concesionario/a reconoce su responsabilidad en la comisión de las infracciones imputadas, señalando lo siguiente:
             <p style="padding-left: 30px; font-style: italic;">
                 “Describir lo expuesto por el/la concesionario/a”.
             </p>
@@ -77,7 +77,7 @@
             </ol>
         </span>
     </li>
-    <li>En esa línea, el/la concesionario/a ha reconocido su responsabilidad mediante el escrito/carta presentado/a el ${ANTECEDENTES_DOCS.Escrito.fechaEmisionTexto || 'XX de XXXX de XXXX'}, es decir, dentro del plazo para la presentación de los descargos a las imputaciones efectuadas mediante el/la Escrito/Carta N° ${ANTECEDENTES_DOCS.Escrito.numero || 'XXXX'}, de fecha ${ANTECEDENTES_DOCS.Escrito.fechaEmisionTexto || 'XX de XXXX de XXXX'}, ingresado al OSINFOR el XX de XXXXX de XXXX con Registro N° XXXXXXXXX, siendo de aplicación el primer supuesto antes mencionado, aspecto que será considerado cuando se realice cálculo de la multa en los considerandos siguientes.</li>
+    <li>En esa línea, el/la concesionario/a ha reconocido su responsabilidad mediante el escrito/carta presentado/a el ${ANTECEDENTES_DOCS.Escrito.fechaEmisionTexto || ANTECEDENTES_DOCS.Carta.fechaEmisionTexto || 'XX de XXXX de XXXX'}, es decir, dentro del plazo para la presentación de los descargos a las imputaciones efectuadas mediante el/la Escrito/Carta N° ${ANTECEDENTES_DOCS.Escrito.numero || ANTECEDENTES_DOCS.Carta.numero || 'XXXX'}, de fecha ${ANTECEDENTES_DOCS.Escrito.fechaEmisionTexto || ANTECEDENTES_DOCS.Carta.fechaEmisionTexto || 'XX de XXXX de XXXX'}, ingresado al OSINFOR el ${ANTECEDENTES_DOCS.Escrito.fechaEmisionTexto || ANTECEDENTES_DOCS.Carta.fechaEmisionTexto || 'XX de XXXX de XXXX'} con Registro N° ${ANTECEDENTES_DOCS.Escrito.numero || ANTECEDENTES_DOCS.Carta.numero || 'XXXX'}, siendo de aplicación el primer supuesto antes mencionado, aspecto que será considerado cuando se realice cálculo de la multa en los considerandos siguientes.</li>
 </ol>
 {{/if}}
 
@@ -127,7 +127,7 @@
 <ol class="continue" style="margin-left: ${MARGIN_LEFT.OL};">
     <li>
         De acuerdo con el reporte de antecedentes de fecha XX, se advierte que, el/la Titular no fue sancionada anteriormente por el OSINFOR, y no se identifican agravantes y atenuantes aplicables, en consecuencia, las infracciones acreditadas son pasibles de ser sancionadas de la siguiente manera:
-    </li>    
+    </li>
 </ol>
 <table width="580" cellpadding="4" style="border: 0; font-family: Arial; font-size: 10pt; border-collapse: collapse; line-height: 150%;">
     <thead>
@@ -143,11 +143,11 @@
                 Numeral "${infra.inciso}" del Anexo 1 del RISMFFS.<br />
                 ${infra.titulo}
             </td>
-            <td style="border: 1px solid #000;">
-                ${infra.rangoSancion}
+            <td style="border: 1px solid #000; width: 40%; text-align: center; ">
+                ${infra.rangoSancion || 'XX UIT'}
             </td>
         </tr>
-        {{/each}}        
+        {{/each}}
     </tbody>
 </table>
 {{/if}}
@@ -169,12 +169,14 @@
             Al respecto, del análisis técnico del cumplimiento de los criterios para disponer una medida correctiva, se desprende las siguientes condiciones:
             <ul style="margin-left: 0;">
                 <li>
-                    <span>
-                        <strong>Identificación del aprovechamiento no autorizado, dentro y fuera del área de la concesión, así como del retiro de cobertura forestal</strong><br />
-                        Respecto a esta condición, se advierte técnicamente la extracción no autorizada de X.XX m3, correspondiente a X árbol(es) fuera del censo comercial/semilleros de la(s) especie(s) XXXXXXXXXXXXXXX.<br />
-                        Asimismo, se advierte el volumen injustificado de X.XX m3, correspondiente a la(s) especie(s) XXXXXXXXXXXXXXX.<br />
-                        En adición a lo anterior, se verificó el retiro de la cobertura forestal de X.XXX hectáreas.
-                    </span>
+                    <div>
+                        <div>
+                            <strong>Identificación del aprovechamiento no autorizado, dentro y fuera del área de la concesión, así como del retiro de cobertura forestal</strong>
+                        </div>
+                        <div>Respecto a esta condición, se advierte técnicamente la extracción no autorizada de X.XX m3, correspondiente a X árbol(es) fuera del censo comercial/semilleros de la(s) especie(s) XXXXXXXXXXXXXXX.</div>
+                        <div>Asimismo, se advierte el volumen injustificado de X.XX m3, correspondiente a la(s) especie(s) XXXXXXXXXXXXXXX.</div>
+                        <div>En adición a lo anterior, se verificó el retiro de la cobertura forestal de X.XXX hectáreas.</div>
+                    </div>
                 </li>
                 <li>
                     <span>
@@ -462,7 +464,7 @@
                     En ese sentido, corresponde comunicarle a ${entidad} el resultado y conclusión del presente procedimiento, a fin que, en el marco de sus competencias, ejecute lo siguiente:
                 </div>
                 <div>
-                   - Exhorte el/la titular a cumplir las obligaciones en virtud al contrato de concesión.
+                    - Exhorte el/la titular a cumplir las obligaciones en virtud al contrato de concesión.
                 </div>
             </td>
         </tr>

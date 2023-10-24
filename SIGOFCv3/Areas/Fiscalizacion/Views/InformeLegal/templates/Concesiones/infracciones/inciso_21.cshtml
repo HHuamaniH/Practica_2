@@ -5,13 +5,12 @@
             <th style="text-align: center; border: 1px solid #000;">Tipo infractor</th>
             <th style="text-align: center; border: 1px solid #000;">Conducta Imputada</th>
             <th style="text-align: center; border: 1px solid #000;">Descargo sobre la imputación formulada</th>
-            <th style="text-align: center; border: 1px solid #000;">Información complementaria/información adicional</th>
         </tr>
     </thead>
     <tbody>
         <tr>
             <td style="border: 1px solid #000;">
-                Dependerá del caso concreto
+                Literales a) y k) del numeral 43.1 del artículo 43 del RGF.
             </td>
             <td style="border: 1px solid #000;">
                 Numeral 21 del Cuadro de Infracciones y Sanciones en Materia Forestal del Anexo 1 del RISMFFS.
@@ -19,27 +18,25 @@
                 <i>"Talar, extraer y/o aprovechar recursos forestales, sin autorización, en su condición o no de titular del título habilitante, a excepción de los aprovechados por subsistencia"</i>
             </td>
             <td style="border: 1px solid #000;">
-                Cumplir con la implementación del plan de manejo aprobado y demostrar el origen legal de los productos aprovechados
+                Se imputó contra el/la Titular ${infraccion.detalle || 'XX'}
             </td>
-            <td style="border: 1px solid #000;">
-                Dependerá del caso concreto
-            </td>
-            <td style="border: 1px solid #000;">
-                Dependerá del caso concreto
+            <td style="border: 1px solid #000; text-align: center;">
+                ${informe.COD_TIPO_INFORME?'Si':'No'}
             </td>
         </tr>
     </tbody>
 </table>
 <div>Fuente: Resolución Sub Directoral N° ${informe.ANTECEDENTES_DOCS.RSD.numero || '00XX-202X-OSINFOR/08.2.X'}</div>
 
+{{if infraccion.flgDesvirtua}}
 <ol class="continue" style="margin-left: ${informe.MARGIN_LEFT.OL};">
     <li>
-        Mediante la Resolución Sub Directoral N° ${informe.ANTECEDENTES_DOCS.RSD.numero || 'XXXXX-XXXX-OSINFOR/08.2.1'}, de fecha ${informe.ANTECEDENTES_DOCS.RSD.fechaEmisionTexto ||'XX de XXXX'}, se imputó al/la concesionario/a presuntamente talar, extraer y/o aprovechar recursos forestales, sin autorización, en su condición o no de titular del título habilitante por un volumen de XX.XXX m3 (descripción del volumen total injustificado, precisando el volumen correspondiente a cada especie), a excepción de los aprovechados por subsistencia.
+        Mediante la Resolución Sub Directoral N° ${informe.ANTECEDENTES_DOCS.RSD.numero || '00XX-202X-OSINFOR/08.2.X'}, de fecha ${informe.ANTECEDENTES_DOCS.RSD.fechaEmisionTexto || 'XX de XXX del 202X'}, se imputó al/la concesionario/a presuntamente incumplir con la presentación (descripción del tipo de informe de ejecución y el periodo).
     </li>
     {{if informe.COD_TIPO_INFORME == 1}}
     <li>
         <span>
-            Por Escrito/Carta de fecha ${informe.ANTECEDENTES_DOCS.Escrito.fechaEmisionTexto ||'XX de XXXX'} ingresado al OSINFOR con Registro N° ${informe.ANTECEDENTES_DOCS.Escrito.numero || '00XX-202X-OSINFOR/08.2.X'}, e/la concesionario/a presentó sus descargos, donde se advierte los siguientes argumentos que guarda relación con la imputación materia de análisis:<br />
+            Por Escrito/Carta de fecha ${informe.ANTECEDENTES_DOCS.Escrito.fechaEmisionTexto || informe.ANTECEDENTES_DOCS.Carta.fechaEmisionTexto || 'XX de XXX del 202X'} ingresado al OSINFOR con Registro N° ${informe.ANTECEDENTES_DOCS.Escrito.numero || informe.ANTECEDENTES_DOCS.Carta.numero || 'XXXX'}, e/la concesionario/a presentó sus descargos, donde se advierte los siguientes argumentos que guarda relación con la imputación materia de análisis:<br /><br />
             <ol style="list-style-type: lower-alpha">
                 <li>(Agregar texto original).</li>
                 <li>(Agregar texto original).</li>
@@ -49,7 +46,7 @@
     </li>
     <li>
         <span>
-            Respecto a lo señalado por el/la concesionario/a, se advierte el siguiente análisis:<br />
+            Respecto a lo señalado por el/la concesionario/a, se advierte el siguiente análisis:
             <ul>
                 <li>
                     Con relación al argumento señalado en el acápite a), <strong>XXXXXXXXXXXXXXXXXXXXXXXXXXX</strong>.
@@ -65,6 +62,7 @@
     </li>
     {{/if}}
 </ol>
+{{/if}}
 
 <ol class="continue" style="margin-left: ${informe.MARGIN_LEFT.OL};">
     <li>

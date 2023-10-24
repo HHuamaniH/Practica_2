@@ -57,6 +57,11 @@ namespace CapaLogica.Documento
             return oDat_Informe_Legal_Digital.ObtenerInforme(COD_RESOLUCION);
         }
 
+        public VM_Fiscalizacion_ISupervision InformeSupervisionResumen(string COD_INFORME_SUPERVISION)
+        {
+            return oDat_Informe_Legal_Digital.InformeSupervisionResumen(COD_INFORME_SUPERVISION);
+        }
+
         public List<VM_INFORME_LEGAL_DIGITAL_ANTECEDENTE> ObtenerAntecedentesRSD(string COD_RESOLUCION, string COD_THABILITANTE)
         {
             return oDat_Informe_Legal_Digital.ObtenerAntecedentesRSD(COD_RESOLUCION, COD_THABILITANTE);
@@ -90,11 +95,6 @@ namespace CapaLogica.Documento
         public bool AnularFirmaPorInforme(string codInforme)
         {
             return oDat_Informe_Legal_Digital.AnularFirmaPorInforme(codInforme);
-        }
-
-        public List<Ent_INFORME_VOL_ANALIZADO> RegMostrarInfoDocumentResumenSupervisado(string COD_RESOLUCION)
-        {
-            return oDat_Informe_Legal_Digital.RegMostrarInfoDocumentResumenSupervisado(COD_RESOLUCION);
-        }
+        }        
     }
 }

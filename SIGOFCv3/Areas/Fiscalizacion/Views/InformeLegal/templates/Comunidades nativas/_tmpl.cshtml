@@ -38,7 +38,7 @@
 <ol class="continue" style="margin-left: ${MARGIN_LEFT.OL}; ">
     <li>
         <span>
-            Mediante Escrito/Carta N° ${ANTECEDENTES_DOCS.Escrito.numero || 'XXXX'}, de fecha ${ANTECEDENTES_DOCS.Escrito.fechaEmisionTexto || 'XX de XXXX de XXXX'}, ingresado al OSINFOR el XX de XXXXX de XXXX con Registro N° XXXXXXXXX, el/la administrado/a reconoce su responsabilidad en la comisión de las infracciones imputadas, señalando lo siguiente:
+            Mediante Escrito/Carta N° ${ANTECEDENTES_DOCS.Escrito.numero || ANTECEDENTES_DOCS.Carta.numero || 'XXXX'}, de fecha ${ANTECEDENTES_DOCS.Escrito.fechaEmisionTexto || ANTECEDENTES_DOCS.Carta.fechaEmisionTexto || 'XX de XXXX de XXXX'}, el/la administrado/a reconoce su responsabilidad en la comisión de las infracciones imputadas, señalando lo siguiente:
             <p style="padding-left: 30px; font-style: italic;">
                 “Describir lo expuesto por el/la administrado/a”.
             </p>
@@ -78,7 +78,7 @@
             </ol>
         </span>
     </li>
-    <li>En esa línea, el/la administrado/a ha reconocido su responsabilidad mediante el escrito/carta presentado/a el XX de XXXX de XXXX, es decir, dentro del plazo para la presentación de los descargos a las imputaciones efectuadas mediante el/la Escrito/Carta N°/S/N, de fecha XX de XXXX de XXXX, ingresado al OSINFOR el XX de XXXXX de XXXX con Registro N° XXXXXXXXX, siendo de aplicación el primer supuesto antes mencionado, aspecto que será considerado cuando se realice cálculo de la multa en los considerandos siguientes.</li>
+    <li>En esa línea, el/la administrado/a ha reconocido su responsabilidad mediante el escrito/carta presentado/a el ${ANTECEDENTES_DOCS.Escrito.fechaEmisionTexto || ANTECEDENTES_DOCS.Carta.fechaEmisionTexto || 'XX de XXXX de XXXX'}, es decir, dentro del plazo para la presentación de los descargos a las imputaciones efectuadas mediante el/la Escrito/Carta N°/S/N, de fecha XX de XXXX de XXXX, ingresado al OSINFOR el XX de XXXXX de XXXX con Registro N° XXXXXXXXX, siendo de aplicación el primer supuesto antes mencionado, aspecto que será considerado cuando se realice cálculo de la multa en los considerandos siguientes.</li>
 </ol>
 {{/if}}
 
@@ -122,7 +122,7 @@
 {{/if}}
 
 {{if FLG_SANCION}}
-<h5><u><strong>Sobre la imposición de sanción</strong></u></h5>
+<h5><u><strong>Sobre la imposición de sanción, atenuantes y agravantes</strong></u></h5>
 <ol class="continue" style="margin-left: ${MARGIN_LEFT.OL};">
     <li>
         De acuerdo con el reporte de antecedentes de fecha XX, se advierte que, el/la Titular no fue sancionada anteriormente por el OSINFOR, y no se identifican agravantes y atenuantes aplicables, en consecuencia, las infracciones acreditadas son pasibles de ser sancionadas de la siguiente manera:
@@ -142,8 +142,8 @@
                 Numeral "${infra.inciso}" del Anexo 1 del RISMFFS.<br />
                 ${infra.titulo}
             </td>
-            <td style="border: 1px solid #000;">
-                ${infra.rangoSancion}
+            <td style="border: 1px solid #000; width: 40%; text-align: center;">
+                ${infra.rangoSancion || 'XX UIT'}
             </td>
         </tr>
         {{/each}}

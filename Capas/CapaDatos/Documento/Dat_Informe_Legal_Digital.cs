@@ -199,6 +199,13 @@ namespace CapaDatos.Documento
                                     objEN.item = Convert.ToInt32(dr["NITEM"]);
                                     objEN.codResolucion = dr["VCODRESOLUCION"].ToString();
                                     objEN.numInforme = dr["NUMERO_RESOLUCION"].ToString();
+                                    objEN.codInformeSupervision = dr["COD_ISUPERVISION"].ToString();
+                                    objEN.numInformeSupervision = dr["NUMERO_ISUPERVISION"].ToString();
+                                    //POA
+                                    objEN.numAResolucion = dr["ARESOLUCION_NUM"].ToString();
+                                    objEN.numPOA = dr["NUM_POA"].ToString();
+                                    objEN.nombrePOA = dr["NOMBRE_POA"].ToString();
+
                                     objEN.estado = Convert.ToInt32(dr["NESTADO"]);
                                     objEN.accion = 1;
                                     vm.RSD.Add(objEN);
@@ -261,9 +268,19 @@ namespace CapaDatos.Documento
                                     objEN.inciso = dr["VINCISO"].ToString();
                                     objEN.titulo = dr["VTITULO"].ToString();
                                     objEN.detalle = dr["DESCRIPCION_INFRACCIONES"].ToString();
-                                    objEN.gravedad = dr["GRAVEDAD"]?.ToString();
+                                    objEN.gravedad = dr["GRAVEDAD"] != DBNull.Value ? dr["GRAVEDAD"].ToString() : null;
+                                    objEN.rangoSancion = dr["RANGO_SANCION"] != DBNull.Value ? dr["RANGO_SANCION"].ToString() : null;
                                     objEN.tipoInfraccion = dr["TIPO_INFRACCION"] != DBNull.Value ? Convert.ToInt32(dr["TIPO_INFRACCION"].ToString()) : default(int?);
-                                    objEN.rangoSancion = dr["RANGO_SANCION"]?.ToString();
+
+                                    objEN.codEspecie = dr["COD_ESPECIES"] != DBNull.Value ? dr["COD_ESPECIES"].ToString() : null;
+                                    objEN.especie = dr["DESCRIPCION_ESPECIE"] != DBNull.Value ? dr["DESCRIPCION_ESPECIE"].ToString() : null;
+                                    objEN.volumen = dr["VOLUMEN"] != DBNull.Value ? Convert.ToDouble(dr["VOLUMEN"]) : 0;
+                                    objEN.area = dr["AREA"] != DBNull.Value ? Convert.ToDouble(dr["AREA"]) : 0;
+                                    objEN.nroIndividuos = dr["NUMERO_INDIVIDUOS"] != DBNull.Value ? Convert.ToDouble(dr["NUMERO_INDIVIDUOS"]) : 0;
+                                    objEN.numPOA = dr["NUM_POA"] != DBNull.Value ? dr["NUM_POA"].ToString() : null;
+                                    //objEN.numAResolucion = dr["ARESOLUCION_NUM"] != DBNull.Value ? dr["ARESOLUCION_NUM"].ToString() : null;
+                                    objEN.tipoMaderable = dr["TIPOMADERABLE"].ToString();
+
                                     objEN.flgDesvirtua = Convert.ToBoolean(dr["NFLAGDESVIRTUA"]);
                                     objEN.flgSubsana = Convert.ToBoolean(dr["NFLAGSUBSANA"]);
                                     objEN.parrafos = dr["VPARRAFOS"] != DBNull.Value ? dr["VPARRAFOS"].ToString() : null;
@@ -306,6 +323,67 @@ namespace CapaDatos.Documento
 
                 throw ex;
             }
+        }
+
+        public VM_Fiscalizacion_ISupervision InformeSupervisionResumen(string COD_INFORME_SUPERVISION)
+        {
+            VM_Fiscalizacion_ISupervision vm = null;
+
+            try
+            {
+                using (OracleConnection cn = new OracleConnection(BDConexion.Conexion_Cadena_SIGO()))
+                {
+                    cn.Open();
+                    using (OracleDataReader dr = dBOracle.SelDrdDefault(cn, "DOC_OSINFOR_ERP_MIGRACION.SPFISCALIZACION_ISUPERVISION_RESUMEN", COD_INFORME_SUPERVISION))
+                    {
+                        if (dr != null)
+                        {
+                            if (dr.HasRows)
+                            {
+                                vm = new VM_Fiscalizacion_ISupervision();
+
+                                while (dr.Read())
+                                {
+                                    vm.COD_INFORME = dr["COD_INFORME"].ToString();
+                                    vm.FECHA_SUPERVISION_INICIO = dr["FECHA_SUPERVISION_INICIO"] != DBNull.Value ? dr["FECHA_SUPERVISION_INICIO"].ToString() : null;
+                                    vm.FECHA_SUPERVISION_FIN = dr["FECHA_SUPERVISION_FIN"] != DBNull.Value ? dr["FECHA_SUPERVISION_FIN"].ToString() : null;
+                                }
+
+                                dr.NextResult();
+                                if (dr.HasRows)
+                                {
+                                    vm.VOL_ANALIZADO = new List<Ent_INFORME_VOL_ANALIZADO>();
+                                    Ent_INFORME_VOL_ANALIZADO ovolumen;
+
+                                    while (dr.Read())
+                                    {
+                                        ovolumen = new Ent_INFORME_VOL_ANALIZADO();
+                                        ovolumen.COD_SECUENCIAL = Int32.Parse(dr["COD_SECUENCIAL"].ToString());
+                                        ovolumen.COD_ESPECIES = dr["COD_ESPECIES"].ToString();
+                                        ovolumen.ESPECIES = dr["ESPECIES"].ToString();
+                                        ovolumen.NUM_ARBOLES = Decimal.Parse(dr["NUM_ARBOLES"].ToString());
+                                        ovolumen.BALANCE_EXTRACCION = Decimal.Parse(dr["BALANCE_EXTRACCION"].ToString());
+                                        ovolumen.ESTADO_CAMPO = dr["ESTADO_CAMPO"].ToString();
+                                        ovolumen.VOLUMEN_APROBADO = Decimal.Parse(dr["VOLUMEN_APROBADO"].ToString());
+                                        ovolumen.VOLUMEN_MOVILIZADO = Decimal.Parse(dr["VOLUMEN_MOVILIZADO"].ToString());
+                                        ovolumen.VOLUMEN_INJUSTIFICADO = Decimal.Parse(dr["VOLUMEN_INJUSTIFICADO"].ToString());
+                                        ovolumen.VOLUMEN_JUSTIFICADO = Decimal.Parse(dr["VOLUMEN_JUSTIFICADO"].ToString());
+                                        ovolumen.OBSERVACION = dr["OBSERVACION"].ToString();
+                                        ovolumen.RegEstado = 0;
+                                        vm.VOL_ANALIZADO.Add(ovolumen);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+
+            return vm;
         }
 
         public List<VM_INFORME_LEGAL_DIGITAL_ANTECEDENTE> ObtenerAntecedentesRSD(string COD_RESOLUCION, string COD_THABILITANTE)
@@ -387,7 +465,7 @@ namespace CapaDatos.Documento
             {
                 throw ex;
             }
-        }       
+        }
 
         public void ModificarNumeroInforme(string codInforme, string numeroInforme, DateTime fechaOperacion)
         {
@@ -528,52 +606,6 @@ namespace CapaDatos.Documento
             }
             return success;
         }
-
-        public List<Ent_INFORME_VOL_ANALIZADO> RegMostrarInfoDocumentResumenSupervisado(string COD_RESOLUCION)
-        {
-            var result = new List<Ent_INFORME_VOL_ANALIZADO>();
-            try
-            {
-                using (OracleConnection cn = new OracleConnection(BDConexion.Conexion_Cadena_SIGO()))
-                {
-                    cn.Open();
-                    using (OracleDataReader dr = dBOracle.SelDrdDefault(cn, "DOC_OSINFOR_ERP_MIGRACION.SPFISCALIZACION_INFORME_LEGAL_DIGITAL_ISUPERVISION_RESUMEN", COD_RESOLUCION))
-                    {
-                        if (dr != null)
-                        {
-                            //dr.NextResult();
-                            if (dr.HasRows)
-                            {
-                                Ent_INFORME_VOL_ANALIZADO ovolumen;
-                                while (dr.Read())
-                                {
-                                    ovolumen = new Ent_INFORME_VOL_ANALIZADO();
-                                    ovolumen.COD_SECUENCIAL = Int32.Parse(dr["COD_SECUENCIAL"].ToString());
-                                    ovolumen.COD_ESPECIES = dr["COD_ESPECIES"].ToString();
-                                    ovolumen.ESPECIES = dr["ESPECIES"].ToString();
-                                    ovolumen.NUM_ARBOLES = Decimal.Parse(dr["NUM_ARBOLES"].ToString());
-                                    ovolumen.BALANCE_EXTRACCION = Decimal.Parse(dr["BALANCE_EXTRACCION"].ToString());
-                                    ovolumen.ESTADO_CAMPO = dr["ESTADO_CAMPO"].ToString();
-                                    ovolumen.VOLUMEN_APROBADO = Decimal.Parse(dr["VOLUMEN_APROBADO"].ToString());
-                                    ovolumen.VOLUMEN_MOVILIZADO = Decimal.Parse(dr["VOLUMEN_MOVILIZADO"].ToString());
-                                    ovolumen.VOLUMEN_INJUSTIFICADO = Decimal.Parse(dr["VOLUMEN_INJUSTIFICADO"].ToString());
-                                    ovolumen.VOLUMEN_JUSTIFICADO = Decimal.Parse(dr["VOLUMEN_JUSTIFICADO"].ToString());
-                                    ovolumen.OBSERVACION = dr["OBSERVACION"].ToString();
-                                    ovolumen.RegEstado = 0;
-                                    result.Add(ovolumen);
-                                }
-                            }
-
-                        }
-                    }
-                }
-
-                return result;
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-        }
+        
     }
 }

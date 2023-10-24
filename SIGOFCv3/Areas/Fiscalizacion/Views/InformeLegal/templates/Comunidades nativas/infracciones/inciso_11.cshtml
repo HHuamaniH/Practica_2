@@ -5,7 +5,6 @@
             <th style="text-align: center; border: 1px solid #000;">Tipo infractor</th>
             <th style="text-align: center; border: 1px solid #000;">Conducta Imputada</th>
             <th style="text-align: center; border: 1px solid #000;">Descargo sobre la imputación formulada</th>
-            <th style="text-align: center; border: 1px solid #000;">Información complementaria/información adicional</th>
         </tr>
     </thead>
     <tbody>
@@ -19,18 +18,51 @@
                 <i>"No tener libro de operaciones o no registrar la información en dicho libro, de acuerdo a las disposiciones establecidas".</i>
             </td>
             <td style="border: 1px solid #000;">
-                Dependerá del caso concreto
+                Se imputó contra el/la Titular ${infraccion.detalle || 'XX'}
             </td>
-            <td style="border: 1px solid #000;">
-                Dependerá del caso concreto
-            </td>
-            <td style="border: 1px solid #000;">
-                Dependerá del caso concreto
+            <td style="border: 1px solid #000; text-align: center;">
+                ${informe.COD_TIPO_INFORME?'Si':'No'}
             </td>
         </tr>
     </tbody>
 </table>
 <div>Fuente: Resolución Sub Directoral N° ${informe.ANTECEDENTES_DOCS.RSD.numero || '00XX-202X-OSINFOR/08.2.X'}</div>
+
+{{if infraccion.flgDesvirtua}}
+<ol class="continue" style="margin-left: ${informe.MARGIN_LEFT.OL};">
+    <li>
+        Mediante la Resolución Sub Directoral N° ${informe.ANTECEDENTES_DOCS.RSD.numero || '00XX-202X-OSINFOR/08.2.X'}, de fecha ${informe.ANTECEDENTES_DOCS.RSD.fechaEmisionTexto || 'XX de XXX del 202X'}, se imputó al/la concesionario/a presuntamente incumplir con la presentación (descripción del tipo de informe de ejecución y el periodo).
+    </li>
+    {{if informe.COD_TIPO_INFORME == 1}}
+    <li>
+        <span>
+            Por Escrito/Carta de fecha ${informe.ANTECEDENTES_DOCS.Escrito.fechaEmisionTexto || informe.ANTECEDENTES_DOCS.Carta.fechaEmisionTexto ||'XX de XXXX'} ingresado al OSINFOR con Registro N° ${informe.ANTECEDENTES_DOCS.Escrito.numero || informe.ANTECEDENTES_DOCS.Carta.numero || '00XX-202X-OSINFOR/08.2.X'}, e/la concesionario/a presentó sus descargos, donde se advierte los siguientes argumentos que guarda relación con la imputación materia de análisis:<br />
+            <ol style="list-style-type: lower-alpha">
+                <li>(Agregar texto original).</li>
+                <li>(Agregar texto original).</li>
+                <li>(Agregar texto original).</li>
+            </ol>
+        </span>
+    </li>
+    <li>
+        <span>
+            Respecto a lo señalado por el/la concesionario/a, se advierte el siguiente análisis:
+            <ul>
+                <li>
+                    Con relación al argumento señalado en el acápite a), <strong>XXXXXXXXXXXXXXXXXXXXXXXXXXX</strong>.
+                </li>
+                <li>
+                    Con relación al argumento señalado en el acápite b), <strong>XXXXXXXXXXXXXXXXXXXXXXXXXXX</strong>.
+                </li>
+                <li>
+                    Con relación al argumento señalado en el acápite c), <strong>XXXXXXXXXXXXXXXXXXXXXXXXXXX</strong>.
+                </li>
+            </ul>
+        </span>
+    </li>
+    {{/if}}
+</ol>
+{{/if}}
 
 {{if infraccion.flgSubsana}}
 <h5><strong>Sobre la subsanación voluntaria</strong></h5>
@@ -109,7 +141,7 @@
 
 <ol class="continue" style="margin-left: ${informe.MARGIN_LEFT.OL};">
     <li>
-        Mediante el <strong>Oficio N° xx-</strong> (Registro N° xx) de fecha XX, la ARFFS señaló que el código de Libro de Operaciones otorgado al título habilitante de el/la titular es: ${informe.TITULAR || 'XX'}, tal como se observa a continuación:
+        Mediante el <strong>Oficio N° ${informe.DOC_REFERENCIAS.Oficio.NUMERO || informe.DOC_REFERENCIAS.Oficio.CODIGO || 'XXXX'}</strong> (Registro N° xx) de fecha XX, la ARFFS señaló que el código de Libro de Operaciones otorgado al título habilitante de el/la titular es: ${informe.TITULAR || 'XX'}, tal como se observa a continuación:
     </li>
 </ol>
 <p style="text-align: center;">Imagen....</p>

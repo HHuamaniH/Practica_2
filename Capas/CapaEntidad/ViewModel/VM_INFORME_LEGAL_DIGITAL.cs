@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel;
 
 namespace CapaEntidad.ViewModel
@@ -76,6 +75,11 @@ namespace CapaEntidad.ViewModel
         public int item { get; set; }
         public string codResolucion { get; set; }
         public string numInforme { get; set; }
+        public string codInformeSupervision { get; set; }
+        public string numInformeSupervision { get; set; }
+        public string numAResolucion { get; set; }
+        public string numPOA { get; set; }
+        public string nombrePOA { get; set; }
         public int estado { get; set; }
         public int accion { get; set; }
     }
@@ -132,6 +136,14 @@ namespace CapaEntidad.ViewModel
         public bool flgDesvirtua { get; set; }
         public bool flgSubsana { get; set; }
         public string parrafos { get; set; }
+        public string codEspecie { get; set; }
+        public string especie { get; set; }
+        public double volumen { get; set; }
+        public double area { get; set; }
+        public double nroIndividuos { get; set; }
+        public string numPOA { get; set; }
+        //public string numAResolucion { get; set; }
+        public string tipoMaderable { get; set; }
         public int? estado { get; set; }
         public int accion { get; set; }
     }

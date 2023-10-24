@@ -45,6 +45,8 @@ namespace CapaEntidad.ViewModel
         public string DETALLE_SUNAT { get; set; }
         public string DETALLE_SERFOR { get; set; }
         public string DETALLE_OTROS { get; set; }
+        public string COD_ISUPERVISION { get; set; }
+        public string NUMERO_ISUPERVISION { get; set; }
 
         public virtual List<VM_RSD_INFRACCIONES> LIST_INFRACCIONES { get; set; }
     }

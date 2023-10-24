@@ -38,7 +38,7 @@
 <ol class="continue" style="margin-left: ${MARGIN_LEFT.OL}; ">
     <li>
         <span>
-            Mediante Escrito/Carta N° ${ANTECEDENTES_DOCS.Escrito.numero || 'XXXX'}, de fecha ${ANTECEDENTES_DOCS.Escrito.fechaEmisionTexto || 'XX de XXXX de XXXX'}, ingresado al OSINFOR el XX de XXXXX de XXXX con Registro N° XXXXXXXXX, el/la administrado/a reconoce su responsabilidad en la comisión de las infracciones imputadas, señalando lo siguiente:
+            Mediante Escrito/Carta N° ${ANTECEDENTES_DOCS.Escrito.numero || ANTECEDENTES_DOCS.Carta.numero || 'XXXX'}, de fecha ${ANTECEDENTES_DOCS.Escrito.fechaEmisionTexto || ANTECEDENTES_DOCS.Carta.fechaEmisionTexto || 'XX de XXXX de XXXX'}, el/la administrado/a reconoce su responsabilidad en la comisión de las infracciones imputadas, señalando lo siguiente:
             <p style="padding-left: 30px; font-style: italic;">
                 “Describir lo expuesto por el/la administrado/a”.
             </p>
@@ -78,7 +78,7 @@
             </ol>
         </span>
     </li>
-    <li>En esa línea, el/la administrado/a ha reconocido su responsabilidad mediante el escrito/carta presentado/a el XX de XXXX de XXXX, es decir, dentro del plazo para la presentación de los descargos a las imputaciones efectuadas mediante el/la Escrito/Carta N°/S/N, de fecha XX de XXXX de XXXX, ingresado al OSINFOR el XX de XXXXX de XXXX con Registro N° XXXXXXXXX, siendo de aplicación el primer supuesto antes mencionado, aspecto que será considerado cuando se realice cálculo de la multa en los considerandos siguientes.</li>
+    <li>En esa línea, el/la administrado/a ha reconocido su responsabilidad mediante el escrito/carta presentado/a el ${ANTECEDENTES_DOCS.Escrito.fechaEmisionTexto || ANTECEDENTES_DOCS.Carta.fechaEmisionTexto || 'XX de XXXX de XXXX'}, es decir, dentro del plazo para la presentación de los descargos a las imputaciones efectuadas mediante el/la Escrito/Carta N° ${ANTECEDENTES_DOCS.Escrito.numero || ANTECEDENTES_DOCS.Carta.numero || 'XXXX'}, de fecha ${ANTECEDENTES_DOCS.Escrito.fechaEmisionTexto || ANTECEDENTES_DOCS.Carta.fechaEmisionTexto || 'XX de XXXX de XXXX'}, siendo de aplicación el primer supuesto antes mencionado, aspecto que será considerado cuando se realice cálculo de la multa en los considerandos siguientes.</li>
 </ol>
 {{/if}}
 
@@ -122,10 +122,10 @@
 {{/if}}
 
 {{if FLG_SANCION}}
-<h5><u><strong>Sobre la imposición de sanción</strong></u></h5>
+<h5><u><strong>Sobre la imposición de sanción, atenuantes y agravantes</strong></u></h5>
 <ol class="continue" style="margin-left: ${MARGIN_LEFT.OL};">
     <li>
-        De acuerdo con el reporte de antecedentes de fecha XX, se advierte que, el/la Titular no fue sancionada anteriormente por el OSINFOR, y no se identifican agravantes y atenuantes aplicables, en consecuencia, las infracciones acreditadas son pasibles de ser sancionadas de la siguiente manera:
+        De acuerdo con el reporte de antecedentes de fecha XX, se advierte que, el/la Titular no fue sancionada anteriormente por el OSINFOR, y no se identifican agravantes y atenuantes aplicables. En consecuencia, las infracciones acreditadas son pasibles de ser sancionadas de la siguiente manera:
     </li>
 </ol>
 <table width="580" cellpadding="4" style="border: 0; font-family: Arial; font-size: 10pt; border-collapse: collapse; line-height: 150%;">
@@ -142,8 +142,8 @@
                 Numeral "${infra.inciso}" del Anexo 1 del RISMFFS.<br />
                 ${infra.titulo}
             </td>
-            <td style="border: 1px solid #000;">
-                ${infra.rangoSancion}
+            <td style="border: 1px solid #000; width: 40%; text-align: center; ">
+                ${infra.rangoSancion || 'XX UIT'}
             </td>
         </tr>
         {{/each}}
@@ -224,12 +224,7 @@
                 ${entidad}
             </td>
             <td style="border: 1px solid #000;">
-                <div>
-                    En ese sentido, corresponde comunicarle a ${entidad} el resultado y conclusión del presente procedimiento, a fin que, en el marco de sus competencias, ejecute lo siguiente:
-                </div>
-                <div>
-                    - Exhorte el/la titular a cumplir las obligaciones en virtud al contrato de concesión.
-                </div>
+                Se advierte que, la Resolución Sub Directoral N° ${ANTECEDENTES_DOCS.RSD.numero || '00XX-2023-OSINFOR/08.2.1'}, fue oportunamente remitida a ${TITULAR || 'XXX'}, para que, luego de conocer los resultados de la supervisión del OSINFOR y la disposición del inicio del PAU, en el marco de su atribución fiscalizadora, pueda ejercer las funciones de su competencia. En ese sentido, corresponde comunicarle el resultado y conclusión del presente procedimiento, para los fines pertinentes, para que en el marco de sus competencias ejecuten las acciones correspondientes.
             </td>
         </tr>
         {{/each}}
