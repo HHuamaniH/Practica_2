@@ -1631,6 +1631,9 @@ namespace SIGOFCv3.Areas.Supervision.Models.ManInforme
                                 insertar = insertar + ",'" + listaInf.COORDENADA_NORTE.ToString() + "'";
                                 insertar = insertar + ",'" + listaInf.COORDENADA_NORTE_CAMPO.ToString() + "'";
                                 insertar = insertar + ",'" + listaInf.DAP_CAMPO.ToString() + "'";
+                                insertar = insertar + ",'" + listaInf.DAP_CAMPO1.ToString() + "'";
+                                insertar = insertar + ",'" + listaInf.DAP_CAMPO2.ToString() + "'";
+                                insertar = insertar + ",'" + listaInf.MMEDIR_DAP.ToString() + "'";
                                 insertar = insertar + ",'" + listaInf.AC_CAMPO.ToString() + "'";
                                 insertar = insertar + ",'" + listaInf.ESTADO_CAMPO.ToString() + "'";
                                 insertar = insertar + ",'" + listaInf.CONDICION_CAMPO.ToString() + "'";
@@ -1642,7 +1645,7 @@ namespace SIGOFCv3.Areas.Supervision.Models.ManInforme
                                 insertar = insertar + ",'" + listaInf.COD_SECUENCIAL.ToString() + "'";
                                 insertar = insertar + ",'" + listaInf.FUENTE_FOTO.ToString() + "'";
 
-                                cmd.CommandText = "INSERT INTO [shp_arb_sup$A" + i.ToString().Trim() + ":X" + (oCEntidadInfTemp.ListISupervMaderableAprov.Count + 1).ToString() + "] VALUES (" + insertar + ")";
+                                cmd.CommandText = "INSERT INTO [shp_arb_sup$A" + i.ToString().Trim() + ":AA" + (oCEntidadInfTemp.ListISupervMaderableAprov.Count + 1).ToString() + "] VALUES (" + insertar + ")";
                                 cmd.ExecuteNonQuery();
 
                                 result.data = listaInf.NUMERO;

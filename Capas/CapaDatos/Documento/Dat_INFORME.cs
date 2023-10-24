@@ -9170,6 +9170,9 @@ namespace CapaDatos.DOC
                             oCEntidadTemp.COORDENADA_NORTE = Int32.Parse(dr["COORDENADA_NORTE"].ToString());
                             oCEntidadTemp.COORDENADA_NORTE_CAMPO = Int32.Parse(dr["COORDENADA_NORTE_CAMPO"].ToString());
                             oCEntidadTemp.DAP_CAMPO = Decimal.Parse(dr["DAP_CAMPO"].ToString());
+                            oCEntidadTemp.DAP_CAMPO1 = Decimal.Parse(dr["DAP_CAMPO1"].ToString());
+                            oCEntidadTemp.DAP_CAMPO2 = Decimal.Parse(dr["DAP_CAMPO2"].ToString());
+                            oCEntidadTemp.MMEDIR_DAP = dr["MMEDIR_DAP"].ToString();
                             oCEntidadTemp.AC_CAMPO = Decimal.Parse(dr["AC_CAMPO"].ToString());
                             oCEntidadTemp.ESTADO_CAMPO = dr["ESTADO_CAMPO"].ToString();
                             oCEntidadTemp.CONDICION_CAMPO = dr["CONDICION_CAMPO"].ToString();
