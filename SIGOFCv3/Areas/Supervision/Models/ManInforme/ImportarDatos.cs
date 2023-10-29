@@ -101,7 +101,7 @@ namespace SIGOFCv3.Areas.Supervision.Models.ManInforme
                                         else
                                         {
                                             int coord_esteInt = Convert.ToInt32(ceste);
-                                            if (coord_esteInt > 999999) { throw new Exception("Coordenada Este incorrecta no debe ser mayor a 6 digitos"); }
+                                            if (coord_esteInt > 999999) { throw new Exception("Coordenada Este incorrecta no debe ser mayor a 6 dígitos"); }
                                             else
                                             {
                                                 oCampos.COORDENADA_ESTE = Convert.ToInt32(workSheet.Cells[rowIterator, 5].Value.ToString().Trim());                                                
@@ -110,7 +110,7 @@ namespace SIGOFCv3.Areas.Supervision.Models.ManInforme
                                                 {
                                                     int coord_norteInt = Convert.ToInt32(cnorte);
                                                     oCampos.COORDENADA_NORTE = Convert.ToInt32(workSheet.Cells[rowIterator, 6].Value.ToString().Trim());
-                                                    if (coord_norteInt > 9999999) { throw new Exception("Coordenada Norte incorrecta no debe ser mayor a 6 digitos"); }
+                                                    if (coord_norteInt > 9999999) { throw new Exception("Coordenada Norte incorrecta no debe ser mayor a 7 dígitos"); }
                                                 }
                                             }
                                         }
@@ -411,7 +411,7 @@ namespace SIGOFCv3.Areas.Supervision.Models.ManInforme
                                 else
                                 {
                                     int coord_esteInt = Convert.ToInt32(ceste);
-                                    if (coord_esteInt > 999999) { throw new Exception("Coordenada Este incorrecta no debe ser mayor a 6 digitos"); }
+                                    if (coord_esteInt > 999999) { throw new Exception("Coordenada Este incorrecta no debe ser mayor a 6 dígitos"); }
                                     else
                                     {
                                         oCampos.COORDENADA_ESTE = Convert.ToInt32(workSheet.Cells[rowIterator, 3].Value.ToString().Trim());                                        
@@ -420,7 +420,7 @@ namespace SIGOFCv3.Areas.Supervision.Models.ManInforme
                                         {
                                             int coord_norteInt = Convert.ToInt32(cnorte);
                                             oCampos.COORDENADA_NORTE = Convert.ToInt32(workSheet.Cells[rowIterator, 4].Value.ToString().Trim());
-                                            if (coord_norteInt > 9999999) { throw new Exception("Coordenada Norte incorrecta no debe ser mayor a 6 digitos"); }
+                                            if (coord_norteInt > 9999999) { throw new Exception("Coordenada Norte incorrecta no debe ser mayor a 7 dígitos"); }
                                         }
                                     }
                                 }
