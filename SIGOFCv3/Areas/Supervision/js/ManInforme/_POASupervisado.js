@@ -240,7 +240,7 @@ _POASupervisado.fnInit = function () {
     utilSigo.fnFormatDate(_POASupervisado.frm.find("#txtFecCumplimientoOsinfor"));
 
     var cod_mtipo = _POASupervisado.frm.find("#hdfCodMTipo").val();
-    var cod_mtipo_concesiones = "0000007,0000008,0000009,0000010,0000011,0000012,0000013,0000017,0000018";
+    var cod_mtipo_concesiones = "0000007,0000008,0000009,0000010,0000011,0000012,0000013,0000014,0000017,0000018";
     var cod_mtipo_sobreplan = "0000006,0000007,0000008,0000009,0000010,0000011,0000012,0000013,0000014,0000015,0000016,0000017,0000018";
 
     //Mostrar las opciones de registro de datos del POA (Resultados o Análisis)
