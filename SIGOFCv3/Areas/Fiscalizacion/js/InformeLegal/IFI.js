@@ -469,26 +469,26 @@ _informe.Guardar = function (parametros) {
     }
     utilSigo.fnAjax(params, function (res) {
         //console.log(res);
-        let data = res.data;
+        let objEN = res.data;
         if (res.success) {
-            app.Informe.COD_INFORME_DIGITAL = data.COD_INFORME_DIGITAL;
+            app.Informe.COD_INFORME_DIGITAL = objEN.COD_INFORME_DIGITAL;
 
-            data.PARTICIPANTES.forEach(function (x) {
+            objEN.PARTICIPANTES.forEach(function (x) {
                 x.flgAplica = !!x.estado;
                 x.accion = 1;
             });
 
-            data.DOCUMENTOS.forEach(function (x) { x.accion = 1; });
-            data.RSD.forEach(function (x) { x.accion = 1; });
-            data.INFRACCIONES.forEach(function (x) { x.accion = 1; });
-            data.ANTECEDENTES.forEach(function (x) { x.accion = 1; });
+            objEN.DOCUMENTOS.forEach(function (x) { x.accion = 1; });
+            objEN.RSD.forEach(function (x) { x.accion = 1; });
+            objEN.INFRACCIONES.forEach(function (x) { x.accion = 1; });
+            objEN.ANTECEDENTES.forEach(function (x) { x.accion = 1; });
             app.Informe.REFERENCIAS.forEach(function (x) { x.RegEstado = 0; });
 
-            app.Informe.PARTICIPANTES = data.PARTICIPANTES;
-            app.Informe.DOCUMENTOS = data.DOCUMENTOS;
-            app.Informe.RSD = data.RSD;
-            app.Informe.INFRACCIONES = data.INFRACCIONES;
-            app.Informe.ANTECEDENTES = data.ANTECEDENTES;
+            app.Informe.PARTICIPANTES = objEN.PARTICIPANTES;
+            app.Informe.DOCUMENTOS = objEN.DOCUMENTOS;
+            app.Informe.RSD = objEN.RSD;
+            app.Informe.INFRACCIONES = _informe.CombinarInfracciones(objEN.INFRACCIONES, []);
+            app.Informe.ANTECEDENTES = objEN.ANTECEDENTES;
             app.Informe.ELIMINAR = [];
 
             _informe.CambiarEstado(app.Informe.ESTADO || States.INGRESADO);
@@ -505,36 +505,51 @@ _informe.Guardar = function (parametros) {
     return deferred.promise();
 }
 
-_informe.Estructura = function () {
-    let data = JSON.parse(JSON.stringify(app.Informe));
+_informe.CombinarInfracciones = function (lstInfracciones) {
+    let infracciones = [];
 
-    data.PARTICIPANTES.forEach(function (x, i) {
+    for (const infraccion of lstInfracciones) {
+        if (!infracciones.find(x => x.inciso == infraccion.inciso)) {
+            infracciones.push(infraccion);
+        }
+    }
+
+    //Ordenamos los incisos
+    return infracciones.sort((a, b) => {
+        return (isNaN(a.inciso) || isNaN(b.inciso)) ? -1 : (+a.inciso > +b.inciso ? 1 : -1);
+    });
+}
+
+_informe.Estructura = function () {
+    let objEN = JSON.parse(JSON.stringify(app.Informe));
+
+    objEN.PARTICIPANTES.forEach(function (x, i) {
         if (!x.flgAplica) x.estado = 0;
         else x.estado = x.estado || 1;
     });
 
-    data.DOCUMENTOS.forEach(function (x, i) {
+    objEN.DOCUMENTOS.forEach(function (x, i) {
         if (x.estado === null) x.estado = 1;
     });
 
-    data.INFRACCIONES.forEach(function (x, i) {
+    objEN.INFRACCIONES.forEach(function (x, i) {
         if (x.estado === null) x.estado = 1;
     });
 
-    data.RSD.forEach(function (x, i) {
+    objEN.RSD.forEach(function (x, i) {
         if (x.estado === null) x.estado = 1;
     });
 
-    data.ANTECEDENTES.forEach(function (x, i) {
+    objEN.ANTECEDENTES.forEach(function (x, i) {
         if (x.estado === null) x.estado = 1;
         x.fechaEmisionTexto = x.fechaEmision ? fnDate.text_long(x.fechaEmision) : '';
         x.fechaNotificacionTexto = x.fechaNotificacion ? fnDate.text_long(x.fechaNotificacion) : '';
     });
 
     let parametros = {
-        ...data,
-        //PARTICIPANTES: data.PARTICIPANTES,
-        ELIMINAR: data.ELIMINAR
+        ...objEN,
+        //PARTICIPANTES: objEN.PARTICIPANTES,
+        ELIMINAR: objEN.ELIMINAR
     };
 
     return parametros;
@@ -1110,11 +1125,13 @@ $(function () {
                         datos: { COD_RESOLUCION: self.Informe.COD_INFORME }
                     };
 
-                    utilSigo.fnAjax(params, function (res) {
+                    utilSigo.fnAjax(params, async function (res) {
                         if (res.informe) {
                             res.informe.PARTICIPANTES.forEach(function (x) {
                                 x.flgAplica = !!x.estado;
                             });
+
+                            res.informe.INFRACCIONES = _informe.CombinarInfracciones(res.informe.INFRACCIONES);
 
                             self.Informe = { ...self.Informe, ...res.informe };
                             self.MateriaOnChange();
@@ -1165,9 +1182,8 @@ $(function () {
                             //console.log(expedientes);
 
                             if (expedientes.length > 0) {
-                                self.ExtraerExpediente(expedientes[0].NUM_INFORME).then(res => {
-                                    app.Informe.REFERENCIAS.push(res);
-                                });
+                                const expediente = await self.ExtraerExpediente(expedientes[0].NUM_INFORME);
+                                app.Informe.REFERENCIAS.push(expediente);
                             }
                         }
 
@@ -1543,11 +1559,10 @@ $(function () {
                     numInformeSupervision: item.NUMERO_ISUPERVISION,
                     estado: 1
                 };
-
+               
                 let infracciones = app.Informe.INFRACCIONES;
 
-                for (var i = 0; i < RESODIREC.LIST_INFRACCIONES.length; i++) {
-                    const infraccion = RESODIREC.LIST_INFRACCIONES[i];
+                for (const infraccion of RESODIREC.LIST_INFRACCIONES) {
                     if (!infracciones.find(x => x.inciso == infraccion.DESCRIPCION_ENCISOS)) {
                         const titulo = `Respecto a la imputación de ${infraccion.TEXTO_ENCISO[0].toLowerCase() + infraccion.TEXTO_ENCISO.slice(1)}`;
 

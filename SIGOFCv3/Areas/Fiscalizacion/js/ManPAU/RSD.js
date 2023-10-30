@@ -417,18 +417,18 @@ _informe.Guardar = function (parametros) {
     }
     utilSigo.fnAjax(params, function (res) {
         //console.log(res);
-        let data = res.data;
+        let objEN = res.data;
         if (res.success) {
-            app.Informe.COD_INFORME_DIGITAL = data.COD_INFORME_DIGITAL;
+            app.Informe.COD_INFORME_DIGITAL = objEN.COD_INFORME_DIGITAL;
 
-            data.FIRMAS.forEach(function (x) {
+            objEN.FIRMAS.forEach(function (x) {
                 x.flgAplica = !!x.estado;
                 x.accion = 1;
             });
-            data.RECURSOS.forEach(function (x) { x.accion = 1; });
+            objEN.RECURSOS.forEach(function (x) { x.accion = 1; });
 
-            app.Informe.FIRMAS = data.FIRMAS;
-            app.Informe.RECURSOS = data.RECURSOS;
+            app.Informe.FIRMAS = objEN.FIRMAS;
+            app.Informe.RECURSOS = objEN.RECURSOS;
 
             _informe.CambiarEstado(app.Informe.ESTADO || States.INGRESADO);
             app.Informe.FLG_ACTUALIZAR = false;
