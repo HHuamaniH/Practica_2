@@ -226,7 +226,7 @@ _informe.EnumerarParrafos = function (html) {
     var $html = $('<div />', { html: html });
     $html.find('.enumeration').each((index, el) => {
         const html = $(el).html();
-        $(el).html(`<ol style="margin-left: -50px;" start="${index + 1}"><li>${html}</li></ol>`);
+        $(el).html(`<ol style="margin-left: 0;" start="${index + 1}"><li>${html}</li></ol>`);
     });
 
     return $html.html();
@@ -252,8 +252,8 @@ _informe.RevisarFootnotes = function (html) {
     $html.find('.MsoFootnoteText').each((_, e) => {
         const element = $(e).parent();
         const id = element.attr("id");
-        const a = $html.find('a[href*="#_' + id + '"]:not([name])');
-        if (!a.length) {
+        const a = $html.find('a[href="#_' + id + '"]:not([name])');
+        if (!a.length) {            
             element.remove();
         }
     });
@@ -272,8 +272,11 @@ _informe.Exportar = async function () {
     informe.FECHA = fnDate.text_long(informe.RES_DIRECTORAL_FECHA || new Date());
     informe.SUBDIRECTOR = informe.FIRMAS.find(function (x) { return x.funcion === 'Subdirector' })?.apellidosNombres;
 
+    //Configuracion de márgenes
+    informe.MARGIN_LEFT = { ROOT: '0', H: '0', OL: '0' };
+
     // Listar antecedentes
-    informe.ANTECEDENTES = await _informe.ExtraerAntecedentes(informe.COD_RES_SUB, informe.COD_THABILITANTE);
+    informe.ANTECEDENTES = (await _informe.ExtraerAntecedentes(informe.COD_RES_SUB, informe.COD_THABILITANTE)) || [];
     informe.ANTECEDENTES_DOCS = {};
     informe.ANTECEDENTES_DOCS.Carta = informe.ANTECEDENTES.find(x => x.tipoDocumento == 'Carta') || {};
     informe.ANTECEDENTES_DOCS.Inf_Sup = informe.ANTECEDENTES.find(x => x.tipoDocumento == 'Informe de Supervisión') || {};
@@ -299,7 +302,7 @@ _informe.Exportar = async function () {
 
     //Volumenes injustificados
     let resumen = await _informe.RegResumenInfSupervision(informe.COD_RES_SUB);
-    const volumenes = resumen.filter(x => !!x.VOLUMEN_INJUSTIFICADO);
+    const volumenes = resumen?.VOL_ANALIZADO?.filter(x => !!x.VOLUMEN_INJUSTIFICADO) || [];
 
     informe.VOLUMENES_INJUSTIFICADOS = volumenes;
     informe.VOLUMENES_INJUSTIFICADOS_TOTAL = Math.round(volumenes.reduce((a, b) => a + b.VOLUMEN_INJUSTIFICADO, 0) * 1000) / 1000;
@@ -345,15 +348,15 @@ _informe.Exportar = async function () {
     //$(document).googoose({ html, header, footeridfirst: 'ff1' });
 }
 
-_informe.RegResumenInfSupervision = function (COD_RESOLUCION) {
-    const params = {
-        type: 'get',
-        url: `${urlLocalSigo}Fiscalizacion/InformeLegalDigital/RegMostrarInfoDocumentResumenSupervisado`,
-        datos: { COD_RESOLUCION }
-    };
-
+_informe.RegResumenInfSupervision = function (COD_INFORME_SUPERVISION) {
     return new Promise(function (resolve, reject) {
-        utilSigo.fnAjax(params, res => resolve(res), () => resolve([]));
+        const params = {
+            type: 'get',
+            url: `${urlLocalSigo}Fiscalizacion/InformeLegalDigital/ObtenerInformeSupervision`,
+            datos: { COD_INFORME_SUPERVISION }
+        };
+
+        utilSigo.fnAjax(params, (res) => resolve(res), () => resolve(null));
     });
 }
 
@@ -621,14 +624,11 @@ _informe.EXTRAER_INFRACCIONES_POR_MODALIDAD = function () {
     app.Infracciones = data.Infracciones.filter(x => x.codModalidad == app.Informe.COD_MODALIDAD);
 }
 
-_informe.EXTRAER_PARRAFOS_INFRACCION = function (template, informe) {
-    //let informe = JSON.parse(JSON.stringify(app.Informe));
-    //informe.TABLAS_INFORME = _informe.DATA_INFORMES;
-
+_informe.EXTRAER_PARRAFOS_INFRACCION = function (template, informe) {    
     const infracciones = JSON.parse(JSON.stringify(data.Infracciones))
         .filter(item => item.codModalidad == informe.COD_MODALIDAD && item.select)
         .map(function (item, index) {
-            //item.numeration = _informe.NumeroALetra(index + 1);
+            //item.numeration = _informe.NumeroALetra(index + 1);            
             item.html = _informe.tmpl.get(template, '#tmpl-' + item.codPlantilla, informe);
             return item;
         });

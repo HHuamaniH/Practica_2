@@ -216,7 +216,7 @@ _informe.RevisarFootnotes = function (html) {
     $html.find('.MsoFootnoteText').each((_, e) => {
         const element = $(e).parent();
         const id = element.attr("id");
-        const a = $html.find('a[href*="#_' + id + '"]:not([name])');
+        const a = $html.find('a[href="#_' + id + '"]:not([name])');
         if (!a.length) {
             element.remove();
         }
@@ -239,7 +239,7 @@ _informe.Exportar = async function () {
     informe.DENOMINACION_TITULAR = informe.COD_MODALIDAD == '01' ? 'concesionario' : 'administrado';
 
     //Configuracion de márgenes
-    informe.MARGIN_LEFT = { ROOT: '-15px', H: '0', OL: '-25px' };
+    informe.MARGIN_LEFT = { ROOT: '0', H: '0', OL: '0' };
 
     //EXPEDIENTES ADMINISTRATIVOS
     informe.EXPEDIENTE_ADM = informe.REFERENCIAS.filter(x => x.TIPO_DOCUMENTO?.indexOf('EXPEDIENTE') != -1).map(x => (x.NUMERO || x.CODIGO || 'S/N')).join(', ');
@@ -361,9 +361,7 @@ _informe.RegResumenInfSupervision = function (COD_INFORME_SUPERVISION) {
             datos: { COD_INFORME_SUPERVISION }
         };
 
-        utilSigo.fnAjax(params, function (res) {
-            resolve(res);
-        });
+        utilSigo.fnAjax(params, (res) => resolve(res), () => resolve(null));
     });
 }
 
