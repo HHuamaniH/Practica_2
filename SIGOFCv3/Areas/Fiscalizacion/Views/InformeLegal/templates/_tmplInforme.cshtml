@@ -209,7 +209,7 @@
                 <div>
                     En base a lo expuesto, se procede a formular las siguientes recomendaciones:<br />
                     <ol class="continue" style="margin-left: ${MARGIN_LEFT.OL};">
-                        <li>                            
+                        <li>
                             Remitir el presente informe correspondiente al Expediente Administrativo N° ${EXPEDIENTE_ADM || 'XXXXX-XXXX-OSINFOR/08.2'}, a la Autoridad Decisora, a fin que proceda conforme a su competencia.
                         </li>
                         {{if [1,3].includes(FLG_SANCION)}}
@@ -262,7 +262,7 @@
             <br clear=all style="mso-special-character:line-break;page-break-before:always">
             <h5>Anexos</h5>
             {{each(i, img) IMG_SANCION}}
-            <img alt="Calculo de multa" src="${img}" width="500" height="720" />
+            <img alt="Calculo de multa" src="${img}" />
             {{/each}}
         </div>
         {{/if}}
@@ -271,8 +271,14 @@
 
 @Html.Partial("~/Areas/Fiscalizacion/Views/InformeLegal/templates/_tmplFootnotes.cshtml")
 
+<script id="tmpl-encabezado" type="text/x-jquery-tmpl">
+    <p style="text-align:center;">
+        <img width="550" style="width: 550px;" alt="" src="${urlLocalSigo}content/images/logo/osinfor-header-3.png">
+    </p>
+</script>
+
 <script id="tmpl-pie-pagina" type="text/x-jquery-tmpl">
-    <img width="600" height="60" alt="" src="${urlLocalSigo}content/images/logo/osinfor-footer-punche.png" />
+    <img width="600" height="55" style="width: 600px; height: 55px;" alt="" src="${urlLocalSigo}content/images/logo/osinfor-footer-punche.png" />
     <div>
         Esta es una copia auténtica imprimible de un documento electrónico archivado en el Organismo de Supervisión de los Recursos Forestales y
         de Fauna Silvestre, aplicando lo dispuesto por el Art. 25 de D.S. 070 – 2013 PCM y la Tercera Disposición Complementaria Final del D.S. 026-

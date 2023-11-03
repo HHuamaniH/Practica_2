@@ -150,10 +150,10 @@ _informe.render = function (html) {
             if (figure.hasClass('image-style-align-left')) align = 'left';
             else if (figure.hasClass('image-style-align-right')) align = 'right';
 
-            let percent = figure.css('width').replace(/[%|px]/g, ''); //console.log(percent);
+            let percent = figure.css('width').replace(/[%|px]/g, '');
             figure.css({ 'text-align': align });
 
-            let maxW = 550, w = el.naturalWidth, h = el.naturalHeight; //console.log(w, h);
+            let maxW = 550, w = el.naturalWidth, h = el.naturalHeight;
             if (percent > 0) {
                 maxW = Math.round(maxW * (percent / 100));
             }
@@ -314,16 +314,12 @@ _informe.Exportar = async function () {
     informe.VOLUMENES_INJUSTIFICADOS_TOTAL = Math.round(volumenes.reduce((a, b) => a + b.VOLUMEN_INJUSTIFICADO, 0) * 1000) / 1000;
     //console.log(volumenes);
 
-    //INFRACCIONES
-    console.log("Consultando párrafos de infracciones...");
+    //INFRACCIONES    
     for (var i = 0; i < informe.INFRACCIONES.length; i++) {
         const infraccion = informe.INFRACCIONES[i];
         const parrafos = await _informe.ExtraerParrafoInfraccion(infraccion, informe);
         infraccion.parrafos = parrafos;
     }
-
-    const header = `<p style="text-align:center;"><img width="550" alt="" src="${urlLocalSigo}content/images/logo/osinfor-header-3.png"></p>`;
-    //let footer = `<table style="width: 100%;"><tr><td style="text-align: right;">#CURRENTPAGE#</td></tr></table>`;
 
     informe.IMG_SANCION = [];
     if ([2, 3].includes(informe.FLG_SANCION) && informe.SANCION_COD_CALCULO) {
@@ -332,6 +328,8 @@ _informe.Exportar = async function () {
     }
 
     const template = await _informe.ExtraerPlantilla();
+
+    const header = _informe.tmpl.get(template, '#tmpl-encabezado', { informe, urlLocalSigo });
     informe.PIE_PAGINA = _informe.tmpl.get(template, '#tmpl-pie-pagina', { informe, urlLocalSigo });
 
     console.log(informe);
@@ -407,13 +405,13 @@ _informe.PDFToImgCalculoMulta = function () {
                         for (let i = 0; i < allPages.length; i++) {
                             const page = allPages[i];
 
-                            const viewport = page.getViewport({ scale: 1.0 });
+                            const viewport = page.getViewport({ scale: 0.85 });
 
                             // Prepare canvas using PDF page dimensions
                             canvas = document.createElement('canvas');
                             context = canvas.getContext('2d');
-                            canvas.height = viewport.height;
                             canvas.width = viewport.width;
+                            canvas.height = viewport.height;
 
                             // Render PDF page into canvas context
                             const renderContext = {
@@ -1847,6 +1845,9 @@ $(function () {
         },
         methods: {
             Abrir: function () {
+                this.form.funcion = null;
+                this.form.codPersona = null;
+                this.form.apellidosNombres = null;
                 $('#modal-integrante').modal('show');
             },
             Agregar: function () {

@@ -308,11 +308,10 @@ _informe.Exportar = async function () {
     informe.VOLUMENES_INJUSTIFICADOS_TOTAL = Math.round(volumenes.reduce((a, b) => a + b.VOLUMEN_INJUSTIFICADO, 0) * 1000) / 1000;
     //console.log(volumenes);
 
-    const header = `<p style="text-align:center;"><img height="200" width="200" alt="" src="${informe.URL_APLICACION}content/images/logo/escudo-peruano.jpg"></p>`;
-    //let footer = `<table style="width: 100%;"><tr><td style="text-align: right;">#CURRENTPAGE#</td></tr></table>`;
-
     //Plantilla general
     const template = await _informe.Extraer_Plantilla();
+
+    const header = _informe.tmpl.get(template, '#tmpl-encabezado', informe);
 
     informe.VISTOS = _informe.tmpl.get(template, '#tmpl-vistos', informe);
     informe.COMPETENCIA = _informe.tmpl.get(template, '#tmpl-competencia', informe);
@@ -332,6 +331,8 @@ _informe.Exportar = async function () {
     informe.HERRAMIENTAS_SUBSANAR = _informe.tmpl.get(template, '#tmpl-herramientas-subsanar', informe);
     informe.RESOLUCION = _informe.GenerarResolucion(template, informe);
     informe.PIE_PAGINA = _informe.tmpl.get(template, '#tmpl-pie-pagina', informe)?.replace(/PASSWORD/g, app.Tramite?.password || 'PASSWORD');
+
+    //console.log(informe);
 
     let html = '';
     html += _informe.tmpl.get(template, '#tmpl-exportar', informe);
@@ -353,10 +354,10 @@ _informe.RegResumenInfSupervision = function (COD_INFORME_SUPERVISION) {
         const params = {
             type: 'get',
             url: `${urlLocalSigo}Fiscalizacion/InformeLegalDigital/ObtenerInformeSupervision`,
-            datos: { COD_INFORME_SUPERVISION }
+            data: { COD_INFORME_SUPERVISION }
         };
-
-        utilSigo.fnAjax(params, (res) => resolve(res), () => resolve(null));
+        
+        $.ajax(params).done((res) => resolve(res)).fail(() => resolve(null));
     });
 }
 
