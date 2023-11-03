@@ -1303,6 +1303,9 @@ $(function () {
         },
         methods: {
             Abrir: function () {
+                this.form.funcion = null;
+                this.form.codPersona = null;
+                this.form.apellidosNombres = null;
                 $('#modal-integrante').modal('show');
             },
             Agregar: function () {
