@@ -176,6 +176,7 @@ namespace CapaDatos.Documento
                                     vm.FLG_SANCION = Convert.ToInt16(dr["NFLAGSANCION"]);
                                     vm.SANCION_UIT = Convert.ToDecimal(dr["NSANCIONUIT"]);
                                     vm.SANCION_COD_CALCULO = dr["VSANCIONCODCALCULO"].ToString();
+                                    vm.FLG_REINCIDENCIA = Convert.ToBoolean(dr["NFLAGREINCIDENCIA"]);
                                     vm.FLG_MEDIDA_CORRECTIVA = Convert.ToBoolean(dr["NFLAGMEDIDACORRECTIVA"]);
                                     vm.FLG_MEDIDA_COMPLEMENTARIA = Convert.ToBoolean(dr["NFLAGMEDIDACOMPLEMENTARIA"]);
                                     vm.FLG_RESPONSABLE_SOLIDARIO = Convert.ToBoolean(dr["NFLAGRESPONSABLESOLIDARIO"]);

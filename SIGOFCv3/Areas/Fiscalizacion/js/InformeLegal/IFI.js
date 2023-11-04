@@ -673,25 +673,6 @@ _informe.fnEliminarReferencia = function (item, index) {
 _informe.EliminarResolucion = function (item, index) {
     //console.log(item)
 
-    /*app.Informe = {
-        ...app.Informe,
-        COD_THABILITANTE: null,
-        NUM_CONTRATO: null,
-        COD_TITULAR: null,
-        TITULAR: null,
-        TITULAR_DOCUMENTO: null,
-        TITULAR_ESTADO_RUC: null,
-        TITULAR_CONDICION_RUC: null,
-        TITULAR_RUC: null,
-        R_LEGAL: null,
-        R_LEGAL_DOCUMENTO: null,
-        R_LEGAL_RUC: null,
-        DIRECCION_LEGAL: null,
-        UBIGEO_DEPARTAMENTO: null,
-        UBIGEO_PROVINCIA: null,
-        UBIGEO_DISTRITO: null,
-    }*/
-
     if (item.codInformeDigital) {
         app.Informe.ELIMINAR.push({ codInforme: item.codInformeDigital, item: item.item, origen: 'RSD' });
 
@@ -1043,6 +1024,7 @@ $(function () {
                 FLG_REC_RESPONSABILIDAD: true,
                 FLG_GRAVEDAD_RIESGO: true,
                 FLG_SANCION: 0, // 0: Ninguna, 1: Amonestación, 2: Multa, 3: Amonestación y multa
+                FLG_REINCIDENCIA: false,
                 SANCION_UIT: 0,
                 SANCION_COD_CALCULO: null,
                 FLG_MEDIDA_CORRECTIVA: true,
@@ -1948,11 +1930,13 @@ $(function () {
             },
             Notificar: function () {
                 const self = this;
+                const user = ManInfLegal_AddEdit.userApp;
+
                 const notificacion = {
                     DESTINATARIOS: self.form.Seleccionados.map(item => item.email).join(','),
                     CC_DESTINATARIOS: self.form.CC,
                     COD_INFORME: app.Informe.NUM_INFORME_SITD,
-                    MENSAJE_ENVIO_ALERTA: _informe.render(self.form.Mensaje),
+                    MENSAJE_ENVIO_ALERTA: `${_informe.render(self.form.Mensaje)}<br><br>Atentamente,<br>${user.PERSONA}`,
                     URL_LOCAL: window.location.href
                 };
 

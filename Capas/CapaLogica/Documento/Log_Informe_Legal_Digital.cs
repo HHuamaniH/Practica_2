@@ -37,6 +37,7 @@ namespace CapaLogica.Documento
             cabecera.pNFlagSancion = Convert.ToInt16(informeDigital.FLG_SANCION);
             cabecera.pNSancionUIT = informeDigital.SANCION_UIT ?? 0;
             cabecera.pvSancionCodCalculo = informeDigital.SANCION_COD_CALCULO;
+            cabecera.pNFlagReincidencia = Convert.ToInt16(informeDigital.FLG_REINCIDENCIA);
             cabecera.pNFlagMedidaCorrectiva = Convert.ToInt16(informeDigital.FLG_MEDIDA_CORRECTIVA);
             cabecera.pNFlagMedidaComplementaria = Convert.ToInt16(informeDigital.FLG_MEDIDA_COMPLEMENTARIA);
             cabecera.pNFlagResponsableSolidario = Convert.ToInt16(informeDigital.FLG_RESPONSABLE_SOLIDARIO);

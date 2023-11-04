@@ -52,6 +52,8 @@ namespace CapaEntidad.Documento
         public decimal pNSancionUIT { get; set; }
         [Description("pvSancionCodCalculo")]
         public string pvSancionCodCalculo { get; set; }
+        [Description("pNFlagReincidencia")]
+        public Int16 pNFlagReincidencia { get; set; }
         [Description("pNFlagMedidaCorrectiva")]
         public Int16 pNFlagMedidaCorrectiva { get; set; }
         [Description("pNFlagMedidaComplementaria")]

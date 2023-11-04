@@ -1426,11 +1426,13 @@ $(function () {
             },
             Notificar: function () {
                 const self = this;
+                const user = ManInfLegal_AddEdit.userApp;
+
                 const notificacion = {
                     DESTINATARIOS: self.form.Seleccionados.map(item => item.email).join(','),
                     CC_DESTINATARIOS: self.form.CC,
                     COD_INFORME: app.Informe.NUM_INFORME_SITD,
-                    MENSAJE_ENVIO_ALERTA: _informe.render(self.form.Mensaje),
+                    MENSAJE_ENVIO_ALERTA: `${_informe.render(self.form.Mensaje)}<br><br>Atentamente,<br>${user.PERSONA}`,
                     URL_LOCAL: window.location.href
                 };
 

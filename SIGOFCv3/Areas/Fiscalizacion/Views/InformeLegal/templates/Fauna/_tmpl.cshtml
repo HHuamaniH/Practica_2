@@ -122,6 +122,65 @@
         </tr>
     </tbody>
 </table>
+
+<h5><u><strong>Afectación al patrimonio forestal</strong></u></h5>
+<ol class="continue" style="margin-left: ${MARGIN_LEFT.OL}; ">
+    <li>
+        Exponer las acciones dañosas advertidas en el marco de los Criterios SGC-M1-CRI-001-V.02 “Criterios para estimar la gravedad del daño por la comisión de infracciones en materia forestal” , o la que lo sustituya.
+    </li>
+</ol>
+@*<p style="text-align: center;">
+        <strong>Cuadro N° XX.</strong> Gravedad del daño al patrimonio forestal por actividad
+    </p>*@
+<table width="100%" cellpadding="4" style="border: 0; font-family: Arial; font-size: 10pt; border-collapse: collapse; line-height: 150%;">
+    <thead>
+        <tr>
+            <th style="text-align: center; border: 1px solid #000;"><strong>Actividad</strong></th>
+            <th style="text-align: center; border: 1px solid #000;"><strong>Unidad de medida</strong></th>
+            <th style="text-align: center; border: 1px solid #000;"><strong>Cantidad</strong></th>
+            <th style="text-align: center; border: 1px solid #000;"><strong>Superficie afectada (ha)</strong></th>
+            <th style="text-align: center; border: 1px solid #000;"><strong>Nivel de gravedad<sup>*</sup></strong></th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td style="border: 1px solid #000;">a) Extracción no autorizada</td>
+            <td style="border: 1px solid #000; text-align: center;">m<sup>3</sup></td>
+            <td style="border: 1px solid #000;"></td>
+            <td style="border: 1px solid #000;"></td>
+            <td style="border: 1px solid #000;"></td>
+        </tr>
+        <tr>
+            <td style="border: 1px solid #000;">b) Actividad agrícola y/o pecuaria</td>
+            <td style="border: 1px solid #000; text-align: center;">ha</td>
+            <td style="border: 1px solid #000;"></td>
+            <td style="border: 1px solid #000;"></td>
+            <td style="border: 1px solid #000;"></td>
+        </tr>
+        <tr>
+            <td style="border: 1px solid #000;">c) Retiro de cobertura boscosa</td>
+            <td style="border: 1px solid #000; text-align: center;">ha</td>
+            <td style="border: 1px solid #000;"></td>
+            <td style="border: 1px solid #000;"></td>
+            <td style="border: 1px solid #000;"></td>
+        </tr>
+        <tr>
+            <td style="border: 1px solid #000;">d) Minería</td>
+            <td style="border: 1px solid #000; text-align: center;">ha</td>
+            <td style="border: 1px solid #000;"></td>
+            <td style="border: 1px solid #000;"></td>
+            <td style="border: 1px solid #000;"></td>
+        </tr>
+        <tr>
+            <td style="border: 1px solid #000; text-align: center;" colspan="4"><strong>Total</strong></td>
+            <td style="border: 1px solid #000;"></td>
+        </tr>
+    </tbody>
+</table>
+<div style="font-size: 8pt;">
+    <div><strong>Fuente:</strong> Supervisión al PMF (número)</div>
+    <div>* Leve, grave, muy grave</div>
+</div>
 {{/if}}
 
 {{if FLG_SANCION}}
@@ -174,6 +233,25 @@
         </tr>
     </tfoot>
 </table>
+
+{{if FLG_REINCIDENCIA}}
+<ol class="continue" style="margin-left: ${MARGIN_LEFT.OL};">
+    <li>
+        <span>
+            En virtud de lo expuesto y considerando establecido en el literal e)  del ítem 3 del artículo 248 del TUO de la Ley del Procedimiento Administrativo General - Ley N° 27444, se advierte que la administrada tiene la calidad de reincidente, condición que deberá tenerse al momento de imponerse una sanción de acuerdo al siguiente detalle:
+            <ul>
+                <li>
+                    Con relación a las sanciones el /la administrada/o es reincidente por la infracción tipificada en el numeral XX relacionada a la implementación del Libro de operaciones, toda vez que considerando la fecha de finalización de vigencia del plan de manejo (XX – XX ) del presente caso, se deduce que la administrada ya contaba con la obligación de la implementación del Libro de operaciones después que quedaran firmes las resoluciones de sanción descritas anteriormente.
+                </li>
+                <li>
+                    Con relación a la primera y segunda sanción la administrada no es reincidente por la infracciones tipificadas en los literales XX del XX , toda vez que, para el presente caso, se advierte de la Forma 20, que la fecha última de movilización (GTF – XX) de la especie XX (especie materia de sanción) fue realizado el XX, por lo cual tomando en cuenta la fecha de notificación de las resoluciones de sanción descritas anteriormente, se deduce que la el /la administrada/o realizó el aprovechamiento antes que quedaran firmes las citadas resoluciones.
+                </li>
+            </ul>
+        </span>
+    </li>
+</ol>
+{{/if}}
+
 {{/if}}
 
 {{if FLG_MEDIDA_CORRECTIVA}}

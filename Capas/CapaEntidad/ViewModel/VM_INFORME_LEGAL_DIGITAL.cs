@@ -52,6 +52,7 @@ namespace CapaEntidad.ViewModel
         public int FLG_SANCION { get; set; }
         public decimal? SANCION_UIT { get; set; }
         public string SANCION_COD_CALCULO { get; set; }
+        public bool FLG_REINCIDENCIA { get; set; }
         public bool FLG_MEDIDA_CORRECTIVA { get; set; }
         public bool FLG_MEDIDA_COMPLEMENTARIA { get; set; }
         public bool FLG_RESPONSABLE_SOLIDARIO { get; set; }
