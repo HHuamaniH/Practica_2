@@ -68,68 +68,74 @@ namespace SIGOFCv3.Areas.Supervision.Models.ManInforme
             List<CapaEntidad.DOC.Ent_INFORME> lstCobBoscosa = new List<CapaEntidad.DOC.Ent_INFORME>();
 
             HttpPostedFileBase file = _request.Files[0];
-            if ((file != null) && (file.ContentLength > 0) && !string.IsNullOrEmpty(file.FileName))
+            if (file.ContentType == "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
             {
-                using (var package = new ExcelPackage(file.InputStream))
+                if ((file != null) && (file.ContentLength > 0) && !string.IsNullOrEmpty(file.FileName))
                 {
-                    var currentSheet = package.Workbook.Worksheets;
-                    var workSheet = currentSheet.First();
-                    var noOfCol = workSheet.Dimension.End.Column;
-                    var noOfRow = workSheet.Dimension.End.Row;
-                    CapaEntidad.DOC.Ent_INFORME oCampos;
-                    string ceste, cnorte;
-
-                    for (int rowIterator = 2; rowIterator <= noOfRow; rowIterator++)
+                    using (var package = new ExcelPackage(file.InputStream))
                     {
-                        oCampos = new CapaEntidad.DOC.Ent_INFORME();
-                        oCampos.ACTIVIDAD = workSheet.Cells[rowIterator, 1].Value.ToString().Trim();
-                        if (!string.IsNullOrEmpty(oCampos.ACTIVIDAD))
+                        var currentSheet = package.Workbook.Worksheets;
+                        var workSheet = currentSheet.First();
+                        var noOfCol = workSheet.Dimension.End.Column;
+                        var noOfRow = workSheet.Dimension.End.Row;
+                        CapaEntidad.DOC.Ent_INFORME oCampos;
+                        string ceste, cnorte;
+
+                        for (int rowIterator = 2; rowIterator <= noOfRow; rowIterator++)
                         {
-                            oCampos.AREA = Decimal.Parse(workSheet.Cells[rowIterator, 2].Value.ToString().Trim());
-                            oCampos.ZONA = workSheet.Cells[rowIterator, 3].Value.ToString().Trim();
-                            if (oCampos.ZONA == "17S" || oCampos.ZONA == "18S" || oCampos.ZONA == "19S")
+                            oCampos = new CapaEntidad.DOC.Ent_INFORME();
+                            oCampos.ACTIVIDAD = workSheet.Cells[rowIterator, 1].Value.ToString().Trim();
+                            if (!string.IsNullOrEmpty(oCampos.ACTIVIDAD))
                             {
-                                oCampos.AUTORIZADO = workSheet.Cells[rowIterator, 4].Value.ToString().Trim();
-                                if (!string.IsNullOrEmpty(oCampos.AUTORIZADO))
+                                oCampos.AREA = Decimal.Parse(workSheet.Cells[rowIterator, 2].Value.ToString().Trim());
+                                oCampos.ZONA = workSheet.Cells[rowIterator, 3].Value.ToString().Trim();
+                                if (oCampos.ZONA == "17S" || oCampos.ZONA == "18S" || oCampos.ZONA == "19S")
                                 {
-                                    ceste = (workSheet.Cells[rowIterator, 5].Value ?? "").ToString().Trim();
-                                    cnorte = (workSheet.Cells[rowIterator, 6].Value ?? "").ToString().Trim();
-                                    if (ceste != "" && cnorte != "")
+                                    oCampos.AUTORIZADO = workSheet.Cells[rowIterator, 4].Value.ToString().Trim();
+                                    if (!string.IsNullOrEmpty(oCampos.AUTORIZADO))
                                     {
-                                        oCampos.COD_SECUENCIAL = 0;                                        
-                                        if (!Regex.IsMatch(ceste, @"^\d+$")) { throw new Exception("Coordenada Este incorrecta debe ser numérico"); }
-                                        else
+                                        ceste = (workSheet.Cells[rowIterator, 5].Value ?? "").ToString().Trim();
+                                        cnorte = (workSheet.Cells[rowIterator, 6].Value ?? "").ToString().Trim();
+                                        if (ceste != "" && cnorte != "")
                                         {
-                                            int coord_esteInt = Convert.ToInt32(ceste);
-                                            if (coord_esteInt > 999999) { throw new Exception("Coordenada Este incorrecta no debe ser mayor a 6 dígitos"); }
+                                            oCampos.COD_SECUENCIAL = 0;
+                                            if (!Regex.IsMatch(ceste, @"^\d+$")) { throw new Exception("Coordenada Este incorrecta debe ser numérico"); }
                                             else
                                             {
-                                                oCampos.COORDENADA_ESTE = Convert.ToInt32(workSheet.Cells[rowIterator, 5].Value.ToString().Trim());                                                
-                                                if (!Regex.IsMatch(cnorte, @"^\d+$")) { throw new Exception("Coordenada Norte incorrecta debe ser numérico"); }
+                                                int coord_esteInt = Convert.ToInt32(ceste);
+                                                if (coord_esteInt > 999999) { throw new Exception("Coordenada Este incorrecta no debe ser mayor a 6 dígitos"); }
                                                 else
                                                 {
-                                                    int coord_norteInt = Convert.ToInt32(cnorte);
-                                                    oCampos.COORDENADA_NORTE = Convert.ToInt32(workSheet.Cells[rowIterator, 6].Value.ToString().Trim());
-                                                    if (coord_norteInt > 9999999) { throw new Exception("Coordenada Norte incorrecta no debe ser mayor a 7 dígitos"); }
+                                                    oCampos.COORDENADA_ESTE = Convert.ToInt32(workSheet.Cells[rowIterator, 5].Value.ToString().Trim());
+                                                    if (!Regex.IsMatch(cnorte, @"^\d+$")) { throw new Exception("Coordenada Norte incorrecta debe ser numérico"); }
+                                                    else
+                                                    {
+                                                        int coord_norteInt = Convert.ToInt32(cnorte);
+                                                        oCampos.COORDENADA_NORTE = Convert.ToInt32(workSheet.Cells[rowIterator, 6].Value.ToString().Trim());
+                                                        if (coord_norteInt > 9999999) { throw new Exception("Coordenada Norte incorrecta no debe ser mayor a 7 dígitos"); }
+                                                    }
                                                 }
                                             }
+                                            oCampos.OBSERVACION = (workSheet.Cells[rowIterator, 7].Value ?? "").ToString().Trim();
+                                            oCampos.RegEstado = 1;
+                                            lstCobBoscosa.Add(oCampos);
                                         }
-                                        oCampos.OBSERVACION = (workSheet.Cells[rowIterator, 7].Value ?? "").ToString().Trim();
-                                        oCampos.RegEstado = 1;
-                                        lstCobBoscosa.Add(oCampos);
+                                        else { throw new Exception("Coordenada incorrecta"); }
                                     }
-                                    else { throw new Exception("Coordenada incorrecta"); }
+                                    else { throw new Exception("Autoridad incorrecta"); }
                                 }
-                                else { throw new Exception("Autoridad incorrecta"); }
+                                else { throw new Exception("Zona UTM incorrecta"); }
                             }
-                            else { throw new Exception("Zona UTM incorrecta"); }
-                        }
-                        else { throw new Exception("Actividad incorrecta"); }
+                            else { throw new Exception("Actividad incorrecta"); }
 
+                        }
                     }
                 }
             }
-
+            else
+            {
+                throw new Exception("Archivo cargado no válido, utilizar la plantilla desde la opción de descarga.");
+            }
             return lstCobBoscosa;
         }
         public static List<CapaEntidad.DOC.Ent_INFORME> AvistamientoFauna(HttpRequestBase _request)
@@ -384,56 +390,60 @@ namespace SIGOFCv3.Areas.Supervision.Models.ManInforme
             List<CapaEntidad.DOC.Ent_INFORME_EVAL_OTRO> lstEval = new List<CapaEntidad.DOC.Ent_INFORME_EVAL_OTRO>();
 
             HttpPostedFileBase file = _request.Files[0];
-            if ((file != null) && (file.ContentLength > 0) && !string.IsNullOrEmpty(file.FileName))
+            if (file.ContentType == "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
             {
-                using (var package = new ExcelPackage(file.InputStream))
+                if ((file != null) && (file.ContentLength > 0) && !string.IsNullOrEmpty(file.FileName))
                 {
-                    var currentSheet = package.Workbook.Worksheets;
-                    var workSheet = currentSheet.First();
-                    var noOfCol = workSheet.Dimension.End.Column;
-                    var noOfRow = workSheet.Dimension.End.Row;
-                    CapaEntidad.DOC.Ent_INFORME_EVAL_OTRO oCampos;
-                    string ceste, cnorte;
-
-                    for (int rowIterator = 2; rowIterator <= noOfRow; rowIterator++)
+                    using (var package = new ExcelPackage(file.InputStream))
                     {
-                        oCampos = new CapaEntidad.DOC.Ent_INFORME_EVAL_OTRO();
-                        oCampos.ZONA = (workSheet.Cells[rowIterator, 2].Value ?? "").ToString().Trim();
-                        if (oCampos.ZONA == "17S" || oCampos.ZONA == "18S" || oCampos.ZONA == "19S")
+                        var currentSheet = package.Workbook.Worksheets;
+                        var workSheet = currentSheet.First();
+                        var noOfCol = workSheet.Dimension.End.Column;
+                        var noOfRow = workSheet.Dimension.End.Row;
+                        CapaEntidad.DOC.Ent_INFORME_EVAL_OTRO oCampos;
+                        string ceste, cnorte;
+
+                        for (int rowIterator = 2; rowIterator <= noOfRow; rowIterator++)
                         {
-                            ceste = (workSheet.Cells[rowIterator, 3].Value ?? "").ToString().Trim();
-                            cnorte = (workSheet.Cells[rowIterator, 4].Value ?? "").ToString().Trim();
-                            if (ceste != "" && cnorte != "")
+                            oCampos = new CapaEntidad.DOC.Ent_INFORME_EVAL_OTRO();
+                            oCampos.ZONA = (workSheet.Cells[rowIterator, 2].Value ?? "").ToString().Trim();
+                            if (oCampos.ZONA == "17S" || oCampos.ZONA == "18S" || oCampos.ZONA == "19S")
                             {
-                                oCampos.COD_SECUENCIAL = 0;
-                                oCampos.EVALUACION = (workSheet.Cells[rowIterator, 1].Value ?? "").ToString().Trim();
-                                if (!Regex.IsMatch(ceste, @"^\d+$")) { throw new Exception("Coordenada Este incorrecta debe ser numérico"); }
-                                else
+                                ceste = (workSheet.Cells[rowIterator, 3].Value ?? "").ToString().Trim();
+                                cnorte = (workSheet.Cells[rowIterator, 4].Value ?? "").ToString().Trim();
+                                if (ceste != "" && cnorte != "")
                                 {
-                                    int coord_esteInt = Convert.ToInt32(ceste);
-                                    if (coord_esteInt > 999999) { throw new Exception("Coordenada Este incorrecta no debe ser mayor a 6 dígitos"); }
+                                    oCampos.COD_SECUENCIAL = 0;
+                                    oCampos.EVALUACION = (workSheet.Cells[rowIterator, 1].Value ?? "").ToString().Trim();
+                                    if (!Regex.IsMatch(ceste, @"^\d+$")) { throw new Exception("Coordenada Este incorrecta debe ser numérico"); }
                                     else
                                     {
-                                        oCampos.COORDENADA_ESTE = Convert.ToInt32(workSheet.Cells[rowIterator, 3].Value.ToString().Trim());                                        
-                                        if (!Regex.IsMatch(cnorte, @"^\d+$")) { throw new Exception("Coordenada Norte incorrecta debe ser numérico"); }
+                                        int coord_esteInt = Convert.ToInt32(ceste);
+                                        if (coord_esteInt > 999999) { throw new Exception("Coordenada Este incorrecta no debe ser mayor a 6 dígitos"); }
                                         else
                                         {
-                                            int coord_norteInt = Convert.ToInt32(cnorte);
-                                            oCampos.COORDENADA_NORTE = Convert.ToInt32(workSheet.Cells[rowIterator, 4].Value.ToString().Trim());
-                                            if (coord_norteInt > 9999999) { throw new Exception("Coordenada Norte incorrecta no debe ser mayor a 7 dígitos"); }
+                                            oCampos.COORDENADA_ESTE = Convert.ToInt32(workSheet.Cells[rowIterator, 3].Value.ToString().Trim());
+                                            if (!Regex.IsMatch(cnorte, @"^\d+$")) { throw new Exception("Coordenada Norte incorrecta debe ser numérico"); }
+                                            else
+                                            {
+                                                int coord_norteInt = Convert.ToInt32(cnorte);
+                                                oCampos.COORDENADA_NORTE = Convert.ToInt32(workSheet.Cells[rowIterator, 4].Value.ToString().Trim());
+                                                if (coord_norteInt > 9999999) { throw new Exception("Coordenada Norte incorrecta no debe ser mayor a 7 dígitos"); }
+                                            }
                                         }
                                     }
+                                    oCampos.DESCRIPCION = (workSheet.Cells[rowIterator, 5].Value ?? "").ToString().Trim();
+                                    oCampos.RegEstado = 1;
+                                    lstEval.Add(oCampos);
                                 }
-                                oCampos.DESCRIPCION = (workSheet.Cells[rowIterator, 5].Value ?? "").ToString().Trim();
-                                oCampos.RegEstado = 1;
-                                lstEval.Add(oCampos);
+                                else { throw new Exception("Coordenada incorrecta"); }
                             }
-                            else { throw new Exception("Coordenada incorrecta"); }
+                            else { throw new Exception("Zona UTM incorrecta"); }
                         }
-                        else { throw new Exception("Zona UTM incorrecta"); }
                     }
                 }
             }
+            else { throw new Exception("Archivo cargado no válido, utilizar la plantilla desde la opción de descarga."); }
             return lstEval;
         }
         public static List<CapaEntidad.DOC.Ent_INFORME_VOL_ANALIZADO> VolumenAnalizado(HttpRequestBase _request)
