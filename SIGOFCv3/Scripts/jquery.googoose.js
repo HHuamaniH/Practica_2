@@ -402,7 +402,7 @@
             html += 'body, table { font-family: Arial; font-size: 10pt; }\n';
             html += 'ul, ol { margin-left: 25px; }\n';
             html += 'ul { list-style: disc; }\n';
-            html += 'ul li, ol li { margin-bottom: 12px; }';            
+            html += 'ul li, ol li { margin-bottom: 12px; }';
             html += '-->\n';
             html += '</style>\n';
 
