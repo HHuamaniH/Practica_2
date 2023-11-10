@@ -719,15 +719,7 @@ namespace CapaDatos.GENE
                                     oCEntidadDet.COD_SMGRUPO = dr.GetValueString(p2).Trim();
                                     oCEntidadDet.COD_SECUENCIAL_PADRE = dr.GetInt32(p8);
                                     oCEntidadDet.MENU_PADRE = dr.GetValueString(p5).Trim();
-                                    int existe = 0;
-                                    foreach (var item in lsItemsMenPadre)
-                                    {
-                                        if (oCEntidadDet.MENU_PADRE == item.MENU_PADRE) { existe = 1; }
-                                    }
-                                    if (existe == 0)
-                                    {
-                                        lsItemsMenPadre.Add(oCEntidadDet);
-                                    }
+                                    lsItemsMenPadre.Add(oCEntidadDet);
                                     COD_MENUPADRE = String.Format("{0}{1}{2}", dr.GetValueString(p1).Trim(), dr.GetValueString(p2).Trim(), dr.GetInt32(p8).ToString().Trim());
                                 }
                                 oCEntidadDet = new CEntidad();
