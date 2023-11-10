@@ -1,5 +1,5 @@
 ﻿@model SIGOFCv3.Areas.THabilitante.Models.ManGrillaViewModel
-<script src="~/Areas/THabilitante/js/Controles/Index.js?v4"></script>
+<script src="~/Areas/THabilitante/js/Controles/Index.js?v5"></script>
 <link href="~/Areas/THabilitante/css/controles.css" rel="stylesheet" />
 
 <div class="card">
@@ -20,7 +20,7 @@
                     @Html.DropDownList("cboOpciones", (IEnumerable<SelectListItem>)Model.cboOpciones, new { @class = "form-control form-control-sm" })
                 </div>
                 <div class="form-group col-md-6">
-                    <input type="text" class="form-control form-control-sm" id="txtValor" placeholder="Ingrese Valor a Buscar">
+                    <input type="text" class="form-control form-control-sm" id="txtValor" placeholder="Ingrese Valor a Buscar" onkeypress = "return utilSigo.checkLetter(event);">
                 </div>
                 <div class="btn-group col-md-2">
                     <a id="btnManGrillaBuscar" style="cursor:pointer;" data-toggle="tooltip" data-placement="top" title="Buscar el registro"><span class="fa mx-2 fa-lg fa-search"></span></a>

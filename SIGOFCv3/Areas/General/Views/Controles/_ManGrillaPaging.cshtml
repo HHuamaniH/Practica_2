@@ -1,6 +1,6 @@
 ﻿@model SIGOFCv3.Areas.General.Models.ManGrillaViewModel
 
-<script src="~/Areas/General/js/Controles/_ManGrillaPaging.js"></script>
+<script src="~/Areas/General/js/Controles/_ManGrillaPaging.js?noCache=@Guid.NewGuid().ToString()"></script>
 
 <style type="text/css">
     #dvManGrillaPaging .dataTables_info {
@@ -31,7 +31,7 @@
                         @Html.DropDownList("ddlOpcionBuscarId", Model.cboOpciones, new { @class = "form-control form-control-sm" })
                     </div>
                     <div class="form-group col-md-6">
-                        <input type="text" class="form-control form-control-sm" id="txtValorBuscar" placeholder="Ingrese Valor a Buscar">
+                        <input type="text" class="form-control form-control-sm" id="txtValorBuscar" placeholder="Ingrese Valor a Buscar" onkeypress = "return utilSigo.checkLetter(event);">
                     </div>
                     <div class="btn-group col-md-2" style="padding-top:5px;">
                         <a id="btnSearch" style="cursor:pointer;" data-toggle="tooltip" data-placement="top" title="Buscar el registro" onclick="_ManGrillaPaging.fnSearch()"><span class="fa mx-2 fa-lg fa-search"></span></a>
@@ -51,7 +51,7 @@
                         @Html.DropDownList("ddlOpcionBuscarId1", Model.cboOpciones1, new { @class = "form-control form-control-sm" })
                     </div>
                     <div class="form-group col-md-4">
-                        <input type="text" class="form-control form-control-sm" id="txtValorBuscar" placeholder="Ingrese Valor a Buscar">
+                        <input type="text" class="form-control form-control-sm" id="txtValorBuscar" placeholder="Ingrese Valor a Buscar" onkeypress = "return utilSigo.checkLetter(event);">
                     </div>
                     <div class="btn-group col-md-2" style="padding-top:5px;">
                         <a id="btnSearch" style="cursor:pointer;" data-toggle="tooltip" data-placement="top" title="Buscar el registro" onclick="_ManGrillaPaging.fnSearch()"><span class="fa mx-2 fa-lg fa-search"></span></a>

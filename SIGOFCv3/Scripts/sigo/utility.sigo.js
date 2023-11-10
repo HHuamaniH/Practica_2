@@ -735,7 +735,7 @@ utilSigo.convertirFechaHoraStandar = function (fecha) {
     return returns;
 };
 
-utilSigo.isFechaMayor = function (date1,date2) {
+utilSigo.isFechaMayor = function (date1, date2) {
     let returns = false;
     if (date1 > date2) {
         returns = true;
@@ -919,17 +919,17 @@ utilSigo.onBlurTwoDecimal = function (thix, texto) {
 
 utilSigo.onBlurTwoDecimalIS = function (thix, texto) {
     let numero = document.getElementById(thix.id).value;
-    if (numero!="") {
+    if (numero != "") {
         if (!/^\d+(\.\d{1,2})?$/.test(numero)) {
             document.getElementById(thix.id).value = "";
             utilSigo.toastWarning("Aviso", "El " + texto + " sólo debe tener dos decimales");
             $("#" + thix.id).focus();
         }
-    }    
+    }
 }
 utilSigo.validateFechaRango = function (id, texto) {
-    let fecha = $('#'+id).val();
-    
+    let fecha = $('#' + id).val();
+
     let campos = fecha.split('/');
     let date = new Date(campos[2] + "-" + campos[1] + "-" + campos[0]);
     let dateToday = new Date(utilSigo.obtenerFechaHora()[0]);
@@ -937,7 +937,7 @@ utilSigo.validateFechaRango = function (id, texto) {
     datePast.setFullYear(datePast.getFullYear() - 5);
     let dateTodayCampos = utilSigo.obtenerFechaHora()[0].split('-');
     let dateTodayStr = dateTodayCampos[2] + "/" + dateTodayCampos[1] + "/" + dateTodayCampos[0];
-    
+
     if (utilSigo.isFechaMayor(date, dateToday)) {
         utilSigo.toastWarning("Aviso", "El campo " + texto + " no debe ser mayor a la fecha actual");
         document.getElementById(id).value = dateTodayStr;
@@ -952,3 +952,27 @@ utilSigo.validateFechaRango = function (id, texto) {
     return true;
 }
 
+utilSigo.findWords = function (text) {
+    let msg = "La búsqueda no puede contener la(s) siguiente(s) palabra(s) : ";
+    const lowerText = text.toLowerCase();
+
+    const words = ["Connection", "oracle", "System", "Data", "SqlClient"];
+
+    const foundWords = [];
+
+    words.forEach(word => {
+        // Convertir la palabra a minúsculas para hacer una búsqueda sin distinción de mayúsculas y minúsculas
+        const lowerWord = word.toLowerCase();
+
+        // Buscar la palabra en el texto
+        if (lowerText.includes(lowerWord)) {
+            foundWords.push(word);
+            msg += " " + word;
+        }
+    });
+    if (foundWords.length == 0) {
+        msg = "";
+    }
+
+    return (msg);
+}
