@@ -1,0 +1,42 @@
+﻿
+<script src="~/Areas/Fiscalizacion/js/Controles/Ubigeo.js"></script>
+@{
+    IEnumerable<SelectListItem> iniSelect = new List<SelectListItem> { new SelectListItem { Value = "-", Text = "Seleccionar" }, new SelectListItem { Value = "0000", Text = "MULTI-PROVINCIA" } };
+    IEnumerable<SelectListItem> iniSelectDistri = new List<SelectListItem> { new SelectListItem { Value = "-", Text = "Seleccionar" }, new SelectListItem { Value = "000000", Text = "MULTI-DISTRITO" } };
+}
+<div class="modal-dialog" role="document">
+    <div class="modal-content">
+        <div class="modal-header text-small" style="cursor:move;">
+            Seleccione el Ubigeo
+            <i class="fa fa-close" style="cursor:pointer;" onclick="controlesUbigeo.closeUbigeoModal();"></i>
+        </div>
+        <div class="modal-body">
+            <form id="frmUbigeo">
+                @Html.Hidden("hdUrl", @Url.Action("GetListUbigeoTodo", "Controles", new { Area = "THabilitante" }))
+                @Html.Hidden("ubHdFormularioOrigen", (string)ViewBag.ubFormularioOrigen)
+                @Html.Hidden("ubHdControlOrigen", (string)ViewBag.ubControlOrigen)
+                <div class="form-group row">
+                    <label for="cboDepartamento" class="col-md-3 col-form-label text-small">Departamento</label>
+                    <div class="col-md-9">
+                        @Html.DropDownList("cboDepartamento", iniSelect, new { @class = "form-control form-control-sm", @style = "width:auto;" })
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="cboProvincia" class="col-md-3 col-form-label text-small">Provincia</label>
+                    <div class="col-md-9">
+                        @Html.DropDownList("cboProvincia", iniSelect, new { @class = "form-control form-control-sm", @style = "width:auto;" })
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="cboDistrito" class="col-md-3 col-form-label text-small">Distrito</label>
+                    <div class="col-md-9">
+                        @Html.DropDownList("cboDistrito", iniSelectDistri, new { @class = "form-control form-control-sm", @style = "width:auto;" })
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="modal-footer">
+
+        </div>
+    </div>
+</div>

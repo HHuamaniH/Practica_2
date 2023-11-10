@@ -12,17 +12,18 @@ using CLogica = CapaLogica.DOC.Log_INFFUN;
 using System.Linq;
 using CapaEntidad.ViewModel.General;
 using SIGOFCv3.Helper;
+using System.Globalization;
 
 namespace SIGOFCv3.Areas.Fiscalizacion.Controllers
 {
     public class InformeFundamentadoController : Controller
     {
-        public static CEntVM vmIF= new CEntVM();
+        public static CEntVM vmIF = new CEntVM();
 
         public ActionResult Index(string _alertaIncial = "")
         {
             ViewBag.Formulario = "INFORME_FUNDAMENTADO";
-            ViewBag.TituloFormulario = "Informe Fundamentado";
+            ViewBag.TituloFormulario = "Solicitud de FEMAs";
             ViewBag.AlertaInicial = _alertaIncial;
             //obtenemos el rol sobre el formulario
             VM_Menu_Rol mr = HelperSigo.GetRol("MODULO FISCALIZACION", "Informe Fundamentado");
@@ -44,6 +45,16 @@ namespace SIGOFCv3.Areas.Fiscalizacion.Controllers
                 entIF.COD_UCUENTA = (ModelSession.GetSession())[0].COD_UCUENTA;
                 entIF = logIF.RegMostCombo(entIF);
                 vmIF.ddlOd = entIF.ListMComboOD.Select(i => new VM_Cbo { Value = i.CODIGO, Text = i.DESCRIPCION });
+
+                vmIF.ddlTipoSolicitud = entIF.ListTipoSolicitud.Select(i => new VM_Cbo { Value = i.CODIGO, Text = i.DESCRIPCION });
+                vmIF.ddlTipoSolicitudId = entIF.ListTipoSolicitud.ElementAt(0).CODIGO;
+
+                vmIF.ddlVencimientoPlazoLegal = entIF.ListVencimientoPlazoLegal.Select(i => new VM_Cbo { Value = i.CODIGO, Text = i.DESCRIPCION });
+                vmIF.ddlVencimientoPlazoLegalId = entIF.ListVencimientoPlazoLegal.ElementAt(0).CODIGO;
+
+                vmIF.ddlEstadoSolicitudFema = entIF.ListEstadoSolicitudFema.Select(i => new VM_Cbo { Value = i.CODIGO, Text = i.DESCRIPCION });
+                vmIF.ddlEstadoSolicitudFemaId = entIF.ListEstadoSolicitudFema.ElementAt(0).CODIGO;
+
                 entIF = logIF.RegMostrarComboEntidad(entIF);
                 vmIF.ddlEntidad = entIF.ListarEntidades.Select(i => new VM_Cbo { Value = i.COD_SENTIDAD, Text = i.DESCRIPCION_ENTIDAD });
                 vmIF.ddlEntidadId = entIF.ListarEntidades.ElementAt(0).COD_SENTIDAD;
@@ -51,29 +62,64 @@ namespace SIGOFCv3.Areas.Fiscalizacion.Controllers
                 entIF = logIF.RegMostrarComboSubEntidad(entIF);
                 vmIF.ddlSubEntidad = entIF.ListarEntidades.Select(i => new VM_Cbo { Value = i.COD_SENTIDAD, Text = i.DESCRIPCION_SUBENTIDAD });
                 vmIF.ddlSubEntidadId = entIF.ListarEntidades.ElementAt(0).COD_SENTIDAD;
+
+
                 this.initBusquedaModal();
 
                 if (String.IsNullOrEmpty(asCodInfFundamentado))
-                {      
-                    vmIF.lblTituloEstado = "Nuevo Registro";    
+                {
+                    vmIF.lblTituloEstado = "Nuevo Registro";
+               
                     vmIF.vmControlCalidad.ddlIndicadorId = "0000000";
                     vmIF.hdfCodTipoInfFundamentado = "0000049";
                     vmIF.txtTipoInfFundamentado = "Informes fundamentados - Informes fundamentados";
                     vmIF.ddlOdId = null;
-                    vmIF.txtFechaFundamentado = null;
+                    vmIF.dtpFechaFundamentado = null;
                     vmIF.txtNumInfFundamentado = null;
                     vmIF.txtConclusiones = null;
                     vmIF.txtObservaciones = null;
+                    //vmIF.ddlEstadoSolicitudFema = new List<VM_Cbo>();
                     vmIF.listaProfesionales = new List<CEntidadIF>();
-                    vmIF.tbInforme = new List<CEntidadIF>();  
+                    vmIF.tbInforme = new List<CEntidadIF>();
                     vmIF.listaEntidades = new List<CEntidadIF>();
+                    vmIF.tbEliTABLA = new List<CEntidadIF>();
                     vmIF.RegEstado = 1;
+                    vmIF.txtRegistro = null;
+                    vmIF.dtpFechaIngresoSolicitud = null;
+                    vmIF.txtNumeroOficioSolicitud = null;
+                    vmIF.txtDetalle = null;
+                    vmIF.ddlTipoSolicitudId = null;
+                    vmIF.ddlVencimientoPlazoLegalId = null;
+                    vmIF.chkEmitirInforme = false;
+                    vmIF.dtpfechaFirmezaPAU = null;
+                    vmIF.txtNumeroOficio1 = null;
+                    vmIF.dtpFechaEmision2 = null;
+                    vmIF.txtNumeroInformeFundamentado = null;
+                    vmIF.chkEmitirOficio = false;
+                    vmIF.txtNumeroOficio2 = null;
+                    vmIF.dtpfechaOficio2 = null;
+                    vmIF.txtObservacionesOficio = null;
+                    vmIF.chkEmitirOficioPau = false;
+                    vmIF.txtNumeroOficio2 = null;
+                    vmIF.dtpfechaOficio2 = null;
+                    vmIF.txtObservacionesPau = null;
+                    vmIF.chkNotificacion = false;
+                    vmIF.dtpFechaNotificacion = null;
+                    vmIF.txtAnotaciones = null;
+                    vmIF.hdfItemEstUbigeoCodigo = null;
+                    vmIF.fItemEstUbigeoCodigo = null;
+                    vmIF.hdtxtTitularTipo = null;
+                    vmIF.txtTitularTipo = null;
+                    vmIF.dtpfechaOficio1 = null;
+                    vmIF.txtNumeroOficioPau = null;
+                    vmIF.dtpFechaEmisionPau = null;
                 }
                 else
                 {
                     entIF = logIF.RegMostrarINFFUNItem(new CEntidadIF() { COD_INFFUN = asCodInfFundamentado });
                     vmIF.lblTituloEstado = "Modificando Registro";
                     vmIF.hdfCodInfFundamentado = asCodInfFundamentado;
+                    vmIF.ddlEstadoSolicitudFemaId = entIF.COD_ESTADO_SOLICITUD;
                     vmIF.vmControlCalidad.ddlIndicadorId = entIF.COD_ESTADO_DOC;
                     vmIF.vmControlCalidad.txtUsuarioRegistro = entIF.USUARIO_REGISTRO;
                     vmIF.vmControlCalidad.txtUsuarioControl = entIF.USUARIO_CONTROL;
@@ -82,14 +128,52 @@ namespace SIGOFCv3.Areas.Fiscalizacion.Controllers
                     vmIF.ddlOdId = entIF.COD_OD_REGISTRO;
                     vmIF.hdfCodTipoInfFundamentado = entIF.COD_FCTIPO;
                     vmIF.txtTipoInfFundamentado = entIF.TIPO_FISCALIZA;
-                    vmIF.txtFechaFundamentado = entIF.FECHA_EMISION.ToString();
-                    vmIF.txtNumInfFundamentado= entIF.NUMERO_INFORME;
+                    vmIF.dtpFechaFundamentado = entIF.FECHA_EMISION == null ? null : entIF.FECHA_EMISION?.ToString();
+                    vmIF.txtNumInfFundamentado = entIF.NUMERO_INFORME;
                     vmIF.listaProfesionales = entIF.ListProfesionales;
                     vmIF.tbInforme = entIF.ListInformes;
                     vmIF.listaEntidades = entIF.ListarEntidades;
                     vmIF.txtConclusiones = entIF.CONCLUSIONES;
                     vmIF.txtObservaciones = entIF.DESCRIPCION;
                     vmIF.tbEliTABLA = new List<CEntidadIF>();
+                    vmIF.txtRegistro = entIF.NUMERO_TRAMITE;
+                    vmIF.dtpFechaIngresoSolicitud = entIF.FECHA_TRAMITE == null ? null : entIF.FECHA_TRAMITE?.ToString();
+                    vmIF.txtNumeroOficioSolicitud = entIF.NUMERO_SOLICITUD;
+                    vmIF.txtDetalle = entIF.GLOSA;
+                    vmIF.ddlTipoSolicitudId = entIF.COD_TIPO_SOLICITUD;
+                    vmIF.ddlVencimientoPlazoLegalId = entIF.COD_VEN_LEGAL;
+
+                    if (entIF.FLAG_INFFUN_EMITIDO == 1)
+                    {
+                        vmIF.chkEmitirInforme = (entIF.FLAG_INFFUN_EMITIDO == 1 ? true : false);
+                        vmIF.dtpfechaFirmezaPAU = entIF.FECHA_FIRMEZA.ToString();
+                        vmIF.txtNumeroOficio1 = entIF.NUMERO_OFICIO1;
+                        vmIF.dtpfechaOficio1 = entIF.FECHA_OFICIO1.ToString();
+                        vmIF.txtNumeroInformeFundamentado = entIF.NUMERO_INFORME;
+
+                    }
+                    else if (entIF.FLAG_NO_INFUN_EMITIDO == 1)
+                    {
+                        vmIF.chkEmitirOficio = (entIF.FLAG_NO_INFUN_EMITIDO == 1 ? true : false);
+                        vmIF.txtNumeroOficio2 = entIF.NUMERO_OFICIO2;
+                        vmIF.dtpfechaOficio2 = entIF.FECHA_OFICIO2.ToString();
+                        vmIF.txtObservacionesOficio = entIF.NOTA_NO_INFFUN;
+                    }
+                    else if (entIF.FLAG_COPIA_PAU_EMITIDO == 1)
+                    {
+                        vmIF.chkEmitirOficioPau = (entIF.FLAG_COPIA_PAU_EMITIDO == 1 ? true : false);
+                        vmIF.txtNumeroOficioPau = entIF.NUMERO_OFICIO2;
+                        vmIF.dtpFechaEmisionPau = entIF.FECHA_OFICIO2.ToString();
+                        vmIF.txtObservacionesPau = entIF.NOTA_COPIA_PAU;
+                    }
+
+                    vmIF.chkNotificacion = (entIF.FLAG_NOTIFICACION == 1 ? true : false);
+                    vmIF.dtpFechaNotificacion = entIF.FECHA_NOTIFICACION == null ? null : entIF.FECHA_NOTIFICACION?.ToString();
+                    vmIF.txtAnotaciones = entIF.NOTA_NOTIFICACION;
+                    vmIF.hdfItemEstUbigeoCodigo = entIF.COD_UBIGEO;
+                    vmIF.fItemEstUbigeoCodigo = entIF.ESTAB_UBIGEO;
+                    vmIF.hdtxtTitularTipo = entIF.COD_PERSONA_ASIGNADO;
+                    vmIF.txtTitularTipo = entIF.PERSONA_TITULAR;
                     vmIF.RegEstado = 0;
                 }
                 //obtenemos el rol sobre el formulario
@@ -100,7 +184,7 @@ namespace SIGOFCv3.Areas.Fiscalizacion.Controllers
                 vmIF.vmControlCalidad.VALIAS_ROL = mr.VALIAS;
                 return View(vmIF);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 return RedirectToAction("ErrorC", "Index");
             }
@@ -122,7 +206,7 @@ namespace SIGOFCv3.Areas.Fiscalizacion.Controllers
                 entIF.COD_PERSONA = "";
                 entIF.COD_INFFUN = obj.hdfCodInfFundamentado;
                 entIF.NUMERO_INFORME = obj.txtNumInfFundamentado;
-                entIF.FECHA_EMISION = obj.txtFechaFundamentado;
+                entIF.FECHA_EMISION = obj.dtpFechaFundamentado;
                 //entIF.FECHA_CREACION = "";
                 entIF.COD_OD_REGISTRO = obj.ddlOdId;
                 entIF.COD_ESTADO_DOC = obj.vmControlCalidad.ddlIndicadorId;
@@ -135,14 +219,15 @@ namespace SIGOFCv3.Areas.Fiscalizacion.Controllers
                 entIF.ListInformes = obj.tbInforme;
                 entIF.ListarEntidades = obj.listaEntidades;
 
-                if (obj.tbEliTABLA != null) {
+                if (obj.tbEliTABLA != null)
+                {
 
                     for (int j = 0; j < obj.tbEliTABLA.Count; j++)
                     {
                         var ob = obj.tbEliTABLA[j];
                         vmIF.tbEliTABLA.Add(ob);
                     }
-                } 
+                }
 
                 entIF.ListEliTABLA = vmIF.tbEliTABLA;
                 entIF.ListProfesionales = obj.listaProfesionales;
@@ -159,6 +244,178 @@ namespace SIGOFCv3.Areas.Fiscalizacion.Controllers
                 return Json(ex.Message);
             }
 
+        }
+
+        [HttpPost]
+        public JsonResult GrabarInFun(CEntVM obj)
+        {
+            try
+            {
+                string codCuenta = (ModelSession.GetSession())[0].COD_UCUENTA;
+                ListResult result = new ListResult();
+                CEntidadIF entIF = new CEntidadIF();
+                CLogica logIF = new CLogica();
+
+
+                entIF.COD_FCTIPO = obj.hdfCodTipoInfFundamentado;
+                entIF.COD_UCUENTA = codCuenta;
+                entIF.COD_PERSONA = "";
+                entIF.COD_INFFUN = obj.hdfCodInfFundamentado;
+                entIF.COD_ESTADO_DOC = obj.vmControlCalidad.ddlIndicadorId;
+                entIF.OBSERVACIONES_CONTROL = obj.vmControlCalidad.txtControlCalidadObservaciones;
+                entIF.OBSERV_SUBSANAR = obj.vmControlCalidad.chkObsSubsanada;
+
+
+                // NUEVOS CAMPOS // DATOS SOLICITUD
+                entIF.COD_ESTADO_SOLICITUD = obj.ddlEstadoSolicitudFemaId;
+                entIF.NUMERO_TRAMITE = obj.txtRegistro;
+                entIF.FECHA_TRAMITE = obj.dtpFechaIngresoSolicitud;
+                entIF.NUMERO_SOLICITUD = obj.txtNumeroOficioSolicitud;
+                entIF.COD_TIPO_SOLICITUD = obj.ddlTipoSolicitudId;
+                entIF.COD_VEN_LEGAL = obj.ddlVencimientoPlazoLegalId;
+                entIF.GLOSA = obj.txtDetalle;
+                entIF.COD_OD_REGISTRO = obj.ddlOdId;
+                entIF.COD_UBIGEO = obj.hdfItemEstUbigeoCodigo; // PENDIENTE
+                entIF.COD_PERSONA_ASIGNADO = obj.hdtxtTitularTipo; // PENDIENTE
+
+                // NUEVOS CAMPOS // INFORME FUNDAMENTADO
+                string fechaOficio2 = "";
+                string fechaOficio1 = "";
+                if (obj.chkEmitirInforme)
+                {
+                    // INFORME
+                    entIF.FLAG_INFFUN_EMITIDO = (obj.chkEmitirInforme ? 1 : 0);
+                    entIF.FECHA_FIRMEZA = obj.dtpfechaFirmezaPAU;
+                    entIF.NUMERO_OFICIO1 = obj.txtNumeroOficio1;
+                    entIF.FECHA_OFICIO1 = obj.dtpfechaOficio1;
+                    entIF.CONCLUSIONES = obj.txtConclusiones;
+                    entIF.DESCRIPCION = obj.txtObservaciones;
+                    entIF.NUMERO_INFORME = obj.txtNumeroInformeFundamentado;
+                    entIF.FECHA_EMISION = obj.dtpFechaFundamentado;
+
+                    fechaOficio1 = Convert.ToDateTime(entIF.FECHA_OFICIO1).ToString("dd/MM/yyyy");
+
+                }
+
+                // OFICIO
+                if (obj.chkEmitirOficio)
+                {
+                    entIF.FLAG_NO_INFUN_EMITIDO = (obj.chkEmitirOficio ? 1 : 0);
+                    entIF.NUMERO_OFICIO2 = obj.txtNumeroOficio2;
+                    entIF.FECHA_OFICIO2 = obj.dtpfechaOficio2;
+                    entIF.NOTA_NO_INFFUN = obj.txtObservacionesOficio;
+                    fechaOficio2 = Convert.ToDateTime(entIF.FECHA_OFICIO2).ToString("dd/MM/yyyy");
+                }
+
+                //NUEVOS CAMPOS // PAU/COPIA
+                if (obj.chkEmitirOficioPau)
+                {
+                    entIF.FLAG_COPIA_PAU_EMITIDO = (obj.chkEmitirOficioPau ? 1 : 0);
+                    entIF.NUMERO_OFICIO2 = obj.txtNumeroOficioPau;
+                    entIF.FECHA_OFICIO2 = obj.dtpFechaEmisionPau;
+                    entIF.NOTA_COPIA_PAU = obj.txtObservacionesPau;
+                    fechaOficio2 = Convert.ToDateTime(entIF.FECHA_OFICIO2).ToString("dd/MM/yyyy");
+                }
+
+                //NUEVOS CAMPOS // NOTIFICACION
+                if (obj.chkNotificacion)
+                {
+                    entIF.FLAG_NOTIFICACION = (obj.chkNotificacion ? 1 : 0);
+                    entIF.FECHA_NOTIFICACION = obj.dtpFechaNotificacion;
+                    entIF.NOTA_NOTIFICACION = obj.txtAnotaciones;
+                }
+
+                entIF.OUTPUTPARAM01 = "";
+                entIF.RegEstado = obj.RegEstado;
+
+                entIF.ListInformes = obj.tbInforme;
+                entIF.ListarEntidades = obj.listaEntidades;
+
+                if (entIF.FLAG_INFFUN_EMITIDO == null)
+                    entIF.FLAG_INFFUN_EMITIDO = 0;
+                if (entIF.FLAG_NO_INFUN_EMITIDO == null)
+                    entIF.FLAG_NO_INFUN_EMITIDO = 0;
+                if (entIF.FLAG_COPIA_PAU_EMITIDO == null)
+                    entIF.FLAG_COPIA_PAU_EMITIDO = 0;
+
+                if (entIF.FLAG_INFFUN_EMITIDO == 0 && entIF.FLAG_NO_INFUN_EMITIDO == 0 && entIF.FLAG_COPIA_PAU_EMITIDO == 0)
+                {
+                    entIF.DIAS_HABILES_TRANS_NO_INFFUN = 0;
+                    entIF.DIAS_HAB_TRANSCURIDOS = 0;
+                }
+
+                // SI(FLAG_COPIA_PAU_EMITIDO == 1)
+                if (entIF.FLAG_COPIA_PAU_EMITIDO == 1) // FECHA_OFICIO2 - FECHA_TRAMITE;
+                    entIF.DIAS_HAB_TRANSCURIDOS = CalcularDiasEntreFechas(fechaOficio2, obj.dtpFechaIngresoSolicitud);
+                //SI(FLAG_INFFUN_EMITIDO == 1) && (FLAG_NO_INFFUN_EMITIDO == 0)
+                if (entIF.FLAG_INFFUN_EMITIDO == 1 && entIF.FLAG_NO_INFUN_EMITIDO == 0) ////DIAS_HABILES_TRANSCURRIDOS = FECHA_OFICIO1 - FECHA_TRAMITE
+                    entIF.DIAS_HAB_TRANSCURIDOS = CalcularDiasEntreFechas(fechaOficio1, obj.dtpFechaIngresoSolicitud);
+                //SI(FLAG_INFFUN_EMITIDO == 0) && (FLAG_NO_INFFUN_EMITIDO == 1)
+                if (entIF.FLAG_INFFUN_EMITIDO == 0 && entIF.FLAG_NO_INFUN_EMITIDO == 1) //DIAS_HABILES_TRANS_NO_INFFUN = FECHA_OFICIO2 - FECHA_TRAMITE
+                    entIF.DIAS_HABILES_TRANS_NO_INFFUN = CalcularDiasEntreFechas(fechaOficio2, obj.dtpFechaIngresoSolicitud);
+                //SI(FLAG_INFFUN_EMITIDO == 1) && (FLAG_NO_INFFUN_EMITIDO == 1)
+                if (entIF.FLAG_INFFUN_EMITIDO == 1 && entIF.FLAG_NO_INFUN_EMITIDO == 1) //DIAS_HABILES_TRANSCURRIDOS = FECHA_OFICIO1 - FECHA_FIRMEZA
+                    entIF.DIAS_HAB_TRANSCURIDOS = CalcularDiasEntreFechas(fechaOficio1, obj.dtpfechaFirmezaPAU);
+
+                if (obj.tbEliTABLA != null)
+                {
+
+                    for (int j = 0; j < obj.tbEliTABLA.Count; j++)
+                    {
+                        var ob = obj.tbEliTABLA[j];
+                        vmIF.tbEliTABLA.Add(ob);
+                    }
+                }
+
+                entIF.ListEliTABLA = vmIF.tbEliTABLA;
+                entIF.ListProfesionales = obj.listaProfesionales;
+
+                var estado_final = logIF.RegInformeFundamentado_Grabar(entIF);
+
+                if (estado_final != "0" && estado_final != "1") result.AddResultado("El Registro se Guardo Correctamente", true);
+                else result.AddResultado("Error en la información", false);
+
+                return Json(result);
+            }
+            catch (Exception ex)
+            {
+                return Json(ex.Message);
+            }
+
+        }
+
+        public bool TryParseFecha(string fechaStr, out DateTime fecha)
+        {
+            string formatoFecha = "dd/MM/yyyy";
+            if (DateTime.TryParseExact(fechaStr, formatoFecha, CultureInfo.InvariantCulture, DateTimeStyles.None, out fecha))
+            {
+                return true;
+            }
+            else
+            {
+                fecha = DateTime.MinValue;
+                return false;
+            }
+        }
+
+        public int CalcularDiasEntreFechas(string fechaInicioStr, string fechaFinStr)
+        {
+            DateTime fechaInicio, fechaFin;
+            if (!TryParseFecha(fechaInicioStr, out fechaInicio) || !TryParseFecha(fechaFinStr, out fechaFin))
+            {
+                throw new ArgumentException("Las fechas deben estar en formato 'dd/MM/yyyy' y contener datos válidos.");
+            }
+
+            TimeSpan diferencia = fechaFin - fechaInicio;
+
+            //if (diferencia.TotalDays < 0)
+            //{
+            //    throw new ArgumentException("La fecha de inicio debe ser anterior a la fecha de finalización.");
+            //}
+
+            int cantidadDias = (int)diferencia.TotalDays;
+
+            return cantidadDias;
         }
 
         public void initBusquedaModal()
@@ -363,7 +620,8 @@ namespace SIGOFCv3.Areas.Fiscalizacion.Controllers
                 bool valor = false;
                 string resultado = "No se eliminaron elementos";
 
-                if (opc == "PROFESIONAL") {
+                if (opc == "PROFESIONAL")
+                {
                     if (vmIF.listaProfesionales.Count > 0)
                     {
                         for (int j = 0; j < vmIF.listaProfesionales.Count; j++)
@@ -375,7 +633,7 @@ namespace SIGOFCv3.Areas.Fiscalizacion.Controllers
                                 oCampos.EliTABLA = "INFFUN_DET_PROFESIONAL";
                                 oCampos.EliVALOR01 = obj.COD_PERSONA;
                                 vmIF.tbEliTABLA.Add(oCampos);
-                            }          
+                            }
                         }
                     }
 

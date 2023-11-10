@@ -203,8 +203,8 @@ namespace CapaEntidad.DOC
         [Description("ADMINISTRADO")]
         public String ADMINISTRADO { get; set; }
         [Description("THABILITANTE")]
-        public String THABILITANTE { get; set; }       
-       
+        public String THABILITANTE { get; set; }
+
         [Category("LIST"), Description("ListMComboCategoria")]
         public List<Ent_BUSQUEDA> ListMComboCategoria { get; set; }
         [Category("LIST"), Description("ListMComboDIdentidad")]

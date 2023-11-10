@@ -68,7 +68,7 @@ namespace CapaDatos.DOC
             {
                 tr = cn.BeginTransaction();
                 //Grabando Cabecera
-                using (OracleCommand cmd = dBOracle.ManExecuteOutput(cn, tr, "DOC_OSINFOR_ERP_MIGRACION.spINFFUNGrabar", oCEntidad))
+                using (OracleCommand cmd = dBOracle.ManExecuteOutput(cn, tr, "DOC_OSINFOR_ERP_MIGRACION.SPINFFUNGRABAR_V2", oCEntidad))
                 {
                     cmd.ExecuteNonQuery();
                     OUTPUTPARAM01 = (String)cmd.Parameters["OUTPUTPARAM01"].Value;
@@ -136,7 +136,7 @@ namespace CapaDatos.DOC
                         if (loDatos.RegEstado == 1) //Nuevo
                         {
                             oCamposDet = new CEntidadC();
-                            if (loDatos.COD_RESODIREC!= null && loDatos.COD_RESODIREC != "" && loDatos.COD_RESODIREC_INI_PAU != null && loDatos.COD_RESODIREC_INI_PAU != "")
+                            if (loDatos.COD_RESODIREC != null && loDatos.COD_RESODIREC != "" && loDatos.COD_RESODIREC_INI_PAU != null && loDatos.COD_RESODIREC_INI_PAU != "")
                             {
                                 oCamposDet.COD_RESODIREC_INI_PAU = loDatos.COD_RESODIREC_INI_PAU;
                                 oCamposDet.COD_RESODIREC = loDatos.COD_RESODIREC;
@@ -232,6 +232,36 @@ namespace CapaDatos.DOC
                             lsCEntidad.DESCRIPCION = dr.GetString(dr.GetOrdinal("DESCRIPCION"));
                             lsCEntidad.COD_OD_REGISTRO = dr.GetString(dr.GetOrdinal("COD_OD_REGISTRO"));
                             lsCEntidad.USUARIO_REGISTRO = dr.GetString(dr.GetOrdinal("USUARIO_REGISTRO"));
+                            // NUEVOS CAMPOS //
+                            lsCEntidad.NUMERO_TRAMITE = dr.GetString(dr.GetOrdinal("NUMERO_REGISTRO"));
+                            lsCEntidad.FECHA_TRAMITE = dr.GetString(dr.GetOrdinal("FECHA_SOLICITUD"));
+                            lsCEntidad.NUMERO_SOLICITUD = dr.GetString(dr.GetOrdinal("NUMERO_SOLICITUD"));
+                            lsCEntidad.COD_TIPO_SOLICITUD = dr.GetString(dr.GetOrdinal("COD_TIPO_SOLICITUD"));
+                            lsCEntidad.COD_VEN_LEGAL = dr.GetString(dr.GetOrdinal("COD_VENC_LEGAL"));
+                            lsCEntidad.GLOSA = dr.GetString(dr.GetOrdinal("DETALLE"));
+                            lsCEntidad.COD_UBIGEO = dr.GetString(dr.GetOrdinal("COD_UBIGEO"));
+                            lsCEntidad.ESTAB_UBIGEO = dr.GetString(dr.GetOrdinal("ESTAB_UBIGEO"));
+                            lsCEntidad.COD_PERSONA_ASIGNADO = dr.GetString(dr.GetOrdinal("COD_PERSONA_ASIGNADO"));
+                            lsCEntidad.PERSONA_TITULAR = dr.GetString(dr.GetOrdinal("PERSONA_TITULAR"));
+
+                            lsCEntidad.FLAG_INFFUN_EMITIDO = dr.GetInt32(dr.GetOrdinal("FLAG_INFFUN_EMITIDO"));
+                            lsCEntidad.FECHA_FIRMEZA = dr.GetString(dr.GetOrdinal("FECHA_FIRMEZA"));
+                            lsCEntidad.NUMERO_OFICIO1 = dr.GetString(dr.GetOrdinal("NUMERO_OFICIO1"));
+                            lsCEntidad.FECHA_OFICIO1 = dr.GetString(dr.GetOrdinal("FECHA_OFICIO1"));
+
+                            lsCEntidad.FLAG_NO_INFUN_EMITIDO = dr.GetInt32(dr.GetOrdinal("FLAG_NO_INFUN_EMITIDO"));
+                            lsCEntidad.NUMERO_OFICIO2 = dr.GetString(dr.GetOrdinal("NUMERO_OFICIO2"));
+                            lsCEntidad.FECHA_OFICIO2 = dr.GetString(dr.GetOrdinal("FECHA_OFICIO2"));
+                            lsCEntidad.NOTA_NO_INFFUN = dr.GetString(dr.GetOrdinal("NOTA_NO_INFFUN"));
+
+                            lsCEntidad.FLAG_COPIA_PAU_EMITIDO = dr.GetInt32(dr.GetOrdinal("FLAG_COPIA_PAU_EMITIDO"));
+                            lsCEntidad.NOTA_COPIA_PAU = dr.GetString(dr.GetOrdinal("NOTA_COPIA_PAU"));
+
+                            lsCEntidad.FLAG_NOTIFICACION = dr.GetInt32(dr.GetOrdinal("FLAG_NOTIFICACION"));
+                            lsCEntidad.FECHA_NOTIFICACION = dr.GetString(dr.GetOrdinal("FECHA_NOTIFICACION"));
+                            lsCEntidad.NOTA_NOTIFICACION = dr.GetString(dr.GetOrdinal("NOTA_NOTIFICACION"));
+
+
                         }
                         //Estado (Calidad)
                         dr.NextResult();
@@ -443,7 +473,7 @@ namespace CapaDatos.DOC
             }
         }
 
-       public CEntidadC RegMostCombo(OracleConnection cn, CEntidadC oCEntidad)
+        public CEntidadC RegMostCombo(OracleConnection cn, CEntidadC oCEntidad)
         {
             CEntidadC oCampos = null;
             try
@@ -533,6 +563,57 @@ namespace CapaDatos.DOC
                             }
                         }
                         oCampos.ListTipoCNotificacion = lsDetDetalle;
+
+                        //06 Tipo de Solicitud
+                        dr.NextResult();
+                        lsDetDetalle = new List<CEntidadC>();
+                        if (dr.HasRows)
+                        {
+                            int pt1 = dr.GetOrdinal("CODIGO");
+                            int pt2 = dr.GetOrdinal("DESCRIPCION");
+                            while (dr.Read())
+                            {
+                                oCamposDet = new CEntidadC();
+                                oCamposDet.CODIGO = dr.GetString(pt1);
+                                oCamposDet.DESCRIPCION = dr.GetString(pt2);
+                                lsDetDetalle.Add(oCamposDet);
+                            }
+                        }
+                        oCampos.ListTipoSolicitud = lsDetDetalle;
+
+                        //07 Vencimiento Plazo Legal
+                        dr.NextResult();
+                        lsDetDetalle = new List<CEntidadC>();
+                        if (dr.HasRows)
+                        {
+                            int pt1 = dr.GetOrdinal("CODIGO");
+                            int pt2 = dr.GetOrdinal("DESCRIPCION");
+                            while (dr.Read())
+                            {
+                                oCamposDet = new CEntidadC();
+                                oCamposDet.CODIGO = dr.GetString(pt1);
+                                oCamposDet.DESCRIPCION = dr.GetString(pt2);
+                                lsDetDetalle.Add(oCamposDet);
+                            }
+                        }
+                        oCampos.ListVencimientoPlazoLegal = lsDetDetalle;
+
+                        //07 Estado Solicitud Fema
+                        dr.NextResult();
+                        lsDetDetalle = new List<CEntidadC>();
+                        if (dr.HasRows)
+                        {
+                            int pt1 = dr.GetOrdinal("CODIGO");
+                            int pt2 = dr.GetOrdinal("DESCRIPCION");
+                            while (dr.Read())
+                            {
+                                oCamposDet = new CEntidadC();
+                                oCamposDet.CODIGO = dr.GetString(pt1);
+                                oCamposDet.DESCRIPCION = dr.GetString(pt2);
+                                lsDetDetalle.Add(oCamposDet);
+                            }
+                        }
+                        oCampos.ListEstadoSolicitudFema = lsDetDetalle;
                     }
                 }
                 return oCampos;

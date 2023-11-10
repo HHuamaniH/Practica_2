@@ -1,4 +1,5 @@
-﻿@model CapaEntidad.ViewModel.VM_InformeFundamentado
+﻿
+@model CapaEntidad.ViewModel.VM_InformeFundamentado
 
 <style type="text/css">
     #tbRenderListIFundamentado_wrapper {
@@ -14,55 +15,55 @@
 
 
 <script type="text/javascript">
-    var _renderListExpediente = {};
-    _renderListExpediente.tbEliTABLA = [];
+    var _renderListExpedienteSigo = {};
+    _renderListExpedienteSigo.tbEliTABLA = [];
     // iniciar datos en la tabla
-     _renderListExpediente.fnInitDataTable_Detail = function () {
+     _renderListExpedienteSigo.fnInitDataTable_Detail = function () {
         var columns_label = [], columns_data = [], options = {};
 
         columns_label = ["Informe", "Dir. Línea", "Nro Habilitante", "Titular"];
          columns_data = ["NUMERO", "D_LINEA", "NUM_THABILITANTE", "TITULAR"];
         options = {
-            page_length: 10, row_index: true, row_delete: true, row_fnDelete: "_renderListExpediente.fnDelete(this)", page_sort: true
+            page_length: 10, row_index: true, row_delete: true, row_fnDelete: "_renderListExpedienteSigo.fnDelete(this)", page_sort: true
         };
-        _renderListExpediente.dtRenderListInforme = utilDt.fnLoadDataTable_Detail(_renderListExpediente.frm.find("#tbRenderListIFundamentado"), columns_label, columns_data, options);
-        _renderListExpediente.dtRenderListInforme.rows.add(JSON.parse('@Html.Raw(Json.Encode(@Model.tbInforme))')).draw();
+         _renderListExpedienteSigo.dtRenderListInforme = utilDt.fnLoadDataTable_Detail(_renderListExpedienteSigo.frm.find("#tbRenderListIFundamentadoSigo"), columns_label, columns_data, options);
+        _renderListExpedienteSigo.dtRenderListInforme.rows.add(JSON.parse('@Html.Raw(Json.Encode(@Model.tbInforme))')).draw();
 
         options = {
-            page_paging: true, page_length: 10, row_index: true, row_select: true, row_fnSelect: "_renderListExpediente.fnSelect(this)"
+            page_paging: true, page_length: 10, row_index: true, row_select: true, row_fnSelect: "_renderListExpedienteSigo.fnSelect(this)"
         };
-        utilDt.fnLoadDataTable_Detail(_renderListExpediente.frm.find("#tbConsultaExpediente"), columns_label, columns_data, options);
-        _renderListExpediente.dtConsultaInforme = _renderListExpediente.fnInitDataTablePaging(options);
+        utilDt.fnLoadDataTable_Detail(_renderListExpedienteSigo.frm.find("#tbConsultaExpedienteSigo"), columns_label, columns_data, options);
+        _renderListExpedienteSigo.dtConsultaInforme = _renderListExpedienteSigo.fnInitDataTablePaging(options);
     }
 
-    _renderListExpediente.fnViewModalConsulta = function () {
-        utilSigo.modalDraggable(_renderListExpediente.frm.find("#mdlConsultaIFundamentado"), '.modal-header');
-        _renderListExpediente.frm.find("#mdlConsultaIFundamentado").modal({ keyboard: true, backdrop: 'static' });
+    _renderListExpedienteSigo.fnViewModalConsulta = function () {
+        utilSigo.modalDraggable(_renderListExpedienteSigo.frm.find("#mdlConsultaIFundamentadoSigo"), '.modal-header');
+        _renderListExpedienteSigo.frm.find("#mdlConsultaIFundamentadoSigo").modal({ keyboard: true, backdrop: 'static' });
     }
 
 
-    _renderListExpediente.fnSelect = function (obj) {
-        var data = _renderListExpediente.dtConsultaInforme.row($(obj).parents('tr')).data();
-        if (!utilDt.existValorSearch(_renderListExpediente.dtRenderListInforme, "COD_INFORME", data["COD_INFORME"])) {
+    _renderListExpedienteSigo.fnSelect = function (obj) {
+        var data = _renderListExpedienteSigo.dtConsultaInforme.row($(obj).parents('tr')).data();
+        if (!utilDt.existValorSearch(_renderListExpedienteSigo.dtRenderListInforme, "COD_INFORME", data["COD_INFORME"])) {
             data["RegEstado"] = 1;
-            _renderListExpediente.dtRenderListInforme.rows.add([data]).draw();
-            _renderListExpediente.dtRenderListInforme.page('last').draw('page');
+            _renderListExpedienteSigo.dtRenderListInforme.rows.add([data]).draw();
+            _renderListExpedienteSigo.dtRenderListInforme.page('last').draw('page');
         } else {
             utilSigo.toastWarning("Aviso", "El informe ya se encuentra en la lista");
         }
-        _renderListExpediente.frm.find('#mdlConsultaIFundamentado').modal('hide');
+        _renderListExpedienteSigo.frm.find('#mdlConsultaIFundamentadoSigo').modal('hide');
     }
 
     /*Listado de registros (render)*/
-    _renderListExpediente.fnDelete = function (obj) {
+    _renderListExpedienteSigo.fnDelete = function (obj) {
         utilSigo.dialogConfirm("Confirmacion", "¿Está seguro de Eliminar el Registro Seleccionado?", function (r) {
             if (r) {
-                var data = _renderListExpediente.dtRenderListInforme.row($(obj).parents('tr')).data();
+                var data = _renderListExpedienteSigo.dtRenderListInforme.row($(obj).parents('tr')).data();
                 if (data["RegEstado"] == "0") {
                     //let EliTabla = "";
                     if (data["COD_RESODIREC_INI_PAU"].trim() != "" && data["COD_RESODIREC"].trim() != "") {
                         //console.log("aqui")
-                        _renderListExpediente.tbEliTABLA.push({
+                        _renderListExpedienteSigo.tbEliTABLA.push({
                             EliTABLA: "INFFUN_VS_INI_PAU",
                             COD_RESODIREC: data["COD_RESODIREC"],
                             COD_RESODIREC_INI_PAU: data["COD_RESODIREC_INI_PAU"]
@@ -70,22 +71,22 @@
                         });
                     }
                     else if (data["COD_INFORME"].trim() != "") {
-                        _renderListExpediente.tbEliTABLA.push({
+                        _renderListExpedienteSigo.tbEliTABLA.push({
                             EliTABLA: "INFFUN_INFORME",
                             COD_INFORME: data["COD_INFORME"]
                         });
                     }
 
                 }
-                _renderListExpediente.dtRenderListInforme.row($(obj).parents('tr')).remove().draw(false);
+                _renderListExpedienteSigo.dtRenderListInforme.row($(obj).parents('tr')).remove().draw(false);
                 utilSigo.toastSuccess("Éxito", "El elemento ha sido eliminado correctamente");
             }
         });
     }
-    _renderListExpediente.fnGetListEliTABLA = function () { return _renderListExpediente.tbEliTABLA }
+    _renderListExpedienteSigo.fnGetListEliTABLA = function () { return _renderListExpedienteSigo.tbEliTABLA }
 
     // para llenar el modal
-    _renderListExpediente.fnInitDataTablePaging = function (options) {
+    _renderListExpedienteSigo.fnInitDataTablePaging = function (options) {
         var optDt = {};
         optDt.iLength = options.page_length;
         optDt.iStart = 0;
@@ -93,7 +94,7 @@
         optDt.bInfo = true;
         optDt.bSort = true;
         optDt.aSort = [];
-        return _renderListExpediente.frm.find("#tbConsultaExpediente").DataTable({
+        return _renderListExpedienteSigo.frm.find("#tbConsultaExpedienteSigo").DataTable({
             processing: true,
             serverSide: true,
             searching: optDt.bSearch,
@@ -105,8 +106,8 @@
                 "data": function (d) {
                     d.customSearchEnabled = true;
                     d.customSearchForm = "LISTAR_INFORMES_RD_EXPADM"; //ddlModalFiscalizacion
-                    d.customSearchType = _renderListExpediente.frm.find("#ddlModalFiscalizacion").val();
-                    d.customSearchValue = _renderListExpediente.frm.find("#txtConsultaIFundamentado").val();
+                    d.customSearchType = _renderListExpedienteSigo.frm.find("#ddlModalFiscalizacion").val();
+                    d.customSearchValue = _renderListExpedienteSigo.frm.find("#txtConsultaIFundamentado").val();
                     for (var i = 0; i < d.order.length; i++) {
                         d.order[i]["column_name"] = d.columns[d.order[i]["column"]]["data"];
                     }
@@ -130,38 +131,38 @@
         });
     }
 
-    _renderListExpediente.fnConsulta = function () {
-        var txtConsulta = _renderListExpediente.frm.find("#txtConsultaIFundamentado").val();
+    _renderListExpedienteSigo.fnConsulta = function () {
+        var txtConsulta = _renderListExpedienteSigo.frm.find("#txtConsultaIFundamentado").val();
         if (txtConsulta.length > 2) {
-            _renderListExpediente.dtConsultaInforme.ajax.reload();
+            _renderListExpedienteSigo.dtConsultaInforme.ajax.reload();
         } else {
             utilSigo.toastWarning("Aviso", "Ingrese al menos 3 caracteres para proceder con la búsqueda.");
         }
     }
 
-    _renderListExpediente.fnInit = function () {
-        _renderListExpediente.frm.find("#btnConsultaIFundamentado").click(function () {
-            _renderListExpediente.fnConsulta();
+    _renderListExpedienteSigo.fnInit = function () {
+        _renderListExpedienteSigo.frm.find("#btnConsultaIFundamentado").click(function () {
+            _renderListExpedienteSigo.fnConsulta();
 
         });
-        _renderListExpediente.frm.find("#txtConsultaIFundamentado").keyup(function (e) {
+        _renderListExpedienteSigo.frm.find("#txtConsultaIFundamentado").keyup(function (e) {
             if (e.keyCode == 13) {
-                _renderListExpediente.fnConsulta();
+                _renderListExpedienteSigo.fnConsulta();
             }
         });
-        _renderListExpediente.frm.find("#mdlConsultaIFundamentado").on('shown.bs.modal', function () {
-            _renderListExpediente.frm.find("#txtConsultaIFundamentado").focus();
+        _renderListExpedienteSigo.frm.find("#mdlConsultaIFundamentadoSigo").on('shown.bs.modal', function () {
+            _renderListExpedienteSigo.frm.find("#txtConsultaIFundamentado").focus();
         });
     }
 
-    _renderListExpediente.fnGetList = function () {
+    _renderListExpedienteSigo.fnGetList = function () {
         let list = [], rows, countFilas, data;
 
-        rows = _renderListExpediente.dtRenderListInforme.$("tr");
+        rows = _renderListExpedienteSigo.dtRenderListInforme.$("tr");
         countFilas = rows.length;
         if (countFilas > 0) {
             $.each(rows, function (i, o) {
-                data = _renderListExpediente.dtRenderListInforme.row($(o)).data();
+                data = _renderListExpedienteSigo.dtRenderListInforme.row($(o)).data();
                // if (data["RegEstado"] == "1" || data["RegEstado"] == "2") {
                 list.push(utilSigo.fnConvertArrayToObject(data));
                // }
@@ -172,23 +173,23 @@
 
 
    $(document).ready(function () {
-       _renderListExpediente.frm = $("#frmRenderListIFundamentado");
+       _renderListExpedienteSigo.frm = $("#frmRenderListIFundamentadoSigo");
        //inicializa la tabla con los campos obtenidos del model
-       _renderListExpediente.fnInitDataTable_Detail();
+       _renderListExpedienteSigo.fnInitDataTable_Detail();
        //inicializa los componentes necesarios
-       _renderListExpediente.fnInit();
+       _renderListExpedienteSigo.fnInit();
    });
 
 </script>
 
-<div id="frmRenderListIFundamentado">
+<div id="frmRenderListIFundamentadoSigo">
     <div class="table-responsive">
-        <table id="tbRenderListIFundamentado" style="width:100%;margin:0px !important;" class="table table-hover table-bordered">
+        <table id="tbRenderListIFundamentadoSigo" style="width:100%;margin:0px !important;" class="table table-hover table-bordered">
             <thead>
                 <tr>
                     <th colspan="6" class="text-sm-left">
                         <div class="form-inline">
-                            <i class="fa mx-2 fa-lg fa-solid fa-plus" style="cursor:pointer;" onclick="_renderListExpediente.fnViewModalConsulta();" data-toggle="tooltip" data-placement="top" title="Nuevo"></i>
+                            <i class="fa mx-2 fa-lg fa-solid fa-plus" style="cursor:pointer;" onclick="_renderListExpedienteSigo.fnViewModalConsulta();" data-toggle="tooltip" data-placement="top" title="Nuevo"></i>
                             <strong>Informe SIGO</strong>
                         </div>
                     </th>
@@ -199,7 +200,7 @@
     </div>
 
 
-    <div class="modal fade hide" id="mdlConsultaIFundamentado" tabindex="-1" role="dialog">
+    <div class="modal fade hide" id="mdlConsultaIFundamentadoSigo" tabindex="-1" role="dialog">
         <div class="modal-dialog modal-lg" role="document">
             <div class="modal-content">
                 <div class="modal-header text-small" style="cursor:move;">
@@ -226,7 +227,7 @@
                             </div>
                         </div>
                         <div class="table-responsive" style="overflow-y:hidden;">
-                            <table id="tbConsultaExpediente" style="width:100%;margin:0px !important;" class="table table-hover table-bordered">
+                            <table id="tbConsultaExpedienteSigo" style="width:100%;margin:0px !important;" class="table table-hover table-bordered">
                                 <thead></thead>
                                 <tbody></tbody>
                             </table>

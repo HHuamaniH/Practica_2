@@ -96,6 +96,9 @@ namespace CapaLogica.DOC
                 throw ex;
             }
         }
+
+   
+
         public CEntidad RegListasValidacion(CEntidad oCEntidad)
         {
             oCEntidad.BusFormulario = "VALIDACION";

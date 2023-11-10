@@ -788,6 +788,7 @@ ManTHabilitante.cargarUbigeoModal = function (control) {
         }
     });
 };
+
 //cuando es autorizacionde fauna silvestre Ex situ - Modlidad 0000002
 ManTHabilitante.iniciarModalidadFauna = function () {
     ManTHabilitante.frmTHabilitanteRegistro.find("#txtItemRAPFecha").datepicker({ format: "dd/mm/yyyy", autoclose: true, language: 'es' });

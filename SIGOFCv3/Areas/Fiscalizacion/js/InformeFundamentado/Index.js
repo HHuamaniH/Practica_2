@@ -7,8 +7,8 @@ ManInfFundamentado.fnLoadManGrillaPaging = function () {
     var option = { url: url, datos: JSON.stringify(data), type: 'POST', dataType: 'html' };
 
     var columns_label = [], columns_data = [], options = {};
-    columns_label = ["Fecha Registro", "Número", "Tipo Documento", "Nro. Expediente", "Nro. Informe"];
-    columns_data = ["FECHA_CREACION", "NUMERO", "TIPO_FISCALIZA", "NUMERO_EXPEDIENTE", "NUMERO_INFORME"];
+    columns_label = ["Fecha Tramite","Número Tramite","Tipo Solicitud","Fecha Registro", "Número", "Tipo Documento", "Nro. Expediente", "Nro. Informe"];
+    columns_data = ["FECHA_TRAMITE","NUMERO_TRAMITE","TIPO_SOLICITUD","FECHA_CREACION", "NUMERO", "TIPO_FISCALIZA", "NUMERO_EXPEDIENTE", "NUMERO_INFORME"];
     options = {
         page_paging: true, page_length: 20, row_index: true, row_edit: true, row_fnEdit: "_ManGrillaPaging.fnCreate(this)"
     };

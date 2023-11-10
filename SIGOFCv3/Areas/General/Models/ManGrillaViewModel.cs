@@ -20,6 +20,7 @@ namespace SIGOFCv3.Areas.General.Models
         public String titleMenu { get; set; }
         public IEnumerable<SelectListItem> cboOpciones { get; set; }
         public IEnumerable<SelectListItem> cboOpciones1 { get; set; }
+        
         //public IEnumerable<Ent_THABILITANTE> listMComboModalidad { get; set; }
         //  public string cboManModalidad { get; set; }
         //  public bool chkManConsolidado { get; set; }
