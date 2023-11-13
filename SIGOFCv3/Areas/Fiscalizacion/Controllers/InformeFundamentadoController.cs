@@ -143,29 +143,29 @@ namespace SIGOFCv3.Areas.Fiscalizacion.Controllers
                     vmIF.ddlTipoSolicitudId = entIF.COD_TIPO_SOLICITUD;
                     vmIF.ddlVencimientoPlazoLegalId = entIF.COD_VEN_LEGAL;
 
-                    if (entIF.FLAG_INFFUN_EMITIDO == 1)
-                    {
+                    //if (entIF.FLAG_INFFUN_EMITIDO == 1)
+                    //{
                         vmIF.chkEmitirInforme = (entIF.FLAG_INFFUN_EMITIDO == 1 ? true : false);
                         vmIF.dtpfechaFirmezaPAU = entIF.FECHA_FIRMEZA.ToString();
                         vmIF.txtNumeroOficio1 = entIF.NUMERO_OFICIO1;
                         vmIF.dtpfechaOficio1 = entIF.FECHA_OFICIO1.ToString();
                         vmIF.txtNumeroInformeFundamentado = entIF.NUMERO_INFORME;
 
-                    }
-                    else if (entIF.FLAG_NO_INFUN_EMITIDO == 1)
-                    {
+                    //}
+                   //if (entIF.FLAG_NO_INFUN_EMITIDO == 1)
+                   // {
                         vmIF.chkEmitirOficio = (entIF.FLAG_NO_INFUN_EMITIDO == 1 ? true : false);
                         vmIF.txtNumeroOficio2 = entIF.NUMERO_OFICIO2;
                         vmIF.dtpfechaOficio2 = entIF.FECHA_OFICIO2.ToString();
                         vmIF.txtObservacionesOficio = entIF.NOTA_NO_INFFUN;
-                    }
-                    else if (entIF.FLAG_COPIA_PAU_EMITIDO == 1)
-                    {
+                    //}
+                    //if (entIF.FLAG_COPIA_PAU_EMITIDO == 1)
+                    //{
                         vmIF.chkEmitirOficioPau = (entIF.FLAG_COPIA_PAU_EMITIDO == 1 ? true : false);
                         vmIF.txtNumeroOficioPau = entIF.NUMERO_OFICIO2;
                         vmIF.dtpFechaEmisionPau = entIF.FECHA_OFICIO2.ToString();
                         vmIF.txtObservacionesPau = entIF.NOTA_COPIA_PAU;
-                    }
+                    //}
 
                     vmIF.chkNotificacion = (entIF.FLAG_NOTIFICACION == 1 ? true : false);
                     vmIF.dtpFechaNotificacion = entIF.FECHA_NOTIFICACION == null ? null : entIF.FECHA_NOTIFICACION?.ToString();
@@ -292,10 +292,10 @@ namespace SIGOFCv3.Areas.Fiscalizacion.Controllers
                     entIF.DESCRIPCION = obj.txtObservaciones;
                     entIF.NUMERO_INFORME = obj.txtNumeroInformeFundamentado;
                     entIF.FECHA_EMISION = obj.dtpFechaFundamentado;
-
                     fechaOficio1 = Convert.ToDateTime(entIF.FECHA_OFICIO1).ToString("dd/MM/yyyy");
-
                 }
+                else
+                    obj.chkEmitirInforme = false;
 
                 // OFICIO
                 if (obj.chkEmitirOficio)
@@ -306,6 +306,8 @@ namespace SIGOFCv3.Areas.Fiscalizacion.Controllers
                     entIF.NOTA_NO_INFFUN = obj.txtObservacionesOficio;
                     fechaOficio2 = Convert.ToDateTime(entIF.FECHA_OFICIO2).ToString("dd/MM/yyyy");
                 }
+                else
+                    obj.chkEmitirOficio = false;
 
                 //NUEVOS CAMPOS // PAU/COPIA
                 if (obj.chkEmitirOficioPau)
@@ -316,6 +318,8 @@ namespace SIGOFCv3.Areas.Fiscalizacion.Controllers
                     entIF.NOTA_COPIA_PAU = obj.txtObservacionesPau;
                     fechaOficio2 = Convert.ToDateTime(entIF.FECHA_OFICIO2).ToString("dd/MM/yyyy");
                 }
+                else
+                    obj.chkEmitirOficioPau = false;
 
                 //NUEVOS CAMPOS // NOTIFICACION
                 if (obj.chkNotificacion)
@@ -324,6 +328,8 @@ namespace SIGOFCv3.Areas.Fiscalizacion.Controllers
                     entIF.FECHA_NOTIFICACION = obj.dtpFechaNotificacion;
                     entIF.NOTA_NOTIFICACION = obj.txtAnotaciones;
                 }
+                else
+                    obj.chkNotificacion = false;
 
                 entIF.OUTPUTPARAM01 = "";
                 entIF.RegEstado = obj.RegEstado;

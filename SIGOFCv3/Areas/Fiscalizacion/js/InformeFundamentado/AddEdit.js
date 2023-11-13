@@ -224,6 +224,7 @@ ManInfFundamentado_AddEdit.fnSaveFormV2 = function () {
     let txtNumeroOficioPau = "";
     let dtpFechaEmisionPau = "";
     let dtpfechaOficio2 = "";
+    let txtObservacionesPau = "";
 
     switch (codigoTipoSolicitud) {
         case "000001":
@@ -249,7 +250,7 @@ ManInfFundamentado_AddEdit.fnSaveFormV2 = function () {
             chkEmitirOficioPau = (ManInfFundamentado_AddEdit.frm.find("#chkEmitirOficioPau").is(":checked") ? 1 : 0);
             txtNumeroOficioPau = ManInfFundamentado_AddEdit.frm.find("#txtNumeroOficioPau").val();
             dtpFechaEmisionPau = ManInfFundamentado_AddEdit.frm.find("#dtpFechaEmisionPau").val();
-
+            txtObservacionesPau = ManInfFundamentado_AddEdit.frm.find("#txtObservacionesPau").val();
             break;
     }
 
@@ -266,7 +267,7 @@ ManInfFundamentado_AddEdit.fnSaveFormV2 = function () {
         ddlTipoSolicitudId, ddlVencimientoPlazoLegalId, txtDetalle, ddlOdId, hdfItemEstUbigeoCodigo, hdtxtTitularTipo,
         chkEmitirInforme, dtpfechaFirmezaPAU, txtNumeroInformeFundamentado, dtpFechaFundamentado, txtNumeroOficio1, dtpfechaOficio1, txtConclusiones, txtObservaciones,
         chkEmitirOficio, txtNumeroOficio2, dtpfechaOficio2, txtObservacionesOficio,
-        chkEmitirOficioPau, txtNumeroOficioPau, dtpFechaEmisionPau,
+        chkEmitirOficioPau, txtNumeroOficioPau, dtpFechaEmisionPau, txtObservacionesPau,
         chkNotificacion, dtpFechaNotificacion, txtAnotaciones,
         hdfCodigoInfFundamentadoAlerta
     }
