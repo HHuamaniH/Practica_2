@@ -270,9 +270,18 @@ ManInfFundamentado_AddEdit.fnSaveFormV2 = function () {
         chkNotificacion, dtpFechaNotificacion, txtAnotaciones,
         hdfCodigoInfFundamentadoAlerta
     }
+    switch (codigoTipoSolicitud) {
+        case "000001":
+            model.tbInforme = _renderListExpediente.fnGetList();
+            break;
+        case "000002":
+        case "000003":
+            model.tbInforme = _renderListExpedienteSigo.fnGetList();
+            break;
+    }
     model.vmControlCalidad = _ControlCalidad.fnGetDatosControlCalidad();
     model.listaProfesionales = ManInfFundamentado_AddEdit.DataProfesional;
-    model.tbInforme = _renderListExpediente.fnGetList();
+    //model.tbInforme = _renderListExpediente.fnGetList();
     model.tbEliTABLA = _renderListExpediente.tbEliTABLA;
     model.listaEntidades = ManInfFundamentado_AddEdit.DataEntidad;
 
@@ -308,7 +317,6 @@ ManInfFundamentado_AddEdit.fnSaveFormV2 = function () {
 
 ManInfFundamentado_AddEdit.fnValidarAtributosV2 = function (obj) {
     var falta = "", band = 0;
-    debugger;
     if (obj.vmControlCalidad.ddlIndicadorId == 0) {
         falta = "Debe seleccionar la situación actual de su registro";
         band = 1;

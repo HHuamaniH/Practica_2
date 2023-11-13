@@ -4,6 +4,16 @@
     Layout = "~/Views/Shared/_LayoutMain.cshtml";
 }
 
+<style>
+    .obligatorio::before {
+        content: "*";
+        color: red;
+        font-size: 2em;
+        margin-right: 5px;
+        vertical-align: middle;
+    }
+</style>
+
 <script src="~/Areas/Fiscalizacion/js/InformeFundamentado/AddEdit.js?v=@Guid.NewGuid()"></script>
 @section scripts{
     <script>
@@ -66,21 +76,21 @@
                                 </div>
                                 <div class="form-row">
                                     <div class="form-group col-md-4">
-                                        <label for="txtRegistro" class="text-small">Registro</label>
+                                        <label for="txtRegistro" class="text-small obligatorio">Registro</label>
                                         @Html.TextBoxFor(m => m.txtRegistro, new { @class = "form-control form-control-sm" })
                                     </div>
                                     <div class="form-group col-md-4">
-                                        <label for="dtpFechaIngresoSolicitud" class="text-small">Fecha de Ingreso de la Solicitud</label>
+                                        <label for="dtpFechaIngresoSolicitud" class="text-small obligatorio">Fecha de Ingreso de la Solicitud</label>
                                         @Html.EditorFor(m => m.dtpFechaIngresoSolicitud, new { htmlAttributes = new { @class = "form-control form-control-sm", placeholder = "dd/mm/yyyy" } })
                                     </div>
                                     <div class="form-group col-md-4">
-                                        <label for="txtNumeroOficioSolicitud" class="text-small">N° de oficio(Solicitud)</label>
+                                        <label for="txtNumeroOficioSolicitud" class="text-small obligatorio">N° de oficio(Solicitud)</label>
                                         @Html.TextBoxFor(m => m.txtNumeroOficioSolicitud, new { @class = "form-control form-control-sm" })
                                     </div>
                                 </div>
                                 <div class="form-row">
                                     <div class="form-group col-md-4">
-                                        <label for="ddlTipoSolicitud" class="text-small">Tipo de Solicitud</label>
+                                        <label for="ddlTipoSolicitud" class="text-small obligatorio">Tipo de Solicitud</label>
                                         @Html.DropDownListFor(m => m.ddlTipoSolicitudId, new SelectList(Model.ddlTipoSolicitud, "Value", "Text"),
                                         new { @class = "form-control form-control-sm", id = "ddlTipoSolicitud" })
                                     </div>
@@ -88,7 +98,7 @@
 
                                     </div>
                                     <div class="form-group col-md-4">
-                                        <label for="ddlVencimientoPlazoLegal" class="text-small">Vencimiento del plazo legal</label>
+                                        <label for="ddlVencimientoPlazoLegal" class="text-small obligatorio">Vencimiento del plazo legal</label>
                                         @Html.DropDownListFor(m => m.ddlVencimientoPlazoLegalId, new SelectList(Model.ddlVencimientoPlazoLegal, "Value", "Text"),
                                         new { @class = "form-control form-control-sm", id = "ddlVencimientoPlazoLegal" })
                                     </div>
@@ -101,12 +111,12 @@
                                 </div>
                                 <div class="form-row">
                                     <div class="form-group col-md-4">
-                                        <label for="ddlIndicadorId" class="text-small">O.D. Competente</label>
+                                        <label for="ddlIndicadorId" class="text-small obligatorio">O.D. Competente</label>
                                         @Html.DropDownListFor(m => m.ddlOdId, new SelectList(Model.ddlOd, "Value", "Text"), new { @class = "form-control form-control-sm" })
                                     </div>
 
                                     <div class="form-group col-md-4">
-                                        <label for="fItemEstUbigeoCodigo" class="text-small">Ubigeo<i class="fa fa-cog fa-spin text-danger" id="iconUbigeoTH" style="display:none;" data-toggle="tooltip" data-placement="top" title="Seleccione Ubigeo"></i></label>
+                                        <label for="fItemEstUbigeoCodigo" class="text-small obligatorio">Ubigeo<i class="fa fa-cog fa-spin text-danger" id="iconUbigeoTH" style="display:none;" data-toggle="tooltip" data-placement="top" title="Seleccione Ubigeo"></i></label>
                                         <div class="input-group">
                                             <div class="input-group-prepend">
                                                 <span class="input-group-text"><i class="fa fa-search" style="cursor:pointer;" data-toggle="tooltip" data-placement="top" title="Ubigeo" onclick="ManInfFundamentado_AddEdit.cargarUbigeoModal('fItemEstUbigeoCodigo');"></i></span>
@@ -116,7 +126,7 @@
                                     </div>
                                     <div class="form-group col-md-4">
 
-                                        <label for="txtTitularTipo" class="text-small">Usuario Asignado</label>
+                                        <label for="txtTitularTipo" class="text-small obligatorio">Usuario Asignado</label>
                                         <div class="input-group">
                                             <div class="input-group-prepend">
                                                 <span class="input-group-text"><i class="fa fa-male" style="cursor:pointer;" onclick="ManInfFundamentado_AddEdit.fnBuscarPersona('TITULAR', 'N');" data-toggle="tooltip" data-placement="top" title="Natural"></i></span>
@@ -175,7 +185,7 @@
                                                     </div>
                                                     <div class="form-group col-md-4">
                                                         <div class="custom-control custom-checkbox my-1 mr-sm-2">
-                                                            <label for="dtpfechaFirmezaPAU" class="text-small">  Fecha de Firmeza del PAU</label>
+                                                            <label for="dtpfechaFirmezaPAU" class="text-small obligatorio">  Fecha de Firmeza del PAU</label>
                                                             @Html.EditorFor(m => m.dtpfechaFirmezaPAU, new { htmlAttributes = new { @class = "form-control form-control-sm", placeholder = "dd/mm/yyyy" } })
                                                         </div>
                                                     </div>
@@ -188,13 +198,13 @@
                                                     </div>
                                                     <div class="form-group col-md-4">
                                                         <div class="custom-control custom-checkbox my-1 mr-sm-2">
-                                                            <label for="txtNumeroInformeFundamentado" class="text-small">Número de Informe Fundamentado</label>
+                                                            <label for="txtNumeroInformeFundamentado" class="text-small obligatorio">Número de Informe Fundamentado</label>
                                                             @Html.EditorFor(m => m.txtNumeroInformeFundamentado, new { htmlAttributes = new { @class = "form-control form-control-sm" } })
                                                         </div>
                                                     </div>
                                                     <div class="form-group col-md-4">
                                                         <div class="custom-control custom-checkbox my-1 mr-sm-2">
-                                                            <label for="dtpFechaFundamentado" class="text-small">Fecha de Emisión de Informe</label>
+                                                            <label for="dtpFechaFundamentado" class="text-small obligatorio">Fecha de Emisión de Informe</label>
                                                             @Html.EditorFor(m => m.dtpFechaFundamentado, new { htmlAttributes = new { @class = "form-control form-control-sm", placeholder = "dd/mm/yyyy" } })
                                                         </div>
                                                     </div>
@@ -205,13 +215,13 @@
                                                     </div>
                                                     <div class="form-group col-md-4">
                                                         <div class="custom-control custom-checkbox my-1 mr-sm-2">
-                                                            <label for="txtNumeroOficio1" class="text-small">  N° de Oficio</label>
+                                                            <label for="txtNumeroOficio1" class="text-small obligatorio">  N° de Oficio</label>
                                                             @Html.EditorFor(m => m.txtNumeroOficio1, new { htmlAttributes = new { @class = "form-control form-control-sm" } })
                                                         </div>
                                                     </div>
                                                     <div class="form-group col-md-4">
                                                         <div class="custom-control custom-checkbox my-1 mr-sm-2">
-                                                            <label for="dtpFechaEmisionPau" class="text-small">Fecha de Emisión de Oficio</label>
+                                                            <label for="dtpFechaEmisionPau" class="text-small obligatorio">Fecha de Emisión de Oficio</label>
                                                             @Html.EditorFor(m => m.dtpfechaOficio1, new { htmlAttributes = new { @class = "form-control form-control-sm", placeholder = "dd/mm/yyyy" } })
                                                         </div>
                                                     </div>
@@ -273,11 +283,11 @@
                                                         </div>
                                                     </div>
                                                     <div class="form-group col-md-4">
-                                                        <label for="txtNumeroOficio2" class="text-small">N° de oficio</label>
+                                                        <label for="txtNumeroOficio2" class="text-small obligatorio">N° de oficio</label>
                                                         @Html.TextBoxFor(m => m.txtNumeroOficio2, new { @class = "form-control form-control-sm" })
                                                     </div>
                                                     <div class="form-group col-md-4">
-                                                        <label for="dtpfechaOficio2" class="text-small">Fecha de Oficio</label>
+                                                        <label for="dtpfechaOficio2" class="text-small obligatorio">Fecha de Oficio</label>
                                                         @Html.EditorFor(m => m.dtpfechaOficio2, new { htmlAttributes = new { @class = "form-control form-control-sm", placeholder = "dd/mm/yyyy" } })
                                                     </div>
                                                 </div>
@@ -307,13 +317,13 @@
                                         </div>
                                         <div class="form-group col-md-4">
                                             <div class="custom-control custom-checkbox my-1 mr-sm-2">
-                                                <label for="txtNumeroOficioPau" class="text-small"> N° de Oficio</label>
+                                                <label for="txtNumeroOficioPau" class="text-small obligatorio"> N° de Oficio</label>
                                                 @Html.EditorFor(m => m.txtNumeroOficioPau, new { htmlAttributes = new { @class = "form-control form-control-sm" } })
                                             </div>
                                         </div>
                                         <div class="form-group col-md-4">
 
-                                            <label for="dtpFechaEmisionPau" class="text-small">Fecha de Emisión</label>
+                                            <label for="dtpFechaEmisionPau" class="text-small obligatorio">Fecha de Emisión</label>
                                             @Html.EditorFor(m => m.dtpFechaEmisionPau, new { htmlAttributes = new { @class = "form-control form-control-sm", placeholder = "dd/mm/yyyy" } })
                                             @*@Html.EditorFor(m => m.dtpfechaOficio2, new { htmlAttributes = new { @class = "form-control form-control-sm", placeholder = "dd/mm/yyyy" } })*@
                                         </div>
