@@ -128,11 +128,11 @@
 <ol class="continue" style="margin-left: ${MARGIN_LEFT.OL}; ">
     <li>
         Exponer las acciones dañosas advertidas en el marco de los Criterios SGC-M1-CRI-001-V.02 “Criterios para estimar la gravedad del daño por la comisión de infracciones en materia forestal” , o la que lo sustituya.
-    </li>   
+    </li>
 </ol>
 @*<p style="text-align: center;">
-    <strong>Cuadro N° XX.</strong> Gravedad del daño al patrimonio forestal por actividad
-</p>*@
+        <strong>Cuadro N° XX.</strong> Gravedad del daño al patrimonio forestal por actividad
+    </p>*@
 <table width="100%" cellpadding="4" style="border: 0; font-family: Arial; font-size: 10pt; border-collapse: collapse; line-height: 150%;">
     <thead>
         <tr>
@@ -268,221 +268,227 @@
         En el presente caso, la medida correctiva a aplicar será de mitigación, mediante el manejo de regeneración natural o el establecimiento de plantaciones forestales; respecto a por la extracción no autorizada de XX.XX m3 de madera, los cuales se desconoce el número de árboles extraídos, incluido el/los individuos semilleros y fuera del censo comercial, así como por el retiro de la cobertura forestal de X.XXX hectáreas.
     </li>
     <li>
-        <span>
-            Al respecto, del análisis técnico del cumplimiento de los criterios para disponer una medida correctiva, se desprende las siguientes condiciones:
-            <ul style="margin-left: 0;">
-                <li>
-                    <div>
-                        <div>
-                            <strong>Identificación del aprovechamiento no autorizado, dentro y fuera del área de la concesión, así como del retiro de cobertura forestal</strong>
-                        </div>
-                        <div>Respecto a esta condición, se advierte técnicamente la extracción no autorizada de X.XX m3, correspondiente a X árbol(es) fuera del censo comercial/semilleros de la(s) especie(s) XXXXXXXXXXXXXXX.</div>
-                        <div>Asimismo, se advierte el volumen injustificado de X.XX m3, correspondiente a la(s) especie(s) XXXXXXXXXXXXXXX.</div>
-                        <div>En adición a lo anterior, se verificó el retiro de la cobertura forestal de X.XXX hectáreas.</div>
-                    </div>
-                </li>
-                <li>
-                    <span>
-                        <strong>El lugar donde se dispone se realiza sobre el lugar de la extracción no autorizada</strong><br />
-                        Respecto a esta condición, se ha advertido la ubicación de la extracción no autorizada de los individuos anteriormente señalados (fuera del censo y de los semilleros), así como la presencia de claros en el área concesionada para el volumen injustificado, y se tiene plenamente identificado el área de retiro de cobertura forestal, conforme el siguiente detalle:<br />
-                        <div style="text-align: center;">
-                            <strong>Cuadro N° XX: Ubicación de la extracción no autorizada</strong>
-                        </div>
-                        <table cellpadding="0" cellspacing="0" style="width: 100%; margin: 0; border-collapse: collapse;">
-                            <thead>
-                                <tr style="background: #f0f0f0;">
-                                    <th style="text-align: center; border: 1px solid #000; padding: 7px;">N°</th>
-                                    <th style="text-align: center; border: 1px solid #000; padding: 7px;">Especie</th>
-                                    <th style="text-align: center; border: 1px solid #000; padding: 7px;">Estado</th>
-                                    <th style="text-align: center; border: 1px solid #000; padding: 7px;">Volumen (m<sup>3</sup>)</th>
-                                    <th style="text-align: center; border: 1px solid #000; padding: 7px;">N° de individuos</th>
-                                    <th style="text-align: center; border: 1px solid #000; padding: 7px;">Ubicación</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {{each(i, item) [1,2,3]}}
-                                <tr>
-                                    <td style="text-align: center; border: 1px solid #000; padding: 7px;">${i + 1}</td>
-                                    <td style="text-align: center; border: 1px solid #000; padding: 7px; "></td>
-                                    <td style="text-align: center; border: 1px solid #000; padding: 7px;"></td>
-                                    <td style="text-align: center; border: 1px solid #000; padding: 7px;"></td>
-                                    <td style="text-align: center; border: 1px solid #000; padding: 7px;"></td>
-                                    <td style="text-align: center; border: 1px solid #000; padding: 7px;"></td>
-                                </tr>
-                                {{/each}}
-                            </tbody>
-                        </table>
-                        <div style="text-align: center; font-size: 8.5pt; margin-top: 0;">
-                            <strong>Fuente:</strong> Elaboración propia en base al Informe de Supervisión N° ${ANTECEDENTES_DOCS.Inf_Sup.numero || 'XXXXX-XXXX-OSINFOR/08.1.1'}
-                        </div>
-                        <div style="text-align: center;">
-                            <strong>Cuadro N° XX: Ubicación de retiro de cobertura vegetal</strong>
-                        </div>
-                        <table cellpadding="0" cellspacing="0" style="width: 100%; margin: 0; border-collapse: collapse;">
-                            <thead>
-                                <tr style="background: #f0f0f0;">
-                                    <th style="text-align: center; border: 1px solid #000; padding: 7px;" rowspan="2">N°</th>
-                                    <th style="text-align: center; border: 1px solid #000; padding: 7px;" colspan="2">Coordenada UTM</th>
-                                    <th style="text-align: center; border: 1px solid #000; padding: 7px;" rowspan="2">Observación</th>
-                                </tr>
-                                <tr style="background: #f0f0f0;">
-                                    <th style="text-align: center; border: 1px solid #000; padding: 7px;">Este</th>
-                                    <th style="text-align: center; border: 1px solid #000; padding: 7px;">Norte</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {{each(i, item) [1]}}
-                                <tr>
-                                    <td style="text-align: center; border: 1px solid #000; padding: 7px;">${i + 1}</td>
-                                    <td style="text-align: center; border: 1px solid #000; padding: 7px; "></td>
-                                    <td style="text-align: center; border: 1px solid #000; padding: 7px;"></td>
-                                    <td style="text-align: center; border: 1px solid #000; padding: 7px;"></td>
-                                </tr>
-                                {{/each}}
-                            </tbody>
-                        </table>
-                        <div style="text-align: center; font-size: 8.5pt; margin-top: 0;">
-                            <strong>Fuente:</strong> Elaboración propia en base al Informe de Supervisión N° ${ANTECEDENTES_DOCS.Inf_Sup.numero || 'XXXXX-XXXX-OSINFOR/08.1.1'}
-                        </div>
-                    </span>
-                </li>
-                <li>
-                    <span>
-                        <strong>La cantidad de individuos reponer, el diseño de la plantación y las especies</strong><br />
-                        Respecto a este criterio, se determinó técnicamente lo siguiente:<br />
-                        <div style="text-align: center;">
-                            <strong>Cuadro N° XX: Número de individuos de regeneración natural a manejar referido a la extracción no autorizada</strong>
-                        </div>
-                        <table cellpadding="0" cellspacing="0" style="width: 100%; margin: 0; border-collapse: collapse;">
-                            <thead>
-                                <tr style="background: #f0f0f0;">
-                                    <th style="text-align: center; border: 1px solid #000; padding: 7px;" rowspan="3">Especie</th>
-                                    <th style="text-align: center; border: 1px solid #000; padding: 7px;" rowspan="3">Volumen extraído (m<sup>3</sup>)</th>
-                                    <th style="text-align: center; border: 1px solid #000; padding: 7px;" rowspan="3">Número de árboles extraídos sin autorización</th>
-                                    <th style="text-align: center; border: 1px solid #000; padding: 7px;" rowspan="3">Número de individuos de regeneración natural a manejar o reponer</th>
-                                    <th style="text-align: center; border: 1px solid #000; padding: 7px;" colspan="2">Ubicación de la mitigación</th>
-                                </tr>
-                                <tr style="background: #f0f0f0;">
-                                    <th style="text-align: center; border: 1px solid #000; padding: 7px;" colspan="2">Coordenadas UTM (19S)</th>
-                                </tr>
-                                <tr style="background: #f0f0f0;">
-                                    <th style="text-align: center; border: 1px solid #000; padding: 7px;">Este</th>
-                                    <th style="text-align: center; border: 1px solid #000; padding: 7px;">Norte</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {{each(i, item) [1,2,3]}}
-                                <tr>
-                                    <td style="text-align: center; border: 1px solid #000; padding: 7px;"></td>
-                                    <td style="text-align: center; border: 1px solid #000; padding: 7px;"></td>
-                                    <td style="text-align: center; border: 1px solid #000; padding: 7px;"></td>
-                                    <td style="text-align: center; border: 1px solid #000; padding: 7px;"></td>
-                                    <td style="text-align: center; border: 1px solid #000; padding: 7px;"></td>
-                                    <td style="text-align: center; border: 1px solid #000; padding: 7px;"></td>
-                                </tr>
-                                {{/each}}
-                                <tr style="background: #f0f0f0;">
-                                    <td style="text-align: center; border: 1px solid #000; padding: 7px;">Total</td>
-                                    <td style="text-align: center; border: 1px solid #000; padding: 7px;"></td>
-                                    <td style="text-align: center; border: 1px solid #000; padding: 7px;"></td>
-                                    <td style="text-align: center; border: 1px solid #000; padding: 7px;"></td>
-                                    <td style="text-align: center; border: 1px solid #000; padding: 7px;"></td>
-                                    <td style="text-align: center; border: 1px solid #000; padding: 7px;"></td>
-                                </tr>
-                            </tbody>
-                        </table>
-                        <div style="text-align: center; font-size: 8.5pt; margin-top: 0;">
-                            <strong>Fuente:</strong> Elaboración propia en base a los “Criterios para la disposición, seguimiento y verificación de las medidas correctivas y/o mandatos en materia forestal y de fauna silvestre del OSINFOR”, aprobado por Resolución de Jefatura N° 00055-2020-OSINFOR/01.1
-                        </div>
-                        <div style="text-align: center;">
-                            <strong>Cuadro N° XX: Número de individuos de regeneración natural a manejar referido al volumen injustificado</strong>
-                        </div>
-                        <table cellpadding="0" cellspacing="0" style="width: 100%; margin: 0; border-collapse: collapse;">
-                            <thead>
-                                <tr style="background: #f0f0f0;">
-                                    <th style="text-align: center; border: 1px solid #000; padding: 7px;" rowspan="3">Especie</th>
-                                    <th style="text-align: center; border: 1px solid #000; padding: 7px;" rowspan="3">Volumen extraído (m<sup>3</sup>)</th>
-                                    <th style="text-align: center; border: 1px solid #000; padding: 7px;" rowspan="3">Número de individuos de regeneración natural a manejar o reponer</th>
-                                    <th style="text-align: center; border: 1px solid #000; padding: 7px;" colspan="2">Número de individuos de regeneración natural a manejar</th>
-                                </tr>
-                                <tr style="background: #f0f0f0;">
-                                    <th style="text-align: center; border: 1px solid #000; padding: 7px;" colspan="2">Coordenadas UTM WGS84</th>
-                                </tr>
-                                <tr style="background: #f0f0f0;">
-                                    <th style="text-align: center; border: 1px solid #000; padding: 7px;">Este</th>
-                                    <th style="text-align: center; border: 1px solid #000; padding: 7px;">Norte</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {{each(i, item) [1,2,3]}}
-                                <tr>
-                                    <td style="text-align: center; border: 1px solid #000; padding: 7px;"></td>
-                                    <td style="text-align: center; border: 1px solid #000; padding: 7px;"></td>
-                                    <td style="text-align: center; border: 1px solid #000; padding: 7px;"></td>
-                                    <td style="text-align: center; border: 1px solid #000; padding: 7px;"></td>
-                                    <td style="text-align: center; border: 1px solid #000; padding: 7px;"></td>
-                                </tr>
-                                {{/each}}
-                                <tr style="background: #f0f0f0;">
-                                    <td style="text-align: center; border: 1px solid #000; padding: 7px;">Total</td>
-                                    <td style="text-align: center; border: 1px solid #000; padding: 7px;"></td>
-                                    <td style="text-align: center; border: 1px solid #000; padding: 7px;"></td>
-                                    <td style="text-align: center; border: 1px solid #000; padding: 7px;"></td>
-                                    <td style="text-align: center; border: 1px solid #000; padding: 7px;"></td>
-                                </tr>
-                            </tbody>
-                        </table>
-                        <div style="text-align: center; font-size: 8.5pt; margin-top: 0;">
-                            <strong>Fuente:</strong> Elaboración propia en base a los “Criterios para la disposición, seguimiento y verificación de las medidas correctivas y/o mandatos en materia forestal y de fauna silvestre del OSINFOR”, aprobado por Resolución de Jefatura N° 00055-2020-OSINFOR/01.1
-                        </div>
-                        <div style="text-align: center;">
-                            <strong>Cuadro N° XX: Cantidad de plantas a instalar en el área afectada</strong>
-                        </div>
-                        <table cellpadding="0" cellspacing="0" style="width: 100%; margin: 0; border-collapse: collapse;">
-                            <thead>
-                                <tr style="background: #f0f0f0;">
-                                    <th style="text-align: center; border: 1px solid #000; padding: 7px;">N°</th>
-                                    <th style="text-align: center; border: 1px solid #000; padding: 7px;">Especies</th>
-                                    <th style="text-align: center; border: 1px solid #000; padding: 7px;">Grupo ecológico</th>
-                                    <th style="text-align: center; border: 1px solid #000; padding: 7px;">Diseño</th>
-                                    <th style="text-align: center; border: 1px solid #000; padding: 7px;">Distanciamiento</th>
-                                    <th style="text-align: center; border: 1px solid #000; padding: 7px;">N° de plantones a instalar (aprox.)</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {{each(i, item) [1,2]}}
-                                <tr>
-                                    <td style="text-align: center; border: 1px solid #000; padding: 7px;">${i + 1}</td>
-                                    <td style="text-align: center; border: 1px solid #000; padding: 7px; "></td>
-                                    <td style="text-align: center; border: 1px solid #000; padding: 7px;"></td>
-                                    <td style="text-align: center; border: 1px solid #000; padding: 7px;"></td>
-                                    <td style="text-align: center; border: 1px solid #000; padding: 7px;"></td>
-                                    <td style="text-align: center; border: 1px solid #000; padding: 7px;"></td>
-                                </tr>
-                                {{/each}}
-                            </tbody>
-                        </table>
-                        <div style="text-align: center; font-size: 8.5pt; margin-top: 0;">
-                            <strong>Fuente:</strong>  Elaboración propia en base a los “Criterios para la disposición, seguimiento y verificación de las medidas correctivas y/o mandatos en materia forestal y de fauna silvestre del OSINFOR”, aprobado por Resolución de Jefatura N° 00055-2020-OSINFOR/01.1
-                        </div>
-                    </span>
-                </li>
-                <li>
-                    En ese sentido, habiéndose concluido en la fase de instrucción del presente PAU que la conducta infractora del/la concesionario/a ha generado un daño con un nivel de afectación “leve/grave/muy grave”), y considerando que se ha confirmado técnicamente la viabilidad de su aplicación, es necesario que se disponga la realización de las medidas correctivas destinadas a mitigar el impacto causado, determinándose como <strong>propuesta de plan de implementación de medidas correctivas, las que se detallan en el Anexo II del presente Informe.</strong>
-                </li>
-                <li>
-                    Por otro lado, cabe señalar que, de acuerdo al literal u) del numeral 43.1 del artículo 43 del RGF, los titulares tienen la obligación de cumplir con la implementación de las medidas correctivas y/o mandatos que se emitan como resultado de las acciones de control, supervisión y/o fiscalización ejecutadas por el OSINFOR.
-                </li>
-                <li>
-                    En esta directriz, el numeral 13 del Cuadro de infracciones y Sanciones en Materia Forestal del Anexo 1 del RISMFFS, establece que el incumplir con la implementación de las medidas correctivas, constituye una infracción grave, debiendo informarse que la supervisión de la medida adoptada, se encuentra a cargo de la Dirección de Supervisión Forestal y de Fauna Silvestre del OSINFOR
-                    <a style="mso-footnote-id: foot_DSFFS" href="#_foot_DSFFS" title="">
-                        <sup class=MsoFootnoteReference><span style="mso-special-character:footnote"></span></sup>
-                    </a>.
-                </li>
-            </ul>
-        </span>
+        Al respecto, del análisis técnico del cumplimiento de los criterios para disponer una medida correctiva, se desprende las siguientes condiciones:
     </li>
 </ol>
+
+<ul style="margin-left: 0;">
+    <li>
+        <div>
+            <div>
+                <strong>Identificación del aprovechamiento no autorizado, dentro y fuera del área de la concesión, así como del retiro de cobertura forestal</strong>
+            </div>
+            <div>Respecto a esta condición, se advierte técnicamente la extracción no autorizada de X.XX m3, correspondiente a X árbol(es) fuera del censo comercial/semilleros de la(s) especie(s) XXXXXXXXXXXXXXX.</div>
+            <div>Asimismo, se advierte el volumen injustificado de X.XX m3, correspondiente a la(s) especie(s) XXXXXXXXXXXXXXX.</div>
+            <div>En adición a lo anterior, se verificó el retiro de la cobertura forestal de X.XXX hectáreas.</div>
+        </div>
+    </li>
+    <li>
+        <span>
+            <strong>El lugar donde se dispone se realiza sobre el lugar de la extracción no autorizada</strong><br />
+            Respecto a esta condición, se ha advertido la ubicación de la extracción no autorizada de los individuos anteriormente señalados (fuera del censo y de los semilleros), así como la presencia de claros en el área concesionada para el volumen injustificado, y se tiene plenamente identificado el área de retiro de cobertura forestal, conforme el siguiente detalle:<br />
+        </span>
+    </li>
+</ul>
+
+<div style="text-align: center;">
+    <strong>Cuadro N° XX: Ubicación de la extracción no autorizada</strong>
+</div>
+<table cellpadding="0" cellspacing="0" style="width: 100%; margin: 0; border-collapse: collapse;">
+    <thead>
+        <tr style="background: #f0f0f0;">
+            <th style="text-align: center; border: 1px solid #000; padding: 7px;">N°</th>
+            <th style="text-align: center; border: 1px solid #000; padding: 7px;">Especie</th>
+            <th style="text-align: center; border: 1px solid #000; padding: 7px;">Estado</th>
+            <th style="text-align: center; border: 1px solid #000; padding: 7px;">Volumen (m<sup>3</sup>)</th>
+            <th style="text-align: center; border: 1px solid #000; padding: 7px;">N° de individuos</th>
+            <th style="text-align: center; border: 1px solid #000; padding: 7px;">Ubicación</th>
+        </tr>
+    </thead>
+    <tbody>
+        {{each(i, item) [1,2,3]}}
+        <tr>
+            <td style="text-align: center; border: 1px solid #000; padding: 7px;">${i + 1}</td>
+            <td style="text-align: center; border: 1px solid #000; padding: 7px;"></td>
+            <td style="text-align: center; border: 1px solid #000; padding: 7px;"></td>
+            <td style="text-align: center; border: 1px solid #000; padding: 7px;"></td>
+            <td style="text-align: center; border: 1px solid #000; padding: 7px;"></td>
+            <td style="text-align: center; border: 1px solid #000; padding: 7px;"></td>
+        </tr>
+        {{/each}}
+    </tbody>
+</table>
+<div style="text-align: center; font-size: 8.5pt; margin-top: 0;">
+    <strong>Fuente:</strong> Elaboración propia en base al Informe de Supervisión N° ${ANTECEDENTES_DOCS.Inf_Sup.numero || 'XXXXX-XXXX-OSINFOR/08.1.1'}
+</div>
+<div style="text-align: center; margin-top: 15px;">
+    <strong>Cuadro N° XX: Ubicación de retiro de cobertura vegetal</strong>
+</div>
+<table cellpadding="0" cellspacing="0" style="width: 100%; margin: 0; border-collapse: collapse;">
+    <thead>
+        <tr style="background: #f0f0f0;">
+            <th style="text-align: center; border: 1px solid #000; padding: 7px;" rowspan="2">N°</th>
+            <th style="text-align: center; border: 1px solid #000; padding: 7px;" colspan="2">Coordenada UTM</th>
+            <th style="text-align: center; border: 1px solid #000; padding: 7px;" rowspan="2">Observación</th>
+        </tr>
+        <tr style="background: #f0f0f0;">
+            <th style="text-align: center; border: 1px solid #000; padding: 7px;">Este</th>
+            <th style="text-align: center; border: 1px solid #000; padding: 7px;">Norte</th>
+        </tr>
+    </thead>
+    <tbody>
+        {{each(i, item) [1]}}
+        <tr>
+            <td style="text-align: center; border: 1px solid #000; padding: 7px;">${i + 1}</td>
+            <td style="text-align: center; border: 1px solid #000; padding: 7px; "></td>
+            <td style="text-align: center; border: 1px solid #000; padding: 7px;"></td>
+            <td style="text-align: center; border: 1px solid #000; padding: 7px;"></td>
+        </tr>
+        {{/each}}
+    </tbody>
+</table>
+<div style="text-align: center; font-size: 8.5pt; margin-top: 0;">
+    <strong>Fuente:</strong> Elaboración propia en base al Informe de Supervisión N° ${ANTECEDENTES_DOCS.Inf_Sup.numero || 'XXXXX-XXXX-OSINFOR/08.1.1'}
+</div>
+
+<ul style="margin-left: 0;">
+    <li>
+        <strong>La cantidad de individuos reponer, el diseño de la plantación y las especies</strong><br />
+        Respecto a este criterio, se determinó técnicamente lo siguiente:<br />
+    </li>
+</ul>
+
+<div style="text-align: center;">
+    <strong>Cuadro N° XX: Número de individuos de regeneración natural a manejar referido a la extracción no autorizada</strong>
+</div>
+<table cellpadding="0" cellspacing="0" style="width: 100%; margin: 0; border-collapse: collapse;">
+    <thead>
+        <tr style="background: #f0f0f0;">
+            <th style="text-align: center; border: 1px solid #000; padding: 7px;" rowspan="3">Especie</th>
+            <th style="text-align: center; border: 1px solid #000; padding: 7px;" rowspan="3">Volumen extraído (m<sup>3</sup>)</th>
+            <th style="text-align: center; border: 1px solid #000; padding: 7px;" rowspan="3">Número de árboles extraídos sin autorización</th>
+            <th style="text-align: center; border: 1px solid #000; padding: 7px;" rowspan="3">Número de individuos de regeneración natural a manejar o reponer</th>
+            <th style="text-align: center; border: 1px solid #000; padding: 7px;" colspan="2">Ubicación de la mitigación</th>
+        </tr>
+        <tr style="background: #f0f0f0;">
+            <th style="text-align: center; border: 1px solid #000; padding: 7px;" colspan="2">Coordenadas UTM (19S)</th>
+        </tr>
+        <tr style="background: #f0f0f0;">
+            <th style="text-align: center; border: 1px solid #000; padding: 7px;">Este</th>
+            <th style="text-align: center; border: 1px solid #000; padding: 7px;">Norte</th>
+        </tr>
+    </thead>
+    <tbody>
+        {{each(i, item) [1,2,3]}}
+        <tr>
+            <td style="text-align: center; border: 1px solid #000; padding: 7px;"></td>
+            <td style="text-align: center; border: 1px solid #000; padding: 7px;"></td>
+            <td style="text-align: center; border: 1px solid #000; padding: 7px;"></td>
+            <td style="text-align: center; border: 1px solid #000; padding: 7px;"></td>
+            <td style="text-align: center; border: 1px solid #000; padding: 7px;"></td>
+            <td style="text-align: center; border: 1px solid #000; padding: 7px;"></td>
+        </tr>
+        {{/each}}
+        <tr style="background: #f0f0f0;">
+            <td style="text-align: center; border: 1px solid #000; padding: 7px;">Total</td>
+            <td style="text-align: center; border: 1px solid #000; padding: 7px;"></td>
+            <td style="text-align: center; border: 1px solid #000; padding: 7px;"></td>
+            <td style="text-align: center; border: 1px solid #000; padding: 7px;"></td>
+            <td style="text-align: center; border: 1px solid #000; padding: 7px;"></td>
+            <td style="text-align: center; border: 1px solid #000; padding: 7px;"></td>
+        </tr>
+    </tbody>
+</table>
+<div style="text-align: center; font-size: 8.5pt; margin-top: 0;">
+    <strong>Fuente:</strong> Elaboración propia en base a los “Criterios para la disposición, seguimiento y verificación de las medidas correctivas y/o mandatos en materia forestal y de fauna silvestre del OSINFOR”, aprobado por Resolución de Jefatura N° 00055-2020-OSINFOR/01.1
+</div>
+<div style="text-align: center; margin-top: 15px;">
+    <strong>Cuadro N° XX: Número de individuos de regeneración natural a manejar referido al volumen injustificado</strong>
+</div>
+<table cellpadding="0" cellspacing="0" style="width: 100%; margin: 0; border-collapse: collapse;">
+    <thead>
+        <tr style="background: #f0f0f0;">
+            <th style="text-align: center; border: 1px solid #000; padding: 7px;" rowspan="3">Especie</th>
+            <th style="text-align: center; border: 1px solid #000; padding: 7px;" rowspan="3">Volumen extraído (m<sup>3</sup>)</th>
+            <th style="text-align: center; border: 1px solid #000; padding: 7px;" rowspan="3">Número de individuos de regeneración natural a manejar o reponer</th>
+            <th style="text-align: center; border: 1px solid #000; padding: 7px;" colspan="2">Número de individuos de regeneración natural a manejar</th>
+        </tr>
+        <tr style="background: #f0f0f0;">
+            <th style="text-align: center; border: 1px solid #000; padding: 7px;" colspan="2">Coordenadas UTM WGS84</th>
+        </tr>
+        <tr style="background: #f0f0f0;">
+            <th style="text-align: center; border: 1px solid #000; padding: 7px;">Este</th>
+            <th style="text-align: center; border: 1px solid #000; padding: 7px;">Norte</th>
+        </tr>
+    </thead>
+    <tbody>
+        {{each(i, item) [1,2,3]}}
+        <tr>
+            <td style="text-align: center; border: 1px solid #000; padding: 7px;"></td>
+            <td style="text-align: center; border: 1px solid #000; padding: 7px;"></td>
+            <td style="text-align: center; border: 1px solid #000; padding: 7px;"></td>
+            <td style="text-align: center; border: 1px solid #000; padding: 7px;"></td>
+            <td style="text-align: center; border: 1px solid #000; padding: 7px;"></td>
+        </tr>
+        {{/each}}
+        <tr style="background: #f0f0f0;">
+            <td style="text-align: center; border: 1px solid #000; padding: 7px;">Total</td>
+            <td style="text-align: center; border: 1px solid #000; padding: 7px;"></td>
+            <td style="text-align: center; border: 1px solid #000; padding: 7px;"></td>
+            <td style="text-align: center; border: 1px solid #000; padding: 7px;"></td>
+            <td style="text-align: center; border: 1px solid #000; padding: 7px;"></td>
+        </tr>
+    </tbody>
+</table>
+<div style="text-align: center; font-size: 8.5pt; margin-top: 0;">
+    <strong>Fuente:</strong> Elaboración propia en base a los “Criterios para la disposición, seguimiento y verificación de las medidas correctivas y/o mandatos en materia forestal y de fauna silvestre del OSINFOR”, aprobado por Resolución de Jefatura N° 00055-2020-OSINFOR/01.1
+</div>
+<div style="text-align: center; margin-top: 15px;">
+    <strong>Cuadro N° XX: Cantidad de plantas a instalar en el área afectada</strong>
+</div>
+<table cellpadding="0" cellspacing="0" style="width: 100%; margin: 0; border-collapse: collapse;">
+    <thead>
+        <tr style="background: #f0f0f0;">
+            <th style="text-align: center; border: 1px solid #000; padding: 7px;">N°</th>
+            <th style="text-align: center; border: 1px solid #000; padding: 7px;">Especies</th>
+            <th style="text-align: center; border: 1px solid #000; padding: 7px;">Grupo ecológico</th>
+            <th style="text-align: center; border: 1px solid #000; padding: 7px;">Diseño</th>
+            <th style="text-align: center; border: 1px solid #000; padding: 7px;">Distanciamiento</th>
+            <th style="text-align: center; border: 1px solid #000; padding: 7px;">N° de plantones a instalar (aprox.)</th>
+        </tr>
+    </thead>
+    <tbody>
+        {{each(i, item) [1,2]}}
+        <tr>
+            <td style="text-align: center; border: 1px solid #000; padding: 7px;">${i + 1}</td>
+            <td style="text-align: center; border: 1px solid #000; padding: 7px; "></td>
+            <td style="text-align: center; border: 1px solid #000; padding: 7px;"></td>
+            <td style="text-align: center; border: 1px solid #000; padding: 7px;"></td>
+            <td style="text-align: center; border: 1px solid #000; padding: 7px;"></td>
+            <td style="text-align: center; border: 1px solid #000; padding: 7px;"></td>
+        </tr>
+        {{/each}}
+    </tbody>
+</table>
+<div style="text-align: center; font-size: 8.5pt; margin-top: 0;">
+    <strong>Fuente:</strong>  Elaboración propia en base a los “Criterios para la disposición, seguimiento y verificación de las medidas correctivas y/o mandatos en materia forestal y de fauna silvestre del OSINFOR”, aprobado por Resolución de Jefatura N° 00055-2020-OSINFOR/01.1
+</div>
+
+<ul style="margin-left: 0;">
+    <li>
+        En ese sentido, habiéndose concluido en la fase de instrucción del presente PAU que la conducta infractora del/la concesionario/a ha generado un daño con un nivel de afectación “leve/grave/muy grave”), y considerando que se ha confirmado técnicamente la viabilidad de su aplicación, es necesario que se disponga la realización de las medidas correctivas destinadas a mitigar el impacto causado, determinándose como <strong>propuesta de plan de implementación de medidas correctivas, las que se detallan en el Anexo II del presente Informe.</strong>
+    </li>
+    <li>
+        Por otro lado, cabe señalar que, de acuerdo al literal u) del numeral 43.1 del artículo 43 del RGF, los titulares tienen la obligación de cumplir con la implementación de las medidas correctivas y/o mandatos que se emitan como resultado de las acciones de control, supervisión y/o fiscalización ejecutadas por el OSINFOR.
+    </li>
+    <li>
+        En esta directriz, el numeral 13 del Cuadro de infracciones y Sanciones en Materia Forestal del Anexo 1 del RISMFFS, establece que el incumplir con la implementación de las medidas correctivas, constituye una infracción grave, debiendo informarse que la supervisión de la medida adoptada, se encuentra a cargo de la Dirección de Supervisión Forestal y de Fauna Silvestre del OSINFOR
+        <a style="mso-footnote-id: foot_DSFFS" href="#_foot_DSFFS" title="">
+            <sup class=MsoFootnoteReference><span style="mso-special-character:footnote"></span></sup>
+        </a>.
+    </li>
+</ul>
+
 {{else}}
 <ol class="continue" style="margin-left: ${MARGIN_LEFT.OL};">
     <li>

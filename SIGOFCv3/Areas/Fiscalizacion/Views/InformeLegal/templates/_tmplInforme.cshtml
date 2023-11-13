@@ -85,7 +85,7 @@
                                 <ul style="list-style-type: lower-roman; margin-left: 0;">
                                     {{each(index, inf) INFRACCIONES}}
                                     <li>
-                                        <i>${inf.detalle}</i>
+                                        <i>${inf.detalle || 'No hay detalle de conducta imputada'}</i>
                                     </li>
                                     {{/each}}
                                 </ul>
@@ -262,7 +262,7 @@
             <br clear=all style="mso-special-character:line-break;page-break-before:always">
             <h5>Anexos</h5>
             {{each(i, img) IMG_SANCION}}
-            <img alt="Calculo de multa" src="${img}" />
+            <img alt="Calculo de multa" src="${img}" style="width: 560px;" />
             {{/each}}
         </div>
         {{/if}}

@@ -32,8 +32,8 @@
 </table>
 <div>Fuente: Resolución Sub Directoral N° ${informe.ANTECEDENTES_DOCS.RSD.numero || '00XX-202X-OSINFOR/08.2.X'}</div>
 
+{{if informe.COD_TIPO_INFORME == 1}}
 <ol class="continue" style="margin-left: ${informe.MARGIN_LEFT.OL};">
-    {{if informe.COD_TIPO_INFORME == 1}}
     <li>
         <span>
             Mediante el escrito, ingresado con fecha XX de XX de XXXX, con registro N° XX, la/el administrada/o presentó sus descargos contra la Resolución Sub Directoral N° ${informe.ANTECEDENTES_DOCS.RSD.numero || 'XXXXX-XXXX-OSINFOR/08.2.1'}, donde se advierten los siguientes argumentos que guardan relación con la imputación materia de análisis:<br /><br />
@@ -59,63 +59,66 @@
             </ul>
         </span>
     </li>
-    {{/if}}
-    <li>
-        <span>
-            En el presente caso, de acuerdo a la documentación que obra en el expediente administrativo y del análisis de los descargos, ha quedado acreditado lo siguiente:
-            <br /><br />
-            El/la administrada/o no ha informado el egreso de XX especímenes de Fauna Silvestre, los cuales corresponden a XX”.
-            <br /><br />
-            Por lo que en el presente caso, se evidencia que el/la administrada/o no ha informado el egreso de  XX, como se observa del Balance de ingresos y egresos, donde no se advierte la situación de estas especies; se debe precisar que la administrada presentó toda documentación que acredita la posesión de distintas especies, así como toda documentación sobre los egresos de las mismas; sin embargo, en ninguno de estos documentos se advierte la situación de los mencionados especímenes, por lo que al evidenciarse que la administrada debe poseer estas especies y al advertir que estas no se encontraron al momento de la supervisión, se puede concluir que el/la administrada/o no ha informado sobre el egreso de las especies antes citadas.
-            <br /><br />
-            <table width="100%" cellpadding="4" border="0" style="font-family: Arial; font-size: 9pt; border-collapse: collapse; line-height: 150%;">
-                <thead>
-                    <tr style="background-color: #bfbfbf;">
-                        <th style="text-align: center; border: 1px solid #000;">
-                            Espécimen
-                        </th>
-                        <th style="text-align: center; border: 1px solid #000;">
-                            Reporte Inf de Sup
-                        </th>
-                        <th style="text-align: center; border: 1px solid #000;">
-                            Egreso
-                        </th>
-                        <th style="text-align: center; border: 1px solid #000;">
-                            Motivo
-                        </th>
-                        <th style="text-align: center; border: 1px solid #000;">
-                            Balance documentario
-                        </th>
-                        <th style="text-align: center; border: 1px solid #000;">
-                            Supervisión OSINFOR
-                        </th>
-                        <th style="text-align: center; border: 1px solid #000;">
-                            Especie faltante
-                        </th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {{each(a, b) [1,2,3,4,5,6]}}
-                    <tr>
-                        <td style="border: 1px solid #000; text-align: center;"></td>
-                        <td style="border: 1px solid #000; text-align: center;"></td>
-                        <td style="border: 1px solid #000; text-align: center;"></td>
-                        <td style="border: 1px solid #000; text-align: center;"></td>
-                        <td style="border: 1px solid #000; text-align: center;"></td>
-                        <td style="border: 1px solid #000; text-align: center;"></td>
-                        <td style="border: 1px solid #000; text-align: center;"></td>
-                    </tr>
-                    {{/each}}
-                    <tr style="background-color: #bfbfbf;">
-                        <td style="border: 1px solid #000; text-align: center;" colspan="6">
-                            TOTAL
-                        </td>
-                        <td style="border: 1px solid #000; text-align: center;"></td>
-                    </tr>
-                </tbody>
-            </table>
-        </span>
-    </li>
+</ol>
+{{/if}}
+
+En el presente caso, de acuerdo a la documentación que obra en el expediente administrativo y del análisis de los descargos, ha quedado acreditado lo siguiente:
+<br />
+<br />
+El/la administrada/o no ha informado el egreso de XX especímenes de Fauna Silvestre, los cuales corresponden a XX”.
+<br />
+<br />
+Por lo que en el presente caso, se evidencia que el/la administrada/o no ha informado el egreso de  XX, como se observa del Balance de ingresos y egresos, donde no se advierte la situación de estas especies; se debe precisar que la administrada presentó toda documentación que acredita la posesión de distintas especies, así como toda documentación sobre los egresos de las mismas; sin embargo, en ninguno de estos documentos se advierte la situación de los mencionados especímenes, por lo que al evidenciarse que la administrada debe poseer estas especies y al advertir que estas no se encontraron al momento de la supervisión, se puede concluir que el/la administrada/o no ha informado sobre el egreso de las especies antes citadas.
+<br />
+<br />
+<table width="100%" cellpadding="4" border="0" style="font-family: Arial; font-size: 9pt; border-collapse: collapse; line-height: 150%;">
+    <thead>
+        <tr style="background-color: #bfbfbf;">
+            <th style="text-align: center; border: 1px solid #000;">
+                Espécimen
+            </th>
+            <th style="text-align: center; border: 1px solid #000;">
+                Reporte Inf de Sup
+            </th>
+            <th style="text-align: center; border: 1px solid #000;">
+                Egreso
+            </th>
+            <th style="text-align: center; border: 1px solid #000;">
+                Motivo
+            </th>
+            <th style="text-align: center; border: 1px solid #000;">
+                Balance documentario
+            </th>
+            <th style="text-align: center; border: 1px solid #000;">
+                Supervisión OSINFOR
+            </th>
+            <th style="text-align: center; border: 1px solid #000;">
+                Especie faltante
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        {{each(a, b) [1,2,3,4,5,6]}}
+        <tr>
+            <td style="border: 1px solid #000; text-align: center;"></td>
+            <td style="border: 1px solid #000; text-align: center;"></td>
+            <td style="border: 1px solid #000; text-align: center;"></td>
+            <td style="border: 1px solid #000; text-align: center;"></td>
+            <td style="border: 1px solid #000; text-align: center;"></td>
+            <td style="border: 1px solid #000; text-align: center;"></td>
+            <td style="border: 1px solid #000; text-align: center;"></td>
+        </tr>
+        {{/each}}
+        <tr style="background-color: #bfbfbf;">
+            <td style="border: 1px solid #000; text-align: center;" colspan="6">
+                TOTAL
+            </td>
+            <td style="border: 1px solid #000; text-align: center;"></td>
+        </tr>
+    </tbody>
+</table>
+
+<ol class="continue" style="margin-left: ${informe.MARGIN_LEFT.OL};">
     <li>
         En ese contexto, de acuerdo a lo señalado precedentemente
         {{if informe.COD_TIPO_INFORME == 1}}
