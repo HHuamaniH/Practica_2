@@ -4,10 +4,10 @@ var ManInforme_AddEdit = {};
 /*Variables globales*/
 ManInforme_AddEdit.tbEliTABLA = [];
 
-ManInforme_AddEdit.Denuncia =  {
+ManInforme_AddEdit.Denuncia = {
     objDeuncia: {
         tra_M_Tramite: {
-            cCodificacion:''
+            cCodificacion: ''
         },
         COD_IDENUNCIA: '',
         ENT_INFORME: {
@@ -41,7 +41,7 @@ ManInforme_AddEdit.Denuncia =  {
                     if (response.iCodTramite != -1) {
                         utilSigo.toastSuccess("Aviso", "N° Tramite STID Encontrado")
                         ManInforme_AddEdit.Denuncia.objDeuncia.tra_M_Tramite = response;
-                        
+
                         $('.responseOk').show();
                         $('.responseError').hide();
                     }
@@ -84,7 +84,7 @@ ManInforme_AddEdit.Denuncia =  {
             url: urlLocalSigo + "Supervision/Denuncias/obtenerDenunciaxInforme",
             datos: JSON.stringify({
                 ENT_INFORME: {
-                    COD_INFORME: $('#hdfCodInforme').val() 
+                    COD_INFORME: $('#hdfCodInforme').val()
                 }
             }),
             type: 'POST'
@@ -148,22 +148,22 @@ ManInforme_AddEdit.Incidencia = {
         let date = new Date(row.FECHA_SUCESO.split('/')[2], row.FECHA_SUCESO.split('/')[1], row.FECHA_SUCESO.split('/')[0]);
         $('#h1').val(row.OBJCOD_IINCIDENCIA_PROTOCOLOS_NIVEL_1.COD_IINCIDENCIA_PROTOCOLOS);
         $('#h2').val(row.OBJCOD_IINCIDENCIA_PROTOCOLOS_NIVEL_2.COD_IINCIDENCIA_PROTOCOLOS);
-        
+
         $('#COD_IINCIDENCIA').val(row.COD_IINCIDENCIA);
-        $('#txt_FECHA_SUCESO').val(row.FECHA_SUCESO.split('/')[2] + '-' + row.FECHA_SUCESO.split('/')[1] + '-' +row.FECHA_SUCESO.split('/')[0]);
+        $('#txt_FECHA_SUCESO').val(row.FECHA_SUCESO.split('/')[2] + '-' + row.FECHA_SUCESO.split('/')[1] + '-' + row.FECHA_SUCESO.split('/')[0]);
         $('#txt_HORA_SUCESO').val(row.HORA_SUCESO);
         $('#cboRIESGO').val(row.OBJCOD_IINCIDENCIA_PROTOCOLOS_RIESGO.COD_IINCIDENCIA_PROTOCOLOS);
         $('#cboPROCESO').val(row.OBJCOD_IINCIDENCIA_PROTOCOLOS_PROCESO.COD_IINCIDENCIA_PROTOCOLOS);
         $('#cboCIRCUNSTANCIA').val(row.OBJCOD_IINCIDENCIA_PROTOCOLOS_CIRCUNSTANCIA.COD_IINCIDENCIA_PROTOCOLOS);
         $('#txt_UBICACION').val(row.UBICACION);
         $('#cboEFECTO').val(row.OBJCOD_IINCIDENCIA_PROTOCOLOS_EFECTO.COD_IINCIDENCIA_PROTOCOLOS);
-        
+
         $('#txt_DSCRP_INCIDENCIA').val(row.DSCRP_INCIDENCIA);
         $('#txt_OBSERVACIONES').val(row.OBSERVACIONES);
         $('#BtnGuardar').text('EDITAR');
         $('#cboRIESGO').change();
     },
-    cargarData: function (str,select,padre) {
+    cargarData: function (str, select, padre) {
         let data = {
             iINCIDENCIA_TIPO_PROTOCOLO: {
                 NOMBRE_TIPO_PROTOCOLO: str
@@ -190,7 +190,7 @@ ManInforme_AddEdit.Incidencia = {
                 $.each(data, function (i, item) {
                     let x = '';
                     if (i === 0) x = 'selected';
-                    $('#' + select).append('<option '+x+'title="' + item.NOMBRE_PROTOCOLO + '"  value="' + item.COD_IINCIDENCIA_PROTOCOLOS + '">' + utilSigo.recortarTextos(item.NOMBRE_PROTOCOLO,40) + '</option>');
+                    $('#' + select).append('<option ' + x + 'title="' + item.NOMBRE_PROTOCOLO + '"  value="' + item.COD_IINCIDENCIA_PROTOCOLOS + '">' + utilSigo.recortarTextos(item.NOMBRE_PROTOCOLO, 40) + '</option>');
                 });
 
             },
@@ -212,7 +212,7 @@ ManInforme_AddEdit.Incidencia = {
         });
     },
     ui: function () {
-        ManInforme_AddEdit.Incidencia.cargarData('RIESGO','cboRIESGO');
+        ManInforme_AddEdit.Incidencia.cargarData('RIESGO', 'cboRIESGO');
         ManInforme_AddEdit.Incidencia.cargarData('PROCESO', 'cboPROCESO');
         ManInforme_AddEdit.Incidencia.cargarData('CIRCUNSTANCIA', 'cboCIRCUNSTANCIA');
         ManInforme_AddEdit.Incidencia.cargarData('EFECTO', 'cboEFECTO');
@@ -222,7 +222,7 @@ ManInforme_AddEdit.Incidencia = {
     eventos: function () {
 
         $('#cboRIESGO').change(function () {
-            ManInforme_AddEdit.Incidencia.cargarData('NIVEL 2', 'NIVEL_2',$(this).val());
+            ManInforme_AddEdit.Incidencia.cargarData('NIVEL 2', 'NIVEL_2', $(this).val());
             ManInforme_AddEdit.Incidencia.cargarData('NIVEL 1', 'NIVEL_1', $(this).val());
         });
 
@@ -284,7 +284,7 @@ ManInforme_AddEdit.Incidencia = {
             });
         });
     },
-    cargarIncidencias : function () {
+    cargarIncidencias: function () {
         ManInforme_AddEdit.Incidencia.tablaIncidencia =
             $('#GridIINCIDENCIA').DataTable({
                 oLanguage: initSigo.oLanguage,
@@ -384,7 +384,7 @@ ManInforme_AddEdit.Incidencia = {
                 ]
             });
     },
-    validarIncidencia : function () {
+    validarIncidencia: function () {
         utilSigo.elementOk($('#txt_FECHA_SUCESO'));
         utilSigo.elementOk($('#txt_HORA_SUCESO'));
         utilSigo.elementOk($('#cboRIESGO'));
@@ -466,7 +466,7 @@ ManInforme_AddEdit.fnReturnIndex = function (alertaInicial) {
 }
 
 ManInforme_AddEdit.fnDownloadDatosInforme = function () {
-    var url = urlLocalSigo + "Supervision/ManInforme/DescargarDatosInforme?asCodInforme="+ManInforme_AddEdit.frm.find("#hdfCodInforme").val();
+    var url = urlLocalSigo + "Supervision/ManInforme/DescargarDatosInforme?asCodInforme=" + ManInforme_AddEdit.frm.find("#hdfCodInforme").val();
     //window.open(url, "_blank");
     window.location = url;
 }
@@ -508,7 +508,8 @@ ManInforme_AddEdit.fnViewModalUbigeo = function () {
         if (!utilSigo.fnValidateForm_HideControl(ManInforme_AddEdit.frm, ManInforme_AddEdit.frm.find("#hdfCodUbigeo"), ManInforme_AddEdit.frm.find("#iconUbigeo"), false)) return false;
         return true;
     }
-);}
+    );
+}
 
 ManInforme_AddEdit.fnCustomValidateForm = function () {
     ManInforme_AddEdit.Denuncia.objDeuncia.IATENDIDO = $('input[name="rbtnAtendido"]:checked').val();
@@ -606,8 +607,8 @@ ManInforme_AddEdit.fnSaveForm = function () {
             datosInforme.chkPlanAmazonas = utilSigo.fnGetValChk(ManInforme_AddEdit.frm.find("#chkPlanAmazonas"));
             datosInforme.chkPlanAmazonas2014 = utilSigo.fnGetValChk(ManInforme_AddEdit.frm.find("#chkPlanAmazonas2014"));
             datosInforme.chkPlanAmazonas2015 = utilSigo.fnGetValChk(ManInforme_AddEdit.frm.find("#chkPlanAmazonas2015"));
-            datosInforme.chkPlanAmazonas2016 = utilSigo.fnGetValChk(ManInforme_AddEdit.frm.find("#chkPlanAmazonas2016"));            
-			datosInforme.txtConclusion = window.editor_txtConclusion.getData();//CKEDITOR.instances["txtConclusion"].getData();
+            datosInforme.chkPlanAmazonas2016 = utilSigo.fnGetValChk(ManInforme_AddEdit.frm.find("#chkPlanAmazonas2016"));
+            datosInforme.txtConclusion = window.editor_txtConclusion.getData();//CKEDITOR.instances["txtConclusion"].getData();
             datosInforme.vmDatoSupervision = _renderDatosSupervision.fnGetDatosSupervision();
             datosInforme.ddlBuenDesempenioId = (datosInforme.ddlBuenDesempenioId == "Seleccionar") ? "1" : datosInforme.ddlBuenDesempenioId;
             datosInforme.ddlArchivaInformeId = (datosInforme.ddlArchivaInformeId == "Seleccionar") ? "-1" : datosInforme.ddlArchivaInformeId;
@@ -625,12 +626,18 @@ ManInforme_AddEdit.fnSaveForm = function () {
             datosInforme.tbEliTABLA = datosInforme.tbEliTABLA.concat(_renderObligContractual.fnGetListEliTABLA());
             datosInforme.tbDesplazamiento = _renderDesplazamiento.fnGetList();
             datosInforme.tbEliTABLA = datosInforme.tbEliTABLA.concat(_renderDesplazamiento.fnGetListEliTABLA());
+            if ($('#hdfCodMTipo').val() == "0000030") {
+                datosInforme.tbCoberturaBoscosa = _renderCoberturaBoscosa.fnGetList();
+                datosInforme.tbEliTABLA = datosInforme.tbEliTABLA.concat(_renderCoberturaBoscosa.fnGetListEliTABLA());
+                datosInforme.tbOtrosPtosEval = _renderOtrosPuntosEval.fnGetList();
+                datosInforme.tbEliTABLA = datosInforme.tbEliTABLA.concat(_renderOtrosPuntosEval.fnGetListEliTABLA());
+            }
 
             datosInforme.tbMandatos = _renderMandatos.fnGetList();
             datosInforme.tbMandatos = datosInforme.tbMandatos.concat(_renderMandatos.fnGetListEliTABLA());
             datosInforme.tbObligMandatos = _renderObligacionMandatos.fnGetList();
             datosInforme.tbObligMandatos = datosInforme.tbObligMandatos.concat(_renderObligacionMandatos.fnGetListEliTABLA());
-            
+
             var option = { url: ManInforme_AddEdit.frm.action, datos: JSON.stringify({ dto: datosInforme }), type: 'POST' };
             $.ajax({
                 url: option.url,
@@ -677,7 +684,7 @@ $(document).ready(function () {
     ManInforme_AddEdit.frm = $("#frmManInforme_AddEdit");
     ManInforme_AddEdit.fnInit();
     $('[data-toggle="tooltip"]').tooltip();
-   
+
 
     ManInforme_AddEdit.frm.find("#dvObligacionContractual").hide();
     if (ManInforme_AddEdit.frm.find("#hdfCodDLinea").val() == "0000005") {//CONCESIONES

@@ -367,7 +367,12 @@ controles_TH.listarBusqueda = function () {
 controles_TH.realizarBusqueda = function () {
     var valorCboOpciones = controles_TH.frmManGrilla.find("#cboOpciones").val();
     var valorBusqueda = controles_TH.frmManGrilla.find("#txtValor").val().trim();
-
+    
+    var text = utilSigo.findWords(valorBusqueda);
+    if (text != "") {
+        utilSigo.toastWarning("Aviso", text);
+        return false;
+    }
     if (valorBusqueda === "") {
         utilSigo.toastWarning("Aviso", "Ingrese Valor a Buscar");
         return false;

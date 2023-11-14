@@ -152,7 +152,7 @@ utilSigo.check = function (e) {
     var patron = "/[A-Za-z0-9]";
     var tecla_final = String.fromCharCode(tecla);
     return patron.test(tecla_final);
-    
+
 }
 utilSigo.loadAjaxCombo = function (_url, combo, _data, itemDefault, isasync, fn) {
     $.ajax({
@@ -727,15 +727,15 @@ utilSigo.convertirFechaHoraStandar = function (fecha) {
             returns = arr[2] + '-' + arr[1] + '-' + arr[0];
         } else {
             returns = '1';
-        }        
+        }
     }
 
-    
-    
-    return returns;   
+
+
+    return returns;
 };
 
-utilSigo.isFechaMayor = function (date1,date2) {
+utilSigo.isFechaMayor = function (date1, date2) {
     let returns = false;
     if (date1 > date2) {
         returns = true;
@@ -857,8 +857,8 @@ utilSigo.disabledOpc = function () {
         $('form i.fa-window-close').prop("onclick", false);
         $('form i.fa-file-o').prop("onclick", false);
         $('.dt-button').prop("disabled", false);
-     
-       
+
+
         $('.no-bloqueo-rol button').prop("disabled", false);
         $('.no-bloqueo-rol input').prop("disabled", false);
         $('.no-bloqueo-rol textarea').prop("disabled", false);
@@ -884,7 +884,7 @@ utilSigo.checkLetter = function (e) {
     if (tecla == 8 || tecla == 32) {
         return true;
     }
-    
+
     var patron = /[ ÁÉÍÓÚA-Záéíóúa-z0-9\-\/]/;
     var tecla_final = String.fromCharCode(tecla);
     return patron.test(tecla_final);
@@ -914,6 +914,65 @@ utilSigo.onBlurTwoDecimal = function (thix, texto) {
         document.getElementById(thix.id).value = 0;
         utilSigo.toastWarning("Aviso", "El " + texto + " sólo debe tener dos decimales");
         $("#" + thix.id).focus();
-    }    
+    }
 }
 
+utilSigo.onBlurTwoDecimalIS = function (thix, texto) {
+    let numero = document.getElementById(thix.id).value;
+    if (numero != "") {
+        if (!/^\d+(\.\d{1,2})?$/.test(numero)) {
+            document.getElementById(thix.id).value = "";
+            utilSigo.toastWarning("Aviso", "El " + texto + " sólo debe tener dos decimales");
+            $("#" + thix.id).focus();
+        }
+    }
+}
+utilSigo.validateFechaRango = function (id, texto) {
+    let fecha = $('#' + id).val();
+
+    let campos = fecha.split('/');
+    let date = new Date(campos[2] + "-" + campos[1] + "-" + campos[0]);
+    let dateToday = new Date(utilSigo.obtenerFechaHora()[0]);
+    let datePast = new Date(utilSigo.obtenerFechaHora()[0]);
+    datePast.setFullYear(datePast.getFullYear() - 5);
+    let dateTodayCampos = utilSigo.obtenerFechaHora()[0].split('-');
+    let dateTodayStr = dateTodayCampos[2] + "/" + dateTodayCampos[1] + "/" + dateTodayCampos[0];
+
+    if (utilSigo.isFechaMayor(date, dateToday)) {
+        utilSigo.toastWarning("Aviso", "El campo " + texto + " no debe ser mayor a la fecha actual");
+        document.getElementById(id).value = dateTodayStr;
+        $("#" + id).focus();
+        return false;
+    } else if (utilSigo.isFechaMayor(datePast, date)) {
+        utilSigo.toastWarning("Aviso", "El campo " + texto + " no debe ser menor a 5 años de la fecha actual");
+        document.getElementById(id).value = dateTodayStr;
+        $("#" + id).focus();
+        return false;
+    }
+    return true;
+}
+
+utilSigo.findWords = function (text) {
+    let msg = "La búsqueda no puede contener la(s) siguiente(s) palabra(s) : ";
+    const lowerText = text.toLowerCase();
+
+    const words = ["Connection", "oracle", "System", "Data", "SqlClient"];
+
+    const foundWords = [];
+
+    words.forEach(word => {
+        // Convertir la palabra a minúsculas para hacer una búsqueda sin distinción de mayúsculas y minúsculas
+        const lowerWord = word.toLowerCase();
+
+        // Buscar la palabra en el texto
+        if (lowerText.includes(lowerWord)) {
+            foundWords.push(word);
+            msg += " " + word;
+        }
+    });
+    if (foundWords.length == 0) {
+        msg = "";
+    }
+
+    return (msg);
+}

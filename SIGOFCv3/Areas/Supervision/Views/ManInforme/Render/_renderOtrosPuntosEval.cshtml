@@ -18,7 +18,7 @@
         columns_data = ["EVALUACION", "ZONA", "COORDENADA_ESTE", "COORDENADA_NORTE", "DESCRIPCION"];
         options = {
             page_length: 10, row_index: true, row_edit: true, row_fnEdit: "_renderOtrosPuntosEval.fnAddEdit(this)"
-            , row_delete: true, row_fnDelete: "_renderCoberturaBoscosa.fnDelete(this)"
+            , row_delete: true, row_fnDelete: "_renderOtrosPuntosEval.fnDelete(this)"
             , button_copy: true, button_csv: true, button_excel: true, button_pdf: true, button_print: true
             , export_title: $("#tbRenderOtrosPuntosEval").find("thead tr")[0].innerText.trim()
             , page_sort: true
@@ -104,6 +104,7 @@
     }
 
     _renderOtrosPuntosEval.fnImport = function (e, obj) {
+        debugger;
         var url = urlLocalSigo + "Supervision/ManInforme/ImportarDatosInformeSimple";
         uploadFile.fileSelectHandler(e, obj, url, { asTipo: "EVALUACION_OTRO" }, function (data) {
             for (var i = 0; i < data.length; i++) {
@@ -111,7 +112,11 @@
                     _renderOtrosPuntosEval.dtOtrosPuntosEval.rows.add([data[i]]).draw();
                     _renderOtrosPuntosEval.dtOtrosPuntosEval.page('last').draw('page');
                 }
-            }
+             }
+            e.target.value = "";
+        }, function (data) {
+            e.target.value = "";
+            utilSigo.toastWarning("Error de validación", data.msj);
         });
     }
 
@@ -172,7 +177,7 @@
                             <label style="cursor:pointer;" class="fa mx-2 fa-lg fa-file-excel-o" title="Importar Archivo" data-toggle="tooltip">
                                 <input type="file" id="fileselect" name="fileselect" style="display:none" size="60" onchange="_renderOtrosPuntosEval.fnImport(event, this)">
                             </label>
-                            <i class="fa mx-2 fa-lg fa-folder-open" style="cursor:pointer;" onclick="_renderOtrosPuntosEval.fnExport();" data-toggle="tooltip" data-placement="top" title="Descargar Plantilla"></i>
+                            <a href="@Url.Content("~/Archivos/Plantilla/Otros_Puntos_Eval.xlsx")"> <i class="fa mx-2 fa-lg fa-folder-open" style="cursor:pointer;" data-toggle="tooltip" data-placement="top" title="Descargar Plantilla"></i></a>
                             <strong>Otros Puntos de Evaluación</strong>
                         </div>
                     </th>

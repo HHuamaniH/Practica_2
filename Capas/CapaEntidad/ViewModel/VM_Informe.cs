@@ -57,6 +57,8 @@ namespace CapaEntidad.ViewModel
         public List<Ent_INFORME_OBLIGTITULAR> tbObligTitular { get; set; }
         public List<Ent_INFORME> tbObligacion { get; set; }
         public List<Ent_INFORME> tbDesplazamiento { get; set; }
+        public List<Ent_INFORME> tbCoberturaBoscosa { get; set; }
+        public List<Ent_INFORME> tbOtrosPtosEval { get; set; }
         public string hdSitd { get; set; }
 
         //TGS:27/08/2021

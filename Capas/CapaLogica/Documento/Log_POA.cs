@@ -601,6 +601,12 @@ namespace CapaLogica.DOC
                     POA_VM.chkPendiente = datModificar.AD_RSPendiente == null || datModificar.AD_RSPendiente == false ? false : true;
                     POA_VM.txtObservacionesAcervo = datModificar.AD_Observaciones;
 
+                    POA_VM.txtNumeroSolAprob = datModificar.SAPROBACION_NUM;
+                    POA_VM.txtFechaSolAprob = datModificar.SAPROBACION_FECHA;
+                    POA_VM.hdfItemIOFuncionarioCodigo = datModificar.ACTA_IOCULAR_COD_FUNCIONARIO;
+                    POA_VM.lblItemIOFuncionario = datModificar.ACTA_IOCULAR_FUNCIONARIO;
+                    POA_VM.lblItemIOFuncionarioODatos = datModificar.ACTA_IOCULAR_CARGO;
+
 
                 }
                 if (nuevo == 2) //varias opciones
@@ -1111,6 +1117,11 @@ namespace CapaLogica.DOC
                 oCampos.AD_RSConcluido = dto.chkConcluido;
                 oCampos.AD_RSProceso = dto.chkProceso;
                 oCampos.AD_RSPendiente = dto.chkPendiente;
+
+                oCampos.SAPROBACION_NUM = dto.txtNumeroSolAprob;
+                oCampos.SAPROBACION_FECHA = dto.txtFechaSolAprob;
+                oCampos.ACTA_IOCULAR_COD_FUNCIONARIO = dto.hdfItemIOFuncionarioCodigo;
+
 
                 oCampos.AD_Observaciones = String.IsNullOrEmpty(dto.txtObservacionesAcervo) ? "" : dto.txtObservacionesAcervo.Trim();
 

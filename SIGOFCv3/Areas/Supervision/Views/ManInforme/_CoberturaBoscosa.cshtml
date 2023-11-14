@@ -9,16 +9,16 @@
         </div>
         <div class="modal-body">
             <form id="frmItemCoberturaBoscosa">
-                @Html.Hidden("hdfRegEstadoOtrosPtosEvaluacion")              
-                @Html.Hidden("hdfCodSecuencialOtrosPtosEvaluacion")              
+                @Html.Hidden("hdfRegEstadoCobBoscosa")              
+                @Html.Hidden("hdfCodSecuencialCobBos")              
                 <div class="form-row">
                     <div class="form-group col-md-6">
                         <label for="ddlVerticeId" class="text-small">Actividad</label>
-                        @Html.TextBox("txtActividad", "", new { @class = "form-control form-control-sm", maxlength = "300", oninput = "this.value = this.value.replace(/[^áéíóúa-zÁÉÍÓÚA-Z 0-9]/,'')" })
+                        @Html.TextBox("txtActividad", "", new { @class = "form-control form-control-sm", maxlength = "300", onkeypress = "return utilSigo.checkLetter(event);" })
                     </div>
                     <div class="form-group col-md-6">
                         <label for="txtActividad" class="text-small">Área</label>
-                        @Html.TextBox("txtArea", "", new { @class = "form-control form-control-sm", maxlength = "10", type = "number" })
+                        @Html.TextBox("txtArea", "", new { @class = "form-control form-control-sm", maxlength = "10", onblur = "return utilSigo.onBlurTwoDecimalIS(this,'Área');", onkeypress = "return utilSigo.onKeyDecimal(event, this);" })
                     </div>
                 </div>
                 <div class="form-row">
@@ -28,17 +28,17 @@
                     </div>
                     <div class="form-group col-md-6">
                         <label for="ddlZonaCampoId" class="text-small">Autorizado</label>
-                        @Html.TextBox("txtAutorizado", "", new { @class = "form-control form-control-sm", maxlength = "200", oninput = "this.value = this.value.replace(/[^áéíóúa-zÁÉÍÓÚA-Z 0-9]/,'')" })
+                        @Html.TextBox("txtAutorizado", "", new { @class = "form-control form-control-sm", maxlength = "200", onkeypress = "return utilSigo.checkLetter(event);" })
                     </div>
                 </div>
                 <div class="form-row">
                     <div class="form-group col-md-6">
                         <label for="txtCoordEste" class="text-small">Coordenada Este</label>
-                        @Html.TextBox("txtCoordEste", "", new { @class = "form-control form-control-sm", maxlength = "6", type = "number" })
+                        @Html.TextBox("txtCoordEste", "", new { @class = "form-control form-control-sm", maxlength = "6", onkeypress = "return utilSigo.checkNum(event);" })
                     </div>
                     <div class="form-group col-md-6">
                         <label for="txtCoordNorte" class="text-small">Coordenada Norte</label>
-                        @Html.TextBox("txtCoordNorte", "", new { @class = "form-control form-control-sm", maxlength = "7", type = "number" })
+                        @Html.TextBox("txtCoordNorte", "", new { @class = "form-control form-control-sm", maxlength = "7", onkeypress = "return utilSigo.checkNum(event);" })
                     </div>
                 </div>
                 @*<div class="form-row">
@@ -54,7 +54,7 @@
                 <div class="form-row">
                     <div class="form-group col-md-12">
                         <label for="txtObservacionCampo" class="text-small">Observación</label>
-                        @Html.TextArea("txtObservacion", "", new { @class = "form-control form-control-sm", rows = "4" })
+                        @Html.TextArea("txtObservacion", "", new { @class = "form-control form-control-sm", rows = "4", onkeypress = "return utilSigo.checkLetter(event);" })
                     </div>
                 </div>
             </form>

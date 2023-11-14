@@ -908,6 +908,10 @@ namespace CapaLogica.DOC
                     {
                         tipoObligTitular = "OBLIGTITU_MADE";
                     }
+                    else if (asCodMTipo== "0000030")
+                    {
+                        tipoObligTitular = "OBLIGTITU_CUSAF";
+                    }
                     var lstObligTitular = exeBus.RegMostComboIndividual("OBLIGACION_TITULAR", tipoObligTitular);
                     foreach (var item in lstObligTitular)
                     {
@@ -980,8 +984,15 @@ namespace CapaLogica.DOC
                     vmInf.tbVerticeTHCampo = entInf.ListTHVerticeCampo;
                     vmInf.tbAvistamientoFauna = entInf.ListAvistamientoFauna;
                     vmInf.tbFotoSupervision = entInf.ListFotos;
-                    vmInf.tbObligTitular = ("0000007|0000010|0000014|0000015|0000016|0000017").Contains(asCodMTipo) ?
+                    if (asCodMTipo == "0000030")
+                    {
+                        vmInf.tbObligTitular = entInf.ListObligacionTitular.Where(m => m.COD_GRUPO == "OBLIGTITU_CUSAF").ToList();
+                    }
+                    else
+                    {
+                        vmInf.tbObligTitular = ("0000007|0000010|0000014|0000015|0000016|0000017").Contains(asCodMTipo) ?
                         entInf.ListObligacionTitular.Where(m => m.COD_GRUPO == "OBLIGTITU_MADE").ToList() : entInf.ListObligacionTitular.Where(m => m.COD_GRUPO == "OBLIGTITU_NOMADE").ToList();
+                    }
                     vmInf.tbObligacion = entInf.ListISUPERVISION_OCARACTE_AMB01;
                     vmInf.tbDesplazamiento = entInf.ListDesplazamientoInforme;
                     vmInf.hdSupervisor_Calidad = entInf.COD_SUP_CALIDAD;
@@ -990,6 +1001,8 @@ namespace CapaLogica.DOC
                     vmInf.ddlArchivaInformeId = (entInf.ARCHIVA_INFORME == -1) ? "Seleccionar" : entInf.ARCHIVA_INFORME.ToString();
                     vmInf.tbMandatos = entInf.ListMandatos;
                     vmInf.tbObligMandatos = entInf.ListObligMandatos;
+                    vmInf.tbCoberturaBoscosa = entInf.ListCoberturaBoscosa;
+                    vmInf.tbOtrosPtosEval = entInf.ListOtrosPtosEval;
                 }
             }
             catch (Exception ex)
@@ -1079,6 +1092,8 @@ namespace CapaLogica.DOC
                 paramsInf.COD_SUP_CALIDAD = _dto.hdSupervisor_Calidad;
                 paramsInf.ListMandatos = _dto.tbMandatos;
                 paramsInf.ListObligMandatos = _dto.tbObligMandatos;
+                paramsInf.ListCoberturaBoscosa = _dto.tbCoberturaBoscosa;
+                paramsInf.ListOtrosPtosEval = _dto.tbOtrosPtosEval;
                 ReglInsertarInforme_v3(paramsInf);
 
                 string msjRespuesta = _dto.hdfRegEstado == 1 ? "El Registro se Guardo Correctamente" : "El Registro se Modifico Correctamente";

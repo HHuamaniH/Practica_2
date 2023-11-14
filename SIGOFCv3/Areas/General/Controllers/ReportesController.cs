@@ -4589,6 +4589,112 @@ namespace SIGOFCv3.Areas.General.Controllers
             }
         }
 
+        [HttpPost]
+        public ActionResult RptObligacionesTitularesCusaf(Dictionary<string, string> cabecera, List<Dictionary<string, string>> resumen, string opcion = null)
+        {
+            string dir = string.Format("~/Archivos/Plantilla/Report_SupervisionesDispObligacionesCusaf{0}.xlsx", (opcion != "_new" ? "" : "_new"));
+            FileInfo template = new FileInfo(Server.MapPath(dir));
+            int rowStart = 3;
+
+            using (var package = new ExcelPackage(template))
+            {
+                var workbook = package.Workbook;
+                ExcelWorksheet worksheet = workbook.Worksheets.First();
+
+                if (resumen != null)
+                {
+                    int column = 0;
+
+                    foreach (var item in resumen)
+                    {
+
+                        column = 0;
+                        worksheet.Cells[HelperSigo.GetColum(++column) + rowStart.ToString()].Value = rowStart - 2;
+                        worksheet.Cells[HelperSigo.GetColum(++column) + rowStart.ToString()].Value = item["DEPARTAMENTO"];
+                        worksheet.Cells[HelperSigo.GetColum(++column) + rowStart.ToString()].Value = item["MODALIDAD_TIPO"];
+                        worksheet.Cells[HelperSigo.GetColum(++column) + rowStart.ToString()].Value = item["NUM_THABILITANTE"];
+                        worksheet.Cells[HelperSigo.GetColum(++column) + rowStart.ToString()].Value = item["TITULAR"];
+                        worksheet.Cells[HelperSigo.GetColum(++column) + rowStart.ToString()].Value = item["INFORME"];
+                        worksheet.Cells[HelperSigo.GetColum(++column) + rowStart.ToString()].Value = item["FECHA_SUPERVISION_INICIO"];
+                        worksheet.Cells[HelperSigo.GetColum(++column) + rowStart.ToString()].Value = item["OPORTUNIDAD_SUPERVISION"];
+                        //Fauna
+                        worksheet.Cells[HelperSigo.GetColum(++column) + rowStart.ToString()].Value = item["OBLIG_01"];
+                        worksheet.Cells[HelperSigo.GetColum(++column) + rowStart.ToString()].Value = item["OBLIG_02"];
+                        worksheet.Cells[HelperSigo.GetColum(++column) + rowStart.ToString()].Value = item["OBLIG_03"];
+                        worksheet.Cells[HelperSigo.GetColum(++column) + rowStart.ToString()].Value = item["OBLIG_04"];
+                        worksheet.Cells[HelperSigo.GetColum(++column) + rowStart.ToString()].Value = item["OBLIG_05"];
+                        worksheet.Cells[HelperSigo.GetColum(++column) + rowStart.ToString()].Value = item["OBLIG_06"];
+                        worksheet.Cells[HelperSigo.GetColum(++column) + rowStart.ToString()].Value = item["OBLIG_07"];
+                        worksheet.Cells[HelperSigo.GetColum(++column) + rowStart.ToString()].Value = item["OBLIG_08"];
+                        worksheet.Cells[HelperSigo.GetColum(++column) + rowStart.ToString()].Value = item["OBLIG_09"];
+                        worksheet.Cells[HelperSigo.GetColum(++column) + rowStart.ToString()].Value = item["OBLIG_10"];
+                        worksheet.Cells[HelperSigo.GetColum(++column) + rowStart.ToString()].Value = item["OBLIG_11"];
+                        worksheet.Cells[HelperSigo.GetColum(++column) + rowStart.ToString()].Value = item["OBLIG_12"];
+                        worksheet.Cells[HelperSigo.GetColum(++column) + rowStart.ToString()].Value = item["OBLIG_13"];
+                        worksheet.Cells[HelperSigo.GetColum(++column) + rowStart.ToString()].Value = item["OBLIG_14"];
+                        worksheet.Cells[HelperSigo.GetColum(++column) + rowStart.ToString()].Value = item["OBLIG_15"];
+                        worksheet.Cells[HelperSigo.GetColum(++column) + rowStart.ToString()].Value = item["OBLIG_16"];
+                        worksheet.Cells[HelperSigo.GetColum(++column) + rowStart.ToString()].Value = item["OBLIG_17"];
+                        worksheet.Cells[HelperSigo.GetColum(++column) + rowStart.ToString()].Value = item["OBLIG_18"];
+                        worksheet.Cells[HelperSigo.GetColum(++column) + rowStart.ToString()].Value = item["OBLIG_19"];
+                        worksheet.Cells[HelperSigo.GetColum(++column) + rowStart.ToString()].Value = item["OBLIG_20"];
+                        worksheet.Cells[HelperSigo.GetColum(++column) + rowStart.ToString()].Value = item["OBLIG_21"];
+                        worksheet.Cells[HelperSigo.GetColum(++column) + rowStart.ToString()].Value = item["OBLIG_22"];
+                        worksheet.Cells[HelperSigo.GetColum(++column) + rowStart.ToString()].Value = item["OBLIG_23"];
+                        worksheet.Cells[HelperSigo.GetColum(++column) + rowStart.ToString()].Value = item["OBLIG_24"];
+                        worksheet.Cells[HelperSigo.GetColum(++column) + rowStart.ToString()].Value = item["OBLIG_25"];
+                        worksheet.Cells[HelperSigo.GetColum(++column) + rowStart.ToString()].Value = item["OBLIG_26"];
+                        worksheet.Cells[HelperSigo.GetColum(++column) + rowStart.ToString()].Value = item["OBLIG_27"];
+                        worksheet.Cells[HelperSigo.GetColum(++column) + rowStart.ToString()].Value = item["OBLIG_28"];
+                        worksheet.Cells[HelperSigo.GetColum(++column) + rowStart.ToString()].Value = item["OBLIG_29"];
+                        worksheet.Cells[HelperSigo.GetColum(++column) + rowStart.ToString()].Value = item["OBLIG_30"];
+                        worksheet.Cells[HelperSigo.GetColum(++column) + rowStart.ToString()].Value = item["OBLIG_31"];
+                        worksheet.Cells[HelperSigo.GetColum(++column) + rowStart.ToString()].Value = item["OBLIG_32"];
+                        worksheet.Cells[HelperSigo.GetColum(++column) + rowStart.ToString()].Value = item["OBLIG_33"];
+                        worksheet.Cells[HelperSigo.GetColum(++column) + rowStart.ToString()].Value = item["OBLIG_34"];
+                        worksheet.Cells[HelperSigo.GetColum(++column) + rowStart.ToString()].Value = item["OBLIG_35"];
+                        worksheet.Cells[HelperSigo.GetColum(++column) + rowStart.ToString()].Value = item["OBLIG_36"];
+
+                        //if (opcion=="_new")
+                        //{
+                        //    worksheet.Cells[HelperSigo.GetColum(++column) + rowStart.ToString()].Value = item["OBLIG_31"];
+                        //    worksheet.Cells[HelperSigo.GetColum(++column) + rowStart.ToString()].Value = item["OBLIG_32"];
+                        //    worksheet.Cells[HelperSigo.GetColum(++column) + rowStart.ToString()].Value = item["OBLIG_33"];
+                        //    worksheet.Cells[HelperSigo.GetColum(++column) + rowStart.ToString()].Value = item["OBLIG_34"];
+                        //}
+
+
+
+                        //RESULTADO
+                        worksheet.Cells[HelperSigo.GetColum(++column) + rowStart.ToString()].Formula = "SUMIF(" + "I" + rowStart.ToString() + ":" + (opcion == "_new" ? "AR" : "AR") + rowStart.ToString() + (opcion == "_new" ? ",AS1,I1:AR1)" : ",AS1,I1:AR1)");
+
+                        //DENOMINADOR
+                        worksheet.Cells[HelperSigo.GetColum(++column) + rowStart.ToString()].Formula = "SUMIF(" + "I" + rowStart.ToString() + ":" + (opcion == "_new" ? "AR" : "AR") + rowStart.ToString() + (opcion == "_new" ? ",AS1,I1:AR1)" : ",AS1,I1:AR1)") + "+SUMIF(" + "I" + rowStart.ToString() + ":" + (opcion == "_new" ? "AR" : "AR") + rowStart.ToString() + (opcion == "_new" ? ",AT1,I1:AR1)" : ",AT1,I1:AR1)");
+
+                        //INDICE
+                        worksheet.Cells[HelperSigo.GetColum(++column) + rowStart.ToString()].Formula = (opcion == "_new" ? "IF(AT" : "IF(AT") + rowStart.ToString() + "=0, 0," + (opcion == "_new" ? "AS" : "AS") + rowStart.ToString() + "/" + (opcion == "_new" ? "AT" : "AT") + rowStart.ToString() + ")*100"; ;
+                        worksheet.Cells[HelperSigo.GetColum(column) + rowStart.ToString()].Style.Numberformat.Format = "#0\\.00%";
+
+                        //TGS: CERTIFICADO 02/10/2021
+                        worksheet.Cells[HelperSigo.GetColum(++column) + rowStart.ToString()].Value = item["CERTIFICADO"];
+                        rowStart++;
+                    }
+
+
+                }
+                string excelName = cabecera["Titulo"] != null ? cabecera["Titulo"].ToString() : "rptObligacionesTitularesCusaf";
+                using (var memoryStream = new MemoryStream())
+                {
+                    package.SaveAs(memoryStream);
+                    return new BinaryContentResultDowload
+                    {
+                        FileName = excelName + ".xlsx",
+                        ContentType = "application/octet-stream",
+                        Content = memoryStream.ToArray()
+                    };
+                }
+            }
+        }
         #endregion
 
         [HttpGet]

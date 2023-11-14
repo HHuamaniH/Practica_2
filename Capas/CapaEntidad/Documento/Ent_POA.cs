@@ -549,6 +549,16 @@ namespace CapaEntidad.DOC
         public String REGENTE_NRO_LICENCIA { get; set; }
         [Description("REGENTE_EMAIL")]
         public String REGENTE_EMAIL { get; set; }
+        [Description("SAPROBACION_NUM")]
+        public String SAPROBACION_NUM { get; set; }
+        [Description("SAPROBACION_FECHA")]
+        public String SAPROBACION_FECHA { get; set; }
+        [Description("ACTA_IOCULAR_COD_FUNCIONARIO")]
+        public String ACTA_IOCULAR_COD_FUNCIONARIO { get; set; }
+        [Description("ACTA_IOCULAR_FUNCIONARIO")]
+        public String ACTA_IOCULAR_FUNCIONARIO { get; set; }
+        [Description("ACTA_IOCULAR_CARGO")]
+        public String ACTA_IOCULAR_CARGO { get; set; }
 
 
         //Titulo Habilitante

@@ -303,176 +303,200 @@ namespace SIGOFCv3.Areas.THabilitante.Controllers
                 if (Request != null)
                 {
                     HttpPostedFileBase file = Request.Files[0];
-                    if ((file != null) && (file.ContentLength > 0) && !string.IsNullOrEmpty(file.FileName))
+                    if (file.ContentType == "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
                     {
-
-                        //string fileName = file.FileName;
-                        //string fileContentType = file.ContentType;
-                        //  byte[] fileBytes = new byte[file.ContentLength];
-                        // var data = file.InputStream.Read(fileBytes, 0, Convert.ToInt32(file.ContentLength));
-                        using (var package = new ExcelPackage(file.InputStream))
+                        if ((file != null) && (file.ContentLength > 0) && !string.IsNullOrEmpty(file.FileName))
                         {
-                            var currentSheet = package.Workbook.Worksheets;
-                            var workSheet = currentSheet.First();
-                            var noOfCol = workSheet.Dimension.End.Column;
-                            var noOfRow = workSheet.Dimension.End.Row;
 
-                            //Aqui es la logica
-
-                            //Recorriendo Datos
-                            CEntidad oCampos;
-                            //ListBusqueda<CEntidad> oListBus;     
-                            string hdfItemExcelImportar = Request["TVentana"];
-                            List<CEntidad> ListPOAItemsDetalle = new List<CEntidad>();
-
-                            switch (hdfItemExcelImportar)
+                            //string fileName = file.FileName;
+                            //string fileContentType = file.ContentType;
+                            //  byte[] fileBytes = new byte[file.ContentLength];
+                            // var data = file.InputStream.Read(fileBytes, 0, Convert.ToInt32(file.ContentLength));
+                            using (var package = new ExcelPackage(file.InputStream))
                             {
-                                #region CMADE
-                                case "CMADE":
-                                    for (int rowIterator = 2; rowIterator <= noOfRow; rowIterator++)
-                                    {
-                                        oCampos = new CEntidad();
-                                        oCampos.COD_SECUENCIAL = 0;
-                                        oCampos.COD_ESPECIES = "";
-                                        oCampos.BLOQUE = workSheet.Cells[rowIterator, 5].Value == null ? "" : workSheet.Cells[rowIterator, 5].Value.ToString().Trim();
-                                        oCampos.FAJA = workSheet.Cells[rowIterator, 6].Value == null ? "" : workSheet.Cells[rowIterator, 6].Value.ToString().Trim();
-                                        oCampos.CODIGO = workSheet.Cells[rowIterator, 7].Value == null ? "" : workSheet.Cells[rowIterator, 7].Value.ToString().Trim();
-                                        oCampos.VOLUMEN = workSheet.Cells[rowIterator, 8].Value == null ? 0 : Decimal.Parse(workSheet.Cells[rowIterator, 8].Value.ToString().Trim());
-                                        oCampos.DAP = workSheet.Cells[rowIterator, 9].Value == null ? 0 : Decimal.Parse(workSheet.Cells[rowIterator, 9].Value.ToString().Trim());
-                                        oCampos.AC = workSheet.Cells[rowIterator, 10].Value == null ? 0 : Decimal.Parse(workSheet.Cells[rowIterator, 10].Value.ToString().Trim());
-                                        oCampos.DMC = workSheet.Cells[rowIterator, 11].Value == null ? 0 : Int32.Parse(workSheet.Cells[rowIterator, 11].Value.ToString().Trim());
-                                        oCampos.COD_ECONDICION = "";
-                                        oCampos.COD_EESTADO = "";
-                                        oCampos.ZONA = workSheet.Cells[rowIterator, 14].Value == null ? "" : workSheet.Cells[rowIterator, 14].Value.ToString().Trim();
-                                        if (oCampos.ZONA == "17" || oCampos.ZONA == "18" || oCampos.ZONA == "19")
-                                            oCampos.ZONA = oCampos.ZONA + "S";
-                                        oCampos.COORDENADA_ESTE = workSheet.Cells[rowIterator, 15].Value == null ? 0 : Int32.Parse(workSheet.Cells[rowIterator, 15].Value.ToString().Trim());
-                                        oCampos.COORDENADA_NORTE = workSheet.Cells[rowIterator, 16].Value == null ? 0 : Int32.Parse(workSheet.Cells[rowIterator, 16].Value.ToString().Trim());
-                                        oCampos.OBSERVACION = workSheet.Cells[rowIterator, 18].Value == null ? "" : workSheet.Cells[rowIterator, 18].Value.ToString().Trim();
-                                        oCampos.CONDICION = workSheet.Cells[rowIterator, 12].Value == null ? "" : workSheet.Cells[rowIterator, 12].Value.ToString().Trim();
-                                        oCampos.ESTADO = workSheet.Cells[rowIterator, 13].Value == null ? "" : workSheet.Cells[rowIterator, 13].Value.ToString().Trim();
-                                        oCampos.ESPECIES = String.Format("{0} | {1}", workSheet.Cells[rowIterator, 1].Value == null ? "" : workSheet.Cells[rowIterator, 1].Value.ToString().Trim(), workSheet.Cells[rowIterator, 2].Value == null ? "" : workSheet.Cells[rowIterator, 2].Value.ToString().Trim());
-                                        oCampos.COD_ESPECIES_ARESOLUCION = "";
-                                        oCampos.ESPECIES_ARESOLUCION = String.Format("{0} | {1}", workSheet.Cells[rowIterator, 3].Value == null ? "" : workSheet.Cells[rowIterator, 3].Value.ToString().Trim(), workSheet.Cells[rowIterator, 4].Value == null ? "" : workSheet.Cells[rowIterator, 4].Value.ToString().Trim());
-                                        oCampos.RegEstado = 1;
-                                        oCampos.PCA = workSheet.Cells[rowIterator, 17].Value == null ? "" : workSheet.Cells[rowIterator, 17].Value.ToString().Trim();
-                                        ListPOAItemsDetalle.Add(oCampos);
-                                    }
+                                var currentSheet = package.Workbook.Worksheets;
+                                var workSheet = currentSheet.First();
+                                var noOfCol = workSheet.Dimension.End.Column;
+                                var noOfRow = workSheet.Dimension.End.Row;
 
-                                    break;
-                                #endregion
-                                #region CNOMADE
-                                case "CNOMADE":
-                                    for (int rowIterator = 2; rowIterator <= noOfRow; rowIterator++)
-                                    {
-                                        oCampos = new CEntidad();
-                                        oCampos.COD_SECUENCIAL = 0;
-                                        oCampos.COD_ESPECIES = "";
-                                        oCampos.NUM_ESTRADA = workSheet.Cells[rowIterator, 5].Value == null ? "" : workSheet.Cells[rowIterator, 5].Value.ToString().Trim();
-                                        oCampos.CODIGO = workSheet.Cells[rowIterator, 6].Value == null ? "" : workSheet.Cells[rowIterator, 6].Value.ToString().Trim();
-                                        oCampos.DIAMETRO = workSheet.Cells[rowIterator, 7].Value == null ? 0 : Decimal.Parse(workSheet.Cells[rowIterator, 7].Value.ToString().Trim());
-                                        oCampos.ALTURA = workSheet.Cells[rowIterator, 8].Value == null ? 0 : Decimal.Parse(workSheet.Cells[rowIterator, 8].Value.ToString().Trim());
-                                        oCampos.PRODUCCION_LATAS = workSheet.Cells[rowIterator, 9].Value == null ? 0 : Decimal.Parse(workSheet.Cells[rowIterator, 9].Value.ToString().Trim());
-                                        oCampos.COD_ECONDICION = "";
-                                        oCampos.ZONA = workSheet.Cells[rowIterator, 11].Value == null ? "" : workSheet.Cells[rowIterator, 11].Value.ToString().Trim();
-                                        if (oCampos.ZONA == "17" || oCampos.ZONA == "18" || oCampos.ZONA == "19")
-                                            oCampos.ZONA = oCampos.ZONA + "S";
+                                //Aqui es la logica
 
-                                        oCampos.COORDENADA_ESTE = workSheet.Cells[rowIterator, 12].Value == null ? 0 : Int32.Parse(workSheet.Cells[rowIterator, 12].Value.ToString().Trim());
-                                        oCampos.COORDENADA_NORTE = workSheet.Cells[rowIterator, 13].Value == null ? 0 : Int32.Parse(workSheet.Cells[rowIterator, 13].Value.ToString().Trim());
-                                        oCampos.OBSERVACION = workSheet.Cells[rowIterator, 14].Value == null ? "" : workSheet.Cells[rowIterator, 14].Value.ToString().Trim();
-                                        oCampos.CONDICION = workSheet.Cells[rowIterator, 10].Value == null ? "" : workSheet.Cells[rowIterator, 10].Value.ToString().Trim();
-                                        oCampos.ESPECIES = String.Format("{0} | {1}", (workSheet.Cells[rowIterator, 1].Value == null ? "" : workSheet.Cells[rowIterator, 1].Value.ToString().Trim()), (workSheet.Cells[rowIterator, 2].Value == null ? "" : workSheet.Cells[rowIterator, 2].Value.ToString().Trim()));
-                                        oCampos.COD_ESPECIES_ARESOLUCION = "";
-                                        oCampos.ESPECIES_ARESOLUCION = String.Format("{0} | {1}", workSheet.Cells[rowIterator, 3].Value == null ? "" : workSheet.Cells[rowIterator, 3].Value.ToString().Trim(), workSheet.Cells[rowIterator, 4].Value == null ? "" : workSheet.Cells[rowIterator, 4].Value.ToString().Trim());
-                                        oCampos.RegEstado = 1;
-                                        ListPOAItemsDetalle.Add(oCampos);
-                                    }
+                                //Recorriendo Datos
+                                CEntidad oCampos;
+                                //ListBusqueda<CEntidad> oListBus;     
+                                string hdfItemExcelImportar = Request["TVentana"];
+                                List<CEntidad> ListPOAItemsDetalle = new List<CEntidad>();
 
-                                    break;
-                                #endregion
-                                #region BEMADE
-                                case "BEMADE":
-                                    for (int rowIterator = 2; rowIterator <= noOfRow; rowIterator++)
-                                    {
-                                        oCampos = new CEntidad();
-                                        oCampos.COD_SECUENCIAL = 0;
-                                        oCampos.COD_ESPECIES = "";
-                                        oCampos.DMC = workSheet.Cells[rowIterator, 5].Value == null ? 0 : Int32.Parse(workSheet.Cells[rowIterator, 5].Value.ToString().Trim());
-                                        oCampos.TOTAL_ARBOLES = workSheet.Cells[rowIterator, 6].Value == null ? 0 : Int32.Parse(workSheet.Cells[rowIterator, 6].Value.ToString().Trim());
-                                        oCampos.VOLUMEN_AUTORIZADO = workSheet.Cells[rowIterator, 7].Value == null ? 0 : Decimal.Parse(workSheet.Cells[rowIterator, 7].Value.ToString().Trim());
-                                        oCampos.VOLUMEN_MOVILIZADO = workSheet.Cells[rowIterator, 8].Value == null ? 0 : Decimal.Parse(workSheet.Cells[rowIterator, 8].Value.ToString().Trim());
-                                        oCampos.SALDO = workSheet.Cells[rowIterator, 9].Value == null ? 0 : Decimal.Parse(workSheet.Cells[rowIterator, 9].Value.ToString().Trim());
-                                        oCampos.TIPOMADERABLE = workSheet.Cells[rowIterator, 10].Value == null ? "" : workSheet.Cells[rowIterator, 10].Value.ToString().Trim();
-                                        oCampos.OBSERVACION = workSheet.Cells[rowIterator, 12].Value == null ? "" : workSheet.Cells[rowIterator, 12].Value.ToString().Trim();
-                                        oCampos.ESPECIES = String.Format("{0} | {1}", (workSheet.Cells[rowIterator, 1].Value == null ? "" : workSheet.Cells[rowIterator, 1].Value.ToString().Trim()), (workSheet.Cells[rowIterator, 2].Value == null ? "" : workSheet.Cells[rowIterator, 2].Value.ToString().Trim()));
-                                        oCampos.COD_ESPECIES_SERFOR = "";
-                                        oCampos.ESPECIES_SERFOR = String.Format("{0} | {1}", workSheet.Cells[rowIterator, 3].Value == null ? "" : workSheet.Cells[rowIterator, 3].Value.ToString().Trim(), workSheet.Cells[rowIterator, 4].Value == null ? "" : workSheet.Cells[rowIterator, 4].Value.ToString().Trim());
-                                        oCampos.RegEstado = 1;
-                                        oCampos.PCA = workSheet.Cells[rowIterator, 11].Value == null ? "" : workSheet.Cells[rowIterator, 11].Value.ToString().Trim();
-
-                                        ListPOAItemsDetalle.Add(oCampos);
-                                    }
-
-                                    break;
-                                #endregion
-
-                                #region BENOMADE
-                                case "BENOMADE":
-                                    hdfItemCod_MTipo = Request["hdfItemCod_MTipo"];
-
-                                    if (hdfItemCod_MTipo == "0000021")
-                                    {
+                                switch (hdfItemExcelImportar)
+                                {
+                                    #region CMADE
+                                    case "CMADE":
                                         for (int rowIterator = 2; rowIterator <= noOfRow; rowIterator++)
                                         {
                                             oCampos = new CEntidad();
                                             oCampos.COD_SECUENCIAL = 0;
                                             oCampos.COD_ESPECIES = "";
-                                            oCampos.AUTORIZADO = workSheet.Cells[rowIterator, 5].Value == null ? 0 : Decimal.Parse(workSheet.Cells[rowIterator, 5].Value.ToString().Trim());
-                                            oCampos.EXTRAIDO = workSheet.Cells[rowIterator, 6].Value == null ? 0 : Decimal.Parse(workSheet.Cells[rowIterator, 6].Value.ToString().Trim());
-                                            oCampos.SALDO = workSheet.Cells[rowIterator, 7].Value == null ? 0 : Decimal.Parse(workSheet.Cells[rowIterator, 7].Value.ToString().Trim());
-                                            oCampos.UNIDAD_MEDIDA = workSheet.Cells[rowIterator, 8].Value == null ? "" : workSheet.Cells[rowIterator, 8].Value.ToString().Trim();
-                                            oCampos.OBSERVACION = workSheet.Cells[rowIterator, 9].Value == null ? "" : workSheet.Cells[rowIterator, 9].Value.ToString().Trim();
+                                            oCampos.BLOQUE = workSheet.Cells[rowIterator, 5].Value == null ? "" : workSheet.Cells[rowIterator, 5].Value.ToString().Trim();
+                                            oCampos.FAJA = workSheet.Cells[rowIterator, 6].Value == null ? "" : workSheet.Cells[rowIterator, 6].Value.ToString().Trim();
+                                            oCampos.CODIGO = workSheet.Cells[rowIterator, 7].Value == null ? "" : workSheet.Cells[rowIterator, 7].Value.ToString().Trim();
+                                            oCampos.VOLUMEN = workSheet.Cells[rowIterator, 8].Value == null ? 0 : Decimal.Parse(workSheet.Cells[rowIterator, 8].Value.ToString().Trim());
+                                            oCampos.DAP = workSheet.Cells[rowIterator, 9].Value == null ? 0 : Decimal.Parse(workSheet.Cells[rowIterator, 9].Value.ToString().Trim());
+                                            oCampos.AC = workSheet.Cells[rowIterator, 10].Value == null ? 0 : Decimal.Parse(workSheet.Cells[rowIterator, 10].Value.ToString().Trim());
+                                            oCampos.DMC = workSheet.Cells[rowIterator, 11].Value == null ? 0 : Int32.Parse(workSheet.Cells[rowIterator, 11].Value.ToString().Trim());
+                                            oCampos.COD_ECONDICION = "";
+                                            oCampos.COD_EESTADO = "";
+                                            oCampos.ZONA = workSheet.Cells[rowIterator, 14].Value == null ? "" : workSheet.Cells[rowIterator, 14].Value.ToString().Trim();
+                                            if (oCampos.ZONA == "17" || oCampos.ZONA == "18" || oCampos.ZONA == "19")
+                                                oCampos.ZONA = oCampos.ZONA + "S";
+                                            oCampos.COORDENADA_ESTE = workSheet.Cells[rowIterator, 15].Value == null ? 0 : Int32.Parse(workSheet.Cells[rowIterator, 15].Value.ToString().Trim());
+                                            oCampos.COORDENADA_NORTE = workSheet.Cells[rowIterator, 16].Value == null ? 0 : Int32.Parse(workSheet.Cells[rowIterator, 16].Value.ToString().Trim());
+                                            oCampos.OBSERVACION = workSheet.Cells[rowIterator, 18].Value == null ? "" : workSheet.Cells[rowIterator, 18].Value.ToString().Trim();
+                                            oCampos.CONDICION = workSheet.Cells[rowIterator, 12].Value == null ? "" : workSheet.Cells[rowIterator, 12].Value.ToString().Trim();
+                                            oCampos.ESTADO = workSheet.Cells[rowIterator, 13].Value == null ? "" : workSheet.Cells[rowIterator, 13].Value.ToString().Trim();
                                             oCampos.ESPECIES = String.Format("{0} | {1}", workSheet.Cells[rowIterator, 1].Value == null ? "" : workSheet.Cells[rowIterator, 1].Value.ToString().Trim(), workSheet.Cells[rowIterator, 2].Value == null ? "" : workSheet.Cells[rowIterator, 2].Value.ToString().Trim());
-                                            oCampos.COD_ESPECIES_SERFOR = "";
-                                            oCampos.ESPECIES_SERFOR = String.Format("{0} | {1}", workSheet.Cells[rowIterator, 3].Value == null ? "" : workSheet.Cells[rowIterator, 3].Value.ToString().Trim(), workSheet.Cells[rowIterator, 4].Value == null ? "" : workSheet.Cells[rowIterator, 4].Value.ToString().Trim());
+                                            oCampos.COD_ESPECIES_ARESOLUCION = "";
+                                            oCampos.ESPECIES_ARESOLUCION = String.Format("{0} | {1}", workSheet.Cells[rowIterator, 3].Value == null ? "" : workSheet.Cells[rowIterator, 3].Value.ToString().Trim(), workSheet.Cells[rowIterator, 4].Value == null ? "" : workSheet.Cells[rowIterator, 4].Value.ToString().Trim());
+                                            oCampos.RegEstado = 1;
+                                            oCampos.PCA = workSheet.Cells[rowIterator, 17].Value == null ? "" : workSheet.Cells[rowIterator, 17].Value.ToString().Trim();
+                                            ListPOAItemsDetalle.Add(oCampos);
+                                        }
+
+                                        break;
+                                    #endregion
+                                    #region CNOMADE
+                                    case "CNOMADE":
+                                        for (int rowIterator = 2; rowIterator <= noOfRow; rowIterator++)
+                                        {
+                                            oCampos = new CEntidad();
+                                            oCampos.COD_SECUENCIAL = 0;
+                                            oCampos.COD_ESPECIES = "";
+                                            oCampos.NUM_ESTRADA = workSheet.Cells[rowIterator, 5].Value == null ? "" : workSheet.Cells[rowIterator, 5].Value.ToString().Trim();
+                                            oCampos.CODIGO = workSheet.Cells[rowIterator, 6].Value == null ? "" : workSheet.Cells[rowIterator, 6].Value.ToString().Trim();
+                                            oCampos.DIAMETRO = workSheet.Cells[rowIterator, 7].Value == null ? 0 : Decimal.Parse(workSheet.Cells[rowIterator, 7].Value.ToString().Trim());
+                                            oCampos.ALTURA = workSheet.Cells[rowIterator, 8].Value == null ? 0 : Decimal.Parse(workSheet.Cells[rowIterator, 8].Value.ToString().Trim());
+                                            oCampos.PRODUCCION_LATAS = workSheet.Cells[rowIterator, 9].Value == null ? 0 : Decimal.Parse(workSheet.Cells[rowIterator, 9].Value.ToString().Trim());
+                                            oCampos.COD_ECONDICION = "";
+                                            oCampos.ZONA = workSheet.Cells[rowIterator, 11].Value == null ? "" : workSheet.Cells[rowIterator, 11].Value.ToString().Trim();
+                                            if (oCampos.ZONA == "17" || oCampos.ZONA == "18" || oCampos.ZONA == "19")
+                                                oCampos.ZONA = oCampos.ZONA + "S";
+
+                                            oCampos.COORDENADA_ESTE = workSheet.Cells[rowIterator, 12].Value == null ? 0 : Int32.Parse(workSheet.Cells[rowIterator, 12].Value.ToString().Trim());
+                                            oCampos.COORDENADA_NORTE = workSheet.Cells[rowIterator, 13].Value == null ? 0 : Int32.Parse(workSheet.Cells[rowIterator, 13].Value.ToString().Trim());
+                                            oCampos.OBSERVACION = workSheet.Cells[rowIterator, 14].Value == null ? "" : workSheet.Cells[rowIterator, 14].Value.ToString().Trim();
+                                            oCampos.CONDICION = workSheet.Cells[rowIterator, 10].Value == null ? "" : workSheet.Cells[rowIterator, 10].Value.ToString().Trim();
+                                            oCampos.ESPECIES = String.Format("{0} | {1}", (workSheet.Cells[rowIterator, 1].Value == null ? "" : workSheet.Cells[rowIterator, 1].Value.ToString().Trim()), (workSheet.Cells[rowIterator, 2].Value == null ? "" : workSheet.Cells[rowIterator, 2].Value.ToString().Trim()));
+                                            oCampos.COD_ESPECIES_ARESOLUCION = "";
+                                            oCampos.ESPECIES_ARESOLUCION = String.Format("{0} | {1}", workSheet.Cells[rowIterator, 3].Value == null ? "" : workSheet.Cells[rowIterator, 3].Value.ToString().Trim(), workSheet.Cells[rowIterator, 4].Value == null ? "" : workSheet.Cells[rowIterator, 4].Value.ToString().Trim());
                                             oCampos.RegEstado = 1;
                                             ListPOAItemsDetalle.Add(oCampos);
                                         }
 
-
-
-                                    }
-                                    else if (hdfItemCod_MTipo == "0000020")
-                                    {
+                                        break;
+                                    #endregion
+                                    #region BEMADE
+                                    case "BEMADE":
                                         for (int rowIterator = 2; rowIterator <= noOfRow; rowIterator++)
                                         {
                                             oCampos = new CEntidad();
                                             oCampos.COD_SECUENCIAL = 0;
                                             oCampos.COD_ESPECIES = "";
-                                            oCampos.FECHA1 = workSheet.Cells[rowIterator, 5].Value == null ? "" : workSheet.Cells[rowIterator, 5].Value.ToString().Trim();
-                                            oCampos.GUIA_TRANSPORTE = workSheet.Cells[rowIterator, 6].Value == null ? "" : workSheet.Cells[rowIterator, 6].Value.ToString().Trim();
-                                            oCampos.FECHA2 = workSheet.Cells[rowIterator, 7].Value == null ? "" : workSheet.Cells[rowIterator, 7].Value.ToString().Trim();
-                                            oCampos.RECIBO = workSheet.Cells[rowIterator, 8].Value == null ? "" : workSheet.Cells[rowIterator, 8].Value.ToString().Trim();
+                                            oCampos.DMC = workSheet.Cells[rowIterator, 5].Value == null ? 0 : Int32.Parse(workSheet.Cells[rowIterator, 5].Value.ToString().Trim());
+                                            oCampos.TOTAL_ARBOLES = workSheet.Cells[rowIterator, 6].Value == null ? 0 : Int32.Parse(workSheet.Cells[rowIterator, 6].Value.ToString().Trim());
+                                            oCampos.VOLUMEN_AUTORIZADO = workSheet.Cells[rowIterator, 7].Value == null ? 0 : Decimal.Parse(workSheet.Cells[rowIterator, 7].Value.ToString().Trim());
+                                            oCampos.VOLUMEN_MOVILIZADO = workSheet.Cells[rowIterator, 8].Value == null ? 0 : Decimal.Parse(workSheet.Cells[rowIterator, 8].Value.ToString().Trim());
                                             oCampos.SALDO = workSheet.Cells[rowIterator, 9].Value == null ? 0 : Decimal.Parse(workSheet.Cells[rowIterator, 9].Value.ToString().Trim());
-                                            oCampos.CANTIDAD = workSheet.Cells[rowIterator, 10].Value == null ? 0 : Int32.Parse(workSheet.Cells[rowIterator, 10].Value.ToString().Trim());
-                                            oCampos.OBSERVACION = workSheet.Cells[rowIterator, 11].Value == null ? "" : workSheet.Cells[rowIterator, 11].Value.ToString().Trim();
-                                            oCampos.ESPECIES = String.Format("{0} | {1}", workSheet.Cells[rowIterator, 1].Value == null ? "" : workSheet.Cells[rowIterator, 1].Value.ToString().Trim(), workSheet.Cells[rowIterator, 2].Value == null ? "" : workSheet.Cells[rowIterator, 2].Value.ToString().Trim());
+                                            oCampos.TIPOMADERABLE = workSheet.Cells[rowIterator, 10].Value == null ? "" : workSheet.Cells[rowIterator, 10].Value.ToString().Trim();
+                                            oCampos.OBSERVACION = workSheet.Cells[rowIterator, 12].Value == null ? "" : workSheet.Cells[rowIterator, 12].Value.ToString().Trim();
+                                            oCampos.ESPECIES = String.Format("{0} | {1}", (workSheet.Cells[rowIterator, 1].Value == null ? "" : workSheet.Cells[rowIterator, 1].Value.ToString().Trim()), (workSheet.Cells[rowIterator, 2].Value == null ? "" : workSheet.Cells[rowIterator, 2].Value.ToString().Trim()));
                                             oCampos.COD_ESPECIES_SERFOR = "";
                                             oCampos.ESPECIES_SERFOR = String.Format("{0} | {1}", workSheet.Cells[rowIterator, 3].Value == null ? "" : workSheet.Cells[rowIterator, 3].Value.ToString().Trim(), workSheet.Cells[rowIterator, 4].Value == null ? "" : workSheet.Cells[rowIterator, 4].Value.ToString().Trim());
                                             oCampos.RegEstado = 1;
+                                            oCampos.PCA = workSheet.Cells[rowIterator, 11].Value == null ? "" : workSheet.Cells[rowIterator, 11].Value.ToString().Trim();
+
                                             ListPOAItemsDetalle.Add(oCampos);
                                         }
-                                    }
-                                    else
-                                    {
+
+                                        break;
+                                    #endregion
+
+                                    #region BENOMADE
+                                    case "BENOMADE":
+                                        hdfItemCod_MTipo = Request["hdfItemCod_MTipo"];
+
+                                        if (hdfItemCod_MTipo == "0000021")
+                                        {
+                                            for (int rowIterator = 2; rowIterator <= noOfRow; rowIterator++)
+                                            {
+                                                oCampos = new CEntidad();
+                                                oCampos.COD_SECUENCIAL = 0;
+                                                oCampos.COD_ESPECIES = "";
+                                                oCampos.AUTORIZADO = workSheet.Cells[rowIterator, 5].Value == null ? 0 : Decimal.Parse(workSheet.Cells[rowIterator, 5].Value.ToString().Trim());
+                                                oCampos.EXTRAIDO = workSheet.Cells[rowIterator, 6].Value == null ? 0 : Decimal.Parse(workSheet.Cells[rowIterator, 6].Value.ToString().Trim());
+                                                oCampos.SALDO = workSheet.Cells[rowIterator, 7].Value == null ? 0 : Decimal.Parse(workSheet.Cells[rowIterator, 7].Value.ToString().Trim());
+                                                oCampos.UNIDAD_MEDIDA = workSheet.Cells[rowIterator, 8].Value == null ? "" : workSheet.Cells[rowIterator, 8].Value.ToString().Trim();
+                                                oCampos.OBSERVACION = workSheet.Cells[rowIterator, 9].Value == null ? "" : workSheet.Cells[rowIterator, 9].Value.ToString().Trim();
+                                                oCampos.ESPECIES = String.Format("{0} | {1}", workSheet.Cells[rowIterator, 1].Value == null ? "" : workSheet.Cells[rowIterator, 1].Value.ToString().Trim(), workSheet.Cells[rowIterator, 2].Value == null ? "" : workSheet.Cells[rowIterator, 2].Value.ToString().Trim());
+                                                oCampos.COD_ESPECIES_SERFOR = "";
+                                                oCampos.ESPECIES_SERFOR = String.Format("{0} | {1}", workSheet.Cells[rowIterator, 3].Value == null ? "" : workSheet.Cells[rowIterator, 3].Value.ToString().Trim(), workSheet.Cells[rowIterator, 4].Value == null ? "" : workSheet.Cells[rowIterator, 4].Value.ToString().Trim());
+                                                oCampos.RegEstado = 1;
+                                                ListPOAItemsDetalle.Add(oCampos);
+                                            }
+
+
+
+                                        }
+                                        else if (hdfItemCod_MTipo == "0000020")
+                                        {
+                                            for (int rowIterator = 2; rowIterator <= noOfRow; rowIterator++)
+                                            {
+                                                oCampos = new CEntidad();
+                                                oCampos.COD_SECUENCIAL = 0;
+                                                oCampos.COD_ESPECIES = "";
+                                                oCampos.FECHA1 = workSheet.Cells[rowIterator, 5].Value == null ? "" : workSheet.Cells[rowIterator, 5].Value.ToString().Trim();
+                                                oCampos.GUIA_TRANSPORTE = workSheet.Cells[rowIterator, 6].Value == null ? "" : workSheet.Cells[rowIterator, 6].Value.ToString().Trim();
+                                                oCampos.FECHA2 = workSheet.Cells[rowIterator, 7].Value == null ? "" : workSheet.Cells[rowIterator, 7].Value.ToString().Trim();
+                                                oCampos.RECIBO = workSheet.Cells[rowIterator, 8].Value == null ? "" : workSheet.Cells[rowIterator, 8].Value.ToString().Trim();
+                                                oCampos.SALDO = workSheet.Cells[rowIterator, 9].Value == null ? 0 : Decimal.Parse(workSheet.Cells[rowIterator, 9].Value.ToString().Trim());
+                                                oCampos.CANTIDAD = workSheet.Cells[rowIterator, 10].Value == null ? 0 : Int32.Parse(workSheet.Cells[rowIterator, 10].Value.ToString().Trim());
+                                                oCampos.OBSERVACION = workSheet.Cells[rowIterator, 11].Value == null ? "" : workSheet.Cells[rowIterator, 11].Value.ToString().Trim();
+                                                oCampos.ESPECIES = String.Format("{0} | {1}", workSheet.Cells[rowIterator, 1].Value == null ? "" : workSheet.Cells[rowIterator, 1].Value.ToString().Trim(), workSheet.Cells[rowIterator, 2].Value == null ? "" : workSheet.Cells[rowIterator, 2].Value.ToString().Trim());
+                                                oCampos.COD_ESPECIES_SERFOR = "";
+                                                oCampos.ESPECIES_SERFOR = String.Format("{0} | {1}", workSheet.Cells[rowIterator, 3].Value == null ? "" : workSheet.Cells[rowIterator, 3].Value.ToString().Trim(), workSheet.Cells[rowIterator, 4].Value == null ? "" : workSheet.Cells[rowIterator, 4].Value.ToString().Trim());
+                                                oCampos.RegEstado = 1;
+                                                ListPOAItemsDetalle.Add(oCampos);
+                                            }
+                                        }
+                                        else
+                                        {
+                                            for (int rowIterator = 2; rowIterator <= noOfRow; rowIterator++)
+                                            {
+                                                oCampos = new CEntidad();
+                                                oCampos.COD_SECUENCIAL = 0;
+                                                oCampos.COD_ESPECIES = "";
+                                                oCampos.KILOGRAMO_AUTORIZADO = workSheet.Cells[rowIterator, 5].Value == null ? 0 : Decimal.Parse(workSheet.Cells[rowIterator, 5].Value.ToString().Trim());
+                                                oCampos.KILOGRAMO_MOVILIZADO = workSheet.Cells[rowIterator, 6].Value == null ? 0 : Decimal.Parse(workSheet.Cells[rowIterator, 6].Value.ToString().Trim());
+                                                oCampos.SALDO = workSheet.Cells[rowIterator, 7].Value == null ? 0 : Decimal.Parse(workSheet.Cells[rowIterator, 7].Value.ToString().Trim());
+                                                oCampos.OBSERVACION = workSheet.Cells[rowIterator, 8].Value == null ? "" : workSheet.Cells[rowIterator, 8].Value.ToString().Trim();
+                                                oCampos.ESPECIES = String.Format("{0} | {1}", workSheet.Cells[rowIterator, 1].Value == null ? "" : workSheet.Cells[rowIterator, 1].Value.ToString().Trim(), workSheet.Cells[rowIterator, 2].Value == null ? "" : workSheet.Cells[rowIterator, 2].Value.ToString().Trim());
+                                                oCampos.COD_ESPECIES_SERFOR = "";
+                                                oCampos.ESPECIES_SERFOR = String.Format("{0} | {1}", workSheet.Cells[rowIterator, 3].Value == null ? "" : workSheet.Cells[rowIterator, 3].Value.ToString().Trim(), workSheet.Cells[rowIterator, 4].Value == null ? "" : workSheet.Cells[rowIterator, 4].Value.ToString().Trim());
+                                                oCampos.RegEstado = 1;
+                                                ListPOAItemsDetalle.Add(oCampos);
+                                            }
+                                        }
+
+                                        break;
+
+                                    #endregion
+                                    #region BEINSITU
+                                    case "BEINSITU":
                                         for (int rowIterator = 2; rowIterator <= noOfRow; rowIterator++)
                                         {
                                             oCampos = new CEntidad();
                                             oCampos.COD_SECUENCIAL = 0;
                                             oCampos.COD_ESPECIES = "";
-                                            oCampos.KILOGRAMO_AUTORIZADO = workSheet.Cells[rowIterator, 5].Value == null ? 0 : Decimal.Parse(workSheet.Cells[rowIterator, 5].Value.ToString().Trim());
-                                            oCampos.KILOGRAMO_MOVILIZADO = workSheet.Cells[rowIterator, 6].Value == null ? 0 : Decimal.Parse(workSheet.Cells[rowIterator, 6].Value.ToString().Trim());
+                                            oCampos.CANTIDAD_AUTORIZADO = workSheet.Cells[rowIterator, 5].Value == null ? 0 : Decimal.Parse(workSheet.Cells[rowIterator, 5].Value.ToString().Trim());
+                                            oCampos.CANTIDAD_MOVILIZADO = workSheet.Cells[rowIterator, 6].Value == null ? 0 : Decimal.Parse(workSheet.Cells[rowIterator, 6].Value.ToString().Trim());
                                             oCampos.SALDO = workSheet.Cells[rowIterator, 7].Value == null ? 0 : Decimal.Parse(workSheet.Cells[rowIterator, 7].Value.ToString().Trim());
                                             oCampos.OBSERVACION = workSheet.Cells[rowIterator, 8].Value == null ? "" : workSheet.Cells[rowIterator, 8].Value.ToString().Trim();
                                             oCampos.ESPECIES = String.Format("{0} | {1}", workSheet.Cells[rowIterator, 1].Value == null ? "" : workSheet.Cells[rowIterator, 1].Value.ToString().Trim(), workSheet.Cells[rowIterator, 2].Value == null ? "" : workSheet.Cells[rowIterator, 2].Value.ToString().Trim());
@@ -481,686 +505,671 @@ namespace SIGOFCv3.Areas.THabilitante.Controllers
                                             oCampos.RegEstado = 1;
                                             ListPOAItemsDetalle.Add(oCampos);
                                         }
-                                    }
 
-                                    break;
-
-                                #endregion
-                                #region BEINSITU
-                                case "BEINSITU":
-                                    for (int rowIterator = 2; rowIterator <= noOfRow; rowIterator++)
-                                    {
-                                        oCampos = new CEntidad();
-                                        oCampos.COD_SECUENCIAL = 0;
-                                        oCampos.COD_ESPECIES = "";
-                                        oCampos.CANTIDAD_AUTORIZADO = workSheet.Cells[rowIterator, 5].Value == null ? 0 : Decimal.Parse(workSheet.Cells[rowIterator, 5].Value.ToString().Trim());
-                                        oCampos.CANTIDAD_MOVILIZADO = workSheet.Cells[rowIterator, 6].Value == null ? 0 : Decimal.Parse(workSheet.Cells[rowIterator, 6].Value.ToString().Trim());
-                                        oCampos.SALDO = workSheet.Cells[rowIterator, 7].Value == null ? 0 : Decimal.Parse(workSheet.Cells[rowIterator, 7].Value.ToString().Trim());
-                                        oCampos.OBSERVACION = workSheet.Cells[rowIterator, 8].Value == null ? "" : workSheet.Cells[rowIterator, 8].Value.ToString().Trim();
-                                        oCampos.ESPECIES = String.Format("{0} | {1}", workSheet.Cells[rowIterator, 1].Value == null ? "" : workSheet.Cells[rowIterator, 1].Value.ToString().Trim(), workSheet.Cells[rowIterator, 2].Value == null ? "" : workSheet.Cells[rowIterator, 2].Value.ToString().Trim());
-                                        oCampos.COD_ESPECIES_SERFOR = "";
-                                        oCampos.ESPECIES_SERFOR = String.Format("{0} | {1}", workSheet.Cells[rowIterator, 3].Value == null ? "" : workSheet.Cells[rowIterator, 3].Value.ToString().Trim(), workSheet.Cells[rowIterator, 4].Value == null ? "" : workSheet.Cells[rowIterator, 4].Value.ToString().Trim());
-                                        oCampos.RegEstado = 1;
-                                        ListPOAItemsDetalle.Add(oCampos);
-                                    }
-
-                                    break;
-                                #endregion
-                                #region VERTICE
-                                case "VERTICE":
-                                    for (int rowIterator = 2; rowIterator <= noOfRow; rowIterator++)
-                                    {
-                                        //Verificando Existencia
-                                        oCampos = new CEntidad();
-                                        oCampos.VERTICE = workSheet.Cells[rowIterator, 1].Value == null ? "" : workSheet.Cells[rowIterator, 1].Value.ToString().Trim();
-                                        string temp = workSheet.Cells[rowIterator, 2].Value == null ? "" : workSheet.Cells[rowIterator, 2].Value.ToString().Trim();
-
-                                        if (temp != "17" && temp != "18" && temp != "19"
-                                        && temp != "17S" && temp != "18S" && temp != "19S")
-                                        {
-                                            oCampos.ZONA = "";
-                                        }
-                                        else
-                                        {
-                                            if (temp == "17" || temp == "17S") { oCampos.ZONA = "17S"; }
-                                            else if (temp == "18" || temp == "18S") { oCampos.ZONA = "18S"; }
-                                            else if (temp == "19" || temp == "19S") { oCampos.ZONA = "19S"; }
-                                            else { oCampos.ZONA = temp; }
-                                        }
-                                        oCampos.COORDENADA_ESTE = workSheet.Cells[rowIterator, 3].Value == null ? 0 : Int32.Parse(workSheet.Cells[rowIterator, 3].Value.ToString().Trim());
-                                        oCampos.COORDENADA_NORTE = workSheet.Cells[rowIterator, 4].Value == null ? 0 : Int32.Parse(workSheet.Cells[rowIterator, 4].Value.ToString().Trim());
-                                        oCampos.OBSERVACION = workSheet.Cells[rowIterator, 6].Value == null ? "" : workSheet.Cells[rowIterator, 6].Value.ToString().Trim();
-                                        oCampos.PCA = workSheet.Cells[rowIterator, 5].Value == null ? "" : workSheet.Cells[rowIterator, 5].Value.ToString().Trim();
-                                        oCampos.COD_SECUENCIAL = 0;
-                                        oCampos.RegEstado = 1;
-                                        ListPOAItemsDetalle.Add(oCampos);
-                                    }
-
-
-                                    break;
-                                #endregion
-                                #region RAPROBMADE
-                                case "RAPROBMADE":
-                                    Log_PLAN_MANEJO objLog_RAPoa;
-                                    bool isAdd_RAPoa;
-                                    string codEspecie_RAPoa;
-                                    string codEspecieSerfor_RAPoa;
-
-                                    hdfItemCod_MTipo = Request["hdfItemCod_MTipo"];
-
-                                    if (hdfItemCod_MTipo == "0000021")
-                                    {
-                                        for (int rowIterator = 2; rowIterator <= noOfRow; rowIterator++)
-                                        {
-                                            oCampos = new CEntidad();
-                                            objLog_RAPoa = new Log_PLAN_MANEJO();
-                                            isAdd_RAPoa = true;
-
-                                            codEspecie_RAPoa = objLog_RAPoa.GetCodEspecie(
-                                                workSheet.Cells[rowIterator, 1].Value == null ? "" : workSheet.Cells[rowIterator, 1].Value.ToString().Trim(),
-                                                workSheet.Cells[rowIterator, 2].Value == null ? "" : workSheet.Cells[rowIterator, 2].Value.ToString().Trim()
-                                            );
-
-                                            if (codEspecie_RAPoa != null && codEspecie_RAPoa.Trim() != "")
-                                            {
-                                                oCampos.COD_SECUENCIAL = 0;
-                                                oCampos.COD_ESPECIES = codEspecie_RAPoa;
-                                                oCampos.ESPECIES = String.Format("{0} | {1}", workSheet.Cells[rowIterator, 1].Value == null ? "" : workSheet.Cells[rowIterator, 1].Value.ToString().Trim(), workSheet.Cells[rowIterator, 2].Value == null ? "" : workSheet.Cells[rowIterator, 2].Value.ToString().Trim());
-                                                oCampos.ABUNDANCIA = workSheet.Cells[rowIterator, 5].Value == null ? 0 : Decimal.Parse(workSheet.Cells[rowIterator, 5].Value.ToString().Trim());
-                                                oCampos.NUMINDIVIDUOS = workSheet.Cells[rowIterator, 6].Value == null ? 0 : Decimal.Parse(workSheet.Cells[rowIterator, 6].Value.ToString().Trim());
-                                                oCampos.PESO = workSheet.Cells[rowIterator, 7].Value == null ? 0 : Decimal.Parse(workSheet.Cells[rowIterator, 7].Value.ToString().Trim());
-                                                oCampos.RENDIMIENTO = workSheet.Cells[rowIterator, 8].Value == null ? 0 : Decimal.Parse(workSheet.Cells[rowIterator, 8].Value.ToString().Trim());
-                                                oCampos.UNIDAD_MEDIDA = workSheet.Cells[rowIterator, 9].Value == null ? "" : workSheet.Cells[rowIterator, 9].Value.ToString().Trim();
-                                                oCampos.TIPOMADERABLE = workSheet.Cells[rowIterator, 10].Value == null ? "" : workSheet.Cells[rowIterator, 10].Value.ToString().Trim();
-                                                oCampos.PCA = workSheet.Cells[rowIterator, 11].Value == null ? "" : workSheet.Cells[rowIterator, 11].Value.ToString().Trim();
-                                                oCampos.OBSERVACION = workSheet.Cells[rowIterator, 12].Value == null ? "" : workSheet.Cells[rowIterator, 12].Value.ToString().Trim();
-                                                oCampos.RegEstado = 1;
-
-                                                if (!(workSheet.Cells[rowIterator, 3].Value == null ? "" : workSheet.Cells[rowIterator, 3].Value.ToString().Trim()).Equals(""))
-                                                {
-                                                    codEspecieSerfor_RAPoa = objLog_RAPoa.GetCodEspecie(
-                                                        workSheet.Cells[rowIterator, 3].Value == null ? "" : workSheet.Cells[rowIterator, 3].Value.ToString().Trim(),
-                                                        workSheet.Cells[rowIterator, 4].Value == null ? "" : workSheet.Cells[rowIterator, 4].Value.ToString().Trim()
-                                                    );
-
-                                                    if (codEspecieSerfor_RAPoa != null && codEspecieSerfor_RAPoa != "")
-                                                    {
-                                                        oCampos.COD_ESPECIES_SERFOR = codEspecieSerfor_RAPoa;
-                                                        oCampos.ESPECIES_SERFOR = String.Format("{0} | {1}", workSheet.Cells[rowIterator, 3].Value == null ? "" : workSheet.Cells[rowIterator, 3].Value.ToString().Trim(), workSheet.Cells[rowIterator, 4].Value == null ? "" : workSheet.Cells[rowIterator, 4].Value.ToString().Trim());
-                                                    }
-                                                    else isAdd_RAPoa = false;
-                                                }
-
-                                                if (isAdd_RAPoa) ListPOAItemsDetalle.Add(oCampos);
-                                            }
-                                        }
-                                    }
-                                    else if (hdfItemCod_MTipo == "0000020")
-                                    {
-                                        for (int rowIterator = 2; rowIterator <= noOfRow; rowIterator++)
-                                        {
-                                            oCampos = new CEntidad();
-                                            objLog_RAPoa = new Log_PLAN_MANEJO();
-                                            isAdd_RAPoa = true;
-
-                                            codEspecie_RAPoa = objLog_RAPoa.GetCodEspecie(
-                                                workSheet.Cells[rowIterator, 1].Value == null ? "" : workSheet.Cells[rowIterator, 1].Value.ToString().Trim(),
-                                                workSheet.Cells[rowIterator, 2].Value == null ? "" : workSheet.Cells[rowIterator, 2].Value.ToString().Trim()
-                                            );
-
-                                            if (codEspecie_RAPoa != null && codEspecie_RAPoa.Trim() != "")
-                                            {
-                                                oCampos.COD_SECUENCIAL = 0;
-                                                oCampos.COD_ESPECIES = codEspecie_RAPoa;
-                                                oCampos.ESPECIES = String.Format("{0} | {1}", workSheet.Cells[rowIterator, 1].Value == null ? "" : workSheet.Cells[rowIterator, 1].Value.ToString().Trim(), workSheet.Cells[rowIterator, 2].Value == null ? "" : workSheet.Cells[rowIterator, 2].Value.ToString().Trim());
-                                                oCampos.SuperficieHa = workSheet.Cells[rowIterator, 5].Value == null ? 0 : Decimal.Parse(workSheet.Cells[rowIterator, 5].Value.ToString().Trim());
-                                                oCampos.CANTIDAD = workSheet.Cells[rowIterator, 6].Value == null ? 0 : Int32.Parse(workSheet.Cells[rowIterator, 6].Value.ToString().Trim());
-                                                oCampos.TIPOMADERABLE = workSheet.Cells[rowIterator, 7].Value == null ? "" : workSheet.Cells[rowIterator, 7].Value.ToString().Trim();
-                                                oCampos.PCA = workSheet.Cells[rowIterator, 8].Value == null ? "" : workSheet.Cells[rowIterator, 8].Value.ToString().Trim();
-                                                oCampos.OBSERVACION = workSheet.Cells[rowIterator, 9].Value == null ? "" : workSheet.Cells[rowIterator, 9].Value.ToString().Trim();
-                                                oCampos.RegEstado = 1;
-
-                                                if (!(workSheet.Cells[rowIterator, 3].Value == null ? "" : workSheet.Cells[rowIterator, 3].Value.ToString().Trim()).Equals(""))
-                                                {
-                                                    codEspecieSerfor_RAPoa = objLog_RAPoa.GetCodEspecie(
-                                                        workSheet.Cells[rowIterator, 3].Value == null ? "" : workSheet.Cells[rowIterator, 3].Value.ToString().Trim(),
-                                                        workSheet.Cells[rowIterator, 4].Value == null ? "" : workSheet.Cells[rowIterator, 4].Value.ToString().Trim()
-                                                    );
-
-                                                    if (codEspecieSerfor_RAPoa != null && codEspecieSerfor_RAPoa != "")
-                                                    {
-                                                        oCampos.COD_ESPECIES_SERFOR = codEspecieSerfor_RAPoa;
-                                                        oCampos.ESPECIES_SERFOR = String.Format("{0} | {1}", workSheet.Cells[rowIterator, 3].Value == null ? "" : workSheet.Cells[rowIterator, 3].Value.ToString().Trim(), workSheet.Cells[rowIterator, 4].Value == null ? "" : workSheet.Cells[rowIterator, 4].Value.ToString().Trim());
-                                                    }
-                                                    else isAdd_RAPoa = false;
-                                                }
-
-                                                if (isAdd_RAPoa) ListPOAItemsDetalle.Add(oCampos);
-                                            }
-                                        }
-                                    }
-                                    else
-                                    {
-                                        for (int rowIterator = 2; rowIterator <= noOfRow; rowIterator++)
-                                        {
-                                            oCampos = new CEntidad();
-                                            objLog_RAPoa = new Log_PLAN_MANEJO();
-                                            isAdd_RAPoa = true;
-
-                                            codEspecie_RAPoa = objLog_RAPoa.GetCodEspecie(
-                                                workSheet.Cells[rowIterator, 1].Value == null ? "" : workSheet.Cells[rowIterator, 1].Value.ToString().Trim(),
-                                                workSheet.Cells[rowIterator, 2].Value == null ? "" : workSheet.Cells[rowIterator, 2].Value.ToString().Trim()
-                                            );
-
-                                            if (codEspecie_RAPoa != null && codEspecie_RAPoa.Trim() != "")
-                                            {
-                                                oCampos.COD_SECUENCIAL = 0;
-                                                oCampos.COD_ESPECIES = codEspecie_RAPoa;
-                                                oCampos.ESPECIES = String.Format("{0} | {1}", workSheet.Cells[rowIterator, 1].Value == null ? "" : workSheet.Cells[rowIterator, 1].Value.ToString().Trim(), workSheet.Cells[rowIterator, 2].Value == null ? "" : workSheet.Cells[rowIterator, 2].Value.ToString().Trim());
-                                                oCampos.NUM_ARBOLES = workSheet.Cells[rowIterator, 5].Value == null ? 0 : Int32.Parse(workSheet.Cells[rowIterator, 5].Value.ToString().Trim());
-                                                oCampos.VOLUMEN_KILOGRAMOS = workSheet.Cells[rowIterator, 6].Value == null ? 0 : Decimal.Parse(workSheet.Cells[rowIterator, 6].Value.ToString().Trim());
-                                                oCampos.TIPOMADERABLE = workSheet.Cells[rowIterator, 7].Value == null ? "" : workSheet.Cells[rowIterator, 7].Value.ToString().Trim();
-                                                oCampos.PCA = workSheet.Cells[rowIterator, 8].Value == null ? "" : workSheet.Cells[rowIterator, 8].Value.ToString().Trim();
-                                                oCampos.OBSERVACION = workSheet.Cells[rowIterator, 9].Value == null ? "" : workSheet.Cells[rowIterator, 9].Value.ToString().Trim();
-                                                oCampos.RegEstado = 1;
-
-                                                if (oCampos.TIPOMADERABLE.Equals("CARBON") || oCampos.TIPOMADERABLE.Equals("NO MADERABLES")) oCampos.UNIDAD_MEDIDA = "KG";
-                                                else if (oCampos.TIPOMADERABLE.Equals("MADERABLES")) oCampos.UNIDAD_MEDIDA = "M3";
-
-                                                if (!(workSheet.Cells[rowIterator, 3].Value == null ? "" : workSheet.Cells[rowIterator, 3].Value.ToString().Trim()).Equals(""))
-                                                {
-                                                    codEspecieSerfor_RAPoa = objLog_RAPoa.GetCodEspecie(
-                                                        workSheet.Cells[rowIterator, 3].Value == null ? "" : workSheet.Cells[rowIterator, 3].Value.ToString().Trim(),
-                                                        workSheet.Cells[rowIterator, 4].Value == null ? "" : workSheet.Cells[rowIterator, 4].Value.ToString().Trim()
-                                                    );
-
-                                                    if (codEspecieSerfor_RAPoa != null && codEspecieSerfor_RAPoa != "")
-                                                    {
-                                                        oCampos.COD_ESPECIES_SERFOR = codEspecieSerfor_RAPoa;
-                                                        oCampos.ESPECIES_SERFOR = String.Format("{0} | {1}", workSheet.Cells[rowIterator, 3].Value == null ? "" : workSheet.Cells[rowIterator, 3].Value.ToString().Trim(), workSheet.Cells[rowIterator, 4].Value == null ? "" : workSheet.Cells[rowIterator, 4].Value.ToString().Trim());
-                                                    }
-                                                    else isAdd_RAPoa = false;
-                                                }
-
-                                                if (isAdd_RAPoa) ListPOAItemsDetalle.Add(oCampos);
-                                            }
-                                        }
-                                    }
-
-                                    break;
-                                #endregion
-                                //#region RREFORMADE
-                                //case "RREFORMADE":
-                                //    foreach (DataRow Fila in exiItemDatos.Datos.Rows)
-                                //    {
-                                //        oCampos = new CEntidad();
-                                //        oCampos.COD_SECUENCIAL = 0;
-                                //        oCampos.COD_ESPECIES = "";
-                                //        oCampos.NUM_ARBOLES = Int32.Parse(Fila[4].ToString().Trim());
-                                //        oCampos.VOLUMEN_KILOGRAMOS = Decimal.Parse(Fila[5].ToString().Trim());
-                                //        oCampos.TIPOMADERABLE = Fila[6].ToString().Trim();
-                                //        oCampos.OBSERVACION = Fila[7].ToString().Trim();
-                                //        oCampos.ESPECIES = String.Format("{0} | {1}", Fila[0].ToString().Trim(), Fila[1].ToString().Trim());
-                                //        oCampos.COD_ESPECIES_SERFOR = "";
-                                //        oCampos.ESPECIES_SERFOR = String.Format("{0} | {1}", Fila[2].ToString().Trim(), Fila[3].ToString().Trim());
-                                //        oCampos.RegEstado = 1;
-                                //        ListPOAItemsDetalle.Add(oCampos);
-                                //    }
-                                //    HerUtil.GrillaLlenar(grvItemRRPoa, ListPOAItemsDetalle, 0);
-                                //    break;
-                                //#endregion
-                                #region RAPROBINSITU
-                                case "RAPROBINSITU":
-                                    for (int rowIterator = 2; rowIterator <= noOfRow; rowIterator++)
-                                    {
-                                        oCampos = new CEntidad();
-                                        oCampos.COD_SECUENCIAL = 0;
-                                        oCampos.COD_ESPECIES = "";
-                                        oCampos.PERIODO = workSheet.Cells[rowIterator, 5].Value == null ? "" : workSheet.Cells[rowIterator, 5].Value.ToString().Trim();
-                                        oCampos.CUOTA_SACA = workSheet.Cells[rowIterator, 6].Value == null ? 0 : Int32.Parse(workSheet.Cells[rowIterator, 6].Value.ToString().Trim());
-                                        oCampos.METODO_CAZA = workSheet.Cells[rowIterator, 7].Value == null ? "" : workSheet.Cells[rowIterator, 7].Value.ToString().Trim();
-                                        oCampos.SISTEMA_MARCAJE = workSheet.Cells[rowIterator, 8].Value == null ? "" : workSheet.Cells[rowIterator, 8].Value.ToString().Trim();
-                                        oCampos.DENSIDAD = workSheet.Cells[rowIterator, 9].Value == null ? 0 : Int32.Parse(workSheet.Cells[rowIterator, 9].Value.ToString().Trim());
-                                        oCampos.OBSERVACION = workSheet.Cells[rowIterator, 10].Value == null ? "" : workSheet.Cells[rowIterator, 10].Value.ToString().Trim();
-                                        oCampos.ESPECIES = String.Format("{0} | {1}", workSheet.Cells[rowIterator, 1].Value == null ? "" : workSheet.Cells[rowIterator, 1].Value.ToString().Trim(), workSheet.Cells[rowIterator, 2].Value == null ? "" : workSheet.Cells[rowIterator, 2].Value.ToString().Trim());
-                                        oCampos.COD_ESPECIES_SERFOR = "";
-                                        oCampos.ESPECIES_SERFOR = String.Format("{0} | {1}", workSheet.Cells[rowIterator, 3].Value == null ? "" : workSheet.Cells[rowIterator, 3].Value.ToString().Trim(), workSheet.Cells[rowIterator, 4].Value == null ? "" : workSheet.Cells[rowIterator, 4].Value.ToString().Trim());
-                                        oCampos.RegEstado = 1;
-                                        ListPOAItemsDetalle.Add(oCampos);
-                                    }
-
-                                    break;
-                                #endregion
-
-                                #region BExt_MadeNoMade
-                                case "BExt_MadeNoMade":
-                                    hdfItemEstadoOrigen = Request["hdfItemEstadoOrigen"];
-                                    hdfItemIndicador = Request["hdfItemIndicador"];
-                                    Log_PLAN_MANEJO objLog;
-                                    bool isAdd;
-                                    string codEspecie;
-                                    string codEspecieSerfor;
-
-                                    if (
-                                        (hdfItemEstadoOrigen.Equals("PN") && hdfItemIndicador.Equals("M")) ||
-                                        (hdfItemEstadoOrigen.Equals("R")) ||
-                                        (hdfItemEstadoOrigen.Equals("MS")) ||
-                                        (hdfItemEstadoOrigen.Equals("PC"))
-                                    )
-                                    {
-                                        for (int rowIterator = 2; rowIterator <= noOfRow; rowIterator++)
-                                        {
-                                            oCampos = new CEntidad();
-                                            objLog = new Log_PLAN_MANEJO();
-                                            isAdd = true;
-
-                                            codEspecie = objLog.GetCodEspecie(
-                                                workSheet.Cells[rowIterator, 1].Value == null ? "" : workSheet.Cells[rowIterator, 1].Value.ToString().Trim(),
-                                                workSheet.Cells[rowIterator, 2].Value == null ? "" : workSheet.Cells[rowIterator, 2].Value.ToString().Trim()
-                                            );
-
-                                            if (codEspecie != null && codEspecie.Trim() != "")
-                                            {
-                                                oCampos.COD_SECUENCIAL = 0;
-                                                oCampos.COD_ESPECIES = codEspecie;
-                                                oCampos.ESPECIES = String.Format("{0} | {1}", (workSheet.Cells[rowIterator, 1].Value == null ? "" : workSheet.Cells[rowIterator, 1].Value.ToString().Trim()), (workSheet.Cells[rowIterator, 2].Value == null ? "" : workSheet.Cells[rowIterator, 2].Value.ToString().Trim()));
-                                                oCampos.DMC = workSheet.Cells[rowIterator, 5].Value == null ? 0 : Int32.Parse(workSheet.Cells[rowIterator, 5].Value.ToString().Trim());
-                                                oCampos.TOTAL_ARBOLES = workSheet.Cells[rowIterator, 6].Value == null ? 0 : Int32.Parse(workSheet.Cells[rowIterator, 6].Value.ToString().Trim());
-                                                oCampos.VOLUMEN_AUTORIZADO = workSheet.Cells[rowIterator, 7].Value == null ? 0 : Decimal.Parse(workSheet.Cells[rowIterator, 7].Value.ToString().Trim());
-                                                oCampos.VOLUMEN_MOVILIZADO = workSheet.Cells[rowIterator, 8].Value == null ? 0 : Decimal.Parse(workSheet.Cells[rowIterator, 8].Value.ToString().Trim());
-                                                oCampos.SALDO = workSheet.Cells[rowIterator, 9].Value == null ? 0 : Decimal.Parse(workSheet.Cells[rowIterator, 9].Value.ToString().Trim());
-                                                oCampos.TIPOMADERABLE = workSheet.Cells[rowIterator, 10].Value == null ? "" : workSheet.Cells[rowIterator, 10].Value.ToString().Trim();
-                                                oCampos.OBSERVACION = workSheet.Cells[rowIterator, 11].Value == null ? "" : workSheet.Cells[rowIterator, 11].Value.ToString().Trim();
-                                                oCampos.RegEstado = 1;
-
-                                                if (oCampos.TIPOMADERABLE.Equals("MADERABLES")) oCampos.UNIDAD_MEDIDA = "M3";
-                                                else if (oCampos.TIPOMADERABLE.Equals("CARBON")) oCampos.UNIDAD_MEDIDA = "KG";
-
-                                                if (!(workSheet.Cells[rowIterator, 3].Value == null ? "" : workSheet.Cells[rowIterator, 3].Value.ToString().Trim()).Equals(""))
-                                                {
-                                                    codEspecieSerfor = objLog.GetCodEspecie(
-                                                        workSheet.Cells[rowIterator, 3].Value == null ? "" : workSheet.Cells[rowIterator, 3].Value.ToString().Trim(),
-                                                        workSheet.Cells[rowIterator, 4].Value == null ? "" : workSheet.Cells[rowIterator, 4].Value.ToString().Trim()
-                                                    );
-
-                                                    if (codEspecieSerfor != null && codEspecieSerfor != "")
-                                                    {
-                                                        oCampos.COD_ESPECIES_SERFOR = codEspecieSerfor;
-                                                        oCampos.ESPECIES_SERFOR = String.Format("{0} | {1}", workSheet.Cells[rowIterator, 3].Value == null ? "" : workSheet.Cells[rowIterator, 3].Value.ToString().Trim(), workSheet.Cells[rowIterator, 4].Value == null ? "" : workSheet.Cells[rowIterator, 4].Value.ToString().Trim());
-                                                    }
-                                                    else isAdd = false;
-                                                }
-
-                                                if (isAdd) ListPOAItemsDetalle.Add(oCampos);
-                                            }
-                                        }
-                                    }
-                                    else if (
-                                        (hdfItemEstadoOrigen.Equals("PN") && hdfItemIndicador.Equals("NM")) ||
-                                        (hdfItemEstadoOrigen.Equals("PCN"))
-                                    )
-                                    {
-                                        hdfItemCod_MTipo = Request["hdfItemCod_MTipo"];
-
-                                        if (hdfItemCod_MTipo == "0000021")
-                                        {
-                                            for (int rowIterator = 2; rowIterator <= noOfRow; rowIterator++)
-                                            {
-                                                oCampos = new CEntidad();
-                                                objLog = new Log_PLAN_MANEJO();
-                                                isAdd = true;
-
-                                                codEspecie = objLog.GetCodEspecie(
-                                                    workSheet.Cells[rowIterator, 1].Value == null ? "" : workSheet.Cells[rowIterator, 1].Value.ToString().Trim(),
-                                                    workSheet.Cells[rowIterator, 2].Value == null ? "" : workSheet.Cells[rowIterator, 2].Value.ToString().Trim()
-                                                );
-
-                                                if (codEspecie != null && codEspecie.Trim() != "")
-                                                {
-                                                    oCampos.COD_SECUENCIAL = 0;
-                                                    oCampos.COD_ESPECIES = codEspecie;
-                                                    oCampos.ESPECIES = String.Format("{0} | {1}", workSheet.Cells[rowIterator, 1].Value == null ? "" : workSheet.Cells[rowIterator, 1].Value.ToString().Trim(), workSheet.Cells[rowIterator, 2].Value == null ? "" : workSheet.Cells[rowIterator, 2].Value.ToString().Trim());
-                                                    oCampos.AUTORIZADO = workSheet.Cells[rowIterator, 5].Value == null ? 0 : Decimal.Parse(workSheet.Cells[rowIterator, 5].Value.ToString().Trim());
-                                                    oCampos.EXTRAIDO = workSheet.Cells[rowIterator, 6].Value == null ? 0 : Decimal.Parse(workSheet.Cells[rowIterator, 6].Value.ToString().Trim());
-                                                    oCampos.SALDO = workSheet.Cells[rowIterator, 7].Value == null ? 0 : Decimal.Parse(workSheet.Cells[rowIterator, 7].Value.ToString().Trim());
-                                                    oCampos.TIPOMADERABLE = "NO MADERABLES";
-                                                    oCampos.UNIDAD_MEDIDA = "KG";
-                                                    oCampos.OBSERVACION = workSheet.Cells[rowIterator, 8].Value == null ? "" : workSheet.Cells[rowIterator, 8].Value.ToString().Trim();
-                                                    oCampos.RegEstado = 1;
-
-                                                    if (!(workSheet.Cells[rowIterator, 3].Value == null ? "" : workSheet.Cells[rowIterator, 3].Value.ToString().Trim()).Equals(""))
-                                                    {
-                                                        codEspecieSerfor = objLog.GetCodEspecie(
-                                                            workSheet.Cells[rowIterator, 3].Value == null ? "" : workSheet.Cells[rowIterator, 3].Value.ToString().Trim(),
-                                                            workSheet.Cells[rowIterator, 4].Value == null ? "" : workSheet.Cells[rowIterator, 4].Value.ToString().Trim()
-                                                        );
-
-                                                        if (codEspecieSerfor != null && codEspecieSerfor != "")
-                                                        {
-                                                            oCampos.COD_ESPECIES_SERFOR = codEspecieSerfor;
-                                                            oCampos.ESPECIES_SERFOR = String.Format("{0} | {1}", workSheet.Cells[rowIterator, 3].Value == null ? "" : workSheet.Cells[rowIterator, 3].Value.ToString().Trim(), workSheet.Cells[rowIterator, 4].Value == null ? "" : workSheet.Cells[rowIterator, 4].Value.ToString().Trim());
-                                                        }
-                                                        else isAdd = false;
-                                                    }
-
-                                                    if (isAdd) ListPOAItemsDetalle.Add(oCampos);
-                                                }
-                                            }
-                                        }
-                                        else if (hdfItemCod_MTipo == "0000020")
-                                        {
-                                            for (int rowIterator = 2; rowIterator <= noOfRow; rowIterator++)
-                                            {
-                                                oCampos = new CEntidad();
-                                                objLog = new Log_PLAN_MANEJO();
-                                                isAdd = true;
-
-                                                codEspecie = objLog.GetCodEspecie(
-                                                    workSheet.Cells[rowIterator, 1].Value == null ? "" : workSheet.Cells[rowIterator, 1].Value.ToString().Trim(),
-                                                    workSheet.Cells[rowIterator, 2].Value == null ? "" : workSheet.Cells[rowIterator, 2].Value.ToString().Trim()
-                                                );
-
-                                                if (codEspecie != null && codEspecie.Trim() != "")
-                                                {
-                                                    oCampos.COD_SECUENCIAL = 0;
-                                                    oCampos.COD_ESPECIES = codEspecie;
-                                                    oCampos.ESPECIES = String.Format("{0} | {1}", workSheet.Cells[rowIterator, 1].Value == null ? "" : workSheet.Cells[rowIterator, 1].Value.ToString().Trim(), workSheet.Cells[rowIterator, 2].Value == null ? "" : workSheet.Cells[rowIterator, 2].Value.ToString().Trim());
-                                                    oCampos.FECHA1 = workSheet.Cells[rowIterator, 5].Value == null ? "" : workSheet.Cells[rowIterator, 5].Value.ToString().Trim();
-                                                    oCampos.GUIA_TRANSPORTE = workSheet.Cells[rowIterator, 6].Value == null ? "" : workSheet.Cells[rowIterator, 6].Value.ToString().Trim();
-                                                    oCampos.FECHA2 = workSheet.Cells[rowIterator, 7].Value == null ? "" : workSheet.Cells[rowIterator, 7].Value.ToString().Trim();
-                                                    oCampos.RECIBO = workSheet.Cells[rowIterator, 8].Value == null ? "" : workSheet.Cells[rowIterator, 8].Value.ToString().Trim();
-                                                    oCampos.SALDO = workSheet.Cells[rowIterator, 9].Value == null ? 0 : Decimal.Parse(workSheet.Cells[rowIterator, 9].Value.ToString().Trim());
-                                                    oCampos.TIPOMADERABLE = "NO MADERABLES";
-                                                    oCampos.CANTIDAD = workSheet.Cells[rowIterator, 10].Value == null ? 0 : Int32.Parse(workSheet.Cells[rowIterator, 10].Value.ToString().Trim());
-                                                    oCampos.OBSERVACION = workSheet.Cells[rowIterator, 11].Value == null ? "" : workSheet.Cells[rowIterator, 11].Value.ToString().Trim();
-                                                    oCampos.RegEstado = 1;
-
-                                                    if (!(workSheet.Cells[rowIterator, 3].Value == null ? "" : workSheet.Cells[rowIterator, 3].Value.ToString().Trim()).Equals(""))
-                                                    {
-                                                        codEspecieSerfor = objLog.GetCodEspecie(
-                                                            workSheet.Cells[rowIterator, 3].Value == null ? "" : workSheet.Cells[rowIterator, 3].Value.ToString().Trim(),
-                                                            workSheet.Cells[rowIterator, 4].Value == null ? "" : workSheet.Cells[rowIterator, 4].Value.ToString().Trim()
-                                                        );
-
-                                                        if (codEspecieSerfor != null && codEspecieSerfor != "")
-                                                        {
-                                                            oCampos.COD_ESPECIES_SERFOR = codEspecieSerfor;
-                                                            oCampos.ESPECIES_SERFOR = String.Format("{0} | {1}", workSheet.Cells[rowIterator, 3].Value == null ? "" : workSheet.Cells[rowIterator, 3].Value.ToString().Trim(), workSheet.Cells[rowIterator, 4].Value == null ? "" : workSheet.Cells[rowIterator, 4].Value.ToString().Trim());
-                                                        }
-                                                        else isAdd = false;
-                                                    }
-
-                                                    if (isAdd) ListPOAItemsDetalle.Add(oCampos);
-                                                }
-                                            }
-                                        }
-                                        else
-                                        {
-                                            for (int rowIterator = 2; rowIterator <= noOfRow; rowIterator++)
-                                            {
-                                                oCampos = new CEntidad();
-                                                objLog = new Log_PLAN_MANEJO();
-                                                isAdd = true;
-
-                                                codEspecie = objLog.GetCodEspecie(
-                                                    workSheet.Cells[rowIterator, 1].Value == null ? "" : workSheet.Cells[rowIterator, 1].Value.ToString().Trim(),
-                                                    workSheet.Cells[rowIterator, 2].Value == null ? "" : workSheet.Cells[rowIterator, 2].Value.ToString().Trim()
-                                                );
-
-                                                if (codEspecie != null && codEspecie.Trim() != "")
-                                                {
-                                                    oCampos.COD_SECUENCIAL = 0;
-                                                    oCampos.COD_ESPECIES = codEspecie;
-                                                    oCampos.ESPECIES = String.Format("{0} | {1}", workSheet.Cells[rowIterator, 1].Value == null ? "" : workSheet.Cells[rowIterator, 1].Value.ToString().Trim(), workSheet.Cells[rowIterator, 2].Value == null ? "" : workSheet.Cells[rowIterator, 2].Value.ToString().Trim());
-                                                    oCampos.VOLUMEN_AUTORIZADO = workSheet.Cells[rowIterator, 5].Value == null ? 0 : Decimal.Parse(workSheet.Cells[rowIterator, 5].Value.ToString().Trim());
-                                                    oCampos.VOLUMEN_MOVILIZADO = workSheet.Cells[rowIterator, 6].Value == null ? 0 : Decimal.Parse(workSheet.Cells[rowIterator, 6].Value.ToString().Trim());
-                                                    oCampos.SALDO = workSheet.Cells[rowIterator, 7].Value == null ? 0 : Decimal.Parse(workSheet.Cells[rowIterator, 7].Value.ToString().Trim());
-                                                    oCampos.TIPOMADERABLE = "NO MADERABLES";
-                                                    oCampos.UNIDAD_MEDIDA = "KG";
-                                                    oCampos.OBSERVACION = workSheet.Cells[rowIterator, 8].Value == null ? "" : workSheet.Cells[rowIterator, 8].Value.ToString().Trim();
-                                                    oCampos.RegEstado = 1;
-
-                                                    if (!(workSheet.Cells[rowIterator, 3].Value == null ? "" : workSheet.Cells[rowIterator, 3].Value.ToString().Trim()).Equals(""))
-                                                    {
-                                                        codEspecieSerfor = objLog.GetCodEspecie(
-                                                            workSheet.Cells[rowIterator, 3].Value == null ? "" : workSheet.Cells[rowIterator, 3].Value.ToString().Trim(),
-                                                            workSheet.Cells[rowIterator, 4].Value == null ? "" : workSheet.Cells[rowIterator, 4].Value.ToString().Trim()
-                                                        );
-
-                                                        if (codEspecieSerfor != null && codEspecieSerfor != "")
-                                                        {
-                                                            oCampos.COD_ESPECIES_SERFOR = codEspecieSerfor;
-                                                            oCampos.ESPECIES_SERFOR = String.Format("{0} | {1}", workSheet.Cells[rowIterator, 3].Value == null ? "" : workSheet.Cells[rowIterator, 3].Value.ToString().Trim(), workSheet.Cells[rowIterator, 4].Value == null ? "" : workSheet.Cells[rowIterator, 4].Value.ToString().Trim());
-                                                        }
-                                                        else isAdd = false;
-                                                    }
-
-                                                    if (isAdd) ListPOAItemsDetalle.Add(oCampos);
-                                                }
-                                            }
-                                        }
-                                    }
-                                    else
-                                    {
-                                        hdfItemCod_MTipo = Request["hdfItemCod_MTipo"];
-
-                                        if (hdfItemCod_MTipo == "0000021")
-                                        {
-                                            for (int rowIterator = 2; rowIterator <= noOfRow; rowIterator++)
-                                            {
-                                                oCampos = new CEntidad();
-                                                objLog = new Log_PLAN_MANEJO();
-                                                isAdd = true;
-
-                                                codEspecie = objLog.GetCodEspecie(
-                                                    workSheet.Cells[rowIterator, 1].Value == null ? "" : workSheet.Cells[rowIterator, 1].Value.ToString().Trim(),
-                                                    workSheet.Cells[rowIterator, 2].Value == null ? "" : workSheet.Cells[rowIterator, 2].Value.ToString().Trim()
-                                                );
-
-                                                if (codEspecie != null && codEspecie.Trim() != "")
-                                                {
-                                                    oCampos.COD_SECUENCIAL = 0;
-                                                    oCampos.COD_ESPECIES = codEspecie;
-                                                    oCampos.ESPECIES = String.Format("{0} | {1}", workSheet.Cells[rowIterator, 1].Value == null ? "" : workSheet.Cells[rowIterator, 1].Value.ToString().Trim(), workSheet.Cells[rowIterator, 2].Value == null ? "" : workSheet.Cells[rowIterator, 2].Value.ToString().Trim());
-                                                    oCampos.TIPOMADERABLE = workSheet.Cells[rowIterator, 5].Value == null ? "" : workSheet.Cells[rowIterator, 5].Value.ToString().Trim();
-                                                    oCampos.SALDO = workSheet.Cells[rowIterator, 12].Value == null ? 0 : Decimal.Parse(workSheet.Cells[rowIterator, 12].Value.ToString().Trim());
-                                                    oCampos.OBSERVACION = workSheet.Cells[rowIterator, 13].Value == null ? "" : workSheet.Cells[rowIterator, 13].Value.ToString().Trim();
-                                                    oCampos.RegEstado = 1;
-
-                                                    if (oCampos.TIPOMADERABLE.Equals("MADERABLES") || oCampos.TIPOMADERABLE.Equals("CARBON"))
-                                                    {
-                                                        oCampos.DMC = workSheet.Cells[rowIterator, 6].Value == null ? 0 : Int32.Parse(workSheet.Cells[rowIterator, 6].Value.ToString().Trim());
-                                                        oCampos.TOTAL_ARBOLES = workSheet.Cells[rowIterator, 7].Value == null ? 0 : Int32.Parse(workSheet.Cells[rowIterator, 7].Value.ToString().Trim());
-                                                        oCampos.VOLUMEN_AUTORIZADO = workSheet.Cells[rowIterator, 8].Value == null ? 0 : Decimal.Parse(workSheet.Cells[rowIterator, 8].Value.ToString().Trim());
-                                                        oCampos.VOLUMEN_MOVILIZADO = workSheet.Cells[rowIterator, 9].Value == null ? 0 : Decimal.Parse(workSheet.Cells[rowIterator, 9].Value.ToString().Trim());
-
-                                                        if (oCampos.TIPOMADERABLE.Equals("MADERABLES")) oCampos.UNIDAD_MEDIDA = "M3";
-                                                        else oCampos.UNIDAD_MEDIDA = "KG";
-
-                                                        //Para que valores numéricos no vayan con -1
-                                                        oCampos.AUTORIZADO = 0;
-                                                        oCampos.EXTRAIDO = 0;
-                                                    }
-                                                    else if (oCampos.TIPOMADERABLE.Equals("NO MADERABLES"))
-                                                    {
-                                                        oCampos.AUTORIZADO = workSheet.Cells[rowIterator, 10].Value == null ? 0 : Decimal.Parse(workSheet.Cells[rowIterator, 10].Value.ToString().Trim());
-                                                        oCampos.EXTRAIDO = workSheet.Cells[rowIterator, 11].Value == null ? 0 : Decimal.Parse(workSheet.Cells[rowIterator, 11].Value.ToString().Trim());
-                                                        oCampos.UNIDAD_MEDIDA = "KG";
-                                                        //Para que valores numéricos no vayan con -1
-                                                        oCampos.DMC = 0;
-                                                        oCampos.TOTAL_ARBOLES = 0;
-                                                        oCampos.VOLUMEN_AUTORIZADO = 0;
-                                                        oCampos.VOLUMEN_MOVILIZADO = 0;
-                                                    }
-
-                                                    if (!(workSheet.Cells[rowIterator, 3].Value == null ? "" : workSheet.Cells[rowIterator, 3].Value.ToString().Trim()).Equals(""))
-                                                    {
-                                                        codEspecieSerfor = objLog.GetCodEspecie(
-                                                            workSheet.Cells[rowIterator, 3].Value == null ? "" : workSheet.Cells[rowIterator, 3].Value.ToString().Trim(),
-                                                            workSheet.Cells[rowIterator, 4].Value == null ? "" : workSheet.Cells[rowIterator, 4].Value.ToString().Trim()
-                                                        );
-
-                                                        if (codEspecieSerfor != null && codEspecieSerfor != "")
-                                                        {
-                                                            oCampos.COD_ESPECIES_SERFOR = codEspecieSerfor;
-                                                            oCampos.ESPECIES_SERFOR = String.Format("{0} | {1}", workSheet.Cells[rowIterator, 3].Value == null ? "" : workSheet.Cells[rowIterator, 3].Value.ToString().Trim(), workSheet.Cells[rowIterator, 4].Value == null ? "" : workSheet.Cells[rowIterator, 4].Value.ToString().Trim());
-                                                        }
-                                                        else isAdd = false;
-                                                    }
-
-                                                    if (isAdd) ListPOAItemsDetalle.Add(oCampos);
-                                                }
-                                            }
-                                        }
-                                        else if (hdfItemCod_MTipo == "0000020")
-                                        {
-                                            for (int rowIterator = 2; rowIterator <= noOfRow; rowIterator++)
-                                            {
-                                                oCampos = new CEntidad();
-                                                objLog = new Log_PLAN_MANEJO();
-                                                isAdd = true;
-
-                                                codEspecie = objLog.GetCodEspecie(
-                                                    workSheet.Cells[rowIterator, 1].Value == null ? "" : workSheet.Cells[rowIterator, 1].Value.ToString().Trim(),
-                                                    workSheet.Cells[rowIterator, 2].Value == null ? "" : workSheet.Cells[rowIterator, 2].Value.ToString().Trim()
-                                                );
-
-                                                if (codEspecie != null && codEspecie.Trim() != "")
-                                                {
-                                                    oCampos.COD_SECUENCIAL = 0;
-                                                    oCampos.COD_ESPECIES = codEspecie;
-                                                    oCampos.ESPECIES = String.Format("{0} | {1}", workSheet.Cells[rowIterator, 1].Value == null ? "" : workSheet.Cells[rowIterator, 1].Value.ToString().Trim(), workSheet.Cells[rowIterator, 2].Value == null ? "" : workSheet.Cells[rowIterator, 2].Value.ToString().Trim());
-                                                    oCampos.TIPOMADERABLE = workSheet.Cells[rowIterator, 5].Value == null ? "" : workSheet.Cells[rowIterator, 5].Value.ToString().Trim();
-                                                    oCampos.SALDO = workSheet.Cells[rowIterator, 14].Value == null ? 0 : Decimal.Parse(workSheet.Cells[rowIterator, 14].Value.ToString().Trim());
-                                                    oCampos.OBSERVACION = workSheet.Cells[rowIterator, 16].Value == null ? "" : workSheet.Cells[rowIterator, 16].Value.ToString().Trim();
-                                                    oCampos.RegEstado = 1;
-
-                                                    if (oCampos.TIPOMADERABLE.Equals("MADERABLES") || oCampos.TIPOMADERABLE.Equals("CARBON"))
-                                                    {
-                                                        oCampos.DMC = workSheet.Cells[rowIterator, 6].Value == null ? 0 : Int32.Parse(workSheet.Cells[rowIterator, 6].Value.ToString().Trim());
-                                                        oCampos.TOTAL_ARBOLES = workSheet.Cells[rowIterator, 7].Value == null ? 0 : Int32.Parse(workSheet.Cells[rowIterator, 7].Value.ToString().Trim());
-                                                        oCampos.VOLUMEN_AUTORIZADO = workSheet.Cells[rowIterator, 8].Value == null ? 0 : Decimal.Parse(workSheet.Cells[rowIterator, 8].Value.ToString().Trim());
-                                                        oCampos.VOLUMEN_MOVILIZADO = workSheet.Cells[rowIterator, 9].Value == null ? 0 : Decimal.Parse(workSheet.Cells[rowIterator, 9].Value.ToString().Trim());
-
-                                                        if (oCampos.TIPOMADERABLE.Equals("MADERABLES")) oCampos.UNIDAD_MEDIDA = "M3";
-                                                        else oCampos.UNIDAD_MEDIDA = "KG";
-
-                                                        //Para que valores numéricos no vayan con -1
-                                                        oCampos.CANTIDAD = 0;
-
-                                                    }
-                                                    else if (oCampos.TIPOMADERABLE.Equals("NO MADERABLES"))
-                                                    {
-                                                        oCampos.FECHA1 = workSheet.Cells[rowIterator, 10].Value == null ? "" : workSheet.Cells[rowIterator, 10].Value.ToString().Trim();
-                                                        oCampos.GUIA_TRANSPORTE = workSheet.Cells[rowIterator, 11].Value == null ? "" : workSheet.Cells[rowIterator, 11].Value.ToString().Trim();
-                                                        oCampos.FECHA2 = workSheet.Cells[rowIterator, 12].Value == null ? "" : workSheet.Cells[rowIterator, 12].Value.ToString().Trim();
-                                                        oCampos.RECIBO = workSheet.Cells[rowIterator, 13].Value == null ? "" : workSheet.Cells[rowIterator, 13].Value.ToString().Trim();
-                                                        oCampos.CANTIDAD = workSheet.Cells[rowIterator, 15].Value == null ? 0 : Int32.Parse(workSheet.Cells[rowIterator, 15].Value.ToString().Trim());
-
-                                                        //Para que valores numéricos no vayan con -1
-                                                        oCampos.DMC = 0;
-                                                        oCampos.TOTAL_ARBOLES = 0;
-                                                        oCampos.VOLUMEN_AUTORIZADO = 0;
-                                                        oCampos.VOLUMEN_MOVILIZADO = 0;
-                                                    }
-
-                                                    if (!(workSheet.Cells[rowIterator, 3].Value == null ? "" : workSheet.Cells[rowIterator, 3].Value.ToString().Trim()).Equals(""))
-                                                    {
-                                                        codEspecieSerfor = objLog.GetCodEspecie(
-                                                            workSheet.Cells[rowIterator, 3].Value == null ? "" : workSheet.Cells[rowIterator, 3].Value.ToString().Trim(),
-                                                            workSheet.Cells[rowIterator, 4].Value == null ? "" : workSheet.Cells[rowIterator, 4].Value.ToString().Trim()
-                                                        );
-
-                                                        if (codEspecieSerfor != null && codEspecieSerfor != "")
-                                                        {
-                                                            oCampos.COD_ESPECIES_SERFOR = codEspecieSerfor;
-                                                            oCampos.ESPECIES_SERFOR = String.Format("{0} | {1}", workSheet.Cells[rowIterator, 3].Value == null ? "" : workSheet.Cells[rowIterator, 3].Value.ToString().Trim(), workSheet.Cells[rowIterator, 4].Value == null ? "" : workSheet.Cells[rowIterator, 4].Value.ToString().Trim());
-                                                        }
-                                                        else isAdd = false;
-                                                    }
-
-                                                    if (isAdd) ListPOAItemsDetalle.Add(oCampos);
-                                                }
-                                            }
-                                        }
-                                        else
-                                        {
-                                            for (int rowIterator = 2; rowIterator <= noOfRow; rowIterator++)
-                                            {
-                                                oCampos = new CEntidad();
-                                                objLog = new Log_PLAN_MANEJO();
-                                                isAdd = true;
-
-                                                codEspecie = objLog.GetCodEspecie(
-                                                    workSheet.Cells[rowIterator, 1].Value == null ? "" : workSheet.Cells[rowIterator, 1].Value.ToString().Trim(),
-                                                    workSheet.Cells[rowIterator, 2].Value == null ? "" : workSheet.Cells[rowIterator, 2].Value.ToString().Trim()
-                                                );
-
-                                                if (codEspecie != null && codEspecie.Trim() != "")
-                                                {
-                                                    oCampos.COD_SECUENCIAL = 0;
-                                                    oCampos.COD_ESPECIES = codEspecie;
-                                                    oCampos.ESPECIES = String.Format("{0} | {1}", workSheet.Cells[rowIterator, 1].Value == null ? "" : workSheet.Cells[rowIterator, 1].Value.ToString().Trim(), workSheet.Cells[rowIterator, 2].Value == null ? "" : workSheet.Cells[rowIterator, 2].Value.ToString().Trim());
-                                                    oCampos.TIPOMADERABLE = workSheet.Cells[rowIterator, 5].Value == null ? "" : workSheet.Cells[rowIterator, 5].Value.ToString().Trim();
-                                                    oCampos.VOLUMEN_AUTORIZADO = workSheet.Cells[rowIterator, 8].Value == null ? 0 : Decimal.Parse(workSheet.Cells[rowIterator, 8].Value.ToString().Trim());
-                                                    oCampos.VOLUMEN_MOVILIZADO = workSheet.Cells[rowIterator, 9].Value == null ? 0 : Decimal.Parse(workSheet.Cells[rowIterator, 9].Value.ToString().Trim());
-                                                    oCampos.SALDO = workSheet.Cells[rowIterator, 10].Value == null ? 0 : Decimal.Parse(workSheet.Cells[rowIterator, 10].Value.ToString().Trim());
-                                                    oCampos.OBSERVACION = workSheet.Cells[rowIterator, 11].Value == null ? "" : workSheet.Cells[rowIterator, 11].Value.ToString().Trim();
-                                                    oCampos.RegEstado = 1;
-
-                                                    if (oCampos.TIPOMADERABLE.Equals("MADERABLES") || oCampos.TIPOMADERABLE.Equals("CARBON"))
-                                                    {
-                                                        oCampos.DMC = workSheet.Cells[rowIterator, 6].Value == null ? 0 : Int32.Parse(workSheet.Cells[rowIterator, 6].Value.ToString().Trim());
-                                                        oCampos.TOTAL_ARBOLES = workSheet.Cells[rowIterator, 7].Value == null ? 0 : Int32.Parse(workSheet.Cells[rowIterator, 7].Value.ToString().Trim());
-
-                                                        if (oCampos.TIPOMADERABLE.Equals("MADERABLES")) oCampos.UNIDAD_MEDIDA = "M3";
-                                                        else oCampos.UNIDAD_MEDIDA = "KG";
-                                                    }
-                                                    else if (oCampos.TIPOMADERABLE.Equals("NO MADERABLES"))
-                                                    {
-                                                        oCampos.UNIDAD_MEDIDA = "KG";
-
-                                                        //Para que valores numéricos no vayan con -1
-                                                        oCampos.DMC = 0;
-                                                        oCampos.TOTAL_ARBOLES = 0;
-                                                    }
-
-                                                    if (!(workSheet.Cells[rowIterator, 3].Value == null ? "" : workSheet.Cells[rowIterator, 3].Value.ToString().Trim()).Equals(""))
-                                                    {
-                                                        codEspecieSerfor = objLog.GetCodEspecie(
-                                                            workSheet.Cells[rowIterator, 3].Value == null ? "" : workSheet.Cells[rowIterator, 3].Value.ToString().Trim(),
-                                                            workSheet.Cells[rowIterator, 4].Value == null ? "" : workSheet.Cells[rowIterator, 4].Value.ToString().Trim()
-                                                        );
-
-                                                        if (codEspecieSerfor != null && codEspecieSerfor != "")
-                                                        {
-                                                            oCampos.COD_ESPECIES_SERFOR = codEspecieSerfor;
-                                                            oCampos.ESPECIES_SERFOR = String.Format("{0} | {1}", workSheet.Cells[rowIterator, 3].Value == null ? "" : workSheet.Cells[rowIterator, 3].Value.ToString().Trim(), workSheet.Cells[rowIterator, 4].Value == null ? "" : workSheet.Cells[rowIterator, 4].Value.ToString().Trim());
-                                                        }
-                                                        else isAdd = false;
-                                                    }
-
-                                                    if (isAdd) ListPOAItemsDetalle.Add(oCampos);
-                                                }
-                                            }
-                                        }
-                                    }
-
-                                    break;
+                                        break;
                                     #endregion
+                                    #region VERTICE
+                                    case "VERTICE":
+                                        for (int rowIterator = 2; rowIterator <= noOfRow; rowIterator++)
+                                        {
+                                            //Verificando Existencia
+                                            oCampos = new CEntidad();
+                                            oCampos.VERTICE = workSheet.Cells[rowIterator, 1].Value == null ? "" : workSheet.Cells[rowIterator, 1].Value.ToString().Trim();
+                                            string temp = workSheet.Cells[rowIterator, 2].Value == null ? "" : workSheet.Cells[rowIterator, 2].Value.ToString().Trim();
+
+                                            if (temp != "17" && temp != "18" && temp != "19"
+                                            && temp != "17S" && temp != "18S" && temp != "19S")
+                                            {
+                                                oCampos.ZONA = "";
+                                            }
+                                            else
+                                            {
+                                                if (temp == "17" || temp == "17S") { oCampos.ZONA = "17S"; }
+                                                else if (temp == "18" || temp == "18S") { oCampos.ZONA = "18S"; }
+                                                else if (temp == "19" || temp == "19S") { oCampos.ZONA = "19S"; }
+                                                else { oCampos.ZONA = temp; }
+                                            }
+                                            oCampos.COORDENADA_ESTE = workSheet.Cells[rowIterator, 3].Value == null ? 0 : Int32.Parse(workSheet.Cells[rowIterator, 3].Value.ToString().Trim());
+                                            oCampos.COORDENADA_NORTE = workSheet.Cells[rowIterator, 4].Value == null ? 0 : Int32.Parse(workSheet.Cells[rowIterator, 4].Value.ToString().Trim());
+                                            oCampos.OBSERVACION = workSheet.Cells[rowIterator, 6].Value == null ? "" : workSheet.Cells[rowIterator, 6].Value.ToString().Trim();
+                                            oCampos.PCA = workSheet.Cells[rowIterator, 5].Value == null ? "" : workSheet.Cells[rowIterator, 5].Value.ToString().Trim();
+                                            oCampos.COD_SECUENCIAL = 0;
+                                            oCampos.RegEstado = 1;
+                                            ListPOAItemsDetalle.Add(oCampos);
+                                        }
+
+
+                                        break;
+                                    #endregion
+                                    #region RAPROBMADE
+                                    case "RAPROBMADE":
+                                        Log_PLAN_MANEJO objLog_RAPoa;
+                                        bool isAdd_RAPoa;
+                                        string codEspecie_RAPoa;
+                                        string codEspecieSerfor_RAPoa;
+
+                                        hdfItemCod_MTipo = Request["hdfItemCod_MTipo"];
+
+                                        if (hdfItemCod_MTipo == "0000021")
+                                        {
+                                            for (int rowIterator = 2; rowIterator <= noOfRow; rowIterator++)
+                                            {
+                                                oCampos = new CEntidad();
+                                                objLog_RAPoa = new Log_PLAN_MANEJO();
+                                                isAdd_RAPoa = true;
+
+                                                codEspecie_RAPoa = objLog_RAPoa.GetCodEspecie(
+                                                    workSheet.Cells[rowIterator, 1].Value == null ? "" : workSheet.Cells[rowIterator, 1].Value.ToString().Trim(),
+                                                    workSheet.Cells[rowIterator, 2].Value == null ? "" : workSheet.Cells[rowIterator, 2].Value.ToString().Trim()
+                                                );
+
+                                                if (codEspecie_RAPoa != null && codEspecie_RAPoa.Trim() != "")
+                                                {
+                                                    oCampos.COD_SECUENCIAL = 0;
+                                                    oCampos.COD_ESPECIES = codEspecie_RAPoa;
+                                                    oCampos.ESPECIES = String.Format("{0} | {1}", workSheet.Cells[rowIterator, 1].Value == null ? "" : workSheet.Cells[rowIterator, 1].Value.ToString().Trim(), workSheet.Cells[rowIterator, 2].Value == null ? "" : workSheet.Cells[rowIterator, 2].Value.ToString().Trim());
+                                                    oCampos.ABUNDANCIA = workSheet.Cells[rowIterator, 5].Value == null ? 0 : Decimal.Parse(workSheet.Cells[rowIterator, 5].Value.ToString().Trim());
+                                                    oCampos.NUMINDIVIDUOS = workSheet.Cells[rowIterator, 6].Value == null ? 0 : Decimal.Parse(workSheet.Cells[rowIterator, 6].Value.ToString().Trim());
+                                                    oCampos.PESO = workSheet.Cells[rowIterator, 7].Value == null ? 0 : Decimal.Parse(workSheet.Cells[rowIterator, 7].Value.ToString().Trim());
+                                                    oCampos.RENDIMIENTO = workSheet.Cells[rowIterator, 8].Value == null ? 0 : Decimal.Parse(workSheet.Cells[rowIterator, 8].Value.ToString().Trim());
+                                                    oCampos.UNIDAD_MEDIDA = workSheet.Cells[rowIterator, 9].Value == null ? "" : workSheet.Cells[rowIterator, 9].Value.ToString().Trim();
+                                                    oCampos.TIPOMADERABLE = workSheet.Cells[rowIterator, 10].Value == null ? "" : workSheet.Cells[rowIterator, 10].Value.ToString().Trim();
+                                                    oCampos.PCA = workSheet.Cells[rowIterator, 11].Value == null ? "" : workSheet.Cells[rowIterator, 11].Value.ToString().Trim();
+                                                    oCampos.OBSERVACION = workSheet.Cells[rowIterator, 12].Value == null ? "" : workSheet.Cells[rowIterator, 12].Value.ToString().Trim();
+                                                    oCampos.RegEstado = 1;
+
+                                                    if (!(workSheet.Cells[rowIterator, 3].Value == null ? "" : workSheet.Cells[rowIterator, 3].Value.ToString().Trim()).Equals(""))
+                                                    {
+                                                        codEspecieSerfor_RAPoa = objLog_RAPoa.GetCodEspecie(
+                                                            workSheet.Cells[rowIterator, 3].Value == null ? "" : workSheet.Cells[rowIterator, 3].Value.ToString().Trim(),
+                                                            workSheet.Cells[rowIterator, 4].Value == null ? "" : workSheet.Cells[rowIterator, 4].Value.ToString().Trim()
+                                                        );
+
+                                                        if (codEspecieSerfor_RAPoa != null && codEspecieSerfor_RAPoa != "")
+                                                        {
+                                                            oCampos.COD_ESPECIES_SERFOR = codEspecieSerfor_RAPoa;
+                                                            oCampos.ESPECIES_SERFOR = String.Format("{0} | {1}", workSheet.Cells[rowIterator, 3].Value == null ? "" : workSheet.Cells[rowIterator, 3].Value.ToString().Trim(), workSheet.Cells[rowIterator, 4].Value == null ? "" : workSheet.Cells[rowIterator, 4].Value.ToString().Trim());
+                                                        }
+                                                        else isAdd_RAPoa = false;
+                                                    }
+
+                                                    if (isAdd_RAPoa) ListPOAItemsDetalle.Add(oCampos);
+                                                }
+                                            }
+                                        }
+                                        else if (hdfItemCod_MTipo == "0000020")
+                                        {
+                                            for (int rowIterator = 2; rowIterator <= noOfRow; rowIterator++)
+                                            {
+                                                oCampos = new CEntidad();
+                                                objLog_RAPoa = new Log_PLAN_MANEJO();
+                                                isAdd_RAPoa = true;
+
+                                                codEspecie_RAPoa = objLog_RAPoa.GetCodEspecie(
+                                                    workSheet.Cells[rowIterator, 1].Value == null ? "" : workSheet.Cells[rowIterator, 1].Value.ToString().Trim(),
+                                                    workSheet.Cells[rowIterator, 2].Value == null ? "" : workSheet.Cells[rowIterator, 2].Value.ToString().Trim()
+                                                );
+
+                                                if (codEspecie_RAPoa != null && codEspecie_RAPoa.Trim() != "")
+                                                {
+                                                    oCampos.COD_SECUENCIAL = 0;
+                                                    oCampos.COD_ESPECIES = codEspecie_RAPoa;
+                                                    oCampos.ESPECIES = String.Format("{0} | {1}", workSheet.Cells[rowIterator, 1].Value == null ? "" : workSheet.Cells[rowIterator, 1].Value.ToString().Trim(), workSheet.Cells[rowIterator, 2].Value == null ? "" : workSheet.Cells[rowIterator, 2].Value.ToString().Trim());
+                                                    oCampos.SuperficieHa = workSheet.Cells[rowIterator, 5].Value == null ? 0 : Decimal.Parse(workSheet.Cells[rowIterator, 5].Value.ToString().Trim());
+                                                    oCampos.CANTIDAD = workSheet.Cells[rowIterator, 6].Value == null ? 0 : Int32.Parse(workSheet.Cells[rowIterator, 6].Value.ToString().Trim());
+                                                    oCampos.TIPOMADERABLE = workSheet.Cells[rowIterator, 7].Value == null ? "" : workSheet.Cells[rowIterator, 7].Value.ToString().Trim();
+                                                    oCampos.PCA = workSheet.Cells[rowIterator, 8].Value == null ? "" : workSheet.Cells[rowIterator, 8].Value.ToString().Trim();
+                                                    oCampos.OBSERVACION = workSheet.Cells[rowIterator, 9].Value == null ? "" : workSheet.Cells[rowIterator, 9].Value.ToString().Trim();
+                                                    oCampos.RegEstado = 1;
+
+                                                    if (!(workSheet.Cells[rowIterator, 3].Value == null ? "" : workSheet.Cells[rowIterator, 3].Value.ToString().Trim()).Equals(""))
+                                                    {
+                                                        codEspecieSerfor_RAPoa = objLog_RAPoa.GetCodEspecie(
+                                                            workSheet.Cells[rowIterator, 3].Value == null ? "" : workSheet.Cells[rowIterator, 3].Value.ToString().Trim(),
+                                                            workSheet.Cells[rowIterator, 4].Value == null ? "" : workSheet.Cells[rowIterator, 4].Value.ToString().Trim()
+                                                        );
+
+                                                        if (codEspecieSerfor_RAPoa != null && codEspecieSerfor_RAPoa != "")
+                                                        {
+                                                            oCampos.COD_ESPECIES_SERFOR = codEspecieSerfor_RAPoa;
+                                                            oCampos.ESPECIES_SERFOR = String.Format("{0} | {1}", workSheet.Cells[rowIterator, 3].Value == null ? "" : workSheet.Cells[rowIterator, 3].Value.ToString().Trim(), workSheet.Cells[rowIterator, 4].Value == null ? "" : workSheet.Cells[rowIterator, 4].Value.ToString().Trim());
+                                                        }
+                                                        else isAdd_RAPoa = false;
+                                                    }
+
+                                                    if (isAdd_RAPoa) ListPOAItemsDetalle.Add(oCampos);
+                                                }
+                                            }
+                                        }
+                                        else
+                                        {
+                                            for (int rowIterator = 2; rowIterator <= noOfRow; rowIterator++)
+                                            {
+                                                oCampos = new CEntidad();
+                                                objLog_RAPoa = new Log_PLAN_MANEJO();
+                                                isAdd_RAPoa = true;
+
+                                                codEspecie_RAPoa = objLog_RAPoa.GetCodEspecie(
+                                                    workSheet.Cells[rowIterator, 1].Value == null ? "" : workSheet.Cells[rowIterator, 1].Value.ToString().Trim(),
+                                                    workSheet.Cells[rowIterator, 2].Value == null ? "" : workSheet.Cells[rowIterator, 2].Value.ToString().Trim()
+                                                );
+
+                                                if (codEspecie_RAPoa != null && codEspecie_RAPoa.Trim() != "")
+                                                {
+                                                    oCampos.COD_SECUENCIAL = 0;
+                                                    oCampos.COD_ESPECIES = codEspecie_RAPoa;
+                                                    oCampos.ESPECIES = String.Format("{0} | {1}", workSheet.Cells[rowIterator, 1].Value == null ? "" : workSheet.Cells[rowIterator, 1].Value.ToString().Trim(), workSheet.Cells[rowIterator, 2].Value == null ? "" : workSheet.Cells[rowIterator, 2].Value.ToString().Trim());
+                                                    oCampos.NUM_ARBOLES = workSheet.Cells[rowIterator, 5].Value == null ? 0 : Int32.Parse(workSheet.Cells[rowIterator, 5].Value.ToString().Trim());
+                                                    oCampos.VOLUMEN_KILOGRAMOS = workSheet.Cells[rowIterator, 6].Value == null ? 0 : Decimal.Parse(workSheet.Cells[rowIterator, 6].Value.ToString().Trim());
+                                                    oCampos.TIPOMADERABLE = workSheet.Cells[rowIterator, 7].Value == null ? "" : workSheet.Cells[rowIterator, 7].Value.ToString().Trim();
+                                                    oCampos.PCA = workSheet.Cells[rowIterator, 8].Value == null ? "" : workSheet.Cells[rowIterator, 8].Value.ToString().Trim();
+                                                    oCampos.OBSERVACION = workSheet.Cells[rowIterator, 9].Value == null ? "" : workSheet.Cells[rowIterator, 9].Value.ToString().Trim();
+                                                    oCampos.RegEstado = 1;
+
+                                                    if (oCampos.TIPOMADERABLE.Equals("CARBON") || oCampos.TIPOMADERABLE.Equals("NO MADERABLES")) oCampos.UNIDAD_MEDIDA = "KG";
+                                                    else if (oCampos.TIPOMADERABLE.Equals("MADERABLES")) oCampos.UNIDAD_MEDIDA = "M3";
+
+                                                    if (!(workSheet.Cells[rowIterator, 3].Value == null ? "" : workSheet.Cells[rowIterator, 3].Value.ToString().Trim()).Equals(""))
+                                                    {
+                                                        codEspecieSerfor_RAPoa = objLog_RAPoa.GetCodEspecie(
+                                                            workSheet.Cells[rowIterator, 3].Value == null ? "" : workSheet.Cells[rowIterator, 3].Value.ToString().Trim(),
+                                                            workSheet.Cells[rowIterator, 4].Value == null ? "" : workSheet.Cells[rowIterator, 4].Value.ToString().Trim()
+                                                        );
+
+                                                        if (codEspecieSerfor_RAPoa != null && codEspecieSerfor_RAPoa != "")
+                                                        {
+                                                            oCampos.COD_ESPECIES_SERFOR = codEspecieSerfor_RAPoa;
+                                                            oCampos.ESPECIES_SERFOR = String.Format("{0} | {1}", workSheet.Cells[rowIterator, 3].Value == null ? "" : workSheet.Cells[rowIterator, 3].Value.ToString().Trim(), workSheet.Cells[rowIterator, 4].Value == null ? "" : workSheet.Cells[rowIterator, 4].Value.ToString().Trim());
+                                                        }
+                                                        else isAdd_RAPoa = false;
+                                                    }
+
+                                                    if (isAdd_RAPoa) ListPOAItemsDetalle.Add(oCampos);
+                                                }
+                                            }
+                                        }
+
+                                        break;
+                                    #endregion
+                                    //#region RREFORMADE
+                                    //case "RREFORMADE":
+                                    //    foreach (DataRow Fila in exiItemDatos.Datos.Rows)
+                                    //    {
+                                    //        oCampos = new CEntidad();
+                                    //        oCampos.COD_SECUENCIAL = 0;
+                                    //        oCampos.COD_ESPECIES = "";
+                                    //        oCampos.NUM_ARBOLES = Int32.Parse(Fila[4].ToString().Trim());
+                                    //        oCampos.VOLUMEN_KILOGRAMOS = Decimal.Parse(Fila[5].ToString().Trim());
+                                    //        oCampos.TIPOMADERABLE = Fila[6].ToString().Trim();
+                                    //        oCampos.OBSERVACION = Fila[7].ToString().Trim();
+                                    //        oCampos.ESPECIES = String.Format("{0} | {1}", Fila[0].ToString().Trim(), Fila[1].ToString().Trim());
+                                    //        oCampos.COD_ESPECIES_SERFOR = "";
+                                    //        oCampos.ESPECIES_SERFOR = String.Format("{0} | {1}", Fila[2].ToString().Trim(), Fila[3].ToString().Trim());
+                                    //        oCampos.RegEstado = 1;
+                                    //        ListPOAItemsDetalle.Add(oCampos);
+                                    //    }
+                                    //    HerUtil.GrillaLlenar(grvItemRRPoa, ListPOAItemsDetalle, 0);
+                                    //    break;
+                                    //#endregion
+                                    #region RAPROBINSITU
+                                    case "RAPROBINSITU":
+                                        for (int rowIterator = 2; rowIterator <= noOfRow; rowIterator++)
+                                        {
+                                            oCampos = new CEntidad();
+                                            oCampos.COD_SECUENCIAL = 0;
+                                            oCampos.COD_ESPECIES = "";
+                                            oCampos.PERIODO = workSheet.Cells[rowIterator, 5].Value == null ? "" : workSheet.Cells[rowIterator, 5].Value.ToString().Trim();
+                                            oCampos.CUOTA_SACA = workSheet.Cells[rowIterator, 6].Value == null ? 0 : Int32.Parse(workSheet.Cells[rowIterator, 6].Value.ToString().Trim());
+                                            oCampos.METODO_CAZA = workSheet.Cells[rowIterator, 7].Value == null ? "" : workSheet.Cells[rowIterator, 7].Value.ToString().Trim();
+                                            oCampos.SISTEMA_MARCAJE = workSheet.Cells[rowIterator, 8].Value == null ? "" : workSheet.Cells[rowIterator, 8].Value.ToString().Trim();
+                                            oCampos.DENSIDAD = workSheet.Cells[rowIterator, 9].Value == null ? 0 : Int32.Parse(workSheet.Cells[rowIterator, 9].Value.ToString().Trim());
+                                            oCampos.OBSERVACION = workSheet.Cells[rowIterator, 10].Value == null ? "" : workSheet.Cells[rowIterator, 10].Value.ToString().Trim();
+                                            oCampos.ESPECIES = String.Format("{0} | {1}", workSheet.Cells[rowIterator, 1].Value == null ? "" : workSheet.Cells[rowIterator, 1].Value.ToString().Trim(), workSheet.Cells[rowIterator, 2].Value == null ? "" : workSheet.Cells[rowIterator, 2].Value.ToString().Trim());
+                                            oCampos.COD_ESPECIES_SERFOR = "";
+                                            oCampos.ESPECIES_SERFOR = String.Format("{0} | {1}", workSheet.Cells[rowIterator, 3].Value == null ? "" : workSheet.Cells[rowIterator, 3].Value.ToString().Trim(), workSheet.Cells[rowIterator, 4].Value == null ? "" : workSheet.Cells[rowIterator, 4].Value.ToString().Trim());
+                                            oCampos.RegEstado = 1;
+                                            ListPOAItemsDetalle.Add(oCampos);
+                                        }
+
+                                        break;
+                                    #endregion
+
+                                    #region BExt_MadeNoMade
+                                    case "BExt_MadeNoMade":
+                                        hdfItemEstadoOrigen = Request["hdfItemEstadoOrigen"];
+                                        hdfItemIndicador = Request["hdfItemIndicador"];
+                                        Log_PLAN_MANEJO objLog;
+                                        bool isAdd;
+                                        string codEspecie;
+                                        string codEspecieSerfor;
+
+                                        if (
+                                            (hdfItemEstadoOrigen.Equals("PN") && hdfItemIndicador.Equals("M")) ||
+                                            (hdfItemEstadoOrigen.Equals("R")) ||
+                                            (hdfItemEstadoOrigen.Equals("MS")) ||
+                                            (hdfItemEstadoOrigen.Equals("PC"))
+                                        )
+                                        {
+                                            for (int rowIterator = 2; rowIterator <= noOfRow; rowIterator++)
+                                            {
+                                                oCampos = new CEntidad();
+                                                objLog = new Log_PLAN_MANEJO();
+                                                isAdd = true;
+
+                                                codEspecie = objLog.GetCodEspecie(
+                                                    workSheet.Cells[rowIterator, 1].Value == null ? "" : workSheet.Cells[rowIterator, 1].Value.ToString().Trim(),
+                                                    workSheet.Cells[rowIterator, 2].Value == null ? "" : workSheet.Cells[rowIterator, 2].Value.ToString().Trim()
+                                                );
+
+                                                if (codEspecie != null && codEspecie.Trim() != "")
+                                                {
+                                                    oCampos.COD_SECUENCIAL = 0;
+                                                    oCampos.COD_ESPECIES = codEspecie;
+                                                    oCampos.ESPECIES = String.Format("{0} | {1}", (workSheet.Cells[rowIterator, 1].Value == null ? "" : workSheet.Cells[rowIterator, 1].Value.ToString().Trim()), (workSheet.Cells[rowIterator, 2].Value == null ? "" : workSheet.Cells[rowIterator, 2].Value.ToString().Trim()));
+                                                    oCampos.DMC = workSheet.Cells[rowIterator, 5].Value == null ? 0 : Int32.Parse(workSheet.Cells[rowIterator, 5].Value.ToString().Trim());
+                                                    oCampos.TOTAL_ARBOLES = workSheet.Cells[rowIterator, 6].Value == null ? 0 : Int32.Parse(workSheet.Cells[rowIterator, 6].Value.ToString().Trim());
+                                                    oCampos.VOLUMEN_AUTORIZADO = workSheet.Cells[rowIterator, 7].Value == null ? 0 : Decimal.Parse(workSheet.Cells[rowIterator, 7].Value.ToString().Trim());
+                                                    oCampos.VOLUMEN_MOVILIZADO = workSheet.Cells[rowIterator, 8].Value == null ? 0 : Decimal.Parse(workSheet.Cells[rowIterator, 8].Value.ToString().Trim());
+                                                    oCampos.SALDO = workSheet.Cells[rowIterator, 9].Value == null ? 0 : Decimal.Parse(workSheet.Cells[rowIterator, 9].Value.ToString().Trim());
+                                                    oCampos.TIPOMADERABLE = workSheet.Cells[rowIterator, 10].Value == null ? "" : workSheet.Cells[rowIterator, 10].Value.ToString().Trim();
+                                                    oCampos.OBSERVACION = workSheet.Cells[rowIterator, 11].Value == null ? "" : workSheet.Cells[rowIterator, 11].Value.ToString().Trim();
+                                                    oCampos.RegEstado = 1;
+
+                                                    if (oCampos.TIPOMADERABLE.Equals("MADERABLES")) oCampos.UNIDAD_MEDIDA = "M3";
+                                                    else if (oCampos.TIPOMADERABLE.Equals("CARBON")) oCampos.UNIDAD_MEDIDA = "KG";
+
+                                                    if (!(workSheet.Cells[rowIterator, 3].Value == null ? "" : workSheet.Cells[rowIterator, 3].Value.ToString().Trim()).Equals(""))
+                                                    {
+                                                        codEspecieSerfor = objLog.GetCodEspecie(
+                                                            workSheet.Cells[rowIterator, 3].Value == null ? "" : workSheet.Cells[rowIterator, 3].Value.ToString().Trim(),
+                                                            workSheet.Cells[rowIterator, 4].Value == null ? "" : workSheet.Cells[rowIterator, 4].Value.ToString().Trim()
+                                                        );
+
+                                                        if (codEspecieSerfor != null && codEspecieSerfor != "")
+                                                        {
+                                                            oCampos.COD_ESPECIES_SERFOR = codEspecieSerfor;
+                                                            oCampos.ESPECIES_SERFOR = String.Format("{0} | {1}", workSheet.Cells[rowIterator, 3].Value == null ? "" : workSheet.Cells[rowIterator, 3].Value.ToString().Trim(), workSheet.Cells[rowIterator, 4].Value == null ? "" : workSheet.Cells[rowIterator, 4].Value.ToString().Trim());
+                                                        }
+                                                        else isAdd = false;
+                                                    }
+
+                                                    if (isAdd) ListPOAItemsDetalle.Add(oCampos);
+                                                }
+                                            }
+                                        }
+                                        else if (
+                                            (hdfItemEstadoOrigen.Equals("PN") && hdfItemIndicador.Equals("NM")) ||
+                                            (hdfItemEstadoOrigen.Equals("PCN"))
+                                        )
+                                        {
+                                            hdfItemCod_MTipo = Request["hdfItemCod_MTipo"];
+
+                                            if (hdfItemCod_MTipo == "0000021")
+                                            {
+                                                for (int rowIterator = 2; rowIterator <= noOfRow; rowIterator++)
+                                                {
+                                                    oCampos = new CEntidad();
+                                                    objLog = new Log_PLAN_MANEJO();
+                                                    isAdd = true;
+
+                                                    codEspecie = objLog.GetCodEspecie(
+                                                        workSheet.Cells[rowIterator, 1].Value == null ? "" : workSheet.Cells[rowIterator, 1].Value.ToString().Trim(),
+                                                        workSheet.Cells[rowIterator, 2].Value == null ? "" : workSheet.Cells[rowIterator, 2].Value.ToString().Trim()
+                                                    );
+
+                                                    if (codEspecie != null && codEspecie.Trim() != "")
+                                                    {
+                                                        oCampos.COD_SECUENCIAL = 0;
+                                                        oCampos.COD_ESPECIES = codEspecie;
+                                                        oCampos.ESPECIES = String.Format("{0} | {1}", workSheet.Cells[rowIterator, 1].Value == null ? "" : workSheet.Cells[rowIterator, 1].Value.ToString().Trim(), workSheet.Cells[rowIterator, 2].Value == null ? "" : workSheet.Cells[rowIterator, 2].Value.ToString().Trim());
+                                                        oCampos.AUTORIZADO = workSheet.Cells[rowIterator, 5].Value == null ? 0 : Decimal.Parse(workSheet.Cells[rowIterator, 5].Value.ToString().Trim());
+                                                        oCampos.EXTRAIDO = workSheet.Cells[rowIterator, 6].Value == null ? 0 : Decimal.Parse(workSheet.Cells[rowIterator, 6].Value.ToString().Trim());
+                                                        oCampos.SALDO = workSheet.Cells[rowIterator, 7].Value == null ? 0 : Decimal.Parse(workSheet.Cells[rowIterator, 7].Value.ToString().Trim());
+                                                        oCampos.TIPOMADERABLE = "NO MADERABLES";
+                                                        oCampos.UNIDAD_MEDIDA = "KG";
+                                                        oCampos.OBSERVACION = workSheet.Cells[rowIterator, 8].Value == null ? "" : workSheet.Cells[rowIterator, 8].Value.ToString().Trim();
+                                                        oCampos.RegEstado = 1;
+
+                                                        if (!(workSheet.Cells[rowIterator, 3].Value == null ? "" : workSheet.Cells[rowIterator, 3].Value.ToString().Trim()).Equals(""))
+                                                        {
+                                                            codEspecieSerfor = objLog.GetCodEspecie(
+                                                                workSheet.Cells[rowIterator, 3].Value == null ? "" : workSheet.Cells[rowIterator, 3].Value.ToString().Trim(),
+                                                                workSheet.Cells[rowIterator, 4].Value == null ? "" : workSheet.Cells[rowIterator, 4].Value.ToString().Trim()
+                                                            );
+
+                                                            if (codEspecieSerfor != null && codEspecieSerfor != "")
+                                                            {
+                                                                oCampos.COD_ESPECIES_SERFOR = codEspecieSerfor;
+                                                                oCampos.ESPECIES_SERFOR = String.Format("{0} | {1}", workSheet.Cells[rowIterator, 3].Value == null ? "" : workSheet.Cells[rowIterator, 3].Value.ToString().Trim(), workSheet.Cells[rowIterator, 4].Value == null ? "" : workSheet.Cells[rowIterator, 4].Value.ToString().Trim());
+                                                            }
+                                                            else isAdd = false;
+                                                        }
+
+                                                        if (isAdd) ListPOAItemsDetalle.Add(oCampos);
+                                                    }
+                                                }
+                                            }
+                                            else if (hdfItemCod_MTipo == "0000020")
+                                            {
+                                                for (int rowIterator = 2; rowIterator <= noOfRow; rowIterator++)
+                                                {
+                                                    oCampos = new CEntidad();
+                                                    objLog = new Log_PLAN_MANEJO();
+                                                    isAdd = true;
+
+                                                    codEspecie = objLog.GetCodEspecie(
+                                                        workSheet.Cells[rowIterator, 1].Value == null ? "" : workSheet.Cells[rowIterator, 1].Value.ToString().Trim(),
+                                                        workSheet.Cells[rowIterator, 2].Value == null ? "" : workSheet.Cells[rowIterator, 2].Value.ToString().Trim()
+                                                    );
+
+                                                    if (codEspecie != null && codEspecie.Trim() != "")
+                                                    {
+                                                        oCampos.COD_SECUENCIAL = 0;
+                                                        oCampos.COD_ESPECIES = codEspecie;
+                                                        oCampos.ESPECIES = String.Format("{0} | {1}", workSheet.Cells[rowIterator, 1].Value == null ? "" : workSheet.Cells[rowIterator, 1].Value.ToString().Trim(), workSheet.Cells[rowIterator, 2].Value == null ? "" : workSheet.Cells[rowIterator, 2].Value.ToString().Trim());
+                                                        oCampos.FECHA1 = workSheet.Cells[rowIterator, 5].Value == null ? "" : workSheet.Cells[rowIterator, 5].Value.ToString().Trim();
+                                                        oCampos.GUIA_TRANSPORTE = workSheet.Cells[rowIterator, 6].Value == null ? "" : workSheet.Cells[rowIterator, 6].Value.ToString().Trim();
+                                                        oCampos.FECHA2 = workSheet.Cells[rowIterator, 7].Value == null ? "" : workSheet.Cells[rowIterator, 7].Value.ToString().Trim();
+                                                        oCampos.RECIBO = workSheet.Cells[rowIterator, 8].Value == null ? "" : workSheet.Cells[rowIterator, 8].Value.ToString().Trim();
+                                                        oCampos.SALDO = workSheet.Cells[rowIterator, 9].Value == null ? 0 : Decimal.Parse(workSheet.Cells[rowIterator, 9].Value.ToString().Trim());
+                                                        oCampos.TIPOMADERABLE = "NO MADERABLES";
+                                                        oCampos.CANTIDAD = workSheet.Cells[rowIterator, 10].Value == null ? 0 : Int32.Parse(workSheet.Cells[rowIterator, 10].Value.ToString().Trim());
+                                                        oCampos.OBSERVACION = workSheet.Cells[rowIterator, 11].Value == null ? "" : workSheet.Cells[rowIterator, 11].Value.ToString().Trim();
+                                                        oCampos.RegEstado = 1;
+
+                                                        if (!(workSheet.Cells[rowIterator, 3].Value == null ? "" : workSheet.Cells[rowIterator, 3].Value.ToString().Trim()).Equals(""))
+                                                        {
+                                                            codEspecieSerfor = objLog.GetCodEspecie(
+                                                                workSheet.Cells[rowIterator, 3].Value == null ? "" : workSheet.Cells[rowIterator, 3].Value.ToString().Trim(),
+                                                                workSheet.Cells[rowIterator, 4].Value == null ? "" : workSheet.Cells[rowIterator, 4].Value.ToString().Trim()
+                                                            );
+
+                                                            if (codEspecieSerfor != null && codEspecieSerfor != "")
+                                                            {
+                                                                oCampos.COD_ESPECIES_SERFOR = codEspecieSerfor;
+                                                                oCampos.ESPECIES_SERFOR = String.Format("{0} | {1}", workSheet.Cells[rowIterator, 3].Value == null ? "" : workSheet.Cells[rowIterator, 3].Value.ToString().Trim(), workSheet.Cells[rowIterator, 4].Value == null ? "" : workSheet.Cells[rowIterator, 4].Value.ToString().Trim());
+                                                            }
+                                                            else isAdd = false;
+                                                        }
+
+                                                        if (isAdd) ListPOAItemsDetalle.Add(oCampos);
+                                                    }
+                                                }
+                                            }
+                                            else
+                                            {
+                                                for (int rowIterator = 2; rowIterator <= noOfRow; rowIterator++)
+                                                {
+                                                    oCampos = new CEntidad();
+                                                    objLog = new Log_PLAN_MANEJO();
+                                                    isAdd = true;
+
+                                                    codEspecie = objLog.GetCodEspecie(
+                                                        workSheet.Cells[rowIterator, 1].Value == null ? "" : workSheet.Cells[rowIterator, 1].Value.ToString().Trim(),
+                                                        workSheet.Cells[rowIterator, 2].Value == null ? "" : workSheet.Cells[rowIterator, 2].Value.ToString().Trim()
+                                                    );
+
+                                                    if (codEspecie != null && codEspecie.Trim() != "")
+                                                    {
+                                                        oCampos.COD_SECUENCIAL = 0;
+                                                        oCampos.COD_ESPECIES = codEspecie;
+                                                        oCampos.ESPECIES = String.Format("{0} | {1}", workSheet.Cells[rowIterator, 1].Value == null ? "" : workSheet.Cells[rowIterator, 1].Value.ToString().Trim(), workSheet.Cells[rowIterator, 2].Value == null ? "" : workSheet.Cells[rowIterator, 2].Value.ToString().Trim());
+                                                        oCampos.VOLUMEN_AUTORIZADO = workSheet.Cells[rowIterator, 5].Value == null ? 0 : Decimal.Parse(workSheet.Cells[rowIterator, 5].Value.ToString().Trim());
+                                                        oCampos.VOLUMEN_MOVILIZADO = workSheet.Cells[rowIterator, 6].Value == null ? 0 : Decimal.Parse(workSheet.Cells[rowIterator, 6].Value.ToString().Trim());
+                                                        oCampos.SALDO = workSheet.Cells[rowIterator, 7].Value == null ? 0 : Decimal.Parse(workSheet.Cells[rowIterator, 7].Value.ToString().Trim());
+                                                        oCampos.TIPOMADERABLE = "NO MADERABLES";
+                                                        oCampos.UNIDAD_MEDIDA = "KG";
+                                                        oCampos.OBSERVACION = workSheet.Cells[rowIterator, 8].Value == null ? "" : workSheet.Cells[rowIterator, 8].Value.ToString().Trim();
+                                                        oCampos.RegEstado = 1;
+
+                                                        if (!(workSheet.Cells[rowIterator, 3].Value == null ? "" : workSheet.Cells[rowIterator, 3].Value.ToString().Trim()).Equals(""))
+                                                        {
+                                                            codEspecieSerfor = objLog.GetCodEspecie(
+                                                                workSheet.Cells[rowIterator, 3].Value == null ? "" : workSheet.Cells[rowIterator, 3].Value.ToString().Trim(),
+                                                                workSheet.Cells[rowIterator, 4].Value == null ? "" : workSheet.Cells[rowIterator, 4].Value.ToString().Trim()
+                                                            );
+
+                                                            if (codEspecieSerfor != null && codEspecieSerfor != "")
+                                                            {
+                                                                oCampos.COD_ESPECIES_SERFOR = codEspecieSerfor;
+                                                                oCampos.ESPECIES_SERFOR = String.Format("{0} | {1}", workSheet.Cells[rowIterator, 3].Value == null ? "" : workSheet.Cells[rowIterator, 3].Value.ToString().Trim(), workSheet.Cells[rowIterator, 4].Value == null ? "" : workSheet.Cells[rowIterator, 4].Value.ToString().Trim());
+                                                            }
+                                                            else isAdd = false;
+                                                        }
+
+                                                        if (isAdd) ListPOAItemsDetalle.Add(oCampos);
+                                                    }
+                                                }
+                                            }
+                                        }
+                                        else
+                                        {
+                                            hdfItemCod_MTipo = Request["hdfItemCod_MTipo"];
+
+                                            if (hdfItemCod_MTipo == "0000021")
+                                            {
+                                                for (int rowIterator = 2; rowIterator <= noOfRow; rowIterator++)
+                                                {
+                                                    oCampos = new CEntidad();
+                                                    objLog = new Log_PLAN_MANEJO();
+                                                    isAdd = true;
+
+                                                    codEspecie = objLog.GetCodEspecie(
+                                                        workSheet.Cells[rowIterator, 1].Value == null ? "" : workSheet.Cells[rowIterator, 1].Value.ToString().Trim(),
+                                                        workSheet.Cells[rowIterator, 2].Value == null ? "" : workSheet.Cells[rowIterator, 2].Value.ToString().Trim()
+                                                    );
+
+                                                    if (codEspecie != null && codEspecie.Trim() != "")
+                                                    {
+                                                        oCampos.COD_SECUENCIAL = 0;
+                                                        oCampos.COD_ESPECIES = codEspecie;
+                                                        oCampos.ESPECIES = String.Format("{0} | {1}", workSheet.Cells[rowIterator, 1].Value == null ? "" : workSheet.Cells[rowIterator, 1].Value.ToString().Trim(), workSheet.Cells[rowIterator, 2].Value == null ? "" : workSheet.Cells[rowIterator, 2].Value.ToString().Trim());
+                                                        oCampos.TIPOMADERABLE = workSheet.Cells[rowIterator, 5].Value == null ? "" : workSheet.Cells[rowIterator, 5].Value.ToString().Trim();
+                                                        oCampos.SALDO = workSheet.Cells[rowIterator, 12].Value == null ? 0 : Decimal.Parse(workSheet.Cells[rowIterator, 12].Value.ToString().Trim());
+                                                        oCampos.OBSERVACION = workSheet.Cells[rowIterator, 13].Value == null ? "" : workSheet.Cells[rowIterator, 13].Value.ToString().Trim();
+                                                        oCampos.RegEstado = 1;
+
+                                                        if (oCampos.TIPOMADERABLE.Equals("MADERABLES") || oCampos.TIPOMADERABLE.Equals("CARBON"))
+                                                        {
+                                                            oCampos.DMC = workSheet.Cells[rowIterator, 6].Value == null ? 0 : Int32.Parse(workSheet.Cells[rowIterator, 6].Value.ToString().Trim());
+                                                            oCampos.TOTAL_ARBOLES = workSheet.Cells[rowIterator, 7].Value == null ? 0 : Int32.Parse(workSheet.Cells[rowIterator, 7].Value.ToString().Trim());
+                                                            oCampos.VOLUMEN_AUTORIZADO = workSheet.Cells[rowIterator, 8].Value == null ? 0 : Decimal.Parse(workSheet.Cells[rowIterator, 8].Value.ToString().Trim());
+                                                            oCampos.VOLUMEN_MOVILIZADO = workSheet.Cells[rowIterator, 9].Value == null ? 0 : Decimal.Parse(workSheet.Cells[rowIterator, 9].Value.ToString().Trim());
+
+                                                            if (oCampos.TIPOMADERABLE.Equals("MADERABLES")) oCampos.UNIDAD_MEDIDA = "M3";
+                                                            else oCampos.UNIDAD_MEDIDA = "KG";
+
+                                                            //Para que valores numéricos no vayan con -1
+                                                            oCampos.AUTORIZADO = 0;
+                                                            oCampos.EXTRAIDO = 0;
+                                                        }
+                                                        else if (oCampos.TIPOMADERABLE.Equals("NO MADERABLES"))
+                                                        {
+                                                            oCampos.AUTORIZADO = workSheet.Cells[rowIterator, 10].Value == null ? 0 : Decimal.Parse(workSheet.Cells[rowIterator, 10].Value.ToString().Trim());
+                                                            oCampos.EXTRAIDO = workSheet.Cells[rowIterator, 11].Value == null ? 0 : Decimal.Parse(workSheet.Cells[rowIterator, 11].Value.ToString().Trim());
+                                                            oCampos.UNIDAD_MEDIDA = "KG";
+                                                            //Para que valores numéricos no vayan con -1
+                                                            oCampos.DMC = 0;
+                                                            oCampos.TOTAL_ARBOLES = 0;
+                                                            oCampos.VOLUMEN_AUTORIZADO = 0;
+                                                            oCampos.VOLUMEN_MOVILIZADO = 0;
+                                                        }
+
+                                                        if (!(workSheet.Cells[rowIterator, 3].Value == null ? "" : workSheet.Cells[rowIterator, 3].Value.ToString().Trim()).Equals(""))
+                                                        {
+                                                            codEspecieSerfor = objLog.GetCodEspecie(
+                                                                workSheet.Cells[rowIterator, 3].Value == null ? "" : workSheet.Cells[rowIterator, 3].Value.ToString().Trim(),
+                                                                workSheet.Cells[rowIterator, 4].Value == null ? "" : workSheet.Cells[rowIterator, 4].Value.ToString().Trim()
+                                                            );
+
+                                                            if (codEspecieSerfor != null && codEspecieSerfor != "")
+                                                            {
+                                                                oCampos.COD_ESPECIES_SERFOR = codEspecieSerfor;
+                                                                oCampos.ESPECIES_SERFOR = String.Format("{0} | {1}", workSheet.Cells[rowIterator, 3].Value == null ? "" : workSheet.Cells[rowIterator, 3].Value.ToString().Trim(), workSheet.Cells[rowIterator, 4].Value == null ? "" : workSheet.Cells[rowIterator, 4].Value.ToString().Trim());
+                                                            }
+                                                            else isAdd = false;
+                                                        }
+
+                                                        if (isAdd) ListPOAItemsDetalle.Add(oCampos);
+                                                    }
+                                                }
+                                            }
+                                            else if (hdfItemCod_MTipo == "0000020")
+                                            {
+                                                for (int rowIterator = 2; rowIterator <= noOfRow; rowIterator++)
+                                                {
+                                                    oCampos = new CEntidad();
+                                                    objLog = new Log_PLAN_MANEJO();
+                                                    isAdd = true;
+
+                                                    codEspecie = objLog.GetCodEspecie(
+                                                        workSheet.Cells[rowIterator, 1].Value == null ? "" : workSheet.Cells[rowIterator, 1].Value.ToString().Trim(),
+                                                        workSheet.Cells[rowIterator, 2].Value == null ? "" : workSheet.Cells[rowIterator, 2].Value.ToString().Trim()
+                                                    );
+
+                                                    if (codEspecie != null && codEspecie.Trim() != "")
+                                                    {
+                                                        oCampos.COD_SECUENCIAL = 0;
+                                                        oCampos.COD_ESPECIES = codEspecie;
+                                                        oCampos.ESPECIES = String.Format("{0} | {1}", workSheet.Cells[rowIterator, 1].Value == null ? "" : workSheet.Cells[rowIterator, 1].Value.ToString().Trim(), workSheet.Cells[rowIterator, 2].Value == null ? "" : workSheet.Cells[rowIterator, 2].Value.ToString().Trim());
+                                                        oCampos.TIPOMADERABLE = workSheet.Cells[rowIterator, 5].Value == null ? "" : workSheet.Cells[rowIterator, 5].Value.ToString().Trim();
+                                                        oCampos.SALDO = workSheet.Cells[rowIterator, 14].Value == null ? 0 : Decimal.Parse(workSheet.Cells[rowIterator, 14].Value.ToString().Trim());
+                                                        oCampos.OBSERVACION = workSheet.Cells[rowIterator, 16].Value == null ? "" : workSheet.Cells[rowIterator, 16].Value.ToString().Trim();
+                                                        oCampos.RegEstado = 1;
+
+                                                        if (oCampos.TIPOMADERABLE.Equals("MADERABLES") || oCampos.TIPOMADERABLE.Equals("CARBON"))
+                                                        {
+                                                            oCampos.DMC = workSheet.Cells[rowIterator, 6].Value == null ? 0 : Int32.Parse(workSheet.Cells[rowIterator, 6].Value.ToString().Trim());
+                                                            oCampos.TOTAL_ARBOLES = workSheet.Cells[rowIterator, 7].Value == null ? 0 : Int32.Parse(workSheet.Cells[rowIterator, 7].Value.ToString().Trim());
+                                                            oCampos.VOLUMEN_AUTORIZADO = workSheet.Cells[rowIterator, 8].Value == null ? 0 : Decimal.Parse(workSheet.Cells[rowIterator, 8].Value.ToString().Trim());
+                                                            oCampos.VOLUMEN_MOVILIZADO = workSheet.Cells[rowIterator, 9].Value == null ? 0 : Decimal.Parse(workSheet.Cells[rowIterator, 9].Value.ToString().Trim());
+
+                                                            if (oCampos.TIPOMADERABLE.Equals("MADERABLES")) oCampos.UNIDAD_MEDIDA = "M3";
+                                                            else oCampos.UNIDAD_MEDIDA = "KG";
+
+                                                            //Para que valores numéricos no vayan con -1
+                                                            oCampos.CANTIDAD = 0;
+
+                                                        }
+                                                        else if (oCampos.TIPOMADERABLE.Equals("NO MADERABLES"))
+                                                        {
+                                                            oCampos.FECHA1 = workSheet.Cells[rowIterator, 10].Value == null ? "" : workSheet.Cells[rowIterator, 10].Value.ToString().Trim();
+                                                            oCampos.GUIA_TRANSPORTE = workSheet.Cells[rowIterator, 11].Value == null ? "" : workSheet.Cells[rowIterator, 11].Value.ToString().Trim();
+                                                            oCampos.FECHA2 = workSheet.Cells[rowIterator, 12].Value == null ? "" : workSheet.Cells[rowIterator, 12].Value.ToString().Trim();
+                                                            oCampos.RECIBO = workSheet.Cells[rowIterator, 13].Value == null ? "" : workSheet.Cells[rowIterator, 13].Value.ToString().Trim();
+                                                            oCampos.CANTIDAD = workSheet.Cells[rowIterator, 15].Value == null ? 0 : Int32.Parse(workSheet.Cells[rowIterator, 15].Value.ToString().Trim());
+
+                                                            //Para que valores numéricos no vayan con -1
+                                                            oCampos.DMC = 0;
+                                                            oCampos.TOTAL_ARBOLES = 0;
+                                                            oCampos.VOLUMEN_AUTORIZADO = 0;
+                                                            oCampos.VOLUMEN_MOVILIZADO = 0;
+                                                        }
+
+                                                        if (!(workSheet.Cells[rowIterator, 3].Value == null ? "" : workSheet.Cells[rowIterator, 3].Value.ToString().Trim()).Equals(""))
+                                                        {
+                                                            codEspecieSerfor = objLog.GetCodEspecie(
+                                                                workSheet.Cells[rowIterator, 3].Value == null ? "" : workSheet.Cells[rowIterator, 3].Value.ToString().Trim(),
+                                                                workSheet.Cells[rowIterator, 4].Value == null ? "" : workSheet.Cells[rowIterator, 4].Value.ToString().Trim()
+                                                            );
+
+                                                            if (codEspecieSerfor != null && codEspecieSerfor != "")
+                                                            {
+                                                                oCampos.COD_ESPECIES_SERFOR = codEspecieSerfor;
+                                                                oCampos.ESPECIES_SERFOR = String.Format("{0} | {1}", workSheet.Cells[rowIterator, 3].Value == null ? "" : workSheet.Cells[rowIterator, 3].Value.ToString().Trim(), workSheet.Cells[rowIterator, 4].Value == null ? "" : workSheet.Cells[rowIterator, 4].Value.ToString().Trim());
+                                                            }
+                                                            else isAdd = false;
+                                                        }
+
+                                                        if (isAdd) ListPOAItemsDetalle.Add(oCampos);
+                                                    }
+                                                }
+                                            }
+                                            else
+                                            {
+                                                for (int rowIterator = 2; rowIterator <= noOfRow; rowIterator++)
+                                                {
+                                                    oCampos = new CEntidad();
+                                                    objLog = new Log_PLAN_MANEJO();
+                                                    isAdd = true;
+
+                                                    codEspecie = objLog.GetCodEspecie(
+                                                        workSheet.Cells[rowIterator, 1].Value == null ? "" : workSheet.Cells[rowIterator, 1].Value.ToString().Trim(),
+                                                        workSheet.Cells[rowIterator, 2].Value == null ? "" : workSheet.Cells[rowIterator, 2].Value.ToString().Trim()
+                                                    );
+
+                                                    if (codEspecie != null && codEspecie.Trim() != "")
+                                                    {
+                                                        oCampos.COD_SECUENCIAL = 0;
+                                                        oCampos.COD_ESPECIES = codEspecie;
+                                                        oCampos.ESPECIES = String.Format("{0} | {1}", workSheet.Cells[rowIterator, 1].Value == null ? "" : workSheet.Cells[rowIterator, 1].Value.ToString().Trim(), workSheet.Cells[rowIterator, 2].Value == null ? "" : workSheet.Cells[rowIterator, 2].Value.ToString().Trim());
+                                                        oCampos.TIPOMADERABLE = workSheet.Cells[rowIterator, 5].Value == null ? "" : workSheet.Cells[rowIterator, 5].Value.ToString().Trim();
+                                                        oCampos.VOLUMEN_AUTORIZADO = workSheet.Cells[rowIterator, 8].Value == null ? 0 : Decimal.Parse(workSheet.Cells[rowIterator, 8].Value.ToString().Trim());
+                                                        oCampos.VOLUMEN_MOVILIZADO = workSheet.Cells[rowIterator, 9].Value == null ? 0 : Decimal.Parse(workSheet.Cells[rowIterator, 9].Value.ToString().Trim());
+                                                        oCampos.SALDO = workSheet.Cells[rowIterator, 10].Value == null ? 0 : Decimal.Parse(workSheet.Cells[rowIterator, 10].Value.ToString().Trim());
+                                                        oCampos.OBSERVACION = workSheet.Cells[rowIterator, 11].Value == null ? "" : workSheet.Cells[rowIterator, 11].Value.ToString().Trim();
+                                                        oCampos.RegEstado = 1;
+
+                                                        if (oCampos.TIPOMADERABLE.Equals("MADERABLES") || oCampos.TIPOMADERABLE.Equals("CARBON"))
+                                                        {
+                                                            oCampos.DMC = workSheet.Cells[rowIterator, 6].Value == null ? 0 : Int32.Parse(workSheet.Cells[rowIterator, 6].Value.ToString().Trim());
+                                                            oCampos.TOTAL_ARBOLES = workSheet.Cells[rowIterator, 7].Value == null ? 0 : Int32.Parse(workSheet.Cells[rowIterator, 7].Value.ToString().Trim());
+
+                                                            if (oCampos.TIPOMADERABLE.Equals("MADERABLES")) oCampos.UNIDAD_MEDIDA = "M3";
+                                                            else oCampos.UNIDAD_MEDIDA = "KG";
+                                                        }
+                                                        else if (oCampos.TIPOMADERABLE.Equals("NO MADERABLES"))
+                                                        {
+                                                            oCampos.UNIDAD_MEDIDA = "KG";
+
+                                                            //Para que valores numéricos no vayan con -1
+                                                            oCampos.DMC = 0;
+                                                            oCampos.TOTAL_ARBOLES = 0;
+                                                        }
+
+                                                        if (!(workSheet.Cells[rowIterator, 3].Value == null ? "" : workSheet.Cells[rowIterator, 3].Value.ToString().Trim()).Equals(""))
+                                                        {
+                                                            codEspecieSerfor = objLog.GetCodEspecie(
+                                                                workSheet.Cells[rowIterator, 3].Value == null ? "" : workSheet.Cells[rowIterator, 3].Value.ToString().Trim(),
+                                                                workSheet.Cells[rowIterator, 4].Value == null ? "" : workSheet.Cells[rowIterator, 4].Value.ToString().Trim()
+                                                            );
+
+                                                            if (codEspecieSerfor != null && codEspecieSerfor != "")
+                                                            {
+                                                                oCampos.COD_ESPECIES_SERFOR = codEspecieSerfor;
+                                                                oCampos.ESPECIES_SERFOR = String.Format("{0} | {1}", workSheet.Cells[rowIterator, 3].Value == null ? "" : workSheet.Cells[rowIterator, 3].Value.ToString().Trim(), workSheet.Cells[rowIterator, 4].Value == null ? "" : workSheet.Cells[rowIterator, 4].Value.ToString().Trim());
+                                                            }
+                                                            else isAdd = false;
+                                                        }
+
+                                                        if (isAdd) ListPOAItemsDetalle.Add(oCampos);
+                                                    }
+                                                }
+                                            }
+                                        }
+
+                                        break;
+                                        #endregion
+                                }
+
+
+
+                                //objVM2.ListMadeCENSO.AddRange(ListPOAItemsDetalle);
+
+                                retorna = ListPOAItemsDetalle;
+
+
+
+
                             }
-
-
-
-                            //objVM2.ListMadeCENSO.AddRange(ListPOAItemsDetalle);
-
-                            retorna = ListPOAItemsDetalle;
-
-
-
-
                         }
                     }
+                    else
+                    {
+                        success = false;
+                        msj = "Archivo cargado no válido, utilizar la plantilla desde la opción de descarga.";
+                    }
+                    
                 }
 
             }

@@ -89,12 +89,17 @@ namespace CapaEntidad.ViewModel
         public List<Ent_POA> ListEliTABLA { get; set; }
 
         //Resolución que Aprueba el POA
+        public string txtNumeroSolAprob { get; set; }
+        public string txtFechaSolAprob { get; set; }
         public string lbltextapru { get; set; }
         public string txtItemAresolucion_Num { get; set; }
         public string txtItemAresolucion_Fecha { get; set; }
         public string hdfItemARFuncionarioCodigo { get; set; }
+        public string hdfItemIOFuncionarioCodigo { get; set; }
         public string lblItemARFuncionario { get; set; }
+        public string lblItemIOFuncionario { get; set; }
         public string lblItemARFuncionarioODatos { get; set; }
+        public string lblItemIOFuncionarioODatos { get; set; }
 
         //Especies Aprobadas de la Resolución de Aprobación del POA
         public string lbltextEspeciesApru { get; set; }

@@ -62,7 +62,7 @@ _OtrosPuntosEval.fnInit = function (data) {
             txtCoordNorte: { required: true }
         },
         messages: {
-            txtEvaluacion: { required: "Ingrese la evaluacion" },
+            txtEvaluacion: { required: "Ingrese la evaluación" },
             ddlZonaId: { invalidFrmOtrosPuntosEval: "Seleccione la zona" },
             txtCoordEste: { required: "Ingrese la coordenada este" },
             txtCoordNorte: { required: "Ingrese la coordenada norte" }

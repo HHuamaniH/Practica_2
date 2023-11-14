@@ -415,7 +415,7 @@ ManPOA.selectFile = null;
 
 
         this.frmPOARegistro
-            .find("#txtItemInicio_Vigencia,#txtItemFin_Vigencia,#txtItemActa_Iocular_Fe,#txtItemAresolucion_Fecha,#txtItemItecnico_Raprobacion_Fecha,#txtItemFEmisionBExtracion,#txtItemItecnico_Iocular_Fecha,#txtFechaAcervo")
+            .find("#txtItemInicio_Vigencia,#txtItemFin_Vigencia,#txtItemActa_Iocular_Fe,#txtItemAresolucion_Fecha,#txtItemItecnico_Raprobacion_Fecha,#txtItemFEmisionBExtracion,#txtItemItecnico_Iocular_Fecha,#txtFechaAcervo,#txtFechaSolAprob")
             .datepicker(initSigo.formatDatePicker);
         this.visibleSinInsOcu();
         $.fn.select2.defaults.set("theme", "bootstrap4");
@@ -487,6 +487,16 @@ ManPOA.selectFile = null;
             }
             ManPOA.frmPOARegistro.submit();
         });
+
+        $("#chckSinInspOcu").change(function () {
+            let chckSinInspOcu = document.getElementById("chckSinInspOcu");
+            if (chckSinInspOcu.checked) {
+                $("#hdfItemIOFuncionarioCodigo").val("");
+                $("#lblItemIOFuncionario").val("");
+                $("#lblItemIOFuncionarioODatos").val("");
+            }
+        });
+
         $("#chkConcluido,#chkProceso,#chkPendiente").click(function () {
             var id = $(this).attr("id");
             //console.log(id);
@@ -501,6 +511,8 @@ ManPOA.selectFile = null;
                 $("#chkConcluido,#chkProceso").prop("checked", false);
             }
         });
+
+        
 
         ManPOA.ItemRAPoa.frmResolAprob.find("#ddlTipoMaderables_RAprob").change(function () {
             if (this.value != "-") {
@@ -521,6 +533,7 @@ ManPOA.selectFile = null;
         if (true) {
 
         }
+
     };
     this.validacionGeneral = function () {
         var ids = ["ddlItemIndicadorId", "ddlODRegistroId"];
@@ -540,6 +553,7 @@ ManPOA.selectFile = null;
             $('a[href="#' + idtab + '"]').tab('show');
             idControlError.focus();
         }
+
         return valRetorno;
     }
     this.openZafraModal = function () {
@@ -686,6 +700,8 @@ ManPOA.selectFile = null;
                             //} else { utilSigo.toastWarning("Aviso", "El regente ya se encuentra registrado"); }
                             break;
                         case "FAPROBACION":
+                            ManPOA.fnSetPersonaCompleto(_dom, data["COD_PERSONA"], data["COD_PTIPO"], data["TIPO_CARGO"]); break;
+                        case "FIOCULAR":
                             ManPOA.fnSetPersonaCompleto(_dom, data["COD_PERSONA"], data["COD_PTIPO"], data["TIPO_CARGO"]); break;
                         case "IOCULAR":
                             if (!utilDt.existValorSearch(ManPOA.dtItemAOcular, "COD_PERSONA", data["COD_PERSONA"])) {
@@ -884,6 +900,12 @@ ManPOA.selectFile = null;
                             ManPOA.frmPOARegistro.find("#hdfItemARFuncionarioCodigo").val(data.data["COD_PERSONA"]);
                             ManPOA.frmPOARegistro.find("#lblItemARFuncionario").val(data.data["APELLIDOS_NOMBRES"]);
                             ManPOA.frmPOARegistro.find("#lblItemARFuncionarioODatos").val(data.data["N_DOCUMENTO"] + " - " + data.data["CARGO"]);
+                            break;
+                        case "FIOCULAR":
+                            debugger;
+                            ManPOA.frmPOARegistro.find("#hdfItemIOFuncionarioCodigo").val(data.data["COD_PERSONA"]);
+                            ManPOA.frmPOARegistro.find("#lblItemIOFuncionario").val(data.data["APELLIDOS_NOMBRES"]);
+                            ManPOA.frmPOARegistro.find("#lblItemIOFuncionarioODatos").val(tipoCargo);
                             break;
                     }
                 } else {
@@ -1681,6 +1703,9 @@ ManPOA.selectFile = null;
                 return false;
             }
         }
+        if (!utilSigo.validateFechaRango("txtFechaSolAprob", "Fecha Aprobación")) {
+            return false;
+        } 
         return true;
     }
     
