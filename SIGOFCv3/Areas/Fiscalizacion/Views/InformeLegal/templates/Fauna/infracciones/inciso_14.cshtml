@@ -1,0 +1,224 @@
+﻿<table width="100%" cellpadding="4" style="border: 0; font-family: Arial; font-size: 10pt; border-collapse: collapse; line-height: 150%;">
+    <thead>
+        <tr style="background-color: #bfbfbf;">
+            <th style="text-align: center; border: 1px solid #000;">Base legal de la obligación</th>
+            <th style="text-align: center; border: 1px solid #000;">Tipo infractor</th>
+            <th style="text-align: center; border: 1px solid #000;">Conducta Imputada</th>
+            <th style="text-align: center; border: 1px solid #000;">Descargo sobre la imputación formulada</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td style="border: 1px solid #000;">
+                Literal z) del numeral 17.1 del artículo 17 del RGFS
+            </td>
+            <td style="border: 1px solid #000;">
+                <div>
+                    Numeral “14” del Anexo 2 del Cuadro de Infracciones y Sanciones en Materia Forestal del RISMFFS
+                </div>
+                <br />
+                <i>
+                    “Incumplir con la implementación de las medidas correctivas y/o provisorias y/o mandatos dispuestos por la autoridad competente”
+                </i>
+            </td>
+            <td style="border: 1px solid #000;">
+                Se imputó contra el/la Titular ${infraccion.detalle || 'XX'}
+            </td>
+            <td style="border: 1px solid #000; text-align: center;">
+                ${informe.COD_TIPO_INFORME?'Si':'No'}
+            </td>
+        </tr>
+    </tbody>
+</table>
+<div>Fuente: Resolución Sub Directoral N° ${informe.ANTECEDENTES_DOCS.RSD.numero || '00XX-202X-OSINFOR/08.2.X'}</div>
+
+{{if informe.COD_TIPO_INFORME == 1}}
+<ol class="continue" style="margin-left: ${informe.MARGIN_LEFT.OL};">
+    <li>
+        <span>
+            Mediante el escrito, ingresado con fecha XX de XX de XXXX, con registro N° XX, la/el administrada/o presentó sus descargos contra la Resolución Sub Directoral N° ${informe.ANTECEDENTES_DOCS.RSD.numero || 'XXXXX-XXXX-OSINFOR/08.2.1'}, donde se advierten los siguientes argumentos que guardan relación con la imputación materia de análisis:<br /><br />
+            <ol style="list-style-type: lower-alpha">
+                <li>(…) XXXXXXXXXXXXXXXXXXXXX (…). (Texto original del descargo).</li>
+                <li>(…) XXXXXXXXXXXXXXXXXXXXX (…). (Texto original del descargo).</li>
+            </ol>
+        </span>
+    </li>
+    <li>
+        <span>
+            Respecto a lo señalado por el/la concesionario/a, se advierte el siguiente análisis:
+            <ul style="margin-left: 25px;">
+                <li>
+                    Con relación al argumento señalado en el acápite a), <strong>XXXXXXXXXXXXXXXXXXXXXXXXXXX</strong>.
+                </li>
+                <li>
+                    Con relación al argumento señalado en el acápite b), <strong>XXXXXXXXXXXXXXXXXXXXXXXXXXX</strong>.
+                </li>
+                <li>
+                    Con relación al argumento señalado en el acápite c), <strong>XXXXXXXXXXXXXXXXXXXXXXXXXXX</strong>.
+                </li>
+            </ul>
+        </span>
+    </li>
+</ol>
+{{/if}}
+
+En el presente caso, de acuerdo a la documentación que obra en el expediente administrativo y del análisis de los descargos, ha quedado acreditado lo siguiente:
+<br />
+<br />
+El/la administrada/o no ha informado el egreso de XX especímenes de Fauna Silvestre, los cuales corresponden a XX”.
+<br />
+<br />
+Por lo que en el presente caso, se evidencia que el/la administrada/o no ha informado el egreso de  XX, como se observa del Balance de ingresos y egresos, donde no se advierte la situación de estas especies; se debe precisar que la administrada presentó toda documentación que acredita la posesión de distintas especies, así como toda documentación sobre los egresos de las mismas; sin embargo, en ninguno de estos documentos se advierte la situación de los mencionados especímenes, por lo que al evidenciarse que la administrada debe poseer estas especies y al advertir que estas no se encontraron al momento de la supervisión, se puede concluir que el/la administrada/o no ha informado sobre el egreso de las especies antes citadas.
+<br />
+<br />
+<table width="100%" cellpadding="4" border="0" style="font-family: Arial; font-size: 9pt; border-collapse: collapse; line-height: 150%;">
+    <thead>
+        <tr style="background-color: #bfbfbf;">
+            <th style="text-align: center; border: 1px solid #000;">
+                Espécimen
+            </th>
+            <th style="text-align: center; border: 1px solid #000;">
+                Reporte Inf de Sup
+            </th>
+            <th style="text-align: center; border: 1px solid #000;">
+                Egreso
+            </th>
+            <th style="text-align: center; border: 1px solid #000;">
+                Motivo
+            </th>
+            <th style="text-align: center; border: 1px solid #000;">
+                Balance documentario
+            </th>
+            <th style="text-align: center; border: 1px solid #000;">
+                Supervisión OSINFOR
+            </th>
+            <th style="text-align: center; border: 1px solid #000;">
+                Especie faltante
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        {{each(a, b) [1,2,3,4,5,6]}}
+        <tr>
+            <td style="border: 1px solid #000; text-align: center;"></td>
+            <td style="border: 1px solid #000; text-align: center;"></td>
+            <td style="border: 1px solid #000; text-align: center;"></td>
+            <td style="border: 1px solid #000; text-align: center;"></td>
+            <td style="border: 1px solid #000; text-align: center;"></td>
+            <td style="border: 1px solid #000; text-align: center;"></td>
+            <td style="border: 1px solid #000; text-align: center;"></td>
+        </tr>
+        {{/each}}
+        <tr style="background-color: #bfbfbf;">
+            <td style="border: 1px solid #000; text-align: center;" colspan="6">
+                TOTAL
+            </td>
+            <td style="border: 1px solid #000; text-align: center;"></td>
+        </tr>
+    </tbody>
+</table>
+
+<ol class="continue" style="margin-left: ${informe.MARGIN_LEFT.OL};">
+    <li>
+        En ese contexto, de acuerdo a lo señalado precedentemente
+        {{if informe.COD_TIPO_INFORME == 1}}
+        y siendo que los descargos presentados
+        {{/if}}
+        no desacreditan los hechos que sustentan la imputación, se confirma que el administrado cometió la infracción tipificada en el literal XXXXXXXX.
+    </li>
+</ol>
+
+<ol class="continue" style="margin-left: ${informe.MARGIN_LEFT.OL};">
+    <li>
+        En el presente caso, de acuerdo a la documentación que obra en el expediente administrativo, ha quedado acreditado lo siguiente:
+    </li>
+</ol>
+
+<ul style="list-style-type: disc; margin-left: ${informe.MARGIN_LEFT.OL};">
+    <li>
+        <span>
+            <div>
+                Mediante el Proveído de Archivo de Informe de Supervisión N° xxx-20xx-OSINFOR/08.2.2, se dictaron al titular  xx mandatos relacionados al manejo de fauna silvestre, conforme al siguiente detalle:
+            </div>
+            <ul style="margin-left: 25px;">
+                <li><strong>Mandato N° 01:</strong> “xx</li>
+                <li><strong>Mandato N° 02:</strong> “xx</li>
+            </ul>
+        </span>
+    </li>
+    <li>
+        Posteriormente, mediante la Carta N° xx-xxx-OSINFOR/08.2.2, notificada con fecha xx de xx de xxx, se remitió al titular, el Proveído de Archivo de Informe de Supervisión N° xxx-20xx-OSINFOR/08.2.2, el Informe de Supervisión N° 00xx-20xx-OSINFOR/08.1.2, a fin de que pudiera dar cumplimiento a los xx mandatos detallados anteriormente.
+    </li>
+    <li>
+        <span>
+            Al respecto, en el numeral xx (Del Cumplimiento de mandatos y medidas correctivas) del Informe de Supervisión N° 00xx-20xx-OSINFOR/08.1.2, del xx de xxx de 20xx la DSFFS señala lo siguiente:
+
+            <ul style="margin-left: 25px;">
+                <li>
+                    “(…) xx”.
+                </li>
+            </ul>
+        </span>
+    </li>
+    <li>
+        Al respecto, mediante la Notificación Preventiva N° xx-A-20xx-OSINFOR/08.1 se otorgó el plazo de cinco (05) días hábiles para que el/la titular cumpla con presentar el informe de implementación de los mandatos, no obstante, hasta la fecha no se ha cumplido con la mencionada obligación.
+    </li>
+    <li>
+        Cabe precisar que, si bien mediante el Proveído de Archivo de Informe de Supervisión N° 0xx-20xx-OSINFOR/08.2.2 no se determinó un plazo para informar el cumplimiento de los mandatos, se otorgó un plazo para su implementación de xx mes, respectivamente, cumplimiento que debía informar tanto a la ARFFS como al OSINFOR; conforme al siguiente plazo:
+    </li>
+</ul>
+
+<p style="text-align: center;">
+    <strong>Plazo para la Implementación del Mandato N° 01</strong>
+</p>
+
+<table width="100%" cellpadding="4" style="border: 0; font-family: Arial; font-size: 10pt; border-collapse: collapse; line-height: 150%;">
+    <thead>
+        <tr style="background-color: #bfbfbf;">
+            <th style="text-align: center; border: 1px solid #000;">Notificación del Proveído N° de Archivo de Informe de Supervisión N° 0xx-20xx-OSINFOR/08.2.2</th>
+            <th style="text-align: center; border: 1px solid #000;">Vcto. Plazo para implementar  (hasta xx meses a partir de su notificación)</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td style="border: 1px solid #000;">
+                xx
+            </td>
+            <td style="border: 1px solid #000;">
+                xx
+            </td>
+        </tr>
+    </tbody>
+</table>
+
+<p style="text-align: center;">
+    <strong>Plazo para la Implementación del Mandato N° 02</strong>
+</p>
+
+<table width="100%" cellpadding="4" style="border: 0; font-family: Arial; font-size: 10pt; border-collapse: collapse; line-height: 150%;">
+    <thead>
+        <tr style="background-color: #bfbfbf;">
+            <th style="text-align: center; border: 1px solid #000;">Notificación del Proveído N° de Archivo de Informe de Supervisión N° 0xx-20xx-OSINFOR/08.2.2</th>
+            <th style="text-align: center; border: 1px solid #000;">Vcto. Plazo para implementar  (hasta xx meses a partir de su notificación)</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td style="border: 1px solid #000;">
+                xx
+            </td>
+            <td style="border: 1px solid #000;">
+                xx
+            </td>
+        </tr>
+    </tbody>
+</table>
+
+<ol class="continue" style="margin-left: ${informe.MARGIN_LEFT.OL};">
+    <li>
+        Sin embargo, a la fecha de emisión del presente informe, el/la titular no ha cumplido con remitir información que acredite el cumplimiento de los mandatos N° 01 y 02, siendo incluso que la supervisora de fauna silvestre verificó in situ que no fueron implementados.
+    </li>
+    <li>
+        En consecuencia, estando a la evaluación realizada a los actuados en el presente procedimiento, y siendo que el/la titular no presentó descargos que logren desacreditar los hechos que sustentan la imputación materia de análisis, ha quedado acreditada la comisión de la infracción tipificada en el numeral 14 del Anexo 2 del Cuadro de Infracciones y Sanciones en Materia de Fauna Silvestre del RISMFFS.
+    </li>
+</ol>

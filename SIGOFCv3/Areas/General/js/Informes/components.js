@@ -95,7 +95,7 @@ Vue.component('editor', {
         watchdog
             .create($(this.$el).find(".editor")[0], ckeditorConfig);*/
 
-        DecoupledDocumentEditor.create($(this.$el).find(".editor")[0], ckeditorConfig).then(editor => {
+        DecoupledDocumentEditor.create($(this.$el).find(".editor")[0], window.ckeditorConfig || {}).then(editor => {
             self.instance = editor;
 
             //toolbarContainer

@@ -37,6 +37,7 @@ namespace CapaLogica.Documento
             cabecera.pNFlagSancion = Convert.ToInt16(informeDigital.FLG_SANCION);
             cabecera.pNSancionUIT = informeDigital.SANCION_UIT ?? 0;
             cabecera.pvSancionCodCalculo = informeDigital.SANCION_COD_CALCULO;
+            cabecera.pNFlagReincidencia = Convert.ToInt16(informeDigital.FLG_REINCIDENCIA);
             cabecera.pNFlagMedidaCorrectiva = Convert.ToInt16(informeDigital.FLG_MEDIDA_CORRECTIVA);
             cabecera.pNFlagMedidaComplementaria = Convert.ToInt16(informeDigital.FLG_MEDIDA_COMPLEMENTARIA);
             cabecera.pNFlagResponsableSolidario = Convert.ToInt16(informeDigital.FLG_RESPONSABLE_SOLIDARIO);
@@ -55,6 +56,11 @@ namespace CapaLogica.Documento
         public VM_INFORME_LEGAL_DIGITAL ObtenerInforme(string COD_RESOLUCION)
         {
             return oDat_Informe_Legal_Digital.ObtenerInforme(COD_RESOLUCION);
+        }
+
+        public VM_Fiscalizacion_ISupervision InformeSupervisionResumen(string COD_INFORME_SUPERVISION)
+        {
+            return oDat_Informe_Legal_Digital.InformeSupervisionResumen(COD_INFORME_SUPERVISION);
         }
 
         public List<VM_INFORME_LEGAL_DIGITAL_ANTECEDENTE> ObtenerAntecedentesRSD(string COD_RESOLUCION, string COD_THABILITANTE)
@@ -90,11 +96,6 @@ namespace CapaLogica.Documento
         public bool AnularFirmaPorInforme(string codInforme)
         {
             return oDat_Informe_Legal_Digital.AnularFirmaPorInforme(codInforme);
-        }
-
-        public List<Ent_INFORME_VOL_ANALIZADO> RegMostrarInfoDocumentResumenSupervisado(string COD_RESOLUCION)
-        {
-            return oDat_Informe_Legal_Digital.RegMostrarInfoDocumentResumenSupervisado(COD_RESOLUCION);
-        }
+        }        
     }
 }

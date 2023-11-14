@@ -400,8 +400,9 @@
             html += '.landscape {page:landscape;}\n';
             html += 'body, table, table tr th, table tr td, p, ul, ol, span, strong, div { line-height: 1em; }\n';
             html += 'body, table { font-family: Arial; font-size: 10pt; }\n';
-            html += 'ul { margin-left: -25px; list-style: disc; }\n';
-            html += 'ul li, ol li { margin-bottom: 12px; }';            
+            html += 'ul, ol { margin-left: 25px; }\n';
+            html += 'ul { list-style: disc; }\n';
+            html += 'ul li, ol li { margin-bottom: 12px; }';
             html += '-->\n';
             html += '</style>\n';
 

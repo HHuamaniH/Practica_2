@@ -1,0 +1,173 @@
+﻿<table width="580" cellpadding="4" style="border: 0; font-family: Arial; font-size: 10pt; border-collapse: collapse; line-height: 150%;">
+    <thead>
+        <tr style="background-color: #bfbfbf;">
+            <th style="text-align: center; border: 1px solid #000;">Base legal de la obligación</th>
+            <th style="text-align: center; border: 1px solid #000;">Tipo infractor</th>
+            <th style="text-align: center; border: 1px solid #000;">Conducta Imputada</th>
+            <th style="text-align: center; border: 1px solid #000;">Descargo sobre la imputación formulada</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td style="border: 1px solid #000;">
+                Literal d) del numeral 17.1 del artículo 17 del RGFS
+            </td>
+            <td style="border: 1px solid #000;">
+                <div>
+                    Numeral 12 del Anexo 2 del Cuadro de Infracciones y Sanciones en Materia Forestal del RISMFFS.
+                </div>
+                <br />
+                <i>
+                    “No tener libro de operaciones o no registrar la información endicho libro, de acuerdo a las disposiciones establecidas”
+                </i>
+            </td>
+            <td style="border: 1px solid #000;">
+                Se imputó contra el/la Titular ${infraccion.detalle || 'XX'}
+            </td>
+            <td style="border: 1px solid #000; text-align: center;">
+                ${informe.COD_TIPO_INFORME?'Si':'No'}
+            </td>
+        </tr>
+    </tbody>
+</table>
+<div>Fuente: Resolución Sub Directoral N° ${informe.ANTECEDENTES_DOCS.RSD.numero || '00XX-202X-OSINFOR/08.2.X'}</div>
+
+{{if informe.COD_TIPO_INFORME == 1}}
+<ol class="continue" style="margin-left: ${informe.MARGIN_LEFT.OL};">
+    <li>
+        <span>
+            Mediante el escrito, ingresado con fecha XX de XX de XXXX, con registro N° XX, la/el administrada/o presentó sus descargos contra la Resolución Sub Directoral N° ${informe.ANTECEDENTES_DOCS.RSD.numero || 'XXXXX-XXXX-OSINFOR/08.2.1'}, donde se advierten los siguientes argumentos que guardan relación con la imputación materia de análisis:<br /><br />
+            <ol style="list-style-type: lower-alpha">
+                <li>(…) XXXXXXXXXXXXXXXXXXXXX (…). (Texto original del descargo).</li>
+                <li>(…) XXXXXXXXXXXXXXXXXXXXX (…). (Texto original del descargo).</li>
+            </ol>
+        </span>
+    </li>
+    <li>
+        <span>
+            Respecto a lo señalado por el/la concesionario/a, se advierte el siguiente análisis:
+            <ul style="margin-left: 25px;">
+                <li>
+                    Con relación al argumento señalado en el acápite a), <strong>XXXXXXXXXXXXXXXXXXXXXXXXXXX</strong>.
+                </li>
+                <li>
+                    Con relación al argumento señalado en el acápite b), <strong>XXXXXXXXXXXXXXXXXXXXXXXXXXX</strong>.
+                </li>
+                <li>
+                    Con relación al argumento señalado en el acápite c), <strong>XXXXXXXXXXXXXXXXXXXXXXXXXXX</strong>.
+                </li>
+            </ul>
+        </span>
+    </li>
+</ol>
+{{/if}}
+
+En el presente caso, de acuerdo a la documentación que obra en el expediente administrativo y del análisis de los descargos, ha quedado acreditado lo siguiente:
+<br />
+<br />
+El/la administrada/o no ha informado el egreso de XX especímenes de Fauna Silvestre, los cuales corresponden a XX”.
+<br />
+<br />
+Por lo que en el presente caso, se evidencia que el/la administrada/o no ha informado el egreso de  XX, como se observa del Balance de ingresos y egresos, donde no se advierte la situación de estas especies; se debe precisar que la administrada presentó toda documentación que acredita la posesión de distintas especies, así como toda documentación sobre los egresos de las mismas; sin embargo, en ninguno de estos documentos se advierte la situación de los mencionados especímenes, por lo que al evidenciarse que la administrada debe poseer estas especies y al advertir que estas no se encontraron al momento de la supervisión, se puede concluir que el/la administrada/o no ha informado sobre el egreso de las especies antes citadas.
+<br />
+<br />
+<table width="100%" cellpadding="4" border="0" style="font-family: Arial; font-size: 9pt; border-collapse: collapse; line-height: 150%;">
+    <thead>
+        <tr style="background-color: #bfbfbf;">
+            <th style="text-align: center; border: 1px solid #000;">
+                Espécimen
+            </th>
+            <th style="text-align: center; border: 1px solid #000;">
+                Reporte Inf de Sup
+            </th>
+            <th style="text-align: center; border: 1px solid #000;">
+                Egreso
+            </th>
+            <th style="text-align: center; border: 1px solid #000;">
+                Motivo
+            </th>
+            <th style="text-align: center; border: 1px solid #000;">
+                Balance documentario
+            </th>
+            <th style="text-align: center; border: 1px solid #000;">
+                Supervisión OSINFOR
+            </th>
+            <th style="text-align: center; border: 1px solid #000;">
+                Especie faltante
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        {{each(a, b) [1,2,3,4,5,6]}}
+        <tr>
+            <td style="border: 1px solid #000; text-align: center;"></td>
+            <td style="border: 1px solid #000; text-align: center;"></td>
+            <td style="border: 1px solid #000; text-align: center;"></td>
+            <td style="border: 1px solid #000; text-align: center;"></td>
+            <td style="border: 1px solid #000; text-align: center;"></td>
+            <td style="border: 1px solid #000; text-align: center;"></td>
+            <td style="border: 1px solid #000; text-align: center;"></td>
+        </tr>
+        {{/each}}
+        <tr style="background-color: #bfbfbf;">
+            <td style="border: 1px solid #000; text-align: center;" colspan="6">
+                TOTAL
+            </td>
+            <td style="border: 1px solid #000; text-align: center;"></td>
+        </tr>
+    </tbody>
+</table>
+
+<ol class="continue" style="margin-left: ${informe.MARGIN_LEFT.OL};">
+    <li>
+        En ese contexto, de acuerdo a lo señalado precedentemente
+        {{if informe.COD_TIPO_INFORME == 1}}
+        y siendo que los descargos presentados
+        {{/if}}
+        no desacreditan los hechos que sustentan la imputación, se confirma que el administrado cometió la infracción tipificada en el literal XXXXXXXX.
+    </li>
+</ol>
+
+<ol class="continue" style="margin-left: ${informe.MARGIN_LEFT.OL};">
+    <li>
+        En el presente caso, de acuerdo a la documentación que obra en el expediente administrativo, ha quedado acreditado lo siguiente:
+    </li>
+</ol>
+
+<ul style="list-style-type: disc; margin-left: ${informe.MARGIN_LEFT.OL};">
+    <li>
+        <span>
+            <div>
+                Mediante la <strong>Resolución de Dirección Ejecutiva N° D000198-2021-MIDAGRI-SERFOR-DE de fecha 19 de octubre de 2021</strong>, se aprueba los Formatos de Libro de Operaciones, denominados “Formato de Libro de Operaciones para áreas de manejo de fauna silvestre”, “Formato de Libro de Operaciones para centros de cría de fauna silvestre” y “Formato de Libro de operaciones para centros de transformación primaria, lugares de acopio, depósitos y centros de comercialización de productos, subproductos y especímenes de fauna silvestre”, los cuales según el artículo 2 de la mencionada resolución señala que:
+            </div>
+            <div>
+                <u><strong>“Desde la entrada en vigencia de la presente Resolución hasta el plazo de un año, opera un periodo de adecuación</strong></u> en el que los titulares de áreas de manejo de fauna silvestre, centros de cría de fauna silvestre, centros de transformación primaria, lugares de acopio, depósitos y centros de comercialización de productos, subproductos y especímenes de fauna silvestre, y las Autoridades Regionales Forestales y de Fauna Silvestre, reciben la capacitación y acompañamiento de parte del SERFOR para el uso e implementación de los Formatos de Libro de Operaciones aprobados en el artículo 1 de la presente Resolución, <u>los cuales resultan exigibles luego de culminado dicho proceso</u>”.
+            </div>
+        </span>
+    </li>
+    <li>
+        <div>
+            <div>
+                Si bien es cierto se advierte que la utilización de estos formatos sería exigible luego del plazo de un año para su adecuación, se advierte que en el artículo 4 también señala que:
+            </div>
+            <div>
+                “En tanto dure el periodo de adecuación previsto en el artículo 2 de la presente Resolución, los titulares de áreas de manejo de fauna silvestre, centros de cría de fauna silvestre, centros de transformación primaria, lugares de acopio, depósitos y centros de comercialización de productos, subproductos y especímenes de fauna silvestre, <strong>tienen la obligación de acreditar la procedencia legal de los especímenes, productos y subproductos de fauna silvestre, con la documentación prevista en la legislación vigente, que puede complementarse con el uso de instrumentos manuales o informáticos para el registro de información.</strong> El uso de dichos instrumentos contribuye con la trazabilidad de los especímenes, productos y subproductos de fauna silvestre”.
+            </div>
+        </div>
+    </li>
+    <li>
+        Sin embargo, pese al requerimiento efectuado mediante la Carta N° 0XXX-XXX-OSINFOR/08.1 notificada con fecha XX, así como mediante Carta de Notificación Preventiva N° XX, de fecha XX, el/la titular no ha cumplido con presentar información equivalente al Libro de Operaciones (teniendo en cuenta que la diligencia de supervisión se efectuó con anterioridad al vencimiento del plazo de adecuación), a fin de acreditar el cumplimiento de la presente obligación.
+    </li>
+</ul>
+
+<ol class="continue" style="margin-left: ${informe.MARGIN_LEFT.OL};">
+    <li>
+        Adicionalmente, de la búsqueda realizada en el Sistema de Trámite Documentario - SITD del OSINFOR, <strong>se advierte que, el/la titular no ha presentado el Libro de Operaciones actualizado</strong>, hasta la fecha de emisión del presente Informe.
+    </li>
+    <li>
+        En ese sentido, <u><strong>se concluye que, el administrado no cuenta con el Libro de operaciones.</strong></u>
+    </li>
+    <li>
+        En consecuencia, estando a la evaluación realizada a los actuados en el presente procedimiento, y siendo que el/la titular no presentó descargos que logren desacreditar los hechos que sustentan la imputación materia de análisis, ha quedado acreditada la comisión de la infracción tipificada en el numeral 12 del Anexo 2 del Cuadro de Infracciones y Sanciones en Materia de Fauna Silvestre del RISMFFS.
+    </li>
+</ol>

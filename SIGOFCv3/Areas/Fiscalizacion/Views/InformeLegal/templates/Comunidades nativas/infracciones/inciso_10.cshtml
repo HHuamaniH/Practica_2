@@ -10,11 +10,11 @@
     <tbody>
         <tr>
             <td style="border: 1px solid #000;">
-                Literal b) del numeral 43.1 del artículo 43 , concordado con el artículo 66  del RGF
+                Literales a) y k) del numeral 29.1 del artículo 29 del RGFFSCNCC
             </td>
             <td style="border: 1px solid #000;">
-                <div>Numeral 2 del Cuadro de Infracciones y Sanciones en Materia Forestal del Anexo 1 del RISMFFS</div><br />
-                <i>“No entregar o presentar información o documentación legalmente exigible en el plazo previsto, o cuando la autoridad competente lo requiera”.</i>
+                Numeral 10 del Cuadro de Infracciones y Sanciones en Materia Forestal del Anexo 1 del RISMFFS<br /><br />
+                <i>"Talar, extraer y/o aprovechar recursos forestales no autorizados en el área del título habilitante, cuando sea imputable al administrado en su condición de titular del título habilitante"</i>
             </td>
             <td style="border: 1px solid #000;">
                 Se imputó contra el/la Titular ${infraccion.detalle || 'XX'}
@@ -35,7 +35,7 @@
     {{if informe.COD_TIPO_INFORME == 1}}
     <li>
         <span>
-            Por Escrito/Carta de fecha ${informe.ANTECEDENTES_DOCS.Escrito.fechaEmisionTexto || informe.ANTECEDENTES_DOCS.Carta.fechaEmisionTexto || 'XX de XXX del 202X'} ingresado al OSINFOR con Registro N° ${informe.ANTECEDENTES_DOCS.Escrito.numero || informe.ANTECEDENTES_DOCS.Carta.numero || 'XXXX'}, e/la concesionario/a presentó sus descargos, donde se advierte los siguientes argumentos que guarda relación con la imputación materia de análisis:<br /><br />
+            Por Escrito/Carta de fecha ${informe.ANTECEDENTES_DOCS.Escrito.fechaEmisionTexto || informe.ANTECEDENTES_DOCS.Carta.fechaEmisionTexto ||'XX de XXXX'} ingresado al OSINFOR con Registro N° ${informe.ANTECEDENTES_DOCS.Escrito.numero || informe.ANTECEDENTES_DOCS.Carta.numero || '00XX-202X-OSINFOR/08.2.X'}, e/la concesionario/a presentó sus descargos, donde se advierte los siguientes argumentos que guarda relación con la imputación materia de análisis:<br />
             <ol style="list-style-type: lower-alpha">
                 <li>(Agregar texto original).</li>
                 <li>(Agregar texto original).</li>
@@ -62,6 +62,7 @@
     {{/if}}
 </ol>
 {{/if}}
+
 {{if infraccion.flgSubsana}}
 <h5><strong>Sobre la subsanación voluntaria</strong></h5>
 <ol class="continue" style="margin-left: ${informe.MARGIN_LEFT.OL};">
@@ -70,7 +71,6 @@
     </li>
 </ol>
 <br />
-
 <div style="text-align: center; margin-bottom: 0;">
     <strong>
         Cuadro N° XX: Evaluación de los presupuestos para la configuración de la subsanación voluntaria
@@ -107,106 +107,98 @@
             <td style="border: 1px solid #000; text-align: center;">SI</td>
         </tr>
         <tr>
-            <td style="border: 1px solid #000; background-color: #bfbfbf; text-align: center;" rowspan="2">
-                Presupuesto específico
+            <td style="border: 1px solid #000; background-color: #bfbfbf; text-align: center;" rowspan="4">
+                Presupuestos específico
             </td>
             <td style="border: 1px solid #000;">
-                (i) Entregar la información o documentación.
+                (i) Reponer con otro(s) individuo(s) declarado(s) dentro de la parcela de corta del plan de manejo supervisado.
+            </td>
+            <td style="border: 1px solid #000;" rowspan="2">
+                De la revisión del Escrito/Carta de fecha XX de XX de 20XX ingresado al OSINFOR con Registro N° XXXXXXXXX, el/la concesionario/a manifiesta que habría efectuado el reemplazo del/los individuo/s semillero(s)/ fuera del censo comercial de la/s especie/s XXXXXX “nombre común” de código XXX por el individuo semillero talados sin autorización por el/los individuo/s aprovechables del plan de manejo forestal, aportando además fotografías/coordenadas/entre otros elementos objetivos que permiten inferir, en aplicación del del principio de presunción de licitud, el/la concesionario/a cumplió con la reposición de los individuos en cuestión.
+            </td>
+            <td style="border: 1px solid #000; text-align: center;" rowspan="2">SI</td>
+        </tr>
+        <tr>
+            <td style="border: 1px solid #000;">
+                Acreditar la reposición del individuo.
+            </td>
+        </tr>
+        <tr>
+            <td style="border: 1px solid #000;">
+                Justificar que fue producto de un error propio del manejo forestal.
             </td>
             <td style="border: 1px solid #000;">
-                De la revisión del Escrito/Carta de fecha ${informe.ANTECEDENTES_DOCS.Escrito.fechaEmisionTexto || 'XX de XXX del 202X'} ingresado al OSINFOR con Registro N° ${informe.ANTECEDENTES_DOCS.Escrito.numero || 'XXXX'}, se advierte que el/la concesionario/a presentó ante el (indicar entidad e informe de ejecución objeto de imputación, así como el periodo correspondiente y fecha de presentación), por lo que, se tiene por cumplido el requisito analizado.
+                De la revisión del Escrito/Carta de fecha XX de XX de 20XX ingresado al OSINFOR con Registro N° XXXXXXXXX, el/la concesionario/a expresa que los individuos talados sin autorización fueron producto del error propio del manejo forestal
+            </td>
+            <td style="border: 1px solid #000; text-align: center;">SI</td>
+        </tr>
+        <tr>
+            <td style="border: 1px solid #000;">
+                Registrar la información en el Libro de Operaciones de títulos habilitantes y/o Informes de Ejecución.
+            </td>
+            <td style="border: 1px solid #000;">
+                De la revisión del Escrito/Carta de fecha XX de XX de 20XX ingresado al OSINFOR con Registro N° XXXXXXXXX, el/la concesionario/a remitió copia del (consignar Informe de Ejecución o Libro de Operaciones) en donde consignó el reemplazo de los individuos talados sin autorización y que ello fue producto del error propio del manejo forestal.
             </td>
             <td style="border: 1px solid #000; text-align: center;">SI</td>
         </tr>
     </tbody>
 </table>
-<div style="font-size: 9pt; margin-top: 0; text-align: center;">
+<div style="font-size: 9pt; margin-top: 0; text-align: center; margin-bottom: 15px;">
     <strong>Fuente:</strong> Elaboración propia en base a lo regulado por el artículo 6 del RISMFFS
 </div>
 
 <ol class="continue" style="margin-left: ${informe.MARGIN_LEFT.OL};">
     <li>
-        En atención a lo señalado precedentemente, se advierte que la conducta <strong>del/la concesionario/a</strong> cumple con los requisitos para la aplicación de la figura de subsanación voluntaria respecto de la infracción materia de análisis.
+        En atención a lo señalado precedentemente, se advierte que la conducta <strong>del/la concesionario/a</strong> <u>cumple con los requisitos para la aplicación de la figura de subsanación voluntaria respecto de la infracción materia de análisis</u>.
     </li>
     <li>
-        En ese sentido, de acuerdo a lo señalado precedentemente, y considerando la configuración de la subsanación voluntaria, se desestima que la concesionaria haya cometido la infracción tipificada en el numeral 2 del Cuadro de Infracciones y Sanciones en Materia Forestal del Anexo 1 del RISMFFS.
+        En ese sentido, de acuerdo a lo señalado precedentemente, y considerando la configuración de la subsanación voluntaria, se desestima que la concesionaria haya cometido la infracción tipificada en el numeral 10 del Cuadro de Infracciones y Sanciones en Materia Forestal del Anexo 1 del RISMFFS.
     </li>
     <li>
-        Sin perjuicio de lo señalado anteriormente, se exhorta al/la concesionario/a a cumplir con su obligación como titular del contrato de concesión, y de remitir a esta Administración, los informes de ejecución, dentro del plazo y forma establecida en la normativa vigente; es decir dentro de los cuarenta y cinco (45) días calendario de culminado el año operativo y suscrito por el regente, en los casos que corresponda, a fin de evitar incurrir en futuras infracciones administrativas.
+        Sin perjuicio de lo señalado anteriormente, se exhorta <strong>al/la concesionario/a</strong> a cumplir con su obligación como titular del contrato de concesión, y de cumplir con la implementación del plan de manejo en los términos en que le fue aprobado, a fin de evitar incurrir en futuras infracciones administrativas.
     </li>
 </ol>
 {{/if}}
+
 <ol class="continue" style="margin-left: ${informe.MARGIN_LEFT.OL};">
     <li>
-        Conforme el artículo 66 del RGF los informes de ejecución se clasifican en: <strong>a)</strong> informe de ejecución anual (se presentan al final de año operativo en base al plan de manejo aprobado); y <strong>b)</strong> informe de ejecución final (se presenta al finalizar la vigencia del plan de manejo). <strong>El plazo para presentar el informe de ejecución a la ARFFS y al OSINFOR, es dentro de los 45 días culminado el año operativo</strong>, es decir, la Titular debió presentar el informe de ejecución conforme al siguiente cuadro:
-    </li>
-    <li>
-        La Titular <strong><u>no ha cumplido con presentar el Informe de Ejecución del XX, correspondiente al primer periodo anual 20XX-20XX, el cual debe contener las actividades de aprovechamiento de productos forestales maderables y no maderables</u></strong>, incluso habiéndose realizado la consulta en el Sistema de Trámite Documentario- SITD del OSINFOR, a la fecha de emisión del presente informe no han sido presentados, dicho incumplimiento se detalla en el siguiente cuadro.
+        De la evaluación de la documentación que obra en el expediente administrativo, ha quedado acreditado que la Titular aprovechó sin autorización un volumen de <strong>xx m<sup>3</sup></strong> correspondiente a xx árboles (semilleros/no censados), de acuerdo a las imágenes y cuadro siguiente:
     </li>
 </ol>
 
 <table cellpadding="4" border="0" style="font-family: Arial; font-size: 10pt; border-collapse: collapse; line-height: 150%; margin-bottom: 0;">
     <thead>
         <tr>
-            <th style="border: 1px solid #000; text-align: center;">Plan de Manejo Forestal</th>
-            <th style="border: 1px solid #000; text-align: center;">Tipo de Informe de Ejecución</th>
-            <th style="border: 1px solid #000; text-align: center;">Tipo de aprovechamiento</th>
-            <th style="border: 1px solid #000; text-align: center;">Periodo de implementación</th>
-            <th style="border: 1px solid #000; text-align: center;">Fecha de culminación del año operativo</th>
-            <th style="border: 1px solid #000; text-align: center;">
-                Fecha para la presentación de los Informes de Ejecución Anuales considerando los 45 días calendario
-            </th>
-            <th style="border: 1px solid #000; text-align: center;">Cumplió/No cumplió</th>
+            <th style="border: 1px solid #000; text-align: center;">N°</th>
+            <th style="border: 1px solid #000; text-align: center;">Especie</th>
+            <th style="border: 1px solid #000; text-align: center;">Cantidad de individuos</th>
+            <th style="border: 1px solid #000; text-align: center;">Estado</th>
+            <th style="border: 1px solid #000; text-align: center;">Condición</th>
+            <th style="border: 1px solid #000; text-align: center;">Antigüedad de aprovechamiento</th>
+            <th style="border: 1px solid #000; text-align: center;">Código</th>
+            <th style="border: 1px solid #000; text-align: center;">Volumen</th>
         </tr>
     </thead>
     <tbody>
         <tr>
-            <td style="border: 1px solid #000;" rowspan="2">
-                Dependerá del caso concreto
-            </td>
-            <td style="border: 1px solid #000;" rowspan="2">
-                Dependerá del caso concreto
-            </td>
-            <td style="border: 1px solid #000;">
-                No maderable (castaña)
-            </td>
-            <td style="border: 1px solid #000;">
-                XX
-            </td>
-            <td style="border: 1px solid #000;">
-                XX
-            </td>
-            <td style="border: 1px solid #000;">
-                XX
-            </td>
-            <td style="border: 1px solid #000;">
-                No cumplió
-            </td>
+            <td style="border: 1px solid #000; text-align: center;">1</td>
+            <td style="border: 1px solid #000; text-align: center;">${infraccion.especie}</td>
+            <td style="border: 1px solid #000; text-align: center;">${infraccion.nroIndividuos}</td>
+            <td style="border: 1px solid #000; text-align: center;">Movilizado</td>
+            <td style="border: 1px solid #000; text-align: center;">Semillero/no censado</td>
+            <td style="border: 1px solid #000; text-align: center;">Durante el  periodo de ejecución del plan de manejo</td>
+            <td style="border: 1px solid #000; text-align: center;">${infraccion.codEspecie}</td>
+            <td style="border: 1px solid #000; text-align: center;">${infraccion.volumen} m<sup>3</sup></td>
         </tr>
         <tr>
-            <td style="border: 1px solid #000;">
-                Maderable
-            </td>
-            <td style="border: 1px solid #000;">
-                XX
-            </td>
-            <td style="border: 1px solid #000;">
-                XX
-            </td>
-            <td style="border: 1px solid #000;">
-                XX
-            </td>
-            <td style="border: 1px solid #000;">
-                No cumplió
-            </td>
+            <td style="border: 1px solid #000; text-align: center;" colspan="7">TOTAL</td>
+            <td style="border: 1px solid #000; text-align: center;">${infraccion.volumen} m<sup>3</sup></td>
         </tr>
     </tbody>
 </table>
-<div>Fuente: Elaboración propia</div>
 
 <ol class="continue" style="margin-left: ${informe.MARGIN_LEFT.OL};">
-    <li>De acuerdo a lo señalado precedentemente XX.</li>
     <li>
-        En consecuencia, estando a la evaluación realizada a los actuados en el presente procedimiento, y siendo que el/la titular no presentó descargos que logren desacreditar los hechos que sustentan la imputación materia de análisis, ha quedado acreditada la comisión de la infracción tipificada en el numeral 2 del Anexo 2 del Cuadro de Infracciones y Sanciones en Materia de Fauna Silvestre del RISMFFS.
+        Conforme lo señalado y siendo que la XX.
     </li>
 </ol>

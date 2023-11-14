@@ -43,28 +43,28 @@
             <p>Y,</p>
             <div><strong>CONSIDERANDO:</strong></div>
             <div>
-                <ol style="margin-left: -50px; list-style: upper-roman;" start="1"><li><strong>COMPETENCIA</strong></li></ol>
+                <ol style="margin-left: ${MARGIN_LEFT.ROOT}; list-style: upper-roman;" start="1"><li><strong>COMPETENCIA</strong></li></ol>
                 <div>{{html COMPETENCIA}}</div>
             </div>
             <div>
-                <ol style="margin-left: -50px; list-style: upper-roman;" start="2"><li><strong>ANÁLISIS DE LOS RESULTADOS DEL INFORME DE SUPERVISIÓN</strong></li></ol>
+                <ol style="margin-left: ${MARGIN_LEFT.ROOT}; list-style: upper-roman;" start="2"><li><strong>ANÁLISIS DE LOS RESULTADOS DEL INFORME DE SUPERVISIÓN</strong></li></ol>
                 <!--(aquí se puede poner la opción de exportar las especies, volumen; teniendo en cuenta que debe mantenerse una hoja en blanco; toda vez, que aquí se realiza el análisis de los resultados de la diligencia de supervisión).-->
                 <span>{{html ANALISIS}}</span>
             </div>
             <div>
-                <ol style="margin-left: -50px; list-style: upper-roman;" start="3"><li><strong>IMPUTACION DE CARGOS</strong></li></ol>
+                <ol style="margin-left: ${MARGIN_LEFT.ROOT}; list-style: upper-roman;" start="3"><li><strong>IMPUTACION DE CARGOS</strong></li></ol>
                 <div>{{html IMPUTACION}}</div>
             </div>
             <div>
-                <ol style="margin-left: -50px; list-style: upper-roman;" start="4"><li><strong>SOBRE LA DISPOSICIÓN DE MEDIDAS CAUTELARES EN EL MARCO DEL PAU</strong></li></ol>
+                <ol style="margin-left: ${MARGIN_LEFT.ROOT}; list-style: upper-roman;" start="4"><li><strong>SOBRE LA DISPOSICIÓN DE MEDIDAS CAUTELARES EN EL MARCO DEL PAU</strong></li></ol>
                 <div>{{html MEDIDAS_CAUTELARES}}</div>
             </div>
             <div>
-                <ol style="margin-left: -50px; list-style: upper-roman;" start="5"><li><strong>SOBRE LA COMUNICACIÓN DE LOS ACTUADOS A OTRAS ENTIDADES</strong></li></ol>
+                <ol style="margin-left: ${MARGIN_LEFT.ROOT}; list-style: upper-roman;" start="5"><li><strong>SOBRE LA COMUNICACIÓN DE LOS ACTUADOS A OTRAS ENTIDADES</strong></li></ol>
                 <div>{{html COMUNICACION_EXTERNA}}</div>
             </div>
             <div>
-                <ol style="margin-left: -50px; list-style: upper-roman;" start="6"><li><strong>SOBRE HERRAMIENTAS PARA SUBSANAR INFRACCIONES Y EJERCER EL DERECHO A LA DEFENSA</strong></li></ol>
+                <ol style="margin-left: ${MARGIN_LEFT.ROOT}; list-style: upper-roman;" start="6"><li><strong>SOBRE HERRAMIENTAS PARA SUBSANAR INFRACCIONES Y EJERCER EL DERECHO A LA DEFENSA</strong></li></ol>
                 <div>{{html HERRAMIENTAS_SUBSANAR}}</div>
             </div>
 
@@ -115,13 +115,6 @@
 </script>
 
 <script id="tmpl-vistos" type="text/x-jquery-tmpl">
-    @*<p style="text-align: justify;">
-            El informe de Supervisión N° ${NRO_REFERENCIA} de fecha ${INF_FECHA}, con el tipo de supervisión
-            (ORDINARIA/ EXTRAORDINARIA/ INOPINADA / GABINETE*) y el plan de manejo supervisado
-            (PO / DEMA / PMFI/ CUMPLIMIENTO DE OBLIGACIONES / MEDIDAS CORRECTIVAS),
-            ${TITULAR_SUPERVISADO} con {{if RUC_TITULAR}}RUC ${RUC_TITULAR}{{else DOCUMENTO_RLEGAL}}DNI ${DOCUMENTO_RLEGAL}{{/if}}, en relación al
-            título habilitante Nº ${NUM_THABILITANTE}.
-        </p>*@
     <p>Los siguientes documentos:</p>
     <table width="100%" cellpadding="4" style="border: 0; font-family: Arial; font-size: 10pt; border-collapse: collapse; line-height: 150%;">
         <thead>
@@ -218,7 +211,7 @@
     </p>
 
     {{each(n, item) INFRACCIONES}}
-    <ol style="margin-left: -50px; list-style: lower-alpha;" start="${n + 1}">
+    <ol style="margin-left: ${MARGIN_LEFT.OL}; list-style: lower-alpha;" start="${n + 1}">
         <li>
             <strong>${item.titulo}</strong>
         </li>
@@ -339,9 +332,9 @@
     <table width="100%" cellpadding="4" style="border: 0; font-family: Arial; font-size: 10pt; border-collapse: collapse; line-height: 150%;">
         <tbody>
             <tr>
-                <td style="background-color: #f0f0f0; text-align: center; border: 1px solid #000; width: 20px;">N°</td>
-                <td style="background-color: #f0f0f0; text-align: center; border: 1px solid #000;">Conducta imputada</td>
-                <td style="background-color: #f0f0f0; text-align: center; border: 1px solid #000;">Tipo infractor</td>
+                <td style="text-align: center; border: 1px solid #000; width: 20px;">N°</td>
+                <td style="text-align: center; border: 1px solid #000;">Conducta imputada</td>
+                <td style="text-align: center; border: 1px solid #000;">Tipo infractor</td>
             </tr>
             {{each(i, item) INFRACCIONES}}
             <tr>
@@ -472,7 +465,7 @@
         <li>
             <span>
                 Suspender los efectos de las cuatro guías de transporte forestal, de fecha XX de junio de 20XX (GTF XXX), correspondientes a las especies aprobadas en el Plan de Manejo N° ${PLAN_MANEJO.NOMBRE_POA}, otorgadas a favor de ${TITULAR_SUPERVISADO}, correspondiente al TH N°  ${NUM_THABILITANTE}, conforme se detalla a continuación:
-                <table width="100%" cellpadding="4" style="border: 0; font-family: Arial; font-size: 10pt; border-collapse: collapse; line-height: 150%;">
+                <table width="570" cellpadding="4" style="border: 0; font-family: Arial; font-size: 10pt; border-collapse: collapse; line-height: 150%;">
                     <thead>
                         <tr>
                             <td style="text-align: center; border: 1px solid #000;">Parcela de corta</td>
@@ -506,7 +499,7 @@
                 <p>
                     Incautar temporalmente los recursos forestales movilizados mediante las XX Guías de Transporte Forestal de fecha XX de XXX de 20XX del Plan de Manejo N° ${PLAN_MANEJO.NOMBRE_POA}, conforme se detalla a continuación:
                 </p>
-                <table width="100%" cellpadding="4" style="border: 0; font-family: Arial; font-size: 10pt; border-collapse: collapse; line-height: 150%;">
+                <table width="570" cellpadding="4" style="border: 0; font-family: Arial; font-size: 10pt; border-collapse: collapse; line-height: 150%;">
                     <thead>
                         <tr>
                             <td style="text-align: center; border: 1px solid #000;">Parcela de corta</td>
@@ -558,9 +551,9 @@
     <table width="100%" cellpadding="4" style="border: 0; font-family: Arial; font-size: 10pt; border-collapse: collapse; line-height: 150%;">
         <tbody>
             <tr>
-                <td style="background-color: #f0f0f0; text-align: center; border: 1px solid #000; width: 20px;">N°</td>
-                <td style="background-color: #f0f0f0; text-align: center; border: 1px solid #000;">Entidad</td>
-                <td style="background-color: #f0f0f0; text-align: center; border: 1px solid #000;">Motivo</td>
+                <td style="text-align: center; border: 1px solid #000; width: 20px;">N°</td>
+                <td style="text-align: center; border: 1px solid #000;">Entidad</td>
+                <td style="text-align: center; border: 1px solid #000;">Motivo</td>
             </tr>
             <tr>
                 <td style="border: 1px solid #000;">1</td>
@@ -582,9 +575,9 @@
     <table width="100%" cellpadding="4" style="border: 0; font-family: Arial; font-size: 10pt; border-collapse: collapse; line-height: 150%;">
         <tbody>
             <tr>
-                <td style="background-color: #f0f0f0; text-align: center; border: 1px solid #000;">Herramientas</td>
-                <td style="background-color: #f0f0f0; text-align: center; border: 1px solid #000;">Objetivos</td>
-                <td style="background-color: #f0f0f0; text-align: center; border: 1px solid #000;">Beneficios</td>
+                <td style="text-align: center; border: 1px solid #000;">Herramientas</td>
+                <td style="text-align: center; border: 1px solid #000;">Objetivos</td>
+                <td style="text-align: center; border: 1px solid #000;">Beneficios</td>
             </tr>
             <tr>
                 <td style="border: 1px solid #000; text-align: center; vertical-align: middle;">
@@ -667,7 +660,7 @@
             <thead>
                 <tr>
                     <th style="border: 1px solid #000; text-align: center;">N°</th>
-                    <th style="border: 1px solid #000; text-align: center;">Conducta imputad</th>
+                    <th style="border: 1px solid #000; text-align: center;">Conducta imputada</th>
                     <th style="border: 1px solid #000; text-align: center;">Causal de caducidad</th>
                 </tr>
             </thead>
@@ -781,6 +774,12 @@
             <strong>Artículo.</strong> Adjuntar al expediente que se genere el récord de sanciones administrativas a la xx, que pueda existir en el OSINFOR.
         </p>
     </div>
+</script>
+
+<script id="tmpl-encabezado" type="text/x-jquery-tmpl">
+    <p style="text-align:center;">
+        <img height="200" width="200" alt="" src="${URL_APLICACION}content/images/logo/escudo-peruano.jpg">
+    </p>
 </script>
 
 <script id="tmpl-pie-pagina" type="text/x-jquery-tmpl">

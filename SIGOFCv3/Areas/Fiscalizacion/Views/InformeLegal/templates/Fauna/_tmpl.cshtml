@@ -1,10 +1,11 @@
 ﻿<ol class="continue" style="margin-left: ${MARGIN_LEFT.OL};">
-    <li>De conformidad con lo establecido en el numeral 4 del artículo 255 del Texto Único Ordenado de la Ley N° 27444, Ley del Procedimiento Administrativo General, aprobado por Decreto Supremo N° 004-2019-JUS (en adelante, TUO de la Ley N° 27444) con el respectivo descargo o sin él, la autoridad que instruye el procedimiento realizará todas las actuaciones necesarias para el examen de los hechos, recabando los datos e informaciones que sean relevantes para determinar, en su caso, la existencia de responsabilidad susceptible de sanción.</li>
-    <li>En tal sentido, resulta necesario confrontar los hechos advertidos en la supervisión y las actuaciones administrativas del presente procedimiento, a fin de determinar fehacientemente si existe coherencia y correspondencia entre ellos, así como responsabilidad administrativa emanada de las conductas del titular; bajo esta premisa, corresponde analizar las imputaciones formuladas sobre la base de lo señalado previamente con el objeto de acreditar o no su comisión.</li>
+    <li>
+        De acuerdo al Numeral 4 del artículo 255 del Texto Único Ordenado de la Ley N° 27444, Ley del Procedimiento Administrativo General, aprobado por Decreto Supremo N° 004-2019-JUS (en adelante, TUO de la Ley N° 27444), Con el respectivo descargo o sin él, la autoridad que instruye el procedimiento realizará todas las actuaciones necesarias para la evaluación de los hechos, a fin de determinar, en su caso, la existencia de responsabilidad susceptible de sanción; a continuación se analizará las imputaciones formuladas, a fin de acreditar o no su comisión.
+    </li>
 </ol>
 
 {{if FLG_CUESTION_PREVIA}}
-<h5 style="margin-left: ${MARGIN_LEFT.H};"><u><strong>Cuestión previa: Rectificación de error material</strong></u></h5>
+<h5><u><strong>Cuestión previa: Rectificación de error material</strong></u></h5>
 <ol class="continue" style="margin-left: ${MARGIN_LEFT.OL};">
     <li>
         Antes de efectuar el análisis correspondiente al PAU iniciado al/la administrado/a, es necesario señalar que, (detallar el error material identificado), siendo lo correcto XXXXXX XXXXXXX XXXXXXXXXX. Por lo tanto, se procede a realizar una rectificación de error material
@@ -33,11 +34,11 @@
 {{/if}}
 
 {{if FLG_REC_RESPONSABILIDAD}}
-<h5 style="margin-left: ${MARGIN_LEFT.H};"><u><strong>Sobre el reconocimiento de responsabilidad</strong></u></h5>
+<h5><u><strong>Sobre el reconocimiento de responsabilidad</strong></u></h5>
 <ol class="continue" style="margin-left: ${MARGIN_LEFT.OL}; ">
     <li>
         <span>
-            Mediante Escrito/Carta N°/S/N, de fecha XX de XXXX de XXXX, ingresado al OSINFOR el XX de XXXXX de XXXX con Registro N° XXXXXXXXX, el/la administrado/a reconoce su responsabilidad en la comisión de las infracciones imputadas, señalando lo siguiente:
+            Mediante Escrito/Carta N° ${ANTECEDENTES_DOCS.Escrito.numero || ANTECEDENTES_DOCS.Carta.numero || 'XXXX'}, de fecha ${ANTECEDENTES_DOCS.Escrito.fechaEmisionTexto || ANTECEDENTES_DOCS.Carta.fechaEmisionTexto || 'XX de XXXX de XXXX'}, el/la administrado/a reconoce su responsabilidad en la comisión de las infracciones imputadas, señalando lo siguiente:
             <p style="padding-left: 30px; font-style: italic;">
                 “Describir lo expuesto por el/la administrado/a”.
             </p>
@@ -77,74 +78,138 @@
             </ol>
         </span>
     </li>
-    <li>En esa línea, el/la administrado/a ha reconocido su responsabilidad mediante el escrito/carta presentado/a el XX de XXXX de XXXX, es decir, dentro del plazo para la presentación de los descargos a las imputaciones efectuadas mediante el/la Escrito/Carta N°/S/N, de fecha XX de XXXX de XXXX, ingresado al OSINFOR el XX de XXXXX de XXXX con Registro N° XXXXXXXXX, siendo de aplicación el primer supuesto antes mencionado, aspecto que será considerado cuando se realice cálculo de la multa en los considerandos siguientes.</li>
+    <li>En esa línea, el/la administrado/a ha reconocido su responsabilidad mediante el escrito/carta presentado/a el ${ANTECEDENTES_DOCS.Escrito.fechaEmisionTexto || ANTECEDENTES_DOCS.Carta.fechaEmisionTexto || 'XX de XXXX de XXXX'}, es decir, dentro del plazo para la presentación de los descargos a las imputaciones efectuadas mediante el/la Escrito/Carta N° ${ANTECEDENTES_DOCS.Escrito.numero || ANTECEDENTES_DOCS.Carta.numero || 'XXXX'}, de fecha ${ANTECEDENTES_DOCS.Escrito.fechaEmisionTexto || ANTECEDENTES_DOCS.Carta.fechaEmisionTexto || 'XX de XXXX de XXXX'}, siendo de aplicación el primer supuesto antes mencionado, aspecto que será considerado cuando se realice cálculo de la multa en los considerandos siguientes.</li>
 </ol>
 {{/if}}
 
 {{if INFRACCIONES.length}}
-<h5 style="margin-left: ${MARGIN_LEFT.H};"><u><strong>Sobre las infracciones imputadas</strong></u></h5>
-<ol style="list-style-type: lower-alpha; margin-left: ${MARGIN_LEFT.OL};" start="1">
-    {{each(i, infra) INFRACCIONES}}
-    <li>
-        <span>
-            <strong>${infra.titulo}</strong>
-        </span>
-        {{html infra.parrafos}}
-    </li>
-    {{/each}}
-</ol>
+<h5><u><strong>Sobre las infracciones imputadas</strong></u></h5>
+{{each(i, infra) INFRACCIONES}}
+<div>
+    <ol style="list-style-type: lower-alpha; margin-left: ${MARGIN_LEFT.OL};" start="${i + 1}">
+        <li><strong>${infra.titulo}</strong></li>
+    </ol>
+    {{html infra.parrafos}}
+</div>
+{{/each}}
 {{/if}}
 
 {{if FLG_GRAVEDAD_RIESGO}}
-<h5 style="margin-left: ${MARGIN_LEFT.H};"><u><strong>Determinación de la gravedad y/o riesgo generado</strong></u></h5>
-<ol class="continue" style="margin-left: ${MARGIN_LEFT.OL};">
+<h5><u><strong>Determinación de la gravedad y/o riesgo generado</strong></u></h5>
+<table width="100%" cellpadding="4" style="border: 0; font-family: Arial; font-size: 10pt; border-collapse: collapse; line-height: 150%;">
+    <thead>
+        <tr>
+            <th style="text-align: center; border: 1px solid #000;"><strong>Normativa</strong></th>
+            <th style="text-align: center; border: 1px solid #000;"><strong>Análisis</strong></th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td style="border: 1px solid #000;">
+                “Criterios para estimar la gravedad del daño por la comisión de infracciones en materia forestal”, aprobado por Resolución de Jefatura Nº 059-2019-OSINFOR.
+            </td>
+            <td style="border: 1px solid #000;">
+                <div>
+                    Conforme a los resultados del Informe de Supervisión, la extracción de XX m3 de madera provenientes de árboles no autorizados, representa una afectación de XX hectáreas (XX hectáreas/m3 no autorizado) de nivel XX a la cobertura boscosa, la cual forma parte del Patrimonio Forestal Nacional.
+                </div>
+                <div>
+                    Cabe señalar que, las especies en cuestión no se encuentran incluidas en la lista de Clasificación Oficial de Especies Amenazadas de Flora Silvestre, aprobada mediante Decreto Supremo N° 043-2006-AG
+                    <a style="mso-footnote-id: foot_decreto_supremo_1" href="#_foot_decreto_supremo_1" title="">
+                        <sup class=MsoFootnoteReference><span style="mso-special-character:footnote"></span></sup>
+                    </a>.
+                </div>
+            </td>
+        </tr>
+    </tbody>
+</table>
+
+<h5><u><strong>Afectación al patrimonio forestal</strong></u></h5>
+<ol class="continue" style="margin-left: ${MARGIN_LEFT.OL}; ">
     <li>
-        De acuerdo a la opinión técnica vertida en el presente procedimiento, el volumen total extraído de X.XXX m<sup>3</sup>, que fue movilizado de árboles no autorizados, incluido el semillero movilizado / árboles fuera del censo, el retiro de cobertura vegetal de X.XXX hectáreas, así como el nivel de impacto causado por metro cúbico no autorizado (0.0167 hectáreas/ m3 no autorizado), habría ocasionado la afectación de X.XXX hectáreas de cobertura boscosa, lo que implica una afectación de magnitud “XXXX” a la cobertura boscosa natural que integra el Patrimonio Forestal Nacional; ello, en aplicación de los criterios SGC-M1-CRI-001-V.02, “Criterios para estimar la gravedad del daño por la comisión de infracciones en materia forestal”, aprobado por Resolución de Jefatura N° 059-2019-OSINFOR.
-    </li>
-    <li>
-        Cabe señalar que, las especies en cuestión no se encuentran incluidas en la lista de Clasificación Oficial de Especies Amenazadas de Flora Silvestre, aprobada mediante Decreto Supremo N° 043-2006-AG.
+        Exponer las acciones dañosas advertidas en el marco de los Criterios SGC-M1-CRI-001-V.02 “Criterios para estimar la gravedad del daño por la comisión de infracciones en materia forestal” , o la que lo sustituya.
     </li>
 </ol>
 {{/if}}
 
 {{if FLG_SANCION}}
-<h5 style="margin-left: ${MARGIN_LEFT.H};"><u><strong>Sobre la imposición de sanción</strong></u></h5>
+<h5>
+    <u>
+        <strong>
+            <span>Sobre la imposición de sanción</span>
+            <a style="mso-footnote-id: foot_sancion_titulo" href="#_foot_sancion_titulo" title="">
+                <sup class=MsoFootnoteReference><span style="mso-special-character:footnote"></span></sup>
+            </a>, atenuantes y agravantes
+        </strong>
+    </u>
+</h5>
+<ol class="continue" style="margin-left: ${MARGIN_LEFT.OL};">
+    <li>
+        <span>De acuerdo con el reporte de antecedentes</span>
+        <a style="mso-footnote-id: foot_reporte_antecedentes" href="#_foot_reporte_antecedentes" title="">
+            <sup class=MsoFootnoteReference><span style="mso-special-character:footnote"></span></sup>
+        </a> de fecha XX, se advierte que, el/la Titular no fue sancionada anteriormente por el OSINFOR, y no se identifican agravantes y atenuantes aplicables, en consecuencia, las infracciones acreditadas son pasibles de ser sancionadas de la siguiente manera:
+    </li>
+</ol>
+<table width="100%" cellpadding="4" style="border: 0; font-family: Arial; font-size: 10pt; border-collapse: collapse; line-height: 150%;">
+    <thead>
+        <tr>
+            <th style="text-align: center; border: 1px solid #000;"><strong>Infracción</strong></th>
+            <th style="text-align: center; border: 1px solid #000;"><strong>Sanción</strong></th>
+        </tr>
+    </thead>
+    <tbody>
+        {{each(i, infra) INFRACCIONES}}
+        <tr>
+            <td style="border: 1px solid #000;">
+                Numeral "${infra.inciso}" del Anexo 1 del RISMFFS.<br />
+                ${infra.titulo}
+            </td>
+            <td style="border: 1px solid #000; width: 40%; text-align: center; ">
+                ${infra.rangoSancion || 'XX UIT'}
+            </td>
+        </tr>
+        {{/each}}
+    </tbody>
+    <tfoot>
+        <tr>
+            <td style="border: 1px solid #000; text-align: center;">
+                <strong>Total Sanción de Multa</strong>
+            </td>
+            <td style="border: 1px solid #000; text-align: center;">
+                <strong>${SANCION_UIT || 'XX'} UIT</strong>
+            </td>
+        </tr>
+    </tfoot>
+</table>
+
+{{if FLG_REINCIDENCIA}}
 <ol class="continue" style="margin-left: ${MARGIN_LEFT.OL};">
     <li>
         <span>
-            La(s) infracción(es) acreditada(s) es(son) pasible(s) de ser sancionada(s) de la siguiente manera:
+            En virtud de lo expuesto y considerando establecido en el literal e)  del ítem 3 del artículo 248 del TUO de la Ley del Procedimiento Administrativo General - Ley N° 27444, se advierte que la administrada tiene la calidad de reincidente, condición que deberá tenerse al momento de imponerse una sanción de acuerdo al siguiente detalle:
             <ul>
-                {{each(i, infr) INFRACCIONES}}
                 <li>
-                    Respecto de la infracción tipificada como ${infr.gravedad?.toLowerCase()} en el numeral ${infr.inciso} del Cuadro de Infracciones y Sanciones en Materia Forestal del Anexo 2 del RISMFFS, con una {{if infr.tipoInfraccion > 1}}multa ascendente ${infr.rangoSancion || 'XX A XX UIT'}{{else}} amonestación{{/if}}.
+                    Con relación a las sanciones el /la administrada/o es reincidente por la infracción tipificada en el numeral XX relacionada a la implementación del Libro de operaciones, toda vez que considerando la fecha de finalización de vigencia del plan de manejo (XX – XX ) del presente caso, se deduce que la administrada ya contaba con la obligación de la implementación del Libro de operaciones después que quedaran firmes las resoluciones de sanción descritas anteriormente.
                 </li>
-                {{/each}}
+                <li>
+                    Con relación a la primera y segunda sanción la administrada no es reincidente por la infracciones tipificadas en los literales XX del XX , toda vez que, para el presente caso, se advierte de la Forma 20, que la fecha última de movilización (GTF – XX) de la especie XX (especie materia de sanción) fue realizado el XX, por lo cual tomando en cuenta la fecha de notificación de las resoluciones de sanción descritas anteriormente, se deduce que la el /la administrada/o realizó el aprovechamiento antes que quedaran firmes las citadas resoluciones.
+                </li>
             </ul>
         </span>
-    </li>
-    <li>
-        Ahora bien, de acuerdo con el Reporte de Antecedentes, de fecha XX de XXXXXX de XXXX, se advierte que el/la administrado/a no registra sanción de amonestación y/o multa impuesta por la Dirección de Fiscalización Forestal y de Fauna Silvestre. En esa línea, se puede considerar que <strong>el administrado no ha incurrido en reincidencia</strong>.
-    </li>
-    <li>
-        {{if FLG_SANCION == 1}}
-        En tal sentido, teniendo en consideración la aplicación a la metodología aprobada, corresponde imponer una <strong>sanción de amonestación</strong> respecto de (precisar las infracciones acreditadas) del Cuadro de Infracciones y Sanciones en Materia Forestal del Anexo 2 del RISMFFS.
-        {{else FLG_SANCION == 2}}
-        En tal sentido, teniendo en consideración la aplicación a la metodología aprobada, corresponde imponer una <strong>sanción de multa ascendente a ${SANCION_UIT || 0} UIT</strong>, vigente a la fecha en que se cumpla con el pago de esta respecto de (precisar las infracciones acreditadas) del Cuadro de Infracciones y Sanciones en Materia Forestal del RISMFFS.
-        {{else FLG_SANCION == 3}}
-        En tal sentido, teniendo en consideración la aplicación a la metodología aprobada, corresponde imponer una <strong>sanción de amonestación</strong> respecto de (precisar las infracciones acreditadas) del Cuadro de Infracciones y Sanciones en Materia Forestal del Anexo 2 del RISMFFS, asi como una <strong>sanción de multa ascendente a ${SANCION_UIT || 0} UIT</strong>, vigente a la fecha en que se cumpla con el pago de esta respecto de (precisar las infracciones acreditadas) del Cuadro de Infracciones y Sanciones en Materia Forestal del citado reglamento.
-        {{/if}}
     </li>
 </ol>
 {{/if}}
 
+{{/if}}
+
 {{if FLG_MEDIDA_CORRECTIVA}}
-<h5 style="margin-left: ${MARGIN_LEFT.H};"><u><strong>De las medidas correctivas (mandatos)</strong></u></h5>
+<h5><u><strong>De las medidas correctivas (mandatos)</strong></u></h5>
 <ol class="continue" style="margin-left: ${MARGIN_LEFT.OL};">
     <li>
         Para el presente caso, corresponde analizar si resulta viable dictar la medida correctiva por el incumplimiento del Mandato N° XX y el incumplimiento del plan de manejo (infraestructura de respaldo), según lo dispuesto en los Criterios SGC-M1-CRI-004-V.01 “Criterios para la disposición, seguimiento y verificación de las medidas correctivas y/o mandatos en materia forestal y de fauna silvestre del Organismo de Supervisión de los Recursos Forestales y de Fauna Silvestre - OSINFOR”, aprobado mediante Resolución de Jefatura Nº 00055-2020-OSINFOR/01.1.
     </li>
 </ol>
-<h5 style="margin-left: ${MARGIN_LEFT.H};"><u><strong>Sobre el incumplimiento del Mandado N° xx:</strong></u></h5>
+<h5><u><strong>Sobre el incumplimiento del Mandado N° xx:</strong></u></h5>
 <ol class="continue" style="margin-left: ${MARGIN_LEFT.OL};">
     <li>
         Ahora bien, de acuerdo al Cuadro N° XY (Medidas correctivas en materia de fauna silvestre y plazos para su implementación) de los “Criterios para la disposición, seguimiento y verificación de las medidas correctivas y/o mandatos en materia forestal y de fauna silvestre del Organismo de Supervisión de los Recursos Forestales y de Fauna Silvestre - OSINFOR”, aprobado por Resolución Jefatural N° 00055-2020-OSINFOR, no se establece una medida específica para el incumplimiento de mandatos. No obstante, dispone que “La DFFFS evaluará la pertinencia de disponer otras medidas correctivas que no se encuentren contempladas en el presente documento”.
@@ -156,7 +221,7 @@
         En ese sentido, y habiéndose determinado la necesidad de la implementación continua del manejo de seguridad en el XXXXXXX, el tipo de medida correctiva de prevención y mitigación, la cual es viable acreditando la implementación de candados en todos los recintos del Centro de Custodia Temporal y deberá ser realizada conforme lo señala el Anexo II del presente informe.
     </li>
 </ol>
-<h5 style="margin-left: ${MARGIN_LEFT.H};"><u><strong>Sobre la implementación del plan de manejo (infraestructura de respaldo):</strong></u></h5>
+<h5><u><strong>Sobre la implementación del plan de manejo (infraestructura de respaldo):</strong></u></h5>
 <ol class="continue" style="margin-left: ${MARGIN_LEFT.OL};">
     <li>
         Por otro lado, corresponde analizar si resulta viable dictar la medida correctiva por no implementar infraestructura de respaldo conforme al plan de manejo de fauna silvestre aprobado, según lo dispuesto en los “Criterios para la disposición, seguimiento y verificación de las medidas correctivas y/o mandatos en materia forestal y de fauna silvestre del Organismo de Supervisión de los Recursos Forestales y de Fauna Silvestre - OSINFOR”, aprobado por Resolución Jefatural N° 00055-2020-OSINFOR, el tipo de medida correctiva que corresponde aplicar sería de medida implementación del plan de manejo, la cual es viable realizando la implementación del tópico, cuarentena y almacén de acuerdo a lo descrito en el plan de manejo de fauna silvestre y deberá ser realizada conforme lo señala el Anexo II del presente informe.
@@ -168,7 +233,7 @@
 {{/if}}
 
 {{if FLG_MEDIDA_COMPLEMENTARIA}}
-<h5 style="margin-left: ${MARGIN_LEFT.H};"><u><strong>De las medidas complementarias</strong></u></h5>
+<h5><u><strong>De las medidas complementarias</strong></u></h5>
 <ol class="continue" style="margin-left: ${MARGIN_LEFT.OL};">
     <li>
         En ese sentido, con la finalidad de eliminar o mitigar los efectos producidos por la comisión de la infracción acreditada en el presente procedimiento, tales como el incumplimiento de mandatos, conforme a lo establecido en el Reglamento de Infracciones y Sanciones en Materia Forestal y de Fauna Silvestre, aprobado mediante Decreto Supremo N° 007-2021-MIDAGRI, publicado con fecha 12 de abril de 2021, el cual señala que de manera complementaria a la sanción a imponerse, puede aplicarse la clausura, ya sea temporal o definitiva, de un establecimiento que desarrolla actividades prohibidas o que contravengan las disposiciones previstas en la legislación forestal y de fauna silvestre.
@@ -195,11 +260,26 @@
 {{/if}}
 
 {{if FLG_COMUNICACION_GORE}}
-<h5 style="margin-left: ${MARGIN_LEFT.H};"><u><strong>Comunicación al GORE</strong></u></h5>
-<ol class="continue" style="margin-left: ${MARGIN_LEFT.OL};">
-    <li>
-        Finalmente, se advierte que la Resolución Sub Directoral N° ${ANTECEDENTES_DOCS.RSD.numero || 'XXXXX-XXXX-OSINFOR/08.2.1'}, que dio inicio al PAU fue oportunamente remitida a la ARFFS, para que, luego de conocer los resultados de la supervisión del OSINFOR y la disposición del inicio del PAU, en el marco de su atribución fiscalizadora, pueda ejercer las funciones de su competencia. En ese sentido, corresponde comunicarle el resultado y conclusión del presente procedimiento, para los fines pertinentes, para que en el marco de sus competencias ejecuten las acciones correspondientes.
-    </li>
-</ol>
+<h5><u><strong>Comunicación al GORE y/o otras autoridades</strong></u></h5>
+<table width="100%" cellpadding="4" style="border: 0; font-family: Arial; font-size: 10pt; border-collapse: collapse; line-height: 150%;">
+    <thead>
+        <tr>
+            <th style="border: 1px solid #000; text-align: center;"><strong>Entidad</strong></th>
+            <th style="border: 1px solid #000; text-align: center;"><strong>Motivo</strong></th>
+        </tr>
+    </thead>
+    <tbody>
+        {{each(index, entidad) INSTITUCIONES}}
+        <tr>
+            <td style="border: 1px solid #000;">
+                ${entidad}
+            </td>
+            <td style="border: 1px solid #000;">
+                Se advierte que, la Resolución Sub Directoral N° ${ANTECEDENTES_DOCS.RSD.numero || '00XX-2023-OSINFOR/08.2.1'}, fue oportunamente remitida a ${TITULAR || 'XXX'}, para que, luego de conocer los resultados de la supervisión del OSINFOR y la disposición del inicio del PAU, en el marco de su atribución fiscalizadora, pueda ejercer las funciones de su competencia. En ese sentido, corresponde comunicarle el resultado y conclusión del presente procedimiento, para los fines pertinentes, para que en el marco de sus competencias ejecuten las acciones correspondientes.
+            </td>
+        </tr>
+        {{/each}}
+    </tbody>
+</table>
 {{/if}}
 

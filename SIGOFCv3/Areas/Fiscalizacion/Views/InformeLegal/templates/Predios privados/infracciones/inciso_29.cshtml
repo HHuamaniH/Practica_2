@@ -10,12 +10,12 @@
     <tbody>
         <tr>
             <td style="border: 1px solid #000;">
-                Literales a) y k) del numeral 43.1 del artículo 43 del RGF.
+                Literal m) del numeral 43.1 del artículo 43 del RGF.
             </td>
             <td style="border: 1px solid #000;">
-                Numeral 21 del Cuadro de Infracciones y Sanciones en Materia Forestal del Anexo 1 del RISMFFS.
+                Numeral 29 del Cuadro de Infracciones y Sanciones en Materia Forestal del Anexo 1 del RISMFFS
                 <br /><br />
-                <i>"Talar, extraer y/o aprovechar recursos forestales, sin autorización, en su condición o no de titular del título habilitante, a excepción de los aprovechados por subsistencia"</i>
+                <i>"No contar con un regente para la implementación del plan de manejo, en caso corresponda"</i>
             </td>
             <td style="border: 1px solid #000;">
                 Se imputó contra el/la Titular ${infraccion.detalle || 'XX'}
@@ -66,63 +66,35 @@
 
 <ol class="continue" style="margin-left: ${informe.MARGIN_LEFT.OL};">
     <li>
-        De acuerdo a la evaluación del expediente queda acreditado que XX:
+        El XX de XXX de 202X, el/la Titular y el Ing. XX suscribieron el Contrato de Regencia Forestal, el cual tiene como objeto la XX.
+    </li>
+    <li>
+        De acuerdo a la evaluación del expediente administrativo, <strong><u>la Titular no contó con Regente Forestal durante la implementación, lo que se evidencia del contenido del Contrato de Regencia que solo considera los servicios del Regente Forestal para la elaboración del PMFI</u></strong>, tal como se observa a continuación:
     </li>
 </ol>
 
-<table cellpadding="4" border="0" style="font-family: Arial; font-size: 9pt; border-collapse: collapse; line-height: 150%;">
-    <thead>
-        <tr style="background-color: #bfbfbf;">
-            <th style="text-align: center; border: 1px solid #000;">
-                Especies supervisadas
-            </th>
-            <th style="text-align: center; border: 1px solid #000;">
-                Árboles aprobados (parcelas)
-            </th>
-            <th style="text-align: center; border: 1px solid #000;">
-                Árboles supervisados
-            </th>
-            <th style="text-align: center; border: 1px solid #000;">
-                Estado de los árboles en campo
-            </th>
-            <th style="text-align: center; border: 1px solid #000;">
-                Volumen movilizado en el Balance de Extracción (A)
-            </th>
-            <th style="text-align: center; border: 1px solid #000;">
-                Volumen movilizado advertido en campo (B)
-            </th>
-            <th style="text-align: center; border: 1px solid #000;">
-                Volumen injustificado<br />B - A
-            </th>
-        </tr>
-    </thead>
-    {{each(i, objEsp) informe.VOLUMENES_INJUSTIFICADOS}}
-    <tbody>
-        <tr>
-            <td style="border: 1px solid #000; text-align: center;">${objEsp.ESPECIES}</td>
-            <td style="border: 1px solid #000; text-align: center;">${objEsp.VOLUMEN_APROBADO}</td>
-            <td style="border: 1px solid #000; text-align: center;">${objEsp.NUM_ARBOLES}</td>
-            <td style="border: 1px solid #000; text-align: center;">${objEsp.ESTADO_CAMPO}</td>
-            <td style="border: 1px solid #000; text-align: center;">${objEsp.BALANCE_EXTRACCION}</td>
-            <td style="border: 1px solid #000; text-align: center;">${objEsp.VOLUMEN_MOVILIZADO}</td>
-            <td style="border: 1px solid #000; text-align: center;">${objEsp.VOLUMEN_INJUSTIFICADO}</td>
-        </tr>
-    </tbody>
-    {{/each}}
-    <tfoot>
-        <tr style="background-color: #bfbfbf;">
-            <td style="border: 1px solid #000; text-align: center;" colspan="6">
-                Total
-            </td>
-            <td style="border: 1px solid #000; text-align: center;">
-                ${informe.VOLUMENES_INJUSTIFICADOS_TOTAL}
-            </td>
-        </tr>
-    </tfoot>
-</table>
+<p style="text-align: center; font-size: 7pt;">
+    Consignar Imagen<br />Fuente: Contrato de Regencia de fecha…
+</p>
 
 <ol class="continue" style="margin-left: ${informe.MARGIN_LEFT.OL};">
     <li>
-        En ese sentido XX
+        El PM aprobado mediante la Resolución ${informe.ANUM_RESOLUCION || 'XX'}, tiene vigencia hasta XX. Asimismo, de la revisión de la Forma 20, se advierte que la última movilización se realizó el 2XX.
+    </li>
+    <li>
+        En el presente caso, la administrada implementó el Plan de Manejo Forestal Intermedio Reformulado (PMFI – PO 02), sin embargo, no habría contado con regente forestal, conforme se observa en el siguiente gráfico:
+    </li>
+</ol>
+
+<p>
+    <strong>Gráfico 01.</strong> Línea de tiempo
+</p>
+
+<ol class="continue" style="margin-left: ${informe.MARGIN_LEFT.OL};">
+    <li>
+        Adicionalmente, de la consulta efectuada en el Sistema de Información de Trámite Documentario – SITD del OSINFOR, previo a la emisión del presente informe ella titular no ha remitido contrato de regencia vigente para la implementación del plan de manejo considerando que su PMFI se encuentra vigente y viene realizando las actividades de aprovechamiento.
+    </li>
+    <li>
+        Por ello, de acuerdo lo evaluado y xx.
     </li>
 </ol>
