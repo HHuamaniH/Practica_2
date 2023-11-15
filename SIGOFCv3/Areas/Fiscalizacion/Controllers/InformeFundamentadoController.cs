@@ -69,7 +69,7 @@ namespace SIGOFCv3.Areas.Fiscalizacion.Controllers
                 if (String.IsNullOrEmpty(asCodInfFundamentado))
                 {
                     vmIF.lblTituloEstado = "Nuevo Registro";
-               
+
                     vmIF.vmControlCalidad.ddlIndicadorId = "0000000";
                     vmIF.hdfCodTipoInfFundamentado = "0000049";
                     vmIF.txtTipoInfFundamentado = "Informes fundamentados - Informes fundamentados";
@@ -128,7 +128,8 @@ namespace SIGOFCv3.Areas.Fiscalizacion.Controllers
                     vmIF.ddlOdId = entIF.COD_OD_REGISTRO;
                     vmIF.hdfCodTipoInfFundamentado = entIF.COD_FCTIPO;
                     vmIF.txtTipoInfFundamentado = entIF.TIPO_FISCALIZA;
-                    vmIF.dtpFechaFundamentado = entIF.FECHA_EMISION == null ? null : entIF.FECHA_EMISION?.ToString();
+
+                    vmIF.dtpFechaFundamentado = (entIF.FECHA_EMISION == null || entIF.FECHA_EMISION.ToString().Trim()=="") ? null : entIF.FECHA_EMISION?.ToString();
                     vmIF.txtNumInfFundamentado = entIF.NUMERO_INFORME;
                     vmIF.listaProfesionales = entIF.ListProfesionales;
                     vmIF.tbInforme = entIF.ListInformes;
@@ -137,38 +138,36 @@ namespace SIGOFCv3.Areas.Fiscalizacion.Controllers
                     vmIF.txtObservaciones = entIF.DESCRIPCION;
                     vmIF.tbEliTABLA = new List<CEntidadIF>();
                     vmIF.txtRegistro = entIF.NUMERO_TRAMITE;
-                    vmIF.dtpFechaIngresoSolicitud = entIF.FECHA_TRAMITE == null ? null : entIF.FECHA_TRAMITE?.ToString();
+
+                    vmIF.dtpFechaIngresoSolicitud = (entIF.FECHA_TRAMITE == null || entIF.FECHA_TRAMITE.ToString().Trim() == "") ? null : entIF.FECHA_TRAMITE?.ToString();
                     vmIF.txtNumeroOficioSolicitud = entIF.NUMERO_SOLICITUD;
                     vmIF.txtDetalle = entIF.GLOSA;
                     vmIF.ddlTipoSolicitudId = entIF.COD_TIPO_SOLICITUD;
                     vmIF.ddlVencimientoPlazoLegalId = entIF.COD_VEN_LEGAL;
 
-                    //if (entIF.FLAG_INFFUN_EMITIDO == 1)
-                    //{
-                        vmIF.chkEmitirInforme = (entIF.FLAG_INFFUN_EMITIDO == 1 ? true : false);
-                        vmIF.dtpfechaFirmezaPAU = entIF.FECHA_FIRMEZA.ToString();
-                        vmIF.txtNumeroOficio1 = entIF.NUMERO_OFICIO1;
-                        vmIF.dtpfechaOficio1 = entIF.FECHA_OFICIO1.ToString();
-                        vmIF.txtNumeroInformeFundamentado = entIF.NUMERO_INFORME;
+                    vmIF.chkEmitirInforme = (entIF.FLAG_INFFUN_EMITIDO == 1 ? true : false);
+                    vmIF.dtpfechaFirmezaPAU = (entIF.FECHA_FIRMEZA == null || entIF.FECHA_FIRMEZA.ToString().Trim() == "") ? null : entIF.FECHA_FIRMEZA?.ToString();
 
-                    //}
-                   //if (entIF.FLAG_NO_INFUN_EMITIDO == 1)
-                   // {
-                        vmIF.chkEmitirOficio = (entIF.FLAG_NO_INFUN_EMITIDO == 1 ? true : false);
-                        vmIF.txtNumeroOficio2 = entIF.NUMERO_OFICIO2;
-                        vmIF.dtpfechaOficio2 = entIF.FECHA_OFICIO2.ToString();
-                        vmIF.txtObservacionesOficio = entIF.NOTA_NO_INFFUN;
-                    //}
-                    //if (entIF.FLAG_COPIA_PAU_EMITIDO == 1)
-                    //{
-                        vmIF.chkEmitirOficioPau = (entIF.FLAG_COPIA_PAU_EMITIDO == 1 ? true : false);
-                        vmIF.txtNumeroOficioPau = entIF.NUMERO_OFICIO2;
-                        vmIF.dtpFechaEmisionPau = entIF.FECHA_OFICIO2.ToString();
-                        vmIF.txtObservacionesPau = entIF.NOTA_COPIA_PAU;
-                    //}
+                    vmIF.txtNumeroOficio1 = entIF.NUMERO_OFICIO1;
+
+                    vmIF.dtpfechaOficio1 = (entIF.FECHA_OFICIO1 == null || entIF.FECHA_OFICIO1.ToString().Trim() == "") ? null : entIF.FECHA_OFICIO1?.ToString();
+                    vmIF.txtNumeroInformeFundamentado = entIF.NUMERO_INFORME;
+
+                    vmIF.chkEmitirOficio = (entIF.FLAG_NO_INFUN_EMITIDO == 1 ? true : false);
+                    vmIF.txtNumeroOficio2 = entIF.NUMERO_OFICIO2;
+
+                    vmIF.dtpfechaOficio2 = (entIF.FECHA_OFICIO2 == null || entIF.FECHA_OFICIO2.ToString().Trim() == "") ? null : entIF.FECHA_OFICIO2?.ToString();
+                    vmIF.txtObservacionesOficio = entIF.NOTA_NO_INFFUN;
+                   
+                    vmIF.chkEmitirOficioPau = (entIF.FLAG_COPIA_PAU_EMITIDO == 1 ? true : false);
+                    vmIF.txtNumeroOficioPau = entIF.NUMERO_OFICIO2;
+
+                    vmIF.dtpFechaEmisionPau = (entIF.FECHA_OFICIO2 == null || entIF.FECHA_OFICIO2.ToString().Trim() == "") ? null : entIF.FECHA_OFICIO2?.ToString();
+                    vmIF.txtObservacionesPau = entIF.NOTA_COPIA_PAU;
 
                     vmIF.chkNotificacion = (entIF.FLAG_NOTIFICACION == 1 ? true : false);
-                    vmIF.dtpFechaNotificacion = entIF.FECHA_NOTIFICACION == null ? null : entIF.FECHA_NOTIFICACION?.ToString();
+                    vmIF.dtpFechaNotificacion = (entIF.FECHA_NOTIFICACION == null || entIF.FECHA_NOTIFICACION.ToString().Trim() == "") ? null : entIF.FECHA_NOTIFICACION?.ToString();
+  
                     vmIF.txtAnotaciones = entIF.NOTA_NOTIFICACION;
                     vmIF.hdfItemEstUbigeoCodigo = entIF.COD_UBIGEO;
                     vmIF.fItemEstUbigeoCodigo = entIF.ESTAB_UBIGEO;
@@ -265,7 +264,6 @@ namespace SIGOFCv3.Areas.Fiscalizacion.Controllers
                 entIF.OBSERVACIONES_CONTROL = obj.vmControlCalidad.txtControlCalidadObservaciones;
                 entIF.OBSERV_SUBSANAR = obj.vmControlCalidad.chkObsSubsanada;
 
-
                 // NUEVOS CAMPOS // DATOS SOLICITUD
                 entIF.COD_ESTADO_SOLICITUD = obj.ddlEstadoSolicitudFemaId;
                 entIF.NUMERO_TRAMITE = obj.txtRegistro;
@@ -281,55 +279,70 @@ namespace SIGOFCv3.Areas.Fiscalizacion.Controllers
                 // NUEVOS CAMPOS // INFORME FUNDAMENTADO
                 string fechaOficio2 = "";
                 string fechaOficio1 = "";
-                if (obj.chkEmitirInforme)
+
+                if (obj.ddlTipoSolicitudId.ToString() == "000001")
                 {
                     // INFORME
                     entIF.FLAG_INFFUN_EMITIDO = (obj.chkEmitirInforme ? 1 : 0);
-                    entIF.FECHA_FIRMEZA = obj.dtpfechaFirmezaPAU;
+
+                    if (obj.dtpfechaFirmezaPAU != null)
+                    {
+                        obj.dtpfechaFirmezaPAU = obj.dtpfechaFirmezaPAU.Trim();
+                        entIF.FECHA_FIRMEZA = obj.dtpfechaFirmezaPAU;
+                    }
+
                     entIF.NUMERO_OFICIO1 = obj.txtNumeroOficio1;
-                    entIF.FECHA_OFICIO1 = obj.dtpfechaOficio1;
+
+                    if (obj.dtpfechaOficio1 != null)
+                    {
+                        obj.dtpfechaOficio1 = obj.dtpfechaOficio1.Trim();
+                        entIF.FECHA_OFICIO1 = obj.dtpfechaOficio1;
+                    }
+
                     entIF.CONCLUSIONES = obj.txtConclusiones;
                     entIF.DESCRIPCION = obj.txtObservaciones;
                     entIF.NUMERO_INFORME = obj.txtNumeroInformeFundamentado;
-                    entIF.FECHA_EMISION = obj.dtpFechaFundamentado;
-                    fechaOficio1 = Convert.ToDateTime(entIF.FECHA_OFICIO1).ToString("dd/MM/yyyy");
-                }
-                else
-                    obj.chkEmitirInforme = false;
 
-                // OFICIO
-                if (obj.chkEmitirOficio)
-                {
+                    if (obj.dtpFechaFundamentado != null)
+                    {
+                        obj.dtpFechaFundamentado = obj.dtpFechaFundamentado.Trim();
+                        entIF.FECHA_EMISION = obj.dtpFechaFundamentado;
+                    }
+                    // OFICIO
                     entIF.FLAG_NO_INFUN_EMITIDO = (obj.chkEmitirOficio ? 1 : 0);
                     entIF.NUMERO_OFICIO2 = obj.txtNumeroOficio2;
-                    entIF.FECHA_OFICIO2 = obj.dtpfechaOficio2;
-                    entIF.NOTA_NO_INFFUN = obj.txtObservacionesOficio;
-                    fechaOficio2 = Convert.ToDateTime(entIF.FECHA_OFICIO2).ToString("dd/MM/yyyy");
-                }
-                else
-                    obj.chkEmitirOficio = false;
 
-                //NUEVOS CAMPOS // PAU/COPIA
-                if (obj.chkEmitirOficioPau)
+                    if (obj.dtpfechaOficio2 != null)
+                    {
+                        obj.dtpfechaOficio2 = obj.dtpfechaOficio2.Trim();
+                        entIF.FECHA_OFICIO2 = obj.dtpfechaOficio2;
+                    }
+                    entIF.NOTA_NO_INFFUN = obj.txtObservacionesOficio;
+
+                }
+                else //NUEVOS CAMPOS // PAU/COPIA
                 {
                     entIF.FLAG_COPIA_PAU_EMITIDO = (obj.chkEmitirOficioPau ? 1 : 0);
                     entIF.NUMERO_OFICIO2 = obj.txtNumeroOficioPau;
-                    entIF.FECHA_OFICIO2 = obj.dtpFechaEmisionPau;
+
+                    if (obj.dtpFechaEmisionPau != null)
+                    {
+                        obj.dtpFechaEmisionPau = obj.dtpFechaEmisionPau.Trim();
+                        entIF.FECHA_OFICIO2 = obj.dtpFechaEmisionPau;
+                    }
                     entIF.NOTA_COPIA_PAU = obj.txtObservacionesPau;
-                    fechaOficio2 = Convert.ToDateTime(entIF.FECHA_OFICIO2).ToString("dd/MM/yyyy");
                 }
-                else
-                    obj.chkEmitirOficioPau = false;
 
                 //NUEVOS CAMPOS // NOTIFICACION
-                if (obj.chkNotificacion)
+                entIF.FLAG_NOTIFICACION = (obj.chkNotificacion ? 1 : 0);
+
+                if (obj.dtpFechaNotificacion != null)
                 {
-                    entIF.FLAG_NOTIFICACION = (obj.chkNotificacion ? 1 : 0);
+                    obj.dtpFechaNotificacion = obj.dtpFechaNotificacion.Trim();
                     entIF.FECHA_NOTIFICACION = obj.dtpFechaNotificacion;
-                    entIF.NOTA_NOTIFICACION = obj.txtAnotaciones;
                 }
-                else
-                    obj.chkNotificacion = false;
+
+                entIF.NOTA_NOTIFICACION = obj.txtAnotaciones;
 
                 entIF.OUTPUTPARAM01 = "";
                 entIF.RegEstado = obj.RegEstado;
@@ -350,6 +363,7 @@ namespace SIGOFCv3.Areas.Fiscalizacion.Controllers
                     entIF.DIAS_HAB_TRANSCURIDOS = 0;
                 }
 
+                /*
                 // SI(FLAG_COPIA_PAU_EMITIDO == 1)
                 if (entIF.FLAG_COPIA_PAU_EMITIDO == 1) // FECHA_OFICIO2 - FECHA_TRAMITE;
                     entIF.DIAS_HAB_TRANSCURIDOS = CalcularDiasEntreFechas(fechaOficio2, obj.dtpFechaIngresoSolicitud);
@@ -362,6 +376,7 @@ namespace SIGOFCv3.Areas.Fiscalizacion.Controllers
                 //SI(FLAG_INFFUN_EMITIDO == 1) && (FLAG_NO_INFFUN_EMITIDO == 1)
                 if (entIF.FLAG_INFFUN_EMITIDO == 1 && entIF.FLAG_NO_INFUN_EMITIDO == 1) //DIAS_HABILES_TRANSCURRIDOS = FECHA_OFICIO1 - FECHA_FIRMEZA
                     entIF.DIAS_HAB_TRANSCURIDOS = CalcularDiasEntreFechas(fechaOficio1, obj.dtpfechaFirmezaPAU);
+                */
 
                 if (obj.tbEliTABLA != null)
                 {

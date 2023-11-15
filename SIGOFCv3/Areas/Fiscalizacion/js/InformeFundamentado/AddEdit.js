@@ -1,4 +1,4 @@
-﻿
+
 var ManInfFundamentado_AddEdit = {};
 
 ManInfFundamentado_AddEdit.DataProfesional = [];
@@ -274,16 +274,18 @@ ManInfFundamentado_AddEdit.fnSaveFormV2 = function () {
     switch (codigoTipoSolicitud) {
         case "000001":
             model.tbInforme = _renderListExpediente.fnGetList();
+            model.tbEliTABLA = _renderListExpediente.tbEliTABLA;
             break;
         case "000002":
         case "000003":
             model.tbInforme = _renderListExpedienteSigo.fnGetList();
+            model.tbEliTABLA = _renderListExpedienteSigo.tbEliTABLA;
             break;
     }
     model.vmControlCalidad = _ControlCalidad.fnGetDatosControlCalidad();
     model.listaProfesionales = ManInfFundamentado_AddEdit.DataProfesional;
     //model.tbInforme = _renderListExpediente.fnGetList();
-    model.tbEliTABLA = _renderListExpediente.tbEliTABLA;
+    //model.tbEliTABLA = _renderListExpediente.tbEliTABLA;
     model.listaEntidades = ManInfFundamentado_AddEdit.DataEntidad;
 
     if (chkEmitirInforme || chkEmitirOficioPau) {
@@ -330,19 +332,19 @@ ManInfFundamentado_AddEdit.fnValidarAtributosV2 = function (obj) {
     }
     if (band == 0) {
         if (obj.txtRegistro == "") {
-            falta = "Ingrese Número de Registro";
+            falta = "Ingrese Número de Registro del SITD";
             band = 1;
         }
     }
     if (band == 0) {
         if (obj.dtpFechaIngresoSolicitud.trim() == "") {
-            falta = "Ingrese Fecha de Ingreso de la Solicitud";
+            falta = "Ingrese Fecha de Ingreso de la Solicitud del SITD";
             band = 1;
         }
     }
     if (band == 0) {
         if (obj.txtNumeroOficioSolicitud.trim() == "") {
-            falta = "Ingrese Número de Oficio(Solicitud)";
+            falta = "Ingrese Número de Oficio (Solicitud)";
             band = 1;
         }
     }
@@ -367,7 +369,7 @@ ManInfFundamentado_AddEdit.fnValidarAtributosV2 = function (obj) {
 
     if (band == 0) {
         if (obj.hdfItemEstUbigeoCodigo.trim() == "") {
-            falta = "Debe seleccionar Región";
+            falta = "Debe seleccionar Ubigeo";
             band = 1;
         }
     }
@@ -629,8 +631,8 @@ ManInfFundamentado_AddEdit.fnInitDataTable_Detail = function () {
     var columns_label = [], columns_data = [], options = {};
 
     //Cargar Profesionales
-    columns_label = ["Nº DNI", "Apellidos y Nombres", "Tipo"];
-    columns_data = ["NUMERO", "APELLIDOS_NOMBRES", "TIPO"];
+    columns_label = ["Nº DNI", "Apellidos y Nombres"];
+    columns_data = ["NUMERO", "APELLIDOS_NOMBRES"];
     options = {
         page_length: 10, row_index: true, row_delete: true, row_fnDelete: "ManInfFundamentado_AddEdit.fnDelete(this,'PROFESIONAL')", page_sort: true
     };
