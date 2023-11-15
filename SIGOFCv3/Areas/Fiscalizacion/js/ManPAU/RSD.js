@@ -1426,7 +1426,7 @@ $(function () {
             },
             Notificar: function () {
                 const self = this;
-                const user = ManInfLegal_AddEdit.userApp;
+                const user = ManRD_AddEdit.userApp;
 
                 const notificacion = {
                     DESTINATARIOS: self.form.Seleccionados.map(item => item.email).join(','),
