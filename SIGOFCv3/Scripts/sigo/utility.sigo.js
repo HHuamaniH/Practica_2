@@ -929,26 +929,29 @@ utilSigo.onBlurTwoDecimalIS = function (thix, texto) {
 }
 utilSigo.validateFechaRango = function (id, texto) {
     let fecha = $('#' + id).val();
+    if (typeof fecha !== 'undefined') {
+        if (fecha != '') {
+            let campos = fecha.split('/');
+            let date = new Date(campos[2] + "-" + campos[1] + "-" + campos[0]);
+            let dateToday = new Date(utilSigo.obtenerFechaHora()[0]);
+            let datePast = new Date(utilSigo.obtenerFechaHora()[0]);
+            datePast.setFullYear(datePast.getFullYear() - 5);
+            let dateTodayCampos = utilSigo.obtenerFechaHora()[0].split('-');
+            let dateTodayStr = dateTodayCampos[2] + "/" + dateTodayCampos[1] + "/" + dateTodayCampos[0];
 
-    let campos = fecha.split('/');
-    let date = new Date(campos[2] + "-" + campos[1] + "-" + campos[0]);
-    let dateToday = new Date(utilSigo.obtenerFechaHora()[0]);
-    let datePast = new Date(utilSigo.obtenerFechaHora()[0]);
-    datePast.setFullYear(datePast.getFullYear() - 5);
-    let dateTodayCampos = utilSigo.obtenerFechaHora()[0].split('-');
-    let dateTodayStr = dateTodayCampos[2] + "/" + dateTodayCampos[1] + "/" + dateTodayCampos[0];
-
-    if (utilSigo.isFechaMayor(date, dateToday)) {
-        utilSigo.toastWarning("Aviso", "El campo " + texto + " no debe ser mayor a la fecha actual");
-        document.getElementById(id).value = dateTodayStr;
-        $("#" + id).focus();
-        return false;
-    } else if (utilSigo.isFechaMayor(datePast, date)) {
-        utilSigo.toastWarning("Aviso", "El campo " + texto + " no debe ser menor a 5 años de la fecha actual");
-        document.getElementById(id).value = dateTodayStr;
-        $("#" + id).focus();
-        return false;
-    }
+            if (utilSigo.isFechaMayor(date, dateToday)) {
+                utilSigo.toastWarning("Aviso", "El campo " + texto + " no debe ser mayor a la fecha actual");
+                document.getElementById(id).value = dateTodayStr;
+                $("#" + id).focus();
+                return false;
+            } else if (utilSigo.isFechaMayor(datePast, date)) {
+                utilSigo.toastWarning("Aviso", "El campo " + texto + " no debe ser menor a 5 años de la fecha actual");
+                document.getElementById(id).value = dateTodayStr;
+                $("#" + id).focus();
+                return false;
+            }
+        }        
+    }    
     return true;
 }
 
