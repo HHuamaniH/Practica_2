@@ -8,7 +8,7 @@ using System.Collections.Generic;
 using System.Web.Mvc;
 using CEntVM = CapaEntidad.ViewModel.VM_InformeFundamentado;
 using CEntidadIF = CapaEntidad.DOC.Ent_INFFUN;
-using CLogica = CapaLogica.DOC.Log_INFFUN;
+using CLogica = CapaLogica.DOC.Log_INFFUN;  
 using System.Linq;
 using CapaEntidad.ViewModel.General;
 using SIGOFCv3.Helper;

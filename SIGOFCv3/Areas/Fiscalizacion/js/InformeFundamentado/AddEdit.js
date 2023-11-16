@@ -650,9 +650,59 @@ ManInfFundamentado_AddEdit.fnInitDataTable_Detail = function () {
 
 }
 
+ManInfFundamentado_AddEdit.fnActivarControles = function () {
+    var chkEmitirInforme = document.getElementById('chkEmitirInforme');
+    var chkEmitirOficio = document.getElementById('chkEmitirOficio');
+    var chkEmitirOficioPau = document.getElementById('chkEmitirOficioPau');
+    var chkNotificacion = document.getElementById('chkNotificacion');
+
+    var controlesDinamicos = document.querySelectorAll('.activarInforme');
+    var controlesDinamicosOficio = document.querySelectorAll('.activarEmitirOficio');
+    var controlesDinamicosOficioPau = document.querySelectorAll('.activarEmitirOficioPau');
+    var controlesDinamicosNotificacion = document.querySelectorAll('.activarNotificacion');
+
+    chkEmitirInforme.addEventListener('change', function () {
+        controlesDinamicos.forEach(function (control) {
+            control.disabled = !chkEmitirInforme.checked;
+            if (!chkEmitirInforme.checked) {
+                control.value = '';
+            }
+        });
+    });
+
+    chkEmitirOficio.addEventListener('change', function () {
+        controlesDinamicosOficio.forEach(function (control) {
+            control.disabled = !chkEmitirOficio.checked;
+            if (!chkEmitirOficio.checked) {
+                control.value = '';
+            }
+        });
+    });
+
+    chkEmitirOficioPau.addEventListener('change', function () {
+        controlesDinamicosOficioPau.forEach(function (control) {
+            control.disabled = !chkEmitirOficioPau.checked;
+            if (!chkEmitirOficioPau.checked) {
+                control.value = '';
+            }
+        });
+    });
+
+    chkNotificacion.addEventListener('change', function () {
+        controlesDinamicosNotificacion.forEach(function (control) {
+            control.disabled = !chkNotificacion.checked;
+            if (!chkNotificacion.checked) {
+                control.value = '';
+            }
+        });
+    });
+
+}
+
 $(document).ready(function () {
     ManInfFundamentado_AddEdit.frm = $("#frmInfFundamentadoRegistro");
     ManInfFundamentado_AddEdit.iniciarEventos();
+    ManInfFundamentado_AddEdit.fnActivarControles();
 
     ManInfFundamentado_AddEdit.frm.find("#ddlEntidadId").change(function () {
         ManInfFundamentado_AddEdit.fnFiltrarSubEntidad(ManInfFundamentado_AddEdit.frm.find("#ddlEntidadId").val());
@@ -684,5 +734,32 @@ $(document).ready(function () {
         }
 
     }).trigger('change');
+
+    var controlesDinamicos = document.querySelectorAll('.activarInforme');
+    var controlesDinamicosOficio = document.querySelectorAll('.activarEmitirOficio');
+    var controlesDinamicosOficioPau = document.querySelectorAll('.activarEmitirOficioPau');
+    var controlesDinamicosNotificacion = document.querySelectorAll('.activarNotificacion');
+
+    controlesDinamicos.forEach(function (control) {
+        if (!chkEmitirInforme.checked) {
+            control.disabled = true;
+        }
+    });
+    controlesDinamicosOficio.forEach(function (control) {
+        if (!chkEmitirOficio.checked) {
+            control.disabled = true;
+        }
+    });
+    controlesDinamicosOficioPau.forEach(function (control) {
+        if (!chkEmitirOficioPau.checked) {
+            control.disabled = true;
+        }
+    });
+    controlesDinamicosNotificacion.forEach(function (control) {
+        if (!chkNotificacion.checked) {
+            control.disabled = true;
+        }
+    });
+
 
 });
