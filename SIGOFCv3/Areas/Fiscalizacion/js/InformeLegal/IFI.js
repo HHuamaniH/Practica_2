@@ -352,15 +352,18 @@ _informe.Exportar = async function () {
 }
 
 _informe.RegResumenInfSupervision = function (COD_INFORME_SUPERVISION) {
-    return new Promise(function (resolve, reject) {
-        const params = {
-            type: 'get',
-            url: `${urlLocalSigo}Fiscalizacion/InformeLegalDigital/ObtenerInformeSupervision`,
-            datos: { COD_INFORME_SUPERVISION }
-        };
+    const params = {
+        type: 'get',
+        url: `${urlLocalSigo}Fiscalizacion/InformeLegalDigital/ObtenerInformeSupervision`,
+        data: { COD_INFORME_SUPERVISION },
+        global: false
+    }
 
-        utilSigo.fnAjax(params, (res) => resolve(res), () => resolve(null));
+    const promise = new Promise((resolve, reject) => {
+        $.ajax(params).done(res => resolve(res)).fail(() => resolve(null));
     });
+
+    return promise;
 }
 
 _informe.ExtraerAntecedentes = function (COD_RESOLUCION) {
@@ -1539,7 +1542,7 @@ $(function () {
                     numInformeSupervision: item.NUMERO_ISUPERVISION,
                     estado: 1
                 };
-               
+
                 let infracciones = app.Informe.INFRACCIONES;
 
                 for (const infraccion of RESODIREC.LIST_INFRACCIONES) {
