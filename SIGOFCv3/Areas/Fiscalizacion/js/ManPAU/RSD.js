@@ -974,12 +974,12 @@ $(function () {
 
                         //CABECERA
                         //Asociacion con el informe de supervision
-                        self.Inf_Supervision = res.inf_supervision;
-                        const cab = res.inf_supervision[0];
+                        self.Inf_Supervision = res.inf_supervision || [];
+                        const cab = self.Inf_Supervision[0];
 
                         if (cab) {
                             self.Informe.COD_INFORME = cab.COD_INFORME;
-                            self.Informe.NRO_REFERENCIA = res.inf_supervision.map(function (x) { return x.NUM_INFORME }).join(', ');
+                            self.Informe.NRO_REFERENCIA = self.Inf_Supervision.map(function (x) { return x.NUM_INFORME }).join(', ');
 
                             self.Informe.INF_FECHA = fnDate.text_long(cab.INF_FECHA);
                             self.Informe.TITULAR_SUPERVISADO = cab.TITULAR_SUPERVISADO;
