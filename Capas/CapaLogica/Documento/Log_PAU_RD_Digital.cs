@@ -1,27 +1,26 @@
 ﻿using CapaDatos.DOC;
-using CapaDatos.Documento;
 using CapaEntidad.DOC;
-using CapaEntidad.Documento;
 using CapaEntidad.ViewModel;
 using System;
 using System.Collections.Generic;
 
-namespace CapaLogica.Documento
+namespace CapaLogica.DOC
 {
-    public class Log_Informe_Legal_Digital
+    public class Log_PAU_RD_Digital
     {
-        Dat_Informe_Legal_Digital oDat_Informe_Legal_Digital;
+        Dat_PAU_RD_Digital oDat_PAU_RD_Digital;
 
-        public Log_Informe_Legal_Digital()
+        public Log_PAU_RD_Digital()
         {
-            oDat_Informe_Legal_Digital = new Dat_Informe_Legal_Digital();
+            oDat_PAU_RD_Digital = new Dat_PAU_RD_Digital();
         }
 
-        public string RegInformeGrabar(VM_INFORME_LEGAL_DIGITAL informeDigital)
+        public string RegRDGrabar(VM_PAU_RD_DIGITAL informeDigital)
         {
-            Ent_InformeLegalPAUDigital cabecera = new Ent_InformeLegalPAUDigital();
+            Ent_ResDirTabInforme cabecera = new Ent_ResDirTabInforme();
+
             cabecera.pVCodInformeDigital = informeDigital.COD_INFORME_DIGITAL;
-            cabecera.pVCodInforme = informeDigital.COD_INFORME;
+            cabecera.pVCodResolucion = informeDigital.COD_RESOLUCION;
             cabecera.pNTramiteID = informeDigital.TRAMITE_ID;
             cabecera.pVNumInformeSITD = informeDigital.NUM_INFORME_SITD;
             cabecera.pVCodProcedencia = informeDigital.COD_PROCEDENCIA;
@@ -50,52 +49,42 @@ namespace CapaLogica.Documento
             cabecera.pNEstado = informeDigital.ESTADO;
             cabecera.pVOUTPUTPARAM01 = "";
 
-            return oDat_Informe_Legal_Digital.RegInformeGrabar(cabecera, informeDigital);
+            return oDat_PAU_RD_Digital.RegRDGrabar(cabecera, informeDigital);
         }
 
-        public VM_INFORME_LEGAL_DIGITAL ObtenerInforme(string COD_RESOLUCION)
+        public VM_PAU_RD_DIGITAL ObtenerRD(string COD_RESOLUCION)
         {
-            return oDat_Informe_Legal_Digital.ObtenerInforme(COD_RESOLUCION);
+            return oDat_PAU_RD_Digital.ObtenerRD(COD_RESOLUCION);
         }
 
-        public VM_Fiscalizacion_ISupervision InformeSupervisionResumen(string COD_INFORME_SUPERVISION)
+        public bool ParticipanteActualizar(VM_PAU_RD_DIGITAL_PARTICIPANTE item)
         {
-            return oDat_Informe_Legal_Digital.InformeSupervisionResumen(COD_INFORME_SUPERVISION);
+            return oDat_PAU_RD_Digital.ParticipanteActualizar(item);
         }
 
-        public List<VM_INFORME_LEGAL_DIGITAL_ANTECEDENTE> ObtenerAntecedentesRSD(string COD_RESOLUCION, string COD_THABILITANTE)
+        public List<VM_PAU_RD_DIGITAL_INFRACCION> ListarInfracciones()
         {
-            return oDat_Informe_Legal_Digital.ObtenerAntecedentesRSD(COD_RESOLUCION, COD_THABILITANTE);
+            return oDat_PAU_RD_Digital.ListarInfracciones();
         }
 
-        public VM_TRA_M_TRAMITE_SITD ObtenerExpedienteSITD(string NRO_DOCUMENTO)
+        public string Notificar(VM_PAU_DIGITAL_ALERTA notificacion)
         {
-            return oDat_Informe_Legal_Digital.ObtenerExpedienteSITD(NRO_DOCUMENTO);
+            return oDat_PAU_RD_Digital.Notificar(notificacion);
         }
 
         public void ModificarNumeroInforme(string codInforme, string numeroInforme, DateTime fechaOperacion)
         {
-            oDat_Informe_Legal_Digital.ModificarNumeroInforme(codInforme, numeroInforme, fechaOperacion);
-        }
-
-        public string Notificar(Informe_Notificacion notificacion)
-        {
-            return oDat_Informe_Legal_Digital.Notificar(notificacion);
-        }
-
-        public bool ParticipanteActualizar(VM_INFORME_LEGAL_DIGITAL_PARTICIPANTE item)
-        {
-            return oDat_Informe_Legal_Digital.ParticipanteActualizar(item);
+            oDat_PAU_RD_Digital.ModificarNumeroInforme(codInforme, numeroInforme, fechaOperacion);
         }
 
         public bool CambiarEstado(string codInformeDigital, DateTime fechaOperacion, int estado, string codUsuarioOperacion)
         {
-            return oDat_Informe_Legal_Digital.CambiarEstado(codInformeDigital, fechaOperacion, estado, codUsuarioOperacion);
+            return oDat_PAU_RD_Digital.CambiarEstado(codInformeDigital, fechaOperacion, estado, codUsuarioOperacion);
         }
 
         public bool AnularFirmaPorInforme(string codInforme)
         {
-            return oDat_Informe_Legal_Digital.AnularFirmaPorInforme(codInforme);
-        }        
+            return oDat_PAU_RD_Digital.AnularFirmaPorInforme(codInforme);
+        }
     }
 }

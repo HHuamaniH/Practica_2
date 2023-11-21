@@ -24,16 +24,16 @@
 <script src="~/Scripts/ckeditor5/config.js?v=1"></script>
 <script src="~/Areas/General/js/Informes/general.js?v=1"></script>
 <script src="~/Areas/General/js/Informes/components.js?v=1"></script>
-<script src="~/Areas/Fiscalizacion/js/ManPAU/RSD.js?noCache=@Guid.NewGuid().ToString()" type="text/javascript"></script>
+<script src="~/Areas/Fiscalizacion/js/ManPAU/RD.js?noCache=@Guid.NewGuid().ToString()"></script>
 
 <div id="frmInforme" class="card loading">
     <div id="informe_header" class="card-header text-small d-flex justify-content-between align-items-center">
         <div>Generar Informe</div>
         <div class="options">
-            <button type="button" class="btn btn-link btn-sm p-0 ml-3" onclick="_informe.Exportar()" v-if="Informe.COD_INFORME_DIGITAL && Informe.ESTADO < States.FINALIZADO">
+            <button type="button" class="btn btn-link btn-sm p-0 ml-3" onclick="_informe.Exportar()" v-if="true || Informe.COD_INFORME_DIGITAL && Informe.ESTADO < States.FINALIZADO">
                 <i class="fa fa-file-word-o fa-fw"></i>Crear informe
             </button>
-            <button type="button" class="btn btn-link btn-sm p-0 ml-3" onclick="_informe.Registro()" v-if="Informe.COD_RES_SUB && Informe.ESTADO < States.COMPLETADO || Informe.FLG_ACTUALIZAR">
+            <button type="button" class="btn btn-link btn-sm p-0 ml-3" onclick="_informe.Registro()" v-if="Informe.COD_RESOLUCION && Informe.ESTADO < States.COMPLETADO || Informe.FLG_ACTUALIZAR">
                 <i class="fa fa-save fa-fw"></i>Guardar
             </button>
             <div class="btn-group" v-if="Informe.COD_INFORME_DIGITAL">
@@ -96,7 +96,7 @@
                     </a>
                     <p class="d-none d-sm-block">Visado</p>
                     <div class="dropdown-menu dropdown-menu-right p-3" style="min-width: 270px;">
-                        <div class="row mb-3" v-for="(item, index) in Informe.FIRMAS" v-if="item.flgAplica">
+                        <div class="row mb-3" v-for="(item, index) in Informe.PARTICIPANTES" v-if="item.flgAplica">
                             <div class="col">
                                 <div>{{item.funcion}}</div>
                                 <small class="person-name">{{item.apellidosNombres}}</small>
@@ -117,21 +117,52 @@
         </div>
     </div>
 
-    <div class="card-body" v-if="Informe.COD_RES_SUB">
+    <div class="card-body" v-if="Informe.COD_RESOLUCION">
         <fieldset class="fs-border" v-bind:disabled="Informe.ESTADO > States.EN_REVISION">
             <legend>Datos Generales</legend>
-            <div class="form-row">
-                <div class="col-sm-8">
-                    <div class="form-group form-group-sm">
-                        <label class="col-form-label text-small">Procedencia</label>
-                        <select class="form-control form-control-sm" v-model="Informe.COD_PROCEDENCIA">
-                            <option v-for="(item, index) in Procedencias" :value="item.COD_PROCEDENCIA">{{item.PROCEDENCIA}}</option>
-                        </select>
+            <div class="form-row align-items-center">
+                <div class="col-sm-7">
+                    <div class="form-row">
+                        <div class="col-sm-6">
+                            <div class="form-group form-group-sm">
+                                <label class="col-form-label text-small">Procedencia</label>
+                                <select class="form-control form-control-sm" v-model="Informe.COD_PROCEDENCIA">
+                                    <option v-for="(item, index) in Procedencias" :value="item.COD_PROCEDENCIA">{{item.PROCEDENCIA}}</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group form-group-sm">
+                                <label class="col-form-label text-small">Tipo de resolución</label>
+                                <select class="form-control form-control-sm" v-model="Informe.COD_TIPO_INFORME">
+                                    <option value="1">Con Descargo</option>
+                                    <option value="2">Sin Descargo</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="col-sm-6">
+                            <div class="form-group form-group-sm">
+                                <label class="col-form-label text-small">Materia</label>
+                                <select class="form-control form-control-sm" v-on:change="MateriaOnChange()" v-model="Informe.COD_MATERIA">
+                                    <option v-for="(item, index) in Materias" :value="item.COD_MATERIA">{{item.MATERIA}}</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group form-group-sm">
+                                <label class="col-form-label text-small">Modalidad</label>
+                                <select class="form-control form-control-sm" v-model="Informe.COD_MODALIDAD">
+                                    <option v-for="(item, index) in Modalidades" :value="item.COD_MODALIDAD">{{item.MODALIDAD}}</option>
+                                </select>
+                            </div>
+                        </div>
                     </div>
                 </div>
-                <div class="col-sm-4">
+                <div class="col-sm-5">
                     <div class="form-group form-group-sm text-center">
-                        <label class="col-form-label text-small">N° de Resolución Sub Directoral</label>
+                        <label class="col-form-label text-small">N° de Resolución Directoral</label>
                         <h4 class="mt-2">
                             {{Informe.NUM_INFORME_SITD || 'N/A'}} <i class="fa fa-pencil-square fa-lg ml-2 cursor-pointer text-success" v-if="Informe.COD_INFORME_DIGITAL" onclick="_informe.SITD_OPEN()"></i>
                         </h4>
@@ -139,52 +170,64 @@
                     </div>
                 </div>
             </div>
-            <div class="form-row">
-                <div class="col-sm-2">
-                    <div class="form-group form-group-sm">
-                        <label class="col-form-label text-small">Materia</label>
-                        <select class="form-control form-control-sm" v-on:change="MateriaOnChange()" v-model="Informe.COD_MATERIA">
-                            <option v-for="(item, index) in Materias" :value="item.COD_MATERIA">{{item.MATERIA}}</option>
-                        </select>
+            <div class="mt-1 mb-3">
+                <h5>Referencias</h5>
+                <div class="form-group form-group-sm">
+                    <label class="col-form-label text-small">
+                        Informe Final de Instrucción (IFI) <a class="btn btn-link btn-sm p-0 ml-2 text-success" v-on:click="AgregarIFI()" style="font-size: 0.8rem;">Agregar</a>
+                    </label>
+                    <div>
+                        <span class="chip badge badge-success rounded mr-2 mt-1" v-for="(item, index) in Informe.ILEGAL">
+                            <a class="text-white" target="_blank" v-bind:href="_informe.ObtenerRutaResolucion(item)">{{item.nroILegal}}</a>
+                            <i class="fa fa-times-circle" title="Eliminar resolución" v-on:click="_informe.EliminarResolucion(item, index)"></i>
+                        </span>
+                        <template v-if="!Informe.ILEGAL?.length">
+                            <span class="chip badge badge-danger rounded mt-1">
+                                <i class="fa fa-info-circle"></i> No hay informes asociados
+                            </span>
+                        </template>
                     </div>
                 </div>
-                <div class="col-sm-2">
-                    <div class="form-group form-group-sm">
-                        <label class="col-form-label text-small">Modalidad</label>
-                        <select class="form-control form-control-sm" v-model="Informe.COD_MODALIDAD" v-on:change="_informe.EXTRAER_INFRACCIONES_POR_MODALIDAD()">
-                            <option v-for="(item, index) in Modalidades" :value="item.COD_MODALIDAD">{{item.MODALIDAD}}</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="col-sm-auto">
-                    <div class="form-group form-group-sm">
-                        <label class="col-form-label text-small">N° de informe de supervisión</label>
-                        <div>
-                            <a class="chip badge badge-success rounded mr-2 mt-1" v-for="(item, index) in Inf_Supervision"
-                               target="_blank" v-bind:href="_informe.ObtenerRutaInformeSup(item)">
-                                {{item.NUM_INFORME}}
-                            </a>
-                            <template v-if="!Inf_Supervision?.length">
-                                <span class="chip badge badge-danger rounded mt-1">
-                                    <i class="fa fa-info-circle"></i> No hay informes asociados
-                                </span>
-                            </template>
-                            <i class="fa fa-plus-circle fa-lg ml-3 cursor-pointer" v-if="Informe.ESTADO == States.INGRESADO" onclick="_informe.AsociarInforme()"></i>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-sm-auto" v-if="Inf_Supervision?.length">
-                    <div class="form-group form-group-sm">
-                        <label class="col-form-label text-small">Plan de Manejo</label>
-                        <div class="input-group input-group-sm">
-                            <input type="text" class="form-control" v-model="Informe.NOMBRE_POA" disabled />
-                            <div class="input-group-append">
-                                <button type="button" class="btn btn-secondary" v-on:click="modal_planes_manejo.Abrir()">
-                                    <i class="fa fa-search"></i>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
+                <div class="table-responsive">
+                    <table class="table table-hover table-bordered" style="margin-bottom: 0 !important;">
+                        <thead>
+                            <tr role="row">
+                                <th colspan="100%" class="text-sm-left" rowspan="1">
+                                    <div class="form-inline">
+                                        <i class="fa mx-2 fa-lg fa-file-o" style="cursor:pointer;" onclick="modal_referencias.Abrir();" v-if="Informe.ESTADO != States.FINALIZADO" data-toggle="tooltip" data-placement="top" title="Nuevo"></i>
+                                        <strong>Otras referencias / documentos SITD</strong>
+                                    </div>
+                                </th>
+                            </tr>
+                            <tr>
+                                <th style="width: 30px;" v-if="Informe.ESTADO != States.FINALIZADO"></th>
+                                <th class="text-center" style="width: 30px;">N°</th>
+                                <th class="text-center"></th>
+                                <th class="text-center">CÓDIGO</th>
+                                <th class="text-center">NUM. DOCUMENTO</th>
+                                <th class="text-center">TIPO DOCUMENTO</th>
+                                <th class="text-center">DESCARGAR</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr v-for="(item, index) in Informe.REFERENCIAS">
+                                <td class="text-center" v-if="Informe.ESTADO != States.FINALIZADO">
+                                    <i class="fa fa-lg fa-window-close" style="color:red;cursor:pointer;" title="Eliminar" v-on:click="_informe.fnEliminarReferencia(item, index)"></i>
+                                </td>
+                                <td class="text-center">{{index + 1}}</td>
+                                <td class="text-center">{{item.SUBTIPO_DETALLE}}</td>
+                                <td class="text-center">{{item.CODIGO}}</td>
+                                <td class="text-center">{{item.NUMERO}}</td>
+                                <td class="text-center">{{item.TIPO_DOCUMENTO}}</td>
+                                <td class="text-center">
+                                    <a href="javascript:void(0);" v-on:click="_informe.DescargarDocumentoSITD(item)" v-if="item.PDF_DOCUMENTO">Descargar</a>
+                                </td>
+                            </tr>
+                            <tr class="odd" v-if="!Informe.REFERENCIAS?.length">
+                                <td valign="top" colspan="100" class="text-center">No existen datos registrados</td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
             </div>
             <h5>Administrado</h5>
@@ -192,25 +235,25 @@
                 <div class="col-sm-3">
                     <div class="form-group">
                         <label class="col-form-label text-small">Nombre del titular</label>
-                        <input type="text" class="form-control form-control-sm" v-model="Informe.TITULAR_SUPERVISADO" disabled />
+                        <input type="text" class="form-control form-control-sm" v-model="Informe.TITULAR" disabled />
                     </div>
                 </div>
                 <div class="col-sm-3">
                     <div class="form-group">
                         <label class="col-form-label text-small">DNI del titular</label>
-                        <input type="text" class="form-control form-control-sm" v-model="Informe.DOCUMENTO_TITULAR" disabled />
+                        <input type="text" class="form-control form-control-sm" v-model="Informe.TITULAR_DOCUMENTO" disabled />
                     </div>
                 </div>
                 <div class="col-sm-3">
                     <div class="form-group">
                         <label class="col-form-label text-small">Representante legal</label>
-                        <input type="text" class="form-control form-control-sm" v-model="Informe.REPRESENTANTE_LEGAL" disabled />
+                        <input type="text" class="form-control form-control-sm" v-model="Informe.R_LEGAL" disabled />
                     </div>
                 </div>
                 <div class="col-sm-3">
                     <div class="form-group">
                         <label class="col-form-label text-small">DNI Representante legal</label>
-                        <input type="text" class="form-control form-control-sm" v-model="Informe.DOCUMENTO_RLEGAL" disabled />
+                        <input type="text" class="form-control form-control-sm" v-model="Informe.R_LEGAL_DOCUMENTO" disabled />
                     </div>
                 </div>
             </div>
@@ -218,15 +261,15 @@
                 <div class="col-sm-3">
                     <div class="form-group">
                         <label class="col-form-label text-small">N° contrato/permiso</label>
-                        <input type="text" class="form-control form-control-sm" v-model="Informe.NUM_THABILITANTE" disabled />
+                        <input type="text" class="form-control form-control-sm" v-model="Informe.NUM_CONTRATO" disabled />
                     </div>
                 </div>
                 <div class="col-sm-3">
                     <div class="form-group">
                         <label class="col-form-label text-small">N° RUC Titular</label>
                         <div class="input-group input-group-sm">
-                            <input type="text" class="form-control" v-model="Informe.RUC_TITULAR" disabled />
-                            <div class="input-group-append" v-if="Informe.RUC_TITULAR">
+                            <input type="text" class="form-control" v-model="Informe.TITULAR_RUC" disabled />
+                            <div class="input-group-append" v-if="Informe.TITULAR_RUC">
                                 <button type="button" class="btn btn-secondary" v-on:click="ConsultaRUC">
                                     <i class="fa fa-search"></i>
                                 </button>
@@ -247,7 +290,7 @@
                     </div>
                 </div>
             </div>
-            <h5>Lugar donde se registra</h5>
+            <h5>Ubicación del Titular</h5>
             <div class="form-row">
                 <div class="col-sm-4">
                     <div class="form-group">
@@ -268,39 +311,6 @@
                     </div>
                 </div>
             </div>
-            <div class="form-row">
-                @*<div class="col-sm-4">
-                        <div class="form-group">
-                            <label class="col-form-label text-small">N° Resolución Subdirectoral</label>
-                            <input type="text" class="form-control form-control-sm" v-model="Informe.COD_RES_SUB" disabled />
-                        </div>
-                    </div>*@
-                <div class="col-sm-2">
-                    <div class="form-group">
-                        <label class="col-form-label text-small">Año</label>
-                        <input type="text" class="form-control form-control-sm" v-model="Informe.RES_DIRECTORAL_ANIO" />
-                    </div>
-                </div>
-                <div class="col-sm-4">
-                    <div class="form-group">
-                        <label class="col-form-label text-small">Código de la Unidad Orgánica</label>
-                        <input type="text" class="form-control form-control-sm" v-model="Informe.RES_DIRECTORAL_UND_ORGANICA" />
-                    </div>
-                </div>
-                <div class="col-sm-2">
-                    <div class="form-group">
-                        <label class="col-form-label text-small">Fecha</label>
-                        <div class="input-group input-group-sm">
-                            <date-picker v-model="Informe.RES_DIRECTORAL_FECHA"></date-picker>
-                            <div class="input-group-append">
-                                <div class="input-group-text">
-                                    <i class="fa fa-calendar"></i>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
         </fieldset>
         <fieldset class="fs-border">
             <legend>
@@ -312,7 +322,7 @@
                     <i class="fa fa-envelope-o mr-1"></i>Notificar a todos
                 </a>
             </legend>
-            <div class="card-view form-row align-items-end mb-3 bg-light rounded p-2 pb-3" v-for="(item, index) in Informe.FIRMAS">
+            <div class="card-view form-row align-items-end mb-3 bg-light rounded p-2 pb-3" v-for="(item, index) in Informe.PARTICIPANTES">
                 <div class="col-sm-4">
                     <div class="text-small mt-0">
                         <div class="custom-control custom-checkbox">
@@ -352,10 +362,10 @@
                     </div>
                 </div>
                 <div class="col-sm-2 text-right" v-if="item.flgAplica">
-                    <button type="button" class="btn btn-outline-warning btn-sm" v-on:click="Revisar(item, index)" v-if="item.estado == 2 && app.Informe.ESTADO == States.EN_REVISION">Revisar</button>
+                    <button type="button" class="btn btn-outline-warning btn-sm" v-on:click="Revisar(item, index)" v-if="item.estado == 2 && Informe.ESTADO == States.EN_REVISION">Revisar</button>
                     <button type="button" class="btn btn-primary btn-sm" v-on:click="Firmar(item, index)" v-if="item.estado >= 2" v-bind:disabled="item.estado == 4">Firmar</button>
                 </div>
-                <div class="options" v-if="index > 3 && Informe.ESTADO == States.INGRESADO">
+                <div class="options" v-if="index > 4 && Informe.ESTADO == States.INGRESADO">
                     <i class="fa fa-times-circle fa-lg text-danger cursor-pointer" v-on:click="Eliminar_Integrante(item, index)"></i>
                 </div>
             </div>
@@ -380,92 +390,127 @@
                 </div>
             </div>
         </fieldset>
-        <fieldset class="fs-border">
-            <legend>Información detallada del Informe de Supervisión</legend>
-            <div class="pt-2" id="group-analisis">
-                <a class="btn btn-link px-0" onclick="_informe.ResumenInforme()">
-                    <i class="fa fa-search mr-2"></i>Consultar información
-                </a>
-            </div>
-        </fieldset>
-
-        <fieldset class="fs-border">
-            <legend>Análisis de los resultados del Informe de Supervisión</legend>
-            <h5>Incumplimiento de obligaciones</h5>
-            <div class="mt-3" v-for="(item, index) in Infracciones">
+        <fieldset class="fs-border" v-if="Informe.INFRACCIONES.length">
+            <legend>Análisis de la imputación de cargos</legend>
+            <h5>Imputaciones a considerar</h5>
+            <div class="mt-3" v-for="(item, index) in Informe.INFRACCIONES">
                 <div class="custom-control custom-checkbox custom-control-inline">
-                    <input type="checkbox" class="custom-control-input" :id="'inf_' + item.codInfraccion" v-model="item.select">
-                    <label class="custom-control-label" :for="'inf_' + item.codInfraccion">{{item.titulo}}</label>
+                    <input type="checkbox" class="custom-control-input" :id="'inf_' + index" v-model="item.select">
+                    <label class="custom-control-label" :for="'inf_' + index">
+                        <strong>Inciso {{item.inciso}}.</strong> {{item.titulo || 'No se encontró información de la infracción'}}<br />
+                        <span class="small text-muted mt-2" v-if="item.detalle">{{item.detalle}}</span>
+                    </label>
                 </div>
             </div>
         </fieldset>
 
         <fieldset class="fs-border">
-            <legend>Sobre las presuntas causales de caducidad</legend>
             <div class="mb-3">
-                <h5>Sobre la causal de caducidad por la extracción o movilización de recursos forestales no autorizados</h5>
+                <h5>Del responsable solidario</h5>
                 <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="radio" name="rb_caducidad_extraccion" id="rb_caducidad_extraccion_si" v-bind:value="true" v-model="Informe.FLG_CADUCIDAD_EXTRACCION">
+                    <input class="form-check-input" type="radio" name="rb_responsable_solidario" id="rb_responsable_solidario_si" v-bind:value="true" v-model="Informe.FLG_RESPOSABLE_SOLIDARIO">
                     <label class="form-check-label" for="rb_caducidad_extraccion_si">Si</label>
                 </div>
                 <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="radio" name="rb_caducidad_extraccion" id="rb_caducidad_extraccion_no" v-bind:value="false" v-model="Informe.FLG_CADUCIDAD_EXTRACCION">
-                    <label class="form-check-label" for="rb_caducidad_extraccion_no">No</label>
+                    <input class="form-check-input" type="radio" name="rb_responsable_solidario" id="rb_responsable_solidario_no" v-bind:value="false" v-model="Informe.FLG_RESPOSABLE_SOLIDARIO">
+                    <label class="form-check-label" for="rb_responsable_solidario_no">No</label>
                 </div>
             </div>
-            <div v-if="Informe.FLG_CADUCIDAD_EXTRACCION">
-                <fieldset class="fs-border">
-                    <legend>Seleccionar criterios:</legend>
-                    <div class="mt-3" v-for="(item, index) in data.Causales_Caducidad">
-                        <div class="custom-control custom-checkbox custom-control-inline">
-                            <input type="checkbox" class="custom-control-input" :id="'rb_' + index" v-model="item.select">
-                            <label class="custom-control-label" :for="'rb_' + index">{{item.titulo}}</label>
+            <div class="mb-3">
+                <h5>Gravedad ocasionada</h5>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="rb_gravedad_ocasionada" id="rb_gravedad_ocasionada_si" v-bind:value="true" v-model="Informe.FLG_GRAVEDAD_OCASIONADA">
+                    <label class="form-check-label" for="rb_caducidad_extraccion_si">Si</label>
+                </div>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="rb_gravedad_ocasionada" id="rb_gravedad_ocasionada_no" v-bind:value="false" v-model="Informe.FLG_GRAVEDAD_OCASIONADA">
+                    <label class="form-check-label" for="rb_gravedad_ocasionada_no">No</label>
+                </div>
+            </div>
+            <div class="mb-3">
+                <h5>Acreditación de las imputaciones, imposición de sanción, atenuantes y agravantes</h5>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="rb_acreditacion_imputaciones" id="rb_acreditacion_imputaciones_si" v-bind:value="true" v-model="Informe.FLG_ACREDITACION_IMPUTACIONES">
+                    <label class="form-check-label" for="rb_acreditacion_imputaciones_si">Si</label>
+                </div>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="rb_acreditacion_imputaciones" id="rb_acreditacion_imputaciones_no" v-bind:value="false" v-model="Informe.FLG_ACREDITACION_IMPUTACIONES">
+                    <label class="form-check-label" for="rb_acreditacion_imputaciones_no">No</label>
+                </div>
+            </div>
+            <div class="mb-3">
+                <h5>¿Incluir cálculo de multa en los anexos?</h5>
+                <div class="row align-items-center">
+                    <div class="col-auto">
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="rb_sancion" id="rb_sancion_si" v-bind:value="1" v-model="Informe.FLG_SANCION">
+                            <label class="form-check-label" for="rb_sancion_si">Si</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="rb_sancion" id="rb_sancion_no" v-bind:value="0" v-model="Informe.FLG_SANCION">
+                            <label class="form-check-label" for="rb_sancion_no">No</label>
                         </div>
                     </div>
-                </fieldset>
-            </div>
-            <div class="mb-3">
-                <h5>Imputación de cargos</h5>
-                <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="radio" name="rb_imputacion_cargos" id="rb_imputacion_cargos_si" v-bind:value="true" v-model="Informe.FLG_IMPUTACION_CARGOS">
-                    <label class="form-check-label" for="rb_imputacion_cargos_si">Si</label>
-                </div>
-                <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="radio" name="rb_imputacion_cargos" id="rb_imputacion_cargos_no" v-bind:value="false" v-model="Informe.FLG_IMPUTACION_CARGOS">
-                    <label class="form-check-label" for="rb_imputacion_cargos_no">No</label>
-                </div>
-            </div>
-            <div class="mb-3">
-                <h5>Sobre la disposición de medidas cautelares en el marco del PAU</h5>
-                <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="radio" name="rb_medidas_cautelares" id="rb_medidas_cautelares_si" v-bind:value="true" v-model="Informe.FLG_MEDIDAS_CAUTELARES">
-                    <label class="form-check-label" for="rb_medidas_cautelares_si">Si</label>
-                </div>
-                <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="radio" name="rb_medidas_cautelares" id="rb_medidas_cautelares_no" v-bind:value="false" v-model="Informe.FLG_MEDIDAS_CAUTELARES">
-                    <label class="form-check-label" for="rb_medidas_cautelares_no">No</label>
-                </div>
-            </div>
-            <div class="mb-3">
-                <h5>Sobre la comunicación de los actuados a otras entidades</h5>
-                <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="radio" name="rb_comunicacion" id="rb_comunicacion_si" v-bind:value="true" v-model="Informe.FLG_COMUNICACION">
-                    <label class="form-check-label" for="rb_comunicacion_si">Si</label>
-                </div>
-                <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="radio" name="rb_comunicacion" id="rb_comunicacion_no" v-bind:value="false" v-model="Informe.FLG_COMUNICACION">
-                    <label class="form-check-label" for="rb_comunicacion_no">No</label>
+                    <template v-if="Informe.FLG_SANCION">
+                        <div class="col-auto">
+                            <div class="btn-group btn-group-sm">
+                                <button type="button" class="btn btn-info btn-sm" v-on:click="_informe.AbrirCalculoMulta()">
+                                    {{Informe.SANCION_COD_CALCULO ? 'Editar': 'Generar'}} cálculo
+                                </button>
+                                <template v-if="Informe.SANCION_COD_CALCULO">
+                                    <button type="button" class="btn btn-default btn-sm" title="Eliminar" v-on:click="_informe.EliminarArchivoSancion()">
+                                        <i class="fa fa-trash"></i>
+                                    </button>
+                                </template>
+                            </div>
+                        </div>
+                        <div class="col-2">
+                            <div class="input-group input-group-sm">
+                                <input type="number" class="form-control" v-model="Informe.SANCION_UIT" />
+                                <div class="input-group-append">
+                                    <span class="input-group-text">UIT</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-auto" v-if="Informe.SANCION_COD_CALCULO">
+                            <span class="btn btn-success btn-sm">
+                                <a class="text-white" target="_blank" v-bind:href="_informe.UrlDescargarArchivoSancion()">DESCARGAR CÁLCULO</a>
+                            </span>
+                        </div>
+                    </template>
                 </div>
             </div>
             <div class="mb-3">
-                <h5>Sobre herramientas para subsanar infracciones y ejercer el derecho a la defensa</h5>
+                <h5>De las medidas complementarias</h5>
                 <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="radio" name="rb_herramientas_subsanar" id="rb_herramientas_subsanar_si" v-bind:value="true" v-model="Informe.FLG_HERRAMIENTAS_SUBSANAR">
-                    <label class="form-check-label" for="rb_herramientas_subsanar_si">Si</label>
+                    <input class="form-check-input" type="radio" name="rb_medidas_complementarias" id="rb_medidas_complementarias_si" v-bind:value="true" v-model="Informe.FLG_MEDIDAS_COMPLEMENTARIAS">
+                    <label class="form-check-label" for="rb_medidas_complementarias_si">Si</label>
                 </div>
                 <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="radio" name="rb_herramientas_subsanar" id="rb_herramientas_subsanar_no" v-bind:value="false" v-model="Informe.FLG_HERRAMIENTAS_SUBSANAR">
-                    <label class="form-check-label" for="rb_herramientas_subsanar_no">No</label>
+                    <input class="form-check-input" type="radio" name="rb_medidas_complementarias" id="rb_medidas_complementarias_no" v-bind:value="false" v-model="Informe.FLG_MEDIDAS_COMPLEMENTARIAS">
+                    <label class="form-check-label" for="rb_medidas_complementarias_no">No</label>
+                </div>
+            </div>
+            <div class="mb-3">
+                <h5>Medida correctiva</h5>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="rb_medidas_correctivas" id="rb_medidas_correctivas_si" v-bind:value="true" v-model="Informe.FLG_MEDIDAS_CORRECTIVAS">
+                    <label class="form-check-label" for="rb_medidas_correctivas_si">Si</label>
+                </div>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="rb_medidas_correctivas" id="rb_medidas_correctivas_no" v-bind:value="false" v-model="Informe.FLG_MEDIDAS_CORRECTIVAS">
+                    <label class="form-check-label" for="rb_medidas_correctivas_no">No</label>
+                </div>
+            </div>
+            <div class="mb-3">
+                <h5>Comunicación de los actuados a otras entidades</h5>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="rb_comunicacion_entidades" id="rb_comunicacion_entidades_si" v-bind:value="true" v-model="Informe.FLG_COMUNICACION_ENTIDADES">
+                    <label class="form-check-label" for="rb_comunicacion_entidades_si">Si</label>
+                </div>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="rb_comunicacion_entidades" id="rb_comunicacion_entidades_no" v-bind:value="false" v-model="Informe.FLG_COMUNICACION_ENTIDADES">
+                    <label class="form-check-label" for="rb_comunicacion_entidades_no">No</label>
                 </div>
             </div>
         </fieldset>
@@ -534,6 +579,39 @@
     </div>
 </div>
 
+<div id="modal-ifi" class="modal fade" data-backdrop="static">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header text-small" style="cursor:move;">
+                <span>Buscar Informe Final de Instrucción</span>
+                <i class="fa fa-close" style="cursor:pointer;" data-dismiss="modal" aria-label="Close"></i>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label class="col-form-label col-form-label-sm">Buscar</label>
+                    <div class="input-group">
+                        <select class="form-control form-control-sm col-3" v-model="opcion">
+                            <option v-bind:value="item.Value" v-for="(item, index) in opciones">{{item.Text}}</option>
+                        </select>
+                        <input type="text" class="form-control form-control-sm" v-model="texto" v-on:keyup.enter="Buscar()" />
+                        <div class="input-group-btn">
+                            <button type="button" class="btn btn-primary btn-sm" v-on:click="Buscar()">
+                                <i class="fa fa-search"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="table-responsive">
+                    <table id="dt_ifi" class="table table-bordered table-hover"></table>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Cancelar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <div id="modal-integrante" class="modal fade" data-backdrop="static">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -549,6 +627,7 @@
                         <option>Ingeniero Forestal</option>
                         <option>Coordinador</option>
                         <option>Subdirector</option>
+                        <option>Director</option>
                     </select>
                 </div>
                 <div class="form-group">
@@ -763,7 +842,7 @@
                     </tbody>
                 </table>
             </div>
-            <div class="modal-footer">                
+            <div class="modal-footer">
                 <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Cancelar</button>
             </div>
         </div>

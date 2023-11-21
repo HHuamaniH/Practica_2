@@ -677,7 +677,7 @@ namespace CapaLogica.DOC
         }
         #endregion
 
-        public VM_RSD_Resumen RSD_Resumen(string COD_RESDIR, string asCodTipoIL)
+        public VM_PAU_RSD_RESUMEN RSD_Resumen(string COD_RESDIR, string asCodTipoIL)
         {
             try
             {

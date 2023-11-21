@@ -1,0 +1,802 @@
+﻿<script id="tmpl-exportar" type="text/x-jquery-tmpl">
+    <div style="font-family: Arial; font-size: 10pt; line-height: 150%;">
+        <div>
+            <table width="100%" cellpadding="4" style="border: 0; text-align: justify; font-family: Arial; font-size: 10pt; border-collapse: collapse; line-height: 150%;">
+                <tbody>
+                    <tr>
+                        <td style="vertical-align: top;"><strong>EXPEDIENTE N°</strong></td>
+                        <td style="width: 30px; vertical-align: top;">:</td>
+                        <td style="vertical-align: top;">${EXPEDIENTE_ADM}</td>
+                    </tr>
+                    <tr>
+                        <td style="vertical-align: top;"><strong>MATERIA</strong></td>
+                        <td style="width: 30px; vertical-align: top;">:</td>
+                        <td style="vertical-align: top;">${MATERIA}</td>
+                    </tr>
+                    <tr>
+                        <td style="vertical-align: top;"><strong>ADMINISTRADO</strong></td>
+                        <td style="width: 30px; vertical-align: top;">:</td>
+                        <td style="vertical-align: top;">${TITULAR_SUPERVISADO}</td>
+                    </tr>
+                    <tr>
+                        <td style="vertical-align: top;"><strong>TÍTULO HABILITANTE</strong></td>
+                        <td style="width: 30px; vertical-align: top;">:</td>
+                        <td style="vertical-align: top;">${NUM_THABILITANTE}</td>
+                    </tr>
+                    <tr>
+                        <td style="vertical-align: top;"><strong>REFERENCIA</strong></td>
+                        <td style="width: 30px; vertical-align: top;">:</td>
+                        <td style="vertical-align: top;">Informe de Supervisión N° ${NRO_REFERENCIA}</td>
+                    </tr>
+                </tbody>
+            </table>
+            <div style="font-weight: bold; text-align: center; font-size: 11pt; margin: 15pt 0;">
+                RESOLUCIÓN SUB DIRECTORAL N° ${NUM_INFORME_SITD}
+            </div>
+            <div style="text-align: right; margin-bottom: 15pt;">
+                Lima, ${FECHA}
+            </div>
+        </div>
+        <div style="text-align: justify;">
+            <strong>VISTOS:</strong>
+            <div>{{html VISTOS}}</div>
+            <p>Y,</p>
+            <div><strong>CONSIDERANDO:</strong></div>
+            <div>
+                <ol style="margin-left: ${MARGIN_LEFT.ROOT}; list-style: upper-roman;" start="1"><li><strong>COMPETENCIA</strong></li></ol>
+                <div>{{html COMPETENCIA}}</div>
+            </div>
+            <div>
+                <ol style="margin-left: ${MARGIN_LEFT.ROOT}; list-style: upper-roman;" start="2"><li><strong>ANÁLISIS DE LOS RESULTADOS DEL INFORME DE SUPERVISIÓN</strong></li></ol>
+                <!--(aquí se puede poner la opción de exportar las especies, volumen; teniendo en cuenta que debe mantenerse una hoja en blanco; toda vez, que aquí se realiza el análisis de los resultados de la diligencia de supervisión).-->
+                <span>{{html ANALISIS}}</span>
+            </div>
+            <div>
+                <ol style="margin-left: ${MARGIN_LEFT.ROOT}; list-style: upper-roman;" start="3"><li><strong>IMPUTACION DE CARGOS</strong></li></ol>
+                <div>{{html IMPUTACION}}</div>
+            </div>
+            <div>
+                <ol style="margin-left: ${MARGIN_LEFT.ROOT}; list-style: upper-roman;" start="4"><li><strong>SOBRE LA DISPOSICIÓN DE MEDIDAS CAUTELARES EN EL MARCO DEL PAU</strong></li></ol>
+                <div>{{html MEDIDAS_CAUTELARES}}</div>
+            </div>
+            <div>
+                <ol style="margin-left: ${MARGIN_LEFT.ROOT}; list-style: upper-roman;" start="5"><li><strong>SOBRE LA COMUNICACIÓN DE LOS ACTUADOS A OTRAS ENTIDADES</strong></li></ol>
+                <div>{{html COMUNICACION_EXTERNA}}</div>
+            </div>
+            <div>
+                <ol style="margin-left: ${MARGIN_LEFT.ROOT}; list-style: upper-roman;" start="6"><li><strong>SOBRE HERRAMIENTAS PARA SUBSANAR INFRACCIONES Y EJERCER EL DERECHO A LA DEFENSA</strong></li></ol>
+                <div>{{html HERRAMIENTAS_SUBSANAR}}</div>
+            </div>
+
+            <p class="enumeration" style="text-align: justify;">
+                En virtud de lo establecido en el numeral 3 de los artículos 254 y 255 del TUO de la Ley del Procedimiento Administrativo General - Ley N° 27444, aprobado por Decreto Supremo
+                N° 004-2019-JUS, la autoridad instructora es la que formula la calificación de las infracciones que tales hechos pueden constituir y la expresión de las sanciones que, en su caso, se le pudiera imponer.
+            </p>
+            <p class="enumeration" style="text-align: justify;">
+                Bajo ese razonamiento, de acuerdo con el artículo 16  del Reglamento del PAU, corresponde a la autoridad instructora determinar la existencia o inexistencia de indicios de la
+                comisión de infracción (es) a la legislación forestal y de fauna silvestre y, si además éstas constituyen causal de caducidad del título habilitante otorgado, debiendo disponer
+                el inicio del PAU o el archivo del Informe de supervisión en caso de no existir mérito para el inicio.
+            </p>
+            <p style="text-align: justify;">
+                En uso de las atribuciones conferidas por la Ley que crea el Organismo de Supervisión de los Recursos Forestales y de Fauna Silvestre, Decreto Legislativo N° 1085,
+                modificado por los Decretos Legislativos N° 1319 y N° 1451; la Ley Forestal y de Fauna Silvestre, Ley N° 29763; el Reglamento para la Gestión Forestal y de Fauna Silvestre
+                en Comunidades Nativas y Comunidades Campesinas, aprobado mediante Decreto Supremo N° 021-2015-MINAGRI, Decreto Supremo N° 007-2021-MIDAGRI, que aprueba el Reglamento de
+                Infracciones y Sanciones en Materia Forestal y de Fauna Silvestre; el TUO de la Ley del Procedimiento Administrativo General - Ley N° 27444, aprobado por Decreto Supremo
+                N° 004-2019-JUS; el Reglamento de Organización y Funciones del OSINFOR, aprobado por Decreto Supremo N° 029-2017-PCM; la Resolución Directoral N° 001-2017-OSINFOR-DFFFS;
+                y, el Reglamento del Procedimiento Administrativo Único del OSINFOR, aprobado mediante Resolución Presidencial N° 020-2017-OSINFOR.
+            </p>
+            <p><strong>SE RESUELVE:</strong></p>
+            {{html RESOLUCION}}
+        </div>
+        <p style="text-align: center; margin-bottom: 15px;">
+            Regístrese y comuníquese,
+        </p>
+        <p style="text-align: center;">
+            Firmado digitalmente por<br />
+            <strong>${SUBDIRECTOR || 'Subdirector'}</strong><br />
+            Ejecutivo<br />
+            ${PROCEDENCIA}<br />
+            OSINFOR
+        </p>
+    </div>
+    <table border="0" cellspacing="0" cellpadding="0" style="margin: 0in 0in 0in 900in; width: 1px; height: 1px; overflow: hidden;">
+        <tr>
+            <td>
+                <!--Footer Primera página => id = ff1 -->
+                <div style="mso-element: footer; text-align: justify; font-size: 8pt; font-style: italic;" id="googoose-footer">
+                    <p class="MsoFooter">
+                        {{html PIE_PAGINA}}
+                        <table style="width: 100%;"><tr><td style="text-align: right;">#CURRENTPAGE#</td></tr></table>
+                    </p>
+                </div>
+            </td>
+        </tr>
+    </table>
+</script>
+
+<script id="tmpl-vistos" type="text/x-jquery-tmpl">
+    <p>Los siguientes documentos:</p>
+    <table width="100%" cellpadding="4" style="border: 0; font-family: Arial; font-size: 10pt; border-collapse: collapse; line-height: 150%;">
+        <thead>
+            <tr>
+                <th style="border: 1px solid #000;"><strong>N°</strong></th>
+                <th style="border: 1px solid #000;"><strong>ANTECEDENTES</strong></th>
+                <th style="border: 1px solid #000;"><strong>DESCRIPCIÓN</strong></th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td style="border: 1px solid #000;">1</td>
+                <td style="border: 1px solid #000;">
+                    Informe de Supervisión N° ${NRO_REFERENCIA}, de fecha ${INF_FECHA} (en adelante, el Informe de Supervisión)
+                    <a style="mso-footnote-id: foot_vistos_1" href="#_foot_vistos_1" title="">
+                        <sup class=MsoFootnoteReference><span style="mso-special-character:footnote"></span></sup>
+                    </a>
+                </td>
+                <td style="border: 1px solid #000;">
+                    <u>Titular:</u> ${TITULAR_SUPERVISADO} identificado con {{if RUC_TITULAR}}RUC ${RUC_TITULAR}{{else DOCUMENTO_RLEGAL}}DNI ${DOCUMENTO_RLEGAL}{{/if}} (en adelante, el/la titular)<br />
+                    <u>Código de TH:</u> ${NUM_THABILITANTE}, suscrito el xx de xx del xx (en adelante, el contrato de concesión/el permiso forestal)<br />
+                    <u>Plan de Manejo supervisado:</u> PO ${PLAN_MANEJO.NOMBRE_POA}, periodo ${PLAN_MANEJO.INICIO_VIGENCIA}, aprobado mediante Resolución N° ${PLAN_MANEJO.ARESOLUCION_NUM}, de fecha ${PLAN_MANEJO.ARESOLUCION_FECHA}<br />
+                    <u>Fecha de supervisión:</u> ${INF_FECHA}
+                </td>
+            </tr>
+            <tr>
+                <td style="border: 1px solid #000;">2</td>
+                <td style="border: 1px solid #000;">Documentos que comunican el Informe de Supervisión</td>
+                <td style="border: 1px solid #000;">
+                    Carta N° ${ANTECEDENTES_DOCS.Carta?.numero}, del ${ANTECEDENTES_DOCS.Carta?.fechaEmision}, notificada el ${ANTECEDENTES_DOCS.Carta?.fechaNotificacion}
+                    <a style="mso-footnote-id: foot_vistos_2" href="#_foot_vistos_2" title="">
+                        <sup class=MsoFootnoteReference><span style="mso-special-character:footnote"></span></sup>
+                    </a>, que remitió a copia del Informe de Supervisión a la/el titular.
+                </td>
+            </tr>
+            <tr>
+                <td style="border: 1px solid #000;">3</td>
+                <td style="border: 1px solid #000;">Documentos presentados posterior a la supervisión</td>
+                <td style="border: 1px solid #000;">
+                    De la revisión del SITD del OSINFOR, se observa que la/el titular no ha presentado ningún escrito vinculado a desvirtuar los hallazgos señalados en el Informe de Supervisión.
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</script>
+
+<script id="tmpl-competencia" type="text/x-jquery-tmpl">
+    <table width="100%" cellpadding="4" style="border: 0; font-family: Arial; font-size: 10pt; border-collapse: collapse; line-height: 150%;">
+        <thead>
+            <tr>
+                <th style="border: 1px solid #000;">N°</th>
+                <th style="border: 1px solid #000;">NORMATIVA</th>
+                <th style="border: 1px solid #000;">DESCRIPCIÓN</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td style="border: 1px solid #000;">1</td>
+                <td style="border: 1px solid #000;">
+                    Decreto Legislativo N° 1085, modificado por los Decretos Legislativos N° 1319 y N° 1451 (en adelante, Decreto Legislativo N° 1085), y Ley N° 29763, Ley Forestal y de Fauna Silvestre (en adelante, la LFFS)
+                </td>
+                <td style="border: 1px solid #000;">
+                    Se crea el Organismo de Supervisión de los Recursos Forestales y de Fauna Silvestre – OSINFOR, como un organismo público encargado de supervisar y fiscalizar el aprovechamiento sostenible y la conservación de los recursos forestales y de fauna silvestre, otorgados por el Estado a través de títulos habilitantes regulados por la LFFS.
+                </td>
+            </tr>
+            <tr>
+                <td style="border: 1px solid #000;">2</td>
+                <td style="border: 1px solid #000;">
+                    Reglamento de Organización y Funciones – ROF del OSINFOR, aprobado por Decreto Supremo N° 136-2022-PCM (en adelante, el ROF del OSINFOR)
+                </td>
+                <td style="border: 1px solid #000;">
+                    <div>
+                        El artículo 28 del ROF del OSINFOR, señala que, La Dirección del Procedimiento Sancionador Forestal y de Fauna Silvestre es el órgano de línea responsable de conducir y controlar el desarrollo del Procedimiento Administrativo Único en primera instancia. Depende de la Jefatura.
+                    </div>
+                    <div>
+                        Asimismo, el artículo 54 del ROF del OSINFOR, señala que, “son unidades orgánicas de la Dirección del Procedimiento Sancionador Forestal y de Fauna Silvestre las siguientes: 2.1 Subdirección de Instrucción, 2.2 Subdirección de Sanción”
+                    </div>
+                    <div>
+                        En esa línea, el artículo 55 del ROF del OSINFOR establece que, “la Subdirección de Instrucción es la unidad orgánica de línea responsable de evaluar y determinar el inicio del procedimiento administrativo único; así como, de realizar las acciones correspondientes a la fase instructora, de acuerdo a la normativa vigente.”
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</script>
+
+<script id="tmpl-analisis" type="text/x-jquery-tmpl">
+    <p class="enumeration">
+        De la revisión de los resultados del Informe de Supervisión que recomienda el inicio del Procedimiento Administrativo Único
+        (en adelante, PAU)
+        <a style="mso-footnote-id: foot_vistos_3" href="#_foot_vistos_3" title="">
+            <sup class=MsoFootnoteReference><span style="mso-special-character:footnote"></span></sup>
+        </a> en atención a los siguientes incumplimientos identificados:
+    </p>
+
+    {{each(n, item) INFRACCIONES}}
+    <ol style="margin-left: ${MARGIN_LEFT.OL}; list-style: lower-alpha;" start="${n + 1}">
+        <li>
+            <strong>${item.titulo}</strong>
+        </li>
+    </ol>
+    <p>{{html item.html}}</p>
+    {{/each}}
+
+    {{if FLG_CADUCIDAD_EXTRACCION}}
+    <p>
+        <strong>
+            Sobre la causal de caducidad por la extracción o movilización de recursos forestales no autorizados
+        </strong>
+    </p>
+    <p class="enumeration">
+        Conforme a los Criterios para la declaración de caducidad del título habilitante en el Procedimiento Administrativo Único – PAU del OSINFOR
+        <a style="mso-footnote-id: foot_caducidad_1" href="#_foot_caducidad_1" title="">
+            <sup class=MsoFootnoteReference><span style="mso-special-character:footnote"></span></sup>
+        </a>, la caducidad se encuentra definida como la “extinción del  título habilitante o del derecho para el aprovechamiento de los recursos forestales y de fauna silvestre, conforme lo establecido en la Ley Orgánica para el Aprovechamiento Sostenible de Recursos Naturales, Ley N° 26821, así como en la Ley Forestal y de Fauna Silvestre, Ley N° 29763 y sus reglamentos aprobados”.
+    </p>
+    <p class="enumeration">
+        De acuerdo a lo señalado tanto en el literal b) del artículo 153 de la Ley Forestal y de Fauna Silvestre, Ley N° 29763, como en el literal b) del artículo 44 del Reglamento para la Gestión Forestal, aprobado mediante Decreto Supremo N° 018-2015-MINAGRI, constituye una causal de caducidad, la extracción o movilización de recursos forestales no autorizados.
+    </p>
+    <p class="enumeration">
+        En esa línea, teniendo en cuenta lo dispuesto en los “Criterios para la declaración de caducidad del título habilitante en el Procedimiento Administrativo Único del OSINFOR”, aprobados mediante Resolución de Jefatura N° 009-2018-OSINFOR, se establece que la caducidad se declara cuando concurran cada uno de los siguientes criterios:
+    </p>
+    <ul style="list-style: lower-alpha;">
+        {{each(i, item) CAUSALES_CADUCIDAD}}
+        <li>
+            ${item.titulo}
+        </li>
+        {{/each}}
+    </ul>
+    <p class="enumeration">
+        En caso de determinarse que, las acciones de extracción o movilización alcancen un nivel de gravedad estimado como “muy grave”, y de no concurrir los supuestos señalas en los literales b) o c), se declarará la caducidad cuando se verifique la concurrencia del literal d).
+    </p>
+    <p class="enumeration">
+        Ahora bien, tomando en cuenta los criterios antes señalados, el análisis técnico advierte lo siguiente:
+    </p>
+    <table width="100%" cellpadding="4" style="border: 0; font-family: Arial; font-size: 10pt; border-collapse: collapse; line-height: 150%;">
+        <thead>
+            <tr>
+                <th style="border:1px solid #000;">CRITERIOS</th>
+                <th style="border:1px solid #000;">DESCRIPCIÓN</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td style="border:1px solid #000;">
+                    De la gravedad – respecto al aprovechamiento maderable
+                </td>
+                <td style="border:1px solid #000;">
+                    <ul style="list-style:circle">
+                        <li>
+                            La tala, extracción y/o aprovechamiento de los recursos forestales sin autorización, el mismo que corresponde a un volumen total de xx m3, correspondiente al volumen injustificado (xx m3) de las especies xx, y a la extracción no autorizada xx m3, correspondiente a 1 árbol no autorizado de la especie xx.
+                        </li>
+                        <li>
+                            Tomando en cuenta el precitado volumen extraído sin autorización de xxx m<sup>3</sup> correspondiente a individuos no autorizados, se habría realizado la afectación de xx hectáreas de cobertura boscosa afectados por la extracción forestal sin criterios de sostenibilidad.
+                        </li>
+                        <li>
+                            Ante lo expuesto, se habría configurado una afectación de nivel
+                            <strong>muy grave</strong>
+                            <a style="mso-footnote-id: foot_caducidad_2" href="#_foot_caducidad_2" title="">
+                                <sup class=MsoFootnoteReference><span style="mso-special-character:footnote"></span></sup>
+                            </a>
+                            a la cobertura boscosa del Patrimonio Forestal Nacional,
+                            por lo cual, se cumple con el presente criterio.
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+            <tr>
+                <td style="border:1px solid #000;">
+                    Inexistencia del 100% de los árboles de la muestra evaluada y/o inexistencia total de indicios de censo comercial en el área del plan de manejo supervisado y/o inexistencia de evidencias de aprovechamiento forestal en dicha área.
+                </td>
+                <td style="border:1px solid #000;">
+                    Según los resultados de la supervisión, se evidenció la ejecución del censo comercial al encontrarse los individuos programados a supervisar, asimismo, se evidenció aprovechamiento maderable de manera parcial, de ello se desprende que, no se cumple con el presente criterio.
+                </td>
+            </tr>
+            <tr>
+                <td style="border:1px solid #000;">
+                    Antecedentes del titular por infracción a la legislación forestal que, como mínimo, hayan generado un daño de nivel “grave” al Patrimonio Forestal Nacional.
+                </td>
+                <td style="border:1px solid #000;">
+                    Según el reporte de antecedentes, la/el titular no cuenta con antecedentes por infracción a la legislación forestal, por lo cual, no se cumple el presente criterio.
+                </td>
+            </tr>
+            <tr>
+                <td style="border:1px solid #000;">
+                    De la continuidad del título habilitante
+                </td>
+                <td style="border:1px solid #000;">
+                    <p>
+                        Al respecto, el aprovechamiento maderable genera un nivel de daño al bosque que se ampara en el cumplimiento de los planes de manejo, debido a que, su alcance se encuentra previsto dentro del margen tolerable de sostenibilidad, teniendo en cuenta que este tiene la capacidad de regenerarse, sin afectar significativamente sus características de estructura funcional, siempre y cuando esta alteración no exceda el límite de esta capacidad regenerativa.
+                    </p>
+                    <p>
+                        Cabe indicar que, la/el titular habría realizado la extracción y movilización de xx m<sup>3</sup> de madera proveniente de individuos no autorizados. En esa línea, de acuerdo a los resultados recogidos de campo, el manejo forestal dentro de la concesión es casi nula, siendo que la empresa se dedicó en gran parte a utilizar la documentación otorgada por la autoridad competente para amparar extracciones no autorizadas.
+                    </p>
+                    <p>
+                        En esa línea, teniendo en cuenta la magnitud del volumen proveniente de árboles no autorizados, la limitada implementación de las actividades de aprovechamiento maderable que supone la ausencia de manejo dentro del área autorizada; y el uso indebido de los documentos antes citados, es posible sostener que, la continuidad del título habilitante supone el riesgo de que se sigan afectando los recursos forestales, por lo cual, se cumple con el presente criterio.
+                    </p>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <p class="enumeration">
+        Conforme todo lo mencionado, la/el titular habría incurrido en la causal de caducidad detallada precedentemente, al determinarse que sería presuntamente responsable por la extracción no autorizada de xx m3 de madera, así como por la presunta utilización de documentación otorgada o aprobada por la autoridad forestal, para amparar la extracción y/o comercialización de recursos forestales provenientes de extracciones no autorizadas. Cabe indicar que, extracción no autorizada habría ocasionado un daño de magnitud
+        <strong>“muy grave”</strong> a la cobertura boscosa y, evidencia que, la continuidad del título habilitante supone el riesgo de que se sigan afectando los recursos forestales; presupuesto esencial para la eventual adopción de una medida drástica como la caducidad, al ser proporcional al grado de afectación que se habría producido.
+    </p>
+    <p class="enumeration">
+        En ese sentido, teniendo en cuenta que en el presente caso, <strong>las acciones de extracción no autorizada ha alcanzado un nivel de gravedad “muy grave”, y se advierte que, la continuidad del título habilitante supone el riesgo de que se sigan afectando los recursos forestales</strong>,
+        se concluye que, la/el titular habría incurrido en la causal de caducidad tipificada en el literal b) del artículo 153 de la Ley N° 29763, concordante con el literal b) del artículo 44 del Reglamento para la Gestión Forestal, aprobado mediante Decreto Supremo N° 018-2015-MINAGRI; según lo señalado en los considerandos de la presente resolución sub directoral.
+    </p>
+    {{/if}}
+</script>
+
+<script id="tmpl-imputacion" type="text/x-jquery-tmpl">
+    <p>Teniendo en cuenta lo señalado precedentemente, existen elementos suficientes para presumir que la/el titular habría cometido las siguientes infracciones:</p>
+    <table width="100%" cellpadding="4" style="border: 0; font-family: Arial; font-size: 10pt; border-collapse: collapse; line-height: 150%;">
+        <tbody>
+            <tr>
+                <td style="text-align: center; border: 1px solid #000; width: 20px;">N°</td>
+                <td style="text-align: center; border: 1px solid #000;">Conducta imputada</td>
+                <td style="text-align: center; border: 1px solid #000;">Tipo infractor</td>
+            </tr>
+            {{each(i, item) INFRACCIONES}}
+            <tr>
+                <td style="border: 1px solid #000;">${i+1}</td>
+                <td style="border: 1px solid #000;">${item.conducta}</td>
+                <td style="border: 1px solid #000;">
+                    <p><i>${item.tipoInfractor}</i></p>
+                    <p>(${item.numeral})</p>
+                </td>
+            </tr>
+            {{/each}}
+        </tbody>
+    </table>
+</script>
+
+<script id="tmpl-medidas-cautelares" type="text/x-jquery-tmpl">
+    {{if FLG_MEDIDAS_CAUTELARES}}
+    <p style="margin-left: -30px;"><strong>IV.1. Normativa aplicable</strong></p>
+    <table width="100%" cellpadding="4" style="border: 0; font-family: Arial; font-size: 10pt; border-collapse: collapse; line-height: 150%;">
+        <thead>
+            <tr>
+                <td style="text-align: center; border: 1px solid #000;">Normativa</td>
+                <td style="text-align: center; border: 1px solid #000;">Descripción</td>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td style="border: 1px solid #000;">
+                    Disposición Complementaria Final Cuarta
+                    <a style="mso-footnote-id: foot_caducidad_3" href="#_foot_caducidad_3" title="">
+                        <sup class=MsoFootnoteReference><span style="mso-special-character:footnote"></span></sup>
+                    </a>
+                    del Decreto Legislativo N° 1220, Decreto Legislativo que establece medidas para la lucha contra la Tala Ilegal
+                </td>
+                <td style="border: 1px solid #000;">
+                    Faculta al OSINFOR a ordenar medidas cautelares antes de iniciar un procedimiento administrativo sancionador o en cualquier etapa del procedimiento.
+                </td>
+            </tr>
+            <tr>
+                <td style="border: 1px solid #000;">
+                    Artículo 157 del Texto Único Ordenado de la Ley Nº 27444, Ley del Procedimiento Administrativo General, aprobado por Decreto Supremo Nº 004-2019-JUS
+                    <a style="mso-footnote-id: foot_caducidad_4" href="#_foot_caducidad_4" title="">
+                        <sup class=MsoFootnoteReference><span style="mso-special-character:footnote"></span></sup>
+                    </a>
+                </td>
+                <td style="border: 1px solid #000;">
+                    Establece que la Autoridad dispone medidas cautelares en caso exista la posibilidad de que sin su adopción, se arriesgue la eficacia de la resolución a emitir, precisándose adicionalmente que las mismas pueden ser modificadas o levantadas en caso se produzcan circunstancias sobrevinientes o que no pudieron ser consideradas en el momento de su adopción
+                </td>
+            </tr>
+            <tr>
+                <td style="border: 1px solid #000;">
+                    Artículo 153 de la Ley N° 29763, Ley Forestal y de Fauna Silvestre
+                </td>
+                <td style="border: 1px solid #000;">
+                    Las infracciones a dicha ley y su reglamento, generan, entre otros, la imposición de medidas provisionales y cautelares.
+                </td>
+            </tr>
+            <tr>
+                <td style="border: 1px solid #000;">
+                    Numeral 7.1.2 de la Resolución de Jefatura N° 046-2018-OSINFOR, que aprueba los “Criterios para dictar Medidas Cautelares y Medidas Provisionales en Primera Instancia”
+                </td>
+                <td style="border: 1px solid #000;">
+                    Para dictar medidas cautelares se requiere: i) Verosimilitud de la presunta comisión de una infracción administrativa, ii) Peligro de daño irreparable que puede producirse hasta el momento que se disponga el inicio del PAU o se concluya el mismo; y iii) Razonabilidad de la medida.
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <p style="margin-left: -30px;"><strong>IV.2. Requisitos para el dictado de medidas cautelares</strong></p>
+    <table width="100%" cellpadding="4" style="border: 0; font-family: Arial; font-size: 10pt; border-collapse: collapse; line-height: 150%;">
+        <thead>
+            <tr>
+                <td style="text-align: center; border: 1px solid #000;">Requisito</td>
+                <td style="text-align: center; border: 1px solid #000;">Descripción</td>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td style="border: 1px solid #000;">
+                    Verosimilitud de la presunta comisión de una infracción administrativa
+                </td>
+                <td style="border: 1px solid #000;">
+                    <p>
+                        El xx de xxx de 202X, la Sub Dirección de Supervisión de Concesiones Forestales y de Fauna Silvestre informó a través de la Alerta N° XXXX, que en la supervisión al área del Plan de Manejo ${PLAN_MANEJO.NOMBRE_POA}, correspondiente al TH N° ${NUM_THABILITANTE}, no se han encontrado en campo evidencias de actividad de aprovechamiento forestal, entre ellas no existe movilización de volumen maderable del área; por lo que, el volumen reportado en el balance de extracción y forma 20 de fecha XX de XX de 20XX, procederían de árboles no autorizados, lo cual habría generado un daño a la cobertura boscosa natural que integra el Patrimonio Forestal Nacional.
+                    </p>
+                    <p>
+                        En ese sentido, los hallazgos contundentes de la supervisión permiten inferir que se ha cumplido con el primer presupuesto para emitir medidas cautelares, en el marco del presente PAU.
+                    </p>
+                </td>
+            </tr>
+            <tr>
+                <td style="border: 1px solid #000;">
+                    Peligro de daño irreparable por la demora en la expedición de la resolución de inicio de PAU
+                </td>
+                <td style="border: 1px solid #000;">
+                    <p>
+                        La vigencia del Plan de Manejo N° ${PLAN_MANEJO.NOMBRE_POA}, aprobado mediante la Resolución N° ${PLAN_MANEJO.ARESOLUCION_NUM}, culminará el ${PLAN_MANEJO.FIN_VIGENCIA || 'XX'}. Asimismo, se advierte que, existe un saldo de xxx m3 de madera rolliza que el titular podría movilizar. En esa línea, existe la posibilidad que se siga realizando la afectación a la cobertura forestal.
+                    </p>
+                    <p>
+                        Es necesario adoptar medidas orientadas a prevenir que el daño irreparable generado al Patrimonio Forestal, producto de la extracción no autorizada de xxx m3 de madera rolliza, se siga incrementando durante la vigencia del aludido plan de manejo. De la misma manera, surge la necesidad de suspender los efectos del Plan de Manejo y de las GTF, a fin de evitar que se aprueben futuros reingresos y/o movilizaciones de saldos.
+                    </p>
+                    <p>
+                        Por lo tanto, <strong>el segundo requisito para emitir medidas cautelares se ha configurado.</strong>
+                    </p>
+                </td>
+            </tr>
+            <tr>
+                <td style="border: 1px solid #000;">
+                    Razonabilidad de la medida
+                </td>
+                <td style="border: 1px solid #000;">
+                    <p>
+                        Las medidas a dictarse incidirán en aquellos derechos y/o instrumentos cuya continuación o permanencia pueda seguir afectando la sostenibilidad de los recursos forestales o permitan la perpetuación de los efectos antijurídicos de la infracción cometida.
+                    </p>
+                    <p>
+                        Por consiguiente, la suspensión de los efectos del PO aprobado, de las guías de transporte forestal y demás documentos vinculados, así como la disposición de la incautación temporal del recurso forestal extraído sin autorización, son congruentes y proporcionales a los fines perseguidos, <strong>cumpliéndose con el tercer requisito para la emisión de medidas cautelares.</strong>
+                    </p>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <p class="enumeration">
+        Se cumple con los requisitos exigidos en el numeral 7.1.2 de la Resolución de Jefatura N° 046-2018-OSINFOR; y, a fin de que la decisión final a emitirse en el presente procedimiento sea eficaz y se puedan salvaguardar los recursos que forman parte del patrimonio forestal que fueron extraído sin autorización, <strong>corresponde, se mantengan las medidas cautelares dictadas mediante Resolución Sub Directoral N° 00xxx-20xx-OSINFOR/08.2.1, conforme al siguiente detalle:</strong>
+    </p>
+    <ul style="list-style: lower-alpha;">
+        <li>
+            Suspender los efectos del Plan de Manejo N° ${PLAN_MANEJO.NOMBRE_POA}, aprobado mediante la Resolución Jefatural N° ${PLAN_MANEJO.ARESOLUCION_NUM}, otorgados a favor de ${TITULAR_SUPERVISADO}, correspondiente al TH N° ${NUM_THABILITANTE}; así como, suspender la autorización de eventuales reingresos y/o movilizaciones de saldos vinculados con el citado contrato/permiso forestal.
+        </li>
+        <li>
+            <span>
+                Suspender los efectos de las cuatro guías de transporte forestal, de fecha XX de junio de 20XX (GTF XXX), correspondientes a las especies aprobadas en el Plan de Manejo N° ${PLAN_MANEJO.NOMBRE_POA}, otorgadas a favor de ${TITULAR_SUPERVISADO}, correspondiente al TH N°  ${NUM_THABILITANTE}, conforme se detalla a continuación:
+                <table width="570" cellpadding="4" style="border: 0; font-family: Arial; font-size: 10pt; border-collapse: collapse; line-height: 150%;">
+                    <thead>
+                        <tr>
+                            <td style="text-align: center; border: 1px solid #000;">Parcela de corta</td>
+                            <td style="text-align: center; border: 1px solid #000;">GTF</td>
+                            <td style="text-align: center; border: 1px solid #000;">Fecha de Emisión</td>
+                            <td style="text-align: center; border: 1px solid #000;">Especie</td>
+                            <td style="text-align: center; border: 1px solid #000;">N° Trozas</td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td style="text-align: center; border: 1px solid #000;">xx</td>
+                            <td style="text-align: center; border: 1px solid #000;">xx</td>
+                            <td style="text-align: center; border: 1px solid #000;">xx</td>
+                            <td style="text-align: center; border: 1px solid #000;">xx</td>
+                            <td style="text-align: center; border: 1px solid #000;">xx</td>
+                        </tr>
+                        <tr>
+                            <td style="text-align: center; border: 1px solid #000;" colspan="4">Total</td>
+                            <td style="text-align: center; border: 1px solid #000;"></td>
+                        </tr>
+                    </tbody>
+                </table>
+                <p>
+                    Asimismo, se requiere a el/la titular que se abstenga de utilizar las mismas para la movilización de volúmenes autorizados en el plan de manejo señalado precedentemente. Por tanto, mientras permanezca vigente la referida medida, aquellos documentos previamente expedidos por la autoridad competente, carecen de efectos y validez para amparar la movilización o el transporte de recursos y/o productos forestales, con indiferencia de su ubicación geográfica o su eventual destino.
+                </p>
+            </span>
+        </li>
+        <li>
+            <span>
+                <p>
+                    Incautar temporalmente los recursos forestales movilizados mediante las XX Guías de Transporte Forestal de fecha XX de XXX de 20XX del Plan de Manejo N° ${PLAN_MANEJO.NOMBRE_POA}, conforme se detalla a continuación:
+                </p>
+                <table width="570" cellpadding="4" style="border: 0; font-family: Arial; font-size: 10pt; border-collapse: collapse; line-height: 150%;">
+                    <thead>
+                        <tr>
+                            <td style="text-align: center; border: 1px solid #000;">Parcela de corta</td>
+                            <td style="text-align: center; border: 1px solid #000;">GTF</td>
+                            <td style="text-align: center; border: 1px solid #000;">Fecha de Emisión</td>
+                            <td style="text-align: center; border: 1px solid #000;">Especie</td>
+                            <td style="text-align: center; border: 1px solid #000;">N° Trozas</td>
+                            <td style="text-align: center; border: 1px solid #000;">Volumen (m<sup>3</sup>)</td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td style="text-align: center; border: 1px solid #000;">xx</td>
+                            <td style="text-align: center; border: 1px solid #000;">xx</td>
+                            <td style="text-align: center; border: 1px solid #000;">xx</td>
+                            <td style="text-align: center; border: 1px solid #000;">xx</td>
+                            <td style="text-align: center; border: 1px solid #000;">xx</td>
+                            <td style="text-align: center; border: 1px solid #000;">xx</td>
+                        </tr>
+                        <tr>
+                            <td style="text-align: center; border: 1px solid #000;" colspan="4">Total</td>
+                            <td style="text-align: center; border: 1px solid #000;">xx</td>
+                            <td style="text-align: center; border: 1px solid #000;">xx</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </span>
+        </li>
+    </ul>
+    <p style="margin-left: -30px;"><strong>IV.3. Sobre la ejecución de la medida cautelar</strong></p>
+    <p>
+        El presente caso exige una respuesta efectiva que permita impedir continuar con la movilización y/o comercialización de las mencionadas especies, sobre las cuales habría recaído las presuntas conductas infractoras cuya comisión se atribuye a la/el titular, siendo indispensable que las medidas se hacen de conocimiento de la <strong>Oficina Desconcentrada de xxx de la Gerencia Regional de Desarrollo Forestal y de Fauna Silvestre del Gobierno Regional de xxx, a fin que disponga las acciones administrativas encaminadas a ejecutar las medidas antes dispuestas</strong>, conforme a lo señalado en la parte considerativa de la presente resolución.
+    </p>
+    <p style="margin-left: -30px;"><strong>IV.4. Sobre la comunicación al Administrado</strong></p>
+    <p>
+        Finalmente, si bien la resolución de inicio del PAU es inimpugnable, de acuerdo a lo señalado en el artículo 36 del Reglamento del PAU, el/la titular puede impugnar la medida cautelar dentro de los quince (15) días hábiles de su notificación. La impugnación no suspende la ejecución de la medida, salvo por disposición legal o decisión justificada de la autoridad administrativa competente, de acuerdo a lo previsto en el numeral 10.4 del artículo 4 del Decreto Supremo N° 007-2021-MIDAGRI.
+    </p>
+    {{else}}
+    <p>
+        En el presente caso, se ha determinado que xxx m3 de producto forestal tiene indicios de tener origen ilegal, por lo que podría evaluarse la adopción de una medida cautelar con el objetivo de detener dicho cargamento. Sin embargo, se ha verificado que las Guías de Transporte Forestal no contienen todos los códigos del volumen movilizado, por lo que, no se puede identificar el producto que debería intervenirse. En consecuencia, no es posible dictar una medida cautelar.
+    </p>
+    <p>
+        Sin perjuicio de ello, el numeral 196.1 del artículo 196 concordado con el literal b del numeral 197.1 del artículo 197 del RGF, establecen que las ARFFS cumplen una función de control, la cual implica acciones de vigilancia, monitoreo e intervención de carácter permanente respecto al patrimonio forestal, razón por la cual, la Gerencia Regional Forestal y de Fauna Silvestre del Gobierno Regional de Madre de Dios, deberá disponer las acciones pertinentes en cumplimiento de lo antes señalado.
+    </p>
+    {{/if}}
+</script>
+
+<script id="tmpl-comunicacion-externa" type="text/x-jquery-tmpl">
+    <table width="100%" cellpadding="4" style="border: 0; font-family: Arial; font-size: 10pt; border-collapse: collapse; line-height: 150%;">
+        <tbody>
+            <tr>
+                <td style="text-align: center; border: 1px solid #000; width: 20px;">N°</td>
+                <td style="text-align: center; border: 1px solid #000;">Entidad</td>
+                <td style="text-align: center; border: 1px solid #000;">Motivo</td>
+            </tr>
+            <tr>
+                <td style="border: 1px solid #000;">1</td>
+                <td style="border: 1px solid #000;">
+                    Gerencia Regional Forestal y de Fauna Silvestre del Gobierno Regional de xx
+                </td>
+                <td style="border: 1px solid #000; width: 50%;">
+                    Tome conocimiento de los resultados de la evaluación del informe de supervisión, implemente lo indicado en el considerando xx y cumpla con remitir lo siguiente: xxx.
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</script>
+
+<script id="tmpl-herramientas-subsanar" type="text/x-jquery-tmpl">
+    <p>
+        Adicional a lo desarrollado en la presente Resolución, se le informa al titular que puede acceder a las siguientes herramientas del OSINFOR:
+    </p>
+    <table width="100%" cellpadding="4" style="border: 0; font-family: Arial; font-size: 10pt; border-collapse: collapse; line-height: 150%;">
+        <tbody>
+            <tr>
+                <td style="text-align: center; border: 1px solid #000;">Herramientas</td>
+                <td style="text-align: center; border: 1px solid #000;">Objetivos</td>
+                <td style="text-align: center; border: 1px solid #000;">Beneficios</td>
+            </tr>
+            <tr>
+                <td style="border: 1px solid #000; text-align: center; vertical-align: middle;">
+                    <img width="120" height="50" src="${URL_APLICACION}content/images/logo/mibosque.jpg" />
+                </td>
+                <td style="border: 1px solid #000;">
+                    Permite a los titulares de títulos habilitantes y regentes remitir y registrar información clara y oportuna para evidenciar el cumplimiento de sus obligaciones. Además, permite reportar amenazas y/o delitos ambientales que se puedan desarrollar dentro de las áreas de manejo.
+                </td>
+                <td style="border: 1px solid #000;">
+                    Acredita el cumplimiento de obligaciones<br />
+                    Previene la comisión de infracciones
+                </td>
+            </tr>
+            <tr>
+                <td style="border: 1px solid #000; text-align: center; vertical-align: middle;">
+                    <img width="80" height="80" src="${URL_APLICACION}content/images/logo/siado.jpg" />
+                </td>
+                <td style="border: 1px solid #000;">
+                    Permite al titular del título habilitante consultar y descargar, de manera directa, rápida y ordenada, desde cualquier equipo móvil o computadora, los principales documentos del expediente administrativo que corresponden al presente PAU, a fin que pueda elaborar sus descargos y demás escritos que estime pertinente.
+                </td>
+                <td style="border: 1px solid #000;">
+                    Acceso al expediente del PAU digital desde cualquier lugar, sin necesidad de acudir a las oficinas del OSINFOR.
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <p class="enumeration">
+        De acuerdo con el artículo 8 del Reglamento del Procedimiento Administrativo Único del Organismo de Supervisión de los Recursos Forestales y de Fauna Silvestre – OSINFOR (en adelante, el Reglamento del PAU), corresponde a la autoridad instructora realizar actuaciones de investigación para recabar indicios sobre la presunta comisión de infracciones y causales de caducidad contempladas, desarrollar actuaciones probatorias y, formular el informe final de instrucción.
+    </p>
+    <p style="text-indent: 30px;">
+        En uso de las atribuciones conferidas por la Ley que crea el Organismo de Supervisión de los Recursos Forestales y de Fauna Silvestre, Decreto Legislativo N° 1085, modificado por los Decretos Legislativos N° 1319 y N° 1451; la Ley Forestal y de Fauna Silvestre, Ley N° 29763; el Reglamento para la Gestión Forestal, aprobado mediante Decreto Supremo N° 018-2015-MINAGRI; el Reglamento de Infracciones y Sanciones en Materia Forestal y de Fauna Silvestre, aprobado mediante Decreto Supremo N° 007-2021-MIDAGRI; el TUO de la Ley del Procedimiento Administrativo General - Ley N° 27444, aprobado por Decreto Supremo N° 004-2019-JUS; el Reglamento de Organización y Funciones del OSINFOR, aprobado por Decreto Supremo N° 136-2022-PCM; y, el Reglamento del Procedimiento Administrativo Único del OSINFOR, aprobado mediante Resolución de Jefatura N° 00043-2021-OSINFOR/01.1​.
+    </p>
+</script>
+
+<script id="tmpl-resolucion" type="text/x-jquery-tmpl">
+    <div style="text-align: justify;">
+        <p style="text-indent: 30px;">
+            <strong>Artículo.</strong> Iniciar el Procedimiento Administrativo Único a ${Inf_Supervision?.TITULAR_SUPERVISADO},
+            identificada con {{if RUC_TITULAR}}RUC ${RUC_TITULAR}{{else DOCUMENTO_RLEGAL}}DNI ${DOCUMENTO_RLEGAL}{{/if}}, titular del ${Inf_Supervision?.NUM_THABILITANTE}, por la presunta comisión de las siguientes infracciones:
+        </p>
+
+        <table width="100%" cellpadding="4" style="border: 0; font-family: Arial; font-size: 10pt; border-collapse: collapse; line-height: 150%;">
+            <thead>
+                <tr>
+                    <th style="border: 1px solid #000; text-align: center;">Descripción de la infracción</th>
+                    <th style="border: 1px solid #000; text-align: center;">
+                        Sanción aplicable
+                        <a style="mso-footnote-id: foot_resolucion_1" href="#_foot_resolucion_1" title="">
+                            <sup class=MsoFootnoteReference><span style="mso-special-character:footnote"></span></sup>
+                        </a>
+                    </th>
+                    <th style="border: 1px solid #000; text-align: center;">Posibilidad de subsanar</th>
+                    <th style="border: 1px solid #000; text-align: center;">Forma de subsanar</th>
+                </tr>
+            </thead>
+            <tbody>
+                {{each(i, item) INFRACCIONES}}
+                <tr>
+                    <td style="border: 1px solid #000;">
+                        <p><i>"${item.tipoInfractor}"</i></p>
+                        <p>${item.numeral}</p>
+                    </td>
+                    <td style="border: 1px solid #000;">
+                        <p>${item.sancion}</p>
+                        <p>${item.numeral}</p>
+                    </td>
+                    <td style="border: 1px solid #000; text-align: center;">Si/No</td>
+                    <td style="border: 1px solid #000;">${item.subsanar}</td>
+                </tr>
+                {{/each}}
+            </tbody>
+        </table>
+
+        {{if FLG_CADUCIDAD_EXTRACCION}}
+        <p>
+            Asimismo, por la presunta incursión en la siguiente causal de caducidad:
+        </p>
+
+        <table width="100%" cellpadding="4" style="border: 0; font-family: Arial; font-size: 10pt; border-collapse: collapse; line-height: 150%;">
+            <thead>
+                <tr>
+                    <th style="border: 1px solid #000; text-align: center;">N°</th>
+                    <th style="border: 1px solid #000; text-align: center;">Conducta imputada</th>
+                    <th style="border: 1px solid #000; text-align: center;">Causal de caducidad</th>
+                </tr>
+            </thead>
+            <tbody>
+                {{each(i, item) CAUSALES_CADUCIDAD}}
+                <tr>
+                    <td style="border: 1px solid #000; text-align: center;">${i+1}</td>
+                    <td style="border: 1px solid #000;">${item.titulo}</td>
+                    <td style="border: 1px solid #000;">Causal</td>
+                </tr>
+                {{/each}}
+            </tbody>
+        </table>
+        {{/if}}
+
+        <p style="text-indent: 30px;">
+            <strong>Artículo.</strong> Notificar la presente Resolución Sub Directoral, a ${TITULAR_SUPERVISADO}, al domicilio ubicado ${DIRECCION_LEGAL || 'XX'}
+            <a style="mso-footnote-id: foot_resolucion_2" href="#_foot_resolucion_2" title="">
+                <sup class=MsoFootnoteReference><span style="mso-special-character:footnote"></span></sup>
+            </a>, otorgándole un plazo de quince (15) días hábiles más el término de la distancia, en caso corresponda, contados a partir del día siguiente de la fecha de notificación, para que formule los descargos que considere pertinentes.
+        </p>
+
+        <p>
+            Asimismo, en concordancia con el Decreto Supremo N° 026-2023-PCM, mediante el cual se aprueba el uso obligatorio de la notificación vía Casilla Electrónica del OSINFOR, se le <strong>EXHORTA</strong> a realizar su afiliación a la casilla electrónica del OSINFOR ingresando al siguiente link: https://notificaciones.osinfor.gob.pe:9061/#/registro, a fin que se realice la notificación a través de ese medio. Cabe señalar que, según lo estipulado en el Reglamento del Sistema de Notificación Vía Casilla Electrónica del OSINFOR, aprobado mediante Resolución de Jefatura N° 026-2023-OSINFOR, a partir del 1 de agosto del 2023, <strong>el OSINFOR habilitará de oficio casillas electrónicas a todos los administrados.</strong> En esa línea, se le recuerda que, una vez asignada la casilla electrónica, deberá revisarla periódicamente, a efectos de tomar conocimiento oportuno de los actos administrativos y actuaciones administrativas que le hayan sido notificados por el OSINFOR.
+        </p>
+
+        <p style="text-indent: 30px;">
+            <strong>Artículo.</strong> Informar a ${TITULAR_SUPERVISADO}, que puede efectuar las siguientes acciones:
+        </p>
+
+        <table width="100%" cellpadding="4" style="border: 0; font-family: Arial; font-size: 10pt; border-collapse: collapse; line-height: 150%;">
+            <thead>
+                <tr>
+                    <th style="border: 1px solid #000; text-align: center;">Acción</th>
+                    <th style="border: 1px solid #000; text-align: center;">Plazo</th>
+                    <th style="border: 1px solid #000; text-align: center;">Lugar</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td style="border: 1px solid #000;">
+                        Presentar sus descargos sobre las infracciones señaladas en el artículo 1
+                    </td>
+                    <td style="border: 1px solid #000; text-align: center;" rowspan="3">
+                        15 días hábiles más el término de la distancia, en caso corresponda.
+                    </td>
+                    <td style="border: 1px solid #000;" rowspan="5">
+                        Mesa de Partes Digital a través del portal web del OSINFOR:
+                        https://facilita.gob.pe/t/677
+                        <a style="mso-footnote-id: foot_resolucion_3" href="#_foot_resolucion_3" title="">
+                            <sup class=MsoFootnoteReference><span style="mso-special-character:footnote"></span></sup>
+                        </a>
+                        y sólo si el archivo a adjuntar excede los 10 MB, remitirlo al correo mesa.partes@osinfor.gob.pe, o de forma presencial, ante la mesa de partes de la sede central del OSINFOR en la ciudad de Lima o
+                        ante cualquier mesa de partes
+                        <a style="mso-footnote-id: foot_resolucion_4" href="#_foot_resolucion_4" title="">
+                            <sup class=MsoFootnoteReference><span style="mso-special-character:footnote"></span></sup>
+                        </a>
+                        de sus Oficinas Desconcentradas del OSINFOR, pudiendo consignar adicionalmente una dirección electrónica y/o casilla electrónica del OSINFOR, en caso lo tuviere
+                        <a style="mso-footnote-id: foot_resolucion_5" href="#_foot_resolucion_5" title="">
+                            <sup class=MsoFootnoteReference><span style="mso-special-character:footnote"></span></sup>
+                        </a>. Asimismo, se solicita que los documentos que presente en el marco del PAU consignen el siguiente número de expediente: 000xxx-202x-OSINFOR/08.2.
+                    </td>
+                </tr>
+                <tr>
+                    <td style="border: 1px solid #000;">
+                        Presentar alguna documentación adicional
+                        <a style="mso-footnote-id: foot_resolucion_6" href="#_foot_resolucion_6" title="">
+                            <sup class=MsoFootnoteReference><span style="mso-special-character:footnote"></span></sup>
+                        </a>, especialmente lo siguiente:
+                        <p>- Remitir el Libro de Operaciones Actualizado</p>
+                        <p>- Balance de Extracción, Guías de Transporte Forestal y Forma 20 actualizado</p>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="border: 1px solid #000;">
+                        Subsanar las infracciones identificadas en el artículo 1
+                    </td>
+                </tr>
+                <tr>
+                    <td style="border: 1px solid #000;">
+                        Reconocer su responsabilidad sobre las infracciones cometidas, para reducir la multa que pudiera imponerse al finalizar el PAU
+                        <a style="mso-footnote-id: foot_resolucion_7" href="#_foot_resolucion_7" title="">
+                            <sup class=MsoFootnoteReference><span style="mso-special-character:footnote"></span></sup>
+                        </a>
+                    </td>
+                    <td style="border: 1px solid #000;">
+                        Durante el PAU
+                    </td>
+                </tr>
+                <tr>
+                    <td style="border: 1px solid #000;">
+                        Solicitar la programación de una Audiencia de Informe Oral
+                    </td>
+                    <td style="border: 1px solid #000;">
+                        Durante el PAU
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <p style="text-indent: 30px;">
+            <strong>Artículo.</strong> Remitir copia de la presente Resolución Sub Directoral a la Gerencia Regional Forestal y de Fauna Silvestre del Gobierno Regional de xxx, para que en su condición de Autoridad Regional Forestal y de Fauna Silvestre y Parte Concedente, tome conocimiento de los hechos expuestos y adopte las medidas necesarias para obtener el cumplimiento correcto del título habilitante. Asimismo, solicitarle que cumpla con remitir en un plazo máximo de <strong>DIEZ (10) DÍAS HÁBILES</strong>, de recibido el presente documento, con carácter de <strong>URGENTE</strong>, la siguiente información:
+        </p>
+
+        <ul style="list-style:disc;">
+            <li>xx</li>
+            <li>xx</li>
+        </ul>
+
+        <p style="text-indent: 30px;">
+            <strong>Artículo.</strong> Adjuntar al expediente que se genere el récord de sanciones administrativas a la xx, que pueda existir en el OSINFOR.
+        </p>
+    </div>
+</script>
+
+<script id="tmpl-encabezado" type="text/x-jquery-tmpl">
+    <p style="text-align:center;">
+        <img height="200" width="200" alt="" src="${URL_APLICACION}content/images/logo/escudo-peruano.jpg">
+    </p>
+</script>
+
+<script id="tmpl-pie-pagina" type="text/x-jquery-tmpl">
+    Esta es una copia auténtica imprimible de un documento electrónico archivado en el Organismo de Supervisión de los Recursos Forestales y
+    de Fauna Silvestre, aplicando lo dispuesto por el Art. 25 de D.S. 070 – 2013 PCM y la Tercera Disposición Complementaria Final del D.S. 026-
+    2016-PCM. Su autenticidad e integridad pueden ser contrastadas a través de la siguiente web:
+    <a href="http://mpv.osinfor.gob.pe:8083/visor-osinfor-pide">http://mpv.osinfor.gob.pe:8083/visor-osinfor-pide</a> e ingresando la siguiente clave-std: PASSWORD
+</script>
+
+<script id="tmpl-notificacion-calidad" type="text/x-jquery-tmpl">
+    <p>
+        Estimado(a)<br /><br />Adjunto el enlace de descarga de la Resolución Sub Directoral Nro ${NUM_INFORME_SITD},
+        debidamente revisado y firmado por los involucrados para el control de calidad respectivo.<br /><br />
+        <strong>URL Descarga:</strong>&nbsp;<a target="_blank" href="${URL_DESCARGA}">${NUM_INFORME_SITD || 'Enlace de descarga'}</a><br /><br />
+        Atentamente<br />
+        ${USUARIO}
+    </p>
+</script>
+
+@Html.Partial("~/Areas/Fiscalizacion/Views/ManPAURD/templates/_tmplFootnotes.cshtml")

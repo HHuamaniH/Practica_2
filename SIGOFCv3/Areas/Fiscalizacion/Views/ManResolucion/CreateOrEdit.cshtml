@@ -4,16 +4,22 @@
     ViewBag.Title = "AddEdit";
     Layout = "~/Views/Shared/_LayoutMain.cshtml";
 }
-<script src="~/Areas/Fiscalizacion/js/ManResolucion/AddEdit.js?V=15.5"></script>
+<script src="~/Areas/Fiscalizacion/js/ManResolucion/AddEdit.js?V=16"></script>
 <script type="text/javascript">
     ManRD_AddEdit.userApp = JSON.parse('@Html.Raw(Json.Encode(ViewBag.Usuario))');
 </script>
 @section scripts{
     <script>
-        "use strict"; var rol = '';
+        "use strict"; let rol = '';
     $(document).ready(function () {
         //Validamos el rol del usuario
         utilSigo.ValidaRol('@ViewBag.VAliasRol', 'btnRegistrar', '@Model.vmControlCalidad.ddlIndicadorId');
+
+        $('form input[type=text]').on('keypress', function (e) {
+            if (e.which === 13) {
+                e.preventDefault();
+            }
+        });
     });
     </script>
 }
@@ -107,7 +113,14 @@
 
                         <div class="tab-content">
                             <div class="tab-pane fade show mt-3" id="navInformeDigital" role="tabpanel" aria-labelledby="nav-home-tab">
-                                @Html.Partial("~/Areas/Fiscalizacion/Views/ManPAU/_InformeResSubDir.cshtml")
+                                @if (Model.chkResDir)
+                                {
+                                    @Html.Partial("~/Areas/Fiscalizacion/Views/ManPAURD/_InformeResDir.cshtml")
+                                }
+                                else if (Model.chkResSubDir)
+                                {
+                                    @Html.Partial("~/Areas/Fiscalizacion/Views/ManPAU/_InformeResSubDir.cshtml")
+                                }
                             </div>
                             <div class="tab-pane fade" id="navEstado" role="tabpanel" aria-labelledby="nav-home-tab">
                                 @{ Html.RenderAction("_ControlCalidad", "Controles", new { area = "GENERAL", dto = Model.vmControlCalidad }); }

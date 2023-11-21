@@ -4,9 +4,9 @@ using System.ComponentModel;
 
 namespace CapaEntidad.ViewModel
 {
-    public class VM_RSD_DIGITAL
+    public class VM_PAU_RSD_DIGITAL
     {
-        public VM_RSD_DIGITAL()
+        public VM_PAU_RSD_DIGITAL()
         {
             this.RECURSOS = new List<VM_RSD_DIGITAL_RECURSO>();
             this.FIRMAS = new List<VM_RSD_DIGITAL_FIRMA>();
@@ -136,19 +136,5 @@ namespace CapaEntidad.ViewModel
         public string ARESOLUCION_FECHA { get; set; }
         public string INICIO_VIGENCIA { get; set; }
         public string FIN_VIGENCIA { get; set; }
-    }
-
-    public class RSD_Notificacion
-    {
-        [Description("DESTINATARIOS")]
-        public string DESTINATARIOS { get; set; }
-        [Description("CC_DESTINATARIOS")]
-        public string CC_DESTINATARIOS { get; set; }
-        [Description("COD_INFORME")]
-        public string COD_INFORME { get; set; }
-        [Description("MENSAJE_ENVIO_ALERTA")]
-        public string MENSAJE_ENVIO_ALERTA { get; set; }
-        [Description("URL_LOCAL")]
-        public string URL_LOCAL { get; set; }
     }
 }

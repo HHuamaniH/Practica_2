@@ -1,23 +1,23 @@
-﻿using System.Collections.Generic;
-using System.ComponentModel;
+﻿using System;
+using System.Collections.Generic;
 
 namespace CapaEntidad.ViewModel
 {
-    public class VM_INFORME_LEGAL_DIGITAL
+    public class VM_PAU_RD_DIGITAL
     {
-        public VM_INFORME_LEGAL_DIGITAL()
+        public VM_PAU_RD_DIGITAL()
         {
-            this.RSD = new List<VM_INFORME_LEGAL_DIGITAL_VS_RSD>();
-            this.ANTECEDENTES = new List<VM_INFORME_LEGAL_DIGITAL_ANTECEDENTE>();
-            this.REFERENCIAS = new List<VM_INFORME_LEGAL_REFERENCIA_SITD>();
-            this.DOCUMENTOS = new List<VM_INFORME_LEGAL_DIGITAL_DOCUMENTO>();
-            this.PARTICIPANTES = new List<VM_INFORME_LEGAL_DIGITAL_PARTICIPANTE>();
-            this.INFRACCIONES = new List<VM_INFORME_LEGAL_DIGITAL_INFRACCION>();
-            this.ELIMINAR = new List<VM_INFORME_LEGAL_DIGITAL_ELIMINAR>();
+            this.ILEGAL = new List<VM_PAU_RD_DIGITAL_VS_ILEGAL>();
+            this.ANTECEDENTES = new List<VM_PAU_RD_DIGITAL_ANTECEDENTE>();
+            this.REFERENCIAS = new List<VM_PAU_RD_DIGITAL_REFERENCIA_SITD>();
+            this.DOCUMENTOS = new List<VM_PAU_RD_DIGITAL_DOCUMENTO>();
+            this.PARTICIPANTES = new List<VM_PAU_RD_DIGITAL_PARTICIPANTE>();
+            this.INFRACCIONES = new List<VM_PAU_RD_DIGITAL_INFRACCION>();
+            this.ELIMINAR = new List<VM_PAU_RD_DIGITAL_ELIMINAR>();
         }
 
         public string COD_INFORME_DIGITAL { get; set; }
-        public string COD_INFORME { get; set; }
+        public string COD_RESOLUCION { get; set; }
         public string NUM_INFORME_SITD { get; set; }
         public int? TRAMITE_ID { get; set; }
         public string COD_PROCEDENCIA { get; set; }
@@ -25,9 +25,7 @@ namespace CapaEntidad.ViewModel
         public string COD_TIPO_INFORME { get; set; }
         public string COD_MATERIA { get; set; }
         public string MATERIA { get; set; }
-        //public string NRO_REFERENCIA { get; set; }
         public string COD_MODALIDAD { get; set; }
-
         public string COD_THABILITANTE { get; set; }
         public string COD_TITULAR { get; set; }
         public string NUM_CONTRATO { get; set; }
@@ -61,16 +59,16 @@ namespace CapaEntidad.ViewModel
         public string COD_USUARIO_OPERACION { get; set; }
         public int ESTADO { get; set; }
 
-        public List<VM_INFORME_LEGAL_DIGITAL_VS_RSD> RSD { get; set; }
-        public List<VM_INFORME_LEGAL_DIGITAL_ANTECEDENTE> ANTECEDENTES { get; set; }
-        public List<VM_INFORME_LEGAL_REFERENCIA_SITD> REFERENCIAS { get; set; }
-        public List<VM_INFORME_LEGAL_DIGITAL_DOCUMENTO> DOCUMENTOS { get; set; }
-        public List<VM_INFORME_LEGAL_DIGITAL_PARTICIPANTE> PARTICIPANTES { get; set; }
-        public List<VM_INFORME_LEGAL_DIGITAL_INFRACCION> INFRACCIONES { get; set; }
-        public List<VM_INFORME_LEGAL_DIGITAL_ELIMINAR> ELIMINAR { get; set; }
+        public List<VM_PAU_RD_DIGITAL_VS_ILEGAL> ILEGAL { get; set; }
+        public List<VM_PAU_RD_DIGITAL_ANTECEDENTE> ANTECEDENTES { get; set; }
+        public List<VM_PAU_RD_DIGITAL_REFERENCIA_SITD> REFERENCIAS { get; set; }
+        public List<VM_PAU_RD_DIGITAL_DOCUMENTO> DOCUMENTOS { get; set; }
+        public List<VM_PAU_RD_DIGITAL_PARTICIPANTE> PARTICIPANTES { get; set; }
+        public List<VM_PAU_RD_DIGITAL_INFRACCION> INFRACCIONES { get; set; }
+        public List<VM_PAU_RD_DIGITAL_ELIMINAR> ELIMINAR { get; set; }
     }
 
-    public class VM_INFORME_LEGAL_DIGITAL_VS_RSD
+    public class VM_PAU_RD_DIGITAL_VS_ILEGAL
     {
         public string codInformeDigital { get; set; }
         public int item { get; set; }
@@ -85,7 +83,20 @@ namespace CapaEntidad.ViewModel
         public int accion { get; set; }
     }
 
-    public class VM_INFORME_LEGAL_REFERENCIA_SITD
+    public class VM_PAU_RD_DIGITAL_ANTECEDENTE
+    {
+        public string codInformeDigital { get; set; }
+        public int item { get; set; }
+        public string codResolucion { get; set; }
+        public string tipoDocumento { get; set; }
+        public string numero { get; set; }
+        public string fechaEmision { get; set; }
+        public string fechaNotificacion { get; set; }
+        public int? estado { get; set; }
+        public int accion { get; set; }
+    }
+
+    public class VM_PAU_RD_DIGITAL_REFERENCIA_SITD
     {
         public string COD_ILEGAL { get; set; }
         public string COD_ILACCION { get; set; }
@@ -97,7 +108,7 @@ namespace CapaEntidad.ViewModel
         public int RegEstado { get; set; }
     }
 
-    public class VM_INFORME_LEGAL_DIGITAL_DOCUMENTO
+    public class VM_PAU_RD_DIGITAL_DOCUMENTO
     {
         public string codInformeDigital { get; set; }
         public int item { get; set; }
@@ -109,7 +120,7 @@ namespace CapaEntidad.ViewModel
         public int accion { get; set; }
     }
 
-    public class VM_INFORME_LEGAL_DIGITAL_PARTICIPANTE
+    public class VM_PAU_RD_DIGITAL_PARTICIPANTE
     {
         public string codInformeDigital { get; set; }
         public int item { get; set; }
@@ -122,7 +133,7 @@ namespace CapaEntidad.ViewModel
         public int accion { get; set; }
     }
 
-    public class VM_INFORME_LEGAL_DIGITAL_INFRACCION
+    public class VM_PAU_RD_DIGITAL_INFRACCION
     {
         public string codInformeDigital { get; set; }
         public int item { get; set; }
@@ -143,43 +154,15 @@ namespace CapaEntidad.ViewModel
         public double area { get; set; }
         public double nroIndividuos { get; set; }
         public string numPOA { get; set; }
-        //public string numAResolucion { get; set; }
         public string tipoMaderable { get; set; }
         public int? estado { get; set; }
         public int accion { get; set; }
     }
 
-    public class VM_INFORME_LEGAL_DIGITAL_ANTECEDENTE
-    {
-        public string codInformeDigital { get; set; }
-        public int item { get; set; }
-        public string codResolucion { get; set; }
-        public string tipoDocumento { get; set; }
-        public string numero { get; set; }
-        public string fechaEmision { get; set; }
-        public string fechaNotificacion { get; set; }
-        public int? estado { get; set; }
-        public int accion { get; set; }
-    }
-
-    public class VM_INFORME_LEGAL_DIGITAL_ELIMINAR
+    public class VM_PAU_RD_DIGITAL_ELIMINAR
     {
         public string codInforme { get; set; }
         public object item { get; set; }
         public string origen { get; set; } //DOCUMENTO,PARTICIPANTE,INFRACCION,RSD
-    }
-
-    public class Informe_Notificacion
-    {
-        [Description("DESTINATARIOS")]
-        public string DESTINATARIOS { get; set; }
-        [Description("CC_DESTINATARIOS")]
-        public string CC_DESTINATARIOS { get; set; }
-        [Description("COD_INFORME")]
-        public string COD_INFORME { get; set; }
-        [Description("MENSAJE_ENVIO_ALERTA")]
-        public string MENSAJE_ENVIO_ALERTA { get; set; }
-        [Description("URL_LOCAL")]
-        public string URL_LOCAL { get; set; }
     }
 }

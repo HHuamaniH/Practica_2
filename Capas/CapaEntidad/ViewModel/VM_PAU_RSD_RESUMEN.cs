@@ -2,9 +2,9 @@
 
 namespace CapaEntidad.ViewModel
 {
-    public class VM_RSD_Resumen
+    public class VM_PAU_RSD_RESUMEN
     {
-        public VM_RSD_Resumen()
+        public VM_PAU_RSD_RESUMEN()
         {
             this.LIST_INFRACCIONES = new List<VM_RSD_INFRACCIONES>();
         }

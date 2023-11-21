@@ -2446,9 +2446,9 @@ namespace CapaDatos.DOC
             }
         }
 
-        public VM_RSD_Resumen RSD_Resumen(OracleConnection cn, string COD_RESDIR, string asCodTipoIL)
+        public VM_PAU_RSD_RESUMEN RSD_Resumen(OracleConnection cn, string COD_RESDIR, string asCodTipoIL)
         {
-            VM_RSD_Resumen result = null;
+            VM_PAU_RSD_RESUMEN result = null;
 
             try
             {
@@ -2461,7 +2461,7 @@ namespace CapaDatos.DOC
                         {
                             while (dr.Read())
                             {
-                                result = new VM_RSD_Resumen();
+                                result = new VM_PAU_RSD_RESUMEN();
                                 result.COD_THABILITANTE = dr["COD_THABILITANTE"] != DBNull.Value ? dr["COD_THABILITANTE"].ToString() : null;
                                 result.COD_TITULAR = dr["COD_TITULAR"] != DBNull.Value ? dr["COD_TITULAR"].ToString() : null;
                                 result.NUM_THABILITANTE = dr["NUM_THABILITANTE"] != DBNull.Value ? dr["NUM_THABILITANTE"].ToString() : null;
