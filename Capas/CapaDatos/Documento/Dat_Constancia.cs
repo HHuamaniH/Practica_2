@@ -106,6 +106,65 @@ namespace CapaDatos.DOC
                 throw ex;
             }
         }
+
+        public VM_CONSTANCIA_V2 ObtenerPorIdentificador_v2(OracleConnection cn, string identificador)
+        {
+            VM_CONSTANCIA_V2 constancia = null;
+            try
+            {
+                object[] param = { identificador };
+                using (OracleDataReader dr = dBOracle.SelDrdDefault(cn, "DOC_OSINFOR_ERP_MIGRACION.SPFISCALIZACION_CONSTANCIA_OBTENER_POR_CODIGO_v2", param))
+                {
+                    if (dr != null)
+                    {
+                        if (dr.HasRows)
+                        {
+                            dr.Read();
+                            constancia = new VM_CONSTANCIA_V2();
+                            constancia.NV_CONSTANCIA = dr["NV_CONSTANCIA"].ToString();
+                            constancia.VAR_NUM_CONSTANCIA = dr["VAR_NUM_CONSTANCIA"].ToString();
+                            constancia.VAR_TITULAR = dr["VAR_TITULAR"].ToString();
+                            constancia.VAR_TIPO_DOC = dr["VAR_TIPO_DOC"].ToString();
+                            constancia.VAR_NUMERO_DOC = dr["VAR_NUMERO_DOC"].ToString();
+                            constancia.VAR_TITULO = dr["VAR_TITULO"].ToString();
+                            constancia.VAR_PLANES = dr["VAR_PLANES"].ToString();
+                            constancia.VAR_RESOLUCION_APLAN = dr["VAR_RESOLUCION_APLAN"].ToString();
+                            constancia.VAR_REGENTE = dr["VAR_REGENTE"].ToString();
+                            constancia.VAR_FECHA_SUP = dr["VAR_FECHA_SUP"].ToString();
+                            constancia.VAR_INFORME = dr["VAR_INFORME"].ToString();
+                            constancia.NUMERO_INFORME = dr["VAR_INFORME"].ToString();
+                            constancia.VAR_FECHA_INFORME = dr["VAR_FECHA_INFORME"].ToString().Trim() == "" ? null : (DateTime?)Convert.ToDateTime((dr["VAR_FECHA_INFORME"]));
+                            constancia.VAR_POA_CONST = dr["VAR_POA_CONST"].ToString();
+                            constancia.VAR_INICIO_POA = dr["VAR_INICIO_POA"].ToString().Trim() == "" ? null : (DateTime?)Convert.ToDateTime((dr["VAR_INICIO_POA"]));
+                            constancia.VAR_FIN_SUP = dr["VAR_FIN_SUP"].ToString().Trim() == "" ? null : (DateTime?)Convert.ToDateTime((dr["VAR_FIN_SUP"]));
+                            constancia.VAR_FECHA_EMC = dr["VAR_FECHA_EMC"].ToString().Trim() == "" ? null : (DateTime?)Convert.ToDateTime((dr["VAR_FECHA_EMC"]));
+                            constancia.VAR_JEFE = dr["VAR_JEFE"].ToString();
+                            constancia.VAR_OFICINA = dr["VAR_OFICINA"].ToString();
+
+                            constancia.ESTADO_DOCUMENTO = dr["ESTADO_DOCUMENTO"].ToString();
+                            constancia.VAR_LIC_REGENTE = dr["VAR_LIC_REGENTE"].ToString();
+
+                            constancia.TRAMITE_ID = Convert.ToInt32(dr["TRAMITE_ID"]);
+                            constancia.ARCHIVO = dr["ARCHIVO"].ToString();
+                            constancia.ARCHIVO_TEMP = dr["ARCHIVO_TEMP"].ToString();
+                            constancia.NU_ESTADO = Convert.ToInt32(dr["NU_ESTADO"]);
+                            constancia.COD_INFORME = dr["COD_INFORME"].ToString();
+                            constancia.COD_THABILITANTE = dr["COD_THABILITANTE"].ToString();
+                            constancia.COD_TITULAR = dr["COD_TITULAR"].ToString();
+                            constancia.NUMERO = dr["VAR_NUM_CONSTANCIA"].ToString();
+                            constancia.FECHA_EMISION = dr["VAR_FECHA_EMC"].ToString().Trim() == "" ? null : (DateTime?)Convert.ToDateTime(dr["VAR_FECHA_EMC"]);
+                        }
+                    }
+                }
+
+                return constancia;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
         public bool ActualizarDatosIntegración(string identificador,string numero,
                           DateTime fechaEmision,string codUsuario,string estadoDocumento,DateTime fechaModificar,int tramiteId,string archivo)
         {

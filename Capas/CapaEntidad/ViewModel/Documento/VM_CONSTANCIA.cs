@@ -84,4 +84,49 @@ namespace CapaEntidad.ViewModel.DOC
             this.cFlag = 1;
         }
     }
+
+    public class VM_CONSTANCIA_V2
+    {
+        public string NV_CONSTANCIA { get; set; }
+        public string VAR_NUM_CONSTANCIA { get; set; }
+        public string VAR_TITULAR { get; set; }
+        public string VAR_TIPO_DOC { get; set; }
+        public string VAR_NUMERO_DOC { get; set; }
+        public string VAR_TITULO { get; set; }
+        public string VAR_PLANES { get; set; }
+        public string VAR_LIC_REGENTE { get; set; }
+        public string VAR_RESOLUCION_APLAN { get; set; }
+        public string VAR_REGENTE { get; set; }
+        public string VAR_FECHA_SUP { get; set; }
+        public string VAR_INFORME { get; set; }
+        public DateTime? VAR_FECHA_INFORME { get; set; }
+        public string VAR_POA_CONST { get; set; }
+        public DateTime? VAR_INICIO_POA { get; set; }
+        public DateTime? VAR_FIN_SUP { get; set; }
+        public DateTime? VAR_FECHA_EMC { get; set; }
+        public string VAR_JEFE { get; set; }
+        public string VAR_OFICINA { get; set; }
+
+        public string ARCHIVO { get; set; }
+        public string ESTADO_DOCUMENTO { get; set; }
+
+        public int TRAMITE_ID { get; set; }
+        public string NUMERO_INFORME { get; set; }
+
+        public string PASSWORD { get; set; }
+
+        public string PERSONA_FIRMA { get; set; }
+        public string OFICINA { get; set; }
+
+        public DateTime? FECHA_EMISION { get; set; }
+        public string NUMERO { get; set; }
+
+        public string ARCHIVO_TEMP { get; set; }
+
+        public string APELLIDOS_NOMBRES { get; set; }
+        public string COD_TITULAR { get; set; }
+        public int NU_ESTADO { get; set; }
+        public string COD_INFORME { get; set; }
+        public string COD_THABILITANTE { get; set; }
+    }
 }

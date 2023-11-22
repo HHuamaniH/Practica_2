@@ -1,4 +1,5 @@
-﻿using DocumentFormat.OpenXml.Packaging;
+﻿using DocumentFormat.OpenXml.Drawing.Wordprocessing;
+using DocumentFormat.OpenXml.Packaging;
 using DocumentFormat.OpenXml.Wordprocessing;
 using System;
 using System.Collections.Generic;
@@ -109,6 +110,26 @@ namespace SIGOFCv3.Helper
                                     }
                                 }
                             }
+                        }
+                    }
+                }
+            }
+        }
+
+        public static void ReplaceImage(WordprocessingDocument wordDoc, string tagName, string imagePath)
+        {
+            IEnumerable<Drawing> drawings = wordDoc.MainDocumentPart.Document.Descendants<Drawing>().ToList();
+            foreach (Drawing drawing in drawings)
+            {
+                DocProperties dpr = drawing.Descendants<DocProperties>().FirstOrDefault();
+                if (dpr != null && (dpr.Name == tagName || dpr.Description == tagName))
+                {
+                    foreach (DocumentFormat.OpenXml.Drawing.Blip b in drawing.Descendants<DocumentFormat.OpenXml.Drawing.Blip>().ToList())
+                    {
+                        OpenXmlPart imagePart = wordDoc.MainDocumentPart.GetPartById(b.Embed);
+                        using (var writer = new BinaryWriter(imagePart.GetStream()))
+                        {
+                            writer.Write(File.ReadAllBytes(imagePath));
                         }
                     }
                 }
@@ -415,8 +436,7 @@ namespace SIGOFCv3.Helper
             foreach (var paragraph in paragraphs)
                 SearchAndReplaceInParagraph((XmlElement)paragraph, search, replace, matchCase);
         }
-        public static void SearchAndReplace(WordprocessingDocument wordDoc, string search,
-           string replace, bool matchCase)
+        public static void SearchAndReplace(WordprocessingDocument wordDoc, string search, string replace, bool matchCase)
         {
             if (HasTrackedRevisions(wordDoc))
                 throw new SearchAndReplaceException(

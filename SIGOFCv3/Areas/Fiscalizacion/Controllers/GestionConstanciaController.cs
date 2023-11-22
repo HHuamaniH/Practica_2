@@ -20,6 +20,8 @@ using CapaEntidad.ViewModel.DOC;
 using SIGOFCv3.Models;
 using System.Net;
 using Newtonsoft.Json;
+using QRCoder;
+using System.Drawing;
 
 namespace SIGOFCv3.Areas.Fiscalizacion.Controllers
 {
@@ -531,7 +533,7 @@ namespace SIGOFCv3.Areas.Fiscalizacion.Controllers
             string nombreContratoGenerado = string.Empty;
             CLogica logConstancia = null;
             Log_Persona logPersona = null;
-            VM_CONSTANCIA constancia = null;
+            VM_CONSTANCIA_V2 constancia = null;
             DateTime fechaOperacion = DateTime.Now;
             bool flagRegeneracion = false;
             string nroDocumentoJefe = string.Empty, nombresJefe = string.Empty, apellidosJefe = string.Empty, oficina = string.Empty;
@@ -543,7 +545,7 @@ namespace SIGOFCv3.Areas.Fiscalizacion.Controllers
                 logPersona = new Log_Persona();
 
                 //obteniendo datos de constancia
-                constancia = logConstancia.ObtenerPorIdentificador(identificador);
+                constancia = logConstancia.ObtenerPorIdentificador_v2(identificador);
                 if (constancia == null) throw new Exception("0|El registro de constancia no existe");
                 if (!System.IO.File.Exists(Path.Combine(Server.MapPath(folderPlantilla), "PlantillaConstanciasTH.docx")))
                 {
@@ -579,7 +581,7 @@ namespace SIGOFCv3.Areas.Fiscalizacion.Controllers
             }
             return Json(new { success, message, exInterno, constancia, existeArchivo });
         }
-        private void CrearWord(VM_CONSTANCIA constancia)
+        private void CrearWord(VM_CONSTANCIA_V2 constancia)
         {
             string pathDestinoWord = string.Empty;
             string pathDestinoPdf = string.Empty;
@@ -610,30 +612,43 @@ namespace SIGOFCv3.Areas.Fiscalizacion.Controllers
                 {
                     var body = wordDoc.MainDocumentPart.Document.Body;
                     var paras = body.Elements<wp.Paragraph>();
-                    HelperWord.BuscarReemplazarTexto(paras, "VAR_TITULAR_TH", constancia.APELLIDOS_NOMBRES?.ToUpper());
-                    HelperWord.BuscarReemplazarTexto(paras, "VAR_NUM_TH", constancia.NUMERO_TH);
-                    HelperWord.BuscarReemplazarTexto(paras, "VAR_PM_NOMBRE", constancia.TIPO_PLAN);
-                    if (constancia.TIPO_PLAN.ToUpper() == "DEMA")
-                    {
-                        planManejoPC = $"PC N° {constancia.PARCELA}";
-                    }
-                    else
-                    {
-                        planManejoPC = $"N° {constancia.NUM_POA}, PC N° {constancia.PARCELA}";
-                    }
-                    HelperWord.BuscarReemplazarTexto(paras, "VAR_PM_NUMERO", planManejoPC);
-                    //HelperWord.BuscarReemplazarTexto(paras, "VAR_PM_PC", constancia.PARCELA);
-                    HelperWord.BuscarReemplazarTexto(paras, "VAR_SUP_INICIO", HelperWord.FechaLetras(constancia.FECHA_SUPERVISION_INICIO));
-                    HelperWord.BuscarReemplazarTexto(paras, "VAR_SUP_FIN", HelperWord.FechaLetras(constancia.FECHA_SUPERVISION_FIN));
-                    HelperWord.BuscarReemplazarTexto(paras, "VAR_SUP_NUMERO", constancia.NUMERO_INFORME);
-                    HelperWord.BuscarReemplazarTexto(paras, "VAR_SUP_PRESENTACION", HelperWord.FechaDDMMAAAA(constancia.FECHA_INFORME));
-                    HelperWord.BuscarReemplazarTexto(paras, "VAR_SUP_DMA_FIN", HelperWord.FechaLetras(constancia.FECHA_SUPERVISION_FIN));
+                    HelperWord.BuscarReemplazarTexto(paras, "VAR_TITULAR_TH", constancia.VAR_TITULAR);
+                    HelperWord.BuscarReemplazarTexto(paras, "VAR_TIPO_DOC", constancia.VAR_TIPO_DOC);
+                    HelperWord.BuscarReemplazarTexto(paras, "VAR_DOCUMENTO", constancia.VAR_NUMERO_DOC);
+                    HelperWord.BuscarReemplazarTexto(paras, "VAR_NUM_TH", constancia.VAR_TITULO);
+                    HelperWord.BuscarReemplazarTexto(paras, "VAR_PLANES", constancia.VAR_PLANES);
+                    HelperWord.BuscarReemplazarTexto(paras, "VAR_REGENTE", constancia.VAR_REGENTE);
+                    HelperWord.BuscarReemplazarTexto(paras, "VAR_LIC_REGENTE", constancia.VAR_LIC_REGENTE);
+                    HelperWord.BuscarReemplazarTexto(paras, "VAR_FECHA_SUPER", constancia.VAR_FECHA_SUP);
+                    HelperWord.BuscarReemplazarTexto(paras, "VAR_INFORME", constancia.VAR_INFORME);
+                    HelperWord.BuscarReemplazarTexto(paras, "VAR_EMISION_INFORME", HelperWord.FechaDDMMAAAA(constancia.VAR_FECHA_INFORME));
+                    HelperWord.BuscarReemplazarTexto(paras, "VAR_POA_CONST", constancia.VAR_POA_CONST);
+                    HelperWord.BuscarReemplazarTexto(paras, "VAR_FIN_SUP", HelperWord.FechaDDMMAAAA(constancia.VAR_FIN_SUP));
+                    //HelperWord.SearchAndReplace(wordDoc, "VAR_RESOLUCION_APLAN", constancia.VAR_RESOLUCION_APLAN, true);
+
+                    var path_qr = GenerarQR(constancia.NV_CONSTANCIA);
+                    HelperWord.ReplaceImage(wordDoc, "img_qr", path_qr);
 
                     wordDoc.Close();
                 }
                 this.GuardarMemoryStream(mem, pathDestinoWord);
             }        
         }
+
+        private string GenerarQR(string codConstancia)
+        {
+            string path_qr = Server.MapPath("~/Archivos/Constancias/QR/" + codConstancia + ".png");
+
+            QRCodeGenerator qrGenerator = new QRCodeGenerator();
+            QRCodeData qrCodeData = qrGenerator.CreateQrCode("https://constancia-cumplimiento.osinfor.gob.pe/visor-documento/" + codConstancia, QRCodeGenerator.ECCLevel.Q);
+            QRCode qrCode = new QRCode(qrCodeData);
+            Bitmap qrCodeImage = qrCode.GetGraphic(20, Color.FromArgb(0, 124, 75), Color.FromArgb(246, 246, 246), true);
+
+            qrCodeImage.Save(path_qr, System.Drawing.Imaging.ImageFormat.Png);
+
+            return path_qr;
+        }
+
         private void CrearConstancia(VM_CONSTANCIA constancia)
         {   
             string pathDestinoWord = string.Empty;
@@ -689,7 +704,7 @@ namespace SIGOFCv3.Areas.Fiscalizacion.Controllers
                     HelperWord.BuscarReemplazarTexto(paras, "VAR_CONST_EMISION", HelperWord.FechaLetras(constancia.FECHA_EMISION));
 
                     //DATOS DEL SITD
-                    HelperWord.BuscarReemplazarTexto(paras, "VAR_SITD_NCONSTANCIA", constancia.NUMERO);
+                    HelperWord.SearchAndReplace(wordDoc, "VAR_SITD_NCONSTANCIA", constancia.NUMERO, true);
                     HelperWord.SearchAndReplace(wordDoc, "VAR_SITD_CLAVE", constancia.PASSWORD, true);
                     HelperWord.BuscarReemplazarTexto(paras, "VAR_JEFE_FIRMA", constancia.PERSONA_FIRMA.ToUpper());
                     HelperWord.BuscarReemplazarTexto(paras, "VAR_JEFE_OFICINA", constancia.OFICINA .ToUpper());
@@ -742,7 +757,7 @@ namespace SIGOFCv3.Areas.Fiscalizacion.Controllers
                     HelperWord.BuscarReemplazarTexto(paras, "VAR_CONST_EMISION", HelperWord.FechaLetras(constancia.FECHA_EMISION));
 
                     //DATOS DEL SITD
-                    HelperWord.BuscarReemplazarTexto(paras, "VAR_SITD_NCONSTANCIA", constancia.NUMERO);
+                    HelperWord.SearchAndReplace(wordDoc, "VAR_SITD_NCONSTANCIA", constancia.NUMERO, true);
                     HelperWord.SearchAndReplace(wordDoc, "VAR_SITD_CLAVE", constancia.PASSWORD, true);
                     HelperWord.BuscarReemplazarTexto(paras, "VAR_JEFE_FIRMA", constancia.PERSONA_FIRMA.ToUpper());
                     HelperWord.BuscarReemplazarTexto(paras, "VAR_JEFE_OFICINA", constancia.OFICINA.ToUpper());

@@ -60,6 +60,24 @@ namespace CapaLogica.DOC
         {
             return oCDatos.ActualizarEstado(identificador, estadoDocumento, fechaModificar, usuarioModificacion);
         }
+
+        public VM_CONSTANCIA_V2 ObtenerPorIdentificador_v2(string identificador)
+        {
+            try
+            {
+                using (OracleConnection cn = new OracleConnection(BDConexion.Conexion_Cadena_SIGO()))
+                {
+                    cn.Open();
+                    return oCDatos.ObtenerPorIdentificador_v2(cn, identificador);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+
+            }
+        }
+
         #region "SQL SERVER"
         public int TramiteGuardar(VM_CONSTANCIA_TRAMITE tramite)
         {
