@@ -374,6 +374,7 @@ _informe.Exportar = async function () {
 
     //Plantilla de infracciones 
     informe.ANALISIS = _informe.tmpl.get(template, '#tmpl-analisis', informe);
+    informe.RESPONSABLE_SOLIDARIO = _informe.tmpl.get(template, '#tmpl-responsable-solidario', informe);
     informe.GRAVEDAD_OCASIONADA = _informe.tmpl.get(template, '#tmpl-gravedad-ocasionada', informe);
     informe.ACREDITACION_IMPUTACIONES = _informe.tmpl.get(template, '#tmpl-acreditacion-imputaciones', informe);
     informe.MEDIDAS_COMPLEMENTARIAS = _informe.tmpl.get(template, '#tmpl-medidas-complementarias', informe);

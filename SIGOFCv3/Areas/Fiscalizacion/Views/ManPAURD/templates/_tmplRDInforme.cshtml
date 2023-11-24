@@ -47,29 +47,44 @@
             </div>
             <div>
                 <ol style="margin-left: ${MARGIN_LEFT.ROOT}; list-style: upper-roman;" start="2"><li><strong>ANÁLISIS DE LAS IMPUTACIONES DE CARGO</strong></li></ol>
-                <!--(aquí se puede poner la opción de exportar las especies, volumen; teniendo en cuenta que debe mantenerse una hoja en blanco; toda vez, que aquí se realiza el análisis de los resultados de la diligencia de supervisión).-->
                 <span>{{html ANALISIS}}</span>
             </div>
+            {{if FLG_RESPONSABLE_SOLIDARIO}}
+            <div>
+                <ol style="margin-left: ${MARGIN_LEFT.ROOT}; list-style: upper-roman;" start="3"><li><strong>DEL RESPONSABLE SOLIDARIO</strong></li></ol>
+                <div>{{html RESPONSABLE_SOLIDARIO}}</div>
+            </div>
+            {{/if}}
+            {{if FLG_GRAVEDAD_OCASIONADA}}
             <div>
                 <ol style="margin-left: ${MARGIN_LEFT.ROOT}; list-style: upper-roman;" start="3"><li><strong>GRAVEDAD OCASIONADA</strong></li></ol>
                 <div>{{html GRAVEDAD_OCASIONADA}}</div>
             </div>
+            {{/if}}
+            {{if FLG_ACREDITACION_IMPUTACIONES}}
             <div>
                 <ol style="margin-left: ${MARGIN_LEFT.ROOT}; list-style: upper-roman;" start="4"><li><strong>ACREDITACIÓN DE LAS IMPUTACIONES, IMPOSICIÓN DE SANCIÓN ATENUENATES Y AGRAVANTES.</strong></li></ol>
                 <div>{{html ACREDITACION_IMPUTACIONES}}</div>
             </div>
+            {{/if}}
+            {{if FLG_MEDIDAS_COMPLEMENTARIAS}}
             <div>
                 <ol style="margin-left: ${MARGIN_LEFT.ROOT}; list-style: upper-roman;" start="4"><li><strong>DE LAS MEDIDAS COMPLEMENTARIAS</strong></li></ol>
                 <div>{{html MEDIDAS_COMPLEMENTARIAS}}</div>
             </div>
+            {{/if}}
+            {{if FLG_MEDIDAS_CORRECTIVAS}}
             <div>
                 <ol style="margin-left: ${MARGIN_LEFT.ROOT}; list-style: upper-roman;" start="5"><li><strong>MEDIDA CORRECTIVA</strong></li></ol>
                 <div>{{html MEDIDAS_CORRECTIVAS}}</div>
             </div>
+            {{/if}}
+            {{if FLG_COMUNICACION_ENTIDADES}}
             <div>
                 <ol style="margin-left: ${MARGIN_LEFT.ROOT}; list-style: upper-roman;" start="6"><li><strong>COMUNICACIÓN DE LOS ACTUADOS A OTRAS ENTIDADES</strong></li></ol>
                 <div>{{html COMUNICACION_ENTIDADES}}</div>
             </div>
+            {{/if}}
             <p>
                 Por lo expuesto, en uso de las atribuciones conferidas por el Decreto Legislativo N° 1085, Ley que creó el Organismo de Supervisión de los Recursos Forestales y de Fauna Silvestre – OSINFOR y modificatorias; la Resolución de Jefatura Nº 00003-2023-OSINFOR/01.1, que aprueba el Texto Integrado del Reglamento de organización y Funciones del Organismo de Supervisión de los Recursos Forestales y de Fauna Silvestre (OSINFOR); la Ley N° 29763, Ley Forestal y de Fauna Silvestre y su Reglamento para la Gestión Forestal, aprobado mediante el Decreto Supremo N° 018-2015-MINAGRI; el Reglamento de Infracciones y Sanciones en Materia Forestal y de Fauna Silvestre, aprobado por Decreto Supremo N° 007-2021-MIDAGRI; el Decreto Supremo N° 004-2019-JUS, que aprobó el Texto Único Ordenado de la Ley del Procedimiento Administrativo General, Ley Nº 27444; la Resolución de Jefatura N° 00043-2021-OSINFOR/01.1, que aprobó el Reglamento del Procedimiento Administrativo Único - PAU del OSINFOR; y la la Resolución de Jefatura N° 120-2019-OSINFOR/01.1, de fecha 31 de diciembre de 2019;
             </p>
@@ -233,17 +248,14 @@
             <tr>
                 <td style="border: 1px solid #000;">2</td>
                 <td style="border: 1px solid #000;">
-                    Reglamento de Organización y Funciones – ROF del OSINFOR, aprobado por Decreto Supremo N° 136-2022-PCM (en adelante, el ROF del OSINFOR)
+                    Texto Integrado del Reglamento de Organización y Funciones – ROF del OSINFOR, aprobado por Resolución de Jefatura N° 00003-2023-PCM (en adelante, el ROF del OSINFOR)
                 </td>
                 <td style="border: 1px solid #000;">
                     <div>
-                        El artículo 28 del ROF del OSINFOR, señala que, La Dirección del Procedimiento Sancionador Forestal y de Fauna Silvestre es el órgano de línea responsable de conducir y controlar el desarrollo del Procedimiento Administrativo Único en primera instancia. Depende de la Jefatura.
+                        El artículo 51 del ROF del OSINFOR, señala que, La Dirección del Procedimiento Sancionador Forestal y de Fauna Silvestre es el órgano facultado para dirigir, conducir y controlar en primera instancia el desarrollo del PAU.
                     </div>
                     <div>
-                        Asimismo, el artículo 54 del ROF del OSINFOR, señala que, “son unidades orgánicas de la Dirección del Procedimiento Sancionador Forestal y de Fauna Silvestre las siguientes: 2.1 Subdirección de Instrucción, 2.2 Subdirección de Sanción”
-                    </div>
-                    <div>
-                        En esa línea, el artículo 55 del ROF del OSINFOR establece que, “la Subdirección de Instrucción es la unidad orgánica de línea responsable de evaluar y determinar el inicio del procedimiento administrativo único; así como, de realizar las acciones correspondientes a la fase instructora, de acuerdo a la normativa vigente.”
+                        Asimismo, el literal del artículo 52 del citado documento de gestión, señala que: compete a dicha dirección actuar como órgano resolutivo de primera instancia administrativa, determinando la imposición de sanciones, medidas correctivas o el archivamiento del procedimiento, entre otros.
                     </div>
                 </td>
             </tr>
@@ -264,6 +276,100 @@
         {{html infra.parrafos}}
     </div>
     {{/each}}
+</script>
+
+<script id="tmpl-responsable-solidario" type="text/x-jquery-tmpl">
+    <p class="enumeration">
+        Mediante la Resolución Subdirectoral N° 000xx-2023-OSINFOR/08.2.1, de fecha xx de enero de 2023, se incluyó en el PAU a la empresa xxxxxxxxxxxxx. como presunta responsable solidaria, respecto a la comisión de las infracciones tipificadas en los numerales 10, 11, 21 y 26 del Cuadro de Infracciones y Sanciones en Materia Forestal del Anexo 1 del RISMFFS.
+    </p>
+    <p class="enumeration">
+        Sobre el particular, de la revisión del Contrato de Compra Venta de fecha x x de enero de 2021, se advierte que el mismo fue suscrito por la administrada y las empresas Inversiones xxxxxxxxxxxxxxx., identificada con RUC N° xxxxxxxxxxxxxxxxxx, representada por xxxxxxxxxxxxxxxx, e “xxxxxxxxxxxxxxx SAC”, identificada con RUC N° xxxxxxxxxxxxxxxxx, representada por el señor xxxxxxxxxxxxx, conforme se observa en el siguiente extracto del mencionado contrato:
+    </p>
+    <p style="text-align: center;">Adjuntar imagen<br />Fuente: Contrato de Compra Venta</p>
+    <p class="enumeration">
+        No obstante, de la revisión de la documentación obrante en el expediente administrativo, no se advierte el poder otorgado a favor del señor xxxxxxxxxxxxx, a fin de acreditar sus facultades para suscribir el mencionado contrato en representación de la empresa xxxxxxxxxxxxxxxxxx o xxxxxxxxxxxxxxx
+    </p>
+    <p class="enumeration">
+        Ante ello, con la finalidad de esclarecer los hechos materia de análisis, mediante las Cartas N° 000xxx-2023-OSINFOR/08.2.2 y 000xx-2023-OSINFOR/08.2.2 de fecha 12 de julio de 2023, diligenciadas con fecha xx de xxxxx de 2023 y xx de xxxxx de 2023, respectivamente, se solicitó a la administrada y a xxxxxxxxxxxxxxx, el poder otorgado a favor del señor xxxxxxxxxxxx e informar sobre participación de la empresa xxxxxxxxxxxxxxxxxxxxxxxx o xxxxxxxxxxxxxxxxxxx en las actividades de aprovechamiento del permiso forestal, otorgando para ello el plazo de cinco (05) días hábiles.
+    </p>
+    <p class="enumeration">
+        Sin embargo, habiéndose cumplido el plazo otorgado, <strong>ni la administrada ni xxxxxxxxxxxxxxxxxxxxxxxxxx cumplieron con remitir la información solicitada.</strong>
+    </p>
+    <p class="enumeration">
+        Por lo anterior, no existen elementos suficientes que permitan acreditar la participación de xxxxxxxxxxxxxxxxxxxxx, en las actividades de aprovechamiento del recurso forestal maderable del presente Permiso Forestal, por lo que <u>corresponde considerar solo como presunto responsable solidario a la empresa xxxxxxxxxxxxxxx., incluida en el presente PAU, mediante la Resolución Sub Directoral N° 000xx-2023-OSINFOR/08.2.1, de fecha xx de enero de 20xx</u>.
+    </p>
+    <p class="enumeration">
+        Ahora bien, la Autoridad Instructora realizó el análisis del expediente administrativo, concluyendo lo siguiente:
+    </p>
+    <p style="margin-left: 15px;">
+        <i>
+            “(…) Al respecto, mediante la Resolución Sub Directoral N° xxxxxxxxxxxxxxxxxxxx de fecha xx de xxxxx de 2023, se dispuso incluir como presunta responsable solidaria de la administrada en el presente PAU, a la empresa xxxxxxxxxxxxxxxxxx identificada con RUC N° xxxxxxxxxxxxxxxxxxxxx, toda vez que:
+        </i>
+    </p>
+    <ul>
+        <li>
+            El artículo 83 de la Ley Forestal y de Fauna Silvestre, Ley N° 29763, dispone en su tercer párrafo que los terceros que realicen aprovechamiento forestal en tierras comunales son responsables solidarios con las comunidades nativas o campesinas por el debido cumplimiento de la legislación forestal y de fauna silvestre.
+        </li>
+        <li>
+            El artículo 58 del Reglamento para la Gestión Forestal y de Fauna Silvestre en Comunidades Nativas y Comunidades Campesinas, aprobado por Decreto Supremo N° 021-2015-MINAGRI, dispone que cuando exista un contrato suscrito entre una comunidad nativa o campesina y un tercero, para el aprovechamiento de los recursos forestales, el tercero es responsable solidario respecto de las obligaciones o los compromisos asumidos en dicho contrato. (…)
+        </li>
+        <li>
+            Asimismo, debe tomarse en cuenta el Considerando 59 de la Resolución del Tribunal Forestal y de Fauna Silvestre N° 004-2019-OSINFOR-TFFF-I, por el cual el citado colegiado ha señalado que “(…) La responsabilidad administrativa solidaria es aquella que se irroga a un conjunto de administrados, siendo cada uno de ellos responsable de la totalidad de la sanción impuesta por la Administración, por lo tanto esta última puede exigir su cumplimiento a cualquiera, (…)”.
+        </li>
+    </ul>
+    <p>
+        <i>
+            Sobre el particular, es preciso destacar que en el expediente administrativo obra el documento denominado “Contrato de compra venta” suscrito entre el señor xxxxxxxxxxxx representante de la administrada, y el señor xxxxxxxxxxxxxxxxxxxxxx, representante de la empresa Inversiones xxxxxxxxxxxxx., identificada con R.U.C. N° xxxxxxxxxxxx.
+        </i>
+    </p>
+    <p>
+        Aunado a ello, en el contrato firmado entre la Comunidad Nativa xxxxxxxxxxxxxxx y la empresa se debe precisar que en el referido contrato se observa estipulado lo siguiente:
+    </p>
+    <p style="text-align: center;">
+        <strong>Imagen N° 01: Contrato entre la administrada y la presunta responsable solidaria</strong>
+    </p>
+    <p style="text-align: center;">
+        Adjuntar imagen<br /><strong>Fuente:</strong> Contrato de Compra Venta
+    </p>
+    <p>
+        En atención a lo señalado, conforme lo detalla el numeral 6.2 de la cláusula sexta, el numeral 8.1 de la cláusula octava y el numeral 9.3 de la cláusula novena del Contrato, la empresa xxxxxxxxxxxxxxxxxxxxxx participaría en la extracción y aprovechamiento de madera en el área de manejo de la administrada; del mismo modo, señala que responde como responsable solidaria.
+    </p>
+    <p>
+        En ese sentido, teniendo en consideración lo evidenciado, se advierte que durante la vigencia del plan de manejo, la empresa xxxxxxxxxxxxxx., sí participó en las actividades de aprovechamiento del recursos forestales en el plan de manejo aprobado, dicho aprovechamiento debió ejercerse en estricto cumplimiento de las disposiciones señaladas en el instrumento de gestión ambiental antes mencionado, debiendo realizarse la tala, extracción y movilización únicamente de aquellos individuos que fueron autorizados, conforme a lo aprobado en el instrumento de gestión, de manera que se garantice el aprovechamiento sostenible del recurso forestal y la preservación del medio ambiente.
+    </p>
+    <p>
+        No obstante, se advierte que la empresa Inversiones xxxxxxxxx, al realizar las operaciones de aprovechamiento en el área del Plan de Manejo, no cumplió con las disposiciones señaladas en dicho instrumento de gestión.
+    </p>
+    <p>
+        Ahora bien, respecto a la imputación referida a “No tener libro de operaciones, de acuerdo a las disposiciones establecidas”, la cual tiene como propósito que se lleve un registro de la información sobre la ejecución del plan de manejo, es decir, respecto al aprovechamiento de los individuos autorizados, los cuales se encuentran considerados en el censo forestal aprobado mediante el PO 01 – PC 01, 02 y 03, materia de análisis, todo ello para garantizar la trazabilidad del producto forestal; en función a lo contenido en el Contrato, donde es posible inferir que la empresa Inversiones Melycel E.I.R.L., al haber celebrado el contrato y participar en el aprovechamiento forestal, proceso, que además está vinculado al uso de la documentación como la implementación del Libro de Operaciones, responsabilidad que se encuentra establecida en el artículo 82 de la Ley Forestal y de Fauna Silvestre; asimismo, conforme lo señala el numeral 5 de las “Instrucciones para el uso del Libro de Operaciones de los Títulos Habilitantes para aprovechamiento forestal maderable”, anexo 02 de la Resolución de Dirección Ejecutiva N° 264-2019-MINAGRI-SERFOR-DE, señala que este debe mantenerse de forma física en el campamento principal del título habilitante.
+    </p>
+    <p class="enumeration">
+        En ese sentido, la Autoridad Instructora determinó que existen elementos suficientes que permitieron mantener la imputación atribuida al responsable solidario.
+    </p>
+    <p class="enumeration">
+        Al respecto, es preciso señalar que el Tribunal Forestal y de Fauna Silvestre del OSINFOR ha analizado el tema de la responsabilidad solidaria del tercero que participa en el aprovechamiento forestal en tierras de Comunidades Nativas, y ha señalado en el considerando 59 de la Resolución del Tribunal Forestal y de Fauna Silvestre N° 004-2019-OSINFOR-TFFF-I, que: “(…) La responsabilidad administrativa solidaria es aquella que se irroga a un conjunto de administrados, siendo cada uno de ellos responsable de la totalidad de la sanción impuesta por la Administración, por lo tanto esta última puede exigir su cumplimiento a cualquiera; es decir, la responsabilidad solidaria está destinada a que los terceros respondan por su participación en los hechos investigados que podrían revestir infracción administrativa”.
+    </p>
+    <p class="enumeration">
+        En ese sentido, la responsabilidad solidaria es aquella figura en la concurren varias personas naturales o jurídicas, distintas al obligado principal, ante uno o varios sujetos que exigen, indistintamente a cualquiera de ellas, el cumplimiento de una obligación que ha sido legalmente adquirida.
+    </p>
+    <p class="enumeration">
+        Teniendo en consideración que, en los términos del referido contrato aplicado durante la vigencia del PO N° xx – PC N° xx, xx y xx, la referida empresa realizó el aprovechamiento del recurso forestal en el plan de manejo aprobado, dicho aprovechamiento debió ejercerse en estricto cumplimiento de las disposiciones señaladas en el instrumento de gestión ambiental antes mencionado, de manera que se garantice el aprovechamiento sostenible del recurso forestal y la preservación del medio ambiente.
+    </p>
+    <p class="enumeration">
+        No obstante, la empresa al realizar las operaciones de aprovechamiento en el área del plan operativo no cumplió con las disposiciones señaladas en dicho instrumento de gestión, al haberse acreditado la conducta constitutiva de la infracción previamente analizada.
+    </p>
+    <p class="enumeration">
+        Ahora bien, tal como se aprecia, la legislación forestal ha vinculado la responsabilidad solidaria con la actividad de aprovechamiento forestal y permitido que sean los contratos entre las comunidades nativas y terceros los que precisen su alcance, siendo que, en el presente caso, el contrato fija acuerdos sobre la actividad extractiva y de movilización de especies forestales; por tanto, <strong>corresponde que la empresa asuma las consecuencias jurídicas que impliquen las mismas, en el caso en cuestión por la extracción y movilización de productos forestales procedentes de extracciones no autorizadas determinadas en los considerandos que preceden.</strong>
+    </p>
+    <p class="enumeration">
+        Asimismo, conforme a lo señalado por la Autoridad Instructora,  sobre la conducta tipificada relativa a “No registrar la información en el Libro de Operaciones de acuerdo a las disposiciones establecidas”, en los términos del referido contrato aplicado durante la vigencia del PO N° xx – PC N° xx, xx y xx, la referida empresa estuvo a cargo del aprovechamiento del recurso forestal dentro del área del plan de manejo y, consecuentemente, de las obligaciones establecidas en la normativa forestal directamente relacionadas a la actividad extractiva, por ejemplo, la implementación y correcto llenado del Libro de Operaciones conforme a las disposiciones establecidas. En ese sentido, considerando que la empresa realizó las actividades de aprovechamiento forestal, esta debía implementar y registrar las operaciones realizadas en campo en las secciones de Tala, Trozado y Despacho del respectivo Libro de Operaciones.
+    </p>
+    <p class="enumeration">
+        Sin embargo, tal como se ha confirmado en párrafos anteriores, no se ha cumplido con actualizar el Libro de Operaciones, por lo que <strong>corresponde que la empresa asuma de manera solidaria las consecuencias jurídicas que implique el incumplimiento de no registrar la información acorde a las actividades de aprovechamiento forestal en dicho documento de trazabilidad.</strong>
+    </p>
+    <p class="enumeration">
+        En atención a lo señalado, se concluye que la empresa xxxxxxxxxxxxxxxx., identificada con RUC N° xxxxxxxxxxxx, es responsable solidaria en la comisión de las infracciones tipificadas en los numerales 10, 11, 21 y 26 del Cuadro de Infracciones y Sanciones en Materia de Fauna Silvestre del Anexo 1 del Reglamento de Infracciones y Sanciones en Materia Forestal y de Fauna Silvestre, aprobado mediante Decreto Supremo N° 007-2021-MIDAGRI; <u>criterio acorde con lo señalado en el Informe Final de Instrucción.</u>
+    </p>
 </script>
 
 <script id="tmpl-gravedad-ocasionada" type="text/x-jquery-tmpl">
@@ -430,6 +536,13 @@
 </script>
 
 <script id="tmpl-resolucion" type="text/x-jquery-tmpl">
+    {{if FLG_RESPONSABLE_SOLIDARIO}}
+    <p style="text-indent: 30px;">
+        <strong>Artículo.</strong> Declarar que corresponde considerar solo como responsable solidaria a la empresa xxxxxxxxxxxxxxx., incluida en el presente PAU, mediante la Resolución Sub Directoral N° 00013-2023-OSINFOR/08.2.1, de fecha xx de enero de 2023; en virtud de lo expuesto en la parte considerativa de la presente Resolución Directoral.
+    </p>
+    {{/if}}
+
+    {{/if}}
     <p style="text-indent: 30px;">
         <strong>Artículo.</strong> Declarar la caducidad del derecho de aprovechamiento contenido en el Permiso xxx, otorgado a xxxx, identificada con DNI/ RUC N° xxxx, por haber incurrido en la causal de caducidad prevista en el literal x) del artículo 153 de la Ley Forestal y de Fauna Silvestre, Ley N° 29763, concordado con el literal x) del artículo xx del Reglamento xxx, aprobado por Decreto Supremo N° xx-2015-MINAGRI; y con el numeral xxx de la Cláusula xxxx del Contrato de Concesión, conforme a lo señalado en la parte considerativa de la presente Resolución Directoral.
     </p>
