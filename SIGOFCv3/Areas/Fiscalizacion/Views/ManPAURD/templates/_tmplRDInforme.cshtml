@@ -38,10 +38,9 @@
             </div>
         </div>
         <div style="text-align: justify;">
-            <strong>VISTOS:</strong>
-            <div>{{html VISTOS}}</div>
-            <p>Y,</p>
-            <div><strong>CONSIDERANDO:</strong></div>
+            <p><strong>VISTOS:</strong></p>
+            <div>{{html VISTOS}}</div>            
+            <p><strong>CONSIDERANDO:</strong></p>
             <div>
                 <ol style="margin-left: ${MARGIN_LEFT.ROOT}; list-style: upper-roman;" start="1"><li><strong>COMPETENCIA</strong></li></ol>
                 <div>{{html COMPETENCIA}}</div>
@@ -103,8 +102,7 @@
     </table>
 </script>
 
-<script id="tmpl-vistos" type="text/x-jquery-tmpl">
-    <p>Los siguientes documentos:</p>
+<script id="tmpl-vistos" type="text/x-jquery-tmpl">    
     <table width="100%" cellpadding="4" style="border: 0; font-family: Arial; font-size: 10pt; border-collapse: collapse; line-height: 150%;">
         <thead>
             <tr>
@@ -131,19 +129,71 @@
             </tr>
             <tr>
                 <td style="border: 1px solid #000;">2</td>
-                <td style="border: 1px solid #000;">Documentos que comunican el Informe de Supervisión</td>
+                <td style="border: 1px solid #000;">Resolución Sub Directoral N° 000XX-20XX-OSINFOR/08.2.1, de fecha XX de XXXX de 202X</td>
                 <td style="border: 1px solid #000;">
-                    Carta N° ${ANTECEDENTES_DOCS.Carta?.numero}, del ${ANTECEDENTES_DOCS.Carta?.fechaEmision}, notificada el ${ANTECEDENTES_DOCS.Carta?.fechaNotificacion}
-                    <a style="mso-footnote-id: foot_vistos_2" href="#_foot_vistos_2" title="">
-                        <sup class=MsoFootnoteReference><span style="mso-special-character:footnote"></span></sup>
-                    </a>, que remitió a copia del Informe de Supervisión a la/el titular.
+                    Se inició el PAU <strong>por haber incurrido presuntamente en lo siguiente:</strong>
+                    <ul style="list-style: lower-roman; margin-left: 35px;">
+                        <li>
+                            <i>“Se vinculará con las imputaciones expuestas en la RSD de inicio de PAU y RSD de ampliación”</i>
+                        </li>
+                    </ul>
                 </td>
             </tr>
             <tr>
                 <td style="border: 1px solid #000;">3</td>
-                <td style="border: 1px solid #000;">Documentos presentados posterior a la supervisión</td>
                 <td style="border: 1px solid #000;">
-                    De la revisión del SITD del OSINFOR, se observa que la/el titular no ha presentado ningún escrito vinculado a desvirtuar los hallazgos señalados en el Informe de Supervisión.
+                    Cédula de Notificación N° ${ANTECEDENTES_DOCS.Ced_Noti.numero}, de fecha ${ANTECEDENTES_DOCS.Ced_Noti.fechaEmisionTexto || 'XX de XXXXX de XXXX'}, notificada el ${ANTECEDENTES_DOCS.Ced_Noti.fechaNotificacionTexto || 'XX de XXXXX de XXXX'}
+                </td>
+                <td style="border: 1px solid #000;">
+                    Se notificó al/la titular la Resolución Sub Directoral N° ${ANTECEDENTES_DOCS.RSD.numero || 'XXXX'} y el Informe de Supervisión N° ${ANTECEDENTES_DOCS.Inf_Sup.numero || 'XXXX'}.
+                </td>
+            </tr>
+            <tr>
+                <td style="border: 1px solid #000;">4</td>
+                <td style="border: 1px solid #000;">Documentos presentados posterior a la notificación de la Resolución Sub Directoral N° 000XX-202X-OSINFOR/08.2.1.</td>
+                <td style="border: 1px solid #000;">
+                    De la revisión del Sistema de Trámite Documentario SITD-OSINFOR, se verifica que el/la administrado (a) presentó descargo mediante los siguientes documentos:
+                    <ul style="list-style: lower-roman; margin-left: 35px;">
+                        <li>
+                            Escrito xxxxx SITD N° xxxxx de fecha xx de xxx de xxxx
+                        </li>
+                    </ul>
+                    <p>
+                        En caso haya variaciones de domicilio, agregar un ítem en el cual se indique dicha situación.
+                    </p>
+                </td>
+            </tr>
+            <tr>
+                <td style="border: 1px solid #000;">5</td>
+                <td style="border: 1px solid #000;">Informe Final de Instrucción N° 000XX-2023-OSINFOR/08.2.1, de fecha XX de XXX de 202X.</td>
+                <td style="border: 1px solid #000;">
+                    <strong>Recomienda:</strong>
+                    <ul style="list-style: lower-roman; margin-left: 35px; ">
+                        <li>
+                            “Se vinculará con las recomendaciones del IFI”
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+            <tr>
+                <td style="border: 1px solid #000;">6</td>
+                <td style="border: 1px solid #000;">
+                    Cédula de Notificación N° 00XXX-2023-OSINFOR/08.2.2, de fecha XX de marzo de 202X, notificada el XX de XXX de 202X
+                </td>
+                <td style="border: 1px solid #000;">
+                    Se notificó a el/la administrado/a el Informe Final de Instrucción N° 000XX-202X-OSINFOR/08.2.1.
+                </td>
+            </tr>
+            <tr>
+                <td style="border: 1px solid #000;">7</td>
+                <td style="border: 1px solid #000;">Documentos presentados posterior a la notificación del Informe Final de Instrucción N° XX-XX-OSINFOR/08.2.1.</td>
+                <td style="border: 1px solid #000;">
+                    De la revisión del Sistema de Trámite Documentario SITD-OSINFOR, se verifica que el/la administrado (a) presentó descargo mediante los siguientes documentos:
+                    <ul style="list-style: lower-roman; margin-left: 35px;">
+                        <li>
+                            Escrito xxxxx SITD N° xxxxx de fecha xx de xxx de xxxx
+                        </li>
+                    </ul>
                 </td>
             </tr>
         </tbody>
