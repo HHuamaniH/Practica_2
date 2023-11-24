@@ -39,7 +39,7 @@
         </div>
         <div style="text-align: justify;">
             <p><strong>VISTOS:</strong></p>
-            <div>{{html VISTOS}}</div>            
+            <div>{{html VISTOS}}</div>
             <p><strong>CONSIDERANDO:</strong></p>
             <div>
                 <ol style="margin-left: ${MARGIN_LEFT.ROOT}; list-style: upper-roman;" start="1"><li><strong>COMPETENCIA</strong></li></ol>
@@ -102,7 +102,7 @@
     </table>
 </script>
 
-<script id="tmpl-vistos" type="text/x-jquery-tmpl">    
+<script id="tmpl-vistos" type="text/x-jquery-tmpl">
     <table width="100%" cellpadding="4" style="border: 0; font-family: Arial; font-size: 10pt; border-collapse: collapse; line-height: 150%;">
         <thead>
             <tr>
@@ -152,12 +152,16 @@
                 <td style="border: 1px solid #000;">4</td>
                 <td style="border: 1px solid #000;">Documentos presentados posterior a la notificación de la Resolución Sub Directoral N° 000XX-202X-OSINFOR/08.2.1.</td>
                 <td style="border: 1px solid #000;">
+                    {{if COD_TIPO_INFORME == 1}}
                     De la revisión del Sistema de Trámite Documentario SITD-OSINFOR, se verifica que el/la administrado (a) presentó descargo mediante los siguientes documentos:
                     <ul style="list-style: lower-roman; margin-left: 35px;">
                         <li>
                             Escrito xxxxx SITD N° xxxxx de fecha xx de xxx de xxxx
                         </li>
                     </ul>
+                    {{else}}
+                    De la revisión del Sistema de Trámite Documentario SITD-OSINFOR, se verifica que el/la administrado (a) a pesar de haber sido debidamente notificado (a), no presentó descargo alguno.
+                    {{/if}}
                     <p>
                         En caso haya variaciones de domicilio, agregar un ítem en el cual se indique dicha situación.
                     </p>
@@ -188,12 +192,19 @@
                 <td style="border: 1px solid #000;">7</td>
                 <td style="border: 1px solid #000;">Documentos presentados posterior a la notificación del Informe Final de Instrucción N° XX-XX-OSINFOR/08.2.1.</td>
                 <td style="border: 1px solid #000;">
+                    {{if COD_TIPO_INFORME == 1}}
                     De la revisión del Sistema de Trámite Documentario SITD-OSINFOR, se verifica que el/la administrado (a) presentó descargo mediante los siguientes documentos:
                     <ul style="list-style: lower-roman; margin-left: 35px;">
                         <li>
                             Escrito xxxxx SITD N° xxxxx de fecha xx de xxx de xxxx
                         </li>
                     </ul>
+                    {{else}}
+                    De la revisión del Sistema de Trámite Documentario SITD-OSINFOR, se verifica que el/la administrado (a) a pesar de haber sido debidamente notificado (a), no presentó descargo alguno.
+                    {{/if}}
+                    <p>
+                        En caso haya variaciones de domicilio, agregar un ítem en el cual se indique dicha situación.
+                    </p>
                 </td>
             </tr>
         </tbody>
@@ -269,7 +280,7 @@
                     “Criterios para estimar la gravedad del daño por la comisión de infracciones en materia forestal”, aprobado por Resolución de Jefatura Nº 059-2019-OSINFOR.
                 </td>
                 <td style="border: 1px solid #000;">
-                    <p>Conforme a los resultados del Informe de Supervisión, la extracción de XX m3 de madera provenientes de árboles no autorizados, representa una afectación de XX hectáreas (0.0167 hectáreas/m3 no autorizado) de nivel XX a la cobertura boscosa, la cual forma parte del Patrimonio Forestal Nacional.</p>
+                    <p>Conforme a los resultados del Informe de Supervisión, la extracción de XX m<sup>3</sup> de madera provenientes de árboles no autorizados, representa una afectación de XX hectáreas (XXX hectáreas/m<sup>3</sup> no autorizado) de nivel XX a la cobertura boscosa, la cual forma parte del Patrimonio Forestal Nacional.</p>
                     <p>Cabe señalar que, de las especies en cuestión, no se encuentra en la clasificación de especies amenazadas, conforme al numeral 5.27 del artículo 5 del Reglamento para la Gestión Forestal, aprobado por Decreto Supremo N° 018-2015-MINAGRI.</p>
                 </td>
             </tr>
@@ -385,7 +396,7 @@
                     </p>
                     <ul>
                         <li>
-                            Extracción no autorizada equivalente a xxxm3 de madera de las especies xxxx, hecho que genera un daño de magnitud muy grave a la cobertura boscosa, y actúe conforme a sus competencias.
+                            Extracción no autorizada equivalente a xxxm<sup>3</sup> de madera de las especies xxxx, hecho que genera un daño de magnitud muy grave a la cobertura boscosa, y actúe conforme a sus competencias.
                         </li>
                         <li>
                             Falsedad de información contenida en el Informe de Ejecución.
