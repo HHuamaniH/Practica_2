@@ -111,9 +111,15 @@ namespace SIGOFCv3.Areas.Fiscalizacion.Controllers
             return PartialView("~/Areas/Fiscalizacion/Views/ManPAURD/templates/_tmplRDInforme.cshtml");
         }
 
-        public PartialViewResult TemplateRDObligaciones()
+        [HttpGet]
+        public ActionResult ObtenerInfraccion(string modalidad, string inciso)
         {
-            return PartialView("~/Areas/Fiscalizacion/Views/ManPAURD/templates/_tmplRDObligaciones.cshtml");
+            string name = $"~/Areas/Fiscalizacion/Views/ManPAURD/templates/{modalidad}/infracciones/inciso_{inciso}.cshtml";
+
+            ViewEngineResult result = ViewEngines.Engines.FindView(ControllerContext, name, null);
+            if (result.View == null) return Content($"<p>No se encontró información de la infracción para el inciso {inciso}</p>");
+
+            return PartialView(name);
         }
 
         [HttpPost]

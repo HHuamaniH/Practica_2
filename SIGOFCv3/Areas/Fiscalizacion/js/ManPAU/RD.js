@@ -26,9 +26,8 @@ const data = {
         { COD_MODALIDAD: '02', COD_MATERIA: '02', MODALIDAD: 'Predios privados', CONTRATO: 'permiso forestal' },
         { COD_MODALIDAD: '03', COD_MATERIA: '02', MODALIDAD: 'Comunidades nativas', CONTRATO: 'permiso forestal' },
         { COD_MODALIDAD: '04', COD_MATERIA: '01', MODALIDAD: 'Fauna', CONTRATO: '' },
-    ],
-    Infracciones: [],
-    Causales_Caducidad: []
+    ],    
+    //Causales_Caducidad: []
 };
 
 _informe.CambiarEstado = function (state) {
@@ -216,6 +215,16 @@ _informe.EnumerarListas = function (html) {
     return $html.html();
 }
 
+_informe.EnumerarParrafos = function (html) {
+    var $html = $('<div />', { html: html });
+    $html.find('.enumeration').each((index, el) => {
+        const html = $(el).html();
+        $(el).html(`<ol style="margin-left: 0;" start="${index + 1}"><li>${html}</li></ol>`);
+    });
+
+    return $html.html();
+}
+
 _informe.GenerarResolucion = function (template, informe) {
     let index = 0;
     informe.Inf_Supervision = app.Inf_Supervision[0];
@@ -294,6 +303,15 @@ _informe.Exportar = async function () {
     informe.ANTECEDENTES_DOCS.Ced_Noti = informe.ANTECEDENTES.find(x => x.tipoDocumento == 'Cédula de Notificación') || {};
     informe.ANTECEDENTES_DOCS.Escrito = informe.ANTECEDENTES.find(x => x.tipoDocumento == 'Escrito') || {};
 
+    //Listar planes de manejo
+    //const PLANES_MANEJO = await _informe.ListarPlanesManejo('D', null, informe.COD_THABILITANTE, informe.NUM_POA);
+    //const plan = PLANES_MANEJO[0] || {};
+    //plan.ARESOLUCION_FECHA = fnDate.text_long(plan.ARESOLUCION_FECHA);
+    //plan.INICIO_VIGENCIA = fnDate.text_long(plan.INICIO_VIGENCIA);
+    //plan.FIN_VIGENCIA = fnDate.text_long(plan.FIN_VIGENCIA);
+    //informe.PLAN_MANEJO = plan;
+    informe.PLAN_MANEJO = {};
+
     //OFICIO
     informe.DOC_REFERENCIAS = {};
     informe.DOC_REFERENCIAS.Oficio = informe.REFERENCIAS.find(x => x.TIPO_DOCUMENTO == 'OFICIO') || {};
@@ -349,12 +367,23 @@ _informe.Exportar = async function () {
 
     const template = await _informe.ExtraerPlantilla();
 
-    const header = _informe.tmpl.get(template, '#tmpl-encabezado', informe);
-    informe.PIE_PAGINA = _informe.tmpl.get(template, '#tmpl-pie-pagina', informe);
+    informe.VISTOS = _informe.tmpl.get(template, '#tmpl-vistos', informe);
+    informe.COMPETENCIA = _informe.tmpl.get(template, '#tmpl-competencia', informe);
+
+    //Plantilla de infracciones 
+    informe.ANALISIS = _informe.tmpl.get(template, '#tmpl-analisis', informe);
+    informe.GRAVEDAD_OCASIONADA = _informe.tmpl.get(template, '#tmpl-gravedad-ocasionada', informe);
+    informe.ACREDITACION_IMPUTACIONES = _informe.tmpl.get(template, '#tmpl-acreditacion-imputaciones', informe);
+    informe.MEDIDAS_COMPLEMENTARIAS = _informe.tmpl.get(template, '#tmpl-medidas-complementarias', informe);
+    informe.MEDIDAS_CORRECTIVAS = _informe.tmpl.get(template, '#tmpl-medidas-correctivas', informe);
+    informe.COMUNICACION_ENTIDADES = _informe.tmpl.get(template, '#tmpl-comunicacion-entidades', informe);
+    informe.RESOLUCION = _informe.GenerarResolucion(template, informe);
+
+    informe.PIE_PAGINA = _informe.tmpl.get(template, '#tmpl-pie-pagina', informe)?.replace(/PASSWORD/g, app.Tramite?.password || 'PASSWORD');
 
     console.log(informe);
+    const header = _informe.tmpl.get(template, '#tmpl-encabezado', informe);
 
-    //let html = _informe.tmpl.General(informe);
     let html = '';
     html += _informe.tmpl.get(template, '#tmpl-exportar', informe);
     html += _informe.tmpl.get(template, '#tmpl-pie-pagina-estructura', informe);
@@ -362,11 +391,9 @@ _informe.Exportar = async function () {
     html += _informe.tmpl.get(template, '#tmpl-footnotes', informe);
     html = _informe.RevisarFootnotes(html);
 
-    //Enumeracion de listas
-    html = _informe.EnumerarListas(html);
-
-    //Enumeracion de cuadros
+    //Enumeracion
     html = _informe.EnumerarCuadros(html);
+    html = _informe.EnumerarParrafos(html);
 
     $(document).googoose({ html, header });
 }
@@ -513,7 +540,7 @@ _informe.Estructura = function () {
         x.item = i + 1;
     });
 
-    objEN.INFRACCIONES = JSON.parse(JSON.stringify(app.Infracciones))
+    objEN.INFRACCIONES = JSON.parse(JSON.stringify(objEN.INFRACCIONES))
         .filter(item => item.select);
 
     //objEN.CAUSALES_CADUCIDAD = JSON.parse(JSON.stringify(data.Causales_Caducidad))
@@ -727,23 +754,9 @@ _informe.EXTRAER_RESUMEN_INFORME = function () {
     })
 }
 
-_informe.EXTRAER_INFRACCIONES = function () {
-    return new Promise((resolve, reject) => {
-        utilSigo.fnAjax({
-            type: 'get',
-            dataType: 'html',
-            url: `${urlLocalSigo}Fiscalizacion/ManPAU/TemplateRDObligaciones`
-        }, html => resolve(html), () => resolve(null));
-    })
-}
-
-_informe.EXTRAER_INFRACCIONES_POR_MODALIDAD = function () {
-    app.Infracciones = data.Infracciones.filter(x => x.codModalidad == app.Informe.COD_MODALIDAD);
-}
-
 _informe.EXTRAER_PARRAFOS_INFRACCION = function (template, informe) {
-    const infracciones = JSON.parse(JSON.stringify(data.Infracciones))
-        .filter(item => item.codModalidad == informe.COD_MODALIDAD && item.select)
+    const infracciones = JSON.parse(JSON.stringify(informe.INFRACCIONES))
+        //.filter(item => item.codModalidad == informe.COD_MODALIDAD && item.select)
         .map(function (item, index) {
             //item.numeration = _informe.NumeroALetra(index + 1);            
             item.html = _informe.tmpl.get(template, '#tmpl-' + item.codPlantilla, informe);
@@ -1045,8 +1058,7 @@ $(function () {
                 { COD_MATERIA: '01', MATERIA: 'Fauna Silvestre' },
                 { COD_MATERIA: '02', MATERIA: 'Recursos Forestales' },
             ],
-            Modalidades: [],
-            Infracciones: []
+            Modalidades: []
         },
         methods: {
             init: async function () {
@@ -1098,8 +1110,6 @@ $(function () {
             MateriaOnChange: function () {
                 this.Modalidades = data.Modalidades.filter(x => x.COD_MATERIA === this.Informe.COD_MATERIA);
                 this.Informe.COD_MODALIDAD = this.Modalidades[0].COD_MODALIDAD;
-
-                _informe.EXTRAER_INFRACCIONES_POR_MODALIDAD();
             },
             Informacion: function (values) {
                 const self = this;
