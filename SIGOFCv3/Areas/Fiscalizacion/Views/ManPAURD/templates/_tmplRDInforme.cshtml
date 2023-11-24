@@ -6,7 +6,7 @@
                     <tr>
                         <td style="vertical-align: top;"><strong>EXPEDIENTE N°</strong></td>
                         <td style="width: 30px; vertical-align: top;">:</td>
-                        <td style="vertical-align: top;">${EXPEDIENTE_ADM}</td>
+                        <td style="vertical-align: top;">${EXPEDIENTE_ADM || '000XX-20XX-OSINFOR/08.2.1'}</td>
                     </tr>
                     <tr>
                         <td style="vertical-align: top;"><strong>MATERIA</strong></td>
@@ -16,22 +16,22 @@
                     <tr>
                         <td style="vertical-align: top;"><strong>ADMINISTRADO</strong></td>
                         <td style="width: 30px; vertical-align: top;">:</td>
-                        <td style="vertical-align: top;">${TITULAR_SUPERVISADO}</td>
+                        <td style="vertical-align: top;">${TITULAR}</td>
                     </tr>
                     <tr>
                         <td style="vertical-align: top;"><strong>TÍTULO HABILITANTE</strong></td>
                         <td style="width: 30px; vertical-align: top;">:</td>
-                        <td style="vertical-align: top;">${NUM_THABILITANTE}</td>
+                        <td style="vertical-align: top;">${NUM_CONTRATO}</td>
                     </tr>
                     <tr>
                         <td style="vertical-align: top;"><strong>REFERENCIA</strong></td>
                         <td style="width: 30px; vertical-align: top;">:</td>
-                        <td style="vertical-align: top;">Informe de Supervisión N° ${NRO_REFERENCIA}</td>
+                        <td style="vertical-align: top;">Informe Final de Instrucción N° ${NRO_REFERENCIA || '000XX-20XX-OSINFOR/08.2.1'}</td>
                     </tr>
                 </tbody>
             </table>
             <div style="font-weight: bold; text-align: center; font-size: 11pt; margin: 15pt 0;">
-                RESOLUCIÓN SUB DIRECTORAL N° ${NUM_INFORME_SITD}
+                RESOLUCIÓN DIRECTORAL N° ${NUM_INFORME_SITD || '00XXX-2023-OSINFOR/08.2'}
             </div>
             <div style="text-align: right; margin-bottom: 15pt;">
                 Lima, ${FECHA}

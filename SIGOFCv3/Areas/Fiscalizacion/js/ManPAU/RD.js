@@ -276,8 +276,10 @@ _informe.Exportar = async function () {
     informe.EXPEDIENTE_ADM = informe.REFERENCIAS.filter(x => x.TIPO_DOCUMENTO?.indexOf('EXPEDIENTE') != -1).map(x => (x.NUMERO || x.CODIGO || 'S/N')).join(', ');
     if (!informe.EXPEDIENTE_ADM) {
         const row = _renderListExpediente.dtRenderListInforme.rows().data().toArray()[0] || {};
-        informe.EXPEDIENTE_ADM = row.NUM_INFORME?.match(regExpOSINFOR)[0] || null;
+        informe.EXPEDIENTE_ADM = row.NUMERO?.match(regExpOSINFOR)[0] || null;
     }
+
+    informe.NUM_INFORME_SITD = informe.NUM_INFORME_SITD || '';
 
     //Asociamos las infracciones a las RSD en los antecedentes
     for (let item of informe.ANTECEDENTES) {
