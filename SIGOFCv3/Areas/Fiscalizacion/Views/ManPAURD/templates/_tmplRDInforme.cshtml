@@ -456,18 +456,33 @@
     <p class="enumeration">
         Cabe indicar que las referidas medidas complementarias deben hacerse de conocimiento de la autoridad, a fin de que lleve a cabo su ejecución; ello, teniendo en consideración que el numeral 15.2 del artículo 15 del RISMFFS, establece que el SERFOR, el OSINFOR y las ARFFS, deben colaborar entre sí, para la ejecución de las sanciones, medidas complementarias, medidas correctivas y medidas cautelares o provisionales, cuando se dispongan.
     </p>
+    {{if COD_MODALIDAD == "04"}} <!--Fauna-->
+    <p class="enumeration">
+        En ese sentido, <strong>corresponde dictar como medida complementaria la clausura temporal de xxxxxxxxxxxxxxxxxxxxxxx,</strong> conforme al detalle establecido en el Anexo II de la presente resolución.
+    </p>
+    {{else}}
     <p class="enumeration">
         En ese sentido, <strong>corresponde dictar como medida complementaria el decomiso</strong> de los productos forestales que se transporten y comercialicen al amparo de las guías de transporte forestal y listas de trozas del Permiso Forestal, así como, del plan de manejo aprobado; con la finalidad de eliminar o mitigar los efectos producidos por la comisión de la infracción acreditada en el presente procedimiento, tales como la posesión, el transporte o comercialización de los productos forestales provenientes de la extracción no autorizada, conforme al detalle establecido en el Anexo II de la presente resolución.
     </p>
+    {{/if}}
 </script>
 
 <script id="tmpl-medidas-correctivas" type="text/x-jquery-tmpl">
+    {{if COD_MODALIDAD == "04"}} <!--Fauna-->
+    <p class="enumeration">
+        La medida correctiva a aplicarse en el presente caso,  (i) implementación de candados en todos los recintos del xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx y (ii) implementación del tópico, cuarentena y almacén de acuerdo a lo descrito en el plan de manejo de fauna silvestre; medidas que deberán ser realizadas conforme a lo señalado en la propuesta de medida correctiva se detalla en el anexo 2 de la presente resolución.
+    </p>
+    <p class="enumeration">
+        Los titulares, tienen la obligación de cumplir con la implementación de las medidas correctivas y/o mandatos que se emitan como resultado de las acciones de control, supervisión y/o fiscalización ejecutadas por el OSINFOR; y conforme a lo regulado por el numeral 14 del Anexo 2 del RISMFFS, el incumplir con la implementación de las medidas correctivas, constituye una infracción grave; debiendo informarse que la supervisión de la implementación de la medida, se encuentra a cargo de la Dirección de Supervisión Forestal y de Fauna Silvestre del OSINFOR.
+    </p>
+    {{/else}}
     <p class="enumeration">
         La medida correctiva a aplicarse en el presente caso, por la extracción de un volumen de <strong>xxx m<sup>3</sup></strong>, será de xxx, toda vez que existe un área disponible dentro de la concesión para realizar la reposición de la cobertura afectada mediante manejo de regeneración natural. <u>La propuesta de medida correctiva se detalla en el anexo 2 de la presente resolución</u>.
     </p>
     <p class="enumeration">
         Los titulares, tienen la obligación de cumplir con la implementación de las medidas correctivas y/o mandatos que se emitan como resultado de las acciones de control, supervisión y/o fiscalización ejecutadas por el OSINFOR; y conforme a lo regulado por el numeral 13 del Anexo 1 del RISMFFS, <strong>el incumplir con la implementación de las medidas correctivas, constituye una infracción grave</strong>; debiendo informarse que la supervisión de la implementación de la medida, se encuentra a cargo de la Dirección de Supervisión Forestal y de Fauna Silvestre del OSINFOR.
     </p>
+    {{/if}}
 </script>
 
 <script id="tmpl-comunicacion-entidades" type="text/x-jquery-tmpl">
