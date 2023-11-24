@@ -14,11 +14,11 @@
                 Dependerá del caso concreto
             </td>
             <td style="border: 1px solid #000;">
-                Numeral 16 del Anexo 1 del RISMFFS.<br /><br />
-                <i>“Incumplir con las obligaciones legalmente establecidas en los títulos habilitantes, planes de manejo u otros actos administrativos, diferentes a las causales de caducidad”</i>
+                Numeral 21 del Anexo 1 del RISMFFS.<br /><br />
+                <i>“Talar, extraer y/o aprovechar recursos forestales sin autorización en su condición o no de titular del título habilitante, a excepción de los aprovechados por subsistencia”</i>
             </td>
             <td style="border: 1px solid #000;">
-                Declarar ante la autoridad correspondiente los volúmenes de madera extraído al amparo de su TH.
+                Extracción injustificada de un volumen de XX m3 de madera correspondiente a la especie XX”
             </td>
             <td style="border: 1px solid #000; text-align: center;">
                 Escrito xxxxxxx SITD xxxxxxxxx
@@ -78,19 +78,66 @@
 {{/if}}
 <ul>
     <li>
-        De la revisión de lo evidenciado en campo, se advierte que el/la administrado (a) no declaró ante la autoridad el aprovechamiento de un volumen de xxxx m3(), correspondiente a las especies xxxx, tal como se muestra en el siguiente cuadro:
+        Evidencias de extracciones no autorizadas, conforme se ilustra en el siguiente cuadro:
     </li>
 </ul>
 <p style="text-align: center;"><strong>Cuadro.</strong></p>
+<table cellpadding="4" border="0" style="font-family: Arial; font-size: 9pt; border-collapse: collapse; line-height: 150%;">
+    <thead>
+        <tr style="background-color: #bfbfbf;">
+            <th style="text-align: center; border: 1px solid #000;">
+                Especies supervisadas
+            </th>
+            <th style="text-align: center; border: 1px solid #000;">
+                Árboles aprobados (parcelas)
+            </th>
+            <th style="text-align: center; border: 1px solid #000;">
+                Árboles supervisados
+            </th>
+            <th style="text-align: center; border: 1px solid #000;">
+                Estado de los árboles en campo
+            </th>
+            <th style="text-align: center; border: 1px solid #000;">
+                Volumen movilizado en el Balance de Extracción (A)
+            </th>
+            <th style="text-align: center; border: 1px solid #000;">
+                Volumen movilizado advertido en campo (B)
+            </th>
+            <th style="text-align: center; border: 1px solid #000;">
+                Volumen injustificado<br />B - A
+            </th>
+        </tr>
+    </thead>
+    {{each(i, objEsp) informe.VOLUMENES_INJUSTIFICADOS}}
+    <tbody>
+        <tr>
+            <td style="border: 1px solid #000; text-align: center;">${objEsp.ESPECIES}</td>
+            <td style="border: 1px solid #000; text-align: center;">${objEsp.VOLUMEN_APROBADO}</td>
+            <td style="border: 1px solid #000; text-align: center;">${objEsp.NUM_ARBOLES}</td>
+            <td style="border: 1px solid #000; text-align: center;">${objEsp.ESTADO_CAMPO}</td>
+            <td style="border: 1px solid #000; text-align: center;">${objEsp.BALANCE_EXTRACCION}</td>
+            <td style="border: 1px solid #000; text-align: center;">${objEsp.VOLUMEN_MOVILIZADO}</td>
+            <td style="border: 1px solid #000; text-align: center;">${objEsp.VOLUMEN_INJUSTIFICADO}</td>
+        </tr>
+    </tbody>
+    {{/each}}
+    <tfoot>
+        <tr style="background-color: #bfbfbf;">
+            <td style="border: 1px solid #000; text-align: center;" colspan="6">
+                Total
+            </td>
+            <td style="border: 1px solid #000; text-align: center;">
+                ${informe.VOLUMENES_INJUSTIFICADOS_TOTAL}
+            </td>
+        </tr>
+    </tfoot>
+</table>
 <ul>
     <li>
-        Al respecto, como ha señalado el Tribunal Forestal y de Fauna Silvestre “(...) los administrados se encuentran en la obligación de sustentar la procedencia legal de los productos forestales extraídos, por ello, se exige que ésta se realice mediante las guías de transporte forestal, toda vez que, así se puede acreditar su origen legal, dejando un registro en cuanto a especies y volúmenes movilizados, que permite a la autoridad hacer seguimiento a la trazabilidad del recurso forestal extraído e identificar su trayectoria desde el primer puesto de control.”
-    </li>
-    <li>
-        En consecuencia, teniendo en cuenta que la vigencia del Permiso Forestal fue desde el día <strong>xxxxxx hasta el xxxx</strong> y que según el Balance de Extracción y Forma 20 de fecha <strong>xxxxx</strong> el/la administrado (a) no había declarado el volumen de xxxxxm3; se concluye que se encuentra incumpliendo con lo establecido en la cláusula séptima del Permiso Forestal N° <strong>xxxxxxx</strong>.
+        La extracción no autorizada es atribuible al/la administrado (a), puesto que reportó su aprovechamiento, lo que implica incumplimiento del documento de gestión, el cual es un instrumento que comprende las actividades de manejo a desarrollarse en una unidad de aprovechamiento, a fin de realizar un aprovechamiento sostenible del recurso maderable autorizado; y, que el propio administrado presentó ante la ARFFS y fue aprobado.
     </li>
 </ul>
 
 <p class="enumeration">
-    En ese contexto, de acuerdo a lo señalado precedentemente, se confirma que el/la administrado (a) cometió la infracción tipificada en el numeral 16 del RISMFFS; criterio acorde a lo señalado en el Informe Final de Instrucción.
+    En ese contexto, se confirma que el/la administrado (a) cometió la infracción tipificada en el numeral 21 del Anexo 1 del RISMFFS; criterio acorde a lo señalado en el Informe Final de Instrucción.
 </p>

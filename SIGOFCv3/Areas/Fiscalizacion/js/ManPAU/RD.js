@@ -1054,7 +1054,7 @@ $(function () {
             oficinaDefault: null,
             Tramite: null,
             Procedencias: [
-                { COD_PROCEDENCIA: 'SDI', PROCEDENCIA: 'Subdirección de Instrucción' },
+                { COD_PROCEDENCIA: 'DPSFFS', PROCEDENCIA: 'Dirección del Procedimiento Sancionador Forestal y de Fauna Silvestre' },
             ],
             Materias: [
                 { COD_MATERIA: '01', MATERIA: 'Fauna Silvestre' },
@@ -1071,7 +1071,7 @@ $(function () {
 
                 //Valores por defecto
                 const values = {
-                    COD_PROCEDENCIA: "SDI",
+                    COD_PROCEDENCIA: "DPSFFS",
                     COD_MATERIA: "02",
                     COD_RESOLUCION: datos.hdfCodResodirec,
                     NUM_INFORME_SITD: datos.txtNumeroExpediente,
