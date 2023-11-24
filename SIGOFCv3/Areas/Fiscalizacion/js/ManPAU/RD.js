@@ -190,8 +190,7 @@ _informe.NumeroALetra = function (numero) {
 _informe.tmpl = {
     get: function (html, tmplId, data) {
         const _dom = $("<div>", { html });
-        const partial = _dom.find(tmplId);
-
+        const partial = _dom.find(tmplId);        
         return $('<div>').append(partial.tmpl(data || {})).getUnformattedText();
     },
 }
