@@ -103,6 +103,7 @@ namespace CapaEntidad.ViewModel.DOC
         public string VAR_POA_CONST { get; set; }
         public DateTime? VAR_INICIO_POA { get; set; }
         public DateTime? VAR_FIN_SUP { get; set; }
+        public DateTime? VAR_INICIO_SUP { get; set; }
         public DateTime? VAR_FECHA_EMC { get; set; }
         public string VAR_JEFE { get; set; }
         public string VAR_OFICINA { get; set; }
