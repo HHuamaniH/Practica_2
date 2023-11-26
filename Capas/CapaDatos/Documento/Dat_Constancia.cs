@@ -154,6 +154,8 @@ namespace CapaDatos.DOC
                             constancia.COD_TITULAR = dr["COD_TITULAR"].ToString();
                             constancia.NUMERO = dr["VAR_NUM_CONSTANCIA"].ToString();
                             constancia.FECHA_EMISION = dr["VAR_FECHA_EMC"].ToString().Trim() == "" ? null : (DateTime?)Convert.ToDateTime(dr["VAR_FECHA_EMC"]);
+                            constancia.VAR_TIPO_INFORME = dr["COD_ITIPO"].ToString();
+
                         }
                     }
                 }

@@ -444,6 +444,14 @@ namespace CapaLogica.DOC
                             vm.chkIncumpleDirectiva = (Boolean)CEntProveidoArchItems.INCUMPLE_DIRECTIVA_SUPERV;
                         }
                     }
+                    else if(CEntProveidoArchItems.COD_FCTIPO == "0000106")
+                    {
+                        vm.txtIdSobArchivo = CEntProveidoArchItems.MAE_TIP_PROVARCHIVO;
+                        vm.txtIdMedida = CEntProveidoArchItems.MAE_TIP_MEDIDAS;
+                        vm.txtSobreArchivo = CEntProveidoArchItems.DESCRIPCION_PROVARCHIVO;
+                        vm.txtDictaMedida = CEntProveidoArchItems.DESCRIPCION_MEDIDAS;
+                        vm.txtIdEmiteConst = CEntProveidoArchItems.MAE_TIP_CONSTANCIA;
+                    }
                     else if (CEntProveidoArchItems.COD_FCTIPO == "0000062" || CEntProveidoArchItems.COD_FCTIPO == "0000063" || CEntProveidoArchItems.COD_FCTIPO == "0000064" || CEntProveidoArchItems.COD_FCTIPO == "0000067"
                         || CEntProveidoArchItems.COD_FCTIPO == "0000077" || CEntProveidoArchItems.COD_FCTIPO == "0000079")
                     {
@@ -784,6 +792,11 @@ namespace CapaLogica.DOC
                 {
                     case "0000106":
                         oCEntidadProv.COD_DLINEA = _dto.hdfTipoProveido;
+                        oCEntidadProv.MAE_TIP_PROVARCHIVO = _dto.txtIdSobArchivo;
+                        oCEntidadProv.DESCRIPCION_PROVARCHIVO = _dto.txtIdSobArchivo == "0000006" ? _dto.txtSobreArchivo : null;
+                        oCEntidadProv.MAE_TIP_MEDIDAS = _dto.txtIdMedida;
+                        oCEntidadProv.DESCRIPCION_MEDIDAS = _dto.txtIdMedida == "0000008" || _dto.txtIdMedida == "0000009" ? _dto.txtDictaMedida : null;
+                        oCEntidadProv.MAE_TIP_CONSTANCIA = _dto.txtIdEmiteConst;
                         break;
                     case "0000061":
                         oCEntidadProv.MAE_TIP_PROVARCHIVO = _dto.txtIdSobArchivo;

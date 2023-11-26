@@ -129,5 +129,8 @@ namespace CapaEntidad.ViewModel.DOC
         public int NU_ESTADO { get; set; }
         public string COD_INFORME { get; set; }
         public string COD_THABILITANTE { get; set; }
+        //PARA AUDITORIAS QUINQUENALES
+        public string VAR_TIPO_INFORME { get; set; }
+
     }
 }

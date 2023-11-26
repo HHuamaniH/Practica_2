@@ -4,7 +4,7 @@
     ViewBag.Title = "AddEdit";
     Layout = "~/Views/Shared/_LayoutMain.cshtml";
 }
-<script src="~/Areas/Fiscalizacion/js/ManProveido/AddEdit.js"></script>
+<script src="~/Areas/Fiscalizacion/js/ManProveido/AddEdit.js?v2"></script>
 @section scripts{
     <script>
         "use strict"; var rol = '';
@@ -195,11 +195,11 @@
                                     </div>
 
                                     @*<div class="card-header text-small">Archivos cargados en el SIADO</div>
-                                        <div class="card-body">
-                                            <div class="form-row">
-                                                @{Html.RenderAction("_IntegracionSIADO", "Controles", new { area = "GENERAL", asCriterio = "SUBTIP_TITDOCSIGO", asSubCriterio = "0010", asValor = Model.hdfCodProvedio });}
-                                            </div>
-                                        </div>*@
+                <div class="card-body">
+                    <div class="form-row">
+                        @{Html.RenderAction("_IntegracionSIADO", "Controles", new { area = "GENERAL", asCriterio = "SUBTIP_TITDOCSIGO", asSubCriterio = "0010", asValor = Model.hdfCodProvedio });}
+                    </div>
+                </div>*@
                                 </div>
                             </div>
 
@@ -236,8 +236,18 @@
                                     </div>
                                 </div>
                             }
+                            @if (Model.hdfCodTipoProve == "0000106" )
+                            {
+                                <div class="tab-pane fade show" id="navProvFallTitular" role="tabpanel" aria-labelledby="nav-home-tab">
+                                    <div class="card">
+                                        <div class="col-md-12">
+                                            @Html.Partial("~/Areas/Fiscalizacion/Views/ManProveido/_Shared/_renderFallTitular106.cshtml", Model)
+                                        </div>
+                                    </div>
+                                </div>
+                            }
                             <!--Proveido Fallecimiento titular-->
-                            @if (Model.hdfCodTipoProve == "0000064" || Model.hdfCodTipoProve == "0000077" || Model.hdfCodTipoProve == "0000079" || Model.hdfCodTipoProve == "0000106" || Model.hdfCodTipoProve == "0000113")
+                            @if (Model.hdfCodTipoProve == "0000064" || Model.hdfCodTipoProve == "0000077" || Model.hdfCodTipoProve == "0000079" || Model.hdfCodTipoProve == "0000113")
                             {
                                 <div class="tab-pane fade show" id="navProvFallTitular" role="tabpanel" aria-labelledby="nav-home-tab">
                                     <div class="card">

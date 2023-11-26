@@ -1,0 +1,132 @@
+﻿@model CapaEntidad.ViewModel.VM_Proveido
+<script type="text/javascript">
+    var _renderFallTitular = {};
+    _renderFallTitular.fnSelectRecom = function () {
+        _renderFallTitular.frm.find("#divDescSobArchivo").hide();
+        _renderFallTitular.frm.find("#divMedidaDetalle").hide();
+        _renderFallTitular.frm.find("#divConstObli").hide();
+
+        if (_renderFallTitular.frm.find("#ddlSobArchivo").val() == '0000006') {
+            _renderFallTitular.frm.find("#divDescSobArchivo").show();
+        }
+        if (_renderFallTitular.frm.find("#ddlSobArchivo").val() == '0000005') {
+            _renderFallTitular.frm.find("#divConstObli").show();
+        }
+
+        if (_renderFallTitular.frm.find("#ddlMedida").val() == '0000008') {
+            _renderFallTitular.frm.find("#divMedidaDesc").val('Medidas Correctivas');
+            _renderFallTitular.frm.find("#divMedidaDetalle").show();
+
+        }
+
+        if (_renderFallTitular.frm.find("#ddlMedida").val() == '0000009') {
+            _renderFallTitular.frm.find("#divMedidaDesc").val('Mandatos');
+            _renderFallTitular.frm.find("#divMedidaDetalle").show();
+
+        }
+
+    }
+    $(document).ready(function () {
+        _renderFallTitular.frm = $("#divFallTitular");
+        _renderFallTitular.fnSelectRecom();
+    });
+</script>
+<div id="divFallTitular" class="text-small">
+    <div><br /><br /></div>
+    <div class="form-row">
+        <div class="form-group col-md-4">
+            Sobre el Archivo
+        </div>
+        <div class="form-group col-md-6">
+            @Html.DropDownListFor(m => m.txtIdSobArchivo, new SelectList(Model.ListMComboTipoArchivo, "CODIGO", "DESCRIPCION"),
+                                                                 new
+                                                                 {
+                                                                     @class = "form-control form-control-sm",
+                                                                     @id = "ddlSobArchivo",
+                                                                     @onchange = "_renderFallTitular.fnSelectRecom()"
+                                                                 })
+        </div>
+        <div class="form-group col-md-2">
+        </div>
+    </div>
+    <div class="form-row" id="divDescSobArchivo" style="display:none;">
+        <div class="form-group col-md-4">
+            Descripción Sobre el Archivo
+        </div>
+        <div class="form-group col-md-6">
+            @Html.TextAreaFor(m => m.txtSobreArchivo, 8, 1, new { @class = "form-control form-control-sm" })
+        </div>
+        <div class="form-group col-md-2">
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="form-group col-md-4">
+            Se dicta alguna medida
+        </div>
+        <div class="form-group col-md-6">
+            @Html.DropDownListFor(m => m.txtIdMedida, new SelectList(Model.ListMComboTipoMedidas, "CODIGO", "DESCRIPCION"),
+                                                            new
+                                                            {
+                                                                @class = "form-control form-control-sm",
+                                                                @id = "ddlMedida",
+                                                                @onchange = "_renderFallTitular.fnSelectRecom()"
+                                                            })
+
+        </div>
+        <div class="form-group col-md-2">
+        </div>
+    </div>
+    <div class="form-row" id="divMedidaDetalle" style="display:none;">
+        <div class="form-group col-md-4">
+            <output id="divMedidaDesc" type="text" value="Seleccionar"></output>
+        </div>
+        <div class="form-group col-md-6">
+            @Html.TextAreaFor(m => m.txtDictaMedida, 8, 1, new { @class = "form-control form-control-sm" })
+        </div>
+        <div class="form-group col-md-2">
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="form-group col-md-12">
+            <label for="lblTipoILegal" class="text-small">Recomienda</label>
+            @Html.TextAreaFor(m => m.txtRecomienda, 4, 1, new { @class = "form-control form-control-sm" })
+        </div>
+    </div>
+    <div class="form-row" id="divConstObli" style="display:none;">
+        <div class="form-group col-md-4">
+            Se emite constancia
+        </div>
+        <div class="form-group col-md-6">
+            @Html.DropDownListFor(m => m.txtIdEmiteConst, new SelectList(Model.ListMComboEmiteConst, "CODIGO", "DESCRIPCION"),
+                                                                 new
+                                                                 {
+                                                                     @class = "form-control form-control-sm",
+                                                                     @id = "ddlEmiteConst",
+                                                                     @onchange = "_renderFallTitular.fnSelectRecom()"
+                                                                 })
+        </div>
+        <div class="form-group col-md-2">
+        </div>
+    </div>
+
+
+
+
+    <div class="form-row" style="display:none">
+        <div class="form-group col-md-4">
+            Se Resuelve
+        </div>
+        <div class="form-group col-md-6">
+            @Html.TextAreaFor(m => m.txtResuelve, 8, 1, new { @class = "form-control form-control-sm" })
+        </div>
+        <div class="form-group col-md-2">
+        </div>
+    </div>
+
+    <div class="form-row">
+        <div class="form-group col-md-12">
+            @Html.Partial("~/Areas/Fiscalizacion/Views/ManProveido/_Shared/_renderNotificacion.cshtml", Model)
+        </div>
+    </div>
+</div>
+

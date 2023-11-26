@@ -590,7 +590,18 @@ namespace SIGOFCv3.Areas.Fiscalizacion.Controllers
             //obteniendo plantilla
             try
             {
-                bytePlantilla = System.IO.File.ReadAllBytes(Path.Combine(Server.MapPath(folderPlantilla), "PlantillaConstanciasTH.docx"));
+                //informes de supervision
+                if(constancia.VAR_TIPO_INFORME == "0000001")
+                {
+                    bytePlantilla = System.IO.File.ReadAllBytes(Path.Combine(Server.MapPath(folderPlantilla), "PlantillaConstanciasTH.docx"));
+
+                }
+                //informes quinquenales
+                if (constancia.VAR_TIPO_INFORME == "0000010")
+                {
+                    bytePlantilla = System.IO.File.ReadAllBytes(Path.Combine(Server.MapPath(folderPlantilla), "PlantillaConstanciasQU.docx"));
+
+                }
 
             }
             catch (Exception)
