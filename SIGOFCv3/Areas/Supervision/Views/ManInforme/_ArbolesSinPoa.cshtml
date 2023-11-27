@@ -1,6 +1,6 @@
 ﻿@model CapaEntidad.ViewModel.VM_Informe_POASupervisado
 
-<script src="~/Areas/Supervision/js/ManInforme/_ArbolesSinPoa.js"></script>
+<script src="~/Areas/Supervision/js/ManInforme/_ArbolesSinPoa.js?v=@Guid.NewGuid()"></script>
 <div class="modal-dialog modal-custom-tb" role="document">
     <div class="modal-content" style="height:100%;">
         <div class="modal-header text-small" style="cursor:move;">
@@ -19,6 +19,9 @@
                         @Html.HiddenFor(m => m.hdfNumPoa)
                         @Html.HiddenFor(m => m.hdfCodMTipo)
                         @Html.HiddenFor(m => m.hdfCodNoPoa)
+                        <input type="hidden" id="hdPartMenoresCUSAF" value="@ViewBag.hdPartMenoresCUSAF" />
+                        <input type="hidden" id="hdAsistenciaTecnicaCUSAF" value="@ViewBag.hdAsistenciaTecnicaCUSAF" />
+                        <input type="hidden" id="hdFrecuenciaCUSAF" value="@ViewBag.hdFrecuenciaCUSAF" />
                         @if (Model.hdfCodMTipo != "0000013" && Model.hdfCodMTipo != "0000028")
                         {
                             <div id="dvOpcionPoaResultado">
@@ -38,9 +41,367 @@
                                 </div>
                             </div>
                         }
+                        @if (Model.hdfCodMTipo == "0000030")
+                        {
+                            <div class="card-header text-small">Especies Forestales Establecidas</div>
+                            <div class="card-body">
+                                <div class="form-row">
+                                    <div class="col-md-12">
+                                        @Html.Partial("~/Areas/Supervision/Views/ManInforme/Render/_renderEspecieForEst.cshtml", Model.tbEspecieForEst)
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="card-header text-small">REGISTRO DE INFORMACIÓN BÁSICA DE LOS CONTRATOS DE CESIÓN EN USO PARA SISTEMAS AGROFORESTALES (CUSAF)</div>
+                            <div class="card-body">
+                                <div class="card-header text-small">Información del Titular</div>
+                                <div class="card-body">
+                                    <div class="form-row">
+                                        <div class="form-group col-md-4">
+                                            <label for="txtTelefonoCUSAF" class="text-small">Teléfono</label>                                            
+                                            @Html.TextBoxFor(m => m.txtTelefonoCUSAF, new { @class = "form-control form-control-sm", maxlength = "10", onkeypress = "return utilSigo.checkNum(event)" })
+                                        </div>
+                                        <div class="form-group col-md-4">
+                                            <label for="txtCorreoCUSAF" class="text-small">Correo electrónico</label>
+                                            @Html.TextBoxFor(m => m.txtCorreoCUSAF, new { @class = "form-control form-control-sm", maxlength = "50", onblur = "return utilSigo.onBlurMail(this,'Correo electrónico')" })
+                                        </div>
+                                        <div class="form-group col-md-4">
+                                            <label for="txtNivelEstudioCUSAF" class="text-small">Nivel de estudio</label>
+                                            @Html.TextBoxFor(m => m.txtNivelEstudioCUSAF, new { @class = "form-control form-control-sm", maxlength = "50", onkeypress = "return utilSigo.checkLetter(event)" })                                            
+                                        </div>
+                                    </div>
+                                    <div class="form-row">
+                                        <div class="form-group col-md-4">
+                                            <label for="txtNumeroParticipacionCUSAF" class="text-small">N° miembros por familia y nivel de participación en la actividad</label>
+                                            @Html.TextBoxFor(m => m.txtNumeroParticipacionCUSAF, new { @class = "form-control form-control-sm", maxlength = "5", onkeypress = "return utilSigo.checkNum(event)" })                                            
+                                        </div>
+                                        <div class="form-group col-md-4">
+                                            <label class="text-small">Participación de menores de edad  en la actividad</label>
+                                            <div style="margin-top:7px;">
+                                                <div class="custom-control custom-radio custom-control-inline">
+                                                    <input type="radio" class="custom-control-input" id="rbtnPartMenoresSiCUSAF" name="rbtnPartMenoresCUSAF" value="1">
+                                                    <label class="custom-control-label" for="rbtnPartMenoresSiCUSAF">Si</label>
+                                                </div>
+                                                <div class="custom-control custom-radio custom-control-inline">
+                                                    <input type="radio" class="custom-control-input" id="rbtnPartMenoresNoCUSAF" name="rbtnPartMenoresCUSAF" value="2">
+                                                    <label class="custom-control-label" for="rbtnPartMenoresNoCUSAF">No</label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card-header text-small">Caracterización del Predio</div>
+                                <div class="card-body">
+                                    <div class="form-row">
+                                        <div class="col-md-12">
+                                            @Html.Partial("~/Areas/Supervision/Views/ManInforme/Render/_renderActividadProd.cshtml", Model.tbActividadProductiva)
+                                        </div>
+                                    </div>
+                                    <div class="form-row">
+                                        <div class="form-group col-md-6">
+                                            <label for="txtObsActividadProd" class="text-small">Observación Actividades Productivas</label>
+                                            @Html.TextAreaFor(m => m.txtObsActividadProd, new { @class = "form-control form-control-sm", @rows = "3", maxlength = "500", onkeypress = "return utilSigo.checkLetter(event)" })
+                                        </div>
+                                    </div>
+                                    <div class="form-row">
+                                        <div class="col-md-12">
+                                            @Html.Partial("~/Areas/Supervision/Views/ManInforme/Render/_renderCoberturaBosNat.cshtml", Model.tbCoberturaBosNat)
+                                        </div>
+                                    </div>
+                                    <div class="form-row">
+                                        <div class="form-group col-md-6">
+                                            <label for="txtObsCoberturaBosNat" class="text-small">Observación Áreas Cobertura de Bosques Naturales</label>
+                                            @Html.TextAreaFor(m => m.txtObsCoberturaBosNat, new { @class = "form-control form-control-sm", @rows = "3", maxlength = "500", onkeypress = "return utilSigo.checkLetter(event)" })                                            
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="card-header text-small">Prácticas Agrícolas Pecuarias</div>
+                                <div class="card-body">
+                                    <div class="col-md-12">
+                                        <div class="form-row">
+                                            <div class="form-group col-md-4">
+                                                <div class="form-check p-0">
+                                                    <label class="form-check-label text-small" for="chkControlMalezas">Control de malezas</label>                                                    
+                                                    @Html.CheckBoxFor(m => m.chkControlMalezas, new { @class = "check", type = "checkbox" })
+                                                </div>
+                                            </div>
+                                            <div class="form-group col-md-4">
+                                                <div class="form-check p-0">
+                                                    <label class="form-check-label text-small" for="chkRenovacionCultivo">Renovación de cultivo</label>                                                    
+                                                    @Html.CheckBoxFor(m => m.chkRenovacionCultivo, new { @class = "check", type = "checkbox" })
+                                                </div>
+                                            </div>
+                                            <div class="form-group col-md-4">
+                                                <div class="form-check p-0">
+                                                    <label class="form-check-label text-small" for="chkRotacionCultivoAnual">Rotación de cultivos anuales</label>                                                    
+                                                    @Html.CheckBoxFor(m => m.chkRotacionCultivoAnual, new { @class = "check", type = "checkbox" })
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-row">
+                                            <div class="form-group col-md-4">
+                                                <div class="form-check p-0">
+                                                    <label class="form-check-label text-small" for="chkPodasCultivo">Podas de cultivo</label>                                                    
+                                                    @Html.CheckBoxFor(m => m.chkPodasCultivo, new { @class = "check", type = "checkbox" })
+                                                </div>
+                                            </div>
+                                            <div class="form-group col-md-4">
+                                                <div class="form-check p-0">
+                                                    <label class="form-check-label text-small" for="chkManejoSombra">Manejo de sombra</label>                                                    
+                                                    @Html.CheckBoxFor(m => m.chkManejoSombra, new { @class = "check", type = "checkbox" })
+                                                </div>
+                                            </div>
+                                            <div class="form-group col-md-4">
+                                                <div class="form-check p-0">
+                                                    <label class="form-check-label text-small" for="chkCultivoCobertura">Cultivos de cobertura</label>
+                                                    @Html.CheckBoxFor(m => m.chkCultivoCobertura, new { @class = "check", type = "checkbox" })
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-row">
+                                            <div class="form-group col-md-4">
+                                                <div class="form-check p-0">
+                                                    <label class="form-check-label text-small" for="chkFertilizacion">Fertilización</label>                                                    
+                                                    @Html.CheckBoxFor(m => m.chkFertilizacion, new { @class = "check", type = "checkbox" })
+                                                </div>
+                                            </div>
+                                            <div class="form-group col-md-4">
+                                                <div class="form-check p-0">
+                                                    <label class="form-check-label text-small" for="chkArbolesForestales">Poda de árboles forestales</label>                                                    
+                                                    @Html.CheckBoxFor(m => m.chkArbolesForestales, new { @class = "check", type = "checkbox" })
+                                                </div>
+                                            </div>
+                                            <div class="form-group col-md-4">
+                                                <div class="form-check p-0">
+                                                    <label class="form-check-label text-small" for="chkCurvasBolillo">Curvas a nivel | tres bolillo</label>                                                    
+                                                    @Html.CheckBoxFor(m => m.chkCurvasBolillo, new { @class = "check", type = "checkbox" })
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-row">
+                                            <div class="form-group col-md-4">
+                                                <div class="form-check p-0">
+                                                    <label class="form-check-label text-small" for="chkControlPlagas">Control de plaga</label>
+                                                    @Html.CheckBoxFor(m => m.chkControlPlagas, new { @class = "check", type = "checkbox" })
+                                                </div>
+                                            </div>
+                                            <div class="form-group col-md-4">
+                                                <div class="form-check p-0">
+                                                    <label class="form-check-label text-small" for="chkQuema">Quema</label>
+                                                    @Html.CheckBoxFor(m => m.chkQuema, new { @class = "check", type = "checkbox" })
+                                                </div>
+                                            </div>
+                                            <div class="form-group col-md-4">
+                                                <div class="form-check p-0">
+                                                    <label class="form-check-label text-small" for="chkAgroforesteria">Agroforestería | Silvopastura</label>
+                                                    @Html.CheckBoxFor(m => m.chkAgroforesteria, new { @class = "check", type = "checkbox" })
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-row">
+                                            <div class="form-group col-md-4">
+                                                <div class="form-check p-0">
+                                                    <label class="form-check-label text-small" for="chkPracticaOrganica">Prácticas orgánicas</label>
+                                                    @Html.CheckBoxFor(m => m.chkPracticaOrganica, new { @class = "check", type = "checkbox" })
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card-header text-small">Asistencia Técnica</div>
+                                <div class="card-body">
+                                    <div class="card-header text-small">Recibe asistencia técnica</div>
+                                    <div class="card-body">
+                                        <div class="form-row">
+                                            <div class="form-group col-md-6">
+                                                @*<label class="text-small">?</label>*@
+                                                <div style="margin-top:7px;">
+                                                    <div class="custom-control custom-radio custom-control-inline">
+                                                        <input type="radio" class="custom-control-input" id="rbtnAsistenciaTecnicaSiCUSAF" name="rbtnAsistenciaTecnicaCUSAF" value="1">
+                                                        <label class="custom-control-label text-small" for="rbtnAsistenciaTecnicaSiCUSAF">Si</label>
+                                                    </div>
+                                                    <div class="custom-control custom-radio custom-control-inline">
+                                                        <input type="radio" class="custom-control-input" id="rbtnAsistenciaTecnicaNoCUSAF" name="rbtnAsistenciaTecnicaCUSAF" value="2">
+                                                        <label class="custom-control-label text-small" for="rbtnAsistenciaTecnicaNoCUSAF">No</label>
+                                                    </div>
+                                                </div>
+                                                <label class="text-small mt-4">Descripción</label>                                                
+                                                @Html.TextAreaFor(m => m.txtAsistenciaTecnica, new { @class = "form-control form-control-sm", @rows = "3", maxlength = "500", onkeypress = "return utilSigo.checkLetter(event)" })
+                                            </div>
+                                            <div class="form-group col-md-6">
+                                                <div class="form-row">
+                                                    <div class="form-group col-md-6">
+                                                        <div class="form-check p-0">
+                                                            <label class="form-check-label text-small" for="chkProyecto">Proyecto</label>                                                            
+                                                            @Html.CheckBoxFor(m => m.chkProyecto, new { @class = "check", type = "checkbox" })
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group col-md-6">
+                                                        <div class="form-check p-0">
+                                                            <label class="form-check-labe text-small" for="chkCooperativa">Cooperativa</label>
+                                                            @Html.CheckBoxFor(m => m.chkCooperativa, new { @class = "check", type = "checkbox" })
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-row">
+                                                    <div class="form-group col-md-6">
+                                                        <div class="form-check p-0">
+                                                            <label class="form-check-label text-small" for="chkInstitucion">Institución</label>
+                                                            @Html.CheckBoxFor(m => m.chkInstitucion, new { @class = "check", type = "checkbox" })
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group col-md-6">
+                                                        <div class="form-check p-0">
+                                                            <label class="form-check-label text-small" for="chkAutofinanciado">Autofinanciado</label>
+                                                            @Html.CheckBoxFor(m => m.chkAutofinanciado, new { @class = "check", type = "checkbox" })
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-row">
+                                                    <div class="form-group col-md-12">
+                                                        <label for="txtNombreAsisTecCUSAF" class="text-small mt-4">Nombre</label>                                                        
+                                                        @Html.TextBoxFor(m => m.txtNombreAsisTecCUSAF, new { @class = "form-control form-control-sm", maxlength = "200", onkeypress = "return utilSigo.checkLetter(event)" })
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                        <div class="form-row">
+                                            <div class="form-group col-md-6">
+                                                <label class="text-small  mt-4">Frecuencia</label>
+                                                <div style="margin-top:7px;">
+                                                    <div class="custom-control custom-radio custom-control-inline">
+                                                        <input type="radio" class="custom-control-input" id="rbtnCada3MesesCUSAF" name="rbtnFrecuenciaCUSAF" value="1">
+                                                        <label class="custom-control-label text-small" for="rbtnCada3MesesCUSAF">Cada 3 meses</label>
+                                                    </div>
+                                                    <div class="custom-control custom-radio custom-control-inline">
+                                                        <input type="radio" class="custom-control-input" id="rbtnCada6MesesCUSAF" name="rbtnFrecuenciaCUSAF" value="2">
+                                                        <label class="custom-control-label text-small" for="rbtnCada6MesesCUSAF">Cada 6 meses</label>
+                                                    </div>
+                                                    <div class="custom-control custom-radio custom-control-inline">
+                                                        <input type="radio" class="custom-control-input" id="rbtnUnaVezAnioCUSAF" name="rbtnFrecuenciaCUSAF" value="3">
+                                                        <label class="custom-control-label text-small" for="rbtnUnaVezAnioCUSAF">Una vez por año</label>
+                                                    </div>
+                                                    <div class="custom-control custom-radio custom-control-inline">
+                                                        <input type="radio" class="custom-control-input" id="rbtnMayorUnAnioCUSAF" name="rbtnFrecuenciaCUSAF" value="4">
+                                                        <label class="custom-control-label text-small" for="rbtnMayorUnAnioCUSAF">Mayor a 1 año</label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-group col-md-6">
+                                                <label class="text-small  mt-4">Necesidades de asistencia técnica (describir)</label>
+                                                @Html.TextAreaFor(m => m.txtNecesidadesAsistenciaTecnica, new { @class = "form-control form-control-sm", @rows = "3", maxlength = "500", onkeypress = "return utilSigo.checkLetter(event)" })
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card-header text-small">Financiamiento y Asociatividad</div>
+                                <div class="card-body">
+                                    <div class="card-header text-small">Financiamiento de Actividades</div>
+                                    <div class="card-body">
+                                        <div class="form-row">
+                                            <div class="form-group col-md-4">
+                                                <div class="form-check p-0">
+                                                    <label class="form-check-label text-small" for="chkPropioFA">Propio</label>                                                    
+                                                    @Html.CheckBoxFor(m => m.chkPropioFA, new { @class = "check", type = "checkbox" })
+                                                </div>
+                                            </div>
+                                            <div class="form-group col-md-4">
+                                                <div class="form-check p-0">
+                                                    <label class="form-check-label text-small" for="chkInstitucionFA">Institución</label>
+                                                    @Html.CheckBoxFor(m => m.chkInstitucionFA, new { @class = "check", type = "checkbox" })
+                                                </div>
+                                            </div>
+                                            <div class="form-group col-md-4">
+                                                <div class="form-check p-0">
+                                                    <label class="form-check-label text-small" for="chkProgramaFA">Programa</label>
+                                                    @Html.CheckBoxFor(m => m.chkProgramaFA, new { @class = "check", type = "checkbox" })
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-row">
+                                            <div class="form-group col-md-4">
+                                                <div class="form-check p-0">
+                                                    <label class="form-check-label text-small" for="chkProyectoFA">Proyecto</label>
+                                                    @Html.CheckBoxFor(m => m.chkProyectoFA, new { @class = "check", type = "checkbox" })
+                                                </div>
+                                            </div>
+                                            <div class="form-group col-md-4">
+                                                <div class="form-check p-0">
+                                                    <label class="form-check-label text-small" for="chkCooperativaFA">Cooperativa</label>
+                                                    @Html.CheckBoxFor(m => m.chkCooperativaFA, new { @class = "check", type = "checkbox" })
+                                                </div>
+                                            </div>
+                                            <div class="form-group col-md-4">
+                                                <div class="form-check p-0">
+                                                    <label class="form-check-label text-small" for="chkOtrosTercerosFA">Otros/Terceros</label>
+                                                    @Html.CheckBoxFor(m => m.chkOtrosTercerosFA, new { @class = "check", type = "checkbox" })
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-row">
+                                            <label class="text-small mt-4">Descripción</label>                                            
+                                            @Html.TextAreaFor(m => m.txtFinanciamientoActividad, new { @class = "form-control form-control-sm", @rows = "3", maxlength = "500", onkeypress = "return utilSigo.checkLetter(event)" })
+                                        </div>
+                                        <div class="form-row">
+                                            <label class="text-small mt-4">Asociatividad</label>
+                                        </div>
+                                        <div class="form-row">
+                                            <div class="form-group col-md-3">
+                                                <div class="form-check p-0">
+                                                    <label class="form-check-label text-small" for="chkCooperativaAsoc">Cooperativa</label>
+                                                    @Html.CheckBoxFor(m => m.chkCooperativaAsoc, new { @class = "check", type = "checkbox" })
+                                                </div>
+                                            </div>
+                                            <div class="form-group col-md-3">
+                                                <div class="form-check p-0">
+                                                    <label class="form-check-label text-small" for="chkAsociacionAsoc">Asociación</label>
+                                                    @Html.CheckBoxFor(m => m.chkAsociacionAsoc, new { @class = "check", type = "checkbox" })
+                                                </div>
+                                            </div>
+                                            <div class="form-group col-md-3">
+                                                <div class="form-check p-0">
+                                                    <label class="form-check-label text-small" for="chkOtrosAsoc">Otros</label>
+                                                    @Html.CheckBoxFor(m => m.chkOtrosAsoc, new { @class = "check", type = "checkbox" })
+                                                </div>
+                                            </div>
+                                            <div class="form-group col-md-3">
+                                                <div class="form-check p-0">
+                                                    <label class="form-check-label text-small" for="chkNingunoAsoc">Ninguno</label>
+                                                    @Html.CheckBoxFor(m => m.chkNingunoAsoc, new { @class = "check", type = "checkbox" })
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-row">
+                                            <label class="text-small mt-4">Detallar</label>                                            
+                                            @Html.TextAreaFor(m => m.txtDetallarAsociatividad, new { @class = "form-control form-control-sm", @rows = "3", maxlength = "500", onkeypress = "return utilSigo.checkLetter(event)" })
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group col-md-6">
+                                        <label for="txtObservacionCUSAF" class="text-small mt-4">Observación</label>
+                                        @Html.TextAreaFor(m => m.txtObservacionCUSAF, new { @class = "form-control form-control-sm", @rows = "3", maxlength = "500", onkeypress = "return utilSigo.checkLetter(event)" })
+
+                                    </div>
+                                </div>
+                                <div class="card-header text-small">División del Predio</div>
+                                <div class="card-body">
+                                    <div class="form-row">
+                                        <div class="col-md-12">
+                                            @Html.Partial("~/Areas/Supervision/Views/ManInforme/Render/_renderDivisionPredio.cshtml", Model.tbDivisionPredio)
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+
+                        }
                     </div>
                 </form>
             </div>
         </div>
     </div>
 </div>
+

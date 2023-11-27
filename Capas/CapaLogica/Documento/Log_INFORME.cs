@@ -21,7 +21,7 @@ namespace CapaLogica.DOC
     /// </summary>
     public class Log_INFORME
     {
-        private CDatos oCDatos = new CDatos();       
+        private CDatos oCDatos = new CDatos();
 
         /// <summary>
         /// 
@@ -908,7 +908,7 @@ namespace CapaLogica.DOC
                     {
                         tipoObligTitular = "OBLIGTITU_MADE";
                     }
-                    else if (asCodMTipo== "0000030")
+                    else if (asCodMTipo == "0000030")
                     {
                         tipoObligTitular = "OBLIGTITU_CUSAF";
                     }
@@ -1106,9 +1106,9 @@ namespace CapaLogica.DOC
             }
             return result;
         }
-        public void ModificarNumeroInforme(string codInforme, string numeroInforme,string asunto, DateTime fechaOperacion)
+        public void ModificarNumeroInforme(string codInforme, string numeroInforme, string asunto, DateTime fechaOperacion)
         {
-            oCDatos.ModificarNumeroInforme(codInforme,numeroInforme,asunto,fechaOperacion);
+            oCDatos.ModificarNumeroInforme(codInforme, numeroInforme, asunto, fechaOperacion);
         }
         private void ValidarDatosInforme(VM_Informe _dto)
         {
@@ -1230,18 +1230,21 @@ namespace CapaLogica.DOC
                     vm.tbConsolidado = oCampo.ListConsolidado;
                     vm.tbConsolidadoNN = oCampo.ListConsolidadoNN;
                     vm.tbMaderable = oCampo.ListMaderable;
+                    vm.tbEspecieForEst = oCampo.ListEspecieForEst;
+                    vm.tbActividadProductiva = oCampo.ListActividadProductiva;
+                    vm.tbCoberturaBosNat = oCampo.ListCoberturaBosNat;
 
                     //Parcelas de corta
                     List<VM_Chk> lstChkItem = new List<VM_Chk>();
                     string cod = "";
-                    foreach(var item in oCampo.ListButtonParcelaCorta)
+                    foreach (var item in oCampo.ListButtonParcelaCorta)
                     {
                         lstChkItem.Add(new VM_Chk() { Value = item.Value, Text = item.Text, Checked = item.IsCheck });
                         cod += cod == "" ? "" : "|";
                         cod += item.Value;
                     }
 
-                    if (lstChkItem.Count> 0)
+                    if (lstChkItem.Count > 0)
                     {
                         if (lstChkItem.Count > 1) lstChkItem.Add(new VM_Chk() { Value = "", Text = "Total", Checked = true });
                         else lstChkItem[0].Checked = true;
@@ -1297,8 +1300,56 @@ namespace CapaLogica.DOC
 
                         //vm.tbCondicionArea = oCampo.ListCondicionArea;
                         //vm.tbVerticeArea = oCampo.ListVerticeArea;
+
+                        vm.txtNumeroParticipacionCUSAF = oCampo.NUMERO_PARTICIPANTES == -1 ? string.Empty : oCampo.NUMERO_PARTICIPANTES.ToString();
+                        vm.rbtnPartMenoresCUSAF = oCampo.PARTICIPACION_MENORES;
+                        vm.rbtnAsistenciaTecnicaCUSAF = oCampo.ASISTENCIA_TECNICA;
+                        vm.rbtnFrecuenciaCUSAF = oCampo.FRECUENCIA_ASISTENCIA;
+                        vm.chkControlMalezas = oCampo.CONTROL_MALEZAS == 1 ? true : false;
+                        vm.chkRenovacionCultivo = oCampo.RENOVACION_CULTIVO == 1 ? true : false;
+                        vm.chkRotacionCultivoAnual = oCampo.ROTACION_CULTIVO == 1 ? true : false;
+                        vm.chkPodasCultivo = oCampo.PODAS_CULTIVO == 1 ? true : false;
+                        vm.chkManejoSombra = oCampo.MANEJO_SOMBRA == 1 ? true : false;
+                        vm.chkCultivoCobertura = oCampo.CULTIVO_COBERTURA == 1 ? true : false;
+                        vm.chkFertilizacion = oCampo.FERTILIZACION == 1 ? true : false;
+                        vm.chkArbolesForestales = oCampo.ARBOLES_FORESTALES == 1 ? true : false;
+                        vm.chkCurvasBolillo = oCampo.CURVAS_BOLLILLO == 1 ? true : false;
+                        vm.chkControlPlagas = oCampo.CONTROL_PLAGASAP == 1 ? true : false;
+                        vm.chkQuema = oCampo.QUEMA == 1 ? true : false;
+                        vm.chkAgroforesteria = oCampo.AGROFORESTERIA == 1 ? true : false;
+                        vm.chkPracticaOrganica = oCampo.PRACTICA_ORGANICA == 1 ? true : false;
+                        vm.chkProyecto = oCampo.PROYECTO == 1 ? true : false;
+                        vm.chkCooperativa = oCampo.COOPERATIVA == 1 ? true : false;
+                        vm.chkInstitucion = oCampo.INSTITUCION == 1 ? true : false;
+                        vm.chkAutofinanciado = oCampo.AUTOFINANCIADO == 1 ? true : false;
+                        vm.chkPropioFA = oCampo.PROPIOFA == 1 ? true : false;
+                        vm.chkInstitucionFA = oCampo.INSTITUCIONFA == 1 ? true : false;
+                        vm.chkProgramaFA = oCampo.PROGRAMAFA == 1 ? true : false;
+                        vm.chkProyectoFA = oCampo.PROYECTOFA == 1 ? true : false;
+                        vm.chkCooperativaFA = oCampo.COOPERATIVAFA == 1 ? true : false;
+                        vm.chkOtrosTercerosFA = oCampo.OTROSTERCEROSFA == 1 ? true : false;
+                        vm.chkCooperativaAsoc = oCampo.COOPERATIVAASOC == 1 ? true : false;
+                        vm.chkAsociacionAsoc = oCampo.ASOCIACIONASOC == 1 ? true : false;
+                        vm.chkOtrosAsoc = oCampo.OTROSASOC == 1 ? true : false;
+                        vm.chkNingunoAsoc = oCampo.NINGUNOASOC == 1 ? true : false;
+                        vm.txtTelefonoCUSAF = oCampo.TELEFONO;
+                        vm.txtCorreoCUSAF = oCampo.CORREO;
+                        vm.txtNivelEstudioCUSAF = oCampo.NIVEL_ESTUDIO;
+                        vm.txtObsActividadProd = oCampo.OBSERVACION_ACTPROD;
+                        vm.txtObsCoberturaBosNat = oCampo.OBSERVACION_COBERTURA_BOSNAT;
+                        vm.txtAsistenciaTecnica = oCampo.DESC_ASISTENCIA_TECNICA;
+                        vm.txtNombreAsisTecCUSAF = oCampo.NOMBRE_ASISTENCIA_TECNICA;
+                        vm.txtNecesidadesAsistenciaTecnica = oCampo.NECESIDAD_ASISTENCIA_TECNICA;
+                        vm.txtFinanciamientoActividad = oCampo.FINANCIAMIENTO_TECNICO;
+                        vm.txtDetallarAsociatividad = oCampo.DETALLE_ASOC;
+                        vm.txtObservacionCUSAF = oCampo.OBSERVACION_CUSAF;
+
                         vm.tbEvalArbolAdicional = oCampo.ListEvalArbolAdicional;
                         vm.tbEvalArbolNoAutorizado = oCampo.ListEvalArbolNoAutorizado;
+                        vm.tbEspecieForEst = oCampo.ListEspecieForEst;
+                        vm.tbActividadProductiva = oCampo.ListActividadProductiva;
+                        vm.tbCoberturaBosNat = oCampo.ListCoberturaBosNat;
+                        vm.tbDivisionPredio = oCampo.ListDivisionPredio;
                         //vm.tbHuayrona = oCampo.ListHuayrona_v3;
                         //vm.tbActividadSilvicultural = oCampo.ListActividadSilvicultural;
                         //vm.tbCambioUso = oCampo.ListCambioUso;
@@ -1346,7 +1397,7 @@ namespace CapaLogica.DOC
                 CEntidad entidad = new CEntidad();
                 entidad.COD_INFORME = dto.hdfCodInforme;
                 entidad.NUM_POA = dto.hdfNumPoa;
-                entidad.COD_PARCELA = (dto.lstChkParcelaCortaId=="") ? null : dto.lstChkParcelaCortaId;
+                entidad.COD_PARCELA = (dto.lstChkParcelaCortaId == "") ? null : dto.lstChkParcelaCortaId;
                 //entidad.B_POA = 1;
                 //entidad.CODIGO_SEC_NOPOA = null;
                 CEntidad oCampo = oCDatos.RegMostrarInfoParcelaCorta(entidad);
@@ -1354,7 +1405,7 @@ namespace CapaLogica.DOC
                 vm.tbAnalisis = oCampo.ListAnalisis;
                 vm.tbConsolidado = oCampo.ListConsolidado;
                 vm.tbConsolidadoNN = oCampo.ListConsolidadoNN;
-                vm.tbMaderable = oCampo.ListMaderable;             
+                vm.tbMaderable = oCampo.ListMaderable;
             }
             catch (Exception ex)
             {
@@ -1480,6 +1531,54 @@ namespace CapaLogica.DOC
                 oParams.ListEliTABLA = _dto.tbEliTABLA;
                 oParams.ListEvalArbolAdicional = _dto.tbEvalArbolAdicional;
                 oParams.ListEvalArbolNoAutorizado = _dto.tbEvalArbolNoAutorizado;
+                oParams.ListEspecieForEst = _dto.tbEspecieForEst;
+                oParams.ListActividadProductiva = _dto.tbActividadProductiva;
+                oParams.ListCoberturaBosNat = _dto.tbCoberturaBosNat;
+                oParams.ListDivisionPredio = _dto.tbDivisionPredio;
+
+                oParams.NUMERO_PARTICIPANTES = string.IsNullOrEmpty(_dto.txtNumeroParticipacionCUSAF) ? -1 : Int32.Parse(_dto.txtNumeroParticipacionCUSAF);
+                oParams.PARTICIPACION_MENORES = _dto.rbtnPartMenoresCUSAF;
+                oParams.ASISTENCIA_TECNICA = _dto.rbtnAsistenciaTecnicaCUSAF;
+                oParams.FRECUENCIA_ASISTENCIA = _dto.rbtnFrecuenciaCUSAF;
+                oParams.CONTROL_MALEZAS = _dto.chkControlMalezas == true ? 1: 0;
+                oParams.RENOVACION_CULTIVO = _dto.chkRenovacionCultivo == true ? 1 : 0;
+                oParams.ROTACION_CULTIVO = _dto.chkRotacionCultivoAnual == true ? 1: 0;
+                oParams.PODAS_CULTIVO = _dto.chkPodasCultivo == true ? 1: 0;
+                oParams.MANEJO_SOMBRA = _dto.chkManejoSombra == true ? 1: 0;
+                oParams.CULTIVO_COBERTURA = _dto.chkCultivoCobertura == true ? 1: 0;
+                oParams.FERTILIZACION = _dto.chkFertilizacion == true ? 1: 0;
+                oParams.ARBOLES_FORESTALES = _dto.chkArbolesForestales == true ? 1: 0;
+                oParams.CURVAS_BOLLILLO = _dto.chkCurvasBolillo == true ? 1: 0;
+                oParams.CONTROL_PLAGASAP = _dto.chkControlPlagas == true ? 1: 0;
+                oParams.QUEMA = _dto.chkQuema == true ? 1: 0;
+                oParams.AGROFORESTERIA = _dto.chkAgroforesteria == true ? 1: 0;
+                oParams.PRACTICA_ORGANICA = _dto.chkPracticaOrganica == true ? 1: 0;
+                oParams.PROYECTO = _dto.chkProyecto == true ? 1: 0;
+                oParams.COOPERATIVA = _dto.chkCooperativa == true ? 1: 0;
+                oParams.INSTITUCION = _dto.chkInstitucion == true ? 1: 0;
+                oParams.AUTOFINANCIADO = _dto.chkAutofinanciado == true ? 1: 0;
+                oParams.PROPIOFA = _dto.chkPropioFA == true ? 1: 0;
+                oParams.INSTITUCIONFA = _dto.chkInstitucionFA == true ? 1: 0;
+                oParams.PROGRAMAFA = _dto.chkProgramaFA == true ? 1: 0;
+                oParams.PROYECTOFA = _dto.chkProyectoFA == true ? 1: 0;
+                oParams.COOPERATIVAFA = _dto.chkCooperativaFA == true ? 1: 0;
+                oParams.OTROSTERCEROSFA = _dto.chkOtrosTercerosFA == true ? 1: 0;
+                oParams.COOPERATIVAASOC = _dto.chkCooperativaAsoc == true ? 1: 0;
+                oParams.ASOCIACIONASOC = _dto.chkAsociacionAsoc == true ? 1: 0;
+                oParams.OTROSASOC = _dto.chkOtrosAsoc == true ? 1: 0;
+                oParams.NINGUNOASOC = _dto.chkNingunoAsoc == true ? 1: 0;
+                oParams.TELEFONO = _dto.txtTelefonoCUSAF;
+                oParams.CORREO = _dto.txtCorreoCUSAF;
+                oParams.NIVEL_ESTUDIO = _dto.txtNivelEstudioCUSAF;
+                oParams.OBSERVACION_ACTPROD = _dto.txtObsActividadProd;
+                oParams.OBSERVACION_COBERTURA_BOSNAT = _dto.txtObsCoberturaBosNat;
+                oParams.DESC_ASISTENCIA_TECNICA = _dto.txtAsistenciaTecnica;
+                oParams.NOMBRE_ASISTENCIA_TECNICA = _dto.txtNombreAsisTecCUSAF;
+                oParams.NECESIDAD_ASISTENCIA_TECNICA = _dto.txtNecesidadesAsistenciaTecnica;
+                oParams.FINANCIAMIENTO_TECNICO = _dto.txtFinanciamientoActividad;
+                oParams.DETALLE_ASOC = _dto.txtDetallarAsociatividad;
+                oParams.OBSERVACION_CUSAF = _dto.txtObservacionCUSAF;
+
 
                 oParams.COD_UCUENTA = asCodUCuenta;
                 oParams.OUTPUTPARAM01 = "";
@@ -1887,7 +1986,7 @@ namespace CapaLogica.DOC
                             OBSERVACION = ""
                         });
                     }
-                }                
+                }
                 else
                 {
                     //Obtener datos del informe
@@ -2017,7 +2116,7 @@ namespace CapaLogica.DOC
                     vmInf.tbRelPelCentroCria = entInf.ListRelPelCentroCria;
                     vmInf.tbActividadEducacion = entInf.LisCautiverioActividadRealizada;
                     vmInf.tbActividadInvestigacion = entInf.LisCautiverioCensoICientifica;
-                    vmInf.tbMandatos = entInf.ListMandatos;                    
+                    vmInf.tbMandatos = entInf.ListMandatos;
                     vmInf.tbEnfermedad = entInf.ListEnfermedad;
                     vmInf.tbObligMandatos = entInf.ListObligMandatos;
 
@@ -2650,7 +2749,7 @@ namespace CapaLogica.DOC
                             COD_ENFERMEDAD = Convert.ToInt32(item.Value.Split('|')[0]),
                             GRUPO = item.Value.Split('|')[1],
                             TIPO = item.Value.Split('|')[2],
-                            DESCRIPCION = item.Text,                            
+                            DESCRIPCION = item.Text,
                             OBSERVACION = ""
                         });
                     }
@@ -2828,7 +2927,7 @@ namespace CapaLogica.DOC
                 paramsInf.RegEstado = _dto.hdfRegEstado;
                 paramsInf.OUTPUTPARAM01 = "";
                 paramsInf.COD_SUP_CALIDAD = _dto.hdSupervisor_Calidad;
-                paramsInf.TIPO_INFORME = _dto.ddlTipoInformeId; 
+                paramsInf.TIPO_INFORME = _dto.ddlTipoInformeId;
                 paramsInf.ListMandatos = _dto.tbMandatos;
                 paramsInf.ListTHVerticeCampo = _dto.tbVerticeTHCampo;
                 paramsInf.ListCoberturaBoscosa = _dto.tbCoberturaBoscosa;
@@ -3182,7 +3281,7 @@ namespace CapaLogica.DOC
                 //Actualizado 08/08/2019 CLHC
                 paramsInf.OBSERVACION = _dto.txtObservacion;
                 paramsInf.CONCLUSION = _dto.txtConclusion;
-                paramsInf.COD_SUP_CALIDAD= _dto.hdSupervisor_Calidad;
+                paramsInf.COD_SUP_CALIDAD = _dto.hdSupervisor_Calidad;
                 //Grabar en la base de datos
                 using (OracleConnection cn = new OracleConnection(CapaDatos.BDConexion.Conexion_Cadena_SIGO()))
                 {
@@ -3248,14 +3347,14 @@ namespace CapaLogica.DOC
 
         //llanos
         public List<CapaEntidad.DOC.Ent_INFORME_MADERABLE> DatosMaderable(CEntidad oCampoEntrada)
-        {            
+        {
             try
             {
                 using (OracleConnection cn = new OracleConnection(CapaDatos.BDConexion.Conexion_Cadena_SIGO()))
                 {
                     cn.Open();
                     return oCDatos.DatosMaderable(cn, oCampoEntrada);
-                }                
+                }
             }
             catch (Exception ex)
             {

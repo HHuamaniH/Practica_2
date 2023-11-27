@@ -1,0 +1,227 @@
+﻿
+@model List<CapaEntidad.DOC.Ent_INFORME_DIVISION_PREDIO>
+
+<style type="text/css">
+    #tbRenderDivisionPredio_wrapper {
+        padding: 0px;
+    }
+</style>
+
+<script type="text/javascript">
+    var _renderDivisionPredio = {};
+    _renderDivisionPredio.DataDivisionInterna = [];
+    _renderDivisionPredio.tbEliTABLA = [];
+
+
+    _renderDivisionPredio.fnLoadData = function (obj, tipo) {
+        switch (tipo) {
+            case "DivisionInterna": _renderDivisionPredio.DataDivisionInterna = JSON.parse(obj); break;
+        }
+    }
+
+    _renderDivisionPredio.fnInitTable = function () {
+        var sublista = _renderDivisionPredio.fnObtenerDivisionInterna();
+
+        let tbody = "";
+        $("#tbodyDivisionPredio").html(tbody);
+        for (var i = 0; i < sublista.length; i++) {
+            let obj;
+            let rowspan = 0;
+            for (var j = 0; j < _renderDivisionPredio.DataDivisionInterna.length; j++) {
+                obj = _renderDivisionPredio.DataDivisionInterna[j];
+                if (obj.DIVISION_INTERNA == sublista[i].DIVISION_INTERNA) {
+                    rowspan++;
+                }
+            }
+            for (var j = 0; j < _renderDivisionPredio.DataDivisionInterna.length; j++) {
+                obj = _renderDivisionPredio.DataDivisionInterna[j];
+                if (obj.DIVISION_INTERNA == sublista[i].DIVISION_INTERNA) {
+                    if (rowspan > 0) {
+                        tbody = tbody + '<tr>';
+                        tbody = tbody + '   <td rowspan="' + rowspan.toString() + '">' + obj.DIVISION_INTERNA + '</td>';
+                        tbody = tbody + '   <td>' + obj.COORDENADA_ESTE + '</td>';
+                        tbody = tbody + '   <td>' + obj.COORDENADA_NORTE + '</td>';
+                        tbody = tbody + '   <td>' + obj.ALTITUD + '</td>';
+                        tbody = tbody + '   <td rowspan="' + rowspan.toString() + '">' + obj.OBSERVACION + '</td>';
+                        tbody = tbody + '</tr>';
+                        rowspan = 0;
+                    } else {
+                        tbody = tbody + '<tr>';
+                        tbody = tbody + '   <td>' + obj.COORDENADA_ESTE + '</td>';
+                        tbody = tbody + '   <td>' + obj.COORDENADA_NORTE + '</td>';
+                        tbody = tbody + '   <td>' + obj.ALTITUD + '</td>';
+                        tbody = tbody + '</tr>';
+                    }
+                }
+            }
+        }
+        $("#tbodyDivisionPredio").html(tbody);
+    }
+
+    _renderDivisionPredio.fnObtenerDivisionInterna = function () {
+        var sublista = [];
+        let obj;
+        let band = 0;
+        for (var i = 0; i < _renderDivisionPredio.DataDivisionInterna.length; i++) {
+            obj = _renderDivisionPredio.DataDivisionInterna[i];
+            band = 0;
+            if (sublista.length == 0) {
+                sublista.push({
+                    DIVISION_INTERNA: obj.DIVISION_INTERNA,
+                    OBSERVACION: obj.OBSERVACION,
+                });
+            } else {
+                band = 0;
+                for (var j = 0; j < sublista.length; j++) {
+                    if (obj.DIVISION_INTERNA == sublista[j].DIVISION_INTERNA) {
+                        band = 1;
+                    }
+                }
+                if (band==0) {
+                    sublista.push({
+                        DIVISION_INTERNA: obj.DIVISION_INTERNA,
+                        OBSERVACION: obj.OBSERVACION,
+                    });
+                }
+            }
+        }
+        return sublista;
+    }
+
+    _renderDivisionPredio.fnObtenerLinea = function (divisionInterna) {
+        let coord_este='';
+        let coord_norte='';
+        let altitud = '';
+        let obervacion = '';
+
+            for (var i = 0; i < _renderDivisionPredio.DataDivisionInterna.length; i++) {
+                obj = _renderDivisionPredio.DataDivisionInterna[i];
+                if (obj.DIVISION_INTERNA = divisionInterna) {
+                    if (i == 0) {
+                        divisionInterna = obj.DIVISION_INTERNA;
+                        coord_este = obj.COORDENADA_ESTE;
+                        coord_norte = obj.COORDENADA_NORTE;
+                        altitud = obj.ALTITUD;
+                        obervacion = obj.OBSERVACION;
+                    } else {
+                        divisionInterna = obj.DIVISION_INTERNA;
+                        coord_este = coord_este + ',' + obj.COORDENADA_ESTE;
+                        coord_norte = coord_este + ',' + obj.COORDENADA_NORTE;
+                        altitud = coord_este + ',' + obj.ALTITUD;
+                        obervacion = obj.OBSERVACION;
+                    }
+                }
+            }
+        var obj = {
+            DIVISION_INTERNA: divisionInterna,
+            COORDENADA_ESTE: coord_este,
+            COORDENADA_NORTE: coord_norte,
+            ALTITUD: altitud,
+            OBSERVACION: obervacion
+        };
+        return obj
+    }
+
+    _renderDivisionPredio.fnAddEdit = function (divisionInterna) {
+        var obj = divisionInterna == '' ? null :_renderDivisionPredio.fnObtenerLinea(divisionInterna);
+        var url = urlLocalSigo + "Supervision/ManInforme/_DivisionPredio";
+        var option = { url: url, type: 'POST', datos: { obj }, divId: "mdlManInforme_DivisionPredio" };
+        utilSigo.fnOpenModal(option, function () {
+            _DivisionPredio.fnSaveForm = function (data) {
+                if (data != null) {
+                    debugger;
+                    let coordenada_este = data.COORDENADA_ESTE.split(',');
+                    let coordenada_norte = data.COORDENADA_NORTE.split(',');
+                    let altitud = data.ALTITUD.split(',');
+                    if (divisionInterna == '') {
+                        for (var i = 0; i < coordenada_este.length; i++) {
+                            var objDivInterna = {
+                                DIVISION_INTERNA: data.DIVISION_INTERNA,
+                                COORDENADA_ESTE: coordenada_este[i],
+                                COORDENADA_NORTE: coordenada_norte[i],
+                                ALTITUD: altitud[i],
+                                OBSERVACION: data.OBSERVACION
+
+                            };
+                            _renderDivisionPredio.DataDivisionInterna.push(objDivInterna);
+                        }
+                    } else {
+                        let pos = 0;
+                        for (var i = 0; i < _renderDivisionPredio.DataDivisionInterna.length; i++) {
+                            var objint = _renderDivisionPredio.DataDivisionInterna[i];
+                            if (divisionInterna == objint.DIVISION_INTERNA) {
+                                pos = i;
+                            }
+                        }
+                        _renderDivisionPredio.DataDivisionInterna = _renderDivisionPredio.DataDivisionInterna.filter(objeto => objeto.DIVISION_INTERNA !== divisionInterna);
+                        for (var i = 0; i < cant.length; i++) {
+                            var objDivInterna = {
+                                DIVISION_INTERNA: data.DIVISION_INTERNA,
+                                COORDENADA_ESTE: coordenada_este[i],
+                                COORDENADA_NORTE: coordenada_norte[i],
+                                ALTITUD: altitud[i],
+                                OBSERVACION: data.OBSERVACION
+
+                            };
+                            _renderDivisionPredio.DataDivisionInterna.splice(pos+i, 0, objDivInterna);
+                        }
+                    }
+                    _renderDivisionPredio.fnInitTable();
+                    $("#mdlManInforme_DivisionPredio").modal('hide');
+                } else {
+                    utilSigo.toastError("Error", "No se pudieron guardar los datos");
+                }
+            }
+
+            if (obj != null && obj != "") {
+                var data = _renderDivisionPredio.dtDivisionPredio.row($(obj).parents('tr')).data();
+                _DivisionPredio.fnInit(utilSigo.fnConvertArrayToObject(data));
+            } else { _DivisionPredio.fnInit(""); }
+        });
+    }
+
+    _renderDivisionPredio.fnDeleteAll = function () {
+        _renderDivisionPredio.DataDivisionInterna = [];
+        $("#tbodyDivisionPredio").html("");
+    }
+
+    _renderDivisionPredio.fnDelete = function (obj) {
+
+    }
+
+    _renderDivisionPredio.fnGetList = function () {        
+        return _renderDivisionPredio.DataDivisionInterna;
+    }
+
+    $(document).ready(function () {
+        _renderDivisionPredio.frm = $("#frmRenderDivisionPredio");
+        _renderDivisionPredio.fnLoadData('@Html.Raw(Json.Encode(@Model))', "DivisionInterna");
+        _renderDivisionPredio.fnInitTable();
+    });
+</script>
+
+<div id="frmRenderDivisionPredio">
+    <div class="table-responsive">
+        <table id="tbRenderDivisionPredio" style="width:100%;margin:0px !important;" class="table table-hover table-bordered">
+            <thead>
+                <tr>
+                    <th colspan="5" class="text-sm-left">
+                        <div class="form-inline">
+                            <i class="fa mx-2 fa-lg fa-file-o" style="cursor:pointer;" onclick="_renderDivisionPredio.fnAddEdit('');" data-toggle="tooltip" data-placement="top" title="Nuevo"></i>
+                            <i class="fa mx-2 fa-lg fa-window-close-o" style="cursor:pointer;" onclick="_renderDivisionPredio.fnDeleteAll();" data-toggle="tooltip" data-placement="top" title="Eliminar Todos"></i>
+                            <strong>Registro de División del Predio</strong>
+                        </div>
+                    </th>
+                </tr>
+                <tr>
+                    <th>División Interna</th>
+                    <th>Coordenada Este</th>
+                    <th>Coordenada Norte</th>
+                    <th>Altitud (msnm)</th>
+                    <th>Observaciones</th>
+                </tr>
+            </thead>
+            <tbody id="tbodyDivisionPredio"></tbody>
+        </table>
+    </div>
+</div>

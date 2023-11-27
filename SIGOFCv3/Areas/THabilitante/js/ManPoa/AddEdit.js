@@ -32,6 +32,7 @@ ManPOA.selectFile = null;
     this.dtItemAOcular;
     this.dtItemIOcular;
     this.dtItemTRAprobacion;
+    this.dtItemSAprobacion;
     this.dtItemVertice;
     this.dtBExtPOA;
     this.listBExtPOA = [];
@@ -109,9 +110,9 @@ ManPOA.selectFile = null;
                 url: ManPOA.controller + "/GetAllListDetRegente",
                 type: "GET",
                 datatype: "json",
-                
+
             },
-            
+
             columns:
                 [
                     {
@@ -121,7 +122,7 @@ ManPOA.selectFile = null;
                         }
                     },
                     {
-                        
+
                         autoWidth: true, bSortable: false,
                         mRender: function (data, type, row) {
                             if (row["NOMBRE_ARCH"] === " " || row["NOMBRE_ARCH"] === null || row["NOMBRE_ARCH"] === undefined) {
@@ -129,7 +130,7 @@ ManPOA.selectFile = null;
                             } else {
                                 return "";
                             }
-                        } 
+                        }
                     },
                     {
                         autoWidth: true, bSortable: false,
@@ -157,7 +158,7 @@ ManPOA.selectFile = null;
                     { data: "FECHA_INI", autoWidth: true },
                     { data: "FECHA_FIN", autoWidth: true },
                 ]
-            
+
         });
         this.dtItemIOcular = this.frmPOARegistro.find("#grvItemIOcular").DataTable({
             bServerSide: false,
@@ -237,6 +238,51 @@ ManPOA.selectFile = null;
                         autoWidth: true, bSortable: false,
                         mRender: function (data, type, row) {
                             return '<i class="fa fa-lg fa-window-close" style="color:red;cursor:pointer;" title="Eliminar" onclick="ManPOA.eliminarTRAprobacion(this);"></i>';
+
+                        }
+                    },
+                    { data: "NRO", autoWidth: true },
+                    { data: "PERSONA", autoWidth: true },
+                    { data: "N_DOCUMENTO", autoWidth: true },
+                    //{ data: "CARGO", autoWidth: true },
+                    { data: "TIPO_CARGO", autoWidth: true },
+                    { data: "COD_PTIPO", visible: false },
+                    { data: "RegEstado", visible: false }
+
+                ]
+
+        }); this.dtItemSAprobacion = this.frmPOARegistro.find("#grvItemSAprobacion").DataTable({
+            bServerSide: false,
+            bProcessing: true,
+            bJQueryUI: false,
+            bRetrieve: true,
+            bFilter: false,
+            aaSorting: [],
+            bPaginate: true,
+            bInfo: false,
+            bLengthChange: false,
+            scrollCollapse: true,
+            pageLength: initSigo.pageLength,
+            oLanguage: initSigo.oLanguage,
+            drawCallback: initSigo.showPagination,
+            ajax: {
+                url: ManPOA.controller + "/GetAllListSAPROBACION",
+                type: "GET",
+                datatype: "json"
+            },
+            columns:
+                [
+                    {
+                        autoWidth: true, bSortable: false, visible: true,
+                        mRender: function (data, type, row) {
+                            return '<i class="fa fa-lg fa-pencil-square-o" style="color:blue;cursor:pointer;" title="Editar" onclick="ManPOA.fnEditarPersona(this, ManPOA.dtItemSAprobacion,' + "'ISAPROBACION'" + ');"></i>';
+
+                        }
+                    },
+                    {
+                        autoWidth: true, bSortable: false,
+                        mRender: function (data, type, row) {
+                            return '<i class="fa fa-lg fa-window-close" style="color:red;cursor:pointer;" title="Eliminar" onclick="ManPOA.eliminarSAprobacion(this);"></i>';
 
                         }
                     },
@@ -512,7 +558,7 @@ ManPOA.selectFile = null;
             }
         });
 
-        
+
 
         ManPOA.ItemRAPoa.frmResolAprob.find("#ddlTipoMaderables_RAprob").change(function () {
             if (this.value != "-") {
@@ -671,12 +717,39 @@ ManPOA.selectFile = null;
                                 ManPOA.frmPOARegistro.find("#txtUbigeo").val(data["UBIGEO"]);
                                 ManPOA.frmPOARegistro.find("#txtDirecion").val(data["DIRECCION"]);
                             }
-                            
+
                             break;
                         case "REGENTEIMPLEMENTA":
                             //if (!utilDt.existValorSearch(ManPOA.dtDetRegente, "COD_PERSONA", data["COD_PERSONA"])) {
-                                if (data["COD_PTIPO"] != null && data["COD_PTIPO"].trim() != "" && _tipoPersonaSIGOsfc != "")
-                                {
+                            if (data["COD_PTIPO"] != null && data["COD_PTIPO"].trim() != "" && _tipoPersonaSIGOsfc != "") {
+                                let tipoCargo = _tipoPersonaSIGOsfc.split(',');
+                                let band = 0;
+
+                                for (let i = 0; i < tipoCargo.length; i++) {
+                                    if (tipoCargo[i] == data["COD_PTIPO"]) {
+                                        band = 1;
+                                        break;
+                                    }
+                                }
+
+                                if (band == 0) {
+                                    utilSigo.toastWarning("Aviso", "El cargo asignado no corresponde a lo requerido en la lista");
+                                }
+                                else {
+                                    ManPOA.fnSetPersonaCompleto(_dom, data["COD_PERSONA"], data["COD_PTIPO"], data["TIPO_CARGO"]);
+                                }
+                            }
+                            else {
+                                ManPOA.fnSetPersonaCompleto(_dom, data["COD_PERSONA"], data["COD_PTIPO"], data["TIPO_CARGO"]);
+                            }
+                            //} else { utilSigo.toastWarning("Aviso", "El regente ya se encuentra registrado"); }
+                            break;
+                        case "FAPROBACION":
+                            ManPOA.fnSetPersonaCompleto(_dom, data["COD_PERSONA"], data["COD_PTIPO"], data["TIPO_CARGO"]); break;
+                        case "FSAPROBACION":
+                            if (!utilDt.existValorSearch(ManPOA.dtItemSAprobacion, "COD_PERSONA", data["COD_PERSONA"])) {
+                                if (data["COD_PTIPO"] != null && data["COD_PTIPO"].trim() != "" &&
+                                    _tipoPersonaSIGOsfc != "TODOS" && _tipoPersonaSIGOsfc != "") {
                                     let tipoCargo = _tipoPersonaSIGOsfc.split(',');
                                     let band = 0;
 
@@ -687,22 +760,18 @@ ManPOA.selectFile = null;
                                         }
                                     }
 
-                                    if (band == 0) {
-                                        utilSigo.toastWarning("Aviso", "El cargo asignado no corresponde a lo requerido en la lista");
-                                    }
-                                    else {
-                                        ManPOA.fnSetPersonaCompleto(_dom, data["COD_PERSONA"], data["COD_PTIPO"], data["TIPO_CARGO"]);
-                                    }
+                                    //if (band == 0) {
+                                    //    utilSigo.toastWarning("Aviso", "El cargo asignado no corresponde a lo requerido en la lista");
+                                    //}
+                                    //else {
+                                    ManPOA.fnSetPersonaCompleto(_dom, data["COD_PERSONA"], data["COD_PTIPO"], data["TIPO_CARGO"]);
+                                    /*}*/
                                 }
                                 else {
                                     ManPOA.fnSetPersonaCompleto(_dom, data["COD_PERSONA"], data["COD_PTIPO"], data["TIPO_CARGO"]);
                                 }
-                            //} else { utilSigo.toastWarning("Aviso", "El regente ya se encuentra registrado"); }
+                            } else { utilSigo.toastWarning("Aviso", "El técnico que recomienda la aprobación ya se encuentra registrado"); }
                             break;
-                        case "FAPROBACION":
-                            ManPOA.fnSetPersonaCompleto(_dom, data["COD_PERSONA"], data["COD_PTIPO"], data["TIPO_CARGO"]); break;
-                        case "FIOCULAR":
-                            ManPOA.fnSetPersonaCompleto(_dom, data["COD_PERSONA"], data["COD_PTIPO"], data["TIPO_CARGO"]); break;
                         case "IOCULAR":
                             if (!utilDt.existValorSearch(ManPOA.dtItemAOcular, "COD_PERSONA", data["COD_PERSONA"])) {
                                 if (data["COD_PTIPO"] != null && data["COD_PTIPO"].trim() != "" &&
@@ -826,7 +895,7 @@ ManPOA.selectFile = null;
                                 ManPOA.frmPOARegistro.find("#lblItemConsultorRESOLUCION").val(resAprobacionR);
 
                             }
-                            
+
                             break;
                         case "REGENTEIMPLEMENTA":
                             var dt = null;
@@ -884,12 +953,14 @@ ManPOA.selectFile = null;
                             break;
                         case "IOCULAR":
                         case "ITIOCULAR":
+                        case "FSAPROBACION":
                         case "ITRAPROBACION":
                             var dt = null;
                             switch (_dom) {
                                 case "IOCULAR": dt = ManPOA.dtItemAOcular; break;
                                 case "ITIOCULAR": dt = ManPOA.dtItemIOcular; break;
                                 case "ITRAPROBACION": dt = ManPOA.dtItemTRAprobacion; break;
+                                case "FSAPROBACION": dt = ManPOA.dtItemSAprobacion; break;
                                 default: return false;
                             }
                             var codSecC = parseInt(dt.$("tr").length) + 1;
@@ -900,12 +971,6 @@ ManPOA.selectFile = null;
                             ManPOA.frmPOARegistro.find("#hdfItemARFuncionarioCodigo").val(data.data["COD_PERSONA"]);
                             ManPOA.frmPOARegistro.find("#lblItemARFuncionario").val(data.data["APELLIDOS_NOMBRES"]);
                             ManPOA.frmPOARegistro.find("#lblItemARFuncionarioODatos").val(data.data["N_DOCUMENTO"] + " - " + data.data["CARGO"]);
-                            break;
-                        case "FIOCULAR":
-                            debugger;
-                            ManPOA.frmPOARegistro.find("#hdfItemIOFuncionarioCodigo").val(data.data["COD_PERSONA"]);
-                            ManPOA.frmPOARegistro.find("#lblItemIOFuncionario").val(data.data["APELLIDOS_NOMBRES"]);
-                            ManPOA.frmPOARegistro.find("#lblItemIOFuncionarioODatos").val(tipoCargo);
                             break;
                     }
                 } else {
@@ -1009,13 +1074,13 @@ ManPOA.selectFile = null;
                 if (r) {
                     var $tr = $(obj).closest('tr');
                     var row = ManPOA.dtDetRegente.row($tr).data();
-                    
-                        ManPOA.ListEliTABLA.push({
-                            EliTABLA: "POA_DET_REGENTE",
-                            EliVALOR01: row.COD_PERSONA,
-                            EliVALOR02: row.COD_SECUENCIAL
-                        });
-                    
+
+                    ManPOA.ListEliTABLA.push({
+                        EliTABLA: "POA_DET_REGENTE",
+                        EliVALOR01: row.COD_PERSONA,
+                        EliVALOR02: row.COD_SECUENCIAL
+                    });
+
                     ManPOA.dtDetRegente.row($tr).remove().draw();
                     utilSigo.enumTB(ManPOA.dtDetRegente, 2);
 
@@ -1083,6 +1148,26 @@ ManPOA.selectFile = null;
                     }
                     ManPOA.dtItemTRAprobacion.row($tr).remove().draw();
                     utilSigo.enumTB(ManPOA.dtItemTRAprobacion, 2);
+
+                }
+            });
+    }
+    this.eliminarSAprobacion = function (obj) {
+
+        utilSigo.dialogConfirm("Confirmacion", "¿ Está seguro de Eliminar el Registro Seleccionado ?",
+            function (r) {
+                if (r) {
+                    var $tr = $(obj).closest('tr');
+                    var row = ManPOA.dtItemSAprobacion.row($tr).data();
+                    if (row.RegEstado == 0 || row.RegEstado == 2) {
+                        ManPOA.ListEliTABLA.push({
+                            EliTABLA: "POA_DET_SAPROBACION",
+                            EliVALOR01: row.COD_PERSONA,
+                            EliVALOR02: 0
+                        });
+                    }
+                    ManPOA.dtItemSAprobacion.row($tr).remove().draw();
+                    utilSigo.enumTB(ManPOA.dtItemSAprobacion, 2);
 
                 }
             });
@@ -1705,10 +1790,10 @@ ManPOA.selectFile = null;
         }
         if (!utilSigo.validateFechaRango("txtFechaSolAprob", "Fecha Aprobación")) {
             return false;
-        } 
+        }
         return true;
     }
-    
+
     this.getListDETREGENTE = function () {
         var list = [];
         this.dtDetRegente.rows().every(function (rowIdx, tableLoop, rowLoop) {
@@ -1734,7 +1819,7 @@ ManPOA.selectFile = null;
             }
 
         });
-        
+
         return list;
     }
     this.getListAOCULAR = function () {
@@ -1788,6 +1873,23 @@ ManPOA.selectFile = null;
             }
         });
         return ListTRAPROBACION;
+    }
+    this.getListSAPROBACION = function () {
+        var ListSAPROBACION = [];
+        this.dtItemSAprobacion.rows().every(function (rowIdx, tableLoop, rowLoop) {
+            var row = this.data();
+            if (row.RegEstado == 1 || row.RegEstado == 2) {
+                ListSAPROBACION.push({
+                    PERSONA: row.PERSONA,
+                    N_DOCUMENTO: row.N_DOCUMENTO,
+                    //CARGO: row.CARGO,
+                    COD_PTIPO: row.COD_PTIPO,
+                    COD_PERSONA: row.COD_PERSONA,
+                    RegEstado: row.RegEstado
+                });
+            }
+        });
+        return ListSAPROBACION;
     }
     this.getListRAprueba = function () {
         var list = [];
@@ -2126,6 +2228,10 @@ ManPOA.selectFile = null;
         if (ManPOA.dtItemTRAprobacion != undefined) {
             datosPOA.ListTRAPROBACION = ManPOA.getListTRAPROBACION();
         }
+        //datos de ListSAPROBACION
+        if (ManPOA.dtItemSAprobacion != undefined) {
+            datosPOA.ListSAPROBACION = ManPOA.getListSAPROBACION();
+        }
         //datos de ListRAprueba
         if (ManPOA.ItemRAPoa.dtItemRAPoa != undefined) {
             datosPOA.ListRAprueba = ManPOA.getListRAprueba();
@@ -2146,7 +2252,7 @@ ManPOA.selectFile = null;
                     return;
                 }
             }
-            
+
         }
         //datos de ListAOCULAR
         if (ManPOA.dtItemAOcular != undefined) {
@@ -2169,127 +2275,127 @@ ManPOA.selectFile = null;
         if (ManPOA.listBExtPOA != undefined) {
             datosPOA.ListBExtPOA = ManPOA.getListBExtPOA();
         }
-            //datos Error Material
+        //datos Error Material
 
-            if (ManPOA.dtErrorMaterial_DGeneral != undefined) {
-                datosPOA.ListPOAErrorMaterialG = ManPOA.fnGetListErrorMaterial('DG');
-            }
-            if (ManPOA.dtErrorMaterial_DAdicional != undefined) {
-                datosPOA.ListPOAErrorMaterialA = ManPOA.fnGetListErrorMaterial('DA');
-            }
+        if (ManPOA.dtErrorMaterial_DGeneral != undefined) {
+            datosPOA.ListPOAErrorMaterialG = ManPOA.fnGetListErrorMaterial('DG');
+        }
+        if (ManPOA.dtErrorMaterial_DAdicional != undefined) {
+            datosPOA.ListPOAErrorMaterialA = ManPOA.fnGetListErrorMaterial('DA');
+        }
 
-            if (ManPOA.Itemkardex.dtItemkardex != undefined) {
-                datosPOA.ListKARDEX = ManPOA.getListKARDEX();
-            }
+        if (ManPOA.Itemkardex.dtItemkardex != undefined) {
+            datosPOA.ListKARDEX = ManPOA.getListKARDEX();
+        }
 
-            if (ManPOA.ListEliTABLA != undefined) {
-                datosPOA.ListEliTABLA = ManPOA.ListEliTABLA;
-            }
-            if (ManPOA.frmPOARegistro.find("#ddlItemIndicadorId").val() == "0000007") {
-                datosPOA.txtControlCalidadObservaciones = CKEDITOR.instances["txtControlCalidadObservaciones"].getData();
-            }
+        if (ManPOA.ListEliTABLA != undefined) {
+            datosPOA.ListEliTABLA = ManPOA.ListEliTABLA;
+        }
+        if (ManPOA.frmPOARegistro.find("#ddlItemIndicadorId").val() == "0000007") {
+            datosPOA.txtControlCalidadObservaciones = CKEDITOR.instances["txtControlCalidadObservaciones"].getData();
+        }
 
-            var check = $("#chckSinInspOcu");
-            var state = check.is(":checked");
-            datosPOA.chckSinInspOcu = state;
+        var check = $("#chckSinInspOcu");
+        var state = check.is(":checked");
+        datosPOA.chckSinInspOcu = state;
 
-            check = $("#chkItemCuentaFinZafra");
-            state = check.is(":checked");
-            datosPOA.chkItemCuentaFinZafra = state;
+        check = $("#chkItemCuentaFinZafra");
+        state = check.is(":checked");
+        datosPOA.chkItemCuentaFinZafra = state;
 
-            check = $("#chkItemObsSubsanada");
-            state = check.is(":checked");
-            datosPOA.chkItemObsSubsanada = state;
+        check = $("#chkItemObsSubsanada");
+        state = check.is(":checked");
+        datosPOA.chkItemObsSubsanada = state;
 
-            check = $("#chkNPNumPOA");
-            state = check.is(":checked");
-            datosPOA.chkNPNumPOA = state;
+        check = $("#chkNPNumPOA");
+        state = check.is(":checked");
+        datosPOA.chkNPNumPOA = state;
 
-            check = $("#chkPOAPO");
-            state = check.is(":checked");
-            datosPOA.chkPOAPO = state;
+        check = $("#chkPOAPO");
+        state = check.is(":checked");
+        datosPOA.chkPOAPO = state;
 
-            check = $("#chkIncluyeCD");
-            state = check.is(":checked");
-            datosPOA.chkIncluyeCD = state;
+        check = $("#chkIncluyeCD");
+        state = check.is(":checked");
+        datosPOA.chkIncluyeCD = state;
 
-            check = $("#chkConcluido");
-            state = check.is(":checked");
-            datosPOA.chkConcluido = state;
+        check = $("#chkConcluido");
+        state = check.is(":checked");
+        datosPOA.chkConcluido = state;
 
-            check = $("#chkProceso");
-            state = check.is(":checked");
-            datosPOA.chkProceso = state;
+        check = $("#chkProceso");
+        state = check.is(":checked");
+        datosPOA.chkProceso = state;
 
-            check = $("#chkPendiente");
-            state = check.is(":checked");
-            datosPOA.chkPendiente = state;
+        check = $("#chkPendiente");
+        state = check.is(":checked");
+        datosPOA.chkPendiente = state;
 
-            datosPOA.ListParcela = _frmParcela.fnGetList();
-            datosPOA.ListEliTABLAParcela = _frmParcela.tbEliTABLA;
+        datosPOA.ListParcela = _frmParcela.fnGetList();
+        datosPOA.ListEliTABLAParcela = _frmParcela.tbEliTABLA;
 
-            datosPOA.txtDirecion = $("#txtDirecion").val();
+        datosPOA.txtDirecion = $("#txtDirecion").val();
 
 
-            //Mejora SIADO CENSO
-            debugger
-            if (ManPOA.getParameterByName('siado') == '1') {
-                datosPOA.appClient = ManPOA.getParameterByName('appClientGAER');
-                datosPOA.appData = ManPOA.getParameterByName('appDataGAER');
-            }
+        //Mejora SIADO CENSO
+        debugger
+        if (ManPOA.getParameterByName('siado') == '1') {
+            datosPOA.appClient = ManPOA.getParameterByName('appClientGAER');
+            datosPOA.appData = ManPOA.getParameterByName('appDataGAER');
+        }
 
-            //enviando datos al servidor
-            $.ajax({
-                url: ManPOA.controller + "/RegistrarPOA",
-                type: 'POST',
-                data: JSON.stringify(datosPOA),
-                contentType: 'application/json; charset=utf-8',
-                dataType: 'json',
-                //beforeSend: utilSigo.beforeSendAjax,
-                //complete: utilSigo.completeAjax,
-                error: utilSigo.errorAjax,
-                success: function (data) {
-                    if (data.success) {
-                        if (ManPOA.frmPOARegistro.find("#opRegresar").val() == 0 && ManPOA.getParameterByName('siado') != '1') {
-                            ManPOA.regresar(data.msj, '');
-                        } else {
-                            ManPOA.regresar('', data.appServer);
-                        }
-                    }
-                    else {
-                        if (ManPOA.frmPOARegistro.find("#opRegresar").val() == 0 && ManPOA.getParameterByName('siado') != '1') {
-                            utilSigo.toastWarning("Aviso", data.msj);
-                        } else {
-                            ManPOA.regresar('', data.appServer);
-                        }
+        //enviando datos al servidor
+        $.ajax({
+            url: ManPOA.controller + "/RegistrarPOA",
+            type: 'POST',
+            data: JSON.stringify(datosPOA),
+            contentType: 'application/json; charset=utf-8',
+            dataType: 'json',
+            //beforeSend: utilSigo.beforeSendAjax,
+            //complete: utilSigo.completeAjax,
+            error: utilSigo.errorAjax,
+            success: function (data) {
+                if (data.success) {
+                    if (ManPOA.frmPOARegistro.find("#opRegresar").val() == 0 && ManPOA.getParameterByName('siado') != '1') {
+                        ManPOA.regresar(data.msj, '');
+                    } else {
+                        ManPOA.regresar('', data.appServer);
                     }
                 }
-
-            });
-        }
-        this.regresar = function (msj, appServer) {
-            debugger
-            if (ManPOA.frmPOARegistro.find("#opRegresar").val() === '0' && ManPOA.getParameterByName('siado') != '1') {
-                let tipoFormulario = $("#TipoFormulario").val();
-                let numrpta = 0;
-                if (tipoFormulario === "POA") numrpta = 1;
-                else if (tipoFormulario === "PMFI") numrpta = 3;
-                else numrpta = 2;
-                let url = ManPOA.controller + "/Index?lstManMenu=" + numrpta + "&_alertaIncial=" + msj;
-                window.location = url;
-            } else {
-
-                var appClient = ManPOA.getParameterByName('siado') != '1' ? ManPOA.frmPOARegistro.find("#appClient").val() : ManPOA.getParameterByName('appClientGAER');
-                var appData = ManPOA.getParameterByName('siado') != '1' ? ManPOA.frmPOARegistro.find("#appData").val() : ManPOA.getParameterByName('appDataGAER');
-                let url = urlLocalSigo + "THabilitante/ManVentanillaAntecedentesExpedientes/Index?appClient=" + appClient + "&appData=" + appData + "&appServer=" + appServer;
-                window.location = url;
+                else {
+                    if (ManPOA.frmPOARegistro.find("#opRegresar").val() == 0 && ManPOA.getParameterByName('siado') != '1') {
+                        utilSigo.toastWarning("Aviso", data.msj);
+                    } else {
+                        ManPOA.regresar('', data.appServer);
+                    }
+                }
             }
+
+        });
+    }
+    this.regresar = function (msj, appServer) {
+        debugger
+        if (ManPOA.frmPOARegistro.find("#opRegresar").val() === '0' && ManPOA.getParameterByName('siado') != '1') {
+            let tipoFormulario = $("#TipoFormulario").val();
+            let numrpta = 0;
+            if (tipoFormulario === "POA") numrpta = 1;
+            else if (tipoFormulario === "PMFI") numrpta = 3;
+            else numrpta = 2;
+            let url = ManPOA.controller + "/Index?lstManMenu=" + numrpta + "&_alertaIncial=" + msj;
+            window.location = url;
+        } else {
+
+            var appClient = ManPOA.getParameterByName('siado') != '1' ? ManPOA.frmPOARegistro.find("#appClient").val() : ManPOA.getParameterByName('appClientGAER');
+            var appData = ManPOA.getParameterByName('siado') != '1' ? ManPOA.frmPOARegistro.find("#appData").val() : ManPOA.getParameterByName('appDataGAER');
+            let url = urlLocalSigo + "THabilitante/ManVentanillaAntecedentesExpedientes/Index?appClient=" + appClient + "&appData=" + appData + "&appServer=" + appServer;
+            window.location = url;
         }
-        this.getParameterByName = function (name) {
-            name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
-            var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
-                results = regex.exec(location.search);
-            return results === null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
+    }
+    this.getParameterByName = function (name) {
+        name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
+        var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
+            results = regex.exec(location.search);
+        return results === null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
     }
 
     //Cargar archivo
@@ -2351,7 +2457,7 @@ ManPOA.selectFile = null;
                 data: fileData,
                 success: function (result) {
                     if (result.success) {
-                        result.data;        
+                        result.data;
                         NOM_ARCH = result.data;
                         ManPOA.selectFile = null;
                         utilSigo.toastSuccess("Éxito", result.msj);
@@ -2392,17 +2498,17 @@ ManPOA.selectFile = null;
                         utilSigo.toastWarning("Aviso", "No existe archivo");
                     }
                 }).catch(error => {
-                    
+
                 });
-             }
-             else {
-                 tilSigo.toastWarning("Aviso", "No existe archivo");
-             }
-         } else {
-                 utilSigo.toastWarning("Aviso", "Documento no existe");
-         }
+            }
+            else {
+                tilSigo.toastWarning("Aviso", "No existe archivo");
+            }
+        } else {
+            utilSigo.toastWarning("Aviso", "Documento no existe");
+        }
     }
-    }).apply(ManPOA);
+}).apply(ManPOA);
 //RaPOA
 (function () {
     this.dtItemRAPoa;

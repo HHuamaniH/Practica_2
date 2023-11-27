@@ -1898,6 +1898,14 @@ namespace CapaEntidad.DOC
         public List<Ent_INFORME_EVAL_ARBOL> ListEvalArbolAdicional { get; set; }
         [Category("LIST"), Description("ListEvalArbolNoAutorizado")]
         public List<Ent_INFORME_EVAL_ARBOL> ListEvalArbolNoAutorizado { get; set; }
+        [Category("LIST"), Description("ListEspecieForEst")]
+        public List<Ent_INFORME_ESPECIE_FOREST> ListEspecieForEst { get; set; }
+        [Category("LIST"), Description("ListActividadProductiva")]
+        public List<Ent_INFORME_ACTIVIDAD_PRODUCTIVA> ListActividadProductiva { get; set; }
+        [Category("LIST"), Description("ListCoberturaBosNat")]
+        public List<Ent_INFORME_COBERTURA_BOSNAT> ListCoberturaBosNat { get; set; }
+        [Category("LIST"), Description("ListDivisionPredio")]
+        public List<Ent_INFORME_DIVISION_PREDIO> ListDivisionPredio { get; set; }
         [Category("LIST"), Description("ListHuayrona_v3")]
         public List<Ent_INFORME_HUAYRONA> ListHuayrona_v3 { get; set; }
         [Category("LIST"), Description("ListActividadSilvicultural")]
@@ -1998,9 +2006,128 @@ namespace CapaEntidad.DOC
         public List<Ent_MANDATOS> ListMandatos { get; set; }
         public List<Ent_MANDATOS> ListObligMandatos { get; set; }
 
+        //INICIO REQ-359
+        [Description("NUMERO_PARTICIPANTES")]
+        public Int32 NUMERO_PARTICIPANTES { get; set; }
+        [Description("PARTICIPACION_MENORES")]
+        public Int32 PARTICIPACION_MENORES { get; set; }
+        [Description("ASISTENCIA_TECNICA")]
+        public Int32 ASISTENCIA_TECNICA { get; set; }
+        [Description("FRECUENCIA_ASISTENCIA")]
+        public Int32 FRECUENCIA_ASISTENCIA { get; set; }
+        [Description("CONTROL_MALEZAS")]
+        public Int32 CONTROL_MALEZAS { get; set; }
+        [Description("RENOVACION_CULTIVO")]
+        public Int32 RENOVACION_CULTIVO { get; set; }
+        [Description("ROTACION_CULTIVO")]
+        public Int32 ROTACION_CULTIVO { get; set; }
+        [Description("PODAS_CULTIVO")]
+        public Int32 PODAS_CULTIVO { get; set; }
+        [Description("MANEJO_SOMBRA")]
+        public Int32 MANEJO_SOMBRA { get; set; }
+        [Description("CULTIVO_COBERTURA")]
+        public Int32 CULTIVO_COBERTURA { get; set; }
+        [Description("FERTILIZACION")]
+        public Int32 FERTILIZACION { get; set; }
+        [Description("ARBOLES_FORESTALES")]
+        public Int32 ARBOLES_FORESTALES { get; set; }
+        [Description("CURVAS_BOLLILLO")]
+        public Int32 CURVAS_BOLLILLO { get; set; }
+        [Description("CONTROL_PLAGASAP")]
+        public Int32 CONTROL_PLAGASAP { get; set; }
+        [Description("QUEMA")]
+        public Int32 QUEMA { get; set; }
+        [Description("AGROFORESTERIA")]
+        public Int32 AGROFORESTERIA { get; set; }
+        [Description("PRACTICA_ORGANICA")]
+        public Int32 PRACTICA_ORGANICA { get; set; }
+        [Description("PROYECTO")]
+        public Int32 PROYECTO { get; set; }
+        [Description("COOPERATIVA")]
+        public Int32 COOPERATIVA { get; set; }
+        [Description("INSTITUCION")]
+        public Int32 INSTITUCION { get; set; }
+        [Description("AUTOFINANCIADO")]
+        public Int32 AUTOFINANCIADO { get; set; }
+        [Description("PROPIOFA")]
+        public Int32 PROPIOFA { get; set; }
+        [Description("INSTITUCIONFA")]
+        public Int32 INSTITUCIONFA { get; set; }
+        [Description("PROGRAMAFA")]
+        public Int32 PROGRAMAFA { get; set; }
+        [Description("PROYECTOFA")]
+        public Int32 PROYECTOFA { get; set; }
+        [Description("COOPERATIVAFA")]
+        public Int32 COOPERATIVAFA { get; set; }
+        [Description("OTROSTERCEROSFA")]
+        public Int32 OTROSTERCEROSFA { get; set; }
+        [Description("COOPERATIVAASOC")]
+        public Int32 COOPERATIVAASOC { get; set; }
+        [Description("ASOCIACIONASOC")]
+        public Int32 ASOCIACIONASOC { get; set; }
+        [Description("OTROSASOC")]
+        public Int32 OTROSASOC { get; set; }
+        [Description("NINGUNOASOC")]
+        public Int32 NINGUNOASOC { get; set; }
+        [Description("TELEFONO")]
+        public String TELEFONO { get; set; }
+        [Description("CORREO")]
+        public String CORREO { get; set; }
+        [Description("NIVEL_ESTUDIO")]
+        public String NIVEL_ESTUDIO { get; set; }
+        [Description("OBSERVACION_ACTPROD")]
+        public String OBSERVACION_ACTPROD { get; set; }
+        [Description("OBSERVACION_COBERTURA_BOSNAT")]
+        public String OBSERVACION_COBERTURA_BOSNAT { get; set; }
+        [Description("DESC_ASISTENCIA_TECNICA")]
+        public String DESC_ASISTENCIA_TECNICA { get; set; }
+        [Description("NOMBRE_ASISTENCIA_TECNICA")]
+        public String NOMBRE_ASISTENCIA_TECNICA { get; set; }
+        [Description("NECESIDAD_ASISTENCIA_TECNICA")]
+        public String NECESIDAD_ASISTENCIA_TECNICA { get; set; }
+        [Description("FINANCIAMIENTO_TECNICO")]
+        public String FINANCIAMIENTO_TECNICO { get; set; }
+        [Description("DETALLE_ASOC")]
+        public String DETALLE_ASOC { get; set; }
+        [Description("OBSERVACION_CUSAF")]
+        public String OBSERVACION_CUSAF { get; set; }
+        //FIN REQ-359
+
         #region "Constructor"
         public Ent_INFORME()
         {
+            NUMERO_PARTICIPANTES = -1;
+            NINGUNOASOC = -1;
+            OTROSASOC = -1;
+            ASOCIACIONASOC = -1;
+            COOPERATIVAASOC = -1;
+            OTROSTERCEROSFA = -1;
+            COOPERATIVAFA = -1;
+            PROYECTOFA = -1;
+            PROGRAMAFA = -1;
+            INSTITUCIONFA = -1;
+            PROPIOFA = -1;
+            AUTOFINANCIADO = -1;
+            INSTITUCION = -1;
+            COOPERATIVA = -1;
+            PROYECTO = -1;
+            PRACTICA_ORGANICA = -1;
+            AGROFORESTERIA = -1;
+            QUEMA = -1;
+            CONTROL_PLAGASAP = -1;
+            CURVAS_BOLLILLO = -1;
+            ARBOLES_FORESTALES = -1;
+            FERTILIZACION = -1;
+            CULTIVO_COBERTURA = -1;
+            MANEJO_SOMBRA = -1;
+            PODAS_CULTIVO = -1;
+            ROTACION_CULTIVO = -1;
+            RENOVACION_CULTIVO = -1;
+            CONTROL_MALEZAS = -1;
+            FRECUENCIA_ASISTENCIA = -1;
+            ASISTENCIA_TECNICA = -1;
+            PARTICIPACION_MENORES = -1;
+
             AREA_TH = -1;
             AREA_POA = -1;
             B_POA = -1;
@@ -2333,6 +2460,292 @@ namespace CapaEntidad.DOC
         }
     }
 
+    public class Ent_INFORME_ESPECIE_FOREST
+    {
+        [Description("COD_INFORME")]
+        public String COD_INFORME { get; set; }
+        [Description("COD_ESPECIES_REPLA")]
+        public String COD_ESPECIES_REPLA { get; set; }
+        [Description("DESC_ESPECIES_REPLA")]
+        public String DESC_ESPECIES_REPLA { get; set; }
+        [Description("COD_ESPECIES_RESUP")]
+        public String COD_ESPECIES_RESUP { get; set; }
+        [Description("DESC_ESPECIES_RESUP")]
+        public String DESC_ESPECIES_RESUP { get; set; }
+        [Description("COD_SECUENCIAL")]
+        public Int32 COD_SECUENCIAL { get; set; }
+
+        [Description("COORDENADA_ESTE_REPLA")]
+        public Int32 COORDENADA_ESTE_REPLA { get; set; }
+        [Description("COORDENADA_NORTE_REPLA")]
+        public Int32 COORDENADA_NORTE_REPLA { get; set; }
+        [Description("COORDENADA_ESTE_RESUP")]
+        public Int32 COORDENADA_ESTE_RESUP { get; set; }
+        [Description("COORDENADA_NORTE_RESUP")]
+        public Int32 COORDENADA_NORTE_RESUP { get; set; }
+        [Description("DAP")]
+        public Decimal DAP { get; set; }
+        [Description("AC")]
+        public Decimal AC { get; set; }
+        
+        [Description("OBSERVACION")]
+        public String OBSERVACION { get; set; }
+        [Description("RegEstado")]
+        public Int32 RegEstado { get; set; }
+
+
+        public Ent_INFORME_ESPECIE_FOREST()
+        {
+            COD_SECUENCIAL = -1;
+            DAP = -1;
+            AC = -1;
+            COORDENADA_ESTE_REPLA = -1;
+            COORDENADA_NORTE_REPLA = -1;
+            COORDENADA_ESTE_RESUP = -1;
+            COORDENADA_NORTE_RESUP = -1;
+            RegEstado = -1;
+
+        }
+    }
+
+    public class Ent_INFORME_ACTIVIDAD_PRODUCTIVA
+    {
+        [Description("COD_INFORME")]
+        public String COD_INFORME { get; set; }
+        [Description("COD_ESPECIES")]
+        public String COD_ESPECIES { get; set; }
+        [Description("DESC_ESPECIES")]
+        public String DESC_ESPECIES { get; set; }              
+
+        [Description("COD_SECUENCIAL")]
+        public Int32 COD_SECUENCIAL { get; set; }
+        [Description("ACTIVIDAD")]
+        public String ACTIVIDAD { get; set; }
+        [Description("AREA")]
+        public Decimal AREA { get; set; }
+        [Description("EDAD")]
+        public Decimal EDAD { get; set; }
+        [Description("RENDIMIENTO")]
+        public Decimal RENDIMIENTO { get; set; }
+        [Description("COORDENADA_ESTE")]
+        public Int32 COORDENADA_ESTE { get; set; }
+        [Description("COORDENADA_NORTE")]
+        public Int32 COORDENADA_NORTE { get; set; }
+        [Description("ALTITUD")]
+        public Int32 ALTITUD { get; set; } 
+        [Description("DESTINO_PRODUCCION")]
+        public String DESTINO_PRODUCCION { get; set; }
+        [Description("ESTADO_CULTIVO")]
+        public String ESTADO_CULTIVO { get; set; }
+
+        [Description("RegEstado")]
+        public Int32 RegEstado { get; set; }
+
+
+        public Ent_INFORME_ACTIVIDAD_PRODUCTIVA()
+        {
+            COD_SECUENCIAL = -1;
+            AREA = -1;
+            EDAD = -1;
+            RENDIMIENTO = -1;
+            COORDENADA_ESTE = -1;
+            COORDENADA_NORTE = -1;
+            ALTITUD = -1;
+            RegEstado = -1;
+
+        }
+    }
+
+    public class Ent_INFORME_COBERTURA_BOSNAT
+    {
+        [Description("COD_INFORME")]
+        public String COD_INFORME { get; set; }
+        [Description("AREA_COBERTURA")]
+        public String AREA_COBERTURA { get; set; }
+        [Description("AREA")]
+        public Decimal AREA { get; set; }
+        
+        [Description("COD_SECUENCIAL")]
+        public Int32 COD_SECUENCIAL { get; set; }
+
+        [Description("COORDENADA_ESTE")]
+        public Int32 COORDENADA_ESTE { get; set; }
+        [Description("COORDENADA_NORTE")]
+        public Int32 COORDENADA_NORTE { get; set; }
+        [Description("ALTITUD")]
+        public Int32 ALTITUD { get; set; }        
+
+        [Description("OBSERVACION")]
+        public String OBSERVACION { get; set; }
+        [Description("RegEstado")]
+        public Int32 RegEstado { get; set; }
+
+
+        public Ent_INFORME_COBERTURA_BOSNAT()
+        {
+            COD_SECUENCIAL = -1;
+            AREA = -1;            
+            COORDENADA_ESTE = -1;
+            COORDENADA_NORTE = -1;
+            ALTITUD = -1;
+            RegEstado = -1;
+
+        }
+    }
+    public class Ent_INFORME_DIVISION_PREDIO
+    {
+        [Description("COD_INFORME")]
+        public String COD_INFORME { get; set; }
+        [Description("COD_SECUENCIAL")]
+        public Int32 COD_SECUENCIAL { get; set; }
+        [Description("DIVISION_INTERNA")]
+        public String DIVISION_INTERNA { get; set; }
+        [Description("COORDENADA_ESTE")]
+        public String COORDENADA_ESTE { get; set; }
+        [Description("COORDENADA_NORTE")]
+        public String COORDENADA_NORTE { get; set; }
+        [Description("ALTITUD")]
+        public String ALTITUD { get; set; }
+        [Description("OBSERVACION")]
+        public String OBSERVACION { get; set; }
+
+        [Description("RegEstado")]
+        public Int32 RegEstado { get; set; }
+
+
+        public Ent_INFORME_DIVISION_PREDIO()
+        {
+            COD_SECUENCIAL = -1;    
+            RegEstado = -1;
+
+        }
+    }
+    public class Ent_INFORME_CUSAF
+    {
+        [Description("COD_INFORME")]
+        public String COD_INFORME { get; set; }
+        [Description("NUMERO_PARTICIPANTES")]
+        public Int32 NUMERO_PARTICIPANTES { get; set; }
+        [Description("PARTICIPACION_MENORES")]
+        public Int32 PARTICIPACION_MENORES { get; set; }
+        [Description("ASISTENCIA_TECNICA")]
+        public Int32 ASISTENCIA_TECNICA { get; set; }
+        [Description("FRECUENCIA_ASISTENCIA")]
+        public Int32 FRECUENCIA_ASISTENCIA { get; set; }
+        [Description("CONTROL_MALEZAS")]
+        public Int32 CONTROL_MALEZAS { get; set; }
+        [Description("RENOVACION_CULTIVO")]
+        public Int32 RENOVACION_CULTIVO { get; set; }
+        [Description("ROTACION_CULTIVO")]
+        public Int32 ROTACION_CULTIVO { get; set; }
+        [Description("PODAS_CULTIVO")]
+        public Int32 PODAS_CULTIVO { get; set; }
+        [Description("MANEJO_SOMBRA")]
+        public Int32 MANEJO_SOMBRA { get; set; }
+        [Description("CULTIVO_COBERTURA")]
+        public Int32 CULTIVO_COBERTURA { get; set; }
+        [Description("FERTILIZACION")]
+        public Int32 FERTILIZACION { get; set; }
+        [Description("ARBOLES_FORESTALES")]
+        public Int32 ARBOLES_FORESTALES { get; set; }
+        [Description("CURVAS_BOLLILLO")]
+        public Int32 CURVAS_BOLLILLO { get; set; }
+        [Description("CONTROL_PLAGASAP")]
+        public Int32 CONTROL_PLAGASAP { get; set; }
+        [Description("QUEMA")]
+        public Int32 QUEMA { get; set; }
+        [Description("AGROFORESTERIA")]
+        public Int32 AGROFORESTERIA { get; set; }
+        [Description("PRACTICA_ORGANICA")]
+        public Int32 PRACTICA_ORGANICA { get; set; }
+        [Description("PROYECTO")]
+        public Int32 PROYECTO { get; set; }
+        [Description("COOPERATIVA")]
+        public Int32 COOPERATIVA { get; set; }
+        [Description("INSTITUCION")]
+        public Int32 INSTITUCION { get; set; }
+        [Description("AUTOFINANCIADO")]
+        public Int32 AUTOFINANCIADO { get; set; }
+        [Description("PROPIOFA")]
+        public Int32 PROPIOFA { get; set; }
+        [Description("INSTITUCIONFA")]
+        public Int32 INSTITUCIONFA { get; set; }
+        [Description("PROGRAMAFA")]
+        public Int32 PROGRAMAFA { get; set; }
+        [Description("PROYECTOFA")]
+        public Int32 PROYECTOFA { get; set; }
+        [Description("COOPERATIVAFA")]
+        public Int32 COOPERATIVAFA { get; set; }
+        [Description("OTROSTERCEROSFA")]
+        public Int32 OTROSTERCEROSFA { get; set; }
+        [Description("COOPERATIVAASOC")]
+        public Int32 COOPERATIVAASOC { get; set; }
+        [Description("ASOCIACIONASOC")]
+        public Int32 ASOCIACIONASOC { get; set; }
+        [Description("OTROSASOC")]
+        public Int32 OTROSASOC { get; set; }
+        [Description("NINGUNOASOC")]
+        public Int32 NINGUNOASOC { get; set; }
+        [Description("TELEFONO")]
+        public String TELEFONO { get; set; }
+        [Description("CORREO")]
+        public String CORREO { get; set; }
+        [Description("NIVEL_ESTUDIO")]
+        public String NIVEL_ESTUDIO { get; set; }
+        [Description("OBSERVACION_ACTPROD")]
+        public String OBSERVACION_ACTPROD { get; set; }
+        [Description("OBSERVACION_COBERTURA_BOSNAT")]
+        public String OBSERVACION_COBERTURA_BOSNAT { get; set; }
+        [Description("DESC_ASISTENCIA_TECNICA")]
+        public String DESC_ASISTENCIA_TECNICA { get; set; }
+        [Description("NOMBRE_ASISTENCIA_TECNICA")]
+        public String NOMBRE_ASISTENCIA_TECNICA { get; set; }
+        [Description("NECESIDAD_ASISTENCIA_TECNICA")]
+        public String NECESIDAD_ASISTENCIA_TECNICA { get; set; }
+        [Description("FINANCIAMIENTO_TECNICO")]
+        public String FINANCIAMIENTO_TECNICO { get; set; }
+        [Description("DETALLE_ASOC")]
+        public String DETALLE_ASOC { get; set; }
+        [Description("OBSERVACION_CUSAF")]
+        public String OBSERVACION_CUSAF { get; set; }
+
+
+        public Ent_INFORME_CUSAF()
+        {
+            NUMERO_PARTICIPANTES = -1;
+            NINGUNOASOC = -1;
+            OTROSASOC = -1;
+            ASOCIACIONASOC = -1;
+            COOPERATIVAASOC = -1;
+            OTROSTERCEROSFA = -1;
+            COOPERATIVAFA = -1;
+            PROYECTOFA = -1;
+            PROGRAMAFA = -1;
+            INSTITUCIONFA = -1;
+            PROPIOFA = -1;
+            AUTOFINANCIADO = -1;
+            INSTITUCION = -1;
+            COOPERATIVA = -1;
+            PROYECTO = -1;
+            PRACTICA_ORGANICA = -1;
+            AGROFORESTERIA = -1;
+            QUEMA = -1;
+            CONTROL_PLAGASAP = -1;
+            CURVAS_BOLLILLO = -1;
+            ARBOLES_FORESTALES = -1;
+            FERTILIZACION = -1;
+            CULTIVO_COBERTURA = -1;
+            MANEJO_SOMBRA = -1;
+            PODAS_CULTIVO = -1;
+            ROTACION_CULTIVO = -1;
+            RENOVACION_CULTIVO = -1;
+            CONTROL_MALEZAS = -1;
+            FRECUENCIA_ASISTENCIA = -1;
+            ASISTENCIA_TECNICA = -1;
+            PARTICIPACION_MENORES = -1;
+
+        }
+    }
     public class Ent_INFORME_HUAYRONA
     {
         [Description("NUMERO")]

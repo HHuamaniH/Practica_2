@@ -881,11 +881,15 @@ utilSigo.checkNum = function (e) {
 utilSigo.checkLetter = function (e) {
     var tecla = (document.all) ? e.keyCode : e.which;
 
+    if (tecla === 13) {
+        return true;
+    }
+
     if (tecla == 8 || tecla == 32) {
         return true;
     }
 
-    var patron = /[ ÁÉÍÓÚA-Záéíóúa-z0-9\-\/]/;
+    var patron = /[ ÁÉÍÓÚÑA-Záéíóúa-zñ0-9\-\/]/;
     var tecla_final = String.fromCharCode(tecla);
     return patron.test(tecla_final);
 }
@@ -923,6 +927,38 @@ utilSigo.onBlurTwoDecimalIS = function (thix, texto) {
         if (!/^\d+(\.\d{1,2})?$/.test(numero)) {
             document.getElementById(thix.id).value = "";
             utilSigo.toastWarning("Aviso", "El " + texto + " sólo debe tener dos decimales");
+            $("#" + thix.id).focus();
+        }
+    }
+}
+
+utilSigo.onBlurThreeDecimal = function (thix, texto) {
+    let numero = document.getElementById(thix.id).value;
+    if (numero != "") {
+        if (!/^\d+(\.\d{1,3})?$/.test(numero)) {
+            document.getElementById(thix.id).value = "";
+            utilSigo.toastWarning("Aviso", "El " + texto + " sólo debe tener tres decimales");
+            $("#" + thix.id).focus();
+        }
+    }
+}
+utilSigo.onBlurFourDecimal = function (thix, texto) {
+    let numero = document.getElementById(thix.id).value;
+    if (numero != "") {
+        if (!/^\d+(\.\d{1,4})?$/.test(numero)) {
+            document.getElementById(thix.id).value = "";
+            utilSigo.toastWarning("Aviso", "El " + texto + " sólo debe tener cuatro decimales");
+            $("#" + thix.id).focus();
+        }
+    }
+}
+
+utilSigo.onBlurMail = function (thix, texto) {
+    let numero = document.getElementById(thix.id).value;
+    if (numero != "") {
+        if (!/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(numero)) {
+            document.getElementById(thix.id).value = "";
+            utilSigo.toastWarning("Aviso", "El " + texto + " no es un correo válido");
             $("#" + thix.id).focus();
         }
     }
