@@ -38,28 +38,24 @@ namespace CapaEntidad.DOC
         [Description("pVUbicacionSector")]
         public string pVUbicacionSector { get; set; }
 
-        [Description("pNFlagCuestionPrevia")]
-        public Int16 pNFlagCuestionPrevia { get; set; }
-        [Description("pNFlagRecResponsabilidad")]
-        public Int16 pNFlagRecResponsabilidad { get; set; }
-        [Description("pNFlagGravedadRiesgo")]
-        public Int16 pNFlagGravedadRiesgo { get; set; }
+        [Description("pNFlagResponsableSolidario")]
+        public Int16 pNFlagResponsableSolidario { get; set; }
+        [Description("pNFlagGravedadOcasionada")]
+        public Int16 pNFlagGravedadOcasionada { get; set; }
+        [Description("pNFlagAcreditacionImputaciones")]
+        public Int16 pNFlagAcreditacionImputaciones { get; set; }
         [Description("pNFlagSancion")]
         public Int16 pNFlagSancion { get; set; }
         [Description("pNSancionUIT")]
         public decimal pNSancionUIT { get; set; }
         [Description("pvSancionCodCalculo")]
         public string pvSancionCodCalculo { get; set; }
-        [Description("pNFlagReincidencia")]
-        public Int16 pNFlagReincidencia { get; set; }
-        [Description("pNFlagMedidaCorrectiva")]
-        public Int16 pNFlagMedidaCorrectiva { get; set; }
-        [Description("pNFlagMedidaComplementaria")]
-        public Int16 pNFlagMedidaComplementaria { get; set; }
-        [Description("pNFlagResponsableSolidario")]
-        public Int16 pNFlagResponsableSolidario { get; set; }
-        [Description("pNFlagComunicacionGORE")]
-        public Int16 pNFlagComunicacionGORE { get; set; }
+        [Description("pNFlagMedidasComplementarias")]
+        public Int16 pNFlagMedidasComplementarias { get; set; }
+        [Description("pNFlagMedidasCorrectivas")]
+        public Int16 pNFlagMedidasCorrectivas { get; set; }
+        [Description("pNFlagComunicacionEntidades")]
+        public Int16 pNFlagComunicacionEntidades { get; set; }
 
         [Description("pVRutaArchivoRevision")]
         public string pVRutaArchivoRevision { get; set; }

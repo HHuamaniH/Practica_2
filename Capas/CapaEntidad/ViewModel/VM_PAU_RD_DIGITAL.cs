@@ -43,18 +43,16 @@ namespace CapaEntidad.ViewModel
         public string UBIGEO_PROVINCIA { get; set; }
         public string UBIGEO_COD_DIST { get; set; }
         public string UBIGEO_DISTRITO { get; set; }
-        public string UBIGEO_SECTOR { get; set; }
-        public bool FLG_CUESTION_PREVIA { get; set; }
-        public bool FLG_REC_RESPONSABILIDAD { get; set; }
-        public bool FLG_GRAVEDAD_RIESGO { get; set; }
+        public string UBIGEO_SECTOR { get; set; }        
+        public bool FLG_RESPOSABLE_SOLIDARIO { get; set; }
+        public bool FLG_GRAVEDAD_OCASIONADA { get; set; }
+        public bool FLG_ACREDITACION_IMPUTACIONES { get; set; }
         public int FLG_SANCION { get; set; }
         public decimal? SANCION_UIT { get; set; }
-        public string SANCION_COD_CALCULO { get; set; }
-        public bool FLG_REINCIDENCIA { get; set; }
-        public bool FLG_MEDIDA_CORRECTIVA { get; set; }
-        public bool FLG_MEDIDA_COMPLEMENTARIA { get; set; }
-        public bool FLG_RESPONSABLE_SOLIDARIO { get; set; }
-        public bool FLG_COMUNICACION_GORE { get; set; }
+        public string SANCION_COD_CALCULO { get; set; }        
+        public bool FLG_MEDIDAS_COMPLEMENTARIAS { get; set; }
+        public bool FLG_MEDIDAS_CORRECTIVAS { get; set; }
+        public bool FLG_COMUNICACION_ENTIDADES { get; set; }
         public string RUTA_ARCHIVO_REVISION { get; set; }
         public string COD_USUARIO_OPERACION { get; set; }
         public int ESTADO { get; set; }
@@ -72,13 +70,13 @@ namespace CapaEntidad.ViewModel
     {
         public string codInformeDigital { get; set; }
         public int item { get; set; }
-        public string codResolucion { get; set; }
-        public string numInforme { get; set; }
-        public string codInformeSupervision { get; set; }
-        public string numInformeSupervision { get; set; }
-        public string numAResolucion { get; set; }
-        public string numPOA { get; set; }
-        public string nombrePOA { get; set; }
+        public string codILegal { get; set; }
+        public string nroILegal { get; set; }
+        //public string codInformeSupervision { get; set; }
+        //public string numInformeSupervision { get; set; }
+        //public string numAResolucion { get; set; }
+        //public string numPOA { get; set; }
+        //public string nombrePOA { get; set; }
         public int estado { get; set; }
         public int accion { get; set; }
     }
@@ -137,6 +135,7 @@ namespace CapaEntidad.ViewModel
     {
         public string codInformeDigital { get; set; }
         public int item { get; set; }
+        public string codILegal { get; set; }
         public string codResolucion { get; set; }
         public string codInciso { get; set; }
         public string inciso { get; set; }
@@ -145,8 +144,6 @@ namespace CapaEntidad.ViewModel
         public string rangoSancion { get; set; }
         public string titulo { get; set; }
         public string detalle { get; set; }
-        public bool flgDesvirtua { get; set; }
-        public bool flgSubsana { get; set; }
         public string parrafos { get; set; }
         public string codEspecie { get; set; }
         public string especie { get; set; }
@@ -156,6 +153,7 @@ namespace CapaEntidad.ViewModel
         public string numPOA { get; set; }
         public string tipoMaderable { get; set; }
         public int? estado { get; set; }
+        public bool flgSeleccionado { get; set; }
         public int accion { get; set; }
     }
 

@@ -1937,6 +1937,7 @@ $(function () {
                 const user = ManInfLegal_AddEdit.userApp;
 
                 const notificacion = {
+                    TITULO: 'Informe Final de Instrucción',
                     DESTINATARIOS: self.form.Seleccionados.map(item => item.email).join(','),
                     CC_DESTINATARIOS: self.form.CC,
                     COD_INFORME: app.Informe.NUM_INFORME_SITD,

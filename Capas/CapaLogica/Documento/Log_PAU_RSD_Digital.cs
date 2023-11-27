@@ -75,9 +75,9 @@ namespace CapaLogica.DOC
             return oDat_PAU_Digital.ListarPlanesManejo(COD_INFORME, COD_THABILITANTE, NUM_POA, V_OPCION);
         }
 
-        public string NotificarRSD(VM_PAU_DIGITAL_ALERTA notificacion)
+        public string Notificar(VM_PAU_DIGITAL_ALERTA notificacion)
         {
-            return oDat_PAU_Digital.NotificarRSD(notificacion);
+            return oDat_PAU_Digital.Notificar(notificacion);
         }
 
         public void ModificarNumeroInforme(string codInforme, string numeroInforme, DateTime fechaOperacion)

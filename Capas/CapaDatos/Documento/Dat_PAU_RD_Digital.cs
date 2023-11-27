@@ -27,7 +27,7 @@ namespace CapaDatos.DOC
                 tr = cn.BeginTransaction();
                 try
                 {
-                    using (OracleCommand cmd = dBOracle.ManExecuteOutput(cn, tr, "DOC_OSINFOR_ERP_MIGRACION.SPFISCALIZACION_RD_DIGITAL_GRABAR", informeDigital))
+                    using (OracleCommand cmd = dBOracle.ManExecuteOutput(cn, tr, "DOC_OSINFOR_ERP_MIGRACION.SPFISCALIZACION_RESDIR_DIGITAL_GRABAR", informeDigital))
                     {
                         cmd.ExecuteNonQuery();
                         OUTPUTPARAM01 = (String)cmd.Parameters["pVOUTPUTPARAM01"].Value;
@@ -37,8 +37,8 @@ namespace CapaDatos.DOC
                         {
                             foreach (var item in otros.ILEGAL)
                             {
-                                object[] param = { codInformeDigital, item.item, item.codResolucion, item.estado, item.accion };
-                                dBOracle.ManExecute(cn, tr, "DOC_OSINFOR_ERP_MIGRACION.SPFISCALIZACION_RD_DIGITAL_GRABAR", param);
+                                object[] param = { codInformeDigital, item.item, item.codILegal, item.estado, item.accion };
+                                dBOracle.ManExecute(cn, tr, "DOC_OSINFOR_ERP_MIGRACION.SPFISCALIZACION_RESDIR_DIGITAL_ILEGAL_GRABAR", param);
                             }
                         }
                         if (otros.REFERENCIAS != null)
@@ -48,7 +48,7 @@ namespace CapaDatos.DOC
                                 if (item.RegEstado == 1) //Nuevo o modificado
                                 {
                                     object[] param = { item.COD_ILEGAL, item.CODIGO, item.NUMERO, item.PDF_DOCUMENTO, item.TIPO_DOCUMENTO, item.SUBTIPO, 1 };
-                                    dBOracle.ManExecute(cn, tr, "DOC_OSINFOR_ERP_MIGRACION.SPFISCALIZACION_RD_DIGITAL_DET_ACCION_GRABAR", param);
+                                    dBOracle.ManExecute(cn, tr, "DOC_OSINFOR_ERP_MIGRACION.SPFISCALIZACION_RESDIR_DIGITAL_DET_ACCION_GRABAR", param);
                                 }
                             }
                         }
@@ -57,7 +57,7 @@ namespace CapaDatos.DOC
                             foreach (var item in otros.DOCUMENTOS)
                             {
                                 object[] param = { codInformeDigital, item.item, item.codResolucion, item.tipo, item.url, item.nombre, item.estado, item.accion };
-                                dBOracle.ManExecute(cn, tr, "DOC_OSINFOR_ERP_MIGRACION.SPFISCALIZACION_RD_DIGITAL_DOCUMENTO_GRABAR", param);
+                                dBOracle.ManExecute(cn, tr, "DOC_OSINFOR_ERP_MIGRACION.SPFISCALIZACION_RESDIR_DIGITAL_DOCUMENTO_GRABAR", param);
                             }
                         }
                         if (otros.PARTICIPANTES != null)
@@ -65,15 +65,15 @@ namespace CapaDatos.DOC
                             foreach (var item in otros.PARTICIPANTES)
                             {
                                 object[] param = { codInformeDigital, item.item, item.codPersona, item.funcion, item.observacion, item.estado, item.accion };
-                                dBOracle.ManExecute(cn, tr, "DOC_OSINFOR_ERP_MIGRACION.SPFISCALIZACION_RD_DIGITAL_PARTICIPANTE_GRABAR", param);
+                                dBOracle.ManExecute(cn, tr, "DOC_OSINFOR_ERP_MIGRACION.SPFISCALIZACION_RESDIR_DIGITAL_PARTICIPANTE_GRABAR", param);
                             }
                         }
                         if (otros.INFRACCIONES != null)
                         {
                             foreach (var item in otros.INFRACCIONES)
                             {
-                                object[] param = { codInformeDigital, item.item, item.codResolucion, item.codInciso, item.titulo, Convert.ToInt16(item.flgDesvirtua), Convert.ToInt16(item.flgSubsana), item.parrafos, item.estado, item.accion };
-                                dBOracle.ManExecute(cn, tr, "DOC_OSINFOR_ERP_MIGRACION.SPFISCALIZACION_RD_DIGITAL_INFRACCION_GRABAR", param);
+                                object[] param = { codInformeDigital, item.item, item.codILegal, item.codResolucion, item.codInciso, item.titulo, item.parrafos, item.estado, item.flgSeleccionado, item.accion };
+                                dBOracle.ManExecute(cn, tr, "DOC_OSINFOR_ERP_MIGRACION.SPFISCALIZACION_RESDIR_DIGITAL_INFRACCION_GRABAR", param);
                             }
                         }
                         if (otros.ANTECEDENTES != null)
@@ -90,7 +90,7 @@ namespace CapaDatos.DOC
                                     item.accion
                                 };
 
-                                dBOracle.ManExecute(cn, tr, "DOC_OSINFOR_ERP_MIGRACION.SPFISCALIZACION_RD_DIGITAL_ANTECEDENTES_GRABAR", param);
+                                dBOracle.ManExecute(cn, tr, "DOC_OSINFOR_ERP_MIGRACION.SPFISCALIZACION_RESDIR_DIGITAL_ANTECEDENTES_GRABAR", param);
                             }
                         }
 
@@ -99,7 +99,7 @@ namespace CapaDatos.DOC
                             foreach (var item in otros.ELIMINAR)
                             {
                                 object[] param = { item.codInforme, item.item, item.origen };
-                                dBOracle.ManExecute(cn, tr, "DOC_OSINFOR_ERP_MIGRACION.SPFISCALIZACION_RD_DIGITAL_DET_ELIMINAR", param);
+                                dBOracle.ManExecute(cn, tr, "DOC_OSINFOR_ERP_MIGRACION.SPFISCALIZACION_RESDIR_DIGITAL_DET_ELIMINAR", param);
                             }
                         }
                     }
@@ -132,7 +132,7 @@ namespace CapaDatos.DOC
                 try
                 {
                     object[] param = { item.codInformeDigital, item.item, item.estado };
-                    int rows = dBOracle.ManExecute(cn, tr, "DOC_OSINFOR_ERP_MIGRACION.SPFISCALIZACION_RD_DIGITAL_FIRMA_ACTUALIZAR", param);
+                    int rows = dBOracle.ManExecute(cn, tr, "DOC_OSINFOR_ERP_MIGRACION.SPFISCALIZACION_RESDIR_DIGITAL_FIRMA_ACTUALIZAR", param);
 
                     tr.Commit();
 
@@ -161,7 +161,7 @@ namespace CapaDatos.DOC
                 using (OracleConnection cn = new OracleConnection(BDConexion.Conexion_Cadena_SIGO()))
                 {
                     cn.Open();
-                    using (OracleDataReader dr = dBOracle.SelDrdDefault(cn, "DOC_OSINFOR_ERP_MIGRACION.SPFISCALIZACION_RD_DIGITAL_OBTENER", COD_RESOLUCION))
+                    using (OracleDataReader dr = dBOracle.SelDrdDefault(cn, "DOC_OSINFOR_ERP_MIGRACION.SPFISCALIZACION_RESDIR_DIGITAL_OBTENER", COD_RESOLUCION))
                     {
                         if (dr != null)
                         {
@@ -172,7 +172,7 @@ namespace CapaDatos.DOC
                                 while (dr.Read())
                                 {
                                     vm.COD_INFORME_DIGITAL = dr["VCODINFORMEDIGITAL"].ToString();
-                                    vm.COD_RESOLUCION = dr["COD_RESOLUCION"].ToString();
+                                    vm.COD_RESOLUCION = dr["VCODRESOLUCION"].ToString();
                                     vm.TRAMITE_ID = dr["NTRAMITEID"] != DBNull.Value ? Convert.ToInt32(dr["NTRAMITEID"]) : default(int?);
                                     vm.NUM_INFORME_SITD = dr["VNUMINFORMESITD"].ToString();
                                     vm.COD_PROCEDENCIA = dr["VCODPROCEDENCIA"].ToString();
@@ -197,17 +197,15 @@ namespace CapaDatos.DOC
                                     vm.UBIGEO_COD_DIST = dr["UBIGEO_COD_DIST"].ToString();
                                     vm.UBIGEO_DISTRITO = dr["UBIGEO_DISTRITO"].ToString();
                                     vm.UBIGEO_SECTOR = dr["UBIGEO_SECTOR"].ToString();
-                                    vm.FLG_CUESTION_PREVIA = Convert.ToBoolean(dr["NFLAGCUESTIONPREVIA"]);
-                                    vm.FLG_REC_RESPONSABILIDAD = Convert.ToBoolean(dr["NFLAGRECRESPONSABILIDAD"]);
-                                    vm.FLG_GRAVEDAD_RIESGO = Convert.ToBoolean(dr["NFLAGGRAVEDADRIESGO"]);
+                                    vm.FLG_RESPOSABLE_SOLIDARIO = Convert.ToBoolean(dr["NFLAGRESPONSABLESOLIDARIO"]);
+                                    vm.FLG_GRAVEDAD_OCASIONADA = Convert.ToBoolean(dr["NFLAGGRAVEDADOCASIONADA"]);
+                                    vm.FLG_ACREDITACION_IMPUTACIONES = Convert.ToBoolean(dr["NFLAGACREDITACIONIMPUTACIONES"]);
                                     vm.FLG_SANCION = Convert.ToInt16(dr["NFLAGSANCION"]);
                                     vm.SANCION_UIT = Convert.ToDecimal(dr["NSANCIONUIT"]);
                                     vm.SANCION_COD_CALCULO = dr["VSANCIONCODCALCULO"].ToString();
-                                    vm.FLG_REINCIDENCIA = Convert.ToBoolean(dr["NFLAGREINCIDENCIA"]);
-                                    vm.FLG_MEDIDA_CORRECTIVA = Convert.ToBoolean(dr["NFLAGMEDIDACORRECTIVA"]);
-                                    vm.FLG_MEDIDA_COMPLEMENTARIA = Convert.ToBoolean(dr["NFLAGMEDIDACOMPLEMENTARIA"]);
-                                    vm.FLG_RESPONSABLE_SOLIDARIO = Convert.ToBoolean(dr["NFLAGRESPONSABLESOLIDARIO"]);
-                                    vm.FLG_COMUNICACION_GORE = Convert.ToBoolean(dr["NFLAGCOMUNICACIONGORE"]);
+                                    vm.FLG_MEDIDAS_COMPLEMENTARIAS = Convert.ToBoolean(dr["NFLAGMEDIDASCOMPLEMENTARIAS"]);
+                                    vm.FLG_MEDIDAS_CORRECTIVAS = Convert.ToBoolean(dr["NFLAGMEDIDASCORRECTIVAS"]);
+                                    vm.FLG_COMUNICACION_ENTIDADES = Convert.ToBoolean(dr["NFLAGCOMUNICACIONENTIDADES"]);
                                     vm.RUTA_ARCHIVO_REVISION = dr["VRUTAARCHIVOREVISION"].ToString();
                                     vm.COD_USUARIO_OPERACION = dr["VCODUSUARIOCREACION"].ToString();
                                     //vm.COD_USUARIO_MODIFICACION = dr["VCODUSUARIOMODIFICACION"].ToString();
@@ -215,7 +213,7 @@ namespace CapaDatos.DOC
                                 }
                             }
 
-                            //RSD ASOCIADAS
+                            //INFORMES LEGALES ASOCIADOS
                             dr.NextResult();
                             if (dr.HasRows)
                             {
@@ -225,14 +223,14 @@ namespace CapaDatos.DOC
                                     objEN = new VM_PAU_RD_DIGITAL_VS_ILEGAL();
                                     objEN.codInformeDigital = dr["VCODINFORMEDIGITAL"].ToString();
                                     objEN.item = Convert.ToInt32(dr["NITEM"]);
-                                    objEN.codResolucion = dr["VCODRESOLUCION"].ToString();
-                                    objEN.numInforme = dr["NUMERO_RESOLUCION"].ToString();
-                                    objEN.codInformeSupervision = dr["COD_ISUPERVISION"].ToString();
-                                    objEN.numInformeSupervision = dr["NUMERO_ISUPERVISION"].ToString();
+                                    objEN.codILegal = dr["VCODRESOLUCION"].ToString();
+                                    objEN.nroILegal = dr["NUMERO_RESOLUCION"].ToString();
+                                    //objEN.codInformeSupervision = dr["COD_ISUPERVISION"].ToString();
+                                    //objEN.numInformeSupervision = dr["NUMERO_ISUPERVISION"].ToString();
                                     //POA
-                                    objEN.numAResolucion = dr["ARESOLUCION_NUM"].ToString();
-                                    objEN.numPOA = dr["NUM_POA"].ToString();
-                                    objEN.nombrePOA = dr["NOMBRE_POA"].ToString();
+                                    //objEN.numAResolucion = dr["ARESOLUCION_NUM"].ToString();
+                                    //objEN.numPOA = dr["NUM_POA"].ToString();
+                                    //objEN.nombrePOA = dr["NOMBRE_POA"].ToString();
 
                                     objEN.estado = Convert.ToInt32(dr["NESTADO"]);
                                     objEN.accion = 1;
@@ -291,6 +289,7 @@ namespace CapaDatos.DOC
                                     objEN = new VM_PAU_RD_DIGITAL_INFRACCION();
                                     objEN.codInformeDigital = dr["VCODINFORMEDIGITAL"].ToString();
                                     objEN.item = Convert.ToInt32(dr["NITEM"]);
+                                    objEN.codILegal = dr["VCODILEGAL"].ToString();
                                     objEN.codResolucion = dr["VCODRESOLUCION"].ToString();
                                     objEN.codInciso = dr["VCODINCISO"].ToString();
                                     objEN.inciso = dr["VINCISO"].ToString();
@@ -309,10 +308,11 @@ namespace CapaDatos.DOC
                                     //objEN.numAResolucion = dr["ARESOLUCION_NUM"] != DBNull.Value ? dr["ARESOLUCION_NUM"].ToString() : null;
                                     objEN.tipoMaderable = dr["TIPOMADERABLE"].ToString();
 
-                                    objEN.flgDesvirtua = Convert.ToBoolean(dr["NFLAGDESVIRTUA"]);
-                                    objEN.flgSubsana = Convert.ToBoolean(dr["NFLAGSUBSANA"]);
+                                    //objEN.flgDesvirtua = Convert.ToBoolean(dr["NFLAGDESVIRTUA"]);
+                                    //objEN.flgSubsana = Convert.ToBoolean(dr["NFLAGSUBSANA"]);
                                     objEN.parrafos = dr["VPARRAFOS"] != DBNull.Value ? dr["VPARRAFOS"].ToString() : null;
                                     objEN.estado = Convert.ToInt32(dr["NESTADO"]);
+                                    objEN.flgSeleccionado = dr["NFLAGSELECCIONADO"] != DBNull.Value ? Convert.ToInt16(dr["NFLAGSELECCIONADO"]) == 1 : false;
                                     objEN.accion = 1;
 
                                     vm.INFRACCIONES.Add(objEN);
@@ -353,6 +353,47 @@ namespace CapaDatos.DOC
             }
         }
 
+        public List<VM_PAU_RD_DIGITAL_ANTECEDENTE> ObtenerAntecedentes(string COD_RESOLUCION)
+        {
+            List<VM_PAU_RD_DIGITAL_ANTECEDENTE> vm = null;
+
+            try
+            {
+                using (OracleConnection cn = new OracleConnection(BDConexion.Conexion_Cadena_SIGO()))
+                {
+                    cn.Open();
+                    using (OracleDataReader dr = dBOracle.SelDrdDefault(cn, "DOC_OSINFOR_ERP_MIGRACION.SPFISCALIZACION_RESDIR_DIGITAL_ANTECEDENTES", COD_RESOLUCION))
+                    {
+                        if (dr != null)
+                        {
+                            if (dr.HasRows)
+                            {
+                                vm = new List<VM_PAU_RD_DIGITAL_ANTECEDENTE>();
+
+                                VM_PAU_RD_DIGITAL_ANTECEDENTE objEN = null;
+
+                                while (dr.Read())
+                                {
+                                    objEN = new VM_PAU_RD_DIGITAL_ANTECEDENTE();
+                                    objEN.tipoDocumento = dr["TIPO_DOCUMENTO"].ToString();
+                                    objEN.numero = dr["NUMERO"].ToString();
+                                    objEN.fechaEmision = (dr["FECHA_EMISION"] != DBNull.Value) ? dr["FECHA_EMISION"].ToString().Trim() : null;
+                                    objEN.fechaNotificacion = (dr["FECHA_NOTIFICACION"] != DBNull.Value) ? dr["FECHA_NOTIFICACION"].ToString().Trim() : null;
+                                    vm.Add(objEN);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+
+            return vm;
+        }
+
         public List<VM_PAU_RD_DIGITAL_INFRACCION> ListarInfracciones()
         {
             try
@@ -363,7 +404,7 @@ namespace CapaDatos.DOC
                 {
                     cn.Open();
 
-                    using (OracleDataReader dr = dBOracle.SelDrdDefault(cn, "DOC_OSINFOR_ERP_MIGRACION.SPFISCALIZACION_RD_DIGITAL_INFRACCIONES_OBTENER"))
+                    using (OracleDataReader dr = dBOracle.SelDrdDefault(cn, "DOC_OSINFOR_ERP_MIGRACION.SPFISCALIZACION_RESDIR_DIGITAL_INFRACCIONES_OBTENER"))
                     {
                         if (dr != null)
                         {
@@ -411,7 +452,7 @@ namespace CapaDatos.DOC
                 try
                 {
                     //object[] param = { notificacion.COD_PERSONA, notificacion.COD_INFORME, notificacion.MENSAJE_ENVIO_ALERTA };
-                    using (OracleCommand cmd = dBOracle.ManExecuteOutput(cn, tr, "DOC_OSINFOR_ERP_MIGRACION.SPFISCALIZACION_RD_DIGITAL_ENVIARALERTA", notificacion))
+                    using (OracleCommand cmd = dBOracle.ManExecuteOutput(cn, tr, "DOC_OSINFOR_ERP_MIGRACION.SPFISCALIZACION_PAU_DIGITAL_ENVIARALERTA", notificacion))
                     {
                         cmd.ExecuteNonQuery();
                         OUTPUTPARAM01 = cmd.Parameters["OUTPUTPARAM01"].Value?.ToString() ?? "";
@@ -441,7 +482,7 @@ namespace CapaDatos.DOC
                 try
                 {
                     object[] param = { codInforme, numeroInforme, fechaOperacion };
-                    dBOracle.ManExecute(cn, null, "DOC_OSINFOR_ERP_MIGRACION.SPFISCALIZACION_RD_DIGITAL_INFORME_NUMERO_GUARDAR", param);
+                    dBOracle.ManExecute(cn, null, "DOC_OSINFOR_ERP_MIGRACION.SPFISCALIZACION_RESDIR_DIGITAL_INFORME_NUMERO_GUARDAR", param);
 
                 }
                 catch (Exception ex)
@@ -464,7 +505,7 @@ namespace CapaDatos.DOC
                 try
                 {
                     object[] param = { codInformeDigital, fechaOperacion, estado, codUsuarioOperacion };
-                    dBOracle.ManExecute(cn, null, "DOC_OSINFOR_ERP_MIGRACION.SPFISCALIZACION_RD_DIGITAL_ESTADO_ACTUALIZAR", param);
+                    dBOracle.ManExecute(cn, null, "DOC_OSINFOR_ERP_MIGRACION.SPFISCALIZACION_RESDIR_DIGITAL_ESTADO_ACTUALIZAR", param);
                     success = true;
                 }
                 catch (Exception ex)
@@ -487,7 +528,7 @@ namespace CapaDatos.DOC
                 try
                 {
                     object[] param = { codInforme, "ANULAR_FIRMA_POR_INFORME", "" };
-                    dBOracle.ManExecute(cn, tr, "DOC_OSINFOR_ERP_MIGRACION.SPFISCALIZACION_RD_DIGITAL_OPERACION", param);
+                    dBOracle.ManExecute(cn, tr, "DOC_OSINFOR_ERP_MIGRACION.SPFISCALIZACION_RESDIR_DIGITAL_OPERACION", param);
                     tr.Commit();
                     success = true;
                 }

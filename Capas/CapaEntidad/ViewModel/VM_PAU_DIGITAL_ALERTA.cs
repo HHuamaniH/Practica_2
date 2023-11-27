@@ -4,6 +4,8 @@ namespace CapaEntidad.ViewModel
 {
     public class VM_PAU_DIGITAL_ALERTA
     {
+        [Description("TITULO")]
+        public string TITULO { get; set; }
         [Description("DESTINATARIOS")]
         public string DESTINATARIOS { get; set; }
         [Description("CC_DESTINATARIOS")]

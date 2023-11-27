@@ -121,7 +121,7 @@ namespace SIGOFCv3.Areas.Fiscalizacion.Controllers
         public JsonResult Notificar(VM_PAU_DIGITAL_ALERTA notificacion)
         {
             CLogInforme = new Log_PAU_RSD_Digital();
-            string result = CLogInforme.NotificarRSD(notificacion);
+            string result = CLogInforme.Notificar(notificacion);
 
             return Json(result);
         }

@@ -30,17 +30,17 @@ namespace CapaLogica.DOC
             cabecera.pVCodTHabilitante = informeDigital.COD_THABILITANTE;
             cabecera.pVRucTitularCondicion = informeDigital.TITULAR_CONDICION_RUC;
             cabecera.pVRucTitularEstado = informeDigital.TITULAR_ESTADO_RUC;
-            cabecera.pNFlagCuestionPrevia = Convert.ToInt16(informeDigital.FLG_CUESTION_PREVIA);
-            cabecera.pNFlagRecResponsabilidad = Convert.ToInt16(informeDigital.FLG_REC_RESPONSABILIDAD);
-            cabecera.pNFlagGravedadRiesgo = Convert.ToInt16(informeDigital.FLG_GRAVEDAD_RIESGO);
+            
+            cabecera.pNFlagResponsableSolidario = Convert.ToInt16(informeDigital.FLG_RESPOSABLE_SOLIDARIO);
+            cabecera.pNFlagGravedadOcasionada = Convert.ToInt16(informeDigital.FLG_GRAVEDAD_OCASIONADA);
+            cabecera.pNFlagAcreditacionImputaciones = Convert.ToInt16(informeDigital.FLG_ACREDITACION_IMPUTACIONES);
             cabecera.pNFlagSancion = Convert.ToInt16(informeDigital.FLG_SANCION);
             cabecera.pNSancionUIT = informeDigital.SANCION_UIT ?? 0;
             cabecera.pvSancionCodCalculo = informeDigital.SANCION_COD_CALCULO;
-            cabecera.pNFlagReincidencia = Convert.ToInt16(informeDigital.FLG_REINCIDENCIA);
-            cabecera.pNFlagMedidaCorrectiva = Convert.ToInt16(informeDigital.FLG_MEDIDA_CORRECTIVA);
-            cabecera.pNFlagMedidaComplementaria = Convert.ToInt16(informeDigital.FLG_MEDIDA_COMPLEMENTARIA);
-            cabecera.pNFlagResponsableSolidario = Convert.ToInt16(informeDigital.FLG_RESPONSABLE_SOLIDARIO);
-            cabecera.pNFlagComunicacionGORE = Convert.ToInt16(informeDigital.FLG_COMUNICACION_GORE);
+            cabecera.pNFlagMedidasComplementarias = Convert.ToInt16(informeDigital.FLG_MEDIDAS_COMPLEMENTARIAS);
+            cabecera.pNFlagMedidasCorrectivas = Convert.ToInt16(informeDigital.FLG_MEDIDAS_CORRECTIVAS);
+            cabecera.pNFlagComunicacionEntidades = Convert.ToInt16(informeDigital.FLG_COMUNICACION_ENTIDADES);
+
             cabecera.pVRutaArchivoRevision = informeDigital.RUTA_ARCHIVO_REVISION;
             cabecera.pVCodUsuarioCreacion = informeDigital.COD_USUARIO_OPERACION;
             cabecera.pVCodUsuarioModificacion = informeDigital.COD_USUARIO_OPERACION;
@@ -55,6 +55,11 @@ namespace CapaLogica.DOC
         public VM_PAU_RD_DIGITAL ObtenerRD(string COD_RESOLUCION)
         {
             return oDat_PAU_RD_Digital.ObtenerRD(COD_RESOLUCION);
+        }
+
+        public List<VM_PAU_RD_DIGITAL_ANTECEDENTE> ObtenerAntecedentes(string COD_RESOLUCION)
+        {
+            return oDat_PAU_RD_Digital.ObtenerAntecedentes(COD_RESOLUCION);
         }
 
         public bool ParticipanteActualizar(VM_PAU_RD_DIGITAL_PARTICIPANTE item)

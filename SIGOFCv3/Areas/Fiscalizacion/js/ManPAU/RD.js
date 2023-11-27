@@ -26,7 +26,7 @@ const data = {
         { COD_MODALIDAD: '02', COD_MATERIA: '02', MODALIDAD: 'Predios privados', CONTRATO: 'permiso forestal' },
         { COD_MODALIDAD: '03', COD_MATERIA: '02', MODALIDAD: 'Comunidades nativas', CONTRATO: 'permiso forestal' },
         { COD_MODALIDAD: '04', COD_MATERIA: '01', MODALIDAD: 'Fauna', CONTRATO: '' },
-    ],    
+    ],
     //Causales_Caducidad: []
 };
 
@@ -74,14 +74,6 @@ _informe.CERRAR = function () {
         if (r) {
             let params = _informe.Estructura();
             params.ESTADO = States.COMPLETADO;
-
-            /*const notificaciones_pendientes = app.Informe.PARTICIPANTES.filter(function (x) { return x.flgAplica && x.estado == 1 });
-            if (notificaciones_pendientes.length) {
-                app.Informe.PARTICIPANTES.forEach(function (item) {
-                    if (item.flgAplica && item.estado == 1)
-                        app.Notificar(item);
-                });
-            }*/
 
             _informe.Guardar(params).then(function (res) {
                 _informe.CambiarEstado(States.COMPLETADO);
@@ -190,7 +182,7 @@ _informe.NumeroALetra = function (numero) {
 _informe.tmpl = {
     get: function (html, tmplId, data) {
         const _dom = $("<div>", { html });
-        const partial = _dom.find(tmplId);        
+        const partial = _dom.find(tmplId);
         return $('<div>').append(partial.tmpl(data || {})).getUnformattedText();
     },
 }
@@ -326,8 +318,8 @@ _informe.Exportar = async function () {
     //informe.NOMBRE_POA = informe.ILEGAL[0].nombrePOA || '';
 
     for (let item of informe.ILEGAL) {
-        //if (incisos_afectos.find(x => ['e', '21', 'g'].includes(x))) {
-        let INF_SUPERVISION = await _informe.RegResumenInfSupervision(item.codInformeSupervision);
+        const codInformeSupervision = informe.ANTECEDENTES_DOCS.Inf_Sup;
+        let INF_SUPERVISION = await _informe.RegResumenInfSupervision(codInformeSupervision);
 
         if (INF_SUPERVISION) {
             informe.ANTECEDENTES_DOCS.Inf_Sup.FECHA_SUPERVISION_INICIO = INF_SUPERVISION.FECHA_SUPERVISION_INICIO;
@@ -340,9 +332,8 @@ _informe.Exportar = async function () {
             const resumen = INF_SUPERVISION.VOL_ANALIZADO?.filter(x => !!x.VOLUMEN_INJUSTIFICADO) || [];
             volumenes = volumenes.concat(resumen);
         }
-        //}
 
-        //RESUMEN RSD
+        //RESUMEN
         //const lstInstituciones = await _informe.InstitucionesResolucion(item.codResolucion);
         //instituciones = instituciones.concat(lstInstituciones);
     }
@@ -353,7 +344,9 @@ _informe.Exportar = async function () {
     informe.VOLUMENES_INJUSTIFICADOS_TOTAL = Math.round(volumenes.reduce((a, b) => a + b.VOLUMEN_INJUSTIFICADO, 0) * 1000) / 1000;
     //console.log(volumenes);
 
-    //INFRACCIONES    
+    //INFRACCIONES
+    informe.INFRACCIONES = informe.INFRACCIONES.filter(item => item.flgSeleccionado);
+
     for (var i = 0; i < informe.INFRACCIONES.length; i++) {
         const infraccion = informe.INFRACCIONES[i];
         const parrafos = await _informe.ExtraerParrafoInfraccion(infraccion, informe);
@@ -404,7 +397,7 @@ _informe.RegResumenInfSupervision = function (COD_INFORME_SUPERVISION) {
     return new Promise(function (resolve, reject) {
         const params = {
             type: 'get',
-            url: `${urlLocalSigo}Fiscalizacion/ManPAURD/ObtenerInformeSupervision`,
+            url: `${urlLocalSigo}Fiscalizacion/InformeLegalDigital/ObtenerInformeSupervision`,
             data: { COD_INFORME_SUPERVISION }
         };
 
@@ -418,7 +411,7 @@ _informe.ExtraerAntecedentes = function (COD_RESOLUCION) {
     const params = {
         type: 'get',
         url: `${urlLocalSigo}Fiscalizacion/ManPAURD/ObtenerAntecedentes`,
-        data: { COD_RESOLUCION, COD_THABILITANTE },
+        data: { COD_RESOLUCION },
         global: false
     }
 
@@ -497,7 +490,7 @@ _informe.Guardar = function (parametros) {
 
     let params = {
         type: 'post',
-        url: `${urlLocalSigo}Fiscalizacion/ManPAU/GuardarRD`,
+        url: `${urlLocalSigo}Fiscalizacion/ManPAURD/GuardarRD`,
         datos: JSON.stringify({ informeDigital: parametros }),
     }
     utilSigo.fnAjax(params, function (res) {
@@ -510,10 +503,19 @@ _informe.Guardar = function (parametros) {
                 x.flgAplica = !!x.estado;
                 x.accion = 1;
             });
-            objEN.RECURSOS.forEach(function (x) { x.accion = 1; });
+
+            objEN.DOCUMENTOS.forEach(function (x) { x.accion = 1; });
+            objEN.ILEGAL.forEach(function (x) { x.accion = 1; });
+            objEN.INFRACCIONES.forEach(function (x) { x.accion = 1; });
+            objEN.ANTECEDENTES.forEach(function (x) { x.accion = 1; });
+            app.Informe.REFERENCIAS.forEach(function (x) { x.RegEstado = 0; });
 
             app.Informe.PARTICIPANTES = objEN.PARTICIPANTES;
-            app.Informe.RECURSOS = objEN.RECURSOS;
+            app.Informe.DOCUMENTOS = objEN.DOCUMENTOS;
+            app.Informe.ILEGAL = objEN.ILEGAL;
+            app.Informe.INFRACCIONES = _informe.CombinarInfracciones(objEN.INFRACCIONES, []);
+            app.Informe.ANTECEDENTES = objEN.ANTECEDENTES;
+            app.Informe.ELIMINAR = [];
 
             _informe.CambiarEstado(app.Informe.ESTADO || States.INGRESADO);
             app.Informe.FLG_ACTUALIZAR = false;
@@ -528,29 +530,49 @@ _informe.Guardar = function (parametros) {
     return deferred.promise();
 }
 
+_informe.CombinarInfracciones = function (lstInfracciones) {
+    let infracciones = [];
+
+    for (const infraccion of lstInfracciones) {
+        if (!infracciones.find(x => x.inciso == infraccion.inciso)) {
+            infracciones.push(infraccion);
+        }
+    }
+
+    //Ordenamos los incisos
+    return infracciones.sort((a, b) => {
+        return (isNaN(a.inciso) || isNaN(b.inciso)) ? -1 : (+a.inciso > +b.inciso ? 1 : -1);
+    });
+}
+
 _informe.Estructura = function () {
     let objEN = JSON.parse(JSON.stringify(app.Informe));
 
     objEN.PARTICIPANTES.forEach(function (x, i) {
         if (!x.flgAplica) x.estado = 0;
         else x.estado = x.estado || 1;
-        x.item = i + 1;
     });
 
-    objEN.RECURSOS.forEach(function (x, i) {
+    objEN.DOCUMENTOS.forEach(function (x, i) {
         if (x.estado === null) x.estado = 1;
-        x.item = i + 1;
     });
 
-    objEN.INFRACCIONES = JSON.parse(JSON.stringify(objEN.INFRACCIONES))
-        .filter(item => item.select);
+    objEN.INFRACCIONES.forEach(function (x, i) {
+        if (x.estado === null) x.estado = 1;
+    });
 
-    //objEN.CAUSALES_CADUCIDAD = JSON.parse(JSON.stringify(data.Causales_Caducidad))
-    //    .filter(item => item.select);
+    objEN.ILEGAL.forEach(function (x, i) {
+        if (x.estado === null) x.estado = 1;
+    });
+
+    objEN.ANTECEDENTES.forEach(function (x, i) {
+        if (x.estado === null) x.estado = 1;
+        x.fechaEmisionTexto = x.fechaEmision ? fnDate.text_long(x.fechaEmision) : '';
+        x.fechaNotificacionTexto = x.fechaNotificacion ? fnDate.text_long(x.fechaNotificacion) : '';
+    });
 
     let parametros = {
         ...objEN,
-        //PARTICIPANTES: objEN.PARTICIPANTES,
         ELIMINAR: objEN.ELIMINAR
     };
 
@@ -621,7 +643,7 @@ _informe.TRANSFERIR = function () {
         if (r) {
             utilSigo.fnAjax({
                 type: 'post',
-                url: `${urlLocalSigo}Fiscalizacion/ManPAU/TransferirDocSITD`,
+                url: `${urlLocalSigo}Fiscalizacion/ManPAURD/TransferirDocSITD`,
                 datos: JSON.stringify({
                     tramiteId: app.Tramite.iCodTramite,
                     codInformeDigital: app.Informe.COD_INFORME_DIGITAL,
@@ -645,7 +667,7 @@ _informe.ANULAR = function () {
         if (r) {
             utilSigo.fnAjax({
                 type: 'post',
-                url: `${urlLocalSigo}Fiscalizacion/ManPAU/AnularFirmaPorInforme`,
+                url: `${urlLocalSigo}Fiscalizacion/ManPAURD/AnularFirmaPorInforme`,
                 datos: JSON.stringify({
                     codInforme: app.Informe.COD_INFORME_DIGITAL,
                     codificacion: _informe.fileName()
@@ -692,14 +714,14 @@ _informe.fnEliminarReferencia = function (item, index) {
         const i = data.findIndex(x => x.CODIGO == item.CODIGO && x.TIPO_DOCUMENTO == item.TIPO_DOCUMENTO);
         i != -1 && _renderTerminoPau.dtRenderListSTD02.row(i).remove().draw();
     } else {
-        const i = _renderTerminoPau.dtOtrosDocumentos.findIndex(x => x.CODIGO == item.CODIGO && x.TIPO_DOCUMENTO == item.TIPO_DOCUMENTO);
-        i != -1 && _renderTerminoPau.dtOtrosDocumentos.splice(i, 1);
+        //const i = _renderTerminoPau.dtOtrosDocumentos.findIndex(x => x.CODIGO == item.CODIGO && x.TIPO_DOCUMENTO == item.TIPO_DOCUMENTO);
+        //i != -1 && _renderTerminoPau.dtOtrosDocumentos.splice(i, 1);
     }
 
     app.Informe.REFERENCIAS.splice(index, 1);
 }
 
-_informe.EliminarResolucion = function (item, index) {   
+_informe.EliminarResolucion = function (item, index) {
     if (item.codInformeDigital) {
         app.Informe.ELIMINAR.push({ codInforme: item.codInformeDigital, item: item.item, origen: 'ILEGAL' });
 
@@ -771,7 +793,7 @@ _informe.EXTRAER_PARRAFOS_INFRACCION = function (template, informe) {
 _informe.SITD_OPEN = function () {
     utilSigo.fnAjax({
         type: 'get',
-        url: `${urlLocalSigo}Fiscalizacion/ManPAU/TramiteGeneral`
+        url: `${urlLocalSigo}Fiscalizacion/ManPAURD/TramiteGeneral`
     }, function (res) {
         if (res.success) {
             modal_sitd.oficinas = res.oficina;
@@ -810,7 +832,7 @@ _informe.Extraer_Plantilla = function () {
     return new Promise(function (resolve, reject) {
         const params = {
             type: 'get',
-            url: `${urlLocalSigo}Fiscalizacion/ManPAU/PlantillaInforme`,
+            url: `${urlLocalSigo}Fiscalizacion/ManPAURD/PlantillaInforme`,
             dataType: 'html'
         };
 
@@ -830,7 +852,7 @@ _informe.SITD_TrabajadoresXOficina = function () {
 
     utilSigo.fnAjax({
         type: 'get',
-        url: `${urlLocalSigo}Fiscalizacion/ManPAU/TramiteGeneralByCriterio`,
+        url: `${urlLocalSigo}Fiscalizacion/ManPAURD/TramiteGeneralByCriterio`,
         datos: { criterio: 'TRABAJADOR_X_OFICINA', valor: iCodOficina }
     }, function (res) {
         if (res.success) {
@@ -874,7 +896,7 @@ _informe.SITD_Registro = function () {
 
     let params = {
         type: 'post',
-        url: `${urlLocalSigo}Fiscalizacion/ManPAU/${obj.iCodTramite ? 'TramiteModificar' : 'TramiteGuardar'}`,
+        url: `${urlLocalSigo}Fiscalizacion/ManPAURD/${obj.iCodTramite ? 'TramiteModificar' : 'TramiteGuardar'}`,
         datos: JSON.stringify({ tramite: obj }),
     };
 
@@ -1012,11 +1034,13 @@ $(function () {
                 MATERIA: null,
                 COD_MODALIDAD: null,
                 MODALIDAD: null,
+
                 COD_INFORME: null, //Informe de supervision (auxiliar, obtenemos de la cabecera)
                 NRO_REFERENCIA: null,
                 INF_FECHA: null,
                 NUM_POA: null, // POA
                 NOMBRE_POA: null,
+
                 TITULAR_SUPERVISADO: null,
                 DOCUMENTO_TITULAR: null,
                 RUC_TITULAR: null,
@@ -1085,7 +1109,7 @@ $(function () {
                         { funcion: 'Subdirector', codPersona: null, apellidosNombres: null, flgAplica: true, estado: null },
                         { funcion: 'Director', codPersona: null, apellidosNombres: null, flgAplica: true, estado: null },
                     ],
-                    RECURSOS: [],
+                    DOCUMENTOS: [],
                 };
 
                 self.Informe = { ...self.Informe, ...values };
@@ -1093,7 +1117,7 @@ $(function () {
                 self.MateriaOnChange();
 
                 //Verificamos si existe informacion registrada en la base de datos
-                /*if (self.Informe.COD_RESOLUCION) {
+                if (self.Informe.COD_RESOLUCION) {
                     const res_general = await self.Informacion(values);
 
                     const res_tramite = await self.TramiteByID();
@@ -1105,9 +1129,9 @@ $(function () {
 
                     //Recursos
                     if (!self.Informe.COD_INFORME_DIGITAL) {
-                        const res_files = await self.ObtenerArchivos();
+                        //const res_files = await self.ObtenerArchivos();
                     }
-                }*/
+                }
             },
             MateriaOnChange: function () {
                 this.Modalidades = data.Modalidades.filter(x => x.COD_MATERIA === this.Informe.COD_MATERIA);
@@ -1119,7 +1143,7 @@ $(function () {
                 return new Promise((resolve, reject) => {
                     let params = {
                         type: 'get',
-                        url: `${urlLocalSigo}Fiscalizacion/ManResolucion/ObtenerRD`,
+                        url: `${urlLocalSigo}Fiscalizacion/ManPAURD/ObtenerRD`,
                         datos: { COD_RESOLUCION: self.Informe.COD_RESOLUCION }
                     };
 
@@ -1162,25 +1186,25 @@ $(function () {
 
                             const lstSITD01 = getReferences(_renderTerminoPau.dtRenderListSTD1.rows().data().toArray(), '01');
                             const lstSITD02 = getReferences(_renderTerminoPau.dtRenderListSTD02.rows().data().toArray(), '02');
-                            const lstSITD03 = getReferences(_renderTerminoPau.dtOtrosDocumentos, null);
+                            //const lstSITD03 = getReferences(_renderTerminoPau.dtOtrosDocumentos, null);
 
                             //console.log(lstSITD01, lstSITD02);
-                            self.Informe.REFERENCIAS = [...lstSITD01, ...lstSITD02, ...lstSITD03];
+                            self.Informe.REFERENCIAS = [...lstSITD01, ...lstSITD02];
                         }
 
                         if (!res.informe) {
                             //Expedientes del TAB Datos Generales
                             const expedientes = _renderListExpediente.dtRenderListInforme.rows().data().toArray()
                                 .map(x => {
-                                    const match = x.NUM_INFORME.match(regExpOSINFOR);
-                                    x.NUM_INFORME = match ? match[0] : x.NUM_INFORME;
+                                    const match = x.NUMERO.match(regExpOSINFOR);
+                                    x.NUMERO = match ? match[0] : x.NUMERO;
                                     return x;
                                 });
 
                             //console.log(expedientes);
 
                             if (expedientes.length > 0) {
-                                const expediente = await self.ExtraerExpediente(expedientes[0].NUM_INFORME);
+                                const expediente = await self.ExtraerExpediente(expedientes[0].NUMERO);
                                 app.Informe.REFERENCIAS.push(expediente);
                             }
                         }
@@ -1188,6 +1212,33 @@ $(function () {
                         resolve(res);
                     });
                 });
+            },
+            ExtraerExpediente: function (NRO_DOCUMENTO) {
+                return new Promise((resolve, reject) => {
+                    const params = {
+                        type: 'get',
+                        url: `${urlLocalSigo}Fiscalizacion/InformeLegalDigital/ObtenerExpediente`,
+                        data: { NRO_DOCUMENTO }
+                    };
+
+                    $.ajax(params)
+                        .done(function (res) {
+                            var model = {
+                                COD_ILEGAL: app.Informe.COD_INFORME,
+                                SUBTIPO: null,
+                                SUBTIPO_DETALLE: 'Otro',
+                                CODIGO: res.cCodificacion,
+                                NUMERO: res.cNroDocumento,
+                                TIPO_DOCUMENTO: res.cDescTipoDoc,
+                                PDF_DOCUMENTO: res.PDF_TRAMITE_SITD,
+                                RegEstado: 1
+                            };
+
+                            resolve(model);
+                        }).fail(function (xhr) {
+                            reject();
+                        });
+                })
             },
             TramiteByID: function (datos) {
                 const self = this;
@@ -1200,7 +1251,7 @@ $(function () {
                     }
 
                     const params = {
-                        url: `${urlLocalSigo}Fiscalizacion/ManPAU/TramiteGetById`,
+                        url: `${urlLocalSigo}Fiscalizacion/ManPAURD/TramiteGetById`,
                         datos: { id: datos.TRAMITE_ID, codTHabilitante: datos.COD_THABILITANTE, codInforme: datos.COD_RESOLUCION }
                     };
 
@@ -1237,7 +1288,7 @@ $(function () {
                                 }
                             });
 
-                            self.Informe.RECURSOS = files;
+                            self.Informe.DOCUMENTOS = files;
                             resolve(files);
                         }
                     });
@@ -1249,7 +1300,7 @@ $(function () {
                 let self = this;
                 utilSigo.dialogConfirm("", "¿Desea quitar el recurso como insumo para el análisis?", function (r) {
                     if (r) {
-                        self.Informe.RECURSOS.splice(index, 1);
+                        self.Informe.DOCUMENTOS.splice(index, 1);
                     }
                 });
             },
@@ -1340,7 +1391,7 @@ $(function () {
 
                     let params = {
                         type: 'post',
-                        url: `${urlLocalSigo}Fiscalizacion/ManPAU/RDFirmaActualizar`,
+                        url: `${urlLocalSigo}Fiscalizacion/ManPAURD/RDFirmaActualizar`,
                         datos: JSON.stringify({ participantes })
                     };
 
@@ -1355,38 +1406,6 @@ $(function () {
                 }
 
                 modal_notificar.Abrir(res);
-            },
-            Notificar: function (item, mensaje) {
-                let notificacion = {
-                    COD_PERSONA: item.codPersona,
-                    COD_INFORME: this.Informe.COD_RESOLUCION,
-                    MENSAJE_ENVIO_ALERTA: mensaje,
-                    URL_LOCAL: window.location.href
-                };
-
-                let objEN;
-                if (this.Informe.COD_INFORME_DIGITAL) {
-                    objEN = {
-                        codInformeDigital: this.Informe.COD_INFORME_DIGITAL,
-                        item: item.item,
-                        estado: item.estado > 2 ? item.estado : 2
-                    }
-                }
-
-                let params = {
-                    type: 'post',
-                    url: `${urlLocalSigo}Fiscalizacion/ManPAU/NotificarRD`,
-                    datos: JSON.stringify({ notificacion, objEN })
-                };
-
-                utilSigo.fnAjax(params, function (res) {
-                    if (res) {
-                        item.estado = objEN?.estado || 2;
-                        utilSigo.toastSuccess('Enviado', res);
-                    } else {
-                        utilSigo.toastWarning('Atención', 'No se ha encontrado ningún correo asociado al usuario');
-                    }
-                });
             },
             Revisar: function (item, index) {
                 //let self = this;
@@ -1561,7 +1580,8 @@ $(function () {
                             codILegal: item.COD_ILEGAL,
                             parrafos: null,
                             estado: 1,
-                            select: true
+                            accion: 0,
+                            flgSeleccionado: true
                         }
 
                         infracciones.push(model);
@@ -1611,10 +1631,11 @@ $(function () {
                 app.Informe.INFRACCIONES = infracciones;
 
                 //Antecedentes
-                /*const ANTECEDENTES = await _informe.ExtraerAntecedentes(item.COD_RESODIREC, app.Informe.COD_TITULAR);
+                console.log(item, "Falta extraer antecedentes por codigo de informe legal");
+                /*const ANTECEDENTES = await _informe.ExtraerAntecedentes(item.COD_ILEGAL);
 
                 ANTECEDENTES.forEach(a => {
-                    a.codResolucion = item.COD_RESODIREC;
+                    a.codILegal = item.COD_ILEGAL;
                     const n = a.numero?.match(regExpOSINFOR) || [];
                     a.numero = n[0];
                     a.estado = 1;
@@ -1623,7 +1644,7 @@ $(function () {
                 app.Informe.ANTECEDENTES = ANTECEDENTES;
 
                 //Archivos relacionados
-                let files = await app.ObtenerArchivos(item.COD_RESODIREC);
+                let files = await app.ObtenerArchivos(item.COD_ILEGAL);
 
                 //console.log("LOAD FILES SIADO...", files);
                 files = files.filter(function (file) {
@@ -1759,7 +1780,7 @@ $(function () {
                 } else if (model.SUBTIPO == '02') {
                     _renderTerminoPau.dtRenderListSTD02.rows.add([model]).draw();
                 } else {
-                    _renderTerminoPau.dtOtrosDocumentos.push(model);
+                    //_renderTerminoPau.dtOtrosDocumentos.push(model);
                 }
 
                 utilSigo.toastSuccess('Agregado', 'Se agregó un documento a la lista');
@@ -1936,6 +1957,7 @@ $(function () {
                 const user = ManRD_AddEdit.userApp;
 
                 const notificacion = {
+                    TITULO: 'Resolución Directoral',
                     DESTINATARIOS: self.form.Seleccionados.map(item => item.email).join(','),
                     CC_DESTINATARIOS: self.form.CC,
                     COD_INFORME: app.Informe.NUM_INFORME_SITD,
@@ -1945,7 +1967,7 @@ $(function () {
 
                 let params = {
                     type: 'post',
-                    url: `${urlLocalSigo}Fiscalizacion/ManPAU/Notificar`,
+                    url: `${urlLocalSigo}Fiscalizacion/ManPAURD/Notificar`,
                     datos: JSON.stringify({ notificacion })
                 };
 
@@ -2088,7 +2110,7 @@ $(function () {
                         return xhr;
                     },
                     type: 'post',
-                    url: urlLocalSigo + 'Fiscalizacion/ManPAU/CargarDocumento',
+                    url: urlLocalSigo + 'Fiscalizacion/ManPAURD/CargarDocumento',
                     data: formData,
                     cache: false,
                     contentType: false,

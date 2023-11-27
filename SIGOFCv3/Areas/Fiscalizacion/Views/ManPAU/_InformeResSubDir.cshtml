@@ -31,7 +31,7 @@
         <div>Generar Informe</div>
         <div class="options">
             <button type="button" class="btn btn-link btn-sm p-0 ml-3" onclick="_informe.Exportar()" v-if="Informe.COD_INFORME_DIGITAL && Informe.ESTADO < States.FINALIZADO">
-                <i class="fa fa-file-word-o fa-fw"></i>Crear informe
+                <i class="fa fa-file-word-o fa-fw"></i>Crear documento
             </button>
             <button type="button" class="btn btn-link btn-sm p-0 ml-3" onclick="_informe.Registro()" v-if="Informe.COD_RES_SUB && Informe.ESTADO < States.COMPLETADO || Informe.FLG_ACTUALIZAR">
                 <i class="fa fa-save fa-fw"></i>Guardar

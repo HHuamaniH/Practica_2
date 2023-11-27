@@ -1,5 +1,6 @@
 ﻿using CapaEntidad.ViewModel;
 using CapaLogica.DOC;
+using CapaLogica.Documento;
 using SIGOFCv3.Models;
 using System;
 using System.Collections.Generic;
@@ -30,7 +31,7 @@ namespace SIGOFCv3.Areas.Fiscalizacion.Controllers
                 success = true;
                 msj = "Datos guardados Correctamente";
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 success = false;
                 msj = "Error al guardar los datos";
@@ -38,7 +39,7 @@ namespace SIGOFCv3.Areas.Fiscalizacion.Controllers
 
             return Json(new { success, msj, data = result });
         }
-        
+
         [HttpPost]
         public JsonResult CargarDocumento()
         {
@@ -59,7 +60,7 @@ namespace SIGOFCv3.Areas.Fiscalizacion.Controllers
                     HttpPostedFileBase file = Request.Files[0];
 
                     pathGenerado = Path.Combine(pathDocumento, $"{documentName}");
-                    
+
                     file.SaveAs(pathGenerado);
 
                     return Json(new { fileName = documentName, success = true, msj = "Archivo subido correctamente" });
@@ -75,14 +76,22 @@ namespace SIGOFCv3.Areas.Fiscalizacion.Controllers
             }
         }
 
-        [HttpPost]
+        [HttpGet]
         public JsonResult ObtenerRD(string COD_RESOLUCION)
         {
             CLogInforme = new Log_PAU_RD_Digital();
             var informe = CLogInforme.ObtenerRD(COD_RESOLUCION);
-            
+
             return Json(new { informe }, JsonRequestBehavior.AllowGet);
-        }       
+        }
+
+        [HttpGet]
+        public JsonResult ObtenerAntecedentes(string COD_RESOLUCION)
+        {
+            CLogInforme = new Log_PAU_RD_Digital();
+            var result = CLogInforme.ObtenerAntecedentes(COD_RESOLUCION);
+            return Json(result, JsonRequestBehavior.AllowGet);
+        }
 
         [HttpPost, ValidateInput(false)]
         public JsonResult Notificar(VM_PAU_DIGITAL_ALERTA notificacion)

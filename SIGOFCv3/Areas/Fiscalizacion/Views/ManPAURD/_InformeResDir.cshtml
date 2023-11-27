@@ -31,7 +31,7 @@
         <div>Generar Informe</div>
         <div class="options">
             <button type="button" class="btn btn-link btn-sm p-0 ml-3" onclick="_informe.Exportar()" v-if="true || Informe.COD_INFORME_DIGITAL && Informe.ESTADO < States.FINALIZADO">
-                <i class="fa fa-file-word-o fa-fw"></i>Crear informe
+                <i class="fa fa-file-word-o fa-fw"></i>Crear documento
             </button>
             <button type="button" class="btn btn-link btn-sm p-0 ml-3" onclick="_informe.Registro()" v-if="Informe.COD_RESOLUCION && Informe.ESTADO < States.COMPLETADO || Informe.FLG_ACTUALIZAR">
                 <i class="fa fa-save fa-fw"></i>Guardar
@@ -370,10 +370,10 @@
                 </div>
             </div>
         </fieldset>
-        <fieldset class="fs-border" v-if="Informe.RECURSOS.length">
+        <fieldset class="fs-border" v-if="Informe.DOCUMENTOS.length">
             <legend>Insumos para el Análisis</legend>
             <div class="form-row">
-                <div class="col-sm-3" v-for="(item, index) in Informe.RECURSOS">
+                <div class="col-sm-3" v-for="(item, index) in Informe.DOCUMENTOS">
                     <div class="file-attach">
                         <div class="file-attach-icon">
                             <i class="fa fa-file-pdf-o fa-2x"></i>
@@ -395,7 +395,7 @@
             <h5>Imputaciones a considerar</h5>
             <div class="mt-3" v-for="(item, index) in Informe.INFRACCIONES">
                 <div class="custom-control custom-checkbox custom-control-inline">
-                    <input type="checkbox" class="custom-control-input" :id="'inf_' + index" v-model="item.select">
+                    <input type="checkbox" class="custom-control-input" :id="'inf_' + index" v-model="item.flgSeleccionado">
                     <label class="custom-control-label" :for="'inf_' + index">
                         <strong>Inciso {{item.inciso}}.</strong> {{item.titulo || 'No se encontró información de la infracción'}}<br />
                         <span class="small text-muted mt-2" v-if="item.detalle">{{item.detalle}}</span>

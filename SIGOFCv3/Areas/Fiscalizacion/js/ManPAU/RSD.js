@@ -71,15 +71,7 @@ _informe.CERRAR = function () {
         if (r) {
             let params = _informe.Estructura();
             params.ESTADO = States.COMPLETADO;
-
-            /*const notificaciones_pendientes = app.Informe.FIRMAS.filter(function (x) { return x.flgAplica && x.estado == 1 });
-            if (notificaciones_pendientes.length) {
-                app.Informe.FIRMAS.forEach(function (item) {
-                    if (item.flgAplica && item.estado == 1)
-                        app.Notificar(item);
-                });
-            }*/
-
+            
             _informe.Guardar(params).then(function (res) {
                 _informe.CambiarEstado(States.COMPLETADO);
 
@@ -1165,39 +1157,7 @@ $(function () {
                 }
 
                 modal_notificar.Abrir(res);
-            },
-            Notificar: function (item, mensaje) {
-                let notificacion = {
-                    COD_PERSONA: item.codPersona,
-                    COD_INFORME: this.Informe.COD_RES_SUB,
-                    MENSAJE_ENVIO_ALERTA: mensaje,
-                    URL_LOCAL: window.location.href
-                };
-
-                let objEN;
-                if (this.Informe.COD_INFORME_DIGITAL) {
-                    objEN = {
-                        codInformeDigital: this.Informe.COD_INFORME_DIGITAL,
-                        item: item.item,
-                        estado: item.estado > 2 ? item.estado : 2
-                    }
-                }
-
-                let params = {
-                    type: 'post',
-                    url: `${urlLocalSigo}Fiscalizacion/ManPAU/NotificarRSD`,
-                    datos: JSON.stringify({ notificacion, objEN })
-                };
-
-                utilSigo.fnAjax(params, function (res) {
-                    if (res) {
-                        item.estado = objEN?.estado || 2;
-                        utilSigo.toastSuccess('Enviado', res);
-                    } else {
-                        utilSigo.toastWarning('Atención', 'No se ha encontrado ningún correo asociado al usuario');
-                    }
-                });
-            },
+            },            
             Revisar: function (item, index) {
                 //let self = this;
                 let user = ManRD_AddEdit.userApp || {};
@@ -1429,6 +1389,7 @@ $(function () {
                 const user = ManRD_AddEdit.userApp;
 
                 const notificacion = {
+                    TITULO: 'Resolución Sub Directoral',
                     DESTINATARIOS: self.form.Seleccionados.map(item => item.email).join(','),
                     CC_DESTINATARIOS: self.form.CC,
                     COD_INFORME: app.Informe.NUM_INFORME_SITD,
