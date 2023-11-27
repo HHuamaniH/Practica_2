@@ -96,12 +96,12 @@ namespace CapaEntidad.ViewModel
 
     public class VM_PAU_RD_DIGITAL_REFERENCIA_SITD
     {
-        public string COD_ILEGAL { get; set; }
-        public string COD_ILACCION { get; set; }
+        public string COD_RDACCION { get; set; }
+        public string COD_RESODIREC { get; set; }
         public string CODIGO { get; set; }
         public string NUMERO { get; set; }
-        public string PDF_DOCUMENTO { get; set; }
         public string TIPO_DOCUMENTO { get; set; }
+        public string PDF_DOCUMENTO { get; set; }
         public string SUBTIPO { get; set; }
         public int RegEstado { get; set; }
     }

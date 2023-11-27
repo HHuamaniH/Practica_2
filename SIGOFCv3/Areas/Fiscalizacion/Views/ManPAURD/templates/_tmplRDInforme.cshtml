@@ -749,14 +749,4 @@
     <a href="http://mpv.osinfor.gob.pe:8083/visor-osinfor-pide">http://mpv.osinfor.gob.pe:8083/visor-osinfor-pide</a> e ingresando la siguiente clave-std: PASSWORD
 </script>
 
-<script id="tmpl-notificacion-calidad" type="text/x-jquery-tmpl">
-    <p>
-        Estimado(a)<br /><br />Adjunto el enlace de descarga de la Resolución Sub Directoral Nro ${NUM_INFORME_SITD},
-        debidamente revisado y firmado por los involucrados para el control de calidad respectivo.<br /><br />
-        <strong>URL Descarga:</strong>&nbsp;<a target="_blank" href="${URL_DESCARGA}">${NUM_INFORME_SITD || 'Enlace de descarga'}</a><br /><br />
-        Atentamente<br />
-        ${USUARIO}
-    </p>
-</script>
-
 @Html.Partial("~/Areas/Fiscalizacion/Views/ManPAURD/templates/_tmplFootnotes.cshtml")

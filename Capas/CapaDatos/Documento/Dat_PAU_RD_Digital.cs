@@ -47,8 +47,8 @@ namespace CapaDatos.DOC
                             {
                                 if (item.RegEstado == 1) //Nuevo o modificado
                                 {
-                                    object[] param = { item.COD_ILEGAL, item.CODIGO, item.NUMERO, item.PDF_DOCUMENTO, item.TIPO_DOCUMENTO, item.SUBTIPO, 1 };
-                                    dBOracle.ManExecute(cn, tr, "DOC_OSINFOR_ERP_MIGRACION.SPFISCALIZACION_RESDIR_DIGITAL_DET_ACCION_GRABAR", param);
+                                    object[] param = { item.COD_RESODIREC, item.CODIGO, item.NUMERO,  item.PDF_DOCUMENTO, item.TIPO_DOCUMENTO, item.SUBTIPO, 1 };
+                                    dBOracle.ManExecute(cn, tr, "DOC_OSINFOR_ERP_MIGRACION.RESODIREC_DET_ACCIONGrabar", param);
                                 }
                             }
                         }

@@ -1172,14 +1172,14 @@ $(function () {
                             //REFERENCIAS
                             const getReferences = (lst, SUBTIPO) => {
                                 return lst.map(x => ({
-                                    COD_ILACCION: x.COD_ILACCION,
-                                    COD_RESOLUCION: self.Informe.COD_RESOLUCION,
-                                    SUBTIPO: SUBTIPO,
-                                    SUBTIPO_DETALLE: modal_referencias.subtipos.find(s => s.SUBTIPO == SUBTIPO)?.DESCRIPCION,
+                                    //COD_RDACCION: x.COD_RDACCION,
+                                    COD_RESODIREC: self.Informe.COD_RESOLUCION,
                                     CODIGO: x.CODIGO,
                                     NUMERO: x.NUMERO,
                                     TIPO_DOCUMENTO: x.TIPO_DOCUMENTO,
                                     PDF_DOCUMENTO: x.PDF_DOCUMENTO,
+                                    SUBTIPO: SUBTIPO,
+                                    SUBTIPO_DETALLE: modal_referencias.subtipos.find(s => s.SUBTIPO == SUBTIPO)?.DESCRIPCION,
                                     RegEstado: 0
                                 }));
                             }
@@ -1745,13 +1745,13 @@ $(function () {
                 if (!data) return;
 
                 //Buscamos que no se repita
-                const existe = app.Informe.REFERENCIAS.find(x => x.CODIGO == data.cCodificacion?.trim() && x.TIPO_DOCUMENTO == data.cDescTipoDoc?.trim());
+                const existe = app.Informe.REFERENCIAS.find(x => x.CODIGO == data.cCodificacion?.trim() && x.TIPO == data.cDescTipoDoc?.trim());
                 if (existe) {
                     utilSigo.toastWarning('Alerta', 'El documento ya existe en la lista');
                     return;
                 }
 
-                const oneExp = app.Informe.REFERENCIAS.find(x => x.TIPO_DOCUMENTO?.indexOf('EXPEDIENTE') != -1);
+                const oneExp = app.Informe.REFERENCIAS.find(x => x.TIPO?.indexOf('EXPEDIENTE') != -1);
                 if (oneExp && data.cDescTipoDoc?.trim().indexOf('EXPEDIENTE') != -1) {
                     utilSigo.toastWarning('Alerta', 'Ya existe un EXPEDIENTE en la lista, no se pueden agregar más');
                     return;
@@ -1763,13 +1763,13 @@ $(function () {
                 const self = this;
 
                 var model = {
-                    COD_ILEGAL: app.Informe.COD_INFORME,
-                    SUBTIPO: subSel.SUBTIPO,
-                    SUBTIPO_DETALLE: subSel.DESCRIPCION,
-                    CODIGO: data.cCodificacion?.trim(),
-                    NUMERO: data.cNroDocumento?.trim(),
+                    COD_RESODIREC: app.Informe.COD_RESOLUCION,
+                    CODIGO: data.cCodificacion?.trim() || '',
+                    NUMERO: data.cNroDocumento?.trim() || '',
                     TIPO_DOCUMENTO: data.cDescTipoDoc?.trim(),
                     PDF_DOCUMENTO: data.PDF_TRAMITE_SITD?.trim(),
+                    SUBTIPO: subSel.SUBTIPO,
+                    SUBTIPO_DETALLE: subSel.DESCRIPCION,
                     RegEstado: 1
                 };
 
@@ -1795,7 +1795,7 @@ $(function () {
             subtipos: [
                 { SUBTIPO: '01', DESCRIPCION: 'Allanamiento de responsabilidad' },
                 { SUBTIPO: '02', DESCRIPCION: 'Subsanación voluntaria' },
-                { SUBTIPO: null, DESCRIPCION: 'Otro' },
+                //{ SUBTIPO: null, DESCRIPCION: 'Otro' }, // Considerar la listSTD03, realizar cambios en back
             ]
         },
         methods: {

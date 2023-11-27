@@ -805,49 +805,84 @@
     </div>
 </div>
 
-<div id="modal-planes-manejo" class="modal fade" data-backdrop="static">
+<div id="modal-referencias" class="modal fade" data-backdrop="static">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header text-small" style="cursor:move;">
-                <span>Planes de manejo</span>
+                <span>Documentos SITD</span>
                 <i class="fa fa-close" style="cursor:pointer;" data-dismiss="modal" aria-label="Close"></i>
             </div>
             <div class="modal-body">
-                <table class="table table-bordered dataTable">
-                    <thead>
-                        <tr>
-                            <th>N° POA</th>
-                            <th>POA</th>
-                            <th>N° RESOLUCIÓN</th>
-                            <th>INICIO SUPERVISIÓN</th>
-                            <th>FECHA RESOLUCIÓN</th>
-                            <th>INICIO VIGENCIA</th>
-                            <th>FIN VIGENCIA</th>
-                            <th></th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr v-for="item in Planes_Manejo">
-                            <td>{{item.NUM_POA}}</td>
-                            <td>{{item.NOMBRE_POA}}</td>
-                            <td>{{item.ARESOLUCION_NUM}}</td>
-                            <td class="text-center">{{item.INICIO_SUPERVISION}}</td>
-                            <td class="text-center">{{item.ARESOLUCION_FECHA || '-'}}</td>
-                            <td class="text-center">{{item.INICIO_VIGENCIA || '-'}}</td>
-                            <td class="text-center">{{item.FIN_VIGENCIA || '-'}}</td>
-                            <td class="text-center">
-                                <i class="fa fa-hand-o-left fa-lg cursor-pointer" v-on:click="Seleccionar(item)"></i>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
+                <div class="form-row">
+                    <div class="col-md-auto mb-3">
+                        <label class="control-label small">Categoria</label>
+                        <select class="form-control form-control-sm" v-model="categoria">
+                            <option value="DOC_SALIDA">Documentos de Salida</option>
+                            <option value="DOC_ENTRADA">Documentos de Entrada</option>
+                            <option value="DOC_GENERADOS">Documentos Internos</option>
+                            <option value="DOC_SALIDA_MEM">Documentos de Salida (Memorandums)</option>
+                        </select>
+                    </div>                    
+                    <div class="col-md mb-3">
+                        <label class="control-label small">&nbsp;</label>
+                        <div class="input-group input-group-sm">
+                            <input type="text" class="form-control form-control-sm" maxlength="50" v-model="texto" v-on:keyup.enter="Buscar()" />
+                            <div class="input-group-btn">
+                                <button type="button" class="btn btn-outline-success btn-sm" v-on:click="Buscar()">
+                                    <i class="fa fa-search" data-toggle="tooltip" data-placement="top" title="Buscar"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="table-responsive">
+                    <table id="dtReferencias" class="table table-hover table-bordered w-100">
+                        <thead></thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Salir</button>
             </div>
         </div>
     </div>
 </div>
+
+<div id="modal-referencias-tipo" class="modal fade" data-backdrop="static">
+    <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content">
+            <div class="modal-header text-small" style="cursor:move;">
+                <span>Agregar documento como...</span>
+                <i class="fa fa-close" style="cursor:pointer;" data-dismiss="modal" aria-label="Close"></i>
+            </div>
+            <div class="modal-body">
+                <div class="form-row">
+                    <div class="col-md-auto mb-3">
+                        <label class="control-label small">Grupo</label>
+                        <select class="form-control form-control-sm" v-model="subtipo">
+                            <option v-for="item in subtipos" v-bind:value="item.SUBTIPO">{{item.DESCRIPCION}}</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary btn-sm" v-on:click="Aceptar()">Aceptar</button>
+                <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Salir</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script id="tmpl-notificacion-calidad" type="text/x-jquery-tmpl">
+    <p>
+        Estimado(a)<br /><br />Adjunto el enlace de descarga de la Resolución Sub Directoral Nro ${NUM_INFORME_SITD},
+        debidamente revisado y firmado por los involucrados para el control de calidad respectivo.<br /><br />
+        <strong>URL Descarga:</strong>&nbsp;<a target="_blank" href="${URL_DESCARGA}">${NUM_INFORME_SITD || 'Enlace de descarga'}</a><br /><br />
+        Atentamente<br />
+        ${USUARIO}
+    </p>
+</script>
 
 <!--Firma digital-->
 @Html.Partial("~/Areas/General/Views/FirmaDigital/_FirmaModal.cshtml")

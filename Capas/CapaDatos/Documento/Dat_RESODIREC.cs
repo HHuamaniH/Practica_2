@@ -1153,9 +1153,9 @@ namespace CapaDatos.DOC
                                 oCEntidadSTD = new CEntidadC();
                                 oCEntidadSTD.COD_RDACCION = dr.GetString(dr.GetOrdinal("COD_RDACCION"));
                                 oCEntidadSTD.CODIGO = dr.GetString(dr.GetOrdinal("CODIGO")).ToString();
-                                oCEntidadSTD.NUMERO = dr.GetString(dr.GetOrdinal("NUMERO")).ToString();
+                                oCEntidadSTD.NUMERO = dr["NUMERO"] != DBNull.Value ? dr.GetString(dr.GetOrdinal("NUMERO")).ToString() : "";
                                 oCEntidadSTD.TIPO_DOCUMENTO = dr.GetString(dr.GetOrdinal("TIPO"));
-                                oCEntidadSTD.PDF_DOCUMENTO = dr.GetString(dr.GetOrdinal("DESCARGA"));
+                                oCEntidadSTD.PDF_DOCUMENTO = dr["DESCARGA"] != DBNull.Value ? dr.GetString(dr.GetOrdinal("DESCARGA")) : "";
                                 oCEntidadSTD.RegEstado = 0;
                                 lsCEntidad.listSTD01.Add(oCEntidadSTD);
                             }
@@ -1171,9 +1171,9 @@ namespace CapaDatos.DOC
                                 oCEntidadSTD = new CEntidadC();
                                 oCEntidadSTD.COD_RDACCION = dr.GetString(dr.GetOrdinal("COD_RDACCION"));
                                 oCEntidadSTD.CODIGO = dr.GetString(dr.GetOrdinal("CODIGO")).ToString();
-                                oCEntidadSTD.NUMERO = dr.GetString(dr.GetOrdinal("NUMERO")).ToString();
+                                oCEntidadSTD.NUMERO = dr["NUMERO"] != DBNull.Value ? dr.GetString(dr.GetOrdinal("NUMERO")).ToString() : "";
                                 oCEntidadSTD.TIPO_DOCUMENTO = dr.GetString(dr.GetOrdinal("TIPO"));
-                                oCEntidadSTD.PDF_DOCUMENTO = dr.GetString(dr.GetOrdinal("DESCARGA"));
+                                oCEntidadSTD.PDF_DOCUMENTO = dr["DESCARGA"] != DBNull.Value ? dr.GetString(dr.GetOrdinal("DESCARGA")): "";
                                 oCEntidadSTD.RegEstado = 0;
                                 lsCEntidad.listSTD02.Add(oCEntidadSTD);
                             }
