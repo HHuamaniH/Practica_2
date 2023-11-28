@@ -13,27 +13,27 @@
                 @Html.Hidden("hdfCodSecuencial")
                 <div class="form-row">
                     <div class="form-group col-md-6">
-                        <label for="txtDAP" class="text-small">Áreas con cobertura de Bosques Naturales</label>
+                        <label for="txtDAP" class="text-small">*Áreas con cobertura de Bosques Naturales</label>
                         @Html.DropDownList("ddlAreaCoberturaBosNatId", new SelectList(ViewBag.ddlAreaCobertura, "Value", "Text"), new { @class = "form-control form-control-sm" })
                     </div>
                     <div class="form-group col-md-6 mt-2">
-                        <label for="txtAC" class="text-small">Área (has)</label>
+                        <label for="txtAC" class="text-small">*Área (has)</label>
                         @Html.TextBox("txtAreaBosNat", "", new { @class = "form-control form-control-sm", maxlength = "8", onblur = "return utilSigo.onBlurThreeDecimal(this,'Area');", onkeypress = "return utilSigo.onKeyDecimal(event, this);" })
                     </div>
                 </div>
                 <div class="form-row">
                     <div class="form-group col-md-6">
-                        <label for="txtCoordEsteS" class="text-small">Coordenada Este</label>
+                        <label for="txtCoordEsteS" class="text-small">*Coordenada Este</label>
                         @Html.TextBox("txtCoordEsteBosNat", "", new { @class = "form-control form-control-sm", maxlength = "6", onkeypress = "return utilSigo.checkNum(event)" })
                     </div>
                     <div class="form-group col-md-6">
-                        <label for="txtCoordNorteS" class="text-small">Coordenada Norte</label>
+                        <label for="txtCoordNorteS" class="text-small">*Coordenada Norte</label>
                         @Html.TextBox("txtCoordNorteBosNat", "", new { @class = "form-control form-control-sm", maxlength = "7", onkeypress = "return utilSigo.checkNum(event)" })
                     </div>
                 </div>
                 <div class="form-row">
                     <div class="form-group col-md-6">
-                        <label for="txtDAP" class="text-small">Altitud (msnm): </label>
+                        <label for="txtDAP" class="text-small">*Altitud (msnm): </label>
                         @Html.TextBox("txtAltitudBosNat", "", new { @class = "form-control form-control-sm", maxlength = "4", onkeypress = "return utilSigo.checkNum(event)" })
                     </div>                    
                 </div>

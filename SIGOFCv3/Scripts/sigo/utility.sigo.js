@@ -889,7 +889,7 @@ utilSigo.checkLetter = function (e) {
         return true;
     }
 
-    var patron = /[ ÁÉÍÓÚÑA-Záéíóúa-zñ0-9\-\/\.]/;
+    var patron = /[ ÁÉÍÓÚÑA-Záéíóúa-zñ0-9\-\/\.\,]/;
     var tecla_final = String.fromCharCode(tecla);
     return patron.test(tecla_final);
 }
