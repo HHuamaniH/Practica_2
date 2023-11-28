@@ -95,6 +95,7 @@ namespace SIGOFCv3.Areas.Supervision.Controllers
                         case "COBERTURA_BOSCOSA": result = ImportarDatos.CoberturaBoscosa(Request); break;
                         case "ESPECIESFOREST": result = ImportarDatos.EspecieForestalEstablecida(Request); break;
                         case "COBERTURABOSNAT": result = ImportarDatos.CoberturaBosquesNaturales(Request); break;
+                        case "DIVISIONPREDIO": result = ImportarDatos.DivisionPredio(Request); break;
                     }
                 }
             }

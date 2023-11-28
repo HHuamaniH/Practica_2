@@ -1,172 +1,58 @@
 ﻿
 @model List<CapaEntidad.DOC.Ent_INFORME_DIVISION_PREDIO>
 
+
+
 <style type="text/css">
     #tbRenderDivisionPredio_wrapper {
         padding: 0px;
     }
 </style>
 
+
 <script type="text/javascript">
     var _renderDivisionPredio = {};
-    _renderDivisionPredio.DataDivisionInterna = [];
     _renderDivisionPredio.tbEliTABLA = [];
 
+    _renderDivisionPredio.fnInitDataTable_Detail = function () {
+        var columns_label = [], columns_data = [], options = {};
 
-    _renderDivisionPredio.fnLoadData = function (obj, tipo) {
-        switch (tipo) {
-            case "DivisionInterna": _renderDivisionPredio.DataDivisionInterna = JSON.parse(obj); break;
-        }
-    }
-
-    _renderDivisionPredio.fnInitTable = function () {
-        var sublista = _renderDivisionPredio.fnObtenerDivisionInterna();
-
-        let tbody = "";
-        $("#tbodyDivisionPredio").html(tbody);
-        for (var i = 0; i < sublista.length; i++) {
-            let obj;
-            let rowspan = 0;
-            for (var j = 0; j < _renderDivisionPredio.DataDivisionInterna.length; j++) {
-                obj = _renderDivisionPredio.DataDivisionInterna[j];
-                if (obj.DIVISION_INTERNA == sublista[i].DIVISION_INTERNA) {
-                    rowspan++;
-                }
-            }
-            for (var j = 0; j < _renderDivisionPredio.DataDivisionInterna.length; j++) {
-                obj = _renderDivisionPredio.DataDivisionInterna[j];
-                if (obj.DIVISION_INTERNA == sublista[i].DIVISION_INTERNA) {
-                    if (rowspan > 0) {
-                        tbody = tbody + '<tr>';
-                        tbody = tbody + '   <td rowspan="' + rowspan.toString() + '">' + obj.DIVISION_INTERNA + '</td>';
-                        tbody = tbody + '   <td>' + obj.COORDENADA_ESTE + '</td>';
-                        tbody = tbody + '   <td>' + obj.COORDENADA_NORTE + '</td>';
-                        tbody = tbody + '   <td>' + obj.ALTITUD + '</td>';
-                        tbody = tbody + '   <td rowspan="' + rowspan.toString() + '">' + obj.OBSERVACION + '</td>';
-                        tbody = tbody + '</tr>';
-                        rowspan = 0;
-                    } else {
-                        tbody = tbody + '<tr>';
-                        tbody = tbody + '   <td>' + obj.COORDENADA_ESTE + '</td>';
-                        tbody = tbody + '   <td>' + obj.COORDENADA_NORTE + '</td>';
-                        tbody = tbody + '   <td>' + obj.ALTITUD + '</td>';
-                        tbody = tbody + '</tr>';
-                    }
-                }
-            }
-        }
-        $("#tbodyDivisionPredio").html(tbody);
-    }
-
-    _renderDivisionPredio.fnObtenerDivisionInterna = function () {
-        var sublista = [];
-        let obj;
-        let band = 0;
-        for (var i = 0; i < _renderDivisionPredio.DataDivisionInterna.length; i++) {
-            obj = _renderDivisionPredio.DataDivisionInterna[i];
-            band = 0;
-            if (sublista.length == 0) {
-                sublista.push({
-                    DIVISION_INTERNA: obj.DIVISION_INTERNA,
-                    OBSERVACION: obj.OBSERVACION,
-                });
-            } else {
-                band = 0;
-                for (var j = 0; j < sublista.length; j++) {
-                    if (obj.DIVISION_INTERNA == sublista[j].DIVISION_INTERNA) {
-                        band = 1;
-                    }
-                }
-                if (band==0) {
-                    sublista.push({
-                        DIVISION_INTERNA: obj.DIVISION_INTERNA,
-                        OBSERVACION: obj.OBSERVACION,
-                    });
-                }
-            }
-        }
-        return sublista;
-    }
-
-    _renderDivisionPredio.fnObtenerLinea = function (divisionInterna) {
-        let coord_este='';
-        let coord_norte='';
-        let altitud = '';
-        let obervacion = '';
-
-            for (var i = 0; i < _renderDivisionPredio.DataDivisionInterna.length; i++) {
-                obj = _renderDivisionPredio.DataDivisionInterna[i];
-                if (obj.DIVISION_INTERNA = divisionInterna) {
-                    if (i == 0) {
-                        divisionInterna = obj.DIVISION_INTERNA;
-                        coord_este = obj.COORDENADA_ESTE;
-                        coord_norte = obj.COORDENADA_NORTE;
-                        altitud = obj.ALTITUD;
-                        obervacion = obj.OBSERVACION;
-                    } else {
-                        divisionInterna = obj.DIVISION_INTERNA;
-                        coord_este = coord_este + ',' + obj.COORDENADA_ESTE;
-                        coord_norte = coord_este + ',' + obj.COORDENADA_NORTE;
-                        altitud = coord_este + ',' + obj.ALTITUD;
-                        obervacion = obj.OBSERVACION;
-                    }
-                }
-            }
-        var obj = {
-            DIVISION_INTERNA: divisionInterna,
-            COORDENADA_ESTE: coord_este,
-            COORDENADA_NORTE: coord_norte,
-            ALTITUD: altitud,
-            OBSERVACION: obervacion
+        columns_label = ["División Interna", "Coordenada Este", "Coordenada Norte", "Altitud (msnm)", "Observaciones",];
+        columns_data = ["DIVISION_INTERNA", "COORDENADA_ESTE", "COORDENADA_NORTE", "ALTITUD", "OBSERVACION"];
+        options = {
+            page_length: 10, row_index: true, row_edit: true, row_fnEdit: "_renderDivisionPredio.fnAddEdit(this)"
+            , row_delete: true, row_fnDelete: "_renderDivisionPredio.fnDelete(this)"
+            , button_copy: true, button_csv: true, button_excel: true, button_pdf: true, button_print: true
+            , export_title: $("#tbRenderDivisionPredio").find("thead tr")[0].innerText.trim()
+            , page_sort: true
+            , data:null
         };
-        return obj
+        _renderDivisionPredio.dtDivisionPredio = utilDt.fnLoadDataTable_Detail($("#tbRenderDivisionPredio"), columns_label, columns_data, options);
+
+
     }
 
-    _renderDivisionPredio.fnAddEdit = function (divisionInterna) {
-        var obj = divisionInterna == '' ? null :_renderDivisionPredio.fnObtenerLinea(divisionInterna);
+    _renderDivisionPredio.fnAddEdit = function (obj) {
         var url = urlLocalSigo + "Supervision/ManInforme/_DivisionPredio";
-        var option = { url: url, type: 'POST', datos: { obj }, divId: "mdlManInforme_DivisionPredio" };
+        var option = { url: url, type: 'POST', datos: {}, divId: "mdlManInforme_DivisionPredio" };
         utilSigo.fnOpenModal(option, function () {
             _DivisionPredio.fnSaveForm = function (data) {
                 if (data != null) {
-                    debugger;
-                    let coordenada_este = data.COORDENADA_ESTE.split(',');
-                    let coordenada_norte = data.COORDENADA_NORTE.split(',');
-                    let altitud = data.ALTITUD.split(',');
-                    if (divisionInterna == '') {
-                        for (var i = 0; i < coordenada_este.length; i++) {
-                            var objDivInterna = {
-                                DIVISION_INTERNA: data.DIVISION_INTERNA,
-                                COORDENADA_ESTE: coordenada_este[i],
-                                COORDENADA_NORTE: coordenada_norte[i],
-                                ALTITUD: altitud[i],
-                                OBSERVACION: data.OBSERVACION
-
-                            };
-                            _renderDivisionPredio.DataDivisionInterna.push(objDivInterna);
-                        }
-                    } else {
-                        let pos = 0;
-                        for (var i = 0; i < _renderDivisionPredio.DataDivisionInterna.length; i++) {
-                            var objint = _renderDivisionPredio.DataDivisionInterna[i];
-                            if (divisionInterna == objint.DIVISION_INTERNA) {
-                                pos = i;
-                            }
-                        }
-                        _renderDivisionPredio.DataDivisionInterna = _renderDivisionPredio.DataDivisionInterna.filter(objeto => objeto.DIVISION_INTERNA !== divisionInterna);
-                        for (var i = 0; i < cant.length; i++) {
-                            var objDivInterna = {
-                                DIVISION_INTERNA: data.DIVISION_INTERNA,
-                                COORDENADA_ESTE: coordenada_este[i],
-                                COORDENADA_NORTE: coordenada_norte[i],
-                                ALTITUD: altitud[i],
-                                OBSERVACION: data.OBSERVACION
-
-                            };
-                            _renderDivisionPredio.DataDivisionInterna.splice(pos+i, 0, objDivInterna);
-                        }
+                    var dt = _renderDivisionPredio.dtDivisionPredio;
+                    if (obj == null || obj == "") {//Nuevo Registro
+                        //if (!utilDt.existValorSearch(_renderDivisionPredio.dtDivisionPredio, "ACTIVIDAD", data["ACTIVIDAD"])) {
+                            dt.rows.add([data]).draw();
+                            dt.page('last').draw('page');
+                            utilSigo.toastSuccess("Exito", "Datos guardados correctamente");
+                        //} else {
+                        //    utilSigo.toastWarning("Error", "La actividad ya se encuentra registrado");
+                        //}
+                    } else {//Modificar
+                        var row = dt.row($(obj).parents('tr')).data();
+                        row = data;
+                        dt.row($(obj).parents('tr')).data(row).draw();
+                        utilSigo.toastSuccess("Exito", "Datos actualizados correctamente");
                     }
-                    _renderDivisionPredio.fnInitTable();
                     $("#mdlManInforme_DivisionPredio").modal('hide');
                 } else {
                     utilSigo.toastError("Error", "No se pudieron guardar los datos");
@@ -181,22 +67,86 @@
     }
 
     _renderDivisionPredio.fnDeleteAll = function () {
-        _renderDivisionPredio.DataDivisionInterna = [];
-        $("#tbodyDivisionPredio").html("");
+        var rows, countFilas, data;
+
+        rows = _renderDivisionPredio.dtDivisionPredio.$("tr");
+        countFilas = rows.length;
+        if (countFilas > 0) {
+            utilSigo.dialogConfirm("", "Está seguro de eliminar todos los registros?", function (r) {
+                if (r) {
+                    $.each(rows, function (i, o) {
+                        data = _renderDivisionPredio.dtDivisionPredio.row($(o)).data();
+                        if (data["RegEstado"] == "0" || data["RegEstado"] == "2") {
+                            _renderDivisionPredio.tbEliTABLA.push({
+                                EliTABLA: "ISUPERVISION_DIVISIONPREDIO",
+                                COD_SECUENCIAL: data["COD_SECUENCIAL"]
+                            });
+                        }
+                    });
+                    _renderDivisionPredio.dtDivisionPredio.clear().draw();
+                }
+                utilSigo.toastSuccess("Exito", "Se eliminó todos los registros con éxito");
+            });
+        } else {
+            utilSigo.toastWarning("Aviso", "No se encontraron registros a eliminar");
+        }
     }
 
     _renderDivisionPredio.fnDelete = function (obj) {
+        var data;
 
+        data = _renderDivisionPredio.dtDivisionPredio.row($(obj).parents('tr')).data();
+        if (data["RegEstado"] == "0" || data["RegEstado"] == "2") {
+            _renderDivisionPredio.tbEliTABLA.push({
+                EliTABLA: "ISUPERVISION_DIVISIONPREDIO",
+                COD_SECUENCIAL: data["COD_SECUENCIAL"]
+            });
+        }
+        _renderDivisionPredio.dtDivisionPredio.row($(obj).parents('tr')).remove().draw(false);
+        utilSigo.toastSuccess("Exito", "Se eliminó el registro con éxito");
     }
 
-    _renderDivisionPredio.fnGetList = function () {        
-        return _renderDivisionPredio.DataDivisionInterna;
+    _renderDivisionPredio.fnImport = function (e, obj) {
+        var url = urlLocalSigo + "Supervision/ManInforme/ImportarDatosInformeSimple";
+        uploadFile.fileSelectHandler(e, obj, url, { asTipo: "DIVISIONPREDIO" }, function (data) {
+            for (var i = 0; i < data.length; i++) {
+                //if (!utilDt.existValorSearch(_renderDivisionPredio.dtDivisionPredio, "ACTIVIDAD", data[i]["ACTIVIDAD"])) {
+                    _renderDivisionPredio.dtDivisionPredio.rows.add([data[i]]).draw();
+                    _renderDivisionPredio.dtDivisionPredio.page('last').draw('page');
+                //}
+            }
+            e.target.value = "";
+        }, function (data) {
+            e.target.value = "";
+            utilSigo.toastWarning("Error de validación", data.msj);
+        });
+        e.target.value = "";
     }
+
+    _renderDivisionPredio.fnGetList = function () {
+        var list = [], rows, countFilas, data;
+
+        rows = _renderDivisionPredio.dtDivisionPredio.$("tr");
+        countFilas = rows.length;
+        if (countFilas > 0) {
+            $.each(rows, function (i, o) {
+                data = _renderDivisionPredio.dtDivisionPredio.row($(o)).data();
+                if (data["RegEstado"] == "1" || data["RegEstado"] == "2") {
+                    list.push(utilSigo.fnConvertArrayToObject(data));
+                }
+            });
+        }
+        return list;
+    }
+
+    _renderDivisionPredio.fnGetListEliTABLA = function () { return _renderDivisionPredio.tbEliTABLA }
 
     $(document).ready(function () {
         _renderDivisionPredio.frm = $("#frmRenderDivisionPredio");
-        _renderDivisionPredio.fnLoadData('@Html.Raw(Json.Encode(@Model))', "DivisionInterna");
-        _renderDivisionPredio.fnInitTable();
+
+        _renderDivisionPredio.fnInitDataTable_Detail();
+
+        _renderDivisionPredio.dtDivisionPredio.rows.add(JSON.parse('@Html.Raw(Json.Encode(@Model))')).draw();
     });
 </script>
 
@@ -205,23 +155,20 @@
         <table id="tbRenderDivisionPredio" style="width:100%;margin:0px !important;" class="table table-hover table-bordered">
             <thead>
                 <tr>
-                    <th colspan="5" class="text-sm-left">
+                    <th colspan="9" class="text-sm-left">
                         <div class="form-inline">
                             <i class="fa mx-2 fa-lg fa-file-o" style="cursor:pointer;" onclick="_renderDivisionPredio.fnAddEdit('');" data-toggle="tooltip" data-placement="top" title="Nuevo"></i>
                             <i class="fa mx-2 fa-lg fa-window-close-o" style="cursor:pointer;" onclick="_renderDivisionPredio.fnDeleteAll();" data-toggle="tooltip" data-placement="top" title="Eliminar Todos"></i>
-                            <strong>Registro de División del Predio</strong>
+                            <label style="cursor:pointer;" class="fa mx-2 fa-lg fa-file-excel-o" title="Importar Archivo" data-toggle="tooltip">
+                                <input type="file" id="fileselect" name="fileselect" style="display:none" size="60" onchange="_renderDivisionPredio.fnImport(event, this)">
+                            </label>
+                            <a href="@Url.Content("~/Archivos/Plantilla/DivisionPredio.xlsx")"> <i class="fa mx-2 fa-lg fa-folder-open" style="cursor:pointer;" data-toggle="tooltip" data-placement="top" title="Descargar Plantilla"></i></a>
+                            <strong>Registro de División Predio</strong>
                         </div>
                     </th>
                 </tr>
-                <tr>
-                    <th>División Interna</th>
-                    <th>Coordenada Este</th>
-                    <th>Coordenada Norte</th>
-                    <th>Altitud (msnm)</th>
-                    <th>Observaciones</th>
-                </tr>
             </thead>
-            <tbody id="tbodyDivisionPredio"></tbody>
+            <tbody></tbody>
         </table>
     </div>
 </div>

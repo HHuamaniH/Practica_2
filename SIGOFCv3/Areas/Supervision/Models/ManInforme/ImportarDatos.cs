@@ -211,7 +211,7 @@ namespace SIGOFCv3.Areas.Supervision.Models.ManInforme
                                                 {
                                                     if (!string.IsNullOrEmpty(ac))
                                                     {
-                                                        oCampos.DAP = decimal.Parse(ac);
+                                                        oCampos.AC = decimal.Parse(ac);
                                                     }
                                                 }
                                                 else { throw new Exception(msg); }
@@ -220,7 +220,8 @@ namespace SIGOFCv3.Areas.Supervision.Models.ManInforme
                                         }
                                         else { throw new Exception(msg); }
                                         oCampos.OBSERVACION = (workSheet.Cells[rowIterator, 11].Value ?? "").ToString().Trim();
-                                        if (!Regex.IsMatch(oCampos.OBSERVACION, @"^[ ÁÉÍÓÚA-Záéíóúa-z0-9\-\/]+$")) { throw new Exception("El campo observación no debe tener caracteres especiales."); }
+                                        if (!Regex.IsMatch(oCampos.OBSERVACION, @"^[ ÁÉÍÓÚA-Záéíóúa-z0-9\-\/\.]+$")) { throw new Exception("El campo observación no debe tener caracteres especiales."); }
+                                        if (oCampos.OBSERVACION.Length > 200) { throw new Exception("El campo observación no debe exceder los 200 caracteres"); }
                                         oCampos.RegEstado = 1;
                                         lstEspecieForEst.Add(oCampos);
                                     }
@@ -261,17 +262,17 @@ namespace SIGOFCv3.Areas.Supervision.Models.ManInforme
                         for (int rowIterator = 2; rowIterator <= noOfRow; rowIterator++)
                         {
                             oCampos = new CapaEntidad.DOC.Ent_INFORME_COBERTURA_BOSNAT();
-                            tempString = workSheet.Cells[rowIterator, 1].Value.ToString().Trim();                            
+                            tempString = workSheet.Cells[rowIterator, 1].Value.ToString().Trim();
                             if (!string.IsNullOrEmpty(tempString))
                             {
                                 oCampos.AREA_COBERTURA = tempString;
-                                tempDecimal = workSheet.Cells[rowIterator, 2].Value.ToString().Trim();                                
+                                tempDecimal = workSheet.Cells[rowIterator, 2].Value.ToString().Trim();
                                 if (!string.IsNullOrEmpty(tempDecimal))
                                 {
                                     msg = ValidarThreeDecimal("Área", tempDecimal, "Cobertura de Bosques Naturales");
                                     if (msg == "")
                                     {
-                                        oCampos.AREA = Convert.ToDecimal(tempDecimal);                                       
+                                        oCampos.AREA = Convert.ToDecimal(tempDecimal);
                                         oCampos.COD_SECUENCIAL = 0;
                                         ceste = (workSheet.Cells[rowIterator, 3].Value ?? "").ToString().Trim();
                                         cnorte = (workSheet.Cells[rowIterator, 4].Value ?? "").ToString().Trim();
@@ -288,13 +289,13 @@ namespace SIGOFCv3.Areas.Supervision.Models.ManInforme
                                             {
                                                 oCampos.ALTITUD = Convert.ToInt32(tempDecimal);
                                                 oCampos.OBSERVACION = (workSheet.Cells[rowIterator, 6].Value ?? "").ToString().Trim();
-                                                if (!Regex.IsMatch(oCampos.OBSERVACION, @"^[ ÁÉÍÓÚA-Záéíóúa-z0-9\-\/]+$")) { throw new Exception("El campo observación no debe tener caracteres especiales."); }
-                                                else if(oCampos.OBSERVACION.Length > 200) { throw new Exception("El campo Observación no debe exceder los 200 caracteres"); }
+                                                if (!Regex.IsMatch(oCampos.OBSERVACION, @"^[ ÁÉÍÓÚA-Záéíóúa-z0-9\-\/\.]+$")) { throw new Exception("El campo observación no debe tener caracteres especiales."); }
+                                                else if (oCampos.OBSERVACION.Length > 200) { throw new Exception("El campo Observación no debe exceder los 200 caracteres"); }
                                             }
                                             else { throw new Exception(msg); }
                                         }
                                         else { throw new Exception(msg); }
-                                        
+
                                         oCampos.RegEstado = 1;
                                         lstCoberturaBosNat.Add(oCampos);
                                     }
@@ -313,6 +314,77 @@ namespace SIGOFCv3.Areas.Supervision.Models.ManInforme
                 throw new Exception("Archivo cargado no válido, utilizar la plantilla desde la opción de descarga.");
             }
             return lstCoberturaBosNat;
+        }
+
+        public static List<CapaEntidad.DOC.Ent_INFORME_DIVISION_PREDIO> DivisionPredio(HttpRequestBase _request)
+        {
+            List<CapaEntidad.DOC.Ent_INFORME_DIVISION_PREDIO> lstDivisionPredio = new List<CapaEntidad.DOC.Ent_INFORME_DIVISION_PREDIO>();
+
+            HttpPostedFileBase file = _request.Files[0];
+            if (file.ContentType == "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
+            {
+                if ((file != null) && (file.ContentLength > 0) && !string.IsNullOrEmpty(file.FileName))
+                {
+                    using (var package = new ExcelPackage(file.InputStream))
+                    {
+                        var currentSheet = package.Workbook.Worksheets;
+                        var workSheet = currentSheet.First();
+                        var noOfCol = workSheet.Dimension.End.Column;
+                        var noOfRow = workSheet.Dimension.End.Row;
+                        CapaEntidad.DOC.Ent_INFORME_DIVISION_PREDIO oCampos;
+                        string ceste, cnorte, msg, tempDecimal, tempString;
+
+                        for (int rowIterator = 2; rowIterator <= noOfRow; rowIterator++)
+                        {
+                            oCampos = new CapaEntidad.DOC.Ent_INFORME_DIVISION_PREDIO();
+                            tempString = workSheet.Cells[rowIterator, 1].Value.ToString().Trim();
+                            if (!string.IsNullOrEmpty(tempString))
+                            {
+                                if (tempString.Length > 200) { throw new Exception("La división interna no debe exceder los 200 caracteres"); }
+                                else
+                                {
+                                    if (!Regex.IsMatch(tempString, @"^[ ÁÉÍÓÚA-Záéíóúa-z0-9\-\/\.]+$")) { throw new Exception("El campo división interna no debe contener caractere especiales."); }
+                                    else
+                                    {
+                                        oCampos.DIVISION_INTERNA = tempString;
+                                        oCampos.COD_SECUENCIAL = 0;
+                                        ceste = (workSheet.Cells[rowIterator, 2].Value ?? "").ToString().Trim();
+                                        cnorte = (workSheet.Cells[rowIterator, 3].Value ?? "").ToString().Trim();
+                                        msg = ValidarCoordenadas(ceste, cnorte, "División de Predio");
+
+                                        if (msg == "")
+                                        {
+                                            oCampos.COORDENADA_ESTE = (ceste);
+                                            oCampos.COORDENADA_NORTE = (cnorte);
+                                            tempDecimal = (workSheet.Cells[rowIterator, 4].Value ?? "").ToString().Trim();
+                                            msg = ValidarAltitud(tempDecimal, "División de Predio");
+
+                                            if (msg == "")
+                                            {
+                                                oCampos.ALTITUD = tempDecimal;
+                                                oCampos.OBSERVACION = (workSheet.Cells[rowIterator, 5].Value ?? "").ToString().Trim();
+                                                if (!Regex.IsMatch(oCampos.OBSERVACION, @"^[ ÁÉÍÓÚA-Záéíóúa-z0-9\-\/\.]+$")) { throw new Exception("El campo observación no debe tener caracteres especiales."); }
+                                                else if (oCampos.OBSERVACION.Length > 400) { throw new Exception("El campo Observación no debe exceder los 400 caracteres"); }
+                                                oCampos.RegEstado = 1;
+                                                lstDivisionPredio.Add(oCampos);
+                                            }
+                                            else { throw new Exception(msg); }
+                                        }
+                                        else { throw new Exception(msg); }
+                                    }
+                                }
+                            }
+                            else { throw new Exception("La división interna no debe ser vacía"); }
+
+                        }
+                    }
+                }
+            }
+            else
+            {
+                throw new Exception("Archivo cargado no válido, utilizar la plantilla desde la opción de descarga.");
+            }
+            return lstDivisionPredio;
         }
         public static List<CapaEntidad.DOC.Ent_INFORME> AvistamientoFauna(HttpRequestBase _request)
         {
@@ -1773,21 +1845,26 @@ namespace SIGOFCv3.Areas.Supervision.Models.ManInforme
             string returns = string.Empty;
             if (ceste != "" || cnorte != "")
             {
-                if (!Regex.IsMatch(ceste, @"^\d+$")) { returns = "Coordenada Este de " + descripción + " incorrecta debe ser numérico sin decimales"; }
+                if (ceste.Length > 6) { returns = "Coordenada Este de " + descripción + " incorrecta no debe ser mayor a 6 dígitos"; }
                 else
                 {
-                    int coord_esteInt = Convert.ToInt32(ceste);
-                    if (coord_esteInt > 999999) { returns = "Coordenada Este de " + descripción + " incorrecta no debe ser mayor a 6 dígitos"; }
+                    if (!Regex.IsMatch(ceste, @"^\d+$")) { returns = "Coordenada Este de " + descripción + " incorrecta debe ser numérico sin decimales"; }
                     else
                     {
-                        if (!Regex.IsMatch(cnorte, @"^\d+$")) { returns = "Coordenada Norte de " + descripción + " incorrecta debe ser numérico sin decimales"; }
+                        if (cnorte.Length > 7) { returns = "Coordenada Norte de " + descripción + " incorrecta no debe ser mayor a 7 dígitos"; }
                         else
                         {
-                            int coord_norteInt = Convert.ToInt32(cnorte);
-                            if (coord_norteInt > 9999999) { returns = "Coordenada Norte de " + descripción + " incorrecta no debe ser mayor a 7 dígitos"; }
+                            int coord_esteInt = Convert.ToInt32(ceste);
+                            if (!Regex.IsMatch(cnorte, @"^\d+$")) { returns = "Coordenada Norte de " + descripción + " incorrecta debe ser numérico sin decimales"; }
+                            else
+                            {
+                                int coord_norteInt = Convert.ToInt32(cnorte);
+                            }
+
                         }
                     }
                 }
+
             }
             else { returns = "Coordenada(s) vacía(s) de " + descripción; }
 
@@ -1796,13 +1873,11 @@ namespace SIGOFCv3.Areas.Supervision.Models.ManInforme
         public static string ValidarAltitud(string altidud, string descripción)
         {
             string returns = string.Empty;
-            if (altidud != "" )
+            if (altidud != "")
             {
-                if (!Regex.IsMatch(altidud, @"^\d+$")) { returns = "Altitud de " + descripción + " incorrecta debe ser numérico"; }
-                else
+                if (altidud.Length > 4) { returns = "Altitud Este de " + descripción + " incorrecta no debe ser mayor a 4 dígitos"; }
                 {
-                    int coord_esteInt = Convert.ToInt32(altidud);
-                    if (coord_esteInt > 9999) { returns = "Altitud Este de " + descripción + " incorrecta no debe ser mayor a 4 dígitos"; }                    
+                    if (!Regex.IsMatch(altidud, @"^\d+$")) { returns = "Altitud de " + descripción + " incorrecta debe ser numérico"; }                    
                 }
             }
             else { returns = "Altitud vacía de " + descripción; }
@@ -1812,17 +1887,20 @@ namespace SIGOFCv3.Areas.Supervision.Models.ManInforme
         public static string ValidarThreeDecimal(string campo, string valor, string descripción)
         {
             string returns = string.Empty;
-
             if (!string.IsNullOrEmpty(valor))
             {
                 decimal resultado;
                 if (decimal.TryParse(valor, out resultado))
                 {
-                    if (!Regex.IsMatch(valor, @"^\d+(\.\d{3})?$")) { returns = "Valor de la columna " + campo + " no puede tener más de 3 decimales en " + descripción; }
+                    if (valor.Length > 7) { returns = "Valor de la columna " + campo + " no puede ser mayor a 7 digitos inluido decimal en " + descripción; }
                     else
                     {
-                        decimal valord = Convert.ToDecimal(valor);
-                        if (valord > 9999) { returns = "Valor de la columna " + campo + " no puede ser mayor a 4 digitos en " + descripción; }
+                        if (!Regex.IsMatch(valor, @"^\d+(\.\d{1,3})?$")) { returns = "Valor de la columna " + campo + " no puede tener más de 3 decimales en " + descripción; }
+                        else
+                        {
+                            decimal valord = Convert.ToDecimal(valor);
+                            if (valord > 9999) { returns = "Valor de la columna " + campo + " no puede ser mayor a 4 digitos en " + descripción; }
+                        }
                     }
                 }
                 else { returns = "Valor no permitido (debe ser un número decimal) de la columna: " + campo + " en " + descripción; }

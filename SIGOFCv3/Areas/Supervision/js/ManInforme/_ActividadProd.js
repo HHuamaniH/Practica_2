@@ -46,11 +46,11 @@ _ActividadProd.fnLoadDatos = function (data) {
         _ActividadProd.frm.find("#ddlDestinoActProdId").val(data["DESTINO_PRODUCCION"]);
         _ActividadProd.frm.find("#ddlEstadoCulActProdId").val(data["ESTADO_CULTIVO"]);
 
-        _renderComboEspecie.fnInit("FAUNA", "", "");
+        _renderComboEspecie.fnInit("FORESTAL", "", "");
     } else {
         _ActividadProd.frm.find("#hdfRegEstado").val("1");
         _ActividadProd.frm.find("#hdfCodSecuencial").val("0");
-        _renderComboEspecie.fnInit("FAUNA", "", "");
+        _renderComboEspecie.fnInit("FORESTAL", "", "");
     }
 }
 

@@ -87,6 +87,7 @@ _POASupervisado.fnSubmitForm = function () {
         datosPoa.tbCoberturaBosNat = _renderCoberturaBosNat.fnGetList();
         datosPoa.tbEliTABLA = datosPoa.tbEliTABLA.concat(_renderCoberturaBosNat.fnGetListEliTABLA());
         datosPoa.tbDivisionPredio = _renderDivisionPredio.fnGetList();
+        datosPoa.tbEliTABLA = datosPoa.tbEliTABLA.concat(_renderDivisionPredio.fnGetListEliTABLA());        
 
         // Inicio REQ-359
         datosPoa.rbtnPartMenoresCUSAF = $('input[name="rbtnPartMenoresCUSAF"]:checked').val() != undefined ? $('input[name="rbtnPartMenoresCUSAF"]:checked').val() : null;

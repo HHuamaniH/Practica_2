@@ -11553,56 +11553,25 @@ namespace CapaDatos.DOC
                         }
                     }
                 }
-                #endregion
-                #region ListCoberturaBosNat
-                if (oCEntidad.ListCoberturaBosNat != null)
-                {
-                    foreach (var loDatos in oCEntidad.ListCoberturaBosNat)
-                    {
-                        if (loDatos.RegEstado == 1 || loDatos.RegEstado == 2) //Nuevo o Modificado
-                        {
-                            ocampoCobBosNat = new CEntidadCobBosNat();
-                            ocampoCobBosNat.COD_INFORME = oCEntidad.COD_INFORME;
-                            ocampoCobBosNat.COD_SECUENCIAL = loDatos.COD_SECUENCIAL;
-                            ocampoCobBosNat.AREA_COBERTURA = loDatos.AREA_COBERTURA;
-                            ocampoCobBosNat.AREA = loDatos.AREA;
-                            ocampoCobBosNat.COORDENADA_ESTE = loDatos.COORDENADA_ESTE;
-                            ocampoCobBosNat.COORDENADA_NORTE = loDatos.COORDENADA_NORTE;
-                            ocampoCobBosNat.ALTITUD = loDatos.ALTITUD;
-                            ocampoCobBosNat.OBSERVACION = loDatos.OBSERVACION ?? "";
-                            ocampoCobBosNat.RegEstado = loDatos.RegEstado;
-                            dBOracle.ManExecute(cn, tr, "DOC_OSINFOR_ERP_MIGRACION.ISUPERVISION_COBERTURABOSNAT_GRABAR", ocampoCobBosNat);
-                        }
-                    }
-                }
-                #endregion
+                #endregion                
                 #region ListDivisionPredio
-                int cod_secuencial = 1;
                 if (oCEntidad.ListDivisionPredio != null)
                 {
-                    ocampoDivPredio = new CEntidadDivPredio();
-                    ocampoDivPredio.COD_INFORME = oCEntidad.COD_INFORME;
-                    dBOracle.ManExecute(cn, tr, "DOC_OSINFOR_ERP_MIGRACION.isupervision_divisionpredio_eliminar", ocampoDivPredio);
                     foreach (var loDatos in oCEntidad.ListDivisionPredio)
                     {
                         ocampoDivPredio = new CEntidadDivPredio();
                         ocampoDivPredio.COD_INFORME = oCEntidad.COD_INFORME;
-                        ocampoDivPredio.COD_SECUENCIAL = cod_secuencial;
-                        ocampoDivPredio.DIVISION_INTERNA = loDatos.DIVISION_INTERNA;                        
+                        ocampoDivPredio.COD_SECUENCIAL = loDatos.COD_SECUENCIAL;
+                        ocampoDivPredio.DIVISION_INTERNA = loDatos.DIVISION_INTERNA;
                         ocampoDivPredio.COORDENADA_ESTE = loDatos.COORDENADA_ESTE;
                         ocampoDivPredio.COORDENADA_NORTE = loDatos.COORDENADA_NORTE;
                         ocampoDivPredio.ALTITUD = loDatos.ALTITUD;
                         ocampoDivPredio.OBSERVACION = loDatos.OBSERVACION ?? "";
+                        ocampoDivPredio.RegEstado = loDatos.RegEstado;
                         dBOracle.ManExecute(cn, tr, "DOC_OSINFOR_ERP_MIGRACION.isupervision_divisionpredio_grabar", ocampoDivPredio);
-                        cod_secuencial++;
                     }
                 }
-                else
-                {
-                    ocampoDivPredio = new CEntidadDivPredio();
-                    ocampoDivPredio.COD_INFORME = oCEntidad.COD_INFORME;
-                    dBOracle.ManExecute(cn, tr, "DOC_OSINFOR_ERP_MIGRACION.isupervision_divisionpredio_eliminar", ocampoDivPredio);
-                }
+                    
                 #endregion
                 #region SeccionCusaf
 

@@ -89,8 +89,8 @@ _CoberturaBosNat.fnInit = function (data) {
         messages: {
          //   ddlAreaCoberturaBosNatId: { ddlAreaCoberturaBosNatId: "Seleccione área de Cobertura de Bosques Naturales" },
             txtAreaBosNat: { required: "Ingrese el área (has) de Cobertura de Bosques Naturales" },
-            txtCoordEsteBosNat: { required: "Ingrese la coordinada Norte de Cobertura de Bosques Naturales" },
-            txtCoordNorteBosNat: { required: "Ingrese la coordinada Este de Cobertura de Bosques Naturales" },
+            txtCoordEsteBosNat: { required: "Ingrese la coordenada Norte de Cobertura de Bosques Naturales" },
+            txtCoordNorteBosNat: { required: "Ingrese la coordenada Este de Cobertura de Bosques Naturales" },
             txtAltitudBosNat: { required: "Ingrese la altitud de Cobertura de Bosques Naturales" }
         },
         fnSubmit: function (form) {

@@ -3,70 +3,35 @@ var _DivisionPredio = {};
 
 _DivisionPredio.fnSaveForm = function (data) { /*implementado desde donde se instancia*/ }
 
-_DivisionPredio.fnAgregarLinea = function () {
-    let txtCoordEsteDP = $("#txtCoordEsteDP").val();
-    let txtCoordNorteDP = $("#txtCoordNorteDP").val();
-    let txtAltidudDP = $("#txtAltidudDP").val();    
-    if (txtCoordEsteDP == "" || txtCoordEsteDP == null) {
-        utilSigo.toastWarning("Aviso", "Para agregar debe ingresar la Coordenada Este."); return false;
-    } else if (txtCoordNorteDP == "" || txtCoordNorteDP == null) {
-        utilSigo.toastWarning("Aviso", "Para agregar debe ingresar la Coordenada Norte."); return false;
-    } else if (txtAltidudDP == "" || txtAltidudDP == null) {
-        utilSigo.toastWarning("Aviso", "Para agregar debe ingresar la Altitud."); return false;
-    }
-    if ($("#txtACoordEsteDP").val() == "") {
-        $("#txtACoordEsteDP").val(txtCoordEsteDP);
-        $("#txtACoordNorteDP").val(txtCoordNorteDP);
-        $("#txtAAltidudDP").val(txtAltidudDP);
-    } else {
-        $("#txtACoordEsteDP").val($("#txtACoordEsteDP").val() + "," + txtCoordEsteDP);
-        $("#txtACoordNorteDP").val($("#txtACoordNorteDP").val() + "," + txtCoordNorteDP);
-        $("#txtAAltidudDP").val($("#txtAAltidudDP").val() + "," + txtAltidudDP);
-    }    
-    $("#txtCoordEsteDP").val(''); $("#txtCoordNorteDP").val(''); $("#txtAltidudDP").val('');
-}
-_DivisionPredio.fnClearLinea = function (data) {
-    $("#txtACoordEsteDP").val("");
-    $("#txtACoordNorteDP").val("");
-    $("#txtAAltidudDP").val("");
-}
 _DivisionPredio.fnLoadDatos = function (data) {
-    //if (data != null && data != "") {
-    //    _DivisionPredio.frm.find("#txtDivisionInternaDP").val(data["DIVISION_INTERNA"]);
-    //    _DivisionPredio.frm.find("#txtDivisionInternaDP").val(data["OBSERVACION"]);
-    //    _DivisionPredio.frm.find("#txtAreaBosNat").val(data["AREA"]);
-    //    _DivisionPredio.frm.find("#txtCoordEsteBosNat").val(data["COORDENADA_ESTE"]);
-    //    _DivisionPredio.frm.find("#txtCoordNorteBosNat").val(data["COORDENADA_NORTE"]);
-    //    _DivisionPredio.frm.find("#txtAltitudBosNat").val(data["ALTITUD"]);      
-    //    _DivisionPredio.frm.find("#txtObservacionDP").val(data["OBSERVACION"]);        
-    //} else {
-    //    _DivisionPredio.frm.find("#hdfRegEstado").val("1");
-    //    _DivisionPredio.frm.find("#hdfCodSecuencial").val("0");        
-    //}
+    if (data != null && data != "") {
+        _DivisionPredio.frm.find("#hdfRegEstado").val(data["RegEstado"]);
+        _DivisionPredio.frm.find("#hdfCodSecuencial").val(data["COD_SECUENCIAL"]);
+        _DivisionPredio.frm.find("#txtDivisionInternaDP").val(data["DIVISION_INTERNA"]);        
+        _DivisionPredio.frm.find("#txtCoordEsteDP").val(data["COORDENADA_ESTE"]);
+        _DivisionPredio.frm.find("#txtCoordNorteDP").val(data["COORDENADA_NORTE"]);
+        _DivisionPredio.frm.find("#txtAltidudDP").val(data["ALTITUD"]);
+        _DivisionPredio.frm.find("#txtObservacionDP").val(data["OBSERVACION"]);
+    } else {
+        _DivisionPredio.frm.find("#hdfRegEstado").val("1");
+        _DivisionPredio.frm.find("#hdfCodSecuencial").val("0");
+    }
 }
 
 _DivisionPredio.fnSetDatos = function () {
     var data = [];
-   
-    data["DIVISION_INTERNA"] = _DivisionPredio.frm.find("#txtDivisionInternaDP").val();
-    data["COORDENADA_ESTE"] = _DivisionPredio.frm.find("#txtACoordEsteDP").val();
-    data["COORDENADA_NORTE"] = _DivisionPredio.frm.find("#txtACoordNorteDP").val(); 
-    data["ALTITUD"] = _DivisionPredio.frm.find("#txtAAltidudDP").val();    
+    var regEstado = _DivisionPredio.frm.find("#hdfRegEstado").val();
+    data["RegEstado"] = regEstado == "0" ? "2" : regEstado;
+    data["COD_SECUENCIAL"] = _DivisionPredio.frm.find("#hdfCodSecuencial").val();
+    data["DIVISION_INTERNA"] = _DivisionPredio.frm.find("#txtDivisionInternaDP").val();    
+    data["COORDENADA_ESTE"] = _DivisionPredio.frm.find("#txtCoordEsteDP").val();
+    data["COORDENADA_NORTE"] = _DivisionPredio.frm.find("#txtCoordNorteDP").val();
+    data["ALTITUD"] = _DivisionPredio.frm.find("#txtAltidudDP").val();
     data["OBSERVACION"] = _DivisionPredio.frm.find("#txtObservacionDP").val();
     return data;
 }
 
 _DivisionPredio.fnCustomValidateForm = function () {
-
-    if ($("#txtDivisionInternaDP").val() == '' || $("#txtDivisionInternaDP").val() == null) {
-        utilSigo.toastWarning("Aviso", "Debe ingresar División Interna."); return false;
-    } else if ($("#txtACoordEsteDP").val() == '' || $("#txtACoordEsteDP").val() == null) {
-        utilSigo.toastWarning("Aviso", "Debe ingresar Coordena Este."); return false;
-    } else if ($("#txtACoordNorteDP").val() == '' || $("#txtACoordNorteDP").val() == null) {
-        utilSigo.toastWarning("Aviso", "Debe ingresar Coordena Norte."); return false;
-    } else if ($("#txtAAltidudDP").val() == '' || $("#txtAAltidudDP").val() == null) {
-        utilSigo.toastWarning("Aviso", "Debe ingresar Altitud."); return false;
-    }
 
     return true;
 }
@@ -93,30 +58,38 @@ _DivisionPredio.fnSubmitForm = function () {
 
 _DivisionPredio.fnInit = function (data) {
     _DivisionPredio.frm = $("#frmItemDivisionPredio");
+
     $.fn.select2.defaults.set("theme", "bootstrap4");
+    //_DivisionPredio.frm.find("#ddlTipoAvistRegistroId").select2({ minimumResultsForSearch: -1 });
+    //_DivisionPredio.frm.find("#ddlTipoAvistEstratoId").select2({ minimumResultsForSearch: -1 });
+    //_DivisionPredio.frm.find("#ddlZonaId").select2({ minimumResultsForSearch: -1 });
+    //utilSigo.fnFormatDate(_DivisionPredio.frm.find("#txtFecha"));
+
     _DivisionPredio.fnLoadDatos(data);
 
     //=====-----Para el registro de datos del formulario-----=====
     //Validación personalizada
     jQuery.validator.addMethod("invalidFrmDivisionPredio", function (value, element) {
         switch ($(element).attr('id')) {
-            //case 'ddlAreaDivisionPredioId':
-            //    return (value == '0000000') ? false : true;
-            //    break
+            case 'ddlAreaDivisionPredioId':
+                return (value == '0000000') ? false : true;
+                break
         }
     });
     _DivisionPredio.frm.validate(utilSigo.fnValidate({
         rules: {
+            //  ddlAreaDivisionPredioId: { ddlAreaDivisionPredioId: true },
             txtDivisionInternaDP: { required: true },
-            txtACoordEsteDP: { required: true },
-            txtACoordNorteDP: { required: true },
-            txtAAltidudDP: { required: true }
+            txtCoordEsteDP: { required: true },
+            txtCoordNorteDP: { required: true },
+            txtAltidudDP: { required: true }
         },
         messages: {
-            txtDivisionInternaDP: { required: "Ingrese la división de predio." },
-            txtACoordEsteDP: { required: "Ingrese la coordenada Este" },
-            txtACoordNorteDP: { required: "Ingrese la coordenada Norte" },
-            txtAAltidudDP: { required: "Ingrese la Altidud" }            
+            //   ddlAreaDivisionPredioId: { ddlAreaDivisionPredioId: "Seleccione área de Cobertura de Bosques Naturales" },
+            txtDivisionInternaDP: { required: "Ingrese la División Interna" },
+            txtCoordEsteDP: { required: "Ingrese la coordinada Este" },
+            txtCoordNorteDP: { required: "Ingrese la coordinada Norte" },
+            txtAltidudDP: { required: "Ingrese la altitud" }
         },
         fnSubmit: function (form) {
             if (_DivisionPredio.fnCustomValidateForm()) {

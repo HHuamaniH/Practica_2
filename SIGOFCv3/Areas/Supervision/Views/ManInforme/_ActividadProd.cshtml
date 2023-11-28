@@ -25,17 +25,16 @@
                         </div>
                     </div>
                     @*<div class="form-row">*@
-                    <div class="card-header text-small">Especies</div>
+                    <div class="card-header text-small">Especie Forestal</div>
                     <div class="card-body" id="cardBodyEspecie">
                         <div class="form-row">
                             <div class="form-group col-md-12 ActProd">
-                                <label for="txtEspecieActProd" class="text-small">Área</label>
                                 <textarea class="form-control form-control-sm" rows="4" id="txtEspecieActProd" disabled></textarea>
                             </div>
                         </div>
                         <div class="form-row">
                             @{
-                                string nombreComboEspecie = "ddlRenderComboEspecieId|Especie de Actividad Productiva";
+                                string nombreComboEspecie = "ddlRenderComboEspecieId|Seleccionar especie forestal";
                             }
                             @Html.Partial("~/Areas/General/Views/Controles/_renderComboEspecie.cshtml", nombreComboEspecie)
                         </div>

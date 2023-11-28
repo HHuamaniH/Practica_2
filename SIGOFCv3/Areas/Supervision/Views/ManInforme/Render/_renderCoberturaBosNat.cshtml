@@ -14,12 +14,12 @@
     _renderCoberturaBosNat.fnInitDataTable_Detail = function () {
         var columns_label = [], columns_data = [], options = {};
 
-        columns_label = ["Área con cobertura de bosques naturales", "Áreas (has)", "Coord. Este", "Coord. Norte", "Altitud (msnm)", "Observación",];
+        columns_label = ["Área con cobertura de bosques naturales", "Áreas (has)", "Coordenada Este", "Coordenada Norte", "Altitud (msnm)", "Observación",];
         columns_data = ["AREA_COBERTURA", "AREA", "COORDENADA_ESTE", "COORDENADA_NORTE", "ALTITUD", "OBSERVACION"];
         options = {
             page_length: 10, row_index: true, row_edit: true, row_fnEdit: "_renderCoberturaBosNat.fnAddEdit(this)"
             , row_delete: true, row_fnDelete: "_renderCoberturaBosNat.fnDelete(this)"
-           // , button_copy: true, button_csv: true, button_excel: true, button_pdf: true, button_print: true
+            , button_copy: true, button_csv: true, button_excel: true, button_pdf: true, button_print: true
             , export_title: $("#tbRenderCoberturaBosNat").find("thead tr")[0].innerText.trim()
             , page_sort: true
             , data:null
@@ -69,7 +69,7 @@
         rows = _renderCoberturaBosNat.dtCoberturaBosNat.$("tr");
         countFilas = rows.length;
         if (countFilas > 0) {
-            utilSigo.dialogConfirm("", "Está seguro de Eliminar Todos los Registros?", function (r) {
+            utilSigo.dialogConfirm("", "Está seguro de eliminar todos los registros?", function (r) {
                 if (r) {
                     $.each(rows, function (i, o) {
                         data = _renderCoberturaBosNat.dtCoberturaBosNat.row($(o)).data();
@@ -82,6 +82,7 @@
                     });
                     _renderCoberturaBosNat.dtCoberturaBosNat.clear().draw();
                 }
+                utilSigo.toastSuccess("Exito", "Se eliminó todos los registros con éxito");
             });
         } else {
             utilSigo.toastWarning("Aviso", "No se encontraron registros a eliminar");
@@ -99,6 +100,7 @@
             });
         }
         _renderCoberturaBosNat.dtCoberturaBosNat.row($(obj).parents('tr')).remove().draw(false);
+        utilSigo.toastSuccess("Exito", "Se eliminó el registro con éxito");
     }
 
     _renderCoberturaBosNat.fnImport = function (e, obj) {
@@ -150,7 +152,7 @@
         <table id="tbRenderCoberturaBosNat" style="width:100%;margin:0px !important;" class="table table-hover table-bordered">
             <thead>
                 <tr>
-                    <th colspan="12" class="text-sm-left">
+                    <th colspan="10" class="text-sm-left">
                         <div class="form-inline">
                             <i class="fa mx-2 fa-lg fa-file-o" style="cursor:pointer;" onclick="_renderCoberturaBosNat.fnAddEdit('');" data-toggle="tooltip" data-placement="top" title="Nuevo"></i>
                             <i class="fa mx-2 fa-lg fa-window-close-o" style="cursor:pointer;" onclick="_renderCoberturaBosNat.fnDeleteAll();" data-toggle="tooltip" data-placement="top" title="Eliminar Todos"></i>

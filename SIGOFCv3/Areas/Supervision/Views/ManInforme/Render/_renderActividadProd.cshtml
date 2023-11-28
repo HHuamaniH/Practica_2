@@ -19,7 +19,7 @@
         options = {
             page_length: 10, row_index: true, row_edit: true, row_fnEdit: "_renderActividadProd.fnAddEdit(this)"
             , row_delete: true, row_fnDelete: "_renderActividadProd.fnDelete(this)"
-           // , button_copy: true, button_csv: true, button_excel: true, button_pdf: true, button_print: true
+            , button_copy: true, button_csv: true, button_excel: true, button_pdf: true, button_print: true
             , export_title: $("#tbRenderActividadProd").find("thead tr")[0].innerText.trim()
             , page_sort: true
             , data:null
@@ -69,7 +69,7 @@
         rows = _renderActividadProd.dtActividadProd.$("tr");
         countFilas = rows.length;
         if (countFilas > 0) {
-            utilSigo.dialogConfirm("", "Está seguro de Eliminar Todos los Registros?", function (r) {
+            utilSigo.dialogConfirm("", "Está seguro de eliminar todos los registros?", function (r) {
                 if (r) {
                     $.each(rows, function (i, o) {
                         data = _renderActividadProd.dtActividadProd.row($(o)).data();
@@ -82,6 +82,7 @@
                     });
                     _renderActividadProd.dtActividadProd.clear().draw();
                 }
+                utilSigo.toastSuccess("Exito", "Se eliminó todos los registros con éxito");
             });
         } else {
             utilSigo.toastWarning("Aviso", "No se encontraron registros a eliminar");
@@ -99,6 +100,7 @@
             });
         }
         _renderActividadProd.dtActividadProd.row($(obj).parents('tr')).remove().draw(false);
+        utilSigo.toastSuccess("Exito", "Se eliminó el registro con éxito");
     }
 
     _renderActividadProd.fnImport = function (e, obj) {
@@ -150,7 +152,7 @@
         <table id="tbRenderActividadProd" style="width:100%;margin:0px !important;" class="table table-hover table-bordered">
             <thead>
                 <tr>
-                    <th colspan="13" class="text-sm-left">
+                    <th colspan="14" class="text-sm-left">
                         <div class="form-inline">
                             <i class="fa mx-2 fa-lg fa-file-o" style="cursor:pointer;" onclick="_renderActividadProd.fnAddEdit('');" data-toggle="tooltip" data-placement="top" title="Nuevo"></i>
                             <i class="fa mx-2 fa-lg fa-window-close-o" style="cursor:pointer;" onclick="_renderActividadProd.fnDeleteAll();" data-toggle="tooltip" data-placement="top" title="Eliminar Todos"></i>

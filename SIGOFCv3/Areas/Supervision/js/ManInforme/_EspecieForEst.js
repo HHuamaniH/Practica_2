@@ -14,13 +14,13 @@ _EspecieForEst.fnLoadDatos = function (data) {
         _EspecieForEst.frm.find("#txtDAP").val(data["DAP"]);
         _EspecieForEst.frm.find("#txtAC").val(data["AC"]);        
         _EspecieForEst.frm.find("#txtObservacion").val(data["OBSERVACION"]);        
-        _renderComboEspecie.fnInit("FAUNA", data["COD_ESPECIES_REPLA"], data["DESC_ESPECIES_REPLA"]);
-        _renderComboEspecie2.fnInit("FAUNA", data["COD_ESPECIES_RESUP"], data["DESC_ESPECIES_RESUP"]);
+        _renderComboEspecie.fnInit("FORESTAL", data["COD_ESPECIES_REPLA"], data["DESC_ESPECIES_REPLA"]);
+        _renderComboEspecie2.fnInit("FORESTAL", data["COD_ESPECIES_RESUP"], data["DESC_ESPECIES_RESUP"]);
     } else {
         _EspecieForEst.frm.find("#hdfRegEstado").val("1");
         _EspecieForEst.frm.find("#hdfCodSecuencial").val("0");
-        _renderComboEspecie.fnInit("FAUNA", "", "");
-        _renderComboEspecie2.fnInit("FAUNA", "", "");
+        _renderComboEspecie.fnInit("FORESTAL", "", "");
+        _renderComboEspecie2.fnInit("FORESTAL", "", "");
     }
 }
 
