@@ -30,6 +30,7 @@
         let parcela = _frmParcela.frm.find("#txtParcela").val();
         let area = _frmParcela.frm.find("#txtArea").val();
         let regEstado = _frmParcela.frm.find("#hdfRegEstado").val();
+        let codSecuencial = _frmParcela.frm.find("#hdfCodSecuencial").val();
         if (regEstado == 0) {
             regEstado = 2;
         }
@@ -39,11 +40,12 @@
         var band = 0;
         if (countFilas > 0) {
             for (var j = 0; j < parcelaList.length; j++) {
-                if (parcela == parcelaList[j].PCA) {
+                if (parcela == parcelaList[j].PCA && codSecuencial=='0') {
                     band = 1;
                 }
             }
         }
+        console.log('codSecuencial : ' + codSecuencial);
         if (band == 0) {
             if (parcela.trim() != "") {
                 if (area.trim() != "") {
