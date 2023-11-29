@@ -128,20 +128,18 @@ _ActividadProd.fnInit = function (data) {
         rules: {
             //hdfCodEspeciesActProd: { required: true },
             txtActividadActProd: { required: true },
-            txtAreaActProd: { required: true },
-            txtEdadActProd: { required: true },
-            txtRendimientoActProd: { required: true },
+            txtAreaActProd: { required: true },                        
             txtCoordEsteActProd: { required: true },
-            txtCoordNorteActProd: { required: true }
+            txtCoordNorteActProd: { required: true },
+            txtAltitudActProd: { required: true }
         },
         messages: {
             //hdfCodEspeciesActProd: { required: "Ingrese al menos una Especie" },
             txtActividadActProd: { required: "Ingrese la Actividad Productiva" },
-            txtAreaActProd: { required: "Ingrese el área de Actividad Productiva" },
-            txtEdadActProd: { required: "Ingrese la edad de Actividad Productiva" },
-            txtRendimientoActProd: { required: "Ingrese el rendimiento de Actividad Productiva" },
+            txtAreaActProd: { required: "Ingrese el área de Actividad Productiva" },           
             txtCoordEsteActProd: { required: "Ingrese la coordinada Norte de Actividad Productiva" },
             txtCoordNorteActProd: { required: "Ingrese la coordinada Norte de Actividad Productiva" },
+            txtAltitudActProd: { required: "Ingrese la Altitud de Actividad Productiva" }
         },
         fnSubmit: function (form) {
             if (_ActividadProd.fnCustomValidateForm()) {

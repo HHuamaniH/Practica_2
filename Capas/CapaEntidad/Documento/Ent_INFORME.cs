@@ -2524,9 +2524,9 @@ namespace CapaEntidad.DOC
         [Description("AREA")]
         public Decimal AREA { get; set; }
         [Description("EDAD")]
-        public Decimal EDAD { get; set; }
+        public String EDAD { get; set; }
         [Description("RENDIMIENTO")]
-        public Decimal RENDIMIENTO { get; set; }
+        public String RENDIMIENTO { get; set; }
         [Description("COORDENADA_ESTE")]
         public Int32 COORDENADA_ESTE { get; set; }
         [Description("COORDENADA_NORTE")]
@@ -2546,8 +2546,6 @@ namespace CapaEntidad.DOC
         {
             COD_SECUENCIAL = -1;
             AREA = -1;
-            EDAD = -1;
-            RENDIMIENTO = -1;
             COORDENADA_ESTE = -1;
             COORDENADA_NORTE = -1;
             ALTITUD = -1;

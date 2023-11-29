@@ -10719,8 +10719,8 @@ namespace CapaDatos.DOC
                                     oactividadproductiva.DESC_ESPECIES = dr["DESC_ESPECIES"].ToString();
                                     oactividadproductiva.ACTIVIDAD = dr["ACTIVIDAD"].ToString();
                                     oactividadproductiva.AREA = Decimal.Parse(dr["AREA"].ToString());
-                                    oactividadproductiva.EDAD = Decimal.Parse(dr["EDAD"].ToString());
-                                    oactividadproductiva.RENDIMIENTO = Decimal.Parse(dr["RENDIMIENTO"].ToString());
+                                    oactividadproductiva.EDAD = dr["EDAD"].ToString();
+                                    oactividadproductiva.RENDIMIENTO = dr["RENDIMIENTO"].ToString();
                                     oactividadproductiva.COORDENADA_ESTE = Int32.Parse(dr["COORDENADA_ESTE"].ToString());
                                     oactividadproductiva.COORDENADA_NORTE = Int32.Parse(dr["COORDENADA_NORTE"].ToString());
                                     oactividadproductiva.ALTITUD = Int32.Parse(dr["ALTITUD"].ToString());
