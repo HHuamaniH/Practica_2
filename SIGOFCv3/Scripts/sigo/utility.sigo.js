@@ -878,6 +878,14 @@ utilSigo.checkNum = function (e) {
     return patron.test(tecla_final);
 }
 
+utilSigo.checkTelefono = function (e) {
+    var tecla = (document.all) ? e.keyCode : e.which;
+
+    var patron = /[0-9]/;
+    var tecla_final = String.fromCharCode(tecla);
+    return patron.test(tecla_final);
+}
+
 utilSigo.checkLetter = function (e) {
     var tecla = (document.all) ? e.keyCode : e.which;
 

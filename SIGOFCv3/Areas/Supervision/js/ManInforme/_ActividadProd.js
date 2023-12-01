@@ -137,9 +137,9 @@ _ActividadProd.fnInit = function (data) {
             //hdfCodEspeciesActProd: { required: "Ingrese al menos una Especie" },
             txtActividadActProd: { required: "Ingrese la Actividad Productiva" },
             txtAreaActProd: { required: "Ingrese el área de Actividad Productiva" },           
-            txtCoordEsteActProd: { required: "Ingrese la coordinada Norte de Actividad Productiva" },
-            txtCoordNorteActProd: { required: "Ingrese la coordinada Norte de Actividad Productiva" },
-            txtAltitudActProd: { required: "Ingrese la Altitud de Actividad Productiva" }
+            txtCoordEsteActProd: { required: "Ingrese la coordenada Norte de Actividad Productiva" },
+            txtCoordNorteActProd: { required: "Ingrese la coordenada Norte de Actividad Productiva" },
+            txtAltitudActProd: { required: "Ingrese la altitud de Actividad Productiva" }
         },
         fnSubmit: function (form) {
             if (_ActividadProd.fnCustomValidateForm()) {

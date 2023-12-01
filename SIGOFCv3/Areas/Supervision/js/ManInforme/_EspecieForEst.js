@@ -107,10 +107,10 @@ _EspecieForEst.fnInit = function (data) {
         messages: {
             ddlRenderComboEspecieId1: { invalidFrmEspecieForEst: "Seleccione la especie Registro de Plantación" },
             ddlRenderComboEspecieId2: { invalidFrmEspecieForEst: "Seleccione la especie Registro de Supervisión" },
-            txtCoordEsteRP: { required: "Ingrese la coordinada Este de Registro de Plantación" },
-            txtCoordNorteRP: { required: "Ingrese la coordinada Norte de Registro de Plantación" },
-            txtCoordEsteRS: { required: "Ingrese la coordinada Este de Registro de Supervisión" },
-            txtCoordNorteRS: { required: "Ingrese la coordinada Norte de Registro de Supervisión" },
+            txtCoordEsteRP: { required: "Ingrese la coordenada Este de Registro de Plantación" },
+            txtCoordNorteRP: { required: "Ingrese la coordenada Norte de Registro de Plantación" },
+            txtCoordEsteRS: { required: "Ingrese la coordenada Este de Registro de Supervisión" },
+            txtCoordNorteRS: { required: "Ingrese la coordenada Norte de Registro de Supervisión" },
         },
         fnSubmit: function (form) {
             if (_EspecieForEst.fnCustomValidateForm()) {

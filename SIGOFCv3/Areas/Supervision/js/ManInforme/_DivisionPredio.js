@@ -87,8 +87,8 @@ _DivisionPredio.fnInit = function (data) {
         messages: {
             //   ddlAreaDivisionPredioId: { ddlAreaDivisionPredioId: "Seleccione área de Cobertura de Bosques Naturales" },
             txtDivisionInternaDP: { required: "Ingrese la División Interna" },
-            txtCoordEsteDP: { required: "Ingrese la coordinada Este" },
-            txtCoordNorteDP: { required: "Ingrese la coordinada Norte" },
+            txtCoordEsteDP: { required: "Ingrese la coordenada Este" },
+            txtCoordNorteDP: { required: "Ingrese la coordenada Norte" },
             txtAltidudDP: { required: "Ingrese la altitud" }
         },
         fnSubmit: function (form) {

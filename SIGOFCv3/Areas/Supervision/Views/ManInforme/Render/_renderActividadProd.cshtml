@@ -14,7 +14,7 @@
     _renderActividadProd.fnInitDataTable_Detail = function () {
         var columns_label = [], columns_data = [], options = {};
 
-        columns_label = ["Actividades Productivas", "Especie                      ", "Área", "Edad (años)", "Rendimiento de Parcela (kg)", "Coord. Este", "Coord. Norte", "Altidud (msnm)", "Destino de la Producción", "Estado del Cultivo"];
+        columns_label = ["Actividades Productivas", "Especie Forestal", "Área", "Edad (años)", "Rendimiento de Parcela (kg)", "Coord. Este", "Coord. Norte", "Altitud (msnm)", "Destino de la Producción", "Estado del Cultivo"];
         columns_data = ["ACTIVIDAD", "DESC_ESPECIES", "AREA", "EDAD", "RENDIMIENTO", "COORDENADA_ESTE", "COORDENADA_NORTE", "ALTITUD", "DESTINO_PRODUCCION","ESTADO_CULTIVO"];
         options = {
             page_length: 10, row_index: true, row_edit: true, row_fnEdit: "_renderActividadProd.fnAddEdit(this)"

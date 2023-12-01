@@ -2484,9 +2484,9 @@ namespace CapaEntidad.DOC
         [Description("COORDENADA_NORTE_RESUP")]
         public Int32 COORDENADA_NORTE_RESUP { get; set; }
         [Description("DAP")]
-        public Decimal DAP { get; set; }
+        public String DAP { get; set; }
         [Description("AC")]
-        public Decimal AC { get; set; }
+        public String AC { get; set; }
         
         [Description("OBSERVACION")]
         public String OBSERVACION { get; set; }
@@ -2497,8 +2497,6 @@ namespace CapaEntidad.DOC
         public Ent_INFORME_ESPECIE_FOREST()
         {
             COD_SECUENCIAL = -1;
-            DAP = -1;
-            AC = -1;
             COORDENADA_ESTE_REPLA = -1;
             COORDENADA_NORTE_REPLA = -1;
             COORDENADA_ESTE_RESUP = -1;

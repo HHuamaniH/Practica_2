@@ -10698,8 +10698,8 @@ namespace CapaDatos.DOC
                                     oespecieforest.COORDENADA_NORTE_REPLA = Int32.Parse(dr["COORDENADA_NORTE_REPLA"].ToString());
                                     oespecieforest.COORDENADA_ESTE_RESUP = Int32.Parse(dr["COORDENADA_ESTE_RESUP"].ToString());
                                     oespecieforest.COORDENADA_NORTE_RESUP = Int32.Parse(dr["COORDENADA_NORTE_RESUP"].ToString());
-                                    oespecieforest.DAP = Decimal.Parse(dr["DAP"].ToString());
-                                    oespecieforest.AC = Decimal.Parse(dr["AC"].ToString());
+                                    oespecieforest.DAP = dr["DAP"].ToString();
+                                    oespecieforest.AC = dr["AC"].ToString();
                                     oespecieforest.OBSERVACION = dr["OBSERVACION"].ToString();
                                     oespecieforest.RegEstado = 0;
                                     lsCEntidad.ListEspecieForEst.Add(oespecieforest);
@@ -10731,7 +10731,7 @@ namespace CapaDatos.DOC
                                 }
                             }
                             #endregion
-                            #region ListEspecieForEst                            
+                            #region ListCoberturaBosNat                            
                             CapaEntidad.DOC.Ent_INFORME_COBERTURA_BOSNAT ocoberturabosnat;
                             dr.NextResult();
                             if (dr.HasRows)
@@ -10775,7 +10775,7 @@ namespace CapaDatos.DOC
                             if (dr.HasRows)
                             {
                                 dr.Read();
-                                lsCEntidad.NUMERO_PARTICIPANTES = dr.GetInt16(dr.GetOrdinal("NUMERO_PARTICIPANTES"));
+                                lsCEntidad.NUMERO_PARTICIPANTES = dr.GetInt32(dr.GetOrdinal("NUMERO_PARTICIPANTES"));
                                 lsCEntidad.PARTICIPACION_MENORES = dr.GetInt16(dr.GetOrdinal("PARTICIPACION_MENORES"));
                                 lsCEntidad.ASISTENCIA_TECNICA = dr.GetInt16(dr.GetOrdinal("ASISTENCIA_TECNICA"));
                                 lsCEntidad.FRECUENCIA_ASISTENCIA = dr.GetInt16(dr.GetOrdinal("FRECUENCIA_ASISTENCIA"));

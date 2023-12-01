@@ -203,7 +203,7 @@ namespace SIGOFCv3.Areas.Supervision.Models.ManInforme
                                             {
                                                 if (!string.IsNullOrEmpty(dap))
                                                 {
-                                                    oCampos.DAP = decimal.Parse(dap);
+                                                    oCampos.DAP = dap;
                                                 }
                                                 ac = (workSheet.Cells[rowIterator, 10].Value ?? "").ToString().Trim();
                                                 msg = ValidarThreeDecimal("AC", ac, "Medidas Dasométricas");
@@ -211,7 +211,7 @@ namespace SIGOFCv3.Areas.Supervision.Models.ManInforme
                                                 {
                                                     if (!string.IsNullOrEmpty(ac))
                                                     {
-                                                        oCampos.AC = decimal.Parse(ac);
+                                                        oCampos.AC = ac;
                                                     }
                                                 }
                                                 else { throw new Exception(msg); }
