@@ -25,11 +25,11 @@
                     <div class="form-row">
                         <div class="form-group col-md-6">
                             <label for="txtCoordEsteRP" class="text-small">*Coordenada Este</label>
-                            @Html.TextBox("txtCoordEsteRP", "", new { @class = "form-control form-control-sm", maxlength = "6", onkeypress = "return utilSigo.checkNum(event)" })
+                            @Html.TextBox("txtCoordEsteRP", "", new { @class = "form-control form-control-sm", maxlength = "6", onkeypress = "return utilSigo.checkTelefono(event)" })
                         </div>
                         <div class="form-group col-md-6">
                             <label for="txtCoordNorteRP" class="text-small">*Coordenada Norte</label>
-                            @Html.TextBox("txtCoordNorteRP", "", new { @class = "form-control form-control-sm", maxlength = "7", onkeypress = "return utilSigo.checkNum(event)" })
+                            @Html.TextBox("txtCoordNorteRP", "", new { @class = "form-control form-control-sm", maxlength = "7", onkeypress = "return utilSigo.checkTelefono(event)" })
                         </div>
                     </div>
                 </div>
@@ -46,22 +46,22 @@
                     <div class="form-row">
                         <div class="form-group col-md-6">
                             <label for="txtCoordEsteS" class="text-small">*Coordenada Este</label>
-                            @Html.TextBox("txtCoordEsteRS", "", new { @class = "form-control form-control-sm", maxlength = "6", onkeypress = "return utilSigo.checkNum(event)" })
+                            @Html.TextBox("txtCoordEsteRS", "", new { @class = "form-control form-control-sm", maxlength = "6", onkeypress = "return utilSigo.checkTelefono(event)" })
                         </div>
                         <div class="form-group col-md-6">
                             <label for="txtCoordNorteS" class="text-small">*Coordenada Norte</label>
-                            @Html.TextBox("txtCoordNorteRS", "", new { @class = "form-control form-control-sm", maxlength = "7", onkeypress = "return utilSigo.checkNum(event)" })
+                            @Html.TextBox("txtCoordNorteRS", "", new { @class = "form-control form-control-sm", maxlength = "7", onkeypress = "return utilSigo.checkTelefono(event)" })
                         </div>
                     </div>
                 </div>
                 <div class="form-row">
                     <div class="form-group col-md-6">
                         <label for="txtDAP" class="text-small">DAP(cm)</label>
-                        @Html.TextBox("txtDAP", "", new { @class = "form-control form-control-sm", maxlength = "7", onblur = "return utilSigo.onBlurThreeDecimal(this,'DAP');", onkeypress = "return utilSigo.onKeyDecimal(event, this);" })
+                        @Html.TextBox("txtDAP", "", new { @class = "form-control form-control-sm", maxlength = "8", onblur = "return utilSigo.onBlurSevenDigitoThreeDecimal(this,'DAP');", onkeypress = "return utilSigo.onKeyDecimal(event, this);" })
                     </div>
                     <div class="form-group col-md-6">
                         <label for="txtAC" class="text-small">AC(m)</label>
-                        @Html.TextBox("txtAC", "", new { @class = "form-control form-control-sm", maxlength = "7", onblur = "return utilSigo.onBlurThreeDecimal(this,'AC');", onkeypress = "return utilSigo.onKeyDecimal(event, this);" })
+                        @Html.TextBox("txtAC", "", new { @class = "form-control form-control-sm", maxlength = "8", onblur = "return utilSigo.onBlurSevenDigitoThreeDecimal(this,'AC');", onkeypress = "return utilSigo.onKeyDecimal(event, this);" })
                     </div>
                 </div>                
                 <div class="form-row">

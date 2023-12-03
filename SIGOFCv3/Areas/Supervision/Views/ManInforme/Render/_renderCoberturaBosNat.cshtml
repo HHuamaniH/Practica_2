@@ -91,16 +91,17 @@
 
     _renderCoberturaBosNat.fnDelete = function (obj) {
         var data;
-
-        data = _renderCoberturaBosNat.dtCoberturaBosNat.row($(obj).parents('tr')).data();
-        if (data["RegEstado"] == "0" || data["RegEstado"] == "2") {
-            _renderCoberturaBosNat.tbEliTABLA.push({
-                EliTABLA: "ISUPERVISION_COBERTURABOSNAT",
-                COD_SECUENCIAL: data["COD_SECUENCIAL"]
-            });
-        }
-        _renderCoberturaBosNat.dtCoberturaBosNat.row($(obj).parents('tr')).remove().draw(false);
-        utilSigo.toastSuccess("Exito", "Se eliminó el registro con éxito");
+        utilSigo.dialogConfirm("", "Está seguro de eliminar el registro?", function (r) {
+            data = _renderCoberturaBosNat.dtCoberturaBosNat.row($(obj).parents('tr')).data();
+            if (data["RegEstado"] == "0" || data["RegEstado"] == "2") {
+                _renderCoberturaBosNat.tbEliTABLA.push({
+                    EliTABLA: "ISUPERVISION_COBERTURABOSNAT",
+                    COD_SECUENCIAL: data["COD_SECUENCIAL"]
+                });
+            }
+            _renderCoberturaBosNat.dtCoberturaBosNat.row($(obj).parents('tr')).remove().draw(false);
+            utilSigo.toastSuccess("Exito", "Se eliminó el registro con éxito");
+        });
     }
 
     _renderCoberturaBosNat.fnImport = function (e, obj) {

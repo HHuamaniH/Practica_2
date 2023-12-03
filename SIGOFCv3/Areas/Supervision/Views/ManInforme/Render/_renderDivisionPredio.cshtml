@@ -94,16 +94,17 @@
 
     _renderDivisionPredio.fnDelete = function (obj) {
         var data;
-
-        data = _renderDivisionPredio.dtDivisionPredio.row($(obj).parents('tr')).data();
-        if (data["RegEstado"] == "0" || data["RegEstado"] == "2") {
-            _renderDivisionPredio.tbEliTABLA.push({
-                EliTABLA: "ISUPERVISION_DIVISIONPREDIO",
-                COD_SECUENCIAL: data["COD_SECUENCIAL"]
-            });
-        }
-        _renderDivisionPredio.dtDivisionPredio.row($(obj).parents('tr')).remove().draw(false);
-        utilSigo.toastSuccess("Exito", "Se eliminó el registro con éxito");
+        utilSigo.dialogConfirm("", "Está seguro de eliminar el registro?", function (r) {
+            data = _renderDivisionPredio.dtDivisionPredio.row($(obj).parents('tr')).data();
+            if (data["RegEstado"] == "0" || data["RegEstado"] == "2") {
+                _renderDivisionPredio.tbEliTABLA.push({
+                    EliTABLA: "ISUPERVISION_DIVISIONPREDIO",
+                    COD_SECUENCIAL: data["COD_SECUENCIAL"]
+                });
+            }
+            _renderDivisionPredio.dtDivisionPredio.row($(obj).parents('tr')).remove().draw(false);
+            utilSigo.toastSuccess("Exito", "Se eliminó el registro con éxito");
+        });
     }
 
     _renderDivisionPredio.fnImport = function (e, obj) {

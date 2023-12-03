@@ -880,7 +880,9 @@ utilSigo.checkNum = function (e) {
 
 utilSigo.checkTelefono = function (e) {
     var tecla = (document.all) ? e.keyCode : e.which;
-
+    if (tecla == 8) {
+        return true;
+    }
     var patron = /[0-9]/;
     var tecla_final = String.fromCharCode(tecla);
     return patron.test(tecla_final);
@@ -947,6 +949,40 @@ utilSigo.onBlurThreeDecimal = function (thix, texto) {
             document.getElementById(thix.id).value = "";
             utilSigo.toastWarning("Aviso", "El " + texto + " sólo debe tener tres decimales");
             $("#" + thix.id).focus();
+        }
+    }
+}
+utilSigo.onBlurSevenDigitoThreeDecimal = function (thix, texto) {
+    let numero = document.getElementById(thix.id).value;
+    if (numero != "") {
+        if (!/^\d+(\.\d{1,3})?$/.test(numero)) {
+            document.getElementById(thix.id).value = "";
+            utilSigo.toastWarning("Aviso", "El " + texto + " sólo debe tener tres decimales");
+            $("#" + thix.id).focus();
+        } else {
+            let decimal = parseFloat(numero);
+            if (numero>9999999) {
+                document.getElementById(thix.id).value = "";
+                utilSigo.toastWarning("Aviso", "El " + texto + " sólo no puede ser mayor a 7 digitos sin decimal");
+                $("#" + thix.id).focus();
+            }
+        }
+    }
+}
+utilSigo.onBlurSevenDigitoTwoDecimal = function (thix, texto) {
+    let numero = document.getElementById(thix.id).value;
+    if (numero != "") {
+        if (!/^\d+(\.\d{1,2})?$/.test(numero)) {
+            document.getElementById(thix.id).value = "";
+            utilSigo.toastWarning("Aviso", "El " + texto + " sólo debe tener dos decimales");
+            $("#" + thix.id).focus();
+        } else {
+            let decimal = parseFloat(numero);
+            if (numero > 9999999) {
+                document.getElementById(thix.id).value = "";
+                utilSigo.toastWarning("Aviso", "El " + texto + " sólo no puede ser mayor a 7 digitos sin decimal");
+                $("#" + thix.id).focus();
+            }
         }
     }
 }

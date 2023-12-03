@@ -84,7 +84,7 @@
                 }
                 utilSigo.toastSuccess("Exito", "Se eliminó todos los registros con éxito");
             });
-            
+
         } else {
             utilSigo.toastWarning("Aviso", "No se encontraron registros a eliminar");
         }
@@ -92,16 +92,17 @@
 
     _renderEspecieForEst.fnDelete = function (obj) {
         var data;
-
-        data = _renderEspecieForEst.dtEspecieForEst.row($(obj).parents('tr')).data();
-        if (data["RegEstado"] == "0" || data["RegEstado"] == "2") {
-            _renderEspecieForEst.tbEliTABLA.push({
-                EliTABLA: "ISUPERVISION_ESPECIEFOREST",
-                COD_SECUENCIAL: data["COD_SECUENCIAL"]
-            });
-        }
-        _renderEspecieForEst.dtEspecieForEst.row($(obj).parents('tr')).remove().draw(false);        
-        utilSigo.toastSuccess("Exito", "Se eliminó el registro con éxito");
+        utilSigo.dialogConfirm("", "Está seguro de eliminar el registro?", function (r) {
+            data = _renderEspecieForEst.dtEspecieForEst.row($(obj).parents('tr')).data();
+            if (data["RegEstado"] == "0" || data["RegEstado"] == "2") {
+                _renderEspecieForEst.tbEliTABLA.push({
+                    EliTABLA: "ISUPERVISION_ESPECIEFOREST",
+                    COD_SECUENCIAL: data["COD_SECUENCIAL"]
+                });
+            }
+            _renderEspecieForEst.dtEspecieForEst.row($(obj).parents('tr')).remove().draw(false);
+            utilSigo.toastSuccess("Exito", "Se eliminó el registro con éxito");
+        });
     }
 
     _renderEspecieForEst.fnImport = function (e, obj) {
@@ -176,7 +177,7 @@
                     <th colspan="2" style="text-align: center;">Coordenadas UTM(Supervisión)</th>
                     <th colspan="2" style="text-align: center;">Medidas Dasométricas</th>
                     <th></th>
-                </tr>                
+                </tr>
             </thead>
             <tbody></tbody>
         </table>
