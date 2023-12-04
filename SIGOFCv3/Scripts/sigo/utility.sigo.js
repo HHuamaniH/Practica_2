@@ -952,7 +952,7 @@ utilSigo.onBlurThreeDecimal = function (thix, texto) {
         }
     }
 }
-utilSigo.onBlurSevenDigitoThreeDecimal = function (thix, texto) {
+utilSigo.onBlurFourDigitoThreeDecimal = function (thix, texto) {
     let numero = document.getElementById(thix.id).value;
     if (numero != "") {
         if (!/^\d+(\.\d{1,3})?$/.test(numero)) {
@@ -961,15 +961,15 @@ utilSigo.onBlurSevenDigitoThreeDecimal = function (thix, texto) {
             $("#" + thix.id).focus();
         } else {
             let decimal = parseFloat(numero);
-            if (numero>9999999) {
+            if (numero>9999) {
                 document.getElementById(thix.id).value = "";
-                utilSigo.toastWarning("Aviso", "El " + texto + " sólo no puede ser mayor a 7 digitos sin decimal");
+                utilSigo.toastWarning("Aviso", "El " + texto + " sólo no puede ser mayor a 4 digitos enteros o 9999");
                 $("#" + thix.id).focus();
             }
         }
     }
 }
-utilSigo.onBlurSevenDigitoTwoDecimal = function (thix, texto) {
+utilSigo.onBlurFourDigitoTwoDecimal = function (thix, texto) {
     let numero = document.getElementById(thix.id).value;
     if (numero != "") {
         if (!/^\d+(\.\d{1,2})?$/.test(numero)) {
@@ -978,9 +978,9 @@ utilSigo.onBlurSevenDigitoTwoDecimal = function (thix, texto) {
             $("#" + thix.id).focus();
         } else {
             let decimal = parseFloat(numero);
-            if (numero > 9999999) {
+            if (numero > 9999) {
                 document.getElementById(thix.id).value = "";
-                utilSigo.toastWarning("Aviso", "El " + texto + " sólo no puede ser mayor a 7 digitos sin decimal");
+                utilSigo.toastWarning("Aviso", "El " + texto + " sólo no puede ser mayor a 4 digitos enteros o 9999");
                 $("#" + thix.id).focus();
             }
         }

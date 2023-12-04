@@ -197,7 +197,7 @@ namespace SIGOFCv3.Areas.Supervision.Models.ManInforme
                                             oCampos.COORDENADA_ESTE_RESUP = Convert.ToInt32(ceste);
                                             oCampos.COORDENADA_NORTE_RESUP = Convert.ToInt32(cnorte);
                                             dap = (workSheet.Cells[rowIterator, 9].Value ?? "").ToString().Trim();
-                                            msg = ValidarSevenDigitoThreeDecimal("DAP", dap, "Medidas Dasométricas");
+                                            msg = ValidarFourDigitoThreeDecimal("DAP", dap, "Medidas Dasométricas");
 
                                             if (msg == "")
                                             {
@@ -206,7 +206,7 @@ namespace SIGOFCv3.Areas.Supervision.Models.ManInforme
                                                     oCampos.DAP = dap;
                                                 }
                                                 ac = (workSheet.Cells[rowIterator, 10].Value ?? "").ToString().Trim();
-                                                msg = ValidarSevenDigitoThreeDecimal("AC", ac, "Medidas Dasométricas");
+                                                msg = ValidarFourDigitoThreeDecimal("AC", ac, "Medidas Dasométricas");
                                                 if (msg == "")
                                                 {
                                                     if (!string.IsNullOrEmpty(ac))
@@ -272,7 +272,7 @@ namespace SIGOFCv3.Areas.Supervision.Models.ManInforme
                                 tempDecimal = (workSheet.Cells[rowIterator, 2].Value ?? "").ToString().Trim();
                                 if (!string.IsNullOrEmpty(tempDecimal))
                                 {
-                                    msg = ValidarSevenDigitoThreeDecimal("Área", tempDecimal, "Cobertura de Bosques Naturales");
+                                    msg = ValidarFourDigitoThreeDecimal("Área", tempDecimal, "Cobertura de Bosques Naturales");
                                     if (msg == "")
                                     {
                                         oCampos.AREA = Convert.ToDecimal(tempDecimal);
@@ -1849,24 +1849,24 @@ namespace SIGOFCv3.Areas.Supervision.Models.ManInforme
             return lstDesplaza;
         }
 
-        public static string ValidarCoordenadas(string ceste, string cnorte, string descripción)
+        public static string ValidarCoordenadas(string ceste, string cnorte, string descripcion)
         {
             string returns = string.Empty;
             if (ceste != "")
             {
                 if (cnorte != "")
                 {
-                    if (ceste.Length > 6) { returns = "Coordenada Este de " + descripción + " incorrecta no debe ser mayor a 6 dígitos"; }
+                    if (ceste.Length > 6) { returns = "Coordenada Este de " + descripcion + " incorrecta no debe ser mayor a 6 dígitos"; }
                     else
                     {
-                        if (!Regex.IsMatch(ceste, @"^\d+$")) { returns = "Coordenada Este de " + descripción + " incorrecta debe ser numérico sin decimales"; }
+                        if (!Regex.IsMatch(ceste, @"^\d+$")) { returns = "Coordenada Este de " + descripcion + " incorrecta debe ser numérico sin decimales"; }
                         else
                         {
-                            if (cnorte.Length > 7) { returns = "Coordenada Norte de " + descripción + " incorrecta no debe ser mayor a 7 dígitos"; }
+                            if (cnorte.Length > 7) { returns = "Coordenada Norte de " + descripcion + " incorrecta no debe ser mayor a 7 dígitos"; }
                             else
                             {
                                 int coord_esteInt = Convert.ToInt32(ceste);
-                                if (!Regex.IsMatch(cnorte, @"^\d+$")) { returns = "Coordenada Norte de " + descripción + " incorrecta debe ser numérico sin decimales"; }
+                                if (!Regex.IsMatch(cnorte, @"^\d+$")) { returns = "Coordenada Norte de " + descripcion + " incorrecta debe ser numérico sin decimales"; }
                                 else
                                 {
                                     int coord_norteInt = Convert.ToInt32(cnorte);
@@ -1876,26 +1876,26 @@ namespace SIGOFCv3.Areas.Supervision.Models.ManInforme
                         }
                     }
                 }
-                else { returns = "Coordenada Norte vacía de " + descripción; }
-            }else { returns = "Coordenada Este vacía de " + descripción; }
+                else { returns = "Coordenada Norte vacía de " + descripcion; }
+            }else { returns = "Coordenada Este vacía de " + descripcion; }
 
             return returns;
         }
-        public static string ValidarAltitud(string altidud, string descripción)
+        public static string ValidarAltitud(string altidud, string descripcion)
         {
             string returns = string.Empty;
             if (altidud != "")
             {
-                if (altidud.Length > 4) { returns = "Altitud Este de " + descripción + " incorrecta no debe ser mayor a 4 dígitos"; }
+                if (altidud.Length > 4) { returns = "Altitud de " + descripcion + " incorrecta no debe ser mayor a 4 dígitos"; }
                 {
-                    if (!Regex.IsMatch(altidud, @"^\d+$")) { returns = "Altitud de " + descripción + " incorrecta debe ser numérico"; }                    
+                    if (!Regex.IsMatch(altidud, @"^\d+$")) { returns = "Altitud de " + descripcion + " incorrecta debe ser numérico"; }                    
                 }
             }
-            else { returns = "Altitud vacía de " + descripción; }
+            else { returns = "Altitud vacía de " + descripcion; }
 
             return returns;
         }
-        public static string ValidarSevenDigitoThreeDecimal(string campo, string valor, string descripción)
+        public static string ValidarFourDigitoThreeDecimal(string campo, string valor, string descripcion)
         {
             string returns = string.Empty;
             if (!string.IsNullOrEmpty(valor))
@@ -1903,25 +1903,14 @@ namespace SIGOFCv3.Areas.Supervision.Models.ManInforme
                 decimal resultado;
                 if (decimal.TryParse(valor, out resultado))
                 {
-                    if (valor.Contains('.'))
-                    {
-                        if (valor.Length > 8) { returns = "Valor de la columna " + campo + " no puede ser mayor a 7 dígitos sin el punto decimal en " + descripción; }
-                        else
-                        {
-                            if (!Regex.IsMatch(valor, @"^\d+(\.\d{1,3})?$")) { returns = "Valor de la columna " + campo + " no puede tener más de 3 decimales en " + descripción; }                            
-                        }
-                    }
+                    if (!Regex.IsMatch(valor, @"^\d+(\.\d{1,3})?$")) { returns = "Valor de la columna " + campo + " no puede tener más de 3 decimales en " + descripcion; }
                     else
                     {
-                        if (valor.Length > 7) { returns = "Valor de la columna " + campo + " no puede ser mayor a 7 dígitos sin el punto decimal en " + descripción; }
-                        else
-                        {
-                            if (!Regex.IsMatch(valor, @"^\d+(\.\d{1,3})?$")) { returns = "Valor de la columna " + campo + " no puede tener más de 3 decimales en " + descripción; }                            
-                        }
+                        decimal num = decimal.Parse(valor);
+                        if (num>9999) { returns = "Valor de la columna " + campo + " no puede ser mayor a 4 dígitos enteros o 9999 en " + descripcion; }
                     }
-                    
                 }
-                else { returns = "Valor no permitido (debe ser un número decimal) de la columna: " + campo + " en " + descripción; }
+                else { returns = "Valor no permitido (debe ser un número decimal) de la columna: " + campo + " en " + descripcion; }
             }
 
             return returns;
