@@ -63,7 +63,16 @@
             {{/if}}
             {{if FLG_ACREDITACION_IMPUTACIONES}}
             <div>
-                <ol style="margin-left: ${MARGIN_LEFT.ROOT}; list-style: upper-roman;" start="4"><li><strong>ACREDITACIÓN DE LAS IMPUTACIONES, IMPOSICIÓN DE SANCIÓN ATENUENATES Y AGRAVANTES.</strong></li></ol>
+                <ol style="margin-left: ${MARGIN_LEFT.ROOT}; list-style: upper-roman;" start="4">
+                    <li>
+                        <strong>
+                            ACREDITACIÓN DE LAS IMPUTACIONES, IMPOSICIÓN DE SANCIÓN
+                            <a style="mso-footnote-id: foot_imposicion_1" href="#_foot_imposicion_1" title="">
+                                <sup class=MsoFootnoteReference><span style="mso-special-character:footnote"></span></sup>
+                            </a> ATENUENATES Y AGRAVANTES.
+                        </strong>
+                    </li>
+                </ol>
                 <div>{{html ACREDITACION_IMPUTACIONES}}</div>
             </div>
             {{/if}}
@@ -131,9 +140,6 @@
                 <td style="border: 1px solid #000;">1</td>
                 <td style="border: 1px solid #000;">
                     Informe de Supervisión N° ${NRO_REFERENCIA}, de fecha ${INF_FECHA} (en adelante, el Informe de Supervisión)
-                    <a style="mso-footnote-id: foot_vistos_1" href="#_foot_vistos_1" title="">
-                        <sup class=MsoFootnoteReference><span style="mso-special-character:footnote"></span></sup>
-                    </a>
                 </td>
                 <td style="border: 1px solid #000;">
                     <u>Titular:</u> ${TITULAR_SUPERVISADO} identificado con {{if RUC_TITULAR}}RUC ${RUC_TITULAR}{{else DOCUMENTO_RLEGAL}}DNI ${DOCUMENTO_RLEGAL}{{/if}} (en adelante, el/la titular)<br />
@@ -158,6 +164,9 @@
                 <td style="border: 1px solid #000;">3</td>
                 <td style="border: 1px solid #000;">
                     Cédula de Notificación N° ${ANTECEDENTES_DOCS.Ced_Noti.numero}, de fecha ${ANTECEDENTES_DOCS.Ced_Noti.fechaEmisionTexto || 'XX de XXXXX de XXXX'}, notificada el ${ANTECEDENTES_DOCS.Ced_Noti.fechaNotificacionTexto || 'XX de XXXXX de XXXX'}
+                    <a style="mso-footnote-id: foot_vistos_1" href="#_foot_vistos_1" title="">
+                        <sup class=MsoFootnoteReference><span style="mso-special-character:footnote"></span></sup>
+                    </a>
                 </td>
                 <td style="border: 1px solid #000;">
                     Se notificó al/la titular la Resolución Sub Directoral N° ${ANTECEDENTES_DOCS.RSD.numero || 'XXXX'} y el Informe de Supervisión N° ${ANTECEDENTES_DOCS.Inf_Sup.numero || 'XXXX'}.
@@ -198,6 +207,9 @@
                 <td style="border: 1px solid #000;">6</td>
                 <td style="border: 1px solid #000;">
                     Cédula de Notificación N° 00XXX-2023-OSINFOR/08.2.2, de fecha XX de marzo de 202X, notificada el XX de XXX de 202X
+                    <a style="mso-footnote-id: foot_vistos_2" href="#_foot_vistos_2" title="">
+                        <sup class=MsoFootnoteReference><span style="mso-special-character:footnote"></span></sup>
+                    </a>
                 </td>
                 <td style="border: 1px solid #000;">
                     Se notificó a el/la administrado/a el Informe Final de Instrucción N° 000XX-202X-OSINFOR/08.2.1.
@@ -265,7 +277,10 @@
 
 <script id="tmpl-analisis" type="text/x-jquery-tmpl">
     <p class="enumeration">
-        En aplicación del numeral 258.1 del artículo 258 del Texto Único Ordenado de la Ley del Procedimiento Administrativo General, Ley N° 27444, aprobado por Decreto Supremo Nº 004-2019-JUS (en adelante, TUO de la Ley Nº 27444), corresponde a esta Dirección de Línea resolver estrictamente sobre los hechos imputados en la fase de instrucción.
+        En aplicación del numeral 258.1 del artículo 258 del Texto Único Ordenado de la Ley del Procedimiento Administrativo General, Ley N° 27444, aprobado por Decreto Supremo Nº 004-2019-JUS
+        <a style="mso-footnote-id: foot_imputacion_1" href="#_foot_imputacion_1" title="">
+            <sup class=MsoFootnoteReference><span style="mso-special-character:footnote"></span></sup>
+        </a> (en adelante, TUO de la Ley Nº 27444), corresponde a esta Dirección de Línea resolver estrictamente sobre los hechos imputados en la fase de instrucción.
     </p>
 
     {{each(i, infra) INFRACCIONES}}
@@ -387,7 +402,12 @@
                 </td>
                 <td style="border: 1px solid #000;">
                     <p>Conforme a los resultados del Informe de Supervisión, la extracción de XX m<sup>3</sup> de madera provenientes de árboles no autorizados, representa una afectación de XX hectáreas (XXX hectáreas/m<sup>3</sup> no autorizado) de nivel XX a la cobertura boscosa, la cual forma parte del Patrimonio Forestal Nacional.</p>
-                    <p>Cabe señalar que, de las especies en cuestión, no se encuentra en la clasificación de especies amenazadas, conforme al numeral 5.27 del artículo 5 del Reglamento para la Gestión Forestal, aprobado por Decreto Supremo N° 018-2015-MINAGRI.</p>
+                    <p>
+                        Cabe señalar que, de las especies en cuestión, no se encuentra en la clasificación de especies amenazadas, conforme al numeral 5.27
+                        <a style="mso-footnote-id: foot_gravedad_1" href="#_foot_gravedad_1" title="">
+                            <sup class=MsoFootnoteReference><span style="mso-special-character:footnote"></span></sup>
+                        </a> del artículo 5 del Reglamento para la Gestión Forestal, aprobado por Decreto Supremo N° 018-2015-MINAGRI.
+                    </p>
                 </td>
             </tr>
         </tbody>
@@ -396,7 +416,10 @@
 
 <script id="tmpl-acreditacion-imputaciones" type="text/x-jquery-tmpl">
     <p class="enumeration">
-        El/la administrado (a) es responsable por la comisión de las infracciones tipificadas en los numerales xxxx del Anexo 1 del RISMFFS. Ahora bien, de acuerdo con el reporte de antecedentes de fecha xx, el/la administrado (a) no fue sancionado (a) anteriormente por el OSINFOR; asimismo, no se identifican agravantes y atenuantes aplicables. En consecuencia, las infracciones acreditadas son pasibles de ser sancionadas de la siguiente manera:
+        El/la administrado (a) es responsable por la comisión de las infracciones tipificadas en los numerales xxxx del Anexo 1 del RISMFFS. Ahora bien, de acuerdo con el reporte de antecedentes
+        <a style="mso-footnote-id: foot_imputacion_2" href="#_foot_imputacion_2" title="">
+            <sup class=MsoFootnoteReference><span style="mso-special-character:footnote"></span></sup>
+        </a> de fecha xx, el/la administrado (a) no fue sancionado (a) anteriormente por el OSINFOR; asimismo, no se identifican agravantes y atenuantes aplicables. En consecuencia, las infracciones acreditadas son pasibles de ser sancionadas de la siguiente manera:
     </p>
     <table width="100%" cellpadding="4" style="border: 0; font-family: Arial; font-size: 10pt; border-collapse: collapse; line-height: 150%;">
         <thead>
@@ -413,6 +436,9 @@
                 </td>
                 <td style="border: 1px solid #000;">
                     Amonestación
+                    <a style="mso-footnote-id: foot_imputacion_3" href="#_foot_imputacion_3" title="">
+                        <sup class=MsoFootnoteReference><span style="mso-special-character:footnote"></span></sup>
+                    </a>
                 </td>
             </tr>
         </tbody>
@@ -428,7 +454,10 @@
         </tfoot>
     </table>
     <p class="enumeration">
-        Bajo lo expuesto, en virtud de lo señalado en el numeral 8.5 del artículo 8 del RISMFFS, el monto de la multa a imponer el/la administrado (a) que no sea impugnada y se cancele dentro de los quince (15) días hábiles posteriores a su notificación, goza de un descuento del 25%. La multa que resulte de la aplicación del descuento no puede ser menor a 0.10 UIT.
+        Bajo lo expuesto, en virtud de lo señalado en el numeral 8.5 del artículo 8 del RISMFFS, el monto de la multa a imponer el/la administrado (a) que no sea impugnada y se cancele dentro de los quince (15) días hábiles posteriores a su notificación, goza de un descuento del 25%. La multa que resulte de la aplicación del descuento no puede ser menor a 0.10 UIT
+        <a style="mso-footnote-id: foot_imputacion_4" href="#_foot_imputacion_4" title="">
+            <sup class=MsoFootnoteReference><span style="mso-special-character:footnote"></span></sup>
+        </a>.
     </p>
 </script>
 
@@ -448,7 +477,10 @@
         </li>
     </ul>
     <p class="enumeration">
-        En aplicación del numeral 157.3 del artículo 157 del Texto Único Ordenado de la Ley del Procedimiento Administrativo General, Ley N° 27444, corresponde que las medidas cautelares dispuestas en la resolución sub directoral de inicio del PAU caduquen cuando se emite la resolución que pone fin al procedimiento.
+        En aplicación del numeral 157.3
+        <a style="mso-footnote-id: foot_complementarias_1" href="#_foot_complementarias_1" title="">
+            <sup class=MsoFootnoteReference><span style="mso-special-character:footnote"></span></sup>
+        </a> del artículo 157 del Texto Único Ordenado de la Ley del Procedimiento Administrativo General, Ley N° 27444, corresponde que las medidas cautelares dispuestas en la resolución sub directoral de inicio del PAU caduquen cuando se emite la resolución que pone fin al procedimiento.
     </p>
     <p class="enumeration">
         Por otro lado, conforme a lo establecido inciso a.1 del literal a) del numeral 9.1 del artículo 9 del RISMFFS, de manera complementaria a la sanción a imponerse, puede aplicarse el <strong>decomiso</strong> de especímenes, productos o subproductos forestales y de fauna silvestre sobre los que no pueda acreditarse su origen legal o provengan de operaciones de extracción, caza colecta o captura no autorizadas.
@@ -462,7 +494,10 @@
     </p>
     {{else}}
     <p class="enumeration">
-        En ese sentido, <strong>corresponde dictar como medida complementaria el decomiso</strong> de los productos forestales que se transporten y comercialicen al amparo de las guías de transporte forestal y listas de trozas del Permiso Forestal, así como, del plan de manejo aprobado; con la finalidad de eliminar o mitigar los efectos producidos por la comisión de la infracción acreditada en el presente procedimiento, tales como la posesión, el transporte o comercialización de los productos forestales provenientes de la extracción no autorizada, conforme al detalle establecido en el Anexo II de la presente resolución.
+        En ese sentido, <strong>corresponde dictar como medida complementaria el decomiso</strong> de los productos forestales que se transporten y comercialicen al amparo de las guías de transporte forestal y listas de trozas del Permiso Forestal, así como, del plan de manejo aprobado; con la finalidad de eliminar o mitigar los efectos producidos por la comisión de la infracción acreditada en el presente procedimiento, tales como la posesión, el transporte o comercialización de los productos forestales provenientes de la extracción no autorizada, conforme al detalle establecido en el Anexo II de la presente resolución
+        <a style="mso-footnote-id: foot_complementarias_2" href="#_foot_complementarias_2" title="">
+            <sup class=MsoFootnoteReference><span style="mso-special-character:footnote"></span></sup>
+        </a>.
     </p>
     {{/if}}
 </script>
@@ -477,10 +512,19 @@
     </p>
     {{else}}
     <p class="enumeration">
-        La medida correctiva a aplicarse en el presente caso, por la extracción de un volumen de <strong>xxx m<sup>3</sup></strong>, será de xxx, toda vez que existe un área disponible dentro de la concesión para realizar la reposición de la cobertura afectada mediante manejo de regeneración natural. <u>La propuesta de medida correctiva se detalla en el anexo 2 de la presente resolución</u>.
+        La medida correctiva a aplicarse en el presente caso
+        <a style="mso-footnote-id: foot_correctivas_1" href="#_foot_correctivas_1" title="">
+            <sup class=MsoFootnoteReference><span style="mso-special-character:footnote"></span></sup>
+        </a>, por la extracción de un volumen de <strong>xxx m<sup>3</sup></strong>, será de xxx, toda vez que existe un área disponible dentro de la concesión para realizar la reposición de la cobertura afectada mediante manejo de regeneración natural. <u>La propuesta de medida correctiva se detalla en el anexo 2 de la presente resolución</u>.
     </p>
     <p class="enumeration">
-        Los titulares, tienen la obligación de cumplir con la implementación de las medidas correctivas y/o mandatos que se emitan como resultado de las acciones de control, supervisión y/o fiscalización ejecutadas por el OSINFOR; y conforme a lo regulado por el numeral 13 del Anexo 1 del RISMFFS, <strong>el incumplir con la implementación de las medidas correctivas, constituye una infracción grave</strong>; debiendo informarse que la supervisión de la implementación de la medida, se encuentra a cargo de la Dirección de Supervisión Forestal y de Fauna Silvestre del OSINFOR.
+        Los titulares, tienen la obligación de cumplir con la implementación de las medidas correctivas y/o mandatos que se emitan como resultado de las acciones de control, supervisión y/o fiscalización ejecutadas por el OSINFOR
+        <a style="mso-footnote-id: foot_correctivas_2" href="#_foot_correctivas_2" title="">
+            <sup class=MsoFootnoteReference><span style="mso-special-character:footnote"></span></sup>
+        </a>; y conforme a lo regulado por el numeral 13 del Anexo 1 del RISMFFS, <strong>el incumplir con la implementación de las medidas correctivas, constituye una infracción grave</strong>; debiendo informarse que la supervisión de la implementación de la medida, se encuentra a cargo de la Dirección de Supervisión Forestal y de Fauna Silvestre del OSINFOR
+        <a style="mso-footnote-id: foot_correctivas_3" href="#_foot_correctivas_3" title="">
+            <sup class=MsoFootnoteReference><span style="mso-special-character:footnote"></span></sup>
+        </a>.
     </p>
     {{/if}}
 </script>
@@ -543,7 +587,10 @@
     </table>
 
     <p class="enumeration">
-        Además, considerando lo establecido en el segundo párrafo del artículo 27 del Reglamento del PAU, corresponde notificar la presente resolución directoral a la Subdirección de Instrucción, para conocimiento y fines.
+        Además, considerando lo establecido en el segundo párrafo del artículo 27 del Reglamento del PAU
+        <a style="mso-footnote-id: foot_comunicacion_1" href="#_foot_comunicacion_1" title="">
+            <sup class=MsoFootnoteReference><span style="mso-special-character:footnote"></span></sup>
+        </a>, corresponde notificar la presente resolución directoral a la Subdirección de Instrucción, para conocimiento y fines.
     </p>
     <p class="enumeration">
         Por otro lado, es necesario precisar que, en aras de simplificar y facilitar el envío de información de obligaciones de manera oportuna, ágil y transparente, al administrado cuenta con la herramienta digital - APP MiBosque, el cual es un aplicativo dirigido a los titulares de títulos habilitantes y regentes forestales, para que puedan remitir y registrar información clara y oportuna que permita evidenciar el cumplimiento de sus obligaciones, asociadas a la gestión de recursos forestales, establecidas en el marco normativo. Además, permite reportar amenazas y/o delitos ambientales que se puedan desarrollar dentro de las áreas de manejo, en tiempo real, mediante canales digitales.
@@ -653,6 +700,9 @@
             <tr>
                 <td style="border: 1px solid #000;">
                     Fraccionamiento de multas
+                    <a style="mso-footnote-id: foot_resolucion_1" href="#_foot_resolucion_1" title="">
+                        <sup class=MsoFootnoteReference><span style="mso-special-character:footnote"></span></sup>
+                    </a>
                 </td>
                 <td style="border: 1px solid #000;">
                     Permite pagar la multa en cuotas
@@ -661,6 +711,9 @@
             <tr>
                 <td style="border: 1px solid #000;">
                     Compensación de multas
+                    <a style="mso-footnote-id: foot_resolucion_2" href="#_foot_resolucion_2" title="">
+                        <sup class=MsoFootnoteReference><span style="mso-special-character:footnote"></span></sup>
+                    </a>
                 </td>
                 <td style="border: 1px solid #000;">
                     Permite que la multa se cancele a cambio de determinadas acciones
@@ -692,7 +745,13 @@
                     Mesa de Partes Digital el OSINFOR
                 </td>
                 <td style="border: 1px solid #000;">
-                    A través del enlace https://facilita.gob.pe/t/677, siempre que los archivos no superen los 10 MB.
+                    A través del enlace
+                    <a style="mso-footnote-id: foot_resolucion_3" href="#_foot_resolucion_3" title="">
+                        <sup class=MsoFootnoteReference><span style="mso-special-character:footnote"></span></sup>
+                    </a> https://facilita.gob.pe/t/677
+                    <a style="mso-footnote-id: foot_resolucion_4" href="#_foot_resolucion_4" title="">
+                        <sup class=MsoFootnoteReference><span style="mso-special-character:footnote"></span></sup>
+                    </a>, siempre que los archivos no superen los 10 MB.
                 </td>
             </tr>
             <tr>
@@ -723,7 +782,10 @@
         <strong>Artículo.</strong> Disponer que el/la administrado (a) cumpla con implementar la medida correctiva señalada en el Anexo III que forma parte de la presente Resolución Directoral.
     </p>
     <p style="text-indent: 30px;">
-        <strong>Artículo.</strong> Se invoca el/la señor (a) a utilizar el APP MiBosque, herramienta que permite reportar el cumplimiento de obligaciones, como la presentación de los informes de ejecución, entre otros, a fin de evitar incurrir en incumplimientos que deriven en infracciones a la legislación forestal. El APP Mibosque puede ser descargada del dispositivo móvil (Play Store): https://play.google.com/store/apps/details?id=pe.gob.osinfor.mibosque_demo&hl=es, o mediante la página Web del OSINFOR: https://www.gob.pe/23400-acceder-al-aplicativo-mibosque. Asimismo, podrá realizar cualquier consulta y/o duda respecto al uso del APP Mibosque a la Ing. Erika Morales Ruiz, al teléfono 989336447 y/o al correo electrónico: emoralesr@osinfor.gob.pe.
+        <strong>Artículo.</strong> Se invoca el/la señor (a) a utilizar el APP MiBosque, herramienta que permite reportar el cumplimiento de obligaciones, como la presentación de los informes de ejecución, entre otros, a fin de evitar incurrir en incumplimientos que deriven en infracciones a la legislación forestal. El APP Mibosque puede ser descargada del dispositivo móvil
+        <a style="mso-footnote-id: foot_resolucion_5" href="#_foot_resolucion_5" title="">
+            <sup class=MsoFootnoteReference><span style="mso-special-character:footnote"></span></sup>
+        </a> (Play Store): https://play.google.com/store/apps/details?id=pe.gob.osinfor.mibosque_demo&hl=es, o mediante la página Web del OSINFOR: https://www.gob.pe/23400-acceder-al-aplicativo-mibosque. Asimismo, podrá realizar cualquier consulta y/o duda respecto al uso del APP Mibosque a la Ing. Erika Morales Ruiz, al teléfono 989336447 y/o al correo electrónico: emoralesr@osinfor.gob.pe.
     </p>
     <p style="text-indent: 30px;">
         <strong>Artículo.</strong> Remitir copia de la presente Resolución Directoral a la Gerencia Regional xxx, Fiscalía Especializada en Materia Ambiental de xxx; y al Servicio Nacional Forestal y de Fauna Silvestre – SERFOR, para los fines indicados del numeral VI.
