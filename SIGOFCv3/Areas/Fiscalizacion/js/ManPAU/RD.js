@@ -545,6 +545,10 @@ _informe.CombinarInfracciones = function (lstInfracciones) {
     });
 }
 
+_informe.ValidarNumero = function (value) {
+    return /^\d+$/.test(value);
+}
+
 _informe.Estructura = function () {
     let objEN = JSON.parse(JSON.stringify(app.Informe));
 
@@ -1391,7 +1395,7 @@ $(function () {
 
                     let params = {
                         type: 'post',
-                        url: `${urlLocalSigo}Fiscalizacion/ManPAURD/RDFirmaActualizar`,
+                        url: `${urlLocalSigo}Fiscalizacion/ManPAURD/ParticipanteActualizar`,
                         datos: JSON.stringify({ participantes })
                     };
 

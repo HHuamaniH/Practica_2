@@ -164,7 +164,7 @@ namespace SIGOFCv3.Areas.Fiscalizacion.Controllers
             bool success = true; string msj = "";
             VM_TRAMITE tramite = new Log_Informe_Digital().TramiteGetById(id, codTHabilitante, codInforme);
             return Json(new { success, msj, data = tramite }, JsonRequestBehavior.AllowGet);
-        }
+        }        
 
         [HttpGet]
         public JsonResult TramiteGeneralByCriterio(string criterio, string valor = "")

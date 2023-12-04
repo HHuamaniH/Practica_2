@@ -131,8 +131,8 @@ namespace CapaDatos.DOC
 
                 try
                 {
-                    object[] param = { item.codInformeDigital, item.item, item.estado };
-                    int rows = dBOracle.ManExecute(cn, tr, "DOC_OSINFOR_ERP_MIGRACION.SPFISCALIZACION_RESDIR_DIGITAL_FIRMA_ACTUALIZAR", param);
+                    object[] param = { item.codInformeDigital, item.item, item.codPersona, item.funcion, item.observacion, item.estado, 1 };
+                    int rows = dBOracle.ManExecute(cn, tr, "DOC_OSINFOR_ERP_MIGRACION.SPFISCALIZACION_RESDIR_DIGITAL_PARTICIPANTE_GRABAR", param);
 
                     tr.Commit();
 
