@@ -1,0 +1,185 @@
+﻿
+@model List<CapaEntidad.DOC.Ent_INFORME_ESPECIE_FOREST>
+
+<style type="text/css">
+    #tbRenderEspecieForEst_wrapper {
+        padding: 0px;
+    }
+</style>
+
+<script type="text/javascript">
+    var _renderEspecieForEst = {};
+    _renderEspecieForEst.tbEliTABLA = [];
+
+    _renderEspecieForEst.fnInitDataTable_Detail = function () {
+        var columns_label = [], columns_data = [], options = {};
+
+        columns_label = ["Especie", "Especie", "Coord. Este", "Coord. Norte", "Coord. Este", "Coord. Norte", "DAP(cm)", "AC(m)", "Observación",];
+        columns_data = ["DESC_ESPECIES_REPLA", "DESC_ESPECIES_RESUP", "COORDENADA_ESTE_REPLA", "COORDENADA_NORTE_REPLA", "COORDENADA_ESTE_RESUP", "COORDENADA_NORTE_RESUP","DAP","AC", "OBSERVACION"];
+        options = {
+            page_length: 10, row_index: true, row_edit: true, row_fnEdit: "_renderEspecieForEst.fnAddEdit(this)"
+            , row_delete: true, row_fnDelete: "_renderEspecieForEst.fnDelete(this)"
+            , button_copy: true, button_csv: true, button_excel: true, button_pdf: true, button_print: true
+            , export_title: $("#tbRenderEspecieForEst").find("thead tr")[0].innerText.trim()
+            , page_sort: true
+            , data:null
+        };
+        _renderEspecieForEst.dtEspecieForEst = utilDt.fnLoadDataTable_Detail($("#tbRenderEspecieForEst"), columns_label, columns_data, options);
+
+
+    }
+
+    _renderEspecieForEst.fnAddEdit = function (obj) {
+        var url = urlLocalSigo + "Supervision/ManInforme/_EspecieForEst";
+        var option = { url: url, type: 'POST', datos: {}, divId: "mdlManInforme_EspecieForEst" };
+        utilSigo.fnOpenModal(option, function () {
+            _EspecieForEst.fnSaveForm = function (data) {
+                if (data != null) {
+                    var dt = _renderEspecieForEst.dtEspecieForEst;
+                    if (obj == null || obj == "") {//Nuevo Registro
+                        //if (!utilDt.existValorSearch(_renderEspecieForEst.dtEspecieForEst, "ACTIVIDAD", data["ACTIVIDAD"])) {
+                            dt.rows.add([data]).draw();
+                            dt.page('last').draw('page');
+                            utilSigo.toastSuccess("Exito", "Datos guardados correctamente");
+                        //} else {
+                        //    utilSigo.toastWarning("Error", "La actividad ya se encuentra registrado");
+                        //}
+                    } else {//Modificar
+                        var row = dt.row($(obj).parents('tr')).data();
+                        row = data;
+                        dt.row($(obj).parents('tr')).data(row).draw();
+                        utilSigo.toastSuccess("Exito", "Datos actualizados correctamente");
+                    }
+                    $("#mdlManInforme_EspecieForEst").modal('hide');
+                } else {
+                    utilSigo.toastError("Error", "No se pudieron guardar los datos");
+                }
+            }
+
+            if (obj != null && obj != "") {
+                var data = _renderEspecieForEst.dtEspecieForEst.row($(obj).parents('tr')).data();
+                _EspecieForEst.fnInit(utilSigo.fnConvertArrayToObject(data));
+            } else { _EspecieForEst.fnInit(""); }
+        });
+    }
+
+    _renderEspecieForEst.fnDeleteAll = function () {
+        var rows, countFilas, data;
+
+        rows = _renderEspecieForEst.dtEspecieForEst.$("tr");
+        countFilas = rows.length;
+        if (countFilas > 0) {
+            utilSigo.dialogConfirm("", "Está seguro de eliminar todos los registros?", function (r) {
+                if (r) {
+                    $.each(rows, function (i, o) {
+                        data = _renderEspecieForEst.dtEspecieForEst.row($(o)).data();
+                        if (data["RegEstado"] == "0" || data["RegEstado"] == "2") {
+                            _renderEspecieForEst.tbEliTABLA.push({
+                                EliTABLA: "ISUPERVISION_ESPECIEFOREST",
+                                COD_SECUENCIAL: data["COD_SECUENCIAL"]
+                            });
+                        }
+                    });
+                    _renderEspecieForEst.dtEspecieForEst.clear().draw();
+                }
+                utilSigo.toastSuccess("Exito", "Se eliminó todos los registros con éxito");
+            });
+
+        } else {
+            utilSigo.toastWarning("Aviso", "No se encontraron registros a eliminar");
+        }
+    }
+
+    _renderEspecieForEst.fnDelete = function (obj) {
+        var data;
+        utilSigo.dialogConfirm("", "Está seguro de eliminar el registro?", function (r) {
+            data = _renderEspecieForEst.dtEspecieForEst.row($(obj).parents('tr')).data();
+            if (data["RegEstado"] == "0" || data["RegEstado"] == "2") {
+                _renderEspecieForEst.tbEliTABLA.push({
+                    EliTABLA: "ISUPERVISION_ESPECIEFOREST",
+                    COD_SECUENCIAL: data["COD_SECUENCIAL"]
+                });
+            }
+            _renderEspecieForEst.dtEspecieForEst.row($(obj).parents('tr')).remove().draw(false);
+            utilSigo.toastSuccess("Exito", "Se eliminó el registro con éxito");
+        });
+    }
+
+    _renderEspecieForEst.fnImport = function (e, obj) {
+        var url = urlLocalSigo + "Supervision/ManInforme/ImportarDatosInformeSimple";
+        uploadFile.fileSelectHandler(e, obj, url, { asTipo: "ESPECIESFOREST" }, function (data) {
+            for (var i = 0; i < data.length; i++) {
+                //if (!utilDt.existValorSearch(_renderEspecieForEst.dtEspecieForEst, "ACTIVIDAD", data[i]["ACTIVIDAD"])) {
+                    _renderEspecieForEst.dtEspecieForEst.rows.add([data[i]]).draw();
+                    _renderEspecieForEst.dtEspecieForEst.page('last').draw('page');
+                //}
+            }
+            e.target.value = "";
+        }, function (data) {
+            e.target.value = "";
+            utilSigo.toastWarning("Error de validación", data.msj);
+        });
+        e.target.value = "";
+    }
+
+    _renderEspecieForEst.fnGetList = function () {
+        var list = [], rows, countFilas, data;
+
+        rows = _renderEspecieForEst.dtEspecieForEst.$("tr");
+        countFilas = rows.length;
+        if (countFilas > 0) {
+            $.each(rows, function (i, o) {
+                data = _renderEspecieForEst.dtEspecieForEst.row($(o)).data();
+                if (data["RegEstado"] == "1" || data["RegEstado"] == "2") {
+                    list.push(utilSigo.fnConvertArrayToObject(data));
+                }
+            });
+        }
+        return list;
+    }
+
+    _renderEspecieForEst.fnGetListEliTABLA = function () { return _renderEspecieForEst.tbEliTABLA }
+
+    $(document).ready(function () {
+        _renderEspecieForEst.frm = $("#frmRenderEspecieForEst");
+
+        _renderEspecieForEst.fnInitDataTable_Detail();
+
+        _renderEspecieForEst.dtEspecieForEst.rows.add(JSON.parse('@Html.Raw(Json.Encode(@Model))')).draw();
+    });
+</script>
+
+<div id="frmRenderEspecieForEst">
+    <div class="table-responsive">
+        <table id="tbRenderEspecieForEst" style="width:100%;margin:0px !important;" class="table table-hover table-bordered">
+            <thead>
+                <tr>
+                    <th colspan="13" class="text-sm-left">
+                        <div class="form-inline">
+                            <i class="fa mx-2 fa-lg fa-file-o" style="cursor:pointer;" onclick="_renderEspecieForEst.fnAddEdit('');" data-toggle="tooltip" data-placement="top" title="Nuevo"></i>
+                            <i class="fa mx-2 fa-lg fa-window-close-o" style="cursor:pointer;" onclick="_renderEspecieForEst.fnDeleteAll();" data-toggle="tooltip" data-placement="top" title="Eliminar Todos"></i>
+                            <label style="cursor:pointer;" class="fa mx-2 fa-lg fa-file-excel-o" title="Importar Archivo" data-toggle="tooltip">
+                                <input type="file" id="fileselect" name="fileselect" style="display:none" size="60" onchange="_renderEspecieForEst.fnImport(event, this)">
+                            </label>
+                            <a href="@Url.Content("~/Archivos/Plantilla/EspeciesForestalesEstablecidas.xlsx")"> <i class="fa mx-2 fa-lg fa-folder-open" style="cursor:pointer;" data-toggle="tooltip" data-placement="top" title="Descargar Plantilla"></i></a>
+                            <strong>Registro de Especies Forestales Establecidas</strong>
+                        </div>
+                    </th>
+                </tr>
+                <tr>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th style="text-align: center;">Especie Forestal Registro Plantación</th>
+                    <th style="text-align: center;">Especie Forestal Supervisión</th>
+                    <th colspan="2" style="text-align: center;">Coordenadas UTM(Registro Plantación)</th>
+                    <th colspan="2" style="text-align: center;">Coordenadas UTM(Supervisión)</th>
+                    <th colspan="2" style="text-align: center;">Medidas Dasométricas</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
+</div>

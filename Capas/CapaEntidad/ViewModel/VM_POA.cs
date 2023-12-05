@@ -84,6 +84,7 @@ namespace CapaEntidad.ViewModel
         public string txtItemItecnico_Raprobacion_Num { get; set; }
         public string txtItemItecnico_Raprobacion_Fecha { get; set; }
         public List<Ent_POA> ListTRAPROBACION { get; set; }
+        public List<Ent_POA> ListSAPROBACION { get; set; }
         public List<Ent_POA> ListMadeCENSO { get; set; }
         public List<Ent_POA> ListNoMadeCENSO { get; set; }
         public List<Ent_POA> ListEliTABLA { get; set; }

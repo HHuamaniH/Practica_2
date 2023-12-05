@@ -89,6 +89,7 @@ namespace CapaDatos.DOC
                     {
                         oCampos.ListTIOCULAR = new List<CEntidad>();
                         oCampos.ListTRAPROBACION = new List<CEntidad>();
+                        oCampos.ListSAPROBACION = new List<CEntidad>();
                         oCampos.ListRAprueba = new List<CEntidad>();
                         oCampos.ListRApruebaISitu = new List<CEntidad>();
                         //oCampos.ListRReformula = new List<CEntidad>();
@@ -965,20 +966,37 @@ namespace CapaDatos.DOC
                             }
                         }
                         // lista de parcelas
+                        //dr.NextResult();
+                        //if (dr.HasRows)
+                        //{
+                        //    while (dr.Read())
+                        //    {
+                        //        oCamposDet = new CEntidad();
+                        //        oCamposDet.COD_PARCELA = dr["COD_PARCELA"].ToString();
+                        //        oCamposDet.COD_THABILITANTE = dr["COD_THABILITANTE"].ToString();
+                        //        oCamposDet.NUM_POA = Int32.Parse(dr["NUM_POA"].ToString());
+                        //        oCamposDet.COD_SECUENCIAL = Int32.Parse(dr["COD_SECUENCIAL"].ToString());
+                        //        oCamposDet.PCA = dr["PARCELA"].ToString();
+                        //        oCamposDet.AREA = decimal.Parse(dr["AREA"].ToString());
+                        //        oCamposDet.RegEstado = 0;
+                        //        oCampos.ListParcela.Add(oCamposDet);
+                        //    }
+                        //}
+                        //POA_DET_SAPROBACION
                         dr.NextResult();
                         if (dr.HasRows)
                         {
                             while (dr.Read())
                             {
                                 oCamposDet = new CEntidad();
-                                oCamposDet.COD_PARCELA = dr["COD_PARCELA"].ToString();
-                                oCamposDet.COD_THABILITANTE = dr["COD_THABILITANTE"].ToString();
-                                oCamposDet.NUM_POA = Int32.Parse(dr["NUM_POA"].ToString());
-                                oCamposDet.COD_SECUENCIAL = Int32.Parse(dr["COD_SECUENCIAL"].ToString());
-                                oCamposDet.PCA = dr["PARCELA"].ToString();
-                                oCamposDet.AREA = decimal.Parse(dr["AREA"].ToString());
+                                oCamposDet.COD_PERSONA = dr["COD_PERSONA"].ToString();
+                                oCamposDet.PERSONA = dr["PERSONA"].ToString();
+                                oCamposDet.N_DOCUMENTO = dr["N_DOCUMENTO"].ToString();
+                                //oCamposDet.CARGO = dr["CARGO"].ToString();
+                                oCamposDet.COD_PTIPO = dr["COD_PTIPO"].ToString();
+                                oCamposDet.TIPO_CARGO = dr["TIPO_CARGO"].ToString();
                                 oCamposDet.RegEstado = 0;
-                                oCampos.ListParcela.Add(oCamposDet);
+                                oCampos.ListSAPROBACION.Add(oCamposDet);
                             }
                         }
                     }
@@ -1951,6 +1969,21 @@ namespace CapaDatos.DOC
                         oCamposDet.COD_TRAPROBACION = loDatos.COD_PERSONA;
                         oCamposDet.COD_PTIPO = loDatos.COD_PTIPO;
                         dBOracle.ManExecute(cn, tr, "DOC_OSINFOR_ERP_MIGRACION.spPOA_DET_TRAPROBACIONGrabar", oCamposDet);
+
+                    }
+                }
+                //Grabando Detalle POA_DET_SAPROBACION
+                if (oCEntidad.ListSAPROBACION != null)
+                {
+                    foreach (var loDatos in oCEntidad.ListSAPROBACION)
+                    {
+
+                        oCamposDet = new CEntidad();
+                        oCamposDet.COD_THABILITANTE = oCEntidad.COD_THABILITANTE;
+                        oCamposDet.NUM_POA = oCEntidad.NUM_POA;
+                        oCamposDet.COD_SAPROBACION = loDatos.COD_PERSONA;
+                        oCamposDet.COD_PTIPO = loDatos.COD_PTIPO;
+                        dBOracle.ManExecute(cn, tr, "DOC_OSINFOR_ERP_MIGRACION.spPOA_DET_SAPROBACIONGrabar", oCamposDet);
 
                     }
                 }

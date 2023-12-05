@@ -1,0 +1,80 @@
+﻿
+<script src="~/Areas/Supervision/js/ManInforme/_EspecieForEst.js?v=@Guid.NewGuid()"></script>
+
+<div class="modal-dialog" role="document">
+    <div class="modal-content">
+        <div class="modal-header text-small" style="cursor:move;">
+            <span>Especies Forestales Establecidas</span>
+            <i class="fa fa-close" style="cursor:pointer;" data-dismiss="modal" aria-label="Close"></i>
+        </div>
+        <div class="modal-body">
+            <form id="frmItemEspecieForEst">
+                @Html.Hidden("hdfRegEstado")
+                @Html.Hidden("hdfCodSecuencial")
+
+                <div class="card-header text-small">Registro de Plantación</div>
+                <div class="card-body">
+                    <div class="form-row">
+                        <div class="form-group col-md-12">
+                            @{
+                                string nombreComboEspecie = "ddlRenderComboEspecieId1|*Especie de Registro de Plantación";
+                            }
+                            @Html.Partial("~/Areas/General/Views/Controles/_renderComboEspecie.cshtml", nombreComboEspecie)
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label for="txtCoordEsteRP" class="text-small">*Coordenada Este</label>
+                            @Html.TextBox("txtCoordEsteRP", "", new { @class = "form-control form-control-sm", maxlength = "6", onkeypress = "return utilSigo.checkTelefono(event)" })
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label for="txtCoordNorteRP" class="text-small">*Coordenada Norte</label>
+                            @Html.TextBox("txtCoordNorteRP", "", new { @class = "form-control form-control-sm", maxlength = "7", onkeypress = "return utilSigo.checkTelefono(event)" })
+                        </div>
+                    </div>
+                </div>
+                <div class="card-header text-small">Registro de Supervisión</div>
+                <div class="card-body">
+                    <div class="form-row">
+                        <div class="form-group col-md-12">
+                            @{
+                                string nombreComboEspecie2 = "ddlRenderComboEspecieId2|*Especie de Supervisión";
+                            }
+                            @Html.Partial("~/Areas/General/Views/Controles/_renderComboEspecie2.cshtml", nombreComboEspecie2)
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label for="txtCoordEsteS" class="text-small">*Coordenada Este</label>
+                            @Html.TextBox("txtCoordEsteRS", "", new { @class = "form-control form-control-sm", maxlength = "6", onkeypress = "return utilSigo.checkTelefono(event)" })
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label for="txtCoordNorteS" class="text-small">*Coordenada Norte</label>
+                            @Html.TextBox("txtCoordNorteRS", "", new { @class = "form-control form-control-sm", maxlength = "7", onkeypress = "return utilSigo.checkTelefono(event)" })
+                        </div>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label for="txtDAP" class="text-small">DAP(cm)</label>
+                        @Html.TextBox("txtDAP", "", new { @class = "form-control form-control-sm", maxlength = "8", onblur = "return utilSigo.onBlurFourDigitoThreeDecimal(this,'DAP(cm)');", onkeypress = "return utilSigo.onKeyDecimal(event, this);" })
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="txtAC" class="text-small">AC(m)</label>
+                        @Html.TextBox("txtAC", "", new { @class = "form-control form-control-sm", maxlength = "8", onblur = "return utilSigo.onBlurFourDigitoThreeDecimal(this,'AC(m)');", onkeypress = "return utilSigo.onKeyDecimal(event, this);" })
+                    </div>
+                </div>                
+                <div class="form-row">
+                    <div class="form-group col-md-12">
+                        <label for="txtObservacion" class="text-small">Observación</label>
+                        @Html.TextArea("txtObservacion", "", new { @class = "form-control form-control-sm", maxlength = "200", rows = "3", onkeypress = "return utilSigo.checkLetter(event)" })
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-primary btn-sm" onclick="_EspecieForEst.fnSubmitForm()">Guardar</button>
+            <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Cancelar</button>
+        </div>
+    </div>
+</div>

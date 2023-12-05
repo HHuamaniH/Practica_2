@@ -1,0 +1,172 @@
+﻿
+@model List<CapaEntidad.DOC.Ent_INFORME_ACTIVIDAD_PRODUCTIVA>
+
+<style type="text/css">
+    #tbRenderActividadProd_wrapper {
+        padding: 0px;
+    }
+</style>
+
+<script type="text/javascript">
+    var _renderActividadProd = {};
+    _renderActividadProd.tbEliTABLA = [];
+
+    _renderActividadProd.fnInitDataTable_Detail = function () {
+        var columns_label = [], columns_data = [], options = {};
+
+        columns_label = ["Actividades Productivas", "Especie Forestal", "Área", "Edad (años)", "Rendimiento de Parcela (kg)", "Coord. Este", "Coord. Norte", "Altitud (msnm)", "Destino de la Producción", "Estado del Cultivo"];
+        columns_data = ["ACTIVIDAD", "DESC_ESPECIES", "AREA", "EDAD", "RENDIMIENTO", "COORDENADA_ESTE", "COORDENADA_NORTE", "ALTITUD", "DESTINO_PRODUCCION","ESTADO_CULTIVO"];
+        options = {
+            page_length: 10, row_index: true, row_edit: true, row_fnEdit: "_renderActividadProd.fnAddEdit(this)"
+            , row_delete: true, row_fnDelete: "_renderActividadProd.fnDelete(this)"
+            , button_copy: true, button_csv: true, button_excel: true, button_pdf: true, button_print: true
+            , export_title: $("#tbRenderActividadProd").find("thead tr")[0].innerText.trim()
+            , page_sort: true
+            , data:null
+        };
+        _renderActividadProd.dtActividadProd = utilDt.fnLoadDataTable_Detail($("#tbRenderActividadProd"), columns_label, columns_data, options);
+
+
+    }
+
+    _renderActividadProd.fnAddEdit = function (obj) {
+        var url = urlLocalSigo + "Supervision/ManInforme/_ActividadProd";
+        var option = { url: url, type: 'POST', datos: {}, divId: "mdlManInforme_ActividadProd" };
+        utilSigo.fnOpenModal(option, function () {
+            _ActividadProd.fnSaveForm = function (data) {
+                if (data != null) {
+                    var dt = _renderActividadProd.dtActividadProd;
+                    if (obj == null || obj == "") {//Nuevo Registro
+                        //if (!utilDt.existValorSearch(_renderActividadProd.dtActividadProd, "ACTIVIDAD", data["ACTIVIDAD"])) {
+                            dt.rows.add([data]).draw();
+                            dt.page('last').draw('page');
+                            utilSigo.toastSuccess("Exito", "Datos guardados correctamente");
+                        //} else {
+                        //    utilSigo.toastWarning("Error", "La actividad ya se encuentra registrado");
+                        //}
+                    } else {//Modificar
+                        var row = dt.row($(obj).parents('tr')).data();
+                        row = data;
+                        dt.row($(obj).parents('tr')).data(row).draw();
+                        utilSigo.toastSuccess("Exito", "Datos actualizados correctamente");
+                    }
+                    $("#mdlManInforme_ActividadProd").modal('hide');
+                } else {
+                    utilSigo.toastError("Error", "No se pudieron guardar los datos");
+                }
+            }
+
+            if (obj != null && obj != "") {
+                var data = _renderActividadProd.dtActividadProd.row($(obj).parents('tr')).data();
+                _ActividadProd.fnInit(utilSigo.fnConvertArrayToObject(data));
+            } else { _ActividadProd.fnInit(""); }
+        });
+    }
+
+    _renderActividadProd.fnDeleteAll = function () {
+        var rows, countFilas, data;
+
+        rows = _renderActividadProd.dtActividadProd.$("tr");
+        countFilas = rows.length;
+        if (countFilas > 0) {
+            utilSigo.dialogConfirm("", "Está seguro de eliminar todos los registros?", function (r) {
+                if (r) {
+                    $.each(rows, function (i, o) {
+                        data = _renderActividadProd.dtActividadProd.row($(o)).data();
+                        if (data["RegEstado"] == "0" || data["RegEstado"] == "2") {
+                            _renderActividadProd.tbEliTABLA.push({
+                                EliTABLA: "ISUPERVISION_ACTIVIDADPROD",
+                                COD_SECUENCIAL: data["COD_SECUENCIAL"]
+                            });
+                        }
+                    });
+                    _renderActividadProd.dtActividadProd.clear().draw();
+                }
+                utilSigo.toastSuccess("Exito", "Se eliminó todos los registros con éxito");
+            });
+        } else {
+            utilSigo.toastWarning("Aviso", "No se encontraron registros a eliminar");
+        }
+    }
+
+    _renderActividadProd.fnDelete = function (obj) {
+        var data;
+        utilSigo.dialogConfirm("", "Está seguro de eliminar el registro?", function (r) {
+            data = _renderActividadProd.dtActividadProd.row($(obj).parents('tr')).data();
+            if (data["RegEstado"] == "0" || data["RegEstado"] == "2") {
+                _renderActividadProd.tbEliTABLA.push({
+                    EliTABLA: "ISUPERVISION_ACTIVIDADPROD",
+                    COD_SECUENCIAL: data["COD_SECUENCIAL"]
+                });
+            }
+            _renderActividadProd.dtActividadProd.row($(obj).parents('tr')).remove().draw(false);
+            utilSigo.toastSuccess("Exito", "Se eliminó el registro con éxito");
+        });
+    }
+
+    _renderActividadProd.fnImport = function (e, obj) {
+        var url = urlLocalSigo + "Supervision/ManInforme/ImportarDatosInformeSimple";
+        uploadFile.fileSelectHandler(e, obj, url, { asTipo: "ACTIVIDADPROD" }, function (data) {
+            for (var i = 0; i < data.length; i++) {
+                //if (!utilDt.existValorSearch(_renderActividadProd.dtActividadProd, "ACTIVIDAD", data[i]["ACTIVIDAD"])) {
+                    _renderActividadProd.dtActividadProd.rows.add([data[i]]).draw();
+                    _renderActividadProd.dtActividadProd.page('last').draw('page');
+                //}
+            }
+            e.target.value = "";
+        }, function (data) {
+            e.target.value = "";
+            utilSigo.toastWarning("Error de validación", data.msj);
+        });
+        e.target.value = "";
+    }
+
+    _renderActividadProd.fnGetList = function () {
+        var list = [], rows, countFilas, data;
+
+        rows = _renderActividadProd.dtActividadProd.$("tr");
+        countFilas = rows.length;
+        if (countFilas > 0) {
+            $.each(rows, function (i, o) {
+                data = _renderActividadProd.dtActividadProd.row($(o)).data();
+                if (data["RegEstado"] == "1" || data["RegEstado"] == "2") {
+                    list.push(utilSigo.fnConvertArrayToObject(data));
+                }
+            });
+        }
+        return list;
+    }
+
+    _renderActividadProd.fnGetListEliTABLA = function () { return _renderActividadProd.tbEliTABLA }
+
+    $(document).ready(function () {
+        _renderActividadProd.frm = $("#frmRenderActividadProd");
+
+        _renderActividadProd.fnInitDataTable_Detail();
+
+        _renderActividadProd.dtActividadProd.rows.add(JSON.parse('@Html.Raw(Json.Encode(@Model))')).draw();
+    });
+</script>
+
+<div id="frmRenderActividadProd">
+    <div class="table-responsive">
+        <table id="tbRenderActividadProd" style="width:100%;margin:0px !important;" class="table table-hover table-bordered">
+            <thead>
+                <tr>
+                    <th colspan="14" class="text-sm-left">
+                        <div class="form-inline">
+                            <i class="fa mx-2 fa-lg fa-file-o" style="cursor:pointer;" onclick="_renderActividadProd.fnAddEdit('');" data-toggle="tooltip" data-placement="top" title="Nuevo"></i>
+                            <i class="fa mx-2 fa-lg fa-window-close-o" style="cursor:pointer;" onclick="_renderActividadProd.fnDeleteAll();" data-toggle="tooltip" data-placement="top" title="Eliminar Todos"></i>
+                            @*<label style="cursor:pointer;" class="fa mx-2 fa-lg fa-file-excel-o" title="Importar Archivo" data-toggle="tooltip">
+                                    <input type="file" id="fileselect" name="fileselect" style="display:none" size="60" onchange="_renderActividadProd.fnImport(event, this)">
+                                </label>
+                                <a href="@Url.Content("~/Archivos/Plantilla/ActividadesProductivas.xlsx")"> <i class="fa mx-2 fa-lg fa-folder-open" style="cursor:pointer;" data-toggle="tooltip" data-placement="top" title="Descargar Plantilla"></i></a>*@
+                            <strong>Registro de Actividades Productivas</strong>
+                        </div>
+                    </th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
+</div>

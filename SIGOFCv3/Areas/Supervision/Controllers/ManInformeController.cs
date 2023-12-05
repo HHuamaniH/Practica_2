@@ -26,6 +26,7 @@ using CEntVM = CapaEntidad.ViewModel.VM_Informe;
 using CLogica = CapaLogica.DOC.Log_INFORME;
 using CLogica_Denuncia = CapaLogica.DOC.Log_Denuncia;
 using DocumentFormat.OpenXml.Packaging;
+using SIGOFCv3.Areas.THabilitante.Models;
 
 namespace SIGOFCv3.Areas.Supervision.Controllers
 {
@@ -92,6 +93,9 @@ namespace SIGOFCv3.Areas.Supervision.Controllers
                         case "VOLUMEN_ANALIZADO": result = ImportarDatos.VolumenAnalizado(Request); break;
                         case "DESPLAZAMIENTO_SUPERVISION": result = ImportarDatos.DesplazamientoSupervision(Request); break;
                         case "COBERTURA_BOSCOSA": result = ImportarDatos.CoberturaBoscosa(Request); break;
+                        case "ESPECIESFOREST": result = ImportarDatos.EspecieForestalEstablecida(Request); break;
+                        case "COBERTURABOSNAT": result = ImportarDatos.CoberturaBosquesNaturales(Request); break;
+                        case "DIVISIONPREDIO": result = ImportarDatos.DivisionPredio(Request); break;
                     }
                 }
             }
@@ -316,6 +320,48 @@ namespace SIGOFCv3.Areas.Supervision.Controllers
             ViewBag.ddlZona = exeBus.RegMostComboIndividual("ZONA_UTM", "");
 
             return PartialView();
+        }
+        #endregion
+        #region "Especie Forestal Establecida"
+        [HttpPost]
+        public PartialViewResult _EspecieForEst()
+        {
+            CapaLogica.DOC.Log_BUSQUEDA exeBus = new CapaLogica.DOC.Log_BUSQUEDA();
+            return PartialView();
+        }
+        #endregion
+        #region "Actividad Productiva"
+        [HttpPost]
+        public PartialViewResult _ActividadProd()
+        {
+            CapaLogica.DOC.Log_BUSQUEDA exeBus = new CapaLogica.DOC.Log_BUSQUEDA();
+
+            Ent_BUSQUEDA paramsBus = new Ent_BUSQUEDA();
+            paramsBus.BusFormulario = "DESTINO_PRODUCCION";
+            ViewBag.ddlDestinoActProd = exeBus.RegOpcionesCombo(paramsBus).Select(i => new VM_Cbo { Value = i.CODIGO, Text = i.DESCRIPCION });
+            paramsBus.BusFormulario = "ESTADO_CULTIVO";
+            ViewBag.ddlEstadoCulActProd = exeBus.RegOpcionesCombo(paramsBus).Select(i => new VM_Cbo { Value = i.CODIGO, Text = i.DESCRIPCION });
+            return PartialView();
+        }
+        #endregion
+        #region "Cobertura de Bosques Naturales"
+        [HttpPost]
+        public PartialViewResult _CoberturaBosNat()
+        {
+            CapaLogica.DOC.Log_BUSQUEDA exeBus = new CapaLogica.DOC.Log_BUSQUEDA();
+
+            Ent_BUSQUEDA paramsBus = new Ent_BUSQUEDA();
+            paramsBus.BusFormulario = "AREA_COBERTURA";
+            ViewBag.ddlAreaCobertura = exeBus.RegOpcionesCombo(paramsBus).Select(i => new VM_Cbo { Value = i.CODIGO, Text = i.DESCRIPCION });           
+            return PartialView();
+        }
+        #endregion
+        #region "División Interna del Predio"
+        [HttpPost]
+        public PartialViewResult _DivisionPredio(CapaEntidad.DOC.Ent_INFORME_DIVISION_PREDIO entDivisionPredio)
+        {
+            entDivisionPredio = entDivisionPredio == null ? new CapaEntidad.DOC.Ent_INFORME_DIVISION_PREDIO() : entDivisionPredio;
+            return PartialView(entDivisionPredio);
         }
         #endregion
         #region "Vertice THabilitante"
@@ -546,6 +592,9 @@ namespace SIGOFCv3.Areas.Supervision.Controllers
         {
             CLogica exeInf = new CLogica();
             VM_Informe_POASupervisado vm = exeInf.InitDatosPOASupervisado(asCodInforme, 0, B_POA, CODIGO_SEC_NOPOA, hdfCodMTipo);
+            ViewBag.hdPartMenoresCUSAF = vm.rbtnPartMenoresCUSAF;
+            ViewBag.hdAsistenciaTecnicaCUSAF = vm.rbtnAsistenciaTecnicaCUSAF;
+            ViewBag.hdFrecuenciaCUSAF = vm.rbtnFrecuenciaCUSAF;
             return PartialView(vm);
         }
         [HttpPost]
@@ -556,7 +605,7 @@ namespace SIGOFCv3.Areas.Supervision.Controllers
             {
                 dto.hdfCodInforme = ViewBag.hdfCodInforme;
             }
-            ListResult result = exeInf.GuardarDatosPOASupervisado(dto, (ModelSession.GetSession())[0].COD_UCUENTA);
+            ListResult result = exeInf.GuardarDatosPOASupervisado(dto, (ModelSession.GetSession())[0].COD_UCUENTA);            
             return Json(result);
         }
         [HttpPost]

@@ -25,9 +25,9 @@
     }
 }
 <script type="text/javascript">
-    _renderComboEspecie = {};
+    _renderComboEspecie2 = {};
 
-    _renderComboEspecie.fnInit = function (tipoEspecie, codEspecie, nomEspecie) {
+    _renderComboEspecie2.fnInit = function (tipoEspecie, codEspecie, nomEspecie) {
 
         $("#@nombreCombo").select2({
             placeholder: "Seleccione Especie",
@@ -81,10 +81,10 @@
         }
     }
 
-    _renderComboEspecie.fnGetCodEspecie = function () {
+    _renderComboEspecie2.fnGetCodEspecie = function () {
         return $("#@nombreCombo").val();
     }
-    _renderComboEspecie.fnGetEspecie = function () {
+    _renderComboEspecie2.fnGetEspecie = function () {
         if ($("#@nombreCombo").val()==null) {
             return "";
         }
