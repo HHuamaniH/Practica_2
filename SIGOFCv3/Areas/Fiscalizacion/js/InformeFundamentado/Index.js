@@ -1,9 +1,9 @@
 ﻿"use strict";
-var ManInfFundamentado= {};
+var ManPeriodo= {};
 
-ManInfFundamentado.fnLoadManGrillaPaging = function () {
+ManPeriodo.fnLoadManGrillaPaging = function () {
     var url = initSigo.urlControllerGeneral + "_ManGrillaPaging";
-    var data = ManInfFundamentado.frm.serializeObject();
+    var data = ManPeriodo.frm.serializeObject();
     var option = { url: url, datos: JSON.stringify(data), type: 'POST', dataType: 'html' };
 
     var columns_label = [], columns_data = [], options = {};
@@ -14,7 +14,7 @@ ManInfFundamentado.fnLoadManGrillaPaging = function () {
     };
 
     utilSigo.fnAjax(option, function (data) {
-        ManInfFundamentado.frm.find("#dvManInfFundamentadoContenedor").html(data);
+        ManPeriodo.frm.find("#dvManInfFundamentadoContenedor").html(data);
         _ManGrillaPaging.fnInit(columns_label, columns_data, options);
 
         _ManGrillaPaging.fnExport = function () {
@@ -49,12 +49,12 @@ ManInfFundamentado.fnLoadManGrillaPaging = function () {
 }
 
 $(document).ready(function () {
-    ManInfFundamentado.frm = $("#frmManInfFundamentado");
+    ManPeriodo.frm = $("#frmManInfFundamentado");
 
-    var alertaInicial = ManInfFundamentado.frm.find("#alertaFormulario").val();
+    var alertaInicial = ManPeriodo.frm.find("#alertaFormulario").val();
     if (alertaInicial != "") {
         utilSigo.toastSuccess("Aviso", alertaInicial);
     }
 
-    ManInfFundamentado.fnLoadManGrillaPaging();
+    ManPeriodo.fnLoadManGrillaPaging();
 });

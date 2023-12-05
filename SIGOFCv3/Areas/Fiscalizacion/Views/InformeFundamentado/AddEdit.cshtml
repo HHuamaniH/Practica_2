@@ -59,7 +59,7 @@
                             <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#navDatos" role="tab" aria-controls="home" aria-selected="true">Datos Solicitud FEMAS</a></li>
                             <li class="nav-item" id="idNavInformeFundamentado"><a class="nav-link" data-toggle="tab" href="#navEntidades" role="tab" aria-controls="home" aria-selected="true">Informe Fundamentado</a></li>
                             <li id="idNavPauCopia" class="nav-item"><a class="nav-link" data-toggle="tab" href="#navConclusion" role="tab" aria-controls="home" aria-selected="true">Información PAU/Copia</a></li>
-                            <li id="idNavObservaciones" class="nav-item"><a class="nav-link" data-toggle="tab" href="#navObservacion" role="tab" aria-controls="home" aria-selected="true">Notificación</a></li>
+                            <li id="idNavObservaciones" class="nav-item" onclick="ManInfFundamentado_AddEdit.fnNotificacion()"><a class="nav-link" data-toggle="tab" href="#navObservacion" role="tab" aria-controls="home" aria-selected="true">Notificación</a></li>
                         </ul>
                         <div class="tab-content">
                             <div class="tab-pane fade show active" id="navEstado" role="tabpanel" aria-labelledby="nav-home-tab">
@@ -75,9 +75,14 @@
                                     </div>
                                 </div>
                                 <div class="form-row">
-                                    <div class="form-group col-md-4">
+                                    <div class="form-group col-md-2">
                                         <label for="txtRegistro" class="text-small obligatorio">Número de Registro del SITD</label>
                                         @Html.TextBoxFor(m => m.txtRegistro, new { @class = "form-control form-control-sm" })
+                                    </div>
+                                    <div class="form-group col-md-2">
+                                        <label class="text-small">&ensp;</label>
+                                        <button type="button" class="btn btn-info btn-sm" style="margin-top:32px"
+                                                onclick="ManInfFundamentado_AddEdit.fnObtenerDocumentoSITD()">Obtener Información SITD</button>
                                     </div>
                                     <div class="form-group col-md-4">
                                         <label for="dtpFechaIngresoSolicitud" class="text-small obligatorio">Fecha de Ingreso de la Solicitud del SITD</label>
@@ -90,12 +95,13 @@
                                 </div>
                                 <div class="form-row">
                                     <div class="form-group col-md-4">
+                                        <label for="txtcarpetafiscal" class="text-small obligatorio">Carpeta Fiscal</label>
+                                        @Html.TextBoxFor(m => m.txtcarpetafiscal, new { @class = "form-control form-control-sm" })
+                                    </div>
+                                    <div class="form-group col-md-4">
                                         <label for="ddlTipoSolicitud" class="text-small obligatorio">Tipo de Solicitud</label>
                                         @Html.DropDownListFor(m => m.ddlTipoSolicitudId, new SelectList(Model.ddlTipoSolicitud, "Value", "Text"),
                                         new { @class = "form-control form-control-sm", id = "ddlTipoSolicitud" })
-                                    </div>
-                                    <div class="form-group col-md-4">
-
                                     </div>
                                     <div class="form-group col-md-4">
                                         <label for="ddlVencimientoPlazoLegal" class="text-small obligatorio">Vencimiento del plazo legal</label>
@@ -177,24 +183,24 @@
                                             <div class="card-body">
                                                 <div class="form-row">
                                                     <div class="form-group col-md-4">
-                                                        <br />
                                                         <div class="custom-control custom-checkbox my-1 mr-sm-2">
                                                             @Html.CheckBoxFor(m => m.chkEmitirInforme, new { @class = "custom-control-input" })
                                                             <label for="chkEmitirInforme" class="custom-control-label" style="margin-top:6px;">Emitir Informe</label>
                                                         </div>
                                                     </div>
                                                     <div class="form-group col-md-4">
-                                                        <div class="custom-control custom-checkbox my-1 mr-sm-2">
-                                                            <label for="dtpfechaFirmezaPAU" class="text-small obligatorio">  Fecha de Firmeza del PAU</label>
-                                                            @Html.EditorFor(m => m.dtpfechaFirmezaPAU, new { htmlAttributes = new { @class = "form-control form-control-sm activarInforme", placeholder = "dd/mm/yyyy" } })
-                                                        </div>
+                                                        <label for="ddlproveidor" class="text-small">Memorándum de firmeza</label>
+                                                        @Html.DropDownListFor(m => m.ddlproveidorId, new SelectList(Model.ddlProveidor, "Value", "Text"), new { @class = "form-control form-control-sm" })
                                                     </div>
                                                     <div class="form-group col-md-4">
+                                                        <div class="custom-control custom-checkbox my-1 mr-sm-2">
+                                                            <label for="dtpfechaFirmezaPAU" class="text-small">  Fecha de Firmeza del PAU</label>
+                                                            @Html.EditorFor(m => m.dtpfechaFirmezaPAU, new { htmlAttributes = new { @class = "form-control form-control-sm", placeholder = "dd/mm/yyyy" } })
+                                                        </div>
                                                     </div>
                                                 </div>
                                                 <div class="form-row">
                                                     <div class="form-group col-md-4">
-
                                                     </div>
                                                     <div class="form-group col-md-4">
                                                         <div class="custom-control custom-checkbox my-1 mr-sm-2">
@@ -240,6 +246,7 @@
                                                 </div>
                                                 <div class="form-row">
                                                     <div class="table-responsive">
+                                                        <label for="txtObligatorioPR" class="text-small obligatorio">Ingrese Profesionales Responsables</label>
                                                         <table id="tbProfesionales" style="width:100%" class="table table-hover table-bordered">
                                                             <thead>
                                                                 <tr>
@@ -259,6 +266,7 @@
                                                 <div class="table-responsive">
                                                     <div id="dvRenderListInforme" class="form-row" style="margin-bottom:10px;">
                                                         <div class="col-md-12">
+                                                            <label for="txtObligatorioPR2" class="text-small obligatorio">Ingrese Informe de Supervisíon</label>
                                                             @Html.Partial("~/Areas/Fiscalizacion/Views/InformeFundamentado/Shared/_renderListInforme.cshtml", Model)
                                                         </div>
                                                     </div>
@@ -346,7 +354,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="tab-pane fade show" id="navObservacion" role="tabpanel" aria-labelledby="nav-home-tab">
+                            <div class="tab-pane fade show" id="navObservacion" role="tabpanel" aria-labelledby="nav-home-tab"  >
                                 <div class="card">
                                     <br />
                                     <h3>NOTIFICACIÓN</h3>
@@ -359,13 +367,29 @@
                                             </div>
                                         </div>
                                         <div class="form-group col-md-4">
+
+                                        </div>
+                                        <div class="form-group col-md-4">
+
+                                        </div>
+                                    </div>
+                                    <div class="form-row">
+                                        <div class="form-group col-md-3">
+                                            <div class="custom-control custom-checkbox my-1 mr-sm-2">
+                                                <label for="txtnumeroDocumento" class="text-small"> Número de Documento</label>
+                                                @Html.EditorFor(m => m.txtnumeroDocumento, new { htmlAttributes = new { @class = "form-control form-control-sm activarNotificacion" } })
+                                            </div>
+                                        </div>
+                                        <div class="form-group col-md-2">
+                                            <button class="btn btn-info btn-sm" style="margin-top:28px" type="button"
+                                                    onclick="ManInfFundamentado_AddEdit.fnObtenerFechaNotificacion()"
+                                                    >Obtener Fecha Notificación</button>
+                                        </div>
+                                        <div class="form-group col-md-4">
                                             <div class="custom-control custom-checkbox my-1 mr-sm-2">
                                                 <label for="dtpFechaNotificacion" class="text-small"> Fecha de Notificación</label>
                                                 @Html.EditorFor(m => m.dtpFechaNotificacion, new { htmlAttributes = new { @class = "form-control form-control-sm activarNotificacion", placeholder = "dd/mm/yyyy" } })
                                             </div>
-                                        </div>
-                                        <div class="form-group col-md-4">
-
                                         </div>
                                     </div>
                                     <div class="form-row">

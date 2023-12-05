@@ -9,7 +9,6 @@
         color: #33b35a;
         font-size: 12px;
         margin-top: 12px;
-
     }
 </style>
 
@@ -52,6 +51,7 @@
             utilSigo.toastWarning("Aviso", "El informe ya se encuentra en la lista");
         }
         _renderListExpediente.frm.find('#mdlConsultaIFundamentado').modal('hide');
+
     }
 
     /*Listado de registros (render)*/
@@ -178,6 +178,7 @@
        _renderListExpediente.fnInitDataTable_Detail();
        //inicializa los componentes necesarios
        _renderListExpediente.fnInit();
+
    });
 
 </script>
@@ -211,7 +212,7 @@
                     <div id="frmConsultaIFundamentado">
                         <div class="card-body">
                             <div class="form-row">
-                                <div class="col-md-3 mb-3" style="margin-bottom:0px!important;">
+                                <div class="col-md-3 mb-3" style="margin-bottom: 0px !important; opacity: 0.5; pointer-events: none; ">
                                     @Html.DropDownListFor(m => m.sBusqueda, new SelectList(Model.sBusqueda, "Value", "Text", Model.sBusqueda), new { @class = "form-control form-control-sm", @id = "ddlModalFiscalizacion" })
                                 </div>
                                 <div class="col-md-9 mb-3" style="margin-bottom:0px!important;">

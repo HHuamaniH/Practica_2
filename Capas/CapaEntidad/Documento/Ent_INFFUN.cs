@@ -198,6 +198,9 @@ namespace CapaEntidad.DOC
         [Description("FECHA_FIRMEZA")]
         public object FECHA_FIRMEZA { get; set; }
 
+        [Description("COD_PROVEIDO")]
+        public string COD_PROVEIDO { get; set; }
+
         [Description("NUMERO_OFICIO1")]
         public string NUMERO_OFICIO1 { get; set; }
 
@@ -239,6 +242,9 @@ namespace CapaEntidad.DOC
 
         [Description("ESTAB_UBIGEO")]
         public String ESTAB_UBIGEO { get; set; }
+
+        [Description("CARPETA_FISCAL")]
+        public string CARPETA_FISCAL { get; set; }
         #endregion
     }
 }

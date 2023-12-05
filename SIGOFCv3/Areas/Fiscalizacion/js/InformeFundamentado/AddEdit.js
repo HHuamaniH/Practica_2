@@ -38,7 +38,6 @@ ManInfFundamentado_AddEdit.regresar = function (appServer) {
 };
 
 ManInfFundamentado_AddEdit.fnBuscarPersona = function (_dom, _tipoPersona) {
-    debugger;
     switch (_dom) {
         case "TITULAR":
         case "TITULAR_ADENDA":
@@ -202,7 +201,7 @@ ManInfFundamentado_AddEdit.fnSaveFormV2 = function () {
     let ddlOdId = ManInfFundamentado_AddEdit.frm.find("#ddlOdId").val();
     let hdfItemEstUbigeoCodigo = ManInfFundamentado_AddEdit.frm.find("#hdfItemEstUbigeoCodigo").val();
     let hdtxtTitularTipo = ManInfFundamentado_AddEdit.frm.find("#hdtxtTitularTipo").val();
-
+    let txtcarpetafiscal = ManInfFundamentado_AddEdit.frm.find("#txtcarpetafiscal").val();
     let codigoTipoSolicitud = $("#ddlTipoSolicitud").val();
 
     // INFORME FUNDAMENTADO
@@ -218,6 +217,7 @@ ManInfFundamentado_AddEdit.fnSaveFormV2 = function () {
     let chkEmitirOficio = false;
     let txtNumeroOficio2 = "";
     let txtObservacionesOficio = "";
+    let ddlproveidorId = "";
 
     // PAU/Copia
     let chkEmitirOficioPau = "";
@@ -230,6 +230,7 @@ ManInfFundamentado_AddEdit.fnSaveFormV2 = function () {
         case "000001":
             // INFORME FUNDAMENTADO
             chkEmitirInforme = (ManInfFundamentado_AddEdit.frm.find("#chkEmitirInforme").is(":checked") ? 1 : 0);
+            ddlproveidorId = ManInfFundamentado_AddEdit.frm.find("#ddlproveidorId").val();
             dtpfechaFirmezaPAU = ManInfFundamentado_AddEdit.frm.find("#dtpfechaFirmezaPAU").val();
             txtNumeroInformeFundamentado = ManInfFundamentado_AddEdit.frm.find("#txtNumeroInformeFundamentado").val();
             dtpFechaFundamentado = ManInfFundamentado_AddEdit.frm.find("#dtpFechaFundamentado").val();
@@ -269,7 +270,7 @@ ManInfFundamentado_AddEdit.fnSaveFormV2 = function () {
         chkEmitirOficio, txtNumeroOficio2, dtpfechaOficio2, txtObservacionesOficio,
         chkEmitirOficioPau, txtNumeroOficioPau, dtpFechaEmisionPau, txtObservacionesPau,
         chkNotificacion, dtpFechaNotificacion, txtAnotaciones,
-        hdfCodigoInfFundamentadoAlerta
+        hdfCodigoInfFundamentadoAlerta, txtcarpetafiscal, ddlproveidorId
     }
     switch (codigoTipoSolicitud) {
         case "000001":
@@ -384,12 +385,12 @@ ManInfFundamentado_AddEdit.fnValidarAtributosV2 = function (obj) {
     switch (codigoTipoSolicitud) {
         case "000001":
             if (obj.chkEmitirInforme) {
-                if (band == 0) {
-                    if (obj.dtpfechaFirmezaPAU.trim() == "") {
-                        falta = "Debe seleccionar Fecha de Firmeza del PAU";
-                        band = 1;
-                    }
-                }
+                //if (band == 0) {
+                //    if (obj.dtpfechaFirmezaPAU.trim() == "") {
+                //        falta = "Debe seleccionar Fecha de Firmeza del PAU";
+                //        band = 1;
+                //    }
+                //}
                 if (band == 0) {
                     if (obj.txtNumeroInformeFundamentado.trim() == "") {
                         falta = "Ingrese Número de Informe Fundamentado";
@@ -411,6 +412,18 @@ ManInfFundamentado_AddEdit.fnValidarAtributosV2 = function (obj) {
                 if (band == 0) {
                     if (obj.dtpfechaOficio1.trim() == "") {
                         falta = "Debe seleccionar Fecha de Oficio";
+                        band = 1;
+                    }
+                }
+                if (band == 0) {
+                    if (obj.tbInforme.length < 1) {
+                        falta = "Por favor ingrese un registro.(Informe Supervision)";
+                        band = 1;
+                    }
+                }
+                if (band == 0) {
+                    if (obj.listaProfesionales.length < 1) {
+                        falta = "Por favor ingrese un registro.(Profesionales Responsables)";
                         band = 1;
                     }
                 }
@@ -442,6 +455,12 @@ ManInfFundamentado_AddEdit.fnValidarAtributosV2 = function (obj) {
                 if (band == 0) {
                     if (obj.dtpFechaEmisionPau.trim() == "") {
                         falta = "Debe seleccionar Fecha de Emisión";
+                        band = 1;
+                    }
+                }
+                if (band == 0) {
+                    if (obj.tbInforme.length < 1) {
+                        falta = "Por favor ingrese un registro.(Informe Supervision)";
                         band = 1;
                     }
                 }
@@ -699,6 +718,118 @@ ManInfFundamentado_AddEdit.fnActivarControles = function () {
 
 }
 
+ManInfFundamentado_AddEdit.fnObtenerFechaNotificacion = function () {
+
+
+    var numDocumento = ManInfFundamentado_AddEdit.frm.find("#txtnumeroDocumento").val();
+    var url = urlLocalSigo + "Fiscalizacion/InformeFundamentado/FiltrarFechaNotificacion";
+    var option = { url: url, type: 'POST', datos: JSON.stringify({ numeroDocumento: numDocumento }) };
+
+    utilSigo.fnAjax(option, function (data) {
+        if (data.success) {
+            if (data.result !== "") {
+                var fechaEnTexto = data.result;
+                var partesFecha = fechaEnTexto.split('/');
+                var fechaConvertida = new Date(partesFecha[2], partesFecha[1] - 1, partesFecha[0]);
+                ManInfFundamentado_AddEdit.frm.find("#dtpFechaNotificacion").datepicker('setDate', fechaConvertida);
+            }else
+            {
+                var FechaNotificacion = ManInfFundamentado_AddEdit.frm.find("#dtpFechaNotificacion");
+                FechaNotificacion.val('');
+                utilSigo.toastWarning("Aviso", "No esta registrado la fecha de Notificación");
+            }
+        }
+        else {
+            utilSigo.toastWarning("Aviso", "Sucedio un error, Comuníquese con el Administrador");
+        }
+    });
+
+}
+
+ManInfFundamentado_AddEdit.fnNotificacion = function () {
+
+    let codigoTipoSolicitud = $("#ddlTipoSolicitud").val();
+    let chkEmitirInforme = (ManInfFundamentado_AddEdit.frm.find("#chkEmitirInforme").is(":checked") ? 1 : 0);
+    let chkEmitirOficio = (ManInfFundamentado_AddEdit.frm.find("#chkEmitirOficio").is(":checked") ? 1 : 0);
+    let chkEmitirOficioPau = (ManInfFundamentado_AddEdit.frm.find("#chkEmitirOficioPau").is(":checked") ? 1 : 0);
+
+    let txtnumeroOficio1 = ManInfFundamentado_AddEdit.frm.find("#txtNumeroOficio1").val();
+    let txtnuemrooficio2 = ManInfFundamentado_AddEdit.frm.find("#txtNumeroOficio2").val();
+    let txtNumeroOficioPau = ManInfFundamentado_AddEdit.frm.find("#txtNumeroOficioPau").val();
+    switch (codigoTipoSolicitud) {
+        case "000001":
+            if (chkEmitirInforme == 1 && chkEmitirOficio == 0)
+                ManInfFundamentado_AddEdit.frm.find("#txtnumeroDocumento").val(txtnumeroOficio1);
+            if (chkEmitirInforme == 0 && chkEmitirOficio == 1)
+                ManInfFundamentado_AddEdit.frm.find("#txtnumeroDocumento").val(txtnuemrooficio2);
+            if (chkEmitirInforme == 1 && chkEmitirOficio == 1)
+                ManInfFundamentado_AddEdit.frm.find("#txtnumeroDocumento").val(txtnumeroOficio1);
+            break;
+        case "000002":
+        case "000003":
+            if (chkEmitirOficioPau == 1)
+                ManInfFundamentado_AddEdit.frm.find("#txtnumeroDocumento").val(txtNumeroOficioPau);
+            break;
+    }
+
+}
+
+ManInfFundamentado_AddEdit.fnObtenerDocumentoSITD = function () {
+
+    var numeroRegistro = ManInfFundamentado_AddEdit.frm.find("#txtRegistro").val();
+    var url = urlLocalSigo + "Fiscalizacion/InformeFundamentado/ObtenerDocumentoSITD";
+    var option = { url: url, type: 'POST', datos: JSON.stringify({ numeroRegistro: numeroRegistro }) };
+
+    utilSigo.fnAjax(option, function (data) {
+        if (data.success) {
+            if (data.result) {
+
+                if (data.result.fFecDocumento !== "") {
+                    var fechaEnTexto = data.result.fFecDocumento;
+                    var partesFecha = fechaEnTexto.split('/');
+                    var fechaConvertida = new Date(partesFecha[2], partesFecha[1] - 1, partesFecha[0]);
+                    ManInfFundamentado_AddEdit.frm.find("#dtpFechaIngresoSolicitud").datepicker('setDate', fechaConvertida);
+                }
+                else {
+                    var FechaIngresoSolicitud = ManInfFundamentado_AddEdit.frm.find("#dtpFechaIngresoSolicitud");
+                    FechaIngresoSolicitud.val('');
+                    utilSigo.toastWarning("Aviso", "No esta registrado la fecha de Ingreso");
+                }
+
+
+                //ManInfFundamentado_AddEdit.frm.find("#dtpFechaIngresoSolicitud").val(data.result.fFecDocumento);
+
+                ManInfFundamentado_AddEdit.frm.find("#txtNumeroOficioSolicitud").val(data.result.cNroDocumento);
+                ManInfFundamentado_AddEdit.frm.find("#txtcarpetafiscal").val(data.result.cAsunto);
+                ManInfFundamentado_AddEdit.frm.find("#txtDetalle").val(data.result.cFema + " " + data.result.cNomRemite);
+
+                let ddlTipoSolicitud = ManInfFundamentado_AddEdit.frm.find("#ddlTipoSolicitud");
+                let ddlVencimientoPlazoLegal = ManInfFundamentado_AddEdit.frm.find("#ddlVencimientoPlazoLegal");
+
+                if (data.result.iCodTupa === 70) {
+                    ddlTipoSolicitud.val('000001');
+                    ddlVencimientoPlazoLegal.val('000001');
+                }
+                else if (data.result.iCodTupa === 72) {
+                    ddlTipoSolicitud.val('000002');
+                    ddlVencimientoPlazoLegal.val('000002');
+                }
+                else if (data.result.iCodTupa === 75) {
+                    ddlTipoSolicitud.val('000003');
+                    ddlVencimientoPlazoLegal.val('000002');
+                }
+            }
+
+        }
+        else {
+            utilSigo.toastWarning("Aviso", "Sucedio un error, Comuníquese con el Administrador");
+            console.log(data.result);
+        }
+    });
+
+
+}
+
 $(document).ready(function () {
     ManInfFundamentado_AddEdit.frm = $("#frmInfFundamentadoRegistro");
     ManInfFundamentado_AddEdit.iniciarEventos();
@@ -720,16 +851,20 @@ $(document).ready(function () {
 
     $("#ddlTipoSolicitud").on("change", function () {
         let codigoTipoSolicitud = $("#ddlTipoSolicitud").val();
+        let ddlVencimientoPlazoLegalId = ManInfFundamentado_AddEdit.frm.find("#ddlVencimientoPlazoLegal");
+        debugger;
         switch (codigoTipoSolicitud) {
             case "000001":
                 //$('#inputId').prop('readonly', true);
                 $("#idNavPauCopia").css("display", "none");
                 $("#idNavInformeFundamentado").css("display", "block");
+                ddlVencimientoPlazoLegalId.val('000001');
                 break;
             case "000002":
             case "000003":
                 $("#idNavPauCopia").css("display", "block");
                 $("#idNavInformeFundamentado").css("display", "none");
+                ddlVencimientoPlazoLegalId.val('000002');
                 break;
         }
 
@@ -761,5 +896,57 @@ $(document).ready(function () {
         }
     });
 
+    $('#tbRenderListIFundamentado').on('draw.dt', function () {
+        var miTabla = $('#tbRenderListIFundamentado').DataTable();
+        if (miTabla.rows().count() > 0) {
+            var dataInforme = _renderListExpediente.fnGetList();
+            if (dataInforme != undefined && dataInforme.length > 0) {
+                // CONSULTAR AL SP //
+                console.log(dataInforme);
+                var codigoInforme = dataInforme[0].COD_INFORME;
+                var url = urlLocalSigo + "Fiscalizacion/InformeFundamentado/FiltrarMemoFirmeza";
+                var option = { url: url, type: 'POST', datos: JSON.stringify({ codigoInforme: codigoInforme }) };
+                
+                utilSigo.fnAjax(option, function (data) {
+                    if (data.success) {
+                        var proveidorId = ManInfFundamentado_AddEdit.frm.find("#ddlproveidorId");
+
+                        proveidorId.empty();
+                        $.each(data.result, function (index, item) {
+                            var p = new Option(item.NUMERO_EXPEDIENTE + ' : ' + item.FECHA, item.COD_PROVEIDORARCH);
+                            proveidorId.append(p);
+
+                            if (index == 0) {
+
+                                if (data.result !== "") {
+                                    var fechaEnTexto = item.FECHA;
+                                    var partesFecha = fechaEnTexto.split('/');
+                                    var fechaConvertida = new Date(partesFecha[2], partesFecha[1] - 1, partesFecha[0]);
+                                    ManInfFundamentado_AddEdit.frm.find("#dtpfechaFirmezaPAU").datepicker('setDate', fechaConvertida);
+                                }
+                                else {
+                                    var FechaNotificacion = ManInfFundamentado_AddEdit.frm.find("#dtpfechaFirmezaPAU");
+                                    FechaNotificacion.val('');
+                                    utilSigo.toastWarning("Aviso", "No esta registrado la fecha de Firmeza");
+                                }
+
+                            }
+                        });
+                    }
+                    else {
+                        utilSigo.toastWarning("Aviso", "Sucedio un error, Comuníquese con el Administrador");
+                        console.log(data.result);
+                    }
+                });
+
+                console.log('Data encontrada', dataInforme);
+            }
+        } else {
+            var proveidorId = ManInfFundamentado_AddEdit.frm.find("#ddlproveidorId");
+            var fechaFirmeza = ManInfFundamentado_AddEdit.frm.find("#dtpfechaFirmezaPAU");
+            proveidorId.empty();
+            fechaFirmeza.val('');
+        }
+    });
 
 });

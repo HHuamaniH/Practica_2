@@ -20,7 +20,8 @@ namespace CapaEntidad.ViewModel
         public string ddlEntidadId { get; set; }
         public IEnumerable<VM_Cbo> ddlSubEntidad { get; set; }
         public string ddlSubEntidadId { get; set; }
-
+        public string ddlproveidorId { get; set; }
+        public IEnumerable<VM_Cbo> ddlProveidor { get; set; }
         public string txtConclusiones { get; set; }
         public string txtObservaciones { get; set; }
         public string txtTituloModal { get; set; }
@@ -41,6 +42,7 @@ namespace CapaEntidad.ViewModel
 
         public string dtpFechaIngresoSolicitud { get; set; }
         public string txtNumeroOficioSolicitud { get; set; }
+        public string txtcarpetafiscal { get; set; }
         public IEnumerable<VM_Cbo> ddlTipoSolicitud { get; set; }
         public string ddlTipoSolicitudId { get; set; }
         public IEnumerable<VM_Cbo> ddlVencimientoPlazoLegal { get; set; }
@@ -55,6 +57,7 @@ namespace CapaEntidad.ViewModel
         public string fItemEstUbigeoCodigo { get; set; }
         // INFORME FUNDAMENTADO
         public bool chkEmitirInforme { get; set; }
+        public string cboCodProveidoArch { get; set; }
         public string dtpfechaFirmezaPAU { get; set; }
         public string txtNumeroInformeFundamentado { get; set; }
         public string dtpFechaEmision1 { get; set; }
@@ -75,6 +78,7 @@ namespace CapaEntidad.ViewModel
         // NOTIFICACION
 
         public bool chkNotificacion { get; set; }
+        public string txtnumeroDocumento { get; set; }
         public string dtpFechaNotificacion { get; set; }
         public string txtAnotaciones { get; set; }
 

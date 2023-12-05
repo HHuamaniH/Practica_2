@@ -3,6 +3,11 @@ using System.Collections.Generic;
 using Oracle.ManagedDataAccess.Client;//using System.Data.SqlClient;
 using CEntidadC = CapaEntidad.DOC.Ent_INFFUN;
 using GeneralSQL;//using SQL = GeneralSQL.Data.SQL;
+using CapaEntidad.Documento;
+using GeneralSQL.Data;
+using System.Data.SqlClient;
+using System.Data;
+
 namespace CapaDatos.DOC
 {
     /// <summary>
@@ -260,7 +265,8 @@ namespace CapaDatos.DOC
                             lsCEntidad.FLAG_NOTIFICACION = dr.GetInt32(dr.GetOrdinal("FLAG_NOTIFICACION"));
                             lsCEntidad.FECHA_NOTIFICACION = dr.GetString(dr.GetOrdinal("FECHA_NOTIFICACION"));
                             lsCEntidad.NOTA_NOTIFICACION = dr.GetString(dr.GetOrdinal("NOTA_NOTIFICACION"));
-
+                            lsCEntidad.CARPETA_FISCAL = dr.GetString(dr.GetOrdinal("CARPETA_FISCAL"));
+                            lsCEntidad.COD_PROVEIDO = dr.GetString(dr.GetOrdinal("COD_PROVEIDO"));
 
                         }
                         //Estado (Calidad)
@@ -670,5 +676,112 @@ namespace CapaDatos.DOC
                 throw ex;
             }
         }
+
+        public List<Ent_MemoFirmeza> FiltrarMemoFirmeza(OracleConnection cn, string codigoInforme)
+        {
+            List<Ent_MemoFirmeza> lstentidad = new List<Ent_MemoFirmeza>();
+            Ent_MemoFirmeza entidad = null;
+            try
+            {
+                using (OracleCommand command = new OracleCommand("DOC_OSINFOR_ERP_MIGRACION.SPINFFUN_CONSULTAR_MEMO_FIRMEZA", cn))
+                {
+                    command.CommandType = System.Data.CommandType.StoredProcedure;
+                    command.Parameters.Add("COD_INFORME", OracleDbType.Varchar2).Value = codigoInforme;
+
+                    using (OracleDataReader reader = command.ExecuteReader())
+                    {
+                        if (reader.HasRows)
+                        {
+                            entidad = new Ent_MemoFirmeza();
+                            while (reader.Read())
+                            {
+                                entidad.COD_PROVEIDORARCH = reader.GetString(reader.GetOrdinal("COD_PROVEIDOARCH"));
+                                entidad.FECHA = reader.GetString(reader.GetOrdinal("FECHA"));
+                                entidad.COD_TRAMITE_ENVIO = reader.GetInt32(reader.GetOrdinal("COD_TRAMITE_ENVIO"));
+                                entidad.COD_RESODIREC = reader.GetString(reader.GetOrdinal("COD_RESODIREC"));
+                                entidad.NUMERO_EXPEDIENTE = reader.GetString(reader.GetOrdinal("NUMERO_EXPEDIENTE"));
+                                entidad.COD_INFORME = reader.GetString(reader.GetOrdinal("COD_INFORME"));
+                                lstentidad.Add(entidad);
+                            }
+                        }
+                    }
+                }
+
+                return lstentidad;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        #region "SQL SERVER"
+
+        public Ent_DocumentoEntradaSITD ObtenerDocumentoSITD(string numeroRegistro)
+        {
+            Ent_DocumentoEntradaSITD entidad = null;
+            SQL oGDataSQL = new SQL();
+
+            using (SqlConnection cn = new SqlConnection(BDConexion.Conexion_Cadena_SITD()))
+            {
+                cn.Open();
+                using (SqlCommand cmd = new SqlCommand("SP_CONSULTAR_DOC_ENTRADA_SITD", cn))
+                {
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@NRO_DOCUMENTO", numeroRegistro);
+                    using (SqlDataReader reader = cmd.ExecuteReader())
+                    {
+                        if (reader != null)
+                            if (reader.Read())
+                            {
+                                entidad = new Ent_DocumentoEntradaSITD();
+                                entidad.iCodTramite = reader.GetInt32(reader.GetOrdinal("iCodTramite"));
+                                entidad.cCodificacion = reader.GetString(reader.GetOrdinal("cCodificacion"));
+                                entidad.fFecDocumento = reader.GetString(reader.GetOrdinal("fFecDocumento"));
+                                entidad.cNroDocumento = reader.GetString(reader.GetOrdinal("cNroDocumento"));
+                                entidad.iCodTupa = reader.GetInt32(reader.GetOrdinal("iCodTupa"));
+                                entidad.cAsunto = reader.GetString(reader.GetOrdinal("cAsunto"));
+                                entidad.cNomRemite = reader.GetString(reader.GetOrdinal("cNomRemite"));
+                                entidad.iCodRemitente = reader.GetInt32(reader.GetOrdinal("iCodRemitente"));
+                                entidad.cFema = reader.GetString(reader.GetOrdinal("cFema"));
+
+                            }
+
+                    }
+                }
+            }
+            return entidad;
+        }
+
+        public string FiltrarFechaNotificacion(string numeroRegistro)
+        {
+            string resultado = "";
+            SQL oGDataSQL = new SQL();
+
+            using (SqlConnection cn = new SqlConnection(BDConexion.Conexion_Cadena_SITD()))
+            {
+                cn.Open();
+                using (SqlCommand cmd = new SqlCommand("SP_CONSULTAR_DOC_SALIDA_SITD", cn))
+                {
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@NRO_DOCUMENTO", numeroRegistro);
+                    using (SqlDataReader reader = cmd.ExecuteReader())
+                    {
+                        if (reader != null)
+                            if (reader.Read())
+                            {
+                                resultado = reader.GetString(reader.GetOrdinal("fechaNotificacion"));
+                            }
+
+                    }
+                }
+
+
+            }
+            return resultado;
+        }
+
+        #endregion
+
     }
 }

@@ -8,11 +8,12 @@ using System.Collections.Generic;
 using System.Web.Mvc;
 using CEntVM = CapaEntidad.ViewModel.VM_InformeFundamentado;
 using CEntidadIF = CapaEntidad.DOC.Ent_INFFUN;
-using CLogica = CapaLogica.DOC.Log_INFFUN;  
+using CLogica = CapaLogica.DOC.Log_INFFUN;
 using System.Linq;
 using CapaEntidad.ViewModel.General;
 using SIGOFCv3.Helper;
 using System.Globalization;
+using CapaEntidad.Documento;
 
 namespace SIGOFCv3.Areas.Fiscalizacion.Controllers
 {
@@ -62,7 +63,7 @@ namespace SIGOFCv3.Areas.Fiscalizacion.Controllers
                 entIF = logIF.RegMostrarComboSubEntidad(entIF);
                 vmIF.ddlSubEntidad = entIF.ListarEntidades.Select(i => new VM_Cbo { Value = i.COD_SENTIDAD, Text = i.DESCRIPCION_SUBENTIDAD });
                 vmIF.ddlSubEntidadId = entIF.ListarEntidades.ElementAt(0).COD_SENTIDAD;
-
+                vmIF.ddlProveidor = new List<VM_Cbo>();
 
                 this.initBusquedaModal();
 
@@ -87,6 +88,7 @@ namespace SIGOFCv3.Areas.Fiscalizacion.Controllers
                     vmIF.txtRegistro = null;
                     vmIF.dtpFechaIngresoSolicitud = null;
                     vmIF.txtNumeroOficioSolicitud = null;
+                    vmIF.txtcarpetafiscal = null;
                     vmIF.txtDetalle = null;
                     vmIF.ddlTipoSolicitudId = null;
                     vmIF.ddlVencimientoPlazoLegalId = null;
@@ -113,6 +115,7 @@ namespace SIGOFCv3.Areas.Fiscalizacion.Controllers
                     vmIF.dtpfechaOficio1 = null;
                     vmIF.txtNumeroOficioPau = null;
                     vmIF.dtpFechaEmisionPau = null;
+                    vmIF.cboCodProveidoArch = null;
                 }
                 else
                 {
@@ -129,7 +132,7 @@ namespace SIGOFCv3.Areas.Fiscalizacion.Controllers
                     vmIF.hdfCodTipoInfFundamentado = entIF.COD_FCTIPO;
                     vmIF.txtTipoInfFundamentado = entIF.TIPO_FISCALIZA;
 
-                    vmIF.dtpFechaFundamentado = (entIF.FECHA_EMISION == null || entIF.FECHA_EMISION.ToString().Trim()=="") ? null : entIF.FECHA_EMISION?.ToString();
+                    vmIF.dtpFechaFundamentado = (entIF.FECHA_EMISION == null || entIF.FECHA_EMISION.ToString().Trim() == "") ? null : entIF.FECHA_EMISION?.ToString();
                     vmIF.txtNumInfFundamentado = entIF.NUMERO_INFORME;
                     vmIF.listaProfesionales = entIF.ListProfesionales;
                     vmIF.tbInforme = entIF.ListInformes;
@@ -141,6 +144,7 @@ namespace SIGOFCv3.Areas.Fiscalizacion.Controllers
 
                     vmIF.dtpFechaIngresoSolicitud = (entIF.FECHA_TRAMITE == null || entIF.FECHA_TRAMITE.ToString().Trim() == "") ? null : entIF.FECHA_TRAMITE?.ToString();
                     vmIF.txtNumeroOficioSolicitud = entIF.NUMERO_SOLICITUD;
+                    vmIF.txtcarpetafiscal = entIF.CARPETA_FISCAL;
                     vmIF.txtDetalle = entIF.GLOSA;
                     vmIF.ddlTipoSolicitudId = entIF.COD_TIPO_SOLICITUD;
                     vmIF.ddlVencimientoPlazoLegalId = entIF.COD_VEN_LEGAL;
@@ -158,7 +162,7 @@ namespace SIGOFCv3.Areas.Fiscalizacion.Controllers
 
                     vmIF.dtpfechaOficio2 = (entIF.FECHA_OFICIO2 == null || entIF.FECHA_OFICIO2.ToString().Trim() == "") ? null : entIF.FECHA_OFICIO2?.ToString();
                     vmIF.txtObservacionesOficio = entIF.NOTA_NO_INFFUN;
-                   
+
                     vmIF.chkEmitirOficioPau = (entIF.FLAG_COPIA_PAU_EMITIDO == 1 ? true : false);
                     vmIF.txtNumeroOficioPau = entIF.NUMERO_OFICIO2;
 
@@ -167,13 +171,14 @@ namespace SIGOFCv3.Areas.Fiscalizacion.Controllers
 
                     vmIF.chkNotificacion = (entIF.FLAG_NOTIFICACION == 1 ? true : false);
                     vmIF.dtpFechaNotificacion = (entIF.FECHA_NOTIFICACION == null || entIF.FECHA_NOTIFICACION.ToString().Trim() == "") ? null : entIF.FECHA_NOTIFICACION?.ToString();
-  
+
                     vmIF.txtAnotaciones = entIF.NOTA_NOTIFICACION;
                     vmIF.hdfItemEstUbigeoCodigo = entIF.COD_UBIGEO;
                     vmIF.fItemEstUbigeoCodigo = entIF.ESTAB_UBIGEO;
                     vmIF.hdtxtTitularTipo = entIF.COD_PERSONA_ASIGNADO;
                     vmIF.txtTitularTipo = entIF.PERSONA_TITULAR;
                     vmIF.RegEstado = 0;
+                    vmIF.cboCodProveidoArch = entIF.COD_PROVEIDO;
                 }
                 //obtenemos el rol sobre el formulario
                 VM_Menu_Rol mr = HelperSigo.GetRol("MODULO FISCALIZACION", "Informe Fundamentado");
@@ -270,6 +275,7 @@ namespace SIGOFCv3.Areas.Fiscalizacion.Controllers
                 entIF.FECHA_TRAMITE = obj.dtpFechaIngresoSolicitud;
                 entIF.NUMERO_SOLICITUD = obj.txtNumeroOficioSolicitud;
                 entIF.COD_TIPO_SOLICITUD = obj.ddlTipoSolicitudId;
+                entIF.CARPETA_FISCAL = obj.txtcarpetafiscal;
                 entIF.COD_VEN_LEGAL = obj.ddlVencimientoPlazoLegalId;
                 entIF.GLOSA = obj.txtDetalle;
                 entIF.COD_OD_REGISTRO = obj.ddlOdId;
@@ -284,7 +290,7 @@ namespace SIGOFCv3.Areas.Fiscalizacion.Controllers
                 {
                     // INFORME
                     entIF.FLAG_INFFUN_EMITIDO = (obj.chkEmitirInforme ? 1 : 0);
-
+                    entIF.COD_PROVEIDO = obj.ddlproveidorId;
                     if (obj.dtpfechaFirmezaPAU != null)
                     {
                         obj.dtpfechaFirmezaPAU = obj.dtpfechaFirmezaPAU.Trim();
@@ -363,20 +369,6 @@ namespace SIGOFCv3.Areas.Fiscalizacion.Controllers
                     entIF.DIAS_HAB_TRANSCURIDOS = 0;
                 }
 
-                /*
-                // SI(FLAG_COPIA_PAU_EMITIDO == 1)
-                if (entIF.FLAG_COPIA_PAU_EMITIDO == 1) // FECHA_OFICIO2 - FECHA_TRAMITE;
-                    entIF.DIAS_HAB_TRANSCURIDOS = CalcularDiasEntreFechas(fechaOficio2, obj.dtpFechaIngresoSolicitud);
-                //SI(FLAG_INFFUN_EMITIDO == 1) && (FLAG_NO_INFFUN_EMITIDO == 0)
-                if (entIF.FLAG_INFFUN_EMITIDO == 1 && entIF.FLAG_NO_INFUN_EMITIDO == 0) ////DIAS_HABILES_TRANSCURRIDOS = FECHA_OFICIO1 - FECHA_TRAMITE
-                    entIF.DIAS_HAB_TRANSCURIDOS = CalcularDiasEntreFechas(fechaOficio1, obj.dtpFechaIngresoSolicitud);
-                //SI(FLAG_INFFUN_EMITIDO == 0) && (FLAG_NO_INFFUN_EMITIDO == 1)
-                if (entIF.FLAG_INFFUN_EMITIDO == 0 && entIF.FLAG_NO_INFUN_EMITIDO == 1) //DIAS_HABILES_TRANS_NO_INFFUN = FECHA_OFICIO2 - FECHA_TRAMITE
-                    entIF.DIAS_HABILES_TRANS_NO_INFFUN = CalcularDiasEntreFechas(fechaOficio2, obj.dtpFechaIngresoSolicitud);
-                //SI(FLAG_INFFUN_EMITIDO == 1) && (FLAG_NO_INFFUN_EMITIDO == 1)
-                if (entIF.FLAG_INFFUN_EMITIDO == 1 && entIF.FLAG_NO_INFUN_EMITIDO == 1) //DIAS_HABILES_TRANSCURRIDOS = FECHA_OFICIO1 - FECHA_FIRMEZA
-                    entIF.DIAS_HAB_TRANSCURIDOS = CalcularDiasEntreFechas(fechaOficio1, obj.dtpfechaFirmezaPAU);
-                */
 
                 if (obj.tbEliTABLA != null)
                 {
@@ -668,6 +660,56 @@ namespace SIGOFCv3.Areas.Fiscalizacion.Controllers
             catch (Exception ex)
             {
                 return Json(new { success = false, msj = ex.Message });
+            }
+        }
+
+        [HttpPost]
+        public JsonResult FiltrarMemoFirmeza(string codigoInforme)
+        {
+            try
+            {
+                List<Ent_MemoFirmeza> entidad = new List<Ent_MemoFirmeza>();
+                CLogica logIF = new CLogica();
+                entidad = logIF.FiltrarMemoFirmeza(codigoInforme);
+
+                return Json(new { success = true, result = entidad });
+            }
+            catch (Exception ex)
+            {
+                return Json(new { success = false, result = ex.Message });
+            }
+        }
+        [HttpPost]
+        public JsonResult FiltrarFechaNotificacion(string numeroDocumento)
+        {
+            try
+            {
+                List<Ent_MemoFirmeza> entidad = new List<Ent_MemoFirmeza>();
+                CLogica logIF = new CLogica();
+                string fechaNotificacion = logIF.FiltrarFechaNotificacion(numeroDocumento);
+
+                return Json(new { success = true, result = fechaNotificacion });
+            }
+            catch (Exception ex)
+            {
+                return Json(new { success = false, result = ex.Message });
+            }
+        }
+
+        [HttpPost]
+        public JsonResult ObtenerDocumentoSITD(string numeroRegistro)
+        {
+            try
+            {
+                Ent_DocumentoEntradaSITD entidad = new Ent_DocumentoEntradaSITD();
+                CLogica logIF = new CLogica();
+                entidad = logIF.ObtenerDocumentoSITD(numeroRegistro);
+
+                return Json(new { success = true, result = entidad });
+            }
+            catch (Exception ex)
+            {
+                return Json(new { success = false, result = ex.Message });
             }
         }
 
