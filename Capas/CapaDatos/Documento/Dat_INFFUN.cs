@@ -266,7 +266,7 @@ namespace CapaDatos.DOC
                             lsCEntidad.FECHA_NOTIFICACION = dr.GetString(dr.GetOrdinal("FECHA_NOTIFICACION"));
                             lsCEntidad.NOTA_NOTIFICACION = dr.GetString(dr.GetOrdinal("NOTA_NOTIFICACION"));
                             lsCEntidad.CARPETA_FISCAL = dr.GetString(dr.GetOrdinal("CARPETA_FISCAL"));
-                            lsCEntidad.COD_PROVEIDO = dr.GetString(dr.GetOrdinal("COD_PROVEIDO"));
+                            lsCEntidad.COD_PROVEIDOARCH = dr.GetString(dr.GetOrdinal("COD_PROVEIDOARCH"));
 
                         }
                         //Estado (Calidad)

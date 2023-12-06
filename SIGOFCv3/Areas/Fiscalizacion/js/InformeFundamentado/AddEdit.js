@@ -809,21 +809,41 @@ ManInfFundamentado_AddEdit.fnObtenerDocumentoSITD = function () {
                 if (data.result.iCodTupa === 70) {
                     ddlTipoSolicitud.val('000001');
                     ddlVencimientoPlazoLegal.val('000001');
+
+                    $("#idNavPauCopia").css("display", "none");
+                    $("#idNavInformeFundamentado").css("display", "block");
                 }
                 else if (data.result.iCodTupa === 72) {
                     ddlTipoSolicitud.val('000002');
                     ddlVencimientoPlazoLegal.val('000002');
+
+                    $("#idNavPauCopia").css("display", "block");
+                    $("#idNavInformeFundamentado").css("display", "none");
                 }
                 else if (data.result.iCodTupa === 75) {
                     ddlTipoSolicitud.val('000003');
                     ddlVencimientoPlazoLegal.val('000002');
+
+                    $("#idNavPauCopia").css("display", "block");
+                    $("#idNavInformeFundamentado").css("display", "none");
                 }
+            }
+            else {
+
+                ManInfFundamentado_AddEdit.frm.find("#dtpFechaIngresoSolicitud").val('');
+                ManInfFundamentado_AddEdit.frm.find("#txtNumeroOficioSolicitud").val('');
+                ManInfFundamentado_AddEdit.frm.find("#txtcarpetafiscal").val('');
+                ManInfFundamentado_AddEdit.frm.find("#txtDetalle").val('');
+                ManInfFundamentado_AddEdit.frm.find("#ddlTipoSolicitud").val('');
+                ManInfFundamentado_AddEdit.frm.find("#ddlVencimientoPlazoLegal").val('');
+
+                utilSigo.toastWarning("Aviso", "Número de Registro del SITD no existe.");
+
             }
 
         }
         else {
             utilSigo.toastWarning("Aviso", "Sucedio un error, Comuníquese con el Administrador");
-            console.log(data.result);
         }
     });
 

@@ -178,7 +178,7 @@ namespace SIGOFCv3.Areas.Fiscalizacion.Controllers
                     vmIF.hdtxtTitularTipo = entIF.COD_PERSONA_ASIGNADO;
                     vmIF.txtTitularTipo = entIF.PERSONA_TITULAR;
                     vmIF.RegEstado = 0;
-                    vmIF.cboCodProveidoArch = entIF.COD_PROVEIDO;
+                    vmIF.cboCodProveidoArch = entIF.COD_PROVEIDOARCH;
                 }
                 //obtenemos el rol sobre el formulario
                 VM_Menu_Rol mr = HelperSigo.GetRol("MODULO FISCALIZACION", "Informe Fundamentado");
@@ -290,7 +290,7 @@ namespace SIGOFCv3.Areas.Fiscalizacion.Controllers
                 {
                     // INFORME
                     entIF.FLAG_INFFUN_EMITIDO = (obj.chkEmitirInforme ? 1 : 0);
-                    entIF.COD_PROVEIDO = obj.ddlproveidorId;
+                    entIF.COD_PROVEIDOARCH = obj.ddlproveidorId;
                     if (obj.dtpfechaFirmezaPAU != null)
                     {
                         obj.dtpfechaFirmezaPAU = obj.dtpfechaFirmezaPAU.Trim();
