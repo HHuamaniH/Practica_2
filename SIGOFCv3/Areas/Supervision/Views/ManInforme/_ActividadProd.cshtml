@@ -1,0 +1,94 @@
+﻿
+<script src="~/Areas/Supervision/js/ManInforme/_ActividadProd.js?v=@Guid.NewGuid()"></script>
+
+<div class="modal-dialog" role="document">
+    <div class="modal-content">
+        <div class="modal-header text-small" style="cursor:move;">
+            <span>Actividad Productiva</span>
+            <i class="fa fa-close" style="cursor:pointer;" data-dismiss="modal" aria-label="Close"></i>
+        </div>
+        <div class="modal-body">
+            <form id="frmItemActividadProd">
+                @Html.Hidden("hdfRegEstado")
+                @Html.Hidden("hdfCodSecuencial")
+                @Html.Hidden("hdfCodEspeciesActProd")
+                <div class="card-header text-small">Registro de Actividad Productiva</div>
+                <div class="card-body">
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label for="txtActividadActProd" class="text-small">*Actividad</label>
+                            @Html.TextBox("txtActividadActProd", "", new { @class = "form-control form-control-sm", maxlength = "50", onkeypress = "return utilSigo.checkLetter(event)" })
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label for="txtAreaActProd" class="text-small">*Área</label>
+                            @Html.TextBox("txtAreaActProd", "", new { @class = "form-control form-control-sm", maxlength = "8", onblur = "return utilSigo.onBlurFourDigitoThreeDecimal(this,'Área');", onkeypress = "return utilSigo.onKeyDecimal(event, this);" })
+                        </div>
+                    </div>
+                    @*<div class="form-row">*@
+                <div class="card-header text-small">*Especie Forestal</div>
+                    <div class="card-body" id="cardBodyEspecie">
+                        <div class="form-row">
+                            <div class="form-group col-md-12 ActProd">
+                                <textarea class="form-control form-control-sm" rows="4" id="txtEspecieActProd" disabled></textarea>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            @{
+                                string nombreComboEspecie = "ddlRenderComboEspecieId|Seleccionar especie forestal";
+                            }
+                            @Html.Partial("~/Areas/General/Views/Controles/_renderComboEspecie.cshtml", nombreComboEspecie)
+                        </div>
+                        <div class="form-row mt-2" style="display:felx;justify-content:center;align-items: center;">
+                            <div class="form-inline text-right">
+                                <button type="button" id="btnAgregarEspecie" onclick="_ActividadProd.fnAgregarEspecie()" class="btn btn-primary btn-sm">Agregar</button>
+                                <button type="button" id="btnEliminarEspecie" onclick="_ActividadProd.fnClearEspecie()" class="btn btn-danger btn-sm">Eliminar</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group col-md-12">
+                        @*<span class="input-group-text"><i class="fa fa-plus" style="cursor:pointer;" id="i_2_6_1" onclick="_ActividadProd.fnAgregarEspecie();" data-toggle="tooltip" data-placement="top" title="Agregar"></i></span>*@
+                    </div>
+                    @*</div>*@
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label for="txtEdadActProd" class="text-small">Edad (años)</label>
+                        @Html.TextBox("txtEdadActProd", "", new { @class = "form-control form-control-sm", maxlength = "2", onkeypress = "return utilSigo.checkTelefono(event)" })
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="txtRendimientoActProd" class="text-small">Rendimiento de Parcela (kg)</label>
+                        @Html.TextBox("txtRendimientoActProd", "", new { @class = "form-control form-control-sm", maxlength = "7", onblur = "return utilSigo.onBlurFourDigitoTwoDecimal(this,'Rendimiento de Parcela (kg)');", onkeypress = "return utilSigo.onKeyDecimal(event, this);" })
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label for="txtCoordEsteS" class="text-small">*Coordenada Este</label>
+                        @Html.TextBox("txtCoordEsteActProd", "", new { @class = "form-control form-control-sm", maxlength = "6", onkeypress = "return utilSigo.checkTelefono(event)" })
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="txtCoordNorteS" class="text-small">*Coordenada Norte</label>
+                        @Html.TextBox("txtCoordNorteActProd", "", new { @class = "form-control form-control-sm", maxlength = "7", onkeypress = "return utilSigo.checkTelefono(event)" })
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-4">
+                        <label for="txtAltitudActProd" class="text-small">*Altitud(msnm)</label>
+                        @Html.TextBox("txtAltitudActProd", "", new { @class = "form-control form-control-sm", maxlength = "4", onkeypress = "return utilSigo.checkTelefono(event)" })
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label for="txtAC" class="text-small">Destino de la producción</label>
+                        @Html.DropDownList("ddlDestinoActProdId", new SelectList(ViewBag.ddlDestinoActProd, "Value", "Text"), new { @class = "form-control form-control-sm" })
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label for="ddlEstadoCulActProdId" class="text-small">Estado del Cultivo</label>
+                        @Html.DropDownList("ddlEstadoCulActProdId", new SelectList(ViewBag.ddlEstadoCulActProd, "Value", "Text"), new { @class = "form-control form-control-sm" })
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-primary btn-sm" onclick="_ActividadProd.fnSubmitForm()">Guardar</button>
+            <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Cancelar</button>
+        </div>
+    </div>
+</div>

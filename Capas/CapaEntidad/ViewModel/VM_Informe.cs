@@ -192,6 +192,10 @@ namespace CapaEntidad.ViewModel
         public List<Ent_INFORME_VERTICE_AREA> tbVerticeArea { get; set; }
         public List<Ent_INFORME_EVAL_ARBOL> tbEvalArbolAdicional { get; set; }
         public List<Ent_INFORME_EVAL_ARBOL> tbEvalArbolNoAutorizado { get; set; }
+        public List<Ent_INFORME_ESPECIE_FOREST> tbEspecieForEst { get; set; }
+        public List<Ent_INFORME_ACTIVIDAD_PRODUCTIVA> tbActividadProductiva { get; set; }
+        public List<Ent_INFORME_COBERTURA_BOSNAT> tbCoberturaBosNat { get; set; }
+        public List<Ent_INFORME_DIVISION_PREDIO> tbDivisionPredio { get; set; }
         public List<Ent_INFORME_HUAYRONA> tbHuayrona { get; set; }
         public List<Ent_INFORME_ACT_SILVICULTURAL> tbActividadSilvicultural { get; set; }
         public List<Ent_INFORME_CAMBIO_USO> tbCambioUso { get; set; }
@@ -210,8 +214,57 @@ namespace CapaEntidad.ViewModel
         public string hdfCodTerceroSolidario { get; set; }
         public string txtTerceroSolidario { get; set; }
 
+        //REQ-359
+        public string txtTelefonoCUSAF { get; set; }
+        public string txtCorreoCUSAF { get; set; }
+        public string txtNivelEstudioCUSAF { get; set; }
+        public string txtNumeroParticipacionCUSAF { get; set; }
+        public int rbtnPartMenoresCUSAF { get; set; }
+        public string txtObsActividadProd { get; set; }
+        public string txtObsCoberturaBosNat { get; set; }
+        public bool chkControlMalezas { get; set; }
+        public bool chkRenovacionCultivo { get; set; }
+        public bool chkRotacionCultivoAnual { get; set; }
+        public bool chkPodasCultivo { get; set; }
+        public bool chkManejoSombra { get; set; }
+        public bool chkCultivoCobertura { get; set; }
+        public bool chkFertilizacion { get; set; }
+        public bool chkArbolesForestales { get; set; }
+        public bool chkCurvasBolillo { get; set; }
+        public bool chkControlPlagas { get; set; }
+        public bool chkQuema { get; set; }
+        public bool chkAgroforesteria { get; set; }
+        public bool chkPracticaOrganica { get; set; }
+        public int rbtnAsistenciaTecnicaCUSAF { get; set; }
+        public string txtAsistenciaTecnica { get; set; }
+        public bool chkProyecto { get; set; }
+        public bool chkCooperativa { get; set; }
+        public bool chkInstitucion { get; set; }
+        public bool chkAutofinanciado { get; set; }
+        public string txtNombreAsisTecCUSAF { get; set; }
+        public int rbtnFrecuenciaCUSAF { get; set; }
+        public string txtNecesidadesAsistenciaTecnica { get; set; }
+        public bool chkPropioFA { get; set; }
+        public bool chkInstitucionFA { get; set; }
+        public bool chkProgramaFA { get; set; }
+        public bool chkProyectoFA { get; set; }
+        public bool chkCooperativaFA { get; set; }
+        public bool chkOtrosTercerosFA { get; set; }
+        public string txtFinanciamientoActividad { get; set; }
+        public bool chkCooperativaAsoc { get; set; }
+        public bool chkAsociacionAsoc { get; set; }
+        public bool chkOtrosAsoc { get; set; }
+        public bool chkNingunoAsoc { get; set; }
+        public string txtDetallarAsociatividad { get; set; }
+        public string txtObservacionCUSAF { get; set; }
+
+
+
         public VM_Informe_POASupervisado()
         {
+            rbtnPartMenoresCUSAF = -1;
+            rbtnAsistenciaTecnicaCUSAF = -1;
+            rbtnFrecuenciaCUSAF = -1;
             tbEliTABLA = new List<Ent_INFORME>();
             tbCondicionArea = new List<Ent_INFORME_CONDICION_AREA>();
             tbVerticeArea = new List<Ent_INFORME_VERTICE_AREA>();
@@ -242,7 +295,8 @@ namespace CapaEntidad.ViewModel
             ddlOportunidadAprovId = "0000000";
             tbVolumenAnalizado = new List<Ent_INFORME_VOL_ANALIZADO>();
             tbConsolidadoNN = new List<Ent_INFORME_CONSOLIDADO>();
-        }
+            tbEspecieForEst = new List<Ent_INFORME_ESPECIE_FOREST>();
+    }
     }
 
     public class VM_Informe_ExSitu

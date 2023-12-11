@@ -41,6 +41,8 @@ namespace CapaEntidad.DOC
         public String COD_TIOCULAR { get; set; }
         [Description("COD_TRAPROBACION")]
         public String COD_TRAPROBACION { get; set; }
+        [Description("COD_SAPROBACION")]
+        public String COD_SAPROBACION { get; set; }
         [Description("COD_UCUENTA")]
         public String COD_UCUENTA { get; set; }
         [Description("NUM_POA")]
@@ -394,6 +396,8 @@ namespace CapaEntidad.DOC
         public List<Ent_POA> ListTIOCULAR { get; set; }
         [Category("LIST"), Description("ListTRAPROBACION")]
         public List<Ent_POA> ListTRAPROBACION { get; set; }
+        [Category("LIST"), Description("ListSAPROBACION")]
+        public List<Ent_POA> ListSAPROBACION { get; set; }
         [Category("LIST"), Description("ListRAprueba")]
         public List<Ent_POA> ListRAprueba { get; set; }
         [Category("LIST"), Description("ListRApruebaISitu")]

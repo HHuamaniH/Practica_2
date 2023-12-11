@@ -470,6 +470,7 @@ namespace CapaLogica.DOC
                     POA_VM.ListAOCULAR = datModificar.ListAOCULAR;
                     POA_VM.ListTIOCULAR = datModificar.ListTIOCULAR;
                     POA_VM.ListTRAPROBACION = datModificar.ListTRAPROBACION;
+                    POA_VM.ListSAPROBACION = datModificar.ListSAPROBACION;
                     POA_VM.ListMadeCENSO = datModificar.ListMadeCENSO;
                     POA_VM.ListNoMadeCENSO = datModificar.ListNoMadeCENSO;
                     //05/05/2023
@@ -724,6 +725,7 @@ namespace CapaLogica.DOC
                     oCampos.ListDETREGENTE = new List<CEntidad>();
                     oCampos.ListAOCULAR = new List<CEntidad>();
                     oCampos.ListTRAPROBACION = new List<CEntidad>();
+                    oCampos.ListSAPROBACION = new List<CEntidad>();
                     oCampos.ListRAprueba = new List<CEntidad>();
                     oCampos.ListRApruebaISitu = new List<CEntidad>();
                     oCampos.ListRReformulaISitu = new List<CEntidad>();
@@ -816,6 +818,7 @@ namespace CapaLogica.DOC
                     //  POA_VM.ListAOCULAR = datModificar.ListAOCULAR;
                     POA_VM.ListTIOCULAR = oCampos.ListTIOCULAR;
                     POA_VM.ListTRAPROBACION = oCampos.ListTRAPROBACION;
+                    POA_VM.ListSAPROBACION = oCampos.ListSAPROBACION;
                     POA_VM.ListRAprueba = oCampos.ListRAprueba;
 
                     POA_VM.ListBExtPOA = new List<CEntidad>();
@@ -1045,6 +1048,7 @@ namespace CapaLogica.DOC
                 //Lista de Objetos
                 oCampos.ListTIOCULAR = dto.ListTIOCULAR;
                 oCampos.ListTRAPROBACION = dto.ListTRAPROBACION;
+                oCampos.ListSAPROBACION = dto.ListSAPROBACION;
                 oCampos.ListRAprueba = dto.ListRAprueba;
                 oCampos.ListRApruebaISitu = dto.ListRApruebaISitu;
                 oCampos.ListAOCULAR = dto.ListAOCULAR;

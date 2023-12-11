@@ -1,5 +1,8 @@
 ﻿using CapaEntidad.ViewModel;
+using DocumentFormat.OpenXml.Spreadsheet;
+using DocumentFormat.OpenXml.Wordprocessing;
 using OfficeOpenXml;
+using OfficeOpenXml.FormulaParsing.Excel.Functions.Text;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -91,14 +94,14 @@ namespace SIGOFCv3.Areas.Supervision.Models.ManInforme
                         for (int rowIterator = 2; rowIterator <= noOfRow; rowIterator++)
                         {
                             oCampos = new CapaEntidad.DOC.Ent_INFORME();
-                            oCampos.ACTIVIDAD = workSheet.Cells[rowIterator, 1].Value.ToString().Trim();
+                            oCampos.ACTIVIDAD = (workSheet.Cells[rowIterator, 1].Value ?? "").ToString().Trim();
                             if (!string.IsNullOrEmpty(oCampos.ACTIVIDAD))
                             {
-                                oCampos.AREA = Decimal.Parse(workSheet.Cells[rowIterator, 2].Value.ToString().Trim());
-                                oCampos.ZONA = workSheet.Cells[rowIterator, 3].Value.ToString().Trim();
+                                oCampos.AREA = Decimal.Parse((workSheet.Cells[rowIterator, 2].Value ?? "").ToString().Trim());
+                                oCampos.ZONA = (workSheet.Cells[rowIterator, 3].Value ?? "").ToString().Trim();
                                 if (oCampos.ZONA == "17S" || oCampos.ZONA == "18S" || oCampos.ZONA == "19S")
                                 {
-                                    oCampos.AUTORIZADO = workSheet.Cells[rowIterator, 4].Value.ToString().Trim();
+                                    oCampos.AUTORIZADO = (workSheet.Cells[rowIterator, 4].Value ?? "").ToString().Trim();
                                     if (!string.IsNullOrEmpty(oCampos.AUTORIZADO))
                                     {
                                         ceste = (workSheet.Cells[rowIterator, 5].Value ?? "").ToString().Trim();
@@ -113,12 +116,12 @@ namespace SIGOFCv3.Areas.Supervision.Models.ManInforme
                                                 if (coord_esteInt > 999999) { throw new Exception("Coordenada Este incorrecta no debe ser mayor a 6 dígitos"); }
                                                 else
                                                 {
-                                                    oCampos.COORDENADA_ESTE = Convert.ToInt32(workSheet.Cells[rowIterator, 5].Value.ToString().Trim());
+                                                    oCampos.COORDENADA_ESTE = Convert.ToInt32((workSheet.Cells[rowIterator, 5].Value ?? "").ToString().Trim());
                                                     if (!Regex.IsMatch(cnorte, @"^\d+$")) { throw new Exception("Coordenada Norte incorrecta debe ser numérico"); }
                                                     else
                                                     {
                                                         int coord_norteInt = Convert.ToInt32(cnorte);
-                                                        oCampos.COORDENADA_NORTE = Convert.ToInt32(workSheet.Cells[rowIterator, 6].Value.ToString().Trim());
+                                                        oCampos.COORDENADA_NORTE = Convert.ToInt32((workSheet.Cells[rowIterator, 6].Value ?? "").ToString().Trim());
                                                         if (coord_norteInt > 9999999) { throw new Exception("Coordenada Norte incorrecta no debe ser mayor a 7 dígitos"); }
                                                     }
                                                 }
@@ -144,6 +147,253 @@ namespace SIGOFCv3.Areas.Supervision.Models.ManInforme
                 throw new Exception("Archivo cargado no válido, utilizar la plantilla desde la opción de descarga.");
             }
             return lstCobBoscosa;
+        }
+
+        public static List<CapaEntidad.DOC.Ent_INFORME_ESPECIE_FOREST> EspecieForestalEstablecida(HttpRequestBase _request)
+        {
+            List<CapaEntidad.DOC.Ent_INFORME_ESPECIE_FOREST> lstEspecieForEst = new List<CapaEntidad.DOC.Ent_INFORME_ESPECIE_FOREST>();
+
+            HttpPostedFileBase file = _request.Files[0];
+            if (file.ContentType == "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
+            {
+                if ((file != null) && (file.ContentLength > 0) && !string.IsNullOrEmpty(file.FileName))
+                {
+                    using (var package = new ExcelPackage(file.InputStream))
+                    {
+                        var currentSheet = package.Workbook.Worksheets;
+                        var workSheet = currentSheet.First();
+                        var noOfCol = workSheet.Dimension.End.Column;
+                        var noOfRow = workSheet.Dimension.End.Row;
+                        CapaEntidad.DOC.Ent_INFORME_ESPECIE_FOREST oCampos;
+                        string ceste, cnorte, ncomun, ncientifico, msg, dap, ac;
+
+                        for (int rowIterator = 3; rowIterator <= noOfRow; rowIterator++)
+                        {
+                            oCampos = new CapaEntidad.DOC.Ent_INFORME_ESPECIE_FOREST();
+                            ncomun = (workSheet.Cells[rowIterator, 1].Value ?? "").ToString().Trim();
+                            ncientifico = (workSheet.Cells[rowIterator, 2].Value ?? "").ToString().Trim();
+                            if (!string.IsNullOrEmpty(ncomun) && !string.IsNullOrEmpty(ncientifico))
+                            {
+                                oCampos.DESC_ESPECIES_REPLA = ncomun + " | " + ncientifico;
+                                ncomun = (workSheet.Cells[rowIterator, 3].Value ?? "").ToString().Trim() ;
+                                ncientifico = (workSheet.Cells[rowIterator, 4].Value ?? "").ToString().Trim();
+                                if (!string.IsNullOrEmpty(ncomun) && !string.IsNullOrEmpty(ncientifico))
+                                {
+                                    oCampos.DESC_ESPECIES_RESUP = ncomun + " | " + ncientifico;
+                                    ceste = (workSheet.Cells[rowIterator, 5].Value ?? "").ToString().Trim();
+                                    cnorte = (workSheet.Cells[rowIterator, 6].Value ?? "").ToString().Trim();
+                                    msg = ValidarCoordenadas(ceste, cnorte, "Registro de Plantación");
+                                    if (msg == "")
+                                    {
+                                        oCampos.COORDENADA_ESTE_REPLA = Convert.ToInt32(ceste);
+                                        oCampos.COORDENADA_NORTE_REPLA = Convert.ToInt32(cnorte);
+                                        oCampos.COD_SECUENCIAL = 0;
+                                        ceste = (workSheet.Cells[rowIterator, 7].Value ?? "").ToString().Trim();
+                                        cnorte = (workSheet.Cells[rowIterator, 8].Value ?? "").ToString().Trim();
+                                        msg = ValidarCoordenadas(ceste, cnorte, "Registro de Supervisión");
+
+                                        if (msg == "")
+                                        {
+                                            oCampos.COORDENADA_ESTE_RESUP = Convert.ToInt32(ceste);
+                                            oCampos.COORDENADA_NORTE_RESUP = Convert.ToInt32(cnorte);
+                                            dap = (workSheet.Cells[rowIterator, 9].Value ?? "").ToString().Trim();
+                                            msg = ValidarFourDigitoThreeDecimal("DAP", dap, "Medidas Dasométricas");
+
+                                            if (msg == "")
+                                            {
+                                                if (!string.IsNullOrEmpty(dap))
+                                                {
+                                                    oCampos.DAP = dap;
+                                                }
+                                                ac = (workSheet.Cells[rowIterator, 10].Value ?? "").ToString().Trim();
+                                                msg = ValidarFourDigitoThreeDecimal("AC", ac, "Medidas Dasométricas");
+                                                if (msg == "")
+                                                {
+                                                    if (!string.IsNullOrEmpty(ac))
+                                                    {
+                                                        oCampos.AC = ac;
+                                                    }
+                                                }
+                                                else { throw new Exception(msg); }
+                                            }
+                                            else { throw new Exception(msg); }
+                                        }
+                                        else { throw new Exception(msg); }
+                                        oCampos.OBSERVACION = (workSheet.Cells[rowIterator, 11].Value ?? "").ToString().Trim();
+                                        if (!string.IsNullOrEmpty(oCampos.OBSERVACION))
+                                        {
+                                            if (!Regex.IsMatch(oCampos.OBSERVACION, @"^[ ÁÉÍÓÚA-Záéíóúa-z0-9\-\/\.\,]+$")) { throw new Exception("El campo observación no debe tener caracteres especiales."); }
+                                            if (oCampos.OBSERVACION.Length > 200) { throw new Exception("El campo observación no debe exceder los 200 caracteres"); }
+                                        }                                       
+                                        oCampos.RegEstado = 1;
+                                        lstEspecieForEst.Add(oCampos);
+                                    }
+                                    else { throw new Exception(msg); }
+                                }
+                                else { throw new Exception("Debe seleccionar Especie de Registro de Supervisión"); }
+                            }
+                            else { throw new Exception("Debe seleccionar Especie de Registro de Plantación"); }
+
+                        }
+                    }
+                }
+            }
+            else
+            {
+                throw new Exception("Archivo cargado no válido, utilizar la plantilla desde la opción de descarga.");
+            }
+            return lstEspecieForEst;
+        }
+        public static List<CapaEntidad.DOC.Ent_INFORME_COBERTURA_BOSNAT> CoberturaBosquesNaturales(HttpRequestBase _request)
+        {
+            List<CapaEntidad.DOC.Ent_INFORME_COBERTURA_BOSNAT> lstCoberturaBosNat = new List<CapaEntidad.DOC.Ent_INFORME_COBERTURA_BOSNAT>();
+
+            HttpPostedFileBase file = _request.Files[0];
+            if (file.ContentType == "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
+            {
+                if ((file != null) && (file.ContentLength > 0) && !string.IsNullOrEmpty(file.FileName))
+                {
+                    using (var package = new ExcelPackage(file.InputStream))
+                    {
+                        var currentSheet = package.Workbook.Worksheets;
+                        var workSheet = currentSheet.First();
+                        var noOfCol = workSheet.Dimension.End.Column;
+                        var noOfRow = workSheet.Dimension.End.Row;
+                        CapaEntidad.DOC.Ent_INFORME_COBERTURA_BOSNAT oCampos;
+                        string ceste, cnorte, msg, tempDecimal, tempString;
+
+                        for (int rowIterator = 2; rowIterator <= noOfRow; rowIterator++)
+                        {
+                            oCampos = new CapaEntidad.DOC.Ent_INFORME_COBERTURA_BOSNAT();
+                            tempString = (workSheet.Cells[rowIterator, 1].Value ?? "").ToString().Trim();
+                            if (!string.IsNullOrEmpty(tempString))
+                            {
+                                oCampos.AREA_COBERTURA = tempString;
+                                tempDecimal = (workSheet.Cells[rowIterator, 2].Value ?? "").ToString().Trim();
+                                if (!string.IsNullOrEmpty(tempDecimal))
+                                {
+                                    msg = ValidarFourDigitoThreeDecimal("Área", tempDecimal, "Cobertura de Bosques Naturales");
+                                    if (msg == "")
+                                    {
+                                        oCampos.AREA = Convert.ToDecimal(tempDecimal);
+                                        oCampos.COD_SECUENCIAL = 0;
+                                        ceste = (workSheet.Cells[rowIterator, 3].Value ?? "").ToString().Trim();
+                                        cnorte = (workSheet.Cells[rowIterator, 4].Value ?? "").ToString().Trim();
+                                        msg = ValidarCoordenadas(ceste, cnorte, "Cobertura de Bosques Naturales");
+
+                                        if (msg == "")
+                                        {
+                                            oCampos.COORDENADA_ESTE = Convert.ToInt32(ceste);
+                                            oCampos.COORDENADA_NORTE = Convert.ToInt32(cnorte);
+                                            tempDecimal = (workSheet.Cells[rowIterator, 5].Value ?? "").ToString().Trim();
+                                            msg = ValidarAltitud(tempDecimal, "Cobertura de Bosques Naturales");
+
+                                            if (msg == "")
+                                            {
+                                                oCampos.ALTITUD = Convert.ToInt32(tempDecimal);
+                                                oCampos.OBSERVACION = (workSheet.Cells[rowIterator, 6].Value ?? "").ToString().Trim();
+                                                if (!string.IsNullOrEmpty(oCampos.OBSERVACION))
+                                                {
+                                                    if (!Regex.IsMatch(oCampos.OBSERVACION, @"^[ ÁÉÍÓÚA-Záéíóúa-z0-9\-\/\.\,]+$")) { throw new Exception("El campo observación no debe tener caracteres especiales."); }
+                                                    else if (oCampos.OBSERVACION.Length > 200) { throw new Exception("El campo Observación no debe exceder los 200 caracteres"); }
+                                                }                                                    
+                                            }
+                                            else { throw new Exception(msg); }
+                                        }
+                                        else { throw new Exception(msg); }
+
+                                        oCampos.RegEstado = 1;
+                                        lstCoberturaBosNat.Add(oCampos);
+                                    }
+                                    else { throw new Exception(msg); }
+                                }
+                                else { throw new Exception("Debe ingresar el área (has)"); }
+                            }
+                            else { throw new Exception("Debe seleccionar Cobertura de Bosques Naturales"); }
+
+                        }
+                    }
+                }
+            }
+            else
+            {
+                throw new Exception("Archivo cargado no válido, utilizar la plantilla desde la opción de descarga.");
+            }
+            return lstCoberturaBosNat;
+        }
+
+        public static List<CapaEntidad.DOC.Ent_INFORME_DIVISION_PREDIO> DivisionPredio(HttpRequestBase _request)
+        {
+            List<CapaEntidad.DOC.Ent_INFORME_DIVISION_PREDIO> lstDivisionPredio = new List<CapaEntidad.DOC.Ent_INFORME_DIVISION_PREDIO>();
+
+            HttpPostedFileBase file = _request.Files[0];
+            if (file.ContentType == "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
+            {
+                if ((file != null) && (file.ContentLength > 0) && !string.IsNullOrEmpty(file.FileName))
+                {
+                    using (var package = new ExcelPackage(file.InputStream))
+                    {
+                        var currentSheet = package.Workbook.Worksheets;
+                        var workSheet = currentSheet.First();
+                        var noOfCol = workSheet.Dimension.End.Column;
+                        var noOfRow = workSheet.Dimension.End.Row;
+                        CapaEntidad.DOC.Ent_INFORME_DIVISION_PREDIO oCampos;
+                        string ceste, cnorte, msg, tempDecimal, tempString;
+
+                        for (int rowIterator = 2; rowIterator <= noOfRow; rowIterator++)
+                        {
+                            oCampos = new CapaEntidad.DOC.Ent_INFORME_DIVISION_PREDIO();
+                            tempString = (workSheet.Cells[rowIterator, 1].Value ?? "").ToString().Trim();
+                            if (!string.IsNullOrEmpty(tempString))
+                            {
+                                if (tempString.Length > 200) { throw new Exception("La división interna no debe exceder los 200 caracteres"); }
+                                else
+                                {
+                                    if (!Regex.IsMatch(tempString, @"^[ ÁÉÍÓÚA-Záéíóúa-z0-9\-\/\.\,]+$")) { throw new Exception("El campo división interna no debe contener caractere especiales."); }
+                                    else
+                                    {
+                                        oCampos.DIVISION_INTERNA = tempString;
+                                        oCampos.COD_SECUENCIAL = 0;
+                                        ceste = (workSheet.Cells[rowIterator, 2].Value ?? "").ToString().Trim();
+                                        cnorte = (workSheet.Cells[rowIterator, 3].Value ?? "").ToString().Trim();
+                                        msg = ValidarCoordenadas(ceste, cnorte, "División de Predio");
+
+                                        if (msg == "")
+                                        {
+                                            oCampos.COORDENADA_ESTE = (ceste);
+                                            oCampos.COORDENADA_NORTE = (cnorte);
+                                            tempDecimal = (workSheet.Cells[rowIterator, 4].Value ?? "").ToString().Trim();
+                                            msg = ValidarAltitud(tempDecimal, "División de Predio");
+
+                                            if (msg == "")
+                                            {
+                                                oCampos.ALTITUD = tempDecimal;
+                                                oCampos.OBSERVACION = (workSheet.Cells[rowIterator, 5].Value ?? "").ToString().Trim();
+                                                if (!string.IsNullOrEmpty(oCampos.OBSERVACION))
+                                                {
+                                                    if (!Regex.IsMatch(oCampos.OBSERVACION, @"^[ ÁÉÍÓÚA-Záéíóúa-z0-9\-\/\.\,]+$")) { throw new Exception("El campo observación no debe tener caracteres especiales."); }
+                                                    else if (oCampos.OBSERVACION.Length > 400) { throw new Exception("El campo Observación no debe exceder los 400 caracteres"); }
+                                                }
+                                                oCampos.RegEstado = 1;
+                                                lstDivisionPredio.Add(oCampos);
+                                            }
+                                            else { throw new Exception(msg); }
+                                        }
+                                        else { throw new Exception(msg); }
+                                    }
+                                }
+                            }
+                            else { throw new Exception("La división interna no debe ser vacía"); }
+
+                        }
+                    }
+                }
+            }
+            else
+            {
+                throw new Exception("Archivo cargado no válido, utilizar la plantilla desde la opción de descarga.");
+            }
+            return lstDivisionPredio;
         }
         public static List<CapaEntidad.DOC.Ent_INFORME> AvistamientoFauna(HttpRequestBase _request)
         {
@@ -1597,6 +1847,73 @@ namespace SIGOFCv3.Areas.Supervision.Models.ManInforme
                 throw new Exception("Archivo cargado no válido, utilizar la plantilla desde la opción de descarga.");
             }
             return lstDesplaza;
+        }
+
+        public static string ValidarCoordenadas(string ceste, string cnorte, string descripcion)
+        {
+            string returns = string.Empty;
+            if (ceste != "")
+            {
+                if (cnorte != "")
+                {
+                    if (ceste.Length > 6) { returns = "Coordenada Este de " + descripcion + " incorrecta no debe ser mayor a 6 dígitos"; }
+                    else
+                    {
+                        if (!Regex.IsMatch(ceste, @"^\d+$")) { returns = "Coordenada Este de " + descripcion + " incorrecta debe ser numérico sin decimales"; }
+                        else
+                        {
+                            if (cnorte.Length > 7) { returns = "Coordenada Norte de " + descripcion + " incorrecta no debe ser mayor a 7 dígitos"; }
+                            else
+                            {
+                                int coord_esteInt = Convert.ToInt32(ceste);
+                                if (!Regex.IsMatch(cnorte, @"^\d+$")) { returns = "Coordenada Norte de " + descripcion + " incorrecta debe ser numérico sin decimales"; }
+                                else
+                                {
+                                    int coord_norteInt = Convert.ToInt32(cnorte);
+                                }
+
+                            }
+                        }
+                    }
+                }
+                else { returns = "Coordenada Norte vacía de " + descripcion; }
+            }else { returns = "Coordenada Este vacía de " + descripcion; }
+
+            return returns;
+        }
+        public static string ValidarAltitud(string altidud, string descripcion)
+        {
+            string returns = string.Empty;
+            if (altidud != "")
+            {
+                if (altidud.Length > 4) { returns = "Altitud de " + descripcion + " incorrecta no debe ser mayor a 4 dígitos"; }
+                {
+                    if (!Regex.IsMatch(altidud, @"^\d+$")) { returns = "Altitud de " + descripcion + " incorrecta debe ser numérico"; }                    
+                }
+            }
+            else { returns = "Altitud vacía de " + descripcion; }
+
+            return returns;
+        }
+        public static string ValidarFourDigitoThreeDecimal(string campo, string valor, string descripcion)
+        {
+            string returns = string.Empty;
+            if (!string.IsNullOrEmpty(valor))
+            {
+                decimal resultado;
+                if (decimal.TryParse(valor, out resultado))
+                {
+                    if (!Regex.IsMatch(valor, @"^\d+(\.\d{1,3})?$")) { returns = "Valor de la columna " + campo + " no puede tener más de 3 decimales en " + descripcion; }
+                    else
+                    {
+                        decimal num = decimal.Parse(valor);
+                        if (num>9999) { returns = "Valor de la columna " + campo + " no puede ser mayor a 4 dígitos enteros o 9999 en " + descripcion; }
+                    }
+                }
+                else { returns = "Valor no permitido (debe ser un número decimal) de la columna: " + campo + " en " + descripcion; }
+            }
+
+            return returns;
         }
     }
 }

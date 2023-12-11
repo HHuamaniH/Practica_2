@@ -184,6 +184,7 @@ namespace SIGOFCv3.Areas.THabilitante.Controllers
                 TempData["listAOCULAR"] = objVM.ListAOCULAR;
                 TempData["listTIOCULAR"] = objVM.ListTIOCULAR;
                 TempData["listTRAPROBACION"] = objVM.ListTRAPROBACION;
+                TempData["listSAPROBACION"] = objVM.ListSAPROBACION;
                 TempData["listRAprueba"] = objVM.ListRAprueba;
                 TempData["ListRApruebaISitu"] = objVM.ListRApruebaISitu;
                 TempData["listBExtPOA"] = objVM.ListBExtPOA;
@@ -1604,6 +1605,29 @@ namespace SIGOFCv3.Areas.THabilitante.Controllers
         public JsonResult GetAllListTRAPROBACION()
         {
             List<Ent_POA> data = (List<Ent_POA>)TempData["listTRAPROBACION"];
+            data = data ?? new List<Ent_POA>();
+            int i = 1;
+            var lstMin = from cust in data
+                         select new
+                         {
+                             NRO = i++,
+                             PERSONA = cust.PERSONA,
+                             N_DOCUMENTO = cust.N_DOCUMENTO,
+                             //CARGO = cust.CARGO,
+                             COD_PTIPO = cust.COD_PTIPO,
+                             TIPO_CARGO = cust.TIPO_CARGO,
+                             COD_PERSONA = cust.COD_PERSONA,
+                             RegEstado = cust.RegEstado
+                         };
+
+            var jsonResult = Json(new { data = lstMin }, JsonRequestBehavior.AllowGet);
+            jsonResult.MaxJsonLength = int.MaxValue;
+            return jsonResult;
+        }
+        [HttpGet]
+        public JsonResult GetAllListSAPROBACION()
+        {
+            List<Ent_POA> data = (List<Ent_POA>)TempData["ListSAPROBACION"];
             data = data ?? new List<Ent_POA>();
             int i = 1;
             var lstMin = from cust in data
