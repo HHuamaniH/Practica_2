@@ -698,13 +698,29 @@ _informe.ObtenerRutaResolucion = function (item) {
     return `${urlLocalSigo}Fiscalizacion/InformeLegal/CreateOrEdit?asCodInfLegal=${item.codILegal}&show_informe=true`;
 }
 
-_informe.DescargarDocumentoSITD = function (item) {
+_informe.DescargarDocumentoSITD = function (obj) {
+    const row = $(obj).closest('tr');
+    const item = $(obj).closest('table').DataTable().row(row).data();
+    if (!item || !item.PDF_DOCUMENTO?.trim()) {
+        utilSigo.toastWarning("No existe URL de descarga de archivo");
+        return;
+    }
+
     const data = JSON.parse(JSON.stringify(item));
     descargarTramite(data); //_finalInstruccion.cshtml
 }
 
-_informe.fnEliminarReferencia = function (item, index) {
-    console.log(item)
+_informe.fnEliminarReferencia = function (obj) {
+    const row = $(obj).closest('tr');
+    const item = $(obj).closest('table').DataTable().row(row).data();
+    if (!item) return;
+
+    if (app.Informe.ESTADO == States.FINALIZADO) {
+        utilSigo.toastWarning("No se puede eliminar el archivo en estado FINALIZADO");
+        return;
+    }
+
+    const index = item.index;
 
     if (item.COD_ILACCION)
         app.Informe.ELIMINAR.push({ codInforme: app.Informe.COD_RESOLUCION, item: item.COD_ILACCION, origen: 'REFERENCIA' });
@@ -1370,18 +1386,19 @@ $(function () {
             Abrir_Notificar: async function (item) {
                 const self = this;
                 modal_notificar.form.Mensaje = 'Por favor revisar el informe para la continuidad del proceso.';
+                modal_notificar.form.CC = '';
 
                 let users = [];
 
                 if (item) users = [item.codPersona];
-                else users = this.Informe.PARTICIPANTES.map(user => user.codPersona);
+                else users = this.Informe.PARTICIPANTES.filter(item => item.flgAplica).map(user => user.codPersona);
 
-                const res = await modal_notificar.ObtenerCorreos(users);
+                const correos = await modal_notificar.ObtenerCorreos(users);
 
                 //Actualizar los participantes despues de notificar
-                modal_notificar.callback = function () {
+                modal_notificar.callback = function (enviado) {
                     const personas = self.Informe.PARTICIPANTES
-                        .filter(item => res.find(x => x.codPersona == item.codPersona));
+                        .filter(item => enviado.find(x => x.codPersona == item.codPersona));
 
                     const participantes = personas.map(item => ({
                         ...item,
@@ -1409,7 +1426,7 @@ $(function () {
                     });
                 }
 
-                modal_notificar.Abrir(res);
+                modal_notificar.Abrir(correos);
             },
             Revisar: function (item, index) {
                 //let self = this;
@@ -1597,7 +1614,7 @@ $(function () {
                     return (isNaN(a.inciso) || isNaN(b.inciso)) ? -1 : (+a.inciso > +b.inciso ? 1 : -1);
                 });
 
-                if (!app.Informe.COD_THABILITANTE) {
+                if (!app.Informe.TITULAR) {
                     const THAB = {
                         COD_THABILITANTE: ILEGAL.COD_THABILITANTE,
                         NUM_CONTRATO: ILEGAL.NUM_CONTRATO,
@@ -1703,7 +1720,6 @@ $(function () {
                             error: function (jqXHR) {
                                 utilSigo.unblockUIGeneral();
                                 utilSigo.toastError("Error", initSigo.MessageError);
-                                console.log(jqXHR.responseText);
                             }
                         },
                         columns: [
@@ -1749,13 +1765,13 @@ $(function () {
                 if (!data) return;
 
                 //Buscamos que no se repita
-                const existe = app.Informe.REFERENCIAS.find(x => x.CODIGO == data.cCodificacion?.trim() && x.TIPO == data.cDescTipoDoc?.trim());
+                const existe = app.Informe.REFERENCIAS.find(x => x.CODIGO == data.cCodificacion?.trim() && x.TIPO_DOCUMENTO == data.cDescTipoDoc?.trim());
                 if (existe) {
                     utilSigo.toastWarning('Alerta', 'El documento ya existe en la lista');
                     return;
                 }
 
-                const oneExp = app.Informe.REFERENCIAS.find(x => x.TIPO?.indexOf('EXPEDIENTE') != -1);
+                const oneExp = app.Informe.REFERENCIAS.find(x => x.TIPO_DOCUMENTO?.indexOf('EXPEDIENTE') != -1);
                 if (oneExp && data.cDescTipoDoc?.trim().indexOf('EXPEDIENTE') != -1) {
                     utilSigo.toastWarning('Alerta', 'Ya existe un EXPEDIENTE en la lista, no se pueden agregar más');
                     return;
@@ -1901,12 +1917,21 @@ $(function () {
 
                     utilSigo.fnAjax(params, function (res) {
                         const correos = res
-                            .filter(item => (item?.CORREO || '').indexOf('@') != -1)
-                            .map(item => ({
-                                codPersona: item.COD_PERSONA,
-                                persona: `${item.NOMBRES} ${item.APE_PATERNO} ${item.APE_MATERNO}`,
-                                email: item.CORREO
-                            }));
+                            .filter(item => (item?.CORREO || '').indexOf('@') !== -1)
+                            .reduce((acc, item) => {
+                                if (!acc.some(obj => obj.email === item.CORREO)) {
+                                    return [
+                                        ...acc,
+                                        {
+                                            codPersona: item.COD_PERSONA,
+                                            persona: `${item.NOMBRES} ${item.APE_PATERNO} ${item.APE_MATERNO}`,
+                                            email: item.CORREO
+                                        }
+                                    ];
+                                }
+
+                                return acc;
+                            }, []);
 
                         resolve(correos);
                     });
@@ -1960,9 +1985,10 @@ $(function () {
                 const self = this;
                 const user = ManRD_AddEdit.userApp;
 
+                const seleccionados = JSON.parse(JSON.stringify(self.form.Seleccionados));
                 const notificacion = {
                     TITULO: 'Resolución Directoral',
-                    DESTINATARIOS: self.form.Seleccionados.map(item => item.email).join(','),
+                    DESTINATARIOS: seleccionados.map(item => item.email).join(','),
                     CC_DESTINATARIOS: self.form.CC,
                     COD_INFORME: app.Informe.NUM_INFORME_SITD,
                     MENSAJE_ENVIO_ALERTA: `${_informe.render(self.form.Mensaje)}<br><br>Atentamente,<br>${user.PERSONA}`,
@@ -1978,7 +2004,7 @@ $(function () {
                 utilSigo.fnAjax(params, function (res) {
                     if (res) {
                         //Para ejecutar cualquier acción despues de enviar un correo
-                        if (typeof self.callback === 'function') self.callback(res);
+                        if (typeof self.callback === 'function') self.callback(seleccionados);
                         utilSigo.toastSuccess('Enviado', res);
                     } else {
                         utilSigo.toastWarning('Atención', 'No se ha encontrado ningún correo asociado al usuario');

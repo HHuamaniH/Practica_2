@@ -2,7 +2,7 @@
     ViewBag.Title = "Informe Digital";
 }
 
-<link href="~/Areas/Fiscalizacion/css/ManPAU/index.css" rel="stylesheet" />
+<link href="~/Areas/Fiscalizacion/css/ManPAU/index.css?v=2" rel="stylesheet" />
 <script src="~/Scripts/vue.min.js"></script>
 <script src="~/Scripts/ckeditor5/ckeditor.js"></script>
 
@@ -23,7 +23,7 @@
 </script>
 <script src="~/Scripts/ckeditor5/config.js?v=1"></script>
 <script src="~/Areas/General/js/Informes/general.js?v=1"></script>
-<script src="~/Areas/General/js/Informes/components.js?v=1"></script>
+<script src="~/Areas/General/js/Informes/components.js?v=2"></script>
 <script src="~/Areas/Fiscalizacion/js/ManPAU/RD.js?noCache=@Guid.NewGuid().ToString()"></script>
 
 <div id="frmInforme" class="card loading">
@@ -187,47 +187,47 @@
                             </span>
                         </template>
                     </div>
-                </div>
-                <div class="table-responsive">
-                    <table class="table table-hover table-bordered" style="margin-bottom: 0 !important;">
+                </div>                                
+                <div class="table-responsive tables-join">
+                    <table class="table table-bordered mb-0">
                         <thead>
-                            <tr role="row">
-                                <th colspan="100%" class="text-sm-left" rowspan="1">
+                            <tr>
+                                <th>
                                     <div class="form-inline">
                                         <i class="fa mx-2 fa-lg fa-file-o" style="cursor:pointer;" onclick="modal_referencias.Abrir();" v-if="Informe.ESTADO != States.FINALIZADO" data-toggle="tooltip" data-placement="top" title="Nuevo"></i>
                                         <strong>Otras referencias / documentos SITD</strong>
                                     </div>
                                 </th>
                             </tr>
-                            <tr>
-                                <th style="width: 30px;" v-if="Informe.ESTADO != States.FINALIZADO"></th>
-                                <th class="text-center" style="width: 30px;">N°</th>
-                                <th class="text-center"></th>
-                                <th class="text-center">CÓDIGO</th>
-                                <th class="text-center">NUM. DOCUMENTO</th>
-                                <th class="text-center">TIPO DOCUMENTO</th>
-                                <th class="text-center">DESCARGAR</th>
-                            </tr>
                         </thead>
-                        <tbody>
-                            <tr v-for="(item, index) in Informe.REFERENCIAS">
-                                <td class="text-center" v-if="Informe.ESTADO != States.FINALIZADO">
-                                    <i class="fa fa-lg fa-window-close" style="color:red;cursor:pointer;" title="Eliminar" v-on:click="_informe.fnEliminarReferencia(item, index)"></i>
-                                </td>
-                                <td class="text-center">{{index + 1}}</td>
-                                <td class="text-center">{{item.SUBTIPO_DETALLE}}</td>
-                                <td class="text-center">{{item.CODIGO}}</td>
-                                <td class="text-center">{{item.NUMERO}}</td>
-                                <td class="text-center">{{item.TIPO_DOCUMENTO}}</td>
-                                <td class="text-center">
-                                    <a href="javascript:void(0);" v-on:click="_informe.DescargarDocumentoSITD(item)" v-if="item.PDF_DOCUMENTO">Descargar</a>
-                                </td>
-                            </tr>
-                            <tr class="odd" v-if="!Informe.REFERENCIAS?.length">
-                                <td valign="top" colspan="100" class="text-center">No existen datos registrados</td>
-                            </tr>
-                        </tbody>
                     </table>
+                    <data-table :data="Informe.REFERENCIAS"
+                                row-tmpl="tmpl-reference"
+                                :options="{
+                                 columns: [
+                                     {data: null, title: '' },
+                                     {data: null, title: 'N°' },
+                                     {data: 'SUBTIPO_DETALLE', title: ''},
+                                     {data: 'CODIGO', title: 'CÓDIGO'},
+                                     {data: 'NUMERO', title: 'NUM. DOCUMENTO'},
+                                     {data: 'TIPO_DOCUMENTO', title: 'TIPO DOCUMENTO'},
+                                     {data: null, title: 'DESCARGA'}
+                                 ]
+                            }">
+                    </data-table>
+                    <script id="tmpl-reference" type="text/x-jquery-tmpl">
+                        <td class="text-center">
+                            <i class="fa fa-lg fa-window-close" style="color:red;cursor:pointer;" title="Eliminar" onclick="_informe.fnEliminarReferencia(this)"></i>
+                        </td>
+                        <td class="text-center">${index + 1}</td>
+                        <td class="text-center">${SUBTIPO_DETALLE}</td>
+                        <td class="text-center">${CODIGO}</td>
+                        <td class="text-center">${NUMERO}</td>
+                        <td class="text-center">${TIPO_DOCUMENTO}</td>
+                        <td class="text-center">
+                            <a href="javascript:void(0);" onclick="_informe.DescargarDocumentoSITD(this)">Descargar</a>
+                        </td>
+                    </script>
                 </div>
             </div>
             <h5>Administrado</h5>
@@ -822,7 +822,7 @@
                             <option value="DOC_GENERADOS">Documentos Internos</option>
                             <option value="DOC_SALIDA_MEM">Documentos de Salida (Memorandums)</option>
                         </select>
-                    </div>                    
+                    </div>
                     <div class="col-md mb-3">
                         <label class="control-label small">&nbsp;</label>
                         <div class="input-group input-group-sm">
