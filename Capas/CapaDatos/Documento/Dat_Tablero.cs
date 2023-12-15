@@ -58,7 +58,7 @@ namespace CapaDatos.DOC
                                 oCampos.DIAS_EVALUACION = (oCampos.INF_EVALUADOS != 0)?oCampos.DIAS_EVALUACION / oCampos.INF_EVALUADOS : 0;
                                 oCampos.DIAS_INSTRUCCION = (oCampos.CON_IFI_EMITIDOS!=0) ?oCampos.DIAS_INSTRUCCION / oCampos.CON_IFI_EMITIDOS:0;
                                 oCampos.DIAS_DECISION = (oCampos.RD_EMITIDOS!=0)?oCampos.DIAS_DECISION / oCampos.RD_EMITIDOS:0;
-                                oCampos.MES_PAU = (oCampos.RD_EMITIDOS_NOTIFICADOS != 0)?oCampos.MES_PAU / oCampos.RD_EMITIDOS_NOTIFICADOS : 0;
+                                //oCampos.MES_PAU = (oCampos.RD_EMITIDOS_NOTIFICADOS != 0)?oCampos.MES_PAU / oCampos.RD_EMITIDOS_NOTIFICADOS : 0;
                                 oCampos.MES_INF_PAU = (oCampos.RD_EMITIDOS_NOTIFICADOS != 0)?oCampos.MES_INF_PAU / oCampos.RD_EMITIDOS_NOTIFICADOS : 0;
 
                             }
