@@ -142,21 +142,23 @@
                     Informe de Supervisión N° ${NRO_REFERENCIA}, de fecha ${INF_FECHA} (en adelante, el Informe de Supervisión)
                 </td>
                 <td style="border: 1px solid #000;">
-                    <u>Titular:</u> ${TITULAR_SUPERVISADO} identificado con {{if RUC_TITULAR}}RUC ${RUC_TITULAR}{{else DOCUMENTO_RLEGAL}}DNI ${DOCUMENTO_RLEGAL}{{/if}} (en adelante, el/la titular)<br />
-                    <u>Código de TH:</u> ${NUM_THABILITANTE}, suscrito el xx de xx del xx (en adelante, el contrato de concesión/el permiso forestal)<br />
-                    <u>Plan de Manejo supervisado:</u> PO ${PLAN_MANEJO.NOMBRE_POA}, periodo ${PLAN_MANEJO.INICIO_VIGENCIA}, aprobado mediante Resolución N° ${PLAN_MANEJO.ARESOLUCION_NUM}, de fecha ${PLAN_MANEJO.ARESOLUCION_FECHA}<br />
-                    <u>Fecha de supervisión:</u> ${INF_FECHA}
+                    <u>Titular:</u> ${TITULAR || '(indicar texto)'} identificado con ${TITULAR_DOCUMENTO? 'D.N.I.': 'RUC'} N° ${TITULAR_DOCUMENTO || TITULAR_RUC} (en adelante, el/la titular)<br />
+                    <u>Código de TH:</u> ${NUM_CONTRATO || '(indicar texto)'}, suscrito el xx de xx del xx (en adelante, el contrato de ${TIPO_CONTRATO})<br />
+                    <u>Plan de Manejo supervisado:</u> PO ${PLAN_MANEJO.NOMBRE_POA || 'XXX'}, periodo ${PLAN_MANEJO.INICIO_VIGENCIA || 'XXX'}, aprobado mediante Resolución N° ${PLAN_MANEJO.ARESOLUCION_NUM || 'XXX'}, de fecha ${PLAN_MANEJO.ARESOLUCION_FECHA || 'XXX'}<br />
+                    <u>Fecha de supervisión:</u> ${ANTECEDENTES_DOCS.Inf_Sup.FECHA_SUPERVISION_INICIO_TEXTO || 'XXX'} al ${ANTECEDENTES_DOCS.Inf_Sup.FECHA_SUPERVISION_FIN_TEXTO || 'XXX'}
                 </td>
             </tr>
             <tr>
                 <td style="border: 1px solid #000;">2</td>
-                <td style="border: 1px solid #000;">Resolución Sub Directoral N° 000XX-20XX-OSINFOR/08.2.1, de fecha XX de XXXX de 202X</td>
+                <td style="border: 1px solid #000;">Resolución Sub Directoral N° ${ANTECEDENTES_DOCS.RSD.numero}, de fecha ${ANTECEDENTES_DOCS.RSD.fechaEmisionTexto || 'XX de XXXXX de XXXX'}.</td>
                 <td style="border: 1px solid #000;">
-                    Se inició el PAU <strong>por haber incurrido presuntamente en lo siguiente:</strong>
-                    <ul style="list-style: lower-roman; margin-left: 35px;">
+                    <p>Se inició el PAU <strong>por haber incurrido presuntamente en lo siguiente:</strong></p>
+                    <ul style="list-style-type: lower-roman; margin-left: 45px;">
+                        {{each(index, inf) INFRACCIONES}}
                         <li>
-                            <i>“Se vinculará con las imputaciones expuestas en la RSD de inicio de PAU y RSD de ampliación”</i>
+                            <i>${inf.detalle || '[Indique la conducta imputada]'}</i>
                         </li>
+                        {{/each}}
                     </ul>
                 </td>
             </tr>
@@ -174,13 +176,13 @@
             </tr>
             <tr>
                 <td style="border: 1px solid #000;">4</td>
-                <td style="border: 1px solid #000;">Documentos presentados posterior a la notificación de la Resolución Sub Directoral N° 000XX-202X-OSINFOR/08.2.1.</td>
+                <td style="border: 1px solid #000;">Documentos presentados posterior a la notificación de la Resolución Sub Directoral N° ${ANTECEDENTES_DOCS.RSD.numero || 'XXXX'}</td>
                 <td style="border: 1px solid #000;">
                     {{if COD_TIPO_INFORME == 1}}
                     De la revisión del Sistema de Trámite Documentario SITD-OSINFOR, se verifica que el/la administrado (a) presentó descargo mediante los siguientes documentos:
-                    <ul style="list-style: lower-roman; margin-left: 35px;">
+                    <ul style="list-style: lower-roman; margin-left: 45px;">
                         <li>
-                            Escrito xxxxx SITD N° xxxxx de fecha xx de xxx de xxxx
+                            Escrito ${ANTECEDENTES_DOCS.Escrito.numero || 'XXXX'} SITD N° xxxxx de fecha ${ANTECEDENTES_DOCS.Escrito.fechaEmisionTexto || 'XX de XXXXX de XXXX'}
                         </li>
                     </ul>
                     {{else}}
@@ -193,10 +195,10 @@
             </tr>
             <tr>
                 <td style="border: 1px solid #000;">5</td>
-                <td style="border: 1px solid #000;">Informe Final de Instrucción N° 000XX-2023-OSINFOR/08.2.1, de fecha XX de XXX de 202X.</td>
+                <td style="border: 1px solid #000;">Informe Final de Instrucción N° ${ANTECEDENTES_DOCS.ILEGAL.numero || 'XXXX'}, de fecha ${ANTECEDENTES_DOCS.ILEGAL.fechaEmisionTexto || 'XX de XXXXX de XXXX'}.</td>
                 <td style="border: 1px solid #000;">
                     <strong>Recomienda:</strong>
-                    <ul style="list-style: lower-roman; margin-left: 35px; ">
+                    <ul style="list-style: lower-roman; margin-left: 45px; ">
                         <li>
                             “Se vinculará con las recomendaciones del IFI”
                         </li>
@@ -221,7 +223,7 @@
                 <td style="border: 1px solid #000;">
                     {{if COD_TIPO_INFORME == 1}}
                     De la revisión del Sistema de Trámite Documentario SITD-OSINFOR, se verifica que el/la administrado (a) presentó descargo mediante los siguientes documentos:
-                    <ul style="list-style: lower-roman; margin-left: 35px;">
+                    <ul style="list-style: lower-roman; margin-left: 45px;">
                         <li>
                             Escrito xxxxx SITD N° xxxxx de fecha xx de xxx de xxxx
                         </li>
@@ -295,7 +297,7 @@
 
 <script id="tmpl-responsable-solidario" type="text/x-jquery-tmpl">
     <p class="enumeration">
-        Mediante la Resolución Subdirectoral N° 000xx-2023-OSINFOR/08.2.1, de fecha xx de enero de 2023, se incluyó en el PAU a la empresa xxxxxxxxxxxxx. como presunta responsable solidaria, respecto a la comisión de las infracciones tipificadas en los numerales 10, 11, 21 y 26 del Cuadro de Infracciones y Sanciones en Materia Forestal del Anexo 1 del RISMFFS.
+        Mediante la Resolución Subdirectoral N° ${ANTECEDENTES_DOCS.RSD.numero || 'XXXX'}, de fecha ${ANTECEDENTES_DOCS.RSD.fechaEmisionTexto || 'XX de XXXXX de XXXX'}, se incluyó en el PAU a la empresa xxxxxxxxxxxxx. como presunta responsable solidaria, respecto a la comisión de las infracciones tipificadas en los numerales 10, 11, 21 y 26 del Cuadro de Infracciones y Sanciones en Materia Forestal del Anexo 1 del RISMFFS.
     </p>
     <p class="enumeration">
         Sobre el particular, de la revisión del Contrato de Compra Venta de fecha x x de enero de 2021, se advierte que el mismo fue suscrito por la administrada y las empresas Inversiones xxxxxxxxxxxxxxx., identificada con RUC N° xxxxxxxxxxxxxxxxxx, representada por xxxxxxxxxxxxxxxx, e “xxxxxxxxxxxxxxx SAC”, identificada con RUC N° xxxxxxxxxxxxxxxxx, representada por el señor xxxxxxxxxxxxx, conforme se observa en el siguiente extracto del mencionado contrato:

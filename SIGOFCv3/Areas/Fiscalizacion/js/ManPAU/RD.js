@@ -406,7 +406,7 @@ _informe.RegResumenInfSupervision = function (COD_INFORME_SUPERVISION) {
 }
 
 _informe.ExtraerAntecedentes = function (COD_RESOLUCION) {
-    const COD_THABILITANTE = app.Informe.COD_THABILITANTE;
+    //const COD_THABILITANTE = app.Informe.COD_THABILITANTE;
 
     const params = {
         type: 'get',
@@ -513,7 +513,7 @@ _informe.Guardar = function (parametros) {
             app.Informe.PARTICIPANTES = objEN.PARTICIPANTES;
             app.Informe.DOCUMENTOS = objEN.DOCUMENTOS;
             app.Informe.ILEGAL = objEN.ILEGAL;
-            app.Informe.INFRACCIONES = _informe.CombinarInfracciones(objEN.INFRACCIONES, []);
+            app.Informe.INFRACCIONES = _informe.CombinarInfracciones(objEN.INFRACCIONES);
             app.Informe.ANTECEDENTES = objEN.ANTECEDENTES;
             app.Informe.ELIMINAR = [];
 
@@ -563,6 +563,7 @@ _informe.Estructura = function () {
 
     objEN.INFRACCIONES.forEach(function (x, i) {
         if (x.estado === null) x.estado = 1;
+        x.detalle = x.detalle?.trim();
     });
 
     objEN.ILEGAL.forEach(function (x, i) {
@@ -831,7 +832,7 @@ _informe.SITD_OPEN = function () {
 
             modal_sitd.form.trabajadorId = datos.trabajadorId;
             //modal_sitd.form.perfilId = datos.perfilId;
-            modal_sitd.form.cCodTipoDoc = datos.cCodTipoDoc || "2106"; //(res.tipoDocumento[0] || {}).Value;
+            modal_sitd.form.cCodTipoDoc = datos.cCodTipoDoc || "25";
             modal_sitd.form.fechaRegistro = fnDate.text(datos.fechaRegistro || new Date());
             modal_sitd.form.cAsunto = datos.cAsunto || app.Informe.ASUNTO;
             modal_sitd.form.cObservaciones = datos.cObservaciones;
@@ -1039,6 +1040,76 @@ _informe.Agregar_Integrante = function () {
     modal_integrante.Abrir();
 }
 
+_informe.Agregar_Imputaciones = function () {
+    utilSigo.dialogConfirm("", 'Para agregar imputaciones lo dirigiremos a la sección de "Infracciones imputadas Según Ley" en la pestaña de "Recomendaciones". Guarde los datos antes continuar.', function (r) {
+        if (r) {
+            $('#idnavRecomTermPAu > a').click();
+
+            setTimeout(function () {
+                $("#frmInfracciones").get(0).scrollIntoView();
+            }, 500);
+        }
+    });
+}
+
+/*_informe.Establecer_Infracciones_Form = function () {
+    let model = {
+        COD_ILEGAL_ARTICULOS: null,
+        COD_ILEGAL_ENCISOS: null,
+        DESCRIPCION_ARTICULOS: null,
+        DESCRIPCION_ENCISOS: null,
+        COD_ESPECIES: null,
+        DESCRIPCION_ESPECIE: null,
+        VOLUMEN: null,
+        AREA: null,
+        NUMERO_INDIVIDUOS: null,
+        DESCRIPCION_INFRACCIONES: null,
+        COD_SECUENCIAL: null,
+        NUM_POA: null,
+        POA: null,
+        PCA: null,
+        TIPOMADERABLE: null,
+        RegEstado: null
+    }
+}*/
+
+_informe.Obtener_Infracciones_Form = function () {
+    return _renderInfracciones.dtRenderListInforme.data().toArray().reduce((acc, item) => {
+        if (!acc.some(x => x.codInciso == item.COD_ILEGAL_ENCISOS)) {
+            return [
+                ...acc,
+                {
+                    accion: 0,
+                    area: item.AREA,
+                    codEspecie: item.COD_ESPECIES,
+                    codILegal: null,
+                    codInciso: item.COD_ILEGAL_ENCISOS,
+                    codInformeDigital: app.Informe.COD_INFORME_DIGITAL,
+                    codResolucion: $('#hdfCodResodirec').val(),
+                    detalle: item.DESCRIPCION,
+                    especie: item.DESCRIPCION_ESPECIE,
+                    estado: 1,
+                    flgSeleccionado: true,
+                    gravedad: item.GRAVEDAD,
+                    inciso: item.DESCRIPCION_ENCISOS,
+                    item: 9,
+                    nroIndividuos: item.NUMERO_INDIVIDUOS,
+                    numPOA: item.NUM_POA,
+                    parrafos: null,
+                    rangoSancion: null,
+                    tipoInfraccion: item.TIPO,
+                    tipoMaderable: item.TIPOMADERABLE,
+                    titulo: item.TITULO,
+                    volumen: item.VOLUMEN
+                }
+            ];
+        }
+
+        return acc;
+
+    }, []);
+}
+
 $(function () {
     app = new Vue({
         el: '#frmInforme',
@@ -1132,6 +1203,9 @@ $(function () {
                     DOCUMENTOS: [],
                 };
 
+                const infracciones = _informe.Obtener_Infracciones_Form();                
+                values.INFRACCIONES = infracciones;
+
                 self.Informe = { ...self.Informe, ...values };
 
                 self.MateriaOnChange();
@@ -1173,7 +1247,7 @@ $(function () {
                                 x.flgAplica = !!x.estado;
                             });
 
-                            res.informe.INFRACCIONES = _informe.CombinarInfracciones(res.informe.INFRACCIONES);
+                            res.informe.INFRACCIONES = _informe.CombinarInfracciones([...res.informe.INFRACCIONES, ...app.Informe.INFRACCIONES]);
 
                             self.Informe = { ...self.Informe, ...res.informe };
                             self.MateriaOnChange();
@@ -1591,7 +1665,8 @@ $(function () {
                     return;
                 }
 
-                let infracciones = app.Informe.INFRACCIONES;
+                //Las infracciones se van a obtener de la tabla de recomendaciones
+                /*let infracciones = app.Informe.INFRACCIONES;
 
                 for (const infraccion of ILEGAL.INFRACCIONES) {
                     if (!infracciones.find(x => x.inciso == infraccion.inciso)) {
@@ -1612,7 +1687,7 @@ $(function () {
                 //Ordenamos los incisos
                 infracciones = infracciones.sort((a, b) => {
                     return (isNaN(a.inciso) || isNaN(b.inciso)) ? -1 : (+a.inciso > +b.inciso ? 1 : -1);
-                });
+                });*/
 
                 if (!app.Informe.TITULAR) {
                     const THAB = {
@@ -1649,11 +1724,10 @@ $(function () {
                 };
 
                 app.Informe.ILEGAL.push(INFORME);
-                app.Informe.INFRACCIONES = infracciones;
+                //app.Informe.INFRACCIONES = infracciones;
 
-                //Antecedentes
-                console.log(item, "Falta extraer antecedentes por codigo de informe legal");
-                /*const ANTECEDENTES = await _informe.ExtraerAntecedentes(item.COD_ILEGAL);
+                //Antecedentes                
+                const ANTECEDENTES = await _informe.ExtraerAntecedentes(item.COD_ILEGAL);
 
                 ANTECEDENTES.forEach(a => {
                     a.codILegal = item.COD_ILEGAL;
@@ -1665,7 +1739,8 @@ $(function () {
                 app.Informe.ANTECEDENTES = ANTECEDENTES;
 
                 //Archivos relacionados
-                let files = await app.ObtenerArchivos(item.COD_ILEGAL);
+                console.log(item, "Validar la extracción de archivos...");
+                /*let files = await app.ObtenerArchivos(item.COD_ILEGAL);
 
                 //console.log("LOAD FILES SIADO...", files);
                 files = files.filter(function (file) {

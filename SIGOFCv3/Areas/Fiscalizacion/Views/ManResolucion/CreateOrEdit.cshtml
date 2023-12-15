@@ -121,6 +121,10 @@
                                 {
                                     @Html.Partial("~/Areas/Fiscalizacion/Views/ManPAU/_InformeResSubDir.cshtml")
                                 }
+                                else
+                                {
+                                    <p class="py-4 text-center">Para iniciar la creación de la resolución digital, grabe el registro primero</p>
+                                }
                             </div>
                             <div class="tab-pane fade" id="navEstado" role="tabpanel" aria-labelledby="nav-home-tab">
                                 @{ Html.RenderAction("_ControlCalidad", "Controles", new { area = "GENERAL", dto = Model.vmControlCalidad }); }

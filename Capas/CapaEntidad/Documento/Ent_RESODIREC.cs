@@ -155,6 +155,8 @@ namespace CapaEntidad.DOC
         public int NUMERO_INDIVIDUOS { get; set; }
         [Description("DESCRIPCION_INFRACCIONES")]
         public string DESCRIPCION_INFRACCIONES { get; set; }
+        [Description("GRAVEDAD")]
+        public string GRAVEDAD { get; set; }
         [Description("COD_SECUENCIAL")]
         public int COD_SECUENCIAL { get; set; }
 

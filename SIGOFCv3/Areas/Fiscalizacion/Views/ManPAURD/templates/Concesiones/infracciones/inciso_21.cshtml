@@ -21,7 +21,7 @@
                 Extracción injustificada de un volumen de XX m3 de madera correspondiente a la especie XX”
             </td>
             <td style="border: 1px solid #000; text-align: center;">
-                Escrito xxxxxxx SITD xxxxxxxxx
+                Escrito ${informe.ANTECEDENTES_DOCS.Escrito.numero || '00XX-202X-OSINFOR/08.2.X'} SITD xxxxxxxxx
             </td>
             <td style="border: 1px solid #000; text-align: center;">
                 Dependerá del caso concreto
@@ -33,7 +33,7 @@
 
 {{if informe.COD_TIPO_INFORME == 1}}
 <p class="enumeration">
-    Al respecto, el/la administrada (o) presentó sus descargos contra la Resolución Sub Directoral mediante la Carta N° xxxxxxxxxx de fecha xx de xxxxx de 2023, ingresado con fecha xx de xxxx de 2023 (Registro N° xxxxxxxx) del cual se advierte los siguientes argumentos que guardan relación con la imputación materia de análisis:
+    Al respecto, el/la administrada (o) presentó sus descargos contra la Resolución Sub Directoral mediante la Carta N° ${informe.ANTECEDENTES_DOCS.Carta.numero || '00XX-202X-OSINFOR/08.2.X'} de fecha xx de ${informe.ANTECEDENTES_DOCS.Carta.fechaNotificacionTexto || 'xx de xxxxx de 202X'}, ingresado con fecha ${informe.ANTECEDENTES_DOCS.Carta.fechaEmisionTexto || 'xx de xxxxx de 202X'} (Registro N° xxxxxxxx) del cual se advierte los siguientes argumentos que guardan relación con la imputación materia de análisis:
 </p>
 <ol style="list-style-type: lower-alpha">
     <li>(…) XXXXXXXXXXXXXXXXXXXXX (…). (Texto original del descargo).</li>
@@ -49,7 +49,7 @@
     </li>
 </ul>
 <p class="enumeration">
-    Al respecto, mediante escrito N° xxx con SITD N° xxxxxxx de fecha xx de xxxx de xxxx, el/la administrado (a) presentó su descargo al Informe Final de Instrucción, señalando lo siguiente:
+    Al respecto, mediante escrito N° ${informe.ANTECEDENTES_DOCS.Escrito.numero || '00XX-202X-OSINFOR/08.2.X'} con SITD N° xxxxxxx de fecha ${informe.ANTECEDENTES_DOCS.Escrito.fechaNotificacionTexto || 'xx de xxxxx de 202X'}, el/la administrado (a) presentó su descargo al Informe Final de Instrucción, señalando lo siguiente:
 </p>
 <ol style="list-style-type: lower-alpha">
     <li>(…) XXXXXXXXXXXXXXXXXXXXX (…). (Texto original del descargo).</li>

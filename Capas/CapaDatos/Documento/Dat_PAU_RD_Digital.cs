@@ -362,6 +362,7 @@ namespace CapaDatos.DOC
                 using (OracleConnection cn = new OracleConnection(BDConexion.Conexion_Cadena_SIGO()))
                 {
                     cn.Open();
+                    
                     using (OracleDataReader dr = dBOracle.SelDrdDefault(cn, "DOC_OSINFOR_ERP_MIGRACION.SPFISCALIZACION_RESDIR_DIGITAL_ANTECEDENTES", COD_RESOLUCION))
                     {
                         if (dr != null)
@@ -482,7 +483,7 @@ namespace CapaDatos.DOC
                 try
                 {
                     object[] param = { codInforme, numeroInforme, fechaOperacion };
-                    dBOracle.ManExecute(cn, null, "DOC_OSINFOR_ERP_MIGRACION.SPFISCALIZACION_RESDIR_DIGITAL_INFORME_NUMERO_GUARDAR", param);
+                    dBOracle.ManExecute(cn, null, "DOC_OSINFOR_ERP_MIGRACION.SPFISCALIZACION_RESDIR_DIGITAL_NUMERO_GUARDAR", param);
 
                 }
                 catch (Exception ex)
