@@ -206,11 +206,11 @@ _informe.EnumerarListas = function (html) {
     return $html.html();
 }
 
-_informe.EnumerarParrafos = function (html) {
+_informe.EnumerarParrafos = function (html, MARGIN_LEFT_OL) {
     var $html = $('<div />', { html: html });
     $html.find('.enumeration').each((index, el) => {
         const html = $(el).html();
-        $(el).html(`<ol style="margin-left: 0;" start="${index + 1}"><li>${html}</li></ol>`);
+        $(el).html(`<ol style="margin-left: ${MARGIN_LEFT_OL};" start="${index + 1}"><li>${html}</li></ol>`);
     });
 
     return $html.html();
@@ -261,7 +261,7 @@ _informe.Exportar = async function () {
     informe.DENOMINACION_TITULAR = informe.COD_MODALIDAD == '01' ? 'concesionario' : 'administrado';
 
     //Configuracion de márgenes
-    informe.MARGIN_LEFT = { ROOT: '0', H: '0', OL: '0' };
+    informe.MARGIN_LEFT = { ROOT: '30px', OL: '30px', LEVEL_3: '50px' };
 
     //EXPEDIENTES ADMINISTRATIVOS
     informe.EXPEDIENTE_ADM = informe.REFERENCIAS.filter(x => x.TIPO_DOCUMENTO?.indexOf('EXPEDIENTE') != -1).map(x => (x.NUMERO || x.CODIGO || 'S/N')).join(', ');
@@ -388,7 +388,7 @@ _informe.Exportar = async function () {
 
     //Enumeracion
     html = _informe.EnumerarCuadros(html);
-    html = _informe.EnumerarParrafos(html);
+    html = _informe.EnumerarParrafos(html, informe.MARGIN_LEFT.OL);
 
     $(document).googoose({ html, header });
 }

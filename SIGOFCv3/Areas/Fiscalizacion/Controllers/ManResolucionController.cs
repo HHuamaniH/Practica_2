@@ -128,6 +128,11 @@ namespace SIGOFCv3.Areas.Fiscalizacion.Controllers
         {
             try
             {
+                if(!string.IsNullOrEmpty(asCodRD) && !asCodRD.All(char.IsDigit))
+                {
+                    throw new Exception("Código de resolución incorrecto");
+                }
+                
                 ViewBag.Usuario = ModelSession.GetSession()?.FirstOrDefault();
 
                 vmRD = logRD.initRD(asCodRD, asCodTipoIL);
@@ -142,7 +147,7 @@ namespace SIGOFCv3.Areas.Fiscalizacion.Controllers
             }
             catch (Exception ex)
             {
-                return Json(new { success = false, msj = ex.Message, data = "" });
+                return Json(new { success = false, msj = ex.Message, data = "" }, JsonRequestBehavior.AllowGet);
                 //return RedirectToAction("ErrorC", "Index");
             }
         }

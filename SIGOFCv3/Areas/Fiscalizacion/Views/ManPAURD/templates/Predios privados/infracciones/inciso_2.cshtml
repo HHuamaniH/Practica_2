@@ -35,7 +35,7 @@
 <p class="enumeration">
     Al respecto, el/la administrada (o) presentó sus descargos contra la Resolución Sub Directoral mediante la Carta N° ${informe.ANTECEDENTES_DOCS.Carta.numero || '00XX-202X-OSINFOR/08.2.X'} de fecha ${informe.ANTECEDENTES_DOCS.Carta.fechaNotificacionTexto || 'xx de xxxxx de 202X'}, ingresado con fecha ${informe.ANTECEDENTES_DOCS.Carta.fechaEmisionTexto || 'xx de xxxxx de 202X'} (Registro N° xxxxxxxx) del cual se advierte los siguientes argumentos que guardan relación con la imputación materia de análisis:
 </p>
-<ol style="list-style-type: lower-alpha">
+<ol style="list-style-type: lower-alpha; margin-left: ${informe.MARGIN_LEFT.LEVEL_3};">
     <li>(…) XXXXXXXXXXXXXXXXXXXXX (…). (Texto original del descargo).</li>
     <li>(…) XXXXXXXXXXXXXXXXXXXXX (…). (Texto original del descargo).</li>
     <li>(…) XXXXXXXXXXXXXXXXXXXXX (…). (Texto original del descargo).</li>
@@ -43,7 +43,7 @@
 <p class="enumeration">
     En ese sentido, la Autoridad Instructora realizó el análisis correspondiente al Expediente Administrativo, así como de los documentos mencionados precedentemente, concluyendo lo siguiente:
 </p>
-<ul>
+<ul style="margin-left: ${informe.MARGIN_LEFT.LEVEL_3};">
     <li>
         “(…)xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx (…)”.
     </li>
@@ -123,13 +123,13 @@
 <p class="enumeration">
     Al respecto, mediante escrito N° ${informe.ANTECEDENTES_DOCS.Escrito.numero || '00XX-202X-OSINFOR/08.2.X'} con SITD N° xxxxxxx de fecha ${informe.ANTECEDENTES_DOCS.Escrito.fechaNotificacionTexto || 'xx de xxxxx de 202X'}, el/la administrado (a) presentó su descargo al Informe Final de Instrucción, señalando lo siguiente:
 </p>
-<ol style="list-style-type: lower-alpha">
+<ol style="list-style-type: lower-alpha; margin-left: ${informe.MARGIN_LEFT.LEVEL_3};">
     <li>(…) XXXXXXXXXXXXXXXXXXXXX (…). (Texto original del descargo).</li>
     <li>(…) XXXXXXXXXXXXXXXXXXXXX (…). (Texto original del descargo).</li>
     <li>(…) XXXXXXXXXXXXXXXXXXXXX (…). (Texto original del descargo).</li>
 </ol>
 <p class="enumeration">Respecto a lo señalado por el/la administrado (a); se advierte el siguiente análisis:</p>
-<ul>
+<ul style="margin-left: ${informe.MARGIN_LEFT.LEVEL_3};">
     <li>Con relación al argumento señalado en el acápite a) xxxxxxxxxxxxxxxxxxx</li>
     <li>Con relación al argumento señalado en el acápite b) xxxxxxxxxxxxxxxxxxx</li>
     <li>Con relación al argumento señalado en el acápite c) xxxxxxxxxxxxxxxxxxx</li>
@@ -139,7 +139,7 @@
     En esta etapa del procedimiento, de acuerdo a la documentación que obra en el expediente administrativo, se advierte lo siguiente:
 </p>
 {{if informe.COD_TIPO_INFORME == 1}}
-<ul>
+<ul style="margin-left: ${informe.MARGIN_LEFT.LEVEL_3};">
     <li>
         El PMFI/PO N° xx – PC xx fue aprobado con fecha xx de xxxx de xxxx, con una vigencia hasta el xx de diciembre de xxx
         <a style="mso-footnote-id: foot_infraccion_2_1" href="#_foot_infraccion_2_1" title="">
@@ -160,7 +160,7 @@
 <p style="text-align: center;"><strong>Consignar imagen<br />Fuente: SITD N° xxxxxxxxxx</strong></p>
 {{/if}}
 
-<ul>
+<ul style="margin-left: ${informe.MARGIN_LEFT.LEVEL_3};">
     <li>
         Siendo ello así, de acuerdo al cargo de presentación ante la ARFFS adjunto a los descargos contra el Informe Final de Instrucción (Registro N° xxxxxxx), se concluye que el/la administrada (o) presentó el informe de ejecución anual/final del PMFI/PO N° xx – PC xx, dentro del plazo legal establecido en el RGF, acreditando de este modo el cumplimiento de la obligación establecida en el literal b) del numeral 43.1 del artículo 43 concordante con el artículo 66 del RGF.
     </li>

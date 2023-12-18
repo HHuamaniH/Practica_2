@@ -35,7 +35,7 @@
 <p class="enumeration">
     Al respecto, el/la administrada (o) presentó sus descargos contra la Resolución Sub Directoral mediante la Carta N° ${informe.ANTECEDENTES_DOCS.Carta.numero || '00XX-202X-OSINFOR/08.2.X'} de fecha ${informe.ANTECEDENTES_DOCS.Carta.fechaNotificacionTexto || 'xx de xxxxx de 202X'}, ingresado con fecha ${informe.ANTECEDENTES_DOCS.Carta.fechaEmisionTexto || 'xx de xxxxx de 202X'} (Registro N° xxxxxxxx) del cual se advierte los siguientes argumentos que guardan relación con la imputación materia de análisis:
 </p>
-<ol style="list-style-type: lower-alpha">
+<ol style="list-style-type: lower-alpha; margin-left: ${informe.MARGIN_LEFT.LEVEL_3};">
     <li>(…) XXXXXXXXXXXXXXXXXXXXX (…). (Texto original del descargo).</li>
     <li>(…) XXXXXXXXXXXXXXXXXXXXX (…). (Texto original del descargo).</li>
     <li>(…) XXXXXXXXXXXXXXXXXXXXX (…). (Texto original del descargo).</li>
@@ -43,7 +43,7 @@
 <p class="enumeration">
     En ese sentido, la Autoridad Instructora realizó el análisis correspondiente al Expediente Administrativo, así como de los documentos mencionados precedentemente, concluyendo lo siguiente:
 </p>
-<ul>
+<ul style="margin-left: ${informe.MARGIN_LEFT.LEVEL_3};">
     <li>
         “(…)xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx (…)”.
     </li>
@@ -51,13 +51,13 @@
 <p class="enumeration">
     Al respecto, mediante escrito N° ${informe.ANTECEDENTES_DOCS.Escrito.numero || '00XX-202X-OSINFOR/08.2.X'} con SITD N° xxxxxxx de fecha ${informe.ANTECEDENTES_DOCS.Carta.fechaEmisionTexto || 'xx de xxxxx de 202X'}, el/la administrado (a) presentó su descargo al Informe Final de Instrucción, señalando lo siguiente:
 </p>
-<ol style="list-style-type: lower-alpha">
+<ol style="list-style-type: lower-alpha; margin-left: ${informe.MARGIN_LEFT.LEVEL_3};">
     <li>(…) XXXXXXXXXXXXXXXXXXXXX (…). (Texto original del descargo).</li>
     <li>(…) XXXXXXXXXXXXXXXXXXXXX (…). (Texto original del descargo).</li>
     <li>(…) XXXXXXXXXXXXXXXXXXXXX (…). (Texto original del descargo).</li>
 </ol>
 <p class="enumeration">Respecto a lo señalado por el/la administrado (a); se advierte el siguiente análisis:</p>
-<ul>
+<ul style="margin-left: ${informe.MARGIN_LEFT.LEVEL_3};">
     <li>Con relación al argumento señalado en el acápite a) xxxxxxxxxxxxxxxxxxx</li>
     <li>Con relación al argumento señalado en el acápite b) xxxxxxxxxxxxxxxxxxx</li>
     <li>Con relación al argumento señalado en el acápite c) xxxxxxxxxxxxxxxxxxx</li>
@@ -77,7 +77,7 @@
 </p>
 {{/if}}
 
-<ul>
+<ul style="margin-left: ${informe.MARGIN_LEFT.LEVEL_3};">
     <li>
         El/la administrado (a) realizó el aprovechamiento de xxxx m<sup>3</sup> de la especie xxxxxx de madera no autorizada que proviene de un árbol semillero, conforme se detalla en el cuadro siguiente
         <a style="mso-footnote-id: foot_infraccion_10_1" href="#_foot_infraccion_10_1" title="">
@@ -125,7 +125,7 @@
 </table>
 <div style="font-size: 8pt;">Fuente: Elaboración propia en base al Informe de Supervisión ${informe.ANTECEDENTES_DOCS.Inf_Sup.numero || '00XX-202X-OSINFOR/08.2.X'}N° xxxx-202X-OSINFOR/08.1.2.</div>
 
-<ul>
+<ul style="margin-left: ${informe.MARGIN_LEFT.LEVEL_3};">
     <li>
         El aprovechamiento xxxx m<sup>3</sup> de la especie xxxxx, significa el incumplimiento del plan de manejo, documento que el/la propio (a) administrado (a) presentó ante la ARFFS y fue aprobado. En efecto, en el referido plan de manejo, el/la administrado (a) declaró aquellos árboles que serían aprovechados, entre los que no se encuentra el consignado en el cuadro que precede.
     </li>
