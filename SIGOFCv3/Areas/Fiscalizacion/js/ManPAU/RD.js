@@ -576,6 +576,10 @@ _informe.Estructura = function () {
         x.fechaNotificacionTexto = x.fechaNotificacion ? fnDate.text_long(x.fechaNotificacion) : '';
     });
 
+    Object.keys(objEN).forEach(key => {
+        if (!objEN[key]) objEN[key] = '';
+    })
+
     let parametros = {
         ...objEN,
         ELIMINAR: objEN.ELIMINAR
