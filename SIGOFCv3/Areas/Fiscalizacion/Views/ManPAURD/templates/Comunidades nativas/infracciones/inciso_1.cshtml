@@ -24,7 +24,7 @@
                 No establecer linderos, hitos u otras señales en los vértices V2 (PC 01), V4 (PC 02) y V3 (PC 03)
             </td>
             <td style="border: 1px solid #000; text-align: center;">
-                Escrito xxxxxxx SITD xxxxxxxxx
+                Escrito ${informe.ANTECEDENTES_DOCS.Escrito.numero || '00XX-202X-OSINFOR/08.2.X'} SITD xxxxxxxxx
             </td>
             <td style="border: 1px solid #000; text-align: center;">
                 Dependerá del caso concreto
@@ -36,7 +36,7 @@
 
 {{if informe.COD_TIPO_INFORME == 1}}
 <p class="enumeration">
-    Al respecto, el/la administrada (o) presentó sus descargos contra la Resolución Sub Directoral mediante la Carta N° xxxxxxxxxx de fecha xx de xxxxx de 202X, ingresado con fecha xx de xxxx de 202X (Registro N° xxxxxxxx) del cual se advierte los siguientes argumentos que guardan relación con la imputación materia de análisis:
+    Al respecto, el/la administrada (o) presentó sus descargos contra la Resolución Sub Directoral mediante la Carta N° ${informe.ANTECEDENTES_DOCS.Carta.numero || '00XX-202X-OSINFOR/08.2.X'} de fecha ${informe.ANTECEDENTES_DOCS.Carta.fechaNotificacionTexto || 'xx de xxxxx de 202X'}, ingresado con fecha ${informe.ANTECEDENTES_DOCS.Carta.fechaEmisionTexto || 'xx de xxxxx de 202X'} (Registro N° xxxxxxxx) del cual se advierte los siguientes argumentos que guardan relación con la imputación materia de análisis:
 </p>
 <ol style="list-style-type: lower-alpha">
     <li>(…) XXXXXXXXXXXXXXXXXXXXX (…). (Texto original del descargo).</li>
@@ -52,7 +52,7 @@
     </li>
 </ul>
 <p class="enumeration">
-    Mediante Escrito S/N de fecha XX de XX de 20XX con Registro XX, el/la administrado presentó sus descargos al informe final de instrucción, donde se advierte los siguientes argumentos:
+    Mediante Escrito ${informe.ANTECEDENTES_DOCS.Escrito.numero || '00XX-202X-OSINFOR/08.2.X'} de fecha ${informe.ANTECEDENTES_DOCS.Escrito.fechaNotificacionTexto || 'xx de xxxxx de 202X'} con Registro XX, el/la administrado presentó sus descargos al informe final de instrucción, donde se advierte los siguientes argumentos:
 </p>
 <ol style="list-style-type: lower-alpha">
     <li>(…) XXXXXXXXXXXXXXXXXXXXX (…). (Texto original del descargo).</li>
