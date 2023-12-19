@@ -163,4 +163,23 @@ namespace CapaEntidad.ViewModel
         public object item { get; set; }
         public string origen { get; set; } //DOCUMENTO,PARTICIPANTE,INFRACCION,RSD
     }
+
+    public class VM_PAU_RD_INFORME_LEGAL_RESUMEN
+    {
+        public string COD_THABILITANTE { get; set; }
+        public string COD_TITULAR { get; set; }
+        public string NUM_THABILITANTE { get; set; }
+        public string TITULAR { get; set; }
+        public string TITULAR_DOCUMENTO { get; set; }
+        public string TITULAR_RUC { get; set; }
+        public string R_LEGAL { get; set; }
+        public string R_LEGAL_DOCUMENTO { get; set; }
+        public string R_LEGAL_RUC { get; set; }
+        public string UBIGEO_COD_DPTO { get; set; }
+        public string UBIGEO_DEPARTAMENTO { get; set; }
+        public string UBIGEO_COD_PROV { get; set; }
+        public string UBIGEO_PROVINCIA { get; set; }
+        public string UBIGEO_COD_DIST { get; set; }
+        public string UBIGEO_DISTRITO { get; set; }
+    }
 }

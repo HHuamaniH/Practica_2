@@ -247,6 +247,11 @@ _informe.RevisarFootnotes = function (html) {
 
 _informe.Exportar = async function () {
     const informe = _informe.Estructura();
+
+    Object.keys(informe).forEach(key => {
+        if (typeof informe[key] !== 'boolean' && !informe[key]) informe[key] = '';
+    });
+
     const [procedencias, materias, modalidades] = JSON.parse(JSON.stringify([app.Procedencias, app.Materias, data.Modalidades]));
 
     informe.URL_APLICACION = urlLocalSigo;
@@ -574,11 +579,7 @@ _informe.Estructura = function () {
         if (x.estado === null) x.estado = 1;
         x.fechaEmisionTexto = x.fechaEmision ? fnDate.text_long(x.fechaEmision) : '';
         x.fechaNotificacionTexto = x.fechaNotificacion ? fnDate.text_long(x.fechaNotificacion) : '';
-    });
-
-    Object.keys(objEN).forEach(key => {
-        if (!objEN[key]) objEN[key] = '';
-    })
+    });    
 
     let parametros = {
         ...objEN,
@@ -1014,11 +1015,11 @@ _informe.EliminarArchivoSancion = function () {
     });
 }
 
-_informe.ObtenerInformeLegal = function (COD_RESOLUCION) {
+_informe.ObtenerInformeLegal = function (COD_ILEGAL) {
     const params = {
-        url: `${urlLocalSigo}Fiscalizacion/InformeLegalDigital/ObtenerIFI`,
+        url: `${urlLocalSigo}Fiscalizacion/ManPAURD/ObtenerResumenInformeLegal`,
         type: 'GET',
-        data: { COD_RESOLUCION: COD_RESOLUCION },
+        data: { COD_ILEGAL: COD_ILEGAL },
         beforeSend: function () {
             utilSigo.blockUIGeneral();
         },
@@ -1661,8 +1662,7 @@ $(function () {
                     return;
                 }
 
-                const res_ilegal = await _informe.ObtenerInformeLegal(item.COD_ILEGAL);
-                const ILEGAL = res_ilegal.informe;
+                const ILEGAL = await _informe.ObtenerInformeLegal(item.COD_ILEGAL);
 
                 if (!ILEGAL) {
                     utilSigo.toastWarning('Atención', 'No se encontró información del documento seleccionado');
@@ -1693,32 +1693,30 @@ $(function () {
                     return (isNaN(a.inciso) || isNaN(b.inciso)) ? -1 : (+a.inciso > +b.inciso ? 1 : -1);
                 });*/
 
-                if (!app.Informe.TITULAR) {
-                    const THAB = {
-                        COD_THABILITANTE: ILEGAL.COD_THABILITANTE,
-                        NUM_CONTRATO: ILEGAL.NUM_CONTRATO,
-                        COD_TITULAR: ILEGAL.COD_TITULAR,
-                        TITULAR_DOCUMENTO: ILEGAL.TITULAR_DOCUMENTO,
-                        TITULAR: ILEGAL.TITULAR,
-                        TITULAR_ESTADO_RUC: ILEGAL.TITULAR_ESTADO_RUC,
-                        TITULAR_CONDICION_RUC: ILEGAL.TITULAR_CONDICION_RUC,
-                        TITULAR_RUC: ILEGAL.TITULAR_RUC,
-                        R_LEGAL: ILEGAL.R_LEGAL,
-                        R_LEGAL_DOCUMENTO: ILEGAL.R_LEGAL_DOCUMENTO,
-                        R_LEGAL_RUC: ILEGAL.R_LEGAL_RUC,
-                        DIRECCION_LEGAL: ILEGAL.DIRECCION_LEGAL,
-                        UBIGEO_DEPARTAMENTO: ILEGAL.UBIGEO_DEPARTAMENTO,
-                        UBIGEO_PROVINCIA: ILEGAL.UBIGEO_PROVINCIA,
-                        UBIGEO_DISTRITO: ILEGAL.UBIGEO_DISTRITO,
-                        FLG_SANCION: ILEGAL.FLG_SANCION > 0 ? 1 : 0,
-                        SANCION_UIT: ILEGAL.SANCION_UIT,
-                        SANCION_COD_CALCULO: ILEGAL.SANCION_COD_CALCULO,
-                    };
+                const THAB = {
+                    COD_THABILITANTE: ILEGAL.COD_THABILITANTE,
+                    NUM_CONTRATO: ILEGAL.NUM_THABILITANTE,
+                    COD_TITULAR: ILEGAL.COD_TITULAR,
+                    TITULAR_DOCUMENTO: ILEGAL.TITULAR_DOCUMENTO,
+                    TITULAR: ILEGAL.TITULAR,
+                    //TITULAR_ESTADO_RUC: ILEGAL.TITULAR_ESTADO_RUC,
+                    //TITULAR_CONDICION_RUC: ILEGAL.TITULAR_CONDICION_RUC,
+                    TITULAR_RUC: ILEGAL.TITULAR_RUC,
+                    R_LEGAL: ILEGAL.R_LEGAL,
+                    R_LEGAL_DOCUMENTO: ILEGAL.R_LEGAL_DOCUMENTO,
+                    R_LEGAL_RUC: ILEGAL.R_LEGAL_RUC,
+                    DIRECCION_LEGAL: ILEGAL.DIRECCION_LEGAL,
+                    UBIGEO_DEPARTAMENTO: ILEGAL.UBIGEO_DEPARTAMENTO,
+                    UBIGEO_PROVINCIA: ILEGAL.UBIGEO_PROVINCIA,
+                    UBIGEO_DISTRITO: ILEGAL.UBIGEO_DISTRITO,
+                    //FLG_SANCION: ILEGAL.FLG_SANCION > 0 ? 1 : 0,
+                    //SANCION_UIT: ILEGAL.SANCION_UIT,
+                    //SANCION_COD_CALCULO: ILEGAL.SANCION_COD_CALCULO,
+                };
 
-                    app.Informe = {
-                        ...app.Informe,
-                        ...THAB
-                    }
+                app.Informe = {
+                    ...app.Informe,
+                    ...THAB
                 }
 
                 const INFORME = {
@@ -1743,15 +1741,15 @@ $(function () {
                 app.Informe.ANTECEDENTES = ANTECEDENTES;
 
                 //Archivos relacionados
-                console.log(item, "Validar la extracción de archivos...");
-                /*let files = await app.ObtenerArchivos(item.COD_ILEGAL);
+                //console.log(item, "Validar la extracción de archivos...");
+                let files = await app.ObtenerArchivos(item.COD_ILEGAL);
 
                 //console.log("LOAD FILES SIADO...", files);
                 files = files.filter(function (file) {
                     return !app.Informe.DOCUMENTOS.find(x => x.codResolucion == file.codResolucion)
                 });
 
-                app.Informe.DOCUMENTOS = [...app.Informe.DOCUMENTOS, ...files];*/
+                app.Informe.DOCUMENTOS = [...app.Informe.DOCUMENTOS, ...files];
 
                 $('#modal-ifi').modal('hide');
             }

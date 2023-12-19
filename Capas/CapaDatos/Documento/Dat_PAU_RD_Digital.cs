@@ -4,6 +4,9 @@ using GeneralSQL;
 using Oracle.ManagedDataAccess.Client;
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Runtime.Remoting;
+using System.Runtime.Remoting.Messaging;
 
 namespace CapaDatos.DOC
 {
@@ -47,7 +50,7 @@ namespace CapaDatos.DOC
                             {
                                 if (item.RegEstado == 1) //Nuevo o modificado
                                 {
-                                    object[] param = { item.COD_RESODIREC, item.CODIGO, item.NUMERO,  item.PDF_DOCUMENTO, item.TIPO_DOCUMENTO, item.SUBTIPO, 1 };
+                                    object[] param = { item.COD_RESODIREC, item.CODIGO, item.NUMERO, item.PDF_DOCUMENTO, item.TIPO_DOCUMENTO, item.SUBTIPO, 1 };
                                     dBOracle.ManExecute(cn, tr, "DOC_OSINFOR_ERP_MIGRACION.RESODIREC_DET_ACCIONGrabar", param);
                                 }
                             }
@@ -362,7 +365,7 @@ namespace CapaDatos.DOC
                 using (OracleConnection cn = new OracleConnection(BDConexion.Conexion_Cadena_SIGO()))
                 {
                     cn.Open();
-                    
+
                     using (OracleDataReader dr = dBOracle.SelDrdDefault(cn, "DOC_OSINFOR_ERP_MIGRACION.SPFISCALIZACION_RESDIR_DIGITAL_ANTECEDENTES", COD_RESOLUCION))
                     {
                         if (dr != null)
@@ -545,6 +548,56 @@ namespace CapaDatos.DOC
                 }
             }
             return success;
+        }
+
+        public VM_PAU_RD_INFORME_LEGAL_RESUMEN ObtenerResumenInformeLegal(string COD_ILEGAL)
+        {
+            VM_PAU_RD_INFORME_LEGAL_RESUMEN objEN = null;
+
+            try
+            {
+                using (OracleConnection cn = new OracleConnection(BDConexion.Conexion_Cadena_SIGO()))
+                {
+                    cn.Open();
+
+                    using (OracleDataReader dr = dBOracle.SelDrdDefault(cn, "DOC_OSINFOR_ERP_MIGRACION.SPFISCALIZACION_INFORME_LEGAL_RESUMEN", COD_ILEGAL))
+                    {
+                        if (dr != null)
+                        {
+                            if (dr.HasRows)
+                            {
+                                objEN = new VM_PAU_RD_INFORME_LEGAL_RESUMEN();
+                                var columns = Enumerable.Range(0, dr.FieldCount).Select(dr.GetName).ToList();
+
+                                while (dr.Read())
+                                {
+                                    objEN.COD_THABILITANTE = dr["COD_THABILITANTE"] != DBNull.Value ? dr["COD_THABILITANTE"].ToString() : null;
+                                    objEN.COD_TITULAR = dr["COD_TITULAR"] != DBNull.Value ? dr["COD_TITULAR"].ToString() : null;
+                                    objEN.NUM_THABILITANTE = dr["NUM_THABILITANTE"] != DBNull.Value ? dr["NUM_THABILITANTE"].ToString() : null;
+                                    objEN.TITULAR = dr["TITULAR"] != DBNull.Value ? dr["TITULAR"].ToString() : null;
+                                    objEN.TITULAR_DOCUMENTO = dr["TITULAR_DOCUMENTO"] != DBNull.Value ? dr["TITULAR_DOCUMENTO"].ToString() : null;
+                                    objEN.TITULAR_RUC = dr["TITULAR_RUC"] != DBNull.Value ? dr["TITULAR_RUC"].ToString() : null;
+                                    objEN.R_LEGAL = dr["R_LEGAL"] != DBNull.Value ? dr["R_LEGAL"].ToString() : null;
+                                    objEN.R_LEGAL_DOCUMENTO = dr["R_LEGAL_DOCUMENTO"] != DBNull.Value ? dr["R_LEGAL_DOCUMENTO"].ToString() : null;
+                                    objEN.R_LEGAL_RUC = dr["R_LEGAL_RUC"] != DBNull.Value ? dr["R_LEGAL_RUC"].ToString() : null;
+                                    //objEN.UBIGEO_COD_DPTO = dr["UBIGEO_COD_DPTO"] != DBNull.Value ? dr["UBIGEO_COD_DPTO"].ToString() : null;
+                                    objEN.UBIGEO_DEPARTAMENTO = dr["UBIGEO_DEPARTAMENTO"] != DBNull.Value ? dr["UBIGEO_DEPARTAMENTO"].ToString() : null;
+                                    //objEN.UBIGEO_COD_PROV = dr["UBIGEO_COD_PROV"] != DBNull.Value ? dr["UBIGEO_COD_PROV"].ToString() : null;
+                                    objEN.UBIGEO_PROVINCIA = dr["UBIGEO_PROVINCIA"] != DBNull.Value ? dr["UBIGEO_PROVINCIA"].ToString() : null;
+                                    //objEN.UBIGEO_COD_DIST = dr["UBIGEO_COD_DIST"] != DBNull.Value ? dr["UBIGEO_COD_DIST"].ToString() : null;
+                                    objEN.UBIGEO_DISTRITO = dr["UBIGEO_DISTRITO"] != DBNull.Value ? dr["UBIGEO_DISTRITO"].ToString() : null;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+
+            return objEN;
         }
     }
 }

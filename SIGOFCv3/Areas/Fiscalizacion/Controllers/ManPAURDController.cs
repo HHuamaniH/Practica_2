@@ -40,6 +40,14 @@ namespace SIGOFCv3.Areas.Fiscalizacion.Controllers
             return Json(new { success, msj, data = result });
         }
 
+        [HttpGet]
+        public JsonResult ObtenerResumenInformeLegal(string COD_ILEGAL)
+        {
+            CLogInforme = new Log_PAU_RD_Digital();
+            var result = CLogInforme.ObtenerResumenInformeLegal(COD_ILEGAL);
+            return Json(result, JsonRequestBehavior.AllowGet);
+        }
+
         [HttpPost]
         public JsonResult CargarDocumento()
         {

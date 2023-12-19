@@ -91,5 +91,10 @@ namespace CapaLogica.DOC
         {
             return oDat_PAU_RD_Digital.AnularFirmaPorInforme(codInforme);
         }
+
+        public VM_PAU_RD_INFORME_LEGAL_RESUMEN ObtenerResumenInformeLegal(string COD_ILEGAL)
+        {
+            return oDat_PAU_RD_Digital.ObtenerResumenInformeLegal(COD_ILEGAL);
+        }
     }
 }
