@@ -1245,7 +1245,7 @@ $(function () {
             init: async function () {
                 const self = this;
 
-                const datos = ManRD_AddEdit.frm.serializeObject();
+                const datos = ManRD_AddEdit.fnEstructura();
                 const user = ManRD_AddEdit.userApp;
 
                 //Valores por defecto
