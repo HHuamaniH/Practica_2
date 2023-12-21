@@ -358,6 +358,9 @@ _informe.Exportar = async function () {
         infraccion.parrafos = parrafos;
     }
 
+    informe.INFRACCIONES_AMONESTACION = informe.INFRACCIONES.filter(x => x.gravedad == 'LEVE');
+    informe.INFRACCIONES_SANCION = informe.INFRACCIONES.filter(x => x.gravedad !== 'LEVE');
+
     informe.IMG_SANCION = [];
     if ([2, 3].includes(informe.FLG_SANCION) && informe.SANCION_COD_CALCULO) {
         const images = await _informe.PDFToImgCalculoMulta();
@@ -657,7 +660,7 @@ _informe.TRANSFERIR = function () {
                 datos: JSON.stringify({
                     tramiteId: app.Tramite.iCodTramite,
                     codInformeDigital: app.Informe.COD_INFORME_DIGITAL,
-                    codInforme: app.Informe.COD_INFORME,
+                    codInforme: app.Informe.COD_ILEGAL,
                     codificacion: _informe.fileName()
                 })
             }, function (res) {
@@ -777,13 +780,17 @@ _informe.EliminarResolucion = function (item, index) {
     app.Informe.ILEGAL.splice(index, 1);
 }
 
+_informe.Inf_Supervision = function () {
+    return JSON.parse(JSON.stringify(app.Informe.ANTECEDENTES.find(x => x.tipoDocumento == 'Informe de Supervisión') || {}));
+}
+
 _informe.ResumenInforme = function () {
     const group = $('#group-analisis');
-
+    
     $.ajax({
         type: 'get',
         url: urlLocalSigo + 'Supervision/ManInforme/_ResumenInforme',
-        data: { asCodInforme: app.Informe.COD_INFORME },
+        data: { asCodInforme: _informe.Inf_Supervision().codDocumento }, //app.Informe.COD_INFORME
         beforeSend: function () {
             group.html('Cargando información...');
         },
@@ -794,7 +801,7 @@ _informe.ResumenInforme = function () {
 
 _informe.EXTRAER_RESUMEN_INFORME = function () {
     return new Promise((resolve, reject) => {
-        const asCodInforme = app.Inf_Supervision[0].COD_INFORME;
+        const asCodInforme = _informe.Inf_Supervision().codDocumento; //app.Inf_Supervision[0].COD_INFORME;
 
         utilSigo.fnAjax({
             type: 'get',
@@ -1132,8 +1139,8 @@ $(function () {
                 MODALIDAD: null,
 
                 COD_INFORME: null, //Informe de supervision (auxiliar, obtenemos de la cabecera)
-                NRO_REFERENCIA: null,
-                INF_FECHA: null,
+                //NRO_REFERENCIA: null,
+                //INF_FECHA: null,
                 NUM_POA: null, // POA
                 NOMBRE_POA: null,
 
@@ -1323,7 +1330,7 @@ $(function () {
                     $.ajax(params)
                         .done(function (res) {
                             var model = {
-                                COD_ILEGAL: app.Informe.COD_INFORME,
+                                COD_ILEGAL: app.Informe.COD_ILEGAL,
                                 SUBTIPO: null,
                                 SUBTIPO_DETALLE: 'Otro',
                                 CODIGO: res.cCodificacion,
@@ -1372,7 +1379,7 @@ $(function () {
                         datos: {
                             asCriterio: 'SUBTIP_TITDOCSIGO',
                             asSubCriterio: '0006',
-                            asValor: self.Informe.COD_INFORME //COD_INFORME
+                            asValor: _informe.Inf_Supervision().codDocumento //COD_INFORME
                         }
                     };
 
@@ -1712,6 +1719,7 @@ $(function () {
                     //FLG_SANCION: ILEGAL.FLG_SANCION > 0 ? 1 : 0,
                     //SANCION_UIT: ILEGAL.SANCION_UIT,
                     //SANCION_COD_CALCULO: ILEGAL.SANCION_COD_CALCULO,
+                    COD_INFORME: ILEGAL.COD_ISUPERVISION
                 };
 
                 app.Informe = {
@@ -1733,8 +1741,7 @@ $(function () {
 
                 ANTECEDENTES.forEach(a => {
                     a.codILegal = item.COD_ILEGAL;
-                    const n = a.numero?.match(regExpOSINFOR) || [];
-                    a.numero = n[0];
+                    a.numero = (a.numero?.match(regExpOSINFOR) || [])[0];
                     a.estado = 1;
                 });
 
@@ -1742,7 +1749,7 @@ $(function () {
 
                 //Archivos relacionados
                 //console.log(item, "Validar la extracción de archivos...");
-                let files = await app.ObtenerArchivos(item.COD_ILEGAL);
+                let files = await app.ObtenerArchivos();
 
                 //console.log("LOAD FILES SIADO...", files);
                 files = files.filter(function (file) {

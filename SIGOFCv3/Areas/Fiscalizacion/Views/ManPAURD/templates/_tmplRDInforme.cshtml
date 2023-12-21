@@ -142,7 +142,7 @@
                     Informe de Supervisión N° ${NRO_REFERENCIA}, de fecha ${INF_FECHA} (en adelante, el Informe de Supervisión)
                 </td>
                 <td style="border: 1px solid #000;">
-                    <u>Titular:</u> ${TITULAR || '(indicar texto)'} identificado con ${TITULAR_DOCUMENTO? 'D.N.I.': 'RUC'} N° ${TITULAR_DOCUMENTO || TITULAR_RUC} (en adelante, el/la titular)<br />
+                    <u>Titular:</u> ${TITULAR || '(indicar texto)'} identificado con ${TITULAR_DOCUMENTO? 'DNI': 'RUC'} N° ${TITULAR_DOCUMENTO || TITULAR_RUC} (en adelante, el/la titular)<br />
                     <u>Código de TH:</u> ${NUM_CONTRATO || '(indicar texto)'}, suscrito el xx de xx del xx (en adelante, el contrato de ${TIPO_CONTRATO})<br />
                     <u>Plan de Manejo supervisado:</u> PO ${PLAN_MANEJO.NOMBRE_POA || 'XXX'}, periodo ${PLAN_MANEJO.INICIO_VIGENCIA || 'XXX'}, aprobado mediante Resolución N° ${PLAN_MANEJO.ARESOLUCION_NUM || 'XXX'}, de fecha ${PLAN_MANEJO.ARESOLUCION_FECHA || 'XXX'}<br />
                     <u>Fecha de supervisión:</u> ${ANTECEDENTES_DOCS.Inf_Sup.FECHA_SUPERVISION_INICIO_TEXTO || 'XXX'} al ${ANTECEDENTES_DOCS.Inf_Sup.FECHA_SUPERVISION_FIN_TEXTO || 'XXX'}
@@ -208,24 +208,24 @@
             <tr>
                 <td style="border: 1px solid #000;">6</td>
                 <td style="border: 1px solid #000;">
-                    Cédula de Notificación N° 00XXX-2023-OSINFOR/08.2.2, de fecha XX de marzo de 202X, notificada el XX de XXX de 202X
+                    Cédula de Notificación N° ${ANTECEDENTES_DOCS.Ced_Noti.numero || 'XX-XX-OSINFOR/08.2.1'}, de fecha ${ANTECEDENTES_DOCS.Ced_Noti.fechaEmisionTexto || 'xx de XXXX de 202X'}, notificada el ${ANTECEDENTES_DOCS.Ced_Noti.fechaNotificacionTexto || 'xx de XXXX de 202X'}
                     <a style="mso-footnote-id: foot_vistos_2" href="#_foot_vistos_2" title="">
                         <sup class=MsoFootnoteReference><span style="mso-special-character:footnote"></span></sup>
                     </a>
                 </td>
                 <td style="border: 1px solid #000;">
-                    Se notificó a el/la administrado/a el Informe Final de Instrucción N° 000XX-202X-OSINFOR/08.2.1.
+                    Se notificó a el/la administrado/a el Informe Final de Instrucción N° ${ANTECEDENTES_DOCS.ILEGAL.numero || 'XX-XX-OSINFOR/08.2.1'}.
                 </td>
             </tr>
             <tr>
                 <td style="border: 1px solid #000;">7</td>
-                <td style="border: 1px solid #000;">Documentos presentados posterior a la notificación del Informe Final de Instrucción N° XX-XX-OSINFOR/08.2.1.</td>
+                <td style="border: 1px solid #000;">Documentos presentados posterior a la notificación del Informe Final de Instrucción N° ${ANTECEDENTES_DOCS.ILEGAL.numero || 'XX-XX-OSINFOR/08.2.1'}.</td>
                 <td style="border: 1px solid #000;">
                     {{if COD_TIPO_INFORME == 1}}
                     De la revisión del Sistema de Trámite Documentario SITD-OSINFOR, se verifica que el/la administrado (a) presentó descargo mediante los siguientes documentos:
                     <ul style="list-style: lower-roman; margin-left: 45px;">
                         <li>
-                            Escrito xxxxx SITD N° xxxxx de fecha xx de xxx de xxxx
+                            Escrito ${ANTECEDENTES_DOCS.Escrito.numero || 'XXX'} de fecha ${ANTECEDENTES_DOCS.Escrito.fechaNotificacionTexto || 'xx de XXXX de 202X'}
                         </li>
                     </ul>
                     {{else}}
@@ -313,14 +313,14 @@
         Sin embargo, habiéndose cumplido el plazo otorgado, <strong>ni la administrada ni xxxxxxxxxxxxxxxxxxxxxxxxxx cumplieron con remitir la información solicitada.</strong>
     </p>
     <p class="enumeration">
-        Por lo anterior, no existen elementos suficientes que permitan acreditar la participación de xxxxxxxxxxxxxxxxxxxxx, en las actividades de aprovechamiento del recurso forestal maderable del presente Permiso Forestal, por lo que <u>corresponde considerar solo como presunto responsable solidario a la empresa xxxxxxxxxxxxxxx., incluida en el presente PAU, mediante la Resolución Sub Directoral N° 000xx-2023-OSINFOR/08.2.1, de fecha xx de enero de 20xx</u>.
+        Por lo anterior, no existen elementos suficientes que permitan acreditar la participación de xxxxxxxxxxxxxxxxxxxxx, en las actividades de aprovechamiento del recurso forestal maderable del presente Permiso Forestal, por lo que <u>corresponde considerar solo como presunto responsable solidario a la empresa xxxxxxxxxxxxxxx., incluida en el presente PAU, mediante la Resolución Sub Directoral N° ${ANTECEDENTES_DOCS.RSD.numero || '000XX-202X-OSINFOR/08.2.1'}, de fecha ${ANTECEDENTES_DOCS.RSD.fechaNotificacionTexto || 'xx de XXXX de 202X'}</u>.
     </p>
     <p class="enumeration">
         Ahora bien, la Autoridad Instructora realizó el análisis del expediente administrativo, concluyendo lo siguiente:
     </p>
     <p style="margin-left: 15px;">
         <i>
-            “(…) Al respecto, mediante la Resolución Sub Directoral N° xxxxxxxxxxxxxxxxxxxx de fecha xx de xxxxx de 2023, se dispuso incluir como presunta responsable solidaria de la administrada en el presente PAU, a la empresa xxxxxxxxxxxxxxxxxx identificada con RUC N° xxxxxxxxxxxxxxxxxxxxx, toda vez que:
+            “(…) Al respecto, mediante la Resolución Sub Directoral N° ${ANTECEDENTES_DOCS.RSD.numero || '000XX-202X-OSINFOR/08.2.1'} de fecha ${ANTECEDENTES_DOCS.RSD.fechaNotificacionTexto || 'xx de XXXX de 202X'}, se dispuso incluir como presunta responsable solidaria de la administrada en el presente PAU, a la empresa xxxxxxxxxxxxxxxxxx identificada con RUC N° xxxxxxxxxxxxxxxxxxxxx, toda vez que:
         </i>
     </p>
     <ul style="margin-left: ${MARGIN_LEFT.LEVEL_3};">
@@ -336,11 +336,11 @@
     </ul>
     <p>
         <i>
-            Sobre el particular, es preciso destacar que en el expediente administrativo obra el documento denominado “Contrato de compra venta” suscrito entre el señor xxxxxxxxxxxx representante de la administrada, y el señor xxxxxxxxxxxxxxxxxxxxxx, representante de la empresa Inversiones xxxxxxxxxxxxx., identificada con R.U.C. N° xxxxxxxxxxxx.
+            Sobre el particular, es preciso destacar que en el expediente administrativo obra el documento denominado “Contrato de compra venta” suscrito entre el señor xxxxxxxxxxxx representante de la administrada, y el señor xxxxxxxxxxxxxxxxxxxxxx, representante de la empresa xxxxxxxxxxxxx., identificada con R.U.C. N° xxxxxxxxxxxx.
         </i>
     </p>
     <p>
-        Aunado a ello, en el contrato firmado entre la Comunidad Nativa xxxxxxxxxxxxxxx y la empresa se debe precisar que en el referido contrato se observa estipulado lo siguiente:
+        Aunado a ello, en el contrato firmado entre xxxxxxxxxxxxxxx y la empresa se debe precisar que en el referido contrato se observa estipulado lo siguiente:
     </p>
     <p style="text-align: center;">
         <strong>Imagen N° 01: Contrato entre la administrada y la presunta responsable solidaria</strong>
@@ -355,7 +355,7 @@
         En ese sentido, teniendo en consideración lo evidenciado, se advierte que durante la vigencia del plan de manejo, la empresa xxxxxxxxxxxxxx., sí participó en las actividades de aprovechamiento del recursos forestales en el plan de manejo aprobado, dicho aprovechamiento debió ejercerse en estricto cumplimiento de las disposiciones señaladas en el instrumento de gestión ambiental antes mencionado, debiendo realizarse la tala, extracción y movilización únicamente de aquellos individuos que fueron autorizados, conforme a lo aprobado en el instrumento de gestión, de manera que se garantice el aprovechamiento sostenible del recurso forestal y la preservación del medio ambiente.
     </p>
     <p>
-        No obstante, se advierte que la empresa Inversiones xxxxxxxxx, al realizar las operaciones de aprovechamiento en el área del Plan de Manejo, no cumplió con las disposiciones señaladas en dicho instrumento de gestión.
+        No obstante, se advierte que la empresa xxxxxxxxx, al realizar las operaciones de aprovechamiento en el área del Plan de Manejo, no cumplió con las disposiciones señaladas en dicho instrumento de gestión.
     </p>
     <p>
         Ahora bien, respecto a la imputación referida a “No tener libro de operaciones, de acuerdo a las disposiciones establecidas”, la cual tiene como propósito que se lleve un registro de la información sobre la ejecución del plan de manejo, es decir, respecto al aprovechamiento de los individuos autorizados, los cuales se encuentran considerados en el censo forestal aprobado mediante el PO 01 – PC 01, 02 y 03, materia de análisis, todo ello para garantizar la trazabilidad del producto forestal; en función a lo contenido en el Contrato, donde es posible inferir que la empresa Inversiones Melycel E.I.R.L., al haber celebrado el contrato y participar en el aprovechamiento forestal, proceso, que además está vinculado al uso de la documentación como la implementación del Libro de Operaciones, responsabilidad que se encuentra establecida en el artículo 82 de la Ley Forestal y de Fauna Silvestre; asimismo, conforme lo señala el numeral 5 de las “Instrucciones para el uso del Libro de Operaciones de los Títulos Habilitantes para aprovechamiento forestal maderable”, anexo 02 de la Resolución de Dirección Ejecutiva N° 264-2019-MINAGRI-SERFOR-DE, señala que este debe mantenerse de forma física en el campamento principal del título habilitante.
@@ -431,18 +431,20 @@
             </tr>
         </thead>
         <tbody>
+            {{each(index, inf) INFRACCIONES}}
             <tr>
                 <td style="border: 1px solid #000;">
-                    <p>Numeral 1 del Anexo 1 del RISMFFS.</p>
-                    <i>“No establecer o no mantener los linderos, hitos u otras señales que permitan identificar el área del título habilitante”</i>
+                    <p>Numeral ${inf.inciso} del Anexo 1 del RISMFFS.</p>
+                    <i>“${inf.titulo || '[Indique título de la infracción]'}”</i>
                 </td>
                 <td style="border: 1px solid #000;">
-                    Amonestación
+                    [Indique sanción]
                     <a style="mso-footnote-id: foot_imputacion_3" href="#_foot_imputacion_3" title="">
                         <sup class=MsoFootnoteReference><span style="mso-special-character:footnote"></span></sup>
                     </a>
                 </td>
             </tr>
+            {{/each}}
         </tbody>
         <tfoot>
             <tr>
@@ -450,7 +452,7 @@
                     <strong>Total Sanción de Multa</strong>
                 </td>
                 <td style="border: 1px solid #000; text-align: center;">
-                    <strong>XX UIT</strong>
+                    <strong>${SANCION_UIT || 'XXX'} UIT</strong>
                 </td>
             </tr>
         </tfoot>
@@ -465,7 +467,7 @@
 
 <script id="tmpl-medidas-complementarias" type="text/x-jquery-tmpl">
     <p class="enumeration">
-        Se debe señalar que mediante la Resolución Sub Directoral N° xxxx de fecha xxxx, se dispusieron medidas cautelares, conforme al siguiente detalle:
+        Se debe señalar que mediante la Resolución Sub Directoral N° ${ANTECEDENTES_DOCS.RSD.numero || 'XXXX-202X-OSINFOR/08.2.1'} de fecha ${ANTECEDENTES_DOCS.RSD.fechaNotificacionTexto || 'xx de XXXX de 202X'}, se dispusieron medidas cautelares, conforme al siguiente detalle:
     </p>
     <ul style="margin-left: ${MARGIN_LEFT.LEVEL_3};">
         <li>
@@ -602,15 +604,15 @@
 <script id="tmpl-resolucion" type="text/x-jquery-tmpl">
     {{if FLG_RESPONSABLE_SOLIDARIO}}
     <p style="text-indent: 30px;">
-        <strong>Artículo.</strong> Declarar que corresponde considerar solo como responsable solidaria a la empresa xxxxxxxxxxxxxxx., incluida en el presente PAU, mediante la Resolución Sub Directoral N° 00013-2023-OSINFOR/08.2.1, de fecha xx de enero de 2023; en virtud de lo expuesto en la parte considerativa de la presente Resolución Directoral.
+        <strong>Artículo.</strong> Declarar que corresponde considerar solo como responsable solidaria a la empresa xxxxxxxxxxxxxxx., incluida en el presente PAU, mediante la Resolución Sub Directoral N° ${ANTECEDENTES_DOCS.RSD.numero || 'XXXX-202X-OSINFOR/08.2.1'}, de fecha ${ANTECEDENTES_DOCS.RSD.fechaNotificacionTexto || 'xx de XXXX de 202X'}; en virtud de lo expuesto en la parte considerativa de la presente Resolución Directoral.
     </p>
     {{/if}}
 
     <p style="text-indent: 30px;">
-        <strong>Artículo.</strong> Declarar la caducidad del derecho de aprovechamiento contenido en el Permiso xxx, otorgado a xxxx, identificada con DNI/ RUC N° xxxx, por haber incurrido en la causal de caducidad prevista en el literal x) del artículo 153 de la Ley Forestal y de Fauna Silvestre, Ley N° 29763, concordado con el literal x) del artículo xx del Reglamento xxx, aprobado por Decreto Supremo N° xx-2015-MINAGRI; y con el numeral xxx de la Cláusula xxxx del Contrato de Concesión, conforme a lo señalado en la parte considerativa de la presente Resolución Directoral.
+        <strong>Artículo.</strong> Declarar la caducidad del derecho de aprovechamiento contenido en el Permiso ${NUM_CONTRATO || '(indicar texto)'}, otorgado a ${TITULAR}, identificada con ${TITULAR_DOCUMENTO? 'DNI': 'RUC'} N° ${TITULAR_DOCUMENTO || TITULAR_RUC}, por haber incurrido en la causal de caducidad prevista en el literal x) del artículo 153 de la Ley Forestal y de Fauna Silvestre, Ley N° 29763, concordado con el literal x) del artículo xx del Reglamento xxx, aprobado por Decreto Supremo N° xx-2015-MINAGRI; y con el numeral xxx de la Cláusula xxxx del Contrato de Concesión, conforme a lo señalado en la parte considerativa de la presente Resolución Directoral.
     </p>
     <p style="text-indent: 30px;">
-        <strong>Artículo.</strong> Imponer sanción al/la señor (a) xxx, identificado (a) con DNI N° xx, titular del xx N° xx, conforme a lo siguiente:
+        <strong>Artículo.</strong> Imponer sanción al/la señor (a) ${TITULAR}, identificado(a) con ${TITULAR_DOCUMENTO? 'DNI': 'RUC'} N° ${TITULAR_DOCUMENTO || TITULAR_RUC}, titular del ${DENOMINACION_TITULAR} N° ${NUM_CONTRATO || '(indicar texto)'}, conforme a lo siguiente:
     </p>
     <table width="100%" cellpadding="4" style="border: 0; font-family: Arial; font-size: 10pt; border-collapse: collapse; line-height: 150%;">
         <thead>
@@ -621,60 +623,46 @@
             </tr>
         </thead>
         <tbody>
-            @*{{each(i, item) INFRACCIONES}}*@
+            {{each(g, inf_am) INFRACCIONES_AMONESTACION}}
             <tr>
-                <td style="border: 1px solid #000;">
+                {{if g == 0}}
+                <td style="border: 1px solid #000;" rowspan="${INFRACCIONES_AMONESTACION.length || 1}">
                     Amonestación
                 </td>
+                {{/if}}
                 <td style="border: 1px solid #000;">
-                    Numeral XX, Anexo 1, RISMFFS
+                    Numeral ${inf_am.inciso || 'XX'}, Anexo 1, RISMFFS
                 </td>
                 <td style="border: 1px solid #000;">
-                    No presentar el informe de ejecución del …
+                    ${inf_am.titulo || '[Ingrese título de la sancion]'}
                 </td>
-                <td style="border: 1px solid #000;">
+                {{if g == 0}}
+                <td style="border: 1px solid #000;" rowspan="${INFRACCIONES_AMONESTACION.length || 1}">
                     Si reincide en esta infracción puede ser sancionado con 0.10 hasta 3 UIT (literal a, numeral 8.2, artículo 8 del RISMFFS)
                 </td>
+                {{/if}}
             </tr>
+            {{/each}}
+            {{each(h, inf_san) INFRACCIONES_SANCION}}
             <tr>
-                <td style="border: 1px solid #000;" rowspan="4">
-                    Multa de xxx  UIT, vigente a la fecha en que se cumpla con el pago
+                {{if h == 0}}
+                <td style="border: 1px solid #000;" rowspan="${INFRACCIONES_SANCION.length || 1}">
+                    Multa de ${SANCION_UIT || 'XXX'} UIT, vigente a la fecha en que se cumpla con el pago
+                </td>
+                {{/if}}
+                <td style="border: 1px solid #000;">
+                    Numeral ${inf_san.inciso || 'XX'}, Anexo 1, RISMFFS
                 </td>
                 <td style="border: 1px solid #000;">
-                    Numeral XX, Anexo 1, RISMFFS
+                    ${inf_san.titulo || '[Ingrese título de la sancion]'}
                 </td>
-                <td style="border: 1px solid #000;">
-                    Talar sin autorización …
-                </td>
-                <td style="border: 1px solid #000;" rowspan="4">
+                {{if h == 0}}
+                <td style="border: 1px solid #000;" rowspan="${INFRACCIONES_SANCION.length || 1}">
                     La multa está detallada en el Anexo I de la presente Resolución Directoral
                 </td>
+                {{/if}}
             </tr>
-            <tr>
-                <td style="border: 1px solid #000;">
-                    Numeral XX, Anexo 1, RISMFFS
-                </td>
-                <td style="border: 1px solid #000;">
-                    Talar sin autorización …
-                </td>
-            </tr>
-            <tr>
-                <td style="border: 1px solid #000;">
-                    Numeral XX, Anexo 1, RISMFFS
-                </td>
-                <td style="border: 1px solid #000;">
-                    Talar sin autorización …
-                </td>
-            </tr>
-            <tr>
-                <td style="border: 1px solid #000;">
-                    Numeral XX, Anexo 1, RISMFFS
-                </td>
-                <td style="border: 1px solid #000;">
-                    Talar sin autorización …
-                </td>
-            </tr>
-            @*{{/each}}*@
+            {{/each}}
         </tbody>
     </table>
     <p style="text-indent: 30px;">

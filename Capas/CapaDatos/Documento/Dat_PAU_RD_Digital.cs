@@ -5,8 +5,6 @@ using Oracle.ManagedDataAccess.Client;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.Remoting;
-using System.Runtime.Remoting.Messaging;
 
 namespace CapaDatos.DOC
 {
@@ -85,8 +83,9 @@ namespace CapaDatos.DOC
                             {
                                 object[] param = {
                                     codInformeDigital,
-                                    item.item, item.codResolucion,
+                                    item.item, item.codILegal,
                                     item.tipoDocumento, item.numero,
+                                    item.codDocumento,
                                     string.IsNullOrEmpty(item.fechaEmision) ? default(DateTime?) : Convert.ToDateTime(item.fechaEmision),
                                     string.IsNullOrEmpty(item.fechaNotificacion) ? default(DateTime?) : Convert.ToDateTime(item.fechaNotificacion),
                                     item.estado,
@@ -332,9 +331,10 @@ namespace CapaDatos.DOC
                                     objEN = new VM_PAU_RD_DIGITAL_ANTECEDENTE();
                                     objEN.codInformeDigital = dr["VCODINFORMEDIGITAL"].ToString();
                                     objEN.item = Convert.ToInt32(dr["NITEM"]);
-                                    objEN.codResolucion = dr["VCODRESOLUCION"].ToString();
+                                    objEN.codILegal = dr["VCODILEGAL"].ToString();
                                     objEN.tipoDocumento = dr["VTIPODOCUMENTO"].ToString();
                                     objEN.numero = dr["VNUMERO"].ToString();
+                                    objEN.codDocumento = dr["VCODDOCUMENTO"].ToString();
                                     objEN.fechaEmision = dr["DFECHAEMISION"] != DBNull.Value ? Convert.ToDateTime(dr["DFECHAEMISION"]).ToShortDateString() : null;
                                     objEN.fechaNotificacion = dr["DFECHANOTIFICACION"] != DBNull.Value ? Convert.ToDateTime(dr["DFECHANOTIFICACION"]).ToShortDateString() : null;
                                     objEN.estado = Convert.ToInt32(dr["NESTADO"]);
@@ -381,6 +381,7 @@ namespace CapaDatos.DOC
                                     objEN = new VM_PAU_RD_DIGITAL_ANTECEDENTE();
                                     objEN.tipoDocumento = dr["TIPO_DOCUMENTO"].ToString();
                                     objEN.numero = dr["NUMERO"].ToString();
+                                    objEN.codDocumento = dr["COD_DOCUMENTO"].ToString();
                                     objEN.fechaEmision = (dr["FECHA_EMISION"] != DBNull.Value) ? dr["FECHA_EMISION"].ToString().Trim() : null;
                                     objEN.fechaNotificacion = (dr["FECHA_NOTIFICACION"] != DBNull.Value) ? dr["FECHA_NOTIFICACION"].ToString().Trim() : null;
                                     vm.Add(objEN);
@@ -571,21 +572,20 @@ namespace CapaDatos.DOC
 
                                 while (dr.Read())
                                 {
-                                    objEN.COD_THABILITANTE = dr["COD_THABILITANTE"] != DBNull.Value ? dr["COD_THABILITANTE"].ToString() : null;
-                                    objEN.COD_TITULAR = dr["COD_TITULAR"] != DBNull.Value ? dr["COD_TITULAR"].ToString() : null;
-                                    objEN.NUM_THABILITANTE = dr["NUM_THABILITANTE"] != DBNull.Value ? dr["NUM_THABILITANTE"].ToString() : null;
-                                    objEN.TITULAR = dr["TITULAR"] != DBNull.Value ? dr["TITULAR"].ToString() : null;
-                                    objEN.TITULAR_DOCUMENTO = dr["TITULAR_DOCUMENTO"] != DBNull.Value ? dr["TITULAR_DOCUMENTO"].ToString() : null;
-                                    objEN.TITULAR_RUC = dr["TITULAR_RUC"] != DBNull.Value ? dr["TITULAR_RUC"].ToString() : null;
-                                    objEN.R_LEGAL = dr["R_LEGAL"] != DBNull.Value ? dr["R_LEGAL"].ToString() : null;
-                                    objEN.R_LEGAL_DOCUMENTO = dr["R_LEGAL_DOCUMENTO"] != DBNull.Value ? dr["R_LEGAL_DOCUMENTO"].ToString() : null;
-                                    objEN.R_LEGAL_RUC = dr["R_LEGAL_RUC"] != DBNull.Value ? dr["R_LEGAL_RUC"].ToString() : null;
-                                    //objEN.UBIGEO_COD_DPTO = dr["UBIGEO_COD_DPTO"] != DBNull.Value ? dr["UBIGEO_COD_DPTO"].ToString() : null;
-                                    objEN.UBIGEO_DEPARTAMENTO = dr["UBIGEO_DEPARTAMENTO"] != DBNull.Value ? dr["UBIGEO_DEPARTAMENTO"].ToString() : null;
-                                    //objEN.UBIGEO_COD_PROV = dr["UBIGEO_COD_PROV"] != DBNull.Value ? dr["UBIGEO_COD_PROV"].ToString() : null;
-                                    objEN.UBIGEO_PROVINCIA = dr["UBIGEO_PROVINCIA"] != DBNull.Value ? dr["UBIGEO_PROVINCIA"].ToString() : null;
-                                    //objEN.UBIGEO_COD_DIST = dr["UBIGEO_COD_DIST"] != DBNull.Value ? dr["UBIGEO_COD_DIST"].ToString() : null;
-                                    objEN.UBIGEO_DISTRITO = dr["UBIGEO_DISTRITO"] != DBNull.Value ? dr["UBIGEO_DISTRITO"].ToString() : null;
+                                    objEN.COD_THABILITANTE = dr["COD_THABILITANTE"] as string;
+                                    objEN.COD_TITULAR = dr["COD_TITULAR"] as string;
+                                    objEN.NUM_THABILITANTE = dr["NUM_THABILITANTE"] as string;
+                                    objEN.TITULAR = dr["TITULAR"] as string;
+                                    objEN.TITULAR_DOCUMENTO = dr["TITULAR_DOCUMENTO"] as string;
+                                    objEN.TITULAR_RUC = dr["TITULAR_RUC"] as string;
+                                    objEN.R_LEGAL = dr["R_LEGAL"] as string;
+                                    objEN.R_LEGAL_DOCUMENTO = dr["R_LEGAL_DOCUMENTO"] as string;
+                                    objEN.R_LEGAL_RUC = dr["R_LEGAL_RUC"] as string;
+                                    objEN.UBIGEO_DEPARTAMENTO = dr["UBIGEO_DEPARTAMENTO"] as string;
+                                    objEN.UBIGEO_PROVINCIA = dr["UBIGEO_PROVINCIA"] as string;
+                                    objEN.UBIGEO_DISTRITO = dr["UBIGEO_DISTRITO"] as string;
+                                    objEN.COD_ISUPERVISION = dr["COD_ISUPERVISION"] as string;
+                                    objEN.NUMERO_ISUPERVISION = dr["NUMERO_ISUPERVISION"] as string;
                                 }
                             }
                         }

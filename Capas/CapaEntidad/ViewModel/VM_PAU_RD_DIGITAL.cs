@@ -85,9 +85,10 @@ namespace CapaEntidad.ViewModel
     {
         public string codInformeDigital { get; set; }
         public int item { get; set; }
-        public string codResolucion { get; set; }
+        public string codILegal { get; set; }
         public string tipoDocumento { get; set; }
         public string numero { get; set; }
+        public string codDocumento { get; set; }
         public string fechaEmision { get; set; }
         public string fechaNotificacion { get; set; }
         public int? estado { get; set; }
@@ -175,11 +176,13 @@ namespace CapaEntidad.ViewModel
         public string R_LEGAL { get; set; }
         public string R_LEGAL_DOCUMENTO { get; set; }
         public string R_LEGAL_RUC { get; set; }
-        public string UBIGEO_COD_DPTO { get; set; }
+        //public string UBIGEO_COD_DPTO { get; set; }
         public string UBIGEO_DEPARTAMENTO { get; set; }
-        public string UBIGEO_COD_PROV { get; set; }
+        //public string UBIGEO_COD_PROV { get; set; }
         public string UBIGEO_PROVINCIA { get; set; }
-        public string UBIGEO_COD_DIST { get; set; }
+        //public string UBIGEO_COD_DIST { get; set; }
         public string UBIGEO_DISTRITO { get; set; }
+        public string COD_ISUPERVISION { get; set; }
+        public string NUMERO_ISUPERVISION { get; set; }
     }
 }
