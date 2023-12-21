@@ -110,6 +110,36 @@
             ${PROCEDENCIA}<br />
             OSINFOR
         </p>
+        <br clear=all style="mso-special-character:line-break;page-break-before:always">
+        <p style="text-align: center;">
+            <strong>RESOLUCIÓN DIRECTORAL N° ${NUM_INFORME_SITD || '00XXX-2023-OSINFOR/08.2'}</strong>
+        </p>
+        <p style="text-align: center;">
+            <strong>ANEXO I</strong>
+        </p>
+        {{if IMG_SANCION?.length}}
+        <div style="text-align:center;">
+            {{each(i, img) IMG_SANCION}}
+            <img alt="Calculo de multa" src="${img}" width="450" style="width: 450px;" />
+            {{/each}}
+        </div>
+        {{else}}
+        <p style="text-align: center;">
+            (MULTA)
+        </p>
+        {{/if}}
+        <p style="text-align: center;">
+            <strong>ANEXO II</strong>
+        </p>
+        <p style="text-align: center;">
+            (Decomiso)
+        </p>
+        <p style="text-align: center;">
+            <strong>ANEXO III</strong>
+        </p>
+        <p style="text-align: center;">
+            (Medida complementaria)
+        </p>
     </div>
     <table border="0" cellspacing="0" cellpadding="0" style="margin: 0in 0in 0in 900in; width: 1px; height: 1px; overflow: hidden;">
         <tr>
@@ -139,7 +169,7 @@
             <tr>
                 <td style="border: 1px solid #000;">1</td>
                 <td style="border: 1px solid #000;">
-                    Informe de Supervisión N° ${NRO_REFERENCIA}, de fecha ${INF_FECHA} (en adelante, el Informe de Supervisión)
+                    Informe de Supervisión N° ${ANTECEDENTES_DOCS.Inf_Sup.numero || 'XXXX'}, de fecha ${ANTECEDENTES_DOCS.Inf_Sup.fechaEmisionTexto || 'XX de XXX del 202X'} (en adelante, el Informe de Supervisión)
                 </td>
                 <td style="border: 1px solid #000;">
                     <u>Titular:</u> ${TITULAR || '(indicar texto)'} identificado con ${TITULAR_DOCUMENTO? 'DNI': 'RUC'} N° ${TITULAR_DOCUMENTO || TITULAR_RUC} (en adelante, el/la titular)<br />
@@ -438,10 +468,12 @@
                     <i>“${inf.titulo || '[Indique título de la infracción]'}”</i>
                 </td>
                 <td style="border: 1px solid #000;">
-                    [Indique sanción]
+                    ${inf.rangoSancion || '[Indique sanción]'}
+                    {{if inf.rangoSancion == 'Amonestación'}}
                     <a style="mso-footnote-id: foot_imputacion_3" href="#_foot_imputacion_3" title="">
                         <sup class=MsoFootnoteReference><span style="mso-special-character:footnote"></span></sup>
                     </a>
+                    {{/if}}
                 </td>
             </tr>
             {{/each}}
@@ -712,7 +744,7 @@
         </tbody>
     </table>
     <p style="text-indent: 30px;">
-        <strong>Artículo.</strong> Notificar la presente Resolución Directoral al/la señor (a) xxx, quien puede interponer los recursos impugnativos que estime pertinentes dentro del plazo de quince (15) días hábiles contados a partir del día siguiente de efectuada la notificación de la Resolución Directoral, más el término de la distancia, recomendándole tener en consideración lo señalado en el artículo anterior. Para la presentación de los recursos impugnativos o de cualquier comunicación con el OSINFOR puede utilizar los siguientes medios:
+        <strong>Artículo.</strong> Notificar la presente Resolución Directoral al/la señor (a) ${TITULAR || '(indicar titular)'}, quien puede interponer los recursos impugnativos que estime pertinentes dentro del plazo de quince (15) días hábiles contados a partir del día siguiente de efectuada la notificación de la Resolución Directoral, más el término de la distancia, recomendándole tener en consideración lo señalado en el artículo anterior. Para la presentación de los recursos impugnativos o de cualquier comunicación con el OSINFOR puede utilizar los siguientes medios:
     </p>
     <table width="100%" cellpadding="4" style="border: 0; font-family: Arial; font-size: 10pt; border-collapse: collapse; line-height: 150%;">
         <thead>

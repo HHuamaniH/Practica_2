@@ -70,7 +70,7 @@ _informe.DESCARGAR_ARCHIVO_REVISION = function () {
 }
 
 _informe.CERRAR = function () {
-    utilSigo.dialogConfirm("", "Se CERRARÁ la edición del informe para proceder con la carga del archivo. ¿Está seguro de continuar?", function (r) {
+    utilSigo.dialogConfirm("", "Se CERRARÁ la edición del documento para proceder con la carga del archivo. ¿Está seguro de continuar?", function (r) {
         if (r) {
             let params = _informe.Estructura();
             params.ESTADO = States.COMPLETADO;
@@ -302,13 +302,16 @@ _informe.Exportar = async function () {
     informe.ANTECEDENTES_DOCS.Escrito = informe.ANTECEDENTES.find(x => x.tipoDocumento == 'Escrito') || {};
 
     //Listar planes de manejo
-    //const PLANES_MANEJO = await _informe.ListarPlanesManejo('D', null, informe.COD_THABILITANTE, informe.NUM_POA);
-    //const plan = PLANES_MANEJO[0] || {};
-    //plan.ARESOLUCION_FECHA = fnDate.text_long(plan.ARESOLUCION_FECHA);
-    //plan.INICIO_VIGENCIA = fnDate.text_long(plan.INICIO_VIGENCIA);
-    //plan.FIN_VIGENCIA = fnDate.text_long(plan.FIN_VIGENCIA);
-    //informe.PLAN_MANEJO = plan;
-    informe.PLAN_MANEJO = {};
+    if (informe.NUM_POA) {
+        const PLANES_MANEJO = await _informe.ListarPlanesManejo('D', null, informe.COD_THABILITANTE, informe.NUM_POA);
+        const plan = PLANES_MANEJO[0] || {};
+        plan.ARESOLUCION_FECHA = fnDate.text_long(plan.ARESOLUCION_FECHA);
+        plan.INICIO_VIGENCIA = fnDate.text_long(plan.INICIO_VIGENCIA);
+        plan.FIN_VIGENCIA = fnDate.text_long(plan.FIN_VIGENCIA);
+        informe.PLAN_MANEJO = plan;
+    } else {
+        informe.PLAN_MANEJO = {};
+    }
 
     //OFICIO
     informe.DOC_REFERENCIAS = {};
@@ -323,7 +326,8 @@ _informe.Exportar = async function () {
     //informe.NOMBRE_POA = informe.ILEGAL[0].nombrePOA || '';
 
     for (let item of informe.ILEGAL) {
-        const codInformeSupervision = informe.ANTECEDENTES_DOCS.Inf_Sup;
+        //const codInformeSupervision = informe.ANTECEDENTES_DOCS.Inf_Sup;
+        const codInformeSupervision = _informe.Inf_Supervision().codDocumento;
         let INF_SUPERVISION = await _informe.RegResumenInfSupervision(codInformeSupervision);
 
         if (INF_SUPERVISION) {
@@ -362,7 +366,7 @@ _informe.Exportar = async function () {
     informe.INFRACCIONES_SANCION = informe.INFRACCIONES.filter(x => x.gravedad !== 'LEVE');
 
     informe.IMG_SANCION = [];
-    if ([2, 3].includes(informe.FLG_SANCION) && informe.SANCION_COD_CALCULO) {
+    if ([1].includes(informe.FLG_SANCION) && informe.SANCION_COD_CALCULO) {
         const images = await _informe.PDFToImgCalculoMulta();
         informe.IMG_SANCION = images;
     }
@@ -427,6 +431,75 @@ _informe.ExtraerAntecedentes = function (COD_RESOLUCION) {
         $.ajax(params).done(res => resolve(res)).fail(() => resolve([]));
     });
 };
+
+_informe.PDFToImgCalculoMulta = function () {
+    const url = _informe.UrlDescargarArchivoSancion();
+
+    return new Promise(function (resolve, reject) {
+        $.ajax({
+            url: url,
+            xhrFields: {
+                responseType: 'arraybuffer'
+            },
+            success: function (arrayBuffer) {
+                pdfjsLib.getDocument({ data: arrayBuffer }).promise.then(function (pdf) {
+                    let allPagesPromises = [];
+
+                    // Obtenemos todas las páginas del pdf
+                    for (let i = 1; i <= pdf.numPages; i++) {
+                        allPagesPromises.push(pdf.getPage(i));
+                    }
+
+                    Promise.all(allPagesPromises).then(async function (allPages) {
+                        let pages = [];
+                        let canvas, context;
+
+                        for (let i = 0; i < allPages.length; i++) {
+                            const page = allPages[i];
+
+                            const viewport = page.getViewport({ scale: 0.75 });
+
+                            // Prepare canvas using PDF page dimensions
+                            canvas = document.createElement('canvas');
+                            context = canvas.getContext('2d');
+                            canvas.width = viewport.width;
+                            canvas.height = viewport.height;
+
+                            // Render PDF page into canvas context
+                            const renderContext = {
+                                canvasContext: context,
+                                viewport: viewport
+                            };
+                            let renderTask = page.render(renderContext);
+                            await renderTask.promise;
+
+                            const base64 = canvas.toDataURL("image/jpeg");
+                            pages.push(base64);
+                        }
+
+                        resolve(pages);
+                    });
+
+                });
+            },
+            error: function () {
+                reject();
+            }
+        });
+    });
+}
+
+_informe.ListarPlanesManejo = function (V_OPCION, COD_INFORME, COD_THABILITANTE, NUM_POA) {
+    const params = {
+        type: 'get',
+        url: `${urlLocalSigo}Fiscalizacion/ManPAU/ListarPlanesManejo`,
+        datos: { COD_INFORME, COD_THABILITANTE, NUM_POA, V_OPCION: V_OPCION || 'L' }
+    }
+
+    return new Promise((resolve, reject) => {
+        utilSigo.fnAjax(params, res => resolve(res), () => resolve([]));
+    });
+}
 
 _informe.ExtraerPlantilla = function () {
     return new Promise(function (resolve, reject) {
@@ -582,7 +655,7 @@ _informe.Estructura = function () {
         if (x.estado === null) x.estado = 1;
         x.fechaEmisionTexto = x.fechaEmision ? fnDate.text_long(x.fechaEmision) : '';
         x.fechaNotificacionTexto = x.fechaNotificacion ? fnDate.text_long(x.fechaNotificacion) : '';
-    });    
+    });
 
     let parametros = {
         ...objEN,
@@ -786,7 +859,7 @@ _informe.Inf_Supervision = function () {
 
 _informe.ResumenInforme = function () {
     const group = $('#group-analisis');
-    
+
     $.ajax({
         type: 'get',
         url: urlLocalSigo + 'Supervision/ManInforme/_ResumenInforme',
@@ -1064,27 +1137,6 @@ _informe.Agregar_Imputaciones = function () {
     });
 }
 
-/*_informe.Establecer_Infracciones_Form = function () {
-    let model = {
-        COD_ILEGAL_ARTICULOS: null,
-        COD_ILEGAL_ENCISOS: null,
-        DESCRIPCION_ARTICULOS: null,
-        DESCRIPCION_ENCISOS: null,
-        COD_ESPECIES: null,
-        DESCRIPCION_ESPECIE: null,
-        VOLUMEN: null,
-        AREA: null,
-        NUMERO_INDIVIDUOS: null,
-        DESCRIPCION_INFRACCIONES: null,
-        COD_SECUENCIAL: null,
-        NUM_POA: null,
-        POA: null,
-        PCA: null,
-        TIPOMADERABLE: null,
-        RegEstado: null
-    }
-}*/
-
 _informe.Obtener_Infracciones_Form = function () {
     return _renderInfracciones.dtRenderListInforme.data().toArray().reduce((acc, item) => {
         if (!acc.some(x => x.codInciso == item.COD_ILEGAL_ENCISOS)) {
@@ -1215,7 +1267,7 @@ $(function () {
                     DOCUMENTOS: [],
                 };
 
-                const infracciones = _informe.Obtener_Infracciones_Form();                
+                const infracciones = _informe.Obtener_Infracciones_Form();
                 values.INFRACCIONES = infracciones;
 
                 self.Informe = { ...self.Informe, ...values };
@@ -1534,7 +1586,7 @@ $(function () {
             Firmar: function (item, index) {
                 let user = ManRD_AddEdit.userApp || {};
                 if (this.Informe.ESTADO < States.COMPLETADO) {
-                    utilSigo.toastWarning('Información', 'Tiene que cerrar la edición del informe para empezar con la firma digital');
+                    utilSigo.toastWarning('Información', 'Tiene que cerrar la edición del documento para empezar con la firma digital');
                     return;
                 }
 
@@ -2074,7 +2126,7 @@ $(function () {
                     TITULO: 'Resolución Directoral',
                     DESTINATARIOS: seleccionados.map(item => item.email).join(','),
                     CC_DESTINATARIOS: self.form.CC,
-                    COD_INFORME: app.Informe.NUM_INFORME_SITD,
+                    COD_INFORME: app.Informe.NUM_INFORME_SITD || 'S/N',
                     MENSAJE_ENVIO_ALERTA: `${_informe.render(self.form.Mensaje)}<br><br>Atentamente,<br>${user.PERSONA}`,
                     URL_LOCAL: window.location.href
                 };

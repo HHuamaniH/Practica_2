@@ -28,7 +28,7 @@
 
 <div id="frmInforme" class="card loading">
     <div id="informe_header" class="card-header text-small d-flex justify-content-between align-items-center">
-        <div>Generar Informe</div>
+        <div>Generar Documento</div>
         <div class="options">
             <button type="button" class="btn btn-link btn-sm p-0 ml-3" onclick="_informe.Exportar()" v-if="Informe.COD_INFORME_DIGITAL && Informe.ESTADO < States.FINALIZADO">
                 <i class="fa fa-file-word-o fa-fw"></i>Crear documento
@@ -50,7 +50,7 @@
                         <a class="dropdown-item" href="javascript:void(0);" onclick="_informe.DESCARGAR_ARCHIVO_REVISION()">Descargar documento para revisión</a>
                         <a class="dropdown-item" href="javascript:void(0);" onclick="_informe.REVISION_CARGAR_ARCHIVO()">Cargar documento revisado</a>
                         <div class="dropdown-divider"></div>
-                        <a class="dropdown-item" href="javascript:void(0);" onclick="_informe.CERRAR()">Cerrar informe</a>
+                        <a class="dropdown-item" href="javascript:void(0);" onclick="_informe.CERRAR()">Cerrar revisión de documento</a>
                     </template>
                     <template v-if="Informe.ESTADO == States.COMPLETADO">
                         <a class="dropdown-item" href="javascript:void(0);" onclick="_informe.CARGAR_ARCHIVO()">Cargar documento</a>
@@ -763,14 +763,14 @@
                         </div>
                     </div>
                 </div>
-                <div class="form-group">
+                @*<div class="form-group">
                     <label class="col-form-label">Referencias:</label>
                     <div>
                         <span class="chip badge badge-success rounded mr-2 mt-1" v-for="(item, index) in app.Inf_Supervision">
                             {{item.NUM_INFORME}}
                         </span>
                     </div>
-                </div>
+                </div>*@
                 <div class="form-group">
                     <label class="col-form-label">Asunto</label>
                     <textarea class="form-control form-control-sm" rows="3" v-model="form.cAsunto"></textarea>
