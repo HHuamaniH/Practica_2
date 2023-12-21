@@ -1,0 +1,145 @@
+﻿<table cellpadding="4" style="border: 0; font-family: Arial; font-size: 10pt; border-collapse: collapse; line-height: 150%;">
+    <thead>
+        <tr style="background-color: #bfbfbf;">
+            <th style="text-align: center; border: 1px solid #000;">Obligación incumplida</th>
+            <th style="text-align: center; border: 1px solid #000;">Tipo infractor</th>
+            <th style="text-align: center; border: 1px solid #000;">Conducta Imputada</th>
+            <th style="text-align: center; border: 1px solid #000;">Descargo sobre la imputación formulada</th>
+            <th style="text-align: center; border: 1px solid #000;">Información complementaria/información adicional</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td style="border: 1px solid #000;">
+                Dependerá del caso concreto
+            </td>
+            <td style="border: 1px solid #000;">
+                Numeral 10 del Anexo 1 del RISMFFS.<br /><br />
+                <i>“Talar, extraer y/o aprovechar recursos forestales no autorizados en el área del título habilitante, cuando sea imputable a la administrada en su condición de titular del título habilitante”.</i>
+            </td>
+            <td style="border: 1px solid #000;">
+                Realizar la tala de árboles semilleros y/o no declarados de la especie con un volumen de xxx
+            </td>
+            <td style="border: 1px solid #000; text-align: center;">
+                Escrito ${informe.ANTECEDENTES_DOCS.Escrito.numero || '00XX-202X-OSINFOR/08.2.X'} SITD xxxxxxxxx
+            </td>
+            <td style="border: 1px solid #000; text-align: center;">
+                Dependerá del caso concreto
+            </td>
+        </tr>
+    </tbody>
+</table>
+<div style="font-size: 8pt;">Fuente: Elaboración propia.</div>
+
+{{if informe.COD_TIPO_INFORME == 1}}
+<p class="enumeration">
+    Al respecto, el/la administrada (o) presentó sus descargos contra la Resolución Sub Directoral mediante la Carta N° ${informe.ANTECEDENTES_DOCS.Carta.numero || '00XX-202X-OSINFOR/08.2.X'} de fecha ${informe.ANTECEDENTES_DOCS.Carta.fechaNotificacionTexto || 'xx de xxxxx de 202X'}, ingresado con fecha ${informe.ANTECEDENTES_DOCS.Carta.fechaEmisionTexto || 'xx de xxxxx de 202X'} (Registro N° xxxxxxxx) del cual se advierte los siguientes argumentos que guardan relación con la imputación materia de análisis:
+</p>
+<ol style="list-style-type: lower-alpha; margin-left: ${informe.MARGIN_LEFT.LEVEL_3};">
+    <li>(…) XXXXXXXXXXXXXXXXXXXXX (…). (Texto original del descargo).</li>
+    <li>(…) XXXXXXXXXXXXXXXXXXXXX (…). (Texto original del descargo).</li>
+    <li>(…) XXXXXXXXXXXXXXXXXXXXX (…). (Texto original del descargo).</li>
+</ol>
+<p class="enumeration">
+    En ese sentido, la Autoridad Instructora realizó el análisis correspondiente al Expediente Administrativo, así como de los documentos mencionados precedentemente, concluyendo lo siguiente:
+</p>
+<ul style="margin-left: ${informe.MARGIN_LEFT.LEVEL_3};">
+    <li>
+        “(…)xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx (…)”.
+    </li>
+</ul>
+<p class="enumeration">
+    Al respecto, mediante escrito N° ${informe.ANTECEDENTES_DOCS.Escrito.numero || '00XX-202X-OSINFOR/08.2.X'} con SITD N° xxxxxxx de fecha ${informe.ANTECEDENTES_DOCS.Carta.fechaEmisionTexto || 'xx de xxxxx de 202X'}, el/la administrado (a) presentó su descargo al Informe Final de Instrucción, señalando lo siguiente:
+</p>
+<ol style="list-style-type: lower-alpha; margin-left: ${informe.MARGIN_LEFT.LEVEL_3};">
+    <li>(…) XXXXXXXXXXXXXXXXXXXXX (…). (Texto original del descargo).</li>
+    <li>(…) XXXXXXXXXXXXXXXXXXXXX (…). (Texto original del descargo).</li>
+    <li>(…) XXXXXXXXXXXXXXXXXXXXX (…). (Texto original del descargo).</li>
+</ol>
+<p class="enumeration">Respecto a lo señalado por el/la administrado (a); se advierte el siguiente análisis:</p>
+<ul style="margin-left: ${informe.MARGIN_LEFT.LEVEL_3};">
+    <li>Con relación al argumento señalado en el acápite a) xxxxxxxxxxxxxxxxxxx</li>
+    <li>Con relación al argumento señalado en el acápite b) xxxxxxxxxxxxxxxxxxx</li>
+    <li>Con relación al argumento señalado en el acápite c) xxxxxxxxxxxxxxxxxxx</li>
+</ul>
+<p class="enumeration">
+    En esta etapa del procedimiento, de acuerdo a la documentación que obra en el expediente administrativo y del análisis de los descargos, se advierte lo siguiente:
+</p>
+{{else}}
+<p class="enumeration">
+    Es preciso mencionar que, respecto de la imputación realizada, el/la administrado no presentó descargo a la Resolución Sub Directoral.
+</p>
+<p class="enumeration">
+    La Autoridad Instructora, concluyó que existen elementos suficientes que permitieron mantener la imputación atribuida al/la administrado (a); respecto de lo cual el/la administrado (a) <u>no presentó descargos a lo señalado en el Informe Final de Instrucción.</u>
+</p>
+<p class="enumeration">
+    En esta etapa del procedimiento, de acuerdo a la documentación que obra en el expediente administrativo, se advierte lo siguiente:
+</p>
+{{/if}}
+
+<ul style="margin-left: ${informe.MARGIN_LEFT.LEVEL_3};">
+    <li>
+        El/la administrado (a) realizó el aprovechamiento de xxxx m<sup>3</sup> de la especie xxxxxx de madera no autorizada que proviene de un árbol semillero, conforme se detalla en el cuadro siguiente
+        <a style="mso-footnote-id: foot_infraccion_10_1" href="#_foot_infraccion_10_1" title="">
+            <sup class=MsoFootnoteReference><span style="mso-special-character:footnote"></span></sup>
+        </a>:
+    </li>
+</ul>
+<p class="text-align: center;">
+    <strong>Cuadro.</strong>: Extracción no autorizada de árboles semilleros en el área de la PC N° 04 del PO N° 01
+</p>
+<table cellpadding="4" style="border: 0; font-family: Arial; font-size: 10pt; border-collapse: collapse; line-height: 150%;">
+    <thead>
+        <tr style="background-color: #bfbfbf;">
+            <th style="text-align: center; border: 1px solid #000;">N°</th>
+            <th style="text-align: center; border: 1px solid #000;">Especie</th>
+            <th style="text-align: center; border: 1px solid #000;">Estado</th>
+            <th style="text-align: center; border: 1px solid #000;">Volumen</th>
+            <th style="text-align: center; border: 1px solid #000;">Coordenadas</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td style="border: 1px solid #000;">1</td>
+            <td style="border: 1px solid #000;">
+                Manilkara bidentata “quinilla” de código 5-36
+            </td>
+            <td style="border: 1px solid #000;">
+                Movilizado
+            </td>
+            <td style="border: 1px solid #000; text-align: center;">
+                XXX m<sup>3</sup>
+            </td>
+            <td style="border: 1px solid #000; text-align: center;">
+                XXX E – XXX N
+            </td>
+        </tr>
+    </tbody>
+    <tfoot>
+        <tr>
+            <td style="border: 1px solid #000; background-color: #bfbfbf;" colspan="3">Total</td>
+            <td style="border: 1px solid #000;">XXX m<sup>3</sup></td>
+            <td style="border: 1px solid #000; background-color: #bfbfbf;"></td>
+        </tr>
+    </tfoot>
+</table>
+<div style="font-size: 8pt;">Fuente: Elaboración propia en base al Informe de Supervisión N° ${informe.ANTECEDENTES_DOCS.Inf_Sup.numero || 'xx de xxxxx de 202X'}.</div>
+
+<ul style="margin-left: ${informe.MARGIN_LEFT.LEVEL_3};">
+    <li>
+        El aprovechamiento xxxx m<sup>3</sup> de la especie xxxxx, significa el incumplimiento del plan de manejo, documento que el/la propio (a) administrado (a) presentó ante la ARFFS y fue aprobado. En efecto, en el referido plan de manejo, el/la administrado (a) declaró aquellos árboles que serían aprovechados, entre los que no se encuentra el consignado en el cuadro que precede.
+    </li>
+    <li>
+        Finalmente, a pesar de que el RISMFFS señala que la infracción analizada es subsanable, la misma que se efectúa dentro del plazo previsto para la presentación de los descargos en la fase instructora, el/la administrado (a) no realizó la subsanación correspondiente
+        <a style="mso-footnote-id: foot_infraccion_10_2" href="#_foot_infraccion_10_2" title="">
+            <sup class=MsoFootnoteReference><span style="mso-special-character:footnote"></span></sup>
+        </a>, a pesar de haberse informado mediante xxxxxx.
+    </li>
+</ul>
+
+<p class="enumeration">
+    En ese contexto, de acuerdo a lo señalado precedentemente, se confirma que el/la administrado (a) cometió la infracción
+    <a style="mso-footnote-id: foot_infraccion_10_3" href="#_foot_infraccion_10_3" title="">
+        <sup class=MsoFootnoteReference><span style="mso-special-character:footnote"></span></sup>
+    </a> tipificada en el numeral 10 del Anexo 1 del RISMFFS; criterio acorde a lo señalado en el Informe Final de Instrucción.
+</p>

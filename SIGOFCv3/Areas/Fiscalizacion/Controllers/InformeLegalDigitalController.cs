@@ -14,16 +14,16 @@ namespace SIGOFCv3.Areas.Fiscalizacion.Controllers
 {
     public class InformeLegalDigitalController : Controller
     {
-        Log_Informe_Legal_Digital oLog_Informe_Legal_Digital;
+        Log_PAU_IFI_Digital oLog_Informe_Legal_Digital;
 
         [HttpPost]
-        public JsonResult GuardarIFI(VM_INFORME_LEGAL_DIGITAL informeDigital)
+        public JsonResult GuardarIFI(VM_PAU_IFI_DIGITAL informeDigital)
         {
             bool success = false; string msj = "";
-            VM_INFORME_LEGAL_DIGITAL result = new VM_INFORME_LEGAL_DIGITAL();
+            VM_PAU_IFI_DIGITAL result = new VM_PAU_IFI_DIGITAL();
             try
             {
-                oLog_Informe_Legal_Digital = new Log_Informe_Legal_Digital();
+                oLog_Informe_Legal_Digital = new Log_PAU_IFI_Digital();
                 informeDigital.COD_USUARIO_OPERACION = (ModelSession.GetSession())[0].COD_UCUENTA;
 
                 result.COD_INFORME_DIGITAL = oLog_Informe_Legal_Digital.RegInformeGrabar(informeDigital);
@@ -44,7 +44,7 @@ namespace SIGOFCv3.Areas.Fiscalizacion.Controllers
         [HttpGet]
         public JsonResult ObtenerIFI(string COD_RESOLUCION)
         {
-            oLog_Informe_Legal_Digital = new Log_Informe_Legal_Digital();
+            oLog_Informe_Legal_Digital = new Log_PAU_IFI_Digital();
             var informe = oLog_Informe_Legal_Digital.ObtenerInforme(COD_RESOLUCION);
             //var inf_supervision = oLog_Informe_Legal_Digital.ObtenerRSDCabeceraByReferencia(COD_RESOLUCION, 3);
             return Json(new { informe }, JsonRequestBehavior.AllowGet);
@@ -53,14 +53,14 @@ namespace SIGOFCv3.Areas.Fiscalizacion.Controllers
         [HttpGet]
         public JsonResult ObtenerAntecedentes(string COD_RESOLUCION, string COD_THABILITANTE)
         {
-            oLog_Informe_Legal_Digital = new Log_Informe_Legal_Digital();
+            oLog_Informe_Legal_Digital = new Log_PAU_IFI_Digital();
             var result = oLog_Informe_Legal_Digital.ObtenerAntecedentesRSD(COD_RESOLUCION, COD_THABILITANTE);
             return Json(result, JsonRequestBehavior.AllowGet);
         }
 
         public JsonResult ObtenerInformeSupervision(string COD_INFORME_SUPERVISION)
         {
-            oLog_Informe_Legal_Digital = new Log_Informe_Legal_Digital();
+            oLog_Informe_Legal_Digital = new Log_PAU_IFI_Digital();
             var result = oLog_Informe_Legal_Digital.InformeSupervisionResumen(COD_INFORME_SUPERVISION);
             return Json(result, JsonRequestBehavior.AllowGet);
         }
@@ -68,7 +68,7 @@ namespace SIGOFCv3.Areas.Fiscalizacion.Controllers
         [HttpGet]
         public JsonResult ObtenerExpediente(string NRO_DOCUMENTO)
         {
-            oLog_Informe_Legal_Digital = new Log_Informe_Legal_Digital();
+            oLog_Informe_Legal_Digital = new Log_PAU_IFI_Digital();
             var result = oLog_Informe_Legal_Digital.ObtenerExpedienteSITD(NRO_DOCUMENTO);
             return Json(result, JsonRequestBehavior.AllowGet);
         }
@@ -119,7 +119,7 @@ namespace SIGOFCv3.Areas.Fiscalizacion.Controllers
                 if (tramite.iCodTramite > 0)
                 {
                     //actualizando número de informe
-                    Log_Informe_Legal_Digital logInforme = new Log_Informe_Legal_Digital();
+                    Log_PAU_IFI_Digital logInforme = new Log_PAU_IFI_Digital();
                     logInforme.ModificarNumeroInforme(tramite.cod_Informe, tramite.cCodificacion, DateTime.Now);
 
                     success = true;
@@ -162,9 +162,9 @@ namespace SIGOFCv3.Areas.Fiscalizacion.Controllers
         }
 
         [HttpPost, ValidateInput(false)]
-        public JsonResult Notificar(Informe_Notificacion notificacion)
+        public JsonResult Notificar(VM_PAU_DIGITAL_ALERTA notificacion)
         {
-            oLog_Informe_Legal_Digital = new Log_Informe_Legal_Digital();
+            oLog_Informe_Legal_Digital = new Log_PAU_IFI_Digital();
             var result = oLog_Informe_Legal_Digital.Notificar(notificacion);            
             return Json(result);
         }
@@ -172,7 +172,7 @@ namespace SIGOFCv3.Areas.Fiscalizacion.Controllers
         [HttpPost]
         public JsonResult ParticipanteActualizar(List<VM_INFORME_LEGAL_DIGITAL_PARTICIPANTE> participantes)
         {
-            oLog_Informe_Legal_Digital = new Log_Informe_Legal_Digital();
+            oLog_Informe_Legal_Digital = new Log_PAU_IFI_Digital();
             foreach (var item in participantes)
             {
                 oLog_Informe_Legal_Digital.ParticipanteActualizar(item);
@@ -182,13 +182,13 @@ namespace SIGOFCv3.Areas.Fiscalizacion.Controllers
         }
 
         [HttpGet]
-        public JsonResult ExtraerOpcionesBuscarRSD()
+        public JsonResult ExtraerOpcionesBuscar(string BusCriterio)
         {
             Log_BUSQUEDA exeBus = new Log_BUSQUEDA();
             Ent_BUSQUEDA paramsBus = new Ent_BUSQUEDA();
 
             paramsBus.BusFormulario = "MANGRILLA";
-            paramsBus.BusCriterio = "RESOLUCION_SUBDIRECTORAL";
+            paramsBus.BusCriterio = BusCriterio; // "RESOLUCION_SUBDIRECTORAL" / "INFORME_LEGAL";
 
             var result = HelperSigo.LLenarCombos(exeBus.RegOpcionesCombo(paramsBus), "");
             return Json(result, JsonRequestBehavior.AllowGet);
@@ -201,7 +201,7 @@ namespace SIGOFCv3.Areas.Fiscalizacion.Controllers
             string pathDocumentoOrigen = Server.MapPath("~/" + System.Configuration.ConfigurationManager.AppSettings["pathInvoker"]);
             string pathDocumentoDestino = Server.MapPath("~/" + System.Configuration.ConfigurationManager.AppSettings["pathTransferidoSITD"]);
             string pathGeneradoOrigen = string.Empty, pathGeneradoDestino = string.Empty, nombreDocumentoNuevo = string.Empty;
-            oLog_Informe_Legal_Digital = new Log_Informe_Legal_Digital();
+            oLog_Informe_Legal_Digital = new Log_PAU_IFI_Digital();
             try
             {
                 var usuarioLogin = ModelSession.GetSession().FirstOrDefault();               
@@ -268,7 +268,7 @@ namespace SIGOFCv3.Areas.Fiscalizacion.Controllers
                 string pathDocumento = Server.MapPath("~/" + System.Configuration.ConfigurationManager.AppSettings["pathInvoker"]);
                 //var usuarioLogin = ModelSession.GetSession().FirstOrDefault();
 
-                oLog_Informe_Legal_Digital = new Log_Informe_Legal_Digital();
+                oLog_Informe_Legal_Digital = new Log_PAU_IFI_Digital();
                 success = oLog_Informe_Legal_Digital.AnularFirmaPorInforme(codInforme);
                 if (success)
                 {

@@ -8,16 +8,16 @@ using System.Collections.Generic;
 
 namespace CapaLogica.Documento
 {
-    public class Log_Informe_Legal_Digital
+    public class Log_PAU_IFI_Digital
     {
-        Dat_Informe_Legal_Digital oDat_Informe_Legal_Digital;
+        Dat_PAU_IFI_Digital oDat_Informe_Legal_Digital;
 
-        public Log_Informe_Legal_Digital()
+        public Log_PAU_IFI_Digital()
         {
-            oDat_Informe_Legal_Digital = new Dat_Informe_Legal_Digital();
+            oDat_Informe_Legal_Digital = new Dat_PAU_IFI_Digital();
         }
 
-        public string RegInformeGrabar(VM_INFORME_LEGAL_DIGITAL informeDigital)
+        public string RegInformeGrabar(VM_PAU_IFI_DIGITAL informeDigital)
         {
             Ent_InformeLegalPAUDigital cabecera = new Ent_InformeLegalPAUDigital();
             cabecera.pVCodInformeDigital = informeDigital.COD_INFORME_DIGITAL;
@@ -53,7 +53,7 @@ namespace CapaLogica.Documento
             return oDat_Informe_Legal_Digital.RegInformeGrabar(cabecera, informeDigital);
         }
 
-        public VM_INFORME_LEGAL_DIGITAL ObtenerInforme(string COD_RESOLUCION)
+        public VM_PAU_IFI_DIGITAL ObtenerInforme(string COD_RESOLUCION)
         {
             return oDat_Informe_Legal_Digital.ObtenerInforme(COD_RESOLUCION);
         }
@@ -78,7 +78,7 @@ namespace CapaLogica.Documento
             oDat_Informe_Legal_Digital.ModificarNumeroInforme(codInforme, numeroInforme, fechaOperacion);
         }
 
-        public string Notificar(Informe_Notificacion notificacion)
+        public string Notificar(VM_PAU_DIGITAL_ALERTA notificacion)
         {
             return oDat_Informe_Legal_Digital.Notificar(notificacion);
         }

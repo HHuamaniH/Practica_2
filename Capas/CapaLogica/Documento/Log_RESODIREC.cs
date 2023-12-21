@@ -677,7 +677,7 @@ namespace CapaLogica.DOC
         }
         #endregion
 
-        public VM_RSD_Resumen RSD_Resumen(string COD_RESDIR, string asCodTipoIL)
+        public VM_PAU_RSD_RESUMEN RSD_Resumen(string COD_RESDIR, string asCodTipoIL)
         {
             try
             {
@@ -797,7 +797,7 @@ namespace CapaLogica.DOC
                     vm.hdfCodPersona = oCEntidadRD.COD_PERSONA;
                     vm.txtApellidosNombres = oCEntidadRD.APELLIDOS_NOMBRES;
                     vm.txtNumeroResolucion = oCEntidadRD.NUMERO_RESOLUCION;
-                    vm.txtFechaEmision = oCEntidadRD.FECHA_EMISION.ToString();
+                    if(oCEntidadRD.FECHA_EMISION != null) vm.txtFechaEmision = oCEntidadRD.FECHA_EMISION.ToString();
                     vm.txtFechaAnulacion = oCEntidadRD.FECHA_ANULACION.ToString();
                     vm.chkResDir = (bool)oCEntidadRD.RESDIR;
                     vm.chkResSubDir = (bool)oCEntidadRD.RESSUBDIR;
@@ -883,7 +883,7 @@ namespace CapaLogica.DOC
                     ///para las infracciones
                     vm.txtBExtraccionFEmision = (string)oCEntidadRD.BEXTRACCION_FEMISION;
                     vm.txtDescInfraacion = oCEntidadRD.DESCRIPCION_INFRACCIONES;
-                    
+
                     ///inicializamos algunos combos
                     //vm.listaEspeciesFloraCombo = initCombos("ESPECIES", "");
                     initCombosRD(vm);
@@ -893,7 +893,8 @@ namespace CapaLogica.DOC
                     {
                         initPoas(vm);
                     }
-                    else {
+                    else
+                    {
                         vm.ListPOAOBSERVATORIO = oCEntidadRD.ListPOAs;
                         vm.ListPOA = oCEntidadRD.ListPOAs;
                     }
@@ -999,7 +1000,7 @@ namespace CapaLogica.DOC
                     }
 
                     //21.09.2022 TGS
-                    vm.chkTerceroSolidario= (oCEntidadRD.COD_TERCERO_SOLIDARIO.Trim()=="")?false:true;
+                    vm.chkTerceroSolidario = (oCEntidadRD.COD_TERCERO_SOLIDARIO.Trim() == "") ? false : true;
                     vm.hdfCodTerceroSolidario = oCEntidadRD.COD_TERCERO_SOLIDARIO;
                     vm.txtTerceroSolidario = oCEntidadRD.TERCERO_SOLIDARIO;
                     vm.chkSubsVoluntaria = (Boolean)oCEntidadRD.SUBSANACION_VOLUNTARIA;
@@ -1334,7 +1335,7 @@ namespace CapaLogica.DOC
             var errores = new List<string>();
             if (_dto.vmControlCalidad.ddlIndicadorId == "0000000") errores.Add("Seleccione el estado actual del registro");
             //if (string.IsNullOrEmpty(_dto.txtNumeroResolucion)) errores.Add("Ingrese el número de Resolución Directoral");
-            if (string.IsNullOrEmpty(_dto.txtFechaEmision)) errores.Add("Seleccione la fecha de emisión");
+            //if (string.IsNullOrEmpty(_dto.txtFechaEmision)) errores.Add("Seleccione la fecha de emisión");
             if (_dto.listInformes == null) errores.Add("Seleccione un informe, expediente");
             //if (_dto.hdfCodTipoIlegal == "0000001" && _dto.txtIdRecomendacion == "0000000") errores.Add("Seleccione una recomendación");
 
@@ -1344,7 +1345,7 @@ namespace CapaLogica.DOC
             }
             if (_dto.vmControlCalidad.ddlIndicadorId == "0000000") throw new Exception("Seleccione el estado actual del registro");
             //if (string.IsNullOrEmpty(_dto.txtNumeroResolucion)) throw new Exception("Ingrese el número de Resolución Directoral");
-            if (string.IsNullOrEmpty(_dto.txtFechaEmision)) throw new Exception("Seleccione la fecha de emisión");
+            //if (string.IsNullOrEmpty(_dto.txtFechaEmision)) throw new Exception("Seleccione la fecha de emisión");
             if (_dto.listInformes == null) throw new Exception("Seleccione un informe, expediente");
             /*if (_dto.chkMedidaCompl == true)
             {
@@ -1379,11 +1380,15 @@ namespace CapaLogica.DOC
                 {
                     oCEntResodirec.COD_PERSONA = _dto.hdfCodPersona.Trim();
                 }
-                
+
                 oCEntResodirec.COD_RESODIREC = _dto.hdfCodResodirec;
                 oCEntResodirec.DESCRIPCION = _dto.txtObservacones;
                 oCEntResodirec.NUMERO_RESOLUCION = _dto.txtNumeroResolucion;
-                oCEntResodirec.FECHA_EMISION = Convert.ToDateTime(_dto.txtFechaEmision);
+
+                if (!string.IsNullOrEmpty(_dto.txtFechaEmision))
+                {
+                    oCEntResodirec.FECHA_EMISION = Convert.ToDateTime(_dto.txtFechaEmision);
+                }
 
                 oCEntResodirec.RESDIR = _dto.chkResDir;
                 oCEntResodirec.RESSUBDIR = _dto.chkResSubDir;

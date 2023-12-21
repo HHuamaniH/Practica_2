@@ -1,0 +1,136 @@
+﻿<table cellpadding="4" style="border: 0; font-family: Arial; font-size: 10pt; border-collapse: collapse; line-height: 150%;">
+    <thead>
+        <tr style="background-color: #bfbfbf;">
+            <th style="text-align: center; border: 1px solid #000;">Obligación incumplida</th>
+            <th style="text-align: center; border: 1px solid #000;">Tipo infractor</th>
+            <th style="text-align: center; border: 1px solid #000;">Conducta Imputada</th>
+            <th style="text-align: center; border: 1px solid #000;">Descargo sobre la imputación formulada</th>
+            <th style="text-align: center; border: 1px solid #000;">Información complementaria/información adicional</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td style="border: 1px solid #000;">
+                Dependerá del caso concreto
+            </td>
+            <td style="border: 1px solid #000;">
+                Numeral 2 del Anexo 2 del RISMFFS<br /><br />
+                <i>“No entregar o presentar información o documentación legalmente exigible en el plazo previsto, o cuando la autoridad competente lo requiera”</i>
+            </td>
+            <td style="border: 1px solid #000;">
+                No presentar el Informe de Ejecución xxxx, el cual debe contener las actividades de aprovechamiento de productos forestales maderables y no maderables
+            </td>
+            <td style="border: 1px solid #000; text-align: center;">
+                Escrito ${informe.ANTECEDENTES_DOCS.Escrito.numero || '00XX-202X-OSINFOR/08.2.X'} SITD xxxxxxxxx
+            </td>
+            <td style="border: 1px solid #000; text-align: center;">
+                Dependerá del caso concreto
+            </td>
+        </tr>
+    </tbody>
+</table>
+<div style="font-size: 8pt;">Fuente: Elaboración propia.</div>
+
+{{if informe.COD_TIPO_INFORME == 1}}
+<p class="enumeration">
+    Al respecto, el/la administrada (o) presentó sus descargos contra la Resolución Sub Directoral mediante la Carta N° ${informe.ANTECEDENTES_DOCS.Carta.numero || '00XX-202X-OSINFOR/08.2.X'} de fecha ${informe.ANTECEDENTES_DOCS.Carta.fechaNotificacionTexto || 'xx de xxxxx de 202X'}, ingresado con fecha xx de ${informe.ANTECEDENTES_DOCS.Carta.fechaEmisionTexto || 'xx de xxxxx de 202X'} (Registro N° xxxxxxxx) del cual se advierte los siguientes argumentos que guardan relación con la imputación materia de análisis:
+</p>
+<ol style="list-style-type: lower-alpha; margin-left: ${informe.MARGIN_LEFT.LEVEL_3};">
+    <li>(…) XXXXXXXXXXXXXXXXXXXXX (…). (Texto original del descargo).</li>
+    <li>(…) XXXXXXXXXXXXXXXXXXXXX (…). (Texto original del descargo).</li>
+    <li>(…) XXXXXXXXXXXXXXXXXXXXX (…). (Texto original del descargo).</li>
+</ol>
+<p class="enumeration">
+    En ese sentido, la Autoridad Instructora realizó el análisis correspondiente al Expediente Administrativo, así como de los documentos mencionados precedentemente, concluyendo lo siguiente:
+</p>
+<ul style="margin-left: ${informe.MARGIN_LEFT.LEVEL_3};">
+    <li>
+        “(…)xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx (…)”.
+    </li>
+</ul>
+{{else}}
+<p class="enumeration">
+    Es preciso mencionar que, respecto de la imputación realizada, el/la administrado no presentó descargo a la Resolución Sub Directoral.
+</p>
+<p class="enumeration">
+    La Autoridad Instructora, concluyó que existen elementos suficientes que permitieron mantener la imputación atribuida al/la administrado (a); respecto de lo cual el/la administrado (a) <u>no presentó descargos a lo señalado en el Informe Final de Instrucción.</u>
+</p>
+{{/if}}
+
+<p class="enumeration">
+    En esta etapa del procedimiento, de acuerdo a la documentación que obra en el expediente administrativo, se advierte lo siguiente:
+</p>
+<ul style="margin-left: ${informe.MARGIN_LEFT.LEVEL_3};">
+    <li>
+        El/la administrado (a), tenía que presentar el informe de ejecución periodo xxxx – xxxx, hasta el xxxx, ante la ARFFS y al OSINFOR, conforme al siguiente cuadro:
+    </li>
+</ul>
+<table cellpadding="4" border="0" style="font-family: Arial; font-size: 10pt; border-collapse: collapse; line-height: 150%; margin-bottom: 0;">
+    <thead>
+        <tr>
+            <th style="border: 1px solid #000; text-align: center;">Plan de Manejo Forestal</th>
+            <th style="border: 1px solid #000; text-align: center;">Tipo de Informe de Ejecución</th>
+            <th style="border: 1px solid #000; text-align: center;">Tipo de aprovechamiento</th>
+            <th style="border: 1px solid #000; text-align: center;">Periodo de implementación</th>
+            <th style="border: 1px solid #000; text-align: center;">Fecha de culminación del año operativo</th>
+            <th style="border: 1px solid #000; text-align: center;">
+                Fecha para la presentación de los Informes de Ejecución Anuales considerando los 45 días calendario
+            </th>
+            <th style="border: 1px solid #000; text-align: center;">Cumplió/No cumplió</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td style="border: 1px solid #000;" rowspan="2">
+                Dependerá del caso concreto
+            </td>
+            <td style="border: 1px solid #000;" rowspan="2">
+                Dependerá del caso concreto
+            </td>
+            <td style="border: 1px solid #000;">
+                No maderable (castaña)
+            </td>
+            <td style="border: 1px solid #000;">
+                XX
+            </td>
+            <td style="border: 1px solid #000;">
+                XX
+            </td>
+            <td style="border: 1px solid #000;">
+                XX
+            </td>
+            <td style="border: 1px solid #000;">
+                No cumplió
+            </td>
+        </tr>
+        <tr>
+            <td style="border: 1px solid #000;">
+                Maderable
+            </td>
+            <td style="border: 1px solid #000;">
+                XX
+            </td>
+            <td style="border: 1px solid #000;">
+                XX
+            </td>
+            <td style="border: 1px solid #000;">
+                XX
+            </td>
+            <td style="border: 1px solid #000;">
+                No cumplió
+            </td>
+        </tr>
+    </tbody>
+</table>
+<div style="font-size: 8pt;">Fuente: Elaboración propia.</div>
+<ul style="margin-left: ${informe.MARGIN_LEFT.LEVEL_3};">
+    <li>
+        Sin embargo, el/la <strong>administrado (a) no ha cumplido con presentar el Informe de Ejecución del anual, del periodo xxxx - xxxx</strong>, el cual debe contener las actividades implementadas en el plan de manejo.
+    </li>
+    <li>
+        Debe considerarse que el RISMFFS permite que la infracción analizada se subsane, incluso hasta el vencimiento del plazo previsto para la presentación de los descargos en la fase instructora; siendo que, el/la administrado (a) no cumplió con presentar el informe de ejecución correspondiente.
+    </li>
+</ul>
+<p class="enumeration">
+    En ese contexto, de acuerdo a lo señalado precedentemente, se desestima/se confirma que el/la administrado (a) cometió la infracción tipificada en el numeral 2 del Anexo 1 del RISMFFS.
+</p>

@@ -1337,18 +1337,19 @@ $(function () {
             Abrir_Notificar: async function (item) {
                 const self = this;
                 modal_notificar.form.Mensaje = 'Por favor revisar el informe para la continuidad del proceso.';
+                modal_notificar.form.CC = '';
 
                 let users = [];
 
                 if (item) users = [item.codPersona];
-                else users = this.Informe.PARTICIPANTES.map(user => user.codPersona);
+                else users = this.Informe.PARTICIPANTES.filter(item => item.flgAplica).map(user => user.codPersona);
 
-                const res = await modal_notificar.ObtenerCorreos(users);
+                const correos = await modal_notificar.ObtenerCorreos(users);
 
                 //Actualizar los participantes despues de notificar
-                modal_notificar.callback = function () {
+                modal_notificar.callback = function (enviado) {
                     const personas = self.Informe.PARTICIPANTES
-                        .filter(item => res.find(x => x.codPersona == item.codPersona));
+                        .filter(item => enviado.find(x => x.codPersona == item.codPersona));
 
                     const participantes = personas.map(item => ({
                         ...item,
@@ -1376,7 +1377,7 @@ $(function () {
                     });
                 }
 
-                modal_notificar.Abrir(res);
+                modal_notificar.Abrir(correos);
             },
             Revisar: function (item, index) {
                 //let self = this;
@@ -1456,7 +1457,8 @@ $(function () {
             Abrir: function () {
                 const self = this;
                 const params = {
-                    url: `${urlLocalSigo}Fiscalizacion/InformeLegalDigital/ExtraerOpcionesBuscarRSD`,
+                    url: `${urlLocalSigo}Fiscalizacion/InformeLegalDigital/ExtraerOpcionesBuscar`,
+                    datos: { BusCriterio: 'RESOLUCION_SUBDIRECTORAL' }
                 };
 
                 if (!self.opciones.length) {
@@ -1581,7 +1583,7 @@ $(function () {
                 });
 
                 // Si no hay información del titular lo establecemos (Solo para la primera RSD)
-                if (!app.Informe.COD_THABILITANTE) {
+                if (!app.Informe.TITULAR) {
                     const THAB = {
                         COD_THABILITANTE: RESODIREC.COD_THABILITANTE,
                         NUM_CONTRATO: RESODIREC.NUM_THABILITANTE,
@@ -1876,12 +1878,21 @@ $(function () {
 
                     utilSigo.fnAjax(params, function (res) {
                         const correos = res
-                            .filter(item => (item?.CORREO || '').indexOf('@') != -1)
-                            .map(item => ({
-                                codPersona: item.COD_PERSONA,
-                                persona: `${item.NOMBRES} ${item.APE_PATERNO} ${item.APE_MATERNO}`,
-                                email: item.CORREO
-                            }));
+                            .filter(item => (item?.CORREO || '').indexOf('@') !== -1)
+                            .reduce((acc, item) => {
+                                if (!acc.some(obj => obj.email === item.CORREO)) {
+                                    return [
+                                        ...acc,
+                                        {
+                                            codPersona: item.COD_PERSONA,
+                                            persona: `${item.NOMBRES} ${item.APE_PATERNO} ${item.APE_MATERNO}`,
+                                            email: item.CORREO
+                                        }
+                                    ];
+                                }
+
+                                return acc;
+                            }, []);
 
                         resolve(correos);
                     });
@@ -1934,9 +1945,11 @@ $(function () {
             Notificar: function () {
                 const self = this;
                 const user = ManInfLegal_AddEdit.userApp;
+                const seleccionados = JSON.parse(JSON.stringify(self.form.Seleccionados));
 
                 const notificacion = {
-                    DESTINATARIOS: self.form.Seleccionados.map(item => item.email).join(','),
+                    TITULO: 'Informe Final de Instrucción',
+                    DESTINATARIOS: seleccionados.map(item => item.email).join(','),
                     CC_DESTINATARIOS: self.form.CC,
                     COD_INFORME: app.Informe.NUM_INFORME_SITD,
                     MENSAJE_ENVIO_ALERTA: `${_informe.render(self.form.Mensaje)}<br><br>Atentamente,<br>${user.PERSONA}`,
@@ -1952,7 +1965,7 @@ $(function () {
                 utilSigo.fnAjax(params, function (res) {
                     if (res) {
                         //Para ejecutar cualquier acción despues de enviar un correo
-                        if (typeof self.callback === 'function') self.callback(res);
+                        if (typeof self.callback === 'function') self.callback(seleccionados);
                         utilSigo.toastSuccess('Enviado', res);
                     } else {
                         utilSigo.toastWarning('Atención', 'No se ha encontrado ningún correo asociado al usuario');

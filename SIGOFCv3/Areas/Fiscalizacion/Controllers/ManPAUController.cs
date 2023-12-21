@@ -12,12 +12,12 @@ namespace SIGOFCv3.Areas.Fiscalizacion.Controllers
 {
     public class ManPAUController : Controller
     {
-        Log_PAU_Digital CLogInforme;
+        Log_PAU_RSD_Digital CLogInforme;
 
         [HttpGet]
         public JsonResult ObtenerConfiguracion()
         {
-            CLogInforme = new Log_PAU_Digital();
+            CLogInforme = new Log_PAU_RSD_Digital();
             var infracciones = CLogInforme.ListarInfracciones();
             var causales_caducidad = CLogInforme.ListarCausalesCaducidad();
             var result = new { infracciones, causales_caducidad };
@@ -25,13 +25,13 @@ namespace SIGOFCv3.Areas.Fiscalizacion.Controllers
         }
 
         [HttpPost]
-        public JsonResult GuardarRSD(VM_RSD_DIGITAL informeDigital)
+        public JsonResult GuardarRSD(VM_PAU_RSD_DIGITAL informeDigital)
         {
             bool success = false; string msj = "";
-            VM_RSD_DIGITAL result = new VM_RSD_DIGITAL();
+            VM_PAU_RSD_DIGITAL result = new VM_PAU_RSD_DIGITAL();
             try
             {
-                CLogInforme = new Log_PAU_Digital();
+                CLogInforme = new Log_PAU_RSD_Digital();
                 informeDigital.COD_USUARIO_OPERACION = (ModelSession.GetSession())[0].COD_UCUENTA;
 
                 result.COD_INFORME_DIGITAL = CLogInforme.RegRSDGrabar(informeDigital);
@@ -52,7 +52,7 @@ namespace SIGOFCv3.Areas.Fiscalizacion.Controllers
         [HttpGet]
         public JsonResult ListarPlanesManejo(string COD_INFORME, string COD_THABILITANTE, int? NUM_POA, string V_OPCION)
         {
-            CLogInforme = new Log_PAU_Digital();
+            CLogInforme = new Log_PAU_RSD_Digital();
             var result = CLogInforme.ListarPlanesManejo(COD_INFORME, COD_THABILITANTE, NUM_POA, V_OPCION);
             return Json(result, JsonRequestBehavior.AllowGet);
         }
@@ -103,7 +103,7 @@ namespace SIGOFCv3.Areas.Fiscalizacion.Controllers
         [HttpPost]
         public JsonResult ObtenerRSD(string COD_RESOLUCION)
         {
-            CLogInforme = new Log_PAU_Digital();
+            CLogInforme = new Log_PAU_RSD_Digital();
             //var cabecera = CLogInforme.ObtenerRSDCabecera(COD_RESOLUCION);
             var informe = CLogInforme.ObtenerRSD(COD_RESOLUCION);
             var inf_supervision = CLogInforme.ObtenerRSDCabeceraByReferencia(COD_RESOLUCION, 3);
@@ -112,16 +112,16 @@ namespace SIGOFCv3.Areas.Fiscalizacion.Controllers
 
         public JsonResult ConsultarReferencia(string NRO_REFERENCIA, int TIPO)
         {
-            CLogInforme = new Log_PAU_Digital();
+            CLogInforme = new Log_PAU_RSD_Digital();
             var data = CLogInforme.ObtenerRSDCabeceraByReferencia(NRO_REFERENCIA, TIPO);
             return Json(new { data }, JsonRequestBehavior.AllowGet);
         }        
 
         [HttpPost, ValidateInput(false)]
-        public JsonResult Notificar(RSD_Notificacion notificacion)
+        public JsonResult Notificar(VM_PAU_DIGITAL_ALERTA notificacion)
         {
-            CLogInforme = new Log_PAU_Digital();
-            string result = CLogInforme.NotificarRSD(notificacion);
+            CLogInforme = new Log_PAU_RSD_Digital();
+            string result = CLogInforme.Notificar(notificacion);
 
             return Json(result);
         }
@@ -129,7 +129,7 @@ namespace SIGOFCv3.Areas.Fiscalizacion.Controllers
         [HttpPost]
         public JsonResult RSDFirmaActualizar(List<VM_RSD_DIGITAL_FIRMA> participantes)
         {
-            CLogInforme = new Log_PAU_Digital();
+            CLogInforme = new Log_PAU_RSD_Digital();
             foreach (var item in participantes)
             {
                 CLogInforme.RSDFirmaActualizar(item);
@@ -158,7 +158,7 @@ namespace SIGOFCv3.Areas.Fiscalizacion.Controllers
                 string pathDocumento = Server.MapPath("~/" + System.Configuration.ConfigurationManager.AppSettings["pathInvoker"]);
                 //var usuarioLogin = ModelSession.GetSession().FirstOrDefault();
 
-                CLogInforme = new Log_PAU_Digital();
+                CLogInforme = new Log_PAU_RSD_Digital();
                 success = CLogInforme.AnularFirmaPorInforme(codInforme);
                 if (success)
                 {
@@ -237,7 +237,7 @@ namespace SIGOFCv3.Areas.Fiscalizacion.Controllers
                 if (tramite.iCodTramite > 0)
                 {
                     //actualizando número de informe
-                    Log_PAU_Digital logInforme = new Log_PAU_Digital();
+                    Log_PAU_RSD_Digital logInforme = new Log_PAU_RSD_Digital();
                     logInforme.ModificarNumeroInforme(tramite.cod_Informe, tramite.cCodificacion, tramite.fechaRegistro);
 
                     success = true;
@@ -286,11 +286,11 @@ namespace SIGOFCv3.Areas.Fiscalizacion.Controllers
             string pathDocumentoOrigen = Server.MapPath("~/" + System.Configuration.ConfigurationManager.AppSettings["pathInvoker"]);
             string pathDocumentoDestino = Server.MapPath("~/" + System.Configuration.ConfigurationManager.AppSettings["pathTransferidoSITD"]);
             string pathGeneradoOrigen = string.Empty, pathGeneradoDestino = string.Empty, nombreDocumentoNuevo = string.Empty;
-            Log_PAU_Digital CLogInforme = null;
+            Log_PAU_RSD_Digital CLogInforme = null;
             try
             {
                 var usuarioLogin = ModelSession.GetSession().FirstOrDefault();
-                CLogInforme = new Log_PAU_Digital();
+                CLogInforme = new Log_PAU_RSD_Digital();
 
                 pathGeneradoOrigen = Path.Combine(pathDocumentoOrigen, $"{codificacion}");
                 if (!System.IO.File.Exists(pathGeneradoOrigen))

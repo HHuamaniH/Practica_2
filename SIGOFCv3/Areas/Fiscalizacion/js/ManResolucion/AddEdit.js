@@ -15,7 +15,22 @@ ManRD_AddEdit.iniciarEventos = function () {
 
     if (ManRD_AddEdit.frm.find("#hdfCodFCTipo").val() == "0000010") {
         ManRD_AddEdit.fnShowTerceroSolidario();
-    }  
+    } 
+
+    ManRD_AddEdit.checkedResolucion();
+}
+
+ManRD_AddEdit.checkedResolucion = function () {  
+    const chkResDir = ManRD_AddEdit.frm.find("#chkResDir");
+    const chkResSubDir = ManRD_AddEdit.frm.find("#chkResSubDir");
+
+    chkResDir.on('change', function () {
+        chkResSubDir.prop("checked", false);
+    });
+
+    chkResSubDir.on('change', function () {
+        chkResDir.prop("checked", false);
+    });
 }
 
 //vuelve a la vista principal del listado

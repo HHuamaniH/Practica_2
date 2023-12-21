@@ -1,0 +1,836 @@
+﻿<script id="tmpl-exportar" type="text/x-jquery-tmpl">
+    <div style="font-family: Arial; font-size: 10pt; line-height: 150%;">
+        <div>
+            <table width="100%" cellpadding="4" style="border: 0; text-align: justify; font-family: Arial; font-size: 10pt; border-collapse: collapse; line-height: 150%;">
+                <tbody>
+                    <tr>
+                        <td style="vertical-align: top;"><strong>EXPEDIENTE N°</strong></td>
+                        <td style="width: 30px; vertical-align: top;">:</td>
+                        <td style="vertical-align: top;">${EXPEDIENTE_ADM || '000XX-20XX-OSINFOR/08.2.1'}</td>
+                    </tr>
+                    <tr>
+                        <td style="vertical-align: top;"><strong>MATERIA</strong></td>
+                        <td style="width: 30px; vertical-align: top;">:</td>
+                        <td style="vertical-align: top;">${MATERIA}</td>
+                    </tr>
+                    <tr>
+                        <td style="vertical-align: top;"><strong>ADMINISTRADO</strong></td>
+                        <td style="width: 30px; vertical-align: top;">:</td>
+                        <td style="vertical-align: top;">${TITULAR}</td>
+                    </tr>
+                    <tr>
+                        <td style="vertical-align: top;"><strong>TÍTULO HABILITANTE</strong></td>
+                        <td style="width: 30px; vertical-align: top;">:</td>
+                        <td style="vertical-align: top;">${NUM_CONTRATO}</td>
+                    </tr>
+                    <tr>
+                        <td style="vertical-align: top;"><strong>REFERENCIA</strong></td>
+                        <td style="width: 30px; vertical-align: top;">:</td>
+                        <td style="vertical-align: top;">Informe Final de Instrucción N° ${ANTECEDENTES_DOCS.Inf_Sup.numero || '000XX-20XX-OSINFOR/08.2.1'}</td>
+                    </tr>
+                </tbody>
+            </table>
+            <div style="font-weight: bold; text-align: center; font-size: 11pt; margin: 15pt 0;">
+                RESOLUCIÓN DIRECTORAL N° ${NUM_INFORME_SITD || '00XXX-2023-OSINFOR/08.2'}
+            </div>
+            <div style="text-align: right; margin-bottom: 15pt;">
+                Lima, ${FECHA}
+            </div>
+        </div>
+        <div style="text-align: justify;">
+            <p><strong>VISTOS:</strong></p>
+            <div>{{html VISTOS}}</div>
+            <p><strong>CONSIDERANDO:</strong></p>
+            <div>
+                <ol style="margin-left: ${MARGIN_LEFT.ROOT}; list-style: upper-roman;" start="1"><li><strong>COMPETENCIA</strong></li></ol>
+                <div>{{html COMPETENCIA}}</div>
+            </div>
+            <div>
+                <ol style="margin-left: ${MARGIN_LEFT.ROOT}; list-style: upper-roman;" start="2"><li><strong>ANÁLISIS DE LAS IMPUTACIONES DE CARGO</strong></li></ol>
+                <span>{{html ANALISIS}}</span>
+            </div>
+            {{if FLG_RESPONSABLE_SOLIDARIO}}
+            <div>
+                <ol style="margin-left: ${MARGIN_LEFT.ROOT}; list-style: upper-roman;" start="3"><li><strong>DEL RESPONSABLE SOLIDARIO</strong></li></ol>
+                <div>{{html RESPONSABLE_SOLIDARIO}}</div>
+            </div>
+            {{/if}}
+            {{if FLG_GRAVEDAD_OCASIONADA}}
+            <div>
+                <ol style="margin-left: ${MARGIN_LEFT.ROOT}; list-style: upper-roman;" start="3"><li><strong>GRAVEDAD OCASIONADA</strong></li></ol>
+                <div>{{html GRAVEDAD_OCASIONADA}}</div>
+            </div>
+            {{/if}}
+            {{if FLG_ACREDITACION_IMPUTACIONES}}
+            <div>
+                <ol style="margin-left: ${MARGIN_LEFT.ROOT}; list-style: upper-roman;" start="4">
+                    <li>
+                        <strong>
+                            ACREDITACIÓN DE LAS IMPUTACIONES, IMPOSICIÓN DE SANCIÓN
+                            <a style="mso-footnote-id: foot_imposicion_1" href="#_foot_imposicion_1" title="">
+                                <sup class=MsoFootnoteReference><span style="mso-special-character:footnote"></span></sup>
+                            </a> ATENUENATES Y AGRAVANTES.
+                        </strong>
+                    </li>
+                </ol>
+                <div>{{html ACREDITACION_IMPUTACIONES}}</div>
+            </div>
+            {{/if}}
+            {{if FLG_MEDIDAS_COMPLEMENTARIAS}}
+            <div>
+                <ol style="margin-left: ${MARGIN_LEFT.ROOT}; list-style: upper-roman;" start="4"><li><strong>DE LAS MEDIDAS COMPLEMENTARIAS</strong></li></ol>
+                <div>{{html MEDIDAS_COMPLEMENTARIAS}}</div>
+            </div>
+            {{/if}}
+            {{if FLG_MEDIDAS_CORRECTIVAS}}
+            <div>
+                <ol style="margin-left: ${MARGIN_LEFT.ROOT}; list-style: upper-roman;" start="5"><li><strong>MEDIDA CORRECTIVA</strong></li></ol>
+                <div>{{html MEDIDAS_CORRECTIVAS}}</div>
+            </div>
+            {{/if}}
+            {{if FLG_COMUNICACION_ENTIDADES}}
+            <div>
+                <ol style="margin-left: ${MARGIN_LEFT.ROOT}; list-style: upper-roman;" start="6"><li><strong>COMUNICACIÓN DE LOS ACTUADOS A OTRAS ENTIDADES</strong></li></ol>
+                <div>{{html COMUNICACION_ENTIDADES}}</div>
+            </div>
+            {{/if}}
+            <p>
+                Por lo expuesto, en uso de las atribuciones conferidas por el Decreto Legislativo N° 1085, Ley que creó el Organismo de Supervisión de los Recursos Forestales y de Fauna Silvestre – OSINFOR y modificatorias; la Resolución de Jefatura Nº 00003-2023-OSINFOR/01.1, que aprueba el Texto Integrado del Reglamento de organización y Funciones del Organismo de Supervisión de los Recursos Forestales y de Fauna Silvestre (OSINFOR); la Ley N° 29763, Ley Forestal y de Fauna Silvestre y su Reglamento para la Gestión Forestal, aprobado mediante el Decreto Supremo N° 018-2015-MINAGRI; el Reglamento de Infracciones y Sanciones en Materia Forestal y de Fauna Silvestre, aprobado por Decreto Supremo N° 007-2021-MIDAGRI; el Decreto Supremo N° 004-2019-JUS, que aprobó el Texto Único Ordenado de la Ley del Procedimiento Administrativo General, Ley Nº 27444; la Resolución de Jefatura N° 00043-2021-OSINFOR/01.1, que aprobó el Reglamento del Procedimiento Administrativo Único - PAU del OSINFOR; y la la Resolución de Jefatura N° 120-2019-OSINFOR/01.1, de fecha 31 de diciembre de 2019;
+            </p>
+            <p><strong>SE RESUELVE:</strong></p>
+            {{html RESOLUCION}}
+        </div>
+        <p style="text-align: center; margin-bottom: 15px;">
+            Regístrese y comuníquese,
+        </p>
+        <p style="text-align: center;">
+            Firmado digitalmente por<br />
+            <strong>${DIRECTOR || 'Director'}</strong><br />
+            Director <br />
+            ${PROCEDENCIA}<br />
+            OSINFOR
+        </p>
+        <br clear=all style="mso-special-character:line-break;page-break-before:always">
+        <p style="text-align: center;">
+            <strong>RESOLUCIÓN DIRECTORAL N° ${NUM_INFORME_SITD || '00XXX-2023-OSINFOR/08.2'}</strong>
+        </p>
+        <p style="text-align: center;">
+            <strong>ANEXO I</strong>
+        </p>
+        {{if IMG_SANCION?.length}}
+        <div style="text-align:center;">
+            {{each(i, img) IMG_SANCION}}
+            <img alt="Calculo de multa" src="${img}" width="450" style="width: 450px;" />
+            {{/each}}
+        </div>
+        {{else}}
+        <p style="text-align: center;">
+            (MULTA)
+        </p>
+        {{/if}}
+        <p style="text-align: center;">
+            <strong>ANEXO II</strong>
+        </p>
+        <p style="text-align: center;">
+            (Decomiso)
+        </p>
+        <p style="text-align: center;">
+            <strong>ANEXO III</strong>
+        </p>
+        <p style="text-align: center;">
+            (Medida complementaria)
+        </p>
+    </div>
+    <table border="0" cellspacing="0" cellpadding="0" style="margin: 0in 0in 0in 900in; width: 1px; height: 1px; overflow: hidden;">
+        <tr>
+            <td>
+                <!--Footer Primera página => id = ff1 -->
+                <div style="mso-element: footer; text-align: justify; font-size: 8pt; font-style: italic;" id="googoose-footer">
+                    <p class="MsoFooter">
+                        {{html PIE_PAGINA}}
+                        <table style="width: 100%;"><tr><td style="text-align: right;">#CURRENTPAGE#</td></tr></table>
+                    </p>
+                </div>
+            </td>
+        </tr>
+    </table>
+</script>
+
+<script id="tmpl-vistos" type="text/x-jquery-tmpl">
+    <table width="100%" cellpadding="4" style="border: 0; font-family: Arial; font-size: 10pt; border-collapse: collapse; line-height: 150%;">
+        <thead>
+            <tr>
+                <th style="border: 1px solid #000;"><strong>N°</strong></th>
+                <th style="border: 1px solid #000;"><strong>ANTECEDENTES</strong></th>
+                <th style="border: 1px solid #000;"><strong>DESCRIPCIÓN</strong></th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td style="border: 1px solid #000;">1</td>
+                <td style="border: 1px solid #000;">
+                    Informe de Supervisión N° ${ANTECEDENTES_DOCS.Inf_Sup.numero || 'XXXX'}, de fecha ${ANTECEDENTES_DOCS.Inf_Sup.fechaEmisionTexto || 'XX de XXX del 202X'} (en adelante, el Informe de Supervisión)
+                </td>
+                <td style="border: 1px solid #000;">
+                    <u>Titular:</u> ${TITULAR || '(indicar texto)'} identificado con ${TITULAR_DOCUMENTO? 'DNI': 'RUC'} N° ${TITULAR_DOCUMENTO || TITULAR_RUC} (en adelante, el/la titular)<br />
+                    <u>Código de TH:</u> ${NUM_CONTRATO || '(indicar texto)'}, suscrito el xx de xx del xx (en adelante, el contrato de ${TIPO_CONTRATO})<br />
+                    <u>Plan de Manejo supervisado:</u> PO ${PLAN_MANEJO.NOMBRE_POA || 'XXX'}, periodo ${PLAN_MANEJO.INICIO_VIGENCIA || 'XXX'}, aprobado mediante Resolución N° ${PLAN_MANEJO.ARESOLUCION_NUM || 'XXX'}, de fecha ${PLAN_MANEJO.ARESOLUCION_FECHA || 'XXX'}<br />
+                    <u>Fecha de supervisión:</u> ${ANTECEDENTES_DOCS.Inf_Sup.FECHA_SUPERVISION_INICIO_TEXTO || 'XXX'} al ${ANTECEDENTES_DOCS.Inf_Sup.FECHA_SUPERVISION_FIN_TEXTO || 'XXX'}
+                </td>
+            </tr>
+            <tr>
+                <td style="border: 1px solid #000;">2</td>
+                <td style="border: 1px solid #000;">Resolución Sub Directoral N° ${ANTECEDENTES_DOCS.RSD.numero}, de fecha ${ANTECEDENTES_DOCS.RSD.fechaEmisionTexto || 'XX de XXXXX de XXXX'}.</td>
+                <td style="border: 1px solid #000;">
+                    <p>Se inició el PAU <strong>por haber incurrido presuntamente en lo siguiente:</strong></p>
+                    <ul style="list-style-type: lower-roman; margin-left: 45px;">
+                        {{each(index, inf) INFRACCIONES}}
+                        <li>
+                            <i>${inf.detalle || '[Indique la conducta imputada]'}</i>
+                        </li>
+                        {{/each}}
+                    </ul>
+                </td>
+            </tr>
+            <tr>
+                <td style="border: 1px solid #000;">3</td>
+                <td style="border: 1px solid #000;">
+                    Cédula de Notificación N° ${ANTECEDENTES_DOCS.Ced_Noti.numero}, de fecha ${ANTECEDENTES_DOCS.Ced_Noti.fechaEmisionTexto || 'XX de XXXXX de XXXX'}, notificada el ${ANTECEDENTES_DOCS.Ced_Noti.fechaNotificacionTexto || 'XX de XXXXX de XXXX'}
+                    <a style="mso-footnote-id: foot_vistos_1" href="#_foot_vistos_1" title="">
+                        <sup class=MsoFootnoteReference><span style="mso-special-character:footnote"></span></sup>
+                    </a>
+                </td>
+                <td style="border: 1px solid #000;">
+                    Se notificó al/la titular la Resolución Sub Directoral N° ${ANTECEDENTES_DOCS.RSD.numero || 'XXXX'} y el Informe de Supervisión N° ${ANTECEDENTES_DOCS.Inf_Sup.numero || 'XXXX'}.
+                </td>
+            </tr>
+            <tr>
+                <td style="border: 1px solid #000;">4</td>
+                <td style="border: 1px solid #000;">Documentos presentados posterior a la notificación de la Resolución Sub Directoral N° ${ANTECEDENTES_DOCS.RSD.numero || 'XXXX'}</td>
+                <td style="border: 1px solid #000;">
+                    {{if COD_TIPO_INFORME == 1}}
+                    De la revisión del Sistema de Trámite Documentario SITD-OSINFOR, se verifica que el/la administrado (a) presentó descargo mediante los siguientes documentos:
+                    <ul style="list-style: lower-roman; margin-left: 45px;">
+                        <li>
+                            Escrito ${ANTECEDENTES_DOCS.Escrito.numero || 'XXXX'} SITD N° xxxxx de fecha ${ANTECEDENTES_DOCS.Escrito.fechaEmisionTexto || 'XX de XXXXX de XXXX'}
+                        </li>
+                    </ul>
+                    {{else}}
+                    De la revisión del Sistema de Trámite Documentario SITD-OSINFOR, se verifica que el/la administrado (a) a pesar de haber sido debidamente notificado (a), no presentó descargo alguno.
+                    {{/if}}
+                    <p>
+                        En caso haya variaciones de domicilio, agregar un ítem en el cual se indique dicha situación.
+                    </p>
+                </td>
+            </tr>
+            <tr>
+                <td style="border: 1px solid #000;">5</td>
+                <td style="border: 1px solid #000;">Informe Final de Instrucción N° ${ANTECEDENTES_DOCS.ILEGAL.numero || 'XXXX'}, de fecha ${ANTECEDENTES_DOCS.ILEGAL.fechaEmisionTexto || 'XX de XXXXX de XXXX'}.</td>
+                <td style="border: 1px solid #000;">
+                    <strong>Recomienda:</strong>
+                    <ul style="list-style: lower-roman; margin-left: 45px; ">
+                        <li>
+                            “Se vinculará con las recomendaciones del IFI”
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+            <tr>
+                <td style="border: 1px solid #000;">6</td>
+                <td style="border: 1px solid #000;">
+                    Cédula de Notificación N° ${ANTECEDENTES_DOCS.Ced_Noti.numero || 'XX-XX-OSINFOR/08.2.1'}, de fecha ${ANTECEDENTES_DOCS.Ced_Noti.fechaEmisionTexto || 'xx de XXXX de 202X'}, notificada el ${ANTECEDENTES_DOCS.Ced_Noti.fechaNotificacionTexto || 'xx de XXXX de 202X'}
+                    <a style="mso-footnote-id: foot_vistos_2" href="#_foot_vistos_2" title="">
+                        <sup class=MsoFootnoteReference><span style="mso-special-character:footnote"></span></sup>
+                    </a>
+                </td>
+                <td style="border: 1px solid #000;">
+                    Se notificó a el/la administrado/a el Informe Final de Instrucción N° ${ANTECEDENTES_DOCS.ILEGAL.numero || 'XX-XX-OSINFOR/08.2.1'}.
+                </td>
+            </tr>
+            <tr>
+                <td style="border: 1px solid #000;">7</td>
+                <td style="border: 1px solid #000;">Documentos presentados posterior a la notificación del Informe Final de Instrucción N° ${ANTECEDENTES_DOCS.ILEGAL.numero || 'XX-XX-OSINFOR/08.2.1'}.</td>
+                <td style="border: 1px solid #000;">
+                    {{if COD_TIPO_INFORME == 1}}
+                    De la revisión del Sistema de Trámite Documentario SITD-OSINFOR, se verifica que el/la administrado (a) presentó descargo mediante los siguientes documentos:
+                    <ul style="list-style: lower-roman; margin-left: 45px;">
+                        <li>
+                            Escrito ${ANTECEDENTES_DOCS.Escrito.numero || 'XXX'} de fecha ${ANTECEDENTES_DOCS.Escrito.fechaNotificacionTexto || 'xx de XXXX de 202X'}
+                        </li>
+                    </ul>
+                    {{else}}
+                    De la revisión del Sistema de Trámite Documentario SITD-OSINFOR, se verifica que el/la administrado (a) a pesar de haber sido debidamente notificado (a), no presentó descargo alguno.
+                    {{/if}}
+                    <p>
+                        En caso haya variaciones de domicilio, agregar un ítem en el cual se indique dicha situación.
+                    </p>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</script>
+
+<script id="tmpl-competencia" type="text/x-jquery-tmpl">
+    <table width="100%" cellpadding="4" style="border: 0; font-family: Arial; font-size: 10pt; border-collapse: collapse; line-height: 150%;">
+        <thead>
+            <tr>
+                <th style="border: 1px solid #000;">N°</th>
+                <th style="border: 1px solid #000;">NORMATIVA</th>
+                <th style="border: 1px solid #000;">DESCRIPCIÓN</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td style="border: 1px solid #000;">1</td>
+                <td style="border: 1px solid #000;">
+                    Decreto Legislativo N° 1085, modificado por los Decretos Legislativos N° 1319 y N° 1451 (en adelante, Decreto Legislativo N° 1085), y Ley N° 29763, Ley Forestal y de Fauna Silvestre (en adelante, la LFFS)
+                </td>
+                <td style="border: 1px solid #000;">
+                    Se crea el Organismo de Supervisión de los Recursos Forestales y de Fauna Silvestre – OSINFOR, como un organismo público encargado de supervisar y fiscalizar el aprovechamiento sostenible y la conservación de los recursos forestales y de fauna silvestre, otorgados por el Estado a través de títulos habilitantes regulados por la LFFS.
+                </td>
+            </tr>
+            <tr>
+                <td style="border: 1px solid #000;">2</td>
+                <td style="border: 1px solid #000;">
+                    Texto Integrado del Reglamento de Organización y Funciones – ROF del OSINFOR, aprobado por Resolución de Jefatura N° 00003-2023-PCM (en adelante, el ROF del OSINFOR)
+                </td>
+                <td style="border: 1px solid #000;">
+                    <div>
+                        El artículo 51 del ROF del OSINFOR, señala que, La Dirección del Procedimiento Sancionador Forestal y de Fauna Silvestre es el órgano facultado para dirigir, conducir y controlar en primera instancia el desarrollo del PAU.
+                    </div>
+                    <div>
+                        Asimismo, el literal del artículo 52 del citado documento de gestión, señala que: compete a dicha dirección actuar como órgano resolutivo de primera instancia administrativa, determinando la imposición de sanciones, medidas correctivas o el archivamiento del procedimiento, entre otros.
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</script>
+
+<script id="tmpl-analisis" type="text/x-jquery-tmpl">
+    <p class="enumeration">
+        En aplicación del numeral 258.1 del artículo 258 del Texto Único Ordenado de la Ley del Procedimiento Administrativo General, Ley N° 27444, aprobado por Decreto Supremo Nº 004-2019-JUS
+        <a style="mso-footnote-id: foot_imputacion_1" href="#_foot_imputacion_1" title="">
+            <sup class=MsoFootnoteReference><span style="mso-special-character:footnote"></span></sup>
+        </a> (en adelante, TUO de la Ley Nº 27444), corresponde a esta Dirección de Línea resolver estrictamente sobre los hechos imputados en la fase de instrucción.
+    </p>
+
+    {{each(i, infra) INFRACCIONES}}
+    <div>
+        <ol style="list-style-type: lower-alpha; margin-left: ${MARGIN_LEFT.OL};" start="${i + 1}">
+            <li><strong>${infra.titulo}</strong></li>
+        </ol>
+        {{html infra.parrafos}}
+    </div>
+    {{/each}}
+</script>
+
+<script id="tmpl-responsable-solidario" type="text/x-jquery-tmpl">
+    <p class="enumeration">
+        Mediante la Resolución Subdirectoral N° ${ANTECEDENTES_DOCS.RSD.numero || 'XXXX'}, de fecha ${ANTECEDENTES_DOCS.RSD.fechaEmisionTexto || 'XX de XXXXX de XXXX'}, se incluyó en el PAU a la empresa xxxxxxxxxxxxx. como presunta responsable solidaria, respecto a la comisión de las infracciones tipificadas en los numerales 10, 11, 21 y 26 del Cuadro de Infracciones y Sanciones en Materia Forestal del Anexo 1 del RISMFFS.
+    </p>
+    <p class="enumeration">
+        Sobre el particular, de la revisión del Contrato de Compra Venta de fecha x x de enero de 2021, se advierte que el mismo fue suscrito por la administrada y las empresas Inversiones xxxxxxxxxxxxxxx., identificada con RUC N° xxxxxxxxxxxxxxxxxx, representada por xxxxxxxxxxxxxxxx, e “xxxxxxxxxxxxxxx SAC”, identificada con RUC N° xxxxxxxxxxxxxxxxx, representada por el señor xxxxxxxxxxxxx, conforme se observa en el siguiente extracto del mencionado contrato:
+    </p>
+    <p style="text-align: center;">Adjuntar imagen<br />Fuente: Contrato de Compra Venta</p>
+    <p class="enumeration">
+        No obstante, de la revisión de la documentación obrante en el expediente administrativo, no se advierte el poder otorgado a favor del señor xxxxxxxxxxxxx, a fin de acreditar sus facultades para suscribir el mencionado contrato en representación de la empresa xxxxxxxxxxxxxxxxxx o xxxxxxxxxxxxxxx
+    </p>
+    <p class="enumeration">
+        Ante ello, con la finalidad de esclarecer los hechos materia de análisis, mediante las Cartas N° 000xxx-2023-OSINFOR/08.2.2 y 000xx-2023-OSINFOR/08.2.2 de fecha 12 de julio de 2023, diligenciadas con fecha xx de xxxxx de 2023 y xx de xxxxx de 2023, respectivamente, se solicitó a la administrada y a xxxxxxxxxxxxxxx, el poder otorgado a favor del señor xxxxxxxxxxxx e informar sobre participación de la empresa xxxxxxxxxxxxxxxxxxxxxxxx o xxxxxxxxxxxxxxxxxxx en las actividades de aprovechamiento del permiso forestal, otorgando para ello el plazo de cinco (05) días hábiles.
+    </p>
+    <p class="enumeration">
+        Sin embargo, habiéndose cumplido el plazo otorgado, <strong>ni la administrada ni xxxxxxxxxxxxxxxxxxxxxxxxxx cumplieron con remitir la información solicitada.</strong>
+    </p>
+    <p class="enumeration">
+        Por lo anterior, no existen elementos suficientes que permitan acreditar la participación de xxxxxxxxxxxxxxxxxxxxx, en las actividades de aprovechamiento del recurso forestal maderable del presente Permiso Forestal, por lo que <u>corresponde considerar solo como presunto responsable solidario a la empresa xxxxxxxxxxxxxxx., incluida en el presente PAU, mediante la Resolución Sub Directoral N° ${ANTECEDENTES_DOCS.RSD.numero || '000XX-202X-OSINFOR/08.2.1'}, de fecha ${ANTECEDENTES_DOCS.RSD.fechaNotificacionTexto || 'xx de XXXX de 202X'}</u>.
+    </p>
+    <p class="enumeration">
+        Ahora bien, la Autoridad Instructora realizó el análisis del expediente administrativo, concluyendo lo siguiente:
+    </p>
+    <p style="margin-left: 15px;">
+        <i>
+            “(…) Al respecto, mediante la Resolución Sub Directoral N° ${ANTECEDENTES_DOCS.RSD.numero || '000XX-202X-OSINFOR/08.2.1'} de fecha ${ANTECEDENTES_DOCS.RSD.fechaNotificacionTexto || 'xx de XXXX de 202X'}, se dispuso incluir como presunta responsable solidaria de la administrada en el presente PAU, a la empresa xxxxxxxxxxxxxxxxxx identificada con RUC N° xxxxxxxxxxxxxxxxxxxxx, toda vez que:
+        </i>
+    </p>
+    <ul style="margin-left: ${MARGIN_LEFT.LEVEL_3};">
+        <li>
+            El artículo 83 de la Ley Forestal y de Fauna Silvestre, Ley N° 29763, dispone en su tercer párrafo que los terceros que realicen aprovechamiento forestal en tierras comunales son responsables solidarios con las comunidades nativas o campesinas por el debido cumplimiento de la legislación forestal y de fauna silvestre.
+        </li>
+        <li>
+            El artículo 58 del Reglamento para la Gestión Forestal y de Fauna Silvestre en Comunidades Nativas y Comunidades Campesinas, aprobado por Decreto Supremo N° 021-2015-MINAGRI, dispone que cuando exista un contrato suscrito entre una comunidad nativa o campesina y un tercero, para el aprovechamiento de los recursos forestales, el tercero es responsable solidario respecto de las obligaciones o los compromisos asumidos en dicho contrato. (…)
+        </li>
+        <li>
+            Asimismo, debe tomarse en cuenta el Considerando 59 de la Resolución del Tribunal Forestal y de Fauna Silvestre N° 004-2019-OSINFOR-TFFF-I, por el cual el citado colegiado ha señalado que “(…) La responsabilidad administrativa solidaria es aquella que se irroga a un conjunto de administrados, siendo cada uno de ellos responsable de la totalidad de la sanción impuesta por la Administración, por lo tanto esta última puede exigir su cumplimiento a cualquiera, (…)”.
+        </li>
+    </ul>
+    <p>
+        <i>
+            Sobre el particular, es preciso destacar que en el expediente administrativo obra el documento denominado “Contrato de compra venta” suscrito entre el señor xxxxxxxxxxxx representante de la administrada, y el señor xxxxxxxxxxxxxxxxxxxxxx, representante de la empresa xxxxxxxxxxxxx., identificada con R.U.C. N° xxxxxxxxxxxx.
+        </i>
+    </p>
+    <p>
+        Aunado a ello, en el contrato firmado entre xxxxxxxxxxxxxxx y la empresa se debe precisar que en el referido contrato se observa estipulado lo siguiente:
+    </p>
+    <p style="text-align: center;">
+        <strong>Imagen N° 01: Contrato entre la administrada y la presunta responsable solidaria</strong>
+    </p>
+    <p style="text-align: center;">
+        Adjuntar imagen<br /><strong>Fuente:</strong> Contrato de Compra Venta
+    </p>
+    <p>
+        En atención a lo señalado, conforme lo detalla el numeral 6.2 de la cláusula sexta, el numeral 8.1 de la cláusula octava y el numeral 9.3 de la cláusula novena del Contrato, la empresa xxxxxxxxxxxxxxxxxxxxxx participaría en la extracción y aprovechamiento de madera en el área de manejo de la administrada; del mismo modo, señala que responde como responsable solidaria.
+    </p>
+    <p>
+        En ese sentido, teniendo en consideración lo evidenciado, se advierte que durante la vigencia del plan de manejo, la empresa xxxxxxxxxxxxxx., sí participó en las actividades de aprovechamiento del recursos forestales en el plan de manejo aprobado, dicho aprovechamiento debió ejercerse en estricto cumplimiento de las disposiciones señaladas en el instrumento de gestión ambiental antes mencionado, debiendo realizarse la tala, extracción y movilización únicamente de aquellos individuos que fueron autorizados, conforme a lo aprobado en el instrumento de gestión, de manera que se garantice el aprovechamiento sostenible del recurso forestal y la preservación del medio ambiente.
+    </p>
+    <p>
+        No obstante, se advierte que la empresa xxxxxxxxx, al realizar las operaciones de aprovechamiento en el área del Plan de Manejo, no cumplió con las disposiciones señaladas en dicho instrumento de gestión.
+    </p>
+    <p>
+        Ahora bien, respecto a la imputación referida a “No tener libro de operaciones, de acuerdo a las disposiciones establecidas”, la cual tiene como propósito que se lleve un registro de la información sobre la ejecución del plan de manejo, es decir, respecto al aprovechamiento de los individuos autorizados, los cuales se encuentran considerados en el censo forestal aprobado mediante el PO 01 – PC 01, 02 y 03, materia de análisis, todo ello para garantizar la trazabilidad del producto forestal; en función a lo contenido en el Contrato, donde es posible inferir que la empresa Inversiones Melycel E.I.R.L., al haber celebrado el contrato y participar en el aprovechamiento forestal, proceso, que además está vinculado al uso de la documentación como la implementación del Libro de Operaciones, responsabilidad que se encuentra establecida en el artículo 82 de la Ley Forestal y de Fauna Silvestre; asimismo, conforme lo señala el numeral 5 de las “Instrucciones para el uso del Libro de Operaciones de los Títulos Habilitantes para aprovechamiento forestal maderable”, anexo 02 de la Resolución de Dirección Ejecutiva N° 264-2019-MINAGRI-SERFOR-DE, señala que este debe mantenerse de forma física en el campamento principal del título habilitante.
+    </p>
+    <p class="enumeration">
+        En ese sentido, la Autoridad Instructora determinó que existen elementos suficientes que permitieron mantener la imputación atribuida al responsable solidario.
+    </p>
+    <p class="enumeration">
+        Al respecto, es preciso señalar que el Tribunal Forestal y de Fauna Silvestre del OSINFOR ha analizado el tema de la responsabilidad solidaria del tercero que participa en el aprovechamiento forestal en tierras de Comunidades Nativas, y ha señalado en el considerando 59 de la Resolución del Tribunal Forestal y de Fauna Silvestre N° 004-2019-OSINFOR-TFFF-I, que: “(…) La responsabilidad administrativa solidaria es aquella que se irroga a un conjunto de administrados, siendo cada uno de ellos responsable de la totalidad de la sanción impuesta por la Administración, por lo tanto esta última puede exigir su cumplimiento a cualquiera; es decir, la responsabilidad solidaria está destinada a que los terceros respondan por su participación en los hechos investigados que podrían revestir infracción administrativa”.
+    </p>
+    <p class="enumeration">
+        En ese sentido, la responsabilidad solidaria es aquella figura en la concurren varias personas naturales o jurídicas, distintas al obligado principal, ante uno o varios sujetos que exigen, indistintamente a cualquiera de ellas, el cumplimiento de una obligación que ha sido legalmente adquirida.
+    </p>
+    <p class="enumeration">
+        Teniendo en consideración que, en los términos del referido contrato aplicado durante la vigencia del PO N° xx – PC N° xx, xx y xx, la referida empresa realizó el aprovechamiento del recurso forestal en el plan de manejo aprobado, dicho aprovechamiento debió ejercerse en estricto cumplimiento de las disposiciones señaladas en el instrumento de gestión ambiental antes mencionado, de manera que se garantice el aprovechamiento sostenible del recurso forestal y la preservación del medio ambiente.
+    </p>
+    <p class="enumeration">
+        No obstante, la empresa al realizar las operaciones de aprovechamiento en el área del plan operativo no cumplió con las disposiciones señaladas en dicho instrumento de gestión, al haberse acreditado la conducta constitutiva de la infracción previamente analizada.
+    </p>
+    <p class="enumeration">
+        Ahora bien, tal como se aprecia, la legislación forestal ha vinculado la responsabilidad solidaria con la actividad de aprovechamiento forestal y permitido que sean los contratos entre las comunidades nativas y terceros los que precisen su alcance, siendo que, en el presente caso, el contrato fija acuerdos sobre la actividad extractiva y de movilización de especies forestales; por tanto, <strong>corresponde que la empresa asuma las consecuencias jurídicas que impliquen las mismas, en el caso en cuestión por la extracción y movilización de productos forestales procedentes de extracciones no autorizadas determinadas en los considerandos que preceden.</strong>
+    </p>
+    <p class="enumeration">
+        Asimismo, conforme a lo señalado por la Autoridad Instructora,  sobre la conducta tipificada relativa a “No registrar la información en el Libro de Operaciones de acuerdo a las disposiciones establecidas”, en los términos del referido contrato aplicado durante la vigencia del PO N° xx – PC N° xx, xx y xx, la referida empresa estuvo a cargo del aprovechamiento del recurso forestal dentro del área del plan de manejo y, consecuentemente, de las obligaciones establecidas en la normativa forestal directamente relacionadas a la actividad extractiva, por ejemplo, la implementación y correcto llenado del Libro de Operaciones conforme a las disposiciones establecidas. En ese sentido, considerando que la empresa realizó las actividades de aprovechamiento forestal, esta debía implementar y registrar las operaciones realizadas en campo en las secciones de Tala, Trozado y Despacho del respectivo Libro de Operaciones.
+    </p>
+    <p class="enumeration">
+        Sin embargo, tal como se ha confirmado en párrafos anteriores, no se ha cumplido con actualizar el Libro de Operaciones, por lo que <strong>corresponde que la empresa asuma de manera solidaria las consecuencias jurídicas que implique el incumplimiento de no registrar la información acorde a las actividades de aprovechamiento forestal en dicho documento de trazabilidad.</strong>
+    </p>
+    <p class="enumeration">
+        En atención a lo señalado, se concluye que la empresa xxxxxxxxxxxxxxxx., identificada con RUC N° xxxxxxxxxxxx, es responsable solidaria en la comisión de las infracciones tipificadas en los numerales 10, 11, 21 y 26 del Cuadro de Infracciones y Sanciones en Materia de Fauna Silvestre del Anexo 1 del Reglamento de Infracciones y Sanciones en Materia Forestal y de Fauna Silvestre, aprobado mediante Decreto Supremo N° 007-2021-MIDAGRI; <u>criterio acorde con lo señalado en el Informe Final de Instrucción.</u>
+    </p>
+</script>
+
+<script id="tmpl-gravedad-ocasionada" type="text/x-jquery-tmpl">
+    <table width="100%" cellpadding="4" style="border: 0; font-family: Arial; font-size: 10pt; border-collapse: collapse; line-height: 150%;">
+        <tbody>
+            <tr>
+                <td style="text-align: center; border: 1px solid #000; width: 20px;">N°</td>
+                <td style="text-align: center; border: 1px solid #000;">Normativa</td>
+                <td style="text-align: center; border: 1px solid #000;">Análisis</td>
+            </tr>
+            <tr>
+                <td style="border: 1px solid #000;">1</td>
+                <td style="border: 1px solid #000;">
+                    “Criterios para estimar la gravedad del daño por la comisión de infracciones en materia forestal”, aprobado por Resolución de Jefatura Nº 059-2019-OSINFOR.
+                </td>
+                <td style="border: 1px solid #000;">
+                    <p>Conforme a los resultados del Informe de Supervisión, la extracción de XX m<sup>3</sup> de madera provenientes de árboles no autorizados, representa una afectación de XX hectáreas (XXX hectáreas/m<sup>3</sup> no autorizado) de nivel XX a la cobertura boscosa, la cual forma parte del Patrimonio Forestal Nacional.</p>
+                    <p>
+                        Cabe señalar que, de las especies en cuestión, no se encuentra en la clasificación de especies amenazadas, conforme al numeral 5.27
+                        <a style="mso-footnote-id: foot_gravedad_1" href="#_foot_gravedad_1" title="">
+                            <sup class=MsoFootnoteReference><span style="mso-special-character:footnote"></span></sup>
+                        </a> del artículo 5 del Reglamento para la Gestión Forestal, aprobado por Decreto Supremo N° 018-2015-MINAGRI.
+                    </p>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</script>
+
+<script id="tmpl-acreditacion-imputaciones" type="text/x-jquery-tmpl">
+    <p class="enumeration">
+        El/la administrado (a) es responsable por la comisión de las infracciones tipificadas en los numerales xxxx del Anexo 1 del RISMFFS. Ahora bien, de acuerdo con el reporte de antecedentes
+        <a style="mso-footnote-id: foot_imputacion_2" href="#_foot_imputacion_2" title="">
+            <sup class=MsoFootnoteReference><span style="mso-special-character:footnote"></span></sup>
+        </a> de fecha xx, el/la administrado (a) no fue sancionado (a) anteriormente por el OSINFOR; asimismo, no se identifican agravantes y atenuantes aplicables. En consecuencia, las infracciones acreditadas son pasibles de ser sancionadas de la siguiente manera:
+    </p>
+    <table width="100%" cellpadding="4" style="border: 0; font-family: Arial; font-size: 10pt; border-collapse: collapse; line-height: 150%;">
+        <thead>
+            <tr>
+                <td style="text-align: center; border: 1px solid #000;">Infracción</td>
+                <td style="text-align: center; border: 1px solid #000;">Sanción</td>
+            </tr>
+        </thead>
+        <tbody>
+            {{each(index, inf) INFRACCIONES}}
+            <tr>
+                <td style="border: 1px solid #000;">
+                    <p>Numeral ${inf.inciso} del Anexo 1 del RISMFFS.</p>
+                    <i>“${inf.titulo || '[Indique título de la infracción]'}”</i>
+                </td>
+                <td style="border: 1px solid #000;">
+                    ${inf.rangoSancion || '[Indique sanción]'}
+                    {{if inf.rangoSancion == 'Amonestación'}}
+                    <a style="mso-footnote-id: foot_imputacion_3" href="#_foot_imputacion_3" title="">
+                        <sup class=MsoFootnoteReference><span style="mso-special-character:footnote"></span></sup>
+                    </a>
+                    {{/if}}
+                </td>
+            </tr>
+            {{/each}}
+        </tbody>
+        <tfoot>
+            <tr>
+                <td style="border: 1px solid #000;">
+                    <strong>Total Sanción de Multa</strong>
+                </td>
+                <td style="border: 1px solid #000; text-align: center;">
+                    <strong>${SANCION_UIT || 'XXX'} UIT</strong>
+                </td>
+            </tr>
+        </tfoot>
+    </table>
+    <p class="enumeration">
+        Bajo lo expuesto, en virtud de lo señalado en el numeral 8.5 del artículo 8 del RISMFFS, el monto de la multa a imponer el/la administrado (a) que no sea impugnada y se cancele dentro de los quince (15) días hábiles posteriores a su notificación, goza de un descuento del 25%. La multa que resulte de la aplicación del descuento no puede ser menor a 0.10 UIT
+        <a style="mso-footnote-id: foot_imputacion_4" href="#_foot_imputacion_4" title="">
+            <sup class=MsoFootnoteReference><span style="mso-special-character:footnote"></span></sup>
+        </a>.
+    </p>
+</script>
+
+<script id="tmpl-medidas-complementarias" type="text/x-jquery-tmpl">
+    <p class="enumeration">
+        Se debe señalar que mediante la Resolución Sub Directoral N° ${ANTECEDENTES_DOCS.RSD.numero || 'XXXX-202X-OSINFOR/08.2.1'} de fecha ${ANTECEDENTES_DOCS.RSD.fechaNotificacionTexto || 'xx de XXXX de 202X'}, se dispusieron medidas cautelares, conforme al siguiente detalle:
+    </p>
+    <ul style="margin-left: ${MARGIN_LEFT.LEVEL_3};">
+        <li>
+            Suspender los efectos de la DEMA/PO, aprobada mediante la xxxx, de fecha xxxx, que resuelve aprobar el xxx, a favor de xxxxxx, correspondiente al Permiso xxxxxx; así como, suspender la autorización de eventuales reingresos y/o movilizaciones de saldos vinculados con el citado permiso.
+        </li>
+        <li>
+            Suspender los efectos de las guías de transporte forestal y listas de trozas correspondientes a las especies aprobadas en la DEMA/PO aprobada por la Resolución xxxx de fecha xxx, otorgada a favor de xxx, correspondiente al Permiso xxx; requiriéndose al/ la titular del permiso forestal que se abstenga de utilizar las mismas para la movilización de volúmenes autorizados en el plan de manejo señalado precedentemente; y mientras permanezca vigente la referida medida, aquellos documentos previamente expedidos por la autoridad competente, carecen de efectos y validez para amparar la movilización o el transporte de recursos y/o productos forestales, con indiferencia de su ubicación geográfica o su eventual destino.
+        </li>
+        <li>
+            Incautar temporalmente los recursos forestales movilizados mediante las Guías de Transporte Forestal y correspondientes Listas de Trozas aprobada a favor de la administrada, mediante la Resolución xxxx, que aprueba la/el <strong>DEMA/PO</strong>.
+        </li>
+    </ul>
+    <p class="enumeration">
+        En aplicación del numeral 157.3
+        <a style="mso-footnote-id: foot_complementarias_1" href="#_foot_complementarias_1" title="">
+            <sup class=MsoFootnoteReference><span style="mso-special-character:footnote"></span></sup>
+        </a> del artículo 157 del Texto Único Ordenado de la Ley del Procedimiento Administrativo General, Ley N° 27444, corresponde que las medidas cautelares dispuestas en la resolución sub directoral de inicio del PAU caduquen cuando se emite la resolución que pone fin al procedimiento.
+    </p>
+    <p class="enumeration">
+        Por otro lado, conforme a lo establecido inciso a.1 del literal a) del numeral 9.1 del artículo 9 del RISMFFS, de manera complementaria a la sanción a imponerse, puede aplicarse el <strong>decomiso</strong> de especímenes, productos o subproductos forestales y de fauna silvestre sobre los que no pueda acreditarse su origen legal o provengan de operaciones de extracción, caza colecta o captura no autorizadas.
+    </p>
+    <p class="enumeration">
+        Cabe indicar que las referidas medidas complementarias deben hacerse de conocimiento de la autoridad, a fin de que lleve a cabo su ejecución; ello, teniendo en consideración que el numeral 15.2 del artículo 15 del RISMFFS, establece que el SERFOR, el OSINFOR y las ARFFS, deben colaborar entre sí, para la ejecución de las sanciones, medidas complementarias, medidas correctivas y medidas cautelares o provisionales, cuando se dispongan.
+    </p>
+    {{if COD_MODALIDAD == "04"}} <!--Fauna-->
+    <p class="enumeration">
+        En ese sentido, <strong>corresponde dictar como medida complementaria la clausura temporal de xxxxxxxxxxxxxxxxxxxxxxx,</strong> conforme al detalle establecido en el Anexo II de la presente resolución.
+    </p>
+    {{else}}
+    <p class="enumeration">
+        En ese sentido, <strong>corresponde dictar como medida complementaria el decomiso</strong> de los productos forestales que se transporten y comercialicen al amparo de las guías de transporte forestal y listas de trozas del Permiso Forestal, así como, del plan de manejo aprobado; con la finalidad de eliminar o mitigar los efectos producidos por la comisión de la infracción acreditada en el presente procedimiento, tales como la posesión, el transporte o comercialización de los productos forestales provenientes de la extracción no autorizada, conforme al detalle establecido en el Anexo II de la presente resolución
+        <a style="mso-footnote-id: foot_complementarias_2" href="#_foot_complementarias_2" title="">
+            <sup class=MsoFootnoteReference><span style="mso-special-character:footnote"></span></sup>
+        </a>.
+    </p>
+    {{/if}}
+</script>
+
+<script id="tmpl-medidas-correctivas" type="text/x-jquery-tmpl">
+    {{if COD_MODALIDAD == "04"}} <!--Fauna-->
+    <p class="enumeration">
+        La medida correctiva a aplicarse en el presente caso,  (i) implementación de candados en todos los recintos del xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx y (ii) implementación del tópico, cuarentena y almacén de acuerdo a lo descrito en el plan de manejo de fauna silvestre; medidas que deberán ser realizadas conforme a lo señalado en la propuesta de medida correctiva se detalla en el anexo 2 de la presente resolución.
+    </p>
+    <p class="enumeration">
+        Los titulares, tienen la obligación de cumplir con la implementación de las medidas correctivas y/o mandatos que se emitan como resultado de las acciones de control, supervisión y/o fiscalización ejecutadas por el OSINFOR; y conforme a lo regulado por el numeral 14 del Anexo 2 del RISMFFS, el incumplir con la implementación de las medidas correctivas, constituye una infracción grave; debiendo informarse que la supervisión de la implementación de la medida, se encuentra a cargo de la Dirección de Supervisión Forestal y de Fauna Silvestre del OSINFOR.
+    </p>
+    {{else}}
+    <p class="enumeration">
+        La medida correctiva a aplicarse en el presente caso
+        <a style="mso-footnote-id: foot_correctivas_1" href="#_foot_correctivas_1" title="">
+            <sup class=MsoFootnoteReference><span style="mso-special-character:footnote"></span></sup>
+        </a>, por la extracción de un volumen de <strong>xxx m<sup>3</sup></strong>, será de xxx, toda vez que existe un área disponible dentro de la concesión para realizar la reposición de la cobertura afectada mediante manejo de regeneración natural. <u>La propuesta de medida correctiva se detalla en el anexo 2 de la presente resolución</u>.
+    </p>
+    <p class="enumeration">
+        Los titulares, tienen la obligación de cumplir con la implementación de las medidas correctivas y/o mandatos que se emitan como resultado de las acciones de control, supervisión y/o fiscalización ejecutadas por el OSINFOR
+        <a style="mso-footnote-id: foot_correctivas_2" href="#_foot_correctivas_2" title="">
+            <sup class=MsoFootnoteReference><span style="mso-special-character:footnote"></span></sup>
+        </a>; y conforme a lo regulado por el numeral 13 del Anexo 1 del RISMFFS, <strong>el incumplir con la implementación de las medidas correctivas, constituye una infracción grave</strong>; debiendo informarse que la supervisión de la implementación de la medida, se encuentra a cargo de la Dirección de Supervisión Forestal y de Fauna Silvestre del OSINFOR
+        <a style="mso-footnote-id: foot_correctivas_3" href="#_foot_correctivas_3" title="">
+            <sup class=MsoFootnoteReference><span style="mso-special-character:footnote"></span></sup>
+        </a>.
+    </p>
+    {{/if}}
+</script>
+
+<script id="tmpl-comunicacion-entidades" type="text/x-jquery-tmpl">
+    <table width="100%" cellpadding="4" style="border: 0; font-family: Arial; font-size: 10pt; border-collapse: collapse; line-height: 150%;">
+        <thead>
+            <tr>
+                <td style="text-align: center; border: 1px solid #000;">Entidad</td>
+                <td style="text-align: center; border: 1px solid #000;">Motivo</td>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td style="border: 1px solid #000;">
+                    Gerencia Regional Forestal y de Fauna Silvestre del Gobierno Regional de Madre de Dios
+                </td>
+                <td style="border: 1px solid #000;">
+                    <p>
+                        Para que tome conocimiento de los resultados de la evaluación técnica y legal del PAU, y adopte las acciones correspondientes como autoridad concedente del título habilitante.
+                    </p>
+                    <p>
+                        Así como, para que proceda conforme corresponde, respecto a la medida complementaria dictada en el artículo xxx de la presente resolución, referido al decomiso de los productos forestales que se transporten y comercialicen al amparo de las guías de transporte forestal y listas de trozas del Permiso Forestal, así como, del plan de manejo aprobado.
+                    </p>
+                </td>
+            </tr>
+            <tr>
+                <td style="border: 1px solid #000;">
+                    Fiscalía Especializada en Materia Ambiental de Madre de Dios
+                </td>
+                <td style="border: 1px solid #000;">
+                    <p>
+                        Para que tome conocimiento de los siguientes y actúe conforme a sus competencias:
+                    </p>
+                    <ul>
+                        <li>
+                            Extracción no autorizada equivalente a xxxm<sup>3</sup> de madera de las especies xxxx, hecho que genera un daño de magnitud muy grave a la cobertura boscosa, y actúe conforme a sus competencias.
+                        </li>
+                        <li>
+                            Falsedad de información contenida en el Informe de Ejecución.
+                        </li>
+                        <li>xxx</li>
+                    </ul>
+                </td>
+            </tr>
+            <tr>
+                <td style="border: 1px solid #000;">
+                    Servicio Nacional Forestal y de Fauna Silvestre – SERFOR
+                </td>
+                <td style="border: 1px solid #000;">
+                    <p>
+                        Por ser la Autoridad encargada de llevar el Registro Nacional de Infractores Por ser la Autoridad encargada de llevar el Registro Nacional de Infractores.
+                    </p>
+                    <p>
+                        En adición, para que evalúe la falsedad de información que presenta el Informe de ejecución suscrita por el regente xxxx
+                    </p>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <p class="enumeration">
+        Además, considerando lo establecido en el segundo párrafo del artículo 27 del Reglamento del PAU
+        <a style="mso-footnote-id: foot_comunicacion_1" href="#_foot_comunicacion_1" title="">
+            <sup class=MsoFootnoteReference><span style="mso-special-character:footnote"></span></sup>
+        </a>, corresponde notificar la presente resolución directoral a la Subdirección de Instrucción, para conocimiento y fines.
+    </p>
+    <p class="enumeration">
+        Por otro lado, es necesario precisar que, en aras de simplificar y facilitar el envío de información de obligaciones de manera oportuna, ágil y transparente, al administrado cuenta con la herramienta digital - APP MiBosque, el cual es un aplicativo dirigido a los titulares de títulos habilitantes y regentes forestales, para que puedan remitir y registrar información clara y oportuna que permita evidenciar el cumplimiento de sus obligaciones, asociadas a la gestión de recursos forestales, establecidas en el marco normativo. Además, permite reportar amenazas y/o delitos ambientales que se puedan desarrollar dentro de las áreas de manejo, en tiempo real, mediante canales digitales.
+    </p>
+</script>
+
+<script id="tmpl-resolucion" type="text/x-jquery-tmpl">
+    {{if FLG_RESPONSABLE_SOLIDARIO}}
+    <p style="text-indent: 30px;">
+        <strong>Artículo.</strong> Declarar que corresponde considerar solo como responsable solidaria a la empresa xxxxxxxxxxxxxxx., incluida en el presente PAU, mediante la Resolución Sub Directoral N° ${ANTECEDENTES_DOCS.RSD.numero || 'XXXX-202X-OSINFOR/08.2.1'}, de fecha ${ANTECEDENTES_DOCS.RSD.fechaNotificacionTexto || 'xx de XXXX de 202X'}; en virtud de lo expuesto en la parte considerativa de la presente Resolución Directoral.
+    </p>
+    {{/if}}
+
+    <p style="text-indent: 30px;">
+        <strong>Artículo.</strong> Declarar la caducidad del derecho de aprovechamiento contenido en el Permiso ${NUM_CONTRATO || '(indicar texto)'}, otorgado a ${TITULAR}, identificada con ${TITULAR_DOCUMENTO? 'DNI': 'RUC'} N° ${TITULAR_DOCUMENTO || TITULAR_RUC}, por haber incurrido en la causal de caducidad prevista en el literal x) del artículo 153 de la Ley Forestal y de Fauna Silvestre, Ley N° 29763, concordado con el literal x) del artículo xx del Reglamento xxx, aprobado por Decreto Supremo N° xx-2015-MINAGRI; y con el numeral xxx de la Cláusula xxxx del Contrato de Concesión, conforme a lo señalado en la parte considerativa de la presente Resolución Directoral.
+    </p>
+    <p style="text-indent: 30px;">
+        <strong>Artículo.</strong> Imponer sanción al/la señor (a) ${TITULAR}, identificado(a) con ${TITULAR_DOCUMENTO? 'DNI': 'RUC'} N° ${TITULAR_DOCUMENTO || TITULAR_RUC}, titular del ${DENOMINACION_TITULAR} N° ${NUM_CONTRATO || '(indicar texto)'}, conforme a lo siguiente:
+    </p>
+    <table width="100%" cellpadding="4" style="border: 0; font-family: Arial; font-size: 10pt; border-collapse: collapse; line-height: 150%;">
+        <thead>
+            <tr>
+                <th style="border: 1px solid #000; text-align: center;">Sanción</th>
+                <th style="border: 1px solid #000; text-align: center;" colspan="2">Infracción</th>
+                <th style="border: 1px solid #000; text-align: center;">Observación</th>
+            </tr>
+        </thead>
+        <tbody>
+            {{each(g, inf_am) INFRACCIONES_AMONESTACION}}
+            <tr>
+                {{if g == 0}}
+                <td style="border: 1px solid #000;" rowspan="${INFRACCIONES_AMONESTACION.length || 1}">
+                    Amonestación
+                </td>
+                {{/if}}
+                <td style="border: 1px solid #000;">
+                    Numeral ${inf_am.inciso || 'XX'}, Anexo 1, RISMFFS
+                </td>
+                <td style="border: 1px solid #000;">
+                    ${inf_am.titulo || '[Ingrese título de la sancion]'}
+                </td>
+                {{if g == 0}}
+                <td style="border: 1px solid #000;" rowspan="${INFRACCIONES_AMONESTACION.length || 1}">
+                    Si reincide en esta infracción puede ser sancionado con 0.10 hasta 3 UIT (literal a, numeral 8.2, artículo 8 del RISMFFS)
+                </td>
+                {{/if}}
+            </tr>
+            {{/each}}
+            {{each(h, inf_san) INFRACCIONES_SANCION}}
+            <tr>
+                {{if h == 0}}
+                <td style="border: 1px solid #000;" rowspan="${INFRACCIONES_SANCION.length || 1}">
+                    Multa de ${SANCION_UIT || 'XXX'} UIT, vigente a la fecha en que se cumpla con el pago
+                </td>
+                {{/if}}
+                <td style="border: 1px solid #000;">
+                    Numeral ${inf_san.inciso || 'XX'}, Anexo 1, RISMFFS
+                </td>
+                <td style="border: 1px solid #000;">
+                    ${inf_san.titulo || '[Ingrese título de la sancion]'}
+                </td>
+                {{if h == 0}}
+                <td style="border: 1px solid #000;" rowspan="${INFRACCIONES_SANCION.length || 1}">
+                    La multa está detallada en el Anexo I de la presente Resolución Directoral
+                </td>
+                {{/if}}
+            </tr>
+            {{/each}}
+        </tbody>
+    </table>
+    <p style="text-indent: 30px;">
+        <strong>Artículo.</strong> El importe de la multa impuesta deberá ser depositado por el/la señor (a) xxx, en el Banco de la Nación (Código 0211 - Transacción 9660), a nombre del OSINFOR – Multas, debiendo entregar su comprobante de pago a la Oficina Desconcentrada del OSINFOR más cercana o enviarlo al correo electrónico: multas@osinfor.gob.pe de la Unidad de Administración Financiera y Cobranzas del OSINFOR, pudiendo comunicarse con la Abg. Grissel Ybañez Gamboa al número de celular … para cualquier consulta. En caso de incumplir con el pago de la multa, se procederá al cobro coactivo, salvo que se haya acogido a alguno de los siguientes beneficios:
+    </p>
+    <table width="100%" cellpadding="4" style="border: 0; font-family: Arial; font-size: 10pt; border-collapse: collapse; line-height: 150%;">
+        <thead>
+            <tr>
+                <th style="border: 1px solid #000; text-align: center;" colspan="2">Beneficios</th>
+                <th style="border: 1px solid #000; text-align: center;">Observación</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td style="border: 1px solid #000;">
+                    Pronto pago
+                </td>
+                <td style="border: 1px solid #000;">
+                    Aplica un descuento del 25% si cancela dentro de los quince (15) días hábiles más el término de la distancia, contados desde el día siguiente de notificada la presente resolución directoral
+                </td>
+                <td style="border: 1px solid #000;" rowspan="3">
+                    Para acogeré a alguno de los beneficios no debe interponer algún recurso impugnatorio (numeral 8.5, artículo 8, RISMFFS)
+                </td>
+            </tr>
+            <tr>
+                <td style="border: 1px solid #000;">
+                    Fraccionamiento de multas
+                    <a style="mso-footnote-id: foot_resolucion_1" href="#_foot_resolucion_1" title="">
+                        <sup class=MsoFootnoteReference><span style="mso-special-character:footnote"></span></sup>
+                    </a>
+                </td>
+                <td style="border: 1px solid #000;">
+                    Permite pagar la multa en cuotas
+                </td>
+            </tr>
+            <tr>
+                <td style="border: 1px solid #000;">
+                    Compensación de multas
+                    <a style="mso-footnote-id: foot_resolucion_2" href="#_foot_resolucion_2" title="">
+                        <sup class=MsoFootnoteReference><span style="mso-special-character:footnote"></span></sup>
+                    </a>
+                </td>
+                <td style="border: 1px solid #000;">
+                    Permite que la multa se cancele a cambio de determinadas acciones
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <p style="text-indent: 30px;">
+        <strong>Artículo.</strong> Notificar la presente Resolución Directoral al/la señor (a) ${TITULAR || '(indicar titular)'}, quien puede interponer los recursos impugnativos que estime pertinentes dentro del plazo de quince (15) días hábiles contados a partir del día siguiente de efectuada la notificación de la Resolución Directoral, más el término de la distancia, recomendándole tener en consideración lo señalado en el artículo anterior. Para la presentación de los recursos impugnativos o de cualquier comunicación con el OSINFOR puede utilizar los siguientes medios:
+    </p>
+    <table width="100%" cellpadding="4" style="border: 0; font-family: Arial; font-size: 10pt; border-collapse: collapse; line-height: 150%;">
+        <thead>
+            <tr>
+                <th style="border: 1px solid #000; text-align: center;">Medios para presentar documentación</th>
+                <th style="border: 1px solid #000; text-align: center;">Observación</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td style="border: 1px solid #000;">
+                    Casilla electrónica
+                </td>
+                <td style="border: 1px solid #000;">
+                    En caso tenga una cuenta creada. Para mayor información puede comunicarse con la Oficina Desconcentrada más cercana
+                </td>
+            </tr>
+            <tr>
+                <td style="border: 1px solid #000;">
+                    Mesa de Partes Digital el OSINFOR
+                </td>
+                <td style="border: 1px solid #000;">
+                    A través del enlace
+                    <a style="mso-footnote-id: foot_resolucion_3" href="#_foot_resolucion_3" title="">
+                        <sup class=MsoFootnoteReference><span style="mso-special-character:footnote"></span></sup>
+                    </a> https://facilita.gob.pe/t/677
+                    <a style="mso-footnote-id: foot_resolucion_4" href="#_foot_resolucion_4" title="">
+                        <sup class=MsoFootnoteReference><span style="mso-special-character:footnote"></span></sup>
+                    </a>, siempre que los archivos no superen los 10 MB.
+                </td>
+            </tr>
+            <tr>
+                <td style="border: 1px solid #000;">
+                    Correo electrónico institucional
+                </td>
+                <td style="border: 1px solid #000;">
+                    A través del correo mesa.partes@osinfor.gob.pe, siempre que los archivos superen los 10 MB.
+                </td>
+            </tr>
+            <tr>
+                <td style="border: 1px solid #000;">
+                    Mesa de partes del OSINFOR de la Sede Central - Lima o ante cualquiera de las Oficinas Desconcentradas del OSINFOR
+                </td>
+                <td style="border: 1px solid #000;">
+                    Para conocer la dirección de la Sede Central y Oficinas Desconcentradas, puede consultar el siguiente link https://www.gob.pe/institucion/osinfor/contacto-y-numeros-de-emergencias
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <p style="text-indent: 30px;">
+        <strong>Artículo.</strong> Disponer, en atención a lo normado en el literal a.1 del numeral 9.1 del artículo 9 del Reglamento de Infracciones y Sanciones en Materia Forestal y de Fauna Silvestre, aprobado por Decreto Supremo N° 007-2021-MINAGRI, en concordancia con lo señalado en el numeral 152.2 del artículo 152 de la Ley N° 29763 – Ley Forestal y de Fauna Silvestre, como medida complementaria la incautación de los productos forestales que se transporten y comercialicen al amparo de las guías de transporte forestal y listas de trozas conforme al detalle al Anexo II de la presente resolución.
+    </p>
+    <p>
+        Dicha medida complementaria debe ser implementada por la <strong>xxxxx</strong>, una vez notificada la presente Resolución Directoral conforme a lo dispuesto en la Primera Disposición Complementaria Final de los “Lineamientos para el Ejercicio de la Potestad Sancionadora y Desarrollo del Procedimiento Administrativo Sancionador”, aprobados por Resolución de Dirección Ejecutiva N° 008-2020-SERFOR-DE. Asimismo, debe ser comunicada a esta Dirección de Línea sobre su implementación.
+    </p>
+    <p style="text-indent: 30px;">
+        <strong>Artículo.</strong> Disponer que el/la administrado (a) cumpla con implementar la medida correctiva señalada en el Anexo III que forma parte de la presente Resolución Directoral.
+    </p>
+    <p style="text-indent: 30px;">
+        <strong>Artículo.</strong> Se invoca el/la señor (a) a utilizar el APP MiBosque, herramienta que permite reportar el cumplimiento de obligaciones, como la presentación de los informes de ejecución, entre otros, a fin de evitar incurrir en incumplimientos que deriven en infracciones a la legislación forestal. El APP Mibosque puede ser descargada del dispositivo móvil
+        <a style="mso-footnote-id: foot_resolucion_5" href="#_foot_resolucion_5" title="">
+            <sup class=MsoFootnoteReference><span style="mso-special-character:footnote"></span></sup>
+        </a> (Play Store): https://play.google.com/store/apps/details?id=pe.gob.osinfor.mibosque_demo&hl=es, o mediante la página Web del OSINFOR: https://www.gob.pe/23400-acceder-al-aplicativo-mibosque. Asimismo, podrá realizar cualquier consulta y/o duda respecto al uso del APP Mibosque a la Ing. Erika Morales Ruiz, al teléfono 989336447 y/o al correo electrónico: emoralesr@osinfor.gob.pe.
+    </p>
+    <p style="text-indent: 30px;">
+        <strong>Artículo.</strong> Remitir copia de la presente Resolución Directoral a la Gerencia Regional xxx, Fiscalía Especializada en Materia Ambiental de xxx; y al Servicio Nacional Forestal y de Fauna Silvestre – SERFOR, para los fines indicados del numeral VI.
+    </p>
+    <p style="text-indent: 30px;">
+        <strong>Artículo.</strong> Remitir copia de la presente Resolución Directoral a la Subdirección de Instrucción, a fin de que tome conocimiento de su contenido, en observancia del artículo 27 del Reglamento del PAU.
+    </p>
+    <p style="text-indent: 30px;">
+        <strong>Artículo.</strong> Una vez firme la presente resolución directoral o agotada la vía administrativa, inscribir al/la señor (a) <strong>xxxxx</strong> en el Registro de Sancionados y/o Caducados que forma parte del Sistema de Información Gerencial del OSINFOR – SIGO, conducido por la Dirección del Procedimiento Sancionador Forestal y de Fauna Silvestre; adicionalmente, comunicar tal condición al Servicio Nacional Forestal y de Fauna Silvestre – SERFOR, así como a la Gerencia de <strong>xxxxx</strong> y a la Fiscalía Especializada en Materia Ambiental de <strong>xxxxx</strong>.
+    </p>
+</script>
+
+<script id="tmpl-encabezado" type="text/x-jquery-tmpl">
+    <p style="text-align:center;">
+        <img height="200" width="200" alt="" src="${URL_APLICACION}content/images/logo/escudo-peruano.jpg">
+    </p>
+</script>
+
+<script id="tmpl-pie-pagina" type="text/x-jquery-tmpl">
+    Esta es una copia auténtica imprimible de un documento electrónico archivado en el Organismo de Supervisión de los Recursos Forestales y
+    de Fauna Silvestre, aplicando lo dispuesto por el Art. 25 de D.S. 070 – 2013 PCM y la Tercera Disposición Complementaria Final del D.S. 026-
+    2016-PCM. Su autenticidad e integridad pueden ser contrastadas a través de la siguiente web:
+    <a href="http://mpv.osinfor.gob.pe:8083/visor-osinfor-pide">http://mpv.osinfor.gob.pe:8083/visor-osinfor-pide</a> e ingresando la siguiente clave-std: PASSWORD
+</script>
+
+@Html.Partial("~/Areas/Fiscalizacion/Views/ManPAURD/templates/_tmplFootnotes.cshtml")

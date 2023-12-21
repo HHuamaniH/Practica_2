@@ -734,7 +734,7 @@ namespace CapaDatos.DOC
                             if (dr["NUMERO_RESOLUCION"] != DBNull.Value) lsCEntidad.NUMERO_RESOLUCION = dr.GetString(dr.GetOrdinal("NUMERO_RESOLUCION"));
                             lsCEntidad.COD_PERSONA = dr.GetString(dr.GetOrdinal("COD_PERSONA"));
                             lsCEntidad.APELLIDOS_NOMBRES = dr.GetString(dr.GetOrdinal("APELLIDOS_NOMBRES"));
-                            lsCEntidad.FECHA_EMISION = dr.GetString(dr.GetOrdinal("FECHA_EMISION"));
+                            lsCEntidad.FECHA_EMISION = dr["FECHA_EMISION"] != DBNull.Value ? dr.GetString(dr.GetOrdinal("FECHA_EMISION")) : null;
                             lsCEntidad.FECHA_ANULACION = dr.GetString(dr.GetOrdinal("FECHA_ANULACION"));
                             lsCEntidad.NUMERO_EXPEDIENTE = dr.GetString(dr.GetOrdinal("NUMERO_EXPEDIENTE"));
                             lsCEntidad.SOLICITUD_ANTECEDENTES = dr.GetBoolean(dr.GetOrdinal("SOLICITUD_ANTECEDENTES"));
@@ -942,6 +942,8 @@ namespace CapaDatos.DOC
                                 ocampoEnt.AREA = Decimal.Parse(dr["AREA"].ToString());
                                 ocampoEnt.NUMERO_INDIVIDUOS = Int32.Parse(dr["NUMERO_INDIVIDUOS"].ToString());
                                 ocampoEnt.DESCRIPCION_INFRACCIONES = dr["DESCRIPCION_INFRACCIONES"].ToString();
+                                ocampoEnt.TITULO = dr["TITULO"].ToString();
+                                ocampoEnt.GRAVEDAD = dr["GRAVEDAD"].ToString();
                                 ocampoEnt.COD_SECUENCIAL = Int32.Parse(dr["COD_SECUENCIAL"].ToString());
                                 ocampoEnt.NUM_POA = dr["NUM_POA"].ToString();
                                 ocampoEnt.POA = dr["POA"].ToString();
@@ -1153,9 +1155,9 @@ namespace CapaDatos.DOC
                                 oCEntidadSTD = new CEntidadC();
                                 oCEntidadSTD.COD_RDACCION = dr.GetString(dr.GetOrdinal("COD_RDACCION"));
                                 oCEntidadSTD.CODIGO = dr.GetString(dr.GetOrdinal("CODIGO")).ToString();
-                                oCEntidadSTD.NUMERO = dr.GetString(dr.GetOrdinal("NUMERO")).ToString();
+                                oCEntidadSTD.NUMERO = dr["NUMERO"] != DBNull.Value ? dr.GetString(dr.GetOrdinal("NUMERO")).ToString() : "";
                                 oCEntidadSTD.TIPO_DOCUMENTO = dr.GetString(dr.GetOrdinal("TIPO"));
-                                oCEntidadSTD.PDF_DOCUMENTO = dr.GetString(dr.GetOrdinal("DESCARGA"));
+                                oCEntidadSTD.PDF_DOCUMENTO = dr["DESCARGA"] != DBNull.Value ? dr.GetString(dr.GetOrdinal("DESCARGA")) : "";
                                 oCEntidadSTD.RegEstado = 0;
                                 lsCEntidad.listSTD01.Add(oCEntidadSTD);
                             }
@@ -1171,9 +1173,9 @@ namespace CapaDatos.DOC
                                 oCEntidadSTD = new CEntidadC();
                                 oCEntidadSTD.COD_RDACCION = dr.GetString(dr.GetOrdinal("COD_RDACCION"));
                                 oCEntidadSTD.CODIGO = dr.GetString(dr.GetOrdinal("CODIGO")).ToString();
-                                oCEntidadSTD.NUMERO = dr.GetString(dr.GetOrdinal("NUMERO")).ToString();
+                                oCEntidadSTD.NUMERO = dr["NUMERO"] != DBNull.Value ? dr.GetString(dr.GetOrdinal("NUMERO")).ToString() : "";
                                 oCEntidadSTD.TIPO_DOCUMENTO = dr.GetString(dr.GetOrdinal("TIPO"));
-                                oCEntidadSTD.PDF_DOCUMENTO = dr.GetString(dr.GetOrdinal("DESCARGA"));
+                                oCEntidadSTD.PDF_DOCUMENTO = dr["DESCARGA"] != DBNull.Value ? dr.GetString(dr.GetOrdinal("DESCARGA")) : "";
                                 oCEntidadSTD.RegEstado = 0;
                                 lsCEntidad.listSTD02.Add(oCEntidadSTD);
                             }
@@ -2446,9 +2448,9 @@ namespace CapaDatos.DOC
             }
         }
 
-        public VM_RSD_Resumen RSD_Resumen(OracleConnection cn, string COD_RESDIR, string asCodTipoIL)
+        public VM_PAU_RSD_RESUMEN RSD_Resumen(OracleConnection cn, string COD_RESDIR, string asCodTipoIL)
         {
-            VM_RSD_Resumen result = null;
+            VM_PAU_RSD_RESUMEN result = null;
 
             try
             {
@@ -2461,7 +2463,7 @@ namespace CapaDatos.DOC
                         {
                             while (dr.Read())
                             {
-                                result = new VM_RSD_Resumen();
+                                result = new VM_PAU_RSD_RESUMEN();
                                 result.COD_THABILITANTE = dr["COD_THABILITANTE"] != DBNull.Value ? dr["COD_THABILITANTE"].ToString() : null;
                                 result.COD_TITULAR = dr["COD_TITULAR"] != DBNull.Value ? dr["COD_TITULAR"].ToString() : null;
                                 result.NUM_THABILITANTE = dr["NUM_THABILITANTE"] != DBNull.Value ? dr["NUM_THABILITANTE"].ToString() : null;

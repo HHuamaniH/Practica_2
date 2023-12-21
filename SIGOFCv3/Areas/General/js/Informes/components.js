@@ -148,57 +148,45 @@ Vue.component('editor', {
 });
 
 Vue.component("data-table", {
-    template: '<table class="table"></table>',
+    template: '<table class="table table-bordered"></table>',
     props: ["options", "data", "rowTmpl"],
     mounted: function () {
-        var self = this;
-
-        var default_options = {
-            bAutoWidth: false,
-            paging: true,
-            lengthChange: false,
-            searching: false,
-        };
-
-        default_options = $.extend(default_options, self.options);
-
-        //let tmpl = document.getElementById(self.rowTmpl);
-        default_options.fnRowCallback = function (row, data, displayIndex, displayIndexFull) {
-            // Render the row template for this row.
-            //ko.renderTemplate(binding.rowTemplate, data, null, row, "replaceChildren");
-            //console.log(row, data, displayIndex, displayIndexFull);
-            //$(row).html(tmpl.innerHTML);
-
-            data.index = displayIndexFull;
-            //render jquery.tmpl
-            $(row).html($('<div>').append($(`#${self.rowTmpl}`).tmpl(data)).html());
-
-            return row;
-        };
-
-        self.options = default_options;
-
-        self.data_table = $(self.$el).DataTable(self.options);
-        self.load_data();
+        // Use created instead of mounted
+        this.initializeDataTable();
     },
     watch: {
         data: {
             handler: function (value, old_value) {
-                var self = this;
-                self.load_data();
+                // Use 'deep: true' if data can contain deep changes
+                this.load_data();
             },
-            immediate: true
+            immediate: true,
+            deep: true
         }
     },
     methods: {
+        initializeDataTable: function () {
+            // Use Object.assign for options merging
+            const defaultOptions = Object.assign({
+                bAutoWidth: false,
+                paging: true,
+                lengthChange: false,
+                searching: false,
+                fnRowCallback: (row, data, displayIndex, displayIndexFull) => {
+                    data.index = displayIndexFull;                    
+                    // Render jquery.tmpl                    
+                    $(row).html($('<div>').append($(`#${this.rowTmpl}`).tmpl(data)).html());
+                    return row;
+                }
+            }, this.options);
+
+            this.data_table = $(this.$el).DataTable(defaultOptions);
+            this.load_data();
+        },
         load_data: function () {
-            var self = this;
-
-            if (!self.data || !self.data_table) {
-                return;
+            if (this.data && this.data_table) {
+                this.data_table.clear().rows.add(this.data).draw();
             }
-
-            self.data_table.clear().rows.add(self.data).draw();
         },
     }
 });

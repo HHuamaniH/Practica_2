@@ -1,0 +1,116 @@
+﻿<table cellpadding="4" style="border: 0; font-family: Arial; font-size: 10pt; border-collapse: collapse; line-height: 150%;">
+    <thead>
+        <tr style="background-color: #bfbfbf;">
+            <th style="text-align: center; border: 1px solid #000;">Obligación incumplida</th>
+            <th style="text-align: center; border: 1px solid #000;">Tipo infractor</th>
+            <th style="text-align: center; border: 1px solid #000;">Conducta Imputada</th>
+            <th style="text-align: center; border: 1px solid #000;">Descargo sobre la imputación formulada</th>
+            <th style="text-align: center; border: 1px solid #000;">Información complementaria/información adicional</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td style="border: 1px solid #000;">
+                Dependerá del caso concreto
+            </td>
+            <td style="border: 1px solid #000;">
+                Numeral 11 del Anexo 1 del RISMFFS.<br /><br />
+                <i>“No tener libro de operaciones o no registrar la información endicho libro, de acuerdo a las disposiciones establecidas”</i>
+            </td>
+            <td style="border: 1px solid #000;">
+                No tener libro de operaciones de acuerdo a las disposiciones establecidas
+            </td>
+            <td style="border: 1px solid #000; text-align: center;">
+                Escrito ${informe.ANTECEDENTES_DOCS.Escrito.numero || '00XX-202X-OSINFOR/08.2.X'} SITD xxxxxxxxx
+            </td>
+            <td style="border: 1px solid #000; text-align: center;">
+                Dependerá del caso concreto
+            </td>
+        </tr>
+    </tbody>
+</table>
+<div style="font-size: 8pt;">Fuente: Elaboración propia.</div>
+
+{{if informe.COD_TIPO_INFORME == 1}}
+<p class="enumeration">
+    Al respecto, el/la administrada (o) presentó sus descargos contra la Resolución Sub Directoral mediante la Carta N° ${informe.ANTECEDENTES_DOCS.Carta.numero || '00XX-202X-OSINFOR/08.2.X'} de fecha ${informe.ANTECEDENTES_DOCS.Carta.fechaNotificacionTexto || 'xx de xxxxx de 202X'}, ingresado con fecha ${informe.ANTECEDENTES_DOCS.Carta.fechaEmisionTexto || 'xx de xxxxx de 202X'} (Registro N° xxxxxxxx) del cual se advierte los siguientes argumentos que guardan relación con la imputación materia de análisis:
+</p>
+<ol style="list-style-type: lower-alpha; margin-left: ${informe.MARGIN_LEFT.LEVEL_3};; margin-left: ${informe.MARGIN_LEFT.LEVEL_3};">
+    <li>(…) XXXXXXXXXXXXXXXXXXXXX (…). (Texto original del descargo).</li>
+    <li>(…) XXXXXXXXXXXXXXXXXXXXX (…). (Texto original del descargo).</li>
+    <li>(…) XXXXXXXXXXXXXXXXXXXXX (…). (Texto original del descargo).</li>
+</ol>
+<p class="enumeration">
+    En ese sentido, la Autoridad Instructora realizó el análisis correspondiente al Expediente Administrativo, así como de los documentos mencionados precedentemente, concluyendo lo siguiente:
+</p>
+<ul style="margin-left: ${informe.MARGIN_LEFT.LEVEL_3};">
+    <li>
+        “(…)xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx (…)”.
+    </li>
+</ul>
+<p class="enumeration">
+    Al respecto, mediante escrito N° ${informe.ANTECEDENTES_DOCS.Escrito.numero || '00XX-202X-OSINFOR/08.2.X'} con SITD N° xxxxxxx de fecha ${informe.ANTECEDENTES_DOCS.Escrito.fechaNotificacionTexto || 'xx de xxxxx de 202X'}, el/la administrado (a) presentó su descargo al Informe Final de Instrucción, señalando lo siguiente:
+</p>
+<ol style="list-style-type: lower-alpha; margin-left: ${informe.MARGIN_LEFT.LEVEL_3};; margin-left: ${informe.MARGIN_LEFT.LEVEL_3};">
+    <li>(…) XXXXXXXXXXXXXXXXXXXXX (…). (Texto original del descargo).</li>
+    <li>(…) XXXXXXXXXXXXXXXXXXXXX (…). (Texto original del descargo).</li>
+    <li>(…) XXXXXXXXXXXXXXXXXXXXX (…). (Texto original del descargo).</li>
+</ol>
+<p class="enumeration">Respecto a lo señalado por el/la administrado (a); se advierte el siguiente análisis:</p>
+<ul style="margin-left: ${informe.MARGIN_LEFT.LEVEL_3};">
+    <li>Con relación al argumento señalado en el acápite a) xxxxxxxxxxxxxxxxxxx</li>
+    <li>Con relación al argumento señalado en el acápite b) xxxxxxxxxxxxxxxxxxx</li>
+    <li>Con relación al argumento señalado en el acápite c) xxxxxxxxxxxxxxxxxxx</li>
+</ul>
+<p class="enumeration">
+    En esta etapa del procedimiento, de acuerdo a la documentación que obra en el expediente administrativo y del análisis de los descargos, se advierte lo siguiente:
+</p>
+{{else}}
+<p class="enumeration">
+    Es preciso mencionar que, respecto de la imputación realizada, el/la administrado no presentó descargo a la Resolución Sub Directoral.
+</p>
+<p class="enumeration">
+    La Autoridad Instructora, concluyó que existen elementos suficientes que permitieron mantener la imputación atribuida al/la administrado (a); respecto de lo cual el/la administrado (a) <u>no presentó descargos a lo señalado en el Informe Final de Instrucción.</u>
+</p>
+{{/if}}
+<ul style="margin-left: ${informe.MARGIN_LEFT.LEVEL_3};">
+    <li>
+        Con fecha ${informe.ANTECEDENTES_DOCS.ILEGAL.fechaNotificacionTexto || 'xx de xxxxx de 202X'} se aprobó la xxxx en favor del/de la administrado (a)
+        <a style="mso-footnote-id: foot_infraccion_11_1" href="#_foot_infraccion_11_1" title="">
+            <sup class=MsoFootnoteReference><span style="mso-special-character:footnote"></span></sup>
+        </a>, con vigencia desde el XX de XXX de 202X hasta el XX de XXX de 202X.
+    </li>
+    <li>
+        En el marco de la implementación de la DEMA el/la administrado (a) efectuó aprovechamiento forestal, dado que, durante la diligencia de supervisión, <u>
+            <strong>xx árboles</strong> fueron hallados en tocón, asimismo, efectuó su última movilización de madera el xx  de xxxx de 202x
+            <a style="mso-footnote-id: foot_infraccion_11_2" href="#_foot_infraccion_11_2" title="">
+                <sup class=MsoFootnoteReference><span style="mso-special-character:footnote"></span></sup>
+            </a>
+        </u>.
+    </li>
+    <li>
+        Acorde a la Resolución de Dirección Ejecutiva N° 264-2019-MINAGRI-SERFOR-DE, de fecha de fecha 30 de diciembre de 2019
+        <a style="mso-footnote-id: foot_infraccion_11_3" href="#_foot_infraccion_11_3" title="">
+            <sup class=MsoFootnoteReference><span style="mso-special-character:footnote"></span></sup>
+        </a>, el/la administrado (a) tenía la obligación registrar la información del aprovechamiento realizado desde la Sección “Tala” del Libro de Operaciones.
+    </li>
+    <li>
+        Al respecto, revisado los documentos del presente PAU,  y de la búsqueda realizada en el Sistema de Trámite Documentario - SITD del OSINFOR, se advierte que el/la administrado (a) no ha presentado el Libro de Operaciones, hasta la fecha de emisión de la presente resolución, a pesar de que se encontraba en la obligatoriedad de contar con el libro de operaciones
+        <a style="mso-footnote-id: foot_infraccion_11_4" href="#_foot_infraccion_11_4" title="">
+            <sup class=MsoFootnoteReference><span style="mso-special-character:footnote"></span></sup>
+        </a>.
+    </li>
+    <li>
+        Aunado a ello, mediante Oficio N° xxx, de fecha xxxx (Registro N° 202209761), la ARFFS señala que, para el/la administrado (a) no se ha aprobado codificación del libro de operaciones.
+    </li>
+    <li>
+        En consecuencia, el/la administrado (a), no ha cumplido con tener el Libro de Operaciones de acuerdo a las disposiciones establecidas.
+    </li>
+</ul>
+
+<p class="enumeration">
+    En ese contexto, de acuerdo a lo señalado precedentemente, se confirma que el/la administrado (a) cometió la infracción
+    <a style="mso-footnote-id: foot_infraccion_11_5" href="#_foot_infraccion_11_5" title="">
+        <sup class=MsoFootnoteReference><span style="mso-special-character:footnote"></span></sup>
+    </a> tipificada en el numeral 11 del Anexo 1 del RISMFFS; <u>criterio acorde a lo señalado en el Informe Final de Instrucción.</u>
+</p>

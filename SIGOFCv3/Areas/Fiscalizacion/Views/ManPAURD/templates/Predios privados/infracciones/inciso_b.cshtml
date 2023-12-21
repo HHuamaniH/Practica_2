@@ -1,0 +1,163 @@
+﻿<table cellpadding="4" style="border: 0; font-family: Arial; font-size: 10pt; border-collapse: collapse; line-height: 150%;">
+    <thead>
+        <tr style="background-color: #bfbfbf;">
+            <th style="text-align: center; border: 1px solid #000;">Obligación incumplida</th>
+            <th style="text-align: center; border: 1px solid #000;">Tipo infractor</th>
+            <th style="text-align: center; border: 1px solid #000;">Conducta Imputada</th>
+            <th style="text-align: center; border: 1px solid #000;">Descargo sobre la imputación formulada</th>
+            <th style="text-align: center; border: 1px solid #000;">Información complementaria/información adicional</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td style="border: 1px solid #000;">
+                Dependerá del caso concreto
+            </td>
+            <td style="border: 1px solid #000;">
+                Literal b)
+                <a style="mso-footnote-id: foot_infraccion_b_1" href="#_foot_infraccion_b_1" title="">
+                    <sup class=MsoFootnoteReference><span style="mso-special-character:footnote"></span></sup>
+                </a> del artículo 153 de LFFS, concordado con lo establecido en el Literal b)
+                <a style="mso-footnote-id: foot_infraccion_b_2" href="#_foot_infraccion_b_2" title="">
+                    <sup class=MsoFootnoteReference><span style="mso-special-character:footnote"></span></sup>
+                </a> del artículo 44 del RGF.
+            </td>
+            <td style="border: 1px solid #000;">
+                Incumplir con la implementación del plan de manejo aprobado y demostrar el origen legal de los productos aprovechados
+            </td>
+            <td style="border: 1px solid #000; text-align: center;">
+                Escrito ${informe.ANTECEDENTES_DOCS.Escrito.numero || '00XX-202X-OSINFOR/08.2.X'} SITD xxxxxxxxx
+            </td>
+            <td style="border: 1px solid #000; text-align: center;">
+                Dependerá del caso concreto
+            </td>
+        </tr>
+    </tbody>
+</table>
+<div style="font-size: 8pt;">Fuente: Elaboración propia.</div>
+
+{{if informe.COD_TIPO_INFORME == 1}}
+<p class="enumeration">
+    Al respecto, el/la administrada (o) presentó sus descargos contra la Resolución Sub Directoral mediante la Carta N° ${informe.ANTECEDENTES_DOCS.Carta.numero || '00XX-202X-OSINFOR/08.2.X'} de fecha ${informe.ANTECEDENTES_DOCS.Carta.fechaNotificacionTexto || 'xx de xxxxx de 202X'}, ingresado con fecha ${informe.ANTECEDENTES_DOCS.Carta.fechaEmisionTexto || 'xx de xxxxx de 202X'} (Registro N° xxxxxxxx) del cual se advierte los siguientes argumentos que guardan relación con la imputación materia de análisis:
+</p>
+<ol style="list-style-type: lower-alpha; margin-left: ${informe.MARGIN_LEFT.LEVEL_3};">
+    <li>(…) XXXXXXXXXXXXXXXXXXXXX (…). (Texto original del descargo).</li>
+    <li>(…) XXXXXXXXXXXXXXXXXXXXX (…). (Texto original del descargo).</li>
+    <li>(…) XXXXXXXXXXXXXXXXXXXXX (…). (Texto original del descargo).</li>
+</ol>
+<p class="enumeration">
+    En ese sentido, la Autoridad Instructora realizó el análisis correspondiente al Expediente Administrativo, así como de los documentos mencionados precedentemente, concluyendo lo siguiente:
+</p>
+<ul style="margin-left: ${informe.MARGIN_LEFT.LEVEL_3};">
+    <li>
+        “(…)xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx (…)”.
+    </li>
+</ul>
+<p class="enumeration">
+    Al respecto, mediante escrito N° ${informe.ANTECEDENTES_DOCS.Escrito.numero || '00XX-202X-OSINFOR/08.2.X'} con SITD N° xxxxxxx de fecha ${informe.ANTECEDENTES_DOCS.Escrito.fechaNotificacionTexto || 'xx de xxxxx de 202X'}, el/la administrado (a) presentó su descargo al Informe Final de Instrucción, señalando lo siguiente:
+</p>
+<ol style="list-style-type: lower-alpha; margin-left: ${informe.MARGIN_LEFT.LEVEL_3};">
+    <li>(…) XXXXXXXXXXXXXXXXXXXXX (…). (Texto original del descargo).</li>
+    <li>(…) XXXXXXXXXXXXXXXXXXXXX (…). (Texto original del descargo).</li>
+    <li>(…) XXXXXXXXXXXXXXXXXXXXX (…). (Texto original del descargo).</li>
+</ol>
+<p class="enumeration">Respecto a lo señalado por el/la administrado (a); se advierte el siguiente análisis:</p>
+<ul style="margin-left: ${informe.MARGIN_LEFT.LEVEL_3};">
+    <li>Con relación al argumento señalado en el acápite a) xxxxxxxxxxxxxxxxxxx</li>
+    <li>Con relación al argumento señalado en el acápite b) xxxxxxxxxxxxxxxxxxx</li>
+    <li>Con relación al argumento señalado en el acápite c) xxxxxxxxxxxxxxxxxxx</li>
+</ul>
+<p class="enumeration">
+    En esta etapa del procedimiento, de acuerdo a la documentación que obra en el expediente administrativo y del análisis de los descargos, se advierte lo siguiente:
+</p>
+{{else}}
+<p class="enumeration">
+    Es preciso mencionar que, respecto de la imputación realizada, el/la administrado no presentó descargo a la Resolución Sub Directoral.
+</p>
+<p class="enumeration">
+    La Autoridad Instructora, concluyó que existen elementos suficientes que permitieron mantener la imputación atribuida al/la administrado (a); respecto de lo cual el/la administrado (a) <u>no presentó descargos a lo señalado en el Informe Final de Instrucción.</u>
+</p>
+<p class="enumeration">
+    En esta etapa del procedimiento, de acuerdo a la documentación que obra en el expediente administrativo, se advierte lo siguiente:
+</p>
+{{/if}}
+<ul style="margin-left: ${informe.MARGIN_LEFT.LEVEL_3};">
+    <li>
+        El literal b) del artículo 153 de la Ley N° 29763, Ley Forestal y de Fauna Silvestre, de modo concordante con el literal b) del artículo 44 del RGF, constituye una causal de caducidad, la extracción o movilización de recursos forestales no autorizados, lo que ha ocurrido en el presente caso, conforme a lo analizado en los numerales 28 al 32 de la presente resolución.
+    </li>
+    <li>
+        Asimismo, se cumplen los criterios mínimos para declarar la caducidad indicados en el  numeral 7.2 de los “Criterios para la declaración de caducidad del título habilitante en el PAU del OSINFOR”, aprobado por Resolución de Jefatura N° 009-2018-OSINFOR
+        <a style="mso-footnote-id: foot_infraccion_b_3" href="#_foot_infraccion_b_3" title="">
+            <sup class=MsoFootnoteReference><span style="mso-special-character:footnote"></span></sup>
+        </a>, conforme se detalla en el siguiente cuadro:
+    </li>
+</ul>
+<table cellpadding="4" style="border: 0; font-family: Arial; font-size: 10pt; border-collapse: collapse; line-height: 150%;">
+    <thead>
+        <tr style="background-color: #bfbfbf;">
+            <th style="text-align: center; border: 1px solid #000;">Criterio</th>
+            <th style="text-align: center; border: 1px solid #000;">Análisis al caso concreto</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td style="border: 1px solid #000;">
+                a) Las acciones de extracción o movilización alcanzan un nivel de gravedad estimado como “muy grave”, de acuerdo a los criterios vigentes para estimar la gravedad del daño.
+            </td>
+            <td style="border: 1px solid #000;">
+                La extracción de un volumen total de xxxxx m<sup>3</sup> de madera correspondiente a las especies xxxxx (xxxxx m<sup>3</sup>), provenientes de individuos no autorizados, para el presente caso, significa una afectación de nivel <strong>“muy grave”</strong> a la cobertura boscosa, por lo cual se cumple con este criterio.
+            </td>
+        </tr>
+        <tr>
+            <td style="border: 1px solid #000;">
+                b) Inexistencia del 100% de los árboles de la muestra evaluada y/o inexistencia total de indicios de censo comercial en el área del plan de manejo supervisado (…)
+            </td>
+            <td style="border: 1px solid #000;">
+                Se evidenció aprovechamiento maderable de manera parcial, por lo cual, no se cumple con el presente criterio.
+            </td>
+        </tr>
+        <tr>
+            <td style="border: 1px solid #000;">
+                c) Antecedentes del titular por infracción a la legislación forestal que, como mínimo, hayan generado un daño de nivel “grave” al Patrimonio Forestal Nacional. La referida afectación debe ser confrontada con la estimación actual del daño, según los criterios vigentes para estimar la gravedad del daño, la misma que solo será considerada en el análisis del presente criterio, si se mantiene en el mismo nivel de magnitud.
+            </td>
+            <td style="border: 1px solid #000;">
+                Según el reporte de antecedentes
+                <a style="mso-footnote-id: foot_infraccion_b_4" href="#_foot_infraccion_b_4" title="">
+                    <sup class=MsoFootnoteReference><span style="mso-special-character:footnote"></span></sup>
+                </a>, la titular no cuenta con antecedentes por infracción a la legislación forestal, por lo cual, no se cumple el presente criterio
+            </td>
+        </tr>
+        <tr>
+            <td style="border: 1px solid #000;">
+                d) La continuidad del título habilitante supone el riesgo de que se sigan afectando los recursos forestales y/o de fauna silvestre; riesgo que debe ser determinado a través de la evaluación técnica correspondiente.
+                Excepcionalmente, en caso de determinarse que las acciones de extracción o movilización alcancen un nivel de gravedad estimado como “muy grave”, y de no concurrir los supuestos señalados en los literales b) o c), se declarará la caducidad cuando se verifique la concurrencia del literal d).
+            </td>
+            <td style="border: 1px solid #000;">
+                <p>
+                    La titular realizó la extracción y movilización de xxxx m3 de madera, correspondiente a tres especies forestales proveniente de individuos no autorizados; dicho aprovechamiento ha generado una afectación de xxx hectáreas de cobertura boscosa afectados por la extracción forestal sin criterios de sostenibilidad; lo cual no solamente afectó la flora, sino también, entre otros, a la fauna silvestre que dependen directamente del bosque, así como los servicios ecosistémicos, que implica que las evidencias son muy dañinas para el ambiente, con posibilidad de recuperación a costo muy elevado a largo plazo, o con el riesgo de pérdida de opción de uso del recurso forestal en el futuro.
+                </p>
+                <p>
+                    Al haberse efectuado el aprovechamiento de individuos no autorizados bajo el amparo de los documentos del título habilitante, apartándose claramente de la finalidad para el cual fue otorgado; existe el riesgo que el mal accionar del/la administrado (a) se vea extendido en los próximos planes de manejo, por lo cual, la continuidad del título habilitante supone el riesgo de que se sigan afectando los recursos forestales y/o de fauna silvestre.
+                </p>
+            </td>
+        </tr>
+    </tbody>
+</table>
+<p>
+    En ese sentido, si bien se ha verificado que dos de las cuatro condiciones para declarar la caducidad no se cumplen, se debe considerar que los “Criterios para la declaración de caducidad del título habilitante en el Procedimiento Administrativo Único del OSINFOR”, vigente, posibilitan la declaratoria de caducidad se ocurren los supuestos a) (infracción muy grave) y d) (riesgo en la continuidad del TH), lo que en el presente caso se justifica debido a que el título habilitante solo ha sido utilizado para legalizar productos obtenidos ilegalmente, sin que exista en el área inversión para el cuidado y manejo de los bosques.
+</p>
+<ul style="margin-left: ${informe.MARGIN_LEFT.LEVEL_3};">
+    <li>
+        Es en base a lo expuesto precedentemente, se ha establecido que el/la administrado (a) se encuentra incursa en la causal de caducidad previamente señalada.
+    </li>
+    <li>
+        En ese sentido, teniendo en consideración el principio de legalidad y el de predictibilidad o confianza legítima
+        <a style="mso-footnote-id: foot_infraccion_b_5" href="#_foot_infraccion_b_5" title="">
+            <sup class=MsoFootnoteReference><span style="mso-special-character:footnote"></span></sup>
+        </a>, esta Autoridad debe actuar conforme a lo establecido en las normas antes citadas, no pudiéndose apartar del análisis que se realice en base a la aplicación los referidos criterios. En efecto, es importante señalar que toda actuación de la Administración tiene una finalidad objetivamente determinada y se orienta a satisfacer un interés general que, en el presente caso, es tutelar el patrimonio forestal y de fauna silvestre, el cual se ha visto gravemente afectado por el manejo realizado a través del título habilitante.
+    </li>
+</ul>
+
+<p class="enumeration">
+    En consecuencia, la causal de caducidad prevista en el literal b) del artículo 153 de la LFFS, concordante con el literal b) del artículo 44 del RGF, se encuentra acreditada.
+</p>

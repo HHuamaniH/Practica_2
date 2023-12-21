@@ -6,16 +6,16 @@ using System.Collections.Generic;
 
 namespace CapaLogica.DOC
 {
-    public class Log_PAU_Digital
+    public class Log_PAU_RSD_Digital
     {
-        Dat_PAU_Digital oDat_PAU_Digital;
+        Dat_PAU_RSD_Digital oDat_PAU_Digital;
 
-        public Log_PAU_Digital()
+        public Log_PAU_RSD_Digital()
         {
-            oDat_PAU_Digital = new Dat_PAU_Digital();
+            oDat_PAU_Digital = new Dat_PAU_RSD_Digital();
         }
 
-        public string RegRSDGrabar(VM_RSD_DIGITAL informeDigital)
+        public string RegRSDGrabar(VM_PAU_RSD_DIGITAL informeDigital)
         {
             Ent_ResSubDirTabInforme cabecera = new Ent_ResSubDirTabInforme();
 
@@ -50,7 +50,7 @@ namespace CapaLogica.DOC
             return oDat_PAU_Digital.RegRSDGrabar(cabecera, informeDigital);
         }
 
-        public VM_RSD_DIGITAL ObtenerRSD(string COD_RESOLUCION)
+        public VM_PAU_RSD_DIGITAL ObtenerRSD(string COD_RESOLUCION)
         {
             return oDat_PAU_Digital.ObtenerRSD(COD_RESOLUCION);
         }
@@ -75,9 +75,9 @@ namespace CapaLogica.DOC
             return oDat_PAU_Digital.ListarPlanesManejo(COD_INFORME, COD_THABILITANTE, NUM_POA, V_OPCION);
         }
 
-        public string NotificarRSD(RSD_Notificacion notificacion)
+        public string Notificar(VM_PAU_DIGITAL_ALERTA notificacion)
         {
-            return oDat_PAU_Digital.NotificarRSD(notificacion);
+            return oDat_PAU_Digital.Notificar(notificacion);
         }
 
         public void ModificarNumeroInforme(string codInforme, string numeroInforme, DateTime fechaOperacion)

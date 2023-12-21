@@ -10,18 +10,18 @@ using SQL = GeneralSQL.Data.SQL;
 
 namespace CapaDatos.Documento
 {
-    public class Dat_Informe_Legal_Digital
+    public class Dat_PAU_IFI_Digital
     {
         private DBOracle dBOracle;
         private SQL oGDataSQL;
 
-        public Dat_Informe_Legal_Digital()
+        public Dat_PAU_IFI_Digital()
         {
             dBOracle = new DBOracle();
             oGDataSQL = new SQL();
         }
 
-        public string RegInformeGrabar(Ent_InformeLegalPAUDigital informeDigital, VM_INFORME_LEGAL_DIGITAL oILegal)
+        public string RegInformeGrabar(Ent_InformeLegalPAUDigital informeDigital, VM_PAU_IFI_DIGITAL oILegal)
         {
             string OUTPUTPARAM01 = "", codInformeDigital = informeDigital.pVCodInformeDigital;
 
@@ -126,9 +126,9 @@ namespace CapaDatos.Documento
             return codInformeDigital;
         }
 
-        public VM_INFORME_LEGAL_DIGITAL ObtenerInforme(string COD_RESOLUCION)
+        public VM_PAU_IFI_DIGITAL ObtenerInforme(string COD_RESOLUCION)
         {
-            VM_INFORME_LEGAL_DIGITAL vm = null;
+            VM_PAU_IFI_DIGITAL vm = null;
             try
             {
                 using (OracleConnection cn = new OracleConnection(BDConexion.Conexion_Cadena_SIGO()))
@@ -140,7 +140,7 @@ namespace CapaDatos.Documento
                         {
                             if (dr.HasRows)
                             {
-                                vm = new VM_INFORME_LEGAL_DIGITAL();
+                                vm = new VM_PAU_IFI_DIGITAL();
 
                                 while (dr.Read())
                                 {
@@ -487,7 +487,7 @@ namespace CapaDatos.Documento
             }
         }
 
-        public string Notificar(Informe_Notificacion notificacion)
+        public string Notificar(VM_PAU_DIGITAL_ALERTA notificacion)
         {
             string OUTPUTPARAM01 = "";
 
@@ -499,7 +499,7 @@ namespace CapaDatos.Documento
                 try
                 {
                     //object[] param = { notificacion.COD_PERSONA, notificacion.COD_INFORME, notificacion.MENSAJE_ENVIO_ALERTA };
-                    using (OracleCommand cmd = dBOracle.ManExecuteOutput(cn, tr, "DOC_OSINFOR_ERP_MIGRACION.SPFISCALIZACION_INFORME_LEGAL_DIGITAL_ENVIARALERTA", notificacion))
+                    using (OracleCommand cmd = dBOracle.ManExecuteOutput(cn, tr, "DOC_OSINFOR_ERP_MIGRACION.SPFISCALIZACION_PAU_DIGITAL_ENVIARALERTA", notificacion))
                     {
                         cmd.ExecuteNonQuery();
                         OUTPUTPARAM01 = cmd.Parameters["OUTPUTPARAM01"].Value?.ToString() ?? "";

@@ -2,7 +2,7 @@
     ViewBag.Title = "Informe Digital";
 }
 
-<link href="~/Areas/Fiscalizacion/css/ResSubDir/index.css" rel="stylesheet" />
+<link href="~/Areas/Fiscalizacion/css/ManPAU/index.css" rel="stylesheet" />
 <script src="~/Scripts/vue.min.js"></script>
 <script src="~/Scripts/ckeditor5/ckeditor.js"></script>
 
@@ -19,12 +19,6 @@
 
     $(function () {
         if (!$('#txtFechaEmision').val()) $('#txtFechaEmision').val(fnDate.text(new Date()));
-
-        //if (window.location.search.indexOf('type=rd') != -1) {
-        //    $('#chkResDir').attr('checked', true);
-        //} else {
-        //    $('#chkResSubDir').attr('checked', true);
-        //}
     });
 </script>
 <script src="~/Scripts/ckeditor5/config.js?v=1"></script>
@@ -37,7 +31,7 @@
         <div>Generar Informe</div>
         <div class="options">
             <button type="button" class="btn btn-link btn-sm p-0 ml-3" onclick="_informe.Exportar()" v-if="Informe.COD_INFORME_DIGITAL && Informe.ESTADO < States.FINALIZADO">
-                <i class="fa fa-file-word-o fa-fw"></i>Crear informe
+                <i class="fa fa-file-word-o fa-fw"></i>Crear documento
             </button>
             <button type="button" class="btn btn-link btn-sm p-0 ml-3" onclick="_informe.Registro()" v-if="Informe.COD_RES_SUB && Informe.ESTADO < States.COMPLETADO || Informe.FLG_ACTUALIZAR">
                 <i class="fa fa-save fa-fw"></i>Guardar
@@ -366,10 +360,6 @@
                 </div>
             </div>
         </fieldset>
-        @*<div class="form-group">
-            <h5>Vistos</h5>
-            <editor v-model="Informe.VISTOS" :disabled="Informe.ESTADO > States.EN_REVISION"></editor>
-        </div>*@
         <fieldset class="fs-border" v-if="Informe.RECURSOS.length">
             <legend>Insumos para el Análisis</legend>
             <div class="form-row">
@@ -479,61 +469,6 @@
                 </div>
             </div>
         </fieldset>
-
-        @*<ul class="nav nav-tabs" id="tab-estructura" role="tablist">
-            <li class="nav-item" role="presentation">
-                <a class="nav-link active" data-toggle="tab" href="#tab-est-1" role="tab">Antecedentes</a>
-            </li>
-            <li class="nav-item" role="presentation">
-                <a class="nav-link" data-toggle="tab" href="#tab-est-2" role="tab">Competencia</a>
-            </li>
-            <li class="nav-item" role="presentation">
-                <a class="nav-link" data-toggle="tab" href="#tab-est-3" role="tab">Análisis</a>
-            </li>
-            <li class="nav-item" role="presentation">
-                <a class="nav-link" data-toggle="tab" href="#tab-est-4" role="tab">Imputación de cargos</a>
-            </li>
-            <li class="nav-item" role="presentation">
-                <a class="nav-link" data-toggle="tab" href="#tab-est-5" role="tab">Sobre comunicación con otras entidades</a>
-            </li>
-            <li class="nav-item" role="presentation">
-                <a class="nav-link" data-toggle="tab" href="#tab-est-6" role="tab">Párrafos Cliché</a>
-            </li>
-            <li class="nav-item" role="presentation">
-                <a class="nav-link" data-toggle="tab" href="#tab-est-7" role="tab">Pie de página</a>
-            </li>
-        </ul>
-        <div class="tab-content">
-            <div class="tab-pane pt-3 show active" id="tab-est-1" role="tabpanel">
-                <editor v-model="Informe.ANTECEDENTES" :disabled="Informe.ESTADO > States.EN_REVISION"></editor>
-            </div>
-            <div class="tab-pane pt-3" id="tab-est-2" role="tabpanel">
-                <editor class="editor-table-sm" v-model="Informe.COMPETENCIA" :disabled="Informe.ESTADO > States.EN_REVISION"></editor>
-            </div>
-            <div class="tab-pane pt-3" id="tab-est-3" role="tabpanel">
-                <button type="button" class="btn btn-primary btn-sm my-2" v-if="Informe.ESTADO == States.INGRESADO" onclick="_informe.Mostrar_Analisis()">Generar análisis</button>
-                <editor v-model="Informe.ANALISIS" :disabled="Informe.ESTADO > States.EN_REVISION"></editor>
-            </div>
-            <div class="tab-pane pt-3" id="tab-est-4" role="tabpanel">
-                <editor v-model="Informe.IMPUTACION" :disabled="Informe.ESTADO > States.EN_REVISION"></editor>
-            </div>
-            <div class="tab-pane pt-3" id="tab-est-5" role="tabpanel">
-                <editor v-model="Informe.COMUNICACION_EXTERNA" :disabled="Informe.ESTADO > States.EN_REVISION"></editor>
-            </div>
-            <div class="tab-pane pt-3" id="tab-est-6" role="tabpanel">
-                <editor v-model="Informe.PARRAFOS_CLICHE" :disabled="Informe.ESTADO > States.EN_REVISION"></editor>
-            </div>
-            <div class="tab-pane pt-3" id="tab-est-7" role="tabpanel">
-                <editor v-model="Informe.PIE_PAGINA" :disabled="Informe.ESTADO > States.EN_REVISION"></editor>
-            </div>
-        </div>
-        <fieldset class="fs-border mt-3">
-            <legend>Se resuelve</legend>
-            <a class="btn btn-link btn-sm" v-on:click="GenerarResolucion()" v-if="Informe.ESTADO <= States.EN_REVISION">
-                <i class="fa fa-arrow-down mr-2"></i>Registrar información
-            </a>
-            <editor v-model="Informe.RESOLUCION" class="mt-3" :disabled="Informe.ESTADO > States.EN_REVISION"></editor>
-        </fieldset>*@
     </div>
     <div class="py-5 my-3 text-center" v-else>
         <h4>Para registrar el PAU Digital, primero genere la sección de "Datos Generales"</h4>
@@ -834,9 +769,6 @@
         </div>
     </div>
 </div>
-
-<!--Informe-->
-@*@Html.Partial("~/Areas/Fiscalizacion/Views/ManPAU/templates/_tmplRSDInforme.cshtml")*@
 
 <!--Firma digital-->
 @Html.Partial("~/Areas/General/Views/FirmaDigital/_FirmaModal.cshtml")

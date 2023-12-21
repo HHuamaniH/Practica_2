@@ -1,0 +1,114 @@
+﻿<table cellpadding="4" style="border: 0; font-family: Arial; font-size: 10pt; border-collapse: collapse; line-height: 150%;">
+    <thead>
+        <tr style="background-color: #bfbfbf;">
+            <th style="text-align: center; border: 1px solid #000;">Obligación incumplida</th>
+            <th style="text-align: center; border: 1px solid #000;">Tipo infractor</th>
+            <th style="text-align: center; border: 1px solid #000;">Conducta Imputada</th>
+            <th style="text-align: center; border: 1px solid #000;">Descargo sobre la imputación formulada</th>
+            <th style="text-align: center; border: 1px solid #000;">Información complementaria/información adicional</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td style="border: 1px solid #000;">
+                Dependerá del caso concreto
+            </td>
+            <td style="border: 1px solid #000;">
+                Numeral 32 del Anexo 1 del RISMFFS.<br /><br />
+                <i>“Elaborar, suscribir y/o presentar planes de manejo e informes de ejecución que contengan información falsa o adulterada”</i>
+            </td>
+            <td style="border: 1px solid #000;">
+                Presentar el xxx, periodo xxxx, conteniendo información falsa, debido a la inexistencia de 45 individuos de las especies xxxx que representan un 22% del total de aprobados para el referido XXX.
+            </td>
+            <td style="border: 1px solid #000; text-align: center;">
+                Escrito ${informe.ANTECEDENTES_DOCS.Escrito.numero || '00XX-202X-OSINFOR/08.2.X'} SITD xxxxxxxxx
+            </td>
+            <td style="border: 1px solid #000; text-align: center;">
+                Dependerá del caso concreto
+            </td>
+        </tr>
+    </tbody>
+</table>
+<div style="font-size: 8pt;">Fuente: Elaboración propia.</div>
+
+{{if informe.COD_TIPO_INFORME == 1}}
+<p class="enumeration">
+    Al respecto, el/la administrada (o) presentó sus descargos contra la Resolución Sub Directoral mediante la Carta N° ${informe.ANTECEDENTES_DOCS.Carta.numero || '00XX-202X-OSINFOR/08.2.X'} de fecha ${informe.ANTECEDENTES_DOCS.Carta.fechaNotificacionTexto || 'xx de xxxxx de 202X'}, ingresado con fecha ${informe.ANTECEDENTES_DOCS.Carta.fechaEmisionTexto || 'xx de xxxxx de 202X'} (Registro N° xxxxxxxx) del cual se advierte los siguientes argumentos que guardan relación con la imputación materia de análisis:
+</p>
+<ol style="list-style-type: lower-alpha; margin-left: ${informe.MARGIN_LEFT.LEVEL_3};">
+    <li>(…) XXXXXXXXXXXXXXXXXXXXX (…). (Texto original del descargo).</li>
+    <li>(…) XXXXXXXXXXXXXXXXXXXXX (…). (Texto original del descargo).</li>
+    <li>(…) XXXXXXXXXXXXXXXXXXXXX (…). (Texto original del descargo).</li>
+</ol>
+<p class="enumeration">
+    En ese sentido, la Autoridad Instructora realizó el análisis correspondiente al Expediente Administrativo, así como de los documentos mencionados precedentemente, concluyendo lo siguiente:
+</p>
+<ul style="margin-left: ${informe.MARGIN_LEFT.LEVEL_3};">
+    <li>
+        “(…)xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx (…)”.
+    </li>
+</ul>
+<p class="enumeration">
+    Al respecto, mediante escrito N° ${informe.ANTECEDENTES_DOCS.Escrito.numero || '00XX-202X-OSINFOR/08.2.X'} con SITD N° xxxxxxx de fecha ${informe.ANTECEDENTES_DOCS.Carta.fechaNotificacionTexto || 'xx de xxxxx de 202X'}, el/la administrado (a) presentó su descargo al Informe Final de Instrucción, señalando lo siguiente:
+</p>
+<ol style="list-style-type: lower-alpha; margin-left: ${informe.MARGIN_LEFT.LEVEL_3};">
+    <li>(…) XXXXXXXXXXXXXXXXXXXXX (…). (Texto original del descargo).</li>
+    <li>(…) XXXXXXXXXXXXXXXXXXXXX (…). (Texto original del descargo).</li>
+    <li>(…) XXXXXXXXXXXXXXXXXXXXX (…). (Texto original del descargo).</li>
+</ol>
+<p class="enumeration">Respecto a lo señalado por el/la administrado (a); se advierte el siguiente análisis:</p>
+<ul style="margin-left: ${informe.MARGIN_LEFT.LEVEL_3};">
+    <li>Con relación al argumento señalado en el acápite a) xxxxxxxxxxxxxxxxxxx</li>
+    <li>Con relación al argumento señalado en el acápite b) xxxxxxxxxxxxxxxxxxx</li>
+    <li>Con relación al argumento señalado en el acápite c) xxxxxxxxxxxxxxxxxxx</li>
+</ul>
+<p class="enumeration">
+    En esta etapa del procedimiento, de acuerdo a la documentación que obra en el expediente administrativo y del análisis de los descargos, se advierte lo siguiente:
+</p>
+{{else}}
+<p class="enumeration">
+    Es preciso mencionar que, respecto de la imputación realizada, el/la administrado no presentó descargo a la Resolución Sub Directoral.
+</p>
+<p class="enumeration">
+    La Autoridad Instructora, concluyó que existen elementos suficientes que permitieron mantener la imputación atribuida al/la administrado (a); respecto de lo cual el/la administrado (a) <u>no presentó descargos a lo señalado en el Informe Final de Instrucción.</u>
+</p>
+<p class="enumeration">
+    En esta etapa del procedimiento, de acuerdo a la documentación que obra en el expediente administrativo, se advierte lo siguiente:
+</p>
+{{/if}}
+<ul style="margin-left: ${informe.MARGIN_LEFT.LEVEL_3};">
+    <li>
+        Mediante la Resolución Jefatural N° xxxx de fecha xxx, la ARFFS aprobó el xxx, en la cual se establece que el aprovechamiento se realizará de conformidad con los datos (vértices de ubicación en coordenadas UTM, especie y volumen) señalados en el plan de manejo aprobado.
+    </li>
+    <li>
+        No obstante, durante la supervisión en campo
+        <a style="mso-footnote-id: foot_infraccion_32_1" href="#_foot_infraccion_32_1" title="">
+            <sup class=MsoFootnoteReference><span style="mso-special-character:footnote"></span></sup>
+        </a>, se constató la inexistencia de xxx individuos (xxx aprovechables y xx semilleros), de las especies xxx, los cuales no existen en su totalidad de acuerdo a las coordenadas UTM declaradas en el xxx, así como tampoco se encontraron vestigios de su aprovechamiento, conforme se advierte de las siguientes imágenes:
+    </li>
+</ul>
+<p style="text-align: center;"><strong>Mapas, y/o tomas fotográficas que evidencian la inexistencia</strong></p>
+<ul style="margin-left: ${informe.MARGIN_LEFT.LEVEL_3};">
+    <li>
+        A pesar de ello, mediante el Informe de Ejecución
+        <a style="mso-footnote-id: foot_infraccion_32_2" href="#_foot_infraccion_32_2" title="">
+            <sup class=MsoFootnoteReference><span style="mso-special-character:footnote"></span></sup>
+        </a> (periodo xxxx-xxxx), presentado por el/la administrado (a) se señaló el aprovechamiento de xxxx de la especie xxx conforme se advierte de las siguientes imágenes:
+    </li>
+    <li>
+        Al respecto, el artículo xxx
+        <a style="mso-footnote-id: foot_infraccion_32_3" href="#_foot_infraccion_32_3" title="">
+            <sup class=MsoFootnoteReference><span style="mso-special-character:footnote"></span></sup>
+        </a> del (RGF o RGFFSCNCC), establece que: “El informe de ejecución (…) tiene carácter de declaración jurada”
+        <a style="mso-footnote-id: foot_infraccion_32_4" href="#_foot_infraccion_32_4" title="">
+            <sup class=MsoFootnoteReference><span style="mso-special-character:footnote"></span></sup>
+        </a>.
+    </li>
+    <li>
+        En consecuencia, al haberse determinado que xxx individuos (xxx aprovechables y xx semilleros) declarados no existen en campo y que no se evidenciaron actividades de aprovechamiento en campo, se ha configurado la infracción consistente en elaborar, formular, suscribir, presentar o remitir documentos con información adulterada, falsa o incompleta contenida en documentos físicos o medios informáticos, en este caso, la información falsa contenida en el informe de ejecución que fue presentado por la administrada a la (precisar ARFFS y/o OSINFOR), a través del escrito ${informe.ANTECEDENTES_DOCS.Escrito.numero || '00XX-202X-OSINFOR/08.2.X'} de fecha ${informe.ANTECEDENTES_DOCS.Escrito.fechaNotificacionTexto || 'xx de xxxxx de 202X'}, con registro N° xxxx.
+    </li>
+</ul>
+
+<p class="enumeration">
+    En ese contexto, se confirma que el/la administrado (a) cometió la infracción tipificada en el numeral 32 del Anexo 1 del RISMFFS; criterio acorde a lo señalado en el Informe Final de Instrucción.
+</p>

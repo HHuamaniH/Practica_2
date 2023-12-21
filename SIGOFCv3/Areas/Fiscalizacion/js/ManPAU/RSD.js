@@ -71,15 +71,7 @@ _informe.CERRAR = function () {
         if (r) {
             let params = _informe.Estructura();
             params.ESTADO = States.COMPLETADO;
-
-            /*const notificaciones_pendientes = app.Informe.FIRMAS.filter(function (x) { return x.flgAplica && x.estado == 1 });
-            if (notificaciones_pendientes.length) {
-                app.Informe.FIRMAS.forEach(function (item) {
-                    if (item.flgAplica && item.estado == 1)
-                        app.Notificar(item);
-                });
-            }*/
-
+            
             _informe.Guardar(params).then(function (res) {
                 _informe.CambiarEstado(States.COMPLETADO);
 
@@ -974,12 +966,12 @@ $(function () {
 
                         //CABECERA
                         //Asociacion con el informe de supervision
-                        self.Inf_Supervision = res.inf_supervision;
-                        const cab = res.inf_supervision[0];
+                        self.Inf_Supervision = res.inf_supervision || [];
+                        const cab = self.Inf_Supervision[0];
 
                         if (cab) {
                             self.Informe.COD_INFORME = cab.COD_INFORME;
-                            self.Informe.NRO_REFERENCIA = res.inf_supervision.map(function (x) { return x.NUM_INFORME }).join(', ');
+                            self.Informe.NRO_REFERENCIA = self.Inf_Supervision.map(function (x) { return x.NUM_INFORME }).join(', ');
 
                             self.Informe.INF_FECHA = fnDate.text_long(cab.INF_FECHA);
                             self.Informe.TITULAR_SUPERVISADO = cab.TITULAR_SUPERVISADO;
@@ -1125,18 +1117,19 @@ $(function () {
             Abrir_Notificar: async function (item) {
                 const self = this;
                 modal_notificar.form.Mensaje = 'Por favor revisar el informe para la continuidad del proceso.';
+                modal_notificar.form.CC = '';
 
                 let users = [];
 
                 if (item) users = [item.codPersona];
-                else users = this.Informe.FIRMAS.map(user => user.codPersona);
+                else users = this.Informe.FIRMAS.filter(item => item.flgAplica).map(user => user.codPersona);
 
-                const res = await modal_notificar.ObtenerCorreos(users);
+                const correos = await modal_notificar.ObtenerCorreos(users);
 
                 //Actualizar los participantes despues de notificar
-                modal_notificar.callback = function () {
+                modal_notificar.callback = function (enviado) {
                     const personas = self.Informe.FIRMAS
-                        .filter(item => res.find(x => x.codPersona == item.codPersona));
+                        .filter(item => enviado.find(x => x.codPersona == item.codPersona));
 
                     const participantes = personas.map(item => ({
                         ...item,
@@ -1164,40 +1157,8 @@ $(function () {
                     });
                 }
 
-                modal_notificar.Abrir(res);
-            },
-            Notificar: function (item, mensaje) {
-                let notificacion = {
-                    COD_PERSONA: item.codPersona,
-                    COD_INFORME: this.Informe.COD_RES_SUB,
-                    MENSAJE_ENVIO_ALERTA: mensaje,
-                    URL_LOCAL: window.location.href
-                };
-
-                let objEN;
-                if (this.Informe.COD_INFORME_DIGITAL) {
-                    objEN = {
-                        codInformeDigital: this.Informe.COD_INFORME_DIGITAL,
-                        item: item.item,
-                        estado: item.estado > 2 ? item.estado : 2
-                    }
-                }
-
-                let params = {
-                    type: 'post',
-                    url: `${urlLocalSigo}Fiscalizacion/ManPAU/NotificarRSD`,
-                    datos: JSON.stringify({ notificacion, objEN })
-                };
-
-                utilSigo.fnAjax(params, function (res) {
-                    if (res) {
-                        item.estado = objEN?.estado || 2;
-                        utilSigo.toastSuccess('Enviado', res);
-                    } else {
-                        utilSigo.toastWarning('Atención', 'No se ha encontrado ningún correo asociado al usuario');
-                    }
-                });
-            },
+                modal_notificar.Abrir(correos);
+            },            
             Revisar: function (item, index) {
                 //let self = this;
                 let user = ManRD_AddEdit.userApp || {};
@@ -1369,12 +1330,21 @@ $(function () {
 
                     utilSigo.fnAjax(params, function (res) {
                         const correos = res
-                            .filter(item => (item?.CORREO || '').indexOf('@') != -1)
-                            .map(item => ({
-                                codPersona: item.COD_PERSONA,
-                                persona: `${item.NOMBRES} ${item.APE_PATERNO} ${item.APE_MATERNO}`,
-                                email: item.CORREO
-                            }));
+                            .filter(item => (item?.CORREO || '').indexOf('@') !== -1)
+                            .reduce((acc, item) => {
+                                if (!acc.some(obj => obj.email === item.CORREO)) {
+                                    return [
+                                        ...acc,
+                                        {
+                                            codPersona: item.COD_PERSONA,
+                                            persona: `${item.NOMBRES} ${item.APE_PATERNO} ${item.APE_MATERNO}`,
+                                            email: item.CORREO
+                                        }
+                                    ];
+                                }
+
+                                return acc;
+                            }, []);
 
                         resolve(correos);
                     });
@@ -1427,9 +1397,11 @@ $(function () {
             Notificar: function () {
                 const self = this;
                 const user = ManRD_AddEdit.userApp;
+                const seleccionados = JSON.parse(JSON.stringify(self.form.Seleccionados));
 
                 const notificacion = {
-                    DESTINATARIOS: self.form.Seleccionados.map(item => item.email).join(','),
+                    TITULO: 'Resolución Sub Directoral',
+                    DESTINATARIOS: seleccionados.map(item => item.email).join(','),
                     CC_DESTINATARIOS: self.form.CC,
                     COD_INFORME: app.Informe.NUM_INFORME_SITD,
                     MENSAJE_ENVIO_ALERTA: `${_informe.render(self.form.Mensaje)}<br><br>Atentamente,<br>${user.PERSONA}`,
@@ -1445,7 +1417,7 @@ $(function () {
                 utilSigo.fnAjax(params, function (res) {
                     if (res) {
                         //Para ejecutar cualquier acción despues de enviar un correo
-                        if (typeof self.callback === 'function') self.callback(res);
+                        if (typeof self.callback === 'function') self.callback(seleccionados);
                         utilSigo.toastSuccess('Enviado', res);
                     } else {
                         utilSigo.toastWarning('Atención', 'No se ha encontrado ningún correo asociado al usuario');

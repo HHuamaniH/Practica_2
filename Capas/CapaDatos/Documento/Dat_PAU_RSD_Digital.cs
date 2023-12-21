@@ -8,16 +8,16 @@ using System.Linq;
 
 namespace CapaDatos.DOC
 {
-    public class Dat_PAU_Digital
+    public class Dat_PAU_RSD_Digital
     {
         private DBOracle dBOracle;
 
-        public Dat_PAU_Digital()
+        public Dat_PAU_RSD_Digital()
         {
             dBOracle = new DBOracle();
         }
 
-        public string RegRSDGrabar(Ent_ResSubDirTabInforme informeDigital, VM_RSD_DIGITAL otros)
+        public string RegRSDGrabar(Ent_ResSubDirTabInforme informeDigital, VM_PAU_RSD_DIGITAL otros)
         {
             String OUTPUTPARAM01 = "", codInformeDigital = informeDigital.pVCodInformeDigital;
 
@@ -130,9 +130,9 @@ namespace CapaDatos.DOC
             return txSuccess;
         }
 
-        public VM_RSD_DIGITAL ObtenerRSD(string COD_RESOLUCION)
+        public VM_PAU_RSD_DIGITAL ObtenerRSD(string COD_RESOLUCION)
         {
-            VM_RSD_DIGITAL vm = null;
+            VM_PAU_RSD_DIGITAL vm = null;
             try
             {
                 using (OracleConnection cn = new OracleConnection(BDConexion.Conexion_Cadena_SIGO()))
@@ -145,7 +145,7 @@ namespace CapaDatos.DOC
                             //INFORME                   
                             if (dr.HasRows)
                             {
-                                vm = new VM_RSD_DIGITAL();
+                                vm = new VM_PAU_RSD_DIGITAL();
                                 vm.RECURSOS = new List<VM_RSD_DIGITAL_RECURSO>();
                                 vm.FIRMAS = new List<VM_RSD_DIGITAL_FIRMA>();
                                 vm.INFRACCIONES = new List<VM_RSD_DIGITAL_INFRACCIONES_INFORME>();
@@ -391,7 +391,7 @@ namespace CapaDatos.DOC
             }
         }
 
-        public string NotificarRSD(RSD_Notificacion notificacion)
+        public string Notificar(VM_PAU_DIGITAL_ALERTA notificacion)
         {
             string OUTPUTPARAM01 = "";
 
@@ -403,7 +403,7 @@ namespace CapaDatos.DOC
                 try
                 {
                     //object[] param = { notificacion.COD_PERSONA, notificacion.COD_INFORME, notificacion.MENSAJE_ENVIO_ALERTA };
-                    using (OracleCommand cmd = dBOracle.ManExecuteOutput(cn, tr, "DOC_OSINFOR_ERP_MIGRACION.SPFISCALIZACION_RSDTABINFORMEDIGITAL_ENVIARALERTA", notificacion))
+                    using (OracleCommand cmd = dBOracle.ManExecuteOutput(cn, tr, "DOC_OSINFOR_ERP_MIGRACION.SPFISCALIZACION_PAU_DIGITAL_ENVIARALERTA", notificacion))
                     {
                         cmd.ExecuteNonQuery();
                         OUTPUTPARAM01 = cmd.Parameters["OUTPUTPARAM01"].Value?.ToString() ?? "";
