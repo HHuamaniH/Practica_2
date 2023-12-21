@@ -103,6 +103,7 @@ namespace CapaEntidad.ViewModel.DOC
         public string VAR_POA_CONST { get; set; }
         public DateTime? VAR_INICIO_POA { get; set; }
         public DateTime? VAR_FIN_SUP { get; set; }
+        public DateTime? VAR_INICIO_SUP { get; set; }
         public DateTime? VAR_FECHA_EMC { get; set; }
         public string VAR_JEFE { get; set; }
         public string VAR_OFICINA { get; set; }
@@ -128,5 +129,8 @@ namespace CapaEntidad.ViewModel.DOC
         public int NU_ESTADO { get; set; }
         public string COD_INFORME { get; set; }
         public string COD_THABILITANTE { get; set; }
+        //PARA AUDITORIAS QUINQUENALES
+        public string VAR_TIPO_INFORME { get; set; }
+
     }
 }

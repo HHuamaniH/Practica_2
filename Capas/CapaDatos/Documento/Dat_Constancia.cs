@@ -130,12 +130,13 @@ namespace CapaDatos.DOC
                             constancia.VAR_PLANES = dr["VAR_PLANES"].ToString();
                             constancia.VAR_RESOLUCION_APLAN = dr["VAR_RESOLUCION_APLAN"].ToString();
                             constancia.VAR_REGENTE = dr["VAR_REGENTE"].ToString();
-                            constancia.VAR_FECHA_SUP = dr["VAR_FECHA_SUP"].ToString();
+                            //constancia.VAR_FECHA_SUP = dr["VAR_FECHA_SUP"].ToString();
                             constancia.VAR_INFORME = dr["VAR_INFORME"].ToString();
                             constancia.NUMERO_INFORME = dr["VAR_INFORME"].ToString();
                             constancia.VAR_FECHA_INFORME = dr["VAR_FECHA_INFORME"].ToString().Trim() == "" ? null : (DateTime?)Convert.ToDateTime((dr["VAR_FECHA_INFORME"]));
                             constancia.VAR_POA_CONST = dr["VAR_POA_CONST"].ToString();
                             constancia.VAR_INICIO_POA = dr["VAR_INICIO_POA"].ToString().Trim() == "" ? null : (DateTime?)Convert.ToDateTime((dr["VAR_INICIO_POA"]));
+                            constancia.VAR_INICIO_SUP = dr["VAR_FECHA_IN_SUP"].ToString().Trim() == "" ? null : (DateTime?)Convert.ToDateTime((dr["VAR_FECHA_IN_SUP"])); 
                             constancia.VAR_FIN_SUP = dr["VAR_FIN_SUP"].ToString().Trim() == "" ? null : (DateTime?)Convert.ToDateTime((dr["VAR_FIN_SUP"]));
                             constancia.VAR_FECHA_EMC = dr["VAR_FECHA_EMC"].ToString().Trim() == "" ? null : (DateTime?)Convert.ToDateTime((dr["VAR_FECHA_EMC"]));
                             constancia.VAR_JEFE = dr["VAR_JEFE"].ToString();
@@ -153,6 +154,8 @@ namespace CapaDatos.DOC
                             constancia.COD_TITULAR = dr["COD_TITULAR"].ToString();
                             constancia.NUMERO = dr["VAR_NUM_CONSTANCIA"].ToString();
                             constancia.FECHA_EMISION = dr["VAR_FECHA_EMC"].ToString().Trim() == "" ? null : (DateTime?)Convert.ToDateTime(dr["VAR_FECHA_EMC"]);
+                            constancia.VAR_TIPO_INFORME = dr["COD_ITIPO"].ToString();
+
                         }
                     }
                 }

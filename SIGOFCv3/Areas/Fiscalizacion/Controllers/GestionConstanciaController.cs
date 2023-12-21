@@ -590,7 +590,18 @@ namespace SIGOFCv3.Areas.Fiscalizacion.Controllers
             //obteniendo plantilla
             try
             {
-                bytePlantilla = System.IO.File.ReadAllBytes(Path.Combine(Server.MapPath(folderPlantilla), "PlantillaConstanciasTH.docx"));
+                //informes de supervision
+                if(constancia.VAR_TIPO_INFORME == "0000001")
+                {
+                    bytePlantilla = System.IO.File.ReadAllBytes(Path.Combine(Server.MapPath(folderPlantilla), "PlantillaConstanciasTH.docx"));
+
+                }
+                //informes quinquenales
+                if (constancia.VAR_TIPO_INFORME == "0000010")
+                {
+                    bytePlantilla = System.IO.File.ReadAllBytes(Path.Combine(Server.MapPath(folderPlantilla), "PlantillaConstanciasQU.docx"));
+
+                }
 
             }
             catch (Exception)
@@ -619,11 +630,15 @@ namespace SIGOFCv3.Areas.Fiscalizacion.Controllers
                     HelperWord.BuscarReemplazarTexto(paras, "VAR_PLANES", constancia.VAR_PLANES);
                     HelperWord.BuscarReemplazarTexto(paras, "VAR_REGENTE", constancia.VAR_REGENTE);
                     HelperWord.BuscarReemplazarTexto(paras, "VAR_LIC_REGENTE", constancia.VAR_LIC_REGENTE);
-                    HelperWord.BuscarReemplazarTexto(paras, "VAR_FECHA_SUPER", constancia.VAR_FECHA_SUP);
+                    HelperWord.BuscarReemplazarTexto(paras, "VAR_INICIO_SUP", HelperWord.FechaLetras(Convert.ToDateTime(constancia.VAR_INICIO_SUP)));
+                    HelperWord.BuscarReemplazarTexto(paras, "VAR_FIN_SUP", HelperWord.FechaLetras(Convert.ToDateTime(constancia.VAR_FIN_SUP)));
+
                     HelperWord.BuscarReemplazarTexto(paras, "VAR_INFORME", constancia.VAR_INFORME);
-                    HelperWord.BuscarReemplazarTexto(paras, "VAR_EMISION_INFORME", HelperWord.FechaDDMMAAAA(constancia.VAR_FECHA_INFORME));
+                    HelperWord.BuscarReemplazarTexto(paras, "VAR_EMISION_INFORME", HelperWord.FechaLetras(Convert.ToDateTime(constancia.VAR_FECHA_INFORME)));
                     HelperWord.BuscarReemplazarTexto(paras, "VAR_POA_CONST", constancia.VAR_POA_CONST);
-                    HelperWord.BuscarReemplazarTexto(paras, "VAR_FIN_SUP", HelperWord.FechaDDMMAAAA(constancia.VAR_FIN_SUP));
+                    HelperWord.BuscarReemplazarTexto(paras, "VAR_INI_POA", HelperWord.FechaLetras(Convert.ToDateTime(constancia.VAR_INICIO_POA)));
+
+                    HelperWord.BuscarReemplazarTexto(paras, "VAR_FIN_SUP", HelperWord.FechaLetras(Convert.ToDateTime(constancia.VAR_FIN_SUP)));
                     //HelperWord.SearchAndReplace(wordDoc, "VAR_RESOLUCION_APLAN", constancia.VAR_RESOLUCION_APLAN, true);
 
                     var path_qr = GenerarQR(constancia.NV_CONSTANCIA);
