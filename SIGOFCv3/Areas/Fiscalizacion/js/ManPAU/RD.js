@@ -1521,7 +1521,10 @@ $(function () {
             },
             Abrir_Notificar: async function (item) {
                 const self = this;
-                modal_notificar.form.Mensaje = 'Por favor revisar el informe para la continuidad del proceso.';
+                let message = `Estimado/a,<br><br>Se le envía la Resolución Directoral correspondiente para su
+                <strong>${[1, 2].indexOf(self.Informe.ESTADO) != -1 ? 'revisión' : 'firma'}</strong>.`
+
+                modal_notificar.form.Mensaje = message;
                 modal_notificar.form.CC = '';
 
                 let users = [];
