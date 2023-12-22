@@ -678,7 +678,7 @@ _informe.VerDocumento = function () {
 
 _informe.CARGAR_ARCHIVO = function () {
     if (!app.Tramite) {
-        utilSigo.toastWarning('', 'No se ha generado el Nro de Resolución Sub Directoral previamente');
+        utilSigo.toastWarning('', 'No se ha generado el Nro de Resolución Directoral previamente');
         return;
     }
 
@@ -690,12 +690,10 @@ _informe.CARGAR_ARCHIVO = function () {
     modal_doc.show({ name: app.Tramite.cCodificacion, callback });
 }
 
-_informe.ENVIAR_CONTROL_CALIDAD = function () {
-    const user = ManRD_AddEdit.userApp || {};
+_informe.ENVIAR_CONTROL_CALIDAD = function () {   
     const data = {
         NUM_INFORME_SITD: app.Informe.NUM_INFORME_SITD,
-        URL_DESCARGA: _informe.RutaDocumentoDescarga(),
-        USUARIO: user.PERSONA
+        URL_DESCARGA: _informe.RutaDocumentoDescarga()
     }
 
     const message = $('#tmpl-notificacion-calidad').tmpl(data).html();

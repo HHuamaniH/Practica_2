@@ -409,7 +409,7 @@
                     <a class="btn btn-link btn-sm ml-2" onclick="_informe.Agregar_Imputaciones()">
                         <i class="fa fa-plus-circle mr-2"></i>Agregar...
                     </a>
-                </div>                
+                </div>
             </div>
         </fieldset>
 
@@ -760,13 +760,13 @@
                     </div>
                 </div>
                 @*<div class="form-group">
-                    <label class="col-form-label">Referencias:</label>
-                    <div>
-                        <span class="chip badge badge-success rounded mr-2 mt-1" v-for="(item, index) in app.Inf_Supervision">
-                            {{item.NUM_INFORME}}
-                        </span>
-                    </div>
-                </div>*@
+                        <label class="col-form-label">Referencias:</label>
+                        <div>
+                            <span class="chip badge badge-success rounded mr-2 mt-1" v-for="(item, index) in app.Inf_Supervision">
+                                {{item.NUM_INFORME}}
+                            </span>
+                        </div>
+                    </div>*@
                 <div class="form-group">
                     <label class="col-form-label">Asunto</label>
                     <textarea class="form-control form-control-sm" rows="3" v-model="form.cAsunto"></textarea>
@@ -884,13 +884,14 @@
 </div>
 
 <script id="tmpl-notificacion-calidad" type="text/x-jquery-tmpl">
-    <p>
-        Estimado(a)<br /><br />Adjunto el enlace de descarga de la Resolución Sub Directoral Nro ${NUM_INFORME_SITD},
-        debidamente revisado y firmado por los involucrados para el control de calidad respectivo.<br /><br />
-        <strong>URL Descarga:</strong>&nbsp;<a target="_blank" href="${URL_DESCARGA}">${NUM_INFORME_SITD || 'Enlace de descarga'}</a><br /><br />
-        Atentamente<br />
-        ${USUARIO}
-    </p>
+    Estimado(a)
+    <br />
+    <br />Adjunto el enlace de descarga de la Resolución Directoral Nro ${NUM_INFORME_SITD},
+    debidamente revisado y firmado por los involucrados para el control de calidad respectivo.
+    <br />
+    <br />
+    <strong>URL Descarga:</strong>&nbsp;
+    <a target="_blank" href="${URL_DESCARGA}">${NUM_INFORME_SITD || 'Enlace de descarga'}</a>
 </script>
 
 <!--Firma digital-->
