@@ -678,7 +678,7 @@ _informe.VerDocumento = function () {
 
 _informe.CARGAR_ARCHIVO = function () {
     if (!app.Tramite) {
-        utilSigo.toastWarning('', 'No se ha generado el Nro de Resolución Sub Directoral previamente');
+        utilSigo.toastWarning('', 'No se ha generado el Nro de Resolución Directoral previamente');
         return;
     }
 
@@ -690,12 +690,10 @@ _informe.CARGAR_ARCHIVO = function () {
     modal_doc.show({ name: app.Tramite.cCodificacion, callback });
 }
 
-_informe.ENVIAR_CONTROL_CALIDAD = function () {
-    const user = ManRD_AddEdit.userApp || {};
+_informe.ENVIAR_CONTROL_CALIDAD = function () {   
     const data = {
         NUM_INFORME_SITD: app.Informe.NUM_INFORME_SITD,
-        URL_DESCARGA: _informe.RutaDocumentoDescarga(),
-        USUARIO: user.PERSONA
+        URL_DESCARGA: _informe.RutaDocumentoDescarga()
     }
 
     const message = $('#tmpl-notificacion-calidad').tmpl(data).html();
@@ -1523,7 +1521,10 @@ $(function () {
             },
             Abrir_Notificar: async function (item) {
                 const self = this;
-                modal_notificar.form.Mensaje = 'Por favor revisar el informe para la continuidad del proceso.';
+                let message = `Estimado/a,<br><br>Se le envía la Resolución Directoral correspondiente para su
+                <strong>${[1, 2].indexOf(self.Informe.ESTADO) != -1 ? 'revisión' : 'firma'}</strong>.`
+
+                modal_notificar.form.Mensaje = message;
                 modal_notificar.form.CC = '';
 
                 let users = [];
