@@ -1,5 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace CapaEntidad.ViewModel
 {
@@ -16,17 +16,26 @@ namespace CapaEntidad.ViewModel
             this.ELIMINAR = new List<VM_PAU_RD_DIGITAL_ELIMINAR>();
         }
 
+        [RegularExpression("^[0-9]+$", ErrorMessage = "Sólo números")]
         public string COD_INFORME_DIGITAL { get; set; }
+        [RegularExpression("^[0-9]+$", ErrorMessage = "Sólo números")]
         public string COD_RESOLUCION { get; set; }
+        [RegularExpression("^[0-9]+$", ErrorMessage = "Sólo números")]
         public string NUM_INFORME_SITD { get; set; }
         public int? TRAMITE_ID { get; set; }
+        [RegularExpression("^[a-zA-ZáéíóúüÁÉÍÓÚÜñÑ0-9]+$", ErrorMessage = "Solo se permiten letras y números.")]
         public string COD_PROCEDENCIA { get; set; }
         public string PROCEDENCIA { get; set; }
+        [RegularExpression("^[0-9]+$", ErrorMessage = "Sólo números")]
         public string COD_TIPO_INFORME { get; set; }
+        [RegularExpression("^[0-9]+$", ErrorMessage = "Sólo números")]
         public string COD_MATERIA { get; set; }
         public string MATERIA { get; set; }
+        [RegularExpression("^[0-9]+$", ErrorMessage = "Sólo números")]
         public string COD_MODALIDAD { get; set; }
+        [RegularExpression("^[0-9]+$", ErrorMessage = "Sólo números")]
         public string COD_THABILITANTE { get; set; }
+        [RegularExpression("^[0-9]+$", ErrorMessage = "Sólo números")]
         public string COD_TITULAR { get; set; }
         public string NUM_CONTRATO { get; set; }
         public string TITULAR { get; set; }
@@ -68,6 +77,7 @@ namespace CapaEntidad.ViewModel
 
     public class VM_PAU_RD_DIGITAL_VS_ILEGAL
     {
+        [RegularExpression("^[0-9]+$", ErrorMessage = "Sólo números")]
         public string codInformeDigital { get; set; }
         public int item { get; set; }
         public string codILegal { get; set; }
@@ -83,6 +93,7 @@ namespace CapaEntidad.ViewModel
 
     public class VM_PAU_RD_DIGITAL_ANTECEDENTE
     {
+        [RegularExpression("^[0-9]+$", ErrorMessage = "Sólo números")]
         public string codInformeDigital { get; set; }
         public int item { get; set; }
         public string codILegal { get; set; }
@@ -109,8 +120,10 @@ namespace CapaEntidad.ViewModel
 
     public class VM_PAU_RD_DIGITAL_DOCUMENTO
     {
+        [RegularExpression("^[0-9]+$", ErrorMessage = "Sólo números")]
         public string codInformeDigital { get; set; }
         public int item { get; set; }
+        [RegularExpression("^[0-9]+$", ErrorMessage = "Sólo números")]
         public string codResolucion { get; set; }
         public string tipo { get; set; }
         public string url { get; set; }
@@ -121,11 +134,16 @@ namespace CapaEntidad.ViewModel
 
     public class VM_PAU_RD_DIGITAL_PARTICIPANTE
     {
+        [RegularExpression("^[0-9]+$", ErrorMessage = "Sólo números")]
         public string codInformeDigital { get; set; }
         public int item { get; set; }
+        [RegularExpression("^[0-9]+$", ErrorMessage = "Sólo números")]
         public string codPersona { get; set; }
+        [RegularExpression("^[0-9]+$", ErrorMessage = "Sólo números")]
         public string numeroDocumento { get; set; }
+        [RegularExpression("^[a-zA-ZáéíóúüÁÉÍÓÚÜñÑ ]+$", ErrorMessage = "Solo se permiten letras.")]
         public string apellidosNombres { get; set; }
+        [RegularExpression("^[a-zA-ZáéíóúüÁÉÍÓÚÜñÑ ]+$", ErrorMessage = "Solo se permiten letras.")]
         public string funcion { get; set; }
         public string observacion { get; set; }
         public int? estado { get; set; }
@@ -134,9 +152,12 @@ namespace CapaEntidad.ViewModel
 
     public class VM_PAU_RD_DIGITAL_INFRACCION
     {
+        [RegularExpression("^[0-9]+$", ErrorMessage = "Sólo números")]
         public string codInformeDigital { get; set; }
         public int item { get; set; }
+        [RegularExpression("^[0-9]+$", ErrorMessage = "Sólo números")]
         public string codILegal { get; set; }
+        [RegularExpression("^[0-9]+$", ErrorMessage = "Sólo números")]
         public string codResolucion { get; set; }
         public string codInciso { get; set; }
         public string inciso { get; set; }
@@ -146,6 +167,7 @@ namespace CapaEntidad.ViewModel
         public string titulo { get; set; }
         public string detalle { get; set; }
         public string parrafos { get; set; }
+        [RegularExpression("^[0-9]+$", ErrorMessage = "Sólo números")]
         public string codEspecie { get; set; }
         public string especie { get; set; }
         public double volumen { get; set; }
@@ -160,6 +182,7 @@ namespace CapaEntidad.ViewModel
 
     public class VM_PAU_RD_DIGITAL_ELIMINAR
     {
+        [RegularExpression("^[0-9]+$", ErrorMessage = "Sólo números")]
         public string codInforme { get; set; }
         public object item { get; set; }
         public string origen { get; set; } //DOCUMENTO,PARTICIPANTE,INFRACCION,RSD
@@ -167,7 +190,9 @@ namespace CapaEntidad.ViewModel
 
     public class VM_PAU_RD_INFORME_LEGAL_RESUMEN
     {
+        [RegularExpression("^[0-9]+$", ErrorMessage = "Sólo números")]
         public string COD_THABILITANTE { get; set; }
+        [RegularExpression("^[0-9]+$", ErrorMessage = "Sólo números")]
         public string COD_TITULAR { get; set; }
         public string NUM_THABILITANTE { get; set; }
         public string TITULAR { get; set; }

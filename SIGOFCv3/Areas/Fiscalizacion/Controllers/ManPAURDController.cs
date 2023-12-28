@@ -12,18 +12,31 @@ namespace SIGOFCv3.Areas.Fiscalizacion.Controllers
 {
     public class ManPAURDController : Controller
     {
-        Log_PAU_RD_Digital CLogInforme;
+        Log_PAU_RD_Digital CLogInforme;        
 
         [HttpPost]
         public JsonResult GuardarRD(VM_PAU_RD_DIGITAL informeDigital)
         {
             bool success = false; string msj = "";
-            VM_PAU_RD_DIGITAL result = new VM_PAU_RD_DIGITAL();
+            VM_PAU_RD_DIGITAL result = null;
+
             try
             {
+                if (!ModelState.IsValid)
+                {
+                    // Acceder a los errores de validación
+                    var erroresDeValidacion = ModelState
+                    .Where(v => v.Value.Errors.Any())
+                    .SelectMany(kvp => kvp.Value.Errors.Select(e => new { Key = kvp.Key, Value = e.ErrorMessage }))
+                    .ToList();
+
+                    throw new Exception($"Datos inválidos en el modelo:<br> {string.Join("<br>", erroresDeValidacion.Select(x => x.Key + ": " + x.Value))}");
+                }
+
                 CLogInforme = new Log_PAU_RD_Digital();
                 informeDigital.COD_USUARIO_OPERACION = (ModelSession.GetSession())[0].COD_UCUENTA;
 
+                result = new VM_PAU_RD_DIGITAL();
                 result.COD_INFORME_DIGITAL = CLogInforme.RegRDGrabar(informeDigital);
                 result = CLogInforme.ObtenerRD(informeDigital.COD_RESOLUCION); // COD_RESOLUCION
 
@@ -33,7 +46,7 @@ namespace SIGOFCv3.Areas.Fiscalizacion.Controllers
             catch (Exception ex)
             {
                 success = false;
-                msj = "Error al guardar los datos";
+                msj = ex.Message ?? "Error al guardar los datos";
             }
 
             return Json(new { success, msj, data = result });
@@ -57,8 +70,8 @@ namespace SIGOFCv3.Areas.Fiscalizacion.Controllers
                 {
                     var usuarioLogin = (ModelSession.GetSession())[0];
                     string documentName = Request["documentName"].ToString();
-                   
-                    if(documentName.IndexOfAny(Path.GetInvalidFileNameChars()) > -1)
+
+                    if (documentName.IndexOfAny(Path.GetInvalidFileNameChars()) > -1)
                     {
                         throw new Exception("El nombre del archivo a cargar es incorrecto");
                     }
@@ -176,7 +189,7 @@ namespace SIGOFCv3.Areas.Fiscalizacion.Controllers
             bool success = true; string msj = "";
             VM_TRAMITE tramite = new Log_Informe_Digital().TramiteGetById(id, codTHabilitante, codInforme);
             return Json(new { success, msj, data = tramite }, JsonRequestBehavior.AllowGet);
-        }        
+        }
 
         [HttpGet]
         public JsonResult TramiteGeneralByCriterio(string criterio, string valor = "")
@@ -279,8 +292,8 @@ namespace SIGOFCv3.Areas.Fiscalizacion.Controllers
             bool success = false; string msj = "";
             string pathDocumentoOrigen = Server.MapPath("~/" + System.Configuration.ConfigurationManager.AppSettings["pathInvoker"]);
             string pathDocumentoDestino = Server.MapPath("~/" + System.Configuration.ConfigurationManager.AppSettings["pathTransferidoSITD"]);
-            string pathGeneradoOrigen = string.Empty, 
-                pathGeneradoDestino = string.Empty, 
+            string pathGeneradoOrigen = string.Empty,
+                pathGeneradoDestino = string.Empty,
                 nombreDocumentoNuevo = string.Empty;
 
             Log_PAU_RD_Digital CLogInforme = null;
