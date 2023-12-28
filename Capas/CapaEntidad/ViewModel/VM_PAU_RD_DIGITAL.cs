@@ -44,7 +44,7 @@ namespace CapaEntidad.ViewModel
         public string UBIGEO_COD_DIST { get; set; }
         public string UBIGEO_DISTRITO { get; set; }
         public string UBIGEO_SECTOR { get; set; }        
-        public bool FLG_RESPOSABLE_SOLIDARIO { get; set; }
+        public bool FLG_RESPONSABLE_SOLIDARIO { get; set; }
         public bool FLG_GRAVEDAD_OCASIONADA { get; set; }
         public bool FLG_ACREDITACION_IMPUTACIONES { get; set; }
         public int FLG_SANCION { get; set; }

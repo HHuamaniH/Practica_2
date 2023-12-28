@@ -1212,7 +1212,7 @@ $(function () {
                 INFRACCIONES: [],
                 ELIMINAR: [],
 
-                FLG_RESPOSABLE_SOLIDARIO: true,
+                FLG_RESPONSABLE_SOLIDARIO: true,
                 FLG_GRAVEDAD_OCASIONADA: true,
                 FLG_ACREDITACION_IMPUTACIONES: true,
                 FLG_SANCION: 0,

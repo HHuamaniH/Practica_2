@@ -1,6 +1,5 @@
 ﻿using CapaEntidad.ViewModel;
 using CapaLogica.DOC;
-using CapaLogica.Documento;
 using SIGOFCv3.Models;
 using System;
 using System.Collections.Generic;
@@ -58,7 +57,12 @@ namespace SIGOFCv3.Areas.Fiscalizacion.Controllers
                 {
                     var usuarioLogin = (ModelSession.GetSession())[0];
                     string documentName = Request["documentName"].ToString();
-                    //string codInformeDigital = Request["codInformeDigital"].ToString();
+                   
+                    if(documentName.IndexOfAny(Path.GetInvalidFileNameChars()) > -1)
+                    {
+                        throw new Exception("El nombre del archivo a cargar es incorrecto");
+                    }
+
                     string pathGenerado = "";
 
                     if (!Directory.Exists(pathDocumento))
@@ -270,12 +274,15 @@ namespace SIGOFCv3.Areas.Fiscalizacion.Controllers
         }
 
         [HttpPost]
-        public JsonResult TransferirDocSITD(int tramiteId, string codInformeDigital, string codInforme, string codificacion)
+        public JsonResult TransferirDocSITD(int tramiteId, string codInformeDigital, string codificacion)
         {
             bool success = false; string msj = "";
             string pathDocumentoOrigen = Server.MapPath("~/" + System.Configuration.ConfigurationManager.AppSettings["pathInvoker"]);
             string pathDocumentoDestino = Server.MapPath("~/" + System.Configuration.ConfigurationManager.AppSettings["pathTransferidoSITD"]);
-            string pathGeneradoOrigen = string.Empty, pathGeneradoDestino = string.Empty, nombreDocumentoNuevo = string.Empty;
+            string pathGeneradoOrigen = string.Empty, 
+                pathGeneradoDestino = string.Empty, 
+                nombreDocumentoNuevo = string.Empty;
+
             Log_PAU_RD_Digital CLogInforme = null;
 
             try
