@@ -269,7 +269,8 @@
             <label for="lblTerceroSolidario" class="text-small texto-recortado">Tercero solidario<i class="fa fa-cog fa-spin text-danger" id="iconTerceroSolidario" style="display:none;" data-toggle="tooltip" data-placement="top" title="Seleccione tercero"></i></label>
             <div class="input-group">
                 <div class="input-group-prepend">
-                    <span class="input-group-text"><i class="fa fa-plus" style="cursor:pointer;" onclick="ManRD_AddEdit.fnBuscarPersona('TERCERO', 'N');" data-toggle="tooltip" data-placement="top" title="Agregar"></i></span>
+                    <span class="input-group-text"><i class="fa fa-male" style="cursor:pointer;" onclick="ManRD_AddEdit.fnBuscarPersona('TERCERO', 'N');" data-toggle="tooltip" data-placement="top" title="Agregar"></i></span>
+                    <span class="input-group-text"><i class="fa fa-institution" style="cursor:pointer;" onclick="ManRD_AddEdit.fnBuscarPersona('TERCERO', 'J');" data-toggle="tooltip" data-placement="top" title="Jurídica"></i></span>
                 </div>
                 @Html.EditorFor(m => m.txtTerceroSolidario, new { htmlAttributes = new { @class = "form-control form-control-sm", @disabled = "disabled" } })
                 <input type="hidden" id="hdTipoTercero" />
