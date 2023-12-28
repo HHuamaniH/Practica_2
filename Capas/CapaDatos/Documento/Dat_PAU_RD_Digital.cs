@@ -199,7 +199,7 @@ namespace CapaDatos.DOC
                                     vm.UBIGEO_COD_DIST = dr["UBIGEO_COD_DIST"].ToString();
                                     vm.UBIGEO_DISTRITO = dr["UBIGEO_DISTRITO"].ToString();
                                     vm.UBIGEO_SECTOR = dr["UBIGEO_SECTOR"].ToString();
-                                    vm.FLG_RESPOSABLE_SOLIDARIO = Convert.ToBoolean(dr["NFLAGRESPONSABLESOLIDARIO"]);
+                                    vm.FLG_RESPONSABLE_SOLIDARIO = Convert.ToBoolean(dr["NFLAGRESPONSABLESOLIDARIO"]);
                                     vm.FLG_GRAVEDAD_OCASIONADA = Convert.ToBoolean(dr["NFLAGGRAVEDADOCASIONADA"]);
                                     vm.FLG_ACREDITACION_IMPUTACIONES = Convert.ToBoolean(dr["NFLAGACREDITACIONIMPUTACIONES"]);
                                     vm.FLG_SANCION = Convert.ToInt16(dr["NFLAGSANCION"]);

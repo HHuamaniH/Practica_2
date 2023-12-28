@@ -31,7 +31,7 @@ namespace CapaLogica.DOC
             cabecera.pVRucTitularCondicion = informeDigital.TITULAR_CONDICION_RUC;
             cabecera.pVRucTitularEstado = informeDigital.TITULAR_ESTADO_RUC;
             
-            cabecera.pNFlagResponsableSolidario = Convert.ToInt16(informeDigital.FLG_RESPOSABLE_SOLIDARIO);
+            cabecera.pNFlagResponsableSolidario = Convert.ToInt16(informeDigital.FLG_RESPONSABLE_SOLIDARIO);
             cabecera.pNFlagGravedadOcasionada = Convert.ToInt16(informeDigital.FLG_GRAVEDAD_OCASIONADA);
             cabecera.pNFlagAcreditacionImputaciones = Convert.ToInt16(informeDigital.FLG_ACREDITACION_IMPUTACIONES);
             cabecera.pNFlagSancion = Convert.ToInt16(informeDigital.FLG_SANCION);
