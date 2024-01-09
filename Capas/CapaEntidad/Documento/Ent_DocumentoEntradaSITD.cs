@@ -11,6 +11,7 @@
         public string cNomRemite { get; set; }
         public int iCodRemitente { get; set; }
         public string cFema { get; set; }
+        public string cTipoSolicitudFema { get; set; }
 
     }
 }

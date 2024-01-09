@@ -796,9 +796,6 @@ ManInfFundamentado_AddEdit.fnObtenerDocumentoSITD = function () {
                     utilSigo.toastWarning("Aviso", "No esta registrado la fecha de Ingreso");
                 }
 
-
-                //ManInfFundamentado_AddEdit.frm.find("#dtpFechaIngresoSolicitud").val(data.result.fFecDocumento);
-
                 ManInfFundamentado_AddEdit.frm.find("#txtNumeroOficioSolicitud").val(data.result.cNroDocumento);
                 ManInfFundamentado_AddEdit.frm.find("#txtcarpetafiscal").val(data.result.cAsunto);
                 ManInfFundamentado_AddEdit.frm.find("#txtDetalle").val(data.result.cFema + " " + data.result.cNomRemite);
@@ -806,21 +803,21 @@ ManInfFundamentado_AddEdit.fnObtenerDocumentoSITD = function () {
                 let ddlTipoSolicitud = ManInfFundamentado_AddEdit.frm.find("#ddlTipoSolicitud");
                 let ddlVencimientoPlazoLegal = ManInfFundamentado_AddEdit.frm.find("#ddlVencimientoPlazoLegal");
 
-                if (data.result.iCodTupa === 70) {
+                if (data.result.cTipoSolicitudFema === '000001') {
                     ddlTipoSolicitud.val('000001');
                     ddlVencimientoPlazoLegal.val('000001');
 
                     $("#idNavPauCopia").css("display", "none");
                     $("#idNavInformeFundamentado").css("display", "block");
                 }
-                else if (data.result.iCodTupa === 72) {
+                else if (data.result.cTipoSolicitudFema === '000002') {
                     ddlTipoSolicitud.val('000002');
                     ddlVencimientoPlazoLegal.val('000002');
 
                     $("#idNavPauCopia").css("display", "block");
                     $("#idNavInformeFundamentado").css("display", "none");
                 }
-                else if (data.result.iCodTupa === 75) {
+                else if (data.result.cTipoSolicitudFema === '000003') {
                     ddlTipoSolicitud.val('000003');
                     ddlVencimientoPlazoLegal.val('000002');
 

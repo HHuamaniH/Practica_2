@@ -58,6 +58,27 @@ namespace CapaLogica.DOC
         /// </summary>
         /// <param name="oCampoEntrada"></param>
         /// <returns></returns>
+      
+        public String RegInformeFundamentado_Actualiza(string codigo)
+        {
+            try
+            {
+                using (OracleConnection cn = new OracleConnection(CapaDatos.BDConexion.Conexion_Cadena_SIGO()))
+                {
+                    cn.Open();
+                    return oCDatos.RegActualizaInfFundamentado(cn, codigo);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="oCampoEntrada"></param>
+        /// <returns></returns>
         public CEntidad RegMostrarINFFUNItem(CEntidad oCampoEntrada)
         {
             try

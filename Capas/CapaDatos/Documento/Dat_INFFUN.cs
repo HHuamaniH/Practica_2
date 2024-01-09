@@ -189,7 +189,45 @@ namespace CapaDatos.DOC
                     }
                 }
                 tr.Commit();
+
+
+
                 return OUTPUTPARAM01 + '|' + OUTPUTPARAM02;
+            }
+            catch (Exception ex)
+            {
+                if (tr != null)
+                {
+                    tr.Rollback();
+                }
+                throw ex;
+            }
+        }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="cn"></param>
+        /// <param name="oCEntidad"></param>
+        /// <returns></returns>
+        /// 
+
+        public String RegActualizaInfFundamentado(OracleConnection cn, string codigo)
+        {
+            OracleTransaction tr = null;
+            CEntidadC oCamposDet;
+
+            try
+            {
+                tr = cn.BeginTransaction();
+
+                oCamposDet = new CEntidadC();
+                oCamposDet.COD_INFFUN = codigo;
+                oCamposDet.RegEstado = 1;
+                dBOracle.ManExecute(cn, tr, "DOC_OSINFOR_ERP_MIGRACION.spINFFUN_INFORME_ACTUALIZA", oCamposDet);
+
+                tr.Commit();
+
+                return codigo;
             }
             catch (Exception ex)
             {
@@ -267,7 +305,7 @@ namespace CapaDatos.DOC
                             lsCEntidad.NOTA_NOTIFICACION = dr.GetString(dr.GetOrdinal("NOTA_NOTIFICACION"));
                             lsCEntidad.CARPETA_FISCAL = dr.GetString(dr.GetOrdinal("CARPETA_FISCAL"));
                             lsCEntidad.COD_PROVEIDOARCH = dr.GetString(dr.GetOrdinal("COD_PROVEIDOARCH"));
-
+                            lsCEntidad.COD_ESTADO_SOLICITUD = dr.GetString(dr.GetOrdinal("COD_ESTADO_SOLICITUD"));
                         }
                         //Estado (Calidad)
                         dr.NextResult();
@@ -744,6 +782,7 @@ namespace CapaDatos.DOC
                                 entidad.cNomRemite = reader.GetString(reader.GetOrdinal("cNomRemite"));
                                 entidad.iCodRemitente = reader.GetInt32(reader.GetOrdinal("iCodRemitente"));
                                 entidad.cFema = reader.GetString(reader.GetOrdinal("cFema"));
+                                entidad.cTipoSolicitudFema = reader.GetString(reader.GetOrdinal("cTipoSolicitudFema"));
 
                             }
 

@@ -238,7 +238,11 @@ namespace SIGOFCv3.Areas.Fiscalizacion.Controllers
 
                 var estado_final = logIF.RegInformeFundamentado_Grabar(entIF);
 
-                if (estado_final != "0" && estado_final != "1") result.AddResultado("El Registro se Guardo Correctamente", true);
+                if (estado_final != "0" && estado_final != "1")
+                {
+                    logIF.RegInformeFundamentado_Actualiza(estado_final.Replace('|', ' ').Trim());
+                    result.AddResultado("El Registro se Guardo Correctamente", true);
+                }
                 else result.AddResultado("Error en la información", false);
 
                 return Json(result);
@@ -385,7 +389,11 @@ namespace SIGOFCv3.Areas.Fiscalizacion.Controllers
 
                 var estado_final = logIF.RegInformeFundamentado_Grabar(entIF);
 
-                if (estado_final != "0" && estado_final != "1") result.AddResultado("El Registro se Guardo Correctamente", true);
+                if (estado_final != "0" && estado_final != "1")
+                {
+                    logIF.RegInformeFundamentado_Actualiza(estado_final.Replace('|', ' ').Trim());
+                    result.AddResultado("El Registro se Guardo Correctamente", true);
+                }
                 else result.AddResultado("Error en la información", false);
 
                 return Json(result);
