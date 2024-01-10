@@ -167,7 +167,6 @@ namespace CapaEntidad.ViewModel
         public string titulo { get; set; }
         public string detalle { get; set; }
         public string parrafos { get; set; }
-        [RegularExpression("^[0-9]+$", ErrorMessage = "Sólo números")]
         public string codEspecie { get; set; }
         public string especie { get; set; }
         public double volumen { get; set; }
