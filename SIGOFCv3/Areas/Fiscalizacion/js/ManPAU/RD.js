@@ -61,7 +61,7 @@ _informe.REVISION_CARGAR_ARCHIVO = function () {
         $('#modal-cargar-documento').modal('hide');
     }
 
-    modal_doc.show({ name: app.Informe.COD_INFORME_DIGITAL, callback });
+    modal_doc.show({ name: `RD_${app.Informe.COD_INFORME_DIGITAL}`, callback });
 }
 
 _informe.DESCARGAR_ARCHIVO_REVISION = function () {

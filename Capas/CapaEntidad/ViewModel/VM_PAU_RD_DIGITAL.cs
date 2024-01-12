@@ -20,7 +20,6 @@ namespace CapaEntidad.ViewModel
         public string COD_INFORME_DIGITAL { get; set; }
         [RegularExpression("^[0-9]+$", ErrorMessage = "Sólo números")]
         public string COD_RESOLUCION { get; set; }
-        [RegularExpression("^[0-9]+$", ErrorMessage = "Sólo números")]
         public string NUM_INFORME_SITD { get; set; }
         public int? TRAMITE_ID { get; set; }
         [RegularExpression("^[a-zA-ZáéíóúüÁÉÍÓÚÜñÑ0-9]+$", ErrorMessage = "Solo se permiten letras y números.")]
