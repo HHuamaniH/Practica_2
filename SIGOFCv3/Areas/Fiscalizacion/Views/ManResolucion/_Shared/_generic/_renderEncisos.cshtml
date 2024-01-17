@@ -13,6 +13,11 @@
         _renderInfracciones.frm.find("#divInfNumIndv").hide();
         _renderInfracciones.frm.find("#divInfEspecieFlora").hide();
         _renderInfracciones.frm.find("#divInfTipoAprov").hide();
+
+        //Seleccionar especies por defecto Ninguna | Ninguna
+        _renderInfracciones.frm.find("#ddlEspeciesFauna").val('0002226');
+        _renderInfracciones.frm.find("#ddlEspeciesFlora").val('0002226');
+
         switch (idEnciso) {
             case "0000001":
             case "0000002":
