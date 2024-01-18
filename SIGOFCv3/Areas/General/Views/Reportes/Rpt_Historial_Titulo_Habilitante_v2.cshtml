@@ -1,0 +1,226 @@
+﻿
+@{
+    ViewBag.Title = "Rpt_Historial_Titulo_Habilitante";
+    Layout = "~/Views/Shared/_LayoutMain.cshtml";
+}
+<link href="~/Content/PaginaPrinSIGO.min.css" rel="stylesheet" />
+<link href="~/Content/newSIGOFormulario.min.css" rel="stylesheet" />
+<link href="~/Content/Grilla.css" rel="stylesheet" />
+<style>
+    .datosGral, .datosBloque { }
+
+    .datosGral > div, .datosBloque > div { width: 100%; float: none; font-size: 12px; height: 100%; overflow: auto; }
+
+    .datosGral > div > div:first-child, .datosBloque > div > div:first-child { background-color: #e8f3fb; width: 29%; padding-left: 1%; height: 100%; padding-bottom: 2px; padding-top: 2px; }
+
+    .datosGral > div > div:last-child, .datosBloque > div > div:last-child { width: 69%; height: 100%; padding-left: 1%; }
+
+    .datosGral > div > div, .datosBloque > div > div { float: left; }
+
+    .sepBloque { width: 100% !important; } 
+
+    .GrillaDivReporte { width: 98% !important; margin: 10px 10px 10px 10px; }
+
+    .Grilla { border-collapse: collapse; }
+
+    .Grilla tr:nth-child(even) { background: #eff8fb }
+
+    .Grilla tr:nth-child(odd) { background: #FFF }
+
+    .Grilla tr:hover { background-color: #D9FF66; }
+
+    #tbVolInjus > tbody > tr > td:nth-child(1) { text-align: center; width: 4%; }
+
+    #tbVolInjus > tbody > tr > td:nth-child(2) { text-align: left; width: 30%; }
+
+    #tbVolInjus > tbody > tr > td:nth-child(3) { text-align: right; width: 12%; }
+
+    #tbVolInjus > tbody > tr > td:nth-child(4) { text-align: right; width: 12%; }
+
+    #tbVolInjus > tbody > tr > td:nth-child(5) { text-align: right; width: 12%; }
+
+    #tbVolInjus > tbody > tr > td:nth-child(6) { text-align: right; width: 15%; }
+
+    #tbVolInjus > tbody > tr > td:nth-child(7) { text-align: right; width: 15%; }
+
+    .GrillaPagerstyle { background-color: #359BD2 !important; }
+</style>
+<div id="divReporte" class="container-fluid">
+    <div class="card">
+        <div class="card-header text-left">
+            <h5>Trazabilidad del Título Habilitante</h5>
+        </div>
+        <div class="card-body">
+            <div id="divPrincipal">
+                <div class="col-12">
+                    <form id="frmRHT">
+                        <div class="form-row">
+                            <div class="form-group col-md-4">
+                                <select id="dllOpcionBusqueda" class="form-control form-control-sm">
+                                    <option value="TH_NUMERO">Número de Título Habilitante</option>
+                                    <option value="TH_TITULAR">Titular</option>
+                                    <option value="TH_DOCUMENTO">DNI/RUC</option>
+                                    <option value="TH_REPRESENTANTE">Nombre de Representante Legal</option>
+                                </select>
+                            </div>
+                            <div class="form-group col-md-4">
+                                <input type="text" id="txtParamBusqueda" class="form-control form-control-sm" />
+                            </div>
+                            <div class="btn-group col-md-2" style="padding-top:5px;">
+                                <a id="btnSearch" style="cursor:pointer;" data-toggle="tooltip" data-placement="top" title="Buscar" onclick="rptHTH_v2.fnSearch()"><span class="fa mx-2 fa-lg fa-search"></span></a>
+                            </div>
+                        </div>
+                        <div class="table-responsive-md">
+                            <table id="tbHistorialTH" class="table table-hover table-bordered fa-fw" style="width:100%;">
+                                <thead>
+                                    <tr>
+                                        <th>N°</th>
+                                        <th>Título Habilitante</th>
+                                        <th>Titular</th>
+                                        <th>DNI/RUC</th>
+                                        <th>Modalidad</th>
+                                        <th>Ubicación</th>
+                                        <th>Area Otorgada</th>
+                                        <th>Fecha Inicio</th>
+                                        <th>Fecha Fin</th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+                        </div>
+                        <br />
+                        <br />
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div id="containerLoad">
+
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+
+                </div>
+            </div>         
+            <div id="divHistorialTH">               
+                
+            </div>            
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    var rptHTH_v2 = {
+        fnTHDetalle: (COD_THABILITANTE) => {
+            $("#divHistorialTH").html('');
+            $.ajax({
+                url: `${urlLocalSigo}General/Reportes/_Rpt_HistorialTHDetalle_v2`,
+                type: 'GET',
+                async: true,
+                data: { COD_THABILITANTE: COD_THABILITANTE },
+                dataType: 'html',
+                beforeSend: utilSigo.beforeSendAjax,
+                error: utilSigo.errorAjax,
+                complete: utilSigo.completeAjax,
+                success: function (data) {
+                    $("#divHistorialTH").html('');
+                    $("#divHistorialTH").append(data);
+                    $("#divPrincipal").slideUp();
+                    $("#divHistorialTH").slideDown();
+                },
+                statusCode: {
+                    203: () => { utilSigo.unblockUIGeneral(); utilSigo.toastWarning("Aviso", "El usuario perdio la sesión. Vuelva ingresar al sistema"); }
+                }
+            });
+        },
+        fnSearch: () => {
+            var valorBusqueda = rptHTH_v2.frm.find("#txtParamBusqueda").val().trim();
+
+            if (valorBusqueda === "") {
+                utilSigo.toastWarning("Aviso", "Ingrese Valor a Buscar");
+                return false;
+            }
+            else {
+                var cantCarateres = valorBusqueda.length;
+                if (cantCarateres < 3) {
+                    utilSigo.toastWarning("Aviso", "Longitud del criterio de búsqueda debe ser mayor a dos caracteres");
+                    return false;
+                }
+                let model = {
+                    criterio: rptHTH_v2.frm.find("#dllOpcionBusqueda").val(),
+                    valor: rptHTH_v2.frm.find("#txtParamBusqueda").val().trim()
+                };
+                let url = urlLocalSigo + "General/Reportes/RptHistorialTHGetAll_v2";
+                let option = { url: url, datos: JSON.stringify(model), type: 'POST' };
+                rptHTH_v2.dtGrillaGeneral.clear().draw();
+                utilSigo.fnAjax(option, function (r) {
+                    if (r.success) {
+                        let data = r.data;
+                        let list = [];
+                        for (i = 0; i < data.length; i++) {
+                            list.push(data[i]);
+                        }
+                        rptHTH_v2.dtGrillaGeneral.rows.add(list).draw();
+                    }
+                    else {
+                        utilSigo.toastWarning("Aviso", initSigo.MessageError);
+                    }
+                });
+            }           
+        },
+        fnInit: () => {
+            rptHTH_v2.frm = $("#frmRHT");
+            rptHTH_v2.tbGrillaGeneral = $("#tbHistorialTH");
+            const columns = [
+                {
+                    "name": "ROW_INDE", "width": "2%", "orderable": false, "searchable": false, "mRender": function (data, type, row, meta) {
+                        return parseInt(meta.row) + 1 + meta.settings._iDisplayStart;
+                    }
+                },
+                {
+                    "data": "", "className": "text-center", "width": "15%", "orderable": false, "searchable": false, "mRender": function (data, type, row) {
+                        return `<div><a href="javascript: void(0);" onclick="rptHTH_v2.fnTHDetalle('${row.COD_THABILITANTE}')">${row.TITULO}</a></div>`;
+                    }
+                } ,
+                //{ "data": "TITULO", "autoWidth": true },
+                { "data": "TITULAR", "width": "15%" },
+                { "data": "NUMERO_DOCUMENTO", "width": "10%" },
+                { "data": "MODALIDAD", "width": "10%" },
+                { "data": "UBICACION", "width": "20%" },
+                { "data": "AREA_O", "width": "8%" },
+                { "data": "FECHA_INICIO", "width": "10%" },
+                { "data": "FECHA_FIN", "width": "10%" }
+               
+            ];
+            rptHTH_v2.dtGrillaGeneral = rptHTH_v2.tbGrillaGeneral.DataTable({
+                "bServerSide": false,
+                "bAutoWidth": false,
+                "bProcessing": true,
+                "bJQueryUI": false,
+                "bRetrieve": true,
+                //"sPaginationType": "bootstrap",
+                "bFilter": false,
+                "aaSorting": [],
+                "bPaginate": true,
+                columns: columns,
+                "bInfo": false,
+                "bLengthChange": false,
+                "pageLength": 10,
+                // "scrollX": true,  
+                "oLanguage": initSigo.oLanguage,
+                "drawCallback": initSigo.showPagination
+            });
+
+            rptHTH_v2.frm.find("#txtParamBusqueda").keypress(function (e) {
+                let code = e.which;
+                if (code == 13) {
+                    rptHTH_v2.fnSearch();
+                    return false;
+                }
+            });
+        },
+        
+        
+    };
+    $(document).ready(function () {
+        rptHTH_v2.fnInit();
+    });
+</script>

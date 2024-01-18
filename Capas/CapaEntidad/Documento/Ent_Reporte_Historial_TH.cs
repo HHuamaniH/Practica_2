@@ -16,9 +16,13 @@ namespace CapaEntidad.DOC
 
         [Description("TITULAR")]
         public String TITULAR { get; set; }
+        [Description("NUMERO_DOCUMENTO")]
+        public String NUMERO_DOCUMENTO { get; set; }
 
         [Description("UBICACION")]
         public String UBICACION { get; set; }
+        [Description("ESTAB_SECTOR")]
+        public String ESTAB_SECTOR { get; set; }
 
         [Description("DIRECCION")]
         public String DIRECCION { get; set; }
@@ -67,7 +71,11 @@ namespace CapaEntidad.DOC
         public String consultor { get; set; }
 
         [Description("ARESOLUCION_NUM")]
-        public String ARESOLUCION_NUM { get; set; }
+        public String ARESOLUCION_NUM { get; set; }  
+        [Description("INICIO_VIGENCIA")]
+        public String INICIO_VIGENCIA { get; set; }  
+        [Description("FIN_VIGENCIA")]
+        public String FIN_VIGENCIA { get; set; }        
 
         [Description("ITECNICO_REFORMULA_POA_NUM")]
         public String ITECNICO_REFORMULA_POA_NUM { get; set; }
@@ -344,6 +352,10 @@ namespace CapaEntidad.DOC
         public String COD_ESPECIES { get; set; }
         [Description("NOMBRE_COMUN")]
         public String NOMBRE_COMUN { get; set; }
+        [Description("NOMBRE_CIENTIFICO")]
+        public String NOMBRE_CIENTIFICO { get; set; }
+        [Description("PARCELA")]
+        public String PARCELA { get; set; }
         [Description("ESPECIES")]
         public Int32 ESPECIES { get; set; }
         [Description("INXISTENCIA")]
@@ -959,12 +971,40 @@ namespace CapaEntidad.DOC
         public String T_DNI { get; set; }
         [Description("T_RUC")]
         public String T_RUC { get; set; }
+        [Description("T_NUMERO_DOCUMENTO")]
+        public String T_NUMERO_DOCUMENTO { get; set; }
         [Description("R_DNI")]
         public String R_DNI { get; set; }
         [Description("R_RUC")]
         public String R_RUC { get; set; }
+        [Description("R_NUMERO_DOCUMENTO")]
+        public String R_NUMERO_DOCUMENTO { get; set; }
         [Description("PROVEIDO")]
         public String PROVEIDO { get; set; }
+        [Description("ESTADO_TH")]
+        public String ESTADO_TH { get; set; }
+        [Description("COD_DOCUMENTO_DIG")]
+        public String COD_DOCUMENTO_DIG { get; set; }
+        [Description("DOC_RDINICIO")]
+        public String DOC_RDINICIO { get; set; }
+        [Description("DOC_RDTERMINO")]
+        public String DOC_RDTERMINO { get; set; }
+        [Description("DOC_RDRECONSIDERACION")]
+        public String DOC_RDRECONSIDERACION { get; set; }
+        [Description("DOC_RDRECTIFICACION")]
+        public String DOC_RDRECTIFICACION { get; set; }
+        [Description("DOC_RDACUMULACION")]
+        public String DOC_RDACUMULACION { get; set; }
+        [Description("DOC_RDAMPLIACION")]
+        public String DOC_RDAMPLIACION { get; set; }
+        [Description("DOC_RDCADUCIDAD")]
+        public String DOC_RDCADUCIDAD { get; set; }
+        [Description("DOC_RDOTROS")]
+        public String DOC_RDOTROS { get; set; }
+        [Description("DOC_RDVARI")]
+        public String DOC_RDVARI { get; set; }
+        [Description("DOC_RDARCH")]
+        public String DOC_RDARCH { get; set; }
         #region constructor
         public Ent_Reporte_Historial_TH()
         {

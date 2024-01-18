@@ -32,6 +32,21 @@ namespace CapaLogica.DOC
                 throw ex;
             }
         }
+        public List<CEntidad> Log_listarTH_v2(CEntidad oCEntidad)
+        {
+            try
+            {
+                using (OracleConnection cn = new OracleConnection(CapaDatos.BDConexion.Conexion_Cadena_SIGO()))
+                {
+                    cn.Open();
+                    return oCDatos.Dat_listarTH_v2(cn, oCEntidad);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
 
         public CEntidad log_TH_Titulo_Habilitante(CEntidad oCEntidad)
         {
@@ -41,6 +56,21 @@ namespace CapaLogica.DOC
                 {
                     cn.Open();
                     return oCDatos.Titulo_Habilitante_Detalle(cn, oCEntidad);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+        public CEntidad log_TH_Titulo_Habilitante_v2(CEntidad oCEntidad)
+        {
+            try
+            {
+                using (OracleConnection cn = new OracleConnection(CapaDatos.BDConexion.Conexion_Cadena_SIGO()))
+                {
+                    cn.Open();
+                    return oCDatos.Titulo_Habilitante_Detalle_v2(cn, oCEntidad);
                 }
             }
             catch (Exception ex)
@@ -594,6 +624,36 @@ namespace CapaLogica.DOC
                 {
                     cn.Open();
                     return oCDatos.ReporteHistorialDetalleInt(cn, oCEntidad);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+        public List<CEntidad> Log_List_THDetalle_v2(CEntidad oCEntidad)
+        {
+            try
+            {
+                using (OracleConnection cn = new OracleConnection(CapaDatos.BDConexion.Conexion_Cadena_SIGO()))
+                {
+                    cn.Open();
+                    return oCDatos.ReporteHistorialDetalleInt_v2(cn, oCEntidad);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+        public CEntidad Log_List_THDetallePoa_v2(CEntidad oCEntidad)
+        {
+            try
+            {
+                using (OracleConnection cn = new OracleConnection(CapaDatos.BDConexion.Conexion_Cadena_SIGO()))
+                {
+                    cn.Open();
+                    return oCDatos.ReporteHistorialDetallePoa_v2(cn, oCEntidad);
                 }
             }
             catch (Exception ex)

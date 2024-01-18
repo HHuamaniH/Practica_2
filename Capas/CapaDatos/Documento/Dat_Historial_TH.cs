@@ -62,7 +62,46 @@ namespace CapaDatos.DOC
             }
 
         }
+        public List<CEntidad> Dat_listarTH_v2(OracleConnection cn, CEntidad oCEntidad)
+        {
+            List<CEntidad> lsCEntidad = new List<CEntidad>();
+            try
+            {
+                using (OracleDataReader dr = dBOracle.SelDrdDefault(cn, null, "DOC_OSINFOR_ERP_MIGRACION.spRTrazabilidad_TH_Titulo_Habilitante", oCEntidad))
+                {
+                    if (dr != null)
+                    {
+                        CEntidad oCampos = new CEntidad();
+                        if (dr.HasRows)
+                        {
+                            while (dr.Read())
+                            {
+                                //PARTE_DIARIO_DETALLE
+                                oCampos = new CEntidad();
+                                oCampos.COD_THABILITANTE = dr["COD_THABILITANTE"].ToString();
+                                oCampos.TITULO = dr["TITULO"].ToString();
+                                oCampos.TITULAR = dr["TITULAR"].ToString();
+                                oCampos.NUMERO_DOCUMENTO = dr["NUMERO_DOCUMENTO"].ToString();
+                                oCampos.REPRESENTANTE_LEG = dr["REP_LEGAL"].ToString();
+                                oCampos.UBICACION = dr["UBIGEO"].ToString() + " - " + dr["ESTAB_SECTOR"].ToString();
+                                oCampos.MODALIDAD = dr["MODALIDAD"].ToString();
+                                oCampos.AREA_O = Convert.ToDecimal(dr["AREA_OTORGADA"]);
+                                oCampos.FECHA_INICIO = dr["CONTRATO_FECHA_INICIO"].ToString();
+                                oCampos.FECHA_FIN = dr["CONTRATO_FECHA_FIN"].ToString();
+                                lsCEntidad.Add(oCampos);
+                            }
+                        }
 
+                    }
+                }
+                return lsCEntidad;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+
+        }
         public CEntidad Titulo_Habilitante_Detalle(OracleConnection cn, CEntidad oCEntidad)
         {
             CEntidad oCampos = new CEntidad();
@@ -153,21 +192,21 @@ namespace CapaDatos.DOC
                             {
                                 //PARTE_DIARIO_DETALLE
                                 oCampos1 = new CEntidad();
-                                oCampos1.COD_THABILITANTE =dr["COD_THABILITANTE"].ToString();
+                                oCampos1.COD_THABILITANTE = dr["COD_THABILITANTE"].ToString();
                                 oCampos1.NUM_POA = Convert.ToInt32(dr["NUM_POA"]);
                                 oCampos1.POA_COMPLEMENT = Convert.ToInt32(dr["NUM_PCOMPLEMENTARIO"]);
                                 oCampos1.AREA_O = Convert.ToDecimal(dr["AREA"]);
-                                oCampos1.PCA =  dr["PCA"].ToString();
+                                oCampos1.PCA = dr["PCA"].ToString();
                                 oCampos1.ZAFRA = dr["ZAFRA_PCA"].ToString();
                                 oCampos1.FECHA_INICIO = dr["CONSULTOR"].ToString();
                                 oCampos1.consultor = dr["CONSULTOR"].ToString();
                                 oCampos1.ARESOLUCION_NUM = dr["ARESOLUCION_NUM"].ToString();
-                                oCampos1.fecha_aprobacion =  dr["Fecha_Resolucion"].ToString();
+                                oCampos1.fecha_aprobacion = dr["Fecha_Resolucion"].ToString();
                                 oCampos1.NUMERO_ARBOLES = Convert.ToInt32(dr["ARBOLES"]);
                                 oCampos1.VOLUMEN_ARBOLES = Convert.ToDecimal(dr["VOLUMEN"]);
-                                oCampos1.NUM_POA_STRING =   dr["NOMBRE_POA"].ToString();
-                                oCampos1.COD_INFORME =   dr["COD_INFORME"].ToString();
-                                oCampos1.NUM_INFORME =  dr["NUM_INFORME"].ToString();
+                                oCampos1.NUM_POA_STRING = dr["NOMBRE_POA"].ToString();
+                                oCampos1.COD_INFORME = dr["COD_INFORME"].ToString();
+                                oCampos1.NUM_INFORME = dr["NUM_INFORME"].ToString();
 
                                 ListPOA.Add(oCampos1);
                             }
@@ -217,6 +256,134 @@ namespace CapaDatos.DOC
                 throw ex;
             }
         }
+
+        public CEntidad Titulo_Habilitante_Detalle_v2(OracleConnection cn, CEntidad oCEntidad)
+        {
+            CEntidad oCampos = new CEntidad();
+            List<CEntidad> ListPOA = new List<CEntidad>();
+            List<CEntidad> List_Informe = new List<CEntidad>();
+            oCampos.ListINFORMETH = new List<CEntidad>();
+            oCampos.ListPOATH = new List<CEntidad>();
+            List<CEntidad> List_InfTitular = new List<CEntidad>();
+
+            try
+            {
+                using (OracleDataReader dr = dBOracle.SelDrdDefault(cn, null, "doc_osinfor_erp_migracion.spRTrazabilidad_TH_Titulo_Habilitante", oCEntidad))
+                {
+                    if (dr != null)
+                    {
+                        //  CEntidad oCampos = new CEntidad();
+                        if (dr.HasRows)
+                        {
+
+                            while (dr.Read())
+                            {
+                                //PARTE_DIARIO_DETALLE
+                                oCampos = new CEntidad();
+                                oCampos.COD_THABILITANTE = dr["COD_THABILITANTE"].ToString();
+                                oCampos.TITULO = dr["TITULO"].ToString();
+                                oCampos.TITULAR = dr["TITULAR"].ToString();
+                                oCampos.REPRESENTANTE_LEG = dr["REP_LEGAL"].ToString();
+                                oCampos.UBICACION = dr["UBIGEO"].ToString();
+                                oCampos.ESTAB_SECTOR = dr["ESTAB_SECTOR"].ToString();
+                                oCampos.MODALIDAD = dr["MODALIDAD"].ToString();
+                                oCampos.AREA_O = Convert.ToDecimal(dr["AREA_OTORGADA"]);
+                                oCampos.FECHA_INICIO = dr["CONTRATO_FECHA_INICIO"].ToString();
+                                oCampos.FECHA_FIN = dr["CONTRATO_FECHA_FIN"].ToString();
+                                oCampos.DIRECCION_TH = dr["DIRECCION"].ToString();
+                                oCampos.DIRECCION_LEGAL = dr["DIRECCION_LEGAL"].ToString();
+                                oCampos.ESTADO_CONTA = dr["lista_infractor"].ToString();
+                                oCampos.T_DNI = dr["T_DNI"].ToString();
+                                oCampos.T_RUC = dr["T_RUC"].ToString();
+                                oCampos.T_NUMERO_DOCUMENTO = dr["T_NUMERO_DOCUMENTO"].ToString();
+                                oCampos.R_DNI = dr["R_DNI"].ToString();
+                                oCampos.R_RUC = dr["R_RUC"].ToString();
+                                oCampos.R_NUMERO_DOCUMENTO = dr["R_NUMERO_DOCUMENTO"].ToString();
+                                oCampos.ESTADO_TH = dr["ESTADO_TH"].ToString();
+                                oCampos.COD_DOCUMENTO_DIG = dr["COD_DOCUMENTO_DIG"].ToString();
+
+                                // lsCEntidad.Add(oCampos);
+                            }
+                        }
+
+                    }
+
+                    dr.NextResult();
+                    // POA
+                    if (dr.HasRows)
+                    {
+                        CEntidad oCampos1 = new CEntidad();
+                        if (dr.HasRows)
+                        {
+                            while (dr.Read())
+                            {
+                                //PARTE_DIARIO_DETALLE
+                                oCampos1 = new CEntidad();
+                                oCampos1.COD_THABILITANTE = dr["COD_THABILITANTE"].ToString();
+                                oCampos1.NUM_POA = Convert.ToInt32(dr["NUM_POA"]);
+                                oCampos1.POA_COMPLEMENT = Convert.ToInt32(dr["NUM_PCOMPLEMENTARIO"]);
+                                oCampos1.AREA_O = Convert.ToDecimal(dr["AREA"]);
+                                oCampos1.PCA = dr["PCA"].ToString();
+                                oCampos1.ZAFRA = dr["ZAFRA_PCA"].ToString();
+                                oCampos1.FECHA_INICIO = dr["CONSULTOR"].ToString();
+                                oCampos1.consultor = dr["CONSULTOR"].ToString();
+                                oCampos1.ARESOLUCION_NUM = dr["ARESOLUCION_NUM"].ToString();
+                                oCampos1.fecha_aprobacion = dr["Fecha_Resolucion"].ToString();
+                                oCampos1.NUMERO_ARBOLES = Convert.ToInt32(dr["ARBOLES"]);
+                                oCampos1.VOLUMEN_ARBOLES = Convert.ToDecimal(dr["VOLUMEN"]);
+                                oCampos1.NUM_POA_STRING = dr["NOMBRE_POA"].ToString();
+                                oCampos1.COD_INFORME = dr["COD_INFORME"].ToString();
+                                oCampos1.NUM_INFORME = dr["NUM_INFORME"].ToString();
+
+                                ListPOA.Add(oCampos1);
+                            }
+                        }
+                        oCampos.ListPOATH = ListPOA;
+                    }
+
+                    dr.NextResult();
+                    // POA
+                    if (dr.HasRows)
+                    {
+                        CEntidad oCampos3 = new CEntidad();
+                        if (dr.HasRows)
+                        {
+                            int pt1 = dr.GetOrdinal("NUMERO");
+                            int pt2 = dr.GetOrdinal("TIPO_FISCALIZA");
+                            int pt3 = dr.GetOrdinal("NUMERO_EXPEDIENTE");
+                            // int pt4 = dr.GetOrdinal("NUMERO_INFORME");
+                            // int pt5 = dr.GetOrdinal("NUMERO_RESOLUCION");
+                            // int pt6 = dr.GetOrdinal("REMITENTE");
+                            // int pt7 = dr.GetOrdinal("TITULAR");
+                            int pt8 = dr.GetOrdinal("FECHA");
+
+                            while (dr.Read())
+                            {
+                                //PARTE_DIARIO_DETALLE
+                                oCampos3 = new CEntidad();
+                                oCampos3.NUMERO = dr["NUMERO"].ToString();
+                                oCampos3.Tipo_Inicio = dr["TIPO_FISCALIZA"].ToString();
+                                oCampos3.NUM_CNOTIFICACION = dr["NUMERO_EXPEDIENTE"].ToString();
+                                // oCampos3.NUM_INFORME = dr.GetString(pt4);
+                                // oCampos3.RD_INICIO = dr.GetString(pt5);
+                                // oCampos3.consultor = dr.GetString(pt6);
+                                // oCampos3.TITULAR = dr.GetString(pt7);
+                                oCampos3.fecha_aprobacion = dr["FECHA"].ToString();
+                                List_InfTitular.Add(oCampos3);
+                            }
+                        }
+                        oCampos.ListINFTIT = List_InfTitular;
+                    }
+
+                }
+                return oCampos;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
         //public List<CEntidad> Informes_Sup_TH(OracleConnection cn, CEntidad oCEntidad)
         //{
         //    List<CEntidad> List_Informe = new List<CEntidad>();
@@ -1619,15 +1786,15 @@ namespace CapaDatos.DOC
         //METODO JOEL
         public CEntidad dat_EstadoProcesoJudicializado_O(OracleConnection cn, CEntidad oCEntidad)
         {
-           
+
 
             try
             {
                 using (OracleDataReader dr = dBOracle.SelDrdRow(cn, null, "DOC_OSINFOR_ERP_MIGRACION.SPASESORIALEGAL_OSINFOR_ESTADOPROCESOJUDICIALIZADOS", oCEntidad))
                 {
                     CEntidad oCampos = new CEntidad();
-                   
-                   
+
+
                     if (dr.HasRows)
                     {
                         int pt1 = dr.GetOrdinal("NUMEROTITULOHABILITANTE");
@@ -1662,12 +1829,12 @@ namespace CapaDatos.DOC
                 using (SqlDataReader dr = oGDataSQL.SelDrdDefault(cn, null, "OAJ.spAsesoriaLegal_OSINFOR_BusquedaJudicializados", oCEntidad))
                 {
                     CEntidad oCampos = new CEntidad();
-                    
+
                     if (dr != null)
                     {
                         if (dr.HasRows)
                         {
-                           
+
                             int pt1 = dr.GetOrdinal("NUMEROTITULOHABILITANTE");
                             int pt2 = dr.GetOrdinal("TITULAR");
                             int pt3 = dr.GetOrdinal("NUMERORESOLUCIONDIRECTORAL");
@@ -1690,8 +1857,8 @@ namespace CapaDatos.DOC
                         }
 
                     }
-                                                          
-                   
+
+
                     return lista;
                 }
             }
@@ -1751,7 +1918,7 @@ namespace CapaDatos.DOC
                     {
                         if (dr.HasRows)
                         {
-                           
+
                             int pt1 = dr.GetOrdinal("id");
                             int pt2 = dr.GetOrdinal("uit");
                             int pt3 = dr.GetOrdinal("factor_uit");
@@ -1786,7 +1953,7 @@ namespace CapaDatos.DOC
                                 oCampos.OTROS_INGRESOS_D = dr.GetDecimal(pt13);
                                 listDeudas.Add(oCampos);
                             }
-                           
+
 
 
                         }
@@ -1816,7 +1983,7 @@ namespace CapaDatos.DOC
                     {
                         if (dr.HasRows)
                         {
-                           
+
                             //fecha	multa	interes	cuota	voucher	recibo	band	fecha_orden	otrosIngresos
                             int pt1 = dr.GetOrdinal("fecha");
                             int pt2 = dr.GetOrdinal("multa");
@@ -1827,7 +1994,7 @@ namespace CapaDatos.DOC
                             int pt7 = dr.GetOrdinal("band");
                             int pt8 = dr.GetOrdinal("fecha_orden");
                             int pt9 = dr.GetOrdinal("otrosIngresos");
-                           
+
 
                             //oCampos = new CEntidad();
                             while (dr.Read())
@@ -1841,12 +2008,12 @@ namespace CapaDatos.DOC
                                 oCampos.VOUCHER_P = dr.GetString(pt5);
                                 oCampos.RECIBO_P = dr.GetString(pt6);
                                 oCampos.BAND_P = dr.GetString(pt7);
-                                oCampos.FECHA_ORDEN_P = dr.IsDBNull(pt8)?"": dr.GetDateTime(pt8).ToString("dd/MM/yyyy");
+                                oCampos.FECHA_ORDEN_P = dr.IsDBNull(pt8) ? "" : dr.GetDateTime(pt8).ToString("dd/MM/yyyy");
                                 oCampos.OTROSINGRESOS_P = dr.GetDouble(pt9);
-                               
+
                                 listPagos.Add(oCampos);
                             }
-                          
+
                         }
 
                     }
@@ -1874,7 +2041,7 @@ namespace CapaDatos.DOC
                     {
                         if (dr.HasRows)
                         {
-                            
+
                             //periodo	fecha	saldo	multa	interes	cuota	nroRecibo	periodo_p	fecha_p	saldo_p	multa_p	interes_p	cuota_p	nroRecibo_p
                             int pt1 = dr.GetOrdinal("periodo");
                             int pt2 = dr.GetOrdinal("fecha");
@@ -1945,7 +2112,7 @@ namespace CapaDatos.DOC
                             //
                             int pt1 = dr.GetOrdinal("SigCorrelativo");
                             int pt2 = dr.GetOrdinal("SigNomTitular");
-                            int pt3 = dr.GetOrdinal("ResIdentity");      
+                            int pt3 = dr.GetOrdinal("ResIdentity");
                             int pt4 = dr.GetOrdinal("ResJefAprobComp_Nro");
                             int pt5 = dr.GetOrdinal("ResJefAprobComp_Fecha");
                             int pt6 = dr.GetOrdinal("ResJefAprobComp_NroActa");
@@ -1953,7 +2120,7 @@ namespace CapaDatos.DOC
                             int pt8 = dr.GetOrdinal("ResJefAprobCompFracc_Nro");
                             int pt9 = dr.GetOrdinal("ResJefAprobCompFracc_Fecha");
                             int pt10 = dr.GetOrdinal("ResJefAprobCompFracc_NroActa");
-                            int pt11 = dr.GetOrdinal("ResJefAprobCompFracc_FechaNot");       
+                            int pt11 = dr.GetOrdinal("ResJefAprobCompFracc_FechaNot");
                             int pt12 = dr.GetOrdinal("ResJefPerdComp_Nro");
                             int pt13 = dr.GetOrdinal("ResJefPerdComp_Fecha");
                             int pt14 = dr.GetOrdinal("ResJefPerdComp_NroActa");
@@ -1971,7 +2138,7 @@ namespace CapaDatos.DOC
                                 oCampos.SIGCORRELATIVO_CM = dr.GetInt32(pt1);
                                 oCampos.SIGNOMTITULAR_CM = dr.IsDBNull(pt2) ? "" : dr.GetString(pt2);
                                 oCampos.RESIDENTITY_CM = dr.GetInt32(pt3);
-                                oCampos.RESJEFAPROBCOMP_NRO_CM = dr.IsDBNull(pt4)?"": dr.GetString(pt4);
+                                oCampos.RESJEFAPROBCOMP_NRO_CM = dr.IsDBNull(pt4) ? "" : dr.GetString(pt4);
                                 oCampos.RESJEFAPROBCOMP_FECHA_CM = dr.IsDBNull(pt5) ? "" : dr.GetString(pt5);
                                 oCampos.RESJEFAPROBCOMP_NROACTA_CM = dr.IsDBNull(pt6) ? "" : dr.GetString(pt6);
                                 oCampos.RESJEFAPROBCOMP_FECHANOT_CM = dr.IsDBNull(pt7) ? "" : dr.GetString(pt7);
@@ -2039,12 +2206,12 @@ namespace CapaDatos.DOC
 
                                 oCampos = new CEntidad();
                                 oCampos.ANIO_CC = dr.GetInt32(pt1);
-                                oCampos.FECHA_CC= dr.GetString(pt2);
-                                oCampos.MONTOCOMPENSABLE_CC= dr.GetDecimal(pt3);
+                                oCampos.FECHA_CC = dr.GetString(pt2);
+                                oCampos.MONTOCOMPENSABLE_CC = dr.GetDecimal(pt3);
                                 oCampos.FECHA_P_CC = dr.GetString(pt4);
-                                oCampos.MONTOCOMPENSABLE_P_CC= dr.GetDecimal(pt5);
+                                oCampos.MONTOCOMPENSABLE_P_CC = dr.GetDecimal(pt5);
                                 oCampos.NROINFORME_CC = dr.GetString(pt6);
-                                oCampos.FECHAINFORME_CC= dr.GetString(pt7);
+                                oCampos.FECHAINFORME_CC = dr.GetString(pt7);
                                 oCampos.NRORJ_CC = dr.GetString(pt8);
                                 oCampos.FECHARJ_CC = dr.IsDBNull(pt9) ? "" : dr.GetString(pt9);
                                 oCampos.CUENTACONTABLE_CC = dr.IsDBNull(pt10) ? "" : dr.GetString(pt10);
@@ -2344,7 +2511,7 @@ namespace CapaDatos.DOC
         public List<CEntidad> datInfraccionesTitular(OracleConnection cn, CEntidad oCEntidad)
         {
             List<CEntidad> listInfracciones = new List<CEntidad>();
-                
+
             try
             {
                 using (OracleDataReader dr = dBOracle.SelDrdDefault(cn, null, "DOC_BD_OBSERVATORIO_MIGRACION.spRhInfractores", oCEntidad))
@@ -2405,7 +2572,7 @@ namespace CapaDatos.DOC
                         }
 
                     }
-                    return listInfracciones; 
+                    return listInfracciones;
                 }
             }
             catch (Exception ex)
@@ -3230,6 +3397,253 @@ namespace CapaDatos.DOC
 
                     return List_Informe;
                 }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public List<CEntidad> ReporteHistorialDetalleInt_v2(OracleConnection cn, CEntidad oCEntidad)
+        {
+            List<CEntidad> List_Informe = new List<CEntidad>();
+
+            try
+            {
+                using (OracleDataReader dr = dBOracle.SelDrdDefault(cn, null, "doc_osinfor_erp_migracion.spRTrazabilidad_TH_Titulo_Habilitante", oCEntidad))
+                {
+                    // INFORMES
+                    if (dr.HasRows)
+                    {
+                        CEntidad oCampos2 = new CEntidad();
+                        if (dr.HasRows)
+                        {                            
+                            while (dr.Read())
+                            {
+                                //PARTE_DIARIO_DETALLE
+                                oCampos2 = new CEntidad();
+                                oCampos2.COD_INFORME = dr["COD_INFORME"].ToString();
+                                oCampos2.NUMERO = dr["NUMERO"].ToString(); //numero de informe
+                                oCampos2.ESTADO_ORIGEN_TIPO = dr["ORIGEN"].ToString();
+                                oCampos2.ANIO_SUP = dr["ANIO_SUP"].ToString();
+                                oCampos2.Supervisor = dr["SUPERVISORES"].ToString();
+                                oCampos2.COD_DOCINFORME = dr["COD_DOCINFORME"].ToString(); // DOC SIADO INFORME
+                                oCampos2.OBSERVACIONES = dr["OBSERVACION"].ToString();
+
+                                // R.D. INICIO
+                                oCampos2.COD_RESODIREC_Inicio = dr["COD_RDINICIO"].ToString();
+                                oCampos2.DOC_RDINICIO = dr["DOC_SIADO_RDINICIO"].ToString();
+                                oCampos2.RD_INICIO = dr["RD_INICIO"].ToString();
+                                oCampos2.COD_DOCRDINICIO = dr["COD_DOCRDINICIO"].ToString();
+                                oCampos2.FECHA_RDINICIO = dr["FECHA_RDINICIO"].ToString();
+                                oCampos2.MEDIDAS_CAUTELARES = dr["RDINICIO_MED_CAUTELAR"].ToString();
+                                oCampos2.CAUSAL_CADUCIDAD = dr["RDINICIO_CAUSAL_CADUCIDAD"].ToString();
+                                oCampos2.INF_FALSA_DAS = dr["RDIMICIO_INF_FALSA_DAS"].ToString();
+                                oCampos2.INF_FALSA_DIF = dr["RDINICIO_INF_FALSA_DIF"].ToString();
+                                oCampos2.INF_FALSA_INEX = dr["RDINICIO_INF_FALSA_INEX"].ToString();
+                                oCampos2.INFRACCIONES = dr["RDINICIO_INFRACCIONES"].ToString();
+                                oCampos2.NUM_EXP = dr["NUM_EXPEDIENTE"].ToString();// numero de expediente de la rd
+
+
+                                // R.D. TERMINO
+                                oCampos2.COD_RESODIREC_Termino = dr["COD_RDTERMINO"].ToString();//codigo de la RD de termino
+                                oCampos2.RD_TERMINO = dr["RD_TERMINO"].ToString();
+                                oCampos2.DOC_RDTERMINO = dr["DOC_SIADO_RDTERMINO"].ToString();
+                                oCampos2.COD_DOCRDTERMINO = dr["COD_DOCRDTERMINO"].ToString();
+                                oCampos2.FECHA_RDTERMINO = dr["FECHA_RDTERMINO"].ToString();
+                                oCampos2.DETERMINACION_RDTERMINO = dr["DETTERMINA_RT"].ToString();
+                                oCampos2.CADUCIDAD_RDTERMINO = dr["CADUCIDAD_RT"].ToString();
+                                oCampos2.MULTA_RDTERMINO = dr["MULTA_RT"].ToString();
+                                oCampos2.MULTA_MONTO = dr["MONTO_RT"].ToString();
+                                oCampos2.SANCION_EXTITULAR_RDTERMINO = dr["EX_TITULARRT"].ToString();
+                                oCampos2.TITULAR = dr["EX_TITULAR"].ToString();
+                                oCampos2.INFRACCIONES_TER = dr["INFRACCIONES_RT"].ToString();
+                                oCampos2.ESTADO_ORIGEN = dr["ESTADO_PROCESO"].ToString();
+
+                                //cambios en el reporte historial titulo habilitante interno 15/11/2016
+                                // R.D. reconsideracion
+                                oCampos2.RECONS_COD_RESODIREC = dr["COD_RDRECONSIDERACION"].ToString();
+                                oCampos2.DOC_RDRECONSIDERACION = dr["DOC_SIADO_RDRECONSIDERACION"].ToString();
+                                oCampos2.RECONS_NUM_RESOLUCION = dr["RD_RECONSIDERACION"].ToString();
+                                oCampos2.DOC_RECONS = dr["COD_DOCRDRECONS"].ToString();
+                                oCampos2.RECONS_RD_FECHA = dr["FECHA_RDRECONS"].ToString();
+                                oCampos2.RECONS_IMPROCEDENTE = dr["RDR_IMPROCEDENTE"].ToString();
+                                oCampos2.RECONS_FUNDADA = dr["RDR_FUNDADA"].ToString();
+                                oCampos2.RECONS_FUNDADA_PARTE = dr["RDR_FUNDADA_PARTE"].ToString();
+                                oCampos2.RECONS_INFUNDADA = dr["RDR_INFUNDADO"].ToString();
+                                oCampos2.RECONS_LEVANTAR_CADUCIDAD = dr["RDR_LEVANTAR_CADUCIDAD"].ToString();
+                                oCampos2.RECONS_CAMBIO_MULTA = dr["RDRR_CAMBIOMULTA"].ToString();
+                                oCampos2.RECONS_MONTO = dr["RDRR_MULTA"].ToString();
+
+                                //R.D. RECTIFICACION
+                                oCampos2.RECT_COD_RESODIREC = dr["RECT_COD_RESODIREC"].ToString();
+                                oCampos2.DOC_RDRECTIFICACION = dr["DOC_SIADO_RDRECTIFICACION"].ToString();
+                                oCampos2.RECT_NUM_RESOLUCION = dr["RECT_NUM_RESOLUCION"].ToString();
+                                oCampos2.DOC_RECTIFICACION = dr["DOC_RECTIFICACION"].ToString();
+                                oCampos2.RECT_RD_FECHA = dr["RECT_RD_FECHA"].ToString();
+                                oCampos2.RECT_ERRORMATERIAL = dr["RECT_ERRORMATERIAL"].ToString();
+                                oCampos2.RECT_CAMBIO_MULTA = dr["RECT_CAMBIO_MULTA"].ToString();
+                                oCampos2.RECT_MONTO = dr["RECT_MONTO"].ToString();
+                                oCampos2.RECT_OTROS = dr["RECT_OTROS"].ToString();
+                                oCampos2.RECT_DESC_OTROS = dr["RECT_DESC_OTROS"].ToString();
+
+                                //R.D. ACUMULACION
+                                oCampos2.ACUM_COD_RESODIREC = dr["ACUM_COD_RESODIREC"].ToString();
+                                oCampos2.DOC_RDACUMULACION = dr["DOC_SIADO_RDACUMULACION"].ToString();
+                                oCampos2.ACUM_NUM_RESOLUCION = dr["ACUM_NUM_RESOLUCION"].ToString();
+                                oCampos2.ACUM_COD_FCTIPO = dr["ACUM_COD_FCTIPO"].ToString();
+                                oCampos2.ACUM_FECHA_EMISION = dr["ACUM_FECHA_EMISION"].ToString();
+                                oCampos2.ACUM_DESCRIPCION = dr["ACUM_DESCRIPCION"].ToString();
+
+                                // R.D. AMPLIACION
+                                oCampos2.AMP_COD_RESODIREC = dr["AMP_COD_RESODIREC"].ToString();
+                                oCampos2.DOC_RDAMPLIACION = dr["DOC_SIADO_RDAMPLIACION"].ToString();
+                                oCampos2.AMP_NUM_RESOLUCION = dr["AMP_NUM_RESOLUCION"].ToString();
+                                oCampos2.RD_FECHA_EMISION_AMP = dr["RD_FECHA_EMISION_AMP"].ToString();
+                                oCampos2.AMP_IMPUTACION = dr["AMP_IMPUTACION"].ToString();
+                                oCampos2.AMP_OTRAS_INFRACCIONES = dr["AMP_OTRAS_INFRACCIONES"].ToString();
+                                oCampos2.AMP_POR_PLAZOS = dr["AMP_POR_PLAZOS"].ToString();
+                                oCampos2.AMP_OTROS = dr["AMP_OTROS"].ToString();
+
+                                // R.D. CADUCIDAD
+                                oCampos2.CAD_COD_RESODIREC = dr["CAD_COD_RESODIREC"].ToString();
+                                oCampos2.DOC_RDCADUCIDAD = dr["DOC_SIADO_RDCADUCIDAD"].ToString();
+                                oCampos2.CAD_NUM_RESOLUCION = dr["CAD_NUM_RESOLUCION"].ToString();
+                                oCampos2.CAD_RD_FECHA = dr["CAD_RD_FECHA"].ToString();
+                                oCampos2.CAD_NUM_EXP = dr["CAD_NUM_EXP"].ToString();
+                                oCampos2.CAD_CADUCIDAD = dr["CAD_CADUCIDAD"].ToString();
+
+                                oCampos2.OTROS_COD_RESODIREC = dr["OTROS_COD_RESODIREC"].ToString();
+                                oCampos2.DOC_RDOTROS = dr["DOC_SIADO_RDOTROS"].ToString();
+                                oCampos2.OTROS_NUM_RESOLUCION = dr["OTROS_NUM_RESOLUCION"].ToString();
+                                oCampos2.OTROS_RD_FECHA = dr["OTROS_RD_FECHA"].ToString();
+                                oCampos2.OTROS_DETERMINACION = dr["OTROS_DETERMINACION"].ToString();
+
+                                oCampos2.VARI_COD_RESODIREC = dr["VARI_COD_RESODIREC"].ToString();
+                                oCampos2.DOC_RDVARI = dr["DOC_SIADO_RDVARI"].ToString();
+                                oCampos2.VARI_NUM_RESOLUCION = dr["VARI_NUM_RESOLUCION"].ToString();
+                                oCampos2.VARI_RD_FECHA = dr["VARI_RD_FECHA"].ToString();
+                                oCampos2.VARI_LEVANTAR = dr["VARI_LEVANTAR"].ToString();
+                                oCampos2.VARI_LEVANTAR_PARTE = dr["VARI_LEVANTAR_PARTE"].ToString();
+                                oCampos2.VARI_NO_LEVANTAR = dr["VARI_NO_LEVANTAR"].ToString();
+                                oCampos2.VARI_MODIFICAR = dr["VARI_MODIFICAR"].ToString();
+                                oCampos2.VARI_DETERMINACION = dr["VARI_DETERMINACION"].ToString();
+
+                                oCampos2.ARCH_COD_RESODIREC = dr["ARCH_COD_RESODIREC"].ToString();
+                                oCampos2.DOC_RDARCH = dr["DOC_SIADO_RDARCH"].ToString();
+                                oCampos2.ARCH_COD_FCTIPO = dr["ARCH_COD_FCTIPO"].ToString();
+                                oCampos2.ARCH_NUM_RESOLUCION = dr["ARCH_NUM_RESOLUCION"].ToString();
+                                oCampos2.ARCH_FECHA_RD = dr["ARCH_FECHA_RD"].ToString();
+                                oCampos2.ARCH_EVIDENCIA_IRRE = dr["ARCH_EVIDENCIA_IRRE"].ToString();
+                                oCampos2.ARCH_SIN_INFRACCION = dr["ARCH_SIN_INFRACCION"].ToString();
+                                oCampos2.ARCH_BUEN_MANEJO = dr["ARCH_BUEN_MANEJO"].ToString();
+                                oCampos2.ARCH_DEFICIENTE_NOT = dr["ARCH_DEFICIENTE_NOT"].ToString();
+                                oCampos2.ARCH_DEFICIENCIA_TEC = dr["ARCH_DEFICIENCIA_TEC"].ToString();
+                                oCampos2.OTROS = dr["OTROS"].ToString();
+
+                                // PROVEIDO
+                                oCampos2.FECHA_PROVEIDO = dr["FECHA_PROVEIDO"].ToString();
+                                oCampos2.PROVEIDO = dr["TIPO_PROVEIDO"].ToString();
+                                // TRIBUNAL
+                                //oCampos2.NUM_RDTFFS = dr["RD_TFFFS"].ToString();
+                                //oCampos2.DETERMINA_TFFSTER = dr["TFFS_DETERMINA"].ToString();
+                                //oCampos2.MOTIVO_TFFSTER = dr["TFFS_MOTIVO"].ToString();
+                                oCampos2.NUM_POA_STRING = dr["NOMBRE_POA"].ToString();
+
+                                // TRIBUNAL R.D. INICIO
+                                oCampos2.COD_TRIBUNAL_INI = dr["COD_TRIBUNAL_INI"].ToString();
+                                oCampos2.NUM_TFFSINI = dr["NUM_TFFSINI"].ToString();
+                                oCampos2.DETERMINA = dr["DETERMINA"].ToString();
+                                oCampos2.MOTIVO = dr["MOTIVO"].ToString();
+                                oCampos2.ESTADO_TFFS = dr["ESTADO_TFFS"].ToString();
+                                //TRIBUNAL R.D. TERMINO
+                                oCampos2.COD_TRIBUNAL_TER = dr["COD_TRIBUNAL_TER"].ToString();
+                                oCampos2.NUM_TFFSTER = dr["NUM_TFFSTER"].ToString();
+                                oCampos2.DETERMINA_TFFSTER = dr["DETERMINA_TFFSTER"].ToString();
+                                oCampos2.MOTIVO_TFFSTER = dr["MOTIVO_TFFSTER"].ToString();
+                                oCampos2.ESTADO_TFFSTER = dr["ESTADO_TFFSTER"].ToString();
+                                //TRIBUNAL RECONSIDERACION
+                                oCampos2.COD_TRIBUNAL_REC = dr["COD_TRIBUNAL_REC"].ToString();
+                                oCampos2.NUM_TFFSREC = dr["NUM_TFFSREC"].ToString();
+                                oCampos2.DETERMINA_TFFSREC = dr["DETERMINA_TFFSREC"].ToString();
+                                oCampos2.MOTIVO_TFFSREC = dr["MOTIVO_TFFSREC"].ToString();
+                                oCampos2.ESTADO_TFFSREC = dr["ESTADO_TFFSREC"].ToString();
+
+                                List_Informe.Add(oCampos2);
+                            }
+                        }
+
+                    }
+
+                    return List_Informe;
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public CEntidad ReporteHistorialDetallePoa_v2(OracleConnection cn, CEntidad oCEntidad)
+        {
+            CEntidad oCampos = new CEntidad();
+            List<CEntidad> ListPOA = new List<CEntidad>();
+            List<CEntidad> List_Informe = new List<CEntidad>();
+            oCampos.ListINFORMETH = new List<CEntidad>();
+            oCampos.ListPOATH = new List<CEntidad>();
+            List<CEntidad> List_InfTitular = new List<CEntidad>();
+
+            try
+            {
+                using (OracleDataReader dr = dBOracle.SelDrdDefault(cn, null, "doc_osinfor_erp_migracion.spRTrazabilidad_TH_DetallePoa", oCEntidad))
+                {
+                    if (dr != null)
+                    {
+                        //  CEntidad oCampos = new CEntidad();
+                        if (dr.HasRows)
+                        {
+
+                            while (dr.Read())
+                            {
+                                //POA
+                                oCampos = new CEntidad();
+                                oCampos.COD_THABILITANTE = dr["COD_THABILITANTE"].ToString();
+                                oCampos.COD_DOCUMENTO_DIG = (string.IsNullOrEmpty(dr["DOC_SIADO_ARESOL"].ToString()) || string.IsNullOrEmpty(dr["DOC_ORIGEN_ARESOL"].ToString())) ? string.Empty : dr["DOC_SIADO_ARESOL"].ToString() + "|" + dr["DOC_ORIGEN_ARESOL"].ToString();                                
+                                oCampos.NUM_POA_STRING = dr["POA"].ToString();
+                                oCampos.AREA_O = Convert.ToDecimal(dr["AREA"]);
+                                oCampos.ARESOLUCION_NUM = dr["ARESOLUCION_NUM"].ToString();
+                                oCampos.FECHA_C = dr["ARESOLUCION_FECHA"].ToString();
+                                oCampos.INICIO_VIGENCIA = dr["INICIO_VIGENCIA"] == null ? string.Empty : dr["INICIO_VIGENCIA"].ToString();
+                                oCampos.FIN_VIGENCIA = dr["FIN_VIGENCIA"] == null ? string.Empty : dr["FIN_VIGENCIA"].ToString();
+                                oCampos.consultor = dr["CONSULTOR"].ToString();
+                            }
+                        }
+
+                    }
+
+                    dr.NextResult();
+                    // POA
+                    if (dr.HasRows)
+                    {
+                        CEntidad oCampos1 = new CEntidad();
+                        oCampos.ListPOATH = new List<CEntidad>();
+                        if (dr.HasRows)
+                        {
+                            while (dr.Read())
+                            {
+                                //PARTE_DIARIO_DETALLE
+                                oCampos1 = new CEntidad();
+                                oCampos1.NOMBRE_COMUN = dr["NOMBRE_COMUN"].ToString();
+                                oCampos1.NOMBRE_CIENTIFICO = dr["NOMBRE_CIENTIFICO"].ToString();
+                                oCampos1.PARCELA = dr["PARCELA"].ToString();
+                                oCampos1.NUMERO_ARBOLES = Convert.ToInt32(dr["NUM_ARBOLES"]);
+                                oCampos1.VOLUMEN_ARBOLES = Convert.ToInt32(dr["VOLUMEN_KILOGRAMOS"]);
+                                oCampos.ListPOATH.Add(oCampos1);
+                            }
+                        }
+                    }
+                }
+                return oCampos;
             }
             catch (Exception ex)
             {
