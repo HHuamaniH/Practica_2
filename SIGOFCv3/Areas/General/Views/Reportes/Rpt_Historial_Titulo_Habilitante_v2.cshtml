@@ -64,7 +64,7 @@
                                 </select>
                             </div>
                             <div class="form-group col-md-4">
-                                <input type="text" id="txtParamBusqueda" class="form-control form-control-sm" />
+                                <input type="text" id="txtParamBusqueda" class="form-control form-control-sm" onkeypress="return utilSigo.checkLetter(event);"/>
                             </div>
                             <div class="btn-group col-md-2" style="padding-top:5px;">
                                 <a id="btnSearch" style="cursor:pointer;" data-toggle="tooltip" data-placement="top" title="Buscar" onclick="rptHTH_v2.fnSearch()"><span class="fa mx-2 fa-lg fa-search"></span></a>
@@ -133,6 +133,12 @@
         },
         fnSearch: () => {
             var valorBusqueda = rptHTH_v2.frm.find("#txtParamBusqueda").val().trim();
+
+            var text = utilSigo.findWords(valorBusqueda);
+            if (text != "") {
+                utilSigo.toastWarning("Aviso", text);
+                return false;
+            }
 
             if (valorBusqueda === "") {
                 utilSigo.toastWarning("Aviso", "Ingrese Valor a Buscar");
