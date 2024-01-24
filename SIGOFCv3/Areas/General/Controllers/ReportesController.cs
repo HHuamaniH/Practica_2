@@ -1726,7 +1726,7 @@ namespace SIGOFCv3.Areas.General.Controllers
             }
             return Json(new { success, msj, data = htmlText }, JsonRequestBehavior.AllowGet);
         }
-        public ActionResult _Rpt_HistorialTHDetalle_SelectInf_v2(string COD_INFORME, string titular)
+        public ActionResult _Rpt_HistorialTHDetalle_SelectInf_v2(string COD_INFORME, string titular, string num_poa)
         {
             Log_RHistorial_TH oCLogica = new Log_RHistorial_TH();
             Ent_Reporte_Historial_TH oCEntidadTemp = new Ent_Reporte_Historial_TH();
@@ -1738,7 +1738,7 @@ namespace SIGOFCv3.Areas.General.Controllers
             {
                 oCEntidadTemp.BusValor = COD_INFORME;
                 oCEntidadTemp.BusCriterio = "INF_TITULAR_V2";
-                oCEntidadTemp.NUM_POA = 0;
+                oCEntidadTemp.NUM_POA = num_poa == null ? 0 : int.Parse(num_poa);
                 List<Ent_Reporte_Historial_TH> ListInfSupTh = new List<Ent_Reporte_Historial_TH>();
                 ListInfSupTh = oCLogica.Log_List_THDetalle_v2(oCEntidadTemp);
                 htmlText = this.Inf_Sup_TH_v3(ListInfSupTh, titular);
@@ -2187,7 +2187,7 @@ namespace SIGOFCv3.Areas.General.Controllers
                                 cadena.Append("<div class=bloqueFormContent2 > <div class=bloqueFormContent2LeftDoble >");
                                 cadena.Append("<div>Número de Resolución Directoral</div><div>:</div>");
                                 cadena.Append("</div>");
-                                cadena.Append("<div class=bloqueFormContent2Right > <div><p>" + oCEntidad_List[i].RD_INICIO + "</p></div> </div>");                                
+                                cadena.Append("<div class=bloqueFormContent2Right > <div><p>" + oCEntidad_List[i].RD_INICIO + "</p></div> </div>");
                                 cadena.Append(" </div>");
 
                                 cadena.Append("<div class=bloqueFormContent2 > <div class=bloqueFormContent2LeftDoble >");
@@ -3157,15 +3157,34 @@ namespace SIGOFCv3.Areas.General.Controllers
                         cadena.Append("<div class=bloqueFormContent2 > <div class=bloqueFormContent2LeftDoble >");
                         cadena.Append("<div>N° Informe Supervisión</div><div>:</div>");
                         cadena.Append("</div>");
-                        cadena.Append("<div class=bloqueFormContent2Right > <div> ");                   
+                        cadena.Append("<div class=bloqueFormContent2Right > <div> ");
                         cadena.Append(oCEntidad_List[i].NUMERO);
                         cadena.Append("</div></div>");
                         cadena.Append(" </div>");
                         cadena.Append("<div class=bloqueFormContent2 > <div class=bloqueFormContent2LeftDoble >");
-                        cadena.Append("<div>Supervisor</div><div>:</div>");
-                        cadena.Append("</div>");
-                        cadena.Append("<div class=bloqueFormContent2Right > <div> " + oCEntidad_List[i].Supervisor + " </div> </div>");
-                        cadena.Append(" </div>");
+                        cadena.Append("<div>Fecha de Inicio de la supervisión en campo</div><div>:</div></div>");
+                        cadena.Append("<div class=bloqueFormContent2Right > <div> " + oCEntidad_List[i].FECHA_SUPERVISION_INICIO + " </div> </div></div>");
+
+                        cadena.Append("<div class=bloqueFormContent2 > <div class=bloqueFormContent2LeftDoble >");
+                        cadena.Append("<div>Fecha de Término de la supervisión en campo</div><div>:</div></div>");
+                        cadena.Append("<div class=bloqueFormContent2Right > <div> " + oCEntidad_List[i].FECHA_SUPERVISION_FIN + " </div> </div></div>");
+
+                        cadena.Append("<div class=bloqueFormContent2 > <div class=bloqueFormContent2LeftDoble >");
+                        cadena.Append("<div>Regente encargado de la implementación</div><div>:</div></div>");
+                        cadena.Append("<div class=bloqueFormContent2Right > <div> " + oCEntidad_List[i].REGENTE_IMPLEMENTA + " </div> </div></div>");
+
+                        cadena.Append("<div class=bloqueFormContent2 > <div class=bloqueFormContent2LeftDoble >");
+                        cadena.Append("<div>Se archiva el informe</div><div>:</div></div>");
+                        cadena.Append("<div class=bloqueFormContent2Right > <div> " + oCEntidad_List[i].ARCHIVA_INFORME + " </div> </div></div>");
+
+                        cadena.Append("<div class=bloqueFormContent2 > <div class=bloqueFormContent2LeftDoble >");
+                        cadena.Append("<div>Supervisor</div><div>:</div></div>");
+                        cadena.Append("<div class=bloqueFormContent2Right > <div> " + oCEntidad_List[i].Supervisor + " </div> </div></div>");
+
+                        cadena.Append("<div class=bloqueFormContent2 > <div class=bloqueFormContent2LeftDoble >");
+                        cadena.Append("<div>Volumen injustificado</div><div>:</div></div>");
+                        cadena.Append("<div class=bloqueFormContent2Right > <div> " + oCEntidad_List[i].VOLUMEN_INJUSTIFICADO.ToString() + " </div> </div></div>");
+
                         cadena.Append("<div class=bloqueFormContent2 > <div class=bloqueFormContent2LeftDoble >");
                         cadena.Append("<div>Entidad que Superviso</div><div>:</div>");
                         cadena.Append("</div>");
@@ -3543,8 +3562,8 @@ namespace SIGOFCv3.Areas.General.Controllers
                                 cadena.Append("<div class=bloqueFormTitulo ><div>R.D. de Inicio</div></div>");
                                 cadena.Append("<div class=bloqueFormContent2 > <div class=bloqueFormContent2LeftDoble >");
                                 cadena.Append("<div>Número de Resolución Directoral</div><div>:</div>");
-                                cadena.Append("</div>");                                
-                                if (string.IsNullOrEmpty(oCEntidad_List[i].DOC_RDINICIO.Trim())|| oCEntidad_List[i].DOC_RDINICIO=="|")
+                                cadena.Append("</div>");
+                                if (string.IsNullOrEmpty(oCEntidad_List[i].DOC_RDINICIO.Trim()) || oCEntidad_List[i].DOC_RDINICIO == "|")
                                     cadena.Append("<div class=bloqueFormContent2Right > <div><p>" + oCEntidad_List[i].RD_INICIO + "</p></div> </div>");
                                 else
                                     cadena.Append("<div class=bloqueFormContent2Right > <div> <a href=\"javascript: void(0);\" onclick=\"_RtpTHDet_v2.fnDownloadResPOA(\'" + oCEntidad_List[i].DOC_RDINICIO + "\')\">" + oCEntidad_List[i].RD_INICIO + "</a> </div> </div>");
@@ -3624,6 +3643,12 @@ namespace SIGOFCv3.Areas.General.Controllers
                                 cadena.Append("<div>Con Causal de Caducidad</div><div>:</div>");
                                 cadena.Append("</div>");
                                 cadena.Append("<div class=bloqueFormContent2Right ><div>" + oCEntidad_List[i].CAUSAL_CADUCIDAD + "</div> </div>");
+                                cadena.Append(" </div>");
+
+                                cadena.Append("<div class=bloqueFormContent2 > <div class=bloqueFormContent2LeftDoble >");
+                                cadena.Append("<div>Con Información Falsa</div><div>:</div>");
+                                cadena.Append("</div>");
+                                cadena.Append("<div class=bloqueFormContent2Right ><div>" + oCEntidad_List[i].INF_FALSA_INEX + "</div> </div>");
                                 cadena.Append(" </div>");
 
                                 cadena.Append("<div class=bloqueFormTitulo ><div>Especies con volumen injustificado</div></div>");
@@ -3728,6 +3753,66 @@ namespace SIGOFCv3.Areas.General.Controllers
                                     cadena.Append("</tr>");
                                 }
                                 cadena.Append("</table><br/>");
+
+                                //Notificaciones de la resolución Directoral de Inicio de PAU
+                                cadena.Append("<div class=bloqueFormTitulo ><div>Notificaciones de la Resolución Directoral de Inicio de PAU</div></div>");
+                                cadena.Append("<table class=Grilla cellspain=0 style='" + styleSupTable + "' >");
+                                cadena.Append("<tr>");
+                                cadena.Append("<th class=tdcenter style=width:" + 5 + "% >");
+                                cadena.Append("N°");
+                                cadena.Append("</th>");
+                                cadena.Append("<th class=tdcenter style=width:" + 40 + "% >");
+                                cadena.Append("Nro Notificación");
+                                cadena.Append("</th>");
+                                cadena.Append("<th class=tdcenter style=width:" + 25 + "% >");
+                                cadena.Append("Fecha Notificación)");
+                                cadena.Append("</th>");
+                                cadena.Append("<th class=tdcenter style=width:" + 30 + "% >");
+                                cadena.Append("Tipo Notificación");
+                                cadena.Append("</th>");                                
+                                cadena.Append("</tr>");
+
+                                if (oCEntidad_List[0].ListNotRDINICIO.Count>0)
+                                {
+                                    for (int zy = 0; zy < oCEntidad_List[0].ListNotRDINICIO.Count; zy++)
+                                    {
+                                        cadena.Append("<tr>");
+                                        cadena.Append("<td class=tdcenterAli style=width:" + 5 + "% >");
+                                        cadena.Append(zy + 1);
+                                        cadena.Append("</td>");
+                                        cadena.Append("<td class=tdleftAli style=width:" + 40 + "% >");
+                                        cadena.Append(oCEntidad_List[0].ListNotRDINICIO[zy].NUMERO_NOTIFICACION);
+                                        cadena.Append("</td>");
+                                        cadena.Append("<td class=tdcenterAli style=width:" + 25 + "% >");
+                                        cadena.Append(oCEntidad_List[0].ListNotRDINICIO[zy].FECHA_NOTIFICA_TITULAR);
+                                        cadena.Append("</td>");
+                                        cadena.Append("<td class=tdcenterAli style=width:" + 30 + "% >");
+                                        cadena.Append(oCEntidad_List[0].ListNotRDINICIO[zy].TIPO_FISCALIZA);
+                                        cadena.Append("</td>");
+                                        cadena.Append("</tr>");
+                                    }
+                                }
+                                else
+                                {
+                                    cadena.Append("<tr>");
+                                    cadena.Append("<td class=tdcenterAli style=width:" + 5 + "% >");
+                                    cadena.Append("-");
+                                    cadena.Append("</td>");
+                                    cadena.Append("<td class=tdleftAli style=width:" + 40 + "% >");
+                                    cadena.Append("-");
+                                    cadena.Append("</td>");
+                                    cadena.Append("<td class=tdcenterAli style=width:" + 25 + "% >");
+                                    cadena.Append("-");
+                                    cadena.Append("</td>");
+                                    cadena.Append("<td class=tdcenterAli style=width:" + 30 + "% >");
+                                    cadena.Append("-");
+                                    cadena.Append("</td>");
+                                    cadena.Append("</tr>");
+                                }
+                                
+                                cadena.Append("</table><br/>");
+
+
                                 oCEntidad_List[i].NUM_TFFSINI = oCEntidad_List[i].NUM_TFFSINI ?? "";
                                 if (oCEntidad_List[i].NUM_TFFSINI.Trim() != "" && oCEntidad_List[i].NUM_TFFSINI != null)
                                 {
@@ -3741,9 +3826,21 @@ namespace SIGOFCv3.Areas.General.Controllers
                                     cadena.Append(" </div>");
 
                                     cadena.Append("<div class=bloqueFormContent2 > <div class=bloqueFormContent2LeftDoble >");
+                                    cadena.Append("<div>Fecha emisión</div><div>:</div>");
+                                    cadena.Append("</div>");
+                                    cadena.Append("<div class=bloqueFormContent2Right ><div>" + oCEntidad_List[i].FECHA_EMISION_RITFFS + "</div> </div>");
+                                    cadena.Append(" </div>");
+
+                                    cadena.Append("<div class=bloqueFormContent2 > <div class=bloqueFormContent2LeftDoble >");
+                                    cadena.Append("<div>Recurso de apelación</div><div>:</div>");
+                                    cadena.Append("</div>");
+                                    cadena.Append("<div class=bloqueFormContent2Right ><div>" + oCEntidad_List[i].APELACION_RITFFS + "</div> </div>");
+                                    cadena.Append(" </div>");
+
+                                    cadena.Append("<div class=bloqueFormContent2 > <div class=bloqueFormContent2LeftDoble >");
                                     cadena.Append("<div>Determina</div><div>:</div>");
                                     cadena.Append("</div>");
-                                    cadena.Append("<div class=bloqueFormContent2Right ><div>" + oCEntidad_List[i].DETERMINA + "</div> </div>");
+                                    cadena.Append("<div class=bloqueFormContent2Right ><div>" + oCEntidad_List[i].SENTIDO_RESOLUCION_RITFFS + "</div> </div>");
                                     cadena.Append(" </div>");
 
                                     cadena.Append("<div class=bloqueFormContent2 > <div class=bloqueFormContent2LeftDoble >");
@@ -3763,6 +3860,33 @@ namespace SIGOFCv3.Areas.General.Controllers
                                     cadena.Append("</div>");
                                     cadena.Append("<div class=bloqueFormContent2Right ><div>" + oCEntidad_List[i].ESTADO_TFFS + " </div> </div>");
                                     cadena.Append(" </div>");
+
+                                    cadena.Append("<div class=bloqueFormContent2 > <div class=bloqueFormContent2LeftDoble >");
+                                    cadena.Append("<div>Se confirma la resolución</div><div>:</div>");
+                                    cadena.Append("</div>");
+                                    cadena.Append("<div class=bloqueFormContent2Right ><div>" + oCEntidad_List[i].CONFIRM_RESOLUCION_RITFFS + " </div> </div>");
+                                    cadena.Append(" </div>");
+
+                                    cadena.Append("<div class=bloqueFormContent2 > <div class=bloqueFormContent2LeftDoble >");
+                                    cadena.Append("<div>Levanta caducidad</div><div>:</div>");
+                                    cadena.Append("</div>");
+                                    cadena.Append("<div class=bloqueFormContent2Right ><div>" + oCEntidad_List[i].LEVANTAMIENTO_RESOLUCION_RITFFS + " </div> </div>");
+                                    cadena.Append(" </div>");
+
+                                    cadena.Append("<div class=bloqueFormContent2 > <div class=bloqueFormContent2LeftDoble >");
+                                    cadena.Append("<div>Cambio de multa</div><div>:</div>");
+                                    cadena.Append("</div>");
+                                    cadena.Append("<div class=bloqueFormContent2Right ><div>" + oCEntidad_List[i].CAMBIO_MULTA_RITFFS + " </div> </div>");
+                                    cadena.Append(" </div>");
+
+                                    if (oCEntidad_List[i].CAMBIO_MULTA_RITFFS.ToUpper() == "SI")
+                                    {
+                                        cadena.Append("<div class=bloqueFormContent2 > <div class=bloqueFormContent2LeftDoble >");
+                                        cadena.Append("<div>Nuevo monto de multa UIT</div><div>:</div>");
+                                        cadena.Append("</div>");
+                                        cadena.Append("<div class=bloqueFormContent2Right ><div>" + oCEntidad_List[i].MULTA_RITFFS + " </div> </div>");
+                                        cadena.Append(" </div>");
+                                    }
                                 }
                             }
 
@@ -3780,7 +3904,7 @@ namespace SIGOFCv3.Areas.General.Controllers
 
                                 cadena.Append("<div class=bloqueFormContent2 > <div class=bloqueFormContent2LeftDoble >");
                                 cadena.Append("<div>Número de Resolución Directoral</div><div>:</div>");
-                                cadena.Append("</div>");                                
+                                cadena.Append("</div>");
                                 if (string.IsNullOrEmpty(oCEntidad_List[i].DOC_RDTERMINO.Trim()) || oCEntidad_List[i].DOC_RDTERMINO == "|")
                                     cadena.Append("<div class=bloqueFormContent2Right ><div>" + oCEntidad_List[i].RD_TERMINO + "</div> </div>");
                                 else
@@ -3800,9 +3924,39 @@ namespace SIGOFCv3.Areas.General.Controllers
                                 cadena.Append(" </div>");
 
                                 cadena.Append("<div class=bloqueFormContent2 > <div class=bloqueFormContent2LeftDoble >");
+                                cadena.Append("<div>Multa</div><div>:</div>");
+                                cadena.Append("</div>");
+                                cadena.Append("<div class=bloqueFormContent2Right ><div>" + oCEntidad_List[i].MULTA_RDTERMINO + "</div> </div>");
+                                cadena.Append(" </div>");
+
+                                cadena.Append("<div class=bloqueFormContent2 > <div class=bloqueFormContent2LeftDoble >");
                                 cadena.Append("<div>Monto de la multa</div><div>:</div>");
                                 cadena.Append("</div>");
                                 cadena.Append("<div class=bloqueFormContent2Right ><div>" + oCEntidad_List[i].MULTA_MONTO + " (UIT) </div> </div>");
+                                cadena.Append(" </div>");
+
+                                cadena.Append("<div class=bloqueFormContent2 > <div class=bloqueFormContent2LeftDoble >");
+                                cadena.Append("<div>Caducidad</div><div>:</div>");
+                                cadena.Append("</div>");
+                                cadena.Append("<div class=bloqueFormContent2Right ><div>" + oCEntidad_List[i].CADUCIDAD_RDTERMINO + " (UIT) </div> </div>");
+                                cadena.Append(" </div>");
+
+                                cadena.Append("<div class=bloqueFormContent2 > <div class=bloqueFormContent2LeftDoble >");
+                                cadena.Append("<div>Gravedad de daño</div><div>:</div>");
+                                cadena.Append("</div>");
+                                cadena.Append("<div class=bloqueFormContent2Right ><div>" + oCEntidad_List[i].GRAVEDAD_DANIO_RDTERMINO + " (UIT) </div> </div>");
+                                cadena.Append(" </div>");
+
+                                cadena.Append("<div class=bloqueFormContent2 > <div class=bloqueFormContent2LeftDoble >");
+                                cadena.Append("<div>Medidas complementarias</div><div>:</div>");
+                                cadena.Append("</div>");
+                                cadena.Append("<div class=bloqueFormContent2Right ><div>" + oCEntidad_List[i].MEDIDAS_CAUTELARES_RDTERMINO + " (UIT) </div> </div>");
+                                cadena.Append(" </div>");
+
+                                cadena.Append("<div class=bloqueFormContent2 > <div class=bloqueFormContent2LeftDoble >");
+                                cadena.Append("<div>Medidas correctivas</div><div>:</div>");
+                                cadena.Append("</div>");
+                                cadena.Append("<div class=bloqueFormContent2Right ><div>" + oCEntidad_List[i].MEDIDAS_CORRECTIVAS_RDTERMINO + " (UIT) </div> </div>");
                                 cadena.Append(" </div>");
 
                                 cadena.Append("<div class=bloqueFormContent2 > <div class=bloqueFormContent2LeftDoble >");
@@ -4042,6 +4196,65 @@ namespace SIGOFCv3.Areas.General.Controllers
                                     cadena.Append("</tr>");
                                 }
                                 cadena.Append("</table><br/>");
+
+                                //Notificaciones de la resolución Directoral de Termino de PAU
+                                cadena.Append("<div class=bloqueFormTitulo ><div>Notificaciones de la Resolución Directoral de Término de PAU</div></div>");
+                                cadena.Append("<table class=Grilla cellspain=0 style='" + styleSupTable + "' >");
+                                cadena.Append("<tr>");
+                                cadena.Append("<th class=tdcenter style=width:" + 5 + "% >");
+                                cadena.Append("N°");
+                                cadena.Append("</th>");
+                                cadena.Append("<th class=tdcenter style=width:" + 40 + "% >");
+                                cadena.Append("Nro Notificación");
+                                cadena.Append("</th>");
+                                cadena.Append("<th class=tdcenter style=width:" + 25 + "% >");
+                                cadena.Append("Fecha Notificación)");
+                                cadena.Append("</th>");
+                                cadena.Append("<th class=tdcenter style=width:" + 30 + "% >");
+                                cadena.Append("Tipo Notificación");
+                                cadena.Append("</th>");
+                                cadena.Append("</tr>");
+
+                                if (oCEntidad_List[0].ListNotRDTERMINO.Count > 0)
+                                {
+                                    for (int zy = 0; zy < oCEntidad_List[0].ListNotRDTERMINO.Count; zy++)
+                                    {
+                                        cadena.Append("<tr>");
+                                        cadena.Append("<td class=tdcenterAli style=width:" + 5 + "% >");
+                                        cadena.Append(zy + 1);
+                                        cadena.Append("</td>");
+                                        cadena.Append("<td class=tdleftAli style=width:" + 40 + "% >");
+                                        cadena.Append(oCEntidad_List[0].ListNotRDTERMINO[zy].NUMERO_NOTIFICACION);
+                                        cadena.Append("</td>");
+                                        cadena.Append("<td class=tdcenterAli style=width:" + 25 + "% >");
+                                        cadena.Append(oCEntidad_List[0].ListNotRDTERMINO[zy].FECHA_NOTIFICA_TITULAR);
+                                        cadena.Append("</td>");
+                                        cadena.Append("<td class=tdcenterAli style=width:" + 30 + "% >");
+                                        cadena.Append(oCEntidad_List[0].ListNotRDTERMINO[zy].TIPO_FISCALIZA);
+                                        cadena.Append("</td>");
+                                        cadena.Append("</tr>");
+                                    }
+                                }
+                                else
+                                {
+                                    cadena.Append("<tr>");
+                                    cadena.Append("<td class=tdcenterAli style=width:" + 5 + "% >");
+                                    cadena.Append("-");
+                                    cadena.Append("</td>");
+                                    cadena.Append("<td class=tdleftAli style=width:" + 40 + "% >");
+                                    cadena.Append("-");
+                                    cadena.Append("</td>");
+                                    cadena.Append("<td class=tdcenterAli style=width:" + 25 + "% >");
+                                    cadena.Append("-");
+                                    cadena.Append("</td>");
+                                    cadena.Append("<td class=tdcenterAli style=width:" + 30 + "% >");
+                                    cadena.Append("-");
+                                    cadena.Append("</td>");
+                                    cadena.Append("</tr>");
+                                }
+
+                                cadena.Append("</table><br/>");
+
                                 oCEntidad_List[i].NUM_TFFSTER = oCEntidad_List[i].NUM_TFFSTER ?? "";
                                 if (oCEntidad_List[i].NUM_TFFSTER.Trim() != "")
                                 {
@@ -4052,6 +4265,18 @@ namespace SIGOFCv3.Areas.General.Controllers
                                     cadena.Append("<div>Número de Resolución TFFS</div><div>:</div>");
                                     cadena.Append("</div>");
                                     cadena.Append("<div class=bloqueFormContent2Right ><div><p>" + oCEntidad_List[i].NUM_TFFSTER + "</p></div> </div>");
+                                    cadena.Append(" </div>");
+
+                                    cadena.Append("<div class=bloqueFormContent2 > <div class=bloqueFormContent2LeftDoble >");
+                                    cadena.Append("<div>Fecha emisión</div><div>:</div>");
+                                    cadena.Append("</div>");
+                                    cadena.Append("<div class=bloqueFormContent2Right ><div>" + oCEntidad_List[i].FECHA_EMISION_RTTFFS + "</div> </div>");
+                                    cadena.Append(" </div>");
+
+                                    cadena.Append("<div class=bloqueFormContent2 > <div class=bloqueFormContent2LeftDoble >");
+                                    cadena.Append("<div>Recurso de apelación</div><div>:</div>");
+                                    cadena.Append("</div>");
+                                    cadena.Append("<div class=bloqueFormContent2Right ><div>" + oCEntidad_List[i].APELACION_RTTFFS + "</div> </div>");
                                     cadena.Append(" </div>");
 
                                     cadena.Append("<div class=bloqueFormContent2 > <div class=bloqueFormContent2LeftDoble >");
@@ -4077,6 +4302,34 @@ namespace SIGOFCv3.Areas.General.Controllers
                                     cadena.Append("</div>");
                                     cadena.Append("<div class=bloqueFormContent2Right ><div>" + oCEntidad_List[i].ESTADO_TFFSTER + " </div> </div>");
                                     cadena.Append(" </div>");
+
+                                    cadena.Append("<div class=bloqueFormContent2 > <div class=bloqueFormContent2LeftDoble >");
+                                    cadena.Append("<div>Se confirma la resolución</div><div>:</div>");
+                                    cadena.Append("</div>");
+                                    cadena.Append("<div class=bloqueFormContent2Right ><div>" + oCEntidad_List[i].CONFIRM_RESOLUCION_RTTFFS + " </div> </div>");
+                                    cadena.Append(" </div>");
+
+                                    cadena.Append("<div class=bloqueFormContent2 > <div class=bloqueFormContent2LeftDoble >");
+                                    cadena.Append("<div>Levanta caducidad</div><div>:</div>");
+                                    cadena.Append("</div>");
+                                    cadena.Append("<div class=bloqueFormContent2Right ><div>" + oCEntidad_List[i].LEVANTAMIENTO_RESOLUCION_RTTFFS + " </div> </div>");
+                                    cadena.Append(" </div>");
+
+                                    cadena.Append("<div class=bloqueFormContent2 > <div class=bloqueFormContent2LeftDoble >");
+                                    cadena.Append("<div>Cambio de multa</div><div>:</div>");
+                                    cadena.Append("</div>");
+                                    cadena.Append("<div class=bloqueFormContent2Right ><div>" + oCEntidad_List[i].CAMBIO_MULTA_RTTFFS + " </div> </div>");
+                                    cadena.Append(" </div>");
+
+                                    if (oCEntidad_List[i].CAMBIO_MULTA_RTTFFS.ToUpper() == "SI")
+                                    {
+                                        cadena.Append("<div class=bloqueFormContent2 > <div class=bloqueFormContent2LeftDoble >");
+                                        cadena.Append("<div>Nuevo monto de multa UIT</div><div>:</div>");
+                                        cadena.Append("</div>");
+                                        cadena.Append("<div class=bloqueFormContent2Right ><div>" + oCEntidad_List[i].MULTA_RTTFFS + " </div> </div>");
+                                        cadena.Append(" </div>");
+                                    }
+
                                 }
                             }
                             oCEntidad_List[i].RECONS_COD_RESODIREC = oCEntidad_List[i].RECONS_COD_RESODIREC ?? "";
@@ -4087,7 +4340,7 @@ namespace SIGOFCv3.Areas.General.Controllers
 
                                 cadena.Append("<div class=bloqueFormContent2 > <div class=bloqueFormContent2LeftDoble >");
                                 cadena.Append("<div>Número de Resolución Directoral</div><div>:</div>");
-                                cadena.Append("</div>");                                
+                                cadena.Append("</div>");
                                 if (string.IsNullOrEmpty(oCEntidad_List[i].DOC_RDRECONSIDERACION.Trim()) || oCEntidad_List[i].DOC_RDRECONSIDERACION == "|")
                                     cadena.Append("<div class=bloqueFormContent2Right ><div>" + oCEntidad_List[i].RECONS_NUM_RESOLUCION + "</div> </div>");
                                 else
@@ -4101,6 +4354,12 @@ namespace SIGOFCv3.Areas.General.Controllers
                                 cadena.Append("</div>");
 
                                 cadena.Append("<div class=bloqueFormTitulo ><div>Determinación</div></div>");
+                                cadena.Append("<div class=bloqueFormContent2 > <div class=bloqueFormContent2LeftDoble >");
+                                cadena.Append("<div>Inadmisible</div><div>:</div>");
+                                cadena.Append("</div>");
+                                cadena.Append("<div class=bloqueFormContent2Right ><div>" + oCEntidad_List[i].RECONS_INADMISIBLE + "</div> </div>");
+                                cadena.Append("</div>");
+
                                 cadena.Append("<div class=bloqueFormContent2 > <div class=bloqueFormContent2LeftDoble >");
                                 cadena.Append("<div>Improcedente</div><div>:</div>");
                                 cadena.Append("</div>");
@@ -4132,10 +4391,20 @@ namespace SIGOFCv3.Areas.General.Controllers
                                 cadena.Append(" </div>");
 
                                 cadena.Append("<div class=bloqueFormContent2 > <div class=bloqueFormContent2LeftDoble >");
-                                cadena.Append("<div>Cambio de monto de multa</div><div>:</div>");
+                                cadena.Append("<div>Cambio de multa</div><div>:</div>");
                                 cadena.Append("</div>");
-                                cadena.Append("<div class=bloqueFormContent2Right ><div>" + oCEntidad_List[i].RECONS_CAMBIO_MULTA + "</div><div>" + oCEntidad_List[i].RECONS_MONTO + "</div></div>");
+                                cadena.Append("<div class=bloqueFormContent2Right ><div>" + oCEntidad_List[i].RECONS_CAMBIO_MULTA + "</div>");
                                 cadena.Append(" </div>");
+
+                                if (oCEntidad_List[i].RECONS_CAMBIO_MULTA.ToUpper() == "SI")
+                                {
+                                    cadena.Append("<div class=bloqueFormContent2 > <div class=bloqueFormContent2LeftDoble >");
+                                    cadena.Append("<div>Nuevo monto de multa UIT</div><div>:</div>");
+                                    cadena.Append("</div>");
+                                    cadena.Append("<div class=bloqueFormContent2Right ><div>" + oCEntidad_List[i].RECONS_MONTO + "</div></div>");
+                                    cadena.Append(" </div>");
+                                }
+
                                 oCEntidad_List[i].NUM_TFFSREC = oCEntidad_List[i].NUM_TFFSREC ?? "";
                                 if (oCEntidad_List[i].NUM_TFFSREC.Trim() != "")
                                 {
@@ -4146,6 +4415,18 @@ namespace SIGOFCv3.Areas.General.Controllers
                                     cadena.Append("<div>Número de Resolución TFFS</div><div>:</div>");
                                     cadena.Append("</div>");
                                     cadena.Append("<div class=bloqueFormContent2Right ><div><p>" + oCEntidad_List[i].NUM_TFFSREC + "</p></div> </div>");
+                                    cadena.Append(" </div>");
+
+                                    cadena.Append("<div class=bloqueFormContent2 > <div class=bloqueFormContent2LeftDoble >");
+                                    cadena.Append("<div>Fecha emisión</div><div>:</div>");
+                                    cadena.Append("</div>");
+                                    cadena.Append("<div class=bloqueFormContent2Right ><div>" + oCEntidad_List[i].FECHA_EMISION_RRTFFS + "</div> </div>");
+                                    cadena.Append(" </div>");
+
+                                    cadena.Append("<div class=bloqueFormContent2 > <div class=bloqueFormContent2LeftDoble >");
+                                    cadena.Append("<div>Recurso de apelación</div><div>:</div>");
+                                    cadena.Append("</div>");
+                                    cadena.Append("<div class=bloqueFormContent2Right ><div>" + oCEntidad_List[i].APELACION_RRTFFS + "</div> </div>");
                                     cadena.Append(" </div>");
 
                                     cadena.Append("<div class=bloqueFormContent2 > <div class=bloqueFormContent2LeftDoble >");
@@ -4171,6 +4452,33 @@ namespace SIGOFCv3.Areas.General.Controllers
                                     cadena.Append("</div>");
                                     cadena.Append("<div class=bloqueFormContent2Right ><div>" + oCEntidad_List[i].ESTADO_TFFSREC + " </div> </div>");
                                     cadena.Append(" </div>");
+
+                                    cadena.Append("<div class=bloqueFormContent2 > <div class=bloqueFormContent2LeftDoble >");
+                                    cadena.Append("<div>Se confirma la resolución</div><div>:</div>");
+                                    cadena.Append("</div>");
+                                    cadena.Append("<div class=bloqueFormContent2Right ><div>" + oCEntidad_List[i].CONFIRM_RESOLUCION_RRTFFS + " </div> </div>");
+                                    cadena.Append(" </div>");
+
+                                    cadena.Append("<div class=bloqueFormContent2 > <div class=bloqueFormContent2LeftDoble >");
+                                    cadena.Append("<div>Levanta caducidad</div><div>:</div>");
+                                    cadena.Append("</div>");
+                                    cadena.Append("<div class=bloqueFormContent2Right ><div>" + oCEntidad_List[i].LEVANTAMIENTO_RESOLUCION_RRTFFS + " </div> </div>");
+                                    cadena.Append(" </div>");
+
+                                    cadena.Append("<div class=bloqueFormContent2 > <div class=bloqueFormContent2LeftDoble >");
+                                    cadena.Append("<div>Cambio de multa</div><div>:</div>");
+                                    cadena.Append("</div>");
+                                    cadena.Append("<div class=bloqueFormContent2Right ><div>" + oCEntidad_List[i].CAMBIO_MULTA_RRTFFS + " </div> </div>");
+                                    cadena.Append(" </div>");
+
+                                    if (oCEntidad_List[i].CAMBIO_MULTA_RRTFFS.ToUpper() == "SI")
+                                    {
+                                        cadena.Append("<div class=bloqueFormContent2 > <div class=bloqueFormContent2LeftDoble >");
+                                        cadena.Append("<div>Nuevo monto de multa UIT</div><div>:</div>");
+                                        cadena.Append("</div>");
+                                        cadena.Append("<div class=bloqueFormContent2Right ><div>" + oCEntidad_List[i].MULTA_RRTFFS + " </div> </div>");
+                                        cadena.Append(" </div>");
+                                    }
                                 }
                             }
                             oCEntidad_List[i].RECT_COD_RESODIREC = oCEntidad_List[i].RECT_COD_RESODIREC ?? "";
@@ -4181,7 +4489,7 @@ namespace SIGOFCv3.Areas.General.Controllers
 
                                 cadena.Append("<div class=bloqueFormContent2 > <div class=bloqueFormContent2LeftDoble >");
                                 cadena.Append("<div>Número de Resolución Directoral</div><div>:</div>");
-                                cadena.Append("</div>");                                
+                                cadena.Append("</div>");
                                 if (string.IsNullOrEmpty(oCEntidad_List[i].DOC_RDRECTIFICACION.Trim()) || oCEntidad_List[i].DOC_RDRECTIFICACION == "|")
                                     cadena.Append("<div class=bloqueFormContent2Right ><div>" + oCEntidad_List[i].RECT_NUM_RESOLUCION + "</div> </div>");
                                 else
@@ -4227,7 +4535,7 @@ namespace SIGOFCv3.Areas.General.Controllers
 
                                 cadena.Append("<div class=bloqueFormContent2 > <div class=bloqueFormContent2LeftDoble >");
                                 cadena.Append("<div>Número de Resolución Directoral</div><div>:</div>");
-                                cadena.Append("</div>");                                
+                                cadena.Append("</div>");
                                 if (string.IsNullOrEmpty(oCEntidad_List[i].DOC_RDAMPLIACION.Trim()) || oCEntidad_List[i].DOC_RDAMPLIACION == "|")
                                     cadena.Append("<div class=bloqueFormContent2Right ><div>" + oCEntidad_List[i].AMP_NUM_RESOLUCION + "</div> </div>");
                                 else
@@ -4272,7 +4580,7 @@ namespace SIGOFCv3.Areas.General.Controllers
                                 cadena.Append("<div class=bloqueFormTitulo ><div>R.D. Otros</div></div>");
                                 cadena.Append("<div class=bloqueFormContent2 > <div class=bloqueFormContent2LeftDoble >");
                                 cadena.Append("<div>Número de Resolución Directoral</div><div>:</div>");
-                                cadena.Append("</div>");                                
+                                cadena.Append("</div>");
                                 if (string.IsNullOrEmpty(oCEntidad_List[i].DOC_RDOTROS.Trim()) || oCEntidad_List[i].DOC_RDOTROS == "|")
                                     cadena.Append("<div class=bloqueFormContent2Right ><div>" + oCEntidad_List[i].OTROS_NUM_RESOLUCION + "</div> </div>");
                                 else
@@ -4375,7 +4683,7 @@ namespace SIGOFCv3.Areas.General.Controllers
                                 cadena.Append("<div class=bloqueFormTitulo ><div>R.D.  Caducidad por Renuncia del Titular</div></div>");
                                 cadena.Append("<div class=bloqueFormContent2 > <div class=bloqueFormContent2LeftDoble >");
                                 cadena.Append("<div>Número de Resolución Directoral</div><div>:</div>");
-                                cadena.Append("</div>");                                
+                                cadena.Append("</div>");
                                 if (string.IsNullOrEmpty(oCEntidad_List[i].DOC_RDCADUCIDAD.Trim()) || oCEntidad_List[i].DOC_RDCADUCIDAD == "|")
                                     cadena.Append("<div class=bloqueFormContent2Right ><div>" + oCEntidad_List[i].CAD_NUM_RESOLUCION + "</div> </div>");
                                 else
@@ -4588,15 +4896,21 @@ namespace SIGOFCv3.Areas.General.Controllers
                 cadena.Append("</div>");
                 cadena.Append("<div class=bloqueFormContent2Right > <div> " + (string.IsNullOrEmpty(oCEntidad_List.FIN_VIGENCIA) ? "-" : oCEntidad_List.FIN_VIGENCIA) + " </div> </div>");
                 cadena.Append(" </div>");
+
+                cadena.Append("<div class=bloqueFormContent2 > <div class=bloqueFormContent2LeftDoble >");
+                cadena.Append("<div>Consultor/Regente</div><div>:</div>");
+                cadena.Append("</div>");
+                cadena.Append("<div class=bloqueFormContent2Right > <div> " + oCEntidad_List.consultor + " </div> </div>");
+                cadena.Append(" </div>");
                 cadena.Append("<div class=bloqueFormTitulo ><div> Lista de especies aprobadas en la resolución</div></div>");
-                String styleSupTable = "width: 95% ; font-size:12; border: 1px solid #ddd; border-collapse: collapse;";
+                String stylePoaTable = "width: 95% ; font-size:12; border: 1px solid #ddd; border-collapse: collapse;";
 
                 if (oCEntidad_List.ListPOATH.Count > 0)
                 {
                     /**
-                     * aqui creamos la tabla para los arboles supervisados
+                     * aqui creamos la tabla Lista de Especies
                      */
-                    cadena.Append("<table class=Grilla cellspacin=0 style='" + styleSupTable + "' >");
+                    cadena.Append("<table class=Grilla cellspacin=0 style='" + stylePoaTable + "' >");
                     cadena.Append("<tr>");
                     cadena.Append("<th class=tdcenter style=width:" + 30 + "% >");
                     cadena.Append("Nombre común");
@@ -4637,13 +4951,83 @@ namespace SIGOFCv3.Areas.General.Controllers
                         cadena.Append("</td>");
                         cadena.Append("</tr>");
                     }
-                    list_inf = cadena.ToString();
+                    cadena.Append("</table>");
                 }
                 else
                 {
                     cadena.Append("<div>No se encontraron lista de especies aprobadas</div>");
                 }
 
+
+                cadena.Append("<div class=bloqueFormTitulo ><div> Balance de Extracción del " + oCEntidad_List.NUM_POA_STRING + "</div></div>");
+
+                cadena.Append("<div class=bloqueFormContent2 > <div class=bloqueFormContent2LeftDoble >");
+                cadena.Append("<div>Fecha de Emisión B. Extracción</div><div>:</div>");
+                cadena.Append("</div>");
+                cadena.Append("<div class=bloqueFormContent2Right > <div> " + oCEntidad_List.BEXTRACCION_FEMISION + " </div> </div>");
+                cadena.Append(" </div>");
+
+                String stylePoaBETable = "width: 95% ; font-size:12; border: 1px solid #ddd; border-collapse: collapse;";
+                if (oCEntidad_List.ListPOABalance.Count > 0)
+                {
+                    /**
+                     * aqui creamos la tabla Lista de Balance de Extracción
+                     */
+                    cadena.Append("<table class=Grilla cellspacin=0 style='" + stylePoaBETable + "' >");
+                    cadena.Append("<tr>");
+                    cadena.Append("<th class=tdcenter style=width:" + 5 + "% >");
+                    cadena.Append("N°");
+                    cadena.Append("</th>");
+                    cadena.Append("<th class=tdcenter style=width:" + 30 + "% >");
+                    cadena.Append("Especie");
+                    cadena.Append("</th>");
+                    cadena.Append("<th class=tdcenter style=width:" + 15 + "% >");
+                    cadena.Append("Total Árboles");
+                    cadena.Append("</th>");
+                    cadena.Append("<th class=tdcenter style=width:" + 20 + "% >");
+                    cadena.Append("Volumen autorizado (m3)");
+                    cadena.Append("</th>");
+                    cadena.Append("<th class=tdcenter style=width:" + 20 + "% >");
+                    cadena.Append("Volumen movilizado (m3)");
+                    cadena.Append("</th>");
+                    cadena.Append("<th class=tdcenter style=width:" + 10 + "% >");
+                    cadena.Append("Saldo");
+                    cadena.Append("</th>");
+                    cadena.Append("</th>");
+                    cadena.Append("</tr>");
+
+                    for (int x = 0; x < oCEntidad_List.ListPOABalance.Count; x++)
+                    {
+                        var item = oCEntidad_List.ListPOABalance[x];
+                        cadena.Append("<tr>");
+                        cadena.Append("<td class=tdleftAli style=width:" + 5 + "% >");
+                        cadena.Append((x + 1).ToString());
+                        cadena.Append("</td>");
+                        cadena.Append("<td class=tdleftAli style=width:" + 30 + "% >");
+                        cadena.Append(item.NOMBRE_CIENTIFICO + " | " + item.NOMBRE_COMUN);
+                        cadena.Append("</td>");
+                        cadena.Append("<td class=tdcenterAli style=width:" + 20 + "% >");
+                        cadena.Append(item.TOTAL_ARBOLES);
+                        cadena.Append("</td>");
+                        cadena.Append("<td class=tdcenterAli style=width:" + 10 + "% >");
+                        cadena.Append(item.VOLUMEN_AUTORIZADO);
+                        cadena.Append("</td>");
+                        cadena.Append("<td class=tdcenterAli style=width:" + 10 + "% >");
+                        cadena.Append(item.VOLUMEN_MOVILIZADO);
+                        cadena.Append("</td>");
+                        cadena.Append("<td class=tdcenterAli style=width:" + 10 + "% >");
+                        cadena.Append(item.SALDO);
+                        cadena.Append("</td>");
+                        cadena.Append("</tr>");
+                    }
+                    cadena.Append("</table>");
+                }
+                else
+                {
+                    cadena.Append("<div>No se encontraron Balance de Extracción</div>");
+                }
+
+                list_inf = cadena.ToString();
 
             }
             else

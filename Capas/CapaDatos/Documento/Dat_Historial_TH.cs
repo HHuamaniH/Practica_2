@@ -3417,10 +3417,11 @@ namespace CapaDatos.DOC
                     {
                         CEntidad oCampos2 = new CEntidad();
                         if (dr.HasRows)
-                        {                            
+                        {
                             while (dr.Read())
                             {
                                 //PARTE_DIARIO_DETALLE
+                                #region Detalle
                                 oCampos2 = new CEntidad();
                                 oCampos2.COD_INFORME = dr["COD_INFORME"].ToString();
                                 oCampos2.NUMERO = dr["NUMERO"].ToString(); //numero de informe
@@ -3429,8 +3430,16 @@ namespace CapaDatos.DOC
                                 oCampos2.Supervisor = dr["SUPERVISORES"].ToString();
                                 oCampos2.COD_DOCINFORME = dr["COD_DOCINFORME"].ToString(); // DOC SIADO INFORME
                                 oCampos2.OBSERVACIONES = dr["OBSERVACION"].ToString();
+                                oCampos2.FECHA_SUPERVISION_INICIO = dr["FECHA_SUPERVISION_INICIO"].ToString();
+                                oCampos2.FECHA_SUPERVISION_FIN = dr["FECHA_SUPERVISION_FIN"].ToString();
+                                oCampos2.REGENTE_IMPLEMENTA = dr["REGENTE_IMPLEMENTA"].ToString();
+                                oCampos2.ARCHIVA_INFORME = dr["ARCHIVA_INFORME"].ToString();
+                                oCampos2.SUPERVISOR = dr["SUPERVISOR"].ToString();
+                                oCampos2.VOLUMEN_INJUSTIFICADO = Decimal.Parse(dr["VOLUMEN_INJUSTIFICADO"].ToString());
+                                #endregion
 
                                 // R.D. INICIO
+                                #region R.D. INICIO
                                 oCampos2.COD_RESODIREC_Inicio = dr["COD_RDINICIO"].ToString();
                                 oCampos2.DOC_RDINICIO = dr["DOC_SIADO_RDINICIO"].ToString();
                                 oCampos2.RD_INICIO = dr["RD_INICIO"].ToString();
@@ -3440,28 +3449,37 @@ namespace CapaDatos.DOC
                                 oCampos2.CAUSAL_CADUCIDAD = dr["RDINICIO_CAUSAL_CADUCIDAD"].ToString();
                                 oCampos2.INF_FALSA_DAS = dr["RDIMICIO_INF_FALSA_DAS"].ToString();
                                 oCampos2.INF_FALSA_DIF = dr["RDINICIO_INF_FALSA_DIF"].ToString();
-                                oCampos2.INF_FALSA_INEX = dr["RDINICIO_INF_FALSA_INEX"].ToString();
                                 oCampos2.INFRACCIONES = dr["RDINICIO_INFRACCIONES"].ToString();
                                 oCampos2.NUM_EXP = dr["NUM_EXPEDIENTE"].ToString();// numero de expediente de la rd
 
+                                oCampos2.INF_FALSA_INEX = dr["RDINICIO_INF_FALSA_INEX"].ToString();
+                                #endregion
 
                                 // R.D. TERMINO
+                                #region R.D. TERMINO
                                 oCampos2.COD_RESODIREC_Termino = dr["COD_RDTERMINO"].ToString();//codigo de la RD de termino
                                 oCampos2.RD_TERMINO = dr["RD_TERMINO"].ToString();
                                 oCampos2.DOC_RDTERMINO = dr["DOC_SIADO_RDTERMINO"].ToString();
                                 oCampos2.COD_DOCRDTERMINO = dr["COD_DOCRDTERMINO"].ToString();
                                 oCampos2.FECHA_RDTERMINO = dr["FECHA_RDTERMINO"].ToString();
                                 oCampos2.DETERMINACION_RDTERMINO = dr["DETTERMINA_RT"].ToString();
-                                oCampos2.CADUCIDAD_RDTERMINO = dr["CADUCIDAD_RT"].ToString();
-                                oCampos2.MULTA_RDTERMINO = dr["MULTA_RT"].ToString();
                                 oCampos2.MULTA_MONTO = dr["MONTO_RT"].ToString();
                                 oCampos2.SANCION_EXTITULAR_RDTERMINO = dr["EX_TITULARRT"].ToString();
                                 oCampos2.TITULAR = dr["EX_TITULAR"].ToString();
                                 oCampos2.INFRACCIONES_TER = dr["INFRACCIONES_RT"].ToString();
                                 oCampos2.ESTADO_ORIGEN = dr["ESTADO_PROCESO"].ToString();
 
-                                //cambios en el reporte historial titulo habilitante interno 15/11/2016
+                                oCampos2.MULTA_RDTERMINO = dr["MULTA_RT"].ToString();
+                                oCampos2.CADUCIDAD_RDTERMINO = dr["CADUCIDAD_RT"].ToString();
+                                oCampos2.GRAVEDAD_DANIO_RDTERMINO = dr["GRAVEDAD_DANIO_RDTERMINO"].ToString();
+                                oCampos2.MEDIDAS_CORRECTIVAS_RDTERMINO = dr["MEDIDAS_CORRECTIVAS_RDTERMINO"].ToString();
+                                oCampos2.MEDIDAS_CAUTELARES_RDTERMINO = dr["MEDIDAS_CAUTELARES_RDTERMINO"].ToString();
+
+                                //cambios en el reporte historial titulo habilitante interno 15/11/2016                                
+                                #endregion
+
                                 // R.D. reconsideracion
+                                #region R.D. reconsideracion
                                 oCampos2.RECONS_COD_RESODIREC = dr["COD_RDRECONSIDERACION"].ToString();
                                 oCampos2.DOC_RDRECONSIDERACION = dr["DOC_SIADO_RDRECONSIDERACION"].ToString();
                                 oCampos2.RECONS_NUM_RESOLUCION = dr["RD_RECONSIDERACION"].ToString();
@@ -3472,10 +3490,14 @@ namespace CapaDatos.DOC
                                 oCampos2.RECONS_FUNDADA_PARTE = dr["RDR_FUNDADA_PARTE"].ToString();
                                 oCampos2.RECONS_INFUNDADA = dr["RDR_INFUNDADO"].ToString();
                                 oCampos2.RECONS_LEVANTAR_CADUCIDAD = dr["RDR_LEVANTAR_CADUCIDAD"].ToString();
+
                                 oCampos2.RECONS_CAMBIO_MULTA = dr["RDRR_CAMBIOMULTA"].ToString();
                                 oCampos2.RECONS_MONTO = dr["RDRR_MULTA"].ToString();
+                                oCampos2.RECONS_INADMISIBLE = dr["RDRR_INADMISIBLE"].ToString();
+                                #endregion
 
                                 //R.D. RECTIFICACION
+                                #region R.D. RECTIFICACION
                                 oCampos2.RECT_COD_RESODIREC = dr["RECT_COD_RESODIREC"].ToString();
                                 oCampos2.DOC_RDRECTIFICACION = dr["DOC_SIADO_RDRECTIFICACION"].ToString();
                                 oCampos2.RECT_NUM_RESOLUCION = dr["RECT_NUM_RESOLUCION"].ToString();
@@ -3486,16 +3508,19 @@ namespace CapaDatos.DOC
                                 oCampos2.RECT_MONTO = dr["RECT_MONTO"].ToString();
                                 oCampos2.RECT_OTROS = dr["RECT_OTROS"].ToString();
                                 oCampos2.RECT_DESC_OTROS = dr["RECT_DESC_OTROS"].ToString();
+                                #endregion
 
                                 //R.D. ACUMULACION
+                                #region R.D. ACUMULACION
                                 oCampos2.ACUM_COD_RESODIREC = dr["ACUM_COD_RESODIREC"].ToString();
                                 oCampos2.DOC_RDACUMULACION = dr["DOC_SIADO_RDACUMULACION"].ToString();
                                 oCampos2.ACUM_NUM_RESOLUCION = dr["ACUM_NUM_RESOLUCION"].ToString();
                                 oCampos2.ACUM_COD_FCTIPO = dr["ACUM_COD_FCTIPO"].ToString();
                                 oCampos2.ACUM_FECHA_EMISION = dr["ACUM_FECHA_EMISION"].ToString();
                                 oCampos2.ACUM_DESCRIPCION = dr["ACUM_DESCRIPCION"].ToString();
-
-                                // R.D. AMPLIACION
+                                #endregion
+                                // R.D. AMPLIACION 
+                                #region R.D. AMPLIACION
                                 oCampos2.AMP_COD_RESODIREC = dr["AMP_COD_RESODIREC"].ToString();
                                 oCampos2.DOC_RDAMPLIACION = dr["DOC_SIADO_RDAMPLIACION"].ToString();
                                 oCampos2.AMP_NUM_RESOLUCION = dr["AMP_NUM_RESOLUCION"].ToString();
@@ -3504,8 +3529,11 @@ namespace CapaDatos.DOC
                                 oCampos2.AMP_OTRAS_INFRACCIONES = dr["AMP_OTRAS_INFRACCIONES"].ToString();
                                 oCampos2.AMP_POR_PLAZOS = dr["AMP_POR_PLAZOS"].ToString();
                                 oCampos2.AMP_OTROS = dr["AMP_OTROS"].ToString();
+                                #endregion
+
 
                                 // R.D. CADUCIDAD
+                                #region R.D. CADUCIDAD
                                 oCampos2.CAD_COD_RESODIREC = dr["CAD_COD_RESODIREC"].ToString();
                                 oCampos2.DOC_RDCADUCIDAD = dr["DOC_SIADO_RDCADUCIDAD"].ToString();
                                 oCampos2.CAD_NUM_RESOLUCION = dr["CAD_NUM_RESOLUCION"].ToString();
@@ -3540,8 +3568,11 @@ namespace CapaDatos.DOC
                                 oCampos2.ARCH_DEFICIENTE_NOT = dr["ARCH_DEFICIENTE_NOT"].ToString();
                                 oCampos2.ARCH_DEFICIENCIA_TEC = dr["ARCH_DEFICIENCIA_TEC"].ToString();
                                 oCampos2.OTROS = dr["OTROS"].ToString();
+                                #endregion
+
 
                                 // PROVEIDO
+                                #region R.D. PROVEIDO
                                 oCampos2.FECHA_PROVEIDO = dr["FECHA_PROVEIDO"].ToString();
                                 oCampos2.PROVEIDO = dr["TIPO_PROVEIDO"].ToString();
                                 // TRIBUNAL
@@ -3549,31 +3580,105 @@ namespace CapaDatos.DOC
                                 //oCampos2.DETERMINA_TFFSTER = dr["TFFS_DETERMINA"].ToString();
                                 //oCampos2.MOTIVO_TFFSTER = dr["TFFS_MOTIVO"].ToString();
                                 oCampos2.NUM_POA_STRING = dr["NOMBRE_POA"].ToString();
+                                #endregion
 
                                 // TRIBUNAL R.D. INICIO
+                                #region TRIBUNAL R.D. INICIO
                                 oCampos2.COD_TRIBUNAL_INI = dr["COD_TRIBUNAL_INI"].ToString();
                                 oCampos2.NUM_TFFSINI = dr["NUM_TFFSINI"].ToString();
                                 oCampos2.DETERMINA = dr["DETERMINA"].ToString();
                                 oCampos2.MOTIVO = dr["MOTIVO"].ToString();
                                 oCampos2.ESTADO_TFFS = dr["ESTADO_TFFS"].ToString();
+                                oCampos2.FECHA_EMISION_RITFFS = dr["FECHA_EMISION_RITFFS"].ToString();
+                                oCampos2.APELACION_RITFFS = dr["APELACION_RITFFS"].ToString();
+                                oCampos2.SENTIDO_RESOLUCION_RITFFS = dr["SENTIDO_RESOLUCION_RITFFS"].ToString();
+                                oCampos2.CONFIRM_RESOLUCION_RITFFS = dr["CONFIRM_RESOLUCION_RITFFS"].ToString();
+                                oCampos2.LEVANTAMIENTO_RESOLUCION_RITFFS = dr["LEVANTAMIENTO_RESOLUCION_RITFFS"].ToString();
+                                oCampos2.CAMBIO_MULTA_RITFFS = dr["CAMBIO_MULTA_RITFFS"].ToString();
+                                oCampos2.MULTA_RITFFS = Decimal.Parse(dr["MULTA_RITFFS"].ToString());
+                                oCampos2.ESTADO_PAU_RITFFS = dr["ESTADO_PAU_RITFFS"].ToString();
+                                #endregion
                                 //TRIBUNAL R.D. TERMINO
+                                #region TRIBUNAL R.D. TERMINO
                                 oCampos2.COD_TRIBUNAL_TER = dr["COD_TRIBUNAL_TER"].ToString();
                                 oCampos2.NUM_TFFSTER = dr["NUM_TFFSTER"].ToString();
                                 oCampos2.DETERMINA_TFFSTER = dr["DETERMINA_TFFSTER"].ToString();
                                 oCampos2.MOTIVO_TFFSTER = dr["MOTIVO_TFFSTER"].ToString();
                                 oCampos2.ESTADO_TFFSTER = dr["ESTADO_TFFSTER"].ToString();
+                                oCampos2.FECHA_EMISION_RTTFFS = dr["FECHA_EMISION_RTTFFS"].ToString();
+                                oCampos2.APELACION_RTTFFS = dr["APELACION_RTTFFS"].ToString();
+                                oCampos2.SENTIDO_RESOLUCION_RTTFFS = dr["SENTIDO_RESOLUCION_RTTFFS"].ToString();
+                                oCampos2.CONFIRM_RESOLUCION_RTTFFS = dr["CONFIRM_RESOLUCION_RTTFFS"].ToString();
+                                oCampos2.LEVANTAMIENTO_RESOLUCION_RTTFFS = dr["LEVANTAMIENTO_RESOLUCION_RTTFFS"].ToString();
+                                oCampos2.CAMBIO_MULTA_RTTFFS = dr["CAMBIO_MULTA_RTTFFS"].ToString();
+                                oCampos2.MULTA_RTTFFS = Decimal.Parse(dr["MULTA_RTTFFS"].ToString());
+                                oCampos2.ESTADO_PAU_RTTFFS = dr["ESTADO_PAU_RTTFFS"].ToString();
+                                #endregion
                                 //TRIBUNAL RECONSIDERACION
+                                #region TRIBUNAL RECONSIDERACION
                                 oCampos2.COD_TRIBUNAL_REC = dr["COD_TRIBUNAL_REC"].ToString();
                                 oCampos2.NUM_TFFSREC = dr["NUM_TFFSREC"].ToString();
                                 oCampos2.DETERMINA_TFFSREC = dr["DETERMINA_TFFSREC"].ToString();
                                 oCampos2.MOTIVO_TFFSREC = dr["MOTIVO_TFFSREC"].ToString();
                                 oCampos2.ESTADO_TFFSREC = dr["ESTADO_TFFSREC"].ToString();
-
+                                oCampos2.FECHA_EMISION_RRTFFS = dr["FECHA_EMISION_RRTFFS"].ToString();
+                                oCampos2.APELACION_RRTFFS = dr["APELACION_RRTFFS"].ToString();
+                                oCampos2.SENTIDO_RESOLUCION_RRTFFS = dr["SENTIDO_RESOLUCION_RRTFFS"].ToString();
+                                oCampos2.CONFIRM_RESOLUCION_RRTFFS = dr["CONFIRM_RESOLUCION_RRTFFS"].ToString();
+                                oCampos2.LEVANTAMIENTO_RESOLUCION_RRTFFS = dr["LEVANTAMIENTO_RESOLUCION_RRTFFS"].ToString();
+                                oCampos2.CAMBIO_MULTA_RRTFFS = dr["CAMBIO_MULTA_RRTFFS"].ToString();
+                                oCampos2.MULTA_RRTFFS = Decimal.Parse(dr["MULTA_RRTFFS"].ToString());
+                                oCampos2.ESTADO_PAU_RRTFFS = dr["ESTADO_PAU_RRTFFS"].ToString();
+                                #endregion
                                 List_Informe.Add(oCampos2);
                             }
                         }
 
                     }
+
+                    dr.NextResult();
+                    // Cuadro de Notificación de resolución Sub Directoral de Inicio de PAU
+                    #region Notificación de resolución Sub Directoral de Inicio de PAU
+                    if (dr.HasRows)
+                    {
+                        CEntidad oCampos1 = new CEntidad();
+                        List_Informe[0].ListNotRDINICIO = new List<CEntidad>();
+                        if (dr.HasRows)
+                        {
+                            while (dr.Read())
+                            {
+                                //PARTE_DIARIO_DETALLE
+                                oCampos1 = new CEntidad();
+                                oCampos1.NUMERO_NOTIFICACION = dr["NUMERO_NOTIFICACION"].ToString();
+                                oCampos1.FECHA_NOTIFICA_TITULAR = dr["FECHA_NOTIFICA_TITULAR"].ToString();
+                                oCampos1.TIPO_FISCALIZA = dr["TIPO_FISCALIZA"].ToString();                                
+                                List_Informe[0].ListNotRDINICIO.Add(oCampos1);
+                            }
+                        }
+                    }
+                    #endregion
+
+                    dr.NextResult();
+                    // Cuadro de Notificación de resolución Sub Directoral de Inicio de PAU
+                    #region Notificación de resolución Sub Directoral de Término de PAU
+                    if (dr.HasRows)
+                    {
+                        CEntidad oCampos1 = new CEntidad();
+                        List_Informe[0].ListNotRDTERMINO = new List<CEntidad>();
+                        if (dr.HasRows)
+                        {
+                            while (dr.Read())
+                            {
+                                //PARTE_DIARIO_DETALLE
+                                oCampos1 = new CEntidad();
+                                oCampos1.NUMERO_NOTIFICACION = dr["NUMERO_NOTIFICACION"].ToString();
+                                oCampos1.FECHA_NOTIFICA_TITULAR = dr["FECHA_NOTIFICA_TITULAR"].ToString();
+                                oCampos1.TIPO_FISCALIZA = dr["TIPO_FISCALIZA"].ToString();
+                                List_Informe[0].ListNotRDTERMINO.Add(oCampos1);
+                            }
+                        }
+                    }
+                    #endregion
 
                     return List_Informe;
                 }
@@ -3591,6 +3696,7 @@ namespace CapaDatos.DOC
             List<CEntidad> List_Informe = new List<CEntidad>();
             oCampos.ListINFORMETH = new List<CEntidad>();
             oCampos.ListPOATH = new List<CEntidad>();
+            oCampos.ListPOABalance = new List<CEntidad>();
             List<CEntidad> List_InfTitular = new List<CEntidad>();
 
             try
@@ -3608,7 +3714,7 @@ namespace CapaDatos.DOC
                                 //POA
                                 oCampos = new CEntidad();
                                 oCampos.COD_THABILITANTE = dr["COD_THABILITANTE"].ToString();
-                                oCampos.COD_DOCUMENTO_DIG = (string.IsNullOrEmpty(dr["DOC_SIADO_ARESOL"].ToString()) || string.IsNullOrEmpty(dr["DOC_ORIGEN_ARESOL"].ToString())) ? string.Empty : dr["DOC_SIADO_ARESOL"].ToString() + "|" + dr["DOC_ORIGEN_ARESOL"].ToString();                                
+                                oCampos.COD_DOCUMENTO_DIG = (string.IsNullOrEmpty(dr["DOC_SIADO_ARESOL"].ToString()) || string.IsNullOrEmpty(dr["DOC_ORIGEN_ARESOL"].ToString())) ? string.Empty : dr["DOC_SIADO_ARESOL"].ToString() + "|" + dr["DOC_ORIGEN_ARESOL"].ToString();
                                 oCampos.NUM_POA_STRING = dr["POA"].ToString();
                                 oCampos.AREA_O = Convert.ToDecimal(dr["AREA"]);
                                 oCampos.ARESOLUCION_NUM = dr["ARESOLUCION_NUM"].ToString();
@@ -3616,6 +3722,7 @@ namespace CapaDatos.DOC
                                 oCampos.INICIO_VIGENCIA = dr["INICIO_VIGENCIA"] == null ? string.Empty : dr["INICIO_VIGENCIA"].ToString();
                                 oCampos.FIN_VIGENCIA = dr["FIN_VIGENCIA"] == null ? string.Empty : dr["FIN_VIGENCIA"].ToString();
                                 oCampos.consultor = dr["CONSULTOR"].ToString();
+                                oCampos.BEXTRACCION_FEMISION = dr["BEXTRACCION_FEMISION"].ToString();
                             }
                         }
 
@@ -3639,6 +3746,32 @@ namespace CapaDatos.DOC
                                 oCampos1.NUMERO_ARBOLES = Convert.ToInt32(dr["NUM_ARBOLES"]);
                                 oCampos1.VOLUMEN_ARBOLES = Convert.ToInt32(dr["VOLUMEN_KILOGRAMOS"]);
                                 oCampos.ListPOATH.Add(oCampos1);
+                            }
+                        }
+                    }
+
+                    dr.NextResult();
+                    // BE POA
+                    if (dr.HasRows)
+                    {
+                        CEntidad oCampos1 = new CEntidad();
+                        oCampos.ListPOABalance = new List<CEntidad>();
+                        if (dr.HasRows)
+                        {
+                            while (dr.Read())
+                            {
+                                //PARTE_DIARIO_DETALLE
+                                oCampos1 = new CEntidad();
+                                oCampos1.NOMBRE_CIENTIFICO = dr["NOMBRE_CIENTIFICO"].ToString();
+                                oCampos1.NOMBRE_COMUN = dr["NOMBRE_COMUN"].ToString();
+                                oCampos1.DMC = Convert.ToInt32(dr["DMC"].ToString());
+                                oCampos1.TOTAL_ARBOLES = Convert.ToInt32(dr["TOTAL_ARBOLES"]);
+                                oCampos1.VOLUMEN_AUTORIZADO = Convert.ToDecimal(dr["VOLUMEN_AUTORIZADO"]);
+                                oCampos1.VOLUMEN_MOVILIZADO = Convert.ToDecimal(dr["VOLUMEN_MOVILIZADO"]);
+                                oCampos1.SALDO = Convert.ToDecimal(dr["SALDO"]);
+                                oCampos1.OBSERVACIONES = dr["OBSERVACION"].ToString();
+
+                                oCampos.ListPOABalance.Add(oCampos1);
                             }
                         }
                     }

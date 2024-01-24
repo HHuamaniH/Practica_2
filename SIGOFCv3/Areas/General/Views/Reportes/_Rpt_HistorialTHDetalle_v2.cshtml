@@ -173,7 +173,7 @@
             {
                 foreach (var item in Model.ListPOATH)
                 {
-                    string onclick = String.Format("_RtpTHDet_v2.fnResolucion('{0}')", item.COD_INFORME);
+                    string onclick = String.Format("_RtpTHDet_v2.fnResolucion('{0}','{1}')", item.COD_INFORME, item.NUM_POA);
                     string onclickPOA = String.Format("_RtpTHDet_v2.fnPOA('{0}','{1}','{2}')", item.NUM_POA, item.COD_THABILITANTE, item.COD_INFORME);
 
                     <tr>                        
@@ -319,12 +319,12 @@
             xhr.open('head', ss);
             xhr.send(null);
         },
-        fnResolucion: (cod_informe) => {
+        fnResolucion: (cod_informe,num_poa) => {
             let titular = $("#lblTitularTH").val();
             titular = titular == null ? "" : titular;
             let url = urlLocalSigo + "General/Reportes/_Rpt_HistorialTHDetalle_SelectInf_v2";
             let option = {
-                url: url, datos: { COD_INFORME: cod_informe, titular: titular }, type: 'GET'
+                url: url, datos: { COD_INFORME: cod_informe, titular: titular, num_poa: num_poa }, type: 'GET'
             };
             $("#divHistorialAdicional").html('');
             utilSigo.fnAjax(option, function (r) {
