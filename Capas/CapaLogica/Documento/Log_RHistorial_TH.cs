@@ -646,6 +646,21 @@ namespace CapaLogica.DOC
                 throw ex;
             }
         }
+        public List<CEntidad> Log_List_NotRD(CEntidad oCEntidad)
+        {
+            try
+            {
+                using (OracleConnection cn = new OracleConnection(CapaDatos.BDConexion.Conexion_Cadena_SIGO()))
+                {
+                    cn.Open();
+                    return oCDatos.ReporteListNotRD(cn, oCEntidad);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
         public CEntidad Log_List_THDetallePoa_v2(CEntidad oCEntidad)
         {
             try

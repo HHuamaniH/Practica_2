@@ -62,7 +62,7 @@
     </div>
     <div class="bloqueFormContent2">
         <div class="bloqueFormContent2LeftDoble">
-            <div>Fecha Término</div>
+            <div>Fecha término</div>
             <div>:</div>
         </div>
         <div class="bloqueFormContent2Right">
@@ -84,7 +84,7 @@
     </div>
     <div class="bloqueFormContent2">
         <div class="bloqueFormContent2LeftDoble">
-            <div>Secto</div>
+            <div>Sector</div>
             <div>:</div>
         </div>
         <div class="bloqueFormContent2Right">
@@ -139,7 +139,7 @@
     </div>
     <div class="bloqueFormContent2">
         <div class="bloqueFormContent2LeftDoble">
-            <div>Estado del título habilitante</div>
+            <div>Estado del Título Habilitante</div>
             <div>:</div>
         </div>
         <div class="bloqueFormContent2Right">
@@ -168,7 +168,7 @@
                 <th>N° INFORME</th>
             </tr>
         </thead>
-        <tbody>
+        <tbody>            
             @if (Model.ListPOATH.Count > 0)
             {
                 foreach (var item in Model.ListPOATH)
@@ -176,7 +176,7 @@
                     string onclick = String.Format("_RtpTHDet_v2.fnResolucion('{0}','{1}')", item.COD_INFORME, item.NUM_POA);
                     string onclickPOA = String.Format("_RtpTHDet_v2.fnPOA('{0}','{1}','{2}')", item.NUM_POA, item.COD_THABILITANTE, item.COD_INFORME);
 
-                    <tr>                        
+                    <tr>
                         <td><a href="javascript: void(0);" onclick="@onclickPOA">@item.NUM_POA_STRING</a></td>
                         <td>@item.ZAFRA</td>
                         <td>@item.ARESOLUCION_NUM</td>

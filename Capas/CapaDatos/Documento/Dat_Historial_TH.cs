@@ -3463,6 +3463,7 @@ namespace CapaDatos.DOC
                                 oCampos2.COD_DOCRDTERMINO = dr["COD_DOCRDTERMINO"].ToString();
                                 oCampos2.FECHA_RDTERMINO = dr["FECHA_RDTERMINO"].ToString();
                                 oCampos2.DETERMINACION_RDTERMINO = dr["DETTERMINA_RT"].ToString();
+                                oCampos2.AMONESTACION_RT = dr["AMONESTACION_RT"].ToString();
                                 oCampos2.MULTA_MONTO = dr["MONTO_RT"].ToString();
                                 oCampos2.SANCION_EXTITULAR_RDTERMINO = dr["EX_TITULARRT"].ToString();
                                 oCampos2.TITULAR = dr["EX_TITULAR"].ToString();
@@ -3484,7 +3485,7 @@ namespace CapaDatos.DOC
                                 oCampos2.DOC_RDRECONSIDERACION = dr["DOC_SIADO_RDRECONSIDERACION"].ToString();
                                 oCampos2.RECONS_NUM_RESOLUCION = dr["RD_RECONSIDERACION"].ToString();
                                 oCampos2.DOC_RECONS = dr["COD_DOCRDRECONS"].ToString();
-                                oCampos2.RECONS_RD_FECHA = dr["FECHA_RDRECONS"].ToString();
+                                oCampos2.FECHA_RDRECONS = dr["FECHA_RDRECONS"].ToString();
                                 oCampos2.RECONS_IMPROCEDENTE = dr["RDR_IMPROCEDENTE"].ToString();
                                 oCampos2.RECONS_FUNDADA = dr["RDR_FUNDADA"].ToString();
                                 oCampos2.RECONS_FUNDADA_PARTE = dr["RDR_FUNDADA_PARTE"].ToString();
@@ -3597,6 +3598,7 @@ namespace CapaDatos.DOC
                                 oCampos2.CAMBIO_MULTA_RITFFS = dr["CAMBIO_MULTA_RITFFS"].ToString();
                                 oCampos2.MULTA_RITFFS = Decimal.Parse(dr["MULTA_RITFFS"].ToString());
                                 oCampos2.ESTADO_PAU_RITFFS = dr["ESTADO_PAU_RITFFS"].ToString();
+                                oCampos2.DOC_SIADO_RITFFS = dr["DOC_SIADO_RITFFS"].ToString();
                                 #endregion
                                 //TRIBUNAL R.D. TERMINO
                                 #region TRIBUNAL R.D. TERMINO
@@ -3613,6 +3615,7 @@ namespace CapaDatos.DOC
                                 oCampos2.CAMBIO_MULTA_RTTFFS = dr["CAMBIO_MULTA_RTTFFS"].ToString();
                                 oCampos2.MULTA_RTTFFS = Decimal.Parse(dr["MULTA_RTTFFS"].ToString());
                                 oCampos2.ESTADO_PAU_RTTFFS = dr["ESTADO_PAU_RTTFFS"].ToString();
+                                oCampos2.DOC_SIADO_RTTFFS = dr["DOC_SIADO_RTTFFS"].ToString();
                                 #endregion
                                 //TRIBUNAL RECONSIDERACION
                                 #region TRIBUNAL RECONSIDERACION
@@ -3629,6 +3632,7 @@ namespace CapaDatos.DOC
                                 oCampos2.CAMBIO_MULTA_RRTFFS = dr["CAMBIO_MULTA_RRTFFS"].ToString();
                                 oCampos2.MULTA_RRTFFS = Decimal.Parse(dr["MULTA_RRTFFS"].ToString());
                                 oCampos2.ESTADO_PAU_RRTFFS = dr["ESTADO_PAU_RRTFFS"].ToString();
+                                oCampos2.DOC_SIADO_RRTFFS = dr["DOC_SIADO_RRTFFS"].ToString();
                                 #endregion
                                 List_Informe.Add(oCampos2);
                             }
@@ -3637,48 +3641,30 @@ namespace CapaDatos.DOC
                     }
 
                     dr.NextResult();
-                    // Cuadro de Notificación de resolución Sub Directoral de Inicio de PAU
-                    #region Notificación de resolución Sub Directoral de Inicio de PAU
+                    // Volumen Analizado en la Supervisión
+                    #region Volumen Analizado en la Supervisión
                     if (dr.HasRows)
                     {
                         CEntidad oCampos1 = new CEntidad();
-                        List_Informe[0].ListNotRDINICIO = new List<CEntidad>();
+                        List_Informe[0].ListVolumenAnalizado = new List<CEntidad>();
                         if (dr.HasRows)
                         {
                             while (dr.Read())
                             {
-                                //PARTE_DIARIO_DETALLE
                                 oCampos1 = new CEntidad();
-                                oCampos1.NUMERO_NOTIFICACION = dr["NUMERO_NOTIFICACION"].ToString();
-                                oCampos1.FECHA_NOTIFICA_TITULAR = dr["FECHA_NOTIFICA_TITULAR"].ToString();
-                                oCampos1.TIPO_FISCALIZA = dr["TIPO_FISCALIZA"].ToString();                                
-                                List_Informe[0].ListNotRDINICIO.Add(oCampos1);
+                                oCampos1.ESPECIE = dr["ESPECIES"].ToString();                                
+                                oCampos1.VOLUMEN_APROBADO = Decimal.Parse(dr["VOLUMEN_APROBADO"].ToString());
+                                oCampos1.VOLUMEN_MOVILIZADO = Decimal.Parse(dr["VOLUMEN_MOVILIZADO"].ToString());
+                                oCampos1.VOLUMEN_INJUSTIFICADO = Decimal.Parse(dr["VOLUMEN_INJUSTIFICADO"].ToString());
+                                oCampos1.VOLUMEN_JUSTIFICADO = Decimal.Parse(dr["VOLUMEN_JUSTIFICADO"].ToString());
+                                oCampos1.OBSERVACIONES = dr["OBSERVACION"].ToString();
+                                oCampos1.PCA = dr["PCA"].ToString();
+                                List_Informe[0].ListVolumenAnalizado.Add(oCampos1);
                             }
                         }
                     }
                     #endregion
 
-                    dr.NextResult();
-                    // Cuadro de Notificación de resolución Sub Directoral de Inicio de PAU
-                    #region Notificación de resolución Sub Directoral de Término de PAU
-                    if (dr.HasRows)
-                    {
-                        CEntidad oCampos1 = new CEntidad();
-                        List_Informe[0].ListNotRDTERMINO = new List<CEntidad>();
-                        if (dr.HasRows)
-                        {
-                            while (dr.Read())
-                            {
-                                //PARTE_DIARIO_DETALLE
-                                oCampos1 = new CEntidad();
-                                oCampos1.NUMERO_NOTIFICACION = dr["NUMERO_NOTIFICACION"].ToString();
-                                oCampos1.FECHA_NOTIFICA_TITULAR = dr["FECHA_NOTIFICA_TITULAR"].ToString();
-                                oCampos1.TIPO_FISCALIZA = dr["TIPO_FISCALIZA"].ToString();
-                                List_Informe[0].ListNotRDTERMINO.Add(oCampos1);
-                            }
-                        }
-                    }
-                    #endregion
 
                     return List_Informe;
                 }
@@ -3689,6 +3675,42 @@ namespace CapaDatos.DOC
             }
         }
 
+        public List<CEntidad> ReporteListNotRD(OracleConnection cn, CEntidad oCEntidad)
+        {
+            List<CEntidad> List_Notificaciones = new List<CEntidad>();
+
+            try
+            {
+                using (OracleDataReader dr = dBOracle.SelDrdDefault(cn, null, "doc_osinfor_erp_migracion.spRTrazabilidad_TH_Titulo_Habilitante", oCEntidad))
+                {
+                    // Notificaciones
+                    if (dr.HasRows)
+                    {
+                        CEntidad oCampos2 = new CEntidad();
+                        if (dr.HasRows)
+                        {
+                            while (dr.Read())
+                            {
+                                CEntidad oCampos1 = new CEntidad();
+                                //PARTE_DIARIO_DETALLE
+                                oCampos1 = new CEntidad();
+                                oCampos1.NUMERO_NOTIFICACION = dr["NUMERO_NOTIFICACION"].ToString();
+                                oCampos1.FECHA_NOTIFICA_TITULAR = dr["FECHA_NOTIFICA_TITULAR"].ToString();
+                                oCampos1.TIPO_FISCALIZA = dr["TIPO_FISCALIZA"].ToString();
+                                List_Notificaciones.Add(oCampos1);
+                            }
+                        }
+
+                    }
+
+                    return List_Notificaciones;
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
         public CEntidad ReporteHistorialDetallePoa_v2(OracleConnection cn, CEntidad oCEntidad)
         {
             CEntidad oCampos = new CEntidad();
