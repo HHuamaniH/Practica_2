@@ -3206,211 +3206,227 @@ namespace SIGOFCv3.Areas.General.Controllers
                     ListInfArboles = oCLogica.Log_listarArboles(oCEntidadTem);
                     String styleSupTable = "width: 100% ; font-size:12; border: 1px solid #ddd; border-collapse: collapse;";
 
-                    if (ListInfArboles.Count > 0)
+                    if (ListInfArboles != null)
                     {
-                        /**
-                         * aqui creamos la tabla para los arboles supervisados
-                         */
-                        cadena.Append("<table class=Grilla cellspacin=0 style='" + styleSupTable + "' >");
-                        cadena.Append("<tr>");
-                        cadena.Append("<th class=tdcenter style=width:" + 5 + "% >");
-                        cadena.Append("N°");
-                        cadena.Append("</th>");
-                        cadena.Append("<th class=tdcenter style=width:" + 15 + "% >");
-                        cadena.Append("Especie");
-                        cadena.Append("</th>");
-                        cadena.Append("<th class=tdcenter style=width:" + 10 + "% >");
-                        cadena.Append("N° árboles supervisados");
-                        cadena.Append("</th>");
-                        cadena.Append("<th class=tdcenter style=width:" + 10 + "% >");
-                        cadena.Append("N° árboles inexistentes");
-                        cadena.Append("</th>");
-                        cadena.Append("<th class=tdcenter style=width:" + 10 + "% >");
-                        cadena.Append("% de inexistencia");
-                        cadena.Append("</th>");
-                        cadena.Append("<th class=tdcenter style=width:" + 10 + "% >");
-                        cadena.Append("N° árboles en pie");
-                        cadena.Append("</th>");
-                        cadena.Append("<th class=tdcenter style=width:" + 10 + "% >");
-                        cadena.Append("N° árboles tumbados");
-                        cadena.Append("</th>");
-                        cadena.Append("<th class=tdcenter style=width:" + 10 + "% >");
-                        cadena.Append("N° árboles en tocón");
-                        cadena.Append("</th>");
-                        cadena.Append("<th class=tdcenter style=width:" + 10 + "% >");
-                        cadena.Append("N° árboles no evaluados");
-                        cadena.Append("</th>");
-                        cadena.Append("<th class=tdcenter style=width:" + 10 + "% >");
-                        cadena.Append("N° árboles sin datos");
-                        cadena.Append("</th>");
-                        cadena.Append("</tr>");
-                        int total_especie = 0;
-                        int total_inex = 0;
-                        int total_pie = 0;
-                        int total_tumbado = 0;
-                        int total_tocon = 0;
-                        int total_noeva = 0;
-                        int total_sindat = 0;
-
-                        for (int y = 0; y < ListInfArboles.Count; y++)
+                        if (ListInfArboles.Count > 0)
                         {
-                            int num = y + 1;
+                            /**
+                             * aqui creamos la tabla para los arboles supervisados
+                             */
+                            cadena.Append("<table class=Grilla cellspacin=0 style='" + styleSupTable + "' >");
                             cadena.Append("<tr>");
-                            cadena.Append("<td class=tdcenterAli style=width:" + 5 + "% >");
-                            cadena.Append(num);
-                            cadena.Append("</td>");
-                            cadena.Append("<td class=tdleftAli style=width:" + 15 + "% >");
-                            cadena.Append(ListInfArboles[y].NOMBRE_COMUN);
-                            cadena.Append("</td>");
-                            cadena.Append("<td class=tdcenterAli style=width:" + 10 + "% >");
-                            cadena.Append(ListInfArboles[y].ESPECIES);
-                            cadena.Append("</td>");
-                            cadena.Append("<td class=tdcenterAli style=width:" + 10 + "% >");
-                            cadena.Append(ListInfArboles[y].INXISTENCIA);
-                            cadena.Append("</td>");
-                            cadena.Append("<td class=tdcenterAli style=width:" + 10 + "% >");
-                            cadena.Append(ListInfArboles[y].PORCENTAJE_INEX);
-                            cadena.Append("</td>");
-                            cadena.Append("<td class=tdcenterAli style=width:" + 10 + "% >");
-                            cadena.Append(ListInfArboles[y].EN_PIE);
-                            cadena.Append("</td>");
-                            cadena.Append("<td class=tdcenterAli style=width:" + 10 + "% >");
-                            cadena.Append(ListInfArboles[y].TUMBADO);
-                            cadena.Append("</td>");
-                            cadena.Append("<td class=tdcenterAli style=width:" + 10 + "% >");
-                            cadena.Append(ListInfArboles[y].TOCON);
-                            cadena.Append("</td>");
-                            cadena.Append("<td class=tdcenterAli style=width:" + 10 + "% >");
-                            cadena.Append(ListInfArboles[y].NO_EVALUADO);
-                            cadena.Append("</td>");
-                            cadena.Append("<td class=tdcenterAli style=width:" + 10 + "% >");
-                            cadena.Append(ListInfArboles[y].SIN_DATOS);
-                            cadena.Append("</td>");
+                            cadena.Append("<th class=tdcenter style=width:" + 5 + "% >");
+                            cadena.Append("N°");
+                            cadena.Append("</th>");
+                            cadena.Append("<th class=tdcenter style=width:" + 15 + "% >");
+                            cadena.Append("Especie");
+                            cadena.Append("</th>");
+                            cadena.Append("<th class=tdcenter style=width:" + 10 + "% >");
+                            cadena.Append("N° árboles supervisados");
+                            cadena.Append("</th>");
+                            cadena.Append("<th class=tdcenter style=width:" + 10 + "% >");
+                            cadena.Append("N° árboles inexistentes");
+                            cadena.Append("</th>");
+                            cadena.Append("<th class=tdcenter style=width:" + 10 + "% >");
+                            cadena.Append("% de inexistencia");
+                            cadena.Append("</th>");
+                            cadena.Append("<th class=tdcenter style=width:" + 10 + "% >");
+                            cadena.Append("N° árboles en pie");
+                            cadena.Append("</th>");
+                            cadena.Append("<th class=tdcenter style=width:" + 10 + "% >");
+                            cadena.Append("N° árboles tumbados");
+                            cadena.Append("</th>");
+                            cadena.Append("<th class=tdcenter style=width:" + 10 + "% >");
+                            cadena.Append("N° árboles en tocón");
+                            cadena.Append("</th>");
+                            cadena.Append("<th class=tdcenter style=width:" + 10 + "% >");
+                            cadena.Append("N° árboles no evaluados");
+                            cadena.Append("</th>");
+                            cadena.Append("<th class=tdcenter style=width:" + 10 + "% >");
+                            cadena.Append("N° árboles sin datos");
+                            cadena.Append("</th>");
                             cadena.Append("</tr>");
-                            total_especie = total_especie + ListInfArboles[y].ESPECIES;
-                            total_inex = total_inex + ListInfArboles[y].INXISTENCIA;
-                            total_pie = total_pie + ListInfArboles[y].EN_PIE;
-                            total_tumbado = total_tumbado + ListInfArboles[y].TUMBADO;
-                            total_tocon = total_tocon + ListInfArboles[y].TOCON;
-                            total_sindat = total_sindat + ListInfArboles[y].SIN_DATOS;
+                            int total_especie = 0;
+                            int total_inex = 0;
+                            int total_pie = 0;
+                            int total_tumbado = 0;
+                            int total_tocon = 0;
+                            int total_noeva = 0;
+                            int total_sindat = 0;
 
+                            for (int y = 0; y < ListInfArboles.Count; y++)
+                            {
+                                int num = y + 1;
+                                cadena.Append("<tr>");
+                                cadena.Append("<td class=tdcenterAli style=width:" + 5 + "% >");
+                                cadena.Append(num);
+                                cadena.Append("</td>");
+                                cadena.Append("<td class=tdleftAli style=width:" + 15 + "% >");
+                                cadena.Append(ListInfArboles[y].NOMBRE_COMUN);
+                                cadena.Append("</td>");
+                                cadena.Append("<td class=tdcenterAli style=width:" + 10 + "% >");
+                                cadena.Append(ListInfArboles[y].ESPECIES);
+                                cadena.Append("</td>");
+                                cadena.Append("<td class=tdcenterAli style=width:" + 10 + "% >");
+                                cadena.Append(ListInfArboles[y].INXISTENCIA);
+                                cadena.Append("</td>");
+                                cadena.Append("<td class=tdcenterAli style=width:" + 10 + "% >");
+                                cadena.Append(ListInfArboles[y].PORCENTAJE_INEX);
+                                cadena.Append("</td>");
+                                cadena.Append("<td class=tdcenterAli style=width:" + 10 + "% >");
+                                cadena.Append(ListInfArboles[y].EN_PIE);
+                                cadena.Append("</td>");
+                                cadena.Append("<td class=tdcenterAli style=width:" + 10 + "% >");
+                                cadena.Append(ListInfArboles[y].TUMBADO);
+                                cadena.Append("</td>");
+                                cadena.Append("<td class=tdcenterAli style=width:" + 10 + "% >");
+                                cadena.Append(ListInfArboles[y].TOCON);
+                                cadena.Append("</td>");
+                                cadena.Append("<td class=tdcenterAli style=width:" + 10 + "% >");
+                                cadena.Append(ListInfArboles[y].NO_EVALUADO);
+                                cadena.Append("</td>");
+                                cadena.Append("<td class=tdcenterAli style=width:" + 10 + "% >");
+                                cadena.Append(ListInfArboles[y].SIN_DATOS);
+                                cadena.Append("</td>");
+                                cadena.Append("</tr>");
+                                total_especie = total_especie + ListInfArboles[y].ESPECIES;
+                                total_inex = total_inex + ListInfArboles[y].INXISTENCIA;
+                                total_pie = total_pie + ListInfArboles[y].EN_PIE;
+                                total_tumbado = total_tumbado + ListInfArboles[y].TUMBADO;
+                                total_tocon = total_tocon + ListInfArboles[y].TOCON;
+                                total_sindat = total_sindat + ListInfArboles[y].SIN_DATOS;
+
+                            }
+                            cadena.Append("<tr>");
+                            cadena.Append("<th class=tdcenterAli style=width:" + 5 + "% >");
+                            cadena.Append("");
+                            cadena.Append("</th>");
+                            cadena.Append("<th class=tdleftAli style=width:" + 15 + "% >");
+                            cadena.Append("TOTAL :");
+                            cadena.Append("</th>");
+                            cadena.Append("<th class=tdcenterAli style=width:" + 10 + "% >");
+                            cadena.Append(total_especie);
+                            cadena.Append("</th>");
+                            cadena.Append("<th class=tdcenterAli style=width:" + 10 + "% >");
+                            cadena.Append(total_inex);
+                            cadena.Append("</th>");
+                            cadena.Append("<th class=tdcenterAli style=width:" + 10 + "% >");
+                            cadena.Append("");
+                            cadena.Append("</th>");
+                            cadena.Append("<th class=tdcenterAli style=width:" + 10 + "% >");
+                            cadena.Append(total_pie);
+                            cadena.Append("</th>");
+                            cadena.Append("<th class=tdcenterAli style=width:" + 10 + "% >");
+                            cadena.Append(total_tumbado);
+                            cadena.Append("</th>");
+                            cadena.Append("<th class=tdcenterAli style=width:" + 10 + "% >");
+                            cadena.Append(total_tocon);
+                            cadena.Append("</th>");
+                            cadena.Append("<th class=tdcenterAli style=width:" + 10 + "% >");
+                            cadena.Append(total_noeva);
+                            cadena.Append("</th>");
+                            cadena.Append("<th class=tdcenterAli style=width:" + 10 + "% >");
+                            cadena.Append(total_sindat);
+                            cadena.Append("</th>");
+                            cadena.Append("</tr>");
+                            cadena.Append("</table>");
                         }
-                        cadena.Append("<tr>");
-                        cadena.Append("<th class=tdcenterAli style=width:" + 5 + "% >");
-                        cadena.Append("");
-                        cadena.Append("</th>");
-                        cadena.Append("<th class=tdleftAli style=width:" + 15 + "% >");
-                        cadena.Append("TOTAL :");
-                        cadena.Append("</th>");
-                        cadena.Append("<th class=tdcenterAli style=width:" + 10 + "% >");
-                        cadena.Append(total_especie);
-                        cadena.Append("</th>");
-                        cadena.Append("<th class=tdcenterAli style=width:" + 10 + "% >");
-                        cadena.Append(total_inex);
-                        cadena.Append("</th>");
-                        cadena.Append("<th class=tdcenterAli style=width:" + 10 + "% >");
-                        cadena.Append("");
-                        cadena.Append("</th>");
-                        cadena.Append("<th class=tdcenterAli style=width:" + 10 + "% >");
-                        cadena.Append(total_pie);
-                        cadena.Append("</th>");
-                        cadena.Append("<th class=tdcenterAli style=width:" + 10 + "% >");
-                        cadena.Append(total_tumbado);
-                        cadena.Append("</th>");
-                        cadena.Append("<th class=tdcenterAli style=width:" + 10 + "% >");
-                        cadena.Append(total_tocon);
-                        cadena.Append("</th>");
-                        cadena.Append("<th class=tdcenterAli style=width:" + 10 + "% >");
-                        cadena.Append(total_noeva);
-                        cadena.Append("</th>");
-                        cadena.Append("<th class=tdcenterAli style=width:" + 10 + "% >");
-                        cadena.Append(total_sindat);
-                        cadena.Append("</th>");
-                        cadena.Append("</tr>");
-                        cadena.Append("</table>");
+                        else
+                        {
+                            cadena.Append("<div>No se encontraron arboles supervisados para el informe de supervision</div>");
+                        }
                     }
                     else
                     {
                         cadena.Append("<div>No se encontraron arboles supervisados para el informe de supervision</div>");
                     }
+                    
 
                     cadena.Append("<div class=bloqueFormTitulo ><div> Volumen analizado en la supervisión</div></div>");
 
                     styleSupTable = "width: 100% ; font-size:12; border: 1px solid #ddd; border-collapse: collapse;";
 
-                    if (oCEntidad_List[i].ListVolumenAnalizado.Count > 0)
+                    if (oCEntidad_List[i].ListVolumenAnalizado != null)
                     {
-                        /**
-                         * aqui creamos la tabla para los Volumen Analizado en la Supervisión
-                         */
-                        cadena.Append("<table class=Grilla cellspacin=0 style='" + styleSupTable + "' >");
-                        cadena.Append("<tr>");
-                        cadena.Append("<th class=tdcenter style=width:" + 5 + "% >");
-                        cadena.Append("N°");
-                        cadena.Append("</th>");
-                        cadena.Append("<th class=tdcenter style=width:" + 25 + "% >");
-                        cadena.Append("Especies");
-                        cadena.Append("</th>");
-                        cadena.Append("<th class=tdcenter style=width:" + 10 + "% >");
-                        cadena.Append("Volumen aprobado analizado (m3)");
-                        cadena.Append("</th>");
-                        cadena.Append("<th class=tdcenter style=width:" + 10 + "% >");
-                        cadena.Append("Volumen movilizado analizado (m3)");
-                        cadena.Append("</th>");
-                        cadena.Append("<th class=tdcenter style=width:" + 10 + "% >");
-                        cadena.Append("Volumen injustificado (m3)");
-                        cadena.Append("</th>");
-                        cadena.Append("<th class=tdcenter style=width:" + 10 + "% >");
-                        cadena.Append("Volumen justificado (m3)");
-                        cadena.Append("</th>");
-                        cadena.Append("<th class=tdcenter style=width:" + 10 + "% >");
-                        cadena.Append("PC");
-                        cadena.Append("</th>");
-                        cadena.Append("<th class=tdcenter style=width:" + 20 + "% >");
-                        cadena.Append("Observaciones");
-                        cadena.Append("</th>");
-                        cadena.Append("</tr>");
-
-                        for (int y = 0; y < oCEntidad_List[i].ListVolumenAnalizado.Count; y++)
+                        if (oCEntidad_List[i].ListVolumenAnalizado.Count > 0)
                         {
-                            int num = y + 1;
+                            /**
+                             * aqui creamos la tabla para los Volumen Analizado en la Supervisión
+                             */
+                            cadena.Append("<table class=Grilla cellspacin=0 style='" + styleSupTable + "' >");
                             cadena.Append("<tr>");
-                            cadena.Append("<td class=tdcenterAli style=width:" + 5 + "% >");
-                            cadena.Append(num);
-                            cadena.Append("</td>");
-                            cadena.Append("<td class=tdleftAli style=width:" + 25 + "% >");
-                            cadena.Append(oCEntidad_List[i].ListVolumenAnalizado[y].ESPECIE);
-                            cadena.Append("</td>");
-                            cadena.Append("<td class=tdcenterAli style=width:" + 10 + "% >");
-                            cadena.Append(oCEntidad_List[i].ListVolumenAnalizado[y].VOLUMEN_APROBADO);
-                            cadena.Append("</td>");
-                            cadena.Append("<td class=tdcenterAli style=width:" + 10 + "% >");
-                            cadena.Append(oCEntidad_List[i].ListVolumenAnalizado[y].VOLUMEN_MOVILIZADO);
-                            cadena.Append("</td>");
-                            cadena.Append("<td class=tdcenterAli style=width:" + 10 + "% >");
-                            cadena.Append(oCEntidad_List[i].ListVolumenAnalizado[y].VOLUMEN_INJUSTIFICADO);
-                            cadena.Append("</td>");
-                            cadena.Append("<td class=tdcenterAli style=width:" + 10 + "% >");
-                            cadena.Append(oCEntidad_List[i].ListVolumenAnalizado[y].VOLUMEN_JUSTIFICADO);
-                            cadena.Append("</td>");
-                            cadena.Append("<td class=tdcenterAli style=width:" + 10 + "% >");
-                            cadena.Append(oCEntidad_List[i].ListVolumenAnalizado[y].PCA);
-                            cadena.Append("</td>");
-                            cadena.Append("<td class=tdcenterAli style=width:" + 20 + "% >");
-                            cadena.Append(oCEntidad_List[i].ListVolumenAnalizado[y].OBSERVACIONES);
-                            cadena.Append("</td>");
+                            cadena.Append("<th class=tdcenter style=width:" + 5 + "% >");
+                            cadena.Append("N°");
+                            cadena.Append("</th>");
+                            cadena.Append("<th class=tdcenter style=width:" + 25 + "% >");
+                            cadena.Append("Especies");
+                            cadena.Append("</th>");
+                            cadena.Append("<th class=tdcenter style=width:" + 10 + "% >");
+                            cadena.Append("Volumen aprobado analizado (m3)");
+                            cadena.Append("</th>");
+                            cadena.Append("<th class=tdcenter style=width:" + 10 + "% >");
+                            cadena.Append("Volumen movilizado analizado (m3)");
+                            cadena.Append("</th>");
+                            cadena.Append("<th class=tdcenter style=width:" + 10 + "% >");
+                            cadena.Append("Volumen injustificado (m3)");
+                            cadena.Append("</th>");
+                            cadena.Append("<th class=tdcenter style=width:" + 10 + "% >");
+                            cadena.Append("Volumen justificado (m3)");
+                            cadena.Append("</th>");
+                            cadena.Append("<th class=tdcenter style=width:" + 10 + "% >");
+                            cadena.Append("PC");
+                            cadena.Append("</th>");
+                            cadena.Append("<th class=tdcenter style=width:" + 20 + "% >");
+                            cadena.Append("Observaciones");
+                            cadena.Append("</th>");
                             cadena.Append("</tr>");
+
+                            for (int y = 0; y < oCEntidad_List[i].ListVolumenAnalizado.Count; y++)
+                            {
+                                int num = y + 1;
+                                cadena.Append("<tr>");
+                                cadena.Append("<td class=tdcenterAli style=width:" + 5 + "% >");
+                                cadena.Append(num);
+                                cadena.Append("</td>");
+                                cadena.Append("<td class=tdleftAli style=width:" + 25 + "% >");
+                                cadena.Append(oCEntidad_List[i].ListVolumenAnalizado[y].ESPECIE);
+                                cadena.Append("</td>");
+                                cadena.Append("<td class=tdcenterAli style=width:" + 10 + "% >");
+                                cadena.Append(oCEntidad_List[i].ListVolumenAnalizado[y].VOLUMEN_APROBADO);
+                                cadena.Append("</td>");
+                                cadena.Append("<td class=tdcenterAli style=width:" + 10 + "% >");
+                                cadena.Append(oCEntidad_List[i].ListVolumenAnalizado[y].VOLUMEN_MOVILIZADO);
+                                cadena.Append("</td>");
+                                cadena.Append("<td class=tdcenterAli style=width:" + 10 + "% >");
+                                cadena.Append(oCEntidad_List[i].ListVolumenAnalizado[y].VOLUMEN_INJUSTIFICADO);
+                                cadena.Append("</td>");
+                                cadena.Append("<td class=tdcenterAli style=width:" + 10 + "% >");
+                                cadena.Append(oCEntidad_List[i].ListVolumenAnalizado[y].VOLUMEN_JUSTIFICADO);
+                                cadena.Append("</td>");
+                                cadena.Append("<td class=tdcenterAli style=width:" + 10 + "% >");
+                                cadena.Append(oCEntidad_List[i].ListVolumenAnalizado[y].PCA);
+                                cadena.Append("</td>");
+                                cadena.Append("<td class=tdcenterAli style=width:" + 20 + "% >");
+                                cadena.Append(oCEntidad_List[i].ListVolumenAnalizado[y].OBSERVACIONES);
+                                cadena.Append("</td>");
+                                cadena.Append("</tr>");
+                            }
+                            cadena.Append("</table>");
                         }
-                        cadena.Append("</table>");
+                        else
+                        {
+                            cadena.Append("<div>No se encontraron Volumen Analizado en la Supervisión</div>");
+                        }
                     }
                     else
                     {
                         cadena.Append("<div>No se encontraron Volumen Analizado en la Supervisión</div>");
                     }
+                    
                     cadena.Append("<div class=bloqueFormContent2 > <div class=bloqueFormContent2LeftDoble >");
                     cadena.Append("<div>Con indicios de aprovechamiento</div><div>:</div>");
                     cadena.Append("</div>");
-                    cadena.Append("<div class=bloqueFormContent2Right > <div>"+ oCEntidad_List[i].INDICIO_APROV + "</div> </div>");
+                    cadena.Append("<div class=bloqueFormContent2Right > <div>" + oCEntidad_List[i].INDICIO_APROV + "</div> </div>");
                     cadena.Append(" </div>");
                     cadena.Append("<div class=bloqueFormContent2 > <div class=bloqueFormContent2LeftDoble >");
                     cadena.Append("<div>Con presencia de cambio de uso</div><div>:</div>");
@@ -3490,7 +3506,7 @@ namespace SIGOFCv3.Areas.General.Controllers
                             {
                                 ListTempTH.Add(new Ent_Temporal
                                 {
-                                    COD_RESODIREC = "TFFS_" + oCEntidad_List[j].COD_TRIBUNAL_INI,                                    
+                                    COD_RESODIREC = "TFFS_" + oCEntidad_List[j].COD_TRIBUNAL_INI,
                                     TIPO_RD = "RD_TFFS_INICIO"
                                 });
                                 crearTFFSInicio(oCEntidad_List[j], ref cadena);
@@ -3778,37 +3794,7 @@ namespace SIGOFCv3.Areas.General.Controllers
             cadena.Append("<div class=bloqueFormContent2Right ><div>" + entidad.INF_FALSA_INEX + "</div> </div>");
             cadena.Append(" </div>");
 
-            cadena.Append("<div class=bloqueFormTitulo ><div>Especies con volumen injustificado</div></div>");
-            cadena.Append("<table class=Grilla cellspain=0 style='" + styleSupTable + "' >");
-            cadena.Append("<tr>");
-            cadena.Append("<th class=tdcenter style=width:" + 5 + "% >");
-            cadena.Append("N°");
-            cadena.Append("</th>");
-            cadena.Append("<th class=tdcenter style=width:" + 10 + "% >");
-            cadena.Append("Artículo");
-            cadena.Append("</th>");
-            cadena.Append("<th class=tdcenter style=width:" + 5 + "% >");
-            cadena.Append("Incisos");
-            cadena.Append("</th>");
-            cadena.Append("<th class=tdcenter style=width:" + 10 + "% >");
-            cadena.Append("Volumen (m3)");
-            cadena.Append("</th>");
-            cadena.Append("<th class=tdcenter style=width:" + 20 + "% >");
-            cadena.Append("Especie");
-            cadena.Append("</th>");
-            cadena.Append("<th class=tdcenter style=width:" + 10 + "% >");
-            cadena.Append("Área (ha)");
-            cadena.Append("</th>");
-            cadena.Append("<th class=tdcenter style=width:" + 10 + "% >");
-            cadena.Append("Num. Individuos");
-            cadena.Append("</th>");
-            cadena.Append("<th class=tdcenter style=width:" + 15 + "% >");
-            cadena.Append("Desc. Infracciones");
-            cadena.Append("</th>");
-            cadena.Append("<th class=tdcenter style=width:" + 10 + "% >");
-            cadena.Append("POA");
-            cadena.Append("</th>");
-            cadena.Append("</tr>");
+            
             // para el volumen de las especies
             oCEntidadTem = new Ent_Reporte_Historial_TH();
             oCEntidadTem.BusValor = entidad.COD_RESODIREC_Inicio;
@@ -3818,127 +3804,169 @@ namespace SIGOFCv3.Areas.General.Controllers
             listEspecie = oCLogica.log_Especies_MovTH(oCEntidadTem);
 
             // implementar el bucle para el recorrido de la informacion 
-            if (listEspecie.Count > 0)
+
+            if (listEspecie != null)
             {
-                for (int zy = 0; zy < listEspecie.Count; zy++)
-                {
-                    cadena.Append("<tr>");
-                    cadena.Append("<td class=tdcenterAli style=width:" + 5 + "% >");
-                    cadena.Append(zy + 1);
-                    cadena.Append("</td>");
-                    cadena.Append("<td class=tdleftAli style=width:" + 10 + "% >");
-                    cadena.Append(listEspecie[zy].Articulos);
-                    cadena.Append("</td>");
-                    cadena.Append("<td class=tdcenterAli style=width:" + 5 + "% >");
-                    cadena.Append(listEspecie[zy].Encisos);
-                    cadena.Append("</td>");
-                    cadena.Append("<td class=tdcenterAli style=width:" + 10 + "% >");
-                    cadena.Append(listEspecie[zy].VOLUMEN_INEXISTENTE);
-                    cadena.Append("</td>");
-                    cadena.Append("<td class=tdleftAli style=width:" + 20 + "% >");
-                    cadena.Append(listEspecie[zy].NOMBRE_COMUN);
-                    cadena.Append("</td>");
-                    cadena.Append("<td class=tdcenterAli style=width:" + 10 + "% >");
-                    cadena.Append(listEspecie[zy].AREA_O);
-                    cadena.Append("</td>");
-                    cadena.Append("<td class=tdcenterAli style=width:" + 10 + "% >");
-                    cadena.Append(listEspecie[zy].NUMERO_ARBOLES);
-                    cadena.Append("</td>");
-                    cadena.Append("<td class=tdcenterAli style=width:" + 15 + "% >");
-                    cadena.Append(listEspecie[zy].descripFin);
-                    cadena.Append("</td>");
-                    cadena.Append("<td class=tdcenterAli style=width:" + 10 + "% >");
-                    cadena.Append(listEspecie[zy].NUM_EXP);
-                    cadena.Append("</td>");
-                    cadena.Append("</tr>");
-                }
-            }
-            else
-            {
+                cadena.Append("<div class=bloqueFormTitulo ><div>Especies con volumen injustificado</div></div>");
+                cadena.Append("<table class=Grilla cellspain=0 style='" + styleSupTable + "' >");
                 cadena.Append("<tr>");
-                cadena.Append("<td class=tdcenterAli style=width:" + 5 + "% >");
-                cadena.Append("-");
-                cadena.Append("</td>");
-                cadena.Append("<td class=tdcenterAli style=width:" + 25 + "% >");
-                cadena.Append("-");
-                cadena.Append("</td>");
-                cadena.Append("<td class=tdcenterAli style=width:" + 10 + "% >");
-                cadena.Append("-");
-                cadena.Append("</td>");
-                cadena.Append("<td class=tdcenterAli style=width:" + 10 + "% >");
-                cadena.Append("-");
-                cadena.Append("</td>");
-                cadena.Append("<td class=tdcenterAli style=width:" + 10 + "% >");
-                cadena.Append("-");
-                cadena.Append("</td>");
-                cadena.Append("<td class=tdcenterAli style=width:" + 10 + "% >");
-                cadena.Append("-");
-                cadena.Append("</td>");
-                cadena.Append("<td class=tdcenterAli style=width:" + 10 + "% >");
-                cadena.Append("-");
-                cadena.Append("</td>");
+                cadena.Append("<th class=tdcenter style=width:" + 5 + "% >");
+                cadena.Append("N°");
+                cadena.Append("</th>");
+                cadena.Append("<th class=tdcenter style=width:" + 10 + "% >");
+                cadena.Append("Artículo");
+                cadena.Append("</th>");
+                cadena.Append("<th class=tdcenter style=width:" + 5 + "% >");
+                cadena.Append("Incisos");
+                cadena.Append("</th>");
+                cadena.Append("<th class=tdcenter style=width:" + 10 + "% >");
+                cadena.Append("Volumen (m3)");
+                cadena.Append("</th>");
+                cadena.Append("<th class=tdcenter style=width:" + 20 + "% >");
+                cadena.Append("Especie");
+                cadena.Append("</th>");
+                cadena.Append("<th class=tdcenter style=width:" + 10 + "% >");
+                cadena.Append("Área (ha)");
+                cadena.Append("</th>");
+                cadena.Append("<th class=tdcenter style=width:" + 10 + "% >");
+                cadena.Append("Num. Individuos");
+                cadena.Append("</th>");
+                cadena.Append("<th class=tdcenter style=width:" + 15 + "% >");
+                cadena.Append("Desc. Infracciones");
+                cadena.Append("</th>");
+                cadena.Append("<th class=tdcenter style=width:" + 10 + "% >");
+                cadena.Append("POA");
+                cadena.Append("</th>");
                 cadena.Append("</tr>");
-            }
-            cadena.Append("</table><br/>");
 
-            //Notificaciones de la resolución Directoral de Inicio de PAU
-            cadena.Append("<div class=bloqueFormTitulo ><div>Notificaciones de la Resolución Directoral de Inicio de PAU</div></div>");
-            cadena.Append("<table class=Grilla cellspain=0 style='" + styleSupTable + "' >");
-            cadena.Append("<tr>");
-            cadena.Append("<th class=tdcenter style=width:" + 5 + "% >");
-            cadena.Append("N°");
-            cadena.Append("</th>");
-            cadena.Append("<th class=tdcenter style=width:" + 40 + "% >");
-            cadena.Append("Nro Notificación");
-            cadena.Append("</th>");
-            cadena.Append("<th class=tdcenter style=width:" + 25 + "% >");
-            cadena.Append("Fecha Notificación)");
-            cadena.Append("</th>");
-            cadena.Append("<th class=tdcenter style=width:" + 30 + "% >");
-            cadena.Append("Tipo Notificación");
-            cadena.Append("</th>");
-            cadena.Append("</tr>");
-
-
-            if (entidad.ListNotRDINICIO.Count > 0)
-            {
-                for (int zy = 0; zy < entidad.ListNotRDINICIO.Count; zy++)
+                if (listEspecie.Count > 0)
+                {
+                    for (int zy = 0; zy < listEspecie.Count; zy++)
+                    {
+                        cadena.Append("<tr>");
+                        cadena.Append("<td class=tdcenterAli style=width:" + 5 + "% >");
+                        cadena.Append(zy + 1);
+                        cadena.Append("</td>");
+                        cadena.Append("<td class=tdleftAli style=width:" + 10 + "% >");
+                        cadena.Append(listEspecie[zy].Articulos);
+                        cadena.Append("</td>");
+                        cadena.Append("<td class=tdcenterAli style=width:" + 5 + "% >");
+                        cadena.Append(listEspecie[zy].Encisos);
+                        cadena.Append("</td>");
+                        cadena.Append("<td class=tdcenterAli style=width:" + 10 + "% >");
+                        cadena.Append(listEspecie[zy].VOLUMEN_INEXISTENTE);
+                        cadena.Append("</td>");
+                        cadena.Append("<td class=tdleftAli style=width:" + 20 + "% >");
+                        cadena.Append(listEspecie[zy].NOMBRE_COMUN);
+                        cadena.Append("</td>");
+                        cadena.Append("<td class=tdcenterAli style=width:" + 10 + "% >");
+                        cadena.Append(listEspecie[zy].AREA_O);
+                        cadena.Append("</td>");
+                        cadena.Append("<td class=tdcenterAli style=width:" + 10 + "% >");
+                        cadena.Append(listEspecie[zy].NUMERO_ARBOLES);
+                        cadena.Append("</td>");
+                        cadena.Append("<td class=tdcenterAli style=width:" + 15 + "% >");
+                        cadena.Append(listEspecie[zy].descripFin);
+                        cadena.Append("</td>");
+                        cadena.Append("<td class=tdcenterAli style=width:" + 10 + "% >");
+                        cadena.Append(listEspecie[zy].NUM_EXP);
+                        cadena.Append("</td>");
+                        cadena.Append("</tr>");
+                    }
+                }
+                else
                 {
                     cadena.Append("<tr>");
                     cadena.Append("<td class=tdcenterAli style=width:" + 5 + "% >");
-                    cadena.Append(zy + 1);
-                    cadena.Append("</td>");
-                    cadena.Append("<td class=tdleftAli style=width:" + 40 + "% >");
-                    cadena.Append(entidad.ListNotRDINICIO[zy].NUMERO_NOTIFICACION);
+                    cadena.Append("-");
                     cadena.Append("</td>");
                     cadena.Append("<td class=tdcenterAli style=width:" + 25 + "% >");
-                    cadena.Append(entidad.ListNotRDINICIO[zy].FECHA_NOTIFICA_TITULAR);
+                    cadena.Append("-");
                     cadena.Append("</td>");
-                    cadena.Append("<td class=tdcenterAli style=width:" + 30 + "% >");
-                    cadena.Append(entidad.ListNotRDINICIO[zy].TIPO_FISCALIZA);
+                    cadena.Append("<td class=tdcenterAli style=width:" + 10 + "% >");
+                    cadena.Append("-");
+                    cadena.Append("</td>");
+                    cadena.Append("<td class=tdcenterAli style=width:" + 10 + "% >");
+                    cadena.Append("-");
+                    cadena.Append("</td>");
+                    cadena.Append("<td class=tdcenterAli style=width:" + 10 + "% >");
+                    cadena.Append("-");
+                    cadena.Append("</td>");
+                    cadena.Append("<td class=tdcenterAli style=width:" + 10 + "% >");
+                    cadena.Append("-");
+                    cadena.Append("</td>");
+                    cadena.Append("<td class=tdcenterAli style=width:" + 10 + "% >");
+                    cadena.Append("-");
                     cadena.Append("</td>");
                     cadena.Append("</tr>");
                 }
-            }
-            else
-            {
-                cadena.Append("<tr>");
-                cadena.Append("<td class=tdcenterAli style=width:" + 5 + "% >");
-                cadena.Append("-");
-                cadena.Append("</td>");
-                cadena.Append("<td class=tdleftAli style=width:" + 40 + "% >");
-                cadena.Append("-");
-                cadena.Append("</td>");
-                cadena.Append("<td class=tdcenterAli style=width:" + 25 + "% >");
-                cadena.Append("-");
-                cadena.Append("</td>");
-                cadena.Append("<td class=tdcenterAli style=width:" + 30 + "% >");
-                cadena.Append("-");
-                cadena.Append("</td>");
-                cadena.Append("</tr>");
+                cadena.Append("</table><br/>");
             }
 
-            cadena.Append("</table><br/>");
+                        
+
+            if (entidad.ListNotRDINICIO !=null)
+            {
+                //Notificaciones de la resolución Directoral de Inicio de PAU
+                cadena.Append("<div class=bloqueFormTitulo ><div>Notificaciones de la Resolución Directoral de Inicio de PAU</div></div>");
+                cadena.Append("<table class=Grilla cellspain=0 style='" + styleSupTable + "' >");
+                cadena.Append("<tr>");
+                cadena.Append("<th class=tdcenter style=width:" + 5 + "% >");
+                cadena.Append("N°");
+                cadena.Append("</th>");
+                cadena.Append("<th class=tdcenter style=width:" + 40 + "% >");
+                cadena.Append("Nro Notificación");
+                cadena.Append("</th>");
+                cadena.Append("<th class=tdcenter style=width:" + 25 + "% >");
+                cadena.Append("Fecha Notificación)");
+                cadena.Append("</th>");
+                cadena.Append("<th class=tdcenter style=width:" + 30 + "% >");
+                cadena.Append("Tipo Notificación");
+                cadena.Append("</th>");
+                cadena.Append("</tr>");
+
+                if (entidad.ListNotRDINICIO.Count > 0)
+                {
+                    for (int zy = 0; zy < entidad.ListNotRDINICIO.Count; zy++)
+                    {
+                        cadena.Append("<tr>");
+                        cadena.Append("<td class=tdcenterAli style=width:" + 5 + "% >");
+                        cadena.Append(zy + 1);
+                        cadena.Append("</td>");
+                        cadena.Append("<td class=tdleftAli style=width:" + 40 + "% >");
+                        cadena.Append(entidad.ListNotRDINICIO[zy].NUMERO_NOTIFICACION);
+                        cadena.Append("</td>");
+                        cadena.Append("<td class=tdcenterAli style=width:" + 25 + "% >");
+                        cadena.Append(entidad.ListNotRDINICIO[zy].FECHA_NOTIFICA_TITULAR);
+                        cadena.Append("</td>");
+                        cadena.Append("<td class=tdcenterAli style=width:" + 30 + "% >");
+                        cadena.Append(entidad.ListNotRDINICIO[zy].TIPO_FISCALIZA);
+                        cadena.Append("</td>");
+                        cadena.Append("</tr>");
+                    }
+                }
+                else
+                {
+                    cadena.Append("<tr>");
+                    cadena.Append("<td class=tdcenterAli style=width:" + 5 + "% >");
+                    cadena.Append("-");
+                    cadena.Append("</td>");
+                    cadena.Append("<td class=tdleftAli style=width:" + 40 + "% >");
+                    cadena.Append("-");
+                    cadena.Append("</td>");
+                    cadena.Append("<td class=tdcenterAli style=width:" + 25 + "% >");
+                    cadena.Append("-");
+                    cadena.Append("</td>");
+                    cadena.Append("<td class=tdcenterAli style=width:" + 30 + "% >");
+                    cadena.Append("-");
+                    cadena.Append("</td>");
+                    cadena.Append("</tr>");
+                }
+
+                cadena.Append("</table><br/>");
+            }
+
+            
 
             #endregion
 
@@ -4080,38 +4108,7 @@ namespace SIGOFCv3.Areas.General.Controllers
             cadena.Append("<div class=bloqueFormContent2Right ><div>" + entidad.INFRACCIONES_TER + "</div> </div>");
             cadena.Append(" </div>");
 
-            //Especies con aprovechamiento Injustificados
-            cadena.Append("<div class=bloqueFormTitulo ><div>Especies con aprovechamiento Injustificados</div></div>");
-            cadena.Append("<table class=Grilla cellspacin=0 style='" + styleSupTable + "%' >");
-            cadena.Append("<tr>");
-            cadena.Append("<th class=tdcenter style=width:" + 5 + "% >");
-            cadena.Append("N°");
-            cadena.Append("</th>");
-            cadena.Append("<th class=tdcenter style=width:" + 10 + "% >");
-            cadena.Append("Artículo");
-            cadena.Append("</th>");
-            cadena.Append("<th class=tdcenter style=width:" + 5 + "% >");
-            cadena.Append("Incisos");
-            cadena.Append("</th>");
-            cadena.Append("<th class=tdcenter style=width:" + 10 + "% >");
-            cadena.Append("Volumen (m3)");
-            cadena.Append("</th>");
-            cadena.Append("<th class=tdcenter style=width:" + 20 + "% >");
-            cadena.Append("Especies");
-            cadena.Append("</th>");
-            cadena.Append("<th class=tdcenter style=width:" + 10 + "% >");
-            cadena.Append("Área (ha)");
-            cadena.Append("</th>");
-            cadena.Append("<th class=tdcenter style=width:" + 10 + "% >");
-            cadena.Append("Num. Individuos");
-            cadena.Append("</th>");
-            cadena.Append("<th class=tdcenter style=width:" + 15 + "% >");
-            cadena.Append("Desc. Infracciones");
-            cadena.Append("</th>");
-            cadena.Append("<th class=tdcenter style=width:" + 10 + "% >");
-            cadena.Append("POA");
-            cadena.Append("</th>");
-            cadena.Append("</tr>");
+            
             // implementar el bucle para el recorrido de la informacion 
             oCEntidadTem = new Ent_Reporte_Historial_TH();
             oCEntidadTem.BusValor = entidad.COD_RESODIREC_Termino;
@@ -4119,70 +4116,108 @@ namespace SIGOFCv3.Areas.General.Controllers
             oCEntidadTem.NUM_POA = 1;// (Int32)Session["ID_REGISTRO"];
             List<Ent_Reporte_Historial_TH> listEspecie = new List<Ent_Reporte_Historial_TH>();
             listEspecie = oCLogica.log_Especies_MovTH(oCEntidadTem);
-            if (listEspecie.Count > 0)
+
+            if (listEspecie != null)
             {
-                for (int yz = 0; yz < listEspecie.Count; yz++)
+                //Especies con aprovechamiento Injustificados
+                cadena.Append("<div class=bloqueFormTitulo ><div>Especies con aprovechamiento Injustificados</div></div>");
+                cadena.Append("<table class=Grilla cellspacin=0 style='" + styleSupTable + "%' >");
+                cadena.Append("<tr>");
+                cadena.Append("<th class=tdcenter style=width:" + 5 + "% >");
+                cadena.Append("N°");
+                cadena.Append("</th>");
+                cadena.Append("<th class=tdcenter style=width:" + 10 + "% >");
+                cadena.Append("Artículo");
+                cadena.Append("</th>");
+                cadena.Append("<th class=tdcenter style=width:" + 5 + "% >");
+                cadena.Append("Incisos");
+                cadena.Append("</th>");
+                cadena.Append("<th class=tdcenter style=width:" + 10 + "% >");
+                cadena.Append("Volumen (m3)");
+                cadena.Append("</th>");
+                cadena.Append("<th class=tdcenter style=width:" + 20 + "% >");
+                cadena.Append("Especies");
+                cadena.Append("</th>");
+                cadena.Append("<th class=tdcenter style=width:" + 10 + "% >");
+                cadena.Append("Área (ha)");
+                cadena.Append("</th>");
+                cadena.Append("<th class=tdcenter style=width:" + 10 + "% >");
+                cadena.Append("Num. Individuos");
+                cadena.Append("</th>");
+                cadena.Append("<th class=tdcenter style=width:" + 15 + "% >");
+                cadena.Append("Desc. Infracciones");
+                cadena.Append("</th>");
+                cadena.Append("<th class=tdcenter style=width:" + 10 + "% >");
+                cadena.Append("POA");
+                cadena.Append("</th>");
+                cadena.Append("</tr>");
+                if (listEspecie.Count > 0)
+                {
+                    for (int yz = 0; yz < listEspecie.Count; yz++)
+                    {
+                        cadena.Append("<tr>");
+                        cadena.Append("<td class=tdcenterAli style=width:" + 5 + "% >");
+                        cadena.Append(yz + 1);
+                        cadena.Append("</td>");
+                        cadena.Append("<td class=tdcenterAli style=width:" + 10 + "% >");
+                        cadena.Append(listEspecie[yz].Articulos);
+                        cadena.Append("</td>");
+                        cadena.Append("<td class=tdcenterAli style=width:" + 5 + "% >");
+                        cadena.Append(listEspecie[yz].Encisos);
+                        cadena.Append("</td>");
+                        cadena.Append("<td class=tdcenterAli style=width:" + 10 + "% >");
+                        cadena.Append(listEspecie[yz].VOLUMEN_INEXISTENTE);
+                        cadena.Append("</td>");
+                        cadena.Append("<td class=tdcenterAli style=width:" + 20 + "% >");
+                        cadena.Append(listEspecie[yz].NOMBRE_COMUN);
+                        cadena.Append("</td>");
+                        cadena.Append("<td class=tdcenterAli style=width:" + 10 + "% >");
+                        cadena.Append(listEspecie[yz].AREA_O);
+                        cadena.Append("</td>");
+                        cadena.Append("<td class=tdcenterAli style=width:" + 10 + "% >");
+                        cadena.Append(listEspecie[yz].NUMERO_ARBOLES);
+                        cadena.Append("</td>");
+                        cadena.Append("<td class=tdcenterAli style=width:" + 15 + "% >");
+                        cadena.Append(listEspecie[yz].descripFin);
+                        cadena.Append("</td>");
+                        cadena.Append("<td class=tdcenterAli style=width:" + 10 + "% >");
+                        cadena.Append(listEspecie[yz].NUM_EXP);
+                        cadena.Append("</td>");
+                        cadena.Append("</tr>");
+                    }
+                }
+                else
                 {
                     cadena.Append("<tr>");
                     cadena.Append("<td class=tdcenterAli style=width:" + 5 + "% >");
-                    cadena.Append(yz + 1);
+                    cadena.Append("-");
+                    cadena.Append("</td>");
+                    cadena.Append("<td class=tdcenterAli style=width:" + 25 + "% >");
+                    cadena.Append("-");
                     cadena.Append("</td>");
                     cadena.Append("<td class=tdcenterAli style=width:" + 10 + "% >");
-                    cadena.Append(listEspecie[yz].Articulos);
-                    cadena.Append("</td>");
-                    cadena.Append("<td class=tdcenterAli style=width:" + 5 + "% >");
-                    cadena.Append(listEspecie[yz].Encisos);
+                    cadena.Append("-");
                     cadena.Append("</td>");
                     cadena.Append("<td class=tdcenterAli style=width:" + 10 + "% >");
-                    cadena.Append(listEspecie[yz].VOLUMEN_INEXISTENTE);
-                    cadena.Append("</td>");
-                    cadena.Append("<td class=tdcenterAli style=width:" + 20 + "% >");
-                    cadena.Append(listEspecie[yz].NOMBRE_COMUN);
+                    cadena.Append("-");
                     cadena.Append("</td>");
                     cadena.Append("<td class=tdcenterAli style=width:" + 10 + "% >");
-                    cadena.Append(listEspecie[yz].AREA_O);
+                    cadena.Append("-");
                     cadena.Append("</td>");
                     cadena.Append("<td class=tdcenterAli style=width:" + 10 + "% >");
-                    cadena.Append(listEspecie[yz].NUMERO_ARBOLES);
-                    cadena.Append("</td>");
-                    cadena.Append("<td class=tdcenterAli style=width:" + 15 + "% >");
-                    cadena.Append(listEspecie[yz].descripFin);
+                    cadena.Append("-");
                     cadena.Append("</td>");
                     cadena.Append("<td class=tdcenterAli style=width:" + 10 + "% >");
-                    cadena.Append(listEspecie[yz].NUM_EXP);
+                    cadena.Append("-");
                     cadena.Append("</td>");
                     cadena.Append("</tr>");
                 }
+                cadena.Append("</table><br/>");
             }
-            else
-            {
-                cadena.Append("<tr>");
-                cadena.Append("<td class=tdcenterAli style=width:" + 5 + "% >");
-                cadena.Append("-");
-                cadena.Append("</td>");
-                cadena.Append("<td class=tdcenterAli style=width:" + 25 + "% >");
-                cadena.Append("-");
-                cadena.Append("</td>");
-                cadena.Append("<td class=tdcenterAli style=width:" + 10 + "% >");
-                cadena.Append("-");
-                cadena.Append("</td>");
-                cadena.Append("<td class=tdcenterAli style=width:" + 10 + "% >");
-                cadena.Append("-");
-                cadena.Append("</td>");
-                cadena.Append("<td class=tdcenterAli style=width:" + 10 + "% >");
-                cadena.Append("-");
-                cadena.Append("</td>");
-                cadena.Append("<td class=tdcenterAli style=width:" + 10 + "% >");
-                cadena.Append("-");
-                cadena.Append("</td>");
-                cadena.Append("<td class=tdcenterAli style=width:" + 10 + "% >");
-                cadena.Append("-");
-                cadena.Append("</td>");
-                cadena.Append("</tr>");
-            }
-            cadena.Append("</table><br/>");
 
-            //Notificaciones de la resolución Directoral de Termino de PAU
+            if (entidad.ListNotRDTERMINO != null)
+            {
+                //Notificaciones de la resolución Directoral de Termino de PAU
             cadena.Append("<div class=bloqueFormTitulo ><div>Notificaciones de la Resolución Directoral de Término de PAU</div></div>");
             cadena.Append("<table class=Grilla cellspain=0 style='" + styleSupTable + "' >");
             cadena.Append("<tr>");
@@ -4238,6 +4273,8 @@ namespace SIGOFCv3.Areas.General.Controllers
                 cadena.Append("</tr>");
             }
             cadena.Append("</table><br/>");
+            }
+
             #endregion
 
             return string.Empty;
@@ -4688,64 +4725,70 @@ namespace SIGOFCv3.Areas.General.Controllers
                 cadena.Append("<div class=bloqueFormTitulo ><div> Lista de especies aprobadas en la resolución</div></div>");
                 String stylePoaTable = "width: 100% ; font-size:12; border: 1px solid #ddd; border-collapse: collapse;";
 
-                if (oCEntidad_List.ListPOATH.Count > 0)
+                if (oCEntidad_List.ListPOATH != null)
                 {
-                    /**
-                     * aqui creamos la tabla Lista de Especies
-                     */
-                    cadena.Append("<table class=Grilla cellspacin=0 style='" + stylePoaTable + "' >");
-                    cadena.Append("<tr>");
-                    cadena.Append("<th class=tdcenter style=width:" + 25 + "% >");
-                    cadena.Append("Nombre común");
-                    cadena.Append("</th>");
-                    cadena.Append("<th class=tdcenter style=width:" + 25 + "% >");
-                    cadena.Append("Nombre científico");
-                    cadena.Append("</th>");
-                    cadena.Append("<th class=tdcenter style=width:" + 20 + "% >");
-                    cadena.Append("Parcela de corta");
-                    cadena.Append("</th>");
-                    cadena.Append("<th class=tdcenter style=width:" + 10 + "% >");
-                    cadena.Append("N° árboles");
-                    cadena.Append("</th>");
-                    cadena.Append("<th class=tdcenter style=width:" + 10 + "% >");
-                    cadena.Append("Volumen autorizado");
-                    cadena.Append("</th>");
-                    cadena.Append("<th class=tdcenter style=width:" + 10 + "% >");
-                    cadena.Append("Unidad de medida");
-                    cadena.Append("</th>");
-                    cadena.Append("</tr>");
-
-                    for (int y = 0; y < oCEntidad_List.ListPOATH.Count; y++)
+                    if (oCEntidad_List.ListPOATH.Count > 0)
                     {
-                        var item = oCEntidad_List.ListPOATH[y];
+                        /**
+                         * aqui creamos la tabla Lista de Especies
+                         */
+                        cadena.Append("<table class=Grilla cellspacin=0 style='" + stylePoaTable + "' >");
                         cadena.Append("<tr>");
-                        cadena.Append("<td class=tdleftAli style=width:" + 25 + "% >");
-                        cadena.Append(item.NOMBRE_COMUN);
-                        cadena.Append("</td>");
-                        cadena.Append("<td class=tdleftAli style=width:" + 25 + "% >");
-                        cadena.Append(item.NOMBRE_CIENTIFICO);
-                        cadena.Append("</td>");
-                        cadena.Append("<td class=tdcenterAli style=width:" + 20 + "% >");
-                        cadena.Append(item.PARCELA);
-                        cadena.Append("</td>");
-                        cadena.Append("<td class=tdcenterAli style=width:" + 10 + "% >");
-                        cadena.Append(item.NUMERO_ARBOLES);
-                        cadena.Append("</td>");
-                        cadena.Append("<td class=tdcenterAli style=width:" + 10 + "% >");
-                        cadena.Append(item.VOLUMEN_ARBOLES);
-                        cadena.Append("</td>");
-                        cadena.Append("<td class=tdcenterAli style=width:" + 10 + "% >");
-                        cadena.Append(item.UNIDAD_MEDIDA);
-                        cadena.Append("</td>");
+                        cadena.Append("<th class=tdcenter style=width:" + 25 + "% >");
+                        cadena.Append("Nombre común");
+                        cadena.Append("</th>");
+                        cadena.Append("<th class=tdcenter style=width:" + 25 + "% >");
+                        cadena.Append("Nombre científico");
+                        cadena.Append("</th>");
+                        cadena.Append("<th class=tdcenter style=width:" + 20 + "% >");
+                        cadena.Append("Parcela de corta");
+                        cadena.Append("</th>");
+                        cadena.Append("<th class=tdcenter style=width:" + 10 + "% >");
+                        cadena.Append("N° árboles");
+                        cadena.Append("</th>");
+                        cadena.Append("<th class=tdcenter style=width:" + 10 + "% >");
+                        cadena.Append("Volumen autorizado");
+                        cadena.Append("</th>");
+                        cadena.Append("<th class=tdcenter style=width:" + 10 + "% >");
+                        cadena.Append("Unidad de medida");
+                        cadena.Append("</th>");
                         cadena.Append("</tr>");
+
+                        for (int y = 0; y < oCEntidad_List.ListPOATH.Count; y++)
+                        {
+                            var item = oCEntidad_List.ListPOATH[y];
+                            cadena.Append("<tr>");
+                            cadena.Append("<td class=tdleftAli style=width:" + 25 + "% >");
+                            cadena.Append(item.NOMBRE_COMUN);
+                            cadena.Append("</td>");
+                            cadena.Append("<td class=tdleftAli style=width:" + 25 + "% >");
+                            cadena.Append(item.NOMBRE_CIENTIFICO);
+                            cadena.Append("</td>");
+                            cadena.Append("<td class=tdcenterAli style=width:" + 20 + "% >");
+                            cadena.Append(item.PARCELA);
+                            cadena.Append("</td>");
+                            cadena.Append("<td class=tdcenterAli style=width:" + 10 + "% >");
+                            cadena.Append(item.NUMERO_ARBOLES);
+                            cadena.Append("</td>");
+                            cadena.Append("<td class=tdcenterAli style=width:" + 10 + "% >");
+                            cadena.Append(item.VOLUMEN_ARBOLES);
+                            cadena.Append("</td>");
+                            cadena.Append("<td class=tdcenterAli style=width:" + 10 + "% >");
+                            cadena.Append(item.UNIDAD_MEDIDA);
+                            cadena.Append("</td>");
+                            cadena.Append("</tr>");
+                        }
+                        cadena.Append("</table>");
                     }
-                    cadena.Append("</table>");
+                    else
+                    {
+                        cadena.Append("<div>No se encontraron lista de especies aprobadas</div>");
+                    }
                 }
                 else
                 {
                     cadena.Append("<div>No se encontraron lista de especies aprobadas</div>");
                 }
-
 
                 cadena.Append("<div class=bloqueFormTitulo ><div> Balance de Extracción del " + oCEntidad_List.NUM_POA_STRING + "</div></div>");
 
@@ -4756,69 +4799,79 @@ namespace SIGOFCv3.Areas.General.Controllers
                 cadena.Append(" </div>");
 
                 String stylePoaBETable = "width: 100% ; font-size:12; border: 1px solid #ddd; border-collapse: collapse;";
-                if (oCEntidad_List.ListPOABalance.Count > 0)
-                {
-                    /**
-                     * aqui creamos la tabla Lista de Balance de Extracción
-                     */
-                    cadena.Append("<table class=Grilla cellspacin=0 style='" + stylePoaBETable + "' >");
-                    cadena.Append("<tr>");
-                    cadena.Append("<th class=tdcenter style=width:" + 5 + "% >");
-                    cadena.Append("N°");
-                    cadena.Append("</th>");
-                    cadena.Append("<th class=tdcenter style=width:" + 25 + "% >");
-                    cadena.Append("Especie");
-                    cadena.Append("</th>");
-                    cadena.Append("<th class=tdcenter style=width:" + 15 + "% >");
-                    cadena.Append("Total árboles");
-                    cadena.Append("</th>");
-                    cadena.Append("<th class=tdcenter style=width:" + 15 + "% >");
-                    cadena.Append("Volumen autorizado (m3)");
-                    cadena.Append("</th>");
-                    cadena.Append("<th class=tdcenter style=width:" + 15 + "% >");
-                    cadena.Append("Volumen movilizado (m3)");
-                    cadena.Append("</th>");
-                    cadena.Append("<th class=tdcenter style=width:" + 10 + "% >");
-                    cadena.Append("Saldo");
-                    cadena.Append("</th>");
-                    cadena.Append("<th class=tdcenter style=width:" + 15 + "% >");
-                    cadena.Append("Unidad de medida");
-                    cadena.Append("</th>");
-                    cadena.Append("</tr>");
 
-                    for (int x = 0; x < oCEntidad_List.ListPOABalance.Count; x++)
+                if (oCEntidad_List.ListPOABalance != null)
+                {
+                    if (oCEntidad_List.ListPOABalance.Count > 0)
                     {
-                        var item = oCEntidad_List.ListPOABalance[x];
+                        /**
+                         * aqui creamos la tabla Lista de Balance de Extracción
+                         */
+                        cadena.Append("<table class=Grilla cellspacin=0 style='" + stylePoaBETable + "' >");
                         cadena.Append("<tr>");
-                        cadena.Append("<td class=tdleftAli style=width:" + 5 + "% >");
-                        cadena.Append((x + 1).ToString());
-                        cadena.Append("</td>");
-                        cadena.Append("<td class=tdleftAli style=width:" + 25 + "% >");
-                        cadena.Append(item.NOMBRE_CIENTIFICO + " | " + item.NOMBRE_COMUN);
-                        cadena.Append("</td>");
-                        cadena.Append("<td class=tdcenterAli style=width:" + 15 + "% >");
-                        cadena.Append(item.TOTAL_ARBOLES);
-                        cadena.Append("</td>");
-                        cadena.Append("<td class=tdcenterAli style=width:" + 15 + "% >");
-                        cadena.Append(item.VOLUMEN_AUTORIZADO);
-                        cadena.Append("</td>");
-                        cadena.Append("<td class=tdcenterAli style=width:" + 15 + "% >");
-                        cadena.Append(item.VOLUMEN_MOVILIZADO);
-                        cadena.Append("</td>");
-                        cadena.Append("<td class=tdcenterAli style=width:" + 10 + "% >");
-                        cadena.Append(item.SALDO);
-                        cadena.Append("</td>");
-                        cadena.Append("<td class=tdcenterAli style=width:" + 15 + "% >");
-                        cadena.Append(item.UNIDAD_MEDIDA);
-                        cadena.Append("</td>");
+                        cadena.Append("<th class=tdcenter style=width:" + 5 + "% >");
+                        cadena.Append("N°");
+                        cadena.Append("</th>");
+                        cadena.Append("<th class=tdcenter style=width:" + 25 + "% >");
+                        cadena.Append("Especie");
+                        cadena.Append("</th>");
+                        cadena.Append("<th class=tdcenter style=width:" + 15 + "% >");
+                        cadena.Append("Total árboles");
+                        cadena.Append("</th>");
+                        cadena.Append("<th class=tdcenter style=width:" + 15 + "% >");
+                        cadena.Append("Volumen autorizado (m3)");
+                        cadena.Append("</th>");
+                        cadena.Append("<th class=tdcenter style=width:" + 15 + "% >");
+                        cadena.Append("Volumen movilizado (m3)");
+                        cadena.Append("</th>");
+                        cadena.Append("<th class=tdcenter style=width:" + 10 + "% >");
+                        cadena.Append("Saldo");
+                        cadena.Append("</th>");
+                        cadena.Append("<th class=tdcenter style=width:" + 15 + "% >");
+                        cadena.Append("Unidad de medida");
+                        cadena.Append("</th>");
                         cadena.Append("</tr>");
+
+                        for (int x = 0; x < oCEntidad_List.ListPOABalance.Count; x++)
+                        {
+                            var item = oCEntidad_List.ListPOABalance[x];
+                            cadena.Append("<tr>");
+                            cadena.Append("<td class=tdleftAli style=width:" + 5 + "% >");
+                            cadena.Append((x + 1).ToString());
+                            cadena.Append("</td>");
+                            cadena.Append("<td class=tdleftAli style=width:" + 25 + "% >");
+                            cadena.Append(item.NOMBRE_CIENTIFICO + " | " + item.NOMBRE_COMUN);
+                            cadena.Append("</td>");
+                            cadena.Append("<td class=tdcenterAli style=width:" + 15 + "% >");
+                            cadena.Append(item.TOTAL_ARBOLES);
+                            cadena.Append("</td>");
+                            cadena.Append("<td class=tdcenterAli style=width:" + 15 + "% >");
+                            cadena.Append(item.VOLUMEN_AUTORIZADO);
+                            cadena.Append("</td>");
+                            cadena.Append("<td class=tdcenterAli style=width:" + 15 + "% >");
+                            cadena.Append(item.VOLUMEN_MOVILIZADO);
+                            cadena.Append("</td>");
+                            cadena.Append("<td class=tdcenterAli style=width:" + 10 + "% >");
+                            cadena.Append(item.SALDO);
+                            cadena.Append("</td>");
+                            cadena.Append("<td class=tdcenterAli style=width:" + 15 + "% >");
+                            cadena.Append(item.UNIDAD_MEDIDA);
+                            cadena.Append("</td>");
+                            cadena.Append("</tr>");
+                        }
+                        cadena.Append("</table>");
                     }
-                    cadena.Append("</table>");
+                    else
+                    {
+                        cadena.Append("<div>No se encontraron Balance de Extracción</div>");
+                    }
                 }
                 else
                 {
                     cadena.Append("<div>No se encontraron Balance de Extracción</div>");
                 }
+
+
 
                 list_inf = cadena.ToString();
 
