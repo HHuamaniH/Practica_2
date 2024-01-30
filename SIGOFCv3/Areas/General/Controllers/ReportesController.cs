@@ -3410,7 +3410,7 @@ namespace SIGOFCv3.Areas.General.Controllers
                     cadena.Append("<div class=bloqueFormContent2 > <div class=bloqueFormContent2LeftDoble >");
                     cadena.Append("<div>Con indicios de aprovechamiento</div><div>:</div>");
                     cadena.Append("</div>");
-                    cadena.Append("<div class=bloqueFormContent2Right > <div> - </div> </div>");
+                    cadena.Append("<div class=bloqueFormContent2Right > <div>"+ oCEntidad_List[i].INDICIO_APROV + "</div> </div>");
                     cadena.Append(" </div>");
                     cadena.Append("<div class=bloqueFormContent2 > <div class=bloqueFormContent2LeftDoble >");
                     cadena.Append("<div>Con presencia de cambio de uso</div><div>:</div>");
@@ -4005,19 +4005,19 @@ namespace SIGOFCv3.Areas.General.Controllers
             cadena.Append("<div class=bloqueFormContent2 > <div class=bloqueFormContent2LeftDoble >");
             cadena.Append("<div>Gravedad de daño</div><div>:</div>");
             cadena.Append("</div>");
-            cadena.Append("<div class=bloqueFormContent2Right ><div>" + entidad.GRAVEDAD_DANIO_RDTERMINO + " (UIT) </div> </div>");
+            cadena.Append("<div class=bloqueFormContent2Right ><div>" + entidad.GRAVEDAD_DANIO_RDTERMINO + " </div> </div>");
             cadena.Append(" </div>");
 
             cadena.Append("<div class=bloqueFormContent2 > <div class=bloqueFormContent2LeftDoble >");
             cadena.Append("<div>Medidas complementarias</div><div>:</div>");
             cadena.Append("</div>");
-            cadena.Append("<div class=bloqueFormContent2Right ><div>" + entidad.MEDIDAS_CAUTELARES_RDTERMINO + " (UIT) </div> </div>");
+            cadena.Append("<div class=bloqueFormContent2Right ><div>" + entidad.MEDIDAS_CAUTELARES_RDTERMINO + " </div> </div>");
             cadena.Append(" </div>");
 
             cadena.Append("<div class=bloqueFormContent2 > <div class=bloqueFormContent2LeftDoble >");
             cadena.Append("<div>Medidas correctivas</div><div>:</div>");
             cadena.Append("</div>");
-            cadena.Append("<div class=bloqueFormContent2Right ><div>" + entidad.MEDIDAS_CORRECTIVAS_RDTERMINO + " (UIT) </div> </div>");
+            cadena.Append("<div class=bloqueFormContent2Right ><div>" + entidad.MEDIDAS_CORRECTIVAS_RDTERMINO + " </div> </div>");
             cadena.Append(" </div>");
 
             cadena.Append("<div class=bloqueFormContent2 > <div class=bloqueFormContent2LeftDoble >");
@@ -4695,10 +4695,10 @@ namespace SIGOFCv3.Areas.General.Controllers
                      */
                     cadena.Append("<table class=Grilla cellspacin=0 style='" + stylePoaTable + "' >");
                     cadena.Append("<tr>");
-                    cadena.Append("<th class=tdcenter style=width:" + 30 + "% >");
+                    cadena.Append("<th class=tdcenter style=width:" + 25 + "% >");
                     cadena.Append("Nombre común");
                     cadena.Append("</th>");
-                    cadena.Append("<th class=tdcenter style=width:" + 30 + "% >");
+                    cadena.Append("<th class=tdcenter style=width:" + 25 + "% >");
                     cadena.Append("Nombre científico");
                     cadena.Append("</th>");
                     cadena.Append("<th class=tdcenter style=width:" + 20 + "% >");
@@ -4710,6 +4710,8 @@ namespace SIGOFCv3.Areas.General.Controllers
                     cadena.Append("<th class=tdcenter style=width:" + 10 + "% >");
                     cadena.Append("Volumen autorizado");
                     cadena.Append("</th>");
+                    cadena.Append("<th class=tdcenter style=width:" + 10 + "% >");
+                    cadena.Append("Unidad de medida");
                     cadena.Append("</th>");
                     cadena.Append("</tr>");
 
@@ -4717,10 +4719,10 @@ namespace SIGOFCv3.Areas.General.Controllers
                     {
                         var item = oCEntidad_List.ListPOATH[y];
                         cadena.Append("<tr>");
-                        cadena.Append("<td class=tdleftAli style=width:" + 30 + "% >");
+                        cadena.Append("<td class=tdleftAli style=width:" + 25 + "% >");
                         cadena.Append(item.NOMBRE_COMUN);
                         cadena.Append("</td>");
-                        cadena.Append("<td class=tdleftAli style=width:" + 30 + "% >");
+                        cadena.Append("<td class=tdleftAli style=width:" + 25 + "% >");
                         cadena.Append(item.NOMBRE_CIENTIFICO);
                         cadena.Append("</td>");
                         cadena.Append("<td class=tdcenterAli style=width:" + 20 + "% >");
@@ -4731,6 +4733,9 @@ namespace SIGOFCv3.Areas.General.Controllers
                         cadena.Append("</td>");
                         cadena.Append("<td class=tdcenterAli style=width:" + 10 + "% >");
                         cadena.Append(item.VOLUMEN_ARBOLES);
+                        cadena.Append("</td>");
+                        cadena.Append("<td class=tdcenterAli style=width:" + 10 + "% >");
+                        cadena.Append(item.UNIDAD_MEDIDA);
                         cadena.Append("</td>");
                         cadena.Append("</tr>");
                     }
@@ -4761,21 +4766,23 @@ namespace SIGOFCv3.Areas.General.Controllers
                     cadena.Append("<th class=tdcenter style=width:" + 5 + "% >");
                     cadena.Append("N°");
                     cadena.Append("</th>");
-                    cadena.Append("<th class=tdcenter style=width:" + 30 + "% >");
+                    cadena.Append("<th class=tdcenter style=width:" + 25 + "% >");
                     cadena.Append("Especie");
                     cadena.Append("</th>");
                     cadena.Append("<th class=tdcenter style=width:" + 15 + "% >");
                     cadena.Append("Total árboles");
                     cadena.Append("</th>");
-                    cadena.Append("<th class=tdcenter style=width:" + 20 + "% >");
+                    cadena.Append("<th class=tdcenter style=width:" + 15 + "% >");
                     cadena.Append("Volumen autorizado (m3)");
                     cadena.Append("</th>");
-                    cadena.Append("<th class=tdcenter style=width:" + 20 + "% >");
+                    cadena.Append("<th class=tdcenter style=width:" + 15 + "% >");
                     cadena.Append("Volumen movilizado (m3)");
                     cadena.Append("</th>");
                     cadena.Append("<th class=tdcenter style=width:" + 10 + "% >");
                     cadena.Append("Saldo");
                     cadena.Append("</th>");
+                    cadena.Append("<th class=tdcenter style=width:" + 15 + "% >");
+                    cadena.Append("Unidad de medida");
                     cadena.Append("</th>");
                     cadena.Append("</tr>");
 
@@ -4786,20 +4793,23 @@ namespace SIGOFCv3.Areas.General.Controllers
                         cadena.Append("<td class=tdleftAli style=width:" + 5 + "% >");
                         cadena.Append((x + 1).ToString());
                         cadena.Append("</td>");
-                        cadena.Append("<td class=tdleftAli style=width:" + 30 + "% >");
+                        cadena.Append("<td class=tdleftAli style=width:" + 25 + "% >");
                         cadena.Append(item.NOMBRE_CIENTIFICO + " | " + item.NOMBRE_COMUN);
                         cadena.Append("</td>");
-                        cadena.Append("<td class=tdcenterAli style=width:" + 20 + "% >");
+                        cadena.Append("<td class=tdcenterAli style=width:" + 15 + "% >");
                         cadena.Append(item.TOTAL_ARBOLES);
                         cadena.Append("</td>");
-                        cadena.Append("<td class=tdcenterAli style=width:" + 10 + "% >");
+                        cadena.Append("<td class=tdcenterAli style=width:" + 15 + "% >");
                         cadena.Append(item.VOLUMEN_AUTORIZADO);
                         cadena.Append("</td>");
-                        cadena.Append("<td class=tdcenterAli style=width:" + 10 + "% >");
+                        cadena.Append("<td class=tdcenterAli style=width:" + 15 + "% >");
                         cadena.Append(item.VOLUMEN_MOVILIZADO);
                         cadena.Append("</td>");
                         cadena.Append("<td class=tdcenterAli style=width:" + 10 + "% >");
                         cadena.Append(item.SALDO);
+                        cadena.Append("</td>");
+                        cadena.Append("<td class=tdcenterAli style=width:" + 15 + "% >");
+                        cadena.Append(item.UNIDAD_MEDIDA);
                         cadena.Append("</td>");
                         cadena.Append("</tr>");
                     }

@@ -5,7 +5,7 @@
     </div>
     <br />
     <div class="bloqueFormTitulo">
-        <div>Historial de Título Habilitante</div>
+        <div>Trazabilidad de Título Habilitante</div>
     </div>
     <br />
     <div class="bloqueFormContent2">
@@ -327,10 +327,12 @@
                 url: url, datos: { COD_INFORME: cod_informe, titular: titular, num_poa: num_poa }, type: 'GET'
             };
             $("#divHistorialAdicional").html('');
+            $("#divPoa").html('');
             utilSigo.fnAjax(option, function (r) {
                 if (r.success) {
                     let data = r.data;
                     $("#divHistorialAdicional").html('');
+                    $("#divPoa").html('');
                     $("#divHistorialAdicional").append(data);
                 }
                 else {
@@ -348,10 +350,12 @@
                 url: url, datos: { NUM_POA: strNum_Poa, COD_THABILITANTE: strCod_Thabilitante, COD_INFORME: strCod_informe }, type: 'GET'
             };
             $("#divPoa").html('');
+            $("#divHistorialAdicional").html('');
             utilSigo.fnAjax(option, function (r) {
                 if (r.success) {
                     let data = r.data;
                     $("#divPoa").html('');
+                    $("#divHistorialAdicional").html('');
                     $("#divPoa").append(data);
                 }
                 else {

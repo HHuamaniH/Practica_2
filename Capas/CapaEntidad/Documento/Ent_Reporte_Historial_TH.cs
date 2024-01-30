@@ -331,6 +331,8 @@ namespace CapaEntidad.DOC
 
         [Description("VOLUMEN_ARBOLES")]
         public Decimal VOLUMEN_ARBOLES { get; set; }
+        [Description("UNIDAD_MEDIDA")]
+        public String UNIDAD_MEDIDA { get; set; }
 
         [Description("ID_REGISTRO")]
         public Int32 ID_REGISTRO { get; set; }
@@ -403,6 +405,8 @@ namespace CapaEntidad.DOC
         public String SUPERVISOR { get; set; }
         [Description("VOLUMEN_INJUSTIFICADO")]
         public Decimal VOLUMEN_INJUSTIFICADO { get; set; }
+        [Description("INDICIO_APROV")]
+        public String INDICIO_APROV { get; set; }
 
         //[Description("COD_PROVARCH")]
         //public String COD_PROVARCH { get; set; }

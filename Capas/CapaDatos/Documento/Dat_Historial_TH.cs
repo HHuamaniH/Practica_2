@@ -3436,6 +3436,7 @@ namespace CapaDatos.DOC
                                 oCampos2.ARCHIVA_INFORME = dr["ARCHIVA_INFORME"].ToString();
                                 oCampos2.SUPERVISOR = dr["SUPERVISOR"].ToString();
                                 oCampos2.VOLUMEN_INJUSTIFICADO = Decimal.Parse(dr["VOLUMEN_INJUSTIFICADO"].ToString());
+                                oCampos2.INDICIO_APROV = dr["INDICIO_APROV"].ToString() == "0" ? "No" : "Si";
                                 #endregion
 
                                 // R.D. INICIO
@@ -3463,7 +3464,7 @@ namespace CapaDatos.DOC
                                 oCampos2.COD_DOCRDTERMINO = dr["COD_DOCRDTERMINO"].ToString();
                                 oCampos2.FECHA_RDTERMINO = dr["FECHA_RDTERMINO"].ToString();
                                 oCampos2.DETERMINACION_RDTERMINO = dr["DETTERMINA_RT"].ToString();
-                                oCampos2.AMONESTACION_RT = dr["AMONESTACION_RT"].ToString();
+                                oCampos2.AMONESTACION_RT = dr["AMONESTACION_RT"].ToString() == "0" ? "No" : "Si";
                                 oCampos2.MULTA_MONTO = dr["MONTO_RT"].ToString();
                                 oCampos2.SANCION_EXTITULAR_RDTERMINO = dr["EX_TITULARRT"].ToString();
                                 oCampos2.TITULAR = dr["EX_TITULAR"].ToString();
@@ -3652,7 +3653,7 @@ namespace CapaDatos.DOC
                             while (dr.Read())
                             {
                                 oCampos1 = new CEntidad();
-                                oCampos1.ESPECIE = dr["ESPECIES"].ToString();                                
+                                oCampos1.ESPECIE = dr["ESPECIES"].ToString();
                                 oCampos1.VOLUMEN_APROBADO = Decimal.Parse(dr["VOLUMEN_APROBADO"].ToString());
                                 oCampos1.VOLUMEN_MOVILIZADO = Decimal.Parse(dr["VOLUMEN_MOVILIZADO"].ToString());
                                 oCampos1.VOLUMEN_INJUSTIFICADO = Decimal.Parse(dr["VOLUMEN_INJUSTIFICADO"].ToString());
@@ -3766,7 +3767,8 @@ namespace CapaDatos.DOC
                                 oCampos1.NOMBRE_CIENTIFICO = dr["NOMBRE_CIENTIFICO"].ToString();
                                 oCampos1.PARCELA = dr["PARCELA"].ToString();
                                 oCampos1.NUMERO_ARBOLES = Convert.ToInt32(dr["NUM_ARBOLES"]);
-                                oCampos1.VOLUMEN_ARBOLES = Convert.ToInt32(dr["VOLUMEN_KILOGRAMOS"]);
+                                oCampos1.VOLUMEN_ARBOLES = Convert.ToDecimal(dr["VOLUMEN_KILOGRAMOS"]);
+                                oCampos1.UNIDAD_MEDIDA = dr["UNIDAD_MEDIDA"].ToString();
                                 oCampos.ListPOATH.Add(oCampos1);
                             }
                         }
@@ -3792,6 +3794,7 @@ namespace CapaDatos.DOC
                                 oCampos1.VOLUMEN_MOVILIZADO = Convert.ToDecimal(dr["VOLUMEN_MOVILIZADO"]);
                                 oCampos1.SALDO = Convert.ToDecimal(dr["SALDO"]);
                                 oCampos1.OBSERVACIONES = dr["OBSERVACION"].ToString();
+                                oCampos1.UNIDAD_MEDIDA = dr["UNIDAD_MEDIDA"].ToString();
 
                                 oCampos.ListPOABalance.Add(oCampos1);
                             }
