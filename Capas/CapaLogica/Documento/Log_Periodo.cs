@@ -71,5 +71,33 @@ namespace CapaLogica.Documento
             }
             return result;
         }
+
+        public ListResult DeletePeriodo(string id, string codUsuario)
+        {
+            ListResult result = new ListResult();
+            try
+            {
+                Ent_Periodo ent = new Ent_Periodo();
+                ent.RegEstado = 1;
+                ent.IDPERIODO = string.IsNullOrEmpty(id) ? "" : id.Trim();
+               // ent.MOTIVO = model.motivo;
+                ent.ACTIVO = 1;
+                ent.OUTPUTPARAM01 = "";
+                ent.OUTPUTPARAM02 = "";
+                ent.COD_UCUENTA = codUsuario;
+                Dat_Periodo dat = new Dat_Periodo();
+                dat.DeletePeriodo(ent);
+                result.success = true;
+                string msj = "Se eliminó correctamente el periodo";
+       
+                result.msj = msj;
+            }
+            catch (Exception ex)
+            {
+                result.success = false;
+                result.msj = ex.Message;
+            }
+            return result;
+        }
     }
 }

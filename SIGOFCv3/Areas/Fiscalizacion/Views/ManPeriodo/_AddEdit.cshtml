@@ -50,6 +50,7 @@
 <script>
     "use strict";
     var _manPerfil = {
+
         fnClose: () => {
             utilSigo.fnCloseModal("manPerfilModal");
         },
@@ -57,29 +58,40 @@
             _manPerfil.fnClose();
         },
         guardarPeriodo: () => {
-            debugger;
-            var url = urlLocalSigo + "Fiscalizacion/ManPeriodo/_AddEdit";
-            var model = _manPerfil.frm.serializeObject();
-            
-            model.act = utilSigo.fnGetValChk(_manPerfil.frm.find("#act"));
-            model.id = _manPerfil.frm.find("#id").val();
 
-            var option = { url: url, datos: JSON.stringify(model), type: 'POST' };
-            utilSigo.fnAjax(option, function (data) {
-                if (data.success) {
-                    utilSigo.toastSuccess("Aviso", data.msj);
-                    _manPerfil.fnClose();
-                    _manPerfil.frm.submit();
-                }
-                else {
-                    utilSigo.toastWarning("Aviso", data.msj);
-                }
-            });
+            var falta = fnValidar();
+            if (falta != "") {
+                utilSigo.toastWarning("Aviso", falta);
+            }
+            else {
+
+                var url = urlLocalSigo + "Fiscalizacion/ManPeriodo/_AddEdit";
+                var model = _manPerfil.frm.serializeObject();
+
+                model.act = utilSigo.fnGetValChk(_manPerfil.frm.find("#act"));
+                model.id = _manPerfil.frm.find("#id").val();
+
+                var option = { url: url, datos: JSON.stringify(model), type: 'POST' };
+                utilSigo.fnAjax(option, function (data) {
+                    if (data.success) {
+                        utilSigo.toastSuccess("Aviso", data.msj);
+                        _manPerfil.fnClose();
+                        _manPerfil.frm.submit();
+                        ManPeriodo.fnBuscarPeriodo();
+                    }
+                    else {
+                        utilSigo.toastWarning("Aviso", data.msj);
+                    }
+                });
+
+
+            }
+
+
         },
         fnInit: () => {
             let perfil = JSON.parse('@Html.Raw(Json.Encode(@Model))');
-            console.log('perfil', perfil);
-
+            
             _manPerfil.frm = $("#frmAddEditPerfil");
             _manPerfil.cont = $("#divManPerfil");
 
@@ -99,9 +111,33 @@
         }
 
     };
+
+
     $(function () {
         _manPerfil.fnInit();
     });
+
+
+    function fnValidar() {
+        var falta = "", band = 0;
+
+        var ExpRegFecha = /^(?:(?:(?:0?[1-9]|1\d|2[0-8])[/](?:0?[1-9]|1[0-2])|(?:29|30)[/](?:0?[13-9]|1[0-2])|31[/](?:0?[13578]|1[02]))[/](?:0{2,3}[1-9]|0{1,2}[1-9]\d|0?[1-9]\d{2}|[1-9]\d{3})|29[/]0?2[/](?:\d{1,2}(?:0[48]|[2468][048]|[13579][26])|(?:0?[48]|[13579][26]|[2468][048])00))$/;
+
+        var fecha = _manPerfil.frm.find("#id").val();
+
+        if (fecha.trim() == "") {
+            falta = "Debe seleccionar Fecha";
+            band = 1;
+        }
+
+        var Fechainvalida = fecha.trim();
+        if (Fechainvalida.match(ExpRegFecha) == null) {
+            falta = "Ingrese Fecha en el siguiente formato dd/mm/yyyy";
+            band = 1;
+        }
+
+        return falta;
+    }
 
 
 </script>

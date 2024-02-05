@@ -22,7 +22,9 @@ namespace SIGOFCv3.Areas.Fiscalizacion.Controllers
         {
 
             logPeriodo = new Log_Periodo();
+
             var itemEdit = logPeriodo.AddEditPeriodoInit(cod);
+            if(cod!="") itemEdit.estado = 0;
             return PartialView(itemEdit);
         }
 
@@ -51,6 +53,16 @@ namespace SIGOFCv3.Areas.Fiscalizacion.Controllers
         {
             logPeriodo = new Log_Periodo();
             return Json(logPeriodo.AddEditPeriodo(vm, (ModelSession.GetSession())[0].COD_UCUENTA));
+        }
+
+        [HttpPost]
+        public JsonResult _DeletePeriodo(string id)
+        {
+            DateTime fecha = Convert.ToDateTime(id);
+            var test = fecha.ToString("dd/MM/yyyy");
+
+            logPeriodo = new Log_Periodo();
+            return Json(logPeriodo.DeletePeriodo(fecha.ToString("dd/MM/yyyy"), (ModelSession.GetSession())[0].COD_UCUENTA));
         }
     }
 }

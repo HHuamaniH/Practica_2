@@ -11,7 +11,6 @@ ManPeriodo.fnBuscarPeriodo = function () {
     var url = ManPeriodo.url + "criterio=" + valCriterio + "&valor=" + valorBuscar;
 
     ManPeriodo.dtPerfil.ajax.url(url).load(function (data) {
-        //debugger
         if (data.success == false) {
             utilSigo.toastError("Error", "Sucedio un Error al listar los perfiles, Comuniquese con el Administrador");
             console.log(data.msjError);
@@ -47,10 +46,10 @@ ManPeriodo.fnInitDataTable_Detail = function () {
 }
 ManPeriodo.fnAddDelete = function (obj) {
     var itemRow = ManPeriodo.dtPerfil.row($(obj).parents('tr')).data();
-    utilSigo.dialogConfirm('', 'Esta seguro de eliminar el perfil: ' + itemRow.descr + '?', function (r) {
+    utilSigo.dialogConfirm('', 'Esta seguro de eliminar el periodo: ' + itemRow.ID + '?', function (r) {
         if (r) {
-            var url = urlLocalSigo + "Seguridad/Perfil/DeletePerfil";
-            var option = { url: url, datos: JSON.stringify({ id: itemRow.id }), type: 'POST' };
+            var url = urlLocalSigo + "Fiscalizacion/ManPeriodo/_DeletePeriodo";
+            var option = { url: url, datos: JSON.stringify({ id: itemRow.ID }), type: 'POST' };
             utilSigo.fnAjax(option, function (data) {
                 if (data.success) {
                     utilSigo.toastSuccess("Aviso", data.msj);

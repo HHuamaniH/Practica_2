@@ -117,5 +117,41 @@ namespace CapaDatos.Documento
             }
             return true;
         }
+
+        public bool DeletePeriodo(Ent_Periodo entity)
+        {
+            string OUTPUTPARAM02 = "";
+            string OUTPUTPARAM01 = "";
+
+            using (OracleConnection cn = new OracleConnection(BDConexion.Conexion_Cadena_SIGO()))
+            {
+                OracleTransaction tr = null;
+                try
+                {
+                    cn.Open();
+                    tr = cn.BeginTransaction();
+                    using (OracleCommand cmd = dBOracle.ManExecuteOutput(cn, tr, "GENE_OSINFOR_ERP_MIGRACION.USP_PERIODO_ELIMINAR", entity))
+                    {
+                        cmd.ExecuteNonQuery();
+                        OUTPUTPARAM02 = (string)cmd.Parameters["OUTPUTPARAM02"].Value;
+                        OUTPUTPARAM01 = (string)cmd.Parameters["OUTPUTPARAM01"].Value;
+                        if (OUTPUTPARAM02 != "EXITO")
+                        {
+                            throw new Exception(OUTPUTPARAM02);
+                        }
+                    }
+                    tr.Commit();
+                }
+                catch (Exception ex)
+                {
+                    tr.Rollback();
+                    tr.Dispose();
+                    tr = null;
+                    throw ex;
+                }
+            }
+            return true;
+        }
+
     }
 }

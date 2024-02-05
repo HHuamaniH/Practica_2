@@ -319,8 +319,13 @@ ManInfFundamentado_AddEdit.fnSaveFormV2 = function () {
     }
 }
 
+
 ManInfFundamentado_AddEdit.fnValidarAtributosV2 = function (obj) {
     var falta = "", band = 0;
+
+    var ExpRegFecha = /^(?:(?:(?:0?[1-9]|1\d|2[0-8])[/](?:0?[1-9]|1[0-2])|(?:29|30)[/](?:0?[13-9]|1[0-2])|31[/](?:0?[13578]|1[02]))[/](?:0{2,3}[1-9]|0{1,2}[1-9]\d|0?[1-9]\d{2}|[1-9]\d{3})|29[/]0?2[/](?:\d{1,2}(?:0[48]|[2468][048]|[13579][26])|(?:0?[48]|[13579][26]|[2468][048])00))$/;
+
+
     if (obj.vmControlCalidad.ddlIndicadorId == 0) {
         falta = "Debe seleccionar la situación actual de su registro";
         band = 1;
@@ -342,6 +347,12 @@ ManInfFundamentado_AddEdit.fnValidarAtributosV2 = function (obj) {
             falta = "Ingrese Fecha de Ingreso de la Solicitud del SITD";
             band = 1;
         }
+
+        var Fechainvalida = obj.dtpFechaIngresoSolicitud.trim();
+        if (Fechainvalida.match(ExpRegFecha) == null) {
+            falta = "Ingrese Fecha en el siguiente formato dd/mm/yyyy";
+            band = 1;
+        }
     }
     if (band == 0) {
         if (obj.txtNumeroOficioSolicitud.trim() == "") {
@@ -360,6 +371,7 @@ ManInfFundamentado_AddEdit.fnValidarAtributosV2 = function (obj) {
             falta = "Debe seleccionar Vencimiento de Plazo Legal";
             band = 1;
         }
+
     }
     if (band == 0) {
         if (obj.ddlOdId == 0) {
@@ -402,6 +414,12 @@ ManInfFundamentado_AddEdit.fnValidarAtributosV2 = function (obj) {
                         falta = "Ingrese Fecha de Emisión";
                         band = 1;
                     }
+
+                    var Fechainvalida = obj.dtpFechaFundamentado.trim();
+                    if (Fechainvalida.match(ExpRegFecha) == null) {
+                        falta = "Ingrese Fecha en el siguiente formato dd/mm/yyyy";
+                        band = 1;
+                    }
                 }
                 if (band == 0) {
                     if (obj.txtNumeroOficio1.trim() == "") {
@@ -412,6 +430,12 @@ ManInfFundamentado_AddEdit.fnValidarAtributosV2 = function (obj) {
                 if (band == 0) {
                     if (obj.dtpfechaOficio1.trim() == "") {
                         falta = "Debe seleccionar Fecha de Oficio";
+                        band = 1;
+                    }
+
+                    var Fechainvalida = obj.dtpfechaOficio1.trim();
+                    if (Fechainvalida.match(ExpRegFecha) == null) {
+                        falta = "Ingrese Fecha en el siguiente formato dd/mm/yyyy";
                         band = 1;
                     }
                 }
@@ -440,6 +464,12 @@ ManInfFundamentado_AddEdit.fnValidarAtributosV2 = function (obj) {
                         falta = "Debe seleccionar Fecha de Oficio";
                         band = 1;
                     }
+
+                    var Fechainvalida = obj.dtpfechaOficio2.trim();
+                    if (Fechainvalida.match(ExpRegFecha) == null) {
+                        falta = "Ingrese Fecha en el siguiente formato dd/mm/yyyy";
+                        band = 1;
+                    }
                 }
             }
             break;
@@ -455,6 +485,12 @@ ManInfFundamentado_AddEdit.fnValidarAtributosV2 = function (obj) {
                 if (band == 0) {
                     if (obj.dtpFechaEmisionPau.trim() == "") {
                         falta = "Debe seleccionar Fecha de Emisión";
+                        band = 1;
+                    }
+
+                    var Fechainvalida = obj.dtpFechaEmisionPau.trim();
+                    if (Fechainvalida.match(ExpRegFecha) == null) {
+                        falta = "Ingrese Fecha en el siguiente formato dd/mm/yyyy";
                         band = 1;
                     }
                 }
@@ -474,6 +510,13 @@ ManInfFundamentado_AddEdit.fnValidarAtributosV2 = function (obj) {
                 falta = "Debe seleccionar Fecha de Notificación";
                 band = 1;
             }
+
+            var Fechainvalida = obj.dtpFechaNotificacion.trim();
+            if (Fechainvalida.match(ExpRegFecha) == null) {
+                falta = "Ingrese Fecha en el siguiente formato dd/mm/yyyy";
+                band = 1;
+            }
+
         }
     }
 
@@ -965,5 +1008,9 @@ $(document).ready(function () {
             fechaFirmeza.val('');
         }
     });
+
+
+ 
+
 
 });
