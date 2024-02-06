@@ -1,0 +1,399 @@
+﻿@model CapaEntidad.DOC.Ent_Reporte_Historial_TH
+<div class="container">
+    <div class="card-header text-small" id="divTitle">
+        <a id="btnRegresarusuario" style="cursor:pointer;" data-toggle="tooltip" data-placement="top" title="Regresar" onclick="_RtpTHDet_v2.fnRegresar()"><i class="fa mx-2 fa-lg fa-reply"></i></a>
+    </div>
+    <br />
+    <div class="bloqueFormTitulo">
+        <div>Trazabilidad de Título Habilitante</div>
+    </div>
+    <br />
+    <div class="bloqueFormContent2">
+        <div class="bloqueFormContent2LeftDoble">
+            <div>N° Título Habilitante</div>
+            <div>:</div>
+        </div>
+        <div class="bloqueFormContent2Right">
+            <div>
+                @if (string.IsNullOrEmpty(@Model.COD_DOCUMENTO_DIG.Trim()))
+                {
+                    <span id="cphPrincipal_lblNumTH">@Model.TITULO</span>
+                }
+                else
+                {
+                    <span id="cphPrincipal_lblNumTH"><a href="javascript: void(0);" onclick="_RtpTHDet_v2.fnDownloadTH('@Model.COD_DOCUMENTO_DIG')">@Model.TITULO</a></span>
+                }
+
+            </div>
+        </div>
+    </div>
+    <div class="bloqueFormContent2">
+        <div class="bloqueFormContent2LeftDoble">
+            <div>Modalidad</div>
+            <div>:</div>
+        </div>
+        <div class="bloqueFormContent2Right">
+            <div>
+                <span id="cphPrincipal_lblModalidadTH">@Model.MODALIDAD</span>
+            </div>
+        </div>
+    </div>
+    <div class="bloqueFormContent2">
+        <div class="bloqueFormContent2LeftDoble">
+            <div>Área del Título Habilitante</div>
+            <div>:</div>
+        </div>
+        <div class="bloqueFormContent2Right">
+            <div>
+                <span id="cphPrincipal_lblAreaTH">@Model.AREA_O</span>
+            </div>
+        </div>
+    </div>
+    <div class="bloqueFormContent2">
+        <div class="bloqueFormContent2LeftDoble">
+            <div>Fecha inicio</div>
+            <div>:</div>
+        </div>
+        <div class="bloqueFormContent2Right">
+            <div>
+                <span id="cphPrincipal_lblFechaInicioTH">@Model.FECHA_INICIO</span>
+            </div>
+        </div>
+    </div>
+    <div class="bloqueFormContent2">
+        <div class="bloqueFormContent2LeftDoble">
+            <div>Fecha término</div>
+            <div>:</div>
+        </div>
+        <div class="bloqueFormContent2Right">
+            <div>
+                <span id="cphPrincipal_lblFechaTerminoTH">@Model.FECHA_FIN</span>
+            </div>
+        </div>
+    </div>
+    <div class="bloqueFormContent2">
+        <div class="bloqueFormContent2LeftDoble">
+            <div>Ubicación</div>
+            <div>:</div>
+        </div>
+        <div class="bloqueFormContent2Right">
+            <div>
+                <span id="cphPrincipal_lblUbicacionTH">@Model.UBICACION</span>
+            </div>
+        </div>
+    </div>
+    <div class="bloqueFormContent2">
+        <div class="bloqueFormContent2LeftDoble">
+            <div>Sector</div>
+            <div>:</div>
+        </div>
+        <div class="bloqueFormContent2Right">
+            <div>
+                <span id="cphPrincipal_lblEstabSectorTH">@Model.ESTAB_SECTOR</span>
+            </div>
+        </div>
+    </div>
+    <div class="bloqueFormContent2">
+        <div class="bloqueFormContent2LeftDoble">
+            <div>Titular</div>
+            <div>:</div>
+        </div>
+        <div class="bloqueFormContent2Right">
+            <div>
+                <span id="lblTitularTH">@Model.TITULAR</span>
+            </div>
+        </div>
+    </div>
+    <div class="bloqueFormContent2">
+        <div class="bloqueFormContent2LeftDoble">
+            <div>DNI/RUC/CE</div>
+            <div>:</div>
+        </div>
+        <div class="bloqueFormContent2Right">
+            <div>
+                <span id="lblNumDocTitularTH">@Model.T_NUMERO_DOCUMENTO</span>
+            </div>
+        </div>
+    </div>
+    <div class="bloqueFormContent2">
+        <div class="bloqueFormContent2LeftDoble">
+            <div>Dirección Titular</div>
+            <div>:</div>
+        </div>
+        <div class="bloqueFormContent2Right">
+            <div>
+                <span id="cphPrincipal_lblDireccionTH">@Model.DIRECCION_TH</span>
+            </div>
+        </div>
+    </div>
+    <div class="bloqueFormContent2">
+        <div class="bloqueFormContent2LeftDoble">
+            <div>Representante Legal</div>
+            <div>:</div>
+        </div>
+        <div class="bloqueFormContent2Right">
+            <div>
+                <span id="cphPrincipal_lblRepresentanteTH">@Model.REPRESENTANTE_LEG</span>
+            </div>
+        </div>
+    </div>
+    <div class="bloqueFormContent2">
+        <div class="bloqueFormContent2LeftDoble">
+            <div>Estado del Título Habilitante</div>
+            <div>:</div>
+        </div>
+        <div class="bloqueFormContent2Right">
+            <div>
+                <span id="cphPrincipal_lblEstadoTH">@Model.ESTADO_TH</span>
+            </div>
+        </div>
+    </div>
+    <br />
+    <div id="cphPrincipal_Div1" class="bloqueFormTitulo">
+        <div>
+            Listado de POA
+        </div>
+    </div>
+    <br />
+    <table class="Grilla">
+        <thead>
+            <tr>
+                <th>N° POA   </th>
+                <th>ZAFRA</th>
+                <th>N° RESOLUCIÓN APROBACIÓN DEL POA</th>
+                <th>FECHA RESOLUCIÓN</th>
+                <th>NÚMERO DE ESPECIES</th>
+                <th>VOLUMEN TOTAL APROBADO (m3)</th>
+                <th>CONSULTOR</th>
+                <th>N° INFORME</th>
+            </tr>
+        </thead>
+        <tbody>            
+            @if (Model.ListPOATH.Count > 0)
+            {
+                foreach (var item in Model.ListPOATH)
+                {
+                    string onclick = String.Format("_RtpTHDet_v2.fnResolucion('{0}','{1}')", item.COD_INFORME, item.NUM_POA);
+                    string onclickPOA = String.Format("_RtpTHDet_v2.fnPOA('{0}','{1}','{2}')", item.NUM_POA, item.COD_THABILITANTE, item.COD_INFORME);
+
+                    <tr>
+                        <td><a href="javascript: void(0);" onclick="@onclickPOA">@item.NUM_POA_STRING</a></td>
+                        <td>@item.ZAFRA</td>
+                        <td>@item.ARESOLUCION_NUM</td>
+                        <td>@item.fecha_aprobacion</td>
+                        @*<td><a href="javascript: void(0);" onclick="_RtpTHDet_v2.fnArboles(@item.NUM_POA)">@item.NUMERO_ARBOLES</a></td>*@
+                        <td>@item.NUMERO_ARBOLES</td>
+                        <td>@item.VOLUMEN_ARBOLES</td>
+                        <td>@item.consultor</td>
+                        @if (string.IsNullOrEmpty(item.NUM_INFORME.Trim()))
+                        {
+                            <td>No Supervisado</td>
+                        }
+                        else
+                        {
+                            <td><a href="javascript: void(0);" onclick="@onclick">@item.NUM_INFORME</a></td>
+                        }
+                    </tr>
+                }
+            }
+            else
+            {
+                <tr>
+                    <td>No hay datos</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <br />
+    <br />
+    <div id="divPoa">
+
+    </div>
+    <br />
+    <br />
+    <div id="divHistorialAdicional">
+
+    </div>
+    <br />
+    <br />
+</div>
+<div class="modal fade" id="mResumenMulta" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="mResumenMulta" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="mResumenMultaLabel">Resumen de Multas</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-12 rMulta">
+
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                <button type="button" class="btn btn-primary d-none">Understood</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    var _RtpTHDet_v2 = {
+        fnRegresar: () => {
+            $("#divPrincipal").slideDown();
+            $("#divHistorialTH").slideUp();
+        },
+        fnArboles: (numPoa) => {
+            let url = urlLocalSigo + "General/Reportes/_Rpt_HistorialTHDetalle_Especie";
+            let option = {
+                url: url, datos: { numPoa: numPoa }, type: 'GET'
+            };
+            $("#divHistorialAdicional").html('');
+            utilSigo.fnAjax(option, function (r) {
+                if (r.success) {
+                    let data = r.data;
+                    $("#divHistorialAdicional").html('');
+                    $("#divHistorialAdicional").append(data);
+                }
+                else {
+                    utilSigo.toastWarning("Aviso", initSigo.MessageError);
+                }
+            });
+        },
+        fnDownloadTH: (COD_DOCUMENTO_DIG) => {
+            let lista = COD_DOCUMENTO_DIG.split('|');
+            let strFileName = '';
+            let strOrigen = '';
+            if (lista.length > 1) {
+                strFileName = lista[0];
+                strOrigen = lista[1];
+            }
+
+            var ss = urlLocalSigo + "General/Controles/DescargarIntegracionSIADO?fileName=" + strFileName + "&origen=" + strOrigen;
+            var xhr = new XMLHttpRequest();
+            xhr.onload = function () {
+                if (xhr.readyState == 4 && xhr.status == 200) {
+                    window.location.href = ss;
+                }
+                else if (xhr.status == 404) {
+                    utilSigo.toastWarning("Aviso", "Sucedio un error, No existe la direccion de descarga");
+                }
+                else if (xhr.status == 0) {
+                    utilSigo.toastWarning("Aviso", "Sucedio un error, No existe el archivo");
+                }
+                else {
+                    utilSigo.toastWarning("Aviso", "Sucedio un error al descargar el archivo, Comuníquese con el Administrador");
+                }
+            }
+            xhr.open('head', ss);
+            xhr.send(null);
+        },
+        fnDownloadResPOA: (COD_DOCUMENTO_DIG) => {            
+            let lista = COD_DOCUMENTO_DIG.split('|');
+            let strFileName = '';
+            let strOrigen = '';
+            if (lista.length > 1) {
+                strFileName = lista[0];
+                strOrigen = lista[1];
+            }
+
+            var ss = urlLocalSigo + "General/Controles/DescargarIntegracionSIADO?fileName=" + strFileName + "&origen=" + strOrigen;
+            var xhr = new XMLHttpRequest();
+            xhr.onload = function () {
+                if (xhr.readyState == 4 && xhr.status == 200) {
+                    window.location.href = ss;
+                }
+                else if (xhr.status == 404) {
+                    utilSigo.toastWarning("Aviso", "Sucedio un error, No existe la direccion de descarga");
+                }
+                else if (xhr.status == 0) {
+                    utilSigo.toastWarning("Aviso", "Sucedio un error, No existe el archivo");
+                }
+                else {
+                    utilSigo.toastWarning("Aviso", "Sucedio un error al descargar el archivo, Comuníquese con el Administrador");
+                }
+            }
+            xhr.open('head', ss);
+            xhr.send(null);
+        },
+        fnResolucion: (cod_informe,num_poa) => {
+            let titular = $("#lblTitularTH").val();
+            titular = titular == null ? "" : titular;
+            let url = urlLocalSigo + "General/Reportes/_Rpt_HistorialTHDetalle_SelectInf_v2";
+            let option = {
+                url: url, datos: { COD_INFORME: cod_informe, titular: titular, num_poa: num_poa }, type: 'GET'
+            };
+            $("#divHistorialAdicional").html('');
+            $("#divPoa").html('');
+            utilSigo.fnAjax(option, function (r) {
+                if (r.success) {
+                    let data = r.data;
+                    $("#divHistorialAdicional").html('');
+                    $("#divPoa").html('');
+                    $("#divHistorialAdicional").append(data);
+                }
+                else {
+                    utilSigo.toastWarning("Aviso", initSigo.MessageError);
+                }
+            });
+        },
+        fnPOA: (num_Poa, cod_Thabilitante, cod_informe) => {
+            debugger;
+            let strNum_Poa = num_Poa;
+            let strCod_Thabilitante = cod_Thabilitante;
+            let strCod_informe = cod_informe;
+            let url = urlLocalSigo + "General/Reportes/_Rpt_HistorialTHDetalle_SelectPoa_v2";
+            let option = {
+                url: url, datos: { NUM_POA: strNum_Poa, COD_THABILITANTE: strCod_Thabilitante, COD_INFORME: strCod_informe }, type: 'GET'
+            };
+            $("#divPoa").html('');
+            $("#divHistorialAdicional").html('');
+            utilSigo.fnAjax(option, function (r) {
+                if (r.success) {
+                    let data = r.data;
+                    $("#divPoa").html('');
+                    $("#divHistorialAdicional").html('');
+                    $("#divPoa").append(data);
+                }
+                else {
+                    utilSigo.toastWarning("Aviso", initSigo.MessageError);
+                }
+            });
+        },
+        fnResumenRecaudacionesC: (id) => {
+            let anio = $('#Fecha').val(); //_rendReporteSup.frm.find("#chkAnio").val();
+
+            let url = urlLocalSigo + "General/Reportes/ResumenRecaudacionCobranza";
+            $.ajax({
+                url: url,
+                type: 'POST',
+                datatype: "json",
+                traditional: true,
+                beforeSend: function () { utilSigo.beforeSendAjax(); },
+                data: { 'id': id },
+                success: function (data) {
+
+                    $('.rMulta').html(data);
+                    $('#mResumenMulta').modal('show');
+
+                },
+                complete: function () { utilSigo.unblockUIGeneral(); }
+            });
+        },
+        fnResumeDescargar: () => {
+
+        }
+    };
+    $(document).ready(function () {
+
+
+    });
+</script>
+<style>
+    .modal-xl {
+        max-width: 90%;
+    }
+</style>

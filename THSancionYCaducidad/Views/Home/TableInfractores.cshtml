@@ -61,14 +61,23 @@
             <td style="width: 4%; text-align: center">@item.MULTA_MONTO</td>
             <td style="width: 6%; text-align: center">@item.OBSERVACIONES</td>
             <td style="width: 5%; text-align: center">
-                @using (@Html.BeginForm("detalle", "Home", FormMethod.Post))
+
+                <button id="btnBuscar" type="submit" class="btn btn-app btnBuscar" formtarget="_blank" title="Ver historial Título Habilitante"
+                        style="min-width:50px; height:52px; background-color:#3c8dbc; color:white; padding: 10px 5px;" 
+                        onclick="window.open('@ViewBag.urlObservatorio'+'@item.COD_THABILITANTE', '_blank')">
+                    <i class="fa fa-search-plus"></i> Ver
+                </button>
+
+
+                @*@using (@Html.BeginForm("detalle", "Home", FormMethod.Post))
                 {
                     <button id="btnBuscar" type="submit" class="btn btn-app btnBuscar" formtarget="_blank" title="Ver historial Título Habilitante"
                             style="min-width:50px; height:52px; background-color:#3c8dbc; color:white; padding: 10px 5px;">
                         <i class="fa fa-search-plus"></i> Ver
                     </button>
+
                     <input type="hidden" id="hfTHabilitanteCod" name="hfTHabilitanteCod" value="@item.COD_THABILITANTE" />
-                }
+                }*@
             </td>
         </tr>
             }

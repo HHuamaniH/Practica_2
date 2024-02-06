@@ -16,9 +16,13 @@ namespace CapaEntidad.DOC
 
         [Description("TITULAR")]
         public String TITULAR { get; set; }
+        [Description("NUMERO_DOCUMENTO")]
+        public String NUMERO_DOCUMENTO { get; set; }
 
         [Description("UBICACION")]
         public String UBICACION { get; set; }
+        [Description("ESTAB_SECTOR")]
+        public String ESTAB_SECTOR { get; set; }
 
         [Description("DIRECCION")]
         public String DIRECCION { get; set; }
@@ -68,6 +72,12 @@ namespace CapaEntidad.DOC
 
         [Description("ARESOLUCION_NUM")]
         public String ARESOLUCION_NUM { get; set; }
+        [Description("INICIO_VIGENCIA")]
+        public String INICIO_VIGENCIA { get; set; }
+        [Description("FIN_VIGENCIA")]
+        public String FIN_VIGENCIA { get; set; }
+        [Description("BEXTRACCION_FEMISION")]
+        public String BEXTRACCION_FEMISION { get; set; }
 
         [Description("ITECNICO_REFORMULA_POA_NUM")]
         public String ITECNICO_REFORMULA_POA_NUM { get; set; }
@@ -83,6 +93,12 @@ namespace CapaEntidad.DOC
 
         [Description("NUMERO_RESOLUCION")]
         public String NUMERO_RESOLUCION { get; set; }
+        [Description("NUMERO_NOTIFICACION")]
+        public String NUMERO_NOTIFICACION { get; set; }
+        [Description("FECHA_NOTIFICA_TITULAR")]
+        public String FECHA_NOTIFICA_TITULAR { get; set; }
+        [Description("TIPO_FISCALIZA")]
+        public String TIPO_FISCALIZA { get; set; }
 
         [Description("COD_ITIPO")]
         public String COD_ITIPO { get; set; }
@@ -238,9 +254,17 @@ namespace CapaEntidad.DOC
 
         [Description("DETERMINACION_RDTERMINO")]
         public String DETERMINACION_RDTERMINO { get; set; }
+        [Description("AMONESTACION_RT")]
+        public String AMONESTACION_RT { get; set; }
 
         [Description("CADUCIDAD_RDTERMINO")]
         public String CADUCIDAD_RDTERMINO { get; set; }
+        [Description("GRAVEDAD_DANIO_RDTERMINO")]
+        public String GRAVEDAD_DANIO_RDTERMINO { get; set; }
+        [Description("MEDIDAS_CORRECTIVAS_RDTERMINO")]
+        public String MEDIDAS_CORRECTIVAS_RDTERMINO { get; set; }
+        [Description("MEDIDAS_CAUTELARES_RDTERMINO")]
+        public String MEDIDAS_CAUTELARES_RDTERMINO { get; set; }
 
         [Description("MULTA_RDTERMINO")]
         public String MULTA_RDTERMINO { get; set; }
@@ -307,6 +331,8 @@ namespace CapaEntidad.DOC
 
         [Description("VOLUMEN_ARBOLES")]
         public Decimal VOLUMEN_ARBOLES { get; set; }
+        [Description("UNIDAD_MEDIDA")]
+        public String UNIDAD_MEDIDA { get; set; }
 
         [Description("ID_REGISTRO")]
         public Int32 ID_REGISTRO { get; set; }
@@ -344,6 +370,10 @@ namespace CapaEntidad.DOC
         public String COD_ESPECIES { get; set; }
         [Description("NOMBRE_COMUN")]
         public String NOMBRE_COMUN { get; set; }
+        [Description("NOMBRE_CIENTIFICO")]
+        public String NOMBRE_CIENTIFICO { get; set; }
+        [Description("PARCELA")]
+        public String PARCELA { get; set; }
         [Description("ESPECIES")]
         public Int32 ESPECIES { get; set; }
         [Description("INXISTENCIA")]
@@ -363,6 +393,20 @@ namespace CapaEntidad.DOC
 
         [Description("OBSERVACIONES")]
         public String OBSERVACIONES { get; set; }
+        [Description("FECHA_SUPERVISION_INICIO")]
+        public String FECHA_SUPERVISION_INICIO { get; set; }
+        [Description("FECHA_SUPERVISION_FIN")]
+        public String FECHA_SUPERVISION_FIN { get; set; }
+        [Description("REGENTE_IMPLEMENTA")]
+        public String REGENTE_IMPLEMENTA { get; set; }
+        [Description("ARCHIVA_INFORME")]
+        public String ARCHIVA_INFORME { get; set; }
+        [Description("SUPERVISOR")]
+        public String SUPERVISOR { get; set; }
+        [Description("VOLUMEN_INJUSTIFICADO")]
+        public Decimal VOLUMEN_INJUSTIFICADO { get; set; }
+        [Description("INDICIO_APROV")]
+        public String INDICIO_APROV { get; set; }
 
         //[Description("COD_PROVARCH")]
         //public String COD_PROVARCH { get; set; }
@@ -676,6 +720,13 @@ namespace CapaEntidad.DOC
         [Category("LIST"), Description("ListVolumenInexistencia")]
         public List<Ent_Reporte_Historial_TH> ListVolumenInexistencia { get; set; } //volumen de inexistencia
 
+        [Category("LIST"), Description("ListVolumenAnalizado")]
+        public List<Ent_Reporte_Historial_TH> ListVolumenAnalizado { get; set; } //Notificación de resolución Sub Directoral de Inicio de PAU
+        [Category("LIST"), Description("ListNotRDINICIO")]
+        public List<Ent_Reporte_Historial_TH> ListNotRDINICIO { get; set; } //Notificación de resolución Sub Directoral de Inicio de PAU
+        [Category("LIST"), Description("ListNotRDTERMINO")]
+        public List<Ent_Reporte_Historial_TH> ListNotRDTERMINO { get; set; } //Notificación de resolución Sub Directoral de Término de PAU
+
         //cambios en el historial titulo habilitante interno
 
         [Description("RECONS_COD_RESODIREC")]
@@ -686,6 +737,8 @@ namespace CapaEntidad.DOC
         public String RECONS_CODFCTIPO { get; set; }
         [Description("RECONS_RD_FECHA")]
         public Object RECONS_RD_FECHA { get; set; }
+        [Description("FECHA_RDRECONS")]
+        public String FECHA_RDRECONS { get; set; }
         [Description("RECONS_IMPROCEDENTE")]
         public String RECONS_IMPROCEDENTE { get; set; }
         [Description("RECONS_FUNDADA")]
@@ -694,6 +747,8 @@ namespace CapaEntidad.DOC
         public String RECONS_FUNDADA_PARTE { get; set; }
         [Description("RECONS_INFUNDADA")]
         public String RECONS_INFUNDADA { get; set; }
+        [Description("RECONS_INADMISIBLE")]
+        public String RECONS_INADMISIBLE { get; set; }
         [Description("RECONS_LEVANTAR_CADUCIDAD")]
         public String RECONS_LEVANTAR_CADUCIDAD { get; set; }
         [Description("RECONS_CAMBIO_MULTA")]
@@ -890,6 +945,24 @@ namespace CapaEntidad.DOC
         public String DOC_RETRO { get; set; }
         [Description("ESTADO_TFFS")]
         public String ESTADO_TFFS { get; set; }
+        [Description("FECHA_EMISION_RITFFS")]
+        public String FECHA_EMISION_RITFFS { get; set; }
+        [Description("APELACION_RITFFS")]
+        public String APELACION_RITFFS { get; set; }
+        [Description("SENTIDO_RESOLUCION_RITFFS")]
+        public String SENTIDO_RESOLUCION_RITFFS { get; set; }
+        [Description("CONFIRM_RESOLUCION_RITFFS")]
+        public String CONFIRM_RESOLUCION_RITFFS { get; set; }
+        [Description("LEVANTAMIENTO_RESOLUCION_RITFFS")]
+        public String LEVANTAMIENTO_RESOLUCION_RITFFS { get; set; }
+        [Description("CAMBIO_MULTA_RITFFS")]
+        public String CAMBIO_MULTA_RITFFS { get; set; }
+        [Description("MULTA_RITFFS")]
+        public Decimal MULTA_RITFFS { get; set; }
+        [Description("ESTADO_PAU_RITFFS")]
+        public String ESTADO_PAU_RITFFS { get; set; }
+        [Description("DOC_SIADO_RITFFS")]
+        public String DOC_SIADO_RITFFS { get; set; }
         // tribunal termino
         [Description("COD_TRIBUNAL_TER")]
         public String COD_TRIBUNAL_TER { get; set; }
@@ -903,6 +976,24 @@ namespace CapaEntidad.DOC
         public String DOC_RETRO_TFFSTER { get; set; }
         [Description("ESTADO_TFFSTER")]
         public String ESTADO_TFFSTER { get; set; }
+        [Description("FECHA_EMISION_RTTFFS")]
+        public String FECHA_EMISION_RTTFFS { get; set; }
+        [Description("APELACION_RTTFFS")]
+        public String APELACION_RTTFFS { get; set; }
+        [Description("SENTIDO_RESOLUCION_RTTFFS")]
+        public String SENTIDO_RESOLUCION_RTTFFS { get; set; }
+        [Description("CONFIRM_RESOLUCION_RTTFFS")]
+        public String CONFIRM_RESOLUCION_RTTFFS { get; set; }
+        [Description("LEVANTAMIENTO_RESOLUCION_RTTFFS")]
+        public String LEVANTAMIENTO_RESOLUCION_RTTFFS { get; set; }
+        [Description("CAMBIO_MULTA_RTTFFS")]
+        public String CAMBIO_MULTA_RTTFFS { get; set; }
+        [Description("MULTA_RTTFFS")]
+        public Decimal MULTA_RTTFFS { get; set; }
+        [Description("ESTADO_PAU_RTTFFS")]
+        public String ESTADO_PAU_RTTFFS { get; set; }
+        [Description("DOC_SIADO_RTTFFS")]
+        public String DOC_SIADO_RTTFFS { get; set; }
         //tribunal reconsideracion
         [Description("COD_TRIBUNAL_REC")]
         public String COD_TRIBUNAL_REC { get; set; }
@@ -916,6 +1007,24 @@ namespace CapaEntidad.DOC
         public String DOC_RETRO_TFFSREC { get; set; }
         [Description("ESTADO_TFFSREC")]
         public String ESTADO_TFFSREC { get; set; }
+        [Description("FECHA_EMISION_RRTFFS")]
+        public String FECHA_EMISION_RRTFFS { get; set; }
+        [Description("APELACION_RITFFS")]
+        public String APELACION_RRTFFS { get; set; }
+        [Description("SENTIDO_RESOLUCION_RRTFFS")]
+        public String SENTIDO_RESOLUCION_RRTFFS { get; set; }
+        [Description("CONFIRM_RESOLUCION_RRTFFS")]
+        public String CONFIRM_RESOLUCION_RRTFFS { get; set; }
+        [Description("LEVANTAMIENTO_RESOLUCION_RRTFFS")]
+        public String LEVANTAMIENTO_RESOLUCION_RRTFFS { get; set; }
+        [Description("CAMBIO_MULTA_RRTFFS")]
+        public String CAMBIO_MULTA_RRTFFS { get; set; }
+        [Description("MULTA_RRTFFS")]
+        public Decimal MULTA_RRTFFS { get; set; }
+        [Description("ESTADO_PAU_RRTFFS")]
+        public String ESTADO_PAU_RRTFFS { get; set; }
+        [Description("DOC_SIADO_RRTFFS")]
+        public String DOC_SIADO_RRTFFS { get; set; }
 
         // datos para capturar la informacion en los reportes
         [Description("COD_ACCION")]
@@ -959,12 +1068,46 @@ namespace CapaEntidad.DOC
         public String T_DNI { get; set; }
         [Description("T_RUC")]
         public String T_RUC { get; set; }
+        [Description("T_NUMERO_DOCUMENTO")]
+        public String T_NUMERO_DOCUMENTO { get; set; }
         [Description("R_DNI")]
         public String R_DNI { get; set; }
         [Description("R_RUC")]
         public String R_RUC { get; set; }
+        [Description("R_NUMERO_DOCUMENTO")]
+        public String R_NUMERO_DOCUMENTO { get; set; }
         [Description("PROVEIDO")]
         public String PROVEIDO { get; set; }
+        [Description("ESTADO_TH")]
+        public String ESTADO_TH { get; set; }
+        [Description("COD_DOCUMENTO_DIG")]
+        public String COD_DOCUMENTO_DIG { get; set; }
+        [Description("DOC_RDINICIO")]
+        public String DOC_RDINICIO { get; set; }
+        [Description("DOC_RDTERMINO")]
+        public String DOC_RDTERMINO { get; set; }
+        [Description("DOC_RDRECONSIDERACION")]
+        public String DOC_RDRECONSIDERACION { get; set; }
+        [Description("DOC_RDRECTIFICACION")]
+        public String DOC_RDRECTIFICACION { get; set; }
+        [Description("DOC_RDACUMULACION")]
+        public String DOC_RDACUMULACION { get; set; }
+        [Description("DOC_RDAMPLIACION")]
+        public String DOC_RDAMPLIACION { get; set; }
+        [Description("DOC_RDCADUCIDAD")]
+        public String DOC_RDCADUCIDAD { get; set; }
+        [Description("DOC_RDOTROS")]
+        public String DOC_RDOTROS { get; set; }
+        [Description("DOC_RDVARI")]
+        public String DOC_RDVARI { get; set; }
+        [Description("DOC_RDARCH")]
+        public String DOC_RDARCH { get; set; }
+        [Description("ESPECIE")]
+        public String ESPECIE { get; set; }
+        [Description("VOLUMEN_APROBADO")]
+        public Decimal VOLUMEN_APROBADO { get; set; }
+        [Description("VOLUMEN_JUSTIFICADO")]
+        public Decimal VOLUMEN_JUSTIFICADO { get; set; }
         #region constructor
         public Ent_Reporte_Historial_TH()
         {
@@ -1037,7 +1180,18 @@ namespace CapaEntidad.DOC
             MONTOCOMPENSABLE_P_CC = -1;
             COMPESTADO_CC = -1;
             V_MESES = -1;
+            VOLUMEN_INJUSTIFICADO = -1;
+            MULTA_RITFFS = -1;
+            MULTA_RTTFFS = -1;
+            MULTA_RRTFFS = -1;
+            VOLUMEN_APROBADO = -1;
+            VOLUMEN_JUSTIFICADO = -1;
         }
         #endregion
+    }
+    public class Ent_Temporal
+    {
+        public string COD_RESODIREC { get; set; }
+        public string TIPO_RD { get; set; }
     }
 }

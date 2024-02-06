@@ -103,6 +103,7 @@ namespace THSancionYCaducidad.Controllers
                 model.fecha = DateTime.Today.AddDays(-1).ToString("dd/MM/yyyy");
                 model.ListInfractores = listCEntidad;
                 Session["model"] = model;
+                ViewBag.urlObservatorio = WebConfigurationManager.AppSettings["urlObservatorio"];
                 auditoriaReporte("Buscar", "0000042");
                 return View("TableInfractores", model);
             }
