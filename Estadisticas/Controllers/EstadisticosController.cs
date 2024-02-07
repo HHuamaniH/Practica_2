@@ -57,71 +57,40 @@ namespace Estadisticas.Controllers
 
                 foreach (var item in CEntReportEstadisticos.ListISupervision_Region_Modalidad.OrderByDescending(m => m.TOTAL))
                 {
-                    subretorno.Add(new Object[] { item.DEPARTAMENTO,
-                item.CANT_PFAUNA,
-                item.CANT_TARA,
-                item.CANT_BS,
-                item.CANT_CMADE,
-                item.CANT_NM,
-                item.CANT_FYR,
-                item.CANT_ECO,
-                item.CANT_CONS,
-                item.CANT_CFAUNA,
-                item.CANT_PP,
-                item.CANT_CCCC_CCNN,
-                item.CANT_BL,
-                //item.CANT_SISAG,
-                item.CANT_PNM,
-                item.TOTAL});
+                    subretorno.Add(
+                        new Object[] {
+                            item.MODALIDAD, item.AMAZONAS, item.ANCASH, item.APURIMAC, item.AREQUIPA, item.AYACUCHO, item.CAJAMARCA, item.CALLAO
+                            ,item.CUSCO, item.HUANCAVELICA, item.HUANUCO, item.ICA, item.JUNIN, item.LALIBERTAD, item.LAMBAYEQUE, item.LIMA
+                            ,item.LORETO, item.MADREDEDIOS, item.MOQUEGUA, item.PASCO, item.PIURA, item.PUNO, item.SANMARTIN, item.TACNA
+                            ,item.TUMBES, item.UCAYALI, item.TOTAL
+                        }
+                    );
                 }
                 retorno.Add(subretorno);
 
                 subretorno = new List<Object[]>();
-
                 foreach (var item in CEntReportEstadisticos.ListISupervision_Modalidad_Anio.OrderByDescending(m => m.TOTAL))
                 {
-                    subretorno.Add(new Object[] { item.MODALIDAD,
-                //item.DOSMILCINCO,
-                item.DOSMILNUEVE,
-                item.DOSMILDIEZ,
-                item.DOSMILONCE,
-                item.DOSMILDOCE,
-                item.DOSMILTRECE,
-                item.DOSMILCATORCE,
-                item.DOSMILQUINCE,
-                item.DOSMILDIECISEIS,
-                item.DOSMILDIECISIETE,
-                item.DOSMILDIECIOCHO,
-                item.DOSMILDIECINUEVE,
-                item.DOSMILVEINTE,
-                item.DOSMILVEINTIUNO,
-                item.DOSMILVEINTIDOS,
-                item.DOSMILVEINTITRES,
-                item.TOTAL});
+                    subretorno.Add(
+                        new Object[] {
+                            item.MODALIDAD, item.DOSMILNUEVE, item.DOSMILDIEZ, item.DOSMILONCE, item.DOSMILDOCE, item.DOSMILTRECE, item.DOSMILCATORCE,
+                            item.DOSMILQUINCE, item.DOSMILDIECISEIS, item.DOSMILDIECISIETE, item.DOSMILDIECIOCHO, item.DOSMILDIECINUEVE, item.DOSMILVEINTE,
+                            item.DOSMILVEINTIUNO, item.DOSMILVEINTIDOS, item.DOSMILVEINTITRES, item.DOSMILVEINTICUATRO, item.TOTAL
+                        }
+                    );
                 }
                 retorno.Add(subretorno);
 
                 subretorno = new List<Object[]>();
                 foreach (var item in CEntReportEstadisticos.ListISupervision_Region_Anio.OrderByDescending(m => m.TOTAL))
                 {
-                    subretorno.Add(new Object[] { item.DEPARTAMENTO,
-                //item.DOSMILCINCO,
-                item.DOSMILNUEVE,
-                item.DOSMILDIEZ,
-                item.DOSMILONCE,
-                item.DOSMILDOCE,
-                item.DOSMILTRECE,
-                item.DOSMILCATORCE,
-                item.DOSMILQUINCE,
-                item.DOSMILDIECISEIS,
-                item.DOSMILDIECISIETE,
-                item.DOSMILDIECIOCHO,
-                item.DOSMILDIECINUEVE,
-                item.DOSMILVEINTE,
-                item.DOSMILVEINTIUNO,
-                item.DOSMILVEINTIDOS,
-                item.DOSMILVEINTITRES,
-                item.TOTAL });
+                    subretorno.Add(
+                        new Object[] {
+                            item.DEPARTAMENTO, item.DOSMILNUEVE, item.DOSMILDIEZ, item.DOSMILONCE, item.DOSMILDOCE, item.DOSMILTRECE, item.DOSMILCATORCE,
+                            item.DOSMILQUINCE, item.DOSMILDIECISEIS, item.DOSMILDIECISIETE, item.DOSMILDIECIOCHO, item.DOSMILDIECINUEVE, item.DOSMILVEINTE,
+                            item.DOSMILVEINTIUNO, item.DOSMILVEINTIDOS, item.DOSMILVEINTITRES, item.DOSMILVEINTICUATRO, item.TOTAL
+                        }
+                    );
                 }
                 retorno.Add(subretorno);
                 return Json(retorno);

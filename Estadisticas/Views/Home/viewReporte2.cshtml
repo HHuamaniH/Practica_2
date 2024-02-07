@@ -41,9 +41,9 @@
                         $(data).each(function () {
                             var i = 0;
                             ++j;
-                            var arrayTotal = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+                            var arrayTotal = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
                             $("#tbReportEst2" + (j) + ">tbody").empty();
-                            if (j == 1) { cantColumns = 14; } else if (j == 2 || j == 3) { cantColumns = 16; }
+                            if (j == 1) { cantColumns = 26; } else if (j == 2 || j == 3) { cantColumns = 17; }
 
                             $(this).each(function () {
                                 fila = "<tr><td>" + (++i) + "</td><td>" + $(this)[0] + "</td>";
@@ -64,10 +64,10 @@
                             $("#tbReportEst2" + (j) + ">tbody").append(fila);
 
                             var dvHeight = $("#tbReportEst2" + (j)).parent().height();
-                            var dataSort = $(this).sort(function (a, b) { return b[16] - a[16] });
+                            var dataSort = $(this).sort(function (a, b) { return b[17] - a[17] });
 
                             if (j == 2) {
-                                customChart.LoadBarraSimple(dataSort, 0, { colIndex: [16], color: ["blue"], legend: ["Número de Supervisiones"] }, { type: "H", title: "", legend: false, xTitle: "Número de Supervisiones", yTitle: "Modalidad de Aprovechamiento", canvas: "cnvReporteEst2" });
+                                customChart.LoadBarraSimple(dataSort, 0, { colIndex: [17], color: ["blue"], legend: ["Número de Supervisiones"] }, { type: "H", title: "", legend: false, xTitle: "Número de Supervisiones", yTitle: "Modalidad de Aprovechamiento", canvas: "cnvReporteEst2" });
                                 if (dvHeight>372) {
                                     $("#cnvReporteEst2").css("height", dvHeight);
                                 }
@@ -76,7 +76,7 @@
                                 for (var i = 0; i < dataSort.length; i++) {
                                     dataSort[i][0] = PrimerCaracterMayuscula(dataSort[i][0].toLowerCase());
                                 }
-                                customChart.LoadBarraSimple(dataSort, 0, { colIndex: [16], color: ["blue"], legend: ["Número de Supervisiones"] }, { type: "H", title: "", legend: false, xTitle: "Número de Supervisiones", yTitle: "Departamento", canvas: "cnvReporteEst3" });
+                                customChart.LoadBarraSimple(dataSort, 0, { colIndex: [17], color: ["blue"], legend: ["Número de Supervisiones"] }, { type: "H", title: "", legend: false, xTitle: "Número de Supervisiones", yTitle: "Departamento", canvas: "cnvReporteEst3" });
                                 if (dvHeight > 372) {
                                     $("#cnvReporteEst3").css("height", dvHeight);
                                 }
@@ -130,20 +130,32 @@
                         <thead>
                             <tr>
                                 <th>Nº</th>
-                                <th>Departamento</th>
-                                <th>Permisos y Autorizaciones Fauna Silvestre</th>
-                                <th>Tara</th>
-                                <th>Bosques Secos</th>
-                                <th>Concesiones Maderables</th>
-                                <th>Concesiones No Maderables</th>
-                                <th>Forestación y Reforestación</th>
-                                <th>Concesiones Ecoturismo</th>
-                                <th>Concesiones Conservación</th>
-                                <th>Concesiones Fauna Silvestre</th>
-                                <th>Predio Privado</th>
-                                <th>Comunidad Nativa y Campesina</th>
-                                <th>Bosques Locales</th>
-                                <th>Permisos y Autorizaciones Productos Forestales No Maderables</th>
+                                <th>Modalidad</th>
+                                <th>Amazonas</th>
+                                <th>Áncash</th>
+                                <th>Apurímac</th>
+                                <th>Arequipa</th>
+                                <th>Ayacucho</th>
+                                <th>Cajamarca</th>
+                                <th>Callao</th>
+                                <th>Cusco</th>
+                                <th>Huancavelica</th>
+                                <th>Huánuco</th>
+                                <th>Ica</th>
+                                <th>Junín</th>
+                                <th>La Libertad</th>
+                                <th>Lambayeque</th>
+                                <th>Lima</th>
+                                <th>Loreto</th>
+                                <th>Madre de Dios</th>
+                                <th>Moquegua</th>
+                                <th>Pasco</th>
+                                <th>Piura</th>
+                                <th>Puno</th>
+                                <th>San Martín</th>
+                                <th>Tacna</th>
+                                <th>Tumbes</th>
+                                <th>Ucayali</th>
                                 <th>Total</th>
                             </tr>
                         </thead>
@@ -178,6 +190,7 @@
                                 <th>2021</th>
                                 <th>2022</th>
                                 <th>2023</th>
+                                <th>2024</th>
                                 <th>Total</th>
                             </tr>
                         </thead>
@@ -215,6 +228,7 @@
                                 <th>2021</th>
                                 <th>2022</th>
                                 <th>2023</th>
+                                <th>2024</th>
                                 <th>Total</th>
                             </tr>
                         </thead>

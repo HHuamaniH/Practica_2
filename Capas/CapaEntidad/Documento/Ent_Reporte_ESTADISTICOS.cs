@@ -129,6 +129,8 @@ namespace CapaEntidad.DOC
         public Int32 DOSMILVEINTIDOS { get; set; }
         [Description("DOSMILVEINTITRES")]
         public Int32 DOSMILVEINTITRES { get; set; }
+        [Description("DOSMILVEINTICUATRO")]
+        public Int32 DOSMILVEINTICUATRO { get; set; }
         [Description("NUM_CAPACITACIONES")]
         public Int32 NUM_CAPACITACIONES { get; set; }
         [Description("NUM_PARTICIPANTES")]
@@ -217,6 +219,58 @@ namespace CapaEntidad.DOC
         [Description("FUNCIONARIOS_EXISTENTE")]
         public Int32 FUNCIONARIOS_EXISTENTE { get; set; }
 
+        //Departamentos, columnas nuevas para actualizar el reporte estadístico #2
+        [Description("AMAZONAS")]
+        public Decimal AMAZONAS { get; set; }
+        [Description("ANCASH")]
+        public Decimal ANCASH { get; set; }
+        [Description("APURIMAC")]
+        public Decimal APURIMAC { get; set; }
+        [Description("AREQUIPA")]
+        public Decimal AREQUIPA { get; set; }
+        [Description("AYACUCHO")]
+        public Decimal AYACUCHO { get; set; }
+        [Description("CAJAMARCA")]
+        public Decimal CAJAMARCA { get; set; }
+        [Description("CALLAO")]
+        public Decimal CALLAO { get; set; }
+        [Description("CUSCO")]
+        public Decimal CUSCO { get; set; }
+        [Description("HUANCAVELICA")]
+        public Decimal HUANCAVELICA { get; set; }
+        [Description("HUANUCO")]
+        public Decimal HUANUCO { get; set; }
+        [Description("ICA")]
+        public Decimal ICA { get; set; }
+        [Description("JUNIN")]
+        public Decimal JUNIN { get; set; }
+        [Description("LALIBERTAD")]
+        public Decimal LALIBERTAD { get; set; }
+        [Description("LAMBAYEQUE")]
+        public Decimal LAMBAYEQUE { get; set; }
+        [Description("LIMA")]
+        public Decimal LIMA { get; set; }
+        [Description("LORETO")]
+        public Decimal LORETO { get; set; }
+        [Description("MADREDEDIOS")]
+        public Decimal MADREDEDIOS { get; set; }
+        [Description("MOQUEGUA")]
+        public Decimal MOQUEGUA { get; set; }
+        [Description("PASCO")]
+        public Decimal PASCO { get; set; }
+        [Description("PIURA")]
+        public Decimal PIURA { get; set; }
+        [Description("PUNO")]
+        public Decimal PUNO { get; set; }
+        [Description("SANMARTIN")]
+        public Decimal SANMARTIN { get; set; }
+        [Description("TACNA")]
+        public Decimal TACNA { get; set; }
+        [Description("TUMBES")]
+        public Decimal TUMBES { get; set; }
+        [Description("UCAYALI")]
+        public Decimal UCAYALI { get; set; }
+
         public Ent_Reporte_ESTADISTICOS()
         {
             VOL_AUTORIZADO = -1;
@@ -270,6 +324,7 @@ namespace CapaEntidad.DOC
             DOSMILVEINTIUNO = -1;
             DOSMILVEINTIDOS = -1;
             DOSMILVEINTITRES = -1;
+            DOSMILVEINTICUATRO = -1;
             NUM_CAPACITACIONES = -1;
             NUM_PARTICIPANTES = -1;
             NUM_HOMBRES = -1;
@@ -308,6 +363,32 @@ namespace CapaEntidad.DOC
             REGENTES_EXISTENTE = -1;
             FUNCIONARIOS = -1;
             FUNCIONARIOS_EXISTENTE = -1;
+
+            AMAZONAS = -1;
+            ANCASH = -1;
+            APURIMAC = -1;
+            AREQUIPA = -1;
+            AYACUCHO = -1;
+            CAJAMARCA = -1;
+            CALLAO = -1;
+            CUSCO = -1;
+            HUANCAVELICA = -1;
+            HUANUCO = -1;
+            ICA = -1;
+            JUNIN = -1;
+            LALIBERTAD = -1;
+            LAMBAYEQUE = -1;
+            LIMA = -1;
+            LORETO = -1;
+            MADREDEDIOS = -1;
+            MOQUEGUA = -1;
+            PASCO = -1;
+            PIURA = -1;
+            PUNO = -1;
+            SANMARTIN = -1;
+            TACNA = -1;
+            TUMBES = -1;
+            UCAYALI = -1;
         }
     }
 }

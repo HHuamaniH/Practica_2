@@ -61,7 +61,7 @@ namespace CapaDatos.DOC
             oCEntReporte.ListISupervision_Region_Modalidad = new List<CEntidad>();
             oCEntReporte.ListISupervision_Modalidad_Anio = new List<CEntidad>();
             oCEntReporte.ListISupervision_Region_Anio = new List<CEntidad>();
-            //List<CEntidad> lsCEntidad = new List<CEntidad>();
+
             try
             {
                 using (OracleDataReader dr = dBOracle.SelDrdDefault(cn, null, "DOC_BD_OBSERVATORIO_MIGRACION.new_REPORTE_ESTADISTICOS", oCEntidad))
@@ -74,22 +74,33 @@ namespace CapaDatos.DOC
                             while (dr.Read())
                             {
                                 oCampos = new CEntidad();
-                                oCampos.DEPARTAMENTO = dr["REGION"].ToString();
+                                oCampos.MODALIDAD = dr["MODALIDAD"].ToString();
+                                oCampos.AMAZONAS = Int32.Parse(dr["'AMAZONAS'"].ToString());
+                                oCampos.ANCASH = Int32.Parse(dr["'ANCASH'"].ToString());
+                                oCampos.APURIMAC = Int32.Parse(dr["'APURIMAC'"].ToString());
+                                oCampos.AREQUIPA = Int32.Parse(dr["'AREQUIPA'"].ToString());
+                                oCampos.AYACUCHO = Int32.Parse(dr["'AYACUCHO'"].ToString());
+                                oCampos.CAJAMARCA = Int32.Parse(dr["'CAJAMARCA'"].ToString());
+                                oCampos.CALLAO = Int32.Parse(dr["'CALLAO'"].ToString());
+                                oCampos.CUSCO = Int32.Parse(dr["'CUSCO'"].ToString());
+                                oCampos.HUANCAVELICA = Int32.Parse(dr["'HUANCAVELICA'"].ToString());
+                                oCampos.HUANUCO = Int32.Parse(dr["'HUANUCO'"].ToString());
+                                oCampos.ICA = Int32.Parse(dr["'ICA'"].ToString());
+                                oCampos.JUNIN = Int32.Parse(dr["'JUNIN'"].ToString());
+                                oCampos.LALIBERTAD = Int32.Parse(dr["'LALIBERTAD'"].ToString());
+                                oCampos.LAMBAYEQUE = Int32.Parse(dr["'LAMBAYEQUE'"].ToString());
+                                oCampos.LIMA = Int32.Parse(dr["'LIMA'"].ToString());
+                                oCampos.LORETO = Int32.Parse(dr["'LORETO'"].ToString());
+                                oCampos.MADREDEDIOS = Int32.Parse(dr["'MADREDEDIOS'"].ToString());
+                                oCampos.MOQUEGUA = Int32.Parse(dr["'MOQUEGUA'"].ToString());
+                                oCampos.PASCO = Int32.Parse(dr["'PASCO'"].ToString());
+                                oCampos.PIURA = Int32.Parse(dr["'PIURA'"].ToString());
+                                oCampos.PUNO = Int32.Parse(dr["'PUNO'"].ToString());
+                                oCampos.SANMARTIN = Int32.Parse(dr["'SANMARTIN'"].ToString());
+                                oCampos.TACNA = Int32.Parse(dr["'TACNA'"].ToString());
+                                oCampos.TUMBES = Int32.Parse(dr["'TUMBES'"].ToString());
+                                oCampos.UCAYALI = Int32.Parse(dr["'UCAYALI'"].ToString());
                                 oCampos.TOTAL = Int32.Parse(dr["TOTAL"].ToString());
-                                oCampos.CANT_PFAUNA = Int32.Parse(dr["'CANT_ZOOL'"].ToString()) + Int32.Parse(dr["'CANT_ZOOC'"].ToString()) + Int32.Parse(dr["'CANT_CRES'"].ToString()) + Int32.Parse(dr["'CANT_CCT'"].ToString()) + Int32.Parse(dr["'CANT_CENTCONS'"].ToString());
-                                oCampos.CANT_TARA = Int32.Parse(dr["'CANT_TARA'"].ToString());
-                                oCampos.CANT_BS = Int32.Parse(dr["'CANT_BS'"].ToString());
-                                oCampos.CANT_CMADE = Int32.Parse(dr["'CANT_CMADE'"].ToString());
-                                oCampos.CANT_NM = Int32.Parse(dr["'CANT_NMCAST'"].ToString()) + Int32.Parse(dr["'CANT_NMSHIR'"].ToString()) + Int32.Parse(dr["'CANT_NMAGU'"].ToString()) + Int32.Parse(dr["'CANT_CCARRIZO'"].ToString()) + Int32.Parse(dr["'CANT_CPMEDICI'"].ToString());
-                                oCampos.CANT_FYR = Int32.Parse(dr["'CANT_FYR'"].ToString());
-                                oCampos.CANT_ECO = Int32.Parse(dr["'CANT_ECO'"].ToString());
-                                oCampos.CANT_CONS = Int32.Parse(dr["'CANT_CONS'"].ToString());
-                                oCampos.CANT_CFAUNA = Int32.Parse(dr["'CANT_CFAUNA'"].ToString());
-                                oCampos.CANT_PP = Int32.Parse(dr["'CANT_PP'"].ToString());
-                                oCampos.CANT_CCCC_CCNN = Int32.Parse(dr["'CANT_CCNN'"].ToString()) + Int32.Parse(dr["'CANT_CCCC'"].ToString());
-                                oCampos.CANT_BL = Int32.Parse(dr["'CANT_BL'"].ToString());
-                                oCampos.CANT_SISAG = Int32.Parse(dr["'CANT_SISAG'"].ToString());
-                                oCampos.CANT_PNM = Int32.Parse(dr["'CANT_CARRIZO'"].ToString()) + Int32.Parse(dr["'CANT_PMEDICI'"].ToString()) + Int32.Parse(dr["'CANT_PSHIR'"].ToString()) + Int32.Parse(dr["'CANT_MUSGO'"].ToString());
                                 oCEntReporte.ListISupervision_Region_Modalidad.Add(oCampos);
                             }
                         }
@@ -101,10 +112,6 @@ namespace CapaDatos.DOC
                             {
                                 oCampos = new CEntidad();
                                 oCampos.MODALIDAD = dr["MODALIDAD"].ToString();
-                                oCampos.DOSMILCINCO = Int32.Parse(dr["'2005'"].ToString()) + Int32.Parse(dr["'2006'"].ToString()) + Int32.Parse(dr["'2007'"].ToString()) + Int32.Parse(dr["'2008'"].ToString());
-                                //oCampos.DOSMILSEIS = dr.GetInt32(p2);
-                                //oCampos.DOSMILSIETE = dr.GetInt32(p3);
-                                //oCampos.DOSMILOCHO = dr.GetInt32(p4);
                                 oCampos.DOSMILNUEVE = Int32.Parse(dr["'2009'"].ToString());
                                 oCampos.DOSMILDIEZ = Int32.Parse(dr["'2010'"].ToString());
                                 oCampos.DOSMILONCE = Int32.Parse(dr["'2011'"].ToString());
@@ -120,6 +127,7 @@ namespace CapaDatos.DOC
                                 oCampos.DOSMILVEINTIUNO = Int32.Parse(dr["'2021'"].ToString());
                                 oCampos.DOSMILVEINTIDOS = Int32.Parse(dr["'2022'"].ToString());
                                 oCampos.DOSMILVEINTITRES = Int32.Parse(dr["'2023'"].ToString());
+                                oCampos.DOSMILVEINTICUATRO = Int32.Parse(dr["'2024'"].ToString());
                                 oCampos.TOTAL = Int32.Parse(dr["TOTAL"].ToString());
                                 oCEntReporte.ListISupervision_Modalidad_Anio.Add(oCampos);
                             }
@@ -132,10 +140,6 @@ namespace CapaDatos.DOC
                             {
                                 oCampos = new CEntidad();
                                 oCampos.DEPARTAMENTO = dr["REGION"].ToString();
-                                oCampos.DOSMILCINCO = Int32.Parse(dr["'2005'"].ToString()) + Int32.Parse(dr["'2006'"].ToString()) + Int32.Parse(dr["'2007'"].ToString()) + Int32.Parse(dr["'2008'"].ToString());
-                                //oCampos.DOSMILSEIS = dr.GetInt32(p2);
-                                //oCampos.DOSMILSIETE = dr.GetInt32(p3);
-                                //oCampos.DOSMILOCHO = dr.GetInt32(p4);
                                 oCampos.DOSMILNUEVE = Int32.Parse(dr["'2009'"].ToString());
                                 oCampos.DOSMILDIEZ = Int32.Parse(dr["'2010'"].ToString());
                                 oCampos.DOSMILONCE = Int32.Parse(dr["'2011'"].ToString());
@@ -151,6 +155,7 @@ namespace CapaDatos.DOC
                                 oCampos.DOSMILVEINTIUNO = Int32.Parse(dr["'2021'"].ToString());
                                 oCampos.DOSMILVEINTIDOS = Int32.Parse(dr["'2022'"].ToString());
                                 oCampos.DOSMILVEINTITRES = Int32.Parse(dr["'2023'"].ToString());
+                                oCampos.DOSMILVEINTICUATRO = Int32.Parse(dr["'2024'"].ToString());
                                 oCampos.TOTAL = Int32.Parse(dr["TOTAL"].ToString());
                                 oCEntReporte.ListISupervision_Region_Anio.Add(oCampos);
                             }
