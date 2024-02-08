@@ -24,7 +24,7 @@ namespace CapaDatos.DOC
             int bandera = 0;
             try
             {
-                using (OracleDataReader dr = dBOracle.SelDrdDefault(cn, null, "DOC_BD_OBSERVATORIO_MIGRACION.spGeneral_Combo_Listar", oCEntidad))
+                using (OracleDataReader dr = dBOracle.SelDrdDefault(cn, null, "DOC_OSINFOR_ERP_MIGRACION.spGeneral_Combo_Listar", oCEntidad))
                 {
                     if (dr != null)
                     {

@@ -23,7 +23,7 @@ namespace CapaDatos.DOC
             CEntidad oCampos = new CEntidad();
             try
             {
-                using (OracleDataReader dr = dBOracle.SelDrdDefault(cn, null, "DOC_BD_OBSERVATORIO_MIGRACION.new_REPORTE_Observatorio_v2", oCEntidad))
+                using (OracleDataReader dr = dBOracle.SelDrdDefault(cn, null, "DOC_OSINFOR_ERP_MIGRACION.new_REPORTE_Observatorio_v2", oCEntidad))
                 {
                     if (dr != null)
                     {   //LISTA ROJA
@@ -126,7 +126,7 @@ namespace CapaDatos.DOC
             CEntidad oCampos;
             try
             {
-                using (OracleDataReader dr = dBOracle.SelDrdDefault(cn, null, "DOC_BD_OBSERVATORIO_MIGRACION.new_REPORTE_Observatorio_v2", oCEntidad))
+                using (OracleDataReader dr = dBOracle.SelDrdDefault(cn, null, "DOC_OSINFOR_ERP_MIGRACION.new_REPORTE_Observatorio_v2", oCEntidad))
                 {
                     lsCEntidad.List_Resumen_ROJO = new List<CEntidad>();
                     lsCEntidad.List_Resumen_AMBAR = new List<CEntidad>();
@@ -368,7 +368,7 @@ namespace CapaDatos.DOC
             CEntidad oCampos;
             try
             {
-                using (OracleDataReader dr = dBOracle.SelDrdDefault(cn, null, "DOC_BD_OBSERVATORIO_MIGRACION.new_REPORTE_Observatorio_v2", oCEntidad))
+                using (OracleDataReader dr = dBOracle.SelDrdDefault(cn, null, "DOC_OSINFOR_ERP_MIGRACION.new_REPORTE_Observatorio_v2", oCEntidad))
                 {
                     lsCEntidad.List_Resoluciones = new List<CEntidad>();
                     //lsCEntidad.List_Injus_Inf = new List<CEntidad>();
@@ -493,7 +493,7 @@ namespace CapaDatos.DOC
             CEntidad oCampos;
             try
             {
-                using (OracleDataReader dr = dBOracle.SelDrdDefault(cn, null, "DOC_BD_OBSERVATORIO_MIGRACION.new_REPORTE_Observatorio_v2", oCEntidad))
+                using (OracleDataReader dr = dBOracle.SelDrdDefault(cn, null, "DOC_OSINFOR_ERP_MIGRACION.new_REPORTE_Observatorio_v2", oCEntidad))
                 {
                     lsCEntidad.List_Detalle_Titular = new List<CEntidad>();
                     if (dr != null)
@@ -531,7 +531,7 @@ namespace CapaDatos.DOC
             CEntidad oCampos;
             try
             {
-                using (OracleDataReader dr = dBOracle.SelDrdDefault(cn, null, "DOC_BD_OBSERVATORIO_MIGRACION.new_REPORTE_Observatorio_v2", oCEntidad))
+                using (OracleDataReader dr = dBOracle.SelDrdDefault(cn, null, "DOC_OSINFOR_ERP_MIGRACION.new_REPORTE_Observatorio_v2", oCEntidad))
                 {
                     lsCEntidad.List_Detalle_Titular = new List<CEntidad>();
                     if (dr != null)
@@ -573,7 +573,7 @@ namespace CapaDatos.DOC
             CEntidad oCampos;
             try
             {
-                using (OracleDataReader dr = dBOracle.SelDrdDefault(cn, null, "DOC_BD_OBSERVATORIO_MIGRACION.new_REPORTE_Observatorio_v2", oCEntidad))
+                using (OracleDataReader dr = dBOracle.SelDrdDefault(cn, null, "DOC_OSINFOR_ERP_MIGRACION.new_REPORTE_Observatorio_v2", oCEntidad))
                 {
                     lsCEntidad.List_Detalle_Titular = new List<CEntidad>();
                     if (dr != null)
@@ -613,7 +613,7 @@ namespace CapaDatos.DOC
             CEntidad oCampos;
             try
             {
-                using (OracleDataReader dr = dBOracle.SelDrdDefault(cn, null, "DOC_BD_OBSERVATORIO_MIGRACION.new_REPORTE_Observatorio_v2", oCEntidad))
+                using (OracleDataReader dr = dBOracle.SelDrdDefault(cn, null, "DOC_OSINFOR_ERP_MIGRACION.new_REPORTE_Observatorio_v2", oCEntidad))
                 {
                     lsCEntidad.List_Detalle_Titular = new List<CEntidad>();
                     if (dr != null)
@@ -652,7 +652,7 @@ namespace CapaDatos.DOC
             CEntidad oCampos = new CEntidad();
             try
             {
-                using (OracleDataReader dr = dBOracle.SelDrdDefault(cn, null, "DOC_BD_OBSERVATORIO_MIGRACION.new_REPORTE_ObservatorioFecha", oCEntidad))
+                using (OracleDataReader dr = dBOracle.SelDrdDefault(cn, null, "DOC_OSINFOR_ERP_MIGRACION.new_REPORTE_ObservatorioFecha", oCEntidad))
                 {
                     if (dr != null)
                     {
@@ -689,7 +689,7 @@ namespace CapaDatos.DOC
             //CEntidad oCampos = new CEntidad();
             try
             {
-                using (OracleDataReader dr = dBOracle.SelDrdDefault(cn, null, "HERR_BD_OBSERVATORIO_MIGRACION.spDESCARGA_ESP", oCEntidad))
+                using (OracleDataReader dr = dBOracle.SelDrdDefault(cn, null, "HERR_OSINFOR_ERP_MIGRACION.spDESCARGA_ESP", oCEntidad))
                 {
                     if (dr != null)
                     {
