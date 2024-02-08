@@ -1,0 +1,49 @@
+﻿
+@{
+    ViewBag.Title = "Listado de Perfil";
+    Layout = "~/Views/Shared/_LayoutMain.cshtml";
+}
+@section scripts{
+    <script>
+        "use strict"; var rol = '';
+    $(document).ready(function () {
+        //Validamos el rol del usuario
+        utilSigo.ValidaRol('@ViewBag.VAliasRol', 'btnAdd', 'Edit');
+    });
+    </script>
+}
+<div class="container-fluid">
+    <div class="card" id="divPerfil">
+        <div class="card-header text-left">
+            <h5>Listado de Periodos</h5>
+        </div>
+        <div class="card-body">
+            <form id="frmListadoPerfil" method="get">
+                <div class="form-row">
+
+                    <div class="col-md-6 mb-3">
+                        <div class="input-group">
+                            <input type="text" id="txtValor" class="form-control form-control-sm" maxlength="50" />
+                            <div class="input-group-prepend">
+                                <span class="input-group-text" id="btnBuscar" style="cursor:pointer;color:forestgreen"><i class="fa fa-search" data-toggle="tooltip" data-placement="top" title="Buscar"></i></span>
+                                <span class="input-group-text" id="btnNuevo" style="cursor:pointer;color:cadetblue;"><i class="fa fa-plus" data-toggle="tooltip" data-placement="top" title="Adicionar"></i></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+            <div class="table-responsive">
+                <table id="tbListPerfil" class="table table-hover table-bordered" style="width:100%;">
+                    <thead></thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div id="divPerfilMenu">
+
+    </div>
+</div>
+<div class="modal fade hide" id="manPerfilModal" tabindex="-1" role="dialog"></div>
+<script src="~/Areas/Fiscalizacion/js/ManPeriodo/index.js"></script>
+

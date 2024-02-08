@@ -332,18 +332,18 @@ namespace CapaDatos.DOC
                                     oCampos.NUM_REGISTRO_PROFESIONAL = dr["DPROFESIONAL"].ToString();
                                     //TRAE UBIGEO | DIRECCION
                                     string[] ubi_dir = dr["UBIGEO_DIRECCION"].ToString().Split('|');
-                                    if (ubi_dir.Length > 1)
+                                    if (ubi_dir.Length > 1 && !string.IsNullOrEmpty(ubi_dir[0]) && ubi_dir[0] != " ")
                                     {
-                                        oCampos.UBIGEO= ubi_dir[0];
+                                        oCampos.UBIGEO = ubi_dir[0];
                                         oCampos.DIRECCION = ubi_dir[1];
                                         oCampos.COD_UBIGEO = ubi_dir[2];
                                     }
                                     oCampos.NOMBRES = dr["NOMBRES"].ToString();
                                     oCampos.APE_PATERNO = dr["APE_PATERNO"].ToString();
-                                    oCampos.APE_MATERNO = dr["APE_MATERNO"].ToString();
-                                    oCampos.N_RUC = dr["N_RUC"].ToString();
-                                    oCampos.COD_PTIPO = dr["COD_PTIPO"].ToString();
-                                    oCampos.TIPO_CARGO = dr["TIPO_CARGO"].ToString();
+                                    oCampos.APE_MATERNO = (dr["APE_MATERNO"] != null ? dr["APE_MATERNO"].ToString() : "");
+                                    oCampos.N_RUC = (dr["N_RUC"] != null ? dr["N_RUC"].ToString() : "");
+                                    oCampos.COD_PTIPO = (dr["COD_PTIPO"] != null ? dr["COD_PTIPO"].ToString() : "");
+                                    oCampos.TIPO_CARGO = (dr["TIPO_CARGO"] != null ? dr["TIPO_CARGO"].ToString() : "");
                                     lsCEntidad.Add(oCampos);
                                 }
                             }

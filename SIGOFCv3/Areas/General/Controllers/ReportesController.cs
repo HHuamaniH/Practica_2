@@ -6544,6 +6544,7 @@ namespace SIGOFCv3.Areas.General.Controllers
                 case "1": view = "IndicadoresOSINFOR_1"; break;
                 case "2": view = "IndicadoresOSINFOR_2"; break;
                 case "3": view = "IndicadoresOSINFOR_3"; break;
+                case "4": view = "IndicadoresOSINFOR_4"; break;
             }
 
             return View(view);

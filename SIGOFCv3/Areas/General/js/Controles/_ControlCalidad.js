@@ -29,6 +29,7 @@ _ControlCalidad.fnInit = function () {
 _ControlCalidad.fnGetDatosControlCalidad = function () {
     var datosCalidad = {};
     datosCalidad.ddlIndicadorId = _ControlCalidad.frm.find("#ddlIndicadorId").val();
+
     if (datosCalidad.ddlIndicadorId == "0000007") {
         //datosCalidad.txtControlCalidadObservaciones = CKEDITOR.instances["txtControlCalidadObservaciones"].getData();
         datosCalidad.txtControlCalidadObservaciones = _ControlCalidad.frm.find("#txtControlCalidadObservaciones").val();

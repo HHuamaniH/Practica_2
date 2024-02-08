@@ -13,17 +13,17 @@ _ManGrillaPaging.fnInitDataTablePaging = function (options) {
     optDt.bInfo = true;
     optDt.bSort = true;
     optDt.aSort = [];
-    
+
     //Cargar Configuración _ManGrillaPaging
     if (window.sessionStorage) {
         var lstConfig = [], index = -1;
 
         if (JSON.parse(sessionStorage.getItem('ListConfig_ManGrillaPaging')) == null) {
+        
             sessionStorage.setItem('ListConfig_ManGrillaPaging', JSON.stringify(lstConfig));
         }
-
         lstConfig = JSON.parse(sessionStorage.getItem('ListConfig_ManGrillaPaging'));
-        index = lstConfig.findIndex(m=>m.TipoFormulario == _ManGrillaPaging.frm.find("#tipoFormulario").val());
+        index = lstConfig.findIndex(m => m.TipoFormulario == _ManGrillaPaging.frm.find("#tipoFormulario").val());
         if (index != -1) {
             _ManGrillaPaging.frm.find("#ddlOpcionBuscarId").select2("val", [lstConfig[index].OpcionBuscar]);
             _ManGrillaPaging.frm.find("#txtValorBuscar").val(lstConfig[index].ValorBuscar);
@@ -47,16 +47,16 @@ _ManGrillaPaging.fnInitDataTablePaging = function (options) {
         ajax: {
             "url": initSigo.urlControllerGeneral + "/GetListaGeneralPaging",
             "data": function (d) {
+
                 d.customSearchEnabled = true;
                 d.customSearchForm = _ManGrillaPaging.frm.find("#tipoFormulario").val();
                 d.customSearchType = _ManGrillaPaging.frm.find("#ddlOpcionBuscarId").val();
                 d.customSearchValue = _ManGrillaPaging.frm.find("#txtValorBuscar").val();
-
                 for (var i = 0; i < d.order.length; i++) {
                     d.order[i]["column_name"] = d.columns[d.order[i]["column"]]["data"];
                 }
                 d.columns = null;
-            },            
+            },
             "error": function (jqXHR) {
                 utilSigo.unblockUIGeneral();
                 utilSigo.toastError("Error", initSigo.MessageError);
@@ -102,6 +102,8 @@ _ManGrillaPaging.fnSearch = function () {
 
         _ManGrillaPaging.dtManGrillaPaging.ajax.reload();
     }
+
+
 }
 //Actualizar listado de registros
 _ManGrillaPaging.fnRefresh = function () {
@@ -133,7 +135,7 @@ _ManGrillaPaging.fnReadConfigManGrillaPaging = function () {
             RowStart: _ManGrillaPaging.dtManGrillaPaging.context[0]._iDisplayStart,
             ColumnOrder: _ManGrillaPaging.dtManGrillaPaging.context[0].aaSorting[0]
         };
-        index = lstConfig.findIndex(m=>m.TipoFormulario == _ManGrillaPaging.frm.find("#tipoFormulario").val());
+        index = lstConfig.findIndex(m => m.TipoFormulario == _ManGrillaPaging.frm.find("#tipoFormulario").val());
         if (index != -1) { lstConfig[index] = config; }
         else { lstConfig.push(config); }
         sessionStorage.setItem('ListConfig_ManGrillaPaging', JSON.stringify(lstConfig));
@@ -160,6 +162,7 @@ _ManGrillaPaging.fnInit = function (columns_label, columns_data, options) {
 
     $.fn.select2.defaults.set("theme", "bootstrap4");
     _ManGrillaPaging.frm.find("#ddlOpcionBuscarId").select2({ minimumResultsForSearch: -1 });
+
     _ManGrillaPaging.frm.find("#txtValorBuscar").focus();
     $('[data-toggle="tooltip"]').tooltip();
 

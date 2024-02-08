@@ -1,7 +1,7 @@
 ﻿@model CapaEntidad.ViewModel.VM_ControlCalidad_2
 
 @*<script src="~/Scripts/ckeditor/ckeditor.js"></script>*@
-<script src="~/Areas/General/js/Controles/_ControlCalidad.js"></script>
+<script src="~/Areas/General/js/Controles/_ControlCalidad.js?v=@Guid.NewGuid()"></script>
 
 <div class="card" id="frmControlCalidad">
     @Html.Hidden("hdfCodGrupoUsuario", (object)ViewBag.hdfCodGrupoUsuario)
@@ -24,6 +24,7 @@
             </div>
 
         </div>
+        
         <div class="form-row" id="dvObservacionCalidad" style="display:none;">
             <div class="form-group col-md-12">
                 @Html.TextAreaFor(m => m.txtControlCalidadObservaciones, new { @class = "form-control form-control-sm" })

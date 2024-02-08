@@ -1,0 +1,143 @@
+﻿
+@model CapaEntidad.ViewModel.VM_Periodo
+
+<style>
+    .datepicker {
+        z-index: 1600 !important; /* has to be larger than 1050 */
+    }
+</style>
+
+<div id="divManPerfil" class="modal-dialog" role="document">
+    <div class="modal-content">
+        <div class="modal-header text-small" style="cursor:move;padding:0.5rem;">
+            <h5 class="modal-title">@Model.lblTitulo</h5>
+        </div>
+        <div class="modal-body">
+            <form id="frmAddEditPerfil" method="post">
+                @Html.HiddenFor(m => m.estado)
+
+                <div class="form-row">
+                    <div class="form-group col-md-12">
+                        <label for="id" class="text-small">Día Feriado</label>
+                        @Html.EditorFor(m => m.id, new { htmlAttributes = new { @class = "form-control form-control-sm", placeholder = "dd/mm/yyyy" } })
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-12">
+                        <label for="descr" class="text-small">Descripcion</label>
+                        @Html.EditorFor(m => m.motivo, new { htmlAttributes = new { @class = "form-control form-control-sm", @minlength = "4", @maxlength = "50" } })
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-12">
+                        <div class="custom-control custom-checkbox my-1 mr-sm-2">
+                            @Html.CheckBoxFor(m => m.act, new { @class = "custom-control-input" })
+                            <label class="custom-control-label" id="lblCheck" style="margin-top:4px;" for="act">
+                                Activo
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+            </form>
+        </div>
+        <div class="modal-footer">
+            <button id="btnGuardar" class="btn btn-primary btn-sm" onclick="_manPerfil.guardarPeriodo();">Registrar</button>
+            <button id="btnCancelar" class="btn btn-secondary btn-sm" onclick="_manPerfil.fnCancelar();">Cancelar</button>
+        </div>
+    </div>
+</div>
+<script>
+    "use strict";
+    var _manPerfil = {
+
+        fnClose: () => {
+            utilSigo.fnCloseModal("manPerfilModal");
+        },
+        fnCancelar: () => {
+            _manPerfil.fnClose();
+        },
+        guardarPeriodo: () => {
+
+            var falta = fnValidar();
+            if (falta != "") {
+                utilSigo.toastWarning("Aviso", falta);
+            }
+            else {
+
+                var url = urlLocalSigo + "Fiscalizacion/ManPeriodo/_AddEdit";
+                var model = _manPerfil.frm.serializeObject();
+
+                model.act = utilSigo.fnGetValChk(_manPerfil.frm.find("#act"));
+                model.id = _manPerfil.frm.find("#id").val();
+
+                var option = { url: url, datos: JSON.stringify(model), type: 'POST' };
+                utilSigo.fnAjax(option, function (data) {
+                    if (data.success) {
+                        utilSigo.toastSuccess("Aviso", data.msj);
+                        _manPerfil.fnClose();
+                        _manPerfil.frm.submit();
+                        ManPeriodo.fnBuscarPeriodo();
+                    }
+                    else {
+                        utilSigo.toastWarning("Aviso", data.msj);
+                    }
+                });
+
+
+            }
+
+
+        },
+        fnInit: () => {
+            let perfil = JSON.parse('@Html.Raw(Json.Encode(@Model))');
+            
+            _manPerfil.frm = $("#frmAddEditPerfil");
+            _manPerfil.cont = $("#divManPerfil");
+
+            _manPerfil.frm.find("#id").datepicker({ format: "dd/mm/yyyy", autoclose: true, language: 'es', container: '#divManPerfil modal-body' });
+
+
+            if (!utilSigo.fnGetValChk(_manPerfil.frm.find("#act"))) _manPerfil.frm.find("#lblCheck").text("Inactivo");
+            _manPerfil.frm.find("#act").click(function () {
+                if ($(this).is(":checked")) {
+                    _manPerfil.frm.find("#lblCheck").text("Activo");
+                }
+                else {
+                    _manPerfil.frm.find("#lblCheck").text("Inactivo");
+                }
+            });
+            
+        }
+
+    };
+
+
+    $(function () {
+        _manPerfil.fnInit();
+    });
+
+
+    function fnValidar() {
+        var falta = "", band = 0;
+
+        var ExpRegFecha = /^(?:(?:(?:0?[1-9]|1\d|2[0-8])[/](?:0?[1-9]|1[0-2])|(?:29|30)[/](?:0?[13-9]|1[0-2])|31[/](?:0?[13578]|1[02]))[/](?:0{2,3}[1-9]|0{1,2}[1-9]\d|0?[1-9]\d{2}|[1-9]\d{3})|29[/]0?2[/](?:\d{1,2}(?:0[48]|[2468][048]|[13579][26])|(?:0?[48]|[13579][26]|[2468][048])00))$/;
+
+        var fecha = _manPerfil.frm.find("#id").val();
+
+        if (fecha.trim() == "") {
+            falta = "Debe seleccionar Fecha";
+            band = 1;
+        }
+
+        var Fechainvalida = fecha.trim();
+        if (Fechainvalida.match(ExpRegFecha) == null) {
+            falta = "Ingrese Fecha en el siguiente formato dd/mm/yyyy";
+            band = 1;
+        }
+
+        return falta;
+    }
+
+
+</script>

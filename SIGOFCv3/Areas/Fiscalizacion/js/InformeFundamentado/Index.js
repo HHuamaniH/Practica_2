@@ -1,20 +1,20 @@
 ﻿"use strict";
-var ManInfFundamentado= {};
+var ManPeriodo= {};
 
-ManInfFundamentado.fnLoadManGrillaPaging = function () {
+ManPeriodo.fnLoadManGrillaPaging = function () {
     var url = initSigo.urlControllerGeneral + "_ManGrillaPaging";
-    var data = ManInfFundamentado.frm.serializeObject();
+    var data = ManPeriodo.frm.serializeObject();
     var option = { url: url, datos: JSON.stringify(data), type: 'POST', dataType: 'html' };
 
     var columns_label = [], columns_data = [], options = {};
-    columns_label = ["Fecha Registro", "Número", "Tipo Documento", "Nro. Expediente", "Nro. Informe"];
-    columns_data = ["FECHA_CREACION", "NUMERO", "TIPO_FISCALIZA", "NUMERO_EXPEDIENTE", "NUMERO_INFORME"];
+    columns_label = ["Fecha Tramite","Número Tramite","Tipo Solicitud","Fecha Registro", "Número", "Tipo Documento", "Nro. Expediente", "Nro. Informe"];
+    columns_data = ["FECHA_TRAMITE","NUMERO_TRAMITE","TIPO_SOLICITUD","FECHA_CREACION", "NUMERO", "TIPO_FISCALIZA", "NUMERO_EXPEDIENTE", "NUMERO_INFORME"];
     options = {
         page_paging: true, page_length: 20, row_index: true, row_edit: true, row_fnEdit: "_ManGrillaPaging.fnCreate(this)"
     };
 
     utilSigo.fnAjax(option, function (data) {
-        ManInfFundamentado.frm.find("#dvManInfFundamentadoContenedor").html(data);
+        ManPeriodo.frm.find("#dvManInfFundamentadoContenedor").html(data);
         _ManGrillaPaging.fnInit(columns_label, columns_data, options);
 
         _ManGrillaPaging.fnExport = function () {
@@ -49,12 +49,12 @@ ManInfFundamentado.fnLoadManGrillaPaging = function () {
 }
 
 $(document).ready(function () {
-    ManInfFundamentado.frm = $("#frmManInfFundamentado");
+    ManPeriodo.frm = $("#frmManInfFundamentado");
 
-    var alertaInicial = ManInfFundamentado.frm.find("#alertaFormulario").val();
+    var alertaInicial = ManPeriodo.frm.find("#alertaFormulario").val();
     if (alertaInicial != "") {
         utilSigo.toastSuccess("Aviso", alertaInicial);
     }
 
-    ManInfFundamentado.fnLoadManGrillaPaging();
+    ManPeriodo.fnLoadManGrillaPaging();
 });

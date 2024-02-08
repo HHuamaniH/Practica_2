@@ -61,13 +61,13 @@ namespace CapaDatos.DOC
                                 #region CERTIFICADO_PLANTA
                                 case "CERTIFICADO_PLANTA":
                                     switch (oCEntidad.BusCriterio)
-                                    {                                        
+                                    {
                                         case "MODTH_NUMERO":
                                         case "MODTH_TITULAR":
                                             while (dr.Read())
                                             {
                                                 oCampos = new CEntidad();
-                                                oCampos.CODIGO = dr["COD_THABILITANTE"].ToString();                                                
+                                                oCampos.CODIGO = dr["COD_THABILITANTE"].ToString();
                                                 oCampos.NUMERO = dr["MODALIDAD"].ToString();
                                                 oCampos.PARAMETRO01 = dr["NUM_THABILITANTE"].ToString();
                                                 oCampos.PARAMETRO02 = dr["PERSONA"].ToString();
@@ -79,7 +79,7 @@ namespace CapaDatos.DOC
                                                 lsCEntidad.Add(oCampos);
 
                                                 lsCEntidad.Add(oCampos);
-                                            }                                            
+                                            }
                                             break;
                                         default:
                                             while (dr.Read())
@@ -97,7 +97,7 @@ namespace CapaDatos.DOC
                                             }
                                             break;
                                     }
-                                    
+
                                     break;
                                 #endregion
                                 #region POA
@@ -1149,7 +1149,7 @@ namespace CapaDatos.DOC
                                     #endregion
                             }
                         }
-                        }
+                    }
                 }
                 return lsCEntidad;
             }
@@ -1255,6 +1255,7 @@ namespace CapaDatos.DOC
                         }
                         oCampos.ListTipoCNotificacion = lsDetDetalle;
                         // 06
+
                         dr.NextResult();
                         lsDetDetalle = new List<CEntidad>();
                         if (dr.HasRows)
@@ -1317,6 +1318,7 @@ namespace CapaDatos.DOC
                 throw ex;
             }
         }
+  
         /// <summary>
         /// 
         /// </summary>
@@ -2329,7 +2331,7 @@ namespace CapaDatos.DOC
 
                                 #region PROVEIDO_ARCHIVO_SUP
                                 case "PROVEIDO_ARCHIVO_SUP":
-                                        while (dr.Read())
+                                    while (dr.Read())
                                     {
                                         oCampos = new CEntidad();
                                         oCampos.CODIGO = dr["CODIGO"].ToString();
@@ -2648,7 +2650,7 @@ namespace CapaDatos.DOC
                             if (dr.HasRows)
                             {
                                 VM_Reporte sFila;
-                               
+
                                 while (dr.Read())
                                 {
                                     sFila = new VM_Reporte();
@@ -2725,8 +2727,8 @@ namespace CapaDatos.DOC
             {
                 throw ex;
             }
-        } 
-        
+        }
+
         public List<Dictionary<string, string>> RegMostrarTHCalificacion(OracleConnection cn, CEntidad oCEntidad, ref int rowcount)
         {
             List<Dictionary<string, string>> lstResult = new List<Dictionary<string, string>>();
@@ -2835,7 +2837,7 @@ namespace CapaDatos.DOC
             List<Dictionary<string, string>> lstResult = new List<Dictionary<string, string>>();
             try
             {
-                object[] param = {ent.BusFormulario,ent.BusCriterio,ent.BusValor,ent.currentpage,ent.pagesize," "," " };
+                object[] param = { ent.BusFormulario, ent.BusCriterio, ent.BusValor, ent.currentpage, ent.pagesize, " ", " " };
                 using (OracleConnection cn = new OracleConnection(BDConexion.Conexion_Cadena_SIGO()))
                 {
                     cn.Open();
@@ -3035,34 +3037,34 @@ namespace CapaDatos.DOC
                             //}
                             //else
                             //{
+                            if (dr.HasRows)
+                            {
+                                Dictionary<string, string> sFila;
+                                string sColumn = "";
+                                while (dr.Read())
+                                {
+                                    sFila = new Dictionary<string, string>();
+                                    for (int i = 0; i < dr.FieldCount; i++)
+                                    {
+                                        sColumn = dr.GetName(i).ToLower();
+                                        sFila.Add(sColumn.ToLower(), dr[sColumn].ToString());
+
+
+                                    }
+                                    lstResult.Add(sFila);
+                                }
+                                dr.NextResult();
                                 if (dr.HasRows)
                                 {
-                                    Dictionary<string, string> sFila;
-                                    string sColumn = "";
-                                    while (dr.Read())
+                                    if (dr.Read())
                                     {
-                                        sFila = new Dictionary<string, string>();
-                                        for (int i = 0; i < dr.FieldCount; i++)
-                                        {
-                                            sColumn = dr.GetName(i).ToLower();
-                                            sFila.Add(sColumn.ToLower(), dr[sColumn].ToString());
-
-
-                                        }
-                                        lstResult.Add(sFila);
-                                    }
-                                    dr.NextResult();
-                                    if (dr.HasRows)
-                                    {
-                                        if (dr.Read())
-                                        {
-                                            rowcount = Convert.ToInt32(dr["rowcount"].ToString());
-                                        }
+                                        rowcount = Convert.ToInt32(dr["rowcount"].ToString());
                                     }
                                 }
+                            }
                             //}
 
-                                
+
                         }
                     }
                 }
@@ -3199,14 +3201,14 @@ namespace CapaDatos.DOC
                 throw ex;
             }
         }
-        public List<VM_Cbo> RegMostComboSupervision(string BUSFORMULARIO,string BUSCRITERIO,string BUSVALOR)
+        public List<VM_Cbo> RegMostComboSupervision(string BUSFORMULARIO, string BUSCRITERIO, string BUSVALOR)
         {
             List<VM_Cbo> lstCampos = new List<VM_Cbo>();
             using (OracleConnection cn = new OracleConnection(BDConexion.Conexion_Cadena_SIGO()))
                 try
                 {
                     cn.Open();
-                    using (OracleDataReader dr = dBOracle.SelDrdDefault(cn, "DOC_OSINFOR_ERP_MIGRACION.USP_COMBO_LISTAR_SUPERVISION", BUSFORMULARIO,BUSCRITERIO,BUSVALOR))
+                    using (OracleDataReader dr = dBOracle.SelDrdDefault(cn, "DOC_OSINFOR_ERP_MIGRACION.USP_COMBO_LISTAR_SUPERVISION", BUSFORMULARIO, BUSCRITERIO, BUSVALOR))
                     {
                         if (dr != null)
                         {

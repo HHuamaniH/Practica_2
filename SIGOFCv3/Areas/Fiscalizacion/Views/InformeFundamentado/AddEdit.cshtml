@@ -4,7 +4,17 @@
     Layout = "~/Views/Shared/_LayoutMain.cshtml";
 }
 
-<script src="~/Areas/Fiscalizacion/js/InformeFundamentado/AddEdit.js"></script>
+<style>
+    .obligatorio::before {
+        content: "*";
+        color: red;
+        font-size: 2em;
+        margin-right: 5px;
+        vertical-align: middle;
+    }
+</style>
+
+<script src="~/Areas/Fiscalizacion/js/InformeFundamentado/AddEdit.js?v=@Guid.NewGuid()"></script>
 @section scripts{
     <script>
         "use strict"; var rol = '';
@@ -19,6 +29,7 @@
     ManInfFundamentado_AddEdit.fnLoadData('@Html.Raw(Json.Encode(@Model.listaEntidades))', "DataEntidad");
 </script>
 
+
 <div class="container-fluid">
     <div class="card">
         <div class="card-header text-right">
@@ -27,7 +38,7 @@
         <div class="card-body">
             <div class="card">
                 <div class="card-header text-small">
-                    <a id="btnRegistrar" href="javascript:void(0)" style="cursor:pointer;" data-toggle="tooltip" data-placement="top" title="Guardar" onclick="ManInfFundamentado_AddEdit.fnSaveForm()"><i class="fa mx-2 fa-lg fa-save"></i></a>
+                    <a id="btnRegistrar" href="javascript:void(0)" style="cursor:pointer;" data-toggle="tooltip" data-placement="top" title="Guardar" onclick="ManInfFundamentado_AddEdit.fnSaveFormV2()"><i class="fa mx-2 fa-lg fa-save"></i></a>
                     <a style="cursor:pointer;" data-toggle="tooltip" data-placement="top" title="Regresar" onclick="ManInfFundamentado_AddEdit.regresar()"><i class="fa mx-2 fa-lg fa-reply"></i></a>
                     @Model.lblTituloEstado
                 </div>
@@ -37,76 +48,108 @@
                         @Html.HiddenFor(m => m.hdfCodInfFundamentado)
                         @Html.HiddenFor(m => m.hdfCodTipoInfFundamentado)
                         @Html.HiddenFor(m => m.RegEstado)
-
+                        @Html.HiddenFor(m => m.hdtxtTitularTipo)
+                        @Html.HiddenFor(m => m.hdfItemEstUbigeoCodigo)
                         <!--para el tipo antes del PAU-->
                         @Html.HiddenFor(m => m.hdfCodigoInfFundamentadoAlerta)
 
 
                         <ul class="nav nav-tabs" id="myTab" role="tablist">
                             <li class="nav-item"><a class="nav-link active" data-toggle="tab" href="#navEstado" role="tab" aria-controls="home" aria-selected="true">Estado Situacional</a></li>
-                            <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#navDatos" role="tab" aria-controls="home" aria-selected="true">Datos Generales</a></li>
-                            <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#navEntidades" role="tab" aria-controls="home" aria-selected="true">Entidades</a></li>
-                            <li id="idNavConclusiones" class="nav-item"><a class="nav-link" data-toggle="tab" href="#navConclusion" role="tab" aria-controls="home" aria-selected="true">Conclusiones</a></li>
-                            <li id="idNavObservaciones" class="nav-item"><a class="nav-link" data-toggle="tab" href="#navObservacion" role="tab" aria-controls="home" aria-selected="true">Observaciones</a></li>
+                            <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#navDatos" role="tab" aria-controls="home" aria-selected="true">Datos Solicitud FEMAS</a></li>
+                            <li class="nav-item" id="idNavInformeFundamentado"><a class="nav-link" data-toggle="tab" href="#navEntidades" role="tab" aria-controls="home" aria-selected="true">Informe Fundamentado</a></li>
+                            <li id="idNavPauCopia" class="nav-item"><a class="nav-link" data-toggle="tab" href="#navConclusion" role="tab" aria-controls="home" aria-selected="true">Información PAU/Copia</a></li>
+                            <li id="idNavObservaciones" class="nav-item" onclick="ManInfFundamentado_AddEdit.fnNotificacion()"><a class="nav-link" data-toggle="tab" href="#navObservacion" role="tab" aria-controls="home" aria-selected="true">Notificación</a></li>
                         </ul>
                         <div class="tab-content">
                             <div class="tab-pane fade show active" id="navEstado" role="tabpanel" aria-labelledby="nav-home-tab">
                                 @{ Html.RenderAction("_ControlCalidad", "Controles", new { area = "GENERAL", dto = Model.vmControlCalidad }); }
                             </div>
                             <div class="tab-pane fade show" id="navDatos" role="tabpanel" aria-labelledby="nav-home-tab">
+                                <br />
+                                <br />
                                 <div class="form-row">
-                                    <div class="form-group col-md-3">
-                                        <label for="lblOdId" class="text-small">O.D. desde donde registra la información</label>
+                                    <div class="form-group col-md-4">
+                                        <label for="ddlIndicadorId" class="text-small">Estado Solicitud del FEMA</label>
+                                        @Html.DropDownListFor(m => m.ddlEstadoSolicitudFemaId, new SelectList(Model.ddlEstadoSolicitudFema, "Value", "Text"), new { @class = "form-control form-control-sm" })
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group col-md-2">
+                                        <label for="txtRegistro" class="text-small obligatorio">Número de Registro del SITD</label>
+                                        @Html.TextBoxFor(m => m.txtRegistro, new { @class = "form-control form-control-sm" })
+                                    </div>
+                                    <div class="form-group col-md-2">
+                                        <label class="text-small">&ensp;</label>
+                                        <button type="button" class="btn btn-info btn-sm" style="margin-top:32px"
+                                                onclick="ManInfFundamentado_AddEdit.fnObtenerDocumentoSITD()">Obtener Información SITD</button>
+                                    </div>
+                                    <div class="form-group col-md-4">
+                                        <label for="dtpFechaIngresoSolicitud" class="text-small obligatorio">Fecha de Ingreso de la Solicitud del SITD</label>
+                                        @Html.EditorFor(m => m.dtpFechaIngresoSolicitud, new { htmlAttributes = new { @class = "form-control form-control-sm", placeholder = "dd/mm/yyyy" } })
+                                    </div>
+                                    <div class="form-group col-md-4">
+                                        <label for="txtNumeroOficioSolicitud" class="text-small obligatorio">N° de oficio (Solicitud)</label>
+                                        @Html.TextBoxFor(m => m.txtNumeroOficioSolicitud, new { @class = "form-control form-control-sm" })
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group col-md-4">
+                                        <label for="txtcarpetafiscal" class="text-small obligatorio">Carpeta Fiscal</label>
+                                        @Html.TextBoxFor(m => m.txtcarpetafiscal, new { @class = "form-control form-control-sm" })
+                                    </div>
+                                    <div class="form-group col-md-4">
+                                        <label for="ddlTipoSolicitud" class="text-small obligatorio">Tipo de Solicitud</label>
+                                        @Html.DropDownListFor(m => m.ddlTipoSolicitudId, new SelectList(Model.ddlTipoSolicitud, "Value", "Text"),
+                                        new { @class = "form-control form-control-sm", id = "ddlTipoSolicitud" })
+                                    </div>
+                                    <div class="form-group col-md-4">
+                                        <label for="ddlVencimientoPlazoLegal" class="text-small obligatorio">Vencimiento del plazo legal</label>
+                                        @Html.DropDownListFor(m => m.ddlVencimientoPlazoLegalId, new SelectList(Model.ddlVencimientoPlazoLegal, "Value", "Text"),
+                                        new { @class = "form-control form-control-sm", id = "ddlVencimientoPlazoLegal" })
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group col-md-12">
+                                        <label for="txtDetalle" class="text-small">Detalle</label>
+                                        @Html.TextAreaFor(m => m.txtDetalle, 3, 1, new { @class = "form-control form-control-sm" })
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group col-md-4">
+                                        <label for="ddlIndicadorId" class="text-small obligatorio">O.D. Competente</label>
                                         @Html.DropDownListFor(m => m.ddlOdId, new SelectList(Model.ddlOd, "Value", "Text"), new { @class = "form-control form-control-sm" })
                                     </div>
-                                    <div class="form-group col-md-12">
-                                        <label for="lblTipoILegal" class="text-small">Tipo de Informe Fundamentado</label>
-                                        @Html.TextBoxFor(m => m.txtTipoInfFundamentado, new { @class = "form-control form-control-sm", disabled = "disabled" })
-                                    </div>
-                                </div>
-                                <div class="form-row">
+
                                     <div class="form-group col-md-4">
-                                        <label for="txtFechaFundamentado" class="text-small">Fecha de Emisión</label>
-                                        @Html.EditorFor(m => m.txtFechaFundamentado, new { htmlAttributes = new { @class = "form-control form-control-sm", placeholder = "dd/mm/yyyy", title = "la fecha a ingresar debe ser en el formato dd/mm/yyyy", maxlength = "10" } })
+                                        <label for="fItemEstUbigeoCodigo" class="text-small obligatorio">Ubigeo<i class="fa fa-cog fa-spin text-danger" id="iconUbigeoTH" style="display:none;" data-toggle="tooltip" data-placement="top" title="Seleccione Ubigeo"></i></label>
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text"><i class="fa fa-search" style="cursor:pointer;" data-toggle="tooltip" data-placement="top" title="Ubigeo" onclick="ManInfFundamentado_AddEdit.cargarUbigeoModal('fItemEstUbigeoCodigo');"></i></span>
+                                            </div>
+                                            @Html.EditorFor(m => m.fItemEstUbigeoCodigo, new { htmlAttributes = new { @class = "form-control form-control-sm", @disabled = "disabled" } })
+                                        </div>
                                     </div>
                                     <div class="form-group col-md-4">
-                                        <label for="txtNumInfFundamentado" class="text-small">Número Informe Fundamentado</label>
-                                        @Html.EditorFor(m => m.txtNumInfFundamentado, new { htmlAttributes = new { @class = "form-control form-control-sm" } })
+
+                                        <label for="txtTitularTipo" class="text-small obligatorio">Usuario Asignado</label>
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text"><i class="fa fa-male" style="cursor:pointer;" onclick="ManInfFundamentado_AddEdit.fnBuscarPersona('TITULAR', 'N');" data-toggle="tooltip" data-placement="top" title="Natural"></i></span>
+                                            </div>
+                                            @Html.EditorFor(m => m.txtTitularTipo, new { htmlAttributes = new { @class = "form-control form-control-sm", @disabled = "disabled" } })
+                                            <input type="hidden" id="hdtipotxtTitularTipo" />
+                                        </div>
+
                                     </div>
                                 </div>
-                                <div class="form-row">
-                                    <div class="table-responsive">
-                                        <table id="tbProfesionales" style="width:100%" class="table table-hover table-bordered">
-                                            <thead>
-                                                <tr>
-                                                    <th colspan="17" class="text-sm-left">
-                                                        <div class="form-inline">
-                                                            <i class="fa mx-2 fa-lg fa-file-o" style="cursor:pointer;" onclick="ManInfFundamentado_AddEdit.fnBuscarPersona('PROFESIONAL', 'N');" data-toggle="tooltip" data-placement="top" title="Nuevo"></i>
-                                                            <i class="fa mx-2 fa-lg fa-window-close-o" style="cursor:pointer;" onclick="ManInfFundamentado_AddEdit.fnDeleteAll('PROFESIONAL');" data-toggle="tooltip" data-placement="top" title="Eliminar Todos"></i>
-                                                            <strong>
-                                                                Profesionales responsables
-                                                            </strong>
-                                                        </div>
-                                                    </th>
-                                                </tr>
-                                            </thead>
-                                        </table>
-                                    </div>
-                                </div>
-                                <div id="dvRenderListInforme" class="form-row" style="margin-bottom:10px;">
-                                    <div class="col-md-12">
-                                        @Html.Partial("~/Areas/Fiscalizacion/Views/InformeFundamentado/Shared/_renderListInforme.cshtml", Model)
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="tab-pane fade show" id="navEntidades" role="tabpanel" aria-labelledby="nav-home-tab">
                                 <div class="form-row">
                                     <div class="form-group col-md-3">
-                                        <label for="lblEntidad" class="text-small">Entidad</label>
+                                        <label for="ddlEntidadId" class="text-small">Entidad</label>
                                         @Html.DropDownListFor(m => m.ddlEntidadId, new SelectList(Model.ddlEntidad, "Value", "Text"), new { @class = "form-control form-control-sm" })
                                     </div>
                                     <div class="form-group col-md-3">
-                                        <label for="lblSubEntidad" class="text-small">Departamento</label>
+                                        <label for="ddlSubEntidadId" class="text-small">Dependencia</label>
                                         @Html.DropDownListFor(m => m.ddlSubEntidadId, new SelectList(Model.ddlSubEntidad, "Value", "Text"), new { @class = "form-control form-control-sm" })
                                     </div>
                                     <div class="form-group col-md-3">
@@ -114,6 +157,8 @@
                                         <button type="button" id="btnAddEntidades" class="btn btn-info btn-sm">Agregar Entidades</button>
                                     </div>
                                 </div>
+                                <!--tbListaEntidad-->
+
                                 <br />
                                 <div class="form-row">
                                     <div class="table-responsive">
@@ -122,23 +167,236 @@
                                         </table>
                                     </div>
                                 </div>
+
+                            </div>
+                            <div class="tab-pane fade show" id="navEntidades" role="tabpanel" aria-labelledby="nav-home-tab">
+                                <br />
+                                <div id="accordion">
+                                    <div class="card">
+                                        <div class="card-header" id="headingOne">
+                                            <a href="#" class="card-link" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                                                Emitir Informe Fundamentado
+                                            </a>
+                                        </div>
+
+                                        <div id="collapseOne" class="collapse" aria-labelledby="headingOne" data-parent="#accordion">
+                                            <div class="card-body">
+                                                <div class="form-row">
+                                                    <div class="form-group col-md-4">
+                                                        <div class="custom-control custom-checkbox my-1 mr-sm-2">
+                                                            @Html.CheckBoxFor(m => m.chkEmitirInforme, new { @class = "custom-control-input" })
+                                                            <label for="chkEmitirInforme" class="custom-control-label" style="margin-top:6px;">Emitir Informe</label>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group col-md-4">
+                                                        <label for="ddlproveidor" class="text-small">Memorándum de firmeza</label>
+                                                        @Html.DropDownListFor(m => m.ddlproveidorId, new SelectList(Model.ddlProveidor, "Value", "Text"), new { @class = "form-control form-control-sm" })
+                                                    </div>
+                                                    <div class="form-group col-md-4">
+                                                        <div class="custom-control custom-checkbox my-1 mr-sm-2">
+                                                            <label for="dtpfechaFirmezaPAU" class="text-small">  Fecha de Firmeza del PAU</label>
+                                                            @Html.EditorFor(m => m.dtpfechaFirmezaPAU, new { htmlAttributes = new { @class = "form-control form-control-sm", placeholder = "dd/mm/yyyy" } })
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-row">
+                                                    <div class="form-group col-md-4">
+                                                    </div>
+                                                    <div class="form-group col-md-4">
+                                                        <div class="custom-control custom-checkbox my-1 mr-sm-2">
+                                                            <label for="txtNumeroInformeFundamentado" class="text-small obligatorio">Número de Informe Fundamentado</label>
+                                                            @Html.EditorFor(m => m.txtNumeroInformeFundamentado, new { htmlAttributes = new { @class = "form-control form-control-sm activarInforme" } })
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group col-md-4">
+                                                        <div class="custom-control custom-checkbox my-1 mr-sm-2">
+                                                            <label for="dtpFechaFundamentado" class="text-small obligatorio">Fecha de Emisión de Informe</label>
+                                                            @Html.EditorFor(m => m.dtpFechaFundamentado, new { htmlAttributes = new { @class = "form-control form-control-sm activarInforme", placeholder = "dd/mm/yyyy" } })
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-row">
+                                                    <div class="form-group col-md-4">
+
+                                                    </div>
+                                                    <div class="form-group col-md-4">
+                                                        <div class="custom-control custom-checkbox my-1 mr-sm-2">
+                                                            <label for="txtNumeroOficio1" class="text-small obligatorio">  N° de Oficio</label>
+                                                            @Html.EditorFor(m => m.txtNumeroOficio1, new { htmlAttributes = new { @class = "form-control form-control-sm activarInforme" } })
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group col-md-4">
+                                                        <div class="custom-control custom-checkbox my-1 mr-sm-2">
+                                                            <label for="dtpFechaEmisionPau" class="text-small obligatorio">Fecha de Emisión de Oficio</label>
+                                                            @Html.EditorFor(m => m.dtpfechaOficio1, new { htmlAttributes = new { @class = "form-control form-control-sm activarInforme", placeholder = "dd/mm/yyyy" } })
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-row">
+                                                    <div class="form-group col-md-12">
+                                                        <label for="txtConclusiones" class="text-small">Conclusiones</label>
+                                                        @Html.TextAreaFor(m => m.txtConclusiones, 3, 1, new { @class = "form-control form-control-sm activarInforme" })
+                                                    </div>
+                                                </div>
+                                                <div class="form-row">
+                                                    <div class="form-group col-md-12">
+                                                        <label for="txtObservaciones" class="text-small">Observaciones</label>
+                                                        @Html.TextAreaFor(m => m.txtObservaciones, 3, 1, new { @class = "form-control form-control-sm activarInforme" })
+                                                    </div>
+                                                </div>
+                                                <div class="form-row">
+                                                    <div class="table-responsive">
+                                                        <label for="txtObligatorioPR" class="text-small obligatorio">Ingrese Profesionales Responsables</label>
+                                                        <table id="tbProfesionales" style="width:100%" class="table table-hover table-bordered">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th colspan="17" class="text-sm-left">
+                                                                        <div class="form-inline ">
+                                                                            <i class="fa mx-2 fa-lg fa-solid fa-plus" style="cursor:pointer;" onclick="ManInfFundamentado_AddEdit.fnBuscarPersona('PROFESIONAL', 'N');" data-toggle="tooltip" data-placement="top" title="Nuevo"></i>
+                                                                            <strong>
+                                                                                Profesionales responsables
+                                                                            </strong>
+                                                                        </div>
+                                                                    </th>
+                                                                </tr>
+                                                            </thead>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                                <div class="table-responsive">
+                                                    <div id="dvRenderListInforme" class="form-row" style="margin-bottom:10px;">
+                                                        <div class="col-md-12">
+                                                            <label for="txtObligatorioPR2" class="text-small obligatorio">Ingrese Informe de Supervisíon</label>
+                                                            @Html.Partial("~/Areas/Fiscalizacion/Views/InformeFundamentado/Shared/_renderListInforme.cshtml", Model)
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="card">
+                                        <div class="card-header" id="headingTwo">
+                                            <a href="#" class="card-link" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo">
+                                                Emitir Oficio
+                                            </a>
+                                        </div>
+                                        <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordion">
+                                            <div class="card-body">
+                                                <div class="form-row">
+                                                    <div class="form-group col-md-4">
+                                                        <br />
+                                                        <div class="custom-control custom-checkbox my-1 mr-sm-2">
+                                                            @Html.CheckBoxFor(m => m.chkEmitirOficio, new { @class = "custom-control-input" })
+                                                            <label for="chkEmitirOficio" class="custom-control-label" style="margin-top:6px;">Emitir Oficio</label>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group col-md-4">
+                                                        <label for="txtNumeroOficio2" class="text-small obligatorio">N° de oficio</label>
+                                                        @Html.TextBoxFor(m => m.txtNumeroOficio2, new { @class = "form-control form-control-sm activarEmitirOficio" })
+                                                    </div>
+                                                    <div class="form-group col-md-4">
+                                                        <label for="dtpfechaOficio2" class="text-small obligatorio">Fecha de Oficio</label>
+                                                        @Html.EditorFor(m => m.dtpfechaOficio2, new { htmlAttributes = new { @class = "form-control form-control-sm activarEmitirOficio", placeholder = "dd/mm/yyyy" } })
+                                                    </div>
+                                                </div>
+                                                <div class="form-row">
+                                                    <div class="form-group col-md-12">
+                                                        <label for="txtObservacionesOficio" class="text-small">Observaciones</label>
+                                                        @Html.TextAreaFor(m => m.txtObservacionesOficio, 3, 1, new { @class = "form-control form-control-sm activarEmitirOficio" })
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
                             </div>
                             <div class="tab-pane fade show" id="navConclusion" role="tabpanel" aria-labelledby="nav-home-tab">
                                 <div class="card">
+                                    <br />
+                                    <h3>PAU - COPIA</h3>
                                     <div class="form-row">
+                                        <div class="form-group col-md-4">
+                                            <br />
+                                            <div class="custom-control custom-checkbox my-1 mr-sm-2">
+                                                @Html.CheckBoxFor(m => m.chkEmitirOficioPau, new { @class = "custom-control-input" })
+                                                <label for="chkEmitirOficioPau" class="custom-control-label" style="margin-top:6px;">Emitir Oficio</label>
+                                            </div>
+                                        </div>
+                                        <div class="form-group col-md-4">
+                                            <div class="custom-control custom-checkbox my-1 mr-sm-2">
+                                                <label for="txtNumeroOficioPau" class="text-small obligatorio"> N° de Oficio</label>
+                                                @Html.EditorFor(m => m.txtNumeroOficioPau, new { htmlAttributes = new { @class = "form-control form-control-sm activarEmitirOficioPau" } })
+                                            </div>
+                                        </div>
+                                        <div class="form-group col-md-4">
+
+                                            <label for="dtpFechaEmisionPau" class="text-small obligatorio">Fecha de Emisión</label>
+                                            @Html.EditorFor(m => m.dtpFechaEmisionPau, new { htmlAttributes = new { @class = "form-control form-control-sm activarEmitirOficioPau", placeholder = "dd/mm/yyyy" } })
+                                        </div>
+                                    </div>
+                                    <br />
+                                    <div class="table-responsive">
+                                        <div id="dvRenderListInformeSigo" class="form-row" style="margin-bottom:10px;">
+                                            <div class="col-md-12">
+                                                @Html.Partial("~/Areas/Fiscalizacion/Views/InformeFundamentado/Shared/_renderListInformeSigo.cshtml", Model)
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <br />
+                                    <div class="form-row">
+
                                         <div class="form-group col-md-12">
-                                            <label for="txtConclusiones" class="text-small">Conclusiones</label>
-                                            @Html.TextAreaFor(m => m.txtConclusiones, 3, 1, new { @class = "form-control form-control-sm" })
+                                            <label for="txtObservacionesPau" class="text-small">Observaciones</label>
+                                            @Html.TextAreaFor(m => m.txtObservacionesPau, 3, 1, new { @class = "form-control form-control-sm activarEmitirOficioPau" })
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                            <div class="tab-pane fade show" id="navObservacion" role="tabpanel" aria-labelledby="nav-home-tab">
+                            <div class="tab-pane fade show" id="navObservacion" role="tabpanel" aria-labelledby="nav-home-tab"  >
                                 <div class="card">
+                                    <br />
+                                    <h3>NOTIFICACIÓN</h3>
+                                    <div class="form-row">
+                                        <div class="form-group col-md-4">
+                                            <br />
+                                            <div class="custom-control custom-checkbox my-1 mr-sm-2">
+                                                @Html.CheckBoxFor(m => m.chkNotificacion, new { @class = "custom-control-input" })
+                                                <label for="chkNotificacion" class="custom-control-label" style="margin-top:6px;">Notificación</label>
+                                            </div>
+                                        </div>
+                                        <div class="form-group col-md-4">
+
+                                        </div>
+                                        <div class="form-group col-md-4">
+
+                                        </div>
+                                    </div>
+                                    <div class="form-row">
+                                        <div class="form-group col-md-3">
+                                            <div class="custom-control custom-checkbox my-1 mr-sm-2">
+                                                <label for="txtnumeroDocumento" class="text-small"> Número de Documento</label>
+                                                @Html.EditorFor(m => m.txtnumeroDocumento, new { htmlAttributes = new { @class = "form-control form-control-sm activarNotificacion" } })
+                                            </div>
+                                        </div>
+                                        <div class="form-group col-md-2">
+                                            <button class="btn btn-info btn-sm" style="margin-top:28px" type="button"
+                                                    onclick="ManInfFundamentado_AddEdit.fnObtenerFechaNotificacion()"
+                                                    >Obtener Fecha Notificación</button>
+                                        </div>
+                                        <div class="form-group col-md-4">
+                                            <div class="custom-control custom-checkbox my-1 mr-sm-2">
+                                                <label for="dtpFechaNotificacion" class="text-small"> Fecha de Notificación</label>
+                                                @Html.EditorFor(m => m.dtpFechaNotificacion, new { htmlAttributes = new { @class = "form-control form-control-sm activarNotificacion", placeholder = "dd/mm/yyyy" } })
+                                            </div>
+                                        </div>
+                                    </div>
                                     <div class="form-row">
                                         <div class="form-group col-md-12">
-                                            <label for="txtObservaciones" class="text-small">Observaciones</label>
-                                            @Html.TextAreaFor(m => m.txtObservaciones, 3, 1, new { @class = "form-control form-control-sm" })
+
+                                            <label for="txtAnotaciones" class="text-small">Anotaciones</label>
+                                            @Html.TextAreaFor(m => m.txtAnotaciones, 3, 1, new { @class = "form-control form-control-sm activarNotificacion" })
                                         </div>
                                     </div>
                                 </div>
@@ -154,3 +412,4 @@
 @* Para el control genérico de personas *@
 <div class="modal fade hide" id="mdlBuscarPersona" role="dialog"></div>
 <div class="modal fade" id="modalAddEditPersona" tabindex="-1" role="dialog"></div>
+<div class="modal fade hide" id="personaUbigeoModal" role="dialog"></div>

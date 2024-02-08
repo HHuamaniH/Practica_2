@@ -3,6 +3,11 @@ using System.Collections.Generic;
 using Oracle.ManagedDataAccess.Client;//using System.Data.SqlClient;
 using CEntidadC = CapaEntidad.DOC.Ent_INFFUN;
 using GeneralSQL;//using SQL = GeneralSQL.Data.SQL;
+using CapaEntidad.Documento;
+using GeneralSQL.Data;
+using System.Data.SqlClient;
+using System.Data;
+
 namespace CapaDatos.DOC
 {
     /// <summary>
@@ -68,7 +73,7 @@ namespace CapaDatos.DOC
             {
                 tr = cn.BeginTransaction();
                 //Grabando Cabecera
-                using (OracleCommand cmd = dBOracle.ManExecuteOutput(cn, tr, "DOC_OSINFOR_ERP_MIGRACION.spINFFUNGrabar", oCEntidad))
+                using (OracleCommand cmd = dBOracle.ManExecuteOutput(cn, tr, "DOC_OSINFOR_ERP_MIGRACION.SPINFFUNGRABAR_V2", oCEntidad))
                 {
                     cmd.ExecuteNonQuery();
                     OUTPUTPARAM01 = (String)cmd.Parameters["OUTPUTPARAM01"].Value;
@@ -136,7 +141,7 @@ namespace CapaDatos.DOC
                         if (loDatos.RegEstado == 1) //Nuevo
                         {
                             oCamposDet = new CEntidadC();
-                            if (loDatos.COD_RESODIREC!= null && loDatos.COD_RESODIREC != "" && loDatos.COD_RESODIREC_INI_PAU != null && loDatos.COD_RESODIREC_INI_PAU != "")
+                            if (loDatos.COD_RESODIREC != null && loDatos.COD_RESODIREC != "" && loDatos.COD_RESODIREC_INI_PAU != null && loDatos.COD_RESODIREC_INI_PAU != "")
                             {
                                 oCamposDet.COD_RESODIREC_INI_PAU = loDatos.COD_RESODIREC_INI_PAU;
                                 oCamposDet.COD_RESODIREC = loDatos.COD_RESODIREC;
@@ -184,7 +189,45 @@ namespace CapaDatos.DOC
                     }
                 }
                 tr.Commit();
+
+
+
                 return OUTPUTPARAM01 + '|' + OUTPUTPARAM02;
+            }
+            catch (Exception ex)
+            {
+                if (tr != null)
+                {
+                    tr.Rollback();
+                }
+                throw ex;
+            }
+        }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="cn"></param>
+        /// <param name="oCEntidad"></param>
+        /// <returns></returns>
+        /// 
+
+        public String RegActualizaInfFundamentado(OracleConnection cn, string codigo)
+        {
+            OracleTransaction tr = null;
+            CEntidadC oCamposDet;
+
+            try
+            {
+                tr = cn.BeginTransaction();
+
+                oCamposDet = new CEntidadC();
+                oCamposDet.COD_INFFUN = codigo;
+                oCamposDet.RegEstado = 1;
+                dBOracle.ManExecute(cn, tr, "DOC_OSINFOR_ERP_MIGRACION.spINFFUN_INFORME_ACTUALIZA", oCamposDet);
+
+                tr.Commit();
+
+                return codigo;
             }
             catch (Exception ex)
             {
@@ -232,6 +275,37 @@ namespace CapaDatos.DOC
                             lsCEntidad.DESCRIPCION = dr.GetString(dr.GetOrdinal("DESCRIPCION"));
                             lsCEntidad.COD_OD_REGISTRO = dr.GetString(dr.GetOrdinal("COD_OD_REGISTRO"));
                             lsCEntidad.USUARIO_REGISTRO = dr.GetString(dr.GetOrdinal("USUARIO_REGISTRO"));
+                            // NUEVOS CAMPOS //
+                            lsCEntidad.NUMERO_TRAMITE = dr.GetString(dr.GetOrdinal("NUMERO_REGISTRO"));
+                            lsCEntidad.FECHA_TRAMITE = dr.GetString(dr.GetOrdinal("FECHA_SOLICITUD"));
+                            lsCEntidad.NUMERO_SOLICITUD = dr.GetString(dr.GetOrdinal("NUMERO_SOLICITUD"));
+                            lsCEntidad.COD_TIPO_SOLICITUD = dr.GetString(dr.GetOrdinal("COD_TIPO_SOLICITUD"));
+                            lsCEntidad.COD_VEN_LEGAL = dr.GetString(dr.GetOrdinal("COD_VENC_LEGAL"));
+                            lsCEntidad.GLOSA = dr.GetString(dr.GetOrdinal("DETALLE"));
+                            lsCEntidad.COD_UBIGEO = dr.GetString(dr.GetOrdinal("COD_UBIGEO"));
+                            lsCEntidad.ESTAB_UBIGEO = dr.GetString(dr.GetOrdinal("ESTAB_UBIGEO"));
+                            lsCEntidad.COD_PERSONA_ASIGNADO = dr.GetString(dr.GetOrdinal("COD_PERSONA_ASIGNADO"));
+                            lsCEntidad.PERSONA_TITULAR = dr.GetString(dr.GetOrdinal("PERSONA_TITULAR"));
+
+                            lsCEntidad.FLAG_INFFUN_EMITIDO = dr.GetInt32(dr.GetOrdinal("FLAG_INFFUN_EMITIDO"));
+                            lsCEntidad.FECHA_FIRMEZA = dr.GetString(dr.GetOrdinal("FECHA_FIRMEZA"));
+                            lsCEntidad.NUMERO_OFICIO1 = dr.GetString(dr.GetOrdinal("NUMERO_OFICIO1"));
+                            lsCEntidad.FECHA_OFICIO1 = dr.GetString(dr.GetOrdinal("FECHA_OFICIO1"));
+
+                            lsCEntidad.FLAG_NO_INFUN_EMITIDO = dr.GetInt32(dr.GetOrdinal("FLAG_NO_INFUN_EMITIDO"));
+                            lsCEntidad.NUMERO_OFICIO2 = dr.GetString(dr.GetOrdinal("NUMERO_OFICIO2"));
+                            lsCEntidad.FECHA_OFICIO2 = dr.GetString(dr.GetOrdinal("FECHA_OFICIO2"));
+                            lsCEntidad.NOTA_NO_INFFUN = dr.GetString(dr.GetOrdinal("NOTA_NO_INFFUN"));
+
+                            lsCEntidad.FLAG_COPIA_PAU_EMITIDO = dr.GetInt32(dr.GetOrdinal("FLAG_COPIA_PAU_EMITIDO"));
+                            lsCEntidad.NOTA_COPIA_PAU = dr.GetString(dr.GetOrdinal("NOTA_COPIA_PAU"));
+
+                            lsCEntidad.FLAG_NOTIFICACION = dr.GetInt32(dr.GetOrdinal("FLAG_NOTIFICACION"));
+                            lsCEntidad.FECHA_NOTIFICACION = dr.GetString(dr.GetOrdinal("FECHA_NOTIFICACION"));
+                            lsCEntidad.NOTA_NOTIFICACION = dr.GetString(dr.GetOrdinal("NOTA_NOTIFICACION"));
+                            lsCEntidad.CARPETA_FISCAL = dr.GetString(dr.GetOrdinal("CARPETA_FISCAL"));
+                            lsCEntidad.COD_PROVEIDOARCH = dr.GetString(dr.GetOrdinal("COD_PROVEIDOARCH"));
+                            lsCEntidad.COD_ESTADO_SOLICITUD = dr.GetString(dr.GetOrdinal("COD_ESTADO_SOLICITUD"));
                         }
                         //Estado (Calidad)
                         dr.NextResult();
@@ -443,7 +517,7 @@ namespace CapaDatos.DOC
             }
         }
 
-       public CEntidadC RegMostCombo(OracleConnection cn, CEntidadC oCEntidad)
+        public CEntidadC RegMostCombo(OracleConnection cn, CEntidadC oCEntidad)
         {
             CEntidadC oCampos = null;
             try
@@ -533,6 +607,57 @@ namespace CapaDatos.DOC
                             }
                         }
                         oCampos.ListTipoCNotificacion = lsDetDetalle;
+
+                        //06 Tipo de Solicitud
+                        dr.NextResult();
+                        lsDetDetalle = new List<CEntidadC>();
+                        if (dr.HasRows)
+                        {
+                            int pt1 = dr.GetOrdinal("CODIGO");
+                            int pt2 = dr.GetOrdinal("DESCRIPCION");
+                            while (dr.Read())
+                            {
+                                oCamposDet = new CEntidadC();
+                                oCamposDet.CODIGO = dr.GetString(pt1);
+                                oCamposDet.DESCRIPCION = dr.GetString(pt2);
+                                lsDetDetalle.Add(oCamposDet);
+                            }
+                        }
+                        oCampos.ListTipoSolicitud = lsDetDetalle;
+
+                        //07 Vencimiento Plazo Legal
+                        dr.NextResult();
+                        lsDetDetalle = new List<CEntidadC>();
+                        if (dr.HasRows)
+                        {
+                            int pt1 = dr.GetOrdinal("CODIGO");
+                            int pt2 = dr.GetOrdinal("DESCRIPCION");
+                            while (dr.Read())
+                            {
+                                oCamposDet = new CEntidadC();
+                                oCamposDet.CODIGO = dr.GetString(pt1);
+                                oCamposDet.DESCRIPCION = dr.GetString(pt2);
+                                lsDetDetalle.Add(oCamposDet);
+                            }
+                        }
+                        oCampos.ListVencimientoPlazoLegal = lsDetDetalle;
+
+                        //07 Estado Solicitud Fema
+                        dr.NextResult();
+                        lsDetDetalle = new List<CEntidadC>();
+                        if (dr.HasRows)
+                        {
+                            int pt1 = dr.GetOrdinal("CODIGO");
+                            int pt2 = dr.GetOrdinal("DESCRIPCION");
+                            while (dr.Read())
+                            {
+                                oCamposDet = new CEntidadC();
+                                oCamposDet.CODIGO = dr.GetString(pt1);
+                                oCamposDet.DESCRIPCION = dr.GetString(pt2);
+                                lsDetDetalle.Add(oCamposDet);
+                            }
+                        }
+                        oCampos.ListEstadoSolicitudFema = lsDetDetalle;
                     }
                 }
                 return oCampos;
@@ -589,5 +714,113 @@ namespace CapaDatos.DOC
                 throw ex;
             }
         }
+
+        public List<Ent_MemoFirmeza> FiltrarMemoFirmeza(OracleConnection cn, string codigoInforme)
+        {
+            List<Ent_MemoFirmeza> lstentidad = new List<Ent_MemoFirmeza>();
+            Ent_MemoFirmeza entidad = null;
+            try
+            {
+                using (OracleCommand command = new OracleCommand("DOC_OSINFOR_ERP_MIGRACION.SPINFFUN_CONSULTAR_MEMO_FIRMEZA", cn))
+                {
+                    command.CommandType = System.Data.CommandType.StoredProcedure;
+                    command.Parameters.Add("COD_INFORME", OracleDbType.Varchar2).Value = codigoInforme;
+
+                    using (OracleDataReader reader = command.ExecuteReader())
+                    {
+                        if (reader.HasRows)
+                        {
+                            entidad = new Ent_MemoFirmeza();
+                            while (reader.Read())
+                            {
+                                entidad.COD_PROVEIDORARCH = reader.GetString(reader.GetOrdinal("COD_PROVEIDOARCH"));
+                                entidad.FECHA = reader.GetString(reader.GetOrdinal("FECHA"));
+                                entidad.COD_TRAMITE_ENVIO = reader.GetInt32(reader.GetOrdinal("COD_TRAMITE_ENVIO"));
+                                entidad.COD_RESODIREC = reader.GetString(reader.GetOrdinal("COD_RESODIREC"));
+                                entidad.NUMERO_EXPEDIENTE = reader.GetString(reader.GetOrdinal("NUMERO_EXPEDIENTE"));
+                                entidad.COD_INFORME = reader.GetString(reader.GetOrdinal("COD_INFORME"));
+                                lstentidad.Add(entidad);
+                            }
+                        }
+                    }
+                }
+
+                return lstentidad;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        #region "SQL SERVER"
+
+        public Ent_DocumentoEntradaSITD ObtenerDocumentoSITD(string numeroRegistro)
+        {
+            Ent_DocumentoEntradaSITD entidad = null;
+            SQL oGDataSQL = new SQL();
+
+            using (SqlConnection cn = new SqlConnection(BDConexion.Conexion_Cadena_SITD()))
+            {
+                cn.Open();
+                using (SqlCommand cmd = new SqlCommand("SP_CONSULTAR_DOC_ENTRADA_SITD", cn))
+                {
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@NRO_DOCUMENTO", numeroRegistro);
+                    using (SqlDataReader reader = cmd.ExecuteReader())
+                    {
+                        if (reader != null)
+                            if (reader.Read())
+                            {
+                                entidad = new Ent_DocumentoEntradaSITD();
+                                entidad.iCodTramite = reader.GetInt32(reader.GetOrdinal("iCodTramite"));
+                                entidad.cCodificacion = reader.GetString(reader.GetOrdinal("cCodificacion"));
+                                entidad.fFecDocumento = reader.GetString(reader.GetOrdinal("fFecDocumento"));
+                                entidad.cNroDocumento = reader.GetString(reader.GetOrdinal("cNroDocumento"));
+                                entidad.iCodTupa = reader.GetInt32(reader.GetOrdinal("iCodTupa"));
+                                entidad.cAsunto = reader.GetString(reader.GetOrdinal("cAsunto"));
+                                entidad.cNomRemite = reader.GetString(reader.GetOrdinal("cNomRemite"));
+                                entidad.iCodRemitente = reader.GetInt32(reader.GetOrdinal("iCodRemitente"));
+                                entidad.cFema = reader.GetString(reader.GetOrdinal("cFema"));
+                                entidad.cTipoSolicitudFema = reader.GetString(reader.GetOrdinal("cTipoSolicitudFema"));
+
+                            }
+
+                    }
+                }
+            }
+            return entidad;
+        }
+
+        public string FiltrarFechaNotificacion(string numeroRegistro)
+        {
+            string resultado = "";
+            SQL oGDataSQL = new SQL();
+
+            using (SqlConnection cn = new SqlConnection(BDConexion.Conexion_Cadena_SITD()))
+            {
+                cn.Open();
+                using (SqlCommand cmd = new SqlCommand("SP_CONSULTAR_DOC_SALIDA_SITD", cn))
+                {
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@NRO_DOCUMENTO", numeroRegistro);
+                    using (SqlDataReader reader = cmd.ExecuteReader())
+                    {
+                        if (reader != null)
+                            if (reader.Read())
+                            {
+                                resultado = reader.GetString(reader.GetOrdinal("fechaNotificacion"));
+                            }
+
+                    }
+                }
+
+
+            }
+            return resultado;
+        }
+
+        #endregion
+
     }
 }

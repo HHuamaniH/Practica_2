@@ -15,7 +15,9 @@ namespace CapaEntidad.ViewModel
         public string hdFrmControl { get; set; }
         public string hdIdControl { get; set; }
         public IEnumerable<VM_Cbo> ddlIndicador { get; set; }
+      
         public string ddlIndicadorId { get; set; }
+      
         public bool ddlIndicadorEnable { get; set; }
         public bool chkObsSubsanada { get; set; }
         public bool hdnDisableControl { get; set; }
