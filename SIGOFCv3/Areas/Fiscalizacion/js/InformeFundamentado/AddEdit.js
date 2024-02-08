@@ -912,7 +912,7 @@ $(document).ready(function () {
     $("#ddlTipoSolicitud").on("change", function () {
         let codigoTipoSolicitud = $("#ddlTipoSolicitud").val();
         let ddlVencimientoPlazoLegalId = ManInfFundamentado_AddEdit.frm.find("#ddlVencimientoPlazoLegal");
-        debugger;
+ 
         switch (codigoTipoSolicitud) {
             case "000001":
                 //$('#inputId').prop('readonly', true);

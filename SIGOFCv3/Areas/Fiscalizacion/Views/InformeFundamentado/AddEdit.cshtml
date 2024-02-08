@@ -267,7 +267,12 @@
                                                     <div id="dvRenderListInforme" class="form-row" style="margin-bottom:10px;">
                                                         <div class="col-md-12">
                                                             <label for="txtObligatorioPR2" class="text-small obligatorio">Ingrese Informe de Supervisíon</label>
-                                                            @Html.Partial("~/Areas/Fiscalizacion/Views/InformeFundamentado/Shared/_renderListInforme.cshtml", Model)
+
+                                                            @if (Model.ddlTipoSolicitudId == "000001")
+                                                            {
+                                                                @Html.Partial("~/Areas/Fiscalizacion/Views/InformeFundamentado/Shared/_renderListInforme.cshtml", Model)
+                                                            }
+
                                                         </div>
                                                     </div>
                                                 </div>
@@ -339,7 +344,12 @@
                                     <div class="table-responsive">
                                         <div id="dvRenderListInformeSigo" class="form-row" style="margin-bottom:10px;">
                                             <div class="col-md-12">
-                                                @Html.Partial("~/Areas/Fiscalizacion/Views/InformeFundamentado/Shared/_renderListInformeSigo.cshtml", Model)
+
+                                                @if (Model.ddlTipoSolicitudId != "000001")
+                                                {
+                                                    @Html.Partial("~/Areas/Fiscalizacion/Views/InformeFundamentado/Shared/_renderListInformeSigo.cshtml", Model)
+                                                }
+
                                             </div>
                                         </div>
                                     </div>

@@ -128,9 +128,9 @@ namespace CapaDatos.DOC
                         oCamposDet.COD_INFFUN = OUTPUTPARAM01;
                         oCamposDet.EliTABLA = loDatos.EliTABLA;
                         oCamposDet.EliVALOR01 = loDatos.EliVALOR01;
-                        oCamposDet.COD_INFORME = loDatos.COD_INFORME;
-                        oCamposDet.COD_RESODIREC = loDatos.COD_RESODIREC;
-                        oCamposDet.COD_RESODIREC_INI_PAU = loDatos.COD_RESODIREC_INI_PAU;
+                        oCamposDet.COD_INFORME = (loDatos.COD_INFORME==null) ? " " : loDatos.COD_INFORME;
+                        oCamposDet.COD_RESODIREC = (loDatos.COD_RESODIREC == null) ? " " : loDatos.COD_RESODIREC; 
+                        oCamposDet.COD_RESODIREC_INI_PAU = (loDatos.COD_RESODIREC_INI_PAU == null) ? " " : loDatos.COD_RESODIREC_INI_PAU;  
                         dBOracle.ManExecute(cn, tr, "DOC_OSINFOR_ERP_MIGRACION.spINFFUNEliminarDetalle", oCamposDet);
                     }
                 }
