@@ -508,6 +508,7 @@ namespace CapaLogica.DOC
 
                     }
 
+                    vm.txtFechaFirmezaF = string.IsNullOrEmpty(CEntProveidoArchItems.FECHA_FIRMEZA.ToString().Trim()) ? string.Empty : CEntProveidoArchItems.FECHA_FIRMEZA.ToString();
                     //cambiacbtipo(hdfItemCategoriaCodigo.Value); 
 
                 }
