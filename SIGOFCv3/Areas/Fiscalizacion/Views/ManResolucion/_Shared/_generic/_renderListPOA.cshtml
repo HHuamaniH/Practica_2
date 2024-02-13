@@ -23,6 +23,9 @@
     _renderPOA.fncParcelas = function (codEnSelect) {
         var idPoa = _renderInfracciones.frm.find("#ddlPOA").val();
         var codResodirec = ManRD_AddEdit.frm.find("#hdfCodResodirec").val();
+
+        $('#txtParcelaRD').find('option').remove().end();
+
         $.ajax({
             url: '@Url.Action("listaParcela", "ManResolucion")',
             type: 'GET',
@@ -34,7 +37,6 @@
                 var countFilas = dataList.length;
                 if (countFilas > 0) {
                     $.each(dataList, function (i, o) {
-                       
                         $('#txtParcelaRD').append($('<option>', {
                             value: dataList[i].CODIGO,
                             text: dataList[i].DESCRIPCION
@@ -43,13 +45,11 @@
                 }
             }
         });
-        
     };
 
     $(document).ready(function () {
         _renderPOA.frm = $("#fmrPOA");       
         _renderPOA.fncParcelas();
-
     });
 
 </script>

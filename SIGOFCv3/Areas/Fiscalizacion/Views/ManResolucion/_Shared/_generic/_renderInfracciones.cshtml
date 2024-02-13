@@ -37,7 +37,7 @@
 
             }
         });
-        _renderInfracciones.fncBuscarPOA();
+        //_renderInfracciones.fncBuscarPOA();
 
         //Seleccionar especies por defecto Ninguna | Ninguna
         _renderInfracciones.frm.find("#ddlEspeciesFauna").val('0002226');
@@ -341,7 +341,7 @@
         });
     }
 
-    _renderInfracciones.fncBuscarPOA = function () {
+    @*_renderInfracciones.fncBuscarPOA = function () {
         let id = 1;
        $.ajax({
             url: '@Url.Action("getListPOA","ManResolucion")',
@@ -354,7 +354,7 @@
                 //_renderInfracciones.fncBuscarPOA();
               }
         });
-    };
+    };*@
 
     $(document).ready(function () {
         _renderInfracciones.frm = $("#frmInfracciones");

@@ -14,7 +14,7 @@
         ///_renderInfraccionesRecon.tbEliTABLA = {};
     };
 
-    _renderInfraccionesRecon.fncArticulos = function (codEnSelect) {
+    @*_renderInfraccionesRecon.fncArticulos = function (codEnSelect) {
         var idArticulo = _renderInfraccionesRecon.frm.find("#ddlArticulos").val();
         var DescArticulo = _renderInfraccionesRecon.frm.find("#ddlArticulos option:selected").text();
         var codEncisoSelect = codEnSelect
@@ -30,7 +30,7 @@
             }
         });
         _renderInfraccionesRecon.fncBuscarPOA();
-    };
+    };*@
 
     ///--------> lista
     _renderInfraccionesRecon.fnAdd = function (obj) {
@@ -299,7 +299,7 @@
         });
     }
 
-    _renderInfraccionesRecon.fncBuscarPOA = function () {
+    @*_renderInfraccionesRecon.fncBuscarPOA = function () {
         let id = 1;
        $.ajax({
             url: '@Url.Action("getListPOA","ManResolucion")',
@@ -312,7 +312,7 @@
                 //_renderInfraccionesRecon.fncBuscarPOA();
               }
         });
-    };
+    };*@
 
     $(document).ready(function () {
         _renderInfraccionesRecon.frm = $("#frmInfraccionesRecons");
