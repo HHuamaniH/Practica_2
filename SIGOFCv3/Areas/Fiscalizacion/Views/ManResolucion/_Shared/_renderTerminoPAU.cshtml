@@ -37,19 +37,11 @@
             _renderTerminoPau.frm.find("#divSITD2").show();
         }*/
     }
-    _renderTerminoPau.fncSubMotivo = function () {
+    _renderTerminoPau.fncSubMotivo = function (fn) {
         var idMotivo = _renderTerminoPau.frm.find("#ddlMotivoArch").val();
-        var descMotivo = _renderTerminoPau.frm.find("#ddlMotivoArch option:selected").text();
-        $.ajax({
-            url: '@Url.Action("subTipoArchivo","ManResolucion")',
-            type: 'GET',
-            datatype: "json",
-            traditional: true,
-            data: { 'idMotivo': idMotivo, 'descMotivo': descMotivo },
-            success: function (data) {
-                $("#divSubTipoArchivo").html(data)
-            }
-        });
+        var urlPublico = urlLocalSigo + "Fiscalizacion/ManResolucion/subTipoArchivo";
+
+        utilSigo.loadAjaxCombo(urlPublico, _renderListaArchivoC.frm.find("#ddlSubtipoArchv"), { idMotivo: idMotivo }, null, false, fn);
     };
 
 

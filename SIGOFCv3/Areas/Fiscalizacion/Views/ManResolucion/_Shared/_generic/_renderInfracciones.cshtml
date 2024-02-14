@@ -19,7 +19,6 @@
     let cod_secuencial;
     _renderInfracciones.iniciarEventos = function () {
         _renderInfracciones.frm.find("#txtBExtraccionFEmision").datepicker({ format: "dd/mm/yyyy", autoclose: true, language: 'es' });
-        ///_renderInfracciones.tbEliTABLA = {};
     };
 
     _renderInfracciones.fncArticulos = function (codEnSelect) {
@@ -37,90 +36,91 @@
 
             }
         });
-        //_renderInfracciones.fncBuscarPOA();
 
         //Seleccionar especies por defecto Ninguna | Ninguna
         _renderInfracciones.frm.find("#ddlEspeciesFauna").val('0002226');
         _renderInfracciones.frm.find("#ddlEspeciesFlora").val('0002226');
     };
 
-    ///--------> lista
-    _renderInfracciones.fnAdd = function (obj) {
-            var idArticulo = _renderInfracciones.frm.find("#ddlArticulos").val();
-            var DescArticulo = _renderInfracciones.frm.find("#ddlArticulos option:selected").text();
-            let idEnciso = _renderIncisos.frm.find("#ddlEnciso").val();
-            let descEnciso = _renderIncisos.frm.find("#ddlEnciso option:selected").text();
-            let idPoa = _renderInfracciones.frm.find("#ddlPOA").val();
-            let descPoa = _renderInfracciones.frm.find("#ddlPOA option:selected").text();
-            let area = _renderInfracciones.frm.find("#txtAreaInfrac").val();
-            let descripcion = _renderInfracciones.frm.find("#txtDescInfrac").val();
-            let volumen = _renderInfracciones.frm.find("#txtVolumenInf").val();
-            let idEspecie = _renderInfracciones.frm.find("#ddlEspeciesFlora").val();
-            let desEspecie = _renderInfracciones.frm.find("#ddlEspeciesFlora option:selected").text();
-            let idTipo = _renderInfracciones.frm.find("#ddTipo").val();
-            let numInd = _renderInfracciones.frm.find("#txtNumIndv").val();
-            let idEspecieFauna = _renderInfracciones.frm.find("#ddlEspeciesFauna").val();
-            let desEspecieFauna = _renderInfracciones.frm.find("#ddlEspeciesFauna option:selected").text();
-            let pca = _renderInfracciones.frm.find("#txtParcelaRD").val();
-
-            if (pca == undefined) {
-                pca = "";
-            }
-            let codEspecie = null;
-            let especie = '';
-            let RegEstado = 1;
-            if (idEspecie != "0002226" && idEspecie != null) {
-                codEspecie = idEspecie;
-                especie = desEspecie;
-            }else if (idEspecieFauna != "0002226" && idEspecieFauna != null) {
-                codEspecie = idEspecieFauna;
-                especie = desEspecieFauna;
-            }
-
-            if (indice != null) {
-                RegEstado = 2;
-            }
-            else {
-                cod_secuencial = 0;
-            }
-            let model = {
-                'COD_ILEGAL_ARTICULOS': idArticulo,
-                'COD_ILEGAL_ENCISOS': idEnciso,
-                'DESCRIPCION_ARTICULOS': DescArticulo,
-                'DESCRIPCION_ENCISOS': descEnciso,
-                'COD_ESPECIES': codEspecie,
-                'DESCRIPCION_ESPECIE': especie,
-                'VOLUMEN': volumen == "" ? 0 : volumen,
-                'AREA': area == "" ? 0 : area,
-                'NUMERO_INDIVIDUOS': numInd == "" ? 0 : numInd,
-                'DESCRIPCION_INFRACCIONES': descripcion,
-                'COD_SECUENCIAL': cod_secuencial,
-                'NUM_POA': idPoa,
-                'POA': descPoa,
-                'PCA': pca,
-                'TIPOMADERABLE': idTipo,
-                'RegEstado': RegEstado
-            }
-
-           if (indice == null) {
-                _renderInfracciones.dtRenderListInforme.rows.add([model]).draw();
-                _renderInfracciones.dtRenderListInforme.page('last').draw('page');
-           }
-           else {
-                _renderInfracciones.dtRenderListInforme.row(indice).data(model).draw(false);
-            }
-
+    _renderInfracciones.fnLimpiarFormulario = function () {
         _renderInfracciones.frm.find("#txtAreaInfrac").val('');
         _renderInfracciones.frm.find("#txtNumIndv").val('');
         _renderInfracciones.frm.find("#txtVolumenInf").val('');
         _renderInfracciones.frm.find("#txtDescInfrac").val('');
         _renderInfracciones.frm.find("#ddlEspeciesFauna").val('0002226');
         _renderInfracciones.frm.find("#ddlEspeciesFlora").val('0002226');
-
+        _renderInfracciones.frm.find("#ddTipo").val('MADERABLES');
+        _renderInfracciones.frm.find("#btnAddInfracciones").text('Agregar Infracción');
 
         indice = null;
-        //
-        // table.row(i).data(tempRow);
+    }
+
+    _renderInfracciones.fnAdd = function (obj) {
+        var idArticulo = _renderInfracciones.frm.find("#ddlArticulos").val();
+        var DescArticulo = _renderInfracciones.frm.find("#ddlArticulos option:selected").text();
+        let idEnciso = _renderIncisos.frm.find("#ddlEnciso").val();
+        let descEnciso = _renderIncisos.frm.find("#ddlEnciso option:selected").text();
+        let idPoa = _renderInfracciones.frm.find("#ddlPOA").val();
+        let descPoa = _renderInfracciones.frm.find("#ddlPOA option:selected").text();
+        let area = _renderInfracciones.frm.find("#txtAreaInfrac").val();
+        let descripcion = _renderInfracciones.frm.find("#txtDescInfrac").val();
+        let volumen = _renderInfracciones.frm.find("#txtVolumenInf").val();
+        let idEspecie = _renderInfracciones.frm.find("#ddlEspeciesFlora").val();
+        let desEspecie = _renderInfracciones.frm.find("#ddlEspeciesFlora option:selected").text();
+        let idTipo = _renderInfracciones.frm.find("#ddTipo").val();
+        let numInd = _renderInfracciones.frm.find("#txtNumIndv").val();
+        let idEspecieFauna = _renderInfracciones.frm.find("#ddlEspeciesFauna").val();
+        let desEspecieFauna = _renderInfracciones.frm.find("#ddlEspeciesFauna option:selected").text();
+        let pca = _renderInfracciones.frm.find("#txtParcelaRD").val();
+
+        if (pca == undefined) {
+            pca = "";
+        }
+        let codEspecie = null;
+        let especie = '';
+        let RegEstado = 1;
+        if (idEspecie != "0002226" && idEspecie != null) {
+            codEspecie = idEspecie;
+            especie = desEspecie;
+        }else if (idEspecieFauna != "0002226" && idEspecieFauna != null) {
+            codEspecie = idEspecieFauna;
+            especie = desEspecieFauna;
+        }
+
+        if (indice != null) {
+            RegEstado = 2;
+        }
+        else {
+            cod_secuencial = 0;
+        }
+        let model = {
+            'COD_ILEGAL_ARTICULOS': idArticulo,
+            'COD_ILEGAL_ENCISOS': idEnciso,
+            'DESCRIPCION_ARTICULOS': DescArticulo,
+            'DESCRIPCION_ENCISOS': descEnciso,
+            'COD_ESPECIES': codEspecie,
+            'DESCRIPCION_ESPECIE': especie,
+            'VOLUMEN': volumen == "" ? 0 : volumen,
+            'AREA': area == "" ? 0 : area,
+            'NUMERO_INDIVIDUOS': numInd == "" ? 0 : numInd,
+            'DESCRIPCION_INFRACCIONES': descripcion,
+            'COD_SECUENCIAL': cod_secuencial,
+            'NUM_POA': idPoa,
+            'POA': descPoa,
+            'PCA': pca,
+            'TIPOMADERABLE': idTipo,
+            'RegEstado': RegEstado
+        }
+
+        if (indice == null) {
+            _renderInfracciones.dtRenderListInforme.rows.add([model]).draw();
+            _renderInfracciones.dtRenderListInforme.page('last').draw('page');
+        }
+        else {
+            _renderInfracciones.dtRenderListInforme.row(indice).data(model).draw(false);
+        }
+
+        _renderInfracciones.fnLimpiarFormulario();
     }
 
     _renderInfracciones.fnImport = function (obj) {
@@ -163,6 +163,7 @@
                         d.order[i]["column_name"] = d.columns[d.order[i]["column"]]["data"];
                     }
                     d.columns = null;
+                    d.customSearchValue = ManRD_AddEdit.frm.find("#hdfCodResodirec").val();
                 },
                 "error": function (jqXHR) {
                     utilSigo.unblockUIGeneral();
@@ -183,75 +184,32 @@
     }
 
     _renderInfracciones.fnSelect = function (obj) {
-            var modelData = _renderInfracciones.dtConsultaInforme.row($(obj).parents('tr')).data();
-            var idArticulo = modelData["COD_ILEGAL_ARTICULOS"];
-            var DescArticulo =  modelData["DESCRIPCION_ARTICULOS"];
-            let idEnciso = modelData["COD_ILEGAL_ENCISOS"];
-            let descEnciso = modelData["DESCRIPCION_ENCISOS"];
-            let idPoa = modelData["NUM_POA"];
-            let descPoa = modelData["POA"];
-            let area = modelData["AREA"];
-            let descripcion =  modelData["DESCRIPCION_INFRACCIONES"];
-            let volumen = modelData["VOLUMEN"];
-            let idEspecie =  modelData["COD_ESPECIES"];
-            let desEspecie =  modelData["DESCRIPCION_ESPECIE"];
-            let idTipo =  modelData["TIPOMADERABLE"];
-            let numInd =  modelData["NUMERO_INDIVIDUOS"];
-            let idEspecieFauna = modelData["COD_ESPECIES"];
-            let desEspecieFauna = modelData["DESCRIPCION_ESPECIE"];
-            let pca = modelData["PCA"];
-            let codEspecie = null;
-            let especie = '';
-            let RegEstado = 1;
-            if (idEspecie != "0002226") {
-                codEspecie = idEspecie;
-                especie = desEspecie;
-            }
+        var modelData = _renderInfracciones.dtConsultaInforme.row($(obj).parents('tr')).data();
 
-            if (idEspecieFauna != "0002226") {
-                codEspecie = idEspecieFauna;
-                especie = desEspecieFauna;
-            }
-            if (indice != null) {
-                RegEstado = 2;
-            }
-            else {
-                cod_secuencial = 0;
-            }
-            let model = {
-                'COD_ILEGAL_ARTICULOS': idArticulo,
-                'COD_ILEGAL_ENCISOS': idEnciso,
-                'DESCRIPCION_ARTICULOS': DescArticulo,
-                'DESCRIPCION_ENCISOS': descEnciso,
-                'COD_ESPECIES': codEspecie,
-                'DESCRIPCION_ESPECIE': especie,
-                'VOLUMEN': volumen == "" ? 0 : volumen,
-                'AREA': area == "" ? 0 : area,
-                'NUMERO_INDIVIDUOS': numInd == "" ? 0 : numInd,
-                'DESCRIPCION_INFRACCIONES': descripcion,
-                'COD_SECUENCIAL': cod_secuencial,
-                'NUM_POA': idPoa,
-                'POA': descPoa,
-                'PCA': pca,
-                'TIPOMADERABLE': idTipo,
-                'RegEstado': RegEstado
-            }
+        let model = {
+            'COD_ILEGAL_ARTICULOS': modelData["COD_ILEGAL_ARTICULOS"],
+            'COD_ILEGAL_ENCISOS': modelData["COD_ILEGAL_ENCISOS"],
+            'DESCRIPCION_ARTICULOS': modelData["DESCRIPCION_ARTICULOS"],
+            'DESCRIPCION_ENCISOS': modelData["DESCRIPCION_ENCISOS"],
+            'COD_ESPECIES': modelData["COD_ESPECIES"],
+            'DESCRIPCION_ESPECIE': modelData["DESCRIPCION_ESPECIE"],
+            'VOLUMEN': modelData["VOLUMEN"] == "" ? 0 : modelData["VOLUMEN"],
+            'AREA': modelData["AREA"] == "" ? 0 : modelData["AREA"],
+            'NUMERO_INDIVIDUOS': modelData["NUMERO_INDIVIDUOS"] == "" ? 0 : modelData["NUMERO_INDIVIDUOS"],
+            'DESCRIPCION_INFRACCIONES': modelData["DESCRIPCION_INFRACCIONES"],
+            'COD_SECUENCIAL': 0,
+            'NUM_POA': modelData["NUM_POA"],
+            'POA': modelData["POA"],
+            'PCA': modelData["PCA"],
+            'TIPOMADERABLE': modelData["TIPOMADERABLE"],
+            'RegEstado': 1
+        }
 
-           if (indice == null) {
-                _renderInfracciones.dtRenderListInforme.rows.add([model]).draw();
-                _renderInfracciones.dtRenderListInforme.page('last').draw('page');
-           }
-           else {
-                _renderInfracciones.dtRenderListInforme.row(indice).data(model).draw(false);
-            }
-            _renderInfracciones.frm.find("#txtAreaInfrac").val('');
-            _renderInfracciones.frm.find("#txtNumIndv").val('');
-            _renderInfracciones.frm.find("#txtVolumenInf").val('');
-            _renderInfracciones.frm.find("#txtDescInfrac").val('');
-            _renderInfracciones.frm.find("#ddlEspeciesFauna").val('0002226');
-            _renderInfracciones.frm.find("#ddlEspeciesFlora").val('0002226');
+        _renderInfracciones.dtRenderListInforme.rows.add([model]).draw();
+        _renderInfracciones.dtRenderListInforme.page('last').draw('page');
+        utilSigo.toastSuccess("Éxito", "Infracción importada correctamente");
 
-        indice = null;
+        _renderInfracciones.fnLimpiarFormulario();
     }
 
     //----> se agrega la tabla
@@ -265,13 +223,9 @@
             , row_index: true, row_delete: true, row_fnDelete: "_renderInfracciones.fnDelete(this)",
             row_edit: true, row_fnEdit: "_renderInfracciones.fnEdit(this)"
         };
-        /*options = {
-            page_length: 10, row_index: true, row_delete: true, row_fnDelete: "_renderInfracciones.fnDelete(this)", page_sort: true, row_edit: true, row_fnEdit: "_renderInfracciones.fnEdit(this)",
-            button_excel: true, export_title: $("#tbRenderIncisos").find("thead tr")[0].innerText.trim()
-        };*/
+
         _renderInfracciones.dtRenderListInforme = utilDt.fnLoadDataTable_Detail(_renderInfracciones.frm.find("#tbRenderIncisos"), columns_label, columns_data, options);
         _renderInfracciones.dtRenderListInforme.rows.add(JSON.parse('@Html.Raw(Json.Encode(@Model.ListarIniPAU))')).draw();
-
     }
 
     _renderInfracciones.fnEdit = function (obj) {
@@ -284,17 +238,20 @@
         _renderInfracciones.frm.find("#txtVolumenInf").val(data['VOLUMEN']);
         _renderInfracciones.frm.find("#ddTipo").val(data['TIPOMADERABLE']);
         _renderInfracciones.frm.find("#txtNumIndv").val(data['NUMERO_INDIVIDUOS']);
-        _renderInfracciones.frm.find("#ddlEspeciesFlora").val(data['COD_ESPECIES']);
-        _renderInfracciones.frm.find("#ddlEspeciesFauna").val(data['COD_ESPECIES']);
-        if(@Model.ListPOA.Count > 0){
-            _renderPOA.frm.find("#txtParcelaRD").val(data['PCA']);
+
+        if (@Model.ListPOA.Count > 0) {
+            _renderPOA.frm.find("#ddlPOA").val(data['NUM_POA']);
+            _renderPOA.fncParcelas();
+            setTimeout(function () {
+                _renderPOA.frm.find("#txtParcelaRD").val(data['PCA']);
+                _renderInfracciones.frm.find("#ddlEspeciesFlora").val(data['COD_ESPECIES']);
+                _renderInfracciones.frm.find("#ddlEspeciesFauna").val(data['COD_ESPECIES']);
+            }, 2000);
         }
 
-
         cod_secuencial = data['COD_SECUENCIAL'];
-
+        _renderInfracciones.frm.find("#btnAddInfracciones").text('Editar Infracción');
     }
-
 
     /*Listado de registros (render)*/
     _renderInfracciones.fnDelete = function (obj) {
@@ -336,32 +293,15 @@
             }
             else {
                 utilSigo.toastWarning("Aviso", "Sucedio un error, Comuníquese con el Administrador");
-                console.log(data.msj);
             }
         });
     }
-
-    @*_renderInfracciones.fncBuscarPOA = function () {
-        let id = 1;
-       $.ajax({
-            url: '@Url.Action("getListPOA","ManResolucion")',
-           type: 'GET',
-            datatype: "json",
-            traditional: true,
-            data: {'id': id},
-            success: function (data) {
-                $("#divPOA").html(data)
-                //_renderInfracciones.fncBuscarPOA();
-              }
-        });
-    };*@
 
     $(document).ready(function () {
         _renderInfracciones.frm = $("#frmInfracciones");
         _renderInfracciones.iniciarEventos();
         _renderInfracciones.fnInitDataTable_Detail();
         _renderInfracciones.fnInitDataTable_Detail_Import();
-
     });
 
 </script>
@@ -499,6 +439,7 @@
             <div class="form-row">
                 <div class="form-group -col-md-12">
                     <button type="button" id="btnAddInfracciones" class="btn btn-info btn-sm" onclick="_renderInfracciones.fnAdd()"> Agregar Infracción</button>
+                    <button type="button" id="btnCancelarAddInfracciones" class="btn btn-warning btn-sm" onclick="_renderInfracciones.fnLimpiarFormulario()"> Cancelar</button>
                 </div>
             </div>
         </div>
@@ -507,7 +448,7 @@
                 @if (Model.hdfCodFCTipo == "0000011" || Model.hdfCodFCTipo == "0000105" || Model.hdfCodFCTipo == "0000010")
                 {
                     <div class="form-group -col-md-12">
-                        <button type="button" id="btnAddInfracciones" class="btn btn-info btn-sm" onclick="_renderInfracciones.fnImport()">Importar de la RD de Inicio, Ampliación o Variación de PAU</button>
+                        <button type="button" id="btnImportInfracciones" class="btn btn-info btn-sm" onclick="_renderInfracciones.fnImport()">Importar de la RD de Inicio, Ampliación o Variación de PAU</button>
                     </div>
                 }
             </div>

@@ -140,6 +140,7 @@
                         d.order[i]["column_name"] = d.columns[d.order[i]["column"]]["data"];
                     }
                     d.columns = null;
+                    d.customSearchValue = ManRD_AddEdit.frm.find("#hdfCodResodirec").val();
                 },
                 "error": function (jqXHR) {
                     utilSigo.unblockUIGeneral();

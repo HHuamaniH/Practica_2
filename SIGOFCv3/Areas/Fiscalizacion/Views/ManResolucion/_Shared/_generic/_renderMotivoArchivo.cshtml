@@ -5,49 +5,28 @@
      _renderListaArchivoC.tbEliTABLA = [];
 
 
-    _renderListaArchivoC.fnAdd = function (obj) {
+    _renderListaArchivoC.fnAdd = function () {
+        var dataMotivo = {
+            "COD_MOTIVO": _renderTerminoPau.frm.find("#ddlMotivoArch").val(),
+            "CODIGO": _renderListaArchivoC.frm.find("#ddlSubtipoArchv").val(),
+            "MOTIVO": _renderTerminoPau.frm.find("#ddlMotivoArch option:selected").text(),
+            "DETALLE_MOTIVO": _renderListaArchivoC.frm.find("#ddlSubtipoArchv option:selected").text(),
+            "DESCRIPCIONMOTIVO": _renderListaArchivoC.frm.find("#txtDescArchivo").val()
+        };
 
-        var codMotivo = _renderTerminoPau.frm.find("#ddlMotivoArch").val();
-
-        var codigoSub = _renderListaArchivoC.frm.find("#ddlSubtipoArchv").val();
-        var motivo = _renderListaArchivoC.frm.find("#txtDescTipoMotivoArch").val();
-        var detalleMotivo = _renderListaArchivoC.frm.find("#ddlSubtipoArchv option:selected").text();
-        var descmMtivo = _renderListaArchivoC.frm.find("#txtDescArchivo").val();
-        if (codMotivo != "0000000") {
-            if (codigoSub != "0000000") {
-                $.ajax({
-                    url: '@Url.Action("agregarMotivoArchivo","ManResolucion")',
-                    type: 'POST',
-                    datatype: "json",
-                    traditional: true,
-                    data: { 'codigoSub': codigoSub, 'motivo': motivo, 'detalleMotivo': detalleMotivo, 'descmMtivo': descmMtivo },
-                    success: function (data) {
-                        $('#divListaMotivoLL').html(data);
-                    }
-                });
-            }
-            else {
-                utilSigo.toastWarning("Aviso", "Seleccione tipo de archivo");
-            }
-        }
-        else {
-             utilSigo.toastWarning("Aviso", "Seleccione motivo de archivo");
-        }
+        _renderListaArchivoDetalle.fnAdd(dataMotivo);
+        
         _renderListaArchivoC.frm.find("#txtDescArchivo").val('');
         _renderListaArchivoC.frm.find("#ddlSubtipoArchv").val('0000000');
-
     }
 
     $(document).ready(function () {
        _renderListaArchivoC.frm = $("#fmrSubTipoArch");
-
     });
 
 </script>
 
 <div id="fmrSubTipoArch">
-    @Html.HiddenFor(m => m.txtIdTipoMotivoArch)
-    @Html.HiddenFor(m => m.txtDescTipoMotivoArch)
     <div class="form-row" id="divSubTipoArchivo">
         <div class="form-group col-md-4">
             <label for="chkGTF" class="text-small">Tipo motivo Archivo</label>
