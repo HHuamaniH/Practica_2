@@ -48,7 +48,7 @@
             data["RegEstado"] = 1;
             _renderListExpediente.dtRenderListInforme.rows.add([data]).draw();
             _renderListExpediente.dtRenderListInforme.page('last').draw('page');
-            _renderListExpediente.fncBuscarPOA();
+            //_renderListExpediente.fncBuscarPOA();
             //Funcion callback implementada desde PAU Digital
             if (typeof _renderListExpediente.fnCallback === 'function') _renderListExpediente.fnCallback(data);
             ManRD_AddEdit.frm.find("#txtNumeroExpediente").val(data["NUMERO_EXPEDIENTE"]);
@@ -60,7 +60,7 @@
     }
 
     //metodo para buscar los planes operativos
-    _renderListExpediente.fncBuscarPOA = function () {
+    /*_renderListExpediente.fncBuscarPOA = function () {
         let model = {};
         model = _renderListExpediente.fnGetList();
         let url = urlLocalSigo + "Fiscalizacion/ManResolucion/listaPoa";
@@ -76,7 +76,7 @@
             utilSigo.toastWarning("Aviso", data.msj);
             }
         });
-    };
+    };*/
 
     _renderListExpediente.fnGetList = function () {
         let list = [], rows, countFilas, data;

@@ -3,26 +3,12 @@
 <script type="text/javascript">
     var _renderPOA = {};
 
-    /*
-    this.ddListarPCVertice = function () {
-        var pcList = [];
-        $('#txtParcelaRD').find('option').remove().end();
-        var parcela = _frmParcela.fnGetList();
-        var countFilas = parcela.length;
-        if (countFilas > 0) {
-            $.each(parcela, function (i, o) {
-                //alert(parcela[i].PCA);
-                //pcList.push(utilSigo.fnConvertArrayToObject(parcela[i].PCA));
-                $('#txtParcelaRD').append($('<option>', {
-                    value: parcela[i].PCA,
-                    text: parcela[i].PCA
-                }));
-            });
-        }
-    }*/
-    _renderPOA.fncParcelas = function (codEnSelect) {
+    _renderPOA.fncParcelas = function () {
         var idPoa = _renderInfracciones.frm.find("#ddlPOA").val();
         var codResodirec = ManRD_AddEdit.frm.find("#hdfCodResodirec").val();
+
+        $('#txtParcelaRD').find('option').remove().end();
+
         $.ajax({
             url: '@Url.Action("listaParcela", "ManResolucion")',
             type: 'GET',
@@ -34,7 +20,6 @@
                 var countFilas = dataList.length;
                 if (countFilas > 0) {
                     $.each(dataList, function (i, o) {
-                       
                         $('#txtParcelaRD').append($('<option>', {
                             value: dataList[i].CODIGO,
                             text: dataList[i].DESCRIPCION
@@ -43,13 +28,11 @@
                 }
             }
         });
-        
     };
 
     $(document).ready(function () {
         _renderPOA.frm = $("#fmrPOA");       
         _renderPOA.fncParcelas();
-
     });
 
 </script>
@@ -66,7 +49,7 @@
                                  {
                                      @class = "form-control form-control-sm",
                                      @id = "ddlPOA",
-                                     @onchange = "_renderPOA.fncParcelas('')"
+                                     @onchange = "_renderPOA.fncParcelas()"
                                  })
             }
             else

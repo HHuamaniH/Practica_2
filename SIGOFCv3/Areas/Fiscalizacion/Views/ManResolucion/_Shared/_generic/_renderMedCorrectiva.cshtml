@@ -116,22 +116,23 @@
         _renderMedCorrect.frm.find("#mdlEspecie").modal({ keyboard: true, backdrop: 'static' });
     }
 
-     _renderMedCorrect.fnAddEspecie = function () {
-        var codEspecie = _renderMedCorrect.frm.find("#ddlEspecies").val();
-        var especie = _renderMedCorrect.frm.find("#ddlEspecies option:selected").text();
-        var volumen = _renderMedCorrect.frm.find("#txtVolumenEspecie").val();
-        var arboles = _renderMedCorrect.frm.find("#txtNroArboles").val();
-        var observacion = _renderMedCorrect.frm.find("#txtObservacionesArch").val();
-        $.ajax({
-            url: '@Url.Action("agregarEspeciesMC","ManResolucion")',
-            type: 'POST',
-            datatype: "json",
-            traditional: true,
-            data: { 'codEspecie': codEspecie, 'especie': especie, 'volumen': volumen, 'arboles': arboles, 'observaciones': observacion },
-            success: function (data) {
-             $('#frmRenderListaEspecies').html(data);
-            }
-        });
+    _renderMedCorrect.fnAddEspecie = function (data = null) {
+        var dataEspecie = {};
+
+        if (data != null) {
+            dataEspecie = data
+        } else {
+            dataEspecie = {
+                "COD_ESPECIES": _renderMedCorrect.frm.find("#ddlEspecies").val(),
+                "ESPECIES": _renderMedCorrect.frm.find("#ddlEspecies option:selected").text(),
+                "VOLUMEN_MOVILIZADO": _renderMedCorrect.frm.find("#txtVolumenEspecie").val(),
+                "NUMERO_INDIVIDUOS": _renderMedCorrect.frm.find("#txtNroArboles").val(),
+                "OBSERVACION": _renderMedCorrect.frm.find("#txtObservacionesArch").val()
+            };
+        }
+
+        _renderListaEspecies.fnAdd(dataEspecie);
+
         _renderMedCorrect.frm.find("#ddlEspecies").val('0002226');
         _renderMedCorrect.frm.find("#txtVolumenEspecie").val('');
         _renderMedCorrect.frm.find("#txtNroArboles").val('');
@@ -166,7 +167,11 @@
             dataType: 'json',
             processData: false,
             success: function (data) {
-                _renderMedCorrect.fnAddEspecie();
+                if (data != null && data.data.length > 0) {
+                    for (var i = 0; i < data.data.length; i++) {
+                        _renderMedCorrect.fnAddEspecie(data.data[i]);
+                    }
+                }
             },
             error: function (jqXHR, error, errorThrown) {
                 utilSigo.unblockUIGeneral();
@@ -366,7 +371,7 @@
                                     </div>
                                     <div class="form-group col-md-8">
                                         <div style="margin-top:7px;">
-                                            <input type="text" class="form-control form-control-sm" id="txtVolumenEspecie">
+                                            <input type="number" class="form-control form-control-sm" id="txtVolumenEspecie">
                                         </div>
                                     </div>
                                 </div>
@@ -377,7 +382,7 @@
                                     </div>
                                     <div class="form-group col-md-8|">
                                         <div style="margin-top:7px;">
-                                            <input type="text" class="form-control form-control-sm" id="txtNroArboles">
+                                            <input type="number" class="form-control form-control-sm" id="txtNroArboles">
                                         </div>
                                     </div>
                                 </div>
