@@ -2357,7 +2357,7 @@ _reporteGeneral.rpt24InitDataTable = function () {
 
 _reporteGeneral.fnInitReporteSolicitudFema = function () {
 
-    $("#lbTituloGeneral,#lbSubTituloGeneral").html("Reporte de Solicitud FEMA");
+    $("#lbTituloGeneral,#lbSubTituloGeneral").html("Consulta de Solicitud FEMA");
     _reporteGeneral.frm.find("#dvFiltroAnio").show();
     //_reporteGeneral.frm.find("#dvChkAnioAll").show();
     _reporteGeneral.frm.find("#dvFiltroMes").show();
