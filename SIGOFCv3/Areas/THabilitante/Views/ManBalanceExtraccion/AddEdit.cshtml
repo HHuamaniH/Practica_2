@@ -414,7 +414,7 @@
                     _EditBExtraccion.frm.find("#btnExcelPMedBExtMadNoMad").show();
 
                     columns_label = ["Especie", "Especie SERFOR", "DMC", "Total Árboles", "Cantidad Autorizada", "Cantidad Movilizada"
-                        , "Autorizado", "Extraído", "Saldo", "Unidad de medida", "Tipo de aprovechamiento", "Observación"];
+                        , "Autorizado", "Extraído", "Saldo", "UM", "Tipo de aprovechamiento", "Observación"];
                     columns_data = ["ESPECIES", "ESPECIES_SERFOR", "DMC", "TOTAL_ARBOLES", "VOLUMEN_AUTORIZADO", "VOLUMEN_MOVILIZADO"
                         , "AUTORIZADO", "EXTRAIDO", "SALDO", "UNIDAD_MEDIDA", "TIPOMADERABLE", "OBSERVACION"];
                 } else if (cod_mtipo == "0000020") {
@@ -422,7 +422,7 @@
 
                     columns_label = ["Especie", "Especie SERFOR", "DMC", "Total Árboles", "Cantidad Autorizada", "Cantidad Movilizada"
                         , "Fecha (expedición para forma 20)", "Guía de Transporte Forestal", "Fecha", "Recibo", "Saldo", "Cantidad"
-                        , "Unidad de medida", "Tipo de aprovechamiento", "Observación"];
+                        , "UM", "Tipo de aprovechamiento", "Observación"];
                     columns_data = ["ESPECIES", "ESPECIES_SERFOR", "DMC", "TOTAL_ARBOLES", "VOLUMEN_AUTORIZADO", "VOLUMEN_MOVILIZADO"
                         , "FECHA1", "GUIA_TRANSPORTE", "FECHA2", "RECIBO", "SALDO", "CANTIDAD", "UNIDAD_MEDIDA", "TIPOMADERABLE", "OBSERVACION"];
                 } else {
@@ -430,7 +430,7 @@
 
                     //Se agregó Total Árboles por solicitud de requerimiento
                     columns_label = ["Especie", "Especie SERFOR", "DMC", "Total Árboles", "Cantidad Autorizada", "Cantidad Movilizada"
-                        , "Saldo", "Unidad de medida", "Tipo de aprovechamiento", "Parcela de Corta", "Observación"];
+                        , "Saldo", "UM", "Tipo de aprovechamiento", "Parcela de Corta", "Observación"];
                     columns_data = ["ESPECIES", "ESPECIES_SERFOR", "DMC", "TOTAL_ARBOLES", "VOLUMEN_AUTORIZADO", "VOLUMEN_MOVILIZADO"
                         , "SALDO", "UNIDAD_MEDIDA", "TIPOMADERABLE", "PC", "OBSERVACION"];
                 }

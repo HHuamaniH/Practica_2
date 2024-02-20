@@ -299,7 +299,7 @@
     _renderInfracciones.fnInitDataTable_Detail = function () {
         var columns_label = [], columns_data = [], options = {};
 
-        columns_label = ["Articulo", "Inciso", "Volumen (m3)","PC", "Especie", "Area (ha)", "Num. Indiv", "Desc. Infraccion", "Numero POA", "Tipo Aprovechamiento", "Unidad Medida"];
+        columns_label = ["Articulo", "Inciso", "Volumen (m3)","PC", "Especie", "Area (ha)", "Num. Indiv", "Desc. Infraccion", "Numero POA", "Tipo Aprovechamiento", "UM"];
         columns_data = ["DESCRIPCION_ARTICULOS", "DESCRIPCION_ENCISOS", "VOLUMEN","PCA","DESCRIPCION_ESPECIE" , "AREA", "NUMERO_INDIVIDUOS", "DESCRIPCION_INFRACCIONES", "POA", "TIPOMADERABLE", "UNIDAD_MEDIDA"];
         options = {
             page_length: 50, button_excel: true, export_title: $("#tbRenderIncisos").find("thead tr")[0].innerText.trim()
@@ -535,7 +535,7 @@
         </div>
     </div>
 
-    <div class="form-row" id="divInfTipoAprov">
+    <div class="form-row" id="divInfUnidadMedida">
         <div class="form-group col-md-4">
             <label for="lblArticulos" class="text-small">Unidad de Medida</label>
         </div>
