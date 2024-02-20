@@ -19,8 +19,8 @@
     _renderVolumenAnalizado.fnInitDataTable_Detail = function () {
         var columns_label = [], columns_data = [], options = {};
 
-        columns_label = ["Especie", "Volumen Aprobado Analizado","Volumen Movilizado Analizado","Volumen Injustificado","Volumen Justificado", "PC","Observaciones"];
-        columns_data = ["ESPECIES", "VOLUMEN_APROBADO", "VOLUMEN_MOVILIZADO", "VOLUMEN_INJUSTIFICADO", "VOLUMEN_JUSTIFICADO", "PCA","OBSERVACION"];
+        columns_label = ["Especie", "Volumen Aprobado Analizado", "Volumen Movilizado Analizado", "Volumen Injustificado", "Volumen Justificado", "Tipo Aprov.", "U. M.", "PC","Observaciones"];
+        columns_data = ["ESPECIES", "VOLUMEN_APROBADO", "VOLUMEN_MOVILIZADO", "VOLUMEN_INJUSTIFICADO", "VOLUMEN_JUSTIFICADO", "TIPO_APROVECHAMIENTO", "UNIDAD_MEDIDA", "PCA","OBSERVACION"];
         options = {
             page_length: 10, row_index: true, row_edit: true, row_fnEdit: "_renderVolumenAnalizado.fnAddEdit(this)"
             , row_delete: true, row_fnDelete: "_renderVolumenAnalizado.fnDelete(this)"
@@ -112,8 +112,9 @@
                 _renderVolumenAnalizado.dtVolAnalizado.rows.add([data[i]]).draw();
                 _renderVolumenAnalizado.dtVolAnalizado.page('last').draw('page');
             }
-            _renderVolumenAnalizado.fnSetTotal();
+            _renderVolumenAnalizado.fnSetTotal();            
         });
+        e.target.value = "";
     }
 
     _renderVolumenAnalizado.fnGetList = function () {
@@ -168,7 +169,7 @@
         <table id="tbRenderVolumenAnalizado" style="width:100%;margin:0px !important;" class="table table-hover table-bordered">
             <thead>
                 <tr>
-                    <th colspan="11" class="text-sm-left">
+                    <th colspan="13" class="text-sm-left">
                         <div class="form-inline">
                             <i class="fa mx-2 fa-lg fa-file-o" style="cursor:pointer;" onclick="_renderVolumenAnalizado.fnAddEdit('');" data-toggle="tooltip" data-placement="top" title="Nuevo"></i>
                             <i class="fa mx-2 fa-lg fa-window-close-o" style="cursor:pointer;" onclick="_renderVolumenAnalizado.fnDeleteAll();" data-toggle="tooltip" data-placement="top" title="Eliminar Todos"></i>
@@ -195,7 +196,8 @@
                     <th><span id="totalVolJustificado">0</span></th>
                     <th></th>
                     <th></th>
-
+                    <th></th>
+                    <th></th>
                 </tr>
             </tfoot>
         </table>

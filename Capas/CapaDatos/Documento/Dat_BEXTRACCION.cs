@@ -195,6 +195,7 @@ namespace CapaDatos.DOC
                                     oCampos.COD_ESPECIES_SERFOR = dr["COD_ESPECIES_SERFOR"].ToString();
                                     oCampos.ESPECIES_SERFOR = dr["ESPECIES_SERFOR"].ToString();
                                     oCampos.UNIDAD_MEDIDA = dr["UNIDAD_MEDIDA"].ToString();
+                                    oCampos.COD_PARCELA = dr["COD_PARCELA"].ToString();
                                     oCampos.PC = dr["PC"].ToString();
                                     oCampos.AUTORIZADO = decimal.Parse(dr["AUTORIZADO"].ToString());//No Maderable
                                     oCampos.EXTRAIDO = decimal.Parse(dr["EXTRAIDO"].ToString());//No Maderable

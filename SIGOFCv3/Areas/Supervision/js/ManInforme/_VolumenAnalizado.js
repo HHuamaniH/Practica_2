@@ -13,6 +13,9 @@ _VolumenAnalizado.fnLoadDatos = function (data) {
         _VolumenAnalizado.frm.find("#txtVolJustificado").val(data["VOLUMEN_JUSTIFICADO"]);
         _VolumenAnalizado.frm.find("#txtParcelaVolumen").val(data["PCA"]);
         _VolumenAnalizado.frm.find("#txtObservacion").val(data["OBSERVACION"]);       
+        _VolumenAnalizado.frm.find("#ddlTipoAprovechamiento_VolAn").val(data["TIPO_APROVECHAMIENTO"]);   
+        _VolumenAnalizado.fnCrearUnidadMedida(data["TIPO_APROVECHAMIENTO"]);
+        _VolumenAnalizado.frm.find("#ddlUnidadMedida_VolAn").val(data["UNIDAD_MEDIDA"]);       
         _renderComboEspecie.fnInit("FORESTAL", data["COD_ESPECIES"], data["ESPECIES"]);
     } else {
         _VolumenAnalizado.frm.find("#hdfRegEstado").val("1");
@@ -34,6 +37,8 @@ _VolumenAnalizado.fnSetDatos = function () {
     data["VOLUMEN_JUSTIFICADO"] = _VolumenAnalizado.frm.find("#txtVolJustificado").val();
     data["PCA"] = _VolumenAnalizado.frm.find("#txtParcelaVolumen").val() == "0000000" ? "" : _VolumenAnalizado.frm.find("#txtParcelaVolumen").val();
     data["OBSERVACION"] = _VolumenAnalizado.frm.find("#txtObservacion").val();   
+    data["TIPO_APROVECHAMIENTO"] = _VolumenAnalizado.frm.find("#ddlTipoAprovechamiento_VolAn").val();   
+    data["UNIDAD_MEDIDA"] = _VolumenAnalizado.frm.find("#ddlUnidadMedida_VolAn").val();   
 
     return data;
 }
@@ -45,11 +50,38 @@ _VolumenAnalizado.fnCustomValidateForm = function () {
     return true;
 }
 
+_VolumenAnalizado.fnCrearUnidadMedida = function (valor) {
+
+    var htmlddlUnidadMedida_VolAn = "";
+    var ddlUnidadMedida_VolAn = document.getElementById('ddlUnidadMedida_VolAn');
+    switch (valor) {
+        case "CARBON":
+            htmlddlUnidadMedida_VolAn += '<option value="KG">KG</option>';
+            ddlUnidadMedida_VolAn.innerHTML = htmlddlUnidadMedida_VolAn;
+            break;
+        case "MADERABLES":
+            htmlddlUnidadMedida_VolAn += '<option value="M3">M3</option>';
+            htmlddlUnidadMedida_VolAn += '<option value="KG">KG</option>';
+            ddlUnidadMedida_VolAn.innerHTML = htmlddlUnidadMedida_VolAn;
+            break;
+        case "NO MADERABLES":
+            htmlddlUnidadMedida_VolAn += '<option value="KG">KG</option>';
+            htmlddlUnidadMedida_VolAn += '<option value="LT">LT</option>';
+            ddlUnidadMedida_VolAn.innerHTML = htmlddlUnidadMedida_VolAn;
+            break;
+        default:
+    }
+
+
+    return true;
+}
+
 _VolumenAnalizado.fnSubmitForm = function () {
     _VolumenAnalizado.frm.submit();
 }
 
-_VolumenAnalizado.fnInit = function (data) {
+_VolumenAnalizado.fnInit = function (data) {    
+
     _VolumenAnalizado.frm = $("#frmItemVolumenAnalizado");
 
     _VolumenAnalizado.fnLoadDatos(data);
@@ -87,5 +119,9 @@ _VolumenAnalizado.fnInit = function (data) {
     //Validación de controles que usan Select2
     _VolumenAnalizado.frm.find("select.select2-hidden-accessible").on("change", function (e) {
         $(this).valid();
+    });
+
+    _VolumenAnalizado.frm.find("#ddlTipoAprovechamiento_VolAn").on("change", function (e) {
+        _VolumenAnalizado.fnCrearUnidadMedida(this.value);
     });
 }

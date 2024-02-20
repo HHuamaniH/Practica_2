@@ -467,14 +467,14 @@
                     _EditBExtraccion.dtBExtMade_NoMade.clear().draw();
                     /*for (var i = 0; i < result.data.length; i++) {
                         if (result.data[i].UNIDAD_MEDIDA.Trim == "" || result.data[i].UNIDAD_MEDIDA == "-") {
-                            
+
                             if (result.data[i].TIPOMADERABLE == "NO MADERABLES") {
                                 if (cod_mtipo != "0000020") result.data[i].UNIDAD_MEDIDA = "KG";
                             }
                         }
                     }*/
                     _EditBExtraccion.dtBExtMade_NoMade.rows.add(result.data).draw();
-                    
+
                     if (result.data.length > 0) {
                         for (var i = 0; i < result.data.length; i++) {
                             switch (result.data[i].TIPOMADERABLE) {
@@ -561,7 +561,7 @@
                                         "<th></th>" +
                                         "<th></th></tr>";
                                 }
-                                
+
                             } else if (cod_mtipo == "0000020") {
                                 if (contNoM > 0) {
                                     tfootTable += "<tr><th></th>" +
@@ -578,7 +578,7 @@
                                         "<th></th>" +
                                         "<th></th></tr>";
                                 }
-                                
+
                             } else {
                                 if (contNoM > 0) {
                                     tfootTable += "<tr><th></th>" +
@@ -795,6 +795,7 @@
 
                 if (obj != null && obj != "") {
                     var data = _EditBExtraccion.dtBExtMade_NoMade.row($(obj).parents('tr')).data();
+                    debugger;
                     _BExtraccionMaderable.fnInit(utilSigo.fnConvertArrayToObject(data), cod_mtipo);
                 } else { _BExtraccionMaderable.fnInit("", cod_mtipo); }
             });
@@ -1125,7 +1126,7 @@
 
                                 switch (tipo) {
                                     case "BEXTRACCION_MADE":
-                                        //_EditBExtraccion.fnLoadTableBExtMade(cod_secuencial_bext); 
+                                        //_EditBExtraccion.fnLoadTableBExtMade(cod_secuencial_bext);
                                         _EditBExtraccion.fnLoadTableBExtMade_NoMade(cod_secuencial_bext);
                                         break;
                                     case "BEXTRACCION_NOMADE": _EditBExtraccion.fnLoadTableBExtNoMade(cod_secuencial_bext); break;
@@ -1138,6 +1139,7 @@
                     }
                 });
             });
+            e.target.value = "";
         },
         fnExportBExt: (tipo) => {
             var cod_mtipo = _EditBExtraccion.frm.find("#hdfCodMTipo").val();

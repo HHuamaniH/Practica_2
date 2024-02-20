@@ -558,16 +558,41 @@ ManPOA.selectFile = null;
             }
         });
 
-
-
         ManPOA.ItemRAPoa.frmResolAprob.find("#ddlTipoMaderables_RAprob").change(function () {
             if (this.value != "-") {
-                if (this.value == "CARBON" || this.value == "NO MADERABLES") {
-                    ManPOA.ItemRAPoa.frmResolAprob.find("#ddlRAPoaUM").val("KG");
+                var ddlRAPoaUM = document.getElementById("ddlRAPoaUM");
+                var htmlddlRAPoaUM = "";
+                switch (this.value) {
+                    case "CARBON":
+                        htmlddlRAPoaUM = '<option value="KG">KG</option>';
+                        ddlRAPoaUM.innerHTML = htmlddlRAPoaUM;
+                        break;
+                    case "NO MADERABLES":
+                        htmlddlRAPoaUM = '<option value="KG">KG</option>';
+                        htmlddlRAPoaUM += '<option value="LT">LT</option>';
+                        ddlRAPoaUM.innerHTML = htmlddlRAPoaUM;
+                        break;
+                    case "MADERABLES":
+                        htmlddlRAPoaUM = '<option value="M3">M3</option>';
+                        htmlddlRAPoaUM += '<option value="KG">KG</option>';
+                        ddlRAPoaUM.innerHTML = htmlddlRAPoaUM;
+                        break;
+                    default:
+                        htmlddlRAPoaUM = '<option value="KG">M3</option>';
+                        htmlddlRAPoaUM += '<option value="KG">KG</option>';
+                        ddlRAPoaUM.innerHTML = htmlddlRAPoaUM;
+                        break;
                 }
-                else if (this.value == "MADERABLES") ManPOA.ItemRAPoa.frmResolAprob.find("#ddlRAPoaUM").val("M3");
 
-                ManPOA.ItemRAPoa.frmResolAprob.find("#ddlRAPoaUM").attr("disabled", true);
+
+                //if (this.value == "CARBON" || this.value == "NO MADERABLES") {
+                //    ManPOA.ItemRAPoa.frmResolAprob.find("#ddlRAPoaUM").val("KG");
+                //    ManPOA.ItemRAPoa.frmResolAprob.find("#ddlRAPoaUM").item;
+
+                //}
+                //else if (this.value == "MADERABLES") ManPOA.ItemRAPoa.frmResolAprob.find("#ddlRAPoaUM").val("M3");
+
+                //ManPOA.ItemRAPoa.frmResolAprob.find("#ddlRAPoaUM").attr("disabled", true);
             }
             else {
                 ManPOA.ItemRAPoa.frmResolAprob.find("#ddlRAPoaUM").val("-");
@@ -2782,6 +2807,29 @@ ManPOA.selectFile = null;
                 this.frmResolAprob.find("#txtItemRAPoaObservacion").val(data.OBSERVACION);
                 this.frmResolAprob.find("#txtParcelaEspecie").val(data.PCA);
 
+                var htmlddlRAPoaUM = document.getElementById('ddlRAPoaUM');
+                switch (data.TIPOMADERABLE) {
+                    case "CARBON":
+                        htmlddlRAPoaUM = '<option value="KG">KG</option>';
+                        ddlRAPoaUM.innerHTML = htmlddlRAPoaUM;
+                        break;
+                    case "NO MADERABLES":
+                        htmlddlRAPoaUM = '<option value="KG">KG</option>';
+                        htmlddlRAPoaUM += '<option value="LT">LT</option>';
+                        ddlRAPoaUM.innerHTML = htmlddlRAPoaUM;
+                        break;
+                    case "MADERABLES":
+                        htmlddlRAPoaUM = '<option value="M3">M3</option>';
+                        htmlddlRAPoaUM += '<option value="KG">KG</option>';
+                        ddlRAPoaUM.innerHTML = htmlddlRAPoaUM;
+                        break;
+                    default:
+                        htmlddlRAPoaUM = '<option value="KG">M3</option>';
+                        htmlddlRAPoaUM += '<option value="KG">KG</option>';
+                        ddlRAPoaUM.innerHTML = htmlddlRAPoaUM;
+                        break;
+                }
+
 
                 if (hdfItemCod_MTipo == "0000020") {
                     this.frmResolAprob.find("#txtSuperficieHa").val(data.SuperficieHa);
@@ -2800,9 +2848,10 @@ ManPOA.selectFile = null;
                     this.frmResolAprob.find("#txtItemRAPoaVolumen_Kilogramos").val(data.VOLUMEN_KILOGRAMOS);
                     this.frmResolAprob.find("#ddlRAPoaUM").val(data.UNIDAD_MEDIDA);
 
-                    if (data.UNIDAD_MEDIDA != "-")
-                        this.frmResolAprob.find("#ddlRAPoaUM").attr("disabled", true);
+                    //if (data.UNIDAD_MEDIDA != "-")
+                    //    this.frmResolAprob.find("#ddlRAPoaUM").attr("disabled", true);
                 }
+                
             }
         }
 
@@ -3009,7 +3058,8 @@ ManPOA.selectFile = null;
 
                 this.dtItemRAPoa.row.add(fila).draw();
                 this.dtItemRAPoa.page('last').draw('page');
-
+                utilSigo.toastSuccess("Exito", "Se agregó el registro con éxito");
+                this.closeModal();
             }
             else {
                 //var indice = this.frmResolAprob.find("#hdfItemRAPoa_ListIndex").val();                            
@@ -3061,7 +3111,7 @@ ManPOA.selectFile = null;
                     row.RegEstado = 2;
                 }
                 this.dtItemRAPoa.row(this.tr).data(row).draw();
-                utilSigo.toastSuccess("Exito", "Se modifico con exito");
+                utilSigo.toastSuccess("Exito", "El registro se modificó con éxito");
                 this.closeModal();
             }
             ManPOA.ItemRAPoa.CalculaPOA(hdfItemCod_MTipo);
@@ -3798,6 +3848,7 @@ ManPOA.selectFile = null;
         if (files != undefined && files.length > 0) {
             this.uploadFileToServer(files[0], control, url, TVentana);
         }
+        e.target.value = "";
     }
     this.resetFileSelect = function (control, url, TVentana) {
         if (TVentana == "BExt_MadeNoMade" || TVentana == "RAPROBMADE") {

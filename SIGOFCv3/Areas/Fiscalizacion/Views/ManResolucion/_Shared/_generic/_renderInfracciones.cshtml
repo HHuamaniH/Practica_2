@@ -19,6 +19,7 @@
     let cod_secuencial;
     _renderInfracciones.iniciarEventos = function () {
         _renderInfracciones.frm.find("#txtBExtraccionFEmision").datepicker({ format: "dd/mm/yyyy", autoclose: true, language: 'es' });
+        _renderInfracciones.fncTipoAprov();
         ///_renderInfracciones.tbEliTABLA = {};
     };
 
@@ -44,6 +45,37 @@
         _renderInfracciones.frm.find("#ddlEspeciesFlora").val('0002226');
     };
 
+    _renderInfracciones.fncTipoAprov = function () {
+        var idddTipo = _renderInfracciones.frm.find("#ddTipo").val();
+        _renderInfracciones.fnCrearUnidadMedida(idddTipo);
+    };
+
+    _renderInfracciones.fnCrearUnidadMedida = function (valor) {
+
+        var htmlddUnidadMedidaInf = "";
+        var ddUnidadMedidaInf = document.getElementById("ddUnidadMedidaInf");
+        switch (valor) {
+            case "CARBON":
+                htmlddUnidadMedidaInf += '<option value="KG">KG</option>';
+                ddUnidadMedidaInf.innerHTML = htmlddUnidadMedidaInf;
+                break;
+            case "MADERABLES":
+                htmlddUnidadMedidaInf += '<option value="M3">M3</option>';
+                htmlddUnidadMedidaInf += '<option value="KG">KG</option>';
+                ddUnidadMedidaInf.innerHTML = htmlddUnidadMedidaInf;
+                break;
+            case "NO MADERABLES":
+                htmlddUnidadMedidaInf += '<option value="KG">KG</option>';
+                htmlddUnidadMedidaInf += '<option value="LT">LT</option>';
+                ddUnidadMedidaInf.innerHTML = htmlddUnidadMedidaInf;
+                break;
+            default:
+        }
+
+
+        return true;
+    }
+
     ///--------> lista
     _renderInfracciones.fnAdd = function (obj) {
             var idArticulo = _renderInfracciones.frm.find("#ddlArticulos").val();
@@ -62,6 +94,7 @@
             let idEspecieFauna = _renderInfracciones.frm.find("#ddlEspeciesFauna").val();
             let desEspecieFauna = _renderInfracciones.frm.find("#ddlEspeciesFauna option:selected").text();
             let pca = _renderInfracciones.frm.find("#txtParcelaRD").val();
+            let idUnidadMedidaInf = _renderInfracciones.frm.find("#ddUnidadMedidaInf").val();
 
             if (pca == undefined) {
                 pca = "";
@@ -99,6 +132,7 @@
                 'POA': descPoa,
                 'PCA': pca,
                 'TIPOMADERABLE': idTipo,
+                'UNIDAD_MEDIDA': idUnidadMedidaInf,
                 'RegEstado': RegEstado
             }
 
@@ -113,7 +147,12 @@
         _renderInfracciones.frm.find("#txtAreaInfrac").val('');
         _renderInfracciones.frm.find("#txtNumIndv").val('');
         _renderInfracciones.frm.find("#txtVolumenInf").val('');
-        _renderInfracciones.frm.find("#txtDescInfrac").val('');
+        _renderInfracciones.frm.find("#txtDescInfrac").val('');                
+        //$("#txtBExtraccionFEmision").val("");
+        //$("#txtBExtraccionFEmision").val("");
+        //$("#ddlArticulos").val("0");
+        //$("#ddlEnciso").val("0");
+
         _renderInfracciones.frm.find("#ddlEspeciesFauna").val('0002226');
         _renderInfracciones.frm.find("#ddlEspeciesFlora").val('0002226');
 
@@ -196,6 +235,7 @@
             let idEspecie =  modelData["COD_ESPECIES"];
             let desEspecie =  modelData["DESCRIPCION_ESPECIE"];
             let idTipo =  modelData["TIPOMADERABLE"];
+            let idUnidadMedida =  modelData["UNIDAD_MEDIDA"];
             let numInd =  modelData["NUMERO_INDIVIDUOS"];
             let idEspecieFauna = modelData["COD_ESPECIES"];
             let desEspecieFauna = modelData["DESCRIPCION_ESPECIE"];
@@ -234,6 +274,7 @@
                 'POA': descPoa,
                 'PCA': pca,
                 'TIPOMADERABLE': idTipo,
+                'UNIDAD_MEDIDA': idUnidadMedida,
                 'RegEstado': RegEstado
             }
 
@@ -258,8 +299,8 @@
     _renderInfracciones.fnInitDataTable_Detail = function () {
         var columns_label = [], columns_data = [], options = {};
 
-        columns_label = ["Articulo", "Inciso", "Volumen (m3)","PC", "Especie", "Area (ha)", "Num. Indiv", "Desc. Infraccion", "Numero POA", "Tipo Aprovechamiento"];
-        columns_data = ["DESCRIPCION_ARTICULOS", "DESCRIPCION_ENCISOS", "VOLUMEN","PCA","DESCRIPCION_ESPECIE" , "AREA", "NUMERO_INDIVIDUOS", "DESCRIPCION_INFRACCIONES", "POA", "TIPOMADERABLE"];
+        columns_label = ["Articulo", "Inciso", "Volumen (m3)","PC", "Especie", "Area (ha)", "Num. Indiv", "Desc. Infraccion", "Numero POA", "Tipo Aprovechamiento", "Unidad Medida"];
+        columns_data = ["DESCRIPCION_ARTICULOS", "DESCRIPCION_ENCISOS", "VOLUMEN","PCA","DESCRIPCION_ESPECIE" , "AREA", "NUMERO_INDIVIDUOS", "DESCRIPCION_INFRACCIONES", "POA", "TIPOMADERABLE", "UNIDAD_MEDIDA"];
         options = {
             page_length: 50, button_excel: true, export_title: $("#tbRenderIncisos").find("thead tr")[0].innerText.trim()
             , row_index: true, row_delete: true, row_fnDelete: "_renderInfracciones.fnDelete(this)",
@@ -283,6 +324,7 @@
         _renderInfracciones.frm.find("#txtDescInfrac").val(data['DESCRIPCION_INFRACCIONES']);
         _renderInfracciones.frm.find("#txtVolumenInf").val(data['VOLUMEN']);
         _renderInfracciones.frm.find("#ddTipo").val(data['TIPOMADERABLE']);
+        _renderInfracciones.frm.find("#ddUnidadMedidaInf").val(data['UNIDAD_MEDIDA']);
         _renderInfracciones.frm.find("#txtNumIndv").val(data['NUMERO_INDIVIDUOS']);
         _renderInfracciones.frm.find("#ddlEspeciesFlora").val(data['COD_ESPECIES']);
         _renderInfracciones.frm.find("#ddlEspeciesFauna").val(data['COD_ESPECIES']);
@@ -416,7 +458,7 @@
             <label for="lblArticulos" class="text-small">Descripción</label>
         </div>
         <div class="form-group col-md-6">
-            @Html.TextAreaFor(m => m.txtDescInfrac, 3, 1, new { @class = "form-control form-control-sm" })
+            @Html.TextAreaFor(m => m.txtDescInfrac, 3, 1, new { @class = "form-control form-control-sm", maxlength = "200", onkeypress = "return utilSigo.checkLetter(event);" })
         </div>
         <div class="form-group col-md-2">
 
@@ -486,7 +528,21 @@
         </div>
         <div class="form-group col-md-6">
             @Html.DropDownListFor(m => m.txtIdTipoAprov, new SelectList(Model.ListTipo, "Value", "Text"),
-                    new { @class = "form-control form-control-sm", @id = "ddTipo" })
+                    new { @class = "form-control form-control-sm", @id = "ddTipo", @onchange = "_renderInfracciones.fncTipoAprov('')" })
+        </div>
+        <div class="form-group col-md-2">
+
+        </div>
+    </div>
+
+    <div class="form-row" id="divInfTipoAprov">
+        <div class="form-group col-md-4">
+            <label for="lblArticulos" class="text-small">Unidad de Medida</label>
+        </div>
+        <div class="form-group col-md-6">
+            <select class="form-control form-control-sm" id="ddUnidadMedidaInf">
+                <option value="0"> Seleccionar</option>
+            </select>            
         </div>
         <div class="form-group col-md-2">
 
@@ -520,7 +576,7 @@
         <table id="tbRenderIncisos" style="width:100%;margin:0px !important;" class="table table-hover table-bordered">
             <thead>
                 <tr>
-                    <th colspan="14" class="text-sm-left">
+                    <th colspan="15" class="text-sm-left">
                         <div class="row">
                             <div class="col-md-8">
                                 <div class="form-inline">

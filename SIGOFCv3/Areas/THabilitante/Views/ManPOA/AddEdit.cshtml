@@ -2081,7 +2081,7 @@
                     <div class="form-group row" id="trNumArboles">
                         <label for="txtItemRAPoaNum_Arboles" class="text-small col-md-3">N° árboles</label>
                         <div class="col-md-9">
-                            <input type="text" id="txtItemRAPoaNum_Arboles" name="txtItemRAPoaNum_Arboles" class="form-control form-control-sm" maxlength="6" pattern="[0-9]{1,6}" title="Solo debe ingresar números enteros" data-toggle="tooltip" onkeypress="return utilSigo.onKeyEntero(event, this);">
+                            <input type="text" id="txtItemRAPoaNum_Arboles" name="txtItemRAPoaNum_Arboles" class="form-control form-control-sm" maxlength="6" title="Solo debe ingresar números enteros" data-toggle="tooltip" onkeypress="return utilSigo.onKeyEntero(event, this);">
                         </div>
                     </div>
                     <div class="form-group row" id="trSuperficieHa">
@@ -2153,7 +2153,7 @@
                     <div class="form-group row" id="trVolumenAuto">
                         <label for="txtItemRAPoaVolumen_Kilogramos" id="ltrItemRAPoaVolumen_Kilogramos" class="text-small col-md-3">Cantidad Autorizada</label>
                         <div class="col-md-9">
-                            <input type="text" id="txtItemRAPoaVolumen_Kilogramos" class="form-control form-control-sm" maxlength="10" pattern="[-+]?[0-9]*[.,]?[0-9]+" title="solo puede ingresar números enteros o decimales" data-toggle="tooltip" onkeypress="return utilSigo.onKeyDecimal(event, this);">
+                            <input type="text" id="txtItemRAPoaVolumen_Kilogramos" class="form-control form-control-sm" maxlength="11" title="solo puede ingresar números enteros o decimales" data-toggle="tooltip" onkeypress="return utilSigo.onKeyDecimal(event, this);" onblur="return utilSigo.onBlurSevenDigitoThreeDecimal(this,'Cantidad Autorizada');">
                         </div>
                     </div>
                     <div class="form-group row" id="trRAPoaUM">
@@ -2176,7 +2176,7 @@
                     <div class="form-group row">
                         <label for="txtItemRAPoaObservacion" class="text-small col-md-3">Observación</label>
                         <div class="col-md-9">
-                            <textarea id="txtItemRAPoaObservacion" class="form-control form-control-sm" rows="2"></textarea>
+                            <textarea id="txtItemRAPoaObservacion" class="form-control form-control-sm" rows="2" maxlength="100" onkeypress="return utilSigo.checkLetter(event);"></textarea>
                         </div>
                     </div>
                     <button type="button" id="btnItemRAPoa_Grabar" class="btn-primary" onclick="ManPOA.ItemRAPoa.btnItemRAPoa_Grabar_Click()">Aceptar</button>
