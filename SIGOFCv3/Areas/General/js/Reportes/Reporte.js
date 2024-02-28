@@ -2337,15 +2337,17 @@ _reporteGeneral.rpt24InitDataTable = function () {
     var columns_label = [], columns_data = [], options = {};
     var tb = $("#tbdvReporteSolicitudFema");
 
-    columns_label = ["Nro. Trámite", "Fecha Trámite", "Nro. Solicitud", "Carpeta Fiscal", "Tipo Solicitud", "Plazo Legal", "O.D."
-        , "Fecha Oficio INFFUN", "Nro. Oficio INFFUN", "Nro. Informe", "Fecha Oficio PAU/Copia", "Nro. Oficio PAU/Copia", "Dias Transc.", "Dias Transc. 2"
-        , "Dentro Plazo Legal", "FEMA", "Estado"
+    columns_label = ["Nro. Registro SITD", "Fecha de ingreso al SITD", "N° de Oficio (Solicitud)", "Carpeta Fiscal", "Tipo Solicitud",
+        "Plazo Legal", "O.D.", "Nro. Oficio (solicitud IFU)", "Fecha Oficio (solicitud IFU)", "Nro. Informe IFU",
+        "Fecha de Informe IFU", "Nro. Oficio (Inf. PAU/Copias)", "Fecha Oficio (Inf. PAU/Copias)", "Dias transcurridos hasta la emisión del oficio (IFU, Inf. PAU y Copias)", "Dias transcurridos hasta la emisión del oficio (Solicitud de IFU / no se emite IFU)",
+        "Respuesta dentro de Plazo Legal (SI/ NO)", "FEMA", "Estado"
     ];
 
 
-    columns_data = ["NUMERO_TRAMITE", "FECHA_TRAMITE", "NUMERO_SOLICITUD", "CARPETA_FISCAL", "TIPO_SOLICITUD", "PLAZO_LEGAL", "OD", "FECHA_OFICIO_INFFUN", "NUMERO_OFICIO_INFFUN", "NUMERO_INFORME"
-        , "FECHA_OFICIO_PAU", "NUMERO_OFICIO_PAU", "DIAS_TRANS", "DIAS_TRANS2"
-        , "FLAG_DENTRO_PLAZO", "FEMA", "ESTADO"
+    columns_data = ["NUMERO_TRAMITE", "FECHA_TRAMITE", "NUMERO_SOLICITUD", "CARPETA_FISCAL", "TIPO_SOLICITUD",
+        "PLAZO_LEGAL", "OD", "NUMERO_OFICIO_INFFUN", "FECHA_OFICIO_INFFUN", "NUMERO_INFORME",
+        "FECHA_EMISION", "NUMERO_OFICIO_PAU", "FECHA_OFICIO_PAU", "DIAS_TRANS", "DIAS_TRANS2",
+        "FLAG_DENTRO_PLAZO", "FEMA", "ESTADO"
     ];
 
     options = {
