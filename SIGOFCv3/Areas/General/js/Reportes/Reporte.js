@@ -2339,7 +2339,7 @@ _reporteGeneral.rpt24InitDataTable = function () {
 
     columns_label = ["Nro. Registro SITD", "Fecha de ingreso al SITD", "N° de Oficio (Solicitud)", "Carpeta Fiscal", "Tipo Solicitud",
         "Plazo Legal", "O.D.", "Nro. Oficio (solicitud IFU)", "Fecha Oficio (solicitud IFU)", "Nro. Informe IFU",
-        "Fecha de Informe IFU", "Nro. Oficio (Inf. PAU/Copias)", "Fecha Oficio (Inf. PAU/Copias)", "Dias transcurridos hasta la emisión del oficio (IFU, Inf. PAU y Copias)", "Dias transcurridos hasta la emisión del oficio (Solicitud de IFU / no se emite IFU)",
+        "Fecha de Informe IFU", "Nro. Oficio (Inf. PAU/Copias)", "Fecha Oficio (Inf. PAU/Copias)", "Días transcurridos hasta la emisión del oficio (IFU, Inf. PAU y Copias)", "Días transcurridos hasta la emisión del oficio (Solicitud de IFU / no se emite IFU)",
         "Respuesta dentro de Plazo Legal (SI/ NO)", "FEMA", "Estado"
     ];
 
