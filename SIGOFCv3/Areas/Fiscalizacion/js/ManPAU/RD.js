@@ -666,7 +666,7 @@ _informe.Estructura = function () {
 }
 
 _informe.RutaDocumentoDescarga = function () {
-    let name = `${app.Informe.ESTADO >= States.FINALIZADO ? 'RESOLUCION-SUBDIRECTORAL-' : ''}${_informe.fileName()}`;
+    let name = `${app.Informe.ESTADO >= States.FINALIZADO ? 'RESOLUCION-DIRECTORAL-' : ''}${_informe.fileName()}`;
     let base = app.Informe.ESTADO >= States.FINALIZADO ? urlBaseDocFirmaTrans : urlBaseDocFirma;
     return `${urlLocalSigo}${base}/${name}?v=${new Date().getTime()}`;
 }
