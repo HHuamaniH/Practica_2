@@ -481,6 +481,7 @@ namespace SIGOFCv3.Reportes.THabilitante
                         insertar = insertar + ",'" + (string.IsNullOrEmpty(listaInf.NUM_ARBOLES.ToString()) ? "" : listaInf.NUM_ARBOLES.ToString()) + "'";
                         insertar = insertar + ",'" + (string.IsNullOrEmpty(listaInf.VOLUMEN_KILOGRAMOS.ToString()) ? "" : listaInf.VOLUMEN_KILOGRAMOS.ToString()) + "'";
                         insertar = insertar + ",'" + (string.IsNullOrEmpty(listaInf.TIPOMADERABLE.ToString()) ? "" : listaInf.TIPOMADERABLE.ToString()) + "'";
+                        insertar = insertar + ",'" + (string.IsNullOrEmpty(listaInf.UNIDAD_MEDIDA.ToString()) ? "" : listaInf.UNIDAD_MEDIDA.ToString()) + "'";
                         insertar = insertar + ",'" + (string.IsNullOrEmpty(listaInf.PCA.ToString()) ? "" : listaInf.PCA.ToString()) + "'";
                         insertar = insertar + ",'" + (string.IsNullOrEmpty(listaInf.OBSERVACION.ToString()) ? "" : listaInf.OBSERVACION.ToString()) + "'";
                         cmd.CommandText = "INSERT INTO [Datos$A" + i.ToString().Trim() + ":Z" + (listaParam.Count + 1).ToString() + "] VALUES (" + insertar + ")";

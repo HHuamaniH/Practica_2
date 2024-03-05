@@ -206,6 +206,7 @@ namespace CapaEntidad.ViewModel
         public string txtDescInfrac { get; set; }
         public string txtVolumenInf { get; set; }
         public string txtIdTipoAprov { get; set; }
+        public string txtIdUnidadMedida { get; set; }
         public List<Ent_RESODIREC> ListArticulo { get; set; }
         public List<Ent_RESODIREC> ListEspeciesMC { get; set; }
 

@@ -175,7 +175,7 @@ namespace SIGOFCv3.Areas.Supervision.Models.ManInforme
                             if (!string.IsNullOrEmpty(ncomun) && !string.IsNullOrEmpty(ncientifico))
                             {
                                 oCampos.DESC_ESPECIES_REPLA = ncomun + " | " + ncientifico;
-                                ncomun = (workSheet.Cells[rowIterator, 3].Value ?? "").ToString().Trim() ;
+                                ncomun = (workSheet.Cells[rowIterator, 3].Value ?? "").ToString().Trim();
                                 ncientifico = (workSheet.Cells[rowIterator, 4].Value ?? "").ToString().Trim();
                                 if (!string.IsNullOrEmpty(ncomun) && !string.IsNullOrEmpty(ncientifico))
                                 {
@@ -224,7 +224,7 @@ namespace SIGOFCv3.Areas.Supervision.Models.ManInforme
                                         {
                                             if (!Regex.IsMatch(oCampos.OBSERVACION, @"^[ ÁÉÍÓÚA-Záéíóúa-z0-9\-\/\.\,]+$")) { throw new Exception("El campo observación no debe tener caracteres especiales."); }
                                             if (oCampos.OBSERVACION.Length > 200) { throw new Exception("El campo observación no debe exceder los 200 caracteres"); }
-                                        }                                       
+                                        }
                                         oCampos.RegEstado = 1;
                                         lstEspecieForEst.Add(oCampos);
                                     }
@@ -296,7 +296,7 @@ namespace SIGOFCv3.Areas.Supervision.Models.ManInforme
                                                 {
                                                     if (!Regex.IsMatch(oCampos.OBSERVACION, @"^[ ÁÉÍÓÚA-Záéíóúa-z0-9\-\/\.\,]+$")) { throw new Exception("El campo observación no debe tener caracteres especiales."); }
                                                     else if (oCampos.OBSERVACION.Length > 200) { throw new Exception("El campo Observación no debe exceder los 200 caracteres"); }
-                                                }                                                    
+                                                }
                                             }
                                             else { throw new Exception(msg); }
                                         }
@@ -755,18 +755,76 @@ namespace SIGOFCv3.Areas.Supervision.Models.ManInforme
                         var noOfRow = workSheet.Dimension.End.Row;
                         CapaEntidad.DOC.Ent_INFORME_VOL_ANALIZADO oCampos;
 
+                        decimal volumen_kilogramos = decimal.Parse("9999999.999");
+                        string valor = "";
+
                         for (int rowIterator = 2; rowIterator <= noOfRow; rowIterator++)
                         {
                             oCampos = new CapaEntidad.DOC.Ent_INFORME_VOL_ANALIZADO();
                             oCampos.COD_SECUENCIAL = 0;
                             oCampos.COD_ESPECIES = "";
+
+                            if (workSheet.Cells[rowIterator, 1].Value == null) throw new Exception("Ingresar el Nombre Científico de la especie.");
+                            if (workSheet.Cells[rowIterator, 2].Value == null) throw new Exception("Ingresar el Nombre Común de la especie.");
                             oCampos.ESPECIES = workSheet.Cells[rowIterator, 1].Value.ToString().Trim() + " | " + workSheet.Cells[rowIterator, 2].Value.ToString().Trim();
-                            oCampos.VOLUMEN_APROBADO = Convert.ToDecimal(workSheet.Cells[rowIterator, 3].Value.ToString().Trim());
-                            oCampos.VOLUMEN_MOVILIZADO = Convert.ToDecimal(workSheet.Cells[rowIterator, 4].Value.ToString().Trim());
-                            oCampos.VOLUMEN_INJUSTIFICADO = Convert.ToDecimal(workSheet.Cells[rowIterator, 5].Value.ToString().Trim());
-                            oCampos.VOLUMEN_JUSTIFICADO = Convert.ToDecimal(workSheet.Cells[rowIterator, 6].Value.ToString().Trim());
-                            oCampos.PCA = (workSheet.Cells[rowIterator, 7].Value ?? "").ToString().Trim();
-                            oCampos.OBSERVACION = (workSheet.Cells[rowIterator, 8].Value ?? "").ToString().Trim();
+
+                            if (workSheet.Cells[rowIterator, 3].Value != null)
+                            {
+                                valor = workSheet.Cells[rowIterator, 3].Value.ToString().Trim();
+                                if (!Regex.IsMatch(valor, @"^\d+(\.\d{1,3})?$")) throw new Exception("El volumen aprobado debe ser un valor numérico y no puede exceder los 3 decimales.");
+                            }
+                            oCampos.VOLUMEN_APROBADO = workSheet.Cells[rowIterator, 3].Value == null ? 0 : Decimal.Parse(workSheet.Cells[rowIterator, 3].Value.ToString().Trim());
+                            if (oCampos.VOLUMEN_APROBADO > volumen_kilogramos) throw new Exception("El volumen aprobado no puede exceder los 7 dígitos.");
+
+                            if (workSheet.Cells[rowIterator, 4].Value != null)
+                            {
+                                valor = workSheet.Cells[rowIterator, 4].Value.ToString().Trim();
+                                if (!Regex.IsMatch(valor, @"^\d+(\.\d{1,3})?$")) throw new Exception("El volumen movilizado debe ser un valor numérico y no puede exceder los 3 decimales.");
+                            }
+                            oCampos.VOLUMEN_MOVILIZADO = workSheet.Cells[rowIterator, 4].Value == null ? 0 : Decimal.Parse(workSheet.Cells[rowIterator, 4].Value.ToString().Trim());
+                            if (oCampos.VOLUMEN_MOVILIZADO > volumen_kilogramos) throw new Exception("El volumen movilizado no puede exceder los 7 dígitos.");
+
+                            if (workSheet.Cells[rowIterator, 5].Value != null)
+                            {
+                                valor = workSheet.Cells[rowIterator, 5].Value.ToString().Trim();
+                                if (!Regex.IsMatch(valor, @"^\d+(\.\d{1,3})?$")) throw new Exception("El volumen injustificado debe ser un valor numérico y no puede exceder los 3 decimales.");
+                            }
+                            oCampos.VOLUMEN_INJUSTIFICADO = workSheet.Cells[rowIterator, 5].Value == null ? 0 : Decimal.Parse(workSheet.Cells[rowIterator, 4].Value.ToString().Trim());
+                            if (oCampos.VOLUMEN_INJUSTIFICADO > volumen_kilogramos) throw new Exception("El volumen injustificado no puede exceder los 7 dígitos.");
+
+                            if (workSheet.Cells[rowIterator, 6].Value != null)
+                            {
+                                valor = workSheet.Cells[rowIterator, 6].Value.ToString().Trim();
+                                if (!Regex.IsMatch(valor, @"^\d+(\.\d{1,3})?$")) throw new Exception("El volumen justificado debe ser un valor numérico y no puede exceder los 3 decimales.");
+                            }
+                            oCampos.VOLUMEN_JUSTIFICADO = workSheet.Cells[rowIterator, 6].Value == null ? 0 : Decimal.Parse(workSheet.Cells[rowIterator, 4].Value.ToString().Trim());
+                            if (oCampos.VOLUMEN_JUSTIFICADO > volumen_kilogramos) throw new Exception("El volumen justificado no puede exceder los 7 dígitos.");
+
+                            oCampos.TIPO_APROVECHAMIENTO = (workSheet.Cells[rowIterator, 7].Value ?? "").ToString().Trim();
+                            if (string.IsNullOrEmpty(oCampos.TIPO_APROVECHAMIENTO)) throw new Exception("Debe ingresaro el Tipo de Aprovechamiento.");
+
+                            oCampos.UNIDAD_MEDIDA = (workSheet.Cells[rowIterator, 8].Value ?? "").ToString().Trim();
+                            if (string.IsNullOrEmpty(oCampos.UNIDAD_MEDIDA)) throw new Exception("Debe ingresaro la Unidad de Medida.");
+                            switch (oCampos.TIPO_APROVECHAMIENTO)
+                            {
+                                case "CARBON":
+                                    if (oCampos.UNIDAD_MEDIDA != "KG") throw new Exception("Para el Tipo CARBON solo se permite el ingreso de Unidad de Medida KG.");
+                                    break;
+                                case "NO MADERABLES":
+                                    if (oCampos.UNIDAD_MEDIDA == "M3") throw new Exception("Para el Tipo NO MADERABLES solo se permite el ingreso de Unidad de Medida KG y LT.");
+                                    break;
+                                case "MADERABLES":
+                                    if (oCampos.UNIDAD_MEDIDA == "LT") throw new Exception("Para el Tipo MADERABLES solo se permite el ingreso de Unidad de Medida M3 y KG.");
+                                    break;
+                            }
+
+                            oCampos.PCA = (workSheet.Cells[rowIterator, 9].Value ?? "").ToString().Trim();
+                            if (string.IsNullOrEmpty(oCampos.PCA)) throw new Exception("Debe ingresaro el PCA.");
+
+                            oCampos.OBSERVACION = (workSheet.Cells[rowIterator, 10].Value ?? "").ToString().Trim();
+                            if (oCampos.OBSERVACION.Length > 100) throw new Exception("El campo Observación no debe exceder los 100 caracteres.");
+                            else if (!Regex.IsMatch(oCampos.OBSERVACION, @"^[ ÁÉÍÓÚA-Záéíóúa-z0-9\-\/\.\,]+$") && oCampos.OBSERVACION != "") throw new Exception("El campo Observación no debe contener caracteres especiales.");
+
                             oCampos.RegEstado = 1;
                             lstVolAnaliza.Add(oCampos);
                         }
@@ -1877,7 +1935,8 @@ namespace SIGOFCv3.Areas.Supervision.Models.ManInforme
                     }
                 }
                 else { returns = "Coordenada Norte vacía de " + descripcion; }
-            }else { returns = "Coordenada Este vacía de " + descripcion; }
+            }
+            else { returns = "Coordenada Este vacía de " + descripcion; }
 
             return returns;
         }
@@ -1888,7 +1947,7 @@ namespace SIGOFCv3.Areas.Supervision.Models.ManInforme
             {
                 if (altidud.Length > 4) { returns = "Altitud de " + descripcion + " incorrecta no debe ser mayor a 4 dígitos"; }
                 {
-                    if (!Regex.IsMatch(altidud, @"^\d+$")) { returns = "Altitud de " + descripcion + " incorrecta debe ser numérico"; }                    
+                    if (!Regex.IsMatch(altidud, @"^\d+$")) { returns = "Altitud de " + descripcion + " incorrecta debe ser numérico"; }
                 }
             }
             else { returns = "Altitud vacía de " + descripcion; }
@@ -1907,7 +1966,7 @@ namespace SIGOFCv3.Areas.Supervision.Models.ManInforme
                     else
                     {
                         decimal num = decimal.Parse(valor);
-                        if (num>9999) { returns = "Valor de la columna " + campo + " no puede ser mayor a 4 dígitos enteros o 9999 en " + descripcion; }
+                        if (num > 9999) { returns = "Valor de la columna " + campo + " no puede ser mayor a 4 dígitos enteros o 9999 en " + descripcion; }
                     }
                 }
                 else { returns = "Valor no permitido (debe ser un número decimal) de la columna: " + campo + " en " + descripcion; }

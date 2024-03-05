@@ -584,7 +584,7 @@ namespace SIGOFCv3.Areas.Supervision.Controllers
             }
             catch (Exception ex)
             {
-                return Json(new { success = false, result = ex.Message });
+                return Json(new { success = false, result = "Ocurrió un error, comuníquese con el administrador." });
             }
         }
         [HttpPost]
@@ -713,6 +713,7 @@ namespace SIGOFCv3.Areas.Supervision.Controllers
             CapaLogica.DOC.Log_BUSQUEDA exeBus = new CapaLogica.DOC.Log_BUSQUEDA();
             string valor = asCodTHabilitante + "," + aiNumPoa.ToString();
             ViewBag.ddParcelas = exeBus.RegMostComboIndividual("PARCELAS", valor);
+            ViewBag.ddlTipoAprov = exeBus.RegMostComboIndividual("TIPO_APROVECHAMIENTO", valor);
             return PartialView();
         }
         #endregion

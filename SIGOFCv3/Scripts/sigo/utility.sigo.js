@@ -961,9 +961,9 @@ utilSigo.onBlurFourDigitoThreeDecimal = function (thix, texto) {
             $("#" + thix.id).focus();
         } else {
             let decimal = parseFloat(numero);
-            if (numero>9999) {
+            if (numero>9999.999) {
                 document.getElementById(thix.id).value = "";
-                utilSigo.toastWarning("Aviso", "El campo " + texto + " no puede ser mayor a 4 dígitos enteros o 9999");
+                utilSigo.toastWarning("Aviso", "El campo " + texto + " no debe exceder los 4 dígitos");
                 $("#" + thix.id).focus();
             }
         }
@@ -978,9 +978,26 @@ utilSigo.onBlurFourDigitoTwoDecimal = function (thix, texto) {
             $("#" + thix.id).focus();
         } else {
             let decimal = parseFloat(numero);
-            if (numero > 9999) {
+            if (numero > 9999.99) {
                 document.getElementById(thix.id).value = "";
-                utilSigo.toastWarning("Aviso", "El campo " + texto + " no puede ser mayor a 4 dígitos enteros o 9999");
+                utilSigo.toastWarning("Aviso", "El campo " + texto + " no debe exceder los 4 dígitos");
+                $("#" + thix.id).focus();
+            }
+        }
+    }
+}
+utilSigo.onBlurSevenDigitoThreeDecimal = function (thix, texto) {
+    let numero = document.getElementById(thix.id).value;
+    if (numero != "") {
+        if (!/^\d+(\.\d{1,3})?$/.test(numero)) {
+            document.getElementById(thix.id).value = "";
+            utilSigo.toastWarning("Aviso", "El campo " + texto + " sólo debe tener tres decimales");
+            $("#" + thix.id).focus();
+        } else {
+            let decimal = parseFloat(numero);
+            if (numero > 9999999.999) {
+                document.getElementById(thix.id).value = "";
+                utilSigo.toastWarning("Aviso", "El campo " + texto + " no debe exceder los 7 dígitos");
                 $("#" + thix.id).focus();
             }
         }

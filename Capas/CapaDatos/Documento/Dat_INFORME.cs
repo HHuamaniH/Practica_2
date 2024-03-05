@@ -10496,6 +10496,8 @@ namespace CapaDatos.DOC
                                     ovolumen.VOLUMEN_INJUSTIFICADO = Decimal.Parse(dr["VOLUMEN_INJUSTIFICADO"].ToString());
                                     ovolumen.VOLUMEN_JUSTIFICADO = Decimal.Parse(dr["VOLUMEN_JUSTIFICADO"].ToString());
                                     ovolumen.OBSERVACION = dr["OBSERVACION"].ToString();
+                                    ovolumen.TIPO_APROVECHAMIENTO = dr["TIPO_APROVECHAMIENTO"].ToString();
+                                    ovolumen.UNIDAD_MEDIDA = dr["UNIDAD_MEDIDA"].ToString();
                                     ovolumen.RegEstado = 0;
                                     ovolumen.PCA = dr["PCA"].ToString();
                                     lsCEntidad.ListVolumenAnalizado.Add(ovolumen);
@@ -11308,6 +11310,8 @@ namespace CapaDatos.DOC
                             ocampo.VOLUMEN_INJUSTIFICADO = loDatos.VOLUMEN_INJUSTIFICADO;
                             ocampo.VOLUMEN_JUSTIFICADO = loDatos.VOLUMEN_JUSTIFICADO;
                             ocampo.OBSERVACION = loDatos.OBSERVACION;
+                            ocampo.TIPO_APROVECHAMIENTO = loDatos.TIPO_APROVECHAMIENTO;
+                            ocampo.UNIDAD_MEDIDA = loDatos.UNIDAD_MEDIDA;
                             ocampo.COD_UCUENTA = oCEntidad.COD_UCUENTA;
                             ocampo.PCA = loDatos.PCA;
                             ocampo.RegEstado = loDatos.RegEstado;

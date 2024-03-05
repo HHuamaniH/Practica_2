@@ -29,7 +29,7 @@
                     @*Maderable*@
                     <div class="form-group col-md-6 trDMC" style="display:none;">
                         <label for="txtDMC" class="text-small">DMC (cm)</label>
-                        @Html.TextBox("txtDMC", "", new { @class = "form-control form-control-sm", maxlength = "10", @onkeypress = "return utilSigo.onKeyEntero(event, this);" })
+                        @Html.TextBox("txtDMC", "", new { @class = "form-control form-control-sm", maxlength = "6", @onkeypress = "return utilSigo.onKeyEntero(event, this);" })
                     </div>
                     @*Maderable*@
                     <div class="form-group col-md-6 trArbol" style="display:none;">
@@ -40,11 +40,11 @@
                 <div class="form-row trVolumen" style="display:none;">
                     <div class="form-group col-md-6">
                         <label for="txtVolAutorizado" class="text-small">Cantidad autorizada</label>
-                        @Html.TextBox("txtVolAutorizado", "", new { @class = "form-control form-control-sm", maxlength = "10", @onkeypress = "return utilSigo.onKeyDecimal(event, this);" })
+                        @Html.TextBox("txtVolAutorizado", "", new { @class = "form-control form-control-sm", maxlength = "11", @onkeypress = "return utilSigo.onKeyDecimal(event, this);", @onblur = "return utilSigo.onBlurSevenDigitoThreeDecimal(this,'Cantidad autorizada');" })
                     </div>
                     <div class="form-group col-md-6">
                         <label for="txtVolMovilizado" class="text-small">Cantidad movilizada</label>
-                        @Html.TextBox("txtVolMovilizado", "", new { @class = "form-control form-control-sm", maxlength = "10", @onkeypress = "return utilSigo.onKeyDecimal(event, this);" })
+                        @Html.TextBox("txtVolMovilizado", "", new { @class = "form-control form-control-sm", maxlength = "11", @onkeypress = "return utilSigo.onKeyDecimal(event, this);", @onblur = "return utilSigo.onBlurSevenDigitoThreeDecimal(this,'Cantidad movilizada');" })
                     </div>
                 </div>
                 <div class="form-row trMedicinal" style="display:none;">
@@ -91,15 +91,15 @@
                     @*No Maderable*@
                     <div class="form-group col-md-6 trCarrizo" style="display:none;">
                         <label for="txtCantidad" class="text-small">Cantidad</label>
-                        @Html.TextBox("txtCantidad", "", new { @class = "form-control form-control-sm", maxlength = "10", @onkeypress = "return utilSigo.onKeyEntero(event, this);" })
+                        @Html.TextBox("txtCantidad", "", new { @class = "form-control form-control-sm", maxlength = "10", onkeypress = "return utilSigo.onKeyEntero(event, this);" })
                     </div>
                     <div class="form-group col-md-6 trSaldo" style="display:none;">
                         <label for="txtSaldo" class="text-small">Saldo</label>
-                        @Html.TextBox("txtSaldo", "", new { @class = "form-control form-control-sm", maxlength = "10", @onkeypress = "return utilSigo.onKeyDecimal(event, this);" })
+                        @Html.TextBox("txtSaldo", "", new { @class = "form-control form-control-sm", maxlength = "10", onkeypress = "return utilSigo.onKeyDecimal(event, this);", @onblur = "return utilSigo.onBlurSevenDigitoThreeDecimal(this,'Saldo');" })
                     </div>
                     <div class="form-group col-md-6 trParcela" style="display:none;">
                         <label for="txtParcela" class="text-small">PC</label>
-                        @Html.DropDownList("ddlParcelaId", new SelectList(ViewBag.lstParcelas, "Value", "Text"), new { @class = "form-control form-control-sm" })                     
+                        @Html.DropDownList("ddlParcelaId", new SelectList(ViewBag.lstParcelas, "Value", "Text"), new { @class = "form-control form-control-sm" })
                     </div>
                 </div>
                 <div class="form-row trTipoAprov" style="display:none;">
@@ -127,7 +127,7 @@
                 <div class="form-row trObservacion" style="display:none;">
                     <div class="form-group col-md-12">
                         <label for="txtObservacion" class="text-small">Observacion</label>
-                        @Html.TextArea("txtObservacion", "", new { @class = "form-control form-control-sm", rows = "3" })
+                        @Html.TextArea("txtObservacion", "", new { @class = "form-control form-control-sm", rows = "3", onkeypress = "return utilSigo.checkLetter(event);", maxlength="100" })
                     </div>
                 </div>
             </form>
@@ -146,7 +146,7 @@
     var lst_estado_origen_2 = ["R", "MS", "PC"];
     var band;
 
-    var _BExtraccionMaderable = {  
+    var _BExtraccionMaderable = {
         fnSave: () => {
             var cod_mtipo = _BExtraccionMaderable.frm.find("#hdfCodMTipo").val();
             /*
@@ -170,7 +170,7 @@
                 || (estado_origen == "DEMA" && indicador != "M")) {
                 if (cod_mtipo == "0000021") { //Planta medicinal
                     if (utilSigo.ValidaTexto("txtAutorizado", "Ingrese el valor autorizado") == false) return false;
-                    if (utilSigo.ValidaTexto("txtExtraido", "Ingrese el valor extraído") == false) return false;                    
+                    if (utilSigo.ValidaTexto("txtExtraido", "Ingrese el valor extraído") == false) return false;
                 } else if (cod_mtipo == "0000020") { //Carrizo
                     if (utilSigo.ValidaTexto("txtCantidad", "Ingrese la cantidad") == false) return false;
                 } else { //Normal
@@ -180,28 +180,28 @@
                 if (utilSigo.ValidaTexto("txtSaldo", "Ingrese el saldo") == false) return false;
             }
             else {*/
-                if (utilSigo.ValidaCombo("ddlTipoId", "Seleccione el tipo de aprovechamiento") == false) return false;
+            if (utilSigo.ValidaCombo("ddlTipoId", "Seleccione el tipo de aprovechamiento") == false) return false;
+            else {
+                var codTipoAprov = _BExtraccionMaderable.frm.find("#ddlTipoId").val();
+                if (codTipoAprov == "MADERABLES" || codTipoAprov == "CARBON") {
+                    if (utilSigo.ValidaTexto("txtDMC", "Ingrese el DMC") == false) return false;
+                    if (utilSigo.ValidaTexto("txtTotalArbol", "Ingrese el Total de árboles") == false) return false;
+                    if (utilSigo.ValidaTexto("txtVolAutorizado", "Ingrese la Cantidad autorizada") == false) return false;
+                    if (utilSigo.ValidaTexto("txtVolMovilizado", "Ingrese la Cantidad movilizada") == false) return false;
+                }
                 else {
-                    var codTipoAprov = _BExtraccionMaderable.frm.find("#ddlTipoId").val();
-                    if (codTipoAprov == "MADERABLES" || codTipoAprov == "CARBON") {
-                        if (utilSigo.ValidaTexto("txtDMC", "Ingrese el DMC") == false) return false;
-                        if (utilSigo.ValidaTexto("txtTotalArbol", "Ingrese el Total de árboles") == false) return false;
+                    if (cod_mtipo == "0000021") {
+                        if (utilSigo.ValidaTexto("txtAutorizado", "Ingrese el valor autorizado") == false) return false;
+                        if (utilSigo.ValidaTexto("txtExtraido", "Ingrese el valor extraído") == false) return false;
+                    } else if (cod_mtipo == "0000020") {
+                        if (utilSigo.ValidaTexto("txtCantidad", "Ingrese la cantidad") == false) return false;
+                    } else {
                         if (utilSigo.ValidaTexto("txtVolAutorizado", "Ingrese la Cantidad autorizada") == false) return false;
                         if (utilSigo.ValidaTexto("txtVolMovilizado", "Ingrese la Cantidad movilizada") == false) return false;
                     }
-                    else {
-                        if (cod_mtipo == "0000021") {
-                            if (utilSigo.ValidaTexto("txtAutorizado", "Ingrese el valor autorizado") == false) return false;
-                            if (utilSigo.ValidaTexto("txtExtraido", "Ingrese el valor extraído") == false) return false;
-                        } else if (cod_mtipo == "0000020") {
-                            if (utilSigo.ValidaTexto("txtCantidad", "Ingrese la cantidad") == false) return false;
-                        } else {
-                            if (utilSigo.ValidaTexto("txtVolAutorizado", "Ingrese la Cantidad autorizada") == false) return false;
-                            if (utilSigo.ValidaTexto("txtVolMovilizado", "Ingrese la Cantidad movilizada") == false) return false;
-                        }
-                    }
-                    if (utilSigo.ValidaTexto("txtSaldo", "Ingrese el saldo") == false) return false;
                 }
+                if (utilSigo.ValidaTexto("txtSaldo", "Ingrese el saldo") == false) return false;
+            }
             //}
 
             var data = {
@@ -268,10 +268,24 @@
                     _BExtraccionMaderable.frm.find(".trUM").show();
                     _BExtraccionMaderable.frm.find(".trObservacion").show();
 
-                    if (value == "MADERABLES") _BExtraccionMaderable.frm.find("#ddlUniMedidaId").val("M3").select2();
-                    else _BExtraccionMaderable.frm.find("#ddlUniMedidaId").val("KG").select2();
-
-                    _BExtraccionMaderable.frm.find("#ddlUniMedidaId").attr("disabled", true);
+                    var ddlUniMedidaIdBex = document.getElementById('ddlUniMedidaId');
+                    var htmlddlUniMedidaIdBex = '';
+                    switch (value) {
+                        case "CARBON":
+                            htmlddlUniMedidaIdBex += '<option value="KG">KG</option>';
+                            ddlUniMedidaIdBex.innerHTML = htmlddlUniMedidaIdBex;
+                            //_BExtraccionMaderable.frm.find("#ddlUniMedidaId").val("KG").select2();
+                            break;
+                        case "MADERABLES":
+                            htmlddlUniMedidaIdBex += '<option value="M3">M3</option>';
+                            htmlddlUniMedidaIdBex += '<option value="KG">KG</option>';
+                            ddlUniMedidaIdBex.innerHTML = htmlddlUniMedidaIdBex;
+                            break;
+                        default:
+                    }
+                    //if (value == "MADERABLES") _BExtraccionMaderable.frm.find("#ddlUniMedidaId").val("M3").select2();
+                    //else _BExtraccionMaderable.frm.find("#ddlUniMedidaId").val("KG").select2();
+                    //_BExtraccionMaderable.frm.find("#ddlUniMedidaId").attr("disabled", true);
                 }
                 else if (value == "NO MADERABLES") {
                     _BExtraccionMaderable.frm.find(".trGrupoDMCArbol").hide();
@@ -281,14 +295,19 @@
                     _BExtraccionMaderable.frm.find(".trSaldo").show();
                     _BExtraccionMaderable.frm.find(".trObservacion").show();
 
+                    var ddlUniMedidaIdBex = document.getElementById('ddlUniMedidaId');
+                    htmlddlUniMedidaIdBex += '<option value="KG">KG</option>';
+                    htmlddlUniMedidaIdBex += '<option value="LT">LT</option>';
+                    ddlUniMedidaIdBex.innerHTML = htmlddlUniMedidaIdBex;
+
                     if (cod_mtipo == "0000021") {
                         _BExtraccionMaderable.frm.find(".trVolumen").hide();
                         _BExtraccionMaderable.frm.find(".trMedicinal").show();
                         _BExtraccionMaderable.frm.find(".trCarrizo").hide();
                         _BExtraccionMaderable.frm.find(".trUM").show();
 
-                        _BExtraccionMaderable.frm.find("#ddlUniMedidaId").val("KG").select2();
-                        _BExtraccionMaderable.frm.find("#ddlUniMedidaId").attr("disabled", true);
+                        //_BExtraccionMaderable.frm.find("#ddlUniMedidaId").val("KG").select2();
+                        //_BExtraccionMaderable.frm.find("#ddlUniMedidaId").attr("disabled", true);
                     }
                     else if (cod_mtipo == "0000020") {
                         _BExtraccionMaderable.frm.find(".trVolumen").hide();
@@ -298,8 +317,8 @@
                         _BExtraccionMaderable.frm.find(".trUM").show();
 
                         //_BExtraccionMaderable.frm.find("#ddlUniMedidaId").val("-").select2();
-                        _BExtraccionMaderable.frm.find("#ddlUniMedidaId").val("KG").select2();
-                        _BExtraccionMaderable.frm.find("#ddlUniMedidaId").attr("disabled", true);
+                        //_BExtraccionMaderable.frm.find("#ddlUniMedidaId").val("KG").select2();
+                        //_BExtraccionMaderable.frm.find("#ddlUniMedidaId").attr("disabled", true);
                     }
                     else {
                         _BExtraccionMaderable.frm.find(".trGrupoDMCArbol").show();
@@ -309,8 +328,8 @@
                         _BExtraccionMaderable.frm.find(".trCarrizo").hide();
                         _BExtraccionMaderable.frm.find(".trUM").show();
 
-                        _BExtraccionMaderable.frm.find("#ddlUniMedidaId").val("KG").select2();
-                        _BExtraccionMaderable.frm.find("#ddlUniMedidaId").attr("disabled", true);
+                        //_BExtraccionMaderable.frm.find("#ddlUniMedidaId").val("KG").select2();
+                        //_BExtraccionMaderable.frm.find("#ddlUniMedidaId").attr("disabled", true);
                     }
                 }
                 else {
@@ -346,16 +365,30 @@
                 if ((estado_origen == "PN" && indicador == "M")
                     || lst_estado_origen_2.includes(estado_origen)) {
                     if (value == "MADERABLES") {
-                        _BExtraccionMaderable.frm.find("#ddlUniMedidaId").val("M3").select2();
-                        _BExtraccionMaderable.frm.find("#ddlUniMedidaId").attr("disabled", true);
+
+                        var ddlUniMedidaIdBex = document.getElementById('ddlUniMedidaId');
+                        htmlddlUniMedidaIdBex += '<option value="M3">M3</option>';
+                        htmlddlUniMedidaIdBex += '<option value="KG">KG</option>';
+                        ddlUniMedidaIdBex.innerHTML = htmlddlUniMedidaIdBex;
+
+                        //_BExtraccionMaderable.frm.find("#ddlUniMedidaId").val("M3").select2();
+                        //_BExtraccionMaderable.frm.find("#ddlUniMedidaId").attr("disabled", true);
                     }
                     else if (value == "CARBON") {
-                        _BExtraccionMaderable.frm.find("#ddlUniMedidaId").val("KG").select2();
-                        _BExtraccionMaderable.frm.find("#ddlUniMedidaId").attr("disabled", true);
+                        var ddlUniMedidaIdBex = document.getElementById('ddlUniMedidaId');                        
+                        htmlddlUniMedidaIdBex += '<option value="KG">KG</option>';
+                        ddlUniMedidaIdBex.innerHTML = htmlddlUniMedidaIdBex;
+
+                        //_BExtraccionMaderable.frm.find("#ddlUniMedidaId").val("KG").select2();
+                        //_BExtraccionMaderable.frm.find("#ddlUniMedidaId").attr("disabled", true);
                     }
                     else {
-                        _BExtraccionMaderable.frm.find("#ddlUniMedidaId").val("-").select2();
-                        _BExtraccionMaderable.frm.find("#ddlUniMedidaId").attr("disabled", false);
+                        var ddlUniMedidaIdBex = document.getElementById('ddlUniMedidaId');
+                        htmlddlUniMedidaIdBex += '<option value="KG">KG</option>';
+                        htmlddlUniMedidaIdBex += '<option value="LT">LT</option>';
+                        ddlUniMedidaIdBex.innerHTML = htmlddlUniMedidaIdBex;
+                        //_BExtraccionMaderable.frm.find("#ddlUniMedidaId").val("-").select2();
+                        //_BExtraccionMaderable.frm.find("#ddlUniMedidaId").attr("disabled", false);
                     }
                 }
             }
@@ -423,20 +456,20 @@
                 _BExtraccionMaderable.frm.find(".trObservacion").show();
             }
             else {*/
-                _BExtraccionMaderable.frm.find(".trTipoAprov").show();
-                _BExtraccionMaderable.frm.find(".trEspecieSERFOR").after(_BExtraccionMaderable.frm.find(".trTipoAprov"));
-                if (data != "") _BExtraccionMaderable.frm.find("#ddlTipoId").attr("disabled", true);
-                band = 1;
+            _BExtraccionMaderable.frm.find(".trTipoAprov").show();
+            _BExtraccionMaderable.frm.find(".trEspecieSERFOR").after(_BExtraccionMaderable.frm.find(".trTipoAprov"));
+            if (data != "") _BExtraccionMaderable.frm.find("#ddlTipoId").attr("disabled", true);
+            band = 1;
             //}
-
+            debugger;
             if (data == "") { //Nuevo registro
                 _BExtraccionMaderable.frm.find("#hdfCodSecuencial").val(0);
                 _BExtraccionMaderable.frm.find("#hdfRegEstado").val(1);
-               // _renderComboEspecie.fnInit("FORESTAL", "", "");
+                // _renderComboEspecie.fnInit("FORESTAL", "", "");
             } else { //Modificar registro
                 _BExtraccionMaderable.frm.find("#hdfCodSecuencial").val(data.COD_SECUENCIAL);
                 _BExtraccionMaderable.frm.find("#hdfRegEstado").val(data.RegEstado);
-               // _renderComboEspecie.fnInit("FORESTAL", data.COD_ESPECIES, data.ESPECIES);
+                // _renderComboEspecie.fnInit("FORESTAL", data.COD_ESPECIES, data.ESPECIES);
                 _BExtraccionMaderable.frm.find("#ddlRenderComboEspecieId").val(data.COD_ESPECIES).trigger("change");
                 //_BExtraccionMaderable.frm.find("#ddlRenderComboEspecieId").attr("disabled",true);
                 _BExtraccionMaderable.frm.find("#ddlEspecieSerforId").val(data.COD_ESPECIES_SERFOR).trigger("change");

@@ -414,7 +414,7 @@
                     _EditBExtraccion.frm.find("#btnExcelPMedBExtMadNoMad").show();
 
                     columns_label = ["Especie", "Especie SERFOR", "DMC", "Total Árboles", "Cantidad Autorizada", "Cantidad Movilizada"
-                        , "Autorizado", "Extraído", "Saldo", "Unidad de medida", "Tipo de aprovechamiento", "Observación"];
+                        , "Autorizado", "Extraído", "Saldo", "UM", "Tipo de aprovechamiento", "Observación"];
                     columns_data = ["ESPECIES", "ESPECIES_SERFOR", "DMC", "TOTAL_ARBOLES", "VOLUMEN_AUTORIZADO", "VOLUMEN_MOVILIZADO"
                         , "AUTORIZADO", "EXTRAIDO", "SALDO", "UNIDAD_MEDIDA", "TIPOMADERABLE", "OBSERVACION"];
                 } else if (cod_mtipo == "0000020") {
@@ -422,7 +422,7 @@
 
                     columns_label = ["Especie", "Especie SERFOR", "DMC", "Total Árboles", "Cantidad Autorizada", "Cantidad Movilizada"
                         , "Fecha (expedición para forma 20)", "Guía de Transporte Forestal", "Fecha", "Recibo", "Saldo", "Cantidad"
-                        , "Unidad de medida", "Tipo de aprovechamiento", "Observación"];
+                        , "UM", "Tipo de aprovechamiento", "Observación"];
                     columns_data = ["ESPECIES", "ESPECIES_SERFOR", "DMC", "TOTAL_ARBOLES", "VOLUMEN_AUTORIZADO", "VOLUMEN_MOVILIZADO"
                         , "FECHA1", "GUIA_TRANSPORTE", "FECHA2", "RECIBO", "SALDO", "CANTIDAD", "UNIDAD_MEDIDA", "TIPOMADERABLE", "OBSERVACION"];
                 } else {
@@ -430,7 +430,7 @@
 
                     //Se agregó Total Árboles por solicitud de requerimiento
                     columns_label = ["Especie", "Especie SERFOR", "DMC", "Total Árboles", "Cantidad Autorizada", "Cantidad Movilizada"
-                        , "Saldo", "Unidad de medida", "Tipo de aprovechamiento", "Parcela de Corta", "Observación"];
+                        , "Saldo", "UM", "Tipo de aprovechamiento", "Parcela de Corta", "Observación"];
                     columns_data = ["ESPECIES", "ESPECIES_SERFOR", "DMC", "TOTAL_ARBOLES", "VOLUMEN_AUTORIZADO", "VOLUMEN_MOVILIZADO"
                         , "SALDO", "UNIDAD_MEDIDA", "TIPOMADERABLE", "PC", "OBSERVACION"];
                 }
@@ -467,14 +467,14 @@
                     _EditBExtraccion.dtBExtMade_NoMade.clear().draw();
                     /*for (var i = 0; i < result.data.length; i++) {
                         if (result.data[i].UNIDAD_MEDIDA.Trim == "" || result.data[i].UNIDAD_MEDIDA == "-") {
-                            
+
                             if (result.data[i].TIPOMADERABLE == "NO MADERABLES") {
                                 if (cod_mtipo != "0000020") result.data[i].UNIDAD_MEDIDA = "KG";
                             }
                         }
                     }*/
                     _EditBExtraccion.dtBExtMade_NoMade.rows.add(result.data).draw();
-                    
+
                     if (result.data.length > 0) {
                         for (var i = 0; i < result.data.length; i++) {
                             switch (result.data[i].TIPOMADERABLE) {
@@ -561,7 +561,7 @@
                                         "<th></th>" +
                                         "<th></th></tr>";
                                 }
-                                
+
                             } else if (cod_mtipo == "0000020") {
                                 if (contNoM > 0) {
                                     tfootTable += "<tr><th></th>" +
@@ -578,7 +578,7 @@
                                         "<th></th>" +
                                         "<th></th></tr>";
                                 }
-                                
+
                             } else {
                                 if (contNoM > 0) {
                                     tfootTable += "<tr><th></th>" +
@@ -795,6 +795,7 @@
 
                 if (obj != null && obj != "") {
                     var data = _EditBExtraccion.dtBExtMade_NoMade.row($(obj).parents('tr')).data();
+                    debugger;
                     _BExtraccionMaderable.fnInit(utilSigo.fnConvertArrayToObject(data), cod_mtipo);
                 } else { _BExtraccionMaderable.fnInit("", cod_mtipo); }
             });
@@ -1125,7 +1126,7 @@
 
                                 switch (tipo) {
                                     case "BEXTRACCION_MADE":
-                                        //_EditBExtraccion.fnLoadTableBExtMade(cod_secuencial_bext); 
+                                        //_EditBExtraccion.fnLoadTableBExtMade(cod_secuencial_bext);
                                         _EditBExtraccion.fnLoadTableBExtMade_NoMade(cod_secuencial_bext);
                                         break;
                                     case "BEXTRACCION_NOMADE": _EditBExtraccion.fnLoadTableBExtNoMade(cod_secuencial_bext); break;
@@ -1138,8 +1139,10 @@
                     }
                 });
             });
+            e.target.value = "";
         },
         fnExportBExt: (tipo) => {
+            debugger;
             var cod_mtipo = _EditBExtraccion.frm.find("#hdfCodMTipo").val();
             let cod_thabilitante = _EditBExtraccion.frm.find("#hdfCodTHabilitante").val();
             let num_poa = _EditBExtraccion.frm.find("#hdfNumPoa").val();
@@ -1163,17 +1166,17 @@
                 asEstadoOrigen: _EditBExtraccion.frm.find("#hdfEstadoOrigen").val(),
                 asIndicador: _EditBExtraccion.frm.find("#hdfIndicador").val()
             };
-
+            debugger;
             var url = urlLocalSigo + "THabilitante/ManBalanceExtraccion/DescargarBExtraccion";
-            var option = { url: url, datos: JSON.stringify(data), type: 'POST' };
-
-            utilSigo.fnAjax(option, function (data) {
+            var option = { url: url, datos: JSON.stringify(data), type: 'POST' };            
+            utilSigo.fnAjax(option, function (data) {                
                 if (data.success) {
                     window.location.href = urlLocalSigo + "THabilitante/ManBalanceExtraccion/Download?file=" + data.msj;
                 }
                 else {
                     utilSigo.toastWarning("Aviso", data.msj);
                 }
+
             });
         },
         fnShowBExt: () => {
