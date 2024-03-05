@@ -584,7 +584,7 @@ namespace SIGOFCv3.Areas.Supervision.Controllers
             }
             catch (Exception ex)
             {
-                return Json(new { success = false, result = ex.Message });
+                return Json(new { success = false, result = "Ocurrió un error, comuníquese con el administrador." });
             }
         }
         [HttpPost]

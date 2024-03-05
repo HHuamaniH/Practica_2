@@ -1142,6 +1142,7 @@
             e.target.value = "";
         },
         fnExportBExt: (tipo) => {
+            debugger;
             var cod_mtipo = _EditBExtraccion.frm.find("#hdfCodMTipo").val();
             let cod_thabilitante = _EditBExtraccion.frm.find("#hdfCodTHabilitante").val();
             let num_poa = _EditBExtraccion.frm.find("#hdfNumPoa").val();
@@ -1165,17 +1166,17 @@
                 asEstadoOrigen: _EditBExtraccion.frm.find("#hdfEstadoOrigen").val(),
                 asIndicador: _EditBExtraccion.frm.find("#hdfIndicador").val()
             };
-
+            debugger;
             var url = urlLocalSigo + "THabilitante/ManBalanceExtraccion/DescargarBExtraccion";
-            var option = { url: url, datos: JSON.stringify(data), type: 'POST' };
-
-            utilSigo.fnAjax(option, function (data) {
+            var option = { url: url, datos: JSON.stringify(data), type: 'POST' };            
+            utilSigo.fnAjax(option, function (data) {                
                 if (data.success) {
                     window.location.href = urlLocalSigo + "THabilitante/ManBalanceExtraccion/Download?file=" + data.msj;
                 }
                 else {
                     utilSigo.toastWarning("Aviso", data.msj);
                 }
+
             });
         },
         fnShowBExt: () => {

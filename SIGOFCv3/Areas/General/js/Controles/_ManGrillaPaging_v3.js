@@ -81,6 +81,12 @@ _ManGrillaPaging.fnInitDataTablePaging = function (options) {
 _ManGrillaPaging.fnSearch = function () {
     var valorBusqueda = _ManGrillaPaging.frm.find("#txtValorBuscar").val();
 
+    var text = utilSigo.findWords(valorBusqueda);
+    if (text != "") {
+        utilSigo.toastWarning("Aviso", text);
+        return false;
+    }
+
     if (valorBusqueda.trim() == "") {
         utilSigo.toastWarning("Aviso", "Ingrese Valor a Buscar");
         _ManGrillaPaging.frm.find("#txtValorBuscar").focus();
