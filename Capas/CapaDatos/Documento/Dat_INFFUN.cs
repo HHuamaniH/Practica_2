@@ -733,11 +733,9 @@ namespace CapaDatos.DOC
                             entidad = new Ent_MemoFirmeza();
                             while (reader.Read())
                             {
-                                entidad.COD_PROVEIDORARCH = reader.GetString(reader.GetOrdinal("COD_PROVEIDOARCH"));
-                                entidad.FECHA = reader.GetString(reader.GetOrdinal("FECHA"));
-                                entidad.COD_TRAMITE_ENVIO = reader.GetInt32(reader.GetOrdinal("COD_TRAMITE_ENVIO"));
-                                entidad.COD_RESODIREC = reader.GetString(reader.GetOrdinal("COD_RESODIREC"));
-                                entidad.NUMERO_EXPEDIENTE = reader.GetString(reader.GetOrdinal("NUMERO_EXPEDIENTE"));
+                                if (!reader.IsDBNull(reader.GetOrdinal("FECHA"))) entidad.FECHA = reader.GetString(reader.GetOrdinal("FECHA"));
+                                if (!reader.IsDBNull(reader.GetOrdinal("NUMERO_EXPEDIENTE"))) entidad.NUMERO_EXPEDIENTE = reader.GetString(reader.GetOrdinal("NUMERO_EXPEDIENTE"));
+                                if (!reader.IsDBNull(reader.GetOrdinal("COD_PROVEIDOARCH"))) entidad.COD_PROVEIDORARCH = reader.GetString(reader.GetOrdinal("COD_PROVEIDOARCH"));
                                 entidad.COD_INFORME = reader.GetString(reader.GetOrdinal("COD_INFORME"));
                                 lstentidad.Add(entidad);
                             }
