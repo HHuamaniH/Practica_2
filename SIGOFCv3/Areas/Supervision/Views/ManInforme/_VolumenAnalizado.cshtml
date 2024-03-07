@@ -19,21 +19,40 @@
                 <div class="form-row">
                     <div class="form-group col-md-6">
                         <label for="txtVolAprobado" class="text-small">Volumen Aprobado</label>
-                        @Html.TextBox("txtVolAprobado", "", new { @class = "form-control form-control-sm", type = "number" })
+                        @Html.TextBox("txtVolAprobado", "", new { @class = "form-control form-control-sm", maxlength = "11", onkeypress = "return utilSigo.onKeyDecimal(event, this);", onblur = "return utilSigo.onBlurSevenDigitoThreeDecimal(this,'Volumen Aprobado');" })
                     </div>
                     <div class="form-group col-md-6">
                         <label for="txtVolMovilizado" class="text-small">Volumen Movilizado</label>
-                        @Html.TextBox("txtVolMovilizado", "", new { @class = "form-control form-control-sm", type = "number" })
+                        @Html.TextBox("txtVolMovilizado", "", new { @class = "form-control form-control-sm", maxlength = "11", onkeypress = "return utilSigo.onKeyDecimal(event, this);", onblur = "return utilSigo.onBlurSevenDigitoThreeDecimal(this,'Volumen Movilizado');" })
                     </div>
                 </div>
                 <div class="form-row">
                     <div class="form-group col-md-6">
                         <label for="txtVolInjustificado" class="text-small">Volumen Injustificado</label>
-                        @Html.TextBox("txtVolInjustificado", "", new { @class = "form-control form-control-sm", type = "number" })
+                        @Html.TextBox("txtVolInjustificado", "", new { @class = "form-control form-control-sm", maxlength = "11", onkeypress = "return utilSigo.onKeyDecimal(event, this);", onblur = "return utilSigo.onBlurSevenDigitoThreeDecimal(this,'Volumen Injustificado');" })
                     </div>
                     <div class="form-group col-md-6">
                         <label for="txtVolJustificado" class="text-small">Volumen Justificado</label>
-                        @Html.TextBox("txtVolJustificado", "", new { @class = "form-control form-control-sm", type = "number" })
+                        @Html.TextBox("txtVolJustificado", "", new { @class = "form-control form-control-sm", maxlength = "11", onkeypress = "return utilSigo.onKeyDecimal(event, this);", onblur = "return utilSigo.onBlurSevenDigitoThreeDecimal(this,'Volumen Justificado');" })
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label for="ddlTipoAprovechamiento_VolAn" class="text-small">Tipo Aprovechamiento</label>
+
+                        @Html.DropDownList("ddlTipoAprovechamiento_VolAn", new SelectList(ViewBag.ddlTipoAprov, "Value", "Text"), new { @class = "form-control form-control-sm" })
+
+                        @*<select id="ddlTipoAprovechamiento_VolAn" class="form-control form-control-sm">
+                            <option value="CARBON">CARBÓN </option>
+                            <option value="MADERABLES">MADERABLES </option>
+                            <option value="NO MADERABLES">NO MADERABLES</option>
+                        </select>*@
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="ddlUnidadMedida_VolAn" class="text-small">Unidad de Medida</label>
+                        <select id="ddlUnidadMedida_VolAn" class="form-control form-control-sm">  
+                            <option value="KG">KG</option>
+                        </select>
                     </div>
                 </div>
                 <div class="form-group row">
@@ -46,7 +65,7 @@
                 <div class="form-row">
                     <div class="form-group col-md-12">
                         <label for="txtObservacion" class="text-small">Observaciones</label>
-                        @Html.TextArea("txtObservacion", "", new { @class = "form-control form-control-sm", rows = "3" })
+                        @Html.TextArea("txtObservacion", "", new { @class = "form-control form-control-sm", rows = "3", maxlength="100", onkeypress = "return utilSigo.checkLetter(event);" })
                     </div>
                 </div>
             </form>

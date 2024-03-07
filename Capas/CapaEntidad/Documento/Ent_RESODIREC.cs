@@ -162,6 +162,8 @@ namespace CapaEntidad.DOC
 
         [Description("TIPOMADERABLE")]
         public String TIPOMADERABLE { get; set; }
+        [Description("UNIDAD_MEDIDA")]
+        public String UNIDAD_MEDIDA { get; set; }
 
 
         [Description("TIPO")]

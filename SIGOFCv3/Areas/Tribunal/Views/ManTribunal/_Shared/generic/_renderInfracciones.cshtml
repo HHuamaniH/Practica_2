@@ -7,6 +7,7 @@
 
     _renderInfracciones.iniciarEventos = function () {
         _renderInfracciones.frm.find("#txtFEmisionBExtraccion").datepicker({ format: "dd/mm/yyyy", autoclose: true, language: 'es' });
+        _renderInfracciones.fncTipoAprov();
         ///_renderInfracciones.tbEliTABLA = {};
     };
 
@@ -41,6 +42,7 @@
         let idEspecie = _renderInfracciones.frm.find("#ddlEspeciesFlora").val();
         let desEspecie = _renderInfracciones.frm.find("#ddlEspeciesFlora option:selected").text();
         let idTipo = _renderInfracciones.frm.find("#ddlTipoAprovechamientoId option:selected").text();
+        let idUnidadMedida = _renderInfracciones.frm.find("#ddlUnidadMedidaId option:selected").text();
         let numInd = _renderInfracciones.frm.find("#txtNumeroIndividuos").val();
         let idEspecieFauna = _renderInfracciones.frm.find("#ddlEspeciesFauna").val();
         let desEspecieFauna = _renderInfracciones.frm.find("#ddlEspeciesFauna option:selected").text();
@@ -77,6 +79,7 @@
             'NUM_POA': idPoa,
             'POA': descPoa,
             'TIPOMADERABLE': idTipo,
+            'UNIDAD_MEDIDA': idUnidadMedida,
             'RegEstado': 1
         }
         if (indice == null) {
@@ -96,7 +99,7 @@
         indice = null;
         _renderInfracciones.frm.find("#divArticulo").hide();
     }
-    _renderInfracciones.fnImport = function () {        
+    _renderInfracciones.fnImport = function () {
 
         var listInfracciones = [];
         let url = urlLocalSigo + "Tribunal/ManTribunal/importarInfracciones";
@@ -129,6 +132,7 @@
                     var codEspecie = data[i].COD_ESPECIES;
                     var desEspecie = data[i].DESCRIPCION_ESPECIE;
                     var idTipo = data[i].TIPOMADERABLE;
+                    var idUnidadMedida = data[i].UNIDAD_MEDIDA;
                     var numInd = data[i].NUMERO_INDIVIDUOS;
                     var especie = data[i].DESCRIPCION_ESPECIE;
                     var descPOA = data[i].POA;
@@ -148,6 +152,7 @@
                         'NUM_POA': idPoa,//
                         'POA': descPOA,
                         'TIPOMADERABLE': idTipo,
+                        'UNIDAD_MEDIDA': idUnidadMedida,
                         'RegEstado': 1
                     }
 
@@ -163,8 +168,8 @@
     _renderInfracciones.fnInitDataTable_Detail = function () {
         var columns_label = [], columns_data = [], options = {};
 
-        columns_label = ["Articulo", "Inciso", "Volumen (m3)", "Especie", "Area (ha)", "Num. Indiv", "Desc. Infraccion", "Numero POA", "Tipo Aprovechamiento","COD_SECUENCIAL"];
-        columns_data = ["DESCRIPCION_ARTICULOS", "DESCRIPCION_ENCISOS", "VOLUMEN","DESCRIPCION_ESPECIE" , "AREA", "NUMERO_INDIVIDUOS", "DESCRIPCION_INFRACCIONES", "POA", "TIPOMADERABLE","COD_SECUENCIAL"];
+        columns_label = ["Articulo", "Inciso", "Volumen (m3)", "Especie", "Area (ha)", "Num. Indiv", "Desc. Infraccion", "Numero POA", "Tipo Aprovechamiento", "Unidad de Medida","COD_SECUENCIAL"];
+        columns_data = ["DESCRIPCION_ARTICULOS", "DESCRIPCION_ENCISOS", "VOLUMEN", "DESCRIPCION_ESPECIE", "AREA", "NUMERO_INDIVIDUOS", "DESCRIPCION_INFRACCIONES", "POA", "TIPOMADERABLE", "UNIDAD_MEDIDA","COD_SECUENCIAL"];
         options = {
             page_length: 10, row_index: true, row_delete: true, row_fnDelete: "_renderInfracciones.fnDelete(this)", page_sort: true, row_edit: true, row_fnEdit: "_renderInfracciones.fnEdit(this)"
         };
@@ -202,6 +207,9 @@
             CODIGO_TIPOMADERABLE = "00000123";
         }
         $("#ddlTipoAprovechamientoId").val(CODIGO_TIPOMADERABLE);
+        _renderInfracciones.fncTipoAprov()
+        $("#ddlUnidadMedidaId").val(data['UNIDAD_MEDIDA']);
+
         var CODIGO_PLANMANEJO;
         if (data['POA'] = "PO 1") {
             CODIGO_PLANMANEJO = "00000146";
@@ -234,6 +242,41 @@
 
         cod_secuencial = data['COD_SECUENCIAL'];
 
+    }
+
+    _renderInfracciones.fncTipoAprov = function () {
+        var idddTipo = _renderInfracciones.frm.find("#ddlTipoAprovechamientoId").find("option:selected").text().toUpperCase();
+        _renderInfracciones.fnCrearUnidadMedida(idddTipo);
+    };
+
+    _renderInfracciones.fnCrearUnidadMedida = function (valor) {
+
+        var htmlddUnidadMedidaInf = "";
+        var ddUnidadMedidaInf = document.getElementById("ddlUnidadMedidaId");
+        switch (valor) {
+            case "CARBON":
+            case "CARBÓN":
+                htmlddUnidadMedidaInf += '<option value="KG">KG</option>';
+                ddUnidadMedidaInf.innerHTML = htmlddUnidadMedidaInf;
+                break;
+            case "MADERABLES":
+                htmlddUnidadMedidaInf += '<option value="M3">M3</option>';
+                htmlddUnidadMedidaInf += '<option value="KG">KG</option>';
+                ddUnidadMedidaInf.innerHTML = htmlddUnidadMedidaInf;
+                break;
+            case "NO MADERABLES":
+                htmlddUnidadMedidaInf += '<option value="KG">KG</option>';
+                htmlddUnidadMedidaInf += '<option value="LT">LT</option>';
+                ddUnidadMedidaInf.innerHTML = htmlddUnidadMedidaInf;
+                break;
+            default:
+                htmlddUnidadMedidaInf += '<option value="NA">NA</option>';
+                ddUnidadMedidaInf.innerHTML = htmlddUnidadMedidaInf;
+                break;
+        }
+
+
+        return true;
     }
 
 
@@ -405,8 +448,19 @@
                         new
                         {
                             @class = "form-control form-control-sm",
-                            @id = "ddlTipoAprovechamientoId"
+                            @id = "ddlTipoAprovechamientoId",
+                            @onchange = "_renderInfracciones.fncTipoAprov('')"
                         })
+            </div>
+            <div class="form-group col-md-6">
+
+            </div>
+            <div class="form-group col-md-3">
+                <label for="lblArticulos" class="text-small">Unidad de Medida</label>
+            </div>
+            <div class="form-group col-md-3">
+                <select class="form-control form-control-sm" id="ddlUnidadMedidaId">
+                </select>
             </div>
             <div class="form-group col-md-2">
 
@@ -431,7 +485,7 @@
         <table id="tbRenderIncisos" style="width:100%;margin:0px !important;" class="table table-hover table-bordered">
             <thead>
                 <tr>
-                    <th colspan="13" class="text-sm-left">
+                    <th colspan="14" class="text-sm-left">
                         <label for="lbldocument" class="form-group col-md-12 text-small">Listado de Infracciones Confirmadas Según Ley</label>
                         <div class="row">
                             <div class="col-md-8">

@@ -486,6 +486,7 @@ namespace SIGOFCv3.Areas.THabilitante.Models.ManBalanceExtraccion
                                         insertar = insertar + ",'" + (string.IsNullOrEmpty(item.VOLUMEN_AUTORIZADO.ToString()) ? "" : item.VOLUMEN_AUTORIZADO.ToString()) + "'";
                                         insertar = insertar + ",'" + (string.IsNullOrEmpty(item.VOLUMEN_MOVILIZADO.ToString()) ? "" : item.VOLUMEN_MOVILIZADO.ToString()) + "'";
                                         insertar = insertar + ",'" + (string.IsNullOrEmpty(item.SALDO.ToString()) ? "" : item.SALDO.ToString()) + "'";
+                                        insertar = insertar + ",'" + (string.IsNullOrEmpty(item.UNIDAD_MEDIDA.ToString()) ? "" : item.UNIDAD_MEDIDA.ToString()) + "'";
                                         insertar = insertar + ",'" + (string.IsNullOrEmpty(item.PC.ToString()) ? "" : item.PC.ToString()) + "'";
                                         insertar = insertar + ",'" + (string.IsNullOrEmpty(item.OBSERVACION.ToString()) ? "" : item.OBSERVACION.ToString()) + "'";
                                         cmd.CommandText = "INSERT INTO [Datos$A" + i.ToString().Trim() + ":Z" + (olMaderable.Count + 1).ToString() + "] VALUES (" + insertar + ")";

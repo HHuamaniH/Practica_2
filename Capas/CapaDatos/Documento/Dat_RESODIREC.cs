@@ -143,6 +143,7 @@ namespace CapaDatos.DOC
                             oCamposDet.NUMERO_INDIVIDUOS = loDatos.NUMERO_INDIVIDUOS;
                             oCamposDet.NUM_POA = loDatos.NUM_POA;
                             oCamposDet.TIPOMADERABLE = loDatos.TIPOMADERABLE;
+                            oCamposDet.UNIDAD_MEDIDA = loDatos.UNIDAD_MEDIDA;
                             oCamposDet.DESCRIPCION_INFRACCIONES = loDatos.DESCRIPCION_INFRACCIONES;
                             oCamposDet.RegEstado = loDatos.RegEstado;
                             oCamposDet.PCA = loDatos.PCA;
@@ -948,6 +949,7 @@ namespace CapaDatos.DOC
                                 ocampoEnt.NUM_POA = dr["NUM_POA"].ToString();
                                 ocampoEnt.POA = dr["POA"].ToString();
                                 ocampoEnt.TIPOMADERABLE = dr["TIPOMADERABLE"].ToString();
+                                ocampoEnt.UNIDAD_MEDIDA = dr["UNIDAD_MEDIDA"].ToString();
                                 ocampoEnt.RegEstado = 0;
                                 ocampoEnt.PCA = dr["PCA"].ToString();
                                 lsCEntidad.ListarIniPAU.Add(ocampoEnt);
@@ -999,6 +1001,7 @@ namespace CapaDatos.DOC
                                 oCampos.AREA = decimal.Parse(dr["AREA_RECONS"].ToString());
                                 oCampos.NUMERO_INDIVIDUOS = int.Parse(dr["NUMERO_INDIVIDUOS_RECONS"].ToString());
                                 oCampos.TIPOMADERABLE = dr["TIPOMADERABLE"].ToString();
+                                oCampos.UNIDAD_MEDIDA = dr["UNIDAD_MEDIDA"].ToString();
                                 oCampos.POA = dr["POA"].ToString();
                                 oCampos.DETERMINACION = dr["REFERENCIA"].ToString();
                                 oCampos.DESCRIPCION_INFRACCIONES = dr["OBSERVACIONES_REF"].ToString();
@@ -1412,6 +1415,7 @@ namespace CapaDatos.DOC
                                 ocampoEnt.NUM_POA = dr["NUM_POA"].ToString();
                                 ocampoEnt.POA = dr["POA"].ToString();
                                 ocampoEnt.TIPOMADERABLE = dr["TIPOMADERABLE"].ToString();
+                                ocampoEnt.UNIDAD_MEDIDA = dr["UNIDAD_MEDIDA"].ToString();
                                 ocampoEnt.COD_ILEGAL_ARTICULOS = dr["cod_ilegal_articulos"].ToString();
                                 ocampoEnt.DETERMINACION = "";
                                 if (oCEntidad.BusValor == "INICIO_PAU")

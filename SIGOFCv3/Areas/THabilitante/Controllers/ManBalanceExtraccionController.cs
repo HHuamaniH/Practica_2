@@ -63,7 +63,7 @@ namespace SIGOFCv3.Areas.THabilitante.Controllers
             }
             catch (Exception ex)
             {
-                return Json(new { success = false, message = ex.Message }, JsonRequestBehavior.AllowGet);
+                return Json(new { success = false, message = "Ocurrió un error, comuníquese con el administrador." }, JsonRequestBehavior.AllowGet);
             }
         }
 
@@ -121,11 +121,19 @@ namespace SIGOFCv3.Areas.THabilitante.Controllers
         }
 
         [HttpGet]
-        [DeleteFileAttribute]
+        //[DeleteFileAttribute]
         public ActionResult Download(string file)
         {
-            string fullPath = Path.Combine(Server.MapPath("~/Archivos/Plantilla"), file);
-            return File(fullPath, "application/vnd.ms-excel", file);
+            if (!file.Contains(":"))
+            {
+                string fullPath = Path.Combine(Server.MapPath("~/Archivos/Plantilla"), file);
+                return File(fullPath, "application/vnd.ms-excel", file);
+            }
+            else
+            {
+                return Json(new { success = false, message = "Archivo de descarga no permitido." }, JsonRequestBehavior.AllowGet);
+            }
+            
         }
         #endregion
         #region "Fecha de Emisión"
@@ -157,7 +165,7 @@ namespace SIGOFCv3.Areas.THabilitante.Controllers
             }
             catch (Exception ex)
             {
-                return Json(new { success = false, message = ex.Message }, JsonRequestBehavior.AllowGet);
+                return Json(new { success = false, message = "Ocurrió un error, comuníquese con el administrador." }, JsonRequestBehavior.AllowGet);
             }
         }
 
@@ -168,10 +176,10 @@ namespace SIGOFCv3.Areas.THabilitante.Controllers
             ViewBag.hdfNumPoa = aiNumPoa;
             ViewBag.hdfCodSecuencialBExt = aiCodSecuencialBExt;
 
-            Ent_POA oCampos = new Ent_POA() { COD_UCUENTA = (ModelSession.GetSession())[0].COD_UCUENTA, BusFormulario = "POA", BusCriterio = "POA_GENERAL", COD_THABILITANTE= asCodTHabilitante, BusValor2= aiNumPoa };
+            Ent_POA oCampos = new Ent_POA() { COD_UCUENTA = (ModelSession.GetSession())[0].COD_UCUENTA, BusFormulario = "POA", BusCriterio = "POA_GENERAL", COD_THABILITANTE = asCodTHabilitante, BusValor2 = aiNumPoa };
             Log_POA exePoa = new Log_POA();
             oCampos = exePoa.RegMostCombo(oCampos);
-            
+
             var lstEspeciesSerfor = oCampos.ListMComboEspeciesSerfor.Select(i => new VM_Cbo { Value = i.CODIGO, Text = i.DESCRIPCION }).ToList();
             lstEspeciesSerfor.Insert(0, new VM_Cbo { Value = "-", Text = "Seleccionar" });
             ViewBag.lstEspeciesSerfor = lstEspeciesSerfor;
@@ -272,7 +280,7 @@ namespace SIGOFCv3.Areas.THabilitante.Controllers
             }
             catch (Exception ex)
             {
-                return Json(new { success = false, message = ex.Message }, JsonRequestBehavior.AllowGet);
+                return Json(new { success = false, message = "Ocurrió un error, comuníquese con el administrador." }, JsonRequestBehavior.AllowGet);
             }
         }
 

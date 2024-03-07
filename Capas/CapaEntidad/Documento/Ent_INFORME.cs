@@ -464,6 +464,8 @@ namespace CapaEntidad.DOC
         public String COD_UCUENTA { get; set; }
         [Description("ESTADO_ORIGEN")]
         public String ESTADO_ORIGEN { get; set; }
+        [Description("TIPO_APROVECHAMIENTO")]
+        public String TIPO_APROVECHAMIENTO { get; set; }
         [Description("OBSERVACION")]
         public String OBSERVACION { get; set; }
         [Description("OBSERVACION2")]
@@ -2916,6 +2918,10 @@ namespace CapaEntidad.DOC
         public decimal VOLUMEN_JUSTIFICADO { get; set; }
         [Description("OBSERVACION")]
         public String OBSERVACION { get; set; }
+        [Description("TIPO_APROVECHAMIENTO")]
+        public String TIPO_APROVECHAMIENTO { get; set; } 
+        [Description("UNIDAD_MEDIDA")]
+        public String UNIDAD_MEDIDA { get; set; }
         [Description("RegEstado")]
         public Int32 RegEstado { get; set; }
 

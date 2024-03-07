@@ -14,7 +14,7 @@
         ///_renderInfraccionesRecon.tbEliTABLA = {};
     };
 
-    _renderInfraccionesRecon.fncArticulos = function (codEnSelect) {
+    @*_renderInfraccionesRecon.fncArticulos = function (codEnSelect) {
         var idArticulo = _renderInfraccionesRecon.frm.find("#ddlArticulos").val();
         var DescArticulo = _renderInfraccionesRecon.frm.find("#ddlArticulos option:selected").text();
         var codEncisoSelect = codEnSelect
@@ -30,7 +30,7 @@
             }
         });
         _renderInfraccionesRecon.fncBuscarPOA();
-    };
+    };*@
 
     ///--------> lista
     _renderInfraccionesRecon.fnAdd = function (obj) {
@@ -140,6 +140,7 @@
                         d.order[i]["column_name"] = d.columns[d.order[i]["column"]]["data"];
                     }
                     d.columns = null;
+                    d.customSearchValue = ManRD_AddEdit.frm.find("#hdfCodResodirec").val();
                 },
                 "error": function (jqXHR) {
                     utilSigo.unblockUIGeneral();
@@ -173,6 +174,7 @@
             let idEspecie =  modelData["COD_ESPECIES"];
             let desEspecie =  modelData["DESCRIPCION_ESPECIE"];
             let idTipo =  modelData["TIPOMADERABLE"];
+            let idUnidadMedida =  modelData["UNIDAD_MEDIDA"];
             let numInd =  modelData["NUMERO_INDIVIDUOS"];
             let idEspecieFauna = modelData["COD_ESPECIES"];
             let desEspecieFauna = modelData["DESCRIPCION_ESPECIE"];
@@ -198,6 +200,7 @@
                 'NUM_POA': idPoa,
                 'POA': descPoa,
                 'TIPOMADERABLE': idTipo,
+                'UNIDAD_MEDIDA': idUnidadMedida,
                 'RegEstado': RegEstado,
                 'DETERMINACION': determinacion
             }
@@ -223,8 +226,8 @@
     _renderInfraccionesRecon.fnInitDataTable_Detail = function () {
         var columns_label = [], columns_data = [], options = {};
 
-        columns_label = ["Articulo", "Inciso", "Volumen (m³)", "Especie", "Área (ha)", "Num. Individuos","POA" , "Tipo de aprovechamiento" , "Determinación", "Observaciones"];
-        columns_data = ["DESCRIPCION_ARTICULOS", "DESCRIPCION_ENCISOS", "VOLUMEN", "DESCRIPCION_ESPECIE", "AREA", "NUMERO_INDIVIDUOS",  "POA", "TIPOMADERABLE" , "DETERMINACION", "DESCRIPCION_INFRACCIONES"];
+        columns_label = ["Articulo", "Inciso", "Volumen (m³)", "Especie", "Área (ha)", "Num. Individuos", "POA", "Tipo de aprovechamiento", "Unidad de Medida" , "Determinación", "Observaciones"];
+        columns_data = ["DESCRIPCION_ARTICULOS", "DESCRIPCION_ENCISOS", "VOLUMEN", "DESCRIPCION_ESPECIE", "AREA", "NUMERO_INDIVIDUOS", "POA", "TIPOMADERABLE", "UNIDAD_MEDIDA", "DETERMINACION", "DESCRIPCION_INFRACCIONES"];
        options = {
             page_length: 10, row_index: true, row_delete: true, row_fnDelete: "_renderInfraccionesRecon.fnDelete(this)", page_sort: true, row_edit: true, row_fnEdit: "_renderInfraccionesRecon.fnEdit(this)"
         };
@@ -245,6 +248,7 @@
         _renderInfraccionesRecon.frm.find("#txtDesPOA").val(data['POA']);
         cod_poa = data["NUM_POA"];
         _renderInfraccionesRecon.frm.find("#txtDescTipoA").val(data['TIPOMADERABLE']);
+        _renderInfraccionesRecon.frm.find("#txtUnidadMedidaA").val(data['UNIDAD_MEDIDA']);
         _renderInfraccionesRecon.frm.find("#txtVolumenInf").val(data['VOLUMEN']);
         _renderInfraccionesRecon.frm.find("#txtAreaInfrac").val(data['AREA']);
         _renderInfraccionesRecon.frm.find("#txtNumIndv").val(data['NUMERO_INDIVIDUOS']);
@@ -299,7 +303,7 @@
         });
     }
 
-    _renderInfraccionesRecon.fncBuscarPOA = function () {
+    @*_renderInfraccionesRecon.fncBuscarPOA = function () {
         let id = 1;
        $.ajax({
             url: '@Url.Action("getListPOA","ManResolucion")',
@@ -312,7 +316,7 @@
                 //_renderInfraccionesRecon.fncBuscarPOA();
               }
         });
-    };
+    };*@
 
     $(document).ready(function () {
         _renderInfraccionesRecon.frm = $("#frmInfraccionesRecons");
@@ -373,6 +377,16 @@
             </div>
             <div class="form-group col-md-6">
                 <input type="text" class="form-control" id="txtDescTipoA" readonly="false" />
+            </div>
+            <div class="form-group col-md-2">
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group col-md-4">
+                <label for="txtUnidadMedidaA" class="text-small">Unidad de Medida</label>
+            </div>
+            <div class="form-group col-md-6">
+                <input type="text" class="form-control" id="txtUnidadMedidaA" readonly="false" />
             </div>
             <div class="form-group col-md-2">
             </div>

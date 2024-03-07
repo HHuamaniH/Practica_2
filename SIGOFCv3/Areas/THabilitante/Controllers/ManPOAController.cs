@@ -12,6 +12,7 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.IO;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Web;
 using System.Web.Mvc;
 using CEntidad = CapaEntidad.DOC.Ent_POA;
@@ -550,7 +551,6 @@ namespace SIGOFCv3.Areas.THabilitante.Controllers
                                         string codEspecieSerfor_RAPoa;
 
                                         hdfItemCod_MTipo = Request["hdfItemCod_MTipo"];
-
                                         if (hdfItemCod_MTipo == "0000021")
                                         {
                                             for (int rowIterator = 2; rowIterator <= noOfRow; rowIterator++)
@@ -644,6 +644,10 @@ namespace SIGOFCv3.Areas.THabilitante.Controllers
                                         }
                                         else
                                         {
+                                            //throw new Exception("Archivo cargado no válido, utilizar la plantilla desde la opción de descarga.");
+                                            decimal volumen_kilogramos = decimal.Parse("9999999.999");
+                                            string valor = "";
+                                            int numero = 0;
                                             for (int rowIterator = 2; rowIterator <= noOfRow; rowIterator++)
                                             {
                                                 oCampos = new CEntidad();
@@ -660,15 +664,46 @@ namespace SIGOFCv3.Areas.THabilitante.Controllers
                                                     oCampos.COD_SECUENCIAL = 0;
                                                     oCampos.COD_ESPECIES = codEspecie_RAPoa;
                                                     oCampos.ESPECIES = String.Format("{0} | {1}", workSheet.Cells[rowIterator, 1].Value == null ? "" : workSheet.Cells[rowIterator, 1].Value.ToString().Trim(), workSheet.Cells[rowIterator, 2].Value == null ? "" : workSheet.Cells[rowIterator, 2].Value.ToString().Trim());
-                                                    oCampos.NUM_ARBOLES = workSheet.Cells[rowIterator, 5].Value == null ? 0 : Int32.Parse(workSheet.Cells[rowIterator, 5].Value.ToString().Trim());
-                                                    oCampos.VOLUMEN_KILOGRAMOS = workSheet.Cells[rowIterator, 6].Value == null ? 0 : Decimal.Parse(workSheet.Cells[rowIterator, 6].Value.ToString().Trim());
-                                                    oCampos.TIPOMADERABLE = workSheet.Cells[rowIterator, 7].Value == null ? "" : workSheet.Cells[rowIterator, 7].Value.ToString().Trim();
-                                                    oCampos.PCA = workSheet.Cells[rowIterator, 8].Value == null ? "" : workSheet.Cells[rowIterator, 8].Value.ToString().Trim();
-                                                    oCampos.OBSERVACION = workSheet.Cells[rowIterator, 9].Value == null ? "" : workSheet.Cells[rowIterator, 9].Value.ToString().Trim();
-                                                    oCampos.RegEstado = 1;
 
-                                                    if (oCampos.TIPOMADERABLE.Equals("CARBON") || oCampos.TIPOMADERABLE.Equals("NO MADERABLES")) oCampos.UNIDAD_MEDIDA = "KG";
-                                                    else if (oCampos.TIPOMADERABLE.Equals("MADERABLES")) oCampos.UNIDAD_MEDIDA = "M3";
+                                                    if (workSheet.Cells[rowIterator, 5].Value != null)
+                                                    {
+                                                        valor = workSheet.Cells[rowIterator, 5].Value.ToString().Trim();
+                                                        if (valor.Length > 6) throw new Exception("El número de árboles no puede exceder los 6 caracteres.");
+                                                        if (!int.TryParse(valor, out numero)) throw new Exception("El número de árboles debe ser un valor numérico.");
+                                                    }
+                                                    oCampos.NUM_ARBOLES = workSheet.Cells[rowIterator, 5].Value == null ? 0 : Int32.Parse(workSheet.Cells[rowIterator, 5].Value.ToString().Trim());
+
+                                                    if (workSheet.Cells[rowIterator, 6].Value != null)
+                                                    {
+                                                        valor = workSheet.Cells[rowIterator, 6].Value.ToString().Trim();
+                                                        if (!Regex.IsMatch(valor, @"^\d+(\.\d{1,3})?$")) throw new Exception("El volumen debe ser un valor numérico y no puede exceder los 3 decimales.");
+                                                    }
+                                                    oCampos.VOLUMEN_KILOGRAMOS = workSheet.Cells[rowIterator, 6].Value == null ? 0 : Decimal.Parse(workSheet.Cells[rowIterator, 6].Value.ToString().Trim());
+                                                    if (oCampos.VOLUMEN_KILOGRAMOS > volumen_kilogramos) throw new Exception("El volumen no puede exceder los 7 dígitos.");
+
+
+                                                    oCampos.TIPOMADERABLE = workSheet.Cells[rowIterator, 7].Value == null ? "" : workSheet.Cells[rowIterator, 7].Value.ToString().Trim();
+                                                    if (string.IsNullOrEmpty(oCampos.TIPOMADERABLE)) throw new Exception("Debe ingresar el Tipo de aprovechamiento.");
+                                                    oCampos.UNIDAD_MEDIDA = workSheet.Cells[rowIterator, 8].Value == null ? "" : workSheet.Cells[rowIterator, 8].Value.ToString().Trim();
+                                                    if (string.IsNullOrEmpty(oCampos.UNIDAD_MEDIDA)) throw new Exception("Debe ingresar la Unidad de Medida.");
+                                                    switch (oCampos.TIPOMADERABLE)
+                                                    {
+                                                        case "CARBON":
+                                                            if (oCampos.UNIDAD_MEDIDA != "KG") throw new Exception("Para el Tipo CARBON solo se permite el ingreso de Unidad de Medida KG.");
+                                                            break;
+                                                        case "NO MADERABLES":
+                                                            if (oCampos.UNIDAD_MEDIDA == "M3") throw new Exception("Para el Tipo NO MADERABLES solo se permite el ingreso de Unidad de Medida KG y LT.");
+                                                            break;
+                                                        case "MADERABLES":
+                                                            if (oCampos.UNIDAD_MEDIDA == "LT") throw new Exception("Para el Tipo MADERABLES solo se permite el ingreso de Unidad de Medida M3 y KG.");
+                                                            break;
+                                                    }
+                                                    oCampos.PCA = workSheet.Cells[rowIterator, 9].Value == null ? "" : workSheet.Cells[rowIterator, 9].Value.ToString().Trim();
+                                                    if (string.IsNullOrEmpty(oCampos.PCA)) throw new Exception("Debe ingresar la PCA.");
+                                                    oCampos.OBSERVACION = workSheet.Cells[rowIterator, 10].Value == null ? "" : workSheet.Cells[rowIterator, 10].Value.ToString().Trim();
+                                                    if (oCampos.OBSERVACION.Length > 100) throw new Exception("El campo Observación no debe exceder los 100 caracteres.");
+                                                    else if (!Regex.IsMatch(oCampos.OBSERVACION, @"^[ ÁÉÍÓÚA-Záéíóúa-z0-9\-\/\.\,]+$") && oCampos.OBSERVACION != "") throw new Exception("El campo Observación no debe contener caracteres especiales.");
+                                                    oCampos.RegEstado = 1;
 
                                                     if (!(workSheet.Cells[rowIterator, 3].Value == null ? "" : workSheet.Cells[rowIterator, 3].Value.ToString().Trim()).Equals(""))
                                                     {
@@ -682,36 +717,22 @@ namespace SIGOFCv3.Areas.THabilitante.Controllers
                                                             oCampos.COD_ESPECIES_SERFOR = codEspecieSerfor_RAPoa;
                                                             oCampos.ESPECIES_SERFOR = String.Format("{0} | {1}", workSheet.Cells[rowIterator, 3].Value == null ? "" : workSheet.Cells[rowIterator, 3].Value.ToString().Trim(), workSheet.Cells[rowIterator, 4].Value == null ? "" : workSheet.Cells[rowIterator, 4].Value.ToString().Trim());
                                                         }
-                                                        else isAdd_RAPoa = false;
+                                                        else
+                                                        {
+                                                            throw new Exception("Ingresar una Especie Serfor válida y/o validar el registro en la opción Gestión de Especies.");
+                                                        }
                                                     }
-
-                                                    if (isAdd_RAPoa) ListPOAItemsDetalle.Add(oCampos);
+                                                    ListPOAItemsDetalle.Add(oCampos);
+                                                }
+                                                else
+                                                {
+                                                    throw new Exception("Ingresar una Especie válida y/o validar el registro en la opción Gestión de Especies.");
                                                 }
                                             }
                                         }
 
                                         break;
-                                    #endregion
-                                    //#region RREFORMADE
-                                    //case "RREFORMADE":
-                                    //    foreach (DataRow Fila in exiItemDatos.Datos.Rows)
-                                    //    {
-                                    //        oCampos = new CEntidad();
-                                    //        oCampos.COD_SECUENCIAL = 0;
-                                    //        oCampos.COD_ESPECIES = "";
-                                    //        oCampos.NUM_ARBOLES = Int32.Parse(Fila[4].ToString().Trim());
-                                    //        oCampos.VOLUMEN_KILOGRAMOS = Decimal.Parse(Fila[5].ToString().Trim());
-                                    //        oCampos.TIPOMADERABLE = Fila[6].ToString().Trim();
-                                    //        oCampos.OBSERVACION = Fila[7].ToString().Trim();
-                                    //        oCampos.ESPECIES = String.Format("{0} | {1}", Fila[0].ToString().Trim(), Fila[1].ToString().Trim());
-                                    //        oCampos.COD_ESPECIES_SERFOR = "";
-                                    //        oCampos.ESPECIES_SERFOR = String.Format("{0} | {1}", Fila[2].ToString().Trim(), Fila[3].ToString().Trim());
-                                    //        oCampos.RegEstado = 1;
-                                    //        ListPOAItemsDetalle.Add(oCampos);
-                                    //    }
-                                    //    HerUtil.GrillaLlenar(grvItemRRPoa, ListPOAItemsDetalle, 0);
-                                    //    break;
-                                    //#endregion
+                                    #endregion                                    
                                     #region RAPROBINSITU
                                     case "RAPROBINSITU":
                                         for (int rowIterator = 2; rowIterator <= noOfRow; rowIterator++)
@@ -1170,7 +1191,7 @@ namespace SIGOFCv3.Areas.THabilitante.Controllers
                         success = false;
                         msj = "Archivo cargado no válido, utilizar la plantilla desde la opción de descarga.";
                     }
-                    
+
                 }
 
             }
@@ -1803,7 +1824,7 @@ namespace SIGOFCv3.Areas.THabilitante.Controllers
                     }
                     //Get the complete folder path and store the file inside it.
                     file.SaveAs(rutaDestino);
-                    
+
 
                     return Json(new { success = true, msj = "Se subio correctamente el archivo", data = name });
                 }

@@ -13,7 +13,6 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using CEntVM = CapaEntidad.ViewModel.VM_Resodirec;
-//using CEntVM = CapaEntidad.ViewModel.VM_InformeLegal;
 using CLogica = CapaLogica.DOC.Log_RESODIREC;
 
 
@@ -22,7 +21,6 @@ namespace SIGOFCv3.Areas.Fiscalizacion.Controllers
     public class ManResolucionController : Controller
     {
         private CLogica logRD = new CLogica();
-        public static CEntVM vmRD = new CEntVM();
 
         // GET: Fiscalizacion/ManResolucion
         public ActionResult Index(string doc)
@@ -135,6 +133,7 @@ namespace SIGOFCv3.Areas.Fiscalizacion.Controllers
                 
                 ViewBag.Usuario = ModelSession.GetSession()?.FirstOrDefault();
 
+                CEntVM vmRD = new CEntVM();
                 vmRD = logRD.initRD(asCodRD, asCodTipoIL);
                 //obtenemos el rol sobre el formulario
                 VM_Menu_Rol mr = HelperSigo.GetRol("MODULO FISCALIZACION", "Resolución Sub Directoral");
@@ -198,6 +197,7 @@ namespace SIGOFCv3.Areas.Fiscalizacion.Controllers
 
         public ActionResult _inicisos(string idArticulo, string descArticulo)
         {
+            CEntVM vmRD = new CEntVM();
             CLogica exeBus = new CLogica();
             vmRD.ddlArticuloId = idArticulo;
             vmRD.txtArticulo = descArticulo;
@@ -209,8 +209,7 @@ namespace SIGOFCv3.Areas.Fiscalizacion.Controllers
         {
             CLogica exeBus = new CLogica();
             Ent_RESODIREC paramsBus = new Ent_RESODIREC();
-            paramsBus.COD_RESODIREC = vmRD.listInformes[0].COD_RESODIREC;
-            paramsBus.COD_RESODIREC_INI_PAU = vmRD.hdfCodResodirec;
+            paramsBus.COD_RESODIREC_INI_PAU = request.CustomSearchValue; //CustomSearchValue: COD_RESODIREC
             paramsBus.BusValor = "INICIO_PAU";
 
             var result = exeBus.RegImportarIncisos(paramsBus);
@@ -225,15 +224,13 @@ namespace SIGOFCv3.Areas.Fiscalizacion.Controllers
             }, JsonRequestBehavior.AllowGet);
             jsonResult.MaxJsonLength = int.MaxValue;
             return jsonResult;
-
         }
 
         public ActionResult importarInfraccionesRDT(DataTableRequest request = null)
         {
             CLogica exeBus = new CLogica();
             Ent_RESODIREC paramsBus = new Ent_RESODIREC();
-            paramsBus.COD_RESODIREC = vmRD.listInformes[0].COD_RESODIREC;
-            paramsBus.COD_RESODIREC_INI_PAU = vmRD.listInformes[0].COD_RESODIREC_INI_PAU;
+            paramsBus.COD_RESODIREC_INI_PAU = request.CustomSearchValue; //CustomSearchValue: COD_RESODIREC
             paramsBus.BusValor = "TERMINO_PAU";
 
             var result = exeBus.RegImportarIncisos(paramsBus);
@@ -248,11 +245,11 @@ namespace SIGOFCv3.Areas.Fiscalizacion.Controllers
             }, JsonRequestBehavior.AllowGet);
             jsonResult.MaxJsonLength = int.MaxValue;
             return jsonResult;
-
         }
 
         public ActionResult inicisos(string idArticulo, string descArticulo, string codEncisoSelect)
         {
+            CEntVM vmRD = new CEntVM();
             CLogica exeBus = new CLogica();
             vmRD.txtIdArticulo = idArticulo;
             vmRD.txtDescripcionArticulo = descArticulo;
@@ -261,60 +258,18 @@ namespace SIGOFCv3.Areas.Fiscalizacion.Controllers
             return PartialView("~/Areas/Fiscalizacion/Views/ManResolucion/_Shared/_generic/_renderEncisos.cshtml", vmRD);
         }
 
-        public ActionResult subTipoArchivo(string idMotivo, string descMotivo)
-        {
-            CLogica exeBus = new CLogica();
-            vmRD.txtIdTipoMotivoArch = idMotivo;
-            vmRD.txtDescTipoMotivoArch = descMotivo;
-            vmRD.ListSubTipoArchivo = exeBus.initArticulos("TIPO_ARCHIVO", idMotivo);
-            return PartialView("~/Areas/Fiscalizacion/Views/ManResolucion/_Shared/_generic/_renderMotivoArchivo.cshtml", vmRD);
-        }
-
         [HttpPost]
-        public ActionResult agregarMotivoArchivo(string codigoSub, string motivo, string detalleMotivo, string descmMtivo)
-        {
-            try
-            {
-                Ent_RESODIREC ocampoEnt = new Ent_RESODIREC();
-                ocampoEnt.CODIGO = codigoSub;
-                ocampoEnt.MOTIVO = motivo;
-                ocampoEnt.DETALLE_MOTIVO = detalleMotivo.Replace("\n", "").Replace("\t", "");
-                ocampoEnt.DESCRIPCIONMOTIVO = descmMtivo.Replace("\n", "").Replace("\t", "");
-                ocampoEnt.RegEstado = 1;
-                vmRD.ListMotivoArchivo.Add(ocampoEnt);
-            }
-            catch (Exception ex)
-            {
-                return Json(new { success = false, msj = ex.Message, data = "" });
-            }
-            return PartialView("~/Areas/Fiscalizacion/Views/ManResolucion/_Shared/_generic/_renderListaMotiva.cshtml", vmRD);
-        }
-
-        public ActionResult busInfraccionesRDInicio(DataTableRequest request = null)
+        public JsonResult subTipoArchivo(string idMotivo)
         {
             CLogica exeBus = new CLogica();
-
-            Ent_RESODIREC importar = new Ent_RESODIREC();
-            importar.COD_RESODIREC = vmRD.listInformes[0].COD_RESODIREC; //oCEntResodirec.ListInformes[0].COD_RESODIREC;
-            importar.COD_RESODIREC_INI_PAU = vmRD.listInformes[0].COD_RESODIREC_INI_PAU;
-            importar.BusValor = "INICIO_PAU";
-
-            var result = exeBus.RegImportarIncisos(importar);
-
-            var jsonResult = Json(new
-            {
-                data = result.ToArray(),
-                draw = request.Draw,
-                recordsTotal = result.Count,
-                recordsFiltered = result.Count,
-                error = ""
-            }, JsonRequestBehavior.AllowGet);
-            jsonResult.MaxJsonLength = int.MaxValue;
-            return jsonResult;
+            var result = exeBus.initArticulos("TIPO_ARCHIVO", idMotivo);
+            return Json(result, JsonRequestBehavior.AllowGet);
         }
 
         public JsonResult listaPoa(List<Ent_RESODIREC> dto)
         {
+            CEntVM vmRD = new CEntVM();
+
             if (dto.Count > 0)
             {
                 List<Ent_RESODIREC> listPoa = new List<Ent_RESODIREC>();
@@ -363,7 +318,7 @@ namespace SIGOFCv3.Areas.Fiscalizacion.Controllers
 
         public JsonResult listaParcela(String CodResodirec, int NumPoa)
         {
-
+            CEntVM vmRD = new CEntVM();
             List<Ent_RESODIREC> listParcela = new List<Ent_RESODIREC>();
             CLogica exeBus = new CLogica();
             Ent_RESODIREC oCEntidad = new Ent_RESODIREC();
@@ -385,67 +340,11 @@ namespace SIGOFCv3.Areas.Fiscalizacion.Controllers
             return jsonResult;
         }
 
-        public PartialViewResult getListPOA(int id)
-        {
-            return PartialView("~/Areas/Fiscalizacion/Views/ManResolucion/_Shared/_generic/_renderListPOA.cshtml", vmRD);
-        }
-
-        /// <summary>
-        /// metodo para agregar las infracciones
-        /// </summary>
-        /// <param name="infracciones"></param>
-        /// <returns></returns>
-        [HttpPost]
-        public ActionResult agregarInfracciones(string idEnciso, string descEnciso, string idPoa, string desPoa, string area, string descripcion, string volumen, string tipo, string idEspecie, string desEspecie, string numInd, string idEspecieFauna, string desEspecieFauna)
-        {
-            try
-            {
-                Ent_RESODIREC ocampoEnt = new Ent_RESODIREC();
-                ocampoEnt.COD_ILEGAL_ARTICULOS = vmRD.txtIdArticulo;
-                ocampoEnt.COD_ILEGAL_ENCISOS = idEnciso;
-                ocampoEnt.DESCRIPCION_ARTICULOS = vmRD.txtDescripcionArticulo;
-                ocampoEnt.DESCRIPCION_ENCISOS = descEnciso;
-                if (idEspecie != "0002226")
-                {
-                    ocampoEnt.COD_ESPECIES = idEspecie == "0002226" ? null : idEspecie;
-                    if (idEspecie != "0002226")
-                    {
-                        ocampoEnt.DESCRIPCION_ESPECIE = desEspecie;
-                    }
-                }
-                if (idEspecieFauna != "0002226")
-                {
-                    ocampoEnt.COD_ESPECIES = idEspecieFauna == "0002226" ? null : idEspecieFauna;
-                    if (idEspecieFauna != "0002226")
-                    {
-                        ocampoEnt.DESCRIPCION_ESPECIE = desEspecieFauna;
-                    }
-                }
-                ocampoEnt.VOLUMEN = volumen == "" ? 0 : Decimal.Parse(volumen);
-                ocampoEnt.AREA = area == "" ? 0 : Decimal.Parse(area);
-                ocampoEnt.NUMERO_INDIVIDUOS = 0;
-                ocampoEnt.DESCRIPCION_INFRACCIONES = descripcion;
-                ocampoEnt.COD_SECUENCIAL = 0;
-                ocampoEnt.NUM_POA = idPoa;
-                ocampoEnt.POA = desPoa;
-                ocampoEnt.TIPOMADERABLE = tipo;
-                ocampoEnt.NUMERO_INDIVIDUOS = numInd == "" ? 0 : int.Parse(numInd);
-                ocampoEnt.RegEstado = 1;
-                vmRD.ListarIniPAU.Add(ocampoEnt);
-            }
-            catch (Exception ex)
-            {
-                return Json(new { success = false, msj = ex.Message, data = "" });
-            }
-            return PartialView("~/Areas/Fiscalizacion/Views/ManResolucion/_Shared/_generic/_renderListaEncisos.cshtml", vmRD);
-        }
-
         [HttpPost]
         public JsonResult AddEditRD(CEntVM dto)
         {
             string codCuenta = (ModelSession.GetSession())[0].COD_UCUENTA;
             CLogica exeBus = new CLogica();
-            //dto.ListPOA = vmRD.ListPOA;
             ListResult result = exeBus.GuardarDatosRD(dto, codCuenta);
             return Json(result);
         }
@@ -571,31 +470,10 @@ namespace SIGOFCv3.Areas.Fiscalizacion.Controllers
             return File(fullPath, "application/pdf", file);
         }
 
-        public ActionResult agregarEspeciesMC(string codEspecie, string especie, string volumen, string arboles, string observaciones)
-        {
-            try
-            {
-                if (codEspecie != "0002226" || especie != "|" || volumen != "" || arboles != "")
-                {
-                    Ent_RESODIREC_MEDIDA_ESPECIE oCentidad = new Ent_RESODIREC_MEDIDA_ESPECIE();
-                    oCentidad.COD_ESPECIES = codEspecie;
-                    oCentidad.ESPECIES = especie;
-                    oCentidad.VOLUMEN_MOVILIZADO = Convert.ToDecimal(volumen == "" ? "0" : volumen);
-                    oCentidad.NUMERO_INDIVIDUOS = Convert.ToInt32(arboles == "" ? "0" : arboles);
-                    oCentidad.OBSERVACION = observaciones.Replace("\n", " ").Replace("\t", " ").Replace("\"", " ");
-                    oCentidad.RegEstado = 1;
-                    vmRD.ListEspecieMedCorrectiva.Add(oCentidad);
-                }
-            }
-            catch (Exception ex)
-            {
-                return Json(new { success = false, msj = ex.Message, data = "" });
-            }
-            return PartialView("~/Areas/Fiscalizacion/Views/ManResolucion/_Shared/_generic/_renderEspecieMC.cshtml", vmRD);
-        }
-
         public JsonResult ImportarEspecieMC()
         {
+            CEntVM vmRD = new CEntVM();
+            vmRD.ListEspecieMedCorrectiva = new List<Ent_RESODIREC_MEDIDA_ESPECIE>();
             int band = 0;
             string mensaje = "Existe un error en: ";
             string err = "";
@@ -659,10 +537,7 @@ namespace SIGOFCv3.Areas.Fiscalizacion.Controllers
             }, JsonRequestBehavior.AllowGet);
             jsonResult.MaxJsonLength = int.MaxValue;
             return jsonResult;
-            //return PartialView("~/Areas/Fiscalizacion/Views/InformeLegal/Shared/_renderListaEspecies.cshtml", vmInfLegal);
-
         }
-
         #endregion
     }
 }

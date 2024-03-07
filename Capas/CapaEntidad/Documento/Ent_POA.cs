@@ -131,7 +131,7 @@ namespace CapaEntidad.DOC
         [Description("NUM_ESTRADA")]
         public String NUM_ESTRADA { get; set; }
         [Description("OBSERVACION")]
-        public Object OBSERVACION { get; set; }
+        public String OBSERVACION { get; set; }
         [Description("PCA")]
         public String PCA { get; set; }
         [Description("PRODUCCION_LATAS")]

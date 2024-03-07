@@ -912,7 +912,6 @@ $(document).ready(function () {
     $("#ddlTipoSolicitud").on("change", function () {
         let codigoTipoSolicitud = $("#ddlTipoSolicitud").val();
         let ddlVencimientoPlazoLegalId = ManInfFundamentado_AddEdit.frm.find("#ddlVencimientoPlazoLegal");
- 
         switch (codigoTipoSolicitud) {
             case "000001":
                 //$('#inputId').prop('readonly', true);
@@ -962,7 +961,6 @@ $(document).ready(function () {
             var dataInforme = _renderListExpediente.fnGetList();
             if (dataInforme != undefined && dataInforme.length > 0) {
                 // CONSULTAR AL SP //
-                console.log(dataInforme);
                 var codigoInforme = dataInforme[0].COD_INFORME;
                 var url = urlLocalSigo + "Fiscalizacion/InformeFundamentado/FiltrarMemoFirmeza";
                 var option = { url: url, type: 'POST', datos: JSON.stringify({ codigoInforme: codigoInforme }) };
@@ -970,28 +968,36 @@ $(document).ready(function () {
                 utilSigo.fnAjax(option, function (data) {
                     if (data.success) {
                         var proveidorId = ManInfFundamentado_AddEdit.frm.find("#ddlproveidorId");
-
                         proveidorId.empty();
-                        $.each(data.result, function (index, item) {
-                            var p = new Option(item.NUMERO_EXPEDIENTE + ' : ' + item.FECHA, item.COD_PROVEIDORARCH);
-                            proveidorId.append(p);
 
-                            if (index == 0) {
+                        if ((data.result.FECHA!=null) && (data.result.NUMERO_EXPEDIENTE!=null)) {
+                            $.each(data.result, function (index, item) {
+                                var p = new Option(item.NUMERO_EXPEDIENTE + ' : ' + item.FECHA, item.COD_PROVEIDORARCH);
+                                proveidorId.append(p);
+                                if (index == 0) {
 
-                                if (data.result !== "") {
-                                    var fechaEnTexto = item.FECHA;
-                                    var partesFecha = fechaEnTexto.split('/');
-                                    var fechaConvertida = new Date(partesFecha[2], partesFecha[1] - 1, partesFecha[0]);
-                                    ManInfFundamentado_AddEdit.frm.find("#dtpfechaFirmezaPAU").datepicker('setDate', fechaConvertida);
+                                    if (data.result !== "") {
+                                        var fechaEnTexto = item.FECHA;
+                                        var partesFecha = fechaEnTexto.split('/');
+                                        var fechaConvertida = new Date(partesFecha[2], partesFecha[1] - 1, partesFecha[0]);
+                                        ManInfFundamentado_AddEdit.frm.find("#dtpfechaFirmezaPAU").datepicker('setDate', fechaConvertida);
+                                    }
+                                    else {
+                                        var FechaNotificacion = ManInfFundamentado_AddEdit.frm.find("#dtpfechaFirmezaPAU");
+                                        FechaNotificacion.val('');
+                                        utilSigo.toastWarning("Aviso", "No esta registrado la fecha de Firmeza");
+                                    }
+
                                 }
-                                else {
-                                    var FechaNotificacion = ManInfFundamentado_AddEdit.frm.find("#dtpfechaFirmezaPAU");
-                                    FechaNotificacion.val('');
-                                    utilSigo.toastWarning("Aviso", "No esta registrado la fecha de Firmeza");
-                                }
+                            });
+                        }
+                        else {
+                            utilSigo.toastWarning("Aviso", "No se encuentra registrado la fecha de firmeza  y/o numero de memorandum.");
+                            console.log(data.result);
+                        }
 
-                            }
-                        });
+
+
                     }
                     else {
                         utilSigo.toastWarning("Aviso", "Sucedio un error, Comuníquese con el Administrador");

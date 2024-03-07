@@ -32,6 +32,26 @@
         _renderListaArchivoDetalle.dtRenderListInforme.row($(obj).parents('tr')).remove().draw(false);
     }
 
+    _renderListaArchivoDetalle.fnAdd = function (data) {
+        if (data.COD_MOTIVO != "0000000") {
+            if (data.CODIGO != "0000000") {
+                if (!utilDt.existValorSearch(_renderListaArchivoDetalle.dtRenderListInforme, "CODIGO", data.CODIGO)) {
+                    data.RegEstado = 1;
+                    _renderListaArchivoDetalle.dtRenderListInforme.rows.add([data]).draw();
+                    _renderListaArchivoDetalle.dtRenderListInforme.page('last').draw('page');
+                } else {
+                    utilSigo.toastWarning("Aviso", "El tipo de motivo de archivo ya se encuentra registrado.");
+                }
+            }
+            else {
+                utilSigo.toastWarning("Aviso", "Seleccione el tipo de archivo");
+            }
+        }
+        else {
+            utilSigo.toastWarning("Aviso", "Seleccione el motivo de archivo");
+        }
+    }
+
     _renderListaArchivoDetalle.fnGetListEliTABLA = function () { return _renderListaArchivoDetalle.tbEliTABLA }
 
     //devuelve la lista
