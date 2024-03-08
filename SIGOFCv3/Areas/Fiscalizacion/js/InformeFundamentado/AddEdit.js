@@ -867,6 +867,13 @@ ManInfFundamentado_AddEdit.fnObtenerDocumentoSITD = function () {
                     $("#idNavPauCopia").css("display", "block");
                     $("#idNavInformeFundamentado").css("display", "none");
                 }
+                else {
+                    ddlTipoSolicitud.val('000003');
+                    ddlVencimientoPlazoLegal.val('000002');
+
+                    $("#idNavPauCopia").css("display", "block");
+                    $("#idNavInformeFundamentado").css("display", "none");
+                }
             }
             else {
 
@@ -957,57 +964,70 @@ $(document).ready(function () {
     });
 
     $('#tbRenderListIFundamentado').on('draw.dt', function () {
-        var miTabla = $('#tbRenderListIFundamentado').DataTable();
-        if (miTabla.rows().count() > 0) {
-            var dataInforme = _renderListExpediente.fnGetList();
-            if (dataInforme != undefined && dataInforme.length > 0) {
-                // CONSULTAR AL SP //
-                console.log(dataInforme);
-                var codigoInforme = dataInforme[0].COD_INFORME;
-                var url = urlLocalSigo + "Fiscalizacion/InformeFundamentado/FiltrarMemoFirmeza";
-                var option = { url: url, type: 'POST', datos: JSON.stringify({ codigoInforme: codigoInforme }) };
-                
-                utilSigo.fnAjax(option, function (data) {
-                    if (data.success) {
-                        var proveidorId = ManInfFundamentado_AddEdit.frm.find("#ddlproveidorId");
+        let codigoTipoSolicitud = $("#ddlTipoSolicitud").val();
+        if (codigoTipoSolicitud == "000001") {
+            var miTabla = $('#tbRenderListIFundamentado').DataTable();
+            if (miTabla.rows().count() > 0) {
+                var dataInforme = _renderListExpediente.fnGetList();
+                if (dataInforme != undefined && dataInforme.length > 0) {
+                    // CONSULTAR AL SP //
+                    var codigoInforme = dataInforme[0].COD_INFORME;
+                    var url = urlLocalSigo + "Fiscalizacion/InformeFundamentado/FiltrarMemoFirmeza";
+                    var option = { url: url, type: 'POST', datos: JSON.stringify({ codigoInforme: codigoInforme }) };
 
-                        proveidorId.empty();
-                        $.each(data.result, function (index, item) {
-                            var p = new Option(item.NUMERO_EXPEDIENTE + ' : ' + item.FECHA, item.COD_PROVEIDORARCH);
-                            proveidorId.append(p);
+                    utilSigo.fnAjax(option, function (data) {
+                        if (data.success) {
+                            var proveidorId = ManInfFundamentado_AddEdit.frm.find("#ddlproveidorId");
+                            proveidorId.empty();
 
-                            if (index == 0) {
+                            console.log(data.result);
+                            if ((data.result[0].FECHA != null) && (data.result[0].NUMERO_EXPEDIENTE != null)) {
+                                $.each(data.result, function (index, item) {
+                                    var p = new Option(item.NUMERO_EXPEDIENTE + ' : ' + item.FECHA, item.COD_PROVEIDORARCH);
+                                    proveidorId.append(p);
+                                    if (index == 0) {
 
-                                if (data.result !== "") {
-                                    var fechaEnTexto = item.FECHA;
-                                    var partesFecha = fechaEnTexto.split('/');
-                                    var fechaConvertida = new Date(partesFecha[2], partesFecha[1] - 1, partesFecha[0]);
-                                    ManInfFundamentado_AddEdit.frm.find("#dtpfechaFirmezaPAU").datepicker('setDate', fechaConvertida);
-                                }
-                                else {
-                                    var FechaNotificacion = ManInfFundamentado_AddEdit.frm.find("#dtpfechaFirmezaPAU");
-                                    FechaNotificacion.val('');
-                                    utilSigo.toastWarning("Aviso", "No esta registrado la fecha de Firmeza");
-                                }
+                                        if (data.result !== "") {
+                                            var fechaEnTexto = item.FECHA;
+                                            var partesFecha = fechaEnTexto.split('/');
+                                            var fechaConvertida = new Date(partesFecha[2], partesFecha[1] - 1, partesFecha[0]);
+                                            ManInfFundamentado_AddEdit.frm.find("#dtpfechaFirmezaPAU").datepicker('setDate', fechaConvertida);
+                                        }
+                                        else {
+                                            var FechaNotificacion = ManInfFundamentado_AddEdit.frm.find("#dtpfechaFirmezaPAU");
+                                            FechaNotificacion.val('');
+                                            utilSigo.toastWarning("Aviso", "No esta registrado la fecha de Firmeza");
+                                        }
 
+                                    }
+                                });
                             }
-                        });
-                    }
-                    else {
-                        utilSigo.toastWarning("Aviso", "Sucedio un error, Comuníquese con el Administrador");
-                        console.log(data.result);
-                    }
-                });
+                            else {
+                                utilSigo.toastWarning("Aviso", "No se encuentra registrado la fecha de firmeza  y/o numero de memorandum.");
+                                console.log(data.result);
+                            }
 
-                console.log('Data encontrada', dataInforme);
+
+
+                        }
+                        else {
+                            utilSigo.toastWarning("Aviso", "Sucedio un error, Comuníquese con el Administrador");
+                            console.log(data.result);
+                        }
+                    });
+
+                    console.log('Data encontrada', dataInforme);
+                }
+            } else {
+                var proveidorId = ManInfFundamentado_AddEdit.frm.find("#ddlproveidorId");
+                var fechaFirmeza = ManInfFundamentado_AddEdit.frm.find("#dtpfechaFirmezaPAU");
+                proveidorId.empty();
+                fechaFirmeza.val('');
             }
-        } else {
-            var proveidorId = ManInfFundamentado_AddEdit.frm.find("#ddlproveidorId");
-            var fechaFirmeza = ManInfFundamentado_AddEdit.frm.find("#dtpfechaFirmezaPAU");
-            proveidorId.empty();
-            fechaFirmeza.val('');
         }
+
     });
+
 
 
  
