@@ -113,6 +113,18 @@ namespace CapaDatos.DOC
                         tr = null;
                         throw new Exception("Está con Control de Calidad, no puede modificar");
                     }
+                    else if (OUTPUTPARAM01 == "4")
+                    {
+                        tr.Rollback();
+                        tr = null;
+                        throw new Exception("El Número de Registro del SITD ya existe");
+                    }
+                    else if (OUTPUTPARAM01 == "5")
+                    {
+                        tr.Rollback();
+                        tr = null;
+                        throw new Exception("El Número de Registro del SITD existe en otro Registro");
+                    }
                 }
                 //Reemplazando El Nuevo Codigo Creado
 
