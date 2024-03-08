@@ -780,7 +780,9 @@ namespace CapaDatos.DOC
                                 entidad.cNomRemite = reader.GetString(reader.GetOrdinal("cNomRemite"));
                                 entidad.iCodRemitente = reader.GetInt32(reader.GetOrdinal("iCodRemitente"));
                                 entidad.cFema = reader.GetString(reader.GetOrdinal("cFema"));
-                                entidad.cTipoSolicitudFema = reader.GetString(reader.GetOrdinal("cTipoSolicitudFema"));
+
+                                if (!reader.IsDBNull(reader.GetOrdinal("cTipoSolicitudFema"))) entidad.cTipoSolicitudFema = reader.GetString(reader.GetOrdinal("cTipoSolicitudFema"));
+                                //entidad.cTipoSolicitudFema = reader.GetString(reader.GetOrdinal("cTipoSolicitudFema"));
 
                             }
 
