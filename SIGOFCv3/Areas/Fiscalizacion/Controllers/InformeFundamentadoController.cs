@@ -399,7 +399,9 @@ namespace SIGOFCv3.Areas.Fiscalizacion.Controllers
             }
             catch (Exception ex)
             {
-                return Json(ex.Message);
+                ListResult resultError = new ListResult();
+                resultError.AddResultado(ex.Message, false);
+                return Json(resultError);
             }
 
         }
