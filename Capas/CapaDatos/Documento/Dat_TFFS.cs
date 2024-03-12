@@ -765,7 +765,7 @@ namespace CapaDatos.DOC
                                 oEntResodirec.NUM_POA = dr["NUM_POA"].ToString();
                                 oEntResodirec.POA = dr["POA"].ToString();
                                 oEntResodirec.TIPOMADERABLE = dr["TIPOMADERABLE"].ToString();
-                                oEntResodirec.UNIDAD_MEDIDA = dr["UNIDAD_MEDIDAun"].ToString();
+                                oEntResodirec.UNIDAD_MEDIDA = dr["UNIDAD_MEDIDA"].ToString();
                                 oEntResodirec.COD_RESODIREC = dr["COD_RESODIREC"].ToString();
                                 oEntResodirec.COD_SECUENCIAL = Int32.Parse(dr["COD_SECUENCIAL"].ToString());
                                 oEntResodirec.DETERMINACION = dr["DETERMINACION"].ToString();
