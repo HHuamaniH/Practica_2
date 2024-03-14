@@ -3059,7 +3059,7 @@ ManPOA.selectFile = null;
                 this.dtItemRAPoa.row.add(fila).draw();
                 this.dtItemRAPoa.page('last').draw('page');
                 utilSigo.toastSuccess("Exito", "Se agregó el registro con éxito");
-                this.closeModal();
+                //this.closeModal();
             }
             else {
                 //var indice = this.frmResolAprob.find("#hdfItemRAPoa_ListIndex").val();                            
