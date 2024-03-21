@@ -73,10 +73,18 @@ namespace SIGOFCv3.Areas.General.Controllers
                 case "24": tipoReporte = "REPORTE_SOLICITUD_FEMA"; break;
             }
 
-            VM _dto = exeRpt.InitReporteGeneral(tipoReporte);
-
-            return View(_dto);
+            if (int.TryParse(_idTipoReporte, out int num) && num >= 0 && num <= 24)
+            {
+                VM _dto = exeRpt.InitReporteGeneral(tipoReporte);
+                return View(_dto);
+            }
+            else
+            {
+                return View("NoReporte");
+            }
         }
+
+
         [HttpPost]
         public JsonResult Reporte(VM dto)
         {
