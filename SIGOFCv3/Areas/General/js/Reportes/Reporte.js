@@ -1213,6 +1213,65 @@ _reporteGeneral.rpt10InitDataTable_NEW = function () {
     _reporteGeneral.dtObligacionesTitularesMaderables_new = utilDt.fnLoadDataTable_Detail(tb, columns_label, columns_data, options);
 }
 
+_reporteGeneral.rpt10InitDataTableCusaf = function () {
+    var columns_label = [], columns_data = [], options = {};
+    var tb = $("#tbObligacionesTitularesCusaf");
+
+    columns_label = [
+        "Departamento", "Modalidad", "N° Titulo Habilitante", "Titular", "N° Inf Supervision", "Fec. Inicio de Supervisión", "Oportunidad de la Supervision", "Obligacion 1 (2 pts.)",
+        "Obligacion 2 (0 pts.)", "Obligacion 3 (1 pts.)", "Obligacion 4 (0 pts.)", "Obligacion 5 (5 pts.)", "Obligacion 6 (0 pts.)", "Obligacion 7 (0 pts.)",
+        "Obligacion 8 (2 pts.)", "Obligacion 9 (0 pts.)", "Obligacion 10 (2 pts.)", "Obligacion 11 (3 pts.)", "Obligacion 12 (2 pts.)", "Obligacion 13 (0 pts.)",
+        "Obligacion 14 (1 pts.)", "Obligacion 15 (3 pts.)", "Obligacion 16 (0 pts.)", "Obligacion 17 (0 pts.)", "Obligacion 18 (1 pts.)", "Obligacion 19 (2 pts.)",
+        "Obligacion 20 (3 pts.)", "Obligacion 21 (2 pts.)", "Obligacion 22 (4 pts.)", "Obligacion 23 (0 pts.)", "Obligacion 24 (0 pts.)", "Obligacion 25 (3 pts.)",
+        "Obligacion 26 (0 pts.)", "Obligacion 27 (0 pts.)", "Obligacion 28 (3 pts.)", "Obligacion 29 (0 pts.)", "Obligacion 30 (1 pts.)", "Obligacion 31 (1 pts.)",
+        "Obligacion 32 (1 pts.)", "Obligacion 33 (1 pts.)", "Obligacion 34 (1 pts.)", "Obligacion 35 (1 pts.)", "Obligacion 36 (1 pts.)",
+        "Puntaje Total (Si)", "Total de Obligaciones  (Si y No)", "Indice", "Cumplimiento"
+    ];
+
+
+    columns_data = ["DEPARTAMENTO", "MODALIDAD_TIPO", "NUM_THABILITANTE", "TITULAR", "INFORME", "FECHA_SUPERVISION_INICIO", "OPORTUNIDAD_SUPERVISION",
+        "OBLIG_01", "OBLIG_02", "OBLIG_03", "OBLIG_04", "OBLIG_05", "OBLIG_06", "OBLIG_07", "OBLIG_08", "OBLIG_09", "OBLIG_10", "OBLIG_11", "OBLIG_12", "OBLIG_13",
+        "OBLIG_14", "OBLIG_15", "OBLIG_16", "OBLIG_17", "OBLIG_18", "OBLIG_19", "OBLIG_20", "OBLIG_21", "OBLIG_22", "OBLIG_23", "OBLIG_24", "OBLIG_25", "OBLIG_26",
+        "OBLIG_27", "OBLIG_28", "OBLIG_29", "OBLIG_30", "OBLIG_31", "OBLIG_32", "OBLIG_33", "OBLIG_34", "OBLIG_35", "OBLIG_36",
+        "RESULTADO", "DENOMINADOR", "INDICE", "CUMPLIMIENTO"
+    ];
+
+    options = {
+        page_length: 10, button_excel: false, export_title: tb.find("thead tr")[0].innerText.trim()
+        , page_search: true, page_info: true, row_index: true, row_data_index: "ROW_INDEX", length_Change: true
+    };
+    _reporteGeneral.dtObligacionesTitularesCusaf = utilDt.fnLoadDataTable_Detail(tb, columns_label, columns_data, options);
+}
+_reporteGeneral.rpt10InitDataTableCusaf_NEW = function () {
+    var columns_label = [], columns_data = [], options = {};
+    var tb = $("#tbObligacionesTitularesCusaf_new");
+
+    columns_label = [
+        "Departamento", "Modalidad", "N° Titulo Habilitante", "Titular", "N° Inf Supervision", "Fec. Inicio de Supervisión", "Oportunidad de la Supervision", "Obligacion 1 (2 pts.)",
+        "Obligacion 2 (0 pts.)", "Obligacion 3 (1 pts.)", "Obligacion 4 (0 pts.)", "Obligacion 5 (5 pts.)", "Obligacion 6 (0 pts.)", "Obligacion 7 (0 pts.)",
+        "Obligacion 8 (2 pts.)", "Obligacion 9 (0 pts.)", "Obligacion 10 (2 pts.)", "Obligacion 11 (3 pts.)", "Obligacion 12 (2 pts.)","Obligacion 13 (0 pts.)",
+        "Obligacion 14 (1 pts.)", "Obligacion 15 (3 pts.)", "Obligacion 16 (0 pts.)", "Obligacion 17 (0 pts.)", "Obligacion 18 (1 pts.)", "Obligacion 19 (2 pts.)",
+        "Obligacion 20 (3 pts.)", "Obligacion 21 (2 pts.)", "Obligacion 22 (4 pts.)", "Obligacion 23 (0 pts.)", "Obligacion 24 (0 pts.)", "Obligacion 25 (3 pts.)",
+        "Obligacion 26 (0 pts.)", "Obligacion 27 (0 pts.)", "Obligacion 28 (3 pts.)", "Obligacion 29 (0 pts.)", "Obligacion 30 (1 pts.)", "Obligacion 31 (1 pts.)",
+        "Obligacion 32 (1 pts.)", "Obligacion 33 (1 pts.)", "Obligacion 34 (1 pts.)", "Obligacion 35 (1 pts.)", "Obligacion 36 (1 pts.)",
+        "Puntaje Total (Si)", "Total de Obligaciones  (Si y No)", "Indice", "Cumplimiento"
+    ];
+
+
+    columns_data = ["DEPARTAMENTO", "MODALIDAD_TIPO", "NUM_THABILITANTE", "TITULAR", "INFORME", "FECHA_SUPERVISION_INICIO", "OPORTUNIDAD_SUPERVISION",
+        "OBLIG_01", "OBLIG_02", "OBLIG_03", "OBLIG_04", "OBLIG_05", "OBLIG_06", "OBLIG_07", "OBLIG_08", "OBLIG_09", "OBLIG_10", "OBLIG_11", "OBLIG_12", "OBLIG_13",
+        "OBLIG_14", "OBLIG_15", "OBLIG_16", "OBLIG_17", "OBLIG_18", "OBLIG_19", "OBLIG_20", "OBLIG_21", "OBLIG_22", "OBLIG_23", "OBLIG_24", "OBLIG_25", "OBLIG_26",
+        "OBLIG_27", "OBLIG_28", "OBLIG_29", "OBLIG_30", "OBLIG_31", "OBLIG_32", "OBLIG_33", "OBLIG_34", "OBLIG_35", "OBLIG_36",
+        "RESULTADO", "DENOMINADOR", "INDICE", "CUMPLIMIENTO"
+    ];
+
+    options = {
+        page_length: 10, button_excel: false, export_title: tb.find("thead tr")[0].innerText.trim()
+        , page_search: true, page_info: true, row_index: true, row_data_index: "ROW_INDEX", length_Change: true
+    };
+    _reporteGeneral.dtObligacionesTitularesCusaf_new = utilDt.fnLoadDataTable_Detail(tb, columns_label, columns_data, options);
+}
+
 _reporteGeneral.fnInitObligacionesTitularesMaderables = function () {
 
     var data_ini = _reporteGeneral.frm.serializeObject();
@@ -1234,7 +1293,9 @@ _reporteGeneral.fnInitObligacionesTitularesMaderables = function () {
 
     
      _reporteGeneral.rpt10InitDataTable_NEW();
-     _reporteGeneral.rpt10InitDataTable();
+    _reporteGeneral.rpt10InitDataTable();
+    _reporteGeneral.rpt10InitDataTableCusaf_NEW();
+    _reporteGeneral.rpt10InitDataTableCusaf();
     _reporteGeneral.rpt11InitDataTable();
     _reporteGeneral.rpt11InitDataTable_NEW();
     _reporteGeneral.rptOTFInitDataTable();
@@ -1247,6 +1308,8 @@ _reporteGeneral.fnInitObligacionesTitularesMaderables = function () {
         _reporteGeneral.dtObligacionesTitularesNoMaderables_new.clear().draw();
         _reporteGeneral.dtObligacionesTitularesFauna.clear().draw();
         _reporteGeneral.dtObligacionesTitularesFauna_new.clear().draw();
+        _reporteGeneral.dtObligacionesTitularesCusaf.clear().draw();
+        _reporteGeneral.dtObligacionesTitularesCusaf_new.clear().draw();
     }
     _reporteGeneral.lstNM = [], _reporteGeneral.lstM = [], _reporteGeneral.lstFauna = [];
     _reporteGeneral.fnSubmitForm = function () {
@@ -1257,6 +1320,8 @@ _reporteGeneral.fnInitObligacionesTitularesMaderables = function () {
         _reporteGeneral.dtObligacionesTitularesNoMaderables_new.clear().draw();
         _reporteGeneral.dtObligacionesTitularesFauna.clear().draw();
         _reporteGeneral.dtObligacionesTitularesFauna_new.clear().draw();
+        _reporteGeneral.dtObligacionesTitularesCusaf.clear().draw();
+        _reporteGeneral.dtObligacionesTitularesCusaf_new.clear().draw();
         if (_reporteGeneral.filterValidate()) {
             var datosReporte = _reporteGeneral.frm.serializeObject();
             datosReporte.txtFechaCorte = null;
@@ -1332,7 +1397,27 @@ _reporteGeneral.fnInitObligacionesTitularesMaderables = function () {
                 }
             });
 
-           
+            d = { hdfTipoReporte: 'OBLIGACIONES_TIT_CUSAF', lstChkModalidadId: datosReporte.lstChkModalidadId, txtFechaCorte: !$('#chbNewRpt').is(":checked") ? '1' : null };
+            var optionCusaf = { url: _reporteGeneral.frm.action, datos: JSON.stringify(d), type: 'POST' };
+            utilSigo.fnAjax(optionCusaf, function (data) {
+                
+                if (data.success) {
+                    _reporteGeneral.lstCusaf = data.data;
+                    if (!$('#chbNewRpt').is(":checked")) {
+                        _reporteGeneral.dtObligacionesTitularesCusaf_new.rows.add(_reporteGeneral.lstCusaf).draw();
+                        $("#tbtblobligCusaf").hide(); $("#tbtblobligCusaf_new").show();
+                    }
+                    else {
+                        _reporteGeneral.dtObligacionesTitularesCusaf.rows.add(_reporteGeneral.lstCusaf).draw();
+                        $("#tbtblobligCusaf_new").hide(); $("#tbtblobligCusaf").show();
+                    }
+                    $("#dvObligacionesTitularesCusaf").show();
+                }
+                else {
+                    utilSigo.toastWarning("Aviso", utilSigo.MessageError);
+                    console.log(data.msj);
+                }
+            });           
         }
         return false;
     }
@@ -1409,6 +1494,42 @@ _reporteGeneral.fnInitObligacionesTitularesMaderables = function () {
             var url = window.URL.createObjectURL(new Blob([result]));
             a.attr("href", url);
             a.attr("download", 'Reporte de Obligaciones Titulares Fauna.xlsx');
+            $("body").append(a);
+            a[0].click();
+            window.URL.revokeObjectURL(url);
+            a.remove();
+            utilSigo.unblockUIGeneral();
+        });
+    }
+
+    _reporteGeneral.fnExportResumenCusaf = function () {
+        var url = urlLocalSigo + "General/Reportes/RptObligacionesTitularesCusaf";
+        if (_reporteGeneral.lstCusaf.length == 0) {
+            utilSigo.toastWarning("Aviso", "Por favor debe existir datos dentro de la tabla"); return;
+        }
+        let params = {
+            cabecera: {
+                Titulo: "OBLIGACIONES_TITULARES"
+            },
+            resumen: _reporteGeneral.lstCusaf,
+            opcion: !$('#chbNewRpt').is(":checked") ? '_new' : ''
+        };
+
+        $.ajax({
+            type: 'post',
+            url: url,
+            data: JSON.stringify(params),
+            contentType: 'application/json',
+            beforeSend: function () { utilSigo.beforeSendAjax(); },
+            dataType: 'binary',
+            xhrFields: {
+                'responseType': 'blob'
+            },
+        }).done(function (result) {
+            var a = $("<a style='display: none;'/>");
+            var url = window.URL.createObjectURL(new Blob([result]));
+            a.attr("href", url);
+            a.attr("download", 'Reporte de Obligaciones Titulares Cusaf.xlsx');
             $("body").append(a);
             a[0].click();
             window.URL.revokeObjectURL(url);
@@ -2396,6 +2517,7 @@ _reporteGeneral.fnInitReporteSolicitudFema = function () {
     }
 }
 /****************Fin Reporte 24*******************/
+
 
 
 $(document).ready(function () {
