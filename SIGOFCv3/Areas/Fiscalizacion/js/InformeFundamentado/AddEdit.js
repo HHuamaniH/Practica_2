@@ -494,12 +494,12 @@ ManInfFundamentado_AddEdit.fnValidarAtributosV2 = function (obj) {
                         band = 1;
                     }
                 }
-                if (band == 0) {
-                    if (obj.tbInforme.length < 1) {
-                        falta = "Por favor ingrese un registro.(Informe Supervision)";
-                        band = 1;
-                    }
-                }
+                //if (band == 0) {
+                //    if (obj.tbInforme.length < 1) {
+                //        falta = "Por favor ingrese un registro.(Informe Supervision)";
+                //        band = 1;
+                //    }
+                //}
             }
             break;
     }

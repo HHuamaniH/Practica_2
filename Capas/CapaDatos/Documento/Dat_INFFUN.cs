@@ -140,9 +140,9 @@ namespace CapaDatos.DOC
                         oCamposDet.COD_INFFUN = OUTPUTPARAM01;
                         oCamposDet.EliTABLA = loDatos.EliTABLA;
                         oCamposDet.EliVALOR01 = loDatos.EliVALOR01;
-                        oCamposDet.COD_INFORME = loDatos.COD_INFORME;
-                        oCamposDet.COD_RESODIREC = loDatos.COD_RESODIREC;
-                        oCamposDet.COD_RESODIREC_INI_PAU = loDatos.COD_RESODIREC_INI_PAU;
+                        oCamposDet.COD_INFORME = (loDatos.COD_INFORME==null) ? " " : loDatos.COD_INFORME;
+                        oCamposDet.COD_RESODIREC = (loDatos.COD_RESODIREC == null) ? " " : loDatos.COD_RESODIREC; 
+                        oCamposDet.COD_RESODIREC_INI_PAU = (loDatos.COD_RESODIREC_INI_PAU == null) ? " " : loDatos.COD_RESODIREC_INI_PAU;  
                         dBOracle.ManExecute(cn, tr, "DOC_OSINFOR_ERP_MIGRACION.spINFFUNEliminarDetalle", oCamposDet);
                     }
                 }
@@ -792,7 +792,9 @@ namespace CapaDatos.DOC
                                 entidad.cNomRemite = reader.GetString(reader.GetOrdinal("cNomRemite"));
                                 entidad.iCodRemitente = reader.GetInt32(reader.GetOrdinal("iCodRemitente"));
                                 entidad.cFema = reader.GetString(reader.GetOrdinal("cFema"));
-                                entidad.cTipoSolicitudFema = reader.GetString(reader.GetOrdinal("cTipoSolicitudFema"));
+
+                                if (!reader.IsDBNull(reader.GetOrdinal("cTipoSolicitudFema"))) entidad.cTipoSolicitudFema = reader.GetString(reader.GetOrdinal("cTipoSolicitudFema"));
+                                //entidad.cTipoSolicitudFema = reader.GetString(reader.GetOrdinal("cTipoSolicitudFema"));
 
                             }
 

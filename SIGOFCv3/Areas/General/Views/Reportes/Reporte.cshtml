@@ -11,7 +11,7 @@
 <script src="~/Scripts/datatables/Extensions/vfs_fonts.js"></script>
 <script src="~/Scripts/datatables/Extensions/buttons.html5.js"></script>
 <script src="~/Scripts/datatables/Extensions/buttons.print.js"></script>
-<script src="~/Areas/General/js/Reportes/Reporte.js?v=2"></script>
+<script src="~/Areas/General/js/Reportes/Reporte.js?v=5"></script>
 
 <link href="~/Content/datatables/buttons.dataTables.min.css" rel="stylesheet" />
 <link href="~/Areas/General/css/Reportes/Reporte.css" rel="stylesheet" />
@@ -310,7 +310,7 @@
                         <table id="tbObligacionesTitularesMaderables" style="width:100%" class="table table-hover table-bordered">
                             <thead>
                                 <tr>
-                                    <th colspan="41" class="text-sm-left">
+                                    <th colspan="36" class="text-sm-left">
                                         <div class="form-inline">
                                             <strong>Reporte de Obligaciones de los Titulares - Maderables</strong>
                                         </div>
@@ -325,7 +325,7 @@
                         <table id="tbObligacionesTitularesMaderables_new" style="width:100%" class="table table-hover table-bordered">
                             <thead>
                                 <tr>
-                                    <th colspan="41" class="text-sm-left">
+                                    <th colspan="39" class="text-sm-left">
                                         <div class="form-inline">
                                             <strong>Reporte de Obligaciones de los Titulares - Maderables</strong>
                                         </div>
@@ -350,7 +350,7 @@
                         <table id="tbObligacionesTitularesNoMaderables" style="width:100%" class="table table-hover table-bordered">
                             <thead>
                                 <tr>
-                                    <th colspan="41" class="text-sm-left">
+                                    <th colspan="31" class="text-sm-left">
                                         <div class="form-inline">
                                             <strong>Reporte de Obligaciones de los Titulares - No Maderables</strong>
                                         </div>
@@ -364,7 +364,7 @@
                         <table id="tbObligacionesTitularesNoMaderables_new" style="width:100%" class="table table-hover table-bordered">
                             <thead>
                                 <tr>
-                                    <th colspan="41" class="text-sm-left">
+                                    <th colspan="32" class="text-sm-left">
                                         <div class="form-inline">
                                             <strong>Reporte de Obligaciones de los Titulares - No Maderables</strong>
                                         </div>
@@ -388,7 +388,7 @@
                         <table id="tbObligacionesTitularesFauna" style="width:100%" class="table table-hover table-bordered">
                             <thead>
                                 <tr>
-                                    <th colspan="54" class="text-sm-left">
+                                    <th colspan="46" class="text-sm-left">
                                         <div class="form-inline">
                                             <strong>Reporte de Obligaciones de los Titulares - Fauna</strong>
                                         </div>
@@ -402,45 +402,7 @@
                         <table id="tbObligacionesTitularesFauna_new" style="width:100%" class="table table-hover table-bordered">
                             <thead>
                                 <tr>
-                                    <th colspan="54" class="text-sm-left">
-                                        <div class="form-inline">
-                                            <strong>Reporte de Obligaciones de los Titulares - Fauna</strong>
-                                        </div>
-                                    </th>
-                                </tr>
-                            </thead>
-                            <tbody></tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-            <div class="card-body" id="dvObligacionesTitularesCusaf" style="display:none;">
-                <div class="form-group">
-                    <nav class="navbar navbar-light bg-light justify-content-between">
-                        <span class="navbar-brand">4. Reporte de Obligaciones de los Titulares - CUSAF </span>
-                        <button class="btn btn-sm btn-outline-primary my-2 my-sm-0 " type="button" onclick="_reporteGeneral.fnExportResumenCusaf()">Descargar<i class="fa fa-file-excel-o fa-fw"></i></button>
-                    </nav>
-                </div>
-                <div class="form-row">
-                    <div id="tbtblobligCusaf" class="table-responsive">
-                        <table id="tbObligacionesTitularesCusaf" style="width:100%" class="table table-hover table-bordered">
-                            <thead>
-                                <tr>
-                                    <th colspan="50" class="text-sm-left">
-                                        <div class="form-inline">
-                                            <strong>Reporte de Obligaciones de los Titulares - Fauna</strong>
-                                        </div>
-                                    </th>
-                                </tr>
-                            </thead>
-                            <tbody></tbody>
-                        </table>
-                    </div>
-                    <div id="tbtblobligCusaf_new" class="table-responsive">
-                        <table id="tbObligacionesTitularesCusaf_new" style="width:100%" class="table table-hover table-bordered">
-                            <thead>
-                                <tr>
-                                    <th colspan="50" class="text-sm-left">
+                                    <th colspan="46" class="text-sm-left">
                                         <div class="form-inline">
                                             <strong>Reporte de Obligaciones de los Titulares - Fauna</strong>
                                         </div>
@@ -711,6 +673,24 @@
                                     <th colspan="97" class="text-sm-left">
                                         <div class="form-inline">
                                             <strong>Listado de Informes de Supervisión</strong>
+                                        </div>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body" id="dvReporteSolicitudFema" style="display:none;">
+                <div class="form-row">
+                    <div class="table-responsive">
+                        <table id="tbdvReporteSolicitudFema" style="width:100%" class="table table-hover table-bordered">
+                            <thead>
+                                <tr>
+                                    <th colspan="20" class="text-sm-left">
+                                        <div class="form-inline">
+                                            <strong>Consulta Solicitud FEMA</strong>
                                         </div>
                                     </th>
                                 </tr>

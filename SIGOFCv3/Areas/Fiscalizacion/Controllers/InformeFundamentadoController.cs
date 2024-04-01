@@ -251,7 +251,6 @@ namespace SIGOFCv3.Areas.Fiscalizacion.Controllers
             {
                 return Json(ex.Message);
             }
-
         }
 
         [HttpPost]

@@ -318,6 +318,18 @@ namespace CapaLogica.DOC
                     vmRpt.lstChkModalidad = exeBus.RegMostComboIndividual("MODALIDAD_EXSITU", "0000002").Where(m => m.Value != "0000000").Select(i => new VM_Chk { Value = i.Value, Text = i.Text });
                     vmRpt.lstChkDepartamento = exeBus.RegMostComboIndividual("DEPARTAMENTO", "").Where(m => m.Value != "00").Select(i => new VM_Chk { Value = i.Value, Text = i.Text });
                     break;
+
+                case "REPORTE_SOLICITUD_FEMA":
+                    vmRpt.lblTituloCabecera = "Reporte de Solicitudes FEMA";
+                    vmRpt.hdfTipoReporte = "REPORTE_SOLICITUD_FEMA";
+                    lstChkItem = new List<VM_Chk>();
+                    for (int i = DateTime.Now.Year; i >= 2004; i--)
+                        lstChkItem.Add(new VM_Chk() { Value = i.ToString(), Text = i.ToString() });
+
+                    vmRpt.lstChkAnio = lstChkItem;
+                    vmRpt.lstChkMes = exeBus.RegMostComboIndividual("MES", "").Where(m => m.Value != "0000000").Select(i => new VM_Chk { Value = i.Value, Text = i.Text });
+
+                    break;
             }
 
             return vmRpt;
