@@ -980,7 +980,7 @@ $(document).ready(function () {
                             proveidorId.empty();
 
                             console.log(data.result);
-                            if ((data.length>0) && (data.result[0].FECHA != null) && (data.result[0].NUMERO_EXPEDIENTE != null)) {
+                            if ((data.result.length>0) && (data.result[0].FECHA != null) && (data.result[0].NUMERO_EXPEDIENTE != null)) {
                                 $.each(data.result, function (index, item) {
                                     var p = new Option(item.NUMERO_EXPEDIENTE + ' : ' + item.FECHA, item.COD_PROVEIDORARCH);
                                     proveidorId.append(p);
