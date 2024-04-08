@@ -1419,7 +1419,7 @@ namespace CapaLogica.DOC
             ListResult result = new ListResult();
             try
             {
-                string cod_mtipo_concesiones = "0000007,0000008,0000009,0000010,0000011,0000012,0000013,0000017,0000018";
+                string cod_mtipo_concesiones = "0000007,0000008,0000009,0000010,0000011,0000012,0000013,0000014,0000017,0000018";
                 string cod_mtipo_sobreplan = "0000006,0000007,0000008,0000009,0000010,0000011,0000012,0000013,0000014,0000015,0000016,0000017,0000018";
                 string cod_mtipo_titularejecuta = "0000007,0000008,0000009,0000010,0000011,0000012,0000013";
 
