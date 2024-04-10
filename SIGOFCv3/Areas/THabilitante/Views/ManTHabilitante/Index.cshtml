@@ -28,6 +28,7 @@
         ManTHabilitante.fnLoadData('@Html.Raw(Json.Encode(@Model.tbErrorMaterial_DGeneral))', "DGenereal");
         ManTHabilitante.fnLoadData('@Html.Raw(Json.Encode(@Model.tbErrorMaterial_DAdicional))', "DAdicional");
         ManTHabilitante.fnLoadData('@Html.Raw(Json.Encode(@Model.tbDivisionInterna))', "DivisionInterna");
+        ManTHabilitante.fnLoadData('@Html.Raw(Json.Encode(@Model.tbTitular_RLegal))', "DTitularRLegal");
     </script>
     <script>
         "use strict";
@@ -1067,6 +1068,29 @@
                                         </div>
                                     }
                                 </div>
+                                <!-- INICIO TITULAR REPRESENTANTE LEGAL-->
+                                <div class="card-header text-small">Representante Legal</div>
+                                <div class="card-body">
+                                    <div class="form-row">
+                                        <div class="table-responsive">
+                                            <table id="tbTitulAR_RLegal" style="width:100%" class="table table-hover table-bordered">
+                                                <thead>
+                                                    <tr>
+                                                        <th colspan="7" class="text-sm-left">
+                                                            <div class="form-inline">                                                                
+                                                                <strong>
+                                                                    Historial de Representante Legal
+                                                                </strong>
+                                                            </div>
+                                                        </th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody></tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- INICIO TITULAR REPRESENTANTE LEGAL-->
                             </div>
                         </div>
                     </form>

@@ -337,6 +337,8 @@ namespace CapaEntidad.DOC
         public List<Ent_ERRORMATERIAL> ListErrorMaterialAdicional { get; set; }
         [Category("LIST"), Description("ListDivisionInterna")]
         public List<Ent_DIVISIONINTERNA> ListDivisionInterna { get; set; }
+        [Category("LIST"), Description("ListTitularRLegal")]
+        public List<Ent_TITULAR_RLEGAL> ListTitularRLegal { get; set; }
 
         [Category("LIST"), Description("ListTHMotivoExtincion")]
         public List<Ent_THABILITANTE> ListTHMotivoExtincion { get; set; }
@@ -403,6 +405,7 @@ namespace CapaEntidad.DOC
             iv_OBSERV_SUBSANAR = -1;
             iv_CUENTA_PLAN_MANEJO = -1;
             ListDivisionInterna = new List<Ent_DIVISIONINTERNA>();
+            ListTitularRLegal = new List<Ent_TITULAR_RLEGAL>();
         }
         #endregion
     }

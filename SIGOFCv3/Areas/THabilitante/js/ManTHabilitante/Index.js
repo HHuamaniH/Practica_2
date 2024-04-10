@@ -5,12 +5,14 @@ var ManTHabilitante = {};
 ManTHabilitante.DataErrorMaterial_DGenereal = [];
 ManTHabilitante.DataErrorMaterial_DAdicional = [];
 ManTHabilitante.DataDivisionInterna = [];
+ManTHabilitante.DataTitularRLegal = [];
 
 ManTHabilitante.fnLoadData = function (obj, tipo) {
     switch (tipo) {
         case "DGenereal": ManTHabilitante.DataErrorMaterial_DGenereal = obj; break;
         case "DAdicional": ManTHabilitante.DataErrorMaterial_DAdicional = obj; break;
         case "DivisionInterna": ManTHabilitante.DataDivisionInterna = JSON.parse(obj); break;
+        case "DTitularRLegal": ManTHabilitante.DataTitularRLegal = obj; break;
     }
 }
 
@@ -2194,6 +2196,15 @@ ManTHabilitante.fnInitDataTable_Detail = function () {
 
     ManTHabilitante.dtErrorMaterial_DAdicional = utilDt.fnLoadDataTable_Detail(ManTHabilitante.frmTHabilitanteRegistro.find("#tbErrorMaterial_DAdicional"), columns_label, columns_data, options);
     ManTHabilitante.dtErrorMaterial_DAdicional.rows.add(JSON.parse(ManTHabilitante.DataErrorMaterial_DAdicional)).draw();
+
+    //Titular Representante Legal
+    columns_label = ["N° Documento", "Apellidos y Nombres", "Fecha de Registro"];
+    columns_data = ["DOCUMENTO", "APELLIDOS_NOMBRES", "FECHA_REGISTRO"];
+    options = {
+        page_length: 10, row_index: true, page_sort: true
+    };
+    ManTHabilitante.dtTitular_RLegal = utilDt.fnLoadDataTable_Detail(ManTHabilitante.frmTHabilitanteRegistro.find("#tbTitulAR_RLegal"), columns_label, columns_data, options);
+    ManTHabilitante.dtTitular_RLegal.rows.add(JSON.parse(ManTHabilitante.DataTitularRLegal)).draw();
 }
 
 ManTHabilitante.fnAddErrorMaterial = function (tipo) {

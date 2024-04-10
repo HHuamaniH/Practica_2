@@ -366,6 +366,7 @@ namespace CapaLogica.DOC
                     TH_VM.tbErrorMaterial_DGeneral = datModificar.ListErrorMaterialGeneral;
                     TH_VM.tbErrorMaterial_DAdicional = datModificar.ListErrorMaterialAdicional;
                     TH_VM.tbDivisionInterna = datModificar.ListDivisionInterna;
+                    TH_VM.tbTitular_RLegal = datModificar.ListTitularRLegal;
                     TH_VM.txtResolucionTitular = datModificar.RES_TITULAR;
 
                     TH_VM.txtEstado_TH = datModificar.ESTADO_TH;
