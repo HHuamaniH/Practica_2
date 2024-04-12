@@ -91,8 +91,8 @@ namespace CapaDatos.DOC
                                 //PARTE_DIARIO_DETALLE
                                 oCamposDet = new CEntidad();
                                 oCamposDet.DEPARTAMENTO = dr["DEPARTAMENTO"].ToString();
-                                oCamposDet.MEDCAU_PAU = Int32.Parse(dr["MEDCAU_PAU"].ToString());
-                                oCamposDet.MEDPRECAU_PAU = Int32.Parse(dr["MEDPRECAU_PAU"].ToString());
+                                oCamposDet.MEDCAU_PAU = Int32.Parse(dr["'MEDCAU_PAU'"].ToString());
+                                oCamposDet.MEDPRECAU_PAU = Int32.Parse(dr["'MEDPRECAU_PAU'"].ToString());
                                 lsDetDetalles.Add(oCamposDet);
                             }
                         }
