@@ -462,7 +462,7 @@ public class WSObservatorio : System.Web.Services.WebService
                 tableDatos.AddCell(HerUtil.celda("Fecha de Supervisión Inicio: " + elementListado.FECHA_SUPERVISION_INICIO.ToString() + ", Término: " + elementListado.FECHA_SUPERVISION_TERMINO.ToString(), 1, 1, 11, Element.ALIGN_LEFT, 0, BaseColor.BLACK, "transparent", "Negrita"));
             }
             doc.Add(tableDatos);
-            String Multa = "";
+            decimal Multa = 0;
             Int32 literal = 0;
             foreach (CEntidad Resoles in oCEntReso.List_Resoluciones)
             {
@@ -576,17 +576,17 @@ public class WSObservatorio : System.Web.Services.WebService
                             tableResol.AddCell(HerUtil.celda(Resoles.DETERMINACION, 2, 1, 11, Element.ALIGN_LEFT, 0, BaseColor.BLACK, "transparent", "Normal"));
                             doc.Add(tableResol);
 
-                            if (Resoles.MONTO > 0)
+                            /*if (Resoles.MONTO > 0)
                             {
                                 medCols = new float[] { .35f, .01f, .64f };
                                 tableResol = HerUtil.constructorTabla(3, page, medCols, page.Width - 90);
                                 tableResol.AddCell(HerUtil.celda("   Multa Determinada:", 2, 1, 11, Element.ALIGN_LEFT, 0, BaseColor.BLACK, "transparent", "Negrita"));
                                 tableResol.AddCell(HerUtil.celda(Resoles.MONTO.ToString() + " U.I.T.", 2, 1, 11, Element.ALIGN_LEFT, 0, BaseColor.BLACK, "transparent", "Normal"));
                                 doc.Add(tableResol);
-                            }
+                            }*/
                         }
                         if (Resoles.MONTO > 0)
-                            Multa = Resoles.MONTO.ToString() + " U.I.T.";
+                            Multa = Resoles.MONTO;
                         break;
                     case "Resolución TFFS":
                         if (!string.IsNullOrEmpty(Resoles.LITERAL))
@@ -1135,14 +1135,14 @@ public class WSObservatorio : System.Web.Services.WebService
                             }
                         }
                         
-                        if (Resoles.MULTA > 0)
+                        /*if (Resoles.MULTA > 0)
                         {
                             medCols = new float[] { .35f, .01f, .64f };
                             tableResol = HerUtil.constructorTabla(3, page, medCols, page.Width - 90);
                             tableResol.AddCell(HerUtil.celda("Multa Determinada:", 2, 1, 11, Element.ALIGN_LEFT, 0, BaseColor.BLACK, "transparent", "Negrita"));
                             tableResol.AddCell(HerUtil.celda(Resoles.MULTA.ToString() + " U.I.T.", 2, 1, 11, Element.ALIGN_LEFT, 0, BaseColor.BLACK, "transparent", "Normal"));
                             doc.Add(tableResol);
-                        }
+                        }*/
                         break;
                     case "Recurso de Reconsideración":
                         tableResol.AddCell(HerUtil.celda("   Se resuelve: ", 1, 1, 11, Element.ALIGN_LEFT, 0, BaseColor.BLACK, "transparent", "Negrita"));
@@ -1164,6 +1164,17 @@ public class WSObservatorio : System.Web.Services.WebService
                         break;
                 }
             }
+
+            if (Multa > 0)
+            {
+                medCols = new float[] { .35f, .01f, .64f };
+                tableResol = HerUtil.constructorTabla(3, page, medCols, page.Width - 90);
+                tableResol.AddCell(HerUtil.celda("   Multa Determinada:", 2, 1, 11, Element.ALIGN_LEFT, 0, BaseColor.BLACK, "transparent", "Normal"));
+                tableResol.AddCell(HerUtil.celda(Multa.ToString() + " U.I.T.", 2, 1, 11, Element.ALIGN_LEFT, 0, BaseColor.BLACK, "transparent", "Normal"));
+                doc.Add(new Paragraph("\n"));
+                doc.Add(tableResol);
+            }
+
             if (elementListado.INFRACCIONES.Trim() != "" && literal == 0)
             {
                 medCols = new float[] { .30f };
