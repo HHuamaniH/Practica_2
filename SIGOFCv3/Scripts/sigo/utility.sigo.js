@@ -1032,7 +1032,7 @@ utilSigo.validateFechaRango = function (id, texto) {
             let date = new Date(campos[2] + "-" + campos[1] + "-" + campos[0]);
             let dateToday = new Date(utilSigo.obtenerFechaHora()[0]);
             let datePast = new Date(utilSigo.obtenerFechaHora()[0]);
-            datePast.setFullYear(datePast.getFullYear() - 5);
+            datePast.setFullYear(datePast.getFullYear() - 10);
             let dateTodayCampos = utilSigo.obtenerFechaHora()[0].split('-');
             let dateTodayStr = dateTodayCampos[2] + "/" + dateTodayCampos[1] + "/" + dateTodayCampos[0];
 
@@ -1042,7 +1042,7 @@ utilSigo.validateFechaRango = function (id, texto) {
                 $("#" + id).focus();
                 return false;
             } else if (utilSigo.isFechaMayor(datePast, date)) {
-                utilSigo.toastWarning("Aviso", "El campo " + texto + " no debe ser menor a 5 años de la fecha actual");
+                utilSigo.toastWarning("Aviso", "El campo " + texto + " no debe ser menor a 10 años de la fecha actual");
                 document.getElementById(id).value = dateTodayStr;
                 $("#" + id).focus();
                 return false;

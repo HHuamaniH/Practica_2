@@ -732,7 +732,7 @@ _bPerAddEdit.fnLoadSumoSelect = function () {
         }
         else {
             _bPerAddEdit.frm.find("#ddlITipoCargoId").val(sTipoCargo);
-            _bPerAddEdit.frm.find("#ddlITipoCargoId").attr("disabled", true);
+            //_bPerAddEdit.frm.find("#ddlITipoCargoId").attr("disabled", true);
         }
     } else {
         _bPerAddEdit.frm.find("#ddlITipoCargoId").val("");
