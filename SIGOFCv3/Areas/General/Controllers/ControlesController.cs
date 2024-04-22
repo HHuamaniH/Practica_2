@@ -1336,6 +1336,7 @@ namespace SIGOFCv3.Areas.General.Controllers
             dto.hdnDisableControl = disableControl;
 
             ViewBag.hdfCodGrupoUsuario = (ModelSession.GetSession())[0].COD_UGRUPO;
+            ViewBag.validarCodEstadoDoc = dto.ddlIndicadorId;
 
             return PartialView(dto);
         }
