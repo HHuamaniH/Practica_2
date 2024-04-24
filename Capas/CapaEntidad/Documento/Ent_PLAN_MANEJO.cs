@@ -332,6 +332,10 @@ namespace CapaEntidad.DOC
         public string COD_DEPENDENCIA { get; set; }
         [Description("DIRECCION")]
         public string DIRECCION { get; set; }
+        [Description("TIPOMADERABLE")]
+        public string TIPOMADERABLE { get; set; }
+        [Description("UNIDAD_MEDIDA")]
+        public string UNIDAD_MEDIDA { get; set; }
         //Lista Objetos
         [Category("LIST"), Description("ListManPlanManejo")]
         public List<Ent_PLAN_MANEJO> ListManPlanManejo { get; set; }

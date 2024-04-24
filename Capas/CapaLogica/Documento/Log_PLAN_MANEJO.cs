@@ -994,6 +994,8 @@ namespace CapaLogica.DOC
                         insertar = insertar + ",'" + (string.IsNullOrEmpty(list.NUM_BLOQUES.ToString()) ? "" : list.NUM_BLOQUES.ToString()) + "'";
                         insertar = insertar + ",'" + (string.IsNullOrEmpty(list.NUM_ARBOLES.ToString()) ? "" : list.NUM_ARBOLES.ToString()) + "'";
                         insertar = insertar + ",'" + (string.IsNullOrEmpty(list.VOLUMEN.ToString()) ? "" : list.VOLUMEN.ToString()) + "'";
+                        insertar = insertar + ",'" + (string.IsNullOrEmpty(list.TIPOMADERABLE.ToString()) ? "" : list.TIPOMADERABLE.ToString()) + "'";
+                        insertar = insertar + ",'" + (string.IsNullOrEmpty(list.UNIDAD_MEDIDA.ToString()) ? "" : list.UNIDAD_MEDIDA.ToString()) + "'";
 
                         cmd.CommandText = "INSERT INTO [Datos$A" + i.ToString().Trim() + ":E" + (listParam.Count + 1).ToString() + "] VALUES (" + insertar + ")";
                         cmd.ExecuteNonQuery();

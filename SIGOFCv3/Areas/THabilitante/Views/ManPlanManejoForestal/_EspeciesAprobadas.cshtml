@@ -23,7 +23,10 @@
         var valNArb = AddEditEsp.frm.find("#txtNumArb").val();
         var valVol = AddEditEsp.frm.find("#txtVolumen").val();
 
-        ManPM.agregarEspecies(valEspecie, valDescripcionEsp, valBlo, valNArb, valVol, AddEditEsp.codSecuencial, AddEditEsp.estado);
+        var valTipoMaderable = AddEditEsp.frm.find("#ddlTipoMaderables_Especies").val();
+        var valUnidadMedida = AddEditEsp.frm.find("#ddlRAForesUM").val();
+
+        ManPM.agregarEspecies(valEspecie, valDescripcionEsp, valBlo, valNArb, valVol, AddEditEsp.codSecuencial, AddEditEsp.estado, valTipoMaderable, valUnidadMedida);
         AddEditEsp.limpiarForm();
     }
     AddEditEsp.fnselectByText = function (txt) {
@@ -59,8 +62,43 @@
             AddEditEsp.frm.find("#txtNumArb").val(ManPM.dataEditar.find(".hdNumArbol").val());
             AddEditEsp.frm.find("#txtVolumen").val(ManPM.dataEditar.find(".hdVolumen").val());
             AddEditEsp.codSecuencial = ManPM.dataEditar.find(".hdCodSecuencial").val();
-            AddEditEsp.estado = ManPM.dataEditar.find(".hdEstadoItem").val()
+            AddEditEsp.estado = ManPM.dataEditar.find(".hdEstadoItem").val();
+
+            AddEditEsp.frm.find("#ddlTipoMaderables_Especies").val(ManPM.dataEditar.find(".hdTipomaderable").val());
+            AddEditEsp.frm.find("#ddlRAForesUM").val(ManPM.dataEditar.find(".hdUnidadMedida").val());
         }
+
+        AddEditEsp.frm.find("#ddlTipoMaderables_Especies").change(function () {
+            if (this.value != "-") {
+                var ddlRAForesUM = document.getElementById("ddlRAForesUM");
+                var htmlddlRAForesUM = "";
+                switch (this.value) {
+                    case "CARBON":
+                        htmlddlRAForesUM = '<option value="KG">KG</option>';
+                        ddlRAForesUM.innerHTML = htmlddlRAForesUM;
+                        break;
+                    case "NO MADERABLES":
+                        htmlddlRAForesUM = '<option value="KG">KG</option>';
+                        htmlddlRAForesUM += '<option value="LT">LT</option>';
+                        ddlRAForesUM.innerHTML = htmlddlRAForesUM;
+                        break;
+                    case "MADERABLES":
+                        htmlddlRAForesUM = '<option value="M3">M3</option>';
+                        htmlddlRAForesUM += '<option value="KG">KG</option>';
+                        ddlRAForesUM.innerHTML = htmlddlRAForesUM;
+                        break;
+                    default:
+                        htmlddlRAForesUM = '<option value="KG">M3</option>';
+                        htmlddlRAForesUM += '<option value="KG">KG</option>';
+                        ddlRAForesUM.innerHTML = htmlddlRAForesUM;
+                        break;
+                }
+            }
+            else {
+                ManFores.ItemRAFores.frmResolAprob.find("#ddlRAForesUM").val("-");
+                ManFores.ItemRAFores.frmResolAprob.find("#ddlRAForesUM").attr("disabled", false);
+            }
+        });
 
         $("#btnGuardarEspecies").click(function () {
             AddEditEsp.frm.submit();
@@ -142,7 +180,30 @@
                     <div class="col-md-7">
                         @Html.EditorFor(m => m.txtVolumen, new { htmlAttributes = new { @class = "form-control form-control-sm", placeholder = "Volumen", maxlength = "10", onkeypress = "return utilSigo.onKeyDecimal(event, this);" } })
                     </div>
+                </div> 
+
+                <div class="form-group row">
+                    <label for="ddlTipoMaderables_Especies" class="col-md-5 col-form-label text-small">Tipo</label>
+                    <div class="col-md-7">
+                        <select id="ddlTipoMaderables_Especies" class="form-control form-control-sm">
+                            <option value="-"> Seleccionar </option>
+                            <option value="CARBON">CARBÓN </option>
+                            <option value="MADERABLES">MADERABLES </option>
+                            <option value="NO MADERABLES">NO MADERABLES</option>
+                        </select>
+                    </div>
                 </div>
+                <div class="form-group row" id="trRAForesUM">
+                    <label for="ddlRAForesUM" class="col-md-5 col-form-label text-small">Unidad de Medida</label>
+                    <div class="col-md-7">
+                        <select id="ddlRAForesUM" class="form-control form-control-sm">
+                            <option value="-"> Seleccionar </option>
+                            <option value="M3">M3</option>
+                            <option value="KG">KG</option>
+                        </select>
+                    </div>
+                </div>
+
             </form>
         </div>
         <div class="modal-footer">

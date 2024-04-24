@@ -150,7 +150,7 @@ namespace SIGOFCv3.Areas.THabilitante.Controllers
         {
             List<Ent_PLAN_MANEJO> data = (List<Ent_PLAN_MANEJO>)TempData["listaEspecies"];
             data = data ?? new List<Ent_PLAN_MANEJO>();
-            var result = from e in data select new { codSec = e.COD_SECUENCIAL, des = e.DESCRIPCION, numArb = e.NUM_ARBOLES, vol = e.VOLUMEN, numB = e.NUM_BLOQUES, itemE = e.RegEstado, codEsp = e.COD_ESPECIES, descB = e.DESC_BLOQUE };
+            var result = from e in data select new { codSec = e.COD_SECUENCIAL, des = e.DESCRIPCION, numArb = e.NUM_ARBOLES, vol = e.VOLUMEN, numB = e.NUM_BLOQUES, itemE = e.RegEstado, codEsp = e.COD_ESPECIES, descB = e.DESC_BLOQUE, tipomaderable = e.TIPOMADERABLE, unidadMedida = e.UNIDAD_MEDIDA };
             var jsonResult = Json(new { data = result }, JsonRequestBehavior.AllowGet);
             jsonResult.MaxJsonLength = int.MaxValue;
             return jsonResult;

@@ -65,7 +65,7 @@ ManPM.enumTB = function (tb) {
         });
     }).draw();
 }
-ManPM.agregarEspecies = function (codEspecie, desEspecie, bloque, narboles, volumen, codSecuencial, estado) {
+ManPM.agregarEspecies = function (codEspecie, desEspecie, bloque, narboles, volumen, codSecuencial, estado, tipomaderable, unidadMedida) {
     var $tbEspecies = ManPM.frm.find('#tbEspecies').dataTable();
 
     if (ManPM.opcRegItem == 'NUE') {
@@ -74,7 +74,7 @@ ManPM.agregarEspecies = function (codEspecie, desEspecie, bloque, narboles, volu
         var codSecE = parseInt(countFilas) + 1;
         var filaE = [{
             itemE: 1, codSec: codSecE, codEsp: codEspecie, des: desEspecie, numArb: narboles,
-            vol: volumen, numB: bloque
+            vol: volumen, numB: bloque, tipomaderable: tipomaderable, unidadMedida: unidadMedida
         }];
         ManPM.frm.find('#tbEspecies').dataTable().fnAddData(filaE);
         ManPM.enumTB('tbEspecies');
@@ -87,7 +87,7 @@ ManPM.agregarEspecies = function (codEspecie, desEspecie, bloque, narboles, volu
 
         var fila = {
             itemE: regEstado, codSec: codSecuencial, codEsp: codEspecie, des: desEspecie, numArb: narboles,
-            vol: volumen, numB: bloque
+            vol: volumen, numB: bloque, tipomaderable: tipomaderable, unidadMedida: unidadMedida
         };
 
         ManPM.frm.find('#tbEspecies').dataTable().fnUpdate(fila, index, undefined, false);
@@ -605,7 +605,7 @@ ManPM.fnImportarEspecieAprobada = function (e, obj) {
                 }];*/
                 var filaE = [{
                     itemE: 1, codSec: codSecE, codEsp: o.COD_ESPECIES, des: o.DESCRIPCION, numArb: o.NUM_ARBOLES,
-                    vol: o.VOLUMEN, numB: o.NUM_BLOQUES
+                    vol: o.VOLUMEN, numB: o.NUM_BLOQUES, tipomaderable: o.TIPOMADERABLE, unidadMedida: o.UNIDAD_MEDIDA
                 }];
                 ManPM.frm.find('#tbEspecies').dataTable().fnAddData(filaE);
                 ManPM.enumTB('tbEspecies');
@@ -798,12 +798,26 @@ ManPM.iniciarTablas = function () {
                     }
                 },
                 {
+                    "data": "tipomaderable", "autoWidth": true,
+                    "mRender": function (data, type, row) {
+                        var cell = '<input type="hidden" class="hdTipomaderable" value="' + row.tipomaderable + '" />' + row.tipomaderable;
+                        return cell;
+                    }
+                },
+                {
+                    "data": "unidadMedida", "autoWidth": true,
+                    "mRender": function (data, type, row) {
+                        var cell = '<input type="hidden" class="hdUnidadMedida" value="' + row.unidadMedida + '" />' + row.unidadMedida;
+                        return cell;
+                    }
+                },
+                {
                     "data": "descB", "visible": false,
                     "mRender": function (data, type, row) {
                         var cell = '<input type="hidden" class="hdDescBloque" value="' + row.descB + '" />' + row.descB;
                         return cell;
                     }
-                }
+                },
             ]
     });
     var contCoordenadas = 1;
@@ -982,7 +996,9 @@ ManPM.prepararDatosEspecies = function () {
                     NUM_ARBOLES: $columna.eq(3).text().trim(),
                     VOLUMEN: $columna.eq(4).text().trim(),
                     COD_SECUENCIAL: $(o).find('.hdCodSecuencial').val(),
-                    RegEstado: $(o).find(".hdEstadoItem").val()
+                    RegEstado: $(o).find(".hdEstadoItem").val(),
+                    TIPOMADERABLE: $columna.eq(6).text().trim(),
+                    UNIDAD_MEDIDA: $columna.eq(7).text().trim()
                 });
             }
         });

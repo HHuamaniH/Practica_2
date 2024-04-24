@@ -2321,6 +2321,8 @@ namespace CapaDatos.DOC
                         oCamposDEt.VOLUMEN = loDatos.VOLUMEN;
                         oCamposDEt.COD_SECUENCIAL = loDatos.COD_SECUENCIAL;
                         oCamposDEt.BusFormulario = "ESPECIES";
+                        oCamposDEt.TIPOMADERABLE = loDatos.TIPOMADERABLE;
+                        oCamposDEt.UNIDAD_MEDIDA = loDatos.UNIDAD_MEDIDA;
                         if (loDatos.RegEstado == 1 || loDatos.RegEstado == 2)
                         {
                             dBOracle.ManExecute(cn, tr, "DOC_OSINFOR_ERP_MIGRACION.uspPLAN_GENERALMANEJOFORESTAL_ItemsGRABARV3", oCamposDEt);                                                                                  
@@ -2473,6 +2475,8 @@ namespace CapaDatos.DOC
                                 oCamposDet.NUM_ARBOLES = Int32.Parse(dr["NUM_ARBOLES"].ToString());
                                 oCamposDet.VOLUMEN = Decimal.Parse(dr["VOLUMEN"].ToString());
                                 oCamposDet.COD_SECUENCIAL = Int32.Parse(dr["COD_SECUENCIAL"].ToString());
+                                oCamposDet.TIPOMADERABLE = dr["TIPOMADERABLE"].ToString();
+                                oCamposDet.UNIDAD_MEDIDA = dr["UNIDAD_MEDIDA"].ToString();
                                 oCamposDet.RegEstado = 0;
                                 oCampos.ListEspecies.Add(oCamposDet);
                             }
