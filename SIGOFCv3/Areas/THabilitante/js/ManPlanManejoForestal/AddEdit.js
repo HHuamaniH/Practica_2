@@ -817,7 +817,7 @@ ManPM.iniciarTablas = function () {
                         var cell = '<input type="hidden" class="hdDescBloque" value="' + row.descB + '" />' + row.descB;
                         return cell;
                     }
-                },
+                }
             ]
     });
     var contCoordenadas = 1;
