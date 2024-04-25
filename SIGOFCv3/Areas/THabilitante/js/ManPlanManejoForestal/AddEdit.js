@@ -718,6 +718,7 @@ ManPM.iniciarTablas = function () {
         "pageLength": initSigo.pageLength,
         "oLanguage": initSigo.oLanguage,
         "drawCallback": initSigo.showPagination,
+        "pageLength": 10,
         "columns":
             [
                 {
@@ -750,6 +751,7 @@ ManPM.iniciarTablas = function () {
         "pageLength": initSigo.pageLength,
         "oLanguage": initSigo.oLanguage,
         "drawCallback": initSigo.showPagination,
+        "pageLength": 10,
         "columns":
             [
                 {
@@ -835,6 +837,7 @@ ManPM.iniciarTablas = function () {
         "pageLength": initSigo.pageLength,
         "oLanguage": initSigo.oLanguage,
         "drawCallback": initSigo.showPagination,
+        "pageLength": 10,
         "columns":
             [
                 {
@@ -899,6 +902,7 @@ ManPM.iniciarTablas = function () {
         "pageLength": initSigo.pageLength,
         "oLanguage": initSigo.oLanguage,
         "drawCallback": initSigo.showPagination,
+        "pageLength": 10,
         "columns":
             [
                 {

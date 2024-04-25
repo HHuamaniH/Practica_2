@@ -71,8 +71,8 @@ namespace SIGOFCv3.Areas.THabilitante.Models.ManPlanManejoForestal
                             oCampos.VOLUMEN = Decimal.Parse((workSheet.Cells[rowIterator, 5].Value ?? "0").ToString().Trim());
                             oCampos.COD_SECUENCIAL = 0;
                             oCampos.RegEstado = 1;
-                            oCampos.TIPOMADERABLE = (workSheet.Cells[rowIterator, 6].Value ?? "0").ToString().Trim();
-                            oCampos.UNIDAD_MEDIDA = (workSheet.Cells[rowIterator, 7].Value ?? "0").ToString().Trim();
+                            oCampos.TIPOMADERABLE = (workSheet.Cells[rowIterator, 6].Value ?? "").ToString().Trim();
+                            oCampos.UNIDAD_MEDIDA = (workSheet.Cells[rowIterator, 7].Value ?? "").ToString().Trim();
 
                             if (isAdd) olResult.Add(oCampos);
                             //else throw new Exception(msjError);

@@ -26,6 +26,9 @@
         var valTipoMaderable = AddEditEsp.frm.find("#ddlTipoMaderables_Especies").val();
         var valUnidadMedida = AddEditEsp.frm.find("#ddlRAForesUM").val();
 
+        if(!valTipoMaderable || valTipoMaderable.length <= 1) valTipoMaderable = '';
+        if(!valUnidadMedida || valUnidadMedida.length <= 1) valUnidadMedida = '';
+
         ManPM.agregarEspecies(valEspecie, valDescripcionEsp, valBlo, valNArb, valVol, AddEditEsp.codSecuencial, AddEditEsp.estado, valTipoMaderable, valUnidadMedida);
         AddEditEsp.limpiarForm();
     }
@@ -34,6 +37,29 @@
         AddEditEsp.frm.find("#cbespeciesinipauforestId").val(valortxt).change();
         AddEditEsp.frm.find("#cbespeciesinipauforestId").attr("disabled", true);
         ManPM.dataEditar.find(".hdCodEspecie").val(valortxt);
+    }
+    AddEditEsp.actualizarSelectUnidadMedidad = function(valorTipoMaderable) {
+        var ddlRAForesUM = document.getElementById("ddlRAForesUM");
+        var htmlddlRAForesUM = "";
+        switch (valorTipoMaderable) {
+            case "CARBON":
+                htmlddlRAForesUM = '<option value="KG">KG</option>';
+                ddlRAForesUM.innerHTML = htmlddlRAForesUM;
+                break;
+            case "NO MADERABLES":
+                htmlddlRAForesUM = '<option value="KG">KG</option>';
+                htmlddlRAForesUM += '<option value="LT">LT</option>';
+                ddlRAForesUM.innerHTML = htmlddlRAForesUM;
+                break;
+            case "MADERABLES":
+                htmlddlRAForesUM = '<option value="M3">M3</option>';
+                htmlddlRAForesUM += '<option value="KG">KG</option>';
+                ddlRAForesUM.innerHTML = htmlddlRAForesUM;
+                break;
+            default:
+                ddlRAForesUM.innerHTML = htmlddlRAForesUM;
+                break;
+        }
     }
     $(document).ready(function () {
         $('[data-toggle="tooltip"]').tooltip();
@@ -65,34 +91,13 @@
             AddEditEsp.estado = ManPM.dataEditar.find(".hdEstadoItem").val();
 
             AddEditEsp.frm.find("#ddlTipoMaderables_Especies").val(ManPM.dataEditar.find(".hdTipomaderable").val());
+            AddEditEsp.actualizarSelectUnidadMedidad(ManPM.dataEditar.find(".hdTipomaderable").val());
             AddEditEsp.frm.find("#ddlRAForesUM").val(ManPM.dataEditar.find(".hdUnidadMedida").val());
         }
 
         AddEditEsp.frm.find("#ddlTipoMaderables_Especies").change(function () {
             if (this.value != "-") {
-                var ddlRAForesUM = document.getElementById("ddlRAForesUM");
-                var htmlddlRAForesUM = "";
-                switch (this.value) {
-                    case "CARBON":
-                        htmlddlRAForesUM = '<option value="KG">KG</option>';
-                        ddlRAForesUM.innerHTML = htmlddlRAForesUM;
-                        break;
-                    case "NO MADERABLES":
-                        htmlddlRAForesUM = '<option value="KG">KG</option>';
-                        htmlddlRAForesUM += '<option value="LT">LT</option>';
-                        ddlRAForesUM.innerHTML = htmlddlRAForesUM;
-                        break;
-                    case "MADERABLES":
-                        htmlddlRAForesUM = '<option value="M3">M3</option>';
-                        htmlddlRAForesUM += '<option value="KG">KG</option>';
-                        ddlRAForesUM.innerHTML = htmlddlRAForesUM;
-                        break;
-                    default:
-                        htmlddlRAForesUM = '<option value="KG">M3</option>';
-                        htmlddlRAForesUM += '<option value="KG">KG</option>';
-                        ddlRAForesUM.innerHTML = htmlddlRAForesUM;
-                        break;
-                }
+                AddEditEsp.actualizarSelectUnidadMedidad(this.value);
             }
             else {
                 ManFores.ItemRAFores.frmResolAprob.find("#ddlRAForesUM").val("-");
