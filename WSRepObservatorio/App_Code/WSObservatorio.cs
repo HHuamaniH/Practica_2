@@ -1169,7 +1169,7 @@ public class WSObservatorio : System.Web.Services.WebService
             {
                 medCols = new float[] { .35f, .01f, .64f };
                 tableResol = HerUtil.constructorTabla(3, page, medCols, page.Width - 90);
-                tableResol.AddCell(HerUtil.celda("   Multa Determinada:", 2, 1, 11, Element.ALIGN_LEFT, 0, BaseColor.BLACK, "transparent", "Normal"));
+                tableResol.AddCell(HerUtil.celda("   Multa Determinada:", 1, 1, 11, Element.ALIGN_LEFT, 0, BaseColor.BLACK, "transparent", "Normal"));
                 tableResol.AddCell(HerUtil.celda(Multa.ToString() + "U.I.T.", 2, 1, 11, Element.ALIGN_LEFT, 0, BaseColor.BLACK, "transparent", "Normal"));
                 doc.Add(new Paragraph("\n"));
                 doc.Add(tableResol);

@@ -34,7 +34,7 @@ namespace CapaEntidad.ViewModel
         public string COD_MODALIDAD { get; set; }
         [RegularExpression("^[0-9]+$", ErrorMessage = "Sólo números")]
         public string COD_THABILITANTE { get; set; }
-        [RegularExpression("^[0-9]+$", ErrorMessage = "Sólo números")]
+        [RegularExpression("^[A-Z0-9]+$", ErrorMessage = "Sólo números")]
         public string COD_TITULAR { get; set; }
         public string NUM_CONTRATO { get; set; }
         public string TITULAR { get; set; }

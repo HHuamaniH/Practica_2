@@ -333,6 +333,8 @@ namespace CapaEntidad.DOC
         public Decimal VOLUMEN_ARBOLES { get; set; }
         [Description("UNIDAD_MEDIDA")]
         public String UNIDAD_MEDIDA { get; set; }
+        [Description("TIPO_APROVECHAMIENTO")]
+        public String TIPO_APROVECHAMIENTO { get; set; }
 
         [Description("ID_REGISTRO")]
         public Int32 ID_REGISTRO { get; set; }

@@ -46,6 +46,7 @@ namespace CapaDatos.DOC
                         oCampos.ListErrorMaterialAdicional = new List<Ent_ERRORMATERIAL>();
                         oCampos.ListTHExtincion = new List<CEntidad>();
                         oCampos.ListDivisionInterna = new List<Ent_DIVISIONINTERNA>();
+                        oCampos.ListTitularRLegal = new List<Ent_TITULAR_RLEGAL>();
 
                         CEntidad oCamposDet;
                         //
@@ -402,6 +403,21 @@ namespace CapaDatos.DOC
                                 oCamposDI.AREA = dr.GetDecimal(dr.GetOrdinal("AREA"));                                
                                 oCamposDI.DESCRIPCIONAREA = dr.GetString(dr.GetOrdinal("DESCRIPCIONAREA")) == " " ? string.Empty : dr.GetString(dr.GetOrdinal("DESCRIPCIONAREA"));                                
                                 oCampos.ListDivisionInterna.Add(oCamposDI);
+                            }
+                        }
+                        //LISTADO HISOTIRAL REPRESENTANTE LEGAL
+                        dr.NextResult();
+                        if (dr.HasRows)
+                        {
+                            Ent_TITULAR_RLEGAL oCamposTRL;
+
+                            while (dr.Read())
+                            {
+                                oCamposTRL = new Ent_TITULAR_RLEGAL();
+                                oCamposTRL.DOCUMENTO = dr.GetString(dr.GetOrdinal("DOCUMENTO"));
+                                oCamposTRL.APELLIDOS_NOMBRES = dr.GetString(dr.GetOrdinal("APELLIDOS_NOMBRES"));
+                                oCamposTRL.FECHA_REGISTRO = dr.GetString(dr.GetOrdinal("FECHA_REGISTRO"));                                
+                                oCampos.ListTitularRLegal.Add(oCamposTRL);
                             }
                         }
                     }

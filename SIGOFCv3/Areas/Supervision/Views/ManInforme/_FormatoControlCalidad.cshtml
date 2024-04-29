@@ -51,6 +51,12 @@
             return false;
         },
         fnAddJefe: () => {
+            var codEstadoDoc = _ControlCalidad.frm.find("#hdfIndicadorCalidadId").val();
+            if (codEstadoDoc != '0000005') {
+                utilSigo.toastWarning("Primero debe marcar el inicio del control de calidad.");
+                return;
+            }
+
             let especialista = fControlCal.contenedor.find("#eJefeODC").val();
             let especialistaId = fControlCal.contenedor.find("#eJefeODCID").val();
             if ((especialistaId == "" || especialista == "") && ($("#hdfCodGrupoUsuario").val() == '0000011' || $("#hdfCodGrupoUsuario").val() == '0000001' ))
@@ -170,6 +176,19 @@
         },
         fnSave: () => {
             let model = fControlCal.fnGetDataTabla();
+
+            var codEstadoDoc = _ControlCalidad.frm.find("#hdfIndicadorCalidadId").val();
+            if (codEstadoDoc == '0000005') {
+                if (!model.eJefeODCID) {
+                    utilSigo.toastWarning("Debe seleccionar el Especialista/Jefe OD que efectúa el control de calidad para continuar con el registro.");
+                    return;
+                }
+                if (!model.fechaRecepcionIS) {
+                    utilSigo.toastWarning("Debe ingresar la Fecha de recepción del Informe de Supervisión.");
+                    return;
+                }
+            }
+
             let option = {
                 url: urlLocalSigo + "Supervision/ManInforme/GuardarFormatoControlCalidad",
                 datos: JSON.stringify(model), type: 'POST'

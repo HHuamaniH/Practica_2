@@ -143,10 +143,11 @@ namespace CapaEntidad.ViewModel
 
         //Error Material
         public List<Ent_ERRORMATERIAL> tbErrorMaterial_DGeneral { get; set; }
-        public List<Ent_ERRORMATERIAL> tbErrorMaterial_DAdicional { get; set; }
+        public List<Ent_ERRORMATERIAL> tbErrorMaterial_DAdicional { get; set; }       
         
         //División Interna del Predio
         public List<Ent_DIVISIONINTERNA> tbDivisionInterna { get; set; }
+        public List<Ent_TITULAR_RLEGAL> tbTitular_RLegal { get; set; }
 
         public IEnumerable<VM_Cbo> ddTHExtincion { get; set; }
         public string ddTHExtincionId { get; set; }
@@ -163,6 +164,7 @@ namespace CapaEntidad.ViewModel
         {
             vmControlCalidad = new VM_ControlCalidad_2();
             tbDivisionInterna = new List<Ent_DIVISIONINTERNA>();
+            tbTitular_RLegal = new List<Ent_TITULAR_RLEGAL>();
         }
     }
 

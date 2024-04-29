@@ -1534,8 +1534,6 @@ namespace CapaDatos.DOC
                             int pt8 = dr.GetOrdinal("NO_EVALUADO");
                             int pt9 = dr.GetOrdinal("SIN_DATOS");
 
-
-
                             while (dr.Read())
                             {
                                 //PARTE_DIARIO_DETALLE
@@ -1754,6 +1752,7 @@ namespace CapaDatos.DOC
                             int pt6 = dr.GetOrdinal("NUMERO_INDIVIDUOS");
                             int pt7 = dr.GetOrdinal("DESCRIPCION_INFRACCIONES");
                             int pt8 = dr.GetOrdinal("POA");
+                            int pt9 = dr.GetOrdinal("PARCELA");
 
 
                             while (dr.Read())
@@ -1768,6 +1767,7 @@ namespace CapaDatos.DOC
                                 oCampos2.NUMERO_ARBOLES = dr.GetInt32(pt6);
                                 oCampos2.descripFin = dr.GetString(pt7);
                                 oCampos2.NUM_EXP = dr.GetString(pt8);
+                                oCampos2.PARCELA = dr.GetString(pt9);
 
 
                                 listAdendas.Add(oCampos2);
@@ -3769,6 +3769,7 @@ namespace CapaDatos.DOC
                                 oCampos1.NUMERO_ARBOLES = Convert.ToInt32(dr["NUM_ARBOLES"]);
                                 oCampos1.VOLUMEN_ARBOLES = Convert.ToDecimal(dr["VOLUMEN_KILOGRAMOS"]);
                                 oCampos1.UNIDAD_MEDIDA = dr["UNIDAD_MEDIDA"].ToString();
+                                oCampos1.TIPO_APROVECHAMIENTO = dr["TIPO_APROVECHAMIENTO"].ToString();
                                 oCampos.ListPOATH.Add(oCampos1);
                             }
                         }
@@ -3795,7 +3796,8 @@ namespace CapaDatos.DOC
                                 oCampos1.SALDO = Convert.ToDecimal(dr["SALDO"]);
                                 oCampos1.OBSERVACIONES = dr["OBSERVACION"].ToString();
                                 oCampos1.UNIDAD_MEDIDA = dr["UNIDAD_MEDIDA"].ToString();
-
+                                oCampos1.TIPO_APROVECHAMIENTO = dr["TIPO_APROVECHAMIENTO"].ToString();
+                                oCampos1.PARCELA = dr["PARCELA"].ToString();
                                 oCampos.ListPOABalance.Add(oCampos1);
                             }
                         }
