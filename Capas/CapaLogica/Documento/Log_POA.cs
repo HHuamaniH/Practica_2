@@ -966,6 +966,7 @@ namespace CapaLogica.DOC
         public ListResult GuardarDatosPOA(VM_POA dto, string codCuenta)
         {
             ListResult resultado = new ListResult();
+            Log_BEXTRACCION logBEXTRACCION = new Log_BEXTRACCION(); 
             CEntidad oCampos = new CEntidad();
             String OUTPUTPARAM = "";
             string msjRespuesta = "El Registro se Guardo Correctamente", appServer = "";
@@ -1050,6 +1051,22 @@ namespace CapaLogica.DOC
                 oCampos.ListTRAPROBACION = dto.ListTRAPROBACION;
                 oCampos.ListSAPROBACION = dto.ListSAPROBACION;
                 oCampos.ListRAprueba = dto.ListRAprueba;
+                if(oCampos.ListRAprueba != null && oCampos.ListRAprueba.Count > 0)
+                {
+                    foreach (var item in oCampos.ListRAprueba)
+                    {
+                        List<Ent_BEXTRACCION_FECEMI> listaFechas = logBEXTRACCION.ListarBExtraccionPorPlan(oCampos.COD_THABILITANTE, oCampos.NUM_POA);
+                        if (listaFechas != null && listaFechas.Count > 0)
+                        {
+                            foreach (var fecha in listaFechas)
+                            {
+                                List<Ent_POA> listaGuardar = new List<Ent_POA>();
+                                listaGuardar.Add(item);
+                                logBEXTRACCION.InsertarBalanceExtraccionMaderableNoMaderable(listaGuardar, oCampos.COD_UCUENTA, fecha.COD_SECUENCIAL, oCampos.COD_THABILITANTE, oCampos.NUM_POA);
+                            }
+                        }
+                    }
+                }
                 oCampos.ListRApruebaISitu = dto.ListRApruebaISitu;
                 oCampos.ListAOCULAR = dto.ListAOCULAR;
                 oCampos.ListVERTICE = dto.ListVERTICE;

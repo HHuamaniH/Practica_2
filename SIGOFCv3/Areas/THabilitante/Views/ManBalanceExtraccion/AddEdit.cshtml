@@ -23,6 +23,11 @@
     .custom-row-footer {
         background-color: lightblue;
     }
+
+    .iconoDeshabilitado {
+        opacity: 0.5;
+        pointer-events: none;
+    }
 </style>
 @section scripts{
     <script>
@@ -31,6 +36,10 @@
     $(document).ready(function () {
         //Validamos el rol del usuario
         utilSigo.ValidaRol('@ViewBag.VAliasRol', 'btnRegistrar');
+        document.getElementById('btnAddEditBExtMade_NoMade').onclick = null;
+        document.getElementById('btnAddEditBExtMade_NoMade').classList.add('iconoDeshabilitado');
+        document.getElementById('btnDeleteBExtMade_NoMade').onclick = null;
+        document.getElementById('btnDeleteBExtMade_NoMade').classList.add('iconoDeshabilitado');
     });
     </script>
 }
@@ -111,8 +120,8 @@
                                                     <tr>
                                                         <th colspan="24" class="text-sm-left">
                                                             <div class="form-inline">
-                                                                <i class="fa mx-2 fa-lg fa-file-o" style="cursor:pointer;" onclick="_EditBExtraccion.fnAddEditBExtMade_NoMade('');" data-toggle="tooltip" data-placement="top" title="Nuevo"></i>
-                                                                <i class="fa mx-2 fa-lg fa-window-close-o" style="cursor:pointer;" onclick="_EditBExtraccion.fnDeleteBExt(null, 'BEXTRACCION_MADE_ALL');" data-toggle="tooltip" data-placement="top" title="Eliminar Todos"></i>
+                                                                <i id="btnAddEditBExtMade_NoMade" class="fa mx-2 fa-lg fa-file-o" style="cursor:pointer;" onclick="_EditBExtraccion.fnAddEditBExtMade_NoMade('');" data-toggle="tooltip" data-placement="top" title="Nuevo"></i>
+                                                                <i id="btnDeleteBExtMade_NoMade" class="fa mx-2 fa-lg fa-window-close-o" style="cursor:pointer;" onclick="_EditBExtraccion.fnDeleteBExt(null, 'BEXTRACCION_MADE_ALL');" data-toggle="tooltip" data-placement="top" title="Eliminar Todos"></i>
                                                                 <label style="cursor:pointer;" class="fa mx-2 fa-lg fa-file-excel-o" title="Importar Archivo" data-toggle="tooltip">
                                                                     <input type="file" style="display:none" size="60" onchange="_EditBExtraccion.fnImportBExt(event, this, 'BEXTRACCION_MADE')">
                                                                 </label>
@@ -438,7 +447,7 @@
 
             options = {
                 page_length: 10, row_edit: true, row_fnEdit: "_EditBExtraccion.fnAddEditBExtMade_NoMade(this)"
-                , row_delete: true, row_fnDelete: "_EditBExtraccion.fnDeleteBExt(this,'BEXTRACCION_MADE')"
+                , row_delete: false, row_fnDelete: "_EditBExtraccion.fnDeleteBExt(this,'BEXTRACCION_MADE')"
                 , row_index: true, page_autowidth: false, page_info: true
             };
 

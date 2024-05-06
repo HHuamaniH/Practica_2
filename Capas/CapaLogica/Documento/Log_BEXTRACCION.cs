@@ -2,6 +2,7 @@
 using CapaEntidad.ViewModel;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using CDatos = CapaDatos.DOC.Dat_BEXTRACCION;
 
 namespace CapaLogica.DOC
@@ -47,11 +48,31 @@ namespace CapaLogica.DOC
 
             try
             {
-                dto.COD_UCUENTA = asCodUCuenta;
-                dto.OUTPUTPARAMDET01 = 0;
-                oCDatos.GrabarBExtraccionFecEmi(dto);
+                Log_POA log = new Log_POA();
+                Ent_POA datModificar = new Ent_POA();
 
-                result.AddResultado("Datos registrados correctamente", true);
+                Ent_POA oCamposMod = new Ent_POA();
+                oCamposMod.COD_THABILITANTE = dto.COD_THABILITANTE;
+                oCamposMod.NUM_POA = dto.NUM_POA;
+
+                datModificar = log.RegMostrarListaItems(oCamposMod);
+
+                var contEspeciesAprobadas = datModificar.ListRAprueba.Count;
+                if(contEspeciesAprobadas <= 0)
+                {
+                    result.AddResultado("Debe ingresar al menos un registro en las especies aprobadas", false);
+                } 
+                else
+                {
+                    dto.COD_UCUENTA = asCodUCuenta;
+                    dto.OUTPUTPARAMDET01 = 0;
+                    oCDatos.GrabarBExtraccionFecEmi(dto);
+
+                    var codSecuencial = ObtenerUltimoCodigoSecuencialDeLasFechasDelBalanceExtraccion(dto.COD_THABILITANTE, dto.NUM_POA);
+                    InsertarBalanceExtraccionMaderableNoMaderable(datModificar.ListRAprueba, asCodUCuenta, codSecuencial, dto.COD_THABILITANTE, dto.NUM_POA);
+
+                    result.AddResultado("Datos registrados correctamente", true);
+                }
             }
             catch (Exception ex)
             {
@@ -146,6 +167,75 @@ namespace CapaLogica.DOC
             }
 
             return result;
+        }
+
+        public int InsertarBalanceExtraccionMaderableNoMaderable(List<Ent_POA> lista, string asCodUCuenta, int codSecuencial, string codTHabilitante, int numPOA)
+        {
+            List<Ent_BEXTRACCION_MADE> listaInsertar = new List<Ent_BEXTRACCION_MADE>();
+
+            foreach (var item in lista)
+            {
+                // OBTENER TODOS LOS DATOS DEL REGISTRO SI ES EDITAR
+                //var result = GrabarBExtraccionMaderable(listaInsertar, asCodUCuenta);
+
+                Ent_BEXTRACCION_MADE guardar = new Ent_BEXTRACCION_MADE();
+                //guardar.AUTORIZADO = -1;
+                //guardar.CANTIDAD = -1;
+                guardar.COD_SECUENCIAL_BEXT = codSecuencial;
+                guardar.COD_THABILITANTE = codTHabilitante;
+                guardar.COD_UCUENTA = null;
+                guardar.ESPECIES = null;
+                guardar.ESPECIES_SERFOR = null;
+                //guardar.EXTRAIDO = -1;
+                guardar.FECHA1 = null;
+                guardar.FECHA2 = null;
+                guardar.GUIA_TRANSPORTE = null;
+                guardar.NUM_POA = numPOA;
+                guardar.PC = null;
+                guardar.RECIBO = null;
+                guardar.RegEstado = item.RegEstado;
+
+                guardar.COD_ESPECIES = item.COD_ESPECIES;
+                guardar.COD_ESPECIES_SERFOR = item.COD_ESPECIES_SERFOR;
+                guardar.TOTAL_ARBOLES = item.NUM_ARBOLES;
+                guardar.VOLUMEN_AUTORIZADO = item.VOLUMEN_KILOGRAMOS;
+                guardar.UNIDAD_MEDIDA = item.UNIDAD_MEDIDA;
+                guardar.TIPOMADERABLE = item.TIPOMADERABLE;
+                guardar.PC = item.PCA;
+
+                if (guardar.RegEstado == 1)
+                {
+                    guardar.DMC = 0;
+                    guardar.VOLUMEN_MOVILIZADO = 0;
+                    guardar.SALDO = 0;
+                } 
+                else
+                {
+                    List<Ent_BEXTRACCION_MADE> resultados = ListarBExtraccionMaderable(codTHabilitante, numPOA, codSecuencial);
+                    var encontrado = resultados.Where(x => x.COD_ESPECIES == guardar.COD_ESPECIES && x.COD_ESPECIES_SERFOR == guardar.COD_ESPECIES_SERFOR);
+                    if (encontrado.Count() > 0)
+                    {
+                        guardar.COD_SECUENCIAL = encontrado.FirstOrDefault().COD_SECUENCIAL;    
+                        guardar.DMC = encontrado.FirstOrDefault().DMC;    
+                        guardar.VOLUMEN_MOVILIZADO = encontrado.FirstOrDefault().VOLUMEN_MOVILIZADO;    
+                        guardar.SALDO = encontrado.FirstOrDefault().SALDO;
+                        guardar.OBSERVACION = encontrado.FirstOrDefault().OBSERVACION;    
+                    }
+                }
+
+                listaInsertar.Add(guardar);
+            }
+
+            ListResult result = GrabarBExtraccionMaderable(listaInsertar, asCodUCuenta);
+
+            return listaInsertar.Count();
+        }
+
+        public int ObtenerUltimoCodigoSecuencialDeLasFechasDelBalanceExtraccion(string codTHabilitante, int numPOA)
+        {
+            var result = ListarBExtraccionPorPlan(codTHabilitante, numPOA);
+            result = result.OrderBy(x => x.COD_SECUENCIAL).Reverse().ToList();
+            return result.FirstOrDefault().COD_SECUENCIAL;
         }
     }
 }

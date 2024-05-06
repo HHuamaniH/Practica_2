@@ -189,7 +189,8 @@ namespace CapaDatos.DOC
                                     oCampos.TOTAL_ARBOLES = Int32.Parse(dr["TOTAL_ARBOLES"].ToString());//Maderable
                                     oCampos.VOLUMEN_MOVILIZADO = decimal.Parse(dr["VOLUMEN_MOVILIZADO"].ToString());
                                     oCampos.VOLUMEN_AUTORIZADO = decimal.Parse(dr["VOLUMEN_AUTORIZADO"].ToString());
-                                    oCampos.SALDO = decimal.Parse(dr["SALDO"].ToString());
+                                    bool esNumero = double.TryParse(dr["SALDO"].ToString(), out double saldoNumerico);
+                                    if(esNumero) oCampos.SALDO = (decimal) saldoNumerico;
                                     oCampos.OBSERVACION = dr["OBSERVACION"].ToString();
                                     oCampos.TIPOMADERABLE = dr["TIPOMADERABLE"].ToString();//Maderable
                                     oCampos.COD_ESPECIES_SERFOR = dr["COD_ESPECIES_SERFOR"].ToString();

@@ -2014,6 +2014,7 @@ namespace CapaDatos.DOC
                     {
 
                         oCamposDet = new CEntidad();
+                        oCamposDet.COD_UCUENTA = oCEntidad.COD_UCUENTA;
                         oCamposDet.COD_THABILITANTE = oCEntidad.COD_THABILITANTE;
                         oCamposDet.NUM_POA = oCEntidad.NUM_POA;
                         oCamposDet.COD_ESPECIES = loDatos.COD_ESPECIES;
