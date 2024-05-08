@@ -16,34 +16,34 @@
                     <div class="form-group col-md-12">
                         <!--Html.Partial("~/Areas/General/Views/Controles/_renderComboEspecie.cshtml")-->
                         <label for="ddlRenderComboEspecieId" class="text-small">Especie</label>
-                        @Html.DropDownList("ddlRenderComboEspecieId", new SelectList(ViewBag.lstEspecies, "Value", "Text"), new { @class = "form-control form-control-sm" })
+                        @Html.DropDownList("ddlRenderComboEspecieId", new SelectList(ViewBag.lstEspecies, "Value", "Text"), new { @class = "form-control form-control-sm", disabled = "disabled" })
                     </div>
                 </div>
                 <div class="form-row trEspecieSERFOR">
                     <div class="form-group col-md-12">
                         <label for="ddlEspecieSerforId" class="text-small">Especie SERFOR</label>
-                        @Html.DropDownList("ddlEspecieSerforId", new SelectList(ViewBag.lstEspeciesSerfor, "Value", "Text"), new { @class = "form-control form-control-sm" })
+                        @Html.DropDownList("ddlEspecieSerforId", new SelectList(ViewBag.lstEspeciesSerfor, "Value", "Text"), new { @class = "form-control form-control-sm", disabled = "disabled" })
                     </div>
                 </div>
                 <div class="form-row trGrupoDMCArbol" style="display:none;">
                     @*Maderable*@
                     <div class="form-group col-md-6 trDMC" style="display:none;">
-                        <label for="txtDMC" class="text-small">DMC (cm)</label>
+                        <label for="txtDMC" class="text-small">DMC (cm) *</label>
                         @Html.TextBox("txtDMC", "", new { @class = "form-control form-control-sm", maxlength = "6", @onkeypress = "return utilSigo.onKeyEntero(event, this);" })
                     </div>
                     @*Maderable*@
                     <div class="form-group col-md-6 trArbol" style="display:none;">
                         <label for="txtTotalArbol" class="text-small">Total árboles</label>
-                        @Html.TextBox("txtTotalArbol", "", new { @class = "form-control form-control-sm", maxlength = "6", @onkeypress = "return utilSigo.onKeyEntero(event, this);" })
+                        @Html.TextBox("txtTotalArbol", "", new { @class = "form-control form-control-sm", maxlength = "6", @onkeypress = "return utilSigo.onKeyEntero(event, this);", disabled = "disabled" })
                     </div>
                 </div>
                 <div class="form-row trVolumen" style="display:none;">
                     <div class="form-group col-md-6">
                         <label for="txtVolAutorizado" class="text-small">Cantidad autorizada</label>
-                        @Html.TextBox("txtVolAutorizado", "", new { @class = "form-control form-control-sm", maxlength = "11", @onkeypress = "return utilSigo.onKeyDecimal(event, this);", @onblur = "return utilSigo.onBlurSevenDigitoThreeDecimal(this,'Cantidad autorizada');" })
+                        @Html.TextBox("txtVolAutorizado", "", new { @class = "form-control form-control-sm", maxlength = "11", @onkeypress = "return utilSigo.onKeyDecimal(event, this);", @onblur = "return utilSigo.onBlurSevenDigitoThreeDecimal(this,'Cantidad autorizada');", disabled = "disabled" })
                     </div>
                     <div class="form-group col-md-6">
-                        <label for="txtVolMovilizado" class="text-small">Cantidad movilizada</label>
+                        <label for="txtVolMovilizado" class="text-small">Cantidad movilizada *</label>
                         @Html.TextBox("txtVolMovilizado", "", new { @class = "form-control form-control-sm", maxlength = "11", @onkeypress = "return utilSigo.onKeyDecimal(event, this);", @onblur = "return utilSigo.onBlurSevenDigitoThreeDecimal(this,'Cantidad movilizada');" })
                     </div>
                 </div>
@@ -94,19 +94,19 @@
                         @Html.TextBox("txtCantidad", "", new { @class = "form-control form-control-sm", maxlength = "10", onkeypress = "return utilSigo.onKeyEntero(event, this);" })
                     </div>
                     <div class="form-group col-md-6 trSaldo" style="display:none;">
-                        <label for="txtSaldo" class="text-small">Saldo</label>
+                        <label for="txtSaldo" class="text-small">Saldo *</label>
                         @Html.TextBox("txtSaldo", "", new { @class = "form-control form-control-sm", maxlength = "10", onkeypress = "return utilSigo.onKeyDecimal(event, this);", @onblur = "return utilSigo.onBlurSevenDigitoThreeDecimal(this,'Saldo');" })
                     </div>
                     <div class="form-group col-md-6 trParcela" style="display:none;">
                         <label for="txtParcela" class="text-small">PC</label>
-                        @Html.DropDownList("ddlParcelaId", new SelectList(ViewBag.lstParcelas, "Value", "Text"), new { @class = "form-control form-control-sm" })
+                        @Html.DropDownList("ddlParcelaId", new SelectList(ViewBag.lstParcelas, "Value", "Text"), new { @class = "form-control form-control-sm", disabled = "disabled" })
                     </div>
                 </div>
                 <div class="form-row trTipoAprov" style="display:none;">
                     @*Maderable*@
                     <div class="form-group col-md-6">
                         <label for="ddlTipoId" class="text-small">Tipo</label>
-                        <select id="ddlTipoId" class="form-control form-control-sm">
+                        <select id="ddlTipoId" class="form-control form-control-sm" disabled="disabled">
                             <option value="-">Seleccionar</option>
                             <option value="CARBON">CARBÓN</option>
                             <option value="MADERABLES">MADERABLES</option>
@@ -117,7 +117,7 @@
                 <div class="form-row trUM" style="display:none;">
                     <div class="form-group col-md-6">
                         <label for="ddlUniMedidaId" class="text-small">Unidad de medida</label>
-                        <select id="ddlUniMedidaId" class="form-control form-control-sm">
+                        <select id="ddlUniMedidaId" class="form-control form-control-sm" disabled="disabled">
                             <option value="-">Seleccionar</option>
                             <option value="M3">M3</option>
                             <option value="KG">KG</option>
@@ -126,7 +126,7 @@
                 </div>
                 <div class="form-row trObservacion" style="display:none;">
                     <div class="form-group col-md-12">
-                        <label for="txtObservacion" class="text-small">Observacion</label>
+                        <label for="txtObservacion" class="text-small">Observacion *</label>
                         @Html.TextArea("txtObservacion", "", new { @class = "form-control form-control-sm", rows = "3", onkeypress = "return utilSigo.checkLetter(event);", maxlength="100" })
                     </div>
                 </div>

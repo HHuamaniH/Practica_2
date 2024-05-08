@@ -193,7 +193,7 @@ namespace CapaLogica.DOC
                 guardar.NUM_POA = numPOA;
                 guardar.PC = null;
                 guardar.RECIBO = null;
-                guardar.RegEstado = item.RegEstado;
+                //guardar.RegEstado = item.RegEstado;
 
                 guardar.COD_ESPECIES = item.COD_ESPECIES;
                 guardar.COD_ESPECIES_SERFOR = item.COD_ESPECIES_SERFOR;
@@ -203,24 +203,23 @@ namespace CapaLogica.DOC
                 guardar.TIPOMADERABLE = item.TIPOMADERABLE;
                 guardar.PC = item.PCA;
 
-                if (guardar.RegEstado == 1)
+                List<Ent_BEXTRACCION_MADE> resultados = ListarBExtraccionMaderable(codTHabilitante, numPOA, codSecuencial);
+                var encontrado = resultados.Where(x => x.COD_ESPECIES == guardar.COD_ESPECIES && x.COD_ESPECIES_SERFOR == guardar.COD_ESPECIES_SERFOR);
+                if (encontrado.Count() > 0)
+                {
+                    guardar.COD_SECUENCIAL = encontrado.FirstOrDefault().COD_SECUENCIAL;
+                    guardar.DMC = encontrado.FirstOrDefault().DMC;
+                    guardar.VOLUMEN_MOVILIZADO = encontrado.FirstOrDefault().VOLUMEN_MOVILIZADO;
+                    guardar.SALDO = encontrado.FirstOrDefault().SALDO;
+                    guardar.OBSERVACION = encontrado.FirstOrDefault().OBSERVACION;
+                    guardar.RegEstado = 2;
+                }
+                else
                 {
                     guardar.DMC = 0;
                     guardar.VOLUMEN_MOVILIZADO = 0;
                     guardar.SALDO = 0;
-                } 
-                else
-                {
-                    List<Ent_BEXTRACCION_MADE> resultados = ListarBExtraccionMaderable(codTHabilitante, numPOA, codSecuencial);
-                    var encontrado = resultados.Where(x => x.COD_ESPECIES == guardar.COD_ESPECIES && x.COD_ESPECIES_SERFOR == guardar.COD_ESPECIES_SERFOR);
-                    if (encontrado.Count() > 0)
-                    {
-                        guardar.COD_SECUENCIAL = encontrado.FirstOrDefault().COD_SECUENCIAL;    
-                        guardar.DMC = encontrado.FirstOrDefault().DMC;    
-                        guardar.VOLUMEN_MOVILIZADO = encontrado.FirstOrDefault().VOLUMEN_MOVILIZADO;    
-                        guardar.SALDO = encontrado.FirstOrDefault().SALDO;
-                        guardar.OBSERVACION = encontrado.FirstOrDefault().OBSERVACION;    
-                    }
+                    guardar.RegEstado = 1;
                 }
 
                 listaInsertar.Add(guardar);

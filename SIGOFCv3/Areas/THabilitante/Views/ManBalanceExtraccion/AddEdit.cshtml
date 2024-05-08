@@ -303,6 +303,7 @@
 <script type="text/javascript">
     let _EditBExtraccion = {
         codSecuencialBExtSelect: 0,
+        listaActualBalance: [],
         fnReturn: (alertaInicial) => {
             var url = urlLocalSigo + "THabilitante/ManBalanceExtraccion/Index";
 
@@ -420,14 +421,14 @@
                 _EditBExtraccion.frm.find("#txttbBExtMade_NoMade").html("BALANCE DE EXTRACCIÓN O KARDEX (Maderable y No Maderable)");
 
                 if (cod_mtipo == "0000021") {
-                    _EditBExtraccion.frm.find("#btnExcelPMedBExtMadNoMad").show();
+                    _EditBExtraccion.frm.find("#btnExcelPMedBExtMadNoMad").hide();
 
                     columns_label = ["Especie", "Especie SERFOR", "DMC", "Total Árboles", "Cantidad Autorizada", "Cantidad Movilizada"
                         , "Autorizado", "Extraído", "Saldo", "UM", "Tipo de aprovechamiento", "Observación"];
                     columns_data = ["ESPECIES", "ESPECIES_SERFOR", "DMC", "TOTAL_ARBOLES", "VOLUMEN_AUTORIZADO", "VOLUMEN_MOVILIZADO"
                         , "AUTORIZADO", "EXTRAIDO", "SALDO", "UNIDAD_MEDIDA", "TIPOMADERABLE", "OBSERVACION"];
                 } else if (cod_mtipo == "0000020") {
-                    _EditBExtraccion.frm.find("#btnExcelCarrBExtMadNoMad").show();
+                    _EditBExtraccion.frm.find("#btnExcelCarrBExtMadNoMad").hide();
 
                     columns_label = ["Especie", "Especie SERFOR", "DMC", "Total Árboles", "Cantidad Autorizada", "Cantidad Movilizada"
                         , "Fecha (expedición para forma 20)", "Guía de Transporte Forestal", "Fecha", "Recibo", "Saldo", "Cantidad"
@@ -435,7 +436,7 @@
                     columns_data = ["ESPECIES", "ESPECIES_SERFOR", "DMC", "TOTAL_ARBOLES", "VOLUMEN_AUTORIZADO", "VOLUMEN_MOVILIZADO"
                         , "FECHA1", "GUIA_TRANSPORTE", "FECHA2", "RECIBO", "SALDO", "CANTIDAD", "UNIDAD_MEDIDA", "TIPOMADERABLE", "OBSERVACION"];
                 } else {
-                    _EditBExtraccion.frm.find("#btnExcelBExtMadNoMad").show();
+                    _EditBExtraccion.frm.find("#btnExcelBExtMadNoMad").hide();
 
                     //Se agregó Total Árboles por solicitud de requerimiento
                     columns_label = ["Especie", "Especie SERFOR", "DMC", "Total Árboles", "Cantidad Autorizada", "Cantidad Movilizada"
@@ -482,6 +483,7 @@
                             }
                         }
                     }*/
+                    listaActualBalance = result.data;
                     _EditBExtraccion.dtBExtMade_NoMade.rows.add(result.data).draw();
 
                     if (result.data.length > 0) {
@@ -723,7 +725,6 @@
                                     tfootTable += "<tr><th></th>" +
                                         "<th></th>" +
                                         "<th></th>" +
-                                        "<th></th>" +
                                         "<th>Total (MADERABLES)</th>" +
                                         "<th>" + cMdmc + "</th>"+
                                         "<th>" + cMarboles + "</th>" +
@@ -739,7 +740,6 @@
                                     tfootTable += "<tr><th></th>" +
                                         "<th></th>" +
                                         "<th></th>" +
-                                        "<th></th>" +
                                         "<th>Total (CARBON)</th>" +
                                         "<th>" + cCdmc + "</th>"+
                                         "<th>" + cCarboles + "</th>" +
@@ -753,7 +753,6 @@
                                 }
                                 if (contNoM > 0) {
                                     tfootTable += "<tr><th></th>" +
-                                        "<th></th>" +
                                         "<th></th>" +
                                         "<th></th>" +
                                         "<th>Total (NO MADERABLES)</th>" +
@@ -833,8 +832,8 @@
             utilSigo.fnAjax(option, function (result) {
                 if (result.success) {
                     _EditBExtraccion.dtBExtMade.clear().draw();
+                    listaActualBalance = result.data;
                     _EditBExtraccion.dtBExtMade.rows.add(result.data).draw();
-
                     let dmc = 0, totArb = 0, volAut = 0, volMov = 0;
                     for (var i = 0; i < result.data.length; i++) {
                         dmc += result.data[i].DMC;
@@ -1121,13 +1120,54 @@
                 utilSigo.dialogConfirm('', 'Desea registrar los datos del archivo importado?', function (r) {
                     if (r) {
                         var url2 = "";
+                        var enviarData = [];
+                        listaActualBalance.forEach(eleTabla => {
+                            /*
+                            var codigoInternoSeparado = eleTabla.CODIGO_INTERNO.split("|"); // "000120240000001|1|10|0006141|0004822"
+                            var codTHabilitante = codigoInternoSeparado[0];
+                            var numPoa = codigoInternoSeparado[1];
+                            var codSecuencial = codigoInternoSeparado[2];
+                            var codEspecie = codigoInternoSeparado[3];
+                            var codEspecieSerfor = codigoInternoSeparado[4];
+                            */
+                            var posicionCoincidencia = data.findIndex(x => x.CODIGO_INTERNO == eleTabla.CODIGO_INTERNO);
+                            /*data.forEach(eleImport => {
+                                if(eleTabla.CODIGO_INTERNO == eleImport.CODIGO_INTERNO) {
+                                    eleTabla.DMC == eleImport.DMC;
+                                    eleTabla.VOLUMEN_MOVILIZADO == eleImport.VOLUMEN_MOVILIZADO;
+                                    eleTabla.SALDO == eleImport.SALDO;
+                                    eleTabla.OBSERVACION == eleImport.OBSERVACION;
+                                }
+                            });*/
+                            if(posicionCoincidencia >= 0) {
+                                eleTabla.DMC = data[posicionCoincidencia].DMC;
+                                eleTabla.VOLUMEN_MOVILIZADO = data[posicionCoincidencia].VOLUMEN_MOVILIZADO;
+                                eleTabla.SALDO = data[posicionCoincidencia].SALDO;
+                                eleTabla.OBSERVACION = data[posicionCoincidencia].OBSERVACION;
+
+                                eleTabla.COD_THABILITANTE = data[posicionCoincidencia].COD_THABILITANTE;
+                                eleTabla.NUM_POA = data[posicionCoincidencia].NUM_POA;
+                                eleTabla.COD_SECUENCIAL_BEXT = data[posicionCoincidencia].COD_SECUENCIAL_BEXT;
+                                eleTabla.COD_SECUENCIAL = data[posicionCoincidencia].COD_SECUENCIAL;
+                                eleTabla.AUTORIZADO = data[posicionCoincidencia].AUTORIZADO;
+                                eleTabla.EXTRAIDO = data[posicionCoincidencia].EXTRAIDO;
+                                eleTabla.FECHA1 = data[posicionCoincidencia].FECHA1;
+                                eleTabla.FECHA2 = data[posicionCoincidencia].FECHA2;
+                                eleTabla.GUIA_TRANSPORTE = data[posicionCoincidencia].GUIA_TRANSPORTE;
+                                eleTabla.CANTIDAD = data[posicionCoincidencia].CANTIDAD;
+                                eleTabla.RECIBO = data[posicionCoincidencia].RECIBO;
+                                eleTabla.COD_PARCELA = data[posicionCoincidencia].COD_PARCELA;
+                                eleTabla.CODIGO_INTERNO = null;
+                            }
+                        });
+                        enviarData = listaActualBalance;
 
                         switch (tipo) {
                             case "BEXTRACCION_MADE": url2 = urlLocalSigo + "THabilitante/ManBalanceExtraccion/GrabarBExtraccionMaderableLista"; break;
                             case "BEXTRACCION_NOMADE": url2 = urlLocalSigo + "THabilitante/ManBalanceExtraccion/GrabarBExtraccionNoMaderableLista"; break;
                         }
 
-                        var option2 = { url: url2, datos: JSON.stringify(data), type: 'POST' };
+                        var option2 = { url: url2, datos: JSON.stringify(enviarData), type: 'POST' };
 
                         utilSigo.fnAjax(option2, function (data2) {
                             if (data2.success) {
