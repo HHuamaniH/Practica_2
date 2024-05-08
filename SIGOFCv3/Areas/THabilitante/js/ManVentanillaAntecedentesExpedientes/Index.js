@@ -73,8 +73,10 @@ anteExpedientes.fnRefresh = function () {
 };
 
 anteExpedientes.fnLoadManGrillaPaging = function () {
-    var columns_label = ["N°", "E", "Tipo Doc Referencia", "N° Trámite", "Documento Trámite ", "Fecha de Entrega al OSINFOR",
-        "Oficina Desconcentrada", "N° Título Habilitante", "Resolución de Aprobación del Plan de Manejo", "Observaciones", "Estado", "SITD",
+    var columns_label = ["N°", "E", "SUB-TIPO", "DETALLE SUB-TIPO", "NÚMERO", "FECHA DEL DOCUMENTO", "N° TÍTULO HABILITANTE", "DESCRIPCIÓN", "N° TRÁMITE",
+        "FECHA DE ENTREGA AL OSINFOR", "OFICINA DESCONCENTRADA",
+        //"Resolución de Aprobación del Plan de Manejo", "Observaciones",
+        "Estado", "SITD",
         "SIADO", "T", "A", "Ir TH", "Ir PM", "Ir AD", "Obs"];
     var colums_title = ["", "Editar Datos SITD", "", "", "", "", "", "", "", "", "", "Descargar Documento Trámite SITD", "Descargar Documento del SIADO", "Transferir", "Anular",
         "Modificar Datos del Título Habilitante", "Modificar Datos del Plan de Manejo", "Modificar Datos del Acto Administrativo", ""];
@@ -91,14 +93,20 @@ anteExpedientes.fnLoadManGrillaPaging = function () {
                 else return "";
             }
         },
-        { "data": "DOC_REFERENCIA", "autoWidth": true },
-        { "data": "CCODIFICACION", "autoWidth": true },
-        { "data": "CNRODOCUMENTO", "autoWidth": true },
-        { "data": "FECHA_SITD", "autoWidth": true },
-        { "data": "CNOMOFICINA", "autoWidth": true },
-        { "data": "NUM_THABILITANTE", "autoWidth": true },
-        { "data": "RESOLUCION_POA", "autoWidth": true },
-        { "data": "OBSERVACION", "autoWidth": true },
+        { "data": "DOC_REFERENCIA", "autoWidth": true },//3
+        { "data": "OBSERVACION", "autoWidth": true },//4
+        { "data": "RESOLUCION_POA", "autoWidth": true },//5
+        { "data": "FFECDOCUMENTO", "autoWidth": true },//6 FECHA DEL DOCUMENTO NUEVO
+        { "data": "NUM_THABILITANTE", "autoWidth": true },//7
+        { "data": "DESCRIPCION", "autoWidth": true },//8 DESCRIPCION 
+        { "data": "CCODIFICACION", "autoWidth": true },//9
+        { "data": "FECHA_SITD", "autoWidth": true },//10
+        { "data": "CNOMOFICINA", "autoWidth": true },//11
+
+
+
+       // { "data": "CNRODOCUMENTO", "autoWidth": true },      
+       // { "data": "", "autoWidth": true },
         { "data": "ESTADO_AEXPEDIENTE", "autoWidth": true },
         {
             "data": "", "width": "2%", "orderable": false, "searchable": false, "mRender": function (data, type, row) {

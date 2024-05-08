@@ -238,6 +238,50 @@ namespace CapaDatos.DOC
             }
         }
 
+        public List<Ent_IntSIADO_V3> RegMostrarListarDocSIADO_V3(OracleConnection cn, CEntIntSIADO oCEntidad)
+        {
+            List<Ent_IntSIADO_V3> oCampos = new List<Ent_IntSIADO_V3>();
+            try
+            {
+                using (OracleDataReader dr = dBOracle.SelDrdDefault(cn, null, "IntSIADO_OSINFOR_ERP_MIGRACION.spMostrarListaDocumentosSiado", oCEntidad))
+                {
+                    if (dr != null)
+                    {
+                        Ent_IntSIADO_V3 oCamposDet;
+                        if (dr.HasRows)
+                        {
+                            int pt1 = dr.GetOrdinal("SUBTIPO");
+                            int pt2 = dr.GetOrdinal("DETALLESUBTIPO");
+                            int pt3 = dr.GetOrdinal("NUMERO");
+                            int pt4 = dr.GetOrdinal("FECHA_DOCUMENTO");
+                            int pt5 = dr.GetOrdinal("ORIGEN");
+                            int pt6 = dr.GetOrdinal("CODDOC");
+                            int pt7 = dr.GetOrdinal("DESCRIPCION");
+                            int pt8 = dr.GetOrdinal("NUMEROTRAMITESITD");
+                            while (dr.Read())
+                            {
+                                oCamposDet = new Ent_IntSIADO_V3();
+                                oCamposDet.SUBTIPO = dr.GetString(pt1);
+                                oCamposDet.DETALLESUBTIPO = dr.GetString(pt2);
+                                oCamposDet.NUMERO = dr.GetString(pt3);
+                                oCamposDet.FECHA_DOCUMENTO = dr.GetString(pt4);
+                                oCamposDet.ORIGEN = dr.GetString(pt5);
+                                oCamposDet.DETINV_CODDOC = dr.GetString(pt6);
+                                oCamposDet.DETINV_DESCRIPCION = dr.GetString(pt7);
+                                oCamposDet.NUMEROTRAMITESITD = dr.GetString(pt8);
+                                oCampos.Add(oCamposDet);
+                            }
+                        }
+                    }
+                }
+                return oCampos;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
         #endregion
 
     }

@@ -1207,6 +1207,35 @@ namespace SIGOFCv3.Areas.General.Controllers
                 return Json(new { data = "", success = false, msj = ex.Message });
             }
         }
+        public PartialViewResult _IntegracionDOCSIADO(string asCriterio, string asSubCriterio, string asValor = "")
+        {
+            ViewBag.hdfCriterio = asCriterio;
+            ViewBag.hdfSubCriterio = asSubCriterio;
+            ViewBag.hdfValor = asValor;
+
+            return PartialView();
+        }
+        public JsonResult buscarIntegracionDOCSIADO(string asCriterio, string asSubCriterio, string asValor = "")
+        {
+            try
+            {
+                //List<Ent_IntSIADO> lstSIADO = new List<Ent_IntSIADO>();
+                Ent_IntSIADO paramSIADO = new Ent_IntSIADO();
+                Log_IntSIADO exeSIADO = new Log_IntSIADO();
+
+                paramSIADO.BusCriterio = asCriterio;
+                paramSIADO.BusValor = asSubCriterio;
+                paramSIADO.Parametro = asValor;
+                var lstSIADO = exeSIADO.RegMostrarListarDocSIADO_V3(paramSIADO);
+                var jsonResult = Json(new { success = true, data = lstSIADO }, JsonRequestBehavior.AllowGet);
+                jsonResult.MaxJsonLength = int.MaxValue;
+                return jsonResult;
+            }
+            catch (Exception ex)
+            {
+                return Json(new { data = "", success = false, msj = ex.Message });
+            }
+        }
         public ActionResult VerificaSIADO(string fileName, string origen)
         {
             string pathRepo = "";

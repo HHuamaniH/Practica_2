@@ -101,5 +101,19 @@ namespace CapaEntidad.DOC
         public String DETINV_DESCRIPCION { get; set; }
         [Description("ORIGEN")]
         public String ORIGEN { get; set; }
+        
+        
+        [Description("SUBTIPO")]
+        public String SUBTIPO { get; set; }
+        [Description("DETALLESUBTIPO")]
+        public String DETALLESUBTIPO { get; set; }
+        [Description("NUMERO")]
+        public String NUMERO { get; set; }
+        [Description("FECHA_DOCUMENTO")]
+        public String FECHA_DOCUMENTO { get; set; }
+        [Description("NUMEROTRAMITESITD")]
+        public String NUMEROTRAMITESITD { get; set; }
+
+
     }
 }

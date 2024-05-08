@@ -53,6 +53,23 @@ namespace CapaLogica.DOC
                 throw ex;
             }
         }
+        public List<Ent_IntSIADO_V3> RegMostrarListarDocSIADO_V3(CEntIntSIADO oCEntidad)
+        {
+            try
+            {
+                //SqlConnection cnSIADO = new OracleConnection(BDConexion.Conexion_Cadena_SIADO());
+                //cnSIADO.Open();
+                using (OracleConnection cn = new OracleConnection(CapaDatos.BDConexion.Conexion_Cadena_SIGO()))
+                {
+                    cn.Open();
+                    return oCDatos.RegMostrarListarDocSIADO_V3(cn, oCEntidad);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
         /// <summary>
         /// 
         /// </summary>
