@@ -1717,7 +1717,7 @@ namespace SIGOFCv3.Areas.General.Controllers
                         #endregion
                         #region ISUCVOLINJUS
                         case "ISUCVOLINJUS":
-                            if (Datos.Columns.Count != 8)
+                            if (Datos.Columns.Count != 10)
                             {
                                 throw new Exception("La plantilla seleccionada no es la correcta para Datos de Volumen Injustificado y Justificado del Informe");
                             }
