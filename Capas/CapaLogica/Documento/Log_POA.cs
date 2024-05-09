@@ -1053,29 +1053,31 @@ namespace CapaLogica.DOC
                 oCampos.ListSAPROBACION = dto.ListSAPROBACION;
                 oCampos.ListRAprueba = dto.ListRAprueba;
 
-
-                //if(oCampos.Fecha_c)
-                if(oCampos.ListRAprueba != null && oCampos.ListRAprueba.Count > 0)
+                if(fechaCorteBalanceExtraccionString != null && fechaCorteBalanceExtraccionString != "") 
                 {
-                    foreach (var item in oCampos.ListRAprueba)
+                    if(oCampos.ListRAprueba != null && oCampos.ListRAprueba.Count > 0)
                     {
-                        List<Ent_BEXTRACCION_FECEMI> listaFechas = logBEXTRACCION.ListarBExtraccionPorPlan(oCampos.COD_THABILITANTE, oCampos.NUM_POA);
-                        if (listaFechas != null && listaFechas.Count > 0)
+                        foreach (var item in oCampos.ListRAprueba)
                         {
-                            foreach (var fecha in listaFechas)
+                            List<Ent_BEXTRACCION_FECEMI> listaFechas = logBEXTRACCION.ListarBExtraccionPorPlan(oCampos.COD_THABILITANTE, oCampos.NUM_POA);
+                            if (listaFechas != null && listaFechas.Count > 0)
                             {
-                                var fechaCreacion = DateTime.Parse(fecha.FECHA_CREACION);
-                                var fechaCorteBalanceExtraccion = DateTime.Parse(fechaCorteBalanceExtraccionString);
-                                if (fechaCreacion > fechaCorteBalanceExtraccion)
+                                foreach (var fecha in listaFechas)
                                 {
-                                    List<Ent_POA> listaGuardar = new List<Ent_POA>();
-                                    listaGuardar.Add(item);
-                                    logBEXTRACCION.InsertarBalanceExtraccionMaderableNoMaderable(listaGuardar, oCampos.COD_UCUENTA, fecha.COD_SECUENCIAL, oCampos.COD_THABILITANTE, oCampos.NUM_POA);
+                                    var fechaCreacion = DateTime.Parse(fecha.FECHA_CREACION);
+                                    var fechaCorteBalanceExtraccion = DateTime.Parse(fechaCorteBalanceExtraccionString);
+                                    if (fechaCreacion > fechaCorteBalanceExtraccion)
+                                    {
+                                        List<Ent_POA> listaGuardar = new List<Ent_POA>();
+                                        listaGuardar.Add(item);
+                                        logBEXTRACCION.InsertarBalanceExtraccionMaderableNoMaderable(listaGuardar, oCampos.COD_UCUENTA, fecha.COD_SECUENCIAL, oCampos.COD_THABILITANTE, oCampos.NUM_POA);
+                                    }
                                 }
                             }
                         }
                     }
                 }
+                
                 oCampos.ListRApruebaISitu = dto.ListRApruebaISitu;
                 oCampos.ListAOCULAR = dto.ListAOCULAR;
                 oCampos.ListVERTICE = dto.ListVERTICE;
@@ -1096,32 +1098,35 @@ namespace CapaLogica.DOC
                 oCampos.NUM_CENSO_MADE_ELIM = (from p in oCampos.ListEliTABLA where p.EliTABLA == "POA_DET_MADERABLE_CENSO" select p).ToList<CEntidad>().Count;
                 oCampos.ELIM_TOTAL_CENSO = dto.hdELIM_TOTAL_CENSO;
 
-                if (oCampos.ListEliTABLA != null)
+                if(fechaCorteBalanceExtraccionString != null && fechaCorteBalanceExtraccionString != "") 
                 {
-                    foreach (var loDatos in oCampos.ListEliTABLA) {
-                        if (loDatos.EliTABLA == "POA_DET_MADE_NOMADE_EAAPROVECHAR")
-                        {
-                            List<Ent_BEXTRACCION_FECEMI> listaFechas = logBEXTRACCION.ListarBExtraccionPorPlan(oCampos.COD_THABILITANTE, oCampos.NUM_POA);
-                            if (listaFechas != null && listaFechas.Count > 0)
+                    if (oCampos.ListEliTABLA != null)
+                    {
+                        foreach (var loDatos in oCampos.ListEliTABLA) {
+                            if (loDatos.EliTABLA == "POA_DET_MADE_NOMADE_EAAPROVECHAR")
                             {
-                                foreach (var fecha in listaFechas)
+                                List<Ent_BEXTRACCION_FECEMI> listaFechas = logBEXTRACCION.ListarBExtraccionPorPlan(oCampos.COD_THABILITANTE, oCampos.NUM_POA);
+                                if (listaFechas != null && listaFechas.Count > 0)
                                 {
-                                    var fechaCreacion = DateTime.Parse(fecha.FECHA_CREACION);
-                                    var fechaCorteBalanceExtraccion = DateTime.Parse(fechaCorteBalanceExtraccionString);
-                                    if (fechaCreacion > fechaCorteBalanceExtraccion)
+                                    foreach (var fecha in listaFechas)
                                     {
-                                        List<Ent_BEXTRACCION_MADE> resultados = logBEXTRACCION.ListarBExtraccionMaderable(oCampos.COD_THABILITANTE, oCampos.NUM_POA, fecha.COD_SECUENCIAL);
-                                        var encontrado = resultados.Where(x => x.COD_ESPECIES == loDatos.EliVALOR01);
-                                        if (encontrado.Count() > 0)
+                                        var fechaCreacion = DateTime.Parse(fecha.FECHA_CREACION);
+                                        var fechaCorteBalanceExtraccion = DateTime.Parse(fechaCorteBalanceExtraccionString);
+                                        if (fechaCreacion > fechaCorteBalanceExtraccion)
                                         {
-                                            Ent_BEXTRACCION_EliTABLA oCEntidadEli = new Ent_BEXTRACCION_EliTABLA();
-                                            oCEntidadEli.EliTABLA = "BEXTRACCION_MADE";
-                                            oCEntidadEli.COD_THABILITANTE = oCampos.COD_THABILITANTE;
-                                            oCEntidadEli.NUM_POA = oCampos.NUM_POA;
-                                            oCEntidadEli.COD_SECUENCIAL = fecha.COD_SECUENCIAL;
-                                            oCEntidadEli.COD_ESPECIES_BEXT = encontrado.FirstOrDefault().COD_ESPECIES;
-                                            oCEntidadEli.COD_SECUENCIAL_BEXT = encontrado.FirstOrDefault().COD_SECUENCIAL;
-                                            ListResult result = logBEXTRACCION.EliminarBExtraccion(oCEntidadEli);
+                                            List<Ent_BEXTRACCION_MADE> resultados = logBEXTRACCION.ListarBExtraccionMaderable(oCampos.COD_THABILITANTE, oCampos.NUM_POA, fecha.COD_SECUENCIAL);
+                                            var encontrado = resultados.Where(x => x.COD_ESPECIES == loDatos.EliVALOR01);
+                                            if (encontrado.Count() > 0)
+                                            {
+                                                Ent_BEXTRACCION_EliTABLA oCEntidadEli = new Ent_BEXTRACCION_EliTABLA();
+                                                oCEntidadEli.EliTABLA = "BEXTRACCION_MADE";
+                                                oCEntidadEli.COD_THABILITANTE = oCampos.COD_THABILITANTE;
+                                                oCEntidadEli.NUM_POA = oCampos.NUM_POA;
+                                                oCEntidadEli.COD_SECUENCIAL = fecha.COD_SECUENCIAL;
+                                                oCEntidadEli.COD_ESPECIES_BEXT = encontrado.FirstOrDefault().COD_ESPECIES;
+                                                oCEntidadEli.COD_SECUENCIAL_BEXT = encontrado.FirstOrDefault().COD_SECUENCIAL;
+                                                ListResult result = logBEXTRACCION.EliminarBExtraccion(oCEntidadEli);
+                                            }
                                         }
                                     }
                                 }
@@ -1129,6 +1134,7 @@ namespace CapaLogica.DOC
                         }
                     }
                 }
+               
 
                 /*  oCampos.ListRReformulaISitu = CEntPOAItems.ListRReformulaISitu;                
                 oCampos.ListASBSAmbientales = CEntPOAItems.ListASBSAmbientales;
