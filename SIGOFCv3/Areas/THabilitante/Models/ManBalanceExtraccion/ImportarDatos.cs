@@ -198,6 +198,15 @@ namespace SIGOFCv3.Areas.THabilitante.Models.ManBalanceExtraccion
                                     isAdd = true;
 
                                     oCampos.CODIGO_INTERNO = workSheet.Cells[rowIterator, 1].Value == null ? "" : workSheet.Cells[rowIterator, 1].Value.ToString().Trim();
+                                    if(oCampos.CODIGO_INTERNO == null || oCampos.CODIGO_INTERNO == "")
+                                    {
+                                        throw new Exception("Error en la fila "+ (rowIterator - 1) + ", el código interno no puede ser un campo vacio.");
+                                    }
+                                    var codigoInternoSplit = oCampos.CODIGO_INTERNO.Split('|');
+                                    if(codigoInternoSplit.Length != 6)
+                                    {
+                                        throw new Exception("Error en la fila " + (rowIterator - 1) + ", código interno incorrecto.");
+                                    }
 
                                     codEspecie = objLog.GetCodEspecie(
                                         workSheet.Cells[rowIterator, 2].Value == null ? "" : workSheet.Cells[rowIterator, 2].Value.ToString().Trim(),
@@ -209,7 +218,7 @@ namespace SIGOFCv3.Areas.THabilitante.Models.ManBalanceExtraccion
                                         oCampos.COD_THABILITANTE = asCodTHabilitante;
                                         oCampos.NUM_POA = aiNumPoa;
                                         oCampos.COD_SECUENCIAL_BEXT = aiCodSecuencialBExt;
-                                        oCampos.COD_SECUENCIAL = oCampos.CODIGO_INTERNO.Split('|')[3] != null ? int.Parse(oCampos.CODIGO_INTERNO.Split('|')[3]) : 0;
+                                        oCampos.COD_SECUENCIAL = codigoInternoSplit[3] != null ? int.Parse(codigoInternoSplit[3]) : 0;
                                         oCampos.COD_ESPECIES = codEspecie;
                                         oCampos.ESPECIES = String.Format("{0} | {1}", workSheet.Cells[rowIterator, 2].Value == null ? "" : workSheet.Cells[rowIterator, 2].Value.ToString().Trim(), workSheet.Cells[rowIterator, 3].Value == null ? "" : workSheet.Cells[rowIterator, 3].Value.ToString().Trim());
                                         

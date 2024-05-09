@@ -964,7 +964,7 @@ namespace CapaLogica.DOC
         }
 
 
-        public ListResult GuardarDatosPOA(VM_POA dto, string codCuenta)
+        public ListResult GuardarDatosPOA(VM_POA dto, string codCuenta, string fechaCorteBalanceExtraccionString)
         {
             ListResult resultado = new ListResult();
             Log_BEXTRACCION logBEXTRACCION = new Log_BEXTRACCION(); 
@@ -1065,8 +1065,8 @@ namespace CapaLogica.DOC
                             foreach (var fecha in listaFechas)
                             {
                                 var fechaCreacion = DateTime.Parse(fecha.FECHA_CREACION);
-                                var fechaCorte = DateTime.Parse("2024-05-06");
-                                if (fechaCreacion > fechaCorte)
+                                var fechaCorteBalanceExtraccion = DateTime.Parse(fechaCorteBalanceExtraccionString);
+                                if (fechaCreacion > fechaCorteBalanceExtraccion)
                                 {
                                     List<Ent_POA> listaGuardar = new List<Ent_POA>();
                                     listaGuardar.Add(item);
@@ -1107,8 +1107,8 @@ namespace CapaLogica.DOC
                                 foreach (var fecha in listaFechas)
                                 {
                                     var fechaCreacion = DateTime.Parse(fecha.FECHA_CREACION);
-                                    var fechaCorte = DateTime.Parse("2024-05-06");
-                                    if (fechaCreacion > fechaCorte)
+                                    var fechaCorteBalanceExtraccion = DateTime.Parse(fechaCorteBalanceExtraccionString);
+                                    if (fechaCreacion > fechaCorteBalanceExtraccion)
                                     {
                                         List<Ent_BEXTRACCION_MADE> resultados = logBEXTRACCION.ListarBExtraccionMaderable(oCampos.COD_THABILITANTE, oCampos.NUM_POA, fecha.COD_SECUENCIAL);
                                         var encontrado = resultados.Where(x => x.COD_ESPECIES == loDatos.EliVALOR01);
