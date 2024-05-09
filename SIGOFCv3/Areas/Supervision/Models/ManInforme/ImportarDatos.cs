@@ -789,7 +789,7 @@ namespace SIGOFCv3.Areas.Supervision.Models.ManInforme
                                 valor = workSheet.Cells[rowIterator, 5].Value.ToString().Trim();
                                 if (!Regex.IsMatch(valor, @"^\d+(\.\d{1,3})?$")) throw new Exception("El volumen injustificado debe ser un valor numérico y no puede exceder los 3 decimales.");
                             }
-                            oCampos.VOLUMEN_INJUSTIFICADO = workSheet.Cells[rowIterator, 5].Value == null ? 0 : Decimal.Parse(workSheet.Cells[rowIterator, 4].Value.ToString().Trim());
+                            oCampos.VOLUMEN_INJUSTIFICADO = workSheet.Cells[rowIterator, 5].Value == null ? 0 : Decimal.Parse(workSheet.Cells[rowIterator, 5].Value.ToString().Trim());
                             if (oCampos.VOLUMEN_INJUSTIFICADO > volumen_kilogramos) throw new Exception("El volumen injustificado no puede exceder los 7 dígitos.");
 
                             if (workSheet.Cells[rowIterator, 6].Value != null)
@@ -797,7 +797,7 @@ namespace SIGOFCv3.Areas.Supervision.Models.ManInforme
                                 valor = workSheet.Cells[rowIterator, 6].Value.ToString().Trim();
                                 if (!Regex.IsMatch(valor, @"^\d+(\.\d{1,3})?$")) throw new Exception("El volumen justificado debe ser un valor numérico y no puede exceder los 3 decimales.");
                             }
-                            oCampos.VOLUMEN_JUSTIFICADO = workSheet.Cells[rowIterator, 6].Value == null ? 0 : Decimal.Parse(workSheet.Cells[rowIterator, 4].Value.ToString().Trim());
+                            oCampos.VOLUMEN_JUSTIFICADO = workSheet.Cells[rowIterator, 6].Value == null ? 0 : Decimal.Parse(workSheet.Cells[rowIterator, 6].Value.ToString().Trim());
                             if (oCampos.VOLUMEN_JUSTIFICADO > volumen_kilogramos) throw new Exception("El volumen justificado no puede exceder los 7 dígitos.");
 
                             oCampos.TIPO_APROVECHAMIENTO = (workSheet.Cells[rowIterator, 7].Value ?? "").ToString().Trim();
