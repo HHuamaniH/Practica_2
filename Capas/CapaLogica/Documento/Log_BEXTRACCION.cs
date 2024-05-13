@@ -202,12 +202,13 @@ namespace CapaLogica.DOC
                 guardar.UNIDAD_MEDIDA = item.UNIDAD_MEDIDA;
                 guardar.TIPOMADERABLE = item.TIPOMADERABLE;
                 guardar.PC = item.PCA;
+                guardar.COD_SECUENCIAL = item.COD_SECUENCIAL;
 
                 List<Ent_BEXTRACCION_MADE> resultados = ListarBExtraccionMaderable(codTHabilitante, numPOA, codSecuencial);
-                var encontrado = resultados.Where(x => x.COD_ESPECIES == guardar.COD_ESPECIES && x.COD_ESPECIES_SERFOR == guardar.COD_ESPECIES_SERFOR);
+                //var encontrado = resultados.Where(x => x.COD_ESPECIES == guardar.COD_ESPECIES && x.COD_ESPECIES_SERFOR == guardar.COD_ESPECIES_SERFOR);
+                var encontrado = resultados.Where(x => x.COD_SECUENCIAL == guardar.COD_SECUENCIAL);
                 if (encontrado.Count() > 0)
                 {
-                    guardar.COD_SECUENCIAL = encontrado.FirstOrDefault().COD_SECUENCIAL;
                     guardar.DMC = encontrado.FirstOrDefault().DMC;
                     guardar.VOLUMEN_MOVILIZADO = encontrado.FirstOrDefault().VOLUMEN_MOVILIZADO;
                     guardar.SALDO = encontrado.FirstOrDefault().SALDO;
