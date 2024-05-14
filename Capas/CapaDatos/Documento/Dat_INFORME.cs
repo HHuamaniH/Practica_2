@@ -12338,7 +12338,7 @@ namespace CapaDatos.DOC
                                     oCampo.LARGO = Decimal.Parse(dr["LARGO"].ToString());
                                     oCampo.OBSERVACION = dr["OBSERVACION"].ToString();
                                     oCampo.RegEstado = 0;
-                                    var itemExiste = lsCEntidad.Where(x => x.COD_ESPECIES == oCampo.COD_ESPECIES).FirstOrDefault();
+                                    /*var itemExiste = lsCEntidad.Where(x => x.COD_ESPECIES == oCampo.COD_ESPECIES).FirstOrDefault();
                                     if (itemExiste != null)
                                     {
                                         itemExiste.ESPESOR = itemExiste.ESPESOR + oCampo.ESPESOR;
@@ -12349,8 +12349,8 @@ namespace CapaDatos.DOC
                                     else
                                     {
                                         lsCEntidad.Add(oCampo);
-                                    }
-
+                                    }*/
+                                    lsCEntidad.Add(oCampo);
                                 }
                             }
                         }
