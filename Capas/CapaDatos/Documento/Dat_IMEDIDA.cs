@@ -542,6 +542,7 @@ namespace CapaDatos.DOC
                             while (dr.Read())
                             {
                                 oCampos = new Ent_IMEDIDA_EXPEDIENTE();
+                                oCampos.NUM_INFORME = dr["NUM_INFORME"].ToString();
                                 oCampos.COD_INFORME = dr["COD_INFORME"].ToString();
                                 oCampos.COD_RESODIREC = dr["COD_RESODIREC"].ToString();
                                 oCampos.NUM_RESOLUCION = dr["NUM_RESOLUCION"].ToString();

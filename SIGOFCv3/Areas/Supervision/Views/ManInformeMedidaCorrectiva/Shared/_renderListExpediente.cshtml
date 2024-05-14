@@ -73,8 +73,8 @@
         _renderListExpediente.dtRenderListExpedienteMCorrectiva.rows.add(JSON.parse('@Html.Raw(Json.Encode(@Model.tbMedida))')).draw();
 
         //tabla modal
-        columns_label = ["N° Expediente", "N° Resolución", "Tipo Resolución", "Título Habilitante", "Titular", "Modalidad"];
-        columns_data = ["NUM_EXPEDIENTE", "NUM_RESOLUCION", "TIPO_RESOLUCION", "NUM_THABILITANTE", "TITULAR", "MODALIDAD"];
+        columns_label = ["N° Informe", "N° Expediente", "N° Resolución", "Tipo Resolución", "Título Habilitante", "Titular", "Modalidad"];
+        columns_data = ["NUM_INFORME", "NUM_EXPEDIENTE", "NUM_RESOLUCION", "TIPO_RESOLUCION", "NUM_THABILITANTE", "TITULAR", "MODALIDAD"];
         options = {
             page_paging: true, page_length: 10, row_index: true, row_select: true, row_fnSelect: "_renderListExpediente.fnSelect(this)"
         };
