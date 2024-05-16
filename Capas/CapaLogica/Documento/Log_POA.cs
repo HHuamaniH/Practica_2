@@ -1052,32 +1052,6 @@ namespace CapaLogica.DOC
                 oCampos.ListTRAPROBACION = dto.ListTRAPROBACION;
                 oCampos.ListSAPROBACION = dto.ListSAPROBACION;
                 oCampos.ListRAprueba = dto.ListRAprueba;
-
-                if(fechaCorteBalanceExtraccionString != null && fechaCorteBalanceExtraccionString != "") 
-                {
-                    if(oCampos.ListRAprueba != null && oCampos.ListRAprueba.Count > 0)
-                    {
-                        foreach (var item in oCampos.ListRAprueba)
-                        {
-                            List<Ent_BEXTRACCION_FECEMI> listaFechas = logBEXTRACCION.ListarBExtraccionPorPlan(oCampos.COD_THABILITANTE, oCampos.NUM_POA);
-                            if (listaFechas != null && listaFechas.Count > 0)
-                            {
-                                foreach (var fecha in listaFechas)
-                                {
-                                    var fechaCreacion = DateTime.Parse(fecha.FECHA_CREACION);
-                                    var fechaCorteBalanceExtraccion = DateTime.Parse(fechaCorteBalanceExtraccionString);
-                                    if (fechaCreacion > fechaCorteBalanceExtraccion)
-                                    {
-                                        List<Ent_POA> listaGuardar = new List<Ent_POA>();
-                                        listaGuardar.Add(item);
-                                        logBEXTRACCION.InsertarBalanceExtraccionMaderableNoMaderable(listaGuardar, oCampos.COD_UCUENTA, fecha.COD_SECUENCIAL, oCampos.COD_THABILITANTE, oCampos.NUM_POA);
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-                
                 oCampos.ListRApruebaISitu = dto.ListRApruebaISitu;
                 oCampos.ListAOCULAR = dto.ListAOCULAR;
                 oCampos.ListVERTICE = dto.ListVERTICE;
@@ -1295,6 +1269,40 @@ namespace CapaLogica.DOC
                 resultado.appServer = appServer;
                 resultado.AddResultado(ex.Message, false);
             }
+
+
+            Ent_POA oCamposMod = new Ent_POA();
+            oCamposMod.COD_THABILITANTE = oCampos.COD_THABILITANTE;
+            oCamposMod.NUM_POA = oCampos.NUM_POA;
+
+            var datBalanceExtraccion = RegMostrarListaItems(oCamposMod);
+            //Agregar en balance de extracción
+            if (fechaCorteBalanceExtraccionString != null && fechaCorteBalanceExtraccionString != "")
+            {
+                if (datBalanceExtraccion.ListRAprueba != null && datBalanceExtraccion.ListRAprueba.Count > 0)
+                {
+                    foreach (var item in datBalanceExtraccion.ListRAprueba)
+                    {
+                        List<Ent_BEXTRACCION_FECEMI> listaFechas = logBEXTRACCION.ListarBExtraccionPorPlan(oCampos.COD_THABILITANTE, oCampos.NUM_POA);
+                        if (listaFechas != null && listaFechas.Count > 0)
+                        {
+                            foreach (var fecha in listaFechas)
+                            {
+                                var fechaCreacion = DateTime.Parse(fecha.FECHA_CREACION);
+                                var fechaCorteBalanceExtraccion = DateTime.Parse(fechaCorteBalanceExtraccionString);
+                                if (fechaCreacion > fechaCorteBalanceExtraccion)
+                                {
+                                    List<Ent_POA> listaGuardar = new List<Ent_POA>();
+                                    listaGuardar.Add(item);
+                                    logBEXTRACCION.InsertarBalanceExtraccionMaderableNoMaderable(listaGuardar, oCampos.COD_UCUENTA, fecha.COD_SECUENCIAL, oCampos.COD_THABILITANTE, oCampos.NUM_POA);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            //End Agregar en balance de extracción
+
             return resultado;
         }
         private void setListCheckToObject(string ListCheckIds, ref CEntidad obj)
