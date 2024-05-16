@@ -952,7 +952,7 @@ _informe.AbrirCalculoMulta = function () {
 
             const administrado = {
                 EXPEDIENTE: app.Informe.REFERENCIAS[0]?.CODIGO,
-                ADMINISTRADO: app.Informe.R_LEGAL || app.Informe.TITULAR,
+                ADMINISTRADO: app.Informe.TITULAR || app.Informe.R_LEGAL,
                 TIPO_DOC: app.Informe.R_LEGAL_DOCUMENTO || app.Informe.R_LEGAL_RUC || app.Informe.TITULAR_DOCUMENTO || app.Informe.TITULAR_RUC,
                 THABILITANTE: app.Informe.NUM_CONTRATO,
             };
