@@ -849,7 +849,7 @@ ManInforme_AddEdit.validarIncidencia = function () {
     }
     if ($('#txt_OBSERVACIONES').val() === '') {
         $('.nav-tabs a[href="#navIncidencias"]').tab('show');
-        utilSigo.elementERROR($('#txt_OBSERVACIONES'), 'Ingrese Observacion');
+        utilSigo.elementERROR($('#txt_OBSERVACIONES'), 'Ingrese Observación');
         return false;
     }
     return true;
