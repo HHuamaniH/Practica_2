@@ -1115,7 +1115,7 @@ namespace CapaLogica.DOC
                                         if (fechaCreacion > fechaCorteBalanceExtraccion)
                                         {
                                             List<Ent_BEXTRACCION_MADE> resultados = logBEXTRACCION.ListarBExtraccionMaderable(oCampos.COD_THABILITANTE, oCampos.NUM_POA, fecha.COD_SECUENCIAL);
-                                            var encontrado = resultados.Where(x => x.COD_ESPECIES == loDatos.EliVALOR01);
+                                            var encontrado = resultados.Where(x => x.COD_SECUENCIAL == loDatos.EliVALOR02);
                                             if (encontrado.Count() > 0)
                                             {
                                                 Ent_BEXTRACCION_EliTABLA oCEntidadEli = new Ent_BEXTRACCION_EliTABLA();

@@ -449,7 +449,7 @@
             options = {
                 page_length: 10, row_edit: true, row_fnEdit: "_EditBExtraccion.fnAddEditBExtMade_NoMade(this)"
                 , row_delete: false, row_fnDelete: "_EditBExtraccion.fnDeleteBExt(this,'BEXTRACCION_MADE')"
-                , row_index: true, page_autowidth: false, page_info: true
+                , row_index: true, page_autowidth: false, page_info: true, length_Change: true
             };
 
             return utilDt.fnLoadDataTable_Detail(_EditBExtraccion.frm.find("#tbBExtMade_NoMade"), columns_label, columns_data, options);

@@ -2554,9 +2554,9 @@ ManPOA.selectFile = null;
             aaSorting: [],
             bPaginate: true,
             bInfo: false,
-            bLengthChange: false,
+            bLengthChange: true,
             scrollCollapse: true,
-            pageLength: initSigo.pageLength,
+            pageLength: 10,
             oLanguage: initSigo.oLanguage,
             drawCallback: initSigo.showPagination,
             ajax: {
