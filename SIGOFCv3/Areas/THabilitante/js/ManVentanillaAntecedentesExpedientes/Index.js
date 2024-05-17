@@ -105,8 +105,8 @@ anteExpedientes.fnLoadManGrillaPaging = function () {
 
 
 
-       // { "data": "CNRODOCUMENTO", "autoWidth": true },      
-       // { "data": "", "autoWidth": true },
+        // { "data": "CNRODOCUMENTO", "autoWidth": true },      
+        // { "data": "", "autoWidth": true },
         { "data": "ESTADO_AEXPEDIENTE", "autoWidth": true },
         {
             "data": "", "width": "2%", "orderable": false, "searchable": false, "mRender": function (data, type, row) {
@@ -293,10 +293,19 @@ anteExpedientes.initEventos = function () {
 
 anteExpedientes.fnExport = function () {
     var url = urlLocalSigo + "THabilitante/ManVentanillaAntecedentesExpedientes/ExportarRegistroUsuario";
-    var option = { url: url, datos: JSON.stringify({}), type: 'POST' };
+
+    var data = {
+        BusEstado: anteExpedientes.frm.find("#ddlOptBustarEstadoVentanillaId").val(),
+        BusCriterio: anteExpedientes.frm.find("#ddlOpcionBuscarVentanillaId").val(),
+        BusValor: anteExpedientes.frm.find("#txtValorBuscar").val().trim()
+    }
+    //var data = anteExpedientes.frm.find("#ddlOptBustarEstadoVentanillaId").val() + '|' + anteExpedientes.frm.find("#ddlOpcionBuscarVentanillaId").val() + '|' + anteExpedientes.frm.find("#txtValorBuscar").val().trim();
+
+    var option = { url: url, datos: JSON.stringify(data), type: 'POST' };
 
     utilSigo.fnAjax(option, function (data) {
         if (data.success) {
+            debugger;
             document.location = urlLocalSigo + "Archivos/Plantilla/" + data.msj;
         }
         else {
@@ -304,6 +313,8 @@ anteExpedientes.fnExport = function () {
             console.log(data.msj);
         }
     });
+
+
 };
 
 anteExpedientes.fnEdit = function (obj) {

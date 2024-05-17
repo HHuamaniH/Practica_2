@@ -67,6 +67,8 @@ namespace CapaEntidad.DOC
         public String BusFormulario { get; set; }
         [Description("BusCriterio")]
         public String BusCriterio { get; set; }
+        [Description("BusEstado")]
+        public String BusEstado { get; set; }
         [Description("BusValor")]
         public String BusValor { get; set; }
         [Description("CODIGO")]

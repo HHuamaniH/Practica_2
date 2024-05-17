@@ -1,4 +1,5 @@
 ﻿using CapaEntidad.ViewModel;
+using SIGOFCv3.Models.DataTables;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -13,24 +14,23 @@ namespace SIGOFCv3.Areas.THabilitante.Models.ManVentanillaAntecedentesExpediente
 {
     public class ExportarDatos
     {
-        public static ListResult RegistroUsuario(string asCodUsuario)
+        public static ListResult RegistroUsuario(CEntidad request)
         {
             ListResult result = new ListResult();
 
             try
             {
-                CEntidad paramCap = new CEntidad();
+                
                 CLogica exeCap = new CLogica();
-                paramCap.COD_UCUENTA = asCodUsuario;
 
-                List<Dictionary<string, string>> olResult = exeCap.ReporteExcel(paramCap);
+                List<Dictionary<string, string>> olResult = exeCap.ReporteExcel(request);
 
                 if (olResult.Count > 0)
                 {
                     string rutaBase = HttpContext.Current.Server.MapPath("~/Archivos/Plantilla/");
                     string nombreFile = DateTime.Now.Year.ToString() + DateTime.Now.Month.ToString() + DateTime.Now.Day.ToString() + DateTime.Now.Hour.ToString() + DateTime.Now.Minute.ToString() + DateTime.Now.Second.ToString() + DateTime.Now.Millisecond.ToString() + ".xlsx";
                     string rutaExcel = rutaBase + nombreFile;
-                    string rutaExcelBase = rutaBase + "plantilla_antecedentes.xlsxx";
+                    string rutaExcelBase = rutaBase + "PlantillaAntecedentes.xlsx";
 
                     try
                     {
@@ -59,7 +59,7 @@ namespace SIGOFCv3.Areas.THabilitante.Models.ManVentanillaAntecedentesExpediente
                     using (OleDbConnection conn = new OleDbConnection(cb.ConnectionString))
                     {
                         string insertar = "";
-                        int i = 1;
+                        int i = 1, ind = 1;
                         //Abrimos la conexión
                         conn.Open();
                         //Creamos la ficha
@@ -69,35 +69,17 @@ namespace SIGOFCv3.Areas.THabilitante.Models.ManVentanillaAntecedentesExpediente
                             //Construyendo las Cabeceras
                             foreach (var itemPart in olResult)
                             {
-                                insertar = "'" + (itemPart["CNOMOFICINA"].Trim() ?? "") + "'";
+                                insertar = "'" + (ind++).ToString() + "'";
+                                insertar = insertar + ",'" + (itemPart["DOC_REFERENCIA"].Trim() ?? "") + "'";
+                                insertar = insertar + ",'" + (itemPart["OBSERVACION"].Trim() ?? "") + "'";
+                                insertar = insertar + ",'" + (itemPart["RESOLUCION_POA"].Trim() ?? "") + "'";
+                                insertar = insertar + ",'" + (itemPart["FFECDOCUMENTO"].Trim() ?? "") + "'";
+                                insertar = insertar + ",'" + (itemPart["NUM_THABILITANTE"].Trim() ?? "") + "'";
+                                insertar = insertar + ",'" + (itemPart["DESCRIPCION"].Trim() ?? "") + "'";
                                 insertar = insertar + ",'" + (itemPart["CCODIFICACION"].Trim() ?? "") + "'";
                                 insertar = insertar + ",'" + (itemPart["FECHA_SITD"].Trim() ?? "") + "'";
-                                insertar = insertar + ",'" + (itemPart["NUM_THABILITANTE"].Trim() ?? "") + "'";
-
-                                if (itemPart["TIPO_SIADO"].Trim() == "")
-                                {
-                                    insertar = insertar + ",'" + (itemPart["DOC_REFERENCIA"].Trim() ?? "") + "'";
-                                }
-                                else
-                                {
-                                    insertar = insertar + ",'" + (itemPart["TIPO_SIADO"].Trim() ?? "") + "'";
-                                }
-                                if (itemPart["SUB_TIPO_SIADO"].Trim() == "")
-                                {
-                                    insertar = insertar + ",'" + (itemPart["OBSERVACION"].Trim() ?? "") + "'";
-                                }
-                                else
-                                {
-                                    insertar = insertar + ",'" + (itemPart["SUB_TIPO_SIADO"].Trim() ?? "") + "'";
-                                }
-
-                                insertar = insertar + ",'" + (itemPart["DESDETALLESUBTIPODOC"].Trim() ?? "") + "'";
-                                insertar = insertar + ",'" + (itemPart["RESOLUCION_POA"].Trim() ?? "") + "'";
-                                insertar = insertar + ",'" + (itemPart["FECHA_SIADO"].Trim() ?? "") + "'";
+                                insertar = insertar + ",'" + (itemPart["CNOMOFICINA"].Trim() ?? "") + "'";
                                 insertar = insertar + ",'" + (itemPart["ESTADO_AEXPEDIENTE"].Trim() ?? "") + "'";
-                                insertar = insertar + ",'" + (itemPart["CCODIFICACION"].Trim() ?? "") + "'";
-                                insertar = insertar + ",'" + (itemPart["COD_SIADO"].Trim() ?? "") + "'";//
-                                insertar = insertar + ",'" + (itemPart["DIAS"].Trim() ?? "") + "'";
 
                                 cmd.CommandText = "INSERT INTO [Datos$A" + i.ToString().Trim() + ":Z" + (olResult.Count + 1).ToString() + "] VALUES (" + insertar + ")";
                                 cmd.ExecuteNonQuery();

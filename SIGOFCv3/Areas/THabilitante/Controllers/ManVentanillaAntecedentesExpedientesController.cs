@@ -97,11 +97,13 @@ namespace SIGOFCv3.Areas.THabilitante.Controllers
         }
 
         [HttpPost]
-        public JsonResult ExportarRegistroUsuario()
+        public JsonResult ExportarRegistroUsuario(CEntidad request)
         {
             ListResult result = new ListResult();
+            //CEntidad request = new CEntidad();
 
-            result = ExportarDatos.RegistroUsuario((ModelSession.GetSession())[0].COD_UCUENTA);
+            result = ExportarDatos.RegistroUsuario(request);
+
 
             return Json(result);
         }
