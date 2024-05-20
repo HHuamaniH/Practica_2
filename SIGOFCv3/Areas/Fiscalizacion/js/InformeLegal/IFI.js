@@ -123,7 +123,7 @@ _informe.FirmaVerificar = function () {
 }
 
 _informe.RutaDocumentoDescarga = function () {
-    let name = `${app.Informe.ESTADO >= States.FINALIZADO ? 'INFORME-LEGAL-' : ''}${_informe.fileName()}`;
+    let name = `${app.Informe.ESTADO >= States.FINALIZADO ? 'INFORME-FINAL-DE-INSTRUCCION-' : ''}${_informe.fileName()}`;
     let base = app.Informe.ESTADO >= States.FINALIZADO ? urlBaseDocFirmaTrans : urlBaseDocFirma;
     return `${urlLocalSigo}${base}/${name}?v=${new Date().getTime()}`;
 }
