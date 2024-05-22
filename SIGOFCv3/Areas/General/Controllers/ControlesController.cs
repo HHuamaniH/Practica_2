@@ -147,6 +147,7 @@ namespace SIGOFCv3.Areas.General.Controllers
             paramsBus.pagesize = request.Length;
             paramsBus.v_pagesize = request.Length;
             paramsBus.currentpage = page;
+
             if (paramsBus.BusValor == "")
             {
                 paramsBus.BusCriterio = "TODOS";
@@ -181,6 +182,8 @@ namespace SIGOFCv3.Areas.General.Controllers
             }
             else if (paramsBus.BusFormulario == "AEXPEDIENTE_SITD")
             {
+                paramsBus.PARAMETRO01 = paramsBus.BusCriterio1.Split('|')[1];
+                paramsBus.BusCriterio1 = paramsBus.BusCriterio1.Split('|')[0];
                 lstResult = exeBus.RegMostrarListaPaging(paramsBus, ref rowcount);
 
                 if (paramsBus.BusCriterio1 != "TODOS")
@@ -779,8 +782,8 @@ namespace SIGOFCv3.Areas.General.Controllers
             {
                 Log_INFORME logInforme = new Log_INFORME();
                 Ent_MANDATOS oParams = new Ent_MANDATOS()
-                {                    
-                    BusValor = asBusValor,                                     
+                {
+                    BusValor = asBusValor,
                 };
                 List<Ent_MANDATOS> consulta = logInforme.BuscarMandatos(oParams);
                 int i = 1;

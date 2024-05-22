@@ -123,6 +123,8 @@ namespace CapaEntidad.DOC
         public String DIAS_DD { get; set; }
         [Description("SUBTIPODETALLE")]
         public String SUBTIPODETALLE { get; set; }
+        [Description("PARAMETRO01")]
+        public String PARAMETRO01 { get; set; }
 
         public Ent_ANTECEDENTE_EXPEDIENTE()
         {

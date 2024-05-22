@@ -19,13 +19,16 @@
                 @Html.Hidden("hdMsjTransfer", (string)ViewBag.msjTransfer)
                 @Html.Hidden("hdOrigen", (string)ViewBag.origen)
                 <div class="form-row">
-                    <div class="form-group col-md-3">
+                    <div class="form-group col-md-2">
                         @Html.DropDownList("ddlOptBustarEstadoVentanillaId", (IEnumerable<SelectListItem>)ViewBag.ddlOptBustarEstadoVentanilla, new { @class = "form-control form-control-sm" })
                     </div>
                     <div class="form-group col-md-3">
                         @Html.DropDownList("ddlOpcionBuscarVentanillaId", (IEnumerable<SelectListItem>)ViewBag.ddlOpcionBuscarVentanilla, new { @class = "form-control form-control-sm" })
                     </div>
-                    <div class="form-group col-md-4">
+                    <div class="form-group col-md-2">
+                        @Html.DropDownList("ddlAnioId", (IEnumerable<SelectListItem>)ViewBag.ddlOpcionAnio, new { @class = "form-control form-control-sm" })
+                    </div>
+                    <div class="form-group col-md-3">
                         <input type="text" class="form-control form-control-sm" id="txtValorBuscar" disabled="disabled" placeholder="Ingrese Valor a Buscar">
                     </div>
                     <div class="btn-group col-md-2" style="padding-top:5px;">

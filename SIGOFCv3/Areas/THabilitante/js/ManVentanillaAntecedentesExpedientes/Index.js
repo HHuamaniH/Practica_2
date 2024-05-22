@@ -67,6 +67,7 @@ anteExpedientes.fnRefresh = function () {
     anteExpedientes.frm.find("#txtValorBuscar").attr("disabled", "disabled");
     anteExpedientes.frm.find("#ddlOptBustarEstadoVentanillaId").val($(anteExpedientes.frm.find("#ddlOptBustarEstadoVentanillaId")[0].childNodes[0]).val()).trigger('change.select2');
     anteExpedientes.frm.find("#ddlOpcionBuscarVentanillaId").val($(anteExpedientes.frm.find("#ddlOpcionBuscarVentanillaId")[0].childNodes[0]).val()).trigger('change.select2');
+    anteExpedientes.frm.find("#ddlAnioId").val($(anteExpedientes.frm.find("#ddlAnioId")[0].childNodes[0]).val()).trigger('change.select2');
     anteExpedientes.dtManGrillaPaging.context[0].aaSorting = [];
     anteExpedientes.dtManGrillaPaging.context[0].aLastSort = [];
     anteExpedientes.dtManGrillaPaging.ajax.reload();
@@ -239,9 +240,9 @@ anteExpedientes.fnLoadManGrillaPaging = function () {
             "data": function (d) {
                 d.customSearchEnabled = true;
                 d.customSearchForm = "AEXPEDIENTE_SITD";
-                d.customSearchType1 = anteExpedientes.frm.find("#ddlOptBustarEstadoVentanillaId").val();
-                d.customSearchType = anteExpedientes.frm.find("#ddlOpcionBuscarVentanillaId").val();
-                d.customSearchValue = anteExpedientes.frm.find("#txtValorBuscar").val().trim();
+                d.customSearchType1 = anteExpedientes.frm.find("#ddlOptBustarEstadoVentanillaId").val() + '|' + anteExpedientes.frm.find("#ddlAnioId").val();
+                d.customSearchType = anteExpedientes.frm.find("#ddlOpcionBuscarVentanillaId").val();                
+                d.customSearchValue = anteExpedientes.frm.find("#txtValorBuscar").val().trim();                
 
                 for (var i = 0; i < d.order.length; i++) {
                     d.order[i]["column_name"] = d.columns[d.order[i]["column"]]["data"];
@@ -296,7 +297,7 @@ anteExpedientes.fnExport = function () {
 
     var data = {
         BusEstado: anteExpedientes.frm.find("#ddlOptBustarEstadoVentanillaId").val(),
-        BusCriterio: anteExpedientes.frm.find("#ddlOpcionBuscarVentanillaId").val(),
+        BusCriterio: anteExpedientes.frm.find("#ddlOpcionBuscarVentanillaId").val() + '|' + anteExpedientes.frm.find("#ddlAnioId").val(),
         BusValor: anteExpedientes.frm.find("#txtValorBuscar").val().trim()
     }
     //var data = anteExpedientes.frm.find("#ddlOptBustarEstadoVentanillaId").val() + '|' + anteExpedientes.frm.find("#ddlOpcionBuscarVentanillaId").val() + '|' + anteExpedientes.frm.find("#txtValorBuscar").val().trim();
@@ -604,6 +605,7 @@ $(document).ready(function () {
     $.fn.select2.defaults.set("theme", "bootstrap4");
     anteExpedientes.frm.find("#ddlOptBustarEstadoVentanillaId").select2();
     anteExpedientes.frm.find("#ddlOpcionBuscarVentanillaId").select2();
+    anteExpedientes.frm.find("#ddlAnioId").select2();
     anteExpedientes.frm.find("#txtValorBuscar").focus();
     anteExpedientes.frmMod.find("#COD_DREFERENCIA").select2();
 
