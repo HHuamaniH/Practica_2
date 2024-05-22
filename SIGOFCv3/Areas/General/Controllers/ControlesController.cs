@@ -13,6 +13,7 @@ using SIGOFCv3.Models.DataTables;
 using SIGOFCv3.Reportes.General;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Data;
 using System.IO;
 using System.Linq;
@@ -994,7 +995,7 @@ namespace SIGOFCv3.Areas.General.Controllers
                     pideOSF_Reniec.ConsultaInfoRequest infoReniec = new pideOSF_Reniec.ConsultaInfoRequest();
                     infoReniec.App = "SIGOsfc v3";
                     infoReniec.IPTerminal = Request.UserHostAddress;
-                    if (asFormulario == "GTF") { infoReniec.UserName = "mlaurente"; }
+                    if (asFormulario == "GTF") { infoReniec.UserName = ConfigurationManager.AppSettings["UsuarioPIDE"]; }
                     else { infoReniec.UserName = (ModelSession.GetSession())[0].USUARIO_LOGIN; }
 
                     pideOSF_Reniec.PersonaResponse resultReniec = new pideOSF_Reniec.PersonaResponse();
@@ -1010,7 +1011,7 @@ namespace SIGOFCv3.Areas.General.Controllers
                     pideOSF_Sunat.ConsultaInfoRequest infoSunat = new pideOSF_Sunat.ConsultaInfoRequest();
                     infoSunat.App = "SIGOsfc v3";
                     infoSunat.IPTerminal = Request.UserHostAddress;
-                    if (asFormulario == "GTF") { infoSunat.UserName = "mlaurente"; }
+                    if (asFormulario == "GTF") { infoSunat.UserName = ConfigurationManager.AppSettings["UsuarioPIDE"]; }
                     else { infoSunat.UserName = (ModelSession.GetSession())[0].USUARIO_LOGIN; }
                     pideOSF_Sunat.DatosRucResponse resultSunat = new pideOSF_Sunat.DatosRucResponse();
 
