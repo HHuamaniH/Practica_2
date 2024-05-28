@@ -221,7 +221,7 @@ ManNotificacion_AddEdit.fnSetPersonaCompleto = function (_dom, codPersona) {
 }
 ManNotificacion_AddEdit.fnBuscarUbigeo = function (_dom) {
     var url = urlLocalSigo + "General/Controles/_Ubigeo";
-    var option = { url: url, type: 'POST', datos: {}, divId: "mdlBuscarUbigeo" };
+    var option = { url: url, type: 'POST', datos: {}, divId: "personaUbigeoModal" };
     utilSigo.fnOpenModal(option, function () {
         _Ubigeo.fnSelectUbigeo = function (_ubigeoText, _ubigeoId) {
             switch (_dom) {
@@ -235,7 +235,7 @@ ManNotificacion_AddEdit.fnBuscarUbigeo = function (_dom) {
                     ManNotificacion_AddEdit.frm.find("#txtUbigeoDJ").val(_ubigeoText);
                     break;
             }
-            $("#mdlBuscarUbigeo").modal('hide');
+            $("#personaUbigeoModal").modal('hide');
         }
 
         switch (_dom) {
