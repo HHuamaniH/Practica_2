@@ -19,13 +19,16 @@
                 @Html.Hidden("hdMsjTransfer", (string)ViewBag.msjTransfer)
                 @Html.Hidden("hdOrigen", (string)ViewBag.origen)
                 <div class="form-row">
-                    <div class="form-group col-md-3">
+                    <div class="form-group col-md-2">
                         @Html.DropDownList("ddlOptBustarEstadoVentanillaId", (IEnumerable<SelectListItem>)ViewBag.ddlOptBustarEstadoVentanilla, new { @class = "form-control form-control-sm" })
                     </div>
                     <div class="form-group col-md-3">
                         @Html.DropDownList("ddlOpcionBuscarVentanillaId", (IEnumerable<SelectListItem>)ViewBag.ddlOpcionBuscarVentanilla, new { @class = "form-control form-control-sm" })
                     </div>
-                    <div class="form-group col-md-4">
+                    <div class="form-group col-md-2">
+                        @Html.DropDownList("ddlAnioId", (IEnumerable<SelectListItem>)ViewBag.ddlOpcionAnio, new { @class = "form-control form-control-sm" })
+                    </div>
+                    <div class="form-group col-md-3">
                         <input type="text" class="form-control form-control-sm" id="txtValorBuscar" disabled="disabled" placeholder="Ingrese Valor a Buscar">
                     </div>
                     <div class="btn-group col-md-2" style="padding-top:5px;">
@@ -39,7 +42,7 @@
                 <table id="tbManGrillaPaging" class="table table-hover table-bordered" style="width:100%;">
                     <thead>
                         <tr>
-                            <th colspan="13" class="text-sm-left" style="background-color:#9ACDE8;"><strong>Expedientes que se registran desde el SITD</strong></th>
+                            <th colspan="14" class="text-sm-left" style="background-color:#9ACDE8;"><strong>Expedientes que se registran desde el SITD</strong></th>
                             <th colspan="2" class="text-sm-center" style="background-color:#9ACDE8;"><strong>Acción</strong></th>
                             <th colspan="4" class="text-sm-center" style="background-color:#9ACDE8;"><strong>Opciones Transferidos</strong></th>
                         </tr>
@@ -68,7 +71,7 @@
                     <input type="hidden" id="COD_TRAMITE_SITD" name="COD_TRAMITE_SITD" />
                     <div class="form-row">
                         <div class="form-group col-md-12">
-                            <label for="txtItemVert_Vertice" class="text-small">Ant. Expediente SITD</label>
+                            <label for="txtExpediente_SITD" class="text-small">Ant. Expediente SITD</label>                            
                             <input type="text" id="txtExpediente_SITD" class="form-control form-control-sm" disabled />
                         </div>
                     </div>

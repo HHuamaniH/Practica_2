@@ -148,6 +148,7 @@ namespace SIGOFCv3.Areas.General.Controllers
             paramsBus.pagesize = request.Length;
             paramsBus.v_pagesize = request.Length;
             paramsBus.currentpage = page;
+
             if (paramsBus.BusValor == "")
             {
                 paramsBus.BusCriterio = "TODOS";
@@ -182,6 +183,8 @@ namespace SIGOFCv3.Areas.General.Controllers
             }
             else if (paramsBus.BusFormulario == "AEXPEDIENTE_SITD")
             {
+                paramsBus.PARAMETRO01 = paramsBus.BusCriterio1.Split('|')[1];
+                paramsBus.BusCriterio1 = paramsBus.BusCriterio1.Split('|')[0];
                 lstResult = exeBus.RegMostrarListaPaging(paramsBus, ref rowcount);
 
                 if (paramsBus.BusCriterio1 != "TODOS")
@@ -780,8 +783,8 @@ namespace SIGOFCv3.Areas.General.Controllers
             {
                 Log_INFORME logInforme = new Log_INFORME();
                 Ent_MANDATOS oParams = new Ent_MANDATOS()
-                {                    
-                    BusValor = asBusValor,                                     
+                {
+                    BusValor = asBusValor,
                 };
                 List<Ent_MANDATOS> consulta = logInforme.BuscarMandatos(oParams);
                 int i = 1;
@@ -1199,6 +1202,35 @@ namespace SIGOFCv3.Areas.General.Controllers
                 paramSIADO.BusValor = asSubCriterio;
                 paramSIADO.Parametro = asValor;
                 var lstSIADO = exeSIADO.RegMostrarListaSIADO_V3(paramSIADO);
+                var jsonResult = Json(new { success = true, data = lstSIADO }, JsonRequestBehavior.AllowGet);
+                jsonResult.MaxJsonLength = int.MaxValue;
+                return jsonResult;
+            }
+            catch (Exception ex)
+            {
+                return Json(new { data = "", success = false, msj = ex.Message });
+            }
+        }
+        public PartialViewResult _IntegracionDOCSIADO(string asCriterio, string asSubCriterio, string asValor = "")
+        {
+            ViewBag.hdfCriterio = asCriterio;
+            ViewBag.hdfSubCriterio = asSubCriterio;
+            ViewBag.hdfValor = asValor;
+
+            return PartialView();
+        }
+        public JsonResult buscarIntegracionDOCSIADO(string asCriterio, string asSubCriterio, string asValor = "")
+        {
+            try
+            {
+                //List<Ent_IntSIADO> lstSIADO = new List<Ent_IntSIADO>();
+                Ent_IntSIADO paramSIADO = new Ent_IntSIADO();
+                Log_IntSIADO exeSIADO = new Log_IntSIADO();
+
+                paramSIADO.BusCriterio = asCriterio;
+                paramSIADO.BusValor = asSubCriterio;
+                paramSIADO.Parametro = asValor;
+                var lstSIADO = exeSIADO.RegMostrarListarDocSIADO_V3(paramSIADO);
                 var jsonResult = Json(new { success = true, data = lstSIADO }, JsonRequestBehavior.AllowGet);
                 jsonResult.MaxJsonLength = int.MaxValue;
                 return jsonResult;

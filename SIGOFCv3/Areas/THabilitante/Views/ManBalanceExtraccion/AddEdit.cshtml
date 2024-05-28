@@ -52,235 +52,263 @@
                         @Html.HiddenFor(m => m.hdfCodMTipo)
                         @Html.HiddenFor(m => m.hdfEstadoOrigen)
                         @Html.HiddenFor(m => m.hdfIndicador)
-                        <div class="card">
-                            <div class="card-header text-small"><span id="lblTituloGeneral"></span></div>
-                            <div class="card-body">
-                                <div class="form-row">
-                                    <div class="form-group col-md-3">
-                                        <label class="text-small">Descripción plan</label>
-                                        @Html.TextBoxFor(m => m.txtNombrePoa, new { @class = "form-control form-control-sm", disabled = "disabled" })
+
+                        <ul class="nav nav-tabs" id="myTab" role="tablist">
+                            <li class="nav-item" id="navDatosTab"><a class="nav-link active" data-toggle="tab" href="#navDatos" role="tab" aria-controls="home" aria-selected="true"><strong>Datos Generales</strong></a></li>
+                            <li class="nav-item" id="navDatosAcervoTab"><a class="nav-link" data-toggle="tab" href="#navDatosAcervo" role="tab" aria-controls="home" aria-selected="false"><strong> Acervo Documentario</strong></a></li>
+                        </ul>
+                        <div class="tab-content" id="nav-tabContent">
+
+                            <div class="tab-pane fade show active" id="navDatos" role="tabpanel" aria-labelledby="nav-contact-tab">
+                                <div class="card">
+                                    <div class="card-header text-small"><span id="lblTituloGeneral"></span></div>
+                                    <div class="card-body">
+                                        <div class="form-row">
+                                            <div class="form-group col-md-3">
+                                                <label class="text-small">Descripción plan</label>
+                                                @Html.TextBoxFor(m => m.txtNombrePoa, new { @class = "form-control form-control-sm", disabled = "disabled" })
+                                            </div>
+                                            <div class="form-group col-md-3">
+                                                <label class="text-small">Res. de aprobación</label>
+                                                @Html.TextBoxFor(m => m.txtResolucionPoa, new { @class = "form-control form-control-sm", disabled = "disabled" })
+                                            </div>
+                                            <div class="form-group col-md-3">
+                                                <label class="text-small">Título habilitante</label>
+                                                @Html.TextBoxFor(m => m.txtTHabilitante, new { @class = "form-control form-control-sm", disabled = "disabled" })
+                                            </div>
+                                            <div class="form-group col-md-3">
+                                                <label class="text-small">Titular actual</label>
+                                                @Html.TextBoxFor(m => m.txtTitular, new { @class = "form-control form-control-sm", disabled = "disabled" })
+                                            </div>
+                                            <div class="form-group col-md-3">
+                                                <label class="text-small">Modalidad</label>
+                                                @Html.TextBoxFor(m => m.txtModalidad, new { @class = "form-control form-control-sm", disabled = "disabled" })
+                                            </div>
+                                        </div>
                                     </div>
-                                    <div class="form-group col-md-3">
-                                        <label class="text-small">Res. de aprobación</label>
-                                        @Html.TextBoxFor(m => m.txtResolucionPoa, new { @class = "form-control form-control-sm", disabled = "disabled" })
+                                    <div class="card-header text-small">Sobre los balances de extracción</div>
+                                    <div class="card-body">
+                                        <div class="form-row">
+                                            <div class="col-xl-3 col-lg-4 col-md-6 col-sm-8">
+                                                <div class="table-responsive">
+                                                    <table id="tbBExtFecha" style="width:100%" class="table table-hover table-bordered">
+                                                        <thead>
+                                                            <tr>
+                                                                <th colspan="4" class="text-sm-left">
+                                                                    <div class="form-inline">
+                                                                        <i class="fa mx-2 fa-lg fa-file-o" style="cursor:pointer;" onclick="_EditBExtraccion.fnAddEditBExtFecha('');" data-toggle="tooltip" data-placement="top" title="Nuevo"></i>
+                                                                        <strong>
+                                                                            Fechas de emisión de los balances de extracción
+                                                                        </strong>
+                                                                    </div>
+                                                                </th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody></tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
-                                    <div class="form-group col-md-3">
-                                        <label class="text-small">Título habilitante</label>
-                                        @Html.TextBoxFor(m => m.txtTHabilitante, new { @class = "form-control form-control-sm", disabled = "disabled" })
+                                    <div id="dvBExtMade_NoMade" class="card-body" style="display:none;">
+                                        <div class="form-row">
+                                            <div class="col-md-12">
+                                                <div class="table-responsive">
+                                                    <table id="tbBExtMade_NoMade" style="width:100%" class="table table-hover table-bordered">
+                                                        <thead>
+                                                            <tr>
+                                                                <th colspan="24" class="text-sm-left">
+                                                                    <div class="form-inline">
+                                                                        <i class="fa mx-2 fa-lg fa-file-o" style="cursor:pointer;" onclick="_EditBExtraccion.fnAddEditBExtMade_NoMade('');" data-toggle="tooltip" data-placement="top" title="Nuevo"></i>
+                                                                        <i class="fa mx-2 fa-lg fa-window-close-o" style="cursor:pointer;" onclick="_EditBExtraccion.fnDeleteBExt(null, 'BEXTRACCION_MADE_ALL');" data-toggle="tooltip" data-placement="top" title="Eliminar Todos"></i>
+                                                                        <label style="cursor:pointer;" class="fa mx-2 fa-lg fa-file-excel-o" title="Importar Archivo" data-toggle="tooltip">
+                                                                            <input type="file" style="display:none" size="60" onchange="_EditBExtraccion.fnImportBExt(event, this, 'BEXTRACCION_MADE')">
+                                                                        </label>
+                                                                        @*Maderable*@
+                                                                        <div id="hplMaderableItemBExtDownload" style="display:none">
+                                                                            <a href="@Url.Content("~/Archivos/Plantilla/PoaMaderableBExtraccion_v3.xlsx")"> <i class="fa mx-2 fa-lg fa-folder-open" style="cursor:pointer;" data-toggle="tooltip" data-placement="top" title="Descargar Plantilla"></i></a>
+                                                                        </div>
+                                                                        @*No Maderable*@
+                                                                        <div id="btnExcelBExtNormal" style="display:none">
+                                                                            <a href="@Url.Content("~/Archivos/Plantilla/PoaNoMaderableBExtraccion_v3.xlsx")"> <i class="fa mx-2 fa-lg fa-folder-open" style="cursor:pointer;" data-toggle="tooltip" data-placement="top" title="Descargar Plantilla"></i></a>
+                                                                        </div>
+                                                                        @*No Maderable*@
+                                                                        <div id="btnExcelBExtPMed" style="display:none">
+                                                                            <a href="@Url.Content("~/Archivos/Plantilla/PoaNoMaderablePMedBExtraccion_v3.xlsx")"> <i class="fa mx-2 fa-lg fa-folder-open" style="cursor:pointer;" data-toggle="tooltip" data-placement="top" title="Descargar Plantilla"></i></a>
+                                                                        </div>
+                                                                        @*No Maderable*@
+                                                                        <div id="btnExcelBExtCarr" style="display:none">
+                                                                            <a href="@Url.Content("~/Archivos/Plantilla/PoaNoMaderableCarrBExtraccion_v3.xlsx")"> <i class="fa mx-2 fa-lg fa-folder-open" style="cursor:pointer;" data-toggle="tooltip" data-placement="top" title="Descargar Plantilla"></i></a>
+                                                                        </div>
+                                                                        @*Maderable - No Maderable*@
+                                                                        <div id="btnExcelPMedBExtMadNoMad" style="display:none">
+                                                                            <a href="@Url.Content("~/Archivos/Plantilla/PoaMadNoMadPMedBExtraccion_v3.xlsx")"> <i class="fa mx-2 fa-lg fa-folder-open" style="cursor:pointer;" data-toggle="tooltip" data-placement="top" title="Descargar Plantilla"></i></a>
+                                                                        </div>
+                                                                        @*Maderable - No Maderable*@
+                                                                        <div id="btnExcelCarrBExtMadNoMad" style="display:none">
+                                                                            <a href="@Url.Content("~/Archivos/Plantilla/PoaMadNoMadCarrBExtraccion_v3.xlsx")"> <i class="fa mx-2 fa-lg fa-folder-open" style="cursor:pointer;" data-toggle="tooltip" data-placement="top" title="Descargar Plantilla"></i></a>
+                                                                        </div>
+                                                                        @*Maderable - No Maderable*@
+                                                                        <div id="btnExcelBExtMadNoMad" style="display:none">
+                                                                            <a href="@Url.Content("~/Archivos/Plantilla/PoaMadNoMadBExtraccion_v3.xlsx")"> <i class="fa mx-2 fa-lg fa-folder-open" style="cursor:pointer;" data-toggle="tooltip" data-placement="top" title="Descargar Plantilla"></i></a>
+                                                                        </div>
+                                                                        <i class="fa mx-2 fa-lg fa-download" style="cursor:pointer;" onclick="_EditBExtraccion.fnExportBExt('BEXTRACCION_MADE');" data-toggle="tooltip" data-placement="top" title="Descargar balance de extracción"></i>
+                                                                        <strong id="txttbBExtMade_NoMade"></strong>
+                                                                    </div>
+                                                                </th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody></tbody>
+                                                        <tfoot></tfoot>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
-                                    <div class="form-group col-md-3">
-                                        <label class="text-small">Titular actual</label>
-                                        @Html.TextBoxFor(m => m.txtTitular, new { @class = "form-control form-control-sm", disabled = "disabled" })
+                                    <!--<div id="dvBExtMaderable" class="card-body" style="display:none;">
+                                        <div class="form-row">
+                                            <div class="col-md-12">
+                                                <div class="table-responsive">
+                                                    <table id="tbBExtMade" style="width:100%" class="table table-hover table-bordered">
+                                                        <thead>
+                                                            <tr>
+                                                                <th colspan="12" class="text-sm-left">
+                                                                    <div class="form-inline">
+                                                                        <i class="fa mx-2 fa-lg fa-file-o" style="cursor:pointer;" onclick="_EditBExtraccion.fnAddEditBExtMade('');" data-toggle="tooltip" data-placement="top" title="Nuevo"></i>
+                                                                        <i class="fa mx-2 fa-lg fa-window-close-o" style="cursor:pointer;" onclick="_EditBExtraccion.fnDeleteBExt(null, 'BEXTRACCION_MADE_ALL');" data-toggle="tooltip" data-placement="top" title="Eliminar Todos"></i>
+                                                                        <label style="cursor:pointer;" class="fa mx-2 fa-lg fa-file-excel-o" title="Importar Archivo" data-toggle="tooltip">
+                                                                            <input type="file" style="display:none" size="60" onchange="_EditBExtraccion.fnImportBExt(event, this, 'BEXTRACCION_MADE')">
+                                                                        </label>
+                                                                        <div>
+                                                                            <a href="@@Url.Content("~/Archivos/Plantilla/PoaMaderableBExtraccion_v2.xlsx")"> <i class="fa mx-2 fa-lg fa-folder-open" style="cursor:pointer;" data-toggle="tooltip" data-placement="top" title="Descargar plantilla"></i></a>
+                                                                        </div>
+                                                                        <i class="fa mx-2 fa-lg fa-download" style="cursor:pointer;" onclick="_EditBExtraccion.fnExportBExt('BEXTRACCION_MADE');" data-toggle="tooltip" data-placement="top" title="Descargar balance de extracción"></i>
+                                                                        <strong>
+                                                                            BALANCE DE EXTRACCIÓN O KARDEX (Maderable)
+                                                                        </strong>
+                                                                    </div>
+                                                                </th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody></tbody>
+                                                        <tfoot>
+                                                            <tr class="custom-row-footer">
+                                                                <th></th>
+                                                                <th></th>
+                                                                <th></th>
+                                                                <th colspan="2"><span>Total</span></th>
+                                                                <th><span id="colDmc">0</span></th>
+                                                                <th><span id="colTotArb">0</span></th>
+                                                                <th><span id="colVolAut">0</span></th>
+                                                                <th><span id="colVolMov">0</span></th>
+                                                                <th></th>
+                                                                <th></th>
+                                                                <th></th>
+                                                            </tr>
+                                                        </tfoot>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
-                                    <div class="form-group col-md-3">
-                                        <label class="text-small">Modalidad</label>
-                                        @Html.TextBoxFor(m => m.txtModalidad, new { @class = "form-control form-control-sm", disabled = "disabled" })
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="card-header text-small">Sobre los balances de extracción</div>
-                            <div class="card-body">
-                                <div class="form-row">
-                                    <div class="col-xl-3 col-lg-4 col-md-6 col-sm-8">
-                                        <div class="table-responsive">
-                                            <table id="tbBExtFecha" style="width:100%" class="table table-hover table-bordered">
-                                                <thead>
-                                                    <tr>
-                                                        <th colspan="4" class="text-sm-left">
-                                                            <div class="form-inline">
-                                                                <i class="fa mx-2 fa-lg fa-file-o" style="cursor:pointer;" onclick="_EditBExtraccion.fnAddEditBExtFecha('');" data-toggle="tooltip" data-placement="top" title="Nuevo"></i>
-                                                                <strong>
-                                                                    Fechas de emisión de los balances de extracción
-                                                                </strong>
-                                                            </div>
-                                                        </th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody></tbody>
-                                            </table>
+                                    <div id="dvBExtNoMaderable" class="card-body" style="display:none;">
+                                        <div class="form-row">
+                                            <div class="col-md-12">
+                                                <div class="table-responsive">
+                                                    <table id="tbBExtNoMade" style="width:100%" class="table table-hover table-bordered">
+                                                        <thead>
+                                                            <tr>
+                                                                <th colspan="12" class="text-sm-left">
+                                                                    <div class="form-inline">
+                                                                        <i class="fa mx-2 fa-lg fa-file-o" style="cursor:pointer;" onclick="_EditBExtraccion.fnAddEditBExtNoMade('');" data-toggle="tooltip" data-placement="top" title="Nuevo"></i>
+                                                                        <i class="fa mx-2 fa-lg fa-window-close-o" style="cursor:pointer;" onclick="_EditBExtraccion.fnDeleteBExt(null, 'BEXTRACCION_NOMADE_ALL');" data-toggle="tooltip" data-placement="top" title="Eliminar Todos"></i>
+                                                                        <label style="cursor:pointer;" class="fa mx-2 fa-lg fa-file-excel-o" title="Importar Archivo" data-toggle="tooltip">
+                                                                            <input type="file" style="display:none" size="60" onchange="_EditBExtraccion.fnImportBExt(event, this, 'BEXTRACCION_NOMADE')">
+                                                                        </label>
+                                                                        <div>
+                                                                            <a href="#" onclick="_EditBExtraccion.fnDownloadTemplateBExtNoMade()"><i class="fa mx-2 fa-lg fa-folder-open" style="cursor:pointer;" data-toggle="tooltip" data-placement="top" title="Descargar plantilla"></i></a>
+                                                                        </div>
+                                                                        <i class="fa mx-2 fa-lg fa-download" style="cursor:pointer;" onclick="_EditBExtraccion.fnExportBExt('BEXTRACCION_NOMADE');" data-toggle="tooltip" data-placement="top" title="Descargar balance de extracción"></i>
+                                                                        <strong>
+                                                                            BALANCE DE EXTRACCIÓN O KARDEX (No Maderable)
+                                                                        </strong>
+                                                                    </div>
+                                                                </th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody></tbody>
+                                                        <tfoot>
+                                                            <tr class="custom-row-footer">
+                                                                <th></th>
+                                                                <th></th>
+                                                                <th></th>
+                                                                <th colspan="2"><span>Total</span></th>
+                                                                <th><span id="NMadCol6"></span></th>
+                                                                <th><span id="NMadCol7"></span></th>
+                                                                <th><span id="NMadCol8"></span></th>
+                                                                <th><span id="NMadCol9"></span></th>
+                                                                @@if (Model.hdfCodMTipo == "0000020" || Model.hdfCodMTipo == "0000021")
+                                                                {
+                                                                    <th><span id="NMadCol10"></span></th>
+                                                                    if (Model.hdfCodMTipo == "0000020")
+                                                                    {
+                                                                        <th><span id="NMadCol11"></span></th>
+                                                                        <th><span id="NMadCol12"></span></th>
+                                                                    }
+                                                                }
+                                                            </tr>
+                                                        </tfoot>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>-->
+                                    <div id="dvBExtKardexTitle" class="card-header text-small" style="display:none;">Sobre el kardex</div>
+                                    <div id="dvBExtKardex" class="card-body" style="display:none;">
+                                        <div class="form-row">
+                                            <div class="col-md-12">
+                                                <div class="table-responsive">
+                                                    <table id="tbBExtKardex" style="width:100%" class="table table-hover table-bordered">
+                                                        <thead>
+                                                            <tr>
+                                                                <th colspan="14" class="text-sm-left">
+                                                                    <div class="form-inline">
+                                                                        <i class="fa mx-2 fa-lg fa-file-o" style="cursor:pointer;" onclick="_EditBExtraccion.fnAddEditBExtKardex('');" data-toggle="tooltip" data-placement="top" title="Nuevo"></i>
+                                                                        <i class="fa mx-2 fa-lg fa-window-close-o" style="cursor:pointer;" onclick="_EditBExtraccion.fnDeleteBExt(null, 'BEXTRACCION_KARDEX_ALL');" data-toggle="tooltip" data-placement="top" title="Eliminar Todos"></i>
+                                                                        <strong>
+                                                                            KARDEX DEL POA
+                                                                        </strong>
+                                                                    </div>
+                                                                </th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody></tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                            <div id="dvBExtMade_NoMade" class="card-body" style="display:none;">
-                                <div class="form-row">
-                                    <div class="col-md-12">
-                                        <div class="table-responsive">
-                                            <table id="tbBExtMade_NoMade" style="width:100%" class="table table-hover table-bordered">
-                                                <thead>
-                                                    <tr>
-                                                        <th colspan="24" class="text-sm-left">
-                                                            <div class="form-inline">
-                                                                <i class="fa mx-2 fa-lg fa-file-o" style="cursor:pointer;" onclick="_EditBExtraccion.fnAddEditBExtMade_NoMade('');" data-toggle="tooltip" data-placement="top" title="Nuevo"></i>
-                                                                <i class="fa mx-2 fa-lg fa-window-close-o" style="cursor:pointer;" onclick="_EditBExtraccion.fnDeleteBExt(null, 'BEXTRACCION_MADE_ALL');" data-toggle="tooltip" data-placement="top" title="Eliminar Todos"></i>
-                                                                <label style="cursor:pointer;" class="fa mx-2 fa-lg fa-file-excel-o" title="Importar Archivo" data-toggle="tooltip">
-                                                                    <input type="file" style="display:none" size="60" onchange="_EditBExtraccion.fnImportBExt(event, this, 'BEXTRACCION_MADE')">
-                                                                </label>
-                                                                @*Maderable*@
-                                                                <div id="hplMaderableItemBExtDownload" style="display:none">
-                                                                    <a href="@Url.Content("~/Archivos/Plantilla/PoaMaderableBExtraccion_v3.xlsx")"> <i class="fa mx-2 fa-lg fa-folder-open" style="cursor:pointer;" data-toggle="tooltip" data-placement="top" title="Descargar Plantilla"></i></a>
-                                                                </div>
-                                                                @*No Maderable*@
-                                                                <div id="btnExcelBExtNormal" style="display:none">
-                                                                    <a href="@Url.Content("~/Archivos/Plantilla/PoaNoMaderableBExtraccion_v3.xlsx")"> <i class="fa mx-2 fa-lg fa-folder-open" style="cursor:pointer;" data-toggle="tooltip" data-placement="top" title="Descargar Plantilla"></i></a>
-                                                                </div>
-                                                                @*No Maderable*@
-                                                                <div id="btnExcelBExtPMed" style="display:none">
-                                                                    <a href="@Url.Content("~/Archivos/Plantilla/PoaNoMaderablePMedBExtraccion_v3.xlsx")"> <i class="fa mx-2 fa-lg fa-folder-open" style="cursor:pointer;" data-toggle="tooltip" data-placement="top" title="Descargar Plantilla"></i></a>
-                                                                </div>
-                                                                @*No Maderable*@
-                                                                <div id="btnExcelBExtCarr" style="display:none">
-                                                                    <a href="@Url.Content("~/Archivos/Plantilla/PoaNoMaderableCarrBExtraccion_v3.xlsx")"> <i class="fa mx-2 fa-lg fa-folder-open" style="cursor:pointer;" data-toggle="tooltip" data-placement="top" title="Descargar Plantilla"></i></a>
-                                                                </div>
-                                                                @*Maderable - No Maderable*@
-                                                                <div id="btnExcelPMedBExtMadNoMad" style="display:none">
-                                                                    <a href="@Url.Content("~/Archivos/Plantilla/PoaMadNoMadPMedBExtraccion_v3.xlsx")"> <i class="fa mx-2 fa-lg fa-folder-open" style="cursor:pointer;" data-toggle="tooltip" data-placement="top" title="Descargar Plantilla"></i></a>
-                                                                </div>
-                                                                @*Maderable - No Maderable*@
-                                                                <div id="btnExcelCarrBExtMadNoMad" style="display:none">
-                                                                    <a href="@Url.Content("~/Archivos/Plantilla/PoaMadNoMadCarrBExtraccion_v3.xlsx")"> <i class="fa mx-2 fa-lg fa-folder-open" style="cursor:pointer;" data-toggle="tooltip" data-placement="top" title="Descargar Plantilla"></i></a>
-                                                                </div>
-                                                                @*Maderable - No Maderable*@
-                                                                <div id="btnExcelBExtMadNoMad" style="display:none">
-                                                                    <a href="@Url.Content("~/Archivos/Plantilla/PoaMadNoMadBExtraccion_v3.xlsx")"> <i class="fa mx-2 fa-lg fa-folder-open" style="cursor:pointer;" data-toggle="tooltip" data-placement="top" title="Descargar Plantilla"></i></a>
-                                                                </div>
-                                                                <i class="fa mx-2 fa-lg fa-download" style="cursor:pointer;" onclick="_EditBExtraccion.fnExportBExt('BEXTRACCION_MADE');" data-toggle="tooltip" data-placement="top" title="Descargar balance de extracción"></i>
-                                                                <strong id="txttbBExtMade_NoMade"></strong>
-                                                            </div>
-                                                        </th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody></tbody>
-                                                <tfoot></tfoot>
-                                            </table>
+
+
+                            <div class="tab-pane fade" id="navDatosAcervo" role="tabpanel" aria-labelledby="nav-contact-tab">
+
+                                <div class="card">
+
+                                    <div class="card-header text-small">Acervo Documentario</div>
+                                    <div class="card-body">
+                                        <div class="form-row">
+                                            @{ string codBEXTHPOA = Model.hdfCodTHabilitante + "|" + Model.hdfNumPoa;}
+                                            @{ Html.RenderAction("_IntegracionDOCSIADO", "Controles", new { area = "GENERAL", asCriterio = "SUBTIP_TITDOCSIGO", asSubCriterio = "0002", asValor = codBEXTHPOA });}
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                            <!--<div id="dvBExtMaderable" class="card-body" style="display:none;">
-                                <div class="form-row">
-                                    <div class="col-md-12">
-                                        <div class="table-responsive">
-                                            <table id="tbBExtMade" style="width:100%" class="table table-hover table-bordered">
-                                                <thead>
-                                                    <tr>
-                                                        <th colspan="12" class="text-sm-left">
-                                                            <div class="form-inline">
-                                                                <i class="fa mx-2 fa-lg fa-file-o" style="cursor:pointer;" onclick="_EditBExtraccion.fnAddEditBExtMade('');" data-toggle="tooltip" data-placement="top" title="Nuevo"></i>
-                                                                <i class="fa mx-2 fa-lg fa-window-close-o" style="cursor:pointer;" onclick="_EditBExtraccion.fnDeleteBExt(null, 'BEXTRACCION_MADE_ALL');" data-toggle="tooltip" data-placement="top" title="Eliminar Todos"></i>
-                                                                <label style="cursor:pointer;" class="fa mx-2 fa-lg fa-file-excel-o" title="Importar Archivo" data-toggle="tooltip">
-                                                                    <input type="file" style="display:none" size="60" onchange="_EditBExtraccion.fnImportBExt(event, this, 'BEXTRACCION_MADE')">
-                                                                </label>
-                                                                <div>
-                                                                    <a href="@@Url.Content("~/Archivos/Plantilla/PoaMaderableBExtraccion_v2.xlsx")"> <i class="fa mx-2 fa-lg fa-folder-open" style="cursor:pointer;" data-toggle="tooltip" data-placement="top" title="Descargar plantilla"></i></a>
-                                                                </div>
-                                                                <i class="fa mx-2 fa-lg fa-download" style="cursor:pointer;" onclick="_EditBExtraccion.fnExportBExt('BEXTRACCION_MADE');" data-toggle="tooltip" data-placement="top" title="Descargar balance de extracción"></i>
-                                                                <strong>
-                                                                    BALANCE DE EXTRACCIÓN O KARDEX (Maderable)
-                                                                </strong>
-                                                            </div>
-                                                        </th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody></tbody>
-                                                <tfoot>
-                                                    <tr class="custom-row-footer">
-                                                        <th></th>
-                                                        <th></th>
-                                                        <th></th>
-                                                        <th colspan="2"><span>Total</span></th>
-                                                        <th><span id="colDmc">0</span></th>
-                                                        <th><span id="colTotArb">0</span></th>
-                                                        <th><span id="colVolAut">0</span></th>
-                                                        <th><span id="colVolMov">0</span></th>
-                                                        <th></th>
-                                                        <th></th>
-                                                        <th></th>
-                                                    </tr>
-                                                </tfoot>
-                                            </table>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div id="dvBExtNoMaderable" class="card-body" style="display:none;">
-                                <div class="form-row">
-                                    <div class="col-md-12">
-                                        <div class="table-responsive">
-                                            <table id="tbBExtNoMade" style="width:100%" class="table table-hover table-bordered">
-                                                <thead>
-                                                    <tr>
-                                                        <th colspan="12" class="text-sm-left">
-                                                            <div class="form-inline">
-                                                                <i class="fa mx-2 fa-lg fa-file-o" style="cursor:pointer;" onclick="_EditBExtraccion.fnAddEditBExtNoMade('');" data-toggle="tooltip" data-placement="top" title="Nuevo"></i>
-                                                                <i class="fa mx-2 fa-lg fa-window-close-o" style="cursor:pointer;" onclick="_EditBExtraccion.fnDeleteBExt(null, 'BEXTRACCION_NOMADE_ALL');" data-toggle="tooltip" data-placement="top" title="Eliminar Todos"></i>
-                                                                <label style="cursor:pointer;" class="fa mx-2 fa-lg fa-file-excel-o" title="Importar Archivo" data-toggle="tooltip">
-                                                                    <input type="file" style="display:none" size="60" onchange="_EditBExtraccion.fnImportBExt(event, this, 'BEXTRACCION_NOMADE')">
-                                                                </label>
-                                                                <div>
-                                                                    <a href="#" onclick="_EditBExtraccion.fnDownloadTemplateBExtNoMade()"><i class="fa mx-2 fa-lg fa-folder-open" style="cursor:pointer;" data-toggle="tooltip" data-placement="top" title="Descargar plantilla"></i></a>
-                                                                </div>
-                                                                <i class="fa mx-2 fa-lg fa-download" style="cursor:pointer;" onclick="_EditBExtraccion.fnExportBExt('BEXTRACCION_NOMADE');" data-toggle="tooltip" data-placement="top" title="Descargar balance de extracción"></i>
-                                                                <strong>
-                                                                    BALANCE DE EXTRACCIÓN O KARDEX (No Maderable)
-                                                                </strong>
-                                                            </div>
-                                                        </th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody></tbody>
-                                                <tfoot>
-                                                    <tr class="custom-row-footer">
-                                                        <th></th>
-                                                        <th></th>
-                                                        <th></th>
-                                                        <th colspan="2"><span>Total</span></th>
-                                                        <th><span id="NMadCol6"></span></th>
-                                                        <th><span id="NMadCol7"></span></th>
-                                                        <th><span id="NMadCol8"></span></th>
-                                                        <th><span id="NMadCol9"></span></th>
-                                                        @@if (Model.hdfCodMTipo == "0000020" || Model.hdfCodMTipo == "0000021")
-                                                        {
-                                                            <th><span id="NMadCol10"></span></th>
-                                                            if (Model.hdfCodMTipo == "0000020")
-                                                            {
-                                                                <th><span id="NMadCol11"></span></th>
-                                                                <th><span id="NMadCol12"></span></th>
-                                                            }
-                                                        }
-                                                    </tr>
-                                                </tfoot>
-                                            </table>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>-->
-                            <div id="dvBExtKardexTitle" class="card-header text-small" style="display:none;">Sobre el kardex</div>
-                            <div id="dvBExtKardex" class="card-body" style="display:none;">
-                                <div class="form-row">
-                                    <div class="col-md-12">
-                                        <div class="table-responsive">
-                                            <table id="tbBExtKardex" style="width:100%" class="table table-hover table-bordered">
-                                                <thead>
-                                                    <tr>
-                                                        <th colspan="14" class="text-sm-left">
-                                                            <div class="form-inline">
-                                                                <i class="fa mx-2 fa-lg fa-file-o" style="cursor:pointer;" onclick="_EditBExtraccion.fnAddEditBExtKardex('');" data-toggle="tooltip" data-placement="top" title="Nuevo"></i>
-                                                                <i class="fa mx-2 fa-lg fa-window-close-o" style="cursor:pointer;" onclick="_EditBExtraccion.fnDeleteBExt(null, 'BEXTRACCION_KARDEX_ALL');" data-toggle="tooltip" data-placement="top" title="Eliminar Todos"></i>
-                                                                <strong>
-                                                                    KARDEX DEL POA
-                                                                </strong>
-                                                            </div>
-                                                        </th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody></tbody>
-                                            </table>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+
                         </div>
+
+
                     </form>
                 </div>
             </div>
@@ -1168,8 +1196,8 @@
             };
             debugger;
             var url = urlLocalSigo + "THabilitante/ManBalanceExtraccion/DescargarBExtraccion";
-            var option = { url: url, datos: JSON.stringify(data), type: 'POST' };            
-            utilSigo.fnAjax(option, function (data) {                
+            var option = { url: url, datos: JSON.stringify(data), type: 'POST' };
+            utilSigo.fnAjax(option, function (data) {
                 if (data.success) {
                     window.location.href = urlLocalSigo + "THabilitante/ManBalanceExtraccion/Download?file=" + data.msj;
                 }

@@ -67,14 +67,17 @@ anteExpedientes.fnRefresh = function () {
     anteExpedientes.frm.find("#txtValorBuscar").attr("disabled", "disabled");
     anteExpedientes.frm.find("#ddlOptBustarEstadoVentanillaId").val($(anteExpedientes.frm.find("#ddlOptBustarEstadoVentanillaId")[0].childNodes[0]).val()).trigger('change.select2');
     anteExpedientes.frm.find("#ddlOpcionBuscarVentanillaId").val($(anteExpedientes.frm.find("#ddlOpcionBuscarVentanillaId")[0].childNodes[0]).val()).trigger('change.select2');
+    anteExpedientes.frm.find("#ddlAnioId").val($(anteExpedientes.frm.find("#ddlAnioId")[0].childNodes[0]).val()).trigger('change.select2');
     anteExpedientes.dtManGrillaPaging.context[0].aaSorting = [];
     anteExpedientes.dtManGrillaPaging.context[0].aLastSort = [];
     anteExpedientes.dtManGrillaPaging.ajax.reload();
 };
 
 anteExpedientes.fnLoadManGrillaPaging = function () {
-    var columns_label = ["N°", "E", "Tipo Doc Referencia", "N° Trámite", "Documento Trámite ", "Fecha de Entrega al OSINFOR",
-        "Oficina Desconcentrada", "N° Título Habilitante", "Resolución de Aprobación del Plan de Manejo", "Observaciones", "Estado", "SITD",
+    var columns_label = ["N°", "E", "SUB-TIPO", "DETALLE SUB-TIPO", "NÚMERO", "FECHA DEL DOCUMENTO", "N° TÍTULO HABILITANTE", "DESCRIPCIÓN", "N° TRÁMITE",
+        "FECHA DE ENTREGA AL OSINFOR", "OFICINA DESCONCENTRADA",
+        //"Resolución de Aprobación del Plan de Manejo", "Observaciones",
+        "Estado", "SITD",
         "SIADO", "T", "A", "Ir TH", "Ir PM", "Ir AD", "Obs"];
     var colums_title = ["", "Editar Datos SITD", "", "", "", "", "", "", "", "", "", "Descargar Documento Trámite SITD", "Descargar Documento del SIADO", "Transferir", "Anular",
         "Modificar Datos del Título Habilitante", "Modificar Datos del Plan de Manejo", "Modificar Datos del Acto Administrativo", ""];
@@ -91,14 +94,20 @@ anteExpedientes.fnLoadManGrillaPaging = function () {
                 else return "";
             }
         },
-        { "data": "DOC_REFERENCIA", "autoWidth": true },
-        { "data": "CCODIFICACION", "autoWidth": true },
-        { "data": "CNRODOCUMENTO", "autoWidth": true },
-        { "data": "FECHA_SITD", "autoWidth": true },
-        { "data": "CNOMOFICINA", "autoWidth": true },
-        { "data": "NUM_THABILITANTE", "autoWidth": true },
-        { "data": "RESOLUCION_POA", "autoWidth": true },
-        { "data": "OBSERVACION", "autoWidth": true },
+        { "data": "DOC_REFERENCIA", "autoWidth": true },//3
+        { "data": "OBSERVACION", "autoWidth": true },//4
+        { "data": "RESOLUCION_POA", "autoWidth": true },//5
+        { "data": "FFECDOCUMENTO", "autoWidth": true },//6 FECHA DEL DOCUMENTO NUEVO
+        { "data": "NUM_THABILITANTE", "autoWidth": true },//7
+        { "data": "DESCRIPCION", "autoWidth": true },//8 DESCRIPCION 
+        { "data": "CCODIFICACION", "autoWidth": true },//9
+        { "data": "FECHA_SITD", "autoWidth": true },//10
+        { "data": "CNOMOFICINA", "autoWidth": true },//11
+
+
+
+        // { "data": "CNRODOCUMENTO", "autoWidth": true },      
+        // { "data": "", "autoWidth": true },
         { "data": "ESTADO_AEXPEDIENTE", "autoWidth": true },
         {
             "data": "", "width": "2%", "orderable": false, "searchable": false, "mRender": function (data, type, row) {
@@ -231,9 +240,9 @@ anteExpedientes.fnLoadManGrillaPaging = function () {
             "data": function (d) {
                 d.customSearchEnabled = true;
                 d.customSearchForm = "AEXPEDIENTE_SITD";
-                d.customSearchType1 = anteExpedientes.frm.find("#ddlOptBustarEstadoVentanillaId").val();
-                d.customSearchType = anteExpedientes.frm.find("#ddlOpcionBuscarVentanillaId").val();
-                d.customSearchValue = anteExpedientes.frm.find("#txtValorBuscar").val().trim();
+                d.customSearchType1 = anteExpedientes.frm.find("#ddlOptBustarEstadoVentanillaId").val() + '|' + anteExpedientes.frm.find("#ddlAnioId").val();
+                d.customSearchType = anteExpedientes.frm.find("#ddlOpcionBuscarVentanillaId").val();                
+                d.customSearchValue = anteExpedientes.frm.find("#txtValorBuscar").val().trim();                
 
                 for (var i = 0; i < d.order.length; i++) {
                     d.order[i]["column_name"] = d.columns[d.order[i]["column"]]["data"];
@@ -285,10 +294,19 @@ anteExpedientes.initEventos = function () {
 
 anteExpedientes.fnExport = function () {
     var url = urlLocalSigo + "THabilitante/ManVentanillaAntecedentesExpedientes/ExportarRegistroUsuario";
-    var option = { url: url, datos: JSON.stringify({}), type: 'POST' };
+
+    var data = {
+        BusEstado: anteExpedientes.frm.find("#ddlOptBustarEstadoVentanillaId").val(),
+        BusCriterio: anteExpedientes.frm.find("#ddlOpcionBuscarVentanillaId").val() + '|' + anteExpedientes.frm.find("#ddlAnioId").val(),
+        BusValor: anteExpedientes.frm.find("#txtValorBuscar").val().trim()
+    }
+    //var data = anteExpedientes.frm.find("#ddlOptBustarEstadoVentanillaId").val() + '|' + anteExpedientes.frm.find("#ddlOpcionBuscarVentanillaId").val() + '|' + anteExpedientes.frm.find("#txtValorBuscar").val().trim();
+
+    var option = { url: url, datos: JSON.stringify(data), type: 'POST' };
 
     utilSigo.fnAjax(option, function (data) {
         if (data.success) {
+            debugger;
             document.location = urlLocalSigo + "Archivos/Plantilla/" + data.msj;
         }
         else {
@@ -296,6 +314,8 @@ anteExpedientes.fnExport = function () {
             console.log(data.msj);
         }
     });
+
+
 };
 
 anteExpedientes.fnEdit = function (obj) {
@@ -585,6 +605,7 @@ $(document).ready(function () {
     $.fn.select2.defaults.set("theme", "bootstrap4");
     anteExpedientes.frm.find("#ddlOptBustarEstadoVentanillaId").select2();
     anteExpedientes.frm.find("#ddlOpcionBuscarVentanillaId").select2();
+    anteExpedientes.frm.find("#ddlAnioId").select2();
     anteExpedientes.frm.find("#txtValorBuscar").focus();
     anteExpedientes.frmMod.find("#COD_DREFERENCIA").select2();
 

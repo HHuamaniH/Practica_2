@@ -40,6 +40,7 @@
                         <ul class="nav nav-tabs" id="myTab" role="tablist">
                             <li class="nav-item"><a class="nav-link active" id="navDatosTab" data-toggle="tab" href="#navDatos" role="tab" aria-controls="home" aria-selected="true">Estado Situacional / Informe de recomendación</a></li>
                             <li class="nav-item"><a class="nav-link" id="navDatosAdicTab" data-toggle="tab" href="#navDatosAdic" role="tab" aria-controls="home" aria-selected="false">@Model.tituloDatosGenerales</a></li>
+                            <li class="nav-item"><a class="nav-link" id="navAcervoDocTab" data-toggle="tab" href="#navAcervoDoc" role="tab" aria-controls="home" aria-selected="false">Acervo Documentario</a></li>
                         </ul>
                         <div class="tab-content" id="nav-tabContent">
                             <div class="tab-pane fade show active" id="navDatos" role="tabpanel" aria-labelledby="nav-home-tab">
@@ -295,7 +296,7 @@
                                                     <tr>
                                                         <th colspan="6" class="text-sm-left">
                                                             <div class="form-inline">
-                                                                 <i id="btnNuevoCoordenada" class="fa mx-2 fa-lg fa-file-o" style="cursor:pointer;" data-toggle="tooltip" data-placement="top" title="Nuevo"></i>
+                                                                <i id="btnNuevoCoordenada" class="fa mx-2 fa-lg fa-file-o" style="cursor:pointer;" data-toggle="tooltip" data-placement="top" title="Nuevo"></i>
                                                                 <i class="fa mx-2 fa-lg fa-window-close-o" style="cursor:pointer;" onclick="ManPM.fnDeleteCoordenadaAll();" data-toggle="tooltip" data-placement="top" title="Eliminar Todo"></i>
                                                                 <label style="cursor:pointer;" class="fa mx-2 fa-lg fa-file-excel-o" title="Importar Excel" data-toggle="tooltip">
                                                                     <input id="fileCoordenada" type="file" style="display:none" size="60" onchange="ManPM.fnImportarCoordenada(event, this);">
@@ -388,6 +389,20 @@
                                         @{ Html.RenderAction("_IntegracionSIADO", "Controles", new { area = "GENERAL", asCriterio = "SUBTIP_TITDOCSIGO", asSubCriterio = "0003", asValor = codEnv });}
                                     </div>
 
+                                </div>
+                            </div>
+                            <!--Acervo Documentario-->
+                            <div class="tab-pane fade" id="navAcervoDoc" role="tabpanel" aria-labelledby="nav-home-tab">
+                                <div class="card">
+
+                                    <div class="card-header text-small">Acervo Documentario</div>
+                                    <div class="card-body">
+                                        <div class="form-row">
+                                            @{
+                                                Html.RenderAction("_IntegracionDOCSIADO", "Controles", new { area = "GENERAL", asCriterio = "SUBTIP_TITDOCSIGO", asSubCriterio = "0003", asValor = Model.hdfManCOD_PGMF });
+                                            }
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>

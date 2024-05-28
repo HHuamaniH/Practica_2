@@ -43,6 +43,15 @@ namespace SIGOFCv3.Areas.THabilitante.Controllers
                 new SelectListItem { Value = "RESOLUCION_POA", Text = "Resolución de Aprobación" },
             };
 
+            int anioActual = DateTime.Now.Year;
+            List<SelectListItem> listAnio = new List<SelectListItem>();
+            for (int i = anioActual; i >= 2015; i--)
+            {
+                listAnio.Add(new SelectListItem { Value = i.ToString(), Text = i.ToString() });
+            }
+            ViewBag.ddlOpcionAnio = listAnio;
+
+
             CEntidad ent = new CEntidad();
             CLogica log = new CLogica();
             ent = log.RegMostCombo(ent);
@@ -97,11 +106,14 @@ namespace SIGOFCv3.Areas.THabilitante.Controllers
         }
 
         [HttpPost]
-        public JsonResult ExportarRegistroUsuario()
+        public JsonResult ExportarRegistroUsuario(CEntidad request)
         {
             ListResult result = new ListResult();
+            //CEntidad request = new CEntidad();
+            request.PARAMETRO01 = request.BusCriterio.Split('|')[1];
+            request.BusCriterio = request.BusCriterio.Split('|')[0];
+            result = ExportarDatos.RegistroUsuario(request);
 
-            result = ExportarDatos.RegistroUsuario((ModelSession.GetSession())[0].COD_UCUENTA);
 
             return Json(result);
         }

@@ -1227,6 +1227,16 @@
                                         </div>
                                     </div>
                                 </div>
+                                <div class="card">
+
+                                    <div class="card-header text-small">Acervo Documentario</div>
+                                    <div class="card-body">
+                                        <div class="form-row">
+                                            @{ string codTHPOA = Model.hdfItemCod_THabilitante + "|" + Model.txtItemNumPOA;}                                           
+                                            @{ Html.RenderAction("_IntegracionDOCSIADO", "Controles", new { area = "GENERAL", asCriterio = "SUBTIP_TITDOCSIGO", asSubCriterio = "0002", asValor = codTHPOA });}
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                             <!--Datos Adicionales-->
                             <div class="tab-pane fade" id="navDatosAdic" role="tabpanel" aria-labelledby="nav-contact-tab">
