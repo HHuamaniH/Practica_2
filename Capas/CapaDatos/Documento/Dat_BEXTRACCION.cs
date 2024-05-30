@@ -4,6 +4,7 @@ using GeneralSQL.Data;
 using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
+using CapaEntidad.ViewModel;
 
 namespace CapaDatos.DOC
 {
@@ -93,6 +94,7 @@ namespace CapaDatos.DOC
                                     oCampos.NUM_POA = Int32.Parse(dr["NUM_POA"].ToString());
                                     oCampos.COD_SECUENCIAL = Int32.Parse(dr["COD_SECUENCIAL"].ToString());
                                     oCampos.BEXTRACCION_FEMISION = dr["BEXTRACCION_FEMISION"].ToString();
+                                    oCampos.FECHA_CREACION = dr["FECHA_CREACION"].ToString();
                                     oCampos.RegEstado = 2;
                                     oCampos.SELECTED = ind == 0 ? 1 : -1;
                                     olResult.Add(oCampos);
@@ -189,7 +191,8 @@ namespace CapaDatos.DOC
                                     oCampos.TOTAL_ARBOLES = Int32.Parse(dr["TOTAL_ARBOLES"].ToString());//Maderable
                                     oCampos.VOLUMEN_MOVILIZADO = decimal.Parse(dr["VOLUMEN_MOVILIZADO"].ToString());
                                     oCampos.VOLUMEN_AUTORIZADO = decimal.Parse(dr["VOLUMEN_AUTORIZADO"].ToString());
-                                    oCampos.SALDO = decimal.Parse(dr["SALDO"].ToString());
+                                    bool esNumero = double.TryParse(dr["SALDO"].ToString(), out double saldoNumerico);
+                                    if(esNumero) oCampos.SALDO = (decimal) saldoNumerico;
                                     oCampos.OBSERVACION = dr["OBSERVACION"].ToString();
                                     oCampos.TIPOMADERABLE = dr["TIPOMADERABLE"].ToString();//Maderable
                                     oCampos.COD_ESPECIES_SERFOR = dr["COD_ESPECIES_SERFOR"].ToString();
@@ -212,6 +215,8 @@ namespace CapaDatos.DOC
                                         //else if (oCampos.TIPOMADERABLE.Equals("CARBON")) oCampos.UNIDAD_MEDIDA = "KG";
                                         else if (oCampos.TIPOMADERABLE.Equals("CARBON") || oCampos.TIPOMADERABLE.Equals("NO MADERABLES")) oCampos.UNIDAD_MEDIDA = "KG";
                                     }
+
+                                    oCampos.CODIGO_INTERNO = oCEntidad.COD_THABILITANTE + "|" + oCEntidad.NUM_POA + "|" + oCEntidad.COD_SECUENCIAL + "|" + oCampos.COD_SECUENCIAL + "|" + oCampos.COD_ESPECIES + "|" + oCampos.COD_ESPECIES_SERFOR;
 
                                     olResult.Add(oCampos);
                                 }

@@ -443,21 +443,23 @@ namespace SIGOFCv3.Areas.THabilitante.Models.ManBalanceExtraccion
                                     foreach (var item in olMaderable)
                                     {
                                         insertar = "";
+                                        insertar = insertar + "'" + (string.IsNullOrEmpty(item.CODIGO_INTERNO) ? "" : item.CODIGO_INTERNO.ToString()) + "'";
+
                                         if (string.IsNullOrEmpty(item.ESPECIES))
                                         {
-                                            insertar = insertar + "'" + "" + "'";
+                                            insertar = insertar + ",'" + "" + "'";
                                             insertar = insertar + ",'" + "" + "'";
                                         }
                                         else
                                         {
                                             if (item.ESPECIES.Trim().Length <= 1)
                                             {
-                                                insertar = insertar + "'" + "" + "'";
+                                                insertar = insertar + ",'" + "" + "'";
                                                 insertar = insertar + ",'" + "" + "'";
                                             }
                                             else
                                             {
-                                                insertar = insertar + "'" + item.ESPECIES.Substring(0, item.ESPECIES.IndexOf('|')).Trim() + "'";
+                                                insertar = insertar + ",'" + item.ESPECIES.Substring(0, item.ESPECIES.IndexOf('|')).Trim() + "'";
                                                 insertar = insertar + ",'" + item.ESPECIES.Substring(item.ESPECIES.IndexOf('|') + 1, item.ESPECIES.Length - item.ESPECIES.IndexOf('|') - 1).Trim() + "'";
                                             }
                                         }

@@ -1,4 +1,5 @@
-﻿using System.ComponentModel;
+﻿using System;
+using System.ComponentModel;
 
 namespace CapaEntidad.DOC
 {
@@ -40,6 +41,8 @@ namespace CapaEntidad.DOC
         [Description("OUTPUTPARAMDET01")]
         public int OUTPUTPARAMDET01 { get; set; }
         public int SELECTED { get; set; }
+        [Description("FECHA_CREACION")]
+        public string FECHA_CREACION { get; set; }
 
         public Ent_BEXTRACCION_FECEMI()
         {
@@ -134,6 +137,8 @@ namespace CapaEntidad.DOC
 
         [Description("COD_PARCELA")]
         public string COD_PARCELA { get; set; }
+        [Description("CODIGO_INTERNO")]
+        public string CODIGO_INTERNO { get; set; }
 
         public Ent_BEXTRACCION_MADE()
         {

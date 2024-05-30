@@ -1778,7 +1778,7 @@ namespace SIGOFCv3.Areas.THabilitante.Controllers
 
             //dto.ListMadeCENSO.AddRange(objVM2.ListMadeCENSO);
             ListResult resultado;
-            resultado = objLog.GuardarDatosPOA(dto, (ModelSession.GetSession())[0].COD_UCUENTA);
+            resultado = objLog.GuardarDatosPOA(dto, (ModelSession.GetSession())[0].COD_UCUENTA, ConfigurationManager.AppSettings["fechaCorteBalanceExtraccion"]);
             return Json(resultado);
         }
 

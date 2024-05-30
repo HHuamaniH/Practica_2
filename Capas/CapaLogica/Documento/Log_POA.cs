@@ -1,6 +1,7 @@
 using CapaDatos.DOC;
 using CapaEntidad.DOC;
 using CapaEntidad.ViewModel;
+using GeneralSQL;
 using Oracle.ManagedDataAccess.Client;
 using System;
 using System.Collections.Generic;
@@ -963,9 +964,10 @@ namespace CapaLogica.DOC
         }
 
 
-        public ListResult GuardarDatosPOA(VM_POA dto, string codCuenta)
+        public ListResult GuardarDatosPOA(VM_POA dto, string codCuenta, string fechaCorteBalanceExtraccionString)
         {
             ListResult resultado = new ListResult();
+            Log_BEXTRACCION logBEXTRACCION = new Log_BEXTRACCION(); 
             CEntidad oCampos = new CEntidad();
             String OUTPUTPARAM = "";
             string msjRespuesta = "El Registro se Guardo Correctamente", appServer = "";
@@ -1070,13 +1072,51 @@ namespace CapaLogica.DOC
                 oCampos.NUM_CENSO_MADE_ELIM = (from p in oCampos.ListEliTABLA where p.EliTABLA == "POA_DET_MADERABLE_CENSO" select p).ToList<CEntidad>().Count;
                 oCampos.ELIM_TOTAL_CENSO = dto.hdELIM_TOTAL_CENSO;
 
+                if(fechaCorteBalanceExtraccionString != null && fechaCorteBalanceExtraccionString != "") 
+                {
+                    if (oCampos.ListEliTABLA != null)
+                    {
+                        foreach (var loDatos in oCampos.ListEliTABLA) {
+                            if (loDatos.EliTABLA == "POA_DET_MADE_NOMADE_EAAPROVECHAR")
+                            {
+                                List<Ent_BEXTRACCION_FECEMI> listaFechas = logBEXTRACCION.ListarBExtraccionPorPlan(oCampos.COD_THABILITANTE, oCampos.NUM_POA);
+                                if (listaFechas != null && listaFechas.Count > 0)
+                                {
+                                    foreach (var fecha in listaFechas)
+                                    {
+                                        var fechaCreacion = DateTime.Parse(fecha.FECHA_CREACION);
+                                        var fechaCorteBalanceExtraccion = DateTime.Parse(fechaCorteBalanceExtraccionString);
+                                        if (fechaCreacion > fechaCorteBalanceExtraccion)
+                                        {
+                                            List<Ent_BEXTRACCION_MADE> resultados = logBEXTRACCION.ListarBExtraccionMaderable(oCampos.COD_THABILITANTE, oCampos.NUM_POA, fecha.COD_SECUENCIAL);
+                                            var encontrado = resultados.Where(x => x.COD_SECUENCIAL == loDatos.EliVALOR02);
+                                            if (encontrado.Count() > 0)
+                                            {
+                                                Ent_BEXTRACCION_EliTABLA oCEntidadEli = new Ent_BEXTRACCION_EliTABLA();
+                                                oCEntidadEli.EliTABLA = "BEXTRACCION_MADE";
+                                                oCEntidadEli.COD_THABILITANTE = oCampos.COD_THABILITANTE;
+                                                oCEntidadEli.NUM_POA = oCampos.NUM_POA;
+                                                oCEntidadEli.COD_SECUENCIAL = fecha.COD_SECUENCIAL;
+                                                oCEntidadEli.COD_ESPECIES_BEXT = encontrado.FirstOrDefault().COD_ESPECIES;
+                                                oCEntidadEli.COD_SECUENCIAL_BEXT = encontrado.FirstOrDefault().COD_SECUENCIAL;
+                                                ListResult result = logBEXTRACCION.EliminarBExtraccion(oCEntidadEli);
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+               
+
                 /*  oCampos.ListRReformulaISitu = CEntPOAItems.ListRReformulaISitu;                
                 oCampos.ListASBSAmbientales = CEntPOAItems.ListASBSAmbientales;
                 oCampos.ListBioseguridad = CEntPOAItems.ListBioseguridad;
                 oCampos.ListRDReformulaPOA = CEntPOAItems.ListRDReformulaPOA;
                 oCampos.ListHijoMadeCENSO = CEntPOAItems.ListHijoMadeCENSO;
                 oCampos.ListHijoNoMadeCENSO = CEntPOAItems.ListHijoNoMadeCENSO;
-                 */
+                */
                 /*
                 #region indicador
                 List<VM_Cbo> listIndicador = POA_VM.ddlItemIndicador.ToList();
@@ -1229,6 +1269,40 @@ namespace CapaLogica.DOC
                 resultado.appServer = appServer;
                 resultado.AddResultado(ex.Message, false);
             }
+
+
+            Ent_POA oCamposMod = new Ent_POA();
+            oCamposMod.COD_THABILITANTE = oCampos.COD_THABILITANTE;
+            oCamposMod.NUM_POA = oCampos.NUM_POA;
+
+            var datBalanceExtraccion = RegMostrarListaItems(oCamposMod);
+            //Agregar en balance de extracción
+            if (fechaCorteBalanceExtraccionString != null && fechaCorteBalanceExtraccionString != "")
+            {
+                if (datBalanceExtraccion.ListRAprueba != null && datBalanceExtraccion.ListRAprueba.Count > 0)
+                {
+                    foreach (var item in datBalanceExtraccion.ListRAprueba)
+                    {
+                        List<Ent_BEXTRACCION_FECEMI> listaFechas = logBEXTRACCION.ListarBExtraccionPorPlan(oCampos.COD_THABILITANTE, oCampos.NUM_POA);
+                        if (listaFechas != null && listaFechas.Count > 0)
+                        {
+                            foreach (var fecha in listaFechas)
+                            {
+                                var fechaCreacion = DateTime.Parse(fecha.FECHA_CREACION);
+                                var fechaCorteBalanceExtraccion = DateTime.Parse(fechaCorteBalanceExtraccionString);
+                                if (fechaCreacion > fechaCorteBalanceExtraccion)
+                                {
+                                    List<Ent_POA> listaGuardar = new List<Ent_POA>();
+                                    listaGuardar.Add(item);
+                                    logBEXTRACCION.InsertarBalanceExtraccionMaderableNoMaderable(listaGuardar, oCampos.COD_UCUENTA, fecha.COD_SECUENCIAL, oCampos.COD_THABILITANTE, oCampos.NUM_POA);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            //End Agregar en balance de extracción
+
             return resultado;
         }
         private void setListCheckToObject(string ListCheckIds, ref CEntidad obj)

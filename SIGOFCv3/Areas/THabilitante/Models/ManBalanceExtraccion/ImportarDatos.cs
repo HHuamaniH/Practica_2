@@ -197,9 +197,20 @@ namespace SIGOFCv3.Areas.THabilitante.Models.ManBalanceExtraccion
                                     objLog = new Log_PLAN_MANEJO();
                                     isAdd = true;
 
+                                    oCampos.CODIGO_INTERNO = workSheet.Cells[rowIterator, 1].Value == null ? "" : workSheet.Cells[rowIterator, 1].Value.ToString().Trim();
+                                    if(oCampos.CODIGO_INTERNO == null || oCampos.CODIGO_INTERNO == "")
+                                    {
+                                        throw new Exception("Error en la fila "+ (rowIterator - 1) + ", el código interno no puede ser un campo vacio.");
+                                    }
+                                    var codigoInternoSplit = oCampos.CODIGO_INTERNO.Split('|');
+                                    if(codigoInternoSplit.Length != 6)
+                                    {
+                                        throw new Exception("Error en la fila " + (rowIterator - 1) + ", código interno incorrecto.");
+                                    }
+
                                     codEspecie = objLog.GetCodEspecie(
-                                        workSheet.Cells[rowIterator, 1].Value == null ? "" : workSheet.Cells[rowIterator, 1].Value.ToString().Trim(),
-                                        workSheet.Cells[rowIterator, 2].Value == null ? "" : workSheet.Cells[rowIterator, 2].Value.ToString().Trim()
+                                        workSheet.Cells[rowIterator, 2].Value == null ? "" : workSheet.Cells[rowIterator, 2].Value.ToString().Trim(),
+                                        workSheet.Cells[rowIterator, 3].Value == null ? "" : workSheet.Cells[rowIterator, 3].Value.ToString().Trim()
                                     );
 
                                     if (codEspecie != null && codEspecie.Trim() != "")
@@ -207,57 +218,57 @@ namespace SIGOFCv3.Areas.THabilitante.Models.ManBalanceExtraccion
                                         oCampos.COD_THABILITANTE = asCodTHabilitante;
                                         oCampos.NUM_POA = aiNumPoa;
                                         oCampos.COD_SECUENCIAL_BEXT = aiCodSecuencialBExt;
-                                        oCampos.COD_SECUENCIAL = 0;
+                                        oCampos.COD_SECUENCIAL = codigoInternoSplit[3] != null ? int.Parse(codigoInternoSplit[3]) : 0;
                                         oCampos.COD_ESPECIES = codEspecie;
-                                        oCampos.ESPECIES = String.Format("{0} | {1}", workSheet.Cells[rowIterator, 1].Value == null ? "" : workSheet.Cells[rowIterator, 1].Value.ToString().Trim(), workSheet.Cells[rowIterator, 2].Value == null ? "" : workSheet.Cells[rowIterator, 2].Value.ToString().Trim());
+                                        oCampos.ESPECIES = String.Format("{0} | {1}", workSheet.Cells[rowIterator, 2].Value == null ? "" : workSheet.Cells[rowIterator, 2].Value.ToString().Trim(), workSheet.Cells[rowIterator, 3].Value == null ? "" : workSheet.Cells[rowIterator, 3].Value.ToString().Trim());
                                         
-                                        oCampos.TIPOMADERABLE = workSheet.Cells[rowIterator, 5].Value == null ? "" : workSheet.Cells[rowIterator, 5].Value.ToString().Trim();
+                                        oCampos.TIPOMADERABLE = workSheet.Cells[rowIterator, 6].Value == null ? "" : workSheet.Cells[rowIterator, 6].Value.ToString().Trim();
                                         if (string.IsNullOrEmpty(oCampos.TIPOMADERABLE)) throw new Exception("Debe ingresar el Tipo de aprovechamiento.");
-
-                                        if (workSheet.Cells[rowIterator, 6].Value != null)
-                                        {
-                                            valor = workSheet.Cells[rowIterator, 6].Value.ToString().Trim();
-                                            if (valor.Length > 6) throw new Exception("El DMC no puede exceder los 6 caracteres.");
-                                            if (!int.TryParse(valor, out numero)) throw new Exception("El DMC debe ser un valor numérico.");
-                                        }
-                                        oCampos.DMC = workSheet.Cells[rowIterator, 6].Value == null ? 0 : Int32.Parse(workSheet.Cells[rowIterator, 6].Value.ToString().Trim());
 
                                         if (workSheet.Cells[rowIterator, 7].Value != null)
                                         {
                                             valor = workSheet.Cells[rowIterator, 7].Value.ToString().Trim();
-                                            if (valor.Length > 6) throw new Exception("El número total no puede exceder los 6 caracteres.");
-                                            if (!int.TryParse(valor, out numero)) throw new Exception("El número total debe ser un valor numérico.");
+                                            if (valor.Length > 6) throw new Exception("El DMC no puede exceder los 6 caracteres.");
+                                            if (!int.TryParse(valor, out numero)) throw new Exception("El DMC debe ser un valor numérico.");
                                         }
-                                        oCampos.TOTAL_ARBOLES = workSheet.Cells[rowIterator, 7].Value == null ? 0 : Int32.Parse(workSheet.Cells[rowIterator, 7].Value.ToString().Trim());
+                                        oCampos.DMC = workSheet.Cells[rowIterator, 7].Value == null ? 0 : Int32.Parse(workSheet.Cells[rowIterator, 7].Value.ToString().Trim());
 
                                         if (workSheet.Cells[rowIterator, 8].Value != null)
                                         {
                                             valor = workSheet.Cells[rowIterator, 8].Value.ToString().Trim();
-                                            if (!Regex.IsMatch(valor, @"^\d+(\.\d{1,3})?$")) throw new Exception("La cantidad autorizada debe ser un valor numérico y no puede exceder los 3 decimales.");
+                                            if (valor.Length > 6) throw new Exception("El número total no puede exceder los 6 caracteres.");
+                                            if (!int.TryParse(valor, out numero)) throw new Exception("El número total debe ser un valor numérico.");
                                         }
-                                        oCampos.VOLUMEN_AUTORIZADO = workSheet.Cells[rowIterator, 8].Value == null ? 0 : Decimal.Parse(workSheet.Cells[rowIterator, 8].Value.ToString().Trim());
-                                        if (oCampos.VOLUMEN_AUTORIZADO > volumen_kilogramos) throw new Exception("La cantidad autorizada no puede exceder los 7 dígitos.");
+                                        oCampos.TOTAL_ARBOLES = workSheet.Cells[rowIterator, 8].Value == null ? 0 : Int32.Parse(workSheet.Cells[rowIterator, 8].Value.ToString().Trim());
 
                                         if (workSheet.Cells[rowIterator, 9].Value != null)
                                         {
                                             valor = workSheet.Cells[rowIterator, 9].Value.ToString().Trim();
-                                            if (!Regex.IsMatch(valor, @"^\d+(\.\d{1,3})?$")) throw new Exception("La cantidad movilizada debe ser un valor numérico y no puede exceder los 3 decimales.");
+                                            if (!Regex.IsMatch(valor, @"^\d+(\.\d{1,3})?$")) throw new Exception("La cantidad autorizada debe ser un valor numérico y no puede exceder los 3 decimales.");
                                         }
-                                        oCampos.VOLUMEN_MOVILIZADO = workSheet.Cells[rowIterator, 9].Value == null ? 0 : Decimal.Parse(workSheet.Cells[rowIterator, 9].Value.ToString().Trim());
-                                        if (oCampos.VOLUMEN_MOVILIZADO > volumen_kilogramos) throw new Exception("La cantidad movilizada no puede exceder los 7 dígitos.");
+                                        oCampos.VOLUMEN_AUTORIZADO = workSheet.Cells[rowIterator, 9].Value == null ? 0 : Decimal.Parse(workSheet.Cells[rowIterator, 9].Value.ToString().Trim());
+                                        if (oCampos.VOLUMEN_AUTORIZADO > volumen_kilogramos) throw new Exception("La cantidad autorizada no puede exceder los 7 dígitos.");
 
                                         if (workSheet.Cells[rowIterator, 10].Value != null)
                                         {
                                             valor = workSheet.Cells[rowIterator, 10].Value.ToString().Trim();
                                             if (!Regex.IsMatch(valor, @"^\d+(\.\d{1,3})?$")) throw new Exception("La cantidad movilizada debe ser un valor numérico y no puede exceder los 3 decimales.");
                                         }
-                                        oCampos.SALDO = workSheet.Cells[rowIterator, 10].Value == null ? 0 : Decimal.Parse(workSheet.Cells[rowIterator, 10].Value.ToString().Trim());
+                                        oCampos.VOLUMEN_MOVILIZADO = workSheet.Cells[rowIterator, 10].Value == null ? 0 : Decimal.Parse(workSheet.Cells[rowIterator, 10].Value.ToString().Trim());
+                                        if (oCampos.VOLUMEN_MOVILIZADO > volumen_kilogramos) throw new Exception("La cantidad movilizada no puede exceder los 7 dígitos.");
+
+                                        if (workSheet.Cells[rowIterator, 11].Value != null)
+                                        {
+                                            valor = workSheet.Cells[rowIterator, 11].Value.ToString().Trim();
+                                            if (!Regex.IsMatch(valor, @"^\d+(\.\d{1,3})?$")) throw new Exception("La cantidad movilizada debe ser un valor numérico y no puede exceder los 3 decimales.");
+                                        }
+                                        oCampos.SALDO = workSheet.Cells[rowIterator, 11].Value == null ? 0 : Decimal.Parse(workSheet.Cells[rowIterator, 11].Value.ToString().Trim());
                                         if (oCampos.SALDO > volumen_kilogramos) throw new Exception("La cantidad movilizada no puede exceder los 7 dígitos.");
 
-                                        oCampos.UNIDAD_MEDIDA = workSheet.Cells[rowIterator, 11].Value == null ? "" : workSheet.Cells[rowIterator, 11].Value.ToString().Trim();
+                                        oCampos.UNIDAD_MEDIDA = workSheet.Cells[rowIterator, 12].Value == null ? "" : workSheet.Cells[rowIterator, 12].Value.ToString().Trim();
                                         if (string.IsNullOrEmpty(oCampos.UNIDAD_MEDIDA)) throw new Exception("Debe ingresar la Unidad de Medida.");
 
-                                        oCampos.PC = workSheet.Cells[rowIterator, 12].Value == null ? "" : workSheet.Cells[rowIterator, 12].Value.ToString().Trim();
+                                        oCampos.PC = workSheet.Cells[rowIterator, 13].Value == null ? "" : workSheet.Cells[rowIterator, 13].Value.ToString().Trim();
                                         if (string.IsNullOrEmpty(oCampos.PC)) throw new Exception("Debe ingresar la PC.");
                                         
                                         switch (oCampos.TIPOMADERABLE)
@@ -273,24 +284,24 @@ namespace SIGOFCv3.Areas.THabilitante.Models.ManBalanceExtraccion
                                                 break;
                                         }
 
-                                        oCampos.OBSERVACION = workSheet.Cells[rowIterator, 13].Value == null ? "" : workSheet.Cells[rowIterator, 13].Value.ToString().Trim();
+                                        oCampos.OBSERVACION = workSheet.Cells[rowIterator, 14].Value == null ? "" : workSheet.Cells[rowIterator, 14].Value.ToString().Trim();
                                         if (oCampos.OBSERVACION.Length > 100) throw new Exception("El campo Observación no debe exceder los 100 caracteres.");
                                         else if (!Regex.IsMatch(oCampos.OBSERVACION, @"^[ ÁÉÍÓÚA-Záéíóúa-z0-9\-\/\.\,]+$") && oCampos.OBSERVACION != "") throw new Exception("El campo Observación no debe contener caracteres especiales.");
 
                                         oCampos.RegEstado = 1;
 
 
-                                        if (!(workSheet.Cells[rowIterator, 3].Value == null ? "" : workSheet.Cells[rowIterator, 3].Value.ToString().Trim()).Equals(""))
+                                        if (!(workSheet.Cells[rowIterator, 4].Value == null ? "" : workSheet.Cells[rowIterator, 4].Value.ToString().Trim()).Equals(""))
                                         {
                                             codEspecieSerfor = objLog.GetCodEspecie(
-                                                workSheet.Cells[rowIterator, 3].Value == null ? "" : workSheet.Cells[rowIterator, 3].Value.ToString().Trim(),
-                                                workSheet.Cells[rowIterator, 4].Value == null ? "" : workSheet.Cells[rowIterator, 4].Value.ToString().Trim()
+                                                workSheet.Cells[rowIterator, 4].Value == null ? "" : workSheet.Cells[rowIterator, 4].Value.ToString().Trim(),
+                                                workSheet.Cells[rowIterator, 5].Value == null ? "" : workSheet.Cells[rowIterator, 5].Value.ToString().Trim()
                                             );
 
                                             if (codEspecieSerfor != null && codEspecieSerfor != "")
                                             {
                                                 oCampos.COD_ESPECIES_SERFOR = codEspecieSerfor;
-                                                oCampos.ESPECIES_SERFOR = String.Format("{0} | {1}", workSheet.Cells[rowIterator, 3].Value == null ? "" : workSheet.Cells[rowIterator, 3].Value.ToString().Trim(), workSheet.Cells[rowIterator, 4].Value == null ? "" : workSheet.Cells[rowIterator, 4].Value.ToString().Trim());
+                                                oCampos.ESPECIES_SERFOR = String.Format("{0} | {1}", workSheet.Cells[rowIterator, 4].Value == null ? "" : workSheet.Cells[rowIterator, 4].Value.ToString().Trim(), workSheet.Cells[rowIterator, 5].Value == null ? "" : workSheet.Cells[rowIterator, 5].Value.ToString().Trim());
                                             }
                                             else
                                             {
