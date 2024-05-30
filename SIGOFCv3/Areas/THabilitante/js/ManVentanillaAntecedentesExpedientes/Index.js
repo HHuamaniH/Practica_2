@@ -41,6 +41,14 @@ anteExpedientes.fnConfig = function () {
 anteExpedientes.fnSearch = function () {
     var valorCboOpcion = anteExpedientes.frm.find("#ddlOpcionBuscarVentanillaId").val();
     var valorBusqueda = anteExpedientes.frm.find("#txtValorBuscar").val().trim();
+    var valorAnio = anteExpedientes.frm.find("#ddlAnioId").val().trim();
+    var valorEstado = anteExpedientes.frm.find("#ddlOptBustarEstadoVentanillaId").val().trim();
+
+    if (valorAnio == "TODOS" && valorCboOpcion == "TODOS" && valorEstado == "TODOS") {
+        utilSigo.toastWarning("Aviso", "Debe seleccionar por lo menos alguna opción de los tres combos.");
+        anteExpedientes.frm.find("#ddlAnioId").focus();
+        return false;
+    }
 
     if (valorCboOpcion != "TODOS") {
         if (valorBusqueda.trim() == "") {
@@ -295,9 +303,19 @@ anteExpedientes.initEventos = function () {
 anteExpedientes.fnExport = function () {
     var url = urlLocalSigo + "THabilitante/ManVentanillaAntecedentesExpedientes/ExportarRegistroUsuario";
 
+    var valorCboOpcion = anteExpedientes.frm.find("#ddlOpcionBuscarVentanillaId").val();    
+    var valorAnio = anteExpedientes.frm.find("#ddlAnioId").val().trim();
+    var valorEstado = anteExpedientes.frm.find("#ddlOptBustarEstadoVentanillaId").val().trim();
+
+    if (valorAnio == "TODOS" && valorCboOpcion == "TODOS" && valorEstado == "TODOS") {
+        utilSigo.toastWarning("Aviso", "Debe seleccionar por lo menos alguna opción de los tres combos.");
+        anteExpedientes.frm.find("#ddlAnioId").focus();
+        return false;
+    }
+
     var data = {
-        BusEstado: anteExpedientes.frm.find("#ddlOptBustarEstadoVentanillaId").val(),
-        BusCriterio: anteExpedientes.frm.find("#ddlOpcionBuscarVentanillaId").val() + '|' + anteExpedientes.frm.find("#ddlAnioId").val(),
+        BusEstado: valorEstado,
+        BusCriterio: valorCboOpcion + '|' + valorAnio,
         BusValor: anteExpedientes.frm.find("#txtValorBuscar").val().trim()
     }
     //var data = anteExpedientes.frm.find("#ddlOptBustarEstadoVentanillaId").val() + '|' + anteExpedientes.frm.find("#ddlOpcionBuscarVentanillaId").val() + '|' + anteExpedientes.frm.find("#txtValorBuscar").val().trim();
@@ -306,7 +324,6 @@ anteExpedientes.fnExport = function () {
 
     utilSigo.fnAjax(option, function (data) {
         if (data.success) {
-            debugger;
             document.location = urlLocalSigo + "Archivos/Plantilla/" + data.msj;
         }
         else {

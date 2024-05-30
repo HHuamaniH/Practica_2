@@ -187,10 +187,10 @@ namespace SIGOFCv3.Areas.General.Controllers
                 paramsBus.BusCriterio1 = paramsBus.BusCriterio1.Split('|')[0];
                 lstResult = exeBus.RegMostrarListaPaging(paramsBus, ref rowcount);
 
-                if (paramsBus.BusCriterio1 != "TODOS")
-                {
-                    lstResult = lstResult.Where(i => i.ContainsKey("ESTADO_AEXPEDIENTE") && i["ESTADO_AEXPEDIENTE"].Equals(paramsBus.BusCriterio1)).ToList();
-                }
+                //if (paramsBus.BusCriterio1 != "TODOS")
+                //{
+                //    lstResult = lstResult.Where(i => i.ContainsKey("ESTADO_AEXPEDIENTE") && i["ESTADO_AEXPEDIENTE"].Equals(paramsBus.BusCriterio1)).ToList();
+                //}
             }
             else
             {

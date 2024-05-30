@@ -45,10 +45,12 @@ namespace SIGOFCv3.Areas.THabilitante.Controllers
 
             int anioActual = DateTime.Now.Year;
             List<SelectListItem> listAnio = new List<SelectListItem>();
-            for (int i = anioActual; i >= 2015; i--)
+            listAnio.Add(new SelectListItem { Value = "TODOS", Text = "TODOS" });
+            for (int i = anioActual; i >= 2019; i--)
             {
                 listAnio.Add(new SelectListItem { Value = i.ToString(), Text = i.ToString() });
             }
+            
             ViewBag.ddlOpcionAnio = listAnio;
 
 
