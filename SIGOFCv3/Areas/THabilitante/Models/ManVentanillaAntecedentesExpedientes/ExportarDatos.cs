@@ -1,4 +1,6 @@
 ﻿using CapaEntidad.ViewModel;
+using OfficeOpenXml;
+using SIGOFCv3.Helper;
 using SIGOFCv3.Models.DataTables;
 using System;
 using System.Collections.Generic;
@@ -32,62 +34,32 @@ namespace SIGOFCv3.Areas.THabilitante.Models.ManVentanillaAntecedentesExpediente
                     string rutaExcel = rutaBase + nombreFile;
                     string rutaExcelBase = rutaBase + "PlantillaAntecedentes.xlsx";
 
-                    try
+                    int rowStart = 2;
+                    using (var package = new ExcelPackage(new FileInfo(rutaExcelBase)))
                     {
-                        File.Delete(@rutaExcel);
-                        File.Copy(@rutaExcelBase, @rutaExcel);
-                    }
-                    catch (IOException ix)
-                    {
-                        throw new Exception(ix.Message);
-                    }
+                        var workbook = package.Workbook;
+                        ExcelWorksheet worksheet = workbook.Worksheets.First();
 
-                    //Creamos la cadena de conexión con el fichero excel
-                    OleDbConnectionStringBuilder cb = new OleDbConnectionStringBuilder();
-                    cb.DataSource = rutaExcel;
-                    if (Path.GetExtension(rutaExcel).ToUpper() == ".XLS")
-                    {
-                        cb.Provider = "Microsoft.Jet.OLEDB.4.0";
-                        cb.Add("Extended Properties", "Excel 8.0;HDR=YES;IMEX=0;");
-                    }
-                    else if (Path.GetExtension(rutaExcel).ToUpper() == ".XLSX")
-                    {
-                        cb.Provider = "Microsoft.ACE.OLEDB.12.0";
-                        cb.Add("Extended Properties", "Excel 12.0 Xml;HDR=YES;IMEX=0;");
-                    }
+                        int column = 0;
 
-                    using (OleDbConnection conn = new OleDbConnection(cb.ConnectionString))
-                    {
-                        string insertar = "";
-                        int i = 1, ind = 1;
-                        //Abrimos la conexión
-                        conn.Open();
-                        //Creamos la ficha
-                        using (OleDbCommand cmd = conn.CreateCommand())
+                        foreach (var item in olResult)
                         {
-                            cmd.CommandType = CommandType.Text;
-                            //Construyendo las Cabeceras
-                            foreach (var itemPart in olResult)
-                            {
-                                insertar = "'" + (ind++).ToString() + "'";
-                                insertar = insertar + ",'" + (itemPart["DOC_REFERENCIA"].Trim() ?? "") + "'";
-                                insertar = insertar + ",'" + (itemPart["OBSERVACION"].Trim() ?? "") + "'";
-                                insertar = insertar + ",'" + (itemPart["RESOLUCION_POA"].Trim() ?? "") + "'";
-                                insertar = insertar + ",'" + (itemPart["FFECDOCUMENTO"].Trim() ?? "") + "'";
-                                insertar = insertar + ",'" + (itemPart["NUM_THABILITANTE"].Trim() ?? "") + "'";
-                                insertar = insertar + ",'" + (itemPart["DESCRIPCION"].Trim() ?? "") + "'";
-                                insertar = insertar + ",'" + (itemPart["CCODIFICACION"].Trim() ?? "") + "'";
-                                insertar = insertar + ",'" + (itemPart["FECHA_SITD"].Trim() ?? "") + "'";
-                                insertar = insertar + ",'" + (itemPart["CNOMOFICINA"].Trim() ?? "") + "'";
-                                insertar = insertar + ",'" + (itemPart["ESTADO_AEXPEDIENTE"].Trim() ?? "") + "'";
-
-                                cmd.CommandText = "INSERT INTO [Datos$A" + i.ToString().Trim() + ":Z" + (olResult.Count + 1).ToString() + "] VALUES (" + insertar + ")";
-                                cmd.ExecuteNonQuery();
-                            }
-
-                            //Cerramos la conexión
-                            conn.Close();
+                            column = 0;
+                            worksheet.Cells[HelperSigo.GetColum(++column) + rowStart.ToString()].Value = (rowStart - 1).ToString();
+                            worksheet.Cells[HelperSigo.GetColum(++column) + rowStart.ToString()].Value = (item["DOC_REFERENCIA"].Trim() ?? "");
+                            worksheet.Cells[HelperSigo.GetColum(++column) + rowStart.ToString()].Value = (item["OBSERVACION"].Trim() ?? "");
+                            worksheet.Cells[HelperSigo.GetColum(++column) + rowStart.ToString()].Value = (item["RESOLUCION_POA"].Trim() ?? "");
+                            worksheet.Cells[HelperSigo.GetColum(++column) + rowStart.ToString()].Value = (item["FFECDOCUMENTO"].Trim() ?? "");
+                            worksheet.Cells[HelperSigo.GetColum(++column) + rowStart.ToString()].Value = (item["NUM_THABILITANTE"].Trim() ?? "");
+                            worksheet.Cells[HelperSigo.GetColum(++column) + rowStart.ToString()].Value = (item["DESCRIPCION"].Trim() ?? "");
+                            worksheet.Cells[HelperSigo.GetColum(++column) + rowStart.ToString()].Value = (item["CCODIFICACION"].Trim() ?? "");
+                            worksheet.Cells[HelperSigo.GetColum(++column) + rowStart.ToString()].Value = (item["FECHA_SITD"].Trim() ?? "");
+                            worksheet.Cells[HelperSigo.GetColum(++column) + rowStart.ToString()].Value = (item["CNOMOFICINA"].Trim() ?? "");
+                            worksheet.Cells[HelperSigo.GetColum(++column) + rowStart.ToString()].Value = (item["ESTADO_AEXPEDIENTE"].Trim() ?? "");                            
+                            rowStart++;
                         }
+
+                        package.SaveAs(new FileInfo(rutaExcel));
                     }
 
                     result.success = true;
