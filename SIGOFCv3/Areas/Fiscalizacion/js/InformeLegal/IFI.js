@@ -1583,7 +1583,8 @@ $(function () {
                 });
 
                 // Si no hay información del titular lo establecemos (Solo para la primera RSD)
-                if (!app.Informe.TITULAR) {
+                //Actualizar datos del titular cuando se modifica la resolución
+                //if (!app.Informe.TITULAR) {
                     const THAB = {
                         COD_THABILITANTE: RESODIREC.COD_THABILITANTE,
                         NUM_CONTRATO: RESODIREC.NUM_THABILITANTE,
@@ -1606,7 +1607,7 @@ $(function () {
                         ...app.Informe,
                         ...THAB
                     }
-                }
+                //}
 
                 app.Informe.RSD.push(RESOLUCION);
                 app.Informe.INFRACCIONES = infracciones;
